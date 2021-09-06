@@ -2,118 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 616A5483027
-	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:00:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D9B48304E
+	for <lists+linux-kernel@lfdr.de>; Mon,  3 Jan 2022 12:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiACLAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 3 Jan 2022 06:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiACLAn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 3 Jan 2022 06:00:43 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A295C061761;
-        Mon,  3 Jan 2022 03:00:43 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id s4so37229758ljd.5;
-        Mon, 03 Jan 2022 03:00:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:from:user-agent:mime-version:to:cc:subject
-         :references:in-reply-to:content-transfer-encoding;
-        bh=RnaPEQ+GyYbouV07jQ/IDGsy7R+lQFdvlf3G6ZfyaFc=;
-        b=Ay/XTzWWTXvXdqT7IwGdNk+yxkvX6sKycrg4hnxQ+GO2J3WdleMQ+t8KT8M0NAenWl
-         fySEaxaEu20d4dnFodKIk35SoPr0f3MOJ5pLdkTe61mICEhRnz1pBBFx+leug6dp50Ta
-         MiHqr0z9n9TKlG6XU+J6Lr8PSmJ/mDeq4KQn6n62hxNxsvBGhVSfDcHrJhTR4g6XVxYz
-         DJFcNyoDIQprap5fyJbVBgmo5ADfWkDnca+d2Q1PeZICWsc5IxGPJebW+VC7OThfuWPT
-         LNzqJP2U6v5uLN1IK36zxhx/V8U2eUotOOvNbe935QQ9LAnl4xZZhfSdj63HaxJqkG2W
-         N4KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:from:user-agent:mime-version:to
-         :cc:subject:references:in-reply-to:content-transfer-encoding;
-        bh=RnaPEQ+GyYbouV07jQ/IDGsy7R+lQFdvlf3G6ZfyaFc=;
-        b=IwvQ92au6SK/zFsgrjnAT/57fa+BedeoLpddEu2eCfGOptuAuF6MtP0zY9LXV5Wu53
-         2YuxjkdyxfA8P3E2J9EUxKu6uwTdDHsWkPN8Bnb2d5BnvtJiqrmpSSJ9fymYRENcKBxH
-         ozbjg/o3GR4qyFIZLmJadhu+GLEbp+a/hNqmmqBrI9hMOfah/lILeC5UxC7ERxQXxOqg
-         y9Wk/RnfSrMCTf434VQTfYJrh0r2aAjjUx4pK3K4n+Qyp9khAO/i34IBv+6fIf3YOcXP
-         Qdikfy/a9826dtVG4udpxRsUfy92xDVb4hh24EoOMPMBldfGSn+YwbAfP5MJnVwxr3D+
-         x7oQ==
-X-Gm-Message-State: AOAM533bAyI65TeHANV6X5LLsYGadDcjG8qzx3qW2dcNvBdRmzK+8P2v
-        49kXGL/uGbl0wg1VoiRu/cs=
-X-Google-Smtp-Source: ABdhPJycAZukdzBB1w2zWJkGxFA8SthDX9yApe13iw6iQ3W3TTUUwlVClmkH6dKoKHYs1efB2lgPNg==
-X-Received: by 2002:a05:651c:1993:: with SMTP id bx19mr21135430ljb.472.1641207641510;
-        Mon, 03 Jan 2022 03:00:41 -0800 (PST)
-Received: from [192.168.0.91] ([188.242.181.97])
-        by smtp.googlemail.com with ESMTPSA id q2sm1322382lfr.64.2022.01.03.03.00.40
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Mon, 03 Jan 2022 03:00:40 -0800 (PST)
-Message-ID: <61D2D9B5.7080401@gmail.com>
-Date:   Mon, 03 Jan 2022 14:10:45 +0300
-From:   Nikolai Zhubr <zhubr.2@gmail.com>
-User-Agent: Mozilla/5.0 (Windows; U; Windows NT 5.1; ru; rv:1.9.2.4) Gecko/20100608 Thunderbird/3.1
+        id S232901AbiACLNn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 3 Jan 2022 06:13:43 -0500
+Received: from gmo11.caters.jp ([157.7.137.14]:43288 "EHLO gmo11.caters.jp"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232900AbiACLNk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 3 Jan 2022 06:13:40 -0500
+X-Greylist: delayed 1343 seconds by postgrey-1.27 at vger.kernel.org; Mon, 03 Jan 2022 06:13:40 EST
+Received: from 127.0.0.1 (v157-7-137-214.myvps.jp [157.7.137.214])
+        by gmo11.caters.jp (Postfix) with SMTP id 4BEA7A4A7B;
+        Mon,  3 Jan 2022 19:41:35 +0900 (JST)
+Message-ID: <5D58EEBDB6624CFF23266FD773A3D265@angler.com.pe>
+Reply-To: "Danny Phillips" <fscspmd@yeah.net>
+From:   "Danny Phillips" <info@angler.com.pe>
+Subject: US$750,000.00 financial settlement to you, Ref: FS/CP2/PY8.
+Date:   Mon, 6 Sep 2021 06:53:01 -0800
+Organization: @
 MIME-Version: 1.0
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-CC:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@kernel.org>,
-        x86@kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] x86/PCI: SiS PIRQ router updates
-References: <alpine.DEB.2.21.2201022040130.56863@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2201022040130.56863@angie.orcam.me.uk>
-Content-Type: text/plain; charset=ISO-8859-1; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain;
+        format=flowed;
+        charset="windows-1251";
+        reply-type=original
+Content-Transfer-Encoding: 8BIT
+X-Priority: 3
+X-MSMail-Priority: Normal
+X-Mailer: Microsoft Outlook Express 6.00.2900.5931
+X-MimeOLE: Produced By Microsoft MimeOLE V6.00.2900.6157
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Maciej,
+Ref No: FSC/CP02/PY8.
 
-Apparently, my previous replies (of 11-sep-2021 to 16-sep-2021) with 
-some observations somehow went to spam box or whatever. I was going to 
-retry but got too busy with unrelated stuff at that time. I can re-send 
-them if necessary.
+Good Morning,
 
-Anyway. Yes, your patch is very usefull. I've tested it quite thoroughly 
-back then, including sharing IRQs for 2 unrelated PCI devices etc. I 
-have it always automatically applied in my private trees since then.
+We are not sure you received our previous message but once again we wish to use this medium to officially congratulate and inform you that you have been selected to receive a financial compensation amount of US$750,000.00 with Ref No. FSC/CP02/PY8.
 
-One peculiarity with my specific board is that I had to also patch ROM 
-BIOS because it included some non-standard $IRT table instead of $PIR 
-table. With that in place, it now Just Works.
+For details to immediately receive your US$750,000.00, kindly send your TELEPHONE number  by email, to our payment director, Caroline Morgan, using the below contact information:
 
-Thank you again for your effort,
+Name: Caroline Morgan
+E-Mail: fscspmd@yeah.net 
 
-Regards,
+PLEASE NOTE: For prompt attention, all correspondence should directly be sent to Caroline Morgan by email [fscspmd@yeah.net] and must have the above stated reference number: FSC/CP02/PY8, sent along with your telephone number.
 
-Nikolai
-
-
-03.01.2022 2:24, Maciej W. Rozycki:
-> Hi,
->
->   Reposting as this has gone nowhere.  Regenerated for line changes and
-> with Nikolai's Tested-by annotation for 2/2, which now have been verified
-> in combination with generic PIRQ router updates posted separately (there's
-> no ordering dependency between the two patch series).
->
->   Nikolai has observed the trigger mode not being fixed up once it has been
-> incorrectly set by the BIOS for PCI devices, causing all kinds of usual
-> issues.  As it turns out we don't have a PIRQ router defined for the
-> SiS85C497 southbridge, which Nikolai's system uses, and which is different
-> from the SiS85C503 southbridge we have support for.
->
->   As we use the generic `sis' infix (capitalised or not) for the SiS85C503
-> southbridge I have prepared this small patch series to first make the
-> existing SiS program entities use a more specific `sis503' infix, and then
-> provide a suitable PIRQ router for the SiS85C497 device.
->
->   See individual change descriptions for further details.
->
->   Please apply.
->
->    Maciej
->
-
+Yours faithfully, 
+Financial Services, UK

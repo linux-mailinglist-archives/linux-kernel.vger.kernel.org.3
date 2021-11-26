@@ -2,85 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA748461112
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77239461314
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244317AbhK2Jax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 04:30:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243223AbhK2J2w (ORCPT
+        id S235317AbhK2LIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:08:38 -0500
+Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17249 "EHLO
+        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347256AbhK2LGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:28:52 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA38C061396
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 01:12:19 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id j3so35181134wrp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 01:12:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blogsoutreach-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:from:reply-to:to:subject:content-transfer-encoding
-         :date:message-id;
-        bh=Q7qNBVtLEfLs5DBpQyguH+ZhZRYa6SP1l2xOa2ePsiw=;
-        b=Bhxq5WwYAUlrGGX+DjOnJXuKU+9+11DG9y0bSYAUdi9ZxctLDZ+ci9hqagQzqd6ZEK
-         9V1pK9Yt8xGK01aoE4bI1GbrS4xQJAhW8JLu/gNP+QuJ/AYkoO8okRVGhBrG1S1P3c20
-         hH3dNcp/st8wPStdxGmYPo7/6ciEkaWg8tK8iZQb06sD9Jv/rOvk7WyJhN/LcshkTaHJ
-         r0XPTwpCHo9kDFGpudbcWshIqX0NuEFE9peM/4GusafK3pds3Gaui5Yvly8QjDrnLUtM
-         Stqx0fbGgX/V9JuiweczCpmWCpzTWxv9PGNw7QTRn1KUcYVPzWwgZGMis/aQYmxsL5n/
-         k2lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:reply-to:to:subject
-         :content-transfer-encoding:date:message-id;
-        bh=Q7qNBVtLEfLs5DBpQyguH+ZhZRYa6SP1l2xOa2ePsiw=;
-        b=6f11yN+0URXQlWa7RTHNBzkHchRD84r+KC1ll5gHJ1B6FC48WBbIVASnHhg04XuARp
-         38TVDoue8uXU41pykLjE+uXJYAkVTzn8Bsqli6orvXeeP1Sf6KdQpMFzJ6m1OZlLBcdV
-         NDWFa6te6A5AYNqJy5QQPsJxgEk/ix+Y1gMBJYSoncN+Kzj4VKzxb3eVLac6eXAopqX2
-         D9SNPawf80tSxUjRcZigdq0ZsA1+2dXdEnqf6+4/PzcCcjOYRYjv4Hp5hxqdQp/9HX/v
-         tAnYpfRFsEkQaJLA0FoPfz0Tn7hPAMV+9RvmZkKV8sBdx+euQGML34MpqWpbYMfBNNTL
-         UuXQ==
-X-Gm-Message-State: AOAM530tpyiCzacanv80L94qHIt8alKJNDQBClATui/viEl9Fctgukez
-        IkTOriE0vVTeUuD10IG5PDmFHDT4wH4WHg==
-X-Google-Smtp-Source: ABdhPJzFqE3xeFowsZl87AROa0WdzrCnLJckKSu9+K3W2R49rykwPl5Ka0OJPbTqLBtOqrUamBqhqA==
-X-Received: by 2002:adf:ee0c:: with SMTP id y12mr32062048wrn.82.1638177138184;
-        Mon, 29 Nov 2021 01:12:18 -0800 (PST)
-Received: from 137.59.228.238 ([137.59.228.238])
-        by smtp.gmail.com with ESMTPSA id d9sm13050515wre.52.2021.11.29.01.12.16
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1 cipher=AES128-SHA bits=128/128);
-        Mon, 29 Nov 2021 01:12:17 -0800 (PST)
+        Mon, 29 Nov 2021 06:06:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1637903008; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=kTT6Em4JDS6/n2VGliGLaE9S+PknFWxGAUiJO4w9UcrhWM6NIlMzAx+PtzMv9HHDSNv2cP27qumLZNCOYVAznwtp8lXf6M/LqY/Gq/p/xzSUwgrV46aHdZiKMf+5JRO3Rs62wyy89VzmskC+loYa07G1bKLiqEwExGzYIzOszds=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1637903008; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=e1fy8d/F7bO0bxbGs9DFbseWsVknlDYWORiYHfsGIf8=; 
+        b=D+d85SWg0ltZ94GnKtm7vV4/uUrRM6weqrb89FGTFtj4m89M2NfrXFUGJ9ojdiV/cZ7+gXsL/DBAa5KTV0Lqxv9KvyfNtzn2BrUtCvKpdzg8Gea5yYl3qHhHkcIcA/HcrdwmahOTG4+DUxHVrliJfPOrrOC6vMZtZRPBfJibA2Q=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=mykernel.net;
+        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
+        dmarc=pass header.from=<cgxu519@mykernel.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1637903008;
+        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
+        h=Date:From:Reply-To:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=e1fy8d/F7bO0bxbGs9DFbseWsVknlDYWORiYHfsGIf8=;
+        b=Nl3r5ejY1FHl1ts5hqefnDJ9sJvZpsLJORZ3A4KioqoF7ibhdDL7ysWhdndMlvgk
+        bhsk/ZFNRmLwXCekMD84/SnA7kYzSfipuQe6dfXL/7ye+fUekX6MpcNkMD/JsBtfPKT
+        eXfIDlXUdRRy6lvszTi851IoRCvWRkSeoVID5kQk=
+Received: from mail.baihui.com by mx.zoho.com.cn
+        with SMTP id 163790300607680.6143952720198; Fri, 26 Nov 2021 13:03:26 +0800 (CST)
+Date:   Fri, 26 Nov 2021 13:03:26 +0800
+From:   Chengguang Xu <cgxu519@mykernel.net>
+Reply-To: cgxu519@mykernel.net
+To:     "Amir Goldstein" <amir73il@gmail.com>
+Cc:     "Miklos Szeredi" <miklos@szeredi.hu>, "Jan Kara" <jack@suse.cz>,
+        "overlayfs" <linux-unionfs@vger.kernel.org>,
+        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "Chengguang Xu" <charliecgxu@tencent.com>
+Message-ID: <17d5aa0795d.fdfda4a49855.5158536783597235118@mykernel.net>
+In-Reply-To: <CAOQ4uxhrg=MAL7sArmP47oyF_QmhG-1b=srs30VNdiT-9s-P0w@mail.gmail.com>
+References: <20211122030038.1938875-1-cgxu519@mykernel.net> <20211122030038.1938875-8-cgxu519@mykernel.net> <CAOQ4uxhrg=MAL7sArmP47oyF_QmhG-1b=srs30VNdiT-9s-P0w@mail.gmail.com>
+Subject: Re: [RFC PATCH V6 7/7] ovl: implement containerized syncfs for
+ overlayfs
 MIME-Version: 1.0
-From:   "Michael" <michael@blogsoutreach.com>
-Reply-To: michael@blogsoutreach.com
-To:     linux-kernel@vger.kernel.org
-Subject: Sponsored post
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Smart_Send_3_1_6
-Date:   Mon, 29 Nov 2021 14:12:01 -0800
-Message-ID: <1408241105816104739653@DELL-PC>
+Importance: Medium
+User-Agent: ZohoCN Mail
+X-Mailer: ZohoCN Mail
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+ ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=80, 2021-11-22 15:40:59 Amir Golds=
+tein <amir73il@gmail.com> =E6=92=B0=E5=86=99 ----
+ > On Mon, Nov 22, 2021 at 5:01 AM Chengguang Xu <cgxu519@mykernel.net> wro=
+te:
+ > >
+ > > From: Chengguang Xu <charliecgxu@tencent.com>
+ > >
+ > > Now overlayfs can only sync own dirty inodes during syncfs,
+ > > so remove unnecessary sync_filesystem() on upper file system.
+ > >
+ > > Signed-off-by: Chengguang Xu <charliecgxu@tencent.com>
+ > > ---
+ > >  fs/overlayfs/super.c | 14 +++++---------
+ > >  1 file changed, 5 insertions(+), 9 deletions(-)
+ > >
+ > > diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+ > > index ccffcd96491d..213b795a6a86 100644
+ > > --- a/fs/overlayfs/super.c
+ > > +++ b/fs/overlayfs/super.c
+ > > @@ -292,18 +292,14 @@ static int ovl_sync_fs(struct super_block *sb, i=
+nt wait)
+ > >         /*
+ > >          * Not called for sync(2) call or an emergency sync (SB_I_SKIP=
+_SYNC).
+ > >          * All the super blocks will be iterated, including upper_sb.
+ > > -        *
+ > > -        * If this is a syncfs(2) call, then we do need to call
+ > > -        * sync_filesystem() on upper_sb, but enough if we do it when =
+being
+ > > -        * called with wait =3D=3D 1.
+ > >          */
+ > > -       if (!wait)
+ > > -               return 0;
+ > > -
+ > >         upper_sb =3D ovl_upper_mnt(ofs)->mnt_sb;
+ > > -
+ > >         down_read(&upper_sb->s_umount);
+ > > -       ret =3D sync_filesystem(upper_sb);
+ > > +       if (wait)
+ > > +               wait_sb_inodes(upper_sb);
+ > > +       if (upper_sb->s_op->sync_fs)
+ > > +               upper_sb->s_op->sync_fs(upper_sb, wait);
+ > > +       ret =3D ovl_sync_upper_blockdev(upper_sb, wait);
+ >=20
+ > I think it will be cleaner to use a helper ovl_sync_upper_filesystem()
+ > with everything from  upper_sb =3D ... and a comment to explain that
+ > this is a variant of __sync_filesystem() where all the dirty inodes writ=
+e
+ > have already been started.
+ >=20
+=20
+I agree with you.=20
 
-I hope this email finds you well.
-
-I am sending this email to ask if you are interested in sponsored posts.
-
-We are searching for relevant sites and blogs for our clients.
-
-You will get 100% top notch content with 1 do follow link relevant to your =
-site niche.
-
-Please let me know how much do you charge per post=3F
-
-We will pay you through Paypal or Payoneer gateway as soon our article is p=
-ublished.
-
-Looking forward to building long-term business opportunities with you.
-
-Best Regards,
-
-michael
+Thanks,
+Chengguang

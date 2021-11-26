@@ -2,93 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 906E44615AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6BF7461A83
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:59:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233796AbhK2NEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:04:08 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:53504 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240431AbhK2NCG (ORCPT
+        id S1345197AbhK2PCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:02:22 -0500
+Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17275 "EHLO
+        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345800AbhK2PAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:02:06 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638190727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e3FciFdKO2khQ7f3Cmj7EZjTaeR+RNoaHikUdH9wKA4=;
-        b=n/cJ6xXeDR0gfPdjD4YQQT6Q6+jc5VrNxxb/wMO1CCL68nw2ivWvCi9Oc5jRQP1vmykI2L
-        wpM4ivbSXnNWtwWg2OMXcPoZHzFO/AGGAjG93eYJmpri4EZB5NYcUKVTUA6tLcXbKQxiVf
-        PgtATQCKLuF+FaTJEgRWVfVNRjp4fW0VBSqZRDYs1JIvyPxR2VSAtYwkT2Ktl7we2swKMa
-        g5AVSA4LFn5citpFX56X18aS9mj7c9i9SbNhRQePzqQeBXdCP73LY2CoabUjdXkXf4G7SV
-        XE6SiQ1P1OMABrt6rekZNAKLNNTpwhPlI8WmKH8Vf+HIO7MpEkvLG1D22S5tnQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638190727;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e3FciFdKO2khQ7f3Cmj7EZjTaeR+RNoaHikUdH9wKA4=;
-        b=uzqwAVQ3mlWAmoUWkKfqvuEYkEasky/aV9Ezf1NXjZIqVG+VhtAHegMwxJu+JHXrQe2PJm
-        sxMNfZT3wK1xjhCg==
-To:     Will Deacon <will@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sinan Kaya <okaya@kernel.org>
-Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
-In-Reply-To: <87lf17dsyp.ffs@tglx>
-References: <20211126224100.303046749@linutronix.de>
- <20211126230525.885757679@linutronix.de>
- <20211129105506.GA22761@willie-the-truck> <87lf17dsyp.ffs@tglx>
-Date:   Mon, 29 Nov 2021 13:58:46 +0100
-Message-ID: <87ilwbdsop.ffs@tglx>
+        Mon, 29 Nov 2021 10:00:20 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1637931974; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=Nof1v9BjaZLa7U9Yw6BND9HDJOH3W5sxq6+upyF6vQOwB4Fc7Q2Yals6F5Ev+BOs/3i0PxfG0xvE+O0hk6npLibCux886M6+C9CiVPEXU4Mw4T8H49sjONWiVTKUygo8+QhbRrP5qB3Wp7oe/0jz2Sww3Y6ZONEE1r3UuHuq9+U=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1637931974; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=A0WNNhMG+hvp6w62fCn0B0olJUzJi3Z1eLpxpY+eTuc=; 
+        b=Q5hyVYzY/rmWRH0Exs1Otf9lIdMDa7AnCS9Ts/aK9iWdPuq+sS3zY+2PHm3c6NjQAuZJ0kW8DkOFe8wPYrglJEOpfjLQ2bA5qqBTeQP6Sq3RDTn/Z6IUAH0BlY3lqNAC+nwrSGfofx+Nht0gUlmTcA2xRqAGHLfA+f6jVdcmy5M=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=mykernel.net;
+        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
+        dmarc=pass header.from=<cgxu519@mykernel.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1637931974;
+        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
+        h=Date:From:Reply-To:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=A0WNNhMG+hvp6w62fCn0B0olJUzJi3Z1eLpxpY+eTuc=;
+        b=QLPGL/NGXGIHUbDmJRtqm1rYDzwsYVYhL6xb/SqFrPS+okFeG85Tofcxx/DygeMG
+        hQdbHWL4KO/uP/Zd7nwdoPwQJxfotEHuiW7KBoXafa5rptxgAeUsC5MOPHP7tRtUJx6
+        grp2ryMBW3GYlXfNtjtp/AhO3kFuhaTCsAbyerXI=
+Received: from mail.baihui.com by mx.zoho.com.cn
+        with SMTP id 1637931970561213.4333284052757; Fri, 26 Nov 2021 21:06:10 +0800 (CST)
+Date:   Fri, 26 Nov 2021 21:06:10 +0800
+From:   Chengguang Xu <cgxu519@mykernel.net>
+Reply-To: cgxu519@mykernel.net
+To:     "Jan Kara" <jack@suse.cz>
+Cc:     "miklos" <miklos@szeredi.hu>, "amir73il" <amir73il@gmail.com>,
+        "linux-unionfs" <linux-unionfs@vger.kernel.org>,
+        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "Chengguang Xu" <charliecgxu@tencent.com>,
+        "ronyjin" <ronyjin@tencent.com>
+Message-ID: <17d5c5a6fed.f090bcae10973.4735687401243313694@mykernel.net>
+In-Reply-To: <20211126091007.GB13004@quack2.suse.cz>
+References: <20211122030038.1938875-1-cgxu519@mykernel.net>
+ <20211122030038.1938875-3-cgxu519@mykernel.net> <20211126091007.GB13004@quack2.suse.cz>
+Subject: Re: [RFC PATCH V6 2/7] ovl: mark overlayfs inode dirty when it has
+ upper
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Importance: Medium
+User-Agent: ZohoCN Mail
+X-Mailer: ZohoCN Mail
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29 2021 at 13:52, Thomas Gleixner wrote:
-> On Mon, Nov 29 2021 at 10:55, Will Deacon wrote:
->> On Sat, Nov 27, 2021 at 02:20:59AM +0100, Thomas Gleixner wrote:
->>> +	smmu->evtq.q.irq = msi_get_virq(dev, EVTQ_MSI_INDEX);
->>> +	smmu->gerr_irq = msi_get_virq(dev, GERROR_MSI_INDEX);
->>> +	smmu->priq.q.irq = msi_get_virq(dev, PRIQ_MSI_INDEX);
->>
->> Prviously, if retrieval of the MSI failed then we'd fall back to wired
->> interrupts. Now, I think we'll clobber the interrupt with 0 instead. Can
->> we make the assignments to smmu->*irq here conditional on the MSI being
->> valid, please?
->
-> So the wired irq number is in ->irq already and MSI does an override
-> if available. Not really obvious...
+ ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=BA=94, 2021-11-26 17:10:07 Jan Kara <=
+jack@suse.cz> =E6=92=B0=E5=86=99 ----
+ > On Mon 22-11-21 11:00:33, Chengguang Xu wrote:
+ > > From: Chengguang Xu <charliecgxu@tencent.com>
+ > >=20
+ > > We simply mark overlayfs inode dirty when it has upper,
+ > > it's much simpler than mark dirtiness on modification.
+ > >=20
+ > > Signed-off-by: Chengguang Xu <charliecgxu@tencent.com>
+ > > ---
+ > >  fs/overlayfs/inode.c | 4 +++-
+ > >  fs/overlayfs/util.c  | 1 +
+ > >  2 files changed, 4 insertions(+), 1 deletion(-)
+ > >=20
+ > > diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
+ > > index 1f36158c7dbe..027ffc0a2539 100644
+ > > --- a/fs/overlayfs/inode.c
+ > > +++ b/fs/overlayfs/inode.c
+ > > @@ -778,8 +778,10 @@ void ovl_inode_init(struct inode *inode, struct o=
+vl_inode_params *oip,
+ > >  {
+ > >      struct inode *realinode;
+ > > =20
+ > > -    if (oip->upperdentry)
+ > > +    if (oip->upperdentry) {
+ > >          OVL_I(inode)->__upperdentry =3D oip->upperdentry;
+ > > +        mark_inode_dirty(inode);
+ > > +    }
+ > >      if (oip->lowerpath && oip->lowerpath->dentry)
+ > >          OVL_I(inode)->lower =3D igrab(d_inode(oip->lowerpath->dentry)=
+);
+ > >      if (oip->lowerdata)
+ >=20
+ > Hum, does this get called only for inodes with upper inode existing? I
+ > suppose we do not need to track inodes that were not copied up because t=
+hey
+ > cannot be dirty? I'm sorry, my knowledge of overlayfs is rather limited =
+so
+ > I may be missing something basic.
+ >=20
 
-But, this happens right after:
-
-     ret = platform_msi_domain_alloc_irqs(dev, nvec, arm_smmu_write_msi_msg);
-
-So if that succeeded then the descriptors exist and have interrupts
-assigned.
+Well, as long as overly inode has upper it can be modified without copy-up,
+so we need to track all overlay inodes which have upper inode.
 
 Thanks,
-
-        tglx
-
+Chengguang
 
 

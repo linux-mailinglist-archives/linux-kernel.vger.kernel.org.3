@@ -2,138 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0DD7461FC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:58:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74AC8462034
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379358AbhK2TCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:02:01 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:54844
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239649AbhK2TAA (ORCPT
+        id S1350785AbhK2TUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:20:51 -0500
+Received: from sender2-op-o12.zoho.com.cn ([163.53.93.243]:17297 "EHLO
+        sender2-op-o12.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1352725AbhK2TSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:00:00 -0500
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 095D54000A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 18:56:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638212202;
-        bh=ok4uKKGSTk4p0yYxv2QRxL9x4nnbrUQrc4yllPT/1iI=;
-        h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-         In-Reply-To:Content-Type;
-        b=Cg5pfYPOO8tOReCcoL8Qf9Utwl7iBGKrFfr3OOXSQB+1kLP3LQNlkDPWJTDspNoPI
-         rKEPPLf6fsktBXN1svD7LXQv3EeGA/dk+kVJPR2Q6rjGUWPy19SBT/noZVET7/x8C4
-         CAkeDpIIn2BrjXIjW4QCs0O4AHwGQTzSGzjqCjrzxbxZpHvv7M6UOdlDDViu5prcQt
-         GfeGY1txDSMdNsLDbfYXjMPXiYQisHJMcO0FyAfDP0KWl8JmE5Uo2/WjfxfEYQHrAQ
-         e6kBZb8myBS2WCBkXBNv25N6cVatGjw1xIcndS0luJhIOwC7EOWSTtF6XNZ3P0hrcn
-         C6/z3YliuFRag==
-Received: by mail-pj1-f69.google.com with SMTP id a16-20020a17090aa51000b001a78699acceso10121143pjq.8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:56:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ok4uKKGSTk4p0yYxv2QRxL9x4nnbrUQrc4yllPT/1iI=;
-        b=MQx2vdEkx3o780JPg3cEKSAt4n+LzwjBRUVNnCP1feZ64AVMZJqjkCa/sMrQ7J9xRA
-         5ztk+Eo9pmpOCexNbGSbnoxIDouoUSeuEK/M1Eun0Jwi90cgn4oJfkaDwsfiy0SlrXsB
-         iOeqHcC6ipKWwySRa0WXuPqRS5ZtI6VKoZ38kT69vf3FJakMb4jychKXpnVi0Kq34log
-         cdT8jJJ+E6pyzIar0Meps2dXeCTb+nm1WTLfOiFQoyuiNC9uTZpnL1VyAKdzvarziQ3+
-         hOl89qNle1PG9n1Yu3kY40kjvtnUXJt4qXsi2oV8gXbZVL8e5ArGdLwA88jEfuWAs1UC
-         j4kw==
-X-Gm-Message-State: AOAM5315lNR2XJL3I+SBDAbziUe1WyUaU6yGMYyTvtYW5btguFXwPqp5
-        5/FLt8w/jbt3ypySrVnzuNAlb91wuPnhKSHBbtSpIog9qg8NjVo09bo13xwyUqjMXwb5m/8AetB
-        jhHfsAnL25L9g3DVATZSi74NugyDzq05CZVJStSHiWA==
-X-Received: by 2002:a17:902:7616:b0:143:a8cd:ef0 with SMTP id k22-20020a170902761600b00143a8cd0ef0mr61917177pll.48.1638212200309;
-        Mon, 29 Nov 2021 10:56:40 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz/BkSAQbSZFobcpK6b56IvT8KwOyOfFMcjPsmM1aFyNsfSddFxK0GI5ICJJ2P36qgEQdf/Ow==
-X-Received: by 2002:a17:902:7616:b0:143:a8cd:ef0 with SMTP id k22-20020a170902761600b00143a8cd0ef0mr61917161pll.48.1638212200099;
-        Mon, 29 Nov 2021 10:56:40 -0800 (PST)
-Received: from [192.168.1.124] ([69.163.84.166])
-        by smtp.gmail.com with ESMTPSA id x14sm83630pjl.27.2021.11.29.10.56.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 10:56:39 -0800 (PST)
-Subject: Re: Commit f980d055a0f858d73d9467bb0b570721bbfcdfb8 causes a
- regression
-To:     Jeff Layton <jlayton@kernel.org>, len.baker@gmx.com
-Cc:     pc@cjr.nz, stfrench@microsoft.com,
-        Kamal Mostafa <Kamal.Mostafa@canonical.com>,
-        linux-cifs@vger.kernel.org,
-        samba-technical <samba-technical@lists.samba.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
-References: <a8b2287b-c459-2169-fbf4-31f3065e0897@canonical.com>
- <0e6e66f7368621128a810bb604eab229dd279187.camel@kernel.org>
-From:   Tim Gardner <tim.gardner@canonical.com>
-Message-ID: <7592d67c-3311-afd0-6ea9-64bd4d2769b6@canonical.com>
-Date:   Mon, 29 Nov 2021 11:56:38 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 29 Nov 2021 14:18:50 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1637903008; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=kTT6Em4JDS6/n2VGliGLaE9S+PknFWxGAUiJO4w9UcrhWM6NIlMzAx+PtzMv9HHDSNv2cP27qumLZNCOYVAznwtp8lXf6M/LqY/Gq/p/xzSUwgrV46aHdZiKMf+5JRO3Rs62wyy89VzmskC+loYa07G1bKLiqEwExGzYIzOszds=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1637903008; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=e1fy8d/F7bO0bxbGs9DFbseWsVknlDYWORiYHfsGIf8=; 
+        b=D+d85SWg0ltZ94GnKtm7vV4/uUrRM6weqrb89FGTFtj4m89M2NfrXFUGJ9ojdiV/cZ7+gXsL/DBAa5KTV0Lqxv9KvyfNtzn2BrUtCvKpdzg8Gea5yYl3qHhHkcIcA/HcrdwmahOTG4+DUxHVrliJfPOrrOC6vMZtZRPBfJibA2Q=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=mykernel.net;
+        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
+        dmarc=pass header.from=<cgxu519@mykernel.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1637903008;
+        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
+        h=Date:From:Reply-To:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=e1fy8d/F7bO0bxbGs9DFbseWsVknlDYWORiYHfsGIf8=;
+        b=Nl3r5ejY1FHl1ts5hqefnDJ9sJvZpsLJORZ3A4KioqoF7ibhdDL7ysWhdndMlvgk
+        bhsk/ZFNRmLwXCekMD84/SnA7kYzSfipuQe6dfXL/7ye+fUekX6MpcNkMD/JsBtfPKT
+        eXfIDlXUdRRy6lvszTi851IoRCvWRkSeoVID5kQk=
+Received: from mail.baihui.com by mx.zoho.com.cn
+        with SMTP id 163790300607680.6143952720198; Fri, 26 Nov 2021 13:03:26 +0800 (CST)
+Date:   Fri, 26 Nov 2021 13:03:26 +0800
+From:   Chengguang Xu <cgxu519@mykernel.net>
+Reply-To: cgxu519@mykernel.net
+To:     "Amir Goldstein" <amir73il@gmail.com>
+Cc:     "Miklos Szeredi" <miklos@szeredi.hu>, "Jan Kara" <jack@suse.cz>,
+        "overlayfs" <linux-unionfs@vger.kernel.org>,
+        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "Chengguang Xu" <charliecgxu@tencent.com>
+Message-ID: <17d5aa0795d.fdfda4a49855.5158536783597235118@mykernel.net>
+In-Reply-To: <CAOQ4uxhrg=MAL7sArmP47oyF_QmhG-1b=srs30VNdiT-9s-P0w@mail.gmail.com>
+References: <20211122030038.1938875-1-cgxu519@mykernel.net> <20211122030038.1938875-8-cgxu519@mykernel.net> <CAOQ4uxhrg=MAL7sArmP47oyF_QmhG-1b=srs30VNdiT-9s-P0w@mail.gmail.com>
+Subject: Re: [RFC PATCH V6 7/7] ovl: implement containerized syncfs for
+ overlayfs
 MIME-Version: 1.0
-In-Reply-To: <0e6e66f7368621128a810bb604eab229dd279187.camel@kernel.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Importance: Medium
+User-Agent: ZohoCN Mail
+X-Mailer: ZohoCN Mail
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=80, 2021-11-22 15:40:59 Amir Golds=
+tein <amir73il@gmail.com> =E6=92=B0=E5=86=99 ----
+ > On Mon, Nov 22, 2021 at 5:01 AM Chengguang Xu <cgxu519@mykernel.net> wro=
+te:
+ > >
+ > > From: Chengguang Xu <charliecgxu@tencent.com>
+ > >
+ > > Now overlayfs can only sync own dirty inodes during syncfs,
+ > > so remove unnecessary sync_filesystem() on upper file system.
+ > >
+ > > Signed-off-by: Chengguang Xu <charliecgxu@tencent.com>
+ > > ---
+ > >  fs/overlayfs/super.c | 14 +++++---------
+ > >  1 file changed, 5 insertions(+), 9 deletions(-)
+ > >
+ > > diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+ > > index ccffcd96491d..213b795a6a86 100644
+ > > --- a/fs/overlayfs/super.c
+ > > +++ b/fs/overlayfs/super.c
+ > > @@ -292,18 +292,14 @@ static int ovl_sync_fs(struct super_block *sb, i=
+nt wait)
+ > >         /*
+ > >          * Not called for sync(2) call or an emergency sync (SB_I_SKIP=
+_SYNC).
+ > >          * All the super blocks will be iterated, including upper_sb.
+ > > -        *
+ > > -        * If this is a syncfs(2) call, then we do need to call
+ > > -        * sync_filesystem() on upper_sb, but enough if we do it when =
+being
+ > > -        * called with wait =3D=3D 1.
+ > >          */
+ > > -       if (!wait)
+ > > -               return 0;
+ > > -
+ > >         upper_sb =3D ovl_upper_mnt(ofs)->mnt_sb;
+ > > -
+ > >         down_read(&upper_sb->s_umount);
+ > > -       ret =3D sync_filesystem(upper_sb);
+ > > +       if (wait)
+ > > +               wait_sb_inodes(upper_sb);
+ > > +       if (upper_sb->s_op->sync_fs)
+ > > +               upper_sb->s_op->sync_fs(upper_sb, wait);
+ > > +       ret =3D ovl_sync_upper_blockdev(upper_sb, wait);
+ >=20
+ > I think it will be cleaner to use a helper ovl_sync_upper_filesystem()
+ > with everything from  upper_sb =3D ... and a comment to explain that
+ > this is a variant of __sync_filesystem() where all the dirty inodes writ=
+e
+ > have already been started.
+ >=20
+=20
+I agree with you.=20
 
-
-On 11/29/21 9:01 AM, Jeff Layton wrote:
-> On Mon, 2021-11-29 at 08:35 -0700, Tim Gardner wrote:
->> Hi Len,
->>
->> I have a report (https://bugs.launchpad.net/bugs/1952094) that commit
->> f980d055a0f858d73d9467bb0b570721bbfcdfb8 ("CIFS: Fix a potencially
->> linear read overflow") causes a regression as a stable backport in a 5.4
->> based kernel. I don't know if this regression exists in tip as well, or
->> if it is unique to the backported environment. I suspect, given the
->> content of the patch, that it is generic. As such, it has been
->> backported to a number of stable releases:
->>
->> linux-4.4.y.txt:0955df2d9bf4857e3e2287e3028903e6cec06c30
->> linux-4.9.y.txt:8878af780747f498551b7d360cae61b415798f18
->> linux-4.14.y.txt:20967547ffc6039f17c63a1c24eb779ee166b245
->> linux-4.19.y.txt:bea655491daf39f1934a71bf576bf3499092d3a4
->> linux-5.4.y.txt:b444064a0e0ef64491b8739a9ae05a952b5f8974
->> linux-5.10.y.txt:6c4857203ffa36918136756a889b12c5864bc4ad
->> linux-5.13.y.txt:9bffe470e9b537075345406512df01ca2188b725
->> linux-5.14.y.txt:c41dd61c86482ab34f6f039b13296308018fd99b
->>
->> Could this be an off-by-one issue if the source string is full length ?
->>
->> rtg
-> 
-> Maybe? But it doesn't seem to be that long. The error message evidently
-> says:
-> 
->      "CIFS VFS: CIFS mount error: iocharset utf8 not found"
-> 
-> The iocharset string ("utf8" here) usually gets set in the mount string
-> and then we just pass that string to load_nls().
-> 
-> The patch you're pointing out though doesn't seem to be involved in any
-> of that. It sounds like something else is wrong. I'd validate that that
-> patch was applied correctly, and get more details about what this guy is
-> doing.
-> 
-> g/l!
-> 
-
-You may be correct. I made the rash assumption the reporter had done a 
-normal full upgrade. However, it appears he may have only done targeted 
-package updates and neglected the linux-modules-extra package that 
-contains the nls_utf8 module. My test kernel installation instructions 
-_did_ include linux-modules-extra which is likely why it worked for him.
-
-I've requested more info from the reporter to verify that the missing 
-package is the root of his problem.
-
-Thanks for responding.
-
-rtg
------------
-Tim Gardner
-Canonical, Inc
+Thanks,
+Chengguang

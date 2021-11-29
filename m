@@ -2,166 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAD246247A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 825EC4625A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbhK2WTl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 17:19:41 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:33867 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232943AbhK2WRt (ORCPT
+        id S234144AbhK2WmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:42:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234320AbhK2WlN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:17:49 -0500
-Received: from [77.244.183.192] (port=62584 helo=[192.168.178.41])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mrour-000EyV-6F; Mon, 29 Nov 2021 23:14:28 +0100
-Subject: Re: [PATCH v4 7/9] watchdog: max77620: add support for the max77714
- variant
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211120155707.4019487-1-luca@lucaceresoli.net>
- <20211120155707.4019487-8-luca@lucaceresoli.net>
- <20211129155320.GA2761477@roeck-us.net>
- <8efe5354-6308-4f0c-a0c8-6657f705cfb1@lucaceresoli.net>
- <65a9c26d-31cb-7c4c-df87-12aee8f43578@roeck-us.net>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <4d3d39e7-73f1-fd12-d61e-adbb08147da9@lucaceresoli.net>
-Date:   Mon, 29 Nov 2021 23:14:25 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 29 Nov 2021 17:41:13 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9FDC0FE6CE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:14:34 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id m15so17569431pgu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:14:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vJr1WdAhjm9K0bo/NyTysmBXUmrGdwZ7UXHYeZqs6A8=;
+        b=jdenIRW0OyIXe10cw0js/ZnNTpE8qTUaHcTLqnB+y0RwKsdGlV1H6tro2In8FIoSfG
+         iZL2fXqcuolco57Hre7w5GH3eUP85HClcmJQ5zGyoCygJLtxNsK3qosIljIs7AdyWZc+
+         M0BZ3MW2LHKi3OGNITu1k8b+P6eRcpWlVcNKpeWNDAQjJJkFeGYyiThy1oRSOI/FIklr
+         T2dN8qmpWPyE2Im5mOWCvjKi9OAlFw6Sc9ImvwnjtquXM1LOFMjXqW4R6sNAazwYXfee
+         94hRnZxRXYMxQEIzOr9D6p3tZfFoHpEA9pmlYwUzYVpPd3fDuw0hhSRAchvW2acvY7Dk
+         tiTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vJr1WdAhjm9K0bo/NyTysmBXUmrGdwZ7UXHYeZqs6A8=;
+        b=3YODZ48JZiVXMxYtTxPc9rpLIp3mi1nZBI66hZwmBGZNLUAcVov/BTfRMICr+gBgsW
+         vdhzIvSCPjpRRQTC80kQvRIQHwDF5VIYgoypOPoMBO+QQ9SjD5AbTeUlzUDjyueu0tgF
+         Fh628ZZ66S4NDLUZjF00v5VytIaRtVbHd3aN7HPJuIzIdm979Owu4oDxwskUubRKtE26
+         cegg8+Oaj70DFUkELnBw7uygo2apeVsJxzvjAMS95+BCy7NPNolsVdZDu10XHNCvEnvl
+         9KrTxwVGqv6gUeVJ2Uu9XCJfbJ4ZgkKh2ynb1zptv8K/CC6kWvr2lkO0pjbhog71OrYq
+         INRg==
+X-Gm-Message-State: AOAM533fMrzXYzgHyvOsjJvIRHjc/KBn23tsyY6oNG7E1Td26oscxRbJ
+        bUEVoeBgOTsOzBgbQOD5YxyG/2g4BTmzGg==
+X-Google-Smtp-Source: ABdhPJw2WkFD6GadsTgMaNDrZxN0dOHmssbuABOd/93651c3GRU+L1jbEthI31TKKWKXRWgKbF7jbg==
+X-Received: by 2002:a05:6a00:1821:b0:4a4:ab04:39a with SMTP id y33-20020a056a00182100b004a4ab04039amr42940454pfa.76.1638224073328;
+        Mon, 29 Nov 2021 14:14:33 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id l21sm299058pjt.24.2021.11.29.14.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 14:14:32 -0800 (PST)
+Date:   Mon, 29 Nov 2021 22:14:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: VMX: prepare sync_pir_to_irr for running with
+ APICv disabled
+Message-ID: <YaVQxZ42Ve6JNIzt@google.com>
+References: <20211123004311.2954158-1-pbonzini@redhat.com>
+ <20211123004311.2954158-3-pbonzini@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <65a9c26d-31cb-7c4c-df87-12aee8f43578@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8BIT
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123004311.2954158-3-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
-
-On 29/11/21 22:56, Guenter Roeck wrote:
-> On 11/29/21 1:24 PM, Luca Ceresoli wrote:
-> [ ... ]
->>>>   +static const struct max77620_variant max77620_wdt_data = {
->>>> +    .wdt_info = {
->>>> +        .identity = "max77620-watchdog",
->>>> +        .options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING |
->>>> WDIOF_MAGICCLOSE,
->>>> +    },
->>>
->>> That does not have to be, and should not be, part of device specific
->>> data,
->>> just because of the identity string.
->>
->> Ok, no problem, will fix, but I have two questions.
->>
->> First, what's the reason? Coding style or a functional difference?
->> Usually const data is preferred to runtime assignment.
->>
+On Mon, Nov 22, 2021, Paolo Bonzini wrote:
+> If APICv is disabled for this vCPU, assigned devices may
+> still attempt to post interrupts.  In that case, we need
+> to cancel the vmentry and deliver the interrupt with
+> KVM_REQ_EVENT.  Extend the existing code that handles
+> injection of L1 interrupts into L2 to cover this case
+> as well.
 > 
-> wdt_info is not chip specific variant information as nothing but the
-> identity
-> string is different, and there is no technical need for that difference.
+> vmx_hwapic_irr_update is only called when APICv is active
+> so it would be confusing to add a check for
+> vcpu->arch.apicv_active in there.  Instead, just use
+> vmx_set_rvi directly in vmx_sync_pir_to_irr.
+
+Overzealous newlines.
+
+If APICv is disabled for this vCPU, assigned devices may still attempt to
+post interrupts.  In that case, we need to cancel the vmentry and deliver
+the interrupt with KVM_REQ_EVENT.  Extend the existing code that handles
+injection of L1 interrupts into L2 to cover this case as well.
+
+vmx_hwapic_irr_update is only called when APICv is active so it would be
+confusing to add a check for vcpu->arch.apicv_active in there.  Instead,
+just use vmx_set_rvi directly in vmx_sync_pir_to_irr.
+
+
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/vmx.c | 35 +++++++++++++++++++++++------------
+>  1 file changed, 23 insertions(+), 12 deletions(-)
 > 
->> Second: it's not clear how you expect it to be done. Looking into the
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index ba66c171d951..cccf1eab58ac 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -6264,7 +6264,7 @@ static int vmx_sync_pir_to_irr(struct kvm_vcpu *vcpu)
+>  	int max_irr;
+>  	bool max_irr_updated;
+>  
+> -	if (KVM_BUG_ON(!vcpu->arch.apicv_active, vcpu->kvm))
+> +	if (KVM_BUG_ON(!enable_apicv, vcpu->kvm))
+>  		return -EIO;
+>  
+>  	if (pi_test_on(&vmx->pi_desc)) {
+> @@ -6276,20 +6276,31 @@ static int vmx_sync_pir_to_irr(struct kvm_vcpu *vcpu)
+>  		smp_mb__after_atomic();
+>  		max_irr_updated =
+>  			kvm_apic_update_irr(vcpu, vmx->pi_desc.pir, &max_irr);
+> -
+> -		/*
+> -		 * If we are running L2 and L1 has a new pending interrupt
+> -		 * which can be injected, this may cause a vmexit or it may
+> -		 * be injected into L2.  Either way, this interrupt will be
+> -		 * processed via KVM_REQ_EVENT, not RVI, because we do not use
+> -		 * virtual interrupt delivery to inject L1 interrupts into L2.
+> -		 */
+> -		if (is_guest_mode(vcpu) && max_irr_updated)
+> -			kvm_make_request(KVM_REQ_EVENT, vcpu);
+>  	} else {
+>  		max_irr = kvm_lapic_find_highest_irr(vcpu);
+> +		max_irr_updated = false;
+
+Heh, maybe s/max_irr_updated/new_pir_found or so?  This is a bit weird:
+
+  1. Update max_irr
+  2. max_irr_updated = false
+
+>  	}
+> -	vmx_hwapic_irr_update(vcpu, max_irr);
+> +
+> +	/*
+> +	 * If virtual interrupt delivery is not in use, the interrupt
+> +	 * will be processed via KVM_REQ_EVENT, not RVI.  This can happen
+
+I'd strongly prefer to phrase this as a command, e.g. "process the interrupt via
+KVM_REQ_EVENT".  "will be processed" makes it sound like some other flow is
+handling the event, which confused me.
+
+> +	 * in two cases:
+> +	 *
+> +	 * 1) If we are running L2 and L1 has a new pending interrupt
+
+Hmm, calling it L1's interrupt isn't technically wrong, but it's a bit confusing
+because it's handled in L2.  Maybe just say "vCPU"?
+
+> +	 * which can be injected, this may cause a vmexit or it may
+
+Overzealous newlines again.
+
+> +	 * be injected into L2.  We do not use virtual interrupt
+> +	 * delivery to inject L1 interrupts into L2.
+
+I found the part of "may cause a vmexit or may be injected into L2" hard to
+follow, I think because this doesn't explicit state that the KVM_REQ_EVENT is
+needed to synthesize a VM-Exit.
+
+How about this for the comment?
+
+	/*
+	 * If virtual interrupt delivery is not in use, process the interrupt
+	 * via KVM_REQ_EVENT, not RVI.  This is necessary in two cases:
+	 *
+	 * 1) If L2 is running and the vCPU has a new pending interrupt.  If L1
+	 * wants to exit on interrupts, KVM_REQ_EVENT is needed to synthesize a
+	 * VM-Exit to L1.  If L1 doesn't want to exit, the interrupt is injected
+	 * into L2, but KVM doesn't use virtual interrupt delivery to inject
+	 * interrupts into L2, and so KVM_REQ_EVENT is again needed.
+	 *
+	 * 2) If APICv is disabled for this vCPU, assigned devices may still
+	 * attempt to post interrupts.  The posted interrupt vector will cause
+	 * a VM-Exit and the subsequent entry will call sync_pir_to_irr.
+	 */
+
+> +	 *
+> +	 * 2) If APICv is disabled for this vCPU, assigned devices may
+> +	 * still attempt to post interrupts.  The posted interrupt
+> +	 * vector will cause a vmexit and the subsequent entry will
+> +	 * call sync_pir_to_irr.
+> +	 */
+> +	if (!is_guest_mode(vcpu) && vcpu->arch.apicv_active)
+
+If the second check uses kvm_vcpu_apicv_active(), this will avoid a silent conflict
+when kvm/master and kvm/queue are merged.
+
+Nits aside, the logic is good:
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+
+> +		vmx_set_rvi(max_irr);
+> +	else if (max_irr_updated)
+> +		kvm_make_request(KVM_REQ_EVENT, vcpu);
+> +
+>  	return max_irr;
+>  }
+>  
+> -- 
+> 2.27.0
 > 
-> I gave you three options to pick from.
-
-Perhaps it's because I'm not a native English speaker, but I thought
-"either" introduces an alternative between two options (wiktionary
-confirms, FWIW). Reading your sentence in that perspective gave it a
-different meaning.
-
->> kernel it looks like almost all drivers set a constant string. I could
->> find only one exception, f71808e_wdt:
->> https://elixir.bootlin.com/linux/v5.16-rc3/source/drivers/watchdog/f71808e_wdt.c#L471
->>
->>
->>> Either keep the current identity string,
->>> mark max77620_wdt_info as __ro_after_init and overwrite the identity
->>> string
->>> there during probe
->>
->> And also remove 'static' I guess. Hm, I don't love this, as above I tend
->> to prefer static const when possible for file-scoped data.
->>
 > 
-> Where did I suggest to remove 'static', and what would be the benefit of
-> making
-> the variable global ?
-
-You didn't. But since max77620_wdt_info is currently file-scoped, should
-it be modified during probe it would generate a weird situation in case
-one has both a max77714 and a max77620 on the same board (unlikely but
-possible), as two instances of the same driver would modify the same
-(static) data.
-
-But all of this discussion is getting quite theoretical as...
-
->>> or add the structure to max77620_wdt and fill it out there.
->>
->> Do you mean like the following, untested, kind-of-pseudocode?
->>
->>   struct max77620_wdt {
->>       struct device            *dev;
->>       struct regmap            *rmap;
->>     const struct max77620_variant    *drv_data;
->> +    struct watchdog_info        info;     /* not a pointer! */
->>       struct watchdog_device        wdt_dev;
->>   };
->>
->> and then, in probe:
->>
->>     wdt->dev = dev;
->>     wdt->drv_data = (const struct max77620_variant *)id->driver_data;
->>     /* ... assign other wdt fields ... */
->> +  strlcpy(wdt_dev->info.identity, id->name, \
->> +          sizeof(wdt_dev->info.identity));
->> +  wdt_dev->info.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | \
->> +                          WDIOF_MAGICCLOSE;
->>
-> For example, yes.
-> 
->> Finally, what about simply:
->>
->>   static const struct max77620_variant max77620_wdt_data = {
->>     .wdt_info = {
->> -        .identity = "max77620-watchdog",
->> +        .identity = "max77xxx-watchdog",
->>         .options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | ...
->>     },
->>
->> and always use that struct unconditionally? The max63xx_wdt.c driver
->> seems to do that. Or, if this is an issue for backward compatibility (is
->> it?), just leave max77620_wdt_data and the .identity field will always
->> be "max77620-watchdog" even when using a MAX77714.
-
-...I'll go for this last, simplest option: same struct, same string, always.
-
--- 
-Luca
-

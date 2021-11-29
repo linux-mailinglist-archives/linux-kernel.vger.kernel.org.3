@@ -2,166 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42323460F8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA528460F8D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:46:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240720AbhK2HvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 02:51:14 -0500
-Received: from esa5.hgst.iphmx.com ([216.71.153.144]:41236 "EHLO
-        esa5.hgst.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241177AbhK2HtN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:49:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1638171956; x=1669707956;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eyoVespazCZvZmlf/odluAdZQbL7d8hO0W+4W0XSC50=;
-  b=FEUazltmDCwbUh1GNj1aReaNX+BfQbrws4bYvuFWoQsG3Gu4AX0A0A6K
-   jlkIKvLgiKh70mp+iCHOVHMKwYTUjVRnVkNsopv3Yr/0B1RFQyD56QJ9f
-   OvbLUoURpmTvW9nANp6or+S17IYXlmqaym9PU6Zk+gKt2smDTa3bhntOj
-   6ie5nKNuedEDHBAKkwSfPRRiodghKryg7SalTaElf5SigSapHtcMCKjCq
-   7ZjaV8r8dmgZYdrg37MqtuW32Nt1t+mgeSWgQYs44QleknAfvqsmA3NNH
-   +fc8UjKMHu0idif6oyYeaGytdeArrHVEUJXq+y3VVWZdp9E0wC+MxvPfh
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.87,272,1631548800"; 
-   d="scan'208";a="186940099"
-Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 29 Nov 2021 15:43:55 +0800
-IronPort-SDR: M7h1n9HlCDF/boduYqOG8YqyQfCBgR8FH2leOUsx/56ZkGeXXr0BCig4ecm2iLkbHossenV7NN
- P2aXsRDSkq4QlZeZDyXYQ16M0S+0W+G5qsXCVZPSa+pyDIZZI63b+sRqeKHZQa0ZbYxvDE2Not
- 46X2FoZYAnKiaQ0E4X7rxma83vknz6j/ohk72tE4W9Rb2HLBpUqudBTyWuRCdtXeaFZk8JxJMC
- Qn5+6dFpKDmA7O3io30JXPpY1D8TRvawXunaZwdvpVGvJbnmr1w9A+WxwvDo58TkrjPlLjjZ1F
- a1L7PCpK0zzOPZC4xcgaJ48g
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 23:17:10 -0800
-IronPort-SDR: 6TxKquluPSec8akrbNpx2XEU5vRkLEoItnPxPqSjubRPBcTgRyFQBtDFYF8aMV68bMlcqTh+IQ
- QZUkdt2C1zyWUWxxtdGNsjD9+mhYSLpI/+Eolh+QfC0qLUuFwVbCWO5tQgbS3upECuBOXF6eeY
- 4xA1uWCidgw37i35NhZyETURhnvmIs8AnLxAjLfgjyxMoLmHrl0WiXTKVlJ67Pj9hhuOMtu5fv
- Zuo7iLs7TJZ9CnzSxSYN++jVfrVQ9GiLfb73ZvMWM06jBuloz3hM9/6nfVT3/WECklS4LgfqJN
- c+Q=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2021 23:43:56 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4J2cmW4bd6z1RtVv
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Nov 2021 23:43:55 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1638171835; x=1640763836; bh=eyoVespazCZvZmlf/odluAdZQbL7d8hO0W+
-        4W0XSC50=; b=ib83jI1poupuv4A0CqmzwrSfcEJRL6pBYLoPU8d/Bvj9r28WPYb
-        roD5Zs2HvcElpXsn582+PF1nH5j53ijB9pZENGC8ILeG64AvLxLFMpi9Ryruzd6O
-        06PpKNOmKyOwLjR9FxAg4VzJQzyPo/kZfl0zw8pn0NlGDFJbdjSA4Y3jdxTzIaSH
-        8s1ZaaI42XkR8XChMD31mqeTSA6SCa0FwUwAISmxLZW7e/t88baPTTh8kAwtM+mv
-        UusFA7MCSkbneL+E5EXXUz3tYnRTsT81mwE45boBTwjEvpbEI8poNgB2mJ1VooJL
-        gQBjPqEPrEdacFy0QHFrhx31Xzp0gtkEO3w==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id l_oJLN9izegn for <linux-kernel@vger.kernel.org>;
-        Sun, 28 Nov 2021 23:43:55 -0800 (PST)
-Received: from [10.225.54.48] (unknown [10.225.54.48])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4J2cmV0l4gz1RtVl;
-        Sun, 28 Nov 2021 23:43:53 -0800 (PST)
-Message-ID: <0b5b3826-2989-8d42-4139-5a9d28582f65@opensource.wdc.com>
-Date:   Mon, 29 Nov 2021 16:43:52 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v2] pata_falcon: Avoid type warnings from sparse
+        id S240455AbhK2Htt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 02:49:49 -0500
+Received: from mail-ma1ind01olkn0165.outbound.protection.outlook.com ([104.47.100.165]:6119
+        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240392AbhK2Hrt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 02:47:49 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dxcud/2/9L5BiiOm5Sbfccuh4USgR7Q8TFgepUuzYXhiR1naUjcI63WLlf1bCgCrePgGfblyknSIyJ32gsgnKgwLRTYAX3ZodZl8FQqpnP37X8UePJCFsFm4Eig3UTqq+2+xy/KPC4d87K+dnTGFUkhreSrOZ5h609yeRaS0DFp4Zqg+llm8dax1l+1CHQDb4QKwz1grx3FffeSBDuLYWRxbetcfmb6iMH33JF8crakpzDtE2rPnjyJudPT/v2YOaZphBNvaWqu3GBGL8AOmfd304RPnYrHcW0TxLGKrgmXCEgtwys46h7aj6EAOxl3OtTZSxWM0WGx7yZ9NNPztXA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bxZC/nJsNKS/bzRhaUJAnJVf5ypYfM0K9cnI4ezD9cM=;
+ b=h15a7OcdY795ao1MDvuTHMPdQ1z59go1n7CaTCffWHJblYXjja9cKJ4Srn/aL+buZwoW/iRf4auIpn9o250xS3svmwuiFkTb8kzP3QLsA15e+2P5PH9xsDmDwqMyqeYsGHsPjgA6TLl0GRsAvkABh1RbITeU24hV4unxif6/Zayql0+tdqoVPoZkJncqQb8+2UB9JkYV/Tt/xZO2Ps4SH9/a7yYfP29327/85XyIycxQpG18cZ2Uvd/7maeznobnCJBb42TSVo9zAc1s7lNfvlK5HlcgIEOtNCZsi8wQgiuSS/6bGdm8lgeTyMG3UQWysyCVg/VuyWCcUfqSsiNaDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bxZC/nJsNKS/bzRhaUJAnJVf5ypYfM0K9cnI4ezD9cM=;
+ b=hjNK6ZBLOq3ChRbzAzHpa0En8GCvpX5Wcyn6EvWp2Y7Kt2+WZvcSMBS/WO+cbKxAF73CPx8i5v4xQY4Q6qJFUFhz5Y/1bsPrCnAIsu5PKRXiHxkaJ+iN1A9+CkXcdtQrorveKnDOit10QTw0TygGLJ3yoDyda0LhegpiyF1FyfzY5JnR/84JfBEyb1QJtBHJkzgO2SzWyOQbd0lTv2V3VKSy3QCqRmjbzQcmMT5o5u1mvYl87BWclJq4AxbUdJv2drJPo6DtK85+zgTrSe5Rg9ISYckk2XWnB3zwMgTERZfj8xVxSlzkMvu8a9Iy+X+6srauTaYGP95YAOFGABqnzQ==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PN1PR0101MB1821.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c00:12::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
+ 2021 07:44:21 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%5]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 07:44:21 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+CC:     Marcel Holtmann <marcel@holtmann.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH v2 2/6] btbcm: disable read tx power for MacBook Pro 16,1 (16
+ inch, 2019)
+Thread-Topic: [PATCH v2 2/6] btbcm: disable read tx power for MacBook Pro 16,1
+ (16 inch, 2019)
+Thread-Index: AQHX5PTr/Pd+XRBzLUamLbooOejRdg==
+Date:   Mon, 29 Nov 2021 07:44:21 +0000
+Message-ID: <6AA7A457-3978-4426-A975-0CFEDFE66CFC@live.com>
+References: <20211001083412.3078-1-redecorating@protonmail.com>
+ <YYePw07y2DzEPSBR@kroah.com>
+ <70a875d0-7162-d149-dbc1-c2f5e1a8e701@leemhuis.info>
+ <20211116090128.17546-1-redecorating@protonmail.com>
+ <e75bf933-9b93-89d2-d73f-f85af65093c8@leemhuis.info>
+ <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com> <YZSuWHB6YCtGclLs@kroah.com>
+ <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
+ <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
+ <20211117124717.12352-1-redecorating@protonmail.com>
+ <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
+ <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
+ <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
+ <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+ <BC534C52-7FCF-4238-8933-C5706F494A11@live.com>
+ <5B9FF471-42DD-44DA-A9CE-0A83BA7A4212@live.com>
+In-Reply-To: <5B9FF471-42DD-44DA-A9CE-0A83BA7A4212@live.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <8f6a78cf7b60160ef3d22445ee1b8f2c0678f74b.1637879659.git.fthain@linux-m68k.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital
-In-Reply-To: <8f6a78cf7b60160ef3d22445ee1b8f2c0678f74b.1637879659.git.fthain@linux-m68k.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [ArM5Rfz2zH/E32Mf3OQQdWUQ7GLS7AxXTcRWae/4oBCglnDnS3VrDsGt5eY+vd4p]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2c739b2d-f54a-402f-9b76-08d9b30c0e56
+x-ms-traffictypediagnostic: PN1PR0101MB1821:
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: v/WngLnhoXmRe5on1+My/M5vPi3ensT0EcTkGB/9dRNf3wdAWzYKA+BEXugBQR4N2jFVormB+7jwSrTR4PkjP8htLIEnQNSKZey+z+12oCSsAgevaBV/xw7+7L9oIS/OHUZADzv6u8I/mbPRa0UMAAwb5EoFlcNSnbV1Tyb4QHmN/F81DcllAK/OfTSCDhpEfsGvdKidjnjXfIVjVpzsz0vX1z0OFqgyZgE9AWw4k1O6In2xKSUj7vMPrjZJ0IpoTe6ZAwkYDDOctLwmJ6S6LAndDOYw9CYo/97lWpKKZJn3lWJzBNMeB2/HRJfYYaO3YgXzfzNFm9k5G0xsGmPdW0ZMfoPg7ygD+1Cz0TilknS2vmRbbm2nCKfndnKRj2GDLYdBLfZe8/DIEsR2fP4Q8E+pTZsrcTvjvQ/MgMx8kn76NQ5DUiAHJWXsr0O88Nf4+QFHu0nSWSTtjudvg2/kRRzmJge/bIcl+wkYEDj0QbcG5paJxON1xMGi/tDd9piAeuZxtl/mwcxmnHvQ7qQVt4xu0vRtNMWnq9t68frEHFGXHNpfPO77OSnebE3xIntJTyH5ppzJ+iDUtUxkconHzw==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: tyTAJZLMLn+o66I6jqE6B/ikNmyrNOfgPhiywBE3wuT1nc5SufUluNz1A2WgBuppnqyZWD4ncCDKrlw8OrRjm/2Z05KyoaQxUu5MfBH/VhcvIqdvZLh3bgakS8ieRH54EkjxI0jNWCJDjkWJt4HimlMgIu0IOgxHVT/V6MJMuLOiSWjpv8IqAhWEnbjovgthfKJIW7BGSfmy6Dzz36JmaAhNB4c+HOsPAh8k/FPATq1jamohx/POOcG6Maj0GLYjWpAXpCZeXr9s4DrXT7nY8x66oQj0E+dWMdyjwvZnLDQXXM5yR3kgdXyTOAdvYBh1xZDBYXh3rYbzqR7fCxWGfHg1DRNDb9FQc2OhTFi/GDOdBR3gDS7yoHyL+veItxstiUGnTM5zikayxE8NgU+vM5xruRZI+6MqXGyGojNTDvfXJybbH8ABdMvF2h68I9Y2LuqNSHvhjOBYtyIfPSK4LVbz2UK70jsNtFUHTAehp6EqvRvLoBwANZWZU5C+c7c+2RCucFX52vuM1+uTrVVJnqOL9+gBPyZg3Bt+BLplrWGKsdkMp1bpC6UbFcoPYzhd7dYbamISNAWlg9SMHAhL9yGW6mLrx6rhs+sgRQ/xT3SMUHxUj7VzeSmvbiVrSdyar3kD5EudXqAG4aKFRQYE+7IZH3DXaUfEJCeJmubGGv/hRH/SAWvPCTL74MG08HgfqtDzK1fLvhwdHN57efqvoe0wazagcEzhjqAORlX2gAYsM6rUMW363OzMpSK+o52obqDYisLT7DLvl9Medkiz/Q==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <F21B303A49BF9841BB43AB4C8A637EC6@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-a1a1a.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2c739b2d-f54a-402f-9b76-08d9b30c0e56
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 07:44:21.0126
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN1PR0101MB1821
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/11/26 7:34, Finn Thain wrote:
-> The zero day bot reported some sparse complaints in pata_falcon.c. E.g.
-> 
-> drivers/ata/pata_falcon.c:58:41: warning: cast removes address space '__iomem' of expression
-> drivers/ata/pata_falcon.c:58:41: warning: incorrect type in argument 1 (different address spaces)
-> drivers/ata/pata_falcon.c:58:41:    expected unsigned short volatile [noderef] [usertype] __iomem *port
-> drivers/ata/pata_falcon.c:58:41:    got unsigned short [usertype] *
-> 
-> The same thing shows up in 8 places, all told. Avoid this by removing
-> unnecessary type casts.
-> 
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: Michael Schmitz <schmitzmic@gmail.com>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
-> ---
->  drivers/ata/pata_falcon.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/ata/pata_falcon.c b/drivers/ata/pata_falcon.c
-> index 121635aa8c00..823c88622e34 100644
-> --- a/drivers/ata/pata_falcon.c
-> +++ b/drivers/ata/pata_falcon.c
-> @@ -55,14 +55,14 @@ static unsigned int pata_falcon_data_xfer(struct ata_queued_cmd *qc,
->  	/* Transfer multiple of 2 bytes */
->  	if (rw == READ) {
->  		if (swap)
-> -			raw_insw_swapw((u16 *)data_addr, (u16 *)buf, words);
-> +			raw_insw_swapw(data_addr, (u16 *)buf, words);
->  		else
-> -			raw_insw((u16 *)data_addr, (u16 *)buf, words);
-> +			raw_insw(data_addr, (u16 *)buf, words);
->  	} else {
->  		if (swap)
-> -			raw_outsw_swapw((u16 *)data_addr, (u16 *)buf, words);
-> +			raw_outsw_swapw(data_addr, (u16 *)buf, words);
->  		else
-> -			raw_outsw((u16 *)data_addr, (u16 *)buf, words);
-> +			raw_outsw(data_addr, (u16 *)buf, words);
->  	}
->  
->  	/* Transfer trailing byte, if any. */
-> @@ -74,16 +74,16 @@ static unsigned int pata_falcon_data_xfer(struct ata_queued_cmd *qc,
->  
->  		if (rw == READ) {
->  			if (swap)
-> -				raw_insw_swapw((u16 *)data_addr, (u16 *)pad, 1);
-> +				raw_insw_swapw(data_addr, (u16 *)pad, 1);
->  			else
-> -				raw_insw((u16 *)data_addr, (u16 *)pad, 1);
-> +				raw_insw(data_addr, (u16 *)pad, 1);
->  			*buf = pad[0];
->  		} else {
->  			pad[0] = *buf;
->  			if (swap)
-> -				raw_outsw_swapw((u16 *)data_addr, (u16 *)pad, 1);
-> +				raw_outsw_swapw(data_addr, (u16 *)pad, 1);
->  			else
-> -				raw_outsw((u16 *)data_addr, (u16 *)pad, 1);
-> +				raw_outsw(data_addr, (u16 *)pad, 1);
->  		}
->  		words++;
->  	}
-> 
+From: Aditya Garg <gargaditya08@live.com>
 
-Geert,
+Bluetooth on Apple MacBook Pro 16,1 is unable to start due to LE Min/Max Tx=
+ Power being queried on=20
+startup. Add a DMI based quirk so that it is disabled.
 
-If your are OK with this version, please send a review tag. Thanks.
+v2: Wrap the changeling at 72 columns and remove tested by.
 
--- 
-Damien Le Moal
-Western Digital Research
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+---
+ drivers/bluetooth/btbcm.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+index e4182acee488c5..c1b0ca63880a68 100644
+--- a/drivers/bluetooth/btbcm.c
++++ b/drivers/bluetooth/btbcm.c
+@@ -8,6 +8,7 @@
+=20
+ #include <linux/module.h>
+ #include <linux/firmware.h>
++#include <linux/dmi.h>
+ #include <asm/unaligned.h>
+=20
+ #include <net/bluetooth/bluetooth.h>
+@@ -343,9 +344,23 @@ static struct sk_buff *btbcm_read_usb_product(struct h=
+ci_dev *hdev)
+ 	return skb;
+ }
+=20
++static const struct dmi_system_id disable_broken_read_transmit_power[] =3D=
+ {
++	{
++		/* Match for Apple MacBook Pro 16,1 which needs
++		 * Read LE Min/Max Tx Power to be disabled.
++		 */
++		 .matches =3D {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,1"),
++		},
++	},
++	{ }
++};
++
+ static int btbcm_read_info(struct hci_dev *hdev)
+ {
+ 	struct sk_buff *skb;
++	const struct dmi_system_id *dmi_id;
+=20
+ 	/* Read Verbose Config Version Info */
+ 	skb =3D btbcm_read_verbose_config(hdev);
+@@ -362,6 +377,11 @@ static int btbcm_read_info(struct hci_dev *hdev)
+=20
+ 	bt_dev_info(hdev, "BCM: features 0x%2.2x", skb->data[1]);
+ 	kfree_skb(skb);
++
++	/* Read DMI and disable broken Read LE Min/Max Tx Power */
++	dmi_id =3D dmi_first_match(disable_broken_read_transmit_power);
++	if (dmi_id)
++		set_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks);
+=20
+ 	return 0;
+ }
+

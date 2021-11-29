@@ -2,154 +2,395 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA958462568
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB44F462578
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231229AbhK2Wim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:38:42 -0500
-Received: from out5-smtp.messagingengine.com ([66.111.4.29]:40415 "EHLO
-        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231501AbhK2WiF (ORCPT
+        id S234695AbhK2WkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:40:20 -0500
+Received: from mail-qk1-f174.google.com ([209.85.222.174]:43904 "EHLO
+        mail-qk1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233951AbhK2Wjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:38:05 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id E9A495C019E;
-        Mon, 29 Nov 2021 17:34:45 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute3.internal (MEProxy); Mon, 29 Nov 2021 17:34:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm3; bh=nak5LLj7hhbHiQ3bZxbtQxMEyoqm
-        oK2+u/U9XmUMMoc=; b=THtCY7wkN/LcNfZsiY6qA3Z5wl8SrUNoDQdhre1m32or
-        xXwFlPbIeq4T7sCxkvXWWqLU0wIndzQRo1e3w7X6TPxHrcmbdlN4s9+JP9D+uT+v
-        u5x/ef/5I2XDXd+kkfqh1c8KgGlq/gbEbOCtRFctyliNdfHGxr3kUcgbeGnrx914
-        BzWbLeVdSNNVcE5iAZsZGDCEC0nCMIeVNcctl0Dllk9l36YowjHlHgN5TUqqF1ta
-        ResCWamcVlEQ4k8HTJZLa3MIE3iJlwnmJoiXh8dNKkuMDVq/xW1m+/vhXEhUvJSH
-        jVmeMDwVM/P3a8Tb/2hcaiblzfVnK2V3wcQzW8mpGw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=nak5LL
-        j7hhbHiQ3bZxbtQxMEyoqmoK2+u/U9XmUMMoc=; b=ea2pzyNyhML2wK/z0O8odQ
-        6ude99ahq4hO3z6Kspo4G0O8LWGST+J62JO11HmqUp7CjYjmNFCUjn4Y+sTNJdLn
-        3UjWrq4krZjwSj2Lw1VBrMRloGxNyH3nDYybdfccJ/uYWObptf/OlrTQNimE1JZT
-        EkP1Bru+1a3cGKwBrjVRvIXkVQM4Hzahp651L0hUPTHXrERbGC9zcWjczgMo4T8h
-        nl6Ii051ICABSNgG3jQpj7YLcu71L38xr0Ky7e+LvxmpXbVWZsW79t3am3umfrUF
-        43FhB5ZyBaO0OK3T42FI/blnp8Q+5hdByyiaFBfo9e8OyUzfMnOoaxhGgyvPk4PA
-        ==
-X-ME-Sender: <xms:hVWlYYVr53cB3hUsRMEnoYkT3mph035pFKO1ZloTpfqIZzJTjJjkOQ>
-    <xme:hVWlYclhtLS9EXXK1DDxNQPtCVGB3ytwPjypfL9N_vdIpNlQWuRu6uQ2EaMce2_VK
-    F_THxC0rEAtiG2G77A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrheelgdduieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
-    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
-    htthgvrhhnpeehtdffledvffegveejgeegvdeujedtteefgfelffehtdetudekteethfet
-    keeuudenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvght
-    vghrrdguvghv
-X-ME-Proxy: <xmx:hVWlYcaQVGukXnjV1thivnYKbqj2kj_VF9BQWNV4mUBNeBEmi4jgug>
-    <xmx:hVWlYXX0fhxwE5auQvj3nId5W7diEzvBj4LmtcbR1vSb3z9gYdLONw>
-    <xmx:hVWlYSn4zj8upU9tYUZ4DZ1CBy_zfTBJWiy33GC_aZWeByA77_ZIkQ>
-    <xmx:hVWlYQa8SoRKcrKDWlE9VIg3rxbbH8S1CISuiDkLp00MAf7QoVIltQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 407A427407A2; Mon, 29 Nov 2021 17:34:45 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4409-g12559b250c-fm-20211129.001-g12559b25
-Mime-Version: 1.0
-Message-Id: <78db7a00-93a4-46de-8071-2801c84bc171@www.fastmail.com>
-In-Reply-To: <YaQseO5kF71vABji@robh.at.kernel.org>
-References: <20211108170946.49689-1-sven@svenpeter.dev>
- <YaQseO5kF71vABji@robh.at.kernel.org>
-Date:   Mon, 29 Nov 2021 23:34:24 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Rob Herring" <robh@kernel.org>
-Cc:     "Felipe Balbi" <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Hector Martin" <marcan@marcan.st>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
-        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Apple dwc3 bindings
-Content-Type: text/plain
+        Mon, 29 Nov 2021 17:39:36 -0500
+Received: by mail-qk1-f174.google.com with SMTP id 193so24663495qkh.10;
+        Mon, 29 Nov 2021 14:36:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=oYq4GIQm8QrcJcBYcEtsoL1OUQLtI2uaYWFL3tBum1w=;
+        b=LbgBUqhNIy40wg1QUS1O3Fphc27umuphTHuXF3Vh3p1aXDpxMB8u1x0uBkoReEpCim
+         Qws+MlUTR+44z5ZnZVEakENKrcwpLTdrfU6pwuCdhEuE6836/zJvFiv0hy41mtw4lmZY
+         1YLN8tM5kVsTYc3cIzQP+cRTcOaYPlO8T+3OWsTzHWZrV97lVx4noL+mCOFlQM5/kb/e
+         xtbk1IkPKi2J95tRlaAM1vZee91lCGFIz1G0UNuyid/iSgKkmcIGicP2EandWWCAfE0l
+         7uRKUoXjM5Kdq43vLMRdIArpNpF15lLBKDwojgjufzkihBUzlfrXdJGQbOAFXSSB8sJh
+         HP+w==
+X-Gm-Message-State: AOAM5331ZxbkcQSMXFEsbKKOYHbqHyekgfiKxHLIJOBJGBNeYh9fEOy4
+        V58Wg1UvjDtYEfnBxmUGGkPHwgK+q5yYNA==
+X-Google-Smtp-Source: ABdhPJzJz5BEY0tJAESTBlt73gwvqVTS7JmG7hyL3hoGsSGW1neE0oIGr731XokwLH4ohx1EX356dw==
+X-Received: by 2002:a05:620a:4092:: with SMTP id f18mr31107993qko.629.1638225377694;
+        Mon, 29 Nov 2021 14:36:17 -0800 (PST)
+Received: from fedora (pool-173-68-57-129.nycmny.fios.verizon.net. [173.68.57.129])
+        by smtp.gmail.com with ESMTPSA id 9sm8636358qkm.5.2021.11.29.14.36.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 14:36:17 -0800 (PST)
+Date:   Mon, 29 Nov 2021 17:36:15 -0500
+From:   Dennis Zhou <dennis@kernel.org>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     dennis@kernel.org, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org, tj@kernel.org,
+        gregkh@linuxfoundation.org, cl@linux.com, catalin.marinas@arm.com,
+        will@kernel.org, tsbogend@alpha.franken.de, mpe@ellerman.id.au,
+        benh@kernel.crashing.org, paulus@samba.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, davem@davemloft.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        sparclinux@vger.kernel.org, x86@kernel.org
+Subject: Re: [PATCH RFC 1/4] mm: percpu: Generalize percpu related config
+Message-ID: <YaVV38QSn6LEBKH/@fedora>
+References: <20211121093557.139034-1-wangkefeng.wang@huawei.com>
+ <20211121093557.139034-2-wangkefeng.wang@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211121093557.139034-2-wangkefeng.wang@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-Thanks for the review!
+On Sun, Nov 21, 2021 at 05:35:54PM +0800, Kefeng Wang wrote:
+> The HAVE_SETUP_PER_CPU_AREA/NEED_PER_CPU_EMBED_FIRST_CHUNK/
+> NEED_PER_CPU_PAGE_FIRST_CHUNK/USE_PERCPU_NUMA_NODE_ID configs,
+> which has duplicate definitions on platforms that subscribe it.
+> 
+> Move them into mm, drop these redundant definitions and instead
+> just select it on applicable platforms.
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>  arch/arm64/Kconfig   | 20 ++++----------------
+>  arch/ia64/Kconfig    |  9 ++-------
+>  arch/mips/Kconfig    | 10 ++--------
+>  arch/powerpc/Kconfig | 17 ++++-------------
+>  arch/riscv/Kconfig   | 10 ++--------
+>  arch/sparc/Kconfig   | 12 +++---------
+>  arch/x86/Kconfig     | 17 ++++-------------
+>  mm/Kconfig           | 12 ++++++++++++
+>  8 files changed, 33 insertions(+), 74 deletions(-)
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index c4207cf9bb17..4ff73299f8a9 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1135,6 +1135,10 @@ config NUMA
+>  	select GENERIC_ARCH_NUMA
+>  	select ACPI_NUMA if ACPI
+>  	select OF_NUMA
+> +	select HAVE_SETUP_PER_CPU_AREA
+> +	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+> +	select NEED_PER_CPU_PAGE_FIRST_CHUNK
+> +	select USE_PERCPU_NUMA_NODE_ID
+>  	help
+>  	  Enable NUMA (Non-Uniform Memory Access) support.
+>  
+> @@ -1151,22 +1155,6 @@ config NODES_SHIFT
+>  	  Specify the maximum number of NUMA Nodes available on the target
+>  	  system.  Increases memory reserved to accommodate various tables.
+>  
+> -config USE_PERCPU_NUMA_NODE_ID
+> -	def_bool y
+> -	depends on NUMA
+> -
+> -config HAVE_SETUP_PER_CPU_AREA
+> -	def_bool y
+> -	depends on NUMA
+> -
+> -config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> -	def_bool y
+> -	depends on NUMA
+> -
+> -config NEED_PER_CPU_PAGE_FIRST_CHUNK
+> -	def_bool y
+> -	depends on NUMA
+> -
+>  source "kernel/Kconfig.hz"
+>  
+>  config ARCH_SPARSEMEM_ENABLE
+> diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
+> index 1e33666fa679..703952819e10 100644
+> --- a/arch/ia64/Kconfig
+> +++ b/arch/ia64/Kconfig
+> @@ -32,6 +32,7 @@ config IA64
+>  	select HAVE_FTRACE_MCOUNT_RECORD
+>  	select HAVE_DYNAMIC_FTRACE if (!ITANIUM)
+>  	select HAVE_FUNCTION_TRACER
+> +	select HAVE_SETUP_PER_CPU_AREA
+>  	select TTY
+>  	select HAVE_ARCH_TRACEHOOK
+>  	select HAVE_VIRT_CPU_ACCOUNTING
+> @@ -88,9 +89,6 @@ config GENERIC_CALIBRATE_DELAY
+>  	bool
+>  	default y
+>  
+> -config HAVE_SETUP_PER_CPU_AREA
+> -	def_bool y
+> -
+>  config DMI
+>  	bool
+>  	default y
+> @@ -292,6 +290,7 @@ config NUMA
+>  	bool "NUMA support"
+>  	depends on !FLATMEM
+>  	select SMP
+> +	select USE_PERCPU_NUMA_NODE_ID
+>  	help
+>  	  Say Y to compile the kernel to support NUMA (Non-Uniform Memory
+>  	  Access).  This option is for configuring high-end multiprocessor
+> @@ -311,10 +310,6 @@ config HAVE_ARCH_NODEDATA_EXTENSION
+>  	def_bool y
+>  	depends on NUMA
+>  
+> -config USE_PERCPU_NUMA_NODE_ID
+> -	def_bool y
+> -	depends on NUMA
+> -
+>  config HAVE_MEMORYLESS_NODES
+>  	def_bool NUMA
+>  
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index de60ad190057..c106a2080877 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -2666,6 +2666,8 @@ config NUMA
+>  	bool "NUMA Support"
+>  	depends on SYS_SUPPORTS_NUMA
+>  	select SMP
+> +	select HAVE_SETUP_PER_CPU_AREA
+> +	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+>  	help
+>  	  Say Y to compile the kernel to support NUMA (Non-Uniform Memory
+>  	  Access).  This option improves performance on systems with more
+> @@ -2676,14 +2678,6 @@ config NUMA
+>  config SYS_SUPPORTS_NUMA
+>  	bool
+>  
+> -config HAVE_SETUP_PER_CPU_AREA
+> -	def_bool y
+> -	depends on NUMA
+> -
+> -config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> -	def_bool y
+> -	depends on NUMA
+> -
+>  config RELOCATABLE
+>  	bool "Relocatable kernel"
+>  	depends on SYS_SUPPORTS_RELOCATABLE
+> diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+> index dea74d7717c0..8badd39854a0 100644
+> --- a/arch/powerpc/Kconfig
+> +++ b/arch/powerpc/Kconfig
+> @@ -55,15 +55,6 @@ config ARCH_MMAP_RND_COMPAT_BITS_MIN
+>  	default 9 if PPC_16K_PAGES	#  9 = 23 (8MB) - 14 (16K)
+>  	default 11			# 11 = 23 (8MB) - 12 (4K)
+>  
+> -config HAVE_SETUP_PER_CPU_AREA
+> -	def_bool PPC64
+> -
+> -config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> -	def_bool y if PPC64
+> -
+> -config NEED_PER_CPU_PAGE_FIRST_CHUNK
+> -	def_bool y if PPC64
+> -
+>  config NR_IRQS
+>  	int "Number of virtual interrupt numbers"
+>  	range 32 1048576
+> @@ -240,6 +231,7 @@ config PPC
+>  	select HAVE_REGS_AND_STACK_ACCESS_API
+>  	select HAVE_RELIABLE_STACKTRACE
+>  	select HAVE_RSEQ
+> +	select HAVE_SETUP_PER_CPU_AREA		if PPC64
+>  	select HAVE_SOFTIRQ_ON_OWN_STACK
+>  	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r2)
+>  	select HAVE_STACKPROTECTOR		if PPC64 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r13)
+> @@ -254,6 +246,8 @@ config PPC
+>  	select MMU_GATHER_RCU_TABLE_FREE
+>  	select MODULES_USE_ELF_RELA
+>  	select NEED_DMA_MAP_STATE		if PPC64 || NOT_COHERENT_CACHE
+> +	select NEED_PER_CPU_EMBED_FIRST_CHUNK	if PPC64
+> +	select NEED_PER_CPU_PAGE_FIRST_CHUNK	if PPC64
+>  	select NEED_SG_DMA_LENGTH
+>  	select OF
+>  	select OF_DMA_DEFAULT_COHERENT		if !NOT_COHERENT_CACHE
+> @@ -659,6 +653,7 @@ config NUMA
+>  	bool "NUMA Memory Allocation and Scheduler Support"
+>  	depends on PPC64 && SMP
+>  	default y if PPC_PSERIES || PPC_POWERNV
+> +	select USE_PERCPU_NUMA_NODE_ID
+>  	help
+>  	  Enable NUMA (Non-Uniform Memory Access) support.
+>  
+> @@ -672,10 +667,6 @@ config NODES_SHIFT
+>  	default "4"
+>  	depends on NUMA
+>  
+> -config USE_PERCPU_NUMA_NODE_ID
+> -	def_bool y
+> -	depends on NUMA
+> -
+>  config HAVE_MEMORYLESS_NODES
+>  	def_bool y
+>  	depends on NUMA
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 821252b65f89..bf66bcbc5a39 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -334,6 +334,8 @@ config NUMA
+>  	select GENERIC_ARCH_NUMA
+>  	select OF_NUMA
+>  	select ARCH_SUPPORTS_NUMA_BALANCING
+> +	select USE_PERCPU_NUMA_NODE_ID
+> +	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+>  	help
+>  	  Enable NUMA (Non-Uniform Memory Access) support.
+>  
+> @@ -349,14 +351,6 @@ config NODES_SHIFT
+>  	  Specify the maximum number of NUMA Nodes available on the target
+>  	  system.  Increases memory reserved to accommodate various tables.
+>  
+> -config USE_PERCPU_NUMA_NODE_ID
+> -	def_bool y
+> -	depends on NUMA
+> -
+> -config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> -	def_bool y
+> -	depends on NUMA
+> -
+>  config RISCV_ISA_C
+>  	bool "Emit compressed instructions when building Linux"
+>  	default y
+> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+> index 66fc08646be5..a6765e0fe6a8 100644
+> --- a/arch/sparc/Kconfig
+> +++ b/arch/sparc/Kconfig
+> @@ -97,6 +97,9 @@ config SPARC64
+>  	select PCI_DOMAINS if PCI
+>  	select ARCH_HAS_GIGANTIC_PAGE
+>  	select HAVE_SOFTIRQ_ON_OWN_STACK
+> +	select HAVE_SETUP_PER_CPU_AREA
+> +	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+> +	select NEED_PER_CPU_PAGE_FIRST_CHUUNK
+>  
+>  config ARCH_PROC_KCORE_TEXT
+>  	def_bool y
+> @@ -123,15 +126,6 @@ config AUDIT_ARCH
+>  	bool
+>  	default y
+>  
+> -config HAVE_SETUP_PER_CPU_AREA
+> -	def_bool y if SPARC64
+> -
+> -config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> -	def_bool y if SPARC64
+> -
+> -config NEED_PER_CPU_PAGE_FIRST_CHUNK
+> -	def_bool y if SPARC64
+> -
+>  config MMU
+>  	bool
+>  	default y
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 7399327d1eff..ca120a1f5857 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -239,6 +239,7 @@ config X86
+>  	select HAVE_REGS_AND_STACK_ACCESS_API
+>  	select HAVE_RELIABLE_STACKTRACE		if X86_64 && (UNWINDER_FRAME_POINTER || UNWINDER_ORC) && STACK_VALIDATION
+>  	select HAVE_FUNCTION_ARG_ACCESS_API
+> +	select HAVE_SETUP_PER_CPU_AREA
+>  	select HAVE_SOFTIRQ_ON_OWN_STACK
+>  	select HAVE_STACKPROTECTOR		if CC_HAS_SANE_STACKPROTECTOR
+>  	select HAVE_STACK_VALIDATION		if X86_64
+> @@ -252,6 +253,8 @@ config X86
+>  	select HAVE_GENERIC_VDSO
+>  	select HOTPLUG_SMT			if SMP
+>  	select IRQ_FORCED_THREADING
+> +	select NEED_PER_CPU_EMBED_FIRST_CHUNK
+> +	select NEED_PER_CPU_PAGE_FIRST_CHUNK
+>  	select NEED_SG_DMA_LENGTH
+>  	select PCI_DOMAINS			if PCI
+>  	select PCI_LOCKLESS_CONFIG		if PCI
+> @@ -331,15 +334,6 @@ config ARCH_HAS_CPU_RELAX
+>  config ARCH_HAS_FILTER_PGPROT
+>  	def_bool y
+>  
+> -config HAVE_SETUP_PER_CPU_AREA
+> -	def_bool y
+> -
+> -config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> -	def_bool y
+> -
+> -config NEED_PER_CPU_PAGE_FIRST_CHUNK
+> -	def_bool y
+> -
+>  config ARCH_HIBERNATION_POSSIBLE
+>  	def_bool y
+>  
+> @@ -1557,6 +1551,7 @@ config NUMA
+>  	depends on SMP
+>  	depends on X86_64 || (X86_32 && HIGHMEM64G && X86_BIGSMP)
+>  	default y if X86_BIGSMP
+> +	select USE_PERCPU_NUMA_NODE_ID
+>  	help
+>  	  Enable NUMA (Non-Uniform Memory Access) support.
+>  
+> @@ -2430,10 +2425,6 @@ config ARCH_HAS_ADD_PAGES
+>  config ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
+>  	def_bool y
+>  
+> -config USE_PERCPU_NUMA_NODE_ID
+> -	def_bool y
+> -	depends on NUMA
+> -
+>  menu "Power management and ACPI options"
+>  
+>  config ARCH_HIBERNATION_HEADER
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 28edafc820ad..6bc5d780c51b 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -432,6 +432,18 @@ config NEED_PER_CPU_KM
+>  	bool
+>  	default y
+>  
+> +config NEED_PER_CPU_EMBED_FIRST_CHUNK
+> +	bool
+> +
+> +config NEED_PER_CPU_PAGE_FIRST_CHUNK
+> +	bool
+> +
+> +config USE_PERCPU_NUMA_NODE_ID
+> +	bool
+> +
+> +config HAVE_SETUP_PER_CPU_AREA
+> +	bool
+> +
+>  config CLEANCACHE
+>  	bool "Enable cleancache driver to cache clean pages if tmem is present"
+>  	help
+> -- 
+> 2.26.2
+> 
 
-On Mon, Nov 29, 2021, at 02:27, Rob Herring wrote:
-> On Mon, Nov 08, 2021 at 06:09:45PM +0100, Sven Peter wrote:
->> Apple Silicon SoCs such as the M1 have multiple USB controllers based on
->> the Synopsys DesignWare USB3 controller.
->> References to the ATC PHY required for SuperSpeed are left out for now
->> until support has been upstreamed as well.
->> 
->> Signed-off-by: Sven Peter <sven@svenpeter.dev>
->> ---
->> v1 -> v2:
->>  - added apple,dwc3 bindings instead of a property for the reset quirk
->>    as requested by robh
->> 
->> I think I have to use GPL-2.0 for this binding since it's based
->> on and references snps,dwc3.yaml which is also only GPL-2.0.
->> Otherwise I'd be fine with the usual GPL/BSD dual license as well.
->> 
->>  .../devicetree/bindings/usb/apple,dwc3.yaml   | 64 +++++++++++++++++++
->>  MAINTAINERS                                   |  1 +
->>  2 files changed, 65 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/usb/apple,dwc3.yaml
->> 
->> diff --git a/Documentation/devicetree/bindings/usb/apple,dwc3.yaml b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
->> new file mode 100644
->> index 000000000000..fb3b3489e6b2
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
->> @@ -0,0 +1,64 @@
->> +# SPDX-License-Identifier: GPL-2.0
->
-> Dual license please.
-
-I'd like to but I'm not sure if I can do that. This binding is based on
-snps,dwc3.yaml and rockchip,dwc3.yaml which are both only GPL-2.0.
-
->
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/usb/apple,dwc3.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Apple Silicon DWC3 USB controller
->> +
->> +maintainers:
->> +  - Sven Peter <sven@svenpeter.dev>
->> +
->> +description:
->> +  On Apple Silicon SoCs such as the M1 each Type-C port has a corresponding
->> +  USB controller based on the Synopsys DesignWare USB3 controller.
->> +
->> +  The common content of this binding is defined in snps,dwc3.yaml.
->> +
->> +allOf:
->> +  - $ref: snps,dwc3.yaml#
->> +
->> +select:
->> +  properties:
->> +    compatible:
->> +      contains:
->> +        const: apple,dwc3
->
-> This needs to list all possible compatibles except snps,dwc3 so the 
-> schema is applied for any incorrect mixture of compatibles.
-
-Makes sense, will do that for the next version.
-
-
+This makes sense and looks good. A series like this is a little tricky.
+The latter patches change the contracts so it'd be easiest to run it
+through my tree. We'd need to get explicit acks from each arch
+maintainer to make sure they're fine with this.
 
 Thanks,
-
-Sven
+Dennis

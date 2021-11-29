@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27F84461DA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F363E461DFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:29:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352956AbhK2S1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:27:18 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47552 "EHLO
+        id S1379268AbhK2SbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:31:23 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:49474 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349710AbhK2SZL (ORCPT
+        with ESMTP id S1352450AbhK2S3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:25:11 -0500
+        Mon, 29 Nov 2021 13:29:21 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C0702CE139A;
-        Mon, 29 Nov 2021 18:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697B5C53FAD;
-        Mon, 29 Nov 2021 18:21:50 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5B3ACCE140C;
+        Mon, 29 Nov 2021 18:26:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A4B6C53FAD;
+        Mon, 29 Nov 2021 18:25:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210111;
-        bh=UD5otZ3LXXjwqGGxrqIb5y/WCjsUU1Fd6ZgVvlV3Uao=;
+        s=korg; t=1638210360;
+        bh=U71gDbyoXRkwiVkWvWBr9SOM5/pKwlhOIdtzR8HagWg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=evPoiWVxZyGdr0a/YABWazqetcYOzfr5PwbYEY6fgIPe2XYZNog7oPvPjBGFzJHBJ
-         K5GQaKE/J07MvID8d8f5UNjJomfajuQ59HozDV2dusEeCB/E1sbAD/AZL0aumapRW2
-         0927w7i/CVQ19k6UXZhr+w5+rdNIIBiuE7oEQzBw=
+        b=bT85Oyf3qJq2oWIOQjYufhGFKRolunEvX9hrpvYvJFqZdwTHdMdlaB1Tg0YRRXAAP
+         8ssy4tUBfBJdvDOV9NIZ6ukw+mS7mv1FcG2fWzOT1OwwTG3yc3GWcWqaC05O5pqzDn
+         /2uzWsNxNT4d+vXJuQM+Lpv3emKC+9XX+8xPC1PQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Nikolay Aleksandrov <nikolay@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 46/69] scsi: mpt3sas: Fix kernel panic during drive powercycle test
-Date:   Mon, 29 Nov 2021 19:18:28 +0100
-Message-Id: <20211129181705.165058042@linuxfoundation.org>
+Subject: [PATCH 5.4 60/92] net: ipv6: add fib6_nh_release_dsts stub
+Date:   Mon, 29 Nov 2021 19:18:29 +0100
+Message-Id: <20211129181709.415644674@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
+References: <20211129181707.392764191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,40 +46,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+From: Nikolay Aleksandrov <nikolay@nvidia.com>
 
-[ Upstream commit 0ee4ba13e09c9d9c1cb6abb59da8295d9952328b ]
+[ Upstream commit 8837cbbf854246f5f4d565f21e6baa945d37aded ]
 
-While looping over shost's sdev list it is possible that one
-of the drives is getting removed and its sas_target object is
-freed but its sdev object remains intact.
+We need a way to release a fib6_nh's per-cpu dsts when replacing
+nexthops otherwise we can end up with stale per-cpu dsts which hold net
+device references, so add a new IPv6 stub called fib6_nh_release_dsts.
+It must be used after an RCU grace period, so no new dsts can be created
+through a group's nexthop entry.
+Similar to fib6_nh_release it shouldn't be used if fib6_nh_init has failed
+so it doesn't need a dummy stub when IPv6 is not enabled.
 
-Consequently, a kernel panic can occur while the driver is trying to access
-the sas_address field of sas_target object without also checking the
-sas_target object for NULL.
-
-Link: https://lore.kernel.org/r/20211117104909.2069-1-sreekanth.reddy@broadcom.com
-Fixes: f92363d12359 ("[SCSI] mpt3sas: add new driver supporting 12GB SAS")
-Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 7bf4796dd099 ("nexthops: add support for replace")
+Signed-off-by: Nikolay Aleksandrov <nikolay@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/mpt3sas/mpt3sas_scsih.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/net/ip6_fib.h    |  1 +
+ include/net/ipv6_stubs.h |  1 +
+ net/ipv6/af_inet6.c      |  1 +
+ net/ipv6/route.c         | 19 +++++++++++++++++++
+ 4 files changed, 22 insertions(+)
 
-diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-index add699b01836f..d899f216245e5 100644
---- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-+++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
-@@ -3364,7 +3364,7 @@ _scsih_ublock_io_device(struct MPT3SAS_ADAPTER *ioc, u64 sas_address)
+diff --git a/include/net/ip6_fib.h b/include/net/ip6_fib.h
+index bd0f1595bdc71..05ecaefeb6322 100644
+--- a/include/net/ip6_fib.h
++++ b/include/net/ip6_fib.h
+@@ -451,6 +451,7 @@ int fib6_nh_init(struct net *net, struct fib6_nh *fib6_nh,
+ 		 struct fib6_config *cfg, gfp_t gfp_flags,
+ 		 struct netlink_ext_ack *extack);
+ void fib6_nh_release(struct fib6_nh *fib6_nh);
++void fib6_nh_release_dsts(struct fib6_nh *fib6_nh);
  
- 	shost_for_each_device(sdev, ioc->shost) {
- 		sas_device_priv_data = sdev->hostdata;
--		if (!sas_device_priv_data)
-+		if (!sas_device_priv_data || !sas_device_priv_data->sas_target)
- 			continue;
- 		if (sas_device_priv_data->sas_target->sas_address
- 		    != sas_address)
+ int call_fib6_entry_notifiers(struct net *net,
+ 			      enum fib_event_type event_type,
+diff --git a/include/net/ipv6_stubs.h b/include/net/ipv6_stubs.h
+index 3e7d2c0e79ca1..af9e127779adf 100644
+--- a/include/net/ipv6_stubs.h
++++ b/include/net/ipv6_stubs.h
+@@ -47,6 +47,7 @@ struct ipv6_stub {
+ 			    struct fib6_config *cfg, gfp_t gfp_flags,
+ 			    struct netlink_ext_ack *extack);
+ 	void (*fib6_nh_release)(struct fib6_nh *fib6_nh);
++	void (*fib6_nh_release_dsts)(struct fib6_nh *fib6_nh);
+ 	void (*fib6_update_sernum)(struct net *net, struct fib6_info *rt);
+ 	int (*ip6_del_rt)(struct net *net, struct fib6_info *rt);
+ 	void (*fib6_rt_update)(struct net *net, struct fib6_info *rt,
+diff --git a/net/ipv6/af_inet6.c b/net/ipv6/af_inet6.c
+index 14ac1d9112877..942da168f18fb 100644
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@ -955,6 +955,7 @@ static const struct ipv6_stub ipv6_stub_impl = {
+ 	.ip6_mtu_from_fib6 = ip6_mtu_from_fib6,
+ 	.fib6_nh_init	   = fib6_nh_init,
+ 	.fib6_nh_release   = fib6_nh_release,
++	.fib6_nh_release_dsts = fib6_nh_release_dsts,
+ 	.fib6_update_sernum = fib6_update_sernum_stub,
+ 	.fib6_rt_update	   = fib6_rt_update,
+ 	.ip6_del_rt	   = ip6_del_rt,
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index daa876c6ae8db..f36db3dd97346 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -3585,6 +3585,25 @@ void fib6_nh_release(struct fib6_nh *fib6_nh)
+ 	fib_nh_common_release(&fib6_nh->nh_common);
+ }
+ 
++void fib6_nh_release_dsts(struct fib6_nh *fib6_nh)
++{
++	int cpu;
++
++	if (!fib6_nh->rt6i_pcpu)
++		return;
++
++	for_each_possible_cpu(cpu) {
++		struct rt6_info *pcpu_rt, **ppcpu_rt;
++
++		ppcpu_rt = per_cpu_ptr(fib6_nh->rt6i_pcpu, cpu);
++		pcpu_rt = xchg(ppcpu_rt, NULL);
++		if (pcpu_rt) {
++			dst_dev_put(&pcpu_rt->dst);
++			dst_release(&pcpu_rt->dst);
++		}
++	}
++}
++
+ static struct fib6_info *ip6_route_info_create(struct fib6_config *cfg,
+ 					      gfp_t gfp_flags,
+ 					      struct netlink_ext_ack *extack)
 -- 
 2.33.0
 

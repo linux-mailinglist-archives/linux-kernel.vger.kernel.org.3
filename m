@@ -2,179 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D244618FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAA6461807
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:24:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378250AbhK2OgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:36:14 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:35049 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231501AbhK2Odx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:33:53 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4J2nYN0tkpz9sT5;
-        Mon, 29 Nov 2021 15:19:52 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id zM0g6DZv7enN; Mon, 29 Nov 2021 15:19:52 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4J2nY40y6hz9sT6;
-        Mon, 29 Nov 2021 15:19:36 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0EAEF8B7AD;
-        Mon, 29 Nov 2021 15:19:36 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id wexZe5IIyXuS; Mon, 29 Nov 2021 15:19:35 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id A07028B7B0;
-        Mon, 29 Nov 2021 15:19:35 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1ATEJTrC959588
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 15:19:29 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1ATEJTEE959587;
-        Mon, 29 Nov 2021 15:19:29 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, alex@ghiti.fr
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-mm@kvack.org
-Subject: [PATCH v3 10/10] powerpc: Simplify and move arch_randomize_brk()
-Date:   Mon, 29 Nov 2021 15:19:24 +0100
-Message-Id: <f591888ebece95d70ffc5b4539c3f7a8f3132521.1638195388.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <cover.1638195388.git.christophe.leroy@csgroup.eu>
-References: <cover.1638195388.git.christophe.leroy@csgroup.eu>
+        id S1377806AbhK2O13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:27:29 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42042 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S232511AbhK2OZ2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:25:28 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATDlFr0028332;
+        Mon, 29 Nov 2021 14:21:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=pp1; bh=SDxQU0Cf2tzKKlX7o2UXE1teEX8a7e551zSq540YKLk=;
+ b=d+crWRJPa5r57bLvIQzzuevNedkyG3+niNSYWU9Swfp2n///dxmoX+dZO+LB4CVZ71bN
+ 5c5IcI4VvQFzEWHfWhl38qeOnM5aj4PT5wNRBfAgpyJhpvI1siJ/TTn+/uLBq2W73OKO
+ aFazRIgZeoxM30M3r+yoWawVO9Gi8zKqhTdtc9k8IatSEcmSOh5NxInE6bp/mr45vUHJ
+ 7EVLWfbOz8YunoJmYa4BvTgth4e8v/lscPHGWM7ZFlhU1SZfK+/at1qyct0ZiAT/eBKX
+ 3lJGXQjMoKTdMbVS1FchE7/jju5VIOxLwa5smjQAZhS1sVAj9hfPoOr5iqSnxgQsJRne JA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cn026rxka-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 14:21:30 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1ATDllAl029213;
+        Mon, 29 Nov 2021 14:21:30 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cn026rxhx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 14:21:30 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATEDKn4001853;
+        Mon, 29 Nov 2021 14:21:27 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma05fra.de.ibm.com with ESMTP id 3ckca94tnx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 14:21:27 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATELODV11272478
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 14:21:25 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C7476AE04D;
+        Mon, 29 Nov 2021 14:21:24 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3C90AAE072;
+        Mon, 29 Nov 2021 14:21:24 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 29 Nov 2021 14:21:24 +0000 (GMT)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kbuild test robot <lkp@intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
+ 16 with TASK_COMM_LEN
+References: <20211120112738.45980-1-laoar.shao@gmail.com>
+        <20211120112738.45980-8-laoar.shao@gmail.com>
+        <yt9d35nf1d84.fsf@linux.ibm.com>
+        <CALOAHbDtqpkN4D0vHvGxTSpQkksMWtFm3faMy0n+pazxN_RPPg@mail.gmail.com>
+Date:   Mon, 29 Nov 2021 15:21:23 +0100
+In-Reply-To: <CALOAHbDtqpkN4D0vHvGxTSpQkksMWtFm3faMy0n+pazxN_RPPg@mail.gmail.com>
+        (Yafang Shao's message of "Mon, 29 Nov 2021 21:41:11 +0800")
+Message-ID: <yt9d35nfvy8s.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1638195562; l=3756; s=20211009; h=from:subject:message-id; bh=bqmcPDzk8HUoSoz0FrExnArqtAGvbgCdBXU0FtLr27c=; b=hcnbOH8wuHkDEqIHcxNywY7LDWBgbGM7X7doH6ERlSIyHc3cyxmh9+J6mO0eAkUibfzuclgGNthr a9J/j08rBPvP3J/6pc1m33mxpnQAQcbsVX58YjCPgazfugspnaqg
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 7Xp9iYRAqWlAkU7aNJskL8ZvHI5hqD4L
+X-Proofpoint-ORIG-GUID: 4I5asdX1Ck6krCqWTqdjTyeMLwa83xva
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-29_08,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ bulkscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501 suspectscore=0
+ clxscore=1015 adultscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111290071
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-arch_randomize_brk() is only needed for hash on book3s/64, for other
-platforms the one provided by the default mmap layout is good enough.
+Hi,
 
-Move it to hash_utils.c and use randomize_page() like the generic one.
+Yafang Shao <laoar.shao@gmail.com> writes:
 
-And properly opt out the radix case instead of making an assumption
-on mmu_highuser_ssize.
+> On Mon, Nov 29, 2021 at 6:13 PM Sven Schnelle <svens@linux.ibm.com> wrote:
+>> > diff --git a/include/linux/sched.h b/include/linux/sched.h
+>> > index 78c351e35fec..cecd4806edc6 100644
+>> > --- a/include/linux/sched.h
+>> > +++ b/include/linux/sched.h
+>> > @@ -274,8 +274,13 @@ struct task_group;
+>> >
+>> >  #define get_current_state()  READ_ONCE(current->__state)
+>> >
+>> > -/* Task command name length: */
+>> > -#define TASK_COMM_LEN                        16
+>> > +/*
+>> > + * Define the task command name length as enum, then it can be visible to
+>> > + * BPF programs.
+>> > + */
+>> > +enum {
+>> > +     TASK_COMM_LEN = 16,
+>> > +};
+>>
+>> This breaks the trigger-field-variable-support.tc from the ftrace test
+>> suite at least on s390:
+>>
+>> echo
+>> 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm)
+>> if next_comm=="ping"'
+>> linux/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc: line 15: echo: write error: Invalid argument
+>>
+>> I added a debugging line into check_synth_field():
+>>
+>> [   44.091037] field->size 16, hist_field->size 16, field->is_signed 1, hist_field->is_signed 0
+>>
+>> Note the difference in the signed field.
+>>
+>
+> Hi Sven,
+>
+> Thanks for the report and debugging!
+> Seems we should explicitly define it as signed ?
+> Could you pls. help verify it?
+>
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index cecd4806edc6..44d36c6af3e1 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -278,7 +278,7 @@ struct task_group;
+>   * Define the task command name length as enum, then it can be visible to
+>   * BPF programs.
+>   */
+> -enum {
+> +enum SignedEnum {
+>         TASK_COMM_LEN = 16,
+>  };
 
-Also change to a 32M range like most other architectures instead of 8M.
+Umm no. What you're doing here is to define the name of the enum as
+'SignedEnum'. This doesn't change the type. I think before C++0x you
+couldn't force an enum type.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v3:
-- Add missing include <linux/elf-randomize.h>
-- Move SZ_1T in a previous patch that moves it out of drivers/pci/controller/pci-xgene.c
-
-v2: New
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/kernel/process.c         | 41 ---------------------------
- arch/powerpc/mm/book3s64/hash_utils.c | 19 +++++++++++++
- 2 files changed, 19 insertions(+), 41 deletions(-)
-
-diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.c
-index a64cfbb85ca2..44c4bce5211d 100644
---- a/arch/powerpc/kernel/process.c
-+++ b/arch/powerpc/kernel/process.c
-@@ -34,10 +34,8 @@
- #include <linux/ftrace.h>
- #include <linux/kernel_stat.h>
- #include <linux/personality.h>
--#include <linux/random.h>
- #include <linux/hw_breakpoint.h>
- #include <linux/uaccess.h>
--#include <linux/elf-randomize.h>
- #include <linux/pkeys.h>
- #include <linux/seq_buf.h>
- 
-@@ -2310,42 +2308,3 @@ unsigned long arch_align_stack(unsigned long sp)
- 		sp -= get_random_int() & ~PAGE_MASK;
- 	return sp & ~0xf;
- }
--
--static inline unsigned long brk_rnd(void)
--{
--        unsigned long rnd = 0;
--
--	/* 8MB for 32bit, 1GB for 64bit */
--	if (is_32bit_task())
--		rnd = (get_random_long() % (1UL<<(23-PAGE_SHIFT)));
--	else
--		rnd = (get_random_long() % (1UL<<(30-PAGE_SHIFT)));
--
--	return rnd << PAGE_SHIFT;
--}
--
--unsigned long arch_randomize_brk(struct mm_struct *mm)
--{
--	unsigned long base = mm->brk;
--	unsigned long ret;
--
--#ifdef CONFIG_PPC_BOOK3S_64
--	/*
--	 * If we are using 1TB segments and we are allowed to randomise
--	 * the heap, we can put it above 1TB so it is backed by a 1TB
--	 * segment. Otherwise the heap will be in the bottom 1TB
--	 * which always uses 256MB segments and this may result in a
--	 * performance penalty.
--	 */
--	if (!radix_enabled() && !is_32bit_task() && (mmu_highuser_ssize == MMU_SEGSIZE_1T))
--		base = max_t(unsigned long, mm->brk, 1UL << SID_SHIFT_1T);
--#endif
--
--	ret = PAGE_ALIGN(base + brk_rnd());
--
--	if (ret < mm->brk)
--		return mm->brk;
--
--	return ret;
--}
--
-diff --git a/arch/powerpc/mm/book3s64/hash_utils.c b/arch/powerpc/mm/book3s64/hash_utils.c
-index 7ecadf5e6bf9..68a5468b0f19 100644
---- a/arch/powerpc/mm/book3s64/hash_utils.c
-+++ b/arch/powerpc/mm/book3s64/hash_utils.c
-@@ -37,6 +37,8 @@
- #include <linux/cpu.h>
- #include <linux/pgtable.h>
- #include <linux/debugfs.h>
-+#include <linux/random.h>
-+#include <linux/elf-randomize.h>
- 
- #include <asm/interrupt.h>
- #include <asm/processor.h>
-@@ -2171,3 +2173,20 @@ void __init print_system_hash_info(void)
- 	if (htab_hash_mask)
- 		pr_info("htab_hash_mask    = 0x%lx\n", htab_hash_mask);
- }
-+
-+unsigned long arch_randomize_brk(struct mm_struct *mm)
-+{
-+	/*
-+	 * If we are using 1TB segments and we are allowed to randomise
-+	 * the heap, we can put it above 1TB so it is backed by a 1TB
-+	 * segment. Otherwise the heap will be in the bottom 1TB
-+	 * which always uses 256MB segments and this may result in a
-+	 * performance penalty.
-+	 */
-+	if (is_32bit_task())
-+		return randomize_page(mm->brk, SZ_32M);
-+	else if (!radix_enabled() && mmu_highuser_ssize == MMU_SEGSIZE_1T)
-+		return randomize_page(max_t(unsigned long, mm->brk, SZ_1T), SZ_1G);
-+	else
-+		return randomize_page(mm->brk, SZ_1G);
-+}
--- 
-2.33.1
-
+Regards
+Sven

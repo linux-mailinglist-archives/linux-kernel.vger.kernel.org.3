@@ -2,85 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F433461B6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFC63461B8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:09:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244583AbhK2P7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 10:59:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
+        id S1344018AbhK2QMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:12:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245088AbhK2P5U (ORCPT
+        with ESMTP id S1344117AbhK2QKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 10:57:20 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F8CCC08EA4B
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:03:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pTPDPWwnJNKhFksvBzJmMzgdWpyP2ONhKFxhLChr2xU=; b=cx8OKIC6WsqXu+TVnp2DUKEp1O
-        SEiqDCxYwg03JHcxBMnKVd7PDecQCyvMfd83IH2rvXfaFFCWDaFUHmaEGG7FuYP2y7NJE12JQ4f3z
-        mT/MXiGQ8ELMrIP/BsODNc+q72OMVkMMbVIbntFXBg53GR13zqv8Hse55DrKZTn/0Mmv484xSmf1G
-        0Cq1lC3/W9BDRjeFYSZBJ3mpc2FMl3hTQ4UcdpOzIooZg3A4Y7Nc9mvTyEyqFJC5U5pcfSr3Y6p3s
-        QEORrMnDGPP7wBHid3Wh7DHfiyV0jNFqgx4B/LFTZnqxswS3owOPFzxhDUSbI/6DhiguZpXBggm67
-        vVaSOhyA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mrhFX-007pMz-Do; Mon, 29 Nov 2021 14:03:20 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 21F3030023F;
-        Mon, 29 Nov 2021 15:03:19 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 04484200A1AFF; Mon, 29 Nov 2021 15:03:18 +0100 (CET)
-Date:   Mon, 29 Nov 2021 15:03:18 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Len Brown <len.brown@intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH v2 0/3] topology/sysfs: only export used sysfs attributes
-Message-ID: <YaTdpsVCDQMlscON@hirez.programming.kicks-ass.net>
-References: <20211129130309.3256168-1-hca@linux.ibm.com>
+        Mon, 29 Nov 2021 11:10:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B6DC08EA74
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:11:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77A89B8111B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:11:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 411B6C53FCE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:11:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638195083;
+        bh=x7gANHXCj9D2jHArSELv0y5uHzyFEQHNRCPsvkTF7Ig=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=iNUsntFyxDfkFs/HGTqojPv+3tLdNcEC6oBQRPlXoTB0CVQRJHniOMQeocKDGbXez
+         z9Kohzcm3ftOZyq3oRq0RZyVqSrwR1v3ou7PwWIayS/KGeuLASLNyz4LyVWhHV6fZ3
+         SDhocSeSec8g+jR3FuQb+zPyG0HKsoWvxg6IZ0bDU+8HPjKfOSpK3666oQazAX5+rf
+         caj7GS2Q3UTzyy1DhQmh25AOzdaoF+qC6wQoTjf/s7aMyUolupsQ3V8SYsHh7xsDS0
+         Q95zfpdOIv6fyH6fBt2lR70PKnjGdWJjK13izpyWbWcxyP6qpr63haYXwnRGWH0lMB
+         q6jmDDVZ14xGQ==
+Received: by mail-ot1-f54.google.com with SMTP id 98-20020a9d086b000000b0057a403bbd4eso1037954oty.13
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:11:23 -0800 (PST)
+X-Gm-Message-State: AOAM5307u4E/zXQ3+OawqU86QU49eiTaMmBhMx00GtNyBMQmR5un3ijv
+        G7QqDiKR1XqSbixnrCe7jclzAnbf/YQgpSnIyJM=
+X-Google-Smtp-Source: ABdhPJy+sCJisvcqc004QkFyRiHpYJFr+ExQOffMyO3CNLI9sMiM9JhpV7VLeTt4wPEZ2Wa4UwdsXjGAF7oyGrkMt9Q=
+X-Received: by 2002:a05:6830:1514:: with SMTP id k20mr43746692otp.147.1638195082500;
+ Mon, 29 Nov 2021 06:11:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129130309.3256168-1-hca@linux.ibm.com>
+References: <CANiq72kGS0JzFkuUS9oN2_HU9f_stm1gA8v79o2pUCb7bNSe0A@mail.gmail.com>
+ <CACT4Y+Z7bD62SkYGQH2tXV0Zx2MFojYoZzA2R+4J-CrXa6siMw@mail.gmail.com> <CA+fCnZcUEVDWZTUvD+mbe2OrnrpJCC_OB66YMvbZYak8sKg7cw@mail.gmail.com>
+In-Reply-To: <CA+fCnZcUEVDWZTUvD+mbe2OrnrpJCC_OB66YMvbZYak8sKg7cw@mail.gmail.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 29 Nov 2021 15:11:11 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXH7D-0bhv79cRPergquC8-ryCi7YvTokHSaJ14ZHd_F8w@mail.gmail.com>
+Message-ID: <CAMj1kXH7D-0bhv79cRPergquC8-ryCi7YvTokHSaJ14ZHd_F8w@mail.gmail.com>
+Subject: Re: KASAN Arm: global-out-of-bounds in load_module
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 02:03:06PM +0100, Heiko Carstens wrote:
-> v2:
-> As requested by Greg KH: avoid negative logic and use uppercase defines.
-> 
-> v1:
-> Create die and cluster cpu topology sysfs attributes only if an
-> architecture makes uses of it, instead of creating them always for all
-> architectures with bogus default values.
-> Also change the book and drawer cpu topology macros so they match all
-> all other topology macros.
-> 
-> v1: https://lore.kernel.org/lkml/20211128212221.1069726-1-hca@linux.ibm.com/
-> 
-> Heiko Carstens (3):
->   topology/sysfs: export die attributes only if an architectures has support
->   topology/sysfs: export cluster attributes only if an architectures has support
->   topology/sysfs: rework book and drawer topology ifdefery
-> 
->  Documentation/admin-guide/cputopology.rst | 33 +++++++++++------------
->  drivers/base/topology.c                   | 28 ++++++++++++++-----
->  include/linux/topology.h                  | 25 +++++++++++++++++
->  3 files changed, 62 insertions(+), 24 deletions(-)
+On Mon, 29 Nov 2021 at 13:56, Andrey Konovalov <andreyknvl@gmail.com> wrote:
+>
+> On Mon, Nov 29, 2021 at 7:37 AM 'Dmitry Vyukov' via kasan-dev
+> <kasan-dev@googlegroups.com> wrote:
+> >
+> > On Sun, 28 Nov 2021 at 01:43, Miguel Ojeda
+> > <miguel.ojeda.sandonis@gmail.com> wrote:
+> > >
+> > > Hi KASAN / Arm folks,
+> > >
+> > > I noticed in our CI that inserting and removing a module, and then
+> > > inserting it again, e.g.:
+> > >
+> > >     insmod bcm2835_thermal.ko
+> > >     rmmod bcm2835_thermal.ko
+> > >     insmod bcm2835_thermal.ko
+> > >
+> > > deterministically triggers the report below in v5.16-rc2. I also tried
+> > > it on v5.12 to see if it was a recent thing, but same story.
+> > >
+> > > I could find this other report from May, which may be related:
+> > > https://lore.kernel.org/lkml/20210510202653.gjvqsxacw3hcxfvr@pengutronix.de/
+> > >
+> > > Cheers,
+> > > Miguel
+> >
+> > HI Miguel,
+> >
+> > 0xf9 is redzone for global variables:
+> > #define KASAN_GLOBAL_REDZONE    0xF9  /* redzone for global variable */
+> >
+> > I would assume this is caused by not clearing shadow of unloaded
+> > modules, so that the next module loaded hits these leftover redzones.
+>
+> Hi Miguel,
+>
+> Adding to what Dmitry mentioned:
+>
+> The code that's responsible for allocating&clearing/freeing shadow for
+> modules is at the very end of mm/kasan/shadow.c. It's only required
+> when CONFIG_KASAN_VMALLOC is not supported/enabled.
+>
+> As 32-bit arm doesn't select HAVE_ARCH_KASAN_VMALLOC, perhaps it needs
+> something along the lines of what kasan_module_alloc() does with
+> regards to clearing shadow? I assume arm doesn't call that function
+> directly due to a different shadow allocation scheme.
+>
 
-Seems entirely reasonable to me,
-
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Side note: vmap'ed stacks support is being added to ARM,  so it would
+be worth it to investigate whether we can support
+HAVE_ARCH_KASAN_VMALLOC on ARM as well, otherwise we cannot enable
+vmap'ed stacks and KASAN at the same time.

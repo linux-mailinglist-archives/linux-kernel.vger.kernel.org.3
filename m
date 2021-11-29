@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2562461DA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:24:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAA6D461DD6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:27:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378233AbhK2S1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:27:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58848 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345604AbhK2SYx (ORCPT
+        id S1350956AbhK2S3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:29:51 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:48616 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378376AbhK2S11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:24:53 -0500
+        Mon, 29 Nov 2021 13:27:27 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6306B815CE;
-        Mon, 29 Nov 2021 18:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4591C53FC7;
-        Mon, 29 Nov 2021 18:21:32 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D99E0CE13D4;
+        Mon, 29 Nov 2021 18:24:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81A4CC53FAD;
+        Mon, 29 Nov 2021 18:24:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210093;
-        bh=dv/skIBrfhpQe+V223FByW2PvouIpFhUAjG1X4D31ZY=;
+        s=korg; t=1638210246;
+        bh=v5C89pRKB96DEL+ZFjqnRns9T5V9j4hKf46ZtC3Dm4c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sgqYZ+qG5eA24WYfHOJEwoogLMWqz6DauSTyMS8AA0w+bIXbQgymbQXAQma1F+9oP
-         vIIFYCxx4HJcfdYIBQmnxaJw9NZVIp/BVC3ewAXPdDhJB606DSQb88Spxar5dvvzxj
-         rQ6yRh7FKQ6eFbhzbxQEIadk3Ggpp8E+x3wXY7Zg=
+        b=H+6x0TUVd1tq2Z/Ns4TgxcEATfYE9x3MXicRpySppJ8Rd8dEKFldGoCyJt5+o9NRM
+         jNGL3StYMnFFl1G+NhGuAXTvc2x0wm5Sd69cOFNDrwPgul53IE7207ctAfkNij4KTd
+         CJ5o/gnLgsxkDQeSx+jPnCSrcuWP5RjtR5L/+rPs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: [PATCH 4.19 08/69] media: cec: copy sequence field for the reply
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Bough Chen <haibo.chen@nxp.com>
+Subject: [PATCH 5.4 21/92] mmc: sdhci: Fix ADMA for PAGE_SIZE >= 64KiB
 Date:   Mon, 29 Nov 2021 19:17:50 +0100
-Message-Id: <20211129181703.938276206@linuxfoundation.org>
+Message-Id: <20211129181708.122106213@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
+References: <20211129181707.392764191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,34 +46,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-commit 13cbaa4c2b7bf9f8285e1164d005dbf08244ecd5 upstream.
+commit 3d7c194b7c9ad414264935ad4f943a6ce285ebb1 upstream.
 
-When the reply for a non-blocking transmit arrives, the sequence
-field for that reply was never filled in, so userspace would have no
-way of associating the reply to the original transmit.
+The block layer forces a minimum segment size of PAGE_SIZE, so a segment
+can be too big for the ADMA table, if PAGE_SIZE >= 64KiB. Fix by writing
+multiple descriptors, noting that the ADMA table is sized for 4KiB chunks
+anyway, so it will be big enough.
 
-Copy the sequence field to ensure that this is now possible.
-
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Fixes: 0dbacebede1e ([media] cec: move the CEC framework out of staging and to media)
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reported-and-tested-by: Bough Chen <haibo.chen@nxp.com>
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211115082345.802238-1-adrian.hunter@intel.com
+Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/media/cec/cec-adap.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/sdhci.c |   21 ++++++++++++++++++---
+ drivers/mmc/host/sdhci.h |    4 +++-
+ 2 files changed, 21 insertions(+), 4 deletions(-)
 
---- a/drivers/media/cec/cec-adap.c
-+++ b/drivers/media/cec/cec-adap.c
-@@ -1146,6 +1146,7 @@ void cec_received_msg_ts(struct cec_adap
- 			if (abort)
- 				dst->rx_status |= CEC_RX_STATUS_FEATURE_ABORT;
- 			msg->flags = dst->flags;
-+			msg->sequence = dst->sequence;
- 			/* Remove it from the wait_queue */
- 			list_del_init(&data->list);
+--- a/drivers/mmc/host/sdhci.c
++++ b/drivers/mmc/host/sdhci.c
+@@ -749,7 +749,19 @@ static void sdhci_adma_table_pre(struct
+ 			len -= offset;
+ 		}
  
+-		BUG_ON(len > 65536);
++		/*
++		 * The block layer forces a minimum segment size of PAGE_SIZE,
++		 * so 'len' can be too big here if PAGE_SIZE >= 64KiB. Write
++		 * multiple descriptors, noting that the ADMA table is sized
++		 * for 4KiB chunks anyway, so it will be big enough.
++		 */
++		while (len > host->max_adma) {
++			int n = 32 * 1024; /* 32KiB*/
++
++			__sdhci_adma_write_desc(host, &desc, addr, n, ADMA2_TRAN_VALID);
++			addr += n;
++			len -= n;
++		}
+ 
+ 		/* tran, valid */
+ 		if (len)
+@@ -3568,6 +3580,7 @@ struct sdhci_host *sdhci_alloc_host(stru
+ 	 * descriptor for each segment, plus 1 for a nop end descriptor.
+ 	 */
+ 	host->adma_table_cnt = SDHCI_MAX_SEGS * 2 + 1;
++	host->max_adma = 65536;
+ 
+ 	return host;
+ }
+@@ -4221,10 +4234,12 @@ int sdhci_setup_host(struct sdhci_host *
+ 	 * be larger than 64 KiB though.
+ 	 */
+ 	if (host->flags & SDHCI_USE_ADMA) {
+-		if (host->quirks & SDHCI_QUIRK_BROKEN_ADMA_ZEROLEN_DESC)
++		if (host->quirks & SDHCI_QUIRK_BROKEN_ADMA_ZEROLEN_DESC) {
++			host->max_adma = 65532; /* 32-bit alignment */
+ 			mmc->max_seg_size = 65535;
+-		else
++		} else {
+ 			mmc->max_seg_size = 65536;
++		}
+ 	} else {
+ 		mmc->max_seg_size = mmc->max_req_size;
+ 	}
+--- a/drivers/mmc/host/sdhci.h
++++ b/drivers/mmc/host/sdhci.h
+@@ -349,7 +349,8 @@ struct sdhci_adma2_64_desc {
+ 
+ /*
+  * Maximum segments assuming a 512KiB maximum requisition size and a minimum
+- * 4KiB page size.
++ * 4KiB page size. Note this also allows enough for multiple descriptors in
++ * case of PAGE_SIZE >= 64KiB.
+  */
+ #define SDHCI_MAX_SEGS		128
+ 
+@@ -547,6 +548,7 @@ struct sdhci_host {
+ 	unsigned int blocks;	/* remaining PIO blocks */
+ 
+ 	int sg_count;		/* Mapped sg entries */
++	int max_adma;		/* Max. length in ADMA descriptor */
+ 
+ 	void *adma_table;	/* ADMA descriptor table */
+ 	void *align_buffer;	/* Bounce buffer */
 
 

@@ -2,98 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 799A4462664
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7867462589
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbhK2Wvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:51:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
+        id S234622AbhK2Wkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235760AbhK2WuP (ORCPT
+        with ESMTP id S234053AbhK2WkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:50:15 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C935C061785
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:20:15 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso16412887pji.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:20:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=d/VHE146EldVzZNw053jCy2kU4sOJkhWa9AFjMEeYoU=;
-        b=YBcKV5I1ym6Pq7HiM97mJe8JffgQeVmv6n81aPdg1LdcXvMb5DDee9hehpcU2S5M3c
-         BGJ45psgrvHdHycV0IE+CR3wdkzK8JyomKPu9G6LENGuUDwhP8c7l5RPSxHWi8j+6pAP
-         aHuCKFQIrQe4CHw/mhO+Fo0tuMS1jtOQ8d0eR+8L2z9p5XgV0UEnYv5GGS6k6aNnZ8l1
-         pJeAuwcOKlVtHzQnpgt3ywE8/xzeHJYFzXZrogBuLN3crQIRgOGMB/baaGB3Bz/aeXrM
-         441Ors5L6Z+2Ral71vtIJQ45PP7nt4JCd+0FpSpVs8iEQmJc2NCGXvE1H448S7lZ0kU8
-         +T3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=d/VHE146EldVzZNw053jCy2kU4sOJkhWa9AFjMEeYoU=;
-        b=r8MzumQ921gDdca5GhhvZxKQ6aJRXU7vu340T5Olp+ULtI95RTP15xlYcgwULuP1zp
-         0b2wCTqyAwNwLn91uxlNi5dGuOdhUOUbQ1xhBkvZ/XFnM1eJhVB9e3AEuTNVf8hDxmVR
-         bzbQ3Z5Og9hZJjwkwwVow6gmLVw3TB1z+k2NVxqR70hCJsgyB/8fZbhzf4AVMGOoI8Ac
-         pAJNBaAKi6PYsRr5nbs1keTtJ+DBLP28CNOJZbE9NiuQlvDer66XzjBSSoaDDXu4AkxX
-         sv+iImWqH+1PFsIvUgLe5ZEZyqsVwhGgfi66UyUvhKVGATRL9X6ybgBQCAtngKkYqt+w
-         LwIA==
-X-Gm-Message-State: AOAM531upfFVQEsVQFKOqF859Wkchc09mlzkm8khVMX+vSyp+VUKpX7q
-        1KTCzl43NwIv+4MSZeUWwRK/EQ==
-X-Google-Smtp-Source: ABdhPJx5mPquBYmd3HZ+xgzwlI10sjg8adXl/sVFthLKnKT7q6ioiplN6tT7LIB+rq1eoWgT3xCe/w==
-X-Received: by 2002:a17:90b:1b06:: with SMTP id nu6mr313709pjb.155.1638213614692;
-        Mon, 29 Nov 2021 11:20:14 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h15sm19910986pfc.134.2021.11.29.11.20.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 11:20:14 -0800 (PST)
-Date:   Mon, 29 Nov 2021 19:20:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     isaku.yamahata@intel.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [RFC PATCH v3 28/59] KVM: x86: Check for pending APICv interrupt
- in kvm_vcpu_has_events()
-Message-ID: <YaUn6pqZHrw4Z8zn@google.com>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <9852ad79d1078088743a57008226c869b0316da1.1637799475.git.isaku.yamahata@intel.com>
- <4708e92c-373b-a07f-c80c-fe194ca706df@redhat.com>
+        Mon, 29 Nov 2021 17:40:22 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BCA1C061191;
+        Mon, 29 Nov 2021 11:20:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 65F50CE13D7;
+        Mon, 29 Nov 2021 19:20:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3847C53FC7;
+        Mon, 29 Nov 2021 19:20:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638213623;
+        bh=g/nsYskIq0J2gIpANu+wdPav06i49Mv0L127LqeWDic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZZrHcQYuIz2+z6eGi7PKmEwwhGdcpFmkHNkAtnlOxfYSQqQIiZXQV3n/Zxexl1Sne
+         LGEaInfaa0NcDRMmyel5OApl5FeUuMg9RenyiQ515L9vJ4pat2aNNkBeZYmcQZJWH9
+         BjOzWz3sACWFtEqYz88K1XcKZ7nWgsn+P8gttjAylwKBkTPLbLuRTwtEIhZXsqAamJ
+         a23yF2v3+M+z8O4cz2fK0T+/Gpr2DUKiRtx+PGgh5LmqNYhfVKcmYHIDX4KnUw7zMn
+         rOUo06+MlC1ypTvTriX/NCB48pFT0uKtFFkOQ3RAWEMOKMOnvTN4YTafK5mDkONbeN
+         TEQ9TUa3ZJJ2w==
+Date:   Mon, 29 Nov 2021 20:20:20 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Quan Nguyen <quan@os.amperecomputing.com>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+Subject: Re: [PATCH v2 0/2] i2c: aspeed: Late ack Tx done irqs and fix
+ unhandled Tx done with NAK
+Message-ID: <YaUn9HO4STM+LmAD@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Quan Nguyen <quan@os.amperecomputing.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
+        Jae Hyun Yoo <jae.hyun.yoo@linux.intel.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-i2c@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Open Source Submission <patches@amperecomputing.com>,
+        Phong Vo <phong@os.amperecomputing.com>,
+        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
+References: <20210616031046.2317-1-quan@os.amperecomputing.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hSONgx73KSpSsJcS"
 Content-Disposition: inline
-In-Reply-To: <4708e92c-373b-a07f-c80c-fe194ca706df@redhat.com>
+In-Reply-To: <20210616031046.2317-1-quan@os.amperecomputing.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021, Paolo Bonzini wrote:
-> On 11/25/21 01:20, isaku.yamahata@intel.com wrote:
-> > From: Sean Christopherson<sean.j.christopherson@intel.com>
-> > 
-> > Return true for kvm_vcpu_has_events() if the vCPU has a pending APICv
-> > interrupt to support TDX's usage of APICv.  Unlike VMX, TDX doesn't have
-> > access to vmcs.GUEST_INTR_STATUS and so can't emulate posted interrupts,
-> > i.e. needs to generate a posted interrupt and more importantly can't
-> > manually move requested interrupts into the vIRR (which it also doesn't
-> > have access to).
-> 
-> Does this mean it is impossible to disable APICv on TDX?  If so, please add
-> a WARN.
 
-Yes, APICv is forced.
+--hSONgx73KSpSsJcS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Rereading this patch, checking only for a pending posted interrupt isn't correct,
-a pending interrupt that's below the PPR shouldn't be considered a wake event.
+On Wed, Jun 16, 2021 at 10:10:44AM +0700, Quan Nguyen wrote:
+> This series consists of two patches to fix the below issues observed
+> when testing with slave mode:
+>   + Unhandled Tx done with NAK
+>   + Early ack'ed of Tx done (ACK and NAK) causing "Unexpected Ack on
+>   read request".
+>=20
 
-A much better approach would be to have vt_sync_pir_to_irr() redirect to a TDX
-implementation to read the PIR but not update the vIRR, that way common x86 doesn't
-need to be touched.  Hopefully that can be done in a race-free way.
+aspeed maintainers, are you happy with this series now?
+
+> v2:
+>   + Split these patches to separate series [Joel]
+>   + Added the Fixes lines [Joel]
+>   + Fixed multiline comment [Joel]
+>   + Refactor irq clearing code [Joel, Guenter]
+>   + Revised commit message [Joel, Quan]
+>=20
+> v1:
+>   + These patches are first introduced in
+>   https://lkml.org/lkml/2021/5/19/205
+>=20
+> Quan Nguyen (2):
+>   i2c: aspeed: Fix unhandled Tx done with NAK
+>   i2c: aspeed: Acknowledge Tx done with and without ACK irq late
+>=20
+>  drivers/i2c/busses/i2c-aspeed.c | 22 ++++++++++++++--------
+>  1 file changed, 14 insertions(+), 8 deletions(-)
+>=20
+> --=20
+> 2.28.0
+>=20
+
+--hSONgx73KSpSsJcS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlJ/QACgkQFA3kzBSg
+KbZoxg/+Me1R4XCxqO4t3nohVs8D4zoBBn+b2tQCtqhHNlmbD8hVLPiWu3vfwu3f
+xLDMgOHONd6/rxrw5N2bN8t1oX0AXz2yhxMeVYKgO3jm3AIFuf6bQiqNgBEw009r
+V0NgFmKmN7VkkA3AX5tZKb67P9MSMoVTmWPteZtSzvbphyZr74U8Gv4XpaX1X6ep
+QuQXO3LGvHEJ+WDF5T38eXR1lXZZFTraGqkPmmslFiNOX00XCw5w3zv0PKg8oO4a
+7HRqAxvFiWOw+MD29hkSop+Pjt8G8heq+ZUyIFuBJ6VKLWgCtuaBVnR9B4KlSo1U
+r96yEHx7zrGx8BMMjp/39Ds3oJzkjQR/LzVMy/DAwb8FO0YtELsMJkg1n18r/BFt
+a1ezWd28jFfuVJVTtE5CKZBgPT0wSq4738L236sENmfC0Lo5Zjd3p8miJCnZnlXz
+ePc0fL6PjdJCTNZIlM21mBNvNUWiSW+zsF2+ASJDIwFUVbEaBdvt0k4fSW5GoSX0
+ribRkt2str4gFtyg+s+19mnb8UHZlQnpQunHqpXiaO93iPGqATZFKpwhCG77qJO3
+ifsYMJ+Cui4uPv9xZcTqRJmeqP9ElqYzCz6YVq0EDcLaKaBYfESu0pu1NKTsohB6
+JNJlXes7kqTsu0l4dxspbwNwAGiUe8pk+Vfirn6kM41SUNxKaEE=
+=MdjE
+-----END PGP SIGNATURE-----
+
+--hSONgx73KSpSsJcS--

@@ -2,210 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 206E0461A0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15312461A1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378422AbhK2Oox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:44:53 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:46232 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378848AbhK2Omk (ORCPT
+        id S1378782AbhK2Opb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:45:31 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:55324
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1379123AbhK2OnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:42:40 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 29 Nov 2021 09:43:23 -0500
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 82EB71FCA1;
-        Mon, 29 Nov 2021 14:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638196760; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g7uRp09YN+2wwoLXxVBcU3pfHZe88L/deD7R42M+YS8=;
-        b=bDuBVaOCI2Jte50hcwFHZesvTNeoIHO47fD7LtWPgm3eNoKRZq8wsqCNHXR4oq64LqIUal
-        Pd0RhrRj4sEpboM+ubV2MaMEcaDhw4XSYlSX6W0QJ+A5wm43EOsvpCFewNqPp7w+TFDuB6
-        JAQrt2poofsGS6s5XP5S7WCzu/aO+lI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638196760;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g7uRp09YN+2wwoLXxVBcU3pfHZe88L/deD7R42M+YS8=;
-        b=YrRKqm8hESMq65g/AmZkNHO/Edk1fC7lkhXr4UvthN2XPdISdmKptwUvOk88XdoA5bQ14L
-        S/AJ0FqIBpSraDAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0B70B13B15;
-        Mon, 29 Nov 2021 14:39:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eJFpMBfmpGEjCAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 29 Nov 2021 14:39:19 +0000
-Message-ID: <800280a5-ea6f-2f9c-1ae1-d626f3a18e23@suse.de>
-Date:   Mon, 29 Nov 2021 15:39:19 +0100
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A3E1D4001F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638196803;
+        bh=w6+BoYvnmAnd+GSm1CSG2oy2MCenL4FLdq4APeVFVSU=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=SSLBrO4hzgCknz6ZobYMdyV465cWrP+t1PQ0rWkP7d3I2eKnS/cvpV5Xeen3vztfj
+         ZOCCADslzkI4U5vZddG1VdsUud/hYbCRgnUNhFRvoO4YW20M/NZxoctqTFDy2H/6mr
+         t941Ig8jP+99IPNt8PU7WRicMM8bW9XxYzoD8mJPLs02RCFS61hTd1Ho25rYmU4A5j
+         zm/FvGcr/wiV9dnCpGh6l1FDg7E5z6B7c1w8bjUITwEmhX7JM+UlghGtOR7Z86SE/u
+         J8LbILLuEtqEWfUFT0VCLi2O15L5ma5YGqmzwUp0/X+L3upGgUiRPk/GYTyuKn5shP
+         Po0FuiMmTLAAw==
+Received: by mail-pg1-f198.google.com with SMTP id z4-20020a656104000000b00321790921fbso8606623pgu.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:40:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=w6+BoYvnmAnd+GSm1CSG2oy2MCenL4FLdq4APeVFVSU=;
+        b=Ze3i/OkC8m1OZmt7Pmd3H5UBwQ6VilNsAjBBf1b9GfpSkCGrUlmyoTVXAEw17cSUaL
+         KTb4NK3+u7ssw40wfzfYgl7+cmcm+5lKHwSsXuqQ7MQ8TrpKWQvt5DcNbngPDq3mBogh
+         8gihCqiu4m0EReE3tsK9KbJJCszPeZz+P1TdSD8844X8kzPILMn3psDHq4e13Zhosw29
+         YaHwGkbTrXdmE2JCzZmsiNrx1ln6zWITK58put9NPBD9qkzEQ/7HHb0EZvGjA70CNOO7
+         eofQPOAsh1wRvokqjxWkdw85eOzx9End0uPRg19k5tMAwXdiMFIHjpD7Cg2C4z7xUoYi
+         N5vg==
+X-Gm-Message-State: AOAM533e4iWBviDUgsOm82qtQ09E2HAdoiQRXQX6K370EEcSmUPsBATC
+        utP+sQhW6aYZCb1TOaDtKsTnvxx+PZjQh1b89PqIjFzEkP5UOuIU02aeHGpSF0VQ03wYbTciFfw
+        6SD56TyuDZAU+5QIv/4RKJkc2OuodVF2ATls+kpZzdg==
+X-Received: by 2002:a17:90b:4c89:: with SMTP id my9mr38888790pjb.229.1638196801872;
+        Mon, 29 Nov 2021 06:40:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzu+OIHnSidQX9q38q/ISn/oYi/aZG1iV/zfzuNI9YibcOhqr2H6QmGitjdqa/6oOI6TNG41Q==
+X-Received: by 2002:a17:90b:4c89:: with SMTP id my9mr38888748pjb.229.1638196801543;
+        Mon, 29 Nov 2021 06:40:01 -0800 (PST)
+Received: from localhost.localdomain (2001-b400-e254-16ab-fe1c-26fe-b098-aa3d.emome-ip6.hinet.net. [2001:b400:e254:16ab:fe1c:26fe:b098:aa3d])
+        by smtp.gmail.com with ESMTPSA id p188sm16862766pfg.102.2021.11.29.06.39.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 06:40:01 -0800 (PST)
+From:   Chris Chiu <chris.chiu@canonical.com>
+To:     Jes.Sorensen@gmail.com, kvalo@codeaurora.org, davem@davemloft.net,
+        kuba@kernel.org
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Chris Chiu <chris.chiu@canonical.com>
+Subject: [PATCH] rtl8xxxu: Improve the A-MPDU retransmission rate with RTS/CTS protection
+Date:   Mon, 29 Nov 2021 22:39:53 +0800
+Message-Id: <20211129143953.369557-1-chris.chiu@canonical.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] efi: Move efifb_setup_from_dmi() prototype from arch
- headers
-Content-Language: en-US
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        stable@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
-        linux-riscv@lists.infradead.org, x86@kernel.org
-References: <20211126001333.555514-1-javierm@redhat.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <20211126001333.555514-1-javierm@redhat.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------zGJ8z5U3jir98KXlGDVY7zsl"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------zGJ8z5U3jir98KXlGDVY7zsl
-Content-Type: multipart/mixed; boundary="------------6KQ91Ngk6Y2LlxOCUjB8Gk4a";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javierm@redhat.com>,
- linux-kernel@vger.kernel.org
-Cc: kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
- stable@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
- Ard Biesheuvel <ardb@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Catalin Marinas <catalin.marinas@arm.com>,
- Daniel Vetter <daniel.vetter@ffwll.ch>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
- Ingo Molnar <mingo@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Russell King <linux@armlinux.org.uk>, Thomas Gleixner <tglx@linutronix.de>,
- Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-efi@vger.kernel.org, linux-riscv@lists.infradead.org, x86@kernel.org
-Message-ID: <800280a5-ea6f-2f9c-1ae1-d626f3a18e23@suse.de>
-Subject: Re: [PATCH] efi: Move efifb_setup_from_dmi() prototype from arch
- headers
-References: <20211126001333.555514-1-javierm@redhat.com>
-In-Reply-To: <20211126001333.555514-1-javierm@redhat.com>
+The A-MPDU retransmission rate is always high (> 20%) even in a very
+clean environment. However, the vendor driver retransimission rate is
+< 10% in the same test bed. The different is the vendor driver starts
+the A-MPDU TXOP with initial RTS/CTS handshake which is observed in the
+air capture and the TX descriptor. Since there's no related field in
+TX descriptor to enable the L-SIG TXOP protection and the duration,
+applying the RTS/CTS protection instead helps to lower the retransmission
+rate from > 20% to ~12% in the same test setup.
 
---------------6KQ91Ngk6Y2LlxOCUjB8Gk4a
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Signed-off-by: Chris Chiu <chris.chiu@canonical.com>
+---
+ drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-SGkNCg0KQW0gMjYuMTEuMjEgdW0gMDE6MTMgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+IENvbW1pdCA4NjMzZWY4MmYxMDEgKCJkcml2ZXJzL2Zpcm13YXJlOiBjb25z
-b2xpZGF0ZSBFRkkgZnJhbWVidWZmZXIgc2V0dXANCj4gZm9yIGFsbCBhcmNoZXMiKSBtYWRl
-IHRoZSBHZW5lcmljIFN5c3RlbSBGcmFtZWJ1ZmZlcnMgKHN5c2ZiKSBkcml2ZXIgYWJsZQ0K
-PiB0byBiZSBidWlsdCBvbiBub24teDg2IGFyY2hpdGVjdHVyZXMuDQo+IA0KPiBCdXQgbGVm
-dCB0aGUgZWZpZmJfc2V0dXBfZnJvbV9kbWkoKSBmdW5jdGlvbiBwcm90b3R5cGUgZGVjbGFy
-YXRpb24gaW4gdGhlDQo+IGFyY2hpdGVjdHVyZSBzcGVjaWZpYyBoZWFkZXJzLiBUaGlzIGNv
-dWxkIGxlYWQgdG8gdGhlIGZvbGxvd2luZyBjb21waWxlcg0KPiB3YXJuaW5nIGFzIHJlcG9y
-dGVkIGJ5IHRoZSBrZXJuZWwgdGVzdCByb2JvdDoNCj4gDQo+ICAgICBkcml2ZXJzL2Zpcm13
-YXJlL2VmaS9zeXNmYl9lZmkuYzo3MDo2OiB3YXJuaW5nOiBubyBwcmV2aW91cyBwcm90b3R5
-cGUgZm9yIGZ1bmN0aW9uICdlZmlmYl9zZXR1cF9mcm9tX2RtaScgWy1XbWlzc2luZy1wcm90
-b3R5cGVzXQ0KPiAgICAgdm9pZCBlZmlmYl9zZXR1cF9mcm9tX2RtaShzdHJ1Y3Qgc2NyZWVu
-X2luZm8gKnNpLCBjb25zdCBjaGFyICpvcHQpDQo+ICAgICAgICAgIF4NCj4gICAgIGRyaXZl
-cnMvZmlybXdhcmUvZWZpL3N5c2ZiX2VmaS5jOjcwOjE6IG5vdGU6IGRlY2xhcmUgJ3N0YXRp
-YycgaWYgdGhlIGZ1bmN0aW9uIGlzIG5vdCBpbnRlbmRlZCB0byBiZSB1c2VkIG91dHNpZGUg
-b2YgdGhpcyB0cmFuc2xhdGlvbiB1bml0DQo+ICAgICB2b2lkIGVmaWZiX3NldHVwX2Zyb21f
-ZG1pKHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksIGNvbnN0IGNoYXIgKm9wdCkNCj4gDQo+IEZp
-eGVzOiA4NjMzZWY4MmYxMDEgKCJkcml2ZXJzL2Zpcm13YXJlOiBjb25zb2xpZGF0ZSBFRkkg
-ZnJhbWVidWZmZXIgc2V0dXAgZm9yIGFsbCBhcmNoZXMiKQ0KPiBSZXBvcnRlZC1ieToga2Vy
-bmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+IENjOiA8c3RhYmxlQHZnZXIua2Vy
-bmVsLm9yZz4gIyA1LjE1LngNCj4gU2lnbmVkLW9mZi1ieTogSmF2aWVyIE1hcnRpbmV6IENh
-bmlsbGFzIDxqYXZpZXJtQHJlZGhhdC5jb20+DQoNCkFja2VkLWJ5OiBUaG9tYXMgWmltbWVy
-bWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4NCg0KPiAtLS0NCj4gDQo+ICAgYXJjaC9hcm0v
-aW5jbHVkZS9hc20vZWZpLmggICB8IDEgLQ0KPiAgIGFyY2gvYXJtNjQvaW5jbHVkZS9hc20v
-ZWZpLmggfCAxIC0NCj4gICBhcmNoL3Jpc2N2L2luY2x1ZGUvYXNtL2VmaS5oIHwgMSAtDQo+
-ICAgYXJjaC94ODYvaW5jbHVkZS9hc20vZWZpLmggICB8IDIgLS0NCj4gICBpbmNsdWRlL2xp
-bnV4L2VmaS5oICAgICAgICAgIHwgNiArKysrKysNCj4gICA1IGZpbGVzIGNoYW5nZWQsIDYg
-aW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNo
-L2FybS9pbmNsdWRlL2FzbS9lZmkuaCBiL2FyY2gvYXJtL2luY2x1ZGUvYXNtL2VmaS5oDQo+
-IGluZGV4IGE2ZjNiMTc5ZThhOS4uMjcyMThlYWJiZjlhIDEwMDY0NA0KPiAtLS0gYS9hcmNo
-L2FybS9pbmNsdWRlL2FzbS9lZmkuaA0KPiArKysgYi9hcmNoL2FybS9pbmNsdWRlL2FzbS9l
-ZmkuaA0KPiBAQCAtMTcsNyArMTcsNiBAQA0KPiAgIA0KPiAgICNpZmRlZiBDT05GSUdfRUZJ
-DQo+ICAgdm9pZCBlZmlfaW5pdCh2b2lkKTsNCj4gLWV4dGVybiB2b2lkIGVmaWZiX3NldHVw
-X2Zyb21fZG1pKHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksIGNvbnN0IGNoYXIgKm9wdCk7DQo+
-ICAgDQo+ICAgaW50IGVmaV9jcmVhdGVfbWFwcGluZyhzdHJ1Y3QgbW1fc3RydWN0ICptbSwg
-ZWZpX21lbW9yeV9kZXNjX3QgKm1kKTsNCj4gICBpbnQgZWZpX3NldF9tYXBwaW5nX3Blcm1p
-c3Npb25zKHN0cnVjdCBtbV9zdHJ1Y3QgKm1tLCBlZmlfbWVtb3J5X2Rlc2NfdCAqbWQpOw0K
-PiBkaWZmIC0tZ2l0IGEvYXJjaC9hcm02NC9pbmNsdWRlL2FzbS9lZmkuaCBiL2FyY2gvYXJt
-NjQvaW5jbHVkZS9hc20vZWZpLmgNCj4gaW5kZXggZDNlMTgyNTMzN2JlLi5hZDU1MDc5YWJl
-NDcgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvYXJtNjQvaW5jbHVkZS9hc20vZWZpLmgNCj4gKysr
-IGIvYXJjaC9hcm02NC9pbmNsdWRlL2FzbS9lZmkuaA0KPiBAQCAtMTQsNyArMTQsNiBAQA0K
-PiAgIA0KPiAgICNpZmRlZiBDT05GSUdfRUZJDQo+ICAgZXh0ZXJuIHZvaWQgZWZpX2luaXQo
-dm9pZCk7DQo+IC1leHRlcm4gdm9pZCBlZmlmYl9zZXR1cF9mcm9tX2RtaShzdHJ1Y3Qgc2Ny
-ZWVuX2luZm8gKnNpLCBjb25zdCBjaGFyICpvcHQpOw0KPiAgICNlbHNlDQo+ICAgI2RlZmlu
-ZSBlZmlfaW5pdCgpDQo+ICAgI2VuZGlmDQo+IGRpZmYgLS1naXQgYS9hcmNoL3Jpc2N2L2lu
-Y2x1ZGUvYXNtL2VmaS5oIGIvYXJjaC9yaXNjdi9pbmNsdWRlL2FzbS9lZmkuaA0KPiBpbmRl
-eCA0OWIzOThmZTk5ZjEuLmNjNGY2Nzg3ZjkzNyAxMDA2NDQNCj4gLS0tIGEvYXJjaC9yaXNj
-di9pbmNsdWRlL2FzbS9lZmkuaA0KPiArKysgYi9hcmNoL3Jpc2N2L2luY2x1ZGUvYXNtL2Vm
-aS5oDQo+IEBAIC0xMyw3ICsxMyw2IEBADQo+ICAgDQo+ICAgI2lmZGVmIENPTkZJR19FRkkN
-Cj4gICBleHRlcm4gdm9pZCBlZmlfaW5pdCh2b2lkKTsNCj4gLWV4dGVybiB2b2lkIGVmaWZi
-X3NldHVwX2Zyb21fZG1pKHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksIGNvbnN0IGNoYXIgKm9w
-dCk7DQo+ICAgI2Vsc2UNCj4gICAjZGVmaW5lIGVmaV9pbml0KCkNCj4gICAjZW5kaWYNCj4g
-ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL2VmaS5oIGIvYXJjaC94ODYvaW5j
-bHVkZS9hc20vZWZpLmgNCj4gaW5kZXggNGQwYjEyNjgzNWI4Li42MzE1OGZkNTU4NTYgMTAw
-NjQ0DQo+IC0tLSBhL2FyY2gveDg2L2luY2x1ZGUvYXNtL2VmaS5oDQo+ICsrKyBiL2FyY2gv
-eDg2L2luY2x1ZGUvYXNtL2VmaS5oDQo+IEBAIC0xOTcsOCArMTk3LDYgQEAgc3RhdGljIGlu
-bGluZSBib29sIGVmaV9ydW50aW1lX3N1cHBvcnRlZCh2b2lkKQ0KPiAgIA0KPiAgIGV4dGVy
-biB2b2lkIHBhcnNlX2VmaV9zZXR1cCh1NjQgcGh5c19hZGRyLCB1MzIgZGF0YV9sZW4pOw0K
-PiAgIA0KPiAtZXh0ZXJuIHZvaWQgZWZpZmJfc2V0dXBfZnJvbV9kbWkoc3RydWN0IHNjcmVl
-bl9pbmZvICpzaSwgY29uc3QgY2hhciAqb3B0KTsNCj4gLQ0KPiAgIGV4dGVybiB2b2lkIGVm
-aV90aHVua19ydW50aW1lX3NldHVwKHZvaWQpOw0KPiAgIGVmaV9zdGF0dXNfdCBlZmlfc2V0
-X3ZpcnR1YWxfYWRkcmVzc19tYXAodW5zaWduZWQgbG9uZyBtZW1vcnlfbWFwX3NpemUsDQo+
-ICAgCQkJCQkgdW5zaWduZWQgbG9uZyBkZXNjcmlwdG9yX3NpemUsDQo+IGRpZmYgLS1naXQg
-YS9pbmNsdWRlL2xpbnV4L2VmaS5oIGIvaW5jbHVkZS9saW51eC9lZmkuaA0KPiBpbmRleCBk
-YmQzOWIyMGUwMzQuLmVmOGRiYzBhMTUyMiAxMDA2NDQNCj4gLS0tIGEvaW5jbHVkZS9saW51
-eC9lZmkuaA0KPiArKysgYi9pbmNsdWRlL2xpbnV4L2VmaS5oDQo+IEBAIC0xMjgzLDQgKzEy
-ODMsMTAgQEAgc3RhdGljIGlubGluZSBzdHJ1Y3QgZWZpX21va3Zhcl90YWJsZV9lbnRyeSAq
-ZWZpX21va3Zhcl9lbnRyeV9maW5kKA0KPiAgIH0NCj4gICAjZW5kaWYNCj4gICANCj4gKyNp
-ZmRlZiBDT05GSUdfU1lTRkINCj4gK2V4dGVybiB2b2lkIGVmaWZiX3NldHVwX2Zyb21fZG1p
-KHN0cnVjdCBzY3JlZW5faW5mbyAqc2ksIGNvbnN0IGNoYXIgKm9wdCk7DQo+ICsjZWxzZQ0K
-PiArc3RhdGljIGlubGluZSB2b2lkIGVmaWZiX3NldHVwX2Zyb21fZG1pKHN0cnVjdCBzY3Jl
-ZW5faW5mbyAqc2ksIGNvbnN0IGNoYXIgKm9wdCkgeyB9DQo+ICsjZW5kaWYNCj4gKw0KPiAg
-ICNlbmRpZiAvKiBfTElOVVhfRUZJX0ggKi8NCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1h
-bm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25z
-IEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55
-DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRv
-dGV2DQo=
+diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+index a42e2081b75f..06d59ffb7444 100644
+--- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
++++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
+@@ -4859,7 +4859,7 @@ rtl8xxxu_fill_txdesc_v1(struct ieee80211_hw *hw, struct ieee80211_hdr *hdr,
+ 	 * rts_rate is zero if RTS/CTS or CTS to SELF are not enabled
+ 	 */
+ 	tx_desc->txdw4 |= cpu_to_le32(rts_rate << TXDESC32_RTS_RATE_SHIFT);
+-	if (rate_flags & IEEE80211_TX_RC_USE_RTS_CTS) {
++	if (ampdu_enable || (rate_flags & IEEE80211_TX_RC_USE_RTS_CTS)) {
+ 		tx_desc->txdw4 |= cpu_to_le32(TXDESC32_RTS_CTS_ENABLE);
+ 		tx_desc->txdw4 |= cpu_to_le32(TXDESC32_HW_RTS_ENABLE);
+ 	} else if (rate_flags & IEEE80211_TX_RC_USE_CTS_PROTECT) {
+@@ -4930,7 +4930,7 @@ rtl8xxxu_fill_txdesc_v2(struct ieee80211_hw *hw, struct ieee80211_hdr *hdr,
+ 	/*
+ 	 * rts_rate is zero if RTS/CTS or CTS to SELF are not enabled
+ 	 */
+-	if (rate_flags & IEEE80211_TX_RC_USE_RTS_CTS) {
++	if (ampdu_enable || (rate_flags & IEEE80211_TX_RC_USE_RTS_CTS)) {
+ 		tx_desc40->txdw3 |= cpu_to_le32(TXDESC40_RTS_CTS_ENABLE);
+ 		tx_desc40->txdw3 |= cpu_to_le32(TXDESC40_HW_RTS_ENABLE);
+ 	} else if (rate_flags & IEEE80211_TX_RC_USE_CTS_PROTECT) {
+-- 
+2.25.1
 
---------------6KQ91Ngk6Y2LlxOCUjB8Gk4a--
-
---------------zGJ8z5U3jir98KXlGDVY7zsl
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGk5hcFAwAAAAAACgkQlh/E3EQov+BU
-IBAAsrJse0TjcHf8zr6/2DkGksRGeAdo2qzMsN++QB4k5UCY7x3qo3kE8iSOU5BPtBE+EI9ColSs
-mSjE4reGmcjo6RKpPqhUQGFyhwG5Aa2TQcXmobdSnMrAZUa3eoNpg0K4joRJoFTzujG2Ap0zawr1
-pv7ygAzexGU8UzhxYW1p+4kwoHL7ehz3VA6wUqYaUlE22zk3Mr1Nnkhqz3XQ2pGbdTSqY9c7j3/q
-4QDBZhVvS0W6kHcRGw/nHypwpAYUH8GgFjr5NOUntm6K2oZRRR9tg+hm97igR/FDF6wkQkIDDH0A
-vtRIVKWq+ByLF9djP5Wj9csmUQ4GckdHGYsD+jmAcJFSBkIFer87NGJABa+TfL2Nc4R70cEiMfeQ
-PcrL7cu6jAFJQ/MCh660ByMoV8t905fjhV0xZicNdBc4bMRY3zxepxgwuWttrTwcBkAlF1TqdLuP
-PgcpEKQxCFXay7b+rWuWkH7A4ewbrIOfqljftsCbAPgYP3JXJyi66Wx7vEiS53cZsYzNyUEJgnTT
-45nqSIT4xiTCdQF2zHKiYZjacCqzUMV1zAEn2CF3+wSNB1DKOjiKfKQHOMdZUgV0IAHP2aXYxdJz
-hqAaSED/o1wFc95toK42TyKgLh0zRHVTDM1OdP94SRPB2bGQkJ4yWxVxZuAGJohKWWGv0pEFNr+c
-Jx8=
-=+2u3
------END PGP SIGNATURE-----
-
---------------zGJ8z5U3jir98KXlGDVY7zsl--

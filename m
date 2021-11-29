@@ -2,76 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A7D462385
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:41:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3271A46238F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:43:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbhK2Voy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 16:44:54 -0500
-Received: from ms.lwn.net ([45.79.88.28]:53550 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231929AbhK2Vmw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:42:52 -0500
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S232448AbhK2VqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 16:46:24 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23143 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232266AbhK2VoX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 16:44:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638222065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QCFD7Ah5IiTcd1a6Gpk3m6ibgmYONE5XP5yWvVfmZ5A=;
+        b=TXKNmZYrDvsEW6w3v4r1Sj8VIyxdqWthtfC2vQlArxV9yrcs1AmJv8zdUYzu1JT/grOa4a
+        yPolPjSbU1mwY/OmTbfCud6UPNwdFkecDpIIcyjloePoeclwq9is+LYpZMzAxnAGMUYVPO
+        IrzCgLdAAN641tk/X1LOHjAWhLOtORA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-5Dz_xYvhN12pm6HYXYz0Bg-1; Mon, 29 Nov 2021 16:41:02 -0500
+X-MC-Unique: 5Dz_xYvhN12pm6HYXYz0Bg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 776D1221;
-        Mon, 29 Nov 2021 21:39:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 776D1221
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1638221974; bh=KUWR2wrj1GBdUBCsyEtNF7J8KqKNmk27V80VSJG77ks=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Rp2HE8FFknHIUzRL8icxKz5Zt4SB0dYyXIEqH1losWDIOwOp4WRceSggyk92M4yEu
-         xw+Yln75m+92lkzuRgJF1E67MJz33DMSf6I605O86XE7Xo9HWdsWBojOsFrm2xPXh/
-         E1Y3KqVLz7GTqetSwuZgjM8e4XW2EssoklObCjWtHZa1BTFFUfl9PfxBe6Ydbiq7ej
-         FTz4YpxmfG1MD7amBMVlGB4P18guxrJyMnnWnZiEcGDxIDyvq26LV2hBohxvhzlgi/
-         TZAVsOfW7310igQkjy3NMcty1aJt0MpLtN05lZUuHd3ZsTD3YHqxgUWV/wjhBFrm1M
-         IXgwTatPjHRgw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Akira Yokosawa <akiyks@gmail.com>,
-        Joel Colledge <joel.colledge@linbit.com>
-Cc:     Philipp Reisner <philipp.reisner@linbit.com>,
-        Lars Ellenberg <lars.ellenberg@linbit.com>,
-        drbd-dev@lists.linbit.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] docs: admin-guide/blockdev: Remove digraph of
- node-states
-In-Reply-To: <7df04f45-8746-e666-1a9d-a998f1ab1f91@gmail.com>
-References: <7df04f45-8746-e666-1a9d-a998f1ab1f91@gmail.com>
-Date:   Mon, 29 Nov 2021 14:39:33 -0700
-Message-ID: <87sfvesktm.fsf@meer.lwn.net>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 83E5C1927807;
+        Mon, 29 Nov 2021 21:40:59 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 21F1160BF4;
+        Mon, 29 Nov 2021 21:40:55 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <163819627469.215744.3603633690679962985.stgit@warthog.procyon.org.uk>
+References: <163819627469.215744.3603633690679962985.stgit@warthog.procyon.org.uk> <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 35/64] cachefiles: Add security derivation
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <302430.1638222055.1@warthog.procyon.org.uk>
+Date:   Mon, 29 Nov 2021 21:40:55 +0000
+Message-ID: <302431.1638222055@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Akira Yokosawa <akiyks@gmail.com> writes:
+I missed out the patch description:
 
-> While node-states-8.dot has two digraphs, the dot(1) command can
-> not properly handle multiple graphs in a DOT file and the
-> kernel-doc page at
->
->     https://www.kernel.org/doc/html/latest/admin-guide/blockdev/drbd/figures.html
->
-> fails to render the graphs.
->
-> It turned out that the digraph of node_states can be removed.
->
-> Quote from Joel's reflection:
->
->     On reflection, the digraph node_states can be removed entirely.
->     It is too basic to contain any useful information. In addition
->     it references "ioctl_set_state". The ioctl configuration
->     interface for DRBD has long been removed. In fact, it was never
->     in the upstream version of DRBD.
->
-> Remove node_states and rename the DOT file peer_states-8.dot.
->
-> Suggested-by: Joel Colledge <joel.colledge@linbit.com>
-> Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-> Cc: Philipp Reisner <philipp.reisner@linbit.com>
-> Cc: Lars Ellenberg <lars.ellenberg@linbit.com>
+    cachefiles: Add security derivation
+    
+    Implement code to derive a new set of creds for the cachefiles to use when
+    making VFS or I/O calls and to change the auditing info since the
+    application interacting with the network filesystem is not accessing the
+    cache directly.  Cachefiles uses override_creds() to change the effective
+    creds temporarily.
+    
+    set_security_override_from_ctx() is called to derive the LSM 'label' that
+    the cachefiles driver will act with.  set_create_files_as() is called to
+    determine the LSM 'label' that will be applied to files and directories
+    created in the cache.  These functions alter the new creds.
+    
+    Also implement a couple of functions to wrap the calls to begin/end cred
+    overriding.
+    
+    Signed-off-by: David Howells <dhowells@redhat.com>
+    cc: linux-cachefs@redhat.com
 
-Applied, thanks.
+David
 
-jon

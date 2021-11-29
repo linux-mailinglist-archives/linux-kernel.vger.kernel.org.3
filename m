@@ -2,90 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3271A46238F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74E6C462422
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:15:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbhK2VqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 16:46:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:23143 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232266AbhK2VoX (ORCPT
+        id S231673AbhK2WQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231442AbhK2WQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:44:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638222065;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QCFD7Ah5IiTcd1a6Gpk3m6ibgmYONE5XP5yWvVfmZ5A=;
-        b=TXKNmZYrDvsEW6w3v4r1Sj8VIyxdqWthtfC2vQlArxV9yrcs1AmJv8zdUYzu1JT/grOa4a
-        yPolPjSbU1mwY/OmTbfCud6UPNwdFkecDpIIcyjloePoeclwq9is+LYpZMzAxnAGMUYVPO
-        IrzCgLdAAN641tk/X1LOHjAWhLOtORA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-115-5Dz_xYvhN12pm6HYXYz0Bg-1; Mon, 29 Nov 2021 16:41:02 -0500
-X-MC-Unique: 5Dz_xYvhN12pm6HYXYz0Bg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 29 Nov 2021 17:16:33 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9160DC08EB2C;
+        Mon, 29 Nov 2021 13:42:41 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 83E5C1927807;
-        Mon, 29 Nov 2021 21:40:59 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 21F1160BF4;
-        Mon, 29 Nov 2021 21:40:55 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <163819627469.215744.3603633690679962985.stgit@warthog.procyon.org.uk>
-References: <163819627469.215744.3603633690679962985.stgit@warthog.procyon.org.uk> <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 35/64] cachefiles: Add security derivation
+        by ms.lwn.net (Postfix) with ESMTPSA id 15D6F2D3;
+        Mon, 29 Nov 2021 21:42:41 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 15D6F2D3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1638222161; bh=dxVqXyJt+NWgZ8KiVRMsoxhFaqe07X8UZntns7f7gKQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=EA8Ro+5/aZe+MD7I/L/neRV6pUADrcqN0wTI9mdNnQFFtxll3BF5mry3LchTdNuYI
+         61iUnEvzODQooGQx07UYwLpMbd/fsA6qIwZFnQ0zqJEV/zcAyTHxrSa86YTBmf7C2o
+         epFHqXGnpMNzaQNQhgzCQuXjUvjPTK/CpK+h/IA828cowQ3U5ToEXqND6wb49f+CDW
+         7xaIMxqEbr5WT3uzVfQWw0R+7sCl2C0TlVHtijieqtlfVTafYQ3031RXZfPUt5OEtk
+         Ma6dx60u7jEwaiSxNFiyhqOOl/XKRCqHPMarkmEjzqmbdkeON90DzAIGWNYtgLiPf1
+         1vs/rhQvOPsYA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Erik Ekman <erik@kryo.se>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Erik Ekman <erik@kryo.se>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation/process: fix self reference
+In-Reply-To: <20211119200758.642474-1-erik@kryo.se>
+References: <20211119200758.642474-1-erik@kryo.se>
+Date:   Mon, 29 Nov 2021 14:42:40 -0700
+Message-ID: <87o862skof.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <302430.1638222055.1@warthog.procyon.org.uk>
-Date:   Mon, 29 Nov 2021 21:40:55 +0000
-Message-ID: <302431.1638222055@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I missed out the patch description:
+Erik Ekman <erik@kryo.se> writes:
 
-    cachefiles: Add security derivation
-    
-    Implement code to derive a new set of creds for the cachefiles to use when
-    making VFS or I/O calls and to change the auditing info since the
-    application interacting with the network filesystem is not accessing the
-    cache directly.  Cachefiles uses override_creds() to change the effective
-    creds temporarily.
-    
-    set_security_override_from_ctx() is called to derive the LSM 'label' that
-    the cachefiles driver will act with.  set_create_files_as() is called to
-    determine the LSM 'label' that will be applied to files and directories
-    created in the cache.  These functions alter the new creds.
-    
-    Also implement a couple of functions to wrap the calls to begin/end cred
-    overriding.
-    
-    Signed-off-by: David Howells <dhowells@redhat.com>
-    cc: linux-cachefs@redhat.com
+> Instead link to the device tree document with the same name.
+>
+> Signed-off-by: Erik Ekman <erik@kryo.se>
+> ---
+>  Documentation/process/submitting-patches.rst | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
+> index da085d63af9b..6b3aaed66fba 100644
+> --- a/Documentation/process/submitting-patches.rst
+> +++ b/Documentation/process/submitting-patches.rst
+> @@ -14,7 +14,8 @@ works, see Documentation/process/development-process.rst. Also, read
+>  Documentation/process/submit-checklist.rst
+>  for a list of items to check before submitting code.  If you are submitting
+>  a driver, also read Documentation/process/submitting-drivers.rst; for device
+> -tree binding patches, read Documentation/process/submitting-patches.rst.
+> +tree binding patches, read
+> +Documentation/devicetree/bindings/submitting-patches.rst.
 
-David
+Applied, thanks.
 
+jon

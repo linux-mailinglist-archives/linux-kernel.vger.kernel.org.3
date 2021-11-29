@@ -2,45 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6138E461E7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D01D7461DC8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378742AbhK2Sg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:36:29 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:39422 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379565AbhK2Se0 (ORCPT
+        id S1378207AbhK2S3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:29:22 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:48202 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349813AbhK2S1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:34:26 -0500
+        Mon, 29 Nov 2021 13:27:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B0B3B815E0;
-        Mon, 29 Nov 2021 18:31:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B737EC53FC7;
-        Mon, 29 Nov 2021 18:30:59 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B29CDCE13BF;
+        Mon, 29 Nov 2021 18:23:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B56CC53FC7;
+        Mon, 29 Nov 2021 18:23:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210660;
-        bh=6RL4Owx+//WhEBUmpiLTRE/JU85TjLHH0oXFSLNUmIA=;
+        s=korg; t=1638210197;
+        bh=Sn8tndyMRnu26tV783OUTcsuI7UKqTEhnAAgF7tTOSA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JCFT9xLnxI8WNREMx6aZ8w26vCOxpQ6tShsFtQBpxhn+Cl5uDCRDwpL+zYP/aaFWf
-         S3oe7gNIOHWy/8AP69DToSJbYue5ze01L99Fp1FoZP+BEPoRQrO+Hjp/C4OOw1YOoE
-         WdeSCW3ChvMeV3AkTkkiMelkm0VvtQMOIuP93x+g=
+        b=r+CBbKCP3pENRcogXalw3maPFFUsy4ZM8gShdK3fsmLSTPuZUubayF5YdR1eVN9QO
+         jlO0eoLB7h8l3HDBsKIUFguz1jy8mGRKgm9jrYDJFO+Mdb5FNk7y/4zS9lPzSHA4Ep
+         BrjEV5lgL5wRx/oCugV7pSREyp8+2uL8JP6+EfKI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Douglas Gilbert <dgilbert@interlog.com>,
-        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 073/121] scsi: scsi_debug: Zero clear zones at reset write pointer
+Subject: [PATCH 4.19 42/69] net: ieee802154: handle iftypes as u32
 Date:   Mon, 29 Nov 2021 19:18:24 +0100
-Message-Id: <20211129181714.105533357@linuxfoundation.org>
+Message-Id: <20211129181705.040658746@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
+References: <20211129181703.670197996@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,52 +46,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
+From: Alexander Aring <aahringo@redhat.com>
 
-[ Upstream commit 2d62253eb1b60f4ce8b39125eee282739b519297 ]
+[ Upstream commit 451dc48c806a7ce9fbec5e7a24ccf4b2c936e834 ]
 
-When a reset is requested the position of the write pointer is updated but
-the data in the corresponding zone is not cleared. Instead scsi_debug
-returns any data written before the write pointer was reset. This is an
-error and prevents using scsi_debug for stale page cache testing of the
-BLKRESETZONE ioctl.
+This patch fixes an issue that an u32 netlink value is handled as a
+signed enum value which doesn't fit into the range of u32 netlink type.
+If it's handled as -1 value some BIT() evaluation ends in a
+shift-out-of-bounds issue. To solve the issue we set the to u32 max which
+is s32 "-1" value to keep backwards compatibility and let the followed enum
+values start counting at 0. This brings the compiler to never handle the
+enum as signed and a check if the value is above NL802154_IFTYPE_MAX should
+filter -1 out.
 
-Zero written data in the zone when resetting the write pointer.
-
-Link: https://lore.kernel.org/r/20211122061223.298890-1-shinichiro.kawasaki@wdc.com
-Fixes: f0d1cf9378bd ("scsi: scsi_debug: Add ZBC zone commands")
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Acked-by: Douglas Gilbert <dgilbert@interlog.com>
-Signed-off-by: Shin'ichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: f3ea5e44231a ("ieee802154: add new interface command")
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Link: https://lore.kernel.org/r/20211112030916.685793-1-aahringo@redhat.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_debug.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/net/nl802154.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index 3fc7c2a31c191..1a3f5adc68849 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -4628,6 +4628,7 @@ static void zbc_rwp_zone(struct sdebug_dev_info *devip,
- 			 struct sdeb_zone_state *zsp)
- {
- 	enum sdebug_z_cond zc;
-+	struct sdeb_store_info *sip = devip2sip(devip, false);
+diff --git a/include/net/nl802154.h b/include/net/nl802154.h
+index ddcee128f5d9a..145acb8f25095 100644
+--- a/include/net/nl802154.h
++++ b/include/net/nl802154.h
+@@ -19,6 +19,8 @@
+  *
+  */
  
- 	if (zbc_zone_is_conv(zsp))
- 		return;
-@@ -4639,6 +4640,10 @@ static void zbc_rwp_zone(struct sdebug_dev_info *devip,
- 	if (zsp->z_cond == ZC4_CLOSED)
- 		devip->nr_closed--;
- 
-+	if (zsp->z_wp > zsp->z_start)
-+		memset(sip->storep + zsp->z_start * sdebug_sector_size, 0,
-+		       (zsp->z_wp - zsp->z_start) * sdebug_sector_size);
++#include <linux/types.h>
 +
- 	zsp->z_non_seq_resource = false;
- 	zsp->z_wp = zsp->z_start;
- 	zsp->z_cond = ZC1_EMPTY;
+ #define NL802154_GENL_NAME "nl802154"
+ 
+ enum nl802154_commands {
+@@ -150,10 +152,9 @@ enum nl802154_attrs {
+ };
+ 
+ enum nl802154_iftype {
+-	/* for backwards compatibility TODO */
+-	NL802154_IFTYPE_UNSPEC = -1,
++	NL802154_IFTYPE_UNSPEC = (~(__u32)0),
+ 
+-	NL802154_IFTYPE_NODE,
++	NL802154_IFTYPE_NODE = 0,
+ 	NL802154_IFTYPE_MONITOR,
+ 	NL802154_IFTYPE_COORD,
+ 
 -- 
 2.33.0
 

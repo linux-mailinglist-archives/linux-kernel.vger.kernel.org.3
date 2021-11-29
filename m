@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA206462511
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DD04626C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:54:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231847AbhK2WfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:35:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60686 "EHLO
+        id S235352AbhK2W5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:57:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233332AbhK2Wey (ORCPT
+        with ESMTP id S235823AbhK2WzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:34:54 -0500
+        Mon, 29 Nov 2021 17:55:02 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897D8C0C2368
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:48:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618CEC0C236A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:48:30 -0800 (PST)
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638208108;
+        s=2020; t=1638208109;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4POHWttKDLCioDdhd9nXuhpJiEq71/owpp/FCDooROs=;
-        b=FWWAdxROtb8WLQ9QbZQNR+fyYDvU7tt8IXttvVA8/MCTkI4tEuqlwtkvq2E2EMAyJikzim
-        gUhswMUVJpD4XYOrueOKhTFXyO1VPJlclp1TnObYgm4UIEYT2MTXWT/VF1htQlgDx17sOI
-        NksbWGAT2DpeTC+h5gFgljZzkt86LTL0KxegoTUUmSrsxmwk3paRP61N1/PBEjsRQWBCBa
-        uSOLp6NX8My0p5cVq1Pnwn7Nh3Z6MWJbguM4JKmse1rIeklJ/y+UQQPz+ImKE5YTGBeca2
-        WEqrDz3d20ql7e0d0YKOiUSwwYi+hFVGQR1pYsySWsLSxAj3tmwnaYBCjOctSA==
+        bh=AmohWZGuAOsLtik5LbHwnJPTa7PuekGutr9B/WW3Jlk=;
+        b=M+J9/ZJ6mV0r8sf7YB5MHkyXhE496FxzJ7xxf/3eEKSeqK3j9y2xIxUmhuj8i1v4Is/kzj
+        wlIMuEAubvxvsvICkyVzv6n/rClbOrCePHrVSkYZaLeQXY5pSUNM+70bQGYTlYYFEnSHqy
+        4GEoUkn4PDHI8eULqqm/oS9Td1IXq8QDUYD4m7iJNFT6fsj/qNalyqaGQjniKO/764cghf
+        99dBtfaN6M6WozEiQ6s0J9P8qiQaKLJ/eFC/eYA3Lm91xTHNkAuyM/vZQ1pALoEkLWNJsh
+        CHYVnPDYGzcia4I9lcp4+zl8coLq2+mnYCVt02JazqVPmcQYuLEJ5ogF3zAMBQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638208108;
+        s=2020e; t=1638208109;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=4POHWttKDLCioDdhd9nXuhpJiEq71/owpp/FCDooROs=;
-        b=k6tfiuKAxLH7O5tpmqCVFL+qud+SaxzYkKes3o+rvlvIvFRqatzNqtvTaNGq+kvrBPQtC7
-        cQZZynPm41KQSiAg==
+        bh=AmohWZGuAOsLtik5LbHwnJPTa7PuekGutr9B/WW3Jlk=;
+        b=CSJfCKKfx1Mrv4gPiFJicdLeK8mndU198o33MssuT+HnxG7r+WEL1Sa8dxxQUVqlADEag7
+        EFqhrGULhZ3ZfCAg==
 To:     linux-kernel@vger.kernel.org
 Cc:     Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
@@ -48,10 +48,12 @@ Cc:     Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
         Steven Rostedt <rostedt@goodmis.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Vincent Guittot <vincent.guittot@linaro.org>,
-        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
-Subject: [PATCH 05/11] lockdep: Remove softirq accounting on PREEMPT_RT.
-Date:   Mon, 29 Nov 2021 18:46:48 +0100
-Message-Id: <20211129174654.668506-6-bigeasy@linutronix.de>
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH 07/11] lockdep/selftests: Unbalanced migrate_disable() & rcu_read_lock().
+Date:   Mon, 29 Nov 2021 18:46:50 +0100
+Message-Id: <20211129174654.668506-8-bigeasy@linutronix.de>
 In-Reply-To: <20211129174654.668506-1-bigeasy@linutronix.de>
 References: <20211129174654.668506-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
@@ -60,89 +62,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+The tests with unbalanced lock() + unlock() operation leave a modified
+preemption counter behind which is then reset to its original value
+after the test.
 
-There is not really a softirq context on PREEMPT_RT.
-Softirqs on PREEMPT_RT are always invoked within the context of a
-threaded interrupt handler or within ksoftirqd. The "in-softirq" context
-is preemptible and is protected by a per-CPU lock to ensure mutual
-exclusion.
+The spin_lock() function on PREEMPT_RT does not include a
+preempt_disable() statement but migrate_disable() and read_rcu_lock().
+As a consequence both counter never get back to their original value and
+the system explodes later after the selftest.
+In the double-unlock case on PREEMPT_RT, the migrate_disable() and RCU
+code will trigger a warning which should be avoided. These counter
+should not be decremented below their initial value.
 
-There is no difference on PREEMPT_RT between spin_lock_irq() and
-spin_lock() because the former does not disable interrupts. Therefore if
-a lock is used in_softirq() and locked once with spin_lock_irq() then
-lockdep will report this with "inconsistent {SOFTIRQ-ON-W} ->
-{IN-SOFTIRQ-W} usage".
+Save both counters and bring them back to their original value after the
+test.
+In the double-unlock case, increment both counter in advance to they
+become balanced after the double unlock.
 
-Teach lockdep that we don't really do softirqs on -RT.
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- include/linux/irqflags.h | 23 +++++++++++++++--------
- kernel/locking/lockdep.c |  2 ++
- 2 files changed, 17 insertions(+), 8 deletions(-)
+ lib/locking-selftest.c | 26 +++++++++++++++++++++++++-
+ 1 file changed, 25 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
-index 600c10da321a7..4b140938b03e2 100644
---- a/include/linux/irqflags.h
-+++ b/include/linux/irqflags.h
-@@ -71,14 +71,6 @@ do {						\
- do {						\
- 	__this_cpu_dec(hardirq_context);	\
- } while (0)
--# define lockdep_softirq_enter()		\
--do {						\
--	current->softirq_context++;		\
--} while (0)
--# define lockdep_softirq_exit()			\
--do {						\
--	current->softirq_context--;		\
--} while (0)
+diff --git a/lib/locking-selftest.c b/lib/locking-selftest.c
+index 4d614c74e6ec5..417056ba28e1f 100644
+--- a/lib/locking-selftest.c
++++ b/lib/locking-selftest.c
+@@ -712,12 +712,18 @@ GENERATE_TESTCASE(ABCDBCDA_rtmutex);
 =20
- # define lockdep_hrtimer_enter(__hrtimer)		\
- ({							\
-@@ -140,6 +132,21 @@ do {						\
- # define lockdep_irq_work_exit(__work)		do { } while (0)
- #endif
+ #undef E
 =20
-+#if defined(CONFIG_TRACE_IRQFLAGS) && !defined(CONFIG_PREEMPT_RT)
-+# define lockdep_softirq_enter()		\
-+do {						\
-+	current->softirq_context++;		\
-+} while (0)
-+# define lockdep_softirq_exit()			\
-+do {						\
-+	current->softirq_context--;		\
-+} while (0)
-+
++#ifdef CONFIG_PREEMPT_RT
++# define RT_PREPARE_DBL_UNLOCK()	{ migrate_disable(); rcu_read_lock(); }
 +#else
-+# define lockdep_softirq_enter()		do { } while (0)
-+# define lockdep_softirq_exit()			do { } while (0)
++# define RT_PREPARE_DBL_UNLOCK()
++#endif
+ /*
+  * Double unlock:
+  */
+ #define E()					\
+ 						\
+ 	LOCK(A);				\
++	RT_PREPARE_DBL_UNLOCK();		\
+ 	UNLOCK(A);				\
+ 	UNLOCK(A); /* fail */
+=20
+@@ -1398,7 +1404,13 @@ static int unexpected_testcase_failures;
+=20
+ static void dotest(void (*testcase_fn)(void), int expected, int lockclass_=
+mask)
+ {
+-	unsigned long saved_preempt_count =3D preempt_count();
++	int saved_preempt_count =3D preempt_count();
++#ifdef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SMP
++	int saved_mgd_count =3D current->migration_disabled;
++#endif
++	int saved_rcu_count =3D current->rcu_read_lock_nesting;
++#endif
+=20
+ 	WARN_ON(irqs_disabled());
+=20
+@@ -1432,6 +1444,18 @@ static void dotest(void (*testcase_fn)(void), int ex=
+pected, int lockclass_mask)
+ 	 * count, so restore it:
+ 	 */
+ 	preempt_count_set(saved_preempt_count);
++
++#ifdef CONFIG_PREEMPT_RT
++#ifdef CONFIG_SMP
++	while (current->migration_disabled > saved_mgd_count)
++		migrate_enable();
 +#endif
 +
- #if defined(CONFIG_IRQSOFF_TRACER) || \
- 	defined(CONFIG_PREEMPT_TRACER)
-  extern void stop_critical_timings(void);
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 2270ec68f10a1..4a882f83aeb9d 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -5485,6 +5485,7 @@ static noinstr void check_flags(unsigned long flags)
- 		}
- 	}
-=20
-+#ifndef CONFIG_PREEMPT_RT
- 	/*
- 	 * We dont accurately track softirq state in e.g.
- 	 * hardirq contexts (such as on 4KSTACKS), so only
-@@ -5499,6 +5500,7 @@ static noinstr void check_flags(unsigned long flags)
- 			DEBUG_LOCKS_WARN_ON(!current->softirqs_enabled);
- 		}
- 	}
++	while (current->rcu_read_lock_nesting > saved_rcu_count)
++		rcu_read_unlock();
++	WARN_ON_ONCE(current->rcu_read_lock_nesting < saved_rcu_count);
 +#endif
-=20
- 	if (!debug_locks)
- 		print_irqtrace_events(current);
++
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ 	if (softirq_count())
+ 		current->softirqs_enabled =3D 0;
 --=20
 2.34.0
 

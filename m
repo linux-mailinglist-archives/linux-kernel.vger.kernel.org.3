@@ -2,88 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 457D44614F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5AC74614F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348312AbhK2MZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:25:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:60828 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244644AbhK2MX3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:23:29 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F2746137B;
-        Mon, 29 Nov 2021 12:20:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id DA9DF60187;
-        Mon, 29 Nov 2021 12:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638188410;
-        bh=3dz4afOlmwavUqRWSWmY4mghzZ91U/hXH/Y5D1YaZNo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=B404iPjF0gv8zoZLFY0KsVcxpMrHOtjOSrphr2F0IRNcU0XlQPx5tJ906CkniuEnL
-         spIK69024xyFAq84ktbTHDeeSJNhkJ+tu/7dEWRP3ecNuUZLq/P1wjnTcGNOe/X42+
-         IQSMUwZ35jHA05aqQ0XwPH5ZFvnaW+EADYUNvNafxltG9DPYG62pajZi9uHQkrceGZ
-         uWps24EetffAcuty2SzdClJ10V+KOBZTWhb85J1ZeIxb8in1ZjK3JGCbYFAy2c3a9p
-         9AHUq5ur3EhW2f80m3qsSQjLZ6HNwY7jBe95ukit9wE7GBrSTXpTEqxgplihwcA4Pi
-         M3BbJCknrqw7g==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D43AC60A4D;
-        Mon, 29 Nov 2021 12:20:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S244109AbhK2M0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 07:26:20 -0500
+Received: from elvis.franken.de ([193.175.24.41]:48727 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236912AbhK2MYT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 07:24:19 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mrfeW-0005RM-00; Mon, 29 Nov 2021 13:21:00 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 28140C2FBD; Mon, 29 Nov 2021 13:20:52 +0100 (CET)
+Date:   Mon, 29 Nov 2021 13:20:52 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software
+ nodes
+Message-ID: <20211129122052.GA7921@alpha.franken.de>
+References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
+ <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
+ <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/4] net: mvneta: mqprio cleanups and shaping
- support
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163818841086.20614.1395556484776103965.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Nov 2021 12:20:10 +0000
-References: <20211126112056.849123-1-maxime.chevallier@bootlin.com>
-In-Reply-To: <20211126112056.849123-1-maxime.chevallier@bootlin.com>
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        gregory.clement@bootlin.com, andrew@lunn.ch, pali@kernel.org,
-        kuba@kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 26 Nov 2021 12:20:52 +0100 you wrote:
-> Hello everyone,
+On Fri, Nov 26, 2021 at 01:16:22PM +0100, Geert Uytterhoeven wrote:
+> Hi Arnd,
 > 
-> This is the second version of the series that adds some improvements to the
-> existing mqprio implementation in mvneta, and adds support for
-> egress shaping offload.
+> On Fri, Nov 26, 2021 at 11:58 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > On Fri, Nov 26, 2021 at 11:23 AM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > In order to get rid of legacy platform data in AT25 driver,
+> > > convert its users to use software nodes.
+> > >
+> > > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> >
+> > This looks good to me, thanks for cleaning this up! I think Geert has this
+> > hardware, adding him to Cc in case he wants to give it a spin.
 > 
-> The first 3 patches are some minor cleanups, such as using the
-> tc_mqprio_qopt_offload structure to get access to more offloading
-> options, cleaning the logic to detect whether or not we should offload
-> mqprio setting, and allowing to have a 1 to N mapping between TCs and
-> queues.
+> The SPI controller is only present on TX4938, not on TX4927, so it is
+> unused on my rbtx4927 board.
 > 
-> [...]
+> > >  arch/mips/include/asm/txx9/spi.h    |  4 ++--
+> > >  arch/mips/txx9/generic/spi_eeprom.c | 32 +++++++++++++++++------------
+> > >  arch/mips/txx9/rbtx4938/setup.c     |  6 +++---
+> > >  3 files changed, 24 insertions(+), 18 deletions(-)
+> 
+> Probably all of this can be removed, given the SPI controller driver
+> itself was removed in commit 74523a5dae0c96d6 ("spi: txx9: Remove
+> driver")?
 
-Here is the summary with links:
-  - [net-next,v2,1/4] net: mvneta: Use struct tc_mqprio_qopt_offload for MQPrio configuration
-    https://git.kernel.org/netdev/net-next/c/75fa71e3acad
-  - [net-next,v2,2/4] net: mvneta: Don't force-set the offloading flag
-    https://git.kernel.org/netdev/net-next/c/e7ca75fe6662
-  - [net-next,v2,3/4] net: mvneta: Allow having more than one queue per TC
-    https://git.kernel.org/netdev/net-next/c/e9f7099d0730
-  - [net-next,v2,4/4] net: mvneta: Add TC traffic shaping offload
-    https://git.kernel.org/netdev/net-next/c/2551dc9e398c
+are you ok with completly removing rbtx4938 support ? Can I rbtx4939
+board support, too ?
 
-You are awesome, thank you!
+Thomas.
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

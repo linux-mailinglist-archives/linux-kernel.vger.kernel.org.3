@@ -2,280 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F30F146224E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D396846225A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:40:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233646AbhK2UlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 15:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
+        id S234398AbhK2UoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 15:44:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbhK2UjP (ORCPT
+        with ESMTP id S229774AbhK2UmC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:39:15 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF60C08ED6C;
-        Mon, 29 Nov 2021 09:13:43 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id k37so46574908lfv.3;
-        Mon, 29 Nov 2021 09:13:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:content-language:to:cc
-         :references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=VTatKi9nLjKf/ouxwhMrze6+WUP0SdgQqfY3/ZOFly0=;
-        b=lf2lo7e6Oo6F1oAeqlYLJBN4TBBFyrGcFYIfSly83M+PSNlk7YCljNt6JsKHAzM5x1
-         lOjNwPIIy88h0CXdbmCG8jsf8eLRifr4poWmtoNQcJlf4K6udZpen4ELhBp9bxIoHuVQ
-         8HquW3qTwIyckbUxFVek0PzeNxD5M/gKgoR23W3WG+0bHVWHKullaQZC6j72AwDnj65W
-         SkAuFB49AbNjre9/ZN3HXVsqwvxqV80txNQG44tjQPwtxWMFsnNaHhpGZXX18NUbjp3F
-         XObIWnIygWyRSl6OnNGt2eqrAj9yCS/Vyk1knJ5xJAArofjhg8MU5Af+Cxczb6q4PvaG
-         kjPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
-         :content-transfer-encoding;
-        bh=VTatKi9nLjKf/ouxwhMrze6+WUP0SdgQqfY3/ZOFly0=;
-        b=j0+FpRFaPoiXjDu43aBYlIMha3SsnB4MXZ07Lb7rqVyLWTa8yzMF+0BmZg3NvvvUQb
-         L2rB3sV6l/O/4v2W96hAHEZfUVl0y2hzRgzUfoPtMHao2mqfw+P8rGqEoqqwuaXC9gir
-         Z6G3e43AwleoVcih6Q0p0i0yv77HSACBvRTKJZSUsbybqKqaoMV2nmqjjftWWmfcwqOu
-         SHms/g5xxhpz3j192LEN0FMapAjY5UajBY9FcUwjdYAESyBfe7p6ziJDrVm5MgqA7req
-         AEbKc9PFGFaPcQGsXcrsKFfEv6yNkVlKfor7HK5ZUiMYXiLBXUnugUL10Dcsq5sUV5Us
-         xxZQ==
-X-Gm-Message-State: AOAM532WuCwz5Jdezo4gZWmn62Dnl0AhnkFzeMCXvNEOx5iVDk/1DEXX
-        93uaSKuLQdc8EAZM+AV8FAk=
-X-Google-Smtp-Source: ABdhPJza825v6DwnUXQa0o2zoVz4Mcoj+1EcfWGapApxnoNOdyBNHJsWR1/ZuaHOmTRwEnOwV0uODw==
-X-Received: by 2002:a05:6512:ace:: with SMTP id n14mr20426920lfu.53.1638206021365;
-        Mon, 29 Nov 2021 09:13:41 -0800 (PST)
-Received: from [10.0.0.115] (91-153-170-164.elisa-laajakaista.fi. [91.153.170.164])
-        by smtp.gmail.com with ESMTPSA id b13sm1406433lfc.79.2021.11.29.09.13.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 09:13:40 -0800 (PST)
-Message-ID: <4cb46c35-0279-bef2-46dd-d9fb6901688c@gmail.com>
-Date:   Mon, 29 Nov 2021 19:14:08 +0200
+        Mon, 29 Nov 2021 15:42:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CE63C0698E5;
+        Mon, 29 Nov 2021 09:17:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9A04DCE131E;
+        Mon, 29 Nov 2021 17:17:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CE23C53FC7;
+        Mon, 29 Nov 2021 17:17:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638206235;
+        bh=EJ/491y2sXQi1g7e++9dtTCnZ+NIW/pxkeKhPGvQhr4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=r5sBkG6jS8z1zsNlYMyawzFPioGjVixsVOw0Ii/uoxSHvPUJ8zkb9vwhsUGZB1SjC
+         b5EPq7n6lHSPSWRbJI5Wim0jnfb4TpFra84ABPIm40GZIbacR4r0CjUUUOUA0Q7URx
+         mKyzQC07M5H2ZvE3JrUq4r5HxdQrt04MiTLdNQ5icIIqiAMoT35yQCNlZW46XMphD/
+         bDOvL8HxJJ/DT9H6LkybSYXMQ/OSKO4aynUXfIJXJNT3hbNwneqPcxnOCH/nec0Fw/
+         nYyQDuf7GwKxHFHh10RyPRwPGoQHEEqL19lCbB6BFGNV4F4jf+S5XYpKzUl2NqfTeg
+         MYL0mKOyVagGg==
+Date:   Mon, 29 Nov 2021 09:17:13 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Petr Machata <petrm@nvidia.com>
+Cc:     Ido Schimmel <idosch@idosch.org>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?= =?UTF-8?B?bnNlbg==?= 
+        <toke@redhat.com>,
+        "Alexander Lobakin" <alexandr.lobakin@intel.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Jesse Brandeburg" <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Shay Agroskin" <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        "David Arinzon" <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        "Saeed Bishara" <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        "Claudiu Manoil" <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        "Martin Habets" <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Martin KaFai Lau" <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        "Vladimir Oltean" <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, <netdev@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>, <nikolay@nvidia.com>
+Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
+ per-channel statistics
+Message-ID: <20211129091713.2dc8462f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <87sfveq48z.fsf@nvidia.com>
+References: <20211123163955.154512-22-alexandr.lobakin@intel.com>
+        <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
+        <87bl28bga6.fsf@toke.dk>
+        <20211125170708.127323-1-alexandr.lobakin@intel.com>
+        <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <20211125204007.133064-1-alexandr.lobakin@intel.com>
+        <87sfvj9k13.fsf@toke.dk>
+        <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <87ee72ah56.fsf@toke.dk>
+        <20211126111431.4a2ed007@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <YaPCbaMVaVlxXcHC@shredder>
+        <20211129064755.539099c0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <874k7vq7tl.fsf@nvidia.com>
+        <20211129080502.53f7d316@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        <87sfveq48z.fsf@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Content-Language: en-US
-To:     Jayesh Choudhary <j-choudhary@ti.com>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     devicetree@vger.kernel.org, robh+dt@kernel.org,
-        alsa-devel@alsa-project.org, lgirdwood@gmail.com,
-        linux-kernel@vger.kernel.org, broonie@kernel.org,
-        "Yadav, Pratyush" <p.yadav@ti.com>
-References: <20211126050228.6257-1-j-choudhary@ti.com>
- <64426bc9-1160-97c6-4714-4201b8f7a81c@gmail.com>
- <a7bc460f-abf4-1d64-6416-5b50dc15d184@ti.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-Subject: Re: [PATCH v3] ASoC: dt-bindings: davinci-mcasp: convert McASP
- bindings to yaml schema
-In-Reply-To: <a7bc460f-abf4-1d64-6416-5b50dc15d184@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 29 Nov 2021 18:08:12 +0100 Petr Machata wrote:
+> Jakub Kicinski <kuba@kernel.org> writes:
+> > On Mon, 29 Nov 2021 16:51:02 +0100 Petr Machata wrote:  
+> >> IFLA_STATS_LINK_OFFLOAD_XSTATS is a nest. Currently it carries just
+> >> CPU_HIT stats. The idea is to carry HW stats as well in that group.  
+> >
+> > Hm, the expectation was that the HW stats == total - SW. I believe that
+> > still holds true for you, even if HW stats are not "complete" (e.g.
+> > user enabled them after device was already forwarding for a while).
+> > Is the concern about backward compat or such?  
+> 
+> I guess you could call it backward compat. But not only. I think a
+> typical user doing "ip -s l sh", including various scripts, wants to see
+> the full picture and not worry what's going on where. Physical
+> netdevices already do that, and by extension bond and team of physical
+> netdevices. It also makes sense from the point of view of an offloaded
+> datapath as an implementation detail that you would ideally not notice.
 
+Agreed.
 
-On 29/11/2021 13:21, Jayesh Choudhary wrote:
-> 
-> 
-> On 29/11/21 12:23 pm, Péter Ujfalusi wrote:
->>
->>
->> On 26/11/2021 07:02, Jayesh Choudhary wrote:
->>> Convert the bindings for McASP controllers for TI SOCs
->>> from txt to YAML schema.
->>
->> Can you CC the sound/soc/ti/ maintainer next time, I have found this
->> patch in my Spam folder...
-> 
-> Okay. Also, I will add this file in the MAINTAINERS file under the
-> heading 'TEXAS INSTRUMENTS ASoC DRIVERS'
+> For those who care to know about the offloaded datapath, it would be
+> nice to have the option to request either just the SW stats, or just the
+> HW stats. A logical place to put these would be under the OFFLOAD_XSTATS
+> nest of the RTM_GETSTATS message, but maybe the SW ones should be up
+> there next to IFLA_STATS_LINK_64. (After all it's going to be
+> independent from not only offload datapath, but also XDP.)
 
-OK, thank you. I'm sure I have missed some other binding document...
+What I'm getting at is that I thought IFLA_OFFLOAD_XSTATS_CPU_HIT
+should be sufficient from uAPI perspective in terms of reporting.
+User space can do the simple math to calculate the "SW stats" if 
+it wants to. We may well be talking about the same thing, so maybe
+let's wait for the code?
 
->>> Adds additional properties 'clocks', 'clock-names', 'power-domains',
->>> '#sound-dai-cells',
->>
->>> 'num-serializer'
->>
->> Which use was removed by 1427e660b49e87cd842dba94158b0fc73030c17e
-> 
-> The dts file of arm SOCs is not updated and was generating an error in
-> dtbs_check. I will remove this property.
+> This way you get the intuitive default behavior, but still have a way to
+> e.g. request just the SW stats without hitting the HW, or just request
+> the HW stats if that's what you care about.
 
-Yes, that dts file was added 2 years after the num-serializer got removed...
-
-> 
->>
->>> and 'port'
->>
->> And what this "port" is?
-> 
-> The mcasp node in the file 'arch/arm/boot/dts/am335x-sl50.dts' has this
-> as child node.
-
-Right, it is there if McASP is used via the graph card.
-
->>> +
->>> +  tdm-slots:
->>
->> description?
-> 
-> I will add description.
-> 
->>
->>> +    maxItems: 1
->>> +
->>> +  serial-dir:
->>> +    description:
->>> +      A list of serializer configuration
->>> +      Entry is indication for serializer pin direction
->>> +      0 - Inactive, 1 - TX, 2 - RX
->>
->> You should mention that _all_ AXR pins should be present in the array,
->> even if they are no in use.
->>
->>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->>> +    minItems: 1
->>> +    maxItems: 16
->>
->> a McASP could have up to 25 AXR pins...
->>
-> 
-> Will update the description and the maximum.
-> 
->>> +    items:
->>> +      minimum: 0
->>> +      maximum: 2
->>> +      default: 0
->>> +
-> 
-> 
->>> +
->>> +  tx-num-evt:
->>
->> description?
->>
->>> +    maxItems: 1
->>> +
->>> +  rx-num-evt:
->>
->> description?
->>
->>> +    maxItems: 1
->>> +
->>> +  dismod:
->>
->> description?
->>
-> 
-> For the above three properties, is the description in the txt file
-> sufficient?
-
-I would add a bit more detail than just 'FIFO levels'
-
->>> +
->>> +  sram-size-playback:
->>> +    maxItems: 1
->>
->> should be dropped, not used
->>
->>> +
->>> +  sram-size-capture:
->>> +    maxItems: 1
->>
->> not used, please drop
->>
-> 
-> Okay.
-
-Thanks
-
-> 
->>> +
->>> +  interrupts:
->>> +    minItems: 1
->>> +    items:
->>> +      - description: TX FIFO interrupt
->>> +      - description: RX FIFO interrupt
->>
->> The 'common' does not deserve a description?
->>
-> 
-> Will add this.
-
-Great
-
-> 
-> 
->>> +  gpio-controller: true
->>> +
->>> +  "#gpio-cells":
->>> +    const: 2
->>> +
->>> +  function-gpios:
->>> +    maxItems: 1
->>
->> This is not McASP property, it was an example on how to use a pin as
->> GPIO from the outside...
->>
-> 
-> Okay. will remove function-gpios.
-> 
->>> +
->>> +  clocks:
->>> +    minItems: 1
->>> +    maxItems: 3
->>> +
->>> +  clock-names:
->>> +    minItems: 1
->>> +    items:
->>> +      - const: fck
->>> +      - const: ahclkx
->>> +      - const: ahclkr
->>
->> I can not find any use in the code for ahclkx/r?
->>
-> 
-> Some arm SOCs had additional clocks in the DT nodes.
-
-It looks like dra7 family have it. On those the AHCLK x/r have other
-source option than from outside (ATL for example).
-I'm not certain if they are absolutely needed, but there were something
-about the optional clocks...
-
-Tony, can you recall?
-
->>> +
->>> +required:
->>> +  - compatible
->>> +  - reg
->>> +  - reg-names
->>> +  - dmas
->>> +  - dma-names
->>> +  - interrupts
->>> +  - interrupt-names
->>> +  - serial-dir
->>> +  - op-mode
->>> +  - tdm-slots
->>
->> The last three is not needed if the McASP is used only as GPIO.
->> The dmas and interrupts should not be needed in this case, but I think
->> it is not taken care of atm.
->>
->> The tdm-slots is ignored for DIT mode
->>
-> 
-> These were mentioned in txt file as required.
-> In light of this new knowledge, I will remove 'serial-dir', 'op-mode'
-> and 'tdm-slots'.
-
-Yes, I know.
-The trick is that serial-dir  op-mode and tdm-slots only needed when
-audio is used and tdm-slots is only needed in I2S mode.
-I would check the dmas and interrupts, but from the hardware pow they
-are not needed in GPIO only mode.
-
--- 
-Péter

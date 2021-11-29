@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD51462550
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456F1462353
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:28:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232414AbhK2Whu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:37:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
+        id S229717AbhK2Vbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 16:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233502AbhK2WhY (ORCPT
+        with ESMTP id S231641AbhK2V3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:37:24 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98377C03AA39;
-        Mon, 29 Nov 2021 10:20:07 -0800 (PST)
+        Mon, 29 Nov 2021 16:29:45 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7060DC041F7C;
+        Mon, 29 Nov 2021 10:24:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E4DC8CE13BF;
-        Mon, 29 Nov 2021 18:20:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8A7C53FAD;
-        Mon, 29 Nov 2021 18:20:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11694B815D1;
+        Mon, 29 Nov 2021 18:24:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375C5C53FC7;
+        Mon, 29 Nov 2021 18:24:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210004;
-        bh=LaQZQYqDGYsMdD+YcR/jlE9PH6bgEKWlnwxeAnrB6v0=;
+        s=korg; t=1638210254;
+        bh=p8gIsxhzM9pJlhgn9D8b9aLiGH4BxwbsifAsWtCRpHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BqleYG6JngmLAlXz/lfF5SZMuuh+zoYfLmAQ9S5IIydaCincEtaMu0BK1yvcwrIzo
-         PXS9DwH9H/gnXR58EF4eRh1PsC/2ve2aqP2EJMO9MfmP5zTHN2IRfeqY7+8YVtMW/7
-         owqyzjXOu43AW1wt4jKvI24b206Uv2io/VuRoEfM=
+        b=puicAR2HtBPbRjmt5bXkWULO7yIC9XqY+CYpz4dmq7Q7Of2phQVe52uJ7Dfz7zSO9
+         RqPXs0OW6CQ+kjB4CNxalOzbqqAS8Ip/Pt+8wxeJlQYS4DNaQRjQhMT9FDqU1mw+Ow
+         6rdMC/saz6UvkIf6WM3MFM42lPDCcu5xvDOfuFeg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>
-Subject: [PATCH 4.19 10/69] staging: rtl8192e: Fix use after free in _rtl92e_pci_disconnect()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.4 23/92] PCI: aardvark: Deduplicate code in advk_pcie_rd_conf()
 Date:   Mon, 29 Nov 2021 19:17:52 +0100
-Message-Id: <20211129181703.999563500@linuxfoundation.org>
+Message-Id: <20211129181708.184405459@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
+References: <20211129181707.392764191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,39 +49,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Marek Behún <kabel@kernel.org>
 
-commit b535917c51acc97fb0761b1edec85f1f3d02bda4 upstream.
+commit 67cb2a4c93499c2c22704998fd1fd2bc35194d8e upstream.
 
-The free_rtllib() function frees the "dev" pointer so there is use
-after free on the next line.  Re-arrange things to avoid that.
+Avoid code repetition in advk_pcie_rd_conf() by handling errors with
+goto jump, as is customary in kernel.
 
-Fixes: 66898177e7e5 ("staging: rtl8192e: Fix unload/reload problem")
-Cc: stable <stable@vger.kernel.org>
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Link: https://lore.kernel.org/r/20211117072016.GA5237@kili
+Link: https://lore.kernel.org/r/20211005180952.6812-9-kabel@kernel.org
+Fixes: 43f5c77bcbd2 ("PCI: aardvark: Fix reporting CRS value")
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/staging/rtl8192e/rtl8192e/rtl_core.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c |   48 ++++++++++++++--------------------
+ 1 file changed, 20 insertions(+), 28 deletions(-)
 
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_core.c
-@@ -2579,13 +2579,14 @@ static void _rtl92e_pci_disconnect(struc
- 			free_irq(dev->irq, dev);
- 			priv->irq = 0;
- 		}
--		free_rtllib(dev);
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -773,18 +773,8 @@ static int advk_pcie_rd_conf(struct pci_
+ 		    (le16_to_cpu(pcie->bridge.pcie_conf.rootctl) &
+ 		     PCI_EXP_RTCTL_CRSSVE);
  
- 		if (dev->mem_start != 0) {
- 			iounmap((void __iomem *)dev->mem_start);
- 			release_mem_region(pci_resource_start(pdev, 1),
- 					pci_resource_len(pdev, 1));
- 		}
+-	if (advk_pcie_pio_is_running(pcie)) {
+-		/*
+-		 * If it is possible return Completion Retry Status so caller
+-		 * tries to issue the request again instead of failing.
+-		 */
+-		if (allow_crs) {
+-			*val = CFG_RD_CRS_VAL;
+-			return PCIBIOS_SUCCESSFUL;
+-		}
+-		*val = 0xffffffff;
+-		return PCIBIOS_SET_FAILED;
+-	}
++	if (advk_pcie_pio_is_running(pcie))
++		goto try_crs;
+ 
+ 	/* Program the control register */
+ 	reg = advk_readl(pcie, PIO_CTRL);
+@@ -808,25 +798,13 @@ static int advk_pcie_rd_conf(struct pci_
+ 	advk_writel(pcie, 1, PIO_START);
+ 
+ 	ret = advk_pcie_wait_pio(pcie);
+-	if (ret < 0) {
+-		/*
+-		 * If it is possible return Completion Retry Status so caller
+-		 * tries to issue the request again instead of failing.
+-		 */
+-		if (allow_crs) {
+-			*val = CFG_RD_CRS_VAL;
+-			return PCIBIOS_SUCCESSFUL;
+-		}
+-		*val = 0xffffffff;
+-		return PCIBIOS_SET_FAILED;
+-	}
++	if (ret < 0)
++		goto try_crs;
+ 
+ 	/* Check PIO status and get the read result */
+ 	ret = advk_pcie_check_pio_status(pcie, allow_crs, val);
+-	if (ret < 0) {
+-		*val = 0xffffffff;
+-		return PCIBIOS_SET_FAILED;
+-	}
++	if (ret < 0)
++		goto fail;
+ 
+ 	if (size == 1)
+ 		*val = (*val >> (8 * (where & 3))) & 0xff;
+@@ -834,6 +812,20 @@ static int advk_pcie_rd_conf(struct pci_
+ 		*val = (*val >> (8 * (where & 3))) & 0xffff;
+ 
+ 	return PCIBIOS_SUCCESSFUL;
 +
-+		free_rtllib(dev);
- 	} else {
- 		priv = rtllib_priv(dev);
- 	}
++try_crs:
++	/*
++	 * If it is possible, return Completion Retry Status so that caller
++	 * tries to issue the request again instead of failing.
++	 */
++	if (allow_crs) {
++		*val = CFG_RD_CRS_VAL;
++		return PCIBIOS_SUCCESSFUL;
++	}
++
++fail:
++	*val = 0xffffffff;
++	return PCIBIOS_SET_FAILED;
+ }
+ 
+ static int advk_pcie_wr_conf(struct pci_bus *bus, u32 devfn,
 
 

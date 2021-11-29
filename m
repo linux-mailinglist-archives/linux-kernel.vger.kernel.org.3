@@ -2,90 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F29461AD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF8E461ADB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344398AbhK2PaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 10:30:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
+        id S242828AbhK2PbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:31:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbhK2P2Z (ORCPT
+        with ESMTP id S1346339AbhK2P3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 10:28:25 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC465C052902
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:38:14 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id b11so12183772pld.12
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:38:14 -0800 (PST)
+        Mon, 29 Nov 2021 10:29:16 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C7DC05290A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:39:03 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id 7so34557195oip.12
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:39:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
+        h=mime-version:reply-to:from:date:message-id:subject:to
          :content-transfer-encoding;
-        bh=Om9Vpj2eEDIjSh+H6i8e/yMs6hn/L468LtrHAmEffB0=;
-        b=jDZCMFKxnuuk3GbLiU/mafDUmAiCkJu3nLr240MUixztB5sOK3xLLox60J98qEl08p
-         LPIfBMedoK1zZQfOyEcdBYs3aY/wNZzbmsqju8NdeulC7Fjp6Av2Y0fPttqjIwcZ+hEy
-         x717Nx4/NiMjYxOjTo8YMz0qe38KT4rQZgT0osaa3R8d1Zf3vRw9NVDkB4qG5cV7ubRl
-         4U6gLodXrtGpUijGKcKTSqFwl8aJbSmVLlH4JJ2luQMO4h0YOEoKqNQQNuKKp0K9G6Eo
-         jMEkwzBjPzYsdzPfzEwKnxRoISVga9aLWe1Cmeuuu437ipDogqxiQZ6UavDOmZZ51g4V
-         VUsQ==
+        bh=NCSgregBP4vjmqVrcsaXJKge9SfifXD693b35ZcSwv0=;
+        b=XlRAzcd9d4gnBly1MT445DR9r7tj5lSoJgt0+SuhXi/tGHvhRgGbPOFePZlf10Roq6
+         mRgqrjztrk+VsPyvZfBbXlmp9Y0l4G7hbivQBCqqfNxcATvJ90uNyK2UJtzBP389gHdm
+         K0S4JQS79Vj9Y3CQqwOJ3V4cJtuLuWWZJgXYbUh9oPOn9KkL2BXjIwbMJzdIxTG8HTlK
+         Ph5EmfuJde7ocTNVuruORZ+jYZ8hjR+LpPpDLLNrTwJtWlz5gCxCRzOoLHoLRk2dkI6o
+         xBkGdez9cBI5r8nP6RZMgP2ooxcnQKDET2Ldcfby9b0d9d05dGVQdgR7SX3SP3GYLkgy
+         IJcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Om9Vpj2eEDIjSh+H6i8e/yMs6hn/L468LtrHAmEffB0=;
-        b=H94nvi3FWSezMAqx2DtKUe2wNfHq6v5HLDlOvuKPVnxvCQSrQavXhtQi/iTiwAsKEf
-         YQ/pxsqhnTKVXHoTEx1CohbMZT6JhKfDGZkw3ErEduG+4MgNoLojJDXMKjynVm+eeLJ6
-         wSP4ybk9cuDAqmIamjRUXlV+VvEmHTzMfuJ8i3cGmVIBQ46fQnWVFfxMzqq71PKayP8F
-         8wPqPBHvv30NP5kDfyB9ygzqBorRLmvHFTcmwMMzKLT+9jN/kdKGn8BFfGU2V8jIUoVx
-         YBsDnI3EKaU1h5/k8XxSOlOgvJndu7MJYBXybVkpK/2H3Zt2mKjPVLMgLkLeMlTQ2vIh
-         eLew==
-X-Gm-Message-State: AOAM5316knc9PbEyBzmiMm32+eyx+bsvHb3Rxd0bi7nuAoM3XtgKZIGi
-        s02Q3DYYBULHq4Q9e1rB8wY=
-X-Google-Smtp-Source: ABdhPJz8ZKps2ykdBomBRYp2Z+j7tQvVNxekRN/0reBY0mYFPV+t/vkFAvNVUki3x1Ib5yGHyhKB3w==
-X-Received: by 2002:a17:902:ced0:b0:142:189a:4284 with SMTP id d16-20020a170902ced000b00142189a4284mr61088465plg.79.1638193094398;
-        Mon, 29 Nov 2021 05:38:14 -0800 (PST)
-Received: from localhost.localdomain (5e.8a.38a9.ip4.static.sl-reverse.com. [169.56.138.94])
-        by smtp.gmail.com with ESMTPSA id co4sm18913249pjb.2.2021.11.29.05.38.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Nov 2021 05:38:14 -0800 (PST)
-From:   Zhenguo Yao <yaozhenguo1@gmail.com>
-To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        mlevitsk@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Zhenguo Yao <yaozhenguo1@gmail.com>
-Subject: [BUG] hugetlbfs: Fix issue of preallocation of gigantic pages can't work
-Date:   Mon, 29 Nov 2021 21:38:03 +0800
-Message-Id: <20211129133803.15653-1-yaozhenguo1@gmail.com>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=NCSgregBP4vjmqVrcsaXJKge9SfifXD693b35ZcSwv0=;
+        b=4WHVm2PKsKN/D3ca0CTSUGWDpV0kLXqci3JQcaWFlyAq593P/CvRdTKh1Bk/XCKkws
+         oLonMG8eYbU3yQZaG0DERR73tUejjZnObfHvviuRSvqnAakgQCWrpcFLnTKRhvRjcYzE
+         w2L4mlyXfcpVY1USO1/jzdZhX4lr/7fYbdDfAYqWd6/fw+MMyWqsZhZseCUQuXDWwJEm
+         dukCk86Iv257SrPoT5BP6p/c8q21v3lyuR40uC3OxKvbcrpxI5JB3+xIGSfcKBp0SA3T
+         Ysdv27q60yPPTVrf+CaiAn5vRiMnBIPq3nEvXg3mF8zmvOgx2tpLu9u89ajN4HiFdnmi
+         MFoQ==
+X-Gm-Message-State: AOAM530LS5coiVOq52B2el4tZZL3+D/IHv7P6PBl+INR9DjlQU0W0W4A
+        H5Mub31rzE49Et3hzZnREK400D8681/JcOU4kug=
+X-Google-Smtp-Source: ABdhPJwcTJ3ge39hMf1SuXELzM+f7/bZsod7H0HfSPD5xwJSYIRG0xfuLA/uH3DF81yAHZmrjpK8CiZUNYALflphLkQ=
+X-Received: by 2002:aca:b10a:: with SMTP id a10mr42008151oif.74.1638193143007;
+ Mon, 29 Nov 2021 05:39:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a4a:3b8f:0:0:0:0:0 with HTTP; Mon, 29 Nov 2021 05:39:02
+ -0800 (PST)
+Reply-To: jennifermbaya38@gmail.com
+From:   Mrs Jennifer Mbaya <kokossousylvie@gmail.com>
+Date:   Mon, 29 Nov 2021 05:39:02 -0800
+Message-ID: <CAFBEt+ndw+RjWGQb7zTiDdpzZe8T7TycgVBABE_iu4Mh=kvrQg@mail.gmail.com>
+Subject: =?UTF-8?Q?Kedvezm=C3=A9nyezett?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Preallocation of gigantic pages can't work bacause of commit:b5389086ad7b
-(hugetlbfs: extend the definition of hugepages parameter to support node
-allocation). When nid is NUMA_NO_NODE(-1), alloc_bootmem_huge_page will
-always return without doing allocation. Fix this by adding more check.
-
-Signed-off-by: Zhenguo Yao <yaozhenguo1@gmail.com>
----
- mm/hugetlb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 60f9b6a9582e..6d1603387914 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -2876,7 +2876,7 @@ int __alloc_bootmem_huge_page(struct hstate *h, int nid)
- 	struct huge_bootmem_page *m = NULL; /* initialize for clang */
- 	int nr_nodes, node;
- 
--	if (nid >= nr_online_nodes)
-+	if (nid != NUMA_NO_NODE && nid >= nr_online_nodes)
- 		return 0;
- 	/* do node specific alloc */
- 	if (nid != NUMA_NO_NODE) {
--- 
-2.27.0
-
+Az =C3=96n nev=C3=A9ben az Egyes=C3=BClt Nemzetek =C3=A9s az Eg=C3=A9szs=C3=
+=A9g=C3=BCgyi Vil=C3=A1gszervezet a
+nemzetk=C3=B6zi valutaalaphoz kapcsol=C3=B3dva d=C3=ADjat adom=C3=A1nyoz, a=
+melyben az =C3=96n
+e-mail c=C3=ADm=C3=A9t =C3=A9s p=C3=A9nzeszk=C3=B6z=C3=A9t =C3=A1tadtuk nek=
+=C3=BCnk az =C3=96n =C3=A1tutal=C3=A1sa =C3=A9rdek=C3=A9ben,
+k=C3=A9rj=C3=BCk, eros=C3=ADtse meg adatait az =C3=96n =C3=A1tutal=C3=A1sa =
+=C3=A9rdek=C3=A9ben.
+Azt az utas=C3=ADt=C3=A1st kaptuk, hogy minden f=C3=BCggoben l=C3=A9vo tran=
+zakci=C3=B3t vigy=C3=BCnk
+=C3=A1t a k=C3=B6vetkezo k=C3=A9t napon bel=C3=BCl, de ha megkapta az alapj=
+=C3=A1t, akkor
+hagyja figyelmen k=C3=ADv=C3=BCl ezt az =C3=BCzenetet, ha nem azonnal.
+S=C3=BCrgosen v=C3=A1laszolnia kell erre az =C3=BCzenetre, ez nem egy olyan
+internetes csal=C3=B3, ez a vil=C3=A1gj=C3=A1rv=C3=A1ny enyh=C3=ADt=C3=A9se=
+.
+Jennifer Mbaya

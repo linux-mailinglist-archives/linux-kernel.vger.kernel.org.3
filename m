@@ -2,111 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4E746165A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:27:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDD746166B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244640AbhK2Nay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:30:54 -0500
-Received: from foss.arm.com ([217.140.110.172]:39378 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377674AbhK2N2s (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:28:48 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A9BD01042;
-        Mon, 29 Nov 2021 05:25:30 -0800 (PST)
-Received: from [10.57.34.182] (unknown [10.57.34.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5C04B3F766;
-        Mon, 29 Nov 2021 05:25:27 -0800 (PST)
-Message-ID: <98dfa822-218b-6ad9-4fd0-56a8e5d2bd02@arm.com>
-Date:   Mon, 29 Nov 2021 13:25:27 +0000
+        id S243761AbhK2Ncm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:32:42 -0500
+Received: from mail.loongson.cn ([114.242.206.163]:50412 "EHLO loongson.cn"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S237107AbhK2Nal (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 08:30:41 -0500
+Received: from [10.130.0.135] (unknown [113.200.148.30])
+        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Ax+sg11aRhCWsBAA--.2737S3;
+        Mon, 29 Nov 2021 21:27:18 +0800 (CST)
+Subject: Re: [PATCH v2] fuse: rename some files and clean up Makefile
+To:     Stefan Hajnoczi <stefanha@redhat.com>
+References: <1638008002-3037-1-git-send-email-yangtiezhu@loongson.cn>
+ <YaSpRwMlMvcIIMZo@stefanha-x1.localdomain>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <7277c1ee-6f7b-611d-180d-866db37b2bd7@loongson.cn>
+Date:   Mon, 29 Nov 2021 21:27:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
-Content-Language: en-GB
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>, Mark Rutland <mark.rutland@arm.com>,
-        Stuart Yoder <stuyoder@gmail.com>, linux-pci@vger.kernel.org,
-        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
-        x86@kernel.org, Sinan Kaya <okaya@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Megha Dey <megha.dey@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-References: <20211126224100.303046749@linutronix.de>
- <20211126230525.885757679@linutronix.de>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20211126230525.885757679@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <YaSpRwMlMvcIIMZo@stefanha-x1.localdomain>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf9Ax+sg11aRhCWsBAA--.2737S3
+X-Coremail-Antispam: 1UD129KBjvdXoWrKF18Jr4UKFyUtw47Gr1rJFb_yoWDXFg_ur
+        W5trWxuwnrXF1YyFW7Cr18XFs7Ka1vva1UZr1Yvw4rGrn8GFy3XrWqgw1I9a1xWFy8ZF45
+        Grs8uan8Z3sa9jkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxAYjsxI4VW3JwAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I
+        6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM2
+        8CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0
+        cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z2
+        80aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAK
+        zVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx
+        8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc2xS
+        Y4AK67AK6ry8MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+        8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWU
+        twCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+        0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07
+        jIksDUUUUU=
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-11-27 01:22, Thomas Gleixner wrote:
-> Let the core code fiddle with the MSI descriptor retrieval.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> ---
->   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |   19 +++----------------
->   1 file changed, 3 insertions(+), 16 deletions(-)
-> 
-> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-> @@ -3154,7 +3154,6 @@ static void arm_smmu_write_msi_msg(struc
->   
->   static void arm_smmu_setup_msis(struct arm_smmu_device *smmu)
->   {
-> -	struct msi_desc *desc;
->   	int ret, nvec = ARM_SMMU_MAX_MSIS;
->   	struct device *dev = smmu->dev;
->   
-> @@ -3182,21 +3181,9 @@ static void arm_smmu_setup_msis(struct a
->   		return;
->   	}
->   
-> -	for_each_msi_entry(desc, dev) {
-> -		switch (desc->msi_index) {
-> -		case EVTQ_MSI_INDEX:
-> -			smmu->evtq.q.irq = desc->irq;
-> -			break;
-> -		case GERROR_MSI_INDEX:
-> -			smmu->gerr_irq = desc->irq;
-> -			break;
-> -		case PRIQ_MSI_INDEX:
-> -			smmu->priq.q.irq = desc->irq;
-> -			break;
-> -		default:	/* Unknown */
-> -			continue;
-> -		}
-> -	}
-> +	smmu->evtq.q.irq = msi_get_virq(dev, EVTQ_MSI_INDEX);
-> +	smmu->gerr_irq = msi_get_virq(dev, GERROR_MSI_INDEX);
-> +	smmu->priq.q.irq = msi_get_virq(dev, PRIQ_MSI_INDEX);
+On 11/29/2021 06:19 PM, Stefan Hajnoczi wrote:
+> On Sat, Nov 27, 2021 at 06:13:22PM +0800, Tiezhu Yang wrote:
+>> No need to generate virtio_fs.o first and then link to virtiofs.o, just
+>> rename virtio_fs.c to virtiofs.c and remove "virtiofs-y := virtio_fs.o"
+>> in Makefile, also update MAINTAINERS. Additionally, rename the private
+>> header file fuse_i.h to fuse.h, like ext4.h in fs/ext4, xfs.h in fs/xfs
+>> and f2fs.h in fs/f2fs.
+>
+> There are two separate changes in this patch (virtio_fs.c -> virtiofs.c
+> and fuse_i.h -> fuse.h). A patch series with two patches would be easier
+> to review and cleaner to backport.
+>
+> I'm happy with renaming virtio_fs.c to virtiofs.c:
+>
+> Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
+>
 
-FWIW I've just quickly booted the msi-v1-part-2 branch on a platform 
-with MSIs but no PRI such that this now sets priq.q.irq to an error 
-value, and as I predicted it's still happy.
+Hi Stefan and Miklos,
 
-Tested-by: Robin Murphy <robin.murphy@arm.com>
+Thanks for your reply, what should I do now?
 
-Cheers,
-Robin.
+(1) split this patch into two separate patches to send v3;
+(2) just ignore this patch because
+"This will make backport of bugfixes harder for no good reason."
+said by Miklos.
 
->   	/* Add callback to free MSIs on teardown */
->   	devm_add_action(dev, arm_smmu_free_msis, dev);
-> 
-> _______________________________________________
-> iommu mailing list
-> iommu@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/iommu
-> 
+Thanks,
+Tiezhu
+

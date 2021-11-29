@@ -2,100 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0179E4620BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:42:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011C54620C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:42:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352772AbhK2Tpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:45:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49972 "EHLO
+        id S237495AbhK2Tp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:45:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240131AbhK2Tnl (ORCPT
+        with ESMTP id S235999AbhK2Tnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:43:41 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BB5C08EA72;
-        Mon, 29 Nov 2021 08:01:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 029FB61536;
-        Mon, 29 Nov 2021 16:01:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59321C53FAD;
-        Mon, 29 Nov 2021 16:01:41 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 11:01:40 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     akpm@linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, oliver.sang@intel.com, lkp@intel.com,
-        Kees Cook <keescook@chromium.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v2 4/7] fs/binfmt_elf: replace open-coded string copy
- with get_task_comm
-Message-ID: <20211129110140.733475f3@gandalf.local.home>
-In-Reply-To: <20211120112738.45980-5-laoar.shao@gmail.com>
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-5-laoar.shao@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 29 Nov 2021 14:43:53 -0500
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31B2CC061D5F;
+        Mon, 29 Nov 2021 08:04:17 -0800 (PST)
+Received: by mail-ot1-x32d.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so4700733otu.10;
+        Mon, 29 Nov 2021 08:04:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Cv5LVXTTCR1HmOZGb736k7WjrkVKH15RJ/Gmegp4BAU=;
+        b=gx5BleuEv5p/J6ypZnNqJfuQ7KmBz/NQOVe3Jzw/0LVocKisnut1f4yjvivQu9lztj
+         Y86M+X+LjoRRBY3mULjX0Mz07HWb5WNRnAjqNgvn4j4O+QVgOQrQuVfo4ym3wwE1qfgk
+         ZE57Dr+JZr4stnN+oofrVYSOHmkeekVBfVLdXKH0hofiH4OH18ZGgm5TWaUkX/qEY+Ng
+         zUlx0zRgdaKXc41BRPmHLli67ff1omj3rub6Ec6/D72LxDgq60DF355Ey4N+SMeRcZpN
+         FLUet+gkfKRfL5ITtrF3Xd8bI0vHB0ieLwuin7vObSTLiALbgZ5629eZDz0vJfg/9RIG
+         2Y9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=Cv5LVXTTCR1HmOZGb736k7WjrkVKH15RJ/Gmegp4BAU=;
+        b=ic1Z4OdLHe8ePpolMrZUiruk6UEWnm2uy7WWr+S9x0gOiv8gnhRpjW7t5BIbiakiKM
+         Osh5xbE5+GIPQdxATz/7Ek2qyEsmK6mzTi/Q954YydTK820LglYF5n7lssXQ3KiLvXbh
+         7UwudICtnXsWNYUg3HZkhfAD8gI7XLGEmZrUPmxxNkOgtpSeJXu7MHFCyNkkxaKp8V9h
+         3gEAxGDTu9QRlqtZ2bs7tWpgwfGtVCL0Mf72rUztfoC3G2GSZRXjHD7SYUprvuP0z9bB
+         UCWph8eJBZ3FgZxu9w53x/qU7bSg3FyiaQBH8j+gcPrsbZ40REUOOEf0N5eDROHIZAkX
+         zYEg==
+X-Gm-Message-State: AOAM530pZ4kVXlS5WGb2rwH97O4mtqzI4MjZS0FyENVvt4+kHF0K4Q2h
+        ovCn/tZBm3CxCFsWE6a2Afo=
+X-Google-Smtp-Source: ABdhPJwb5t+pEea2I1w63lGWBXhTN+t6qjFcNXBQy5xShKmNkM0Fmeg28O6OHOZck/x3aKAgROlI7w==
+X-Received: by 2002:a05:6830:13cc:: with SMTP id e12mr45512351otq.377.1638201856548;
+        Mon, 29 Nov 2021 08:04:16 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s2sm2704156otr.69.2021.11.29.08.04.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 08:04:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 29 Nov 2021 08:04:14 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v4 8/9] watchdog: max77620: add comment to clarify
+ set_timeout procedure
+Message-ID: <20211129160414.GA3014810@roeck-us.net>
+References: <20211120155707.4019487-1-luca@lucaceresoli.net>
+ <20211120155707.4019487-9-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211120155707.4019487-9-luca@lucaceresoli.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 20 Nov 2021 11:27:35 +0000
-Yafang Shao <laoar.shao@gmail.com> wrote:
+On Sat, Nov 20, 2021 at 04:57:06PM +0100, Luca Ceresoli wrote:
+> Clarify why we need to ping the watchdog before changing the timeout by
+> quoting the MAX77714 datasheet.
+> 
 
-> diff --git a/include/linux/elfcore-compat.h b/include/linux/elfcore-compat.h
-> index e272c3d452ce..54feb64e9b5d 100644
-> --- a/include/linux/elfcore-compat.h
-> +++ b/include/linux/elfcore-compat.h
-> @@ -43,6 +43,11 @@ struct compat_elf_prpsinfo
->  	__compat_uid_t			pr_uid;
->  	__compat_gid_t			pr_gid;
->  	compat_pid_t			pr_pid, pr_ppid, pr_pgrp, pr_sid;
+Unless I am missing something, this adds confusion instead of clarifying
+anything, and it is misleading. The added comment in the code makes it
+sound like clearing the watchdog timer is only needed for MAX77614.
+However, the code was in place for MAX77620, suggesting that it was needed
+for that chip as well and is not MAX77614 specific.
+
+Please either drop this patch or rephrase it to clarify that it applies
+to both chips.
+
+Guenter
+
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+> 
+> This patch is new in v4. It adds a clarification comment to the max77620
+> driver taken from v3 patch 7.
+> ---
+>  drivers/watchdog/max77620_wdt.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
+> index 06b48295fab6..f082a4ea2c03 100644
+> --- a/drivers/watchdog/max77620_wdt.c
+> +++ b/drivers/watchdog/max77620_wdt.c
+> @@ -132,6 +132,11 @@ static int max77620_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>  		break;
+>  	}
+>  
 > +	/*
-> +	 * The hard-coded 16 is derived from TASK_COMM_LEN, but it can't be
-> +	 * changed as it is exposed to userspace. We'd better make it hard-coded
-> +	 * here.
-
-Didn't I once suggest having a macro called something like:
-
-  TASK_COMM_LEN_16 ?
-
-
-https://lore.kernel.org/all/20211014221409.5da58a42@oasis.local.home/
-
--- Steve
-
-
+> +	 * "If the value of TWD needs to be changed, clear the system
+> +	 * watchdog timer first [...], then change the value of TWD."
+> +	 * (MAX77714 datasheet)
 > +	 */
->  	char				pr_fname[16];
->  	char				pr_psargs[ELF_PRARGSZ];
->  };
-> diff --git a/include/linux/elfcore.h b/include/linux/elfcore.h
-> index 957ebec35aad..746e081879a5 100644
-> --- a/include/linux/elfcore.h
-> +++ b/include/linux/elfcore.h
-> @@ -65,6 +65,11 @@ struct elf_prpsinfo
->  	__kernel_gid_t	pr_gid;
->  	pid_t	pr_pid, pr_ppid, pr_pgrp, pr_sid;
->  	/* Lots missing */
-> +	/*
-> +	 * The hard-coded 16 is derived from TASK_COMM_LEN, but it can't be
-> +	 * changed as it is exposed to userspace. We'd better make it hard-coded
-> +	 * here.
-> +	 */
->  	char	pr_fname[16];	/* filename of executable */
->  	char	pr_psargs[ELF_PRARGSZ];	/* initial part of arg list */
->  };
+>  	ret = regmap_update_bits(wdt->rmap, wdt->drv_data->reg_cnfg_glbl3,
+>  				 wdt->drv_data->wdtc_mask, 0x1);
+>  	if (ret < 0)

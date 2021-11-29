@@ -2,206 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 825EC4625A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE0746247C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbhK2WmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:42:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33740 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234320AbhK2WlN (ORCPT
+        id S234019AbhK2WT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:19:59 -0500
+Received: from mail-oi1-f176.google.com ([209.85.167.176]:34772 "EHLO
+        mail-oi1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234135AbhK2WSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:41:13 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9FDC0FE6CE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:14:34 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id m15so17569431pgu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:14:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vJr1WdAhjm9K0bo/NyTysmBXUmrGdwZ7UXHYeZqs6A8=;
-        b=jdenIRW0OyIXe10cw0js/ZnNTpE8qTUaHcTLqnB+y0RwKsdGlV1H6tro2In8FIoSfG
-         iZL2fXqcuolco57Hre7w5GH3eUP85HClcmJQ5zGyoCygJLtxNsK3qosIljIs7AdyWZc+
-         M0BZ3MW2LHKi3OGNITu1k8b+P6eRcpWlVcNKpeWNDAQjJJkFeGYyiThy1oRSOI/FIklr
-         T2dN8qmpWPyE2Im5mOWCvjKi9OAlFw6Sc9ImvwnjtquXM1LOFMjXqW4R6sNAazwYXfee
-         94hRnZxRXYMxQEIzOr9D6p3tZfFoHpEA9pmlYwUzYVpPd3fDuw0hhSRAchvW2acvY7Dk
-         tiTw==
+        Mon, 29 Nov 2021 17:18:04 -0500
+Received: by mail-oi1-f176.google.com with SMTP id t19so37403059oij.1;
+        Mon, 29 Nov 2021 14:14:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=vJr1WdAhjm9K0bo/NyTysmBXUmrGdwZ7UXHYeZqs6A8=;
-        b=3YODZ48JZiVXMxYtTxPc9rpLIp3mi1nZBI66hZwmBGZNLUAcVov/BTfRMICr+gBgsW
-         vdhzIvSCPjpRRQTC80kQvRIQHwDF5VIYgoypOPoMBO+QQ9SjD5AbTeUlzUDjyueu0tgF
-         Fh628ZZ66S4NDLUZjF00v5VytIaRtVbHd3aN7HPJuIzIdm979Owu4oDxwskUubRKtE26
-         cegg8+Oaj70DFUkELnBw7uygo2apeVsJxzvjAMS95+BCy7NPNolsVdZDu10XHNCvEnvl
-         9KrTxwVGqv6gUeVJ2Uu9XCJfbJ4ZgkKh2ynb1zptv8K/CC6kWvr2lkO0pjbhog71OrYq
-         INRg==
-X-Gm-Message-State: AOAM533fMrzXYzgHyvOsjJvIRHjc/KBn23tsyY6oNG7E1Td26oscxRbJ
-        bUEVoeBgOTsOzBgbQOD5YxyG/2g4BTmzGg==
-X-Google-Smtp-Source: ABdhPJw2WkFD6GadsTgMaNDrZxN0dOHmssbuABOd/93651c3GRU+L1jbEthI31TKKWKXRWgKbF7jbg==
-X-Received: by 2002:a05:6a00:1821:b0:4a4:ab04:39a with SMTP id y33-20020a056a00182100b004a4ab04039amr42940454pfa.76.1638224073328;
-        Mon, 29 Nov 2021 14:14:33 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id l21sm299058pjt.24.2021.11.29.14.14.32
+        bh=IffRfna52Ob5VpMAmyauxNNqvaWuTWKWn4wJYeGVpRA=;
+        b=RQKXVssjlSJupvYmDnt1M/YcDcxj5H0M/uRjgdJURSI3YZntm6THX1vW1V3tWwx6Op
+         qMkbZtJPfaNmQXKzGDjqUrXEoIlcp5hu6by7VoaMIPpD05ssSsB0YvNMnXlPEUvKiSoN
+         amZfY5dMTro1eM0LWOKqFsFxLo0/JkUO0UjdTyCU1GNMZYvHwsswwg9/cWO9sCwRUwyH
+         iepOdbv73+4qz48sHi1Ob/AYBywBoY7+C/ILpR3byZN8CHLpPsgJBeimY2Q9S0H7p9Lh
+         Vct9h3n2i15kXVNn03j1G2mkMsao/4v+tHhYBtw8RR3/0R+vJxtqhPy5Z5LIj2SFi7Cf
+         +WOA==
+X-Gm-Message-State: AOAM5302rNjBnIfpF34UtMztQdjXDVTsuPe3WDI8UpR6mMHSwBQl8H7H
+        ims0+UZiq0MeI70JWEqo5Q==
+X-Google-Smtp-Source: ABdhPJyP57TJVroc8VqQIOgqc6U9QgHNXTv3668NJsD3IXEbfYDDvO+BAt1+Eq3Optk5l4XALnhxYw==
+X-Received: by 2002:a05:6808:cf:: with SMTP id t15mr692955oic.43.1638224085630;
+        Mon, 29 Nov 2021 14:14:45 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id q12sm2813970otl.66.2021.11.29.14.14.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 14:14:32 -0800 (PST)
-Date:   Mon, 29 Nov 2021 22:14:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: VMX: prepare sync_pir_to_irr for running with
- APICv disabled
-Message-ID: <YaVQxZ42Ve6JNIzt@google.com>
-References: <20211123004311.2954158-1-pbonzini@redhat.com>
- <20211123004311.2954158-3-pbonzini@redhat.com>
+        Mon, 29 Nov 2021 14:14:44 -0800 (PST)
+Received: (nullmailer pid 706746 invoked by uid 1000);
+        Mon, 29 Nov 2021 22:14:43 -0000
+Date:   Mon, 29 Nov 2021 16:14:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     robh+dt@kernel.org, kernel@pengutronix.de, festevam@gmail.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ping.bai@nxp.com, aisheng.dong@nxp.com,
+        Peng Fan <peng.fan@nxp.com>, shawnguo@kernel.org,
+        linux-arm-kernel@lists.infradead.org, s.hauer@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH 1/3] dt-bindings: power: imx8ulp: add power domain header
+ file
+Message-ID: <YaVQ06/tLczxwKaK@robh.at.kernel.org>
+References: <20211117032740.2518926-1-peng.fan@oss.nxp.com>
+ <20211117032740.2518926-2-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211123004311.2954158-3-pbonzini@redhat.com>
+In-Reply-To: <20211117032740.2518926-2-peng.fan@oss.nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021, Paolo Bonzini wrote:
-> If APICv is disabled for this vCPU, assigned devices may
-> still attempt to post interrupts.  In that case, we need
-> to cancel the vmentry and deliver the interrupt with
-> KVM_REQ_EVENT.  Extend the existing code that handles
-> injection of L1 interrupts into L2 to cover this case
-> as well.
+On Wed, 17 Nov 2021 11:27:38 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
 > 
-> vmx_hwapic_irr_update is only called when APICv is active
-> so it would be confusing to add a check for
-> vcpu->arch.apicv_active in there.  Instead, just use
-> vmx_set_rvi directly in vmx_sync_pir_to_irr.
-
-Overzealous newlines.
-
-If APICv is disabled for this vCPU, assigned devices may still attempt to
-post interrupts.  In that case, we need to cancel the vmentry and deliver
-the interrupt with KVM_REQ_EVENT.  Extend the existing code that handles
-injection of L1 interrupts into L2 to cover this case as well.
-
-vmx_hwapic_irr_update is only called when APICv is active so it would be
-confusing to add a check for vcpu->arch.apicv_active in there.  Instead,
-just use vmx_set_rvi directly in vmx_sync_pir_to_irr.
-
-
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> Add i.MX8ULP power domain header file
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  arch/x86/kvm/vmx/vmx.c | 35 +++++++++++++++++++++++------------
->  1 file changed, 23 insertions(+), 12 deletions(-)
+>  include/dt-bindings/power/imx8ulp-power.h | 26 +++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+>  create mode 100644 include/dt-bindings/power/imx8ulp-power.h
 > 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index ba66c171d951..cccf1eab58ac 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -6264,7 +6264,7 @@ static int vmx_sync_pir_to_irr(struct kvm_vcpu *vcpu)
->  	int max_irr;
->  	bool max_irr_updated;
->  
-> -	if (KVM_BUG_ON(!vcpu->arch.apicv_active, vcpu->kvm))
-> +	if (KVM_BUG_ON(!enable_apicv, vcpu->kvm))
->  		return -EIO;
->  
->  	if (pi_test_on(&vmx->pi_desc)) {
-> @@ -6276,20 +6276,31 @@ static int vmx_sync_pir_to_irr(struct kvm_vcpu *vcpu)
->  		smp_mb__after_atomic();
->  		max_irr_updated =
->  			kvm_apic_update_irr(vcpu, vmx->pi_desc.pir, &max_irr);
-> -
-> -		/*
-> -		 * If we are running L2 and L1 has a new pending interrupt
-> -		 * which can be injected, this may cause a vmexit or it may
-> -		 * be injected into L2.  Either way, this interrupt will be
-> -		 * processed via KVM_REQ_EVENT, not RVI, because we do not use
-> -		 * virtual interrupt delivery to inject L1 interrupts into L2.
-> -		 */
-> -		if (is_guest_mode(vcpu) && max_irr_updated)
-> -			kvm_make_request(KVM_REQ_EVENT, vcpu);
->  	} else {
->  		max_irr = kvm_lapic_find_highest_irr(vcpu);
-> +		max_irr_updated = false;
 
-Heh, maybe s/max_irr_updated/new_pir_found or so?  This is a bit weird:
-
-  1. Update max_irr
-  2. max_irr_updated = false
-
->  	}
-> -	vmx_hwapic_irr_update(vcpu, max_irr);
-> +
-> +	/*
-> +	 * If virtual interrupt delivery is not in use, the interrupt
-> +	 * will be processed via KVM_REQ_EVENT, not RVI.  This can happen
-
-I'd strongly prefer to phrase this as a command, e.g. "process the interrupt via
-KVM_REQ_EVENT".  "will be processed" makes it sound like some other flow is
-handling the event, which confused me.
-
-> +	 * in two cases:
-> +	 *
-> +	 * 1) If we are running L2 and L1 has a new pending interrupt
-
-Hmm, calling it L1's interrupt isn't technically wrong, but it's a bit confusing
-because it's handled in L2.  Maybe just say "vCPU"?
-
-> +	 * which can be injected, this may cause a vmexit or it may
-
-Overzealous newlines again.
-
-> +	 * be injected into L2.  We do not use virtual interrupt
-> +	 * delivery to inject L1 interrupts into L2.
-
-I found the part of "may cause a vmexit or may be injected into L2" hard to
-follow, I think because this doesn't explicit state that the KVM_REQ_EVENT is
-needed to synthesize a VM-Exit.
-
-How about this for the comment?
-
-	/*
-	 * If virtual interrupt delivery is not in use, process the interrupt
-	 * via KVM_REQ_EVENT, not RVI.  This is necessary in two cases:
-	 *
-	 * 1) If L2 is running and the vCPU has a new pending interrupt.  If L1
-	 * wants to exit on interrupts, KVM_REQ_EVENT is needed to synthesize a
-	 * VM-Exit to L1.  If L1 doesn't want to exit, the interrupt is injected
-	 * into L2, but KVM doesn't use virtual interrupt delivery to inject
-	 * interrupts into L2, and so KVM_REQ_EVENT is again needed.
-	 *
-	 * 2) If APICv is disabled for this vCPU, assigned devices may still
-	 * attempt to post interrupts.  The posted interrupt vector will cause
-	 * a VM-Exit and the subsequent entry will call sync_pir_to_irr.
-	 */
-
-> +	 *
-> +	 * 2) If APICv is disabled for this vCPU, assigned devices may
-> +	 * still attempt to post interrupts.  The posted interrupt
-> +	 * vector will cause a vmexit and the subsequent entry will
-> +	 * call sync_pir_to_irr.
-> +	 */
-> +	if (!is_guest_mode(vcpu) && vcpu->arch.apicv_active)
-
-If the second check uses kvm_vcpu_apicv_active(), this will avoid a silent conflict
-when kvm/master and kvm/queue are merged.
-
-Nits aside, the logic is good:
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-
-> +		vmx_set_rvi(max_irr);
-> +	else if (max_irr_updated)
-> +		kvm_make_request(KVM_REQ_EVENT, vcpu);
-> +
->  	return max_irr;
->  }
->  
-> -- 
-> 2.27.0
-> 
-> 
+Acked-by: Rob Herring <robh@kernel.org>

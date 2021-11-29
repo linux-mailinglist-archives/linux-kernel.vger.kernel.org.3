@@ -2,118 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAE74627D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B494627AB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237028AbhK2XKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S237117AbhK2XIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:08:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236824AbhK2XJx (ORCPT
+        with ESMTP id S236608AbhK2XH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:09:53 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0151C03AA25;
-        Mon, 29 Nov 2021 10:16:53 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id g18so17779289pfk.5;
-        Mon, 29 Nov 2021 10:16:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=U/lV8E1L2sRsBwRPS+If7j1bCTz7XAKccet53yRJUbM=;
-        b=E/V2jd5RtTT4t+mQMJCGTXfQJ5vhNpgk9p5ctLDOVJ2smfpN9GfGuTsgwFgP6gSR4q
-         9isZVjEZ4A6h4kyVfNn0GB8jbgo1EFcyVyIrmGH9jWdFfwTgQcbIcQMtYYM8tPZJKoIN
-         ZhNbUdFhmq4JZv4Om/B9nwLYWZabIjp+QtpSpnm7HYDTrwAPg9dqulgC13L61gpdYkVI
-         HOR82Zo6pY5INibMkwItuLjQ0tlA+qEp21FDsrc0acq1oJb8nNKruIARFunKoJ56rMu4
-         FfXc4XbveK3z2cLWl9LX+SiG6pC72bGbLrz6Q/OY0//UcVQqTcNeyxDXYQQL5P68KvRH
-         OCFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=U/lV8E1L2sRsBwRPS+If7j1bCTz7XAKccet53yRJUbM=;
-        b=cFN0SWmsVMlsr3AwCtAkATdFyU98UN69LKu/Bn0fOYCio0/3z5LBkVdGmBUWp+tIGw
-         G+tG3Nt/9jN3erlBr0eO+QArg22qzC9EHTvS7gXGHt5EExj918XilhVeABISYidVUD7g
-         IsgQidN30twv9Xe+gh/pgpaw2x8bEDcQ1Fhryi+dg8tfUGSlMLmbDgbgSjr9Uo1glB7q
-         aRmAVPZZEgSDrF6dzOn9T+hyvoFkEodBSFwVJhj2/6s4Ica74zupY6Bvt24BmqJp9Nkf
-         49m2zFJSjvWrafg01376qnuqvVtIeHglnK10YoWQT/RZAgIc8/yxqiQln8+jM2kCW6rP
-         /X0A==
-X-Gm-Message-State: AOAM530MKqdCiZnlWltYFY1q47U/40QgjZGCTAwrEAlRRp+IaYU1Ci60
-        Qm2oGy0L1s3ELecGsV7PI2QZwLupU0lN1w==
-X-Google-Smtp-Source: ABdhPJyjw0DqgX3V+/kqLgS46RggjIjDjIjz1Z1EXIzQIKoG9/8p67gg4EJRQI20HFPRJMOpCuAOlw==
-X-Received: by 2002:aa7:870d:0:b0:49f:e41d:4f8d with SMTP id b13-20020aa7870d000000b0049fe41d4f8dmr42145998pfo.16.1638209813407;
-        Mon, 29 Nov 2021 10:16:53 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id nn4sm22937pjb.38.2021.11.29.10.16.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 10:16:52 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 29 Nov 2021 08:16:51 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Laibin Qiu <qiulaibin@huawei.com>
-Cc:     axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] blk-throttle: Set BIO_THROTTLED when bio has been
- throttled
-Message-ID: <YaUZExR6v8IdZUeM@slm.duckdns.org>
-References: <20211118131551.810931-1-qiulaibin@huawei.com>
+        Mon, 29 Nov 2021 18:07:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A49C19AC26;
+        Mon, 29 Nov 2021 10:35:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BA2FB815A9;
+        Mon, 29 Nov 2021 18:35:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1914C53FC7;
+        Mon, 29 Nov 2021 18:35:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638210951;
+        bh=sw5FpaTokhOi0/FANlkKlsupYVHpmfzlErwtE/Onah8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jsyi/SYo82gObqUBGaTmTfNCeC/8wEpB78VNf/obODvx0e+w/E4L85gn+6a5wo1VW
+         vr1iOwI5yC8hjvmIFx/f3eK1SfhJOHFXBwIHnrwtFAz3QPjMCsRKIiZP/BK7kf8Afq
+         psLSwgYV4eT74Gy26ADR6dosRr/hobZ42Gfq0O2A=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 024/179] ALSA: hda/realtek: Fix LED on HP ProBook 435 G7
+Date:   Mon, 29 Nov 2021 19:16:58 +0100
+Message-Id: <20211129181719.742791468@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211118131551.810931-1-qiulaibin@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Takashi Iwai <tiwai@suse.de>
 
-On Thu, Nov 18, 2021 at 09:15:51PM +0800, Laibin Qiu wrote:
-> 1.In current process, all bio will set the BIO_THROTTLED flag
-> after __blk_throtl_bio().
-> 
-> 2.If bio needs to be throttled, it will start the timer and
-> stop submit bio directly. Bio will submit in blk_throtl_dispatch_work_fn()
-> when the timer expires. But in the current process, if bio is throttled.
-> The BIO_THROTTLED will be set to bio after timer start. If the bio
-> has been completed, it may cause use-after-free.
-> 
-> Fix this by move BIO_THROTTLED set before timer set.
+commit 05ec7161084565365ecf267e9909a897a95f243a upstream.
 
-Have you tried reproducing and confirming the above in any way?
+HP ProBook 435 G7 (SSID 103c:8735) needs the similar quirk as another
+HP ProBook for enabling the mute and the mic-mute LEDs.
 
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index 39bb6e68a9a2..ddfbff4465d5 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -2149,6 +2149,7 @@ bool __blk_throtl_bio(struct bio *bio)
->  	td->nr_queued[rw]++;
->  	throtl_add_bio_tg(bio, qn, tg);
->  	throttled = true;
-> +	bio_set_flag(bio, BIO_THROTTLED);
->  
->  	/*
->  	 * Update @tg's dispatch time and force schedule dispatch if @tg
-> @@ -2163,7 +2164,6 @@ bool __blk_throtl_bio(struct bio *bio)
->  
->  out_unlock:
->  	spin_unlock_irq(&q->queue_lock);
-> -	bio_set_flag(bio, BIO_THROTTLED);
+BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215021
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20211118071636.14738-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-Because it seems wrong in two ways:
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -8665,6 +8665,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x103c, 0x8728, "HP EliteBook 840 G7", ALC285_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8729, "HP", ALC285_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8730, "HP ProBook 445 G7", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
++	SND_PCI_QUIRK(0x103c, 0x8735, "HP ProBook 435 G7", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8736, "HP", ALC285_FIXUP_HP_GPIO_AMP_INIT),
+ 	SND_PCI_QUIRK(0x103c, 0x8760, "HP", ALC285_FIXUP_HP_MUTE_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x877a, "HP", ALC285_FIXUP_HP_MUTE_LED),
 
-* This function is called synchronously on the issue path. The bio isn't
-  seen by the queue and device driver yet and nothing can race to issue it
-  before this function returns.
 
-* Now we're not setting BIO_THROTTLED when we're taking a different return
-  path through the out_unlock label and risks calling back into blk_throtl
-  again on the same bio.
-
-In general, if you think you spotted an issue, please try to trigger it in
-however way possible to confirm that the issue is real.
-
-Thanks.
-
--- 
-tejun

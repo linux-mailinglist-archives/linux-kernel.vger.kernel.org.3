@@ -2,127 +2,396 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 858394625D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:40:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5080B46256F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234675AbhK2Wn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:43:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35142 "EHLO
+        id S234103AbhK2WjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:39:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234502AbhK2WnS (ORCPT
+        with ESMTP id S232333AbhK2Wi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:43:18 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EFFCC203968;
-        Mon, 29 Nov 2021 11:18:55 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id l25so76130772eda.11;
-        Mon, 29 Nov 2021 11:18:54 -0800 (PST)
+        Mon, 29 Nov 2021 17:38:27 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C09C09B071;
+        Mon, 29 Nov 2021 11:19:26 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id l16so39118361wrp.11;
+        Mon, 29 Nov 2021 11:19:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=b6e11+CJLAryPIw/7DDSWmANxwHaOEFVgPmI0eD1ehw=;
-        b=Yv9EDK6h14i2Dbj+iAIYK0HlvK2JERVyMLo4AC4eEaaM5uGAacc8HtxG8w/Y/N1eKa
-         zoqVyYrJgoymLJ79VszdPFvZOcROHF7XsZML04k5ATYUCAQQQYdmRFM1zliBw5sA+fUR
-         rGCOh7Dkwc25orqYcXeHYn5++zj+NoIkUF+txgA7cbkgTIdSaLJPMhb1GiDwryyn0Wfc
-         MU5Gbh+ysqRcMgmq6XO0rBfKo/INnGwUPA9nBrqjSM7nJ1s+plFGQd3Vr5vlky9IMZdn
-         wkdyjWJAJzkiJ+6yukZdQ5xwMk5wTjTGyWuy1lXhP9nJ6WRZVyGbloAAqLRFAE+sHa2m
-         tnMw==
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=qVp86ggDKWOSMbR+u7GYfx7O3eoA31VOAp6ctZC//6o=;
+        b=W3p9muJEbzGfTISOQoEbGVHig8f01goO3YBtKvudH/k8ocHcb6kV/mE26S9f2T169e
+         9x8R11sw7eP+4tv3Jdjd6HXZ5o4lJ7dozC8HSJOgK86H3gbJ+cEcJUZLAO31sE/0UPg+
+         FespFCqKwMnc2Ge4QiuNu3nlmo8HV8zHoJqBEP6Glr+0sSbuWYMwQWTnZI0D12bW2WIS
+         rZD5iY+dgH7NxJmhUuPeowDa3IO9GM2FVpSOY8g9bwAVHMPTZBUvwpOPNCRfucRQHnRk
+         2ZIZz4/dU/Eb1axv0QBfA5Qx+Toeng04CWg7PQasHORFL1ntPDtZWaICQZtVKNf317Ki
+         ZuTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=b6e11+CJLAryPIw/7DDSWmANxwHaOEFVgPmI0eD1ehw=;
-        b=SLP5O1d7fkwxL+83NBeKa4ZhuHfdQtripEi5FgV/ql2UwS7HJCKA9BbyMMptW9HGAA
-         k98Iu139eSUf0Gq3C+ffm5HQC63D/r3zLxCvfL5R9VnQw8zBTYKXUGh0pcToYJek2qDn
-         GUcn+BWDEqjHYboiuqLSr92RGt78Iz+/0UKGyToa6sUWaUzvhntT6NjAIKOD8Fp4De0D
-         gyXp7Wxx/f3PUPMH1JFIXXstY4KMRYmE9qrxocj52Q0JOrzsnDqWspXlvPzdTMeDnHxD
-         EH9qVyJITsyn54CyUBoFki1XjuQHkxvNbyfTfmOouFSZyTDqVvcmVayq2F1qyOXJ4kgL
-         qTyA==
-X-Gm-Message-State: AOAM5338hzw0w5OtfifO4qWh0FzeyQ5HPjltl/I633k8EQb3NTyC+5Ik
-        KOFKWMIR6NPdAsbzMOellLE=
-X-Google-Smtp-Source: ABdhPJx2YJ0juUfs4Yk6vuSEcojrZsOKQtVYCvzwUVoRUJT0twH/9lzRN0MjKMCkmooXwTOepr8KsQ==
-X-Received: by 2002:a17:906:c9d2:: with SMTP id hk18mr4315253ejb.523.1638213533689;
-        Mon, 29 Nov 2021 11:18:53 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id ch28sm9615535edb.72.2021.11.29.11.18.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 11:18:53 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <880a5727-69d1-72a1-b129-b053781625ad@redhat.com>
-Date:   Mon, 29 Nov 2021 20:18:50 +0100
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=qVp86ggDKWOSMbR+u7GYfx7O3eoA31VOAp6ctZC//6o=;
+        b=eWEcHlZjivGpUGeczHIN5T2y33IYxJDWObjw+EjaEI4YTGDh9BpKTvuKApZ8tZkGF/
+         yGXGHmZnbRAp3df8fsTkQejh57S7JLAaAvX3chVzuLezAMRnq/XRG4xlfShY4KlbEnyl
+         K34fDu3Cfe1QswCIoIrxcKDwvXHo8G7UK1Ww6U3aTSd6HiQ3CimF2oUhXFeB4EEglMJQ
+         6b0w8WOZTAGirNv2/CVnGpkdldnu/KmUiVRlw8kVxGc8YoAJMg+Nbh3MR56pQ292SXZl
+         sJlFFJIqNiQSOn6nReG9QiZt3msJ4+7OR+TB0hP2Et6lVgh92lWjET3DQTuM3J9pvi5a
+         q8GA==
+X-Gm-Message-State: AOAM532ZbLrzavwLy8ID/bv3Q+YVKwG189tf8RNkO1FOYbHX8SNXF0Uz
+        zqgV5ccJWg212ovdjbedzwY=
+X-Google-Smtp-Source: ABdhPJzuwMRcIWH56KLiQpJnfjZg+tljCxxNSe41NZpdHjHVa3DdHeXjrXhhpFBvEMAni2IxtdKWpQ==
+X-Received: by 2002:adf:dbd1:: with SMTP id e17mr35675104wrj.480.1638213564863;
+        Mon, 29 Nov 2021 11:19:24 -0800 (PST)
+Received: from ?IPv6:2a02:ab88:368f:2080:eab:126a:947d:3008? ([2a02:ab88:368f:2080:eab:126a:947d:3008])
+        by smtp.gmail.com with ESMTPSA id l22sm156191wmp.34.2021.11.29.11.19.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 11:19:24 -0800 (PST)
+Message-ID: <97a28ade85f31f709c7848da5ebab0bdc802afd2.camel@gmail.com>
+Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
+From:   David Virag <virag.david003@gmail.com>
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+Date:   Mon, 29 Nov 2021 20:19:01 +0100
+In-Reply-To: <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+         <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+         <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
- successful
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-12-seanjc@google.com>
- <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
- <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
- <YaUNBfJh35WXMV0M@google.com>
- <496c2fc6-26b0-9b5d-32f4-2f9e9dd6a064@redhat.com>
- <YaUiEquKYi5eqWC0@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YaUiEquKYi5eqWC0@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/21 19:55, Sean Christopherson wrote:
->> Still it does seem to be a race that happens when IS_RUNNING=true but
->> vcpu->mode == OUTSIDE_GUEST_MODE.  This patch makes the race easier to
->> trigger because it moves IS_RUNNING=false later.
+On Mon, 2021-11-29 at 15:56 +0200, Sam Protsenko wrote:
+> On Sun, 28 Nov 2021 at 05:15, David Virag <virag.david003@gmail.com>
+> wrote:
+> > 
+> > On Sun, 2021-11-28 at 00:32 +0200, Sam Protsenko wrote:
+> > > USIv2 IP-core provides selectable serial protocol (UART, SPI or
+> > > High-Speed I2C); only one can be chosen at a time. This series
+> > > implements USIv2 driver, which allows one to select particular USI
+> > > function in device tree, and also performs USI block
+> > > initialization.
+> > > 
+> > > With that driver implemented, it's not needed to do USI
+> > > initialization
+> > > in protocol drivers anymore, so that code is removed from the
+> > > serial
+> > > driver.
+> > > 
+> > 
+> > I think the downstream way of doing this (USI node reg being on the
+> > SW_CONF register itself rather than an offset from uart/i2c/spi, the
+> > USI driver only controlling the SW_CONF, and the uart/i2c/spi drivers
+> > controlling their USI_CON and USI_OPTION regs) is cleaner, better,
+> > and
+> > easier to adapt to USIv1 too.
+> > 
 > 
-> Oh!  Any chance the bug only repros with preemption enabled?  That would explain
-> why I don't see problems, I'm pretty sure I've only run AVIC with a PREEMPT=n.
+> One reason why I think it's better to provide SW_CONF register via
+> syscon node, is that it helps us to avoid possible register access
+> conflicts in future, and also conflicts when requesting corresponding
+> resources. In other words, the System Register block can be used by
+> many consumers (drivers) in future; those consumers might try to
+> modify the same registers simultaneously, which might lead to race
+> conditions (as RMW operation is not atomic), so some kind of
+> serialization should be done (like locking in regmap), which is
+> provided by syscon. Also, that wouldn't even come to that: you just
+> can't request the same I/O area twice in Linux. So if SW_CONF is
+> passed via "reg" property to USI driver, and then we try to map the
+> whole System Register (or its portion that includes SW_CONF), that
+> request would fail.
 
-Me too.
+I've got to admit, that's something I didn't think about much, partly
+because the lack of TRM on my hand, as I'm working with just vendor
+kernel sources and consumer phones. What other things are in the sysreg
+in your case? Looking at my vendor device tree, the USI SW_CONF
+registers are at 0x10032000-0x10032008 in my case and the DT lacks
+anything else close by (in the 0x1003xxxx region).
 
-> svm_vcpu_{un}blocking() are called with preemption enabled, and avic_set_running()
-> passes in vcpu->cpu.  If the vCPU is preempted and scheduled in on a different CPU,
-> avic_vcpu_load() will overwrite the vCPU's entry with the wrong CPU info.
+> 
+> Although passing one SW_CONF register via "reg" might look easier to
+> implement, it might also bring us all sort of problems later on. And I
+> think a good design should account for such pitfalls.
+> 
+> As for the USI registers: I really don't think that duplicating the
+> code for USI block reset across uart/i2c/spi drivers would help us to
+> accomplish anything. Why those drivers should be even aware of USI
+> reset? At least in USIv2 block, the USI registers and uart/i2c/spi
+> registers are not mixed: they are located at different and always
+> fixed addresses. We can benefit from that fact, and provide Device
+> Tree structure which reflects the hardware one, separating USI control
+> from actual protocol nodes.
+> 
+> > For example: I'm sure this is the case on USIv2 devices too, but on
+> > Exynos7885, different devices have USI modes configured differently.
+> > For example a Samsung Galaxy A8 (2018) has all the USI blocks
+> > configured as SPI while a Samsung Galaxy M20 has the first USI
+> > configured as dual HSI2C, the second as HSI2C on the first 2 pins and
+> > the third as HSI2C on the last 2 pins. With this way of doing
+> > everything on USIv2 we'd need 3 disabled USIv2 nodes in the SoC DTSI
+> > for one USI block, each for every protocol the USI block can do, all
+> > having a single child for their protocol and each referencing the
+> > same
+> > sysreg (not even sure if that's even supported). Then the board DTS
+> > could enable the USI node it needs.
+> > 
+> 
+> If I'm following you correctly, then it's not like that. I guess
+> Krzysztof already replied to that, so I'll probably just repeat his
+> words. In that case you'll have something like this in your SoC dtsi
+> (for your USIv1 case of course, because dual HSI2C is not present in
+> USIv2):
+> 
+> <<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
+> usi1 {
+>     spi1 {
+>     };
+> 
+>     hsi2c1_1 {
+>     };
+> 
+>     hsi2c1_2 {
+>     };
+> };
+> 
+> usi2 {
+>     spi2 {
+>     };
+> 
+>     hsi2c2_1 {
+>     };
+> };
+> 
+> 
+> usi3 {
+>     spi3 {
+>     };
+> 
+>     hsi2c2_2 {
+>     };
+> };
+> <<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
+> 
+> and then in your board dts you just have to enable corresponding usi's
+> with proper modes, and enable chosen protocol nodes, like this:
+> 
+> <<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
+> &usi1 {
+>     status = "okay"
+>     samsung,mode = <USI_V1_DUAL_I2C>;
+> };
+> 
+> &hsi2c1_1 {
+>     status = "okay"
+> };
+> 
+> &hsi2c1_2 {
+>     status = "okay"
+> };
+> <<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
 
-That would make a lot of sense.  avic_vcpu_load() can handle 
-svm->avic_is_running = false, but avic_set_running still needs its body 
-wrapped by preempt_disable/preempt_enable.
+What got me confused is the following: Upon checking vendor drivers I
+was under the impression that we have all 3 protocols at seperate
+addresses, and the USI SW_CONF register kind of works like a
+multiplexer for the USI pins to switch between protocols. Now I see
+that I was wrong, and the addresses are in fact the same. Now on a
+hardware level it might still work just as a multiplexer but it
+swithches the entire address space for a whole different protocol
+block. Dumb little misunderstanding on my part, never mind! They are on
+the same address even on USIv1. Not sure how I haven't noticed that
+before, I guess since I never started experimenting with USI before,
+just looked at the code as a reference I assumed a lot of things.
 
-Fedora's kernel is CONFIG_PREEMPT_VOLUNTARY, but I know Maxim uses his 
-own build so it would not surprise me if he used CONFIG_PREEMPT=y.
+> 
+> > With the downstream way we could have just one USI node and we could
+> > add the 3 protocols it can do disabled as seperate or child nodes.
+> > This
+> > way the board DTS only needs to set the appropriate mode setting and
+> > enable the protocol it needs. I'd say much better than having 3 USI
+> > nodes for the same USI block.
+> > 
+> 
+> Not sure if with downstream USI driver you can actually have protocols
+> as sub-nodes in USI node though. It doesn't do anything like
+> of_platform_populate().
 
-Paolo
+It can't as far as I'm aware, I was just thinking that did seem like a
+good idea to keep.
+
+> 
+> Also, with this USIv2 driver you can do the same thing you described:
+> you can have just one USI node with 3 protocols as sub-nodes (or you
+> can even have protocol nodes outside of USI node, but I'd not
+> recommend that).
+> 
+> Actually I can see that it's my fault for not describing that case in
+> bindings example. I'll make sure to do that in v2. You also got me
+> thinking about default mode: sometimes SW_CONF reset value chooses
+> some protocol. In that case maybe it'd useful to have something like
+> USI_V2_DEFAULT, to tell driver to not touch SW_CONF at all.
+
+Not sure if that's useful, I'm thinking we specify some protocol for
+the USIs in board dts anyways, and if we don't, then we probably don't
+use that USI block anyways, so at a minimum all protocols should be
+probably disabled in that case, and probably the USI block as a whole
+too. (SoC dtsi has them disabled, board dts doesn't touch them, so they
+remain disabled). May I know how do you think a defult mode would be
+useful?
+
+> And also I
+> can add USI_V2_NONE while at it, so that driver can write 0x0 to
+> SW_CONF: that way no protocol will be selected. Maybe that can be
+> beneficial for PM reasons, if some board doesn't use some USI blocks
+> at all. Do you think it's feasible to add those two values to
+> dt-bindings header? And is it possible to do so in USIv1?
+
+I think I saw some downstream driver do something similiar, that sounds
+like a good idea. In USIv1 I can see the HSI2C driver writing 0 to the
+SW_CONF register at pm suspend. Not sure why that's in the HSI2C driver
+rather than the USI but I'm guessing it should do the same thing as for
+you. I have no TRM though, so not sure. We'll probably just have to
+assume that's how it works here, maybe someone that has access to an
+USIv1 SoC TRM could confirm? Probably won't get any response from
+anyone who has it though.
+ 
+> 
+> > Also this way is pretty USIv2 centric. Adding USIv1 support to this
+> > driver is difficult this way because of the the lack of USI_CON and
+> > USI_OPTION registers as a whole (so having nowhere to actually set
+> > the
+> > reg of the USI node to, as the only thing USIv1 has is the SW_CONF
+> > register). In my opinion being able to use the same driver and same
+> > device tree layout for USIv1 and USIv2 is a definite plus
+> > 
+> 
+> Well, it's USIv2 driver after all. I never expected it can be extended
+> for USIv1 support. If you think it can be reused for USIv1, it's fine
+> by me. But we need to consider next things:
+>   - rename the driver to just "usi.c" (and also its configuration
+> symbol)
+>   - provide different compatible for USIv1 (and maybe corresponding
+> driver data)
+>   - rework bindings (header and doc); make sure existing bindings are
+> intact (we shouldn't change already introduced interfaces)
+>   - in case of USIv1 compatible; don't try to tinker with USIv2
+> registers
+>   - samsung,clkreq-on won't be available in case of USIv1 compatible
+> 
+> Because I don't have USIv1 SoC TRM (and neither do I possess some
+> USIv1 board which I can use for test), I don't think it's my place to
+> add USIv1 support. But I think it's possible to do so, using my input
+> above.
+> 
+> I can see how it might be frustrating having to do some extra work
+> (comparing to just using the code existing in downstream). But I guess
+> that's the difference: vendor is mostly concerned about competitive
+> advantage and getting to market fast, while upstream is more concerned
+> about quality, considering all use cases, and having proper design.
+
+It's not really the extra work, I just didn't see the benefits of this
+way, and my misunderstanding caused me to not see how this would work.
+I never really wanted to use the downstream driver as is, but in my
+head I was thinking that "layout" should work.
+
+> Anyway, we can work together to make it right, and to have both
+> IP-cores support. In the worst case, if those are too different, we
+> can have two separate drivers for those.
+> 
+> > The only real drawback of that way is having to add code for USIv2
+> > inside the UART, HSI2C, and SPI drivers but in my opinion the
+> > benefits
+> > overweigh the drawbacks greatly. We could even make the
+> > uart/spi/hsi2c
+> > drivers call a helper function in the USI driver to set their
+> > USI_CON
+> > and USI_OPTION registers up so that code would be shared and not
+> > duplicated. Wether this patch gets applied like this is not my
+> > choice
+> > though, I'll let the people responsible decide
+> > :-)
+> > 
+> 
+> I'd argue that there are a lot of real drawbacks of using downstream
+> driver as is. That's why I completely re-designed and re-implemented
+> it. Downstream driver can't be built and function as a module, it
+> doesn't respect System Register sharing between consumers, it leads
+> to
+> USI reset code duplication scattered across protocol drivers (that
+> arguably shouldn't even be aware of that), it doesn't reflect HW
+> structure clearly, it's not holding clocks needed for registers
+> access
+> (btw, sysreg clock can be provided in syscon node, exactly for that
+> reason). As Krzysztof said, it also can't handle correct probe order
+> and deferred probes. Downstream driver might work fine for some
+> particular use-cases the vendor has, but in upstream it's better to
+> cover more cases we can expect, as upstream kernel is used on more
+> platforms, with more user space variants, etc.
+
+I do agree now, as I said a bit of a misunderstanding made me believe
+this was wrong. (as if the addresses were different and the downstream
+drivers worked the same way that would mean each USIv2 would have 3
+sets of USI_CON and USI_OPTION registers for each protocol which would
+definitely have to be handled somewhat differently.
+
+> 
+> I don't really think protocol drivers should be aware of USI
+> registers
+> at all, but if we they do -- we can provide some API from USIv2
+> driver
+> later, with EXPORT_SYMBOL(), referencing corresponding USI instance
+> by
+> phandle or using some other mechanism for inter-driver communication.
+> 
+> Of course, it's not my place to decide on patch acceptance too. But I
+> was under the impression that maintainers would be ok with this
+> course
+> of actions. Also, upstream kernel seems to already follow the same
+> design for some similar drivers. See for example
+> drivers/soc/qcom/qcom_gsbi.c.
+> 
+> > Anyways, soon enough I can write an USIv1 driver after I submit all
+> > the
+> > 7885 stuff I'm working on currently. If you want to, you can add
+> > USIv2
+> > support to that driver, or if an USIv2 driver is already in
+> > upstream at
+> > that point, if it is written in the downstream way I can add v1
+> > support
+> > to that, or if it's like this I'll have to make a whole seperate
+> > driver
+> > with a whole seperate DT structure.
+> > 
+> 
+> If it's like you said (USIv1 only touches the SW_CONF register), I
+> guess USIv2 driver can be extended for USIv1 case. I already provided
+> my thoughts on such rework above. It's probably better to consult
+> with
+> Krzysztof first. I guess the only way to figure out if it's feasible
+> or it's better to have separate exynos-usi-v1.c for USIv1, is to try
+> and add USIv1 support into USIv2 driver and see how pretty or ugly it
+> is :) Whatever the way you decide to go with, please add me to Cc
+> list
+> when sending USIv1 patches.
+
+Sure, I'll try doing it on top of the final version of your driver
+then! Sorry for the misunderstanding there!
+
+> 
+> > Best regards,
+> > David
+

@@ -2,102 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2004616D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:43:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5184616DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:43:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237127AbhK2NqW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:46:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57030 "EHLO
+        id S240850AbhK2Nqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbhK2NoT (ORCPT
+        with ESMTP id S238060AbhK2Noa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:44:19 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3D5C08EC73;
-        Mon, 29 Nov 2021 04:25:19 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id o29so14427177wms.2;
-        Mon, 29 Nov 2021 04:25:19 -0800 (PST)
+        Mon, 29 Nov 2021 08:44:30 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAE9C06175D
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:26:13 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id v64so41742534ybi.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:26:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=daLDNYXL/+8eDPcdA0ml26iWQ6uJtsnOCHrovjJY9zo=;
-        b=g37GH9ftRH5TvVPU1IClRbQBmN5akqHTDNIPDSE83SqcXQmSGWfIZfXNC+aTq9Busd
-         bRS8wlydwG6TjfjOk9y8ztImKbbhLxC0d3ntBsZWg5uJUBuTQ5vgXmBs/IILxAm/ClkG
-         aYx8ydN4PTdoDI8Fati0Fsc3f8JfhTXDQAkx4BTBZ5TrYGujymHk5HCALxD0nu763AxM
-         EXgLGB6VsmXEv79/UZreDWSipYUDDU30Jn7RKYj6sHzRJQB0BQbQeTepB29kFkHVrh4s
-         QfBYAHuA/LvJJFO6n6PG3mlqDAqgmoI39diLp1QdeRv9A9Mmb0ju65p9zbLKp//mEtlU
-         4/pw==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=jLSyxGIPPAZsrcMRpmNOT8BBNjdeI6FtIZETH5WpPBg=;
+        b=S2zPfUWZjvsNyCsE248fr7k5eKZE6C1Jtf1JUjOR03Hhlodvx3Jf/Xe07usCe47xRn
+         fjQGM86pHpajJeSWPLX5/2gfjlpCGGqPXtTdJrWv0OtW0zIggGmI2EHaVcGKTV+cyrwT
+         0wXLzxBB6mGaUQ2ZAKYBu0Gomc+GPdSNarMtWHOHNwpGlXdeUApLgT4QQNblJaNhtqMx
+         Pp+fJq9GpP0F105StjTuADFewvrCMDYAfHBRPXUynKmyaA1mHAIVigAfO6a8GrGXmRe9
+         uRsTDpZ2QFUmpOEOKX5jaqFZ/LsZLvu78FBWCql3dSqKzdDLCSpXUUVggmAAvM2CYLFG
+         6HUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=daLDNYXL/+8eDPcdA0ml26iWQ6uJtsnOCHrovjJY9zo=;
-        b=n4Cxq82wvdzhlLuI2bHxdXDk5MuhZPeIApgF/Qzzz2m0A5fXCVx7H2Z+yXUa6ApNwA
-         o89+D6ezyQJOhVchGKTotwDvzT+zRQLxoFb/vTuMpDov7maoYEOCK+pdf5mEUe7TxP9A
-         vNqb4Jb5BeNZAPkaPojNU8TPZvAwxjxFN/cX26TJVVcMRssczJmkpA65x0gkTylga244
-         wml5JjsrjkNTpYDGO2aWi4FxJUBn7JdgxG8CFW1nEx4xb8JRu6tktOydEcFxUnfBcYQW
-         kR77cFeL/1sAvJMwUfYlF/2AjUoFY1W4ZzHSxWczrQnIb68obeYDDD0N8j/G28hb18l6
-         dCHA==
-X-Gm-Message-State: AOAM5317Kg1l65aeEg3+TxdWtBsu3SL8BbN8nQ1cabvTc82asVB1Vmdd
-        QT52qZaaCoUE8Q==
-X-Google-Smtp-Source: ABdhPJyD9zLDN6DOnTyjldHl6D5gu9E+hSYDUF3RZj6yU9dzp6Qfp1JLd5D9Ew3LqCan3BPiEtKxkA==
-X-Received: by 2002:a05:600c:22cb:: with SMTP id 11mr36210187wmg.181.1638188718455;
-        Mon, 29 Nov 2021 04:25:18 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id v6sm19154992wmh.8.2021.11.29.04.25.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 04:25:17 -0800 (PST)
-From:   Colin Ian King <colin.i.king@googlemail.com>
-X-Google-Original-From: Colin Ian King <colin.i.king@gmail.com>
-To:     Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] iwlwifi: mei: Fix spelling mistakes in a devfs file and error message
-Date:   Mon, 29 Nov 2021 12:25:17 +0000
-Message-Id: <20211129122517.10424-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=jLSyxGIPPAZsrcMRpmNOT8BBNjdeI6FtIZETH5WpPBg=;
+        b=kroNUfbSepamcrVhtllqrDo0ovmxIk0Amf5Xa75sSH/+JS+SWTwddhK3HnytzZJ1wL
+         T8IyF5t2qZZwPbY5zcyyIVRLUfRnW0Nje4/zcDIaQpoisH82IRcsxk2SQAG8tm4qLYBA
+         cX1ngkTIMDjHL//O19KC9sRVsG6WDU7U0emtzVpfpvyP3qS/hfvT6wzILp66p0Cx7t3X
+         dRDfsS7ItJDT7LAaLlpLDE5qT2nxpvlUU2FUp1D0rbCVzdwrhB/0OmzMahN09UBOsoMk
+         aVlyol85A3SM0ac6NgaiQ/miFSi4ECdUx0scv1sZXTPukMK5Y0v8lmb+lVHy6lZt6KHt
+         0daw==
+X-Gm-Message-State: AOAM533tyE0IO77Ykl7Y2PAudHWwNDhXd2KoIvj2SM/JTbxoQ6Dr49Aw
+        vhrk2GsSZ4N0UpULaCAkJm8R/Bu0n4jbsrby1Vb1IhgmM3gjBg==
+X-Google-Smtp-Source: ABdhPJw2xUJawW9/Ze4jSl0i30u0x4kQAg098sTZsGUOC0qnIfL3NuTn+D6yxKstU2B0yewGsDbX4yS8WerhhqAi7Y8=
+X-Received: by 2002:a25:7084:: with SMTP id l126mr1773231ybc.310.1638188772741;
+ Mon, 29 Nov 2021 04:26:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <e52068a6e98031a386b5052a166a55c94fe940f6.camel@redhat.com> <ff89f867-0709-d8bb-b6f5-51b2be4cc2dd@oracle.com>
+In-Reply-To: <ff89f867-0709-d8bb-b6f5-51b2be4cc2dd@oracle.com>
+From:   Zhenguo Yao <yaozhenguo1@gmail.com>
+Date:   Mon, 29 Nov 2021 20:26:02 +0800
+Message-ID: <CA+WzARmTSD_S22xHSp2TinobzEXDwZzPU5vv7NX7-SqtUOtA5g@mail.gmail.com>
+Subject: Re: Commit 'hugetlbfs: extend the definition of hugepages parameter
+ to support node allocation' breaks old numa less syntax of reserving
+ hugepages on boot.
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_err message and also in a devfs
-filename. Fix these.
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/wireless/intel/iwlwifi/mei/main.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/wireless/intel/iwlwifi/mei/main.c b/drivers/net/wireless/intel/iwlwifi/mei/main.c
-index 112cc362e8e7..ed208f273289 100644
---- a/drivers/net/wireless/intel/iwlwifi/mei/main.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mei/main.c
-@@ -209,7 +209,7 @@ static void iwl_mei_free_shared_mem(struct mei_cl_device *cldev)
- 	struct iwl_mei *mei = mei_cldev_get_drvdata(cldev);
- 
- 	if (mei_cldev_dma_unmap(cldev))
--		dev_err(&cldev->dev, "Coudln't unmap the shared mem properly\n");
-+		dev_err(&cldev->dev, "Couldn't unmap the shared mem properly\n");
- 	memset(&mei->shared_mem, 0, sizeof(mei->shared_mem));
- }
- 
-@@ -1754,7 +1754,7 @@ static void iwl_mei_dbgfs_register(struct iwl_mei *mei)
- 			     mei->dbgfs_dir, &iwl_mei_status);
- 	debugfs_create_file("send_start_message", S_IWUSR, mei->dbgfs_dir,
- 			    mei, &iwl_mei_dbgfs_send_start_message_ops);
--	debugfs_create_file("req_ownserhip", S_IWUSR, mei->dbgfs_dir,
-+	debugfs_create_file("req_ownership", S_IWUSR, mei->dbgfs_dir,
- 			    mei, &iwl_mei_dbgfs_req_ownership_ops);
- }
- 
--- 
-2.33.1
-
+Mike Kravetz <mike.kravetz@oracle.com> =E4=BA=8E2021=E5=B9=B411=E6=9C=8829=
+=E6=97=A5=E5=91=A8=E4=B8=80 =E4=B8=8B=E5=8D=8812:31=E5=86=99=E9=81=93=EF=BC=
+=9A
+>
+> On 11/28/21 03:18, Maxim Levitsky wrote:
+> >
+> > dmesg prints this:
+> >
+> > HugeTLB: allocating 64 of page size 1.00 GiB failed.  Only allocated 0 =
+hugepages
+> >
+> > Huge pages were allocated on kernel command line (1/2 of 128GB system):
+> >
+> > 'default_hugepagesz=3D1G hugepagesz=3D1G hugepages=3D64'
+> >
+> > This is 3970X and no real support/need for NUMA, thus only fake NUMA no=
+de 0 is present.
+> >
+> > Reverting the commit helps.
+> >
+> > New syntax also works ( hugepages=3D0:64 )
+> >
+> > I can test any patches for this bug.
+>
+> Argh!  I think preallocation of gigantic pages on all systems with only
+> a single node is broken.  The issue is at the beginning of
+> __alloc_bootmem_huge_page:
+>
+> int __alloc_bootmem_huge_page(struct hstate *h, int nid)
+> {
+>         struct huge_bootmem_page *m =3D NULL; /* initialize for clang */
+>         int nr_nodes, node;
+>
+>         if (nid >=3D nr_online_nodes)
+>                 return 0;
+>
+> Without using the node specific syntax, nid =3D=3D NUMA_NO_NODE =3D=3D -1=
+.  For the
+> comparison, nid will be converted to an unsigned into to match nr_online_=
+nodes
+> so we will immediately return 0 instead of doing the allocations.
+>
+> Zhenguo Yao,
+> Can you verify and perhaps put together a patch?does
+>
+Preallocation of gigantic pages cant=E2=80=98 work in all the environment, =
+not
+only in single node.
+I think the issue is because of the replacement
+nodes_weight(node_states[N_MEMORY] with
+nr_online_nodes in my patch of last version. Sorry for my careless. I
+didn't notice that  parameter
+nid is int =EF=BC=8Cbut nr_online_nodes is unsigned int. so, this if (nid >=
+=3D
+nr_online_nodes) is always
+true when nid is NUMA_NO_NODE(-1).  I will send a fix  as soon as passible.
+This is really a low-level mistake ^^
+> >
+> > Also unrelated, is there any progress on allocating 1GB pages on demand=
+ so that I could
+> > allocate them only when I run a VM?
+>
+> That should be possible.  Such support was added back in 2014 with commit
+> 944d9fec8d7a "hugetlb: add support for gigantic page allocation at runtim=
+e".
+>
+> >
+> > i don't mind having these pages to be marked as to be used for userspac=
+e only,
+> > since as far as I remember its the kernel usage that makes some page un=
+moveable.
+> >
+>
+> Of course, finding 1GB of contiguous space for a gigantic page is often
+> difficult at runtime.  So, allocations are likely to fail the longer the
+> system is up and running and fragmentation increases.
+>
+> > Last time (many years ago) I tried to create a zone with only userspace=
+ pages
+> > (I don't remember what options I used) but it didn't work.
+>
+> Not too long ago, support was added to use CMA for gigantic page allocati=
+on.
+> See commit cf11e85fc08c "mm: hugetlb: optionally allocate gigantic hugepa=
+ges
+> using cma".  This sounds like something you might want to try.
+> --
+> Mike Kravetz
+>
+> >
+> > Is there a way to debug what is causing unmoveable pages and doesn't le=
+t
+> > /proc/sys/vm/nr_hugepages work (I tried it today and as usual the numbe=
+r
+> > it can allocate steadly decreases over time).
+>
+>
+>
+>

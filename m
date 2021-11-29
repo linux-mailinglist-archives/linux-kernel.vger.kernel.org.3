@@ -2,161 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF74461B86
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9949F461B88
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244735AbhK2QK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 11:10:26 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49094 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbhK2QIZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:08:25 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6B26CB811F5;
-        Mon, 29 Nov 2021 16:05:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F363C53FAD;
-        Mon, 29 Nov 2021 16:05:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638201905;
-        bh=4N87j1xF0qZOK6vkTN+k9+VLDwxHQq/Q1A1VR38B4AQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hYd722QiYpC36Bf6Q9uJFPlKPCw4bp52LuJo88+FRlqHBDPZiJV2xxZjo5MUc2moR
-         hNcG5kc9SZg08L6NdNQ0reOmJIK1mIvsFygISYhUiJ6MF9siH9EUqUOj7eLQsFWlvc
-         73QsXWTh7LmGU+fDc5lAIFUsUpf+NXCnpB4qQASFhFOqBauVjGuzAs991gYajYQElr
-         ng6WG+dmtohCxSRwl0esJqyoAD4Ye6lAZMKHbWz1JP10FvCcHktWdX+dRAK2TARvCP
-         ek5C6JqhSLqcO9P9xiKcnXSQiLy6RbxYR9QImV2JZIjuBM/KXbDM66Sto0EIB70cHi
-         6KEDTLA4Ptsfg==
-Date:   Mon, 29 Nov 2021 08:05:02 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Petr Machata <petrm@nvidia.com>
-Cc:     Ido Schimmel <idosch@idosch.org>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?= =?UTF-8?B?bnNlbg==?= 
-        <toke@redhat.com>, Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Shay Agroskin" <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        "David Arinzon" <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        "Saeed Bishara" <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        "Claudiu Manoil" <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "Martin Habets" <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Martin KaFai Lau" <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        "Vladimir Oltean" <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, <netdev@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <virtualization@lists.linux-foundation.org>, <nikolay@nvidia.com>
-Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
- per-channel statistics
-Message-ID: <20211129080502.53f7d316@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <874k7vq7tl.fsf@nvidia.com>
-References: <20211123163955.154512-22-alexandr.lobakin@intel.com>
-        <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
-        <87bl28bga6.fsf@toke.dk>
-        <20211125170708.127323-1-alexandr.lobakin@intel.com>
-        <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20211125204007.133064-1-alexandr.lobakin@intel.com>
-        <87sfvj9k13.fsf@toke.dk>
-        <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <87ee72ah56.fsf@toke.dk>
-        <20211126111431.4a2ed007@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <YaPCbaMVaVlxXcHC@shredder>
-        <20211129064755.539099c0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <874k7vq7tl.fsf@nvidia.com>
+        id S1344576AbhK2QLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:11:23 -0500
+Received: from comms.puri.sm ([159.203.221.185]:54158 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242882AbhK2QJV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 11:09:21 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id AB8EEE10FA;
+        Mon, 29 Nov 2021 08:05:33 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id hc2wmh2ZhkyO; Mon, 29 Nov 2021 08:05:32 -0800 (PST)
+Date:   Mon, 29 Nov 2021 17:05:23 +0100
+From:   Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+To:     Kieran Bingham <kieran.bingham@ideasonboard.com>
+Cc:     Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>, kernel@puri.sm,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH] media: Add 16-bit Bayer formats
+Message-ID: <20211129170356.7258d6db.dorota.czaplejewicz@puri.sm>
+In-Reply-To: <163820077159.3059017.10242072140890692995@Monstersaurus>
+References: <20211019114718.827400-1-dorota.czaplejewicz@puri.sm>
+        <163820077159.3059017.10242072140890692995@Monstersaurus>
+Organization: Purism
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/rSs3Ei2YPG=sIYsrxFriVYL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 16:51:02 +0100 Petr Machata wrote:
-> Jakub Kicinski <kuba@kernel.org> writes:
-> > On Sun, 28 Nov 2021 19:54:53 +0200 Ido Schimmel wrote:  
-> >> I agree. I think IFLA_STATS64 in RTM_NEWLINK should contain statistics
-> >> of all the packets seen by the netdev. The breakdown into software /
-> >> hardware / XDP should be reported via RTM_NEWSTATS.  
-> >
-> > Hm, in the offload case "seen by the netdev" may be unclear. For 
-> > the offload case I believe our recommendation was phrased more like 
-> > "all packets which would be seen by the netdev if there was no
-> > routing/tc offload", right?  
-> 
-> Yes. The idea is to expose to Linux stats about traffic at conceptually
-> corresponding objects in the HW.
+--Sig_/rSs3Ei2YPG=sIYsrxFriVYL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Great.
+On Mon, 29 Nov 2021 15:46:11 +0000
+Kieran Bingham <kieran.bingham@ideasonboard.com> wrote:
 
-> >> Currently, for soft devices such as VLANs, bridges and GRE, user space
-> >> only sees statistics of packets forwarded by software, which is quite
-> >> useless when forwarding is offloaded from the kernel to hardware.
-> >> 
-> >> Petr is working on exposing hardware statistics for such devices via
-> >> rtnetlink. Unlike XDP (?), we need to be able to let user space enable /
-> >> disable hardware statistics as we have a limited number of hardware
-> >> counters and they can also reduce the bandwidth when enabled. We are
-> >> thinking of adding a new RTM_SETSTATS for that:
-> >> 
-> >> # ip stats set dev swp1 hw_stats on  
-> >
-> > Does it belong on the switch port? Not the netdev we want to track?  
-> 
-> Yes, it does, and is designed that way. That was just muscle memory
-> typing that "swp1" above :)
-> 
-> You would do e.g. "ip stats set dev swp1.200 hw_stats on" or, "dev br1",
-> or something like that.
+> Hi Dorota,
+>=20
+> Quoting Dorota Czaplejewicz (2021-10-19 12:59:29)
+> > 16-bit bayer formats are used by the i.MX driver. =20
+>=20
+> Can we expand upon this at all?
+>=20
+> The Subject says "Add 16-bit Bayer formats" but this isn't adding the
+> format, it's purely extending the v4l2_format_info table with the
+> information for that format which is otherwise missing.
+>=20
+What do you suggest for a better commit message? My reasoning was that I'm =
+adding entries to a table.
 
-I see :)
+> I wonder what other formats are missing from that table too?
+>=20
+>=20
+> > Signed-off-by: Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+> > ---
+> > Hello,
+> >=20
+> > While working on the i.MX8 video driver, I discovered that `v4l2_fill_p=
+ixfmt` will fail when using 10-bit sensor formats. (For background, see the=
+ conversation at https://lkml.org/lkml/2021/10/17/93 .)
+> >=20
+> > It appears that the video hardware will fill a 16-bit-per-pixel buffer =
+when fed 10-bit-per-pixel Bayer data, making `v4l2_fill_pixfmt` effectively=
+ broken for this case. =20
+>=20
+> This statement is confusing to me. Are you saying you're programming the
+> hardware with 10 bit, and it's using 16 bits per pixel to store that
+> data? (Which is simply 'unpacked' I think ?)
+>=20
+I know the sensor I'm dealing with sends 10-bit data. I'm observing that th=
+e data arriving at this stage of the pipeline is encoded with 16 bits per p=
+ixel. As far as I understand, that's what i.MX8 does at some stage of the M=
+IPI/CSI2 pipeline by design, but I can't elaborate at the moment, and I don=
+'t think it affects the validity of the addition.
+>=20
+> >=20
+> > This change adds the relevant entries to the format info structure.
+> >=20
+> > Difference in behaviour observed using the i846 driver on the Librem 5.
+> >=20
+> > Regards,
+> > Dorota Czaplejewicz
+> >=20
+> >  drivers/media/v4l2-core/v4l2-common.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >=20
+> > diff --git a/drivers/media/v4l2-core/v4l2-common.c b/drivers/media/v4l2=
+-core/v4l2-common.c
+> > index 04af03285a20..d2e61538e979 100644
+> > --- a/drivers/media/v4l2-core/v4l2-common.c
+> > +++ b/drivers/media/v4l2-core/v4l2-common.c
+> > @@ -309,6 +309,10 @@ const struct v4l2_format_info *v4l2_format_info(u3=
+2 format)
+> >                 { .format =3D V4L2_PIX_FMT_SGBRG12,       .pixel_enc =
+=3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D {=
+ 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> >                 { .format =3D V4L2_PIX_FMT_SGRBG12,       .pixel_enc =
+=3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D {=
+ 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> >                 { .format =3D V4L2_PIX_FMT_SRGGB12,       .pixel_enc =
+=3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D {=
+ 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> > +               { .format =3D V4L2_PIX_FMT_SBGGR16,       .pixel_enc =
+=3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D {=
+ 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> > +               { .format =3D V4L2_PIX_FMT_SGBRG16,       .pixel_enc =
+=3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D {=
+ 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> > +               { .format =3D V4L2_PIX_FMT_SGRBG16,       .pixel_enc =
+=3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D {=
+ 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 },
+> > +               { .format =3D V4L2_PIX_FMT_SRGGB16,       .pixel_enc =
+=3D V4L2_PIXEL_ENC_BAYER, .mem_planes =3D 1, .comp_planes =3D 1, .bpp =3D {=
+ 2, 0, 0, 0 }, .hdiv =3D 1, .vdiv =3D 1 }, =20
+>=20
+> This looks right as far as I can see though, so for the change, and
+> ideally with the commit message improved to be clearer about the
+> content and reasoning for the change:
+>=20
+> Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>=20
 
-> >> For query, something like (under discussion):
-> >> 
-> >> # ip stats show dev swp1 // all groups
-> >> # ip stats show dev swp1 group link
-> >> # ip stats show dev swp1 group offload // all sub-groups
-> >> # ip stats show dev swp1 group offload sub-group cpu
-> >> # ip stats show dev swp1 group offload sub-group hw
-> >> 
-> >> Like other iproute2 commands, these follow the nesting of the
-> >> RTM_{NEW,GET}STATS uAPI.  
-> >
-> > But we do have IFLA_STATS_LINK_OFFLOAD_XSTATS, isn't it effectively 
-> > the same use case?  
-> 
-> IFLA_STATS_LINK_OFFLOAD_XSTATS is a nest. Currently it carries just
-> CPU_HIT stats. The idea is to carry HW stats as well in that group.
+Thanks!
 
-Hm, the expectation was that the HW stats == total - SW. I believe that
-still holds true for you, even if HW stats are not "complete" (e.g.
-user enabled them after device was already forwarding for a while).
-Is the concern about backward compat or such?
+--Dorota
+> >         };
+> >         unsigned int i;
+> > =20
+> > --=20
+> > 2.31.1
+> > =20
+
+
+--Sig_/rSs3Ei2YPG=sIYsrxFriVYL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEExKRqtqfFqmh+lu1oADBpX4S8ZncFAmGk+kMACgkQADBpX4S8
+ZnchgQ/8CaLnHdVuBu+Yo4JH/2CpmOZd8OUy5640QkYM4QJxiV+JNlR1EyAiJgLO
+uErbLZdqyCrnhnGzNm/SElcJcyBmNh6e8P1zWtTFbAr62GKvBqW8Ah3BfbkDgfT8
+QRmH32WaA85SjUEeex1Y0O8XTZVzOtclBNaOGpFI6hccvPFNBp1kIMOJSYrnGoOR
+JYoaQAVQ+arB8NlGBJ5tfp1rUiE/Q5NC8jLugzUxojcy+3VbyWZ0JU+ZHOmjYfGw
+zpYG8fMt7do3NqU8eTM8qrpQkaXvA33yODAutrC2t6i3zP1S5aa9o/2GvUASc5dM
+L0qCYU1qxPmiI81y51I7QRmTqwA5MJliCH2D+NkALCz6+aYTulvF2WLqtvJrU4zQ
+3/Oc8JO/WeM/0u2lH0c8FjxhbDS5saID7b6/Maq5HLpyU3S6qrhG07FAkZuNnjwi
+Q5XAIuvcO7gcRwJBaB/8wBDSL9jSU6I3UypWeZQXuxNuUBQyAMS3MEDBv7Ma1Ai7
+zQSWCARuO77CgICVOeI7FDaCixVM/oM4wP9cyvQ+0o7XgElRuonttzTekZqLtm5s
+cad5Ho13BwhNCP3EhjTW7Id0s1lcf13Ei4a6YhR5jIn7hpQkU8jehv9peXtk15Jx
+26x/mg2SlN6wEpsvw9vV0C4mIXvoxZ8JoV5pSeDEh6jMnBUTqyo=
+=38EQ
+-----END PGP SIGNATURE-----
+
+--Sig_/rSs3Ei2YPG=sIYsrxFriVYL--

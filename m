@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B63CE462220
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1FA462232
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbhK2U0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 15:26:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S234630AbhK2U34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 15:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237072AbhK2UXC (ORCPT
+        with ESMTP id S233900AbhK2UZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:23:02 -0500
+        Mon, 29 Nov 2021 15:25:49 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651D7C09CE49;
-        Mon, 29 Nov 2021 08:57:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DF0C0254FA;
+        Mon, 29 Nov 2021 09:01:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 00F55612EB;
-        Mon, 29 Nov 2021 16:57:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F0BC53FC7;
-        Mon, 29 Nov 2021 16:57:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC0FF615BE;
+        Mon, 29 Nov 2021 17:01:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C64EC53FAD;
+        Mon, 29 Nov 2021 17:01:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638205026;
-        bh=cljE9tV1lfPSK7XSjLtUKfxaH+Wz78RefRWZpXMeN6s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NHRvxprJVfhtTmssRXUZSnxn5W+3TBS/HYhGJ0BUbcAkJe1k5AJRfzXVghJAikUto
-         POrT6tW9SHvSGrENMKcOC5kOXJRtiR0fQG1pOMekTcyexH7iJNn899GpDnMRZB29aB
-         nN3mnOtwrz98IkIC9+tUB3zfB4rS4V88pihCTugOSTKLdB2zrrfTkN842XThyx0a5b
-         8vdhUISe8IEnC/DIP+lLT3GWIWgKjKvlXcwqpfxAvAXOIMtH1rscBSSVrcKcJ9LhqP
-         8XLw48RwKZWxVjt030kPM23JnYarY/uE8AD0kG6SOVvHXi7oz9MAF04QV5i2Zg0f8d
-         y+0psxZkFjkIg==
-Date:   Mon, 29 Nov 2021 17:57:03 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     lakshmi.sowjanya.d@intel.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jarkko.nikula@linux.intel.com, bala.senthil@intel.com,
-        pandith.n@intel.com
-Subject: Re: [PATCH v1 2/2] i2c: designware-pci: Set ideal timing parameters
- for Elkhart Lake PSE
-Message-ID: <YaUGX27+jHwQxg48@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        lakshmi.sowjanya.d@intel.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        bala.senthil@intel.com, pandith.n@intel.com
-References: <20211109103552.18677-1-lakshmi.sowjanya.d@intel.com>
- <20211109103552.18677-2-lakshmi.sowjanya.d@intel.com>
+        s=k20201202; t=1638205265;
+        bh=oenFJL2Wv8wyYsQIWdj3rYdoS7C7utIfHZRqntFJyRk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rlpKoXTDAH9Gy4Zk5JlUtoo1Zq69GM90tjzqYhc/4U17AyHUaCzWFUmRKXqbSTOXS
+         Tk6PjHCimiL5Z1lacm0xB+7h98MTmEzo8CBClGW0h58i4ntF1M0RuSqyH6anNsuBHt
+         yq+hzrdF1kNPkFWqE6GxgCq0DVC+7jAOOErvlaOTSQHj0eG+RQXbeqvTWDalxkzMCo
+         1g2UaoYGspxzO5RLedqI/P+mh+vGi57BeE+QL/3xXYh3EyveH0fxR5uLaIk1KDEJXY
+         Wsf8nJpHnc3lqHX+TT0EiMNOP/JvVzGYcM8UXqVQe7WpgOJxmWLaOyhV0bsJygoWJ0
+         GHPdPToGtfN0g==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Tom Stellard <tstellar@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
+        kernelci@groups.io, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
+Date:   Mon, 29 Nov 2021 09:57:57 -0700
+Message-Id: <20211129165803.470795-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p3ajAfGV2Ta1UOrF"
-Content-Disposition: inline
-In-Reply-To: <20211109103552.18677-2-lakshmi.sowjanya.d@intel.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series raises the minimum supported version of LLVM to
+11.0.0.
 
---p3ajAfGV2Ta1UOrF
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Patch #1 outlines the issue, goes over the potential impact of the
+change, and does the actual bump. Subsequent patches clean up the
+various checks that are always true after the bump.
 
-On Tue, Nov 09, 2021 at 04:05:52PM +0530, lakshmi.sowjanya.d@intel.com wrot=
-e:
-> From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
->=20
-> Set optimal HCNT, LCNT and hold time values for all the speeds supported
-> in Intel Programmable Service Engine I2C controller in Intel Elkhart
-> Lake.
->=20
-> Signed-off-by: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+I have marked this revision as RFC to give various parties the option to
+comment on this bump before it is done, namely KernelCI and Linaro's
+LKFT, who are still testing clang-10. I have added some other folks to
+CC that I know are testing with clang to see if this impacts them in any
+way (as I would like to impact as few people as possible) but as far as
+I am aware, most other CIs and developers are testing closer to tip of
+tree. If that is not true, scream so that we can see what can be done
+about that. If I missed anyone who is actively testing with clang,
+please key them in and I will make sure to include them in future
+revisions (if any are needed).
 
-Applied to for-next, thanks!
+It probably makes sense for this series to live in -mm.
+
+Nathan Chancellor (6):
+  Documentation: Raise the minimum supported version of LLVM to 11.0.0
+  mm, slab: Remove compiler check in __kmalloc_index
+  arch/Kconfig: Remove CLANG_VERSION check in HAS_LTO_CLANG
+  Revert "ARM: 9070/1: Make UNWINDER_ARM depend on ld.bfd or ld.lld
+    11.0.0+"
+  gcov: Remove compiler version check
+  init/Kconfig: Drop linker version check for LD_ORPHAN_WARN
+
+ Documentation/process/changes.rst | 2 +-
+ arch/Kconfig                      | 3 +--
+ arch/arm/Kconfig.debug            | 2 --
+ include/linux/slab.h              | 3 +--
+ init/Kconfig                      | 1 -
+ kernel/gcov/Kconfig               | 1 -
+ scripts/min-tool-version.sh       | 2 +-
+ 7 files changed, 4 insertions(+), 10 deletions(-)
 
 
---p3ajAfGV2Ta1UOrF
-Content-Type: application/pgp-signature; name="signature.asc"
+base-commit: d58071a8a76d779eedab38033ae4c821c30295a5
+-- 
+2.34.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlBl8ACgkQFA3kzBSg
-KbZZkA//cWu6m2u6mTFtPJUfMEEw6LuT89rXMnblLED3Ht1h89/KppaBd6dwZg+c
-hYxzdHvR4vkIdvI927WNmOrjzZdqfB7Cr2bXDjRS4V+F+du1oAvbnu/ANujNfv6d
-Zgvy29GPV2mG+ymO45XL0sBrTdX2JP8w3k5OANNfpRah1fXrAcd1F9rw1Z3Uv+5N
-rIWp3lbutV7OyT84a7DFQ+bvdvmya/iUQLX+YTiAUror85i5NlcTv+vKPB6VeMNX
-qotfyjnAqKvGgN3C/fCwqSlFzmUsmmbFuy4aY98qQRJG4z4sQddl46LlBVgrhRF2
-3cEQE79uVatwU4NJWFPHAwk48Ip+q7sJX7Hfuq/rfQJDRvRlD6+c1qJ7Q0HGjwRG
-QzL0Bobo5mZe9F0TzEoXSBS8LsIOJ3i77Ko0ESZZChQ3+zZ4zb1KyE5t9pG4Il1g
-W+K5yzWn1U23vSuNyDULOCRTg7ULyfB0yhaShGoWGJ9ROzfAfsmEPbefwyAEnXJy
-J+XUYTEaqaWhIpKg2UYEjsWffEnciszfUAPdI+FvlFIALW0FuC94DCH3P81cjfyG
-SafFbE/103YtvBfcYmUvnD8wh2kvdhMRKWBHQpwvcFfCZQrAQEYyc6UkuVCO51J7
-yZlbO5Sz8Qg7gDxPhZQFnYPHNCd0qu/BzzDsXTrH3dzTnPUBy0A=
-=W+n9
------END PGP SIGNATURE-----
-
---p3ajAfGV2Ta1UOrF--

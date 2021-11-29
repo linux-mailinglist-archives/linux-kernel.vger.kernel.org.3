@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36FE4462495
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A27A9462570
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbhK2WVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:21:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56546 "EHLO
+        id S233111AbhK2WjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:39:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234155AbhK2WUF (ORCPT
+        with ESMTP id S234326AbhK2Wib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:20:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1A5C07CA2C;
-        Mon, 29 Nov 2021 11:57:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B092B815C3;
-        Mon, 29 Nov 2021 19:57:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29009C53FC7;
-        Mon, 29 Nov 2021 19:56:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638215819;
-        bh=DhEombK07QwNpXLoXCpOa6HpTzpV1NgajiSa+1qwN+k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=G/KxpR0xy14HXlT475qhaNwJrIxGYP/VsTeY+NiH1U2p2H5PmALhUHuDP4hkjOS5h
-         3lXp3PDufcrlUvBTVZO9d7j9TiJl8STfLCuiDcBUD6jBV4smCa81kBrpO1mnSocjVj
-         3U24gDeDb89Eh7BebiuM27eb+200niBO8f6FyxLRunkHUAEZlsfdRqCc+vFlwQ2dmK
-         f+jw49pRuDRaEzpLkQ4lkOdH6W9D/uKM0E46vuo4PqfGRCoGtbv/w39lmFHgbN6fG7
-         J3gSGPvUHbqdR9AK5MlvAOb5Nd8471kkNOtChSeIIjWtYkYiqys+s9OLB/cRpTVjRx
-         ICNuZdXwRdytw==
-Message-ID: <ec986700-48b7-6b35-b404-efb578dccb3c@kernel.org>
-Date:   Mon, 29 Nov 2021 14:56:53 -0500
+        Mon, 29 Nov 2021 17:38:31 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9758EC21884D
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 12:12:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=03RItMg0M2HfikfUQJ2uQM/WPVH5m+4bpjbxZJ5j+s8=; b=3HEudj3w0x4FaRvV6GSN6VghFW
+        0ilwuhNDZZ0PNXqAFhUbGi5hr7xpnjH0KEnFNSJHXCEYxYsVG6KHgnn8jn8BUzBBWVh+GboRGLnjm
+        UX0rvhgY/hBHEtKLYGEj0OfWa3/FQUgnKc3JXsdxh69aFVVdWqfWEXM5LoY6BPNoIUhA6SpvgSFcq
+        eO/odnUC9AYOmITea5UuaL75Y9/pB49vzaL6YAvczYPqJPmJNXg0E3gcvIqwLTy+SRpIYz/ECThOS
+        s9288SDEqZgy82LHO6t+HCRXG/S4Qbg/78Kpsry4Acja4MUIff1ogy1/OyKGXoeA8aPSzE0twXr3L
+        hkF9eGhA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mrn0M-002H2F-VF; Mon, 29 Nov 2021 20:12:02 +0000
+Date:   Mon, 29 Nov 2021 12:12:02 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Xiaoming Ni <nixiaoming@huawei.com>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [mcgrof-next:20211124-sysctl-cleanups-v2 41/41]
+ kernel/kprobes.c:2605:2: error: implicit declaration of function
+ 'kprobe_sysctls_init'
+Message-ID: <YaU0EuR8neVB9hEX@bombadil.infradead.org>
+References: <202111271451.VDtFz59Q-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [patch 37/37] dmaengine: qcom_hidma: Cleanup MSI handling
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        dmaengine@vger.kernel.org, Santosh Shilimkar <ssantosh@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>
-References: <20211126224100.303046749@linutronix.de>
- <20211126230526.111397616@linutronix.de>
-From:   Sinan Kaya <okaya@kernel.org>
-In-Reply-To: <20211126230526.111397616@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202111271451.VDtFz59Q-lkp@intel.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/26/2021 8:22 PM, Thomas Gleixner wrote:
-> There is no reason to walk the MSI descriptors to retrieve the interrupt
-> number for a device. Use msi_get_virq() instead.
+On Sat, Nov 27, 2021 at 02:48:14PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20211124-sysctl-cleanups-v2
+> head:   c66aee3b7120f4a5f1d40cc9109dcf684643cc17
+> commit: c66aee3b7120f4a5f1d40cc9109dcf684643cc17 [41/41] kprobe: move sysctl_kprobes_optimization to kprobes.c
+> config: arm64-randconfig-r006-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271451.VDtFz59Q-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=c66aee3b7120f4a5f1d40cc9109dcf684643cc17
+>         git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
+>         git fetch --no-tags mcgrof-next 20211124-sysctl-cleanups-v2
+>         git checkout c66aee3b7120f4a5f1d40cc9109dcf684643cc17
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 > 
-> Signed-off-by: Thomas Gleixner<tglx@linutronix.de>
-> Cc: Sinan Kaya<okaya@kernel.org>
-> Cc:dmaengine@vger.kernel.org
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> kernel/kprobes.c:2605:2: error: implicit declaration of function 'kprobe_sysctls_init' [-Werror,-Wimplicit-function-declaration]
+>            kprobe_sysctls_init();
+>            ^
+>    1 error generated.
 
-Acked-by: Sinan Kaya <okaya@kernel.org>
+Fixed.
+
+  Luis

@@ -2,39 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F4E461ED8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:38:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F589461ED9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379388AbhK2SlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:41:00 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54654 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379454AbhK2Siy (ORCPT
+        id S1380013AbhK2SlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:41:01 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:43154 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379597AbhK2Si4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:38:54 -0500
+        Mon, 29 Nov 2021 13:38:56 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EA568CE13D0;
-        Mon, 29 Nov 2021 18:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98837C53FAD;
-        Mon, 29 Nov 2021 18:35:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C9A0B815CE;
+        Mon, 29 Nov 2021 18:35:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D060C53FAD;
+        Mon, 29 Nov 2021 18:35:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210933;
-        bh=IJ2dXdwhT25l1CIeqH3ncy6xMkbSsRJusfJIZXgqJTo=;
+        s=korg; t=1638210936;
+        bh=pmqMktAJiNe3gwCL43sCY6s97VwQepgn/lzC7Bll7ig=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BgtgeorI5eJmZdbeJeau27pgxeBXUhmITj0kfuHDD5qW/sj3XLcCRd8ovaiaAi6P6
-         E9WRYhXHdQC5hTA4Mo5jiPZ5BwjiMy6HCysKo+qEixPNuDRzgdNTKioI9R8Xvv6TnG
-         u2nGiRFZOmkqq8GZxEHVbHttR3bQ5zZzEefXy72Q=
+        b=lhW9XD2Go/iZ1CIUDzv3PgsYIF1ndlWYqbZW9qI+44zFt7n0QCnS3x2wlchi8JNxk
+         OFdFq6mOdeTZc3wiJlDx1wH1HE5zL0jHnyQnKmk2xZN4uIY6kk/hrl7jQLvrzH4PrJ
+         7tauI/4B+8sGS0GFj1xHOzocWeoaj3c5HEVWWrCo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hyunchul Lee <hyc.lee@gmail.com>,
+        stable@vger.kernel.org, Coverity Scan <scan-admin@coverity.com>,
+        Hyunchul Lee <hyc.lee@gmail.com>,
         Namjae Jeon <linkinjeon@kernel.org>,
         Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 045/179] ksmbd: contain default data stream even if xattr is empty
-Date:   Mon, 29 Nov 2021 19:17:19 +0100
-Message-Id: <20211129181720.448146300@linuxfoundation.org>
+Subject: [PATCH 5.15 046/179] ksmbd: fix memleak in get_file_stream_info()
+Date:   Mon, 29 Nov 2021 19:17:20 +0100
+Message-Id: <20211129181720.487852046@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
 References: <20211129181718.913038547@linuxfoundation.org>
@@ -48,75 +49,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Namjae Jeon <linkinjeon@kernel.org>
 
-commit 1ec72153ff434ce75bace3044dc89a23a05d7064 upstream.
+commit 178ca6f85aa3231094467691f5ea1ff2f398aa8d upstream.
 
-If xattr is not supported like exfat or fat, ksmbd server doesn't
-contain default data stream in FILE_STREAM_INFORMATION response. It will
-cause ppt or doc file update issue if local filesystem is such as ones.
-This patch move goto statement to contain it.
+Fix memleak in get_file_stream_info()
 
-Fixes: 9f6323311c70 ("ksmbd: add default data stream name in FILE_STREAM_INFORMATION")
+Fixes: 34061d6b76a4 ("ksmbd: validate OutputBufferLength of QUERY_DIR, QUERY_INFO, IOCTL requests")
 Cc: stable@vger.kernel.org # v5.15
+Reported-by: Coverity Scan <scan-admin@coverity.com>
 Acked-by: Hyunchul Lee <hyc.lee@gmail.com>
 Signed-off-by: Namjae Jeon <linkinjeon@kernel.org>
 Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ksmbd/smb2pdu.c |   18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ fs/ksmbd/smb2pdu.c |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 --- a/fs/ksmbd/smb2pdu.c
 +++ b/fs/ksmbd/smb2pdu.c
-@@ -4450,6 +4450,12 @@ static void get_file_stream_info(struct
- 			 &stat);
- 	file_info = (struct smb2_file_stream_info *)rsp->Buffer;
+@@ -4489,8 +4489,10 @@ static void get_file_stream_info(struct
+ 				     ":%s", &stream_name[XATTR_NAME_STREAM_LEN]);
  
-+	buf_free_len =
-+		smb2_calc_max_out_buf_len(work, 8,
-+					  le32_to_cpu(req->OutputBufferLength));
-+	if (buf_free_len < 0)
-+		goto out;
-+
- 	xattr_list_len = ksmbd_vfs_listxattr(path->dentry, &xattr_list);
- 	if (xattr_list_len < 0) {
- 		goto out;
-@@ -4458,12 +4464,6 @@ static void get_file_stream_info(struct
- 		goto out;
- 	}
+ 		next = sizeof(struct smb2_file_stream_info) + streamlen * 2;
+-		if (next > buf_free_len)
++		if (next > buf_free_len) {
++			kfree(stream_buf);
+ 			break;
++		}
  
--	buf_free_len =
--		smb2_calc_max_out_buf_len(work, 8,
--					  le32_to_cpu(req->OutputBufferLength));
--	if (buf_free_len < 0)
--		goto out;
--
- 	while (idx < xattr_list_len) {
- 		stream_name = xattr_list + idx;
- 		streamlen = strlen(stream_name);
-@@ -4507,6 +4507,7 @@ static void get_file_stream_info(struct
- 		file_info->NextEntryOffset = cpu_to_le32(next);
- 	}
- 
-+out:
- 	if (!S_ISDIR(stat.mode) &&
- 	    buf_free_len >= sizeof(struct smb2_file_stream_info) + 7 * 2) {
- 		file_info = (struct smb2_file_stream_info *)
-@@ -4515,14 +4516,13 @@ static void get_file_stream_info(struct
- 					      "::$DATA", 7, conn->local_nls, 0);
- 		streamlen *= 2;
- 		file_info->StreamNameLength = cpu_to_le32(streamlen);
--		file_info->StreamSize = 0;
--		file_info->StreamAllocationSize = 0;
-+		file_info->StreamSize = cpu_to_le64(stat.size);
-+		file_info->StreamAllocationSize = cpu_to_le64(stat.blocks << 9);
- 		nbytes += sizeof(struct smb2_file_stream_info) + streamlen;
- 	}
- 
- 	/* last entry offset should be 0 */
- 	file_info->NextEntryOffset = 0;
--out:
- 	kvfree(xattr_list);
- 
- 	rsp->OutputBufferLength = cpu_to_le32(nbytes);
+ 		file_info = (struct smb2_file_stream_info *)&rsp->Buffer[nbytes];
+ 		streamlen  = smbConvertToUTF16((__le16 *)file_info->StreamName,
 
 

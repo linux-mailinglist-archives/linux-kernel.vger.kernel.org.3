@@ -2,170 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A97C46267D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67138462522
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbhK2Ww4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:52:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S233751AbhK2Wfk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:35:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234816AbhK2Wue (ORCPT
+        with ESMTP id S233479AbhK2We6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:50:34 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D743C03AA16
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:15:16 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id l8so17520230qtk.6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:15:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5b5qh/kvUmuAxuX6IrP7q82N4vspMTIsdmghaUk1cYw=;
-        b=Bdhtd9WSzPvU7/V8HNa2hTMVtdIsLC0wN52/ZfiCz7euJW4oaVxMP2/kNhJp80Am7h
-         DYp4u0lASiuZiG1Z5TEUOUQRFVxAy2/JnInSxRJYDTNIVMxsaTqu8JZihaXMErA1TPfl
-         EZohXunqEZdSqaHV7IRRV3rUTed8qdM/yfUrMlISenbnKNMs1e96aHwtMGZe1qovHERa
-         1l6eTXckhtZuH7qVWAFPrq575D/BPWcZMWhqQBnPxSL7MtTRFo9E0qb7/Axi+VPN0V8o
-         G7ek3jPWPfNj3GXvkO7wDWWRNOE8tJEIc7HPQ0FaP3A5xXJgqK2kHm2D58Xky2ISQ0oT
-         m2KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5b5qh/kvUmuAxuX6IrP7q82N4vspMTIsdmghaUk1cYw=;
-        b=7XgdzZHoVcu9js+QnsGaDjhnXjC8KpNasajTtluLPYV7R3VSZ/+bhYDEYdOH1gC6kE
-         gky7u3FnZINmHSuL+KdQIZO3SGuk4T64Z9TU6GJjpziBxiEkFGlnVpvi+uFpvq20yg9F
-         XckndCXRkcqywRNNcbyIaC/4M2eEEuCc5w7zxXYhk3MiQ7KYUDm7Lz4oy5hcV0R7QPj4
-         tPip6zn18RFj2jQC31KB0ta6J0ByV2mKC4ce5Yq9TDVHlbHR+BkEUaqEA0s9WGh/Gi7d
-         yHveiKU2R65lcrGRPXwisx8dR8/eitn6BwHK84VpzO1pgIqLCiCXAFrxeEqOcRHHHBT7
-         joYw==
-X-Gm-Message-State: AOAM532Ul7Gz9SWydRTlnL46dC0P8oIAJ9tejz10D/uaIzQwEZhvEIBI
-        lQMcRTPinDQc1NThJb//SB/gVA==
-X-Google-Smtp-Source: ABdhPJwCS7omvq0J3BR4cWJfCQsBbn2Q8/rhwVshyCiOdQYdsmN5CvbQQClg1wniqFXuFXfTTajxxw==
-X-Received: by 2002:a05:622a:288:: with SMTP id z8mr36944934qtw.526.1638209715216;
-        Mon, 29 Nov 2021 10:15:15 -0800 (PST)
-Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
-        by smtp.gmail.com with ESMTPSA id bl16sm8435585qkb.44.2021.11.29.10.15.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 10:15:14 -0800 (PST)
-Date:   Mon, 29 Nov 2021 13:15:13 -0500
-From:   Josef Bacik <josef@toxicpanda.com>
-To:     Valentin Schneider <valentin.schneider@arm.com>
-Cc:     peterz@infradead.org, vincent.guittot@linaro.org,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance
- patch
-Message-ID: <YaUYsUHSKI5P2ulk@localhost.localdomain>
-References: <YaUH5GFFoLiS4/3/@localhost.localdomain>
- <87ee6yc00j.mognet@arm.com>
+        Mon, 29 Nov 2021 17:34:58 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88D2CC03AA1C;
+        Mon, 29 Nov 2021 10:15:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C0EC1CE13AB;
+        Mon, 29 Nov 2021 18:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6452EC53FAD;
+        Mon, 29 Nov 2021 18:15:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638209755;
+        bh=4ZvxN/3yB6BIkS5mjsWCkybDGiWY3Py98ZFJY+s6Vj4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E3PEpP+W+hDsvuPyeAajJimQVmbwxj2vGUyUBwsK5ThTOCuv+YHmnBNMyLUG7G8rF
+         5o01BTshaoBe4BVtxyMikV3YpDda7S2O7n4eJe7DEADKrRJkrc8hg8g9lx+h5AYnRp
+         JtJNrW2SfymVAqN0xI4bM+fie8mRqdne78USgugV5E5JwVWJT5abjwphwrAcmT+OwE
+         ZL4CZ2ydWXwx6fSODO6V6qeQ5ytH7zXy7etv/RfSxAqg3b2nnPSHcxLwwyF2ldGQPJ
+         0pgUSn0IkJKU1xSBqlha2PjmY6Uigr9n+kpysW/wNU5DBimNjt+01icl/evZTh+Ifd
+         D9pEACPTwiJdg==
+Date:   Mon, 29 Nov 2021 18:15:50 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Pratyush Yadav <p.yadav@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Michael Walle <michael@walle.cc>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] Add bindings for peripheral-specific SPI
+ controller properties
+Message-ID: <YaUY1gKnyoOEvo/M@sirena.org.uk>
+References: <20211109181911.2251-1-p.yadav@ti.com>
+ <20211129180935.nmymboy336hllly7@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qhLQH2s+5hgBKos4"
 Content-Disposition: inline
-In-Reply-To: <87ee6yc00j.mognet@arm.com>
+In-Reply-To: <20211129180935.nmymboy336hllly7@ti.com>
+X-Cookie: Thank god!! ... It's HENNY YOUNGMAN!!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 06:03:24PM +0000, Valentin Schneider wrote:
-> 
-> Hi Josef,
-> 
-> On 29/11/21 12:03, Josef Bacik wrote:
-> > Hello,
-> >
-> > Our nightly performance testing found a performance regression when we rebased
-> > our devel tree onto v5.16-rc.  This took me a few days to bisect down, but this
-> > patch
-> >
-> > 7fd7a9e0caba ("sched/fair: Trigger nohz.next_balance updates when a CPU goes NOHZ-idle")
-> >
-> > is the one that introduces the regression.  My performance testing box is a 2
-> > socket, with a model name "Intel(R) Xeon(R) Bronze 3204 CPU @ 1.90GHz", for a
-> > total of 12 cpu's reported in cpuinfo.  It has 128gib of RAM, and these perf
-> > tests are being run against a SSD and spinning rust device, but the regression
-> > is consistent across both configurations.  You can see the historical graph of
-> > the completion latencies for this specific run
-> >
-> > http://toxicpanda.com/performance/emptyfiles500k_write_clat_ns_p99.png
-> >
-> > Or for something a little more braindead (untar firefox) you can see a increase
-> > in the runtime
-> >
-> > http://toxicpanda.com/performance/untarfirefox_elapsed.png
-> >
-> > These two tests are single threaded, the regression doesn't appear to affect
-> > multi-threaded tests.  For a simple reproducer you can simply download a tarball
-> > of the firefox sources and untar it onto a clean btrfs file system.  The time
-> > before and after this commit goes up ~1-2 seconds on my machine.  For a less
-> > simple test you can create a clean btrfs file system and run
-> >
-> > fio --name emptyfiles500k --create_on_open=1 --nrfiles=31250 --readwrite=write \
-> >       --readwrite=write --ioengine=filecreate --fallocate=none --filesize=4k \
-> >       --openfiles=1 --alloc-size 98304 --allrandrepeat=1 --randseed=12345 \
-> >       --directory <mount point>
-> >
-> > And you are looking for the "Write clat ns p99" metric.  You'll see a 5-10%
-> > increase in the latency time.  If you want to run our tests directly it's
-> > relatively easy to setup, you can clone the fsperf repo
-> >
-> > https://github.com/josefbacik/fsperf
-> >
-> > Then in the fsperf directory edit the local.cfg and add
-> >
-> > [main]
-> > directory=/mnt/test
-> >
-> > [btrfs]
-> > device=/dev/sdc
-> > iosched=none
-> > mkfs=mkfs.btrfs -f
-> > mount=mount -o noatime
-> >
-> > And then run the following on the baseline kernel
-> >
-> > ./fsperf -p regression -c btrfs -n 10 emptyfiles500k
-> >
-> > This will run the test 10 times and save the results to the database.  Then you
-> > can boot into your changed kernel and runn
-> >
-> > ./fsperf -p regrssion -c btrfs -n 10 -t emptyfiles500k
-> >
-> > This will run the test 10 times and take the average and compare it to the
-> > baseline and print out the values, you'll see the increase latency values there.
-> >
-> > I can reproduce this at will, if you want to just throw patches at me I'm happy
-> > to run it and let you know what happens.  I'm attaching my .config as well in
-> > case that is needed, but the HZ and PREEMPT settings are
-> >
-> > CONFIG_NO_HZ_COMMON=y
-> > CONFIG_NO_HZ_FULL=y
-> > CONFIG_NO_HZ=y
-> > CONFIG_HZ_1000=y
-> > CONFIG_PREEMPT=y
-> > CONFIG_PREEMPT_COUNT=y
-> > CONFIG_PREEMPTION=y
-> > CONFIG_PREEMPT_DYNAMIC=y
-> > CONFIG_PREEMPT_RCU=y
-> > CONFIG_HAVE_PREEMPT_DYNAMIC=y
-> > CONFIG_PREEMPT_NOTIFIERS=y
-> > CONFIG_DEBUG_PREEMPT=y
-> 
-> Thanks for the report!
-> 
-> That patch you bisected does add more NOHZ kicks that aren't time-gated
-> like nohz.next_blocked / nohz.next_balance, so I'm thinking that a
-> pathological scenario would be a low-period bursty task which keeps
-> flicking a CPU idle/!idle. SCHED_SOFTIRQ running the NOHZ work on the
-> task's previous CPU would then repeatedly delay / force the task to be
-> placed on another CPU.
-> 
-> Would you happen to have execution traces by any chance? If not I should be
-> able to get one out of that fsperf thingie.
-> 
 
-I don't, if you want to tell me how I can do it right now.  I've disabled
-everything on this box for now so it's literally just sitting there waiting to
-have things done to it.  Thanks,
+--qhLQH2s+5hgBKos4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Josef
+On Mon, Nov 29, 2021 at 11:39:35PM +0530, Pratyush Yadav wrote:
+> On 09/11/21 11:49PM, Pratyush Yadav wrote:
+
+> > This is the best approach that I came up with with my limited knowledge
+> > of JSON schema. It has some limitations that are mentioned in patch 1. I
+> > don't know of any better ways to model this. Suggestions are welcome!
+
+> Do you plan to take this series through your tree or should I poke Mark=
+=20
+> about it?
+
+I'd expect to take it through my tree but please allow a reasonable time
+for reviews...
+
+--qhLQH2s+5hgBKos4
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGlGNUACgkQJNaLcl1U
+h9BdUAf8CPx2aYIuPUWc4Ka8OhpPDQXy+JJkgrtPsqFeOqDqSk2dwAUHat/zea2+
+GJatBwnEcSdBPtjJ9Lhu7MOI+Lj4255qllxHtem4dr4HtKUhFPFzxrlfaHpZ7b6g
+g3ilAzVvilA/svq+UldUzrI2X0x4eJx9vfb5DU57IJV55iYzKokCLUfcUxXPwGWi
+LXNwGOX8Gd8I+o9bnEUeAakeac+UEl0jwfyzea9wQb7+9QovJAFt0EfxnZ5aXXSL
+9Mg90x6V6YzzL06tntkPs4FNF7N5QrS+Lnb3temdqn21Wr3ezdCuf9wHwizXzyCz
+SA+x9BeNFM4Z6o72ym0004LMiYmb9w==
+=4TaM
+-----END PGP SIGNATURE-----
+
+--qhLQH2s+5hgBKos4--

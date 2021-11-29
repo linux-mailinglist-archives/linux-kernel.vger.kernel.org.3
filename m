@@ -2,187 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B3846145B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A83DC46130D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:04:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244080AbhK2L6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:58:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33112 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbhK2L4B (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:56:01 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678B5C0698DF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 02:57:38 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id j3so35844034wrp.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 02:57:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=7vafQL9VRNu9gFf/4mCpAetbH+x6q7yQT0LZFBgrIEY=;
-        b=FpAGCEzpMCHDlrye0BEfBwWwvSDdjJvOXWO1p1/HTeFUBw51K/pUg7ZN8+2hhZV2HV
-         22JTf8MK/JHZYUDXEZbC+03TcrFop82Q+qtsYPzjpgh0a2kz2Tyj31pCNAlSo0pVU0EN
-         1s2wOz2tBmMVxpJwr8CJDRVHdSqJ9GcDNjGn9KsDQYIjSjL3pOQzcOX38J8iZtCO7cVf
-         1VsNFoQ43N5HhmH8x/M4In50SZ0JugEpRq/2UnLc5Mhi5/l/XYzd/9rvORCsTXUtfH9K
-         hKbSLcZgq5l3o1EzWNRfQzE9J6l1tKsCqXva0OANeH17ADW9gxG5Ur3Js5eQVOUl0wJ0
-         lk7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=7vafQL9VRNu9gFf/4mCpAetbH+x6q7yQT0LZFBgrIEY=;
-        b=QPJFmtbBlLaIt/mMWm3mGHcubuMAYYFjTt7U/mtuGelDUYVglMbwWXBxtM216MD1mR
-         HD6RusaAOcqQI/+50fb2SBs6diFZpwUrFtX0xhoQeE3Rfh0Rm232ew2O6UXcep9c1c0N
-         ikIcu5aSo19apibhKmOVxCuylVLz+Sg7tDg9OyqEM57ngy3U3bsvJK0B69IuOy8P18Sm
-         7E2ZQoXanrDro0C42bCCwVU5iXsAUnvk8e9c7FBDJXBFCUdDNhT7BCb3U3KlRQH3eLhS
-         t+s6010KLYApRbhwN2zsZETgwude+561fiRUZrGmZnJpUfA9tZ0rx+Xi8JGhkqV6SkE6
-         NVtA==
-X-Gm-Message-State: AOAM532Zv71DYMieekjwR3qczARpiQS1chcfdBKnkNPlMr2+FlAm72V3
-        ppzdmdSq0pMp14AHF1LhvD7moQ==
-X-Google-Smtp-Source: ABdhPJwAU8YPWeu2RrOY2XQ41C34yLkIywEO8EJrMwhVry4Q5OSTPeXL1PW8RxfOB2Xl3zforekjfA==
-X-Received: by 2002:adf:d082:: with SMTP id y2mr32476986wrh.214.1638183456845;
-        Mon, 29 Nov 2021 02:57:36 -0800 (PST)
-Received: from elver.google.com ([2a00:79e0:15:13:aaf:77c4:3d2:af75])
-        by smtp.gmail.com with ESMTPSA id n1sm16528943wmq.6.2021.11.29.02.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 02:57:36 -0800 (PST)
-Date:   Mon, 29 Nov 2021 11:57:30 +0100
-From:   Marco Elver <elver@google.com>
-To:     Boqun Feng <boqun.feng@gmail.com>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH v2 03/23] kcsan: Avoid checking scoped accesses from
- nested contexts
-Message-ID: <YaSyGr4vW3yifWWC@elver.google.com>
-References: <20211118081027.3175699-1-elver@google.com>
- <20211118081027.3175699-4-elver@google.com>
- <YaSTn3JbkHsiV5Tm@boqun-archlinux>
+        id S1354403AbhK2LH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:07:29 -0500
+Received: from foss.arm.com ([217.140.110.172]:35932 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236585AbhK2LF0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 06:05:26 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3405B1042;
+        Mon, 29 Nov 2021 03:02:09 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4DCE23F694;
+        Mon, 29 Nov 2021 03:02:08 -0800 (PST)
+Date:   Mon, 29 Nov 2021 11:02:02 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: Linux 5.16-rc3
+Message-ID: <20211129110202.GA23795@lpieralisi>
+References: <CAHk-=wgtC_D-irsmyC89JPE1mnAAGJTc8qaNwaqcNUrt66TDMw@mail.gmail.com>
+ <20211129015909.GA921717@roeck-us.net>
+ <09df5c2a-8e03-8afd-ffe3-628dcd326497@infradead.org>
+ <53f0b09c-58b3-bd37-5309-5c43242cbecd@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YaSTn3JbkHsiV5Tm@boqun-archlinux>
-User-Agent: Mutt/2.0.5 (2021-01-21)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <53f0b09c-58b3-bd37-5309-5c43242cbecd@roeck-us.net>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 04:47PM +0800, Boqun Feng wrote:
-> Hi Marco,
-> 
-> On Thu, Nov 18, 2021 at 09:10:07AM +0100, Marco Elver wrote:
-> > Avoid checking scoped accesses from nested contexts (such as nested
-> > interrupts or in scheduler code) which share the same kcsan_ctx.
+On Sun, Nov 28, 2021 at 08:17:33PM -0800, Guenter Roeck wrote:
+> On 11/28/21 7:07 PM, Randy Dunlap wrote:
 > > 
-> > This is to avoid detecting false positive races of accesses in the same
+> > 
+> > On 11/28/21 17:59, Guenter Roeck wrote:
+> > > On Sun, Nov 28, 2021 at 02:21:20PM -0800, Linus Torvalds wrote:
+> > > > So rc3 is usually a bit larger than rc2 just because people had some
+> > > > time to start finding things.
+> > > > 
+> > > > So too this time, although it's not like this is a particularly big
+> > > > rc3. Possibly partly due to the past week having been Thanksgiving
+> > > > week here in the US. But the size is well within the normal range, so
+> > > > if that's a factor, it's not been a big one.
+> > > > 
+> > > > The diff for rc3 is mostly drivers, although part of that is just
+> > > > because of the removal of a left-over MIPS Netlogic driver which makes
+> > > > the stats look a bit wonky, and is over a third of the whole diff just
+> > > > in itself.
+> > > > 
+> > > > If you ignore that part, the statistics look a bit more normal, but
+> > > > drivers still dominate (network drivers, sound and gpu are the big
+> > > > ones, but there is noise all over). Other than that there's once again
+> > > > a fair amount of selftest (mostly networking), along with core
+> > > > networking, some arch updates - the bulk of it from a single arm64
+> > > > uaccess patch, although that's mostly because it's all pretty small -
+> > > > and random other changes.
+> > > > 
+> > > > Full shortlog below.
+> > > > 
+> > > > Please test,
+> > > > 
+> > > 
+> > > Build results:
+> > >     total: 153 pass: 152 fail: 1
+> > > Failed builds:
+> > >     mips:allmodconfig
+> > > Qemu test results:
+> > >     total: 482 pass: 482 fail: 0
+> > > 
+> > > Building mips:allmodconfig ... failed
+> > > --------------
+> > > Error log:
+> > > ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
+> > > ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
+> > > 
+> > > There is still no fix for the mips:allmodconfig build problem as far
+> > > as I can see. It is a bit odd, because the fix would be as simple as
+> > > 
+> > >   config PCIE_MT7621
+> > > -    tristate "MediaTek MT7621 PCIe Controller"
+> > > -    depends on (RALINK && SOC_MT7621) || (MIPS && COMPILE_TEST)
+> > > +    bool "MediaTek MT7621 PCIe Controller"
+> > > +    depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
+> > >       select PHY_MT7621_PCI
+> > >       default SOC_MT7621
+> > >       help
+> > > 
+> > > Context: tristate doesn't make sense here because both RALINK and
+> > > SOC_MT7621 are bool. Also, RALINK is redundant because SOC_MT7621
+> > > already depends on it. The compile failure is due to missing exported
+> > > symbols, and it is only seen if PCIE_MT7621=m - which is only possible
+> > > if COMPILE_TEST=y. In other words, the dependencies above are set such
+> > > that test builds, and only test builds, fail.
+> > > 
+> > > The problem was introduced with commit 2bdd5238e756 ("PCI: mt7621:
+> > > Add MediaTek MT7621 PCIe host controller driver"). Copying some of
+> > > those responsible to see if we can expect a solution sometime soon.
+> > 
+> > 
+> > I sent a patch for this a couple of weeks ago and Sergio replied to it
+> > here:
+> > 
+> > https://lore.kernel.org/linux-pci/CAMhs-H8TA0S23FjSRKGKeKAWWdUxET6YnivLQoFuy_fSVJOPXw@mail.gmail.com/
+> > 
+> > saying that is a different patch out there but that it had not
+> > been reviewed yet.
+> > 
 > 
-> Could you provide an example for a false positive?
-> 
-> I think we do want to detect the following race:
-> 
-> 	static int v = SOME_VALUE; // a percpu variable.
-> 	static int other_v = ... ;
-> 
-> 	void foo(..)
-> 	{
-> 		int tmp;
-> 		int other_tmp;
-> 
-> 		preempt_disable();
-> 		{
-> 			ASSERT_EXCLUSIVE_ACCESSS_SCOPED(v);
-> 			tmp = v;
-> 			
-> 			other_tmp = other_v; // int_handler() may run here
-> 			
-> 			v = tmp + 2;
-> 		}
-> 		preempt_enabled();
-> 	}
-> 
-> 	void int_handler() // an interrupt handler
-> 	{
-> 		v++;
-> 	}
-> 
-> , if I understand correctly, we can detect this currently, but with this
-> patch, we cannot detect this if the interrupt happens while we're doing
-> the check for "other_tmp = other_v;", right? Of course, running tests
-> multiple times may eventually catch this, but I just want to understand
-> what's this patch for, thanks!
+> All proposals I have seen assume that PCIE_MT7621=m. As I said, I think
+> that it is pointless to do that because the driver can only be built
+> as module if COMPILE_TEST=y. We should not [have to] export symbols
+> because of that.
 
-The above will still be detected. Task and interrupt contexts in this
-case are distinct, i.e. kcsan_ctx differ (see get_ctx()).
+Hi Sergio,
 
-But there are rare cases where kcsan_ctx is shared, such as nested
-interrupts (NMI?), or when entering scheduler code -- which currently
-has a KCSAN_SANITIZE := n, but I occasionally test it, which is how I
-found this problem. The problem occurs frequently when enabling KCSAN in
-kernel/sched and placing a random ASSERT_EXCLUSIVE_ACCESS_SCOPED() in
-task context, or just enable "weak memory modeling" without this fix.
-You also need CONFIG_PREEMPT=y + CONFIG_KCSAN_INTERRUPT_WATCHER=y.
-
-The emphasis here really is on _shared kcsan_ctx_, which is not too
-common. As noted in the commit description, we need to "[...] setting up
-a watchpoint for a non-scoped (normal) access that also "conflicts" with
-a current scoped access."
-
-Consider this:
-
-	static int v;
-	int foo(..)
-	{
-		ASSERT_EXCLUSIVE_ACCESS_SCOPED(v);
-		v++; // preempted during watchpoint for 'v++'
-	}
-
-Here we set up a scoped_access to be checked for v. Then on v++, a
-watchpoint is set up for the normal access. While the watchpoint is set
-up, the task is preempted and upon entering scheduler code, we're still
-in_task() and 'current' is still the same, thus get_ctx() returns a
-kcsan_ctx where the scoped_accesses list is non-empty containing the
-scoped access for foo()'s ASSERT_EXCLUSIVE.
-
-That means, when instrumenting scheduler code or any other code called
-by scheduler code or nested interrupts (anything where get_ctx() still
-returns the same as parent context), it'd now perform checks based on
-the parent context's scoped access, and because the parent context also
-has a watchpoint set up on the variable that conflicts with the scoped
-access we'd report a nonsensical race.
-
-This case is also possible:
-
-	static int v;
-	static int x;
-	int foo(..)
-	{
-		ASSERT_EXCLUSIVE_ACCESS_SCOPED(v);
-		x++; // preempted during watchpoint for 'v' after checking x++
-	}
-
-Here, all we need is for the scoped access to be checked after x++, end
-up with a watchpoint for it, then enter scheduler code, which then
-checked 'v', sees the conflicting watchpoint, and reports a nonsensical
-race again.
-
-By disallowing scoped access checking for a kcsan_ctx, we simply make
-sure that in such nested contexts where kcsan_ctx is shared, none of
-these nonsensical races would be detected nor reported.
-
-Hopefully that clarifies what this is about.
+can we converge to a fix with this thread background in mind please ?
 
 Thanks,
--- Marco
+Lorenzo

@@ -2,208 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC784625F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0578746259D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:38:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234629AbhK2Wpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:45:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
+        id S234364AbhK2WlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235017AbhK2Wor (ORCPT
+        with ESMTP id S234200AbhK2WkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:44:47 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C82A2C1404D8;
-        Mon, 29 Nov 2021 10:30:33 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id a9so38860830wrr.8;
-        Mon, 29 Nov 2021 10:30:33 -0800 (PST)
+        Mon, 29 Nov 2021 17:40:05 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D8FC047CC4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:31:01 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b40so47080694lfv.10
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:31:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1/CwQ12ShLmacvJ1YWb4vFM7M7bJgoNSB+8djXb70J8=;
-        b=JIZ3TcK/4QVWjkktk1XNt3FaGg3NPql/JVcH3scPqsZSC5Eax+EbKByaMv1MCmzOpk
-         xX+gkv4AP7xVDLlSxsnOVwh6WyFMCKtOwRtd4jHy0JN4TrIjbL0c37JBRBJYzsIZtMcK
-         Rj0JOTRJmBAkH/O8Z7ondD4Ng2WXXSVGCNDSqwdZQsHJTd75plFAC7uvpAEM2WD5Uxx7
-         cZ0PRT/q8JUYGSbYCSHy07H3yb3ltpR2lT0Ei/CL7Y1LIUzVzQcx9KlOgvwiYyYT5Rv0
-         rn3BXZovIji0cfJRzWELSXVupzOVHXlLXs/es1oEHtpwcIhxx/oImd4Txfd/8yEuQmRt
-         7boQ==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3cNMSwt45ock9pSAjkXBM1gUWmDWeBPaQRr1gZTZ0gI=;
+        b=Is26+2qi06IhBeX6mUmRAomd6VgRCRKKQEkHS/ElA8ydGNoR3lIDA0vLJqdmMMwIsz
+         VHwNDGTPz1lEon4iVKImIQZ3rVE+KecLBIY4sHTSFYfiI7MVlgWIlYFpnHfD2O+5IOqX
+         oaTmAiEXdKL4ZK56UuLk7bl/wP1+PzqVenx1m2edYaqq636bJjmxLXB6a+veiwKWiEdZ
+         fMd7ZXDe+R7pkUL7V0UVbd1S3zZeIgmjRX7ve2BG+l67WhSOjZ0yeBwy6JzO/ZG72TUX
+         6tXA5Uv7gzT2CaxdF44j6IiNqpvQp+NqFk58+O4MoIfRT8rZCB7BxNlYCMyWLftQaMAb
+         RShw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=1/CwQ12ShLmacvJ1YWb4vFM7M7bJgoNSB+8djXb70J8=;
-        b=CVCHilDn219yPd5tsM3IqS+cdCMYvaamr82yonzGqlZvNpHvtpFXAwR5HJvMGqOUaE
-         WFo0+PQNHvzXLgeSfLh9ZcxNqthsWls/OGiIg1Dx8+x/EL8hpMP3N3LyAli7TAQWnsC+
-         KrzsJIVkQOnJFXM2uXuVoB1owPRP00MywszJKT4f9c88TDjrMxUTfRyrxvbYDFyxSi3W
-         T/TRdX6KyuoJjZz+0sttWB2cHmZR3c7eA3OWjC7K8R3inxust9edLduaGynt7MiceHAJ
-         Og4NxTKdh1Clk9pnN8CTD1hRsEmkAcNXaPZTkZ2IlmMJyTwf0Piqjo4F4b76Ka8xmnYT
-         YQbQ==
-X-Gm-Message-State: AOAM5320kJiQnRRcqN7S5lZED0Hpt6en/leIo7Ln59sTfnh/HtPK8o9Y
-        6OX2umrLlhO+Fnmw6IJgZVTC3nxaZ388CQ==
-X-Google-Smtp-Source: ABdhPJyAm+oTAjAgnH9K0Qb6WIc1qU8yq6dloiZVp4/ZRDicxlIFKJMm2SWeqBY39j3KXN26RkTo2g==
-X-Received: by 2002:adf:9e01:: with SMTP id u1mr35778156wre.561.1638210632098;
-        Mon, 29 Nov 2021 10:30:32 -0800 (PST)
-Received: from eldamar (80-218-24-251.dclient.hispeed.ch. [80.218.24.251])
-        by smtp.gmail.com with ESMTPSA id z6sm104695wmp.9.2021.11.29.10.30.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 10:30:31 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Mon, 29 Nov 2021 19:30:30 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Ben Hutchings <benh@debian.org>
-Subject: Re: [PATCH 4.19 088/323] locking/lockdep: Avoid RCU-induced noinstr
- fail
-Message-ID: <YaUcRuy050ZrtucJ@eldamar.lan>
-References: <20211124115718.822024889@linuxfoundation.org>
- <20211124115721.937655496@linuxfoundation.org>
- <YaNP46ypf6xcTcJH@eldamar.lan>
- <YaNvGtWfuCRkmWwi@eldamar.lan>
- <YaNx31QvvjHy2IGh@eldamar.lan>
- <YaN+1gwQwt0aGKte@kroah.com>
- <YaN/ZQYSAUfzjq0d@kroah.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3cNMSwt45ock9pSAjkXBM1gUWmDWeBPaQRr1gZTZ0gI=;
+        b=Smc0RnRfVrTIxnHprpzfOxP6YCDHET5rDHJqra8QXzwM13sJvcQbjNTH/IbDKODmVQ
+         Mp1mfqBpzahmNH5DHlyAD4Tn3iSfPeNSEpwQov2tdm+B6ls12WHLXzsekMSkoAKy4JxZ
+         8CYD9jURbRnLpZMfyu+ihrIQyg83k/kdSfmBP5SM/HZJVWWOhMUxslZA/ErbfrYHYr3m
+         r9uRE089oV92kfJYlFMijx2dvHsNJe49hNZkElEqlsjwg2I1+6B6f6Ic7zT0ibQrgPD2
+         gEd3e2sHSqN/TLYbkONvYWVRuBX95smr0xCsWXOy7vczfJbNCUSKLeMUJnMNDyQr3EwK
+         8muA==
+X-Gm-Message-State: AOAM5303N0a+4NY8DrmPJRpz/yGDeyrV9wFxSBdml0Zu9pUCCkTKppGU
+        nid8r543JI0urpa7ONq9oAXjkju/3l0r+HeOfWoLjw==
+X-Google-Smtp-Source: ABdhPJz6dTs7OIKfCj9AdUmQMX4Sqh7ZuZ9v3AsgeE+6RyGPUJnSXVhzX8RTGetchysB6Qz1lZmbh9+C1lZNlb2Cm80=
+X-Received: by 2002:a05:6512:607:: with SMTP id b7mr50143383lfe.489.1638210659100;
+ Mon, 29 Nov 2021 10:30:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YaN/ZQYSAUfzjq0d@kroah.com>
+References: <20211129165803.470795-1-nathan@kernel.org>
+In-Reply-To: <20211129165803.470795-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 29 Nov 2021 10:30:48 -0800
+Message-ID: <CAKwvOdn9o+5TfauYr+ZDngTZEDxVRQka1T3vOEoE=ByFg=n5=w@mail.gmail.com>
+Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Tom Stellard <tstellar@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
+        kernelci@groups.io, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Mon, Nov 29, 2021 at 9:01 AM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> This patch series raises the minimum supported version of LLVM to
+> 11.0.0.
+>
+> Patch #1 outlines the issue, goes over the potential impact of the
+> change, and does the actual bump. Subsequent patches clean up the
+> various checks that are always true after the bump.
+>
+> I have marked this revision as RFC to give various parties the option to
+> comment on this bump before it is done, namely KernelCI and Linaro's
+> LKFT, who are still testing clang-10. I have added some other folks to
+> CC that I know are testing with clang to see if this impacts them in any
+> way (as I would like to impact as few people as possible) but as far as
+> I am aware, most other CIs and developers are testing closer to tip of
+> tree. If that is not true, scream so that we can see what can be done
+> about that. If I missed anyone who is actively testing with clang,
+> please key them in and I will make sure to include them in future
+> revisions (if any are needed).
+>
+> It probably makes sense for this series to live in -mm.
 
-(Adding Ben as well)
+Series looks good to me. Thanks for the patch, and cleanups!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-On Sun, Nov 28, 2021 at 02:08:53PM +0100, Greg Kroah-Hartman wrote:
-> On Sun, Nov 28, 2021 at 02:06:30PM +0100, Greg Kroah-Hartman wrote:
-> > On Sun, Nov 28, 2021 at 01:11:11PM +0100, Salvatore Bonaccorso wrote:
-> > > Hi,
-> > > 
-> > > On Sun, Nov 28, 2021 at 12:59:24PM +0100, Salvatore Bonaccorso wrote:
-> > > > Hi,
-> > > > 
-> > > > On Sun, Nov 28, 2021 at 10:46:13AM +0100, Salvatore Bonaccorso wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > On Wed, Nov 24, 2021 at 12:54:38PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > From: Peter Zijlstra <peterz@infradead.org>
-> > > > > > 
-> > > > > > [ Upstream commit ce0b9c805dd66d5e49fd53ec5415ae398f4c56e6 ]
-> > > > > > 
-> > > > > > vmlinux.o: warning: objtool: look_up_lock_class()+0xc7: call to rcu_read_lock_any_held() leaves .noinstr.text section
-> > > > > 
-> > > > > For 4.19.218 at least this commit seems to cause a build failure for
-> > > > > cpupower, if warnings are treated as errors, I have not seen the same
-> > > > > for the 5.10.80 build:
-> > > > > 
-> > > > > gcc -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -DVERSION=\"4.19\" -DPACKAGE=\"cpupower\" -DPACKAGE_BUGREPORT=\"Debian\ \(reportbug\ linux-cpupower\)\" -D_GNU_SOURCE -pipe -DNLS -Wall -Wchar-subscripts -Wpointer-arith
-> > > > >  -Wsign-compare -Wno-pointer-sign -Wdeclaration-after-statement -Wshadow -Os -fomit-frame-pointer -fPIC -o /home/build/linux-4.19.218/debian/build/build-tools/tools/power/cpupower/lib/cpupower.o -c lib/cpupower.c
-> > > > > In file included from lockdep.c:28:
-> > > > > ../../../kernel/locking/lockdep.c: In function ‘look_up_lock_class’:
-> > > > > ../../../kernel/locking/lockdep.c:694:2: error: implicit declaration of function ‘hlist_for_each_entry_rcu_notrace’; did you mean ‘hlist_for_each_entry_continue’? [-Werror=implicit-function-declaration]
-> > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > > >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > >   hlist_for_each_entry_continue
-> > > > > ../../../kernel/locking/lockdep.c:694:53: error: ‘hash_entry’ undeclared (first use in this function); did you mean ‘hash_ptr’?
-> > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > > >                                                      ^~~~~~~~~~
-> > > > >                                                      hash_ptr
-> > > > > ../../../kernel/locking/lockdep.c:694:53: note: each undeclared identifier is reported only once for each function it appears in
-> > > > > ../../../kernel/locking/lockdep.c:694:64: error: expected ‘;’ before ‘{’ token
-> > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > > >                                                                 ^~
-> > > > >                                                                 ;
-> > > > > ../../../kernel/locking/lockdep.c:706:1: warning: control reaches end of non-void function [-Wreturn-type]
-> > > > >  }
-> > > > >  ^
-> > > > > cc1: some warnings being treated as errors
-> > > > > make[5]: *** [/home/build/linux-4.19.218/tools/build/Makefile.build:97: /home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep/lockdep.o] Error 1
-> > > > > make[4]: *** [Makefile:121: /home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep/liblockdep-in.o] Error 2
-> > > > > make[4]: Leaving directory '/home/build/linux-4.19.218/tools/lib/lockdep'
-> > > > > make[3]: *** [/home/build/linux-4.19.218/debian/rules.d/tools/lib/lockdep/Makefile:16: all] Error 2
-> > > > > make[3]: Leaving directory '/home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep'
-> > > > > make[2]: *** [debian/rules.real:795: build-liblockdep] Error 2
-> > > > > make[2]: *** Waiting for unfinished jobs....
-> > > > > 
-> > > > > I was not yet able to look further on it.
-> > > > 
-> > > > Might actually be a distro specific issue, needs some further
-> > > > investigation.
-> > > 
-> > > I'm really sorry about the doubled noice, so here is the stance. I can
-> > > reproduce distro indpeendent, but the initial claim was wrong. It can
-> > > be reproduced for 4.19.218:
-> > > 
-> > > $ LC_ALL=C.UTF-8 V=1 ARCH=x86 make -C tools liblockdep
-> > > make: Entering directory '/home/build/linux-stable/tools'
-> > > mkdir -p lib/lockdep && make  subdir=lib/lockdep  -C lib/lockdep 
-> > > make[1]: Entering directory '/home/build/linux-stable/tools/lib/lockdep'
-> > > make -f /home/build/linux-stable/tools/build/Makefile.build dir=. obj=fixdep
-> > >   gcc -Wp,-MD,./.fixdep.o.d -Wp,-MT,fixdep.o  -D"BUILD_STR(s)=#s"   -c -o fixdep.o fixdep.c
-> > >    ld -r -o fixdep-in.o  fixdep.o
-> > > gcc  -o fixdep fixdep-in.o
-> > >   gcc -Wp,-MD,./.common.o.d -Wp,-MT,common.o -g -DCONFIG_LOCKDEP -DCONFIG_STACKTRACE -DCONFIG_PROVE_LOCKING -DBITS_PER_LONG=__WORDSIZE -DLIBLOCKDEP_VERSION='"4.19.218"' -rdynamic -O0 -g -fPIC -Wall -I. -I./uinclude -I./include -I../../include -D"BUILD_STR(s)=#s" -c -o common.o common.c
-> > >   gcc -Wp,-MD,./.lockdep.o.d -Wp,-MT,lockdep.o -g -DCONFIG_LOCKDEP -DCONFIG_STACKTRACE -DCONFIG_PROVE_LOCKING -DBITS_PER_LONG=__WORDSIZE -DLIBLOCKDEP_VERSION='"4.19.218"' -rdynamic -O0 -g -fPIC -Wall -I. -I./uinclude -I./include -I../../include -D"BUILD_STR(s)=#s" -c -o lockdep.o lockdep.c
-> > > In file included from lockdep.c:28:
-> > > ../../../kernel/locking/lockdep.c: In function ‘look_up_lock_class’:
-> > > ../../../kernel/locking/lockdep.c:692:2: warning: implicit declaration of function ‘hlist_for_each_entry_rcu_notrace’; did you mean ‘hlist_for_each_entry_continue’? [-Wimplicit-function-declaration]
-> > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >   hlist_for_each_entry_continue
-> > > ../../../kernel/locking/lockdep.c:692:53: error: ‘hash_entry’ undeclared (first use in this function); did you mean ‘hash_ptr’?
-> > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > >                                                      ^~~~~~~~~~
-> > >                                                      hash_ptr
-> > > ../../../kernel/locking/lockdep.c:692:53: note: each undeclared identifier is reported only once for each function it appears in
-> > > ../../../kernel/locking/lockdep.c:692:64: error: expected ‘;’ before ‘{’ token
-> > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > >                                                                 ^~
-> > >                                                                 ;
-> > > ../../../kernel/locking/lockdep.c:704:1: warning: control reaches end of non-void function [-Wreturn-type]
-> > >  }
-> > >  ^
-> > > make[2]: *** [/home/build/linux-stable/tools/build/Makefile.build:97: lockdep.o] Error 1
-> > > make[1]: *** [Makefile:121: liblockdep-in.o] Error 2
-> > > make[1]: Leaving directory '/home/build/linux-stable/tools/lib/lockdep'
-> > > make: *** [Makefile:66: liblockdep] Error 2
-> > > make: Leaving directory '/home/build/linux-stable/tools'
-> > > 
-> > > Reverting upstream ce0b9c805dd6 ("locking/lockdep: Avoid RCU-induced
-> > > noinstr fail") on top of 4.19.218 fixes the issue.
-> > > 
-> > > So back to square one, and again apologies for the intermediate noise!
-> > 
-> > What config/arch is causing this to break?  And if you add rchlist.h to
-> > the include files for lockdep.c, does that resolve the issue?  I haven't
-> > seen any other reports of this yet.
-> 
-> Ah, it's the tools being built here, sorry, that was confusing.
+>
+> Nathan Chancellor (6):
+>   Documentation: Raise the minimum supported version of LLVM to 11.0.0
+>   mm, slab: Remove compiler check in __kmalloc_index
+>   arch/Kconfig: Remove CLANG_VERSION check in HAS_LTO_CLANG
+>   Revert "ARM: 9070/1: Make UNWINDER_ARM depend on ld.bfd or ld.lld
+>     11.0.0+"
+>   gcov: Remove compiler version check
+>   init/Kconfig: Drop linker version check for LD_ORPHAN_WARN
+>
+>  Documentation/process/changes.rst | 2 +-
+>  arch/Kconfig                      | 3 +--
+>  arch/arm/Kconfig.debug            | 2 --
+>  include/linux/slab.h              | 3 +--
+>  init/Kconfig                      | 1 -
+>  kernel/gcov/Kconfig               | 1 -
+>  scripts/min-tool-version.sh       | 2 +-
+>  7 files changed, 4 insertions(+), 10 deletions(-)
+>
+>
+> base-commit: d58071a8a76d779eedab38033ae4c821c30295a5
+> --
+> 2.34.1
+>
+>
 
-Ah yes, sorry this was not clear. It's all about the tools, which some
-are built as well as packages in Debian accompaning, tools/lib/lockdep
-is one of those built.
 
-> Yes, I can duplicate this, when building liblockdep.  As that code just
-> got ripped out of upstream, perhaps just use the out-of-tree code
-> instead now?
-
-That's tricky. Even though lockep is probably only usefull for Kernel
-developers, we usually cannot drop a package built in a stable
-release. If it's not fixable in upstream and the respective stable
-series, then we might need to find a suitable fix downstream to make
-it build.
-
-Speaking of Debian: Last resort would probably be still to drop the
-package in the stable release.
-
-I know lockdep was ripped in v5.16-rc1, but AFAIK lockdep has not
-found a new home yet out of tree.
-
-Regards,
-Salvatore
+-- 
+Thanks,
+~Nick Desaulniers

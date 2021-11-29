@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB96461E02
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1044461E84
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378895AbhK2Sbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:31:31 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:48602 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378849AbhK2S31 (ORCPT
+        id S1379725AbhK2Sgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:36:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37258 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354777AbhK2Sen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:29:27 -0500
+        Mon, 29 Nov 2021 13:34:43 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1BC77CE13F9;
-        Mon, 29 Nov 2021 18:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE56CC53FD2;
-        Mon, 29 Nov 2021 18:26:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B235EB815B1;
+        Mon, 29 Nov 2021 18:31:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA32CC53FC7;
+        Mon, 29 Nov 2021 18:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210366;
-        bh=x4WhqPn1skGoKyCfANKh4dgRIuLWcoEaJA8mHcJpKkI=;
+        s=korg; t=1638210683;
+        bh=Vtq3xw5BKtUOnlV9IrZNnYmN0WomtlWx7C0pszlLM+Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nQU0dYDVr9Ksx0xXJxZAVoV2niSgC8U7CjRRCHEXEm8rVjbQpiqV4zOnhIZI5fqwl
-         PkIbckhuPdwjpo7yIUBW+FKO1srPKNZDEg/rM7s4qUjVh+UWQ8aGIJvRcvQm/JCDqX
-         jzzVU8cU+YrooQAm6jvP4yFRC2dzJDJO0dnhiboA=
+        b=inMbTVek3AOxr7mdFBownmjZ+lktDIVT26dtEPkqrLhZE0XNMGvr4n9++TKp1yYqQ
+         2sGWa/L+Kyg1aiYOXeJH94ABUmNZn99p2PA/dJImzS4XajIVR32v9mZwWh0HyMPfPG
+         J1HAfV0DJeujDl4Q/M8TEsWfnbzRpuCumx8/3UXc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 62/92] scsi: core: sysfs: Fix setting device state to SDEV_RUNNING
-Date:   Mon, 29 Nov 2021 19:18:31 +0100
-Message-Id: <20211129181709.481514029@linuxfoundation.org>
+Subject: [PATCH 5.10 081/121] PM: hibernate: use correct mode for swsusp_close()
+Date:   Mon, 29 Nov 2021 19:18:32 +0100
+Message-Id: <20211129181714.385344135@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
-References: <20211129181707.392764191@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+References: <20211129181711.642046348@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,39 +47,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
 
-[ Upstream commit eb97545d6264b341b06ba7603f52ff6c0b2af6ea ]
+[ Upstream commit cefcf24b4d351daf70ecd945324e200d3736821e ]
 
-This fixes an issue added in commit 4edd8cd4e86d ("scsi: core: sysfs: Fix
-hang when device state is set via sysfs") where if userspace is requesting
-to set the device state to SDEV_RUNNING when the state is already
-SDEV_RUNNING, we return -EINVAL instead of count. The commmit above set ret
-to count for this case, when it should have set it to 0.
+Commit 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in
+swsusp_check()") changed the opening mode of the block device to
+(FMODE_READ | FMODE_EXCL).
 
-Link: https://lore.kernel.org/r/20211120164917.4924-1-michael.christie@oracle.com
-Fixes: 4edd8cd4e86d ("scsi: core: sysfs: Fix hang when device state is set via sysfs")
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+In the corresponding calls to swsusp_close(), the mode is still just
+FMODE_READ which triggers the warning in blkdev_flush_mapping() on
+resume from hibernate.
+
+So, use the mode (FMODE_READ | FMODE_EXCL) also when closing the
+device.
+
+Fixes: 39fbef4b0f77 ("PM: hibernate: Get block device exclusively in swsusp_check()")
+Signed-off-by: Thomas Zeitlhofer <thomas.zeitlhofer+lkml@ze-it.at>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_sysfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/power/hibernate.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
-index 16432d42a50aa..6faf1d6451b0c 100644
---- a/drivers/scsi/scsi_sysfs.c
-+++ b/drivers/scsi/scsi_sysfs.c
-@@ -796,7 +796,7 @@ store_state_field(struct device *dev, struct device_attribute *attr,
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 2fc7d509a34fc..bf640fd6142a0 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -688,7 +688,7 @@ static int load_image_and_restore(void)
+ 		goto Unlock;
  
- 	mutex_lock(&sdev->state_mutex);
- 	if (sdev->sdev_state == SDEV_RUNNING && state == SDEV_RUNNING) {
--		ret = count;
-+		ret = 0;
- 	} else {
- 		ret = scsi_device_set_state(sdev, state);
- 		if (ret == 0 && state == SDEV_RUNNING)
+ 	error = swsusp_read(&flags);
+-	swsusp_close(FMODE_READ);
++	swsusp_close(FMODE_READ | FMODE_EXCL);
+ 	if (!error)
+ 		error = hibernation_restore(flags & SF_PLATFORM_MODE);
+ 
+@@ -978,7 +978,7 @@ static int software_resume(void)
+ 	/* The snapshot device should not be opened while we're running */
+ 	if (!hibernate_acquire()) {
+ 		error = -EBUSY;
+-		swsusp_close(FMODE_READ);
++		swsusp_close(FMODE_READ | FMODE_EXCL);
+ 		goto Unlock;
+ 	}
+ 
+@@ -1013,7 +1013,7 @@ static int software_resume(void)
+ 	pm_pr_dbg("Hibernation image not present or could not be loaded.\n");
+ 	return error;
+  Close_Finish:
+-	swsusp_close(FMODE_READ);
++	swsusp_close(FMODE_READ | FMODE_EXCL);
+ 	goto Finish;
+ }
+ 
 -- 
 2.33.0
 

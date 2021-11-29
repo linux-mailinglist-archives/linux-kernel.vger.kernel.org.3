@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1812E461EF8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7CBF461DD1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:26:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355017AbhK2SmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:42:12 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:42612 "EHLO
+        id S1350841AbhK2S3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:29:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60386 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379332AbhK2SkI (ORCPT
+        with ESMTP id S1378241AbhK2S1U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:40:08 -0500
+        Mon, 29 Nov 2021 13:27:20 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 450E3B815D4;
-        Mon, 29 Nov 2021 18:36:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DAFFC53FAD;
-        Mon, 29 Nov 2021 18:36:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C505B815C3;
+        Mon, 29 Nov 2021 18:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86EBC53FAD;
+        Mon, 29 Nov 2021 18:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638211008;
-        bh=djMT1jroNL58Oss+UaQjxdK/neylESckMbZRUTQt6Z0=;
+        s=korg; t=1638210240;
+        bh=eOBE9rN6BA+5Z4RsBbrqrbKjZS+2LWioD2bBVZ3nVN4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HxRRxREL5yGfLEfPtqa4UBbttn3morKhhdglkvnGjPnuAwMMOCpuxxZR3yT/o2PB9
-         nPLT/LcObgbDBwOTwEbTvBIPdBiR4n1ApLxjZ9fEBqlC/rhPWOxL+YEiMKGkQd9RKp
-         tNgB+Ez7liol85/etYaVDLYGnmyq/Hx47afDB28M=
+        b=G871gf0ghaPtERLa6WG9HvQUrnw8IDl5L1WRFeHHYDSvqV6PMivM+KopgijIKFE1q
+         +RI0fL6RACUSnjwo27Q1mH911+SoVfpecK2c0HhXSiKXpB+fch0GYv76q/c2I7JmVh
+         txHbUslFJAoVga89ogqNtNODA+8AHc3i742b45Ck=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 072/179] ARM: dts: BCM5301X: Add interrupt properties to GPIO node
-Date:   Mon, 29 Nov 2021 19:17:46 +0100
-Message-Id: <20211129181721.318020240@linuxfoundation.org>
+        stable@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+Subject: [PATCH 5.4 19/92] tracing/uprobe: Fix uprobe_perf_open probes iteration
+Date:   Mon, 29 Nov 2021 19:17:48 +0100
+Message-Id: <20211129181708.061686496@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
-References: <20211129181718.913038547@linuxfoundation.org>
+In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
+References: <20211129181707.392764191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,36 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Jiri Olsa <jolsa@redhat.com>
 
-[ Upstream commit 40f7342f0587639e5ad625adaa15efdd3cffb18f ]
+commit 1880ed71ce863318c1ce93bf324876fb5f92854f upstream.
 
-The GPIO controller is also an interrupt controller provider and is
-currently missing the appropriate 'interrupt-controller' and
-'#interrupt-cells' properties to denote that.
+Add missing 'tu' variable initialization in the probes loop,
+otherwise the head 'tu' is used instead of added probes.
 
-Fixes: fb026d3de33b ("ARM: BCM5301X: Add Broadcom's bus-axi to the DTS file")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lkml.kernel.org/r/20211123142801.182530-1-jolsa@kernel.org
+
+Cc: stable@vger.kernel.org
+Fixes: 99c9a923e97a ("tracing/uprobe: Fix double perf_event linking on multiprobe uprobe")
+Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/bcm5301x.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ kernel/trace/trace_uprobe.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
-index 437a2b0f68de3..f69d2af3c1fa4 100644
---- a/arch/arm/boot/dts/bcm5301x.dtsi
-+++ b/arch/arm/boot/dts/bcm5301x.dtsi
-@@ -242,6 +242,8 @@ chipcommon: chipcommon@0 {
+--- a/kernel/trace/trace_uprobe.c
++++ b/kernel/trace/trace_uprobe.c
+@@ -1299,6 +1299,7 @@ static int uprobe_perf_open(struct trace
+ 		return 0;
  
- 			gpio-controller;
- 			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
- 		};
- 
- 		pcie0: pcie@12000 {
--- 
-2.33.0
-
+ 	list_for_each_entry(pos, trace_probe_probe_list(tp), list) {
++		tu = container_of(pos, struct trace_uprobe, tp);
+ 		err = uprobe_apply(tu->inode, tu->offset, &tu->consumer, true);
+ 		if (err) {
+ 			uprobe_perf_close(call, event);
 
 

@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4796B461523
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7084D461527
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376811AbhK2Mfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:35:31 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59322 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244746AbhK2Md3 (ORCPT
+        id S1377182AbhK2Mfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 07:35:50 -0500
+Received: from mail-ua1-f46.google.com ([209.85.222.46]:42740 "EHLO
+        mail-ua1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229703AbhK2Mdr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:33:29 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3B7CB8105A;
-        Mon, 29 Nov 2021 12:30:10 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 717DA60184;
-        Mon, 29 Nov 2021 12:30:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638189009;
-        bh=YumIVWW8v4CgXiygB9D+c81bh6Mc4361zipd22kWrcs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=bORHPDKpD09HrJC4raYE+/dvcGxogT8lIugWpsBnpDKB9pvomlIRV4hpIjGWWkstE
-         Pi+as2VOZsngMQdk4zvgoQ15yXHKlAkKwhTrvof2/LX/fZIZULuwr6vhm8b9sn76LS
-         cAwKTFh7THT/o8ISjx9MExXVf6AHsLUMq+LCFmYnezWJ0vuS5CYlRczbgHrL3ubeS1
-         owIHCXoBDN+HpZ/NP7NNMBghk/O2v9mEB3bGBGHxf4jxgIiWEngXW1YtKmQkoP9egZ
-         7wFq6gqZhMgWrr7MIdwesYjSptt06Ys2wIv4UStJUcBlMMqXLZXUNbZWypZd7k4xpB
-         93L3tVCostTqA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 6066760A45;
-        Mon, 29 Nov 2021 12:30:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 29 Nov 2021 07:33:47 -0500
+Received: by mail-ua1-f46.google.com with SMTP id t13so33585678uad.9;
+        Mon, 29 Nov 2021 04:30:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=8PEIUoQlSa7P3fpibfgMKclAfPeJy9X1SLFDcaBhJyE=;
+        b=K2aaS7zXrvDEYVP0xed/pUw49q4ajUL4AIK3rAs4e8NCha4ekvjJQEidhwTZI7vQec
+         NBFvQAAzEAmNMTsqfIJplvxvdyYUYGBmjlv7k8e1vjOvm9GIt2fl+gZfnZ+L2kAyTH/6
+         otZvq5oU4k0rhEPVZ3aUr3ckw9S2waFaMKNzaX8wLsJknsZYyS6SuYDD6fC2QzmVsaPX
+         awvPxdLP3X9GJUyCwGoMF8A7t702Q7Th6x7TzHKhOBPCPYL9Xig4pwrbnjeCkxVIzXEA
+         ICRmQZj6XYpOAg+XOZl/03TmQJeagPPwwvzdvyEPKteKZ6kR8qqACWGAy2DwMpGE703e
+         ptMg==
+X-Gm-Message-State: AOAM531NTxKJhD+RWvo4mqqUfzRgR1LYMq+iy1E0ouMv6cPc97kwImgm
+        it6RKHNSNKNyG2guHhtL13zepwujDdKGig==
+X-Google-Smtp-Source: ABdhPJxSF2tx4Ox31Gi2K8SyOdzDnIJzOUHx/0L011hyyduJh/7QOAZmPTQ+eeUSn0pZWXUpHJlB5Q==
+X-Received: by 2002:a67:2f05:: with SMTP id v5mr30798497vsv.25.1638189029670;
+        Mon, 29 Nov 2021 04:30:29 -0800 (PST)
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com. [209.85.221.172])
+        by smtp.gmail.com with ESMTPSA id c21sm8290589vso.21.2021.11.29.04.30.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 04:30:29 -0800 (PST)
+Received: by mail-vk1-f172.google.com with SMTP id s17so10907864vka.5;
+        Mon, 29 Nov 2021 04:30:29 -0800 (PST)
+X-Received: by 2002:a1f:4641:: with SMTP id t62mr17689913vka.0.1638189029111;
+ Mon, 29 Nov 2021 04:30:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/2] net: wwan: Add Qualcomm BAM-DMUX WWAN network
- driver
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163818900938.24631.13563359260502643872.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Nov 2021 12:30:09 +0000
-References: <20211127173108.3992-1-stephan@gerhold.net>
-In-Reply-To: <20211127173108.3992-1-stephan@gerhold.net>
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     davem@davemloft.net, kuba@kernel.org, loic.poulain@linaro.org,
-        ryazanov.s.a@gmail.com, johannes@sipsolutions.net,
-        bjorn.andersson@linaro.org, agross@kernel.org, robh+dt@kernel.org,
-        aleksander@aleksander.es, netdev@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, jeffrey.l.hugo@gmail.com
+References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
+ <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
+ <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com> <20211129122052.GA7921@alpha.franken.de>
+In-Reply-To: <20211129122052.GA7921@alpha.franken.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 29 Nov 2021 13:30:17 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com>
+Message-ID: <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software nodes
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Thomas,
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+On Mon, Nov 29, 2021 at 1:21 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+> On Fri, Nov 26, 2021 at 01:16:22PM +0100, Geert Uytterhoeven wrote:
+> > On Fri, Nov 26, 2021 at 11:58 AM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > On Fri, Nov 26, 2021 at 11:23 AM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > In order to get rid of legacy platform data in AT25 driver,
+> > > > convert its users to use software nodes.
+> > > >
+> > > > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > >
+> > > This looks good to me, thanks for cleaning this up! I think Geert has this
+> > > hardware, adding him to Cc in case he wants to give it a spin.
+> >
+> > The SPI controller is only present on TX4938, not on TX4927, so it is
+> > unused on my rbtx4927 board.
+> >
+> > > >  arch/mips/include/asm/txx9/spi.h    |  4 ++--
+> > > >  arch/mips/txx9/generic/spi_eeprom.c | 32 +++++++++++++++++------------
+> > > >  arch/mips/txx9/rbtx4938/setup.c     |  6 +++---
+> > > >  3 files changed, 24 insertions(+), 18 deletions(-)
+> >
+> > Probably all of this can be removed, given the SPI controller driver
+> > itself was removed in commit 74523a5dae0c96d6 ("spi: txx9: Remove
+> > driver")?
+>
+> are you ok with completly removing rbtx4938 support ? Can I rbtx4939
+> board support, too ?
 
-On Sat, 27 Nov 2021 18:31:06 +0100 you wrote:
-> The BAM Data Multiplexer provides access to the network data channels
-> of modems integrated into many older Qualcomm SoCs, e.g. Qualcomm MSM8916
-> or MSM8974. This series adds a driver that allows using it.
-> 
-> All the changes in this patch series are based on a quite complicated
-> driver from Qualcomm [1]. The driver has been used in postmarketOS [2]
-> on various smartphones/tablets based on Qualcomm MSM8916 and MSM8974
-> for more than a year now with no reported problems. It works out of
-> the box with open-source WWAN userspace such as ModemManager.
-> 
-> [...]
+Fine for me, I only have rbtx4927.
 
-Here is the summary with links:
-  - [net-next,v3,1/2] dt-bindings: net: Add schema for Qualcomm BAM-DMUX
-    https://git.kernel.org/netdev/net-next/c/f3aee7c900ed
-  - [net-next,v3,2/2] net: wwan: Add Qualcomm BAM-DMUX WWAN network driver
-    https://git.kernel.org/netdev/net-next/c/21a0ffd9b38c
+BTW, I'm using it in 32-bit mode, as the VxWorks bootloader cannot boot
+64-bit images. Are there other boards with such a limitation? Perhaps
+there's even shim support for booting 64-bit kernels on such boards,
+so I can test both 32-bit and 64-bit kernels?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks!
 
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

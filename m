@@ -2,77 +2,432 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0B5461F78
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C9B461F8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:45:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238267AbhK2Srn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
+        id S1378779AbhK2StB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:49:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379997AbhK2Spg (ORCPT
+        with ESMTP id S1379390AbhK2Sq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:45:36 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6028EC049495
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SI2iTFkTDzYYUcDOPg4rBs+bvyVyq2R8CsvglYX1/L0=; b=SSRboMwoEA25CeO+Dwu5OjVYSt
-        eCNX6e6DMZ7ALRUuUKw4n0JaJThPQO6j3iAlgZn3Eo4TlaIpid2MdKwK+bILk9g4pjmAzUAkZz7pd
-        Mt1jigQtf0metVpRF+oGQwxWn6bAyiB9814jSinwlGhf5stRQ/JhIvPSiEu9db7BJt/niFYB2hg06
-        lP1iBLN2yC6TFQAWWcCkkF9VtJFEUUZNLIUG6ypSWiY1zCTFJ9jLfnY8CxwbO7Zs9IbYJNOCxp371
-        LFAiMyJLZcjDBfRlzMinv30yHCo+mbwdSDzeREhUOuvs4RwQmHE+fiUByQnyMu0p0RtjIJkXLmWBR
-        FPXsWXzw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mri7x-0081dm-Gj; Mon, 29 Nov 2021 14:59:34 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 46CC930023F;
-        Mon, 29 Nov 2021 15:59:32 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2DDEF2B2FCB21; Mon, 29 Nov 2021 15:59:32 +0100 (CET)
-Date:   Mon, 29 Nov 2021 15:59:32 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Hillf Danton <hdanton@sina.com>, Boqun Feng <boqun.feng@gmail.com>,
-        syzbot <syzbot+84ef57449019b1be878d@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        tglx@linutronix.de, Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rajatasthana4@gmail.com
-Subject: Re: [syzbot] INFO: rcu detected stall in newstat
-Message-ID: <YaTq1I82HEA/e6r6@hirez.programming.kicks-ass.net>
-References: <0000000000003544c405c8a3026a@google.com>
- <20211128030309.1897-1-hdanton@sina.com>
- <CACT4Y+YXg=rRmCsM3i0ES_dXhFGdnS7LLwtX3YmRLjjr0haCOA@mail.gmail.com>
- <20211129131328.1960-1-hdanton@sina.com>
- <CACT4Y+ZxJUu+UrUpOwvcFOy2LubhP1HuCQybxaq-rrDsdO9bRg@mail.gmail.com>
+        Mon, 29 Nov 2021 13:46:59 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01819C0494A5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:01:19 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso17063969wmr.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:01:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CoRV2RVbd+sSY+aqVpog7E1rtiGsWpeRt2xamF32FYs=;
+        b=hWProAaImgDFOr6NoToYaQ1Pvz2jkIyK/IqQ9HmiytoawpJK/wV/qLoUiZIherQJvv
+         k0AoaMxP5pW0rf5WDb3dc/LdJezoHCnSDknp/7xZ+tHMZN4p5nnlyWGWCSIKoosto8S4
+         2Jkg34Tt1Dgxk/AjujQO/xsvjeVFT78/YuOrTuTKUtPO684chyMmNEu1jyVe5OntcCOM
+         ADAIFsyE6VVWETbrDsn5r+LjPbmQ5zIG5krYQLqLAwOPvZHyu+y7lZdQ98AWmvVbez4m
+         qUVEGYpngxxUo6aiwojDfsZLxLJKGeI9tjuQSZzhRQ8PeC7MwbgDOrMvt6S6wdOZ2OKA
+         DeCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=CoRV2RVbd+sSY+aqVpog7E1rtiGsWpeRt2xamF32FYs=;
+        b=EqDvHBENPJnaBkt4z0E8D4PLMTzo7xEN6ZnKNxBJndt9b379b0Hli6sH04B0eCDTmk
+         7BSNXbDAZUzM2u7AgDLqCBVUyC9yPgLJ8Bk0m3dFlsI1VG6vxKR06VPkgxUHJdOsNxCW
+         uG3o96t+zrBHEb3GsGH44FaW3PMqdXOncFTJviTXk8FkdRUOdPrNghilRlAlmfD/4s89
+         LlpIHpaw/bSGxiKtpPkOTLnYeIg01IdNa7p4PMJ73RpUx6Y/f1eD++2dcmtUhR7spqnP
+         brYpTH+EHQ0CupNSpvyXyt9sFihV9vXTeGcdk5HB/gE7AP271nbMLkuhZgxCisWsMlxo
+         3dGQ==
+X-Gm-Message-State: AOAM531FzBDjmPk4doET13p7QzB8oiBzmYGl5MMj65/OwLz8HSTf0nGg
+        OSYqOdLP/6L+jz3V/G7bO4/8Og==
+X-Google-Smtp-Source: ABdhPJxfmxh+PQbzO4zOMd585IrclolKW2ylOrAmt7efL4n6tmrTWm1J6xETX9WPrcz7n2Dcpuc5+g==
+X-Received: by 2002:a05:600c:354b:: with SMTP id i11mr37791659wmq.61.1638198074671;
+        Mon, 29 Nov 2021 07:01:14 -0800 (PST)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6d:f804:0:387:571:2fd1:1eb])
+        by smtp.gmail.com with ESMTPSA id m3sm13842885wrv.95.2021.11.29.07.01.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 07:01:14 -0800 (PST)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     x86@kernel.org, linux-kernel@vger.kernel.org, vgoyal@redhat.com,
+        bp@alien8.de, tglx@linutronix.de
+Cc:     fam.zheng@bytedance.com, Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH] x86/purgatory: provide config to disable purgatory
+Date:   Mon, 29 Nov 2021 15:01:02 +0000
+Message-Id: <20211129150102.2269587-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+ZxJUu+UrUpOwvcFOy2LubhP1HuCQybxaq-rrDsdO9bRg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 03:15:16PM +0100, Dmitry Vyukov wrote:
+Disabling purgatory reduces the boot time if it is not needed
+as the sha256 digest of kexec segments is no longer calculated
+or verified. This helps reduce the downtime of servers when
+the host kernel managing multiple VMs needs to be updated via kexec.
 
-> Right, I missed the "preempt leak: 00000100 -> 00000101" warning. And
-> before that there is also "WARNING: inconsistent lock state" warning.
-> This reminds me of the issues we had with RCU/LOCKDEP before when an
-> RCU warning disabled LOCKDEP tracking, as the result LOCKDEP missed
-> part of events (e.g. tracked lock, but missed subsequent unlock) and
-> due to races/ordering issues it mis-reported them as nonsensical
-> reports.
+The usage of registers %r9-%r13 needed to be moved to %r10-%r14
+in relocate_kernel_64.S as bootparam_load_addr is passed in %r9.
 
-You're talking about how debug_locks_off() is a hot-racy-mess? That only
-matters if you're triggering stuff concurrently which *mostly* doesn't
-happen.
+The time taken from reboot to running init process was measured
+with both purgatory enabled and disabled over 20 runs and the
+averages are:
+Purgatory disabled:
+- TSC = 3908766161 cycles
+- ktime = 606.8 ms
+Purgatory enabled:
+- TSC = 5005811885 cycles (28.1% worse)
+- ktime = 843.1 ms (38.9% worse)
 
-I'm also not quite sure how to fix that without globally serializing
-everything, which would be super unhappy.
+Hence disabling purgatory has a significant improvement in kexec
+time.
+
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
+Reviewed-by: Fam Zheng <fam.zheng@bytedance.com>
+
+---
+v2 changes:
+ - Updated commit message to include timing and usecase.
+ - Fixed bug in v1 in which bootparam_load_addr was not passed when
+   purgatory was disabled.
+---
+ arch/powerpc/Kbuild                  |  2 +-
+ arch/powerpc/Kconfig                 |  2 +-
+ arch/s390/Kbuild                     |  2 +-
+ arch/s390/Kconfig                    |  2 +-
+ arch/s390/purgatory/Makefile         |  2 +-
+ arch/x86/Kbuild                      |  2 +-
+ arch/x86/Kconfig                     |  6 ++-
+ arch/x86/include/asm/kexec.h         |  3 +-
+ arch/x86/kernel/kexec-bzimage64.c    | 70 ++++++++++++++++------------
+ arch/x86/kernel/machine_kexec_64.c   |  3 +-
+ arch/x86/kernel/relocate_kernel_64.S |  8 ++++
+ arch/x86/purgatory/Makefile          |  2 +-
+ include/linux/kexec.h                |  5 ++
+ kernel/kexec_file.c                  |  9 ++--
+ 14 files changed, 73 insertions(+), 45 deletions(-)
+
+diff --git a/arch/powerpc/Kbuild b/arch/powerpc/Kbuild
+index 22cd0d55a892..072e62d7898e 100644
+--- a/arch/powerpc/Kbuild
++++ b/arch/powerpc/Kbuild
+@@ -15,7 +15,7 @@ obj-$(CONFIG_KVM)  += kvm/
+ 
+ obj-$(CONFIG_PERF_EVENTS) += perf/
+ obj-$(CONFIG_KEXEC_CORE)  += kexec/
+-obj-$(CONFIG_KEXEC_FILE)  += purgatory/
++obj-$(CONFIG_KEXEC_PURGATORY)  += purgatory/
+ 
+ # for cleaning
+ subdir- += boot
+diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
+index dea74d7717c0..58bdfd1abb44 100644
+--- a/arch/powerpc/Kconfig
++++ b/arch/powerpc/Kconfig
+@@ -557,7 +557,7 @@ config KEXEC_FILE
+ 	  for kernel and initramfs as opposed to a list of segments as is the
+ 	  case for the older kexec call.
+ 
+-config ARCH_HAS_KEXEC_PURGATORY
++config KEXEC_PURGATORY
+ 	def_bool KEXEC_FILE
+ 
+ config RELOCATABLE
+diff --git a/arch/s390/Kbuild b/arch/s390/Kbuild
+index 76e362277179..2ed4ee5cdf59 100644
+--- a/arch/s390/Kbuild
++++ b/arch/s390/Kbuild
+@@ -7,7 +7,7 @@ obj-$(CONFIG_S390_HYPFS_FS)	+= hypfs/
+ obj-$(CONFIG_APPLDATA_BASE)	+= appldata/
+ obj-y				+= net/
+ obj-$(CONFIG_PCI)		+= pci/
+-obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += purgatory/
++obj-$(CONFIG_KEXEC_PURGATORY) += purgatory/
+ 
+ # for cleaning
+ subdir- += boot tools
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index 2a5bb4f29cfe..d15bdaa0e198 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -538,7 +538,7 @@ config KEXEC_FILE
+ 	  kexec system call this system call takes file descriptors for the
+ 	  kernel and initramfs as arguments.
+ 
+-config ARCH_HAS_KEXEC_PURGATORY
++config KEXEC_PURGATORY
+ 	def_bool y
+ 	depends on KEXEC_FILE
+ 
+diff --git a/arch/s390/purgatory/Makefile b/arch/s390/purgatory/Makefile
+index 360ada80d20c..03cac6d7310a 100644
+--- a/arch/s390/purgatory/Makefile
++++ b/arch/s390/purgatory/Makefile
+@@ -51,4 +51,4 @@ $(obj)/purgatory.ro: $(obj)/purgatory $(obj)/purgatory.chk FORCE
+ $(obj)/kexec-purgatory.o: $(obj)/kexec-purgatory.S $(obj)/purgatory.ro FORCE
+ 	$(call if_changed_rule,as_o_S)
+ 
+-obj-$(CONFIG_ARCH_HAS_KEXEC_PURGATORY) += kexec-purgatory.o
++obj-$(CONFIG_KEXEC_PURGATORY) += kexec-purgatory.o
+diff --git a/arch/x86/Kbuild b/arch/x86/Kbuild
+index f384cb1a4f7a..9089438ed6d8 100644
+--- a/arch/x86/Kbuild
++++ b/arch/x86/Kbuild
+@@ -24,7 +24,7 @@ obj-$(CONFIG_IA32_EMULATION) += ia32/
+ obj-y += platform/
+ obj-y += net/
+ 
+-obj-$(CONFIG_KEXEC_FILE) += purgatory/
++obj-$(CONFIG_KEXEC_PURGATORY) += purgatory/
+ 
+ # for cleaning
+ subdir- += boot tools
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 7399327d1eff..7efe6dbfdc67 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -2000,8 +2000,10 @@ config KEXEC_FILE
+ 	  for kernel and initramfs as opposed to list of segments as
+ 	  accepted by previous system call.
+ 
+-config ARCH_HAS_KEXEC_PURGATORY
+-	def_bool KEXEC_FILE
++config KEXEC_PURGATORY
++	bool "A standalone relocatable object run between the 2 kernels during kexec"
++	depends on KEXEC_FILE
++	default y
+ 
+ config KEXEC_SIG
+ 	bool "Verify kernel signature during kexec_file_load() syscall"
+diff --git a/arch/x86/include/asm/kexec.h b/arch/x86/include/asm/kexec.h
+index 11b7c06e2828..8c33bb32b593 100644
+--- a/arch/x86/include/asm/kexec.h
++++ b/arch/x86/include/asm/kexec.h
+@@ -129,7 +129,8 @@ relocate_kernel(unsigned long indirection_page,
+ 		unsigned long page_list,
+ 		unsigned long start_address,
+ 		unsigned int preserve_context,
+-		unsigned int host_mem_enc_active);
++		unsigned int host_mem_enc_active,
++		unsigned long bootparam_load_addr);
+ #endif
+ 
+ #define ARCH_HAS_KIMAGE_ARCH
+diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+index 170d0fd68b1f..dbaa0e8c7634 100644
+--- a/arch/x86/kernel/kexec-bzimage64.c
++++ b/arch/x86/kernel/kexec-bzimage64.c
+@@ -374,18 +374,19 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
+ 			return ERR_PTR(ret);
+ 	}
+ 
+-	/*
+-	 * Load purgatory. For 64bit entry point, purgatory  code can be
+-	 * anywhere.
+-	 */
+-	ret = kexec_load_purgatory(image, &pbuf);
+-	if (ret) {
+-		pr_err("Loading purgatory failed\n");
+-		return ERR_PTR(ret);
+-	}
+-
+-	pr_debug("Loaded purgatory at 0x%lx\n", pbuf.mem);
++	if (IS_ENABLED(CONFIG_KEXEC_PURGATORY)) {
++		/*
++		 * Load purgatory. For 64bit entry point, purgatory  code can be
++		 * anywhere.
++		 */
++		ret = kexec_load_purgatory(image, &pbuf);
++		if (ret) {
++			pr_err("Loading purgatory failed\n");
++			return ERR_PTR(ret);
++		}
+ 
++		pr_debug("Loaded purgatory at 0x%lx\n", pbuf.mem);
++	}
+ 
+ 	/*
+ 	 * Load Bootparams and cmdline and space for efi stuff.
+@@ -466,28 +467,37 @@ static void *bzImage64_load(struct kimage *image, char *kernel,
+ 	params->hdr.type_of_loader = 0x0D << 4;
+ 	params->hdr.loadflags = 0;
+ 
+-	/* Setup purgatory regs for entry */
+-	ret = kexec_purgatory_get_set_symbol(image, "entry64_regs", &regs64,
+-					     sizeof(regs64), 1);
+-	if (ret)
+-		goto out_free_params;
++	if (IS_ENABLED(CONFIG_KEXEC_PURGATORY)) {
++		/* Setup purgatory regs for entry */
++		ret = kexec_purgatory_get_set_symbol(image, "entry64_regs", &regs64,
++						     sizeof(regs64), 1);
++		if (ret)
++			goto out_free_params;
+ 
+-	regs64.rbx = 0; /* Bootstrap Processor */
+-	regs64.rsi = bootparam_load_addr;
+-	regs64.rip = kernel_load_addr + 0x200;
+-	stack = kexec_purgatory_get_symbol_addr(image, "stack_end");
+-	if (IS_ERR(stack)) {
+-		pr_err("Could not find address of symbol stack_end\n");
+-		ret = -EINVAL;
+-		goto out_free_params;
+-	}
++		regs64.rbx = 0; /* Bootstrap Processor */
++		regs64.rsi = bootparam_load_addr;
++		regs64.rip = kernel_load_addr + 0x200;
+ 
+-	regs64.rsp = (unsigned long)stack;
+-	ret = kexec_purgatory_get_set_symbol(image, "entry64_regs", &regs64,
+-					     sizeof(regs64), 0);
+-	if (ret)
+-		goto out_free_params;
++		stack = kexec_purgatory_get_symbol_addr(image, "stack_end");
++		if (IS_ERR(stack)) {
++			pr_err("Could not find address of symbol stack_end\n");
++			ret = -EINVAL;
++			goto out_free_params;
++		}
+ 
++		regs64.rsp = (unsigned long)stack;
++		ret = kexec_purgatory_get_set_symbol(image, "entry64_regs", &regs64,
++						     sizeof(regs64), 0);
++		if (ret)
++			goto out_free_params;
++	} else {
++		/*
++		 * Pass kernel and bootparam load address to relocate_kernel
++		 * if purgatory is disabled.
++		 */
++		image->start = kernel_load_addr + 0x200;
++		image->bootparam_load_addr = bootparam_load_addr;
++	}
+ 	ret = setup_boot_parameters(image, params, bootparam_load_addr,
+ 				    efi_map_offset, efi_map_sz,
+ 				    efi_setup_data_offset);
+diff --git a/arch/x86/kernel/machine_kexec_64.c b/arch/x86/kernel/machine_kexec_64.c
+index f5da4a18070a..f7b009768652 100644
+--- a/arch/x86/kernel/machine_kexec_64.c
++++ b/arch/x86/kernel/machine_kexec_64.c
+@@ -359,7 +359,8 @@ void machine_kexec(struct kimage *image)
+ 				       (unsigned long)page_list,
+ 				       image->start,
+ 				       image->preserve_context,
+-				       cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT));
++				       cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT),
++				       image->bootparam_load_addr);
+ 
+ #ifdef CONFIG_KEXEC_JUMP
+ 	if (image->preserve_context)
+diff --git a/arch/x86/kernel/relocate_kernel_64.S b/arch/x86/kernel/relocate_kernel_64.S
+index c8fe74a28143..12789c8eabe6 100644
+--- a/arch/x86/kernel/relocate_kernel_64.S
++++ b/arch/x86/kernel/relocate_kernel_64.S
+@@ -48,6 +48,7 @@ SYM_CODE_START_NOALIGN(relocate_kernel)
+ 	 * %rdx start address
+ 	 * %rcx preserve_context
+ 	 * %r8  host_mem_enc_active
++	 * %r9  bootparam_load_addr
+ 	 */
+ 
+ 	/* Save the CPU context, used for jumping back */
+@@ -59,6 +60,9 @@ SYM_CODE_START_NOALIGN(relocate_kernel)
+ 	pushq %r15
+ 	pushf
+ 
++	/* Save bootparam_load_addr in %r14  */
++	movq	%r9, %r14
++
+ 	movq	PTR(VA_CONTROL_PAGE)(%rsi), %r11
+ 	movq	%rsp, RSP(%r11)
+ 	movq	%cr0, %rax
+@@ -179,7 +183,11 @@ SYM_CODE_START_LOCAL_NOALIGN(identity_mapped)
+ 	xorl	%ebx, %ebx
+ 	xorl    %ecx, %ecx
+ 	xorl    %edx, %edx
++#ifdef CONFIG_KEXEC_PURGATORY
+ 	xorl    %esi, %esi
++#else
++	movq    %r14, %rsi
++#endif
+ 	xorl    %edi, %edi
+ 	xorl    %ebp, %ebp
+ 	xorl	%r8d, %r8d
+diff --git a/arch/x86/purgatory/Makefile b/arch/x86/purgatory/Makefile
+index 95ea17a9d20c..688b3f21be8f 100644
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@ -81,4 +81,4 @@ quiet_cmd_bin2c = BIN2C   $@
+ $(obj)/kexec-purgatory.c: $(obj)/purgatory.ro $(obj)/purgatory.chk FORCE
+ 	$(call if_changed,bin2c)
+ 
+-obj-$(CONFIG_KEXEC_FILE)	+= kexec-purgatory.o
++obj-$(CONFIG_KEXEC_PURGATORY)	+= kexec-purgatory.o
+diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+index 0c994ae37729..818c3770158f 100644
+--- a/include/linux/kexec.h
++++ b/include/linux/kexec.h
+@@ -313,6 +313,11 @@ struct kimage {
+ 	void *elf_headers;
+ 	unsigned long elf_headers_sz;
+ 	unsigned long elf_load_addr;
++
++#ifndef CONFIG_PURGATORY
++	unsigned long bootparam_load_addr;
++#endif
++
+ };
+ 
+ /* kexec interface functions */
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 8347fc158d2b..ad3131880a37 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -108,6 +108,7 @@ int __weak arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+ }
+ #endif
+ 
++#ifdef CONFIG_KEXEC_PURGATORY
+ /*
+  * arch_kexec_apply_relocations_add - apply relocations of type RELA
+  * @pi:		Purgatory to be relocated.
+@@ -141,7 +142,7 @@ arch_kexec_apply_relocations(struct purgatory_info *pi, Elf_Shdr *section,
+ 	pr_err("REL relocation unsupported.\n");
+ 	return -ENOEXEC;
+ }
+-
++#endif /* CONFIG_KEXEC_PURGATORY */
+ /*
+  * Free up memory used by kernel, initrd, and command line. This is temporary
+  * memory allocation which is not needed any more after these buffers have
+@@ -724,7 +725,7 @@ static int kexec_calculate_store_digests(struct kimage *image)
+ 	struct kexec_sha_region *sha_regions;
+ 	struct purgatory_info *pi = &image->purgatory_info;
+ 
+-	if (!IS_ENABLED(CONFIG_ARCH_HAS_KEXEC_PURGATORY))
++	if (!IS_ENABLED(CONFIG_KEXEC_PURGATORY))
+ 		return 0;
+ 
+ 	zero_buf = __va(page_to_pfn(ZERO_PAGE(0)) << PAGE_SHIFT);
+@@ -829,7 +830,7 @@ static int kexec_calculate_store_digests(struct kimage *image)
+ 	return ret;
+ }
+ 
+-#ifdef CONFIG_ARCH_HAS_KEXEC_PURGATORY
++#ifdef CONFIG_KEXEC_PURGATORY
+ /*
+  * kexec_purgatory_setup_kbuf - prepare buffer to load purgatory.
+  * @pi:		Purgatory to be loaded.
+@@ -1176,7 +1177,7 @@ int kexec_purgatory_get_set_symbol(struct kimage *image, const char *name,
+ 
+ 	return 0;
+ }
+-#endif /* CONFIG_ARCH_HAS_KEXEC_PURGATORY */
++#endif /* CONFIG_KEXEC_PURGATORY */
+ 
+ int crash_exclude_mem_range(struct crash_mem *mem,
+ 			    unsigned long long mstart, unsigned long long mend)
+-- 
+2.25.1
+

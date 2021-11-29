@@ -2,98 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E03EB461A2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C55B461A30
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:45:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348305AbhK2Org (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:47:36 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:54004 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378796AbhK2Opf (ORCPT
+        id S235785AbhK2Osg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:48:36 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:46634 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345800AbhK2Oq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:45:35 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638196934;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 29 Nov 2021 09:46:27 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 842791FD3A;
+        Mon, 29 Nov 2021 14:43:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638196988; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=CT0v0AI6Phc8QVXrts/Xgc4HRVQEDE2q+21sbaFe3Ag=;
-        b=FLmFznUrsgGdCbkY18htm7AVhrJXD8U/COCS8SobY/Fs5q0hzBOjNa5VOMzAo8uh3ixtor
-        Si29Nben+KPEqz1+N0yD6PS3qluBIuq3elGrNncT23ydzQDK2l9SnDPo2CnUq8qH8j8MZ6
-        vdvCp+IY+fkqSwwbS7Vke5ucVqUPyZqIAnlw2remRg1r2/dstE2w/iGMIhhlHtUzXuGfyg
-        PeIFtoJzVGaUJsD95eDn+sZvgevfzRe7bt6oelu5NOVNC0Y5uWJCfO8sg7SGeqm/QUZ5F8
-        9idHosPV4IKLQIULp5+Ee114KeQfrHkYLH1gL8+nGq99mmniKOQJkHCZ2aVDWw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638196934;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        bh=NWUEKk1LbiEJfj4CY9t4KjyiCWPpGKwfVKuULja5Bsg=;
+        b=b3DyrDJUHh+1aT/FKhCgJcWEVXHC3ww0ObFICqkVT/jzrvEtBU5Dgpd8rXU6uQfrXtSkY+
+        zTsSCqd8MhEfHLQoWOv8TgWq593fUmrgYwF1l5T9sgGTe75vW2bWCSMxqb5qDQML6IYCfq
+        eGVgpHLskhh2DQIE8nLpuEzmPiEdAFo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638196988;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=CT0v0AI6Phc8QVXrts/Xgc4HRVQEDE2q+21sbaFe3Ag=;
-        b=1lha+hOs5XE61wIA5Q6/xFS1hVtMHYwWSYlH+AylgvE8sxOiU/hMvfsbJ4+lxuc4mz54M/
-        UkoehTAc13TFlPDw==
-To:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>, Mark Rutland <mark.rutland@arm.com>,
-        Stuart Yoder <stuyoder@gmail.com>, linux-pci@vger.kernel.org,
-        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
-        x86@kernel.org, Sinan Kaya <okaya@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Megha Dey <megha.dey@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
-In-Reply-To: <76a1b5c1-01c8-bb30-6105-b4073dc23065@arm.com>
-References: <20211126224100.303046749@linutronix.de>
- <20211126230525.885757679@linutronix.de>
- <20211129105506.GA22761@willie-the-truck>
- <76a1b5c1-01c8-bb30-6105-b4073dc23065@arm.com>
-Date:   Mon, 29 Nov 2021 15:42:14 +0100
-Message-ID: <87czmjdnw9.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
+        bh=NWUEKk1LbiEJfj4CY9t4KjyiCWPpGKwfVKuULja5Bsg=;
+        b=v96RDHOKkFNh5drXWl3FjCyiiug6mA0W4s2DJ1DYNaL4UKCNX+vk2hcsGjPhuzxs1UnxIn
+        oz9bNW6us15MCGBA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 3C279A3B81;
+        Mon, 29 Nov 2021 14:43:08 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 15:43:08 +0100
+Message-ID: <s5h8rx758g3.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Kai Vehmanen <kai.vehmanen@linux.intel.com>
+Cc:     Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+Subject: Re: linux-next: manual merge of the sound-asoc tree with the sound-current tree
+In-Reply-To: <alpine.DEB.2.22.394.2111291602310.3554566@eliteleevi.tm.intel.com>
+References: <20211129113554.59416109@canb.auug.org.au>
+        <s5ho8635n9g.wl-tiwai@suse.de>
+        <YaTDKNOOP2I2dbI+@sirena.org.uk>
+        <alpine.DEB.2.22.394.2111291602310.3554566@eliteleevi.tm.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29 2021 at 13:13, Robin Murphy wrote:
-> On 2021-11-29 10:55, Will Deacon wrote:
->>> -	}
->>> +	smmu->evtq.q.irq = msi_get_virq(dev, EVTQ_MSI_INDEX);
->>> +	smmu->gerr_irq = msi_get_virq(dev, GERROR_MSI_INDEX);
->>> +	smmu->priq.q.irq = msi_get_virq(dev, PRIQ_MSI_INDEX);
->> 
->> Prviously, if retrieval of the MSI failed then we'd fall back to wired
->> interrupts. Now, I think we'll clobber the interrupt with 0 instead. Can
->> we make the assignments to smmu->*irq here conditional on the MSI being
->> valid, please?
->
-> I was just looking at that too, but reached the conclusion that it's 
-> probably OK, since consumption of this value later is gated on 
-> ARM_SMMU_FEAT_PRI, so the fact that it changes from 0 to an error value 
-> in the absence of PRI should make no practical difference.
+On Mon, 29 Nov 2021 15:29:36 +0100,
+Kai Vehmanen wrote:
+> 
+> Hi,
+> 
+> On Mon, 29 Nov 2021, Mark Brown wrote:
+> 
+> > On Mon, Nov 29, 2021 at 10:23:07AM +0100, Takashi Iwai wrote:
+> > 
+> > > Mark, could you resolve in the latter branch?
+> > 
+> > I'll just leave them for now, Linus got angry about merging up fixes
+> > just to resolve conflicts so if it's not an actual dependency...
+> 
+> the asoc for-5.17 branch does have all the needed changes and the 
+> linux-next merged version seems ok. We've already sent many further 
+> changes that touch this area of code to asoc for-5.17. Let me know if some 
+> actions are needed to help.
 
-It's actually 0 when the vector cannot be found.
+The question is rather whether this discrepancy would cause a problem
+for further developments.  If back-merging 5.16 stuff makes things
+easier, it should be done so.  OTOH, if it's just for resolving the
+conflict in the final tree, we can leave it.
 
-> If we don't have MSIs at all, we'd presumably still fail earlier
-> either at the dev->msi_domain check or upon trying to allocate the
-> vectors, so we'll still fall back to any previously-set wired values
-> before getting here.  The only remaining case is if we've
-> *successfully* allocated the expected number of vectors yet are then
-> somehow unable to retrieve one or more of them - presumably the system
-> has to be massively borked for that to happen, at which point do we
-> really want to bother trying to reason about anything?
 
-Probably not. At that point something is going to explode sooner than
-later in colorful ways.
+thanks,
 
-Thanks,
-
-        tglx
+Takashi

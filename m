@@ -2,52 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E754615A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3029946144B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243457AbhK2NC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236079AbhK2NAY (ORCPT
+        id S242929AbhK2L4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:56:51 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57391 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239667AbhK2Lys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:00:24 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C3A7C08EB3B;
-        Mon, 29 Nov 2021 03:45:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Zr4yGvG1oSJLft11tGwyOTizPULLeTWpauYnh23nKIU=; b=qRq17tcdjDfrmVPqdGTaujU82V
-        USUu58An8ugaQWMaf2IWlA84cAcGSoO5C8pzpMMR6W3Fjv5V2CiX2jPdY4ge+zyXoBp74pw5MBxTu
-        cShHoey1ReqanWov8SRIBO8VV/MshJl8YBdaV9zMx2Aqvv6dg2yPmndz9kH5Abjp1d228oKv6vZFM
-        9TdC3buoDMJ2fktQVWjtbnhcYNkrHZJVjBB+a7K2EkneHHTHlkNTnd0GI6Atf5j2r14TEqX52nwsQ
-        n8tY3nqzv76YXi42ZyFUEZyuf7I5CEwkIkLjZf+jXlGqwimfWtThOVw/HKXpS45Wt6TwiywrGZ+tS
-        rQwLzKig==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mrf6G-000Z8S-Lp; Mon, 29 Nov 2021 11:45:36 +0000
-Date:   Mon, 29 Nov 2021 03:45:36 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     hch@infradead.org, tj@kernel.org, axboe@kernel.dk,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
-Subject: Re: [PATCH 1/4] Revert "blk-throttle: remove tg_drain_bios"
-Message-ID: <YaS9YPSAZgkNgxTb@infradead.org>
-References: <20211127101059.477405-1-yukuai3@huawei.com>
- <20211127101059.477405-2-yukuai3@huawei.com>
+        Mon, 29 Nov 2021 06:54:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638186690;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o1hbT83UZyzEpMcYnWEfjfHejJ/ev9mdgbjpKbK1VxE=;
+        b=jPSCvnH3AmIEJgnraLey8Z5aFFc8AIeOcFcsX+DzhdtTb0SAGz8twzNMycBFyTfseM1MSS
+        8w+KBStygLCLMuokWtNVxaJiSfRKO+isstyAF4hpUsR6KCkexSxNid9nv4QxiUG0bDtO4c
+        Kw91vHSrw0dewmGQCdIUe1mphja4ZQA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-236-0RUPr8GeNKa5FNXeq5UITg-1; Mon, 29 Nov 2021 06:51:29 -0500
+X-MC-Unique: 0RUPr8GeNKa5FNXeq5UITg-1
+Received: by mail-ed1-f70.google.com with SMTP id d13-20020a056402516d00b003e7e67a8f93so13537609ede.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:51:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=o1hbT83UZyzEpMcYnWEfjfHejJ/ev9mdgbjpKbK1VxE=;
+        b=vmiVl7G+rFrU2rZqYZR95aujZfBARA0rsVX0m1JaPhBfwvRhcbqsZuzNU6peFk8NDk
+         /QdgFJ/lh5ChIhcEREmGX8A1QiqnBEg6coOjRNqcrGkmXfWjgWUnoXnBZm//auKpY6Sj
+         FKSFDmlv+G0LQDUFMgy/pjbzcNqif/YWo8cT5y99N7XftyeEJAzkl5SMwgeXxE8Z3kqx
+         +c/b+GZ8qIgsp59mUjWGr84arsQorNSUnC8hgP5iKPkBTpeCo7Ir04RccQrjxxe1vqyZ
+         Pb0L1dTWUG20aKkbPNicQOQ2DUiAi4dIT9Tz0P5BOnAjP5R9zvki805xXGraEhbObitD
+         xRSw==
+X-Gm-Message-State: AOAM532P8iJVnvTpYE6WArHGpKWiUaoRmFTFfNEb91Lj8Y8Y8How7aOJ
+        MgHsWzB7BIp9XbVhDxBja7UQCIsfU05OqqxWceQA2KWeuTAYbnckZ8BIlqelmYH/iLZy2Ybp/rH
+        th7Te87msRj4K81dCtxXWh7Fi
+X-Received: by 2002:a05:6402:90c:: with SMTP id g12mr72820068edz.36.1638186687988;
+        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJy//h6DqzMZ3cIjns1ItOPHoyCEI8XwGnDfYQ/w255YG7ez18OJaBJc76mESug2RLwzmhwD5w==
+X-Received: by 2002:a05:6402:90c:: with SMTP id g12mr72820014edz.36.1638186687643;
+        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id z1sm9056421edq.54.2021.11.29.03.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 6858F1802A0; Mon, 29 Nov 2021 12:51:26 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
+ per-channel statistics
+In-Reply-To: <871ae82a-3d5b-2693-2f77-7c86d725a056@iogearbox.net>
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+ <20211123163955.154512-22-alexandr.lobakin@intel.com>
+ <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
+ <87bl28bga6.fsf@toke.dk>
+ <20211125170708.127323-1-alexandr.lobakin@intel.com>
+ <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20211125204007.133064-1-alexandr.lobakin@intel.com>
+ <87sfvj9k13.fsf@toke.dk>
+ <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <871ae82a-3d5b-2693-2f77-7c86d725a056@iogearbox.net>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Mon, 29 Nov 2021 12:51:26 +0100
+Message-ID: <878rx79o3l.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211127101059.477405-2-yukuai3@huawei.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 06:10:56PM +0800, Yu Kuai wrote:
-> This reverts commit 32e3374304c7c317c05a61f3ddc315dbd46424f2.
+Daniel Borkmann <daniel@iogearbox.net> writes:
 
-Please re-add the function together with the actual users in a commit
-that has a proper commit log.
+> On 11/26/21 7:06 PM, Jakub Kicinski wrote:
+>> On Fri, 26 Nov 2021 13:30:16 +0100 Toke H=C3=B8iland-J=C3=B8rgensen wrot=
+e:
+>>>>> TBH I wasn't following this thread too closely since I saw Daniel
+>>>>> nacked it already. I do prefer rtnl xstats, I'd just report them
+>>>>> in -s if they are non-zero. But doesn't sound like we have an agreeme=
+nt
+>>>>> whether they should exist or not.
+>>>>
+>>>> Right, just -s is fine, if we drop the per-channel approach.
+>>>
+>>> I agree that adding them to -s is fine (and that resolves my "no one
+>>> will find them" complain as well). If it crowds the output we could also
+>>> default to only output'ing a subset, and have the more detailed
+>>> statistics hidden behind a verbose switch (or even just in the JSON
+>>> output)?
+>>>
+>>>>> Can we think of an approach which would make cloudflare and cilium
+>>>>> happy? Feels like we're trying to make the slightly hypothetical
+>>>>> admin happy while ignoring objections of very real users.
+>>>>
+>>>> The initial idea was to only uniform the drivers. But in general
+>>>> you are right, 10 drivers having something doesn't mean it's
+>>>> something good.
+>>>
+>>> I don't think it's accurate to call the admin use case "hypothetical".
+>>> We're expending a significant effort explaining to people that XDP can
+>>> "eat" your packets, and not having any standard statistics makes this
+>>> way harder. We should absolutely cater to our "early adopters", but if
+>>> we want XDP to see wider adoption, making it "less weird" is critical!
+>>=20
+>> Fair. In all honesty I said that hoping to push for a more flexible
+>> approach hidden entirely in BPF, and not involving driver changes.
+>> Assuming the XDP program has more fine grained stats we should be able
+>> to extract those instead of double-counting. Hence my vague "let's work
+>> with apps" comment.
+>>=20
+>> For example to a person familiar with the workload it'd be useful to
+>> know if program returned XDP_DROP because of configured policy or
+>> failure to parse a packet. I don't think that sort distinction is
+>> achievable at the level of standard stats.
+>
+> Agree on the additional context. How often have you looked at tc clsact
+> /dropped/ stats specifically when you debug a more complex BPF program
+> there?
+>
+>    # tc -s qdisc show clsact dev foo
+>    qdisc clsact ffff: parent ffff:fff1
+>     Sent 6800 bytes 120 pkt (dropped 0, overlimits 0 requeues 0)
+>     backlog 0b 0p requeues 0
+>
+> Similarly, XDP_PASS counters may be of limited use as well for same reason
+> (and I think we might not even have a tc counter equivalent for it).
+>
+>> The information required by the admin is higher level. As you say the
+>> primary concern there is "how many packets did XDP eat".
+>
+> Agree. Above said, for XDP_DROP I would see one use case where you compare
+> different drivers or bond vs no bond as we did in the past in [0] when
+> testing against a packet generator (although I don't see bond driver cove=
+red
+> in this series here yet where it aggregates the XDP stats from all bond s=
+lave
+> devs).
+>
+> On a higher-level wrt "how many packets did XDP eat", it would make sense
+> to have the stats for successful XDP_{TX,REDIRECT} given these are out
+> of reach from a BPF prog PoV - we can only count there how many times we
+> returned with XDP_TX but not whether the pkt /successfully made it/.
+>
+> In terms of error cases, could we just standardize all drivers on the beh=
+avior
+> of e.g. mlx5e_xdp_handle(), meaning, a failure from XDP_{TX,REDIRECT} will
+> hit the trace_xdp_exception() and then fallthrough to bump a drop counter
+> (same as we bump in XDP_DROP then). So the drop counter will account for
+> program drops but also driver-related drops.
+>
+> At some later point the trace_xdp_exception() could be extended with an e=
+rror
+> code that the driver would propagate (given some of them look quite simil=
+ar
+> across drivers, fwiw), and then whoever wants to do further processing wi=
+th
+> them can do so via bpftrace or other tooling.
+>
+> So overall wrt this series: from the lrstats we'd be /dropping/ the pass,
+> tx_errors, redirect_errors, invalid, aborted counters. And we'd be /keepi=
+ng/
+> bytes & packets counters that XDP sees, (driver-)successful tx & redirect
+> counters as well as drop counter. Also, XDP bytes & packets counters shou=
+ld
+> not be counted twice wrt ethtool stats.
+
+This sounds reasonable to me, and I also like the error code to
+tracepoint idea :)
+
+-Toke
+

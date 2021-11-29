@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDA7461E62
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D26461D8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:23:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379412AbhK2Sfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:35:42 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:51878 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379560AbhK2Sdd (ORCPT
+        id S1354160AbhK2S0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:26:19 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58540 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243892AbhK2SYL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:33:33 -0500
+        Mon, 29 Nov 2021 13:24:11 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8F303CE13E6;
-        Mon, 29 Nov 2021 18:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C37AC53FC7;
-        Mon, 29 Nov 2021 18:30:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B2D9B815C5;
+        Mon, 29 Nov 2021 18:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B97D3C53FC7;
+        Mon, 29 Nov 2021 18:20:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210611;
-        bh=XGlUXYXy3K96WhsClmBBLC7qMuOoPBKUV48Z4lAjupE=;
+        s=korg; t=1638210051;
+        bh=M2x2xTghd3P1I7w96dfCHfLQWa9qGidy1rj0fbxp2ws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q4Ryle0CA7kJLzyYbmVDSpUjoJa+xNL+WDkQIIH5vNMAr1yQt69tdeXr44dHrrZ/a
-         Gsnr8dQ0yEzt8v51jPABqYEb+XAqFfmN9kYIWF9oorDPnDNqAhJWQRwQatZnLA+LWk
-         0t3PovMfL6Pu+Um18pyoXAMYfxS4PwwKoAxi+RYg=
+        b=aVjf4vSiCwnWL+nhSQqnatJIINiuDvlF4Toz7PK0BZLeqO6PzxWcIGkL8pN2YomQU
+         8z/J//zd9tK3U+CwQgsJMjzMHdlekHLwciPyLj26vz053Q1ZEKIU4dlpVUoH5mWutl
+         s6wzSeclu3dMa9NLVPP4qooRwI2GbHg5rcp/2mPg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 056/121] drm/nouveau/acr: fix a couple NULL vs IS_ERR() checks
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 4.19 25/69] PCI: aardvark: Fix compilation on s390
 Date:   Mon, 29 Nov 2021 19:18:07 +0100
-Message-Id: <20211129181713.530291752@linuxfoundation.org>
+Message-Id: <20211129181704.494088660@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
+References: <20211129181703.670197996@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,66 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit b371fd131fcec59f6165c80778bdc2cd1abd616b ]
+commit b32c012e4b98f0126aa327be2d1f409963057643 upstream.
 
-The nvkm_acr_lsfw_add() function never returns NULL.  It returns error
-pointers on error.
+Include linux/gpio/consumer.h instead of linux/gpio.h, as is said in the
+latter file.
 
-Fixes: 22dcda45a3d1 ("drm/nouveau/acr: implement new subdev to replace "secure boot"")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Ben Skeggs <bskeggs@redhat.com>
-Signed-off-by: Karol Herbst <kherbst@redhat.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211118111314.GB1147@kili
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This was reported by kernel test bot when compiling for s390.
+
+  drivers/pci/controller/pci-aardvark.c:350:2: error: implicit declaration of function 'gpiod_set_value_cansleep' [-Werror,-Wimplicit-function-declaration]
+  drivers/pci/controller/pci-aardvark.c:1074:21: error: implicit declaration of function 'devm_gpiod_get_from_of_node' [-Werror,-Wimplicit-function-declaration]
+  drivers/pci/controller/pci-aardvark.c:1076:14: error: use of undeclared identifier 'GPIOD_OUT_LOW'
+
+Link: https://lore.kernel.org/r/202006211118.LxtENQfl%25lkp@intel.com
+Link: https://lore.kernel.org/r/20200907111038.5811-2-pali@kernel.org
+Fixes: 5169a9851daa ("PCI: aardvark: Issue PERST via GPIO")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Marek Behún <marek.behun@nic.cz>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/nouveau/nvkm/subdev/acr/gm200.c | 6 ++++--
- drivers/gpu/drm/nouveau/nvkm/subdev/acr/gp102.c | 6 ++++--
- 2 files changed, 8 insertions(+), 4 deletions(-)
+ drivers/pci/controller/pci-aardvark.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/gm200.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/gm200.c
-index cd41b2e6cc879..18502fd6ebaa0 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/gm200.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/gm200.c
-@@ -207,11 +207,13 @@ int
- gm200_acr_wpr_parse(struct nvkm_acr *acr)
- {
- 	const struct wpr_header *hdr = (void *)acr->wpr_fw->data;
-+	struct nvkm_acr_lsfw *lsfw;
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -9,7 +9,7 @@
+  */
  
- 	while (hdr->falcon_id != WPR_HEADER_V0_FALCON_ID_INVALID) {
- 		wpr_header_dump(&acr->subdev, hdr);
--		if (!nvkm_acr_lsfw_add(NULL, acr, NULL, (hdr++)->falcon_id))
--			return -ENOMEM;
-+		lsfw = nvkm_acr_lsfw_add(NULL, acr, NULL, (hdr++)->falcon_id);
-+		if (IS_ERR(lsfw))
-+			return PTR_ERR(lsfw);
- 	}
- 
- 	return 0;
-diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/gp102.c b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/gp102.c
-index 80eb9d8dbc803..e5c8303a5b7b7 100644
---- a/drivers/gpu/drm/nouveau/nvkm/subdev/acr/gp102.c
-+++ b/drivers/gpu/drm/nouveau/nvkm/subdev/acr/gp102.c
-@@ -161,11 +161,13 @@ int
- gp102_acr_wpr_parse(struct nvkm_acr *acr)
- {
- 	const struct wpr_header_v1 *hdr = (void *)acr->wpr_fw->data;
-+	struct nvkm_acr_lsfw *lsfw;
- 
- 	while (hdr->falcon_id != WPR_HEADER_V1_FALCON_ID_INVALID) {
- 		wpr_header_v1_dump(&acr->subdev, hdr);
--		if (!nvkm_acr_lsfw_add(NULL, acr, NULL, (hdr++)->falcon_id))
--			return -ENOMEM;
-+		lsfw = nvkm_acr_lsfw_add(NULL, acr, NULL, (hdr++)->falcon_id);
-+		if (IS_ERR(lsfw))
-+			return PTR_ERR(lsfw);
- 	}
- 
- 	return 0;
--- 
-2.33.0
-
+ #include <linux/delay.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+ #include <linux/irqdomain.h>
 
 

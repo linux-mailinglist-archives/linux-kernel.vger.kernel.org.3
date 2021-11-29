@@ -2,164 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47F304610F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569F54610ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242974AbhK2JTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 04:19:06 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:34276 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241809AbhK2JQx (ORCPT
+        id S243495AbhK2JSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 04:18:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241100AbhK2JQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:16:53 -0500
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AT8lRxG007693;
-        Mon, 29 Nov 2021 09:13:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=xniMcVNwzDC0ZXJ0DZ2+lUwhdveaX/rR0CI0kqYuob8=;
- b=UlxcMSJbW/3s9x3ZkqR9WZE1BQvuy+QxxKMTk+jv23a8J3paWxcRrXxmM+4pEhR6r0n+
- yGod+kQ/iJiKn5WQYK+EPgZlcPolVpuPE02oRIkobZnlW6FCOqLeo7pQuKxyS3SdCSnK
- sx/qy6GWLSg/dvB6KsSKlAPkotuL5UQf9hXsU1Fcl63UIcet7P4FI0e/gbqFitdtsezx
- hM/gcJACTgdd0YSIM8z0Qk/JJHzTvlSB8bZkKcxHogD+4oDbuiGvTyVjVYQRb0S8V7cp
- urqXb9p7cj3a7vEIyAOuPqY/hPyaa9O9ILyD+psHS7MoqXius9VPdKsjbZzvxPBaTEgI 1w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmunqghy6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 09:13:36 +0000
-Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AT9AE0c029080;
-        Mon, 29 Nov 2021 09:13:36 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmunqghxc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 09:13:35 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AT94eFr023387;
-        Mon, 29 Nov 2021 09:13:33 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma05fra.de.ibm.com with ESMTP id 3ckca91y2w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 09:13:33 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AT967qb56099292
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Nov 2021 09:06:07 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6A5F742056;
-        Mon, 29 Nov 2021 09:13:29 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C583D4204D;
-        Mon, 29 Nov 2021 09:13:28 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.5.116])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 29 Nov 2021 09:13:28 +0000 (GMT)
-Date:   Mon, 29 Nov 2021 09:59:14 +0100
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] KVM: s390: gaccess: Cleanup access to guest
- pages
-Message-ID: <20211129095914.34975067@p-imbrenda>
-In-Reply-To: <20211126164549.7046-4-scgl@linux.ibm.com>
-References: <20211126164549.7046-1-scgl@linux.ibm.com>
-        <20211126164549.7046-4-scgl@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+        Mon, 29 Nov 2021 04:16:48 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EA1C0613B3;
+        Mon, 29 Nov 2021 01:01:01 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C5105B80E2B;
+        Mon, 29 Nov 2021 09:00:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C76CEC004E1;
+        Mon, 29 Nov 2021 09:00:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638176458;
+        bh=Qlr43Soawr/WWYkdiJWsATYOLYnK2WCcrLgE7pjs6R4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qrf3MfG4KKoLsRGFnsNpE+7cijbqY3jNHzzeoHfnJUszA7IEN1w/Qae2paOBap1QS
+         A2dsMLWbexRe2WeJ6jF1sEML5GznFnB88dKsCz9EA5MyHNW5b+bBpJ1M90X8cNItZ3
+         MulgHzXA+rToegfrAAQo3PocTZdXlHsE6XXBrXLmzCE0gsfYh8C2BkFj9kvUl/IACr
+         zeLIYm/NLEYro0pxKWFVtcnT+eQ7gQXlSCubRABDFqOuc9zIVLAq6QahTAVXubyEe1
+         eYfYk8k4b+ZHRAHDBEHAdcF62a66Da/kyZ2C2uPWn8zkmpwcj/hsux+RYG4Rk6gGJM
+         idNDJ3XG5k+KA==
+Date:   Mon, 29 Nov 2021 10:00:55 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] i2c: i801: Safely share SMBus with BIOS/ACPI
+Message-ID: <YaSWx7ldFfbCmrK3@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Hector Martin <marcan@marcan.st>, Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20210626054113.246309-1-marcan@marcan.st>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 0Nv6UxSaUs-xGBatjkjXtYIvuTgozx6q
-X-Proofpoint-GUID: mxbwW3crET2RqaJu_PiQ2EZW7ZsbRro2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-29_05,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- bulkscore=0 spamscore=0 mlxlogscore=999 priorityscore=1501
- lowpriorityscore=0 impostorscore=0 mlxscore=0 adultscore=0 malwarescore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111290042
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NJ64SnWzsGr4DzGg"
+Content-Disposition: inline
+In-Reply-To: <20210626054113.246309-1-marcan@marcan.st>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Nov 2021 17:45:49 +0100
-Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
 
-> Introduce a helper function for guest frame access.
-> 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+--NJ64SnWzsGr4DzGg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+On Sat, Jun 26, 2021 at 02:41:13PM +0900, Hector Martin wrote:
+> The i801 controller provides a locking mechanism that the OS is supposed
+> to use to safely share the SMBus with ACPI AML or other firmware.
+>=20
+> Previously, Linux attempted to get out of the way of ACPI AML entirely,
+> but left the bus locked if it used it before the first AML access. This
+> causes AML implementations that *do* attempt to safely share the bus
+> to time out if Linux uses it first; notably, this regressed ACPI video
+> backlight controls on 2015 iMacs after 01590f361e started instantiating
+> SPD EEPROMs on boot.
+>=20
+> Commit 065b6211a8 fixed the immediate problem of leaving the bus locked,
+> but we can do better. The controller does have a proper locking mechanism,
+> so let's use it as intended. Since we can't rely on the BIOS doing this
+> properly, we implement the following logic:
+>=20
+> - If ACPI AML uses the bus at all, we make a note and disable power
+>   management. The latter matches already existing behavior.
+> - When we want to use the bus, we attempt to lock it first. If the
+>   locking attempt times out, *and* ACPI hasn't tried to use the bus at
+>   all yet, we cautiously go ahead and assume the BIOS forgot to unlock
+>   the bus after boot. This preserves existing behavior.
+> - We always unlock the bus after a transfer.
+> - If ACPI AML tries to use the bus (except trying to lock it) while
+>   we're in the middle of a transfer, or after we've determined
+>   locking is broken, we know we cannot safely share the bus and give up.
+>=20
+> Upon first usage of SMBus by ACPI AML, if nothing has gone horribly
+> wrong so far, users will see:
+>=20
+> i801_smbus 0000:00:1f.4: SMBus controller is shared with ACPI AML. This s=
+eems safe so far.
+>=20
+> If locking the SMBus times out, users will see:
+>=20
+> i801_smbus 0000:00:1f.4: BIOS left SMBus locked
+>=20
+> And if ACPI AML tries to use the bus concurrently with Linux, or it
+> previously used the bus and we failed to subsequently lock it as
+> above, the driver will give up and users will get:
+>=20
+> i801_smbus 0000:00:1f.4: BIOS uses SMBus unsafely
+> i801_smbus 0000:00:1f.4: Driver SMBus register access inhibited
+>=20
+> This fixes the regression introduced by 01590f361e, and further allows
+> safely sharing the SMBus on 2015 iMacs. Tested by running `i2cdump` in a
+> loop while changing backlight levels via the ACPI video device.
+>=20
+> Fixes: 01590f361e ("i2c: i801: Instantiate SPD EEPROMs automatically")
+> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 
-see a small nit below
+Jean, Heiner, what do we do with this topic?
 
 > ---
->  arch/s390/kvm/gaccess.c | 24 ++++++++++++++++--------
->  1 file changed, 16 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-> index c09659609d68..9193f0de40b1 100644
-> --- a/arch/s390/kvm/gaccess.c
-> +++ b/arch/s390/kvm/gaccess.c
-> @@ -866,6 +866,20 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->  	return 0;
->  }
->  
-> +static int access_guest_page(struct kvm *kvm, enum gacc_mode mode, gpa_t gpa,
-> +			     void *data, unsigned int len)
-> +{
-> +	const unsigned int offset = offset_in_page(gpa);
-> +	const gfn_t gfn = gpa_to_gfn(gpa);
-> +	int rc;
+>  drivers/i2c/busses/i2c-i801.c | 96 ++++++++++++++++++++++++++++-------
+>  1 file changed, 79 insertions(+), 17 deletions(-)
+>=20
+> diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
+> index 04a1e38f2a6f..03be6310d6d7 100644
+> --- a/drivers/i2c/busses/i2c-i801.c
+> +++ b/drivers/i2c/busses/i2c-i801.c
+> @@ -287,11 +287,18 @@ struct i801_priv {
+>  #endif
+>  	struct platform_device *tco_pdev;
+> =20
+> +	/* BIOS left the controller marked busy. */
+> +	bool inuse_stuck;
+>  	/*
+> -	 * If set to true the host controller registers are reserved for
+> -	 * ACPI AML use. Protected by acpi_lock.
+> +	 * If set to true, ACPI AML uses the host controller registers.
+> +	 * Protected by acpi_lock.
+>  	 */
+> -	bool acpi_reserved;
+> +	bool acpi_usage;
+> +	/*
+> +	 * If set to true, ACPI AML uses the host controller registers in an
+> +	 * unsafe way. Protected by acpi_lock.
+> +	 */
+> +	bool acpi_unsafe;
+>  	struct mutex acpi_lock;
+>  };
+> =20
+> @@ -854,10 +861,37 @@ static s32 i801_access(struct i2c_adapter *adap, u1=
+6 addr,
+>  	int hwpec;
+>  	int block =3D 0;
+>  	int ret =3D 0, xact =3D 0;
+> +	int timeout =3D 0;
+>  	struct i801_priv *priv =3D i2c_get_adapdata(adap);
+> =20
+> +	/*
+> +	 * The controller provides a bit that implements a mutex mechanism
+> +	 * between users of the bus. First, try to lock the hardware mutex.
+> +	 * If this doesn't work, we give up trying to do this, but then
+> +	 * bail if ACPI uses SMBus at all.
+> +	 */
+> +	if (!priv->inuse_stuck) {
+> +		while (inb_p(SMBHSTSTS(priv)) & SMBHSTSTS_INUSE_STS) {
+> +			if (++timeout >=3D MAX_RETRIES) {
+> +				dev_warn(&priv->pci_dev->dev,
+> +					 "BIOS left SMBus locked\n");
+> +				priv->inuse_stuck =3D true;
+> +				break;
+> +			}
+> +			usleep_range(250, 500);
+> +		}
+> +	}
 > +
-> +	if (mode == GACC_STORE)
-> +		rc = kvm_write_guest_page(kvm, gfn, data, offset, len);
-
-why not just return ?
-
-(but don't bother with a v4, it's ok anyway)
-
+>  	mutex_lock(&priv->acpi_lock);
+> -	if (priv->acpi_reserved) {
+> +	if (priv->acpi_usage && priv->inuse_stuck && !priv->acpi_unsafe) {
+> +		priv->acpi_unsafe =3D true;
+> +
+> +		dev_warn(&priv->pci_dev->dev, "BIOS uses SMBus unsafely\n");
+> +		dev_warn(&priv->pci_dev->dev,
+> +			 "Driver SMBus register access inhibited\n");
+> +	}
+> +
+> +	if (priv->acpi_unsafe) {
+>  		mutex_unlock(&priv->acpi_lock);
+>  		return -EBUSY;
+>  	}
+> @@ -1639,6 +1673,16 @@ static bool i801_acpi_is_smbus_ioport(const struct=
+ i801_priv *priv,
+>  	       address <=3D pci_resource_end(priv->pci_dev, SMBBAR);
+>  }
+> =20
+> +static acpi_status
+> +i801_acpi_do_access(u32 function, acpi_physical_address address,
+> +				u32 bits, u64 *value)
+> +{
+> +	if ((function & ACPI_IO_MASK) =3D=3D ACPI_READ)
+> +		return acpi_os_read_port(address, (u32 *)value, bits);
 > +	else
-> +		rc = kvm_read_guest_page(kvm, gfn, data, offset, len);
-> +	return rc;
+> +		return acpi_os_write_port(address, (u32)*value, bits);
 > +}
 > +
->  int access_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
->  		 unsigned long len, enum gacc_mode mode)
->  {
-> @@ -896,10 +910,7 @@ int access_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
->  	rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode);
->  	for (idx = 0; idx < nr_pages && !rc; idx++) {
->  		fragment_len = min(PAGE_SIZE - offset_in_page(gpas[idx]), len);
-> -		if (mode == GACC_STORE)
-> -			rc = kvm_write_guest(vcpu->kvm, gpas[idx], data, fragment_len);
-> -		else
-> -			rc = kvm_read_guest(vcpu->kvm, gpas[idx], data, fragment_len);
-> +		rc = access_guest_page(vcpu->kvm, mode, gpas[idx], data, fragment_len);
->  		len -= fragment_len;
->  		data += fragment_len;
+>  static acpi_status
+>  i801_acpi_io_handler(u32 function, acpi_physical_address address, u32 bi=
+ts,
+>  		     u64 *value, void *handler_context, void *region_context)
+> @@ -1648,17 +1692,38 @@ i801_acpi_io_handler(u32 function, acpi_physical_=
+address address, u32 bits,
+>  	acpi_status status;
+> =20
+>  	/*
+> -	 * Once BIOS AML code touches the OpRegion we warn and inhibit any
+> -	 * further access from the driver itself. This device is now owned
+> -	 * by the system firmware.
+> +	 * Non-i801 accesses pass through.
+>  	 */
+> -	mutex_lock(&priv->acpi_lock);
+> +	if (!i801_acpi_is_smbus_ioport(priv, address))
+> +		return i801_acpi_do_access(function, address, bits, value);
+> =20
+> -	if (!priv->acpi_reserved && i801_acpi_is_smbus_ioport(priv, address)) {
+> -		priv->acpi_reserved =3D true;
+> +	if (!mutex_trylock(&priv->acpi_lock)) {
+> +		mutex_lock(&priv->acpi_lock);
+> +		/*
+> +		 * This better be a read of the status register to acquire
+> +		 * the lock...
+> +		 */
+> +		if (!priv->acpi_unsafe &&
+> +			!(address =3D=3D SMBHSTSTS(priv) &&
+> +			 (function & ACPI_IO_MASK) =3D=3D ACPI_READ)) {
+> +			/*
+> +			 * Uh-oh, ACPI AML is trying to do something with the
+> +			 * controller without locking it properly.
+> +			 */
+> +			priv->acpi_unsafe =3D true;
+> +
+> +			dev_warn(&pdev->dev, "BIOS uses SMBus unsafely\n");
+> +			dev_warn(&pdev->dev,
+> +				 "Driver SMBus register access inhibited\n");
+> +		}
+> +	}
+> =20
+> -		dev_warn(&pdev->dev, "BIOS is accessing SMBus registers\n");
+> -		dev_warn(&pdev->dev, "Driver SMBus register access inhibited\n");
+> +	if (!priv->acpi_usage) {
+> +		priv->acpi_usage =3D true;
+> +
+> +		if (!priv->acpi_unsafe)
+> +			dev_info(&pdev->dev,
+> +				 "SMBus controller is shared with ACPI AML. This seems safe so far.\=
+n");
+> =20
+>  		/*
+>  		 * BIOS is accessing the host controller so prevent it from
+> @@ -1667,10 +1732,7 @@ i801_acpi_io_handler(u32 function, acpi_physical_a=
+ddress address, u32 bits,
+>  		pm_runtime_get_sync(&pdev->dev);
 >  	}
-> @@ -920,10 +931,7 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
->  	while (len && !rc) {
->  		gpa = kvm_s390_real_to_abs(vcpu, gra);
->  		fragment_len = min(PAGE_SIZE - offset_in_page(gpa), len);
-> -		if (mode)
-> -			rc = write_guest_abs(vcpu, gpa, data, fragment_len);
-> -		else
-> -			rc = read_guest_abs(vcpu, gpa, data, fragment_len);
-> +		rc = access_guest_page(vcpu->kvm, mode, gpa, data, fragment_len);
->  		len -= fragment_len;
->  		gra += fragment_len;
->  		data += fragment_len;
+> =20
+> -	if ((function & ACPI_IO_MASK) =3D=3D ACPI_READ)
+> -		status =3D acpi_os_read_port(address, (u32 *)value, bits);
+> -	else
+> -		status =3D acpi_os_write_port(address, (u32)*value, bits);
+> +	status =3D i801_acpi_do_access(function, address, bits, value);
+> =20
+>  	mutex_unlock(&priv->acpi_lock);
+> =20
+> @@ -1706,7 +1768,7 @@ static void i801_acpi_remove(struct i801_priv *priv)
+>  		ACPI_ADR_SPACE_SYSTEM_IO, i801_acpi_io_handler);
+> =20
+>  	mutex_lock(&priv->acpi_lock);
+> -	if (priv->acpi_reserved)
+> +	if (priv->acpi_usage)
+>  		pm_runtime_put(&priv->pci_dev->dev);
+>  	mutex_unlock(&priv->acpi_lock);
+>  }
+> --=20
+> 2.32.0
+>=20
 
+--NJ64SnWzsGr4DzGg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGklsMACgkQFA3kzBSg
+Kbb19xAAp+/KuBaMeVdW591pCrHFWzeHtIY0DD8VW4txlCukb+DbpQhglCh55H+N
+o9b0kwVdZU4Fv/5SMVfeTlXb7kPilI+JnlMiY4uxgzkQADzYBnkES/PsjBxY1aRQ
+0evCirc8gDGrMllwe0p5YmYsir/4JvGowIMjpHA4LWm/Ul9wyoMbiEp0dtaecMQU
+mq9LJSX6+oL3dhueuwNSX6h72mI55KfMTuS/ay83Fqwqhr/Y8txYSky1y8q7ICyx
+jVLDUQFh/dcCqIPFKncVCLDFS/pcTpIDRvvvD7yDv5uC4SPKnq1xXHlkUm7iRP9+
+nRAv/eSuyj9tZ4955Za/TBsrzh+QPlgVFXTkTeEr6W7PBOIOs5ayQFPpTYni/S8p
+IQ5uDRVnEDMNiFPNf9O+Y9q0NeMiUiXl48aPRNWBjTbiCx4uLg98H89Pocb5Ji4L
+thbfEiPuf86YRErHaqKIQo7m77tQBwd0ySk4XC2r5SiwlUORJ+1wMmH9cbLuEkp1
+tfMMYzqpW7SQU8uxp3H/y0nZCnHFIWrPODtZZsTDv48ga5ODzQdqg/rt4MZG1cmy
+6/B/e5dvDVYxBlynTShQ3ch7MwlBTGJjLaqWzI+ie0GzzzcoSW9BAfx0W60aDzC2
+QiVnpPuiMBeTXY4yCSYl5qHBLog1L5BSRqiNuaekokZHBfjL6qA=
+=pW/q
+-----END PGP SIGNATURE-----
+
+--NJ64SnWzsGr4DzGg--

@@ -2,189 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F21462870
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D068546286E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:38:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbhK2XmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
+        id S230045AbhK2Xl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbhK2Xl7 (ORCPT
+        with ESMTP id S232386AbhK2Xl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:41:59 -0500
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FCAC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:38:41 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id w4so19200872ilv.12
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:38:41 -0800 (PST)
+        Mon, 29 Nov 2021 18:41:56 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35F3C06174A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:38:37 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id f125so4486623pgc.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:38:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=cM4LLC7Ra6uzwcuWSM5NZXc4z65RXTzgZXg9TfzcrF0=;
-        b=NjvrXefV+Tyz/6qIt23esO3IWA1rwOrUFvNgUnPxtLiRG8g5rEQxg9nsMJLXpZr3FK
-         tU4ts056l/QVt0QnFbNLCAmiWh1+34UbklkMHozBzMVJfUe/vaRiB5ZYIu8Wx5nKspwL
-         U+8KBLfAqLorkIDfctmoyGJ9T3ma4NnUm7KUTB/NKv4dYWw6iRyv/YlJDMlTmSue5KaW
-         qWpNqaMvQ7NTbDnoXJ0dBTT6aL+nkUEFZZg1wgCxy92+V1kih/O98c8JHHCB/6+jP/92
-         y8DvUnwagDbvGsCMClD+gGtexD2VsxNZIl+N3WABP7cE5SZIJlR/ahYfAiuN99RxsPoW
-         oPEw==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kimin07IyQujzwbNieuCZAXwjj1roojWjqX5HWur5aU=;
+        b=Wsw+rXmhVk+A+ci/dpCKpRKXxCMuyKgJPmFHurEFyKZ1yoeuVHrUluGgbdWdjPa7ww
+         XjV2FHLl/REIVyA1Za6yBUNq0K1pfFutbciD8Bbk6FGFtmfKBLU5dpIa1uWOqby0H3Bu
+         lBbCkoN4MgRL3J+IoLPGm3HZRHVo4SxPx9IlZqxwHl3sfdM3315DHroq8tvCugZSAMmC
+         E/GexI7mIdflziFoqFed8pWZF7aJwarZ7cjLHowO8Jz6WGTMx8VnVbwx7BqhRG+jvx1P
+         i8ZZo0/9HZHIpHjZ6G6kvT8Ux5kQjxQqA+aAzWjUBZUvEHoTZd5jfjyAmEmzxM5nWEgV
+         AEmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cM4LLC7Ra6uzwcuWSM5NZXc4z65RXTzgZXg9TfzcrF0=;
-        b=jQvz05a4t3NTaVtH/Wad2Lc8etglQdSKFC+STN+XjS8A6oQx/sOLN3/4F+ZViOaV8n
-         kBHmANQZjQFK1ZFAsq+8XqVp/fIwLecgo94iL7hXayyJMqTNQ87wy/WkQRdw7/UOH314
-         Oa02L0H+9OsSeeOTZyNMhbvNvvFZN47x/To+Q7bqeezE05h3YAxpW+PwkbKkcoxaHT6a
-         oXqXmwo5hD9TKFA3NtmBWxWCB6+eaD43dY83nd610Kg4rXNg3x2PqzOhhWq1kpWmQ+T9
-         M4tEFtMHr62sSNqpfvl63sG8Dlu4WyzGIHh2rZl/Ns6MCwFHb6N6bJgQl5QMO2rGHL+E
-         QLqw==
-X-Gm-Message-State: AOAM530mqxiQ2rG0PmJrzsCw0kO8Vv2zue2cDw0SSqq96P5Pyqnc8AZb
-        wMUNai5tPMyxcPo6c+WQy+Vu73d3F9gNrusBCuV7Iw==
-X-Google-Smtp-Source: ABdhPJzK9K+KVbfmPIZ+m0ojXFZFrobizxDicP6iM3RcGMNmXCBfxijWX476XWcc/i38FLLnoATKPFzu88o5GajmOqc=
-X-Received: by 2002:a05:6e02:f51:: with SMTP id y17mr38013668ilj.2.1638229120515;
- Mon, 29 Nov 2021 15:38:40 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kimin07IyQujzwbNieuCZAXwjj1roojWjqX5HWur5aU=;
+        b=nKj4WJkgO31/Fo1p/HKA/r8/YU2wZ4UaeuTQ4Ed+ZXpVG+sTNn9Y7S6MDaNM1WXgDO
+         mYL/ZkgfBeTZFESy2PrmoC1AkTZBlnY4IvYwxsuN7T5yst0fc1/PcjFfFiGDAoGVGhwJ
+         7GJ+cNaX9pBRj4ZVkspMkhK9/+Hm+3esJRgPESlORQiiOxH619LNTMZyt1Fu1svL6vy9
+         K4pHJk/v2B5EfIjTiV6vqARd4kuTeLlsspMnLcUDqtuXchg7a5kW18psaX/czpEts0L2
+         ixzbrC2zoAei9ZR72TZCNXtZoHezTcVcatvefJPZOAY44mtc5WpL4eN4raTkGFDcerR+
+         pDzw==
+X-Gm-Message-State: AOAM530GHeWwSRiToJh6BVPD7oCvuLRqXiJy3rhQ9CF7puVBMtzc8tJO
+        Gp0rdZvKAwb7y3YP37p7QublmQ==
+X-Google-Smtp-Source: ABdhPJwpzUNbdUuRzeXMckQ0oWkaWO8uUHzEVuQzZ1oSekyb/3R3wksSbGFHSGirj3qfxf4HuEayhw==
+X-Received: by 2002:a05:6a00:1348:b0:481:179c:ce9b with SMTP id k8-20020a056a00134800b00481179cce9bmr41985324pfu.27.1638229117199;
+        Mon, 29 Nov 2021 15:38:37 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c18sm18945196pfl.201.2021.11.29.15.38.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 15:38:36 -0800 (PST)
+Date:   Mon, 29 Nov 2021 23:38:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
+        Xiaoyao Li <xiaoyao.li@intel.com>
+Subject: Re: [RFC PATCH v3 54/59] KVM: X86: Introduce initial_tsc_khz in
+ struct kvm_arch
+Message-ID: <YaVkeZalN5wkd9uL@google.com>
+References: <cover.1637799475.git.isaku.yamahata@intel.com>
+ <5ba3573c8b82fcbdc3f3994f6d4d2a3c40445be9.1637799475.git.isaku.yamahata@intel.com>
+ <875ysghrp8.ffs@tglx>
+ <741df444-5cd0-2049-f93a-c2521e4f426d@redhat.com>
 MIME-Version: 1.0
-References: <20211118201730.2302927-1-irogers@google.com> <YaOkbojVb2gZtfCk@krava>
-In-Reply-To: <YaOkbojVb2gZtfCk@krava>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 29 Nov 2021 15:38:28 -0800
-Message-ID: <CAP-5=fVRE8dcDtivYaAm=DQze4d2966X7oWTWVzstzWeC-xeSw@mail.gmail.com>
-Subject: Re: [PATCH] perf header: Fix memory leaks
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <741df444-5cd0-2049-f93a-c2521e4f426d@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 7:47 AM Jiri Olsa <jolsa@redhat.com> wrote:
->
-> On Thu, Nov 18, 2021 at 12:17:30PM -0800, Ian Rogers wrote:
-> > These leaks were found with leak sanitizer running "perf pipe recording
-> > and injection test". In pipe mode feat_fd may hold onto an events struct
-> > that needs freeing. When string features are processed they may
-> > overwrite an already created string, so free this before the overwrite.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/header.c | 15 ++++++++++-----
-> >  1 file changed, 10 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-> > index 79cce216727e..e3c1a532d059 100644
-> > --- a/tools/perf/util/header.c
-> > +++ b/tools/perf/util/header.c
-> > @@ -2321,6 +2321,7 @@ static int perf_header__read_build_ids(struct perf_header *header,
-> >  #define FEAT_PROCESS_STR_FUN(__feat, __feat_env) \
-> >  static int process_##__feat(struct feat_fd *ff, void *data __maybe_unused) \
-> >  {\
-> > +     free(ff->ph->env.__feat_env);                \
->
-> hm, how is this set before this callback is triggered?
+On Thu, Nov 25, 2021, Paolo Bonzini wrote:
+> On 11/25/21 22:05, Thomas Gleixner wrote:
+> > You can argue that my request is unreasonable until you are blue in
+> > your face, it's not going to lift my NAK on this.
+> 
+> There's no need for that.  I'd be saying the same, and I don't think it's
+> particularly helpful that you made it almost a personal issue.
+> 
+> While in this series there is a separation of changes to existing code vs.
+> new code, what's not clear is _why_ you have all those changes. These are
+> not code cleanups or refactorings that can stand on their own feet; lots of
+> the early patches are actually part of the new functionality.  And being in
+> the form of "add an argument here" or "export a function there", it's not
+> really easy (or feasible) to review them without seeing how the new
+> functionality is used, which requires a constant back and forth between
+> early patches and the final 2000 line file.
+> 
+> In some sense, the poor commit messages at the beginning of the series are
+> just a symptom of not having any meat until too late, and then dropping it
+> all at once.  There's only so much that you can say about an
+> EXPORT_SYMBOL_GPL, the real thing to talk about is probably the thing that
+> refers to that symbol.
+> 
+> If there are some patches that are actually independent, go ahead and submit
+> them early.  But more practically, for the bulk of the changes what you need
+> to do is:
+> 
+> 1) incorporate into patch 55 a version of tdx.c that essentially does
+> KVM_BUG_ON or WARN_ON for each function.  Temporarily keep the same huge
+> patch that adds the remaining 2000 lines of tdx.c
+> 
+> 2) squash the tdx.c stub with patch 44.
+> 
+> 3) gather a strace of QEMU starting up a TDX domain.
+> 
+> 4) figure out which parts of the code are needed to run until the first
+> ioctl.  Make that a first patch.
 
-I see it for cpuid which is initially set in:
-#0  perf_env__read_cpuid (env=0x62b000007240) at util/env.c:363
-#1  0x0000555556325153 in perf_env__cpuid (env=0x62b000007240) at util/env.c:456
-#2  0x00005555564002ff in evlist__init_trace_event_sample_raw
-(evlist=0x61e000000080) at util/sample-raw.c:17
-#3  0x00005555563f01f4 in __perf_session__new (data=0x7fffffffb8b0,
-repipe=false, repipe_fd=-1, tool=0x7fffffffbaa0)
-    at util/session.c:228
-#4  0x000055555615f26b in perf_session__new (data=0x7fffffffb8b0,
-tool=0x7fffffffbaa0) at util/session.h:70
-#5  0x000055555616d991 in cmd_report (argc=0, argv=0x7fffffffe468) at
-builtin-report.c:1408
-#6  0x00005555562f36b8 in run_builtin (p=0x5555586bacd0
-<commands+240>, argc=5, argv=0x7fffffffe468) at perf.c:313
-#7  0x00005555562f3c11 in handle_internal_command (argc=5,
-argv=0x7fffffffe468) at perf.c:365
-#8  0x00005555562f3fce in run_argv (argcp=0x7fffffffe240,
-argv=0x7fffffffe250) at perf.c:409
-#9  0x00005555562f47bd in main (argc=5, argv=0x7fffffffe468) at perf.c:539
+Hmm, I don't think this approach will work as well as it did for SEV when applied
+at a per-ioctl granuarity, I suspect several patches will end up quite large.   I
+completely agree with the overall idea, but I'd encourage the TDX folks to have a
+finer granularity where it makes sense, e.g. things like the x2APIC behavior,
+immutable TSC, memory management, etc... can probably be sliced up into separate
+patches.
 
-And then overwritten causing the leak:
-#0  0x00005555563b965a in process_cpuid (ff=0x7fffffffad50, data=0x0)
-at util/header.c:2333
-#1  0x00005555563c53d2 in perf_event__process_feature
-(session=0x62b000007200, event=0x621000006500) at util/header.c:4144
-#2  0x000055555615fdef in process_feature_event
-(session=0x62b000007200, event=0x621000006500) at builtin-report.c:230
-#3  0x00005555563fa033 in perf_session__process_user_event
-(session=0x62b000007200, event=0x621000006500, file_offset=868)
-    at util/session.c:1668
-#4  0x00005555563fae08 in perf_session__process_event
-(session=0x62b000007200, event=0x621000006500, file_offset=868)
-    at util/session.c:1803
-#5  0x00005555563fc4e6 in __perf_session__process_pipe_events
-(session=0x62b000007200) at util/session.c:2044
-#6  0x00005555563ff005 in perf_session__process_events
-(session=0x62b000007200) at util/session.c:2418
-#7  0x000055555616508a in __cmd_report (rep=0x7fffffffbaa0) at
-builtin-report.c:940
-#8  0x000055555616f5c9 in cmd_report (argc=0, argv=0x7fffffffe468) at
-builtin-report.c:1629
-#9  0x00005555562f36b8 in run_builtin (p=0x5555586bacd0
-<commands+240>, argc=5, argv=0x7fffffffe468) at perf.c:313
-#10 0x00005555562f3c11 in handle_internal_command (argc=5,
-argv=0x7fffffffe468) at perf.c:365
-#11 0x00005555562f3fce in run_argv (argcp=0x7fffffffe240,
-argv=0x7fffffffe250) at perf.c:409
-#12 0x00005555562f47bd in main (argc=5, argv=0x7fffffffe468) at perf.c:539
+> 5) repeat step 4 until you have covered all the code
+> 
+> 5) Move the new "KVM: VMX: Add 'main.c' to wrap VMX and TDX" (which also
+> adds the tdx.c stub) as possible in the series.
+> 
+> 6) Move each of the new patches as early as possible in the series.
+> 
+> 7) Look for candidates for squashing (e.g. commit messages that say it's
+> "used later"; now the use should be very close and the two can be merged).
+> Add to the commit message a note about changes outside VMX.
 
-Thanks,
-Ian
+Generally speaking, I agree.  For the flag exposion, I 100% agree that setting
+the flag in TDX, adding it in x86 is best done in a signal patch, and handling
+all side effects is best done in a single patch.  
 
-> jirka
->
-> >       ff->ph->env.__feat_env = do_read_string(ff); \
-> >       return ff->ph->env.__feat_env ? 0 : -ENOMEM; \
-> >  }
-> > @@ -4124,6 +4125,7 @@ int perf_event__process_feature(struct perf_session *session,
-> >       struct perf_record_header_feature *fe = (struct perf_record_header_feature *)event;
-> >       int type = fe->header.type;
-> >       u64 feat = fe->feat_id;
-> > +     int ret = 0;
-> >
-> >       if (type < 0 || type >= PERF_RECORD_HEADER_MAX) {
-> >               pr_warning("invalid record type %d in pipe-mode\n", type);
-> > @@ -4141,11 +4143,13 @@ int perf_event__process_feature(struct perf_session *session,
-> >       ff.size = event->header.size - sizeof(*fe);
-> >       ff.ph = &session->header;
-> >
-> > -     if (feat_ops[feat].process(&ff, NULL))
-> > -             return -1;
-> > +     if (feat_ops[feat].process(&ff, NULL)) {
-> > +             ret = -1;
-> > +             goto out;
-> > +     }
-> >
-> >       if (!feat_ops[feat].print || !tool->show_feat_hdr)
-> > -             return 0;
-> > +             goto out;
-> >
-> >       if (!feat_ops[feat].full_only ||
-> >           tool->show_feat_hdr >= SHOW_FEAT_HEADER_FULL_INFO) {
-> > @@ -4154,8 +4158,9 @@ int perf_event__process_feature(struct perf_session *session,
-> >               fprintf(stdout, "# %s info available, use -I to display\n",
-> >                       feat_ops[feat].name);
-> >       }
-> > -
-> > -     return 0;
-> > +out:
-> > +     free_event_desc(ff.events);
-> > +     return ret;
-> >  }
-> >
-> >  size_t perf_event__fprintf_event_update(union perf_event *event, FILE *fp)
-> > --
-> > 2.34.0.rc2.393.gf8c9666880-goog
-> >
->
+But for things like letting debug TDs access registers, I would prefer not to
+actually squash the two (or more) patches.  I agree that two related patches need
+to be contiguous in the series, but I'd prefer that things with non-trivial changes,
+especially in common code, are kept separate.
+
+> The resulting series may not be perfect, but it would be a much better
+> starting point for review.
+> 
+> Paolo

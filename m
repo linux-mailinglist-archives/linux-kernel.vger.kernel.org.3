@@ -2,130 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 999364619C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 095854619B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:38:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347776AbhK2Oli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:41:38 -0500
-Received: from mga06.intel.com ([134.134.136.31]:46852 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1378911AbhK2Oje (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:39:34 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="296786173"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="296786173"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 06:33:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="653129914"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Nov 2021 06:33:43 -0800
-To:     zhuyinbo <zhuyinbo@loongson.cn>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1636612118-32481-1-git-send-email-zhuyinbo@loongson.cn>
- <c330c58f-bb73-d439-d6fa-63eb9cba4313@loongson.cn>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v3] usb: xhci: add LWP quirk for ensuring uPD720201 into
- D3 state after S5
-Message-ID: <ffc49feb-2648-b94c-c4b5-ee24bd44d1de@linux.intel.com>
-Date:   Mon, 29 Nov 2021 16:35:16 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S1378385AbhK2OlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:41:08 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:58555 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346001AbhK2OjH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:39:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638196549;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NX7VkkYIQGzP0I9XBsLSshFdyA+J/OWJz10sfl4k2wU=;
+        b=d5Y7DkX7K8Shqg4+i2GINBas40YFGXEM8IZOnhBcPZZ3HQqAnjH1bbn8gYKo1qz6nnFOFS
+        mm4J843C6gWcT73yi7paFq1ehLnfTNa5OAgwckkKt7/rWiNYYmF1n0ic0RwY8R9IglYxM4
+        lW4JgR4FgzYEJysnPBv3ZQzAlZl09c4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-514-TAcmm38MNN-cxHhLS9hPrg-1; Mon, 29 Nov 2021 09:35:41 -0500
+X-MC-Unique: TAcmm38MNN-cxHhLS9hPrg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6A2FD760D3;
+        Mon, 29 Nov 2021 14:35:36 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F3F931002388;
+        Mon, 29 Nov 2021 14:35:32 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+Subject: [PATCH 53/64] fscache, cachefiles: Display stats of no-space events
+From:   David Howells <dhowells@redhat.com>
+To:     linux-cachefs@redhat.com
+Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 29 Nov 2021 14:35:32 +0000
+Message-ID: <163819653216.215744.17210522251617386509.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
+References: <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/0.23
 MIME-Version: 1.0
-In-Reply-To: <c330c58f-bb73-d439-d6fa-63eb9cba4313@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.11.2021 14.25, zhuyinbo wrote:
-> 
-> 在 2021/11/11 下午2:28, Yinbo Zhu 写道:
->> After S5, any pci device should into D3 state that if supported, but the
->> uPD720201 was not and cause OSPM power consumption is more higher that
->> S5 than S4. Due to that uPD720201 firmware behavior was unknown and the
->> _PS3 method wasn't implemented in ACPI table which can make device into
->> D3, I think xhci HCD can add a quirk ensure it into D3 state after S5
->> that is appropriate and this patch was to add the XHCI_LWP_QURIK and set
->> PCI_D3hot to uPD720201 pmsc register in xhci_pci_shutdown and
->> xhci_pci_remove to fix xhci power consumption issue.
->>
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->> Change in v3:
->>         Add D3 set in xhci_pci_remove function.
->>
->>   drivers/usb/host/xhci-pci.c | 9 +++++++++
->>   drivers/usb/host/xhci.h     | 1 +
->>   2 files changed, 10 insertions(+)
->>
->> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->> index 2c9f25c..6258a5a 100644
->> --- a/drivers/usb/host/xhci-pci.c
->> +++ b/drivers/usb/host/xhci-pci.c
->> @@ -265,6 +265,7 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->>           pdev->device == 0x0014) {
->>           xhci->quirks |= XHCI_TRUST_TX_LENGTH;
->>           xhci->quirks |= XHCI_ZERO_64B_REGS;
->> +        xhci->quirks |= XHCI_LWP_QUIRK;
->>       }
->>       if (pdev->vendor == PCI_VENDOR_ID_RENESAS &&
->>           pdev->device == 0x0015) {
->> @@ -466,6 +467,10 @@ static void xhci_pci_remove(struct pci_dev *dev)
->>           pci_set_power_state(dev, PCI_D3hot);
->>         usb_hcd_pci_remove(dev);
->> +
->> +    /* Workaround for decreasing power consumption after S5 */
->> +    if (xhci->quirks & XHCI_LWP_QUIRK)
->> +        pci_set_power_state(dev, PCI_D3hot);
->>   }
->>     #ifdef CONFIG_PM
->> @@ -610,6 +615,10 @@ static void xhci_pci_shutdown(struct usb_hcd *hcd)
->>       /* Yet another workaround for spurious wakeups at shutdown with HSW */
->>       if (xhci->quirks & XHCI_SPURIOUS_WAKEUP)
->>           pci_set_power_state(pdev, PCI_D3hot);
->> +
->> +    /* Workaround for decreasing power consumption after S5 */
->> +    if (xhci->quirks & XHCI_LWP_QUIRK)
->> +        pci_set_power_state(pdev, PCI_D3hot);
->>   }
->>   #endif /* CONFIG_PM */
->>   diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
->> index dca6181..bcd70d1 100644
->> --- a/drivers/usb/host/xhci.h
->> +++ b/drivers/usb/host/xhci.h
->> @@ -1899,6 +1899,7 @@ struct xhci_hcd {
->>   #define XHCI_SG_TRB_CACHE_SIZE_QUIRK    BIT_ULL(39)
->>   #define XHCI_NO_SOFT_RETRY    BIT_ULL(40)
->>   #define XHCI_BROKEN_D3COLD    BIT_ULL(41)
->> +#define XHCI_LWP_QUIRK        BIT_ULL(42)
->>         unsigned int        num_active_eps;
->>       unsigned int        limit_active_eps;
-> 
-> Hi all,
-> 
-> 
-> Do you have any advice about my patch, if no any question, please you help me merge this patch to upstream.
-> 
+Add stat counters of no-space events that caused caching not to happen and
+display in /proc/fs/fscache/stats.
 
-This will set any Renesas uPD720201 PCI controller to D3 at remove or shutdown.
-Should this be limited to only those platforms with missing ACPI methods?
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: linux-cachefs@redhat.com
+---
 
-Would be better if we could avoid setting PCI D states directly in xhci driver.
+ fs/cachefiles/cache.c         |   18 +++++++++++++++---
+ fs/cachefiles/daemon.c        |    2 +-
+ fs/cachefiles/internal.h      |   11 +++++++++--
+ fs/cachefiles/io.c            |    7 +++++--
+ fs/cachefiles/namei.c         |    6 ++++--
+ fs/fscache/stats.c            |    8 ++++++++
+ include/linux/fscache-cache.h |    6 ++++++
+ 7 files changed, 48 insertions(+), 10 deletions(-)
 
-Do you know the details why pci_disable_device() called by usb_hcd_pci_shutdown()
-is not setting this right D state in this case? 
-Is it just the missing _PS3 ACPI method described in the patch, or some other reason?
-
-Is windows working? or is that not relevant in this case?
-If not working, and product not yet on the market then fixing the ACPI firmware
-would be solve both cases.
-
-Thanks
--Mathias
+diff --git a/fs/cachefiles/cache.c b/fs/cachefiles/cache.c
+index 2f7f5381afbe..327cea71557f 100644
+--- a/fs/cachefiles/cache.c
++++ b/fs/cachefiles/cache.c
+@@ -147,7 +147,7 @@ int cachefiles_add_cache(struct cachefiles_cache *cache)
+ 	pr_info("File cache on %s registered\n", cache_cookie->name);
  
+ 	/* check how much space the cache has */
+-	cachefiles_has_space(cache, 0, 0);
++	cachefiles_has_space(cache, 0, 0, cachefiles_has_space_check);
+ 	cachefiles_end_secure(cache, saved_cred);
+ 	_leave(" = 0 [%px]", cache->cache);
+ 	return 0;
+@@ -175,7 +175,8 @@ int cachefiles_add_cache(struct cachefiles_cache *cache)
+  * cache
+  */
+ int cachefiles_has_space(struct cachefiles_cache *cache,
+-			 unsigned fnr, unsigned bnr)
++			 unsigned fnr, unsigned bnr,
++			 enum cachefiles_has_space_for reason)
+ {
+ 	struct kstatfs stats;
+ 	u64 b_avail, b_writing;
+@@ -233,7 +234,7 @@ int cachefiles_has_space(struct cachefiles_cache *cache,
+ 	ret = -ENOBUFS;
+ 	if (stats.f_ffree < cache->fstop ||
+ 	    b_avail < cache->bstop)
+-		goto begin_cull;
++		goto stop_and_begin_cull;
+ 
+ 	ret = 0;
+ 	if (stats.f_ffree < cache->fcull ||
+@@ -252,6 +253,17 @@ int cachefiles_has_space(struct cachefiles_cache *cache,
+ 	//_leave(" = 0");
+ 	return 0;
+ 
++stop_and_begin_cull:
++	switch (reason) {
++	case cachefiles_has_space_for_write:
++		fscache_count_no_write_space();
++		break;
++	case cachefiles_has_space_for_create:
++		fscache_count_no_create_space();
++		break;
++	default:
++		break;
++	}
+ begin_cull:
+ 	if (!test_and_set_bit(CACHEFILES_CULLING, &cache->flags)) {
+ 		_debug("### CULL CACHE ###");
+diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
+index 45af558a696e..40a792421fc1 100644
+--- a/fs/cachefiles/daemon.c
++++ b/fs/cachefiles/daemon.c
+@@ -170,7 +170,7 @@ static ssize_t cachefiles_daemon_read(struct file *file, char __user *_buffer,
+ 		return 0;
+ 
+ 	/* check how much space the cache has */
+-	cachefiles_has_space(cache, 0, 0);
++	cachefiles_has_space(cache, 0, 0, cachefiles_has_space_check);
+ 
+ 	/* summarise */
+ 	f_released = atomic_xchg(&cache->f_released, 0);
+diff --git a/fs/cachefiles/internal.h b/fs/cachefiles/internal.h
+index 77c899b3eaa5..5396baad45ed 100644
+--- a/fs/cachefiles/internal.h
++++ b/fs/cachefiles/internal.h
+@@ -130,10 +130,17 @@ static inline void cachefiles_state_changed(struct cachefiles_cache *cache)
+  * cache.c
+  */
+ extern int cachefiles_add_cache(struct cachefiles_cache *cache);
+-extern int cachefiles_has_space(struct cachefiles_cache *cache,
+-				unsigned fnr, unsigned bnr);
+ extern void cachefiles_withdraw_cache(struct cachefiles_cache *cache);
+ 
++enum cachefiles_has_space_for {
++	cachefiles_has_space_check,
++	cachefiles_has_space_for_write,
++	cachefiles_has_space_for_create,
++};
++extern int cachefiles_has_space(struct cachefiles_cache *cache,
++				unsigned fnr, unsigned bnr,
++				enum cachefiles_has_space_for reason);
++
+ /*
+  * daemon.c
+  */
+diff --git a/fs/cachefiles/io.c b/fs/cachefiles/io.c
+index d284984da1fa..74ef4d1fc562 100644
+--- a/fs/cachefiles/io.c
++++ b/fs/cachefiles/io.c
+@@ -468,7 +468,8 @@ static int __cachefiles_prepare_write(struct netfs_cache_resources *cres,
+ 	 * space, we need to see if it's fully allocated.  If it's not, we may
+ 	 * want to cull it.
+ 	 */
+-	if (cachefiles_has_space(cache, 0, *_len / PAGE_SIZE) == 0)
++	if (cachefiles_has_space(cache, 0, *_len / PAGE_SIZE,
++				 cachefiles_has_space_check) == 0)
+ 		return 0; /* Enough space to simply overwrite the whole block */
+ 
+ 	pos = cachefiles_inject_read_error();
+@@ -483,6 +484,7 @@ static int __cachefiles_prepare_write(struct netfs_cache_resources *cres,
+ 		return 0; /* Fully allocated */
+ 
+ 	/* Partially allocated, but insufficient space: cull. */
++	fscache_count_no_write_space();
+ 	pos = cachefiles_inject_remove_error();
+ 	if (pos == 0)
+ 		ret = vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+@@ -498,7 +500,8 @@ static int __cachefiles_prepare_write(struct netfs_cache_resources *cres,
+ 	return ret;
+ 
+ check_space:
+-	return cachefiles_has_space(cache, 0, *_len / PAGE_SIZE);
++	return cachefiles_has_space(cache, 0, *_len / PAGE_SIZE,
++				    cachefiles_has_space_for_write);
+ }
+ 
+ static int cachefiles_prepare_write(struct netfs_cache_resources *cres,
+diff --git a/fs/cachefiles/namei.c b/fs/cachefiles/namei.c
+index 9e05bc8dc44b..7e24a7a2234d 100644
+--- a/fs/cachefiles/namei.c
++++ b/fs/cachefiles/namei.c
+@@ -115,7 +115,8 @@ struct dentry *cachefiles_get_directory(struct cachefiles_cache *cache,
+ 
+ 	/* we need to create the subdir if it doesn't exist yet */
+ 	if (d_is_negative(subdir)) {
+-		ret = cachefiles_has_space(cache, 1, 0);
++		ret = cachefiles_has_space(cache, 1, 0,
++					   cachefiles_has_space_for_create);
+ 		if (ret < 0)
+ 			goto mkdir_error;
+ 
+@@ -511,7 +512,8 @@ static bool cachefiles_create_file(struct cachefiles_object *object)
+ 	struct file *file;
+ 	int ret;
+ 
+-	ret = cachefiles_has_space(object->volume->cache, 1, 0);
++	ret = cachefiles_has_space(object->volume->cache, 1, 0,
++				   cachefiles_has_space_for_create);
+ 	if (ret < 0)
+ 		return false;
+ 
+diff --git a/fs/fscache/stats.c b/fs/fscache/stats.c
+index 798ee68b3e9d..db2f4e225dd9 100644
+--- a/fs/fscache/stats.c
++++ b/fs/fscache/stats.c
+@@ -42,6 +42,10 @@ atomic_t fscache_n_read;
+ EXPORT_SYMBOL(fscache_n_read);
+ atomic_t fscache_n_write;
+ EXPORT_SYMBOL(fscache_n_write);
++atomic_t fscache_n_no_write_space;
++EXPORT_SYMBOL(fscache_n_no_write_space);
++atomic_t fscache_n_no_create_space;
++EXPORT_SYMBOL(fscache_n_no_create_space);
+ 
+ /*
+  * display the general statistics
+@@ -82,6 +86,10 @@ int fscache_stats_show(struct seq_file *m, void *v)
+ 		   atomic_read(&fscache_n_relinquishes_retire),
+ 		   atomic_read(&fscache_n_relinquishes_dropped));
+ 
++	seq_printf(m, "NoSpace: nwr=%u ncr=%u\n",
++		   atomic_read(&fscache_n_no_write_space),
++		   atomic_read(&fscache_n_no_create_space));
++
+ 	seq_printf(m, "IO     : rd=%u wr=%u\n",
+ 		   atomic_read(&fscache_n_read),
+ 		   atomic_read(&fscache_n_write));
+diff --git a/include/linux/fscache-cache.h b/include/linux/fscache-cache.h
+index 491518f53f01..1d7d43171243 100644
+--- a/include/linux/fscache-cache.h
++++ b/include/linux/fscache-cache.h
+@@ -186,11 +186,17 @@ static inline void fscache_wait_for_objects(struct fscache_cache *cache)
+ #ifdef CONFIG_FSCACHE_STATS
+ extern atomic_t fscache_n_read;
+ extern atomic_t fscache_n_write;
++extern atomic_t fscache_n_no_write_space;
++extern atomic_t fscache_n_no_create_space;
+ #define fscache_count_read() atomic_inc(&fscache_n_read)
+ #define fscache_count_write() atomic_inc(&fscache_n_write)
++#define fscache_count_no_write_space() atomic_inc(&fscache_n_no_write_space)
++#define fscache_count_no_create_space() atomic_inc(&fscache_n_no_create_space)
+ #else
+ #define fscache_count_read() do {} while(0)
+ #define fscache_count_write() do {} while(0)
++#define fscache_count_no_write_space() do {} while(0)
++#define fscache_count_no_create_space() do {} while(0)
+ #endif
+ 
+ #endif /* _LINUX_FSCACHE_CACHE_H */
+
+

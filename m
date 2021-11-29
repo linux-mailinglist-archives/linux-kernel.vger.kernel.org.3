@@ -2,147 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 028F3461624
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A367146162F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:22:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377720AbhK2NZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:25:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        id S1377455AbhK2N0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:26:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377921AbhK2NXj (ORCPT
+        with ESMTP id S1377631AbhK2NYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:23:39 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073FDC08EC3C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:04:28 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id b11so14263038qvm.7
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:04:27 -0800 (PST)
+        Mon, 29 Nov 2021 08:24:08 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19D7C08EE1B;
+        Mon, 29 Nov 2021 04:04:38 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id b1so43778622lfs.13;
+        Mon, 29 Nov 2021 04:04:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=K3Scob6tfrSEwGaQfKNaSmWMRXFNzUT8pTC86JJZqxM=;
-        b=SSNwUgVPm22P0dNXAl+9yWYNYHwJ62vyZJlORcxyl8y4ayPf0Zc5VdSmt8Fz+4VtdZ
-         AfHd+kuKvN2LLyp7UKzaOKLBCH5rUsCeEeBNHGaYj810sBcKER3VrgKpMXlUnnZxJbUz
-         /OAY7XRbtHShLjEyO8BFcwkREUdR0XTGQ1QQ2e1jO9Rp+FhylP0XEDMI8Q8YxNyc9Y9n
-         LdP9Bi0NkDcbNg4LieRq5XoW+uzsRE9cq5QwUJyiHEELbJGUVkfohtSTBkfEok/HrGmr
-         +zlf7QonV7MraHA8cQkq469aRNosqzH8aiZtuVmL4BbA3uQDd1sPc8iGRciuykt9YD/m
-         ON8g==
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=PNn5ANXHQBQImIpvHbPbNMd2Lqd15EQlJogO89cnByY=;
+        b=MI4kP55/Zlm7TBL7y2OrNMI5h+lPZeZmB7t8OlZkmrVqz5nkh2/Y6HuliAe0oVs0Rk
+         rFetODlieSY8yYJ/zujS836D4HMa1RwjML/CAxKtomUWXSGb1qL/KVpTn6q2+Uvz6fll
+         o53AZuiQAc2GWbWiafTtGZSuw2c5mqIFJqFNiJYF9aTjEDiBqb562eel2zakvhyPlOl3
+         pG/pjhw/StA1ckadkeclKZKjMkX16zdmIl6oAlX+4fS7qeRy6PONzcXzKzm9X1QdAno0
+         Kkwc07Ys2BvHYPaVq37PhoNg88rbf4eu8IhUwjBo48bGGmIHfJryc8vu/Bws5bIp8Ted
+         95RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=K3Scob6tfrSEwGaQfKNaSmWMRXFNzUT8pTC86JJZqxM=;
-        b=bR29zrGu/WJV2oo4QD77kt0cFP0OBkmC3Q0f87+ccjYaweaxlfp4UnwRj9LviWQ4Gp
-         HHv8F7iP637r1EswsI7fkEmoLJON04q09aN3p2Av7L5t8Cp6jewCKw7z02YyaRv/dYTp
-         OZYX94T7K+SOeUM8Dh+27TJuRnMl1MG5VLym+rAlzu5JzWo2wavGwMhpp5BNhEFPsjX8
-         Dz1HW9x6RK7SEyjqx1x1YFm3WyGWCAOjZkB4YSDZXaYyyIdKP5ao6aUEO8NpwB32Y52+
-         dUCPS9TSTr3ekwo7UJYkHtrhcGN+IRyvNSYZbRp75joJdWJsnc56qKpqTXxCxjAjoxsq
-         7gog==
-X-Gm-Message-State: AOAM532b9t95kSQXqjzlscAClYSKjj5qceFl1sMBz+tjCQinV9ABS2wU
-        i9jOR6kGsbUHFyNzs5SzRmLTiiNaII+ykGdLXLV/pg==
-X-Google-Smtp-Source: ABdhPJydXX/RgWbTYLXfpK7JLkBLmlf+qeDjWm9D0Q2Gno1YLfMh2uUZYTCEa3cydUWDHjkXtFPflysCXRM6mNgePd8=
-X-Received: by 2002:ad4:5be9:: with SMTP id k9mr42858059qvc.62.1638187466963;
- Mon, 29 Nov 2021 04:04:26 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=PNn5ANXHQBQImIpvHbPbNMd2Lqd15EQlJogO89cnByY=;
+        b=ofoh+c30kzyAvX7PeNash1HX3Wdv4rC9lL5fjgeHWDZAoqZ3VSFXUrvyMTXyTkHz91
+         WP0SKuI050NO18iCfzHFHzZI26EdDDUfK3r7cc2es8wnsVEE1dvDQKPBMcuFVHoHkQhN
+         ZvgRCT1aeQ4xpcYTgjI/Jv5cQhixzSFNqbuhpXzC/eGr1qI49Bn4lYdg7YMgQEMHNizw
+         uOetJQx1w/rafolkGj9sO4XkBYPLaHFnBKEqglLSCJjKb9SHu797TFKzHwt+Q3+iDqZC
+         GGQZdmw1gYnjgGiYcy0EfnLpr9N8w74chiHVlEu8mc1fnEAuKxB93sNn+CCRSiJGXAMP
+         tFqg==
+X-Gm-Message-State: AOAM531Z5gComcgPWQJ2C4Z88M84Qkfz1GWynH3L4PWV3UmRrJj1Ant2
+        GqXkMtb1Mjb9qZfmLR9ekSxxM2RqH8g=
+X-Google-Smtp-Source: ABdhPJwfeiycltlybhTj7UKB2JEhJqYEuRYscpRNQomunXBGc+OXGSTBjoVVWr3Sr9Zkv1hFoSwEuA==
+X-Received: by 2002:a05:6512:e9c:: with SMTP id bi28mr45440847lfb.245.1638187475542;
+        Mon, 29 Nov 2021 04:04:35 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id g12sm1317274lfu.135.2021.11.29.04.04.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 04:04:34 -0800 (PST)
+Subject: Re: [PATCH v2 28/45] mfd: rn5t618: Use devm_register_power_handler()
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Joshua Thompson <funaho@jurai.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Tony Lindgren <tony@atomide.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
+        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20211027211715.12671-1-digetx@gmail.com>
+ <20211027211715.12671-29-digetx@gmail.com> <YaS/lStp2b8GhVxw@google.com>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <592f2326-b450-1db1-0d3d-804415cf5de6@gmail.com>
+Date:   Mon, 29 Nov 2021 15:04:25 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <000000000000a0d53f05d1c72a4c@google.com> <20211129114713.at2mo64hgnlmkx3x@wittgenstein>
-In-Reply-To: <20211129114713.at2mo64hgnlmkx3x@wittgenstein>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Mon, 29 Nov 2021 13:03:50 +0100
-Message-ID: <CAG_fn=UNdZi=fV2Ma0kSUL8ezEopga9DgoYRHPyuWQso-GHbrQ@mail.gmail.com>
-Subject: Re: [syzbot] KMSAN: uninit-value in from_kuid
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     syzbot <syzbot+dfac92a50024b54acaa4@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, cxfcosmos@gmail.com,
-        ebiederm@xmission.com, legion@kernel.org,
-        linux-kernel@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YaS/lStp2b8GhVxw@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:47 PM Christian Brauner
-<christian.brauner@ubuntu.com> wrote:
->
-> On Sat, Nov 27, 2021 at 07:50:27AM -0800, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    425295055ce6 kmsan: core: address comments to kmsan-che=
-cks.h
-> > git tree:       https://github.com/google/kmsan.git master
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1640209ab00=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2d142cdf420=
-4061
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3Ddfac92a50024b=
-54acaa4
-> > compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.=
-git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Deb=
-ian) 2.35.2
-> > userspace arch: i386
-> >
-> > Unfortunately, I don't have any reproducer for this issue yet.
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the co=
-mmit:
-> > Reported-by: syzbot+dfac92a50024b54acaa4@syzkaller.appspotmail.com
-> >
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> > BUG: KMSAN: uninit-value in map_id_up_base kernel/user_namespace.c:335 =
-[inline]
-> > BUG: KMSAN: uninit-value in map_id_up kernel/user_namespace.c:365 [inli=
-ne]
-> > BUG: KMSAN: uninit-value in from_kuid+0x51d/0xbd0 kernel/user_namespace=
-.c:413
-> >  map_id_up_base kernel/user_namespace.c:335 [inline]
-> >  map_id_up kernel/user_namespace.c:365 [inline]
-> >  from_kuid+0x51d/0xbd0 kernel/user_namespace.c:413
-> >  p9pdu_vwritef+0x15ab/0x5120 net/9p/protocol.c:398
-> >  p9pdu_writef+0x23a/0x280 net/9p/protocol.c:539
-> >  p9pdu_vwritef+0x21f0/0x5120 net/9p/protocol.c:490
-> >  p9_client_prepare_req+0xa4b/0xff0 net/9p/client.c:709
-> >  p9_client_rpc+0x278/0x1410 net/9p/client.c:740
-> >  p9_client_setattr+0x115/0x2c0 net/9p/client.c:1899
-> >  v9fs_vfs_setattr_dotl+0x7e2/0xd70 fs/9p/vfs_inode_dotl.c:590
-> >  notify_change+0x1fe3/0x2170 fs/attr.c:410
-> >  vfs_utimes+0x8aa/0xc70 fs/utimes.c:65
-> >  do_utimes_path fs/utimes.c:98 [inline]
-> >  do_utimes fs/utimes.c:144 [inline]
-> >  __do_sys_utime32 fs/utimes.c:247 [inline]
-> >  __se_sys_utime32+0x386/0x520 fs/utimes.c:235
-> >  __ia32_sys_utime32+0x91/0xc0 fs/utimes.c:235
-> >  do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
-> >  __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
-> >  do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
-> >  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
-> >  entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-> >
-> > Uninit was stored to memory at:
-> >  v9fs_vfs_setattr_dotl+0x58a/0xd70 fs/9p/vfs_inode_dotl.c:567
->
-> That's a bug in the 9P2000.L implementation of .setattr.
-> It copies struct iattr values without checking ia_valid. That's causing
-> uninitalized memory to be copied. I sent a fix to 9p for this.
->
-> Christian
+29.11.2021 14:55, Lee Jones пишет:
+> On Thu, 28 Oct 2021, Dmitry Osipenko wrote:
+> 
+>> Use devm_register_power_handler() that replaces global pm_power_off
+>> variable and allows to register multiple power-off handlers. It also
+>> provides restart-handler support, i.e. all in one API.
+>>
+>> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>> ---
+>>  drivers/mfd/rn5t618.c | 56 ++++++++++++++++---------------------------
+>>  1 file changed, 21 insertions(+), 35 deletions(-)
+> 
+> For my own reference (apply this as-is to your sign-off block):
+> 
+>   Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+> 
 
-Thanks!
-
-
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Thanks you. This and other driver patches will be slightly changed
+because the power-handler was renamed to sys-off handler starting with
+the v3 of this series, but yours ack still will be valid here.

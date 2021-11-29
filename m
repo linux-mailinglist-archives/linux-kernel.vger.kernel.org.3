@@ -2,86 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35109461614
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D8A461617
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:19:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377578AbhK2NVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50670 "EHLO
+        id S1377659AbhK2NWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:22:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbhK2NTJ (ORCPT
+        with ESMTP id S1377490AbhK2NUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:19:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F655C0613FC;
-        Mon, 29 Nov 2021 04:01:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6BEDB80D53;
-        Mon, 29 Nov 2021 12:01:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B05BCC004E1;
-        Mon, 29 Nov 2021 12:01:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638187280;
-        bh=vBptFj3aUeLExHyhRFb83+obbB6Bl97pRM+m9eY9FBY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q72LQRu1mTEz+Jg5z90HKLdULb2cMXdwgRTsKMz52K35+buD2YNdkVuURuvv1+md2
-         vmtq9veflhF0hJ14OpijEuNN532o/BnDXS79D+Ip58pbsHR3xWUUa7eWow7xJj1Fxq
-         8iSNk00MYyPBz3rQAC4e5sflT5h8N9QIt4hZrq+IVW0yV13KB4m0HD6Jukvx4JDNGm
-         6QqC9XTupUhvv5Zo/HlIb4nwftvwGIbvgXEOwJpSk8E9f6rMycyKvw8tI3hLaW0yFT
-         0aXohm45Fodjbeh9z2UbW6RiQrt+F7EYLT7MQ5FZRZzEKCRGXddliuaJkHclzE9gM1
-         mfVq2mU093pMw==
-Date:   Mon, 29 Nov 2021 12:01:15 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: spi: spi-rockchip: Add rk3568-spi
- compatible
-Message-ID: <YaTBC0Gw5BzE1qq0@sirena.org.uk>
-References: <20211127141910.12649-1-frattaroli.nicolas@gmail.com>
- <20211127141910.12649-2-frattaroli.nicolas@gmail.com>
+        Mon, 29 Nov 2021 08:20:16 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F8B0C07E5ED
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:01:55 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id k37-20020a05600c1ca500b00330cb84834fso16620641wms.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=uweCsg8C2SBajHvm8AKg9aw0vkXPXn6fvcrsFtDM/+w=;
+        b=YDOYhJjX7Iyna0jxiHtNazzA4BmzwsZsC7W7ng3gatT/L2TEbmtLfbCTJhYuovBKg2
+         fAUpKRfKUazhiJHtlhU4s1wHkfGi5f8vFJQvo7eDKRFSKm6IpbmiQqHAKt+TbRH7ct9k
+         exngdcFibxw+jMswHcayjjDpy9Rb28kyS0IuwgZOFKieBg3mtkApPXc/1ydq3a3nZZmz
+         1MiF6mEAh5/GMwCXdOilE5FvtqpLqy8REDLkelXXJxkv3IbuxmxWgThtv7b8pUBxCCts
+         4ukaGcV7eC2ls6IR2N7Ub5d9SIZ0oDTwUBf0McON4me8azRzH6kZXWPohGFv0cxzchUM
+         jckg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=uweCsg8C2SBajHvm8AKg9aw0vkXPXn6fvcrsFtDM/+w=;
+        b=q9MjkPvZXnE6XlIdamzS4+J4n+RmnKvea4zhrVnLXoMjXPd+d+S51k9hPrQnabszd5
+         JSaQfzW7gQWPoQLviUe0i2afnCB9d+yPKIpA+N1UNxChqRGwzbuDhBuJn2qDXpXgDgCw
+         1ql4UtWls05tQLQZp+Z8+Bna4ZZYjvR0TC/LYXfeM/Lxqo990unwUl/Nx/43L9T8yKwI
+         OxR7svnFLCcU0D9BlZNkc/MrIAD4XCXGVquUiYI1QcFOqtBhnsk94QhOV45I/B3P6X1r
+         fr+c0did85KjFRVYfIOOFWTePWyuxB/RqZgks6m7UYO1ma2aiYhR7V3GwFdNJvmJXMOs
+         A7uA==
+X-Gm-Message-State: AOAM533mXyF8EbtCePjKVLB6UDiLAXAK4gQWlbp9kRpW+p+k5KUHDzKN
+        cOiIoIERbjq7cUjMS2yRk5NYjw==
+X-Google-Smtp-Source: ABdhPJxXeOaBN84ZRyNW+2b2TC2uaI9IKgTsh1VIFHIDU0HmrPmSRUwo7d3GSAEeroFnvTIiojTdqw==
+X-Received: by 2002:a1c:a905:: with SMTP id s5mr36902877wme.150.1638187313932;
+        Mon, 29 Nov 2021 04:01:53 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id 10sm17624629wrb.75.2021.11.29.04.01.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 04:01:53 -0800 (PST)
+Date:   Mon, 29 Nov 2021 12:01:51 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        lukas.bulwahn@gmail.com, Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-power@fi.rohmeurope.com
+Subject: Re: [PATCH RESEND 3/4] mfd: bd70528: Drop BD70528 support
+Message-ID: <YaTBL6Vtaxrnjhgb@google.com>
+References: <cover.1637066805.git.matti.vaittinen@fi.rohmeurope.com>
+ <cf7dfd98b3403ad363b2b48b57bdbfd57a6416cb.1637066805.git.matti.vaittinen@fi.rohmeurope.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="thPcABwJnBXBpjkW"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211127141910.12649-2-frattaroli.nicolas@gmail.com>
-X-Cookie: Thank god!! ... It's HENNY YOUNGMAN!!
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cf7dfd98b3403ad363b2b48b57bdbfd57a6416cb.1637066805.git.matti.vaittinen@fi.rohmeurope.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 16 Nov 2021, Matti Vaittinen wrote:
 
---thPcABwJnBXBpjkW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> The only known BD70528 use-cases are such that the PMIC is controlled
+> from separate MCU which is not running Linux. I am not aware of
+> any Linux driver users. Furthermore, it seems there is no demand for
+> this IC. Let's ease the maintenance burden and drop the driver. We can
+> always add it back if there is sudden need for it.
+> 
+> Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> Acked-by: Lee Jones <lee.jones@linaro.org>
+> ---
+>  drivers/mfd/Kconfig              |  17 --
+>  drivers/mfd/Makefile             |   1 -
+>  drivers/mfd/rohm-bd70528.c       | 314 -------------------------
+>  include/linux/mfd/rohm-bd70528.h | 389 -------------------------------
+>  include/linux/mfd/rohm-generic.h |   1 -
+>  5 files changed, 722 deletions(-)
+>  delete mode 100644 drivers/mfd/rohm-bd70528.c
+>  delete mode 100644 include/linux/mfd/rohm-bd70528.h
 
-On Sat, Nov 27, 2021 at 03:19:07PM +0100, Nicolas Frattaroli wrote:
-> This adds a compatible string for the SPI controller found on
-> the RK3566 and RK3568 SoCs.
+Applied, thanks.
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
-
---thPcABwJnBXBpjkW
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGkwQoACgkQJNaLcl1U
-h9C79Af/VkQzSokkKhu4i2rEQ3wVt1TXWw6OmUYThFsujeHoBzXRo3iUqgLnvegr
-UhqQ9HI5E9eXRfd+EdYCsru73RDrXe2Jxs1/09RYMZHxb7In/FFRdyd1TUTv6PYu
-bNUqnhdpnyGV/59n4FVsyt6zcifp9NGqSZhJW5lSQF9RMagaAa1iY+GOf0OTrUoO
-Ib7evx1ALUZMtqE+CuQ5PW0EmjvqWk5hlAa63RUZUHkG3v2bE/nn79uHeWdB8mTW
-tQVlPbFsFhiBH7pmWqjpEHERfAzSUj+wEcz1WJYqZ6EG/mTJQA6lMncn2RjbAPxY
-BXDGGW3SsUs8RFRlFmBwihuE8Bh2iA==
-=onyW
------END PGP SIGNATURE-----
-
---thPcABwJnBXBpjkW--
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

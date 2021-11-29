@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A90C4614EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:21:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0DCC4614F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344420AbhK2MZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:25:00 -0500
-Received: from foss.arm.com ([217.140.110.172]:37344 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241775AbhK2MWn (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:22:43 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7AD741042;
-        Mon, 29 Nov 2021 04:19:25 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7B24B3F694;
-        Mon, 29 Nov 2021 04:19:23 -0800 (PST)
-Date:   Mon, 29 Nov 2021 12:19:18 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Mikko Perttunen <mperttunen@nvidia.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, jonathanh@nvidia.com,
-        krzysztof.kozlowski@canonical.com, robh@kernel.org, kw@linux.com,
-        p.zabel@pengutronix.de, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 5/5] PCI: tegra194: Handle errors in BPMP response
-Message-ID: <20211129121918.GA24438@lpieralisi>
-References: <20210915085517.1669675-1-mperttunen@nvidia.com>
- <20210915085517.1669675-5-mperttunen@nvidia.com>
- <YV86l4OhqKN0AkMN@orome.fritz.box>
- <20211013125956.GA11036@lpieralisi>
+        id S1347099AbhK2MZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 07:25:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:60800 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244399AbhK2MX1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 07:23:27 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF94B6131D;
+        Mon, 29 Nov 2021 12:20:09 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 3F36A6056B;
+        Mon, 29 Nov 2021 12:20:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638188409;
+        bh=cL6EgVVC1DsCIYVnx1E2JDuO7ZUOxCNXbc27Nc9cyR8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=OdoUKmFF/gpmMdkh7IzP8OmIrZjUB9HGHQFDJ1AFTP0V/xMawrEUZU81BFRcZutc3
+         ma632BllgFwqU8yN31x7WhPxwIhO/LTxbUrFx5IypNifyJb9Bkl3lwwrTeJrWXIaVX
+         JRcEqollL/uEKeB0wHq8CPIyQtXsjdk32R6vmiruycosecH3fplT+Xp7mYjTgue9hE
+         UEknfYueFyqVhgCPR7EXs5SY6+/JVy+Pfa+7u4CZYlc6vbYKRaTv5xEZnWvmEcw55U
+         lt3w9BZ821q4v2V5x5onetWlYDux3sye2Ix4qqpd3AK0+jdfrH1kbNZza2y279qg7z
+         /B4oXJ7GSE+pA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 2F04C609D5;
+        Mon, 29 Nov 2021 12:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211013125956.GA11036@lpieralisi>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] net: stmmac: Avoid DMA_CHAN_CONTROL write if no Split
+ Header support
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163818840918.20614.10733400123125984165.git-patchwork-notify@kernel.org>
+Date:   Mon, 29 Nov 2021 12:20:09 +0000
+References: <20211126155115.12394-1-vincent.whitchurch@axis.com>
+In-Reply-To: <20211126155115.12394-1-vincent.whitchurch@axis.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, davem@davemloft.net, kuba@kernel.org,
+        mcoquelin.stm32@gmail.com, kernel@axis.com,
+        Jose.Abreu@synopsys.com, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 13, 2021 at 01:59:56PM +0100, Lorenzo Pieralisi wrote:
-> On Thu, Oct 07, 2021 at 08:21:11PM +0200, Thierry Reding wrote:
-> > On Wed, Sep 15, 2021 at 11:55:17AM +0300, Mikko Perttunen wrote:
-> > > The return value from tegra_bpmp_transfer indicates the success or
-> > > failure of the IPC transaction with BPMP. If the transaction
-> > > succeeded, we also need to check the actual command's result code.
-> > > Add code to do this.
-> > > 
-> > > Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
-> > > ---
-> > >  drivers/pci/controller/dwc/pcie-tegra194.c | 9 ++++++++-
-> > >  1 file changed, 8 insertions(+), 1 deletion(-)
-> > 
-> > Acked-by: Thierry Reding <treding@nvidia.com>
-> 
-> Hi Thierry,
-> 
-> can I pull this patch into the PCI tree ? Or if you want the series
-> to go via another tree:
-> 
-> Acked-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Hello:
 
-Hi,
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-I would like to ask please how you want this series to be handled.
+On Fri, 26 Nov 2021 16:51:15 +0100 you wrote:
+> The driver assumes that split headers can be enabled/disabled without
+> stopping/starting the device, so it writes DMA_CHAN_CONTROL from
+> stmmac_set_features().  However, on my system (IP v5.10a without Split
+> Header support), simply writing DMA_CHAN_CONTROL when DMA is running
+> (for example, with the commands below) leads to a TX watchdog timeout.
+> 
+>  host$ socat TCP-LISTEN:1024,fork,reuseaddr - &
+>  device$ ethtool -K eth0 tso off
+>  device$ ethtool -K eth0 tso on
+>  device$ dd if=/dev/zero bs=1M count=10 | socat - TCP4:host:1024
+>  <tx watchdog timeout>
+> 
+> [...]
 
-Thanks,
-Lorenzo
+Here is the summary with links:
+  - [net] net: stmmac: Avoid DMA_CHAN_CONTROL write if no Split Header support
+    https://git.kernel.org/netdev/net/c/f8e7dfd6fdab
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

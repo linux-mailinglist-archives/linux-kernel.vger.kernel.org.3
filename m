@@ -2,63 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 288BB4620B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D294620C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:42:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238261AbhK2ToT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50122 "EHLO
+        id S1353385AbhK2Tpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:45:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347630AbhK2TmS (ORCPT
+        with ESMTP id S239907AbhK2Tnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:42:18 -0500
+        Mon, 29 Nov 2021 14:43:40 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219A3C09B330;
-        Mon, 29 Nov 2021 07:57:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F736C0698C0;
+        Mon, 29 Nov 2021 08:01:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B142D612E3;
-        Mon, 29 Nov 2021 15:57:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C111AC53FAD;
-        Mon, 29 Nov 2021 15:57:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1D60E61536;
+        Mon, 29 Nov 2021 16:01:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4EDCC53FCB;
+        Mon, 29 Nov 2021 16:01:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638201429;
-        bh=6PNUU+CgX9nNJylhSu1AL6pQJAc/RwS4ITMRm+DCXgs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=trEwIKTsmiy8bxX4JpHtVjW9TEezXNV7ldZWN5zMFuD9omjDj2uBkqhJoCKUSg2Vd
-         NyOujHkioCtpqV0Xd5tI1Al8ro9oUeuVaQiuirOEcEm9Bk+1P42/Qghm4EC79W9TA7
-         YPbAkjwcoYhXcO7de5NtM+kL3hnLy/XCD3ZyUvKEkk+29AKH/FabzoUJaemhPf8+Wv
-         wLStAD5XOZKbcTkVDkKrfr4YRo7Xcx2qHsa+ZT/vj8aQyo4XqfgMDDOXl752KlJMA+
-         q76ccytzhl1wD+J10/PBdJGmqCkvxMo1BoJodvypsua0G9RYn5QX2GnYVN+6JRRTx1
-         GnUCE9U0x+yYg==
-Date:   Mon, 29 Nov 2021 07:57:07 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     menglong8.dong@gmail.com
-Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
-        edumazet@google.com, imagedong@tencent.com, ycheng@google.com,
-        kuniyu@amazon.co.jp, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v2 net-next] net: snmp: add statistics for tcp small
- queue check
-Message-ID: <20211129075707.47ab0ffe@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211128060102.6504-1-imagedong@tencent.com>
-References: <20211128060102.6504-1-imagedong@tencent.com>
+        s=k20201202; t=1638201689;
+        bh=Kv6MBJXYeHo0IxkIpDY6gwYHS2TLFxXrBu9ZJWu8kyc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HIUMWJn5i/ZkPEx2uv6ITIpHeBvPAEUJfIJWXd9m0bj0hSSR5mEDTX3OqcLtzzV1A
+         VGyL4y2zK5MTat1iGPwpQ4bylq9ZcdfIblhCGEJt8EDu7Vwci/CWwM6/qZqrK8Bxfc
+         jLKw2VgdNKPfMIp0PpkNcd4fnBnxdALIdbBoGNn8wKQRp0BuGtCQc8tSbIjo8FAecg
+         plAAemFtuTDREl7q+APVmry/1jfQTJPC5UIFUHa4Hnmkc0Oc0QLx+3tEiVA65tbBsa
+         9bNfCX/dSo3ieKAm9Kle4XQIul8QjWQYAftLs6WQlGUqHI9tLv/XM+3dOBuDbgRh0H
+         ZZkEN9ot/hNxA==
+Message-ID: <0e6e66f7368621128a810bb604eab229dd279187.camel@kernel.org>
+Subject: Re: Commit f980d055a0f858d73d9467bb0b570721bbfcdfb8 causes a
+ regression
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Tim Gardner <tim.gardner@canonical.com>, len.baker@gmx.com
+Cc:     pc@cjr.nz, stfrench@microsoft.com,
+        Kamal Mostafa <Kamal.Mostafa@canonical.com>,
+        linux-cifs@vger.kernel.org,
+        samba-technical <samba-technical@lists.samba.org>,
+        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
+Date:   Mon, 29 Nov 2021 11:01:27 -0500
+In-Reply-To: <a8b2287b-c459-2169-fbf4-31f3065e0897@canonical.com>
+References: <a8b2287b-c459-2169-fbf4-31f3065e0897@canonical.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Nov 2021 14:01:02 +0800 menglong8.dong@gmail.com wrote:
-> Once tcp small queue check failed in tcp_small_queue_check(), the
-> throughput of tcp will be limited, and it's hard to distinguish
-> whether it is out of tcp congestion control.
+On Mon, 2021-11-29 at 08:35 -0700, Tim Gardner wrote:
+> Hi Len,
 > 
-> Add statistics of LINUX_MIB_TCPSMALLQUEUEFAILURE for this scene.
+> I have a report (https://bugs.launchpad.net/bugs/1952094) that commit 
+> f980d055a0f858d73d9467bb0b570721bbfcdfb8 ("CIFS: Fix a potencially 
+> linear read overflow") causes a regression as a stable backport in a 5.4 
+> based kernel. I don't know if this regression exists in tip as well, or 
+> if it is unique to the backported environment. I suspect, given the 
+> content of the patch, that it is generic. As such, it has been 
+> backported to a number of stable releases:
+> 
+> linux-4.4.y.txt:0955df2d9bf4857e3e2287e3028903e6cec06c30
+> linux-4.9.y.txt:8878af780747f498551b7d360cae61b415798f18
+> linux-4.14.y.txt:20967547ffc6039f17c63a1c24eb779ee166b245
+> linux-4.19.y.txt:bea655491daf39f1934a71bf576bf3499092d3a4
+> linux-5.4.y.txt:b444064a0e0ef64491b8739a9ae05a952b5f8974
+> linux-5.10.y.txt:6c4857203ffa36918136756a889b12c5864bc4ad
+> linux-5.13.y.txt:9bffe470e9b537075345406512df01ca2188b725
+> linux-5.14.y.txt:c41dd61c86482ab34f6f039b13296308018fd99b
+> 
+> Could this be an off-by-one issue if the source string is full length ?
+> 
+> rtg
 
-Isn't this going to trigger all the time and alarm users because of the
-"Failure" in the TCPSmallQueueFailure name?  Isn't it perfectly fine
-for TCP to bake full TSQ amount of data and have it paced out onto the
-wire? What's your link speed?
+Maybe? But it doesn't seem to be that long. The error message evidently
+says:
+
+    "CIFS VFS: CIFS mount error: iocharset utf8 not found"
+
+The iocharset string ("utf8" here) usually gets set in the mount string
+and then we just pass that string to load_nls().
+
+The patch you're pointing out though doesn't seem to be involved in any
+of that. It sounds like something else is wrong. I'd validate that that
+patch was applied correctly, and get more details about what this guy is
+doing.
+
+g/l!
+-- 
+Jeff Layton <jlayton@kernel.org>

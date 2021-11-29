@@ -2,94 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20862461A20
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E03EB461A2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378855AbhK2Opg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:45:36 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43666 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379173AbhK2On2 (ORCPT
+        id S1348305AbhK2Org (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:47:36 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:54004 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378796AbhK2Opf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:43:28 -0500
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DF3B61536;
-        Mon, 29 Nov 2021 14:40:11 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 533686056B;
-        Mon, 29 Nov 2021 14:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638196810;
-        bh=0QZyL1/omFoFM0oSe+ruCABogOsAksI9L44Xdvjnsro=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=CyubTxm4PWvQqaAVi9bm7PZ5E5QhVkNOTe67JIDwap1mE0Vb1WbMGNnaVTytxdHNT
-         2v14XBX1ThLLQGcjVEj71sQugEQrJa8D9pr0oOF1Me+4XVYNmnSBSeevAS2rFADBrO
-         TWNqu+LH7EPUfMG82vf1fDlJYgrN4zDmHyFnLKVL7j/t45WJ0FXHEay2YoQRtfi2MP
-         g3GszrQCumJbi/XTVFW7riOiNIGFRN9qe4HbuFxvLL7/vtMcbEHUYqH1EqAtSdghAy
-         0mPZ+EbJsQDUwtzmuySDw/xSoHjk7vUp8/t0cLX8R3Fy+2Y/LaUfQq9pNmrq7cP0Zq
-         RTQf9wUxFM7+Q==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3AED860A88;
-        Mon, 29 Nov 2021 14:40:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 29 Nov 2021 09:45:35 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638196934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CT0v0AI6Phc8QVXrts/Xgc4HRVQEDE2q+21sbaFe3Ag=;
+        b=FLmFznUrsgGdCbkY18htm7AVhrJXD8U/COCS8SobY/Fs5q0hzBOjNa5VOMzAo8uh3ixtor
+        Si29Nben+KPEqz1+N0yD6PS3qluBIuq3elGrNncT23ydzQDK2l9SnDPo2CnUq8qH8j8MZ6
+        vdvCp+IY+fkqSwwbS7Vke5ucVqUPyZqIAnlw2remRg1r2/dstE2w/iGMIhhlHtUzXuGfyg
+        PeIFtoJzVGaUJsD95eDn+sZvgevfzRe7bt6oelu5NOVNC0Y5uWJCfO8sg7SGeqm/QUZ5F8
+        9idHosPV4IKLQIULp5+Ee114KeQfrHkYLH1gL8+nGq99mmniKOQJkHCZ2aVDWw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638196934;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CT0v0AI6Phc8QVXrts/Xgc4HRVQEDE2q+21sbaFe3Ag=;
+        b=1lha+hOs5XE61wIA5Q6/xFS1hVtMHYwWSYlH+AylgvE8sxOiU/hMvfsbJ4+lxuc4mz54M/
+        UkoehTAc13TFlPDw==
+To:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>
+Cc:     Nishanth Menon <nm@ti.com>, Mark Rutland <mark.rutland@arm.com>,
+        Stuart Yoder <stuyoder@gmail.com>, linux-pci@vger.kernel.org,
+        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
+        x86@kernel.org, Sinan Kaya <okaya@kernel.org>,
+        iommu@lists.linux-foundation.org,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Megha Dey <megha.dey@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Tero Kristo <kristo@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
+In-Reply-To: <76a1b5c1-01c8-bb30-6105-b4073dc23065@arm.com>
+References: <20211126224100.303046749@linutronix.de>
+ <20211126230525.885757679@linutronix.de>
+ <20211129105506.GA22761@willie-the-truck>
+ <76a1b5c1-01c8-bb30-6105-b4073dc23065@arm.com>
+Date:   Mon, 29 Nov 2021 15:42:14 +0100
+Message-ID: <87czmjdnw9.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 00/10] net: hns3: some cleanups for -next
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163819681023.20833.8288126722128597970.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Nov 2021 14:40:10 +0000
-References: <20211129140027.23036-1-huangguangbin2@huawei.com>
-In-Reply-To: <20211129140027.23036-1-huangguangbin2@huawei.com>
-To:     Guangbin Huang <huangguangbin2@huawei.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, wangjie125@huawei.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lipeng321@huawei.com, chenhao288@hisilicon.com
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Mon, Nov 29 2021 at 13:13, Robin Murphy wrote:
+> On 2021-11-29 10:55, Will Deacon wrote:
+>>> -	}
+>>> +	smmu->evtq.q.irq = msi_get_virq(dev, EVTQ_MSI_INDEX);
+>>> +	smmu->gerr_irq = msi_get_virq(dev, GERROR_MSI_INDEX);
+>>> +	smmu->priq.q.irq = msi_get_virq(dev, PRIQ_MSI_INDEX);
+>> 
+>> Prviously, if retrieval of the MSI failed then we'd fall back to wired
+>> interrupts. Now, I think we'll clobber the interrupt with 0 instead. Can
+>> we make the assignments to smmu->*irq here conditional on the MSI being
+>> valid, please?
+>
+> I was just looking at that too, but reached the conclusion that it's 
+> probably OK, since consumption of this value later is gated on 
+> ARM_SMMU_FEAT_PRI, so the fact that it changes from 0 to an error value 
+> in the absence of PRI should make no practical difference.
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+It's actually 0 when the vector cannot be found.
 
-On Mon, 29 Nov 2021 22:00:17 +0800 you wrote:
-> To improve code readability and simplicity, this series refactor some
-> functions in the HNS3 ethernet driver.
-> 
-> Guangbin Huang (3):
->   net: hns3: refine function hclge_cfg_mac_speed_dup_hw()
->   net: hns3: add new function hclge_tm_schd_mode_tc_base_cfg()
->   net: hns3: refine function hclge_tm_pri_q_qs_cfg()
-> 
-> [...]
+> If we don't have MSIs at all, we'd presumably still fail earlier
+> either at the dev->msi_domain check or upon trying to allocate the
+> vectors, so we'll still fall back to any previously-set wired values
+> before getting here.  The only remaining case is if we've
+> *successfully* allocated the expected number of vectors yet are then
+> somehow unable to retrieve one or more of them - presumably the system
+> has to be massively borked for that to happen, at which point do we
+> really want to bother trying to reason about anything?
 
-Here is the summary with links:
-  - [net-next,01/10] net: hns3: refactor reset_prepare_general retry statement
-    https://git.kernel.org/netdev/net-next/c/ed0e658c51aa
-  - [net-next,02/10] net: hns3: refactor hns3_nic_reuse_page()
-    https://git.kernel.org/netdev/net-next/c/e74a726da2c4
-  - [net-next,03/10] net: hns3: refactor two hns3 debugfs functions
-    https://git.kernel.org/netdev/net-next/c/e6fe5e167185
-  - [net-next,04/10] net: hns3: split function hns3_get_tx_timeo_queue_info()
-    https://git.kernel.org/netdev/net-next/c/a4ae2bc0abd4
-  - [net-next,05/10] net: hns3: refine function hclge_cfg_mac_speed_dup_hw()
-    https://git.kernel.org/netdev/net-next/c/e46da6a3d4d3
-  - [net-next,06/10] net: hns3: add new function hclge_tm_schd_mode_tc_base_cfg()
-    https://git.kernel.org/netdev/net-next/c/7ca561be11d0
-  - [net-next,07/10] net: hns3: refine function hclge_tm_pri_q_qs_cfg()
-    https://git.kernel.org/netdev/net-next/c/e06dac5290b7
-  - [net-next,08/10] net: hns3: split function hns3_nic_get_stats64()
-    https://git.kernel.org/netdev/net-next/c/8469b645c9a1
-  - [net-next,09/10] net: hns3: split function hns3_handle_bdinfo()
-    https://git.kernel.org/netdev/net-next/c/2fbf6a07f537
-  - [net-next,10/10] net: hns3: split function hns3_set_l2l3l4()
-    https://git.kernel.org/netdev/net-next/c/1d851c0905f8
+Probably not. At that point something is going to explode sooner than
+later in colorful ways.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
 
-
+        tglx

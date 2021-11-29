@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC85B461DAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:25:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1819461F58
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351013AbhK2S1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:27:50 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47760 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350992AbhK2SZn (ORCPT
+        id S1380360AbhK2SqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:46:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49164 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377578AbhK2SoM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:25:43 -0500
+        Mon, 29 Nov 2021 13:44:12 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 75A6FCE13E1;
-        Mon, 29 Nov 2021 18:22:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23727C53FC7;
-        Mon, 29 Nov 2021 18:22:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6D18B815DE;
+        Mon, 29 Nov 2021 18:40:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15B62C53FAD;
+        Mon, 29 Nov 2021 18:40:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210142;
-        bh=vzhx6vWqZfWnp7avfUISClBR51auH5IO6cIJ107wOxE=;
+        s=korg; t=1638211250;
+        bh=EYni/KGcNn2nwydUAjEjq+zq5lXC/2K6du7S4wX6Uw0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xURmtXxwq4Q+psGygGQCDGlPObQ6FP8dcaMq38JqGfdf2GSZ08QO+9qTz1ujHcJm2
-         SZG1BaH/F8rxBKSUlG9IO0Qoh11eVGY7SGaGwbVjCv4jndvXqzJa635RaZ/hhXtO9C
-         xkxXoBr+yOafA6NUVwhX1ICRKvkB49/6Jx+7Lso8=
+        b=xHsYkLT3TzOPTyqLrBSmK+KF04FHDy32ukLT4v1AItxBvCGfVZZZAreKpaLlBJm7r
+         4cQ2+LSZ5P7M68efXc/yPAQ3esza3WASnY8xftjEmNsTV9i9D0nWEANgVeRp9E1bu8
+         +jGcZ0zYEQSI5EcrIx2JC39oS22Qcn7QKGJYsEzY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-Subject: [PATCH 4.19 56/69] tracing: Check pid filtering when creating events
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 124/179] net: marvell: mvpp2: increase MTU limit when XDP enabled
 Date:   Mon, 29 Nov 2021 19:18:38 +0100
-Message-Id: <20211129181705.471337676@linuxfoundation.org>
+Message-Id: <20211129181723.041469914@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,48 +47,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steven Rostedt (VMware) <rostedt@goodmis.org>
+From: Marek Behún <kabel@kernel.org>
 
-commit 6cb206508b621a9a0a2c35b60540e399225c8243 upstream.
+[ Upstream commit 7b1b62bc1e6a7b2fd5ee7a4296268eb291d23aeb ]
 
-When pid filtering is activated in an instance, all of the events trace
-files for that instance has the PID_FILTER flag set. This determines
-whether or not pid filtering needs to be done on the event, otherwise the
-event is executed as normal.
+Currently mvpp2_xdp_setup won't allow attaching XDP program if
+  mtu > ETH_DATA_LEN (1500).
 
-If pid filtering is enabled when an event is created (via a dynamic event
-or modules), its flag is not updated to reflect the current state, and the
-events are not filtered properly.
+The mvpp2_change_mtu on the other hand checks whether
+  MVPP2_RX_PKT_SIZE(mtu) > MVPP2_BM_LONG_PKT_SIZE.
 
-Cc: stable@vger.kernel.org
-Fixes: 3fdaf80f4a836 ("tracing: Implement event pid filtering")
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+These two checks are semantically different.
+
+Moreover this limit can be increased to MVPP2_MAX_RX_BUF_SIZE, since in
+mvpp2_rx we have
+  xdp.data = data + MVPP2_MH_SIZE + MVPP2_SKB_HEADROOM;
+  xdp.frame_sz = PAGE_SIZE;
+
+Change the checks to check whether
+  mtu > MVPP2_MAX_RX_BUF_SIZE
+
+Fixes: 07dd0a7aae7f ("mvpp2: add basic XDP support")
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/trace/trace_events.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2255,12 +2255,19 @@ static struct trace_event_file *
- trace_create_new_event(struct trace_event_call *call,
- 		       struct trace_array *tr)
- {
-+	struct trace_pid_list *pid_list;
- 	struct trace_event_file *file;
+diff --git a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+index d74d4966b13fc..ed6d0c019573b 100644
+--- a/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
++++ b/drivers/net/ethernet/marvell/mvpp2/mvpp2_main.c
+@@ -5017,11 +5017,13 @@ static int mvpp2_change_mtu(struct net_device *dev, int mtu)
+ 		mtu = ALIGN(MVPP2_RX_PKT_SIZE(mtu), 8);
+ 	}
  
- 	file = kmem_cache_alloc(file_cachep, GFP_TRACE);
- 	if (!file)
- 		return NULL;
++	if (port->xdp_prog && mtu > MVPP2_MAX_RX_BUF_SIZE) {
++		netdev_err(dev, "Illegal MTU value %d (> %d) for XDP mode\n",
++			   mtu, (int)MVPP2_MAX_RX_BUF_SIZE);
++		return -EINVAL;
++	}
++
+ 	if (MVPP2_RX_PKT_SIZE(mtu) > MVPP2_BM_LONG_PKT_SIZE) {
+-		if (port->xdp_prog) {
+-			netdev_err(dev, "Jumbo frames are not supported with XDP\n");
+-			return -EINVAL;
+-		}
+ 		if (priv->percpu_pools) {
+ 			netdev_warn(dev, "mtu %d too high, switching to shared buffers", mtu);
+ 			mvpp2_bm_switch_buffers(priv, false);
+@@ -5307,8 +5309,8 @@ static int mvpp2_xdp_setup(struct mvpp2_port *port, struct netdev_bpf *bpf)
+ 	bool running = netif_running(port->dev);
+ 	bool reset = !prog != !port->xdp_prog;
  
-+	pid_list = rcu_dereference_protected(tr->filtered_pids,
-+					     lockdep_is_held(&event_mutex));
-+
-+	if (pid_list)
-+		file->flags |= EVENT_FILE_FL_PID_FILTER;
-+
- 	file->event_call = call;
- 	file->tr = tr;
- 	atomic_set(&file->sm_ref, 0);
+-	if (port->dev->mtu > ETH_DATA_LEN) {
+-		NL_SET_ERR_MSG_MOD(bpf->extack, "XDP is not supported with jumbo frames enabled");
++	if (port->dev->mtu > MVPP2_MAX_RX_BUF_SIZE) {
++		NL_SET_ERR_MSG_MOD(bpf->extack, "MTU too large for XDP");
+ 		return -EOPNOTSUPP;
+ 	}
+ 
+-- 
+2.33.0
+
 
 

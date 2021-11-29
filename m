@@ -2,142 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AC646208B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:31:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C47546209A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348035AbhK2Te6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:34:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
+        id S234348AbhK2TiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344825AbhK2Tc5 (ORCPT
+        with ESMTP id S229538AbhK2TgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:32:57 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755F3C061D6A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:50:13 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id 207so35236399ljf.10
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:50:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IPmmzDKvEjC1FznZv9O5Nd5L810sAcBLQi2CDuZWQj8=;
-        b=yOOpC93sL7JqfmFVvCibFuWW7waZzi0jMq1mOP6uNzLqAUi0b7u9vheatN3O74eJpy
-         trhC9uFqPmtr0Upqwxl1bS+Kpm+LXmR1BKyrrn9jHG2c1c8mvGyanCl7Sc5ejkPGtRBR
-         JKvruF3+XirpjxyzA08Z40hyGb6vyvmCXbqQUC8Gw94bdRNxGv1p1tNe7QCaClZ4Ztjg
-         IwG2oEgfLb7WYtE5LU7q07Ib+50R8t5eJhM3qkq0J/vQlZm9nPLXzzr/u3cTPtMUhJwH
-         825isAkUgDs1o71fNMIJ/JhsW14ui4sZFmWymlXazlEuqE+tb5fIdMoeov426nZj+eWr
-         pTXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IPmmzDKvEjC1FznZv9O5Nd5L810sAcBLQi2CDuZWQj8=;
-        b=RzJiNRxyrFFgJLj645smLpOu2xC8/BGw5xnJW/h7Pqu+DBHUtQIdyZzCXVxhfXHSwW
-         gXk0mh87aHeATBRi/aH2/ir1XkXo6+qq5V3OH+spRBDu4apt+FMPsa0ZTax8LeoI4dU0
-         1wFb9AJO1tiUKlhnnaJLsUeZYzabQlUwgANXnRomo3vNiUff1ZSx5Ii6C86CB2GALUq1
-         DFG5qHOLe87f85RZMBgzj4OForENOEtHKAjdfacqsSlvlpvJtwMx+wCBvkO+xkJoIc9X
-         TPqpGb2KP7/MKT9R1hGrKtW67PAqC/9UgRTjWTQoRwcVAc2YPiHGa8HKWAOjGoJ3/F9+
-         5FvA==
-X-Gm-Message-State: AOAM5308q72x8FdM2m4dyz2LkJRlg3F2+RGrpE1n/5k9xzhSkQ77gKY2
-        ta/E9nQo1E6AeFRO0wmidBRslgG2x5KVWiG/nMRN/g==
-X-Google-Smtp-Source: ABdhPJzU/0XG0SIPrVm+rU/UkZ7u5NlQt35pOFiKqswu7DGFGmIGrKyFVLlkGFiEAqoC8Atvtxsy+lNM9Lffl91DX2s=
-X-Received: by 2002:a2e:84c4:: with SMTP id q4mr49336527ljh.266.1638201011657;
- Mon, 29 Nov 2021 07:50:11 -0800 (PST)
+        Mon, 29 Nov 2021 14:36:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70093C0619FF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:52:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59011B811EF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5199CC53FAD;
+        Mon, 29 Nov 2021 15:52:25 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 16:52:21 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Alexander Potapenko <glider@google.com>
+Cc:     syzbot <syzbot+dfac92a50024b54acaa4@syzkaller.appspotmail.com>,
+        akpm@linux-foundation.org, cxfcosmos@gmail.com,
+        ebiederm@xmission.com, legion@kernel.org,
+        linux-kernel@vger.kernel.org, serge@hallyn.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KMSAN: uninit-value in from_kuid
+Message-ID: <20211129155221.fvbtsrz6zumo5bpf@wittgenstein>
+References: <000000000000a0d53f05d1c72a4c@google.com>
+ <20211129114713.at2mo64hgnlmkx3x@wittgenstein>
+ <CAG_fn=UGPTizsqgvYNnVkPK9TeXhyyi8f92Qnpy=cN7S4JzeCw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211124154239.3191366-1-vincent.donnefort@arm.com>
- <CAKfTPtDX8sOfguZhJt5QV3j5D_JetcgncuF2w+uLa0XDk7UXkw@mail.gmail.com>
- <8735nkcwov.mognet@arm.com> <CAKfTPtDPskVdEd-KQ_cwe-R_zVFPQOgdbk9x+3eD12pKs8fGFw@mail.gmail.com>
- <87zgpsb6de.mognet@arm.com> <CAKfTPtCnusWJXJLDEudQ_q8MWaZYbPJK-QjAbBYWFW8Nw-J+Ww@mail.gmail.com>
- <87sfvjavqk.mognet@arm.com> <CAKfTPtC4iXXaptm9+2bHvX2E3xAWU4M3xN0ZuwpFQ1RyXAyxyA@mail.gmail.com>
- <87pmqmc16f.mognet@arm.com> <20211126171817.GA3798214@ubiquitous>
-In-Reply-To: <20211126171817.GA3798214@ubiquitous>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 29 Nov 2021 16:49:58 +0100
-Message-ID: <CAKfTPtCGyp8JZq1EOgEhTeD+PBV2rMnTQ=uV-ZgsaN1RVmPk0w@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Fix detection of per-CPU kthreads waking a task
-To:     Vincent Donnefort <Vincent.Donnefort@arm.com>
-Cc:     Valentin Schneider <Valentin.Schneider@arm.com>,
-        peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
-        dietmar.eggemann@arm.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAG_fn=UGPTizsqgvYNnVkPK9TeXhyyi8f92Qnpy=cN7S4JzeCw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Nov 2021 at 18:18, Vincent Donnefort
-<vincent.donnefort@arm.com> wrote:
->
-> On Fri, Nov 26, 2021 at 04:49:12PM +0000, Valentin Schneider wrote:
-> > On 26/11/21 15:40, Vincent Guittot wrote:
-> > > On Fri, 26 Nov 2021 at 14:32, Valentin Schneider
-> > > <Valentin.Schneider@arm.com> wrote:
-> > >>         /*
-> > >> -        * Allow a per-cpu kthread to stack with the wakee if the
-> > >> -        * kworker thread and the tasks previous CPUs are the same.
-> > >> -        * The assumption is that the wakee queued work for the
-> > >> -        * per-cpu kthread that is now complete and the wakeup is
-> > >> -        * essentially a sync wakeup. An obvious example of this
-> > >> +        * Allow a per-cpu kthread to stack with the wakee if the kworker thread
-> > >> +        * and the tasks previous CPUs are the same.  The assumption is that the
-> > >> +        * wakee queued work for the per-cpu kthread that is now complete and
-> > >> +        * the wakeup is essentially a sync wakeup. An obvious example of this
-> > >>          * pattern is IO completions.
-> > >> +        *
-> > >> +        * Ensure the wakeup is issued by the kthread itself, and don't match
-> > >> +        * against the idle task because that could override the
-> > >> +        * available_idle_cpu(target) check done higher up.
-> > >>          */
-> > >> -       if (is_per_cpu_kthread(current) &&
-> > >> +       if (is_per_cpu_kthread(current) && !is_idle_task(current) &&
-> > >
-> > > still i don't see the need of !is_idle_task(current)
-> > >
+On Mon, Nov 29, 2021 at 04:16:21PM +0100, Alexander Potapenko wrote:
+> On Mon, Nov 29, 2021 at 12:47 PM Christian Brauner
+> <christian.brauner@ubuntu.com> wrote:
 > >
-> > Admittedly, belts and braces. The existing condition checks rq->nr_running <= 1
-> > which can lead to coscheduling when the wakeup is issued by the idle task
-> > (or even if rq->nr_running == 0, you can have rq->ttwu_pending without
-> > having sent an IPI due to polling). Essentially this overrides the first
-> > check in sis() that uses idle_cpu(target) (prev == smp_processor_id() ==
-> > target).
-> >
-> > I couldn't prove such wakeups can happen right now, but if/when they do
-> > (AIUI it would just take someone to add a wake_up_process() down some
-> > smp_call_function() callback) then we'll need the above. If you're still
-> > not convinced by now, I won't push it further.
->
-> From a quick experiment, even with the asym_fits_capacity(), I can trigger
-> the following:
->
-> [    0.118855] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.128214] select_idle_sibling: wakee=rcu_gp:3 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.137327] select_idle_sibling: wakee=rcu_par_gp:4 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.147221] select_idle_sibling: wakee=kworker/u16:0:7 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.156994] select_idle_sibling: wakee=mm_percpu_wq:8 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-
-Timestamp shows its booting phase and thread name above shows per cpu
-thread. Could it happen just while creating per cpu thread at boot and
-as a result not relevant ?
-
-Can you see similar things later after booting ?
-
-I have tried to trigger the situation but failed to get wrong
-sequence. All are coming from interrupt while idle.
-After adding in_task() condition, I haven't been able to trigger the
-warn() that I added to catch the wrong situations on SMP, Heterogenous
-or NUMA system. Could you share more details on your setup ?
-
-
-> [    0.171943] select_idle_sibling: wakee=rcu_sched:10 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
->
-> So the in_task() condition doesn't appear to be enough to filter wakeups
-> while we have the swapper as a current.
->
-> >
+> > On Sat, Nov 27, 2021 at 07:50:27AM -0800, syzbot wrote:
+> > > Hello,
 > > >
-> > >> +           in_task() &&
-> > >>             prev == smp_processor_id() &&
-> > >>             this_rq()->nr_running <= 1) {
-> > >>                 return prev;
-> > >>
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    425295055ce6 kmsan: core: address comments to kmsan-checks.h
+> > > git tree:       https://github.com/google/kmsan.git master
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1640209ab00000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=2d142cdf4204061
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=dfac92a50024b54acaa4
+> > > compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
+> > > userspace arch: i386
+> > >
+> > > Unfortunately, I don't have any reproducer for this issue yet.
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+dfac92a50024b54acaa4@syzkaller.appspotmail.com
+> > >
+> > > =====================================================
+> > > BUG: KMSAN: uninit-value in map_id_up_base kernel/user_namespace.c:335 [inline]
+> > > BUG: KMSAN: uninit-value in map_id_up kernel/user_namespace.c:365 [inline]
+> > > BUG: KMSAN: uninit-value in from_kuid+0x51d/0xbd0 kernel/user_namespace.c:413
+> > >  map_id_up_base kernel/user_namespace.c:335 [inline]
+> > >  map_id_up kernel/user_namespace.c:365 [inline]
+> > >  from_kuid+0x51d/0xbd0 kernel/user_namespace.c:413
+> > >  p9pdu_vwritef+0x15ab/0x5120 net/9p/protocol.c:398
+> > >  p9pdu_writef+0x23a/0x280 net/9p/protocol.c:539
+> > >  p9pdu_vwritef+0x21f0/0x5120 net/9p/protocol.c:490
+> > >  p9_client_prepare_req+0xa4b/0xff0 net/9p/client.c:709
+> > >  p9_client_rpc+0x278/0x1410 net/9p/client.c:740
+> > >  p9_client_setattr+0x115/0x2c0 net/9p/client.c:1899
+> > >  v9fs_vfs_setattr_dotl+0x7e2/0xd70 fs/9p/vfs_inode_dotl.c:590
+> > >  notify_change+0x1fe3/0x2170 fs/attr.c:410
+> > >  vfs_utimes+0x8aa/0xc70 fs/utimes.c:65
+> > >  do_utimes_path fs/utimes.c:98 [inline]
+> > >  do_utimes fs/utimes.c:144 [inline]
+> > >  __do_sys_utime32 fs/utimes.c:247 [inline]
+> > >  __se_sys_utime32+0x386/0x520 fs/utimes.c:235
+> > >  __ia32_sys_utime32+0x91/0xc0 fs/utimes.c:235
+> > >  do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
+> > >  __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
+> > >  do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
+> > >  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
+> > >  entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
+> > >
+> > > Uninit was stored to memory at:
+> > >  v9fs_vfs_setattr_dotl+0x58a/0xd70 fs/9p/vfs_inode_dotl.c:567
+> >
+> > That's a bug in the 9P2000.L implementation of .setattr.
+> > It copies struct iattr values without checking ia_valid. That's causing
+> > uninitalized memory to be copied. I sent a fix to 9p for this.
+> >
+> > Christian
+> 
+> Christian,
+> 
+> Do you think it makes sense to request a CVE for this issue?
+> If so, were you going to request one? Otherwise I can do that.
+
+I mean, it's neither my bug nor did I detect it, I just fixed it. :)
+If you would like this to be a CVE then sure go ahead.
+
+(I don't understand the rules around this well enough tbh. For example,
+during the last merge window there were at least 3 or 4 NULL pointer
+derefs or UAFs in newly added but already released code. Should all of
+these get a CVE without a working exploit?)

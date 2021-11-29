@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 360BA4625B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA1D4625C4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbhK2Wm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:42:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
+        id S234698AbhK2WnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:43:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233965AbhK2Wl5 (ORCPT
+        with ESMTP id S234129AbhK2Wmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:41:57 -0500
+        Mon, 29 Nov 2021 17:42:33 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039AAC0443CC;
-        Mon, 29 Nov 2021 10:29:44 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED35C1A195C;
+        Mon, 29 Nov 2021 10:37:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 504B0CE167C;
-        Mon, 29 Nov 2021 18:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00663C53FAD;
-        Mon, 29 Nov 2021 18:29:39 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5BBC0CE13D9;
+        Mon, 29 Nov 2021 18:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A810C53FAD;
+        Mon, 29 Nov 2021 18:37:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210580;
-        bh=UfdAoQDGyc+48qTkqvrj5H6Ic2W5FLrDqeLuRM2yp8o=;
+        s=korg; t=1638211033;
+        bh=Sn8tndyMRnu26tV783OUTcsuI7UKqTEhnAAgF7tTOSA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G9NW8FA+jOUnvclEGRwIjIk2wghZbE6E/o74jFhvbg1VaL2kqTPvoKez8Evn0ByhA
-         YzJsRuEpTJvl3qlflWU6jw00yQcQ9Xc6XIxD/isVRIOkB2CaMmjtNdEgG5Tg3f9YXw
-         BH2u8AmcIZuC08GmMtvSKZmujrCCajk34ELxK1xs=
+        b=IkCXR5oZqxV/s/p4RZJO2B1+zcLUGcXMpIfGrEZr6neAkhKfz74i5nEUv5KiBQeY5
+         QetV0VBcX7v0Pb3gTWRzLxWjZ8GTmoVFd34/5fH82GGgy3hCmIct2RtuW353FYyxPM
+         cQccAn/92o91JJqPbNfNVhKnZaoYHTFQOsGrpkAw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuanqi Liu <legend050709@qq.com>,
-        yangxingwu <xingwu.yang@gmail.com>,
-        Simon Horman <horms@verge.net.au>,
-        Julian Anastasov <ja@ssi.bg>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Alexander Aring <aahringo@redhat.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 043/121] netfilter: ipvs: Fix reuse connection if RS weight is 0
+Subject: [PATCH 5.15 080/179] net: ieee802154: handle iftypes as u32
 Date:   Mon, 29 Nov 2021 19:17:54 +0100
-Message-Id: <20211129181713.108926643@linuxfoundation.org>
+Message-Id: <20211129181721.576403225@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -52,76 +49,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: yangxingwu <xingwu.yang@gmail.com>
+From: Alexander Aring <aahringo@redhat.com>
 
-[ Upstream commit c95c07836fa4c1767ed11d8eca0769c652760e32 ]
+[ Upstream commit 451dc48c806a7ce9fbec5e7a24ccf4b2c936e834 ]
 
-We are changing expire_nodest_conn to work even for reused connections when
-conn_reuse_mode=0, just as what was done with commit dc7b3eb900aa ("ipvs:
-Fix reuse connection if real server is dead").
+This patch fixes an issue that an u32 netlink value is handled as a
+signed enum value which doesn't fit into the range of u32 netlink type.
+If it's handled as -1 value some BIT() evaluation ends in a
+shift-out-of-bounds issue. To solve the issue we set the to u32 max which
+is s32 "-1" value to keep backwards compatibility and let the followed enum
+values start counting at 0. This brings the compiler to never handle the
+enum as signed and a check if the value is above NL802154_IFTYPE_MAX should
+filter -1 out.
 
-For controlled and persistent connections, the new connection will get the
-needed real server depending on the rules in ip_vs_check_template().
-
-Fixes: d752c3645717 ("ipvs: allow rescheduling of new connections when port reuse is detected")
-Co-developed-by: Chuanqi Liu <legend050709@qq.com>
-Signed-off-by: Chuanqi Liu <legend050709@qq.com>
-Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
-Acked-by: Simon Horman <horms@verge.net.au>
-Acked-by: Julian Anastasov <ja@ssi.bg>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: f3ea5e44231a ("ieee802154: add new interface command")
+Signed-off-by: Alexander Aring <aahringo@redhat.com>
+Link: https://lore.kernel.org/r/20211112030916.685793-1-aahringo@redhat.com
+Signed-off-by: Stefan Schmidt <stefan@datenfreihafen.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/networking/ipvs-sysctl.rst | 3 +--
- net/netfilter/ipvs/ip_vs_core.c          | 8 ++++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ include/net/nl802154.h | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/networking/ipvs-sysctl.rst b/Documentation/networking/ipvs-sysctl.rst
-index 2afccc63856ee..1cfbf1add2fc9 100644
---- a/Documentation/networking/ipvs-sysctl.rst
-+++ b/Documentation/networking/ipvs-sysctl.rst
-@@ -37,8 +37,7 @@ conn_reuse_mode - INTEGER
+diff --git a/include/net/nl802154.h b/include/net/nl802154.h
+index ddcee128f5d9a..145acb8f25095 100644
+--- a/include/net/nl802154.h
++++ b/include/net/nl802154.h
+@@ -19,6 +19,8 @@
+  *
+  */
  
- 	0: disable any special handling on port reuse. The new
- 	connection will be delivered to the same real server that was
--	servicing the previous connection. This will effectively
--	disable expire_nodest_conn.
-+	servicing the previous connection.
++#include <linux/types.h>
++
+ #define NL802154_GENL_NAME "nl802154"
  
- 	bit 1: enable rescheduling of new connections when it is safe.
- 	That is, whenever expire_nodest_conn and for TCP sockets, when
-diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
-index c0b8215ab3d47..3a76da58d88bb 100644
---- a/net/netfilter/ipvs/ip_vs_core.c
-+++ b/net/netfilter/ipvs/ip_vs_core.c
-@@ -1976,7 +1976,6 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
- 	struct ip_vs_proto_data *pd;
- 	struct ip_vs_conn *cp;
- 	int ret, pkts;
--	int conn_reuse_mode;
- 	struct sock *sk;
+ enum nl802154_commands {
+@@ -150,10 +152,9 @@ enum nl802154_attrs {
+ };
  
- 	/* Already marked as IPVS request or reply? */
-@@ -2053,15 +2052,16 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
- 	cp = INDIRECT_CALL_1(pp->conn_in_get, ip_vs_conn_in_get_proto,
- 			     ipvs, af, skb, &iph);
+ enum nl802154_iftype {
+-	/* for backwards compatibility TODO */
+-	NL802154_IFTYPE_UNSPEC = -1,
++	NL802154_IFTYPE_UNSPEC = (~(__u32)0),
  
--	conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
--	if (conn_reuse_mode && !iph.fragoffs && is_new_conn(skb, &iph) && cp) {
-+	if (!iph.fragoffs && is_new_conn(skb, &iph) && cp) {
-+		int conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
- 		bool old_ct = false, resched = false;
+-	NL802154_IFTYPE_NODE,
++	NL802154_IFTYPE_NODE = 0,
+ 	NL802154_IFTYPE_MONITOR,
+ 	NL802154_IFTYPE_COORD,
  
- 		if (unlikely(sysctl_expire_nodest_conn(ipvs)) && cp->dest &&
- 		    unlikely(!atomic_read(&cp->dest->weight))) {
- 			resched = true;
- 			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
--		} else if (is_new_conn_expected(cp, conn_reuse_mode)) {
-+		} else if (conn_reuse_mode &&
-+			   is_new_conn_expected(cp, conn_reuse_mode)) {
- 			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
- 			if (!atomic_read(&cp->n_control)) {
- 				resched = true;
 -- 
 2.33.0
 

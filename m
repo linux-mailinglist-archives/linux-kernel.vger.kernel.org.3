@@ -2,182 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB0DA46117C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:57:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6467E46125A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238140AbhK2KAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:00:46 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:64178 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231590AbhK2J6m (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:58:42 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638179721; h=Message-ID: References: In-Reply-To: Subject:
- Cc: To: From: Date: Content-Transfer-Encoding: Content-Type:
- MIME-Version: Sender; bh=rTfcGTR+3GLs3cW3kgd/lC6PwGh1if+M38DrtgJcOGQ=;
- b=GobgZgVGYADasssy6yD2p1R2D6UOgKzUZ17MzqvsuFdwQNj6SgbXg+YiN3orLLFoCa7ZctBn
- cxrckYhhL69vb0GYsMjBMo9mFCX18NYHX1Agbco6c2AAYGyhRTvRBiYTZtnnVrvOXrkd1RFD
- LV1y8DJnyNQXa/PJ7uiE4wagykM=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n02.prod.us-west-2.postgun.com with SMTP id
- 61a4a389bebfa3d4d5084101 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Nov 2021 09:55:21
- GMT
-Sender: sibis=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 398FEC4360D; Mon, 29 Nov 2021 09:55:21 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from mail.codeaurora.org (localhost.localdomain [127.0.0.1])
-        (using TLSv1 with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: sibis)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 5A828C4360C;
-        Mon, 29 Nov 2021 09:55:20 +0000 (UTC)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Mon, 29 Nov 2021 15:25:20 +0530
-From:   Sibi Sankar <sibis@codeaurora.org>
-To:     Rakesh Pillai <pillair@codeaurora.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        swboyd@chromium.org, linux-arm-msm@vger.kernel.org,
+        id S244973AbhK2K1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40666 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344127AbhK2KZ3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 05:25:29 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D5F8C061373
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 01:56:26 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o29so14044972wms.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 01:56:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=JoYsHU+XJpC5AlXMYy6dlFDTBWZmry/p4RloOev9FFw=;
+        b=sS+elfRruvzi6wtAMsU/s+WNTxXW1bfySN8LfJ8IUQMovxXGfHp9ghpNCYglOmE0Hu
+         xk1H8EfBzfdEBJiqAydhcxEQ6tJrUEJzefpPyEfZHcP1BVxp3BaMW1wFf67lzKa8CMXT
+         5GGMta5RdyaT9oVWaKWF4X0e/AjTRIcbjku5JEJqOvFHkxeydPm9VllvVPBHARsKFwLl
+         1pNe1UuiL82xffXYJybUDewoFZFQWd/dlEVKNNWBRDQ7fgYHwUz9YbWh2069Oflv9Qz/
+         AcQL0olLD980D9eQsZqTG61PYVjCgw3BPx4h+5f0AEyHedPS7SVZirBysQtqzQWXmsIp
+         Ldyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JoYsHU+XJpC5AlXMYy6dlFDTBWZmry/p4RloOev9FFw=;
+        b=xsQXcHHQL8yfjmcpFzS3X6GzZJyOizc5mmrbFtunm5Hz0Nob9J9NJkDs0Rf2rW9alI
+         L3yQSZZpRTKzJlN1dKHHyCj+3cloqwDZBq5UZSbvvgG2VrgxUUGqQS06LuXdGc0g1j9E
+         O+lQDNTn9vxGkThsp+bsxI/yJhqE0lqTeeU9kwIZMEW8oVXxXlw6eNiNarn/yRDK4+GT
+         UqKJm24kLLJimVsL+ziil2c5+Fok93vk4lmrSuZfweXufK/lx5VPAaQunOtpXKcq2Llb
+         4Fym0/jTWK8kiWT3H5MNkNbxOGIZ3v1APMwSbduqgFmPWNhVxnRs41nktcmZ59+xEvtZ
+         c1gg==
+X-Gm-Message-State: AOAM532y4LM7WKs4A7PVRL50VfI+d90HpJbqFg/TjVfTP9NhCjcQnj/w
+        adb49cmmWsQM4PiY5E+Usa09Hw==
+X-Google-Smtp-Source: ABdhPJx/wqUhMKyU8qOU/313Add1TM/BvSiew6HbDgIqgaQwkq+sPRs6LA2xh9cQDneaokaPe1CSbA==
+X-Received: by 2002:a05:600c:3489:: with SMTP id a9mr35644457wmq.53.1638179784955;
+        Mon, 29 Nov 2021 01:56:24 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd? ([2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd])
+        by smtp.googlemail.com with ESMTPSA id h13sm13642392wrx.82.2021.11.29.01.56.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 01:56:24 -0800 (PST)
+Subject: Re: [PATCH] ARM: dts: Fix timer regression for beagleboard revision c
+To:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org
+Cc:     =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mpubbise@codeaurora.org, kuabhs@chromium.org,
-        pillair=codeaurora.org@codeaurora.org
-Subject: Re: [PATCH v7] arm64: dts: qcom: sc7280: Add WPSS remoteproc node
-In-Reply-To: <1637299488-22336-1-git-send-email-pillair@codeaurora.org>
-References: <1637299488-22336-1-git-send-email-pillair@codeaurora.org>
-Message-ID: <14d31c99d8fe258af3fc1f28c787c8cb@codeaurora.org>
-X-Sender: sibis@codeaurora.org
-User-Agent: Roundcube Webmail/1.3.9
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Jarkko Nikula <jarkko.nikula@bitmer.com>
+References: <20211125144834.52457-1-tony@atomide.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <6ce29c03-03ce-8e65-76e1-40fe2bf23caa@linaro.org>
+Date:   Mon, 29 Nov 2021 10:56:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211125144834.52457-1-tony@atomide.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Rakesh,
 
-On 2021-11-19 10:54, Rakesh Pillai wrote:
-> Add the WPSS remoteproc node in dts for
-> PIL loading.
+Hi Tony,
+
+On 25/11/2021 15:48, Tony Lindgren wrote:
+> Commit e428e250fde6 ("ARM: dts: Configure system timers for omap3")
+> caused a timer regression for beagleboard revision c where the system
+> clockevent stops working if omap3isp module is unloaded.
 > 
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Rakesh Pillai <pillair@codeaurora.org>
+> Turns out we still have beagleboard revisions a-b4 capacitor c70 quirks
+> applied that limit the usable timers for no good reason. This also affects
+> the power management as we use the system clock instead of the 32k clock
+> source.
+> 
+> Let's fix the issue by adding a new omap3-beagle-ab4.dts for the old timer
+> quirks. This allows us to remove the timer quirks for later beagleboard
+> revisions. We also need to update the related timer quirk check for the
+> correct compatible property.
+> 
+> Fixes: e428e250fde6 ("ARM: dts: Configure system timers for omap3")
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Reported-by: Jarkko Nikula <jarkko.nikula@bitmer.com>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
 > ---
-> Changes from v6:
-> - Swap the oder of two properties in wpss_mem reserved memory
-> 
-> Changes from v5:
-> - Update the clock names
-> ---
->  arch/arm64/boot/dts/qcom/sc7280-idp.dts |  4 +++
->  arch/arm64/boot/dts/qcom/sc7280.dtsi    | 56 
-> +++++++++++++++++++++++++++++++++
->  2 files changed, 60 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> index 9b991ba..ddab150 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dts
-> @@ -80,3 +80,7 @@
->  		qcom,pre-scaling = <1 1>;
->  	};
->  };
+>  .../devicetree/bindings/arm/omap/omap.txt     |  3 ++
+>  arch/arm/boot/dts/Makefile                    |  1 +
+>  arch/arm/boot/dts/omap3-beagle-ab4.dts        | 47 +++++++++++++++++++
+>  arch/arm/boot/dts/omap3-beagle.dts            | 33 -------------
+>  drivers/clocksource/timer-ti-dm-systimer.c    |  2 +-
+>  5 files changed, 52 insertions(+), 34 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/omap3-beagle-ab4.dts
+
+Usually, bindings DT and driver changes are separate patches
+
+
+> diff --git a/Documentation/devicetree/bindings/arm/omap/omap.txt b/Documentation/devicetree/bindings/arm/omap/omap.txt
+> --- a/Documentation/devicetree/bindings/arm/omap/omap.txt
+> +++ b/Documentation/devicetree/bindings/arm/omap/omap.txt
+> @@ -119,6 +119,9 @@ Boards (incomplete list of examples):
+>  - OMAP3 BeagleBoard : Low cost community board
+>    compatible = "ti,omap3-beagle", "ti,omap3430", "ti,omap3"
+>  
+> +- OMAP3 BeagleBoard A to B4 : Early BeagleBoard revisions A to B4 with a timer quirk
+> +  compatible = "ti,omap3-beagle-ab4", "ti,omap3-beagle", "ti,omap3430", "ti,omap3"
 > +
-> +&remoteproc_wpss {
-> +	status = "okay";
+>  - OMAP3 Tobi with Overo : Commercial expansion board with daughter board
+>    compatible = "gumstix,omap3-overo-tobi", "gumstix,omap3-overo", "ti,omap3430", "ti,omap3"
+>  
+> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+> --- a/arch/arm/boot/dts/Makefile
+> +++ b/arch/arm/boot/dts/Makefile
+> @@ -794,6 +794,7 @@ dtb-$(CONFIG_ARCH_OMAP3) += \
+>  	logicpd-som-lv-37xx-devkit.dtb \
+>  	omap3430-sdp.dtb \
+>  	omap3-beagle.dtb \
+> +	omap3-beagle-ab4.dtb \
+>  	omap3-beagle-xm.dtb \
+>  	omap3-beagle-xm-ab.dtb \
+>  	omap3-cm-t3517.dtb \
+> diff --git a/arch/arm/boot/dts/omap3-beagle-ab4.dts b/arch/arm/boot/dts/omap3-beagle-ab4.dts
+> new file mode 100644
+> --- /dev/null
+> +++ b/arch/arm/boot/dts/omap3-beagle-ab4.dts
+> @@ -0,0 +1,47 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/dts-v1/;
+> +
+> +#include "omap3-beagle.dts"
+> +
+> +/ {
+> +	model = "TI OMAP3 BeagleBoard A to B4";
+> +	compatible = "ti,omap3-beagle-ab4", "ti,omap3-beagle", "ti,omap3430", "ti,omap3";
 > +};
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 365a2e0..dd93f13 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -134,6 +134,11 @@
->  			no-map;
->  		};
+> +
+> +/*
+> + * Workaround for capacitor C70 issue, see "Boards revision A and < B5"
+> + * section at https://elinux.org/BeagleBoard_Community
+> + */
+> +
+> +/* Unusable as clocksource because of unreliable oscillator */
+> +&counter32k {
+> +	status = "disabled";
+> +};
+> +
+> +/* Unusable as clockevent because of unreliable oscillator, allow to idle */
+> +&timer1_target {
+> +	/delete-property/ti,no-reset-on-init;
+> +	/delete-property/ti,no-idle;
+> +	timer@0 {
+> +		/delete-property/ti,timer-alwon;
+> +	};
+> +};
+> +
+> +/* Preferred always-on timer for clocksource */
+> +&timer12_target {
+> +	ti,no-reset-on-init;
+> +	ti,no-idle;
+> +	timer@0 {
+> +		/* Always clocked by secure_32k_fck */
+> +	};
+> +};
+> +
+> +/* Preferred timer for clockevent */
+> +&timer2_target {
+> +	ti,no-reset-on-init;
+> +	ti,no-idle;
+> +	timer@0 {
+> +		assigned-clocks = <&gpt2_fck>;
+> +		assigned-clock-parents = <&sys_ck>;
+> +	};
+> +};
+> diff --git a/arch/arm/boot/dts/omap3-beagle.dts b/arch/arm/boot/dts/omap3-beagle.dts
+> --- a/arch/arm/boot/dts/omap3-beagle.dts
+> +++ b/arch/arm/boot/dts/omap3-beagle.dts
+> @@ -308,39 +308,6 @@ &usbhsehci {
+>  	phys = <0 &hsusb2_phy>;
+>  };
+>  
+> -/* Unusable as clocksource because of unreliable oscillator */
+> -&counter32k {
+> -	status = "disabled";
+> -};
+> -
+> -/* Unusable as clockevent because if unreliable oscillator, allow to idle */
+> -&timer1_target {
+> -	/delete-property/ti,no-reset-on-init;
+> -	/delete-property/ti,no-idle;
+> -	timer@0 {
+> -		/delete-property/ti,timer-alwon;
+> -	};
+> -};
+> -
+> -/* Preferred always-on timer for clocksource */
+> -&timer12_target {
+> -	ti,no-reset-on-init;
+> -	ti,no-idle;
+> -	timer@0 {
+> -		/* Always clocked by secure_32k_fck */
+> -	};
+> -};
+> -
+> -/* Preferred timer for clockevent */
+> -&timer2_target {
+> -	ti,no-reset-on-init;
+> -	ti,no-idle;
+> -	timer@0 {
+> -		assigned-clocks = <&gpt2_fck>;
+> -		assigned-clock-parents = <&sys_ck>;
+> -	};
+> -};
+> -
+>  &twl_gpio {
+>  	ti,use-leds;
+>  	/* pullups: BIT(1) */
+> diff --git a/drivers/clocksource/timer-ti-dm-systimer.c b/drivers/clocksource/timer-ti-dm-systimer.c
+> --- a/drivers/clocksource/timer-ti-dm-systimer.c
+> +++ b/drivers/clocksource/timer-ti-dm-systimer.c
+> @@ -241,7 +241,7 @@ static void __init dmtimer_systimer_assign_alwon(void)
+>  	bool quirk_unreliable_oscillator = false;
+>  
+>  	/* Quirk unreliable 32 KiHz oscillator with incomplete dts */
+> -	if (of_machine_is_compatible("ti,omap3-beagle") ||
+> +	if (of_machine_is_compatible("ti,omap3-beagle-ab4") ||
+>  	    of_machine_is_compatible("timll,omap3-devkit8000")) {
+>  		quirk_unreliable_oscillator = true;
+>  		counter_32k = -ENODEV;
 > 
-> +		wpss_mem: memory@9ae00000 {
-> +			reg = <0x0 0x9ae00000 0x0 0x1900000>;
-> +			no-map;
-> +		};
-> +
 
-wpss_mem is already part of idp
-board dts. We no longer include
-PIL reserved memory regions in
-the base SoC dtsi since the size
-varies across boards.
-
->  		rmtfs_mem: memory@9c900000 {
->  			compatible = "qcom,rmtfs-mem";
->  			reg = <0x0 0x9c900000 0x0 0x280000>;
-> @@ -2598,6 +2603,57 @@
->  			status = "disabled";
->  		};
-> 
-> +		remoteproc_wpss: remoteproc@8a00000 {
-> +			compatible = "qcom,sc7280-wpss-pil";
-> +			reg = <0 0x08a00000 0 0x10000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 587 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wpss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wpss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wpss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wpss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wpss_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "wdog", "fatal", "ready", "handover",
-> +					  "stop-ack", "shutdown-ack";
-> +
-> +			clocks = <&gcc GCC_WPSS_AHB_BDG_MST_CLK>,
-> +				 <&gcc GCC_WPSS_AHB_CLK>,
-> +				 <&gcc GCC_WPSS_RSCP_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>;
-> +			clock-names = "ahb_bdg", "ahb",
-> +				      "rscp", "xo";
-> +
-> +			power-domains = <&rpmhpd SC7280_CX>,
-> +					<&rpmhpd SC7280_MX>;
-> +			power-domain-names = "cx", "mx";
-> +
-> +			memory-region = <&wpss_mem>;
-> +
-> +			qcom,qmp = <&aoss_qmp>;
-> +
-> +			qcom,smem-states = <&wpss_smp2p_out 0>;
-> +			qcom,smem-state-names = "stop";
-> +
-> +			resets = <&aoss_reset AOSS_CC_WCSS_RESTART>,
-> +				 <&pdc_reset PDC_WPSS_SYNC_RESET>;
-> +			reset-names = "restart", "pdc_sync";
-> +
-> +			qcom,halt-regs = <&tcsr_mutex 0x37000>;
-> +
-> +			status = "disabled";
-> +
-> +			glink-edge {
-> +				interrupts-extended = <&ipcc IPCC_CLIENT_WPSS
-> +							     IPCC_MPROC_SIGNAL_GLINK_QMP
-> +							     IRQ_TYPE_EDGE_RISING>;
-> +				mboxes = <&ipcc IPCC_CLIENT_WPSS
-> +						IPCC_MPROC_SIGNAL_GLINK_QMP>;
-> +
-> +				label = "wpss";
-> +				qcom,remote-pid = <13>;
-> +			};
-> +		};
-> +
->  		dc_noc: interconnect@90e0000 {
->  			reg = <0 0x090e0000 0 0x5080>;
->  			compatible = "qcom,sc7280-dc-noc";
 
 -- 
-Qualcomm Innovation Center, Inc. is a member of Code Aurora Forum,
-a Linux Foundation Collaborative Project.
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,115 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA0A461C24
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AEC6461C3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346849AbhK2Qx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 11:53:26 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:45730 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347015AbhK2QvY (ORCPT
+        id S1346245AbhK2Q5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:57:40 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.83]:29556 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345788AbhK2Qzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:51:24 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAED7615BD;
-        Mon, 29 Nov 2021 16:48:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90DC6C53FC7;
-        Mon, 29 Nov 2021 16:48:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638204486;
-        bh=UbS4qk0d0chnTXSGcmfZ7R1i2koRRudFe/+X++xLqpI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CJzhCIO1dr2bFwDthsX0RnG19xeSewfR3ihswpw5affNItRXVtRXQl1iOLrzoq4J6
-         md7vT9E391Dz9/NbE/Lz+xH+1JNKkW5B0FH321wmTkm5gQ1s6Vw/XLl5ckLIgY+cMK
-         o7VUXxN8mSpod66yRqW6r8IxHzcc/i/3EZsDdDtoCNRc5GtO6Irn6hJhF8YOM+BnMr
-         v6U1vyu7Z6BXSKF0mx+4/8i0Ah35pMgGjrJKh8XA5laidRQPxExPxV7CnSNtKR7qjn
-         2c+AVaBGtNZToB4talKxBWp+6symoH7g81f8QxRysRu8I+eV35ER0yrZXotxaTxZHZ
-         jBJ9VD1UZhSBQ==
-Date:   Mon, 29 Nov 2021 17:48:03 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Rajat Jain <rajatja@google.com>
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dtor@google.com, rajatxjain@gmail.com,
-        dbasehore@chromium.org
-Subject: Re: [PATCH v2 0/3] i2c: Enable asynchronous suspend/resume
-Message-ID: <YaUEQwYeUgqlMOmu@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, dtor@google.com, rajatxjain@gmail.com,
-        dbasehore@chromium.org
-References: <20211025213532.2349161-1-rajatja@google.com>
+        Mon, 29 Nov 2021 11:55:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638204621;
+    s=strato-dkim-0002; d=chronox.de;
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=JyBjq88B15JKCOYh7QHsQko101At+fMhRrQiO+4wgy0=;
+    b=qJZ6r+xe4Sy0ZbKZakDcT/ZcDuLh6dI+xkgkZtaTC6AL8rbMvMYblB3q6c+zwwfLyy
+    3NVA6Ud87lYwD3Pt56n8s2w2WyMtisujmcqfX/TOe+McXEMccjP7/uKsm6WGmj6MnVJk
+    Gconuffpc14E29VoSJoQRBhWC2aQIj/UoRuAm7IwG7Nx5L+GMpeUdJVEXiF6+IEfvvgL
+    LfVUYELUcuLUyy2p+kOuZQbzqTUgXppRZYdhPG1wazsFMMr4C/ywthkuTzNc/U1dMMqE
+    +4mcM9/YjIBuR4qmiJhBuS/+EMyXR9CyRfZ8EmNoWiUfFn0pJfcuD8p3Ilt3H94vQnN1
+    budw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9xmwdNnzGHXPbIvSX5lo="
+X-RZG-CLASS-ID: mo00
+Received: from tauon.chronox.de
+    by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
+    with ESMTPSA id 006230xATGoJRSz
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 29 Nov 2021 17:50:19 +0100 (CET)
+From:   Stephan Mueller <smueller@chronox.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Simo Sorce <simo@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
+        linux-crypto@vger.kernel.org, Willy Tarreau <w@1wt.eu>,
+        Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+Date:   Mon, 29 Nov 2021 17:50:18 +0100
+Message-ID: <1852548.vyqkCxSGx7@tauon.chronox.de>
+In-Reply-To: <YaT+9MueQIa5p8xr@kroah.com>
+References: <2036923.9o76ZdvQCi@positron.chronox.de> <9311513.S0ZZtNTvxh@tauon.chronox.de> <YaT+9MueQIa5p8xr@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="POKVtAmmjJwrTKPt"
-Content-Disposition: inline
-In-Reply-To: <20211025213532.2349161-1-rajatja@google.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Montag, 29. November 2021, 17:25:24 CET schrieb Greg Kroah-Hartman:
 
---POKVtAmmjJwrTKPt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Greg,
 
-Hi,
+> > > 
+> > > Links to the patches and discussion please?
+> > 
+> > Please consider https://lkml.org/lkml/2020/9/21/157
+> 
+> That's a load of patches, some of them seem sane, what ever happened to
+> them? 
 
-> As far as I understand, the only reason we might not want a device to be
-> marked for asynchronous resume is if we suspect it cannot handle
-> concurrent resume with other devices, which does not look to be the
-> case.=20
+Nothing was discussed, nothing was picked up.
 
-Since parent-child relationships are handled, I'd say let us try this.
-If there are siblings which depend on each other, I think they should be
-marked with "device_link_add" anyhow. I am afraid we will encounter some
-regressions with such siblings. However, I don't think there will be a
-lot and the time savings for all Linux systems may be worth the
-(hopefully) little hazzle.
+> Seems like the conversation got derailed by people with email
+> server issues that prevented them from participating in public :(
+> 
+> But that patch set is a nice way to do this, incremental changes working
+> with the existing codebase, not trying to ignore the current code and
+> create a separate implementation.
+> 
+> Also, minor note, please use lore.kernel.org links, we don't have any
+> control over lkml.org, nor can we take patches out of that site with any
+> of our normal tools.
 
-> This patchset marks the designware, the I2c adapters, and the i2c=20
-> clients for asynchronous suspend/resume. In case it helps to gain any
-> confidence, the patch 3 (for i2c clients) has been included and shipping
-> on all our chromebooks for the past 3+ years, and has not shown any
-> issues. The designware and i2c adapters should be easier.
-
-This in deed helps to gain confidence. I agree that the clients are
-probably the most tricky ones. If that works on all Chromebooks for 3
-years now, I am positive we can test this series in linux-next now.
-
-Thanks for this work,
-
-   Wolfram
+Apologies, will do for the next time.
 
 
---POKVtAmmjJwrTKPt
-Content-Type: application/pgp-signature; name="signature.asc"
+Ciao
+Stephan
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlBEMACgkQFA3kzBSg
-KbZViw//eyB+/5oCFyG5ctW9t8jVasj4Ud8gm7bCoKyG2HTJlusDVfCcfDWKMI+Y
-juPqniuzrP9R1MooW0SX6ggaUSjq3U5hUI2BPOnD3vQak69mNqy7OFP6t19zgbwI
-+rhxWcUN4c0l0F2xsXTqC6tKJliSXEED58WFo7tKUe3O9+lgZ8NULR6ex/A+1Joc
-qGFhlDfxsuVCf1O4wtv/aGSurAqRVHOL2AtOxuBJGlM3n7CNq0FOi/Q2cmvTXt26
-gOEgJdlSXXb4Bwg2ww5ncHCSd852l0KjuFBmmFQvOhBEgAgOM2aq8Tbau3VBPgXC
-Uqmd60MM94H5c0zlF6hqmY1XN04sR+u15jO1yIAwE8hKfgp7BLakaoutRf05ioST
-t33eD3HX6rIbkZW0lsnB5i+nGEHmxdiK+ff7zIpntWl4eiCHZ/yZmVyZX/UB3359
-yG/UghMjFzrmy2wroV0v5kqHs9Rr+i8V3DEZa/MAvPRYRn6RlMiikbBRRIdMULyu
-BgmFka7+00tfoGapHU8UqG3RrYU+JfInxPsvzKM3Ng/qkZSHB5ADrW8hDOcPo2RT
-PT5oODEZ0iRo0oauMpmRw6u18BDyOP/3ni2nD5BPWsghtqqWlPPDOVzOm/d8Rc9l
-CYI4dmVnV67bOUz2ObS+nTqLunRk0Hip1RbRSPBPKnnib3VI0ck=
-=ALIp
------END PGP SIGNATURE-----
-
---POKVtAmmjJwrTKPt--

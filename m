@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB56462438
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC0D4624EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:30:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233113AbhK2WRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:17:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
+        id S232360AbhK2WdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:33:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbhK2WQn (ORCPT
+        with ESMTP id S231451AbhK2Wc6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:16:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99945C12711A;
-        Mon, 29 Nov 2021 10:20:41 -0800 (PST)
+        Mon, 29 Nov 2021 17:32:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA051C1404F9;
+        Mon, 29 Nov 2021 10:30:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1E4B2CE13D4;
-        Mon, 29 Nov 2021 18:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA938C53FAD;
-        Mon, 29 Nov 2021 18:20:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9AD3BB815CF;
+        Mon, 29 Nov 2021 18:30:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCF00C53FC7;
+        Mon, 29 Nov 2021 18:30:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210039;
-        bh=OfVDjOtzA8zY8jRu3ephvwTk6tXze1HWVBB0c+XeK68=;
+        s=korg; t=1638210643;
+        bh=ZSmSfHig9PTFkY3PXBe3JjIQjQjMoLFmcOxhowBkzdk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MWOZJL4q5MkGE9DXWjCfN7XiEBQF9YOslBiONwxbNegmf9gLmLCHtGr/0l1tL9Rim
-         1xZ+2mDFF5LU8qFSHnQCTslHpIY7Xr59OuT5yydkApXERjJD6xcKtQzCVbfjLAP+BW
-         iiQYxWsUa4cFxHSOmmNVLuWvLZdC8dB5mEis0CQY=
+        b=x9E+LvGxE+44nnvvYo8UXZS2w4BZuz9dXxW9173xu0OpPu1aeY3R9TYxkQP7LqKMK
+         QOZU8MFvoOJVNDa1HIOn8BvHNlLIs9yLnTyityGyvStQJSUZmwlQCVQYLgVzWSsQrv
+         5cXW/Y5DYJrbJtuApqgPx7Scdh80KqKkiud2syI0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tomasz Maciej Nowak <tmn505@gmail.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.19 21/69] PCI: aardvark: Issue PERST via GPIO
-Date:   Mon, 29 Nov 2021 19:18:03 +0100
-Message-Id: <20211129181704.359848471@linuxfoundation.org>
+        stable@vger.kernel.org, Peng Fan <peng.fan@nxp.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 053/121] firmware: arm_scmi: pm: Propagate return value to caller
+Date:   Mon, 29 Nov 2021 19:18:04 +0100
+Message-Id: <20211129181713.435546458@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+References: <20211129181711.642046348@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,126 +49,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Peng Fan <peng.fan@nxp.com>
 
-commit 5169a9851daaa2782a7bd2bb83d5b1bd224b2879 upstream.
+[ Upstream commit 1446fc6c678e8d8b31606a4b877abe205f344b38 ]
 
-Add support for issuing PERST via GPIO specified in 'reset-gpios'
-property (as described in PCI device tree bindings).
+of_genpd_add_provider_onecell may return error, so let's propagate
+its return value to caller
 
-Some buggy cards (e.g. Compex WLE900VX or WLE1216) are not detected
-after reboot when PERST is not issued during driver initialization.
-
-If bootloader already enabled link training then issuing PERST has no
-effect for some buggy cards (e.g. Compex WLE900VX) and these cards are
-not detected. We therefore clear the LINK_TRAINING_EN register before.
-
-It was observed that Compex WLE900VX card needs to be in PERST reset
-for at least 10ms if bootloader enabled link training.
-
-Tested on Turris MOX.
-
-Link: https://lore.kernel.org/r/20200430080625.26070-6-pali@kernel.org
-Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20211116064227.20571-1-peng.fan@oss.nxp.com
+Fixes: 898216c97ed2 ("firmware: arm_scmi: add device power domain support using genpd")
+Signed-off-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c |   43 +++++++++++++++++++++++++++++++++-
- 1 file changed, 42 insertions(+), 1 deletion(-)
+ drivers/firmware/arm_scmi/scmi_pm_domain.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -9,6 +9,7 @@
-  */
+diff --git a/drivers/firmware/arm_scmi/scmi_pm_domain.c b/drivers/firmware/arm_scmi/scmi_pm_domain.c
+index 9e44479f02842..a4e4aa9a35426 100644
+--- a/drivers/firmware/arm_scmi/scmi_pm_domain.c
++++ b/drivers/firmware/arm_scmi/scmi_pm_domain.c
+@@ -106,9 +106,7 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+ 	scmi_pd_data->domains = domains;
+ 	scmi_pd_data->num_domains = num_domains;
  
- #include <linux/delay.h>
-+#include <linux/gpio.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/irqdomain.h>
-@@ -17,6 +18,7 @@
- #include <linux/init.h>
- #include <linux/platform_device.h>
- #include <linux/of_address.h>
-+#include <linux/of_gpio.h>
- #include <linux/of_pci.h>
- 
- #include "../pci.h"
-@@ -195,6 +197,7 @@ struct advk_pcie {
- 	u16 msi_msg;
- 	int root_bus_nr;
- 	int link_gen;
-+	struct gpio_desc *reset_gpio;
- };
- 
- static inline void advk_writel(struct advk_pcie *pcie, u32 val, u64 reg)
-@@ -310,10 +313,31 @@ err:
- 	dev_err(dev, "link never came up\n");
+-	of_genpd_add_provider_onecell(np, scmi_pd_data);
+-
+-	return 0;
++	return of_genpd_add_provider_onecell(np, scmi_pd_data);
  }
  
-+static void advk_pcie_issue_perst(struct advk_pcie *pcie)
-+{
-+	u32 reg;
-+
-+	if (!pcie->reset_gpio)
-+		return;
-+
-+	/* PERST does not work for some cards when link training is enabled */
-+	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
-+	reg &= ~LINK_TRAINING_EN;
-+	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
-+
-+	/* 10ms delay is needed for some cards */
-+	dev_info(&pcie->pdev->dev, "issuing PERST via reset GPIO for 10ms\n");
-+	gpiod_set_value_cansleep(pcie->reset_gpio, 1);
-+	usleep_range(10000, 11000);
-+	gpiod_set_value_cansleep(pcie->reset_gpio, 0);
-+}
-+
- static void advk_pcie_setup_hw(struct advk_pcie *pcie)
- {
- 	u32 reg;
- 
-+	advk_pcie_issue_perst(pcie);
-+
- 	/* Set to Direct mode */
- 	reg = advk_readl(pcie, CTRL_CONFIG_REG);
- 	reg &= ~(CTRL_MODE_MASK << CTRL_MODE_SHIFT);
-@@ -386,7 +410,8 @@ static void advk_pcie_setup_hw(struct ad
- 
- 	/*
- 	 * PERST# signal could have been asserted by pinctrl subsystem before
--	 * probe() callback has been called, making the endpoint going into
-+	 * probe() callback has been called or issued explicitly by reset gpio
-+	 * function advk_pcie_issue_perst(), making the endpoint going into
- 	 * fundamental reset. As required by PCI Express spec a delay for at
- 	 * least 100ms after such a reset before link training is needed.
- 	 */
-@@ -1026,6 +1051,22 @@ static int advk_pcie_probe(struct platfo
- 		return ret;
- 	}
- 
-+	pcie->reset_gpio = devm_gpiod_get_from_of_node(dev, dev->of_node,
-+						       "reset-gpios", 0,
-+						       GPIOD_OUT_LOW,
-+						       "pcie1-reset");
-+	ret = PTR_ERR_OR_ZERO(pcie->reset_gpio);
-+	if (ret) {
-+		if (ret == -ENOENT) {
-+			pcie->reset_gpio = NULL;
-+		} else {
-+			if (ret != -EPROBE_DEFER)
-+				dev_err(dev, "Failed to get reset-gpio: %i\n",
-+					ret);
-+			return ret;
-+		}
-+	}
-+
- 	ret = of_pci_get_max_link_speed(dev->of_node);
- 	if (ret <= 0 || ret > 3)
- 		pcie->link_gen = 3;
+ static const struct scmi_device_id scmi_id_table[] = {
+-- 
+2.33.0
+
 
 

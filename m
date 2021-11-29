@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D6F462479
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82D6462759
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233597AbhK2WTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:19:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        id S237162AbhK2XDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbhK2WQo (ORCPT
+        with ESMTP id S237014AbhK2XAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:16:44 -0500
+        Mon, 29 Nov 2021 18:00:40 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0375CC12711C;
-        Mon, 29 Nov 2021 10:21:09 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E816C127B76;
+        Mon, 29 Nov 2021 10:29:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E20BB815C3;
-        Mon, 29 Nov 2021 18:21:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C605DC53FAD;
-        Mon, 29 Nov 2021 18:21:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2591BB815AE;
+        Mon, 29 Nov 2021 18:29:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CA41C53FC7;
+        Mon, 29 Nov 2021 18:29:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210067;
-        bh=PM/yQpI+6fYexdm9iC3694oATmfAwBxaiumR98Y7WFk=;
+        s=korg; t=1638210551;
+        bh=zN+n3mwPS+RxpkyDqheAQc+UjIIJ+yEeCftKuNC7gOM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=f17MKusfp7IqP8VK0V5GbNUwttlGJQ/DQxeOD/LJ8Kdu4uOHP8dn+NhvJa1CZs0Dz
-         D+Hdd82ejgTiaG6kp8jxWB4MniTWSZoaAy0iQhKNFlp5J+FgDGhO8NghJt+I5raYu/
-         AyDFvWBLxWXlNGSIOYwAP4yc2Pto9cpV61DQV9YI=
+        b=EBpt+oitj9YA042m84hHEjQlwOUZozCoeOWNuJUELRT7GQ9v2f7mzlBUMQUr1OSjX
+         gJsGkAww9UJX5E5ydu0PMfCV2S1EYqf18D0t09Wb4HXOpPJpvHjwVkHmPrdlgtMkil
+         6zPVtlr2gvH8Zhb7z2q9jdXCEnXtrlfASCE+pwBA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        John Keeping <john@metanate.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 4.19 03/69] usb: dwc2: hcd_queue: Fix use of floating point literal
+        stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [PATCH 5.10 034/121] powerpc/32: Fix hardlockup on vmap stack overflow
 Date:   Mon, 29 Nov 2021 19:17:45 +0100
-Message-Id: <20211129181703.778282417@linuxfoundation.org>
+Message-Id: <20211129181712.794330996@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+References: <20211129181711.642046348@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,56 +49,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-commit 310780e825f3ffd211b479b8f828885a6faedd63 upstream.
+commit 5bb60ea611db1e04814426ed4bd1c95d1487678e upstream.
 
-A new commit in LLVM causes an error on the use of 'long double' when
-'-mno-x87' is used, which the kernel does through an alias,
-'-mno-80387' (see the LLVM commit below for more details around why it
-does this).
+Since the commit c118c7303ad5 ("powerpc/32: Fix vmap stack - Do not
+activate MMU before reading task struct") a vmap stack overflow
+results in a hard lockup. This is because emergency_ctx is still
+addressed with its virtual address allthough data MMU is not active
+anymore at that time.
 
- drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-                         delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
-                                             ^
- drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
- #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
-                                 ^
- 1 error generated.
+Fix it by using a physical address instead.
 
-This happens due to the use of a 'long double' literal. The 'E6' part of
-'1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-it to 'long double'.
-
-There is no visible reason for a floating point value in this driver, as
-the value is only used as a parameter to a function that expects an
-integer type. Use NSEC_PER_MSEC, which is the same integer value as
-'1E6L', to avoid changing functionality but fix the error.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: John Keeping <john@metanate.com>
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20211105145802.2520658-1-nathan@kernel.org
+Fixes: c118c7303ad5 ("powerpc/32: Fix vmap stack - Do not activate MMU before reading task struct")
+Cc: stable@vger.kernel.org # v5.10+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/ce30364fb7ccda489272af4a1612b6aa147e1d23.1637227521.git.christophe.leroy@csgroup.eu
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc2/hcd_queue.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/kernel/head_32.h |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/usb/dwc2/hcd_queue.c
-+++ b/drivers/usb/dwc2/hcd_queue.c
-@@ -59,7 +59,7 @@
- #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
- 
- /* If we get a NAK, wait this long before retrying */
--#define DWC2_RETRY_WAIT_DELAY 1*1E6L
-+#define DWC2_RETRY_WAIT_DELAY (1 * NSEC_PER_MSEC)
- 
- /**
-  * dwc2_periodic_channel_available() - Checks that a channel is available for a
+--- a/arch/powerpc/kernel/head_32.h
++++ b/arch/powerpc/kernel/head_32.h
+@@ -333,11 +333,11 @@ label:
+ 	mfspr	r1, SPRN_SPRG_THREAD
+ 	lwz	r1, TASK_CPU - THREAD(r1)
+ 	slwi	r1, r1, 3
+-	addis	r1, r1, emergency_ctx@ha
++	addis	r1, r1, emergency_ctx-PAGE_OFFSET@ha
+ #else
+-	lis	r1, emergency_ctx@ha
++	lis	r1, emergency_ctx-PAGE_OFFSET@ha
+ #endif
+-	lwz	r1, emergency_ctx@l(r1)
++	lwz	r1, emergency_ctx-PAGE_OFFSET@l(r1)
+ 	addi	r1, r1, THREAD_SIZE - INT_FRAME_SIZE
+ 	EXCEPTION_PROLOG_2
+ 	SAVE_NVGPRS(r11)
 
 

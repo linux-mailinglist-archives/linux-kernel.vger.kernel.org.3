@@ -2,127 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2054615E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:11:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3407B4615F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377678AbhK2NOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:14:35 -0500
-Received: from foss.arm.com ([217.140.110.172]:38948 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1377477AbhK2NM2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:12:28 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB3C014BF;
-        Mon, 29 Nov 2021 05:07:49 -0800 (PST)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 72A463F766;
-        Mon, 29 Nov 2021 05:07:46 -0800 (PST)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     benh@kernel.crashing.org, boqun.feng@gmail.com, bp@alien8.de,
-        catalin.marinas@arm.com, dvyukov@google.com, efuller@redhat.com,
-        elver@google.com, ink@jurassic.park.msu.ru, jonas@southpole.se,
-        juri.lelli@redhat.com, linux@armlinux.org.uk, luto@kernel.org,
-        mark.rutland@arm.com, mattst88@gmail.com, michal.simek@xilinx.com,
-        mingo@redhat.com, mpe@ellerman.id.au, npiggin@gmail.com,
-        paulmck@kernel.org, paulus@samba.org, peterz@infradead.org,
-        rth@twiddle.net, shorne@gmail.com,
-        stefan.kristiansson@saunalahti.fi, tglx@linutronix.de,
-        vincent.guittot@linaro.org, will@kernel.org
-Subject: [PATCH v8 11/11] x86: snapshot thread flags
-Date:   Mon, 29 Nov 2021 13:06:53 +0000
-Message-Id: <20211129130653.2037928-12-mark.rutland@arm.com>
+        id S1377830AbhK2NP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:15:57 -0500
+Received: from ivanoab7.miniserver.com ([37.128.132.42]:59734 "EHLO
+        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232987AbhK2NN4 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 08:13:56 -0500
+Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
+        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1mrgQP-0006O0-Uz; Mon, 29 Nov 2021 13:10:34 +0000
+Received: from jain.kot-begemot.co.uk ([192.168.3.3])
+        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
+        (envelope-from <anton.ivanov@cambridgegreys.com>)
+        id 1mrgQK-00B6LL-Gu; Mon, 29 Nov 2021 13:10:26 +0000
+From:   anton.ivanov@cambridgegreys.com
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        linux-kernel@vger.kernel.org
+Cc:     Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Subject: [PATCH] ixgbe: Restore crypto offload for tunnel mode where possile
+Date:   Mon, 29 Nov 2021 13:09:58 +0000
+Message-Id: <20211129130958.2642851-1-anton.ivanov@cambridgegreys.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211129130653.2037928-1-mark.rutland@arm.com>
-References: <20211129130653.2037928-1-mark.rutland@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0
+X-Spam-Score: -1.0
+X-Clacks-Overhead: GNU Terry Pratchett
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some thread flags can be set remotely, and so even when IRQs are
-disabled, the flags can change under our feet. Generally this is
-unlikely to cause a problem in practice, but it is somewhat unsound, and
-KCSAN will legitimately warn that there is a data race.
+From: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 
-To avoid such issues, a snapshot of the flags has to be taken prior to
-using them. Some places already use READ_ONCE() for that, others do not.
+Commit d785e1fec60179f534fbe8d006c890e5ad186e51 disabled IPSEC
+in tunnel mode as not working.
 
-Convert them all to the new flag accessor helpers.
+It actually works correctly for TX if (and only if) TSO is disabled on the
+interace. Hence, the offload in tunnel mode needs to be disabled only for RX.
 
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Ingo Molnar <mingo@redhat.com>
+CPU usage for TX side softirq thread without the patch ~ 88%. With the
+patch < 20%. Tested using iperf. If the RX side is Linux with ixgbe
+there is no difference in throughput, because the bottleneck is at
+the RX end where the softirq thread is at 100%. If, however, the RX side is
+capable of line rate, I would expect this patch to allow Linux to reach
+line rate for TX.
+
+Fixes: d785e1fec60179f534fbe8d006c890e5ad186e51 ixgbe: fail to create xfrm offload of IPsec tunnel mode SA
+
+Signed-off-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
 ---
- arch/x86/kernel/process.c | 8 ++++----
- arch/x86/kernel/process.h | 4 ++--
- arch/x86/mm/tlb.c         | 2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c | 15 ++++++++++-----
+ drivers/net/ethernet/intel/ixgbevf/ipsec.c     | 15 ++++++++++-----
+ 2 files changed, 20 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index e9ee8b526319..180d7a00cb66 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -365,7 +365,7 @@ void arch_setup_new_exec(void)
- 		clear_thread_flag(TIF_SSBD);
- 		task_clear_spec_ssb_disable(current);
- 		task_clear_spec_ssb_noexec(current);
--		speculation_ctrl_update(task_thread_info(current)->flags);
-+		speculation_ctrl_update(read_thread_flags());
+diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
+index e596e1a9fc75..98bd9d91d451 100644
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
+@@ -575,11 +575,6 @@ static int ixgbe_ipsec_add_sa(struct xfrm_state *xs)
+ 		return -EINVAL;
  	}
- }
  
-@@ -617,7 +617,7 @@ static unsigned long speculation_ctrl_update_tif(struct task_struct *tsk)
- 			clear_tsk_thread_flag(tsk, TIF_SPEC_IB);
+-	if (xs->props.mode != XFRM_MODE_TRANSPORT) {
+-		netdev_err(dev, "Unsupported mode for ipsec offload\n");
+-		return -EINVAL;
+-	}
+-
+ 	if (ixgbe_ipsec_check_mgmt_ip(xs)) {
+ 		netdev_err(dev, "IPsec IP addr clash with mgmt filters\n");
+ 		return -EINVAL;
+@@ -588,6 +583,11 @@ static int ixgbe_ipsec_add_sa(struct xfrm_state *xs)
+ 	if (xs->xso.flags & XFRM_OFFLOAD_INBOUND) {
+ 		struct rx_sa rsa;
+ 
++		if (xs->props.mode != XFRM_MODE_TRANSPORT) {
++			netdev_err(dev, "IPsec inbound offload supported only for transport mode\n");
++			return -EINVAL;
++		}
++
+ 		if (xs->calg) {
+ 			netdev_err(dev, "Compression offload not supported\n");
+ 			return -EINVAL;
+@@ -699,6 +699,11 @@ static int ixgbe_ipsec_add_sa(struct xfrm_state *xs)
+ 	} else {
+ 		struct tx_sa tsa;
+ 
++		if (xs->props.mode != XFRM_MODE_TRANSPORT && (dev->features & NETIF_F_TSO)) {
++			netdev_err(dev, "Cannot support tunnel mode IPsec offload and TSO simultaneously\n");
++			return -EINVAL;
++		}
++
+ 		if (adapter->num_vfs &&
+ 		    adapter->bridge_mode != BRIDGE_MODE_VEPA)
+ 			return -EOPNOTSUPP;
+diff --git a/drivers/net/ethernet/intel/ixgbevf/ipsec.c b/drivers/net/ethernet/intel/ixgbevf/ipsec.c
+index e3e4676af9e4..ba15f0477649 100644
+--- a/drivers/net/ethernet/intel/ixgbevf/ipsec.c
++++ b/drivers/net/ethernet/intel/ixgbevf/ipsec.c
+@@ -275,14 +275,14 @@ static int ixgbevf_ipsec_add_sa(struct xfrm_state *xs)
+ 		return -EINVAL;
  	}
- 	/* Return the updated threadinfo flags*/
--	return task_thread_info(tsk)->flags;
-+	return read_task_thread_flags(tsk);
- }
  
- void speculation_ctrl_update(unsigned long tif)
-@@ -653,8 +653,8 @@ void __switch_to_xtra(struct task_struct *prev_p, struct task_struct *next_p)
- {
- 	unsigned long tifp, tifn;
+-	if (xs->props.mode != XFRM_MODE_TRANSPORT) {
+-		netdev_err(dev, "Unsupported mode for ipsec offload\n");
+-		return -EINVAL;
+-	}
+-
+ 	if (xs->xso.flags & XFRM_OFFLOAD_INBOUND) {
+ 		struct rx_sa rsa;
  
--	tifn = READ_ONCE(task_thread_info(next_p)->flags);
--	tifp = READ_ONCE(task_thread_info(prev_p)->flags);
-+	tifn = read_task_thread_flags(next_p);
-+	tifp = read_task_thread_flags(prev_p);
++		if (xs->props.mode != XFRM_MODE_TRANSPORT) {
++			netdev_err(dev, "IPsec inbound offload supported only for transport mode\n");
++			return -EINVAL;
++		}
++
+ 		if (xs->calg) {
+ 			netdev_err(dev, "Compression offload not supported\n");
+ 			return -EINVAL;
+@@ -342,6 +342,11 @@ static int ixgbevf_ipsec_add_sa(struct xfrm_state *xs)
+ 	} else {
+ 		struct tx_sa tsa;
  
- 	switch_to_bitmap(tifp);
- 
-diff --git a/arch/x86/kernel/process.h b/arch/x86/kernel/process.h
-index 1d0797b2338a..76b547b83232 100644
---- a/arch/x86/kernel/process.h
-+++ b/arch/x86/kernel/process.h
-@@ -13,8 +13,8 @@ void __switch_to_xtra(struct task_struct *prev_p, struct task_struct *next_p);
- static inline void switch_to_extra(struct task_struct *prev,
- 				   struct task_struct *next)
- {
--	unsigned long next_tif = task_thread_info(next)->flags;
--	unsigned long prev_tif = task_thread_info(prev)->flags;
-+	unsigned long next_tif = read_task_thread_flags(next);
-+	unsigned long prev_tif = read_task_thread_flags(prev);
- 
- 	if (IS_ENABLED(CONFIG_SMP)) {
- 		/*
-diff --git a/arch/x86/mm/tlb.c b/arch/x86/mm/tlb.c
-index 59ba2968af1b..92bb03b9ceb5 100644
---- a/arch/x86/mm/tlb.c
-+++ b/arch/x86/mm/tlb.c
-@@ -361,7 +361,7 @@ static void l1d_flush_evaluate(unsigned long prev_mm, unsigned long next_mm,
- 
- static unsigned long mm_mangle_tif_spec_bits(struct task_struct *next)
- {
--	unsigned long next_tif = task_thread_info(next)->flags;
-+	unsigned long next_tif = read_task_thread_flags(next);
- 	unsigned long spec_bits = (next_tif >> TIF_SPEC_IB) & LAST_USER_MM_SPEC_MASK;
- 
- 	/*
++		if (xs->props.mode != XFRM_MODE_TRANSPORT && (dev->features & NETIF_F_TSO)) {
++			netdev_err(dev, "Cannot support tunnel mode IPsec offload and TSO simultaneously\n");
++			return -EINVAL;
++		}
++
+ 		/* find the first unused index */
+ 		ret = ixgbevf_ipsec_find_empty_idx(ipsec, false);
+ 		if (ret < 0) {
 -- 
 2.30.2
 

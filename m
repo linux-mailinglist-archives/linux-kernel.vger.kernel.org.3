@@ -2,132 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBF3462875
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF81462873
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232118AbhK2XnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:43:09 -0500
-Received: from mail-ua1-f51.google.com ([209.85.222.51]:42562 "EHLO
-        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbhK2XnG (ORCPT
+        id S232578AbhK2Xm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49624 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229902AbhK2Xm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:43:06 -0500
-Received: by mail-ua1-f51.google.com with SMTP id t13so37643048uad.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:39:48 -0800 (PST)
+        Mon, 29 Nov 2021 18:42:28 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C92C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:39:10 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id iq11so13911204pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:39:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=posk.io; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=c7M8bjVkZS4Crx9n4ZGGz1oMJSYLhjEhdQ0JNSPjlt8=;
-        b=V35tdCUBBDMXJ7fCiyIuqsXXPU6QrRaT/GWOg2xVg1xzv9E5BFQ9W2UkyjwlXj2KaF
-         9XkB2/ifBLIKQUxvo4amGtjsEPf6PcquFjfc2/JGz/0Qgawp9Sh6ArGxEZP/v8fX1dbx
-         NghpiQwCtWy/9xielIZZzVDQxmEpglv71V4Rmy99Al84IfweaGcbTjztI6rz3ObcRPqS
-         nbCpI/ai5Ewqm6hXwvWFy7quXey5FxlQCjOQZGWm6l89751vvnW4xp0VivyHXIo3mCcQ
-         MCZtlRJQIATPZXw8FG4Q+fMEtxyP8IswiZlyChOMOMiFNLul2jtLwfedipIcZBH5OvP4
-         Iqlg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l95pitG8XWSZA2qHHx4PG3DJ3b8PJb5JkgMPwr0r3nQ=;
+        b=n0HdvNHnOANn3F8gb2SzjXyCawVgDU1I/FSfqN4L3VS8OcM3yAjGzUy04KrFMU3xIS
+         kmb64yaGH+vb0rnaq3h8bmfAOiEMVUf2rEqjd1CMVaq/gKSlCFp92EuE8Mbr8gbfa4dc
+         Z6U/l0YQ5Tr1dqs+c0a6ZxVLdBRC+D2ry1AUF/O60228Lgkm5oZFj0x/hbirBow2tw0z
+         X5D4xNqJ3WXZldUOP8dWRdb9WVUpWFIMVq1Novb/vvcTYuoTpLyo04eEMxEyOGKI7cQD
+         4jxchaejPESUmzw0ST5qz8LSMfPHk/QFnUWuRwaV2eMvber9LQGuz6z1nWQfh6MLCF1P
+         4UyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=c7M8bjVkZS4Crx9n4ZGGz1oMJSYLhjEhdQ0JNSPjlt8=;
-        b=bu0dqpeXXFEMt+avPrkQVNjI3AMKA/+rUp8/5aNoYTYetBQWP7FzB4qLx4a2vEagtF
-         2LPViQAd2e8w1jv5jJqtQ526YDf8pYM/rg+B8dpxj8Ye4nb/yNI2182PL5ZnOLQKLRh5
-         heEFO6ci0Rxvkgwh6SM/Rfi1L6TWsyuG6KCHGffsuMAItTOONQgntKwYhxDglOwsuf9R
-         hvJ2nE13NvKJcnS67psZ52Zg2L9sA+C+rGD/i3CBExwmZA42jSLCD4yupANTALna9y+D
-         71a/sgFygLfVRSIZH7wDEfpZCLBlHR80iNPhDLAZgFziQspo3jo703LWgfbcN/SwIcHP
-         S3Rw==
-X-Gm-Message-State: AOAM530kZtt22XqOOrAV5I1w8kRS/lQWWjmuuo9S+M3FG+34BPnrTw8H
-        5tiMPXTSUIekJOFUL/QuXN1n6iPlWNCv4WFATclSMA==
-X-Google-Smtp-Source: ABdhPJyQvp4x5bByQwLpBEygbxk1oCfNM99yBAAEpPNfSg1xfZNjK+9yDN/dWx3ThizfuvtRLx8gzzf2dPwNKXRRRVI=
-X-Received: by 2002:a9f:218c:: with SMTP id 12mr51476140uac.71.1638229128058;
- Mon, 29 Nov 2021 15:38:48 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l95pitG8XWSZA2qHHx4PG3DJ3b8PJb5JkgMPwr0r3nQ=;
+        b=szxucG6xeoXNYZByL/ovK2EPcpgjKMDuZLYxDZiHTVZuVNJ3fPS8GHLs3hOLLnKjOc
+         r008EIkPAnx+WC1m9eBR926NJQ+RRIKQJ+ZgjxFlL0ED4ExMRU4oQK9TNAq3OrsEXNVO
+         FY06nSSc1gYs0yMW2yV35meO43E/yxV7ezAjZdkj4DN1/A9Ti8wdcd8FYuOTwXG3AJHJ
+         CyzPu6igrYG/svawrxI/mkMM1nRXdES9I3mjzGMZ2YNQZNKy55laJCICsqZBwF9n0aT2
+         1AFOcF4LmILeInbr14CPjUCBguKNA1/Lp4JfzCnFUFP8N44pQPpT5IIzv6fyDk19kWjC
+         cUcg==
+X-Gm-Message-State: AOAM530fU7q3dqV1kZ4/ot0jDqfupizMmTP+nFKV6rJ2EJiRmkJla+qv
+        zvKVJ1H82smHM1+K3UJ2VG/loaCQ/l+/yA==
+X-Google-Smtp-Source: ABdhPJzfx5GC1GwB20sQRZs3rVQqpgwhCAI/QvWJnEj5FawPhmFRasku0aLu2CyGaYc+6L3pBrg80Q==
+X-Received: by 2002:a17:90b:4f4d:: with SMTP id pj13mr1542168pjb.4.1638229149499;
+        Mon, 29 Nov 2021 15:39:09 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id i2sm19595715pfg.90.2021.11.29.15.39.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 15:39:08 -0800 (PST)
+Date:   Mon, 29 Nov 2021 23:39:05 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
+Subject: Re: [PATCH 3/4] KVM: x86: check PIR even for vCPUs with disabled
+ APICv
+Message-ID: <YaVkmfqkau2EYuy+@google.com>
+References: <20211123004311.2954158-1-pbonzini@redhat.com>
+ <20211123004311.2954158-4-pbonzini@redhat.com>
 MIME-Version: 1.0
-References: <20211122211327.5931-1-posk@google.com> <20211122211327.5931-4-posk@google.com>
- <20211124200822.GF721624@worktop.programming.kicks-ass.net>
- <CAFTs51Uka8VRCHuGidw7mRwATufp87U6S8SWUVod_kU-h6T3ew@mail.gmail.com>
- <YaEUts3RbOLyvAjl@hirez.programming.kicks-ass.net> <CAFTs51XnN+N74i1XHvRUAUWd04-Fs9uV6ouXo=CQSQs8MaEM5A@mail.gmail.com>
- <YaUCoe07Wl9Stlch@hirez.programming.kicks-ass.net> <CAFTs51UzR=m6+vcjTCNOGwGu3ZwB5GMrg+cSQy2ecvCWxhZvEQ@mail.gmail.com>
- <20211129210841.GO721624@worktop.programming.kicks-ass.net>
-In-Reply-To: <20211129210841.GO721624@worktop.programming.kicks-ass.net>
-From:   Peter Oskolkov <posk@posk.io>
-Date:   Mon, 29 Nov 2021 15:38:38 -0800
-Message-ID: <CAFTs51XyGDNj89+FCn4HZqMHuenjQu2wqTOW8ow4hSUbdGrGhw@mail.gmail.com>
-Subject: Re: [PATCH v0.9.1 3/6] sched/umcg: implement UMCG syscalls
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-api@vger.kernel.org, Paul Turner <pjt@google.com>,
-        Ben Segall <bsegall@google.com>,
-        Peter Oskolkov <posk@google.com>,
-        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123004311.2954158-4-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 1:08 PM Peter Zijlstra <peterz@infradead.org> wrote:
-[...]
-> > > > Another big concern I have is that you removed UMCG_TF_LOCKED. I
-> > >
-> > > OOh yes, I forgot to mention that. I couldn't figure out what it was
-> > > supposed to do.
-[...]
->
-> So then A does:
->
->         A::next_tid = C.tid;
->         sys_umcg_wait();
->
-> Which will:
->
->         pin(A);
->         pin(S0);
->
->         cmpxchg(A::state, RUNNING, RUNNABLE);
+On Mon, Nov 22, 2021 at 07:43:10PM -0500, Paolo Bonzini wrote:
+> The IRTE for an assigned device can trigger a POSTED_INTR_VECTOR even
+> if APICv is disabled on the vCPU that receives it.  In that case, the
+> interrupt will just cause a vmexit and leave the ON bit set together
+> with the PIR bit corresponding to the interrupt.
+> 
+> Right now, the interrupt would not be delivered until APICv is re-enabled.
+> However, fixing this is just a matter of always doing the PIR->IRR
+> synchronization, even if the vCPU has temporarily disabled APICv.
+> 
+> This is not a problem for performance, or if anything it is an
+> improvement.  First, in the common case where vcpu->arch.apicv_active is
+> true, one fewer check has to be performed.  Second, static_call_cond will
+> elide the function call if APICv is not present or disabled.  Finally,
+> in the case for AMD hardware we can remove the sync_pir_to_irr callback:
+> it is only needed for apic_has_interrupt_for_ppr, and that function
+> already has a fallback for !APICv.
+> 
+> Cc: stable@vger.kernel.org
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-Hmm.... That's another difference between your patch and mine: my
-approach was "the side that initiates the change updates the state".
-So in my code the userspace changes the current task's state RUNNING
-=> RUNNABLE and the next task's state, or the server's state, RUNNABLE
-=> RUNNING before calling sys_umcg_wait(). The kernel changed worker
-states to BLOCKED/RUNNABLE during block/wake detection, and marked
-servers RUNNING when waking them during block/wake detection; but all
-applicable state changes for sys_umcg_wait() happen in the userspace.
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-The reasoning behind this approach was:
-- do in kernel only that which cannot be done in the userspace, to
-make the kernel code smaller/simpler
-- similar to how futexes work: futex_wait does not change the futex
-value to the desired value, but just checks whether the futex value
-matches the desired value
-- similar to how futexes work, concurrent state changes can happen in
-the userspace without calling into the kernel at all
-    for example:
-        - (a): worker A goes to sleep into sys_umcg_wait()
-        - (b): worker B wants to context switch into worker A "a moment" later
-        - due to preemption/interrupts/pagefaults/whatnot, (b) happens
-in reality before (a)
-    in my patchset, the situation above happily resolves in the
-userspace so that worker A keeps running without ever calling
-sys_umcg_wait().
-
-Again, I don't think this is deal breaking, and your approach will
-work, just a bit less efficiently in some cases :)
-
-I'm still not sure we can live without UMCG_TF_LOCKED. What if worker
-A transfers its server to worker B that A intends to context switch
-into, and then worker A pagefaults or gets interrupted before calling
-sys_umcg_wait()? The server will be woken up and will see that it is
-assigned to worker B; now what? If worker A is "locked" before the
-whole thing starts, the pagefault/interrupt will not trigger
-block/wake detection, worker A will keep RUNNING for all intended
-purposes, and eventually will call sys_umcg_wait() as it had
-intended...
-
-[...]
+> ---
+>  arch/x86/kvm/lapic.c   |  2 +-
+>  arch/x86/kvm/svm/svm.c |  1 -
+>  arch/x86/kvm/x86.c     | 18 +++++++++---------
+>  3 files changed, 10 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 759952dd1222..f206fc35deff 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -707,7 +707,7 @@ static void pv_eoi_clr_pending(struct kvm_vcpu *vcpu)
+>  static int apic_has_interrupt_for_ppr(struct kvm_lapic *apic, u32 ppr)
+>  {
+>  	int highest_irr;
+> -	if (apic->vcpu->arch.apicv_active)
+> +	if (kvm_x86_ops.sync_pir_to_irr)
+>  		highest_irr = static_call(kvm_x86_sync_pir_to_irr)(apic->vcpu);
+>  	else
+>  		highest_irr = apic_find_highest_irr(apic);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 5630c241d5f6..d0f68d11ec70 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4651,7 +4651,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.load_eoi_exitmap = svm_load_eoi_exitmap,
+>  	.hwapic_irr_update = svm_hwapic_irr_update,
+>  	.hwapic_isr_update = svm_hwapic_isr_update,
+> -	.sync_pir_to_irr = kvm_lapic_find_highest_irr,
+>  	.apicv_post_state_restore = avic_post_state_restore,
+>  
+>  	.set_tss_addr = svm_set_tss_addr,
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 441f4769173e..a8f12c83db4b 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4448,8 +4448,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
+>  static int kvm_vcpu_ioctl_get_lapic(struct kvm_vcpu *vcpu,
+>  				    struct kvm_lapic_state *s)
+>  {
+> -	if (vcpu->arch.apicv_active)
+> -		static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+> +	static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
+>  
+>  	return kvm_apic_get_state(vcpu, s);
+>  }
+> @@ -9528,8 +9527,7 @@ static void vcpu_scan_ioapic(struct kvm_vcpu *vcpu)
+>  	if (irqchip_split(vcpu->kvm))
+>  		kvm_scan_ioapic_routes(vcpu, vcpu->arch.ioapic_handled_vectors);
+>  	else {
+> -		if (vcpu->arch.apicv_active)
+> -			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+> +		static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
+>  		if (ioapic_in_kernel(vcpu->kvm))
+>  			kvm_ioapic_scan_entry(vcpu, vcpu->arch.ioapic_handled_vectors);
+>  	}
+> @@ -9802,10 +9800,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  
+>  	/*
+>  	 * This handles the case where a posted interrupt was
+> -	 * notified with kvm_vcpu_kick.
+> +	 * notified with kvm_vcpu_kick.  Assigned devices can
+> +	 * use the POSTED_INTR_VECTOR even if APICv is disabled,
+> +	 * so do it even if APICv is disabled on this vCPU.
+>  	 */
+> -	if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
+> -		static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+> +	if (kvm_lapic_enabled(vcpu))
+> +		static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
+>  
+>  	if (kvm_vcpu_exit_request(vcpu)) {
+>  		vcpu->mode = OUTSIDE_GUEST_MODE;
+> @@ -9849,8 +9849,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
+>  			break;
+>  
+> -		if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
+> -			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+> +		if (kvm_lapic_enabled(vcpu))
+> +			static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
+>  
+>  		if (unlikely(kvm_vcpu_exit_request(vcpu))) {
+>  			exit_fastpath = EXIT_FASTPATH_EXIT_HANDLED;
+> -- 
+> 2.27.0
+> 
+> 

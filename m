@@ -2,90 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71E9B461CC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68A4D461CC9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:33:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349203AbhK2Rg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 12:36:28 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:33094 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242578AbhK2ReK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 12:34:10 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 669A2CE13A7;
-        Mon, 29 Nov 2021 17:30:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35211C53FAD;
-        Mon, 29 Nov 2021 17:30:46 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 12:30:43 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Yafang Shao <laoar.shao@gmail.com>, akpm@linux-foundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        oliver.sang@intel.com, lkp@intel.com,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
- 16 with TASK_COMM_LEN
-Message-ID: <20211129123043.5cfd687a@gandalf.local.home>
-In-Reply-To: <yt9d35nf1d84.fsf@linux.ibm.com>
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-8-laoar.shao@gmail.com>
-        <yt9d35nf1d84.fsf@linux.ibm.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1346667AbhK2Rgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:36:51 -0500
+Received: from foss.arm.com ([217.140.110.172]:43872 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243629AbhK2Rel (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 12:34:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E23231063;
+        Mon, 29 Nov 2021 09:31:23 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.57.80.227])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CA04D3F5A1;
+        Mon, 29 Nov 2021 09:31:22 -0800 (PST)
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+To:     peterz@infradead.org, mingo@redhat.com, vincent.guittot@linaro.org
+Cc:     linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        valentin.schneider@arm.com,
+        Vincent Donnefort <vincent.donnefort@arm.com>
+Subject: [PATCH v3] sched/fair: Fix per-CPU kthread and wakee stacking for asym CPU capacity
+Date:   Mon, 29 Nov 2021 17:31:15 +0000
+Message-Id: <20211129173115.4006346-1-vincent.donnefort@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 11:13:31 +0100
-Sven Schnelle <svens@linux.ibm.com> wrote:
+select_idle_sibling() has a special case for tasks woken up by a per-CPU
+kthread where the selected CPU is the previous one. For asymmetric CPU
+capacity systems, the assumption was that the wakee couldn't have a
+bigger utilization during task placement than it used to have during the
+last activation. That was not considering uclamp.min which can completely
+change between two task activations and as a consequence mandates the
+fitness criterion asym_fits_capacity(), even for the exit path described
+above.
 
+Fixes: b4c9c9f15649 ("sched/fair: Prefer prev cpu in asymmetric wakeup path")
+Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+---
+V2 -> V3:
+  * A more verbose commit message.
+V1 -> V2:
+  * Point to the correct fixed patch.
 
-> This breaks the trigger-field-variable-support.tc from the ftrace test
-> suite at least on s390:
-> 
-> echo 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm) if next_comm=="ping"'
-> linux/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc: line 15: echo: write error: Invalid argument
-> 
-> I added a debugging line into check_synth_field():
-> 
-> [   44.091037] field->size 16, hist_field->size 16, field->is_signed 1, hist_field->is_signed 0
-> 
-> Note the difference in the signed field.
-
-That should not break on strings.
-
-Does this fix it (if you keep the patch)?
-
--- Steve
-
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 9555b8e1d1e3..319f9c8ca7e7 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -3757,7 +3757,7 @@ static int check_synth_field(struct synth_event *event,
- 
- 	if (strcmp(field->type, hist_field->type) != 0) {
- 		if (field->size != hist_field->size ||
--		    field->is_signed != hist_field->is_signed)
-+		    (!field->is_string && field->is_signed != hist_field->is_signed))
- 			return -EINVAL;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 6291876a9d32..b90dc6fd86ca 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6410,7 +6410,8 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
+ 	 */
+ 	if (is_per_cpu_kthread(current) &&
+ 	    prev == smp_processor_id() &&
+-	    this_rq()->nr_running <= 1) {
++	    this_rq()->nr_running <= 1 &&
++	    asym_fits_capacity(task_util, prev)) {
+ 		return prev;
  	}
  
+-- 
+2.25.1
+

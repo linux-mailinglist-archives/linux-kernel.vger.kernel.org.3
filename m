@@ -2,65 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D44461CB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70F80461C9F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347599AbhK2Rbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 12:31:31 -0500
-Received: from mga04.intel.com ([192.55.52.120]:55584 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237175AbhK2R32 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 12:29:28 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="234746255"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="234746255"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 09:24:13 -0800
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="511773514"
-Received: from eliteleevi.tm.intel.com ([10.237.54.20])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 09:24:11 -0800
-Date:   Mon, 29 Nov 2021 19:16:35 +0200 (EET)
-From:   Kai Vehmanen <kai.vehmanen@linux.intel.com>
-X-X-Sender: kvehmane@eliteleevi.tm.intel.com
-To:     Takashi Iwai <tiwai@suse.de>
-cc:     Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Subject: Re: linux-next: manual merge of the sound-asoc tree with the
- sound-current tree
-In-Reply-To: <s5h8rx758g3.wl-tiwai@suse.de>
-Message-ID: <alpine.DEB.2.22.394.2111291913470.3554566@eliteleevi.tm.intel.com>
-References: <20211129113554.59416109@canb.auug.org.au> <s5ho8635n9g.wl-tiwai@suse.de> <YaTDKNOOP2I2dbI+@sirena.org.uk> <alpine.DEB.2.22.394.2111291602310.3554566@eliteleevi.tm.intel.com> <s5h8rx758g3.wl-tiwai@suse.de>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7 02160 Espoo
+        id S1349087AbhK2RXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:23:54 -0500
+Received: from pb-smtp2.pobox.com ([64.147.108.71]:64864 "EHLO
+        pb-smtp2.pobox.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238841AbhK2RVx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 12:21:53 -0500
+Received: from pb-smtp2.pobox.com (unknown [127.0.0.1])
+        by pb-smtp2.pobox.com (Postfix) with ESMTP id 343B1EEBA5;
+        Mon, 29 Nov 2021 12:18:35 -0500 (EST)
+        (envelope-from junio@pobox.com)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=from:to:cc
+        :subject:references:date:in-reply-to:message-id:mime-version
+        :content-type; s=sasl; bh=rvRiW3BDnh+jHJbcguqZFpnMC/yNo38hZFZRxu
+        H4KOc=; b=ZSJ6Lwylm/ZUs/LyNhPtpGtWJFXStctVauhxJNy+OY9ri6ukWdrtk5
+        T/1nqanUKw0vZ7rd3vp0QZaXdth+/LzG4+y1rtllFviTvI7qUCsJDQ+2vI+tG+qX
+        mSIA6KKJcCQR8Wwn/yCRRCr2acSzHb16D+26hbDQJObYF/NQ1UN7M=
+Received: from pb-smtp2.nyi.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp2.pobox.com (Postfix) with ESMTP id 2ACCEEEBA4;
+        Mon, 29 Nov 2021 12:18:35 -0500 (EST)
+        (envelope-from junio@pobox.com)
+Received: from pobox.com (unknown [104.133.2.91])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp2.pobox.com (Postfix) with ESMTPSA id 8ED22EEBA3;
+        Mon, 29 Nov 2021 12:18:34 -0500 (EST)
+        (envelope-from junio@pobox.com)
+From:   Junio C Hamano <gitster@pobox.com>
+To:     Jani Nikula <jani.nikula@intel.com>
+Cc:     Eric Wong <e@80x24.org>, Thorsten Leemhuis <linux@leemhuis.info>,
+        workflows@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, git@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [RFC PATCH v1 1/1] docs: add the new commit-msg tags
+ 'Reported:' and 'Reviewed:'
+References: <cover.1637566224.git.linux@leemhuis.info>
+        <6b760115ecdd3687d4b82680b284f55a04f3ad90.1637566224.git.linux@leemhuis.info>
+        <20211123185237.M476855@dcvr>
+        <12cefa81-495b-3083-5f19-b319c704ebf7@leemhuis.info>
+        <20211126171141.GA21826@dcvr>
+        <42ff6b8d-0b7c-12e0-4648-a9232b0f577c@leemhuis.info>
+        <20211127195231.GA4636@dcvr> <xmqqtufx5p19.fsf@gitster.g>
+        <87mtlnjhj6.fsf@intel.com>
+Date:   Mon, 29 Nov 2021 09:18:32 -0800
+In-Reply-To: <87mtlnjhj6.fsf@intel.com> (Jani Nikula's message of "Mon, 29 Nov
+        2021 14:03:09 +0200")
+Message-ID: <xmqq5ysa5193.fsf@gitster.g>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain
+X-Pobox-Relay-ID: 6203B8F6-5138-11EC-BAC5-CD991BBA3BAF-77302942!pb-smtp2.pobox.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Jani Nikula <jani.nikula@intel.com> writes:
 
-On Mon, 29 Nov 2021, Takashi Iwai wrote:
+> From the RFC nitpicking department, ...
+>
+> Message-ID: (comment) 
+>   <message-id@example.com>
 
-> On Mon, 29 Nov 2021 15:29:36 +0100, Kai Vehmanen wrote:
-> > the asoc for-5.17 branch does have all the needed changes and the 
-> > linux-next merged version seems ok. We've already sent many further 
-> > changes that touch this area of code to asoc for-5.17. Let me know if some 
-> 
-> The question is rather whether this discrepancy would cause a problem
-> for further developments.  If back-merging 5.16 stuff makes things
-> easier, it should be done so.  OTOH, if it's just for resolving the
-> conflict in the final tree, we can leave it.
+Thanks for a fun piece; the (comment) is quite interesting.
 
-I believe it's the latter case, it would be just for resolving conflict
-in the final tree. The patches we have queued up for 5.17 but not yet 
-sent, all apply cleanly on top of asoc for-5.17, so back-merge is not 
-needed for this.
+I wasn't having fun with RFC nitpicking, though.  I was reacting to
+this part of the message I was responding to ...
 
-Br, Kai
+>>> Fwiw, every mail and HTTP/1.x header parser I've looked at works
+>>> case-insensitively.  Also, I'm not sure if `g' is needed, actually...
+
+... to say that "works case-insensitively" may not just be
+empirically correct, but RFC backs him up, to Eric.

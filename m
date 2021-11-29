@@ -2,136 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C3B4613B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 537764613B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:16:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377202AbhK2LQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:16:18 -0500
-Received: from mail-dm6nam11on2066.outbound.protection.outlook.com ([40.107.223.66]:60000
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1377515AbhK2LOQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:14:16 -0500
+        id S238306AbhK2LTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:19:24 -0500
+Received: from mx0a-00069f02.pphosted.com ([205.220.165.32]:5774 "EHLO
+        mx0a-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S235539AbhK2LQI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 06:16:08 -0500
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AT9s8Ws020335;
+        Mon, 29 Nov 2021 11:12:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : content-type : mime-version; s=corp-2021-07-09;
+ bh=sMUhZ+afhEsQuzQVXzXgNERhI2OM+P/5ws6NSBhlt24=;
+ b=VQKW+MPjYjwvoU3Dmc3T5tNBTY3F5I19JwIJGgmtfT75Jr3tp4/F4XI7OCNQYayToUF9
+ fDxBbFEtKO3b6uqwimTuULar9tMl51iUrYkuiW8LcjbuWlyoBScs8ew9HULppDaDKbRU
+ tObOdvqywSZqxrP9c5xgWRWZURk+T8ra5fk59k7eCUmhIZMT64H6UbMdW8z6Kp9hz61T
+ w7vkDbB5OYMhzzqKVbLVw8trmOcukQvV/spGjeJU+2UydcFe7wknrhqY4Ohzn+eUtui7
+ vPsWLwuLLya1rvUTnGCbp1VJ9vlDVCK1KvkbiVCuMTWXYwpP93PCvX80u/QWVZFWWqcV PQ== 
+Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cmvmwgbnk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 11:12:46 +0000
+Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
+        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1ATB5hL9163972;
+        Mon, 29 Nov 2021 11:12:45 GMT
+Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam08lp2172.outbound.protection.outlook.com [104.47.73.172])
+        by aserp3020.oracle.com with ESMTP id 3cmmumvt2r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 11:12:45 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d3GTzH4MG7rEiun1CLRG6JfRGVjKSWsaqywFZxt07twlElK2Ji/ePry5WAqQk8tLApXB0cBVLOz76pMyTtgsLW5VwUP3b4uXTRzNAU8YlmytTsQFItFrBtSmCLMtsvK0HzdV6kAYq5xvTXd3RD/PgB4Dr8eoKU1RAiZq6koU2yn9r2hpCSark89fBUJUfDpvMESPfuYMvKrvV73qoz1ZWTCkvhk0lqm7ZW6tKNDKocvSbbDJ24fLfZyWSNUzR/SoJIztSyeBG5D3rSf3pRgZPr7xwRkd4wKK1O3YZg6O7rle/KTDi4HFMA1LMENTiul2Ku+yzAVyKd332Jsbz9tj+A==
+ b=jVqwLruWefUsg/pP8Jl3Rj++04XfdHD1zPjHSQlH3gx3vPnHWatkAIwfmEGjOYDZr09teQbliHgvXgnsb/hF2LidoFK3BxZWt7BnrBxJiac7wD51wEFsh5if6XLb6gQqWDen2FrpKNgn9vI0ZGjLZMCqUaWw07X3EHYFEz3yjmgZd7xQmsK3NMnRmBtkF9VwAzJceM7ptVcJ61vx/EWKsmqA1fhC5JgzHw2rCsjJeJFouqEL7Am91+qGwFyyQW64sxAsYlECci763BDkkfRGgPiUXYxs/k9K+yHlz0wXUJ7Q4al/yX5DK4wZ/4c6w3iuVcdd70F1lbPgDIDayyvm0w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=alyEU86dkOxvLx875lzJsYqt1M9oKg6gcUwO6YTfhtY=;
- b=TVA+FrpvHL3TuAYSPhSlkzuHZ2FIucneW7WhjWWpwhTpS3sl3qDNIhfIXo+xKHD5ryDvB5eTRpmM/Nq5uj0VskgQH3SzRau9VbauIas+r97P/7a8s/AW26ZvHFcdhHfUY9Qdg+OlMRsZqoe6Cml28q7DSAC7PZZoMFGZTZESE/7vNBUY0uT0ADbSYf8h0wixX59JumENFTSzxkEZI1WpmPkezeLGa1AIaJEKCuVnerv8yyG0S54uehR1q6WpqFfGFzh/PQEOEFVrEeV/qD34fxN80YsFeKvlEQLDZYRKYSkH5ZfJCRDPazBKE25M73SDf/+5Qz37fSFwsp+n/qpgqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.36) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=sMUhZ+afhEsQuzQVXzXgNERhI2OM+P/5ws6NSBhlt24=;
+ b=ChdFlXstFWeVQneJiHZu1gaZd4Yw7f8in3NMo60okLMuk+294VaLtwyxZs/OOYVvruJ8IyosPV2lwC2zWuR8O9+vKJICTO560hdPGLxhZxk5u1G8JTRUAMniPSsqv5/877zCYLCSQclr7v9HdztMNH4aCBWwvtry62coeEXvhqK8kICO2Bm1qejbdIoO4t9hc047WJTTwYOZ9QtafT5Sf48Qy/U1qusWwB1ocfhPwMc/UtjPncpXsEq3bC4LFhKz83iVpo6b591j+dth2yNl+ICPu36QxwO41TrzSVhmMLGLnyKq9bRgU1tamF8LLdoMp1gYfC6c3nuJBwHizDkt5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=alyEU86dkOxvLx875lzJsYqt1M9oKg6gcUwO6YTfhtY=;
- b=AfeoFiYtGj26RscTGKpLnQ4w+SeTPuzI15qbpGM98o06IWn3z/l8/EDRqMRPGxTSuxb8S6+g01k7qMIlD0322MxgD+lNjbkAWLeVbzQVOlxhkZ8Y9sKxlkTVT8Kv4141ikMmzUt20qTiDSNYG25otOcYnh69tW2wXNU4j+t6T6ovw3y9zfzJm+cxJcT+bW7FoSjbX89dUPegYGr2OxoInAr9v152QqvBByoXMa/nMH5cOh0R0sdURY9yPwDVuU3DzzPUZzTOWCU5Qq4UhYPCuk3mqC3Dw7+uy5rlba87MWShSdnP07eQjhg6x+/b13tHXq8k8/RobC/T7nfefvhZRw==
-Received: from MWHPR08CA0059.namprd08.prod.outlook.com (2603:10b6:300:c0::33)
- by BN8PR12MB2883.namprd12.prod.outlook.com (2603:10b6:408:98::22) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=sMUhZ+afhEsQuzQVXzXgNERhI2OM+P/5ws6NSBhlt24=;
+ b=b1pezeU1iuhQQVJgpIKi3pj+VH6semqOT2WFUROVH6kO/sWmhyLPM7E8M1Zeswi0VYYHzLAM5LRm7BAEY5gL0QvlRSBl/wDz5ebu0kl+HyiDWLtwNjoyBAl9LfVORn+5Nxc+ZcE8r47t4cWBmqSGJAvXQqDHf7Fh88g9sQcpq1k=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by MWHPR10MB1295.namprd10.prod.outlook.com
+ (2603:10b6:300:1e::9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
- 2021 11:10:57 +0000
-Received: from CO1NAM11FT032.eop-nam11.prod.protection.outlook.com
- (2603:10b6:300:c0:cafe::39) by MWHPR08CA0059.outlook.office365.com
- (2603:10b6:300:c0::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.21 via Frontend
- Transport; Mon, 29 Nov 2021 11:10:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.36)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.36 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.36; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.36) by
- CO1NAM11FT032.mail.protection.outlook.com (10.13.174.218) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4734.22 via Frontend Transport; Mon, 29 Nov 2021 11:10:57 +0000
-Received: from HQMAIL105.nvidia.com (172.20.187.12) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Mon, 29 Nov
- 2021 11:10:56 +0000
-Received: from pshete-ubuntu.nvidia.com (172.20.187.5) by mail.nvidia.com
- (172.20.187.12) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Mon, 29 Nov 2021 11:10:53 +0000
-From:   Prathamesh Shete <pshete@nvidia.com>
-To:     <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
-        <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <p.zabel@pengutronix.de>, <linux-mmc@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <pshete@nvidia.com>, <anrao@nvidia.com>
-Subject: [PATCH] mmc: sdhci-tegra: Add support to enumerate in HS400ES mode
-Date:   Mon, 29 Nov 2021 16:40:47 +0530
-Message-ID: <20211129111047.5299-1-pshete@nvidia.com>
-X-Mailer: git-send-email 2.17.1
+ 2021 11:12:43 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::7194:c377:36cc:d9f0%6]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 11:12:43 +0000
+Date:   Mon, 29 Nov 2021 14:12:22 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     kbuild@lists.01.org, Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     lkp@intel.com, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: [broonie-sound:for-next 26/50] drivers/firmware/cirrus/cs_dsp.c:761
+ cs_dsp_coeff_write_ctrl() warn: variable dereferenced before check 'ctl'
+ (see line 759)
+Message-ID: <202111260147.g6ZphXY3-lkp@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: JNXP275CA0020.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::32)
+ To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
+Received: from kadam (102.222.70.114) by JNXP275CA0020.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:19::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend Transport; Mon, 29 Nov 2021 11:12:36 +0000
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e7863385-f600-4c5c-c684-08d9b328eb2e
-X-MS-TrafficTypeDiagnostic: BN8PR12MB2883:
-X-Microsoft-Antispam-PRVS: <BN8PR12MB28833493DF2FF6F7F70D467FB7669@BN8PR12MB2883.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2201;
+X-MS-Office365-Filtering-Correlation-Id: 84ea47f2-0d0d-4558-fee4-08d9b32929c4
+X-MS-TrafficTypeDiagnostic: MWHPR10MB1295:
+X-Microsoft-Antispam-PRVS: <MWHPR10MB1295EE481EF41EDAEDC95CE48E669@MWHPR10MB1295.namprd10.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:163;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aUQlhObVwHqMgetAF47ZmGibG9pzekHPfmB9KCX8Yk8Hj3LAPJZtV8PAsemi0qKu/zAQqMM7U8txwpAfwE2q2ngzzcmwu7IC1h/21Fpb+H1Lz5gg2s1QdcZRwl1I9AcVK3iNEncgCOmRSHl/Klr1xtH2W7zGNThCF9pvFhBTndNIvGuWWohcQVYZAlz5loid6gu/xJgB6jQrDzvooDSy1lejMeONTAXkucaPpLziz2pKbivSmBdwFuDa45fjP0uXEoOBmuht9vpwTMz33e1439YYw8nuLp+Rb/CkcOPLo2cqdOc9VoGu55Ai+iS+Hujpazz7bYNcnK83AxQoWvwWW6npWuraOd9FGnRaAYRAQpcqRoiDaLnVq4zn90XaHcC8CHA6nOC5S2a3z3ldliElwTkN1Cr6m6dSY2ghL/xhthNu2SVDEjTQ4A+O/5//fEw/ySE91H78pVo87BLegJCeXTptScjFqcCkMpfXPV2BXA38fVlE4e1Ffcl4bQN7Y5r9IO5vPlXlJ5yyi3gLhu74+3t1iSdH2XWOftptbcZKMYK1bX+bxeKMo0WfWSi4ChfUMTtTtW6nZrTGwYkti29VCvsp/tHMVRZe6P7aqyTwI5CIrtKhnBtskmrDQC6sei8PgrgmZW8SuSLIV/F9Eqxd2o88cacxy2xg3JGETVxDcDyGP/BnVlZFE0wr9F5eDX/WC67cjBt879nmfcSbycdsoQ==
-X-Forefront-Antispam-Report: CIP:216.228.112.36;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid05.nvidia.com;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(36756003)(2906002)(1076003)(83380400001)(5660300002)(8676002)(70586007)(426003)(336012)(107886003)(70206006)(6666004)(8936002)(110136005)(316002)(26005)(54906003)(86362001)(186003)(36860700001)(82310400004)(7696005)(7636003)(2616005)(4326008)(47076005)(356005)(508600001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 11:10:57.4241
+X-Microsoft-Antispam-Message-Info: KYThGL3JiXuSvHRu4WEv/SaRWLcMRWpkQzbrPXDR/4gjB2tGUGM43lt6r4xW43T5Ynee+8kgmBAW/lzdmyBzi1VjO3nLD0GERIMHp3Mdxm96xJ6WqrmUeSJcGVYNwwuBg45c8JS7Hsbp+jkrkDzIqvCwECZ+trAfAKCVTvBhm6q2Ueqr/KfAMh/1X7/k1F+KeqWhFs4XygydaewavndzqJuGQOaNRFUttBFFpOFj/n29c/y7SxrGVBESEzXAoD2+lMcOq0hdiQeIAuaJX/9yw1oPi5m6wN/fpVycBpJiZZp0y++zldHsFZJxp7dzkKpYGEfXEvM/cP5iZ8LR0/VOMNmqS/sPGHgM+0W+7XAXh2R0Q7tthirBle7lKlMjhljHGBZYMKrj8EqnTZYPberLdP+dTExOGOY4R02b5ZBKlHAPteV6qnOq0CjEZbD3bPFY+OceSktc2zLDxBNMVLR4ZZmG3gAbWpGKK1KSyakt0iVOI/Ob2Fb2hWSdrQdd07YtsBdNTzwRAYZ57hRIgOR4XgSnFv/EAMCXqZakZFhVN6usRv7eQgVtGBnOP/+BmDEbZnETo7KoUlnW/QX2Z0jIgLvUQIlS1G3fTuMAwW9DbO5k5WA2OxKKtctvFT616xWs/YKD9C6bxYDlEgaOYqGtN1fTp0aNOkS11X8HrdyTnEEbLZVbvEpHLjE+GYKGar18AlfrgW9iHRcCEhRt013cH24gYFoJCPFnLflvz8pKayKCNttwa5wbdoPvl8EqcKVV0XNA+5/nXBxIfd5z3PKb7LOubuV3DVbUHC7Ez5ZPkx31YBQynyr9ZJ0KhwPejagIn1kywSj0WJ9/iRpRNHuzSQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66476007)(66556008)(9686003)(508600001)(316002)(186003)(8676002)(956004)(66946007)(6486002)(8936002)(2906002)(6666004)(4326008)(86362001)(36756003)(6916009)(44832011)(6496006)(5660300002)(83380400001)(1076003)(26005)(4001150100001)(52116002)(38100700002)(38350700002)(966005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Up+NtA3sFA4dS2JGZeBoqMM2jCoOGknxappBFkcqjhF7DPQIEkzQzwUfhmQE?=
+ =?us-ascii?Q?75VpYtbAJRhtuChQ6UFrVGTA4aAOn0AAVSeRQ4S9dCGG8fL1HFHKRayeIHcX?=
+ =?us-ascii?Q?4xc6q2hBAZhEuj3pqWxj1Bv1RWYiLEVemxa+aIYC3uTrPmuNtaslBFTx4MMJ?=
+ =?us-ascii?Q?jefkP7frAb97P54X8s4ucewHYET9PdQ+pMynSHyfXAXa6hMioKkoU91sTw5o?=
+ =?us-ascii?Q?hIA6ySL1++mBUqOISAjaWHuoyn1bd8fB9LnuOKM+9llg5wRjGA3Usaut5/Xd?=
+ =?us-ascii?Q?ei9K4zN7mmCv0RjvgIpnQ6YZAnFJT2XbpZLzDTFaZ9lrg/irM3m+2bZBFRx0?=
+ =?us-ascii?Q?+r3LSft0jelCR5tTnNtI1wkY1TnFQzo8EB5F4fPfB7Y8kuUF25h6/4e2RvO/?=
+ =?us-ascii?Q?3l90bDBqtuK3sKxbiuvbO8kV5WdoiR5rwPR3wywQN1fenjJFV09+DgXLHkDg?=
+ =?us-ascii?Q?NH6l4V9pa3DbSxIZEoXKUr0QuRhfDNuhuPRDqFIi0Pqj33zAeWbFld6hMg9A?=
+ =?us-ascii?Q?Z34IU16DKsW5isFFRjzxhw+mixD4KrNzQVxeKj5tW1GrmYA9NpA4tWkJ/uCN?=
+ =?us-ascii?Q?CQ117UnffOQqNMIXrZLyljtuFvqECo8utnS3i+2CsC4FNuDf9V0y6geZgE7T?=
+ =?us-ascii?Q?tRT1MlLf4feJAxet9DhoRqU4tzAb/vRGcNiEj8imviIbdAlBmQlSwMvnr9+L?=
+ =?us-ascii?Q?uioxzm8DqJU9+wHAz615Xa6QOy9nQR2vSuFbhraKOukdgtnV6jIPmbS6hvkv?=
+ =?us-ascii?Q?f3bn18o1OkrU0/CzBjN9wn4zKcJV6kIFvMVZH7m4p+TlXApP5GwCQD7z7GXO?=
+ =?us-ascii?Q?TypmpHdYaLyAhAFtdLCRi4gYd5NYwUtzNW1PBKUlmdrkXokUK3W+kj0zOmKH?=
+ =?us-ascii?Q?chur5m+yiECsrLSKrizfBBWCb1TR4v2M9gezrIzAfwO0dSACQGJjEInRT349?=
+ =?us-ascii?Q?n6RAt0hiiyFA0S/JNS/fnZIhYCCFsY6Ol95GWc/360zLoYITXtiKJmuACdUg?=
+ =?us-ascii?Q?4oWlOJgcMG2cM09FSvJPCC12LHAHiPuxWYJK22Txvv8KFdpU79gbX3vNRmRZ?=
+ =?us-ascii?Q?9L8QZi7rxgum1YTS1vXsMuZ/kuLR/KPLI5naI3RFSHMoBrC/6r7TU6GDSt3L?=
+ =?us-ascii?Q?7d06+WAn2iNOL64FjsraTvwBc6IlCEQkpNY5BNnQqtF3ChazwavpodeTseEZ?=
+ =?us-ascii?Q?Rc4RLX/RyFfqdT+RCWEWeknYSHXqYZpUh7bLI/9VEy5qLYgL4kSoyDbWsF6J?=
+ =?us-ascii?Q?ej+zd6GFRBwbsi+GIm1sZeVLoK9mTHFnL7FZiAbqLqwyNTq3gQ73eKatbZSR?=
+ =?us-ascii?Q?qWXgJ+P5uShpVT8ERbOqGU89zVw+RTRLl4T6ruqvG5BwEaxUl+jNvTbCjEtp?=
+ =?us-ascii?Q?3/jsKYVcm92QJ5mnm4dexHOq3Mzr/qzkP714xXLHzhBAFa9iwRIXNUuMMtVI?=
+ =?us-ascii?Q?ldavGbQDGaUWb6LwxkqaO9RaufACdaNZ17XuHZGqh/w3anBAJILnci8E6F8f?=
+ =?us-ascii?Q?zVSYhdCU67bcQ2H0D5g1+/60zjT6f3d9wkBteq/lTAdIMjJhVY4gGF50U/uf?=
+ =?us-ascii?Q?+C+3EZmOLcOsm3EB22sRMI11ppiupGge2hEJOhuI8e448QwIxi9lGvYu4ZLJ?=
+ =?us-ascii?Q?cN0+tDRcfiu+/Ji+CGrxDgDQREVu6ZHjp3b4c8fPpl8O2+7qm5uxfrJiZgDk?=
+ =?us-ascii?Q?o7nEn0qqZ949LrZn1/0AE9uPeC4=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 84ea47f2-0d0d-4558-fee4-08d9b32929c4
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 11:12:42.9640
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7863385-f600-4c5c-c684-08d9b328eb2e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.36];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT032.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2883
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pKB1viZrVG9ChB0LPO2+FfyflEHXhPnysY0hPkHXfheUTlpiITI3MfUSb+kVuJbNwBJbXpOjZyzDjx0g8Nc8XgvJIM7seIqyHqzFXJAYrg4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR10MB1295
+X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10182 signatures=668683
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111290056
+X-Proofpoint-ORIG-GUID: ocvTcF_7jKHjt5JyrG4HR0cAjTYvcjUB
+X-Proofpoint-GUID: ocvTcF_7jKHjt5JyrG4HR0cAjTYvcjUB
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CMD13 is sent after switching to HS400 mode, the bus
-is operating at either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
-To meet Tegra SDHCI requirement at HS400 mode, force SDHCI
-interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
-controller CAR clock and the interface clock are rate matched.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+head:   2b9c8d2b3c89708d53b6124dc49c212dc5341840
+commit: 86c6080407740937ed2ba0ccd181e947f77e2154 [26/50] firmware: cs_dsp: Perform NULL check in cs_dsp_coeff_write/read_ctrl
+config: openrisc-randconfig-m031-20211122 (https://download.01.org/0day-ci/archive/20211126/202111260147.g6ZphXY3-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 11.2.0
 
-Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+
+New smatch warnings:
+drivers/firmware/cirrus/cs_dsp.c:761 cs_dsp_coeff_write_ctrl() warn: variable dereferenced before check 'ctl' (see line 759)
+drivers/firmware/cirrus/cs_dsp.c:823 cs_dsp_coeff_read_ctrl() warn: variable dereferenced before check 'ctl' (see line 821)
+
+vim +/ctl +761 drivers/firmware/cirrus/cs_dsp.c
+
+f6bc909e7673c30 Simon Trimmer  2021-09-13  755  int cs_dsp_coeff_write_ctrl(struct cs_dsp_coeff_ctl *ctl, const void *buf, size_t len)
+f6bc909e7673c30 Simon Trimmer  2021-09-13  756  {
+f6bc909e7673c30 Simon Trimmer  2021-09-13  757  	int ret = 0;
+f6bc909e7673c30 Simon Trimmer  2021-09-13  758  
+5065cfabec21a4a Charles Keepax 2021-11-17 @759  	lockdep_assert_held(&ctl->dsp->pwr_lock);
+                                                                             ^^^^^^^^^^^^^^^^^^
+Dereference
+
+5065cfabec21a4a Charles Keepax 2021-11-17  760  
+86c608040774093 Charles Keepax 2021-11-17 @761  	if (!ctl)
+                                                             ^^^
+Checked too late
+
+86c608040774093 Charles Keepax 2021-11-17  762  		return -ENOENT;
+86c608040774093 Charles Keepax 2021-11-17  763  
+f6bc909e7673c30 Simon Trimmer  2021-09-13  764  	if (ctl->flags & WMFW_CTL_FLAG_VOLATILE)
+f6bc909e7673c30 Simon Trimmer  2021-09-13  765  		ret = -EPERM;
+f6bc909e7673c30 Simon Trimmer  2021-09-13  766  	else if (buf != ctl->cache)
+f6bc909e7673c30 Simon Trimmer  2021-09-13  767  		memcpy(ctl->cache, buf, len);
+f6bc909e7673c30 Simon Trimmer  2021-09-13  768  
+f6bc909e7673c30 Simon Trimmer  2021-09-13  769  	ctl->set = 1;
+f6bc909e7673c30 Simon Trimmer  2021-09-13  770  	if (ctl->enabled && ctl->dsp->running)
+f6bc909e7673c30 Simon Trimmer  2021-09-13  771  		ret = cs_dsp_coeff_write_ctrl_raw(ctl, buf, len);
+f6bc909e7673c30 Simon Trimmer  2021-09-13  772  
+f6bc909e7673c30 Simon Trimmer  2021-09-13  773  	return ret;
+f6bc909e7673c30 Simon Trimmer  2021-09-13  774  }
+
+[ snip ]
+
+f6bc909e7673c30 Simon Trimmer  2021-09-13  817  int cs_dsp_coeff_read_ctrl(struct cs_dsp_coeff_ctl *ctl, void *buf, size_t len)
+f6bc909e7673c30 Simon Trimmer  2021-09-13  818  {
+f6bc909e7673c30 Simon Trimmer  2021-09-13  819  	int ret = 0;
+f6bc909e7673c30 Simon Trimmer  2021-09-13  820  
+5065cfabec21a4a Charles Keepax 2021-11-17 @821  	lockdep_assert_held(&ctl->dsp->pwr_lock);
+                                                                            ^^^^^^^^^^^^^^^^^^^
+
+5065cfabec21a4a Charles Keepax 2021-11-17  822  
+86c608040774093 Charles Keepax 2021-11-17 @823  	if (!ctl)
+                                                            ^^^^
+
+86c608040774093 Charles Keepax 2021-11-17  824  		return -ENOENT;
+86c608040774093 Charles Keepax 2021-11-17  825  
+f6bc909e7673c30 Simon Trimmer  2021-09-13  826  	if (ctl->flags & WMFW_CTL_FLAG_VOLATILE) {
+f6bc909e7673c30 Simon Trimmer  2021-09-13  827  		if (ctl->enabled && ctl->dsp->running)
+f6bc909e7673c30 Simon Trimmer  2021-09-13  828  			return cs_dsp_coeff_read_ctrl_raw(ctl, buf, len);
+f6bc909e7673c30 Simon Trimmer  2021-09-13  829  		else
+f6bc909e7673c30 Simon Trimmer  2021-09-13  830  			return -EPERM;
+f6bc909e7673c30 Simon Trimmer  2021-09-13  831  	} else {
+f6bc909e7673c30 Simon Trimmer  2021-09-13  832  		if (!ctl->flags && ctl->enabled && ctl->dsp->running)
+f6bc909e7673c30 Simon Trimmer  2021-09-13  833  			ret = cs_dsp_coeff_read_ctrl_raw(ctl, ctl->cache, ctl->len);
+f6bc909e7673c30 Simon Trimmer  2021-09-13  834  
+f6bc909e7673c30 Simon Trimmer  2021-09-13  835  		if (buf != ctl->cache)
+f6bc909e7673c30 Simon Trimmer  2021-09-13  836  			memcpy(buf, ctl->cache, len);
+f6bc909e7673c30 Simon Trimmer  2021-09-13  837  	}
+f6bc909e7673c30 Simon Trimmer  2021-09-13  838  
+f6bc909e7673c30 Simon Trimmer  2021-09-13  839  	return ret;
+f6bc909e7673c30 Simon Trimmer  2021-09-13  840  }
+
 ---
- drivers/mmc/host/sdhci-tegra.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
-
-diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-index 387ce9cdbd7c..d800396d1112 100644
---- a/drivers/mmc/host/sdhci-tegra.c
-+++ b/drivers/mmc/host/sdhci-tegra.c
-@@ -123,6 +123,8 @@
- 					 SDHCI_TRNS_BLK_CNT_EN | \
- 					 SDHCI_TRNS_DMA)
- 
-+static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock);
-+
- struct sdhci_tegra_soc_data {
- 	const struct sdhci_pltfm_data *pdata;
- 	u64 dma_mask;
-@@ -369,6 +371,16 @@ static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
- 
- 	sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
- 
-+	/*
-+	 * When CMD13 is sent after switching to HS400 mode, the bus
-+	 * is operating at either MMC_HIGH_26_MAX_DTR or
-+	 * MMC_HIGH_52_MAX_DTR.
-+	 * To meet Tegra SDHCI requirement at HS400 mode, force SDHCI
-+	 * interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
-+	 * controller CAR clock and the interface clock are rate matched.
-+	 */
-+	tegra_sdhci_set_clock(host, MMC_HS200_MAX_DTR);
-+
- }
- 
- static void tegra_sdhci_reset(struct sdhci_host *host, u8 mask)
--- 
-2.17.1
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
 

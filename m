@@ -2,101 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A66462768
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:01:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E654625E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235570AbhK2XE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:04:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S233931AbhK2Woc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:44:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236823AbhK2XC3 (ORCPT
+        with ESMTP id S234677AbhK2Wn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:02:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E95C09B13C;
-        Mon, 29 Nov 2021 14:07:10 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638223628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VcafwLYNhrJW69eNQHQrd8QPnmKaRMfcifi134FHleo=;
-        b=GOTYhVTNavk2gbi2z4w0aj7RZLTtB51Vn6HS2AkfHQBvSdlXjaw2nTY3Q10BeaOgdaM2fC
-        60B7Kcz48QZt/jLbaNe31k5qRrQEswosZtHKXKLFaGp3Iyenw+HMgiUtAi7GxVYYpbf2It
-        gQyAfDGs6MYCFy+wXxOe7VWRJb+lEj9f42gkbPaBz/KSOIG9tk5n/2CsAnI4ioHasSBUJk
-        3QW8U7aNPxFhkBt0xP/EoiqixiI+VbuqF9MD7sP4R5UwsPAoFUGwF7f6slYeXS8CJJR/4p
-        Mxmkx9Y5GMcoOe/KSRVJDunNM4TXf3CYGclZsgpN0Nk0LdGMT1hFp8DFe6fJMA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638223628;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VcafwLYNhrJW69eNQHQrd8QPnmKaRMfcifi134FHleo=;
-        b=J8KSx28OF9ucEAH1adFsORwKLCXgLyojfURVqr79bv+Z9NC7wkp6asUN0QEJkygkzykBj2
-        U8Mom8g3SxKVnzDA==
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Peter Oskolkov <posk@posk.io>, Ingo Molnar <mingo@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        Paul Turner <pjt@google.com>, Ben Segall <bsegall@google.com>,
-        Peter Oskolkov <posk@google.com>,
-        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
-        Thierry Delisle <tdelisle@uwaterloo.ca>
-Subject: Re: [PATCH v0.9.1 3/6] sched/umcg: implement UMCG syscalls
-In-Reply-To: <YaFXDYm7s7A6HDTG@hirez.programming.kicks-ass.net>
-References: <20211122211327.5931-1-posk@google.com>
- <20211122211327.5931-4-posk@google.com>
- <20211124211927.GG721624@worktop.programming.kicks-ass.net>
- <877dcuhbbe.ffs@tglx> <YaFXDYm7s7A6HDTG@hirez.programming.kicks-ass.net>
-Date:   Mon, 29 Nov 2021 23:07:07 +0100
-Message-ID: <87r1ayd3as.ffs@tglx>
+        Mon, 29 Nov 2021 17:43:57 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005E9C09B13F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:08:10 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id x6so23338725iol.13
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:08:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=I+jIHWKDUtLPLAejvY1XbR8dU+L1MB4rcmxtV1IeEuY=;
+        b=V+yKPYdvuj696Ta6zyYOcn+f0c0BzWekcMpmdQ69GctwJOqQHUDdzEwbqwwQN8mWqV
+         S8rPb/cwHQnRPIy7t6i0o/dYsFziFrNytuvfuqdVjl11c352gWEmm3/gv9K1FNmNZ5X8
+         sw2bpVXe1Z4WbLz4WfJnetW5KF7al4dDyao89BcxTUduZhoVJJ7i0M4RSlYs1eDfwhF/
+         pJkfc3cCq3Jt+RHb6ZSG4CJTo9dYP1kyNak2Ur7OkvmVhVtEn/0bKFrh3NuNveTMtG1i
+         rzoHTnjPlqw4wPLgr2LO8Lf8Hi0+uibZSNHFe3yp1HbiQ0loEKxOzRrOU/l4kvsL8vFj
+         3akQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=I+jIHWKDUtLPLAejvY1XbR8dU+L1MB4rcmxtV1IeEuY=;
+        b=rsL/KEw+2lq7bRhmp+ntnioya8LKOe6DVYrU1WNtLC8hQPaslfPcA/8n3e+H/IMnap
+         zEvzw5HVpUoKr9merHkWDJLuBk/5LaNsqMRP88RFcWdJRAkx4kbfajf6LjYOAxQ3sv3C
+         70trUfQvI8qoSW5kR1G605EreMQRNPUsL2vxpKUJgII8xoJ/F6K6SqW9qVqJVOcH5ceA
+         4cfkHEVDUuuoKmg1CafqGRoS0WBIYz9soR6lkDH6MRi3YoYNjuDUJdmtTtB9cZxM1onO
+         V4a0ADc7FfIlO17ogXPuU9f8gBUidbtK83hubqRkeD/D3YsrIA19i22bAkx4TbbVtF/1
+         xtPg==
+X-Gm-Message-State: AOAM532WKkkE761idVvE7dzAmL81TqJLonxFP9A3Zly6ZNItRhqKDMHL
+        R0Dyj3O4jMHRZ6zzv0XGEW1pYdLL4gbUS1+liz5s/A==
+X-Google-Smtp-Source: ABdhPJwL/34AIU3jTwVbWsXe7uJGE4ODaX5MKmuUAfV1ENY1b+/qVIq81GEvQFt0u3k8b09bSBXrryXy1nRtdyOT8E8=
+X-Received: by 2002:a05:6638:1311:: with SMTP id r17mr68875045jad.69.1638223689760;
+ Mon, 29 Nov 2021 14:08:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211111084415.663951-1-eranian@google.com> <20211111084415.663951-4-eranian@google.com>
+ <YY6QBXs0sM16DdbV@hirez.programming.kicks-ass.net> <CABPqkBShSBaJH+PR6rMkRRzjZAKN5zPhcdnLWx=4a-yQWxcA2A@mail.gmail.com>
+ <20211116082923.GX174703@worktop.programming.kicks-ass.net>
+ <CABPqkBQ4BCswvNPpkO79dBamhudikz1cGCXFpwAp9xsTb3F8xQ@mail.gmail.com>
+ <YZZE+bPCokVrTARM@hirez.programming.kicks-ass.net> <YZZH+5odIawPQtgJ@hirez.programming.kicks-ass.net>
+In-Reply-To: <YZZH+5odIawPQtgJ@hirez.programming.kicks-ass.net>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Mon, 29 Nov 2021 14:07:58 -0800
+Message-ID: <CABPqkBSLHS82MM9f9jcLNfYDAR7+j4h2ztm22wjMH11=FM8FcA@mail.gmail.com>
+Subject: Re: [PATCH v2 03/13] perf/x86/amd: add AMD Fam19h Branch Sampling support
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, kim.phillips@amd.com,
+        acme@redhat.com, jolsa@redhat.com, songliubraving@fb.com,
+        mpe@ellerman.id.au, maddy@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26 2021 at 22:52, Peter Zijlstra wrote:
-> On Fri, Nov 26, 2021 at 10:11:17PM +0100, Thomas Gleixner wrote:
->> On Wed, Nov 24 2021 at 22:19, Peter Zijlstra wrote:
->> > On Mon, Nov 22, 2021 at 01:13:24PM -0800, Peter Oskolkov wrote:
->> >
->> >> +	 * Timestamp: a 46-bit CLOCK_MONOTONIC timestamp, at 16ns resolution.
->> >
->> >> +static int umcg_update_state(u64 __user *state_ts, u64 *expected, u64 desired,
->> >> +				bool may_fault)
->> >> +{
->> >> +	u64 curr_ts = (*expected) >> (64 - UMCG_STATE_TIMESTAMP_BITS);
->> >> +	u64 next_ts = ktime_get_ns() >> UMCG_STATE_TIMESTAMP_GRANULARITY;
->> >
->> > I'm still very hesitant to use ktime (fear the HPET); but I suppose it
->> > makes sense to use a time base that's accessible to userspace. Was
->> > MONOTONIC_RAW considered?
->> 
->> MONOTONIC_RAW is not really useful as you can't sleep on it and it won't
->> solve the HPET crap either.
+Peter,
+
+Back from a vacation break. Comments below.
+
+On Thu, Nov 18, 2021 at 4:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
 >
-> But it's ns are of equal size to sched_clock(), if both share TSC IIRC.
-> Whereas MONOTONIC, being subject to ntp rate stuff, has differently
-> sized ns.
+> On Thu, Nov 18, 2021 at 01:20:09PM +0100, Peter Zijlstra wrote:
+> > On Tue, Nov 16, 2021 at 11:23:39PM -0800, Stephane Eranian wrote:
+>
+> > > Ok, I made the changes you suggested. It looks closer to the way LBR is handled.
+> > > However, this means that there is no path by which you can get to
+> > > amd_pmu_disable_event()
+> > > without having gone through amd_pmu_disable_all(). Is that always the
+> > > case? And same thing
+> > > on the enable side.
+> >
+> > So that's true for ->add() and ->del(), those cannot be called without
+> > being wrapped in ->pmu_disable(), ->pmu_enable().
+> >
+> > There is however the ->stop() and ->start() usage for throttling, which
+> > can stop an individual event (while leaving the event scheduled on the
+> > PMU). Now, I think the ->stop() gets called with the PMU enabled, but
+> > the ->start() is with it disabled again.
+>
+> I just looked, and the throttling depends on the PMU's PMI handler
+> implementation, for Intel it will have the PMU disabled, for generic and
+> AMD it has it enabled (see x86_pmu_handle_irq -- also these are really
+> NMIs but lets not do a mass rename just now).
+>
+Yes, I see that too. It has to do with the __perf_event_overflow()
+-> __perf_event_account_interrupt() code path which does not call
+perf_pmu_disable().
+And that's because it knows it is called from PMI and let's the PMI
+code decide the state
+of the PMU. Unfortunately, on AMD, the PMU is not stopped fully on PMI
+and that is because
+there is no centralized way of doing this, so you'd have 6 wrmsr x 2
+to disable/enable. OTOH,
+I don't see the point of monitoring in the PMI code. So there is a
+discrepancy between Intel and
+AMD here. I think we should fix it.
 
-The size is the same, i.e. 1 bit per nanosecond :)
+> > The ramification would be that we'd stop the event, but leave BRS
+> > enabled for a throttled event. Which should be harmless, no?
 
-> The only time that's relevant though is when you're going to mix these
-> timestamps with CLOCK_THREAD_CPUTIME_ID, which might just be
-> interesting.
+Well, the risk here is that if BRS is left enabled, it may hold the
+NMI for up to 16 taken branches.
+If the associated event is disabled, then cpuc->events[idx] = NULL.
+The BRS drain function checks
+for that and does not capture any sample. The brs_drain() function is
+called from the PMI handler if
+cpuc->lbr_users > 0 which would be the case on the stop() path. I
+think this is the only risk we have
+on the throttling code path.
 
-Uuurg. If you want to go towards CLOCK_THREAD_CPUTIME_ID, that's going
-to be really nasty. Actually you can sleep on that clock, but that's a
-completely different universe. If anything like that is desired then we
-need to rewrite that posix CPU timer muck completely with all the bells
-and whistels and race conditions attached to it. *Shudder*
+There would be no problem if we were to stop/start the PMU in the AMD
+PMI handler.
 
-Thanks,
-
-        tglx
-
-
+Thanks.

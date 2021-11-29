@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26918461D70
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5790B461D80
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350649AbhK2SUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:20:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
+        id S1347283AbhK2SZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:25:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349599AbhK2SSB (ORCPT
+        with ESMTP id S1346078AbhK2SXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:18:01 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95423C0698FC;
-        Mon, 29 Nov 2021 06:46:02 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638197160;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=moCVXIgDd3WnVTqImBDpITWvvySrFpXIFP1kWeQJHKU=;
-        b=3S6nmBadZg5tSz0rZHXEDZM40jhTHe/7y2CLs37JoDJvOsqgG2cw7AFkhZmO3IdHZkuU9R
-        pVQt9YCIdmL3mqxv0ggmb01VmoCUbHZRd64fJZOBgy3p6qf0yt+N3IeVkNZOmjc2ffHdBW
-        Fe3cKz/hyz3coikXPRJojbmAf8pnQXCKIifn18l8SAPBIAtd++qZL7lcd2GUQ43ReBZSSb
-        YEaX4dZnsyMGt030d1oeJE78U9xH9MpjyOlXGXYTOBLeSTyHK/p9iuz/Yv3815hL8aqm+X
-        NprgrTl+hvQHD/9Rby3+aV+xzNqCHnMwOelYZ23ZX4e7euce2B93n/AvKumo8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638197160;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=moCVXIgDd3WnVTqImBDpITWvvySrFpXIFP1kWeQJHKU=;
-        b=vkhx9Uk6Dv9aGqVVDjVmHZWJ3IWDihE7siFS7bF7kSJaV33N0jk920aDAUwoTwmfFwotsF
-        Cg8b0iVzhVwufjCA==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com
-Subject: Re: [patch 04/32] genirq/msi: Provide a set of advanced MSI
- accessors and iterators
-In-Reply-To: <20211129140112.GX4670@nvidia.com>
-References: <877dcsf5l5.ffs@tglx> <87o863e2j0.ffs@tglx>
- <20211129140112.GX4670@nvidia.com>
-Date:   Mon, 29 Nov 2021 15:46:00 +0100
-Message-ID: <87a6hndnpz.ffs@tglx>
+        Mon, 29 Nov 2021 13:23:32 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72E3C08EDBE
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:48:35 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id y13so72874361edd.13
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:48:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=FliCx0bGn3ubNIukwxtPju9wJWhhLzDslESrHIbYqAo=;
+        b=T5bO4MKnctuYgq04joV/MQiUVVEk3hmYzplG0ZjO98tJW/kW6sEML0nYymOUR0No9t
+         yp95FtM/KMKgCncy8BNa5Uk2y5phZDY4M0sCotbyYEJRXvN2DDgvMOquDt1AoCPqP+ke
+         jCi2rAUF1Fn+4qzj9I9Y87PjYD90ebX5i5TGR9masR6KxTHk4NWwYeFPqVwfKC89upFQ
+         wLLAIhgZfRm9ryQ7wuyvdeUt9vVIVhrnNYVFbyXHcP15W7FRj3PzeVes6RO682yiZuiB
+         hZC4ndMG06gdjyDShQ/PMqljJ1R0uyt8Hi++geOOUjVQlycd7iXV4GJByJNMfa7uTQAV
+         pgiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=FliCx0bGn3ubNIukwxtPju9wJWhhLzDslESrHIbYqAo=;
+        b=gqJEKqvgr8AVtKeA/fHe/rcQgjr8whZnnxcW8ONT+nub4uG8nVpd5HcUD+5q+2Mgm5
+         c/pOr1M4yybDzINghJ8RHkBCQoPzO8cwCihCsOOnB/72X/kbeJdidX1i6U0gd9+642JV
+         zJNV0RgW/GVZ/eEnO+FSRHB006B26X/aNHEesuVNbQzpGqzPjEdIMDwwEBW79snhNNzY
+         vcbk6yxxCj16Vha5ifgMMHaAzWJvcKOTxV4WyCN7Q2omNbxmo1EJpgx7mDbIJ/bRAHWC
+         nJwstkJZTvIbAtKEIHAegNhPAK0TrMSPVSIvFskbna90aneSm6quzlANSdlLy3RkjEzl
+         Vmvg==
+X-Gm-Message-State: AOAM531HO343ZMKsz8sYcr6FcRiWzC0BergUvBu3mdZMkooorcRblpv2
+        d0VMVQYil9ld1ceXhIZV4+2hqzdMcQn6NA0W8BEMmmkjz+Q=
+X-Google-Smtp-Source: ABdhPJyTk9tBgZZcLKsO8X1xBSnPzQHAtxWc9m3uMq8MC/obS9TMbyGJRZgcFld8AAH0nMBtTbdYhfZnwQJLAwWXVbE=
+X-Received: by 2002:a17:907:764b:: with SMTP id kj11mr59577045ejc.307.1638197314562;
+ Mon, 29 Nov 2021 06:48:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20211128034823.6930-1-wangborong@cdjrlc.com>
+In-Reply-To: <20211128034823.6930-1-wangborong@cdjrlc.com>
+From:   Michal Simek <monstr@monstr.eu>
+Date:   Mon, 29 Nov 2021 15:48:23 +0100
+Message-ID: <CAHTX3dJuVVkxRtHQj9wfoqLpac2SuCHAQpBGca+Da8k03zyJCA@mail.gmail.com>
+Subject: Re: [PATCH] microblaze: fix typo in a comment
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jason,
-
-On Mon, Nov 29 2021 at 10:01, Jason Gunthorpe wrote:
-> On Mon, Nov 29, 2021 at 10:26:11AM +0100, Thomas Gleixner wrote:
->> After looking at all the call sites again, there is no real usage for
->> this local index variable.
->> 
->> If anything needs the index of a descriptor then it's available in the
->> descriptor itself. That won't change because the low level message write
->> code needs the index too and the only accessible storage there is
->> msi_desc.
+ne 28. 11. 2021 v 4:51 odes=C3=ADlatel Jason Wang <wangborong@cdjrlc.com> n=
+apsal:
 >
-> Oh, that makes it simpler, just use the current desc->index as the
-> input to the xa_for_each_start() and then there should be no need of
-> hidden state?
-
-That works for alloc, but on free that's going to end up badly.
-
->> What for? The usage sites should not have to care about the storage
->> details of a facility they are using.
+> The double `was' is repeated in a comment. Consequently, remove one
+> `was' from the comment.
 >
-> Generally for_each things shouldn't have hidden state that prevents
-> them from being nested. It is just an unexpected design pattern..
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  arch/microblaze/kernel/signal.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/microblaze/kernel/signal.c b/arch/microblaze/kernel/sig=
+nal.c
+> index fc61eb0eb8dd..59f0af5ee042 100644
+> --- a/arch/microblaze/kernel/signal.c
+> +++ b/arch/microblaze/kernel/signal.c
+> @@ -11,7 +11,7 @@
+>   *
+>   * 1997-11-28 Modified for POSIX.1b signals by Richard Henderson
+>   *
+> - * This file was was derived from the sh version, arch/sh/kernel/signal.=
+c
+> + * This file was derived from the sh version, arch/sh/kernel/signal.c
+>   *
+>   * This file is subject to the terms and conditions of the GNU General
+>   * Public License. See the file COPYING in the main directory of this
+> --
+> 2.33.0
+>
 
-I'm not seeing any sensible use case for:
+Applied.
+M
 
-     msi_for_each_desc(dev)
-        msi_for_each_desc(dev)
 
-If that ever comes forth, I'm happy to debate this further :)
-
-Thanks,
-
-        tglx
+--=20
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs

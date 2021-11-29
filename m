@@ -2,94 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65440461B98
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E77461B9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345539AbhK2QOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 11:14:09 -0500
-Received: from hostingweb31-40.netsons.net ([89.40.174.40]:42795 "EHLO
-        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345026AbhK2QMH (ORCPT
+        id S1344778AbhK2QQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:16:02 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57628 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344902AbhK2QOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:12:07 -0500
-Received: from [79.2.93.196] (port=58666 helo=[192.168.101.73])
-        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <luca@lucaceresoli.net>)
-        id 1mrjCy-0005C4-EE; Mon, 29 Nov 2021 17:08:48 +0100
-Subject: Re: [PATCH v4 8/9] watchdog: max77620: add comment to clarify
- set_timeout procedure
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211120155707.4019487-1-luca@lucaceresoli.net>
- <20211120155707.4019487-9-luca@lucaceresoli.net>
- <20211129160414.GA3014810@roeck-us.net>
-From:   Luca Ceresoli <luca@lucaceresoli.net>
-Message-ID: <0e08d0e0-489c-342b-4fa4-d4457af20a65@lucaceresoli.net>
-Date:   Mon, 29 Nov 2021 17:08:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 29 Nov 2021 11:14:00 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D40DF61571;
+        Mon, 29 Nov 2021 16:10:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDD67C53FC7;
+        Mon, 29 Nov 2021 16:10:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638202242;
+        bh=QCSCNQAEJNPVIfuhwv4nMqQDWjQzAgnwlTOu2L9UYI0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PCvu5olrO6CrIe+HUaQ/GSC7b8Pqtn+EzPcOb+UhipT1ERV0yNe9vHACtLaFe1UAn
+         K13YBIKV2+sdvPo8o7nJhYi1bjURnSwGEzrjkYiIof0QPhbjcVKxHmbMDI5pMsbW7H
+         QX6fAuJ7fVPqvJE6qw1UlyMst2pUPRU48KAEBSbnMasMQeUyqSd9youfcW2+jKVp+A
+         R37BbGyTFNfbnETHWftsZtn3fYoGszPQiEPwkq7CU3rVY2MtZUDUpVzxpf1gLSePHb
+         kfG3J3TDJxvg6BvnlDIP9iswQKW51SzoZx56ecx8Rr6zfBaYrkFI35hCAGPmR4+rVP
+         ieYbnyUIXowag==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>
+Cc:     Tom Rix <trix@redhat.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] fpga: stratix10-soc: Do not use ret uninitialized in s10_probe()
+Date:   Mon, 29 Nov 2021 09:10:09 -0700
+Message-Id: <20211129161009.3625548-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <20211129160414.GA3014810@roeck-us.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - lucaceresoli.net
-X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
-X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Clang warns:
 
-On 29/11/21 17:04, Guenter Roeck wrote:
-> On Sat, Nov 20, 2021 at 04:57:06PM +0100, Luca Ceresoli wrote:
->> Clarify why we need to ping the watchdog before changing the timeout by
->> quoting the MAX77714 datasheet.
->>
-> 
-> Unless I am missing something, this adds confusion instead of clarifying
-> anything, and it is misleading. The added comment in the code makes it
-> sound like clearing the watchdog timer is only needed for MAX77614.
-> However, the code was in place for MAX77620, suggesting that it was needed
-> for that chip as well and is not MAX77614 specific.
+drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+        return ret;
+               ^~~
+drivers/fpga/stratix10-soc.c:402:9: note: initialize the variable 'ret' to silence this warning
+        int ret;
+               ^
+                = 0
+1 warning generated.
 
-You're right, the comment comes from the max77714-only driver, but now
-that it is in a multi-chip  driver the confusion started to exist.
+ret is only assigned in an error path now so just return 0 directly.
 
-> Please either drop this patch or rephrase it to clarify that it applies
-> to both chips.
+Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1517
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/fpga/stratix10-soc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-What if I rephrase to:
+diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+index 737d14c6e0de..357cea58ec98 100644
+--- a/drivers/fpga/stratix10-soc.c
++++ b/drivers/fpga/stratix10-soc.c
+@@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	platform_set_drvdata(pdev, mgr);
+-	return ret;
++	return 0;
+ 
+ probe_err:
+ 	stratix10_svc_free_channel(priv->chan);
 
-	/*
-	 * "If the value of TWD needs to be changed, clear the system
-	 * watchdog timer first [...], then change the value of TWD."
--	 * (MAX77714 datasheet)
-+	 * (MAX77714 datasheet but applies to MAX77620 too)
-	 */
-
-?
-
+base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
 -- 
-Luca
+2.34.1
+

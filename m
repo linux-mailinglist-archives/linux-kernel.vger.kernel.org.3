@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C164B461BCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3238F461B92
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:10:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345146AbhK2Qhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 11:37:42 -0500
-Received: from mga14.intel.com ([192.55.52.115]:63246 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234379AbhK2Qfk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:35:40 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="236235541"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="236235541"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 08:32:10 -0800
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="676418513"
-Received: from ticela-nm-11.amr.corp.intel.com (HELO [10.212.98.225]) ([10.212.98.225])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 08:32:09 -0800
-Subject: Re: ALSA: hda: Make proper use of timecounter
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Jie Yang <yang.jie@linux.intel.com>,
-        alsa-devel@alsa-project.org
-References: <871r35kwji.ffs@tglx>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <4c1b9ecd-cefe-f890-f309-39d602201d58@linux.intel.com>
-Date:   Mon, 29 Nov 2021 10:06:40 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        id S1344237AbhK2QN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:13:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50362 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229883AbhK2QLT (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 11:11:19 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60926B811F6;
+        Mon, 29 Nov 2021 16:08:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1FCC53FC7;
+        Mon, 29 Nov 2021 16:07:56 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 11:07:55 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Sven Schnelle <svens@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kbuild test robot <lkp@intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
+ 16 with TASK_COMM_LEN
+Message-ID: <20211129110755.616133df@gandalf.local.home>
+In-Reply-To: <CALOAHbDkMhnO_OfQiV4gA8rGnLpyQ27nUcWSnN_-8TXkfQ1Eyw@mail.gmail.com>
+References: <20211120112738.45980-1-laoar.shao@gmail.com>
+        <20211120112738.45980-8-laoar.shao@gmail.com>
+        <yt9d35nf1d84.fsf@linux.ibm.com>
+        <CALOAHbDtqpkN4D0vHvGxTSpQkksMWtFm3faMy0n+pazxN_RPPg@mail.gmail.com>
+        <yt9d35nfvy8s.fsf@linux.ibm.com>
+        <54e1b56c-e424-a4b3-4d61-3018aa095f36@redhat.com>
+        <yt9dy257uivg.fsf@linux.ibm.com>
+        <CALOAHbDkMhnO_OfQiV4gA8rGnLpyQ27nUcWSnN_-8TXkfQ1Eyw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <871r35kwji.ffs@tglx>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 29 Nov 2021 23:33:33 +0800
+Yafang Shao <laoar.shao@gmail.com> wrote:
+
+> > TBH, i would vote for reverting the change. defining an array size as
+> > enum feels really odd.
+> >  
+> 
+> We changed it to enum because the BTF can't parse macro while it can
+> parse the enum type.
+
+I wonder if BTF could take advantage of the tracing:
+
+TRACE_DEFINE_ENUM() macros?
+
+This is how they are converted for user space tooling.
+
+Anyway, I'd have to go and look at why that trigger test failed. I don't
+see how the size of the array caused it to change the signage of value.
+
+-- Steve
 
 
-On 11/24/21 4:40 PM, Thomas Gleixner wrote:
-> HDA uses a timecounter to read a hardware clock running at 24 MHz. The
-> conversion factor is set with a mult value of 125 and a shift value of 0,
-> which is not converting the hardware clock to nanoseconds, it is converting
-> to 1/3 nanoseconds because the conversion factor from 24Mhz to nanoseconds
-> is 125/3. The usage sites divide the "nanoseconds" value returned by
-> timecounter_read() by 3 to get a real nanoseconds value.
-> 
-> There is a lengthy comment in azx_timecounter_init() explaining this
-> choice. That comment makes blatantly wrong assumptions about how
-> timecounters work and what can overflow.
-> 
-> The comment says:
-> 
->      * Applying the 1/3 factor as part of the multiplication
->      * requires at least 20 bits for a decent precision, however
->      * overflows occur after about 4 hours or less, not a option.
-> 
-> timecounters operate on time deltas between two readouts of a clock and use
-> the mult/shift pair to calculate a precise nanoseconds value:
-> 
->     delta_nsec = (delta_clock * mult) >> shift;
-> 
-> The fractional part is also taken into account and preserved to prevent
-> accumulated rounding errors. For details see cyclecounter_cyc2ns().
-> 
-> The mult/shift pair has to be chosen so that the multiplication of the
-> maximum expected delta value does not result in a 64bit overflow. As the
-> counter wraps around on 32bit, the maximum observable delta between two
-> reads is (1 << 32) - 1 which is about 178.9 seconds.
-> 
-> That in turn means the maximum multiplication factor which fits into an u32
-> will not cause a 64bit overflow ever because it's guaranteed that:
-> 
->      ((1 << 32) - 1) ^ 2 < (1 << 64)
-> 
-> The resulting correct multiplication factor is 2796202667 and the shift
-> value is 26, i.e. 26 bit precision. The overflow of the multiplication
-> would happen exactly at a clock readout delta of 6597069765 which is way
-> after the wrap around of the hardware clock at around 274.8 seconds which
-> is off from the claimed 4 hours by more than an order of magnitude.
-> 
-> If the counter ever wraps around the last read value then the calculation
-> is off by the number of wrap arounds times 178.9 seconds because the
-> overflow cannot be observed.
-> 
-> Use clocks_calc_mult_shift(), which calculates the most accurate mult/shift
-> pair based on the given clock frequency, and remove the bogus comment along
-> with the divisions at the readout sites.
-> 
-> Fixes: 5d890f591d15 ("ALSA: hda: support for wallclock timestamps")
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
-I don't recall the reason of why I added separate steps for
-multiplication by 125 and division by 3 back in 2012, but obviously they
-weren't aligned with my own comment "Max buffer time is limited to 178
-seconds to make sure wall clock counter does not overflow".
-
-Thanks for the patch, much appreciated.
-
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> Anyway I don't insist on keeping this change if you think reverting it
+> is better.
 

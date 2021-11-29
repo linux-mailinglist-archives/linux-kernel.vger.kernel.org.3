@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D26461D8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0943E461E65
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354160AbhK2S0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:26:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58540 "EHLO
+        id S1350853AbhK2Sfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:35:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37864 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243892AbhK2SYL (ORCPT
+        with ESMTP id S1379580AbhK2Sde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:24:11 -0500
+        Mon, 29 Nov 2021 13:33:34 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B2D9B815C5;
-        Mon, 29 Nov 2021 18:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B97D3C53FC7;
-        Mon, 29 Nov 2021 18:20:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9D5AB815C3;
+        Mon, 29 Nov 2021 18:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E66EC53FC7;
+        Mon, 29 Nov 2021 18:30:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210051;
-        bh=M2x2xTghd3P1I7w96dfCHfLQWa9qGidy1rj0fbxp2ws=;
+        s=korg; t=1638210614;
+        bh=+hPTTfB30qj91NOr8YuX+KHQ6cLv+RewxQLBhmIaVYM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aVjf4vSiCwnWL+nhSQqnatJIINiuDvlF4Toz7PK0BZLeqO6PzxWcIGkL8pN2YomQU
-         8z/J//zd9tK3U+CwQgsJMjzMHdlekHLwciPyLj26vz053Q1ZEKIU4dlpVUoH5mWutl
-         s6wzSeclu3dMa9NLVPP4qooRwI2GbHg5rcp/2mPg=
+        b=SW6mr7apxEhU26kk21sPXR+/2soeNLE2VbHi7tXfJvEMGAtPPMPoNhHfZ1JCNBDR6
+         ebRhReRIIyXzOvV65C4toHyKfPZ9ZseRoK7QcoPHw0stVowzNK8ji2u4FjgcU1y0uI
+         SSmakMhZmQdSdl5ZFHX+NrcYxpi8d52fOhcw7kew=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.19 25/69] PCI: aardvark: Fix compilation on s390
-Date:   Mon, 29 Nov 2021 19:18:07 +0100
-Message-Id: <20211129181704.494088660@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 057/121] scsi: mpt3sas: Fix kernel panic during drive powercycle test
+Date:   Mon, 29 Nov 2021 19:18:08 +0100
+Message-Id: <20211129181713.562270305@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+References: <20211129181711.642046348@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,42 +47,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
 
-commit b32c012e4b98f0126aa327be2d1f409963057643 upstream.
+[ Upstream commit 0ee4ba13e09c9d9c1cb6abb59da8295d9952328b ]
 
-Include linux/gpio/consumer.h instead of linux/gpio.h, as is said in the
-latter file.
+While looping over shost's sdev list it is possible that one
+of the drives is getting removed and its sas_target object is
+freed but its sdev object remains intact.
 
-This was reported by kernel test bot when compiling for s390.
+Consequently, a kernel panic can occur while the driver is trying to access
+the sas_address field of sas_target object without also checking the
+sas_target object for NULL.
 
-  drivers/pci/controller/pci-aardvark.c:350:2: error: implicit declaration of function 'gpiod_set_value_cansleep' [-Werror,-Wimplicit-function-declaration]
-  drivers/pci/controller/pci-aardvark.c:1074:21: error: implicit declaration of function 'devm_gpiod_get_from_of_node' [-Werror,-Wimplicit-function-declaration]
-  drivers/pci/controller/pci-aardvark.c:1076:14: error: use of undeclared identifier 'GPIOD_OUT_LOW'
-
-Link: https://lore.kernel.org/r/202006211118.LxtENQfl%25lkp@intel.com
-Link: https://lore.kernel.org/r/20200907111038.5811-2-pali@kernel.org
-Fixes: 5169a9851daa ("PCI: aardvark: Issue PERST via GPIO")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Reviewed-by: Marek Behún <marek.behun@nic.cz>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20211117104909.2069-1-sreekanth.reddy@broadcom.com
+Fixes: f92363d12359 ("[SCSI] mpt3sas: add new driver supporting 12GB SAS")
+Signed-off-by: Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    2 +-
+ drivers/scsi/mpt3sas/mpt3sas_scsih.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -9,7 +9,7 @@
-  */
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_scsih.c b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+index 31c384108bc9c..8418b59b3743b 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_scsih.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_scsih.c
+@@ -3675,7 +3675,7 @@ _scsih_ublock_io_device(struct MPT3SAS_ADAPTER *ioc, u64 sas_address)
  
- #include <linux/delay.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/irqdomain.h>
+ 	shost_for_each_device(sdev, ioc->shost) {
+ 		sas_device_priv_data = sdev->hostdata;
+-		if (!sas_device_priv_data)
++		if (!sas_device_priv_data || !sas_device_priv_data->sas_target)
+ 			continue;
+ 		if (sas_device_priv_data->sas_target->sas_address
+ 		    != sas_address)
+-- 
+2.33.0
+
 
 

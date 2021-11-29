@@ -2,132 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E651A4624E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:30:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E8A4624D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231992AbhK2WdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:33:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbhK2WbJ (ORCPT
+        id S229633AbhK2WbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:31:15 -0500
+Received: from ale.deltatee.com ([204.191.154.188]:48154 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229540AbhK2Wax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:31:09 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34BBC0698E6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:27:51 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id u11so13350984plf.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:27:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bluerivertech.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=/KmtMbfeaXHuTAh4g4GRV6pvDUPLEEqbIUrWqrzrkr4=;
-        b=MVciiR/0Lt0NLKjRq9rUA8C0kKeHsKsdf0Qk7wdF1y1yrM0xmZfTFv/X/5yzqZ+9QB
-         vTqZJ4KDLHlujFvzzv1PiPlPgDnDSPt7TffxI7pXBiB3BdQjXuSdy5AF+uGRdaamwIQk
-         mXXVNute8wPzRxjw2nWVMe0cT4ZibcmIoAatoJ4Y1g2ovWmLrXKDhLXBQQ46RbGtXqzn
-         niVALQcT8seeEMznpSq4A1x/40mpUf9Fztc+Oz3YR0c1pSnYkjId2+B2xWPrZ2v0Ao5C
-         c/ljTZThfQVi0S9vhUqt9iAitGGQ25haovbzXuJ9v/GXssRhiVwLb8VCk+DvaBdWqZp5
-         FP1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=/KmtMbfeaXHuTAh4g4GRV6pvDUPLEEqbIUrWqrzrkr4=;
-        b=z807xKr4I4aD/W54nh+mhcd2Qq8az3pNAOXKRoQpZdSama/YLSx6Efbg6vY4l884hD
-         beTqbCy3FdYuR5EzfgfXhH9M5lc8GcNL+OFh9jJFASw/qHgs30F2UAXNKqf9EQeR5Taj
-         SAmYewol1IZTl427qh+RTo0p7ecCOBCFHwSd8fAkF7i/H574THIZloeIyPJYCUy5ppf6
-         xN3qQBF02+0WryJb7fml1unsnVrgdOqxnRDgDSOERv3qnSSPIGPMouJp3AnT3PPJhOfj
-         wBdEMRETgOeHEsv4uGo3l7IN3YtqO3hK5TGSkzq9Zz67qOxJT55JMVKyBRq0aofvQAdO
-         lUxw==
-X-Gm-Message-State: AOAM533eK1CKfRD3RCaQbEnfHxkpH6VS+sVz4eXXaG37YF28vGdZC9MA
-        tuiXPBToC6j48OLCPK6AbEtbWg==
-X-Google-Smtp-Source: ABdhPJzFMLhjVLY9yCkfDQgnTgKpGAYN3oXMd2qZQsYSNGPxE+7RvtTX5dk8CU0Oy91xu3uUaBwmoQ==
-X-Received: by 2002:a17:90b:4a0f:: with SMTP id kk15mr1011991pjb.223.1638224871243;
-        Mon, 29 Nov 2021 14:27:51 -0800 (PST)
-Received: from localhost.localdomain (c-73-231-33-37.hsd1.ca.comcast.net. [73.231.33.37])
-        by smtp.gmail.com with ESMTPSA id i2sm19489983pfg.90.2021.11.29.14.27.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 14:27:50 -0800 (PST)
-From:   Brian Silverman <brian.silverman@bluerivertech.com>
-Cc:     Brian Silverman <brian.silverman@bluerivertech.com>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Dong Aisheng <b29396@freescale.com>,
-        Varka Bhadram <varkabhadram@gmail.com>,
-        Fengguang Wu <fengguang.wu@intel.com>,
-        linux-can@vger.kernel.org (open list:MCAN MMIO DEVICE DRIVER),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH RESEND] can: m_can: Disable and ignore ELO interrupt
-Date:   Mon, 29 Nov 2021 14:26:28 -0800
-Message-Id: <20211129222628.7490-1-brian.silverman@bluerivertech.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20211109021240.3013-1-brian.silverman@bluerivertech.com>
-References: <20211109021240.3013-1-brian.silverman@bluerivertech.com>
+        Mon, 29 Nov 2021 17:30:53 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=h3I3KuBV0EWpxrs/PZnldvg5FyRAoHiTFhFI8WLZtNg=; b=XGhjJUo2WcTINFvER9CSwQY9TX
+        GFFz4P+6Oplo33ZFyVVblbe69M3YyjMz8quXkNayNK98eC9jPpb7o2nwfW65Zf2PvExMR+RNx1xc+
+        h0kG7Yy4JPu0u0WOdT4EzzWtGEMtcJCsl84rzKmlFH4aHTkT5KypZ2K1opX1MSzo4KhD5FKKhbSde
+        j0MqfHCDGr9X7KM5eJFz7fgcXk2kqbn3NcDXoZAcBj7IeR7BbxI3t9LkQ9m04eDfyp5fkm5MdvQPP
+        Bw/SeeAas6aCntn16fXgue43WfF4Prot4xpvBpyAycDrbJZ2hFREwICsC9Qn4ogq6vF+1AoX4YhFr
+        /fC2Zh7A==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1mrp7M-00AR6j-2z; Mon, 29 Nov 2021 15:27:25 -0700
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com>
+Date:   Mon, 29 Nov 2021 15:27:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <874k7ueldt.ffs@tglx>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: borntraeger@de.ibm.com, hca@linux.ibm.com, linux-s390@vger.kernel.org, linux-ntb@googlegroups.com, allenbh@gmail.com, dave.jiang@intel.com, jdmason@kudzu.us, gregkh@linuxfoundation.org, linux-pci@vger.kernel.org, ashok.raj@intel.com, megha.dey@intel.com, jgg@nvidia.com, kevin.tian@intel.com, alex.williamson@redhat.com, maz@kernel.org, helgaas@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-8.2 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the design of this driver, this condition is often triggered.
-However, the counter that this interrupt indicates an overflow is never
-read either, so overflowing is harmless.
 
-On my system, when a CAN bus starts flapping up and down, this locks up
-the whole system with lots of interrupts and printks.
 
-Specifically, this interrupt indicates the CEL field of ECR has
-overflowed. All reads of ECR mask out CEL.
+On 2021-11-29 1:51 p.m., Thomas Gleixner wrote:
+> Logan,
+> 
+> On Mon, Nov 29 2021 at 11:21, Logan Gunthorpe wrote:
+>> On 2021-11-26 6:23 p.m., Thomas Gleixner wrote:
+>>> Replace the about to vanish iterators, make use of the filtering and take
+>>> the descriptor lock around the iteration.
+>>
+>> This patch looks good to me:
+>>
+>> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+> 
+> thanks for having a look at this. While I have your attention, I have a
+> question related to NTB.
+> 
+> The switchtec driver is the only one which uses PCI_IRQ_VIRTUAL in order
+> to allocate non-hardware backed MSI-X descriptors.
+> 
+> AFAIU these descriptors are not MSI-X descriptors in the regular sense
+> of PCI/MSI-X. They are allocated via the PCI/MSI mechanism but their
+> usage is somewhere in NTB which has nothing to do with the way how the
+> real MSI-X interrupts of a device work which explains why we have those
+> pci.msi_attrib.is_virtual checks all over the place.
+> 
+> I assume that there are other variants feeding into NTB which can handle
+> that without this PCI_IRQ_VIRTUAL quirk, but TBH, I got completely lost
+> in that code.
+> 
+> Could you please shed some light on the larger picture of this?
 
-Fixes: e0d1f4816f2a ("can: m_can: add Bosch M_CAN controller support")
-Signed-off-by: Brian Silverman <brian.silverman@bluerivertech.com>
----
- drivers/net/can/m_can/m_can.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+Yes, of course. I'll try to explain:
 
-diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 2470c47b2e31..91be87c4f4d3 100644
---- a/drivers/net/can/m_can/m_can.c
-+++ b/drivers/net/can/m_can/m_can.c
-@@ -204,16 +204,16 @@ enum m_can_reg {
- 
- /* Interrupts for version 3.0.x */
- #define IR_ERR_LEC_30X	(IR_STE	| IR_FOE | IR_ACKE | IR_BE | IR_CRCE)
--#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_ELO | IR_BEU | \
--			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
--			 IR_RF1L | IR_RF0L)
-+#define IR_ERR_BUS_30X	(IR_ERR_LEC_30X | IR_WDI | IR_BEU | IR_BEC | \
-+			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
-+			 IR_RF0L)
- #define IR_ERR_ALL_30X	(IR_ERR_STATE | IR_ERR_BUS_30X)
- 
- /* Interrupts for version >= 3.1.x */
- #define IR_ERR_LEC_31X	(IR_PED | IR_PEA)
--#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_ELO | IR_BEU | \
--			 IR_BEC | IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | \
--			 IR_RF1L | IR_RF0L)
-+#define IR_ERR_BUS_31X      (IR_ERR_LEC_31X | IR_WDI | IR_BEU | IR_BEC | \
-+			 IR_TOO | IR_MRAF | IR_TSW | IR_TEFL | IR_RF1L | \
-+			 IR_RF0L)
- #define IR_ERR_ALL_31X	(IR_ERR_STATE | IR_ERR_BUS_31X)
- 
- /* Interrupt Line Select (ILS) */
-@@ -810,8 +810,6 @@ static void m_can_handle_other_err(struct net_device *dev, u32 irqstatus)
- {
- 	if (irqstatus & IR_WDI)
- 		netdev_err(dev, "Message RAM Watchdog event due to missing READY\n");
--	if (irqstatus & IR_ELO)
--		netdev_err(dev, "Error Logging Overflow\n");
- 	if (irqstatus & IR_BEU)
- 		netdev_err(dev, "Bit Error Uncorrected\n");
- 	if (irqstatus & IR_BEC)
+The NTB code here is trying to create an MSI interrupt that is not
+triggered by the PCI device itself but from a peer behind the
+Non-Transparent Bridge (or, more carefully: from the CPU's perspective
+the interrupt will come from the PCI device, but nothing in the PCI
+device's firmware or hardware will have triggered the interrupt).
 
-base-commit: d2f38a3c6507b2520101f9a3807ed98f1bdc545a
--- 
-2.20.1
+In most cases, the NTB code needs more interrupts than the hardware
+actually provides for in its MSI-X table. That's what PCI_IRQ_VIRTUAL is
+for: it allows the driver to request more interrupts than the hardware
+advertises (ie. pci_msix_vec_count()). These extra interrupts are
+created, but get flagged with msi_attrib.is_virtual which ensures
+functions that program the MSI-X table don't try to write past the end
+of the hardware's table.
+
+The NTB code in drivers/ntb/msi.c uses these virtual MSI-X interrupts.
+(Or rather it can use any interrupt: it doesn't care whether its virtual
+or not, it would be fine if it is just a spare interrupt in hardware,
+but in practice, it will usually be a virtual one). The code uses these
+interrupts by setting up a memory window in the bridge to cover the MMIO
+addresses of MSI-X interrupts. It communicates the offsets of the
+interrupts (and the MSI message data) to the peer so that the peer can
+trigger the interrupt simply by writing the message data to its side of
+the memory window. (In the code: ntbm_msi_request_threaded_irq() is
+called to request and interrupt which fills in the ntb_msi_desc with the
+offset and data, which is transferred to the peer which would then use
+ntb_msi_peer_trigger() to trigger the interrupt.)
+
+Existing NTB hardware does already have what's called a doorbell which
+provides the same functionally as the above technique. However, existing
+hardware implementations of doorbells have significant latency and thus
+slow down performance substantially. Implementing the MSI interrupts as
+described above increased the performance of ntb_transport by more than
+three times[1].
+
+There aren't really other "variants". In theory, IDT hardware would also
+require the same quirk but the drivers in the tree aren't quite up to
+snuff and don't even support ntb_transport (so nobody has added
+support). Intel and AMD drivers could probably do this as well (provided
+they have extra memory windows) but I don't know that anyone has tried.
+
+Let me know if anything is still unclear or you have further questions.
+You can also read the last posting of the patch series[2] if you'd like
+more information.
+
+Logan
+
+[1] 2b0569b3b7e6 ("NTB: Add MSI interrupt support to ntb_transport")
+[2]
+https://lore.kernel.org/all/20190523223100.5526-1-logang@deltatee.com/T/#u
+
+
+
 

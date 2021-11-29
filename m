@@ -2,104 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA7F462403
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4C7462611
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbhK2WO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:14:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
+        id S235366AbhK2Wqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:46:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbhK2WMa (ORCPT
+        with ESMTP id S235448AbhK2WqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:12:30 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC4DC0E52F7;
-        Mon, 29 Nov 2021 13:01:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=la5n+95FqwkImWApoxw9yt6K9/mVvw40Er2NamVkaww=; b=cQnfGaBPRGTYnKlp2Q3CkKpaRO
-        1Q+lgvgboeYnPCIMgXliftKxLBet/Oeo1r/cuz8s5M1vqGtqTrFfEw1bYmSDQeYS/b/hrAwiTJaRL
-        sUKW7O+cMgFMXEri4UIaFZ6SO2vzleUeOS7bOrhm1zAQG2/1TvixHQn+k8Gy+c4r71jCpst+kiPLk
-        yi45DnPEFJxWliZ1oPUU/EWHCpm0SUP/T3WeLaPKXAyCD1p+AThHC+XIuRJwUvebP2wvjPmEmtef/
-        yToFVpzqGCCwnMHRseRYWg5eKe81WU0HoYiN0pzKaxIhMD4V/Gme9xXoytbjFs28Wt4mx7BMV/Aib
-        0+0Fj0Hw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mrnmA-002Zh1-Fo; Mon, 29 Nov 2021 21:01:26 +0000
-Date:   Mon, 29 Nov 2021 13:01:26 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     akpm@linux-foundation.org, keescook@chromium.org,
-        yzaikin@google.com, nixiaoming@huawei.com, ebiederm@xmission.com,
-        peterz@infradead.org, gregkh@linuxfoundation.org, pjt@google.com,
-        liu.hailong6@zte.com.cn, andriy.shevchenko@linux.intel.com,
-        sre@kernel.org, penguin-kernel@i-love.sakura.ne.jp,
-        senozhatsky@chromium.org, wangqing@vivo.com, bcrl@kvack.org,
-        viro@zeniv.linux.org.uk, jack@suse.cz, amir73il@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/9] sysctl: add a new register_sysctl_init() interface
-Message-ID: <YaU/phu3JoalmC8E@bombadil.infradead.org>
-References: <20211123202347.818157-1-mcgrof@kernel.org>
- <20211123202347.818157-2-mcgrof@kernel.org>
- <YZ+2XwgQn8UpVcpb@alley>
+        Mon, 29 Nov 2021 17:46:21 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41B2C0F4B38;
+        Mon, 29 Nov 2021 12:56:55 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id q3so16771769wru.5;
+        Mon, 29 Nov 2021 12:56:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ql+suTnFvydSezbeHxVyPeDhtZlxR55/pcfoLfrc7+k=;
+        b=Ens7ubDTOxqILotmtNmGg8U+4zE7BrADm8c85OPM9xJDZ/hgVyIKJZjoV+78BP7c7k
+         /42TkHcAidV1uMsYtQMyGrV1m46QqeIWB61TSLpW4zNiUKOLWvUdPvCHt6tFReeOyvkj
+         ohe4+m5f4e3OgOcc7zYxKRjV2MHoZGYlBLqmAftUa3pwuorsO8l/oHwYsC2bgaftikab
+         hecr4tOEXJJAYjQ0mhefuLilKbAr95aBIF2o8Hj/FkBh6r+CAD7AtoWA7Ynw3C9yUmIm
+         +/ggRVfCsqiUMEwKZp2FlaERAsIBfSkbyxqR16melEVlK/TkaFlefutwni+FeVH85os8
+         5ZcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ql+suTnFvydSezbeHxVyPeDhtZlxR55/pcfoLfrc7+k=;
+        b=ni15KvOsu8R6+RUwbqWPZygZfLPk94si80eT/euSSZ7x/fXK9+ouo3v7XMEF+/X1CW
+         IWkdb4S9ZObFZD3jcEuHQtrrGHox8d4teg3+0prT1gm5eEmhqxr/44Z/lXJKeL62LU/8
+         RlOlO59JEle4GVhY8yxe+hOwIzgHfWKcRdZUPiQbhV7FQtqnEFGkp2hI7GyZS6YZgvgi
+         i+Vgs09j/2efIYO+7VIT8+Ob0ZhP1s2ZAQrq0k1IEz6WwdM/l9W5smtDKQwJG/qt9Xy9
+         AVFLlC4VFF0kPR8lp4HjVGksY3tdi2d2R+LIPkWUDlDGAh9l+LY2Oza1P7L95Jx9wbEw
+         G4RQ==
+X-Gm-Message-State: AOAM533BgI9PhYqtvehbT9g3/G1o2ZAo2XrMixU+WypieWLjqIqrCXK0
+        1qUYhQiw+ksaoCFGWX3DTukOsQEl7eEuWlue7Zc=
+X-Google-Smtp-Source: ABdhPJyrJ30OAXdBPr/U7cQs7gHEQbhx9D9YurENX81bSHU6lw8F1FvL1j+nliIEMNEguTJT6UDhj1LZLQ4tblRLOcg=
+X-Received: by 2002:adf:e904:: with SMTP id f4mr35829349wrm.245.1638219414380;
+ Mon, 29 Nov 2021 12:56:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZ+2XwgQn8UpVcpb@alley>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+References: <20211129182344.292609-1-robdclark@gmail.com>
+In-Reply-To: <20211129182344.292609-1-robdclark@gmail.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 29 Nov 2021 13:02:05 -0800
+Message-ID: <CAF6AEGtLoT7XE-KoASfn=FjMvPmSijmjUYSyd_dFgubnjio3zw@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm/gpu: Don't allow zero fence_id
+To:     dri-devel <dri-devel@lists.freedesktop.org>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@chromium.org>,
+        Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 05:14:23PM +0100, Petr Mladek wrote:
-> On Tue 2021-11-23 12:23:39, Luis Chamberlain wrote:
-> > From: Xiaoming Ni <nixiaoming@huawei.com>
-> > 
-> > The kernel/sysctl.c is a kitchen sink where everyone leaves
-> > their dirty dishes, this makes it very difficult to maintain.
-> > 
-> > To help with this maintenance let's start by moving sysctls to
-> > places where they actually belong. The proc sysctl maintainers
-> > do not want to know what sysctl knobs you wish to add for your own
-> > piece of code, we just care about the core logic.
-> > 
-> > Today though folks heavily rely on tables on kernel/sysctl.c so
-> > they can easily just extend this table with their needed sysctls.
-> > In order to help users move their sysctls out we need to provide a
-> > helper which can be used during code initialization.
-> > 
-> > We special-case the initialization use of register_sysctl() since
-> > it *is* safe to fail, given all that sysctls do is provide a dynamic
-> > interface to query or modify at runtime an existing variable. So the
-> > use case of register_sysctl() on init should *not* stop if the sysctls
-> > don't end up getting registered. It would be counter productive to
-> > stop boot if a simple sysctl registration failed.
-> >
-> > Provide a helper for init then, and document the recommended init
-> > levels to use for callers of this routine. We will later use this
-> > in subsequent patches to start slimming down kernel/sysctl.c tables
-> > and moving sysctl registration to the code which actually needs
-> > these sysctls.
-> 
-> Do we really need a new helper for this?
-> Is the failure acceptable only during system initialization?
+On Mon, Nov 29, 2021 at 10:18 AM Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> Elsewhere we treat zero as "no fence" and __msm_gem_submit_destroy()
+> skips removal from fence_idr.  We could alternately change this to use
+> negative values for "no fence" but I think it is more clear to not allow
+> zero as a valid fence_id.
+>
 
-Yes because it is __init and we allow / guide folks to *think* clearly
-about not stopping the init process when it comes to sysctls on failure.
+probably should have added:
 
-> The warning would be useful even for the original register_sysctl().
+Fixes: a61acbbe9cf8 ("drm/msm: Track "seqno" fences by idr")
 
-We can open code those.
-
-> It should be up-to-the caller to decide if the failure is fatal
-> or not. It might be enough to document the reasoning why a warning
-> is enough in most cases.
-
-For most case I have seen so far special casing init seems like a worthy
-objective. When we're done with the full conversion we can re-visit
-things but at this point I can't say sharing this outside of init uses
-makes too much sense.
-
-  Luis
-
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/msm/msm_gem_submit.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
+> index 282628d6b72c..6cfa984dee6a 100644
+> --- a/drivers/gpu/drm/msm/msm_gem_submit.c
+> +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+> @@ -881,7 +881,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+>          * to the underlying fence.
+>          */
+>         submit->fence_id = idr_alloc_cyclic(&queue->fence_idr,
+> -                       submit->user_fence, 0, INT_MAX, GFP_KERNEL);
+> +                       submit->user_fence, 1, INT_MAX, GFP_KERNEL);
+>         if (submit->fence_id < 0) {
+>                 ret = submit->fence_id = 0;
+>                 submit->fence_id = 0;
+> --
+> 2.33.1
+>

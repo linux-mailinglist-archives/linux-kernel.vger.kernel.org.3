@@ -2,77 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299804610C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 828964610CE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:06:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241616AbhK2JHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 04:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51518 "EHLO
+        id S242048AbhK2JJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 04:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240575AbhK2JFy (ORCPT
+        with ESMTP id S240013AbhK2JHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:05:54 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72CCDC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 00:50:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TovPf+jjuvo5NCOy/tvJhW4DOAeLEg6t2wBTn9RiJg4=; b=uOxAywY8BYwoSJAbaHl4lyBWLB
-        s7K3MAMb+Ygghi8h4fBbNIsDozTkzMf0ZoQRNmf7EDpYx0VQ15YMdDzusu9lCCUW8Eh6j9MTcXnZ0
-        60M/fzolwZKQTnxVRXk0v5dTX6Ac9uOpq6xU2Y+pp1IIPHezG7cWGjJ1B3y9Ip1TkNUWzSkSyCzYp
-        yPfWbhCS3/yAZdc6nIipEBZM/ykLAPuQD3AcVe5lI3MnZ0d85EQIs9zB/fMpf6ydROCwG/XSBj16E
-        sw3lMB7aowjLL2K1w4m/GV0q/wHUU/cmjdnjKPHhySUpQEWO0BhzlKjHZ7SekgAlQ5uBQJNsQrLhl
-        G6e9qtjw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mrcMi-006iHy-Hk; Mon, 29 Nov 2021 08:50:25 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D3C4430002F;
-        Mon, 29 Nov 2021 09:50:23 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9A6C120167FEC; Mon, 29 Nov 2021 09:50:23 +0100 (CET)
-Date:   Mon, 29 Nov 2021 09:50:23 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [GIT pull] locking/urgent for v5.16-rc3
-Message-ID: <YaSUT2roW6SH2OxM@hirez.programming.kicks-ass.net>
-References: <163811728418.767205.14544746031342483043.tglx@xen13>
- <CAHk-=wh1AZLCtx6Uk1JKpknaHgoLi_DM7221LoRpU6Y_3im03A@mail.gmail.com>
+        Mon, 29 Nov 2021 04:07:54 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31224C0619E6;
+        Mon, 29 Nov 2021 00:52:48 -0800 (PST)
+Received: from [77.23.61.74] (helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1mrcOw-0003yU-Ib; Mon, 29 Nov 2021 09:52:42 +0100
+Message-ID: <50735c6a-6a33-e4b8-a15a-b9efec933bef@leemhuis.info>
+Date:   Mon, 29 Nov 2021 09:52:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh1AZLCtx6Uk1JKpknaHgoLi_DM7221LoRpU6Y_3im03A@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3 1/2] Bluetooth: add quirk disabling LE Read Transmit
+ Power
+Content-Language: en-BS
+To:     Aditya Garg <gargaditya08@live.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
+ <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
+ <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
+ <20211117124717.12352-1-redecorating@protonmail.com>
+ <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
+ <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
+ <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
+ <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+ <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
+ <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
+ <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
+ <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638175968;360f7ded;
+X-HE-SMSGID: 1mrcOw-0003yU-Ib
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 09:15:10AM -0800, Linus Torvalds wrote:
-> On Sun, Nov 28, 2021 at 8:35 AM Thomas Gleixner <tglx@linutronix.de> wrote:
-> >
-> >  - down_read_trylock() is suboptimal when the lock is contended and
-> >    multiple readers trylock concurrently. That's due to the initial value
-> >    being read non-atomically which results in at least two compare exchange
-> >    loops. Making the initial readout atomic reduces this significantly.
-> >    Whith 40 readers by 11% in a benchmark which enforces contention on
-> >    mmap_sem.
-> 
-> This was an intentional optimization to avoid unnecessary cache
-> protocol cycles for when the lock isn't contended - first getting a
-> cacheline for read ownership, only to then get it for write.
-> 
-> But I guess we don't have any good benchmarks for non-contention, so ...
-> 
-> I also hope that maybe modern hardware is smart enough to see "I will
-> write to it later" and avoid the "get line for shared access only to
-> get it for exclusive access immediately afterwards" issue.
+Hi! Great to see progress for this regression.
 
-Yes, I raised that same point, otoh those numbers are not showing that.
-They did lightly contended, but I suppose not cache-cold.
+On 29.11.21 09:32, Aditya Garg wrote:
+> From: Aditya Garg <gargaditya08@live.com>
+> 
+> Some devices have a bug causing them to not work if they query 
+> LE tx power on startup. Thus we add a quirk in order to not query it 
+> and default min/max tx power values to HCI_TX_POWER_INVALID.
+> 
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> ---
+
+FWIW: In case you need to send an improved patch, could you please add
+this after your 'Signed-off-by:' (see at (¹) below for the reasoning):
+
+Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
+Link:
+https://lore.kernel.org/r/4970a940-211b-25d6-edab-21a815313954@protonmail.com
+Fixes: 7c395ea521e6 ("Bluetooth: Query LE tx power on startup")
+
+And if the patch is already good to go: could the subsystem maintainer
+please add it when applying? See (¹) for the reasoning.
+
+Ciao, Thorsten, your Linux kernel regression tracker.
+
+
+(¹) Long story: The commit message would benefit from a link to the
+regression report, for reasons explained in
+Documentation/process/submitting-patches.rst. To quote:
+
+```
+If related discussions or any other background information behind the
+change can be found on the web, add 'Link:' tags pointing to it. In case
+your patch fixes a bug, for example, add a tag with a URL referencing
+the report in the mailing list archives or a bug tracker;
+```
+
+This concept is old, but the text was reworked recently to make this use
+case for the Link: tag clearer. For details see:
+https://git.kernel.org/linus/1f57bd42b77c
+
+Yes, that "Link:" is not really crucial; but it's good to have if
+someone needs to look into the backstory of this change sometime in the
+future. But I care for a different reason. I'm tracking this regression
+(and others) with regzbot, my Linux kernel regression tracking bot. This
+bot will notice if a patch with a Link: tag to a tracked regression gets
+posted and record that, which allowed anyone looking into the regression
+to quickly gasp the current status from regzbot's webui
+(https://linux-regtracking.leemhuis.info/regzbot ) or its reports. The
+bot will also notice if a commit with a Link: tag to a regression report
+is applied by Linus and then automatically mark the regression as
+resolved then.
+
+IOW: this tag makes my life a regression tracker a lot easier, as I
+otherwise have to tell regzbot manually when the fix lands. :-/
+
+
+P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
+on my table. I can only look briefly into most of them. Unfortunately
+therefore I sometimes will get things wrong or miss something important.
+I hope that's not the case here; if you think it is, don't hesitate to
+tell me about it in a public reply. That's in everyone's interest, as
+what I wrote above might be misleading to everyone reading this; any
+suggestion I gave they thus might sent someone reading this down the
+wrong rabbit hole, which none of us wants.
+
+BTW, I have no personal interest in this issue, which is tracked using
+regzbot, my Linux kernel regression tracking bot
+(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
+this mail to get things rolling again and hence don't need to be CC on
+all further activities wrt to this regression.

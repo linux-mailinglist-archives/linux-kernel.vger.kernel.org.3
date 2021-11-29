@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B49B94621E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 586504621E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:11:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234767AbhK2UOf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 15:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
+        id S235114AbhK2UPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 15:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbhK2UMV (ORCPT
+        with ESMTP id S234073AbhK2UNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:12:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A3EC08ECB6;
-        Mon, 29 Nov 2021 08:45:54 -0800 (PST)
+        Mon, 29 Nov 2021 15:13:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D984C08ECB7;
+        Mon, 29 Nov 2021 08:45:57 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69982B81215;
-        Mon, 29 Nov 2021 16:45:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 337B6C53FAD;
-        Mon, 29 Nov 2021 16:45:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE1CB615B4;
+        Mon, 29 Nov 2021 16:45:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E56DCC53FC7;
+        Mon, 29 Nov 2021 16:45:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638204352;
-        bh=4Gqnsc8eJT8RGnAR77WhxngkWMm7XUHlUU4m60Zgkqk=;
+        s=k20201202; t=1638204356;
+        bh=BDOCaXVF64qmbKixmffTWgJrkuezOZ8u43wxCYDH+Gg=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=W2GRWoPP07J8SXxP4UtGzSceMfq+SFFmEWOgs+mCqdzLOqTtqbvfWKlKh5Bwko5+R
-         ywRQMpIMZms1HpEMF/2Kg9U/jd8KomaS2jAl/gzunKgllYVPWce8SBSYX1jYF1EA9e
-         rtGIA8zYoB6cz+eqdOsbdyFxGVy3DH7Mjosy68Sv4gmtfWm4lqNLTiank7hCQTG6im
-         EvnY7mVKupZfhcri+trkRGfTZ2DSqVf7Q7xGb6RenfozhBYP80vjOsABpOgMfb9qfr
-         v36z8KPTiP6/QOkNg5BqcA1V+wqtaJKqSsCAD3b0Wwri4EjRQpfCrgQEmoi3NDZ9fy
-         biyaVjmYQcAvQ==
+        b=G2PyIpIEtaa89eQ6Q/AfTZ1/UXMT2PvKvhUAdSFEAeeQ9clvKKjiTOcUH56XK/uUJ
+         CVQEgs2tDHv8Amsavg1urOKwXyAauV5mN0daMZmo2O4C742eTw+2fwllbDUOqsD8i6
+         5VoaM7h1I55M3sEJbhinEOE3eQlluFxNBZylFhWtTE7jmz9uU4rOl+Ru88utYiNVWt
+         4eMf8iVp+JJcAuH78KVCHqooBwyDY90Ub7/AYDFeVu6taJmDI3w5JxLxpUDhqlCQxO
+         eb/4zL4ywXY/pUsqCvQXj5KKzetnFyem94/FU01DMgpFz+HcVj/QUztPw065K8TAns
+         eCcnE4sfMGXfA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mka@chromium.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        David Collins <collinsd@codeaurora.org>, swboyd@chromium.org
-In-Reply-To: <1637668167-31325-1-git-send-email-quic_c_skakit@quicinc.com>
-References: <1637668167-31325-1-git-send-email-quic_c_skakit@quicinc.com>
-Subject: Re: (subset) [PATCH 0/3] Add PMG1110(Seco Jr) PMIC support
-Message-Id: <163820434992.1716869.8358627296301312921.b4-ty@kernel.org>
-Date:   Mon, 29 Nov 2021 16:45:49 +0000
+To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211126154344.724316-1-frattaroli.nicolas@gmail.com>
+References: <20211126154344.724316-1-frattaroli.nicolas@gmail.com>
+Subject: Re: (subset) [PATCH 0/3] RK356x/Quartz64 Model A SPI
+Message-Id: <163820435465.1716901.11036840063339929110.b4-ty@kernel.org>
+Date:   Mon, 29 Nov 2021 16:45:54 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -52,27 +50,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Nov 2021 17:19:24 +0530, Satya Priya wrote:
-> This series depends on below series which adds the base CRD dts
-> https://patchwork.kernel.org/project/linux-arm-msm/list/?series=584349
+On Fri, 26 Nov 2021 16:43:41 +0100, Nicolas Frattaroli wrote:
+> The first patch of this series adds a compatible for rk3568-spi
+> to the DT bindings.
 > 
-> Satya Priya (3):
->   dt-bindings: regulator: Add compatible for pmg1110
->   regulator: qcom-rpmh: Add PMG1110 regulators
->   arm64: dts: qcom: sc7280: Add pmg1110 regulators for sc7280-crd
+> The second adds the SPI nodes for RK3566 and RK3568 SoCs. The nodes
+> were lifted from the downstream vendor kernel's devicetree, and were
+> double-checked for correctness.
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-linus
 
 Thanks!
 
-[1/3] dt-bindings: regulator: Add compatible for pmg1110
-      commit: ac88e9526d68f2532be3b4b439d45c0c8de7e170
-[2/3] regulator: qcom-rpmh: Add PMG1110 regulators
-      commit: 59eadd2af3f717f2ff70dbb6c153757dc1650651
+[1/3] dt-bindings: spi: spi-rockchip: Add rk3568-spi compatible
+      commit: 07fb78a78de4e67b5d6d5407aeee1250a327a698
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

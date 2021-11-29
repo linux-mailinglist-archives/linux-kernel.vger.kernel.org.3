@@ -2,94 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF4A8461549
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285174613D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:25:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377058AbhK2MmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:42:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240045AbhK2MkJ (ORCPT
+        id S238205AbhK2L2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:28:49 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:50414 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231848AbhK2L0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:40:09 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CC0C061A24
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:23:14 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id o1so33186261uap.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:23:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=FZ4OlDjF0UuQZYjcbE5jWY1rs+Df7PpQZcnrZmat72o=;
-        b=clXoXaU0E4TXCWMWsC/fKLomVxxBhaenD2JNKXyJlgIO+e+qcJ4K+mAptxTxry/2kk
-         YGNDZiQwEuOIUyJzYyYDE3ZfauDPrqs+j91xSLY1vvKPZWGOBRW35bTpyklUDOBZIfce
-         fIrBlJgqjl8cey0UQbSCwpXpFTsxpMcxCt8b6d96HkZH83B+A8t5FyxuxX0uAD3s5xdA
-         K0iWLo8Z4zHHOvPjTYv071emMRPiQnAyxiwCbuMArmTTD632GXMaV9AzwJKmqZjXv7sL
-         gaEpA6vIHivs5EvD9b9PFd52bmzQaRIlMDLmwybs5oLGd2JMREZsibyFPnh6JF7gKKnQ
-         /Dig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=FZ4OlDjF0UuQZYjcbE5jWY1rs+Df7PpQZcnrZmat72o=;
-        b=1bE7Xu7oRMKr+PuTuES+4NXHFYNRFEUibYRV4Hz3zIICPDe5AFLrInm/37q5TjXwdb
-         VHLmnA8EaeRGSOJUDAorLFc1E0JnVa4h9I/gBRM+vLy37bmW7UKQ/elNuaxPCVtDxE2I
-         +G6fW+3ixvW977nR29XErUT8bnYA0QnoYfyHeZvIB0FhhWuv3TLktqTYlDKyfrqWPQLi
-         8+IHDWTKZxZjw8pXU7KZzJEkJR6IDhvnULghY48lq7mugqhndrYwvpIiBRsX5NcgDhrs
-         nZt2rJmigUFm9+ASw+xVfxHeMzCiOlwa6N52lYY75OsdjdNsfdFlMdtIT/5GmTDqmiEP
-         u3BQ==
-X-Gm-Message-State: AOAM533gMbnyeXZJ2aiCPBJAEb85c7ZbEf0L3oSrdGk68MQDmkjRDJB5
-        MlUtXwc2nto9mUo1T7ZcWy1um2GiWKkcN4FZXyM=
-X-Google-Smtp-Source: ABdhPJyIjiUapj/rsB04b8k+4oucmybLdGbkSgko4+0lICYMMgW1vDEKECQrftrKzqvN0sRVCmA0qI96m/+IgBTZ7kc=
-X-Received: by 2002:ab0:7c56:: with SMTP id d22mr48867024uaw.74.1638184992690;
- Mon, 29 Nov 2021 03:23:12 -0800 (PST)
+        Mon, 29 Nov 2021 06:26:47 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 8E86F212C9;
+        Mon, 29 Nov 2021 11:23:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638185008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r/Fr5NxP2jCRkLtXeiXZXbWtKkV0jHF3GitFDxVGIWg=;
+        b=BzpRJa2vr9jLIWnSYSIrW8ycKc8vWG2pId4DDQaGtSKAeZSLGq+SKHboviPUK5oJamwTaO
+        nHvEJ704RXZHxIIqGB0Xfd7uEuNtbujL4bVbai2+n80W3c2uuZm6zLBnxpQP8QK2qz432V
+        UezHo2aX7Z/bDeoss0EYlq00t0Z7elk=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id BACC3A3B83;
+        Mon, 29 Nov 2021 11:23:27 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 12:23:23 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, rientjes@google.com,
+        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
+        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
+        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
+        oleg@redhat.com, david@redhat.com, jannh@google.com,
+        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
+        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com
+Subject: Re: [PATCH v2 1/2] mm: protect free_pgtables with mmap_lock write
+ lock in exit_mmap
+Message-ID: <YaS4KxCSLK+02xaF@dhcp22.suse.cz>
+References: <20211124235906.14437-1-surenb@google.com>
 MIME-Version: 1.0
-Sender: missaisha.gaddafi2014@gmail.com
-Received: by 2002:ab0:2eae:0:0:0:0:0 with HTTP; Mon, 29 Nov 2021 03:23:12
- -0800 (PST)
-From:   Mr Ibrahim <ibrahimidewu4@gmail.com>
-Date:   Mon, 29 Nov 2021 12:23:12 +0100
-X-Google-Sender-Auth: FBnUzSEeOiWQnyFPx3sArJuKkXU
-Message-ID: <CAHnzjr3ysscTODeKhcy67hM6EU8SsEZm0_nJD=CLkLxor9Fu6A@mail.gmail.com>
-Subject: I NEED YOUR RESPOND PLEASE
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124235906.14437-1-surenb@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HELLO Greetings,
+On Wed 24-11-21 15:59:05, Suren Baghdasaryan wrote:
+> oom-reaper and process_mrelease system call should protect against
+> races with exit_mmap which can destroy page tables while they
+> walk the VMA tree. oom-reaper protects from that race by setting
+> MMF_OOM_VICTIM and by relying on exit_mmap to set MMF_OOM_SKIP
+> before taking and releasing mmap_write_lock. process_mrelease has
+> to elevate mm->mm_users to prevent such race. Both oom-reaper and
+> process_mrelease hold mmap_read_lock when walking the VMA tree.
+> The locking rules and mechanisms could be simpler if exit_mmap takes
+> mmap_write_lock while executing destructive operations such as
+> free_pgtables.
+> Change exit_mmap to hold the mmap_write_lock when calling
+> free_pgtables. Operations like unmap_vmas() and unlock_range() are not
+> destructive and could run under mmap_read_lock but for simplicity we
+> take one mmap_write_lock during almost the entire operation. Note
+> also that because oom-reaper checks VM_LOCKED flag, unlock_range()
+> should not be allowed to race with it.
+> In most cases this lock should be uncontended. Previously, Kirill
+> reported ~4% regression caused by a similar change [1]. We reran the
+> same test and although the individual results are quite noisy, the
+> percentiles show lower regression with 1.6% being the worst case [2].
+> The change allows oom-reaper and process_mrelease to execute safely
+> under mmap_read_lock without worries that exit_mmap might destroy page
+> tables from under them.
+> 
+> [1] https://lore.kernel.org/all/20170725141723.ivukwhddk2voyhuc@node.shutemov.name/
+> [2] https://lore.kernel.org/all/CAJuCfpGC9-c9P40x7oy=jy5SphMcd0o0G_6U1-+JAziGKG6dGA@mail.gmail.com/
+> 
+> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> ---
+> changes in v2
+> - Moved mmap_write_unlock to cover remove_vma loop as well, per Matthew Wilcox
+> 
+>  mm/mmap.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index bfb0ea164a90..f4e09d390a07 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -3142,25 +3142,27 @@ void exit_mmap(struct mm_struct *mm)
+>  		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
+>  		 * __oom_reap_task_mm() will not block.
+>  		 *
+> -		 * This needs to be done before calling munlock_vma_pages_all(),
+> +		 * This needs to be done before calling unlock_range(),
+>  		 * which clears VM_LOCKED, otherwise the oom reaper cannot
+>  		 * reliably test it.
+>  		 */
+>  		(void)__oom_reap_task_mm(mm);
+>  
+>  		set_bit(MMF_OOM_SKIP, &mm->flags);
 
-My name is Mr.Ibrahim Idewu, I work in the bank here in Burkina faso.
-I got your contact
-from internet search i hope that you will not expose or betray this
-trust and confident that am about to entrust in you for the benefit of
-our both families.
+Why do you keep this in place?
 
-I discovered an abandoned fund here in our bank belonging to a dead
-businessman who lost his life and entire family in a motor accident,
-I am in need of your help as a foreigner to present you as the next of
-kin and to transfer the
-sum of $19.3 million U.S dollars (nineteen.three million U.S dollars) into your
-account risk is completely %100 free.
-
-Please I will like you to keep
-this proposal as top secret and Also note that you will have 40% of
-this fund, while 60% will be for me.if you agree to this
-transaction and business with me give me your interest by sending your
-information as below.
-
-Your Full Name.
-
-Your Country.
-
-Your Age.
-
-Your Occupation.
-
-Phone Number.
-
-contact address
-
-best regards
-mr Ibrahim Idewu.
+Other than that looks OK to me. Maybe we want to add an explicit note
+that vm_ops::close cannot take mmap_sem in any form. The changelog
+should also mention that you have considered remove_vma and its previous
+no MM locking assumption. You can argue that fput is async and close
+callback shouldn't really need mmap_sem.
+-- 
+Michal Hocko
+SUSE Labs

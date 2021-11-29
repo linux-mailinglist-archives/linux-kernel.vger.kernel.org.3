@@ -2,95 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B98F9461529
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB80461533
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:35:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243205AbhK2MgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:36:23 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59650 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243051AbhK2MeU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:34:20 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4B29FB81055;
-        Mon, 29 Nov 2021 12:31:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C96C53FCB;
-        Mon, 29 Nov 2021 12:31:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638189061;
-        bh=A5Fr7Gtg0+Nz8L2Xvy3PkEpe6aQ5hQSYEHKKFzuxax4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qS1CbJf6VFbiFeigIZR00/LFpUBskLzglOZ94hm5xft994L/eA26tlyxEIkQxS0QR
-         sHJG7CZ42+mlm+GDNvNYgAvjIFCchV7Ft9tXVU2X2xIohEW8WH0p6CCqAbJFJfLHHc
-         cGP1UneET0LOZCQMKR5d+cBWWQ5P6rouOswumQqw=
-Date:   Mon, 29 Nov 2021 13:30:58 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        borntraeger@de.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com
-Subject: Re: [PATCH for 4.14-stable] s390/mm: validate VMA in PGSTE
- manipulation functions
-Message-ID: <YaTIAiR9NVQBPUBE@kroah.com>
-References: <16371715631177@kroah.com>
- <20211126171536.22963-1-david@redhat.com>
- <YaNuALgYu4OQDVXN@kroah.com>
- <7fdab1f3-abf7-1214-8d74-8cdcc6d96918@redhat.com>
+        id S242130AbhK2Mii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 07:38:38 -0500
+Received: from elvis.franken.de ([193.175.24.41]:48752 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241775AbhK2MgO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 07:36:14 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mrfq1-0005Wg-00; Mon, 29 Nov 2021 13:32:53 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 9AE69C2FD1; Mon, 29 Nov 2021 13:31:50 +0100 (CET)
+Date:   Mon, 29 Nov 2021 13:31:50 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Jason Wang <wangborong@cdjrlc.com>
+Cc:     rdunlap@infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Remove a repeated word in a comment
+Message-ID: <20211129123150.GA8232@alpha.franken.de>
+References: <20211113032552.53817-1-wangborong@cdjrlc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7fdab1f3-abf7-1214-8d74-8cdcc6d96918@redhat.com>
+In-Reply-To: <20211113032552.53817-1-wangborong@cdjrlc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 09:40:32AM +0100, David Hildenbrand wrote:
-> On 28.11.21 12:54, Greg KH wrote:
-> > On Fri, Nov 26, 2021 at 06:15:36PM +0100, David Hildenbrand wrote:
-> >> commit fe3d10024073f06f04c74b9674bd71ccc1d787cf upstream.
-> >>
-> >> We should not walk/touch page tables outside of VMA boundaries when
-> >> holding only the mmap sem in read mode. Evil user space can modify the
-> >> VMA layout just before this function runs and e.g., trigger races with
-> >> page table removal code since commit dd2283f2605e ("mm: mmap: zap pages
-> >> with read mmap_sem in munmap"). gfn_to_hva() will only translate using
-> >> KVM memory regions, but won't validate the VMA.
-> >>
-> >> Further, we should not allocate page tables outside of VMA boundaries: if
-> >> evil user space decides to map hugetlbfs to these ranges, bad things will
-> >> happen because we suddenly have PTE or PMD page tables where we
-> >> shouldn't have them.
-> >>
-> >> Similarly, we have to check if we suddenly find a hugetlbfs VMA, before
-> >> calling get_locked_pte().
-> >>
-> >> Fixes: 2d42f9477320 ("s390/kvm: Add PGSTE manipulation functions")
-> >> Signed-off-by: David Hildenbrand <david@redhat.com>
-> >> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> >> Acked-by: Heiko Carstens <hca@linux.ibm.com>
-> >> Link: https://lore.kernel.org/r/20210909162248.14969-4-david@redhat.com
-> >> Signed-off-by: Christian Borntraeger <borntraeger@de.ibm.com>
-> >> Signed-off-by: David Hildenbrand <david@redhat.com>
-> >> ---
-> >>  arch/s390/mm/pgtable.c | 13 +++++++++++++
-> >>  1 file changed, 13 insertions(+)
-> > 
-> > What about for 5.10-stable and 5.4-stable and 4.19-stable?  Will this
-> > commit work there as well?
+On Sat, Nov 13, 2021 at 11:25:52AM +0800, Jason Wang wrote:
+> The repeated word `the' in a comment is redundant, thus one
+> of them was removed from the comment.
 > 
-> Good point, I only have "FAILED: patch "[PATCH] s390/mm: validate VMA in
-> PGSTE manipulation functions" failed to apply to 4.14-stable tree" in my
-> inbox ... but maybe I accidentally deleted the others.
+> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> ---
+>  arch/mips/mm/c-octeon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/mm/c-octeon.c b/arch/mips/mm/c-octeon.c
+> index ec2ae501539a..490322b01f91 100644
+> --- a/arch/mips/mm/c-octeon.c
+> +++ b/arch/mips/mm/c-octeon.c
+> @@ -332,7 +332,7 @@ static void co_cache_error_call_notifiers(unsigned long val)
+>  }
+>  
+>  /*
+> - * Called when the the exception is recoverable
+> + * Called when the exception is recoverable
+>   */
+>  
+>  asmlinkage void cache_parity_error_octeon_recoverable(void)
+> -- 
+> 2.33.0
 
-No, odd, I did not send those out, sorry about that.
+applied to mips-next.
 
-> This commit can also be used for:
-> - 4.19-stable
-> - 5.4-stable
-> - 5.10-stable
+Thomas.
 
-Thanks, will go take this now for all of those.
-
-greg k-h
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

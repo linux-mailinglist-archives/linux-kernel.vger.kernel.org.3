@@ -2,126 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B25B3461A65
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98233461A67
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345085AbhK2O5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:57:01 -0500
-Received: from smtpcmd14161.aruba.it ([62.149.156.161]:54518 "EHLO
-        smtpcmd14161.aruba.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240851AbhK2Oy7 (ORCPT
+        id S243406AbhK2O5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:57:35 -0500
+Received: from 4.mo552.mail-out.ovh.net ([178.33.43.201]:57547 "EHLO
+        4.mo552.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242858AbhK2OzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:54:59 -0500
-Received: from [192.168.50.18] ([146.241.138.59])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id rSUYmwZPnrIRlrSUZmkupp; Sun, 28 Nov 2021 23:17:54 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1638137874; bh=aXY7K66LArue7ekBfUqC+O3Vdu3DF45DOCQggVHhyRk=;
-        h=Subject:To:From:Date:MIME-Version:Content-Type;
-        b=UWFMkiSsKQ62KY+0ZURyD6NV1IdL1jjXBcAjrqYTEE7wNQN3tR/3plBoFRl5Ymo9R
-         XdqL6804DiwhYuUrxfCjxoLtDxrlexLUjPjMzPphMcHQvejZNlErXgIocjFwb5BveM
-         uKZRBszKtpbKIn99ZaSStwtUV0M4Vn7/SaGIDfbh5TJaEPIxhTOldS1rBY0FcN9jYk
-         vy4iDf7ox+ZK7PCY0a+RqgJi1gRitzGTPBUkS90y5rQ+4tBVARx/tXovG+j5B3l3nh
-         Fb2NKuGqmbVxEcmQN2J18zlZ4+0SGUgvN0BJF64Be+wfqVL8sOov9cVBJ7itP+l8av
-         J/EPoY0WuV66w==
-Subject: Re: [PATCH v3 07/13] clk: imx: Add initial support for i.MXRT clock
- driver
-To:     Jesse Taube <mr.bossman075@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     NXP Linux Team <linux-imx@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        soc@kernel.org, Russell King - ARM Linux <linux@armlinux.org.uk>,
-        Abel Vesa <abel.vesa@nxp.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-mmc <linux-mmc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-serial@vger.kernel.org
-References: <20211125211443.1150135-1-Mr.Bossman075@gmail.com>
- <20211125211443.1150135-8-Mr.Bossman075@gmail.com>
- <CAOMZO5Dqo6c=4nGCOakMKG8fn=V1HA7-O26t3GmwWtD-FbZiPg@mail.gmail.com>
- <dae68360-456e-3db8-57ed-2287dc7cfd57@gmail.com>
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-Message-ID: <de705094-1b8c-3950-b7f5-f7150b525ea5@benettiengineering.com>
-Date:   Sun, 28 Nov 2021 23:17:50 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 29 Nov 2021 09:55:23 -0500
+X-Greylist: delayed 17970 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Nov 2021 09:55:22 EST
+Received: from mxplan5.mail.ovh.net (unknown [10.109.156.217])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 70F5120ADA;
+        Mon, 29 Nov 2021 09:52:31 +0000 (UTC)
+Received: from kaod.org (37.59.142.104) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 29 Nov
+ 2021 10:52:29 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-104R005f4bc25ac-e2d5-4f6a-8c28-ebe76ecd031f,
+                    3279756C2EB34864E332BB908A933B747C53BE44) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <ee815cd9-03f3-02f2-a269-ad79ca2af742@kaod.org>
+Date:   Mon, 29 Nov 2021 10:52:26 +0100
 MIME-Version: 1.0
-In-Reply-To: <dae68360-456e-3db8-57ed-2287dc7cfd57@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [patch 00/22] genirq/msi, PCI/MSI: Spring cleaning - Part 1
 Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <linux-hyperv@vger.kernel.org>, Paul Mackerras <paulus@samba.org>,
+        <sparclinux@vger.kernel.org>, Wei Liu <wei.liu@kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
+        <x86@kernel.org>, Christian Borntraeger <borntraeger@de.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>, <linux-pci@vger.kernel.org>,
+        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+References: <20211126222700.862407977@linutronix.de>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20211126222700.862407977@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CMAE-Envelope: MS4wfC2+WimnYT4jDoL/5Qj39vMuFzShQz7FE/Z8sP1XkxBcrbdPos5MDmBJUX4HG5hh+ebK3KAL0how8VdRfqKsNrF/aWMVS2LsH/RZ6zyMVg9un5zPZZoN
- XpWsgys9jMAvtyErhZCjCg6c2qhQ+1ryfHitGjvwSIq5/z+GPvn8Trh3JpwusaUYelmuQOw2GUitDYe0RYkp4D3mLVXw0OnHmiwx+4fe8w/7q5wJwvTomNpJ
- RvxQo74zbj9Agg42zgej+InyJTDpxrNNx/mrojuEwwl4wApu4ST1yBYJnBnay9L9MUd2JBbfZbybNuev6n+VxbA0jqan6TpaUXOZMhe8s6zXc/u8Spgbevwh
- 9ZrFmJjLHacRXAUklqpbukFqImaltYXulxze8paExwJkEn6GWfP8Ugsf9jQmusZmVhIEQd9+Ec99+fR1zFkK+QkYq6FVavA+WR9oUwBVQlDnMIAQHOZLJjvp
- otERI3O0iDAgTl5EZdtf7dN4utkZsrZpvLi8k6HhcXHI+PQzJS4Aas31z6ZtCWB3H+IFlnoEXGhgwvOA2WaMwM4E6ftEDDfx4ugg6iQy40iiIU9wRElp/BN+
- 1L2+DjRbjnQnZYFTnm6f5Bm+PYSmRi2LVrVvuLTLCRtX1gYD58LEPYbY6XKhdwVes39RaJNEhwK4dC0kSU3jWJF6qnrRDnvVPi5GYWDbzXQLqzhCD07w8Cyn
- mgrkecLsHm8q471VM2FCy03c+/h6WDPublFMtL/ySznu61+FmUMDh4MrgwBY8EOLyvbI3tDnECr0J223wqwHMpLYKCTrvfsPDv5mhiWdg7JJycF0kukdo9WS
- +d/fkpVfyZe6uh431ToarZWHxPmF3B9FAZdPXfouVHuOBzpV+Pdm/y66C7BACVeSJ7mkyNedf/uG8K5coWzFH6OSWlxKNBAiXqV1qfX6pXrwuhFO+VfyT1ph
- tK6Xf/dA4Eq5QYjFtXbrPcZUCYJ5drhXeQTIE3Sqx1sFYqrVaI6OfdJKfri3Y/VQBRVuPxC5esevDY0AEBxqnXhbd/OHAy3lNN2ed2wC2Gi7NBglCsPvYTIj
- wNSHJHBqkWZds8O5IqlT4MxLNfDNRUjkPEDCZTJ3wQ5sIsRQ6G5/LeofgvkQSHRXAcwrPTSqAiUIWl+k2ItjIeC/vfPHKzM0TR4=
+X-Originating-IP: [37.59.142.104]
+X-ClientProxiedBy: DAG4EX1.mxp5.local (172.16.2.31) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 03ae1f15-2efb-4469-b086-6ab00679dc25
+X-Ovh-Tracer-Id: 11736099157494238108
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrheelgddtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpefgtdehvdejkefhudevkeekffekleetfeeftdekudeliedujeeftdeikeffvefgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhrtghpthhtoheplhhinhhugihpphgtqdguvghvsehlihhsthhsrdhoiihlrggsshdrohhrgh
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jesse, Fabio,
-
-On 28/11/21 21:52, Jesse Taube wrote:
+On 11/27/21 02:18, Thomas Gleixner wrote:
+> The [PCI] MSI code has gained quite some warts over time. A recent
+> discussion unearthed a shortcoming: the lack of support for expanding
+> PCI/MSI-X vectors after initialization of MSI-X.
 > 
+> PCI/MSI-X has no requirement to setup all vectors when MSI-X is enabled in
+> the device. The non-used vectors have just to be masked in the vector
+> table. For PCI/MSI this is not possible because the number of vectors
+> cannot be changed after initialization.
 > 
-> On 11/28/21 15:50, Fabio Estevam wrote:
->> On Thu, Nov 25, 2021 at 6:14 PM Jesse Taube <mr.bossman075@gmail.com> wrote:
->>>
->>> From: Jesse Taube <mr.bossman075@gmail.com>
->>>
->>> This patch adds initial clock driver support for the i.MXRT series.
+> The PCI/MSI code, but also the core MSI irq domain code are built around
+> the assumption that all required vectors are installed at initialization
+> time and freed when the device is shut down by the driver.
+>
+> Supporting dynamic expansion at least for MSI-X is important for VFIO so
+> that the host side interrupts for passthrough devices can be installed on
+> demand.
+> 
+> This is the first part of a large (total 101 patches) series which
+> refactors the [PCI]MSI infrastructure to make runtime expansion of MSI-X
+> vectors possible. The last part (10 patches) provide this functionality.
+> 
+> The first part is mostly a cleanup which consolidates code, moves the PCI
+> MSI code into a separate directory and splits it up into several parts.
+> 
+> No functional change intended except for patch 2/N which changes the
+> behaviour of pci_get_vector()/affinity() to get rid of the assumption that
+> the provided index is the "index" into the descriptor list instead of using
+> it as the actual MSI[X] index as seen by the hardware. This would break
+> users of sparse allocated MSI-X entries, but non of them use these
+> functions.
+> 
+> This series is based on 5.16-rc2 and also available via git:
+> 
+>       git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v1-part-1
+> 
+> For the curious who can't wait for the next part to arrive the full series
+> is available via:
+> 
+>       git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v1-part-4
 
-Also the commit log must be modified according(Summary+body).
+After fixing the compile failures, I didn't see any regressions on
+these platforms :
 
-Thank you
--- 
-Giulio Benetti
-Benetti Engineering sas
+   PowerNV, pSeries under KVM and PowerVM, using POWER8/9 processors.
 
->>> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
->>> Suggested-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
->>> ---
->>> V1->V2:
->>> * Kconfig: Add new line
->>> * clk-imxrt.c: Remove unused const
->>> * clk-imxrt.c: Remove set parents
->>> * clk-imxrt.c: Use fsl,imxrt-anatop for anatop base address
->>> V2->V3:
->>> * Remove unused ANATOP_BASE_ADDR
->>> * Move to hw API
->>> * Add GPT's own clock
->>> * Add SEMC clocks to set muxing to CRITICAL
->>> ---
->>>    drivers/clk/imx/Kconfig     |   4 +
->>>    drivers/clk/imx/Makefile    |   1 +
->>>    drivers/clk/imx/clk-imxrt.c | 156 ++++++++++++++++++++++++++++++++++++
->>
->> Wouldn't it be better to name it clk-imxrt1050.c instead?
-> we can have multiple imxrt versions in there like the other IMX clk
-> drivers, is this okay?
->>
+Thanks,
+
+C.
+
+> Thanks,
+> 
+> 	tglx
+> ---
+>   arch/powerpc/platforms/4xx/msi.c            |  281 ------------
+>   b/Documentation/driver-api/pci/pci.rst      |    2
+>   b/arch/mips/pci/msi-octeon.c                |   32 -
+>   b/arch/powerpc/platforms/4xx/Makefile       |    1
+>   b/arch/powerpc/platforms/cell/axon_msi.c    |    2
+>   b/arch/powerpc/platforms/powernv/pci-ioda.c |    4
+>   b/arch/powerpc/platforms/pseries/msi.c      |    6
+>   b/arch/powerpc/sysdev/Kconfig               |    6
+>   b/arch/s390/pci/pci_irq.c                   |    4
+>   b/arch/sparc/kernel/pci_msi.c               |    4
+>   b/arch/x86/hyperv/irqdomain.c               |   55 --
+>   b/arch/x86/include/asm/x86_init.h           |    6
+>   b/arch/x86/include/asm/xen/hypervisor.h     |    8
+>   b/arch/x86/kernel/apic/msi.c                |    8
+>   b/arch/x86/kernel/x86_init.c                |   12
+>   b/arch/x86/pci/xen.c                        |   19
+>   b/drivers/irqchip/irq-gic-v2m.c             |    1
+>   b/drivers/irqchip/irq-gic-v3-its-pci-msi.c  |    1
+>   b/drivers/irqchip/irq-gic-v3-mbi.c          |    1
+>   b/drivers/net/wireless/ath/ath11k/pci.c     |    2
+>   b/drivers/pci/Makefile                      |    3
+>   b/drivers/pci/msi/Makefile                  |    7
+>   b/drivers/pci/msi/irqdomain.c               |  267 +++++++++++
+>   b/drivers/pci/msi/legacy.c                  |   79 +++
+>   b/drivers/pci/msi/msi.c                     |  645 ++++------------------------
+>   b/drivers/pci/msi/msi.h                     |   39 +
+>   b/drivers/pci/msi/pcidev_msi.c              |   43 +
+>   b/drivers/pci/pci-sysfs.c                   |    7
+>   b/drivers/pci/xen-pcifront.c                |    2
+>   b/include/linux/msi.h                       |  135 ++---
+>   b/include/linux/pci.h                       |    1
+>   b/kernel/irq/msi.c                          |   41 +
+>   32 files changed, 696 insertions(+), 1028 deletions(-)
+> 
 

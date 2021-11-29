@@ -2,163 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BC2461A87
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC132461A85
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245708AbhK2PCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 10:02:50 -0500
-Received: from smtpbguseast3.qq.com ([54.243.244.52]:34499 "EHLO
-        smtpbguseast3.qq.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245487AbhK2PAs (ORCPT
+        id S1347776AbhK2PCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:02:30 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:54120 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345994AbhK2PA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 10:00:48 -0500
-X-QQ-mid: bizesmtp44t1638197831tq2j9s6v
-Received: from ubu2004.mshome.net (unknown [202.96.137.248])
-        by esmtp6.qq.com (ESMTP) with 
-        id ; Mon, 29 Nov 2021 22:57:00 +0800 (CST)
-X-QQ-SSF: 01400000006000406000B00B0000000
-X-QQ-FEAT: a4niRxydalEZN1GXCGikaEDf5jDtebQZtgIEb/iYUS361d1G4a+QcDRUUH5QN
-        hU1vAsjwaQuyJM6X4VjaGHVeArYSexbobv2mYd/2va+rjVfOHYJimLg48OakPrLcoetubqZ
-        OoOGm8npurVF55oIyaped4Ktgctdn3nUF+TFxRty/byV7sXlkBmrq+4KT5QcWT9Sp8kDiwD
-        k57sn+NsvqhI4rcwBr6x+4XrOpq4gREbBU0z6tfMdLaLrVlciqqnGkNpiBbwrVYk1V6WzUi
-        tKB2+20lCjQYV3o4OjQREEu3OxPzpO8Gzn+itHbYoH62wdkGnfVJ29XhB0tzoAXnR/SQcKW
-        Q4xDeYkFqlAqUIsaoz+SK3OOaNssQ==
-X-QQ-GoodBg: 2
-From:   Yinan Zhang <zhangyinan2019@email.szu.edu.cn>
-To:     akpm@linux-foundation.org
-Cc:     seanga2@gmail.com, linux-kernel@vger.kernel.org,
-        zhangyinan2019@email.szu.edu.cn
-Subject: [PATCH] tools/vm/page_owner_sort.c: add switch between culling by stacktrace and txt
-Date:   Mon, 29 Nov 2021 22:56:58 +0800
-Message-Id: <20211129145658.2491-1-zhangyinan2019@email.szu.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 29 Nov 2021 10:00:26 -0500
+Date:   Mon, 29 Nov 2021 15:57:06 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638197828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+gAq2etfKYlF3VbW8M0eDaLMWdfwgg9cIyozwcq3RYo=;
+        b=vlUO4LMhg46q+GRVo9Zz8Xo4PRJfLZ10OFZDvGoKs1ZDyjQBsSI6zROsG9RlkYnjjkoNcV
+        PfXqs8afvDIxoCpm2F6txSI5kiGb4tpE674IrRv7v5ZkzbDYI7DlxbhXJ6GXerAiNkazsN
+        4okUipYwbPkRjdHmtC/rSE3ovu3hcwQO58mTGBn+SABP6tWeApvCGJ3RH8zCZcPaag8fsf
+        sS/Ry60VezBqjOlJeupg8rpiUpSijCY0NZ0PO7uzYx7Zqss4Z73OE61nnApw1yA5BdAq8e
+        Aky9c9RKj6dIYc809xQ38VXYqH9AWZgQ4XZd4DBd/fJOlXq9LsoNvgy9Q2hgMg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638197828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+gAq2etfKYlF3VbW8M0eDaLMWdfwgg9cIyozwcq3RYo=;
+        b=GjMvW1WgxMFz3LZdNK+o5BUlMf1UnAz1chpMCmtme3N9orA2X7encrxmhF9k4xt8uuywlD
+        J6AWcTDrDr9EjOAA==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tglx@linutronix.de, mtosatti@redhat.com, juri.lelli@redhat.com
+Subject: Re: [PATCH RT] arm64: Allow selecting KVM and PREEMPT_RT
+Message-ID: <20211129145706.rvfywpvt6sapiwy2@linutronix.de>
+References: <20211123095928.21525-1-nsaenzju@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:email.szu.edu.cn:qybgforeign:qybgforeign1
-X-QQ-Bgrelay: 1
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211123095928.21525-1-nsaenzju@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Culling by comparing stacktrace would casue loss of some
-information. For example, if there exists 2 blocks which
-have the same stacktrace and the different head info
+On 2021-11-23 10:59:28 [+0100], Nicolas Saenz Julienne wrote:
+> With 6caa5812e2d1 ("KVM: arm64: Use generic KVM xfer to guest work
+> function") all arm64 exit paths are properly equipped to handle the
+> POSIX timers' task work.
+> 
+> And with a68773bd32d9 ("arm64: Select POSIX_CPU_TIMERS_TASK_WORK") we
+> now handle the timers in thread context.
+> 
+> This allows for KVM and PREEMPT_RT to coexist, so update Kconfig to
+> reflect that.
+> 
+> Signed-off-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
 
-Page allocated via order 0, mask 0x108c48(...), pid 73696,
- ts 1578829190639010 ns, free_ts 1576583851324450 ns
- prep_new_page+0x80/0xb8
- get_page_from_freelist+0x924/0xee8
- __alloc_pages+0x138/0xc18
- alloc_pages+0x80/0xf0
- __page_cache_alloc+0x90/0xc8
+applied.
 
-Page allocated via order 0, mask 0x108c48(...), pid 61806,
- ts 1354113726046100 ns, free_ts 1354104926841400 ns
- prep_new_page+0x80/0xb8
- get_page_from_freelist+0x924/0xee8
- __alloc_pages+0x138/0xc18
- alloc_pages+0x80/0xf0
- __page_cache_alloc+0x90/0xc8
-
-After culling, it would be like this
-
-2 times, 2 pages:
-Page allocated via order 0, mask 0x108c48(...), pid 73696,
- ts 1578829190639010 ns, free_ts 1576583851324450 ns
- prep_new_page+0x80/0xb8
- get_page_from_freelist+0x924/0xee8
- __alloc_pages+0x138/0xc18
- alloc_pages+0x80/0xf0
- __page_cache_alloc+0x90/0xc8
-
-The info of second block missed. So, add -c to turn on culling
-by stacktrace. By default, it will cull by txt.
-
-Signed-off-by: Yinan Zhang <zhangyinan2019@email.szu.edu.cn>
----
- tools/vm/page_owner_sort.c | 23 ++++++++++++++++++++---
- 1 file changed, 20 insertions(+), 3 deletions(-)
-
-diff --git a/tools/vm/page_owner_sort.c b/tools/vm/page_owner_sort.c
-index 1b2acf02d3cd..492be7f752c0 100644
---- a/tools/vm/page_owner_sort.c
-+++ b/tools/vm/page_owner_sort.c
-@@ -51,6 +51,13 @@ int read_block(char *buf, int buf_size, FILE *fin)
- 	return -1; /* EOF or no space left in buf. */
- }
- 
-+static int compare_txt(const void *p1, const void *p2)
-+{
-+	const struct block_list *l1 = p1, *l2 = p2;
-+
-+	return strcmp(l1->txt, l2->txt);
-+}
-+
- static int compare_stacktrace(const void *p1, const void *p2)
- {
- 	const struct block_list *l1 = p1, *l2 = p2;
-@@ -137,12 +144,14 @@ static void usage(void)
- 		"-m	Sort by total memory.\n"
- 		"-s	Sort by the stack trace.\n"
- 		"-t	Sort by times (default).\n"
-+		"-c	cull by comparing stacktrace instead of total block.\n"
- 	);
- }
- 
- int main(int argc, char **argv)
- {
- 	int (*cmp)(const void *, const void *) = compare_num;
-+	int cull_st = 0;
- 	FILE *fin, *fout;
- 	char *buf;
- 	int ret, i, count;
-@@ -151,7 +160,7 @@ int main(int argc, char **argv)
- 	int err;
- 	int opt;
- 
--	while ((opt = getopt(argc, argv, "mst")) != -1)
-+	while ((opt = getopt(argc, argv, "mstc")) != -1)
- 		switch (opt) {
- 		case 'm':
- 			cmp = compare_page_num;
-@@ -162,6 +171,9 @@ int main(int argc, char **argv)
- 		case 't':
- 			cmp = compare_num;
- 			break;
-+		case 'c':
-+			cull_st = 1;
-+			break;
- 		default:
- 			usage();
- 			exit(1);
-@@ -209,7 +221,10 @@ int main(int argc, char **argv)
- 
- 	printf("sorting ....\n");
- 
--	qsort(list, list_size, sizeof(list[0]), compare_stacktrace);
-+	if (cull_st == 1)
-+		qsort(list, list_size, sizeof(list[0]), compare_stacktrace);
-+	else
-+		qsort(list, list_size, sizeof(list[0]), compare_txt);
- 
- 	list2 = malloc(sizeof(*list) * list_size);
- 	if (!list2) {
-@@ -219,9 +234,11 @@ int main(int argc, char **argv)
- 
- 	printf("culling\n");
- 
-+	long offset = cull_st ? &list[0].stacktrace - &list[0].txt : 0;
-+
- 	for (i = count = 0; i < list_size; i++) {
- 		if (count == 0 ||
--		    strcmp(list2[count-1].stacktrace, list[i].stacktrace) != 0) {
-+		    strcmp(*(&list2[count-1].txt+offset), *(&list[i].txt+offset)) != 0) {
- 			list2[count++] = list[i];
- 		} else {
- 			list2[count-1].num += list[i].num;
--- 
-2.23.0
-
-
-
+Sebastian

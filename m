@@ -2,116 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 285174613D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:25:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B37D94613D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238205AbhK2L2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:28:49 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:50414 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbhK2L0r (ORCPT
+        id S242616AbhK2L3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:29:16 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3676 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239790AbhK2L1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:26:47 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 8E86F212C9;
-        Mon, 29 Nov 2021 11:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638185008; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r/Fr5NxP2jCRkLtXeiXZXbWtKkV0jHF3GitFDxVGIWg=;
-        b=BzpRJa2vr9jLIWnSYSIrW8ycKc8vWG2pId4DDQaGtSKAeZSLGq+SKHboviPUK5oJamwTaO
-        nHvEJ704RXZHxIIqGB0Xfd7uEuNtbujL4bVbai2+n80W3c2uuZm6zLBnxpQP8QK2qz432V
-        UezHo2aX7Z/bDeoss0EYlq00t0Z7elk=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id BACC3A3B83;
-        Mon, 29 Nov 2021 11:23:27 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 12:23:23 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, rientjes@google.com,
-        willy@infradead.org, hannes@cmpxchg.org, guro@fb.com,
-        riel@surriel.com, minchan@kernel.org, kirill@shutemov.name,
-        aarcange@redhat.com, christian@brauner.io, hch@infradead.org,
-        oleg@redhat.com, david@redhat.com, jannh@google.com,
-        shakeelb@google.com, luto@kernel.org, christian.brauner@ubuntu.com,
-        fweimer@redhat.com, jengelh@inai.de, timmurray@google.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v2 1/2] mm: protect free_pgtables with mmap_lock write
- lock in exit_mmap
-Message-ID: <YaS4KxCSLK+02xaF@dhcp22.suse.cz>
-References: <20211124235906.14437-1-surenb@google.com>
+        Mon, 29 Nov 2021 06:27:15 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATBFdog001856;
+        Mon, 29 Nov 2021 11:23:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=uWELD1rP4wP6QD8zFTScewoO15gPNuOlLH+WwV0bYUY=;
+ b=gPkdgBb01CJhiSyYm7coWr4C9DnIzXYI24kXKvh661XHQiL3+MSUhuL//FwZ4U2NI/bC
+ Ag4k+/EAt2NamyyMxFQm2JJgsbPpeqrXAfqLbybEjliYpK/1V07ZDo1sT0IKMpiztDI9
+ IjeFCsSItZhXAWVJjQMK+RBQxoYROsQzlWIqhsyLD29gtaqcQlp+0+UAuUBArDN4ruVY
+ M+59gQVHVwzwwSdfAYm153Yi7+LriEjSLmdE0507096lUxaEGeQVNizbnWzorjsWm42C
+ S8VWF5kpuZzzohpqZLyNysXRURTzYwePrXrzitd9BbR4ZYySfmF1akuxxKvqfRjOL2h9 zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmwu5069c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 11:23:56 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1ATBNtaG002395;
+        Mon, 29 Nov 2021 11:23:55 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmwu5067p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 11:23:55 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATBIaTJ020969;
+        Mon, 29 Nov 2021 11:23:53 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06fra.de.ibm.com with ESMTP id 3ckbxjb7u5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 11:23:53 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATBNn6n15073716
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 11:23:49 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D06BFAE053;
+        Mon, 29 Nov 2021 11:23:49 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8448DAE056;
+        Mon, 29 Nov 2021 11:23:49 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 29 Nov 2021 11:23:49 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, irogers@google.com
+Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
+        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH v2] tools/perf: Fix perf test 7 Simple expression parser
+Date:   Mon, 29 Nov 2021 12:23:39 +0100
+Message-Id: <20211129112339.3003036-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211124235906.14437-1-surenb@google.com>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: o9Y9fGPS_2BhgaQ672o4IikBai3RT85c
+X-Proofpoint-GUID: nSwQyw7UN6rvdD1YYqVc00FPaidY2HBx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-29_07,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
+ phishscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111290055
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 24-11-21 15:59:05, Suren Baghdasaryan wrote:
-> oom-reaper and process_mrelease system call should protect against
-> races with exit_mmap which can destroy page tables while they
-> walk the VMA tree. oom-reaper protects from that race by setting
-> MMF_OOM_VICTIM and by relying on exit_mmap to set MMF_OOM_SKIP
-> before taking and releasing mmap_write_lock. process_mrelease has
-> to elevate mm->mm_users to prevent such race. Both oom-reaper and
-> process_mrelease hold mmap_read_lock when walking the VMA tree.
-> The locking rules and mechanisms could be simpler if exit_mmap takes
-> mmap_write_lock while executing destructive operations such as
-> free_pgtables.
-> Change exit_mmap to hold the mmap_write_lock when calling
-> free_pgtables. Operations like unmap_vmas() and unlock_range() are not
-> destructive and could run under mmap_read_lock but for simplicity we
-> take one mmap_write_lock during almost the entire operation. Note
-> also that because oom-reaper checks VM_LOCKED flag, unlock_range()
-> should not be allowed to race with it.
-> In most cases this lock should be uncontended. Previously, Kirill
-> reported ~4% regression caused by a similar change [1]. We reran the
-> same test and although the individual results are quite noisy, the
-> percentiles show lower regression with 1.6% being the worst case [2].
-> The change allows oom-reaper and process_mrelease to execute safely
-> under mmap_read_lock without worries that exit_mmap might destroy page
-> tables from under them.
-> 
-> [1] https://lore.kernel.org/all/20170725141723.ivukwhddk2voyhuc@node.shutemov.name/
-> [2] https://lore.kernel.org/all/CAJuCfpGC9-c9P40x7oy=jy5SphMcd0o0G_6U1-+JAziGKG6dGA@mail.gmail.com/
-> 
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> ---
-> changes in v2
-> - Moved mmap_write_unlock to cover remove_vma loop as well, per Matthew Wilcox
-> 
->  mm/mmap.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index bfb0ea164a90..f4e09d390a07 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -3142,25 +3142,27 @@ void exit_mmap(struct mm_struct *mm)
->  		 * to mmu_notifier_release(mm) ensures mmu notifier callbacks in
->  		 * __oom_reap_task_mm() will not block.
->  		 *
-> -		 * This needs to be done before calling munlock_vma_pages_all(),
-> +		 * This needs to be done before calling unlock_range(),
->  		 * which clears VM_LOCKED, otherwise the oom reaper cannot
->  		 * reliably test it.
->  		 */
->  		(void)__oom_reap_task_mm(mm);
->  
->  		set_bit(MMF_OOM_SKIP, &mm->flags);
+Some platforms do not have CPU die support, for example s390.
+Commit fdf1e29b6118 ("perf expr: Add metric literals for topology.")
+fails on s390:
+ # ./perf test -Fv 7
+   ...
+ # FAILED tests/expr.c:173 #num_dies >= #num_packages
+   ---- end ----
+   Simple expression parser: FAILED!
+ #
 
-Why do you keep this in place?
+Investigating this issue leads to these functions:
+ build_cpu_topology()
+   +--> has_die_topology(void)
+        {
+           struct utsname uts;
 
-Other than that looks OK to me. Maybe we want to add an explicit note
-that vm_ops::close cannot take mmap_sem in any form. The changelog
-should also mention that you have considered remove_vma and its previous
-no MM locking assumption. You can argue that fput is async and close
-callback shouldn't really need mmap_sem.
+           if (uname(&uts) < 0)
+                  return false;
+           if (strncmp(uts.machine, "x86_64", 6))
+                  return false;
+           ....
+        }
+
+which always returns false on s390. The caller build_cpu_topology()
+checks has_die_topology() return value. On false the
+the struct cpu_topology::die_cpu_list is not contructed and has zero
+entries. This leads to the failing comparison: #num_dies >= #num_packages.
+s390 of course has a positive number of packages.
+
+Fix this and check if the function build_cpu_topology() did build up
+a die_cpus_list. The number of entries in this list should be larger
+than 0. If the number of list element is zero, the die_cpus_list has
+not been created and the check in function test__expr()
+    TEST_ASSERT_VAL("#num_dies >= #num_packages", \
+		    num_dies >= num_packages)
+always fails.
+
+Output after:
+ # ./perf test -Fv 7
+  7: Simple expression parser                                        :
+  --- start ---
+  division by zero
+  syntax error
+  ---- end ----
+  Simple expression parser: Ok
+ #
+Cc: Ian Rogers <irogers@google.com>
+Fixes: fdf1e29b6118 ("perf expr: Add metric literals for topology.")
+
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+Acked-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/tests/expr.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
+index c895de481fe1..9356d90bf8db 100644
+--- a/tools/perf/tests/expr.c
++++ b/tools/perf/tests/expr.c
+@@ -169,7 +169,8 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+ 	TEST_ASSERT_VAL("#num_dies", expr__parse(&num_dies, ctx, "#num_dies") == 0);
+ 	TEST_ASSERT_VAL("#num_cores >= #num_dies", num_cores >= num_dies);
+ 	TEST_ASSERT_VAL("#num_packages", expr__parse(&num_packages, ctx, "#num_packages") == 0);
+-	TEST_ASSERT_VAL("#num_dies >= #num_packages", num_dies >= num_packages);
++	if (num_dies)
++		TEST_ASSERT_VAL("#num_dies >= #num_packages", num_dies >= num_packages);
+ 
+ 	/*
+ 	 * Source count returns the number of events aggregating in a leader
 -- 
-Michal Hocko
-SUSE Labs
+2.31.1
+

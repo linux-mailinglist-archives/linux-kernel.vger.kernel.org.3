@@ -2,149 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 155B6460F4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:24:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB901460F4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238207AbhK2H1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 02:27:52 -0500
-Received: from mail-ma1ind01olkn0188.outbound.protection.outlook.com ([104.47.100.188]:61622
-        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
+        id S239019AbhK2H2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 02:28:05 -0500
+Received: from mail-mw2nam10on2085.outbound.protection.outlook.com ([40.107.94.85]:51456
+        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231732AbhK2HZv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:25:51 -0500
+        id S236485AbhK2H0E (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 02:26:04 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nK7kfsiVAuZmMeOn1oAldYo4G24GN7Y2Pwj7WMEKICSLK6UZOC8Ue3evbpvjVhFxQbgZ0mA/6Eontjeb6sMWEHEY+CJSRdGP5qxua4gAJYEFwqZt4kBTkDRTa1RqlC+HKnPzjE5W47kceiL7npANBVzXzl/PKOo8GEIDADmtkCI0bTW68BngnyL01Cdd/38U1X6h5mL8iQ3vTY08BFBq0Kk3jHz01ZYFoivRWZXNVsqOo8fzQXCKbnnLuqjgC+2EViy2Cwf6CHjhDpFkeO0Hv5e0U+WPiYXC4arwi1Sm8xu0Sn3TaMW+W+lRr+IEk6RwthWVZXE/DUbG4A7+NJ8EuQ==
+ b=KQRwXPGPq8fKGoRjHfHxuriZY9FIm+Xp9R2YEzdyy1F9NMRwKtiTswLZ6SEuB4dzCrz79pSkFnsw+vw1cMHO2txp6AuDpt+X3nfNBj/2AIqAq60RFVD9wtdZJ1yNCPi6kIYbMf9p895ZIQiDdkJr4EdTosVrvOQDC6r4owSbogNaz6NXEiE54eOEGcMFZ+uj/18DBSWmBTBqVjRUHzdTi8ytMrAG5/vQEbDgdk+//HwVRW+n1i0YZLjjTjJ8VcJuzAU0DSvodT8cibBLOzByvSzB8/QSfbUJcbUXlS77umgO2T+ZUVfRcDsaLBS+R7bWp50ohYJnpENV62IrbK9pBg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KDekUeYhlnHAZ0XcwiJX3Q70EYZRW5X3JVk+42N1x5g=;
- b=mtui7ZLVyPAuCzDyRqzbNGq2bcAdR2dQrSy9WqrnMEMQj8Q7i67vF7ApnblkhQ2Ry3Gdwzgsg9Kq5nBFB0QLHOkiL9E01HD1sNsSHc+FYlJ8/TtSexyhbH9uScljx+8QH6UntHXkXKLjY1Ow57K4YTGNdf6wN4Gv0tOZ7HFl/halYXhtv/C1WB4zV7ggdr3DnHNRF+2Z4gYTZKAuiKi76Cjo+k0NGBoHzekMHci0DjvfBE1uhDx9+keVeVLfjUHUvAooXS0GVtnEUEjOH0/VC8qeDZAd1/4Mq3SUapz3+wq65XEEnZqyqK5Fw3Xrtr4lP3l2HTCdUi4byU21hWGolw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ bh=niIeq+HGw9zVMYr+C1jJzJMyiOqxJdyp0NqePIHky7E=;
+ b=LZlJKVGuaDqP8nONUzfrt/CtOBBuyaLqAjVBuGjZazAkSUyOTDln8ARzQn2ItVfBNjfbiAQtTnBbKLj3XZigxECRqP4atjiYreJGQiNci8nYwrOYrfOrn82ced9uHmhCSUsE6/9ZTpgCbtiGmvf/NYQXaiBVwSiARuEfES0NKkMBy9GvR5ejoHssB3zz37+g5EAAcgmxnmgY8pSCdF1/9U140MVQ1YMJWjA0m9TDw6MDZ+MeCj8ZqsCpIy4tpPuqstuSOkIyrF46XBZyTqbVV25J2rxHEHkN9jv5YXNpRnWQZqg3qq55I1JoDE9mWqpMkwKErHQrxPmCdwGOJn5QzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KDekUeYhlnHAZ0XcwiJX3Q70EYZRW5X3JVk+42N1x5g=;
- b=oIqTsG23xUuX3FEnez1Y4eMeUyvLq3AO1BptHukWTicAt+u8BJcFioPhjZ9NPFk8/x7G8qp9itBbV97sl2SypgcZfivjCLrQlHSHnAuqMedsSkNWu9Hw3XeFtkQzQpKU0mYGScdIajgh5H0VkGBoMFAHvn4CB0MT+z8BrpHOEm2qpXZH29IgZsbPVdJYNM28XWKHORBzvxmhupAbKNHFPcovxtWe8rvNWBsUlLtGMM8cw/WMO/t0HcMedO70AYu5LX/VSspRnkPMraON6AweIN2jRGPVgYLVM51EapB6hnbv+7y7LGFc97WBPuT5KUzUbMVenIWrxUUdGbYlfSw0Jg==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PNZPR01MB4494.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1::8) with
+ bh=niIeq+HGw9zVMYr+C1jJzJMyiOqxJdyp0NqePIHky7E=;
+ b=uiC/3zO0tc1xr6mRj6JAtPY1w/juh+gA+l+DRBdN20apYB9zyIjZwSg6iVgOD+RW/1NjHmDsW4/GKYbvxwB0FCDBgr38r5kVdseK30ooHeXURjjGw+6BPLvbS8NGZat+Ajl6GDzVSmqz/IWftI3kuM5SsZvwUupFwwtA9RZCMCeJEDEefj+BCXZSu4Q9RAx1SflLbTW1IgofjUA39om/olnpmg9z0pIo9URrL/EqdkJQa44FH32vlHTec+ozEj8WxS1KFjKCPyuQnGmzdU0sFQSma2AUf21T1GYp/Cro6DVHbuHd6uWK/sAULTIUc+TvfAMjTHyeSgyYuM6IwnCZJA==
+Received: from PH0PR12MB5481.namprd12.prod.outlook.com (2603:10b6:510:d4::15)
+ by PH0PR12MB5499.namprd12.prod.outlook.com (2603:10b6:510:d5::23) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
- 2021 07:22:28 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7%5]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
- 07:22:28 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-CC:     Marcel Holtmann <marcel@holtmann.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Daniel Winkler <danielwinkler@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Johan Hedberg <johan.hedberg@intel.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH 1/6] Bluetooth: add quirk disabling LE Read Transmit Power
-Thread-Topic: [PATCH 1/6] Bluetooth: add quirk disabling LE Read Transmit
- Power
-Thread-Index: AQHX5PHdg9R7tTuOZUGKQm9G6AVEOA==
-Date:   Mon, 29 Nov 2021 07:22:27 +0000
-Message-ID: <BC534C52-7FCF-4238-8933-C5706F494A11@live.com>
-References: <20211001083412.3078-1-redecorating@protonmail.com>
- <YYePw07y2DzEPSBR@kroah.com>
- <70a875d0-7162-d149-dbc1-c2f5e1a8e701@leemhuis.info>
- <20211116090128.17546-1-redecorating@protonmail.com>
- <e75bf933-9b93-89d2-d73f-f85af65093c8@leemhuis.info>
- <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com> <YZSuWHB6YCtGclLs@kroah.com>
- <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
- <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
- <20211117124717.12352-1-redecorating@protonmail.com>
- <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
- <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
- <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
- <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
-In-Reply-To: <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.21; Mon, 29 Nov
+ 2021 07:22:45 +0000
+Received: from PH0PR12MB5481.namprd12.prod.outlook.com
+ ([fe80::5ce0:ef86:a707:3c51]) by PH0PR12MB5481.namprd12.prod.outlook.com
+ ([fe80::5ce0:ef86:a707:3c51%7]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 07:22:45 +0000
+From:   Parav Pandit <parav@nvidia.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Eli Cohen <elic@nvidia.com>
+CC:     Jason Wang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        mst <mst@redhat.com>, Eric Dumazet <edumazet@google.com>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        kernel test robot <lkp@intel.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        "kbuild@lists.01.org" <kbuild@lists.01.org>
+Subject: RE: [PATCH] vdpa: Consider device id larger than 31
+Thread-Topic: [PATCH] vdpa: Consider device id larger than 31
+Thread-Index: AQHX4iei4AN/DYjfJ06NNm/PSUxsSawVG8sAgANvF4CAAY3pAIAABevA
+Date:   Mon, 29 Nov 2021 07:22:45 +0000
+Message-ID: <PH0PR12MB54813A22AA1240EE5EBEE48ADC669@PH0PR12MB5481.namprd12.prod.outlook.com>
+References: <20211125180915.649652-1-parav@nvidia.com>
+ <CACGkMEtF+kjj_vryxXAo6PqeX3Puk-XxaaQMcu4mhB1WZRXEpw@mail.gmail.com>
+ <20211128071435.GB99190@mtl-vdi-166.wap.labs.mlnx>
+ <20211129065846.GN18178@kadam>
+In-Reply-To: <20211129065846.GN18178@kadam>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [YYJnhi6fM2c3u0nOMpD1D4ZXGHeABSQzq2bOXc4+TLTlDhjwXx6l1e7ZotEQM/YN]
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
 x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 0b50db91-93ba-4369-78c6-08d9b308ffb7
-x-ms-traffictypediagnostic: PNZPR01MB4494:
+x-ms-office365-filtering-correlation-id: 1191c90a-f63a-4904-9861-08d9b30909ee
+x-ms-traffictypediagnostic: PH0PR12MB5499:
+x-microsoft-antispam-prvs: <PH0PR12MB5499CEE865DE3E6D920B423DDC669@PH0PR12MB5499.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:3276;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: diiWJqbTEfMP8/rbq3MYNNqs7WAokn6+7Q+Q7MABUAWViAIljL1Fqxn5WvOGMp713NGCHGWuNVw2uHQLTjS2KQfFx/LjgisXDAM+x8iKvb3uFsVgpNz21mwyxS7JRfn+Dv3zRm8x2f0Yp5Dypx+yJDQRh9MMHZlHQJ4cUgjPoBjXxIlbNbksSrc/f86fByoTjUed5EfGwdCqgJLO1ObMFWjspPCxVatRDbPWuF6heFN7zNm2tIH5lL0NitqNU+V15IvWNmABeMCzSGCDaOSMqxptJ+H8U9ttu41rfGZlet2IxzH+yx9/9H5dUwG06wKxwZkGOOOQ+lYAaazfgcs/tUry8BwG1z7tRWXlj6GBBulBeBO5I63/3NfwsPw6CPnRW29K4a0Qf3upJApjyRBLbsHgyfiDHdRiubyU7soTCTUCn1gXKcJu2xbTwvyqcPIcfSeSyPYtVqbqF8wLeJVDgmRMyyGjDdgtTb83eACe7qTvfBKhJB85lx/BYxXS7Y+8RVAjdi28fy+lwHpQ+FNEnPELwCuRE/KbANB4LsrVjjMixrY19NHzwj2Ua6nEIGuRGt3pK33wYLqsMM6+yG+K4A==
+x-microsoft-antispam-message-info: JUUyb1MPvVPWFtKoIgbuHFB5FwynsCpscpMA5hml8keaO78jx6n10DqO/gJm5gx8tk7WDuzY+FPucNyJWWTC/FgNP8pyTH+fOlFusADNck4ZuXNXfPrD5WMOQMeey2SC8fdAn6Nk/15sVazTV/XwlgSOJO6h13ynYP977nABwN+MqOWRDaWxGUpus2k3uAPy1VoMeadjfbBbsHSKqyvWT1mWeip/+eS+3hUjij40KUxOmJhgfWzEnEiuk9m1E/5vEgURc2MFdosWFf3F1Y1r8ZuKfD86CcbQ0lLo7FAsCXm7h239CspEb1lNudS/hunyHyHA3m6XIrGtRuf0admh6koL4OOiQg9g5fVVGpSqxxUaBAEvEJHzurWUKyKbtg+ZNCq+GAjC1nb9hcQ4VVag8teEZfRO2Pu4pLYqHj9sVnExcTsygwSww4AAOVlcCdz3IfElTeYOEggkeXKUp8V5Gu3EoTHxV0GYnEzDdi+/N3K5GocCXPTqc+x8nEauCQvvVxCf1W7rzDMgFkWuYU0+FUOavx2nv40gbvwWoZ4kY2p7m+0hUXG5x3AQ9puXNVNmqe+ovy+2NBP8L9Pb/SGzS3k3NWaNWnpqiHzFWj3DQxYDq4zHMXSLxU252TeOx8F5jJKGCAtot96jqcNdhoQHfYD3RXbC7Ds87gUEKWyBPYAIHRnfXvNDvVb0TWRz0gdelUypP56ZId4c5Ujtewkszg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB5481.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(7696005)(8936002)(86362001)(5660300002)(52536014)(110136005)(33656002)(53546011)(6506007)(38070700005)(38100700002)(71200400001)(8676002)(55016003)(508600001)(122000001)(6636002)(186003)(316002)(66476007)(64756008)(66556008)(9686003)(66446008)(83380400001)(2906002)(4326008)(26005)(54906003)(66946007)(76116006);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: D7NSkNTOEEhC1SvmZht5XyyQfos2lbusGqS5lDMS/4fFq5ApQkmeHa5wG56UhWO6+bYXu7n1454uCFVYeSCyUjfEG3bLxtXcFtoq+iJmXjnlw6oWgndJRkKBOpececLxilpVXFAiZMLpy9u2wtydISNwEUI6uO/TSrqt5FybeZAwT6tSXtd8ov/MIJi33XrD0SIz6XKjxz8cnhkhmh4zmLYB7L2iH1Yr63BjaNuupfYG16I5qHfDzEOamtVdvyt9CCf6mJvsQaeAcx+08NgtnaA47kQdXy4FZ0KR1Eit54LTqtu/RKMHlg6GT8jhLuLXjS7Ifev0bd5j1mz6mTIaU4JjEGk8NrrlaXxu9AG6RWrWrPHTqsfTPL0Cm3mBVrPJR3alYzd8I8uXtv58vsOpXpT7gPI6gaPtJh/oFBqUMKvzjPuFURL+NerjB0OwW9VrugH1oWgrowE86stLMxU27GnZNhv8xYi+7q5omBBIsnYdQiBaTqqkRk5w9HfxD013qk5KbWZdQiKdnZsEWTg7uu0ycQ4eASyn1MvxQuC19bgZhxUcKUvlcnKbOTlpMtrDCBkz3EwKsfbvFbAz0/bs+ebqDgXAxtqVc65Nbz+aT+CoLcDvs3YYsQGS5N2pZPJffKyuUL+xRWWTPabPd00tJFQwuVzqyCc1yFFI+d5AA+d0CB0RZf/10VSxozBHrUXLl2/+yJOxC2t/8Oh72kgf5xmFgr0AFQYarG3IFTgAvjGsiMyJEFq0YsP8TDWvi91Q5L7YKvNzEPqtn2fMhzfjFw==
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0BSVg95a/FO/zqEm/Z3sTRaXbKEG5izqMMxO+QRi1V0swQYcVlIzhNpGLMS1?=
+ =?us-ascii?Q?6Mptf+qzZOwbbWZ5sJ6vVcHcWyentnmf99xjqYHND8riZa/34TsaeqInc9sW?=
+ =?us-ascii?Q?DxpoKHTj+foyCatQSUdHm0TZf35Tvhi56wk28ZqN9zlObL1Nm3CwG1F/kLf1?=
+ =?us-ascii?Q?6KcVGvyMbDZtMZhPKYPLefLH6LxS5wP+Bt5qJZQhKTzMhS2y290hB8yHhOro?=
+ =?us-ascii?Q?7vdV3MFJINHUXMqF8w6A9tnvYVBv/fkliYMn8aETgPw60zc9UWtIidJF0tvk?=
+ =?us-ascii?Q?kmO6DDahta5DE5rwvQlDNhyOygTsYZn2aKahzY376u8I2OyzwAhxPvFH1f/Q?=
+ =?us-ascii?Q?Vyx1BaW5FEeJhwumSZD3pqJAutRRPnxQPM1kKwJ5CeZQonZqb2oQtpRr1kfW?=
+ =?us-ascii?Q?CH3foungw7Vjz3NrT8esQ437kf5TpWydoFVyvVmQkk84DMFbdMIBKT5qkPMA?=
+ =?us-ascii?Q?MRrhf3n35UfNri7cVVM/UUBcSIGCs3yAmpfsf8lJflv0uvj2amPpgkUtl3TK?=
+ =?us-ascii?Q?e6LmdrRaps3vFLFXrZ5gE1gCeNdbS3yzqNTy1IT3rjrmux88ZtYJF7+RX86X?=
+ =?us-ascii?Q?tRcEHgsyztM1sBYYXKAxKjLh9D+MnGhuPXYiMX21/xRdh1+gfJnAAGaWecGR?=
+ =?us-ascii?Q?RDqi4jlAG+P68M8z1KSEhllD5T0m9zkI/E3qHygxr/ouNsoVfTWhxTyIh54A?=
+ =?us-ascii?Q?BLOwI6Hwny5fGp2tzT2LtfHwdfWuI+AtTG0Th1K01iCbD/rKYIty2hLuVv4u?=
+ =?us-ascii?Q?GtR4yAL1dskprwG/i/x6/5RfG1LesQ1e2vK2mLIZn5zJKlb0S5FSiVRXYe/N?=
+ =?us-ascii?Q?OqWryA1ApdkawgcCz5s1bz1+F7XjvkpgjzSabP2KBFfU9JZVuXyEBWVY4ZHM?=
+ =?us-ascii?Q?Ndu9p6qMVlab8jcFE8JhXQtXxp6hHx8XaHk+t3XRdMgEm6oZtJICEfiy2K7A?=
+ =?us-ascii?Q?Krnn08L1zZkeSUlu49JF94Ibm/uaE/R7dCqEKfwFDwzCVq9bczHGZTp/Cqsb?=
+ =?us-ascii?Q?eQ6hUjl/9EtVJtP9Z0gjizF8nmzYNg0/rw7oPtvACch1jBk7QCkgF0frC483?=
+ =?us-ascii?Q?YIVqJkGVIH3smyBmLgNLE/yKSy7nrvRiOSD10i4Ga03qJkxQis1uSD2RuwrW?=
+ =?us-ascii?Q?/0zht1QbnEQ04U2zdn+wim6aWZMOJsV0DkBy+HnJ+Rgd1bpGBSUlLxC4Kz75?=
+ =?us-ascii?Q?77daCdbYY/zVimaA3eiKzc2pUakenYNiQ0dNGp0pyZoAI4xBU+2WWwux5scn?=
+ =?us-ascii?Q?6UyD7ZubPfD2UJFrJQ+Z2NKhXjHgmpFFLz7O18zI/Wu3vH7s5AxJ+83apW86?=
+ =?us-ascii?Q?ClkHlJpZpBHltrVHxq+kftwsnbGGrp5F/IrKEUtBu02deQ2N1oEMcyYerP//?=
+ =?us-ascii?Q?hBVdPYfR+XochcAQP6wytQPrQC879JLNov8yKxWo/1BXEBK1Pe74VvkkMEKT?=
+ =?us-ascii?Q?xNFvYm9uCdyGNraYUmrAB8qwVZXQe/zYn/DP/6ByOXhcblVgNqxfut8f630r?=
+ =?us-ascii?Q?2fP2aFYPVKNyOXdoQrqSRENjA60Bvhqc1NzbrpUpNuT+ysyJvpzEUeawT3Z+?=
+ =?us-ascii?Q?ogpzO5SHLPMl7rqTal3mEA2Y1pAE/a+Xx+nUW5tYFQVCray8zg+3t5z14gNW?=
+ =?us-ascii?Q?Ug=3D=3D?=
 Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D6BE5728506AFB46B47747E3B7901F1F@INDPRD01.PROD.OUTLOOK.COM>
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-a1a1a.templateTenant
+X-OriginatorOrg: Nvidia.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b50db91-93ba-4369-78c6-08d9b308ffb7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 07:22:27.8212
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB5481.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1191c90a-f63a-4904-9861-08d9b30909ee
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 07:22:45.1886
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB4494
+X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GRqZJ560FiYjHG6iFBhX3EeBFdY3QsJvJXShaTG3A7XgD/wK7VSugbcXHm29ZiEdUW8cyKAcgN3RWLL2pjkmAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5499
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <redecorating@protonmail.com>
 
-Some devices have a bug causing them to not work if they query LE tx power =
-on startup. Thus we add a quirk in order to not query it and default min/ma=
-x tx power values to HCI_TX_POWER_INVALID.
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
-Tested-by: Aditya Garg <gargaditya08@live.com>
----
- include/net/bluetooth/hci.h | 9 +++++++++
- net/bluetooth/hci_core.c    | 3 ++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-index 63065bc01b766c..383342efcdc464 100644
---- a/include/net/bluetooth/hci.h
-+++ b/include/net/bluetooth/hci.h
-@@ -246,6 +246,15 @@ enum {
- 	 * HCI after resume.
- 	 */
- 	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
-+
-+	/*
-+	 * When this quirk is set, LE tx power is not queried on startup
-+	 * and the min/max tx power values default to HCI_TX_POWER_INVALID.
-+	 *
-+	 * This quirk can be set before hci_register_dev is called or
-+	 * during the hdev->setup vendor callback.
-+	 */
-+	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
- };
-=20
- /* HCI device flags */
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 8d33aa64846b1c..434c6878fe9640 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -619,7 +619,8 @@ static int hci_init3_req(struct hci_request *req, unsig=
-ned long opt)
- 			hci_req_add(req, HCI_OP_LE_READ_ADV_TX_POWER, 0, NULL);
- 		}
-=20
--		if (hdev->commands[38] & 0x80) {
-+		if (hdev->commands[38] & 0x80 &&
-+		!test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks)) {
- 			/* Read LE Min/Max Tx Power*/
- 			hci_req_add(req, HCI_OP_LE_READ_TRANSMIT_POWER,
- 				    0, NULL);
-
+> From: Dan Carpenter <dan.carpenter@oracle.com>
+> Sent: Monday, November 29, 2021 12:29 PM
+>=20
+> On Sun, Nov 28, 2021 at 09:14:35AM +0200, Eli Cohen wrote:
+> > On Fri, Nov 26, 2021 at 10:48:12AM +0800, Jason Wang wrote:
+> > > On Fri, Nov 26, 2021 at 2:09 AM Parav Pandit <parav@nvidia.com> wrote=
+:
+> > > >
+> > > > virtio device id value can be more than 31. Hence, use BIT_ULL in
+> > > > assignment.
+> > > >
+> > > > Fixes: 33b347503f01 ("vdpa: Define vdpa mgmt device, ops and a
+> > > > netlink interface")
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> > > > Signed-off-by: Parav Pandit <parav@nvidia.com>
+> > >
+> > > Acked-by: Jason Wang <jasowang@redhat.com>
+> > >
+> > > > ---
+> > > >  drivers/vdpa/vdpa.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c index
+> > > > 7332a74a4b00..e91c71aeeddf 100644
+> > > > --- a/drivers/vdpa/vdpa.c
+> > > > +++ b/drivers/vdpa/vdpa.c
+> > > > @@ -404,7 +404,7 @@ static int vdpa_mgmtdev_fill(const struct
+> vdpa_mgmt_dev *mdev, struct sk_buff *m
+> > > >                 goto msg_err;
+> > > >
+> > > >         while (mdev->id_table[i].device) {
+> > > > -               supported_classes |=3D BIT(mdev->id_table[i].device=
+);
+> > > > +               supported_classes |=3D
+> > > > + BIT_ULL(mdev->id_table[i].device);
+> > > >                 i++;
+> > > >         }
+> > > >
+> >
+> > type of mdev->id_table[i].device is __u32 so in theory you're limited
+> > to device ID's up to 63.
+>=20
+> A u32 can fit numbers up to 4 million?  These .device numbers are normall=
+y
+> hardcoded defines listed in usr/include/linux/virtio_ids.h
+>=20
+> But sometimes they're not like in vp_modern_probe() which does:
+>=20
+> 	mdev->id.device =3D pci_dev->device - 0x1040;
+>=20
+> I don't know if an assert is really worth it, considering how almost all =
+of them
+> are hardcoded.  Also if we do want an assert maybe there is a better plac=
+e to
+> put it?
+I am changing above fix to report device id only upto 63.
+Others higher values (which are not part of the current spec) will be ignor=
+ed.
+There is no need for assert for any undefined value anyway.

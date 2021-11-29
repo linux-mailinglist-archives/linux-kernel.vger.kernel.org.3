@@ -2,297 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6D2461010
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78F8460FFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347734AbhK2I2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 03:28:31 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:38972 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243362AbhK2I0a (ORCPT
+        id S243397AbhK2I14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 03:27:56 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:14991 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238618AbhK2IZy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 03:26:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638174193; x=1669710193;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=lus7t+7RnG6811oacMwIqPUtLL3I3xh8wAWlySsjTu0=;
-  b=aBGOhwwh0IWZPnVHB4QPF9ly62To0q2krnRML3tU6W884Ns5K7onB3Dz
-   1WcRwftct2HupvcW8ezeX3mJh8+dDK0TJmFARUJG9GFoTlWuicsuSB0Nr
-   4Eg1E+UBebDj0npr2UwaYMTwPZvUQu6AojXgsOLz9ZeKv52DfFlKWaIlj
-   M=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Nov 2021 00:23:11 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 00:23:11 -0800
-Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 29 Nov 2021 00:23:10 -0800
-Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Mon, 29 Nov 2021 00:23:07 -0800
-From:   Fenglin Wu <quic_fenglinw@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Fenglin Wu <quic_fenglinw@quicinc.com>,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        <devicetree@vger.kernel.org>
-CC:     <collinsd@codeaurora.org>, <subbaram@codeaurora.org>
-Subject: [PATCH v3 10/10] dt-bindings: convert qcom,spmi-pmic-arb binding to YAML format
-Date:   Mon, 29 Nov 2021 16:22:17 +0800
-Message-ID: <1638174137-23290-11-git-send-email-quic_fenglinw@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1638174137-23290-1-git-send-email-quic_fenglinw@quicinc.com>
-References: <1638174137-23290-1-git-send-email-quic_fenglinw@quicinc.com>
+        Mon, 29 Nov 2021 03:25:54 -0500
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J2dYt5T7tzZdKc;
+        Mon, 29 Nov 2021 16:19:46 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 29 Nov 2021 16:22:25 +0800
+CC:     <yangyicong@hisilicon.com>, <zhangshaokun@hisilicon.com>,
+        <liuqi115@huawei.com>, <linuxarm@huawei.com>,
+        <prime.zeng@huawei.com>
+Subject: Re: [PATCH v2 2/6] hwtracing: Add trace function support for
+ HiSilicon PCIe Tune and Trace device
+To:     Robin Murphy <robin.murphy@arm.com>, <gregkh@linuxfoundation.org>,
+        <helgaas@kernel.org>, <alexander.shishkin@linux.intel.com>,
+        <lorenzo.pieralisi@arm.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>, <mathieu.poirier@linaro.org>,
+        <suzuki.poulose@arm.com>, <mike.leach@linaro.org>,
+        <leo.yan@linaro.org>, <jonathan.cameron@huawei.com>,
+        <daniel.thompson@linaro.org>, <joro@8bytes.org>,
+        <john.garry@huawei.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <coresight@lists.linaro.org>, <linux-pci@vger.kernel.org>,
+        <linux-perf-users@vger.kernel.org>,
+        <iommu@lists.linux-foundation.org>
+References: <20211116090625.53702-1-yangyicong@hisilicon.com>
+ <20211116090625.53702-3-yangyicong@hisilicon.com>
+ <0b67745c-13dd-1fea-1b8b-d55212bad232@arm.com>
+ <3644ad6e-d800-c84b-9d62-6dda8462450f@hisilicon.com>
+ <e7d4afb7-e4e4-e581-872b-2477850ad8da@hisilicon.com>
+ <38bfa372-54c8-2e81-adab-ca24051a0fe6@arm.com>
+From:   Yicong Yang <yangyicong@hisilicon.com>
+Message-ID: <288856a6-d1eb-d4cc-f3ca-0134b7e4d1dc@hisilicon.com>
+Date:   Mon, 29 Nov 2021 16:22:25 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+In-Reply-To: <38bfa372-54c8-2e81-adab-ca24051a0fe6@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the SPMI PMIC arbiter documentation to JSON/yaml. While at it,
-update SPMI bus "reg" items constraint for SPMI PMIC arbiter to carry
-it and update it with a smaller range.
+On 2021/11/25 23:49, Robin Murphy wrote:
+> On 2021-11-18 09:01, Yicong Yang via iommu wrote:
+>> Hi Robin,
+>>
+>> On 2021/11/16 19:37, Yicong Yang wrote:
+>>> On 2021/11/16 18:56, Robin Murphy wrote:
+>>>> On 2021-11-16 09:06, Yicong Yang via iommu wrote:
+>>>> [...]
+>>>>> +/*
+>>>>> + * Get RMR address if provided by the firmware.
+>>>>> + * Return 0 if the IOMMU doesn't present or the policy of the
+>>>>> + * IOMMU domain is passthrough or we get a usable RMR region.
+>>>>> + * Otherwise a negative value is returned.
+>>>>> + */
+>>>>> +static int hisi_ptt_get_rmr(struct hisi_ptt *hisi_ptt)
+>>>>> +{
+>>>>> +    struct pci_dev *pdev = hisi_ptt->pdev;
+>>>>> +    struct iommu_domain *iommu_domain;
+>>>>> +    struct iommu_resv_region *region;
+>>>>> +    LIST_HEAD(list);
+>>>>> +
+>>>>> +    /*
+>>>>> +     * Use direct DMA if IOMMU does not present or the policy of the
+>>>>> +     * IOMMU domain is passthrough.
+>>>>> +     */
+>>>>> +    iommu_domain = iommu_get_domain_for_dev(&pdev->dev);
+>>>>> +    if (!iommu_domain || iommu_domain->type == IOMMU_DOMAIN_IDENTITY)
+>>>>> +        return 0;
+>>>>> +
+>>>>> +    iommu_get_resv_regions(&pdev->dev, &list);
+>>>>> +    list_for_each_entry(region, &list, list)
+>>>>> +        if (region->type == IOMMU_RESV_DIRECT &&
+>>>>> +            region->length >= HISI_PTT_TRACE_BUFFER_SIZE) {
+>>>>> +            hisi_ptt->trace_ctrl.has_rmr = true;
+>>>>> +            hisi_ptt->trace_ctrl.rmr_addr = region->start;
+>>>>> +            hisi_ptt->trace_ctrl.rmr_length = region->length;
+>>>>> +            break;
+>>>>> +        }
+>>>>> +
+>>>>> +    iommu_put_resv_regions(&pdev->dev, &list);
+>>>>> +    return hisi_ptt->trace_ctrl.has_rmr ? 0 : -ENOMEM;
+>>>>> +}
+>>>>
+>>>> No.
+>>>>
+>>>> The whole point of RMRs is for devices that are already configured to access the given address range in a manner beyond the kernel's control. If you can do this, it proves that you should not have an RMR in the first place.
+>>>>
+>>>> The notion of a kernel driver explicitly configuring its device to DMA into any random RMR that looks big enough is so egregiously wrong that I'm almost lost for words...
+>>>>
+>>>
+>>> our bios will reserve such a region and reported it through iort. the device will write to the region and in the driver we need to access the region
+>>> to get the traced data. the region is reserved exclusively and will not be accessed by kernel or other devices.
+>>>
+>>> is it ok to let bios configure the address to the device and from CPU side we just read it?
+>>>
+>>
+>> Any suggestion?  Is this still an issue you concern if we move the configuration of the device address to BIOS and just read from the CPU side?
+> 
+> If the firmware configures the device so that it's actively tracing and writing out to memory while the kernel boots, then that is a valid reason to have an RMR. However what you're doing in the driver is still complete nonsense. As far as I can follow, the way it's working is this:
+> 
+> - At probe time, the initial state of the hardware is entirely ignored. If it *is* already active, there appears to be a fun chance of crashing if TRACE_INT_MASK is clear and an interrupt happens to fire before anyone has got round to calling perf_aux_output_begin() to make trace_ctrl.handle.rb non-NULL.
+> 
+> - Later, once the user starts a tracing session, a buffer is set up *either* as a completely normal DMA allocation, or by memremap()ing some random IOVA carveout which may or may not be whatever memory the firmware was tracing to.
+> 
+> - The hardware is then reset and completely reprogrammed to use the new buffer, again without any consideration of its previous state (other than possibly timing out and failing if it's already running and that means it never goes idle).
+> 
+> Therefore the driver does not seem to respect any prior configuration of the device by firmware, does not seem to expect it to be running at boot time, does not seem to have any way to preserve and export any trace data captured in an RMR if it *was* running at boot time, and thus without loss of generality could simply use the dma_alloc_coherent() path all the time. Am I missing anything?
+> 
 
-Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
----
- .../bindings/spmi/qcom,spmi-pmic-arb.txt           |  67 -----------
- .../bindings/spmi/qcom,spmi-pmic-arb.yaml          | 128 +++++++++++++++++++++
- Documentation/devicetree/bindings/spmi/spmi.yaml   |   3 +-
- 3 files changed, 130 insertions(+), 68 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
- create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+Thanks for the further explanation and I think I understand your concerns more clearer.
 
-diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
-deleted file mode 100644
-index 6332507..0000000
---- a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
-+++ /dev/null
-@@ -1,67 +0,0 @@
--Qualcomm SPMI Controller (PMIC Arbiter)
--
--The SPMI PMIC Arbiter is found on Snapdragon chipsets.  It is an SPMI
--controller with wrapping arbitration logic to allow for multiple on-chip
--devices to control a single SPMI master.
--
--The PMIC Arbiter can also act as an interrupt controller, providing interrupts
--to slave devices.
--
--See Documentation/devicetree/bindings/spmi/spmi.yaml for the generic SPMI
--controller binding requirements for child nodes.
--
--See Documentation/devicetree/bindings/interrupt-controller/interrupts.txt for
--generic interrupt controller binding documentation.
--
--Required properties:
--- compatible : should be "qcom,spmi-pmic-arb".
--- reg-names  : must contain:
--     "core" - core registers
--     "intr" - interrupt controller registers
--     "cnfg" - configuration registers
--   Registers used only for V2 PMIC Arbiter:
--     "chnls"  - tx-channel per virtual slave registers.
--     "obsrvr" - rx-channel (called observer) per virtual slave registers.
--
--- reg : address + size pairs describing the PMIC arb register sets; order must
--        correspond with the order of entries in reg-names
--- #address-cells : must be set to 2
--- #size-cells : must be set to 0
--- qcom,ee : indicates the active Execution Environment identifier (0-5)
--- qcom,channel : which of the PMIC Arb provided channels to use for accesses (0-5)
--
--Optional properties:
--- interrupts : interrupt list for the PMIC Arb controller, must contain a
--               single interrupt entry for the peripheral interrupt
--- interrupt-names : corresponding interrupt names for the interrupts
--                    listed in the 'interrupts' property, must contain:
--     "periph_irq" - summary interrupt for PMIC peripherals
--- interrupt-controller : boolean indicator that the PMIC arbiter is an interrupt controller
--- #interrupt-cells :  must be set to 4. Interrupts are specified as a 4-tuple:
--    cell 1: slave ID for the requested interrupt (0-15)
--    cell 2: peripheral ID for requested interrupt (0-255)
--    cell 3: the requested peripheral interrupt (0-7)
--    cell 4: interrupt flags indicating level-sense information, as defined in
--            dt-bindings/interrupt-controller/irq.h
--
--Example:
--
--	spmi {
--		compatible = "qcom,spmi-pmic-arb";
--		reg-names = "core", "intr", "cnfg";
--		reg = <0xfc4cf000 0x1000>,
--		      <0xfc4cb000 0x1000>,
--		      <0xfc4ca000 0x1000>;
--
--		interrupt-names = "periph_irq";
--		interrupts = <0 190 0>;
--
--		qcom,ee = <0>;
--		qcom,channel = <0>;
--
--		#address-cells = <2>;
--		#size-cells = <0>;
--
--		interrupt-controller;
--		#interrupt-cells = <4>;
--	};
-diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-new file mode 100644
-index 0000000..be23e47
---- /dev/null
-+++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-@@ -0,0 +1,128 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/spmi/qcom,spmi-pmic-arb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm SPMI PMIC Arbiter
-+
-+maintainers:
-+  - Fenglin Wu <quic_fenglinw@quicinc.com>
-+  - Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
-+
-+description: |
-+  The SPMI PMIC Arbiter is found on Snapdragon chipsets. It is an SPMI
-+  controller with wrapping arbitration logic to allow for multiple
-+  on-chip devices to control a single SPMI master.
-+
-+  The PMIC Arbiter can also act as an interrupt controller, providing
-+  interrupts to slave devices.
-+
-+  See Documentation/devicetree/bindings/spmi/spmi.yaml for the generic
-+  SPMI controller binding requirements for child nodes.
-+
-+allOf:
-+  - $ref: spmi.yaml#
-+
-+properties:
-+  $nodename:
-+    pattern: "^spmi@.*"
-+
-+  compatible:
-+    const: qcom,spmi-pmic-arb
-+
-+  reg-names:
-+    oneOf:
-+      - items:
-+        - const: core
-+        - const: intr
-+        - const: cnfg
-+      - items:
-+        - const: core
-+        - const: intr
-+        - const: cnfg
-+        - const: chnls
-+        - const: obsrvr
-+
-+  reg:
-+    minItems: 3
-+    maxItems: 5
-+    description: |
-+      Specifies base physical address and size of the registers in SPMI PMIC
-+      Arbiter HW module, with the following order.
-+        - SPMI PMIC arbiter core registers (core)
-+        - SPMI PMIC arbiter interrupt controller registers (intr)
-+        - SPMI PMIC arbiter configuration registers (cnfg)
-+        - SPMI PMIC arbiter tx-channel per virtual slave registers (chnls)
-+        - SPMI PMIC arbiter rx-channel per virtual slave registers (obsrvr).
-+      Register for "chnls" and "obsrvr" are only applicable for PMIC arbiter
-+      with HW version greater than V2.
-+
-+  "#address-cells":
-+    const: 2
-+
-+  "#size-cells":
-+    const: 0
-+
-+  interrupts:
-+    description: The summary interrupt for the PMIC Arb controller.
-+    maxItems: 1
-+
-+  interrupt-names:
-+    const: periph_irq
-+
-+  interrupt-controller: true
-+
-+  "#interrupt-cells":
-+    const: 4
-+    description: |
-+      Specifies the number of cells needed to encode any interrupt source.
-+      The 1st cell is the slave ID for the requested interrupt, its valid
-+      range is [0-15].
-+      The 2nd cell is the  peripheral ID for requested interrupt, its valid
-+      range is [0-255].
-+      The 3rd cell is the requested peripheral interrupt, its valid range
-+      is [0-7].
-+      The 4th cell is interrupt flags indicating level-sense information,
-+      as defined in dt-bindings/interrupt-controller/irq.h
-+
-+  qcom,ee:
-+    description: the active Execution Environment identifier
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [0, 1, 2, 3, 4, 5]
-+
-+  qcom,channel:
-+    description: which of the PMIC Arbiter provided channels to use for accesses
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    enum: [0, 1, 2, 3, 4, 5]
-+
-+required:
-+  - compatible
-+  - reg-names
-+  - reg
-+  - "#address-cells"
-+  - "#size-cells"
-+  - qcom,ee
-+  - qcom,channel
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    spmi@fc4cf000 {
-+          compatible = "qcom,spmi-pmic-arb";
-+          reg-names = "core", "intr", "cnfg";
-+          reg = <0xfc4cf000 0x1000>,
-+                <0xfc4cb000 0x1000>,
-+                <0xfc4ca000 0x1000>;
-+          interrupt-names = "periph_irq";
-+          interrupts = <0 190 0>;
-+          interrupt-controller;
-+          #interrupt-cells = <4>;
-+
-+          qcom,ee = <0>;
-+          qcom,channel = <0>;
-+
-+          #address-cells = <2>;
-+          #size-cells = <0>;
-+    };
-diff --git a/Documentation/devicetree/bindings/spmi/spmi.yaml b/Documentation/devicetree/bindings/spmi/spmi.yaml
-index 1d243fae..d7d9345 100644
---- a/Documentation/devicetree/bindings/spmi/spmi.yaml
-+++ b/Documentation/devicetree/bindings/spmi/spmi.yaml
-@@ -25,7 +25,8 @@ properties:
-     pattern: "^spmi@.*"
- 
-   reg:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 5
- 
-   "#address-cells":
-     const: 2
--- 
-2.7.4
+The trace is not supposed to begin by the firmware at boot time. Due to some hardware restriction, the device cannot trace with non-identical mapping.
+So we'd like to use RMR to make the device work when the dma mapping is non-identical. Thus we check here to decide whether to use RMR or not: if the iommu
+is not presented or in the passthrough mode, we can use direct DMA by dma_alloc_coherent(); if the iommu is present and the mode is not passthrough, we try
+to retrieve RMR or we fail the probe. The firmware is expected to reserve a range of memory and reports it to the driver and is not expected to configure
+the trace and do boot time tracing.
+
+> As things stand, RMRs are not yet supported upstream (FYI we're still working on fixing the spec...), so the code above is at best dead, and at worst actively wrong. Furthermore, if the expected usage model *is* that the kernel driver completely resets and reprograms the hardware, then even if there is an RMR for boot-time tracing I would rather expect it to be flagged as remappable, and thus potentially end up as an IOMMU_RESV_DIRECT_RELAXABLE reservation which you wouldn't match anyway.
+> 
+
+Yes the firmware is not expected to start the trace. Will change the desired flag to IOMMU_RESV_DIRECT_RELAXABLE and have a test.
+
+> And after all that, if you really do have a genuine need to respect and preserve prior firmware configuration of the device, then I would surely expect to see the driver actually doing exactly that. Presumably: at probe time, look at TRACE_CTRL; if the device is already configured, read out that configuration - especially including TRACE_ADDR_* - and make sure to reuse it. Not go off on a tangent blindly poking into internal IOMMU API abstractions in the vain hope that the first thing you find happens to be sort-of-related to the information that you actually care about.
+> 
+
+Yes, we do need RMR to make the device work at situation where the mapping is non-identical.
+
+We're certain that the bios won't start and configure the trace in this device's usage, is it still necessary to make
+firmware configure the TRACE_ADDR_* to the device?
+
+As suggested, I think I'll need to modify the RMR codes like
+
+- check TRACE_CTRL, and stop it if it's started. (won't happen but check for sanity)
+- if smmu is not presented, use direct DMA
+- try to retrieve RMR address with flag IOMMU_RESV_DIRECT_RELAXABLE , if presented set hisi_ptt->has_rmr. in this case we won't use direct DMA
+- check if the TRACE_ADDR_* has been configured. if so don't reconfigure it when trace
+- if no rmr but smmu works in passthrough mode, use direct DMA
+- otherwise fails the probe
+
+If I miss something please point it out.
+
+Thanks,
+Yicong
+
+
+
+
+
 

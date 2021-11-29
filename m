@@ -2,166 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35556461131
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:35:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EFD4610FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:19:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244957AbhK2Jiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 04:38:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231544AbhK2Jgu (ORCPT
+        id S243993AbhK2JXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 04:23:08 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:54376 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242850AbhK2JVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:36:50 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD2AC06137C;
-        Mon, 29 Nov 2021 01:18:18 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id a11so16342449ilj.6;
-        Mon, 29 Nov 2021 01:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
-         :subject:to:cc;
-        bh=SqMBvNhyCqzRjhWKuJ4mMsS2WmlVHNR8XpgmOXAnNQk=;
-        b=oHko/lsWrXd6S8QAAKvjducfTT+/fEue6gjqUIdkLyFf794yYvR+rb8p8M0yjVKOuu
-         ipq93m7/w2yZ8fTsrh+M+AeNLeibSMNr8aTujy8keYfHxS9nQHG7RrbyHqyk7GXnFNZN
-         8VbgV7DwfMIN498KYUl2P7PI/uIDsnIhf/zVlZeihatxaDK+3IjMATq02Hk4wALVm8us
-         6H+1CZ/w9iCUIEyaXiMnHbuyJa6dh2a0V2WUayzGj9MhT+uqGf5nQhTkEVv0Y5l5RkIM
-         eER/au6wNmM0Y4EXtEJYrHsq5DCVxN7fn/f2MpyspEQSakSLZ487gpt4HRrQ5KNSMJcB
-         nDOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc;
-        bh=SqMBvNhyCqzRjhWKuJ4mMsS2WmlVHNR8XpgmOXAnNQk=;
-        b=qCV5JnX2vQCVjNJtIUPeTeJceedSvTdve4dSrj4DnADFJvvYbTocoz3L9fObaIfhYF
-         4f1Vs9gN4nVh4ym/eVV1aTQd9aLgdPqhXjtyL+oKIuZHCoE7DgsKNJRwGzQ8Nj978o8Q
-         y+d9QkqMExiJDVaSYSs6sUFvYpzTdkafDhuwwk4l4Q7OiAgfS1RhBDhW7EfpstbJXgSv
-         tsGGtmJW2TqWnJEpenCVNVraI24l37PVP+TuUoP8US1J7ecNVgpa0SumOkHC6/WNsHAY
-         G9337UxQVi3J8jA2t9ZgQlEz2000e5CCj6ZuJufa+muERrO3RajdzBBiLS655uPWjt5t
-         AGaA==
-X-Gm-Message-State: AOAM531S693uYu4UlA1MOJ+uiBSUMiCKxIs8GiZQKBwfyFluqLWMpu2P
-        E21yqCSSR8sXjgq6HX7nwna5yBeJ8HAJDVy6KUw=
-X-Google-Smtp-Source: ABdhPJxKy85jr+4OTA+lFMU8Ng/qSVe5OOdGUATyeprda6Cf+1J2wTAtbQe48xFacvJbTpB0zUAeraH0E4yhnmsbv0E=
-X-Received: by 2002:a05:6e02:180d:: with SMTP id a13mr19116261ilv.1.1638177498304;
- Mon, 29 Nov 2021 01:18:18 -0800 (PST)
+        Mon, 29 Nov 2021 04:21:07 -0500
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AT8lIB5013427;
+        Mon, 29 Nov 2021 09:17:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=jaTaaCN7Rtus0I+DZbL6uB1J53A0coTNWLrcR+M658s=;
+ b=ZPGQB/IyksQriErTVPmVNuBXTd4iNopEb98Lr+aEd5IOtGGRh0rJ74pfHjG1KgoW2/dE
+ s3zIyqEpNhLtczJj+GfKlPYeb05xFnhkpr7nis1zTH1cmDsDl1JoUyD/wx0SzSVe93TY
+ ek+s7Ond4hLVjJHbx4A4J5vKRzeDIP3ESM2L3cnFQP0nLTMB6XslomHpTNb7PS9BGpPx
+ FgZF7ANHvSNPgpm7HMKNe2zDEQpFC2k2+oVA02AqtyJwCeVM3YgAw6OlBJGvOVKeOc62
+ OPP67dzHeUEy8IlhLE9nt7EUxCbc4asYUH6cXAhgzLDJIYe17JAjmXoMUL2/unvvbbZV 3w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmunm8kxu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 09:17:49 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AT9HnIX004602;
+        Mon, 29 Nov 2021 09:17:49 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmunm8kx0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 09:17:49 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AT9E9GN013971;
+        Mon, 29 Nov 2021 09:17:46 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ckbxjjujd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 09:17:46 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AT9HhTT29360518
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 09:17:43 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 539B4AE059;
+        Mon, 29 Nov 2021 09:17:43 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CEC26AE056;
+        Mon, 29 Nov 2021 09:17:42 +0000 (GMT)
+Received: from [9.171.16.66] (unknown [9.171.16.66])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 29 Nov 2021 09:17:42 +0000 (GMT)
+Message-ID: <20f63bce-31b0-091d-111a-eee16bc9304d@linux.vnet.ibm.com>
+Date:   Mon, 29 Nov 2021 10:17:42 +0100
 MIME-Version: 1.0
-References: <CA+icZUXzoQ4Rkms6WbLnnY7WSbcgt9t4vNTu17qyTQTLr6d1sw@mail.gmail.com>
- <CA+icZUUqw-LSJOrGYbmjMv8tHEN_eoq4nbgr8BxspQRFxNjVrA@mail.gmail.com>
- <CA+icZUUWj_-jgiA=NCmSP5zgk_fcEFN5+vKn7jLOFpbdQepSyw@mail.gmail.com> <18efeb0222687d9886b2b83eb4090f08d0493d9f.camel@intel.com>
-In-Reply-To: <18efeb0222687d9886b2b83eb4090f08d0493d9f.camel@intel.com>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Mon, 29 Nov 2021 10:17:41 +0100
-Message-ID: <CA+icZUVT9YDReJDjggVOLkHGXf3zRZB=WZweSRQ1AzmZNW4-+w@mail.gmail.com>
-Subject: Re: [Linux v5.15 final] Call-trace iwlwifi and/or mac80211 (was
- [Linux v5.15-rc6] mac80211 warnings with iwlwifi)
-To:     "Coelho, Luciano" <luciano.coelho@intel.com>
-Cc:     "johannes@sipsolutions.net" <johannes@sipsolutions.net>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Ben Ami, Golan" <golan.ben.ami@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3 3/3] KVM: s390: gaccess: Cleanup access to guest pages
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211126164549.7046-1-scgl@linux.ibm.com>
+ <20211126164549.7046-4-scgl@linux.ibm.com>
+ <20211129095914.34975067@p-imbrenda>
+From:   Janis Schoetterl-Glausch <scgl@linux.vnet.ibm.com>
+In-Reply-To: <20211129095914.34975067@p-imbrenda>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: QzpW5KLm1idKCy6CUrOuMLNLi1U9Sw4s
+X-Proofpoint-GUID: Zsx7DzeXeSL1LkXsgTeq1_Lq87tNDSrV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-29_06,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ bulkscore=0 mlxscore=0 adultscore=0 spamscore=0 phishscore=0
+ mlxlogscore=999 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111290042
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 10:14 AM Coelho, Luciano
-<luciano.coelho@intel.com> wrote:
->
-> On Sat, 2021-11-27 at 22:13 +0100, Sedat Dilek wrote:
-> > Hi,
-> >
-> > Just jumped to the latest Debian-kernel...
-> >
-> > $ cat /proc/version
-> > Linux version 5.15.0-2-amd64 (debian-kernel@lists.debian.org) (gcc-11
-> > (Debian 11.2.0-12) 11.2.0, GNU ld (GNU Binutils for Debian) 2.37) #1
-> > SMP Debian 5.15.5-1 (2021-11
-> > -26)
-> >
-> > ...and still see these issues:
-> >
-> > [Sat Nov 27 21:57:20 2021] iwlwifi 0000:01:00.0: RF_KILL bit toggled
-> > to enable radio.
-> > [Sat Nov 27 21:57:20 2021] iwlwifi 0000:01:00.0: reporting RF_KILL
-> > (radio enabled)
-> > [Sat Nov 27 21:57:20 2021] iwlwifi 0000:01:00.0: Radio type=0x1-0x2-0x0
-> > [Sat Nov 27 21:57:20 2021] iwlwifi 0000:01:00.0: Radio type=0x1-0x2-0x0
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Error sending
-> > REPLY_SCAN_ABORT_CMD: time out after 2000ms.
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Current CMD queue
-> > read_ptr 35 write_ptr 36
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Loaded firmware
-> > version: 18.168.6.1 6000g2b-6.ucode
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: HCMD_ACTIVE already
-> > clear for command REPLY_SCAN_ABORT_CMD
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | OK
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | uPc
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | branchlink1
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | branchlink2
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | interruptlink1
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | interruptlink2
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | data1
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | data2
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | line
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | beacon time
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | tsf low
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | tsf hi
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | time gp1
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | time gp2
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | time gp3
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | uCode version
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | hw version
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | board version
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | hcmd
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | isr0
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | isr1
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | isr2
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | isr3
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | isr4
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | isr_pref
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | wait_event
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | l2p_control
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | l2p_duration
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | l2p_mhvalid
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | l2p_addr_match
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | lmpm_pmg_sel
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | timestamp
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: 0x00000000 | flow_handler
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Start IWL Event Log
-> > Dump: nothing in log
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Command REPLY_RXON
-> > failed: FW Error
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Error clearing
-> > ASSOC_MSK on BSS (-5)
-> > [Sat Nov 27 21:57:27 2021] ieee80211 phy0: Hardware restart was requested
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Radio type=0x1-0x2-0x0
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Radio type=0x1-0x2-0x0
-> > [Sat Nov 27 21:57:27 2021] iwlwifi 0000:01:00.0: Radio type=0x1-0x2-0x0
-> > [Sat Nov 27 21:57:32 2021] iwlwifi 0000:01:00.0: Failed to load firmware chunk!
->
-> [...]
->
-> > > > Can you mac80211 and/or iwlwifi maintainers look at this, please?
-> > > >
-> > > > Attached are my kernel-config and full dmesg-log.
-> > > >
-> > > > If you need further information, please let me know.
->
-> Can you please file a bug in bugzilla about this? Then it's easier for
-> us to track and assign.
->
-> Thanks for reporting! We'll try to come up with a fix asap.
->
+On 11/29/21 09:59, Claudio Imbrenda wrote:
+> On Fri, 26 Nov 2021 17:45:49 +0100
+> Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
+> 
+>> Introduce a helper function for guest frame access.
+>>
+>> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+>> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+> 
+> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-Hi Luca,
+Thanks.
+> 
+> see a small nit below
+> 
+>> ---
+>>  arch/s390/kvm/gaccess.c | 24 ++++++++++++++++--------
+>>  1 file changed, 16 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
+>> index c09659609d68..9193f0de40b1 100644
+>> --- a/arch/s390/kvm/gaccess.c
+>> +++ b/arch/s390/kvm/gaccess.c
+>> @@ -866,6 +866,20 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
+>>  	return 0;
+>>  }
+>>  
+>> +static int access_guest_page(struct kvm *kvm, enum gacc_mode mode, gpa_t gpa,
+>> +			     void *data, unsigned int len)
+>> +{
+>> +	const unsigned int offset = offset_in_page(gpa);
+>> +	const gfn_t gfn = gpa_to_gfn(gpa);
+>> +	int rc;
+>> +
+>> +	if (mode == GACC_STORE)
+>> +		rc = kvm_write_guest_page(kvm, gfn, data, offset, len);
+> 
+> why not just return ?
 
-Thanks for taking care.
+No clue, maybe I wanted to look at the rc while debugging something?
+> 
+> (but don't bother with a v4, it's ok anyway)
+> 
+>> +	else
+>> +		rc = kvm_read_guest_page(kvm, gfn, data, offset, len);
+>> +	return rc;
+>> +}
+>> +
+>>  int access_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
+>>  		 unsigned long len, enum gacc_mode mode)
+>>  {
+>> @@ -896,10 +910,7 @@ int access_guest(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar, void *data,
+>>  	rc = guest_range_to_gpas(vcpu, ga, ar, gpas, len, asce, mode);
+>>  	for (idx = 0; idx < nr_pages && !rc; idx++) {
+>>  		fragment_len = min(PAGE_SIZE - offset_in_page(gpas[idx]), len);
+>> -		if (mode == GACC_STORE)
+>> -			rc = kvm_write_guest(vcpu->kvm, gpas[idx], data, fragment_len);
+>> -		else
+>> -			rc = kvm_read_guest(vcpu->kvm, gpas[idx], data, fragment_len);
+>> +		rc = access_guest_page(vcpu->kvm, mode, gpas[idx], data, fragment_len);
+>>  		len -= fragment_len;
+>>  		data += fragment_len;
+>>  	}
+>> @@ -920,10 +931,7 @@ int access_guest_real(struct kvm_vcpu *vcpu, unsigned long gra,
+>>  	while (len && !rc) {
+>>  		gpa = kvm_s390_real_to_abs(vcpu, gra);
+>>  		fragment_len = min(PAGE_SIZE - offset_in_page(gpa), len);
+>> -		if (mode)
+>> -			rc = write_guest_abs(vcpu, gpa, data, fragment_len);
+>> -		else
+>> -			rc = read_guest_abs(vcpu, gpa, data, fragment_len);
+>> +		rc = access_guest_page(vcpu->kvm, mode, gpa, data, fragment_len);
+>>  		len -= fragment_len;
+>>  		gra += fragment_len;
+>>  		data += fragment_len;
+> 
 
-Do you have me the bugzilla URL, please?
-
-What information shall I attach and/or are relevant?
-
-Regards,
-- Sedat -

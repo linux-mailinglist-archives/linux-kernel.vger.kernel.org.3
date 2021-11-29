@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8CE8462790
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B682F46276B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:03:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235162AbhK2XHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:07:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        id S236478AbhK2XFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:05:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236545AbhK2XHB (ORCPT
+        with ESMTP id S236240AbhK2XEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:07:01 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8A3C111CE8;
-        Mon, 29 Nov 2021 09:39:51 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso14883047pjb.2;
-        Mon, 29 Nov 2021 09:39:51 -0800 (PST)
+        Mon, 29 Nov 2021 18:04:21 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F13DC1262B9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:02:22 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id r130so17775394pfc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:02:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=jXtNF/sPL2y+FUYzBp0rUX3UsbHP3l0DZcj0VSipxzQ=;
-        b=Ja64lXFdxwDLTwzcCX7CVYDIpHTlZxNqc0Fa6bm28nUCevMarEHl0xIPFIx8/H8NUV
-         D6NCwIn8E8TV6liXLFYmB4hDBK+HIz/lThf6bZVJvocJ6J8syTB/g5X05Cy3eJ9NaB7C
-         y+0wNiXp0x+DIlrvBdRkEkoHGRIU/0Dm4uEoEqcz4r0bl5SL7dMtug4+HlZrwpnfTWG+
-         b4Q3Wnge5QIK3/lfxSIvRUWuJv8am15+opOEPf2Nvv+FpbXzfqW5csZiK4GwB7vE/MFm
-         yQ27hpi+zg0inn1ldPqVacjNX9vRBj02UV6zz//ORkQLpARoEcY7eJNKPhvuF/3ZkFpA
-         Oq6Q==
+        bh=QXp6Rjdb9so9tn9PWuGIbuOUwfs9Jwsb1LIx5Ujs/yw=;
+        b=OWuHk7RoCEwXKDMDXfCljE037wZMeREf4yKV9u6svRDiDf1m8rOYK2y6iK2FrztOTt
+         ulu8jIK1sFPK88tkYTVGUMBm/iwGCD1nk1R1B5xcDAuMU8MRkTSuxNThPJ+ExZYIGyG+
+         qn/tj3SRQs4Igp74uqeU0o/fqEg5xwKxZp3CU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=jXtNF/sPL2y+FUYzBp0rUX3UsbHP3l0DZcj0VSipxzQ=;
-        b=qijwwUirGg6hVpthCvcDTlI1K0OmrFbjarSSwx+SxvAzRdta/2FkkVcW18voo7t5vp
-         vl2ovR4/Mk75IzL9AnZg/9onfkbtv/DEKeb5SSlBwK0LWT+TXcmB2AlwfOs9LaCn1yDZ
-         cgDU6QVQ1AmVZrWgoed2SWBkEBzuVn3d78EtTYROYAV6a2Dq/qg48NGpE2S1Cc/z/Zuo
-         269CEkZhXtE3gJrVDSOLeUo2kDrAd6od0ovP4kYhXIBrf9abUzhWw/ycxijWbfl3jgrR
-         a8PrhUzMA00TmGPDYmn/d5j797f4p3sAvMVIOoi0ETWcXH7rVPCeRnjz/1o4NIVpKVkM
-         6X3A==
-X-Gm-Message-State: AOAM532jdutxZaGBLQgfUGOKcjfsa3wLvQcU3IuQ0obictRuBqvynla8
-        Agam/nrc+vE9cGhkhHH63roW4UZZyea8hQ==
-X-Google-Smtp-Source: ABdhPJzd+h973yGq3DVl8eJnnV9BbvEFLAN0O4J92uD5Ql1r9Jj3DYZ1Z+UzjCjdGXiUaNMRFVNu4Q==
-X-Received: by 2002:a17:90a:3045:: with SMTP id q5mr40478485pjl.58.1638207591089;
-        Mon, 29 Nov 2021 09:39:51 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id p16sm19000913pfh.97.2021.11.29.09.39.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 09:39:50 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 29 Nov 2021 07:39:49 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Wei Yang <richard.weiyang@gmail.com>
-Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] cgroup: get the wrong css for css_alloc() during
- cgroup_init_subsys()
-Message-ID: <YaUQZZbFDDOpwHYY@slm.duckdns.org>
-References: <20211127145919.31159-1-richard.weiyang@gmail.com>
- <20211127145919.31159-2-richard.weiyang@gmail.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QXp6Rjdb9so9tn9PWuGIbuOUwfs9Jwsb1LIx5Ujs/yw=;
+        b=rk1fl6kI4d77QbyxxZGb6ph9fF5bpwyb/IBaXE3GU1ZElNo7h/0MTAOTKvTj4mnXwq
+         YBhRr9cBw4psa3A5N2YWcj3/yqD30TercAb5Jocq63+C9qqkXizWJQFuLadNIx+8mx/f
+         lSRfWzniqj1lhAAxkS/LZRBfafdtTFsAShS0+CnSJcLXsS3HfWluxceVlrXIQ0dnIhRq
+         d4+3kVRELEh8sllIsmpeE7WH1s8S3xBxizDn0LnFCEpYGLGESh1t6WO6D74FPWxqMU+O
+         vlhA+yPLvuKZtdi0h2cNZks28gXUy7NKgdYGwksXHsy8dujgGf8s6hpZD15arB5tSN1F
+         DPHg==
+X-Gm-Message-State: AOAM532nrTUPKikmHK8ffjgxi66WNODyxjf8DQ/mp+0J62f4hExyPVwA
+        Qcjp2/L30aWx4KqiWVM2l9QvYw==
+X-Google-Smtp-Source: ABdhPJzmsIA11/pFaCm4cakUSOz2ziL/uU5FLtsc2LHAl9CDHjLHoupWOsGCvTUPwfVjMQ9Wn70QUw==
+X-Received: by 2002:a63:1956:: with SMTP id 22mr36174289pgz.452.1638208941713;
+        Mon, 29 Nov 2021 10:02:21 -0800 (PST)
+Received: from localhost ([2620:15c:202:201:d16f:3a09:ab7a:238e])
+        by smtp.gmail.com with UTF8SMTPSA id k19sm18083179pff.20.2021.11.29.10.02.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 10:02:21 -0800 (PST)
+Date:   Mon, 29 Nov 2021 10:02:20 -0800
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Sandeep Maheswaram <quic_c_sanm@quicinc.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Doug Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_pkondeti@quicinc.com,
+        quic_ppratap@quicinc.com
+Subject: Re: [PATCH 1/2] arm64: qcom: sc7280: Remove USB2 controller and phy
+ nodes from common dtsi
+Message-ID: <YaUVrDw9j0Aks/pn@google.com>
+References: <1637837815-8532-1-git-send-email-quic_c_sanm@quicinc.com>
+ <1637837815-8532-2-git-send-email-quic_c_sanm@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211127145919.31159-2-richard.weiyang@gmail.com>
+In-Reply-To: <1637837815-8532-2-git-send-email-quic_c_sanm@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 02:59:19PM +0000, Wei Yang wrote:
-> css_alloc() needs the parent css, while cgroup_css() gets current
-> cgropu's css. So we are getting the wrong css during
-> cgroup_init_subsys().
+On Thu, Nov 25, 2021 at 04:26:54PM +0530, Sandeep Maheswaram wrote:
+> Remove USB2 controller and phy nodes from common dtsi file as it is
+> required only for SKU1 board.
 > 
-> Fortunately, cgrp_dfl_root.cgrp's css is not set yet, so the value we
-> pass to css_alloc() doesn't harm to the system.
-> 
-> Let's pass NULL directly during init, since we know there is no parent
-> yet.
-> 
-> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
+> Signed-off-by: Sandeep Maheswaram <quic_c_sanm@quicinc.com>
 
-Applied to cgroup/for-5.17 w/ minor description adjustment.
+A series shouldn't break things if it is only applied partially (in order). In
+this case the USB2 controller wouldn't work on the SKU1 board if only this patch
+is applied. It should be squashed with patch 2 of this series ("arm64: qcom:
+sc7280: Add USB2 controller and phy nodes for SKU1 board").
 
-Thanks.
-
--- 
-tejun
+Also doing the move in a single patch instead of two separate patches for remove
+and add makes it easier to review the latter part, since it's evident from the
+patch itself that it's just a move.

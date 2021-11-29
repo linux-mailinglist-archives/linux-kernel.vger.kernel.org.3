@@ -2,82 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 99DE5460F62
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63617460F68
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:34:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240603AbhK2HgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 02:36:13 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:37257 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238633AbhK2HeK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:34:10 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J2cTR27GZz4xQv;
-        Mon, 29 Nov 2021 18:30:50 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638171052;
-        bh=XLUAw31g2hL7dLzC6ws61gJhzOb5F1xpkHy2CUXmIVw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CQKLrbhIK6IjwcTi9lNnzkX8vEInH3saRQ/HgsLLWX47B7WJ4Rruf+21TH2zLreYN
-         IdTQUNmdF1fv+pM95ewnP66qSGGKDUANFioLqhW7k/rW254A6/4gm7sODpT5bg+dY9
-         vfr8XMs++D1yy7WJjlBoAkVSHsKWrTrUiRKQrMoCOfzAE5GIgmnlmlzlv93B6T+CBK
-         BAIkjfksxSc/k/mUYGVcBotXn3rrN40uDw3z49iK0QVhaibbT4uFRu/F05g9Yum2U1
-         l8Ss/jCNRfs/+bCiu9HVrdAXMN2wrbyb1YzWy2rIhnTGbI8axJMN29QC5FoKUdqdXz
-         hRTSzgGtt3DUQ==
-Date:   Mon, 29 Nov 2021 18:30:47 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Felix Fietkau <nbd@nbd.name>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mac80211 tree
-Message-ID: <20211129183047.133cf01c@canb.auug.org.au>
+        id S239131AbhK2Hh3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 02:37:29 -0500
+Received: from mail-bo1ind01olkn0176.outbound.protection.outlook.com ([104.47.101.176]:62080
+        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S239512AbhK2Hf2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 02:35:28 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gIEP60Yzl0kieyRO2LBsaAAFQ0bjLpuC12ErV+n5dcMkjJrSijYCIQRD9R2bfZtyJ0anQcF3exAlOoLJCDw3K5pbx5B5eJdQZ2MaNocl67Tgi9gruvSER054yCmDEk1TZAX7kkmKdK6Y82A+PRiNre17QQLi2rrQdE9WqvRNgrzHz2Y5AO4DwN0iZ1kAjbJV+QG7y92XZvhWQr1+fOw7pOegMCjLVKS5o/S9QbCbIgXi5bDMy38jrF3rtbeu4ZDjtd4nWc6bFCn1l2riHR3I+0rColGHMdxczY03QweYW119ltwbMESrvjBApiEI4DJ/jhzTCe8mts4Wou1dTtek4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4GRXda5gS9x9VSAerCM/aPzhn9gOTctTYuZn80SFd7I=;
+ b=BwdVxfCz7eDMx8qnQkMeTDhs04OnnY9KVzlZL2In06muWkA1eA305UH0AQZRvdtCPyfFJdcqzL3LCcedfdOQIqqmGSP5xbp0/gs9fxTbRzgOVlbKuve8RGMAC0oda3cgaXUbpZosMhWPfA3Nqp0CU9gWk9DxbdCqN3FbEczyZTtUdQgH4y6E9rrR8VLQ6wujf/8Di/T4TQSp6biK+TCUL6xeG2E0HPcuL/GG1MNdk2BNR1A7xvXZ/3b6wui8dW+PSQcrp4ZwajkyQSaGuJ+u0luWAVKkTjz3gzhdpvOOLWmzIgdZVset1p2pwiUPPRI6JEbKTsGVxuEWXwAwE5sK+Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4GRXda5gS9x9VSAerCM/aPzhn9gOTctTYuZn80SFd7I=;
+ b=FfE66BpCabb1s7R0J3epeS8GzinziXWs4kwzPUR9o3q1II6nGzU7WBh2caruyC3/ajKqyuyXXvJPA/WUXN6bTMqMCq5n0AkcWppCJprscr7XNVpulZxgtZFOBcuf72gNyrrhMjsr0Sy6ZaJ4UEdrxusa37zQmIQG8h8LCD49D4Bthx6/n/w5FxiQKIThMcJkCbI8BLQBzMguZLP7i6Ulf/3naO0Q3nvYC3QgbnauC89+SdJWmkHGMiSactGedeZLuzCFFjpDFqpcgCVPeU5gSq3F8OTBmKxW5Uz4DSQjx9GIMX/2oCZaU3/0LuhK1dngcU0GXxXjG90Nlw7XwAYc/w==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PN1PR0101MB1662.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c00:18::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
+ 2021 07:31:32 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%5]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 07:31:32 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+CC:     Marcel Holtmann <marcel@holtmann.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH 5/6] btbcm: disable read tx power for iMac 20,1 (Retina 5K,
+ 27-inch, 2020)
+Thread-Topic: [PATCH 5/6] btbcm: disable read tx power for iMac 20,1 (Retina
+ 5K, 27-inch, 2020)
+Thread-Index: AQHX5PMhn2Jf+xkhtEWseNDG5qLzhw==
+Date:   Mon, 29 Nov 2021 07:31:32 +0000
+Message-ID: <E9DE81E7-F408-414F-AB25-D71657E5177A@live.com>
+References: <20211001083412.3078-1-redecorating@protonmail.com>
+ <YYePw07y2DzEPSBR@kroah.com>
+ <70a875d0-7162-d149-dbc1-c2f5e1a8e701@leemhuis.info>
+ <20211116090128.17546-1-redecorating@protonmail.com>
+ <e75bf933-9b93-89d2-d73f-f85af65093c8@leemhuis.info>
+ <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com> <YZSuWHB6YCtGclLs@kroah.com>
+ <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
+ <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
+ <20211117124717.12352-1-redecorating@protonmail.com>
+ <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
+ <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
+ <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
+ <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+ <BC534C52-7FCF-4238-8933-C5706F494A11@live.com>
+ <5B9FF471-42DD-44DA-A9CE-0A83BA7A4212@live.com>
+ <A96508EB-55CB-4542-9274-301CE8E54510@live.com>
+ <3E9D8424-A65C-4211-B5E4-B6D62400E711@live.com>
+In-Reply-To: <3E9D8424-A65C-4211-B5E4-B6D62400E711@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [dq8NQswA5yhsmA8RcoJWFIfB6waO9bc3bYa33TYtdylq+ZBiw9/jmM0gPxfG+YrY]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0991816a-9158-4b8d-3e12-08d9b30a4427
+x-ms-traffictypediagnostic: PN1PR0101MB1662:
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ypvWmt9eE/qjU+vzSggUMu6f2/XyEkwFc/gZB87m22UcWMgcMXNr13Jix15VtR0Heq6K8Thhgmp/6cXHjDx+8F96787ZWnLtgyASetBKDa3JJZVKCJXmd0hDJSow/rM/ko4heuInkEvoDRqz9wu80wUrDI4nCUSy9kVDdKBNZbKRtuN4D4QToWXpciuO1M5YONz1HQwQivTJ2fgSoH3HgA0sFt7M66/lCaXmWu4lQ7R4TuMseqm8VEG0ydtVdCMNlhQ8CWmDSNIwmfwNLmBqBLIdvFgdMEoVfKFXhUoWUVFGgz0+ywV45hMfLVS5N8VJTxCpHyARhQcGSjQLCdfSAtTxaH4ZrtIrBS3JRi43dUsmR/0TOFSWkpESWyf2dQtfc/hU7WzLEHJ4o+CR2I0UPblOg2w+Tp4n4xtwF6EB0qKD7aSKP+glOSbxAQOz3KjqMuKKKqvN2uVIamRVW/q/ZJN30EX394odaKYv4zs+vICWUlQW7nTXgzCoHPqRy/dsh+brnUEk/CRppX900PwgWPe7HD6JV48mChBmzEKJFrE746JLXfscBWy3lzQHO2Fd3rfplb9GNgBOH/q9NQP7OQ==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: ER4o58k+YJuWdslJsRPN69LdlKyrBKgdQ+CQhP/iT0o/TlHRguENzueRV5ycWEOA4C0GmPkWxNONc0NNWOBsaexuO0RiwW18Hiu9zfiR+QzQPJuwBdI+Lo89NhzhMRPvtklpr75WsZpk2sDtmgoBfG1Plu2tOyyvkcv1u5xHsefI3vWxFtphf4sZ4gW5hr7SqNqsmtz96qXyR+OTp6GamFmMhmVSBc7Eat4ouQuQasJHSSClJ0+Dtz2GXiaum+pp5RrLCBoRHKXoWvPWJBJbv284uyu2uWyTxFRCosY88o+xYehUFmUBlUsQcPiPlo0R3AaKOUktYS2a1lOUdmUzZRBTt7OSHqggJUwimJ24WLhWAY6ikP22bC6zWTzPysiZIiHu2F9vgV2Hf9S1oLpNBBo5YssbKpde5PbeaygpmJsyksU6W7k/VxwQsL0/wMZ0J/8t6HV8DPy28hbJLYs95emaA8QBt5v7ft4Ttvf96U9otr2OfGhNJASme0TKLs436vfnIj6noQB71cZNUJbCj0JYTztqMPJw48VHppgYlk+qlENnNODUdKGBtI1uvEfXlgqpyZAPi4FPyswIop/m/P7QCb0P+QMZM398F82WU6CPOpqIgEmMBDLB3jL6lgfesgHGwTg9V1EWD3bsT5pAMDae5EuY376uUzzfgDWB6xcXOiKlu/ofGgb0qagcVa6dJG/kvWD8KNNv8JAOjOK1WEXLzYn9jg8rKBNTPDFWNCOnKZ6TFaV7j/GMoa5SJ17pGk3MEigyv5MEJeFlHoCeVg==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <762A4BC8ABDACC41ABD77C7513037F90@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/W9xO.9p.CLxgNZHWv+ae1fi";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-a1a1a.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0991816a-9158-4b8d-3e12-08d9b30a4427
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 07:31:32.3296
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN1PR0101MB1662
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/W9xO.9p.CLxgNZHWv+ae1fi
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Aditya Garg <gargaditya08@live.com>
 
-Hi all,
+Bluetooth on Apple iMac 20,1 is unable to start due to LE Min/Max Tx Power =
+being queried on startup. Add a DMI based quirk so that it is disabled.
 
-After merging the mac80211 tree, today's linux-next build (htmldocs)
-produced this warning:
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+---
+ drivers/bluetooth/btbcm.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-net/mac80211/sta_info.h:208: warning: Function parameter or member 'ssn' no=
-t described in 'tid_ampdu_tx'
+diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+index 88214b453b0ce..15c5be927c659 100644
+--- a/drivers/bluetooth/btbcm.c
++++ b/drivers/bluetooth/btbcm.c
+@@ -372,6 +372,15 @@ static const struct dmi_system_id disable_broken_read_=
+transmit_power[] =3D {
+ 			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,4"),
+ 		},
+ 	},
++	{
++		/* Match for Apple iMac 20,1 which needs
++		 * Read LE Min/Max Tx Power to be disabled.
++		 */
++		 .matches =3D {
++			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,1"),
++		},
++	},
+ 	{ }
+ };
+=20
 
-Introduced by commit
-
-  73111efacd3c ("mac80211: fix regression in SSN handling of addba tx")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/W9xO.9p.CLxgNZHWv+ae1fi
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGkgacACgkQAVBC80lX
-0Gy3AQf/W0p3Aq7h0GEuxspyg9pS4JmRFV2kN0L8M4dQqLsNbeapy0PH9udBTdsB
-Hyv74oHyZ26UwqzQWUJMDPeu7kckXLQWECc+AopvhwO/2OUOEeFoTIpb8Zs35tfd
-wnIe39Lu+EZd7Gjqx0EwgtpzAOfEFgrmIBk0DZJuTROdwr0hTavbsbOyzGKFO6Ke
-dUz2Z2sbZNXOHVVZFFjVrvFqHfRWobfSovGQAMI+5tBuAZwHrCKa4/yoa0STyilQ
-mjcRkXvsrwcfbIOacmfSFNJQhTfvXJuqGQagHH7QBjtnB9qDiDx1ez1lpzeQdRmB
-Z5Y+hXUqMgMePqr86Ju/9az+HCFsHg==
-=at/Q
------END PGP SIGNATURE-----
-
---Sig_/W9xO.9p.CLxgNZHWv+ae1fi--

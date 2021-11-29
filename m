@@ -2,164 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE334611F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:16:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B502F4611F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238623AbhK2KTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:19:47 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:10164 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232318AbhK2KRp (ORCPT
+        id S234242AbhK2KWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:22:51 -0500
+Received: from smtprelay-out1.synopsys.com ([149.117.73.133]:59446 "EHLO
+        smtprelay-out1.synopsys.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230427AbhK2KUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:17:45 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AT9lO29006206;
-        Mon, 29 Nov 2021 10:13:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=bTykWiZilsgvIEF8053GRPR7j2ZWFDbGpwj1KiG5Zb8=;
- b=ZRE/D4iZlWQha3YL2zQJ5zfjlQOQWX3mJjlDDOtDsbip+iNART4SQ9TYsBVlt6sQ9Lvg
- lhcgSJ/vR8ria0U2HK7ve1FWaeu13ghyyPlTALSRwVqkoO5J4f+oRgQ3GJ1jENxs4mlD
- wBCb/yvDvJfJrIqHSupTFsxkmGEVI8h2KHSVa4efgopiXMJNh2WvFLOJ1Lp9kiK1Zx2e
- YoMGsqehghyuHXuDSSMvq/2AR6MJAfB5XHx5vadvs6QPCRefk3mCDyGkHdvUQXt0KudR
- EzqoKVBLFwyoApWg7k40rBgQ0UjvJDgR2H5t8gDOMcDc24QUtZA4STRUEYv8NTKgCZ7f Nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmvht8gh0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 10:13:39 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AT9nGP2013939;
-        Mon, 29 Nov 2021 10:13:38 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmvht8gg8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 10:13:38 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATADJsi020937;
-        Mon, 29 Nov 2021 10:13:35 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma01fra.de.ibm.com with ESMTP id 3ckca9ajq7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 10:13:35 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATADWKX22544770
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Nov 2021 10:13:32 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83AC611C04A;
-        Mon, 29 Nov 2021 10:13:32 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E328911C04C;
-        Mon, 29 Nov 2021 10:13:31 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 29 Nov 2021 10:13:31 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     akpm@linux-foundation.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, oliver.sang@intel.com, lkp@intel.com,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Mon, 29 Nov 2021 05:20:49 -0500
+Received: from mailhost.synopsys.com (sv2-mailhost2.synopsys.com [10.205.2.134])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+        by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id E16BC4106C;
+        Mon, 29 Nov 2021 10:17:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+        t=1638181052; bh=JB6eGM1mJ9yRJVWnk/XJ/cUNotIwMITBXg6mNm1GGPY=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=Tf1CndtmMESOaNKU33vybbTHfbkuFADajUM+r81xprCZXZV4o7uEoHTjKULTj2BSv
+         STPtlD4z3Qa7ZFV4GkAAAvD3vZtgEupgdWsw0gq9CIkKP5yJMbnwO17RT6TmKK9oaA
+         JWRqyOyIWGQp1FhlnQneUfzwD4CADQYBM7ZsIP0yVJJ9L0micL8d17rlxpxsAgRZ5J
+         nntMeJ4BRwIz/8LvqOuFdgycFxgdJHgdhTmC25o5D03DkgmB2HmpSCqq+LIofFPc0g
+         M2ZdZtQe2ItmXhBgT6yQ7O/ZCw8xlePVzdiVV8oNFax8q3BchN7GHcwZCCyDUcB2HG
+         yFCCQMMUzA3QQ==
+Received: from o365relay-in.synopsys.com (sv2-o365relay3.synopsys.com [10.202.1.139])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (verified OK))
+        by mailhost.synopsys.com (Postfix) with ESMTPS id 361CFA0096;
+        Mon, 29 Nov 2021 10:17:29 +0000 (UTC)
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08lp2041.outbound.protection.outlook.com [104.47.74.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+        by o365relay-in.synopsys.com (Postfix) with ESMTPS id 2859B40042;
+        Mon, 29 Nov 2021 10:17:27 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=isaev@synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+        dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.b="b6Obt749";
+        dkim-atps=neutral
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MT4+5eD82p8RMaVVHy7kEtV48QqokQTu/H9PuNe6cLUJIyF6Nr6OfVcni+651sV7VP3w/yEL3pVG9L7cjxYyoOdHRJ68/TIwG7VqzdTMGM70QMfrKMYobvoUQkJdrXMo/onTw3micUKbX+Eg+mkB7n8QhOZH8+eWzV/K/wT5l4i9tIS1OA5D5tCPOKUBuiIAOebAnownsx+118g68b0FoCGRHQ4gLaTiSPRZ9u93r3fi4hsz4SUhvk0UCqRTioYFs2Gv9IrbSMlvJt8r29b3AJPMmdTomJTKKRjQbc5U8D1D2KFTFznm6i+yogSqPPYoi0E5unSJHWAh6DhUrd480A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hHgruWNdolrmVQb+yuKuUTZVFGUUNvSxoeUlQOyG2ls=;
+ b=WXAboY5S8eWz6pJU/Lrt9O7fHeop9jOvH/Mdsu1YS1D1e/RInFH0lSuPxdM5t06i9DHySufIhxrUTSbivSXXHu8OGNJmMTfcONh7/TDRCaOBdFSuHREGGTYsfGv/fnwYVF087B8i9GjD+BcSEM4PnwSll7IJoQsBF0TGiev3KiPGfuTWRsYwbCGLZgIvQHbuF+OUkLUtsaFN1jXsGuQg7xwDYBo23Qa6RVbfFV68AxSfhp/8+9ijtjCZK9cAu38zx11ua8FIznHxp4XvFfuMbWEyBQ2+z6EfKX0bB23CEY8f1LBscwX1WPHSnyzs9MPpfZWuthbrIpFXoS7n6opiYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hHgruWNdolrmVQb+yuKuUTZVFGUUNvSxoeUlQOyG2ls=;
+ b=b6Obt7498dU+qBYWDwrygHZc8n5uNAyGbJxoOXnqnk+uggTadUmtEBhtaiSyyrY+tQBU7xFRy1aATQvc6ixHW/lvVbuRoli/SmVCAEsREHaKdqXs+KqHdQkItPcpLvZMgcmq5gvcMmd1mpZCcbL8uCOV/yPZLwdOdCZl4FL0DeI=
+Received: from BY5PR12MB4131.namprd12.prod.outlook.com (2603:10b6:a03:212::13)
+ by BYAPR12MB3142.namprd12.prod.outlook.com (2603:10b6:a03:de::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
+ 2021 10:17:24 +0000
+Received: from BY5PR12MB4131.namprd12.prod.outlook.com
+ ([fe80::a179:8d3:ce3c:a83a]) by BY5PR12MB4131.namprd12.prod.outlook.com
+ ([fe80::a179:8d3:ce3c:a83a%8]) with mapi id 15.20.4713.019; Mon, 29 Nov 2021
+ 10:17:24 +0000
+X-SNPS-Relay: synopsys.com
+From:   Vladimir Isaev <Vladimir.Isaev@synopsys.com>
+To:     Colin Ian King <colin.i.king@googlemail.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
- 16 with TASK_COMM_LEN
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-8-laoar.shao@gmail.com>
-Date:   Mon, 29 Nov 2021 11:13:31 +0100
-In-Reply-To: <20211120112738.45980-8-laoar.shao@gmail.com> (Yafang Shao's
-        message of "Sat, 20 Nov 2021 11:27:38 +0000")
-Message-ID: <yt9d35nf1d84.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Vineet Gupta <vgupta@kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "linux-snps-arc@lists.infradead.org" 
+        <linux-snps-arc@lists.infradead.org>
+CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] ARC: perf: Remove redundant initialization of variable
+ idx
+Thread-Topic: [PATCH] ARC: perf: Remove redundant initialization of variable
+ idx
+Thread-Index: AQHX4xQ6p9ujykx9JEuomtRQHb6dAawaSY2A
+Date:   Mon, 29 Nov 2021 10:17:24 +0000
+Message-ID: <BY5PR12MB41317E2E191990495704FB3EDF669@BY5PR12MB4131.namprd12.prod.outlook.com>
+References: <20211126222312.1125594-1-colin.i.king@gmail.com>
+In-Reply-To: <20211126222312.1125594-1-colin.i.king@gmail.com>
+Accept-Language: ru-RU, en-US
+Content-Language: ru-RU
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcaXNhZXZcYXBw?=
+ =?us-ascii?Q?ZGF0YVxyb2FtaW5nXDA5ZDg0OWI2LTMyZDMtNGE0MC04NWVlLTZiODRiYTI5?=
+ =?us-ascii?Q?ZTM1Ylxtc2dzXG1zZy04OTlhNTUzZC01MGZkLTExZWMtOTgwYi05NGU3MGJj?=
+ =?us-ascii?Q?MWZjM2JcYW1lLXRlc3RcODk5YTU1M2YtNTBmZC0xMWVjLTk4MGItOTRlNzBi?=
+ =?us-ascii?Q?YzFmYzNiYm9keS50eHQiIHN6PSIxMDgxIiB0PSIxMzI4MjY1NDY0MTczMzk4?=
+ =?us-ascii?Q?MzQiIGg9ImtiKyt1N2p4V0pGL0l6bUhzZUYwcVBUeHArOD0iIGlkPSIiIGJs?=
+ =?us-ascii?Q?PSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUhZSUFBQzZq?=
+ =?us-ascii?Q?ZkpMQ3VYWEFYNVdjZVBlU3AvU2ZsWng0OTVLbjlJTkFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFIQUFBQUFHQ0FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFF?=
+ =?us-ascii?Q?QUFRQUJBQUFBaVBXVTlBQUFBQUFBQUFBQUFBQUFBSjRBQUFCbUFHa0FiZ0Jo?=
+ =?us-ascii?Q?QUc0QVl3QmxBRjhBY0FCc0FHRUFiZ0J1QUdrQWJnQm5BRjhBZHdCaEFIUUFa?=
+ =?us-ascii?Q?UUJ5QUcwQVlRQnlBR3NBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVB?=
+ =?us-ascii?Q?QUFBQUFBQUFBZ0FBQUFBQW5nQUFBR1lBYndCMUFHNEFaQUJ5QUhrQVh3QndB?=
+ =?us-ascii?Q?R0VBY2dCMEFHNEFaUUJ5QUhNQVh3Qm5BR1lBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FBQUFB?=
+ =?us-ascii?Q?QUNlQUFBQVpnQnZBSFVBYmdCa0FISUFlUUJmQUhBQVlRQnlBSFFBYmdCbEFI?=
+ =?us-ascii?Q?SUFjd0JmQUhNQVlRQnRBSE1BZFFCdUFHY0FYd0JqQUc4QWJnQm1BQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJtQUc4QWRR?=
+ =?us-ascii?Q?QnVBR1FBY2dCNUFGOEFjQUJoQUhJQWRBQnVBR1VBY2dCekFGOEFjd0J0QUdr?=
+ =?us-ascii?Q?QVl3QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?RUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHWUFid0IxQUc0QVpBQnlBSGtBWHdC?=
+ =?us-ascii?Q?d0FHRUFjZ0IwQUc0QVpRQnlBSE1BWHdCekFIUUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFDQUFB?=
+ =?us-ascii?Q?QUFBQ2VBQUFBWmdCdkFIVUFiZ0JrQUhJQWVRQmZBSEFBWVFCeUFIUUFiZ0Js?=
+ =?us-ascii?Q?QUhJQWN3QmZBSFFBY3dCdEFHTUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFBQm1BRzhB?=
+ =?us-ascii?Q?ZFFCdUFHUUFjZ0I1QUY4QWNBQmhBSElBZEFCdUFHVUFjZ0J6QUY4QWRRQnRB?=
+ =?us-ascii?Q?R01BQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUdjQWRBQnpBRjhBY0FCeUFHOEFa?=
+ =?us-ascii?Q?QUIxQUdNQWRBQmZBSFFBY2dCaEFHa0FiZ0JwQUc0QVp3QUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNB?=
+ =?us-ascii?Q?QUFBQUFDZUFBQUFjd0JoQUd3QVpRQnpBRjhBWVFCakFHTUFid0IxQUc0QWRB?=
+ =?us-ascii?Q?QmZBSEFBYkFCaEFHNEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCekFH?=
+ =?us-ascii?Q?RUFiQUJsQUhNQVh3QnhBSFVBYndCMEFHVUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBSE1BYmdCd0FITUFYd0JzQUdr?=
+ =?us-ascii?Q?QVl3QmxBRzRBY3dCbEFGOEFkQUJsQUhJQWJRQmZBREVBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFB?=
+ =?us-ascii?Q?Q0FBQUFBQUNlQUFBQWN3QnVBSEFBY3dCZkFHd0FhUUJqQUdVQWJnQnpBR1VB?=
+ =?us-ascii?Q?WHdCMEFHVUFjZ0J0QUY4QWN3QjBBSFVBWkFCbEFHNEFkQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUIy?=
+ =?us-ascii?Q?QUdjQVh3QnJBR1VBZVFCM0FHOEFjZ0JrQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBRUFBQUFBQUFBQUFnQUFBQUFBIi8+PC9tZXRhPg=3D=3D?=
+x-dg-rorf: true
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synopsys.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ef0c7dc8-6b7e-4fce-3e7e-08d9b321701c
+x-ms-traffictypediagnostic: BYAPR12MB3142:
+x-microsoft-antispam-prvs: <BYAPR12MB31425FD85D5F913D6859C982DF669@BYAPR12MB3142.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:324;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: k/xqcRFdU1pbmeOoKevPVdj9ptMVq9TKhpHO5Dh7iPfOVBiaIsGSllN1+JnKCuiOH5NYiZcOk8ONPFjr8aY/1KDaWaHQTsUiGJjyTyPDEcH6dTXGouOfcxvzINHap/yPlgblEC2G628lNQTpEbkt13WnzHRL9CYnF5H0JeH7oEP8fdeI3yBaBMbB1iaJi+khD9dm0OsAgONvHkzteRbO/Mpih/A6P36/9c2LZXtyZsL66vi9GXvFBj63NhPNk+Tr+OckxyNbJKwbFJ2GwRtZfcnSfPkkCIqzIZ2zD7JQZTMzp5NcVw5dysYs3mdePlgZ8NcmnabxMO+SJQUmEk0BSAlKzGvKHc2R556BO0gAJ9hB56wzjrOQrr+s6eKECAJXdY9Y5RSx7t03R8sQdrhNZXCT+ZevuDKcvNAiHhXRJ2bZ4JbOchH3gsmhwGvrWQFUZfGLfik5KJD9I9vPjklvQ9c4+5nxZFzmzm7FlGof708/pTqA5iOGP3MdKpBeUgeVUbT0GRWwAgOzrgiNlrXfcsAIvYNuuvip3Ci3pZ7oqVJKhzVi0SoD3cGPyoOp0MqrWW5dXt0sWuZHf957+BaU85vn/6KQtPCFzGgTXeDj3CYgb7R6Zy1cyagwe6yVP1zMlXds245elw/YEYh8XaoW3JpnWwip/0+lQcVBIVq1AAUG3bol6sPIJNCn557JvSOnm20tRqIkCN/kW5M0jguOfNe9PzHbYcyPJXOo1YUuYjI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4131.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(5660300002)(76116006)(53546011)(4326008)(6506007)(122000001)(7696005)(64756008)(66446008)(38070700005)(2906002)(921005)(8676002)(83380400001)(186003)(66476007)(66946007)(66556008)(316002)(71200400001)(33656002)(38100700002)(508600001)(86362001)(110136005)(55016003)(52536014)(9686003)(7416002)(8936002)(4744005)(26005)(54906003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?xncaW6/CxO8tlpuEEElSLYAGmXRqbxUFG6jYZld7jpkbQdK1UyOTsoRVfMEB?=
+ =?us-ascii?Q?BkeoV4gxI+PRrF0G1BXbTzIha7IOsVD2jB+3CJ++q/tK9Bo8mWm7hlki0eeP?=
+ =?us-ascii?Q?uUWunWoqXqf4qxPrU6pLEYJBjnrsCclmzW3I6SDTMIpeobC5P9E7QldxUTZb?=
+ =?us-ascii?Q?6DTaBX90lbQPq2H62WDwG9in9E9AJa8FoIxrW89UsQirwKGHbyQ2oB/RypOj?=
+ =?us-ascii?Q?XZaTqawVUv6MkcCK1zzYcv+mg1wIWThFU2BBlXJE9a3SN2BWzE4zNIhATa1m?=
+ =?us-ascii?Q?P/3LhnA+v4Fq8IbmiobCl3dlUlCu8oHuRAAUY9givfhrdw5KzYbUCWcx1bUv?=
+ =?us-ascii?Q?XOKEy3BN9i+x+BAfwp0nwYc6KCgrurxvO9R+rbentiDd6rU/jbacVxGRbq80?=
+ =?us-ascii?Q?b+Hhlbr/FweZnD1/YWuv5j/CItBb1Q49cAcW6nPKRYeLxDFfx7uoFluFeAW8?=
+ =?us-ascii?Q?6TMGAxdmOR2wXA+Etcno2pxdzslWIPYeFvN+wBUtrPPDNkBd2ujHMd/1kYtj?=
+ =?us-ascii?Q?w6ADaSBKogiGsjMtCrCN72XGcONQrxT5DXRenQhZwrdxbayMfp7JpB9UdQ6y?=
+ =?us-ascii?Q?etttWBLnRKmGwlEQSf6DrxpKs6YlxP+m8XlJqfAu2onaWh8vugeY5rz7mu+g?=
+ =?us-ascii?Q?2zVI+WTZ0qHEcclU4RchP5Cs2INIsBB1Qqxi6Iocqn9Td6v7Y8Uf77VbpT2q?=
+ =?us-ascii?Q?sUyYvOT9NiG8vXYij+4XACMPKpovne3uZsZHQ3t1L62HuN45UCE3eokv2wJo?=
+ =?us-ascii?Q?6d1S2G6mcZp1EuUuiai1z37aH2hBZPiFQ6IwMFldc6ILmKn4uCS39YT0hz+L?=
+ =?us-ascii?Q?6o7CcObggwv3R1so07JU1Zfpcj4GjVIBVMHU6afZXhMxfsxkl7bOTK+c7+PP?=
+ =?us-ascii?Q?3E2xjb3GFTj+mBAz41Fzn3W4EnaoOrbQRii1Vlww8VWpK3tyOj/XaRwyODTe?=
+ =?us-ascii?Q?kmwVSP2eo1Xso0nLjwTpxVgYhgqOUXCOfjQkwbNEBd9H0x8NYNtHWHgx32WI?=
+ =?us-ascii?Q?xgiBztspJm9vhZPjmOz1gV4vcPlqqIOapjJq7yAa2XqQdUSbrFboeTcXbaWA?=
+ =?us-ascii?Q?fLXMmdApaN8Fn+zEYQQujMdWV+lFn03AZ+Ky+/HEBvsekT2/v7kuCMsgJG7S?=
+ =?us-ascii?Q?vJWGxWs14+JeU6eCcOQH4wFWA7zSteZ6rfHM0tYJ0FPZDXrxbFKzjkQKKz49?=
+ =?us-ascii?Q?drTw7QumNP8in+CC1RMK9V5maOPYVVT4J/6RKFicMB1U1pjEleBOktk5c70t?=
+ =?us-ascii?Q?8AziHvLwhf4IHzsonQOaJcaePkbLee7LLaDo4SnijZNAxcpo+XJQWRzd5hGe?=
+ =?us-ascii?Q?QmTpc4JvDD6pSOmHQjFmeXMX2r5ZHycTk6z1TwW6JtFVF81WjJ/DXsLF/MvR?=
+ =?us-ascii?Q?cGy/ZGcBTeGTf1fQ/zzEZ0KEk15ZXEpi+OePUjfKkZD+CpRKDdFar6pN0B+8?=
+ =?us-ascii?Q?h9mokcWGclSJgoOgozGnjITj+35yFYmpLMM5mcv3EDY6/4o1MPpxWXfk1qwa?=
+ =?us-ascii?Q?bvFzwfZA8208MduCH9jfNUVTPAucHJgAYRhXpJnxPcZNKFoCyg3wbszkQNS4?=
+ =?us-ascii?Q?whLA2oSCeETEOsMeqxuOdhYyzRlygZFqN5GYQfAjlywvFSaLH5S7zMNb5TtS?=
+ =?us-ascii?Q?Zg=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tCV3Q3i4lUvrnwlJ9X-_0skwr0F3PEoJ
-X-Proofpoint-ORIG-GUID: 9MlKZj6a0c4TU5bozMc3VrKzCk8L9suc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-29_07,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
- bulkscore=0 phishscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 malwarescore=0 adultscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111290049
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4131.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef0c7dc8-6b7e-4fce-3e7e-08d9b321701c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 10:17:24.4682
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yXFsWyddVy/MJmQtc9XnwdrZWhUw0PP87tswgrmqU04sHLyMbRmZijw15KZDnY+BGIN/ipxI6nJLbHfUmjLuug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR12MB3142
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Yafang Shao <laoar.shao@gmail.com> writes:
-
-> As the sched:sched_switch tracepoint args are derived from the kernel,
-> we'd better make it same with the kernel. So the macro TASK_COMM_LEN is
-> converted to type enum, then all the BPF programs can get it through BTF.
+On 11/27/21 1:23 AM, Colin Ian King wrote:
 >
-> The BPF program which wants to use TASK_COMM_LEN should include the header
-> vmlinux.h. Regarding the test_stacktrace_map and test_tracepoint, as the
-> type defined in linux/bpf.h are also defined in vmlinux.h, so we don't
-> need to include linux/bpf.h again.
->
-> Signed-off-by: Yafang Shao <laoar.shao@gmail.com>
-> Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-> Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> Cc: Michal Miroslaw <mirq-linux@rere.qmqm.pl>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Al Viro <viro@zeniv.linux.org.uk>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Petr Mladek <pmladek@suse.com>
+> The variable idx is being initialized with a value that is never
+> read, it is being updated later on. The assignment is redundant and
+> can be removed.
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
->  include/linux/sched.h                                   | 9 +++++++--
->  tools/testing/selftests/bpf/progs/test_stacktrace_map.c | 6 +++---
->  tools/testing/selftests/bpf/progs/test_tracepoint.c     | 6 +++---
->  3 files changed, 13 insertions(+), 8 deletions(-)
->
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 78c351e35fec..cecd4806edc6 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -274,8 +274,13 @@ struct task_group;
->  
->  #define get_current_state()	READ_ONCE(current->__state)
->  
-> -/* Task command name length: */
-> -#define TASK_COMM_LEN			16
-> +/*
-> + * Define the task command name length as enum, then it can be visible to
-> + * BPF programs.
-> + */
-> +enum {
-> +	TASK_COMM_LEN = 16,
-> +};
+>  arch/arc/kernel/perf_event.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/arc/kernel/perf_event.c b/arch/arc/kernel/perf_event.c
+> index 145722f80c9b..f5dd799ddb9e 100644
+> --- a/arch/arc/kernel/perf_event.c
+> +++ b/arch/arc/kernel/perf_event.c
+> @@ -361,7 +361,7 @@ static int arc_pmu_add(struct perf_event *event, int
+> flags)
+>  {
+>  	struct arc_pmu_cpu *pmu_cpu =3D this_cpu_ptr(&arc_pmu_cpu);
+>  	struct hw_perf_event *hwc =3D &event->hw;
+> -	int idx =3D hwc->idx;
+> +	int idx;
+>=20
+>  	idx =3D ffz(pmu_cpu->used_mask[0]);
+>  	if (idx =3D=3D arc_pmu->n_counters)
+> --
+> 2.33.1
+>=20
 
-This breaks the trigger-field-variable-support.tc from the ftrace test
-suite at least on s390:
+Acked-by: Vladimir Isaev <isaev@synopsys.com>
 
-echo 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm) if next_comm=="ping"'
-linux/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc: line 15: echo: write error: Invalid argument
-
-I added a debugging line into check_synth_field():
-
-[   44.091037] field->size 16, hist_field->size 16, field->is_signed 1, hist_field->is_signed 0
-
-Note the difference in the signed field.
-
-Regards
-Sven
+Thank you,
+Vladimir Isaev

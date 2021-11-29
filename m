@@ -2,155 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5760746175B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:01:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86B7846175F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241126AbhK2OFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:05:10 -0500
-Received: from mail-bo1ind01olkn0186.outbound.protection.outlook.com ([104.47.101.186]:6422
-        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S232243AbhK2ODJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:03:09 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QwRFzGHnQ0Na6fwk22WefLrBRXAG7zH3ctcwuKkJcSlxJSbTn/K2PDOo3Jq8Ryo2dG21Fhw4VzQ+XQO+CD8aR61KnzkNloS2eo/0bWzEx0lJ4lHMxPz1h3oxBagZ0RJNvDSSbWihJrqkEBvNHV0Y6FdOjBN5SLH3rH+Euke6yPQoxWKQeWDgkZC5EP3JTAMcjEKkv97qe60nxzNpf7omolGaVKNXfn/q44pmbTRK/jOgMHitI8tfEKE0Zc2B38aWglbtLQ0fsIfc20irQNGB1MAYOzEVJ7ybM+4vCJBPIkHzPNDk6XrrQLLcCrQHDYfdSJaMpwMFq3/p64Lks/gHwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vz9M7n7yPp9Zm2m6cf/KIXl0WPchPJz6Ri5vJq+Qjrg=;
- b=crpFoxVTMDfZNoW/G1Qws53bqkFEPhd4SJHRHyj7bV74NI4moG3Hssw/5OJrlwHoMgWiWjUNci/2MmsUcoMGeBjxFynx9a0aE4M94Uu28NxsBX1x75vxmFNBvbA9WEhEYXm1+fT8Odx+WxHo6j7NCS3raskG1p4VhmWaLyZg++S1HhkVtQVdb4v4khL0TSVrQH5818fD4UxzOZHoAX+2rrfHnlrv3YqiPMuKDXi3pEOMoGy4AD91kJ2ZiK9PqIVSweh7E3Mgem4ZN2zNHidESzktHgHW71TqWQ1zVe4kNwR6K1yKA/rCuTwAjCNpCKanM/LLI1yuP/PEKhVdSM6YdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vz9M7n7yPp9Zm2m6cf/KIXl0WPchPJz6Ri5vJq+Qjrg=;
- b=QqQHIqOo589Y/95Bjy78eVBGIWXuT53IIb2jyNI75ysdKD1+MycgufPAemayZ4QBYGgc0eD2/HP9KKovSf8RaRIUG5b3SCkY1tCbpmvQ1peJSvhcOZ7xXNBiLPZZWSAOpDEA4uTkwoBXGCjBvf0v3MwrFiu8aQRPn3jFDD5UzN0hFAFrZm1zmLL3dR0IP8DwU6T56k8v+2/w8e9h9e6/ZCFy3yUVlchkrHbuMt4W927F88xBiWlhKEPjGVejhYqc8tOORvBw4J0tCkXw3nongvv7twiVhO7/9phcbrggUBrFBRMqf+uuqO3ZGeV0xNW0n6UnUO/NXkKCVhHSyEFt+A==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PN1PR0101MB1743.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c00:f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.24; Mon, 29 Nov
- 2021 13:59:45 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7%5]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
- 13:59:45 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Marcel Holtmann <marcel@holtmann.org>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Daniel Winkler <danielwinkler@google.com>,
-        Johan Hedberg <johan.hedberg@intel.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v6 1/2] Bluetooth: add quirk disabling LE Read Transmit Power
-Thread-Topic: [PATCH v6 1/2] Bluetooth: add quirk disabling LE Read Transmit
- Power
-Thread-Index: AQHX5Sld0znbfNTuzU+VUpTtAk/vOQ==
-Date:   Mon, 29 Nov 2021 13:59:45 +0000
-Message-ID: <64E15BD0-665E-471F-94D9-991DFB87DEA0@live.com>
-References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
- <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
- <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
- <20211117124717.12352-1-redecorating@protonmail.com>
- <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
- <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
- <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
- <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
- <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
- <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
- <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
- <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
- <92FBACD6-F4F2-4DE8-9000-2D30852770FC@live.com>
- <3716D644-CD1B-4A5C-BC96-A51FF360E31D@live.com>
- <9E6473A2-2ABE-4692-8DCF-D8F06BDEAE29@live.com>
-In-Reply-To: <9E6473A2-2ABE-4692-8DCF-D8F06BDEAE29@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [BqdQXUYYPyfuUkC91T0xYeKPfcXquypOQQpTc7iQl2kjKv2eqo2kp7R7LT7xgNv7]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: d671ad69-9df9-4fca-b680-08d9b3408006
-x-ms-traffictypediagnostic: PN1PR0101MB1743:
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: LZQxYpwUiXDEjLVfAftLeQYsf8nVUnDUdSE3xkt7ENDUUGN4BVWOC3tVPX+eNPfAiw0/4xvh25UznbttIR32qCG3i/lHOu4XqhZhOGWEMG0YhcVtKtAB6KE9Yk7M+JRhXUnOZ2yYHMAj/brJUGFVXcFlmTNaHzFoy3mefXerDdjHXSUwplr5vtq9kUZ0mOP0n/GZFTtvDqKFhOoRgQHouHqza7hRg6O40tMxkgSbqJVY0q5qGCw1QMm54lY7vm9PLWVEjuLAYya8VpdQjq8QyvsNrmBewuu0wO3J+uqu/wKiR7002dyZax6ZejIF1I5BmQ7ZwlJA+5V/u6+bwlMyYsZx/mOzbVCRU7LY9JXSwIeUA4v6lMxRdRPMWZ2s/uE034sETHGJaGO/blenyu21v3ab+nRQ9T7fY5GpZpZBNz2uYKtxfavl9vGEg5JbPJ22XOzgExfUgQfZ+hxoSO/VcLx/9R7xB4XzcaQ/IkzIA8aBvtJ97voNmKzTsebiFRE/ksgxUgZkVnXCaS5KG/h15RRsjXjMVbKD/A1fSPhvqS6FCZAfcyjpncO6ulLW+iI1JwPwxikWZo8wFpeig8qWxeM19H8LBhbkPTvbG0AhoXP87EeGBsEE47Bb9N2p0eIK
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: gSE1QP5fPpKGmmS5DzXxWjLoOWJj4K1QMaVMu/ndlmydYLUgnI/3acRtrgjvExroW/3oQXRFfiI+8vZghMKwz9O9mWdThbziV4uBuzzMVAlX67IfMqXCLep8Pel0IHBew04vUlsntIXF3ISBaTv6fnt6X9S5FAFpz7fbAitY+JABwCB6Mcz0hjbeiRzFToIQ0cn3HVRp3Ui5FxYmU5OeXoRJA39+qxRJoyW1N19nkR+diAPUIS2ysbO24ZX7B6wZVugYEVIBVM6W/tSHYfYDhSfmVd/J2ei5z6+M7A2AJ+7ZQVzm78PsTBNW2KUee6ClYzxj9lv70moErXTK6TmAQUZl8W9Pc8i6tPsD7CDyrlU6/sr7H8Dx/AQ+f+w++Yv2eZoRZuqyKfotkYU6d2QpeEVXaJEoz/y5jwuRFZDBUITx0vBrgkkDjNtM7UDvM0Ha/TCI+dxcyYAykIFJD+FgVKl7sRcOuu6JuLsaQ3Ou6Sv3VuyssL3AAtg+XzGGdSLYrw/tner50kBg2kb/8noxXgQchIm/k3p6lyKTRp8BJcEY/EkBWHc3fGztvCOdygpcGmr/rh/QjXfX4Ejue5E3rErqyPrphyUyCpVjzXby+N3M3zlx3ej65zPCf6IjAl2qp5oTOxN0PwmMk2yhQLZ95c1rEXD+L7h2A6MpDpGztMWPADtVBhVKFvDDV/PPqNcZK6UwcVjbtuWrdbvVp4ZKlsA8/XRW8g3WV3cejNwJobm2/d4GvcBLdIQDYHTSbqVVkvU1bFbaxKrcf/z+3AbrhA==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <DCB386C667096748B06E33A5BA4ECF70@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        id S242592AbhK2OFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:05:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:28290 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S242630AbhK2ODR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:03:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638194399;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IeyJNwcYSO8NniImbH4OBp4zuND8RtpEhu/U4fbs0jQ=;
+        b=Bu4UlWtymTVDE3igg01z1cBKZ9NKPCWz3vfNJgBiehEBM6LMY9KVIgVVTXEcEs0L+o4oZH
+        ZwXullIvFaFgjfV4zgCCkgeeMzSaG1vJVzdpBtnOMTBldQq8jiiBGntum/vIToT6sw2TnV
+        URoRAPSBjD0RCcQQUSRohyFI8gI9vLM=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-598-lKAndVvEPya7X9Lt0Dw1og-1; Mon, 29 Nov 2021 08:59:58 -0500
+X-MC-Unique: lKAndVvEPya7X9Lt0Dw1og-1
+Received: by mail-ed1-f70.google.com with SMTP id i19-20020a05640242d300b003e7d13ebeedso13784367edc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:59:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:message-id:date:mime-version:user-agent:cc
+         :subject:content-language:to:references:in-reply-to
+         :content-transfer-encoding;
+        bh=IeyJNwcYSO8NniImbH4OBp4zuND8RtpEhu/U4fbs0jQ=;
+        b=DwXLBY+UeD4gtjc7LyBwCACKWQHryM0Utj3vI5ERwjXBxvQv8pAurUrMTex9qnMwWv
+         y3WVllpEpRM/SupXSUBC3FjTrBTrhFGm6ZGeVmpNd7zsP4ND7gCjY6ppDV7GI/ITfJXJ
+         OCJ9s+fs9eP/luAimtBoAvGo6YSYuKe7MBPwbCQKQXUmcmaZU3q42IFyo15ywSR+CscS
+         Ofr6eMCrBtShHdk1awkUiVkemk9fEAYa5sb/xaV29/Gr9NE80zxHW/QBf8c4u2XQkBeW
+         j93G+AEJ/m10mdeZOhHse2WfnQqwxqsqsToY6zoKh41F43qr9ZuXhf3Z0WKSBgFRMxay
+         1qyg==
+X-Gm-Message-State: AOAM532uNp6G9JSpORRhnsVP8ldVpHx1BgR8toupsRpdnRRcrGDlhZFM
+        hEc1Ty//IXnBDXG9H9/NlVMHHDDnPXl+ftvzeLU/7zX8MUcMHHmTzI2s0mmsxYFK1K7KVGSjHpb
+        qLjskWWVqS/UxyITSEXPy1Y10
+X-Received: by 2002:a17:907:6d28:: with SMTP id sa40mr59414039ejc.201.1638194396767;
+        Mon, 29 Nov 2021 05:59:56 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwQSUmsFHsP7WeobINWjGi62cHzP+EzVEFoSxpzCoJ1n2b7WNWfx5UgPNnyFcW6l+Ylh8aSEg==
+X-Received: by 2002:a17:907:6d28:: with SMTP id sa40mr59413979ejc.201.1638194396485;
+        Mon, 29 Nov 2021 05:59:56 -0800 (PST)
+Received: from [192.168.2.13] (3-14-107-185.static.kviknet.dk. [185.107.14.3])
+        by smtp.gmail.com with ESMTPSA id nb4sm7766389ejc.21.2021.11.29.05.59.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 05:59:55 -0800 (PST)
+From:   Jesper Dangaard Brouer <jbrouer@redhat.com>
+X-Google-Original-From: Jesper Dangaard Brouer <brouer@redhat.com>
+Message-ID: <37732c0b-a1f5-5e1d-d34e-16ef07fab597@redhat.com>
+Date:   Mon, 29 Nov 2021 14:59:53 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-a1a1a.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: d671ad69-9df9-4fca-b680-08d9b3408006
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 13:59:45.6021
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN1PR0101MB1743
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Cc:     brouer@redhat.com, Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
+ per-channel statistics
+Content-Language: en-US
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+ <20211123163955.154512-22-alexandr.lobakin@intel.com>
+ <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net> <87bl28bga6.fsf@toke.dk>
+ <20211125170708.127323-1-alexandr.lobakin@intel.com>
+ <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20211125204007.133064-1-alexandr.lobakin@intel.com> <87sfvj9k13.fsf@toke.dk>
+ <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <871ae82a-3d5b-2693-2f77-7c86d725a056@iogearbox.net>
+ <3c2fd51e-96c4-d500-bb4c-1972bb0fa3d6@iogearbox.net>
+In-Reply-To: <3c2fd51e-96c4-d500-bb4c-1972bb0fa3d6@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
 
-Some devices have a bug causing them to not work if they query=20
-LE tx power on startup. Thus we add a quirk in order to not query it=20
-and default min/max tx power values to HCI_TX_POWER_INVALID.
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
-Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
-Link:
-https://lore.kernel.org/r/4970a940-211b-25d6-edab-21a815313954@protonmail.c=
-om
-Fixes: 7c395ea521e6 ("Bluetooth: Query LE tx power on startup")
----
- include/net/bluetooth/hci.h | 9 +++++++++
- net/bluetooth/hci_core.c    | 3 ++-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+On 27/11/2021 00.01, Daniel Borkmann wrote:
+> On 11/26/21 11:27 PM, Daniel Borkmann wrote:
+>> On 11/26/21 7:06 PM, Jakub Kicinski wrote:
+> [...]
+>>> The information required by the admin is higher level. As you say the
+>>> primary concern there is "how many packets did XDP eat".
+>>
+>> Agree. Above said, for XDP_DROP I would see one use case where you 
+>> compare
+>> different drivers or bond vs no bond as we did in the past in [0] when
+>> testing against a packet generator (although I don't see bond driver 
+>> covered
+>> in this series here yet where it aggregates the XDP stats from all 
+>> bond slave devs).
+>>
+>> On a higher-level wrt "how many packets did XDP eat", it would make sense
+>> to have the stats for successful XDP_{TX,REDIRECT} given these are out
+>> of reach from a BPF prog PoV - we can only count there how many times we
+>> returned with XDP_TX but not whether the pkt /successfully made it/.
+>>
 
-diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-index 63065bc01b766c..383342efcdc464 100644
---- a/include/net/bluetooth/hci.h
-+++ b/include/net/bluetooth/hci.h
-@@ -246,6 +246,15 @@ enum {
- 	 * HCI after resume.
- 	 */
- 	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
-+
-+	/*
-+	 * When this quirk is set, LE tx power is not queried on startup
-+	 * and the min/max tx power values default to HCI_TX_POWER_INVALID.
-+	 *
-+	 * This quirk can be set before hci_register_dev is called or
-+	 * during the hdev->setup vendor callback.
-+	 */
-+	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
- };
-=20
- /* HCI device flags */
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 8d33aa64846b1c..434c6878fe9640 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -619,7 +619,8 @@ static int hci_init3_req(struct hci_request *req, unsig=
-ned long opt)
- 			hci_req_add(req, HCI_OP_LE_READ_ADV_TX_POWER, 0, NULL);
- 		}
-=20
--		if (hdev->commands[38] & 0x80) {
-+		if ((hdev->commands[38] & 0x80) &&
-+		!test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks)) {
- 			/* Read LE Min/Max Tx Power*/
- 			hci_req_add(req, HCI_OP_LE_READ_TRANSMIT_POWER,
- 				    0, NULL);
+Exactly.
+
+>> In terms of error cases, could we just standardize all drivers on the 
+>> behavior
+>> of e.g. mlx5e_xdp_handle(), meaning, a failure from XDP_{TX,REDIRECT} will
+>> hit the trace_xdp_exception() and then fallthrough to bump a drop counter
+>> (same as we bump in XDP_DROP then). So the drop counter will account for
+>> program drops but also driver-related drops.
+>>
+
+Hmm... I don't agree here.  IMHO the BPF-program's *choice* to drop (via 
+XDP_DROP) should NOT share the counter with the driver-related drops.
+
+The driver-related drops must be accounted separate.
+
+For the record, I think mlx5e_xdp_handle() does the wrong thing, of 
+accounting everything as XDP_DROP in (rq->stats->xdp_drop++).
+
+Current mlx5 driver stats are highly problematic actually.
+Please don't model stats behavior after this driver.
+
+E.g. if BPF-prog takes the *choice* XDP_TX or XDP_REDIRECT or XDP_DROP, 
+then the packet is invisible to "ifconfig" stats.  It is like the driver 
+never received these packets (which is wrong IMHO). (The stats are only 
+avail via ethtool -S).
+
+
+>> At some later point the trace_xdp_exception() could be extended with 
+>> an error
+>> code that the driver would propagate (given some of them look quite 
+>> similar
+>> across drivers, fwiw), and then whoever wants to do further processing 
+>> with them can do so via bpftrace or other tooling.
+
+I do like trace_xdp_exception() is invoked in mlx5e_xdp_handle(), but do 
+notice that xdp_do_redirect() also have a tracepoint that can be used 
+for troubleshooting. (I usually use xdp_monitor for troubleshooting 
+which catch both).
+
+I like the stats XDP handling better in mvneta_run_xdp().
+
+> Just thinking out loud, one straight forward example we could start out 
+> with that is also related to Paolo's series [1] ...
+> 
+> enum xdp_error {
+>      XDP_UNKNOWN,
+>      XDP_ACTION_INVALID,
+>      XDP_ACTION_UNSUPPORTED,
+> };
+> 
+> ... and then bpf_warn_invalid_xdp_action() returns one of the latter two
+> which we pass to trace_xdp_exception(). Later there could be XDP_DRIVER_*
+> cases e.g. propagated from XDP_TX error exceptions.
+> 
+>          [...]
+>          default:
+>                  err = bpf_warn_invalid_xdp_action(act);
+>                  fallthrough;
+>          case XDP_ABORTED:
+> xdp_abort:
+>                  trace_xdp_exception(rq->netdev, prog, act, err);
+>                  fallthrough;
+>          case XDP_DROP:
+>                  lrstats->xdp_drop++;
+>                  break;
+>          }
+>          [...]
+> 
+>    [1] 
+> https://lore.kernel.org/netdev/cover.1637924200.git.pabeni@redhat.com/
+> 
+>> So overall wrt this series: from the lrstats we'd be /dropping/ the pass,
+>> tx_errors, redirect_errors, invalid, aborted counters. And we'd be 
+>> /keeping/
+>> bytes & packets counters that XDP sees, (driver-)successful tx & redirect
+>> counters as well as drop counter. Also, XDP bytes & packets counters 
+>> should
+>> not be counted twice wrt ethtool stats.
+>>
+>>    [0] 
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9e2ee5c7e7c35d195e2aa0692a7241d47a433d1e 
+>>
+
+Concrete example with mlx5:
+
+For most other hardware (than mlx5) I experience that XDP_TX creates a 
+push-back on NIC RX-handing speed.  Thus, the XDP_TX stats recorded by 
+BPF-prog is usually correct.
+
+With mlx5 hardware (tested on ConnectX-5 Ex MT28800) the RX 
+packets-per-sec (pps) stats can easily be faster than actually XDP_TX 
+transmitted frames.
+
+$ sudo ./xdp_rxq_info --dev mlx5p1 --action XDP_TX
+  [...]
+  Running XDP on dev:mlx5p1 (ifindex:10) action:XDP_TX options:swapmac
+  XDP stats       CPU     pps         issue-pps
+  XDP-RX CPU      1       13,922,430  0
+  XDP-RX CPU      total   13,922,430
+
+  RXQ stats       RXQ:CPU pps         issue-pps
+  rx_queue_index    1:1   13,922,430  0
+  rx_queue_index    1:sum 13,922,430
+
+The real xmit speed is (from below ethtool_stats.pl) is
+  9,391,314 pps <= rx1_xdp_tx_xmit /sec
+
+The dropped packets are double accounted as:
+  4,552,033 <= rx_xdp_drop /sec
+  4,552,033 <= rx_xdp_tx_full /sec
+
+
+Show adapter(s) (mlx5p1) statistics (ONLY that changed!)
+Ethtool(mlx5p1  ) stat:       217865 (        217,865) <= ch1_poll /sec
+Ethtool(mlx5p1  ) stat:       217864 (        217,864) <= ch_poll /sec
+Ethtool(mlx5p1  ) stat:     13943371 (     13,943,371) <= 
+rx1_cache_reuse /sec
+Ethtool(mlx5p1  ) stat:      4552033 (      4,552,033) <= rx1_xdp_drop /sec
+Ethtool(mlx5p1  ) stat:       146740 (        146,740) <= 
+rx1_xdp_tx_cqes /sec
+Ethtool(mlx5p1  ) stat:      4552033 (      4,552,033) <= 
+rx1_xdp_tx_full /sec
+Ethtool(mlx5p1  ) stat:      9391314 (      9,391,314) <= 
+rx1_xdp_tx_inlnw /sec
+Ethtool(mlx5p1  ) stat:       880436 (        880,436) <= 
+rx1_xdp_tx_mpwqe /sec
+Ethtool(mlx5p1  ) stat:       997833 (        997,833) <= 
+rx1_xdp_tx_nops /sec
+Ethtool(mlx5p1  ) stat:      9391314 (      9,391,314) <= 
+rx1_xdp_tx_xmit /sec
+Ethtool(mlx5p1  ) stat:     45095173 (     45,095,173) <= 
+rx_64_bytes_phy /sec
+Ethtool(mlx5p1  ) stat:   2886090490 (  2,886,090,490) <= rx_bytes_phy /sec
+Ethtool(mlx5p1  ) stat:     13943293 (     13,943,293) <= rx_cache_reuse 
+/sec
+Ethtool(mlx5p1  ) stat:     31151957 (     31,151,957) <= 
+rx_out_of_buffer /sec
+Ethtool(mlx5p1  ) stat:     45095158 (     45,095,158) <= rx_packets_phy 
+/sec
+Ethtool(mlx5p1  ) stat:   2886072350 (  2,886,072,350) <= rx_prio0_bytes 
+/sec
+Ethtool(mlx5p1  ) stat:     45094878 (     45,094,878) <= 
+rx_prio0_packets /sec
+Ethtool(mlx5p1  ) stat:   2705707938 (  2,705,707,938) <= 
+rx_vport_unicast_bytes /sec
+Ethtool(mlx5p1  ) stat:     45095129 (     45,095,129) <= 
+rx_vport_unicast_packets /sec
+Ethtool(mlx5p1  ) stat:      4552033 (      4,552,033) <= rx_xdp_drop /sec
+Ethtool(mlx5p1  ) stat:       146739 (        146,739) <= rx_xdp_tx_cqe /sec
+Ethtool(mlx5p1  ) stat:      4552033 (      4,552,033) <= rx_xdp_tx_full 
+/sec
+Ethtool(mlx5p1  ) stat:      9391319 (      9,391,319) <= 
+rx_xdp_tx_inlnw /sec
+Ethtool(mlx5p1  ) stat:       880436 (        880,436) <= 
+rx_xdp_tx_mpwqe /sec
+Ethtool(mlx5p1  ) stat:       997831 (        997,831) <= rx_xdp_tx_nops 
+/sec
+Ethtool(mlx5p1  ) stat:      9391319 (      9,391,319) <= rx_xdp_tx_xmit 
+/sec
+Ethtool(mlx5p1  ) stat:    601044221 (    601,044,221) <= tx_bytes_phy /sec
+Ethtool(mlx5p1  ) stat:      9391316 (      9,391,316) <= tx_packets_phy 
+/sec
+Ethtool(mlx5p1  ) stat:    601040871 (    601,040,871) <= tx_prio0_bytes 
+/sec
+Ethtool(mlx5p1  ) stat:      9391264 (      9,391,264) <= 
+tx_prio0_packets /sec
+Ethtool(mlx5p1  ) stat:    563478483 (    563,478,483) <= 
+tx_vport_unicast_bytes /sec
+Ethtool(mlx5p1  ) stat:      9391316 (      9,391,316) <= 
+tx_vport_unicast_packets /sec
+
+
+
+[1] 
+https://github.com/netoptimizer/network-testing/blob/master/bin/ethtool_stats.pl
+
+
+The net_devices stats says the NIC is processing zero packets:
+
+  $ sar -n DEV 2 1000
+  [...]
+  Average:        IFACE   rxpck/s   txpck/s    rxkB/s    txkB/s 
+rxcmp/s   txcmp/s  rxmcst/s   %ifutil
+  [...]
+  Average:       mlx5p1      0,00      0,00      0,00      0,00 
+0,00      0,00      0,00      0,00
+  Average:       mlx5p2      0,00      0,00      0,00      0,00 
+0,00      0,00      0,00      0,00
 

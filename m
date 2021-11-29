@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 416A04626E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC22F462638
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235580AbhK2W6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:58:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S235253AbhK2Wsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:48:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235758AbhK2W50 (ORCPT
+        with ESMTP id S234296AbhK2Wry (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:57:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD23C12B68A;
-        Mon, 29 Nov 2021 10:30:29 -0800 (PST)
+        Mon, 29 Nov 2021 17:47:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFBFC07E5DD;
+        Mon, 29 Nov 2021 10:32:28 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C8E42CE1414;
-        Mon, 29 Nov 2021 18:30:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76AF0C53FCF;
-        Mon, 29 Nov 2021 18:30:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4716B815F8;
+        Mon, 29 Nov 2021 18:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBDC9C53FAD;
+        Mon, 29 Nov 2021 18:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210626;
-        bh=KVv4kMF9jLuKUSE7WjuzI5Ay7Lyk3PM4qDujM0Pd6ZM=;
+        s=korg; t=1638210746;
+        bh=mmPysHoR/OJFMQ0pfu3mwPt15BKd+Lasfc3cqX+ulDo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=moiF7rMbZSeMH9GhqsSd5u180kMHK8qMAen6vCs8n0Do3APwkw4F9lntX0YPQF+TC
-         v16z1ldnDNxmK+P1rafjiD7NLtkwzBTEWaKkz/xuA5e2e7jAtbZvLDq1iXsbPm6KWf
-         vN0wY7HbqvF8OlmLVmddInetb1AXM9EAVC23y0dg=
+        b=YzLxWhkdwcRqCVZidZ6HOf5PnVii9bnX9gtsQHQy4KcKcS36r6c9VQ3ctSbKDGhGZ
+         Ga/Wm9ze+VJuMu3dcStaRkjo5XcImP039MgGqR8+oYrOWoLh8eOhNLJn/59KSoZGmn
+         lsqUpnkc5wyRk9thzz7DZrtbK21bSMderRdOCay0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 061/121] ALSA: intel-dsp-config: add quirk for JSL devices based on ES8336 codec
-Date:   Mon, 29 Nov 2021 19:18:12 +0100
-Message-Id: <20211129181713.707296344@linuxfoundation.org>
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 062/121] mptcp: fix delack timer
+Date:   Mon, 29 Nov 2021 19:18:13 +0100
+Message-Id: <20211129181713.739578105@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
 References: <20211129181711.642046348@linuxfoundation.org>
@@ -51,49 +50,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit fa9730b4f28b7bd183d28a0bf636ab7108de35d7 ]
+[ Upstream commit ee50e67ba0e17b1a1a8d76691d02eadf9e0f392c ]
 
-These devices are based on an I2C/I2S device, we need to force the use
-of the SOF driver otherwise the legacy HDaudio driver will be loaded -
-only HDMI will be supported.
+To compute the rtx timeout schedule_3rdack_retransmission() does multiple
+things in the wrong way: srtt_us is measured in usec/8 and the timeout
+itself is an absolute value.
 
-We previously added support for other Intel platforms but missed
-JasperLake.
-
-BugLink: https://github.com/thesofproject/linux/issues/3210
-Fixes: 9d36ceab9415 ('ALSA: intel-dsp-config: add quirk for APL/GLK/TGL devices based on ES8336 codec')
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Kai Vehmanen <kai.vehmanen@intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Link: https://lore.kernel.org/r/20211027023254.24955-1-yung-chuan.liao@linux.intel.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Fixes: ec3edaa7ca6ce02f ("mptcp: Add handling of outgoing MP_JOIN requests")
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Mat Martineau <mathew.j.martineau>@linux.intel.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/hda/intel-dsp-config.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ net/mptcp/options.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/hda/intel-dsp-config.c b/sound/hda/intel-dsp-config.c
-index 6cdb3db7507b1..fc61571a3ac73 100644
---- a/sound/hda/intel-dsp-config.c
-+++ b/sound/hda/intel-dsp-config.c
-@@ -298,6 +298,15 @@ static const struct config_entry config_table[] = {
- 	},
- #endif
+diff --git a/net/mptcp/options.c b/net/mptcp/options.c
+index ac0233c9cd349..64afe71e2129a 100644
+--- a/net/mptcp/options.c
++++ b/net/mptcp/options.c
+@@ -368,9 +368,10 @@ static void schedule_3rdack_retransmission(struct sock *sk)
  
-+/* JasperLake */
-+#if IS_ENABLED(CONFIG_SND_SOC_SOF_JASPERLAKE)
-+	{
-+		.flags = FLAG_SOF,
-+		.device = 0x4dc8,
-+		.codec_hid = "ESSX8336",
-+	},
-+#endif
-+
- /* Tigerlake */
- #if IS_ENABLED(CONFIG_SND_SOC_SOF_TIGERLAKE)
- 	{
+ 	/* reschedule with a timeout above RTT, as we must look only for drop */
+ 	if (tp->srtt_us)
+-		timeout = tp->srtt_us << 1;
++		timeout = usecs_to_jiffies(tp->srtt_us >> (3 - 1));
+ 	else
+ 		timeout = TCP_TIMEOUT_INIT;
++	timeout += jiffies;
+ 
+ 	WARN_ON_ONCE(icsk->icsk_ack.pending & ICSK_ACK_TIMER);
+ 	icsk->icsk_ack.pending |= ICSK_ACK_SCHED | ICSK_ACK_TIMER;
 -- 
 2.33.0
 

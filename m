@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4237B46167D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A45461681
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:33:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346060AbhK2Nfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:35:55 -0500
-Received: from muru.com ([72.249.23.125]:33200 "EHLO muru.com"
+        id S244849AbhK2Ngn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:36:43 -0500
+Received: from foss.arm.com ([217.140.110.172]:39516 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236165AbhK2Ndy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:33:54 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id DD7B280C0;
-        Mon, 29 Nov 2021 13:31:14 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 15:30:33 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-omap@vger.kernel.org,
-        =?utf-8?Q?Beno=C3=AEt?= Cousson <bcousson@baylibre.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jarkko Nikula <jarkko.nikula@bitmer.com>
-Subject: Re: [PATCH] ARM: dts: Fix timer regression for beagleboard revision c
-Message-ID: <YaTV+UJjbD2HLnR9@atomide.com>
-References: <20211125144834.52457-1-tony@atomide.com>
- <6ce29c03-03ce-8e65-76e1-40fe2bf23caa@linaro.org>
+        id S243004AbhK2Neh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 08:34:37 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF86D1042;
+        Mon, 29 Nov 2021 05:31:19 -0800 (PST)
+Received: from e123427-lin.arm.com (unknown [10.57.34.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E9C6F3F766;
+        Mon, 29 Nov 2021 05:31:17 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     kw@linux.com, bhelgaas@google.com, swboyd@chromium.org,
+        robh@kernel.org, svarbanov@mm-sol.com, agross@kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        pmaliset@codeaurora.org, bjorn.andersson@linaro.org
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI: qcom: Fix an error handling path in 'qcom_pcie_probe()'
+Date:   Mon, 29 Nov 2021 13:30:55 +0000
+Message-Id: <163819262283.21004.1141413014119592076.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <4d03c636193f64907c8dacb17fa71ed05fd5f60c.1636220582.git.christophe.jaillet@wanadoo.fr>
+References: <4d03c636193f64907c8dacb17fa71ed05fd5f60c.1636220582.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6ce29c03-03ce-8e65-76e1-40fe2bf23caa@linaro.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-* Daniel Lezcano <daniel.lezcano@linaro.org> [211129 09:57]:
-> On 25/11/2021 15:48, Tony Lindgren wrote:
-> >  .../devicetree/bindings/arm/omap/omap.txt     |  3 ++
-> >  arch/arm/boot/dts/Makefile                    |  1 +
-> >  arch/arm/boot/dts/omap3-beagle-ab4.dts        | 47 +++++++++++++++++++
-> >  arch/arm/boot/dts/omap3-beagle.dts            | 33 -------------
-> >  drivers/clocksource/timer-ti-dm-systimer.c    |  2 +-
-> >  5 files changed, 52 insertions(+), 34 deletions(-)
-> >  create mode 100644 arch/arm/boot/dts/omap3-beagle-ab4.dts
+On Sat, 6 Nov 2021 18:44:52 +0100, Christophe JAILLET wrote:
+> If 'of_device_get_match_data()' fails, previous 'pm_runtime_get_sync()/
+> pm_runtime_enable()' should be undone.
 > 
-> Usually, bindings DT and driver changes are separate patches
+> To fix it, the easiest is to move this block of code before the memory
+> allocations and the pm_runtime_xxx calls.
+> 
+> 
+> [...]
 
-Not always for fixes :) In this case we need to patch both the dts for
-timer quirks, and also update the related driver quirk. The driver quirk
-I originally added to deal with possble older dtb files complicating the
-fix unncessarily..
+Applied to pci/qcom, thanks!
 
-If you have better ideas for a fix please let me know.
+[1/1] PCI: qcom: Fix an error handling path in 'qcom_pcie_probe()'
+      https://git.kernel.org/lpieralisi/pci/c/4e0e90539b
 
-Regards,
-
-Tony
+Thanks,
+Lorenzo

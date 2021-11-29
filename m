@@ -2,138 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3B4461073
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE4F461079
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242929AbhK2Itx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 03:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47588 "EHLO
+        id S242312AbhK2Iv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 03:51:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243360AbhK2Irv (ORCPT
+        with ESMTP id S240525AbhK2Its (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 03:47:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061C4C0613B1;
-        Mon, 29 Nov 2021 00:33:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DEC361216;
-        Mon, 29 Nov 2021 08:33:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5E32C53FAD;
-        Mon, 29 Nov 2021 08:33:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638174834;
-        bh=ELbDKzbD1spgZeHgrgGSSfWbUkYnVOTCx/WnVxuGDyc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lQSRQGK51CP2JgN2bq6slgK4gw8g17w/kXIZl4iW6ldOqAPSdwpYHBqZrxoCbq/Mn
-         xxKsr6Lc5q4BiU9K5xu7dLc0a2Q3f6hB1WNZssVF0jqkb1qIfC1raTIKYhktfgFaht
-         DCkuFcsNrtjTeAKDmzghdhTULCFjtHpjX4kY5Fr3Tq7srGMBu2EYPhXrYLXcOAwrIE
-         eVt8h0t0punomrTYi9GPE1VzYbSMhs1dwW5SiUzIo+fokEbZSj2FgsU1GU6+gk/J2S
-         F3uw/jGIWhi2v12p8oV4vYNq5J1PAvgqOzWbRMer3QVJuiicRpWcCsS7w8en7z4j1g
-         akr3em9BLL8/A==
-Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
-        (envelope-from <mchehab@kernel.org>)
-        id 1mrc6i-000OLh-Go; Mon, 29 Nov 2021 09:33:52 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "Nathan Chancellor" <nathan@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH v2 05/20] media: drxk: drop operation_mode from set_dvbt()
-Date:   Mon, 29 Nov 2021 09:33:42 +0100
-Message-Id: <b346b5dc4adebe9e4944fb02e0c52b8f06ca753c.1638174810.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <YaEvXpVHRUXv1xtZ@archlinux-ax161>
-References: <YaEvXpVHRUXv1xtZ@archlinux-ax161>
+        Mon, 29 Nov 2021 03:49:48 -0500
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC48C061378;
+        Mon, 29 Nov 2021 00:35:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=BcgNBJ9HP80YhdHS2G7Gf7ThE36M72dxztlVKZ+y/iA=;
+        t=1638174905; x=1639384505; b=s9kg7p3UkUuprvBiw0y/Vz0NL+LOtTyi12e0mTory9EubXC
+        x9/iA9iOauQoAemGCSo52IcvhpyIlnO8BouPIq2LoFfHPrfLRvdYHXDukgmqq3bZYXP0CtaMiIzMG
+        jATNTXepzSaGYecpVgii/02jcWr9JaFeDXvd0/c7cBBeX78xqQmTrMZFFDnBSWiX/O7QcNL/s8wL8
+        jdcvWQaxvg49bI8kR716zVD8sGBvF63HFEC6Ym9YVaE1sRdo+ymMPkdRgovB1HRvD4NOVUxspi1v7
+        DZlnLC12V5+3g4SxN9QIbdUxncgtKqzI16hQ/QtHwl6i8Ax0lfhUy/WsdrD+oJ+g==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.95)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1mrc7i-004LRT-Or;
+        Mon, 29 Nov 2021 09:34:54 +0100
+Message-ID: <e257568948a1af079275df1a904ae04805ead4c7.camel@sipsolutions.net>
+Subject: Re: [RFC v2] mac80211: minstrel_ht: do not set RTS/CTS flag for
+ fallback rates
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Peter Seiderer <ps.report@gmx.net>, Felix Fietkau <nbd@nbd.name>
+Cc:     linux-wireless@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Date:   Mon, 29 Nov 2021 09:34:53 +0100
+In-Reply-To: <20211126152558.4d9fbce3@gmx.net>
+References: <20211116212828.27613-1-ps.report@gmx.net>
+         <e098a58a-8ec0-f90d-dbc9-7b621e31d051@nbd.name>
+         <20211126152558.4d9fbce3@gmx.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     unlisted-recipients:; (no To-header on input)
+Content-Transfer-Encoding: 7bit
+X-malware-bazaar: not-scanned
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This var is set, but never used. So, drop it.
+On Fri, 2021-11-26 at 15:25 +0100, Peter Seiderer wrote:
+> 
+> > 
+> > If you don't want this behavior, I'm fine with adding a way to
+> > explicitly disable it. However, I do think leaving it on by default
+> > makes sense.
+> 
+> I expected this (as otherwise the flag setting would not be there) ;-)
+> 
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- drivers/media/dvb-frontends/drxk_hard.c | 23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
+To be fair, that setting (RTS threshold) has been there for 20 years or
+more, and comes from a much simpler time when the reasoning for RTS/CTS
+was mostly about hidden stations, not about protecting the transmissions
+from older clients that don't understand the newer PHY protocols, etc.
 
-diff --git a/drivers/media/dvb-frontends/drxk_hard.c b/drivers/media/dvb-frontends/drxk_hard.c
-index d7fc2595f15b..9430295a8175 100644
---- a/drivers/media/dvb-frontends/drxk_hard.c
-+++ b/drivers/media/dvb-frontends/drxk_hard.c
-@@ -3720,7 +3720,6 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- {
- 	u16 cmd_result = 0;
- 	u16 transmission_params = 0;
--	u16 operation_mode = 0;
- 	u32 iqm_rc_rate_ofs = 0;
- 	u32 bandwidth = 0;
- 	u16 param1;
-@@ -3759,10 +3758,8 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	/* mode */
- 	switch (state->props.transmission_mode) {
- 	case TRANSMISSION_MODE_AUTO:
--	default:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_MODE__M;
--		fallthrough;	/* try first guess DRX_FFTMODE_8K */
- 	case TRANSMISSION_MODE_8K:
-+	default:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_MODE_8K;
- 		break;
- 	case TRANSMISSION_MODE_2K:
-@@ -3773,9 +3770,7 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	/* guard */
- 	switch (state->props.guard_interval) {
- 	default:
--	case GUARD_INTERVAL_AUTO:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_GUARD__M;
--		fallthrough;	/* try first guess DRX_GUARD_1DIV4 */
-+	case GUARD_INTERVAL_AUTO: /* try first guess DRX_GUARD_1DIV4 */
- 	case GUARD_INTERVAL_1_4:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_GUARD_4;
- 		break;
-@@ -3794,11 +3789,7 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	switch (state->props.hierarchy) {
- 	case HIERARCHY_AUTO:
- 	case HIERARCHY_NONE:
--	default:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_HIER__M;
--		/* try first guess SC_RA_RAM_OP_PARAM_HIER_NO */
--		/* transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_HIER_NO; */
--		fallthrough;
-+	default:	/* try first guess SC_RA_RAM_OP_PARAM_HIER_NO */
- 	case HIERARCHY_1:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_HIER_A1;
- 		break;
-@@ -3814,9 +3805,7 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	/* modulation */
- 	switch (state->props.modulation) {
- 	case QAM_AUTO:
--	default:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_CONST__M;
--		fallthrough;	/* try first guess DRX_CONSTELLATION_QAM64 */
-+	default:	/* try first guess DRX_CONSTELLATION_QAM64 */
- 	case QAM_64:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_CONST_QAM64;
- 		break;
-@@ -3857,9 +3846,7 @@ static int set_dvbt(struct drxk_state *state, u16 intermediate_freqk_hz,
- 	/* coderate */
- 	switch (state->props.code_rate_HP) {
- 	case FEC_AUTO:
--	default:
--		operation_mode |= OFDM_SC_RA_RAM_OP_AUTO_RATE__M;
--		fallthrough;	/* try first guess DRX_CODERATE_2DIV3 */
-+	default:	/* try first guess DRX_CODERATE_2DIV3 */
- 	case FEC_2_3:
- 		transmission_params |= OFDM_SC_RA_RAM_OP_PARAM_RATE_2_3;
- 		break;
--- 
-2.33.1
-
+johannes

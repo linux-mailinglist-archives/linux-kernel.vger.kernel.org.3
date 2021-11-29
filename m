@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A98454613A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31C384613A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:12:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238365AbhK2LPK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 06:15:10 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:56660 "EHLO
+        id S242302AbhK2LPM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 06:15:12 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:22118 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232301AbhK2LMr (ORCPT
+        by vger.kernel.org with ESMTP id S1377252AbhK2LM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:12:47 -0500
+        Mon, 29 Nov 2021 06:12:58 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-HjISAEVJOae9vyoBfAm5fg-1; Mon, 29 Nov 2021 06:09:26 -0500
-X-MC-Unique: HjISAEVJOae9vyoBfAm5fg-1
+ us-mta-493-z9tw4hLdPf-JkYyQUdvT2A-1; Mon, 29 Nov 2021 06:09:38 -0500
+X-MC-Unique: z9tw4hLdPf-JkYyQUdvT2A-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AE9DC81CCB6;
-        Mon, 29 Nov 2021 11:09:24 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3749C10144E0;
+        Mon, 29 Nov 2021 11:09:36 +0000 (UTC)
 Received: from x1.com (unknown [10.22.8.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C92905D9DE;
-        Mon, 29 Nov 2021 11:09:14 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 09F175D9DE;
+        Mon, 29 Nov 2021 11:09:24 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Tao Zhou <tao.zhou@linux.dev>,
@@ -40,9 +40,9 @@ Cc:     Tao Zhou <tao.zhou@linux.dev>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V8 10/14] rtla: Add rtla osnoise top documentation
-Date:   Mon, 29 Nov 2021 12:07:48 +0100
-Message-Id: <3dfdba589524498ee4a2cfe7a0b3ed18319d87db.1638182284.git.bristot@kernel.org>
+Subject: [PATCH V8 11/14] rtla: Add rtla osnoise hist documentation
+Date:   Mon, 29 Nov 2021 12:07:49 +0100
+Message-Id: <5e1bab917784d819bb562337942829dac8a7d362.1638182284.git.bristot@kernel.org>
 In-Reply-To: <cover.1638182284.git.bristot@kernel.org>
 References: <cover.1638182284.git.bristot@kernel.org>
 MIME-Version: 1.0
@@ -57,7 +57,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Man page for rtla osnoise top mode.
+Man page for rtla osnoise hist mode.
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Ingo Molnar <mingo@redhat.com>
@@ -75,105 +75,66 @@ Cc: linux-trace-devel@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- Documentation/tools/rtla/common_options.rst   | 24 ++++++++
- .../tools/rtla/common_osnoise_options.rst     | 17 ++++++
- .../tools/rtla/common_top_options.rst         |  3 +
- Documentation/tools/rtla/rtla-osnoise-top.rst | 61 +++++++++++++++++++
- 4 files changed, 105 insertions(+)
- create mode 100644 Documentation/tools/rtla/common_options.rst
- create mode 100644 Documentation/tools/rtla/common_osnoise_options.rst
- create mode 100644 Documentation/tools/rtla/common_top_options.rst
- create mode 100644 Documentation/tools/rtla/rtla-osnoise-top.rst
+ .../tools/rtla/common_hist_options.rst        | 23 +++++++
+ .../tools/rtla/rtla-osnoise-hist.rst          | 66 +++++++++++++++++++
+ 2 files changed, 89 insertions(+)
+ create mode 100644 Documentation/tools/rtla/common_hist_options.rst
+ create mode 100644 Documentation/tools/rtla/rtla-osnoise-hist.rst
 
-diff --git a/Documentation/tools/rtla/common_options.rst b/Documentation/tools/rtla/common_options.rst
+diff --git a/Documentation/tools/rtla/common_hist_options.rst b/Documentation/tools/rtla/common_hist_options.rst
 new file mode 100644
-index 000000000000..ea6529667e7c
+index 000000000000..0266cd08a6c9
 --- /dev/null
-+++ b/Documentation/tools/rtla/common_options.rst
-@@ -0,0 +1,24 @@
-+**-c**, **--cpus** *cpu-list*
++++ b/Documentation/tools/rtla/common_hist_options.rst
+@@ -0,0 +1,23 @@
++**-b**, **--bucket-size** *N*
 +
-+        Set the osnoise tracer to run the sample threads in the cpu-list.
++        Set the histogram bucket size (default *1*).
 +
-+**-d**, **--duration** *time[s|m|h|d]*
++**-e**, **--entries** *N*
 +
-+        Set the duration of the session.
++        Set the number of entries of the histogram (default 256).
 +
-+**-t**, **--trace**\[*=file*]
++**--no-header**
 +
-+        Save the stopped trace to [*file|osnoise_trace.txt*].
++        Do not print header.
 +
-+**-P**, **--priority** *o:prio|r:prio|f:prio|d:runtime:period*
++**--no-summary**
 +
-+        Set scheduling parameters to the osnoise tracer threads, the format to set the priority are:
++        Do not print summary.
 +
-+        - *o:prio* - use SCHED_OTHER with *prio*;
-+        - *r:prio* - use SCHED_RR with *prio*;
-+        - *f:prio* - use SCHED_FIFO with *prio*;
-+        - *d:runtime[us|ms|s]:period[us|ms|s]* - use SCHED_DEADLINE with *runtime* and *period* in nanoseconds.
++**--no-index**
 +
-+**-h**, **--help**
++        Do not print index.
 +
-+        Print help menu.
-diff --git a/Documentation/tools/rtla/common_osnoise_options.rst b/Documentation/tools/rtla/common_osnoise_options.rst
++**--with-zeros**
++
++        Print zero only entries.
+diff --git a/Documentation/tools/rtla/rtla-osnoise-hist.rst b/Documentation/tools/rtla/rtla-osnoise-hist.rst
 new file mode 100644
-index 000000000000..d556883e4e26
+index 000000000000..52298ddd8701
 --- /dev/null
-+++ b/Documentation/tools/rtla/common_osnoise_options.rst
-@@ -0,0 +1,17 @@
-+**-p**, **--period** *us*
-+
-+        Set the *osnoise* tracer period in microseconds.
-+
-+**-r**, **--runtime** *us*
-+
-+        Set the *osnoise* tracer runtime in microseconds.
-+
-+**-s**, **--stop** *us*
-+
-+        Stop the trace if a single sample is higher than the argument in microseconds.
-+        If **-T** is set, it will also save the trace to the output.
-+
-+**-S**, **--stop-total** *us*
-+
-+        Stop the trace if the total sample is higher than the argument in microseconds.
-+        If **-T** is set, it will also save the trace to the output.
-diff --git a/Documentation/tools/rtla/common_top_options.rst b/Documentation/tools/rtla/common_top_options.rst
-new file mode 100644
-index 000000000000..f48878938f84
---- /dev/null
-+++ b/Documentation/tools/rtla/common_top_options.rst
-@@ -0,0 +1,3 @@
-+**-q**, **--quiet**
-+
-+        Print only a summary at the end of the session.
-diff --git a/Documentation/tools/rtla/rtla-osnoise-top.rst b/Documentation/tools/rtla/rtla-osnoise-top.rst
-new file mode 100644
-index 000000000000..5d75d1394516
---- /dev/null
-+++ b/Documentation/tools/rtla/rtla-osnoise-top.rst
-@@ -0,0 +1,61 @@
++++ b/Documentation/tools/rtla/rtla-osnoise-hist.rst
+@@ -0,0 +1,66 @@
 +===================
-+rtla-osnoise-top
++rtla-osnoise-hist
 +===================
-+-----------------------------------------------
-+Display a summary of the operating system noise
-+-----------------------------------------------
++------------------------------------------------------
++Display a histogram of the osnoise tracer samples
++------------------------------------------------------
 +
 +:Manual section: 1
 +
 +SYNOPSIS
 +========
-+**rtla osnoise top** [*OPTIONS*]
++**rtla osnoise hist** [*OPTIONS*]
 +
 +DESCRIPTION
 +===========
 +.. include:: common_osnoise_description.rst
 +
-+**rtla osnoise top** collects the periodic summary from the *osnoise* tracer,
-+including the counters of the occurrence of the interference source,
-+displaying the results in a user-friendly format.
-+
++The **rtla osnoise hist** tool collects all **osnoise:sample_threshold**
++occurrence in a histogram, displaying the results in a user-friendly way.
 +The tool also allows many configurations of the *osnoise* tracer and the
 +collection of the tracer output.
 +
@@ -181,33 +142,40 @@ index 000000000000..5d75d1394516
 +=======
 +.. include:: common_osnoise_options.rst
 +
-+.. include:: common_top_options.rst
++.. include:: common_hist_options.rst
 +
 +.. include:: common_options.rst
 +
 +EXAMPLE
 +=======
-+In the example below, the **rtla osnoise top** tool is set to run with a
-+real-time priority *FIFO:1*, on CPUs *0-3*, for *900ms* at each period
-+(*1s* by default). The reason for reducing the runtime is to avoid starving
-+the rtla tool. The tool is also set to run for *one minute* and to display
-+a summary of the report at the end of the session::
++In the example below, *osnoise* tracer threads are set to run with real-time
++priority *FIFO:1*, on CPUs *0-11*, for *900ms* at each period (*1s* by
++default). The reason for reducing the runtime is to avoid starving the
++**rtla** tool. The tool is also set to run for *one minute*. The output
++histogram is set to group outputs in buckets of *10us* and *25* entries::
 +
-+  [root@f34 ~]# rtla osnoise top -P F:1 -c 0-3 -r 900000 -d 1M -q
-+                                          Operating System Noise
-+  duration:   0 00:01:00 | time is in us
-+  CPU Period       Runtime        Noise  % CPU Aval   Max Noise   Max Single          HW          NMI          IRQ      Softirq       Thread
-+    0 #59         53100000       304896    99.42580        6978           56         549            0        53111         1590           13
-+    1 #59         53100000       338339    99.36282        8092           24         399            0        53130         1448           31
-+    2 #59         53100000       290842    99.45227        6582           39         855            0        53110         1406           12
-+    3 #59         53100000       204935    99.61405        6251           33         290            0        53156         1460           12
++  [root@f34 ~/]# rtla osnoise hist -P F:1 -c 0-11 -r 900000 -d 1M -b 10 -e 25
++  # RTLA osnoise histogram
++  # Time unit is microseconds (us)
++  # Duration:   0 00:01:00
++  Index   CPU-000   CPU-001   CPU-002   CPU-003   CPU-004   CPU-005   CPU-006   CPU-007   CPU-008   CPU-009   CPU-010   CPU-011
++  0         42982     46287     51779     53740     52024     44817     49898     36500     50408     50128     49523     52377
++  10        12224      8356      2912       878      2667     10155      4573     18894      4214      4836      5708      2413
++  20            8         5        12         2        13        24        20        41        29        53        39        39
++  30            1         1         0         0        10         3         6        19        15        31        30        38
++  40            0         0         0         0         0         4         2         7         2         3         8        11
++  50            0         0         0         0         0         0         0         0         0         1         1         2
++  over:         0         0         0         0         0         0         0         0         0         0         0         0
++  count:    55215     54649     54703     54620     54714     55003     54499     55461     54668     55052     55309     54880
++  min:          0         0         0         0         0         0         0         0         0         0         0         0
++  avg:          0         0         0         0         0         0         0         0         0         0         0         0
++  max:         30        30        20        20        30        40        40        40        40        50        50        50
 +
 +SEE ALSO
 +========
++**rtla-osnoise**\(1), **rtla-osnoise-top**\(1)
 +
-+**rtla-osnoise**\(1), **rtla-osnoise-hist**\(1)
-+
-+Osnoise tracer documentation: <https://www.kernel.org/doc/html/latest/trace/osnoise-tracer.html>
++*osnoise* tracer documentation: <https://www.kernel.org/doc/html/latest/trace/osnoise-tracer.html>
 +
 +AUTHOR
 +======

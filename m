@@ -2,192 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0725E462090
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9CC46209D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348517AbhK2TgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:36:00 -0500
-Received: from mga11.intel.com ([192.55.52.93]:18397 "EHLO mga11.intel.com"
+        id S1352928AbhK2Tj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:39:29 -0500
+Received: from mout01.posteo.de ([185.67.36.141]:54555 "EHLO mout01.posteo.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351964AbhK2Td6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:33:58 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="233556303"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="233556303"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 11:25:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="600317798"
-Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
-  by fmsmga002.fm.intel.com with ESMTP; 29 Nov 2021 11:25:36 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 29 Nov 2021 11:25:36 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20 via Frontend Transport; Mon, 29 Nov 2021 11:25:36 -0800
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.170)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.20; Mon, 29 Nov 2021 11:25:36 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=m+iOiHsvpuL8rKjKNRt2Xpx8be33+PHop4VPSEucMbln6PI8Thux66mW1f6vHSrsoTcX4g/w9+xb4IgZ+Ztk0yNUUZaujvwv0DRfxvn65L8ufrHvOql5+3VDk/UcCZqqJIJg/U2paWXnB+cTbzVVZDMJrbzp3wNwDE3j7rTfrGv6FaV7b7umcEuo7BrjLWPTa809C8o8FYA6wgd+y+3GK+ft+mAA0KKItfn5em/LTcf4wkmB0K2tJ6XmmZzusIAnGvVyjciX1qc0dOweNvnsemc421hZWrBarKUn2tt+EHFNEieZR2gj0SDvFOHMIYIowT7ylexU3WRGp61JA+DVyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s2OMAPEYsPGm81yx8JqN5oBqA3BYPVz+b14LQ3vhe40=;
- b=hCnxvK+9xAon/wQ3fhC8KJfi0mHo4SyDEZYBmVJgVMcZiRigOlXy4hR+oWKrLxGK/8XretdAF4jqdZ61zcSDjJ+KZ4nkD9oL42da+16e3CXqhYbInCuEArzFRilDhAkW8NBLjOpCAwc8/hR1lFMDkpMG4XyNFgl17ZaDzD3ezKthn8zDfQrvZJK8MSreqZqWQlPsemfX6OYlc/acip6/nI2DIhpCsOl36sqcsfDjc1CpZ6Y03CniwGcky5w1uJ9HZpEezErygWfJwgcPoZmribTLYdtVrm88zQOApMGzSMaXexU37K5GxsnfzRr1R1CPxa8d4N0PSOWHwbgYdAhrZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intel.onmicrosoft.com;
- s=selector2-intel-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s2OMAPEYsPGm81yx8JqN5oBqA3BYPVz+b14LQ3vhe40=;
- b=diJihg4kwfmglFS2GMANbusEZ3ghvPCmNiYN1xQOf9eNA6JGJ1Gf/d26i7YI6f9wzF2Wv2KF+BIHjfyjXOODPrTlmjz2mK4VunI05102k6qqZpAiOsC/aTTA2wt66/JmKIIm1E6TOuArTw1pgORX62YQb/o4swue/oMlRUz2ECg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA2PR11MB5163.namprd11.prod.outlook.com (2603:10b6:806:113::20)
- by SN6PR11MB3405.namprd11.prod.outlook.com (2603:10b6:805:c0::27) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Mon, 29 Nov
- 2021 19:25:32 +0000
-Received: from SA2PR11MB5163.namprd11.prod.outlook.com
- ([fe80::d455:2add:2fc6:99bb]) by SA2PR11MB5163.namprd11.prod.outlook.com
- ([fe80::d455:2add:2fc6:99bb%3]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
- 19:25:32 +0000
-Subject: Re: [PATCH] fpga: stratix10-soc: Do not use ret uninitialized in
- s10_probe()
-To:     Nathan Chancellor <nathan@kernel.org>,
-        Moritz Fischer <mdf@kernel.org>, "Wu Hao" <hao.wu@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>
-CC:     Tom Rix <trix@redhat.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "Dan Carpenter" <dan.carpenter@oracle.com>,
-        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-References: <20211129161009.3625548-1-nathan@kernel.org>
-From:   Russ Weight <russell.h.weight@intel.com>
-Message-ID: <41939d45-76ef-e59f-135f-b5c05cd4f5e5@intel.com>
-Date:   Mon, 29 Nov 2021 11:24:26 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
-In-Reply-To: <20211129161009.3625548-1-nathan@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-ClientProxiedBy: MW3PR05CA0020.namprd05.prod.outlook.com
- (2603:10b6:303:2b::25) To SA2PR11MB5163.namprd11.prod.outlook.com
- (2603:10b6:806:113::20)
+        id S229852AbhK2Th1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 14:37:27 -0500
+X-Greylist: delayed 423 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Nov 2021 14:37:27 EST
+Received: from submission (posteo.de [89.146.220.130]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 1FBDE24002A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 20:27:06 +0100 (CET)
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4J2wMs5d4Fz9rxg
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 20:27:05 +0100 (CET)
+Message-ID: <5be0e863-cb9b-c448-9089-6a95f59b8f74@miltschek.de>
+Date:   Mon, 29 Nov 2021 19:26:59 +0000
 MIME-Version: 1.0
-Received: from [10.0.2.4] (50.43.42.212) by MW3PR05CA0020.namprd05.prod.outlook.com (2603:10b6:303:2b::25) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend Transport; Mon, 29 Nov 2021 19:25:31 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a8cff057-9b38-4269-b2ad-08d9b36e0291
-X-MS-TrafficTypeDiagnostic: SN6PR11MB3405:
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-Microsoft-Antispam-PRVS: <SN6PR11MB34050F652EC0F4C54CCE51A5C5669@SN6PR11MB3405.namprd11.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:14;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: U7v1I3zHHk72CQElwUFPVmpPPIRkhvmapeCsJAnlrzop1EGgtafjJTHiZnbkp6xk6xgOvfpPDxWak0iRkRPUpSZBkJ5UGM1xgrhB/VveY9taS6SPEHTEBhGaFNPMxrqwVyoN9qcdKLCg62tV/PMkrljc3zjc2NhsCEGiVgdPPzAST3WULTo0QBkI8XRxOAhVRKowiTxobJZGHGyR75CZqkDie3Surrkif2H1XQEgCyBO7QNrk3F1Q0Gu+3BQK4DpG9ihBnG+yaY+8X5ea6MNTmY7Cu1XraWEJHvXifcvl31GTHc8/1U/B0wqCvk1/cRyj4VU9vJ+nZvwtYNhl9PBoXtdAb5m0+QVFV5RcqYcmFTNMVnBw+zdgqINySWPtxVdpnhgN9NdY28jfdLeYLJx08uzB6VnLnF/tM1lHyi/1+eOIr8+z2j24ijGGysTDjbvSEW/MCpLbdo9dYaNxp5BA7cV/LbDSyayVD5d8Q12qk2J8qIrrhpWjlrhVa+5ir04Ph5YVY8M0H9ElwVjK6Avovx2L152xBg99Fc38tRprxIOa/BrsKEtpcwazVcVhNLxbosRixSARTJHCMSCJNUoPippawJzrjksOaccoQklFd0EPuBNbYd6Ny0UvuQgkaHIcFzknd1w4acBw/soLQtDJjiP9eJOQzmcc83ZingsfH2XndGKcILrxoWU4J5auP31pvXCfgARq+PY67Io0V1FUOtux3IW4CvvxP3g5F8Qu7E4D6aQJ7y9P52ne+WcbTuA1BStWH76gqps3WRUDdmP2YEw2F0dpWWj5fgL4ClPXpN3q148lHD2LZrVanOkbuHOgW/Wt4rmxegEOtqAMgy4sg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA2PR11MB5163.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(5660300002)(83380400001)(8676002)(66946007)(110136005)(16576012)(508600001)(36756003)(38100700002)(66476007)(31696002)(186003)(31686004)(2906002)(316002)(54906003)(8936002)(6636002)(966005)(86362001)(66556008)(82960400001)(26005)(6666004)(6486002)(4326008)(53546011)(2616005)(956004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VXhjWE41OWlGakFVZ2lQNlNFeWJ5cDhNbmx1cDNzS2w1b3lKZXcrOU1COFd2?=
- =?utf-8?B?cDZZUWJwdVNvQ1BoYkMvN0Y0TUEvOWRiaGY1bUtXckU3cm9NVkJpSWpxczBJ?=
- =?utf-8?B?UlFmYVdKTmJlakNxUHpvd0MxeTVSRmlJb2RxYU5mUy8zTFdzUmxsZWpXa0p5?=
- =?utf-8?B?Ym1CYWlhWEZ6NXJTVWQyMHJjbE11NTJ1TkgwUFZHVzBzc2tjYW1Oc3ZZZm9O?=
- =?utf-8?B?QzVpUkhkM3VmdUdPSDViWkxlTTIrNmJ0VktQR3pMMXA2dWgwb0Z2WXIvMjd2?=
- =?utf-8?B?RHRTUGVzcExwWXBLYVg2ajJObzhBQ0dabk4vWE1ERXpFV214ODVyeklkYjRV?=
- =?utf-8?B?REI5RnQ2SXhZWVdWYVhwRWpBejdPblV3elM5bFlvemhWSEQ3L2tmcVgwU1Rr?=
- =?utf-8?B?N0YxUWE1WFl5RENwZENRZnRnM2RtUHFUbXRnVHE3VjFoT01ZSjFjZFVjR1RT?=
- =?utf-8?B?Zk43V2w1WkYwckpGT0NPWEozR3V1TE5VYzlNaDdBWkN2UW1Kam1QcWw0emFq?=
- =?utf-8?B?cktMdmMySjRIdzVIakM5N0c0S1gvM3F5YmpnZmpjNk4rUzJUSTdLZUZaVlJz?=
- =?utf-8?B?bHRSby9uVGlKbUFteFVTZExKN2VURmZ4cTYrVnNTM0wxNHJTOVQyUS9pTCtp?=
- =?utf-8?B?NGt5bXZuZ285bC9aNHpqYW5lc0NDQVNlaExkc1NUdGIyZ2kxYjQ0dE83THB2?=
- =?utf-8?B?ZGlXSkorNGZta1hSaTBzeW5VaTR1WldCbnZMRlZnL0luTDhabVFlckhIZVh6?=
- =?utf-8?B?NGFJTkVWdUtIN0h3cVQvRCtHYXZFdDJkSUhab1YvcmQzTjdZdkJRbktWbXhK?=
- =?utf-8?B?TUdySW1WcGZ5NGdVbC9oTEVPcHE5MjlUbTFPNkhMcHR1bUM5aEpkSkZRU0RX?=
- =?utf-8?B?Y2QxemV5WnNjbGlHSHpJSkE5SXNGRGpsbHg3NW1kM29wVDJPU2VCdlNLNWJ2?=
- =?utf-8?B?RVJZU2t4SXBXRGNBUGJERWNPYis0bG01bUpranJ5UWFYb083QzE4UHAxTFNI?=
- =?utf-8?B?bVFpUUVrcUNYNGJhMlUyY2pKYUxUTU9USUdTaDQyeEFQVGt6WG54bm9BeUtF?=
- =?utf-8?B?NXlYMVJUR0hVU2FoWm9GRml0WjFOVUJEeWpQQlhSL0ExRGxNNlp2eTQ0TFN2?=
- =?utf-8?B?dVo1blpnbVRRK0E0Q0g3S3RhK3NaOTVkMTRTbWxsVy9KMktqbVNVQzI1VkxT?=
- =?utf-8?B?SmVhSFIvdHZKSUFNVHNTRnZhbktpWlAyeU5HZXUrU3JMT1RMVUIvc0N6cUY5?=
- =?utf-8?B?cytudTVFZmFOTXNWWGs2Wnl6VStGekVka2lORlVlTHF4OEU1RmExeW1nTzdl?=
- =?utf-8?B?eDNXdGRscFZYSmlwYjB0NzRCOTQrY3RKTW9UaVdiTTBBMGNJa3VrNmo3dDBC?=
- =?utf-8?B?WStHdkpubFJTS3hTMkdRSjY5Yk83ZG5NNDNjdmt0YUR3OUNIS1hVdTU2S1p2?=
- =?utf-8?B?Rmt2dFdCa2cvemRoalFsd1ZmZTF1STF2WFNyblRkSTFnbGhyU0ZCa1FDbVJF?=
- =?utf-8?B?ZWk1MklOa1phbjJlVG4zQi9pSGdoZks3eER3WkUvaVpWTzM2WGZ1QlRZLzRT?=
- =?utf-8?B?YUFPWDdZeWdyckMyekcycDU0UUFYUUswSURZOGxaNUVlWnRnSmZ0WjZJKy9Z?=
- =?utf-8?B?MGVVWHVQaG1kcllPYmd0Y0ZjZXgrTXl4UTVuNmdjVDFaN3ludDVmUW44WVBh?=
- =?utf-8?B?NytzbDVhSkRQV0hNN0V2REdack11Sks2MndKL2lYOEx2L0pEaVNWTjZ4dDZK?=
- =?utf-8?B?WjBGZVlFa0xPd0Q5cGRTVU5XNjdYVnZJM0EwcXBINzFjMWVxem5iT1J2c3da?=
- =?utf-8?B?MzVjenlRQlZCZmxMNEp1VUM2ZHdmWENNZlRHcnd2dGNobk05VWJLdWJMYVp3?=
- =?utf-8?B?dFNxeklyL1M5dnZLakYycnNDN2IyY245WU5lR3dtanNQTWkxRldWbk5YTFlD?=
- =?utf-8?B?cTdKdS9JSEN1QU1FVmh1U2Iwb1MvK294STdGUWY3SWdCS3B5T3c3NUxNZmV0?=
- =?utf-8?B?aTNxdFVhalVEc200eWwyekhjK2tsUlc0Z0JrNThvK2hTdTh3dWtNdTg0U2J6?=
- =?utf-8?B?aUZBNnRpbjRrYUczWU4za2cwVE1WcS93aTgvSEQ2elBBSlBOSlRpdG5BU3E1?=
- =?utf-8?B?SUlHRzM0aGRVMkdBd200Sk8rckxlRHlJRk92akMvT3JLVGNMSWRvRVVRbzFs?=
- =?utf-8?B?amQ4Z1RFNU9JcGFOWHRNSWtXUXZrOWJJdmhZM2l1MEZWSHZNQS9oRkVOUXVH?=
- =?utf-8?B?QzIyaWc3R3Rwbm96SWVQbHFGTTVRPT0=?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8cff057-9b38-4269-b2ad-08d9b36e0291
-X-MS-Exchange-CrossTenant-AuthSource: SA2PR11MB5163.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 19:25:32.2852
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BM9+gA5DyFryj6/pMkqW7H9rZfiyXTt9C/T3mPIYfWqkjQ979uU+pXwggEtY91YGxsgg9zhk999ofk5KyPKsibUH8HXTOrRRE9KBm/vboOI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB3405
-X-OriginatorOrg: intel.com
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Reply-To: linux-kernel@miltschek.de
+From:   "K." <linux-kernel@miltschek.de>
+Subject: =?UTF-8?Q?Kernel_driver=3a_W1_DALLAS=e2=80=99S_1-WIRE_BUS_invalid_c?=
+ =?UTF-8?Q?alculation?=
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+Dear kernel-driver developers,
 
-Thanks,
-- Russ
+I believe there is a mistake in calculation of the fine part of the 
+temperature value as received from 1-Wire DS18x20-family sensors.
 
-On 11/29/21 8:10 AM, Nathan Chancellor wrote:
-> Clang warns:
->
-> drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
->         return ret;
->                ^~~
-> drivers/fpga/stratix10-soc.c:402:9: note: initialize the variable 'ret' to silence this warning
->         int ret;
->                ^
->                 = 0
-> 1 warning generated.
->
-> ret is only assigned in an error path now so just return 0 directly.
->
-> Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1517
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
->  drivers/fpga/stratix10-soc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
-> index 737d14c6e0de..357cea58ec98 100644
-> --- a/drivers/fpga/stratix10-soc.c
-> +++ b/drivers/fpga/stratix10-soc.c
-> @@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
->  	}
->  
->  	platform_set_drvdata(pdev, mgr);
-> -	return ret;
-> +	return 0;
->  
->  probe_err:
->  	stratix10_svc_free_channel(priv->chan);
->
-> base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
+The current implementation does indeed follow the official datasheet, 
+but exactly the datasheet seems to be incorrect in this place.
 
+Datasheet: https://datasheets.maximintegrated.com/en/ds/DS18S20.pdf
+says two different things on Page 6:
+
+- First:
+"Resolutions greater than 9 bits can be calculated using the data from 
+the temperature, COUNT REMAIN and COUNT PER °C registers in the 
+scratchpad. Note that the COUNT PER  °C  register  is  hard-wired  to 
+16  (10h).  After  reading  the  scratchpad,  the  TEMP_READ  value  is 
+obtained  by  truncating  the  0.5°C  bit  (bit  0)  from  the 
+temperature  data  (see Figure  4)."
+
+- And then:
+"The  extended  resolution  temperature  can  then be calculated using 
+the following equation:
+TEMPERATURE = TEMP_READ - 0.25 + (COUNT_PER_C - COUNT_REMAIN) / COUNT_PER_C"
+
+I have performed live tests with DS18S20 sensors to verify it, how they 
+behave. I was lowering the temperature in slow steps to see individual 
+transitions. Below is the result.
+
+Columns:
+- 00, 01, 06, 07 = response bytes 0 (value), 1 (sign), 6 (count remain) 
+and 7 (count per degC)
+- 01-bin = response byte 0 again as binary
+- 7-min-6 = response byte 7 minus response byte 6
+- -0- = bits 7..1 of response byte 0
+- -76- = bits 3..0 of the (byte 7 - byte 6 subtraction)
+- hex = the value as hex
+- degreesC = the value multiplied by 1/16°C
+
+00 01  06 07 --01-bin- -7-min-6- --0---- -76- hex    degreesC
+37:00::04:10 0011 0111 0C = 1100 0011011.1100 1BC -> 27.75
+37:00::05:10 0011 0111 0B = 1011 0011011.1011 1BB -> 27.6875
+37:00::06:10 0011 0111 0A = 1010 0011011.1010 1BA -> 27.625
+37:00::07:10 0011 0111 09 = 1001 0011011.1001 1B9 -> 27.5625
+37:00::08:10 0011 0111 08 = 1000 0011011.1000 1B8 -> 27.5
+36:00::09:10 0011 0110 07 = 0111 0011011.0111 1B7 -> 27.4375
+36:00::0A:10 0011 0110 06 = 0110 0011011.0110 1B6 -> 27.375
+36:00::0B:10 0011 0110 05 = 0101 0011011.0101 1B5 -> 27.3125
+36:00::0C:10 0011 0110 04 = 0100 0011011.0100 1B4 -> 27.25
+36:00::0D:10 0011 0110 03 = 0011 0011011.0011 1B3 -> 27.1875
+36:00::0E:10 0011 0110 02 = 0010 0011011.0010 1B2 -> 27.125
+36:00::0F:10 0011 0110 01 = 0001 0011011.0001 1B1 -> 27.0625
+36:00::10:10 0011 0110 00 = 0000 0011011.0000 1B0 -> 27
+35:00::01:10 0011 0101 0F = 1111 0011010.1111 1AF -> 26.9375
+35:00::02:10 0011 0101 0E = 1110 0011010.1110 1AE -> 26.875
+35:00::03:10 0011 0101 0D = 1101 0011010.1101 1AD -> 26.8125
+35:00::04:10 0011 0101 0C = 1100 0011010.1100 1AC -> 26.75
+35:00::05:10 0011 0101 0B = 1011 0011010.1011 1AB -> 26.6875
+35:00::06:10 0011 0101 0A = 1010 0011010.1010 1AA -> 26.625
+
+for temperature(s) below zero (u2 coding):
+
+00 01  06 07 --01-bin- -7-min-6- --0---- -76- hex    degreesC
+00:00::0E:10 0000 0000 02 = 0010       0.0010        0.125
+00:00::0F:10 0000 0000 01 = 0001       0.0001        0.0625
+00:00::10:10 0000 0000 00 = 0000       0.0000        0
+FF:FF::01:10 1111 1111 0F = 1111 1111111.1111       -0.0625
+FF:FF::02:10 1111 1111 0E = 1110 1111111.1110       -0.125
+...
+FC:FF::0F:10 1111 1100 01 = 0001 1111110.0001       -1.9375
+FC:FF::10:10 1111 1100 00 = 0000 1111110.0000       -2.0000
+FB:FF::01:10 1111 1011 0F = 1111 1111101.1111       -2.0625
+
+My findings are confirmed by other people, e.g. here:
+https://www.electro-tech-online.com/threads/expanding-ds18s20-output-from-9-bit-to-12-bit.128569/post-1070629
+
+The only unclear thing for me is the byte[7]. The datasheet says it is 
+hard wired to 10h. The guy here says, he has seen devices with other 
+dividers:
+https://www.electro-tech-online.com/threads/expanding-ds18s20-output-from-9-bit-to-12-bit.128569/post-1084824
+"I noticed that the count divisor was not equal to 16 as the data sheet 
+indicated it would be. In fact, as the temperature was raised and 
+lowered, the count divisor would increase and decrease in value (not 
+fixed)."
+
+Assuming the guy did not make any mistake, it would be interesting to 
+know, whether the divisor is always a power of 2 (which would make the 
+conversion easy) or can be of any value.
+
+For your info: I have contacted Evgeniy P. as an author of the driver, 
+but according to the response, he is not maintaining the driver anymore. 
+That's why a question to all of you, if anyone could take a look at this 
+please.
+
+Thank you very much and best regards
+K.

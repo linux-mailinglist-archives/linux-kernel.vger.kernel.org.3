@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FDC46199B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5689D4617EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378655AbhK2OkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:40:05 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:59015 "EHLO pegase2.c-s.fr"
+        id S1377911AbhK2OZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:25:30 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:36889 "EHLO pegase2.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1379111AbhK2OiA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:38:00 -0500
+        id S233479AbhK2OX3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:23:29 -0500
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4J2nYG6sthz9sSp;
-        Mon, 29 Nov 2021 15:19:46 +0100 (CET)
+        by localhost (Postfix) with ESMTP id 4J2nYK0bGDz9sSx;
+        Mon, 29 Nov 2021 15:19:49 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
         by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AKs2oUfo_INm; Mon, 29 Nov 2021 15:19:46 +0100 (CET)
+        with ESMTP id DmPCWUb4XUFi; Mon, 29 Nov 2021 15:19:49 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4J2nY40mKdz9sT5;
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J2nY417Rdz9sT8;
         Mon, 29 Nov 2021 15:19:36 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 085FA8B7B3;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 131F38B7AE;
         Mon, 29 Nov 2021 15:19:36 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
         by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id otA_zolaSl1s; Mon, 29 Nov 2021 15:19:35 +0100 (CET)
+        with ESMTP id 05udLhZsMS-F; Mon, 29 Nov 2021 15:19:35 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id AE69B8B7B5;
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B029D8B7B6;
         Mon, 29 Nov 2021 15:19:35 +0100 (CET)
 Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1ATEJSCW959562
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1ATEJSnU959566
         (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
         Mon, 29 Nov 2021 15:19:28 +0100
 Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1ATEJSqT959561;
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1ATEJSZY959565;
         Mon, 29 Nov 2021 15:19:28 +0100
 X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
 From:   Christophe Leroy <christophe.leroy@csgroup.eu>
@@ -46,147 +46,304 @@ To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
 Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
         linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-mm@kvack.org
-Subject: [PATCH v3 04/10] powerpc/mm: Remove asm/slice.h
-Date:   Mon, 29 Nov 2021 15:19:18 +0100
-Message-Id: <3f8ab2b28aff947a9b6d362d51ee5a89d97f0707.1638195388.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH v3 05/10] powerpc/mm: Call radix__arch_get_unmapped_area() from arch_get_unmapped_area()
+Date:   Mon, 29 Nov 2021 15:19:19 +0100
+Message-Id: <196aeb8ecf6f68dfa369ad198554b2dcfd53c38a.1638195388.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638195388.git.christophe.leroy@csgroup.eu>
 References: <cover.1638195388.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1638195562; l=4276; s=20211009; h=from:subject:message-id; bh=2aRzeye83rSinbLEp9frmuS7EvQlzWonE9gD0u0UBvo=; b=UkwvEq/8L/ZbFBrZC979woP0jpFtIbO0yQo+yH5IrNWW3ONnAYx3mNZtwBVI+YiBRv3K9MikhyTl bB1p/DG1DuBoemB6Iup99wWRSVYjrj7o93+Zt7wzo9r33UrUbLpZ
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1638195562; l=8800; s=20211009; h=from:subject:message-id; bh=xhmMDhewW/TRmUJ1bjg7TfwHU+gY/5N0CfluBZorISk=; b=Ytz6Z4adu+QpjdMcE0FeJ4uoAgyOqhTcv8RIWb3OIvjwSic4iGzy1OYmV5QmF85fpE/jlofaAbpP rSulJpNiBQ/5NgqL520KGZqmrn8PsUuEwy1tZOlamGr58vWf6swW
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move necessary stuff in asm/book3s/64/slice.h and
-remove asm/slice.h
+Instead of setting mm->get_unmapped_area() to either
+arch_get_unmapped_area() or radix__arch_get_unmapped_area(),
+always set it to arch_get_unmapped_area() and call
+radix__arch_get_unmapped_area() from there when radix is enabled.
+
+To keep radix__arch_get_unmapped_area() static, move it to slice.c
+
+Do the same with radix__arch_get_unmapped_area_topdown()
 
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- arch/powerpc/include/asm/book3s/64/hash.h     |  3 ++
- arch/powerpc/include/asm/book3s/64/mmu-hash.h |  1 +
- arch/powerpc/include/asm/book3s/64/slice.h    | 18 +++++++++
- arch/powerpc/include/asm/page.h               |  1 -
- arch/powerpc/include/asm/slice.h              | 37 -------------------
- 5 files changed, 22 insertions(+), 38 deletions(-)
- delete mode 100644 arch/powerpc/include/asm/slice.h
+ arch/powerpc/mm/book3s64/slice.c | 104 ++++++++++++++++++++++++++
+ arch/powerpc/mm/mmap.c           | 123 -------------------------------
+ 2 files changed, 104 insertions(+), 123 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/book3s/64/hash.h b/arch/powerpc/include/asm/book3s/64/hash.h
-index 97f2fc217a49..fab032f552f3 100644
---- a/arch/powerpc/include/asm/book3s/64/hash.h
-+++ b/arch/powerpc/include/asm/book3s/64/hash.h
-@@ -100,6 +100,9 @@
-  * hash table CPUs.
-  */
- #ifdef CONFIG_PPC_64S_HASH_MMU
-+#ifdef CONFIG_HUGETLB_PAGE
-+#define HAVE_ARCH_HUGETLB_UNMAPPED_AREA
-+#endif
- #define HAVE_ARCH_UNMAPPED_AREA
- #define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
- #endif
-diff --git a/arch/powerpc/include/asm/book3s/64/mmu-hash.h b/arch/powerpc/include/asm/book3s/64/mmu-hash.h
-index 3004f3323144..b4b2ca111f75 100644
---- a/arch/powerpc/include/asm/book3s/64/mmu-hash.h
-+++ b/arch/powerpc/include/asm/book3s/64/mmu-hash.h
-@@ -18,6 +18,7 @@
-  * complete pgtable.h but only a portion of it.
-  */
- #include <asm/book3s/64/pgtable.h>
-+#include <asm/book3s/64/slice.h>
- #include <asm/task_size_64.h>
- #include <asm/cpu_has_feature.h>
+diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
+index 4c3e9601fdf6..99742dde811c 100644
+--- a/arch/powerpc/mm/book3s64/slice.c
++++ b/arch/powerpc/mm/book3s64/slice.c
+@@ -639,12 +639,113 @@ unsigned long slice_get_unmapped_area(unsigned long addr, unsigned long len,
+ }
+ EXPORT_SYMBOL_GPL(slice_get_unmapped_area);
  
-diff --git a/arch/powerpc/include/asm/book3s/64/slice.h b/arch/powerpc/include/asm/book3s/64/slice.h
-index f0d3194ba41b..5b0f7105bc8b 100644
---- a/arch/powerpc/include/asm/book3s/64/slice.h
-+++ b/arch/powerpc/include/asm/book3s/64/slice.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_POWERPC_BOOK3S_64_SLICE_H
- #define _ASM_POWERPC_BOOK3S_64_SLICE_H
++/*
++ * Same function as generic code used only for radix, because we don't need to overload
++ * the generic one. But we will have to duplicate, because hash select
++ * HAVE_ARCH_UNMAPPED_AREA
++ */
++static unsigned long
++radix__arch_get_unmapped_area(struct file *filp, unsigned long addr, unsigned long len,
++			      unsigned long pgoff, unsigned long flags)
++{
++	struct mm_struct *mm = current->mm;
++	struct vm_area_struct *vma;
++	int fixed = (flags & MAP_FIXED);
++	unsigned long high_limit;
++	struct vm_unmapped_area_info info;
++
++	high_limit = DEFAULT_MAP_WINDOW;
++	if (addr >= high_limit || (fixed && (addr + len > high_limit)))
++		high_limit = TASK_SIZE;
++
++	if (len > high_limit)
++		return -ENOMEM;
++
++	if (fixed) {
++		if (addr > high_limit - len)
++			return -ENOMEM;
++		return addr;
++	}
++
++	if (addr) {
++		addr = PAGE_ALIGN(addr);
++		vma = find_vma(mm, addr);
++		if (high_limit - len >= addr && addr >= mmap_min_addr &&
++		    (!vma || addr + len <= vm_start_gap(vma)))
++			return addr;
++	}
++
++	info.flags = 0;
++	info.length = len;
++	info.low_limit = mm->mmap_base;
++	info.high_limit = high_limit;
++	info.align_mask = 0;
++
++	return vm_unmapped_area(&info);
++}
++
++static unsigned long
++radix__arch_get_unmapped_area_topdown(struct file *filp, const unsigned long addr0,
++				      const unsigned long len, const unsigned long pgoff,
++				      const unsigned long flags)
++{
++	struct vm_area_struct *vma;
++	struct mm_struct *mm = current->mm;
++	unsigned long addr = addr0;
++	int fixed = (flags & MAP_FIXED);
++	unsigned long high_limit;
++	struct vm_unmapped_area_info info;
++
++	high_limit = DEFAULT_MAP_WINDOW;
++	if (addr >= high_limit || (fixed && (addr + len > high_limit)))
++		high_limit = TASK_SIZE;
++
++	if (len > high_limit)
++		return -ENOMEM;
++
++	if (fixed) {
++		if (addr > high_limit - len)
++			return -ENOMEM;
++		return addr;
++	}
++
++	if (addr) {
++		addr = PAGE_ALIGN(addr);
++		vma = find_vma(mm, addr);
++		if (high_limit - len >= addr && addr >= mmap_min_addr &&
++		    (!vma || addr + len <= vm_start_gap(vma)))
++			return addr;
++	}
++
++	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
++	info.length = len;
++	info.low_limit = max(PAGE_SIZE, mmap_min_addr);
++	info.high_limit = mm->mmap_base + (high_limit - DEFAULT_MAP_WINDOW);
++	info.align_mask = 0;
++
++	addr = vm_unmapped_area(&info);
++	if (!(addr & ~PAGE_MASK))
++		return addr;
++	VM_BUG_ON(addr != -ENOMEM);
++
++	/*
++	 * A failed mmap() very likely causes application failure,
++	 * so fall back to the bottom-up function here. This scenario
++	 * can happen with large stack limits and large mmap()
++	 * allocations.
++	 */
++	return radix__arch_get_unmapped_area(filp, addr0, len, pgoff, flags);
++}
++
+ unsigned long arch_get_unmapped_area(struct file *filp,
+ 				     unsigned long addr,
+ 				     unsigned long len,
+ 				     unsigned long pgoff,
+ 				     unsigned long flags)
+ {
++	if (radix_enabled())
++		return radix__arch_get_unmapped_area(filp, addr, len, pgoff, flags);
++
+ 	return slice_get_unmapped_area(addr, len, flags,
+ 				       mm_ctx_user_psize(&current->mm->context), 0);
+ }
+@@ -655,6 +756,9 @@ unsigned long arch_get_unmapped_area_topdown(struct file *filp,
+ 					     const unsigned long pgoff,
+ 					     const unsigned long flags)
+ {
++	if (radix_enabled())
++		return radix__arch_get_unmapped_area_topdown(filp, addr0, len, pgoff, flags);
++
+ 	return slice_get_unmapped_area(addr0, len, flags,
+ 				       mm_ctx_user_psize(&current->mm->context), 1);
+ }
+diff --git a/arch/powerpc/mm/mmap.c b/arch/powerpc/mm/mmap.c
+index ae683fdc716c..5972d619d274 100644
+--- a/arch/powerpc/mm/mmap.c
++++ b/arch/powerpc/mm/mmap.c
+@@ -80,126 +80,6 @@ static inline unsigned long mmap_base(unsigned long rnd,
+ 	return PAGE_ALIGN(DEFAULT_MAP_WINDOW - gap - rnd);
+ }
  
-+#ifndef __ASSEMBLY__
-+
- #define SLICE_LOW_SHIFT		28
- #define SLICE_LOW_TOP		(0x100000000ul)
- #define SLICE_NUM_LOW		(SLICE_LOW_TOP >> SLICE_LOW_SHIFT)
-@@ -13,4 +15,20 @@
- 
- #define SLB_ADDR_LIMIT_DEFAULT	DEFAULT_MAP_WINDOW_USER64
- 
-+struct mm_struct;
-+
-+unsigned long slice_get_unmapped_area(unsigned long addr, unsigned long len,
-+				      unsigned long flags, unsigned int psize,
-+				      int topdown);
-+
-+unsigned int get_slice_psize(struct mm_struct *mm, unsigned long addr);
-+
-+void slice_set_range_psize(struct mm_struct *mm, unsigned long start,
-+			   unsigned long len, unsigned int psize);
-+
-+void slice_init_new_context_exec(struct mm_struct *mm);
-+void slice_setup_new_exec(void);
-+
-+#endif /* __ASSEMBLY__ */
-+
- #endif /* _ASM_POWERPC_BOOK3S_64_SLICE_H */
-diff --git a/arch/powerpc/include/asm/page.h b/arch/powerpc/include/asm/page.h
-index 254687258f42..62e0c6f12869 100644
---- a/arch/powerpc/include/asm/page.h
-+++ b/arch/powerpc/include/asm/page.h
-@@ -329,6 +329,5 @@ static inline unsigned long kaslr_offset(void)
- 
- #include <asm-generic/memory_model.h>
- #endif /* __ASSEMBLY__ */
--#include <asm/slice.h>
- 
- #endif /* _ASM_POWERPC_PAGE_H */
-diff --git a/arch/powerpc/include/asm/slice.h b/arch/powerpc/include/asm/slice.h
-deleted file mode 100644
-index b15141f2bd76..000000000000
---- a/arch/powerpc/include/asm/slice.h
-+++ /dev/null
-@@ -1,37 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef _ASM_POWERPC_SLICE_H
--#define _ASM_POWERPC_SLICE_H
+-#ifdef CONFIG_PPC_RADIX_MMU
+-/*
+- * Same function as generic code used only for radix, because we don't need to overload
+- * the generic one. But we will have to duplicate, because hash select
+- * HAVE_ARCH_UNMAPPED_AREA
+- */
+-static unsigned long
+-radix__arch_get_unmapped_area(struct file *filp, unsigned long addr,
+-			     unsigned long len, unsigned long pgoff,
+-			     unsigned long flags)
+-{
+-	struct mm_struct *mm = current->mm;
+-	struct vm_area_struct *vma;
+-	int fixed = (flags & MAP_FIXED);
+-	unsigned long high_limit;
+-	struct vm_unmapped_area_info info;
 -
--#ifdef CONFIG_PPC_BOOK3S_64
--#include <asm/book3s/64/slice.h>
+-	high_limit = DEFAULT_MAP_WINDOW;
+-	if (addr >= high_limit || (fixed && (addr + len > high_limit)))
+-		high_limit = TASK_SIZE;
+-
+-	if (len > high_limit)
+-		return -ENOMEM;
+-
+-	if (fixed) {
+-		if (addr > high_limit - len)
+-			return -ENOMEM;
+-		return addr;
+-	}
+-
+-	if (addr) {
+-		addr = PAGE_ALIGN(addr);
+-		vma = find_vma(mm, addr);
+-		if (high_limit - len >= addr && addr >= mmap_min_addr &&
+-		    (!vma || addr + len <= vm_start_gap(vma)))
+-			return addr;
+-	}
+-
+-	info.flags = 0;
+-	info.length = len;
+-	info.low_limit = mm->mmap_base;
+-	info.high_limit = high_limit;
+-	info.align_mask = 0;
+-
+-	return vm_unmapped_area(&info);
+-}
+-
+-static unsigned long
+-radix__arch_get_unmapped_area_topdown(struct file *filp,
+-				     const unsigned long addr0,
+-				     const unsigned long len,
+-				     const unsigned long pgoff,
+-				     const unsigned long flags)
+-{
+-	struct vm_area_struct *vma;
+-	struct mm_struct *mm = current->mm;
+-	unsigned long addr = addr0;
+-	int fixed = (flags & MAP_FIXED);
+-	unsigned long high_limit;
+-	struct vm_unmapped_area_info info;
+-
+-	high_limit = DEFAULT_MAP_WINDOW;
+-	if (addr >= high_limit || (fixed && (addr + len > high_limit)))
+-		high_limit = TASK_SIZE;
+-
+-	if (len > high_limit)
+-		return -ENOMEM;
+-
+-	if (fixed) {
+-		if (addr > high_limit - len)
+-			return -ENOMEM;
+-		return addr;
+-	}
+-
+-	if (addr) {
+-		addr = PAGE_ALIGN(addr);
+-		vma = find_vma(mm, addr);
+-		if (high_limit - len >= addr && addr >= mmap_min_addr &&
+-		    (!vma || addr + len <= vm_start_gap(vma)))
+-			return addr;
+-	}
+-
+-	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
+-	info.length = len;
+-	info.low_limit = max(PAGE_SIZE, mmap_min_addr);
+-	info.high_limit = mm->mmap_base + (high_limit - DEFAULT_MAP_WINDOW);
+-	info.align_mask = 0;
+-
+-	addr = vm_unmapped_area(&info);
+-	if (!(addr & ~PAGE_MASK))
+-		return addr;
+-	VM_BUG_ON(addr != -ENOMEM);
+-
+-	/*
+-	 * A failed mmap() very likely causes application failure,
+-	 * so fall back to the bottom-up function here. This scenario
+-	 * can happen with large stack limits and large mmap()
+-	 * allocations.
+-	 */
+-	return radix__arch_get_unmapped_area(filp, addr0, len, pgoff, flags);
+-}
+-
+-static void radix__arch_pick_mmap_layout(struct mm_struct *mm,
+-					unsigned long random_factor,
+-					struct rlimit *rlim_stack)
+-{
+-	if (mmap_is_legacy(rlim_stack)) {
+-		mm->mmap_base = TASK_UNMAPPED_BASE;
+-		mm->get_unmapped_area = radix__arch_get_unmapped_area;
+-	} else {
+-		mm->mmap_base = mmap_base(random_factor, rlim_stack);
+-		mm->get_unmapped_area = radix__arch_get_unmapped_area_topdown;
+-	}
+-}
+-#else
+-/* dummy */
+-extern void radix__arch_pick_mmap_layout(struct mm_struct *mm,
+-					unsigned long random_factor,
+-					struct rlimit *rlim_stack);
 -#endif
--
--#ifndef __ASSEMBLY__
--
--struct mm_struct;
--
--#ifdef CONFIG_PPC_64S_HASH_MMU
--
--#ifdef CONFIG_HUGETLB_PAGE
--#define HAVE_ARCH_HUGETLB_UNMAPPED_AREA
--#endif
--#define HAVE_ARCH_UNMAPPED_AREA
--#define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
--
--unsigned long slice_get_unmapped_area(unsigned long addr, unsigned long len,
--				      unsigned long flags, unsigned int psize,
--				      int topdown);
--
--unsigned int get_slice_psize(struct mm_struct *mm, unsigned long addr);
--
--void slice_set_range_psize(struct mm_struct *mm, unsigned long start,
--			   unsigned long len, unsigned int psize);
--
--void slice_init_new_context_exec(struct mm_struct *mm);
--void slice_setup_new_exec(void);
--
--#endif /* CONFIG_PPC_64S_HASH_MMU */
--
--#endif /* __ASSEMBLY__ */
--
--#endif /* _ASM_POWERPC_SLICE_H */
+ /*
+  * This function, called very early during the creation of a new
+  * process VM image, sets up which VM layout function to use:
+@@ -211,9 +91,6 @@ void arch_pick_mmap_layout(struct mm_struct *mm, struct rlimit *rlim_stack)
+ 	if (current->flags & PF_RANDOMIZE)
+ 		random_factor = arch_mmap_rnd();
+ 
+-	if (radix_enabled())
+-		return radix__arch_pick_mmap_layout(mm, random_factor,
+-						    rlim_stack);
+ 	/*
+ 	 * Fall back to the standard layout if the personality
+ 	 * bit is set, or if the expected stack growth is unlimited:
 -- 
 2.33.1
 

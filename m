@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E18462663
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305D3462569
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236313AbhK2Wvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:51:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36098 "EHLO
+        id S233708AbhK2Wiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:38:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235660AbhK2WuJ (ORCPT
+        with ESMTP id S234116AbhK2WiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:50:09 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477B0C08E835
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:02:29 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id x6so75867876edr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:02:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vHIcZ4ajJxCRfp6TfnnK3m4uOLsqq/PnoEl1uZz7+2M=;
-        b=LHqpOuZ9bbPhm6BAEqNPiFiqNjqndKV4zQZgjWjGtAQXoprCwWKIcC6/fyMFaSBQ6N
-         k+M+udaeBPxQSV/sqCPS8gOOdZr6WhSxUEYATlnHbqTy8naDBiledHzWmwVMy0eMdV+o
-         X5fV9bcsNEZcXKYY4M9flL9DfU4JNrNc6Wi7tlanU/9oSP6XRf2M7zmjO2MmRwlLoDOr
-         l81B3g2OMpp7EXMM9gbQ8nJGhZw5Emg0VQ/KMNogBPSu8XxQJOS5ddNYZXRxAQ4FwNN+
-         lE8Wv32IPzfNJ+SGajHs4GHojQXuYFahcQ72Q/jolrV3T85hGnbS+/eM/1yqCW1k9cfP
-         kAaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vHIcZ4ajJxCRfp6TfnnK3m4uOLsqq/PnoEl1uZz7+2M=;
-        b=torUjWgKmM/jZYZgk6IgQeSRZEE2yAjZFDCwPpQYRHJkMnhQiyFkR/1qNHU0xa/CKR
-         Chau//yB+Vq/1yhkIHGk2keW9Q6THU+ricItUyf3HwbLBZsN6WhSm3CtNLSHKSWR/cit
-         27xFASCnI66dFUxU2CXRLVWfL0vq/6Xk+ScyrpRfPOaxSLVdcSPau2/8/sIrp19n9Npj
-         a9EsGXWC1FowZUBFgYTlxhwiqSIlgTylj+vf9Ywze8dr4ML8E7Evhad3W3Q9DIcQwyL5
-         UdxleIEiRpyQr2fn6cSY1PFQC/KYGKtfvNYJSkuevIEHLMw+V+yBoQ632Z+0KblVz28h
-         Jg8g==
-X-Gm-Message-State: AOAM531Ue8a0ZUHI5aC4nhrCl760ba5S6YT9WyJXkMLjTv+OwMpuEFgO
-        MWysa6dEI5109jtDWs4mgYlD95jiuRe6kCt6/L0=
-X-Google-Smtp-Source: ABdhPJxGlKZy56+YMwTdyV8+MSNj2EB5bGzBFj/T14hqS9VsMurjSEHNZMxWqn+sj4E8NhGcq44MS8KxUYhtEUSU9i4=
-X-Received: by 2002:aa7:c846:: with SMTP id g6mr76715007edt.75.1638212547798;
- Mon, 29 Nov 2021 11:02:27 -0800 (PST)
+        Mon, 29 Nov 2021 17:38:15 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97F9CC08EC38
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:08:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EC064CE13C4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 19:08:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F290BC53FC7;
+        Mon, 29 Nov 2021 19:08:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638212899;
+        bh=lsOyYHMBrlpxe+yOqHBUunxp2HVJbc4SCbYxlMO2eHU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b45EzunK8FRmC/e8IW9/UuunZW4l4v6DmdUJ3tqnKAn4QN+RTMeEc416NtcEInCQJ
+         VSEkfb+oNx2Pia/CPod2G7cgE8GDcVMKOF13UjQVZ4oKDxHZL7X2pXDF5fg11cAGnG
+         j14qOq8GUWQ/t7CqKE4yZfrrNwjIxabvwwkgoLk0zNyQa3Fyx+PpafRChxt91cj4vc
+         4ScKGk1lHCM028Zs6qVhJ/JCt0SSHPMCR09UavqAZN93FaK4ft71XJeNVB1NCl+QU3
+         /Kj1f24qbLtDmkUCvE7nzyuhtQU1dCCv71Glr3FV6U78fK25B8Hd9dHGcxdnSZxjAv
+         KfivHQSCVXUnQ==
+Date:   Mon, 29 Nov 2021 19:08:13 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        cezary.rojewski@intel.com, liam.r.girdwood@linux.intel.com,
+        yang.jie@linux.intel.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: Intel: atom: Remove redundant check to simplify
+ the code
+Message-ID: <YaUlHRHu4G0EMHE5@sirena.org.uk>
+References: <20211125075028.8500-1-tangbin@cmss.chinamobile.com>
+ <3ca07ce3-6d5c-20cc-8992-4700490ea472@linux.intel.com>
+ <YaUJ2EfU6kYFfjWn@sirena.org.uk>
+ <YaUjfFNA6IScPCY9@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20211128201916.10230-1-rikard.falkeborn@gmail.com>
-In-Reply-To: <20211128201916.10230-1-rikard.falkeborn@gmail.com>
-From:   Christian Gmeiner <christian.gmeiner@gmail.com>
-Date:   Mon, 29 Nov 2021 20:02:16 +0100
-Message-ID: <CAH9NwWfhtYKsPMsiTN-pYc3CQ5XcA9TyX3R4yZch7ZHL2+Soyg@mail.gmail.com>
-Subject: Re: [PATCH] drm/etnaviv: constify static struct cooling_ops
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        The etnaviv authors <etnaviv@lists.freedesktop.org>,
-        DRI mailing list <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="k8dI/ervwTv43JI3"
+Content-Disposition: inline
+In-Reply-To: <YaUjfFNA6IScPCY9@smile.fi.intel.com>
+X-Cookie: Thank god!! ... It's HENNY YOUNGMAN!!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am So., 28. Nov. 2021 um 21:20 Uhr schrieb Rikard Falkeborn
-<rikard.falkeborn@gmail.com>:
->
-> The only usage of cooling_ops is to pass its address to
-> thermal_of_cooling_device_register(), which takes a pointer to const
-> struct thermal_cooling_device_ops as input. Make it const to allow the
-> compiler to put it in read-only memory.
->
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 
-Reviewed-by: Christian Gmeiner <christian.gmeiner@gmail.com>
+--k8dI/ervwTv43JI3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> ---
->  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> index 06bde46df451..37018bc55810 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> @@ -1658,7 +1658,7 @@ etnaviv_gpu_cooling_set_cur_state(struct thermal_cooling_device *cdev,
->         return 0;
->  }
->
-> -static struct thermal_cooling_device_ops cooling_ops = {
-> +static const struct thermal_cooling_device_ops cooling_ops = {
->         .get_max_state = etnaviv_gpu_cooling_get_max_state,
->         .get_cur_state = etnaviv_gpu_cooling_get_cur_state,
->         .set_cur_state = etnaviv_gpu_cooling_set_cur_state,
-> --
-> 2.34.1
->
+On Mon, Nov 29, 2021 at 09:01:16PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 29, 2021 at 05:11:52PM +0000, Mark Brown wrote:
 
+> > Zero is (or was, people were working on changing it partly due to
+> > confusion and partly due to moving to newer infrastructure which
+> > doesn't use it) a valid IRQ on some architectures.  x86 wasn't one of
+> > those though, at least AFAIR.
 
--- 
-greets
---
-Christian Gmeiner, MSc
+> I guess it's about x86, but the API returns Linux virtual IRQ and 0 shouldn't
+> be among them (hardware IRQ != Linux virtual IRQ). Legacy x86 used 1:1 mapping
+> for ISA IRQs (lower 16) among which the Timer IRQ is 0. I believe that timer
+> code does not use any of those APIs (it most likely and IIRC has it hardcoded).
 
-https://christian-gmeiner.info/privacypolicy
+Right, the virtual IRQs are the newer stuff.  32 bit arm was another
+platform that had 0 as a valid IRQ for similar reasons, I don't know if
+any of the platforms are still affected though and I'm going to go out
+on a limb and say they're not using platform_irq_get_optional().
+
+--k8dI/ervwTv43JI3
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGlJR0ACgkQJNaLcl1U
+h9B2PQf/WYlsV4CNaOQAoyzsD41CNi8U8xmJLZ8eWTAX5tT8wDWiaeekfJbSNMX+
+Ebrezn/oQWkJWO72I8cU1ukfBoe5dZh7/UhWzWZwB4zqVdzAqEjjbluAeT3kQw1t
+EoNAmG0r+yqlglNOsW6I//4X2XV5hwrxxcFNOTt1LEefeHia1sdPUtXcx5qr8j/w
+PKO0jJ385qQb5MzZTemGWFPw/VXSOeA/7fPIetF6MH/nyqodaAg2XJDg/maN9drb
+NNms/8YRZzWQsREsDCMLI+kBy3gMwWfMot6aAbEuf37hK1rPWTsMfkxf7OVXoreg
+HRMZ/9WKuV4NM/Owm3Lbl3CDj+FqrA==
+=1J2J
+-----END PGP SIGNATURE-----
+
+--k8dI/ervwTv43JI3--

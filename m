@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 169B3461FA9
+	by mail.lfdr.de (Postfix) with ESMTP id 601E7461FAA
 	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234394AbhK2S46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39332 "EHLO
+        id S235786AbhK2S5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:57:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379776AbhK2Syz (ORCPT
+        with ESMTP id S1379777AbhK2Syz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Nov 2021 13:54:55 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FF3C08C5FE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:13:25 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso17096850wmr.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:13:24 -0800 (PST)
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1A8C0613B4;
+        Mon, 29 Nov 2021 07:14:00 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so25927454otj.7;
+        Mon, 29 Nov 2021 07:14:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=UY/oMk5CP+lhMDCwiflvPnkQGNHXKlcdSyzcY5XesvM=;
-        b=LdSkTX7j+GKCpWd8+WYJWMzonvnbpljw+CiiO+L2fLG/RiTbh/f+PYd58DBC8MkCcx
-         Lze9WAyW5LoyxHhoHAPjd9pYeabSx87SofJ+A3sc2j+4Gh+gN/1QGtF2Lz6VjHODG1pO
-         KT4SqRJQ/gaaw79YDcscBM7j8YIwEIYwPAylQqyYnwPIZvsgzc8aZzMh+HpvcpVZ4VIa
-         RXjdHsAR/5Z7vAnOP5MQYWYfzmXvi6UXh2hF+e1CSXgC0VjlN7juGGKZZaSQGMhoMN3l
-         AOelfNyqpCxU82FekRcF3qBSUbdbiseyXsHi5eP7tUhlDT0Vir97G9jO1XKEBFuYsk8R
-         BDTQ==
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0LDYpaC1o8xhrXzJKdF3sDv2C843tw6YvVGF0VGCbZM=;
+        b=bcF85LpNFw0MsgEHtmp/Y6p8zwZjTr8H7G6F5FEDhT4dTaXWscORwZypSBmpvDZaL1
+         Bps/23UNJROqP23ubTP4XcFgEJzRWQ2fzGHuVvTdMBTA5iKtDlmGUy67b9Wp3p3dDAhy
+         Rc6qR2iQUtsnzS3mAeCFejz0RvRomqMeqpBVUxVwec2dr01mtypw1OwXP79F++VH9Jwv
+         SaOBM3XjFPlIzxbc398+LIoeZvYIAKdVTN0bWPFUX64tt3ARjAlb0eyw07T01wJOsVz+
+         tP5O4N5R845Celuv6v4mny3i4/kiPbM+kroKb4QlMR/QY8RQw6eaafz3sw5AKSIUeaaK
+         yi6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UY/oMk5CP+lhMDCwiflvPnkQGNHXKlcdSyzcY5XesvM=;
-        b=3nUB3YC7X7fKxGmQN/JbALoRmLiGaGKOdobAPVMly5qfgxlaqM8XAnAZ1pR/megLTI
-         i/QPv30p02eWV2YhP8VnuoF5+cbrL5bw6XVC077+OVSyVifB/Z58xLaWv6JIoSI/+lBu
-         RZsVE74fPoq2NKd4wWBeN7IVQQLrJuic0Gice1UeKXm8ZDMUYBcfGGAAuAwWABwfYhdm
-         7OWM/+4G5pLBtfNN7TATjVP7UVBhJgVWeGOIxVrKripsR6g6JwkmhpEL8YM2JSYrpVaO
-         qqDBsVe4StY7Ha22tz4iHYYfPanum9AkHS0TcX3gNPt7xmXbzvR6A/ikfiX+9cDwfJK5
-         MOvQ==
-X-Gm-Message-State: AOAM532ZR40Blfcugvs81RzhWkUL8rnD010HkaMJZ7gqC44KKtQEwe93
-        ex6wRe97UY7s2ugQ/eBRfIHhGg==
-X-Google-Smtp-Source: ABdhPJwgpBiTwlTfTn/bJ34kExETRJsTZjWxY47jcBXZfiM7XlYaJSoBXDgR+XCTtDaNM/XVDvAgMQ==
-X-Received: by 2002:a7b:c157:: with SMTP id z23mr37091482wmi.113.1638198803605;
-        Mon, 29 Nov 2021 07:13:23 -0800 (PST)
-Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id g19sm20703756wmg.12.2021.11.29.07.13.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 07:13:23 -0800 (PST)
-Date:   Mon, 29 Nov 2021 15:13:21 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        linux-kernel@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v2] mfd: Kconfig: change INTEL_SOC_PMIC_CHTDC_TI to bool
-Message-ID: <YaTuEdDXkjdGE+qX@google.com>
-References: <86f546b3233fd799b0c39b83afc521440ebfe004.1638192232.git.mchehab+huawei@kernel.org>
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0LDYpaC1o8xhrXzJKdF3sDv2C843tw6YvVGF0VGCbZM=;
+        b=NhJQIIsuwXc+IhwgzeHfVDJPvd76WT2my8K4x+bOMUtlKKwE+Fgk7tcdlpST/d+Let
+         yu2jNRxqWtxUZVfr/xz7fXlrDgHglMNEvxbmUc5bN8AIt6+tRpVCYJD5UQGXUIzm8x4Q
+         Hu3mksugkJAlbtLjFkTW9lku2Q172VwTkdUesu1dmEkMBOd5hG/4h0XkyuMpNmjGicIN
+         PSYGZJa0ybOOP1eWuzAuJZvCWotFz2E7PUR0DuuuoNM1jgOOe09BYaAC42Bcfp9ZeSUE
+         Z1VJJbK4JDcYxYyO0B3XK/FCfANSXCLBR/cuaiHLtLL6JRSEOtVIg3fALRA0ok10Ytjn
+         PCvg==
+X-Gm-Message-State: AOAM533Dhq6QT91dfbAR9T3dl9D2SRHrw4RHB+PZ4/MMGPIWOn1wp1Rn
+        r94QM8I0QtaiUtp7R8jjAlCXbuNlJfs=
+X-Google-Smtp-Source: ABdhPJxsDSEMIOjXkRRil9aOGp+LsVtS97a3s1w4ZtAwhn9GDG4WispsZRiqeUQj2osS9nu3NxJo3g==
+X-Received: by 2002:a05:6830:1092:: with SMTP id y18mr43935908oto.119.1638198839353;
+        Mon, 29 Nov 2021 07:13:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t18sm2679510ott.2.2021.11.29.07.13.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 07:13:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH] watchdog: da9063: Add hard dependency on I2C
+To:     Andrej Picej <andrej.picej@norik.com>, wim@linux-watchdog.org,
+        linux-watchdog@vger.kernel.org
+Cc:     y.bas@phytec.de, linux-kernel@vger.kernel.org
+References: <20211129134938.3273289-1-andrej.picej@norik.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <bf64b71b-41c1-7a44-9583-c29887bea70b@roeck-us.net>
+Date:   Mon, 29 Nov 2021 07:13:56 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <86f546b3233fd799b0c39b83afc521440ebfe004.1638192232.git.mchehab+huawei@kernel.org>
+In-Reply-To: <20211129134938.3273289-1-andrej.picej@norik.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021, Mauro Carvalho Chehab wrote:
+On 11/29/21 5:49 AM, Andrej Picej wrote:
+> Commit 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in
+> reset handler") implements atomic save i2c transfer which uses i2c
+> functions directly. Add I2C hard dependency which overrides COMPILE_TEST.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Fixes: 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in reset handler")
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 
-> The INTEL_SOC_PMIC_CHTDC_TI should be initialized early, before
-> loading the fbcon driver, as otherwise the i915 driver will
-> fail to configure pwm:
-> 
-> [   13.674287] fb0: switching to inteldrmfb from EFI VGA
-> [   13.682380] Console: switching to colour dummy device 80x25
-> [   13.682468] i915 0000:00:02.0: vgaarb: deactivate vga console
-> [   13.682686] [drm] Supports vblank timestamp caching Rev 2 (21.10.2013).
-> [   13.685773] i915 0000:00:02.0: vgaarb: changed VGA decodes: olddecodes=io+mem,decodes=io+mem:owns=io+mem
-> [   13.686219] i915 0000:00:02.0: [drm] *ERROR* Failed to configure the pwm chip
-> [   13.699572] [drm] Initialized i915 1.6.0 20200313 for 0000:00:02.0 on minor 0
-> [   13.739044] fbcon: i915drmfb (fb0) is primary device
-> [   14.037792] intel_soc_pmic_exec_mipi_pmic_seq_element: No PMIC registered
-> ...
-> [   24.621403] intel_pmic_install_opregion_handler: Ask to register OpRegion for bus ID=PMI2, HID=INT33F5
-> [   24.630540] intel_pmic_install_opregion_handler: OpRegion registered
-> 
-> (some extra debug printk's were added to the above)
-> 
-> As suggested by Hans, this patch also addresses an issue with
-> the dependencies, as, for this driver to be a bool, it also
-> need the I2C core and the I2C_DESIGNWARE driver to be builtin.
-> 
-> Suggested-by: Hans de Goede <hdegoede@redhat.com>
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+
 > ---
->  drivers/mfd/Kconfig | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>   drivers/watchdog/Kconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index 9d222ba17ec6..3207085f799f 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -207,6 +207,7 @@ config DA9055_WATCHDOG
+>   config DA9063_WATCHDOG
+>   	tristate "Dialog DA9063 Watchdog"
+>   	depends on MFD_DA9063 || COMPILE_TEST
+> +	depends on I2C
+>   	select WATCHDOG_CORE
+>   	help
+>   	  Support for the watchdog in the DA9063 PMIC.
+> 
 
-Applied, thanks.
-
--- 
-Lee Jones [李琼斯]
-Senior Technical Lead - Developer Services
-Linaro.org │ Open source software for Arm SoCs
-Follow Linaro: Facebook | Twitter | Blog

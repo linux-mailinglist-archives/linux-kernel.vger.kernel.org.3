@@ -2,89 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5412E461FD1
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:03:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BB8461FF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:11:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238478AbhK2TG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:06:56 -0500
-Received: from mail-ua1-f54.google.com ([209.85.222.54]:45943 "EHLO
-        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235930AbhK2TEw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:04:52 -0500
-Received: by mail-ua1-f54.google.com with SMTP id ay21so36201738uab.12;
-        Mon, 29 Nov 2021 11:01:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DL5dHDq+6bog8OFr5QHKjlV1I5gK3strUsZva+R3K6w=;
-        b=8F0sNFZjtUIa0P0KhmoaQNQDywkJiFbcS/k0w6r+K5zWfrDDLYnG3ud4u7RU8FMTN9
-         pOT7Jor4zE83j7c1mcAaw3uiEICFMLF3didj3ABHFN7dcBUIKSv+x7Il2yUHXwrkVIIl
-         T1+l4Kn27zcrUUw5mXBX2DEwk38Se7rJmgMAZr71j3HEY5j1qgBad9BkJQaOKRFZIiZ4
-         xpbr9V1ObhJy8kACZUcFMhp8/Yq/xZeAIBQlJ5UsZo0dRCKSLDRIk7HRXFmI1TLjMyY9
-         gYu5o+UpGJZfuprZSO5WAbcLUH3fNDBRsNKCLxw4dicfh26MUC2giga6RC0To9JexqRw
-         qveQ==
-X-Gm-Message-State: AOAM531qvTZ7jpfgfUJKor4sbh+xTyB6KdnSliMObazPbnoV1gkoZGXo
-        smw5a6t+9Y8CDuJXluw1Cke2Wxb/0biunQ==
-X-Google-Smtp-Source: ABdhPJy4MLnyGTwTUqQPCikXF5cDPiLm3oOBwujCki9DlxUqb2r+ctP5pOO4HWAS6BbS1DX/e2XGtQ==
-X-Received: by 2002:a67:6187:: with SMTP id v129mr35003172vsb.68.1638212493960;
-        Mon, 29 Nov 2021 11:01:33 -0800 (PST)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
-        by smtp.gmail.com with ESMTPSA id u145sm9480402vsu.25.2021.11.29.11.01.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 11:01:33 -0800 (PST)
-Received: by mail-ua1-f54.google.com with SMTP id w23so36235130uao.5;
-        Mon, 29 Nov 2021 11:01:33 -0800 (PST)
-X-Received: by 2002:a9f:3e01:: with SMTP id o1mr52068214uai.89.1638212493421;
- Mon, 29 Nov 2021 11:01:33 -0800 (PST)
+        id S1350853AbhK2TOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:14:51 -0500
+Received: from mga02.intel.com ([134.134.136.20]:37799 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237628AbhK2TMu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 14:12:50 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223280492"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="223280492"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 11:06:41 -0800
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="458554931"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 11:06:38 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mrly1-00080f-Jt;
+        Mon, 29 Nov 2021 21:05:33 +0200
+Date:   Mon, 29 Nov 2021 21:05:33 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Tang Bin <tangbin@cmss.chinamobile.com>,
+        cezary.rojewski@intel.com, liam.r.girdwood@linux.intel.com,
+        yang.jie@linux.intel.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: Intel: atom: Remove redundant check to simplify
+ the code
+Message-ID: <YaUkfV9ng6/Wmpkd@smile.fi.intel.com>
+References: <20211125075028.8500-1-tangbin@cmss.chinamobile.com>
+ <3ca07ce3-6d5c-20cc-8992-4700490ea472@linux.intel.com>
+ <YaUJ2EfU6kYFfjWn@sirena.org.uk>
+ <YaUjfFNA6IScPCY9@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
- <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
- <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
- <20211129122052.GA7921@alpha.franken.de> <CAMuHMdWbvpzZCs4HOXErbVYQTiQAB0syuiR6Wd7=sTA2vFpXzw@mail.gmail.com>
- <20211129130535.GA8644@alpha.franken.de>
-In-Reply-To: <20211129130535.GA8644@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 29 Nov 2021 20:01:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU94tk5pcTK4Fa-g9vm56oooCeWXkkL8nOgofk5aKbwig@mail.gmail.com>
-Message-ID: <CAMuHMdU94tk5pcTK4Fa-g9vm56oooCeWXkkL8nOgofk5aKbwig@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software nodes
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaUjfFNA6IScPCY9@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Mon, Nov 29, 2021 at 09:01:16PM +0200, Andy Shevchenko wrote:
+> On Mon, Nov 29, 2021 at 05:11:52PM +0000, Mark Brown wrote:
+> > On Mon, Nov 29, 2021 at 10:22:41AM -0600, Pierre-Louis Bossart wrote:
+> > > On 11/25/21 1:50 AM, Tang Bin wrote:
+> > 
+> > > > In the function sst_platform_get_resources(), if platform_get_irq()
+> > > > failed, the return should not be zero, as the example in
+> > > > platform.c is
+> > > >   * int irq = platform_get_irq(pdev, 0)
+> > > >   * if (irq < 0)
+> > > >   * return irq;
+> > > > So remove the redundant check to simplify the code.
+> > 
+> > > Humm, it's a bit of a gray area.
+> > 
+> > > the comments for platform_get_irq and platform_get_irq_optional say:
+> > 
+> > > * Return: non-zero IRQ number on success, negative error number on failure.
+> > 
+> > > but if you look at platform_get_irq_optional, there are two references
+> > > to zero being a possible return value:
+> > 
+> > Zero is (or was, people were working on changing it partly due to
+> > confusion and partly due to moving to newer infrastructure which
+> > doesn't use it) a valid IRQ on some architectures.  x86 wasn't one of
+> > those though, at least AFAIR.
+> 
+> I guess it's about x86, but the API returns Linux virtual IRQ and 0 shouldn't
+> be among them (hardware IRQ != Linux virtual IRQ). Legacy x86 used 1:1 mapping
+> for ISA IRQs (lower 16) among which the Timer IRQ is 0. I believe that timer
+> code does not use any of those APIs (it most likely and IIRC has it hardcoded).
+> 
+> Nevertheless, I have planned to make platform_irq_get_optional() to be optional
+> indeed, where we return 0 when there is no IRQ provided and error when it's a
+> real error happens. This needs to clean up the current (mis-)use of the API.
 
-On Mon, Nov 29, 2021 at 2:33 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> On Mon, Nov 29, 2021 at 01:30:17PM +0100, Geert Uytterhoeven wrote:
-> > BTW, I'm using it in 32-bit mode, as the VxWorks bootloader cannot boot
-> > 64-bit images. Are there other boards with such a limitation? Perhaps
-> > there's even shim support for booting 64-bit kernels on such boards,
-> > so I can test both 32-bit and 64-bit kernels?
->
-> maybe BOOT_ELF32 could help here.
+Link for previous work: https://lore.kernel.org/lkml/20210331144526.19439-1-andriy.shevchenko@linux.intel.com/T/#u
 
-Yes it does, thanks a lot for the suggestion! Patch sent.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Took me a bit to test proper operation, as contemporary cross-toolchains
-create userland binaries that can no longer run on MIPS-II/III CPUs,
-and native development is slow and memory-constrained (dpkg OOM)...
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

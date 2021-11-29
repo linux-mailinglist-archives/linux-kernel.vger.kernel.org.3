@@ -2,71 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D02BA461ACD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1955F461AD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346141AbhK2P3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 10:29:13 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:54349 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242184AbhK2P1J (ORCPT
+        id S1349185AbhK2PaE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:30:04 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:56362 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232856AbhK2P2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 10:27:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638199431;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aBlKyuUGApLu3DvwZ3/RfkSAkyCOYsE2fsPKSfHk0dM=;
-        b=aH/mZDbcUXbkYXpnM0ysyMso6ek2ri40zNv1zCc65sNIdKlgF4ByoMbwpN060PQy536dHE
-        692cshl+PeszXamJG1BoIUBOPkzI2yS7p+Ur00kOK4E4Pn1Pai1P6D/a53F0f7s6bouoB/
-        YQyoI1VS/eBIj1GYO+ouikrU8Bq7DVg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-491-kKLxsffzNIK16ZGtem_2dw-1; Mon, 29 Nov 2021 10:23:48 -0500
-X-MC-Unique: kKLxsffzNIK16ZGtem_2dw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 29 Nov 2021 10:28:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CFAAA83DD22;
-        Mon, 29 Nov 2021 15:23:46 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B3185DF4F;
-        Mon, 29 Nov 2021 15:23:35 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <2cfdbfd834bb6ff1f7f5cf47e3ea72449fe683b6.camel@redhat.com>
-References: <2cfdbfd834bb6ff1f7f5cf47e3ea72449fe683b6.camel@redhat.com> <163706992597.3179783.18360472879717076435.stgit@warthog.procyon.org.uk>
-To:     Jeff Layton <jlayton@redhat.com>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [Linux-cachefs] [PATCH] netfs: Adjust docs after foliation
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <223019.1638199414.1@warthog.procyon.org.uk>
-Date:   Mon, 29 Nov 2021 15:23:34 +0000
-Message-ID: <223020.1638199414@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        by sin.source.kernel.org (Postfix) with ESMTPS id 190ADCE12EE;
+        Mon, 29 Nov 2021 15:24:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED2D1C53FAD;
+        Mon, 29 Nov 2021 15:24:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638199482;
+        bh=qcB3pv0IJqp6lhDzAmAz3L/SZqJi1rmNXfqERQKDtpA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cHIIgFpevk/ICTIWOL60WnoUL8UkvAFj6APEq9Y/OQmcudCrHOi4n9b8FnwUPK4QZ
+         JZLIt957oznH62L0rRpgzF/xX9cI6PVQoSCHEuFgG5WjHIYEXSICdH1+5CUoe1W2M4
+         vHP6wgZZDyNIBnGdUbwz20NTvx+8b9bn3qd+sJWvw/TYui5fzgLP/y3HAggDBeM6Wj
+         oqXi+opr2xSn2CSEf4QrYg+oN+ZWJc/j6bhhjrgcLBzklymzv2H+wUGwSf4RHCW23I
+         pQuOxVbSziXa382msRu4ccmsnPP+5LILBxdXWsSDaJ4YfkPkvu2u+PeQNl4rJJcfZW
+         ArMjOk5zje2/g==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mriWF-008dKc-Vh; Mon, 29 Nov 2021 15:24:40 +0000
+Date:   Mon, 29 Nov 2021 15:24:39 +0000
+Message-ID: <87pmqjm1c8.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] irqchip: Add Qualcomm MPM controller driver
+In-Reply-To: <20211129133308.GB10105@dragon>
+References: <20211126093529.31661-1-shawn.guo@linaro.org>
+        <20211126093529.31661-3-shawn.guo@linaro.org>
+        <87czmmbu8k.wl-maz@kernel.org>
+        <20211129133308.GB10105@dragon>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shawn.guo@linaro.org, tglx@linutronix.de, bjorn.andersson@linaro.org, robh+dt@kernel.org, loic.poulain@linaro.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jeff Layton <jlayton@redhat.com> wrote:
+On Mon, 29 Nov 2021 13:33:12 +0000,
+Shawn Guo <shawn.guo@linaro.org> wrote:
+> 
+> On Fri, Nov 26, 2021 at 07:19:07PM +0000, Marc Zyngier wrote:
+> > [resending after having sorted my email config...]
+> > 
+> > Hi Shawn,
+> 
+> Hi Marc,
+> 
+> Thanks for all these review comments!
+> 
+> > 
+> > On Fri, 26 Nov 2021 09:35:29 +0000,
+> > Shawn Guo <shawn.guo@linaro.org> wrote:
+> > > 
+> > > Qualcomm SoCs based on the RPM architecture have a MSM Power Manager (MPM)
+> > > in always-on domain. In addition to managing resources during sleep, the
+> > > hardware also has an interrupt controller that monitors the interrupts
+> > > when the system is asleep, wakes up the APSS when one of these interrupts
+> > > occur and replays it to GIC after it becomes operational.
+> > > 
+> > > It adds an irqchip driver for this interrupt controller, and here are
+> > > some notes about it.
+> > > 
+> > > - For given SoC, a fixed number of MPM pins are supported, e.g. 96 pins
+> > >   on QCM2290.  Each of these MPM pins can be either a MPM_GIC pin or
+> > >   a MPM_GPIO pin. The mapping between MPM_GIC pin and GIC interrupt
+> > >   is defined by SoC, as well as the mapping between MPM_GPIO pin and
+> > >   GPIO number.  The former mapping can be found as the SoC data in this
+> > >   MPM driver, while the latter can be found as the msm_gpio_wakeirq_map[]
+> > >   in TLMM driver.
+> > > 
+> > > - Two irq domains are created for a single irq_chip to handle MPM_GIC
+> > >   and MPM_GPIO pins respectively, i.e. MPM_GIC domain and MPM_GPIO domain.
+> > >   The former is a child domain of GIC irq domain, while the latter is
+> > >   a parent domain of TLMM/GPIO irq domain.
+> > > 
+> > > - All the register settings are done by APSS on the an internal memory
+> > >   region called vMPM, and RPM will flush them into hardware after it
+> > >   receives a mailbox/IPC notification from APSS.
+> > > 
+> > > - When SoC gets awake from sleep mode, the driver will receive an
+> > >   interrupt from RPM, so that it can replay interrupt for particular
+> > >   polarity.
+> > > 
+> > > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> > > ---
+> > >  drivers/irqchip/Kconfig    |   8 +
+> > >  drivers/irqchip/Makefile   |   1 +
+> > >  drivers/irqchip/qcom-mpm.c | 487 +++++++++++++++++++++++++++++++++++++
+> > >  3 files changed, 496 insertions(+)
+> > >  create mode 100644 drivers/irqchip/qcom-mpm.c
+> > > 
+> > > diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+> > > index 7038957f4a77..e126b19190ef 100644
+> > > --- a/drivers/irqchip/Kconfig
+> > > +++ b/drivers/irqchip/Kconfig
+> > > @@ -430,6 +430,14 @@ config QCOM_PDC
+> > >  	  Power Domain Controller driver to manage and configure wakeup
+> > >  	  IRQs for Qualcomm Technologies Inc (QTI) mobile chips.
+> > >  
+> > > +config QCOM_MPM
+> > > +	bool "QCOM MPM"
+> > 
+> > Can't be built as a module?
+> 
+> The driver is implemented as a builtin_platform_driver().
 
-> > -/**
-> > - * netfs_skip_folio_read - prep a folio for writing without reading first
-> > +/*
-> ...
-> Not sure why you decided to change the last one not to be a kerneldoc
-> comment, but OK. The rest of the changes look straightforward.
+This, on its own, shouldn't preclude the driver from being built as a
+module. However, the config option only allows it to be built in. Why?
 
-It's not part of the API.  It's only internal.  None of the other internal
-functions are listed in the API reference.
+[...]
 
-David
+> > > +static inline void
+> > > +qcom_mpm_write(struct qcom_mpm_priv *priv, unsigned int reg,
+> > > +	       unsigned int index, u32 val)
+> > > +{
+> > > +	unsigned int offset = (reg * priv->reg_stride + index + 2) * 4;
+> > > +	u32 r_val;
+> > > +
+> > > +	writel(val, priv->base + offset);
+> > > +
+> > > +	do {
+> > > +		r_val = readl(priv->base + offset);
+> > > +		udelay(5);
+> > > +	} while (r_val != val);
+> > 
+> > What? Is this waiting for a bit to clear? Why isn't this one of the
+> > read*_poll_timeout*() function instead? Surely you can't wait forever
+> > here.
+> 
+> This is taken from downstream, and it seems to double check the written
+> value by reading it back.  But to be honest, I'm not really this is
+> necessary.  I will do some testing with the read-back check dropped.
 
+How about asking for specs instead? There are QC people on Cc, and
+many more reading the list. Hopefully they can explain what this is
+all about.
+
+> > 
+> > > +}
+> > > +
+> > > +static inline void qcom_mpm_enable_irq(struct irq_data *d, bool en)
+> > > +{
+> > > +	struct qcom_mpm_priv *priv = d->domain->host_data;
+> > 
+> > This really should be stored in d->chip_data.
+> 
+> OK.
+> 
+> > 
+> > > +	int pin = d->hwirq;
+> > > +	unsigned int index = pin / 32;
+> > > +	unsigned int shift = pin % 32;
+> > > +	unsigned long flags;
+> > > +	u32 val;
+> > > +
+> > > +	priv->pin_to_irq[pin] = d->irq;
+> > 
+> > This makes no sense. This is only reinventing the very notion of an
+> > irq domain, which is to lookup the Linux interrupt based on a context
+> > and a signal number.
+> 
+> The uniqueness of this driver is that it has two irq domains.  This
+> little lookup table is created to avoid resolving mapping on each of
+> these domains, which is less efficient.  But you think this is really
+> nonsense, I can change.
+
+"efficient"? You are taking an interrupt to... err... reinject some
+other interrupts. I'm sorry, but the efficiency argument sailed once
+someone built this wonderful piece of HW. The first mistake was to
+involve SW here, so let's not optimise for something that really
+doesn't need it.
+
+Furthermore, why would you look up anywhere other than the wake-up
+domain? My impression was that only these interrupts would require
+being re-triggered.
+
+[...]
+
+> > > +static inline void
+> > > +mpm_set_type(struct qcom_mpm_priv *priv, bool set, unsigned int reg,
+> > > +	     unsigned int index, unsigned int shift)
+> > > +{
+> > > +	u32 val;
+> > > +
+> > > +	val = qcom_mpm_read(priv, reg, index);
+> > > +	if (set)
+> > > +		val |= 1 << shift;
+> > > +	else
+> > > +		val &= ~(1 << shift);
+> > > +	qcom_mpm_write(priv, reg, index, val);
+> > > +}
+> > > +
+> > > +static int qcom_mpm_set_type(struct irq_data *d, unsigned int type)
+> > > +{
+> > > +	struct qcom_mpm_priv *priv = d->domain->host_data;
+> > > +	int pin = d->hwirq;
+> > > +	unsigned int index = pin / 32;
+> > > +	unsigned int shift = pin % 32;
+> > > +	unsigned long flags;
+> > > +
+> > > +	spin_lock_irqsave(&priv->lock, flags);
+> > > +
+> > > +	mpm_set_type(priv, (type & IRQ_TYPE_EDGE_RISING) ? 1 : 0,
+> > 
+> > You have a bool type as the second parameter. Why the convoluted ?:
+> > operator?
+> 
+> Will change to !!(type & IRQ_TYPE_EDGE_RISING).
+> 
+> > 
+> > > +		     MPM_REG_RISING_EDGE, index, shift);
+> > > +	mpm_set_type(priv, (type & IRQ_TYPE_EDGE_FALLING) ? 1 : 0,
+> > > +		     MPM_REG_FALLING_EDGE, index, shift);
+> > > +	mpm_set_type(priv, (type & IRQ_TYPE_LEVEL_HIGH) ? 1 : 0,
+> > > +		     MPM_REG_POLARITY, index, shift);
+> > 
+> > Why does this mean for an edge interrupt?
+> 
+> Edge polarity is configured above on MPM_REG_RISING_EDGE and
+> MPM_REG_FALLING_EDGE.  So I guess MPM_REG_POLARITY doesn't have an
+> impact on edge interrupt.  I do not have any document or information
+> other than downstream code to be sure though.
+
+A well formed 'type' will have that bit clear when any of the EDGE
+flags is set. So this will always be 0. It would also be much better
+if you expressed the whole thing as a switch/case.
+
+[...]
+
+> > > +static int qcom_mpm_probe(struct platform_device *pdev)
+> > > +{
+> > > +	struct irq_domain *parent_domain, *mpm_gic_domain, *mpm_gpio_domain;
+> > > +	struct device *dev = &pdev->dev;
+> > > +	struct device_node *np = dev->of_node;
+> > > +	struct device_node *parent = of_irq_find_parent(np);
+> > > +	struct qcom_mpm_priv *priv;
+> > > +	unsigned int pin_num;
+> > > +	int irq;
+> > > +	int ret;
+> > > +
+> > > +	/* See comments in platform_irqchip_probe() */
+> > > +	if (parent && !irq_find_matching_host(parent, DOMAIN_BUS_ANY))
+> > > +		return -EPROBE_DEFER;
+> > 
+> > So why aren't you using that infrastructure?
+> 
+> Because I need to populate .pm of platform_driver and use match data to
+> pass mpm_data.
+
+Then I'd rather you improve the existing infrastructure to pass the
+bit of extra data you need, instead than reinventing your own.
+
+[...]
+
+> > > +	priv->mbox_client.dev = dev;
+> > > +	priv->mbox_chan = mbox_request_channel(&priv->mbox_client, 0);
+> > > +	if (IS_ERR(priv->mbox_chan)) {
+> > > +		ret = PTR_ERR(priv->mbox_chan);
+> > > +		dev_err(dev, "failed to acquire IPC channel: %d\n", ret);
+> > > +		goto remove_gpio_domain;
+> > 
+> > Why don't you request this first, before all the allocations?
+> 
+> Then I will need to call mbox_free_channel() for any allocation failures
+> afterward.
+
+Which would be fine. Checking for dependencies before allocating
+resources is good practice, specially when this can result in a probe
+deferral.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

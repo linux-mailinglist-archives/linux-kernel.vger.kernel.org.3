@@ -2,27 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 088B646205B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F35946206C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:27:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351853AbhK2TZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:25:50 -0500
-Received: from mga11.intel.com ([192.55.52.93]:17574 "EHLO mga11.intel.com"
+        id S242515AbhK2TaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:30:24 -0500
+Received: from mga17.intel.com ([192.55.52.151]:16145 "EHLO mga17.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242344AbhK2TXp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:23:45 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="233555260"
+        id S1351341AbhK2T2W (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 14:28:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="216753170"
 X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="233555260"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 11:18:51 -0800
+   d="scan'208";a="216753170"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 11:20:13 -0800
 X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="608826679"
+   d="scan'208";a="511825428"
 Received: from mkabdel-mobl.ger.corp.intel.com (HELO localhost) ([10.252.11.182])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 11:18:46 -0800
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 11:20:10 -0800
 From:   Jani Nikula <jani.nikula@intel.com>
-To:     Junio C Hamano <gitster@pobox.com>
-Cc:     Eric Wong <e@80x24.org>, Thorsten Leemhuis <linux@leemhuis.info>,
+To:     Eric Wong <e@80x24.org>
+Cc:     Junio C Hamano <gitster@pobox.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
         workflows@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
         Jonathan Corbet <corbet@lwn.net>, git@vger.kernel.org,
@@ -30,7 +31,7 @@ Cc:     Eric Wong <e@80x24.org>, Thorsten Leemhuis <linux@leemhuis.info>,
         Kees Cook <keescook@chromium.org>
 Subject: Re: [RFC PATCH v1 1/1] docs: add the new commit-msg tags
  'Reported:' and 'Reviewed:'
-In-Reply-To: <xmqq5ysa5193.fsf@gitster.g>
+In-Reply-To: <20211129172618.GA26651@dcvr>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 References: <cover.1637566224.git.linux@leemhuis.info>
  <6b760115ecdd3687d4b82680b284f55a04f3ad90.1637566224.git.linux@leemhuis.info>
@@ -39,19 +40,24 @@ References: <cover.1637566224.git.linux@leemhuis.info>
  <20211126171141.GA21826@dcvr>
  <42ff6b8d-0b7c-12e0-4648-a9232b0f577c@leemhuis.info>
  <20211127195231.GA4636@dcvr> <xmqqtufx5p19.fsf@gitster.g>
- <87mtlnjhj6.fsf@intel.com> <xmqq5ysa5193.fsf@gitster.g>
-Date:   Mon, 29 Nov 2021 21:18:37 +0200
-Message-ID: <87a6hmkbxu.fsf@intel.com>
+ <87mtlnjhj6.fsf@intel.com> <20211129172618.GA26651@dcvr>
+Date:   Mon, 29 Nov 2021 21:20:00 +0200
+Message-ID: <877dcqkbvj.fsf@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021, Junio C Hamano <gitster@pobox.com> wrote:
-> I wasn't having fun with RFC nitpicking, though.
+On Mon, 29 Nov 2021, Eric Wong <e@80x24.org> wrote:
+> Jani Nikula <jani.nikula@intel.com> wrote:
+>> The moral of the story is that you should always offload the header
+>> parsing to some tool or library designed to do that.
+>
+> It's a bit much for common cases with git-send-email and
+> reasonable MUAs, I think.
 
-I didn't mean to imply you were, I was saying I was!
+I think you can have unreasonable MDAs in between, though!
 
 BR,
 Jani.

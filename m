@@ -2,170 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 632F54619F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FCF94619EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378964AbhK2OnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:43:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:24652 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231501AbhK2Okq (ORCPT
+        id S1349630AbhK2Om7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:42:59 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:35616 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347867AbhK2Oki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:40:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638196648;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Mon, 29 Nov 2021 09:40:38 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5C6E421709;
+        Mon, 29 Nov 2021 14:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638196635; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=B5Otm0w8B1AeJPhc/2t/jnQTjEVU5y5eb71fV7VoayI=;
-        b=W0uWG71/N2UDMVvTvCQDtlbi5PeAm0+atzr1vZDGfe8CoZV6Xl+w/uQkoiBNhBu28UqNWS
-        HHUvnp6FIBs5wkMiRrOszS+Nd+da9aB6ANgJJ9X53uO7Q+AEMcdhLT8QdlxJyb9KvnVXzL
-        ZiifaBNWZslYWPQlGcIC3ksl6isjCJ0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-159-z389esmoMBeoaws7HC8aAw-1; Mon, 29 Nov 2021 09:37:23 -0500
-X-MC-Unique: z389esmoMBeoaws7HC8aAw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=xAq1M0EfufsYxEj0cGJTIegFHRqYev6kiU/B6mvpyqU=;
+        b=oOqk/0e4y6iUgH/83aRt3QYO59jLC5fxx3b/xikcMylkgzk1HSYj1cgYOBoOT0+DT9YSt3
+        llV7CRDu7oi1poQ+4t9gdtJ+/hkEmfssB0kEv1apSBY1qbhUVr7726aFaJkqUk4cDGGzy5
+        pIOlvYyZRkdHXscPkmDTnF94bBaNMEg=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3B27084B9A1;
-        Mon, 29 Nov 2021 14:37:21 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8D50B60854;
-        Mon, 29 Nov 2021 14:37:13 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 59/64] afs: Skip truncation on the server of data we haven't
- written yet
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 29 Nov 2021 14:37:12 +0000
-Message-ID: <163819663275.215744.4781075713714590913.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
-References: <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 050BA13B15;
+        Mon, 29 Nov 2021 14:37:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Q4ruOZrlpGEGBwAAMHmgww
+        (envelope-from <nborisov@suse.com>); Mon, 29 Nov 2021 14:37:14 +0000
+Subject: Re: [BUG] fs: btrfs: several possible ABBA deadlocks
+To:     Josef Bacik <josef@toxicpanda.com>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     clm@fb.com, dsterba@suse.com, linux-btrfs@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <44b385ca-f00d-0b47-e370-bd7d97cb1be3@gmail.com>
+ <YaQgFhuaQHsND/jr@localhost.localdomain>
+From:   Nikolay Borisov <nborisov@suse.com>
+Message-ID: <8c1f9493-ef50-635e-4426-61120c4b1a86@suse.com>
+Date:   Mon, 29 Nov 2021 16:37:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+In-Reply-To: <YaQgFhuaQHsND/jr@localhost.localdomain>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't send a truncation RPC to the server if we're only shortening data
-that's in the pagecache and is beyond the server's EOF.
-
-Also don't automatically force writeback on setattr, but do wait to store
-RPCs that are in the region to be removed on a shortening truncation.
-
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
-
- fs/afs/inode.c |   45 +++++++++++++++++++++++++++++++++++----------
- 1 file changed, 35 insertions(+), 10 deletions(-)
-
-diff --git a/fs/afs/inode.c b/fs/afs/inode.c
-index 8db902405031..5964f8aee090 100644
---- a/fs/afs/inode.c
-+++ b/fs/afs/inode.c
-@@ -848,42 +848,67 @@ static const struct afs_operation_ops afs_setattr_operation = {
- int afs_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
- 		struct iattr *attr)
- {
-+	const unsigned int supported =
-+		ATTR_SIZE | ATTR_MODE | ATTR_UID | ATTR_GID |
-+		ATTR_MTIME | ATTR_MTIME_SET | ATTR_TIMES_SET | ATTR_TOUCH;
- 	struct afs_operation *op;
- 	struct afs_vnode *vnode = AFS_FS_I(d_inode(dentry));
-+	struct inode *inode = &vnode->vfs_inode;
-+	loff_t i_size;
- 	int ret;
- 
- 	_enter("{%llx:%llu},{n=%pd},%x",
- 	       vnode->fid.vid, vnode->fid.vnode, dentry,
- 	       attr->ia_valid);
- 
--	if (!(attr->ia_valid & (ATTR_SIZE | ATTR_MODE | ATTR_UID | ATTR_GID |
--				ATTR_MTIME | ATTR_MTIME_SET | ATTR_TIMES_SET |
--				ATTR_TOUCH))) {
-+	if (!(attr->ia_valid & supported)) {
- 		_leave(" = 0 [unsupported]");
- 		return 0;
- 	}
- 
-+	i_size = i_size_read(inode);
- 	if (attr->ia_valid & ATTR_SIZE) {
--		if (!S_ISREG(vnode->vfs_inode.i_mode))
-+		if (!S_ISREG(inode->i_mode))
- 			return -EISDIR;
- 
--		ret = inode_newsize_ok(&vnode->vfs_inode, attr->ia_size);
-+		ret = inode_newsize_ok(inode, attr->ia_size);
- 		if (ret)
- 			return ret;
- 
--		if (attr->ia_size == i_size_read(&vnode->vfs_inode))
-+		if (attr->ia_size == i_size)
- 			attr->ia_valid &= ~ATTR_SIZE;
- 	}
- 
- 	fscache_use_cookie(afs_vnode_cache(vnode), true);
- 
--	/* flush any dirty data outstanding on a regular file */
--	if (S_ISREG(vnode->vfs_inode.i_mode))
--		filemap_write_and_wait(vnode->vfs_inode.i_mapping);
--
- 	/* Prevent any new writebacks from starting whilst we do this. */
- 	down_write(&vnode->validate_lock);
- 
-+	if ((attr->ia_valid & ATTR_SIZE) && S_ISREG(inode->i_mode)) {
-+		loff_t size = attr->ia_size;
-+
-+		/* Wait for any outstanding writes to the server to complete */
-+		loff_t from = min(size, i_size);
-+		loff_t to = max(size, i_size);
-+		ret = filemap_fdatawait_range(inode->i_mapping, from, to);
-+		if (ret < 0)
-+			goto out_unlock;
-+
-+		/* Don't talk to the server if we're just shortening in-memory
-+		 * writes that haven't gone to the server yet.
-+		 */
-+		if (!(attr->ia_valid & (supported & ~ATTR_SIZE & ~ATTR_MTIME)) &&
-+		    attr->ia_size < i_size &&
-+		    attr->ia_size > vnode->status.size) {
-+			truncate_pagecache(inode, attr->ia_size);
-+			fscache_resize_cookie(afs_vnode_cache(vnode),
-+					      attr->ia_size);
-+			i_size_write(inode, attr->ia_size);
-+			ret = 0;
-+			goto out_unlock;
-+		}
-+	}
-+
- 	op = afs_alloc_operation(((attr->ia_valid & ATTR_FILE) ?
- 				  afs_file_key(attr->ia_file) : NULL),
- 				 vnode->volume);
 
 
+On 29.11.21 г. 2:34, Josef Bacik wrote:
+> On Sat, Nov 27, 2021 at 04:23:37PM +0800, Jia-Ju Bai wrote:
+>> Hello,
+>>
+>> My static analysis tool reports several possible ABBA deadlocks in the btrfs
+>> module in Linux 5.10:
+>>
+>> # DEADLOCK 1:
+>> __clear_extent_bit()
+>>   spin_lock(&tree->lock); --> Line 733 (Lock A)
+>>   split_state()
+>>     btrfs_split_delalloc_extent()
+>>       spin_lock(&BTRFS_I(inode)->lock); --> Line 1870 (Lock B)
+>>
+>> btrfs_inode_safe_disk_i_size_write()
+>>   spin_lock(&BTRFS_I(inode)->lock); --> Line 53 (Lock B)
+>>   find_contiguous_extent_bit()
+>>     spin_lock(&tree->lock); --> Line 1620 (Lock A)
+>>
+>> When __clear_extent_bit() and btrfs_inode_safe_disk_i_size_write() are
+>> concurrently executed, the deadlock can occur.
+>>
+>> # DEADLOCK 2:
+>> __set_extent_bit()
+>>   spin_lock(&tree->lock); --> Line 995 (Lock A)
+>>   set_state_bits()
+>>     btrfs_set_delalloc_extent()
+>>       spin_lock(&BTRFS_I(inode)->lock); --> Line 2007 or 2017 or 2029 (Lock
+>> B)
+>>
+>> btrfs_inode_safe_disk_i_size_write()
+>>   spin_lock(&BTRFS_I(inode)->lock); --> Line 53 (Lock B)
+>>   find_contiguous_extent_bit()
+>>     spin_lock(&tree->lock); --> Line 1620 (Lock A)
+>>
+>> When __set_extent_bit() and btrfs_inode_safe_disk_i_size_write() are
+>> concurrently executed, the deadlock can occur.
+>>
+>> # DEADLOCK 3:
+>> convert_extent_bit()
+>>   spin_lock(&tree->lock); --> Line 1241 (Lock A)
+>>   set_state_bits()
+>>     btrfs_set_delalloc_extent()
+>>       spin_lock(&BTRFS_I(inode)->lock); --> Line 2007 or 2017 or 2029 (Lock
+>> B)
+>>
+>> btrfs_inode_safe_disk_i_size_write()
+>>   spin_lock(&BTRFS_I(inode)->lock); --> Line 53 (Lock B)
+>>   find_contiguous_extent_bit()
+>>     spin_lock(&tree->lock); --> Line 1620 (Lock A)
+>>
+>> When convert_extent_bit() and btrfs_inode_safe_disk_i_size_write() are
+>> concurrently executed, the deadlock can occur.
+>>
+>> I am not quite sure whether these possible deadlocks are real and how to fix
+>> them if they are real.
+>> Any feedback would be appreciated, thanks :)
+>>
+> 
+> Hey Jia-Ju,
+> 
+> This is pretty good work, unfortunately it's wrong but it's in a subtle way that
+> a tool wouldn't be able to catch.  The btrfs_inode_safe_disk_i_size_write()
+> helper only messes with BTRFS_I(inode)->file_extent_tree, which is separate from
+> the BTRFS_I(inode)->io_tree.  io_tree gets the btrfs_set_delalloc_extent() stuff
+> called on it, but the file_extent_tree does not.  The file_extent_tree has
+> inode->lock -> tree->lock as the locking order, whereas the file_extent_tree has
+> inode->lock -> tree->lock as the locking order.  Thanks,
+
+nit: did you mean to reverse tree->lock ->inode->lock for the
+file_extent_tree?
+
+> 
+> Josef
+> 

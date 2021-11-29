@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3C1461B23
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8112B461B2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:39:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345334AbhK2Pkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 10:40:52 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:47138
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231384AbhK2Piv (ORCPT
+        id S1347099AbhK2PmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:42:15 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:59916 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244412AbhK2PkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 10:38:51 -0500
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 29 Nov 2021 10:40:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4CDBB3F1B9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:35:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638200132;
-        bh=tf96AuO5x5gjp6koQeTaZjV3TfVhaiadm4gVY/ssPY0=;
-        h=From:Subject:To:Cc:Message-ID:Date:MIME-Version:Content-Type;
-        b=IFG+lHwQP3RkS/mSaK1drPo5kbj6CASSintGwAkI5b59bXilvaTMA6ag7fPvLTIt2
-         R2+1mweyok/KPFkq9jHCAEthtd//xRbHEZVvdZg18I06W6gwLhWxR6WGoZB7Y9kagn
-         nzu7EXhYNBGQ0hFBQpLrboSbh+H5pHF0/ADuZCCmT39vSnLz63YTZuWL5+7u/lDwua
-         8qlVbGw/+9RdJ+LffNSGvsjey2imq39YRhBG9LXonO5CGxEXwB85AMdSAqazuELhiT
-         dvNLuVqBTnaeQlfS7RpEVnU5NcPG/wWgmB8lM30q2KtqqGnjE6BB24sZj2pO8b/IEv
-         rvEum9PQoh+OA==
-Received: by mail-pl1-f199.google.com with SMTP id m15-20020a170902bb8f00b0014382b67873so6510757pls.19
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:35:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:subject:to:cc:message-id:date:user-agent
-         :mime-version:content-language:content-transfer-encoding;
-        bh=tf96AuO5x5gjp6koQeTaZjV3TfVhaiadm4gVY/ssPY0=;
-        b=qCnRC8RKp7tOGBKxkcRdgWMvQStwkQgsayl36tizFlF30+I9FUZ1vMprzvJGZb+oTw
-         4IL06w5L/ufxjh2RlBwAXuTgXNVRr4zR63HtPGFlKX2Go+ruvXvMezobY7Zh2MB8KG7R
-         /LVD3ZBHXMfhl3EnT+nIyo7uaUlFFqlIrmrynTMxlkNEK6KX6T6NE8unL18Cg2glCjv4
-         NkPPHcKZYTAk2PsnHG+dldxoS5dAFfrM8nhQrluj640tAwXEdMmIh1vB2/cokll8USZh
-         xWI8WFqZiPNMPSO5mA4/gSQRneEOHH3fpFSPsjLdCRporcC9Co8GoMn4s5lA3E6bI+BY
-         W//Q==
-X-Gm-Message-State: AOAM531NL0zr4gBffzbXJejFS7BKb69k3ObY4ipIL/Z93D/aGcVHxhzh
-        mthX0UtKfo6rskGH4dnWE6z7PfAkgwKWIRq4kF9cpL36uEhwyn9v+iEha9fCczhjkMwyb37+flc
-        IVkI2XPxgF4vj6h5hfigGDuhtCw9wFwg9gl7ZM04kWg==
-X-Received: by 2002:a17:90a:bf8a:: with SMTP id d10mr38703462pjs.67.1638200131081;
-        Mon, 29 Nov 2021 07:35:31 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzrtghVy2cB06KZtU+MpQ0hZ+SPUtpz89k2kZUBlz6J0QLHMTxsDRgbAg5O5FYs/Nbm1imESQ==
-X-Received: by 2002:a17:90a:bf8a:: with SMTP id d10mr38703435pjs.67.1638200130843;
-        Mon, 29 Nov 2021 07:35:30 -0800 (PST)
-Received: from [192.168.1.124] ([69.163.84.166])
-        by smtp.gmail.com with ESMTPSA id u30sm12251881pgo.60.2021.11.29.07.35.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 07:35:30 -0800 (PST)
-From:   Tim Gardner <tim.gardner@canonical.com>
-Subject: Commit f980d055a0f858d73d9467bb0b570721bbfcdfb8 causes a regression
-To:     len.baker@gmx.com
-Cc:     pc@cjr.nz, jlayton@kernel.org, stfrench@microsoft.com,
-        Kamal Mostafa <Kamal.Mostafa@canonical.com>,
-        linux-cifs@vger.kernel.org,
-        samba-technical <samba-technical@lists.samba.org>,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org
-Message-ID: <a8b2287b-c459-2169-fbf4-31f3065e0897@canonical.com>
-Date:   Mon, 29 Nov 2021 08:35:29 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        by sin.source.kernel.org (Postfix) with ESMTPS id 50954CE131F;
+        Mon, 29 Nov 2021 15:36:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BEA2C53FCE;
+        Mon, 29 Nov 2021 15:36:44 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 15:36:41 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>
+Subject: Re: [PATCH 3/3] btrfs: Avoid live-lock in search_ioctl() on hardware
+ with sub-page faults
+Message-ID: <YaTziROgnFwB6Ddj@arm.com>
+References: <20211124192024.2408218-1-catalin.marinas@arm.com>
+ <20211124192024.2408218-4-catalin.marinas@arm.com>
+ <YZ6arlsi2L3LVbFO@casper.infradead.org>
+ <YZ6idVy3zqQC4atv@arm.com>
+ <CAHc6FU4-P9sVexcNt5CDQxROtMAo=kH8hEu==AAhZ_+Zv53=Ag@mail.gmail.com>
+ <20211127123958.588350-1-agruenba@redhat.com>
+ <YaJM4n31gDeVzUGA@arm.com>
+ <CAHc6FU7BSL58GVkOh=nsNQczRKG3P+Ty044zs7PjKPik4vzz=Q@mail.gmail.com>
+ <YaTEkAahkCwuQdPN@arm.com>
+ <CAHc6FU6zVi9A2D3V3T5zE71YAdkBiJTs0ao1Q6ysSuEp=bz8fQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHc6FU6zVi9A2D3V3T5zE71YAdkBiJTs0ao1Q6ysSuEp=bz8fQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Len,
+On Mon, Nov 29, 2021 at 02:33:42PM +0100, Andreas Gruenbacher wrote:
+> On Mon, Nov 29, 2021 at 1:22 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > On Sat, Nov 27, 2021 at 07:05:39PM +0100, Andreas Gruenbacher wrote:
+> > > We also still have fault_in_safe_writeable which is more difficult to
+> > > fix, and fault_in_readable which we don't want to leave behind broken,
+> > > either.
+> >
+> > fault_in_safe_writeable() can be done by using get_user() instead of
+> > put_user() for arm64 MTE and probably SPARC ADI (an alternative is to
+> > read the in-memory tags and compare them with the pointer).
+> 
+> So we'd keep the existing fault_in_safe_writeable() logic for the
+> actual fault-in and use get_user() to check for sub-page faults? If
+> so, then that should probably also be hidden in arch code.
 
-I have a report (https://bugs.launchpad.net/bugs/1952094) that commit 
-f980d055a0f858d73d9467bb0b570721bbfcdfb8 ("CIFS: Fix a potencially 
-linear read overflow") causes a regression as a stable backport in a 5.4 
-based kernel. I don't know if this regression exists in tip as well, or 
-if it is unique to the backported environment. I suspect, given the 
-content of the patch, that it is generic. As such, it has been 
-backported to a number of stable releases:
+That's what this series does when it probes the whole range in
+fault_in_writeable(). The main reason was that it's more efficient to do
+a read than a write on a large range (the latter dirtying the cache
+lines).
 
-linux-4.4.y.txt:0955df2d9bf4857e3e2287e3028903e6cec06c30
-linux-4.9.y.txt:8878af780747f498551b7d360cae61b415798f18
-linux-4.14.y.txt:20967547ffc6039f17c63a1c24eb779ee166b245
-linux-4.19.y.txt:bea655491daf39f1934a71bf576bf3499092d3a4
-linux-5.4.y.txt:b444064a0e0ef64491b8739a9ae05a952b5f8974
-linux-5.10.y.txt:6c4857203ffa36918136756a889b12c5864bc4ad
-linux-5.13.y.txt:9bffe470e9b537075345406512df01ca2188b725
-linux-5.14.y.txt:c41dd61c86482ab34f6f039b13296308018fd99b
+> > For CHERI, that's different again since the fault_in_safe_writeable capability
+> > encodes the read/write permissions independently.
+> >
+> > However, do we actually want to change the fault_in_safe_writeable() and
+> > fault_in_readable() functions at this stage? I could not get any of them
+> > to live-lock, though I only tried btrfs, ext4 and gfs2. As per the
+> > earlier discussion, normal files accesses are guaranteed to make
+> > progress. The only problematic one was O_DIRECT which seems to be
+> > alright for the above filesystems (the fs either bails out after several
+> > attempts or uses GUP to read which skips the uaccess altogether).
+> 
+> Only gfs2 uses fault_in_safe_writeable(). For buffered reads, progress
+> is guaranteed because failures are at a byte granularity.
+> 
+> O_DIRECT reads and writes happen in device block size granularity, but
+> the pages are grabbed with get_user_pages() before the copying
+> happens. So by the time the copying happens, the pages are guaranteed
+> to be resident, and we don't need to loop around fault_in_*().
 
-Could this be an off-by-one issue if the source string is full length ?
+For file reads, I couldn't triggered any mismatched tag faults with gfs2
+and O_DIRECT, so it matches your description above. For file writes it
+does trigger such faults, so I suspect it doesn't always use
+get_user_pages() for writes. No live-lock though with the vanilla
+kernel. My test uses a page with some mismatched tags in the middle.
 
-rtg
+ext4: no tag faults with O_DIRECT read/write irrespective of whether the
+user buffer is page aligned or not.
+
+btrfs: O_DIRECT file writes - no faults on page-aligned buffers, faults
+on unaligned; file reads - tag faults on both aligned/unaligned buffers.
+No live-lock.
+
+So, some tag faults still happen even with O_DIRECT|O_SYNC but the
+filesystems too care of continuous faulting.
+
+> You've mentioned before that copying to/from struct page bypasses
+> sub-page fault checking. If that is the case, then the checking
+> probably needs to happen in iomap_dio_bio_iter and dio_refill_pages
+> instead.
+
+It's too expensive and not really worth it. With a buffered access, the
+uaccess takes care of checking at the time of load/store (the hardware
+does this for us). With a GUP, the access is done via the kernel mapping
+with a match-all tag to avoid faults (kernel panic). We set the ABI
+expectation some time ago that kernel accesses to user memory may not
+always be tag-checked if the access is done via a GUP'ed page.
+
+> > Happy to address them if there is a real concern, I just couldn't trigger it.
+> 
+> Hopefully it should now be clear why you couldn't. One way of
+> reproducing with fault_in_safe_writeable() would be to use that in
+> btrfs instead of fault_in_writeable(), of course.
+
+Yes, that would trigger it again. I guess if we want to make this API
+safer in general, we can add the checks to the other functions. Only
+probing a few bytes at the start shouldn't cause a performance issue.
+
+Thanks.
+
 -- 
------------
-Tim Gardner
-Canonical, Inc
+Catalin

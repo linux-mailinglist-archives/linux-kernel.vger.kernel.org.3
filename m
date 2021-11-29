@@ -2,159 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DEDF461C8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:14:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796CC461C91
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347968AbhK2RRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 12:17:15 -0500
-Received: from mga03.intel.com ([134.134.136.65]:17894 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346797AbhK2RPN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 12:15:13 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="235949847"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="235949847"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 09:10:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="458508532"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 29 Nov 2021 09:10:14 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mrkAP-000C9A-BW; Mon, 29 Nov 2021 17:10:13 +0000
-Date:   Tue, 30 Nov 2021 01:09:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     kbuild-all@lists.01.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/5] powerpc/inst: Refactor ___get_user_instr()
-Message-ID: <202111300028.pvdtx2Vc-lkp@intel.com>
-References: <97a171efd8c582e2bae82c31f2a9519823a20d3f.1638186773.git.christophe.leroy@csgroup.eu>
+        id S1348970AbhK2RTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:19:08 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8976 "EHLO
+        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345809AbhK2RRH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 12:17:07 -0500
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATGlYMX015648;
+        Mon, 29 Nov 2021 17:13:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=1jbh7Bqw8aRrbB8xzKKoStQfXEKWQMi6v24QMp4/woo=;
+ b=jnzFWZUMgEk+HaXrr8cMMnyOASxhG/TYnyLKRvpys4mfsUM/nFcFMyymAeB0Hb7Wwt1K
+ 5ffK7K+6/RdnRw15Pqp07GkxOPvCjd+xbX/uXx80K6tipEQjZsHWm3W2tMbfeFRTgE5f
+ v27l2uJdBa3nawqT0ad4LbNNrmzOYphyr5Y5S8UZsAMhCId2Xa+EyCstQ+ne++g/Igkw
+ W2yoC9zyN142U6VGf9gD3SxuhlZ0YCO4U/5qN8F/MSM0ebw7AhYBIy2oAbr7tEYP2CkL
+ g2X7kA89mwlfB94jbie0HcylSwiYHT2dNbjpjuchlAGaw60DRC+XWmwneRqGxKWZBC4A Rg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cn2ps8kuv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 17:13:45 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1ATGmHif017183;
+        Mon, 29 Nov 2021 17:13:45 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cn2ps8ku5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 17:13:45 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATGwKpv020894;
+        Mon, 29 Nov 2021 17:13:43 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma05fra.de.ibm.com with ESMTP id 3ckca965pt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 17:13:43 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATH6F6U62652798
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 17:06:15 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B13E652057;
+        Mon, 29 Nov 2021 17:13:40 +0000 (GMT)
+Received: from [9.171.89.183] (unknown [9.171.89.183])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 6685A52054;
+        Mon, 29 Nov 2021 17:13:40 +0000 (GMT)
+Message-ID: <c6b7c933-2d48-1504-7c45-110b0ab317ad@linux.ibm.com>
+Date:   Mon, 29 Nov 2021 18:13:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <97a171efd8c582e2bae82c31f2a9519823a20d3f.1638186773.git.christophe.leroy@csgroup.eu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] kvm/eventfd: fix the misleading comment in
+ kvm_irqfd_assign
+Content-Language: en-US
+To:     "Longpeng(Mike)" <longpeng2@huawei.com>, pbonzini@redhat.com
+Cc:     cornelia.huck@de.ibm.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arei.gonglei@huawei.com
+References: <20211129034328.1604-1-longpeng2@huawei.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <20211129034328.1604-1-longpeng2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: aYs2JJN0imiYHpiviEjonQB9MY2HjiUJ
+X-Proofpoint-ORIG-GUID: OslurKj-BeMRcLOA6KR381zpy9yytlT7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-29_10,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
+ impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
+ adultscore=0 clxscore=1011 priorityscore=1501 spamscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
+ definitions=main-2111290081
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
-
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on v5.16-rc3 next-20211129]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
-
-url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211129-195613
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20211130/202111300028.pvdtx2Vc-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/12f08114cece066b2640aef99e2bc74f49eebef5
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211129-195613
-        git checkout 12f08114cece066b2640aef99e2bc74f49eebef5
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/powerpc/include/asm/hw_breakpoint.h:13,
-                    from arch/powerpc/include/asm/processor.h:43,
-                    from arch/powerpc/include/asm/thread_info.h:40,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:10,
-                    from arch/powerpc/kernel/align.c:17:
-   arch/powerpc/kernel/align.c: In function 'fix_alignment':
->> arch/powerpc/include/asm/inst.h:12:32: error: variable '__suffix' set but not used [-Werror=unused-but-set-variable]
-      12 |         unsigned int __prefix, __suffix;                                \
-         |                                ^~~~~~~~
-   arch/powerpc/include/asm/inst.h:31:34: note: in expansion of macro '___get_user_instr'
-      31 | #define __get_user_instr(x, ptr) ___get_user_instr(__get_user, x, ptr)
-         |                                  ^~~~~~~~~~~~~~~~~
-   arch/powerpc/kernel/align.c:310:21: note: in expansion of macro '__get_user_instr'
-     310 |                 r = __get_user_instr(instr, (void __user *)regs->nip);
-         |                     ^~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
---
-   In file included from arch/powerpc/include/asm/hw_breakpoint.h:13,
-                    from arch/powerpc/include/asm/processor.h:43,
-                    from arch/powerpc/include/asm/thread_info.h:40,
-                    from include/linux/thread_info.h:60,
-                    from arch/powerpc/include/asm/ptrace.h:323,
-                    from arch/powerpc/include/asm/hw_irq.h:12,
-                    from arch/powerpc/include/asm/irqflags.h:12,
-                    from include/linux/irqflags.h:16,
-                    from include/asm-generic/cmpxchg-local.h:6,
-                    from arch/powerpc/include/asm/cmpxchg.h:526,
-                    from arch/powerpc/include/asm/atomic.h:11,
-                    from include/linux/atomic.h:7,
-                    from include/linux/rcupdate.h:25,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/uaccess.h:8,
-                    from arch/powerpc/kernel/hw_breakpoint_constraints.c:3:
-   arch/powerpc/kernel/hw_breakpoint_constraints.c: In function 'wp_get_instr_detail':
->> arch/powerpc/include/asm/inst.h:12:32: error: variable '__suffix' set but not used [-Werror=unused-but-set-variable]
-      12 |         unsigned int __prefix, __suffix;                                \
-         |                                ^~~~~~~~
-   arch/powerpc/include/asm/inst.h:31:34: note: in expansion of macro '___get_user_instr'
-      31 | #define __get_user_instr(x, ptr) ___get_user_instr(__get_user, x, ptr)
-         |                                  ^~~~~~~~~~~~~~~~~
-   arch/powerpc/kernel/hw_breakpoint_constraints.c:135:13: note: in expansion of macro '__get_user_instr'
-     135 |         if (__get_user_instr(*instr, (void __user *)regs->nip))
-         |             ^~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
 
 
-vim +/__suffix +12 arch/powerpc/include/asm/inst.h
+Am 29.11.21 um 04:43 schrieb Longpeng(Mike):
+> From: Longpeng <longpeng2@huawei.com>
+> 
+> The comment above the invocation of vfs_poll() is misleading, move
+> it to the right place.
+> 
+I think that the current variant is better.
+events is only used in that function to check for EPOLLIN, so the
+assignment and the if belong together from a "what am I doing here" perspective.
 
-650b55b707fdfa Jordan Niethe    2020-05-15   6  
-35506a3e2d7c4d Christophe Leroy 2021-03-10   7  #define ___get_user_instr(gu_op, dest, ptr)				\
-35506a3e2d7c4d Christophe Leroy 2021-03-10   8  ({									\
-042e0860e1c1d6 Christophe Leroy 2021-05-20   9  	long __gui_ret;							\
-9134806e149ebb Christophe Leroy 2021-05-20  10  	u32 __user *__gui_ptr = (u32 __user *)ptr;			\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  11  	struct ppc_inst __gui_inst;					\
-35506a3e2d7c4d Christophe Leroy 2021-03-10 @12  	unsigned int __prefix, __suffix;				\
-b3a9e523237013 Christophe Leroy 2021-05-20  13  									\
-b3a9e523237013 Christophe Leroy 2021-05-20  14  	__chk_user_ptr(ptr);						\
-9134806e149ebb Christophe Leroy 2021-05-20  15  	__gui_ret = gu_op(__prefix, __gui_ptr);				\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  16  	if (__gui_ret == 0) {						\
-12f08114cece06 Christophe Leroy 2021-11-29  17  		if (IS_ENABLED(CONFIG_PPC64) && (__prefix >> 26) == OP_PREFIX) { \
-9134806e149ebb Christophe Leroy 2021-05-20  18  			__gui_ret = gu_op(__suffix, __gui_ptr + 1);	\
-042e0860e1c1d6 Christophe Leroy 2021-05-20  19  			__gui_inst = ppc_inst_prefix(__prefix, __suffix); \
-35506a3e2d7c4d Christophe Leroy 2021-03-10  20  		} else {						\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  21  			__gui_inst = ppc_inst(__prefix);		\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  22  		}							\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  23  		if (__gui_ret == 0)					\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  24  			(dest) = __gui_inst;				\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  25  	}								\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  26  	__gui_ret;							\
-35506a3e2d7c4d Christophe Leroy 2021-03-10  27  })
-35506a3e2d7c4d Christophe Leroy 2021-03-10  28  
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> Fixes: 684a0b719ddb ("KVM: eventfd: Fix lock order inversion")
+> Signed-off-by: Longpeng <longpeng2@huawei.com>
+> ---
+>   virt/kvm/eventfd.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
+> index 2ad013b..cd01814 100644
+> --- a/virt/kvm/eventfd.c
+> +++ b/virt/kvm/eventfd.c
+> @@ -406,12 +406,12 @@ bool __attribute__((weak)) kvm_arch_irqfd_route_changed(
+> 
+>   	spin_unlock_irq(&kvm->irqfds.lock);
+> 
+> +	events = vfs_poll(f.file, &irqfd->pt);
+> +
+>   	/*
+>   	 * Check if there was an event already pending on the eventfd
+>   	 * before we registered, and trigger it as if we didn't miss it.
+>   	 */
+> -	events = vfs_poll(f.file, &irqfd->pt);
+> -
+>   	if (events & EPOLLIN)
+>   		schedule_work(&irqfd->inject);
+> 

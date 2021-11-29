@@ -2,155 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1F14613DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C156E4613E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241259AbhK2Lb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:31:58 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:50542 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbhK2L35 (ORCPT
+        id S241101AbhK2Ld5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:33:57 -0500
+Received: from st43p00im-zteg10062001.me.com ([17.58.63.166]:50897 "EHLO
+        st43p00im-zteg10062001.me.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241172AbhK2Lbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:29:57 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4A0C2212C5;
-        Mon, 29 Nov 2021 11:26:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638185199; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uyeD61G0icp3J1TdJP8AWxOrAGeJ77KjoN9LFoIb5T0=;
-        b=G0zqE/lKiyd7B7DEQdRo0VT6O8rjuk4qwA9WKoOpq27gIhg8l3tgn+gVFZoCvz3oBH/Hah
-        76mSVyMk8WbvZr7hNQT/1Olksnr32CCZ8b3IbPbwfax6RXhArRSls6LcU22RgS7l0gxdEu
-        E0sxAa30pNZthll/2cFJQmwj74Ohz1w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638185199;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uyeD61G0icp3J1TdJP8AWxOrAGeJ77KjoN9LFoIb5T0=;
-        b=IsoaSTbm3+RVE8pj0xNBAeskmhk/M0OP9o7sYgID3C7zsSZV8/XIMK8OpeInRDsHXwtXi3
-        wPrRlzg4R9D6fBBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14E5913B53;
-        Mon, 29 Nov 2021 11:26:39 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id g54eBO+4pGHrEQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Mon, 29 Nov 2021 11:26:39 +0000
-Message-ID: <f4b39541-3213-341d-bbf5-e6de9c1ad8f5@suse.de>
-Date:   Mon, 29 Nov 2021 12:26:38 +0100
+        Mon, 29 Nov 2021 06:31:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=me.com; s=1a1hai;
+        t=1638185309; bh=FO0LUT32VcGamCeUuaNkSfl73khKfpMSTlnCbYYzcRo=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=Sm+l7dOwSWblAFjEalalHCDsvEiE5jSh5mxYhcgMF9W1pENtnnB0TVxX+bCX5+aY3
+         eDsOep0NahianPdsVG0fGMG8caA8edjHtwb476z7p91Q0lZJMQLZPl1M2yqe20p6nr
+         dYzdo3/RFqIeU2hVinXnr1t+oqrT13No9TWxO/gckf6HWj3FNaPK9CW+rQJrbmgdRh
+         GR3FSsPFRVsLMxoUlyPEkVigfY0BsQo9/YcUKCcoY4eO6KXCWB+ME6JKewrgT/yX8W
+         jJGqCVF/4FupDcrySmfkQhsz+/2a0KNEJbDj0yZ0vPOxmUDQgRk8BCRfJrW5UU1Y66
+         Zu/8PFQENw5jg==
+Received: from gnbcxl0045.gnb.st.com (101.220.150.77.rev.sfr.net [77.150.220.101])
+        by st43p00im-zteg10062001.me.com (Postfix) with ESMTPSA id 1799A6C01B2;
+        Mon, 29 Nov 2021 11:28:26 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 12:28:24 +0100
+From:   Alain Volmat <avolmat@me.com>
+To:     Andrew Lunn <andrew@lunn.ch>, robh+dt@kernel.org
+Cc:     wsa@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Alain Volmat <avolmat@me.com>
+Subject: Re: [RFC] sti: Conflict in node name for an IP supporting both I2C
+ and SPI
+Message-ID: <20211129112824.GA17122@gnbcxl0045.gnb.st.com>
+Mail-Followup-To: Andrew Lunn <andrew@lunn.ch>, robh+dt@kernel.org,
+        wsa@kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Patrice Chotard <patrice.chotard@foss.st.com>
+References: <20211125210428.GA27075@gnbcxl0045.gnb.st.com>
+ <YaFkG85DHMMRiD7O@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
-Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20211117145829.204360-1-marcan@marcan.st>
- <20211117145829.204360-2-marcan@marcan.st>
- <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de>
- <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------4TPyDD8UaA508Fl0dHc8CnpN"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaFkG85DHMMRiD7O@lunn.ch>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.425,18.0.790
+ definitions=2021-11-29_05:2021-11-28,2021-11-29 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 clxscore=1011 mlxscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-2009150000 definitions=main-2111290057
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------4TPyDD8UaA508Fl0dHc8CnpN
-Content-Type: multipart/mixed; boundary="------------pvJ6Y0v5xZgW0Ta4QDP0nNMV";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Hector Martin <marcan@marcan.st>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
- Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>
-Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Message-ID: <f4b39541-3213-341d-bbf5-e6de9c1ad8f5@suse.de>
-Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
-References: <20211117145829.204360-1-marcan@marcan.st>
- <20211117145829.204360-2-marcan@marcan.st>
- <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de>
- <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
-In-Reply-To: <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
+Hello,
 
---------------pvJ6Y0v5xZgW0Ta4QDP0nNMV
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On Fri, Nov 26, 2021 at 11:47:55PM +0100, Andrew Lunn wrote:
+> On Thu, Nov 25, 2021 at 10:04:28PM +0100, Alain Volmat wrote:
+> > Hello,
+> > 
+> > in the STi platform [1], the I2C and SPI controllers are handled by the
+> > same IP, which can be configured in either one or the other mode.
+> > This leads to warnings during the DT build and I was wondering if you could
+> > give me some hints about how such situation should be handled since this
+> > concern DT warnings but also bindings and YAML.
+> > 
+> > In the SoC DT (dtsi), for each IP, there are 2 entries:
+> > 
+> > One for the I2C mode (implemented by the driver i2c/busses/i2c-st.c)
+> >                 i2c@9840000 {
+> >                         compatible = "st,comms-ssc4-i2c";
+> >                         interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+> >                         reg = <0x9840000 0x110>;
+> >                         clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
+> >                         clock-names = "ssc";
+> >                         clock-frequency = <400000>;
+> >                         pinctrl-names = "default";
+> >                         pinctrl-0 = <&pinctrl_i2c0_default>;
+> >                         #address-cells = <1>;
+> >                         #size-cells = <0>;
+> > 
+> >                         status = "disabled";
+> >                 };
+> > 
+> > One for the SPI mode (implemented by the driver spi/spi-st-ssc4.c)
+> >                 spi@9840000 {
+> >                         compatible = "st,comms-ssc4-spi";
+> >                         reg = <0x9840000 0x110>;
+> >                         interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH>;
+> >                         clocks = <&clk_s_c0_flexgen CLK_EXT2F_A9>;
+> >                         clock-names = "ssc";
+> >                         pinctrl-0 = <&pinctrl_spi0_default>;
+> >                         pinctrl-names = "default";
+> >                         #address-cells = <1>;
+> >                         #size-cells = <0>;
+> > 
+> >                         status = "disabled";
+> >                 };
+> > 
+> > So basically, there are 2 nodes, one for each mode, and enabling one or the
+> > other mode is done within the board DT.
+> > Since the address is the same, this obviously leads to warning during the build
+> > of the DT.
+> > 
+> > arch/arm/boot/dts/stih407-family.dtsi:363.15-376.5: Warning (unique_unit_address): /soc/i2c@9840000: duplicate unit-address (also used in node /soc/spi@9840000)
+> 
+> How about making the compiler look at the status value. So long as
+> only zero or one is enabled, it should not be an issue. If you have
+> two or more nodes enabled for an address, then you want a warning or
+> error.
 
-SGkNCg0KQW0gMjAuMTEuMjEgdW0gMDQ6MjMgc2NocmllYiBIZWN0b3IgTWFydGluOg0KPiBP
-biAxOC8xMS8yMDIxIDE4LjE5LCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+IEhpDQo+
-Pg0KPj4gQW0gMTcuMTEuMjEgdW0gMTU6NTggc2NocmllYiBIZWN0b3IgTWFydGluOg0KPj4+
-IEBAIC04OTcsNSArODk4LDIxIEBAIHN0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyIA0K
-Pj4+IHNpbXBsZWRybV9wbGF0Zm9ybV9kcml2ZXIgPSB7DQo+Pj4gwqDCoCBtb2R1bGVfcGxh
-dGZvcm1fZHJpdmVyKHNpbXBsZWRybV9wbGF0Zm9ybV9kcml2ZXIpOw0KPj4+ICtzdGF0aWMg
-aW50IF9faW5pdCBzaW1wbGVkcm1faW5pdCh2b2lkKQ0KPj4+ICt7DQo+Pj4gK8KgwqDCoCBz
-dHJ1Y3QgZGV2aWNlX25vZGUgKm5wOw0KPj4+ICsNCj4+PiArwqDCoMKgIGlmIChJU19FTkFC
-TEVEKENPTkZJR19PRl9BRERSRVNTKSAmJiBvZl9jaG9zZW4pIHsNCj4+PiArwqDCoMKgwqDC
-oMKgwqAgZm9yX2VhY2hfY2hpbGRfb2Zfbm9kZShvZl9jaG9zZW4sIG5wKSB7DQo+Pj4gK8Kg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKG9mX2RldmljZV9pc19jb21wYXRpYmxlKG5wLCAi
-c2ltcGxlLWZyYW1lYnVmZmVyIikpDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBvZl9wbGF0Zm9ybV9kZXZpY2VfY3JlYXRlKG5wLCBOVUxMLCBOVUxMKTsNCj4+PiAr
-wqDCoMKgwqDCoMKgwqAgfQ0KPj4+ICvCoMKgwqAgfQ0KPj4+ICsNCj4+PiArwqDCoMKgIHJl
-dHVybiAwOw0KPj4+ICt9DQo+Pj4gKw0KPj4+ICtmc19pbml0Y2FsbChzaW1wbGVkcm1faW5p
-dCk7DQo+Pj4gKw0KPj4NCj4+IFNpbXBsZWRybSBpcyBqdXN0IGEgZHJpdmVyLCBidXQgdGhp
-cyBpcyBwbGF0Zm9ybSBzZXR1cCBjb2RlLiBXaHkgaXMgdGhpcw0KPj4gY29kZSBsb2NhdGVk
-IGhlcmUgYW5kIG5vdCB1bmRlciBhcmNoLyBvciBkcml2ZXJzL2Zpcm13YXJlLz8NCj4+DQo+
-PiBJIGtub3cgdGhhdCBvdGhlciBkcml2ZXJzIGRvIHNpbWlsYXIgdGhpbmdzLCBpdCBkb2Vz
-bid0IHNlZW0gdG8gYmVsb25nIA0KPj4gaGVyZS4NCj4gDQo+IFRoaXMgZGVmaW5pdGVseSBk
-b2Vzbid0IGJlbG9uZyBpbiBlaXRoZXIgb2YgdGhvc2UsIHNpbmNlIGl0IGlzIG5vdCBhcmNo
-LSANCj4gb3IgZmlybXdhcmUtc3BlY2lmaWMuIEl0IGlzIGltcGxlbWVudGluZyBzdXBwb3J0
-IGZvciB0aGUgc3RhbmRhcmQgDQo+IHNpbXBsZS1mcmFtZWJ1ZmZlciBPRiBiaW5kaW5nLCB3
-aGljaCBzcGVjaWZpZXMgdGhhdCBpdCBtdXN0IGJlIGxvY2F0ZWQgDQo+IHdpdGhpbiB0aGUg
-L2Nob3NlbiBub2RlIChhbmQgdGh1cyB0aGUgZGVmYXVsdCBPRiBzZXR1cCBjb2RlIHdvbid0
-IGRvIHRoZSANCj4gbWF0Y2hpbmcgZm9yIHlvdSk7IHRoaXMgYXBwbGllcyB0byBhbGwgT0Yg
-cGxhdGZvcm1zIFsxXQ0KPiANCj4gQWRkaW5nIFJvYjsgZG8geW91IHRoaW5rIHRoaXMgc2hv
-dWxkIG1vdmUgZnJvbSBzaW1wbGVmYi9zaW1wbGVkcm0gdG8gDQo+IGNvbW1vbiBPRiBjb2Rl
-PyAod2hlcmU/KQ0KDQpwaW5nIQ0KDQo+IA0KPiBbMV0gRG9jdW1lbnRhdGlvbi9kZXZpY2V0
-cmVlL2JpbmRpbmdzL2Rpc3BsYXkvc2ltcGxlLWZyYW1lYnVmZmVyLnlhbWwNCj4gDQoNCi0t
-IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
-U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
-TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
-ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
+From the compiler point of view it seems this behavior is already
+possible, probably with something like:
+   -Wno-unique_unit_address -Wunique_unit_address_if_enabled
 
---------------pvJ6Y0v5xZgW0Ta4QDP0nNMV--
+Rob, is current behavior (checking unique unit address even if node
+is disabled) on purpose or could this be changed to only checking if the
+node is enabled ?
 
---------------4TPyDD8UaA508Fl0dHc8CnpN
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Alain
 
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGkuO4FAwAAAAAACgkQlh/E3EQov+D6
-9A/8DUk3vwTjfkCaj0jM1eXuz4tpUGPB60I2nAv0hydW4KkI2M5QJuoYZPyDpspIUZThl0/3/QFR
-5qexhNgaccHJ3uBwDalAmwtj3qtxTdsMGDX9VR5qYbItjHuApqDW3P+8pZq8ZjTnhfi0sWhDYFxx
-7JIVXR3GiRkm7fHkN24dYFN+vCs7Gp6gsLFa85Qvd681re5gvIdRHs4qMPEM0KEGg9WYc1B4olR4
-CllJnVoYb89cOpTtVAoEXjUFJBNSCWOgXEiq28kuEIbai6DSH5zchJvtYmBYw70OiyCfjN3+z+Qk
-f5j3nyhL4P8RyelfaSnFSMeIihqKbYnlBvYVDKokS5kwFL5+fzGpjXD4ZcdVOUQWc3fdXFCu5TDD
-mOX4Vb2CA6oVceMdHbqfEo6ZJ1rwczCRgb1edlreaGVEdS/QSJzga6UGRQJ2hrUm5lD8L+ebl4ex
-bN2YO/3V8GkTvIGEAjvzCumnoXc1OVz1faAZisr54OXRMtbDUBnW/V6h8earMx3Daz5JMNTwDxD+
-DvpbdsbhBjav7BBdWExb6lEAD0E0B75ffx70IHdpu13elSQWYLsOKqJvCUHJ3Po45IKNXD2Miu35
-EvGKifLcQb/Ql96m0zdKbE0nXwOwyS3RfgC4hXLZry1bnMmCHtQkHIBXlgvDRPzWyS7hLxgwRBbc
-PfA=
-=uuq9
------END PGP SIGNATURE-----
-
---------------4TPyDD8UaA508Fl0dHc8CnpN--
+> 
+>      Andrew
+> 

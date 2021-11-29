@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 330F9461A73
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D6B461A7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345139AbhK2O7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:59:47 -0500
-Received: from foss.arm.com ([217.140.110.172]:41692 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346090AbhK2O5q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:57:46 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F18AD1042;
-        Mon, 29 Nov 2021 06:54:25 -0800 (PST)
-Received: from [10.57.34.182] (unknown [10.57.34.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7D1C3F766;
-        Mon, 29 Nov 2021 06:54:21 -0800 (PST)
-Message-ID: <b192ad88-5e4e-6f32-1cc7-7a50fc0676a1@arm.com>
-Date:   Mon, 29 Nov 2021 14:54:18 +0000
+        id S245256AbhK2PAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:00:44 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16321 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235992AbhK2O6k (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:58:40 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J2pKk4Sr1z91PK;
+        Mon, 29 Nov 2021 22:54:50 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 29 Nov 2021 22:55:21 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Mon, 29 Nov 2021 22:55:21 +0800
+Message-ID: <8a4dbf98-1ac0-d48d-98fa-c7392e6a4de1@huawei.com>
+Date:   Mon, 29 Nov 2021 22:55:20 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
-Content-Language: en-GB
-To:     Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>
-Cc:     Nishanth Menon <nm@ti.com>, Mark Rutland <mark.rutland@arm.com>,
-        Stuart Yoder <stuyoder@gmail.com>, linux-pci@vger.kernel.org,
-        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
-        x86@kernel.org, Sinan Kaya <okaya@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Megha Dey <megha.dey@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-References: <20211126224100.303046749@linutronix.de>
- <20211126230525.885757679@linutronix.de>
- <20211129105506.GA22761@willie-the-truck>
- <76a1b5c1-01c8-bb30-6105-b4073dc23065@arm.com> <87czmjdnw9.ffs@tglx>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <87czmjdnw9.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH Resend v2 0/3] ARM: Support KFENCE feature
+Content-Language: en-US
+To:     <linux@armlinux.org.uk>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <glider@google.com>, <elver@google.com>, <dvyukov@google.com>
+References: <20211115134848.171098-1-wangkefeng.wang@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20211115134848.171098-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme706-chm.china.huawei.com (10.1.199.102) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-11-29 14:42, Thomas Gleixner wrote:
-> On Mon, Nov 29 2021 at 13:13, Robin Murphy wrote:
->> On 2021-11-29 10:55, Will Deacon wrote:
->>>> -	}
->>>> +	smmu->evtq.q.irq = msi_get_virq(dev, EVTQ_MSI_INDEX);
->>>> +	smmu->gerr_irq = msi_get_virq(dev, GERROR_MSI_INDEX);
->>>> +	smmu->priq.q.irq = msi_get_virq(dev, PRIQ_MSI_INDEX);
->>>
->>> Prviously, if retrieval of the MSI failed then we'd fall back to wired
->>> interrupts. Now, I think we'll clobber the interrupt with 0 instead. Can
->>> we make the assignments to smmu->*irq here conditional on the MSI being
->>> valid, please?
->>
->> I was just looking at that too, but reached the conclusion that it's
->> probably OK, since consumption of this value later is gated on
->> ARM_SMMU_FEAT_PRI, so the fact that it changes from 0 to an error value
->> in the absence of PRI should make no practical difference.
-> 
-> It's actually 0 when the vector cannot be found.
+Hi Russell，
 
-Oh, -1 for my reading comprehension but +1 for my confidence in the 
-patch then :)
+Could I send this to ARM patch system if no more comments,
 
-I'll let Will have the final say over how cautious we really want to be 
-here, but as far as I'm concerned it's a welcome cleanup as-is. Ditto 
-for patch #32 based on the same reasoning, although I don't have a 
-suitable test platform on-hand to sanity-check that one.
+what about your opinion, thanks.
 
-Cheers,
-Robin.
-
->> If we don't have MSIs at all, we'd presumably still fail earlier
->> either at the dev->msi_domain check or upon trying to allocate the
->> vectors, so we'll still fall back to any previously-set wired values
->> before getting here.  The only remaining case is if we've
->> *successfully* allocated the expected number of vectors yet are then
->> somehow unable to retrieve one or more of them - presumably the system
->> has to be massively borked for that to happen, at which point do we
->> really want to bother trying to reason about anything?
-> 
-> Probably not. At that point something is going to explode sooner than
-> later in colorful ways.
-> 
-> Thanks,
-> 
->          tglx
-> 
+On 2021/11/15 21:48, Kefeng Wang wrote:
+> This patchset supports Kfence feature, tested the kfence_test on ARM QEMU
+> with or without ARM_LPAE and all passed.
+>
+> V2 Resend:
+> - adjust is_write_fault() position in patch2 not patch3, sugguested Alexander
+> - Add ACKed from Marco
+> - rebased on v5.16-rc1
+>
+> V2:
+> - drop patch4 in v1, which is used a new way to skip kfence test
+>    see commit c40c6e593bf9 ("kfence: test: fail fast if disabled at boot")
+> - fix some issue about NO MMU
+>    - drop useless set_memory_valid() under no mmu
+>    - fix implicit declaration of function ‘is_write_fault’ if no mmu
+> - make KFENCE depends on !XIP_KERNEL, no tested with xip
+>
+> v1:
+> https://lore.kernel.org/linux-arm-kernel/20210825092116.149975-1-wangkefeng.wang@huawei.com/
+>
+> Kefeng Wang (3):
+>    ARM: mm: Provide set_memory_valid()
+>    ARM: mm: Provide is_write_fault()
+>    ARM: Support KFENCE for ARM
+>
+>   arch/arm/Kconfig                  |  1 +
+>   arch/arm/include/asm/kfence.h     | 53 +++++++++++++++++++++++++++++++
+>   arch/arm/include/asm/set_memory.h |  1 +
+>   arch/arm/mm/fault.c               | 16 ++++++++--
+>   arch/arm/mm/pageattr.c            | 42 ++++++++++++++++++------
+>   5 files changed, 100 insertions(+), 13 deletions(-)
+>   create mode 100644 arch/arm/include/asm/kfence.h
+>

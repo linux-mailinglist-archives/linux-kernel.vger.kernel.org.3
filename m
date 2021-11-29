@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 797F3461D9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:24:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E9D461DE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378055AbhK2S1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:27:11 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47370 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348821AbhK2SYj (ORCPT
+        id S238126AbhK2San (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:30:43 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:33136 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377559AbhK2S2k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:24:39 -0500
+        Mon, 29 Nov 2021 13:28:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B0D5BCE13D4;
-        Mon, 29 Nov 2021 18:21:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6039EC53FAD;
-        Mon, 29 Nov 2021 18:21:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4177B815C2;
+        Mon, 29 Nov 2021 18:25:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B9CC53FAD;
+        Mon, 29 Nov 2021 18:25:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210078;
-        bh=xZ8CjSgr5HI9Tsc5i3jz7oWefFJV1ChMD7hmn75fqoQ=;
+        s=korg; t=1638210320;
+        bh=o+hBNTZdJrDfDxC+5fqOM5iZM6INzFIXCyt3GpZxoQ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bH0+wBDh/J7WVZEd+aStYtWT5XnsoJvi4opEex5LEIhRkGJUFH8hsEpFWzXA+vAKm
-         8fTJKGL3xXWttRbSdMdtARgyzj+FslykYxnY2Yv3q8lopf5AGWWGNU4ZROYcQOqvKs
-         iW+UCl+tPCR1BX1W7chd5zr/+UUZWFM++8ZIYwBU=
+        b=ZmhuahsyGUKgU90InMRoppvN5vcKmlI6qtBOGQFAs5/rw3E0qD63qq6JR36shWVRQ
+         L06ZoOvfqGYSB/W3A8Rn+876f3sXY/UqFvNDU4GZG/PfJybGtlc0Mj7pmgKlPzr4rz
+         Ci/NeLdanXaraofCAkfeGhcPv7o/C1NP3Pca8Wi8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.19 33/69] pinctrl: armada-37xx: add missing pin: PCIe1 Wakeup
-Date:   Mon, 29 Nov 2021 19:18:15 +0100
-Message-Id: <20211129181704.751096224@linuxfoundation.org>
+        stable@vger.kernel.org, Christian Lamparter <chunkeey@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 47/92] ARM: dts: BCM5301X: Fix I2C controller interrupt
+Date:   Mon, 29 Nov 2021 19:18:16 +0100
+Message-Id: <20211129181708.993601152@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
+References: <20211129181707.392764191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,30 +46,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-commit 4d98fbaacd79a82f408febb66a9c42fe42361b16 upstream.
+[ Upstream commit 754c4050a00e802e122690112fc2c3a6abafa7e2 ]
 
-Declare the PCIe1 Wakeup which was initially missing.
+The I2C interrupt controller line is off by 32 because the datasheet
+describes interrupt inputs into the GIC which are for Shared Peripheral
+Interrupts and are starting at offset 32. The ARM GIC binding expects
+the SPI interrupts to be numbered from 0 relative to the SPI base.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Tested-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: bb097e3e0045 ("ARM: dts: BCM5301X: Add I2C support to the DT")
+Tested-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mvebu/pinctrl-armada-37xx.c |    1 +
- 1 file changed, 1 insertion(+)
+ arch/arm/boot/dts/bcm5301x.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-+++ b/drivers/pinctrl/mvebu/pinctrl-armada-37xx.c
-@@ -198,6 +198,7 @@ static struct armada_37xx_pin_group arma
- 	PIN_GRP_GPIO("smi", 18, 2, BIT(4), "smi"),
- 	PIN_GRP_GPIO("pcie1", 3, 1, BIT(5), "pcie"),
- 	PIN_GRP_GPIO("pcie1_clkreq", 4, 1, BIT(9), "pcie"),
-+	PIN_GRP_GPIO("pcie1_wakeup", 5, 1, BIT(10), "pcie"),
- 	PIN_GRP_GPIO("ptp", 20, 3, BIT(11) | BIT(12) | BIT(13), "ptp"),
- 	PIN_GRP("ptp_clk", 21, 1, BIT(6), "ptp", "mii"),
- 	PIN_GRP("ptp_trig", 22, 1, BIT(7), "ptp", "mii"),
+diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
+index 9711170649b69..51f20ded92f04 100644
+--- a/arch/arm/boot/dts/bcm5301x.dtsi
++++ b/arch/arm/boot/dts/bcm5301x.dtsi
+@@ -387,7 +387,7 @@ usb3_dmp: syscon@18105000 {
+ 	i2c0: i2c@18009000 {
+ 		compatible = "brcm,iproc-i2c";
+ 		reg = <0x18009000 0x50>;
+-		interrupts = <GIC_SPI 121 IRQ_TYPE_LEVEL_HIGH>;
++		interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
+ 		#address-cells = <1>;
+ 		#size-cells = <0>;
+ 		clock-frequency = <100000>;
+-- 
+2.33.0
+
 
 

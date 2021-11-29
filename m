@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A788A462451
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:16:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32C5A4625B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:39:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbhK2WRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56574 "EHLO
+        id S234283AbhK2WnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbhK2WQq (ORCPT
+        with ESMTP id S232966AbhK2Wly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:16:46 -0500
+        Mon, 29 Nov 2021 17:41:54 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC627C08ED9F;
-        Mon, 29 Nov 2021 10:21:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03396C12A4C9;
+        Mon, 29 Nov 2021 10:29:20 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 713C7CE13D5;
-        Mon, 29 Nov 2021 18:21:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D649C53FC7;
-        Mon, 29 Nov 2021 18:21:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 78157CE140D;
+        Mon, 29 Nov 2021 18:29:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25C23C53FC7;
+        Mon, 29 Nov 2021 18:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210084;
-        bh=VOndYeX8B0Om55V1+iK2RhJ5H6+F+wjglGsfH6c0Pxs=;
+        s=korg; t=1638210557;
+        bh=CQOj+vOMTYkLjqAdBIyqI4itgv0PKptmXSlNeMkD3/E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1kxQOErVGVyKLEdFFAmcCX3i+dI2dyM4KeBGmQccxTalAIrUc1CoHayW2stZlJQh5
-         AXGLYtLugdWnSFKlsQIFwa4d/wkka8MF0Q3GHjxIy6LRo++CBsIEmYxfr1MSdSunIs
-         uCzm7f6IpYE96sEbaAQ3tbfJSGJRzUY7Rl48Hd18=
+        b=NYlU/vNPzJB2VTvHJzIud0953YFzByq3IkLf6xX9/dWb4gGaAFgP+4T5IdYh6yKhW
+         bTx/KnQPmAITO2ZJs5eTyhxBiOP02FTnvdV6KuqJrTtfeVnL2Rf8EmeIUizGaoaLDG
+         lkEyvKYsbV6iEuu/Wqjqz2Yn0pqGV6tCCNZDLezk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 4.19 05/69] usb: hub: Fix locking issues with address0_mutex
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 5.10 036/121] PCI: aardvark: Update comment about disabling link training
 Date:   Mon, 29 Nov 2021 19:17:47 +0100
-Message-Id: <20211129181703.847697604@linuxfoundation.org>
+Message-Id: <20211129181712.858405742@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+References: <20211129181711.642046348@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,103 +50,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
+From: Pali Rohár <pali@kernel.org>
 
-commit 6cca13de26eea6d32a98d96d916a048d16a12822 upstream.
+commit 1d1cd163d0de22a4041a6f1aeabcf78f80076539 upstream.
 
-Fix the circular lock dependency and unbalanced unlock of addess0_mutex
-introduced when fixing an address0_mutex enumeration retry race in commit
-ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
+According to PCI Express Base Specifications (rev 4.0, 6.6.1
+"Conventional reset"), after fundamental reset a 100ms delay is needed
+prior to enabling link training.
 
-Make sure locking order between port_dev->status_lock and address0_mutex
-is correct, and that address0_mutex is not unlocked in hub_port_connect
-"done:" codepath which may be reached without locking address0_mutex
+Update comment in code to reflect this requirement.
 
-Fixes: 6ae6dc22d2d1 ("usb: hub: Fix usb enumeration issue due to address0 race")
-Cc: <stable@vger.kernel.org>
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Tested-by: Hans de Goede <hdegoede@redhat.com>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Acked-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
-Link: https://lore.kernel.org/r/20211123101656.1113518-1-mathias.nyman@linux.intel.com
+Link: https://lore.kernel.org/r/20201202184659.3795-1-pali@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/core/hub.c |   19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+ drivers/pci/controller/pci-aardvark.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4978,6 +4978,7 @@ static void hub_port_connect(struct usb_
- 	struct usb_port *port_dev = hub->ports[port1 - 1];
- 	struct usb_device *udev = port_dev->child;
- 	static int unreliable_port = -1;
-+	bool retry_locked;
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -389,7 +389,14 @@ static void advk_pcie_issue_perst(struct
+ 	if (!pcie->reset_gpio)
+ 		return;
  
- 	/* Disconnect any existing devices under this port */
- 	if (udev) {
-@@ -5034,9 +5035,10 @@ static void hub_port_connect(struct usb_
- 
- 	status = 0;
- 
--	mutex_lock(hcd->address0_mutex);
--
- 	for (i = 0; i < SET_CONFIG_TRIES; i++) {
-+		usb_lock_port(port_dev);
-+		mutex_lock(hcd->address0_mutex);
-+		retry_locked = true;
- 
- 		/* reallocate for each attempt, since references
- 		 * to the previous one can escape in various ways
-@@ -5045,6 +5047,8 @@ static void hub_port_connect(struct usb_
- 		if (!udev) {
- 			dev_err(&port_dev->dev,
- 					"couldn't allocate usb_device\n");
-+			mutex_unlock(hcd->address0_mutex);
-+			usb_unlock_port(port_dev);
- 			goto done;
- 		}
- 
-@@ -5066,13 +5070,13 @@ static void hub_port_connect(struct usb_
- 		}
- 
- 		/* reset (non-USB 3.0 devices) and get descriptor */
--		usb_lock_port(port_dev);
- 		status = hub_port_init(hub, udev, port1, i);
--		usb_unlock_port(port_dev);
- 		if (status < 0)
- 			goto loop;
- 
- 		mutex_unlock(hcd->address0_mutex);
-+		usb_unlock_port(port_dev);
-+		retry_locked = false;
- 
- 		if (udev->quirks & USB_QUIRK_DELAY_INIT)
- 			msleep(2000);
-@@ -5162,11 +5166,14 @@ static void hub_port_connect(struct usb_
- 
- loop_disable:
- 		hub_port_disable(hub, port1, 1);
--		mutex_lock(hcd->address0_mutex);
- loop:
- 		usb_ep0_reinit(udev);
- 		release_devnum(udev);
- 		hub_free_dev(udev);
-+		if (retry_locked) {
-+			mutex_unlock(hcd->address0_mutex);
-+			usb_unlock_port(port_dev);
-+		}
- 		usb_put_dev(udev);
- 		if ((status == -ENOTCONN) || (status == -ENOTSUPP))
- 			break;
-@@ -5189,8 +5196,6 @@ loop:
- 	}
- 
- done:
--	mutex_unlock(hcd->address0_mutex);
--
- 	hub_port_disable(hub, port1, 1);
- 	if (hcd->driver->relinquish_port && !hub->hdev->parent) {
- 		if (status != -ENOTCONN && status != -ENODEV)
+-	/* PERST does not work for some cards when link training is enabled */
++	/*
++	 * As required by PCI Express spec (PCI Express Base Specification, REV.
++	 * 4.0 PCI Express, February 19 2014, 6.6.1 Conventional Reset) a delay
++	 * for at least 100ms after de-asserting PERST# signal is needed before
++	 * link training is enabled. So ensure that link training is disabled
++	 * prior de-asserting PERST# signal to fulfill that PCI Express spec
++	 * requirement.
++	 */
+ 	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
+ 	reg &= ~LINK_TRAINING_EN;
+ 	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
 
 

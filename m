@@ -2,118 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F824626A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FDD462552
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235212AbhK2Wzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:55:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S233798AbhK2Whw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235847AbhK2WzD (ORCPT
+        with ESMTP id S233468AbhK2WhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:55:03 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6909FC0D8CBA
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:58:08 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id gt5so13309977pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:58:08 -0800 (PST)
+        Mon, 29 Nov 2021 17:37:23 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE3EC127105
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:05:14 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id k23so36171546lje.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:05:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6It/2ISLAKNQvBJXXzqk/ndWM40f+A12E22VByGFlnU=;
-        b=nS106YFkM5gyIjOZPhOPz+p3/cnoYYOu/pEivIUr7GVRtzvr79cA+8LlgyvqQrxQBR
-         6/AUIbJ9XiR7PS1xvUppMN+pCMv8R5PxCiqTu9EjBxSRnf8Ok6SAqadwlDYDBvQck5iX
-         7wGthJYcGJUje1/BCQTbq0DH8KsgFUMQoypvjV/8LLLwe88GtyYFc+3JUIS5pmn1QbZK
-         g450IqHzeGCBU+jnw0m8KUdo42rPPRDWTys4sIc1V+Vh5OoWcmzOj2he72xYyZ4AvZIs
-         LNKcKgkgRn/ANJ8xYfs+avMeMkVZY7rAdqZTe0nXyPUDH5XFM3KbT2ypeaOvifjjKWIG
-         VaEg==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IDi3zvjd6u7ZBVvXAka/LTSyAvUkqeh+L5SnX6c8Zdk=;
+        b=ELtQ57DjVTWJPnvASv4jZtvg9xzVjpRXdLK6WadVUiqQO2Tejx2Y4rP/jZvsvwdaGM
+         wVK5qYNcJTRTVvihhUy6a3XfzO7ShXe3HSKg9CJ9S9TdxAt3X4+ddQNsKXsRbhOEV3Nn
+         NeS7l4DPoqAaH0j+Gm2rrnRobzgyBp+zZRI4nhmfoSItyMTQPe6HJsrb3a8uXIO7pAUp
+         d0pHSCno/fnC3Fp0q+W51eSWigYy/I5qIJhRZa/O1KEhI708OF8jeLET61Dg8b9kw0VH
+         st1/mw7gEQ1NVGLv+ANo/xqXiZgR94N5ykkWzVgrrh3SWq2UdJQ1DTZyuwBI86rq3HIq
+         HE3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6It/2ISLAKNQvBJXXzqk/ndWM40f+A12E22VByGFlnU=;
-        b=OFmJz5Ll+YoqCsnq3XTefMlgd/dY21yH9jcxucMyoOuTsv8MX5TwazYTSuO5AfSbmy
-         aQONxhfPd+MgBwQSA9TUQj40jJUjJXzkI6ffapkZfYyF1bEA8jErHjXAu5w21CmPSb+r
-         gEFGf1p5KJOrJdbiQYaAXlTbsElSI5mzbGb0bTQhwH4oWQx1tVHg+iguopuJ8xtySbAt
-         fmeLLH0dl/QizyCBcWnLSM2ya5vB+I67FPQL28Bja3hIXNuHJKHhsqiGycssWL9fLzx7
-         gz23z3vTxyOzzQOLq+Z0REFYp2f9E7vkbeoqPXk1XzSoyesfH3u3dvpLRsh0qtlOLl3w
-         JiiQ==
-X-Gm-Message-State: AOAM530sd3aYDG25nLKkno8yY23XKamlRGopcExh80sRfghEvWZ9Bhqh
-        6MmSfu1ElwU1zZZ3Cpy9P5S9vQ==
-X-Google-Smtp-Source: ABdhPJyZ+fcPwBQDF8IlB1PBWVERDgsdIyQ/faAUOYEpDKk7V6N92iyUvf7cg5TEkO19F/fZSn61Pg==
-X-Received: by 2002:a17:902:d28a:b0:142:61ce:ae4c with SMTP id t10-20020a170902d28a00b0014261ceae4cmr61362408plc.35.1638208687947;
-        Mon, 29 Nov 2021 09:58:07 -0800 (PST)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id n71sm18032644pfd.50.2021.11.29.09.58.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 09:58:06 -0800 (PST)
-Date:   Mon, 29 Nov 2021 10:58:03 -0700
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tanmay Shah <tanmay.shah@xilinx.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Ben Levinsky <ben.levinsky@xilinx.com>,
-        Bill Mills <bill.mills@linaro.org>,
-        Sergei Korneichuk <sergei.korneichuk@xilinx.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/6] arm64: dts: xilinx: zynqmp: Add RPU subsystem
- device node
-Message-ID: <20211129175803.GB676889@p14s>
-References: <20211123062050.1442712-1-tanmay.shah@xilinx.com>
- <20211123062050.1442712-3-tanmay.shah@xilinx.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IDi3zvjd6u7ZBVvXAka/LTSyAvUkqeh+L5SnX6c8Zdk=;
+        b=s13eEEVnB+C6q0e1we0DNGtuJg7QuJNWoD554uYq+UMw4ScKmhAqIDU3IGhrQKEnTs
+         k19DZqRQBx6AbAWDX1zg73ub9whKJyGlBAtC+4pxBR3jOh/k+vBOVMF1gKo2GGZWCI/q
+         uiNzaMvhV87OBqMmm+1AWjJD4BWrpyPR70QUYrqGOHDi65ctaXfz7txvyuwkjDoi26fp
+         1UfHcfOyhQqzZ/Cykne76CbWsk72wDupz0pou1j/CyHjwxXOsaTKlihJix/jmqSUQJT3
+         mOq2Rdhuul7BWnM2pHLXe8wadBGINMfH1R7q+ihsAIGIbOY3vIShuRxkX4rldm3xP/GG
+         iboA==
+X-Gm-Message-State: AOAM533bgtEsgKXRYVGy5/67Y1oP7BuwJh26GOoeWDkykwIJhvWI+TfN
+        Y+9bOFojE2Pk3YI3nJ30fDaOsJePREEW5bDN8i8rfA==
+X-Google-Smtp-Source: ABdhPJz00rJJqhFv+eY/G4mQJbhWwtM/vfpfxJXb8qlKInsjRYgNcLli9eLdqgC5XVztKYKpkdzK0NNalzo7Gw9l8CQ=
+X-Received: by 2002:a2e:95d3:: with SMTP id y19mr50881703ljh.175.1638209112922;
+ Mon, 29 Nov 2021 10:05:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211123062050.1442712-3-tanmay.shah@xilinx.com>
+References: <YaB/JHP/pMbgRJ1O@kroah.com> <20211126074904.88388-1-guangming.cao@mediatek.com>
+In-Reply-To: <20211126074904.88388-1-guangming.cao@mediatek.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 29 Nov 2021 10:05:00 -0800
+Message-ID: <CALAqxLVF1BPznzwjem2BcsDDoo5gMoBqjKEceZDLJan4zCtk3w@mail.gmail.com>
+Subject: Re: [PATCH v4] dma-buf: system_heap: Use 'for_each_sgtable_sg' in
+ pages free flow
+To:     guangming.cao@mediatek.com
+Cc:     greg@kroah.com, Brian.Starkey@arm.com,
+        benjamin.gaignard@linaro.org, christian.koenig@amd.com,
+        dri-devel@lists.freedesktop.org, labbott@redhat.com,
+        linaro-mm-sig@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        lmark@codeaurora.org, matthias.bgg@gmail.com, robin.murphy@arm.com,
+        stable@vger.kernel.org, sumit.semwal@linaro.org,
+        wsd_upstream@mediatek.com, kuan-ying.lee@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 10:20:46PM -0800, Tanmay Shah wrote:
-> RPU subsystem can be configured in cluster-mode or split mode.
-> Also each r5 core has separate power domains.
-> 
-> Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
-> ---
->  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 17 +++++++++++++++++
->  1 file changed, 17 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> index 28dccb891a53..f4fb98ccb1b5 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> @@ -654,6 +654,23 @@ qspi: spi@ff0f0000 {
->  			power-domains = <&zynqmp_firmware PD_QSPI>;
->  		};
->  
-> +		r5fss: r5fss@ff9a0000 {
-> +			compatible = "xlnx,zynqmp-r5fss";
-> +			xlnx,cluster-mode = <1>;
-> +
-> +                        reg = <0x0 0Xff9a0000 0x0 0x228>;
+On Thu, Nov 25, 2021 at 11:48 PM <guangming.cao@mediatek.com> wrote:
+>
+> From: Guangming <Guangming.Cao@mediatek.com>
+>
+> For previous version, it uses 'sg_table.nent's to traverse sg_table in pages
+> free flow.
+> However, 'sg_table.nents' is reassigned in 'dma_map_sg', it means the number of
+> created entries in the DMA adderess space.
+> So, use 'sg_table.nents' in pages free flow will case some pages can't be freed.
+>
+> Here we should use sg_table.orig_nents to free pages memory, but use the
+> sgtable helper 'for each_sgtable_sg'(, instead of the previous rather common
+> helper 'for_each_sg' which maybe cause memory leak) is much better.
+>
+> Fixes: d963ab0f15fb0 ("dma-buf: system_heap: Allocate higher order pages if available")
+> Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
+> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+> Cc: <stable@vger.kernel.org> # 5.11.*
 
-This line is giving me an obvious checkpatch warning.  Please make sure you run
-checkpatch.pl before sending out a patchset.
+Thanks so much for catching this and sending in all the revisions!
 
-> +
-> +			r5f_core0: r5f-0 {
-> +				compatible = "xlnx,zynqmp-r5f";
-> +				power-domains = <&zynqmp_firmware PD_RPU_0>;
-> +			};
-> +
-> +			r5f_core1: r5f-1 {
-> +				compatible = "xlnx,zynqmp-r5f";
-> +				power-domains = <&zynqmp_firmware PD_RPU_1>;
-> +			};
-> +		};
-> +
->  		psgtr: phy@fd400000 {
->  			compatible = "xlnx,zynqmp-psgtr-v1.1";
->  			status = "disabled";
-> -- 
-> 2.25.1
-> 
+Reviewed-by: John Stultz <john.stultz@linaro.org>

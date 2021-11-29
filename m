@@ -2,93 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C5F23461200
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69AD46124A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245708AbhK2KZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:25:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34019 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S236643AbhK2KXV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:23:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638181203;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=e6SaX+NTgiaFDnrzD5rOQdn6fQZIVXiBx5LgIgNJIdg=;
-        b=Vbr5Vf2BhuLvUZVqzUr6aJYtFc8i/CZ528WhkFO5V+U1jpU0lelSxwRmjej6kK+sFwvmld
-        /TDWyKCPHsjU1B3u+iXUcadFSoOPSGv5TvcJXZwObXTJolGxoSfhK3lgQv+C+kqF6FS0aW
-        AkpR8GJIomzVS3khj1LGIKzeRnjwz7Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-175-Lc5EhORMMfagTkSimab4og-1; Mon, 29 Nov 2021 05:19:59 -0500
-X-MC-Unique: Lc5EhORMMfagTkSimab4og-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9340E343CB;
-        Mon, 29 Nov 2021 10:19:58 +0000 (UTC)
-Received: from localhost (unknown [10.39.195.30])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 69EF960C13;
-        Mon, 29 Nov 2021 10:19:52 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 10:19:51 +0000
-From:   Stefan Hajnoczi <stefanha@redhat.com>
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2] fuse: rename some files and clean up Makefile
-Message-ID: <YaSpRwMlMvcIIMZo@stefanha-x1.localdomain>
-References: <1638008002-3037-1-git-send-email-yangtiezhu@loongson.cn>
+        id S233626AbhK2K1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:27:06 -0500
+Received: from elvis.franken.de ([193.175.24.41]:48508 "EHLO elvis.franken.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232498AbhK2KZF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 05:25:05 -0500
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1mrdmz-0004dt-00; Mon, 29 Nov 2021 11:21:37 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id 5E79DC2F89; Mon, 29 Nov 2021 11:21:16 +0100 (CET)
+Date:   Mon, 29 Nov 2021 11:21:16 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        linux-mips@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        linuxppc-dev@lists.ozlabs.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        sparclinux@vger.kernel.org, x86@kernel.org,
+        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
+        Wei Liu <wei.liu@kernel.org>, linux-hyperv@vger.kernel.org,
+        Juergen Gross <jgross@suse.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>
+Subject: Re: [patch 09/22] MIPS: Octeon: Use arch_setup_msi_irq()
+Message-ID: <20211129102116.GA6158@alpha.franken.de>
+References: <20211126222700.862407977@linutronix.de>
+ <20211126223824.618089023@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Z2Ce6dDVMZ60RS5B"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638008002-3037-1-git-send-email-yangtiezhu@loongson.cn>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+In-Reply-To: <20211126223824.618089023@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Nov 27, 2021 at 02:18:48AM +0100, Thomas Gleixner wrote:
+> The core code provides the same loop code except for the MSI-X reject. Move
+> that to arch_setup_msi_irq() and remove the duplicated code.
+> 
+> No functional change.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> ---
+>  arch/mips/pci/msi-octeon.c |   32 +++-----------------------------
+>  1 file changed, 3 insertions(+), 29 deletions(-)
+> 
+> --- a/arch/mips/pci/msi-octeon.c
+> +++ b/arch/mips/pci/msi-octeon.c
+> @@ -68,6 +68,9 @@ int arch_setup_msi_irq(struct pci_dev *d
+>  	u64 search_mask;
+>  	int index;
+>  
+> +	if (desc->pci.msi_attrib.is_msix)
+> +		return -EINVAL;
+> +
+>  	/*
+>  	 * Read the MSI config to figure out how many IRQs this device
+>  	 * wants.  Most devices only want 1, which will give
+> @@ -182,35 +185,6 @@ int arch_setup_msi_irq(struct pci_dev *d
+>  	return 0;
+>  }
+>  
+> -int arch_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
+> -{
+> -	struct msi_desc *entry;
+> -	int ret;
+> -
+> -	/*
+> -	 * MSI-X is not supported.
+> -	 */
+> -	if (type == PCI_CAP_ID_MSIX)
+> -		return -EINVAL;
+> -
+> -	/*
+> -	 * If an architecture wants to support multiple MSI, it needs to
+> -	 * override arch_setup_msi_irqs()
+> -	 */
+> -	if (type == PCI_CAP_ID_MSI && nvec > 1)
+> -		return 1;
+> -
+> -	for_each_pci_msi_entry(entry, dev) {
+> -		ret = arch_setup_msi_irq(dev, entry);
+> -		if (ret < 0)
+> -			return ret;
+> -		if (ret > 0)
+> -			return -ENOSPC;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  /**
+>   * Called when a device no longer needs its MSI interrupts. All
+>   * MSI interrupts for the device are freed.
 
---Z2Ce6dDVMZ60RS5B
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-On Sat, Nov 27, 2021 at 06:13:22PM +0800, Tiezhu Yang wrote:
-> No need to generate virtio_fs.o first and then link to virtiofs.o, just
-> rename virtio_fs.c to virtiofs.c and remove "virtiofs-y := virtio_fs.o"
-> in Makefile, also update MAINTAINERS. Additionally, rename the private
-> header file fuse_i.h to fuse.h, like ext4.h in fs/ext4, xfs.h in fs/xfs
-> and f2fs.h in fs/f2fs.
-
-There are two separate changes in this patch (virtio_fs.c -> virtiofs.c
-and fuse_i.h -> fuse.h). A patch series with two patches would be easier
-to review and cleaner to backport.
-
-I'm happy with renaming virtio_fs.c to virtiofs.c:
-
-Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
-
---Z2Ce6dDVMZ60RS5B
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmGkqUcACgkQnKSrs4Gr
-c8hcDwf9GKHQ6ydDAUWUl6kfFQdbJcYRM28PABP2g94fv4RMNpFyPVMxz6gMQ0pv
-eplzXRrlAfIeHUMmw/6LAG6VMygzxo5dApigaKd94inPQbGvdQziO3axf3vKyshe
-nk0GSOvwk0adN9LUvJOP4v/zaia6SrH/mTTNLCHRXyq/mnN5wPEImGHR1l4Sr+NM
-spQp+XoBrjQEuikwBL9wEg7ZP+Oyy64tC0kzXzQnq4XY+UdVNIyLZ+BvAxJGJxtR
-Fup9FzJNPiVRC7Y0Np12bQBa/wv+KAHH/g/GYOKpkHiCbczTCeDZUe+TcQNaJE0t
-f+3+ZCQAbio2j/rvXWtoy+WK33we5A==
-=GXwS
------END PGP SIGNATURE-----
-
---Z2Ce6dDVMZ60RS5B--
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]

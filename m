@@ -2,131 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DC444622BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:00:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DDF461FCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:02:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbhK2VDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 16:03:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230397AbhK2VBv (ORCPT
+        id S235467AbhK2TGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:06:11 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:34888 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234670AbhK2TEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:01:51 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B89C11FA3C;
-        Mon, 29 Nov 2021 10:26:44 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id q3so15980307wru.5;
-        Mon, 29 Nov 2021 10:26:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=rykXE60I0Y7JiVT/uJO8EW7eAhlfSUfHDqLyJscSYmA=;
-        b=dRPLlC4HinvWIj2a5lnl5bEXhWSCXUyRk7gjn6BqyaXCyjdpJV0oWNVJPQXEjexDd+
-         cn01j7Md/5mN3TIVlb56jirBgE1knom84xmY3TWJ/rBV0+8slu+g3CKiz5R3C2QeBJbU
-         beFPhhjIuqWewPaU2IcLwGv1+0ahuQXoJeXXhGeu1BIS0dUKhGBxmad/QVY+6PtaX/g1
-         diOwC0pbo3hEuvIGKvWPtcoF9nVrPmQQEoonlaipTE/cLwx0jxayhjIR+OTb719WkkzW
-         5tZ6SFZiFMd3w9bBvkpg1Wtp3lgsjSWORUysIle7H7LBuggNq+dk4APD2LkZW9hgRI8k
-         E1jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=rykXE60I0Y7JiVT/uJO8EW7eAhlfSUfHDqLyJscSYmA=;
-        b=u9SvSpykO5HzPM8Q6x2IbuYSOzh+gJ4ebKkef78fyftMlgriAAOHCwiBzkb5yoI1wr
-         LtfuiI+CGUzwOKiJC3zoEbNt+NElceQc8Sp2wBvfKDDWmXwqAdlCACEpT2Nu/aXWPnj9
-         KWuIRrHeWtiBuoYcY2XmM3Og7hXd9O3Q6u6kP7nvRJBuLCDo5ba3QAOfirF6sXQA2Fzi
-         A8fM9eWzP3SNVktpjtkx5IY9ktxmCrMWBPramKU6nHoTmRV/Gi2Yk2lS6uoVkJMCzmD1
-         FYxXbHyaC7I5iyoEJDG1wuk1LgS01n++8O5Hd+QxerXGCEw/wZhe3/vsiYVwfwMe68YU
-         XjhA==
-X-Gm-Message-State: AOAM530KboVYiR+xcOXa0iqs/PsSlCedwClBZLGerjtk69mCzMX904Ez
-        OlrMBefhpSAPSpjFe59as5tqvOWhgBl14g==
-X-Google-Smtp-Source: ABdhPJz+0uIzSf32zqrfRT9HSUCgW367WqwSMk1yvA9xtCOVp1HgF06PUSo0bYW3cexLEeVJOI2kxg==
-X-Received: by 2002:a5d:65c7:: with SMTP id e7mr35193975wrw.319.1638210402751;
-        Mon, 29 Nov 2021 10:26:42 -0800 (PST)
-Received: from kista.localdomain (cpe-86-58-29-253.static.triera.net. [86.58.29.253])
-        by smtp.gmail.com with ESMTPSA id o12sm85907wmq.12.2021.11.29.10.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 10:26:42 -0800 (PST)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     linux-media@vger.kernel.org
-Cc:     ezequiel@vanguardiasur.com.ar, nicolas.dufresne@collabora.com,
-        mchehab@kernel.org, robh+dt@kernel.org, mripard@kernel.org,
-        wens@csie.org, p.zabel@pengutronix.de, andrzej.p@collabora.com,
-        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v2 3/9] media: hantro: vp9: use double buffering if needed
-Date:   Mon, 29 Nov 2021 19:26:27 +0100
-Message-Id: <20211129182633.480021-4-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129182633.480021-1-jernej.skrabec@gmail.com>
-References: <20211129182633.480021-1-jernej.skrabec@gmail.com>
+        Mon, 29 Nov 2021 14:04:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C069ACE13DB
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 19:00:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4C2FC53FC7;
+        Mon, 29 Nov 2021 19:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638212448;
+        bh=VFjdBV+1MP8kWP3KLfc2GhDfYqlzcaAmHQtzSwB0EnA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oed8vzV/xbK9n0Al68xmkbVSHrwxf8xB460U8yJbGCvGlPLzJ1qfDOwKaMlp3LShw
+         xaWHX8UCOnuYijI5C/3e/3FlANWV5BbQRJmk16Zuq4psTIX9GYQqhvTSCzW0dLrE4n
+         BlBdEC+7M0zHKwrGAPxfenlb8Vp2lyCAfn3dWlH2i/4A2xE1aPqLLU3Ay0F6b7VF22
+         QfPt2HvOwfCPtcenJiqrZcIfH5jeZpESOA9yLlf0yiIY4FsXd7J1dFn+mBD5RfBGEK
+         90YrsI45KE9nEBFUbuuThc28h4R72/IyIlfg6QMmvjbcEnh3lcM6AbCLd5nH+KXCJf
+         4cWx8pCr/STyw==
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: [PATCH] f2fs: show number of pending discard commands
+Date:   Mon, 29 Nov 2021 11:00:39 -0800
+Message-Id: <20211129190039.598115-1-jaegeuk@kernel.org>
+X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some G2 variants need double buffering to be enabled in order to work
-correctly, like that found in Allwinner H6 SoC.
+This information can be used to check how much time we need to give to issue
+all the discard commands.
 
-Add platform quirk for that.
-
-Reviewed-by: Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 ---
- drivers/staging/media/hantro/hantro.h            | 2 ++
- drivers/staging/media/hantro/hantro_g2_regs.h    | 1 +
- drivers/staging/media/hantro/hantro_g2_vp9_dec.c | 2 ++
- 3 files changed, 5 insertions(+)
+ Documentation/ABI/testing/sysfs-fs-f2fs |  5 +++++
+ fs/f2fs/sysfs.c                         | 11 +++++++++++
+ 2 files changed, 16 insertions(+)
 
-diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-index 33eb3e092cc1..d03824fa3222 100644
---- a/drivers/staging/media/hantro/hantro.h
-+++ b/drivers/staging/media/hantro/hantro.h
-@@ -73,6 +73,7 @@ struct hantro_irq {
-  * @num_clocks:			number of clocks in the array
-  * @reg_names:			array of register range names
-  * @num_regs:			number of register range names in the array
-+ * @double_buffer:		core needs double buffering
-  */
- struct hantro_variant {
- 	unsigned int enc_offset;
-@@ -94,6 +95,7 @@ struct hantro_variant {
- 	int num_clocks;
- 	const char * const *reg_names;
- 	int num_regs;
-+	unsigned int double_buffer : 1;
- };
+diff --git a/Documentation/ABI/testing/sysfs-fs-f2fs b/Documentation/ABI/testing/sysfs-fs-f2fs
+index b268e3e18b4a..9f3c355bb70e 100644
+--- a/Documentation/ABI/testing/sysfs-fs-f2fs
++++ b/Documentation/ABI/testing/sysfs-fs-f2fs
+@@ -112,6 +112,11 @@ Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
+ Description:	Set timeout to issue discard commands during umount.
+ 	        Default: 5 secs
  
- /**
-diff --git a/drivers/staging/media/hantro/hantro_g2_regs.h b/drivers/staging/media/hantro/hantro_g2_regs.h
-index 9c857dd1ad9b..15a391a4650e 100644
---- a/drivers/staging/media/hantro/hantro_g2_regs.h
-+++ b/drivers/staging/media/hantro/hantro_g2_regs.h
-@@ -270,6 +270,7 @@
- #define g2_apf_threshold	G2_DEC_REG(55, 0, 0xffff)
++What:		/sys/fs/f2fs/<disk>/pending_discard
++Date:		November 2021
++Contact:	"Jaegeuk Kim" <jaegeuk@kernel.org>
++Description:	Shows the number of pending discard commands in the queue.
++
+ What:		/sys/fs/f2fs/<disk>/max_victim_search
+ Date:		January 2014
+ Contact:	"Jaegeuk Kim" <jaegeuk.kim@samsung.com>
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index 7d289249cd7e..47c950f65b6f 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -118,6 +118,15 @@ static ssize_t sb_status_show(struct f2fs_attr *a,
+ 	return sprintf(buf, "%lx\n", sbi->s_flag);
+ }
  
- #define g2_clk_gate_e		G2_DEC_REG(58, 16, 0x1)
-+#define g2_double_buffer_e	G2_DEC_REG(58, 15, 0x1)
- #define g2_buswidth		G2_DEC_REG(58, 8,  0x7)
- #define g2_max_burst		G2_DEC_REG(58, 0,  0xff)
- 
-diff --git a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
-index e04242d10fa2..d4fc649a4da1 100644
---- a/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
-+++ b/drivers/staging/media/hantro/hantro_g2_vp9_dec.c
-@@ -847,6 +847,8 @@ config_registers(struct hantro_ctx *ctx, const struct v4l2_ctrl_vp9_frame *dec_p
- 	hantro_reg_write(ctx->dev, &g2_clk_gate_e, 1);
- 	hantro_reg_write(ctx->dev, &g2_max_cb_size, 6);
- 	hantro_reg_write(ctx->dev, &g2_min_cb_size, 3);
-+	if (ctx->dev->variant->double_buffer)
-+		hantro_reg_write(ctx->dev, &g2_double_buffer_e, 1);
- 
- 	config_output(ctx, dst, dec_params);
- 
++static ssize_t pending_discard_show(struct f2fs_attr *a,
++		struct f2fs_sb_info *sbi, char *buf)
++{
++	if (!SM_I(sbi)->dcc_info)
++		return -EINVAL;
++	return sprintf(buf, "%llu\n", (unsigned long long)atomic_read(
++				&SM_I(sbi)->dcc_info->discard_cmd_cnt));
++}
++
+ static ssize_t features_show(struct f2fs_attr *a,
+ 		struct f2fs_sb_info *sbi, char *buf)
+ {
+@@ -744,6 +753,7 @@ F2FS_GENERAL_RO_ATTR(unusable);
+ F2FS_GENERAL_RO_ATTR(encoding);
+ F2FS_GENERAL_RO_ATTR(mounted_time_sec);
+ F2FS_GENERAL_RO_ATTR(main_blkaddr);
++F2FS_GENERAL_RO_ATTR(pending_discard);
+ #ifdef CONFIG_F2FS_STAT_FS
+ F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, cp_foreground_calls, cp_count);
+ F2FS_STAT_ATTR(STAT_INFO, f2fs_stat_info, cp_background_calls, bg_cp_count);
+@@ -812,6 +822,7 @@ static struct attribute *f2fs_attrs[] = {
+ 	ATTR_LIST(main_blkaddr),
+ 	ATTR_LIST(max_small_discards),
+ 	ATTR_LIST(discard_granularity),
++	ATTR_LIST(pending_discard),
+ 	ATTR_LIST(batched_trim_sections),
+ 	ATTR_LIST(ipu_policy),
+ 	ATTR_LIST(min_ipu_util),
 -- 
-2.34.1
+2.34.0.rc2.393.gf8c9666880-goog
 

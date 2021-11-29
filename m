@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E271461DD8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B703461F15
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:41:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378531AbhK2S3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:29:53 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:48636 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378448AbhK2S1a (ORCPT
+        id S1380141AbhK2SnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:43:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:46230 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231430AbhK2SlF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:27:30 -0500
+        Mon, 29 Nov 2021 13:41:05 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C38D5CE140B;
-        Mon, 29 Nov 2021 18:24:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F5D2C53FAD;
-        Mon, 29 Nov 2021 18:24:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6B09B815CE;
+        Mon, 29 Nov 2021 18:37:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5663C53FAD;
+        Mon, 29 Nov 2021 18:37:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210249;
-        bh=PM/yQpI+6fYexdm9iC3694oATmfAwBxaiumR98Y7WFk=;
+        s=korg; t=1638211065;
+        bh=dgTDFo91kdM96p52G2VC+rNeqwMi7N+acOMVs2S5y6s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2TNrMlBb2yDvHGzN8U4xTpRLTxaAllDLqv4cB2sMg3jsW3pyMqv9Ic5N/e2BP5MGZ
-         V0Mqq67W9OdfAEI+A+vW88Bpc2Q2eEca0vKgwNimrNiD1ilyL14mwXE6ju8dxcwF8z
-         RhgDinoo6YmPUCAvVOGBSqLs1gjmkUoJ2GtfNH3s=
+        b=2lRxEohMaRKtfzS4V0YQ7VqH/xAtdZlMMJKnA/KtkKLSeuuOWTY2jOlowmh5gg2gc
+         6QaT0MAxftL6JDnwiBGN/mJWSubOFHZVlDIvV3+tGiXqg529zvPnGuvhtKrbpLjjZg
+         ys0k5K+mMCakimA1B8oVxSsnPy78P6dGqbO8CHUY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
-        John Keeping <john@metanate.com>,
-        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.4 04/92] usb: dwc2: hcd_queue: Fix use of floating point literal
-Date:   Mon, 29 Nov 2021 19:17:33 +0100
-Message-Id: <20211129181707.544406356@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: [PATCH 5.15 060/179] PCI: aardvark: Simplify initialization of rootcap on virtual bridge
+Date:   Mon, 29 Nov 2021 19:17:34 +0100
+Message-Id: <20211129181720.939228125@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
-References: <20211129181707.392764191@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,56 +47,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Pali Rohár <pali@kernel.org>
 
-commit 310780e825f3ffd211b479b8f828885a6faedd63 upstream.
+commit 454c53271fc11f3aa5e44e41fd99ca181bd32c62 upstream.
 
-A new commit in LLVM causes an error on the use of 'long double' when
-'-mno-x87' is used, which the kernel does through an alias,
-'-mno-80387' (see the LLVM commit below for more details around why it
-does this).
+PCIe config space can be initialized also before pci_bridge_emul_init()
+call, so move rootcap initialization after PCI config space initialization.
 
- drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
-                         delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
-                                             ^
- drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
- #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
-                                 ^
- 1 error generated.
+This simplifies the function a little since it removes one if (ret < 0)
+check.
 
-This happens due to the use of a 'long double' literal. The 'E6' part of
-'1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
-it to 'long double'.
-
-There is no visible reason for a floating point value in this driver, as
-the value is only used as a parameter to a function that expects an
-integer type. Use NSEC_PER_MSEC, which is the same integer value as
-'1E6L', to avoid changing functionality but fix the error.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1497
-Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
-Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
-Cc: stable <stable@vger.kernel.org>
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Reviewed-by: John Keeping <john@metanate.com>
-Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Link: https://lore.kernel.org/r/20211105145802.2520658-1-nathan@kernel.org
+Link: https://lore.kernel.org/r/20211005180952.6812-11-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/usb/dwc2/hcd_queue.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c |   14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
---- a/drivers/usb/dwc2/hcd_queue.c
-+++ b/drivers/usb/dwc2/hcd_queue.c
-@@ -59,7 +59,7 @@
- #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -992,7 +992,6 @@ static struct pci_bridge_emul_ops advk_p
+ static int advk_sw_pci_bridge_init(struct advk_pcie *pcie)
+ {
+ 	struct pci_bridge_emul *bridge = &pcie->bridge;
+-	int ret;
  
- /* If we get a NAK, wait this long before retrying */
--#define DWC2_RETRY_WAIT_DELAY 1*1E6L
-+#define DWC2_RETRY_WAIT_DELAY (1 * NSEC_PER_MSEC)
+ 	bridge->conf.vendor =
+ 		cpu_to_le16(advk_readl(pcie, PCIE_CORE_DEV_ID_REG) & 0xffff);
+@@ -1012,19 +1011,14 @@ static int advk_sw_pci_bridge_init(struc
+ 	/* Support interrupt A for MSI feature */
+ 	bridge->conf.intpin = PCIE_CORE_INT_A_ASSERT_ENABLE;
  
- /**
-  * dwc2_periodic_channel_available() - Checks that a channel is available for a
++	/* Indicates supports for Completion Retry Status */
++	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
++
+ 	bridge->has_pcie = true;
+ 	bridge->data = pcie;
+ 	bridge->ops = &advk_pci_bridge_emul_ops;
+ 
+-	/* PCIe config space can be initialized after pci_bridge_emul_init() */
+-	ret = pci_bridge_emul_init(bridge, 0);
+-	if (ret < 0)
+-		return ret;
+-
+-	/* Indicates supports for Completion Retry Status */
+-	bridge->pcie_conf.rootcap = cpu_to_le16(PCI_EXP_RTCAP_CRSVIS);
+-
+-	return 0;
++	return pci_bridge_emul_init(bridge, 0);
+ }
+ 
+ static bool advk_pcie_valid_device(struct advk_pcie *pcie, struct pci_bus *bus,
 
 

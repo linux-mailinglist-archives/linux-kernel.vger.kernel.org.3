@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EAB461E6F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 502B0461DE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:27:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350661AbhK2SgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:36:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:38548 "EHLO
+        id S1379064AbhK2SaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:30:06 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:60850 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379631AbhK2Sds (ORCPT
+        with ESMTP id S1378709AbhK2S15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:33:48 -0500
+        Mon, 29 Nov 2021 13:27:57 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1BA78B815E2;
-        Mon, 29 Nov 2021 18:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 511E5C5833E;
-        Mon, 29 Nov 2021 18:30:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DADF2B815C9;
+        Mon, 29 Nov 2021 18:24:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19B20C53FC7;
+        Mon, 29 Nov 2021 18:24:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210628;
-        bh=XSUKiHh5Ceyd6BtAzKyNOaDu4nbGUBCm3iAga4MlARc=;
+        s=korg; t=1638210277;
+        bh=M2x2xTghd3P1I7w96dfCHfLQWa9qGidy1rj0fbxp2ws=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qFCcvMA7WwRrVOdZCd1tNeJ0leuTXmP69+4BbIhJXOFrNmXVoq11OqEJZJyCojFhU
-         r7WvbFloeon3kStToMsMwny1nxKhRweoBr9nxm+p0EAc73czRhlXFJ9PFvfKgGT17U
-         dnqOzFU3ip4/eJmGN1wWt493rPoczHZZYxMN9e/8=
+        b=iROyrAG5s9xc5wUL/zAGxnZ2BJi4JnR07bECTxlbzOH9pQNGfh5rg5Ob9ITLj0jlQ
+         8uyGGomisWBONbIzFvLPH8Gv3fGTsuOWU5I16CU4TWkkrLUq9kRRyxVuvCsO7PPfl0
+         CMMDhkdzhIcY7pDyZwkaCrwWGADkqHdLeuzapIUE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 048/121] ASoC: qdsp6: q6routing: Conditionally reset FrontEnd Mixer
-Date:   Mon, 29 Nov 2021 19:17:59 +0100
-Message-Id: <20211129181713.277970582@linuxfoundation.org>
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 5.4 31/92] PCI: aardvark: Fix compilation on s390
+Date:   Mon, 29 Nov 2021 19:18:00 +0100
+Message-Id: <20211129181708.446803446@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
+References: <20211129181707.392764191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,55 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 861afeac7990587588d057b2c0b3222331c3da29 ]
+commit b32c012e4b98f0126aa327be2d1f409963057643 upstream.
 
-Stream IDs are reused across multiple BackEnd mixers, do not reset the
-stream mixers if they are not already set for that particular FrontEnd.
+Include linux/gpio/consumer.h instead of linux/gpio.h, as is said in the
+latter file.
 
-Ex:
-amixer cset iface=MIXER,name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 1
+This was reported by kernel test bot when compiling for s390.
 
-would set the MultiMedia1 steam for SLIMBUS_0_RX, however doing below
-command will reset previously setup MultiMedia1 stream, because both of them
-are using MultiMedia1 PCM stream.
+  drivers/pci/controller/pci-aardvark.c:350:2: error: implicit declaration of function 'gpiod_set_value_cansleep' [-Werror,-Wimplicit-function-declaration]
+  drivers/pci/controller/pci-aardvark.c:1074:21: error: implicit declaration of function 'devm_gpiod_get_from_of_node' [-Werror,-Wimplicit-function-declaration]
+  drivers/pci/controller/pci-aardvark.c:1076:14: error: use of undeclared identifier 'GPIOD_OUT_LOW'
 
-amixer cset iface=MIXER,name='SLIMBUS_2_RX Audio Mixer MultiMedia1' 0
-
-reset the FrontEnd Mixers conditionally to fix this issue.
-
-This is more noticeable in desktop setup, where in alsactl tries to restore
-the alsa state and overwriting the previous mixer settings.
-
-Fixes: e3a33673e845 ("ASoC: qdsp6: q6routing: Add q6routing driver")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20211116114721.12517-3-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/202006211118.LxtENQfl%25lkp@intel.com
+Link: https://lore.kernel.org/r/20200907111038.5811-2-pali@kernel.org
+Fixes: 5169a9851daa ("PCI: aardvark: Issue PERST via GPIO")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Reviewed-by: Marek Behún <marek.behun@nic.cz>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/qcom/qdsp6/q6routing.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/sound/soc/qcom/qdsp6/q6routing.c b/sound/soc/qcom/qdsp6/q6routing.c
-index 0a6b9433f6acf..934b3f282bccd 100644
---- a/sound/soc/qcom/qdsp6/q6routing.c
-+++ b/sound/soc/qcom/qdsp6/q6routing.c
-@@ -491,7 +491,11 @@ static int msm_routing_put_audio_mixer(struct snd_kcontrol *kcontrol,
- 		session->port_id = be_id;
- 		snd_soc_dapm_mixer_update_power(dapm, kcontrol, 1, update);
- 	} else {
--		session->port_id = -1;
-+		if (session->port_id == be_id) {
-+			session->port_id = -1;
-+			return 0;
-+		}
-+
- 		snd_soc_dapm_mixer_update_power(dapm, kcontrol, 0, update);
- 	}
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -9,7 +9,7 @@
+  */
  
--- 
-2.33.0
-
+ #include <linux/delay.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/interrupt.h>
+ #include <linux/irq.h>
+ #include <linux/irqdomain.h>
 
 

@@ -2,229 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D554461896
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C3746188F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378805AbhK2OcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:32:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:35641 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1378352AbhK2O3r (ORCPT
+        id S1378328AbhK2OcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:32:07 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:45348 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1378315AbhK2O3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Nov 2021 09:29:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638195978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A4C461FD38;
+        Mon, 29 Nov 2021 14:26:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1638195973; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=NjUrIs2U+Q2LvWEFrPsClamAUXKZ1g9qzCJubTcSZOo=;
-        b=NiOPAIAa9KpYnygzSUGC2w2EoCNXMaqbRVJT7pwo8DcLBvcl7/tIY+vB/WsK5s6gMU/Q4N
-        XTm8SY+TwkrKLJC9vB1v1Y0lKebeD2ZrUU6MFCI5dAFgkoWmo4xqBCJ1bOGdiFnBGyHyih
-        s78ASfhTgFQR5TMH8bV07kE+by8ybBc=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-24-hzcwGNJDNje9ziXKR0UctA-1; Mon, 29 Nov 2021 09:26:15 -0500
-X-MC-Unique: hzcwGNJDNje9ziXKR0UctA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        bh=P/2mMER5BWy4uVFtFkCYgpdYQadaiIdXAQCEaONlzSI=;
+        b=NHoyZ8/ObXjEjSR5g2Mumxcfogs07QrJjTw/QzeZOq761ClUixVSxCarDfvX8rbW2peTDP
+        46FOnOM81cFzFRGzOmpJbYQscM54ZFaLKxb0tWbFLugfY/gA6Vha6xqoPqrEsaJpS1wekt
+        xKKTpdDNgaHOiIPrIMZj6+RK2Dfe360=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1638195973;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P/2mMER5BWy4uVFtFkCYgpdYQadaiIdXAQCEaONlzSI=;
+        b=DcLDjsksdtpwoGQWVjqPhkL0r2a1jvvtnsnb6/q8CAaUK6+uaBT8bJkb/ZpfJfB6GaXGnj
+        ZO6pdKEZU45FUDDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0254B344B8;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7EDDC13B15;
         Mon, 29 Nov 2021 14:26:13 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1644A5D6D7;
-        Mon, 29 Nov 2021 14:26:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH 14/64] fscache: Implement functions add/remove a cache
-From:   David Howells <dhowells@redhat.com>
-To:     linux-cachefs@redhat.com
-Cc:     dhowells@redhat.com, Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Mon, 29 Nov 2021 14:26:00 +0000
-Message-ID: <163819596022.215744.8799712491432238827.stgit@warthog.procyon.org.uk>
-In-Reply-To: <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
-References: <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/0.23
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id hSkyHgXjpGGFfwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 29 Nov 2021 14:26:13 +0000
+Message-ID: <9cd2e67b-4769-ad91-2b2a-1899bdf3f8fc@suse.cz>
+Date:   Mon, 29 Nov 2021 15:26:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] mm/slub: fix endianness bug for alloc/free_traces
+ attributes
+Content-Language: en-US
+To:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     linux-mm <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Faiyaz Mohammed <faiyazm@codeaurora.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <7c909b82-8e1c-a8ce-516d-e3aa9bc2fd81@suse.cz>
+ <20211126171848.17534-1-gerald.schaefer@linux.ibm.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211126171848.17534-1-gerald.schaefer@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement functions to allow the cache backend to add or remove a cache:
+On 11/26/21 18:18, Gerald Schaefer wrote:
+> On big-endian s390, the alloc/free_traces attributes produce endless
+> output, because of always 0 idx in slab_debugfs_show().
+> 
+> idx is de-referenced from *v, which points to a loff_t value, with
+> 
+> unsigned int idx = *(unsigned int *)v;
+> 
+> This will only give the upper 32 bits on big-endian, which remain 0.
+> 
+> Instead of only fixing this de-reference, during discussion it seemed
+> more appropriate to change the seq_ops so that they use an explicit
+> iterator in private loc_track struct.
+> 
+> This patch adds idx to loc_track, which will also fix the endianness bug.
+> 
+> Link: https://lore.kernel.org/r/20211117193932.4049412-1-gerald.schaefer@linux.ibm.com
+> Fixes: 64dd68497be7 ("mm: slub: move sysfs slab alloc/free interfaces to debugfs")
+> Cc: <stable@vger.kernel.org> # v5.14+
+> Reported-by: Steffen Maier <maier@linux.ibm.com>
+> Signed-off-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
 
- (1) Declare a cache to be live:
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-	int fscache_add_cache(struct fscache_cache *cache,
-			      const struct fscache_cache_ops *ops,
-			      void *cache_priv);
+With a nit below:
 
-     Take a previously acquired cache cookie, set the operations table and
-     private data and mark the cache open for access.
+> ---
+>  mm/slub.c | 15 +++++++++------
+>  1 file changed, 9 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index a8626825a829..abe7db581d68 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -5081,6 +5081,7 @@ struct loc_track {
+>  	unsigned long max;
+>  	unsigned long count;
+>  	struct location *loc;
+> +	loff_t idx;
+>  };
+>  
+>  static struct dentry *slab_debugfs_root;
+> @@ -6052,11 +6053,11 @@ __initcall(slab_sysfs_init);
+>  #if defined(CONFIG_SLUB_DEBUG) && defined(CONFIG_DEBUG_FS)
+>  static int slab_debugfs_show(struct seq_file *seq, void *v)
+>  {
+> -
+> -	struct location *l;
+> -	unsigned int idx = *(unsigned int *)v;
+>  	struct loc_track *t = seq->private;
+> +	struct location *l;
+> +	unsigned long idx;
+>  
+> +	idx = (unsigned long) t->idx;
+>  	if (idx < t->count) {
+>  		l = &t->loc[idx];
+>  
+> @@ -6105,16 +6106,18 @@ static void *slab_debugfs_next(struct seq_file *seq, void *v, loff_t *ppos)
+>  {
+>  	struct loc_track *t = seq->private;
+>  
+> -	v = ppos;
+> -	++*ppos;
+> +	t->idx = ++(*ppos);
+>  	if (*ppos <= t->count)
+> -		return v;
+> +		return ppos;
 
- (2) Withdraw a cache from service:
+What I had in mind, and to be more in line with the seq_file example, would
+be to return &t->idx here. Then it's what gets passed to slab_debugfs_show()
+as 'v'. But since we ignore 'v' there, it probably doesn't matter.
 
-	void fscache_withdraw_cache(struct fscache_cache *cache);
+>  
+>  	return NULL;
+>  }
+>  
+>  static void *slab_debugfs_start(struct seq_file *seq, loff_t *ppos)
+>  {
+> +	struct loc_track *t = seq->private;
+> +
+> +	t->idx = *ppos;
+>  	return ppos;
 
-     This marks the cache as withdrawn and thus prevents further
-     cache-level and volume-level accesses.
+And same here.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: linux-cachefs@redhat.com
----
-
- fs/fscache/cache.c            |   70 +++++++++++++++++++++++++++++++++++++++++
- include/linux/fscache-cache.h |   13 ++++++++
- 2 files changed, 83 insertions(+)
-
-diff --git a/fs/fscache/cache.c b/fs/fscache/cache.c
-index e867cff53a70..bbd102be91c4 100644
---- a/fs/fscache/cache.c
-+++ b/fs/fscache/cache.c
-@@ -210,12 +210,55 @@ void fscache_relinquish_cache(struct fscache_cache *cache)
- 		fscache_cache_put_prep_failed :
- 		fscache_cache_put_relinquish;
- 
-+	cache->ops = NULL;
- 	cache->cache_priv = NULL;
- 	smp_store_release(&cache->state, FSCACHE_CACHE_IS_NOT_PRESENT);
- 	fscache_put_cache(cache, where);
- }
- EXPORT_SYMBOL(fscache_relinquish_cache);
- 
-+/**
-+ * fscache_add_cache - Declare a cache as being open for business
-+ * @cache: The cache-level cookie representing the cache
-+ * @ops: Table of cache operations to use
-+ * @cache_priv: Private data for the cache record
-+ *
-+ * Add a cache to the system, making it available for netfs's to use.
-+ *
-+ * See Documentation/filesystems/caching/backend-api.rst for a complete
-+ * description.
-+ */
-+int fscache_add_cache(struct fscache_cache *cache,
-+		      const struct fscache_cache_ops *ops,
-+		      void *cache_priv)
-+{
-+	int n_accesses;
-+
-+	_enter("{%s,%s}", ops->name, cache->name);
-+
-+	BUG_ON(fscache_cache_state(cache) != FSCACHE_CACHE_IS_PREPARING);
-+
-+	/* Get a ref on the cache cookie and keep its n_accesses counter raised
-+	 * by 1 to prevent wakeups from transitioning it to 0 until we're
-+	 * withdrawing caching services from it.
-+	 */
-+	n_accesses = atomic_inc_return(&cache->n_accesses);
-+	trace_fscache_access_cache(cache->debug_id, refcount_read(&cache->ref),
-+				   n_accesses, fscache_access_cache_pin);
-+
-+	down_write(&fscache_addremove_sem);
-+
-+	cache->ops = ops;
-+	cache->cache_priv = cache_priv;
-+	fscache_set_cache_state(cache, FSCACHE_CACHE_IS_ACTIVE);
-+
-+	up_write(&fscache_addremove_sem);
-+	pr_notice("Cache \"%s\" added (type %s)\n", cache->name, ops->name);
-+	_leave(" = 0 [%s]", cache->name);
-+	return 0;
-+}
-+EXPORT_SYMBOL(fscache_add_cache);
-+
- /**
-  * fscache_begin_cache_access - Pin a cache so it can be accessed
-  * @cache: The cache-level cookie
-@@ -278,6 +321,33 @@ void fscache_end_cache_access(struct fscache_cache *cache, enum fscache_access_t
- 		wake_up_var(&cache->n_accesses);
- }
- 
-+/**
-+ * fscache_withdraw_cache - Withdraw a cache from the active service
-+ * @cache: The cache cookie
-+ *
-+ * Begin the process of withdrawing a cache from service.  This stops new
-+ * cache-level and volume-level accesses from taking place and waits for
-+ * currently ongoing cache-level accesses to end.
-+ */
-+void fscache_withdraw_cache(struct fscache_cache *cache)
-+{
-+	int n_accesses;
-+
-+	pr_notice("Withdrawing cache \"%s\" (%u objs)\n",
-+		  cache->name, atomic_read(&cache->object_count));
-+
-+	fscache_set_cache_state(cache, FSCACHE_CACHE_IS_WITHDRAWN);
-+
-+	/* Allow wakeups on dec-to-0 */
-+	n_accesses = atomic_dec_return(&cache->n_accesses);
-+	trace_fscache_access_cache(cache->debug_id, refcount_read(&cache->ref),
-+				   n_accesses, fscache_access_cache_unpin);
-+
-+	wait_var_event(&cache->n_accesses,
-+		       atomic_read(&cache->n_accesses) == 0);
-+}
-+EXPORT_SYMBOL(fscache_withdraw_cache);
-+
- #ifdef CONFIG_PROC_FS
- static const char fscache_cache_states[NR__FSCACHE_CACHE_STATE] = "-PAEW";
- 
-diff --git a/include/linux/fscache-cache.h b/include/linux/fscache-cache.h
-index 66624407ba84..f78add6e7823 100644
---- a/include/linux/fscache-cache.h
-+++ b/include/linux/fscache-cache.h
-@@ -33,6 +33,7 @@ enum fscache_cache_state {
-  * Cache cookie.
-  */
- struct fscache_cache {
-+	const struct fscache_cache_ops *ops;
- 	struct list_head	cache_link;	/* Link in cache list */
- 	void			*cache_priv;	/* Private cache data (or NULL) */
- 	refcount_t		ref;
-@@ -44,6 +45,14 @@ struct fscache_cache {
- 	char			*name;
- };
- 
-+/*
-+ * cache operations
-+ */
-+struct fscache_cache_ops {
-+	/* name of cache provider */
-+	const char *name;
-+};
-+
- extern struct workqueue_struct *fscache_wq;
- 
- /*
-@@ -52,6 +61,10 @@ extern struct workqueue_struct *fscache_wq;
- extern struct rw_semaphore fscache_addremove_sem;
- extern struct fscache_cache *fscache_acquire_cache(const char *name);
- extern void fscache_relinquish_cache(struct fscache_cache *cache);
-+extern int fscache_add_cache(struct fscache_cache *cache,
-+			     const struct fscache_cache_ops *ops,
-+			     void *cache_priv);
-+extern void fscache_withdraw_cache(struct fscache_cache *cache);
- 
- extern void fscache_end_volume_access(struct fscache_volume *volume,
- 				      struct fscache_cookie *cookie,
-
+>  }
+>  
+> 
 

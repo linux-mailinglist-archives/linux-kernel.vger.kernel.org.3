@@ -2,124 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E654625E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A43B1462402
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbhK2Woc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:44:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234677AbhK2Wn5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:43:57 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005E9C09B13F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:08:10 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id x6so23338725iol.13
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:08:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=I+jIHWKDUtLPLAejvY1XbR8dU+L1MB4rcmxtV1IeEuY=;
-        b=V+yKPYdvuj696Ta6zyYOcn+f0c0BzWekcMpmdQ69GctwJOqQHUDdzEwbqwwQN8mWqV
-         S8rPb/cwHQnRPIy7t6i0o/dYsFziFrNytuvfuqdVjl11c352gWEmm3/gv9K1FNmNZ5X8
-         sw2bpVXe1Z4WbLz4WfJnetW5KF7al4dDyao89BcxTUduZhoVJJ7i0M4RSlYs1eDfwhF/
-         pJkfc3cCq3Jt+RHb6ZSG4CJTo9dYP1kyNak2Ur7OkvmVhVtEn/0bKFrh3NuNveTMtG1i
-         rzoHTnjPlqw4wPLgr2LO8Lf8Hi0+uibZSNHFe3yp1HbiQ0loEKxOzRrOU/l4kvsL8vFj
-         3akQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=I+jIHWKDUtLPLAejvY1XbR8dU+L1MB4rcmxtV1IeEuY=;
-        b=rsL/KEw+2lq7bRhmp+ntnioya8LKOe6DVYrU1WNtLC8hQPaslfPcA/8n3e+H/IMnap
-         zEvzw5HVpUoKr9merHkWDJLuBk/5LaNsqMRP88RFcWdJRAkx4kbfajf6LjYOAxQ3sv3C
-         70trUfQvI8qoSW5kR1G605EreMQRNPUsL2vxpKUJgII8xoJ/F6K6SqW9qVqJVOcH5ceA
-         4cfkHEVDUuuoKmg1CafqGRoS0WBIYz9soR6lkDH6MRi3YoYNjuDUJdmtTtB9cZxM1onO
-         V4a0ADc7FfIlO17ogXPuU9f8gBUidbtK83hubqRkeD/D3YsrIA19i22bAkx4TbbVtF/1
-         xtPg==
-X-Gm-Message-State: AOAM532WKkkE761idVvE7dzAmL81TqJLonxFP9A3Zly6ZNItRhqKDMHL
-        R0Dyj3O4jMHRZ6zzv0XGEW1pYdLL4gbUS1+liz5s/A==
-X-Google-Smtp-Source: ABdhPJwL/34AIU3jTwVbWsXe7uJGE4ODaX5MKmuUAfV1ENY1b+/qVIq81GEvQFt0u3k8b09bSBXrryXy1nRtdyOT8E8=
-X-Received: by 2002:a05:6638:1311:: with SMTP id r17mr68875045jad.69.1638223689760;
- Mon, 29 Nov 2021 14:08:09 -0800 (PST)
+        id S229551AbhK2WO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:14:58 -0500
+Received: from mail-dm3nam07on2044.outbound.protection.outlook.com ([40.107.95.44]:50273
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S229463AbhK2WMT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:12:19 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RIMOJQ3k/Jx3Gxb3BcTDYTqrojjKOBTI2EanJFhZYLwcAFHcBotXaa4KpJVuzHwWcJcGRstkOuA971n6UoMv1D5Y/B7HrPAQ31hpdBOMkKzSz4k8CGw0tgXPOHsXZjxeRxz3uziaDKcFmn82BtR6qgs4jfQqQsxF78JNTp4NlABCUQeSIvvrBuBpLwKtiJlYnU9OxqwbljD/bmS5a5efCCU7lKQjYdHonjnmWZcEc7WvK7K27OFgQc5dkl+zbAk/3P6DWEyTo1evwtAMPjbR3nLPZyJb+lzmGDd7lZnWUeDeJX5rSm+GAV7WUJF28kXj77tiZ2XHChGwzfXrp7k3zQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8zwazSGCLjIMi3AqEDquB0s4llI/Xb/R+68c/to+kpI=;
+ b=ayq0DxD8Dv30VnBSeHTtN7iZbEjtTI/etuWBYDDQx8tuzdHOiLDOgUZNwOE5eq5ilLcgb2kNZ9cch+6TkOTGIwyQGXlhfNjSvFnypRXp/vxcIIVjCzjhc+7epcoKzIcZnZ9q6KKHVos92WvEi4s6LcQQrVXOx1PD5+0B4kk3OfR2Wmy6ZISxeE2IHKPyQ3gKQM97LkA6JtcAgflwX3y4s4HWNO4HSyv75wp0BjD6dvb25C04N3PUYCKxrUHrJCCDKBw8mOg+oNqU3yNev3IrPwkcpOVzxQWNG8zFF14B+wGYXPI5UFEqfq/i4FHZAJKAGkboduEHSRbx8t+Ckng+XQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8zwazSGCLjIMi3AqEDquB0s4llI/Xb/R+68c/to+kpI=;
+ b=Fib1Lp1xkXUoDEg/NZZGQY7j9UHkpiOgKfx6OaQI5H2AjwPYIizmwvSU1DYRIV7vCkw5uYHoXPxtGC7LJltvOUV6I02kl5VgE0owp4/YcpfXxlfb8jVu8n+iiDOuphmoA7RrBF26i/l13hKevhsQYW1cmqz2Jdh2GmqOJI/hr1kPQ0Sz0txXoVN09sJnlqU/Wxe1/NdlVNU7Co6++JS3F5Ip0ZDJYtO88gB+I29qJ5DN2jZfaChg/OzVVt8Ai3lsbdlvCrNLrKzh/hXpOS/RgthS5jKLywi2yGNtKpXxDOFd1wL6Dwkt9fGW++8i14XLmRsjS3nl4Ndcu2uqFGMTVw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
+ by MN2PR12MB3983.namprd12.prod.outlook.com (2603:10b6:208:169::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
+ 2021 22:09:00 +0000
+Received: from MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::2dea:e478:592:6d66]) by MN2PR12MB3823.namprd12.prod.outlook.com
+ ([fe80::2dea:e478:592:6d66%3]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 22:09:00 +0000
+From:   Zi Yan <ziy@nvidia.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org
+Subject: Re: [RFC PATCH 0/3] Use pageblock_order for cma and alloc_contig_range alignment.
+Date:   Mon, 29 Nov 2021 17:08:57 -0500
+X-Mailer: MailMate (1.14r5850)
+Message-ID: <35A20739-152A-450E-8535-2236D2B28748@nvidia.com>
+In-Reply-To: <52dbf824-76be-cc34-3983-d45510b1b618@suse.cz>
+References: <20211115193725.737539-1-zi.yan@sent.com>
+ <3083463d-978b-fbe6-dadf-670d400ed437@suse.cz>
+ <AEFF28CF-0ED8-450F-96A4-A6CD59CB1F3D@nvidia.com>
+ <BF8FB68A-6E1D-4465-8A2B-884FC034660B@nvidia.com>
+ <52dbf824-76be-cc34-3983-d45510b1b618@suse.cz>
+Content-Type: multipart/signed;
+ boundary="=_MailMate_4B5044BF-6C2C-47FF-8D31-06E6118699F1_=";
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+X-ClientProxiedBy: BL1PR13CA0184.namprd13.prod.outlook.com
+ (2603:10b6:208:2be::9) To MN2PR12MB3823.namprd12.prod.outlook.com
+ (2603:10b6:208:168::26)
 MIME-Version: 1.0
-References: <20211111084415.663951-1-eranian@google.com> <20211111084415.663951-4-eranian@google.com>
- <YY6QBXs0sM16DdbV@hirez.programming.kicks-ass.net> <CABPqkBShSBaJH+PR6rMkRRzjZAKN5zPhcdnLWx=4a-yQWxcA2A@mail.gmail.com>
- <20211116082923.GX174703@worktop.programming.kicks-ass.net>
- <CABPqkBQ4BCswvNPpkO79dBamhudikz1cGCXFpwAp9xsTb3F8xQ@mail.gmail.com>
- <YZZE+bPCokVrTARM@hirez.programming.kicks-ass.net> <YZZH+5odIawPQtgJ@hirez.programming.kicks-ass.net>
-In-Reply-To: <YZZH+5odIawPQtgJ@hirez.programming.kicks-ass.net>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Mon, 29 Nov 2021 14:07:58 -0800
-Message-ID: <CABPqkBSLHS82MM9f9jcLNfYDAR7+j4h2ztm22wjMH11=FM8FcA@mail.gmail.com>
-Subject: Re: [PATCH v2 03/13] perf/x86/amd: add AMD Fam19h Branch Sampling support
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kim.phillips@amd.com,
-        acme@redhat.com, jolsa@redhat.com, songliubraving@fb.com,
-        mpe@ellerman.id.au, maddy@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
+Received: from [10.2.82.121] (130.44.175.231) by BL1PR13CA0184.namprd13.prod.outlook.com (2603:10b6:208:2be::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.8 via Frontend Transport; Mon, 29 Nov 2021 22:08:59 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: ef4ec0ce-0b24-40a2-1f6d-08d9b384d85f
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3983:
+X-Microsoft-Antispam-PRVS: <MN2PR12MB3983B7AAE86B10EB38E4613BC2669@MN2PR12MB3983.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WZJ9tAz8A6MJBJ3QUTSg4tCidVPbl15Dts+RpmYDFfe0LNKSkIywoSHRIocl+f5zoGoX99RlQdEfVkPna3PJlJGoXzwN0tm9jWDdM/4j6ELnLnhyoCi1LG898D9c0hYhYg6DYQjRneDtodbld7mxH8KHzBT8SBViAeZClhJqr1khyUEhXVm+MNuf4VMsdbxrTwSCVygB/LZMgnhUL26qwKxWWRzozB2HhqOGHeV7PNcnU8OaDkiIo34L1/5oHgcWflJFHkiZytSA1D3KhTV0+XNyIejrl3ZGnHOg+WLTdVOZseo9SjbPgKV4Vp8BKHVobeQzsFLHY1lK1TTCVtVEa4l/oAtIyZGezsWch0khzV4/c89xguir64ElSEiF4Q/Mh1gfDQoCIZtXkuceRq4gghNPfz27BO1CBnwZWnb1La1gc9QhTt4ncQJNpqOwOnUvKwegD0Psifcbit/y2nrE+eOkCW+jAyt+D+SYb9lvi4EhfLIlbfJpdGNY131y05ihCaqgnslre+EGSLLUr7rA8g8tCnHE7u+8tCNcAK+Vi94BJaw9HEX4XSe0LWzCQYaSxNi69+flH7lVPD4hzFDjdoCnzpVvk6rn2Vq5QoOoh816IwtcII9v8xLcaRfK4ux39sF28z7znFTQQfKoFoGjyPxZqDke+17dJgQUwCDYJbUHAqqo7ERriTPzLtRWkO5SH+DFNrOH4ib+YX0TWv3Lsicq1PTUI22x5nzHr8HkLOU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(16576012)(26005)(2616005)(6916009)(38100700002)(8936002)(53546011)(54906003)(36756003)(2906002)(66946007)(66556008)(956004)(186003)(316002)(83380400001)(33656002)(508600001)(86362001)(8676002)(4326008)(235185007)(5660300002)(21480400003)(66476007)(7416002)(45980500001)(72826004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KFivDfphpzyNfU4JRr13Xl4z6stZwmv+etn9zR/VX9AHy+HXuyQaG85Lm0Z0?=
+ =?us-ascii?Q?zaz0TK6n3ZNT0hUVUDL0F29Lpn4z8VsmYdfx8UaQTn8kKu3Xx4K5zs9G/wgs?=
+ =?us-ascii?Q?/DNDUSSQzNvvSGYsVq1L/7nrrpuimkZawcAJIlU6kM15/Xir2tDnqnlC9jgW?=
+ =?us-ascii?Q?bNH6MHIiLYovMNpbHPWISng/f7zro6FTjrGHNWXxSz209zhn5MCkwyewwW6V?=
+ =?us-ascii?Q?zoO4DM3UnyQNurmHgIjHl48ZPw2FcrxQ68/OmgS0jkiaDrfAQhF+gYjF1552?=
+ =?us-ascii?Q?MvJ2Afp22509JAJlkObLJWCUjNlRY75X/cHlde9MtwNU0jkvbWIO6w5aeFDG?=
+ =?us-ascii?Q?7s7aYnILH8DRDb35Wa3uNTTM9dKGOwJ94oTPqU2N5eMsRIWMrVImo3tk9Qt9?=
+ =?us-ascii?Q?Ec1ssTMBM810nywI89apRMSUaR6sCIbCuPoHPxmspC4zES0J74h+GoO023du?=
+ =?us-ascii?Q?M+Nw8rLSBVIFJNwU3vBkj7uKoAmUfRmNaOFML1vVY1YX8wU4DgLf+U6bk8a7?=
+ =?us-ascii?Q?aw1aU8346oej/l5U36J569jKFGo7RlQNNWsNEKGfyqH9a91qLa5SV4scpSyT?=
+ =?us-ascii?Q?0dbVykBlOnFjapTR3njXrWCRytVVEtIC41bjnRViXf2TLW7Gp1RC/eYljVJU?=
+ =?us-ascii?Q?TUOrlUvn+haZYuMoiEcL7ctUoVizSG7BPeKEHG2WxKgom4hJYsnoR4CId2Pg?=
+ =?us-ascii?Q?xAbenPwTPh7qG2A0mdCidff7kXsUhSg6OMuM1Yg/D0P4MWFB3PeRrCgFO/HF?=
+ =?us-ascii?Q?5lLve2Eg7nyJL05o/8nmsQIcdc9mYiCLwJQNUuAwbhdCulaA6/Ogjw4dCBQv?=
+ =?us-ascii?Q?3Zy2atXdf1fa8QJIITfOFYpn/d12NvcBBHCqgHE5x4GXqnR7x4+KXnsKx0FF?=
+ =?us-ascii?Q?XvhcpvJ4IdQY8bVrK8tIlVT/yA9zfrIj19sCFTbPsRjYjdDoDc5t48PEm5KT?=
+ =?us-ascii?Q?W80YawPwkRR9/8E+oTCU/ReFKqcjYeZfSXTb429uJ1Q7GtaokDxfIFcMq2Qe?=
+ =?us-ascii?Q?3n2oKRyFhRYQwKuzgnL2xCSXK4QWEfTHCCjK+GKXcGlJcA5qNAMIwnSphnO6?=
+ =?us-ascii?Q?Z8xdP3BbNTROvR2aTQHNKJ9HG438qt92g9luhP5+ZaDf4WfEXXc1eUgQlEnb?=
+ =?us-ascii?Q?WfMdz7qgIAGByJXYJDEV1K5VX71F3kzXIAI6IN3qKxdjuZ8mUbukqRGpiB4I?=
+ =?us-ascii?Q?junhmqzrg4nd4tF2E2kSDLVBZOfWtl1Od/gyrdUaIgS5+WJiYdDse0JvCjrC?=
+ =?us-ascii?Q?YMZm8mYY78GgiGCtefkdnEU56fpPwrGH7zdd3AjpAA+Dkho1E/O4b7XKLAo+?=
+ =?us-ascii?Q?03OF/sFRkK1eZ59/Ykgz+V2xbKlNVCiTs/7tKfI3XMz+iP1NBm/vp8I4A8Er?=
+ =?us-ascii?Q?OmixYvP1v0g0kewwxE/IzYYNerx3N1Hy39HJjLoeYHgwAfd8z15I2l787fAd?=
+ =?us-ascii?Q?qMc9XIGCZP1p7AhjRYL7Y+8f1/jt6Lqnhw5c12zHryug3PrzTQlo3m8TkXG6?=
+ =?us-ascii?Q?kfQiQIv2GzeFce4UrqAEqgY4o117xP8EjqaZpxRJrR+yBMwrpMioAav0NeMU?=
+ =?us-ascii?Q?katquDJ7xfSOGzK9/Hk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ef4ec0ce-0b24-40a2-1f6d-08d9b384d85f
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 22:09:00.0281
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bklzwKCTclG+BWxJtbSwfaiA+ZwNF6OMSsZAkkBQ+FsXwnTcNz7Zf6S3SJ1zlbY5
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3983
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter,
+--=_MailMate_4B5044BF-6C2C-47FF-8D31-06E6118699F1_=
+Content-Type: text/plain
 
-Back from a vacation break. Comments below.
+On 23 Nov 2021, at 12:32, Vlastimil Babka wrote:
 
-On Thu, Nov 18, 2021 at 4:33 AM Peter Zijlstra <peterz@infradead.org> wrote:
+> On 11/23/21 17:35, Zi Yan wrote:
+>> On 19 Nov 2021, at 10:15, Zi Yan wrote:
+>>>>> From what my understanding, cma required alignment of
+>>>>> max(MAX_ORDER - 1, pageblock_order), because when MIGRATE_CMA was introduced,
+>>>>> __free_one_page() does not prevent merging two different pageblocks, when
+>>>>> MAX_ORDER - 1 > pageblock_order. But current __free_one_page() implementation
+>>>>> does prevent that.
+>>>>
+>>>> But it does prevent that only for isolated pageblock, not CMA, and yout
+>>>> patchset doesn't seem to expand that to CMA? Or am I missing something.
+>>>
+>>> Yeah, you are right. Originally, I thought preventing merging isolated pageblock
+>>> with other types of pageblocks is sufficient, since MIGRATE_CMA is always
+>>> converted from MIGRATE_ISOLATE. But that is not true. I will rework the code.
+>>> Thanks for pointing this out.
+>>>
+>>
+>> I find that two pageblocks with different migratetypes, like MIGRATE_RECLAIMABLE
+>> and MIGRATE_MOVABLE can be merged into a single free page after I checked
+>> __free_one_page() in detail and printed pageblock information during buddy page
+>> merging.
 >
-> On Thu, Nov 18, 2021 at 01:20:09PM +0100, Peter Zijlstra wrote:
-> > On Tue, Nov 16, 2021 at 11:23:39PM -0800, Stephane Eranian wrote:
+> Yes, that can happen.
 >
-> > > Ok, I made the changes you suggested. It looks closer to the way LBR is handled.
-> > > However, this means that there is no path by which you can get to
-> > > amd_pmu_disable_event()
-> > > without having gone through amd_pmu_disable_all(). Is that always the
-> > > case? And same thing
-> > > on the enable side.
-> >
-> > So that's true for ->add() and ->del(), those cannot be called without
-> > being wrapped in ->pmu_disable(), ->pmu_enable().
-> >
-> > There is however the ->stop() and ->start() usage for throttling, which
-> > can stop an individual event (while leaving the event scheduled on the
-> > PMU). Now, I think the ->stop() gets called with the PMU enabled, but
-> > the ->start() is with it disabled again.
+> I am not sure what consequence it will cause. Do you have any idea?
 >
-> I just looked, and the throttling depends on the PMU's PMI handler
-> implementation, for Intel it will have the PMU disabled, for generic and
-> AMD it has it enabled (see x86_pmu_handle_irq -- also these are really
-> NMIs but lets not do a mass rename just now).
+> For MIGRATE_RECLAIMABLE or MIGRATE_MOVABLE or even MIGRATE_UNMOVABLE it's
+> absolutely fine. As long as these pageblocks are fully free (and they are if
+> it's a single free page spanning 2 pageblocks), they can be of any of these
+> type, as they can be reused as needed without causing fragmentation.
 >
-Yes, I see that too. It has to do with the __perf_event_overflow()
--> __perf_event_account_interrupt() code path which does not call
-perf_pmu_disable().
-And that's because it knows it is called from PMI and let's the PMI
-code decide the state
-of the PMU. Unfortunately, on AMD, the PMU is not stopped fully on PMI
-and that is because
-there is no centralized way of doing this, so you'd have 6 wrmsr x 2
-to disable/enable. OTOH,
-I don't see the point of monitoring in the PMI code. So there is a
-discrepancy between Intel and
-AMD here. I think we should fix it.
+> But in case of MIGRATE_CMA and MIGRATE_ISOLATE, uncontrolled merging would
+> break the specifics of those types. That's why the code is careful for
+> MIGRATE_ISOLATE, and MIGRATE_CMA was until now done in MAX_ORDER granularity.
 
-> > The ramification would be that we'd stop the event, but leave BRS
-> > enabled for a throttled event. Which should be harmless, no?
+Thanks for the explanation. Basically migratetypes that can fall back to each
+other can be merged into a single free page, right?
 
-Well, the risk here is that if BRS is left enabled, it may hold the
-NMI for up to 16 taken branches.
-If the associated event is disabled, then cpuc->events[idx] = NULL.
-The BRS drain function checks
-for that and does not capture any sample. The brs_drain() function is
-called from the PMI handler if
-cpuc->lbr_users > 0 which would be the case on the stop() path. I
-think this is the only risk we have
-on the throttling code path.
+How about MIGRATE_HIGHATOMIC? It should not be merged with other migratetypes
+from my understanding.
 
-There would be no problem if we were to stop/start the PMU in the AMD
-PMI handler.
 
-Thanks.
+--
+Best Regards,
+Yan, Zi
+
+--=_MailMate_4B5044BF-6C2C-47FF-8D31-06E6118699F1_=
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmGlT3kPHHppeUBudmlk
+aWEuY29tAAoJEJ2yUfNrYfqK0ToP/3xsHoF15mPR7E4A+wmWq5NufZnqLsDp/BYx
+fTspt0RwFFCCYfGmltjtvaR3oJ6ZR/Zq4VGAH4bQqhV3RXW3ln+J10tGEr2P2/c3
+jkSlXj4buDI+7M310afqzeTgp4OKZ2Bl5cEg2VcgGfSi4peM3ndSzc/MFwOzh3vH
+L7ObLigzaUvuJbD3Rp6xq3GDj+53JUZh8wkjZuRlX2RsGVu/tjS2Or+jtP7+wL50
+WkcsyrEfOR8I7C92uArBGifAJQEP9jevsnwN6GJwI/ZEmga0djUBOL5AZcS2HEd4
+ikd9vESjZNs7WSO2j7Y84LhPojaHA5v1xlkoNOdTbw3ndg/LP4nwlAMqs6/2fP3Q
+7gmDAfOW8iZ9r9inH0HNFn0O+vtc+2X2TCgU0FPjv6osUzRc9SXJmTASPmwAa38C
+SUol5lwxsl78vG+A0knxOyusiK1Mb5iouJy/hPmuteobiCXS5PGe4ZL7WAm0Qv0U
+VdCBpuxcoB0GahO9KXWBuQ7EqCo2ubYKvsKQBeyByScKecbuKc55KMIUROPWONiB
+7jsNUrZ++nQzRQ176Az5Ig69f09f6e4BnphGCkLhhEvmJUu7MDbQT4NPEOjippHY
+MbAnuKkUDEF8xY904hlNFcDetthF+ARWVNlx8qWBKqSzfVDodRwNqNBsqoMs1X8o
+/QiCLa1r
+=neNK
+-----END PGP SIGNATURE-----
+
+--=_MailMate_4B5044BF-6C2C-47FF-8D31-06E6118699F1_=--

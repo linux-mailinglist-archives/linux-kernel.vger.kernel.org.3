@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5790B461D80
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:22:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D96461E07
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347283AbhK2SZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:25:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32890 "EHLO
+        id S1378899AbhK2Sbm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:31:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346078AbhK2SXc (ORCPT
+        with ESMTP id S1350659AbhK2S3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:23:32 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E72E3C08EDBE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:48:35 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id y13so72874361edd.13
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:48:35 -0800 (PST)
+        Mon, 29 Nov 2021 13:29:37 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9A1C0048EB
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:51:09 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id e3so73055951edu.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:51:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=monstr-eu.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc:content-transfer-encoding;
-        bh=FliCx0bGn3ubNIukwxtPju9wJWhhLzDslESrHIbYqAo=;
-        b=T5bO4MKnctuYgq04joV/MQiUVVEk3hmYzplG0ZjO98tJW/kW6sEML0nYymOUR0No9t
-         yp95FtM/KMKgCncy8BNa5Uk2y5phZDY4M0sCotbyYEJRXvN2DDgvMOquDt1AoCPqP+ke
-         jCi2rAUF1Fn+4qzj9I9Y87PjYD90ebX5i5TGR9masR6KxTHk4NWwYeFPqVwfKC89upFQ
-         wLLAIhgZfRm9ryQ7wuyvdeUt9vVIVhrnNYVFbyXHcP15W7FRj3PzeVes6RO682yiZuiB
-         hZC4ndMG06gdjyDShQ/PMqljJ1R0uyt8Hi++geOOUjVQlycd7iXV4GJByJNMfa7uTQAV
-         pgiA==
+        bh=GBYpAOe925BYrIse3QCI1ulmcepuLdu5an1jAdY1VrI=;
+        b=kxatyFzeyi/rc+oHpXxoebQ+yFL4RQY+Q1mBNvYX9E4spJI2w5Ti44hdY9V8xVDAP8
+         RQHppNJ2g+luc/DmSBYamVYQSMobW0Gwdh2728FM9hO4HIMZdLjX9JbiYXyzrqswl+sG
+         4KedEYV8VS/uWooTSKnHj2JgRNDdm5tkrNOoGwo3jaZnXjlHum2tIiXSe4rN3rrirohk
+         Mi/qUhFg90+rJBwkWDYSutTdJMY5EbIDfBiXwXd2+J+wSLULFvZbPi2I7Lyy7WkAzgmJ
+         KqGLab5JNTg3cA7oIanGmsFAQ6YlcAHbZPaiGVz4b178aQJj7eZLjIrUt4YeT/WgPSGl
+         WDew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FliCx0bGn3ubNIukwxtPju9wJWhhLzDslESrHIbYqAo=;
-        b=gqJEKqvgr8AVtKeA/fHe/rcQgjr8whZnnxcW8ONT+nub4uG8nVpd5HcUD+5q+2Mgm5
-         c/pOr1M4yybDzINghJ8RHkBCQoPzO8cwCihCsOOnB/72X/kbeJdidX1i6U0gd9+642JV
-         zJNV0RgW/GVZ/eEnO+FSRHB006B26X/aNHEesuVNbQzpGqzPjEdIMDwwEBW79snhNNzY
-         vcbk6yxxCj16Vha5ifgMMHaAzWJvcKOTxV4WyCN7Q2omNbxmo1EJpgx7mDbIJ/bRAHWC
-         nJwstkJZTvIbAtKEIHAegNhPAK0TrMSPVSIvFskbna90aneSm6quzlANSdlLy3RkjEzl
-         Vmvg==
-X-Gm-Message-State: AOAM531HO343ZMKsz8sYcr6FcRiWzC0BergUvBu3mdZMkooorcRblpv2
-        d0VMVQYil9ld1ceXhIZV4+2hqzdMcQn6NA0W8BEMmmkjz+Q=
-X-Google-Smtp-Source: ABdhPJyTk9tBgZZcLKsO8X1xBSnPzQHAtxWc9m3uMq8MC/obS9TMbyGJRZgcFld8AAH0nMBtTbdYhfZnwQJLAwWXVbE=
-X-Received: by 2002:a17:907:764b:: with SMTP id kj11mr59577045ejc.307.1638197314562;
- Mon, 29 Nov 2021 06:48:34 -0800 (PST)
+        bh=GBYpAOe925BYrIse3QCI1ulmcepuLdu5an1jAdY1VrI=;
+        b=qG/1I3lKiE7Fu+CTR/3Yyp0Q9AqWNv2aiIZA1+LQ53mmYIgAPPL9HhwTm3o8uoUfLk
+         /1IzmTPDalHOBzYWh5OrJt45YPiRBJ2WiUBEB0uA1NpCrFgTpbAqneDAFDq41Y4XzF/9
+         9p57sE3+sHzli5RdR8UNge4SQORuA1/3qVU9PgvoJnYAPSLqcZ9WW0F8r7KLAZy232My
+         AtMLjI99uaHGdQAbg4IisAhokBTYJBZOMx65CvM0y9ysZWR0oDtjZXPa/4cbinLAJlM2
+         hqKzr8Hlh9LQyktx880zpHY849kgL6+uNGSipUQqpfZhXh7+vKTaY95R3I3OF43p+HJf
+         DplA==
+X-Gm-Message-State: AOAM533elq/0R3p7MTMqWgGfDyySzhVLUmSnaCZ1nbJtwgvWcEeZnmYi
+        8ctojAhv6I17oXeApLnfEkGy9mOEOeRqB+fT8oGwK9HmCCO1rA==
+X-Google-Smtp-Source: ABdhPJyzP17frZijHTBJmZpl44+A4bs23s05Y3uMLqMwxrTHIQnKvNEAg8uHLx/onOgUvgQAlAhodjXBIUtw+j8WNrs=
+X-Received: by 2002:a05:6402:5206:: with SMTP id s6mr76354604edd.286.1638197467771;
+ Mon, 29 Nov 2021 06:51:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20211128034823.6930-1-wangborong@cdjrlc.com>
-In-Reply-To: <20211128034823.6930-1-wangborong@cdjrlc.com>
+References: <20211126225329.1150651-1-colin.i.king@gmail.com>
+In-Reply-To: <20211126225329.1150651-1-colin.i.king@gmail.com>
 From:   Michal Simek <monstr@monstr.eu>
-Date:   Mon, 29 Nov 2021 15:48:23 +0100
-Message-ID: <CAHTX3dJuVVkxRtHQj9wfoqLpac2SuCHAQpBGca+Da8k03zyJCA@mail.gmail.com>
-Subject: Re: [PATCH] microblaze: fix typo in a comment
-To:     Jason Wang <wangborong@cdjrlc.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>
+Date:   Mon, 29 Nov 2021 15:50:56 +0100
+Message-ID: <CAHTX3d+Sc47Cj7Rs7HxWSLapvwXsWa-1-VBknsFLXBPmEhyRLw@mail.gmail.com>
+Subject: Re: [PATCH] microblaze/mm/highmem: Remove redundant initialization of
+ variable maxmem
+To:     Colin Ian King <colin.i.king@googlemail.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel-janitors@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ne 28. 11. 2021 v 4:51 odes=C3=ADlatel Jason Wang <wangborong@cdjrlc.com> n=
-apsal:
+Hi Colin,
+
+p=C3=A1 26. 11. 2021 v 23:53 odes=C3=ADlatel Colin Ian King
+<colin.i.king@googlemail.com> napsal:
 >
-> The double `was' is repeated in a comment. Consequently, remove one
-> `was' from the comment.
+> The variable maxmem is being initialized with a value that is never
+> read, it is being updated later on. The assignment is redundant and
+> can be removed.
 >
-> Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 > ---
->  arch/microblaze/kernel/signal.c | 2 +-
+>  arch/microblaze/mm/init.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/arch/microblaze/kernel/signal.c b/arch/microblaze/kernel/sig=
-nal.c
-> index fc61eb0eb8dd..59f0af5ee042 100644
-> --- a/arch/microblaze/kernel/signal.c
-> +++ b/arch/microblaze/kernel/signal.c
-> @@ -11,7 +11,7 @@
->   *
->   * 1997-11-28 Modified for POSIX.1b signals by Richard Henderson
->   *
-> - * This file was was derived from the sh version, arch/sh/kernel/signal.=
-c
-> + * This file was derived from the sh version, arch/sh/kernel/signal.c
->   *
->   * This file is subject to the terms and conditions of the GNU General
->   * Public License. See the file COPYING in the main directory of this
+> diff --git a/arch/microblaze/mm/init.c b/arch/microblaze/mm/init.c
+> index 952f35b335b2..f328d4549fad 100644
+> --- a/arch/microblaze/mm/init.c
+> +++ b/arch/microblaze/mm/init.c
+> @@ -144,7 +144,7 @@ int page_is_ram(unsigned long pfn)
+>   */
+>  static void mm_cmdline_setup(void)
+>  {
+> -       unsigned long maxmem =3D 0;
+> +       unsigned long maxmem;
+>         char *p =3D cmd_line;
+>
+>         /* Look for mem=3D option on command line */
 > --
-> 2.33.0
+> 2.33.1
 >
 
-Applied.
-M
+The patch is fine but From and SoB email are different. Please fix it.
+./scripts/checkpatch.pl --codespell --strict
+0001-microblaze-mm-highmem-Remove-redundant-initializatio.patch
+WARNING: From:/Signed-off-by: email address mismatch: 'From: Colin Ian
+King <colin.i.king@googlemail.com>' !=3D 'Signed-off-by: Colin Ian King
+<colin.i.king@gmail.com>'
 
+Thanks,
+Michal
 
 --=20
 Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91

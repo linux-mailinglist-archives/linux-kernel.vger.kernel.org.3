@@ -2,111 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCEB461310
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E58B246131A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:06:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354773AbhK2LHt convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 06:07:49 -0500
-Received: from coyote.holtmann.net ([212.227.132.17]:54587 "EHLO
-        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242974AbhK2LFm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:05:42 -0500
-Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
-        by mail.holtmann.org (Postfix) with ESMTPSA id 05F6FCED20;
-        Mon, 29 Nov 2021 12:02:23 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
-Subject: Re: [PATCH v3 1/2] Bluetooth: add quirk disabling LE Read Transmit
- Power
-From:   Marcel Holtmann <marcel@holtmann.org>
-In-Reply-To: <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
-Date:   Mon, 29 Nov 2021 12:02:23 +0100
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Daniel Winkler <danielwinkler@google.com>,
-        Johan Hedberg <johan.hedberg@intel.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Content-Transfer-Encoding: 8BIT
-Message-Id: <516543B6-9C30-479E-AC9B-A658C836C703@holtmann.org>
-References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
- <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
- <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
- <20211117124717.12352-1-redecorating@protonmail.com>
- <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
- <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
- <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
- <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
- <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
- <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
- <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
- <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
-To:     Aditya Garg <gargaditya08@live.com>
-X-Mailer: Apple Mail (2.3693.20.0.1.32)
+        id S240226AbhK2LJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:09:18 -0500
+Received: from comms.puri.sm ([159.203.221.185]:40264 "EHLO comms.puri.sm"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240713AbhK2LHR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 06:07:17 -0500
+Received: from localhost (localhost [127.0.0.1])
+        by comms.puri.sm (Postfix) with ESMTP id DE16CE1137;
+        Mon, 29 Nov 2021 03:03:59 -0800 (PST)
+Received: from comms.puri.sm ([127.0.0.1])
+        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id evOY7719MzEi; Mon, 29 Nov 2021 03:03:59 -0800 (PST)
+From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+To:     linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, kernel@puri.sm,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+Subject: [PATCH] thermal: qoriq: Only enable sites that actually exist
+Date:   Mon, 29 Nov 2021 12:02:53 +0100
+Message-Id: <20211129110252.1699112-1-sebastian.krzyszkowiak@puri.sm>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aditya,
+On i.MX8MQ, enabling monitoring sites that aren't connected to anything
+can cause unwanted side effects on some units. This seems to happen
+once some of these sites report out-of-range readings and results in
+sensor misbehavior, such as thermal zone readings getting stuck or even
+suddenly reporting an impossibly high value, triggering emergency
+shutdowns.
 
-> Some devices have a bug causing them to not work if they query 
-> LE tx power on startup. Thus we add a quirk in order to not query it 
-> and default min/max tx power values to HCI_TX_POWER_INVALID.
-> 
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
-> ---
-> include/net/bluetooth/hci.h | 9 +++++++++
-> net/bluetooth/hci_core.c    | 3 ++-
-> 2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-> index 63065bc01b766c..383342efcdc464 100644
-> --- a/include/net/bluetooth/hci.h
-> +++ b/include/net/bluetooth/hci.h
-> @@ -246,6 +246,15 @@ enum {
-> 	 * HCI after resume.
-> 	 */
-> 	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
-> +
-> +	/*
-> +	 * When this quirk is set, LE tx power is not queried on startup
-> +	 * and the min/max tx power values default to HCI_TX_POWER_INVALID.
-> +	 *
-> +	 * This quirk can be set before hci_register_dev is called or
-> +	 * during the hdev->setup vendor callback.
-> +	 */
-> +	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
-> };
-> 
-> /* HCI device flags */
-> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> index 8d33aa64846b1c..434c6878fe9640 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -619,7 +619,8 @@ static int hci_init3_req(struct hci_request *req, unsigned long opt)
-> 			hci_req_add(req, HCI_OP_LE_READ_ADV_TX_POWER, 0, NULL);
-> 		}
-> 
-> -		if (hdev->commands[38] & 0x80) {
-> +		if (hdev->commands[38] & 0x80 &&
-> +		!test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks)) {
+The datasheet lists all non-existent sites as "reserved" and doesn't
+make any guarantees about being able to enable them at all, so let's
+not do that.
 
-		if ((hdev->commands[38] && 0x80) &&
-		    !test_bit(HCI_QUIRK_.., &hdev->quirks)) {
+Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before registering them")
 
-> 			/* Read LE Min/Max Tx Power*/
-> 			hci_req_add(req, HCI_OP_LE_READ_TRANSMIT_POWER,
-> 				    0, NULL);
-> 
+Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
+---
+ drivers/thermal/qoriq_thermal.c | 63 ++++++++++++++++++++++-----------
+ 1 file changed, 43 insertions(+), 20 deletions(-)
 
-Regards
-
-Marcel
+diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
+index 73049f9bea25..ef0848849ee2 100644
+--- a/drivers/thermal/qoriq_thermal.c
++++ b/drivers/thermal/qoriq_thermal.c
+@@ -32,7 +32,6 @@
+ #define TMR_DISABLE	0x0
+ #define TMR_ME		0x80000000
+ #define TMR_ALPF	0x0c000000
+-#define TMR_MSITE_ALL	GENMASK(15, 0)
+ 
+ #define REGS_TMTMIR	0x008	/* Temperature measurement interval Register */
+ #define TMTMIR_DEFAULT	0x0000000f
+@@ -129,33 +128,51 @@ static const struct thermal_zone_of_device_ops tmu_tz_ops = {
+ static int qoriq_tmu_register_tmu_zone(struct device *dev,
+ 				       struct qoriq_tmu_data *qdata)
+ {
+-	int id;
++	int ret = 0;
++	struct device_node *np, *child, *sensor_np;
+ 
+-	if (qdata->ver == TMU_VER1) {
+-		regmap_write(qdata->regmap, REGS_TMR,
+-			     TMR_MSITE_ALL | TMR_ME | TMR_ALPF);
+-	} else {
+-		regmap_write(qdata->regmap, REGS_V2_TMSR, TMR_MSITE_ALL);
+-		regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
+-	}
++	np = of_find_node_by_name(NULL, "thermal-zones");
++	if (!np)
++		return -ENODEV;
++
++	sensor_np = of_node_get(dev->of_node);
+ 
+-	for (id = 0; id < SITES_MAX; id++) {
++	for_each_available_child_of_node(np, child) {
+ 		struct thermal_zone_device *tzd;
+-		struct qoriq_sensor *sensor = &qdata->sensor[id];
+-		int ret;
++		struct qoriq_sensor *sensor;
++		int id, site;
++
++		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
++
++		if (ret < 0) {
++			dev_err(dev, "failed to get valid sensor id: %d\n", ret);
++			of_node_put(child);
++			break;
++		}
+ 
++		sensor = &qdata->sensor[id];
+ 		sensor->id = id;
+ 
++		/* Enable monitoring */
++		if (qdata->ver == TMU_VER1) {
++			site = 0x1 << (15 - id);
++			regmap_update_bits(qdata->regmap, REGS_TMR,
++					   site | TMR_ME | TMR_ALPF,
++					   site | TMR_ME | TMR_ALPF);
++		} else {
++			site = 0x1 << id;
++			regmap_update_bits(qdata->regmap, REGS_V2_TMSR, site, site);
++			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
++		}
++
+ 		tzd = devm_thermal_zone_of_sensor_register(dev, id,
+ 							   sensor,
+ 							   &tmu_tz_ops);
+-		ret = PTR_ERR_OR_ZERO(tzd);
+-		if (ret) {
+-			if (ret == -ENODEV)
+-				continue;
+-
+-			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
+-			return ret;
++		if (IS_ERR(tzd)) {
++			ret = PTR_ERR(tzd);
++			dev_err(dev, "failed to register thermal zone: %d\n", ret);
++			of_node_put(child);
++			break;
+ 		}
+ 
+ 		if (devm_thermal_add_hwmon_sysfs(tzd))
+@@ -164,7 +181,13 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
+ 
+ 	}
+ 
+-	return 0;
++	of_node_put(sensor_np);
++	of_node_put(np);
++
++	if (ret)
++		regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
++
++	return ret;
+ }
+ 
+ static int qoriq_tmu_calibration(struct device *dev,
+-- 
+2.34.1
 

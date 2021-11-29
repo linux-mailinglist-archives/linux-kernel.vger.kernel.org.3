@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 309FF462515
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F824626A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:52:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233346AbhK2WfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:35:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60766 "EHLO
+        id S235212AbhK2Wzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:55:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233429AbhK2We5 (ORCPT
+        with ESMTP id S235847AbhK2WzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:34:57 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A23AC0D8C9F;
-        Mon, 29 Nov 2021 09:55:23 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id y12so75379205eda.12;
-        Mon, 29 Nov 2021 09:55:23 -0800 (PST)
+        Mon, 29 Nov 2021 17:55:03 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6909FC0D8CBA
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:58:08 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id gt5so13309977pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:58:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jo8G3WIFnCXJv/Wl58UbY8LXKhGKq56nydp8ornyGvw=;
-        b=AjLExKPDvZxJIAf93isJIQG5owoNwi20rpmLOoVH2+s0ZWunJFmYMjECqAXAa31ExM
-         qP4APhy58+cgNzSgs7CZp9bi9ZLfh1Um4f0T4CPKtFMqEQtoIPcbCG5ECCW+4/RpN3qP
-         1k3CIsFPt6dBLkWzV5yOedKG0phAVvwwuaHgAci5hCbOZz8Yy6GMFp/NPR+R+K6sin3x
-         5VGYrAKTVs66DntrIpjFBpn/bDtGwX2tdoIaZvud6hNaP1K0MD3EhI9p5XlWWUFTNrfc
-         xT0cVpHPnGNOA0p342OPsO0F8T5HlLM3fktULYfIDujE1Zx4qHlH1POPSzpbzwUrncLW
-         GVzQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=6It/2ISLAKNQvBJXXzqk/ndWM40f+A12E22VByGFlnU=;
+        b=nS106YFkM5gyIjOZPhOPz+p3/cnoYYOu/pEivIUr7GVRtzvr79cA+8LlgyvqQrxQBR
+         6/AUIbJ9XiR7PS1xvUppMN+pCMv8R5PxCiqTu9EjBxSRnf8Ok6SAqadwlDYDBvQck5iX
+         7wGthJYcGJUje1/BCQTbq0DH8KsgFUMQoypvjV/8LLLwe88GtyYFc+3JUIS5pmn1QbZK
+         g450IqHzeGCBU+jnw0m8KUdo42rPPRDWTys4sIc1V+Vh5OoWcmzOj2he72xYyZ4AvZIs
+         LNKcKgkgRn/ANJ8xYfs+avMeMkVZY7rAdqZTe0nXyPUDH5XFM3KbT2ypeaOvifjjKWIG
+         VaEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Jo8G3WIFnCXJv/Wl58UbY8LXKhGKq56nydp8ornyGvw=;
-        b=Y3UxfDcyF0qmMRjjjgfWddyCmOiRu+ZT1p2bTtgeMAAJkOoiobR8rD9fohvAfJnxS1
-         Bqec1RGf7kRxXc5TRZ7EJ760OaL8ihF4rOCauHkujCJoJOFICbA0RpeCnkZiMNe2oYaQ
-         DJh1pbsxu+nIpeK4cJqokrJBpDuI4C7yCsEmhWonbfIKXFXI224eCUFnN+K2Acolclgl
-         pbTDiuuGRui6c8p/zvDRJFTYLw9NPIgS2DMTO431tQIeEiYArjJGg1/EkTqmOMHabTtJ
-         amdk25LoWunXBdQFGw+O9iyvhmYHWI22+t227+3KpP/EMbs5OO7s6qprELVMRcv4kwfu
-         IZUg==
-X-Gm-Message-State: AOAM530fct9t3JvZKws23sziAm7FyIez+WJYIOzco3ea/dOw5/XjniCr
-        W4G0dlTNAWDx4c0PD2RFYS0=
-X-Google-Smtp-Source: ABdhPJzV0Hp7Xr2kSqyy1FejCYUnhDh4xLCC02qQtKZ+cbHbGKkW71ueP1pw91X6C27D1KEW8+5Gvw==
-X-Received: by 2002:a17:907:68e:: with SMTP id wn14mr62415481ejb.258.1638208522107;
-        Mon, 29 Nov 2021 09:55:22 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id og38sm7559529ejc.5.2021.11.29.09.55.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 09:55:21 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <ba8341d6-7ee7-1af1-1385-0a9226bbf952@redhat.com>
-Date:   Mon, 29 Nov 2021 18:55:19 +0100
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=6It/2ISLAKNQvBJXXzqk/ndWM40f+A12E22VByGFlnU=;
+        b=OFmJz5Ll+YoqCsnq3XTefMlgd/dY21yH9jcxucMyoOuTsv8MX5TwazYTSuO5AfSbmy
+         aQONxhfPd+MgBwQSA9TUQj40jJUjJXzkI6ffapkZfYyF1bEA8jErHjXAu5w21CmPSb+r
+         gEFGf1p5KJOrJdbiQYaAXlTbsElSI5mzbGb0bTQhwH4oWQx1tVHg+iguopuJ8xtySbAt
+         fmeLLH0dl/QizyCBcWnLSM2ya5vB+I67FPQL28Bja3hIXNuHJKHhsqiGycssWL9fLzx7
+         gz23z3vTxyOzzQOLq+Z0REFYp2f9E7vkbeoqPXk1XzSoyesfH3u3dvpLRsh0qtlOLl3w
+         JiiQ==
+X-Gm-Message-State: AOAM530sd3aYDG25nLKkno8yY23XKamlRGopcExh80sRfghEvWZ9Bhqh
+        6MmSfu1ElwU1zZZ3Cpy9P5S9vQ==
+X-Google-Smtp-Source: ABdhPJyZ+fcPwBQDF8IlB1PBWVERDgsdIyQ/faAUOYEpDKk7V6N92iyUvf7cg5TEkO19F/fZSn61Pg==
+X-Received: by 2002:a17:902:d28a:b0:142:61ce:ae4c with SMTP id t10-20020a170902d28a00b0014261ceae4cmr61362408plc.35.1638208687947;
+        Mon, 29 Nov 2021 09:58:07 -0800 (PST)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id n71sm18032644pfd.50.2021.11.29.09.58.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 09:58:06 -0800 (PST)
+Date:   Mon, 29 Nov 2021 10:58:03 -0700
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tanmay Shah <tanmay.shah@xilinx.com>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Ben Levinsky <ben.levinsky@xilinx.com>,
+        Bill Mills <bill.mills@linaro.org>,
+        Sergei Korneichuk <sergei.korneichuk@xilinx.com>,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 2/6] arm64: dts: xilinx: zynqmp: Add RPU subsystem
+ device node
+Message-ID: <20211129175803.GB676889@p14s>
+References: <20211123062050.1442712-1-tanmay.shah@xilinx.com>
+ <20211123062050.1442712-3-tanmay.shah@xilinx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
- successful
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-12-seanjc@google.com>
- <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
- <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
- <YaUNBfJh35WXMV0M@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YaUNBfJh35WXMV0M@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123062050.1442712-3-tanmay.shah@xilinx.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/21 18:25, Sean Christopherson wrote:
->> If I apply though only the patch series up to this patch, my fedora VM seems
->> to work fine, but my windows VM still locks up hard when I run 'LatencyTop'
->> in it, which doesn't happen without this patch.
+On Mon, Nov 22, 2021 at 10:20:46PM -0800, Tanmay Shah wrote:
+> RPU subsystem can be configured in cluster-mode or split mode.
+> Also each r5 core has separate power domains.
 > 
-> Buy "run 'LatencyTop' in it", do you mean running something in the Windows guest?
-> The only search results I can find for LatencyTop are Linux specific.
+> Signed-off-by: Tanmay Shah <tanmay.shah@xilinx.com>
+> ---
+>  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> index 28dccb891a53..f4fb98ccb1b5 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> @@ -654,6 +654,23 @@ qspi: spi@ff0f0000 {
+>  			power-domains = <&zynqmp_firmware PD_QSPI>;
+>  		};
+>  
+> +		r5fss: r5fss@ff9a0000 {
+> +			compatible = "xlnx,zynqmp-r5fss";
+> +			xlnx,cluster-mode = <1>;
+> +
+> +                        reg = <0x0 0Xff9a0000 0x0 0x228>;
 
-I think it's LatencyMon, https://www.resplendence.com/latencymon.
+This line is giving me an obvious checkpatch warning.  Please make sure you run
+checkpatch.pl before sending out a patchset.
 
-Paolo
+> +
+> +			r5f_core0: r5f-0 {
+> +				compatible = "xlnx,zynqmp-r5f";
+> +				power-domains = <&zynqmp_firmware PD_RPU_0>;
+> +			};
+> +
+> +			r5f_core1: r5f-1 {
+> +				compatible = "xlnx,zynqmp-r5f";
+> +				power-domains = <&zynqmp_firmware PD_RPU_1>;
+> +			};
+> +		};
+> +
+>  		psgtr: phy@fd400000 {
+>  			compatible = "xlnx,zynqmp-psgtr-v1.1";
+>  			status = "disabled";
+> -- 
+> 2.25.1
+> 

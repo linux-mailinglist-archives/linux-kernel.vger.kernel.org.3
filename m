@@ -2,115 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4CCD461ADF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:28:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F29461AD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346339AbhK2Pb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 10:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S1344398AbhK2PaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:30:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbhK2P3z (ORCPT
+        with ESMTP id S229942AbhK2P2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 10:29:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B97C052914
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:40:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8205614DC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 13:40:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AD6AC004E1;
-        Mon, 29 Nov 2021 13:40:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638193238;
-        bh=1mPhNQdmaAP5oOzTHlTQd9ACQe9dnZDwnV1997OZe8I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=q003J9f7UTAZEw+i85oNjhmzhJs+gbK0svlKqeOGk/fQJ9Dkzn/dRhTo7Ggc9EV6B
-         oLvfCOVqyxEaaP0Dzh4tiTtU8ag0AXpuV5C/E53AoyxAitfiyi2tUeZSuzqr0tA7D8
-         hLgVIDR1IE1bTOqUoq+2CpjdqQFm91ANAl37jlGQOIEKWR/p6gsVVVRIJbOhohqXb9
-         8R5EFw1qcVyk6XhbvvG7pOODgvhKiUr+7IfbCGMJ5S6JChRCAiYbGJT/rmrpH+HL6D
-         aSws62t4VMx1rTeIdbW/LUmYJLr+1IuQl+dn5WxTg/DsOxYqjAuomYqARDYHCCa8nU
-         3vhAjcoXcEpGg==
-Date:   Mon, 29 Nov 2021 21:33:18 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     wefu@redhat.com
-Cc:     anup.patel@wdc.com, atishp04@gmail.com, palmer@dabbelt.com,
-        guoren@kernel.org, christoph.muellner@vrull.eu,
-        philipp.tomsich@vrull.eu, hch@lst.de, liush@allwinnertech.com,
-        lazyparser@gmail.com, drew@beagleboard.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        taiten.peng@canonical.com, aniket.ponkshe@canonical.com,
-        heinrich.schuchardt@canonical.com, gordan.markus@canonical.com,
-        guoren@linux.alibaba.com, arnd@arndb.de, wens@csie.org,
-        maxime@cerno.tech, dlustig@nvidia.com, gfavor@ventanamicro.com,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        huffman@cadence.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com
-Subject: Re: [PATCH V4 0/2] riscv: add RISC-V Svpbmt Standard Extension
- supports
-Message-ID: <20211129213309.40673113@xhacker>
-In-Reply-To: <20211129014007.286478-1-wefu@redhat.com>
-References: <20211129014007.286478-1-wefu@redhat.com>
+        Mon, 29 Nov 2021 10:28:25 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC465C052902
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:38:14 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id b11so12183772pld.12
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:38:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Om9Vpj2eEDIjSh+H6i8e/yMs6hn/L468LtrHAmEffB0=;
+        b=jDZCMFKxnuuk3GbLiU/mafDUmAiCkJu3nLr240MUixztB5sOK3xLLox60J98qEl08p
+         LPIfBMedoK1zZQfOyEcdBYs3aY/wNZzbmsqju8NdeulC7Fjp6Av2Y0fPttqjIwcZ+hEy
+         x717Nx4/NiMjYxOjTo8YMz0qe38KT4rQZgT0osaa3R8d1Zf3vRw9NVDkB4qG5cV7ubRl
+         4U6gLodXrtGpUijGKcKTSqFwl8aJbSmVLlH4JJ2luQMO4h0YOEoKqNQQNuKKp0K9G6Eo
+         jMEkwzBjPzYsdzPfzEwKnxRoISVga9aLWe1Cmeuuu437ipDogqxiQZ6UavDOmZZ51g4V
+         VUsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Om9Vpj2eEDIjSh+H6i8e/yMs6hn/L468LtrHAmEffB0=;
+        b=H94nvi3FWSezMAqx2DtKUe2wNfHq6v5HLDlOvuKPVnxvCQSrQavXhtQi/iTiwAsKEf
+         YQ/pxsqhnTKVXHoTEx1CohbMZT6JhKfDGZkw3ErEduG+4MgNoLojJDXMKjynVm+eeLJ6
+         wSP4ybk9cuDAqmIamjRUXlV+VvEmHTzMfuJ8i3cGmVIBQ46fQnWVFfxMzqq71PKayP8F
+         8wPqPBHvv30NP5kDfyB9ygzqBorRLmvHFTcmwMMzKLT+9jN/kdKGn8BFfGU2V8jIUoVx
+         YBsDnI3EKaU1h5/k8XxSOlOgvJndu7MJYBXybVkpK/2H3Zt2mKjPVLMgLkLeMlTQ2vIh
+         eLew==
+X-Gm-Message-State: AOAM5316knc9PbEyBzmiMm32+eyx+bsvHb3Rxd0bi7nuAoM3XtgKZIGi
+        s02Q3DYYBULHq4Q9e1rB8wY=
+X-Google-Smtp-Source: ABdhPJz8ZKps2ykdBomBRYp2Z+j7tQvVNxekRN/0reBY0mYFPV+t/vkFAvNVUki3x1Ib5yGHyhKB3w==
+X-Received: by 2002:a17:902:ced0:b0:142:189a:4284 with SMTP id d16-20020a170902ced000b00142189a4284mr61088465plg.79.1638193094398;
+        Mon, 29 Nov 2021 05:38:14 -0800 (PST)
+Received: from localhost.localdomain (5e.8a.38a9.ip4.static.sl-reverse.com. [169.56.138.94])
+        by smtp.gmail.com with ESMTPSA id co4sm18913249pjb.2.2021.11.29.05.38.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Nov 2021 05:38:14 -0800 (PST)
+From:   Zhenguo Yao <yaozhenguo1@gmail.com>
+To:     mike.kravetz@oracle.com, akpm@linux-foundation.org,
+        mlevitsk@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Zhenguo Yao <yaozhenguo1@gmail.com>
+Subject: [BUG] hugetlbfs: Fix issue of preallocation of gigantic pages can't work
+Date:   Mon, 29 Nov 2021 21:38:03 +0800
+Message-Id: <20211129133803.15653-1-yaozhenguo1@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 09:40:05 +0800
-wefu@redhat.com wrote:
+Preallocation of gigantic pages can't work bacause of commit:b5389086ad7b
+(hugetlbfs: extend the definition of hugepages parameter to support node
+allocation). When nid is NUMA_NO_NODE(-1), alloc_bootmem_huge_page will
+always return without doing allocation. Fix this by adding more check.
 
-> From: Fu Wei <wefu@redhat.com>
->=20
-> This patch follows the  RISC-V standard Svpbmt extension in=20
-> privilege spec to solve the non-coherent SOC DMA synchronization
-> issues.
->=20
-> The svpbmt PTE format:
-> | 63 | 62-61 | 60-8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
->   N     MT     RSW    D   A   G   U   X   W   R   V
->         ^
->=20
-> Of the Reserved bits [63:54] in a leaf PTE, the bits [62:61] are used as
-> the MT (aka MemType) field. This field specifies one of three memory types
-> as shown in the following table=EF=BC=9A
-> MemType     RISC-V Description
-> ----------  ------------------------------------------------
-> 00 - PMA    Normal Cacheable, No change to implied PMA memory type
-> 01 - NC     Non-cacheable, idempotent, weakly-ordered Main Memory
-> 10 - IO     Non-cacheable, non-idempotent, strongly-ordered I/O memory
-> 11 - Rsvd   Reserved for future standard use
->=20
-> The standard protection_map[] needn't be modified because the "PMA"
-> type keeps the highest bits zero.
-> And the whole modification is limited in the arch/riscv/* and using
-> a global variable(__svpbmt) as _PAGE_MASK/IO/NOCACHE for pgprot_noncached
-> (&writecombine) in pgtable.h. We also add _PAGE_CHG_MASK to filter
-> PFN than before.
->=20
-> Enable it in devicetree - (Add "riscv,svpbmt" in the mmu of cpu node)
->  - mmu:
->      riscv,svpmbt
->=20
+Signed-off-by: Zhenguo Yao <yaozhenguo1@gmail.com>
+---
+ mm/hugetlb.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I noticed that this series goes up to v4 but changes history is missing.
-Will you add it?
-
-
-> Wei Fu (2):
->   dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
->   riscv: add RISC-V Svpbmt extension supports
->=20
->  .../devicetree/bindings/riscv/cpus.yaml       | 10 +++++
->  arch/riscv/include/asm/fixmap.h               |  2 +-
->  arch/riscv/include/asm/pgtable-64.h           | 21 ++++++++--
->  arch/riscv/include/asm/pgtable-bits.h         | 39 ++++++++++++++++++-
->  arch/riscv/include/asm/pgtable.h              | 39 ++++++++++++++-----
->  arch/riscv/kernel/cpufeature.c                | 35 +++++++++++++++++
->  arch/riscv/mm/init.c                          |  5 +++
->  7 files changed, 136 insertions(+), 15 deletions(-)
->=20
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 60f9b6a9582e..6d1603387914 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -2876,7 +2876,7 @@ int __alloc_bootmem_huge_page(struct hstate *h, int nid)
+ 	struct huge_bootmem_page *m = NULL; /* initialize for clang */
+ 	int nr_nodes, node;
+ 
+-	if (nid >= nr_online_nodes)
++	if (nid != NUMA_NO_NODE && nid >= nr_online_nodes)
+ 		return 0;
+ 	/* do node specific alloc */
+ 	if (nid != NUMA_NO_NODE) {
+-- 
+2.27.0
 

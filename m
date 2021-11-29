@@ -2,69 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF84046232D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 372DD462543
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbhK2V0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 16:26:05 -0500
-Received: from mail-oo1-f47.google.com ([209.85.161.47]:46741 "EHLO
-        mail-oo1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbhK2VYE (ORCPT
+        id S232885AbhK2WhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:37:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233780AbhK2Wg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:24:04 -0500
-Received: by mail-oo1-f47.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso6063339ood.13;
-        Mon, 29 Nov 2021 13:20:46 -0800 (PST)
+        Mon, 29 Nov 2021 17:36:29 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AC0C093B59
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 13:21:15 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id k4so13208896plx.8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 13:21:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vTbh7aMdkVU2cnIaX6D7qbh+Z4p8232l+qU6dAcs9x4=;
+        b=G8XdUOVk/Af3Ui5DfIB3/ikbiJ7GY2s5wvC/HOIFhBIam5Pz3ldQ1H2ynr7JbPqp3O
+         re3/JvzVtv6dYnjmNS5qWXoHBgzVFMAOT17e4a/6b2T1JCq4P5JIuYipQshBjPAFI1ps
+         dNiRrBNWw0FFjytFmACBGtSXefn/ZQEULpkb5qz4P0VaAzdTJ09x46CtfN9jtnl5JuPz
+         uAsRyehQ466wFzPv6BTeODZsr7Pe69VmeLGsy66HyBwk8mp3qmuFkCnv4fwx4+D6nfjK
+         nYPUtn9pnZ2QXPCS16n9u7qgUN2RT6ra+5F2LZuNmzZQFMtfTFPfYgIRlhg6o5MwFX+C
+         wdiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=2T9EgPmfc0rNPgsjPNUuNg/QqPEADj/Yw0On3FhXaUI=;
-        b=vC/Uz/3SGcGf7QCrK5NEdWjNplvOz2Dypw3lgS8MEwKR26MVt1fheJ8tBxzZwpQvqR
-         uoMMM5tvG1iXOQ/ro4hhg0geHdpDVWdPyuDXJMffGpQBkh4sK9dC/vyqi0apqOovnGOH
-         UfoCC+OXP4X2sK2CdS1nQ2nUMAEvUaeg33ifLgSN6DwyUDh1dzAd/OebA9I8Vg6pOgGX
-         8ONcGOwr6kHolN1eAOLL7gtG3pYblDI33lVUzMjtIE2pR82ZrdPQBcwE5RXeh1Dr6Dbi
-         qtQMCEcXpu+bOjssI3GACXhD7n4RFBq1Fpv/lL5TaFdHCL6lMFRq4F/kNIR6McvZ+yYn
-         /Kow==
-X-Gm-Message-State: AOAM533X/ucxbM9tLoZ7YsBHtds6x69QsdLiVZ6J59k+EcK64XDEoPuY
-        q0+RojcX93SfPOchYs+HOQ==
-X-Google-Smtp-Source: ABdhPJxhu1Qh5Ryd9R7DQN6WpTcyEVLDn9OZtNuxT5MBjG9L1uKXGq8kU2IQaUG6/fDtCIoB6/Kesw==
-X-Received: by 2002:a4a:a44b:: with SMTP id w11mr14751523ool.66.1638220845673;
-        Mon, 29 Nov 2021 13:20:45 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id o26sm2836315otj.14.2021.11.29.13.20.44
+        bh=vTbh7aMdkVU2cnIaX6D7qbh+Z4p8232l+qU6dAcs9x4=;
+        b=urj5o8/btc22Sbn721DTKZ4HhulSy/TOBa395FHExM0QccYlu80dQW9lWsJJx25P2P
+         YwbWwLdNJ1NAvFWgxOTW4XwHbBgBnZvw5wkjwoO3PhYr1AtFjj5kqjyjtTsRmbgk1oam
+         pZVrGA+w2+KIkf9qwpT9Zw4effaANB9tllLpcsFt+GS6DB+F4PSEvZaUxyUNqTANF5ip
+         Z6avd8Vu1Zgwyma2nobSGzoOGEmn1pLYSdbWfr/on0lT7Hmd3mLmCBLVp4LVrgxxdVrb
+         tybaCm0OR+wyexZ3mJlS8ebR4QUsWgzDuxjNNRVSVyjWvwlm/KDhGfn857GEVrUZBg4m
+         8X6Q==
+X-Gm-Message-State: AOAM533rudwxo99keP+GqZpR5qwvozEgZmYqRCrE70wrA3GKgao7sHpz
+        edUTNbsBGFS9xy/AASW03a7vsA==
+X-Google-Smtp-Source: ABdhPJwYounno/EIO+D542MzhtWgmcz65LU2sUa/hZMVgFVjaQp4rGDaoomCk7tGf9A2eVM9efxzpg==
+X-Received: by 2002:a17:902:64c2:b0:141:c171:b99b with SMTP id y2-20020a17090264c200b00141c171b99bmr62232728pli.55.1638220874835;
+        Mon, 29 Nov 2021 13:21:14 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b4sm18810116pfl.60.2021.11.29.13.21.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 13:20:44 -0800 (PST)
-Received: (nullmailer pid 630005 invoked by uid 1000);
-        Mon, 29 Nov 2021 21:20:43 -0000
-Date:   Mon, 29 Nov 2021 15:20:43 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-Cc:     Andy Gross <agross@kernel.org>, linux-clk@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Taniya Das <tdas@codeaurora.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        devicetree@vger.kernel.org, Jeffrey Hugo <jhugo@codeaurora.org>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Herring <robh+dt@kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Add support for the MSM8226 mmcc
-Message-ID: <YaVEK0Gyd16sYD/m@robh.at.kernel.org>
-References: <20211113015844.92762-1-bartosz.dudziak@snejp.pl>
+        Mon, 29 Nov 2021 13:21:14 -0800 (PST)
+Date:   Mon, 29 Nov 2021 21:21:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+Subject: Re: [RFC PATCH v3 23/59] KVM: x86: Allow host-initiated WRMSR to set
+ X2APIC regardless of CPUID
+Message-ID: <YaVERrcOp9ctdj8Y@google.com>
+References: <cover.1637799475.git.isaku.yamahata@intel.com>
+ <63556f13e9608cbccf97d356be46a345772d76d3.1637799475.git.isaku.yamahata@intel.com>
+ <87fsrkja4j.ffs@tglx>
+ <d449a4c2-131d-5406-b7a2-7549bacc02f9@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211113015844.92762-1-bartosz.dudziak@snejp.pl>
+In-Reply-To: <d449a4c2-131d-5406-b7a2-7549bacc02f9@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 13 Nov 2021 02:58:43 +0100, Bartosz Dudziak wrote:
-> Document the multimedia clock controller found on MSM8226.
-> 
-> Signed-off-by: Bartosz Dudziak <bartosz.dudziak@snejp.pl>
-> ---
->  Documentation/devicetree/bindings/clock/qcom,mmcc.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+On Fri, Nov 26, 2021, Paolo Bonzini wrote:
+> On 11/25/21 20:41, Thomas Gleixner wrote:
+> > On Wed, Nov 24 2021 at 16:20, isaku yamahata wrote:
+> > > Let userspace, or in the case of TDX, KVM itself, enable X2APIC even if
+                                            ^^^^^^^^^^
 
-Acked-by: Rob Herring <robh@kernel.org>
+> > > X2APIC is not reported as supported in the guest's CPU model.  KVM
+> > > generally does not force specific ordering between ioctls(), e.g. this
+> > > forces userspace to configure CPUID before MSRs.  And for TDX, vCPUs
+> > > will always run with X2APIC enabled, e.g. KVM will want/need to enable
+                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > > X2APIC from time zero.
+      ^^^^^^^^^^^^^^^^^^^^^
+> > 
+> > This is complete crap. Fix the broken user space and do not add
+> > horrible hacks to the kernel.
+> 
+> tl;dr: I agree that it's a userspace issue but "configure CPUID before MSR"
+> is not the issue (in fact QEMU calls KVM_SET_CPUID2 before any call to
+> KVM_SET_MSRS).
+
+Specifically for TDX, it's not a userspace issue.  To simplify other checks and
+to report sane values for KVM_GET_MSRS, KVM forces X2APIC for TDX guests when the
+vCPU is created, before its exposed to usersepace.  The bit about not forcing
+specific ordering is justification for making the change independent of TDX,
+i.e. to call out that APIC_BASE is different from every other MSR, and is even
+inconsistent in its own behavior since illegal transitions are allowed when
+userspace is stuffing the MSR.
+
+IMO, this patch is valid irrespective of TDX.  It's included in the TDX series
+because TDX support forces the issue.
+
+That said, an alternative for TDX would be do handle this in kvm_lapic_reset()
+now that the lAPIC RESET flows are consolidated.  Back when this patch was first
+written, that wasn't really an option.

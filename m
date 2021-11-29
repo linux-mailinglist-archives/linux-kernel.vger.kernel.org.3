@@ -2,128 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10BB461F74
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 950DF461DA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379898AbhK2SrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:47:21 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:55738 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1380278AbhK2SpQ (ORCPT
+        id S1378250AbhK2S1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:27:20 -0500
+Received: from ale.deltatee.com ([204.191.154.188]:44806 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349752AbhK2SZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:45:16 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D3CD6CE12FD;
-        Mon, 29 Nov 2021 18:41:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82F37C53FAD;
-        Mon, 29 Nov 2021 18:41:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638211316;
-        bh=A1ZL61A4gBYCNqkos2pkB1TEjTNiMrzTpxsoNw2ocDg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CX7FeAopRrQYhrwz7hgyZjLcig1H+pTrdb8luSsFvVmk4vtIO06EobRcQbKUywXqf
-         OaOpVCEw23un/IjAEb59uIoVQAO6O5yyUt0K4t1mhLMAF7bZfSghASgmeMbaJKVUqN
-         TFPpRbhs7cspfrTZTmMVTDZGH085Rr0o7ESjyTPk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Luben Tuikov <luben.tuikov@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.15 179/179] drm/amdgpu/gfx9: switch to golden tsc registers for renoir+
-Date:   Mon, 29 Nov 2021 19:19:33 +0100
-Message-Id: <20211129181724.834155347@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
-References: <20211129181718.913038547@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 29 Nov 2021 13:25:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=WV/TNnYNnFcZxzUqPd3ZA5cAcLIoTgfWNZK1F+bgrdE=; b=i+hqBeVjGcPhRQj4lEj6ktxCov
+        xKEF9uG+mDz4HqGRMeO1nFng5r97jDgdDGG1iqzovojY+adfOjUTtvG8uqnd15ZiaUUp693volE2B
+        KXhlE9aQ8xsPkhjnw7xII1M9i5KGePGLSmBETHhUtfpToXeBhXkuZHD5OmdpzNDPqUiflVkb77FpC
+        FW2ajJwdYW5jzNtTPgxbGDl9d3+DcfT81G5QAc7Vk6FluGUu4xjgynE1j/uiY9T9SQ0e6SJTZ3XO+
+        BAmRg2cHOZ+nH6spZy/PpJToErS9Pz3NxOZFgp1OA5J1gaFVsyhN3zOWGqk7CGNHNrX/X9laeQK7J
+        JayDubbA==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1mrlHS-00ANgo-Vh; Mon, 29 Nov 2021 11:21:36 -0700
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com>
+Date:   Mon, 29 Nov 2021 11:21:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211126232735.547996838@linutronix.de>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: borntraeger@de.ibm.com, hca@linux.ibm.com, linux-s390@vger.kernel.org, linux-ntb@googlegroups.com, allenbh@gmail.com, dave.jiang@intel.com, jdmason@kudzu.us, gregkh@linuxfoundation.org, linux-pci@vger.kernel.org, ashok.raj@intel.com, megha.dey@intel.com, jgg@nvidia.com, kevin.tian@intel.com, alex.williamson@redhat.com, maz@kernel.org, helgaas@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-8.2 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Deucher <alexander.deucher@amd.com>
-
-commit 53af98c091bc42fd9ec64cfabc40da4e5f3aae93 upstream.
-
-Renoir and newer gfx9 APUs have new TSC register that is
-not part of the gfxoff tile, so it can be read without
-needing to disable gfx off.
-
-Acked-by: Luben Tuikov <luben.tuikov@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
----
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c |   46 +++++++++++++++++++++++++---------
- 1 file changed, 35 insertions(+), 11 deletions(-)
-
---- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-@@ -140,6 +140,11 @@ MODULE_FIRMWARE("amdgpu/aldebaran_rlc.bi
- #define mmTCP_CHAN_STEER_5_ARCT								0x0b0c
- #define mmTCP_CHAN_STEER_5_ARCT_BASE_IDX							0
- 
-+#define mmGOLDEN_TSC_COUNT_UPPER_Renoir                0x0025
-+#define mmGOLDEN_TSC_COUNT_UPPER_Renoir_BASE_IDX       1
-+#define mmGOLDEN_TSC_COUNT_LOWER_Renoir                0x0026
-+#define mmGOLDEN_TSC_COUNT_LOWER_Renoir_BASE_IDX       1
-+
- enum ta_ras_gfx_subblock {
- 	/*CPC*/
- 	TA_RAS_BLOCK__GFX_CPC_INDEX_START = 0,
-@@ -4228,19 +4233,38 @@ failed_kiq_read:
- 
- static uint64_t gfx_v9_0_get_gpu_clock_counter(struct amdgpu_device *adev)
- {
--	uint64_t clock;
-+	uint64_t clock, clock_lo, clock_hi, hi_check;
- 
--	amdgpu_gfx_off_ctrl(adev, false);
--	mutex_lock(&adev->gfx.gpu_clock_mutex);
--	if (adev->asic_type == CHIP_VEGA10 && amdgpu_sriov_runtime(adev)) {
--		clock = gfx_v9_0_kiq_read_clock(adev);
--	} else {
--		WREG32_SOC15(GC, 0, mmRLC_CAPTURE_GPU_CLOCK_COUNT, 1);
--		clock = (uint64_t)RREG32_SOC15(GC, 0, mmRLC_GPU_CLOCK_COUNT_LSB) |
--			((uint64_t)RREG32_SOC15(GC, 0, mmRLC_GPU_CLOCK_COUNT_MSB) << 32ULL);
-+	switch (adev->asic_type) {
-+	case CHIP_RENOIR:
-+		preempt_disable();
-+		clock_hi = RREG32_SOC15_NO_KIQ(SMUIO, 0, mmGOLDEN_TSC_COUNT_UPPER_Renoir);
-+		clock_lo = RREG32_SOC15_NO_KIQ(SMUIO, 0, mmGOLDEN_TSC_COUNT_LOWER_Renoir);
-+		hi_check = RREG32_SOC15_NO_KIQ(SMUIO, 0, mmGOLDEN_TSC_COUNT_UPPER_Renoir);
-+		/* The SMUIO TSC clock frequency is 100MHz, which sets 32-bit carry over
-+		 * roughly every 42 seconds.
-+		 */
-+		if (hi_check != clock_hi) {
-+			clock_lo = RREG32_SOC15_NO_KIQ(SMUIO, 0, mmGOLDEN_TSC_COUNT_LOWER_Renoir);
-+			clock_hi = hi_check;
-+		}
-+		preempt_enable();
-+		clock = clock_lo | (clock_hi << 32ULL);
-+		break;
-+	default:
-+		amdgpu_gfx_off_ctrl(adev, false);
-+		mutex_lock(&adev->gfx.gpu_clock_mutex);
-+		if (adev->asic_type == CHIP_VEGA10 && amdgpu_sriov_runtime(adev)) {
-+			clock = gfx_v9_0_kiq_read_clock(adev);
-+		} else {
-+			WREG32_SOC15(GC, 0, mmRLC_CAPTURE_GPU_CLOCK_COUNT, 1);
-+			clock = (uint64_t)RREG32_SOC15(GC, 0, mmRLC_GPU_CLOCK_COUNT_LSB) |
-+				((uint64_t)RREG32_SOC15(GC, 0, mmRLC_GPU_CLOCK_COUNT_MSB) << 32ULL);
-+		}
-+		mutex_unlock(&adev->gfx.gpu_clock_mutex);
-+		amdgpu_gfx_off_ctrl(adev, true);
-+		break;
- 	}
--	mutex_unlock(&adev->gfx.gpu_clock_mutex);
--	amdgpu_gfx_off_ctrl(adev, true);
- 	return clock;
- }
- 
 
 
+On 2021-11-26 6:23 p.m., Thomas Gleixner wrote:
+> Replace the about to vanish iterators, make use of the filtering and take
+> the descriptor lock around the iteration.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Jon Mason <jdmason@kudzu.us>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Allen Hubbe <allenbh@gmail.com>
+> Cc: linux-ntb@googlegroups.com
+
+This patch looks good to me:
+
+Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+
+Thanks,
+
+Logan

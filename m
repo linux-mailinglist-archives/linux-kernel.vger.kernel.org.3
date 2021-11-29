@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3BA461E88
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E487461E8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379779AbhK2ShF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:37:05 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52660 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378749AbhK2SfB (ORCPT
+        id S1378893AbhK2ShJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:37:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:40020 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379092AbhK2SfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:35:01 -0500
+        Mon, 29 Nov 2021 13:35:03 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 60118CE13AA;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7B80B815DE;
+        Mon, 29 Nov 2021 18:31:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06940C53FAD;
         Mon, 29 Nov 2021 18:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0EBC53FC7;
-        Mon, 29 Nov 2021 18:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210700;
-        bh=hJtRomHVfhrSx2NalxNrW4QcfScJCGqMg3uyVbIElrs=;
+        s=korg; t=1638210703;
+        bh=LhxCC2VimnaX4k8GNqn7aRCVMSs2Bpg7mwUGHJ7D0Cc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DBGKgFF1M5qisO/O7mS7Hk1QYZFgigr84LE9dfXvhmPNKsDzlWwrmnpe7h1Z1OOsk
-         KslEBBllhGSARYwBkG99boV+PvCvZ3iaFi/3MpBEr0WWUrcHlL42+uWRdHv6aKxw3B
-         KwHdP1+iKLphZNHKHR+2aWp+qb8vNgojGTcHcTww=
+        b=lySMWOIJRWdwEvaRDShIODz+JBsv8zp0lLHm+SdKLkZhoMtZgpotsrUySuiayI1iS
+         hXTu7Jvcpj93z2uVdGFyk4+iFQqKo9TzeYG/igMlUTj5rZFNwdnNFX3lRHUP0SrUey
+         jD2rU3jLAtUAD5omnomRd8WsPR3uh2D/nmkqNHQ0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        stable@vger.kernel.org, Julian Wiedmann <jwi@linux.ibm.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 086/121] net: phylink: Force retrigger in case of latched link-fail indicator
-Date:   Mon, 29 Nov 2021 19:18:37 +0100
-Message-Id: <20211129181714.555135358@linuxfoundation.org>
+Subject: [PATCH 5.10 087/121] net/smc: Fix NULL pointer dereferencing in smc_vlan_by_tcpsk()
+Date:   Mon, 29 Nov 2021 19:18:38 +0100
+Message-Id: <20211129181714.594804476@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
 References: <20211129181711.642046348@linuxfoundation.org>
@@ -48,61 +47,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+From: Karsten Graul <kgraul@linux.ibm.com>
 
-[ Upstream commit dbae3388ea9ca33bd1d5eabc3b0ef17e69c74677 ]
+[ Upstream commit 587acad41f1bc48e16f42bb2aca63bf323380be8 ]
 
-On mv88e6xxx 1G/2.5G PCS, the SerDes register 4.2001.2 has the following
-description:
-  This register bit indicates when link was lost since the last
-  read. For the current link status, read this register
-  back-to-back.
+Coverity reports a possible NULL dereferencing problem:
 
-Thus to get current link state, we need to read the register twice.
+in smc_vlan_by_tcpsk():
+6. returned_null: netdev_lower_get_next returns NULL (checked 29 out of 30 times).
+7. var_assigned: Assigning: ndev = NULL return value from netdev_lower_get_next.
+1623                ndev = (struct net_device *)netdev_lower_get_next(ndev, &lower);
+CID 1468509 (#1 of 1): Dereference null return value (NULL_RETURNS)
+8. dereference: Dereferencing a pointer that might be NULL ndev when calling is_vlan_dev.
+1624                if (is_vlan_dev(ndev)) {
 
-But doing that in the link change interrupt handler would lead to
-potentially ignoring link down events, which we really want to avoid.
+Remove the manual implementation and use netdev_walk_all_lower_dev() to
+iterate over the lower devices. While on it remove an obsolete function
+parameter comment.
 
-Thus this needs to be solved in phylink's resolve, by retriggering
-another resolve in the event when PCS reports link down and previous
-link was up, and by re-reading PCS state if the previous link was down.
-
-The wrong value is read when phylink requests change from sgmii to
-2500base-x mode, and link won't come up. This fixes the bug.
-
-Fixes: 9525ae83959b ("phylink: add phylink infrastructure")
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-Signed-off-by: Marek Behún <kabel@kernel.org>
+Fixes: cb9d43f67754 ("net/smc: determine vlan_id of stacked net_device")
+Suggested-by: Julian Wiedmann <jwi@linux.ibm.com>
+Signed-off-by: Karsten Graul <kgraul@linux.ibm.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/phylink.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ net/smc/smc_core.c | 35 ++++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-index 8279e08dad9db..57b1b138522e0 100644
---- a/drivers/net/phy/phylink.c
-+++ b/drivers/net/phy/phylink.c
-@@ -675,6 +675,19 @@ static void phylink_resolve(struct work_struct *w)
- 		case MLO_AN_INBAND:
- 			phylink_mac_pcs_get_state(pl, &link_state);
+diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
+index 109d790eaebe2..cd625b672429f 100644
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -1209,14 +1209,26 @@ static void smc_link_down_work(struct work_struct *work)
+ 	mutex_unlock(&lgr->llc_conf_mutex);
+ }
  
-+			/* The PCS may have a latching link-fail indicator.
-+			 * If the link was up, bring the link down and
-+			 * re-trigger the resolve. Otherwise, re-read the
-+			 * PCS state to get the current status of the link.
-+			 */
-+			if (!link_state.link) {
-+				if (cur_link_state)
-+					retrigger = true;
-+				else
-+					phylink_mac_pcs_get_state(pl,
-+								  &link_state);
-+			}
+-/* Determine vlan of internal TCP socket.
+- * @vlan_id: address to store the determined vlan id into
+- */
++static int smc_vlan_by_tcpsk_walk(struct net_device *lower_dev,
++				  struct netdev_nested_priv *priv)
++{
++	unsigned short *vlan_id = (unsigned short *)priv->data;
 +
- 			/* If we have a phy, the "up" state is the union of
- 			 * both the PHY and the MAC */
- 			if (pl->phydev)
++	if (is_vlan_dev(lower_dev)) {
++		*vlan_id = vlan_dev_vlan_id(lower_dev);
++		return 1;
++	}
++
++	return 0;
++}
++
++/* Determine vlan of internal TCP socket. */
+ int smc_vlan_by_tcpsk(struct socket *clcsock, struct smc_init_info *ini)
+ {
+ 	struct dst_entry *dst = sk_dst_get(clcsock->sk);
++	struct netdev_nested_priv priv;
+ 	struct net_device *ndev;
+-	int i, nest_lvl, rc = 0;
++	int rc = 0;
+ 
+ 	ini->vlan_id = 0;
+ 	if (!dst) {
+@@ -1234,20 +1246,9 @@ int smc_vlan_by_tcpsk(struct socket *clcsock, struct smc_init_info *ini)
+ 		goto out_rel;
+ 	}
+ 
++	priv.data = (void *)&ini->vlan_id;
+ 	rtnl_lock();
+-	nest_lvl = ndev->lower_level;
+-	for (i = 0; i < nest_lvl; i++) {
+-		struct list_head *lower = &ndev->adj_list.lower;
+-
+-		if (list_empty(lower))
+-			break;
+-		lower = lower->next;
+-		ndev = (struct net_device *)netdev_lower_get_next(ndev, &lower);
+-		if (is_vlan_dev(ndev)) {
+-			ini->vlan_id = vlan_dev_vlan_id(ndev);
+-			break;
+-		}
+-	}
++	netdev_walk_all_lower_dev(ndev, smc_vlan_by_tcpsk_walk, &priv);
+ 	rtnl_unlock();
+ 
+ out_rel:
 -- 
 2.33.0
 

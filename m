@@ -2,150 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C43EB461BFF
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE3C461C0A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346310AbhK2Qqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 11:46:48 -0500
-Received: from mga12.intel.com ([192.55.52.136]:32146 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229883AbhK2Qos (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:44:48 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="216023106"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="216023106"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 08:41:30 -0800
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="458498016"
-Received: from sumitmon-mobl1.amr.corp.intel.com (HELO [10.209.30.244]) ([10.209.30.244])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 08:41:29 -0800
-Subject: Re: [PATCH Part2 v5 00/45] Add AMD Secure Nested Paging (SEV-SNP)
- Hypervisor Support
-To:     Joerg Roedel <jroedel@suse.de>
-Cc:     Brijesh Singh <brijesh.singh@amd.com>,
-        Peter Gonda <pgonda@google.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sergio Lopez <slp@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Tobin Feldman-Fitzthum <tobin@ibm.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andi Kleen <ak@linux.intel.com>, tony.luck@intel.com,
-        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com
-References: <20210820155918.7518-1-brijesh.singh@amd.com>
- <CAMkAt6o0ySn1=iLYsH0LCnNARrUbfaS0cvtxB__y_d+Q6DUzfA@mail.gmail.com>
- <daf5066b-e89b-d377-ed8a-9338f1a04c0d@amd.com>
- <d673f082-9023-dafb-e42e-eab32a3ddd0c@intel.com>
- <f15597a0-e7e0-0a57-39fd-20715abddc7f@amd.com>
- <5f3b3aab-9ec2-c489-eefd-9136874762ee@intel.com>
- <d83e6668-bec4-8d1f-7f8a-085829146846@amd.com>
- <38282b0c-7eb5-6a91-df19-2f4cfa8549ce@intel.com> <YZ5iWJuxjSCmZL5l@suse.de>
- <bd31abd4-c8a2-bdda-ea74-1c24b29beda7@intel.com> <YZ9gAMHdEo6nQ6a0@suse.de>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <187bfd4d-89dd-c12b-fa07-d4e0b09ee37d@intel.com>
-Date:   Mon, 29 Nov 2021 08:41:25 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
-MIME-Version: 1.0
-In-Reply-To: <YZ9gAMHdEo6nQ6a0@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+        id S1347315AbhK2QsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:48:24 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:53608 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232009AbhK2QqS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 11:46:18 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id D38B61FD38;
+        Mon, 29 Nov 2021 16:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638204179; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QUKCOvl4CJzvTmXhb5oVQ1MaaCyer2L/UBKhuNmXlNw=;
+        b=LYXA0zj1FqXGmG8eK0DdZn6tOPHh4hOfEXHwnUGG+R0d4SAfYGSwcQUhe5PuMJmr8eM2fd
+        LswxuQchBqukhpcJTxW8krelfowk3aWV78EwHiBy6W04UzQQVbCvNJzt563AB4cbEYDihJ
+        EEyOCGjFQDGLhvv8rnDTCpR1SHfPQ5A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638204179;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QUKCOvl4CJzvTmXhb5oVQ1MaaCyer2L/UBKhuNmXlNw=;
+        b=h6W4UHNVXBKHondIK8rDGaR28qJJ5gL9RHhk1KSMGskYnIxilFWeOJ/bGpHDDX1lls5HYT
+        XPXb9xrUUPBpxzBg==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id B2109A3B84;
+        Mon, 29 Nov 2021 16:42:59 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 17:42:59 +0100
+Message-ID: <s5hv90a52wc.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Jie Yang <yang.jie@linux.intel.com>,
+        alsa-devel@alsa-project.org
+Subject: Re: ALSA: hda: Make proper use of timecounter
+In-Reply-To: <4c1b9ecd-cefe-f890-f309-39d602201d58@linux.intel.com>
+References: <871r35kwji.ffs@tglx>
+        <4c1b9ecd-cefe-f890-f309-39d602201d58@linux.intel.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/25/21 2:05 AM, Joerg Roedel wrote:
-> On Wed, Nov 24, 2021 at 09:48:14AM -0800, Dave Hansen wrote:
->> That covers things like copy_from_user().  It does not account for
->> things where kernel mappings are used, like where a
->> get_user_pages()/kmap() is in play.
-> The kmap case is guarded by KVM code, which locks the page first so that
-> the guest can't change the page state, then checks the page state, and
-> if it is shared does the kmap and the access.
+On Mon, 29 Nov 2021 17:06:40 +0100,
+Pierre-Louis Bossart wrote:
 > 
-> This should turn an RMP fault in the kernel which is not covered in the
-> uaccess exception table into a fatal error.
+> 
+> 
+> On 11/24/21 4:40 PM, Thomas Gleixner wrote:
+> > HDA uses a timecounter to read a hardware clock running at 24 MHz. The
+> > conversion factor is set with a mult value of 125 and a shift value of 0,
+> > which is not converting the hardware clock to nanoseconds, it is converting
+> > to 1/3 nanoseconds because the conversion factor from 24Mhz to nanoseconds
+> > is 125/3. The usage sites divide the "nanoseconds" value returned by
+> > timecounter_read() by 3 to get a real nanoseconds value.
+> > 
+> > There is a lengthy comment in azx_timecounter_init() explaining this
+> > choice. That comment makes blatantly wrong assumptions about how
+> > timecounters work and what can overflow.
+> > 
+> > The comment says:
+> > 
+> >      * Applying the 1/3 factor as part of the multiplication
+> >      * requires at least 20 bits for a decent precision, however
+> >      * overflows occur after about 4 hours or less, not a option.
+> > 
+> > timecounters operate on time deltas between two readouts of a clock and use
+> > the mult/shift pair to calculate a precise nanoseconds value:
+> > 
+> >     delta_nsec = (delta_clock * mult) >> shift;
+> > 
+> > The fractional part is also taken into account and preserved to prevent
+> > accumulated rounding errors. For details see cyclecounter_cyc2ns().
+> > 
+> > The mult/shift pair has to be chosen so that the multiplication of the
+> > maximum expected delta value does not result in a 64bit overflow. As the
+> > counter wraps around on 32bit, the maximum observable delta between two
+> > reads is (1 << 32) - 1 which is about 178.9 seconds.
+> > 
+> > That in turn means the maximum multiplication factor which fits into an u32
+> > will not cause a 64bit overflow ever because it's guaranteed that:
+> > 
+> >      ((1 << 32) - 1) ^ 2 < (1 << 64)
+> > 
+> > The resulting correct multiplication factor is 2796202667 and the shift
+> > value is 26, i.e. 26 bit precision. The overflow of the multiplication
+> > would happen exactly at a clock readout delta of 6597069765 which is way
+> > after the wrap around of the hardware clock at around 274.8 seconds which
+> > is off from the claimed 4 hours by more than an order of magnitude.
+> > 
+> > If the counter ever wraps around the last read value then the calculation
+> > is off by the number of wrap arounds times 178.9 seconds because the
+> > overflow cannot be observed.
+> > 
+> > Use clocks_calc_mult_shift(), which calculates the most accurate mult/shift
+> > pair based on the given clock frequency, and remove the bogus comment along
+> > with the divisions at the readout sites.
+> > 
+> > Fixes: 5d890f591d15 ("ALSA: hda: support for wallclock timestamps")
+> > Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> 
+> I don't recall the reason of why I added separate steps for
+> multiplication by 125 and division by 3 back in 2012, but obviously they
+> weren't aligned with my own comment "Max buffer time is limited to 178
+> seconds to make sure wall clock counter does not overflow".
+> 
+> Thanks for the patch, much appreciated.
+> 
+> Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-Let's say something does process_vm_readv() where the pid is a qemu
-process and it is writing to a guest private memory area.  The syscall
-will eventually end up in process_vm_rw_single_vec() which does:
-
->                 pinned_pages = pin_user_pages_remote(mm, pa, pinned_pages,
->                                                      flags, process_pages,
->                                                      NULL, &locked);
-...
->                 rc = process_vm_rw_pages(process_pages,
->                                          start_offset, bytes, iter,
->                                          vm_write);
+Now queued to for-next branch.  Thanks.
 
 
-and eventually in copy_page_from_iter():
-
->                 void *kaddr = kmap_local_page(page);
->                 size_t wanted = _copy_from_iter(kaddr + offset, bytes, i);
->                 kunmap_local(kaddr);
-
-The kernel access to 'kaddr+offset' shouldn't fault.  How does the KVM
-code thwart that kmap_local_page()?
+Takashi

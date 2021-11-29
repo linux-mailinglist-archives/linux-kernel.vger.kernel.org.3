@@ -2,184 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0C6446250F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:32:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DB4462327
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:22:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232888AbhK2Wew (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:34:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60676 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232070AbhK2WeK (ORCPT
+        id S229779AbhK2VZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 16:25:33 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:41955 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229550AbhK2VXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:34:10 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E057CC09B197;
-        Mon, 29 Nov 2021 13:20:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=3tiVVBq/gI28N2+UgtNKbwCLNO9nM3fgPRTuk9WUMUI=; b=1IHc35v9+or5SOX9E1YigpCjGO
-        U2PnIWZdbqh1WA+8+Ip+saD0NVKDNA5h9Ewy+RRwnei9/RUltR2YBSgLyzKNEp3lNpqZfsK1MWq0Q
-        dGErcpOvcEnGlT7bByc1p3fzvVJB6Kn+AYKRV4POfqWn62U1HoWq1ygCUFws9QbgsF+axqWEyC21X
-        Z8nkeiOXvz8cxB0h1uBc0argxu7rj2LkU23ihK8ga3QKPbwAudHc53X21rhqP9vQJz6HDSd5BtDR4
-        8Xnq8y/dUy77m223RFxUDWNDq9zCofEn6rgW0zCy+Ov0ML8AQzPiCOBBd+wfZ1mt2g0N0MvH07Nyh
-        GqO0fIDg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mro3t-002gaW-1C; Mon, 29 Nov 2021 21:19:45 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        keescook@chromium.org, yzaikin@google.com, nixiaoming@huawei.com,
-        ebiederm@xmission.com, steve@sk2.org,
-        mcgrof@bombadil.infradead.org, mcgrof@kernel.org,
-        christian.brauner@ubuntu.com, ebiggers@google.com,
-        naveen.n.rao@linux.ibm.com, davem@davemloft.net,
-        mhiramat@kernel.org, anil.s.keshavamurthy@intel.com
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] kprobe: move sysctl_kprobes_optimization to kprobes.c
-Date:   Mon, 29 Nov 2021 13:19:43 -0800
-Message-Id: <20211129211943.640266-7-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211129211943.640266-1-mcgrof@kernel.org>
-References: <20211129211943.640266-1-mcgrof@kernel.org>
+        Mon, 29 Nov 2021 16:23:32 -0500
+Received: by mail-oi1-f180.google.com with SMTP id u74so37101858oie.8;
+        Mon, 29 Nov 2021 13:20:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=/jIaWBgsu+oXpJeAi+fCw5Zfn9VqgsViSXmHREtQW7w=;
+        b=jiNRV0fjVWGIGMo9jpqsKrak7J+M5LXmzf9rKkOhIFXmnJINq7bzMNwMEEp0LnhG0M
+         T3rp3pQGzNDNi9WnUTw7C0Sykc5mwUFC+hA7gHIukkCmjoDX+ruWKfXZuJXhK7kYDRnP
+         QoxI+60myMXMJW27oTQpuWwSwoxgc51sv9fUunf3fL/F+iiwHkFbVPUiYkEHlb1qvkXQ
+         L7Z1ysGsZUVnpxpgV7X/2toBJPWrqDsvtXST/iqsjKTy4Re7mAKeS60X5yIjjmtUv5OW
+         VWnfbEN39rkBI1+rvjqoTYbFLE2SgR2ur9CQKrOzJlYJ4Juqym0JE1pYJL6008tRm2im
+         FqtQ==
+X-Gm-Message-State: AOAM532e018Vepp8Bf5NLABB755bW0KJa5WUM/VwvpUn8O/Ed7A1aQPU
+        QhlAreVrcUQFkTCQyypRnw==
+X-Google-Smtp-Source: ABdhPJw7JLYoJIiNdZPrVY+5nvjVbUowzZ3MObEEaLWLC03o6BfX8vvMU9eNhvf28bYd6piz0cD9Lw==
+X-Received: by 2002:a05:6808:13d3:: with SMTP id d19mr497944oiw.149.1638220814426;
+        Mon, 29 Nov 2021 13:20:14 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id t13sm3343185oiw.30.2021.11.29.13.20.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 13:20:13 -0800 (PST)
+Received: (nullmailer pid 629158 invoked by uid 1000);
+        Mon, 29 Nov 2021 21:20:12 -0000
+Date:   Mon, 29 Nov 2021 15:20:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ansuel Smith <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: net: dsa: qca8k: improve port
+ definition documentation
+Message-ID: <YaVEDN2unmq7O4Ob@robh.at.kernel.org>
+References: <20211112165752.1704-1-ansuelsmth@gmail.com>
+ <20211112165752.1704-2-ansuelsmth@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211112165752.1704-2-ansuelsmth@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaoming Ni <nixiaoming@huawei.com>
+On Fri, Nov 12, 2021 at 05:57:52PM +0100, Ansuel Smith wrote:
+> Clean and improve port definition for qca8k documentation by referencing
+> the dsa generic port definition and adding the additional specific port
+> definition.
+> 
+> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+> ---
+>  .../devicetree/bindings/net/dsa/qca8k.yaml    | 82 ++++++-------------
+>  1 file changed, 23 insertions(+), 59 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> index 48de0ace265d..9eb24cdf6cd4 100644
+> --- a/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> +++ b/Documentation/devicetree/bindings/net/dsa/qca8k.yaml
+> @@ -99,65 +99,29 @@ patternProperties:
+>          type: object
+>          description: Ethernet switch ports
+>  
+> -        properties:
+> -          reg:
+> -            description: Port number
+> -
+> -          label:
+> -            description:
+> -              Describes the label associated with this port, which will become
+> -              the netdev name
+> -            $ref: /schemas/types.yaml#/definitions/string
+> -
+> -          link:
+> -            description:
+> -              Should be a list of phandles to other switch's DSA port. This
+> -              port is used as the outgoing port towards the phandle ports. The
+> -              full routing information must be given, not just the one hop
+> -              routes to neighbouring switches
+> -            $ref: /schemas/types.yaml#/definitions/phandle-array
+> -
+> -          ethernet:
+> -            description:
+> -              Should be a phandle to a valid Ethernet device node.  This host
+> -              device is what the switch port is connected to
+> -            $ref: /schemas/types.yaml#/definitions/phandle
+> -
+> -          phy-handle: true
+> -
+> -          phy-mode: true
+> -
+> -          fixed-link: true
+> -
+> -          mac-address: true
+> -
+> -          sfp: true
+> -
+> -          qca,sgmii-rxclk-falling-edge:
+> -            $ref: /schemas/types.yaml#/definitions/flag
+> -            description:
+> -              Set the receive clock phase to falling edge. Mostly commonly used on
+> -              the QCA8327 with CPU port 0 set to SGMII.
+> -
+> -          qca,sgmii-txclk-falling-edge:
+> -            $ref: /schemas/types.yaml#/definitions/flag
+> -            description:
+> -              Set the transmit clock phase to falling edge.
+> -
+> -          qca,sgmii-enable-pll:
+> -            $ref: /schemas/types.yaml#/definitions/flag
+> -            description:
+> -              For SGMII CPU port, explicitly enable PLL, TX and RX chain along with
+> -              Signal Detection. On the QCA8327 this should not be enabled, otherwise
+> -              the SGMII port will not initialize. When used on the QCA8337, revision 3
+> -              or greater, a warning will be displayed. When the CPU port is set to
+> -              SGMII on the QCA8337, it is advised to set this unless a communication
+> -              issue is observed.
+> -
+> -        required:
+> -          - reg
+> -
+> -        additionalProperties: false
+> +        allOf:
+> +          - $ref: dsa-port.yaml#
+> +          - properties:
 
-The kernel/sysctl.c is a kitchen sink where everyone leaves
-their dirty dishes, this makes it very difficult to maintain.
+You can drop 'allOf' here too. And add 'unevaluatedProperties: false'.
 
-To help with this maintenance let's start by moving sysctls to
-places where they actually belong. The proc sysctl maintainers
-do not want to know what sysctl knobs you wish to add for your own
-piece of code, we just care about the core logic.
+With that,
 
-Move sysctl_kprobes_optimization from kernel/sysctl.c to kernel/kprobes.c.
-Use register_sysctl() to register the sysctl interface.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Signed-off-by: Xiaoming Ni <nixiaoming@huawei.com>
-[mcgrof: fix compile issue when CONFIG_OPTPROBES is disabled]
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- include/linux/kprobes.h |  6 ------
- kernel/kprobes.c        | 30 ++++++++++++++++++++++++++----
- kernel/sysctl.c         | 12 ------------
- 3 files changed, 26 insertions(+), 22 deletions(-)
-
-diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-index e974caf39d3e..e9c3687c84d5 100644
---- a/include/linux/kprobes.h
-+++ b/include/linux/kprobes.h
-@@ -346,12 +346,6 @@ extern void opt_pre_handler(struct kprobe *p, struct pt_regs *regs);
- 
- DEFINE_INSN_CACHE_OPS(optinsn);
- 
--#ifdef CONFIG_SYSCTL
--extern int sysctl_kprobes_optimization;
--extern int proc_kprobes_optimization_handler(struct ctl_table *table,
--					     int write, void *buffer,
--					     size_t *length, loff_t *ppos);
--#endif /* CONFIG_SYSCTL */
- extern void wait_for_kprobe_optimizer(void);
- #else /* !CONFIG_OPTPROBES */
- static inline void wait_for_kprobe_optimizer(void) { }
-diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-index e9db0c810554..ee76ff64b49e 100644
---- a/kernel/kprobes.c
-+++ b/kernel/kprobes.c
-@@ -48,6 +48,9 @@
- #define KPROBE_HASH_BITS 6
- #define KPROBE_TABLE_SIZE (1 << KPROBE_HASH_BITS)
- 
-+#if !defined(CONFIG_OPTPROBES) || !defined(CONFIG_SYSCTL)
-+#define kprobe_sysctls_init() do { } while (0)
-+#endif
- 
- static int kprobes_initialized;
- /* kprobe_table can be accessed by
-@@ -938,10 +941,10 @@ static void unoptimize_all_kprobes(void)
- }
- 
- static DEFINE_MUTEX(kprobe_sysctl_mutex);
--int sysctl_kprobes_optimization;
--int proc_kprobes_optimization_handler(struct ctl_table *table, int write,
--				      void *buffer, size_t *length,
--				      loff_t *ppos)
-+static int sysctl_kprobes_optimization;
-+static int proc_kprobes_optimization_handler(struct ctl_table *table,
-+					     int write, void *buffer,
-+					     size_t *length, loff_t *ppos)
- {
- 	int ret;
- 
-@@ -957,6 +960,24 @@ int proc_kprobes_optimization_handler(struct ctl_table *table, int write,
- 
- 	return ret;
- }
-+
-+static struct ctl_table kprobe_sysctls[] = {
-+	{
-+		.procname	= "kprobes-optimization",
-+		.data		= &sysctl_kprobes_optimization,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_kprobes_optimization_handler,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE,
-+	},
-+	{}
-+};
-+
-+static void __init kprobe_sysctls_init(void)
-+{
-+	register_sysctl_init("debug", kprobe_sysctls);
-+}
- #endif /* CONFIG_SYSCTL */
- 
- /* Put a breakpoint for a probe. */
-@@ -2581,6 +2602,7 @@ static int __init init_kprobes(void)
- 		err = register_module_notifier(&kprobe_module_nb);
- 
- 	kprobes_initialized = (err == 0);
-+	kprobe_sysctls_init();
- 	return err;
- }
- early_initcall(init_kprobes);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index a4c352f0a514..7f07b058b180 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -55,7 +55,6 @@
- #include <linux/reboot.h>
- #include <linux/ftrace.h>
- #include <linux/perf_event.h>
--#include <linux/kprobes.h>
- #include <linux/oom.h>
- #include <linux/kmod.h>
- #include <linux/capability.h>
-@@ -2817,17 +2816,6 @@ static struct ctl_table debug_table[] = {
- 		.mode		= 0644,
- 		.proc_handler	= proc_dointvec
- 	},
--#endif
--#if defined(CONFIG_OPTPROBES)
--	{
--		.procname	= "kprobes-optimization",
--		.data		= &sysctl_kprobes_optimization,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_kprobes_optimization_handler,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
--	},
- #endif
- 	{ }
- };
--- 
-2.33.0
-
+> +              qca,sgmii-rxclk-falling-edge:
+> +                $ref: /schemas/types.yaml#/definitions/flag
+> +                description:
+> +                  Set the receive clock phase to falling edge. Mostly commonly used on
+> +                  the QCA8327 with CPU port 0 set to SGMII.
+> +
+> +              qca,sgmii-txclk-falling-edge:
+> +                $ref: /schemas/types.yaml#/definitions/flag
+> +                description:
+> +                  Set the transmit clock phase to falling edge.
+> +
+> +              qca,sgmii-enable-pll:
+> +                $ref: /schemas/types.yaml#/definitions/flag
+> +                description:
+> +                  For SGMII CPU port, explicitly enable PLL, TX and RX chain along with
+> +                  Signal Detection. On the QCA8327 this should not be enabled, otherwise
+> +                  the SGMII port will not initialize. When used on the QCA8337, revision 3
+> +                  or greater, a warning will be displayed. When the CPU port is set to
+> +                  SGMII on the QCA8337, it is advised to set this unless a communication
+> +                  issue is observed.
+>  
+>  oneOf:
+>    - required:
+> -- 
+> 2.32.0
+> 
+> 

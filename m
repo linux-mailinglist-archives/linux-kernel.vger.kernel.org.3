@@ -2,154 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98233461A67
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70C774615BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:03:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243406AbhK2O5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:57:35 -0500
-Received: from 4.mo552.mail-out.ovh.net ([178.33.43.201]:57547 "EHLO
-        4.mo552.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242858AbhK2OzX (ORCPT
+        id S1377433AbhK2NHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:07:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48038 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236537AbhK2NFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:55:23 -0500
-X-Greylist: delayed 17970 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Nov 2021 09:55:22 EST
-Received: from mxplan5.mail.ovh.net (unknown [10.109.156.217])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id 70F5120ADA;
-        Mon, 29 Nov 2021 09:52:31 +0000 (UTC)
-Received: from kaod.org (37.59.142.104) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 29 Nov
- 2021 10:52:29 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-104R005f4bc25ac-e2d5-4f6a-8c28-ebe76ecd031f,
-                    3279756C2EB34864E332BB908A933B747C53BE44) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <ee815cd9-03f3-02f2-a269-ad79ca2af742@kaod.org>
-Date:   Mon, 29 Nov 2021 10:52:26 +0100
+        Mon, 29 Nov 2021 08:05:06 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B4AC08EB48;
+        Mon, 29 Nov 2021 03:46:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=FkF4T6LyDRZD+GT3vXQ9zF5ShtYF3Ys/OCkZGkfK2+Y=; b=05kuobI0TGEk0Qbh2JIN2BdBtk
+        CqhqbxF/F4RxxjZmgIxQ17t05TFxBI2DIYlsZo+x2ZJBZ6oYxPf3BjASshWrwLLKP+L0Guy+RQX7P
+        Iyj5dx5ilKdakTfO2dDgqmfzdDxXjBLlsUwQe5XC/ANV43WhIdFt5S+Bng0EhR37RcHIFJMWPUDu6
+        +8bMZJe56139yfO0kXStJsbxFaCJ2ptvcc0hmjeMHboMOEGNVeXgXmULYCnmLbP64IROmon3Mg3aX
+        CDd2NY0oDsu0UfseR0I4SmQ1JMH7BJzs/S9yyVe4uLoLtBmqoA0SXbbVFJn92CjE7cpV+6Eizj5Ii
+        T6OCnfGw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mrf7N-000ZFW-Dh; Mon, 29 Nov 2021 11:46:45 +0000
+Date:   Mon, 29 Nov 2021 03:46:45 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Yu Kuai <yukuai3@huawei.com>
+Cc:     hch@infradead.org, tj@kernel.org, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com
+Subject: Re: [PATCH 2/4] blk-throtl: don't warn in tg_drain_bios()
+Message-ID: <YaS9pfngMscOM3XA@infradead.org>
+References: <20211127101059.477405-1-yukuai3@huawei.com>
+ <20211127101059.477405-3-yukuai3@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [patch 00/22] genirq/msi, PCI/MSI: Spring cleaning - Part 1
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     <linux-hyperv@vger.kernel.org>, Paul Mackerras <paulus@samba.org>,
-        <sparclinux@vger.kernel.org>, Wei Liu <wei.liu@kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
-        <x86@kernel.org>, Christian Borntraeger <borntraeger@de.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>, <linux-pci@vger.kernel.org>,
-        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-References: <20211126222700.862407977@linutronix.de>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20211126222700.862407977@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [37.59.142.104]
-X-ClientProxiedBy: DAG4EX1.mxp5.local (172.16.2.31) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 03ae1f15-2efb-4469-b086-6ab00679dc25
-X-Ovh-Tracer-Id: 11736099157494238108
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrheelgddtlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpefgtdehvdejkefhudevkeekffekleetfeeftdekudeliedujeeftdeikeffvefgfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedtrddtrddtrddtpdefjedrheelrddugedvrddutdegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehmgihplhgrnhehrdhmrghilhdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomheptghlgheskhgrohgurdhorhhgpdhrtghpthhtoheplhhinhhugihpphgtqdguvghvsehlihhsthhsrdhoiihlrggsshdrohhrgh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211127101059.477405-3-yukuai3@huawei.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/27/21 02:18, Thomas Gleixner wrote:
-> The [PCI] MSI code has gained quite some warts over time. A recent
-> discussion unearthed a shortcoming: the lack of support for expanding
-> PCI/MSI-X vectors after initialization of MSI-X.
+On Sat, Nov 27, 2021 at 06:10:57PM +0800, Yu Kuai wrote:
+> tg_drain_bios() will iterate until throtl_rb_first() return NULL,
+> don't warn in such situation.
 > 
-> PCI/MSI-X has no requirement to setup all vectors when MSI-X is enabled in
-> the device. The non-used vectors have just to be masked in the vector
-> table. For PCI/MSI this is not possible because the number of vectors
-> cannot be changed after initialization.
-> 
-> The PCI/MSI code, but also the core MSI irq domain code are built around
-> the assumption that all required vectors are installed at initialization
-> time and freed when the device is shut down by the driver.
->
-> Supporting dynamic expansion at least for MSI-X is important for VFIO so
-> that the host side interrupts for passthrough devices can be installed on
-> demand.
-> 
-> This is the first part of a large (total 101 patches) series which
-> refactors the [PCI]MSI infrastructure to make runtime expansion of MSI-X
-> vectors possible. The last part (10 patches) provide this functionality.
-> 
-> The first part is mostly a cleanup which consolidates code, moves the PCI
-> MSI code into a separate directory and splits it up into several parts.
-> 
-> No functional change intended except for patch 2/N which changes the
-> behaviour of pci_get_vector()/affinity() to get rid of the assumption that
-> the provided index is the "index" into the descriptor list instead of using
-> it as the actual MSI[X] index as seen by the hardware. This would break
-> users of sparse allocated MSI-X entries, but non of them use these
-> functions.
-> 
-> This series is based on 5.16-rc2 and also available via git:
-> 
->       git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v1-part-1
-> 
-> For the curious who can't wait for the next part to arrive the full series
-> is available via:
-> 
->       git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v1-part-4
-
-After fixing the compile failures, I didn't see any regressions on
-these platforms :
-
-   PowerNV, pSeries under KVM and PowerVM, using POWER8/9 processors.
-
-Thanks,
-
-C.
-
-> Thanks,
-> 
-> 	tglx
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 > ---
->   arch/powerpc/platforms/4xx/msi.c            |  281 ------------
->   b/Documentation/driver-api/pci/pci.rst      |    2
->   b/arch/mips/pci/msi-octeon.c                |   32 -
->   b/arch/powerpc/platforms/4xx/Makefile       |    1
->   b/arch/powerpc/platforms/cell/axon_msi.c    |    2
->   b/arch/powerpc/platforms/powernv/pci-ioda.c |    4
->   b/arch/powerpc/platforms/pseries/msi.c      |    6
->   b/arch/powerpc/sysdev/Kconfig               |    6
->   b/arch/s390/pci/pci_irq.c                   |    4
->   b/arch/sparc/kernel/pci_msi.c               |    4
->   b/arch/x86/hyperv/irqdomain.c               |   55 --
->   b/arch/x86/include/asm/x86_init.h           |    6
->   b/arch/x86/include/asm/xen/hypervisor.h     |    8
->   b/arch/x86/kernel/apic/msi.c                |    8
->   b/arch/x86/kernel/x86_init.c                |   12
->   b/arch/x86/pci/xen.c                        |   19
->   b/drivers/irqchip/irq-gic-v2m.c             |    1
->   b/drivers/irqchip/irq-gic-v3-its-pci-msi.c  |    1
->   b/drivers/irqchip/irq-gic-v3-mbi.c          |    1
->   b/drivers/net/wireless/ath/ath11k/pci.c     |    2
->   b/drivers/pci/Makefile                      |    3
->   b/drivers/pci/msi/Makefile                  |    7
->   b/drivers/pci/msi/irqdomain.c               |  267 +++++++++++
->   b/drivers/pci/msi/legacy.c                  |   79 +++
->   b/drivers/pci/msi/msi.c                     |  645 ++++------------------------
->   b/drivers/pci/msi/msi.h                     |   39 +
->   b/drivers/pci/msi/pcidev_msi.c              |   43 +
->   b/drivers/pci/pci-sysfs.c                   |    7
->   b/drivers/pci/xen-pcifront.c                |    2
->   b/include/linux/msi.h                       |  135 ++---
->   b/include/linux/pci.h                       |    1
->   b/kernel/irq/msi.c                          |   41 +
->   32 files changed, 696 insertions(+), 1028 deletions(-)
+>  block/blk-throttle.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
+> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
+> index 230e300c5856..25822c88bea1 100644
+> --- a/block/blk-throttle.c
+> +++ b/block/blk-throttle.c
+> @@ -497,12 +497,13 @@ static void throtl_pd_free(struct blkg_policy_data *pd)
+>  }
+>  
+>  static struct throtl_grp *
+> -throtl_rb_first(struct throtl_service_queue *parent_sq)
+> +throtl_rb_first(struct throtl_service_queue *parent_sq, bool warn)
+>  {
+>  	struct rb_node *n;
+>  
+>  	n = rb_first_cached(&parent_sq->pending_tree);
+> -	WARN_ON_ONCE(!n);
+> +	if (warn)
+> +		WARN_ON_ONCE(!n);
+>  	if (!n)
+>  		return NULL;
 
+Just shift then WARN_ON_ONCE into the callers that care.

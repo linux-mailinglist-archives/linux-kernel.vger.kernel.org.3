@@ -2,74 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 588654622D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA7F462403
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbhK2VGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 16:06:05 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:46630 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbhK2VEF (ORCPT
+        id S229653AbhK2WO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:14:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231135AbhK2WMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:04:05 -0500
-Received: by mail-ot1-f51.google.com with SMTP id 98-20020a9d086b000000b0057a403bbd4eso2686993oty.13;
-        Mon, 29 Nov 2021 13:00:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9ixqJ+RY2dWFIvNpDhU+gxTfVfUYruXUuo17YT42W18=;
-        b=BXph+lnLRB2mbmwStUt/YWkqaAXlomuxs7pPC51Lvykt/E/hh2KpUE3FPbkorUAdaR
-         /SY8cDDvhZU33/s2i9iPXwvZHEdMTqJ+9UOdozGZukaKD7eOzhm/yAvRAVFxoRe0dNn/
-         Y4qEvPuooqDUG0+KxGnXv5TYM4mV3kREPfElAtOPyNvV8K40D2f1N/2P4YNjLqwXO9Sl
-         jhrE16QCGjC46WHFJDsHVas+gLJcFHQhCDn/u6nicz/n8o5c19uKgAkfSLB0rs8LF0DG
-         judPo+E4AHDxo2ze1tQyQKACHIHTCx2Sqw+kwUUg6oFj9DHfLXLmaRo18OGnsZ5vkRnP
-         S4Mg==
-X-Gm-Message-State: AOAM532k3Ru35V4MDXBoXJkwFqhqAtMoIEizl9+c1kLSabSGUrKwBkEx
-        L51HtRwpCTPNyw4OiTFOXg==
-X-Google-Smtp-Source: ABdhPJzz1w47/saTd8O+0bjqYSiswi3LKIsOOshwOjfDd+i+fFukeeezynZTMlH2kWoM4DPxHi1/HQ==
-X-Received: by 2002:a9d:7210:: with SMTP id u16mr33430776otj.160.1638219646852;
-        Mon, 29 Nov 2021 13:00:46 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id ay40sm3308511oib.1.2021.11.29.13.00.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 13:00:46 -0800 (PST)
-Received: (nullmailer pid 601270 invoked by uid 1000);
-        Mon, 29 Nov 2021 21:00:45 -0000
-Date:   Mon, 29 Nov 2021 15:00:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Thierry Reding <thierry.reding@gmail.com>
-Cc:     Jon Hunter <jonathanh@nvidia.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 2/5] dt-bindings: memory: tegra: Add Tegra234 support
-Message-ID: <YaU/fcN/UwqMQAAN@robh.at.kernel.org>
-References: <20211112130627.3682795-1-thierry.reding@gmail.com>
- <20211112130627.3682795-3-thierry.reding@gmail.com>
+        Mon, 29 Nov 2021 17:12:30 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC4DC0E52F7;
+        Mon, 29 Nov 2021 13:01:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=la5n+95FqwkImWApoxw9yt6K9/mVvw40Er2NamVkaww=; b=cQnfGaBPRGTYnKlp2Q3CkKpaRO
+        1Q+lgvgboeYnPCIMgXliftKxLBet/Oeo1r/cuz8s5M1vqGtqTrFfEw1bYmSDQeYS/b/hrAwiTJaRL
+        sUKW7O+cMgFMXEri4UIaFZ6SO2vzleUeOS7bOrhm1zAQG2/1TvixHQn+k8Gy+c4r71jCpst+kiPLk
+        yi45DnPEFJxWliZ1oPUU/EWHCpm0SUP/T3WeLaPKXAyCD1p+AThHC+XIuRJwUvebP2wvjPmEmtef/
+        yToFVpzqGCCwnMHRseRYWg5eKe81WU0HoYiN0pzKaxIhMD4V/Gme9xXoytbjFs28Wt4mx7BMV/Aib
+        0+0Fj0Hw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mrnmA-002Zh1-Fo; Mon, 29 Nov 2021 21:01:26 +0000
+Date:   Mon, 29 Nov 2021 13:01:26 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     akpm@linux-foundation.org, keescook@chromium.org,
+        yzaikin@google.com, nixiaoming@huawei.com, ebiederm@xmission.com,
+        peterz@infradead.org, gregkh@linuxfoundation.org, pjt@google.com,
+        liu.hailong6@zte.com.cn, andriy.shevchenko@linux.intel.com,
+        sre@kernel.org, penguin-kernel@i-love.sakura.ne.jp,
+        senozhatsky@chromium.org, wangqing@vivo.com, bcrl@kvack.org,
+        viro@zeniv.linux.org.uk, jack@suse.cz, amir73il@gmail.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/9] sysctl: add a new register_sysctl_init() interface
+Message-ID: <YaU/phu3JoalmC8E@bombadil.infradead.org>
+References: <20211123202347.818157-1-mcgrof@kernel.org>
+ <20211123202347.818157-2-mcgrof@kernel.org>
+ <YZ+2XwgQn8UpVcpb@alley>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211112130627.3682795-3-thierry.reding@gmail.com>
+In-Reply-To: <YZ+2XwgQn8UpVcpb@alley>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 Nov 2021 14:06:24 +0100, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
+On Thu, Nov 25, 2021 at 05:14:23PM +0100, Petr Mladek wrote:
+> On Tue 2021-11-23 12:23:39, Luis Chamberlain wrote:
+> > From: Xiaoming Ni <nixiaoming@huawei.com>
+> > 
+> > The kernel/sysctl.c is a kitchen sink where everyone leaves
+> > their dirty dishes, this makes it very difficult to maintain.
+> > 
+> > To help with this maintenance let's start by moving sysctls to
+> > places where they actually belong. The proc sysctl maintainers
+> > do not want to know what sysctl knobs you wish to add for your own
+> > piece of code, we just care about the core logic.
+> > 
+> > Today though folks heavily rely on tables on kernel/sysctl.c so
+> > they can easily just extend this table with their needed sysctls.
+> > In order to help users move their sysctls out we need to provide a
+> > helper which can be used during code initialization.
+> > 
+> > We special-case the initialization use of register_sysctl() since
+> > it *is* safe to fail, given all that sysctls do is provide a dynamic
+> > interface to query or modify at runtime an existing variable. So the
+> > use case of register_sysctl() on init should *not* stop if the sysctls
+> > don't end up getting registered. It would be counter productive to
+> > stop boot if a simple sysctl registration failed.
+> >
+> > Provide a helper for init then, and document the recommended init
+> > levels to use for callers of this routine. We will later use this
+> > in subsequent patches to start slimming down kernel/sysctl.c tables
+> > and moving sysctl registration to the code which actually needs
+> > these sysctls.
 > 
-> Document the variant of the memory controller and external memory
-> controllers found on Tegra234 and add some memory client and SMMU
-> stream ID definitions for use in device tree files.
-> 
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> ---
->  .../nvidia,tegra186-mc.yaml                   |  2 ++
->  include/dt-bindings/clock/tegra234-clock.h    |  9 ++++++
->  include/dt-bindings/memory/tegra234-mc.h      | 32 +++++++++++++++++++
->  3 files changed, 43 insertions(+)
->  create mode 100644 include/dt-bindings/memory/tegra234-mc.h
-> 
+> Do we really need a new helper for this?
+> Is the failure acceptable only during system initialization?
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Yes because it is __init and we allow / guide folks to *think* clearly
+about not stopping the init process when it comes to sysctls on failure.
+
+> The warning would be useful even for the original register_sysctl().
+
+We can open code those.
+
+> It should be up-to-the caller to decide if the failure is fatal
+> or not. It might be enough to document the reasoning why a warning
+> is enough in most cases.
+
+For most case I have seen so far special casing init seems like a worthy
+objective. When we're done with the full conversion we can re-visit
+things but at this point I can't say sharing this outside of init uses
+makes too much sense.
+
+  Luis
+

@@ -2,524 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1D4C4621F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:13:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F294621FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234419AbhK2UQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 15:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56664 "EHLO
+        id S234832AbhK2UTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 15:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233300AbhK2UOM (ORCPT
+        with ESMTP id S234455AbhK2UQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:14:12 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4861EC06FD40;
-        Mon, 29 Nov 2021 08:48:50 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id g14so74620134edb.8;
-        Mon, 29 Nov 2021 08:48:50 -0800 (PST)
+        Mon, 29 Nov 2021 15:16:22 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40780C06FD4B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 08:50:13 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k4so12644694plx.8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 08:50:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=NVWtQ1JvshwsCgSB+i2iDXBn2Glv6mfciS5t9cF/cRw=;
-        b=jzvabIgN1jGmcZdLixOs6nyGHxvInvaGSqPzmnycFssrX3x+Varhi2PXaOei3zdgXg
-         DJ8cToQP3nRd9ftIh5LeMzFMEblyPY2twcMR7bpZfWPI6H0r0CKTz8wHkrpKNqaoe7j8
-         33oaFIMgg08o6t/nYEHtgKDeRFJGEaV+vUEltbtU3wF5BXYBZwzX9dqkzJCQMaMxXpGp
-         M/eCK6rrjzTrI/kKM9v8s5+7o2AeeDwuM59r4RscW6C4hylvtsChjqLEByrqzBiPrY+6
-         TfhCMLiYNQ/agI6QAuwz7fOOuDbJqG/hxnF3xrZ4P+U+ISwcE09jHbe192j8WyacGrot
-         ovxw==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6FNTZ5hAlPiemTuXVFkR5v0W6Kq15WxJz69Z0MwRIcY=;
+        b=U9MH0RALNuAt4C5WvRiUyCaU7CzaO7riVDL0APVDqewnb7Drk8o8bEbRnsSyLfPfFE
+         URBG0kWd47n2FcKiyKyzQN6U9RSSw6zytqBBENGck0vK1eXxS/JQQ1HOBRUocurG5Oej
+         25Uw7C0jIRhnpXgK6p7V3Iw/WOPIPlgUY/ej02Hbf2oavIu3YGYcu0pPZnx6lWuCDXRR
+         pqrq0XA1gAh0VqFIFivJrJG4r5LHM3UZMKuo6f55Cu1/ctSuD4Di7IFXv6R82I5Waqk1
+         Tc/CAtx9OvKZG6Y/OXOEnJcFMph5v5gsfsTnOnyWFvXAps6f2CQ4HU61QTzwA8vBwWTW
+         hNJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=NVWtQ1JvshwsCgSB+i2iDXBn2Glv6mfciS5t9cF/cRw=;
-        b=xO9gfHh+qPVQp+Bd5+jeYW30Bk6Yw6RDQMtfz4BJ9gXt59e24edRO8CZRnwBXypjaZ
-         +OM5c6vLMHnuAFBkjNhl3wD7Bgfkw1WCes9KyvgqfDy66EdZu4DsGqMgKDMEZ9SjVlR7
-         DXd5j4TcTSQqDl9IezgDCgXYEQ0urlU52mdqFbzgITobiAlFu32MUPjA3+TK1/wsndpd
-         DcMLTo+HNkXFikJ7A5jF2m2VOJ+GoESeyY49V7j4kHvywnk7yZaLHMZZjSd8Drp+hkE5
-         xqQtiSOEAZgo90FIZytCN0+WWZ/bDR2EN8cZo1QXKZLM/pnWP9Wqaj2lwDlj0ojulGr0
-         bp0A==
-X-Gm-Message-State: AOAM532yRdvIQOcybEcbzkIH9RaWwk+A1+NFEkThp7akeaWREoxeiZcj
-        kggm0WulWAp547fRmqs8JqgpxCu186v8W8vwxvE=
-X-Google-Smtp-Source: ABdhPJwXrtV5pgz93EZZVuW11gUQfvByBd54vPDFQgYmo2zoixTkGNn6uIOUtxYkiU5/oL5FL1aTcAruiKapYhJbmG8=
-X-Received: by 2002:a17:907:1b17:: with SMTP id mp23mr18112259ejc.521.1638204528508;
- Mon, 29 Nov 2021 08:48:48 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6FNTZ5hAlPiemTuXVFkR5v0W6Kq15WxJz69Z0MwRIcY=;
+        b=cHS8ac8yhVUj76BhQt5QcPO18aTtTukkQBJJmZwiGIF6KhQbPdSjk7M6BuDMjF7gg2
+         gz9kmRPId6V0Wrmq2RApYDa0T/DqgDh4tfvneHcUAGRvW8iE3cvko47jAZQFhLy8b2li
+         R5bo1Jd2IIX+kdcQ8FAdSQujfY9tOzdp5tEO3j6FKpCOJEbQlU/7y5Zwg5yQj6tBGQdR
+         DuzwYPHkJZvKNmPH+1s01XAyX8/Of1+6b0lh1AI4nx46JmKuSI2N9bhmKR6UAcBhHQyO
+         exsRioCY5JC/TJBga9gC6jrcMHBJNMCIuIGer7lrbFpwPrhxcoAFe3NDjD6RcdOoTdlO
+         VQiw==
+X-Gm-Message-State: AOAM533fkfK2YD5nflcTDaTimiDiQ3wvGcOo+gHBivWfD476l9ETJfZ6
+        kelKQ8EeGTFTmpn79yerPD0=
+X-Google-Smtp-Source: ABdhPJz9/rqi8O99294BJ5nCdPPMofrB0o4aLXEZm/jL/ysM59oUEVEG/9eCJP/Gg2T5JoQup9TH7g==
+X-Received: by 2002:a17:902:6506:b0:143:84c4:6555 with SMTP id b6-20020a170902650600b0014384c46555mr61835738plk.8.1638204612773;
+        Mon, 29 Nov 2021 08:50:12 -0800 (PST)
+Received: from localhost.localdomain (li567-56.members.linode.com. [192.155.81.56])
+        by smtp.gmail.com with ESMTPSA id mr2sm14044211pjb.25.2021.11.29.08.50.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 08:50:12 -0800 (PST)
+From:   Jeff Xie <xiehuan09@gmail.com>
+To:     rostedt@goodmis.org
+Cc:     mhiramat@kernel.org, mingo@redhat.com, zanussi@kernel.org,
+        linux-kernel@vger.kernel.org, Jeff Xie <xiehuan09@gmail.com>
+Subject: [RFC][PATCH v6 0/5] trace: Introduce objtrace trigger to trace the kernel object
+Date:   Tue, 30 Nov 2021 00:49:46 +0800
+Message-Id: <20211129164951.220511-1-xiehuan09@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211106183802.893285-1-aford173@gmail.com> <718f7f6d6cd564d031c1963f1590c62d549ae725.camel@ndufresne.ca>
- <CAHCN7xKM9RUE7z-+ug1on+D=nDoEm589R4m03ofys92Aq75ZVQ@mail.gmail.com>
- <8db00a4b6faa99c940d9bc86e17161eb0db5efe3.camel@ndufresne.ca>
- <CAJ+vNU28UJffFv9jQ2KryJMudqYxvCaoVOVcU5dPqRA209iN6A@mail.gmail.com>
- <d91532c2c0772f9aa708ead36b2a97203727a7ea.camel@ndufresne.ca>
- <CAJ+vNU3H-V+bPoZ3qKead45h=W7AhQK6Lhjrx5ssdF4c_qfe=A@mail.gmail.com>
- <CAHCN7x+0LwwU_rEST+TZxGquswGKL19gnTy9WLofsXtGAtWqdw@mail.gmail.com>
- <7f94eaacfddb8c5434c17f1e069ea87a17657ce9.camel@ndufresne.ca>
- <CAHCN7xKRzxMBmPbDobWTuvNNSpTXk5XENvfBnfkhRY3eZKhn6w@mail.gmail.com>
- <CAHCN7xJFLNi_g+HX8PCy1Rkgf0jnWpO5QGYVz8nH19xrJkwHrA@mail.gmail.com>
- <CAJ+vNU3zFd=6k_Emc5aafxKkGwCPp4crgOFezQ-E_MbWsn1_EA@mail.gmail.com> <fed6c2fd7cf4971062c417ce41ed1e3812b900e0.camel@ndufresne.ca>
-In-Reply-To: <fed6c2fd7cf4971062c417ce41ed1e3812b900e0.camel@ndufresne.ca>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Mon, 29 Nov 2021 10:48:37 -0600
-Message-ID: <CAHCN7xK+wROHaqDcsY-3WYFQ82qX17L-LHNL3siSWnWvwFShzQ@mail.gmail.com>
-Subject: Re: [RFC 0/5] arm64: imx8mm: Enable Hantro VPUs
-To:     Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Tim Harvey <tharvey@gateworks.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Schrempf Frieder <frieder.schrempf@kontron.de>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        cstevens@beaconembedded.com,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Alice Guo <alice.guo@nxp.com>, Peng Fan <peng.fan@nxp.com>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 2:07 PM Nicolas Dufresne <nicolas@ndufresne.ca> wro=
-te:
->
-> Le lundi 22 novembre 2021 =C3=A0 09:25 -0800, Tim Harvey a =C3=A9crit :
-> > On Sat, Nov 20, 2021 at 7:36 AM Adam Ford <aford173@gmail.com> wrote:
-> > >
-> > > On Fri, Nov 19, 2021 at 5:37 PM Adam Ford <aford173@gmail.com> wrote:
-> > > >
-> > > > On Fri, Nov 19, 2021 at 10:29 AM Nicolas Dufresne <nicolas@ndufresn=
-e.ca> wrote:
-> > > > >
-> > > > > Hi Adam, Tim,
-> > > > >
-> > > > > [...]
-> > > > > > > > > Nicolas and Adam,
-> > > > > > > > >
-> > > > > > > > > For the H1 patches in this series: I've been able to test=
- the IMX8MM
-> > > > > > > > > H1 JPEG encode using GStreamer 1.18.5:
-> > > > > > > > > $ gst-inspect-1.0 | grep -e "v4l2.*enc"
-> > > > > > > > > video4linux2:  v4l2jpegenc: V4L2 JPEG Encoder
-> > > > > > > > > $ gst-launch-1.0 videotestsrc ! jpegenc ! rtpjpegpay ! ud=
-psink
-> > > > > > > >                                   ^ v4l2jpegenc
-> > > > > > > >
-> > > > > > > > This is just a transcript error ?
-> > > > > > >
-> > > > > > > Nicolas,
-> > > > > > >
-> > > > > > > No! Thanks for catching my mistake. I was testing with softwa=
-re encode... ooops!
-> > > > > > >
-> > > > > > > 'gst-launch-1.0 videotestsrc ! v4l2jpegenc ! fakesink' actual=
-ly hangs
-> > > > > > > the board so likely a power-domain issue there?
-> > > > > >
-> > > > > > The v4l2-compliance tests fail on the h1 decoder with a hang, b=
-ut I
-> > > > > > think we're writing to registers which are not documented in th=
-e Mini
-> > > > > > TRM.  The Mini TRM doesn't explicitly show the JPEG encoding as=
- a
-> > > > > > feature, but some of the registers state JPEG, but because some=
- of the
-> > > > > > registers written for the H1 are not documented in the TRM.  If=
- those
-> > > > > > registers are restricted or not in this SoC, I am concerned tha=
-t it
-> > > > > > might be related.  I'll try to run some more tests this weekend=
- to
-> > > > > > check on the status of the power-domain stuff.
-> > > > >
-> > > > > To verify if the HW support JPEG encoding you can read SWREG63 bi=
-t 25. This is
-> > > > > in the TRM, just not labelled properly. To mimic the decoding sid=
-e, would be "HW
-> > > > > synthesis config register X" with the bit labelled SW_ENC_JPEG_PR=
-OF (but
-> > > > > PROF/profile is on or off). If your board hang while reading this=
-, you likely
-> > > > > didn't get the power bit right.
-> > > > >
-> > > > > IMX8 has an undocumented control block thing that we have been fi=
-ghting with in
-> > > > > imx8q,  perhaps that's your issue. Few driver was proposed, we ar=
-e still pending
-> > > > > on NXP solution to be submitted (they asked us to wait, still wai=
-ting =3D)).
-> > > >
-> > > > Nicolas,
-> > > >
-> > > > Thanks for the suggestion to read offset FC.  There was an attempt
-> > > > made by Lucas Stach to develop a VPU blk-ctrl driver to coordinate =
-the
-> > > > power-domains with the GPC driver. Unfortunately, it does appear to
-> > > > hang, so it might not be operating correctly.
-> > > >
-> > > > Lucas,
-> > > >
-> > > > Do you have any idea of stuff I can try to see if the power domain =
-is
-> > > > coming online correctly?
-> > > >
-> > > > [   10.434727] imx-pgc imx-pgc-domain.6: request the vpumix domain =
-to power up
-> > > > [   10.463647] imx-pgc imx-pgc-domain.6: request the vpumix ADB400 =
-to power up
-> > > > [   10.517155] imx-pgc imx-pgc-domain.6: genpd vpumix success
-> > > > [   10.728927] vpu: set fuse bits to enable
-> > > > [   10.825500] imx8m-blk-ctrl 38330000.blk-ctrl: power vpublk-g1 GP=
-C domain
-> > > > [   10.878986] imx-pgc imx-pgc-domain.7: request the vpu-g1 domain =
-to power up
-> > > > [   10.932429] imx-pgc imx-pgc-domain.7: genpd vpu-g1 success
-> > > > [   10.971988] imx8m-blk-ctrl 38330000.blk-ctrl: genpd vpublk-g1 su=
-ccess
-> > > > [   11.004726] hantro-vpu 38300000.video-codec: registered
-> > > > nxp,imx8mm-vpu-dec as /dev/video0
-> > > > [   11.040760] imx8m-blk-ctrl 38330000.blk-ctrl: power vpublk-g2 GP=
-C domain
-> > > > [   11.066181] imx-pgc imx-pgc-domain.8: request the vpu-g2 domain =
-to power up
-> > > > [   11.087887] imx-pgc imx-pgc-domain.8: genpd vpu-g2 success
-> > > > [   11.113808] imx8m-blk-ctrl 38330000.blk-ctrl: genpd vpublk-g2 su=
-ccess
-> > > > [   11.139634] hantro-vpu 38310000.video-codec: registered
-> > > > nxp,imx8mm-vpu-g2-dec as /dev/video1
-> > > > [   11.156463] imx8m-blk-ctrl 38330000.blk-ctrl: power vpublk-h1 GP=
-C domain
-> > > > [   11.170817] imx-pgc imx-pgc-domain.9: request the vpu-h1 domain =
-to power up
-> > > > [   11.232990] imx-pgc imx-pgc-domain.9: genpd vpu-h1 success
-> > > > [   11.252546] imx8m-blk-ctrl 38330000.blk-ctrl: genpd vpublk-h1 su=
-ccess
-> > > > [   11.266152] hantro-vpu 38320000.video-codec: Checking vpu->enc_b=
-ase + 0xfc
-> > > >
-> > > > <hang>
-> > > >
-> > > > adam
-> > > >
-> > >
-> > > Nicolas, Tim, and Lucas,
-> > >
-> > > I think I have the hanging resolved in the power domains, and I'll be
-> > > pushing the fix to the GPCv2.
-> > >
-> > > For the H1 Encoder, I added some debugging code to read the offset
-> > > 0xfc and print some data based on the findings of that VPU-h1 offset.
-> > > I basically check the various bits per the TRM to see if they are set
-> > > and print some splat to indicate whether or not the function is
-> > > supported.
-> > >
-> > > [    8.861865] hantro-vpu 38320000.video-codec: Checking vpu->enc_bas=
-e + 0xfc
-> > > [    8.870594] hantro-vpu 38320000.video-codec: Stabilization support=
-ed by HW
-> > > [    8.889341] hantro-vpu 38320000.video-codec: VP8 encoding supporte=
-d by HW
-> > > [    8.899386] hantro-vpu 38320000.video-codec: H.264 encoding suppor=
-ted by HW
-> > > [    8.918171] hantro-vpu 38320000.video-codec: RGB to YUV conversion
-> > > supported by HW
-> > > [    8.934067] hantro-vpu 38320000.video-codec: registered
-> > > nxp,imx8mm-vpu-h1-enc as /dev/video2
-> > >
-> > > Unfortunately, JPEG is not listed as supported.  :-(
-> >
-> > Adam,
-> >
-> > Well not having JPEG encode support is unfortunate, and unexpected. Do
-> > we not have hantro support yet for VP8/H264 encode?
->
-> There is no mainline support yet. You can derive from RK3288 support usin=
-g Google ChromeOS method (a v4l2 plugins that simulate in userspace a state=
-ful encoder):
->
-> - libv4l plugins / https://chromium.googlesource.com/chromiumos/third_par=
-ty/libv4lplugins/+/refs/heads/master
-> - Kernel Driver / https://chromium.googlesource.com/chromiumos/third_part=
-y/kernel/+/chromeos-4.4/drivers/media/platform/rockchip-vpu/
->
-> >
-> > I haven't quite figured out how to build a modern mono-repo gstreamer
-> > on the ubuntu 20.04 rootfs I'm using so I haven't been able to test
-> > VPU encode/decode properly. I'll keep working on it when I'm back in
-> > the office the following week.
->
-> Did a quick test to make sure there isn't any ubuntu specific blockers, h=
-ere's a
-> dirty script that produce a minimal GStreamer, there was really nothing s=
-pecial
-> compare to other meson projects. Note that I use --wrap-mode=3Dnofallback=
- to avoid
-> letting GStreamer complete it's feature-set by downloading the planet. Th=
-is
-> already build quite a lot and could likely be made smaller by avoid plugi=
-ns-good
-> build-dep call, but then you need to check for v4l2odecs and video4linux =
-devs
-> (mostly gudev a glib udev binding).
->
-> # Install ubuntu
-> podman run -it --rm ubuntu:20.04
-> sed -i "s/# deb-src/deb-src/" /etc/apt/sources.list
-> apt update
-> apt build-dep gstreamer1.0-plugins-good
-> apt install git python3-pip flex bison
->
-> # Need a newer meson
-> pip3 install --user meson
-> export PATH=3D$PATH:~/.local/bin
->
-> # Build GStreamer
-> git clone https://gitlab.freedesktop.org/gstreamer/gstreamer.git
-> cd gstreamer
-> meson setup build --wrap-mode=3Dnofallback
-> ninja -C build
->
-> # Run in-place
-> ./gst-env.py
-> gst-inspect-1.0 v4l2codecs
-> gst-inspect 1.0 video4linux2
->
-Thanks for the suggestions.
+Introduce a method based on function tracer to trace any object and get
+the value of the object dynamically. the object can be obtained from the
+dynamic event (kprobe_event/uprobe_event) or the static event(tracepoint).
 
-I downloaded what's in the master repo:
+Usage:
+When using the kprobe event, only need to set the objtrace(a new trigger),
+we can get the value of the object. The object is from the setting of the 
+kprobe event.
 
-[gst-main] root@localhost:~/gstreamer# gst-inspect-1.0 v4l2codecs
+For example:
+For the function bio_add_page():
 
-** (gst-plugin-scanner:7317): CRITICAL **: 10:29:51.847: can't find
-gi.repository.Gst
-Plugin Details:
-  Name                     v4l2codecs
-  Description              V4L2 CODEC Accelerators plugin
-  Filename
-/root/gstreamer/builddir/subprojects/gst-plugins-bad/sys/v4l2codecs/libgstv=
-4l2codecs.so
-  Version                  1.19.3.1
-  License                  LGPL
-  Source module            gst-plugins-bad
-  Binary package           GStreamer Bad Plug-ins git
-  Origin URL               Unknown package origin
+int bio_add_page(struct bio *bio, struct page *page,
+	unsigned int len, unsigned int offset)
 
-  v4l2slh264dec: V4L2 Stateless H.264 Video Decoder
-  v4l2slmpeg2dec: V4L2 Stateless Mpeg2 Video Decoder
-  v4l2slvp8alphadecodebin: VP8 Alpha Decoder
-  v4l2slvp8dec: V4L2 Stateless VP8 Video Decoder
+Firstly, we can set the base of the object, thus the first string "arg1"
+stands for the value of the first parameter of this function bio_add_gage(),
 
-  4 features:
-  +-- 4 elements
+# echo 'p bio_add_page arg1=$arg1' >> ./kprobe_events
 
-[gst-main] root@localhost:~/gstreamer# gst-inspect-1.0 video4linux2
-Plugin Details:
-  Name                     video4linux2
-  Description              elements for Video 4 Linux
-  Filename
-/root/gstreamer/builddir/subprojects/gst-plugins-good/sys/v4l2/libgstvideo4=
-linux2.so
-  Version                  1.19.3.1
-  License                  LGPL
-  Source module            gst-plugins-good
-  Binary package           GStreamer Good Plug-ins git
-  Origin URL               Unknown package origin
+Secondly, we can get the value dynamically base the above object. 
 
-  v4l2deviceprovider: Video (video4linux2) Device Provider
-  v4l2jpegenc: V4L2 JPEG Encoder
-  v4l2radio: Radio (video4linux2) Tuner
-  v4l2sink: Video (video4linux2) Sink
-  v4l2src: Video (video4linux2) Source
+find the offset of the bi_size in struct bio:
+$ gdb vmlinux
+(gdb) p &(((struct bio *)0)->bi_iter.bi_size)
+$1 = (unsigned int *) 0x28
 
-  5 features:
-  +-- 4 elements
-  +-- 1 device providers
+# echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/ \
+	p_bio_add_page_0/trigger
 
-I still have the H1 encoder enabled, but I know JPEG isn't supported,
-so I'm going to attempt to do some decoding and pipe to fakesink since
-I don't have a functional display yet.
+The best way to use this is that we can set the entrance event and exit
+event, for example, the following example is to set the read_papes as
+the entrance event, and set the __blk_account_io_start as the exit event.
 
-gst-launch-1.0 -ev filesrc location=3Dtrailer_1080p_h264_mp3.avi !
-decodebin3  ! fakesink
+# cd /sys/kernel/debug/tracing/
+# echo 0 > ./tracing_on
+# echo 'p read_pages' >> ./kprobe_events
+# echo 'p __blk_account_io_start' >> ./kprobe_events
+# echo 'traceon if comm == "cat"' > ./events/kprobes/p_read_pages_0/trigger
+# echo 'traceoff if comm == "cat"' > ./events/kprobes/p___blk_account_io_start_0/trigger
+# echo 'p bio_add_page arg1=$arg1' >> ./kprobe_events
+# echo 'objtrace:add:arg1,0x28:u32:1 if comm == "cat"' > ./events/kprobes/p_bio_add_page_0/trigger
 
-Redistribute latency...
-/GstPipeline:pipeline0/GstDecodebin3:decodebin3-0/v4l2slh264dec:v4l2slh264d=
-ec0.GstPad:src:
-caps =3D video/x-raw, format=3D(string)NV12, width=3D(int)1920,
-height=3D(int)1080, interlace-mode=3D(string)progressive,
-multiview-mode=3D(string)mono,
-multiview-flags=3D(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/l=
-eft-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono=
-,
-pixel-aspect-ratio=3D(fraction)1/1, framerate=3D(fraction)25/1
-/GstPipeline:pipeline0/GstDecodebin3:decodebin3-0.GstGhostPad:video_0:
-caps =3D video/x-raw, format=3D(string)NV12, width=3D(int)1920,
-height=3D(int)1080, interlace-mode=3D(string)progressive,
-multiview-mode=3D(string)mono,
-multiview-flags=3D(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/l=
-eft-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono=
-,
-pixel-aspect-ratio=3D(fraction)1/1, framerate=3D(fraction)25/1
-/GstPipeline:pipeline0/GstDecodebin3:decodebin3-0.GstGhostPad:video_0.GstPr=
-oxyPad:proxypad6:
-caps =3D video/x-raw, format=3D(string)NV12, width=3D(int)1920,
-height=3D(int)1080, interlace-mode=3D(string)progressive,
-multiview-mode=3D(string)mono,
-multiview-flags=3D(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-first/l=
-eft-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixed-mono=
-,
-pixel-aspect-ratio=3D(fraction)1/1, framerate=3D(fraction)25/1
-/GstPipeline:pipeline0/GstDecodebin3:decodebin3-0/GstMultiQueue:multiqueue0=
-:
-min-interleave-time =3D 300000000
-Redistribute latency...
-/GstPipeline:pipeline0/GstDecodebin3:decodebin3-0/v4l2slh264dec:v4l2slh264d=
-ec0.GstPad:sink:
-caps =3D video/x-h264, variant=3D(string)itu, framerate=3D(fraction)25/1,
-width=3D(int)1920, height=3D(int)1080, chroma-format=3D(string)4:2:0,
-bit-depth-luma=3D(uint)8, bit-depth-chroma=3D(uint)8,
-parsed=3D(boolean)true, stream-format=3D(string)avc, alignment=3D(string)au=
-,
-profile=3D(string)high, level=3D(string)4,
-codec_data=3D(buffer)01640028ffe1001a67640028acd940780227e58400000300040000=
-0300c83c60c65801000668ebe3cb22c0
-New clock: GstSystemClock
+# du -sh /test.txt
+12.0K   /test.txt
 
-And it appears to stream, because the counter increases.  I haven't
-checked the CPU utilization, but the fact that it shows v4l2slh264dec
-is good.
+# cat  /test.txt > /dev/null
+# cat ./trace
 
-Is there a way to know if/how the decoder is using the proper VPU?  I
-assume if it wasn't using the proper one, it would fail, but was just
-curious.
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 50/50   #P:1
+#
+#                                _-----=> irqs-off
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+             cat-95      [000] .....     1.412065: _raw_spin_unlock_irqrestore <-event_triggers_call object:0xffff888108af6328 value:0x0
+             cat-95      [000] .....     1.412066: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x0
+             cat-95      [000] .....     1.412066: __bio_add_page <-bio_add_page object:0xffff888108af6328 value:0x0
+             cat-95      [000] .....     1.412066: rcu_read_unlock_strict <-xa_load object:0xffff888108af6328 value:0x1000
+             cat-95      [000] .....     1.412066: bio_add_page <-ext4_mpage_readpages object:0xffff888108af6328 value:0x1000
+             cat-95      [000] .....     1.412066: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x1000
+             cat-95      [000] .....     1.412067: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x1000
+             cat-95      [000] .....     1.412067: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x1000
+             cat-95      [000] .....     1.412067: __bio_add_page <-bio_add_page object:0xffff888108af6328 value:0x1000
+             cat-95      [000] .....     1.412067: rcu_read_unlock_strict <-xa_load object:0xffff888108af6328 value:0x2000
+             cat-95      [000] .....     1.412067: bio_add_page <-ext4_mpage_readpages object:0xffff888108af6328 value:0x2000
+             cat-95      [000] .....     1.412067: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x2000
+             cat-95      [000] .....     1.412067: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x2000
+             cat-95      [000] .....     1.412067: __bio_try_merge_page <-bio_add_page object:0xffff888108af6328 value:0x2000
+             cat-95      [000] .....     1.412068: submit_bio <-ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: submit_bio_noacct <-ext4_mpage_readpages object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: __submit_bio <-submit_bio_noacct object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: blk_try_enter_queue <-__submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: rcu_read_unlock_strict <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: rcu_read_unlock_strict <-blk_try_enter_queue object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: submit_bio_checks <-__submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: __cond_resched <-submit_bio_checks object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: rcu_all_qs <-__cond_resched object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412068: should_fail_bio <-submit_bio_checks object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412069: create_task_io_context <-submit_bio_checks object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412069: kmem_cache_alloc_node <-create_task_io_context object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412069: should_failslab <-kmem_cache_alloc_node object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412069: _raw_spin_lock <-create_task_io_context object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412069: blk_mq_submit_bio <-__submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412069: __blk_queue_split <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412069: bvec_split_segs <-__blk_queue_split object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412069: blk_attempt_plug_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: __blk_mq_sched_bio_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: dd_bio_merge <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: _raw_spin_lock <-dd_bio_merge object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: blk_mq_sched_try_merge <-dd_bio_merge object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: elv_merge <-blk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: elv_rqhash_find <-elv_merge object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: dd_request_merge <-blk_mq_sched_try_merge object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: elv_rb_find <-dd_request_merge object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412070: __blk_mq_alloc_request <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: dd_limit_depth <-__blk_mq_alloc_request object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: blk_mq_get_tag <-__blk_mq_alloc_request object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: __blk_mq_get_tag <-blk_mq_get_tag object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: blk_mq_rq_ctx_init.isra.0 <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: ktime_get <-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: dd_prepare_request <-blk_mq_rq_ctx_init.isra.0 object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: __blk_account_io_start <-blk_mq_submit_bio object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: kprobe_ftrace_handler <-ftrace_ops_list_func object:0xffff888108af6328 value:0x3000
+             cat-95      [000] .....     1.412071: get_kprobe <-kprobe_ftrace_handler object:0xffff888108af6328 value:0x3000
 
-I think I'll redo the patch without the RFC and without the H1 encoder
-unless anyone has any objections.  I know I need to rebase on
-linux-next anyway because the patches don't apply cleanly.  Is there a
-specific branch I should use?  I don't know if this goes through
-Shawn's IMX tree or the media tree (or a combination)
+Jeff Xie (5):
+  trace: Add trace any kernel object
+  trace/objtrace: get the value of the object
+  trace/README: Document objtrace trigger syntax
+  trace/objtrace: Add testcases for objtrace
+  trace/objtrace: Add documentation for objtrace
 
-adam
-adam
+ Documentation/trace/events.rst                | 114 +++
+ include/linux/trace_events.h                  |   1 +
+ kernel/trace/Kconfig                          |  10 +
+ kernel/trace/Makefile                         |   1 +
+ kernel/trace/trace.c                          |   3 +
+ kernel/trace/trace.h                          |   8 +
+ kernel/trace/trace_entries.h                  |  18 +
+ kernel/trace/trace_events_trigger.c           |   1 +
+ kernel/trace/trace_object.c                   | 660 ++++++++++++++++++
+ kernel/trace/trace_output.c                   |  40 ++
+ .../ftrace/test.d/trigger/trigger-objtrace.tc |  39 ++
+ 11 files changed, 895 insertions(+)
+ create mode 100644 kernel/trace/trace_object.c
+ create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-objtrace.tc
 
+-- 
+2.25.1
 
-> >
-> > Best regards,
-> >
-> > Tim
-> >
-> > >
-> > > However, the hanging stops occurring, so I'll be posting a patch to
-> > > update the GPCv2 code.  I can reduce sone device tree duplication, an=
-d
-> > > the G2 throws some splat, but that will be a separate discussion.
-> > >
-> > > I can also run v4l2-compliance on the H1 node, and it responds withou=
-t hanging.
-> > >
-> > > root@beacon-imx8mm-kit:~# v4l2-compliance -d2
-> > > v4l2-compliance SHA: not available
-> > > , 64 bits, 64-bit time_t
-> > >
-> > > Compliance test for hantro-vpu device /dev/video2:
-> > >
-> > > Driver Info:
-> > > Driver name      : hantro-vpu
-> > > Card type        : nxp,imx8mm-vpu-h1-enc
-> > > Bus info         : platform: hantro-vpu
-> > > Driver version   : 5.16.0
-> > > Capabilities     : 0x84204000
-> > > Video Memory-to-Memory Multiplanar
-> > > Streaming
-> > > Extended Pix Format
-> > > Device Capabilities
-> > > Device Caps      : 0x04204000
-> > > Video Memory-to-Memory Multiplanar
-> > >
-> > > < snip>
-> > >
-> > > Total for hantro-vpu device /dev/video2: 46, Succeeded: 46, Failed: 0=
-,
-> > > Warnings: 0
-> > >
-> > > I'll do an RFCv2 on the Hantro G1 and G2 with the H1 removed based on
-> > > the updated GPCv2 code I'll be pushing shortly, but at least the
-> > > system doesn't hang, so I'm fairly confident the power domains are
-> > > working better now even if we cannot support the JPEG.
-> > >
-> > > adam
-> > >
-> > > > >
-> > > > > > >
-> > > > > > > >
-> > > > > > > > > host=3D192.168.1.146 port=3D5000
-> > > > > > > > > viewed on client@192.168.1.146 via:
-> > > > > > > > > $ gst-launch-1.0 udpsrc port=3D5000 ! application/x-rtp,p=
-ayload=3D96 !
-> > > > > > > > > rtpjpegdepay ! jpegdec ! autovideosink
-> > > > > > > > >
-> > > > > > > > > For the G1/G2 patches in the series I don't see any Gstre=
-amer
-> > > > > > > > > 'v4l2.*dec' elements. Perhaps I need a newer version of G=
-streamer.
-> > > > > > > >
-> > > > > > > > Most likely yes, I suggest building gstreamer/ branch "main=
-", GStreamer has now
-> > > > > > > > a single repository. We are very close to 1.20, which will =
-include stable API
-> > > > > > > > support of H264, MPEG2 and VP8 decoding.
-> > > > > > > >
-> > > > > > >
-> > > > > > > Ok, let me see if I can navigate through the build process an=
-d I'll
-> > > > > > > get back to you.
-> > > > > > >
-> > > > > > > Thanks,
-> > > > > > >
-> > > > > > > Tim
-> > > > > > >
-> > > > > > > > >
-> > > > > > > > > I have CSI capture and DSI display currently working on
-> > > > > > > > > imx8mm-venice-gw73xx-0x that I can play with. The CSI sen=
-sor only
-> > > > > > > > > supports RAW8/RAW10 (and gstreamer currently only support=
-s RAW8) and I
-> > > > > > > > > can't efficiently convert to something the JPEG encoder l=
-ikes without
-> > > > > > > > > bayer2rgbneon (a libneon version).
-> > > > > > > > >
-> > > > > > > > > I see from the IMX8MMRM that the 2D GPU supports scaling =
-etc with a
-> > > > > > > > > wide range of data formats but I'm not sure how to tap in=
-to this as
-> > > > > > > > > that hardware is managed by the vivante driver. On the IM=
-X6QDL there
-> > > > > > > > > is a separate IPU block that Philipp Zabel wrote a nice m=
-em2mem
-> > > > > > > > > csc/scaler driver for but I don't see any equivalent curr=
-ently for
-> > > > > > > > > IMX8MM.
-> > > > > > > > >
-> > > > > > > > > Best regards,
-> > > > > > > > >
-> > > > > > > > > Tim
-> > > > > > > >
-> > > > >
->

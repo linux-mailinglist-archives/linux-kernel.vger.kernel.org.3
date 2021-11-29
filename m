@@ -2,146 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCA1462666
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1708146248E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234677AbhK2Wvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:51:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235781AbhK2WuR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:50:17 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC57C0619D9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:26:06 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id y8so13001777plg.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:26:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ky2ZS0rUrPmY585Dnw4cMPE4BkawU8vET/uCfEt239E=;
-        b=YlIBSVAlHKxAWW2JlEpHea8Gr9tdF6cQeOBvYJLs+MyyqPyMfTBdlqTEY8zblbwS+S
-         mlhRjS3eTaFRnTlGb8NaXkIEoz76LSeWfXpYmZdkHtOsK2dxuYI/xByC3gRLn/vs+y9l
-         vlEQ4+s/SsYv0WMJ0iQqzENGPo/1F2TvlYeevuv7yow+1SBXUjOs2qf+EB7YGiFVRLSy
-         /gMtKUp2SzYhwMHjPBjyQaJFSQxLP/HyJkNZ0IFvk1TABDS6ELJ6ACVa8VskhLOqcox5
-         bqxWa8SLXKXcYUzrNLUXoX1gf4biuOsIM2NkBo7rLLIl4KoG6KNezMdIgyecEnYBV/FP
-         8fsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ky2ZS0rUrPmY585Dnw4cMPE4BkawU8vET/uCfEt239E=;
-        b=Pz/L6sqNT9qjcon+iPXhA9gQXrcjxK7/IE4G2+vjfr/JfwrTo457T/7Bc5iizfK/mA
-         z0k9bvrFvTtG/rbXz/AQcmkaMv4Nvv48rKeJ6KLU8Ik1Dp/Y+qupyjIBv9bOzbERKvFC
-         zxzp0ZMAUjpO6/FPfjjlv/Pdg3FMLvydPIzPf9KBffGZJ0bbBta/cRsgp2vk6/W7wPBP
-         XLuD6uRzSSHEAKyLttQbftMm/Xoqn0ZaUSNW159vLw1TIWAHGDU87Q9Tusw0lof4YGTJ
-         1Pfw+n22BzDVCr8lmdw4MislqeI3jxK+ZZVu8znNEVswAO9eKjj43B6W8YbA1JiMw/Hv
-         cQMQ==
-X-Gm-Message-State: AOAM530YiPhx8dOzrfdtFpzUksyLJ52UggJqYZk41zEa0VyGKqUCPu/v
-        Lz3eLtiBcZ98h1olypKKdnsF1Q==
-X-Google-Smtp-Source: ABdhPJxVDBh0tLzBePzWon0Vy8jcnvH1HV/QCaCT1ju+uUCmJKWa8FAh7XpASXU12te0Ot4f+gd9wQ==
-X-Received: by 2002:a17:90b:1a8b:: with SMTP id ng11mr55940pjb.3.1638213965571;
-        Mon, 29 Nov 2021 11:26:05 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z10sm18325951pfh.106.2021.11.29.11.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 11:26:05 -0800 (PST)
-Date:   Mon, 29 Nov 2021 19:26:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] KVM: nVMX: Emulate guest TLB flush on nested
- VM-Enter with new vpid12
-Message-ID: <YaUpSeLfa2OejA81@google.com>
-References: <20211125014944.536398-1-seanjc@google.com>
- <20211125014944.536398-3-seanjc@google.com>
- <CAJhGHyBC1C71wchvqE_YztCvtkNgnmTN9FbBAOSz0K6SA3+WAA@mail.gmail.com>
+        id S232815AbhK2WU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:20:57 -0500
+Received: from ip-8.mailobj.net ([213.182.54.8]:54064 "EHLO msg-3.mailo.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233342AbhK2WTM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:19:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=net-c.es; s=mailo;
+        t=1638214067; bh=2tcgcuVx80VzE4HILFYDigYj1ddMAtFMGwsLwzeYJTE=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=kFbX93nVReDYouw6rmj01uRjYOerEJ1fhlHSgiBtoJheGnRRkAqFLM4VTPmtEiAqY
+         Qo2Lx8/PNvJR7p1Vx9hF/sb0xvhnKtzbhoh+Xv1P1CejhN1doggzivEAEFlLp7ri7g
+         2iEW2X0BfFBNBcTAyQSyIxWSINJ/qVviAJ297xjU=
+Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Mon, 29 Nov 2021 20:27:47 +0100 (CET)
+X-EA-Auth: f6dgvTlaAqO2oTPEOC2hHY8CdKMsDGMTCWBI8qLYN/QciFxzFyYn367HsKxggpua43yNhgBTghzuyu8g8HNK1DNA8kPcBq0V
+Date:   Mon, 29 Nov 2021 20:27:45 +0100
+From:   Claudio Suarez <cssk@net-c.es>
+To:     dri-devel@lists.freedesktop.org
+Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
+        lkp@lists.01.org, dri-devel@lists.freedesktop.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: [PATCH] drm: fix error found in some cases after the patch
+ d1af5cd86997
+Message-ID: <YaUpsaP7hng6zpFh@gineta.localdomain>
+References: <YaC7zXW119tlzfVh@gineta.localdomain>
+ <20211128142015.GB5295@xsang-OptiPlex-9020>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJhGHyBC1C71wchvqE_YztCvtkNgnmTN9FbBAOSz0K6SA3+WAA@mail.gmail.com>
+In-Reply-To: <20211128142015.GB5295@xsang-OptiPlex-9020>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021, Lai Jiangshan wrote:
-> On Thu, Nov 25, 2021 at 9:49 AM Sean Christopherson <seanjc@google.com> wrote:
-> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> > index 2ef1d5562a54..dafe5881ae51 100644
-> > --- a/arch/x86/kvm/vmx/nested.c
-> > +++ b/arch/x86/kvm/vmx/nested.c
-> > @@ -1162,29 +1162,26 @@ static void nested_vmx_transition_tlb_flush(struct kvm_vcpu *vcpu,
-> >         WARN_ON(!enable_vpid);
-> >
-> >         /*
-> > -        * If VPID is enabled and used by vmc12, but L2 does not have a unique
-> > -        * TLB tag (ASID), i.e. EPT is disabled and KVM was unable to allocate
-> > -        * a VPID for L2, flush the current context as the effective ASID is
-> > -        * common to both L1 and L2.
-> > -        *
-> > -        * Defer the flush so that it runs after vmcs02.EPTP has been set by
-> > -        * KVM_REQ_LOAD_MMU_PGD (if nested EPT is enabled) and to avoid
-> > -        * redundant flushes further down the nested pipeline.
-> > -        *
-> > -        * If a TLB flush isn't required due to any of the above, and vpid12 is
-> > -        * changing then the new "virtual" VPID (vpid12) will reuse the same
-> > -        * "real" VPID (vpid02), and so needs to be flushed.  There's no direct
-> > -        * mapping between vpid02 and vpid12, vpid02 is per-vCPU and reused for
-> > -        * all nested vCPUs.  Remember, a flush on VM-Enter does not invalidate
-> > -        * guest-physical mappings, so there is no need to sync the nEPT MMU.
-> > +        * VPID is enabled and in use by vmcs12.  If vpid12 is changing, then
-> > +        * emulate a guest TLB flush as KVM does not track vpid12 history nor
-> > +        * is the VPID incorporated into the MMU context.  I.e. KVM must assume
-> > +        * that the new vpid12 has never been used and thus represents a new
-> > +        * guest ASID that cannot have entries in the TLB.
-> >          */
-> > -       if (!nested_has_guest_tlb_tag(vcpu)) {
-> > -               kvm_make_request(KVM_REQ_TLB_FLUSH_CURRENT, vcpu);
-> > -       } else if (is_vmenter &&
-> > -                  vmcs12->virtual_processor_id != vmx->nested.last_vpid) {
-> > +       if (is_vmenter && vmcs12->virtual_processor_id != vmx->nested.last_vpid) {
-> >                 vmx->nested.last_vpid = vmcs12->virtual_processor_id;
-> 
-> How about when vmx->nested.last_vpid == vmcs12->virtual_processor_id == 0?
-> 
-> I think KVM_REQ_TLB_FLUSH_GUEST is needed in this case too.
+The patch d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log
+calls in drm core, files drm_a*.c") fails when the drm_device
+cannot be found in the parameter plane_state. Fix it.
 
-That's handled by code that's just out of sight in this diff.  The first check in
-nested_vmx_transition_tlb_flush() is to see if vmcs12 has VPID enabled.  If the
-code in this patch is reached, vmcs12->virtual_processor_id is guaranteed to be
-non-zero as VM-Enter fails if VPID is enabled but VPID==0.
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Fixes: d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log calls in drm core, files drm_a*.c")
+Signed-off-by: Claudio Suarez <cssk@net-c.es>
+---
+ drivers/gpu/drm/drm_atomic_helper.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-static void nested_vmx_transition_tlb_flush(struct kvm_vcpu *vcpu,
-					    struct vmcs12 *vmcs12,
-					    bool is_vmenter)
-{
-	struct vcpu_vmx *vmx = to_vmx(vcpu);
+diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+index aef2fbd676e5..8bd4472d7949 100644
+--- a/drivers/gpu/drm/drm_atomic_helper.c
++++ b/drivers/gpu/drm/drm_atomic_helper.c
+@@ -312,7 +312,7 @@ update_connector_routing(struct drm_atomic_state *state,
+ 
+ 	if (!new_connector_state->crtc) {
+ 		drm_dbg_atomic(connector->dev, "Disabling [CONNECTOR:%d:%s]\n",
+-				connector->base.id, connector->name);
++			       connector->base.id, connector->name);
+ 
+ 		set_best_encoder(state, new_connector_state, NULL);
+ 
+@@ -805,6 +805,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+ 					bool can_update_disabled)
+ {
+ 	struct drm_framebuffer *fb = plane_state->fb;
++	struct drm_device *dev = plane_state->plane ? plane_state->plane->dev : NULL;
+ 	struct drm_rect *src = &plane_state->src;
+ 	struct drm_rect *dst = &plane_state->dst;
+ 	unsigned int rotation = plane_state->rotation;
+@@ -828,8 +829,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+ 	}
+ 
+ 	if (!crtc_state->enable && !can_update_disabled) {
+-		drm_dbg_kms(plane_state->crtc->dev,
+-			       "Cannot update plane of a disabled CRTC.\n");
++		drm_dbg_kms(dev, "Cannot update plane of a disabled CRTC.\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -839,8 +839,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+ 	hscale = drm_rect_calc_hscale(src, dst, min_scale, max_scale);
+ 	vscale = drm_rect_calc_vscale(src, dst, min_scale, max_scale);
+ 	if (hscale < 0 || vscale < 0) {
+-		drm_dbg_kms(plane_state->crtc->dev,
+-			       "Invalid scaling of plane\n");
++		drm_dbg_kms(dev, "Invalid scaling of plane\n");
+ 		drm_rect_debug_print("src: ", &plane_state->src, true);
+ 		drm_rect_debug_print("dst: ", &plane_state->dst, false);
+ 		return -ERANGE;
+@@ -864,8 +863,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+ 		return 0;
+ 
+ 	if (!can_position && !drm_rect_equals(dst, &clip)) {
+-		drm_dbg_kms(plane_state->crtc->dev,
+-			       "Plane must cover entire CRTC\n");
++		drm_dbg_kms(dev, "Plane must cover entire CRTC\n");
+ 		drm_rect_debug_print("dst: ", dst, false);
+ 		drm_rect_debug_print("clip: ", &clip, false);
+ 		return -EINVAL;
+-- 
+2.33.0
 
-	/*
-	 * If vmcs12 doesn't use VPID, L1 expects linear and combined mappings
-	 * for *all* contexts to be flushed on VM-Enter/VM-Exit, i.e. it's a
-	 * full TLB flush from the guest's perspective.  This is required even
-	 * if VPID is disabled in the host as KVM may need to synchronize the
-	 * MMU in response to the guest TLB flush.
-	 *
-	 * Note, using TLB_FLUSH_GUEST is correct even if nested EPT is in use.
-	 * EPT is a special snowflake, as guest-physical mappings aren't
-	 * flushed on VPID invalidations, including VM-Enter or VM-Exit with
-	 * VPID disabled.  As a result, KVM _never_ needs to sync nEPT
-	 * entries on VM-Enter because L1 can't rely on VM-Enter to flush
-	 * those mappings.
-	 */
-	if (!nested_cpu_has_vpid(vmcs12)) {
-		kvm_make_request(KVM_REQ_TLB_FLUSH_GUEST, vcpu);
-		return;
-	}
 
-	...
-}
+

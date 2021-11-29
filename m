@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7A04624FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAAA24625F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbhK2Wdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:33:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S234603AbhK2Wpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbhK2WdK (ORCPT
+        with ESMTP id S235070AbhK2Wo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:33:10 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C7FC07E5EC;
-        Mon, 29 Nov 2021 10:38:12 -0800 (PST)
+        Mon, 29 Nov 2021 17:44:56 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A0FC047CDA;
+        Mon, 29 Nov 2021 10:31:29 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 841ACB815DE;
-        Mon, 29 Nov 2021 18:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADA2C53FAD;
-        Mon, 29 Nov 2021 18:38:10 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B8A9CE1414;
+        Mon, 29 Nov 2021 18:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9136C53FC7;
+        Mon, 29 Nov 2021 18:31:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638211091;
-        bh=4bIXDqhPIy3o5CeFPHCMI7RLnUsxyKAqTHWlFD0bhTs=;
+        s=korg; t=1638210686;
+        bh=DctU7ZuRPYRNCndyqosNncxXGWUQTuiCgQ3if0Ne70g=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O0tXAWP+3vJTN5bOkL+VEZ5Zm2eTA2/ptgsHgIepzyGL/hllC4duTSfSBAEw2uaj1
-         jwl3hu9/bYxqrG8+9OCdLDtX8igkd7KxEAVzBkZqpVdU1t0ToAoLfF+VHsXIdNO7rw
-         COOfSliMQMgZggIlN+e00TrO7klSnaG+ykFguLDQ=
+        b=IlA1CQYgldXBjqxAVGnpGenuBfTy8jzpAW0aLIgB8lSDRbXHik47jACSKLSYufCp3
+         1eOFwPU/52KU3pO7jtqdto23B27yNrDSGbBNeXoZYRBl5ETF91DiqIcuTqtd/+OZNr
+         UnnlDJO41KJyayXg+iyHi2sCd88AdyUz/NPogo2c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        stable@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Tobias Brunner <tobias@strongswan.org>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 101/179] x86/pvh: add prototype for xen_pvh_init()
+Subject: [PATCH 5.10 064/121] ipv6: fix typos in __ip6_finish_output()
 Date:   Mon, 29 Nov 2021 19:18:15 +0100
-Message-Id: <20211129181722.257947401@linuxfoundation.org>
+Message-Id: <20211129181713.803365371@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
-References: <20211129181718.913038547@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+References: <20211129181711.642046348@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,35 +52,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 767216796cb9ae7f1e3bdf43a7b13b2bf100c2d2 ]
+[ Upstream commit 19d36c5f294879949c9d6f57cb61d39cc4c48553 ]
 
-xen_pvh_init() is lacking a prototype in a header, add it.
+We deal with IPv6 packets, so we need to use IP6CB(skb)->flags and
+IP6SKB_REROUTED, instead of IPCB(skb)->flags and IPSKB_REROUTED
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20211006061950.9227-1-jgross@suse.com
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Found by code inspection, please double check that fixing this bug
+does not surface other bugs.
+
+Fixes: 09ee9dba9611 ("ipv6: Reinject IPv6 packets if IPsec policy matches after SNAT")
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Cc: Tobias Brunner <tobias@strongswan.org>
+Cc: Steffen Klassert <steffen.klassert@secunet.com>
+Cc: David Ahern <dsahern@kernel.org>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+Tested-by: Tobias Brunner <tobias@strongswan.org>
+Acked-by: Tobias Brunner <tobias@strongswan.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/xen/hypervisor.h | 4 ++++
- 1 file changed, 4 insertions(+)
+ net/ipv6/ip6_output.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/xen/hypervisor.h b/arch/x86/include/asm/xen/hypervisor.h
-index ff4b52e37e60d..4957f59deb40b 100644
---- a/arch/x86/include/asm/xen/hypervisor.h
-+++ b/arch/x86/include/asm/xen/hypervisor.h
-@@ -62,4 +62,8 @@ void xen_arch_register_cpu(int num);
- void xen_arch_unregister_cpu(int num);
+diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
+index c2f8e69d7d7a0..54cabf1c2ae15 100644
+--- a/net/ipv6/ip6_output.c
++++ b/net/ipv6/ip6_output.c
+@@ -193,7 +193,7 @@ static int __ip6_finish_output(struct net *net, struct sock *sk, struct sk_buff
+ #if defined(CONFIG_NETFILTER) && defined(CONFIG_XFRM)
+ 	/* Policy lookup after SNAT yielded a new policy */
+ 	if (skb_dst(skb)->xfrm) {
+-		IPCB(skb)->flags |= IPSKB_REROUTED;
++		IP6CB(skb)->flags |= IP6SKB_REROUTED;
+ 		return dst_output(net, sk, skb);
+ 	}
  #endif
- 
-+#ifdef CONFIG_PVH
-+void __init xen_pvh_init(struct boot_params *boot_params);
-+#endif
-+
- #endif /* _ASM_X86_XEN_HYPERVISOR_H */
 -- 
 2.33.0
 

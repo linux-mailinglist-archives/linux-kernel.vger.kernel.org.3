@@ -2,66 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9B746288D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6A646287F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:41:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232505AbhK2XvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:51:02 -0500
-Received: from gate.crashing.org ([63.228.1.57]:34567 "EHLO gate.crashing.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229841AbhK2XvB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:51:01 -0500
-Received: from ip6-localhost (localhost.localdomain [127.0.0.1])
-        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 1ATNf0UG024811;
-        Mon, 29 Nov 2021 17:41:01 -0600
-Message-ID: <84b2d2c6b530d0a3a9b86b0ffcbfa70935bdb0a9.camel@kernel.crashing.org>
-Subject: Re: [PATCH 1/3] usb: aspeed-vhub: add qualifier descriptor
-From:   Benjamin Herrenschmidt <benh@kernel.crashing.org>
-To:     Neal Liu <neal_liu@aspeedtech.com>,
-        Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        kernel test robot <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org
-Cc:     BMC-SW@aspeedtech.com
-Date:   Tue, 30 Nov 2021 10:40:59 +1100
-In-Reply-To: <20211126110954.2677627-2-neal_liu@aspeedtech.com>
-References: <20211126110954.2677627-1-neal_liu@aspeedtech.com>
-         <20211126110954.2677627-2-neal_liu@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        id S232821AbhK2XpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:45:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232108AbhK2XpM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 18:45:12 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A8FC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:41:54 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id c29so6735065pgl.12
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:41:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=PDG0Bl8E6wlHiv8lfcoAy+JyQ0H+H21DxcHuwLiwAi8=;
+        b=YHhv+ReJo9k2w1FFWtWlaPGT1O4O9PwdOFSROBlMrHS8iqi5qQAzDpbGhh7/DS718i
+         yu8BBK8pMQIGNcMLZUYYZv2N5HOxKmDgwW71n/w2kqsplpyfq4XD+gUjgvfggIaK2hc2
+         zoaWFXGPA4Bqtuq59fzBlki05ld9qNBD1Gcr63c92sNaIBJojY+uNCkSdXUG6gT9Ibp5
+         AEZbTddRaD9q5lEwRKGtt4bGTW27j/MrQf01dZDxve9uRPofhTueAQWzR5h4yHAii/Ws
+         Gqz3tJmbN7pRgTgbzCROImBo4dC3q+zaCDskXhSthAcDmqxTXO1wsTSf7ekTd5MfUuyv
+         rX+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PDG0Bl8E6wlHiv8lfcoAy+JyQ0H+H21DxcHuwLiwAi8=;
+        b=hEeyVPYvfTFY5CvSYji0rJNA+G+hEnAD4SgTxlb7RS9iq7BmZd5pobB3BIqAol7+Yd
+         skOrYzEZuZSHfi5p16Kw76J2K3gK7ImSn/n2+PYk1BLX0OnLyZyczkXNi/SQfDQsfMGH
+         LleBLHrCSLseYXrBxmolV6HgdTft8BxSE6NBfZFKAA2RaCBicRs0RYAMovqPxaVR6k88
+         d+Uj1KfA2jIkb1d7sMkiUxlZ96cI2M2pad1BJnRgqgxFw/Izb8pwLLQ279W6tk01nQtO
+         WRse4eRT/ms1jkho01Bk8C3c6DSO2KoNRCRMerD1ba4Uwhe7MbybgNsaPS0jNVtMPbDZ
+         ihUg==
+X-Gm-Message-State: AOAM530pxxQ5cLtSvUrIIKGOJInupXq+0bFFLy52gpDbYUf73vk5a5KC
+        qb+5v94kAyqjxp7a2YiG0L/bMg==
+X-Google-Smtp-Source: ABdhPJxuBGPuA+T2tL92nF8nTaKDlOozw7oEPFI09uY+LONaAJeW35fY35HO46VjMrr8r0+nE/lVvg==
+X-Received: by 2002:a63:4918:: with SMTP id w24mr23854492pga.598.1638229314214;
+        Mon, 29 Nov 2021 15:41:54 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id t4sm19332194pfq.163.2021.11.29.15.41.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 15:41:53 -0800 (PST)
+Date:   Mon, 29 Nov 2021 23:41:50 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
+Subject: Re: [PATCH 4/4] KVM: x86: Use a stable condition around all VT-d PI
+ paths
+Message-ID: <YaVlPso5X2dM+kXC@google.com>
+References: <20211123004311.2954158-1-pbonzini@redhat.com>
+ <20211123004311.2954158-5-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123004311.2954158-5-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2021-11-26 at 19:09 +0800, Neal Liu wrote:
+On Mon, Nov 22, 2021 at 07:43:11PM -0500, Paolo Bonzini wrote:
+> Currently, checks for whether VT-d PI can be used refer to the current
+> status of the feature in the current vCPU; or they more or less pick
+> vCPU 0 in case a specific vCPU is not available.
 > 
-> @@ -417,10 +435,9 @@ enum std_req_rc ast_vhub_std_hub_request(struct ast_vhub_ep *ep,
+> However, these checks do not attempt to synchronize with changes to
+> the IRTE.  In particular, there is no path that updates the IRTE when
+> APICv is re-activated on vCPU 0; and there is no path to wakeup a CPU
+> that has APICv disabled, if the wakeup occurs because of an IRTE
+> that points to a posted interrupt.
+> 
+> To fix this, always go through the VT-d PI path as long as there are
+> assigned devices and APICv is available on both the host and the VM side.
+> Since the relevant condition was copied over three times, take the hint
+> and factor it into a separate function.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
+> ---
+>  arch/x86/kvm/vmx/posted_intr.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+> index 5f81ef092bd4..1c94783b5a54 100644
+> --- a/arch/x86/kvm/vmx/posted_intr.c
+> +++ b/arch/x86/kvm/vmx/posted_intr.c
+> @@ -5,6 +5,7 @@
+>  #include <asm/cpu.h>
 >  
->  		/* GET/SET_CONFIGURATION */
->  	case DeviceRequest | USB_REQ_GET_CONFIGURATION:
-> -		return ast_vhub_simple_reply(ep, 1);
-> +		return ast_vhub_simple_reply(ep, vhub->current_config);
->  	case DeviceOutRequest | USB_REQ_SET_CONFIGURATION:
-> -		if (wValue != 1)
-> -			return std_req_stall;
-> +		vhub->current_config = wValue;
->  		return std_req_complete;
-
-This is odd.. why should we support arbitrary SET_CONFIGURATION for
-configs we don't support ?
-
-Otherwise looks good.
-
-Cheers,
-Ben.
-
-
+>  #include "lapic.h"
+> +#include "irq.h"
+>  #include "posted_intr.h"
+>  #include "trace.h"
+>  #include "vmx.h"
+> @@ -77,13 +78,18 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
+>  		pi_set_on(pi_desc);
+>  }
+>  
+> +static bool vmx_can_use_vtd_pi(struct kvm *kvm)
+> +{
+> +	return irqchip_in_kernel(kvm) && enable_apicv &&
+> +		kvm_arch_has_assigned_device(kvm) &&
+> +		irq_remapping_cap(IRQ_POSTING_CAP);
+> +}
+> +
+>  void vmx_vcpu_pi_put(struct kvm_vcpu *vcpu)
+>  {
+>  	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
+>  
+> -	if (!kvm_arch_has_assigned_device(vcpu->kvm) ||
+> -		!irq_remapping_cap(IRQ_POSTING_CAP)  ||
+> -		!kvm_vcpu_apicv_active(vcpu))
+> +	if (!vmx_can_use_vtd_pi(vcpu->kvm))
+>  		return;
+>  
+>  	/* Set SN when the vCPU is preempted */
+> @@ -141,9 +147,7 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
+>  	struct pi_desc old, new;
+>  	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
+>  
+> -	if (!kvm_arch_has_assigned_device(vcpu->kvm) ||
+> -		!irq_remapping_cap(IRQ_POSTING_CAP)  ||
+> -		!kvm_vcpu_apicv_active(vcpu))
+> +	if (!vmx_can_use_vtd_pi(vcpu->kvm))
+>  		return 0;
+>  
+>  	WARN_ON(irqs_disabled());
+> @@ -270,9 +274,7 @@ int pi_update_irte(struct kvm *kvm, unsigned int host_irq, uint32_t guest_irq,
+>  	struct vcpu_data vcpu_info;
+>  	int idx, ret = 0;
+>  
+> -	if (!kvm_arch_has_assigned_device(kvm) ||
+> -	    !irq_remapping_cap(IRQ_POSTING_CAP) ||
+> -	    !kvm_vcpu_apicv_active(kvm->vcpus[0]))
+> +	if (!vmx_can_use_vtd_pi(kvm))
+>  		return 0;
+>  
+>  	idx = srcu_read_lock(&kvm->irq_srcu);
+> -- 
+> 2.27.0
+> 

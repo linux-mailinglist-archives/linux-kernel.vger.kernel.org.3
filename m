@@ -2,141 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 645EB4624A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099834624AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbhK2WXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:23:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
+        id S233551AbhK2WXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:23:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbhK2WVy (ORCPT
+        with ESMTP id S231983AbhK2WVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Nov 2021 17:21:54 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0CFC21885B
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 12:13:14 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso16519780pji.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 12:13:14 -0800 (PST)
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF13C08ED38;
+        Mon, 29 Nov 2021 12:13:54 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id r11so77131247edd.9;
+        Mon, 29 Nov 2021 12:13:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=from:to:cc:subject:references:date:in-reply-to:message-id
-         :user-agent:mime-version;
-        bh=8kKuma19DoqzJ6QAXbY90QDUkkq9MPNT/HcFRm8bmRg=;
-        b=HFz5zG0dzzFQmfT6iG5mC35PnwMndF/W86P5u8+xxJ1DltPKn/4Y0auSUFjws1mfAG
-         8y9FeIIUhctb1hvuFb99P8grFz3yZdwDRommevmGAVLhbdY1e4xyFO9+BGWzIywxbSv9
-         ibCun9EqnWmQkd6c3aSWJB/rJooYrNXHF8AClkrc8w5JsytSNgjO1kFfEK23oLv0Dbww
-         iWVe+KXTTNfp4D/4CcSLj467oqoAFH8+SrHgAXjdSPrl9UIll0tNe7cshTglxqzy7JuE
-         dvHVE2KYsp0Ucd8/i+y6ZpyR6AzpM5bORmkRzAFBnbjspY3y+kbuhzSIQonEbxbm1k2W
-         wivA==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fi42U/2jTpx4BPkiel0v3NDRtd9dtjlNx3pYLf3HPek=;
+        b=Cp149vpQac3NuayyncHRgVWAufJASCZmcQmiC8wTWF0gcADkg5OetNokGVSlko2U5V
+         wu95zs4NSFS4Zef9eezxIxUyrXSwLKbBAQod5t5j8q51tKRtYf+I9C35RQ7He8CjsOGj
+         ozkkesanML5s0T/kTEQASrhj+zaxg1f4wLkX3jQMn6XnmzMl8ITbNwUe2xP6Ewk887Bg
+         bPoCn8Y9V5lj9fxOnFBtkW/ITEqk0Ng7XMbBVgSAsb8aYsMu85Bt71uJpF1a7A1SuXIp
+         1EzEILVjPx8v9ChnM9Gioa5D+yd/pSWgze8wHFEQM7jbT5DHLUkfT5lg1Sw0/K69pveF
+         25tw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
-         :message-id:user-agent:mime-version;
-        bh=8kKuma19DoqzJ6QAXbY90QDUkkq9MPNT/HcFRm8bmRg=;
-        b=bn20QD71agKPSklzT9TNTbMQnAdehw9GyGUjJDjWpQnlAP34pxlpj7S21IUrBOEu/b
-         a+Yf7L5jQQ/D8KeKFHk8hF/cGjsz+LYRTqEJJspUaPFOs8ti+wgdI7yvoZ9GACPpsdeQ
-         AyQvlliAuqZ71bKC7l8v8y2Xl4rmcfMyF9OLHgTrBexNuoZnKzOFyqGaT4OWhmrEE09C
-         9906CRnl65OVy5ukPJMs3patc6rTcbZLIrpB2z+PfxwCu4IL5bA2igyDmMqIaOpT2+ZW
-         I/MKW/zoSMTBoYXhbhpRwbBvIDaFBAKQJifOvxgpKgedhi0i1/i610DlhTh9mIvsmEf4
-         FZCw==
-X-Gm-Message-State: AOAM531nyeF938fMuAN11469n4kifKV9eG7z6XJmgs0kJxx2rykH04UA
-        VZbom0sL42S+ZfGsZUWp6K1lJw==
-X-Google-Smtp-Source: ABdhPJxJGlP2y8vm6IffHIAEPUn0GxzUipHLBwUCVb75Wz1QBpaxqnv8PF6Lt0mIf4wHViDBeZW4iA==
-X-Received: by 2002:a17:90a:d3c3:: with SMTP id d3mr278723pjw.209.1638216793987;
-        Mon, 29 Nov 2021 12:13:13 -0800 (PST)
-Received: from bsegall-glaptop.localhost (c-73-71-82-80.hsd1.ca.comcast.net. [73.71.82.80])
-        by smtp.gmail.com with ESMTPSA id gc22sm153123pjb.57.2021.11.29.12.13.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 12:13:12 -0800 (PST)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Honglei Wang <wanghonglei@didichuxing.com>,
-        Huaixin Chang <changhuaixin@linux.alibaba.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Mel Gorman" <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <jameshongleiwang@126.com>
-Subject: Re: [PATCH] sched/fair: prevent cpu burst too many periods
-References: <20211129162807.21966-1-wanghonglei@didichuxing.com>
-Date:   Mon, 29 Nov 2021 12:13:02 -0800
-In-Reply-To: <20211129162807.21966-1-wanghonglei@didichuxing.com> (Honglei
-        Wang's message of "Tue, 30 Nov 2021 00:28:07 +0800")
-Message-ID: <xm26mtlmpvox.fsf@google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fi42U/2jTpx4BPkiel0v3NDRtd9dtjlNx3pYLf3HPek=;
+        b=sEPpCQVfrrPa2/gdDaaSFWwPe/2lxBJzpWeBWq2spqKQt3gD+6D4HvzllGyhFba188
+         AqSa88aRP0Z9uVsiHP3FsQxbdGdfIc67eM+OxNzDUAFtlGEVz6k1MhXYFWAMn/7TPT6N
+         Y0muVw1MFf3s44OqFei/W0B72cZVuJG0yCyO7vXICqt74fTRZLR0mu2ac8VTBG7BvUmO
+         2gWIjJqn85jjaMDI/K4aYnTLmdK3lYZ8YjGfiDixzzGw4YD9pIXIw/Mo5zTM77SZ0UPM
+         TY48ubHkQqpdnwYzeiT/21e+W7r4SHW0njaht7ictk1P+yEj0UQlO4PRnS0q41voPuwQ
+         JIJQ==
+X-Gm-Message-State: AOAM533JZIfZqdtpxMpCYqWoNcE4sv+n6OULqw0xI1SAA4lySyOLn2Ly
+        fjmBs0dsX6XJiRDaNwIZoqeB0dsah8mZtN2XTnU=
+X-Google-Smtp-Source: ABdhPJxomutnM/GNTZ/jmxeBw2lYvQB2BV61no9JvRS0JnbN0CtivcJkvJEPPqNAW7GUtFRbx/PgSf3ryQizZel12NE=
+X-Received: by 2002:a05:6402:3595:: with SMTP id y21mr78068428edc.332.1638216832876;
+ Mon, 29 Nov 2021 12:13:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20210407073534.376722-1-benjamin.gaignard@collabora.com> <20210407073534.376722-3-benjamin.gaignard@collabora.com>
+In-Reply-To: <20210407073534.376722-3-benjamin.gaignard@collabora.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Mon, 29 Nov 2021 14:13:41 -0600
+Message-ID: <CAHCN7x+HOMoVNq-swqA2p3ddGKft_8QkB2qm00-CN8Dujaw52Q@mail.gmail.com>
+Subject: Re: [PATCH v9 02/13] dt-bindings: media: nxp, imx8mq-vpu: Update the
+ bindings for G2 support
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        mripard@kernel.org, paul.kocialkowski@bootlin.com,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@siol.net>,
+        hverkuil-cisco@xs4all.nl, emil.l.velikov@gmail.com,
+        Sascha Hauer <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devel@driverdev.osuosl.org, kernel@collabora.com,
+        Chris Healy <cphealy@gmail.com>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Honglei Wang <wanghonglei@didichuxing.com> writes:
-
-> Tasks might get more cpu than quota in persistent periods due to the
-> cpu burst introduced by commit f4183717b370 ("sched/fair: Introduce the
-> burstable CFS controller"). For example, one task group whose quota is
-> 100ms per period and can get 100ms burst, and its avg utilization is
-> around 105ms per period. Once this group gets a free period which
-> leaves enough runtime, it has a chance to get computting power more
-> than its quota for 10 periods or more in common bandwidth configuration
-> (say, 100ms as period). It means tasks can 'steal' the bursted power to
-> do daily jobs because all tasks could be scheduled out or sleep to help
-> the group get free periods.
+On Wed, Apr 7, 2021 at 2:37 AM Benjamin Gaignard
+<benjamin.gaignard@collabora.com> wrote:
 >
-> I believe the purpose of cpu burst is to help handling bursty worklod.
-> But if one task group can get computting power more than its quota for
-> persistent periods even there is no bursty workload, it's kinda broke.
+> Introducing the G2 hevc video decoder requires modifications of the bindings to allow
+> one node per VPU.
 >
-> This patch limits the burst to one period so that it won't break the
-> quota limit for long. With this, we can give task group more cpu burst
-> power to handle the real bursty workload and don't worry about the
-> 'stealing'.
-
-CC ing the burst patch author.
-
-Whether or not burst is useful only for burst, or also for a bit of
-long-term-only fairness is not entirely clear to me. Assuming we want it
-only for burst, cutting off this sharply has a bit of additional
-downside because it means that if a period refresh lands in the middle
-of a burst then you lose the burst runtime. Permitting only two periods
-in a row to make use of burst should be doable but it's yet another
-piece of state added to cfs_b for this, and given typical ~100ms periods
-that may be low enough odds that we don't care.
-
+> VPUs share one hardware control block which is provided as a phandle on
+> a syscon.
+> Each node has now one reg and one interrupt.
+> Add a compatible for G2 hardware block: nxp,imx8mq-vpu-g2.
 >
-> Signed-off-by: Honglei Wang <wanghonglei@didichuxing.com>
+> To be compatible with older DT the driver is still capable to use the 'ctrl'
+> reg-name even if it is deprecated now.
+>
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+
+I need to edit the yaml file to add support the imx8mm, but it doesn't
+appear that this series has gone anywhere.  I know there is still some
+waiting on the vpu-blk-ctrl driver, but it seems like the 8mq could
+split the codecs out using syscon in place of the blk-ctrl until that
+driver is available.  If that doesn't work, I might have to introduce
+a separate yaml file for mini which could be somehow merged with the
+8mq in the future.  I am just not sure which way to go right now.
+
+adam
 > ---
->  kernel/sched/fair.c | 9 ++++++---
->  1 file changed, 6 insertions(+), 3 deletions(-)
+> version 9:
+>  - Corrections in commit message
 >
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6e476f6d9435..cc2c4567fc81 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4640,14 +4640,17 @@ void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)
->  	if (unlikely(cfs_b->quota == RUNTIME_INF))
->  		return;
->  
-> -	cfs_b->runtime += cfs_b->quota;
-> -	runtime = cfs_b->runtime_snap - cfs_b->runtime;
-> +	runtime = cfs_b->runtime_snap - cfs_b->quota - cfs_b->runtime;
+> version 7:
+>  - Add Rob and Philipp reviewed-by tag
+>  - Change syscon phandle name to nxp,imx8m-vpu-ctrl (remove 'q' to be
+>    usable for iMX8MM too)
+>
+> version 5:
+> - This version doesn't break the backward compatibilty between kernel
+>   and DT.
+>
+>  .../bindings/media/nxp,imx8mq-vpu.yaml        | 53 ++++++++++++-------
+>  1 file changed, 34 insertions(+), 19 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> index 762be3f96ce9..18e7d40a5f24 100644
+> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
+> @@ -15,22 +15,18 @@ description:
+>
+>  properties:
+>    compatible:
+> -    const: nxp,imx8mq-vpu
+> +    oneOf:
+> +      - const: nxp,imx8mq-vpu
+> +      - const: nxp,imx8mq-vpu-g2
+>
+>    reg:
+> -    maxItems: 3
+> -
+> -  reg-names:
+> -    items:
+> -      - const: g1
+> -      - const: g2
+> -      - const: ctrl
+> +    maxItems: 1
+>
+>    interrupts:
+> -    maxItems: 2
+> +    maxItems: 1
+>
+>    interrupt-names:
+> -    items:
+> +    oneOf:
+>        - const: g1
+>        - const: g2
+>
+> @@ -46,14 +42,18 @@ properties:
+>    power-domains:
+>      maxItems: 1
+>
+> +  nxp,imx8m-vpu-ctrl:
+> +    description: Specifies a phandle to syscon VPU hardware control block
+> +    $ref: "/schemas/types.yaml#/definitions/phandle"
 > +
->  	if (runtime > 0) {
->  		cfs_b->burst_time += runtime;
->  		cfs_b->nr_burst++;
-> +		cfs_b->runtime = cfs_b->quota;
-> +	} else {
-> +		cfs_b->runtime += cfs_b->quota;
-> +		cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
->  	}
->  
-> -	cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
->  	cfs_b->runtime_snap = cfs_b->runtime;
->  }
-
-If we do this, it should also be mentioned in
-Documentation/scheduler/sched-bwc.rst, since the straightforward
-description of burst as extra max runtime is no longer enough.
+>  required:
+>    - compatible
+>    - reg
+> -  - reg-names
+>    - interrupts
+>    - interrupt-names
+>    - clocks
+>    - clock-names
+> +  - nxp,imx8m-vpu-ctrl
+>
+>  additionalProperties: false
+>
+> @@ -62,18 +62,33 @@ examples:
+>          #include <dt-bindings/clock/imx8mq-clock.h>
+>          #include <dt-bindings/interrupt-controller/arm-gic.h>
+>
+> -        vpu: video-codec@38300000 {
+> +        vpu_ctrl: syscon@38320000 {
+> +                 compatible = "nxp,imx8mq-vpu-ctrl", "syscon";
+> +                 reg = <0x38320000 0x10000>;
+> +        };
+> +
+> +        vpu_g1: video-codec@38300000 {
+>                  compatible = "nxp,imx8mq-vpu";
+> -                reg = <0x38300000 0x10000>,
+> -                      <0x38310000 0x10000>,
+> -                      <0x38320000 0x10000>;
+> -                reg-names = "g1", "g2", "ctrl";
+> -                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> -                             <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> -                interrupt-names = "g1", "g2";
+> +                reg = <0x38300000 0x10000>;
+> +                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
+> +                interrupt-names = "g1";
+> +                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
+> +                         <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
+> +                         <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
+> +                clock-names = "g1", "g2", "bus";
+> +                power-domains = <&pgc_vpu>;
+> +                nxp,imx8m-vpu-ctrl = <&vpu_ctrl>;
+> +        };
+> +
+> +        vpu_g2: video-codec@38310000 {
+> +                compatible = "nxp,imx8mq-vpu-g2";
+> +                reg = <0x38300000 0x10000>;
+> +                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
+> +                interrupt-names = "g2";
+>                  clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
+>                           <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
+>                           <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
+>                  clock-names = "g1", "g2", "bus";
+>                  power-domains = <&pgc_vpu>;
+> +                nxp,imx8m-vpu-ctrl = <&vpu_ctrl>;
+>          };
+> --
+> 2.25.1
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

@@ -2,486 +2,739 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D98814623E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA21E462333
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232990AbhK2WF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S231135AbhK2V1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 16:27:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232568AbhK2WDz (ORCPT
+        with ESMTP id S230440AbhK2VZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:03:55 -0500
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A028C061A24
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:33:46 -0800 (PST)
-Received: by mail-lj1-x22f.google.com with SMTP id 13so36473525ljj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:33:46 -0800 (PST)
+        Mon, 29 Nov 2021 16:25:48 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F1AC214FCD
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:36:04 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id iq11so13495747pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:36:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=3Jm6GX4/oHsxujBWD+qUbtj54rsVwLjbslTkW7nhlF4=;
-        b=LjKYtNYC60XJslQhF2XjHI6lQCBM9vN7gQDMasNVhr9DeEwUW+Dn9gjSSR0UwUwSFl
-         5e0up/XZx7WOXT2dak4X7GfvkGDnOadE6syLqPIM5N1yUeKL2ULRbA3DEAfGpVxMnDEn
-         t7NuUbcE2gzVBSp2M9xeM6mFOABao9S0aTXDWeQL0q6mJk4oy+EkKZccr9DmAINdPU/m
-         b7tOuJDtyg4qqISpP6p+Rq6TpPOgAQsuh+rVsq0U4Bu7ldaHmsA1fD/vnTvPeiavZ/aF
-         fGD+HeSCdsLADR4UlVRUvW1mjM396jIftWBPyXR7hABja9z2MocCUXPkh+veYSbROpwr
-         5EuQ==
+         :cc:content-transfer-encoding;
+        bh=xohg7JdVvkvO2SUDiXwKowHodphNxP500HwNzMb+bfU=;
+        b=3mJajd4V1DdvWtEF+wYEzCoqrnMMQRznFjD4nvIf9I7+pySjX6zaxFf/1dX6yvFAVo
+         Ud79y+0FkUQvZzWVEB4fcm6/U8zeGg/8/7JodJ4XQYY/HzLufwHcVWafaORCNlApyIsg
+         jmsV9GSaaqh5LWKI/Zr9+xCY4BkfnQzJ2kxrV54UnaNnob6DE9lZ0N7bJI3SeLWeGQL3
+         n8zH1ni2jqgGratb3Ipr0t3zw+MCdIgUFiEsuDtJ5gjs5e3aSnvyWBCXApLwNVAXQc7Z
+         XVSWfMm6umx0mJmJPaTWV9WDLvRagwtJ8Z++9FtebkJ+kLJGr9DohAH5v1jNl39MKijx
+         imTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=3Jm6GX4/oHsxujBWD+qUbtj54rsVwLjbslTkW7nhlF4=;
-        b=Lb72BM5QhOuO3MtIP1IhFRnkI5uclLEw1leRaEbTkbzdOTS6RjUhD5PpjANqL7IldC
-         ZtiYZy+EONEpFOFmQi3JRj5Eg3KbbsSY7BlbIK0IwqJ/gcFdyb9DJkVqGebMB/xs1DoL
-         X6OtLt7AH6JU8LsidHMmvqrjSPCW0OGGmuBdRk/iqQd43hkW7L8vbv5ecrn5UdR20Pii
-         G02w8Q7CtV2qADRbpktWtbESmI8ovMFpB1mAUsp7z7BsMU9cXniwTAEk13XQvf9+VI4Y
-         zHMBPbDtiEl//ArJDASB1GsSRBuVqYLh4nhOD32Hy4E3hBbykmh6Dh8sboroNhuVI8q/
-         volQ==
-X-Gm-Message-State: AOAM533VASQUzplrJwhoFzGy1H2rGRMzRhZ0E3zBwtXx6s3RF/WGYtBa
-        Z/TypNmo3w9v6o6LpygjOrRddU4P9f89+S23rQqYYA==
-X-Google-Smtp-Source: ABdhPJxqq2X6mv7AUaMWXJlKtEXpVQ0OVwGJX4gP+7/WswrNaa/In2JlrveShU6maJJbrbgu+BibdFpj5ogLSmujP6M=
-X-Received: by 2002:a05:651c:292:: with SMTP id b18mr52038188ljo.220.1638214424071;
- Mon, 29 Nov 2021 11:33:44 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xohg7JdVvkvO2SUDiXwKowHodphNxP500HwNzMb+bfU=;
+        b=vJEmKs4B9RV0WH9EQn7agmgx7OX3PxeMrRj3JvSct5wI/Rq2h+vjuulL9WXc1yDIbM
+         2t+FJHC5ri/OrPkFp4qFWkJGxAhH7XNZ9i1Fx0THdtaNNsZcs8O1c6gdnIS+Q6fi9Lmn
+         5xh0xducJspU6TFc/xNB/SbeeNqB6slkklH5oMsnYQh5BojHDD5msTrbCWloN2Y8S3/C
+         +r3t6HG7uQ/hGEiQ6R7xHby/tIvbPWpwN2tMzqME3c8gW11on20vRuv+i6abDUobIHBz
+         lSiTQun5zNHFbHWeCqc8PCuvWvgG73mWV2QQh/P1A5kKWelNDwVnJ7jnUcEckaqDowY4
+         qVew==
+X-Gm-Message-State: AOAM532M0dXN4EZk/WEmIhZaE2Gc6HTr6kx03fT1469bkWJZV/dDRuYY
+        jFpuk+VShr5lxELNlz92TcjCCJC/ypzQ3+CeW3G4xw==
+X-Google-Smtp-Source: ABdhPJxuNaUbjV4bLmcxiXLKB+HIvSn9asc0AxMeUnpXUU1L5OoHO+ZOt1JvoDAaN4JiDPsEAouzXlKexW49JuVqeFU=
+X-Received: by 2002:a17:902:7c8a:b0:143:bb4a:7bb3 with SMTP id
+ y10-20020a1709027c8a00b00143bb4a7bb3mr63117830pll.46.1638214563723; Mon, 29
+ Nov 2021 11:36:03 -0800 (PST)
 MIME-Version: 1.0
-References: <202111270255.UYOoN5VN-lkp@intel.com>
-In-Reply-To: <202111270255.UYOoN5VN-lkp@intel.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 29 Nov 2021 11:33:32 -0800
-Message-ID: <CAKwvOdm7L4_q=+P0HWRVK6YdyZwpsTiTRCf=TggqaAqEqA_wSw@mail.gmail.com>
-Subject: Re: fs/btrfs/inode.c:569:2: error: call to __compiletime_assert_921
- declared with 'error' attribute: BUILD_BUG_ON failed: (BTRFS_MAX_COMPRESSED %
- PAGE_SIZE) != 0
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        David Sterba <dsterba@suse.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        kernel test robot <lkp@intel.com>, Chris Mason <clm@fb.com>,
-        Brian Cain <bcain@codeaurora.org>,
-        "open list:QUALCOMM HEXAGON..." <linux-hexagon@vger.kernel.org>,
-        Josef Bacik <josef@toxicpanda.com>, linux-btrfs@vger.kernel.org
+References: <20211106183802.893285-1-aford173@gmail.com> <718f7f6d6cd564d031c1963f1590c62d549ae725.camel@ndufresne.ca>
+ <CAHCN7xKM9RUE7z-+ug1on+D=nDoEm589R4m03ofys92Aq75ZVQ@mail.gmail.com>
+ <8db00a4b6faa99c940d9bc86e17161eb0db5efe3.camel@ndufresne.ca>
+ <CAJ+vNU28UJffFv9jQ2KryJMudqYxvCaoVOVcU5dPqRA209iN6A@mail.gmail.com>
+ <d91532c2c0772f9aa708ead36b2a97203727a7ea.camel@ndufresne.ca>
+ <CAJ+vNU3H-V+bPoZ3qKead45h=W7AhQK6Lhjrx5ssdF4c_qfe=A@mail.gmail.com>
+ <CAHCN7x+0LwwU_rEST+TZxGquswGKL19gnTy9WLofsXtGAtWqdw@mail.gmail.com>
+ <7f94eaacfddb8c5434c17f1e069ea87a17657ce9.camel@ndufresne.ca>
+ <CAHCN7xKRzxMBmPbDobWTuvNNSpTXk5XENvfBnfkhRY3eZKhn6w@mail.gmail.com>
+ <CAHCN7xJFLNi_g+HX8PCy1Rkgf0jnWpO5QGYVz8nH19xrJkwHrA@mail.gmail.com>
+ <CAJ+vNU3zFd=6k_Emc5aafxKkGwCPp4crgOFezQ-E_MbWsn1_EA@mail.gmail.com>
+ <fed6c2fd7cf4971062c417ce41ed1e3812b900e0.camel@ndufresne.ca>
+ <CAHCN7xK+wROHaqDcsY-3WYFQ82qX17L-LHNL3siSWnWvwFShzQ@mail.gmail.com>
+ <CAAEAJfC1xXvemaFP+vTFVJ3S-SpYtrxyZgDamSOgLC1F3ua5xw@mail.gmail.com> <CAHCN7x+UMMP6RXsNm0=OC=UTQzh=RKqQo6B7FD5e4eoJAEfmpg@mail.gmail.com>
+In-Reply-To: <CAHCN7x+UMMP6RXsNm0=OC=UTQzh=RKqQo6B7FD5e4eoJAEfmpg@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 29 Nov 2021 11:35:52 -0800
+Message-ID: <CAJ+vNU1epi9SwPMHkuDmKcb68RLemYF=bsp7AVnzz06zKc2efw@mail.gmail.com>
+Subject: Re: [RFC 0/5] arm64: imx8mm: Enable Hantro VPUs
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        linux-media <linux-media@vger.kernel.org>,
+        Schrempf Frieder <frieder.schrempf@kontron.de>,
+        Marek Vasut <marek.vasut@gmail.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        cstevens@beaconembedded.com,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>,
+        Alice Guo <alice.guo@nxp.com>, Peng Fan <peng.fan@nxp.com>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 10:22 AM kernel test robot <lkp@intel.com> wrote:
+On Mon, Nov 29, 2021 at 10:59 AM Adam Ford <aford173@gmail.com> wrote:
 >
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   a4849f6000e29235a2707f22e39da6b897bb9543
-> commit: b83a908498d68fafca931e1276e145b339cac5fb compiler_attributes.h: move __compiletime_{error|warning}
-> date:   3 months ago
-> config: hexagon-randconfig-r034-20211126 (https://download.01.org/0day-ci/archive/20211127/202111270255.UYOoN5VN-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b83a908498d68fafca931e1276e145b339cac5fb
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout b83a908498d68fafca931e1276e145b339cac5fb
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash fs/btrfs/ prepare
+> On Mon, Nov 29, 2021 at 10:54 AM Ezequiel Garcia
+> <ezequiel@vanguardiasur.com.ar> wrote:
+> >
+> > On Mon, 29 Nov 2021 at 13:48, Adam Ford <aford173@gmail.com> wrote:
+> > >
+> > > On Tue, Nov 23, 2021 at 2:07 PM Nicolas Dufresne <nicolas@ndufresne.c=
+a> wrote:
+> > > >
+> > > > Le lundi 22 novembre 2021 =C3=A0 09:25 -0800, Tim Harvey a =C3=A9cr=
+it :
+> > > > > On Sat, Nov 20, 2021 at 7:36 AM Adam Ford <aford173@gmail.com> wr=
+ote:
+> > > > > >
+> > > > > > On Fri, Nov 19, 2021 at 5:37 PM Adam Ford <aford173@gmail.com> =
+wrote:
+> > > > > > >
+> > > > > > > On Fri, Nov 19, 2021 at 10:29 AM Nicolas Dufresne <nicolas@nd=
+ufresne.ca> wrote:
+> > > > > > > >
+> > > > > > > > Hi Adam, Tim,
+> > > > > > > >
+> > > > > > > > [...]
+> > > > > > > > > > > > Nicolas and Adam,
+> > > > > > > > > > > >
+> > > > > > > > > > > > For the H1 patches in this series: I've been able t=
+o test the IMX8MM
+> > > > > > > > > > > > H1 JPEG encode using GStreamer 1.18.5:
+> > > > > > > > > > > > $ gst-inspect-1.0 | grep -e "v4l2.*enc"
+> > > > > > > > > > > > video4linux2:  v4l2jpegenc: V4L2 JPEG Encoder
+> > > > > > > > > > > > $ gst-launch-1.0 videotestsrc ! jpegenc ! rtpjpegpa=
+y ! udpsink
+> > > > > > > > > > >                                   ^ v4l2jpegenc
+> > > > > > > > > > >
+> > > > > > > > > > > This is just a transcript error ?
+> > > > > > > > > >
+> > > > > > > > > > Nicolas,
+> > > > > > > > > >
+> > > > > > > > > > No! Thanks for catching my mistake. I was testing with =
+software encode... ooops!
+> > > > > > > > > >
+> > > > > > > > > > 'gst-launch-1.0 videotestsrc ! v4l2jpegenc ! fakesink' =
+actually hangs
+> > > > > > > > > > the board so likely a power-domain issue there?
+> > > > > > > > >
+> > > > > > > > > The v4l2-compliance tests fail on the h1 decoder with a h=
+ang, but I
+> > > > > > > > > think we're writing to registers which are not documented=
+ in the Mini
+> > > > > > > > > TRM.  The Mini TRM doesn't explicitly show the JPEG encod=
+ing as a
+> > > > > > > > > feature, but some of the registers state JPEG, but becaus=
+e some of the
+> > > > > > > > > registers written for the H1 are not documented in the TR=
+M.  If those
+> > > > > > > > > registers are restricted or not in this SoC, I am concern=
+ed that it
+> > > > > > > > > might be related.  I'll try to run some more tests this w=
+eekend to
+> > > > > > > > > check on the status of the power-domain stuff.
+> > > > > > > >
+> > > > > > > > To verify if the HW support JPEG encoding you can read SWRE=
+G63 bit 25. This is
+> > > > > > > > in the TRM, just not labelled properly. To mimic the decodi=
+ng side, would be "HW
+> > > > > > > > synthesis config register X" with the bit labelled SW_ENC_J=
+PEG_PROF (but
+> > > > > > > > PROF/profile is on or off). If your board hang while readin=
+g this, you likely
+> > > > > > > > didn't get the power bit right.
+> > > > > > > >
+> > > > > > > > IMX8 has an undocumented control block thing that we have b=
+een fighting with in
+> > > > > > > > imx8q,  perhaps that's your issue. Few driver was proposed,=
+ we are still pending
+> > > > > > > > on NXP solution to be submitted (they asked us to wait, sti=
+ll waiting =3D)).
+> > > > > > >
+> > > > > > > Nicolas,
+> > > > > > >
+> > > > > > > Thanks for the suggestion to read offset FC.  There was an at=
+tempt
+> > > > > > > made by Lucas Stach to develop a VPU blk-ctrl driver to coord=
+inate the
+> > > > > > > power-domains with the GPC driver. Unfortunately, it does app=
+ear to
+> > > > > > > hang, so it might not be operating correctly.
+> > > > > > >
+> > > > > > > Lucas,
+> > > > > > >
+> > > > > > > Do you have any idea of stuff I can try to see if the power d=
+omain is
+> > > > > > > coming online correctly?
+> > > > > > >
+> > > > > > > [   10.434727] imx-pgc imx-pgc-domain.6: request the vpumix d=
+omain to power up
+> > > > > > > [   10.463647] imx-pgc imx-pgc-domain.6: request the vpumix A=
+DB400 to power up
+> > > > > > > [   10.517155] imx-pgc imx-pgc-domain.6: genpd vpumix success
+> > > > > > > [   10.728927] vpu: set fuse bits to enable
+> > > > > > > [   10.825500] imx8m-blk-ctrl 38330000.blk-ctrl: power vpublk=
+-g1 GPC domain
+> > > > > > > [   10.878986] imx-pgc imx-pgc-domain.7: request the vpu-g1 d=
+omain to power up
+> > > > > > > [   10.932429] imx-pgc imx-pgc-domain.7: genpd vpu-g1 success
+> > > > > > > [   10.971988] imx8m-blk-ctrl 38330000.blk-ctrl: genpd vpublk=
+-g1 success
+> > > > > > > [   11.004726] hantro-vpu 38300000.video-codec: registered
+> > > > > > > nxp,imx8mm-vpu-dec as /dev/video0
+> > > > > > > [   11.040760] imx8m-blk-ctrl 38330000.blk-ctrl: power vpublk=
+-g2 GPC domain
+> > > > > > > [   11.066181] imx-pgc imx-pgc-domain.8: request the vpu-g2 d=
+omain to power up
+> > > > > > > [   11.087887] imx-pgc imx-pgc-domain.8: genpd vpu-g2 success
+> > > > > > > [   11.113808] imx8m-blk-ctrl 38330000.blk-ctrl: genpd vpublk=
+-g2 success
+> > > > > > > [   11.139634] hantro-vpu 38310000.video-codec: registered
+> > > > > > > nxp,imx8mm-vpu-g2-dec as /dev/video1
+> > > > > > > [   11.156463] imx8m-blk-ctrl 38330000.blk-ctrl: power vpublk=
+-h1 GPC domain
+> > > > > > > [   11.170817] imx-pgc imx-pgc-domain.9: request the vpu-h1 d=
+omain to power up
+> > > > > > > [   11.232990] imx-pgc imx-pgc-domain.9: genpd vpu-h1 success
+> > > > > > > [   11.252546] imx8m-blk-ctrl 38330000.blk-ctrl: genpd vpublk=
+-h1 success
+> > > > > > > [   11.266152] hantro-vpu 38320000.video-codec: Checking vpu-=
+>enc_base + 0xfc
+> > > > > > >
+> > > > > > > <hang>
+> > > > > > >
+> > > > > > > adam
+> > > > > > >
+> > > > > >
+> > > > > > Nicolas, Tim, and Lucas,
+> > > > > >
+> > > > > > I think I have the hanging resolved in the power domains, and I=
+'ll be
+> > > > > > pushing the fix to the GPCv2.
+> > > > > >
+> > > > > > For the H1 Encoder, I added some debugging code to read the off=
+set
+> > > > > > 0xfc and print some data based on the findings of that VPU-h1 o=
+ffset.
+> > > > > > I basically check the various bits per the TRM to see if they a=
+re set
+> > > > > > and print some splat to indicate whether or not the function is
+> > > > > > supported.
+> > > > > >
+> > > > > > [    8.861865] hantro-vpu 38320000.video-codec: Checking vpu->e=
+nc_base + 0xfc
+> > > > > > [    8.870594] hantro-vpu 38320000.video-codec: Stabilization s=
+upported by HW
+> > > > > > [    8.889341] hantro-vpu 38320000.video-codec: VP8 encoding su=
+pported by HW
+> > > > > > [    8.899386] hantro-vpu 38320000.video-codec: H.264 encoding =
+supported by HW
+> > > > > > [    8.918171] hantro-vpu 38320000.video-codec: RGB to YUV conv=
+ersion
+> > > > > > supported by HW
+> > > > > > [    8.934067] hantro-vpu 38320000.video-codec: registered
+> > > > > > nxp,imx8mm-vpu-h1-enc as /dev/video2
+> > > > > >
+> > > > > > Unfortunately, JPEG is not listed as supported.  :-(
+> > > > >
+> > > > > Adam,
+> > > > >
+> > > > > Well not having JPEG encode support is unfortunate, and unexpecte=
+d. Do
+> > > > > we not have hantro support yet for VP8/H264 encode?
+> > > >
+> > > > There is no mainline support yet. You can derive from RK3288 suppor=
+t using Google ChromeOS method (a v4l2 plugins that simulate in userspace a=
+ stateful encoder):
+> > > >
+> > > > - libv4l plugins / https://chromium.googlesource.com/chromiumos/thi=
+rd_party/libv4lplugins/+/refs/heads/master
+> > > > - Kernel Driver / https://chromium.googlesource.com/chromiumos/thir=
+d_party/kernel/+/chromeos-4.4/drivers/media/platform/rockchip-vpu/
+> > > >
+> > > > >
+> > > > > I haven't quite figured out how to build a modern mono-repo gstre=
+amer
+> > > > > on the ubuntu 20.04 rootfs I'm using so I haven't been able to te=
+st
+> > > > > VPU encode/decode properly. I'll keep working on it when I'm back=
+ in
+> > > > > the office the following week.
+> > > >
+> > > > Did a quick test to make sure there isn't any ubuntu specific block=
+ers, here's a
+> > > > dirty script that produce a minimal GStreamer, there was really not=
+hing special
+> > > > compare to other meson projects. Note that I use --wrap-mode=3Dnofa=
+llback to avoid
+> > > > letting GStreamer complete it's feature-set by downloading the plan=
+et. This
+> > > > already build quite a lot and could likely be made smaller by avoid=
+ plugins-good
+> > > > build-dep call, but then you need to check for v4l2odecs and video4=
+linux devs
+> > > > (mostly gudev a glib udev binding).
+> > > >
+> > > > # Install ubuntu
+> > > > podman run -it --rm ubuntu:20.04
+> > > > sed -i "s/# deb-src/deb-src/" /etc/apt/sources.list
+> > > > apt update
+> > > > apt build-dep gstreamer1.0-plugins-good
+> > > > apt install git python3-pip flex bison
+> > > >
+> > > > # Need a newer meson
+> > > > pip3 install --user meson
+> > > > export PATH=3D$PATH:~/.local/bin
+> > > >
+> > > > # Build GStreamer
+> > > > git clone https://gitlab.freedesktop.org/gstreamer/gstreamer.git
+> > > > cd gstreamer
+> > > > meson setup build --wrap-mode=3Dnofallback
+> > > > ninja -C build
+> > > >
+> > > > # Run in-place
+> > > > ./gst-env.py
+> > > > gst-inspect-1.0 v4l2codecs
+> > > > gst-inspect 1.0 video4linux2
+> > > >
+> > > Thanks for the suggestions.
+> > >
+> > > I downloaded what's in the master repo:
+> > >
+> > > [gst-main] root@localhost:~/gstreamer# gst-inspect-1.0 v4l2codecs
+> > >
+> > > ** (gst-plugin-scanner:7317): CRITICAL **: 10:29:51.847: can't find
+> > > gi.repository.Gst
+> > > Plugin Details:
+> > >   Name                     v4l2codecs
+> > >   Description              V4L2 CODEC Accelerators plugin
+> > >   Filename
+> > > /root/gstreamer/builddir/subprojects/gst-plugins-bad/sys/v4l2codecs/l=
+ibgstv4l2codecs.so
+> > >   Version                  1.19.3.1
+> > >   License                  LGPL
+> > >   Source module            gst-plugins-bad
+> > >   Binary package           GStreamer Bad Plug-ins git
+> > >   Origin URL               Unknown package origin
+> > >
+> > >   v4l2slh264dec: V4L2 Stateless H.264 Video Decoder
+> > >   v4l2slmpeg2dec: V4L2 Stateless Mpeg2 Video Decoder
+> > >   v4l2slvp8alphadecodebin: VP8 Alpha Decoder
+> > >   v4l2slvp8dec: V4L2 Stateless VP8 Video Decoder
+> > >
+> > >   4 features:
+> > >   +-- 4 elements
+> > >
+> > > [gst-main] root@localhost:~/gstreamer# gst-inspect-1.0 video4linux2
+> > > Plugin Details:
+> > >   Name                     video4linux2
+> > >   Description              elements for Video 4 Linux
+> > >   Filename
+> > > /root/gstreamer/builddir/subprojects/gst-plugins-good/sys/v4l2/libgst=
+video4linux2.so
+> > >   Version                  1.19.3.1
+> > >   License                  LGPL
+> > >   Source module            gst-plugins-good
+> > >   Binary package           GStreamer Good Plug-ins git
+> > >   Origin URL               Unknown package origin
+> > >
+> > >   v4l2deviceprovider: Video (video4linux2) Device Provider
+> > >   v4l2jpegenc: V4L2 JPEG Encoder
+> > >   v4l2radio: Radio (video4linux2) Tuner
+> > >   v4l2sink: Video (video4linux2) Sink
+> > >   v4l2src: Video (video4linux2) Source
+> > >
+> > >   5 features:
+> > >   +-- 4 elements
+> > >   +-- 1 device providers
+> > >
+> > > I still have the H1 encoder enabled, but I know JPEG isn't supported,
+> > > so I'm going to attempt to do some decoding and pipe to fakesink sinc=
+e
+> > > I don't have a functional display yet.
+> > >
+> > > gst-launch-1.0 -ev filesrc location=3Dtrailer_1080p_h264_mp3.avi !
+> > > decodebin3  ! fakesink
+> > >
+> > > Redistribute latency...
+> > > /GstPipeline:pipeline0/GstDecodebin3:decodebin3-0/v4l2slh264dec:v4l2s=
+lh264dec0.GstPad:src:
+> > > caps =3D video/x-raw, format=3D(string)NV12, width=3D(int)1920,
+> > > height=3D(int)1080, interlace-mode=3D(string)progressive,
+> > > multiview-mode=3D(string)mono,
+> > > multiview-flags=3D(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-f=
+irst/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixe=
+d-mono,
+> > > pixel-aspect-ratio=3D(fraction)1/1, framerate=3D(fraction)25/1
+> > > /GstPipeline:pipeline0/GstDecodebin3:decodebin3-0.GstGhostPad:video_0=
+:
+> > > caps =3D video/x-raw, format=3D(string)NV12, width=3D(int)1920,
+> > > height=3D(int)1080, interlace-mode=3D(string)progressive,
+> > > multiview-mode=3D(string)mono,
+> > > multiview-flags=3D(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-f=
+irst/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixe=
+d-mono,
+> > > pixel-aspect-ratio=3D(fraction)1/1, framerate=3D(fraction)25/1
+> > > /GstPipeline:pipeline0/GstDecodebin3:decodebin3-0.GstGhostPad:video_0=
+.GstProxyPad:proxypad6:
+> > > caps =3D video/x-raw, format=3D(string)NV12, width=3D(int)1920,
+> > > height=3D(int)1080, interlace-mode=3D(string)progressive,
+> > > multiview-mode=3D(string)mono,
+> > > multiview-flags=3D(GstVideoMultiviewFlagsSet)0:ffffffff:/right-view-f=
+irst/left-flipped/left-flopped/right-flipped/right-flopped/half-aspect/mixe=
+d-mono,
+> > > pixel-aspect-ratio=3D(fraction)1/1, framerate=3D(fraction)25/1
+> > > /GstPipeline:pipeline0/GstDecodebin3:decodebin3-0/GstMultiQueue:multi=
+queue0:
+> > > min-interleave-time =3D 300000000
+> > > Redistribute latency...
+> > > /GstPipeline:pipeline0/GstDecodebin3:decodebin3-0/v4l2slh264dec:v4l2s=
+lh264dec0.GstPad:sink:
+> > > caps =3D video/x-h264, variant=3D(string)itu, framerate=3D(fraction)2=
+5/1,
+> > > width=3D(int)1920, height=3D(int)1080, chroma-format=3D(string)4:2:0,
+> > > bit-depth-luma=3D(uint)8, bit-depth-chroma=3D(uint)8,
+> > > parsed=3D(boolean)true, stream-format=3D(string)avc, alignment=3D(str=
+ing)au,
+> > > profile=3D(string)high, level=3D(string)4,
+> > > codec_data=3D(buffer)01640028ffe1001a67640028acd940780227e58400000300=
+0400000300c83c60c65801000668ebe3cb22c0
+> > > New clock: GstSystemClock
+> > >
+> > > And it appears to stream, because the counter increases.  I haven't
+> > > checked the CPU utilization, but the fact that it shows v4l2slh264dec
+> > > is good.
+> > >
+> > > Is there a way to know if/how the decoder is using the proper VPU?  I
+> > > assume if it wasn't using the proper one, it would fail, but was just
+> > > curious.
+> > >
+> >
+> > A few ways. You can check /proc/interrupts, which should have
+> > VPU activity.
+> >
+> > Or enable debug messages for the module,
+> > using the debug hantro parameter. V4L2 has debug messages
+> > that you can enable, see /sys/class/video4linux/video0/dev_debug.
+> >
+> > Instead of fakesink you can output to pngenc/jpegenc and check the outp=
+ut
+> > is visually correct. If at all possible, the proper way is to use Flust=
+er,
+> > and report the score you get:
+> >
+> > https://github.com/fluendo/fluster
+> >
 >
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> I ran fluster on the VP8 decoder, but only 55/61 passed.
 >
-> All errors (new ones prefixed by >>):
+> *************************************************************************=
+***************************
+> Running test suite VP8-TEST-VECTORS with decoder GStreamer-VP8-V4L2SL-Gst=
+1.0
+> Using 4 parallel job(s)
+> *************************************************************************=
+***************************
 >
-> >> fs/btrfs/inode.c:569:2: error: call to __compiletime_assert_921 declared with 'error' attribute: BUILD_BUG_ON failed: (BTRFS_MAX_COMPRESSED % PAGE_SIZE) != 0
->            BUILD_BUG_ON((BTRFS_MAX_COMPRESSED % PAGE_SIZE) != 0);
->            ^
->    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
->            BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
->            ^
->    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                        ^
->    include/linux/compiler_types.h:322:2: note: expanded from macro 'compiletime_assert'
->            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->            ^
->    include/linux/compiler_types.h:310:2: note: expanded from macro '_compiletime_assert'
->            __compiletime_assert(condition, msg, prefix, suffix)
->            ^
->    include/linux/compiler_types.h:303:4: note: expanded from macro '__compiletime_assert'
->                            prefix ## suffix();                             \
->                            ^
->    <scratch space>:59:1: note: expanded from here
->    __compiletime_assert_921
->    ^
-> >> fs/btrfs/inode.c:569:2: error: call to __compiletime_assert_921 declared with 'error' attribute: BUILD_BUG_ON failed: (BTRFS_MAX_COMPRESSED % PAGE_SIZE) != 0
->    include/linux/build_bug.h:50:2: note: expanded from macro 'BUILD_BUG_ON'
->            BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
->            ^
->    include/linux/build_bug.h:39:37: note: expanded from macro 'BUILD_BUG_ON_MSG'
->    #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                        ^
->    include/linux/compiler_types.h:322:2: note: expanded from macro 'compiletime_assert'
->            _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->            ^
->    include/linux/compiler_types.h:310:2: note: expanded from macro '_compiletime_assert'
->            __compiletime_assert(condition, msg, prefix, suffix)
->            ^
->    include/linux/compiler_types.h:303:4: note: expanded from macro '__compiletime_assert'
->                            prefix ## suffix();                             \
->                            ^
->    <scratch space>:59:1: note: expanded from here
->    __compiletime_assert_921
->    ^
-
-Filed https://github.com/ClangBuiltLinux/linux/issues/1518 for now.
-But when I run `make olddefconfig` with the provided randconfig, I do
-see the following Kconfig warnings:
-
-WARNING: unmet direct dependencies detected for BTRFS_FS
-  Depends on [n]: BLOCK [=y] && !PPC_256K_PAGES && !PAGE_SIZE_256KB [=y]
-  Selected by [m]:
-  - TEST_KMOD [=m] && RUNTIME_TESTING_MENU [=y] && m && MODULES [=y]
-&& NETDEVICES [=y] && NET_CORE [=y] && INET [=y] && BLOCK [=y]
-
-WARNING: unmet direct dependencies detected for BTRFS_FS
-  Depends on [n]: BLOCK [=y] && !PPC_256K_PAGES && !PAGE_SIZE_256KB [=y]
-  Selected by [m]:
-  - TEST_KMOD [=m] && RUNTIME_TESTING_MENU [=y] && m && MODULES [=y]
-&& NETDEVICES [=y] && NET_CORE [=y] && INET [=y] && BLOCK [=y]
-
-WARNING: unmet direct dependencies detected for BTRFS_FS
-  Depends on [n]: BLOCK [=y] && !PPC_256K_PAGES && !PAGE_SIZE_256KB [=y]
-  Selected by [m]:
-  - TEST_KMOD [=m] && RUNTIME_TESTING_MENU [=y] && m && MODULES [=y]
-&& NETDEVICES [=y] && NET_CORE [=y] && INET [=y] && BLOCK [=y]
-
-It looks like CONFIG_BLOCK=y, CONFIG_PPC_256K_PAGES=n, and
-PAGE_SIZE_256KB=y in the randconfig, so I don't grok the Kconfig
-warning.
-
----
-
-If CONFIG_PAGE_SIZE_256KB is set, then in
-arch/hexagon/include/asm/page.h we have:
- 30 #ifdef CONFIG_PAGE_SIZE_256KB
- 31 #define PAGE_SHIFT 18
-...
- 53 #define PAGE_SIZE  (1UL << PAGE_SHIFT)
-
-then
-fs/btrfs/compression.h:24:#define BTRFS_MAX_COMPRESSED          (SZ_128K)
-include/linux/sizes.h:
-28 #define SZ_128K       0x00020000
-
-
-so that's (1 << 18) == 0x40000. The failing assert is checking
-(0x20000 % 0x40000 != 0) (0x20000 % 0x40000 == 0x20000).
-
-Not really sure what to do at this point, but that's why this assert
-is failing for this randconfig.
-
-
->    2 errors generated.
+> [TEST SUITE      ] (DECODER                    ) TEST VECTOR
+>     ... RESULT
+> ----------------------------------------------------------------------
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-004 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-001 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-002 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-003 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-005 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-006 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-007 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-008 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-011 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-009 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-012 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-013 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-014 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-010 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-016 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-017 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-018 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0) vp80-01-intra-1400
+>     ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0) vp80-01-intra-1416
+>     ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0) vp80-01-intra-1417
+>     ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0) vp80-01-intra-1411
+>     ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0) vp80-02-inter-1402
+>     ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0) vp80-02-inter-1412
+>     ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0) vp80-02-inter-1424
+>     ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-01   ... Fail
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-02   ... Fail
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-03   ... Fail
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-04   ... Fail
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1401 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0) vp80-02-inter-1418
+>     ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1403 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1407 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1408 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1409 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1413 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1415 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1425 ... Fail
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1426 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1427 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1432 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1435 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1436 ... Fail
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-00-comprehensive-015 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1441 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1437 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-04-partitions-1404   ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1442 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-04-partitions-1405   ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-04-partitions-1406   ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1428    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1429    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1431    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1410 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-03-segmentation-1414 ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1430    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1433    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1438    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1434    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1439    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1440    ... Success
+> [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> vp80-05-sharpness-1443    ... Success
 >
 >
-> vim +/error +569 fs/btrfs/inode.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> FAIL: vp80-03-segmentation-01 (GStreamer-VP8-V4L2SL-Gst1.0.VP8-TEST-VECTO=
+RS)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "/root/gstreamer/fluster/fluster/test.py", line 104, in _test
+>     self.assertEqual(
+> AssertionError: 'db954c077b7a3f34a448ceaacf8f525c' !=3D
+> '8bbb396a9bdf8afa250d3b2e45e6b367'
+> - db954c077b7a3f34a448ceaacf8f525c
+> + 8bbb396a9bdf8afa250d3b2e45e6b367
+>  : vp80-03-segmentation-01
 >
-> 26d30f852907236 Anand Jain         2016-12-19  512
-> d352ac68148b699 Chris Mason        2008-09-29  513  /*
-> 771ed689d2cd534 Chris Mason        2008-11-06  514   * we create compressed extents in two phases.  The first
-> 771ed689d2cd534 Chris Mason        2008-11-06  515   * phase compresses a range of pages that have already been
-> 771ed689d2cd534 Chris Mason        2008-11-06  516   * locked (both pages and state bits are locked).
-> c8b978188c9a0fd Chris Mason        2008-10-29  517   *
-> 771ed689d2cd534 Chris Mason        2008-11-06  518   * This is done inside an ordered work queue, and the compression
-> 771ed689d2cd534 Chris Mason        2008-11-06  519   * is spread across many cpus.  The actual IO submission is step
-> 771ed689d2cd534 Chris Mason        2008-11-06  520   * two, and the ordered work queue takes care of making sure that
-> 771ed689d2cd534 Chris Mason        2008-11-06  521   * happens in the same order things were put onto the queue by
-> 771ed689d2cd534 Chris Mason        2008-11-06  522   * writepages and friends.
-> c8b978188c9a0fd Chris Mason        2008-10-29  523   *
-> 771ed689d2cd534 Chris Mason        2008-11-06  524   * If this code finds it can't get good compression, it puts an
-> 771ed689d2cd534 Chris Mason        2008-11-06  525   * entry onto the work queue to write the uncompressed bytes.  This
-> 771ed689d2cd534 Chris Mason        2008-11-06  526   * makes sure that both compressed inodes and uncompressed inodes
-> b257031408945eb Artem Bityutskiy   2012-07-25  527   * are written in the same order that the flusher thread sent them
-> b257031408945eb Artem Bityutskiy   2012-07-25  528   * down.
-> d352ac68148b699 Chris Mason        2008-09-29  529   */
-> ac3e99334d640b6 Nikolay Borisov    2019-07-17  530  static noinline int compress_file_range(struct async_chunk *async_chunk)
-> b888db2bd7b67f1 Chris Mason        2007-08-27  531  {
-> 1368c6dac7f10a1 Nikolay Borisov    2019-03-12  532      struct inode *inode = async_chunk->inode;
-> 0b246afa62b0cf5 Jeff Mahoney       2016-06-22  533      struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
-> 0b246afa62b0cf5 Jeff Mahoney       2016-06-22  534      u64 blocksize = fs_info->sectorsize;
-> 1368c6dac7f10a1 Nikolay Borisov    2019-03-12  535      u64 start = async_chunk->start;
-> 1368c6dac7f10a1 Nikolay Borisov    2019-03-12  536      u64 end = async_chunk->end;
-> c8b978188c9a0fd Chris Mason        2008-10-29  537      u64 actual_end;
-> d98da49977f6739 Josef Bacik        2019-10-11  538      u64 i_size;
-> e6dcd2dc9c48910 Chris Mason        2008-07-17  539      int ret = 0;
-> c8b978188c9a0fd Chris Mason        2008-10-29  540      struct page **pages = NULL;
-> c8b978188c9a0fd Chris Mason        2008-10-29  541      unsigned long nr_pages;
-> c8b978188c9a0fd Chris Mason        2008-10-29  542      unsigned long total_compressed = 0;
-> c8b978188c9a0fd Chris Mason        2008-10-29  543      unsigned long total_in = 0;
-> c8b978188c9a0fd Chris Mason        2008-10-29  544      int i;
-> c8b978188c9a0fd Chris Mason        2008-10-29  545      int will_compress;
-> 0b246afa62b0cf5 Jeff Mahoney       2016-06-22  546      int compress_type = fs_info->compress_type;
-> ac3e99334d640b6 Nikolay Borisov    2019-07-17  547      int compressed_extents = 0;
-> 4adaa611020fa6a Chris Mason        2013-03-26  548      int redirty = 0;
-> b888db2bd7b67f1 Chris Mason        2007-08-27  549
-> 6158e1ce1cc620d Nikolay Borisov    2017-02-20  550      inode_should_defrag(BTRFS_I(inode), start, end, end - start + 1,
-> 6158e1ce1cc620d Nikolay Borisov    2017-02-20  551                      SZ_16K);
-> 4cb5300bc839b8a Chris Mason        2011-05-24  552
-> d98da49977f6739 Josef Bacik        2019-10-11  553      /*
-> d98da49977f6739 Josef Bacik        2019-10-11  554       * We need to save i_size before now because it could change in between
-> d98da49977f6739 Josef Bacik        2019-10-11  555       * us evaluating the size and assigning it.  This is because we lock and
-> d98da49977f6739 Josef Bacik        2019-10-11  556       * unlock the page in truncate and fallocate, and then modify the i_size
-> d98da49977f6739 Josef Bacik        2019-10-11  557       * later on.
-> d98da49977f6739 Josef Bacik        2019-10-11  558       *
-> d98da49977f6739 Josef Bacik        2019-10-11  559       * The barriers are to emulate READ_ONCE, remove that once i_size_read
-> d98da49977f6739 Josef Bacik        2019-10-11  560       * does that for us.
-> d98da49977f6739 Josef Bacik        2019-10-11  561       */
-> d98da49977f6739 Josef Bacik        2019-10-11  562      barrier();
-> d98da49977f6739 Josef Bacik        2019-10-11  563      i_size = i_size_read(inode);
-> d98da49977f6739 Josef Bacik        2019-10-11  564      barrier();
-> d98da49977f6739 Josef Bacik        2019-10-11  565      actual_end = min_t(u64, i_size, end + 1);
-> c8b978188c9a0fd Chris Mason        2008-10-29  566  again:
-> c8b978188c9a0fd Chris Mason        2008-10-29  567      will_compress = 0;
-> 09cbfeaf1a5a67b Kirill A. Shutemov 2016-04-01  568      nr_pages = (end >> PAGE_SHIFT) - (start >> PAGE_SHIFT) + 1;
-> 069eac7850890ac David Sterba       2017-02-14 @569      BUILD_BUG_ON((BTRFS_MAX_COMPRESSED % PAGE_SIZE) != 0);
-> 069eac7850890ac David Sterba       2017-02-14  570      nr_pages = min_t(unsigned long, nr_pages,
-> 069eac7850890ac David Sterba       2017-02-14  571                      BTRFS_MAX_COMPRESSED / PAGE_SIZE);
-> c8b978188c9a0fd Chris Mason        2008-10-29  572
-> f03d9301f15fb69 Chris Mason        2009-02-04  573      /*
-> f03d9301f15fb69 Chris Mason        2009-02-04  574       * we don't want to send crud past the end of i_size through
-> f03d9301f15fb69 Chris Mason        2009-02-04  575       * compression, that's just a waste of CPU time.  So, if the
-> f03d9301f15fb69 Chris Mason        2009-02-04  576       * end of the file is before the start of our current
-> f03d9301f15fb69 Chris Mason        2009-02-04  577       * requested range of bytes, we bail out to the uncompressed
-> f03d9301f15fb69 Chris Mason        2009-02-04  578       * cleanup code that can deal with all of this.
-> f03d9301f15fb69 Chris Mason        2009-02-04  579       *
-> f03d9301f15fb69 Chris Mason        2009-02-04  580       * It isn't really the fastest way to fix things, but this is a
-> f03d9301f15fb69 Chris Mason        2009-02-04  581       * very uncommon corner.
-> f03d9301f15fb69 Chris Mason        2009-02-04  582       */
-> f03d9301f15fb69 Chris Mason        2009-02-04  583      if (actual_end <= start)
-> f03d9301f15fb69 Chris Mason        2009-02-04  584              goto cleanup_and_bail_uncompressed;
-> f03d9301f15fb69 Chris Mason        2009-02-04  585
-> c8b978188c9a0fd Chris Mason        2008-10-29  586      total_compressed = actual_end - start;
-> c8b978188c9a0fd Chris Mason        2008-10-29  587
-> 4bcbb33255131ad Shilong Wang       2014-10-07  588      /*
-> 4bcbb33255131ad Shilong Wang       2014-10-07  589       * skip compression for a small file range(<=blocksize) that
-> 0132761017e012a Nicholas D Steeves 2016-05-19  590       * isn't an inline extent, since it doesn't save disk space at all.
-> 4bcbb33255131ad Shilong Wang       2014-10-07  591       */
-> 4bcbb33255131ad Shilong Wang       2014-10-07  592      if (total_compressed <= blocksize &&
-> 4bcbb33255131ad Shilong Wang       2014-10-07  593         (start > 0 || end + 1 < BTRFS_I(inode)->disk_i_size))
-> 4bcbb33255131ad Shilong Wang       2014-10-07  594              goto cleanup_and_bail_uncompressed;
-> 4bcbb33255131ad Shilong Wang       2014-10-07  595
-> 069eac7850890ac David Sterba       2017-02-14  596      total_compressed = min_t(unsigned long, total_compressed,
-> 069eac7850890ac David Sterba       2017-02-14  597                      BTRFS_MAX_UNCOMPRESSED);
-> c8b978188c9a0fd Chris Mason        2008-10-29  598      total_in = 0;
-> c8b978188c9a0fd Chris Mason        2008-10-29  599      ret = 0;
-> db94535db75e67f Chris Mason        2007-10-15  600
-> 771ed689d2cd534 Chris Mason        2008-11-06  601      /*
-> 771ed689d2cd534 Chris Mason        2008-11-06  602       * we do compression for mount -o compress and when the
-> 771ed689d2cd534 Chris Mason        2008-11-06  603       * inode has not been flagged as nocompress.  This flag can
-> 771ed689d2cd534 Chris Mason        2008-11-06  604       * change at any time if we discover bad compression ratios.
-> c8b978188c9a0fd Chris Mason        2008-10-29  605       */
-> 808a12923203ee1 Nikolay Borisov    2020-06-03  606      if (inode_need_compress(BTRFS_I(inode), start, end)) {
-> c8b978188c9a0fd Chris Mason        2008-10-29  607              WARN_ON(pages);
-> 31e818fe7375d60 David Sterba       2015-02-20  608              pages = kcalloc(nr_pages, sizeof(struct page *), GFP_NOFS);
-> 560f7d75457f86a Li Zefan           2011-09-08  609              if (!pages) {
-> 560f7d75457f86a Li Zefan           2011-09-08  610                      /* just bail out to the uncompressed code */
-> 3527a018c00e5db Filipe Manana      2018-10-13  611                      nr_pages = 0;
-> 560f7d75457f86a Li Zefan           2011-09-08  612                      goto cont;
-> 560f7d75457f86a Li Zefan           2011-09-08  613              }
-> c8b978188c9a0fd Chris Mason        2008-10-29  614
-> eec63c65dcbeb14 David Sterba       2017-07-17  615              if (BTRFS_I(inode)->defrag_compress)
-> eec63c65dcbeb14 David Sterba       2017-07-17  616                      compress_type = BTRFS_I(inode)->defrag_compress;
-> eec63c65dcbeb14 David Sterba       2017-07-17  617              else if (BTRFS_I(inode)->prop_compress)
-> b52aa8c93e1fec9 David Sterba       2017-07-17  618                      compress_type = BTRFS_I(inode)->prop_compress;
-> 261507a02ccba9a Li Zefan           2010-12-17  619
-> 4adaa611020fa6a Chris Mason        2013-03-26  620              /*
-> 4adaa611020fa6a Chris Mason        2013-03-26  621               * we need to call clear_page_dirty_for_io on each
-> 4adaa611020fa6a Chris Mason        2013-03-26  622               * page in the range.  Otherwise applications with the file
-> 4adaa611020fa6a Chris Mason        2013-03-26  623               * mmap'd can wander in and change the page contents while
-> 4adaa611020fa6a Chris Mason        2013-03-26  624               * we are compressing them.
-> 4adaa611020fa6a Chris Mason        2013-03-26  625               *
-> 4adaa611020fa6a Chris Mason        2013-03-26  626               * If the compression fails for any reason, we set the pages
-> 4adaa611020fa6a Chris Mason        2013-03-26  627               * dirty again later on.
-> e9679de3fdcb11a Timofey Titovets   2017-10-24  628               *
-> e9679de3fdcb11a Timofey Titovets   2017-10-24  629               * Note that the remaining part is redirtied, the start pointer
-> e9679de3fdcb11a Timofey Titovets   2017-10-24  630               * has moved, the end is the original one.
-> 4adaa611020fa6a Chris Mason        2013-03-26  631               */
-> e9679de3fdcb11a Timofey Titovets   2017-10-24  632              if (!redirty) {
-> 4adaa611020fa6a Chris Mason        2013-03-26  633                      extent_range_clear_dirty_for_io(inode, start, end);
-> 4adaa611020fa6a Chris Mason        2013-03-26  634                      redirty = 1;
-> e9679de3fdcb11a Timofey Titovets   2017-10-24  635              }
-> f51d2b59120ff36 David Sterba       2017-09-15  636
-> f51d2b59120ff36 David Sterba       2017-09-15  637              /* Compression level is applied here and only here */
-> f51d2b59120ff36 David Sterba       2017-09-15  638              ret = btrfs_compress_pages(
-> f51d2b59120ff36 David Sterba       2017-09-15  639                      compress_type | (fs_info->compress_level << 4),
-> 261507a02ccba9a Li Zefan           2010-12-17  640                                         inode->i_mapping, start,
-> 38c31464089f639 David Sterba       2017-02-14  641                                         pages,
-> 4d3a800ebb12999 David Sterba       2017-02-14  642                                         &nr_pages,
-> c8b978188c9a0fd Chris Mason        2008-10-29  643                                         &total_in,
-> e5d74902362f1a0 David Sterba       2017-02-14  644                                         &total_compressed);
-> c8b978188c9a0fd Chris Mason        2008-10-29  645
-> c8b978188c9a0fd Chris Mason        2008-10-29  646              if (!ret) {
-> 7073017aeb98db3 Johannes Thumshirn 2018-12-05  647                      unsigned long offset = offset_in_page(total_compressed);
-> 4d3a800ebb12999 David Sterba       2017-02-14  648                      struct page *page = pages[nr_pages - 1];
-> c8b978188c9a0fd Chris Mason        2008-10-29  649
-> c8b978188c9a0fd Chris Mason        2008-10-29  650                      /* zero the tail end of the last page, we might be
-> c8b978188c9a0fd Chris Mason        2008-10-29  651                       * sending it down to disk
-> c8b978188c9a0fd Chris Mason        2008-10-29  652                       */
-> d048b9c2a737eb7 Ira Weiny          2021-05-04  653                      if (offset)
-> d048b9c2a737eb7 Ira Weiny          2021-05-04  654                              memzero_page(page, offset, PAGE_SIZE - offset);
-> c8b978188c9a0fd Chris Mason        2008-10-29  655                      will_compress = 1;
-> c8b978188c9a0fd Chris Mason        2008-10-29  656              }
-> c8b978188c9a0fd Chris Mason        2008-10-29  657      }
-> 560f7d75457f86a Li Zefan           2011-09-08  658  cont:
-> c8b978188c9a0fd Chris Mason        2008-10-29  659      if (start == 0) {
-> c8b978188c9a0fd Chris Mason        2008-10-29  660              /* lets try to make an inline extent */
-> 6018ba0a0e1bc23 Timofey Titovets   2017-09-15  661              if (ret || total_in < actual_end) {
-> c8b978188c9a0fd Chris Mason        2008-10-29  662                      /* we didn't compress the entire range, try
-> 771ed689d2cd534 Chris Mason        2008-11-06  663                       * to make an uncompressed inline extent.
-> c8b978188c9a0fd Chris Mason        2008-10-29  664                       */
-> a0349401c14f507 Nikolay Borisov    2020-06-03  665                      ret = cow_file_range_inline(BTRFS_I(inode), start, end,
-> a0349401c14f507 Nikolay Borisov    2020-06-03  666                                                  0, BTRFS_COMPRESS_NONE,
-> a0349401c14f507 Nikolay Borisov    2020-06-03  667                                                  NULL);
-> c8b978188c9a0fd Chris Mason        2008-10-29  668              } else {
-> 771ed689d2cd534 Chris Mason        2008-11-06  669                      /* try making a compressed inline extent */
-> a0349401c14f507 Nikolay Borisov    2020-06-03  670                      ret = cow_file_range_inline(BTRFS_I(inode), start, end,
-> fe3f566cd19bb6d Li Zefan           2011-03-28  671                                                  total_compressed,
-> fe3f566cd19bb6d Li Zefan           2011-03-28  672                                                  compress_type, pages);
-> c8b978188c9a0fd Chris Mason        2008-10-29  673              }
-> 79787eaab46121d Jeff Mahoney       2012-03-12  674              if (ret <= 0) {
-> 151a41bc46df2a9 Josef Bacik        2013-07-29  675                      unsigned long clear_flags = EXTENT_DELALLOC |
-> 8b62f87bad9cf06 Josef Bacik        2017-10-19  676                              EXTENT_DELALLOC_NEW | EXTENT_DEFRAG |
-> 8b62f87bad9cf06 Josef Bacik        2017-10-19  677                              EXTENT_DO_ACCOUNTING;
-> e6eb43142a72ba3 Filipe Manana      2014-10-10  678                      unsigned long page_error_op;
-> e6eb43142a72ba3 Filipe Manana      2014-10-10  679
-> e6eb43142a72ba3 Filipe Manana      2014-10-10  680                      page_error_op = ret < 0 ? PAGE_SET_ERROR : 0;
-> 151a41bc46df2a9 Josef Bacik        2013-07-29  681
-> 771ed689d2cd534 Chris Mason        2008-11-06  682                      /*
-> 79787eaab46121d Jeff Mahoney       2012-03-12  683                       * inline extent creation worked or returned error,
-> 79787eaab46121d Jeff Mahoney       2012-03-12  684                       * we don't need to create any more async work items.
-> 79787eaab46121d Jeff Mahoney       2012-03-12  685                       * Unlock and free up our temp pages.
-> 8b62f87bad9cf06 Josef Bacik        2017-10-19  686                       *
-> 8b62f87bad9cf06 Josef Bacik        2017-10-19  687                       * We use DO_ACCOUNTING here because we need the
-> 8b62f87bad9cf06 Josef Bacik        2017-10-19  688                       * delalloc_release_metadata to be done _after_ we drop
-> 8b62f87bad9cf06 Josef Bacik        2017-10-19  689                       * our outstanding extent for clearing delalloc for this
-> 8b62f87bad9cf06 Josef Bacik        2017-10-19  690                       * range.
-> 771ed689d2cd534 Chris Mason        2008-11-06  691                       */
-> ad7ff17b65a0567 Nikolay Borisov    2020-06-03  692                      extent_clear_unlock_delalloc(BTRFS_I(inode), start, end,
-> ad7ff17b65a0567 Nikolay Borisov    2020-06-03  693                                                   NULL,
-> 74e9194afb2c5c6 Nikolay Borisov    2019-07-17  694                                                   clear_flags,
-> ba8b04c1d4adbc6 Qu Wenruo          2016-07-19  695                                                   PAGE_UNLOCK |
-> 6869b0a8be775e9 Qu Wenruo          2021-01-26  696                                                   PAGE_START_WRITEBACK |
-> e6eb43142a72ba3 Filipe Manana      2014-10-10  697                                                   page_error_op |
-> c2790a2e2bc8240 Josef Bacik        2013-07-29  698                                                   PAGE_END_WRITEBACK);
-> cecc8d9038d164e Nikolay Borisov    2019-07-17  699
-> 1e6e238c3002ea3 Qu Wenruo          2020-07-28  700                      /*
-> 1e6e238c3002ea3 Qu Wenruo          2020-07-28  701                       * Ensure we only free the compressed pages if we have
-> 1e6e238c3002ea3 Qu Wenruo          2020-07-28  702                       * them allocated, as we can still reach here with
-> 1e6e238c3002ea3 Qu Wenruo          2020-07-28  703                       * inode_need_compress() == false.
-> 1e6e238c3002ea3 Qu Wenruo          2020-07-28  704                       */
-> 1e6e238c3002ea3 Qu Wenruo          2020-07-28  705                      if (pages) {
-> cecc8d9038d164e Nikolay Borisov    2019-07-17  706                              for (i = 0; i < nr_pages; i++) {
-> cecc8d9038d164e Nikolay Borisov    2019-07-17  707                                      WARN_ON(pages[i]->mapping);
-> cecc8d9038d164e Nikolay Borisov    2019-07-17  708                                      put_page(pages[i]);
-> cecc8d9038d164e Nikolay Borisov    2019-07-17  709                              }
-> cecc8d9038d164e Nikolay Borisov    2019-07-17  710                              kfree(pages);
-> 1e6e238c3002ea3 Qu Wenruo          2020-07-28  711                      }
-> cecc8d9038d164e Nikolay Borisov    2019-07-17  712                      return 0;
-> c8b978188c9a0fd Chris Mason        2008-10-29  713              }
-> c8b978188c9a0fd Chris Mason        2008-10-29  714      }
-> c8b978188c9a0fd Chris Mason        2008-10-29  715
-> c8b978188c9a0fd Chris Mason        2008-10-29  716      if (will_compress) {
-> c8b978188c9a0fd Chris Mason        2008-10-29  717              /*
-> c8b978188c9a0fd Chris Mason        2008-10-29  718               * we aren't doing an inline extent round the compressed size
-> c8b978188c9a0fd Chris Mason        2008-10-29  719               * up to a block size boundary so the allocator does sane
-> c8b978188c9a0fd Chris Mason        2008-10-29  720               * things
-> c8b978188c9a0fd Chris Mason        2008-10-29  721               */
-> fda2832febb1928 Qu Wenruo          2013-02-26  722              total_compressed = ALIGN(total_compressed, blocksize);
-> c8b978188c9a0fd Chris Mason        2008-10-29  723
-> c8b978188c9a0fd Chris Mason        2008-10-29  724              /*
-> c8b978188c9a0fd Chris Mason        2008-10-29  725               * one last check to make sure the compression is really a
-> 170607ebd9c891d Timofey Titovets   2017-06-06  726               * win, compare the page count read with the blocks on disk,
-> 170607ebd9c891d Timofey Titovets   2017-06-06  727               * compression must free at least one sector size
-> c8b978188c9a0fd Chris Mason        2008-10-29  728               */
-> 09cbfeaf1a5a67b Kirill A. Shutemov 2016-04-01  729              total_in = ALIGN(total_in, PAGE_SIZE);
-> 170607ebd9c891d Timofey Titovets   2017-06-06  730              if (total_compressed + blocksize <= total_in) {
-> ac3e99334d640b6 Nikolay Borisov    2019-07-17  731                      compressed_extents++;
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  732
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  733                      /*
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  734                       * The async work queues will take care of doing actual
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  735                       * allocation on disk for these compressed pages, and
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  736                       * will submit them to the elevator.
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  737                       */
-> b5326271e791ea9 Nikolay Borisov    2019-03-12  738                      add_async_extent(async_chunk, start, total_in,
-> 4d3a800ebb12999 David Sterba       2017-02-14  739                                      total_compressed, pages, nr_pages,
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  740                                      compress_type);
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  741
-> 1170862d783a3b4 Timofey Titovets   2017-10-03  742                      if (start + total_in < end) {
-> 1170862d783a3b4 Timofey Titovets   2017-10-03  743                              start += total_in;
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  744                              pages = NULL;
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  745                              cond_resched();
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  746                              goto again;
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  747                      }
-> ac3e99334d640b6 Nikolay Borisov    2019-07-17  748                      return compressed_extents;
-> c8b978188c9a0fd Chris Mason        2008-10-29  749              }
-> c8b978188c9a0fd Chris Mason        2008-10-29  750      }
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  751      if (pages) {
-> c8b978188c9a0fd Chris Mason        2008-10-29  752              /*
-> c8b978188c9a0fd Chris Mason        2008-10-29  753               * the compression code ran but failed to make things smaller,
-> c8b978188c9a0fd Chris Mason        2008-10-29  754               * free any pages it allocated and our page pointer array
-> c8b978188c9a0fd Chris Mason        2008-10-29  755               */
-> 4d3a800ebb12999 David Sterba       2017-02-14  756              for (i = 0; i < nr_pages; i++) {
-> 70b99e6959a4c28 Chris Mason        2008-10-31  757                      WARN_ON(pages[i]->mapping);
-> 09cbfeaf1a5a67b Kirill A. Shutemov 2016-04-01  758                      put_page(pages[i]);
-> c8b978188c9a0fd Chris Mason        2008-10-29  759              }
-> c8b978188c9a0fd Chris Mason        2008-10-29  760              kfree(pages);
-> c8b978188c9a0fd Chris Mason        2008-10-29  761              pages = NULL;
-> c8b978188c9a0fd Chris Mason        2008-10-29  762              total_compressed = 0;
-> 4d3a800ebb12999 David Sterba       2017-02-14  763              nr_pages = 0;
-> c8b978188c9a0fd Chris Mason        2008-10-29  764
-> c8b978188c9a0fd Chris Mason        2008-10-29  765              /* flag the file so we don't compress in the future */
-> 0b246afa62b0cf5 Jeff Mahoney       2016-06-22  766              if (!btrfs_test_opt(fs_info, FORCE_COMPRESS) &&
-> b52aa8c93e1fec9 David Sterba       2017-07-17  767                  !(BTRFS_I(inode)->prop_compress)) {
-> 6cbff00f4632c80 Christoph Hellwig  2009-04-17  768                      BTRFS_I(inode)->flags |= BTRFS_INODE_NOCOMPRESS;
-> c8b978188c9a0fd Chris Mason        2008-10-29  769              }
-> 1e701a3292e25a6 Chris Mason        2010-03-11  770      }
-> f03d9301f15fb69 Chris Mason        2009-02-04  771  cleanup_and_bail_uncompressed:
-> 771ed689d2cd534 Chris Mason        2008-11-06  772      /*
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  773       * No compression, but we still need to write the pages in the file
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  774       * we've been given so far.  redirty the locked page if it corresponds
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  775       * to our extent and set things up for the async work queue to run
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  776       * cow_file_range to do the normal delalloc dance.
-> 771ed689d2cd534 Chris Mason        2008-11-06  777       */
-> 1d53c9e6723022b Chris Mason        2019-07-10  778      if (async_chunk->locked_page &&
-> 1d53c9e6723022b Chris Mason        2019-07-10  779          (page_offset(async_chunk->locked_page) >= start &&
-> 1d53c9e6723022b Chris Mason        2019-07-10  780           page_offset(async_chunk->locked_page)) <= end) {
-> 1368c6dac7f10a1 Nikolay Borisov    2019-03-12  781              __set_page_dirty_nobuffers(async_chunk->locked_page);
-> 771ed689d2cd534 Chris Mason        2008-11-06  782              /* unlocked later on in the async handlers */
-> 1d53c9e6723022b Chris Mason        2019-07-10  783      }
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  784
-> 4adaa611020fa6a Chris Mason        2013-03-26  785      if (redirty)
-> 4adaa611020fa6a Chris Mason        2013-03-26  786              extent_range_redirty_for_io(inode, start, end);
-> b5326271e791ea9 Nikolay Borisov    2019-03-12  787      add_async_extent(async_chunk, start, end - start + 1, 0, NULL, 0,
-> c8bb0c8bd22a4b9 Ashish Samant      2016-03-25  788                       BTRFS_COMPRESS_NONE);
-> ac3e99334d640b6 Nikolay Borisov    2019-07-17  789      compressed_extents++;
-> 3b951516ed703af Chris Mason        2008-04-17  790
-> ac3e99334d640b6 Nikolay Borisov    2019-07-17  791      return compressed_extents;
-> 771ed689d2cd534 Chris Mason        2008-11-06  792  }
-> 771ed689d2cd534 Chris Mason        2008-11-06  793
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> FAIL: vp80-03-segmentation-02 (GStreamer-VP8-V4L2SL-Gst1.0.VP8-TEST-VECTO=
+RS)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "/root/gstreamer/fluster/fluster/test.py", line 104, in _test
+>     self.assertEqual(
+> AssertionError: '4d2d65efeee1c83772c33a13446bd1a4' !=3D
+> '1b2061d4a74549228769f8e292bcb15f'
+> - 4d2d65efeee1c83772c33a13446bd1a4
+> + 1b2061d4a74549228769f8e292bcb15f
+>  : vp80-03-segmentation-02
 >
-> :::::: The code at line 569 was first introduced by commit
-> :::::: 069eac7850890acf0d3c21a6c8ca9f33ddb34a0d btrfs: use predefined limits for calculating maximum number of pages for compression
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> FAIL: vp80-03-segmentation-03 (GStreamer-VP8-V4L2SL-Gst1.0.VP8-TEST-VECTO=
+RS)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "/root/gstreamer/fluster/fluster/test.py", line 104, in _test
+>     self.assertEqual(
+> AssertionError: '73d864433691f8db43257b88495ac8c3' !=3D
+> 'fd1eb6ebd7100995bad11042a9bea048'
+> - 73d864433691f8db43257b88495ac8c3
+> + fd1eb6ebd7100995bad11042a9bea048
+>  : vp80-03-segmentation-03
 >
-> :::::: TO: David Sterba <dsterba@suse.com>
-> :::::: CC: David Sterba <dsterba@suse.com>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> FAIL: vp80-03-segmentation-04 (GStreamer-VP8-V4L2SL-Gst1.0.VP8-TEST-VECTO=
+RS)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "/root/gstreamer/fluster/fluster/test.py", line 104, in _test
+>     self.assertEqual(
+> AssertionError: '7f846c8bd7cdfe61f8542f382f9d8eeb' !=3D
+> '0c27a47c4fd8bbfce173d005bef8be6a'
+> - 7f846c8bd7cdfe61f8542f382f9d8eeb
+> + 0c27a47c4fd8bbfce173d005bef8be6a
+>  : vp80-03-segmentation-04
 >
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> FAIL: vp80-03-segmentation-1425 (GStreamer-VP8-V4L2SL-Gst1.0.VP8-TEST-VEC=
+TORS)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "/root/gstreamer/fluster/fluster/test.py", line 104, in _test
+>     self.assertEqual(
+> AssertionError: '96ffacf0c3eae59b58252be24a60e9b2' !=3D
+> '83e8a322e8ab23e60ba16430aacad827'
+> - 96ffacf0c3eae59b58252be24a60e9b2
+> + 83e8a322e8ab23e60ba16430aacad827
+>  : vp80-03-segmentation-1425
+>
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> FAIL: vp80-03-segmentation-1436 (GStreamer-VP8-V4L2SL-Gst1.0.VP8-TEST-VEC=
+TORS)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "/root/gstreamer/fluster/fluster/test.py", line 104, in _test
+>     self.assertEqual(
+> AssertionError: 'bfd17a557ee1ba347c755a18ce5a64a6' !=3D
+> '5bca61a733c1936205f82de1492a1b2b'
+> - bfd17a557ee1ba347c755a18ce5a64a6
+> + 5bca61a733c1936205f82de1492a1b2b
+>  : vp80-03-segmentation-1436
+>
+> Ran 55/61 tests successfully               in 12.104 secs
+>
+> I am not that familiar with this tool, but I assume failures are bad.
+> However these look like Python errors and not gst errors.
+>
+> The H264 decoder resulted in:
+>
+> Ran 85/135 tests successfully               in 57.821 secs
+>
+> I can provide the splat if you want. Those looked like gst errors,
+> because most of the error messages state the gst-launch-1.0 returned
+> non-zero exit status 1.
+>
+>
+> > It should be easy to use.
+>
+> It was.
+> >
+> > > I think I'll redo the patch without the RFC and without the H1 encode=
+r
+> > > unless anyone has any objections.  I know I need to rebase on
+> > > linux-next anyway because the patches don't apply cleanly.  Is there =
+a
+> > > specific branch I should use?  I don't know if this goes through
+> > > Shawn's IMX tree or the media tree (or a combination)
+> > >
+> >
+> > You should rebase on media's master branch:
+> >
+> > https://git.linuxtv.org/media_tree.git/log/
+>
+> I'll submit the patch with a cover letter with the results of the VP8
+> and H264 fluster test in the cover letter.  Is there a stateless
+> decoder for the VP9 decoder?  gst-inspect only shows the following
+> v4l2codecs.
+>
+>   v4l2slh264dec: V4L2 Stateless H.264 Video Decoder
+>   v4l2slmpeg2dec: V4L2 Stateless Mpeg2 Video Decoder
+>   v4l2slvp8alphadecodebin: VP8 Alpha Decoder
+>   v4l2slvp8dec: V4L2 Stateless VP8 Video Decoder
+>
+> thanks for all your help.  Hopefully we can get this integrated soon.
+>
 
+Adam,
 
+What deps did you install in order to get v4l2codecs building? I
+installed libgudev-1.0-dev based on Nicolas' suggestion and rebuilt
+(not sure if I needed to re-configure somehow) but there is still
+nothing in build/subprojects/gst-plugins-bad/sys/v4l2codecs/. A 'meson
+configure' tells me that v4l2codecs is set to 'auto' but I'm not sure
+how to find out what dependencies are needed or what may be missing.
 
--- 
-Thanks,
-~Nick Desaulniers
+Best regards,
+
+Tim

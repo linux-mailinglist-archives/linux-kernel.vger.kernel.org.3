@@ -2,146 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D068546286E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DBF3462875
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:40:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhK2Xl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbhK2Xl4 (ORCPT
+        id S232118AbhK2XnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:43:09 -0500
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:42562 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229590AbhK2XnG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:41:56 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35F3C06174A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:38:37 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id f125so4486623pgc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:38:37 -0800 (PST)
+        Mon, 29 Nov 2021 18:43:06 -0500
+Received: by mail-ua1-f51.google.com with SMTP id t13so37643048uad.9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:39:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kimin07IyQujzwbNieuCZAXwjj1roojWjqX5HWur5aU=;
-        b=Wsw+rXmhVk+A+ci/dpCKpRKXxCMuyKgJPmFHurEFyKZ1yoeuVHrUluGgbdWdjPa7ww
-         XjV2FHLl/REIVyA1Za6yBUNq0K1pfFutbciD8Bbk6FGFtmfKBLU5dpIa1uWOqby0H3Bu
-         lBbCkoN4MgRL3J+IoLPGm3HZRHVo4SxPx9IlZqxwHl3sfdM3315DHroq8tvCugZSAMmC
-         E/GexI7mIdflziFoqFed8pWZF7aJwarZ7cjLHowO8Jz6WGTMx8VnVbwx7BqhRG+jvx1P
-         i8ZZo0/9HZHIpHjZ6G6kvT8Ux5kQjxQqA+aAzWjUBZUvEHoTZd5jfjyAmEmzxM5nWEgV
-         AEmA==
+        d=posk.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=c7M8bjVkZS4Crx9n4ZGGz1oMJSYLhjEhdQ0JNSPjlt8=;
+        b=V35tdCUBBDMXJ7fCiyIuqsXXPU6QrRaT/GWOg2xVg1xzv9E5BFQ9W2UkyjwlXj2KaF
+         9XkB2/ifBLIKQUxvo4amGtjsEPf6PcquFjfc2/JGz/0Qgawp9Sh6ArGxEZP/v8fX1dbx
+         NghpiQwCtWy/9xielIZZzVDQxmEpglv71V4Rmy99Al84IfweaGcbTjztI6rz3ObcRPqS
+         nbCpI/ai5Ewqm6hXwvWFy7quXey5FxlQCjOQZGWm6l89751vvnW4xp0VivyHXIo3mCcQ
+         MCZtlRJQIATPZXw8FG4Q+fMEtxyP8IswiZlyChOMOMiFNLul2jtLwfedipIcZBH5OvP4
+         Iqlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kimin07IyQujzwbNieuCZAXwjj1roojWjqX5HWur5aU=;
-        b=nKj4WJkgO31/Fo1p/HKA/r8/YU2wZ4UaeuTQ4Ed+ZXpVG+sTNn9Y7S6MDaNM1WXgDO
-         mYL/ZkgfBeTZFESy2PrmoC1AkTZBlnY4IvYwxsuN7T5yst0fc1/PcjFfFiGDAoGVGhwJ
-         7GJ+cNaX9pBRj4ZVkspMkhK9/+Hm+3esJRgPESlORQiiOxH619LNTMZyt1Fu1svL6vy9
-         K4pHJk/v2B5EfIjTiV6vqARd4kuTeLlsspMnLcUDqtuXchg7a5kW18psaX/czpEts0L2
-         ixzbrC2zoAei9ZR72TZCNXtZoHezTcVcatvefJPZOAY44mtc5WpL4eN4raTkGFDcerR+
-         pDzw==
-X-Gm-Message-State: AOAM530GHeWwSRiToJh6BVPD7oCvuLRqXiJy3rhQ9CF7puVBMtzc8tJO
-        Gp0rdZvKAwb7y3YP37p7QublmQ==
-X-Google-Smtp-Source: ABdhPJwpzUNbdUuRzeXMckQ0oWkaWO8uUHzEVuQzZ1oSekyb/3R3wksSbGFHSGirj3qfxf4HuEayhw==
-X-Received: by 2002:a05:6a00:1348:b0:481:179c:ce9b with SMTP id k8-20020a056a00134800b00481179cce9bmr41985324pfu.27.1638229117199;
-        Mon, 29 Nov 2021 15:38:37 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id c18sm18945196pfl.201.2021.11.29.15.38.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 15:38:36 -0800 (PST)
-Date:   Mon, 29 Nov 2021 23:38:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: Re: [RFC PATCH v3 54/59] KVM: X86: Introduce initial_tsc_khz in
- struct kvm_arch
-Message-ID: <YaVkeZalN5wkd9uL@google.com>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <5ba3573c8b82fcbdc3f3994f6d4d2a3c40445be9.1637799475.git.isaku.yamahata@intel.com>
- <875ysghrp8.ffs@tglx>
- <741df444-5cd0-2049-f93a-c2521e4f426d@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=c7M8bjVkZS4Crx9n4ZGGz1oMJSYLhjEhdQ0JNSPjlt8=;
+        b=bu0dqpeXXFEMt+avPrkQVNjI3AMKA/+rUp8/5aNoYTYetBQWP7FzB4qLx4a2vEagtF
+         2LPViQAd2e8w1jv5jJqtQ526YDf8pYM/rg+B8dpxj8Ye4nb/yNI2182PL5ZnOLQKLRh5
+         heEFO6ci0Rxvkgwh6SM/Rfi1L6TWsyuG6KCHGffsuMAItTOONQgntKwYhxDglOwsuf9R
+         hvJ2nE13NvKJcnS67psZ52Zg2L9sA+C+rGD/i3CBExwmZA42jSLCD4yupANTALna9y+D
+         71a/sgFygLfVRSIZH7wDEfpZCLBlHR80iNPhDLAZgFziQspo3jo703LWgfbcN/SwIcHP
+         S3Rw==
+X-Gm-Message-State: AOAM530kZtt22XqOOrAV5I1w8kRS/lQWWjmuuo9S+M3FG+34BPnrTw8H
+        5tiMPXTSUIekJOFUL/QuXN1n6iPlWNCv4WFATclSMA==
+X-Google-Smtp-Source: ABdhPJyQvp4x5bByQwLpBEygbxk1oCfNM99yBAAEpPNfSg1xfZNjK+9yDN/dWx3ThizfuvtRLx8gzzf2dPwNKXRRRVI=
+X-Received: by 2002:a9f:218c:: with SMTP id 12mr51476140uac.71.1638229128058;
+ Mon, 29 Nov 2021 15:38:48 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <741df444-5cd0-2049-f93a-c2521e4f426d@redhat.com>
+References: <20211122211327.5931-1-posk@google.com> <20211122211327.5931-4-posk@google.com>
+ <20211124200822.GF721624@worktop.programming.kicks-ass.net>
+ <CAFTs51Uka8VRCHuGidw7mRwATufp87U6S8SWUVod_kU-h6T3ew@mail.gmail.com>
+ <YaEUts3RbOLyvAjl@hirez.programming.kicks-ass.net> <CAFTs51XnN+N74i1XHvRUAUWd04-Fs9uV6ouXo=CQSQs8MaEM5A@mail.gmail.com>
+ <YaUCoe07Wl9Stlch@hirez.programming.kicks-ass.net> <CAFTs51UzR=m6+vcjTCNOGwGu3ZwB5GMrg+cSQy2ecvCWxhZvEQ@mail.gmail.com>
+ <20211129210841.GO721624@worktop.programming.kicks-ass.net>
+In-Reply-To: <20211129210841.GO721624@worktop.programming.kicks-ass.net>
+From:   Peter Oskolkov <posk@posk.io>
+Date:   Mon, 29 Nov 2021 15:38:38 -0800
+Message-ID: <CAFTs51XyGDNj89+FCn4HZqMHuenjQu2wqTOW8ow4hSUbdGrGhw@mail.gmail.com>
+Subject: Re: [PATCH v0.9.1 3/6] sched/umcg: implement UMCG syscalls
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-api@vger.kernel.org, Paul Turner <pjt@google.com>,
+        Ben Segall <bsegall@google.com>,
+        Peter Oskolkov <posk@google.com>,
+        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
+        Thierry Delisle <tdelisle@uwaterloo.ca>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021, Paolo Bonzini wrote:
-> On 11/25/21 22:05, Thomas Gleixner wrote:
-> > You can argue that my request is unreasonable until you are blue in
-> > your face, it's not going to lift my NAK on this.
-> 
-> There's no need for that.  I'd be saying the same, and I don't think it's
-> particularly helpful that you made it almost a personal issue.
-> 
-> While in this series there is a separation of changes to existing code vs.
-> new code, what's not clear is _why_ you have all those changes. These are
-> not code cleanups or refactorings that can stand on their own feet; lots of
-> the early patches are actually part of the new functionality.  And being in
-> the form of "add an argument here" or "export a function there", it's not
-> really easy (or feasible) to review them without seeing how the new
-> functionality is used, which requires a constant back and forth between
-> early patches and the final 2000 line file.
-> 
-> In some sense, the poor commit messages at the beginning of the series are
-> just a symptom of not having any meat until too late, and then dropping it
-> all at once.  There's only so much that you can say about an
-> EXPORT_SYMBOL_GPL, the real thing to talk about is probably the thing that
-> refers to that symbol.
-> 
-> If there are some patches that are actually independent, go ahead and submit
-> them early.  But more practically, for the bulk of the changes what you need
-> to do is:
-> 
-> 1) incorporate into patch 55 a version of tdx.c that essentially does
-> KVM_BUG_ON or WARN_ON for each function.  Temporarily keep the same huge
-> patch that adds the remaining 2000 lines of tdx.c
-> 
-> 2) squash the tdx.c stub with patch 44.
-> 
-> 3) gather a strace of QEMU starting up a TDX domain.
-> 
-> 4) figure out which parts of the code are needed to run until the first
-> ioctl.  Make that a first patch.
+On Mon, Nov 29, 2021 at 1:08 PM Peter Zijlstra <peterz@infradead.org> wrote:
+[...]
+> > > > Another big concern I have is that you removed UMCG_TF_LOCKED. I
+> > >
+> > > OOh yes, I forgot to mention that. I couldn't figure out what it was
+> > > supposed to do.
+[...]
+>
+> So then A does:
+>
+>         A::next_tid = C.tid;
+>         sys_umcg_wait();
+>
+> Which will:
+>
+>         pin(A);
+>         pin(S0);
+>
+>         cmpxchg(A::state, RUNNING, RUNNABLE);
 
-Hmm, I don't think this approach will work as well as it did for SEV when applied
-at a per-ioctl granuarity, I suspect several patches will end up quite large.   I
-completely agree with the overall idea, but I'd encourage the TDX folks to have a
-finer granularity where it makes sense, e.g. things like the x2APIC behavior,
-immutable TSC, memory management, etc... can probably be sliced up into separate
-patches.
+Hmm.... That's another difference between your patch and mine: my
+approach was "the side that initiates the change updates the state".
+So in my code the userspace changes the current task's state RUNNING
+=> RUNNABLE and the next task's state, or the server's state, RUNNABLE
+=> RUNNING before calling sys_umcg_wait(). The kernel changed worker
+states to BLOCKED/RUNNABLE during block/wake detection, and marked
+servers RUNNING when waking them during block/wake detection; but all
+applicable state changes for sys_umcg_wait() happen in the userspace.
 
-> 5) repeat step 4 until you have covered all the code
-> 
-> 5) Move the new "KVM: VMX: Add 'main.c' to wrap VMX and TDX" (which also
-> adds the tdx.c stub) as possible in the series.
-> 
-> 6) Move each of the new patches as early as possible in the series.
-> 
-> 7) Look for candidates for squashing (e.g. commit messages that say it's
-> "used later"; now the use should be very close and the two can be merged).
-> Add to the commit message a note about changes outside VMX.
+The reasoning behind this approach was:
+- do in kernel only that which cannot be done in the userspace, to
+make the kernel code smaller/simpler
+- similar to how futexes work: futex_wait does not change the futex
+value to the desired value, but just checks whether the futex value
+matches the desired value
+- similar to how futexes work, concurrent state changes can happen in
+the userspace without calling into the kernel at all
+    for example:
+        - (a): worker A goes to sleep into sys_umcg_wait()
+        - (b): worker B wants to context switch into worker A "a moment" later
+        - due to preemption/interrupts/pagefaults/whatnot, (b) happens
+in reality before (a)
+    in my patchset, the situation above happily resolves in the
+userspace so that worker A keeps running without ever calling
+sys_umcg_wait().
 
-Generally speaking, I agree.  For the flag exposion, I 100% agree that setting
-the flag in TDX, adding it in x86 is best done in a signal patch, and handling
-all side effects is best done in a single patch.  
+Again, I don't think this is deal breaking, and your approach will
+work, just a bit less efficiently in some cases :)
 
-But for things like letting debug TDs access registers, I would prefer not to
-actually squash the two (or more) patches.  I agree that two related patches need
-to be contiguous in the series, but I'd prefer that things with non-trivial changes,
-especially in common code, are kept separate.
+I'm still not sure we can live without UMCG_TF_LOCKED. What if worker
+A transfers its server to worker B that A intends to context switch
+into, and then worker A pagefaults or gets interrupted before calling
+sys_umcg_wait()? The server will be woken up and will see that it is
+assigned to worker B; now what? If worker A is "locked" before the
+whole thing starts, the pagefault/interrupt will not trigger
+block/wake detection, worker A will keep RUNNING for all intended
+purposes, and eventually will call sys_umcg_wait() as it had
+intended...
 
-> The resulting series may not be perfect, but it would be a much better
-> starting point for review.
-> 
-> Paolo
+[...]

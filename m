@@ -2,143 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32898461D3E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCD0461D54
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:05:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350841AbhK2SC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:02:59 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:28338 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235871AbhK2SA6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:00:58 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATHlSjv030769;
-        Mon, 29 Nov 2021 17:56:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : references : date : in-reply-to : message-id : mime-version :
- content-type; s=pp1; bh=ji692FR3Mz1r0MiNEkxX/c6ZHq97AskB3w5QWFypXGo=;
- b=b16Q7OX+ghgVZuUSv4mHyRHEiyEIFbqnMfmdr6rLvcDGDyAo5hvhzXMqnLZfBoWRyUTZ
- w4biEwhOxnKzV0pdmWp/5FQ54zKQvLgntaJLjsVw1xCfe9JThX1ojJo0HE5nz5C1gH4B
- mqEloUmu/Zlybw8u3MYRV7Qv7iqQJ/LytQHNyIsJiqBudHaMP3jIyCv08x+8NhfP3/eb
- 14dkYA8a4IkBgVtYiExmtaoFficoc4lGAeX4SKfyzxEjIbXXPy9ppY2ObULM1G3SXfeU
- Bl0UZrje3AGFt6sy+JQy7F/iTSi/8FJnq1oBRKje74rp2l8xKh5ndSXMJFDaYwLudI/V WQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cn3jsg61x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 17:56:59 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1ATHmXfk001537;
-        Mon, 29 Nov 2021 17:56:58 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cn3jsg61a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 17:56:58 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATHsCNU006974;
-        Mon, 29 Nov 2021 17:56:56 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ckbxjqgk2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 17:56:56 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATHus0V29360440
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Nov 2021 17:56:54 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E678EAE055;
-        Mon, 29 Nov 2021 17:56:53 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5283EAE053;
-        Mon, 29 Nov 2021 17:56:53 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 29 Nov 2021 17:56:53 +0000 (GMT)
-From:   Sven Schnelle <svens@linux.ibm.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Yafang Shao <laoar.shao@gmail.com>, akpm@linux-foundation.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        oliver.sang@intel.com, lkp@intel.com,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
- 16 with TASK_COMM_LEN
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-8-laoar.shao@gmail.com>
-        <yt9d35nf1d84.fsf@linux.ibm.com>
-        <20211129123043.5cfd687a@gandalf.local.home>
-Date:   Mon, 29 Nov 2021 18:56:53 +0100
-In-Reply-To: <20211129123043.5cfd687a@gandalf.local.home> (Steven Rostedt's
-        message of "Mon, 29 Nov 2021 12:30:43 -0500")
-Message-ID: <yt9dsfvesv4q.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.0.50 (gnu/linux)
+        id S1350128AbhK2SI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:08:56 -0500
+Received: from mga06.intel.com ([134.134.136.31]:3804 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243023AbhK2SGv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 13:06:51 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="296844349"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="296844349"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 10:01:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="459251126"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 29 Nov 2021 10:01:16 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mrkxo-000CCY-1J; Mon, 29 Nov 2021 18:01:16 +0000
+Date:   Tue, 30 Nov 2021 02:00:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     pandith.n@intel.com, djakov@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, mgross@linux.intel.com,
+        furong.zhou@intel.com, mallikarjunappa.sangannavar@intel.com,
+        lakshmi.bai.raja.subramanian@intel.com,
+        Pandith N <pandith.n@intel.com>
+Subject: Re: [PATCH V8 1/1] interconnect: intel: Add Keem Bay noc driver
+Message-ID: <202111300127.TJsMMckG-lkp@intel.com>
+References: <20211129154337.14398-1-pandith.n@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: htLDRgK8ppBcOGDZPtY3fNCU6FdZEDnP
-X-Proofpoint-ORIG-GUID: IvWG1lU-w3IH0aApjQ2nUWGJ9ljZGTna
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-29_10,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
- malwarescore=0 bulkscore=0 spamscore=0 impostorscore=0 phishscore=0
- priorityscore=1501 mlxscore=0 adultscore=0 suspectscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111290082
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129154337.14398-1-pandith.n@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Steven Rostedt <rostedt@goodmis.org> writes:
+Hi,
 
-> On Mon, 29 Nov 2021 11:13:31 +0100
-> Sven Schnelle <svens@linux.ibm.com> wrote:
->
->
->> This breaks the trigger-field-variable-support.tc from the ftrace test
->> suite at least on s390:
->> 
->> echo
->> 'hist:keys=next_comm:wakeup_lat=common_timestamp.usecs-$ts0:onmatch(sched.sched_waking).wakeup_latency($wakeup_lat,next_pid,sched.sched_waking.prio,next_comm)
->> if next_comm=="ping"'
->> linux/tools/testing/selftests/ftrace/test.d/trigger/inter-event/trigger-field-variable-support.tc: line 15: echo: write error: Invalid argument
->> 
->> I added a debugging line into check_synth_field():
->> 
->> [   44.091037] field->size 16, hist_field->size 16, field->is_signed 1, hist_field->is_signed 0
->> 
->> Note the difference in the signed field.
->
-> That should not break on strings.
->
-> Does this fix it (if you keep the patch)?
+I love your patch! Perhaps something to improve:
 
-It does. Thanks!
+[auto build test WARNING on linus/master]
+[also build test WARNING on v5.16-rc3 next-20211129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-> -- Steve
->
-> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> index 9555b8e1d1e3..319f9c8ca7e7 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -3757,7 +3757,7 @@ static int check_synth_field(struct synth_event *event,
->  
->  	if (strcmp(field->type, hist_field->type) != 0) {
->  		if (field->size != hist_field->size ||
-> -		    field->is_signed != hist_field->is_signed)
-> +		    (!field->is_string && field->is_signed != hist_field->is_signed))
->  			return -EINVAL;
->  	}
->  
+url:    https://github.com/0day-ci/linux/commits/pandith-n-intel-com/interconnect-intel-Add-Keem-Bay-noc-driver/20211129-235117
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d58071a8a76d779eedab38033ae4c821c30295a5
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20211130/202111300127.TJsMMckG-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/724e8829a62d4ae6908d011f927e0c3ae5b0a80c
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review pandith-n-intel-com/interconnect-intel-Add-Keem-Bay-noc-driver/20211129-235117
+        git checkout 724e8829a62d4ae6908d011f927e0c3ae5b0a80c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash drivers/interconnect/intel/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/interconnect/intel/keembay-bwmon.c:142: warning: expecting prototype for flexnoc_counterp_capture(). Prototype was for flexnoc_counter_capture() instead
+
+
+vim +142 drivers/interconnect/intel/keembay-bwmon.c
+
+   122	
+   123	/**
+   124	 * flexnoc_counterp_capture() - Capture the counter statistic values
+   125	 * @noc: NOC type to setup counters
+   126	 * @counter:  Counter number to capture statistics values for n and n+1
+   127	 * @value: statistics values read are returned in this address passed
+   128	 *
+   129	 * This function will return the statistics value of started counters.
+   130	 * When this function returns NOC_PROBE_COMPLETED, it is guaranteed that NOC
+   131	 * counters are idle and finished probing.
+   132	 * Algo : The values should not returned when counters are active/running.
+   133	 * Once the counter is frozen, the values are good to read. There is an
+   134	 * iteration logic implemented to check this. An maximum timeout config
+   135	 * is provided to for capture timeout - NOC_CAPTURE_TIMEOUT_MSEC
+   136	 *
+   137	 *  Returns NOC_PROBE_COMPLETED if the counters are stopped or
+   138	 *  NOC_PROBE_ERR_IN_PROGRESS if counters are still running
+   139	 */
+   140	enum noc_status flexnoc_counter_capture(enum noc_ss_type noc,
+   141						enum noc_counter counter, u32  *value)
+ > 142	{
+   143		unsigned long timeout;
+   144		u32 c0_0, c0_1;
+   145	
+   146		if (noc >= NOC_TYPE_MAX ||
+   147		    counter >= NOC_COUNTER_MAX  ||
+   148		    !value)
+   149			return NOC_PROBE_ERR_INVALID_ARGS;
+   150	
+   151		timeout = jiffies + msecs_to_jiffies(NOC_CAPTURE_TIMEOUT_MSEC);
+   152		do {
+   153			c0_0 = noc_readl((c_offset[counter] + C_VAL));
+   154			usleep_range(10000, 11000);
+   155			c0_1 = noc_readl((c_offset[counter] + C_VAL));
+   156			/* If mainctrl is zero , return error */
+   157			if (noc_readl(MAINCTL) == 0)
+   158				return NOC_PROBE_ERR_IN_PROGRESS;
+   159			/* If counters are zero, keep reading */
+   160			if (0 == c0_0 && 0 == c0_1) {
+   161				break;
+   162			} else if (c0_0 != c0_1) {
+   163				continue;
+   164			} else {
+   165				/* counters look good break the while */
+   166				break;
+   167			}
+   168		} while (time_before(jiffies, timeout));
+   169	
+   170		if (c0_0 != c0_1)
+   171			return NOC_PROBE_ERR_IN_PROGRESS;
+   172	
+   173		c0_0 = noc_readl((c_offset[counter] + C_VAL));
+   174		c0_1 = noc_readl((c_offset[counter + 1] + C_VAL));
+   175		*value = (c0_0 | (c0_1 << 16));
+   176	
+   177		return NOC_PROBE_COMPLETED;
+   178	}
+   179	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

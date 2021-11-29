@@ -2,115 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1405C4617D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2284617DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243757AbhK2OVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:21:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
+        id S1347756AbhK2OWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244340AbhK2OTK (ORCPT
+        with ESMTP id S1377794AbhK2OUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:19:10 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFE2C08EAFC
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:56:36 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id z18so21320070iof.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:56:36 -0800 (PST)
+        Mon, 29 Nov 2021 09:20:31 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A5BC08EB26
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:58:40 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso12323066wmr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:58:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CKtqbicwgTdzcfDDVJ9s3/qtMRbUgp3KQEuBry1DrH0=;
-        b=BPmA997oheI0tE7nHCG5PwmGspFGrUsXVCpyn8D8CtPKr+F5e9+xwlnaqLvM0rJU4f
-         Ckk8pnztz7hPZSgGcQhBpbjtFlcmH0pNWGeFh+zZatoqU6AnWPh/ghPD1bE6EGM3O2C4
-         FnH2KyEEJvZn4hC0kc6NVhQuuNU0iPZPFPVnwl4l7V+Msk3wCPxsp3LleKtGX22RR8c1
-         PprsBE3zfb0Z+hFX0y/CIvUXORIrpSzA7EiJyBUzsOUtpJEVf62Do9aW4INNOncJDGx5
-         ePypANBqmKdP4N849jIBJoiIezlK90la72j2mbFaT1oxE5veAGnZcI+Hz136x9WtVio7
-         bdIw==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=6A67fbHx2MO5BuK4b671y5tVZE/grLXUd1QZNrRTMeg=;
+        b=khXVUQzs0+UG00jtUwYnjNp/nCKqykcCUh5fwfgFabnBNEyBuro/1E9FjDyAiuLOTp
+         T5Jk0a5ejBLRWJMiVFJKGk8f3egtmmcA1qknQqqvkgc2dNhq7yzLMZIJ6EizQI8TzqMZ
+         KZjZdhC3xPtViAVMxD2Vtdwl7soWy/W35HCWynFzJ5EF6CCh1BrqpkgzYmpei0vUJrC1
+         i6Z58ECXkB7kihx6iizsUjMO5hm8GYbVyiZanr7IT3xfffi7emlgNu5INgatWuLFbd30
+         QdeRSBhX3FJVkUn8I5Vw1nZYn3pBY5jyoRiadpeFP7frLRZRUDeAxrLRjY55dCq9lbWT
+         x82Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CKtqbicwgTdzcfDDVJ9s3/qtMRbUgp3KQEuBry1DrH0=;
-        b=ZQWWsXmYJVgVFvloNjGl9NmShinbcJQJvZ+a5kCftuTDMAXyPPv2y6YTGC9yEqQaB6
-         7USzCjvYB0a8IxRrqk6v2RMHLsA16cO54yriqojIJDp+Z6u4vGWWnN0AicR/Xkc159bI
-         UgI+wZ5N2FS3sesCpyQWxjPf+yURp8ytf/GZU0tEWwFLXbouXEvgQ3B0cJGQgmhBavjm
-         WxHMopzAas8dmlR+e6fWxEljXQAMFTcTqZZtTFsRP3JVeJztaKfKN4vRprs7/JlusNwi
-         YWM1xbwi+ZtrZJEufPs3iJsPTWCcTu4t+tDLdam9wII3jONzpR/bPYfaXqUttzjh64Ju
-         VBgg==
-X-Gm-Message-State: AOAM533zOFksSRvXTHKeXv8YGEYW9g+gRLB6RHpKkEg8Gtdy/8AbKY6i
-        Hhf6xQlcz+6pObVbj5vo6Nk1Pg5EgNigMJe8xoo=
-X-Google-Smtp-Source: ABdhPJz7yZAFjWS5SVbcrm3cGqLW78HumxClnBHVEWpGf9HWaajytm8B78/wqo9qOBZcQKb+qHQjV2oYVaHMpPgRqC0=
-X-Received: by 2002:a5e:9b0e:: with SMTP id j14mr59665497iok.127.1638190595204;
- Mon, 29 Nov 2021 04:56:35 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=6A67fbHx2MO5BuK4b671y5tVZE/grLXUd1QZNrRTMeg=;
+        b=AUNLDPSWkTYRU6GzNv/ZE9Ox4edfZpO9aIl9i67X1tX6qatS4i6WOxGnEU8AP9zEkv
+         RXGCWxpxGvyt2Rx8dAyFVHb9NDQ10EeEQlHMumBe2YPR6rukBX3WcBWBwd+38fEwlPV+
+         1awD3zBhQ52OVq7mURX8I9l+UIVUdii3L4oBIV77dxgq5F5ewsuE2iKEqJHXjAl3B5Yh
+         y6nhqg8wro4VAJLc4ZiovedNcAtM09UUY+LnHmaSgNXAZKGZh9n333S9ZsgXVlTagPq6
+         4Y7aHT4cXRGXw3tnxnfIMXnDHa+b0sS/Qo6B7FX68CWtY7PAU9qRl0Dwv9UXsN0ImDmn
+         AQnA==
+X-Gm-Message-State: AOAM530I6HuXJuO9AFUh7mFoIwET1kStCvugaJ+DKzBKMzvvWKTUOpJf
+        rqvGJA5C9A9VISfkge2ndvZFUzVpN+m9zg==
+X-Google-Smtp-Source: ABdhPJwprWYGma5BErTQlhxL9wdHIHIcnqIw6U30kRO8bZEnCyZa5PJr0SaXm89lP+MiTZkl3xn+1g==
+X-Received: by 2002:a05:600c:a42:: with SMTP id c2mr36846556wmq.154.1638190719493;
+        Mon, 29 Nov 2021 04:58:39 -0800 (PST)
+Received: from google.com ([2.31.167.18])
+        by smtp.gmail.com with ESMTPSA id t127sm20654711wma.9.2021.11.29.04.58.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 04:58:39 -0800 (PST)
+Date:   Mon, 29 Nov 2021 12:58:37 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Axtens <dja@axtens.net>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraju@codeaurora.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Theodore Y . Ts'o" <tytso@mit.edu>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>,
+        Samuel Iglesias Gonsalvez <siglesias@igalia.com>,
+        Jorgen Hansen <jhansen@vmware.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Boris Pismenny <borisp@nvidia.com>,
+        Jiri Pirko <jiri@nvidia.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 4/9] drivers: Switch to kvfree_rcu() API
+Message-ID: <YaTOfSi99jV6EGfM@google.com>
+References: <20211124110308.2053-1-urezki@gmail.com>
+ <20211124110308.2053-5-urezki@gmail.com>
 MIME-Version: 1.0
-References: <CANiq72kGS0JzFkuUS9oN2_HU9f_stm1gA8v79o2pUCb7bNSe0A@mail.gmail.com>
- <CACT4Y+Z7bD62SkYGQH2tXV0Zx2MFojYoZzA2R+4J-CrXa6siMw@mail.gmail.com>
-In-Reply-To: <CACT4Y+Z7bD62SkYGQH2tXV0Zx2MFojYoZzA2R+4J-CrXa6siMw@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Mon, 29 Nov 2021 13:56:24 +0100
-Message-ID: <CA+fCnZcUEVDWZTUvD+mbe2OrnrpJCC_OB66YMvbZYak8sKg7cw@mail.gmail.com>
-Subject: Re: KASAN Arm: global-out-of-bounds in load_module
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211124110308.2053-5-urezki@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 7:37 AM 'Dmitry Vyukov' via kasan-dev
-<kasan-dev@googlegroups.com> wrote:
->
-> On Sun, 28 Nov 2021 at 01:43, Miguel Ojeda
-> <miguel.ojeda.sandonis@gmail.com> wrote:
-> >
-> > Hi KASAN / Arm folks,
-> >
-> > I noticed in our CI that inserting and removing a module, and then
-> > inserting it again, e.g.:
-> >
-> >     insmod bcm2835_thermal.ko
-> >     rmmod bcm2835_thermal.ko
-> >     insmod bcm2835_thermal.ko
-> >
-> > deterministically triggers the report below in v5.16-rc2. I also tried
-> > it on v5.12 to see if it was a recent thing, but same story.
-> >
-> > I could find this other report from May, which may be related:
-> > https://lore.kernel.org/lkml/20210510202653.gjvqsxacw3hcxfvr@pengutronix.de/
-> >
-> > Cheers,
-> > Miguel
->
-> HI Miguel,
->
-> 0xf9 is redzone for global variables:
-> #define KASAN_GLOBAL_REDZONE    0xF9  /* redzone for global variable */
->
-> I would assume this is caused by not clearing shadow of unloaded
-> modules, so that the next module loaded hits these leftover redzones.
+On Wed, 24 Nov 2021, Uladzislau Rezki (Sony) wrote:
 
-Hi Miguel,
+> Instead of invoking a synchronize_rcu() to free a pointer
+> after a grace period we can directly make use of new API
+> that does the same but in more efficient way.
+> 
+> CC: Philipp Reisner <philipp.reisner@linbit.com>
+> CC: "Md. Haris Iqbal" <haris.iqbal@ionos.com>
+> CC: Herbert Xu <herbert@gondor.apana.org.au>
+> CC: Mike Marciniszyn <mike.marciniszyn@cornelisnetworks.com>
+> CC: Samuel Iglesias Gonsalvez <siglesias@igalia.com>
+> CC: Lee Jones <lee.jones@linaro.org>
+> CC: Jorgen Hansen <jhansen@vmware.com>
+> CC: Raju Rangoju <rajur@chelsio.com>
+> CC: Saeed Mahameed <saeedm@nvidia.com>
+> CC: Boris Pismenny <borisp@nvidia.com>
+> CC: Jiri Pirko <jiri@nvidia.com>
+> CC: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> ---
+>  drivers/block/drbd/drbd_nl.c                       | 9 +++------
+>  drivers/block/drbd/drbd_receiver.c                 | 6 ++----
+>  drivers/block/drbd/drbd_state.c                    | 3 +--
+>  drivers/block/rnbd/rnbd-srv.c                      | 3 +--
+>  drivers/crypto/nx/nx-common-pseries.c              | 3 +--
+>  drivers/infiniband/hw/hfi1/sdma.c                  | 3 +--
+>  drivers/ipack/carriers/tpci200.c                   | 3 +--
 
-Adding to what Dmitry mentioned:
+>  drivers/mfd/dln2.c                                 | 6 ++----
 
-The code that's responsible for allocating&clearing/freeing shadow for
-modules is at the very end of mm/kasan/shadow.c. It's only required
-when CONFIG_KASAN_VMALLOC is not supported/enabled.
+I'm not an expert in this API, but the premise and changes to MFD seem
+fine at first glance:
 
-As 32-bit arm doesn't select HAVE_ARCH_KASAN_VMALLOC, perhaps it needs
-something along the lines of what kasan_module_alloc() does with
-regards to clearing shadow? I assume arm doesn't call that function
-directly due to a different shadow allocation scheme.
+Acked-by: Lee Jones <lee.jones@linaro.org>
 
-Just a guess.
+>  drivers/misc/vmw_vmci/vmci_context.c               | 6 ++----
+>  drivers/misc/vmw_vmci/vmci_event.c                 | 3 +--
+>  drivers/net/ethernet/chelsio/cxgb4/cxgb4_main.c    | 3 +--
+>  drivers/net/ethernet/mellanox/mlx5/core/en/qos.c   | 3 +--
+>  drivers/net/ethernet/mellanox/mlx5/core/fpga/tls.c | 3 +--
+>  drivers/net/ethernet/mellanox/mlxsw/core.c         | 3 +--
+>  drivers/scsi/device_handler/scsi_dh_alua.c         | 3 +--
+>  drivers/scsi/device_handler/scsi_dh_rdac.c         | 3 +--
+>  drivers/staging/fwserial/fwserial.c                | 3 +--
+>  17 files changed, 22 insertions(+), 44 deletions(-)
 
-Thanks!
+-- 
+Lee Jones [李琼斯]
+Senior Technical Lead - Developer Services
+Linaro.org │ Open source software for Arm SoCs
+Follow Linaro: Facebook | Twitter | Blog

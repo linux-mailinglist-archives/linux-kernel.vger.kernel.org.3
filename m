@@ -2,144 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 430294615F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A529E46160F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:17:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377870AbhK2NQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
+        id S1377615AbhK2NUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:20:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233671AbhK2NON (ORCPT
+        with ESMTP id S1377668AbhK2NSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:14:13 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEB5C08EDBE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:55:07 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id q3so13328833wru.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:55:07 -0800 (PST)
+        Mon, 29 Nov 2021 08:18:16 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9460AC07E5E0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:59:38 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so16592463wmj.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:59:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=VVOPTlZ25TG0A/D/zPlBV/5uhzVs33QmnMBQ/KVuzok=;
-        b=lkwhQKXAkPk/45MOJA8n7UmDgKAdLF4A1HrNaCp2DAoqL5jLTFjou3x32wDBBU6GIT
-         yI/CJhxLCUTnAb5/Em/j6rhcsE0aVo3sMd3LYPxdE5+hC1/mTgxkJqsMs5FMlUOo6mFj
-         p7BNzyn9xjUhYwkgG5BzPtj9HurcHm+ccwOPwS4lv9ee0Rp8UDrMmrydCXbQHsTaZXjk
-         xJu5xIGGnwbHMKU206LqjROnwejVkM/SZiOAqwNOvL8q0Fxve51MyLPqAjPb4PZY1YMm
-         QSzNrZA4BSS9QFja3wZ8ES46Bccp24Bd6Zbx0NoBWxwAbV7Rw05PPAukg5XBBny7eyFr
-         nlLw==
+        bh=UmkfB3QpQ+/FNVInKkZsvXH+lfTkwZM91ssTv4OXvbU=;
+        b=h80VVRoRp09hhlbxLC1FiyxUUyWp+RHUOMntHak2P01/WlCOtyBE7mCSLd31Gp5x7R
+         PlDiOCN7I+LzpLRojQ+p83fPaV+OXe4Y4VUCGA2JU6IMjZMA3a3FhI3Hd4JRI88LoAJn
+         2bB2jWlp9PK8aTbsleMh0t9Mz3NPnPrgbUTiUIfumkm2j0UcNh6o5LmlUi23qPX8asWU
+         0zlfnl2h9YLK9kC6x0VHdAMTSmdzNPyZCnS7hg02Wv3A5aLilJsAsNfgO3TDmOqipSJ3
+         lpmGBcjYVNUXyozvJQDemfR0YoCNW8nKJYTUq8SY/Aw2lYfVZxHWl83AUhfNeidMaGNZ
+         AtMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=VVOPTlZ25TG0A/D/zPlBV/5uhzVs33QmnMBQ/KVuzok=;
-        b=jzZ+Wxt0OvxHFCkxsbfUeS4aaALkLhwP5i2Ir3lNxz+rWIawYXVoplq+r7KQeUy/l6
-         K90+ZplhKpITNshgbO4q6Am6z/T+ca8v7lA/66UnJ8xlkJqU6DoDy3SAcNxg8doHCQS7
-         0BzwJRm/8Jo8SvwKT++gaiYhUEHKmNjB70/9N2Irol3W9aSH/apg/TCKngKvnZAX/j6e
-         90KyoMNqLGUzHVWFPVRJMAyrM42omlg78u1PtesYRWve0jLqhoGvUBfWv60OOFBprPdK
-         UDt5uLKnfbQO+9OWz6+5kpoTcqJY1EwxsCdj3CZVMUel8YPIJ2fv9lP7v18KpGKBgKVM
-         GRXw==
-X-Gm-Message-State: AOAM531f7sP/Qj/8FZR20NMSb4R6YW7phN29bJg+BQv5b6zqhPDaTsyy
-        /fz5gqOqenLNxgAeu+287agjAA==
-X-Google-Smtp-Source: ABdhPJzBdvU2Vc8uq5wk1K9UX3j47S9iY7roSh9nDqHEi2kZs1JBlBSlXeazNTFhoQ+QITHlIyszPw==
-X-Received: by 2002:adf:e742:: with SMTP id c2mr32868966wrn.498.1638186905995;
-        Mon, 29 Nov 2021 03:55:05 -0800 (PST)
+        bh=UmkfB3QpQ+/FNVInKkZsvXH+lfTkwZM91ssTv4OXvbU=;
+        b=4Eq3de/0HD0QWjyhKYOOOEPlzftNXcITNK5HS+cqgwqWKfM7QiiV8BwoC7Vgk09l1m
+         EPDs9mL74C47AsN5KNZARB160xsyEuUfI/o/TXVSdNCYvhQ4MeLZ9BQ3RI9KgTuhjHwh
+         PfVS1ScOPd7bit/+YnFNECRxRPnyLahvGW5dO15bFFDtRmSm35R/35yfVxF1g+USP8xk
+         GpfMHkfI0quH+vlN6a0NHCDszQCh3mlTRzGiBdpr1zrGalwKmtRXl0WXGQQQIsK7wT3D
+         bqpM9VVz7hplmS5LPwOheH7Bdx72oxotNzGXgkg/s0KF2s8Luc3Voa6hOgGtU/AROgay
+         H8YA==
+X-Gm-Message-State: AOAM532GXi0QZ2z6CJmHrnyVaHAVmmyn9Ux63kDk8tad2ADk2YZidfRh
+        C0JKlu54Ls6Pnvy68v/7iQb5jw==
+X-Google-Smtp-Source: ABdhPJzDF/PuUhJhqzNCAQ8FUADARrtQzkA8krw1+hBgCafCJU8ot/f1JUnQzPtJ7AIfURLo90zf1w==
+X-Received: by 2002:a05:600c:3489:: with SMTP id a9mr36411131wmq.53.1638187177204;
+        Mon, 29 Nov 2021 03:59:37 -0800 (PST)
 Received: from google.com ([2.31.167.18])
-        by smtp.gmail.com with ESMTPSA id y15sm16736665wry.72.2021.11.29.03.55.03
+        by smtp.gmail.com with ESMTPSA id t16sm6780575wrn.49.2021.11.29.03.59.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 03:55:05 -0800 (PST)
-Date:   Mon, 29 Nov 2021 11:55:01 +0000
+        Mon, 29 Nov 2021 03:59:36 -0800 (PST)
+Date:   Mon, 29 Nov 2021 11:59:34 +0000
 From:   Lee Jones <lee.jones@linaro.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Joshua Thompson <funaho@jurai.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nick Hu <nickhu@andestech.com>,
-        Greentime Hu <green.hu@gmail.com>,
-        Vincent Chen <deanbo422@gmail.com>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Tony Lindgren <tony@atomide.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-acpi@vger.kernel.org,
-        linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 28/45] mfd: rn5t618: Use devm_register_power_handler()
-Message-ID: <YaS/lStp2b8GhVxw@google.com>
-References: <20211027211715.12671-1-digetx@gmail.com>
- <20211027211715.12671-29-digetx@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Aditya Garg <gargaditya08@live.com>
+Subject: Re: [PATCH v2 1/1] mfd: intel-lpss: Fix too early PM enablement in
+ the ACPI ->probe()
+Message-ID: <YaTApiRJPQSLItYI@google.com>
+References: <20211101190008.86473-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211027211715.12671-29-digetx@gmail.com>
+In-Reply-To: <20211101190008.86473-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 28 Oct 2021, Dmitry Osipenko wrote:
+On Mon, 01 Nov 2021, Andy Shevchenko wrote:
 
-> Use devm_register_power_handler() that replaces global pm_power_off
-> variable and allows to register multiple power-off handlers. It also
-> provides restart-handler support, i.e. all in one API.
+> The runtime PM callback may be called as soon as the runtime PM facility
+> is enabled and activated. It means that ->suspend() may be called before
+> we finish probing the device in the ACPI case. Hence, NULL pointer
+> dereference:
 > 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+>   intel-lpss INT34BA:00: IRQ index 0 not found
+>   BUG: kernel NULL pointer dereference, address: 0000000000000030
+>   ...
+>   Workqueue: pm pm_runtime_work
+>   RIP: 0010:intel_lpss_suspend+0xb/0x40 [intel_lpss]
+> 
+> To fix this, first try to register the device and only after that enable
+> runtime PM facility.
+> 
+> Fixes: 4b45efe85263 ("mfd: Add support for Intel Sunrisepoint LPSS devices")
+> Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
+> Reported-by: Aditya Garg <gargaditya08@live.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Tested-by: Aditya Garg <gargaditya08@live.com>
 > ---
->  drivers/mfd/rn5t618.c | 56 ++++++++++++++++---------------------------
->  1 file changed, 21 insertions(+), 35 deletions(-)
+> v2: added tag (Aditya), returned 0 explicitly at the end of ->probe()
+>  drivers/mfd/intel-lpss-acpi.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 
-For my own reference (apply this as-is to your sign-off block):
-
-  Acked-for-MFD-by: Lee Jones <lee.jones@linaro.org>
+Applied, thanks.
 
 -- 
 Lee Jones [李琼斯]

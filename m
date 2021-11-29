@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08843462022
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 585F1462032
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:17:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348651AbhK2TTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:19:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S1380281AbhK2TUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:20:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345426AbhK2TRk (ORCPT
+        with ESMTP id S1379169AbhK2TSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:17:40 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5EBC0613E1;
-        Mon, 29 Nov 2021 07:35:46 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 553C92A5;
-        Mon, 29 Nov 2021 16:35:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638200144;
-        bh=vQkTcVeubQtyPEvZTfPpWgr0xCoUlM+OeJ2wAvY6uCE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oe4PxyJ7rOJ6yNLwvZq0rwzDfKO/ZpsZplSPR/6rbcSz8KScSUcJ0sw74veOAAPjO
-         ch3/3pIXPkuEq9U2GunOyYN4O52w4iSSmKvnQ6vxxKxiKhhFYf8jYSYLTAcCEBLcjw
-         VUeAOCZFVl5N4nOZrvU3h5xf4e8THuPM1K5Y9mls=
-Date:   Mon, 29 Nov 2021 17:35:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Len Brown <lenb@kernel.org>,
-        linux-acpi@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Kate Hsuan <hpa@redhat.com>, linux-media@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [PATCH v6 05/15] regulator: Introduce tps68470-regulator driver
-Message-ID: <YaTzOA7uV5TzHDDR@pendragon.ideasonboard.com>
-References: <20211125165412.535063-1-hdegoede@redhat.com>
- <20211125165412.535063-6-hdegoede@redhat.com>
- <YaAdIG+2MZPsdI+F@pendragon.ideasonboard.com>
- <19aeff06-d397-5f88-6d07-f76a2073b682@redhat.com>
- <YaLBeq0+0A6R2FZG@pendragon.ideasonboard.com>
- <YaTCpgYaPDssQp+N@sirena.org.uk>
+        Mon, 29 Nov 2021 14:18:12 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC95FC08EC74
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:37:11 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id d9so16842446wrw.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:37:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QNaHQe0sEt+Xz04cYV/MIlXb8cf/E2M9X4MAcvVxnPY=;
+        b=jZT480wxvUl1wAeMTBT1goDqfM/CUNl3b3WLq0yuxBBxM9hmwt7jYsKrDnHVlAYgCq
+         9taCx7GjoIFFKh6wPGbIm7V6djMjeHgD+ecYpG/ghbLjNU5D+scLE0lFxAjlTKRqTWe+
+         RCBO6c7funI7wNn1LyWz/P5Cj+g3wRH3XFK+Zzy409Xl7LRxsPJEENGMHXTnWqEXEvlk
+         dBiBniZ55PYJM/8ytfSKwaxWLJovM+yp5gCjdQPDKhX4nLegcXfTBGqOTUcoA8thRiww
+         Ep9ARVrZ46+60YzrFq6BrXMX9/RUADTqo46rN3ll4ga7YP6/39VZKl+NcnZd3MT8GbJk
+         xSPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QNaHQe0sEt+Xz04cYV/MIlXb8cf/E2M9X4MAcvVxnPY=;
+        b=KwT19i2kP8avFgjpKW/C7dS13nyCNKfpw6ot7qsVJ9KZJZdiW/UKoTy2RCQhdz2txQ
+         LOAhx6Ppw29LyNgD+7sxK276+k2m3SBIh+4+BUwg8OWfyfxLKgG9JJDk1t2j8B1CvZfb
+         ap2Dx0D6NdeuEFlSC6g7bPceUogB1kFcz3p1aMVvETXPvk59FlDKybmVV4/auP3RUscO
+         NoWfsENozu/yxLhCueH8yCqpDWz3H4On90e/MTLzst82ypGbZXE7m4mB1xo4Rbjadb0I
+         gnb1cOzGFUkDHOwoblO1Et3kHetPJLIfJz1brN1VE3QPmtIsEJBiwMAEYqhO3rRaq/C2
+         XszA==
+X-Gm-Message-State: AOAM532kMm+sZ+QaX2N1cbsL6IYKcaWDkETm2EQEM/1rWY9/tjaYIhxz
+        9y4qdfLwtT4eykh9QIfKDkgUcw==
+X-Google-Smtp-Source: ABdhPJydH8DkXqyeN9Ia758m64cpVXoMOUT0emD3QhRO3MqqbhLn7G/GysWuevCbIseRjFknYEcsbg==
+X-Received: by 2002:a5d:5643:: with SMTP id j3mr35495829wrw.138.1638200230316;
+        Mon, 29 Nov 2021 07:37:10 -0800 (PST)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id z5sm25105381wmp.26.2021.11.29.07.37.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 07:37:09 -0800 (PST)
+Date:   Mon, 29 Nov 2021 15:36:47 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Eric Auger <eric.auger@redhat.com>
+Cc:     joro@8bytes.org, will@kernel.org, mst@redhat.com,
+        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        sebastien.boeuf@intel.com, kevin.tian@intel.com,
+        pasic@linux.ibm.com
+Subject: Re: [PATCH v2 2/5] iommu/virtio: Support bypass domains
+Message-ID: <YaTzj6x0nIYoL1WD@myrica>
+References: <20211123155301.1047943-1-jean-philippe@linaro.org>
+ <20211123155301.1047943-3-jean-philippe@linaro.org>
+ <fd03ac99-9bd4-197b-26c8-dcc5de1b3057@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YaTCpgYaPDssQp+N@sirena.org.uk>
+In-Reply-To: <fd03ac99-9bd4-197b-26c8-dcc5de1b3057@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-On Mon, Nov 29, 2021 at 12:08:06PM +0000, Mark Brown wrote:
-> On Sun, Nov 28, 2021 at 01:38:34AM +0200, Laurent Pinchart wrote:
-> > On Fri, Nov 26, 2021 at 12:22:35PM +0100, Hans de Goede wrote:
-> > > On 11/26/21 00:32, Laurent Pinchart wrote:
-> > > > On Thu, Nov 25, 2021 at 05:54:02PM +0100, Hans de Goede wrote:
-> > > >> The TPS68470 PMIC provides Clocks, GPIOs and Regulators. At present in
-> > > >> the kernel the Regulators and Clocks are controlled by an OpRegion
-> > > >> driver designed to work with power control methods defined in ACPI, but
+On Sat, Nov 27, 2021 at 05:18:28PM +0100, Eric Auger wrote:
+> Hi Jean,
 > 
-> Please delete unneeded context from mails when replying.  Doing this
-> makes it much easier to find your reply in the message, helping ensure
-> it won't be missed by people scrolling through the irrelevant quoted
-> material.
+> On 11/23/21 4:52 PM, Jean-Philippe Brucker wrote:
+> > The VIRTIO_IOMMU_F_BYPASS_CONFIG feature adds a new flag to the ATTACH
+> > request, that creates a bypass domain. Use it to enable identity
+> > domains.
+> >
+> > When VIRTIO_IOMMU_F_BYPASS_CONFIG is not supported by the device, we
+> > currently fail attaching to an identity domain. Future patches will
+> > instead create identity mappings in this case.
+> >
+> > Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> > Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
+> > ---
+> >  drivers/iommu/virtio-iommu.c | 20 +++++++++++++++++++-
+> >  1 file changed, 19 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/iommu/virtio-iommu.c b/drivers/iommu/virtio-iommu.c
+> > index 80930ce04a16..ee8a7afd667b 100644
+> > --- a/drivers/iommu/virtio-iommu.c
+> > +++ b/drivers/iommu/virtio-iommu.c
+> > @@ -71,6 +71,7 @@ struct viommu_domain {
+> >  	struct rb_root_cached		mappings;
+> >  
+> >  	unsigned long			nr_endpoints;
+> > +	bool				bypass;
+> >  };
+> >  
+> >  struct viommu_endpoint {
+> > @@ -587,7 +588,9 @@ static struct iommu_domain *viommu_domain_alloc(unsigned type)
+> >  {
+> >  	struct viommu_domain *vdomain;
+> >  
+> > -	if (type != IOMMU_DOMAIN_UNMANAGED && type != IOMMU_DOMAIN_DMA)
+> > +	if (type != IOMMU_DOMAIN_UNMANAGED &&
+> > +	    type != IOMMU_DOMAIN_DMA &&
+> > +	    type != IOMMU_DOMAIN_IDENTITY)
+> >  		return NULL;
+> >  
+> >  	vdomain = kzalloc(sizeof(*vdomain), GFP_KERNEL);
+> > @@ -630,6 +633,17 @@ static int viommu_domain_finalise(struct viommu_endpoint *vdev,
+> >  	vdomain->map_flags	= viommu->map_flags;
+> >  	vdomain->viommu		= viommu;
+> >  
+> > +	if (domain->type == IOMMU_DOMAIN_IDENTITY) {
+> > +		if (!virtio_has_feature(viommu->vdev,
+> nit: couldn't the check be done before the ida_alloc_range(),
+> simplifying the failure cleanup?
 
-I have mixed feelings about that, someones the context is indeed not
-needed, but I've found myself more often than not replying deep in a
-mail thread and wishing the context hadn't been deleted, because it
-ended up being relevant.
+It could, but patch 5 falls back to identity mappings, which is better
+left at the end of the function to keep the error path simple. I put this
+at the end already here, so patch 5 doesn't need to move things around.
 
-> > > >> + * (1) This regulator must have the same voltage as VIO if S_IO LDO is used to
-> > > >> + *     power a sensor/VCM which I2C is daisy chained behind the PMIC.
-> > > >> + * (2) If there is no I2C daisy chain it can be set freely.
-> > > >> + */
-> 
-> > > > Do we need safety checks for this ?
-> 
-> > > There really is no way to deal this condition needs to matches inside the driver,
-> > > this should be enforced by setting proper constraints on the 2 regulators where
-> > > the PMIC is used with a sensor I2C daisy chained behind it.
-> 
-> > Right. I tend to be cautious here, as incorrect settings can destroy the
-> > hardware. We should err on the side of too many safety checks rather
-> > than too few. I was thinking that the cio2-bridge driver could set a
-> > daisy-chaining flag, which could trigger additional checks here, but it
-> > wouldn't protect against someone experimenting to support a new device
-> > and setting different voltages without the daisy-chaining flag.
-> 
-> > My biggest worry is that someone with an unsupported machine may start
-> > by copying and pasting an existing configuration to try it out, and fry
-> > their hardware.
-> 
-> There's really nothing you can do that prevents this, especially in the
-> cut'n'paste scenario.  Overrides tend to get copied along with the rest
-> of the configuration, or checks hacked out if people think they're
-> getting in the way without realising what they're there for.
-
-Maybe a big fat warning comment in the code ? Apart from that, I agree,
-I don't think we can do much.
-
--- 
-Regards,
-
-Laurent Pinchart
+Thanks,
+Jean

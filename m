@@ -2,128 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B18864613E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:32:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 023C0461426
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240936AbhK2LgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S240935AbhK2Lvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:51:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242121AbhK2LeJ (ORCPT
+        with ESMTP id S1346264AbhK2Ltj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:34:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A20C0698C8;
-        Mon, 29 Nov 2021 02:44:53 -0800 (PST)
+        Mon, 29 Nov 2021 06:49:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949FAC0698D4;
+        Mon, 29 Nov 2021 02:55:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A4D1B80E58;
-        Mon, 29 Nov 2021 10:44:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EB1CC004E1;
-        Mon, 29 Nov 2021 10:44:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EF9AE6128E;
+        Mon, 29 Nov 2021 10:55:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A396C53FAD;
+        Mon, 29 Nov 2021 10:55:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638182691;
-        bh=xSycSCHun7nvgriSFuoyHqvSFKVs/MsbAmwoC5vWqnA=;
+        s=k20201202; t=1638183315;
+        bh=QhZNG7zEJdkQvS0LEX52li9AXzufJrQFobG0M6duX3k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iOfzDwwzDcoYazx28YwA5+GZ9vv4ksBNwIVTY+wzyo6pTm/WgK68j9HWsGHhRwd72
-         NzlFNpTfwtWKOhAw3YHBlRUlchqUgCIIs+LyuzTzWDgK/PkgAdThDxenCSPRz3LBp2
-         JsRCxPi1onFM1GF7z5ffPXfgND+eQO7yd00KuCsVMFuMCK6fJEPmzZB/TJ7aVEf1mZ
-         iFw6VB1qQMhhCC1pEDkVdhfAB4zT8AOSBht0yaMtdAMZk/qe1rWmJLEg+FsC1f5qqs
-         e2X+OVWGsk/N73qa3cV44O3kRsxa060iAPsx4AHEcCVEWCEMBlGwTvRBlz669D2Vnz
-         1qDbRA0fQToGw==
-Date:   Mon, 29 Nov 2021 11:44:48 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Tobias Schramm <t.schramm@manjaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH] i2c: rk3x: disable and reenable I2C after timeouts to
- fix stuck low SDA
-Message-ID: <YaSvIDfF5YVArOa+@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Tobias Schramm <t.schramm@manjaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>
-References: <20210826174632.91887-1-t.schramm@manjaro.org>
+        b=In+AkzkxuwyvtyrVSnDdHfnln0ej7MVCOlSJ0dRt2ZWpilriGh6TuxtTbIvPZpGRc
+         3raF7kENSA7Iqg9d3lIFa1Tycva8OdSns9kjZGzFU/i0aJcBpVAWsw03om+s4qnUOM
+         fw8I9XrPtQ3Rho8qt5voFvB4S6aarTonmWrXmIFAJNjWosRUJn049/OYsViwr62iQF
+         gEyUDXXP/57E3hImuxQespEfMMrhMyK1bU1TI2fcChiOBzoxZ2prSilIA/X8hL/HV2
+         gt/PtTjrEAm0TvcLCwOpO2++IoNJLFndUJeT7h1TLYmVmW3HVey3dfUX8+sE/bT/k6
+         GGQZi90ZDL7Yg==
+Date:   Mon, 29 Nov 2021 10:55:07 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        iommu@lists.linux-foundation.org, dmaengine@vger.kernel.org,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        Vinod Koul <vkoul@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sinan Kaya <okaya@kernel.org>
+Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
+Message-ID: <20211129105506.GA22761@willie-the-truck>
+References: <20211126224100.303046749@linutronix.de>
+ <20211126230525.885757679@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6Li5gp6QIDsdtTJv"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20210826174632.91887-1-t.schramm@manjaro.org>
+In-Reply-To: <20211126230525.885757679@linutronix.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Thomas,
 
---6Li5gp6QIDsdtTJv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Aug 26, 2021 at 07:46:32PM +0200, Tobias Schramm wrote:
-> Previously the SDA line sometimes remained stuck low after timeouts
-> rendering the I2C bus unusable. Testing has shown that disabling and
-> reenabling the I2C peripheral after sending the stop condition seems to
-> unstick SDA reliably.
-> Disable and reenable the I2C controller on timeout after sending stop
-> condition to unstick SDA.
-
-Does it also help to not send STOP? This looks a bit like a hack which
-went into the driver somehow. The proper solution might be to remove the
-STOP and add proper i2c_bus_recovery at the beginning of a transfer.
-
->=20
-> Signed-off-by: Tobias Schramm <t.schramm@manjaro.org>
+On Sat, Nov 27, 2021 at 02:20:59AM +0100, Thomas Gleixner wrote:
+> Let the core code fiddle with the MSI descriptor retrieval.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  drivers/i2c/busses/i2c-rk3x.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->=20
-> diff --git a/drivers/i2c/busses/i2c-rk3x.c b/drivers/i2c/busses/i2c-rk3x.c
-> index 819ab4ee517e..fc330cc3686a 100644
-> --- a/drivers/i2c/busses/i2c-rk3x.c
-> +++ b/drivers/i2c/busses/i2c-rk3x.c
-> @@ -1108,6 +1108,16 @@ static int rk3x_i2c_xfer_common(struct i2c_adapter=
- *adap,
->  			val |=3D REG_CON_EN | REG_CON_STOP;
->  			i2c_writel(i2c, val, REG_CON);
-> =20
-> +			/*
-> +			 * Sometimes SDA remains stuck low after timeouts.
-> +			 * Disable and reenable the I2C peripheral to unstick
-> +			 * SDA.
-> +			 */
-> +			val &=3D ~REG_CON_EN;
-> +			i2c_writel(i2c, val, REG_CON);
-> +			val |=3D REG_CON_EN;
-> +			i2c_writel(i2c, val, REG_CON);
-> +
->  			i2c->state =3D STATE_IDLE;
-> =20
->  			ret =3D -ETIMEDOUT;
-> --=20
-> 2.31.1
->=20
+>  drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |   19 +++----------------
+>  1 file changed, 3 insertions(+), 16 deletions(-)
+> 
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+> @@ -3154,7 +3154,6 @@ static void arm_smmu_write_msi_msg(struc
+>  
+>  static void arm_smmu_setup_msis(struct arm_smmu_device *smmu)
+>  {
+> -	struct msi_desc *desc;
+>  	int ret, nvec = ARM_SMMU_MAX_MSIS;
+>  	struct device *dev = smmu->dev;
+>  
+> @@ -3182,21 +3181,9 @@ static void arm_smmu_setup_msis(struct a
+>  		return;
+>  	}
+>  
+> -	for_each_msi_entry(desc, dev) {
+> -		switch (desc->msi_index) {
+> -		case EVTQ_MSI_INDEX:
+> -			smmu->evtq.q.irq = desc->irq;
+> -			break;
+> -		case GERROR_MSI_INDEX:
+> -			smmu->gerr_irq = desc->irq;
+> -			break;
+> -		case PRIQ_MSI_INDEX:
+> -			smmu->priq.q.irq = desc->irq;
+> -			break;
+> -		default:	/* Unknown */
+> -			continue;
+> -		}
+> -	}
+> +	smmu->evtq.q.irq = msi_get_virq(dev, EVTQ_MSI_INDEX);
+> +	smmu->gerr_irq = msi_get_virq(dev, GERROR_MSI_INDEX);
+> +	smmu->priq.q.irq = msi_get_virq(dev, PRIQ_MSI_INDEX);
 
---6Li5gp6QIDsdtTJv
-Content-Type: application/pgp-signature; name="signature.asc"
+Prviously, if retrieval of the MSI failed then we'd fall back to wired
+interrupts. Now, I think we'll clobber the interrupt with 0 instead. Can
+we make the assignments to smmu->*irq here conditional on the MSI being
+valid, please?
 
------BEGIN PGP SIGNATURE-----
+Cheers,
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkryAACgkQFA3kzBSg
-KbbtDA//exD7rdAgLU3RKa0p5TYvpLXxYJpx9MKUCjJVtSTMYaam83u0Yl/LyaDk
-fAi3Il8MY/3muqVMp2iukHzqi+QLJftgC/bBR35xuCGXX3O13C3ER5Jcq51yV5YC
-4GIKIU4gHywMhT1E++OGbZMcurhlazpHTYkmAz7YjdFEf50ws3DajzotLJgbZ2Cy
-XhxTtWOTop4TpjEc59rRhpWZ6+sTITTwMzLng0hMBSYYQrgOohq8UzPy4xxBFUe/
-R+zsM8EtjiBkRLwZ+zjm3DzS6RlSsPKMKs5IszW2E/Q1/uDlHBwiPGUxC+W70wL9
-BVzR2p7hzSaUwwUNfKCruahJnXA370GFnnpPT9nzqBbKb3/uJZloD03q1k/1pN3V
-Fr6YEnomd4UGFehNYWKNy5vFzYQ0PGfxmH8J6qpFU1ud43WYFHXuMWZnzOKhnYyo
-aYZGWiMDC/pjTKEaUqq0LLObTLaHoMmXbFNdo6gfYR+pndqkrjxMq4FTz3mucHXk
-ikNuDt9zRQf49MlF4O61R3WBeE/SYsmS3pHOF/KlrcyOdBwaLUb7nMqquDmsMiK0
-nc06whPerE0fO06divCwcPz047FlAA0YGStkLwRsvCiqWSSa3awjZxCE68mDx6ai
-2OpA+1bPIIXxm7zYKE0Cny0IZXJPg2totOkEjozXcnSN4LY/UA8=
-=vtQV
------END PGP SIGNATURE-----
-
---6Li5gp6QIDsdtTJv--
+Will

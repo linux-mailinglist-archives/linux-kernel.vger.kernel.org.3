@@ -2,121 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DF7446211E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0110C462125
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:55:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350946AbhK2T57 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
+        id S1351782AbhK2T7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232584AbhK2Tz4 (ORCPT
+        with ESMTP id S230243AbhK2T5K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:55:56 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682FAC07CA20;
-        Mon, 29 Nov 2021 08:18:38 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id m6so35606913oim.2;
-        Mon, 29 Nov 2021 08:18:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=N417LwmoteEpLw0/alZmqR2O+gPqKzTspenGXxKY7N0=;
-        b=m7UHSKLOVjOM7y+LuL9980vJ30xbpJssiYQbA9wU1ShVfCUFv5x4Mjf/icFLXlRZmG
-         r6J/UPYGDM2ZSil1ot3/kvwDwQAnGchI2PWt3aaEih15jT/1Mv+/EPZtClOiTw1CZAnB
-         IVkddThv03/usS+Vob1eXCySU/8PxrQQ86SB4jvWrOx12DM+Eni39ki1FaVUBb2tsneA
-         p3+qe7dBtaY2pPlOFJKb0lIrKM45E58s2S6zO2PNx06xyptJvfXr/a21/v9XmwVm29p7
-         EERDCpBdhvant2AEZrjWzs14QbwqOAcwMYLa5C5Ew5Vj6kJkVkTH6inOvD3IEa6QbX8g
-         X9aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=N417LwmoteEpLw0/alZmqR2O+gPqKzTspenGXxKY7N0=;
-        b=d/9lSZ/o1/jTcC3NoIfg2xCJ/XUs18M/L02KqmTtipnwpQiVdddTDKGAMqe0BpPFkQ
-         7PAPgy75g+ZiOfOlxMdH9YCEGOUv2+2xum6H4ew/bjMRdMYsslDezyjuwVPZqkntP4L1
-         ejkPiGuj6ohiN50CICNGnnp5AsufE4npr+MMfQBVd4f8Hn6vx6vpMUuKQh42IQdi0/on
-         Q4E3GFqGVWbEl9tQayKc8GwdRBSSVIGXmHgmDt6XQI7aye6vjoafDVzvYwkICvG+IzFb
-         6McotW3DGLJ5XdnxVrhTW5j64U9Rhu7cxBEvVqnMmwfdxmL8f6NNtF+NI8D8h75aL3Vj
-         zFPg==
-X-Gm-Message-State: AOAM530GvG71ssz2wwkMdBlCwez2nFQLOJRd7mI67gWi87DuCnUvplHe
-        x4Gkq6ox8Lx1La37UsBo2u72LgRI3Ss=
-X-Google-Smtp-Source: ABdhPJyhS4x1H6+R4piCkf/zaDbqnQlCe+fibbDdsjWk/w+3PrsBMQV8sGAxmuzeSioizHmiqXRPPQ==
-X-Received: by 2002:a05:6808:a03:: with SMTP id n3mr40398231oij.125.1638202717249;
-        Mon, 29 Nov 2021 08:18:37 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w18sm2706411otm.1.2021.11.29.08.18.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 08:18:36 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v4 8/9] watchdog: max77620: add comment to clarify
- set_timeout procedure
-To:     Luca Ceresoli <luca@lucaceresoli.net>
-Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-watchdog@vger.kernel.org,
-        Chiwoong Byun <woong.byun@samsung.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-References: <20211120155707.4019487-1-luca@lucaceresoli.net>
- <20211120155707.4019487-9-luca@lucaceresoli.net>
- <20211129160414.GA3014810@roeck-us.net>
- <0e08d0e0-489c-342b-4fa4-d4457af20a65@lucaceresoli.net>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <f05f33ae-d0be-fcf2-0774-c7d0dbda3d36@roeck-us.net>
-Date:   Mon, 29 Nov 2021 08:18:34 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 29 Nov 2021 14:57:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6C0C0698CB;
+        Mon, 29 Nov 2021 08:25:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04B8B615A3;
+        Mon, 29 Nov 2021 16:25:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 848CDC53FC7;
+        Mon, 29 Nov 2021 16:25:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638203127;
+        bh=E9Gp+P2/fj8SXqkg1/fO6Q5h7cq96o56OHJEMlCdHi8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rNq1FOXJE8qvnLtnCeSWd4Zx68X+LuM8K+YCMbZlOLBhgCZxO9aLx2WyvPyKMni0O
+         p70mFxDjCekUSy6hu6PqtomydQlNwdvxXIRedzNg4pUNK1jYw8+kyiUeIpve7MGYga
+         zqOXCcaWua7R3Ixgbo/eypRjyQki/HxtspqCFOp8=
+Date:   Mon, 29 Nov 2021 17:25:24 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Stephan Mueller <smueller@chronox.de>
+Cc:     Simo Sorce <simo@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
+        linux-crypto@vger.kernel.org, Willy Tarreau <w@1wt.eu>,
+        Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+Message-ID: <YaT+9MueQIa5p8xr@kroah.com>
+References: <2036923.9o76ZdvQCi@positron.chronox.de>
+ <22137816.pfsBpAd9cS@tauon.chronox.de>
+ <YaEJtv4A6SoDFYjc@kroah.com>
+ <9311513.S0ZZtNTvxh@tauon.chronox.de>
 MIME-Version: 1.0
-In-Reply-To: <0e08d0e0-489c-342b-4fa4-d4457af20a65@lucaceresoli.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9311513.S0ZZtNTvxh@tauon.chronox.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/21 8:08 AM, Luca Ceresoli wrote:
-> Hi Guenter,
+On Mon, Nov 29, 2021 at 04:31:59PM +0100, Stephan Mueller wrote:
+> Am Freitag, 26. November 2021, 17:22:14 CET schrieb Greg Kroah-Hartman:
 > 
-> On 29/11/21 17:04, Guenter Roeck wrote:
->> On Sat, Nov 20, 2021 at 04:57:06PM +0100, Luca Ceresoli wrote:
->>> Clarify why we need to ping the watchdog before changing the timeout by
->>> quoting the MAX77714 datasheet.
->>>
->>
->> Unless I am missing something, this adds confusion instead of clarifying
->> anything, and it is misleading. The added comment in the code makes it
->> sound like clearing the watchdog timer is only needed for MAX77614.
->> However, the code was in place for MAX77620, suggesting that it was needed
->> for that chip as well and is not MAX77614 specific.
+> Hi Greg,
 > 
-> You're right, the comment comes from the max77714-only driver, but now
-> that it is in a multi-chip  driver the confusion started to exist.
+> > On Fri, Nov 26, 2021 at 05:15:59PM +0100, Stephan Mueller wrote:
+> > > Am Freitag, 26. November 2021, 16:44:17 CET schrieb Greg Kroah-Hartman:
+> > > 
+> > > Hi Greg,
+> > > 
+> > > > On Mon, Nov 22, 2021 at 09:59:01AM -0500, Simo Sorce wrote:
+> > > > > Jason,
+> > > > > have you previously produced a list of reasoned concerns with this
+> > > > > patchset and direction?
+> > > > > 
+> > > > > This specific email is not really useful to me to understand the
+> > > > > concerns as it does not contain actionable suggestion or critique.
+> > > > > 
+> > > > > I personally find the direction fine, and with my distribution hat on
+> > > > > I
+> > > > > can say that FIPS is essential for us and any design must include an
+> > > > > option to be FIPS certifiable.
+> > > > > 
+> > > > > As NIST keeps improving their testing capabilities and rigorous
+> > > > > cryptographic design of the CSPRNGs as well as entropy sources the
+> > > > > kernel must also adapt.
+> > > > > 
+> > > > > Stephan is providing a path forward, and I haven't seen any other
+> > > > > proposal, let alone code, that provide improvements in this area.
+> > > > > I am pretty sure the design can be improved if there is detailed and
+> > > > > actionable feedback on what to change.
+> > > > > 
+> > > > > I hope the path forward can be one of collaboration rather then mere
+> > > > > opposition.
+> > > > 
+> > > > Replacement of the existing code to cut over to the new one is not
+> > > > collaboration, it's the exact opposite.
+> > > > 
+> > > > Submitting patches to the existing codebase to implement the
+> > > > "requirements" is the proper way forward, why has that never been done.
+> > > 
+> > > It has been attempted by Nikolai Stange without avail - no comments were
+> > > received, let alone it was integrated.
+> > 
+> > Links to the patches and discussion please?
 > 
->> Please either drop this patch or rephrase it to clarify that it applies
->> to both chips.
-> 
-> What if I rephrase to:
-> 
-> 	/*
-> 	 * "If the value of TWD needs to be changed, clear the system
-> 	 * watchdog timer first [...], then change the value of TWD."
-> -	 * (MAX77714 datasheet)
-> +	 * (MAX77714 datasheet but applies to MAX77620 too)
-> 	 */
-> 
+> Please consider https://lkml.org/lkml/2020/9/21/157
 
-Sounds good.
+That's a load of patches, some of them seem sane, what ever happened to
+them?  Seems like the conversation got derailed by people with email
+server issues that prevented them from participating in public :(
 
-Guenter
+But that patch set is a nice way to do this, incremental changes working
+with the existing codebase, not trying to ignore the current code and
+create a separate implementation.
 
+Also, minor note, please use lore.kernel.org links, we don't have any
+control over lkml.org, nor can we take patches out of that site with any
+of our normal tools.
 
+> One side note: the LRNG patch set does not replace random.c, but provides an 
+> additional implementation that can be selected at compile time. I am under the 
+> impression that is an equal approach considering other areas of the kernel 
+> like file systems, memory allocators, and similar.
+
+Sometimes, yes, it is valid to have different implementations for things
+that do different things in the same area (like filesystems), but for a
+core function of the kernel, so far the existing random maintainer has
+not wanted to have multiple implementations.  Same goes for other parts
+of the kernel, it's not specific only to this one very tiny driver.
+
+As a counterpoint, we do not allow duplicate drivers that control the
+same hardware types in the tree.  We have tried that in the past and it
+was a nightmare to support and maintain and just caused massive user
+confusion as well.  One can argue that the random driver is in this same
+category.
+
+thanks,
+
+greg k-h

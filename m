@@ -2,40 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7887B461E4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:33:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A30F461E77
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379174AbhK2SfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:35:08 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35672 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379397AbhK2SdD (ORCPT
+        id S1379531AbhK2SgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:36:20 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:52222 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379008AbhK2SeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:33:03 -0500
+        Mon, 29 Nov 2021 13:34:14 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 942EBB815C2;
-        Mon, 29 Nov 2021 18:29:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55DEC53FCF;
-        Mon, 29 Nov 2021 18:29:42 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 89BA1CE13F9;
+        Mon, 29 Nov 2021 18:30:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B04EC53FAD;
+        Mon, 29 Nov 2021 18:30:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210583;
-        bh=h2ZetIc4Td7TdQZhA7qTSqCRG64cFmXtD08DNteIPsc=;
+        s=korg; t=1638210651;
+        bh=ZmJVGOcswWKMSxH6B2Yppikjx+qmQahizOd3Au+ha50=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fbJys3PlJrQw20Cfhv1f/qL//2bwayMqWnmmb1mfyW4Mmkn1GuA1C8d2J0fa0YAAz
-         3oSwNdp+QrCgcrfKyq+ausrMkHWt+Y6Y3Hd7HBOEE/srqlAruknoWFrF7/02219j5K
-         Nfp1/K/70z9I51XCUhgoyv6uROMn1uhkNS/9d9Ps=
+        b=aFiDIMeNneEHEDb3SM9ynO0509KhrLpZ3GejyFoJcz4pXjojYKtPsR1H3u3MmXVuF
+         Nq0cfXDhjJ1spHaBK04OkqjukW0o5Io+lWrjGF72tDbG9eQSbCf2rUxvw6I/+EU6fZ
+         yDjMtvAuQJwMw7cL6oNzQU6M0PNAodTo2oZ+I0AM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, wenxu <wenxu@ucloud.cn>,
-        Will Mortensen <willmo@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 044/121] netfilter: flowtable: fix IPv6 tunnel addr match
-Date:   Mon, 29 Nov 2021 19:17:55 +0100
-Message-Id: <20211129181713.145955826@linuxfoundation.org>
+Subject: [PATCH 5.10 046/121] ARM: dts: BCM5301X: Add interrupt properties to GPIO node
+Date:   Mon, 29 Nov 2021 19:17:57 +0100
+Message-Id: <20211129181713.209954611@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
 References: <20211129181711.642046348@linuxfoundation.org>
@@ -47,43 +45,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Will Mortensen <willmo@gmail.com>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit 39f6eed4cb209643f3f8633291854ed7375d7264 ]
+[ Upstream commit 40f7342f0587639e5ad625adaa15efdd3cffb18f ]
 
-Previously the IPv6 addresses in the key were clobbered and the mask was
-left unset.
+The GPIO controller is also an interrupt controller provider and is
+currently missing the appropriate 'interrupt-controller' and
+'#interrupt-cells' properties to denote that.
 
-I haven't tested this; I noticed it while skimming the code to
-understand an unrelated issue.
-
-Fixes: cfab6dbd0ecf ("netfilter: flowtable: add tunnel match offload support")
-Cc: wenxu <wenxu@ucloud.cn>
-Signed-off-by: Will Mortensen <willmo@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: fb026d3de33b ("ARM: BCM5301X: Add Broadcom's bus-axi to the DTS file")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_flow_table_offload.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/boot/dts/bcm5301x.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/net/netfilter/nf_flow_table_offload.c b/net/netfilter/nf_flow_table_offload.c
-index a6b654b028dd4..d1862782be450 100644
---- a/net/netfilter/nf_flow_table_offload.c
-+++ b/net/netfilter/nf_flow_table_offload.c
-@@ -63,11 +63,11 @@ static void nf_flow_rule_lwt_match(struct nf_flow_match *match,
- 		       sizeof(struct in6_addr));
- 		if (memcmp(&key->enc_ipv6.src, &in6addr_any,
- 			   sizeof(struct in6_addr)))
--			memset(&key->enc_ipv6.src, 0xff,
-+			memset(&mask->enc_ipv6.src, 0xff,
- 			       sizeof(struct in6_addr));
- 		if (memcmp(&key->enc_ipv6.dst, &in6addr_any,
- 			   sizeof(struct in6_addr)))
--			memset(&key->enc_ipv6.dst, 0xff,
-+			memset(&mask->enc_ipv6.dst, 0xff,
- 			       sizeof(struct in6_addr));
- 		enc_keys |= BIT(FLOW_DISSECTOR_KEY_ENC_IPV6_ADDRS);
- 		key->enc_control.addr_type = FLOW_DISSECTOR_KEY_IPV6_ADDRS;
+diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
+index e97a9c0904a98..9fdad20c40d17 100644
+--- a/arch/arm/boot/dts/bcm5301x.dtsi
++++ b/arch/arm/boot/dts/bcm5301x.dtsi
+@@ -242,6 +242,8 @@ chipcommon: chipcommon@0 {
+ 
+ 			gpio-controller;
+ 			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
+ 		};
+ 
+ 		pcie0: pcie@12000 {
 -- 
 2.33.0
 

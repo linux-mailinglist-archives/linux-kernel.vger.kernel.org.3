@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C74461D07
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:50:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2E7461D08
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242407AbhK2Rxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 12:53:49 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:55072 "EHLO
+        id S1344419AbhK2Rxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:53:52 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:55122 "EHLO
         galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233929AbhK2Rvq (ORCPT
+        with ESMTP id S242373AbhK2Rvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 12:51:46 -0500
+        Mon, 29 Nov 2021 12:51:47 -0500
 From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638208107;
+        s=2020; t=1638208108;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hebj8aC3wqf8zcdV4QNi9m7i1BFcLB8bFJ7GSEzXgF0=;
-        b=hhHMV0Y/uMBaWyoJY15fYZ0s6+ofik5x0NwQtH+wwjGH2PGG9PlFX33elRij096NS6AO+b
-        14tgHQC8L7ip/0IgfhzwAki8qFYA2VYK+lq+e6GDs7S6sZttu8Nba5pBgrZuYXVoVMKqsY
-        llnE7NWDd/drPJxXshJyw+p6kITpQimdcUFd2qCpC24qvDI+b0WpczZ692Ur6UOzHHR2Jp
-        tzwo/pQz7k70TrHvNFjZKvjOWkD2MC1wNd0l3UcNcc20qde547ueRwXxO3cFnVHsTWps6b
-        o79hC9k7B2QqEn0lIIi1SxXJDJoToBxccF9vmDUyGu9zvZs25HrUk0JnW4Ik8g==
+        bh=aD5tNwOzjlRa7vHPxJ8kq9equXtZi3bRfTG+iHTXwXw=;
+        b=UWlLh9lud5niaaJgDGxY+NKzYznAennCcYI0GO9Sib8sTvkrGUiP6Fp3QxLS7trqzuK+6a
+        ez9INcT5E/UR4Ppa5djd1xgdtgf8KNXA1LD1djEM4OE6gXlhnpZLqZkSYMUKoXLZ54CiqW
+        TLJZ591tbcXtqEFaU1VqOGcYPOPMYQ4o8ZJuFHcAiZEWVMHYEL/GXHTleyxXmE2n3IsyUP
+        mVZFeH6VW6Qo+oO3a7U72qKuS1xXD33kO3rNs97G4GhOx311o5CopZ0t7B9np4dk7J1q3m
+        wWA5PsNkNFehaR7PxcAe944/g9hFoY6ZX1QTKVdEi9jDILOy2yep8Vuh+F9vLg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638208107;
+        s=2020e; t=1638208108;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hebj8aC3wqf8zcdV4QNi9m7i1BFcLB8bFJ7GSEzXgF0=;
-        b=UYTIu9qO9uqHsVwbtG1PVZuN6IxEMpzbcoHytQ9cj2heu0EB9ww3aZKvd0lVXGXSvKT4vl
-        DWqW5F2sCZdPqfAg==
+        bh=aD5tNwOzjlRa7vHPxJ8kq9equXtZi3bRfTG+iHTXwXw=;
+        b=hZO/tcm32r0MCD5Fd+vFPnGt/xaDo3LjNAX5EkBGXZ72+Lt0ETs0MaFeVf7vNKN28c3pR4
+        PrygM+LyCVANVNAg==
 To:     linux-kernel@vger.kernel.org
 Cc:     Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
@@ -48,9 +48,9 @@ Cc:     Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
         Waiman Long <longman@redhat.com>,
         Will Deacon <will@kernel.org>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 03/11] locking/rtmutex: Squash self-deadlock check for ww_rt_mutex.
-Date:   Mon, 29 Nov 2021 18:46:46 +0100
-Message-Id: <20211129174654.668506-4-bigeasy@linutronix.de>
+Subject: [PATCH 06/11] lockdep/selftests: Avoid using local_lock_{acquire|release}().
+Date:   Mon, 29 Nov 2021 18:46:49 +0100
+Message-Id: <20211129174654.668506-7-bigeasy@linutronix.de>
 In-Reply-To: <20211129174654.668506-1-bigeasy@linutronix.de>
 References: <20211129174654.668506-1-bigeasy@linutronix.de>
 MIME-Version: 1.0
@@ -59,47 +59,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+The local_lock related functions
+  local_lock_acquire()
+  local_lock_release()
 
-Similar to the issues in commits:
+are part of the internal implementation and should be avoided.
+Define the lock as DEFINE_PER_CPU so the normal local_lock() function
+can be used.
 
-  6467822b8cc9 ("locking/rtmutex: Prevent spurious EDEADLK return caused by=
- ww_mutexes")
-  a055fcc132d4 ("locking/rtmutex: Return success on deadlock for ww_mutex w=
-aiters")
-
-ww_rt_mutex_lock() should not return EDEADLK without first going through
-the __ww_mutex logic to set the required state. In fact, the chain-walk
-can deal with the spurious cycles (per the above commits) this check
-warns about and is trying to avoid.
-
-Therefore ignore this test for ww_rt_mutex and simply let things fall
-in place.
-
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- kernel/locking/rtmutex.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ lib/locking-selftest.c | 32 ++++++++++++++++----------------
+ 1 file changed, 16 insertions(+), 16 deletions(-)
 
-diff --git a/kernel/locking/rtmutex.c b/kernel/locking/rtmutex.c
-index 0c6a48dfcecb3..f89620852774d 100644
---- a/kernel/locking/rtmutex.c
-+++ b/kernel/locking/rtmutex.c
-@@ -1103,8 +1103,11 @@ static int __sched task_blocks_on_rt_mutex(struct rt=
-_mutex_base *lock,
- 	 * the other will detect the deadlock and return -EDEADLOCK,
- 	 * which is wrong, as the other waiter is not in a deadlock
- 	 * situation.
-+	 *
-+	 * Except for ww_mutex, in that case the chain walk must already deal
-+	 * with spurious cycles, see the comments at [3] and [6].
- 	 */
--	if (owner =3D=3D task)
-+	if (owner =3D=3D task && !(build_ww_mutex() && ww_ctx))
- 		return -EDEADLK;
+diff --git a/lib/locking-selftest.c b/lib/locking-selftest.c
+index 71652e1c397cf..4d614c74e6ec5 100644
+--- a/lib/locking-selftest.c
++++ b/lib/locking-selftest.c
+@@ -139,7 +139,7 @@ static DEFINE_RT_MUTEX(rtmutex_Z2);
 =20
- 	raw_spin_lock(&task->pi_lock);
+ #endif
+=20
+-static local_lock_t local_A =3D INIT_LOCAL_LOCK(local_A);
++static DEFINE_PER_CPU(local_lock_t, local_A);
+=20
+ /*
+  * non-inlined runtime initializers, to let separate locks share
+@@ -1320,7 +1320,7 @@ GENERATE_PERMUTATIONS_3_EVENTS(irq_read_recursion3_so=
+ft_wlock)
+ # define I_MUTEX(x)	lockdep_reset_lock(&mutex_##x.dep_map)
+ # define I_RWSEM(x)	lockdep_reset_lock(&rwsem_##x.dep_map)
+ # define I_WW(x)	lockdep_reset_lock(&x.dep_map)
+-# define I_LOCAL_LOCK(x) lockdep_reset_lock(&local_##x.dep_map)
++# define I_LOCAL_LOCK(x) lockdep_reset_lock(this_cpu_ptr(&local_##x.dep_ma=
+p))
+ #ifdef CONFIG_RT_MUTEXES
+ # define I_RTMUTEX(x)	lockdep_reset_lock(&rtmutex_##x.dep_map)
+ #endif
+@@ -1380,7 +1380,7 @@ static void reset_locks(void)
+ 	init_shared_classes();
+ 	raw_spin_lock_init(&raw_lock_A);
+ 	raw_spin_lock_init(&raw_lock_B);
+-	local_lock_init(&local_A);
++	local_lock_init(this_cpu_ptr(&local_A));
+=20
+ 	ww_mutex_init(&o, &ww_lockdep); ww_mutex_init(&o2, &ww_lockdep); ww_mutex=
+_init(&o3, &ww_lockdep);
+ 	memset(&t, 0, sizeof(t)); memset(&t2, 0, sizeof(t2));
+@@ -2646,8 +2646,8 @@ static void wait_context_tests(void)
+=20
+ static void local_lock_2(void)
+ {
+-	local_lock_acquire(&local_A);	/* IRQ-ON */
+-	local_lock_release(&local_A);
++	local_lock(&local_A);	/* IRQ-ON */
++	local_unlock(&local_A);
+=20
+ 	HARDIRQ_ENTER();
+ 	spin_lock(&lock_A);		/* IN-IRQ */
+@@ -2656,18 +2656,18 @@ static void local_lock_2(void)
+=20
+ 	HARDIRQ_DISABLE();
+ 	spin_lock(&lock_A);
+-	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle, false */
+-	local_lock_release(&local_A);
++	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle, false */
++	local_unlock(&local_A);
+ 	spin_unlock(&lock_A);
+ 	HARDIRQ_ENABLE();
+ }
+=20
+ static void local_lock_3A(void)
+ {
+-	local_lock_acquire(&local_A);	/* IRQ-ON */
++	local_lock(&local_A);	/* IRQ-ON */
+ 	spin_lock(&lock_B);		/* IRQ-ON */
+ 	spin_unlock(&lock_B);
+-	local_lock_release(&local_A);
++	local_unlock(&local_A);
+=20
+ 	HARDIRQ_ENTER();
+ 	spin_lock(&lock_A);		/* IN-IRQ */
+@@ -2676,18 +2676,18 @@ static void local_lock_3A(void)
+=20
+ 	HARDIRQ_DISABLE();
+ 	spin_lock(&lock_A);
+-	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count=
+ local_lock(), false */
+-	local_lock_release(&local_A);
++	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_l=
+ock(), false */
++	local_unlock(&local_A);
+ 	spin_unlock(&lock_A);
+ 	HARDIRQ_ENABLE();
+ }
+=20
+ static void local_lock_3B(void)
+ {
+-	local_lock_acquire(&local_A);	/* IRQ-ON */
++	local_lock(&local_A);	/* IRQ-ON */
+ 	spin_lock(&lock_B);		/* IRQ-ON */
+ 	spin_unlock(&lock_B);
+-	local_lock_release(&local_A);
++	local_unlock(&local_A);
+=20
+ 	HARDIRQ_ENTER();
+ 	spin_lock(&lock_A);		/* IN-IRQ */
+@@ -2696,8 +2696,8 @@ static void local_lock_3B(void)
+=20
+ 	HARDIRQ_DISABLE();
+ 	spin_lock(&lock_A);
+-	local_lock_acquire(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count=
+ local_lock(), false */
+-	local_lock_release(&local_A);
++	local_lock(&local_A);	/* IN-IRQ <-> IRQ-ON cycle only if we count local_l=
+ock(), false */
++	local_unlock(&local_A);
+ 	spin_unlock(&lock_A);
+ 	HARDIRQ_ENABLE();
+=20
+@@ -2812,7 +2812,7 @@ void locking_selftest(void)
+ 	printk("------------------------\n");
+ 	printk("| Locking API testsuite:\n");
+ 	printk("-----------------------------------------------------------------=
+-----------\n");
+-	printk("                                 | spin |wlock |rlock |mutex | ws=
+em | rsem |\n");
++	printk("                                 | spin |wlock |rlock |mutex | ws=
+em | rsem |rtmutex\n");
+ 	printk("  ---------------------------------------------------------------=
+-----------\n");
+=20
+ 	init_shared_classes();
 --=20
 2.34.0
 

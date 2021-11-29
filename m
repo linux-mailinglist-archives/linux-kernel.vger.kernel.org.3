@@ -2,120 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8FA461CF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A156461CF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348896AbhK2Rsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 12:48:42 -0500
-Received: from mout.gmx.net ([212.227.17.22]:41917 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348352AbhK2Rqm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1349812AbhK2Rsq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 12:48:46 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:60941 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348618AbhK2Rqm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Nov 2021 12:46:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638207789;
-        bh=17zgiDXDq3UcSUuPCRNhT7DaQshJRnZDLVC0K9ZmqjE=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=JSbEyBNDiQaypk8SgE1LFX4xGKBHWYJnQ0PA3xu61Nlq5R0FlP1f5ldPM1MwiSsY6
-         KjLL281hfRB2rlpQA85CqQp29PDZ+Gdaxd5UJJWu4dlMLxEZBt1+xzteDchGBps6JL
-         V2lvAIv6JHNE+GKoWL5MARxDpVfIJcEL+RDGWXUs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from Venus.fritz.box ([46.223.119.124]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MfYLQ-1mPHcb1uyu-00g2WM; Mon, 29
- Nov 2021 18:43:09 +0100
-From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
-To:     gregkh@linuxfoundation.org
-Cc:     linux@armlinux.org.uk, jirislaby@kernel.org,
-        andre.przywara@arm.com, p.rosenberger@kunbus.com, lukas@wunner.de,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Subject: [PATCH v2] serial: amba-pl011: do not request memory region twice
-Date:   Mon, 29 Nov 2021 18:42:38 +0100
-Message-Id: <20211129174238.8333-1-LinoSanfilippo@gmx.de>
-X-Mailer: git-send-email 2.33.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Provags-ID: V03:K1:vhsAkv3IJRjj+N3cP1XhD5UefnXX/MszVGn4CT6Tc+YNrPvE47i
- rDIw9kbit1MYyZLRaq73bKg9Idyz0SzHhWz3n2gqnNllgjW6gftMGRd0hsyJiBSXCG6K6UZ
- Tx3sPut4WiPpzL0vkYj23Ehc7mP0vzkfnpx8Stnk6gEZgi7zakYt6OScQQ/D+VvAVEXAQRs
- 0a2gbnK8V6fu6dH1rTWzA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:pDUyDeJNWfQ=:lWnr8Ii7JUW5F49dHyf1tt
- o5uSOV2C0g568SEMnouo8sds1GgdXzYtrRjiXUdsqNfGTfTc2nAig5xYIv8bN+oaAk+lwcHXC
- qBdQFJkajZJKkAyGOPHReph+JR3pmp+uuXZvkPQCx3Q0mXVfKpQDT0WGi93bDPADw+tPOOEz8
- EOliiM3WfKwm6mfFobm8SKOG2c29JR5PdvLVYEnpP9kupq6FKDEs/tiyszVr6flg2ZgWxFnhV
- vKQGPzcGGED2DUz4qJoW+eNIPPVax8cf/eo5YM/hGmfb4yE0Rl+tnwvFU5JHZkN7rxN+irf87
- 0cPfcPBziDMGtlB28a+tQrAImSQUmd0P/QIzDECN26/wy0JM4hgwDKDqYZeEDbEv1Ga4lsy1/
- Xj6H+ERbImTVrJDfYl9quDkygxLjvhWYP63r06ikk2zI8HPEX6Es4xHKHSnAPYC0bo9t6QC+o
- KdeFvs4vpcu2eHzXGszPp3Q0uoPTe7n797SqMxKoHjF0TPQCACunZ6c76MQ0yuFXc3efYbew9
- 3dNWgURR29ZrkUMuOYYRHQA20/vAXlJSBqFR0ETASPUMpUkDN2zig2UNe7A/ikLSvTCVduFvU
- x4ojzKOGbC2lPfTa4DYxCvjMNdJOukrHbv+6it5TgJRLUevy4DMtoWBkISu6fZz198SOmrmJd
- L5h8q39byDM8x9tsj5wuyWYnC7nTzpIHAgiPkEmfICYYAuboz39LT0hSH4n0PfLpOdiriwa7J
- +dDPuRcVyHPHEhz4Q0VK44WjwLcUsxuzlzhDKO7NhRMqg6SMuw/CIPqoENUdSk7YuvVR56twz
- MXqFhJ23uNomx62tmNLQZl5r+LXi7wRGpMJRWP1I4rYP26NrywtuJQV+VRrJx+Agwg0fq2MW8
- MBoPmpiBcpcxQNquKvoCpOrhQAk6IlrTuGru8DiV602vQRuO7iF23TpzxxjJMSMhhFP0Fs0yc
- pBCY/qdROZEKtzqTFhfECqXls+FXmJniGt33MwMtLmHeGZ4yJM38vh2k0dQsX2W8OcKyaStOn
- xWRROWmvk1OhB3VXd1A3N3MDbJlG/OR1MXCVRJso3WvMuYC0SGz5a4VR/tBQCM4DxBk35rlOo
- je7WrE96sIr+cU=
+Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 9813DCED2E;
+        Mon, 29 Nov 2021 18:43:23 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
+Subject: Re: [PATCH v6 1/2] bluetooth: Handle MSFT Monitor Device Event
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <CAGPPCLB7iJOWb8try5gR9GhC9-gZPzGvgBCeTG3ktNFEXtMQ3A@mail.gmail.com>
+Date:   Mon, 29 Nov 2021 18:43:23 +0100
+Cc:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Miao-chen Chou <mcchou@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Transfer-Encoding: 8BIT
+Message-Id: <3C2ED65E-B71A-49DF-9C7D-7F8BA98ABF38@holtmann.org>
+References: <20211121110853.v6.1.Ic0a40b84dee3825302890aaea690e73165c71820@changeid>
+ <CAGPPCLB7iJOWb8try5gR9GhC9-gZPzGvgBCeTG3ktNFEXtMQ3A@mail.gmail.com>
+To:     Manish Mandlik <mmandlik@google.com>
+X-Mailer: Apple Mail (2.3693.20.0.1.32)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-V2l0aCBjb21taXQgMzg3M2UyZDdmNjNhICgiZHJpdmVyczogUEwwMTE6IHJlZmFjdG9yIHBsMDEx
-X3Byb2JlKCkiKSB0aGUKZnVuY3Rpb24gZGV2bV9pb3JlbWFwKCkgY2FsbGVkIGZyb20gcGwwMTFf
-c2V0dXBfcG9ydCgpIHdhcyByZXBsYWNlZCB3aXRoCmRldm1faW9yZW1hcF9yZXNvdXJjZSgpLiBT
-aW5jZSB0aGlzIGZ1bmN0aW9uIG5vdCBvbmx5IHJlbWFwcyBidXQgYWxzbwpyZXF1ZXN0cyB0aGUg
-cG9ydHMgaW8gbWVtb3J5IHJlZ2lvbiBpdCBub3cgY29sbGlkZXMgd2l0aCB0aGUgLmNvbmZpZ19w
-b3J0KCkKY2FsbGJhY2sgd2hpY2ggcmVxdWVzdHMgdGhlIHNhbWUgcmVnaW9uIGF0IHVhcnQgcG9y
-dCByZWdpc3RyYXRpb24uCgpTaW5jZSBkZXZtX2lvcmVtYXBfcmVzb3VyY2UoKSBhbHJlYWR5IGNs
-YWltcyB0aGUgbWVtb3J5IHN1Y2Nlc3NmdWxseSwgdGhlCnJlcXVlc3QgaW4gLmNvbmZpZ19wb3J0
-KCkgZmFpbHMuCgpMYXRlciBhdCB1YXJ0IHBvcnQgZGVyZWdpc3RyYXRpb24gdGhlIGF0dGVtcHQg
-dG8gcmVsZWFzZSB0aGUgdW5jbGFpbWVkCm1lbW9yeSBhbHNvIGZhaWxzLiBUaGUgZmFpbHVyZSBy
-ZXN1bHRzIGluIGEg4oCcVHJ5aW5nIHRvIGZyZWUgbm9uZXhpc3RlbnQKcmVzb3VyY2UiIHdhcm5p
-bmcuCgpGaXggdGhlc2UgaXNzdWVzIGJ5IHJlbW92aW5nIHRoZSBjYWxsYmFja3MgdGhhdCBpbXBs
-ZW1lbnQgdGhlIHJlZHVuZGFudAptZW1vcnkgYWxsb2NhdGlvbi9yZWxlYXNlLiBBbHNvIG1ha2Ug
-c3VyZSB0aGF0IGNoYW5naW5nIHRoZSBkcml2ZXJzIGlvCm1lbW9yeSBiYXNlIGFkZHJlc3Mgdmlh
-IFRJT0NTU0VSSUFMIGlzIG5vdCBhbGxvd2VkIGFueSBtb3JlLgoKRml4ZXM6IDM4NzNlMmQ3ZjYz
-YSAoImRyaXZlcnM6IFBMMDExOiByZWZhY3RvciBwbDAxMV9wcm9iZSgpIikKU2lnbmVkLW9mZi1i
-eTogTGlubyBTYW5maWxpcHBvIDxMaW5vU2FuZmlsaXBwb0BnbXguZGU+Ci0tLQoKQ2hhbmdlcyBp
-biB2MjoKLSBhZGQgZml4ZXMgdGFnIChhcyBzdWdnZXN0ZWQgYnkgR3JlZykKLSBhZGp1c3QgcGww
-MTFfdmVyaWZ5X3BvcnQgdG8gYXZvaWQgY2hhbmdpbmcgdGhlIG1taW8gYWRkcmVzcyB2aWEKICBU
-SU9DU1NFUklBTCAoYXMgcmVxdWVzdGVkIGJ5IFJ1c3NlbCkKLSByZXBocmFzZSB0aGUgY29tbWl0
-IG1lc3NhZ2UKCgogZHJpdmVycy90dHkvc2VyaWFsL2FtYmEtcGwwMTEuYyB8IDI3ICsrKy0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMjQg
-ZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL2FtYmEtcGwwMTEu
-YyBiL2RyaXZlcnMvdHR5L3NlcmlhbC9hbWJhLXBsMDExLmMKaW5kZXggZDM2MWNkODRmZjhjLi5l
-MGU0MWNlOGJiMWYgMTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdHR5L3NlcmlhbC9hbWJhLXBsMDExLmMK
-KysrIGIvZHJpdmVycy90dHkvc2VyaWFsL2FtYmEtcGwwMTEuYwpAQCAtMjE4MywzMiArMjE4Mywx
-MyBAQCBzdGF0aWMgY29uc3QgY2hhciAqcGwwMTFfdHlwZShzdHJ1Y3QgdWFydF9wb3J0ICpwb3J0
-KQogCXJldHVybiB1YXAtPnBvcnQudHlwZSA9PSBQT1JUX0FNQkEgPyB1YXAtPnR5cGUgOiBOVUxM
-OwogfQogCi0vKgotICogUmVsZWFzZSB0aGUgbWVtb3J5IHJlZ2lvbihzKSBiZWluZyB1c2VkIGJ5
-ICdwb3J0JwotICovCi1zdGF0aWMgdm9pZCBwbDAxMV9yZWxlYXNlX3BvcnQoc3RydWN0IHVhcnRf
-cG9ydCAqcG9ydCkKLXsKLQlyZWxlYXNlX21lbV9yZWdpb24ocG9ydC0+bWFwYmFzZSwgU1pfNEsp
-OwotfQotCi0vKgotICogUmVxdWVzdCB0aGUgbWVtb3J5IHJlZ2lvbihzKSBiZWluZyB1c2VkIGJ5
-ICdwb3J0JwotICovCi1zdGF0aWMgaW50IHBsMDExX3JlcXVlc3RfcG9ydChzdHJ1Y3QgdWFydF9w
-b3J0ICpwb3J0KQotewotCXJldHVybiByZXF1ZXN0X21lbV9yZWdpb24ocG9ydC0+bWFwYmFzZSwg
-U1pfNEssICJ1YXJ0LXBsMDExIikKLQkJCSE9IE5VTEwgPyAwIDogLUVCVVNZOwotfQotCiAvKgog
-ICogQ29uZmlndXJlL2F1dG9jb25maWd1cmUgdGhlIHBvcnQuCiAgKi8KIHN0YXRpYyB2b2lkIHBs
-MDExX2NvbmZpZ19wb3J0KHN0cnVjdCB1YXJ0X3BvcnQgKnBvcnQsIGludCBmbGFncykKIHsKLQlp
-ZiAoZmxhZ3MgJiBVQVJUX0NPTkZJR19UWVBFKSB7CisJaWYgKGZsYWdzICYgVUFSVF9DT05GSUdf
-VFlQRSkKIAkJcG9ydC0+dHlwZSA9IFBPUlRfQU1CQTsKLQkJcGwwMTFfcmVxdWVzdF9wb3J0KHBv
-cnQpOwotCX0KIH0KIAogLyoKQEAgLTIyMjMsNiArMjIwNCw4IEBAIHN0YXRpYyBpbnQgcGwwMTFf
-dmVyaWZ5X3BvcnQoc3RydWN0IHVhcnRfcG9ydCAqcG9ydCwgc3RydWN0IHNlcmlhbF9zdHJ1Y3Qg
-KnNlcikKIAkJcmV0ID0gLUVJTlZBTDsKIAlpZiAoc2VyLT5iYXVkX2Jhc2UgPCA5NjAwKQogCQly
-ZXQgPSAtRUlOVkFMOworCWlmIChwb3J0LT5tYXBiYXNlICE9ICh1bnNpZ25lZCBsb25nKSBzZXIt
-PmlvbWVtX2Jhc2UpCisJCXJldCA9IC1FSU5WQUw7CiAJcmV0dXJuIHJldDsKIH0KIApAQCAtMjI3
-NSw4ICsyMjU4LDYgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB1YXJ0X29wcyBhbWJhX3BsMDExX3Bv
-cHMgPSB7CiAJLmZsdXNoX2J1ZmZlcgk9IHBsMDExX2RtYV9mbHVzaF9idWZmZXIsCiAJLnNldF90
-ZXJtaW9zCT0gcGwwMTFfc2V0X3Rlcm1pb3MsCiAJLnR5cGUJCT0gcGwwMTFfdHlwZSwKLQkucmVs
-ZWFzZV9wb3J0CT0gcGwwMTFfcmVsZWFzZV9wb3J0LAotCS5yZXF1ZXN0X3BvcnQJPSBwbDAxMV9y
-ZXF1ZXN0X3BvcnQsCiAJLmNvbmZpZ19wb3J0CT0gcGwwMTFfY29uZmlnX3BvcnQsCiAJLnZlcmlm
-eV9wb3J0CT0gcGwwMTFfdmVyaWZ5X3BvcnQsCiAjaWZkZWYgQ09ORklHX0NPTlNPTEVfUE9MTApA
-QCAtMjMwNiw4ICsyMjg3LDYgQEAgc3RhdGljIGNvbnN0IHN0cnVjdCB1YXJ0X29wcyBzYnNhX3Vh
-cnRfcG9wcyA9IHsKIAkuc2h1dGRvd24JPSBzYnNhX3VhcnRfc2h1dGRvd24sCiAJLnNldF90ZXJt
-aW9zCT0gc2JzYV91YXJ0X3NldF90ZXJtaW9zLAogCS50eXBlCQk9IHBsMDExX3R5cGUsCi0JLnJl
-bGVhc2VfcG9ydAk9IHBsMDExX3JlbGVhc2VfcG9ydCwKLQkucmVxdWVzdF9wb3J0CT0gcGwwMTFf
-cmVxdWVzdF9wb3J0LAogCS5jb25maWdfcG9ydAk9IHBsMDExX2NvbmZpZ19wb3J0LAogCS52ZXJp
-ZnlfcG9ydAk9IHBsMDExX3ZlcmlmeV9wb3J0LAogI2lmZGVmIENPTkZJR19DT05TT0xFX1BPTEwK
-CmJhc2UtY29tbWl0OiBkNTgwNzFhOGE3NmQ3NzllZWRhYjM4MDMzYWU0YzgyMWMzMDI5NWE1Ci0t
-IAoyLjMzLjEKCg==
+Hi Manish,
+
+> Friendly reminder to review this patch series.
+
+you actually need to look for the kernel build robot comments and address them. In general I am not looking at patches where the kernel build robots finds issues.
+
+Regards
+
+Marcel
+

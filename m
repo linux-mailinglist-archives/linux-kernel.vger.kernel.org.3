@@ -2,85 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5FC46284B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CC546284F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbhK2Xfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:35:34 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50942 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbhK2Xfd (ORCPT
+        id S231878AbhK2XgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:36:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230264AbhK2XgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:35:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 45ED9CE16E0;
-        Mon, 29 Nov 2021 23:32:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1967C53FAD;
-        Mon, 29 Nov 2021 23:32:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638228731;
-        bh=1xAwK1UN6GbP/Kw9DH9ptJJxLz3pyvzNO1N/vlPbgNw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=e24mjV1WWFPS2BQvo73pIos7h237Jil8qHNdfezKaLEKWXhz/+5dVwQFtB5AxRISR
-         IGoCg6e627EXd4xbcmhxG/ccDpOrZTftT0QR6W76sPOhvhSrXZ2B0wBzeVuK9nafqI
-         /f5qTPJITyX7d/FWga48QhCFw11tBiW+uLPNQRV0fFTVsyaFEKIWfnkjyLQQKDkHhS
-         /jVoZdBrQMMtTBwfSAToBBVa2zZtOiA+G0HdGNFHv1zt+1NMkh0jo16Vm4xWnu6Tsw
-         M1ju3aZH8ekYeJnqH4ZXiHGE7zcEBxlGSQpP3H+iNDgExvLJ/umvbjH6YOb4CG/vMD
-         e/iWqbYaDRyqw==
-Date:   Mon, 29 Nov 2021 17:32:09 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jonas =?iso-8859-1?Q?Dre=DFler?= <verdre@v0yd.nl>
-Cc:     Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Tsuchiya Yuto <kitakar@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Maximilian Luz <luzmaximilian@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Subject: Re: [PATCH] mwifiex: Ignore BTCOEX events from the 88W8897 firmware
-Message-ID: <20211129233209.GA2702252@bhelgaas>
+        Mon, 29 Nov 2021 18:36:01 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8254C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:32:43 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id u11so13454522plf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:32:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fMhxAW0T00dvOtfbIMr5O066vKcGP3SQExpqDRyb3WI=;
+        b=cffpanKjPtvjrPkkCaMv+twsIVyfexum4ivNlUeJ+sya9EJi1umlnito1t0x1EhPqo
+         azxJRxRkVNPksEDt4MmYp8AudkLlOthcsy9YDYQjJ0Ivotfu7TB3gqLTSDQ11Qx+ROO7
+         Q2PY+PNIplcM4MO69JFfxGzIGLyGmIweVTE8tuq72errjdAutTLwk1zbyppAD03kwIk2
+         VrXMCjjJeJUqfcJiFTYJXmuN0fz5DepO8EG3T1RYagelB5ZhgijsDbQHFhpV6nDjEXoy
+         q+v5UJV0j0hr0SzwOwEi94EgkOenG1Ta15bud0u8SgnavglOV9GkXDgfzbkeqOx62tQP
+         5GUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fMhxAW0T00dvOtfbIMr5O066vKcGP3SQExpqDRyb3WI=;
+        b=nYg/VVwDPc7tyXYX730qohv65U6AjKZzM9AlKroePDSCIJyAofS41NRBET15kAeP4Y
+         oYDoJyy3n0wBOcyh1mj+S81NtKTtEzsiluTF9kVRMLf7+Oe5vHS37Nj0ccvek+xgDou5
+         2ALFcqrHqOSZqKgIjdsmUD0DoIWWA21uLPaeC9OFzFU2XPYm8+rQ/P7AucwqLCc7tzVP
+         1xgMjP7xxAjcvOAkdEgo6a5PcmneARpC7NwUIjvG4fTvBUK+2hGuPP4PDu5x0MdxVZ5b
+         Bpj7eAXG/Pj55k2PFb2u8/rKYI7A/qnNzhWi1828oW2ix5Ue5IS/wJIa8V1LQTGLnlRF
+         cKRQ==
+X-Gm-Message-State: AOAM530CLjvWIdcwxxIn4wWQAoZ1r4Pp3gdrh2PEScaGyDiPyoO0DGWY
+        0WNjpb6NyE62gNUORmqX39GVXzBks0l9VA==
+X-Google-Smtp-Source: ABdhPJzwzJuC3gagMd9tSbUh5ZqFZWBAYUO8sRrzlOWFg6qVHh0Z9bIfV0+kv3QC3HmYXb22dRQNTw==
+X-Received: by 2002:a17:902:b28b:b0:142:4abc:ac20 with SMTP id u11-20020a170902b28b00b001424abcac20mr64623518plr.88.1638228763144;
+        Mon, 29 Nov 2021 15:32:43 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id fs21sm1085316pjb.1.2021.11.29.15.32.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 15:32:42 -0800 (PST)
+Date:   Mon, 29 Nov 2021 23:32:38 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        seanjc@google.com, stable@vger.kernel.org
+Subject: Re: [PATCH 1/4] KVM: x86: ignore APICv if LAPIC is not enabled
+Message-ID: <YaVjFlTjpoD6XyP3@google.com>
+References: <20211123004311.2954158-1-pbonzini@redhat.com>
+ <20211123004311.2954158-2-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211103205827.14559-1-verdre@v0yd.nl>
+In-Reply-To: <20211123004311.2954158-2-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 03, 2021 at 09:58:27PM +0100, Jonas Dreßler wrote:
-> The firmware of the 88W8897 PCIe+USB card sends those events very
-> unreliably, sometimes bluetooth together with 2.4ghz-wifi is used and no
-> COEX event comes in, and sometimes bluetooth is disabled but the
-> coexistance mode doesn't get disabled.
+On Mon, Nov 22, 2021 at 07:43:08PM -0500, Paolo Bonzini wrote:
+> Synchronize the condition for the two calls to kvm_x86_sync_pir_to_irr.
+> The one in the reenter-guest fast path invoked the callback
+> unconditionally even if LAPIC is disabled.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 
-s/sends those events/sends BTCOEX events/ so it reads well without the
-subject.
+Reviewed-by: David Matlack <dmatlack@google.com>
 
-s/coexistance/coexistence/
-
-Is BTCOEX a standard Bluetooth thing?  Is there a spec reference that
-could be useful here?  I've never seen those specs, so this is just
-curiosity.  I did download the "Bluetooth Core Spec v5.3", which does
-have a "Wireless Coexistence Signaling and Interfaces" chapter, but
-"BTCOEX" doesn't appear in that doc.
-
-> This means we sometimes end up capping the rx/tx window size while
-> bluetooth is not enabled anymore, artifically limiting wifi speeds even
-> though bluetooth is not being used.
-
-s/artifically/artificially/
-
-> Since we can't fix the firmware, let's just ignore those events on the
-> 88W8897 device. From some Wireshark capture sessions it seems that the
-> Windows driver also doesn't change the rx/tx window sizes when bluetooth
-> gets enabled or disabled, so this is fairly consistent with the Windows
-> driver.
+> ---
+>  arch/x86/kvm/x86.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 5a403d92833f..441f4769173e 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -9849,7 +9849,7 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
+>  			break;
+>  
+> -		if (vcpu->arch.apicv_active)
+> +		if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
+>  			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+>  
+>  		if (unlikely(kvm_vcpu_exit_request(vcpu))) {
+> -- 
+> 2.27.0
+> 
+> 

@@ -2,133 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A03461A42
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B083461A8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:00:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346996AbhK2Ov6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:51:58 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:28188 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348549AbhK2Otz (ORCPT
+        id S241994AbhK2PDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:03:54 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:47710 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345432AbhK2PBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:49:55 -0500
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J2p5z6zmJz8vk7;
-        Mon, 29 Nov 2021 22:44:39 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 29 Nov 2021 22:46:36 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Mon, 29 Nov 2021 22:46:35 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Marco Elver <elver@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <mark.rutland@arm.com>, Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2] arm64: Enable KCSAN
-Date:   Mon, 29 Nov 2021 22:57:32 +0800
-Message-ID: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
+        Mon, 29 Nov 2021 10:01:53 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 589521FD38;
+        Mon, 29 Nov 2021 14:58:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1638197914; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9t4Ma3afwC7KZw9L0yhc6vlBZ0A17MFGlznwnQnwnFg=;
+        b=FgA1wOJzo4HWeOGYsqs1Zn9+9sqilkSru5Aiywz0Oon3jZv67bxJPpasmLSyZ2l1Vlv5s1
+        dKibSpK7WF9Cc9w3jIRANiQHhN7ATD7KcS/Npo2/pKhM2fMxVyfEC9fG0ALxvnG/1DvJqH
+        +/JkHW8nIC7fvLwz+blvFMdSbsreDUo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1638197914;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9t4Ma3afwC7KZw9L0yhc6vlBZ0A17MFGlznwnQnwnFg=;
+        b=TH1LAL3X3oY2ggbvSxH/DMeiro4vt3B0XxLrZZ/ByD6KFnMZGaRFU+xA8YGi19PJzN7t/B
+        MZhaDO3lvRW1xaCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CAAEA13B2B;
+        Mon, 29 Nov 2021 14:58:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id uevfMJnqpGH6EQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 29 Nov 2021 14:58:33 +0000
+Message-ID: <7e368c50-ff94-d87e-e93f-bae044659152@suse.cz>
+Date:   Mon, 29 Nov 2021 15:58:33 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Content-Language: en-US
+To:     Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     Peter Gonda <pgonda@google.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com
+References: <20210820155918.7518-1-brijesh.singh@amd.com>
+ <CAMkAt6o0ySn1=iLYsH0LCnNARrUbfaS0cvtxB__y_d+Q6DUzfA@mail.gmail.com>
+ <daf5066b-e89b-d377-ed8a-9338f1a04c0d@amd.com>
+ <d673f082-9023-dafb-e42e-eab32a3ddd0c@intel.com>
+ <f15597a0-e7e0-0a57-39fd-20715abddc7f@amd.com>
+ <5f3b3aab-9ec2-c489-eefd-9136874762ee@intel.com>
+ <d83e6668-bec4-8d1f-7f8a-085829146846@amd.com>
+ <38282b0c-7eb5-6a91-df19-2f4cfa8549ce@intel.com> <YZ5iWJuxjSCmZL5l@suse.de>
+ <bd31abd4-c8a2-bdda-ea74-1c24b29beda7@intel.com> <YZ9gAMHdEo6nQ6a0@suse.de>
+ <9503ac53-1323-eade-2863-df11a5f36b6a@amd.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH Part2 v5 00/45] Add AMD Secure Nested Paging (SEV-SNP)
+ Hypervisor Support
+In-Reply-To: <9503ac53-1323-eade-2863-df11a5f36b6a@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables KCSAN for arm64, with updates to build rules
-to not use KCSAN for several incompatible compilation units.
+On 11/29/21 15:44, Brijesh Singh wrote:
+> 
+> 
+> On 11/25/21 4:05 AM, Joerg Roedel wrote:
+>> On Wed, Nov 24, 2021 at 09:48:14AM -0800, Dave Hansen wrote:
+>>> That covers things like copy_from_user().  It does not account for
+>>> things where kernel mappings are used, like where a
+>>> get_user_pages()/kmap() is in play.
+>>
+>> The kmap case is guarded by KVM code, which locks the page first so that
+>> the guest can't change the page state, then checks the page state, and
+>> if it is shared does the kmap and the access.
+> 
+> 
+> The KVM use-case is well covered in the series, but I believe Dave is
+> highlighting what if the access happens outside of the KVM driver (such as a
+> ptrace() or others).
 
-Resent GCC version(at least GCC10) made outline-atomics as the
-default option(unlike Clang), which will cause linker errors
-for kernel/kcsan/core.o.
+AFAIU ptrace() is a scenario where the userspace mapping is being gup-ped,
+not a kernel page being kmap()ed?
 
-Disables the out-of-line atomics by no-outline-atomics to fix
-the linker errors.
+> One possible approach to fix this is to enlighten the kmap/unmap().
+> Basically, move the per page locking mechanism used by the KVM in the
+> arch-specific code and have kmap/kunmap() call the arch hooks. The arch
+> hooks will do this:
+> 
+> Before the map, check whether the page is added as a shared in the RMP
+> table. If not shared, then error.
+> Acquire a per-page map_lock.
+> Release the per-page map_lock on the kunmap().
+> 
+> The current patch set provides helpers to change the page from private to
+> shared. Enhance the helpers to check for the per-page map_lock, if the
+> map_lock is held then do not allow changing the page from shared to private.
 
-Tested selftest and kcsan_test(built with GCC11 and Clang 13),
-and all passed.
+That could work for the kmap() context.
+What to do for the userspace context (host userspace)?
+- shared->private transition - page has to be unmapped from all userspace,
+elevated refcount (gup() in progress) can block this unmap until it goes
+away - could be doable
+- still, what to do if host userspace then tries to access the unmapped
+page? SIGSEGV instead of SIGBUS and it can recover?
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-Tested on Qemu with clang 13 / gcc 11, based on 5.16-rc3.
 
-[    0.221518] kcsan: enabled early
-[    0.222422] kcsan: strict mode configured
-...
-[    5.839223] kcsan: selftest: 3/3 tests passed
-...
-[  517.895102] # kcsan: pass:24 fail:0 skip:0 total:24
-[  517.896393] # Totals: pass:168 fail:0 skip:0 total:168
-[  517.897502] ok 1 - kcsan
 
-v2:
-- tested on GCC11 and disable outline-atomics for kernel/kcsan/core.c
-  suggested by Marco Elver
-
- arch/arm64/Kconfig               | 1 +
- arch/arm64/kernel/vdso/Makefile  | 1 +
- arch/arm64/kvm/hyp/nvhe/Makefile | 1 +
- kernel/kcsan/Makefile            | 1 +
- 4 files changed, 4 insertions(+)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 4ff73299f8a9..0ac90875f71d 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -150,6 +150,7 @@ config ARM64
- 	select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
- 	select HAVE_ARCH_KASAN_SW_TAGS if HAVE_ARCH_KASAN
- 	select HAVE_ARCH_KASAN_HW_TAGS if (HAVE_ARCH_KASAN && ARM64_MTE)
-+	select HAVE_ARCH_KCSAN
- 	select HAVE_ARCH_KFENCE
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_MMAP_RND_BITS
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index 700767dfd221..60813497a381 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -32,6 +32,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) $(GCC_PLUGINS_CFLAGS) \
- 				$(CC_FLAGS_LTO)
- KASAN_SANITIZE			:= n
-+KCSAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
- KCOV_INSTRUMENT			:= n
-diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-index c3c11974fa3b..24b2c2425b38 100644
---- a/arch/arm64/kvm/hyp/nvhe/Makefile
-+++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-@@ -89,6 +89,7 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI)
- # cause crashes. Just disable it.
- GCOV_PROFILE	:= n
- KASAN_SANITIZE	:= n
-+KCSAN_SANITIZE	:= n
- UBSAN_SANITIZE	:= n
- KCOV_INSTRUMENT	:= n
- 
-diff --git a/kernel/kcsan/Makefile b/kernel/kcsan/Makefile
-index c2bb07f5bcc7..e893b0e1d62a 100644
---- a/kernel/kcsan/Makefile
-+++ b/kernel/kcsan/Makefile
-@@ -8,6 +8,7 @@ CFLAGS_REMOVE_debugfs.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
- 
- CFLAGS_core.o := $(call cc-option,-fno-conserve-stack) \
-+	$(call cc-option,-mno-outline-atomics) \
- 	-fno-stack-protector -DDISABLE_BRANCH_PROFILING
- 
- obj-y := core.o debugfs.o report.o
--- 
-2.26.2
+> Thoughts ?
+> 
+>>
+>> This should turn an RMP fault in the kernel which is not covered in the
+>> uaccess exception table into a fatal error.
+>>
+>> Regards,
+>>
 

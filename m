@@ -2,75 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E59794627D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C26734627DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbhK2XL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:11:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
+        id S236735AbhK2XMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:12:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234077AbhK2XLi (ORCPT
+        with ESMTP id S236523AbhK2XMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:11:38 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F41C0698D6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:31:16 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so16747179pja.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9AvBVjsUrHA5ojRZLyc3LkomsSMZcJ46+mIK8nRuC78=;
-        b=CjshS9PnnLSdv2AK/suTdsJ4choCpPz/1eqxVn8V5C64WtDEK+OxYTQtzf2KARNDYs
-         COUtacor2im7nKgw9GQ3xfaFd0SrSZISdHKBGeAlonlWrKqPYbmrSfjoNR8ILpdMcTw0
-         CVW49Qi4Q5EkUat8G30wzGWaufKxPT4Ho9eRItfqBN1waMkAOk/UBxrCpXSg03MQuf0m
-         zbRQ0OmIHWSbba4lWZggFAGOxpNwdFACeHn+aNiIsFIpAh7bkLUNhtFU48WC+3IrTRf6
-         EEvW+oTZ2uXDmjZG49BDYSKcNcOZoYYJBBO1AbEV9ZBGIFEb7NNyOnkNwWS54JLnGmz7
-         9bcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9AvBVjsUrHA5ojRZLyc3LkomsSMZcJ46+mIK8nRuC78=;
-        b=FbuGR6+O5LXCdxMGChv7KV62cJeF7KKZnY8/d32aMDD5HBQQ9M+4ik+SFtqbFMOkC2
-         rMldck+RaVZ5C17luSgXSLM5muPX/YX4E0thLZZYR6CKOoComyoMZn4KscPpHjG1XpBq
-         ZaweAyyomUaKB53Hm9ZSrR2u/jQup0fTBIf1zGnyDHuXejfP0lDKNZqlTjtVNdCkNJto
-         +drlFk9KC+48xj4RC5uxtbQGnr3GVPR7FC+HIHk/6Af9xnJHq5APuHDaT29KzsYxWMP0
-         PovtpJKN8dY1F9x+EBy+1umRJVcj9QlqTzHL8OsQw2l32YcjugP5K92XqggZ2QNNcWW+
-         uojQ==
-X-Gm-Message-State: AOAM531P2wc/UY29i4NyOP+x+uqp1Fy5bhJcoiVUNJnqiPlFgjkCGsWX
-        pF1+YhOjbQdkdXce08HoIs+5PQ==
-X-Google-Smtp-Source: ABdhPJzF7uWEEj8d7BByxoVl2ngezip9hrJFXj3YT6xDYrOeUi4flFODdMBcQJRImPXrl/BcTlaGKg==
-X-Received: by 2002:a17:90b:4b48:: with SMTP id mi8mr1120100pjb.214.1638225076325;
-        Mon, 29 Nov 2021 14:31:16 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id c2sm19188610pfv.112.2021.11.29.14.31.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 14:31:15 -0800 (PST)
-Date:   Mon, 29 Nov 2021 22:31:12 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        pgonda@google.com
-Subject: Re: [PATCH 11/12] KVM: SEV: do not take kvm->lock when destroying
-Message-ID: <YaVUsB4qBdhBlL6O@google.com>
-References: <20211123005036.2954379-1-pbonzini@redhat.com>
- <20211123005036.2954379-12-pbonzini@redhat.com>
+        Mon, 29 Nov 2021 18:12:03 -0500
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1124C08EA73;
+        Mon, 29 Nov 2021 14:32:39 -0800 (PST)
+Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 62274221;
+        Mon, 29 Nov 2021 22:32:39 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 62274221
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1638225159; bh=V5AIbjAOveHG7paLAjbeI5qsVb0ravBYOIKrb0ocAN8=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Z39+lll32XY03AUnd858HlZTX9qoe36jBbaW6QqjF/uJSlY6iBAZnjv31h9O61T1j
+         bbt2yWwz97Xg6QKtSJv/mF2zD2m7HFeCnL987HOKpbvBuARiVcmp583ir6XwOnD8Jw
+         fIrfxV2PaMYKaZnTNuZKdb0X851pQypnqLCLjjp0Zdabsd2FO6STwz21gExXybs0y3
+         zK2hf5UrHWxL84aWRpto8d60k+goDfesQd7MC/NA4596PNZgE1k9BbX3w+Wq6PTZI7
+         z8mtqjVAQDrpjUhuJX0qpt4iAwD7qbcY8itB/cXIo9+rck7Pv/KfnuLqQE+1pTvm2I
+         gQMTlY5IowL5A==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     cgel.zte@gmail.com, alexs@kernel.org, siyanteng@loongson.cn,
+        seakeel@gmail.com
+Cc:     yang.yang29@zte.com.cn, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] docs/zh_CN: Add zh_CN/accounting/taskstats.rst
+In-Reply-To: <20211129065113.306748-1-yang.yang29@zte.com.cn>
+References: <20211129065113.306748-1-yang.yang29@zte.com.cn>
+Date:   Mon, 29 Nov 2021 15:32:38 -0700
+Message-ID: <87tufur3sp.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211123005036.2954379-12-pbonzini@redhat.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021, Paolo Bonzini wrote:
-> Taking the lock is useless since there are no other references,
-> and there are already accesses (e.g. to sev->enc_context_owner)
-> that do not take it.  So get rid of it.
-> 
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+cgel.zte@gmail.com writes:
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+I'll ask the same question I've been asking others...
+
+> From: Yang Yang <yang.yang29@zte.com.cn>
+>
+> Add translation zh_CN/accounting/taskstats.rst and links it to
+> zh_CN/accounting/index.rst while clean its todo entry.
+>
+> Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+> Reviewed-by: Alex Shi <alexs@kernel.org>
+> Reviewed-by: Yanteng Si <siyanteng@loongson.cn>
+> ---
+> v3:
+> - add necessary blank line for bullet list.
+> v2:
+> - fix incomplete words and long sentences.
+> ---
+>  .../translations/zh_CN/accounting/index.rst   |   2 +-
+>  .../zh_CN/accounting/taskstats.rst            | 147 ++++++++++++++++++
+>  2 files changed, 148 insertions(+), 1 deletion(-)
+>  create mode 100644 Documentation/translations/zh_CN/accounting/taskstats.rst
+>
+> diff --git a/Documentation/translations/zh_CN/accounting/index.rst b/Documentation/translations/zh_CN/accounting/index.rst
+> index 362e907b41f9..124b590fb01b 100644
+> --- a/Documentation/translations/zh_CN/accounting/index.rst
+> +++ b/Documentation/translations/zh_CN/accounting/index.rst
+> @@ -16,10 +16,10 @@
+>     :maxdepth: 1
+>  
+>     psi
+> +   taskstats
+>  
+>  Todolist:
+>  
+>     cgroupstats
+>     delay-accounting
+> -   taskstats
+>     taskstats-struct
+> diff --git a/Documentation/translations/zh_CN/accounting/taskstats.rst b/Documentation/translations/zh_CN/accounting/taskstats.rst
+> new file mode 100644
+> index 000000000000..f88a8d58ec69
+> --- /dev/null
+> +++ b/Documentation/translations/zh_CN/accounting/taskstats.rst
+> @@ -0,0 +1,147 @@
+> +.. include:: ../disclaimer-zh_CN.rst
+> +
+> +:Original: Documentation/accounting/taskstats.rst
+> +
+> +:Translator: Yang Yang <yang.yang29@zte.com.cn>
+> +
+> +.. _cn_taskstats.rst:
+
+What is the purpose of this label here?  Nothing references it.  Somehow
+this practice of adding unused labels got started, but let's try to stop
+it now; it's just clutter.
+
+I've applied the patch but took that label out.
+
+Thanks,
+
+jon

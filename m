@@ -2,87 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3238F461B92
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:10:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65440461B98
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344237AbhK2QN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 11:13:27 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50362 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbhK2QLT (ORCPT
+        id S1345539AbhK2QOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:14:09 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:42795 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1345026AbhK2QMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:11:19 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60926B811F6;
-        Mon, 29 Nov 2021 16:08:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1FCC53FC7;
-        Mon, 29 Nov 2021 16:07:56 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 11:07:55 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded
- 16 with TASK_COMM_LEN
-Message-ID: <20211129110755.616133df@gandalf.local.home>
-In-Reply-To: <CALOAHbDkMhnO_OfQiV4gA8rGnLpyQ27nUcWSnN_-8TXkfQ1Eyw@mail.gmail.com>
-References: <20211120112738.45980-1-laoar.shao@gmail.com>
-        <20211120112738.45980-8-laoar.shao@gmail.com>
-        <yt9d35nf1d84.fsf@linux.ibm.com>
-        <CALOAHbDtqpkN4D0vHvGxTSpQkksMWtFm3faMy0n+pazxN_RPPg@mail.gmail.com>
-        <yt9d35nfvy8s.fsf@linux.ibm.com>
-        <54e1b56c-e424-a4b3-4d61-3018aa095f36@redhat.com>
-        <yt9dy257uivg.fsf@linux.ibm.com>
-        <CALOAHbDkMhnO_OfQiV4gA8rGnLpyQ27nUcWSnN_-8TXkfQ1Eyw@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 29 Nov 2021 11:12:07 -0500
+Received: from [79.2.93.196] (port=58666 helo=[192.168.101.73])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mrjCy-0005C4-EE; Mon, 29 Nov 2021 17:08:48 +0100
+Subject: Re: [PATCH v4 8/9] watchdog: max77620: add comment to clarify
+ set_timeout procedure
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20211120155707.4019487-1-luca@lucaceresoli.net>
+ <20211120155707.4019487-9-luca@lucaceresoli.net>
+ <20211129160414.GA3014810@roeck-us.net>
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Message-ID: <0e08d0e0-489c-342b-4fa4-d4457af20a65@lucaceresoli.net>
+Date:   Mon, 29 Nov 2021 17:08:45 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20211129160414.GA3014810@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca+lucaceresoli.net/only user confirmed/virtual account not confirmed
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 23:33:33 +0800
-Yafang Shao <laoar.shao@gmail.com> wrote:
+Hi Guenter,
 
-> > TBH, i would vote for reverting the change. defining an array size as
-> > enum feels really odd.
-> >  
+On 29/11/21 17:04, Guenter Roeck wrote:
+> On Sat, Nov 20, 2021 at 04:57:06PM +0100, Luca Ceresoli wrote:
+>> Clarify why we need to ping the watchdog before changing the timeout by
+>> quoting the MAX77714 datasheet.
+>>
 > 
-> We changed it to enum because the BTF can't parse macro while it can
-> parse the enum type.
+> Unless I am missing something, this adds confusion instead of clarifying
+> anything, and it is misleading. The added comment in the code makes it
+> sound like clearing the watchdog timer is only needed for MAX77614.
+> However, the code was in place for MAX77620, suggesting that it was needed
+> for that chip as well and is not MAX77614 specific.
 
-I wonder if BTF could take advantage of the tracing:
+You're right, the comment comes from the max77714-only driver, but now
+that it is in a multi-chip  driver the confusion started to exist.
 
-TRACE_DEFINE_ENUM() macros?
+> Please either drop this patch or rephrase it to clarify that it applies
+> to both chips.
 
-This is how they are converted for user space tooling.
+What if I rephrase to:
 
-Anyway, I'd have to go and look at why that trigger test failed. I don't
-see how the size of the array caused it to change the signage of value.
+	/*
+	 * "If the value of TWD needs to be changed, clear the system
+	 * watchdog timer first [...], then change the value of TWD."
+-	 * (MAX77714 datasheet)
++	 * (MAX77714 datasheet but applies to MAX77620 too)
+	 */
 
--- Steve
+?
 
-
-> Anyway I don't insist on keeping this change if you think reverting it
-> is better.
-
+-- 
+Luca

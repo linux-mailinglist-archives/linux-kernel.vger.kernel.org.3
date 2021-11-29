@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2FA46257C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB20F46266F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234470AbhK2WkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:40:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
+        id S235683AbhK2WwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:52:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbhK2Wjz (ORCPT
+        with ESMTP id S235489AbhK2WuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:39:55 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23028C03AA1E
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:16:35 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 71so16945367pgb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:16:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mHx/Rm0v3abugHNIW+k1AFYioeHEBBih2PCymCoJv40=;
-        b=jcm4ABsEgSE+FD2P5CkCiBvNU0wdL+YiaxfQOlKNnZ5///U3+pb2tKo0O5KiPLZeAv
-         chh6M3ISiAOCtms6ipPHE+q0ipPVwzB+fYG53RcQ4ReHokq6R5VN1teeU77Nje7KzMpZ
-         Z5VNpbeU6YbfLfVx0MTXgdczBcI+u06swdgmroIsgSv5iFlt0j9xdOosA2gtaSW6m0/j
-         s7LGaU4/mTMzMn9CqOQgpqQEsFRZ0N121D9Z25SNLkUp5ZQICAwtuTfQfeR8CPeN86AO
-         6D1Na8TQ+cug2tK7P89Y6v5Gk7dGug0qQxe550tzht/cj+CARj6Yw48VKp04/cHk11dE
-         4Naw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mHx/Rm0v3abugHNIW+k1AFYioeHEBBih2PCymCoJv40=;
-        b=pEXM7ukIFiVOnRUTibcXiTQIY/+etJahtD98XlVPXGjkCd9qARL+ztI4tglrvBMj9o
-         uKuWC4ZOSrLh/KNtikPRr7DnEO49Mz61oZ+/210vZ0/dJ4NJZugRfTCYEmJqJN9hJddk
-         FDWRFoDl8Ss/IEsDgB/yhYgM6iYJUMWu9OANYtVM8cnPYYRMUey+OS0Nm0TZzVvgP67O
-         WCqWEuHqoJY5M6LD3KnCLWnFYViPlZpbriZuvcuZ+Bbzi7DnTzvIcRlsbinH3TqiMk4R
-         1x6O1yj5Sn6ksu9vBmYpW0/OpYda5NOK/sQ18OHDdPwnq0chBqpMN5GKJBT9Mtb1QY/5
-         yLwQ==
-X-Gm-Message-State: AOAM532WW/vWY23jYjx3f8GQ157Teyr9aJxPkQyggfwtpV59vCH9t2gT
-        TKepp4TFvmUr5LbusdD01EZMrQ==
-X-Google-Smtp-Source: ABdhPJykaqk8ISKzZvwwtrKmVYkkWoBaqSjfkjvItEqz2J/5mNmNk5Eo2YIxCE6Pg5mB3KVl1Ak5rg==
-X-Received: by 2002:a63:5758:: with SMTP id h24mr20182539pgm.110.1638209794208;
-        Mon, 29 Nov 2021 10:16:34 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id f21sm20219411pfc.85.2021.11.29.10.16.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 10:16:33 -0800 (PST)
-Date:   Mon, 29 Nov 2021 18:16:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [RFC PATCH v3 26/59] KVM: x86: Introduce vm_teardown() hook in
- kvm_arch_vm_destroy()
-Message-ID: <YaUY/vlFX22DFhsE@google.com>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <1fa2d0db387a99352d44247728c5b8ae5f5cab4d.1637799475.git.isaku.yamahata@intel.com>
- <87a6hsj9wd.ffs@tglx>
- <21e8d65c-62bd-b410-1260-1ff4b0e0c251@redhat.com>
- <8735nkhre8.ffs@tglx>
+        Mon, 29 Nov 2021 17:50:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A698C12BCE1;
+        Mon, 29 Nov 2021 10:34:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1240CB815C9;
+        Mon, 29 Nov 2021 18:34:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36D38C53FAD;
+        Mon, 29 Nov 2021 18:34:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638210878;
+        bh=wvEMOgID32Rxz0hBDEo0ylZYdFgjbuZmaAq09s734wI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=dWdj6tqCPJLABWh2CWC0NFrSxkOXz5vXxs/OSKLpWD1T9yDGCitL6tkR3SkYPtcfi
+         KbrcaOa0qKVnqaaG8gU7Civ29IMzZ/vSlfQM4Gq8oNiZSkADcXA/S3gHPvnfvbt9bj
+         WHTJbwek2qvrFHc4Blm9AlnbXSOqEmsxxEt7MzlA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        John Keeping <john@metanate.com>,
+        Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 5.15 008/179] usb: dwc2: hcd_queue: Fix use of floating point literal
+Date:   Mon, 29 Nov 2021 19:16:42 +0100
+Message-Id: <20211129181719.215269006@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8735nkhre8.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021, Thomas Gleixner wrote:
-> On Thu, Nov 25 2021 at 21:54, Paolo Bonzini wrote:
-> > On 11/25/21 20:46, Thomas Gleixner wrote:
-> >> On Wed, Nov 24 2021 at 16:20, isaku yamahata wrote:
-> >>> Add a second kvm_x86_ops hook in kvm_arch_vm_destroy() to support TDX's
-> >>> destruction path, which needs to first put the VM into a teardown state,
-> >>> then free per-vCPU resource, and finally free per-VM resources.
-> >>>
-> >>> Note, this knowingly creates a discrepancy in nomenclature for SVM as
-> >>> svm_vm_teardown() invokes avic_vm_destroy() and sev_vm_destroy().
-> >>> Moving the now-misnamed functions or renaming them is left to a future
-> >>> patch so as not to introduce a functional change for SVM.
-> >> That's just the wrong way around. Fixup SVM first and then add the TDX
-> >> muck on top. Stop this 'left to a future patch' nonsense. I know for
-> >> sure that those future patches never materialize.
-> >
-> > Or just keep vm_destroy for the "early" destruction, and give a new name 
-> > to the new hook.  It is used to give back the TDCS memory, so perhaps 
-> > you can call it vm_free?
-> 
-> Up to you, but the current approach is bogus. I rather go for a fully
-> symmetric interface and let the various incarnations opt in at the right
-> place. Similar to what cpu hotplug states are implementing.
+From: Nathan Chancellor <nathan@kernel.org>
 
-Naming aside, that's what is being done, TDX simply needs two hooks instead of one
-due to the way KVM handles VM and vCPU destruction.  The alternative would be to
-shove and duplicate what is currently common x86 code into VMX/SVM, which IMO is
-far worse.
+commit 310780e825f3ffd211b479b8f828885a6faedd63 upstream.
 
-Regarding the naming, I 100% agree SVM should be refactored prior to adding TDX
-stuff if we choose to go with vm_teardown() and vm_destroy() instead of Paolo's
-suggestion of vm_destroy() and vm_free().  When this patch/code was originally
-written, letting SVM become stale was a deliberate choice to reduce conflicts with
-upstream as we knew the code would live out of tree for quite some time.  But that
-was purely meant to be development "hack", not upstream behavior.
+A new commit in LLVM causes an error on the use of 'long double' when
+'-mno-x87' is used, which the kernel does through an alias,
+'-mno-80387' (see the LLVM commit below for more details around why it
+does this).
+
+ drivers/usb/dwc2/hcd_queue.c:1744:25: error: expression requires  'long double' type support, but target 'x86_64-unknown-linux-gnu' does not support it
+                         delay = ktime_set(0, DWC2_RETRY_WAIT_DELAY);
+                                             ^
+ drivers/usb/dwc2/hcd_queue.c:62:34: note: expanded from macro 'DWC2_RETRY_WAIT_DELAY'
+ #define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
+                                 ^
+ 1 error generated.
+
+This happens due to the use of a 'long double' literal. The 'E6' part of
+'1E6L' causes the literal to be a 'double' then the 'L' suffix promotes
+it to 'long double'.
+
+There is no visible reason for a floating point value in this driver, as
+the value is only used as a parameter to a function that expects an
+integer type. Use NSEC_PER_MSEC, which is the same integer value as
+'1E6L', to avoid changing functionality but fix the error.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1497
+Link: https://github.com/llvm/llvm-project/commit/a8083d42b1c346e21623a1d36d1f0cadd7801d83
+Fixes: 6ed30a7d8ec2 ("usb: dwc2: host: use hrtimer for NAK retries")
+Cc: stable <stable@vger.kernel.org>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: John Keeping <john@metanate.com>
+Acked-by: Minas Harutyunyan <Minas.Harutyunyan@synopsys.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Link: https://lore.kernel.org/r/20211105145802.2520658-1-nathan@kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/usb/dwc2/hcd_queue.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+--- a/drivers/usb/dwc2/hcd_queue.c
++++ b/drivers/usb/dwc2/hcd_queue.c
+@@ -59,7 +59,7 @@
+ #define DWC2_UNRESERVE_DELAY (msecs_to_jiffies(5))
+ 
+ /* If we get a NAK, wait this long before retrying */
+-#define DWC2_RETRY_WAIT_DELAY (1 * 1E6L)
++#define DWC2_RETRY_WAIT_DELAY (1 * NSEC_PER_MSEC)
+ 
+ /**
+  * dwc2_periodic_channel_available() - Checks that a channel is available for a
+
+

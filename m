@@ -2,135 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD8A5461C6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB90461C75
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348490AbhK2RG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 12:06:59 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37566 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232856AbhK2REr (ORCPT
+        id S242548AbhK2RJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:09:36 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:13660 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235101AbhK2RHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 12:04:47 -0500
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATGlhBC015849;
-        Mon, 29 Nov 2021 17:01:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=aFJ0ZfwIB+86qoxxN6yWbiQmqQqDpvIJIqfTfdLri1E=;
- b=bQQJX1U4KJocPG8q1q+ZpO8M/c+0IDHdNgrnPshvpART5dlTLga1H2Cm/pns47FTqNpy
- 20+/+VJ7d6MoLhTknasuPX7DOpcg6NrryCuR1OsQllvwVYqYihhLU95QiDXhDGQQng07
- O0GhRB5H40N6nGrjwqNrztKNrpspY3NSGX+GhF/Ud33fK8H2u2I5JqFRHf6Dq54hBaqT
- Gvda2fUDJNG2RLuJ67kqNMHIPSkG9+aVHBSDDnR/XFlx8fiFft2EMEk+H2wb5RtH0HVm
- p0ykd4FiuIE6Mr8D6bqXALIjLJpQEqQ3j7M73XgTEeBLm8BLtX9PlEw5my39Z9QExfA4 Bw== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cn2ps89fq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 17:01:26 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATGwSW0031907;
-        Mon, 29 Nov 2021 17:01:25 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03ams.nl.ibm.com with ESMTP id 3ckca97260-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 17:01:25 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATH1MJb25166322
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Nov 2021 17:01:23 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C5CFC4C059;
-        Mon, 29 Nov 2021 17:01:22 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 183014C062;
-        Mon, 29 Nov 2021 17:01:22 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.68.145])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 29 Nov 2021 17:01:21 +0000 (GMT)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     linux-integrity@vger.kernel.org
-Cc:     linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH 4/4] ima: support fs-verity file digest based signatures
-Date:   Mon, 29 Nov 2021 12:00:57 -0500
-Message-Id: <20211129170057.243127-5-zohar@linux.ibm.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20211129170057.243127-1-zohar@linux.ibm.com>
-References: <20211129170057.243127-1-zohar@linux.ibm.com>
+        Mon, 29 Nov 2021 12:07:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638205458; x=1669741458;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=3ohmcwXUg0K8xofo5SVJyfgRNwFnqhhSko0Xjjj7ve8=;
+  b=IiAql9NMm8k1nLK7AxQzJU89SuAwL3Bn91q67Nh+ii2QZPzp2C72fX0U
+   BXQfZOFEQjfERJXpccqUulCmumaYl3xfcoE2jSW9t1tYFYJ9rfZCOxtoe
+   AgKgG2uv7ejgQy9Zhj0QBPJ2D8jpcQu55/9mQ8mD/vmqb/tlQJ6yUG90z
+   k=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 29 Nov 2021 09:04:18 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 09:04:17 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 29 Nov 2021 09:04:16 -0800
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 29 Nov 2021 09:04:16 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <aravindh@codeaurora.org>,
+        <quic_khsieh@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5] drm/msm/dp:  employ bridge mechanism for display enable and disable
+Date:   Mon, 29 Nov 2021 09:04:04 -0800
+Message-ID: <1638205444-4616-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FpMpnnkmU3QVPmLZeK41pNDtxFZyKelN
-X-Proofpoint-ORIG-GUID: FpMpnnkmU3QVPmLZeK41pNDtxFZyKelN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-29_10,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 suspectscore=0
- impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0
- adultscore=0 clxscore=1015 priorityscore=1501 spamscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2111290081
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of calculating a file hash and verifying the signature stored
-in the security.ima xattr against the calculated file hash, verify the
-signature of the fs-verity's file digest.  The fs-verity file digest is
-a hash that includes the Merkle tree root hash.
+Currently the msm_dp_*** functions implement the same sequence which would
+happen when drm_bridge is used. hence get rid of this intermediate layer
+and align with the drm_bridge usage to avoid customized implementation.
 
-Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+
+Changes in v2:
+-- revise commit text
+-- rename dp_bridge to msm_dp_bridge
+-- delete empty functions
+
+Changes in v3:
+-- replace kzalloc() with devm_kzalloc()
+-- replace __dp_display_enable() with dp_display_enable()
+-- replace __dp_display_disable() with dp_display_disable()
+
+Changes in v4:
+-- msm_dp_bridge_init() called from msm_dp_modeset_init() same as dsi
+
+Changes in v5:
+-- delete attach, mode_fixup and pre_enable from dp_bridge_ops
 ---
- security/integrity/ima/ima_api.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 21 --------
+ drivers/gpu/drm/msm/dp/dp_display.c         | 16 +++++-
+ drivers/gpu/drm/msm/dp/dp_display.h         |  1 +
+ drivers/gpu/drm/msm/dp/dp_drm.c             | 77 +++++++++++++++++++++++++++++
+ drivers/gpu/drm/msm/msm_drv.h               | 12 +++--
+ 5 files changed, 100 insertions(+), 27 deletions(-)
 
-diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
-index 179c7f0364c2..ee1701f8c0f3 100644
---- a/security/integrity/ima/ima_api.c
-+++ b/security/integrity/ima/ima_api.c
-@@ -16,6 +16,7 @@
- #include <linux/xattr.h>
- #include <linux/evm.h>
- #include <linux/iversion.h>
-+#include <linux/fsverity.h>
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index 31050aa..c4e08c4 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -1003,9 +1003,6 @@ static void dpu_encoder_virt_mode_set(struct drm_encoder *drm_enc,
  
- #include "ima.h"
+ 	trace_dpu_enc_mode_set(DRMID(drm_enc));
  
-@@ -205,6 +206,23 @@ int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
- 				allowed_algos);
+-	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS)
+-		msm_dp_display_mode_set(dpu_enc->dp, drm_enc, mode, adj_mode);
+-
+ 	list_for_each_entry(conn_iter, connector_list, head)
+ 		if (conn_iter->encoder == drm_enc)
+ 			conn = conn_iter;
+@@ -1181,14 +1178,6 @@ static void dpu_encoder_virt_enable(struct drm_encoder *drm_enc)
+ 
+ 	_dpu_encoder_virt_enable_helper(drm_enc);
+ 
+-	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS) {
+-		ret = msm_dp_display_enable(dpu_enc->dp, drm_enc);
+-		if (ret) {
+-			DPU_ERROR_ENC(dpu_enc, "dp display enable failed: %d\n",
+-				ret);
+-			goto out;
+-		}
+-	}
+ 	dpu_enc->enabled = true;
+ 
+ out:
+@@ -1214,11 +1203,6 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+ 	/* wait for idle */
+ 	dpu_encoder_wait_for_event(drm_enc, MSM_ENC_TX_COMPLETE);
+ 
+-	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS) {
+-		if (msm_dp_display_pre_disable(dpu_enc->dp, drm_enc))
+-			DPU_ERROR_ENC(dpu_enc, "dp display push idle failed\n");
+-	}
+-
+ 	dpu_encoder_resource_control(drm_enc, DPU_ENC_RC_EVENT_PRE_STOP);
+ 
+ 	for (i = 0; i < dpu_enc->num_phys_encs; i++) {
+@@ -1243,11 +1227,6 @@ static void dpu_encoder_virt_disable(struct drm_encoder *drm_enc)
+ 
+ 	DPU_DEBUG_ENC(dpu_enc, "encoder disabled\n");
+ 
+-	if (drm_enc->encoder_type == DRM_MODE_ENCODER_TMDS) {
+-		if (msm_dp_display_disable(dpu_enc->dp, drm_enc))
+-			DPU_ERROR_ENC(dpu_enc, "dp display disable failed\n");
+-	}
+-
+ 	mutex_unlock(&dpu_enc->enc_lock);
  }
  
-+static int ima_collect_verity_measurement(struct integrity_iint_cache *iint,
-+					  struct ima_digest_data *hash)
-+{
-+	u8 verity_digest[FS_VERITY_MAX_DIGEST_SIZE];
-+	enum hash_algo verity_alg;
-+	int rc;
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 2f113ff..89a8d43 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1571,6 +1571,18 @@ int msm_dp_modeset_init(struct msm_dp *dp_display, struct drm_device *dev,
+ 	}
+ 
+ 	priv->connectors[priv->num_connectors++] = dp_display->connector;
 +
-+	rc = fsverity_measure(iint->inode, verity_digest, &verity_alg);
-+	if (rc)
-+		return -EINVAL;
-+	if (hash->algo != verity_alg)
-+		return -EINVAL;
-+	hash->length = hash_digest_size[verity_alg];
-+	memcpy(hash->digest, verity_digest, hash->length);
-+	return 0;
++	dp_display->bridge = msm_dp_bridge_init(dp_display, dev, encoder);
++	if (IS_ERR(dp_display->bridge)) {
++		ret = PTR_ERR(dp_display->bridge);
++		DRM_DEV_ERROR(dev->dev,
++			"failed to create dp bridge: %d\n", ret);
++		dp_display->bridge = NULL;
++		return ret;
++	}
++
++	priv->bridges[priv->num_bridges++] = dp_display->bridge;
++
+ 	return 0;
+ }
+ 
+@@ -1674,8 +1686,8 @@ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder)
+ }
+ 
+ void msm_dp_display_mode_set(struct msm_dp *dp, struct drm_encoder *encoder,
+-				struct drm_display_mode *mode,
+-				struct drm_display_mode *adjusted_mode)
++				const struct drm_display_mode *mode,
++				const struct drm_display_mode *adjusted_mode)
+ {
+ 	struct dp_display_private *dp_display;
+ 
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.h b/drivers/gpu/drm/msm/dp/dp_display.h
+index 76f45f9..2237e80 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.h
++++ b/drivers/gpu/drm/msm/dp/dp_display.h
+@@ -13,6 +13,7 @@
+ struct msm_dp {
+ 	struct drm_device *drm_dev;
+ 	struct device *codec_dev;
++	struct drm_bridge *bridge;
+ 	struct drm_connector *connector;
+ 	struct drm_encoder *encoder;
+ 	struct drm_panel *drm_panel;
+diff --git a/drivers/gpu/drm/msm/dp/dp_drm.c b/drivers/gpu/drm/msm/dp/dp_drm.c
+index f33e315..15c0309e 100644
+--- a/drivers/gpu/drm/msm/dp/dp_drm.c
++++ b/drivers/gpu/drm/msm/dp/dp_drm.c
+@@ -5,12 +5,21 @@
+ 
+ #include <drm/drm_atomic_helper.h>
+ #include <drm/drm_atomic.h>
++#include <drm/drm_bridge.h>
+ #include <drm/drm_crtc.h>
+ 
+ #include "msm_drv.h"
+ #include "msm_kms.h"
+ #include "dp_drm.h"
+ 
++
++struct msm_dp_bridge {
++	struct drm_bridge bridge;
++	struct msm_dp *dp_display;
++};
++
++#define to_dp_display(x)     container_of((x), struct msm_dp_bridge, bridge)
++
+ struct dp_connector {
+ 	struct drm_connector base;
+ 	struct msm_dp *dp_display;
+@@ -162,3 +171,71 @@ struct drm_connector *dp_drm_connector_init(struct msm_dp *dp_display)
+ 
+ 	return connector;
+ }
++
++static void dp_bridge_mode_set(struct drm_bridge *drm_bridge,
++				const struct drm_display_mode *mode,
++				const struct drm_display_mode *adjusted_mode)
++{
++	struct msm_dp_bridge *dp_bridge = to_dp_display(drm_bridge);
++	struct msm_dp *dp_display = dp_bridge->dp_display;
++
++	msm_dp_display_mode_set(dp_display, drm_bridge->encoder, mode, adjusted_mode);
 +}
 +
- /*
-  * ima_collect_measurement - collect file measurement
-  *
-@@ -256,6 +274,8 @@ int ima_collect_measurement(struct integrity_iint_cache *iint,
++static void dp_bridge_enable(struct drm_bridge *drm_bridge)
++{
++	struct msm_dp_bridge *dp_bridge = to_dp_display(drm_bridge);
++	struct msm_dp *dp_display = dp_bridge->dp_display;
++
++	msm_dp_display_enable(dp_display, drm_bridge->encoder);
++}
++
++static void dp_bridge_disable(struct drm_bridge *drm_bridge)
++{
++	struct msm_dp_bridge *dp_bridge = to_dp_display(drm_bridge);
++	struct msm_dp *dp_display = dp_bridge->dp_display;
++
++	msm_dp_display_pre_disable(dp_display, drm_bridge->encoder);
++}
++
++static void dp_bridge_post_disable(struct drm_bridge *drm_bridge)
++{
++	struct msm_dp_bridge *dp_bridge = to_dp_display(drm_bridge);
++	struct msm_dp *dp_display = dp_bridge->dp_display;
++
++	msm_dp_display_disable(dp_display, drm_bridge->encoder);
++}
++
++static const struct drm_bridge_funcs dp_bridge_ops = {
++	.enable       = dp_bridge_enable,
++	.disable      = dp_bridge_disable,
++	.post_disable = dp_bridge_post_disable,
++	.mode_set     = dp_bridge_mode_set,
++};
++
++struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display, struct drm_device *dev,
++			struct drm_encoder *encoder)
++{
++	int rc;
++	struct msm_dp_bridge *dp_bridge;
++	struct drm_bridge *bridge;
++
++	dp_bridge = devm_kzalloc(dev->dev, sizeof(*dp_bridge), GFP_KERNEL);
++	if (!dp_bridge)
++		return ERR_PTR(-ENOMEM);
++
++	dp_bridge->dp_display = dp_display;
++
++	bridge = &dp_bridge->bridge;
++	bridge->funcs = &dp_bridge_ops;
++	bridge->encoder = encoder;
++
++	rc = drm_bridge_attach(encoder, bridge, NULL, DRM_BRIDGE_ATTACH_NO_CONNECTOR);
++	if (rc) {
++		DRM_ERROR("failed to attach bridge, rc=%d\n", rc);
++		kfree(dp_bridge);
++		return ERR_PTR(rc);
++	}
++
++	return bridge;
++}
+diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+index 4bb797e..c18a959 100644
+--- a/drivers/gpu/drm/msm/msm_drv.h
++++ b/drivers/gpu/drm/msm/msm_drv.h
+@@ -388,8 +388,12 @@ int msm_dp_display_enable(struct msm_dp *dp, struct drm_encoder *encoder);
+ int msm_dp_display_disable(struct msm_dp *dp, struct drm_encoder *encoder);
+ int msm_dp_display_pre_disable(struct msm_dp *dp, struct drm_encoder *encoder);
+ void msm_dp_display_mode_set(struct msm_dp *dp, struct drm_encoder *encoder,
+-				struct drm_display_mode *mode,
+-				struct drm_display_mode *adjusted_mode);
++				const struct drm_display_mode *mode,
++				const struct drm_display_mode *adjusted_mode);
++
++struct drm_bridge *msm_dp_bridge_init(struct msm_dp *dp_display,
++					struct drm_device *dev,
++					struct drm_encoder *encoder);
+ void msm_dp_irq_postinstall(struct msm_dp *dp_display);
+ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp_display);
  
- 	if (buf)
- 		result = ima_calc_buffer_hash(buf, size, &hash.hdr);
-+	else if (veritysig)
-+		result = ima_collect_verity_measurement(iint, &hash.hdr);
- 	else
- 		result = ima_calc_file_hash(file, &hash.hdr);
+@@ -426,8 +430,8 @@ static inline int msm_dp_display_pre_disable(struct msm_dp *dp,
+ }
+ static inline void msm_dp_display_mode_set(struct msm_dp *dp,
+ 				struct drm_encoder *encoder,
+-				struct drm_display_mode *mode,
+-				struct drm_display_mode *adjusted_mode)
++				const struct drm_display_mode *mode,
++				const struct drm_display_mode *adjusted_mode)
+ {
+ }
  
 -- 
-2.27.0
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

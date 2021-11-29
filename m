@@ -2,196 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A43B1462402
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:11:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90385462405
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbhK2WO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:14:58 -0500
-Received: from mail-dm3nam07on2044.outbound.protection.outlook.com ([40.107.95.44]:50273
-        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
+        id S229804AbhK2WPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:15:06 -0500
+Received: from mail-eopbgr80079.outbound.protection.outlook.com ([40.107.8.79]:12623
+        "EHLO EUR04-VI1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229463AbhK2WMT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:12:19 -0500
+        id S231574AbhK2WNE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:13:04 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RIMOJQ3k/Jx3Gxb3BcTDYTqrojjKOBTI2EanJFhZYLwcAFHcBotXaa4KpJVuzHwWcJcGRstkOuA971n6UoMv1D5Y/B7HrPAQ31hpdBOMkKzSz4k8CGw0tgXPOHsXZjxeRxz3uziaDKcFmn82BtR6qgs4jfQqQsxF78JNTp4NlABCUQeSIvvrBuBpLwKtiJlYnU9OxqwbljD/bmS5a5efCCU7lKQjYdHonjnmWZcEc7WvK7K27OFgQc5dkl+zbAk/3P6DWEyTo1evwtAMPjbR3nLPZyJb+lzmGDd7lZnWUeDeJX5rSm+GAV7WUJF28kXj77tiZ2XHChGwzfXrp7k3zQ==
+ b=O+WLaRn5puUQu9zDuoyr1T0UHTsHDEiEi1dqrXjYPCwl+hkteNdVx4v03oWYm2f/1mWhPgXg7RqfLqlCPyjHiXZnkSWTdoAVX15UCjRL5JX3JPaoQ3zTWvXxE3kP2MmhxwQuiHH8YeIsLo8Z3ajaoHL5rgAP0W89aeptXzwQiJbh2wYZ8bXUHsYnSbZplyRFHQEThTrHLLnBvOfJpZaZj+iTjE9ej1cNlcHZfoVBUDE0uUsR18K/kBqCWkWx4m7tpcR7BJFWoNRhEIrGBaapIeo8xuPciH5VGgxHfQp16fOzIiJy1eEbeyAJFNnNGuG2sAqUp6SbEsYkvSsE9w1klw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8zwazSGCLjIMi3AqEDquB0s4llI/Xb/R+68c/to+kpI=;
- b=ayq0DxD8Dv30VnBSeHTtN7iZbEjtTI/etuWBYDDQx8tuzdHOiLDOgUZNwOE5eq5ilLcgb2kNZ9cch+6TkOTGIwyQGXlhfNjSvFnypRXp/vxcIIVjCzjhc+7epcoKzIcZnZ9q6KKHVos92WvEi4s6LcQQrVXOx1PD5+0B4kk3OfR2Wmy6ZISxeE2IHKPyQ3gKQM97LkA6JtcAgflwX3y4s4HWNO4HSyv75wp0BjD6dvb25C04N3PUYCKxrUHrJCCDKBw8mOg+oNqU3yNev3IrPwkcpOVzxQWNG8zFF14B+wGYXPI5UFEqfq/i4FHZAJKAGkboduEHSRbx8t+Ckng+XQ==
+ bh=Gh3rmQJveyABk1CwbXI4a7pWhkMxW+/DxaOtchXPbro=;
+ b=f1uUHdd65O3/uuKozUFvpQqMUcO1BMuzj3P+9sD+70WRwwhPa356Bl+EuHCtJ2rqw2Wd7r1IA2fsevCuVWgPfqq2HOUt8OXxAviARpbX/7l/8u9xBsZ0R6MgKlDCRMfLeIYC4iP2mxck9JxKgy9Xc5DWjZE8umxGU67QRR8TaS8nxqhTUS94SRp0BATPdQgxG3sxKtQgXQ1i0pWVZ5YRwAGJ4WLXFbZEcD+Mc5p9Q4c08gwQkJNiaXjkBH7MEXbcUhPEx0ptxzgsbEacfIrxdPPaC0b7jTOCtFh9+DnOJbQXETo8GpFY8I8vHnv4UCeBIRIAUlH6/yDnkbScd1KiLQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8zwazSGCLjIMi3AqEDquB0s4llI/Xb/R+68c/to+kpI=;
- b=Fib1Lp1xkXUoDEg/NZZGQY7j9UHkpiOgKfx6OaQI5H2AjwPYIizmwvSU1DYRIV7vCkw5uYHoXPxtGC7LJltvOUV6I02kl5VgE0owp4/YcpfXxlfb8jVu8n+iiDOuphmoA7RrBF26i/l13hKevhsQYW1cmqz2Jdh2GmqOJI/hr1kPQ0Sz0txXoVN09sJnlqU/Wxe1/NdlVNU7Co6++JS3F5Ip0ZDJYtO88gB+I29qJ5DN2jZfaChg/OzVVt8Ai3lsbdlvCrNLrKzh/hXpOS/RgthS5jKLywi2yGNtKpXxDOFd1wL6Dwkt9fGW++8i14XLmRsjS3nl4Ndcu2uqFGMTVw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com (2603:10b6:208:168::26)
- by MN2PR12MB3983.namprd12.prod.outlook.com (2603:10b6:208:169::20) with
+ bh=Gh3rmQJveyABk1CwbXI4a7pWhkMxW+/DxaOtchXPbro=;
+ b=Phis5cYFjOlNDNWyhM7bklzb7gpDSs0ogJvIk6KtHZrx9DAZuqgCX9OG9B7+9UcF7s9cCxVTYDxg/sPV6udzmPHSknUOi8xfsPCpk0/Or4/PxRdRbFviIBBFiuVJ4/lldv3ziI6sU+QxZZVT80sifa2unIHxi2XtpSvj/c0e9dI=
+Received: from VI1PR10MB3167.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:803:12d::15)
+ by VI1PR10MB3712.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:800:142::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
- 2021 22:09:00 +0000
-Received: from MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::2dea:e478:592:6d66]) by MN2PR12MB3823.namprd12.prod.outlook.com
- ([fe80::2dea:e478:592:6d66%3]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
- 22:09:00 +0000
-From:   Zi Yan <ziy@nvidia.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org
-Subject: Re: [RFC PATCH 0/3] Use pageblock_order for cma and alloc_contig_range alignment.
-Date:   Mon, 29 Nov 2021 17:08:57 -0500
-X-Mailer: MailMate (1.14r5850)
-Message-ID: <35A20739-152A-450E-8535-2236D2B28748@nvidia.com>
-In-Reply-To: <52dbf824-76be-cc34-3983-d45510b1b618@suse.cz>
-References: <20211115193725.737539-1-zi.yan@sent.com>
- <3083463d-978b-fbe6-dadf-670d400ed437@suse.cz>
- <AEFF28CF-0ED8-450F-96A4-A6CD59CB1F3D@nvidia.com>
- <BF8FB68A-6E1D-4465-8A2B-884FC034660B@nvidia.com>
- <52dbf824-76be-cc34-3983-d45510b1b618@suse.cz>
-Content-Type: multipart/signed;
- boundary="=_MailMate_4B5044BF-6C2C-47FF-8D31-06E6118699F1_=";
- micalg=pgp-sha512; protocol="application/pgp-signature"
-X-ClientProxiedBy: BL1PR13CA0184.namprd13.prod.outlook.com
- (2603:10b6:208:2be::9) To MN2PR12MB3823.namprd12.prod.outlook.com
- (2603:10b6:208:168::26)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Mon, 29 Nov
+ 2021 22:09:40 +0000
+Received: from VI1PR10MB3167.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d15d:7ee0:39c6:4617]) by VI1PR10MB3167.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::d15d:7ee0:39c6:4617%6]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 22:09:40 +0000
+From:   Adam Ward <Adam.Ward.opensource@diasemi.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Adam Ward <Adam.Ward.opensource@diasemi.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        Support Opensource <Support.Opensource@diasemi.com>
+Subject: RE: [PATCH v3 3/3] regulator: da9121: Add DA914x support
+Thread-Topic: [PATCH v3 3/3] regulator: da9121: Add DA914x support
+Thread-Index: AQHX4MHBCJqEhCaHZE21MkGyd5Mka6waqScAgABv0iA=
+Date:   Mon, 29 Nov 2021 22:09:40 +0000
+Message-ID: <VI1PR10MB3167B6C3F6CC438276C555AFEC669@VI1PR10MB3167.EURPRD10.PROD.OUTLOOK.COM>
+References: <cover.1637709844.git.Adam.Ward.opensource@diasemi.com>
+ <31d387d0a364eef9d5ef72f0adf6d213197a4dfb.1637709844.git.Adam.Ward.opensource@diasemi.com>
+ <YaTuUS4GwZ4ON7fz@sirena.org.uk>
+In-Reply-To: <YaTuUS4GwZ4ON7fz@sirena.org.uk>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2e803ec4-f99c-45c3-3fe4-08d9b384f0ec
+x-ms-traffictypediagnostic: VI1PR10MB3712:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-microsoft-antispam-prvs: <VI1PR10MB37127B66E2DCA7C4A1AFD414CB669@VI1PR10MB3712.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:4303;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: FPe3wbSf+pQYJEGaiYttfyuuRnXVA8Ztyelen2p8ataPvOmtwAcayrBxSJ0PO/9o6gqtkb9ADgu9pB986Paz2JYgpLL6vEHE4ktyOo1QwCiNcBzRp/zp7M31GKPbqGjQp0OAA44IRidnK5QzBk8BTYgHu37Yr3DigDOi6LPQ0LvBmdX7iY/Tc/uXkcOSA2K9FuUs7VZEQDS7qtNfg4YZdBSbqRq5oBsg0GkUoZTA/k8chzq/FV7deTv97COXyPj8oBVQa90tRNCoPvuutrkOsUZbOq1OkRsA08ECb5zMbZRnMtnKeDZudNqYu7kSPP/relM+xb0yBCR0aDXWF93kE/L1d4fgruR8Dy0T9BAYDqj8+mAOpgBRNmOvDIk6qa5QgkeFZN3PZdrmhSJDT3muEMjyr+0iZE7DRcC1WFK8dEP2mtSMSCHAuPuHhX4ybVtKIydiRuR/gWlv3uhNrv5ojaSXstm+VXi6dW6cYWH3I6uU1hPLeV5LutY42Cb2pKtqgtVRSGCpsSgHw7vKorrH14abZkI0aqVhnVkWApyinrGvSKA0q5r6/IgA7seVFtKzB1w7N9AuAwaMC/D4MD7oILOrDM5c4y/0EwSSayIlpMMvhVFdn1YX4xKrKqNiyFGqyBf3Oi2PSbQ4MG9VYDZydRriPhenOKs2F882XTz1JhRQ9Vnc2WhgygvuZuJOm/IU6aLbLXzRhk3hGmy9N7Qbtw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR10MB3167.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(8936002)(508600001)(55236004)(55016003)(6506007)(4326008)(122000001)(8676002)(38100700002)(316002)(2906002)(107886003)(110136005)(54906003)(33656002)(38070700005)(26005)(52536014)(186003)(76116006)(71200400001)(66946007)(5660300002)(558084003)(66446008)(7696005)(66476007)(66556008)(9686003)(86362001)(64756008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?EmbxZzzD722mrxPKV+fmfYBKGSa1fXys/dXH/1np2Pn9kaXDVfoC5aMbie1/?=
+ =?us-ascii?Q?ZxIstgdntmqp2O9I3wYzYUHRK/H4NZ1kiNaeOXse7d30S+pukJ2a5t/a4F5C?=
+ =?us-ascii?Q?zfdNgzaBguPTYaj5lZA7UVb+L1wFoyWrxbWbqYM4vCOgAB65e1Sck90HWyCK?=
+ =?us-ascii?Q?J+pNjWZIxROGgMvUlQ6VIDXVfqYVe5+g+/ybsEzLUBwlJZi38o/yhAnhxSk/?=
+ =?us-ascii?Q?l+BAUMgJ3X6GNdG6uhGEzUBypSksQ3E0GjsQ9m+JNngPpihUO49v7YqmOalZ?=
+ =?us-ascii?Q?kWzkx4lA8D65retcUDweuUxNnnf4irRJ5LpXudp6BLbJTndrmtPdrcopJQQ9?=
+ =?us-ascii?Q?PlrqcgS86LuMjSMSzDDavHbezoa1swUbI7931GWUUQlKqVQVuiENGcxmx6F6?=
+ =?us-ascii?Q?fYoohO8ZxMI2DoiInBb+rs8C1e/wSIv6/jsElrL1PWJ+qkQXLatC8QQ2jPJP?=
+ =?us-ascii?Q?rKvCB1uV+6D9cjxGprOf9ErZHNsJyKmF2sXMHKvIPP6Jvomu8ReGq6vtXs/V?=
+ =?us-ascii?Q?kZfLhmUjoPiKT5Z1Q7NkbtD1yeZWqSv5uKHOdtGQoKwwgLOlmw3thu/xLCbj?=
+ =?us-ascii?Q?Qq7NGWrk7Oloz2mw+NvNi3lW3+6DxJNBEDonKOMBen7r5HdL3ZGdK0h3RxN/?=
+ =?us-ascii?Q?x6/wLNHJuB0Skf0tFlP4n2DeVtzMHDBTb8OBf2wqZ1fiPWQS3ojAkgr+FIm4?=
+ =?us-ascii?Q?/3UV3wL366N5QWLgpqqRneVxJw45V9uu9Z3lHFXx4VYxxJouU6wHs+LSd4ST?=
+ =?us-ascii?Q?O/B6BCv0nAacJTM3krl4HDZkSPTr3FPSyfWg6aALpoEjMSHLhWjHWrV+kchQ?=
+ =?us-ascii?Q?6BcWQRnKwjCKMj1X3HPHbM8+zUebJRXGTe18I8ACONGp3bUuVPbgd0L4VzNx?=
+ =?us-ascii?Q?NQ9llq/R+ZZjOjUlKrUxu3MEal5jxzaKUpkwFg9xq1t1KCUDHhHCPJBi24z2?=
+ =?us-ascii?Q?8YAnn0zOmagfaq/v6SDjg8CZenHOGgnNh5kMPHCC0ljyDppu3YiGatr71oFg?=
+ =?us-ascii?Q?w4jNHQEBulOZ3kFg1Ivpx+YX4dt8LsbH470Azoce9wpIQpP6dxj7VOvwm5fh?=
+ =?us-ascii?Q?KNgweRCU9vEEUJIBc/FAN6V+Kq3HZk9fCRr4HR1eKsX02yDwMnXBfMAuCwZd?=
+ =?us-ascii?Q?aC0fLGo3bHbkYcvGLgMjTX6bDu73Q1vboQNBLkfyl3v9n9r0/PK0cNwv79Cm?=
+ =?us-ascii?Q?AuP5wM1tKRN6L3ZYKb6fwJ8zHffDhjuOoPvsxhnmSIQPJw0Mb3C6ToWWocWI?=
+ =?us-ascii?Q?Kz9yUEO27ANkm9Dmld7YZCrMGUO16TX28paihmE/Tj05CxQHVDyRbkkuGg46?=
+ =?us-ascii?Q?Ac1TWnfBPbciLa7wxY+r0YPKojO8ImKQHrmcWszCvn5nHoolmzHzlAR7lSMY?=
+ =?us-ascii?Q?zk0MZYR+tBPoul7Bv/Ff9I3Q98ytO0PbaFoNGjqZga2gEYH06RdM3zVGMm1l?=
+ =?us-ascii?Q?XxK0aeZZYnx4puVGkoLWTIHm4YoIaVURyMhhgwaSl3CxyuIGTj+pIk1nWdkn?=
+ =?us-ascii?Q?5adfeI+ffWWFaYIAqYc72ocPe9ng/HS75aTW2miLzxqn8h7NPzcKpYFYRjXO?=
+ =?us-ascii?Q?thYC85EzTvn7vUg7mlr8wPJkEily9o/Fm9EXfnqAtZhSZYcMP/Z1/6E8+3WG?=
+ =?us-ascii?Q?x82pA79o6SBfw8IYE99Q6wU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Received: from [10.2.82.121] (130.44.175.231) by BL1PR13CA0184.namprd13.prod.outlook.com (2603:10b6:208:2be::9) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.8 via Frontend Transport; Mon, 29 Nov 2021 22:08:59 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ef4ec0ce-0b24-40a2-1f6d-08d9b384d85f
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3983:
-X-Microsoft-Antispam-PRVS: <MN2PR12MB3983B7AAE86B10EB38E4613BC2669@MN2PR12MB3983.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WZJ9tAz8A6MJBJ3QUTSg4tCidVPbl15Dts+RpmYDFfe0LNKSkIywoSHRIocl+f5zoGoX99RlQdEfVkPna3PJlJGoXzwN0tm9jWDdM/4j6ELnLnhyoCi1LG898D9c0hYhYg6DYQjRneDtodbld7mxH8KHzBT8SBViAeZClhJqr1khyUEhXVm+MNuf4VMsdbxrTwSCVygB/LZMgnhUL26qwKxWWRzozB2HhqOGHeV7PNcnU8OaDkiIo34L1/5oHgcWflJFHkiZytSA1D3KhTV0+XNyIejrl3ZGnHOg+WLTdVOZseo9SjbPgKV4Vp8BKHVobeQzsFLHY1lK1TTCVtVEa4l/oAtIyZGezsWch0khzV4/c89xguir64ElSEiF4Q/Mh1gfDQoCIZtXkuceRq4gghNPfz27BO1CBnwZWnb1La1gc9QhTt4ncQJNpqOwOnUvKwegD0Psifcbit/y2nrE+eOkCW+jAyt+D+SYb9lvi4EhfLIlbfJpdGNY131y05ihCaqgnslre+EGSLLUr7rA8g8tCnHE7u+8tCNcAK+Vi94BJaw9HEX4XSe0LWzCQYaSxNi69+flH7lVPD4hzFDjdoCnzpVvk6rn2Vq5QoOoh816IwtcII9v8xLcaRfK4ux39sF28z7znFTQQfKoFoGjyPxZqDke+17dJgQUwCDYJbUHAqqo7ERriTPzLtRWkO5SH+DFNrOH4ib+YX0TWv3Lsicq1PTUI22x5nzHr8HkLOU=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3823.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(16576012)(26005)(2616005)(6916009)(38100700002)(8936002)(53546011)(54906003)(36756003)(2906002)(66946007)(66556008)(956004)(186003)(316002)(83380400001)(33656002)(508600001)(86362001)(8676002)(4326008)(235185007)(5660300002)(21480400003)(66476007)(7416002)(45980500001)(72826004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KFivDfphpzyNfU4JRr13Xl4z6stZwmv+etn9zR/VX9AHy+HXuyQaG85Lm0Z0?=
- =?us-ascii?Q?zaz0TK6n3ZNT0hUVUDL0F29Lpn4z8VsmYdfx8UaQTn8kKu3Xx4K5zs9G/wgs?=
- =?us-ascii?Q?/DNDUSSQzNvvSGYsVq1L/7nrrpuimkZawcAJIlU6kM15/Xir2tDnqnlC9jgW?=
- =?us-ascii?Q?bNH6MHIiLYovMNpbHPWISng/f7zro6FTjrGHNWXxSz209zhn5MCkwyewwW6V?=
- =?us-ascii?Q?zoO4DM3UnyQNurmHgIjHl48ZPw2FcrxQ68/OmgS0jkiaDrfAQhF+gYjF1552?=
- =?us-ascii?Q?MvJ2Afp22509JAJlkObLJWCUjNlRY75X/cHlde9MtwNU0jkvbWIO6w5aeFDG?=
- =?us-ascii?Q?7s7aYnILH8DRDb35Wa3uNTTM9dKGOwJ94oTPqU2N5eMsRIWMrVImo3tk9Qt9?=
- =?us-ascii?Q?Ec1ssTMBM810nywI89apRMSUaR6sCIbCuPoHPxmspC4zES0J74h+GoO023du?=
- =?us-ascii?Q?M+Nw8rLSBVIFJNwU3vBkj7uKoAmUfRmNaOFML1vVY1YX8wU4DgLf+U6bk8a7?=
- =?us-ascii?Q?aw1aU8346oej/l5U36J569jKFGo7RlQNNWsNEKGfyqH9a91qLa5SV4scpSyT?=
- =?us-ascii?Q?0dbVykBlOnFjapTR3njXrWCRytVVEtIC41bjnRViXf2TLW7Gp1RC/eYljVJU?=
- =?us-ascii?Q?TUOrlUvn+haZYuMoiEcL7ctUoVizSG7BPeKEHG2WxKgom4hJYsnoR4CId2Pg?=
- =?us-ascii?Q?xAbenPwTPh7qG2A0mdCidff7kXsUhSg6OMuM1Yg/D0P4MWFB3PeRrCgFO/HF?=
- =?us-ascii?Q?5lLve2Eg7nyJL05o/8nmsQIcdc9mYiCLwJQNUuAwbhdCulaA6/Ogjw4dCBQv?=
- =?us-ascii?Q?3Zy2atXdf1fa8QJIITfOFYpn/d12NvcBBHCqgHE5x4GXqnR7x4+KXnsKx0FF?=
- =?us-ascii?Q?XvhcpvJ4IdQY8bVrK8tIlVT/yA9zfrIj19sCFTbPsRjYjdDoDc5t48PEm5KT?=
- =?us-ascii?Q?W80YawPwkRR9/8E+oTCU/ReFKqcjYeZfSXTb429uJ1Q7GtaokDxfIFcMq2Qe?=
- =?us-ascii?Q?3n2oKRyFhRYQwKuzgnL2xCSXK4QWEfTHCCjK+GKXcGlJcA5qNAMIwnSphnO6?=
- =?us-ascii?Q?Z8xdP3BbNTROvR2aTQHNKJ9HG438qt92g9luhP5+ZaDf4WfEXXc1eUgQlEnb?=
- =?us-ascii?Q?WfMdz7qgIAGByJXYJDEV1K5VX71F3kzXIAI6IN3qKxdjuZ8mUbukqRGpiB4I?=
- =?us-ascii?Q?junhmqzrg4nd4tF2E2kSDLVBZOfWtl1Od/gyrdUaIgS5+WJiYdDse0JvCjrC?=
- =?us-ascii?Q?YMZm8mYY78GgiGCtefkdnEU56fpPwrGH7zdd3AjpAA+Dkho1E/O4b7XKLAo+?=
- =?us-ascii?Q?03OF/sFRkK1eZ59/Ykgz+V2xbKlNVCiTs/7tKfI3XMz+iP1NBm/vp8I4A8Er?=
- =?us-ascii?Q?OmixYvP1v0g0kewwxE/IzYYNerx3N1Hy39HJjLoeYHgwAfd8z15I2l787fAd?=
- =?us-ascii?Q?qMc9XIGCZP1p7AhjRYL7Y+8f1/jt6Lqnhw5c12zHryug3PrzTQlo3m8TkXG6?=
- =?us-ascii?Q?kfQiQIv2GzeFce4UrqAEqgY4o117xP8EjqaZpxRJrR+yBMwrpMioAav0NeMU?=
- =?us-ascii?Q?katquDJ7xfSOGzK9/Hk=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ef4ec0ce-0b24-40a2-1f6d-08d9b384d85f
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3823.namprd12.prod.outlook.com
+X-OriginatorOrg: diasemi.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 22:09:00.0281
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR10MB3167.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2e803ec4-f99c-45c3-3fe4-08d9b384f0ec
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 22:09:40.7271
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bklzwKCTclG+BWxJtbSwfaiA+ZwNF6OMSsZAkkBQ+FsXwnTcNz7Zf6S3SJ1zlbY5
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3983
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ejLRBasMeuChuMng9bqbD+gbh/bTdPxywMy8bhqY+np7sr/NKlBVPBh7vKqWoJDJAe7Cad10rZqetbt6lgWEgA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR10MB3712
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=_MailMate_4B5044BF-6C2C-47FF-8D31-06E6118699F1_=
-Content-Type: text/plain
-
-On 23 Nov 2021, at 12:32, Vlastimil Babka wrote:
-
-> On 11/23/21 17:35, Zi Yan wrote:
->> On 19 Nov 2021, at 10:15, Zi Yan wrote:
->>>>> From what my understanding, cma required alignment of
->>>>> max(MAX_ORDER - 1, pageblock_order), because when MIGRATE_CMA was introduced,
->>>>> __free_one_page() does not prevent merging two different pageblocks, when
->>>>> MAX_ORDER - 1 > pageblock_order. But current __free_one_page() implementation
->>>>> does prevent that.
->>>>
->>>> But it does prevent that only for isolated pageblock, not CMA, and yout
->>>> patchset doesn't seem to expand that to CMA? Or am I missing something.
->>>
->>> Yeah, you are right. Originally, I thought preventing merging isolated pageblock
->>> with other types of pageblocks is sufficient, since MIGRATE_CMA is always
->>> converted from MIGRATE_ISOLATE. But that is not true. I will rework the code.
->>> Thanks for pointing this out.
->>>
->>
->> I find that two pageblocks with different migratetypes, like MIGRATE_RECLAIMABLE
->> and MIGRATE_MOVABLE can be merged into a single free page after I checked
->> __free_one_page() in detail and printed pageblock information during buddy page
->> merging.
->
-> Yes, that can happen.
->
-> I am not sure what consequence it will cause. Do you have any idea?
->
-> For MIGRATE_RECLAIMABLE or MIGRATE_MOVABLE or even MIGRATE_UNMOVABLE it's
-> absolutely fine. As long as these pageblocks are fully free (and they are if
-> it's a single free page spanning 2 pageblocks), they can be of any of these
-> type, as they can be reused as needed without causing fragmentation.
->
-> But in case of MIGRATE_CMA and MIGRATE_ISOLATE, uncontrolled merging would
-> break the specifics of those types. That's why the code is careful for
-> MIGRATE_ISOLATE, and MIGRATE_CMA was until now done in MAX_ORDER granularity.
-
-Thanks for the explanation. Basically migratetypes that can fall back to each
-other can be merged into a single free page, right?
-
-How about MIGRATE_HIGHATOMIC? It should not be merged with other migratetypes
-from my understanding.
-
-
---
-Best Regards,
-Yan, Zi
-
---=_MailMate_4B5044BF-6C2C-47FF-8D31-06E6118699F1_=
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQJDBAEBCgAtFiEEh7yFAW3gwjwQ4C9anbJR82th+ooFAmGlT3kPHHppeUBudmlk
-aWEuY29tAAoJEJ2yUfNrYfqK0ToP/3xsHoF15mPR7E4A+wmWq5NufZnqLsDp/BYx
-fTspt0RwFFCCYfGmltjtvaR3oJ6ZR/Zq4VGAH4bQqhV3RXW3ln+J10tGEr2P2/c3
-jkSlXj4buDI+7M310afqzeTgp4OKZ2Bl5cEg2VcgGfSi4peM3ndSzc/MFwOzh3vH
-L7ObLigzaUvuJbD3Rp6xq3GDj+53JUZh8wkjZuRlX2RsGVu/tjS2Or+jtP7+wL50
-WkcsyrEfOR8I7C92uArBGifAJQEP9jevsnwN6GJwI/ZEmga0djUBOL5AZcS2HEd4
-ikd9vESjZNs7WSO2j7Y84LhPojaHA5v1xlkoNOdTbw3ndg/LP4nwlAMqs6/2fP3Q
-7gmDAfOW8iZ9r9inH0HNFn0O+vtc+2X2TCgU0FPjv6osUzRc9SXJmTASPmwAa38C
-SUol5lwxsl78vG+A0knxOyusiK1Mb5iouJy/hPmuteobiCXS5PGe4ZL7WAm0Qv0U
-VdCBpuxcoB0GahO9KXWBuQ7EqCo2ubYKvsKQBeyByScKecbuKc55KMIUROPWONiB
-7jsNUrZ++nQzRQ176Az5Ig69f09f6e4BnphGCkLhhEvmJUu7MDbQT4NPEOjippHY
-MbAnuKkUDEF8xY904hlNFcDetthF+ARWVNlx8qWBKqSzfVDodRwNqNBsqoMs1X8o
-/QiCLa1r
-=neNK
------END PGP SIGNATURE-----
-
---=_MailMate_4B5044BF-6C2C-47FF-8D31-06E6118699F1_=--
+On Tues, Nov 29, 2021 at 15:25, Mark Brown wrote:
+> This doesn't build:
+Apologies for this

@@ -2,76 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2A2461C81
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DEDF461C8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348265AbhK2ROM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 12:14:12 -0500
-Received: from perceval.ideasonboard.com ([213.167.242.64]:38454 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346043AbhK2RMJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 12:12:09 -0500
-Received: from Monstersaurus.local (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A78F42A5;
-        Mon, 29 Nov 2021 18:08:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638205730;
-        bh=e1y61Mgloav2WdMgYxa58Sf1c4wfZ5W8NCesGLzRmeQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=a50gaqYsQ7CGeI3zThv3Y6H2CM4T6xRO1Zoz931+bKqe7ac4N7QcpDUVmbNidR5eV
-         IrzNVlTzXncfvjzbOTe9jZ2QPwVvDgDPa8zLs+ft5FN677t3Q0jfL1vqX882snbeFH
-         2NVc/D243yXhozVETZLeJ2ttvnhhbzGnVGAqf0/Q=
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm: rcar-du: Add DSI support to rcar_du_output_name
-Date:   Mon, 29 Nov 2021 17:08:45 +0000
-Message-Id: <20211129170845.2269532-1-kieran.bingham+renesas@ideasonboard.com>
-X-Mailer: git-send-email 2.30.2
+        id S1347968AbhK2RRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:17:15 -0500
+Received: from mga03.intel.com ([134.134.136.65]:17894 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346797AbhK2RPN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 12:15:13 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="235949847"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="235949847"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 09:10:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="458508532"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 29 Nov 2021 09:10:14 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mrkAP-000C9A-BW; Mon, 29 Nov 2021 17:10:13 +0000
+Date:   Tue, 30 Nov 2021 01:09:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     kbuild-all@lists.01.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/5] powerpc/inst: Refactor ___get_user_instr()
+Message-ID: <202111300028.pvdtx2Vc-lkp@intel.com>
+References: <97a171efd8c582e2bae82c31f2a9519823a20d3f.1638186773.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <97a171efd8c582e2bae82c31f2a9519823a20d3f.1638186773.git.christophe.leroy@csgroup.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DSI output names were not added when the DSI pipeline support was
-introduced.
+Hi Christophe,
 
-Add the correct labels for these outputs, and fix the sort order to
-match 'enum rcar_du_output' while we are here.
+I love your patch! Yet something to improve:
 
-Fixes: b291fdcf5114 ("drm: rcar-du: Add r8a779a0 device support")
-Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
-Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+[auto build test ERROR on powerpc/next]
+[also build test ERROR on v5.16-rc3 next-20211129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211129-195613
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20211130/202111300028.pvdtx2Vc-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/12f08114cece066b2640aef99e2bc74f49eebef5
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211129-195613
+        git checkout 12f08114cece066b2640aef99e2bc74f49eebef5
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/kernel/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/powerpc/include/asm/hw_breakpoint.h:13,
+                    from arch/powerpc/include/asm/processor.h:43,
+                    from arch/powerpc/include/asm/thread_info.h:40,
+                    from include/linux/thread_info.h:60,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/powerpc/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/mm.h:10,
+                    from arch/powerpc/kernel/align.c:17:
+   arch/powerpc/kernel/align.c: In function 'fix_alignment':
+>> arch/powerpc/include/asm/inst.h:12:32: error: variable '__suffix' set but not used [-Werror=unused-but-set-variable]
+      12 |         unsigned int __prefix, __suffix;                                \
+         |                                ^~~~~~~~
+   arch/powerpc/include/asm/inst.h:31:34: note: in expansion of macro '___get_user_instr'
+      31 | #define __get_user_instr(x, ptr) ___get_user_instr(__get_user, x, ptr)
+         |                                  ^~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/align.c:310:21: note: in expansion of macro '__get_user_instr'
+     310 |                 r = __get_user_instr(instr, (void __user *)regs->nip);
+         |                     ^~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   In file included from arch/powerpc/include/asm/hw_breakpoint.h:13,
+                    from arch/powerpc/include/asm/processor.h:43,
+                    from arch/powerpc/include/asm/thread_info.h:40,
+                    from include/linux/thread_info.h:60,
+                    from arch/powerpc/include/asm/ptrace.h:323,
+                    from arch/powerpc/include/asm/hw_irq.h:12,
+                    from arch/powerpc/include/asm/irqflags.h:12,
+                    from include/linux/irqflags.h:16,
+                    from include/asm-generic/cmpxchg-local.h:6,
+                    from arch/powerpc/include/asm/cmpxchg.h:526,
+                    from arch/powerpc/include/asm/atomic.h:11,
+                    from include/linux/atomic.h:7,
+                    from include/linux/rcupdate.h:25,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from include/linux/uaccess.h:8,
+                    from arch/powerpc/kernel/hw_breakpoint_constraints.c:3:
+   arch/powerpc/kernel/hw_breakpoint_constraints.c: In function 'wp_get_instr_detail':
+>> arch/powerpc/include/asm/inst.h:12:32: error: variable '__suffix' set but not used [-Werror=unused-but-set-variable]
+      12 |         unsigned int __prefix, __suffix;                                \
+         |                                ^~~~~~~~
+   arch/powerpc/include/asm/inst.h:31:34: note: in expansion of macro '___get_user_instr'
+      31 | #define __get_user_instr(x, ptr) ___get_user_instr(__get_user, x, ptr)
+         |                                  ^~~~~~~~~~~~~~~~~
+   arch/powerpc/kernel/hw_breakpoint_constraints.c:135:13: note: in expansion of macro '__get_user_instr'
+     135 |         if (__get_user_instr(*instr, (void __user *)regs->nip))
+         |             ^~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+
+
+vim +/__suffix +12 arch/powerpc/include/asm/inst.h
+
+650b55b707fdfa Jordan Niethe    2020-05-15   6  
+35506a3e2d7c4d Christophe Leroy 2021-03-10   7  #define ___get_user_instr(gu_op, dest, ptr)				\
+35506a3e2d7c4d Christophe Leroy 2021-03-10   8  ({									\
+042e0860e1c1d6 Christophe Leroy 2021-05-20   9  	long __gui_ret;							\
+9134806e149ebb Christophe Leroy 2021-05-20  10  	u32 __user *__gui_ptr = (u32 __user *)ptr;			\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  11  	struct ppc_inst __gui_inst;					\
+35506a3e2d7c4d Christophe Leroy 2021-03-10 @12  	unsigned int __prefix, __suffix;				\
+b3a9e523237013 Christophe Leroy 2021-05-20  13  									\
+b3a9e523237013 Christophe Leroy 2021-05-20  14  	__chk_user_ptr(ptr);						\
+9134806e149ebb Christophe Leroy 2021-05-20  15  	__gui_ret = gu_op(__prefix, __gui_ptr);				\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  16  	if (__gui_ret == 0) {						\
+12f08114cece06 Christophe Leroy 2021-11-29  17  		if (IS_ENABLED(CONFIG_PPC64) && (__prefix >> 26) == OP_PREFIX) { \
+9134806e149ebb Christophe Leroy 2021-05-20  18  			__gui_ret = gu_op(__suffix, __gui_ptr + 1);	\
+042e0860e1c1d6 Christophe Leroy 2021-05-20  19  			__gui_inst = ppc_inst_prefix(__prefix, __suffix); \
+35506a3e2d7c4d Christophe Leroy 2021-03-10  20  		} else {						\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  21  			__gui_inst = ppc_inst(__prefix);		\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  22  		}							\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  23  		if (__gui_ret == 0)					\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  24  			(dest) = __gui_inst;				\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  25  	}								\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  26  	__gui_ret;							\
+35506a3e2d7c4d Christophe Leroy 2021-03-10  27  })
+35506a3e2d7c4d Christophe Leroy 2021-03-10  28  
+
 ---
- drivers/gpu/drm/rcar-du/rcar_du_drv.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-index 5612a9e7a905..5a8131ef81d5 100644
---- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-+++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
-@@ -544,10 +544,12 @@ const char *rcar_du_output_name(enum rcar_du_output output)
- 	static const char * const names[] = {
- 		[RCAR_DU_OUTPUT_DPAD0] = "DPAD0",
- 		[RCAR_DU_OUTPUT_DPAD1] = "DPAD1",
--		[RCAR_DU_OUTPUT_LVDS0] = "LVDS0",
--		[RCAR_DU_OUTPUT_LVDS1] = "LVDS1",
-+		[RCAR_DU_OUTPUT_DSI0] = "DSI0",
-+		[RCAR_DU_OUTPUT_DSI1] = "DSI1",
- 		[RCAR_DU_OUTPUT_HDMI0] = "HDMI0",
- 		[RCAR_DU_OUTPUT_HDMI1] = "HDMI1",
-+		[RCAR_DU_OUTPUT_LVDS0] = "LVDS0",
-+		[RCAR_DU_OUTPUT_LVDS1] = "LVDS1",
- 		[RCAR_DU_OUTPUT_TCON] = "TCON",
- 	};
- 
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

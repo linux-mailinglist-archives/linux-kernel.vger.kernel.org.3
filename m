@@ -2,293 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7326461FEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:10:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FEE461FF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244671AbhK2TNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:13:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37616 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230396AbhK2TLM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:11:12 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E326B815C3;
-        Mon, 29 Nov 2021 19:07:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE76AC53FC7;
-        Mon, 29 Nov 2021 19:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638212871;
-        bh=UGVyIY2zjpTauDswt/GV6m6Vp4apDdtw270zo6gW2PU=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=M/uzRa+SD43tNKMRr4/t5K/rZVPY4elhSSOZ9/vajgAO0ZKCRB0PG6Tqio0ybvlXF
-         F/ZmmrdWZKqLAi2LDIYXdT5Y+bKoyRDALacegVQJwYRf82UDGKBM7PyO76KRhvdvzf
-         b9wLgNKVD5Ro0mH0BRlhZb6WdDIYQfTxYjk16q2IQP13KH9kBJMvbQUr6ksxGdEFIN
-         iguyOvJ99UUZfuZgB3gLCPCJQbilVtEmKEafS9vhJe94TJd8ttMPptc6KNHu7ilXp9
-         keLq56DsVG5Zv2Wdtl9x+NntIL4kdR8JEdVUmx+Yp3D7GzWDzvkc67NBUhbvOqqck2
-         evlv9OCq4HBlw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A1ADA5C0E4D; Mon, 29 Nov 2021 11:07:51 -0800 (PST)
-Date:   Mon, 29 Nov 2021 11:07:51 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Martin Lau <kafai@fb.com>, Steven Rostedt <rostedt@goodmis.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-doc@vger.kernel.org, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-        Joerg Roedel <jroedel@suse.de>, rcu@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>, kernelci@groups.io,
-        Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: next/master bisection: baseline.dmesg.alert on
- qemu_arm64-virt-gicv3
-Message-ID: <20211129190751.GM641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <61a14e72.1c69fb81.a607d.66fb@mx.google.com>
- <42cba265-2616-9382-324f-11718c8dca0c@collabora.com>
+        id S1351027AbhK2TNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:13:52 -0500
+Received: from mail-dm6nam12on2083.outbound.protection.outlook.com ([40.107.243.83]:8360
+        "EHLO NAM12-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233999AbhK2TLo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 14:11:44 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q5PryMhWCn3YVbu6U57xsiDi2V3sv/Ymo0U0elwrjU4e10z9yqN1fWhHlmVKTN1bAUuTcKoqJQzIthpPDbIFsT3Ju9FPgDhF0NpOBBg2TQPuCN6TqvvntPyjr941hUsmQwVw7S75HXFrk7ihh1qaWE+iqmASCFwzTWm5dDyEutuONw1w6QRg6gAUENdxiPbOO6flXKLeakGbKGkzVO2BXGnUaIdGZwg5zoAJ0T5GpLEsZmuvgUAtV80pjMAzEZ7qC73Vskxse3LimKfaBQDT1edkuN7/0sVxag2aQwUdk4rgDNV/nCf2NcHqWC0+X/lkFyj1LyIPkhSfJlBuZPNN5Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=buoPcLNv7ygYept2gHLWD8Xof/w+BbT/cMoaBJQROjI=;
+ b=HMlPSuK9b3ckXj7JVBGPl79wpDVGz5ryF96o64thnK9wK6PmgK0yLOzIQhvXGni9uGDzVHfRvTdZikSfd0mIm+cKzqmIP0oun8UZv8/HJvq3+dBrYCHjvpYKh99LwO9z/Gc1hWm6JkLcrgtp5D+hvjrrhFCZqvg2qgiyfheYev7xN0JZr0qk1WN0AJUvVYk2oD1szQJELZ+2cT2vLwAWQIyyPIfqzpA5dq2OiDO5h2JgyAn5526NG/9rx/csI1QE5XNTGNN4CU4q4mQyzioumn8tdxrHjyg9fbz1osUKhiQKTl7w2hkwYkfb8bIejy5euZmfCbRrDStFTwqZSzVVtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=buoPcLNv7ygYept2gHLWD8Xof/w+BbT/cMoaBJQROjI=;
+ b=ICwRBwORZ6czX3pfunUktfaIxIbNqH34eZTINEkyYw2n0Z3THEISX3DMRZU1jSStZfy4sbaLD25wQ4/Thpk3bQeo2yOqoQaXuuyu5kcUwcbHhR6T07upixsZ+hhB7zIoWWNc5AzbZjDF0+gmFpbfJElbkEo7CmXxD534jEAEka0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
+ by DM4PR12MB5086.namprd12.prod.outlook.com (2603:10b6:5:389::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
+ 2021 19:08:25 +0000
+Received: from DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1ddd:71e4:5803:e44a]) by DM4PR12MB5229.namprd12.prod.outlook.com
+ ([fe80::1ddd:71e4:5803:e44a%3]) with mapi id 15.20.4734.020; Mon, 29 Nov 2021
+ 19:08:25 +0000
+Subject: Re: [PATCH] KVM: MMU: shadow nested paging does not have PKU
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Lai Jiangshan <laijs@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     stable@vger.kernel.org
+References: <20211126132131.26077-1-pbonzini@redhat.com>
+ <2091ec8e-299a-8b3d-596e-75cf4b68fde1@linux.alibaba.com>
+ <b5e2c332-59a8-7fa8-5e59-4cb2e5be3b8d@redhat.com>
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+Message-ID: <9f56fc4c-9842-a125-0f95-c32e248b677c@amd.com>
+Date:   Mon, 29 Nov 2021 13:08:22 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <b5e2c332-59a8-7fa8-5e59-4cb2e5be3b8d@redhat.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MN2PR08CA0008.namprd08.prod.outlook.com
+ (2603:10b6:208:239::13) To DM4PR12MB5229.namprd12.prod.outlook.com
+ (2603:10b6:5:398::12)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42cba265-2616-9382-324f-11718c8dca0c@collabora.com>
+Received: from [10.236.30.241] (165.204.77.1) by MN2PR08CA0008.namprd08.prod.outlook.com (2603:10b6:208:239::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20 via Frontend Transport; Mon, 29 Nov 2021 19:08:24 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f1c8c740-5ac3-4c83-82f3-08d9b36b9e46
+X-MS-TrafficTypeDiagnostic: DM4PR12MB5086:
+X-Microsoft-Antispam-PRVS: <DM4PR12MB50868EA2C9C439624C2EDC79EC669@DM4PR12MB5086.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7219;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WTiq/uHUaFBrfNX1/2qE9F9CAH34OKtxgGc/IekPvfCEqGknGWU0bQ5O1u4S3mG3GKfyFSvSMz0w+fXdxQXmjGwpCoK2av+QJzwkzaxQ3s+om7LcasOUOzXbKUdcuFy2VN6U9O/SBWpA7ZlKx5PsQu8hpcN7EZ7EIo+rhY2J8RVaRl5jHkMOxH+lOaLPY9fS0c17EkMP6i4OO58RrLWXDMadRsQrFWNuTyZH0NHmS4MN11jnTDo38EtYjBu0sVi3k8OZo4psjj0yvg0EJEzFPM91C+oUwDgv4PLiIfTnwPJpfVKhWdiPWpoXfkbRbfpzuF+WgH4L72ibn05KlEoCIj3Fe4NhjrLSmr69vVFw4UPRq31kwbTYTnR0qhnHPxIpvlRSAsWOuxCTdWWOjhii9feKuBaL8NBzevfgmkatmvTXd8Eii3UKbwjZ6601w8SecTr8hpHeaA0xrAwFzemXOWC0//fidpTSD2q+HWoC6HdZqZv3tWlcQGLoAdwKWZXHxHEifE8evfAvD9EiueP4WphmXnCUSgpW0uH7H7jP3IAcW3QjVJX+trSiW8DJKhvJ18Ic2nMpgOXz3LdkpOL6rsAaU8q8aQvaMFNaWuo487MyOOR5D2YGtOdoPC35f2pOcdqYxbCYnD7zvQe5g6ua7GrQxm6rX8lMaJA7n6Ed6YKCRIhhZ76eIKpE5E2crqVvuGSYlZzdx8wfjd/2hd+OGx1aQlQr0oYfbuibN2I2HHctKEGuAXb9Z9sf/pBzJntN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(66946007)(186003)(66556008)(2616005)(8936002)(66476007)(6486002)(956004)(16576012)(26005)(31696002)(53546011)(4326008)(83380400001)(316002)(508600001)(8676002)(38100700002)(36756003)(5660300002)(86362001)(31686004)(2906002)(4744005)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NzRydnZhajMwVXZMOC9hR2w3WXE1SkZXNzk3YjFnTnJtcGNWSXR2Wm93NFRo?=
+ =?utf-8?B?eVhkckljZm5NZFVRWC8rRStSUDRPRGxZVDNoSEo0bU40S2pLNDhNV1hjTDBY?=
+ =?utf-8?B?Wk1PUTRicWw1K1hXaFZnV0wzRTUzd0tnalFRak5YNy9td0JlZjg3dVAxbGE5?=
+ =?utf-8?B?SEtqUDNVbEhHaUhlcVhmVGpMTUVTSmUvYjM4TWpuZ2VJSlV0RDJkckhSa2lz?=
+ =?utf-8?B?djFHTEx2T0JJZUg3NUxxZklyTmQ5SGsyaG1tRnA2eGRqWW9NbU0zSXN4UU5K?=
+ =?utf-8?B?SFJTbkU0VEsvWWlsL3FTNGlsS2pmKzllbGVSTW42S3dmK1JMQlRQQlFvSFpW?=
+ =?utf-8?B?bWppWXI5NXc3REphZWUwQld1ZS95SmxMNS9aRHZ4a1Z5Um50S2xRUVYzRnZy?=
+ =?utf-8?B?aGFLRVJ5YTEzdlFNWnVHVFlHWk5lSHVXQnk3RGJpVWFESDJyVXk1Vy8xd2dL?=
+ =?utf-8?B?MlIrUXNwU1l4ZEdTdERWTEtQZFZQSEQ1QnJFTVoza2VXOWVsWDQ1RldiOSsw?=
+ =?utf-8?B?MmhiTVpaWUowTElHTjFBM0ZHS29qQW41Wm5GUklqTVYwNjBNaHhTbmVZMXV5?=
+ =?utf-8?B?U3BYWUtMUTZOd2FqWk1XMTFreWE5VWZwbTVjSGdhNGg0a0Zlc2c4cjZETXpl?=
+ =?utf-8?B?QTYwVDQrSlhlbW1pc3N6bmJ6S05MRFdGMmdkOEtoZEFQbjZDeUJmWE1pNHp1?=
+ =?utf-8?B?N3dJTTdiSmEzMDNwbnhJZnpEZytJeWdaQ0ovTHVZdEVpUDIwVEpoUXZ1OVVF?=
+ =?utf-8?B?bHpVVU15WXE0Q1RuRkg1QzB2ZEhSQUtuV0NOd2x5MVFaZ2RrRnpobUswa2V2?=
+ =?utf-8?B?T1hTdlp5c1VaMDltaG1XS01nNnNPMTR4SmpXcEQ4V0Z3MDNJWVdzQ3FRaG0x?=
+ =?utf-8?B?aUo2aFpuZW5qNXdwMVB2Ri9NazRLMnZUajhwUVpNelMxZlpFTDVMQ0Z4ekor?=
+ =?utf-8?B?OG9nSnJIb2JTYlJET3NFT2hGNXBvQzE2R1NPcVc3ajhrOW9RM3pOYkorbSth?=
+ =?utf-8?B?ejlaRVR4OWVVb2c2K29GNGx1ZktyOUREZzNQRllyNlE5L2ZtU0xsYW81TDNV?=
+ =?utf-8?B?WURhRWRsaHhtMFZweGY3NWVMckpBMmMzaHVUYlRJTTFtR0NKaDQ2NTFucVlt?=
+ =?utf-8?B?T3gyVGxRdm5NSi8wUW1FMDlrU2NaeUR3cmxncVpXc0FQNjBVS2NDL09JRjFK?=
+ =?utf-8?B?N1dkbU5DVlVDdVRDclNDMkE2NXByaVVLcFVxbE1Ca2JkblhjckJ6RWhveW0y?=
+ =?utf-8?B?ZjlpRG91OC81L3dTUXJSeTQ2UkRjN2Q3aDBvNEZWRUJ2Q2hZTDY1NXppRUdN?=
+ =?utf-8?B?WXFhNnNBbDJvWmxzb3R6N0FJUmdYUGh5OVJEZmhza2hUTGdUNk03WnpveHdv?=
+ =?utf-8?B?ZmJ4RFQ3QVBQcnZzZk52OVNoekRTemF0TU9nYm9UV1RCb0VWWUZIQlNvb2hL?=
+ =?utf-8?B?eDZHZ3ZRalVSRHhWRHJJS25QeHU0SERXTFYyNlVmOTBqRFBrUjRoVTFIN24z?=
+ =?utf-8?B?V1lHRFpnUDF4RTBwdjRndlhjQVdDeTQrVzlWcG93SlUzMGFqY0FBREh2WjR4?=
+ =?utf-8?B?TXJ2OGV1YVAwL0E4N0hDS014MDUwenJUVzNNcElYL2o5MGtvL1gxWnA0bnYv?=
+ =?utf-8?B?SDFGOGZOWmJmNGN6TW9GTnl5NGJ5b1RSV04zemptTUdldU4xWkdFclBlQ0dI?=
+ =?utf-8?B?cnJVcCtWYmlkZ0lIZFIxd3d2NHJKREZ3VFJhNUNraFVVYlFEWWRrZUJMVEVL?=
+ =?utf-8?B?cWdoVm1uc1lMWFlNaHJmY3pPbTczeDNMRzAvTzZ4M2VERlVDYmlQbFdVQW9V?=
+ =?utf-8?B?UDF4ZW1kdThhcnlDOFNHcU9NdkdkVU8zVzFmY0VsdURDd1ovYm1UV21XN2Q0?=
+ =?utf-8?B?TGswZkJoZVpubWM3dWNPRlM1RFVKdHhQRVZaOFRNQ1B6TjJvblVyTzJhaWdi?=
+ =?utf-8?B?Nk1wREJyMjVvTW5YNmVLQVZvaEp0VW40ZkJiUXRHbkh1L0NtZEh0b2FNVzQz?=
+ =?utf-8?B?TnBYWGxpaUtqLzIrQnFmempzbG5CMHBHWmwvemovYUdzU3Y3SkxpNnNuUjJO?=
+ =?utf-8?B?MWI0dVZ5cW9OZXdiYW4zajBrdTdBRWJNNWNDcnIzcnpORC9ReXpPQ2dVcE1X?=
+ =?utf-8?B?MXkzZWwrSGtEd1BEVnF2YjhzL3hJWmZwVUZpaWRFZ0RrSkJzaGJGT1FobGhl?=
+ =?utf-8?Q?9hplSf6nuPl8+8iz1y7vmnY=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1c8c740-5ac3-4c83-82f3-08d9b36b9e46
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 19:08:24.8905
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mKHSozQ7DYkMENWoHClg3vrQSObnbvLBwlVIjQ8bg8xjbhcC8C+xy37M07E2ldDWKeLzRkNwShO6kJT1M2qRkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5086
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 06:50:01PM +0000, Guillaume Tucker wrote:
-> Hi Paul,
+On 11/27/21 4:25 AM, Paolo Bonzini wrote:
+> On 11/27/21 02:21, Lai Jiangshan wrote:
+>>
+>>
+>> On 2021/11/26 21:21, Paolo Bonzini wrote:
+>>> Initialize the mask for PKU permissions as if CR4.PKE=0, avoiding
+>>> incorrect interpretations of the nested hypervisor's page tables.
+>>
+>> I think the AMD64 volume2 Architecture Programmer’s Manual does not
+>> specify it, but it seems that for a sane NPT walk, PKU should not work
+>> in NPT.
 > 
-> Please see the bisection report below about a new kernel alert
-> message.
+> The PK bit is not defined in the nested page fault EXITINFO1, too. Thomas, 
+> can you have it fixed in the APM that the host's SMEP, SMAP and PKE bits 
+> do not affect nested page table walks?
 > 
-> Reports aren't automatically sent to the public while we're
-> trialing new bisection features on kernelci.org but this one
-> looks valid.
-> 
-> Some more details can be found here:
-> 
->   https://linux.kernelci.org/test/case/id/61a4f02ad5a9e3a5f218f6f6/
-> 
-> The bisection was run on QEMU but it seems to appear on all
-> platforms as it's not an architecture-specific change.
-> Presumably, none of the platforms in KernelCI is setting a value
-> for rcu_task_enqueue_lim at the moment.
-> 
-> Alert messages normally highlight potential problems, so ideally
-> they would need to be resolved.  Should the message in this case
-> really be a pr_alert(), and if so what would be the recommended
-> way to avoid it?
 
-It is to be unconditionally printed, so I am queueing a fixup that
-downgrades it to pr_info().  Does that work for you?
+I talked to our documentation folks and they will look to update the APM 
+with the appropriate information.
 
-							Thanx, Paul
-
-> Best wishes,
-> Guillaume
-> 
-> 
-> GitHub: https://github.com/kernelci/kernelci-project/issues/78
-> 
-> On 26/11/2021 21:15, kernelci.org bot wrote:
-> > * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-> > * This automated bisection report was sent to you on the basis  *
-> > * that you may be involved with the breaking commit it has      *
-> > * found.  No manual investigation has been done to verify it,   *
-> > * and the root cause of the problem may be somewhere else.      *
-> > *                                                               *
-> > * If you do send a fix, please include this trailer:            *
-> > *   Reported-by: "kernelci.org bot" <bot@kernelci.org>          *
-> > *                                                               *
-> > * Hope this helps!                                              *
-> > * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-> > 
-> > next/master bisection: baseline.dmesg.alert on qemu_arm64-virt-gicv3
-> > 
-> > Summary:
-> >   Start:      f30a24ed97b40 Add linux-next specific files for 20211126
-> >   Plain log:  https://storage.kernelci.org/next/master/next-20211126/arm64/defconfig+CONFIG_ARM64_64K_PAGES=y/clang-13/lab-collabora/baseline-qemu_arm64-virt-gicv3.txt
-> >   HTML log:   https://storage.kernelci.org/next/master/next-20211126/arm64/defconfig+CONFIG_ARM64_64K_PAGES=y/clang-13/lab-collabora/baseline-qemu_arm64-virt-gicv3.html
-> >   Result:     dc9166f1253df rcu-tasks: Use more callback queues if contention encountered
-> > 
-> > Checks:
-> >   revert:     PASS
-> >   verify:     PASS
-> > 
-> > Parameters:
-> >   Tree:       next
-> >   URL:        https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-> >   Branch:     master
-> >   Target:     qemu_arm64-virt-gicv3
-> >   CPU arch:   arm64
-> >   Lab:        lab-collabora
-> >   Compiler:   clang-13
-> >   Config:     defconfig+CONFIG_ARM64_64K_PAGES=y
-> >   Test case:  baseline.dmesg.alert
-> > 
-> > Breaking commit found:
-> > 
-> > -------------------------------------------------------------------------------
-> > commit dc9166f1253df20e01b0132ece22efaeb5b0a7e0
-> > Author: Paul E. McKenney <paulmck@kernel.org>
-> > Date:   Wed Nov 24 15:12:15 2021 -0800
-> > 
-> >     rcu-tasks: Use more callback queues if contention encountered
-> >     
-> >     The rcupdate.rcu_task_enqueue_lim module parameter allows system
-> >     administrators to tune the number of callback queues used by the RCU
-> >     Tasks flavors.  However if callback storms are infrequent, it would
-> >     be better to operate with a single queue on a given system unless and
-> >     until that system actually needed more queues.  Systems not needing
-> >     more queues can then avoid the overhead of checking the extra queues
-> >     and especially avoid the overhead of fanning workqueue handlers out to
-> >     all CPUs to invoke callbacks.
-> >     
-> >     This commit therefore switches to using all the CPUs' callback queues if
-> >     call_rcu_tasks_generic() encounters too much lock contention.  The amount
-> >     of lock contention to tolerate defaults to 100 contended lock acquisitions
-> >     per jiffy, and can be adjusted using the new rcupdate.rcu_task_contend_lim
-> >     module parameter.
-> >     
-> >     Such switching is undertaken only if the rcupdate.rcu_task_enqueue_lim
-> >     module parameter is negative, which is its default value (-1).
-> >     This allows savvy systems administrators to set the number of queues
-> >     to some known good value and to not have to worry about the kernel doing
-> >     any second guessing.
-> >     
-> >     Reported-by: Martin Lau <kafai@fb.com>
-> >     Cc: Neeraj Upadhyay <neeraj.iitr10@gmail.com>
-> >     Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> > index f1f3761fe42c8..fc5e20afaeefa 100644
-> > --- a/Documentation/admin-guide/kernel-parameters.txt
-> > +++ b/Documentation/admin-guide/kernel-parameters.txt
-> > @@ -4813,6 +4813,14 @@
-> >  			period to instead use normal non-expedited
-> >  			grace-period processing.
-> >  
-> > +	rcupdate.rcu_task_contend_lim= [KNL]
-> > +			Set the minimum number of callback-queuing-time
-> > +			lock-contention events per jiffy required to
-> > +			cause the RCU Tasks flavors to switch to per-CPU
-> > +			callback queuing.  This switching only occurs
-> > +			when rcupdate.rcu_task_enqueue_lim is set to
-> > +			the default value of -1.
-> > +
-> >  	rcupdate.rcu_task_enqueue_lim= [KNL]
-> >  			Set the number of callback queues to use for the
-> >  			RCU Tasks family of RCU flavors.  The default
-> > diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> > index 0cb20e5b3e856..7da3b500fb901 100644
-> > --- a/kernel/rcu/tasks.h
-> > +++ b/kernel/rcu/tasks.h
-> > @@ -142,6 +142,10 @@ module_param(rcu_task_stall_timeout, int, 0644);
-> >  static int rcu_task_enqueue_lim __read_mostly = -1;
-> >  module_param(rcu_task_enqueue_lim, int, 0444);
-> >  
-> > +static bool rcu_task_cb_adjust;
-> > +static int rcu_task_contend_lim __read_mostly = 100;
-> > +module_param(rcu_task_contend_lim, int, 0444);
-> > +
-> >  /* RCU tasks grace-period state for debugging. */
-> >  #define RTGS_INIT		 0
-> >  #define RTGS_WAIT_WAIT_CBS	 1
-> > @@ -207,8 +211,11 @@ static void cblist_init_generic(struct rcu_tasks *rtp)
-> >  	int lim;
-> >  
-> >  	raw_spin_lock_irqsave(&rtp->cbs_gbl_lock, flags);
-> > -	if (rcu_task_enqueue_lim < 0)
-> > -		rcu_task_enqueue_lim = nr_cpu_ids;
-> > +	if (rcu_task_enqueue_lim < 0) {
-> > +		rcu_task_enqueue_lim = 1;
-> > +		rcu_task_cb_adjust = true;
-> > +		pr_alert("%s: Setting adjustable number of callback queues.\n", __func__);
-> > +	}
-> >  	else if (rcu_task_enqueue_lim == 0)
-> >  		rcu_task_enqueue_lim = 1;
-> >  	lim = rcu_task_enqueue_lim;
-> > @@ -251,6 +258,7 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
-> >  {
-> >  	unsigned long flags;
-> >  	unsigned long j;
-> > +	bool needadjust = false;
-> >  	bool needwake;
-> >  	struct rcu_tasks_percpu *rtpcp;
-> >  
-> > @@ -266,7 +274,9 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
-> >  			rtpcp->rtp_jiffies = j;
-> >  			rtpcp->rtp_n_lock_retries = 0;
-> >  		}
-> > -		rtpcp->rtp_n_lock_retries++;
-> > +		if (rcu_task_cb_adjust && ++rtpcp->rtp_n_lock_retries > rcu_task_contend_lim &&
-> > +		    READ_ONCE(rtp->percpu_enqueue_lim) != nr_cpu_ids)
-> > +			needadjust = true;  // Defer adjustment to avoid deadlock.
-> >  	}
-> >  	if (!rcu_segcblist_is_enabled(&rtpcp->cblist)) {
-> >  		raw_spin_unlock_rcu_node(rtpcp); // irqs remain disabled.
-> > @@ -276,6 +286,15 @@ static void call_rcu_tasks_generic(struct rcu_head *rhp, rcu_callback_t func,
-> >  	needwake = rcu_segcblist_empty(&rtpcp->cblist);
-> >  	rcu_segcblist_enqueue(&rtpcp->cblist, rhp);
-> >  	raw_spin_unlock_irqrestore_rcu_node(rtpcp, flags);
-> > +	if (unlikely(needadjust)) {
-> > +		raw_spin_lock_irqsave(&rtp->cbs_gbl_lock, flags);
-> > +		if (rtp->percpu_enqueue_lim != nr_cpu_ids) {
-> > +			WRITE_ONCE(rtp->percpu_enqueue_shift, ilog2(nr_cpu_ids));
-> > +			smp_store_release(&rtp->percpu_enqueue_lim, nr_cpu_ids);
-> > +			pr_alert("Switching %s to per-CPU callback queuing.\n", rtp->name);
-> > +		}
-> > +		raw_spin_unlock_irqrestore(&rtp->cbs_gbl_lock, flags);
-> > +	}
-> >  	/* We can't create the thread unless interrupts are enabled. */
-> >  	if (needwake && READ_ONCE(rtp->kthread_ptr)) {
-> >  		irq_work_queue(&rtpcp->rtp_irq_work);
-> > -------------------------------------------------------------------------------
-> > 
-> > 
-> > Git bisection log:
-> > 
-> > -------------------------------------------------------------------------------
-> > git bisect start
-> > # good: [8ced7ca3570333998ad2088d5a6275701970e28e] Merge tag 'block-5.16-2021-11-25' of git://git.kernel.dk/linux-block
-> > git bisect good 8ced7ca3570333998ad2088d5a6275701970e28e
-> > # bad: [f30a24ed97b401416118756fa35fbe5d28f999e3] Add linux-next specific files for 20211126
-> > git bisect bad f30a24ed97b401416118756fa35fbe5d28f999e3
-> > # good: [d7359ce68f20102beeec57e760b746e1f76ab65c] Merge branch 'mtd/next' of git://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git
-> > git bisect good d7359ce68f20102beeec57e760b746e1f76ab65c
-> > # good: [6eb0c6fb36d50e66ca0b686ec0eebd7eddff811b] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/mmc.git
-> > git bisect good 6eb0c6fb36d50e66ca0b686ec0eebd7eddff811b
-> > # bad: [e62c6fa2d7d055d657c00734314d6abc664d28b5] Merge branch 'staging-next' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-> > git bisect bad e62c6fa2d7d055d657c00734314d6abc664d28b5
-> > # good: [0ebaaa3b9daaf0341c75a66b8b33399e23e40a8f] Merge branch 'edac-for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/ras/ras.git
-> > git bisect good 0ebaaa3b9daaf0341c75a66b8b33399e23e40a8f
-> > # bad: [556fc834ce0be2f0dbfd8ae2bfb3840326d12cb9] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git
-> > git bisect bad 556fc834ce0be2f0dbfd8ae2bfb3840326d12cb9
-> > # good: [ad3b4071d577f2779c706a22956b6d167710459b] refscale: Simplify the errexit checkpoint
-> > git bisect good ad3b4071d577f2779c706a22956b6d167710459b
-> > # good: [24f474cf45326225f613b58b191600311109695b] rcutorture: Cause TREE02 and TREE10 scenarios to do more callback flooding
-> > git bisect good 24f474cf45326225f613b58b191600311109695b
-> > # bad: [731f2830b96ce040e52b227346087e0dc3a6f5d0] Merge branch 'linux-next' of git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git
-> > git bisect bad 731f2830b96ce040e52b227346087e0dc3a6f5d0
-> > # bad: [3a528960b4b5d4069e4b066a1d9278862e902abc] Merge branch 'rcu/next' of git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-> > git bisect bad 3a528960b4b5d4069e4b066a1d9278862e902abc
-> > # bad: [a106e93308b6c60944c9021fc2cad377639584a2] rcu/nocb: Remove rdp from nocb list when de-offloaded
-> > git bisect bad a106e93308b6c60944c9021fc2cad377639584a2
-> > # good: [a3d09240cbfd98525dbd7038a4ec1afb4bc896a2] rcu-tasks: Avoid raw-spinlocked wakeups from call_rcu_tasks_generic()
-> > git bisect good a3d09240cbfd98525dbd7038a4ec1afb4bc896a2
-> > # bad: [4e83e8074d198b5849926d4a7d921063b24c0250] rcutorture: Test RCU Tasks lock-contention detection
-> > git bisect bad 4e83e8074d198b5849926d4a7d921063b24c0250
-> > # bad: [dc9166f1253df20e01b0132ece22efaeb5b0a7e0] rcu-tasks: Use more callback queues if contention encountered
-> > git bisect bad dc9166f1253df20e01b0132ece22efaeb5b0a7e0
-> > # first bad commit: [dc9166f1253df20e01b0132ece22efaeb5b0a7e0] rcu-tasks: Use more callback queues if contention encountered
-> > -------------------------------------------------------------------------------
-> > 
-> 
+Thanks,
+Tom

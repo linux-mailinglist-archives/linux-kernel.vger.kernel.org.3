@@ -2,202 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B66C4616AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:36:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7FE4616EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377984AbhK2NjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:39:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:50768 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244530AbhK2NhO (ORCPT
+        id S244071AbhK2NsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:48:04 -0500
+Received: from smtp-fw-9103.amazon.com ([207.171.188.200]:54059 "EHLO
+        smtp-fw-9103.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233864AbhK2NqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:37:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638192837;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CFjxye30orMI7i89fFT7gDDtQnI0xfPiALwP4O76QSI=;
-        b=ccQAJfvZ3khCKzN+YyaTgxPB+87tmn9ESuATvpXro/UQ7Ck+rlw61iv+TN2lfvJNqSTB7D
-        3Xy+UKHb2O06ffhdMZyMFql3Y3+FR2jewz38vj1rz1z6v5RbDcTbiK5LVIs5+KfnoE3mvJ
-        kLOa2k4Uwnipe4/I3tNsCOtmp3r8W/M=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-470-gDxi5L9mNF22T7t0BYOxtg-1; Mon, 29 Nov 2021 08:33:55 -0500
-X-MC-Unique: gDxi5L9mNF22T7t0BYOxtg-1
-Received: by mail-wm1-f71.google.com with SMTP id 138-20020a1c0090000000b00338bb803204so8600650wma.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 05:33:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CFjxye30orMI7i89fFT7gDDtQnI0xfPiALwP4O76QSI=;
-        b=C+qZ99e8mAUI7uxx6221qciaHU8x+C8MPcVMhkGBvFKWmsVPmc2w8vsGsmweCxwWWG
-         ECo1rXwSQtMtn8nVv1mQLMA9osWvjVbUJwc1Lwp6c3epeFv/syySh3+7MMuGVlvHppih
-         4UaZXZCkHElK8s1WIFbd3R4zdTtO8ZtM1fBhoprZRlgGwjNlcgRdBnR9p+7UqbBK544v
-         zxDdvJJxmb9wA/pCxJzuL0HHL63dh7NL6LSoP3tw7IELREURyrWI37Ww5bQxszUUD16B
-         fi3Nj8ikUO9FEUosEyPo155U115epyzaZyer+s6aINKRtXy2j1+bw7CnJpV0TDD3swLY
-         qx4Q==
-X-Gm-Message-State: AOAM530Py1xVKtiH4SrGpsCAjcGPKyKvPnoNFutcJPauGPcndLNr1c9g
-        OK94HdhY+RRT4ZNbfVbdb6vNj/25aRsuS0M6zOyN+clcg0NARNFXB1+32h5U6Y2uU+z4e8lmSit
-        xVqRxmnUTHgBil9R5RRTdAnimI41TA4MkT3yfay77
-X-Received: by 2002:a5d:45c4:: with SMTP id b4mr33673327wrs.222.1638192834378;
-        Mon, 29 Nov 2021 05:33:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyE+OPNlvNuS41ipScxbexU0H/eOprmV9W8IL1xapCUHlkoUBHlCidfnJeg1zWR4MrdMtFwIrb2f23/wIndXyg=
-X-Received: by 2002:a5d:45c4:: with SMTP id b4mr33673296wrs.222.1638192834063;
- Mon, 29 Nov 2021 05:33:54 -0800 (PST)
+        Mon, 29 Nov 2021 08:46:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1638193366; x=1669729366;
+  h=references:from:to:cc:subject:date:in-reply-to:
+   message-id:mime-version;
+  bh=l3Vd2FTMtFtZXp/Facb53CtPcmlcKwfaaP4IcJhGKLs=;
+  b=LpPFi2aHIVBZf56QvenWBakhe4ClAU/mA0hadBh+kn7jLcfksVR7fEFr
+   IncSJhgv79wPViNvOtwDmu1r3C643i7w+Aiz70GlZk/ExUvizGuddn7Yn
+   L2godYUOVM9Rs3oXpybPBL5i4mheZT/hUGhk0Lp0ppUspLD89vh8NDyvk
+   g=;
+X-IronPort-AV: E=Sophos;i="5.87,273,1631577600"; 
+   d="scan'208";a="974812256"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-6435a935.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP; 29 Nov 2021 13:42:30 +0000
+Received: from EX13D28EUC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-6435a935.us-west-2.amazon.com (Postfix) with ESMTPS id CBDB04215C;
+        Mon, 29 Nov 2021 13:42:29 +0000 (UTC)
+Received: from u570694869fb251.ant.amazon.com.amazon.com (10.43.162.100) by
+ EX13D28EUC001.ant.amazon.com (10.43.164.4) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.26; Mon, 29 Nov 2021 13:42:11 +0000
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+ <20211123163955.154512-4-alexandr.lobakin@intel.com>
+User-agent: mu4e 1.7.5; emacs 28.0.50
+From:   Shay Agroskin <shayagr@amazon.com>
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        "Michal Swiatkowski" <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Arthur Kiyanovski" <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        "Noam Dagan" <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        "Ioana Ciornei" <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        "Leon Romanovsky" <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        "Martin Habets" <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "Lorenzo Bianconi" <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        "Sergey Ryazanov" <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, <netdev@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rdma@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <virtualization@lists.linux-foundation.org>
+Subject: Re: [PATCH v2 net-next 03/26] ena: implement generic XDP statistics
+ callbacks
+Date:   Mon, 29 Nov 2021 15:34:19 +0200
+In-Reply-To: <20211123163955.154512-4-alexandr.lobakin@intel.com>
+Message-ID: <pj41zlh7bvyt75.fsf@u570694869fb251.ant.amazon.com>
 MIME-Version: 1.0
-References: <CAHc6FU53gdXR4VjSQJUtUigVkgDY6yfRkNBYuBj4sv3eT=MBSQ@mail.gmail.com>
- <YaAROdPCqNzSKCjh@arm.com> <20211124192024.2408218-1-catalin.marinas@arm.com>
- <20211124192024.2408218-4-catalin.marinas@arm.com> <YZ6arlsi2L3LVbFO@casper.infradead.org>
- <YZ6idVy3zqQC4atv@arm.com> <CAHc6FU4-P9sVexcNt5CDQxROtMAo=kH8hEu==AAhZ_+Zv53=Ag@mail.gmail.com>
- <20211127123958.588350-1-agruenba@redhat.com> <YaJM4n31gDeVzUGA@arm.com>
- <CAHc6FU7BSL58GVkOh=nsNQczRKG3P+Ty044zs7PjKPik4vzz=Q@mail.gmail.com> <YaTEkAahkCwuQdPN@arm.com>
-In-Reply-To: <YaTEkAahkCwuQdPN@arm.com>
-From:   Andreas Gruenbacher <agruenba@redhat.com>
-Date:   Mon, 29 Nov 2021 14:33:42 +0100
-Message-ID: <CAHc6FU6zVi9A2D3V3T5zE71YAdkBiJTs0ao1Q6ysSuEp=bz8fQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] btrfs: Avoid live-lock in search_ioctl() on hardware
- with sub-page faults
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-btrfs <linux-btrfs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; format=flowed
+X-Originating-IP: [10.43.162.100]
+X-ClientProxiedBy: EX13D01UWA002.ant.amazon.com (10.43.160.74) To
+ EX13D28EUC001.ant.amazon.com (10.43.164.4)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 1:22 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> On Sat, Nov 27, 2021 at 07:05:39PM +0100, Andreas Gruenbacher wrote:
-> > On Sat, Nov 27, 2021 at 4:21 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > > That's similar, somehow, to the arch-specific probing in one of my
-> > > patches: [1]. We could do the above if we can guarantee that the maximum
-> > > error margin in copy_to_user() is smaller than SUBPAGE_FAULT_SIZE. For
-> > > arm64 copy_to_user(), it is fine, but for copy_from_user(), if we ever
-> > > need to handle fault_in_readable(), it isn't (on arm64 up to 64 bytes
-> > > even if aligned: reads of large blocks are done in 4 * 16 loads, and if
-> > > one of them fails e.g. because of the 16-byte sub-page fault, no write
-> > > is done, hence such larger than 16 delta).
-> > >
-> > > If you want something in the generic fault_in_writeable(), we probably
-> > > need a loop over UACCESS_MAX_WRITE_ERROR in SUBPAGE_FAULT_SIZE
-> > > increments. But I thought I'd rather keep this in the arch-specific code.
-> >
-> > I see, that's even crazier than I'd thought. The looping / probing is
-> > still pretty generic, so I'd still consider putting it in the generic
-> > code.
->
-> In the arm64 probe_subpage_user_writeable(), the loop is skipped if
-> !system_supports_mte() (static label). It doesn't make much difference
-> for search_ioctl() in terms of performance but I'd like the arch code to
-> dynamically decide when to probe. An arch_has_subpage_faults() static
-> inline function would solve this.
->
-> However, the above assumes that the only way of probing is by doing a
-> get_user/put_user(). A non-destructive probe with MTE would be to read
-> the actual tags in memory and compare them with the top byte of the
-> pointer.
->
-> There's the CHERI architecture as well. Although very early days for
-> arm64, we do have an incipient port (https://www.morello-project.org/).
-> The void __user * pointers are propagated inside the kernel as 128-bit
-> capabilities. A fault_in() would check whether the address (bottom
-> 64-bit) is within the range and permissions specified in the upper
-> 64-bit of the capability. There is no notion of sub-page fault
-> granularity here and no need to do a put_user() as the check is just
-> done on the pointer/capability.
->
-> Given the above, my preference is to keep the probing arch-specific.
->
-> > We also still have fault_in_safe_writeable which is more difficult to
-> > fix, and fault_in_readable which we don't want to leave behind broken,
-> > either.
->
-> fault_in_safe_writeable() can be done by using get_user() instead of
-> put_user() for arm64 MTE and probably SPARC ADI (an alternative is to
-> read the in-memory tags and compare them with the pointer).
 
-So we'd keep the existing fault_in_safe_writeable() logic for the
-actual fault-in and use get_user() to check for sub-page faults? If
-so, then that should probably also be hidden in arch code.
+Alexander Lobakin <alexandr.lobakin@intel.com> writes:
 
-> For CHERI, that's different again since the fault_in_safe_writeable capability
-> encodes the read/write permissions independently.
+> ena driver has 6 XDP counters collected per-channel. Add 
+> callbacks
+> for getting the number of channels and those counters using 
+> generic
+> XDP stats infra.
 >
-> However, do we actually want to change the fault_in_safe_writeable() and
-> fault_in_readable() functions at this stage? I could not get any of them
-> to live-lock, though I only tried btrfs, ext4 and gfs2. As per the
-> earlier discussion, normal files accesses are guaranteed to make
-> progress. The only problematic one was O_DIRECT which seems to be
-> alright for the above filesystems (the fs either bails out after several
-> attempts or uses GUP to read which skips the uaccess altogether).
-
-Only gfs2 uses fault_in_safe_writeable(). For buffered reads, progress
-is guaranteed because failures are at a byte granularity.
-
-O_DIRECT reads and writes happen in device block size granularity, but
-the pages are grabbed with get_user_pages() before the copying
-happens. So by the time the copying happens, the pages are guaranteed
-to be resident, and we don't need to loop around fault_in_*().
-
-You've mentioned before that copying to/from struct page bypasses
-sub-page fault checking. If that is the case, then the checking
-probably needs to happen in iomap_dio_bio_iter and dio_refill_pages
-instead.
-
-> Happy to address them if there is a real concern, I just couldn't trigger it.
-
-Hopefully it should now be clear why you couldn't. One way of
-reproducing with fault_in_safe_writeable() would be to use that in
-btrfs instead of fault_in_writeable(), of course.
-
-We're not doing any chunked reads from user space with page faults
-disabled as far as I'm aware right now, so we probably don't have a
-reproducer for fault_in_readable(). It would still be worth fixing
-fault_in_readable() to prevent things from blowing up very
-unexpectedly later, though.
-
-Thanks,
-Andreas
-
-> > > Of course, the above fault_in_writeable() still needs the btrfs
-> > > search_ioctl() counterpart toget_user_pages change the probing on the actual fault
-> > > address or offset.
-> >
-> > Yes, but that change is relatively simple and it eliminates the need
-> > for probing the entire buffer, so it's a good thing. Maybe you want to
-> > add this though:
-> >
-> > --- a/fs/btrfs/ioctl.c
-> > +++ b/fs/btrfs/ioctl.c
-> > @@ -2202,3 +2202,3 @@ static noinline int search_ioctl(struct inode *inode,
-> >         unsigned long sk_offset = 0;
-> > -       char __user *fault_in_addr;
-> > +       char __user *fault_in_addr, *end;
-> >
-> > @@ -2230,6 +2230,6 @@ static noinline int search_ioctl(struct inode *inode,
-> >         fault_in_addr = ubuf;
-> > +       end = ubuf + *buf_size;
-> >         while (1) {
-> >                 ret = -EFAULT;
-> > -               if (fault_in_writeable(fault_in_addr,
-> > -                                      *buf_size - (fault_in_addr - ubuf)))
-> > +               if (fault_in_writeable(fault_in_addr, end - fault_in_addr))
-> >                         break;
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
+> ---
+>  drivers/net/ethernet/amazon/ena/ena_netdev.c | 53 
+>  ++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
 >
-> Thanks, I'll add it.
+> diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
+> b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> index 7d5d885d85d5..83e9b85cc998 100644
+> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> @@ -3313,12 +3313,65 @@ static void ena_get_stats64(struct 
+> net_device *netdev,
+>  	stats->tx_errors = 0;
+>  }
 >
-> --
-> Catalin
->
+> +static int ena_get_xdp_stats_nch(const struct net_device 
+> *netdev, u32 attr_id)
+> +{
+> +	const struct ena_adapter *adapter = netdev_priv(netdev);
+> +
+> +	switch (attr_id) {
+> +	case IFLA_XDP_XSTATS_TYPE_XDP:
+> +		return adapter->num_io_queues;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +
+> +static int ena_get_xdp_stats(const struct net_device *netdev, 
+> u32 attr_id,
+> +			     void *attr_data)
+> +{
+> +	const struct ena_adapter *adapter = netdev_priv(netdev);
+> +	struct ifla_xdp_stats *xdp_stats = attr_data;
+> +	u32 i;
+> +
+> +	switch (attr_id) {
+> +	case IFLA_XDP_XSTATS_TYPE_XDP:
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	for (i = 0; i < adapter->num_io_queues; i++) {
+> +		const struct u64_stats_sync *syncp;
+> +		const struct ena_stats_rx *stats;
+> +		u32 start;
+> +
+> +		stats = &adapter->rx_ring[i].rx_stats;
+> +		syncp = &adapter->rx_ring[i].syncp;
+> +
+> +		do {
+> +			start = u64_stats_fetch_begin_irq(syncp);
+> +
+> +			xdp_stats->drop = stats->xdp_drop;
+> +			xdp_stats->pass = stats->xdp_pass;
+> +			xdp_stats->tx = stats->xdp_tx;
+> +			xdp_stats->redirect = stats->xdp_redirect;
+> +			xdp_stats->aborted = stats->xdp_aborted;
+> +			xdp_stats->invalid = stats->xdp_invalid;
+> +		} while (u64_stats_fetch_retry_irq(syncp, start));
+> +
+> +		xdp_stats++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+
+Hi,
+thank you for the time you took in adding ENA support, this code 
+doesn't update the XDP TX queues (which only available when an XDP 
+program is loaded).
+
+In theory the following patch should fix it, but I was unable to 
+compile your version of iproute2 and test the patch properly. Can 
+you please let me know if I need to do anything special to bring 
+up your version of iproute2 and test this patch?
+
+diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
+b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+index 7d5d885d8..4e89a7d60 100644
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@ -3313,12 +3313,85 @@ static void ena_get_stats64(struct 
+net_device *netdev,
+ 	stats->tx_errors = 0;
+ }
+ 
++static int ena_get_xdp_stats_nch(const struct net_device *netdev, 
+u32 attr_id)
++{
++	const struct ena_adapter *adapter = netdev_priv(netdev);
++
++	switch (attr_id) {
++	case IFLA_XDP_XSTATS_TYPE_XDP:
++		return adapter->num_io_queues;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int ena_get_xdp_stats(const struct net_device *netdev, u32 
+attr_id,
++			     void *attr_data)
++{
++	const struct ena_adapter *adapter = netdev_priv(netdev);
++	struct ifla_xdp_stats *xdp_stats = attr_data;
++	const struct u64_stats_sync *syncp;
++	u32 start;
++	u32 i;
++
++	switch (attr_id) {
++	case IFLA_XDP_XSTATS_TYPE_XDP:
++		break;
++	default:
++		return -EOPNOTSUPP;
++	}
++
++	for (i = 0; i < adapter->num_io_queues; i++) {
++		const struct ena_stats_rx *rx_stats;
++
++		rx_stats = &adapter->rx_ring[i].rx_stats;
++		syncp = &adapter->rx_ring[i].syncp;
++
++		do {
++			start = u64_stats_fetch_begin_irq(syncp);
++
++			xdp_stats->drop = rx_stats->xdp_drop;
++			xdp_stats->pass = rx_stats->xdp_pass;
++			xdp_stats->tx = rx_stats->xdp_tx;
++			xdp_stats->redirect = 
+rx_stats->xdp_redirect;
++			xdp_stats->aborted = 
+rx_stats->xdp_aborted;
++			xdp_stats->invalid = 
+rx_stats->xdp_invalid;
++		} while (u64_stats_fetch_retry_irq(syncp, start));
++
++		xdp_stats++;
++	}
++
++	xdp_stats = attr_data;
++	/* xdp_num_queues can be 0 if an XDP program isn't loaded 
+*/
++	for (i = 0; i < adapter->xdp_num_queues; i++) {
++		const struct ena_stats_tx *tx_stats;
++
++		tx_stats = 
+&adapter->rx_ring[i].xdp_ring->tx_stats;
++		syncp = &adapter->rx_ring[i].xdp_ring->syncp;
++
++		do {
++			start = u64_stats_fetch_begin_irq(syncp);
++
++			xdp_stats->xmit_packets = tx_stats->cnt;
++			xdp_stats->xmit_bytes = tx_stats->bytes;
++			xdp_stats->xmit_errors = 
+tx_stats->dma_mapping_err +
++ 
+tx_stats->prepare_ctx_err;
++		} while (u64_stats_fetch_retry_irq(syncp, start));
++
++		xdp_stats++;
++	}
++
++	return 0;
++}
++
+ static const struct net_device_ops ena_netdev_ops = {
+ 	.ndo_open		= ena_open,
+ 	.ndo_stop		= ena_close,
+ 	.ndo_start_xmit		= ena_start_xmit,
+ 	.ndo_select_queue	= ena_select_queue,
+ 	.ndo_get_stats64	= ena_get_stats64,
++	.ndo_get_xdp_stats_nch	= ena_get_xdp_stats_nch,
++	.ndo_get_xdp_stats	= ena_get_xdp_stats,
+ 	.ndo_tx_timeout		= ena_tx_timeout,
+ 	.ndo_change_mtu		= ena_change_mtu,
+ 	.ndo_set_mac_address	= NULL,
+
 

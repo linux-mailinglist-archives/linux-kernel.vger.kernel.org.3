@@ -2,209 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 270DC4624D0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 761524624D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:28:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbhK2W3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:29:23 -0500
-Received: from mga12.intel.com ([192.55.52.136]:62873 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231156AbhK2W24 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:28:56 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="216106430"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="216106430"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 14:25:23 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="653812644"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Nov 2021 14:25:22 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mrp5N-000CQP-HE; Mon, 29 Nov 2021 22:25:21 +0000
-Date:   Tue, 30 Nov 2021 06:24:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Luo bin <luobin9@huawei.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse:
- sparse: cast to restricted __be64
-Message-ID: <202111300604.cMPVrgfV-lkp@intel.com>
+        id S229764AbhK2WbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232035AbhK2W3g (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:29:36 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C53C0048F3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:26:12 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id k4so7447673pgb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:26:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4AV6AyLtV6+B+PQXfrHfipcjFSD3Gvf5bjWSa9SiKB0=;
+        b=jlpxmigLd0jQtZFZPdr2laNq83gnRdwoIXEgWfc2SfGv+aa9nAgB53NXLHkNFtYitz
+         1tq1cZjSBQ4PaiGIB6Kk9xr+qWxGiuCfB0UFiKEYPbqgJNSBlmrZJEqKoXizpbHBAIp8
+         BOaJexldrIOz1gdn7z7ObDROSyrM2siZRg65tsG3iusU649Z8qow9Ap32EGsiuXQCT/H
+         ur+98e51ugYqFlCSyZAI/IbWvxEGQtP8SoLfcbeEmWxZPiXgbAyn3/Sgtc3TTB6E59AP
+         QUgZP0BvzUXlDxjP84PS/pabnMgpUt7UizbvA/ttJ0xiLTlN5RkyzDygQ3AU9r96l1Gd
+         2udA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4AV6AyLtV6+B+PQXfrHfipcjFSD3Gvf5bjWSa9SiKB0=;
+        b=7T2IZ+2fGh6bz3SH4M/8SEI4gq7sT/WhJMjQPKofhdUH9VPkkV7WBwn3txaxuntGAj
+         pEeRQGFBMUWQv0RbTK9EFqpQGQXEgZKwVinj76Bt016UpA9IOEipOnzd2oSrSFwo8kSV
+         pHp6+EXiZqdooF8+2Or90gbTE3OxWbtmIiuEWesH/D36GJU5AhBb2HTdZ1K5K5xNGdSV
+         M4pJJpPdOoHK/QEBZ6QblGQhm2FDVY3r4L7rEXyz7M681AFDd0VEuJSl9ZaNn5iSAMGP
+         aAhLdYUgPh9AAjLsavSjG+tvwdEcMwcnEUCg/DxnXKXqWvBcfZINUlTLmnOmlbk96z52
+         0sZA==
+X-Gm-Message-State: AOAM531TcnPB6rKV3PCoUYAnMaVMUIdLM4HWClq6IDfm/MjWcZzTcKEM
+        QS8b9uiQywJkuj1j/xcWtvJaIoVbLB5Zx3Hf/XdscA==
+X-Google-Smtp-Source: ABdhPJxmIVqDVd2ueYUBshdrTHHWMA5CdKXSLGpFAP+cONd8fUMBDIMzmtDG0weM1Bfd88BWilM88gG4Z9OvooJGiE0=
+X-Received: by 2002:a63:4244:: with SMTP id p65mr37573466pga.440.1638224772352;
+ Mon, 29 Nov 2021 14:26:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20211128125011.12817-1-aford173@gmail.com>
+In-Reply-To: <20211128125011.12817-1-aford173@gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Mon, 29 Nov 2021 14:26:01 -0800
+Message-ID: <CAJ+vNU11JzuREzY8-0V0GTXTqL3Yb-6vQCTvu08Sx63aQPc-gg@mail.gmail.com>
+Subject: Re: [PATCH V3 1/5] soc: imx: imx8m-blk-ctrl: Fix imx8mm mipi reset
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d58071a8a76d779eedab38033ae4c821c30295a5
-commit: a425b6e1c69ba907b72b737a4d44f8cfbc43ce3c hinic: add mailbox function support
-date:   1 year, 7 months ago
-config: x86_64-randconfig-s022-20211124 (https://download.01.org/0day-ci/archive/20211130/202111300604.cMPVrgfV-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a425b6e1c69ba907b72b737a4d44f8cfbc43ce3c
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout a425b6e1c69ba907b72b737a4d44f8cfbc43ce3c
-        # save the config file to linux build tree
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Sun, Nov 28, 2021 at 4:50 AM Adam Ford <aford173@gmail.com> wrote:
+>
+> Most of the blk-ctrl reset bits are found in one register, however
+> there are two bits in offset 8 for pulling the MIPI DPHY out of reset
+> and one of them needs to be set when IMX8MM_DISPBLK_PD_MIPI_CSI is brought
+> out of reset or the MIPI_CSI hangs.
+>
+> Since MIPI_DSI is impacted, add the additional one for MIPI_DSI too.
+>
+> Fixes: 926e57c065df ("soc: imx: imx8m-blk-ctrl: add DISP blk-ctrl")
+> Signed-off-by: Adam Ford <aford173@gmail.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+> ---
+> V3:  Split the  mipi_phy_rst_mask for CSI and DSI into their respective domains.
+>
+> V2:  Make a note that the extra register is only for Mini/Nano DISPLAY_BLK_CTRL
+>      Rename the new register to mipi_phy_rst_mask
+>      Encapsulate the edits to this register with an if-statement
+>
+>  drivers/soc/imx/imx8m-blk-ctrl.c | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+>
+> diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
+> index 519b3651d1d9..c2f076b56e24 100644
+> --- a/drivers/soc/imx/imx8m-blk-ctrl.c
+> +++ b/drivers/soc/imx/imx8m-blk-ctrl.c
+> @@ -17,6 +17,7 @@
+>
+>  #define BLK_SFT_RSTN   0x0
+>  #define BLK_CLK_EN     0x4
+> +#define BLK_MIPI_RESET_DIV     0x8 /* Mini/Nano DISPLAY_BLK_CTRL only */
+>
+>  struct imx8m_blk_ctrl_domain;
+>
+> @@ -36,6 +37,15 @@ struct imx8m_blk_ctrl_domain_data {
+>         const char *gpc_name;
+>         u32 rst_mask;
+>         u32 clk_mask;
+> +
+> +       /*
+> +        * i.MX8M Mini and Nano have a third DISPLAY_BLK_CTRL register
+> +        * which is used to control the reset for the MIPI Phy.
+> +        * Since it's only present in certain circumstances,
+> +        * an if-statement should be used before setting and clearing this
+> +        * register.
+> +        */
+> +       u32 mipi_phy_rst_mask;
+>  };
+>
+>  #define DOMAIN_MAX_CLKS 3
+> @@ -78,6 +88,8 @@ static int imx8m_blk_ctrl_power_on(struct generic_pm_domain *genpd)
+>
+>         /* put devices into reset */
+>         regmap_clear_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
+> +       if (data->mipi_phy_rst_mask)
+> +               regmap_clear_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
+>
+>         /* enable upstream and blk-ctrl clocks to allow reset to propagate */
+>         ret = clk_bulk_prepare_enable(data->num_clks, domain->clks);
+> @@ -99,6 +111,8 @@ static int imx8m_blk_ctrl_power_on(struct generic_pm_domain *genpd)
+>
+>         /* release reset */
+>         regmap_set_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
+> +       if (data->mipi_phy_rst_mask)
+> +               regmap_set_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
+>
+>         /* disable upstream clocks */
+>         clk_bulk_disable_unprepare(data->num_clks, domain->clks);
+> @@ -120,6 +134,9 @@ static int imx8m_blk_ctrl_power_off(struct generic_pm_domain *genpd)
+>         struct imx8m_blk_ctrl *bc = domain->bc;
+>
+>         /* put devices into reset and disable clocks */
+> +       if (data->mipi_phy_rst_mask)
+> +               regmap_clear_bits(bc->regmap, BLK_MIPI_RESET_DIV, data->mipi_phy_rst_mask);
+> +
+>         regmap_clear_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
+>         regmap_clear_bits(bc->regmap, BLK_CLK_EN, data->clk_mask);
+>
+> @@ -480,6 +497,7 @@ static const struct imx8m_blk_ctrl_domain_data imx8mm_disp_blk_ctl_domain_data[]
+>                 .gpc_name = "mipi-dsi",
+>                 .rst_mask = BIT(5),
+>                 .clk_mask = BIT(8) | BIT(9),
+> +               .mipi_phy_rst_mask = BIT(17),
+>         },
+>         [IMX8MM_DISPBLK_PD_MIPI_CSI] = {
+>                 .name = "dispblk-mipi-csi",
+> @@ -488,6 +506,7 @@ static const struct imx8m_blk_ctrl_domain_data imx8mm_disp_blk_ctl_domain_data[]
+>                 .gpc_name = "mipi-csi",
+>                 .rst_mask = BIT(3) | BIT(4),
+>                 .clk_mask = BIT(10) | BIT(11),
+> +               .mipi_phy_rst_mask = BIT(16),
+>         },
+>  };
+>
+> --
+> 2.32.0
+>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Adam,
 
+Thanks - this is working on my hardware as well and I can display what
+is captured on an imx219 to a dsi display.
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:543:54: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] <asn:2> *addr @@     got unsigned char [usertype] * @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:543:54: sparse:     expected void volatile [noderef] <asn:2> *addr
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:543:54: sparse:     got unsigned char [usertype] *
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:566:58: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void volatile [noderef] <asn:2> *addr @@     got unsigned char [usertype] * @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:566:58: sparse:     expected void volatile [noderef] <asn:2> *addr
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:566:58: sparse:     got unsigned char [usertype] *
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:601:6: sparse: sparse: symbol 'dump_mox_reg' was not declared. Should it be static?
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
->> drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:618:22: sparse: sparse: cast to restricted __be64
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:1057:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned char [usertype] *data @@     got void [noderef] <asn:2> * @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:1057:25: sparse:     expected unsigned char [usertype] *data
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c:1057:25: sparse:     got void [noderef] <asn:2> *
-   drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c: note: in included file:
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int val @@     got restricted __be32 [usertype] @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     expected unsigned int val
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     got restricted __be32 [usertype]
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int val @@     got restricted __be32 [usertype] @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     expected unsigned int val
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     got restricted __be32 [usertype]
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:250:16: sparse: sparse: cast to restricted __be32
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int val @@     got restricted __be32 [usertype] @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     expected unsigned int val
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     got restricted __be32 [usertype]
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int val @@     got restricted __be32 [usertype] @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     expected unsigned int val
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     got restricted __be32 [usertype]
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int val @@     got restricted __be32 [usertype] @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     expected unsigned int val
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     got restricted __be32 [usertype]
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected unsigned int val @@     got restricted __be32 [usertype] @@
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     expected unsigned int val
-   drivers/net/ethernet/huawei/hinic/hinic_hw_if.h:256:16: sparse:     got restricted __be32 [usertype]
+Tested by: Tim Harvey <tharvey@gateworks.com> (tested on
+imx8mm-venice-gw73xx-0x with imx219 support added)
 
-vim +618 drivers/net/ethernet/huawei/hinic/hinic_hw_mbox.c
-
-   535	
-   536	static void mbox_copy_header(struct hinic_hwdev *hwdev,
-   537				     struct hinic_send_mbox *mbox, u64 *header)
-   538	{
-   539		u32 i, idx_max = MBOX_HEADER_SZ / sizeof(u32);
-   540		u32 *data = (u32 *)header;
-   541	
-   542		for (i = 0; i < idx_max; i++)
- > 543			__raw_writel(*(data + i), mbox->data + i * sizeof(u32));
-   544	}
-   545	
-   546	static void mbox_copy_send_data(struct hinic_hwdev *hwdev,
-   547					struct hinic_send_mbox *mbox, void *seg,
-   548					u16 seg_len)
-   549	{
-   550		u8 mbox_max_buf[MBOX_SEG_LEN] = {0};
-   551		u32 data_len, chk_sz = sizeof(u32);
-   552		u32 *data = seg;
-   553		u32 i, idx_max;
-   554	
-   555		/* The mbox message should be aligned in 4 bytes. */
-   556		if (seg_len % chk_sz) {
-   557			memcpy(mbox_max_buf, seg, seg_len);
-   558			data = (u32 *)mbox_max_buf;
-   559		}
-   560	
-   561		data_len = seg_len;
-   562		idx_max = ALIGN(data_len, chk_sz) / chk_sz;
-   563	
-   564		for (i = 0; i < idx_max; i++)
-   565			__raw_writel(*(data + i),
-   566				     mbox->data + MBOX_HEADER_SZ + i * sizeof(u32));
-   567	}
-   568	
-   569	static void write_mbox_msg_attr(struct hinic_mbox_func_to_func *func_to_func,
-   570					u16 dst_func, u16 dst_aeqn, u16 seg_len,
-   571					int poll)
-   572	{
-   573		u16 rsp_aeq = (dst_aeqn == 0) ? 0 : HINIC_MBOX_RSP_AEQN;
-   574		u32 mbox_int, mbox_ctrl;
-   575	
-   576		mbox_int = HINIC_MBOX_INT_SET(dst_func, DST_FUNC) |
-   577			   HINIC_MBOX_INT_SET(dst_aeqn, DST_AEQN) |
-   578			   HINIC_MBOX_INT_SET(rsp_aeq, SRC_RESP_AEQN) |
-   579			   HINIC_MBOX_INT_SET(NO_DMA_ATTRIBUTE_VAL, STAT_DMA) |
-   580			   HINIC_MBOX_INT_SET(ALIGN(MBOX_SEG_LEN + MBOX_HEADER_SZ +
-   581					      MBOX_INFO_SZ, MBOX_SEG_LEN_ALIGN) >> 2,
-   582					      TX_SIZE) |
-   583			   HINIC_MBOX_INT_SET(STRONG_ORDER, STAT_DMA_SO_RO) |
-   584			   HINIC_MBOX_INT_SET(WRITE_BACK, WB_EN);
-   585	
-   586		hinic_hwif_write_reg(func_to_func->hwif,
-   587				     HINIC_FUNC_CSR_MAILBOX_INT_OFFSET_OFF, mbox_int);
-   588	
-   589		wmb(); /* writing the mbox int attributes */
-   590		mbox_ctrl = HINIC_MBOX_CTRL_SET(TX_NOT_DONE, TX_STATUS);
-   591	
-   592		if (poll)
-   593			mbox_ctrl |= HINIC_MBOX_CTRL_SET(NOT_TRIGGER, TRIGGER_AEQE);
-   594		else
-   595			mbox_ctrl |= HINIC_MBOX_CTRL_SET(TRIGGER, TRIGGER_AEQE);
-   596	
-   597		hinic_hwif_write_reg(func_to_func->hwif,
-   598				     HINIC_FUNC_CSR_MAILBOX_CONTROL_OFF, mbox_ctrl);
-   599	}
-   600	
-   601	void dump_mox_reg(struct hinic_hwdev *hwdev)
-   602	{
-   603		u32 val;
-   604	
-   605		val = hinic_hwif_read_reg(hwdev->hwif,
-   606					  HINIC_FUNC_CSR_MAILBOX_CONTROL_OFF);
-   607		dev_err(&hwdev->hwif->pdev->dev, "Mailbox control reg: 0x%x\n", val);
-   608	
-   609		val = hinic_hwif_read_reg(hwdev->hwif,
-   610					  HINIC_FUNC_CSR_MAILBOX_INT_OFFSET_OFF);
-   611		dev_err(&hwdev->hwif->pdev->dev, "Mailbox interrupt offset: 0x%x\n",
-   612			val);
-   613	}
-   614	
-   615	static u16 get_mbox_status(struct hinic_send_mbox *mbox)
-   616	{
-   617		/* write back is 16B, but only use first 4B */
- > 618		u64 wb_val = be64_to_cpu(*mbox->wb_status);
-   619	
-   620		rmb(); /* verify reading before check */
-   621	
-   622		return (u16)(wb_val & MBOX_WB_STATUS_ERRCODE_MASK);
-   623	}
-   624	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Tim

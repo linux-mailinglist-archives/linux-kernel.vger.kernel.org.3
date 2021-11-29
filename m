@@ -2,125 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECFD460F83
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:44:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3163C460F74
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:37:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239987AbhK2Hrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 02:47:40 -0500
-Received: from 10.mo548.mail-out.ovh.net ([46.105.77.235]:38709 "EHLO
-        10.mo548.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231967AbhK2Hpj (ORCPT
+        id S240087AbhK2HlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 02:41:10 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16313 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240827AbhK2HjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:45:39 -0500
-X-Greylist: delayed 522 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Nov 2021 02:45:39 EST
-Received: from mxplan5.mail.ovh.net (unknown [10.108.20.7])
-        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id D10AB2064C;
-        Mon, 29 Nov 2021 07:33:34 +0000 (UTC)
-Received: from kaod.org (37.59.142.103) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 29 Nov
- 2021 08:33:33 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-103G0058ffb0110-7673-40ee-a51a-c9a65a45fa89,
-                    3279756C2EB34864E332BB908A933B747C53BE44) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 82.64.250.170
-Message-ID: <b1a6d267-c7b4-c4b9-ab0e-f5cc32bfe9bf@kaod.org>
-Date:   Mon, 29 Nov 2021 08:33:33 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [patch 05/22] genirq/msi: Fixup includes
+        Mon, 29 Nov 2021 02:39:09 -0500
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J2cZN300Kz91GK;
+        Mon, 29 Nov 2021 15:35:08 +0800 (CST)
+Received: from dggpemm500023.china.huawei.com (7.185.36.83) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Mon, 29 Nov 2021 15:35:39 +0800
+Received: from dggpemm500023.china.huawei.com ([7.185.36.83]) by
+ dggpemm500023.china.huawei.com ([7.185.36.83]) with mapi id 15.01.2308.020;
+ Mon, 29 Nov 2021 15:35:39 +0800
+From:   "zhaozixuan (C)" <zhaozixuan2@huawei.com>
+To:     Paul Moore <paul@paul-moore.com>
+CC:     "eparis@redhat.com" <eparis@redhat.com>,
+        "linux-audit@redhat.com" <linux-audit@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] audit: accelerate audit rule filter
+Thread-Topic: [PATCH] audit: accelerate audit rule filter
+Thread-Index: AQHX4UnhpG+k05BPVEqO6SQrGWmNIKwaIv3w
+Date:   Mon, 29 Nov 2021 07:35:39 +0000
+Message-ID: <4aac209c744848a38bb2003d601083e4@huawei.com>
+References: <20211123075001.3676-1-zhaozixuan2@huawei.com>
+ <CAHC9VhS-pPDWBRX-6q7aj1Fj5oU0M2vgJC0ipTStczYGkFVvwg@mail.gmail.com>
+In-Reply-To: <CAHC9VhS-pPDWBRX-6q7aj1Fj5oU0M2vgJC0ipTStczYGkFVvwg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     <linux-hyperv@vger.kernel.org>, Paul Mackerras <paulus@samba.org>,
-        <sparclinux@vger.kernel.org>, Wei Liu <wei.liu@kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
-        <x86@kernel.org>, Christian Borntraeger <borntraeger@de.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>, <linux-pci@vger.kernel.org>,
-        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-References: <20211126222700.862407977@linutronix.de>
- <20211126223824.382273262@linutronix.de>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <20211126223824.382273262@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.103]
-X-ClientProxiedBy: DAG1EX2.mxp5.local (172.16.2.2) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: 67cb6c92-6833-4394-901b-34c8b386eb6d
-X-Ovh-Tracer-Id: 9389442276353674140
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrheekgdegjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthekredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpeeigedvffekgeeftedutddttdevudeihfegudffkeeitdekkeetkefhffelveelleenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhg
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.176.92]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/27/21 02:18, Thomas Gleixner wrote:
-> Remove the kobject.h include from msi.h as it's not required and add a
-> sysfs.h include to the core code instead.
-> 
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
-
-This patch breaks compile on powerpc :
-
-   CC      arch/powerpc/kernel/msi.o
-In file included from ../arch/powerpc/kernel/msi.c:7:
-../include/linux/msi.h:410:65: error: ‘struct cpumask’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
-   410 | int msi_domain_set_affinity(struct irq_data *data, const struct cpumask *mask,
-       |                                                                 ^~~~~~~
-cc1: all warnings being treated as errors
-
-Below is fix you can merge in patch 5.
-
-Thanks,
-
-C.
-
---- a/include/linux/msi.h
-+++ b/include/linux/msi.h
-@@ -2,6 +2,7 @@
-  #ifndef LINUX_MSI_H
-  #define LINUX_MSI_H
-  
-+#include <linux/cpumask.h>
-  #include <linux/list.h>
-  #include <asm/msi.h>
-
-> ---
->   include/linux/msi.h |    1 -
->   kernel/irq/msi.c    |    1 +
->   2 files changed, 1 insertion(+), 1 deletion(-)
-> 
-> --- a/include/linux/msi.h
-> +++ b/include/linux/msi.h
-> @@ -2,7 +2,6 @@
->   #ifndef LINUX_MSI_H
->   #define LINUX_MSI_H
->   
-> -#include <linux/kobject.h>
->   #include <linux/list.h>
->   #include <asm/msi.h>
->   
-> --- a/kernel/irq/msi.c
-> +++ b/kernel/irq/msi.c
-> @@ -14,6 +14,7 @@
->   #include <linux/irqdomain.h>
->   #include <linux/msi.h>
->   #include <linux/slab.h>
-> +#include <linux/sysfs.h>
->   #include <linux/pci.h>
->   
->   #include "internals.h"
-> 
-
+Pk9uIFR1ZSwgTm92IDIzLCAyMDIxIGF0IDI6NTAgQU0gWml4dWFuIFpoYW8gPHpoYW96aXh1YW4y
+QGh1YXdlaS5jb20+IHdyb3RlOg0KPj4gV2UgdXNlZCBsYXRfc3lzY2FsbCBvZiBsbWJlbmNoMyB0
+byB0ZXN0IHRoZSBwZXJmb3JtYW5jZSBpbXBhY3Qgb2YgdGhpcyAgDQo+PiBwYXRjaC4gV2UgY2hh
+bmdlZCB0aGUgbnVtYmVyIG9mIHJ1bGVzIGFuZCBydW4gbGF0X3N5c2NhbGwgd2l0aCAxMDAwICAN
+Cj4+IHJlcGV0aXRpb25zIGF0IGVhY2ggdGVzdC4gU3lzY2FsbHMgbWVhc3VyZWQgYnkgbGF0X3N5
+c2NhbGwgYXJlIG5vdCAgDQo+PiBtb25pdG9yZWQgYnkgcnVsZXMuDQo+Pg0KPj4gQmVmb3JlIHRo
+aXMgb3B0aW1pemF0aW9uOg0KPj4NCj4+ICAgICAgICAgICAgICBudWxsICAgICByZWFkICAgIHdy
+aXRlICAgICBzdGF0ICAgIGZzdGF0ICAgICAgb3Blbg0KPj4gICAwIHJ1bGVzICAxLjg3bXMgICAy
+Ljc0bXMgICAyLjU2bXMgICAyNi4zMW1zICA0LjEzbXMgICA2OS42Nm1zDQo+PiAgMTAgcnVsZXMg
+IDIuMTVtcyAgIDMuMTNtcyAgIDMuMzJtcyAgIDI2Ljk5bXMgIDQuMTZtcyAgIDc0LjcwbXMNCj4+
+ICAyMCBydWxlcyAgMi40NW1zICAgMy45N21zICAgMy44Mm1zICAgMjcuMDVtcyAgNC42MG1zICAg
+NzYuMzVtcw0KPj4gIDMwIHJ1bGVzICAyLjY0bXMgICA0LjUybXMgICAzLjk1bXMgICAzMC4zMG1z
+ICA0Ljk0bXMgICA3OC45NG1zDQo+PiAgNDAgcnVsZXMgIDIuODNtcyAgIDQuOTdtcyAgIDQuMjNt
+cyAgIDMyLjE2bXMgIDUuNDBtcyAgIDgxLjg4bXMNCj4+ICA1MCBydWxlcyAgMy4wMG1zICAgNS4z
+MG1zICAgNC44NG1zICAgMzMuNDltcyAgNS43OW1zICAgODMuMjBtcw0KPj4gMTAwIHJ1bGVzICA0
+LjI0bXMgICA5Ljc1bXMgICA3LjQybXMgICAzNy42OG1zICA2LjU1bXMgICA5My43MG1zDQo+PiAx
+NjAgcnVsZXMgIDUuNTBtcyAgIDE2Ljg5bXMgIDEyLjE4bXMgIDUxLjUzbXMgIDE3LjQ1bXMgIDE1
+NS40MG1zDQo+Pg0KPj4gQWZ0ZXIgdGhpcyBvcHRpbWl6YXRpb246DQo+Pg0KPj4gICAgICAgICAg
+ICAgIG51bGwgICAgIHJlYWQgICAgd3JpdGUgICAgIHN0YXQgICAgZnN0YXQgICAgICBvcGVuDQo+
+PiAgIDAgcnVsZXMgIDEuODFtcyAgIDIuODRtcyAgIDIuNDJtcyAgMjcuNzBtcyAgIDQuMTVtcyAg
+IDY5LjEwbXMNCj4+ICAxMCBydWxlcyAgMS45N21zICAgMi44M21zICAgMi42OW1zICAyNy43MG1z
+ICAgNC4xNW1zICAgNjkuMzBtcw0KPj4gIDIwIHJ1bGVzICAxLjcybXMgICAyLjkxbXMgICAyLjQx
+bXMgIDI2LjQ5bXMgICAzLjkxbXMgICA3MS4xOW1zDQo+PiAgMzAgcnVsZXMgIDEuODVtcyAgIDIu
+OTRtcyAgIDIuNDhtcyAgMjYuMjdtcyAgIDMuOTdtcyAgIDcxLjQzbXMNCj4+ICA0MCBydWxlcyAg
+MS44OG1zICAgMi45NG1zICAgMi43OG1zICAyNi44NW1zICAgNC4wOG1zICAgNjkuNzltcw0KPj4g
+IDUwIHJ1bGVzICAxLjg2bXMgICAzLjE3bXMgICAzLjA4bXMgIDI2LjI1bXMgICA0LjAzbXMgICA3
+Mi4zMm1zDQo+PiAxMDAgcnVsZXMgIDEuODRtcyAgIDMuMDBtcyAgIDIuODFtcyAgMjYuMjVtcyAg
+IDMuOThtcyAgIDcwLjI1bXMNCj4+IDE2MCBydWxlcyAgMS45Mm1zICAgMy4zMm1zICAgMy4wNm1z
+ICAyNi44MW1zICAgNC41N21zICAgNzEuNDFtcw0KPj4NCj4+IEFzIHRoZSByZXN1bHQgc2hvd24g
+YWJvdmUsIHRoZSBzeXNjYWxsIGxhdGVuY2llcyBpbmNyZWFzZSBhcyAgdGhlIA0KPj4gbnVtYmVy
+ICBvZiBydWxlcyBpbmNyZWFzZXMsIHdoaWxlIHdpdGggdGhlIHBhdGNoIHRoZSBsYXRlbmNpZXMg
+cmVtYWluIHN0YWJsZS4NCj4+ICBUaGlzIGNvdWxkIGhlbHAgd2hlbiBhIHVzZXIgYWRkcyBtYW55
+IGF1ZGl0IHJ1bGVzIGZvciBwdXJwb3NlcyAoc3VjaCANCj4+IGFzICBhdHRhY2sgdHJhY2luZyBv
+ciBwcm9jZXNzIGJlaGF2aW9yIHJlY29yZGluZykgYnV0IHN1ZmZlcnMgZnJvbSBsb3cgIA0KPj4g
+cGVyZm9ybWFuY2UuDQo+DQo+SSBoYXZlIGdlbmVyYWwgY29uY2VybnMgYWJvdXQgdHJhZGluZyBt
+ZW1vcnkgYW5kIGNvbXBsZXhpdHkgZm9yIHBlcmZvcm1hbmNlIGdhaW5zLCBidXQgYmV5b25kIHRo
+YXQgdGhlIG51bWJlcnMgeW91IHBvc3RlZCBhYm92ZSBkb24ndCB5ZXQgbWFrZSBzZW5zZSB0byBt
+ZS4NCg0KVGhhbmtzIGZvciB5b3VyIHJlcGx5Lg0KDQpUaGUgbWVtb3J5IGNvc3Qgb2YgdGhpcyBw
+YXRjaCBpcyBsZXNzIHRoYW4gNEtCICgxODIwIGJ5dGVzIG9uIHg2NCBhbmQNCiAzNjQwIGJ5dGVz
+IG9uIGNvbXBhdGlibGUgeDg2XzY0KSB3aGljaCBpcyB0cml2aWFsIGluIG1hbnkgY2FzZXMuDQog
+QmVzaWRlcywgc3lzY2FsbHMgYXJlIGNhbGxlZCBmcmVxdWVudGx5IG9uIGEgc3lzdGVtIHNvIGEg
+c21hbGwNCiBvcHRpbWl6YXRpb24gY291bGQgYnJpbmcgYSBnb29kIGluY29tZS4NCg0KPldoeSBh
+cmUgdGhlIGxhdGVuY3kgaW5jcmVhc2VzIGR1ZSB0byBydWxlIGNvdW50IG5vdCBzaW1pbGFyIGFj
+cm9zcyB0aGUgZGlmZmVyZW50IHN5c2NhbGxzPyBGb3IgZXhhbXBsZSwgSSB3b3VsZCB0aGluayB0
+aGF0IGlmIHRoZSBpbmNyZWFzZSBpbiBzeXNjYWxsIGxhdGVuY3kgd2FzID5kaXJlY3RseSBhdHRy
+aWJ1dGVkIHRvIHRoZSBhdWRpdCBydWxlIHByb2Nlc3NpbmcgdGhlbiB0aGUgaW5jcmVhc2Ugb24g
+dGhlICJvcGVuIiBzeXNjYWxsIHNob3VsZCBiZSBzaW1pbGFyIHRvIHRoYXQgb2YgdGhlICJudWxs
+IiBzeXNjYWxsLiAgSW4gb3RoZXIgcGhyYXNpbmcsIGlmIHdlID5jYW4gcHJvY2VzcyAxNjAgcnVs
+ZXMgaW4gfjRtcyBpbiB0aGUgIm51bGwiIGNhc2UsIHdoeSBkb2VzIGl0IHRha2UgdXMgfjg2bXMg
+aW4gdGhlICJvcGVuIiBjYXNlPw0KDQpBcyB0byB0aGUgdGVzdCByZXN1bHQsIHdlIGRpZCBzb21l
+IGludmVzdGlnYXRpb25zIGFuZCBjb25jbHVkZWQgdHdvDQogcmVhc29uczoNCjEuIFRoZSBjaG9z
+ZW4gcnVsZSBzZXRzIHdlcmUgbm90IHZlcnkgc3VpdGFibGUuIFRob3VnaCB0aGV5IHdlcmUgbm90
+IGhpdA0KIGJ5IHN5c2NhbGxzIGJlaW5nIG1lYXN1cmVkLCBzb21lIG9mIHRoZW0gd2VyZSBoaXQg
+Ynkgb3RoZXIgcHJvY2Vzc2VzLA0KIHdoaWNoIHJlZHVjZWQgdGhlIHN5c3RlbSBwZXJmb3JtYW5j
+ZSBhbmQgYWZmZWN0ZWQgdGhlIHRlc3QgcmVzdWx0Ow0KMi4gVGhlIHJvdXRpbmUgb2YgbGF0X3N5
+c2NhbGwgaXMgbXVjaCBtb3JlIGNvbXBsaWNhdGVkIHRoYW4gd2UgdGhvdWdodC4gSXQNCiBjYWxs
+ZWQgbWFueSBvdGhlciBzeXNjYWxscyBkdXJpbmcgdGhlIHRlc3QsIHdoaWNoIG1heSBjYXVzZSB0
+aGUgcmVzdWx0DQogbm90IHRvIGJlIGxpbmVhci4NCg0KRHVlIHRvIHRoZSByZWFzb25zIGFib3Zl
+LCB3ZSBkaWQgYW5vdGhlciB0ZXN0LiBXZSBtb2RpZmllZCBhdWRpdCBydWxlIHNldHMNCiBhbmQg
+bWFkZSBzdXJlIHRoZXkgd291bGRuJ3QgYmUgaGl0IGF0IHJ1bnRpbWUuIFRoZW4sIHdlIGFkZGVk
+DQoga3RpbWVfZ2V0X3JlYWxfdHM2NCB0byBhdWRpdHNjLmMgdG8gcmVjb3JkIHRoZSB0aW1lIG9m
+IGV4ZWN1dGluZw0KIF9fYXVkaXRfc3lzY2FsbF9leGl0LiBXZSByYW4gInN0YXQiIHN5c2NhbGwg
+MTAwMDAgdGltZXMgZm9yIGVhY2ggcnVsZSBzZXQNCiBhbmQgcmVjb3JkZWQgdGhlIHRpbWUgaW50
+ZXJ2YWwuIFRoZSByZXN1bHQgaXMgc2hvd24gYmVsb3c6DQoNCkJlZm9yZSB0aGlzIG9wdGltaXph
+dGlvbjoNCg0KcnVsZSBzZXQgICAgICAgICAgdGltZQ0KICAwIHJ1bGVzICAgICAzODQzLjk2bnMN
+CiAgMSBydWxlcyAgICAxMzExOS4wOG5zDQogMTAgcnVsZXMgICAgMTQwMDMuMTNucw0KIDIwIHJ1
+bGVzICAgIDE1NDIwLjE4bnMNCiAzMCBydWxlcyAgICAxNzI4NC44NG5zDQogNDAgcnVsZXMgICAg
+MTkwMTAuNjducw0KIDUwIHJ1bGVzICAgIDIxMTEyLjYzbnMNCjEwMCBydWxlcyAgICAyNTgxNS4w
+Mm5zDQoxMzAgcnVsZXMgICAgMjk0NDcuMDlucw0KDQpBZnRlciB0aGlzIG9wdGltaXphdGlvbjoN
+Cg0KIHJ1bGUgc2V0ICAgICAgICAgIHRpbWUNCiAgMCBydWxlcyAgICAgMzU5Ny43OG5zDQogIDEg
+cnVsZXMgICAgMTM0OTguNzNucw0KIDEwIHJ1bGVzICAgIDEzMTIyLjU3bnMNCiAyMCBydWxlcyAg
+ICAxMjg3NC44OG5zDQogMzAgcnVsZXMgICAgMTQzNTEuOTlucw0KIDQwIHJ1bGVzICAgIDE0MTgx
+LjA3bnMNCiA1MCBydWxlcyAgICAxMzgwNi40NW5zDQoxMDAgcnVsZXMgICAgMTM4OTAuODVucw0K
+MTMwIHJ1bGVzICAgIDE0NDQxLjQ1bnMNCg0KQXMgdGhlIHJlc3VsdCBzaG93ZWQsIHRoZSBpbnRl
+cnZhbCBpcyBsaW5lYXJseSBpbmNyZWFzZWQgYmVmb3JlDQogb3B0aW1pemF0aW9uIHdoaWxlIHRo
+ZSBpbnRlcnZhbCByZW1haW5zIHN0YWJsZSBhZnRlciBvcHRpbWl6YXRpb24uIE5vdGUgDQogdGhh
+dCBhdWRpdCBza2lwcyBzb21lIG9wZXJhdGlvbnMgaWYgdGhlcmUgYXJlIG5vIHJ1bGVzLCBzbyB0
+aGVyZSBpcyBhIGdhcA0KIGJldHdlZW4gMCBydWxlIGFuZCAxIHJ1bGUgc2V0Lg0K

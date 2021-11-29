@@ -2,158 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3484E462781
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068DE4627C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236800AbhK2XGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:06:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S237212AbhK2XKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:10:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237218AbhK2XGU (ORCPT
+        with ESMTP id S237337AbhK2XJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:06:20 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15AC6C0F4B26;
-        Mon, 29 Nov 2021 12:56:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=DFkAuiLlJgGJvY2k3xmqh87XecWf0cvSJbFfKizd6jA=; b=vRwnV+a8kv4xfG4VKOunlJ/t0p
-        s6zM31bSgGMu4GS5v44MeNmotn8WwaRLTnxeaJpglNunytSz6Jy8BvmSTYBnMmUdKzd5KmdVUSeo2
-        +nMgmMKnkhEaYFB7edaRbi2j5QQDRmZnXXZvf/wiL6E4PWogO3hyNlh01qR3ST2bD5y7zTLS3T/E/
-        6FCvO7h6ugIAJj4dds6nzwJWKHQSGfVRQgzCkjNF/XVhEtWQICssly9ZxcsQpQr7xktl6O2Zll9Rb
-        zSsKp523SWLBZi2lRXYiFNbDxHjMZiwHolPuTMe/0uI5JgRDwb92vRl1N2fG6XawbRhy6YX3LsSuk
-        BPsV+WGQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mrngl-002XZi-6l; Mon, 29 Nov 2021 20:55:51 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        keescook@chromium.org, yzaikin@google.com, nixiaoming@huawei.com,
-        ebiederm@xmission.com, steve@sk2.org,
-        mcgrof@bombadil.infradead.org, mcgrof@kernel.org,
-        andriy.shevchenko@linux.intel.com, jlayton@kernel.org,
-        bfields@fieldses.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/9] fs: move shared sysctls to fs/sysctls.c
-Date:   Mon, 29 Nov 2021 12:55:44 -0800
-Message-Id: <20211129205548.605569-6-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211129205548.605569-1-mcgrof@kernel.org>
-References: <20211129205548.605569-1-mcgrof@kernel.org>
+        Mon, 29 Nov 2021 18:09:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89E1C0F74C4;
+        Mon, 29 Nov 2021 13:07:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D6E43CE16B4;
+        Mon, 29 Nov 2021 21:07:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA8D1C53FC7;
+        Mon, 29 Nov 2021 21:07:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638220027;
+        bh=YYsrWpsjHtYy14bPA9IeK6DYB6TTLcgfXcuOF1CfI00=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CV5bVkbPH6U6AOHjBPA2DrM1eZ1WCNEEr2V6Ogj8edwXiqOAEFU3aEpj2j0ppognm
+         2KxVMZtL166u/kJuNPXut4yC2aMuRaFHvW4XWbPWR+cGNYLFYZMRqgJ5oUK9naNO45
+         gAy81Zl4ifg7GW82DuwY9xzyOk+X832OV12I7Rv0qLGaUJO8i0iLBxlKB0BRV1jRux
+         GsDpx057WgYTWJdD+dY1CXtjSmcSeJ13NIyxl3ovhAI9xO8V4yw5Inwyh9J/UMQMpr
+         joNxkB3DRW1TAUbGjKGgBeIKTzWJ4doP6PiUwAkwpHCtW6g8EAMalLhhhJPO8EyR+/
+         IVsq1x4BmP61A==
+Date:   Mon, 29 Nov 2021 15:07:05 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Lee Jones <lee.jones@linaro.org>,
+        Tan Jui Nee <jui.nee.tan@intel.com>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com,
+        henning.schild@siemens.com
+Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
+ support library
+Message-ID: <20211129210705.GA2689680@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaD/hspdA/j0tL5h@smile.fi.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To help with this maintenance let's start by moving sysctls to
-places where they actually belong. The proc sysctl maintainers
-do not want to know what sysctl knobs you wish to add for your own
-piece of code, we just care about the core logic.
+On Fri, Nov 26, 2021 at 05:38:46PM +0200, Andy Shevchenko wrote:
+> On Mon, Mar 08, 2021 at 07:42:21PM -0600, Bjorn Helgaas wrote:
+> > On Mon, Mar 08, 2021 at 09:16:50PM +0200, Andy Shevchenko wrote:
+> > > On Mon, Mar 08, 2021 at 12:52:12PM -0600, Bjorn Helgaas wrote:
+> > > > On Mon, Mar 08, 2021 at 02:20:16PM +0200, Andy Shevchenko wrote:
+> > > > > From: Jonathan Yong <jonathan.yong@intel.com>
+> > > > > 
+> > > > > There is already one and at least one more user is coming which
+> > > > > requires an access to Primary to Sideband bridge (P2SB) in order to
+> > > > > get IO or MMIO bar hidden by BIOS. Create a library to access P2SB
+> > > > > for x86 devices.
+> > > > 
+> > > > Can you include a spec reference?
+> > > 
+> > > I'm not sure I have a public link to the spec. It's the 100 Series PCH [1].
+> > > The document number to look for is 546955 [2] and there actually a bit of
+> > > information about this.
+> > 
+> > This link, found by googling for "p2sb bridge", looks like it might
+> > have relevant public links:
+> > 
+> > https://lab.whitequark.org/notes/2017-11-08/accessing-intel-ich-pch-gpios/
+> > 
+> > I'd prefer if you could dig out the relevant sections because I really
+> > don't know how to identify them.
+> 
+> I'm not sure I understand what you would like to see. The
+> information about P2SB here has confidential tag. I probably can use
+> the document number and cite couple of paragraphs from it. Would it
+> be sufficient?
 
-To help with this maintenance let's start by moving sysctls to
-places where they actually belong. The proc sysctl maintainers
-do not want to know what sysctl knobs you wish to add for your own
-piece of code, we just care about the core logic.
+This patch proposes to add drivers/pci/pci-p2sb.c.  Things in
+drivers/pci/ should generally be documented via PCI-SIG specs to make
+them maintainable.  pci-p2sb.c is clearly x86- and Intel-specific.
+Maybe arch/x86/pci/ would be a better place for it?
 
-So move sysctls which are shared between filesystems into a common
-file outside of kernel/sysctl.c.
+If I were to maintain it under drivers/pci/, I would want some
+description about P2SBC_HIDE_BYTE, which device's config space it is
+in (apparently 0d.0 of some CPU), and which device it hides/unhides
+(apparently some device X other than the CPU).
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- fs/Makefile     |  1 +
- fs/sysctls.c    | 38 ++++++++++++++++++++++++++++++++++++++
- kernel/sysctl.c | 18 ------------------
- 3 files changed, 39 insertions(+), 18 deletions(-)
- create mode 100644 fs/sysctls.c
+> > The code suggests that a register on this device controls whether a
+> > different device is visible in config space.  I think it will be
+> > better if we can describe what's happening.
+> 
+> Actually it seems incorrect assumption (while it works by some reason).
+> I have to double test this.
+> 
+> From the doc:
+> 
+> "The P2SB is enumerated as a normal PCI device. ...
+> Writing a 1 to the P2SBC.HIDE field in the P2SB PCI Configuration space
+> hides the device; writing a 0 to this field, unhides the device."
+> 
+> It clearly states the P2SB PCI configuration space.
 
-diff --git a/fs/Makefile b/fs/Makefile
-index 84c5e4cdfee5..ea8770d124da 100644
---- a/fs/Makefile
-+++ b/fs/Makefile
-@@ -28,6 +28,7 @@ obj-y				+= notify/
- obj-$(CONFIG_EPOLL)		+= eventpoll.o
- obj-y				+= anon_inodes.o
- obj-$(CONFIG_SIGNALFD)		+= signalfd.o
-+obj-$(CONFIG_SYSCTL)		+= sysctls.o
- obj-$(CONFIG_TIMERFD)		+= timerfd.o
- obj-$(CONFIG_EVENTFD)		+= eventfd.o
- obj-$(CONFIG_USERFAULTFD)	+= userfaultfd.o
-diff --git a/fs/sysctls.c b/fs/sysctls.c
-new file mode 100644
-index 000000000000..54216cd1ecd7
---- /dev/null
-+++ b/fs/sysctls.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * /proc/sys/fs shared sysctls
-+ *
-+ * These sysctls are shared between different filesystems.
-+ */
-+#include <linux/init.h>
-+#include <linux/sysctl.h>
-+
-+static struct ctl_table fs_shared_sysctls[] = {
-+	{
-+		.procname	= "overflowuid",
-+		.data		= &fs_overflowuid,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_MAXOLDUID,
-+	},
-+	{
-+		.procname	= "overflowgid",
-+		.data		= &fs_overflowgid,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_MAXOLDUID,
-+	},
-+	{ }
-+};
-+
-+static int __init init_fs_shared_sysctls(void)
-+{
-+	register_sysctl_init("fs", fs_shared_sysctls);
-+	return 0;
-+}
-+
-+early_initcall(init_fs_shared_sysctls);
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 05d9dd85e17f..865173cefcef 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2896,24 +2896,6 @@ static struct ctl_table vm_table[] = {
- };
- 
- static struct ctl_table fs_table[] = {
--	{
--		.procname	= "overflowuid",
--		.data		= &fs_overflowuid,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_MAXOLDUID,
--	},
--	{
--		.procname	= "overflowgid",
--		.data		= &fs_overflowgid,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_MAXOLDUID,
--	},
- #ifdef CONFIG_FILE_LOCKING
- 	{
- 		.procname	= "leases-enable",
--- 
-2.33.0
+It clearly says P2SBC.HIDE is in P2SB config space.  But I think it's
+talking about hiding/unhiding a device other than P2SB.
 
+This patch suggests the P2SB device is at PCI_DEVFN(13, 0), and the
+lpc_ich_init_spi() patch suggests there's a SPI controller at
+PCI_DEVFN(13, 2).  And apparently P2SBC_HIDE_BIT in PCI_DEVFN(13, 0)
+determines whether PCI_DEVFN(13, 2) appears in config space.
+
+So it sounds like P2SB is always visible in config space and is not
+itself a "bridge".  The SPI controller, which *is* a bridge from PCI
+to SPI, appears at PCI_DEVFN(13, 2) in config space when
+P2SBC_HIDE_BIT is cleared.
+
+> > This all sounds quite irregular from the point of view of the PCI
+> > core.  If a device responds to address space that is not described by
+> > a standard PCI BAR, or by an EA capability, or by one of the legacy
+> > VGA or IDE exceptions, we have a problem.  That space must be
+> > described *somehow* in a generic way, e.g., ACPI or similar.
+> > 
+> > What happens if CONFIG_PCI_P2SB is unset?  The device doesn't know
+> > that, and if it is still consuming MMIO address space that we don't
+> > know about, that's a problem.
+> 
+> Yeah, Henning already answered on this and I believe that nothing
+> prevents OS to try that addresses for other PCI devices, except the
+> memory region reservation (by ACPI and / or e820 meaning). It means
+> that we rely on firmware to do the right thing if it hides the P2SB
+> bar.
+> 
+> And at the same time P2SB bar is used as a part of telling OS where
+> the *fixed* 16Mb region of MMIO is located.
+
+If the SPI controller consumes PCI address space, that space must be
+discoverable by standard PCI enumeration and BAR sizing.
+
+If the BIOS hides the device, I assume that means it does not respond
+in config space and does not consume MMIO space.  That's fine.
+
+If the BIOS hides the device and the OS unhides it, the unhide should
+happen before PCI device enumeration, so the PCI core will find the
+device and learn about the MMIO space it consumes.
+
+Bjorn

@@ -2,69 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 531A74627CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59794627D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235260AbhK2XKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        id S236244AbhK2XL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:11:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237125AbhK2XJk (ORCPT
+        with ESMTP id S234077AbhK2XLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:09:40 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6B1C0619FB
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:04:40 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id v1so78022116edx.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:04:40 -0800 (PST)
+        Mon, 29 Nov 2021 18:11:38 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F41C0698D6
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:31:16 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so16747179pja.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:31:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=9QABpclmDsiBw3O50MnuiVrQu5ZlXjbuKEZDiFrlX+M=;
-        b=oiFlsiTC7wUIWSjwnxxqqPl0wwMT0zJBSGJhjHzWKa2BSxxCx9R74nlBUSKBHbRnfR
-         km7OcxwLVQljTJlHu97B6XoY0Cd5+S8z1/kr+fQ5LQvx0SbJ+ugd+Q8zVws6G7AdvFVO
-         rHVYRJLIjGcTOSi6jw5G1YCuZu6KP1ERvTeBBHIZ8/zLstCoWImtRkJrkPGIHtKkE3/R
-         +Atssxal6LZJBs635ht2vCk46tdtT/id5Da1BaaVFTowW9Ph8MwrvaGtO/rJ2x+YAP6s
-         82C2er7DMqjR4xbypS88sAfhhl16vLxEmVtVEPajBQrQrIP8gTvWAAnxE1I87iGLNphC
-         xKJQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9AvBVjsUrHA5ojRZLyc3LkomsSMZcJ46+mIK8nRuC78=;
+        b=CjshS9PnnLSdv2AK/suTdsJ4choCpPz/1eqxVn8V5C64WtDEK+OxYTQtzf2KARNDYs
+         COUtacor2im7nKgw9GQ3xfaFd0SrSZISdHKBGeAlonlWrKqPYbmrSfjoNR8ILpdMcTw0
+         CVW49Qi4Q5EkUat8G30wzGWaufKxPT4Ho9eRItfqBN1waMkAOk/UBxrCpXSg03MQuf0m
+         zbRQ0OmIHWSbba4lWZggFAGOxpNwdFACeHn+aNiIsFIpAh7bkLUNhtFU48WC+3IrTRf6
+         EEvW+oTZ2uXDmjZG49BDYSKcNcOZoYYJBBO1AbEV9ZBGIFEb7NNyOnkNwWS54JLnGmz7
+         9bcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=9QABpclmDsiBw3O50MnuiVrQu5ZlXjbuKEZDiFrlX+M=;
-        b=8DG625fbJW/YtxFvz1k1AdOmOIgSG2o9qKZ30cF+ow6QlwvotaYmHmk0cfqGPssjTp
-         5NdfxigYRR3n118yksKim91WoR0agJLzSIcjstpsAc/3VO0UlvDCAWDb7UXz0qbdIwOJ
-         0oSPlJPPUxoPe4ixVChHwe7rG3XDOjs5mkDdwU49Te9w0EdDpJih60s0VEpRs9g1md4O
-         rISN+sb/pHCT55plf5kdDbQNpvmaw/XaWCkWu9wMmvBbuueOB/AsDDNcGoVlkrAP0X/B
-         FVFTkYvbLnLNiqBS1YhSN6vVLwb3RS8hkHRNlLy3ZVslCyRSjQT+Fr685bK+b2W9An3Z
-         UQgA==
-X-Gm-Message-State: AOAM533I4O/K4RWMgKNXoIjoa0Ptly7CNVWWtLu7cSrNueS2DyNRaq7g
-        R8ClSJyi3jNHt7cCDgPBEOSPgAMefuDQo50gXpA=
-X-Google-Smtp-Source: ABdhPJxNs3OKAYyjAIucm4FxnVk9eoCrSIaStTsFNTybc11OAK5vB9AZqMObbGbaShCyBqStXH+rWKiWWBvBP3lmvRE=
-X-Received: by 2002:a17:907:3e8a:: with SMTP id hs10mr62878225ejc.404.1638223479275;
- Mon, 29 Nov 2021 14:04:39 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9AvBVjsUrHA5ojRZLyc3LkomsSMZcJ46+mIK8nRuC78=;
+        b=FbuGR6+O5LXCdxMGChv7KV62cJeF7KKZnY8/d32aMDD5HBQQ9M+4ik+SFtqbFMOkC2
+         rMldck+RaVZ5C17luSgXSLM5muPX/YX4E0thLZZYR6CKOoComyoMZn4KscPpHjG1XpBq
+         ZaweAyyomUaKB53Hm9ZSrR2u/jQup0fTBIf1zGnyDHuXejfP0lDKNZqlTjtVNdCkNJto
+         +drlFk9KC+48xj4RC5uxtbQGnr3GVPR7FC+HIHk/6Af9xnJHq5APuHDaT29KzsYxWMP0
+         PovtpJKN8dY1F9x+EBy+1umRJVcj9QlqTzHL8OsQw2l32YcjugP5K92XqggZ2QNNcWW+
+         uojQ==
+X-Gm-Message-State: AOAM531P2wc/UY29i4NyOP+x+uqp1Fy5bhJcoiVUNJnqiPlFgjkCGsWX
+        pF1+YhOjbQdkdXce08HoIs+5PQ==
+X-Google-Smtp-Source: ABdhPJzF7uWEEj8d7BByxoVl2ngezip9hrJFXj3YT6xDYrOeUi4flFODdMBcQJRImPXrl/BcTlaGKg==
+X-Received: by 2002:a17:90b:4b48:: with SMTP id mi8mr1120100pjb.214.1638225076325;
+        Mon, 29 Nov 2021 14:31:16 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c2sm19188610pfv.112.2021.11.29.14.31.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 14:31:15 -0800 (PST)
+Date:   Mon, 29 Nov 2021 22:31:12 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        pgonda@google.com
+Subject: Re: [PATCH 11/12] KVM: SEV: do not take kvm->lock when destroying
+Message-ID: <YaVUsB4qBdhBlL6O@google.com>
+References: <20211123005036.2954379-1-pbonzini@redhat.com>
+ <20211123005036.2954379-12-pbonzini@redhat.com>
 MIME-Version: 1.0
-Received: by 2002:a54:2ecf:0:0:0:0:0 with HTTP; Mon, 29 Nov 2021 14:04:39
- -0800 (PST)
-Reply-To: lisshuuu1@gmail.com
-From:   MS LISA HUGH <olivier.folly0@gmail.com>
-Date:   Mon, 29 Nov 2021 23:04:39 +0100
-Message-ID: <CAG_GOAtqOQyDm+Aj1KqD6to_uVgTiw+r=AnY6nXHRFCpswU5AA@mail.gmail.com>
-Subject: YOU HAVE THE DETAILS AS SOON I HEAR FROM YOU(Ms Lisa Hugh)
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123005036.2954379-12-pbonzini@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
+On Mon, Nov 22, 2021, Paolo Bonzini wrote:
+> Taking the lock is useless since there are no other references,
+> and there are already accesses (e.g. to sev->enc_context_owner)
+> that do not take it.  So get rid of it.
+> 
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
 
-I am Ms Lisa Hugh accountant and files keeping by profession here with the bank.
-
-I need Your help for this transfer($4,500,000,00 ,U.S.DOLLARS)to your
-bank account with your co-operation for both of us benefit.
-
-Please send the follow below,
-1)AGE....2)TELEPHONE NUMBER,,,,,...,3)COUNTRY.....4)OCCUPATION......
-Thanks.
-Ms Lisa Hugh
+Reviewed-by: Sean Christopherson <seanjc@google.com>

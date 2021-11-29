@@ -2,157 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 068DE4627C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56F84627C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:07:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237212AbhK2XKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:10:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
+        id S236920AbhK2XJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237337AbhK2XJO (ORCPT
+        with ESMTP id S237336AbhK2XJO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Nov 2021 18:09:14 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89E1C0F74C4;
-        Mon, 29 Nov 2021 13:07:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D6E43CE16B4;
-        Mon, 29 Nov 2021 21:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA8D1C53FC7;
-        Mon, 29 Nov 2021 21:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638220027;
-        bh=YYsrWpsjHtYy14bPA9IeK6DYB6TTLcgfXcuOF1CfI00=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=CV5bVkbPH6U6AOHjBPA2DrM1eZ1WCNEEr2V6Ogj8edwXiqOAEFU3aEpj2j0ppognm
-         2KxVMZtL166u/kJuNPXut4yC2aMuRaFHvW4XWbPWR+cGNYLFYZMRqgJ5oUK9naNO45
-         gAy81Zl4ifg7GW82DuwY9xzyOk+X832OV12I7Rv0qLGaUJO8i0iLBxlKB0BRV1jRux
-         GsDpx057WgYTWJdD+dY1CXtjSmcSeJ13NIyxl3ovhAI9xO8V4yw5Inwyh9J/UMQMpr
-         joNxkB3DRW1TAUbGjKGgBeIKTzWJ4doP6PiUwAkwpHCtW6g8EAMalLhhhJPO8EyR+/
-         IVsq1x4BmP61A==
-Date:   Mon, 29 Nov 2021 15:07:05 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Tan Jui Nee <jui.nee.tan@intel.com>,
-        Jim Quinlan <james.quinlan@broadcom.com>,
-        Jonathan Yong <jonathan.yong@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-pci@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Peter Tyser <ptyser@xes-inc.com>, hdegoede@redhat.com,
-        henning.schild@siemens.com
-Subject: Re: [PATCH v1 3/7] PCI: New Primary to Sideband (P2SB) bridge
- support library
-Message-ID: <20211129210705.GA2689680@bhelgaas>
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B423DC0F74CF;
+        Mon, 29 Nov 2021 13:09:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NYI5KVFPjbS12X0GrBf9xRuRMianhfD+CgDt6QrOv0E=; b=McA148pZHAp5/mjW/omCEMbH0K
+        RAkY7+fT91qeOFoxWPXkglDWlpeZzEUXfC/4Qa9fLRdABt0LkvBXTDnTZjeNMRnGW7P81l4h1GGCl
+        A/x5vjUaU2w08Wi9vED9vR76Cm8/Lnl8ZWLbiMekLvZy5pokjjjRih5/rmfNVLsP0t2RvZcneF/iR
+        L2yYDxRXwrK05gly7G1WfB0irOX3P/PCwNMug5YGGcrH/FnqQ1dFLYx4Fuyc7s4TcZ/wgQARy9PV2
+        05p/obCpKLQKoA4SNFP35QcmzhlF3lwv8+3XmIrYSzUhOSRfbHmwJTk7N6m7QyIQuBJ+Mw/Su4Pq3
+        EuXpa6uQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mrntC-001Jpl-Tt; Mon, 29 Nov 2021 21:08:43 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7370B98675D; Mon, 29 Nov 2021 22:08:41 +0100 (CET)
+Date:   Mon, 29 Nov 2021 22:08:41 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Peter Oskolkov <posk@posk.io>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-api@vger.kernel.org, Paul Turner <pjt@google.com>,
+        Ben Segall <bsegall@google.com>,
+        Peter Oskolkov <posk@google.com>,
+        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
+        Thierry Delisle <tdelisle@uwaterloo.ca>
+Subject: Re: [PATCH v0.9.1 3/6] sched/umcg: implement UMCG syscalls
+Message-ID: <20211129210841.GO721624@worktop.programming.kicks-ass.net>
+References: <20211122211327.5931-1-posk@google.com>
+ <20211122211327.5931-4-posk@google.com>
+ <20211124200822.GF721624@worktop.programming.kicks-ass.net>
+ <CAFTs51Uka8VRCHuGidw7mRwATufp87U6S8SWUVod_kU-h6T3ew@mail.gmail.com>
+ <YaEUts3RbOLyvAjl@hirez.programming.kicks-ass.net>
+ <CAFTs51XnN+N74i1XHvRUAUWd04-Fs9uV6ouXo=CQSQs8MaEM5A@mail.gmail.com>
+ <YaUCoe07Wl9Stlch@hirez.programming.kicks-ass.net>
+ <CAFTs51UzR=m6+vcjTCNOGwGu3ZwB5GMrg+cSQy2ecvCWxhZvEQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YaD/hspdA/j0tL5h@smile.fi.intel.com>
+In-Reply-To: <CAFTs51UzR=m6+vcjTCNOGwGu3ZwB5GMrg+cSQy2ecvCWxhZvEQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 05:38:46PM +0200, Andy Shevchenko wrote:
-> On Mon, Mar 08, 2021 at 07:42:21PM -0600, Bjorn Helgaas wrote:
-> > On Mon, Mar 08, 2021 at 09:16:50PM +0200, Andy Shevchenko wrote:
-> > > On Mon, Mar 08, 2021 at 12:52:12PM -0600, Bjorn Helgaas wrote:
-> > > > On Mon, Mar 08, 2021 at 02:20:16PM +0200, Andy Shevchenko wrote:
-> > > > > From: Jonathan Yong <jonathan.yong@intel.com>
-> > > > > 
-> > > > > There is already one and at least one more user is coming which
-> > > > > requires an access to Primary to Sideband bridge (P2SB) in order to
-> > > > > get IO or MMIO bar hidden by BIOS. Create a library to access P2SB
-> > > > > for x86 devices.
-> > > > 
-> > > > Can you include a spec reference?
-> > > 
-> > > I'm not sure I have a public link to the spec. It's the 100 Series PCH [1].
-> > > The document number to look for is 546955 [2] and there actually a bit of
-> > > information about this.
-> > 
-> > This link, found by googling for "p2sb bridge", looks like it might
-> > have relevant public links:
-> > 
-> > https://lab.whitequark.org/notes/2017-11-08/accessing-intel-ich-pch-gpios/
-> > 
-> > I'd prefer if you could dig out the relevant sections because I really
-> > don't know how to identify them.
+On Mon, Nov 29, 2021 at 09:34:49AM -0800, Peter Oskolkov wrote:
+> On Mon, Nov 29, 2021 at 8:41 AM Peter Zijlstra <peterz@infradead.org> wrote:
+
+> > However, do note this whole scheme fundamentally has some of that, the
+> > moment the syscall unblocks until sys_exit is 'unmanaged' runtime for
+> > all tasks, they can consume however much time the syscall needs there.
+> >
+> > Also, timeout on sys_umcg_wait() gets you the exact same situation (or
+> > worse, multiple running workers).
 > 
-> I'm not sure I understand what you would like to see. The
-> information about P2SB here has confidential tag. I probably can use
-> the document number and cite couple of paragraphs from it. Would it
-> be sufficient?
+> It should not. Timed out workers should be added to the runnable list
+> and not become running unless a server chooses so. So sys_umcg_wait()
+> with a timeout should behave similarly to a normal sleep, in that the
+> server is woken upon the worker blocking, and upon the worker wakeup
+> the worker is added to the woken workers list and waits for a server
+> to run it. The only difference is that in a sleep the worker becomes
+> BLOCKED, while in sys_umcg_wait() the worker is RUNNABLE the whole
+> time.
 
-This patch proposes to add drivers/pci/pci-p2sb.c.  Things in
-drivers/pci/ should generally be documented via PCI-SIG specs to make
-them maintainable.  pci-p2sb.c is clearly x86- and Intel-specific.
-Maybe arch/x86/pci/ would be a better place for it?
+OK, that's somewhat subtle and I hadn't gotten that either.
 
-If I were to maintain it under drivers/pci/, I would want some
-description about P2SBC_HIDE_BYTE, which device's config space it is
-in (apparently 0d.0 of some CPU), and which device it hides/unhides
-(apparently some device X other than the CPU).
+Currently it return -ETIMEDOUT in RUNNING state for both server and
+worker callers.
 
-> > The code suggests that a register on this device controls whether a
-> > different device is visible in config space.  I think it will be
-> > better if we can describe what's happening.
+Let me go fix that then.
+
+> > > Another big concern I have is that you removed UMCG_TF_LOCKED. I
+> >
+> > OOh yes, I forgot to mention that. I couldn't figure out what it was
+> > supposed to do.
+> >
+> > > definitely needed it to guard workers during "sched work" in the
+> > > userspace in my approach. I'm not sure if the flag is absolutely
+> > > needed with your approach, but most likely it is - the kernel-side
+> > > scheduler does lock tasks and runqueues and disables interrupts and
+> > > migrations and other things so that the scheduling logic is not
+> > > hijacked by concurrent stuff. Why do you assume that the userspace
+> > > scheduling code does not need similar protections?
+> >
+> > I've not yet come across a case where this is needed. Migration for
+> > instance is possible when RUNNABLE, simply write ::server_tid before
+> > ::state. Userspace just needs to make sure who actually owns the task,
+> > but it can do that outside of this state.
+> >
+> > But like I said; I've not yet done the userspace part (and I lost most
+> > of today trying to install a new machine), so perhaps I'll run into it
+> > soon enough.
 > 
-> Actually it seems incorrect assumption (while it works by some reason).
-> I have to double test this.
+> The most obvious scenario where I needed locking is when worker A
+> wants to context switch into worker B, while another worker C wants to
+> context switch into worker A, and worker A pagefaults. This involves:
 > 
-> From the doc:
+> worker A context: worker A context switches into worker B:
 > 
-> "The P2SB is enumerated as a normal PCI device. ...
-> Writing a 1 to the P2SBC.HIDE field in the P2SB PCI Configuration space
-> hides the device; writing a 0 to this field, unhides the device."
+> - worker B::server_tid = worker A::server_tid
+> - worker A::server_tid = none
+> - worker A::state = runnable
+> - worker B::state = running
+> - worker A::next_tid = worker B
+> - worker A calls sys_umcg_wait()
 > 
-> It clearly states the P2SB PCI configuration space.
-
-It clearly says P2SBC.HIDE is in P2SB config space.  But I think it's
-talking about hiding/unhiding a device other than P2SB.
-
-This patch suggests the P2SB device is at PCI_DEVFN(13, 0), and the
-lpc_ich_init_spi() patch suggests there's a SPI controller at
-PCI_DEVFN(13, 2).  And apparently P2SBC_HIDE_BIT in PCI_DEVFN(13, 0)
-determines whether PCI_DEVFN(13, 2) appears in config space.
-
-So it sounds like P2SB is always visible in config space and is not
-itself a "bridge".  The SPI controller, which *is* a bridge from PCI
-to SPI, appears at PCI_DEVFN(13, 2) in config space when
-P2SBC_HIDE_BIT is cleared.
-
-> > This all sounds quite irregular from the point of view of the PCI
-> > core.  If a device responds to address space that is not described by
-> > a standard PCI BAR, or by an EA capability, or by one of the legacy
-> > VGA or IDE exceptions, we have a problem.  That space must be
-> > described *somehow* in a generic way, e.g., ACPI or similar.
-> > 
-> > What happens if CONFIG_PCI_P2SB is unset?  The device doesn't know
-> > that, and if it is still consuming MMIO address space that we don't
-> > know about, that's a problem.
+> worker B context: before the above completes, worker C wants to
+> context switch into worker A, with similar steps.
 > 
-> Yeah, Henning already answered on this and I believe that nothing
-> prevents OS to try that addresses for other PCI devices, except the
-> memory region reservation (by ACPI and / or e820 meaning). It means
-> that we rely on firmware to do the right thing if it hides the P2SB
-> bar.
+> "interrupt context": in the middle of the mess above, worker A pagefaults
 > 
-> And at the same time P2SB bar is used as a part of telling OS where
-> the *fixed* 16Mb region of MMIO is located.
+> Too many moving parts. UMCG_TF_LOCKED helped me make this mess
+> manageable. Maybe without pagefaults clever ordering of the operations
+> listed above could make things work, but pagefaults mess things badly,
+> so some kind of "preempt_disable()" for the userspace scheduling code
+> was needed, and UMCG_TF_LOCKED was the solution I had.
 
-If the SPI controller consumes PCI address space, that space must be
-discoverable by standard PCI enumeration and BAR sizing.
+I'm not sure I'm following. For this to be true A and C must be running
+on a different server right?
 
-If the BIOS hides the device, I assume that means it does not respond
-in config space and does not consume MMIO space.  That's fine.
+So we have something like:
 
-If the BIOS hides the device and the OS unhides it, the unhide should
-happen before PCI device enumeration, so the PCI core will find the
-device and learn about the MMIO space it consumes.
+	S0 running A			S1 running B
 
-Bjorn
+Therefore:
+
+	S0::state == RUNNABLE		S1::state == RUNNABLE
+	A::server_tid == S0.tid		B::server_tid == S1.tid
+	A::state == RUNNING		B::state == RUNNING
+
+Now, you want A to switch to C, therefore C had better be with S0, eg we
+have:
+
+	C::server_tid == S0.tid
+	C::state == RUNNABLE
+
+So then A does:
+
+	A::next_tid = C.tid;
+	sys_umcg_wait();
+
+Which will:
+
+	pin(A);
+	pin(S0);
+
+	cmpxchg(A::state, RUNNING, RUNNABLE);
+
+	next_tid = A::next_tid; // C
+
+	enqueue(S0::runnable, A);
+
+At which point B steals S0's runnable queue, and tries to make A go.
+
+					runnable = xchg(S0::runnable_list_ptr, NULL); // == A
+					A::server_tid = S1.tid;
+					B::next_tid = A.tid;
+					sys_umcg_wait();
+
+	wake(C)
+	  cmpxchg(C::state, RUNNABLE, RUNNING); <-- *fault*
+
+
+Something like that, right?
+
+What currently happens is that S0 goes back to S0 and S1 ends up in A.
+That is, if, for any reason we fail to wake next_tid, we'll wake
+server_tid.
+
+So then S0 wakes up and gets to re-evaluate life. If it has another
+worker it can go run that, otherwise it can try and steal a worker
+somewhere or just idle out.
+
+Now arguably, the only reason A->C can fault is because C is garbage, at
+which point your program is malformed and it doesn't matter what
+happens one way or the other.

@@ -2,130 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 52DA44617D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:17:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3102F461973
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354640AbhK2OUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:20:22 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:43392 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243825AbhK2OSU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:18:20 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 9B0811F44680
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638195300; bh=qg0ogrpDEw7JPiv8EIlq4c9NL0fyYtw+4YIjCYhjohM=;
-        h=From:Subject:To:Cc:References:Date:In-Reply-To:From;
-        b=IbTiE2av+7ihv0Qq9SkHZc2960kgW1bDv5Y9iGihVQFz6IjoUilrYSku9yJtwLhOn
-         GtiOrcTSZP1KwdxCklTZWVFd9zNdBMvsCw7Wzr/S9FIw2lOXhp5sJi0CVnWlrnwjj7
-         J2KMKlPvhcGnlrI9v8TxzXQUkn9+jA+p/npimhp6aJdSV1FBm0SeShc+a/cMl2B9kj
-         C2RqBMpIvyYb/wXEqv+sLCk7rC3teGaG/9busDeEQuj7HwKRwSPh6MELP6fmFTaBG1
-         kKSOlDjWlaRx54vzfbVICO5ltEnKJExlwm612kbDKF/n1jEMd1Rxfuu12LU/JcIkWo
-         fsx3oYHza5R2g==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH] drm/msm: Initialize MDSS irq domain at probe time
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, robdclark@gmail.com
-Cc:     sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
-        maxime@cerno.tech, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        jami.kettunen@somainline.org
-References: <20211125150947.354076-1-angelogioacchino.delregno@collabora.com>
- <bf1540f1-4a9f-a9d6-d487-929107c487fd@linaro.org>
-Message-ID: <9a0158ae-a3b1-21b2-1ba3-82d4901eb873@collabora.com>
-Date:   Mon, 29 Nov 2021 15:14:56 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S1378237AbhK2OiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:38:09 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:35049 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1378768AbhK2Of5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:35:57 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J2nYM1mbHz9sT4;
+        Mon, 29 Nov 2021 15:19:51 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 15BUlw8q236k; Mon, 29 Nov 2021 15:19:51 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J2nY41Q1Fz9sTD;
+        Mon, 29 Nov 2021 15:19:36 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1E64E8B7AA;
+        Mon, 29 Nov 2021 15:19:36 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id p7JTDfw25QcC; Mon, 29 Nov 2021 15:19:36 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A35298B7B2;
+        Mon, 29 Nov 2021 15:19:35 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1ATEJQOc959544
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 15:19:26 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1ATEJQDx959542;
+        Mon, 29 Nov 2021 15:19:26 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>, alex@ghiti.fr
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-mm@kvack.org
+Subject: [PATCH v3 00/10] Convert powerpc to default topdown mmap layout
+Date:   Mon, 29 Nov 2021 15:19:14 +0100
+Message-Id: <cover.1638195388.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-In-Reply-To: <bf1540f1-4a9f-a9d6-d487-929107c487fd@linaro.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1638195562; l=3086; s=20211009; h=from:subject:message-id; bh=1erw0VtOXrYy2x4dP5mNsIfz576xCuqm2bQLPruXkhk=; b=3RTY7VpGfoPz4K7IC1rD8QLFf/pgmfgabPWELEGQrvMHxz2lCkgGpIv6svnER43DJvXOXX6sLho+ EsNNhJOnBQn919ggCm87sU94wKDLKr8ADD2q/6+R4BjcTodPjOdc
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/11/21 03:20, Dmitry Baryshkov ha scritto:
-> Hi,
-> 
-> On 25/11/2021 18:09, AngeloGioacchino Del Regno wrote:
->> Since commit 8f59ee9a570c ("drm/msm/dsi: Adjust probe order"), the
->> DSI host gets initialized earlier, but this caused unability to probe
->> the entire stack of components because they all depend on interrupts
->> coming from the main `mdss` node (mdp5, or dpu1).
->>
->> To fix this issue, also anticipate probing mdp5 or dpu1 by initializing
->> them at msm_pdev_probe() time: this will make sure that we add the
->> required interrupt controller mapping before dsi and/or other components
->> try to initialize, finally satisfying the dependency.
->>
->> While at it, also change the allocation of msm_drm_private to use the
->> devm variant of kzalloc().
->>
->> Fixes: 8f59ee9a570c ("drm/msm/dsi: Adjust probe order")
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> I have been thinking about this. I do not feel that this is the correct approach. 
-> Currently DRM device exists only when all components are bound. If any of the 
-> subdevices is removed, corresponding component is delteted (and thus all components 
-> are unbound), the DRM device is taken down. This results in the state cleanup, 
-> userspace notifications, etc.
-> 
-> With your changes, DRM device will continue to exist even after one of subdevices 
-> is removed. This is not an expected behaviour, since subdrivers do not perform full 
-> cleanup, delegating that to DRM device takedown.
-> 
-> I suppose that proper solution would be to split msm_drv.c into into:
-> - generic components & drm code to be called from mdp4/mdp5/dpu driver (making 
-> mdp4, mdp5 or dpu1 the components master)
-> 
-> - bare mdss driver, taking care only about IRQs, OF devices population - calling 
-> proper mdss_init/mdss_destroy functions. Most probably we can drop this part 
-> altogether and just make md5_mdss.c/dpu_mdss.c proper platform drivers.
-> 
+Rebased on top of Nic's v5 series "powerpc: Make hash MMU code build configurable"
 
+This series converts powerpc to default topdown mmap layout.
 
-Hmm... getting a better look on how things are structured... yes, I mostly agree
-with you, though I'm not sure about making MDP{4,5}/DPU1 the component master; that
-would result in a major change in drm-msm, which may be "a bit too much".
+powerpc provides its own arch_get_unmapped_area() only when
+slices are needed, which is only for book3s/64. First part of
+the series moves slices into book3s/64 specific directories
+and cleans up other subarchitectures.
 
-Don't misunderstand me here, please, major changes are fine - but I feel urgency
-to get this bug solved ASAP (since drm-msm is currently broken at least for drm 
-bridges) and, if we do anything major, that would require a very careful slow
-review process that will leave this driver broken for a lot of time.
+Then a small modification is done to core mm to allow
+powerpc to still provide its own arch_randomize_brk()
 
-I actually tried something else that "simplifies" the former approach, so here's
-my proposal:
-* we introduce {mdp5,dpu}_mdss_early_init(struct device, struct msm_drm_private)
-* allocate only msm_drm_private in msm_pdev_probe, leaving the drm_dev_alloc call
-   into msm_drm_init(), so that the drm_dev_put() stays in msm_drm_uninit()
-* pass msm_drm_private as drvdata instead of drm_device
-* change all the drvdata users to get drm_device from priv->dev, instead of getting
-   msm_drm_private from drm_device->dev_private (like many other drm drivers are
-   currently doing)
+Last part converts to default topdown mmap layout.
 
-This way, we keep the current flow of creating the DRM device at msm_drm_init time
-and tearing it down at msm_drm_unbind time, solving the issue that you are
-describing.
+Changes in v3:
+- Fixed missing <linux/elf-randomize.h> in last patch
+- Added a patch to move SZ_1T out of drivers/pci/controller/pci-xgene.c
 
-If you're okay with this kind of approach, I have two patches here that are 95%
-ready, can finish them off and send briefly.
+Changes in v2:
+- Moved patch 4 before patch 2
+- Make generic arch_randomize_brk() __weak
+- Added patch 9
 
-Though, something else must be noted here... in the last mail where I'm pasting
-a crash that happens when running 'rmmod panel_edp ti_sn65dsi86', I have implied
-that this is happening due to the patch that I've sent: after some more research,
-I'm not convinced anymore that this is a consequence of that. That crash may not
-be related to my fix at all, but to something else (perhaps also related to commit
-8f59ee9a570c, the one that we're fixing here).
+Christophe Leroy (10):
+  powerpc/mm: Make slice specific to book3s/64
+  powerpc/mm: Move vma_mmu_pagesize() and hugetlb_get_unmapped_area() to
+    slice.c
+  powerpc/mm: Remove CONFIG_PPC_MM_SLICES
+  powerpc/mm: Remove asm/slice.h
+  powerpc/mm: Call radix__arch_get_unmapped_area() from
+    arch_get_unmapped_area()
+  mm: Allow arch specific arch_randomize_brk() with
+    CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT
+  powerpc/mm: Convert to default topdown mmap layout
+  powerpc/mm: Properly randomise mmap with slices
+  sizes.h: Add SZ_1T macro
+  powerpc: Simplify and move arch_randomize_brk()
 
-Of course, that crash still happens even with the approach that I've just proposed.
+ arch/powerpc/Kconfig                          |   2 +-
+ arch/powerpc/include/asm/book3s/64/hash.h     |   7 +-
+ arch/powerpc/include/asm/book3s/64/hugetlb.h  |   4 -
+ arch/powerpc/include/asm/book3s/64/mmu-hash.h |   1 +
+ arch/powerpc/include/asm/book3s/64/slice.h    |  18 ++
+ arch/powerpc/include/asm/hugetlb.h            |   2 +-
+ arch/powerpc/include/asm/paca.h               |   7 -
+ arch/powerpc/include/asm/page.h               |   1 -
+ arch/powerpc/include/asm/processor.h          |   2 -
+ arch/powerpc/include/asm/slice.h              |  46 ----
+ arch/powerpc/kernel/paca.c                    |   5 -
+ arch/powerpc/kernel/process.c                 |  41 ----
+ arch/powerpc/mm/Makefile                      |   3 +-
+ arch/powerpc/mm/book3s64/Makefile             |   2 +-
+ arch/powerpc/mm/book3s64/hash_utils.c         |  33 +--
+ arch/powerpc/mm/book3s64/radix_hugetlbpage.c  |  55 -----
+ arch/powerpc/mm/{ => book3s64}/slice.c        | 200 ++++++++++++++-
+ arch/powerpc/mm/hugetlbpage.c                 |  28 ---
+ arch/powerpc/mm/mmap.c                        | 228 ------------------
+ arch/powerpc/mm/nohash/mmu_context.c          |   9 -
+ arch/powerpc/mm/nohash/tlb.c                  |   4 -
+ arch/powerpc/platforms/Kconfig.cputype        |   4 -
+ drivers/pci/controller/pci-xgene.c            |   1 -
+ include/linux/sizes.h                         |   2 +
+ mm/util.c                                     |   2 +-
+ 25 files changed, 237 insertions(+), 470 deletions(-)
+ delete mode 100644 arch/powerpc/include/asm/slice.h
+ rename arch/powerpc/mm/{ => book3s64}/slice.c (80%)
+ delete mode 100644 arch/powerpc/mm/mmap.c
 
+-- 
+2.33.1
 
-Looking forward for your opinion!
-
-Cheers,
-- Angelo

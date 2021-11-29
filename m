@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C5A4625B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1263462743
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:59:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234283AbhK2WnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:43:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S236467AbhK2XBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:01:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbhK2Wly (ORCPT
+        with ESMTP id S237098AbhK2XAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:41:54 -0500
+        Mon, 29 Nov 2021 18:00:43 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03396C12A4C9;
-        Mon, 29 Nov 2021 10:29:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54B98C043CD0;
+        Mon, 29 Nov 2021 10:36:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 78157CE140D;
-        Mon, 29 Nov 2021 18:29:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25C23C53FC7;
-        Mon, 29 Nov 2021 18:29:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A01C4CE1626;
+        Mon, 29 Nov 2021 18:36:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49B4AC53FC7;
+        Mon, 29 Nov 2021 18:36:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210557;
-        bh=CQOj+vOMTYkLjqAdBIyqI4itgv0PKptmXSlNeMkD3/E=;
+        s=korg; t=1638211010;
+        bh=xsc1aAWlMbS7mY+1QE2TqEgslezv64uAQqQSKohAjw4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NYlU/vNPzJB2VTvHJzIud0953YFzByq3IkLf6xX9/dWb4gGaAFgP+4T5IdYh6yKhW
-         bTx/KnQPmAITO2ZJs5eTyhxBiOP02FTnvdV6KuqJrTtfeVnL2Rf8EmeIUizGaoaLDG
-         lkEyvKYsbV6iEuu/Wqjqz2Yn0pqGV6tCCNZDLezk=
+        b=SlgVnaiECLSsfuYXK4ORM6v/XDMMEuKXaaKC6eRkrL7qcpvY+lj3WwgLHgv6GKMz8
+         kCnQufGGUb2nJviO4upLSRM4r4yVtHwCCehzdUwFkK51b8hbiJ+iqGumvevu8qeff7
+         KezjqGZbEQCouEBmII9ms/VVTZYTFBBDezqR8Aj4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 5.10 036/121] PCI: aardvark: Update comment about disabling link training
+        stable@vger.kernel.org, Jim Quinlan <jim2101024@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 073/179] ARM: dts: bcm2711: Fix PCIe interrupts
 Date:   Mon, 29 Nov 2021 19:17:47 +0100
-Message-Id: <20211129181712.858405742@linuxfoundation.org>
+Message-Id: <20211129181721.356541681@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,42 +49,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-commit 1d1cd163d0de22a4041a6f1aeabcf78f80076539 upstream.
+[ Upstream commit 98481f3d72fb88cb5b973153434061015f094925 ]
 
-According to PCI Express Base Specifications (rev 4.0, 6.6.1
-"Conventional reset"), after fundamental reset a 100ms delay is needed
-prior to enabling link training.
+The PCIe host bridge has two interrupt lines, one that goes towards it
+PCIE_INTR2 second level interrupt controller and one for its MSI second
+level interrupt controller. The first interrupt line is not currently
+managed by the driver, which is why it was not a functional problem.
 
-Update comment in code to reflect this requirement.
+The interrupt-map property was also only listing the PCI_INTA interrupts
+when there are also the INTB, C and D.
 
-Link: https://lore.kernel.org/r/20201202184659.3795-1-pali@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Jim Quinlan <jim2101024@gmail.com>
+Fixes: d5c8dc0d4c88 ("ARM: dts: bcm2711: Enable PCIe controller")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/bcm2711.dtsi | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -389,7 +389,14 @@ static void advk_pcie_issue_perst(struct
- 	if (!pcie->reset_gpio)
- 		return;
- 
--	/* PERST does not work for some cards when link training is enabled */
-+	/*
-+	 * As required by PCI Express spec (PCI Express Base Specification, REV.
-+	 * 4.0 PCI Express, February 19 2014, 6.6.1 Conventional Reset) a delay
-+	 * for at least 100ms after de-asserting PERST# signal is needed before
-+	 * link training is enabled. So ensure that link training is disabled
-+	 * prior de-asserting PERST# signal to fulfill that PCI Express spec
-+	 * requirement.
-+	 */
- 	reg = advk_readl(pcie, PCIE_CORE_CTRL0_REG);
- 	reg &= ~LINK_TRAINING_EN;
- 	advk_writel(pcie, reg, PCIE_CORE_CTRL0_REG);
+diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
+index 3b60297af7f60..9e01dbca4a011 100644
+--- a/arch/arm/boot/dts/bcm2711.dtsi
++++ b/arch/arm/boot/dts/bcm2711.dtsi
+@@ -506,11 +506,17 @@ pcie0: pcie@7d500000 {
+ 			#address-cells = <3>;
+ 			#interrupt-cells = <1>;
+ 			#size-cells = <2>;
+-			interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>,
++			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>,
+ 				     <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "pcie", "msi";
+ 			interrupt-map-mask = <0x0 0x0 0x0 0x7>;
+ 			interrupt-map = <0 0 0 1 &gicv2 GIC_SPI 143
++							IRQ_TYPE_LEVEL_HIGH>,
++					<0 0 0 2 &gicv2 GIC_SPI 144
++							IRQ_TYPE_LEVEL_HIGH>,
++					<0 0 0 3 &gicv2 GIC_SPI 145
++							IRQ_TYPE_LEVEL_HIGH>,
++					<0 0 0 4 &gicv2 GIC_SPI 146
+ 							IRQ_TYPE_LEVEL_HIGH>;
+ 			msi-controller;
+ 			msi-parent = <&pcie0>;
+-- 
+2.33.0
+
 
 

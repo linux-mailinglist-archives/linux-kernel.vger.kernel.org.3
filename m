@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A30F461E77
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24373461F0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379531AbhK2SgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:36:20 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52222 "EHLO
+        id S1380108AbhK2Smu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:42:50 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55560 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379008AbhK2SeO (ORCPT
+        with ESMTP id S1379925AbhK2Skq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:34:14 -0500
+        Mon, 29 Nov 2021 13:40:46 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 89BA1CE13F9;
-        Mon, 29 Nov 2021 18:30:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B04EC53FAD;
-        Mon, 29 Nov 2021 18:30:51 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 45471CE13D4;
+        Mon, 29 Nov 2021 18:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3847C53FCF;
+        Mon, 29 Nov 2021 18:37:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210651;
-        bh=ZmJVGOcswWKMSxH6B2Yppikjx+qmQahizOd3Au+ha50=;
+        s=korg; t=1638211045;
+        bh=OpONqH4cyYUfcsoa2Ic9kZ61xrPVRk7BqUiTBaI+PKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aFiDIMeNneEHEDb3SM9ynO0509KhrLpZ3GejyFoJcz4pXjojYKtPsR1H3u3MmXVuF
-         Nq0cfXDhjJ1spHaBK04OkqjukW0o5Io+lWrjGF72tDbG9eQSbCf2rUxvw6I/+EU6fZ
-         yDjMtvAuQJwMw7cL6oNzQU6M0PNAodTo2oZ+I0AM=
+        b=yywUqtjUQnHLQYIw2ul+YfHEBe7ni4+Zmnj252/fR09VBJwQ3KkgeN6UkzKhjVrb8
+         J4/g6UuEBkh6vOi+s3FKRJdhhN0cFUiGptxdD8Rpndmakyt1/GakftbX4s3szhzXoX
+         xa3G2jl+velIrYNqeDDRHyWmavns0YYgx+40Ybhk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        stable@vger.kernel.org,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 046/121] ARM: dts: BCM5301X: Add interrupt properties to GPIO node
-Date:   Mon, 29 Nov 2021 19:17:57 +0100
-Message-Id: <20211129181713.209954611@linuxfoundation.org>
+Subject: [PATCH 5.15 084/179] NFSv42: Dont fail clone() unless the OP_CLONE operation failed
+Date:   Mon, 29 Nov 2021 19:17:58 +0100
+Message-Id: <20211129181721.713083809@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -45,34 +46,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 40f7342f0587639e5ad625adaa15efdd3cffb18f ]
+[ Upstream commit d3c45824ad65aebf765fcf51366d317a29538820 ]
 
-The GPIO controller is also an interrupt controller provider and is
-currently missing the appropriate 'interrupt-controller' and
-'#interrupt-cells' properties to denote that.
+The failure to retrieve post-op attributes has no bearing on whether or
+not the clone operation itself was successful. We must therefore ignore
+the return value of decode_getfattr() when looking at the success or
+failure of nfs4_xdr_dec_clone().
 
-Fixes: fb026d3de33b ("ARM: BCM5301X: Add Broadcom's bus-axi to the DTS file")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Fixes: 36022770de6c ("nfs42: add CLONE xdr functions")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/bcm5301x.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/nfs/nfs42xdr.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/arm/boot/dts/bcm5301x.dtsi b/arch/arm/boot/dts/bcm5301x.dtsi
-index e97a9c0904a98..9fdad20c40d17 100644
---- a/arch/arm/boot/dts/bcm5301x.dtsi
-+++ b/arch/arm/boot/dts/bcm5301x.dtsi
-@@ -242,6 +242,8 @@ chipcommon: chipcommon@0 {
- 
- 			gpio-controller;
- 			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
- 		};
- 
- 		pcie0: pcie@12000 {
+diff --git a/fs/nfs/nfs42xdr.c b/fs/nfs/nfs42xdr.c
+index c8bad735e4c19..271e5f92ed019 100644
+--- a/fs/nfs/nfs42xdr.c
++++ b/fs/nfs/nfs42xdr.c
+@@ -1434,8 +1434,7 @@ static int nfs4_xdr_dec_clone(struct rpc_rqst *rqstp,
+ 	status = decode_clone(xdr);
+ 	if (status)
+ 		goto out;
+-	status = decode_getfattr(xdr, res->dst_fattr, res->server);
+-
++	decode_getfattr(xdr, res->dst_fattr, res->server);
+ out:
+ 	res->rpc_status = status;
+ 	return status;
 -- 
 2.33.0
 

@@ -2,96 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C2114617A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B1D4617AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbhK2OPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:15:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S233633AbhK2OQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbhK2ONK (ORCPT
+        with ESMTP id S232698AbhK2OOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:13:10 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C089CC08EAD2;
-        Mon, 29 Nov 2021 04:49:23 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so16717226wmj.5;
-        Mon, 29 Nov 2021 04:49:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F0poFPJsWt+35ZjTKPTDqAWquj99j6P21+mLO9eANjc=;
-        b=I3hKvrFIpV9B6n8epfPsaPBOwhiF+v9Dqo0UZCSDDztmiIeVrboxg9Y/U8uVLCwsAf
-         0bacUL33sAdOklbyi+Eq2rJDYyjrOrNI3KAKLIovfpRVlc9Iw1+HjnM6BF/uliFuRAph
-         INeOzkQVrYEsqFem7A9d9kHDdHoFJ0h1rAhdbS23IZgZAJJArh/Yf6X5wRaUP98gWGMW
-         LS9zqOgLMVrhSKAhf/GPt+KuVgI4Ra+vr0gg6v4BdddtvMxJ9OveMWOCJ5t4ozyv+OE7
-         BJtfaVMD6ZFF46fH7tcAxb18+IH7maBtdmSp1pzLYPjVr3gdKaRKBDWH1ZdCU/vdFb+j
-         zCoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F0poFPJsWt+35ZjTKPTDqAWquj99j6P21+mLO9eANjc=;
-        b=HgtDXTKGbyQ+LzCq2UCoEI2F41jcrQzkNIpUnMqdHy95SopPMihfN4BJmn3ZP7ImsP
-         pIwS3GEveqASk7kAnf7GP2Gof3I5F2OEW1+I+vpNAYQeJKQJ8tqQ/TrFbaL7wLydrbu2
-         3TPCmTr6E/wZTL46aOdXAhlTdELodRB/K7Ryu91kB1PxQf7PKYE0Kz1hxzGQVYo6v5SE
-         C4/lUXpzKpAFIzeBKr3xpzAJ+y1VMUEh2gh5Q2SRYfW+t8n0wJ1FHsdhyMk5K5ZfZDRo
-         4uG7KpKi1yegQJQwE4q71EX+GKcDAf/p9E+3CDbtxHYKhKQMTjRVFti9QBc1lySApfW9
-         uOaw==
-X-Gm-Message-State: AOAM533lc0XxBVn7xp9tT3xL2DF/gAjmhuXfHROXmZaltHKEOejO6cIc
-        kb0XALLoKbwcRw==
-X-Google-Smtp-Source: ABdhPJwyDHDSWQ4+H0d8lJOqJyR6Q1Wjwp2YNIkTFYzwztVdV2R+f1sLmz7AX/uYwADPN+ki1fw22w==
-X-Received: by 2002:a7b:c256:: with SMTP id b22mr10743444wmj.176.1638190162365;
-        Mon, 29 Nov 2021 04:49:22 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id t11sm13926384wrz.97.2021.11.29.04.49.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 04:49:21 -0800 (PST)
-From:   Colin Ian King <colin.i.king@googlemail.com>
-X-Google-Original-From: Colin Ian King <colin.i.king@gmail.com>
-To:     Luca Coelho <luciano.coelho@intel.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next][V2] iwlwifi: mei: Fix spelling mistake "req_ownserhip" -> "req_ownership"
-Date:   Mon, 29 Nov 2021 12:49:21 +0000
-Message-Id: <20211129124921.11817-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.33.1
-MIME-Version: 1.0
+        Mon, 29 Nov 2021 09:14:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC04C08EAE4;
+        Mon, 29 Nov 2021 04:50:11 -0800 (PST)
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88F64B8108B;
+        Mon, 29 Nov 2021 12:50:10 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 3744D60E0B;
+        Mon, 29 Nov 2021 12:50:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638190209;
+        bh=/E789i+PNyKyhJrfBFFVE3mTO7+Nt2BX4/IJi4jp8wM=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=BoHt1+JQHDzVPD7Fhq7Qf7YZROIX806QVLCM7GP/1d1UC2SmgeV7Ba8IDyoJIxozB
+         /P19nHsGcfkiaYV40Slf4c7uIBHmruteItZPuVXsD4ubfryYXB3f8xft8yAS4v7dUv
+         /lafLDti7cmU6mPNvvTr+IUYrU3+4EpFAAC+5LTSQW2sCZk45azFU8emED4HOv86zW
+         RU6jqZE0QT+Z8DZQizM2kzQ6S0gGsNHbDBo6kUjNvYnotxgkRibav7JgOO0U5fchfh
+         +Gz4DdCRNFoz8URl2eMI6seChZL6sequYBqlM921KT85+qNm9Vqd4B6akRKwto5q+a
+         as+jJBOasV5aA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 22A2660A4D;
+        Mon, 29 Nov 2021 12:50:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net/tls: Fix authentication failure in CCM mode
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163819020913.1533.18284775328146941390.git-patchwork-notify@kernel.org>
+Date:   Mon, 29 Nov 2021 12:50:09 +0000
+References: <20211129093212.4053-1-tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <20211129093212.4053-1-tianjia.zhang@linux.alibaba.com>
+To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, borisp@nvidia.com,
+        john.fastabend@gmail.com, daniel@iogearbox.net, vakul.garg@nxp.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a debugfs filename. Fix it.
+Hello:
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/net/wireless/intel/iwlwifi/mei/main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/drivers/net/wireless/intel/iwlwifi/mei/main.c b/drivers/net/wireless/intel/iwlwifi/mei/main.c
-index 112cc362e8e7..0865e4fb25da 100644
---- a/drivers/net/wireless/intel/iwlwifi/mei/main.c
-+++ b/drivers/net/wireless/intel/iwlwifi/mei/main.c
-@@ -1754,7 +1754,7 @@ static void iwl_mei_dbgfs_register(struct iwl_mei *mei)
- 			     mei->dbgfs_dir, &iwl_mei_status);
- 	debugfs_create_file("send_start_message", S_IWUSR, mei->dbgfs_dir,
- 			    mei, &iwl_mei_dbgfs_send_start_message_ops);
--	debugfs_create_file("req_ownserhip", S_IWUSR, mei->dbgfs_dir,
-+	debugfs_create_file("req_ownership", S_IWUSR, mei->dbgfs_dir,
- 			    mei, &iwl_mei_dbgfs_req_ownership_ops);
- }
- 
+On Mon, 29 Nov 2021 17:32:12 +0800 you wrote:
+> When the TLS cipher suite uses CCM mode, including AES CCM and
+> SM4 CCM, the first byte of the B0 block is flags, and the real
+> IV starts from the second byte. The XOR operation of the IV and
+> rec_seq should be skip this byte, that is, add the iv_offset.
+> 
+> Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
+> Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+> Cc: Vakul Garg <vakul.garg@nxp.com>
+> Cc: stable@vger.kernel.org # v5.2+
+> 
+> [...]
+
+Here is the summary with links:
+  - net/tls: Fix authentication failure in CCM mode
+    https://git.kernel.org/netdev/net/c/5961060692f8
+
+You are awesome, thank you!
 -- 
-V2: Just fix the debugfs spelling mistake, the error message has already been fixed.
-    Change commit message and subject line with correct information.
---
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-2.33.1
 

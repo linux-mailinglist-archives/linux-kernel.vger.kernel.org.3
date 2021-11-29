@@ -2,115 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 039CB461BC0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:29:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F76461BFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244953AbhK2Qcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 11:32:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
+        id S1345923AbhK2Qqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbhK2Qah (ORCPT
+        with ESMTP id S242548AbhK2Qoh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:30:37 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11AE0C08EB3E
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:23:20 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id q16so16216378pgq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 06:23:20 -0800 (PST)
+        Mon, 29 Nov 2021 11:44:37 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B09C0AD152;
+        Mon, 29 Nov 2021 06:27:49 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id m5so17501779ilh.11;
+        Mon, 29 Nov 2021 06:27:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=YLydFlTHoWjzh5FM2f+PSZxxi/Xa/coyUIlxGE2+P/Q=;
-        b=aPvFo5iJR6a2oq0v6KDaGZ+uraf1SiLFUfddWlQ2epY6HloVDYOnx8727S1jwPD6HY
-         ItNr3qSPj6B2f4kSBxPB00VOU+uu8Rel3vCjvsuRm0eeyjHYc1gH6eMKApnXUcmlX7c8
-         FLMuJw66HA6PdT7RXY4xmDitWaHcjAMrPfdMTHcQq6z8brSpsK5BeqcVkDREqtMpKhdp
-         BTh2WaXbZQ5ezkBRiKj4galF04LIzV3k5l/u74IWsDpKcCoYaVDhdEm3YNr+QwxuS/qr
-         Zxh8Jw0PXetjmGELbLjED/3DEIL8k/OfteWo4AG92DefXID8+Xl5Fqi0NT3/0rKSbQc/
-         2Fkg==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CmdX7iVA88wv2FQ0G9icVb8l+LFoewmSUQ3H2Hqr1hY=;
+        b=aICLz5H2eaDTHAjyMX6zwpInhUjmtso2Mby1/mf7ZVAk5NHUvl81PfqUnEvvMTSGsJ
+         atHaFiUQkJfbceXvoRFeqcw2Rv+t3UgA1jx9fPLtnXGxAFMxLmQoSLjMd99fRYHVtk1N
+         kIi0RPnt/D4tB5bDrKrhLjdVBQkzPhacefs5SJvV1nvyXK+U2AkKzTjnQmP9FVzRSmst
+         mQlcHZbOPC8L20Z6jrTIYiFQfWEM+YCdZYVKjGMyXXKaJcPA5ydpGjOmI2FMmPGLDJ3s
+         qk/D1MQPQzKgnHIhUsoh08mT49vtX2xxAZYubuWXUs8TIkdJ5B/ErVwkK7FP1xuggHcE
+         yXwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=YLydFlTHoWjzh5FM2f+PSZxxi/Xa/coyUIlxGE2+P/Q=;
-        b=owlGw/Y2UBI3hikYekFRHOLX7nt0vIEpho95mrMlgyaoOGg1291My9lZiHgCsBzPAr
-         n7ToXnfzAMiWtORVeSROjTuhdnLiAAiLkOlafQLCVpnfDzoHXy5wJ+OoILUhLkeywDuI
-         7gHDStOgT12BSxPuzt+KxfUOfzztzL47a/cUPlFL0FCyjkdMTxuwGQ/DQ8SrJeuf3piO
-         t3ZaIxbY9+fJCDmZTqXhAPunO1wcy1eh802oXLZGjXmkxlcAKoYh1BnLAMoK3muH/ysD
-         7761S4mo3p/U/40egquD0Aq/hcoy1O9ryGPy5eS8I3jYDenlGLHN1lLwXxvNe769YIF3
-         kCJg==
-X-Gm-Message-State: AOAM533nY36dkYfHOGTgRMX1S01f37Yv5sLPdrr8ZOuHb91YF61ZvAws
-        0tsbeb73FpfyNd3fXEouKLijNB1/QbKvaQ==
-X-Google-Smtp-Source: ABdhPJwgqJmtr+dmVevA9fhP1HnZR/+rr++6rgnFxNlGzrM9TJGgVIiDWycKiGqqnXfntCD6Gn4vow==
-X-Received: by 2002:a63:8041:: with SMTP id j62mr21442126pgd.517.1638195799623;
-        Mon, 29 Nov 2021 06:23:19 -0800 (PST)
-Received: from localhost.localdomain (bb42-60-144-185.singnet.com.sg. [42.60.144.185])
-        by smtp.gmail.com with ESMTPSA id o2sm19010699pfu.206.2021.11.29.06.23.18
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CmdX7iVA88wv2FQ0G9icVb8l+LFoewmSUQ3H2Hqr1hY=;
+        b=Yy4F7h7MmwlALGVNKi//EldhFbToYFbfjge7LOgrDwsAI8s/y/6R8igDdAvZaimTWh
+         TIAaC+XhnlRwA8M1bZrH62q66XoZHm1PRgUfBcxN/abmJdQTIqEVi71+K+IGFLEaWcoJ
+         QkN4mldaWrdqRlV9PsPoowdyrFVgAWQxavdwP9xhZ/DODigk3hmiHwsCI9G2s3NZ1GJL
+         qeCowXWGzZqCClWaAAW/BtlpcfEzOqDEmqikYLsSvgZHZ6grWp2W6yvTvoAo6avmR364
+         /z8K8Vpclpt6cdKEfMY1bloT0wIZC6fI81Rcb2jm5c0GdSeWn2Yzj8zci0jhqnVBxGpU
+         2/lw==
+X-Gm-Message-State: AOAM532wv4RklCCk6niJE1BRi1r+SANToCRmRuGSd64hbnkiipjzkzUW
+        L9f9SFWmhTmH/EpsIZqujxQ=
+X-Google-Smtp-Source: ABdhPJyYdDkwGECXZ3EnuTu7M3T0UaxFiBNYjKBWQZcoLT1tC++Ij3DZmrvBsflI3jUl1N/BP1bzBg==
+X-Received: by 2002:a05:6e02:12ad:: with SMTP id f13mr54480526ilr.33.1638196068554;
+        Mon, 29 Nov 2021 06:27:48 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id q1sm11659103ilu.51.2021.11.29.06.27.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 06:23:19 -0800 (PST)
-From:   Nguyen Dinh Phi <phind.uet@gmail.com>
-To:     m.szyprowski@samsung.com
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        minchan@kernel.org, tj@kernel.org
-Subject: Re: [PATCH] kernfs: switch global kernfs_rwsem lock to per-fs lock
-Date:   Mon, 29 Nov 2021 22:23:16 +0800
-Message-Id: <20211129142316.4191999-1-phind.uet@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <a7464856-486a-a76a-937c-35a426555507@samsung.com>
-References: <a7464856-486a-a76a-937c-35a426555507@samsung.com>
+        Mon, 29 Nov 2021 06:27:47 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 241A527C005B;
+        Mon, 29 Nov 2021 09:27:45 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 29 Nov 2021 09:27:46 -0500
+X-ME-Sender: <xms:YOOkYbh7klpga0xeJMK_4SwVTmKU6LPR29j_DscfM78ixeu6h4PKrw>
+    <xme:YOOkYYAZHBFmYZqgwHwh-j4odpu4RgGSdwI09kQi7U9MD5mj_JUoPnsRdpvg1nknW
+    DIu9x_braHC8LsehQ>
+X-ME-Received: <xmr:YOOkYbEzQAF2kC-5DkjjAU0obgUm-mCim6bxgBlOhvIPzgMlMIt1SKyaum9Erg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrheelgdeihecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrghtth
+    gvrhhnpedvleeigedugfegveejhfejveeuveeiteejieekvdfgjeefudehfefhgfegvdeg
+    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsoh
+    hquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedq
+    udejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmh
+    gvrdhnrghmvg
+X-ME-Proxy: <xmx:YOOkYYR01qDBRr85CjtjOZrPpgJRViyenu70Wmprvco913N1CuwtGQ>
+    <xmx:YOOkYYz48UXMSs2YbzHbPvJiXEtAnxd-5lQy9BmybCo-a4oDkKadNg>
+    <xmx:YOOkYe43SzcRZ_fbVwcVjStgzmEh-C_0jdWa9ubanIbdHGKWUgLqbw>
+    <xmx:YeOkYZrYWSDwVHvnUFjKja1KjCGpCtY0P9c-5rAScLj8JGF4XN2jaRlkXKQ>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 29 Nov 2021 09:27:44 -0500 (EST)
+Date:   Mon, 29 Nov 2021 22:26:46 +0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Marco Elver <elver@google.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
+        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH v2 03/23] kcsan: Avoid checking scoped accesses from
+ nested contexts
+Message-ID: <YaTjJnl+Wc1qZbG/@boqun-archlinux>
+References: <20211118081027.3175699-1-elver@google.com>
+ <20211118081027.3175699-4-elver@google.com>
+ <YaSTn3JbkHsiV5Tm@boqun-archlinux>
+ <YaSyGr4vW3yifWWC@elver.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaSyGr4vW3yifWWC@elver.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->This patch landed recently in linux-next (20211126) as commit 
->393c3714081a ("kernfs: switch global kernfs_rwsem lock to per-fs lock"). 
->In my tests I've found that it causes the following warning during the 
->system reboot:
->
->  =========================
->  WARNING: held lock freed!
->  5.16.0-rc2+ #10984 Not tainted
->  -------------------------
->  kworker/1:0/18 is freeing memory ffff00004034e200-ffff00004034e3ff, 
->with a lock still held there!
->  ffff00004034e348 (&root->kernfs_rwsem){++++}-{3:3}, at: 
->__kernfs_remove+0x310/0x37c
->  3 locks held by kworker/1:0/18:
->   #0: ffff000040107938 ((wq_completion)cgroup_destroy){+.+.}-{0:0}, at: 
->process_one_work+0x1f0/0x6f0
->   #1: ffff80000b55bdc0 
->((work_completion)(&(&css->destroy_rwork)->work)){+.+.}-{0:0}, at: 
->process_one_work+0x1f0/0x6f0
->   #2: ffff00004034e348 (&root->kernfs_rwsem){++++}-{3:3}, at: 
->__kernfs_remove+0x310/0x37c
->
->  stack backtrace:
->  CPU: 1 PID: 18 Comm: kworker/1:0 Not tainted 5.16.0-rc2+ #10984
->  Hardware name: Raspberry Pi 4 Model B (DT)
->  Workqueue: cgroup_destroy css_free_rwork_fn
->  Call trace:
->   dump_backtrace+0x0/0x1ac
->   show_stack+0x18/0x24
->   dump_stack_lvl+0x8c/0xb8
->   dump_stack+0x18/0x34
->   debug_check_no_locks_freed+0x124/0x140
->   kfree+0xf0/0x3a4
->   kernfs_put+0x1f8/0x224
->   __kernfs_remove+0x1b8/0x37c
->   kernfs_destroy_root+0x38/0x50
->   css_free_rwork_fn+0x288/0x3d4
->   process_one_work+0x288/0x6f0
->   worker_thread+0x74/0x470
->   kthread+0x188/0x194
->   ret_from_fork+0x10/0x20
->
->Let me know if you need more information or help in reproducing this issue.
+On Mon, Nov 29, 2021 at 11:57:30AM +0100, Marco Elver wrote:
+> On Mon, Nov 29, 2021 at 04:47PM +0800, Boqun Feng wrote:
+> > Hi Marco,
+> > 
+> > On Thu, Nov 18, 2021 at 09:10:07AM +0100, Marco Elver wrote:
+> > > Avoid checking scoped accesses from nested contexts (such as nested
+> > > interrupts or in scheduler code) which share the same kcsan_ctx.
+> > > 
+> > > This is to avoid detecting false positive races of accesses in the same
+> > 
+> > Could you provide an example for a false positive?
+> > 
+> > I think we do want to detect the following race:
+> > 
+> > 	static int v = SOME_VALUE; // a percpu variable.
+> > 	static int other_v = ... ;
+> > 
+> > 	void foo(..)
+> > 	{
+> > 		int tmp;
+> > 		int other_tmp;
+> > 
+> > 		preempt_disable();
+> > 		{
+> > 			ASSERT_EXCLUSIVE_ACCESSS_SCOPED(v);
+> > 			tmp = v;
+> > 			
+> > 			other_tmp = other_v; // int_handler() may run here
+> > 			
+> > 			v = tmp + 2;
+> > 		}
+> > 		preempt_enabled();
+> > 	}
+> > 
+> > 	void int_handler() // an interrupt handler
+> > 	{
+> > 		v++;
+> > 	}
+> > 
+> > , if I understand correctly, we can detect this currently, but with this
+> > patch, we cannot detect this if the interrupt happens while we're doing
+> > the check for "other_tmp = other_v;", right? Of course, running tests
+> > multiple times may eventually catch this, but I just want to understand
+> > what's this patch for, thanks!
+> 
+> The above will still be detected. Task and interrupt contexts in this
+> case are distinct, i.e. kcsan_ctx differ (see get_ctx()).
+> 
 
-This patch has a problem, in function kernfs_remove(), it call to 
-__kernfs_remove(kn), which will free the related @root of @kn, it means the 
-root->kernfs_rwsem will be freed too, but it is still being held by the call 
-to down_write(&root->kernfs_rwsem) around line number 100.
+Ok, I was missing that.
 
-BR
+> But there are rare cases where kcsan_ctx is shared, such as nested
+> interrupts (NMI?), or when entering scheduler code -- which currently
+> has a KCSAN_SANITIZE := n, but I occasionally test it, which is how I
+> found this problem. The problem occurs frequently when enabling KCSAN in
+> kernel/sched and placing a random ASSERT_EXCLUSIVE_ACCESS_SCOPED() in
+> task context, or just enable "weak memory modeling" without this fix.
+> You also need CONFIG_PREEMPT=y + CONFIG_KCSAN_INTERRUPT_WATCHER=y.
+> 
+
+Thanks for the background, it's now more clear that the problem is
+triggered ;-)
+
+> The emphasis here really is on _shared kcsan_ctx_, which is not too
+> common. As noted in the commit description, we need to "[...] setting up
+> a watchpoint for a non-scoped (normal) access that also "conflicts" with
+> a current scoped access."
+> 
+> Consider this:
+> 
+> 	static int v;
+> 	int foo(..)
+> 	{
+> 		ASSERT_EXCLUSIVE_ACCESS_SCOPED(v);
+> 		v++; // preempted during watchpoint for 'v++'
+> 	}
+> 
+> Here we set up a scoped_access to be checked for v. Then on v++, a
+> watchpoint is set up for the normal access. While the watchpoint is set
+> up, the task is preempted and upon entering scheduler code, we're still
+> in_task() and 'current' is still the same, thus get_ctx() returns a
+> kcsan_ctx where the scoped_accesses list is non-empty containing the
+> scoped access for foo()'s ASSERT_EXCLUSIVE.
+> 
+> That means, when instrumenting scheduler code or any other code called
+> by scheduler code or nested interrupts (anything where get_ctx() still
+> returns the same as parent context), it'd now perform checks based on
+> the parent context's scoped access, and because the parent context also
+> has a watchpoint set up on the variable that conflicts with the scoped
+> access we'd report a nonsensical race.
+> 
+
+Agreed.
+
+> This case is also possible:
+> 
+> 	static int v;
+> 	static int x;
+> 	int foo(..)
+> 	{
+> 		ASSERT_EXCLUSIVE_ACCESS_SCOPED(v);
+> 		x++; // preempted during watchpoint for 'v' after checking x++
+> 	}
+> 
+> Here, all we need is for the scoped access to be checked after x++, end
+> up with a watchpoint for it, then enter scheduler code, which then
+> checked 'v', sees the conflicting watchpoint, and reports a nonsensical
+> race again.
+> 
+
+Just to be clear, in both examples, the assumption is that 'v' is a
+variable that scheduler code doesn't access, right? Because if scheduler
+code does access 'v', then it's a problem that KCSAN should report. Yes,
+I don't know any variable that scheduler exports, just to make sure
+here.
+
+> By disallowing scoped access checking for a kcsan_ctx, we simply make
+> sure that in such nested contexts where kcsan_ctx is shared, none of
+> these nonsensical races would be detected nor reported.
+> 
+> Hopefully that clarifies what this is about.
+> 
+
+Make sense to me, thanks.
+
+Regards,
+Boqun
+
+> Thanks,
+> -- Marco

@@ -2,102 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F5A462694
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:51:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A9AB462648
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:46:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235109AbhK2WyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S235038AbhK2Wtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:49:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235599AbhK2Wx0 (ORCPT
+        with ESMTP id S235071AbhK2WtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:53:26 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C5FCC09CE49;
-        Mon, 29 Nov 2021 12:22:01 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id o13so39331853wrs.12;
-        Mon, 29 Nov 2021 12:22:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bd8os49boluMWjCPlqHxyzhvgDaCkV5iDG3ksc4Oiew=;
-        b=JfGF2y22b1w2YpnDbGsNpUaD0qGZ5PtvI69SCPcLUOrJiY1sl8NMyFVmYVCH9WoDwp
-         VwVv/AsBWBPipZCXyxs6dP2FeWa+AIZD+d62HU4aR/UigN0beszIVRwejJgSZ2XfBctn
-         uk3kXYwUX3NXYU9BAESYsp68b+gotQykh/uzEl1o8OZQ4G+yA4k0GlQohXazTPqedsaw
-         UKdJdu6G1gDMsXmiEQxWPImvPL1VXmaekdmnXN/FDIhAPphwXWLgmz6/1L42Kr4I60hY
-         rYHs02yWDOAhNaBo2iKsmWELs/D4271YksdgLAM95dsLotCbXCqTrKBR9YTXJWeidqFV
-         LaHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bd8os49boluMWjCPlqHxyzhvgDaCkV5iDG3ksc4Oiew=;
-        b=y7WMWWcUtaMG0UGc/CdzmsxZlV0tTEDOz56X4tXYLYPy5e/wymhzcVSJVthkLcLmAU
-         X/3fLATTUa2Rv27JQRxw+jMeZW05nRdxg2WVfy7aWJkS8/g32JnxDB+av+637jzPx7R8
-         TM4q9W6vhaCIe5kH7Qu1H9sqPYW5QC9Dg8JI5bEz4/8+0lUvl+b/zF1/59dPFE9z/zrG
-         LUJV0WmecERe2qcx3F7n8sjLo8kOU+UczhTtlF/NXkJ2Q3kWpHR7u2LLrsWUiAieMYok
-         x4HF/aeCSS+W6YOvXY8czKRpjllhb2tWBZbW+4r/fhNf/lR3dK13oYQgIt7SWcmiBfxA
-         G5Lg==
-X-Gm-Message-State: AOAM530sOJihpjtC+aL7TSNG2p1BdeoYp7sX/pTRMX5ZbF9HjXLtiEhO
-        PPVcEyhPfLQBcoTPTq93m3apbxTKHmDR+Q==
-X-Google-Smtp-Source: ABdhPJyHGI56MgmqOPpRT2GOWXCw4Uc+KNVhzS0Mzfto+/7wpT2FwsYAABpFPq7f5ZW3aQ0yApfpEw==
-X-Received: by 2002:adf:fbc5:: with SMTP id d5mr39029256wrs.291.1638217319837;
-        Mon, 29 Nov 2021 12:21:59 -0800 (PST)
-Received: from matrix-ESPRIMO-P710 (p200300c78f4e06460b103a790e4c64a8.dip0.t-ipconnect.de. [2003:c7:8f4e:646:b10:3a79:e4c:64a8])
-        by smtp.gmail.com with ESMTPSA id n7sm14395121wro.68.2021.11.29.12.21.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 12:21:59 -0800 (PST)
-Date:   Mon, 29 Nov 2021 21:21:57 +0100
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-To:     corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 4/4] Docs: usb: update explanation for device_present to
- disconnected
-Message-ID: <c4e0a964d0dbd34c13d3a8ff4df6dbb231de6de4.1638152984.git.philipp.g.hortmann@gmail.com>
-References: <cover.1638152984.git.philipp.g.hortmann@gmail.com>
+        Mon, 29 Nov 2021 17:49:08 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9093C0698DB;
+        Mon, 29 Nov 2021 12:32:36 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J2xqM3DC2z4xPv;
+        Tue, 30 Nov 2021 07:32:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638217951;
+        bh=l9w9TSvhh87po2E861l9G8UwZN2i/VH+QsHq1D21drs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fi1gpbz+M5JzVx0HugxH98Da6n0wzsxC7+YsEr0EesKnrnmBRSMIGC+nVMjrVljuV
+         p3h5qLjYKhyfoLF83swpTOFp/zWmKjiQM92+qseKRzY2o7qKsUAVETeOtB0e3skTvK
+         ibK5EW/aYcW9Llc29UogmXXcx3G4c+xb81L1UPEQo2K75AZHR7iRgommcZ7BLwPuti
+         HGlYQ1D66PeoPT2ZDUynNfQ5AuSQeoFWXlStyMhyiQ1Qj2mpvDwXSPRCvcZVXmQhxw
+         gg/SjPISgPWRldg+p5G6NSztlzd413S0UGUF7s86LXEs1/YF6lDVIGOCL4U+uRahc9
+         g8GXU2YDHQlqA==
+Date:   Tue, 30 Nov 2021 07:32:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     msizanoen1 <msizanoen@qtmlabs.xyz>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the net tree
+Message-ID: <20211130073228.611fa87f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1638152984.git.philipp.g.hortmann@gmail.com>
+Content-Type: multipart/signed; boundary="Sig_/gjR3KYURrv4BnpyKAAQne2C";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update text for `device_present` flag to `disconnected` flag
+--Sig_/gjR3KYURrv4BnpyKAAQne2C
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
----
- .../driver-api/usb/writing_usb_driver.rst          | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
+Hi all,
 
-diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-index 74bb72a2f0ac..d398d2155cd3 100644
---- a/Documentation/driver-api/usb/writing_usb_driver.rst
-+++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-@@ -277,15 +277,13 @@ notify the user-space programs that the device is no longer there. The
-     }
- 
- 
--If a program currently has an open handle to the device, we reset the
--flag ``device_present``. For every read, write, release and other
-+If the driver probed the device successfully, the flag ``disconnected``
-+is initialized and set to false. For every read, write and other
- functions that expect a device to be present, the driver first checks
--this flag to see if the device is still present. If not, it releases
--that the device has disappeared, and a ``-ENODEV`` error is returned to the
--user-space program. When the release function is eventually called, it
--determines if there is no device and if not, it does the cleanup that
--the ``skel_disconnect`` function normally does if there are no open files
--on the device (see Listing 5).
-+this flag to see if the device is still present. If not, a ``-ENODEV``
-+error is returned to the user-space program. When the device is
-+disconnected, `skel_disconnected` function is called. It sets ``disconnected``
-+to true and cleans up.
- 
- Isochronous Data
- ================
--- 
-2.25.1
+Commit
 
+  cdef485217d3 ("ipv6: fix memory leak in fib6_rule_suppress")
+
+is missing a Signed-off-by from its author.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gjR3KYURrv4BnpyKAAQne2C
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGlONwACgkQAVBC80lX
+0GwURgf9FW2bQqgeEUzIn8a/ReQAE/MbbZEtfH9PhcplmCOmwZeg3U6Ae7PfC4GF
+MVvHz7R3eSr0Amn6Vzbv5kWu3lUKe6rN56ivYyArnVe+lPdTl+xVf8XNQJFLKgTz
+VCVZ4WB+ZfvX7S52bMMoKVgN6c5ZYwULQTe/rDmk8wGh784BdHj/v5VTwECjFo+a
+PDK8CcQxVy2Z33Ka/AOaH3r5LtmpkQv3vIOQxHAl7IJNIIoYvV7QhG9CXynZlYS+
+BWEVlJiVWScl71TPxyTDIx0nVsNOyB0pZ6o66VSFaELHiEEy2VU9//nG3DXzMATA
+tVyzoSB2pxOSRgQShYMct/pP+eX4fw==
+=CJv9
+-----END PGP SIGNATURE-----
+
+--Sig_/gjR3KYURrv4BnpyKAAQne2C--

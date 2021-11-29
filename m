@@ -2,235 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C6A4611AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB00461287
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbhK2KFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:05:05 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:38644 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346118AbhK2KDB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:03:01 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638179983; h=References: In-Reply-To: Message-Id: Date:
- Subject: Cc: To: From: Sender;
- bh=VlR8aqgZt1NjItqFN4OMgjhCVZUDpejgd47uj9MkXR0=; b=iezph6ZDv0uTYNuOclnJxU79pw2oN2QgIDE0SDqnkXrRAgASQ1QfW6wzAML+fdolBdYcijFK
- 3q8BT+vUhd2EGsoXHuWzQslKwCEeFC/OJGUV7ZMNnO9LwSiik6wDqxyucGpLUUx92b/VGyaG
- lKY4bJn60a1C+xaETZl6PLqdQuw=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n07.prod.us-west-2.postgun.com with SMTP id
- 61a4a48f1abc6f02d06fc3ca (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Nov 2021 09:59:43
- GMT
-Sender: srivasam=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 03E39C4338F; Mon, 29 Nov 2021 09:59:43 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.0
-Received: from hu-srivasam-hyd.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: srivasam)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AC11AC4360C;
-        Mon, 29 Nov 2021 09:59:36 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org AC11AC4360C
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-To:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, plai@codeaurora.org,
-        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
-        srinivas.kandagatla@linaro.org, rohitkr@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        id S238394AbhK2Kiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231680AbhK2Kgp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 05:36:45 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E6BC08EA6C
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 02:02:27 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id o13so35355236wrs.12
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 02:02:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=0P1DBQCz6Re487E8k4zSiqVVuB28Lrg52FapbU18jpo=;
+        b=FaMMR9yWiYxcazApHQ/wg9yKC+NVzoM8Vwo2xVOxiFnNQDm0cdh54iKMf/CKTcaVBi
+         3v0V2JSIftMr20OKDj2qRUUxchnnN6VnmRLtkxZXy10G83MeHoqUxhevvdBYaZi54eKe
+         3ORoI2GGQ1BYzjtd8UwdlW+nDkoYEOSE1wRJVYCHLXFv2q5CUH/SwrEQHJDAo0gfhgRi
+         iVII4IF7xmSWTw91dL3E+EkV+gucjbh5wQhMQNwAtnirzBG1yXdjkr+EUD9T0W5Fikou
+         dr+m0d3Y7+cRy0yHzrk+SPJHgUYX0eiJgjgJZDgqoT6K6yUgzwXLqT8mNzYLZciIrPRm
+         cOow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=0P1DBQCz6Re487E8k4zSiqVVuB28Lrg52FapbU18jpo=;
+        b=rjmiFZT3OBdcdHl0ocvIxpHIRo6LL2DpL5EqBqW1b3fZbJI0ab+LOouQ70PgBktOUg
+         cxtE6Ic34Dwxs0T4bZLh6GwIQQbMxnQNlUy8rTmCFKTlJWxljptU+VEw2Cf6z/gJg0hp
+         RfQlL+Jni4s006ulwqgic7K6y8S0SvI94PC4CpIqwdbRUydu6sgcWOcvbQ7niGlHKyJb
+         k2Vhfxm5VhZvffej0JH+GgTLHYbybmk4ctcF0gOzeVrquLsl16CYd5IaND36yEp+2mqv
+         4nAnYcGcPSS3iTYHMXbXB1gpjfEN6ODVxKwo3yr5XSi6TAt55NXmVwZ4IlF5kURtpdsa
+         8i7Q==
+X-Gm-Message-State: AOAM532h07dxRoFVTNkbKis1hbmHSsGe5cAfBkbvrUIZBWfEf6Hp46ko
+        ILaG1xxDeiWDBQK5dMQT6UBBRQ==
+X-Google-Smtp-Source: ABdhPJxW8KDLLi9B5knbiZGRFmjeaSoYfXl8Bf8QIeqm1eg6FgSQrPWaHsYoimlSs5TggZT1/ujJSQ==
+X-Received: by 2002:adf:8010:: with SMTP id 16mr32377814wrk.559.1638180146284;
+        Mon, 29 Nov 2021 02:02:26 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd? ([2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd])
+        by smtp.googlemail.com with ESMTPSA id g5sm17498490wri.45.2021.11.29.02.02.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 02:02:25 -0800 (PST)
+Subject: Re: [PATCH V6 3/7] dt-bindings: timer: tpm-timer: Add imx8ulp
+ compatible string
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        aisheng.dong@nxp.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        ulf.hansson@linaro.org, broonie@kernel.org, linux@roeck-us.net,
+        wim@linux-watchdog.org, linux@rempel-privat.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Cc:     Srinivasa Rao Mandadapu <srivasam@codeaurora.org>,
-        Venkata Prasad Potturu <potturu@codeaurora.org>
-Subject: [PATCH v3 5/5] pinctrl: qcom: Add SC7280 lpass pin configuration
-Date:   Mon, 29 Nov 2021 15:28:52 +0530
-Message-Id: <1638179932-3353-6-git-send-email-srivasam@codeaurora.org>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1638179932-3353-1-git-send-email-srivasam@codeaurora.org>
-References: <1638179932-3353-1-git-send-email-srivasam@codeaurora.org>
+        linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mmc@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        Jacky Bai <ping.bai@nxp.com>, Rob Herring <robh@kernel.org>,
+        Peng Fan <peng.fan@nxp.com>
+References: <20211126074002.1535696-1-peng.fan@oss.nxp.com>
+ <20211126074002.1535696-4-peng.fan@oss.nxp.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <d075b19a-c82b-9732-2034-1837a303c072@linaro.org>
+Date:   Mon, 29 Nov 2021 11:02:23 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
+MIME-Version: 1.0
+In-Reply-To: <20211126074002.1535696-4-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add pin control support for SC7280 LPASS LPI.
+On 26/11/2021 08:39, Peng Fan (OSS) wrote:
+> From: Jacky Bai <ping.bai@nxp.com>
+> 
+> The tpm timer on i.MX8ULP is derived from i.MX7ULP, it use two
+> compatible strings, so update the compatible string for it.
+> 
+> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
----
- drivers/pinctrl/qcom/Makefile                   |   1 +
- drivers/pinctrl/qcom/pinctrl-lpass-lpi.h        |   1 +
- drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c | 127 ++++++++++++++++++++++++
- 3 files changed, 129 insertions(+)
- create mode 100644 drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
+Applied, thanks
 
-diff --git a/drivers/pinctrl/qcom/Makefile b/drivers/pinctrl/qcom/Makefile
-index 74568cf..e07be79 100644
---- a/drivers/pinctrl/qcom/Makefile
-+++ b/drivers/pinctrl/qcom/Makefile
-@@ -38,3 +38,4 @@ obj-$(CONFIG_PINCTRL_SM8250) += pinctrl-sm8250.o
- obj-$(CONFIG_PINCTRL_SM8350) += pinctrl-sm8350.o
- obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-lpass-lpi.o
- obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-sm8250-lpass-lpi.o
-+obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-sc7280-lpass-lpi.o
-diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
-index b0afb40..1b91585 100644
---- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
-+++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
-@@ -131,6 +131,7 @@ static const unsigned int gpio10_pins[] = { 10 };
- static const unsigned int gpio11_pins[] = { 11 };
- static const unsigned int gpio12_pins[] = { 12 };
- static const unsigned int gpio13_pins[] = { 13 };
-+static const unsigned int gpio14_pins[] = { 14 };
- 
- int lpi_pinctrl_probe(struct platform_device *pdev);
- int lpi_pinctrl_remove(struct platform_device *pdev);
-diff --git a/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
-new file mode 100644
-index 0000000..38b2056
---- /dev/null
-+++ b/drivers/pinctrl/qcom/pinctrl-sc7280-lpass-lpi.c
-@@ -0,0 +1,127 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-+ * ALSA SoC platform-machine driver for QTi LPASS
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+
-+#include "pinctrl-lpass-lpi.h"
-+
-+/* sc7280 variant specific data */
-+static const struct pinctrl_pin_desc sc7280_lpi_pins[] = {
-+	PINCTRL_PIN(0, "gpio0"),
-+	PINCTRL_PIN(1, "gpio1"),
-+	PINCTRL_PIN(2, "gpio2"),
-+	PINCTRL_PIN(3, "gpio3"),
-+	PINCTRL_PIN(4, "gpio4"),
-+	PINCTRL_PIN(5, "gpio5"),
-+	PINCTRL_PIN(6, "gpio6"),
-+	PINCTRL_PIN(7, "gpio7"),
-+	PINCTRL_PIN(8, "gpio8"),
-+	PINCTRL_PIN(9, "gpio9"),
-+	PINCTRL_PIN(10, "gpio10"),
-+	PINCTRL_PIN(11, "gpio11"),
-+	PINCTRL_PIN(12, "gpio12"),
-+	PINCTRL_PIN(13, "gpio13"),
-+	PINCTRL_PIN(14, "gpio14"),
-+};
-+
-+static const char * const swr_tx_clk_groups[] = { "gpio0" };
-+static const char * const swr_tx_data_groups[] = { "gpio1", "gpio2", "gpio14" };
-+static const char * const swr_rx_clk_groups[] = { "gpio3" };
-+static const char * const swr_rx_data_groups[] = { "gpio4", "gpio5" };
-+static const char * const dmic1_clk_groups[] = { "gpio6" };
-+static const char * const dmic1_data_groups[] = { "gpio7" };
-+static const char * const dmic2_clk_groups[] = { "gpio8" };
-+static const char * const dmic2_data_groups[] = { "gpio9" };
-+static const char * const i2s2_clk_groups[] = { "gpio10" };
-+static const char * const i2s2_ws_groups[] = { "gpio11" };
-+static const char * const dmic3_clk_groups[] = { "gpio12" };
-+static const char * const dmic3_data_groups[] = { "gpio13" };
-+static const char * const qua_mi2s_sclk_groups[] = { "gpio0" };
-+static const char * const qua_mi2s_ws_groups[] = { "gpio1" };
-+static const char * const qua_mi2s_data_groups[] = { "gpio2", "gpio3", "gpio4" };
-+static const char * const i2s1_clk_groups[] = { "gpio6" };
-+static const char * const i2s1_ws_groups[] = { "gpio7" };
-+static const char * const i2s1_data_groups[] = { "gpio8", "gpio9" };
-+static const char * const wsa_swr_clk_groups[] = { "gpio10" };
-+static const char * const wsa_swr_data_groups[] = { "gpio11" };
-+static const char * const i2s2_data_groups[] = { "gpio12", "gpio13" };
-+
-+static const struct lpi_pingroup sc7280_groups[] = {
-+	LPI_PINGROUP(0, 0, swr_tx_clk, qua_mi2s_sclk, _, _),
-+	LPI_PINGROUP(1, 2, swr_tx_data, qua_mi2s_ws, _, _),
-+	LPI_PINGROUP(2, 4, swr_tx_data, qua_mi2s_data, _, _),
-+	LPI_PINGROUP(3, 8, swr_rx_clk, qua_mi2s_data, _, _),
-+	LPI_PINGROUP(4, 10, swr_rx_data, qua_mi2s_data, _, _),
-+	LPI_PINGROUP(5, 12, swr_rx_data, _, _, _),
-+	LPI_PINGROUP(6, NO_SLEW, dmic1_clk, i2s1_clk, _,  _),
-+	LPI_PINGROUP(7, NO_SLEW, dmic1_data, i2s1_ws, _, _),
-+	LPI_PINGROUP(8, NO_SLEW, dmic2_clk, i2s1_data, _, _),
-+	LPI_PINGROUP(9, NO_SLEW, dmic2_data, i2s1_data, _, _),
-+	LPI_PINGROUP(10, 16, i2s2_clk, wsa_swr_clk, _, _),
-+	LPI_PINGROUP(11, 18, i2s2_ws, wsa_swr_data, _, _),
-+	LPI_PINGROUP(12, NO_SLEW, dmic3_clk, i2s2_data, _, _),
-+	LPI_PINGROUP(13, NO_SLEW, dmic3_data, i2s2_data, _, _),
-+	LPI_PINGROUP(14, 6, swr_tx_data, _, _, _),
-+};
-+
-+static const struct lpi_function sc7280_functions[] = {
-+	LPI_FUNCTION(dmic1_clk),
-+	LPI_FUNCTION(dmic1_data),
-+	LPI_FUNCTION(dmic2_clk),
-+	LPI_FUNCTION(dmic2_data),
-+	LPI_FUNCTION(dmic3_clk),
-+	LPI_FUNCTION(dmic3_data),
-+	LPI_FUNCTION(i2s1_clk),
-+	LPI_FUNCTION(i2s1_data),
-+	LPI_FUNCTION(i2s1_ws),
-+	LPI_FUNCTION(i2s2_clk),
-+	LPI_FUNCTION(i2s2_data),
-+	LPI_FUNCTION(i2s2_ws),
-+	LPI_FUNCTION(qua_mi2s_data),
-+	LPI_FUNCTION(qua_mi2s_sclk),
-+	LPI_FUNCTION(qua_mi2s_ws),
-+	LPI_FUNCTION(swr_rx_clk),
-+	LPI_FUNCTION(swr_rx_data),
-+	LPI_FUNCTION(swr_tx_clk),
-+	LPI_FUNCTION(swr_tx_data),
-+	LPI_FUNCTION(wsa_swr_clk),
-+	LPI_FUNCTION(wsa_swr_data),
-+};
-+
-+static const struct lpi_pinctrl_variant_data sc7280_lpi_data = {
-+	.pins = sc7280_lpi_pins,
-+	.npins = ARRAY_SIZE(sc7280_lpi_pins),
-+	.groups = sc7280_groups,
-+	.ngroups = ARRAY_SIZE(sc7280_groups),
-+	.functions = sc7280_functions,
-+	.nfunctions = ARRAY_SIZE(sc7280_functions),
-+};
-+
-+static const struct of_device_id lpi_pinctrl_of_match[] = {
-+	{
-+	       .compatible = "qcom,sc7280-lpass-lpi-pinctrl",
-+	       .data = &sc7280_lpi_data,
-+	},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, lpi_pinctrl_of_match);
-+
-+static struct platform_driver lpi_pinctrl_driver = {
-+	.driver = {
-+		   .name = "qcom-sc7280-lpass-lpi-pinctrl",
-+		   .of_match_table = lpi_pinctrl_of_match,
-+	},
-+	.probe = lpi_pinctrl_probe,
-+	.remove = lpi_pinctrl_remove,
-+};
-+
-+module_platform_driver(lpi_pinctrl_driver);
-+MODULE_DESCRIPTION("QTI LPI GPIO pin control driver");
-+MODULE_LICENSE("GPL");
-+
+
 -- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
-is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

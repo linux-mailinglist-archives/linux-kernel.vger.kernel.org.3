@@ -2,319 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E468E462675
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:49:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5E5462703
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbhK2Wwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        id S235905AbhK2XAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:00:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236234AbhK2Wud (ORCPT
+        with ESMTP id S235933AbhK2W7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:50:33 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA16C0C236C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:48:31 -0800 (PST)
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638208109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OcYBBI8nkxMxvHSK/28zWbxuxTQ3Tjbu26Do7H3X1/A=;
-        b=VhxPzAF1WxBK9iA2/4rDbAYy6YZPRQ7rCQnnJGVs/nOSviSCa1zd3JDmBbp24UNTAcY5MB
-        d0iXEnI8Yrs7nGzEQltJW5SFxQdA+QN3OEx94TsgP8z8FWdMNkWg26a8QvcmwC3mYEexDV
-        ojpecsNcamZiczd9LbBo3dgGdy+vYuM7/QLneUSERpPbnP6T1vTt/ON1qvm2eIdbBkWYiJ
-        iju+hcRf8gT1dbw5liNphLRmQ8O8IKjrnaaC8fC3XVMwJp2LWmG0GW+tEewIEQ/lUF7T1w
-        hkf8sLUUsFbD7Ka6qy73qJXVR5NxHAn/GtC1Ce4WrKQvBA2rLuCR7sI6NJpArA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638208109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=OcYBBI8nkxMxvHSK/28zWbxuxTQ3Tjbu26Do7H3X1/A=;
-        b=LPt7OXqlk5nEStmSGjO3PyoggsA9G63QtZY/vox0XOcuJpt4oD2Mh7QktlgN2FsG88zwP4
-        gBEg3gxFdNZBmuCQ==
-To:     linux-kernel@vger.kernel.org
-Cc:     Ben Segall <bsegall@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 09/11] lockdep/selftests: Adapt ww-tests for PREEMPT_RT
-Date:   Mon, 29 Nov 2021 18:46:52 +0100
-Message-Id: <20211129174654.668506-10-bigeasy@linutronix.de>
-In-Reply-To: <20211129174654.668506-1-bigeasy@linutronix.de>
-References: <20211129174654.668506-1-bigeasy@linutronix.de>
+        Mon, 29 Nov 2021 17:59:48 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABED9C08ED82;
+        Mon, 29 Nov 2021 09:53:55 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id y12so75362755eda.12;
+        Mon, 29 Nov 2021 09:53:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1y5DEAA90y8cYxRCLd33wqhLVpAEzLmdNKss0/RInBo=;
+        b=E58dL1Cy0ML/Fq7U+4vMD/XpyhySESNFxGtsJEr0iGA5QuLlhcOX/A4/jdDRZEzDIQ
+         fPsLvJxXz3PX63V9su/FgauAMqwxco+y+olI1dCd3mpfxLlYlBPlhWOjrxeLq9guNxSM
+         eEfi9IneXptokJh8diXl/ugbj5GCH/6ELhKn4aofNdddGLZ+OqUWg1z9TxLUnKXffmNg
+         lUaqpY0k7AwGkJ3OL2ZtKNoHyBmTZ4KtwmtpxoPlTCt2JnQOPjXQ7vH4M7rfgBjlRgND
+         uViwUXN3LorpSW+ON86lkQL5g7/VvacQD/GzeWK08eJHfKwJKQfnwt7i4lLeeVe5Mvw/
+         ad3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=1y5DEAA90y8cYxRCLd33wqhLVpAEzLmdNKss0/RInBo=;
+        b=x4bbK/cjcMnOoyxtkDp7Z3F+2SdUFuT80avz2Tmcu44Jfj+dh6AzycwELMXJuXzPcQ
+         vLpc+he5hqyOnGi+y5qiJxfLNrR0Px3Wt6aLL7yl7fj2aXHZWueJE0MrCS7ZI/+PoFEe
+         k0n9zKbA2jvYjlGXKpeG363N68FxqZgmcISOMaGOG5G6GZgM4MtFvmn9AkkK1aW2nKuU
+         l4c6HdItYcDeosAS9qSTXFEEArBMqXqsNE2ot/WSimKSPVspAoO/UCVplylraCTuaOa6
+         hU62QT7UchN8fQtuLGLaSaDqOt1SCvEpurFiyvxFzwTo8KT6cAkFt2omJTbgx3wsZLyC
+         Votg==
+X-Gm-Message-State: AOAM5310EUJg1Dqp0pxtKg0+W7O6Mn/q6iTwmgRsFiYZdWD+0d+TjoQ9
+        x4b/oOfmOg2XQw+uGhep+5g=
+X-Google-Smtp-Source: ABdhPJyEFZTCnn35jIBM5GkhncH3CSPbL5gmVmWsUh9Tr+ztH5c8bc9QO9Acd3UAKwaA5P3qYhybfg==
+X-Received: by 2002:a05:6402:2744:: with SMTP id z4mr77472004edd.310.1638208434290;
+        Mon, 29 Nov 2021 09:53:54 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id gt18sm7974997ejc.46.2021.11.29.09.53.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 09:53:53 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <496c2fc6-26b0-9b5d-32f4-2f9e9dd6a064@redhat.com>
+Date:   Mon, 29 Nov 2021 18:53:48 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
+ successful
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+ <20211009021236.4122790-12-seanjc@google.com>
+ <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
+ <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
+ <YaUNBfJh35WXMV0M@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YaUNBfJh35WXMV0M@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ww-mutex selftest operates directly on ww_mutex::base and assumes
-its type is struct mutex. This isn't true on PREEMPT_RT which turns the
-mutex into a rtmutex.
+On 11/29/21 18:25, Sean Christopherson wrote:
+> If a posted interrupt arrives after KVM has done its final search through the vIRR,
+> but before avic_update_iommu_vcpu_affinity() is called, the posted interrupt will
+> be set in the vIRR without triggering a host IRQ to wake the vCPU via the GA log.
+> 
+> I.e. KVM is missing an equivalent to VMX's posted interrupt check for an outstanding
+> notification after switching to the wakeup vector.
 
-Add a ww_mutex_base_ abstraction which maps to the relevant mutex_ or
-rt_mutex_ function.
-Change the CONFIG_DEBUG_MUTEXES ifdef to DEBUG_WW_MUTEXES. The latter is
-true for the MUTEX and RTMUTEX implementation of WW-MUTEX. The
-assignment is required in order to pass the tests.
+BTW Maxim reported that it can break even without assigned devices.
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
- lib/locking-selftest.c | 76 +++++++++++++++++++++++++-----------------
- 1 file changed, 46 insertions(+), 30 deletions(-)
+> For now, the least awful approach is sadly to keep the vcpu_(un)blocking() hooks.
 
-diff --git a/lib/locking-selftest.c b/lib/locking-selftest.c
-index 9031f50905aed..8d24279fad055 100644
---- a/lib/locking-selftest.c
-+++ b/lib/locking-selftest.c
-@@ -1700,6 +1700,22 @@ static void ww_test_fail_acquire(void)
- #endif
- }
-=20
-+#ifdef CONFIG_PREEMPT_RT
-+#define ww_mutex_base_lock(b)			rt_mutex_lock(b)
-+#define ww_mutex_base_trylock(b)		rt_mutex_trylock(b)
-+#define ww_mutex_base_lock_nest_lock(b, b2)	rt_mutex_lock_nest_lock(b, b2)
-+#define ww_mutex_base_lock_interruptible(b)	rt_mutex_lock_interruptible(b)
-+#define ww_mutex_base_lock_killable(b)		rt_mutex_lock_killable(b)
-+#define ww_mutex_base_unlock(b)			rt_mutex_unlock(b)
-+#else
-+#define ww_mutex_base_lock(b)			mutex_lock(b)
-+#define ww_mutex_base_trylock(b)		mutex_trylock(b)
-+#define ww_mutex_base_lock_nest_lock(b, b2)	mutex_lock_nest_lock(b, b2)
-+#define ww_mutex_base_lock_interruptible(b)	mutex_lock_interruptible(b)
-+#define ww_mutex_base_lock_killable(b)		mutex_lock_killable(b)
-+#define ww_mutex_base_unlock(b)			mutex_unlock(b)
-+#endif
-+
- static void ww_test_normal(void)
- {
- 	int ret;
-@@ -1714,50 +1730,50 @@ static void ww_test_normal(void)
-=20
- 	/* mutex_lock (and indirectly, mutex_lock_nested) */
- 	o.ctx =3D (void *)~0UL;
--	mutex_lock(&o.base);
--	mutex_unlock(&o.base);
-+	ww_mutex_base_lock(&o.base);
-+	ww_mutex_base_unlock(&o.base);
- 	WARN_ON(o.ctx !=3D (void *)~0UL);
-=20
- 	/* mutex_lock_interruptible (and *_nested) */
- 	o.ctx =3D (void *)~0UL;
--	ret =3D mutex_lock_interruptible(&o.base);
-+	ret =3D ww_mutex_base_lock_interruptible(&o.base);
- 	if (!ret)
--		mutex_unlock(&o.base);
-+		ww_mutex_base_unlock(&o.base);
- 	else
- 		WARN_ON(1);
- 	WARN_ON(o.ctx !=3D (void *)~0UL);
-=20
- 	/* mutex_lock_killable (and *_nested) */
- 	o.ctx =3D (void *)~0UL;
--	ret =3D mutex_lock_killable(&o.base);
-+	ret =3D ww_mutex_base_lock_killable(&o.base);
- 	if (!ret)
--		mutex_unlock(&o.base);
-+		ww_mutex_base_unlock(&o.base);
- 	else
- 		WARN_ON(1);
- 	WARN_ON(o.ctx !=3D (void *)~0UL);
-=20
- 	/* trylock, succeeding */
- 	o.ctx =3D (void *)~0UL;
--	ret =3D mutex_trylock(&o.base);
-+	ret =3D ww_mutex_base_trylock(&o.base);
- 	WARN_ON(!ret);
- 	if (ret)
--		mutex_unlock(&o.base);
-+		ww_mutex_base_unlock(&o.base);
- 	else
- 		WARN_ON(1);
- 	WARN_ON(o.ctx !=3D (void *)~0UL);
-=20
- 	/* trylock, failing */
- 	o.ctx =3D (void *)~0UL;
--	mutex_lock(&o.base);
--	ret =3D mutex_trylock(&o.base);
-+	ww_mutex_base_lock(&o.base);
-+	ret =3D ww_mutex_base_trylock(&o.base);
- 	WARN_ON(ret);
--	mutex_unlock(&o.base);
-+	ww_mutex_base_unlock(&o.base);
- 	WARN_ON(o.ctx !=3D (void *)~0UL);
-=20
- 	/* nest_lock */
- 	o.ctx =3D (void *)~0UL;
--	mutex_lock_nest_lock(&o.base, &t);
--	mutex_unlock(&o.base);
-+	ww_mutex_base_lock_nest_lock(&o.base, &t);
-+	ww_mutex_base_unlock(&o.base);
- 	WARN_ON(o.ctx !=3D (void *)~0UL);
- }
-=20
-@@ -1770,7 +1786,7 @@ static void ww_test_two_contexts(void)
- static void ww_test_diff_class(void)
- {
- 	WWAI(&t);
--#ifdef CONFIG_DEBUG_MUTEXES
-+#ifdef DEBUG_WW_MUTEXES
- 	t.ww_class =3D NULL;
- #endif
- 	WWL(&o, &t);
-@@ -1834,7 +1850,7 @@ static void ww_test_edeadlk_normal(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	o2.ctx =3D &t2;
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
-=20
-@@ -1850,7 +1866,7 @@ static void ww_test_edeadlk_normal(void)
-=20
- 	o2.ctx =3D NULL;
- 	mutex_acquire(&o2.base.dep_map, 0, 1, _THIS_IP_);
--	mutex_unlock(&o2.base);
-+	ww_mutex_base_unlock(&o2.base);
- 	WWU(&o);
-=20
- 	WWL(&o2, &t);
-@@ -1860,7 +1876,7 @@ static void ww_test_edeadlk_normal_slow(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx =3D &t2;
-=20
-@@ -1876,7 +1892,7 @@ static void ww_test_edeadlk_normal_slow(void)
-=20
- 	o2.ctx =3D NULL;
- 	mutex_acquire(&o2.base.dep_map, 0, 1, _THIS_IP_);
--	mutex_unlock(&o2.base);
-+	ww_mutex_base_unlock(&o2.base);
- 	WWU(&o);
-=20
- 	ww_mutex_lock_slow(&o2, &t);
-@@ -1886,7 +1902,7 @@ static void ww_test_edeadlk_no_unlock(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	o2.ctx =3D &t2;
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
-=20
-@@ -1902,7 +1918,7 @@ static void ww_test_edeadlk_no_unlock(void)
-=20
- 	o2.ctx =3D NULL;
- 	mutex_acquire(&o2.base.dep_map, 0, 1, _THIS_IP_);
--	mutex_unlock(&o2.base);
-+	ww_mutex_base_unlock(&o2.base);
-=20
- 	WWL(&o2, &t);
- }
-@@ -1911,7 +1927,7 @@ static void ww_test_edeadlk_no_unlock_slow(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx =3D &t2;
-=20
-@@ -1927,7 +1943,7 @@ static void ww_test_edeadlk_no_unlock_slow(void)
-=20
- 	o2.ctx =3D NULL;
- 	mutex_acquire(&o2.base.dep_map, 0, 1, _THIS_IP_);
--	mutex_unlock(&o2.base);
-+	ww_mutex_base_unlock(&o2.base);
-=20
- 	ww_mutex_lock_slow(&o2, &t);
- }
-@@ -1936,7 +1952,7 @@ static void ww_test_edeadlk_acquire_more(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx =3D &t2;
-=20
-@@ -1957,7 +1973,7 @@ static void ww_test_edeadlk_acquire_more_slow(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx =3D &t2;
-=20
-@@ -1978,11 +1994,11 @@ static void ww_test_edeadlk_acquire_more_edeadlk(vo=
-id)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx =3D &t2;
-=20
--	mutex_lock(&o3.base);
-+	ww_mutex_base_lock(&o3.base);
- 	mutex_release(&o3.base.dep_map, _THIS_IP_);
- 	o3.ctx =3D &t2;
-=20
-@@ -2004,11 +2020,11 @@ static void ww_test_edeadlk_acquire_more_edeadlk_sl=
-ow(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx =3D &t2;
-=20
--	mutex_lock(&o3.base);
-+	ww_mutex_base_lock(&o3.base);
- 	mutex_release(&o3.base.dep_map, _THIS_IP_);
- 	o3.ctx =3D &t2;
-=20
-@@ -2029,7 +2045,7 @@ static void ww_test_edeadlk_acquire_wrong(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx =3D &t2;
-=20
-@@ -2054,7 +2070,7 @@ static void ww_test_edeadlk_acquire_wrong_slow(void)
- {
- 	int ret;
-=20
--	mutex_lock(&o2.base);
-+	ww_mutex_base_lock(&o2.base);
- 	mutex_release(&o2.base.dep_map, _THIS_IP_);
- 	o2.ctx =3D &t2;
-=20
---=20
-2.34.0
+I agree that the hooks cannot be dropped but the bug is reproducible 
+with this patch, where the hooks are still there.
 
+With the hooks in place, you have:
+
+	kvm_vcpu_blocking(vcpu)
+	  avic_set_running(vcpu, false)
+	    avic_vcpu_put(vcpu)
+	      avic_update_iommu_vcpu_affinity()
+	      WRITE_ONCE(...) // clear IS_RUNNING bit
+
+	set_current_state()
+	  smp_mb()
+
+	kvm_vcpu_check_block()
+	  return kvm_arch_vcpu_runnable() || ...
+	    return kvm_vcpu_has_events() || ...
+	      return kvm_cpu_has_interrupt() || ...
+		return kvm_apic_has_interrupt() || ...
+		  return apic_has_interrupt_for_ppr()
+		    apic_find_highest_irr()
+		      scan vIRR
+
+This covers the barrier between the write of is_running and the read of 
+vIRR, and the other side should be correct as well.  in particular, 
+reads of is_running always come after an atomic write to vIRR, and hence 
+after an implicit full memory barrier.  svm_deliver_avic_intr() has an 
+smp_mb__after_atomic() after writing IRR; avic_kick_target_vcpus() even 
+has an explicit barrier in srcu_read_lock(), between the microcode's 
+write to vIRR and its own call to avic_vcpu_is_running().
+
+Still it does seem to be a race that happens when IS_RUNNING=true but 
+vcpu->mode == OUTSIDE_GUEST_MODE.  This patch makes the race easier to 
+trigger because it moves IS_RUNNING=false later.
+
+Paolo

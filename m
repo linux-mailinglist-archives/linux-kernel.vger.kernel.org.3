@@ -2,149 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D96B4617D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1405C4617D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343558AbhK2OUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:20:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35318 "EHLO
+        id S243757AbhK2OVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243561AbhK2OSP (ORCPT
+        with ESMTP id S244340AbhK2OTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:18:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D998FC08EAF1;
-        Mon, 29 Nov 2021 04:55:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A474CB810A1;
-        Mon, 29 Nov 2021 12:55:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5832C004E1;
-        Mon, 29 Nov 2021 12:55:30 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 13:55:27 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     "Serge E. Hallyn" <serge@hallyn.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        Kees Cook <keescook@chromium.org>,
-        Sargun Dhillon <sargun@sargun.me>,
-        Jann Horn <jannh@google.com>,
-        Henning Schild <henning.schild@siemens.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Laurent Vivier <laurent@vivier.eu>,
-        Matthew Bobrowski <repnop@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, containers@lists.linux.dev
-Subject: Re: [PATCH 2/2] binfmt_misc: enable sandboxed mounts
-Message-ID: <20211129125527.fcljhmg4hfpdnseu@wittgenstein>
-References: <20211028103114.2849140-1-brauner@kernel.org>
- <20211028103114.2849140-2-brauner@kernel.org>
- <20211105043000.GA25244@mail.hallyn.com>
+        Mon, 29 Nov 2021 09:19:10 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEFE2C08EAFC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:56:36 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id z18so21320070iof.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 04:56:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=CKtqbicwgTdzcfDDVJ9s3/qtMRbUgp3KQEuBry1DrH0=;
+        b=BPmA997oheI0tE7nHCG5PwmGspFGrUsXVCpyn8D8CtPKr+F5e9+xwlnaqLvM0rJU4f
+         Ckk8pnztz7hPZSgGcQhBpbjtFlcmH0pNWGeFh+zZatoqU6AnWPh/ghPD1bE6EGM3O2C4
+         FnH2KyEEJvZn4hC0kc6NVhQuuNU0iPZPFPVnwl4l7V+Msk3wCPxsp3LleKtGX22RR8c1
+         PprsBE3zfb0Z+hFX0y/CIvUXORIrpSzA7EiJyBUzsOUtpJEVf62Do9aW4INNOncJDGx5
+         ePypANBqmKdP4N849jIBJoiIezlK90la72j2mbFaT1oxE5veAGnZcI+Hz136x9WtVio7
+         bdIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CKtqbicwgTdzcfDDVJ9s3/qtMRbUgp3KQEuBry1DrH0=;
+        b=ZQWWsXmYJVgVFvloNjGl9NmShinbcJQJvZ+a5kCftuTDMAXyPPv2y6YTGC9yEqQaB6
+         7USzCjvYB0a8IxRrqk6v2RMHLsA16cO54yriqojIJDp+Z6u4vGWWnN0AicR/Xkc159bI
+         UgI+wZ5N2FS3sesCpyQWxjPf+yURp8ytf/GZU0tEWwFLXbouXEvgQ3B0cJGQgmhBavjm
+         WxHMopzAas8dmlR+e6fWxEljXQAMFTcTqZZtTFsRP3JVeJztaKfKN4vRprs7/JlusNwi
+         YWM1xbwi+ZtrZJEufPs3iJsPTWCcTu4t+tDLdam9wII3jONzpR/bPYfaXqUttzjh64Ju
+         VBgg==
+X-Gm-Message-State: AOAM533zOFksSRvXTHKeXv8YGEYW9g+gRLB6RHpKkEg8Gtdy/8AbKY6i
+        Hhf6xQlcz+6pObVbj5vo6Nk1Pg5EgNigMJe8xoo=
+X-Google-Smtp-Source: ABdhPJz7yZAFjWS5SVbcrm3cGqLW78HumxClnBHVEWpGf9HWaajytm8B78/wqo9qOBZcQKb+qHQjV2oYVaHMpPgRqC0=
+X-Received: by 2002:a5e:9b0e:: with SMTP id j14mr59665497iok.127.1638190595204;
+ Mon, 29 Nov 2021 04:56:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211105043000.GA25244@mail.hallyn.com>
+References: <CANiq72kGS0JzFkuUS9oN2_HU9f_stm1gA8v79o2pUCb7bNSe0A@mail.gmail.com>
+ <CACT4Y+Z7bD62SkYGQH2tXV0Zx2MFojYoZzA2R+4J-CrXa6siMw@mail.gmail.com>
+In-Reply-To: <CACT4Y+Z7bD62SkYGQH2tXV0Zx2MFojYoZzA2R+4J-CrXa6siMw@mail.gmail.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Mon, 29 Nov 2021 13:56:24 +0100
+Message-ID: <CA+fCnZcUEVDWZTUvD+mbe2OrnrpJCC_OB66YMvbZYak8sKg7cw@mail.gmail.com>
+Subject: Re: KASAN Arm: global-out-of-bounds in load_module
+To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 04, 2021 at 11:30:00PM -0500, Serge Hallyn wrote:
-> On Thu, Oct 28, 2021 at 12:31:14PM +0200, Christian Brauner wrote:
-> > From: Laurent Vivier <laurent@vivier.eu>
-> > 
-> > Enable unprivileged sandboxes to create their own binfmt_misc mounts.
-> > This is based on Laurent's work in [1] but has been significantly
-> > reworked to fix various issues we identified in earlier versions.
-> > 
-> > While binfmt_misc can currently only be mounted in the initial user
-> > namespace, binary types registered in this binfmt_misc instance are
-> > available to all sandboxes (Either by having them installed in the
-> > sandbox or by registering the binary type with the F flag causing the
-> > interpreter to be opened right away). So binfmt_misc binary types are
-> > already delegated to sandboxes implicitly.
-> > 
-> > However, while a sandbox has access to all registered binary types in
-> > binfmt_misc a sandbox cannot currently register its own binary types
-> > in binfmt_misc. This has prevented various use-cases some of which were
-> > already outlined in [1] but we have a range of issues associated with
-> > this (cf. [3]-[5] below which are just a small sample).
-> > 
-> > Extend binfmt_misc to be mountable in non-initial user namespaces.
-> > Similar to other filesystem such as nfsd, mqueue, and sunrpc we use
-> > keyed superblock management. The key determines whether we need to
-> > create a new superblock or can reuse an already existing one. We use the
-> > user namespace of the mount as key. This means a new binfmt_misc
-> > superblock is created once per user namespace creation. Subsequent
-> > mounts of binfmt_misc in the same user namespace will mount the same
-> > binfmt_misc instance. We explicitly do not create a new binfmt_misc
-> > superblock on every binfmt_misc mount as the semantics for
-> > load_misc_binary() line up with the keying model. This also allows us to
-> > retrieve the relevant binfmt_misc instance based on the caller's user
-> > namespace which can be done in a simple (bounded to 32 levels) loop.
-> > 
-> > Similar to the current binfmt_misc semantics allowing access to the
-> > binary types in the initial binfmt_misc instance we do allow sandboxes
-> > access to their parent's binfmt_misc mounts if they do not have created
-> > a separate binfmt_misc instance.
-> > 
-> > Overall, this will unblock the use-cases mentioned below and in general
-> > will also allow to support and harden execution of another
-> > architecture's binaries in tight sandboxes. For instance, using the
-> > unshare binary it possible to start a chroot of another architecture and
-> > configure the binfmt_misc interpreter without being root to run the
-> > binaries in this chroot and without requiring the host to modify its
-> > binary type handlers.
-> > 
-> > Henning had already posted a few experiments in the cover letter at [1].
-> > But here's an additional example where an unprivileged container
-> > registers qemu-user-static binary handlers for various binary types in
-> > its separate binfmt_misc mount and is then seamlessly able to start
-> > containers with a different architecture without affecting the host:
-> > 
-> > [lxc monitor] /var/lib/lxc imp2
-> >  \_ /sbin/init
-> >      \_ /lib/systemd/systemd-journald
-> >      \_ /lib/systemd/systemd-udevd
-> >      \_ /lib/systemd/systemd-networkd
-> >      \_ /usr/sbin/cron -f -P
-> >      \_ @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
-> >      \_ /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
-> >      \_ /usr/sbin/rsyslogd -n -iNONE
-> >      \_ /lib/systemd/systemd-logind
-> >      \_ /lib/systemd/systemd-resolved
-> >      \_ dnsmasq --conf-file=/dev/null -u lxc-dnsmasq --strict-order --bind-interfaces --pid-file=/run/lxc/dnsmasq.pid --liste
-> >      \_ /sbin/agetty -o -p -- \u --noclear --keep-baud console 115200,38400,9600 vt220
-> >      \_ /sbin/agetty -o -p -- \u --noclear --keep-baud pts/0 115200,38400,9600 vt220
-> >      \_ /sbin/agetty -o -p -- \u --noclear --keep-baud pts/1 115200,38400,9600 vt220
-> >      \_ /sbin/agetty -o -p -- \u --noclear --keep-baud pts/2 115200,38400,9600 vt220
-> >      \_ /sbin/agetty -o -p -- \u --noclear --keep-baud pts/3 115200,38400,9600 vt220
-> >      \_ [lxc monitor] /var/lib/lxc alp1
-> >          \_ /usr/libexec/qemu-binfmt/ppc64le-binfmt-P /sbin/init /sbin/init
-> >              \_ /usr/libexec/qemu-binfmt/ppc64le-binfmt-P /lib/systemd/systemd-journald /lib/systemd/systemd-journald
-> >              \_ /usr/libexec/qemu-binfmt/ppc64le-binfmt-P /lib/systemd/systemd-udevd /lib/systemd/systemd-udevd
-> >              \_ /usr/libexec/qemu-binfmt/ppc64le-binfmt-P /usr/sbin/cron /usr/sbin/cron -f -P
-> >              \_ /usr/libexec/qemu-binfmt/ppc64le-binfmt-P /lib/systemd/systemd-resolved /lib/systemd/systemd-resolved
-> >              \_ /usr/libexec/qemu-binfmt/ppc64le-binfmt-P /lib/systemd/systemd-logind /lib/systemd/systemd-logind
-> > 
-> > Link: https://lore.kernel.org/r/20191216091220.465626-2-laurent@vivier.eu
-> > [1]: https://lore.kernel.org/all/20191216091220.465626-1-laurent@vivier.eu
-> > [2]: https://discuss.linuxcontainers.org/t/binfmt-misc-permission-denied
-> > [3]: https://discuss.linuxcontainers.org/t/lxd-binfmt-support-for-qemu-static-interpreters
-> > [4]: https://discuss.linuxcontainers.org/t/3-1-0-binfmt-support-service-in-unprivileged-guest-requires-write-access-on-hosts-proc-sys-fs-binfmt-misc
-> > [5]: https://discuss.linuxcontainers.org/t/qemu-user-static-not-working-4-11
-> > Cc: Sargun Dhillon <sargun@sargun.me>
-> > Cc: Serge Hallyn <serge@hallyn.com>
-> 
-> I *think* this is ok.  I'm still trying to convince myself that there is
-> no way for evict_inode() to run after the kfree(ns->binfmt_misc), but
-> it doesn't look like there is.
-> 
-> Does this memory (as the number of register entries grows) need to be
-> accounted for and/or limited ?
+On Mon, Nov 29, 2021 at 7:37 AM 'Dmitry Vyukov' via kasan-dev
+<kasan-dev@googlegroups.com> wrote:
+>
+> On Sun, 28 Nov 2021 at 01:43, Miguel Ojeda
+> <miguel.ojeda.sandonis@gmail.com> wrote:
+> >
+> > Hi KASAN / Arm folks,
+> >
+> > I noticed in our CI that inserting and removing a module, and then
+> > inserting it again, e.g.:
+> >
+> >     insmod bcm2835_thermal.ko
+> >     rmmod bcm2835_thermal.ko
+> >     insmod bcm2835_thermal.ko
+> >
+> > deterministically triggers the report below in v5.16-rc2. I also tried
+> > it on v5.12 to see if it was a recent thing, but same story.
+> >
+> > I could find this other report from May, which may be related:
+> > https://lore.kernel.org/lkml/20210510202653.gjvqsxacw3hcxfvr@pengutronix.de/
+> >
+> > Cheers,
+> > Miguel
+>
+> HI Miguel,
+>
+> 0xf9 is redzone for global variables:
+> #define KASAN_GLOBAL_REDZONE    0xF9  /* redzone for global variable */
+>
+> I would assume this is caused by not clearing shadow of unloaded
+> modules, so that the next module loaded hits these leftover redzones.
 
-Good point. We should pass GFP_KERNEL_ACCOUNT andor use a cache with
-SLAB_ACCOUNT. I'll fix that up.
+Hi Miguel,
 
-Christian
+Adding to what Dmitry mentioned:
+
+The code that's responsible for allocating&clearing/freeing shadow for
+modules is at the very end of mm/kasan/shadow.c. It's only required
+when CONFIG_KASAN_VMALLOC is not supported/enabled.
+
+As 32-bit arm doesn't select HAVE_ARCH_KASAN_VMALLOC, perhaps it needs
+something along the lines of what kasan_module_alloc() does with
+regards to clearing shadow? I assume arm doesn't call that function
+directly due to a different shadow allocation scheme.
+
+Just a guess.
+
+Thanks!

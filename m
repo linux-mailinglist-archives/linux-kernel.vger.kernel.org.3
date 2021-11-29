@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6142146270F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:59:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3A6462582
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236422AbhK2XA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:00:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38940 "EHLO
+        id S234755AbhK2Wkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:40:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235863AbhK2XAA (ORCPT
+        with ESMTP id S234410AbhK2WkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:00:00 -0500
+        Mon, 29 Nov 2021 17:40:12 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A541BC1A25DC;
-        Mon, 29 Nov 2021 10:38:15 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24BE6C0800C9;
+        Mon, 29 Nov 2021 10:38:47 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4CB13B815BB;
-        Mon, 29 Nov 2021 18:38:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81730C53FAD;
-        Mon, 29 Nov 2021 18:38:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C03D4B815E0;
+        Mon, 29 Nov 2021 18:38:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA539C53FAD;
+        Mon, 29 Nov 2021 18:38:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638211094;
-        bh=nr6D9LJr5YW7Iz4pQ8ucgiAGoMhPfXBTBgZGacm63n4=;
+        s=korg; t=1638211125;
+        bh=OLIjOVpAZr3WQu451s1pGvvPn88OPDhxU3OmxKfXEPk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TbbVSX162jvTshfm6uMxopJwlVwB++E4YKw3gh8CnSQUz2H2yfoPujXAwHtZlyzpZ
-         40phWRKI/PvKBxboBxKOigWaHw/sJkvvwGsRUr4iy47HgEfDB63YzTP7L7h8u/EqzR
-         4BmKiV2sl1ieb2dRsjZVgVavBDWUScVCT10Vhq+g=
+        b=W6+T5g9L3SwP1NR1bNNoQfgbgjaCKIUBswK45PzYfN8BMJPuUUa8rCTpYvgjRpK0m
+         477PdzLY8G56LE4lDOOXGP/vT7IJ0hPPqAwas5iWCQxTPlRdDyYoQNb2aiC+ftunxZ
+         ThF0jrTCNR+1RUVVxY5I/yK/UKN8fpWZ/ucevf/4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        stable@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 102/179] xen/pvh: add missing prototype to header
-Date:   Mon, 29 Nov 2021 19:18:16 +0100
-Message-Id: <20211129181722.296880822@linuxfoundation.org>
+Subject: [PATCH 5.15 104/179] mptcp: fix delack timer
+Date:   Mon, 29 Nov 2021 19:18:18 +0100
+Message-Id: <20211129181722.360957073@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
 References: <20211129181718.913038547@linuxfoundation.org>
@@ -50,36 +50,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Eric Dumazet <edumazet@google.com>
 
-[ Upstream commit 2a0991929aba0a3dd6fe51d1daba06a93a96a021 ]
+[ Upstream commit ee50e67ba0e17b1a1a8d76691d02eadf9e0f392c ]
 
-The prototype of mem_map_via_hcall() is missing in its header, so add
-it.
+To compute the rtx timeout schedule_3rdack_retransmission() does multiple
+things in the wrong way: srtt_us is measured in usec/8 and the timeout
+itself is an absolute value.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: a43fb7da53007e67ad ("xen/pvh: Move Xen code for getting mem map via hcall out of common file")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Link: https://lore.kernel.org/r/20211119153913.21678-1-jgross@suse.com
-Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Fixes: ec3edaa7ca6ce02f ("mptcp: Add handling of outgoing MP_JOIN requests")
+Acked-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Mat Martineau <mathew.j.martineau>@linux.intel.com>
+Signed-off-by: Eric Dumazet <edumazet@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/xen/hypervisor.h | 1 +
- 1 file changed, 1 insertion(+)
+ net/mptcp/options.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/xen/hypervisor.h b/arch/x86/include/asm/xen/hypervisor.h
-index 4957f59deb40b..5adab895127e1 100644
---- a/arch/x86/include/asm/xen/hypervisor.h
-+++ b/arch/x86/include/asm/xen/hypervisor.h
-@@ -64,6 +64,7 @@ void xen_arch_unregister_cpu(int num);
+diff --git a/net/mptcp/options.c b/net/mptcp/options.c
+index 350348f070700..3fcc2e0c8a5df 100644
+--- a/net/mptcp/options.c
++++ b/net/mptcp/options.c
+@@ -434,9 +434,10 @@ static void schedule_3rdack_retransmission(struct sock *sk)
  
- #ifdef CONFIG_PVH
- void __init xen_pvh_init(struct boot_params *boot_params);
-+void __init mem_map_via_hcall(struct boot_params *boot_params_p);
- #endif
+ 	/* reschedule with a timeout above RTT, as we must look only for drop */
+ 	if (tp->srtt_us)
+-		timeout = tp->srtt_us << 1;
++		timeout = usecs_to_jiffies(tp->srtt_us >> (3 - 1));
+ 	else
+ 		timeout = TCP_TIMEOUT_INIT;
++	timeout += jiffies;
  
- #endif /* _ASM_X86_XEN_HYPERVISOR_H */
+ 	WARN_ON_ONCE(icsk->icsk_ack.pending & ICSK_ACK_TIMER);
+ 	icsk->icsk_ack.pending |= ICSK_ACK_SCHED | ICSK_ACK_TIMER;
 -- 
 2.33.0
 

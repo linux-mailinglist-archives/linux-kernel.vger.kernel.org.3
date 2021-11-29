@@ -2,98 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B40B46251F
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8C3462604
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbhK2Wf2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
+        id S235189AbhK2WqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:46:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbhK2We7 (ORCPT
+        with ESMTP id S235332AbhK2WpJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:34:59 -0500
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5E5C03AA35;
-        Mon, 29 Nov 2021 10:19:21 -0800 (PST)
-Received: by mail-pl1-x62f.google.com with SMTP id p18so12827410plf.13;
-        Mon, 29 Nov 2021 10:19:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=nQZmy4cGScvJRiDlRHVd4gzuHUav0YqXgvVm+3n0P84=;
-        b=d+idyvNHakWhb7W1cxj73/tcSGYR8+qLm/NoDZ5ro8n/DN2vzjKEcrinrJ7bGnxsxr
-         ATXdS+Yuj/kLjB3k/3WmB6m8jR6+CPKUNX7CaL8NTFh4SFSYZVEbfTYN6oQaBXmGiYYn
-         /YFwxy+i9nc1fgZiycYoZ8J02PptokM9xDCHIrMYX9gw/ivMB9Kksq3D2tc3Y+GcZd0N
-         gpR63e1UH/iJGTfuLblGo9mB95uJIPLfhQQ3RD9jLogaPJps05xd+48YX2DJPkLXsyWA
-         p7bOLMTIxKdL4DtGjELnyNkYcqi6hiKHx521vudwlewk105i33Dj1kJRUqexxOpG6GJx
-         3N6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=nQZmy4cGScvJRiDlRHVd4gzuHUav0YqXgvVm+3n0P84=;
-        b=T6khnYSbATvnRy8YB6LN91bLwYHcDxFgq+im1z2hEHtrQvGg78xCaFWaDS3+hToNTf
-         oEJdzrN7RfVrXVN/nUsmUm4i/Kq3XDB9Nuo1LU9rcFf63w3VZbah7C+IIQ4+6U/rWm95
-         oXjTT6pGNg3ALo9NvYGIoFYX7drGaif+Tu3LIGKCk5l0pT7raCMzNObgz12PbCYMZ6gU
-         U1+BrFHZsSU2W0ijALN2iJ2+6aC057s8dVvvSngxoghaFRkbrEnOU1GWZYatt6uwcuLA
-         kwHXq4NpmY4T9+pMbZWDAtaVdxPbaTLVefvmHnIvmcL0BjTEbO1npZ7UVm3IsA6w+zJw
-         0jcA==
-X-Gm-Message-State: AOAM532rr2UVtV0KAduyaJaVZbPZUSuddyNPQFRGzDRFW1x+bSZiI+Z1
-        +rD1M5qauz99tWpGWMRdZMc=
-X-Google-Smtp-Source: ABdhPJyvtHz/445hnKl3EGzHXHqBM5YNV/8eO0nxOvmV8HzDYz0ncry4gmJxh1n1KeYP2g7jf09mWQ==
-X-Received: by 2002:a17:90b:4c02:: with SMTP id na2mr26447pjb.94.1638209960962;
-        Mon, 29 Nov 2021 10:19:20 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id l4sm19518598pfc.121.2021.11.29.10.19.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 10:19:18 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 29 Nov 2021 08:19:17 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     cgel.zte@gmail.com
-Cc:     axboe@kernel.dk, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zealci@zte.com.cn, deng.changcheng@zte.com.cn
-Subject: Re: [PATCH v2] block: Use div64_ul instead of do_div
-Message-ID: <YaUZpZYI71K66Zka@slm.duckdns.org>
-References: <20211117010358.158313-1-deng.changcheng@zte.com.cn>
- <20211118034033.163550-1-deng.changcheng@zte.com.cn>
+        Mon, 29 Nov 2021 17:45:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F01C1E03D0;
+        Mon, 29 Nov 2021 10:41:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 887AAB81639;
+        Mon, 29 Nov 2021 18:41:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDEEC53FC7;
+        Mon, 29 Nov 2021 18:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638211276;
+        bh=JvZPDbto5cKDBqsR0XZxIL6sD8bpk/XuEEzw4h5lyH8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=bp3JayfOYHaM8bEexuOBeRwyTIOeKHHvKMdJKEbuxWk7bL347xJ7ZeUMnlRjtcJHR
+         2PhkScd+1Ak0gjmZhwguAyCoTHtFXqPvQlwBZtGHFU81ZkSsRzPDAdH0PS7sTPGQ8L
+         RBPP95znXshDtnHFOOTWTTL3RlDcUDdY9B+IP8SA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+Subject: [PATCH 5.15 166/179] iommu/amd: Clarify AMD IOMMUv2 initialization messages
+Date:   Mon, 29 Nov 2021 19:19:20 +0100
+Message-Id: <20211129181724.397523379@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211118034033.163550-1-deng.changcheng@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 18, 2021 at 03:40:33AM +0000, cgel.zte@gmail.com wrote:
-> From: Changcheng Deng <deng.changcheng@zte.com.cn>
-> 
-> do_div() does a 64-by-32 division. Here the divisor is an unsigned long
-> which on some platforms is 64 bit wide. So use div64_ul instead of do_div
-> to avoid a possible truncation.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Changcheng Deng <deng.changcheng@zte.com.cn>
-> ---
->  block/blk-throttle.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-> index 39bb6e68a9a2..2db635d66617 100644
-> --- a/block/blk-throttle.c
-> +++ b/block/blk-throttle.c
-> @@ -1903,7 +1903,7 @@ static void throtl_downgrade_check(struct throtl_grp *tg)
->  
->  	if (tg->bps[READ][LIMIT_LOW]) {
->  		bps = tg->last_bytes_disp[READ] * HZ;
-> -		do_div(bps, elapsed_time);
-> +		bps = div64_ul(bps, elapsed_time);
+From: Joerg Roedel <jroedel@suse.de>
 
-Yeah, the divisor is ulong for whatever reason but the thing is in jiffies.
-I have a hard time imagining it overflowing 32bit. I'm not sure how useful
-this patch is.
+commit 717e88aad37befedfd531378b632e794e24e9afb upstream.
 
--- 
-tejun
+The messages printed on the initialization of the AMD IOMMUv2 driver
+have caused some confusion in the past. Clarify the messages to lower
+the confusion in the future.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Link: https://lore.kernel.org/r/20211123105507.7654-3-joro@8bytes.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/iommu/amd/iommu_v2.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+--- a/drivers/iommu/amd/iommu_v2.c
++++ b/drivers/iommu/amd/iommu_v2.c
+@@ -928,10 +928,8 @@ static int __init amd_iommu_v2_init(void
+ {
+ 	int ret;
+ 
+-	pr_info("AMD IOMMUv2 driver by Joerg Roedel <jroedel@suse.de>\n");
+-
+ 	if (!amd_iommu_v2_supported()) {
+-		pr_info("AMD IOMMUv2 functionality not available on this system\n");
++		pr_info("AMD IOMMUv2 functionality not available on this system - This is not a bug.\n");
+ 		/*
+ 		 * Load anyway to provide the symbols to other modules
+ 		 * which may use AMD IOMMUv2 optionally.
+@@ -946,6 +944,8 @@ static int __init amd_iommu_v2_init(void
+ 
+ 	amd_iommu_register_ppr_notifier(&ppr_nb);
+ 
++	pr_info("AMD IOMMUv2 loaded and initialized\n");
++
+ 	return 0;
+ 
+ out:
+
+

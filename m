@@ -2,55 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E15664611CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA1FC461163
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345439AbhK2KL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:11:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbhK2KJY (ORCPT
+        id S1347961AbhK2Jxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 04:53:45 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:53506 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245374AbhK2JvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:09:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A65B1C0698C5;
-        Mon, 29 Nov 2021 01:47:58 -0800 (PST)
+        Mon, 29 Nov 2021 04:51:16 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80B2E61256;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BA8A612AB;
         Mon, 29 Nov 2021 09:47:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20459C8CFC3;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CAC5C8CFCA;
         Mon, 29 Nov 2021 09:47:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638179277;
-        bh=50op9YAtX0/PCCZuHHAdCtTsRwW2P9kyuSBk3Zk50fM=;
+        bh=PZc8s3X7+3Fvl9dhdA2WhkbH6WBiqlNGKDPhzYrtWIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Oki8XiQlbzy0bzjG3M7lzh+UspuiW0aj+E0AudObl3VBhss3bB8v3WrDKSjA8Ld/Z
-         aNvZvy9NXWEZ3Adm2/S16ADKTH1MGJ3PC6UZc7aNlMTGOKozWz8oRSe1BSRomjbePZ
-         PmWDVXyBr03dy2eDubT4kEY5bQScrvOPYF7METmZ1UoG+UUdII+3+P+7+Hg3AQN3su
-         E9Oxf+G4F4WGNwWIZqKA5C3UqgPrzYlfhKZWRIfOi7SMS/agARzf9LvyiOQAgGbz9k
-         bsn9vTwcQJn6uz23kO3ELjb6FLqKddPr7895vs/w7gv0CM5GWuyL6QABnjsTcxpaTr
-         gyCnfSIRMC5Cw==
+        b=tzv6b49Jr4kuLZ6+ooSy3BfBoTQunFcJjbBAWSec5tyFqV0ZSCu84wS3RKWJpnEP9
+         AR3OCgpIggV/0Sr2tkWchkhheEFuQOpOBFrArIDDBlTYqRcGWfM22mP8/bJeObiy/T
+         gjGKGseU83VL/D1cKOHd/D+rdFXLU7AlqxfHi3S7GmfuHCLL6wotZLHy2VnTVb7jv7
+         /YoAVBvNtmc8GKfXCNOSNFo9si5UVDh2V524NtAU4wc1vMFSi/utB3nq6DY6UxBUS1
+         PzuNt2Z0fRF/30rz/HMwuGgtwKNnn/JJvYpvr3WM2NQyFLeh7GHLsIQW3EbHJ7D4UQ
+         FEHb9UzajIiUA==
 Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
         (envelope-from <mchehab@kernel.org>)
-        id 1mrdGN-000RC2-0a; Mon, 29 Nov 2021 10:47:55 +0100
+        id 1mrdGN-000RC6-2W; Mon, 29 Nov 2021 10:47:55 +0100
 From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
         Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH v2 18/20] media: mtk-mdp: address a clang warning
-Date:   Mon, 29 Nov 2021 10:47:50 +0100
-Message-Id: <c6e2bedaa593ba764d3cafbe7940005e6b0b594c.1638179135.git.mchehab+huawei@kernel.org>
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH v2 19/20] media: cobalt: drop an unused variable
+Date:   Mon, 29 Nov 2021 10:47:51 +0100
+Message-Id: <22f9904099e3dfd1d245c45a125392b549e142d8.1638179135.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638179135.git.mchehab+huawei@kernel.org>
 References: <cover.1638179135.git.mchehab+huawei@kernel.org>
@@ -62,35 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The typecasts at the dvb-core generate clang warnings when W=1
-is enabled.
+The clock_control value is read but never actually used. Based on
+a comment at the code, it has to be reset at the function.
 
-Such warning is harmless, but it causes the build to break with
-CONFIG_WERROR and W=1 with clang, so do the cast on a way that
-it won't produce warnings anymore.
+So, drop the variable that stores its value.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
 
 See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
 
- drivers/media/platform/mtk-mdp/mtk_mdp_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/pci/cobalt/cobalt-cpld.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-index 976aa1f4829b..3d38793aaa25 100644
---- a/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-+++ b/drivers/media/platform/mtk-mdp/mtk_mdp_core.c
-@@ -148,7 +148,7 @@ static int mtk_mdp_probe(struct platform_device *pdev)
- 			continue;
- 		}
+diff --git a/drivers/media/pci/cobalt/cobalt-cpld.c b/drivers/media/pci/cobalt/cobalt-cpld.c
+index 3d8026483ac3..fad882459d23 100644
+--- a/drivers/media/pci/cobalt/cobalt-cpld.c
++++ b/drivers/media/pci/cobalt/cobalt-cpld.c
+@@ -236,7 +236,6 @@ bool cobalt_cpld_set_freq(struct cobalt *cobalt, unsigned f_out)
+ 	u8 n1, hsdiv;
+ 	u8 regs[6];
+ 	int found = 0;
+-	u16 clock_ctrl;
+ 	int retries = 3;
  
--		comp_type = (enum mtk_mdp_comp_type)of_id->data;
-+		comp_type = (uintptr_t)of_id->data;
+ 	for (i = 0; i < ARRAY_SIZE(multipliers); i++) {
+@@ -260,9 +259,7 @@ bool cobalt_cpld_set_freq(struct cobalt *cobalt, unsigned f_out)
+ 	hsdiv = multipliers[i_best].hsdiv - 4;
+ 	rfreq = div_u64(dco << 28, f_xtal);
  
- 		comp = devm_kzalloc(dev, sizeof(*comp), GFP_KERNEL);
- 		if (!comp) {
+-	clock_ctrl = cpld_read(cobalt, SI570_CLOCK_CTRL);
+-	clock_ctrl |= S01755_REG_CLOCK_CTRL_BITMAP_CLKHSMA_FPGA_CTRL;
+-	clock_ctrl |= S01755_REG_CLOCK_CTRL_BITMAP_CLKHSMA_EN;
++	cpld_read(cobalt, SI570_CLOCK_CTRL);
+ 
+ 	regs[0] = (hsdiv << 5) | (n1 >> 2);
+ 	regs[1] = ((n1 & 0x3) << 6) | (rfreq >> 32);
 -- 
 2.33.1
 

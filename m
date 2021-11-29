@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EC0462690
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:51:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41E5F4626BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:53:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235699AbhK2WyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:54:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
+        id S235845AbhK2W4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233648AbhK2WxX (ORCPT
+        with ESMTP id S236171AbhK2W4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:53:23 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6F2C08EB4F;
-        Mon, 29 Nov 2021 12:21:45 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id a18so39489642wrn.6;
-        Mon, 29 Nov 2021 12:21:45 -0800 (PST)
+        Mon, 29 Nov 2021 17:56:12 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606B4C09CE47;
+        Mon, 29 Nov 2021 12:21:50 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id az34-20020a05600c602200b0033bf8662572so13254817wmb.0;
+        Mon, 29 Nov 2021 12:21:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=7gIeiPld9zLHugWa33z4cxIeDKg8lMMvyR8V+fYZSRU=;
-        b=ozJ62MEtuU7hwSGRIjRdTImmV1wsksWSMmpW3R/9xrm6/FC6Bpo111l5Ez2bOWFEEO
-         e2nJKH1iibcsLCU3PCBUhDy0sUjWKiqFfJ0T/wJUwvxZxlaxVmesQYxlPtVSBwtLFDKj
-         t8Z4Z/uOg32QSLQMBBIsS/4hU8QUDuzsg5nwSWIpqnYVttWyyCO9aMxlSySLDbQ8FT5P
-         mSOcY9b0fgJ+ldtXyCXE3f+t9JhUg8MOmw73zasTNhpvBZO0Efq+U6D82wxPCyGGFfb7
-         /4P2UcvFy9a9H56d9220BzmxKNI/iybT2lYf82KlPsCRrdGcSce0GDsVWts/2RkJBeFx
-         tuEQ==
+        bh=fb86c64AAxfgKMIhtfj1EvABb44FROtjYen1/0oh/7E=;
+        b=gDbo1dVJn1Pl7Vg552yy2coDXPNYenyEMsjHS0rQawHS1B2l3k0mtDIglMGgRwlA4/
+         H+k6yywj73T4bG0x7Nr/n0U4IhX6k48/oKy/T8t5l8kHU3F/UML3PS2Igq0W+NCy/SPR
+         bwJ69n/C0Gc71wzQGgFSmHdFPPPzovkHX2cGzz/jGHrNZiN3mLOevE5ledsmAVgYkHCi
+         tJjdZ12XvDZjsk5QSru3kuiu+rNW6wJin4zHg+botRjOZCCX8Rq2c/eAmEafJCdW+ntt
+         BuTpSp49vW/lVlplrmHnXpoHROICJ7SBjiR09M6sYFu7fZEOQn+HvhuvsWG5IDPib1gp
+         bYPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=7gIeiPld9zLHugWa33z4cxIeDKg8lMMvyR8V+fYZSRU=;
-        b=TEEddtjqMv0EZTU5Bd1GeaVOB19tEQ869hod3XHdHxnFqxuYyTFowSmEuc70wXluUF
-         yg7OTDhgjKf2+oRTTlOTDslMFIdf7BXeqUdODKrZ2R7HO/nadRTiO3KH7SRBeDcAIHFY
-         5SNVod/SBs6uVoDtWjos22Vo65nL54QRLRTu9aA/w10ZWLx3iaDHMfoqksUM3/i3w9UU
-         8U/ZZL5ChTXzF86YqKW+7s7UrTFA6BueGC+Gbq6Scr1lZnAQYBoW2e/EHY9f6yrFYUUl
-         pBcSvVmqH15W/JDISQOTFafxdzby2KX7mWSFWTcyYqsAzJGFvMcPt5ZGYdC9uAurFaIE
-         bWQg==
-X-Gm-Message-State: AOAM533piJfhwS9LKkv7Ibp6yvOAc39COYKzk4rgV0+K04p6C8QS3tMV
-        dyUk4CwkyqFFTdr/a4FAtn7acVeAcZU6DA==
-X-Google-Smtp-Source: ABdhPJwh67JHoWu8iWxdVopal7Q/Ny+oJcSNa8bO1ENTqBaL04B8qRvm7XXWsNg7uTaDZLsPDfL7Sg==
-X-Received: by 2002:a5d:4e0b:: with SMTP id p11mr35723785wrt.88.1638217303906;
-        Mon, 29 Nov 2021 12:21:43 -0800 (PST)
+        bh=fb86c64AAxfgKMIhtfj1EvABb44FROtjYen1/0oh/7E=;
+        b=THLr6ZZzytkHtiOXzD/HuxA8wfGjwGYeXL+C7E5JAVFis9SsiWu+IQv9MNN34GpJmL
+         L62bcppsefSFiW9mCnRi2qUMgMN1jhHNPPS7r8vwRaexRo0fY8coAcDyVBlIAsc43F1n
+         3rS6hHvDSa3kvkAVHgcunEkxibDT8KWIxM510HYxvLoNun6DQL4miQzrhrCgEoRx8eFb
+         0v6p9AWR+8Hx6xYiStXTMstx7Wscoa0m2yoeihnOIlmyu+p3BOtUJM4ny/Sp/cCmn/SV
+         5pz16hcO7dqERHrg5s8bb51rDu5rOsifbhS7VULdxKUsAE8wKCYzs/tQihyR5N46Pzc/
+         snaw==
+X-Gm-Message-State: AOAM530z3m8KF/FkEVrqVKriQOLt0PLbw+pZbtonUwYiKGuwh1Azjs7U
+        9Ya6nvWnx4Wmsah+bxSNMkFoCZ+WcdcOfg==
+X-Google-Smtp-Source: ABdhPJyFDhJ0eC4nxYqZ0esW8KwbVh+54Ab+svmQe19/xmGfPC0ceJBssaQACJCxGZiy8zCfgr0Ymw==
+X-Received: by 2002:a7b:c94e:: with SMTP id i14mr249770wml.85.1638217309076;
+        Mon, 29 Nov 2021 12:21:49 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p200300c78f4e06460b103a790e4c64a8.dip0.t-ipconnect.de. [2003:c7:8f4e:646:b10:3a79:e4c:64a8])
-        by smtp.gmail.com with ESMTPSA id 9sm18599651wry.0.2021.11.29.12.21.43
+        by smtp.gmail.com with ESMTPSA id h2sm14315553wrz.23.2021.11.29.12.21.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 12:21:43 -0800 (PST)
-Date:   Mon, 29 Nov 2021 21:21:41 +0100
+        Mon, 29 Nov 2021 12:21:48 -0800 (PST)
+Date:   Mon, 29 Nov 2021 21:21:47 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     corbet@lwn.net, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     linux-usb@vger.kernel.org
-Subject: [PATCH 1/4] Docs: usb: update usb_bulk_msg receiving example
-Message-ID: <28a76eedad7027277754cef84ca34810b0cfe6f4.1638152984.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 2/4] Docs: usb: update comment and code near decrement our
+ usage count for the device
+Message-ID: <75317b591c0da0d32be77b819680733a44f6f70b.1638152984.git.philipp.g.hortmann@gmail.com>
 References: <cover.1638152984.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -64,70 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clarification that this example is not in the driver template anymore.
-Update code example so that it fits best to usb-skeleton.c
+Put release function in the document typical form
+Update comment: decrement our usage count ..
+and code according to usb-skeleton.c
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- .../driver-api/usb/writing_usb_driver.rst     | 30 +++++++++----------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ Documentation/driver-api/usb/writing_usb_driver.rst | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/Documentation/driver-api/usb/writing_usb_driver.rst b/Documentation/driver-api/usb/writing_usb_driver.rst
-index b43e1ce49f0e..a9608ad18d77 100644
+index a9608ad18d77..b16e4e76d472 100644
 --- a/Documentation/driver-api/usb/writing_usb_driver.rst
 +++ b/Documentation/driver-api/usb/writing_usb_driver.rst
-@@ -218,36 +218,36 @@ do very much processing at that time. Our implementation of
- ``skel_write_bulk_callback`` merely reports if the urb was completed
- successfully or not and then returns.
- 
--The read function works a bit differently from the write function in
-+This read function works a bit differently from the write function in
- that we do not use an urb to transfer data from the device to the
--driver. Instead we call the :c:func:`usb_bulk_msg` function, which can be used
-+driver. Instead we call `usb_bulk_msg` function, which can be used
- to send or receive data from a device without having to create urbs and
--handle urb completion callback functions. We call the :c:func:`usb_bulk_msg`
-+handle urb completion callback functions. We call `usb_bulk_msg`
- function, giving it a buffer into which to place any data received from
- the device and a timeout value. If the timeout period expires without
- receiving any data from the device, the function will fail and return an
- error message. This can be shown with the following code::
- 
-     /* do an immediate bulk read to get data from the device */
--    retval = usb_bulk_msg (skel->dev,
--			   usb_rcvbulkpipe (skel->dev,
--			   skel->bulk_in_endpointAddr),
--			   skel->bulk_in_buffer,
--			   skel->bulk_in_size,
--			   &count, 5000);
-+    rv = usb_bulk_msg(dev->udev,
-+		      usb_rcvbulkpipe (dev->udev,
-+		      dev->bulk_in_endpointAddr),
-+		      dev->bulk_in_buffer,
-+	              dev->bulk_in_size,
-+		      &len, 5000);
-     /* if the read was successful, copy the data to user space */
--    if (!retval) {
--	    if (copy_to_user (buffer, skel->bulk_in_buffer, count))
--		    retval = -EFAULT;
-+    if (!rv) {
-+	    if (copy_to_user (buffer, dev->bulk_in_buffer, len))
-+		    rv = -EFAULT;
- 	    else
--		    retval = count;
-+		    rv = len;
-     }
- 
- 
--The :c:func:`usb_bulk_msg` function can be very useful for doing single reads
-+Function `usb_bulk_msg` can be very useful for doing single reads
- or writes to a device; however, if you need to read or write constantly to
- a device, it is recommended to set up your own urbs and submit them to
--the USB subsystem.
-+the USB subsystem. The template uses urbs for read and write.
+@@ -250,12 +250,12 @@ a device, it is recommended to set up your own urbs and submit them to
+ the USB subsystem. The template uses urbs for read and write.
  
  When the user program releases the file handle that it has been using to
- talk to the device, the release function in the driver is called. In
+-talk to the device, the release function in the driver is called. In
++talk to the device, the `skel_release` function in the driver is called. In
+ this function we decrement our private usage count and wait for possible
+ pending writes::
+ 
+-    /* decrement our usage count for the device */
+-    --skel->open_count;
++    /* decrement the count on our device */
++    kref_put(&dev->kref, skel_delete);
+ 
+ 
+ One of the more difficult problems that USB drivers must be able to
 -- 
 2.25.1
 

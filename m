@@ -2,147 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDB314626AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC52462696
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235814AbhK2Wzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:55:47 -0500
-Received: from mga11.intel.com ([192.55.52.93]:35009 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236124AbhK2WzR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:55:17 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="233592853"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="233592853"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 14:50:25 -0800
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="540182749"
-Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.209.175.223]) ([10.209.175.223])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 14:50:24 -0800
-Message-ID: <693a42d6-34d0-b8f9-f8b8-39ebbabb7f16@intel.com>
-Date:   Mon, 29 Nov 2021 15:50:23 -0700
+        id S235392AbhK2Wyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:54:46 -0500
+Received: from mail-ot1-f52.google.com ([209.85.210.52]:44975 "EHLO
+        mail-ot1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234297AbhK2Wxw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:53:52 -0500
+Received: by mail-ot1-f52.google.com with SMTP id u18-20020a9d7212000000b00560cb1dc10bso27599839otj.11;
+        Mon, 29 Nov 2021 14:50:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qWL8hJC/A0AV1km5eJc7hYhQ5lsLfhkwDnG1R3lL5ts=;
+        b=MAmAZojxJ0pcaQrhNionHW7A2jNefq6jhr5kFGz8YqGjp8vJuQXAhwopoNHwkMFvIq
+         xPHyTAVM/YVzFZUmTj1uAvVQHtn/MIuyY+sX43Y1xS2lySagnLPZZ/q2VyidPaICWFF/
+         VJNdyeivdpTnCRjhJuzYe2+RjKWdAb1AHL9dv5qTD7+uDPB3PZhoKSlLkmQu66GyvzyU
+         Y/spQeVD2Wlc0nbEAas5EjVLDemdtiEdvzljmgKb4TCJE/6rjJ2LywB899yqoV+pkMQ7
+         wzlKzhLMX5g/I1JnEvRBcQqJ8gqMjvyiryTSgVAPrFekwGJFomsemQXU9/uhmpNCmvZo
+         j/Mw==
+X-Gm-Message-State: AOAM530UOdQFEpMKOMibiwZBdXH3kChKFUNSh4q7UxtZfFMkAgHHity2
+        Ih99SSqR1cFpc4iITeYZXWaZPJMQ+w==
+X-Google-Smtp-Source: ABdhPJxzqxONDfPdEwnHa6GDEi1xkdkjaDaXuvyWIphExGSHtIKZoPxZeNKfoBdPp+P+6gnsXeEcnw==
+X-Received: by 2002:a9d:6358:: with SMTP id y24mr48961705otk.369.1638226233869;
+        Mon, 29 Nov 2021 14:50:33 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r26sm2865774otn.15.2021.11.29.14.50.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 14:50:33 -0800 (PST)
+Received: (nullmailer pid 756915 invoked by uid 1000);
+        Mon, 29 Nov 2021 22:50:32 -0000
+Date:   Mon, 29 Nov 2021 16:50:32 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        iommu@lists.linux-foundation.org, Janne Grunau <j@jannau.net>
+Subject: Re: [PATCH 1/4] dt-bindings: iommu: dart: add t6000 compatible
+Message-ID: <YaVZOOUNuglM5TYy@robh.at.kernel.org>
+References: <20211117211509.28066-1-sven@svenpeter.dev>
+ <20211117211509.28066-2-sven@svenpeter.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-Content-Language: en-US
-To:     Logan Gunthorpe <logang@deltatee.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-References: <20211126230957.239391799@linutronix.de>
- <20211126232735.547996838@linutronix.de>
- <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
- <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211117211509.28066-2-sven@svenpeter.dev>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 17 Nov 2021 22:15:06 +0100, Sven Peter wrote:
+> The M1 Max/Pro SoCs come with a new DART variant that is incompatible with
+> the previous one. Add a new compatible for those.
+> 
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> ---
+>  Documentation/devicetree/bindings/iommu/apple,dart.yaml | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-On 11/29/2021 3:27 PM, Logan Gunthorpe wrote:
->
-> On 2021-11-29 1:51 p.m., Thomas Gleixner wrote:
->> Logan,
->>
->> On Mon, Nov 29 2021 at 11:21, Logan Gunthorpe wrote:
->>> On 2021-11-26 6:23 p.m., Thomas Gleixner wrote:
->>>> Replace the about to vanish iterators, make use of the filtering and take
->>>> the descriptor lock around the iteration.
->>> This patch looks good to me:
->>>
->>> Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
->> thanks for having a look at this. While I have your attention, I have a
->> question related to NTB.
->>
->> The switchtec driver is the only one which uses PCI_IRQ_VIRTUAL in order
->> to allocate non-hardware backed MSI-X descriptors.
->>
->> AFAIU these descriptors are not MSI-X descriptors in the regular sense
->> of PCI/MSI-X. They are allocated via the PCI/MSI mechanism but their
->> usage is somewhere in NTB which has nothing to do with the way how the
->> real MSI-X interrupts of a device work which explains why we have those
->> pci.msi_attrib.is_virtual checks all over the place.
->>
->> I assume that there are other variants feeding into NTB which can handle
->> that without this PCI_IRQ_VIRTUAL quirk, but TBH, I got completely lost
->> in that code.
->>
->> Could you please shed some light on the larger picture of this?
-> Yes, of course. I'll try to explain:
->
-> The NTB code here is trying to create an MSI interrupt that is not
-> triggered by the PCI device itself but from a peer behind the
-> Non-Transparent Bridge (or, more carefully: from the CPU's perspective
-> the interrupt will come from the PCI device, but nothing in the PCI
-> device's firmware or hardware will have triggered the interrupt).
->
-> In most cases, the NTB code needs more interrupts than the hardware
-> actually provides for in its MSI-X table. That's what PCI_IRQ_VIRTUAL is
-> for: it allows the driver to request more interrupts than the hardware
-> advertises (ie. pci_msix_vec_count()). These extra interrupts are
-> created, but get flagged with msi_attrib.is_virtual which ensures
-> functions that program the MSI-X table don't try to write past the end
-> of the hardware's table.
->
-> The NTB code in drivers/ntb/msi.c uses these virtual MSI-X interrupts.
-> (Or rather it can use any interrupt: it doesn't care whether its virtual
-> or not, it would be fine if it is just a spare interrupt in hardware,
-> but in practice, it will usually be a virtual one). The code uses these
-> interrupts by setting up a memory window in the bridge to cover the MMIO
-> addresses of MSI-X interrupts. It communicates the offsets of the
-> interrupts (and the MSI message data) to the peer so that the peer can
-> trigger the interrupt simply by writing the message data to its side of
-> the memory window. (In the code: ntbm_msi_request_threaded_irq() is
-> called to request and interrupt which fills in the ntb_msi_desc with the
-> offset and data, which is transferred to the peer which would then use
-> ntb_msi_peer_trigger() to trigger the interrupt.)
->
-> Existing NTB hardware does already have what's called a doorbell which
-> provides the same functionally as the above technique. However, existing
-> hardware implementations of doorbells have significant latency and thus
-> slow down performance substantially. Implementing the MSI interrupts as
-> described above increased the performance of ntb_transport by more than
-> three times[1].
->
-> There aren't really other "variants". In theory, IDT hardware would also
-> require the same quirk but the drivers in the tree aren't quite up to
-> snuff and don't even support ntb_transport (so nobody has added
-> support). Intel and AMD drivers could probably do this as well (provided
-> they have extra memory windows) but I don't know that anyone has tried.
-
-The Intel driver used to do something similar to bypass the doorbell 
-hardware errata for pre Skylake Xeon hardware that wasn't upstream. I'd 
-like to get this working for the performance reasons you mentioned. I 
-just really need to find some time to test this with the second memory 
-window Intel NTB has.
-
-
->
-> Let me know if anything is still unclear or you have further questions.
-> You can also read the last posting of the patch series[2] if you'd like
-> more information.
->
-> Logan
->
-> [1] 2b0569b3b7e6 ("NTB: Add MSI interrupt support to ntb_transport")
-> [2]
-> https://lore.kernel.org/all/20190523223100.5526-1-logang@deltatee.com/T/#u
->
->
->
->
+Acked-by: Rob Herring <robh@kernel.org>

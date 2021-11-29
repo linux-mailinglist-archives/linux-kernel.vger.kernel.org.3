@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1FA462232
+	by mail.lfdr.de (Postfix) with ESMTP id F1DEE462233
 	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234630AbhK2U34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 15:29:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
+        id S234261AbhK2U3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 15:29:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233900AbhK2UZt (ORCPT
+        with ESMTP id S233414AbhK2UZr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:25:49 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18DF0C0254FA;
-        Mon, 29 Nov 2021 09:01:06 -0800 (PST)
+        Mon, 29 Nov 2021 15:25:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72450C0254FC;
+        Mon, 29 Nov 2021 09:01:19 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC0FF615BE;
-        Mon, 29 Nov 2021 17:01:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C64EC53FAD;
-        Mon, 29 Nov 2021 17:01:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32E5FB81260;
+        Mon, 29 Nov 2021 17:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4458AC53FCD;
+        Mon, 29 Nov 2021 17:01:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638205265;
-        bh=oenFJL2Wv8wyYsQIWdj3rYdoS7C7utIfHZRqntFJyRk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=rlpKoXTDAH9Gy4Zk5JlUtoo1Zq69GM90tjzqYhc/4U17AyHUaCzWFUmRKXqbSTOXS
-         Tk6PjHCimiL5Z1lacm0xB+7h98MTmEzo8CBClGW0h58i4ntF1M0RuSqyH6anNsuBHt
-         yq+hzrdF1kNPkFWqE6GxgCq0DVC+7jAOOErvlaOTSQHj0eG+RQXbeqvTWDalxkzMCo
-         1g2UaoYGspxzO5RLedqI/P+mh+vGi57BeE+QL/3xXYh3EyveH0fxR5uLaIk1KDEJXY
-         Wsf8nJpHnc3lqHX+TT0EiMNOP/JvVzGYcM8UXqVQe7WpgOJxmWLaOyhV0bsJygoWJ0
-         GHPdPToGtfN0g==
+        s=k20201202; t=1638205276;
+        bh=0Weje5hoMUc5BJflAblG6alZb9thJPnAILV+D0mM5/M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=AcRPkJjLruSaLIhcr860hu26QbKiSydWtBZqSZ0MviH67RHvYBh7xGEofAOg85lvg
+         J0fZGbcsg4BJOsOCjIAzoYOexBui2LZUx0Yu+GRU5JPPll01pg8Cma1/EPiZgbBhz2
+         qLxg4VqBhQ3FP+kfmkFiom2W+29AF0vzNEUeTkZ56uSM9ThQDw61qm5oOQl5Ul/2YO
+         YZTmsq6YlKadFkahwwjMFB9fpqE9LCPjkAWECfnyidD8DTl30H31GU3UbnMA7KZBDO
+         K5DdALey8T+RJr+DWBQU7QrAYLE4YttBwKTBsDk4ajf6KVUP6ksFgQDsvaI8xNR2jN
+         lHWLEYNW4urzQ==
 From:   Nathan Chancellor <nathan@kernel.org>
 To:     Nick Desaulniers <ndesaulniers@google.com>,
         Kees Cook <keescook@chromium.org>,
@@ -47,56 +47,40 @@ Cc:     Masahiro Yamada <masahiroy@kernel.org>,
         kernelci@groups.io, llvm@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
         Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
-Date:   Mon, 29 Nov 2021 09:57:57 -0700
-Message-Id: <20211129165803.470795-1-nathan@kernel.org>
+Subject: [PATCH RFC 2/6] mm, slab: Remove compiler check in __kmalloc_index
+Date:   Mon, 29 Nov 2021 09:57:59 -0700
+Message-Id: <20211129165803.470795-3-nathan@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211129165803.470795-1-nathan@kernel.org>
+References: <20211129165803.470795-1-nathan@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series raises the minimum supported version of LLVM to
-11.0.0.
+The minimum supported version of LLVM has been raised to 11.0.0, meaning
+this check is always true, so it can be dropped.
 
-Patch #1 outlines the issue, goes over the potential impact of the
-change, and does the actual bump. Subsequent patches clean up the
-various checks that are always true after the bump.
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ include/linux/slab.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-I have marked this revision as RFC to give various parties the option to
-comment on this bump before it is done, namely KernelCI and Linaro's
-LKFT, who are still testing clang-10. I have added some other folks to
-CC that I know are testing with clang to see if this impacts them in any
-way (as I would like to impact as few people as possible) but as far as
-I am aware, most other CIs and developers are testing closer to tip of
-tree. If that is not true, scream so that we can see what can be done
-about that. If I missed anyone who is actively testing with clang,
-please key them in and I will make sure to include them in future
-revisions (if any are needed).
-
-It probably makes sense for this series to live in -mm.
-
-Nathan Chancellor (6):
-  Documentation: Raise the minimum supported version of LLVM to 11.0.0
-  mm, slab: Remove compiler check in __kmalloc_index
-  arch/Kconfig: Remove CLANG_VERSION check in HAS_LTO_CLANG
-  Revert "ARM: 9070/1: Make UNWINDER_ARM depend on ld.bfd or ld.lld
-    11.0.0+"
-  gcov: Remove compiler version check
-  init/Kconfig: Drop linker version check for LD_ORPHAN_WARN
-
- Documentation/process/changes.rst | 2 +-
- arch/Kconfig                      | 3 +--
- arch/arm/Kconfig.debug            | 2 --
- include/linux/slab.h              | 3 +--
- init/Kconfig                      | 1 -
- kernel/gcov/Kconfig               | 1 -
- scripts/min-tool-version.sh       | 2 +-
- 7 files changed, 4 insertions(+), 10 deletions(-)
-
-
-base-commit: d58071a8a76d779eedab38033ae4c821c30295a5
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 181045148b06..d3fb5ac71c24 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -411,8 +411,7 @@ static __always_inline unsigned int __kmalloc_index(size_t size,
+ 	if (size <=  16 * 1024 * 1024) return 24;
+ 	if (size <=  32 * 1024 * 1024) return 25;
+ 
+-	if ((IS_ENABLED(CONFIG_CC_IS_GCC) || CONFIG_CLANG_VERSION >= 110000)
+-	    && !IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES) && size_is_constant)
++	if (!IS_ENABLED(CONFIG_PROFILE_ALL_BRANCHES) && size_is_constant)
+ 		BUILD_BUG_ON_MSG(1, "unexpected size in kmalloc_index()");
+ 	else
+ 		BUG();
 -- 
 2.34.1
 

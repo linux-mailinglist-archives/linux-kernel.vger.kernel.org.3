@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E362A46153C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A7C46130A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:03:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243882AbhK2Mk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:40:59 -0500
-Received: from sender4-op-o15.zoho.com ([136.143.188.15]:17577 "EHLO
-        sender4-op-o15.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241690AbhK2Mi6 (ORCPT
+        id S1353653AbhK2LG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:06:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238600AbhK2LE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:38:58 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1638057926; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=k+N01kzcipbexhHQsG88X2M0FQGUx7o/+bnRg1X6P6lyVOiD8+BbReMlTn0+Oi3d1c7w9m6u7kcgTCTv6d+BOpVO36r0mVQQy1L/o97VJEK3ohLVz927iOckGst0cFmLQti4Chc/9y20bMbd+0kgLRNjeZ1TGdTUALgolDYT0dw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1638057926; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=k/axBYgs8ePu82NKai1qn+cHK8gQhlozWwXZnDXD8yk=; 
-        b=OexewUidtTGMEGSPfuJVLpIck/dTD52CYt8S+WPys75HdmGs49nYiKODg5XEu699gIqo6TlVR7iU2GAApuAuR+8azPDH0YknNLHpDhsT7vOPmhaChYD8tKyUKjTb8/hx7tx2psFIBtsXZa3dxJz8poIP0FMO7ke5CSZtFmK+xno=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=szanni.org;
-        spf=pass  smtp.mailfrom=angelo@szanni.org;
-        dmarc=pass header.from=<lkml@szanni.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1638057926;
-        s=zoho; d=szanni.org; i=lkml@szanni.org;
-        h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type:Content-Transfer-Encoding;
-        bh=k/axBYgs8ePu82NKai1qn+cHK8gQhlozWwXZnDXD8yk=;
-        b=Kn37IrDoVNidrb6X54m7LkCfk4fXsdTOh1vVjU4K3AaFUzv40tFX+7/y6FOyJiit
-        +2Ds4yqz4mGD6AhFB16H8bryGG1OuVI2zQkSqpJ6kprfETH+K8YPj+CPxc0WBKJ6/hL
-        FeasMNHSlJ8BPf4AO798O5gnGRu/2f/mEroY59iI=
-Received: from [192.168.0.128] (200.60.135.218 [200.60.135.218]) by mx.zohomail.com
-        with SMTPS id 1638057923743427.7880943683017; Sat, 27 Nov 2021 16:05:23 -0800 (PST)
-Message-ID: <5475c3ab-a53c-8728-98c5-98fd948ff556@szanni.org>
-Date:   Sat, 27 Nov 2021 19:07:49 -0500
+        Mon, 29 Nov 2021 06:04:58 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E97CC0613F9;
+        Mon, 29 Nov 2021 02:18:41 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id v64so40742062ybi.5;
+        Mon, 29 Nov 2021 02:18:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SXH2HaKOYFSvNYsZNxqPTQGPmOPgtDAaeXAEosri/GI=;
+        b=PSmlwAD7ACyEfBEhWvQkj7823/mBOTnX0C1DcD2ayQHwP89r+UFyiEg9w7xfrnaX5b
+         WycVZDqwMYSsLtj825Dh1xzpCAYz8fuqP6M9c5pg+n5zZ1XAOsA2oPtHt1HxUqdnwS4z
+         3qW3VU0aBxsa+f+v56h5v5rL5IFzjTfRqK1QkDk5Sh0B50lqEXGj+6K6HdxygkPOi2MX
+         wfQ+gKX6KezMgdekoGLVpbLS77ZbxsaHdBj1NbnVwRMxYis1AuMznTmPWrT1ydCgMv/i
+         LQzumcasuCBwF/npDfnwM9rDhT8bwWluLo+wvYS9NXWMwBp4N/ysroCiUtRjgp87W+MU
+         hD/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SXH2HaKOYFSvNYsZNxqPTQGPmOPgtDAaeXAEosri/GI=;
+        b=mgVLvg6PYgqm2wMtEqMwL2pEH+ueR/oUw3/FpmXLnNN1jr97ZnEudZ8Ih0bw1+S1hi
+         ByxgHp9M4Tf5cM3I9J3BeMHHwVnsF8f4RTvUMepaTnyCDLoGmm7tk3GcNte9eAH9aSpO
+         nzTls/tV5+/P78YH2w7MMJQQ/U/ANyS0kX5osNGtNC3qpx0ZWvWUDz6PqYrtKB7B98LP
+         pT6ytk/vTQJVbEJHxWf8TiwLCCQDG05WKzxjVXZsMGwpPqryqaX4HPX+xgwOgHrjBn6U
+         DqPEcq0pmKystjZPDmC4cxoUKbBrbvZSA4k8dZHdq/Ivl/R9PHO5Fcyg63ipM8LzCJTQ
+         Urjw==
+X-Gm-Message-State: AOAM531dWmaDrUd5LIL3CXbIE4gzP7ZU/zyJHwGnIXSOkhbYEBEc33+P
+        2BXlb1GL2XQYBPj9s+nOe3/+sK026MpFJu6N7fw=
+X-Google-Smtp-Source: ABdhPJwBcC0P8wpnRfvlyKdmfKjUUAGGe4jlRwZyfRjWFthpP4ftdxrbP3niRKyeNIIJjlNk0TURUyDLbx2eRbbbdlw=
+X-Received: by 2002:a25:1004:: with SMTP id 4mr6066537ybq.669.1638181120359;
+ Mon, 29 Nov 2021 02:18:40 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>, linux-rt-users@vger.kernel.org
-From:   Angelo Haller <lkml@szanni.org>
-Subject: sched: some non-GPL symbols becoming GPL-only with CONFIG_PREEMPT_RT
- enabled
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+References: <cover.1638179135.git.mchehab+huawei@kernel.org> <7447911ef26de9ac73265df6aee306fbe59691a0.1638179135.git.mchehab+huawei@kernel.org>
+In-Reply-To: <7447911ef26de9ac73265df6aee306fbe59691a0.1638179135.git.mchehab+huawei@kernel.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Mon, 29 Nov 2021 10:18:14 +0000
+Message-ID: <CA+V-a8twBgAd_H6mSJqtP4KL52yYo_iFuPgmODL-Y72=cavWeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 03/20] media: davinci: get rid of an unused function
+To:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-media <linux-media@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings. I hope I picked the right mailing list, as this issue might 
-be one that affects various subsystems and components:
+On Mon, Nov 29, 2021 at 9:47 AM Mauro Carvalho Chehab
+<mchehab+huawei@kernel.org> wrote:
+>
+> vpif_get_default_field() seems to be some left-over from a
+> past code that sets the field order.
+>
+> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> ---
+>
+> See [PATCH v2 00/20] at: https://lore.kernel.org/all/cover.1638179135.git.mchehab+huawei@kernel.org/
+>
+>  drivers/media/platform/davinci/vpif_capture.c | 11 -----------
+>  1 file changed, 11 deletions(-)
+>
+Reviewed-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
 
-When compiling kernel 5.15 (and 5.16-rc2) with `CONFIG_PREEMPT_RT` 
-enabled, some of the symbols being exported as `EXPORT_SYMBOL` suddenly 
-become `EXPORT_SYMBOL_GPL` through transitive effects.
+Cheers,
+Prabhakar
 
-In particular the symbols `migrate_enable` and `migrate_disable` are 
-currently marked as `EXPORT_SYMBOL_GPL` - yet are called from multiple 
-functions that are marked as `EXPORT_SYMBOL`.
-
-Here an (incomplete?) listing of call sites I came across:
-
-kernel/locking/spinlock_rt.c - rt_spin_unlock()
-kernel/locking/spinlock_rt.c - rt_read_unlock()
-kernel/locking/spinlock_rt.c - rt_write_unlock()
-mm/highmem.c - kunmap_local_indexed()
-
-The issue I'm facing in particular is kmap_atomic() calling 
-`migrate_disable` and therefore suddenly becoming GPL-only. This breaks 
-the out-of-tree CDDL licensed module ZFS and has been reported before 
-already [0]. The conversation seemingly going nowhere - or patches at 
-least not being applied upstream. Downstream issue for reference [1].
-
-As the original implementation of `migrate_enable` and `migrate_disable` 
-is apparently by Peter Zijlstra [2]. Peter would you be willing to 
-re-license both symbols `migrate_enable` and `migrate_disable` as 
-`EXPORT_SYMBOL`?
-
-The bigger issue I'm seeing though is that there is currently no 
-automated test to uncover exported symbols changing their license 
-depending on build configuration? I am not intimately familiar with the 
-API guarantees the kernel gives, but this seems like a violation. There 
-might be other symbols with similar licensing problems.
-
-I can open a bugzilla ticket too - if that is preferred.
-
-Angelo
-
-
-[0] 
-https://lore.kernel.org/linux-rt-users/20201208212841.694b3022@orivej.orivej.org/T/
-[1] https://github.com/openzfs/zfs/issues/11097
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/diff/patches/0009-sched-Add-migrate_disable.patch?h=v5.9-rc8-rt14-patches&id=9a89bfdb3bc77aecdd0ff8cc69b595541c7b50c4
-
+> diff --git a/drivers/media/platform/davinci/vpif_capture.c b/drivers/media/platform/davinci/vpif_capture.c
+> index ae92e2c206d0..aba105fa7ef9 100644
+> --- a/drivers/media/platform/davinci/vpif_capture.c
+> +++ b/drivers/media/platform/davinci/vpif_capture.c
+> @@ -618,17 +618,6 @@ static void vpif_calculate_offsets(struct channel_obj *ch)
+>         ch->vpifparams.video_params.stdid = vpifparams->std_info.stdid;
+>  }
+>
+> -/**
+> - * vpif_get_default_field() - Get default field type based on interface
+> - * @iface: ptr to vpif interface
+> - */
+> -static inline enum v4l2_field vpif_get_default_field(
+> -                               struct vpif_interface *iface)
+> -{
+> -       return (iface->if_type == VPIF_IF_RAW_BAYER) ? V4L2_FIELD_NONE :
+> -                                               V4L2_FIELD_INTERLACED;
+> -}
+> -
+>  /**
+>   * vpif_config_addr() - function to configure buffer address in vpif
+>   * @ch: channel ptr
+> --
+> 2.33.1
+>

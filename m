@@ -2,97 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0977461300
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:59:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA748461112
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353720AbhK2LC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:02:57 -0500
-Received: from esa.microchip.iphmx.com ([68.232.154.123]:23654 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354716AbhK2LA4 (ORCPT
+        id S244317AbhK2Jax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 04:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243223AbhK2J2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:00:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1638183459; x=1669719459;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=sni8GEGNKRIzcmDyxT+3sx8vltkStccv50jQbBQNb9I=;
-  b=QvDMPLAjTlCCnNnZjHTanmr6Ornj5sayYQOaF5Bg843lufgcaP/JDoe7
-   3QGy9RYlciBxeGDbjZPoVP9/Gwy0nfFbKqHBMRLuiCAngx61fPH7qunV6
-   MZvjI7wDSO6eyZ1sB/LLaIQDMo/hzwLM/Bdkx989RTCDXzqQbBGBVf8Qt
-   fhr3quFBybdBJJde1cFXPzp9gr6bgyRg2Bu5v60K8OF1eLjyoqPhj9X5M
-   PrxD08nTwm+jdLQvMlDbWO6hLQRyXeKwHwDCeRsLJ7o0RWnPctdhsoOEj
-   fpeWjBwBCF3CrUXqGAJA9ewZfuTe4eR8xlRBwD+zRqyH13swNUE7dG9Vi
-   w==;
-IronPort-SDR: pC9Mo1j3FSmWnO+dJz+sdo/h8/5YPxGZu/adW1G8JBTs9GQOUA5AIyOTg1I3h6dP4CcPh/+FBK
- 14Ts3BA/nMQlFwRz2GP3LA7Ijf6SYeQRGAc7XWTxS9gFODzdLErHNETvd5PHWNQKHds+A6IU+O
- cvJORXOhzGAFA/JNVu49ctwGxj2KJcHlRZfE96tafhPleIWUEzKcUGcB9z7HnAZuL4NO5WDh3S
- W63evdf8YPbcG9b6t0WEN6n0FJTRoSYYoaDdRQvr2txxITgPKrIJ8SbMYiwuqONcE3JNrYCjij
- 3Y0VkNrK17hU/S8CxHTXSd8U
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="140560457"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2021 03:57:31 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 29 Nov 2021 03:57:30 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
- Transport; Mon, 29 Nov 2021 03:57:30 -0700
-Date:   Mon, 29 Nov 2021 11:59:26 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     <davem@davemloft.net>, <robh+dt@kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <p.zabel@pengutronix.de>,
-        <linux@armlinux.org.uk>, <andrew@lunn.ch>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next v4 3/6] net: lan966x: add port module support
-Message-ID: <20211129105926.4k6itzqakeu7znbw@soft-dev3-1.localhost>
-References: <20211126090540.3550913-1-horatiu.vultur@microchip.com>
- <20211126090540.3550913-4-horatiu.vultur@microchip.com>
- <20211126101251.3dceb6f2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+        Mon, 29 Nov 2021 04:28:52 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA38C061396
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 01:12:19 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id j3so35181134wrp.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 01:12:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blogsoutreach-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:from:reply-to:to:subject:content-transfer-encoding
+         :date:message-id;
+        bh=Q7qNBVtLEfLs5DBpQyguH+ZhZRYa6SP1l2xOa2ePsiw=;
+        b=Bhxq5WwYAUlrGGX+DjOnJXuKU+9+11DG9y0bSYAUdi9ZxctLDZ+ci9hqagQzqd6ZEK
+         9V1pK9Yt8xGK01aoE4bI1GbrS4xQJAhW8JLu/gNP+QuJ/AYkoO8okRVGhBrG1S1P3c20
+         hH3dNcp/st8wPStdxGmYPo7/6ciEkaWg8tK8iZQb06sD9Jv/rOvk7WyJhN/LcshkTaHJ
+         r0XPTwpCHo9kDFGpudbcWshIqX0NuEFE9peM/4GusafK3pds3Gaui5Yvly8QjDrnLUtM
+         Stqx0fbGgX/V9JuiweczCpmWCpzTWxv9PGNw7QTRn1KUcYVPzWwgZGMis/aQYmxsL5n/
+         k2lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:reply-to:to:subject
+         :content-transfer-encoding:date:message-id;
+        bh=Q7qNBVtLEfLs5DBpQyguH+ZhZRYa6SP1l2xOa2ePsiw=;
+        b=6f11yN+0URXQlWa7RTHNBzkHchRD84r+KC1ll5gHJ1B6FC48WBbIVASnHhg04XuARp
+         38TVDoue8uXU41pykLjE+uXJYAkVTzn8Bsqli6orvXeeP1Sf6KdQpMFzJ6m1OZlLBcdV
+         NDWFa6te6A5AYNqJy5QQPsJxgEk/ix+Y1gMBJYSoncN+Kzj4VKzxb3eVLac6eXAopqX2
+         D9SNPawf80tSxUjRcZigdq0ZsA1+2dXdEnqf6+4/PzcCcjOYRYjv4Hp5hxqdQp/9HX/v
+         tAnYpfRFsEkQaJLA0FoPfz0Tn7hPAMV+9RvmZkKV8sBdx+euQGML34MpqWpbYMfBNNTL
+         UuXQ==
+X-Gm-Message-State: AOAM530tpyiCzacanv80L94qHIt8alKJNDQBClATui/viEl9Fctgukez
+        IkTOriE0vVTeUuD10IG5PDmFHDT4wH4WHg==
+X-Google-Smtp-Source: ABdhPJzFqE3xeFowsZl87AROa0WdzrCnLJckKSu9+K3W2R49rykwPl5Ka0OJPbTqLBtOqrUamBqhqA==
+X-Received: by 2002:adf:ee0c:: with SMTP id y12mr32062048wrn.82.1638177138184;
+        Mon, 29 Nov 2021 01:12:18 -0800 (PST)
+Received: from 137.59.228.238 ([137.59.228.238])
+        by smtp.gmail.com with ESMTPSA id d9sm13050515wre.52.2021.11.29.01.12.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1 cipher=AES128-SHA bits=128/128);
+        Mon, 29 Nov 2021 01:12:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20211126101251.3dceb6f2@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   "Michael" <michael@blogsoutreach.com>
+Reply-To: michael@blogsoutreach.com
+To:     linux-kernel@vger.kernel.org
+Subject: Sponsored post
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Smart_Send_3_1_6
+Date:   Mon, 29 Nov 2021 14:12:01 -0800
+Message-ID: <1408241105816104739653@DELL-PC>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 11/26/2021 10:12, Jakub Kicinski wrote:
+Hi,
 
-Hi Jakub,
+I hope this email finds you well.
 
-> 
-> On Fri, 26 Nov 2021 10:05:37 +0100 Horatiu Vultur wrote:
-> > This patch adds support for netdev and phylink in the switch. The
-> > injection + extraction is register based. This will be replaced with DMA
-> > accees.
-> >
-> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
-> 
-> Clang sees issues here:
-> 
-> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:409:8: warning: variable 'sz' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->                        if (err != 4)
->                            ^~~~~~~~
-> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:469:7: note: uninitialized use occurs here
->                if (sz < 0 || err)
->                    ^~
-> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:409:4: note: remove the 'if' if its condition is always false
->                        if (err != 4)
->                        ^~~~~~~~~~~~~
-> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:403:9: note: initialize the variable 'sz' to silence this warning
->                int sz, buf_len;
->                      ^
->                       = 0
+I am sending this email to ask if you are interested in sponsored posts.
 
-Thanks for notification.
-I should definitely need to start to build the kernel using Clang.
+We are searching for relevant sites and blogs for our clients.
 
+You will get 100% top notch content with 1 do follow link relevant to your =
+site niche.
 
--- 
-/Horatiu
+Please let me know how much do you charge per post=3F
+
+We will pay you through Paypal or Payoneer gateway as soon our article is p=
+ublished.
+
+Looking forward to building long-term business opportunities with you.
+
+Best Regards,
+
+michael

@@ -2,124 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF752460F31
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C54460F34
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbhK2HOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 02:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55748 "EHLO
+        id S237602AbhK2HPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 02:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbhK2HMO (ORCPT
+        with ESMTP id S232445AbhK2HNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:12:14 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F17C061758;
-        Sun, 28 Nov 2021 23:08:51 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id h16so15495047ila.4;
-        Sun, 28 Nov 2021 23:08:51 -0800 (PST)
+        Mon, 29 Nov 2021 02:13:52 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFF8C061759
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Nov 2021 23:10:35 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id x5so15948660pfr.0
+        for <linux-kernel@vger.kernel.org>; Sun, 28 Nov 2021 23:10:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=C6dWNYHfNwwMDgVTMEboS2qGaBs9EpK0Y12B3cYYsgg=;
-        b=C0tD1BqFaEplnOhJnFwDHJhyFgPbQFoN9FvL1JOLT5AdvrVJgWiUPpniceEW1cqDOH
-         E19ZmdqGQi59jeH3EYMbSeNyCW3fbsb0U6ssN+8O8PqgJukh0rZoXSE9JHQV+31U7tp1
-         B0pWiN9m0KVPR4STeIZqgMNnIslRpPBhpoengRyzTcTkE9Lctae+nfFIU6V0xxDBwqM2
-         IvWoK1yxFBgxiDUiTlSGnNvr7m13eJ2kXEseOZiLKZOxyeA3okz8E1LzZsCvnyx+c62O
-         UyNgkct8hZrvp4LrV99N8pguI9SKinyBmg1m/DkYXFRNdJHvn7hWpS3lrLPmhB4Bk75C
-         lydA==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=dTA5ud3pcmUbZ1xE5uOmnFByKDozJrEPV4w4Qk6rIvw=;
+        b=c1szrkhypZONQzYZOGrUNlRloRrcF2L0VerJ4UPxjPi2TuZhUKU0jgr/gTlUbZLM6c
+         jj1gAFppSlboqFQ6+mIaTw1C9376FU/VOqDtPJ50/9EWgqNnAXsp0eDXry4yKsXcH1TZ
+         9KJQ6GKQt+yHZofLWWLw6uVdaUO8Qv26YIaFMmW6GQBEEOrkbW0DukC+6YdjFsxHARuN
+         RyfVn5RgaAkFf4SgpGj6zpvBVq/oSvNKP7To1F+ATRbrlPnqqrubhSN9F5wuOg2qqTFw
+         PxwaOf9jYFmE3jJqq+b9jm8fo1ZPo/PeHVKX0yb5fNZ6ZdHtWp6rxnMdA6KYON8KQxxZ
+         NZ1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=C6dWNYHfNwwMDgVTMEboS2qGaBs9EpK0Y12B3cYYsgg=;
-        b=lD3Gl67DmKPqCo/+qeyA63R2uziHc4UdYoYIRskz1jE551LfLgw8SdXaMVUO8xvK5v
-         jRVlJnogcbDJGJcgyF3h2gVji6HMOaXzL5ZOZdhpMNuvvgM6nY9a0QXHhBtkF9smv4xy
-         HCwFtZbxdsA5RCt0LsUmmXVksrJN21KYrKoSbCRuV52BcNVOsQ21qvsbVZz+BCmAymK4
-         iqNMa7afYtbTSx/OtFtOWy4tAQ6YwiPGDW/kC2IeBrbUPz26w7FMBSo0le/rCNQ1wWWz
-         2wkmt7yCZy1mVVVisBrqadjhFpfU50A7C6O3LgknDs4tCBBt0YtZt5eXRS4Q+Hqyrtj/
-         ljnA==
-X-Gm-Message-State: AOAM533Kk5WHwPoZKwoMbRFRhY6J9e8A8Zu1qnqJFvmUzsTOG55+MDmS
-        h8+TWhznUo3667Sq5NMTdC7TFdFuQbjX+b5skWQ=
-X-Google-Smtp-Source: ABdhPJwRzUi0ufVkIonkdgzoXFmfE5f5AFaR6B23puAjAUxq7OqWG6MpDlFr9lmrQVFYVIYDJ7iGkVuI34DBBVPzHNg=
-X-Received: by 2002:a05:6e02:1a63:: with SMTP id w3mr47043107ilv.230.1638169731221;
- Sun, 28 Nov 2021 23:08:51 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dTA5ud3pcmUbZ1xE5uOmnFByKDozJrEPV4w4Qk6rIvw=;
+        b=4mq88Ms6UgT/eQg2N/70SNxoPC6ZYwwRma/wjp4W4QSpu6YUcCslN2Xx0BbNq4Gz74
+         gtEwffwC8g6S2mMZQCcYB9hLx+c51RepiYHMurXGk7bwKg5g9nzpOb4rlb9m5BmNR0KB
+         JbjevkohpeXNv1Vk0u3eY3bJzBXBf7F3i+YdG5ytVLX5lJjBaxo/WM2+xi+yQvKf3j9W
+         eEa2bNDtpGYefa2qEs+g45aN3zKchtXQV1NEw2atPI5tpdZXBf2THZiyN7UCbC23P7UF
+         6LOKW4CCNXkoH7vpPdKsv0vnE8dnQfQ2BZMUB0xJife3SJEaT5/ib8Vk5gNFUuiRycmS
+         /BAQ==
+X-Gm-Message-State: AOAM5314RobG9L8ZghHj2Z3/tg5L7VQTOyqeeHbrWHpeUIzxe3wxduSr
+        JJm+uDpDfoJNaYySMcQoEjXTtw==
+X-Google-Smtp-Source: ABdhPJxDS9wOvoMttiFLB+55g1aIXEZkM+ZkIlmj4P2bMLUD9Qy8/ZRtRHZfFtAfS5ZDY4pH6Ds84w==
+X-Received: by 2002:a63:448:: with SMTP id 69mr9522548pge.141.1638169834496;
+        Sun, 28 Nov 2021 23:10:34 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:3807:fdf3:5573:47d6])
+        by smtp.gmail.com with ESMTPSA id ip5sm7216948pjb.5.2021.11.28.23.10.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Nov 2021 23:10:34 -0800 (PST)
+Date:   Mon, 29 Nov 2021 15:10:29 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        cujomalainey@google.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        sound-open-firmware@alsa-project.org
+Subject: Re: [PATCH v7 1/3] dt-bindings: mediatek: add adsp-mbox document
+Message-ID: <YaR85TUlOBcMuG2a@google.com>
+References: <20211129063954.1616-1-allen-kh.cheng@mediatek.com>
+ <20211129063954.1616-2-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <4ede5c987a4ae938a37ab7fe70d5e1d561ee97d4.1637799475.git.isaku.yamahata@intel.com>
- <878rxcht3g.ffs@tglx> <20211126091913.GA11523@gao-cwp>
-In-Reply-To: <20211126091913.GA11523@gao-cwp>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Mon, 29 Nov 2021 15:08:39 +0800
-Message-ID: <CAJhGHyAbBUyyVKL7=Cior_uat9rij1BB4iBwX+EDCAUVs1Npgg@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 53/59] KVM: x86: Add a helper function to restore 4
- host MSRs on exit to user space
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        isaku.yamahata@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129063954.1616-2-allen-kh.cheng@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 2:00 AM Chao Gao <chao.gao@intel.com> wrote:
->
-> On Thu, Nov 25, 2021 at 09:34:59PM +0100, Thomas Gleixner wrote:
-> >On Wed, Nov 24 2021 at 16:20, isaku yamahata wrote:
-> >> From: Chao Gao <chao.gao@intel.com>
-> >
-> >> $Subject: KVM: x86: Add a helper function to restore 4 host MSRs on exit to user space
-> >
-> >Which user space are you talking about? This subject line is misleading
->
-> Host Ring3.
->
-> >at best. The unconditional reset is happening when a TDX VM exits
-> >because the SEAM firmware enforces this to prevent unformation leaks.
->
-> Yes.
->
-> >
-> >It also does not matter whether this are four or ten MSR.
->
-> Indeed, the number of MSRs doesn't matter.
->
-> >Fact is that
-> >the SEAM firmware is buggy because it does not save/restore those MSRs.
->
-> It is done deliberately. It gives host a chance to do "lazy" restoration.
-> "lazy" means don't save/restore them on each TD entry/exit but defer
-> restoration to when it is neccesary e.g., when vCPU is scheduled out or
-> when kernel is about to return to Ring3.
->
-> The TDX module unconditionally reset 4 host MSRs (MSR_SYSCALL_MASK,
-> MSR_START, MSR_LSTAR, MSR_TSC_AUX) to architectural INIT state on exit from
-> TDX VM to KVM.
+On Mon, Nov 29, 2021 at 02:39:52PM +0800, allen-kh.cheng wrote:
+> From: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
+> 
+> This patch adds document for mediatek adsp mbox
+> 
+> Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+> Reviewed-by: AngeloGioacchino Del Regno<angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
 
-I did not find the information in intel-tdx-module-1eas.pdf nor
-intel-tdx-cpu-architectural-specification.pdf.
-
-Maybe the version I downloaded is outdated.
-
-I guess that the "lazy" restoration mode is not a valid optimization.
-The SEAM module should restore it to the original value when it tries
-to reset it to architectural INIT state on exit from TDX VM to KVM
-since the SEAM module also does it via wrmsr (correct me if not).
-
-If the SEAM module doesn't know "the original value" of the these
-MSRs, it would be mere an optimization to save an rdmsr in SEAM.
-But there are a lot of other ways for the host to share the values
-to SEAM in zero overhead.
-
-Could you provide more information?
+Neither AngeloGioacchino Del Regno nor myself provided the R-b tags for the patch.  Please remove them.

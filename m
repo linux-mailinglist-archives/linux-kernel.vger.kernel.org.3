@@ -2,92 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C706460F41
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F90460F48
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236730AbhK2HWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 02:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236904AbhK2HUW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:20:22 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBD73C061757
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Nov 2021 23:16:57 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id r5so15148751pgi.6
-        for <linux-kernel@vger.kernel.org>; Sun, 28 Nov 2021 23:16:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=TiukkxJd2u5/WWxioXXy4ShXE8P1+xdGddfjXUn1Icg=;
-        b=dcJkyWJO7W1+s1KYCfjUJz82f77/eJpXN0khWr4biU8luP/6Mzq8zTKTDb8/hF/XbU
-         Cprsc8gtrtscd7yJEgB/r1AtqApYvBcFnDyFEVydTE6h4moCXhenJuP4j7NPr/fPG8x4
-         DfnucW7NdN+cezNMzFBGCE3/VIydNLtrTnM/t8XryYSL3l6Iciz/CFhioXfo8+EhvT3n
-         VQeYg49fiBGyf4GKC5Lcsc1qz1GHGKKvZOgclGEv/JVUB7A0Y+WtrcAeVaF0ymNHP2Ob
-         0xs2LV3mxr10kRqLRstax8E+0DNBieYt1kjZVHVTvFT/bAO31McwSMVfDzximbncIvVp
-         Feag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TiukkxJd2u5/WWxioXXy4ShXE8P1+xdGddfjXUn1Icg=;
-        b=Rc/xQHEo5bWwQPLCXAtf3RFtrZ+uGLG/lheB/sDXlaqKermEth3ovsC2EIHl3qrh4+
-         epqHRDhC+T8YTC6oa/A13z3G04O7cEdFYaFySsUAmNhu4+r7TeKtDNdaHLX93dcmQ5oi
-         Bvfq9dY5RDY4NItbtsQDKU8KkVW/z8fAwFuZ4rJOoWLUx4Ecego+FIQNnVrxnXqX4JBg
-         v6AlubI1RV9EN7QRhqWVLgRHDcL4u+HVWJDWUWZskVIMTsFGylk0SqyZQzhldERyIMAU
-         1YosS8GF58Jbi5JKv5pe/7nOfeJX97Nac7eRZ+faBxcLK2PYgM4hPKyr4FjurfBRhJaM
-         9rXA==
-X-Gm-Message-State: AOAM5325W0kftt+zVi56Q8ZAohCwdftOBqVHumkE72Ci+fev4LPcFHje
-        Pyg8EgoAm8b6T2skAuwdjoc=
-X-Google-Smtp-Source: ABdhPJymx1QXcFImPYmofFDV6L/lpn9TBBFq2IkLt4RI4bewl6f0q86pIVDoJk1O09vmzxWlz6aDLA==
-X-Received: by 2002:a62:5fc6:0:b0:4a2:ae6d:14cd with SMTP id t189-20020a625fc6000000b004a2ae6d14cdmr37345490pfb.26.1638170217149;
-        Sun, 28 Nov 2021 23:16:57 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:f5d5:95ab:43b1:99a9])
-        by smtp.gmail.com with ESMTPSA id h8sm16515205pfh.10.2021.11.28.23.16.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Nov 2021 23:16:56 -0800 (PST)
-Date:   Sun, 28 Nov 2021 23:16:53 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     lianzhi chang <changlianzhi@uniontech.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, andriy.shevchenko@linux.intel.com,
-        282827961@qq.com
-Subject: Re: [PATCH v18] tty: Fix the keyboard led light display problem
-Message-ID: <YaR+ZfOpmRbRUTMz@google.com>
-References: <20211129040445.24134-1-changlianzhi@uniontech.com>
+        id S236443AbhK2H1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 02:27:42 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:58935 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229777AbhK2HZl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 02:25:41 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J2cHg211vz9sSk;
+        Mon, 29 Nov 2021 08:22:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UPVQNJoArrEd; Mon, 29 Nov 2021 08:22:23 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J2cHg1BMJz9sSh;
+        Mon, 29 Nov 2021 08:22:23 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 19C2D8B76D;
+        Mon, 29 Nov 2021 08:22:23 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 95kUX8e7kcKx; Mon, 29 Nov 2021 08:22:23 +0100 (CET)
+Received: from [172.25.230.108] (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD33C8B763;
+        Mon, 29 Nov 2021 08:22:22 +0100 (CET)
+Message-ID: <e1f310b4-2e23-0fa4-424d-271395824438@csgroup.eu>
+Date:   Mon, 29 Nov 2021 08:22:22 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129040445.24134-1-changlianzhi@uniontech.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v3 4/4] powerpc/inst: Optimise
+ copy_inst_from_kernel_nofault()
+Content-Language: fr-FR
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <1a8623dce54a72c7af172027caa7c44b1fefa8c4.1638036607.git.christophe.leroy@csgroup.eu>
+ <cfcff31e25dd6556b6cdf85842fb4e70174fabaa.1638036607.git.christophe.leroy@csgroup.eu>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <cfcff31e25dd6556b6cdf85842fb4e70174fabaa.1638036607.git.christophe.leroy@csgroup.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Mon, Nov 29, 2021 at 12:04:45PM +0800, lianzhi chang wrote:
-> +	/*
-> +	 * When switching VT, according to the value of kb->kbdmode,
-> +	 * judge whether it is necessary to force the keyboard light
-> +	 * state to be issued.
-> +	 */
-> +	kb = kbd_table + fg_console;
-> +	if (kb->kbdmode != VC_RAW ||
-> +		 kb->kbdmode != VC_MEDIUMRAW ||
-> +		 kb->kbdmode != VC_OFF) {
 
-Please do not do that. Even if kbdmode is one of those states if might
-be set up to show LED pattern set by ioctls (KDSETLED), so you still
-want to restore LEDs.
+Le 27/11/2021 à 19:10, Christophe Leroy a écrit :
+> copy_inst_from_kernel_nofault() uses copy_from_kernel_nofault() to
+> copy one or two 32bits words. This means calling an out-of-line
+> function which itself calls back copy_from_kernel_nofault_allowed()
+> then performs a generic copy with loops.
+> 
+> Rewrite copy_inst_from_kernel_nofault() to do everything at a
+> single place and use __get_kernel_nofault() directly to perform
+> single accesses without loops.
+> 
+> Before the patch:
+> 
+> 	00000018 <copy_inst_from_kernel_nofault>:
+> 	  18:	94 21 ff e0 	stwu    r1,-32(r1)
+> 	  1c:	7c 08 02 a6 	mflr    r0
+> 	  20:	38 a0 00 04 	li      r5,4
+> 	  24:	93 e1 00 1c 	stw     r31,28(r1)
+> 	  28:	7c 7f 1b 78 	mr      r31,r3
+> 	  2c:	38 61 00 08 	addi    r3,r1,8
+> 	  30:	90 01 00 24 	stw     r0,36(r1)
+> 	  34:	48 00 00 01 	bl      34 <copy_inst_from_kernel_nofault+0x1c>
+> 				34: R_PPC_REL24	copy_from_kernel_nofault
+> 	  38:	2c 03 00 00 	cmpwi   r3,0
+> 	  3c:	40 82 00 0c 	bne     48 <copy_inst_from_kernel_nofault+0x30>
+> 	  40:	81 21 00 08 	lwz     r9,8(r1)
+> 	  44:	91 3f 00 00 	stw     r9,0(r31)
+> 	  48:	80 01 00 24 	lwz     r0,36(r1)
+> 	  4c:	83 e1 00 1c 	lwz     r31,28(r1)
+> 	  50:	38 21 00 20 	addi    r1,r1,32
+> 	  54:	7c 08 03 a6 	mtlr    r0
+> 	  58:	4e 80 00 20 	blr
+> 
+> After the patch:
+> 
+> 	00000018 <copy_inst_from_kernel_nofault>:
+> 	  18:	3d 20 b0 00 	lis     r9,-20480
+> 	  1c:	7c 04 48 40 	cmplw   r4,r9
+> 	  20:	7c 69 1b 78 	mr      r9,r3
+> 	  24:	41 80 00 2c 	blt     50 <copy_inst_from_kernel_nofault+0x38>
+> 	  28:	81 42 04 d0 	lwz     r10,1232(r2)
+> 	  2c:	39 4a 00 01 	addi    r10,r10,1
+> 	  30:	91 42 04 d0 	stw     r10,1232(r2)
+> 	  34:	80 e4 00 00 	lwz     r7,0(r4)
+> 	  38:	81 42 04 d0 	lwz     r10,1232(r2)
+> 	  3c:	38 60 00 00 	li      r3,0
+> 	  40:	39 4a ff ff 	addi    r10,r10,-1
+> 	  44:	91 42 04 d0 	stw     r10,1232(r2)
+> 	  48:	90 e9 00 00 	stw     r7,0(r9)
+> 	  4c:	4e 80 00 20 	blr
+> 
+> 	  50:	38 60 ff de 	li      r3,-34
+> 	  54:	4e 80 00 20 	blr
+> 	  58:	81 22 04 d0 	lwz     r9,1232(r2)
+> 	  5c:	38 60 ff f2 	li      r3,-14
+> 	  60:	39 29 ff ff 	addi    r9,r9,-1
+> 	  64:	91 22 04 d0 	stw     r9,1232(r2)
+> 	  68:	4e 80 00 20 	blr
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+> v3: New
+> ---
+>   arch/powerpc/mm/maccess.c | 18 ++++++++++++------
+>   1 file changed, 12 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/powerpc/mm/maccess.c b/arch/powerpc/mm/maccess.c
+> index 5abae96b2b46..90309806f5eb 100644
+> --- a/arch/powerpc/mm/maccess.c
+> +++ b/arch/powerpc/mm/maccess.c
+> @@ -15,16 +15,22 @@ bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
+>   int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
+>   {
+>   	unsigned int val, suffix;
+> -	int err;
+>   
+> -	err = copy_from_kernel_nofault(&val, src, sizeof(val));
+> -	if (err)
+> -		return err;
+> +	if (unlikely(!is_kernel_addr((unsigned long)src)))
+> +		return -ERANGE;
+> +
+> +	pagefault_disable();
 
-Also, you are trying optimize something that happens pretty infrequently
-and it is really easy to get it wrong. It is much safer to let the
-kernel [re]set LEDs regardless of kbdmode and then let X do its own
-thing.
+Allthough generic version of copy_from_kernel_nofault() does it, 
+disabling pagefault is pointless here because we are accessing kernel 
+addresses only, so a page fault will always fail via bad_kernel_fault(), 
+it will never reach the faulthandler_disabled() test.
 
-Thanks.
-
--- 
-Dmitry
+> +	__get_kernel_nofault(&val, src, u32, Efault);
+>   	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
+> -		err = copy_from_kernel_nofault(&suffix, src + 1, sizeof(suffix));
+> +		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+> +		pagefault_enable();
+>   		*inst = ppc_inst_prefix(val, suffix);
+>   	} else {
+> +		pagefault_enable();
+>   		*inst = ppc_inst(val);
+>   	}
+> -	return err;
+> +	return 0;
+> +Efault:
+> +	pagefault_enable();
+> +	return -EFAULT;
+>   }
+> 

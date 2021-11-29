@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A8D4626E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A52C462502
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236257AbhK2W6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:58:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
+        id S233319AbhK2Wdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:33:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbhK2W53 (ORCPT
+        with ESMTP id S232319AbhK2WdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:57:29 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77F5EC141B36;
-        Mon, 29 Nov 2021 10:32:35 -0800 (PST)
+        Mon, 29 Nov 2021 17:33:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9CDC07E5F3;
+        Mon, 29 Nov 2021 10:40:18 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C3ECACE13D0;
-        Mon, 29 Nov 2021 18:32:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75401C53FAD;
-        Mon, 29 Nov 2021 18:32:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1694B815CC;
+        Mon, 29 Nov 2021 18:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C94C53FAD;
+        Mon, 29 Nov 2021 18:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210752;
-        bh=ea4tfQQOfMATtlI7evWrjciHYa2mDFvBvDEMF8y32IY=;
+        s=korg; t=1638211216;
+        bh=dDkI2zj3bBh1yrIAXEy608BKOxsow0pb+LG3yHfQsc8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YvMnfxxMGjFbquhe608SULEUkGLqTFB0escCB+s8k1abYBPHyxO4QQsiar0bDZEvr
-         9dCC/EfK9QWusgjnBGd7E/MuPOqotIYaVkONG/qTMpWnjqSNG3+vTk3rXpHGqqvm1x
-         NOD7kMnOCY3Y7RSDz7DHM31Ojf1BjppcqUJ0CLec=
+        b=J8I6JYWC4ue1jVXG8rSUSfU29IzQfblDM/JWMWCKz0YmydNle7sfpC/OaLaA0nF/+
+         gWL96Qfjb9vVr/qz5Uq+EcfN6EjugRiGr8SDgc/CcJ8m/znZQYTeSCqb/OHo8dzZwP
+         iTtTsaMLnLlE/IBCQ25JdTrmqmnHqY4zOQL3pvZc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Julian Sikorski <belegdol@gmail.com>,
-        Jeremy Allison <jra@samba.org>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 105/121] smb3: do not error on fsync when readonly
-Date:   Mon, 29 Nov 2021 19:18:56 +0100
-Message-Id: <20211129181715.196035836@linuxfoundation.org>
+Subject: [PATCH 5.15 144/179] tls: splice_read: fix accessing pre-processed records
+Date:   Mon, 29 Nov 2021 19:18:58 +0100
+Message-Id: <20211129181723.688074423@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -51,92 +48,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Jakub Kicinski <kuba@kernel.org>
 
-[ Upstream commit 71e6864eacbef0b2645ca043cdfbac272cb6cea3 ]
+[ Upstream commit e062fe99cccd9ff9f232e593d163ecabd244fae8 ]
 
-Linux allows doing a flush/fsync on a file open for read-only,
-but the protocol does not allow that.  If the file passed in
-on the flush is read-only try to find a writeable handle for
-the same inode, if that is not possible skip sending the
-fsync call to the server to avoid breaking the apps.
+recvmsg() will put peek()ed and partially read records onto the rx_list.
+splice_read() needs to consult that list otherwise it may miss data.
+Align with recvmsg() and also put partially-read records onto rx_list.
+tls_sw_advance_skb() is pretty pointless now and will be removed in
+net-next.
 
-Reported-by: Julian Sikorski <belegdol@gmail.com>
-Tested-by: Julian Sikorski <belegdol@gmail.com>
-Suggested-by: Jeremy Allison <jra@samba.org>
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Fixes: 692d7b5d1f91 ("tls: Fix recvmsg() to be able to peek across multiple records")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/file.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+ net/tls/tls_sw.c | 33 +++++++++++++++++++++++++--------
+ 1 file changed, 25 insertions(+), 8 deletions(-)
 
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index 67139f9d583f2..6c06870f90184 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -2618,12 +2618,23 @@ int cifs_strict_fsync(struct file *file, loff_t start, loff_t end,
- 	tcon = tlink_tcon(smbfile->tlink);
- 	if (!(cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NOSSYNC)) {
- 		server = tcon->ses->server;
--		if (server->ops->flush)
--			rc = server->ops->flush(xid, tcon, &smbfile->fid);
--		else
-+		if (server->ops->flush == NULL) {
- 			rc = -ENOSYS;
-+			goto strict_fsync_exit;
+diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
+index 1715e793c04ba..b0cdcea101806 100644
+--- a/net/tls/tls_sw.c
++++ b/net/tls/tls_sw.c
+@@ -1993,6 +1993,7 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+ 	struct sock *sk = sock->sk;
+ 	struct sk_buff *skb;
+ 	ssize_t copied = 0;
++	bool from_queue;
+ 	int err = 0;
+ 	long timeo;
+ 	int chunk;
+@@ -2002,14 +2003,20 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+ 
+ 	timeo = sock_rcvtimeo(sk, flags & SPLICE_F_NONBLOCK);
+ 
+-	skb = tls_wait_data(sk, NULL, flags & SPLICE_F_NONBLOCK, timeo, &err);
+-	if (!skb)
+-		goto splice_read_end;
++	from_queue = !skb_queue_empty(&ctx->rx_list);
++	if (from_queue) {
++		skb = __skb_dequeue(&ctx->rx_list);
++	} else {
++		skb = tls_wait_data(sk, NULL, flags & SPLICE_F_NONBLOCK, timeo,
++				    &err);
++		if (!skb)
++			goto splice_read_end;
+ 
+-	err = decrypt_skb_update(sk, skb, NULL, &chunk, &zc, false);
+-	if (err < 0) {
+-		tls_err_abort(sk, -EBADMSG);
+-		goto splice_read_end;
++		err = decrypt_skb_update(sk, skb, NULL, &chunk, &zc, false);
++		if (err < 0) {
++			tls_err_abort(sk, -EBADMSG);
++			goto splice_read_end;
 +		}
-+
-+		if ((OPEN_FMODE(smbfile->f_flags) & FMODE_WRITE) == 0) {
-+			smbfile = find_writable_file(CIFS_I(inode), FIND_WR_ANY);
-+			if (smbfile) {
-+				rc = server->ops->flush(xid, tcon, &smbfile->fid);
-+				cifsFileInfo_put(smbfile);
-+			} else
-+				cifs_dbg(FYI, "ignore fsync for file not open for write\n");
-+		} else
-+			rc = server->ops->flush(xid, tcon, &smbfile->fid);
  	}
  
-+strict_fsync_exit:
- 	free_xid(xid);
- 	return rc;
- }
-@@ -2635,6 +2646,7 @@ int cifs_fsync(struct file *file, loff_t start, loff_t end, int datasync)
- 	struct cifs_tcon *tcon;
- 	struct TCP_Server_Info *server;
- 	struct cifsFileInfo *smbfile = file->private_data;
-+	struct inode *inode = file_inode(file);
- 	struct cifs_sb_info *cifs_sb = CIFS_FILE_SB(file);
+ 	/* splice does not support reading control messages */
+@@ -2025,7 +2032,17 @@ ssize_t tls_sw_splice_read(struct socket *sock,  loff_t *ppos,
+ 	if (copied < 0)
+ 		goto splice_read_end;
  
- 	rc = file_write_and_wait_range(file, start, end);
-@@ -2651,12 +2663,23 @@ int cifs_fsync(struct file *file, loff_t start, loff_t end, int datasync)
- 	tcon = tlink_tcon(smbfile->tlink);
- 	if (!(cifs_sb->mnt_cifs_flags & CIFS_MOUNT_NOSSYNC)) {
- 		server = tcon->ses->server;
--		if (server->ops->flush)
--			rc = server->ops->flush(xid, tcon, &smbfile->fid);
--		else
-+		if (server->ops->flush == NULL) {
- 			rc = -ENOSYS;
-+			goto fsync_exit;
-+		}
-+
-+		if ((OPEN_FMODE(smbfile->f_flags) & FMODE_WRITE) == 0) {
-+			smbfile = find_writable_file(CIFS_I(inode), FIND_WR_ANY);
-+			if (smbfile) {
-+				rc = server->ops->flush(xid, tcon, &smbfile->fid);
-+				cifsFileInfo_put(smbfile);
-+			} else
-+				cifs_dbg(FYI, "ignore fsync for file not open for write\n");
-+		} else
-+			rc = server->ops->flush(xid, tcon, &smbfile->fid);
- 	}
+-	tls_sw_advance_skb(sk, skb, copied);
++	if (!from_queue) {
++		ctx->recv_pkt = NULL;
++		__strp_unpause(&ctx->strp);
++	}
++	if (chunk < rxm->full_len) {
++		__skb_queue_head(&ctx->rx_list, skb);
++		rxm->offset += len;
++		rxm->full_len -= len;
++	} else {
++		consume_skb(skb);
++	}
  
-+fsync_exit:
- 	free_xid(xid);
- 	return rc;
- }
+ splice_read_end:
+ 	release_sock(sk);
 -- 
 2.33.0
 

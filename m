@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AC14626A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1534626E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:56:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235539AbhK2Wze (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:55:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37760 "EHLO
+        id S235747AbhK2W6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235950AbhK2WzK (ORCPT
+        with ESMTP id S235442AbhK2W5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:55:10 -0500
+        Mon, 29 Nov 2021 17:57:17 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63016C12533A;
-        Mon, 29 Nov 2021 10:27:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A02C12533D;
+        Mon, 29 Nov 2021 10:27:39 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2AA36B815CF;
-        Mon, 29 Nov 2021 18:27:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5090CC53FC7;
-        Mon, 29 Nov 2021 18:27:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CEC4B815CF;
+        Mon, 29 Nov 2021 18:27:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 345E3C53FC7;
+        Mon, 29 Nov 2021 18:27:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210454;
-        bh=LPxT5iVMvNyyBUmTqaFPkAZrGnaOuJic75+Ud/ulqCc=;
+        s=korg; t=1638210457;
+        bh=1bJXgMPjotzg4shCd/vFtSiQm9PWDHgzlsTJ28Iny8Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mh6r6jfRE4hrZLJc5ChAuTp3B8DL3XG4Q99SdYbjxLAQG2F3G5DYB9QZQ/Hwz5tLi
-         dnap1k0ZHOAkDzqdXuQrj3u7k3z1CxGNw+ZK6/BGn/vzwlCdOT7mFh3EsumXPEg0Y8
-         57xxnXFiUU9rR2Lhko9f6bSfw7FqhxuWV4yY5fiE=
+        b=ha+MN+/dp9CJiziiG82c0fmZhu+ere17FgKOgUwoqdsaL3IQzj0gwGIRbRkDYVwYO
+         iWKd5/dMfgO6NzLWX3oNoGh2+pUTMPmxNph8JranF9y85Up/g8RucAQaPD+tOjcEud
+         140GF6S80wQ9Lg4/kckc7QkwUTgaDvq4HudWY6u4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Weichao Guo <guoweichao@oppo.com>,
+        Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 75/92] net: mscc: ocelot: correctly report the timestamping RX filters in ethtool
-Date:   Mon, 29 Nov 2021 19:18:44 +0100
-Message-Id: <20211129181709.909824305@linuxfoundation.org>
+Subject: [PATCH 5.4 76/92] f2fs: set SBI_NEED_FSCK flag when inconsistent node block found
+Date:   Mon, 29 Nov 2021 19:18:45 +0100
+Message-Id: <20211129181709.942185946@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
 References: <20211129181707.392764191@linuxfoundation.org>
@@ -49,38 +49,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Weichao Guo <guoweichao@oppo.com>
 
-[ Upstream commit c49a35eedfef08bffd46b53c25dbf9d6016a86ff ]
+[ Upstream commit 6663b138ded1a59e630c9e605e42aa7fde490cdc ]
 
-The driver doesn't support RX timestamping for non-PTP packets, but it
-declares that it does. Restrict the reported RX filters to PTP v2 over
-L2 and over L4.
+Inconsistent node block will cause a file fail to open or read,
+which could make the user process crashes or stucks. Let's mark
+SBI_NEED_FSCK flag to trigger a fix at next fsck time. After
+unlinking the corrupted file, the user process could regenerate
+a new one and work correctly.
 
-Fixes: 4e3b0468e6d7 ("net: mscc: PTP Hardware Clock (PHC) support")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Weichao Guo <guoweichao@oppo.com>
+Reviewed-by: Chao Yu <chao@kernel.org>
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mscc/ocelot.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ fs/f2fs/node.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc/ocelot.c
-index 3f83647c5802e..bf7832b34a000 100644
---- a/drivers/net/ethernet/mscc/ocelot.c
-+++ b/drivers/net/ethernet/mscc/ocelot.c
-@@ -1183,7 +1183,10 @@ static int ocelot_get_ts_info(struct net_device *dev,
- 				 SOF_TIMESTAMPING_RAW_HARDWARE;
- 	info->tx_types = BIT(HWTSTAMP_TX_OFF) | BIT(HWTSTAMP_TX_ON) |
- 			 BIT(HWTSTAMP_TX_ONESTEP_SYNC);
--	info->rx_filters = BIT(HWTSTAMP_FILTER_NONE) | BIT(HWTSTAMP_FILTER_ALL);
-+	info->rx_filters = BIT(HWTSTAMP_FILTER_NONE) |
-+			   BIT(HWTSTAMP_FILTER_PTP_V2_EVENT) |
-+			   BIT(HWTSTAMP_FILTER_PTP_V2_L2_EVENT) |
-+			   BIT(HWTSTAMP_FILTER_PTP_V2_L4_EVENT);
- 
- 	return 0;
- }
+diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+index 4cb182c20eedd..0cd1d51dde06d 100644
+--- a/fs/f2fs/node.c
++++ b/fs/f2fs/node.c
+@@ -1385,6 +1385,7 @@ static struct page *__get_node_page(struct f2fs_sb_info *sbi, pgoff_t nid,
+ 			  nid, nid_of_node(page), ino_of_node(page),
+ 			  ofs_of_node(page), cpver_of_node(page),
+ 			  next_blkaddr_of_node(page));
++		set_sbi_flag(sbi, SBI_NEED_FSCK);
+ 		err = -EINVAL;
+ out_err:
+ 		ClearPageUptodate(page);
 -- 
 2.33.0
 

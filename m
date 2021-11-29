@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D740B461608
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F6046160A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377534AbhK2NSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:18:39 -0500
-Received: from foss.arm.com ([217.140.110.172]:39060 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243526AbhK2NQh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:16:37 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 616131515;
-        Mon, 29 Nov 2021 05:13:19 -0800 (PST)
-Received: from [10.57.34.182] (unknown [10.57.34.182])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 317153F766;
-        Mon, 29 Nov 2021 05:13:15 -0800 (PST)
-Message-ID: <76a1b5c1-01c8-bb30-6105-b4073dc23065@arm.com>
-Date:   Mon, 29 Nov 2021 13:13:11 +0000
+        id S1377608AbhK2NSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:18:54 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:42976 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S235896AbhK2NQx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 08:16:53 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AT8gB0U015642;
+        Mon, 29 Nov 2021 14:13:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=sqMNcoQwpA9ck+7HZwoMAo0dG2+QpAolRg6WzPlAIKI=;
+ b=QUDV4Oyu5hgi3RtaH24ANImYc7CEO15DHaQfwhQDcTw94rpXvYxwV3MXaQfBY5ibsI3a
+ o/Y70SCbVBcFhwTwNNVJpXyW+FU+hOHs3HGU4RR58+YhFlBDz9N9AlMJErL5Szp6BTbj
+ tsLtsvLUOhxByTGdVLrvhqxaLnj3RWtcErcjCWCDA/cWMzI6HYYk/4wZOXTcKXY7J0v6
+ G0O6pHdgJBGQdc4lrGZ9B3y7QnUzKlTG0IQCRiCt7FkQctIQ5b3jJ2Hv9oLPAf63/z40
+ z7uUOjOrei51DtLHbjzBKR0HM6/wsZ1dtEcN1jZiM+q6DI0Frbg6N3Q9b8iO24TLkHMW Tg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cmn1ybces-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 14:13:16 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 641F910002A;
+        Mon, 29 Nov 2021 14:13:15 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 58A68218100;
+        Mon, 29 Nov 2021 14:13:15 +0100 (CET)
+Received: from lmecxl0912.lme.st.com (10.75.127.47) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Mon, 29 Nov
+ 2021 14:13:14 +0100
+Subject: Re: [PATCH] ARM: dts: stm32: fix stusb1600 pinctrl used on
+ stm32mp157c-dk
+To:     Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+CC:     <robh+dt@kernel.org>, <amelie.delaunay@foss.st.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <fabien.dessenne@foss.st.com>
+References: <1637926420-5116-1-git-send-email-fabrice.gasnier@foss.st.com>
+From:   Alexandre TORGUE <alexandre.torgue@foss.st.com>
+Message-ID: <d716a6a6-549f-c790-d1a1-b48c29d6ef00@foss.st.com>
+Date:   Mon, 29 Nov 2021 14:13:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
-Content-Language: en-GB
-To:     Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@linutronix.de>
-Cc:     Nishanth Menon <nm@ti.com>, Mark Rutland <mark.rutland@arm.com>,
-        Stuart Yoder <stuyoder@gmail.com>, linux-pci@vger.kernel.org,
-        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
-        x86@kernel.org, Sinan Kaya <okaya@kernel.org>,
-        iommu@lists.linux-foundation.org,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Megha Dey <megha.dey@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
-References: <20211126224100.303046749@linutronix.de>
- <20211126230525.885757679@linutronix.de>
- <20211129105506.GA22761@willie-the-truck>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20211129105506.GA22761@willie-the-truck>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <1637926420-5116-1-git-send-email-fabrice.gasnier@foss.st.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.47]
+X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-29_08,2021-11-28_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-11-29 10:55, Will Deacon wrote:
-> Hi Thomas,
-> 
-> On Sat, Nov 27, 2021 at 02:20:59AM +0100, Thomas Gleixner wrote:
->> Let the core code fiddle with the MSI descriptor retrieval.
->>
->> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
->> ---
->>   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c |   19 +++----------------
->>   1 file changed, 3 insertions(+), 16 deletions(-)
->>
->> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
->> @@ -3154,7 +3154,6 @@ static void arm_smmu_write_msi_msg(struc
->>   
->>   static void arm_smmu_setup_msis(struct arm_smmu_device *smmu)
->>   {
->> -	struct msi_desc *desc;
->>   	int ret, nvec = ARM_SMMU_MAX_MSIS;
->>   	struct device *dev = smmu->dev;
->>   
->> @@ -3182,21 +3181,9 @@ static void arm_smmu_setup_msis(struct a
->>   		return;
->>   	}
->>   
->> -	for_each_msi_entry(desc, dev) {
->> -		switch (desc->msi_index) {
->> -		case EVTQ_MSI_INDEX:
->> -			smmu->evtq.q.irq = desc->irq;
->> -			break;
->> -		case GERROR_MSI_INDEX:
->> -			smmu->gerr_irq = desc->irq;
->> -			break;
->> -		case PRIQ_MSI_INDEX:
->> -			smmu->priq.q.irq = desc->irq;
->> -			break;
->> -		default:	/* Unknown */
->> -			continue;
->> -		}
->> -	}
->> +	smmu->evtq.q.irq = msi_get_virq(dev, EVTQ_MSI_INDEX);
->> +	smmu->gerr_irq = msi_get_virq(dev, GERROR_MSI_INDEX);
->> +	smmu->priq.q.irq = msi_get_virq(dev, PRIQ_MSI_INDEX);
-> 
-> Prviously, if retrieval of the MSI failed then we'd fall back to wired
-> interrupts. Now, I think we'll clobber the interrupt with 0 instead. Can
-> we make the assignments to smmu->*irq here conditional on the MSI being
-> valid, please?
+Hi Fabrice
 
-I was just looking at that too, but reached the conclusion that it's 
-probably OK, since consumption of this value later is gated on 
-ARM_SMMU_FEAT_PRI, so the fact that it changes from 0 to an error value 
-in the absence of PRI should make no practical difference. If we don't 
-have MSIs at all, we'd presumably still fail earlier either at the 
-dev->msi_domain check or upon trying to allocate the vectors, so we'll 
-still fall back to any previously-set wired values before getting here. 
-The only remaining case is if we've *successfully* allocated the 
-expected number of vectors yet are then somehow unable to retrieve one 
-or more of them - presumably the system has to be massively borked for 
-that to happen, at which point do we really want to bother trying to 
-reason about anything?
+On 11/26/21 12:33 PM, Fabrice Gasnier wrote:
+> A pinctrl handle is used to setup a pull-up on the stusb1600 IRQ pin (that
+> is open drain).
+> When in ANALOG state, no pull-up can be applied in the GPIO HW controller,
+> still the setting is done into the register. The pull-up is effective
+> currently, only when the GPIO IRQ is requested. The correct setting is to
+> use directly the GPIO, instead of ANALOG state.
+> 
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+>   arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+> index 5f060fe..3b65130 100644
+> --- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+> +++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+> @@ -1718,7 +1718,7 @@
+>   
+>   	stusb1600_pins_a: stusb1600-0 {
+>   		pins {
+> -			pinmux = <STM32_PINMUX('I', 11, ANALOG)>;
+> +			pinmux = <STM32_PINMUX('I', 11, GPIO)>;
+>   			bias-pull-up;
+>   		};
+>   	};
+> 
 
-Robin.
+Applied on stm32-next
+
+Regards
+Alex

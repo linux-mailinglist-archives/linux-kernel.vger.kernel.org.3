@@ -2,158 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 394B646128B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB27461291
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344061AbhK2KkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:40:01 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:44306 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236074AbhK2KiA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:38:00 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1345219AbhK2Km7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:42:59 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:18219 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231773AbhK2Kk6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 05:40:58 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638182261; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=NfRWfQ/kjNZZNKYjAgXr3woDR9TbFsk4RacT+8xIke8=; b=lrgyGjSE9PiYUckDwY6xElgCSo4ZejO56w63xfd/XQcMyqT/P+zSXCurs4e3RWl/GyffZzvP
+ qfq+R39ZJljh80hokN9ItXm3DgPozDdY3eBeaAleIGiSPFz2kosX/PbvG7x3PsTfcsUU9q+u
+ tdgdYNiqGXsoiJFGAk0RlpRODL4=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
+ 61a4ad74135a8a9d0e4bcda4 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Nov 2021 10:37:40
+ GMT
+Sender: srivasam=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 24951C43616; Mon, 29 Nov 2021 10:37:40 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.2 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [10.242.143.72] (unknown [202.46.23.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 848AF61257;
-        Mon, 29 Nov 2021 10:34:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF91C004E1;
-        Mon, 29 Nov 2021 10:34:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638182082;
-        bh=nsUtuRmqSAZRV1KPWJ/+I0Ioj0cagz0JXdcAo35Ew4w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bKx6n4W8Hl5/MY40EORD0pKOk49Qj+zzSZ1XiYB2e6CWBPHA3Yj20wSC2c4oujZZS
-         9OGj+NNIpXp73UDrmyxQD7emWWQu6MYggvcI8LLBhJQCC9CsacRPxu+qCkMBka+eT1
-         mUB7O6bQsu12OCzw4VBrjGpU8NgxDz2wE9tOdIQ4=
-Date:   Mon, 29 Nov 2021 11:34:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Lu Baolu <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dan Williams <dan.j.williams@intel.com>, rafael@kernel.org,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Li Yang <leoyang.li@nxp.com>, iommu@lists.linux-foundation.org,
-        linux-pci@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 04/17] driver core: platform: Add driver dma ownership
- management
-Message-ID: <YaSsv5Z1WS7ldgu3@kroah.com>
-References: <20211128025051.355578-1-baolu.lu@linux.intel.com>
- <20211128025051.355578-5-baolu.lu@linux.intel.com>
- <YaM5Zv1RrdidycKe@kroah.com>
- <20211128231509.GA966332@nvidia.com>
+        (Authenticated sender: srivasam)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0E59BC4338F;
+        Mon, 29 Nov 2021 10:37:33 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 0E59BC4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v6 08/10] ASoC: dt-bindings: Add SC7280 lpass cpu bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, plai@codeaurora.org, bgoswami@codeaurora.org,
+        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org,
+        Venkata Prasad Potturu <potturu@codeaurora.org>
+References: <1637928282-2819-1-git-send-email-srivasam@codeaurora.org>
+ <1637928282-2819-9-git-send-email-srivasam@codeaurora.org>
+ <YaO0ER2pNIQrvlxM@robh.at.kernel.org>
+From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+Organization: Qualcomm India Private Limited.
+Message-ID: <9c21dc98-6bbb-bf33-361c-a768d185f07a@codeaurora.org>
+Date:   Mon, 29 Nov 2021 16:07:31 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211128231509.GA966332@nvidia.com>
+In-Reply-To: <YaO0ER2pNIQrvlxM@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 07:15:09PM -0400, Jason Gunthorpe wrote:
-> On Sun, Nov 28, 2021 at 09:10:14AM +0100, Greg Kroah-Hartman wrote:
-> > On Sun, Nov 28, 2021 at 10:50:38AM +0800, Lu Baolu wrote:
-> > > Multiple platform devices may be placed in the same IOMMU group because
-> > > they cannot be isolated from each other. These devices must either be
-> > > entirely under kernel control or userspace control, never a mixture. This
-> > > checks and sets DMA ownership during driver binding, and release the
-> > > ownership during driver unbinding.
-> > > 
-> > > Driver may set a new flag (suppress_auto_claim_dma_owner) to disable auto
-> > > claiming DMA_OWNER_DMA_API ownership in the binding process. For instance,
-> > > the userspace framework drivers (vfio etc.) which need to manually claim
-> > > DMA_OWNER_PRIVATE_DOMAIN_USER when assigning a device to userspace.
-> > 
-> > Why would any vfio driver be a platform driver?  
-> 
-> Why not? VFIO implements drivers for most physical device types
-> these days. Why wouldn't platform be included?
 
-Because "platform" is not a real device type.  It's a catch-all for
-devices that are only described by firmware, so why would you have a
-virtual device for that?  Why would that be needed?
+On 11/28/2021 10:23 PM, Rob Herring wrote:
+Thanks for Your Time Rob!!!
+> On Fri, Nov 26, 2021 at 05:34:40PM +0530, Srinivasa Rao Mandadapu wrote:
+>> Add bindings for sc7280 lpass cpu driver which supports
+>> audio over i2s based speaker, soundwire based headset, msm dmics
+>> and HDMI Port.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+>> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
+>> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
+>> ---
+>>   .../devicetree/bindings/sound/qcom,lpass-cpu.yaml  | 69 +++++++++++++++++++---
+>>   1 file changed, 61 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
+>> index 1e23c0e..0f5a57c 100644
+>> --- a/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
+>> +++ b/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
+>> @@ -22,35 +22,36 @@ properties:
+>>         - qcom,lpass-cpu
+>>         - qcom,apq8016-lpass-cpu
+>>         - qcom,sc7180-lpass-cpu
+>> +      - qcom,sc7280-lpass-cpu
+>>   
+>>     reg:
+>> -    maxItems: 2
+>> +    maxItems: 5
+>>       description: LPAIF core registers
+>>   
+>>     reg-names:
+>> -    maxItems: 2
+>> +    maxItems: 5
+>>   
+>>     clocks:
+>>       minItems: 3
+>> -    maxItems: 6
+>> +    maxItems: 7
+>>   
+>>     clock-names:
+>>       minItems: 3
+>> -    maxItems: 6
+>> +    maxItems: 7
+>>   
+>>     interrupts:
+>> -    maxItems: 2
+>> +    maxItems: 4
+>>       description: LPAIF DMA buffer interrupt
+>>   
+>>     interrupt-names:
+>> -    maxItems: 2
+>> +    maxItems: 4
+>>   
+>>     qcom,adsp:
+>>       $ref: /schemas/types.yaml#/definitions/phandle
+>>       description: Phandle for the audio DSP node
+>>   
+>>     iommus:
+>> -    maxItems: 2
+>> +    maxItems: 3
+>>       description: Phandle to apps_smmu node with sid mask
+>>   
+>>     power-domains:
+>> @@ -69,7 +70,7 @@ patternProperties:
+>>     "^dai-link@[0-9a-f]$":
+>>       type: object
+>>       description: |
+>> -      LPASS CPU dai node for each I2S device. Bindings of each node
+>> +      LPASS CPU dai node for each I2S device or Soundwire device. Bindings of each node
+>>         depends on the specific driver providing the functionality and
+>>         properties.
+>>       properties:
+>> @@ -174,6 +175,58 @@ allOf:
+>>           - iommus
+>>           - power-domains
+>>   
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: qcom,sc7280-lpass-cpu
+>> +
+>> +    then:
+>> +      properties:
+>> +        clock-names:
+>> +          oneOf:
+>> +            - items:   #for I2S
+>> +                - const: lpass_aon_cc_audio_hm_h_clk
+>> +                - const: lpass_core_cc_sysnoc_mport_core_clk
+>> +                - const: lpass_core_cc_ext_if1_ibit_clk
+>> +            - items:   #for Soundwire
+>> +                - const: lpass_aon_cc_audio_hm_h_clk
+>> +                - const: lpass_audio_cc_codec_mem0_clk
+>> +                - const: lpass_audio_cc_codec_mem1_clk
+>> +                - const: lpass_audio_cc_codec_mem2_clk
+>> +            - items:   #for HDMI
+>> +                - const: lpass_aon_cc_audio_hm_h_clk
+> 'lpass_' and '_clk' are redundant.
+Yes. but these clock names are defined by HW design team. clock drivers 
+fallowed the same,  hence in audio drivers.
+>
+>> +
+>> +        reg-names:
+>> +          anyOf:
+>> +            - items:   #for I2S
+>> +                - const: lpass-lpaif
+>> +            - items:   #for I2S and HDMI
+>> +                - const: lpass-hdmiif
+>> +                - const: lpass-lpaif
+> Doesn't this apply to other SoCs?
+>
+>> +            - items:   #for I2S, soundwire and HDMI
+>> +                - const: lpass-cdc-lpm
+>> +                - const: lpass-rxtx-lpaif
+>> +                - const: lpass-va-lpaif
+>> +                - const: lpass-hdmiif
+>> +                - const: lpass-lpaif
+> 'lpass-' is redundant too, but consistency across SoCs is better.
+>
+> hdmiif and lpaif should be first. (Add new resources on the end.)
+Okay.. order is maintained as per register addresses. if it's okay, even 
+address range is out of order, will change accordingly.
+>
+>> +        interrupt-names:
+>> +          anyOf:
+>> +            - items:   #for I2S
+>> +                - const: lpass-irq-lpaif
+>> +            - items:   #for I2S and HDMI
+>> +                - const: lpass-irq-lpaif
+>> +                - const: lpass-irq-hdmi
+>> +            - items:   #for I2S, soundwire and HDMI
+>> +                - const: lpass-irq-lpaif
+>> +                - const: lpass-irq-vaif
+>> +                - const: lpass-irq-rxtxif
+>> +                - const: lpass-irq-hdmi
+> Again, add new entries to the end.
+  Replied above for the same.
+>> +
+>> +      required:
+>> +        - iommus
+>> +        - power-domains
+>> +
+>>   examples:
+>>     - |
+>>       #include <dt-bindings/sound/sc7180-lpass.h>
+>> -- 
+>> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+>> is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+>>
+>>
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
-> > > diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
-> > > index 7c96f169d274..779bcf2a851c 100644
-> > > +++ b/include/linux/platform_device.h
-> > > @@ -210,6 +210,7 @@ struct platform_driver {
-> > >  	struct device_driver driver;
-> > >  	const struct platform_device_id *id_table;
-> > >  	bool prevent_deferred_probe;
-> > > +	bool suppress_auto_claim_dma_owner;
-> > 
-> > What platform driver needs this change?
-> 
-> It is in patch 12:
-> 
-> --- a/drivers/vfio/platform/vfio_platform.c
-> +++ b/drivers/vfio/platform/vfio_platform.c
-
-Ok, nevermind, you do have a virtual platform device, which personally,
-I find crazy as why would firmware export a "virtual device"?
-
-> @@ -76,6 +76,7 @@ static struct platform_driver vfio_platform_driver = {
->         .driver = {
->                 .name   = "vfio-platform",
->         },
-> +       .suppress_auto_claim_dma_owner = true,
->  };
-> 
-> Which is how VFIO provides support to DPDK for some Ethernet
-> controllers embedded in a few ARM SOCs.
-
-Ick.  Where does the DT file for these devices live that describe a
-"virtual device" to match with this driver?
-
-> It is also used in patch 17 in five tegra platform_drivers to make
-> their sharing of an iommu group between possibly related
-> platform_driver's safer.
-
-Safer how?
-
-> > >  	USE_PLATFORM_PM_SLEEP_OPS
-> > > @@ -1478,7 +1505,8 @@ struct bus_type platform_bus_type = {
-> > >  	.probe		= platform_probe,
-> > >  	.remove		= platform_remove,
-> > >  	.shutdown	= platform_shutdown,
-> > > -	.dma_configure	= platform_dma_configure,
-> > > +	.dma_configure	= _platform_dma_configure,
-> > 
-> > What happened to the original platform_dma_configure() function?
-> 
-> It is still called. The issue here is that platform_dma_configure has
-> nothing to do with platform and is being re-used by AMBA.
-
-Ick, why?  AMBA needs to be a real bus type and use their own functions
-if needed.  There is nothing here that makes this obvious that someone
-else is using those functions and that the platform bus should only be
-using these "new" functions.
-
-> Probably the resolution to both remarks is to rename
-> platform_dma_configure to something sensible (firwmare dma configure
-> maybe?) and use it in all places that do the of & acpi stuff -
-> pci/amba/platform at least.
-
-That would be better than what is being proposed here.
-
-thanks,
-
-greg k-h

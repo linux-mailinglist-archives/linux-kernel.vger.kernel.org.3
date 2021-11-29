@@ -2,154 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E58B246131A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:06:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA395461317
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:05:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240226AbhK2LJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:09:18 -0500
-Received: from comms.puri.sm ([159.203.221.185]:40264 "EHLO comms.puri.sm"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240713AbhK2LHR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:07:17 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by comms.puri.sm (Postfix) with ESMTP id DE16CE1137;
-        Mon, 29 Nov 2021 03:03:59 -0800 (PST)
-Received: from comms.puri.sm ([127.0.0.1])
-        by localhost (comms.puri.sm [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id evOY7719MzEi; Mon, 29 Nov 2021 03:03:59 -0800 (PST)
-From:   Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-To:     linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrey Smirnov <andrew.smirnov@gmail.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, kernel@puri.sm,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
-Subject: [PATCH] thermal: qoriq: Only enable sites that actually exist
-Date:   Mon, 29 Nov 2021 12:02:53 +0100
-Message-Id: <20211129110252.1699112-1-sebastian.krzyszkowiak@puri.sm>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1376866AbhK2LIt convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 06:08:49 -0500
+Received: from coyote.holtmann.net ([212.227.132.17]:50017 "EHLO
+        mail.holtmann.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352092AbhK2LGr (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 06:06:47 -0500
+Received: from smtpclient.apple (p5b3d2e91.dip0.t-ipconnect.de [91.61.46.145])
+        by mail.holtmann.org (Postfix) with ESMTPSA id 488ECCED23;
+        Mon, 29 Nov 2021 12:03:28 +0100 (CET)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 15.0 \(3693.20.0.1.32\))
+Subject: Re: [PATCH v3 resend 2/2] btbcm: disable read tx power for affected
+ Macs with the T2 Security chip
+From:   Marcel Holtmann <marcel@holtmann.org>
+In-Reply-To: <6326984F-8428-4A3D-9734-1A408B9E82BB@live.com>
+Date:   Mon, 29 Nov 2021 12:03:27 +0100
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Content-Transfer-Encoding: 8BIT
+Message-Id: <BEB98DAF-0AEE-4758-A6AC-33F23D11D91A@holtmann.org>
+References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
+ <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
+ <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
+ <20211117124717.12352-1-redecorating@protonmail.com>
+ <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
+ <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
+ <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
+ <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+ <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
+ <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
+ <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
+ <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
+ <A003A45E-EE35-43EC-879F-3395CCB5EF59@live.com>
+ <6326984F-8428-4A3D-9734-1A408B9E82BB@live.com>
+To:     Aditya Garg <gargaditya08@live.com>
+X-Mailer: Apple Mail (2.3693.20.0.1.32)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On i.MX8MQ, enabling monitoring sites that aren't connected to anything
-can cause unwanted side effects on some units. This seems to happen
-once some of these sites report out-of-range readings and results in
-sensor misbehavior, such as thermal zone readings getting stuck or even
-suddenly reporting an impossibly high value, triggering emergency
-shutdowns.
+Hi Aditya,
 
-The datasheet lists all non-existent sites as "reserved" and doesn't
-make any guarantees about being able to enable them at all, so let's
-not do that.
+> Some Macs with the T2 security chip had Bluetooth not working.
+> To fix it we add DMI based quirks to disable querying of LE Tx power.
+> 
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> ---
+> drivers/bluetooth/btbcm.c | 40 +++++++++++++++++++++++++++++++++++++++
+> 1 file changed, 40 insertions(+)
+> 
+> diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+> index e4182acee488c5..40f7c9c5cf0a5a 100644
+> --- a/drivers/bluetooth/btbcm.c
+> +++ b/drivers/bluetooth/btbcm.c
+> @@ -8,6 +8,7 @@
+> 
+> #include <linux/module.h>
+> #include <linux/firmware.h>
+> +#include <linux/dmi.h>
+> #include <asm/unaligned.h>
+> 
+> #include <net/bluetooth/bluetooth.h>
+> @@ -343,9 +344,44 @@ static struct sk_buff *btbcm_read_usb_product(struct hci_dev *hdev)
+> 	return skb;
+> }
+> 
+> +static const struct dmi_system_id disable_broken_read_transmit_power[] = {
+> +	{
+> +		 .matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,1"),
+> +		},
+> +	},
+> +	{
+> +		 .matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,2"),
+> +		},
+> +	},
+> +	{
+> +		 .matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,4"),
+> +		},
+> +	},
+> +	{
+> +		 .matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,1"),
+> +		},
+> +	},
+> +	{
+> +		 .matches = {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,2"),
+> +		},
+> +	},
+> +	{ }
+> +};
+> +
+> static int btbcm_read_info(struct hci_dev *hdev)
+> {
+> 	struct sk_buff *skb;
+> +	const struct dmi_system_id *dmi_id;
 
-Fixes: 45038e03d633 ("thermal: qoriq: Enable all sensors before registering them")
+this variable is not needed.
 
-Signed-off-by: Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>
----
- drivers/thermal/qoriq_thermal.c | 63 ++++++++++++++++++++++-----------
- 1 file changed, 43 insertions(+), 20 deletions(-)
+> 
+> 	/* Read Verbose Config Version Info */
+> 	skb = btbcm_read_verbose_config(hdev);
+> @@ -363,6 +399,10 @@ static int btbcm_read_info(struct hci_dev *hdev)
+> 	bt_dev_info(hdev, "BCM: features 0x%2.2x", skb->data[1]);
+> 	kfree_skb(skb);
+> 
+> +	/* Read DMI and disable broken Read LE Min/Max Tx Power */
+> +	if (dmi_first_match(disable_broken_read_transmit_power))
+> +		set_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks);
+> +
+> 	return 0;
+> }
 
-diff --git a/drivers/thermal/qoriq_thermal.c b/drivers/thermal/qoriq_thermal.c
-index 73049f9bea25..ef0848849ee2 100644
---- a/drivers/thermal/qoriq_thermal.c
-+++ b/drivers/thermal/qoriq_thermal.c
-@@ -32,7 +32,6 @@
- #define TMR_DISABLE	0x0
- #define TMR_ME		0x80000000
- #define TMR_ALPF	0x0c000000
--#define TMR_MSITE_ALL	GENMASK(15, 0)
- 
- #define REGS_TMTMIR	0x008	/* Temperature measurement interval Register */
- #define TMTMIR_DEFAULT	0x0000000f
-@@ -129,33 +128,51 @@ static const struct thermal_zone_of_device_ops tmu_tz_ops = {
- static int qoriq_tmu_register_tmu_zone(struct device *dev,
- 				       struct qoriq_tmu_data *qdata)
- {
--	int id;
-+	int ret = 0;
-+	struct device_node *np, *child, *sensor_np;
- 
--	if (qdata->ver == TMU_VER1) {
--		regmap_write(qdata->regmap, REGS_TMR,
--			     TMR_MSITE_ALL | TMR_ME | TMR_ALPF);
--	} else {
--		regmap_write(qdata->regmap, REGS_V2_TMSR, TMR_MSITE_ALL);
--		regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
--	}
-+	np = of_find_node_by_name(NULL, "thermal-zones");
-+	if (!np)
-+		return -ENODEV;
-+
-+	sensor_np = of_node_get(dev->of_node);
- 
--	for (id = 0; id < SITES_MAX; id++) {
-+	for_each_available_child_of_node(np, child) {
- 		struct thermal_zone_device *tzd;
--		struct qoriq_sensor *sensor = &qdata->sensor[id];
--		int ret;
-+		struct qoriq_sensor *sensor;
-+		int id, site;
-+
-+		ret = thermal_zone_of_get_sensor_id(child, sensor_np, &id);
-+
-+		if (ret < 0) {
-+			dev_err(dev, "failed to get valid sensor id: %d\n", ret);
-+			of_node_put(child);
-+			break;
-+		}
- 
-+		sensor = &qdata->sensor[id];
- 		sensor->id = id;
- 
-+		/* Enable monitoring */
-+		if (qdata->ver == TMU_VER1) {
-+			site = 0x1 << (15 - id);
-+			regmap_update_bits(qdata->regmap, REGS_TMR,
-+					   site | TMR_ME | TMR_ALPF,
-+					   site | TMR_ME | TMR_ALPF);
-+		} else {
-+			site = 0x1 << id;
-+			regmap_update_bits(qdata->regmap, REGS_V2_TMSR, site, site);
-+			regmap_write(qdata->regmap, REGS_TMR, TMR_ME | TMR_ALPF_V2);
-+		}
-+
- 		tzd = devm_thermal_zone_of_sensor_register(dev, id,
- 							   sensor,
- 							   &tmu_tz_ops);
--		ret = PTR_ERR_OR_ZERO(tzd);
--		if (ret) {
--			if (ret == -ENODEV)
--				continue;
--
--			regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
--			return ret;
-+		if (IS_ERR(tzd)) {
-+			ret = PTR_ERR(tzd);
-+			dev_err(dev, "failed to register thermal zone: %d\n", ret);
-+			of_node_put(child);
-+			break;
- 		}
- 
- 		if (devm_thermal_add_hwmon_sysfs(tzd))
-@@ -164,7 +181,13 @@ static int qoriq_tmu_register_tmu_zone(struct device *dev,
- 
- 	}
- 
--	return 0;
-+	of_node_put(sensor_np);
-+	of_node_put(np);
-+
-+	if (ret)
-+		regmap_write(qdata->regmap, REGS_TMR, TMR_DISABLE);
-+
-+	return ret;
- }
- 
- static int qoriq_tmu_calibration(struct device *dev,
--- 
-2.34.1
+Regards
+
+Marcel
 

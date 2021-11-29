@@ -2,88 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC26A461B01
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF450461AF4
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 16:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345907AbhK2PgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 10:36:15 -0500
-Received: from mail-ot1-f49.google.com ([209.85.210.49]:33763 "EHLO
-        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231803AbhK2Pdz (ORCPT
+        id S242184AbhK2Pfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 10:35:52 -0500
+Received: from mail-oi1-f181.google.com ([209.85.167.181]:45815 "EHLO
+        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344160AbhK2Pdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 10:33:55 -0500
-Received: by mail-ot1-f49.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso26119047otf.0;
-        Mon, 29 Nov 2021 07:30:37 -0800 (PST)
+        Mon, 29 Nov 2021 10:33:51 -0500
+Received: by mail-oi1-f181.google.com with SMTP id 7so35212744oip.12;
+        Mon, 29 Nov 2021 07:30:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=o9/xltpZS8/e+Fx8LAzHE+t3v33y8dbhp5g24ocDpeA=;
-        b=rh9Hed8N1XXyqnoie48/wZUjQP3PxBmbIjT9cWHviAwisnWId833pRaA7PRV4wc194
-         e81rQK7kaweOsiGdNuk5jidwDTkLsi9FCc59I6lL2O3tRdH+Z56Gv4QWX5B339m7clLA
-         4whnUPQ0uTFDOyNHEWAd5mcl6cpOIaKE2q3Ehpsyl9C756Wmj3+/y3GUxb6A3RUHi+OU
-         zkGRul5IcTFoNwjVIbXuVdSAgOiu28zG12QhIFODa48mUpkk+5wvvvp1EkchpgbM0/y+
-         S39OEmhb76m4QfhO+PhCmHahSHtAc3XNmPakiElVfl3lIBWwz2TE0fmvaJ8rgsWfYqDM
-         A4yA==
-X-Gm-Message-State: AOAM530Rbo56P/1hW6u1TUB25VRrkyXeYrjVCXJvtWo2wSbJDre6VG6a
-        XBp4ohXo5IOx/ngA3qbTaw==
-X-Google-Smtp-Source: ABdhPJzmfe6xuhnb21hy8AM/h3XzDFm6oGuf3rxxPOA0K4txwqSNxF0l8aXDu8NZZ8L0OV75xjneug==
-X-Received: by 2002:a05:6830:1204:: with SMTP id r4mr45833918otp.34.1638199837059;
-        Mon, 29 Nov 2021 07:30:37 -0800 (PST)
+        bh=m4n1c0DkMDGMvar0IQu4WXywqga4uflTYXHUTLO3idE=;
+        b=VWWRkUZUIk7d7Dxc1K1JMLfZS3K4HMojbsCcQ7HcxPegJu74EEPMVmf9DsAc/52uHe
+         G0SM3w5sNfC6EGO0S8inL0O4dMbFHAfOw7QpwdQJnZ9HlgyVVJzYNjbLjh0djEXbf3vd
+         qqBRHmZ+9tIaq9XP45h3r16Me+7X6NcRvVmhGy6+ABjxXi1l76DXCeuUgmmDouyyP9Ht
+         Am+PTu8FeDxEZ2Ne0b2hchPdOMv8q41Uhtnf5CNGm9HE+z8KeEdRS4Y7Ms+8X41rMzI+
+         ptj1NcEXvAzrKpPdavVqB7gic8zKd+sTgMMAbU6vfB7kpKi8DiK61KXwfHCKZkcBV9Eo
+         Rl8w==
+X-Gm-Message-State: AOAM5334tw6nnCmAt1sWf38ZIvwNPAFzGGENRnsMprBIMsfW7dxZ7OpG
+        UYyXIMFjK7uNuKe49FqZfQ==
+X-Google-Smtp-Source: ABdhPJzkwkUaXI6PG8tzsGAmXouYAAtD/aY86iaymO28QoeayfkXaFCBwnqJhl86e+24aOT2mM0y8w==
+X-Received: by 2002:a05:6808:1589:: with SMTP id t9mr41980146oiw.108.1638199833168;
+        Mon, 29 Nov 2021 07:30:33 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id m5sm3007643oim.45.2021.11.29.07.30.35
+        by smtp.gmail.com with ESMTPSA id s17sm2273404ooj.42.2021.11.29.07.30.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 07:30:36 -0800 (PST)
-Received: (nullmailer pid 123615 invoked by uid 1000);
+        Mon, 29 Nov 2021 07:30:32 -0800 (PST)
+Received: (nullmailer pid 123612 invoked by uid 1000);
         Mon, 29 Nov 2021 15:30:31 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Venkata Prasad Potturu <potturu@codeaurora.org>,
-        bjorn.andersson@linaro.org, swboyd@chromium.org, perex@perex.cz,
-        Linus Walleij <linus.walleij@linaro.org>,
-        rohitkr@codeaurora.org, devicetree@vger.kernel.org,
-        bgoswami@codeaurora.org, plai@codeaurora.org, lgirdwood@gmail.com,
-        agross@kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, tiwai@suse.com,
-        judyhsiao@chromium.org, srinivas.kandagatla@linaro.org,
-        broonie@kernel.org, robh+dt@kernel.org, linux-gpio@vger.kernel.org
-In-Reply-To: <1638179932-3353-2-git-send-email-srivasam@codeaurora.org>
-References: <1638179932-3353-1-git-send-email-srivasam@codeaurora.org> <1638179932-3353-2-git-send-email-srivasam@codeaurora.org>
-Subject: Re: [PATCH v3 1/5] dt-bindings: pinctrl: qcom: Update lpass lpi file name to SoC specific
+To:     Fenglin Wu <quic_fenglinw@quicinc.com>
+Cc:     sboyd@kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, collinsd@codeaurora.org,
+        Rob Herring <robh+dt@kernel.org>, subbaram@codeaurora.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <1638174137-23290-11-git-send-email-quic_fenglinw@quicinc.com>
+References: <1638174137-23290-1-git-send-email-quic_fenglinw@quicinc.com> <1638174137-23290-11-git-send-email-quic_fenglinw@quicinc.com>
+Subject: Re: [PATCH v3 10/10] dt-bindings: convert qcom,spmi-pmic-arb binding to YAML format
 Date:   Mon, 29 Nov 2021 09:30:31 -0600
-Message-Id: <1638199831.124829.123614.nullmailer@robh.at.kernel.org>
+Message-Id: <1638199831.114024.123611.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 15:28:48 +0530, Srinivasa Rao Mandadapu wrote:
-> Change generic lpass lpi pincotrol bindings file to SoC specific file,
-> to distinguish and accomadate other SoC specific dt bindings.
+On Mon, 29 Nov 2021 16:22:17 +0800, Fenglin Wu wrote:
+> Convert the SPMI PMIC arbiter documentation to JSON/yaml. While at it,
+> update SPMI bus "reg" items constraint for SPMI PMIC arbiter to carry
+> it and update it with a smaller range.
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
-> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
+> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
 > ---
->  .../bindings/pinctrl/qcom,lpass-lpi-pinctrl.yaml   | 130 ---------------------
->  .../pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml     | 130 +++++++++++++++++++++
->  2 files changed, 130 insertions(+), 130 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,lpass-lpi-pinctrl.yaml
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml
+>  .../bindings/spmi/qcom,spmi-pmic-arb.txt           |  67 -----------
+>  .../bindings/spmi/qcom,spmi-pmic-arb.yaml          | 128 +++++++++++++++++++++
+>  Documentation/devicetree/bindings/spmi/spmi.yaml   |   3 +-
+>  3 files changed, 130 insertions(+), 68 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
+>  create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml:37:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
+./Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml:41:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/pinctrl/qcom,sm8250-lpass-lpi-pinctrl.yaml#
 
 doc reference errors (make refcheckdocs):
+Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.txt: Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
 
-See https://patchwork.ozlabs.org/patch/1561071
+See https://patchwork.ozlabs.org/patch/1561055
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

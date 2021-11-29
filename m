@@ -2,212 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8184611B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33ADB46114D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240390AbhK2KIv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 05:08:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36552 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344417AbhK2KGr (ORCPT
+        id S241674AbhK2Jwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 04:52:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36417 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238670AbhK2Jua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:06:47 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6512C0617A0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 01:45:34 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mrdDw-0000Zg-Ul; Mon, 29 Nov 2021 10:45:24 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mrdDv-0003uZ-4L; Mon, 29 Nov 2021 10:45:23 +0100
-Message-ID: <9640ea147188dc18586a399d903cd5a8759e2714.camel@pengutronix.de>
-Subject: Re: [PATCH v2 1/2] rtc: Add driver for Sunplus SP7021
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Vincent Shih <vincent.sunplus@gmail.com>, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
-        linux-rtc@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org, wells.lu@sunplus.com,
-        in-reply-to=1635834123-24668-1-git-send-email-vincent.shih@sunplus.com
-Cc:     Vincent Shih <vincent.shih@sunplus.com>
-Date:   Mon, 29 Nov 2021 10:45:23 +0100
-In-Reply-To: <1636439898-7358-2-git-send-email-vincent.shih@sunplus.com>
-References: <1636439898-7358-1-git-send-email-vincent.shih@sunplus.com>
-         <1636439898-7358-2-git-send-email-vincent.shih@sunplus.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Mon, 29 Nov 2021 04:50:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638179232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mwp0gBwc6gvcsvlfC3q+oEEiELWsgNE32DBmNySkG/Y=;
+        b=Qiv5CECZ5Ynm75FUllfaPBK3FTAbjvVT3e/ontYYDHHo/lTm4+U0Olgi6n9bpYhRHl69ta
+        DY8j9EIgYnRU2kkT/BJdGeVd9QgTz8b6APN1tNjddIdXNyIe8Emq95KwHGY/OQiVZd5ywn
+        4EpVT6r3EJyV3OVDIbu9Ll0cWITLvqQ=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-120-eM9-RiCANdaAlYaBqO-uFw-1; Mon, 29 Nov 2021 04:47:09 -0500
+X-MC-Unique: eM9-RiCANdaAlYaBqO-uFw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3924183DD20;
+        Mon, 29 Nov 2021 09:47:08 +0000 (UTC)
+Received: from fedora.redhat.com (unknown [10.39.195.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 814465D6B1;
+        Mon, 29 Nov 2021 09:47:06 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/4] KVM: nVMX: Enlightened MSR Bitmap feature for Hyper-V on KVM
+Date:   Mon, 29 Nov 2021 10:47:00 +0100
+Message-Id: <20211129094704.326635-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+Changes since "[PATCH v4 0/8] KVM: nVMX: Enlightened MSR Bitmap feature for
+Hyper-V on KVM (+ KVM: x86: MSR filtering and related fixes)":
+- Drop Sean's "KVM: x86: MSR filtering and related fixes" as they're
+ already queued, rebase to the latest kvm/queue.
 
-On Tue, 2021-11-09 at 14:38 +0800, Vincent Shih wrote:
-[...]
-> +struct sunplus_rtc {
-> +	struct clk *rtcclk;
-> +	struct reset_control *rstc;
-> +	void __iomem *base;
-> +	u32 ohms;
-> +};
-> +
-> +struct sunplus_rtc sp_rtc;
+Original description of the feature:
 
-Why is this global?
+Updating MSR bitmap for L2 is not cheap and rearly needed. TLFS for Hyper-V
+offers 'Enlightened MSR Bitmap' feature which allows L1 hypervisor to
+inform L0 when it changes MSR bitmap, this eliminates the need to examine
+L1's MSR bitmap for L2 every time when 'real' MSR bitmap for L2 gets
+constructed.
 
+When the feature is enabled for Win10+WSL2, it shaves off around 700 CPU
+cycles from a nested vmexit cost (tight cpuid loop test).
 
-[...]
-> +static int sp_rtc_probe(struct platform_device *plat_dev)
-> +{
-> +	struct rtc_device *rtc;
-> +	struct resource *res;
-> +	const struct rtc_class_ops *rtc_ops;
-> +	void __iomem *reg_base;
-> +	int ret, irq;
-> +
-> +	memset(&sp_rtc, 0, sizeof(sp_rtc));
+First patch of the series is unrelated to the newly implemented feature,
+it fixes a bug in Enlightened MSR Bitmap usage when KVM runs as a nested
+hypervisor on top of Hyper-V.
 
-I'd allocate device private data here with devm_kzalloc() instead.
+Vitaly Kuznetsov (4):
+  KVM: nVMX: Don't use Enlightened MSR Bitmap for L3
+  KVM: VMX: Introduce vmx_msr_bitmap_l01_changed() helper
+  KVM: nVMX: Track whether changes in L0 require MSR bitmap for L2 to be
+    rebuilt
+  KVM: nVMX: Implement Enlightened MSR Bitmap feature
 
-> +	// find and map our resources
-> +	res = platform_get_resource_byname(plat_dev, IORESOURCE_MEM, RTC_REG_NAME);
-> +
-> +	if (res) {
-> +		dev_dbg(&plat_dev->dev, "res = 0x%x\n", res->start);
-> +
-> +		reg_base = devm_ioremap_resource(&plat_dev->dev, res);
+ arch/x86/kvm/hyperv.c     |  2 ++
+ arch/x86/kvm/vmx/nested.c | 23 +++++++++++++++++++++-
+ arch/x86/kvm/vmx/vmx.c    | 41 ++++++++++++++++++++++++++-------------
+ arch/x86/kvm/vmx/vmx.h    |  9 +++++++++
+ 4 files changed, 61 insertions(+), 14 deletions(-)
 
-There is no need to check res before feeding it into
-devm_ioremap_resource(). You can simplify this even further with
-devm_platform_ioremap_resource_by_name().
+-- 
+2.33.1
 
-> +		if (IS_ERR(reg_base)) {
-> +			dev_err(&plat_dev->dev, "%s devm_ioremap_resource fail\n", RTC_REG_NAME);
-> +			return PTR_ERR(reg_base);
-> +		}
-> +
-> +		dev_dbg(&plat_dev->dev, "reg_base = 0x%lx\n", (unsigned long)reg_base);
-> +	}
-> +
-> +	sp_rtc.base = reg_base;
-> +	rtc_ops = &sp_rtc_ops;
-> +
-> +	// Keep RTC from system reset
-> +	writel(DIS_SYS_RST_RTC_MASK | DIS_SYS_RST_RTC, sp_rtc.base + RTC_CTRL);
-
-Are you allowed to write to sp_rtc.base registers before releasing the
-reset?
-
-> +	// request irq
-> +	irq = platform_get_irq(plat_dev, 0);
-> +	if (irq < 0) {
-> +		dev_err(&plat_dev->dev, "platform_get_irq failed\n");
-> +		irq = IRQ_NOTCONNECTED;
-
-By doing this you are making devm_request_irq() below return -ENOTCONN.
-Why not return the real error code right here?
-
-		return dev_err_probe(&plat_dev->dev, irq, "platform_get_irq failed\n");
-
-> +	}
-> +
-> +	ret = devm_request_irq(&plat_dev->dev, irq, rtc_irq_handler,
-> +					IRQF_TRIGGER_RISING, "rtc irq", plat_dev);
-> +	if (ret) {
-> +		dev_err(&plat_dev->dev, "devm_request_irq failed: %d\n", ret);
-> +		return ret;
-
-This could be shortened to:
-
-		return dev_err_probe(&plat_dev->dev, ret, "devm_request_irq failed\n");
-
-> +	}
-> +
-> +	// Setup trickle charger
-> +	if (plat_dev->dev.of_node)
-> +		sp_rtc_set_trickle_charger(plat_dev->dev);
-> +
-> +	// reset
-> +	sp_rtc.rstc = devm_reset_control_get_exclusive(&plat_dev->dev, NULL);
-> +	if (IS_ERR(sp_rtc.rstc)) {
-> +		ret = dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc.rstc),
-> +					    "failed to retrieve reset controller\n");
-> +		return PTR_ERR(sp_rtc.rstc);
-
-This could be shortened to:
-
-		return dev_err_probe(&plat_dev->dev, PTR_ERR(sp_rtc.rstc),
-				     "failed to retrieve reset controller\n");
-
-> +	}
-> +
-> +	// clk
-> +	sp_rtc.rtcclk = devm_clk_get(&plat_dev->dev, NULL);
-> +	if (IS_ERR(sp_rtc.rtcclk)) {
-> +		dev_err(&plat_dev->dev, "devm_clk_get fail\n");
-> +		return PTR_ERR(sp_rtc.rtcclk);
-
-
-> +	}
-> +
-> +	ret = reset_control_deassert(sp_rtc.rstc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = clk_prepare_enable(sp_rtc.rtcclk);
-> +	if (ret)
-
-Assert reset on failure?
-
-> +		return ret;
-> +
-> +	device_init_wakeup(&plat_dev->dev, 1);
-> +
-> +	rtc = devm_rtc_allocate_device(&plat_dev->dev);
-> +	if (IS_ERR(rtc))
-
-Disable clock and assert reset on failure?
-
-> +		return PTR_ERR(rtc);
-> +
-> +	rtc->range_max = U32_MAX;
-> +	rtc->range_min = 0;
-> +	rtc->ops = rtc_ops;
-> +
-> +	ret = devm_rtc_register_device(rtc);
-> +	if (ret)
-> +		goto free_reset_assert_clk;
-> +
-> +	platform_set_drvdata(plat_dev, rtc);
-> +	dev_info(&plat_dev->dev, "sp7021-rtc loaded\n");
-> +
-> +	return 0;
-> +
-> +free_reset_assert_clk:
-> +	reset_control_assert(sp_rtc.rstc);
-> +	clk_disable_unprepare(sp_rtc.rtcclk);
-
-Should this be the other way around? I'd expect this to be in the
-opposite order of reset deassert and clock enable.
-
-> +
-> +	return ret;
-> +}
-> +
-> +static int sp_rtc_remove(struct platform_device *plat_dev)
-> +{
-> +	reset_control_assert(sp_rtc.rstc);
-> +	clk_disable_unprepare(sp_rtc.rtcclk);
-
-Same as above.
-
-regards
-Philipp

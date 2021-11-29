@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C02D461E6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0E0B461F2D
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378862AbhK2Sf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:35:56 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:49666 "EHLO
+        id S1379675AbhK2Sog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:44:36 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:56130 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354060AbhK2Sdn (ORCPT
+        with ESMTP id S237476AbhK2Slz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:33:43 -0500
+        Mon, 29 Nov 2021 13:41:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E565ACE13D8;
-        Mon, 29 Nov 2021 18:30:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 925DEC53FAD;
-        Mon, 29 Nov 2021 18:30:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E1676CE139A;
+        Mon, 29 Nov 2021 18:38:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 910E5C53FC7;
+        Mon, 29 Nov 2021 18:38:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210623;
-        bh=ekOMC+f+5hqO9GySoujz7LeoR6eGO8jYlRMMD/LOsK4=;
+        s=korg; t=1638211114;
+        bh=hWETnBSe4qogJq67JHOa6T+6Lo9CUK5lNWwv2SQokTc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TPKKH11Ww3wAI40g4pKxxogzJSjSq5XhxQYJXgoIb0Gk3jGT1wdUL6bPdFCTEYGfV
-         BpwMkBBTo9FPpX47I3k54R7WcNdnOtjysHLNTa6VTEYBswRxkSefyirPijGTaaRCMh
-         17NRuzongTbPkCbw39dsTQ3ffzgO4L4+uFm2ZhHQ=
+        b=04cneB6xfmmVoNn+KBTgZKu2h92bC9Jvux/gjbrn2ZbOC8R3f7sOr8N8Zk/Uo6l0z
+         +9G2RQw3z0p/BfuajWCittangf0oZSm0frkWEIEVGHK4RVYOHUzdzJMMDjsRL2HSRE
+         MYiHInLhY1U985/b0m9jsA6LikagyigMJ131vtWo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Nitesh B Venkatesh <nitesh.b.venkatesh@intel.com>,
-        George Kuruvinakunnel <george.kuruvinakunnel@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 060/121] iavf: Prevent changing static ITR values if adaptive moderation is on
+        stable@vger.kernel.org, Claudia Pellegrino <linux@cpellegrino.de>,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 097/179] HID: magicmouse: prevent division by 0 on scroll
 Date:   Mon, 29 Nov 2021 19:18:11 +0100
-Message-Id: <20211129181713.667127489@linuxfoundation.org>
+Message-Id: <20211129181722.119489930@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,89 +46,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nitesh B Venkatesh <nitesh.b.venkatesh@intel.com>
+From: Claudia Pellegrino <linux@cpellegrino.de>
 
-[ Upstream commit e792779e6b639c182df91b46ac1e5803460b0b15 ]
+[ Upstream commit a1091118e0d6d84c2fdb94e6c397ac790bfb9dd6 ]
 
-Resolve being able to change static values on VF when adaptive interrupt
-moderation is enabled.
+In hid_magicmouse, if the user has set scroll_speed to a value between
+55 and 63 and scrolls seven times in quick succession, the
+step_hr variable in the magicmouse_emit_touch function becomes 0.
 
-This problem is fixed by checking the interrupt settings is not
-a combination of change of static value while adaptive interrupt
-moderation is turned on.
+That causes a division by zero further down in the function when
+it does `step_x_hr /= step_hr`.
 
-Without this fix, the user would be able to change static values
-on VF with adaptive moderation enabled.
+To reproduce, create `/etc/modprobe.d/hid_magicmouse.conf` with the
+following content:
 
-Fixes: 65e87c0398f5 ("i40evf: support queue-specific settings for interrupt moderation")
-Signed-off-by: Nitesh B Venkatesh <nitesh.b.venkatesh@intel.com>
-Tested-by: George Kuruvinakunnel <george.kuruvinakunnel@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
+```
+options hid_magicmouse scroll_acceleration=1 scroll_speed=55
+```
+
+Then reboot, connect a Magic Mouse and scroll seven times quickly.
+The system will freeze for a minute, and after that `dmesg` will
+confirm that a division by zero occurred.
+
+Enforce a minimum of 1 for the variable so the high resolution
+step count can never reach 0 even at maximum scroll acceleration.
+
+Fixes: d4b9f10a0eb6 ("HID: magicmouse: enable high-resolution scroll")
+
+Signed-off-by: Claudia Pellegrino <linux@cpellegrino.de>
+Tested-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../net/ethernet/intel/iavf/iavf_ethtool.c    | 30 ++++++++++++++++---
- 1 file changed, 26 insertions(+), 4 deletions(-)
+ drivers/hid/hid-magicmouse.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-index ea85b06857fa2..90f5ec982d513 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-@@ -719,12 +719,31 @@ static int iavf_get_per_queue_coalesce(struct net_device *netdev, u32 queue,
-  *
-  * Change the ITR settings for a specific queue.
-  **/
--static void iavf_set_itr_per_queue(struct iavf_adapter *adapter,
--				   struct ethtool_coalesce *ec, int queue)
-+static int iavf_set_itr_per_queue(struct iavf_adapter *adapter,
-+				  struct ethtool_coalesce *ec, int queue)
- {
- 	struct iavf_ring *rx_ring = &adapter->rx_rings[queue];
- 	struct iavf_ring *tx_ring = &adapter->tx_rings[queue];
- 	struct iavf_q_vector *q_vector;
-+	u16 itr_setting;
-+
-+	itr_setting = rx_ring->itr_setting & ~IAVF_ITR_DYNAMIC;
-+
-+	if (ec->rx_coalesce_usecs != itr_setting &&
-+	    ec->use_adaptive_rx_coalesce) {
-+		netif_info(adapter, drv, adapter->netdev,
-+			   "Rx interrupt throttling cannot be changed if adaptive-rx is enabled\n");
-+		return -EINVAL;
-+	}
-+
-+	itr_setting = tx_ring->itr_setting & ~IAVF_ITR_DYNAMIC;
-+
-+	if (ec->tx_coalesce_usecs != itr_setting &&
-+	    ec->use_adaptive_tx_coalesce) {
-+		netif_info(adapter, drv, adapter->netdev,
-+			   "Tx interrupt throttling cannot be changed if adaptive-tx is enabled\n");
-+		return -EINVAL;
-+	}
+diff --git a/drivers/hid/hid-magicmouse.c b/drivers/hid/hid-magicmouse.c
+index 686788ebf3e1e..d7687ce706144 100644
+--- a/drivers/hid/hid-magicmouse.c
++++ b/drivers/hid/hid-magicmouse.c
+@@ -256,8 +256,11 @@ static void magicmouse_emit_touch(struct magicmouse_sc *msc, int raw_id, u8 *tda
+ 		unsigned long now = jiffies;
+ 		int step_x = msc->touches[id].scroll_x - x;
+ 		int step_y = msc->touches[id].scroll_y - y;
+-		int step_hr = ((64 - (int)scroll_speed) * msc->scroll_accel) /
+-			      SCROLL_HR_STEPS;
++		int step_hr =
++			max_t(int,
++			      ((64 - (int)scroll_speed) * msc->scroll_accel) /
++					SCROLL_HR_STEPS,
++			      1);
+ 		int step_x_hr = msc->touches[id].scroll_x_hr - x;
+ 		int step_y_hr = msc->touches[id].scroll_y_hr - y;
  
- 	rx_ring->itr_setting = ITR_REG_ALIGN(ec->rx_coalesce_usecs);
- 	tx_ring->itr_setting = ITR_REG_ALIGN(ec->tx_coalesce_usecs);
-@@ -747,6 +766,7 @@ static void iavf_set_itr_per_queue(struct iavf_adapter *adapter,
- 	 * the Tx and Rx ITR values based on the values we have entered
- 	 * into the q_vector, no need to write the values now.
- 	 */
-+	return 0;
- }
- 
- /**
-@@ -788,9 +808,11 @@ static int __iavf_set_coalesce(struct net_device *netdev,
- 	 */
- 	if (queue < 0) {
- 		for (i = 0; i < adapter->num_active_queues; i++)
--			iavf_set_itr_per_queue(adapter, ec, i);
-+			if (iavf_set_itr_per_queue(adapter, ec, i))
-+				return -EINVAL;
- 	} else if (queue < adapter->num_active_queues) {
--		iavf_set_itr_per_queue(adapter, ec, queue);
-+		if (iavf_set_itr_per_queue(adapter, ec, queue))
-+			return -EINVAL;
- 	} else {
- 		netif_info(adapter, drv, netdev, "Invalid queue value, queue range is 0 - %d\n",
- 			   adapter->num_active_queues - 1);
 -- 
 2.33.0
 

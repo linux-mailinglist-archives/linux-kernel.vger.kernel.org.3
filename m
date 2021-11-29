@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0310246129B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B1FA4612BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346339AbhK2KnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:43:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S1351263AbhK2Kp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:45:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbhK2KlA (ORCPT
+        with ESMTP id S233119AbhK2Knx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:41:00 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C411CC061D7B
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 02:05:03 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id o29so14068066wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 02:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=j8YTcg+1dTFTO23r7MDGqSVdl1/KFj5U5/34hL1utAw=;
-        b=UpwehIOVZVYAMfZWJXe+6dKMpX2a955o0Am0NoH63zd/e+M2CRewQF5sSm7jEJDujD
-         AR8gelRmYTrnsgnx2/iHYOzL21xbS+QO19AbG9mChlHdcGXRduRcpQm0xv9FmpZ0bZvN
-         OHojwoyXklHSqZQDc++86N+vX4Cr30GJ11Cx65ovjDJU+dTKjV+SuqjGAn4z4JLJp2Kl
-         x9pFmcogARsG1r2Pflyrv1wlNXasT4UkK3V78s7g0SqCIIv7+71LGP6KhWPwHzAKmI/o
-         QoOwwuqamqsDvU8oxFfNEAz6J0UPn26l9Pq6C6AKgkh2CLoWUQyOnki9eYCf8tKYeLnq
-         u2qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=j8YTcg+1dTFTO23r7MDGqSVdl1/KFj5U5/34hL1utAw=;
-        b=jY0odDwRlkgeu+g/clWKvo62ecQVfMra0ivbCwgei90Ih+Im3EKp+vwU5lj+aaF4Tl
-         h11BoqALTtk4Q0xoeg7AUrP3rszp+MdlHLXyAZY9w6Qscjb21fHs0HW9SReCTAd6UF/8
-         wOCtJFHmbhQOwWyPJSWGJ3uVFfE9zDNnTMerg74CuF2rQwarKDOgncgTMDtSgR7l8tpA
-         xrKJa7edgviQAJ+L0GmNNYHj0rp06LdT6rr/ir/ISxTO1Ku0G7iJEaqkmD9BQbby1foB
-         pxHV2WWHbXQ0ZQC31SnsbYvxskA6wY+BRWG0ng4BMhA97VjYAs86cEnCTzCIm+cK744L
-         971g==
-X-Gm-Message-State: AOAM530SRfOj87EUyNtzzRenFC+kivm0e9PqerI0oHwAdUHI5YP9GCT5
-        jb85VR4BWKPF4olV4YnmRLgcSSui5UPGGg==
-X-Google-Smtp-Source: ABdhPJx0JDF6B1QQrjYMHL6ELjznLsIUZcaaPZWDgfQSZkTzGlJ8SC5q1ynvpOTzcoMdjWkEsLo/ng==
-X-Received: by 2002:a1c:3546:: with SMTP id c67mr34844121wma.43.1638180302107;
-        Mon, 29 Nov 2021 02:05:02 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd? ([2a01:e34:ed2f:f020:8236:a2e5:8d62:e9cd])
-        by smtp.googlemail.com with ESMTPSA id az15sm13729416wmb.0.2021.11.29.02.05.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 02:05:01 -0800 (PST)
-Subject: Re: [PATCH] thermal: intel_powerclamp: Constify static
- thermal_cooling_device_ops
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211128214641.30953-1-rikard.falkeborn@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <b1bf88bc-413f-c3fd-6246-111d69e9ed93@linaro.org>
-Date:   Mon, 29 Nov 2021 11:04:59 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Mon, 29 Nov 2021 05:43:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100BCC061396;
+        Mon, 29 Nov 2021 02:06:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6748EB80E79;
+        Mon, 29 Nov 2021 10:06:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C17C004E1;
+        Mon, 29 Nov 2021 10:06:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638180413;
+        bh=uitWIyNTXwwm6OoKWtXuF9nygCgs3sTMxZAODgrYAfU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IKKoAc9a1ic9NcZI4k1mpaYfaDltZw2XNo2118zFf7SKo+s3k4/pm6ZfmFHeAoniU
+         SwSC3oPI+cy6wJh3uaBmWEP9ZB7MCPJE/B1CAgoD9o9HYWiw7qXMz/nYpHjUNhPu8Q
+         n8TCCf0/7olBiJZRnMv/rUppn9OV83rNePMCvDawKXYqdy/1AobP7hgqt6zAJoIwEN
+         ZIKpJBng0OpeKGlPDr7RkCCahxvtulOxV37bVVl1mVrRId9fTOmXhXFHjfNIAJalnX
+         KhjARqoo72iGt53sFrGLs05clJdxDPrdChpMlPj00Z55VBDQc2lnLX6kOfoh5yvAB5
+         Cz8i3RRdZTHLA==
+Date:   Mon, 29 Nov 2021 11:06:50 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>
+Cc:     Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches - M43218 <Ludovic.Desroches@microchip.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 0/2] i2c: at91: Add support for programmable clock source
+Message-ID: <YaSmOgH9MP0Kag0s@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Horatiu Vultur - M31836 <Horatiu.Vultur@microchip.com>,
+        Codrin Ciubotariu - M19940 <Codrin.Ciubotariu@microchip.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        Nicolas Ferre - M43238 <Nicolas.Ferre@microchip.com>,
+        "alexandre.belloni@bootlin.com" <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches - M43218 <Ludovic.Desroches@microchip.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20211012140718.2138278-1-horatiu.vultur@microchip.com>
+ <8a775c67-00a3-1dbe-daa3-09a537f482d8@microchip.com>
+ <20211013114144.7j4scdaq2rjfmiwn@soft-dev3-1.localhost>
+ <YYWmZMc8eVq5SZYj@kunai>
+ <eb2120c3-540e-64db-8b70-c2b29f23e3cc@microchip.com>
+ <20211108092942.uulvtqoi36wnbisg@soft-dev3-1.localhost>
 MIME-Version: 1.0
-In-Reply-To: <20211128214641.30953-1-rikard.falkeborn@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="kYzvNRaC+UDmnAMR"
+Content-Disposition: inline
+In-Reply-To: <20211108092942.uulvtqoi36wnbisg@soft-dev3-1.localhost>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2021 22:46, Rikard Falkeborn wrote:
-> The only usage of powerclamp_cooling_ops is to pass its address to
-> thermal_cooling_device_register(), which takes a pointer to const struct
-> thermal_cooling_device_ops. Make it const to allow the compiler to put
-> it in read-only memory.
-> 
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
 
-Applied, thanks
-
-> ---
->  drivers/thermal/intel/intel_powerclamp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/thermal/intel/intel_powerclamp.c b/drivers/thermal/intel/intel_powerclamp.c
-> index 9b68489a2356..14256421d98c 100644
-> --- a/drivers/thermal/intel/intel_powerclamp.c
-> +++ b/drivers/thermal/intel/intel_powerclamp.c
-> @@ -641,7 +641,7 @@ static int powerclamp_set_cur_state(struct thermal_cooling_device *cdev,
->  }
->  
->  /* bind to generic thermal layer as cooling device*/
-> -static struct thermal_cooling_device_ops powerclamp_cooling_ops = {
-> +static const struct thermal_cooling_device_ops powerclamp_cooling_ops = {
->  	.get_max_state = powerclamp_get_max_state,
->  	.get_cur_state = powerclamp_get_cur_state,
->  	.set_cur_state = powerclamp_set_cur_state,
-> 
+--kYzvNRaC+UDmnAMR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+> > > Not even patch 1/2?
+> >=20
+> > we can keep the new compatible, but patch 2/2 needs to be split.
+>=20
+> For me it is OK to use the compatible string 'microchip,sam9x60-i2c'
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+I'll drop this patch for now. If anyone is still interested in it,
+please resend.
+
+
+--kYzvNRaC+UDmnAMR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkpjoACgkQFA3kzBSg
+KbYgag//bafEUOij4Wvxhxw39Z6jv2XeGguyQkh5gVuO3B54PNNqSSpOPjzHhWat
+Kiqt1hZSer7cQIaIM7WApLkMDjwNl70w2k0t+UsfnEwFp4WH67J6k+xOGs7VOanF
+c9ncopG6YzhlsEFegaYOyXKgHihGF7FYUxmZus8BMpWv4ihRCBotdnR5+nPP6emH
+8DeB6J6sLkW6Jw/c8wgARhGxAhA9UqJItIQNExOPh34QSY3fK86EnJIwyr6zLLQV
+aWT9Vv3ZIEnVc4QTa59O9MI0Miq7sN7mU3Q/GKGQhcP9BNXYheDIiIa8Ra8FXxwZ
+fibnPzQqHfhPbb0uIM77ygeWOFH8CpS+Sql5PotMmHs4/xK5l6o+HU5o7oLJko8M
+X0xWhWX1GRctascxVvIiXpdfZhVhv0kJUeYyTVcuiw+nJmt0IJAxzpxMFbWMiHVC
+hoFyOSRDNr/wy2DMSLo9hxAgdOXl2gkk2MDliDgm+PSO1lgXPrMLQZD5k9h2hc29
+8wE95a6ITv3mGzK2V+FclgAMjANqpORCe15WQcCd2fibWoWq8UyTEG43kV6MWIgn
+3Bc8Uo9hNwuC9xvlNLLUomL7oc+Vuv1bIG7WBOaU17oFFPDr4PPIzvD02cCW/B/r
+C1uPi5hZcN7e2ovsyOtev/QxEvt2lJie/8Lqw1PBLVsAdOH71+w=
+=Aykl
+-----END PGP SIGNATURE-----
+
+--kYzvNRaC+UDmnAMR--

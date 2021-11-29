@@ -2,141 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3407B4615F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AB34615ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377830AbhK2NP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:15:57 -0500
-Received: from ivanoab7.miniserver.com ([37.128.132.42]:59734 "EHLO
-        www.kot-begemot.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232987AbhK2NN4 (ORCPT
+        id S1377649AbhK2NP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:15:28 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:56392 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1377835AbhK2NN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:13:56 -0500
-Received: from [192.168.18.6] (helo=jain.kot-begemot.co.uk)
-        by www.kot-begemot.co.uk with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1mrgQP-0006O0-Uz; Mon, 29 Nov 2021 13:10:34 +0000
-Received: from jain.kot-begemot.co.uk ([192.168.3.3])
-        by jain.kot-begemot.co.uk with esmtp (Exim 4.94.2)
-        (envelope-from <anton.ivanov@cambridgegreys.com>)
-        id 1mrgQK-00B6LL-Gu; Mon, 29 Nov 2021 13:10:26 +0000
-From:   anton.ivanov@cambridgegreys.com
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        linux-kernel@vger.kernel.org
-Cc:     Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Subject: [PATCH] ixgbe: Restore crypto offload for tunnel mode where possile
-Date:   Mon, 29 Nov 2021 13:09:58 +0000
-Message-Id: <20211129130958.2642851-1-anton.ivanov@cambridgegreys.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 29 Nov 2021 08:13:26 -0500
+Received: from mail.kernel.org (unknown [198.145.29.99])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D2984614D4;
+        Mon, 29 Nov 2021 13:10:08 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id 4EDA560184;
+        Mon, 29 Nov 2021 13:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638191408;
+        bh=LbXp/8u1CeGkCAxRN5Nfg4W8o4qGxClR38ODgpiv/kQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=ioCJIjjWs6s6kxDYH45CfgnKLYoSzAW72I3L6D+uWC66WG5gPxqrbsgA7q7omNtPG
+         hs3wfbSUIkir17tS9FSnXFk0JSBobJHDavhoS7vh2LyiqN73Z6eT9CYL7CMCDCbxyb
+         ynZmnfCxwUjDF8gfFO//lhhnDUd1c4HvKDfHUuRlHaz/HMHoq7Jh2yGlG40Y+R4G07
+         fH7gwscfStaD4Ci7r7jL76Fm1aqqYMSlRe9YlsHy93gHDgtsY/+Rwyk2W/Ki2psMpH
+         36nUQg7fZ3WnuGb1k3Fvu7TRee2i9UvJb1G17YXO2du8/CVDOD01f8pqY2Q48QRTd5
+         6VW3xZl0cc7+g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4095160A4D;
+        Mon, 29 Nov 2021 13:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0
-X-Spam-Score: -1.0
-X-Clacks-Overhead: GNU Terry Pratchett
+Subject: Re: [PATCH] net/mlx4_en: Update reported link modes for 1/10G
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163819140825.10588.15476422794960132673.git-patchwork-notify@kernel.org>
+Date:   Mon, 29 Nov 2021 13:10:08 +0000
+References: <20211128123712.82096-1-erik@kryo.se>
+In-Reply-To: <20211128123712.82096-1-erik@kryo.se>
+To:     Erik Ekman <erik@kryo.se>
+Cc:     tariqt@nvidia.com, davem@davemloft.net, kuba@kernel.org,
+        michael@stapelberg.ch, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Hello:
 
-Commit d785e1fec60179f534fbe8d006c890e5ad186e51 disabled IPSEC
-in tunnel mode as not working.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-It actually works correctly for TX if (and only if) TSO is disabled on the
-interace. Hence, the offload in tunnel mode needs to be disabled only for RX.
+On Sun, 28 Nov 2021 13:37:11 +0100 you wrote:
+> When link modes were initially added in commit 2c762679435dc
+> ("net/mlx4_en: Use PTYS register to query ethtool settings") and
+> later updated for the new ethtool API in commit 3d8f7cc78d0eb
+> ("net: mlx4: use new ETHTOOL_G/SSETTINGS API") the only 1/10G non-baseT
+> link modes configured were 1000baseKX, 10000baseKX4 and 10000baseKR.
+> It looks like these got picked to represent other modes since nothing
+> better was available.
+> 
+> [...]
 
-CPU usage for TX side softirq thread without the patch ~ 88%. With the
-patch < 20%. Tested using iperf. If the RX side is Linux with ixgbe
-there is no difference in throughput, because the bottleneck is at
-the RX end where the softirq thread is at 100%. If, however, the RX side is
-capable of line rate, I would expect this patch to allow Linux to reach
-line rate for TX.
+Here is the summary with links:
+  - net/mlx4_en: Update reported link modes for 1/10G
+    https://git.kernel.org/netdev/net/c/2191b1dfef7d
 
-Fixes: d785e1fec60179f534fbe8d006c890e5ad186e51 ixgbe: fail to create xfrm offload of IPsec tunnel mode SA
-
-Signed-off-by: Anton Ivanov <anton.ivanov@cambridgegreys.com>
----
- drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c | 15 ++++++++++-----
- drivers/net/ethernet/intel/ixgbevf/ipsec.c     | 15 ++++++++++-----
- 2 files changed, 20 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-index e596e1a9fc75..98bd9d91d451 100644
---- a/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-+++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_ipsec.c
-@@ -575,11 +575,6 @@ static int ixgbe_ipsec_add_sa(struct xfrm_state *xs)
- 		return -EINVAL;
- 	}
- 
--	if (xs->props.mode != XFRM_MODE_TRANSPORT) {
--		netdev_err(dev, "Unsupported mode for ipsec offload\n");
--		return -EINVAL;
--	}
--
- 	if (ixgbe_ipsec_check_mgmt_ip(xs)) {
- 		netdev_err(dev, "IPsec IP addr clash with mgmt filters\n");
- 		return -EINVAL;
-@@ -588,6 +583,11 @@ static int ixgbe_ipsec_add_sa(struct xfrm_state *xs)
- 	if (xs->xso.flags & XFRM_OFFLOAD_INBOUND) {
- 		struct rx_sa rsa;
- 
-+		if (xs->props.mode != XFRM_MODE_TRANSPORT) {
-+			netdev_err(dev, "IPsec inbound offload supported only for transport mode\n");
-+			return -EINVAL;
-+		}
-+
- 		if (xs->calg) {
- 			netdev_err(dev, "Compression offload not supported\n");
- 			return -EINVAL;
-@@ -699,6 +699,11 @@ static int ixgbe_ipsec_add_sa(struct xfrm_state *xs)
- 	} else {
- 		struct tx_sa tsa;
- 
-+		if (xs->props.mode != XFRM_MODE_TRANSPORT && (dev->features & NETIF_F_TSO)) {
-+			netdev_err(dev, "Cannot support tunnel mode IPsec offload and TSO simultaneously\n");
-+			return -EINVAL;
-+		}
-+
- 		if (adapter->num_vfs &&
- 		    adapter->bridge_mode != BRIDGE_MODE_VEPA)
- 			return -EOPNOTSUPP;
-diff --git a/drivers/net/ethernet/intel/ixgbevf/ipsec.c b/drivers/net/ethernet/intel/ixgbevf/ipsec.c
-index e3e4676af9e4..ba15f0477649 100644
---- a/drivers/net/ethernet/intel/ixgbevf/ipsec.c
-+++ b/drivers/net/ethernet/intel/ixgbevf/ipsec.c
-@@ -275,14 +275,14 @@ static int ixgbevf_ipsec_add_sa(struct xfrm_state *xs)
- 		return -EINVAL;
- 	}
- 
--	if (xs->props.mode != XFRM_MODE_TRANSPORT) {
--		netdev_err(dev, "Unsupported mode for ipsec offload\n");
--		return -EINVAL;
--	}
--
- 	if (xs->xso.flags & XFRM_OFFLOAD_INBOUND) {
- 		struct rx_sa rsa;
- 
-+		if (xs->props.mode != XFRM_MODE_TRANSPORT) {
-+			netdev_err(dev, "IPsec inbound offload supported only for transport mode\n");
-+			return -EINVAL;
-+		}
-+
- 		if (xs->calg) {
- 			netdev_err(dev, "Compression offload not supported\n");
- 			return -EINVAL;
-@@ -342,6 +342,11 @@ static int ixgbevf_ipsec_add_sa(struct xfrm_state *xs)
- 	} else {
- 		struct tx_sa tsa;
- 
-+		if (xs->props.mode != XFRM_MODE_TRANSPORT && (dev->features & NETIF_F_TSO)) {
-+			netdev_err(dev, "Cannot support tunnel mode IPsec offload and TSO simultaneously\n");
-+			return -EINVAL;
-+		}
-+
- 		/* find the first unused index */
- 		ret = ixgbevf_ipsec_find_empty_idx(ipsec, false);
- 		if (ret < 0) {
+You are awesome, thank you!
 -- 
-2.30.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

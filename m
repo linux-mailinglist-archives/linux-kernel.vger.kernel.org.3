@@ -2,198 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5199A461D1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439DA461D25
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343745AbhK2R5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 12:57:21 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:37095 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233231AbhK2RzU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 12:55:20 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4J2tCp0Z4fz9sSp;
-        Mon, 29 Nov 2021 18:49:58 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id HmAs7gbUB6xq; Mon, 29 Nov 2021 18:49:58 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4J2tCn6cmbz9sSQ;
-        Mon, 29 Nov 2021 18:49:57 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id D23238B7AF;
-        Mon, 29 Nov 2021 18:49:57 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id PyG3-rNDVByz; Mon, 29 Nov 2021 18:49:57 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.92])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 56A308B7AB;
-        Mon, 29 Nov 2021 18:49:57 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1ATHnoFt015570
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 18:49:50 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1ATHnoRB015569;
-        Mon, 29 Nov 2021 18:49:50 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH v5 5/5] powerpc/inst: Optimise copy_inst_from_kernel_nofault()
-Date:   Mon, 29 Nov 2021 18:49:41 +0100
-Message-Id: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <1f0ede830ccb33a659119a55cb590820c27004db.1638208156.git.christophe.leroy@csgroup.eu>
-References: <1f0ede830ccb33a659119a55cb590820c27004db.1638208156.git.christophe.leroy@csgroup.eu>
+        id S1346126AbhK2R7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:59:14 -0500
+Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:22004 "EHLO
+        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243029AbhK2R5N (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 12:57:13 -0500
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATHSqZK010516;
+        Mon, 29 Nov 2021 17:53:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2021-07-09; bh=zhbwo7WfgNSrBwjya6nNg0MoekvBDhsGS1MJXgyX6UE=;
+ b=vEx/avajp86Db5k1j/NvSHrFLSczjZhm9d5EV0RB9rNMoHr1FgXWM05KmVhCufmxcSHT
+ en5JFadOUTC798Z2FKmkw3ZCnsDCjtrSJkPdCYpfvtWfhqS4FhvulvJHwoyhcSqAqeTY
+ wpebtLEkjSpWmVxwUb/R2ALJ+AqmxOu669u/nh6QWip2CHghuTSBIYmHOPxcTbro5IcW
+ 46cCz6lHaQtZTg8eH0SaquzvQK3F4/Ptb+xYiEyU+lZtNoFOYs9YjWq9dZ2W/6N9vX/I
+ JipzwqFIrIo+aXCDcEh8d5g3I/pi2B7VtkT1r8l7llSEeNwZiGEgXz14fJTfZTbZ+deP KA== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3cmt8c37tk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 17:53:38 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1ATHphqF093410;
+        Mon, 29 Nov 2021 17:53:38 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by userp3030.oracle.com with ESMTP id 3ck9swt6v5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 29 Nov 2021 17:53:37 +0000
+Received: from userp3030.oracle.com (userp3030.oracle.com [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 1ATHrb37099662;
+        Mon, 29 Nov 2021 17:53:37 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.147.25.63])
+        by userp3030.oracle.com with ESMTP id 3ck9swt6u7-1;
+        Mon, 29 Nov 2021 17:53:37 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, ramanan.govindarajan@oracle.com,
+        george.kennedy@oracle.com, vijayendra.suman@oracle.com,
+        stephen@networkplumber.org, syzkaller <syzkaller@googlegroups.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        David Ahern <dsahern@kernel.org>,
+        Florian Westphal <fw@strlen.de>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Alexander Aring <aahringo@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4] net: netlink: af_netlink: Prevent empty skb by adding a check on len.
+Date:   Mon, 29 Nov 2021 09:53:27 -0800
+Message-Id: <20211129175328.55339-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1638208179; l=4527; s=20211009; h=from:subject:message-id; bh=fTslvI2FBnUZmL2VtwTjeTaEtgoSGT27H2cJtyNw/9o=; b=qJN6WXatWGf7mCrm2QqMRz4Ujj8POWEoDwA9M5x+7/QT45KBAPnrDnI3UdbwYeHvEjhztKVTyo7F tt0yFaUvBAav/hwJANW3QhJNU9OMljXdXI3ZYetN1HFe4MN/Qt22
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: TgLBbaBRz3-2R6NoFE6-HtPB5wQAWDLB
+X-Proofpoint-GUID: TgLBbaBRz3-2R6NoFE6-HtPB5wQAWDLB
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-copy_inst_from_kernel_nofault() uses copy_from_kernel_nofault() to
-copy one or two 32bits words. This means calling an out-of-line
-function which itself calls back copy_from_kernel_nofault_allowed()
-then performs a generic copy with loops.
+Adding a check on len parameter to avoid empty skb. This prevents a
+division error in netem_enqueue function which is caused when skb->len=0
+and skb->data_len=0 in the randomized corruption step as shown below.
 
-Rewrite copy_inst_from_kernel_nofault() to do everything at a
-single place and use __get_kernel_nofault() directly to perform
-single accesses without loops.
+skb->data[prandom_u32() % skb_headlen(skb)] ^= 1<<(prandom_u32() % 8);
 
-Allthough the generic function uses pagefault_disable(), it is not
-required on powerpc because do_page_fault() bails earlier when a
-kernel mode fault happens on a kernel address.
+Crash Report:
+[  343.170349] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family
+0 port 6081 - 0
+[  343.216110] netem: version 1.3
+[  343.235841] divide error: 0000 [#1] PREEMPT SMP KASAN NOPTI
+[  343.236680] CPU: 3 PID: 4288 Comm: reproducer Not tainted 5.16.0-rc1+
+[  343.237569] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.11.0-2.el7 04/01/2014
+[  343.238707] RIP: 0010:netem_enqueue+0x1590/0x33c0 [sch_netem]
+[  343.239499] Code: 89 85 58 ff ff ff e8 5f 5d e9 d3 48 8b b5 48 ff ff
+ff 8b 8d 50 ff ff ff 8b 85 58 ff ff ff 48 8b bd 70 ff ff ff 31 d2 2b 4f
+74 <f7> f1 48 b8 00 00 00 00 00 fc ff df 49 01 d5 4c 89 e9 48 c1 e9 03
+[  343.241883] RSP: 0018:ffff88800bcd7368 EFLAGS: 00010246
+[  343.242589] RAX: 00000000ba7c0a9c RBX: 0000000000000001 RCX:
+0000000000000000
+[  343.243542] RDX: 0000000000000000 RSI: ffff88800f8edb10 RDI:
+ffff88800f8eda40
+[  343.244474] RBP: ffff88800bcd7458 R08: 0000000000000000 R09:
+ffffffff94fb8445
+[  343.245403] R10: ffffffff94fb8336 R11: ffffffff94fb8445 R12:
+0000000000000000
+[  343.246355] R13: ffff88800a5a7000 R14: ffff88800a5b5800 R15:
+0000000000000020
+[  343.247291] FS:  00007fdde2bd7700(0000) GS:ffff888109780000(0000)
+knlGS:0000000000000000
+[  343.248350] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  343.249120] CR2: 00000000200000c0 CR3: 000000000ef4c000 CR4:
+00000000000006e0
+[  343.250076] Call Trace:
+[  343.250423]  <TASK>
+[  343.250713]  ? memcpy+0x4d/0x60
+[  343.251162]  ? netem_init+0xa0/0xa0 [sch_netem]
+[  343.251795]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.252443]  netem_enqueue+0xe28/0x33c0 [sch_netem]
+[  343.253102]  ? stack_trace_save+0x87/0xb0
+[  343.253655]  ? filter_irq_stacks+0xb0/0xb0
+[  343.254220]  ? netem_init+0xa0/0xa0 [sch_netem]
+[  343.254837]  ? __kasan_check_write+0x14/0x20
+[  343.255418]  ? _raw_spin_lock+0x88/0xd6
+[  343.255953]  dev_qdisc_enqueue+0x50/0x180
+[  343.256508]  __dev_queue_xmit+0x1a7e/0x3090
+[  343.257083]  ? netdev_core_pick_tx+0x300/0x300
+[  343.257690]  ? check_kcov_mode+0x10/0x40
+[  343.258219]  ? _raw_spin_unlock_irqrestore+0x29/0x40
+[  343.258899]  ? __kasan_init_slab_obj+0x24/0x30
+[  343.259529]  ? setup_object.isra.71+0x23/0x90
+[  343.260121]  ? new_slab+0x26e/0x4b0
+[  343.260609]  ? kasan_poison+0x3a/0x50
+[  343.261118]  ? kasan_unpoison+0x28/0x50
+[  343.261637]  ? __kasan_slab_alloc+0x71/0x90
+[  343.262214]  ? memcpy+0x4d/0x60
+[  343.262674]  ? write_comp_data+0x2f/0x90
+[  343.263209]  ? __kasan_check_write+0x14/0x20
+[  343.263802]  ? __skb_clone+0x5d6/0x840
+[  343.264329]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.264958]  dev_queue_xmit+0x1c/0x20
+[  343.265470]  netlink_deliver_tap+0x652/0x9c0
+[  343.266067]  netlink_unicast+0x5a0/0x7f0
+[  343.266608]  ? netlink_attachskb+0x860/0x860
+[  343.267183]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.267820]  ? write_comp_data+0x2f/0x90
+[  343.268367]  netlink_sendmsg+0x922/0xe80
+[  343.268899]  ? netlink_unicast+0x7f0/0x7f0
+[  343.269472]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.270099]  ? write_comp_data+0x2f/0x90
+[  343.270644]  ? netlink_unicast+0x7f0/0x7f0
+[  343.271210]  sock_sendmsg+0x155/0x190
+[  343.271721]  ____sys_sendmsg+0x75f/0x8f0
+[  343.272262]  ? kernel_sendmsg+0x60/0x60
+[  343.272788]  ? write_comp_data+0x2f/0x90
+[  343.273332]  ? write_comp_data+0x2f/0x90
+[  343.273869]  ___sys_sendmsg+0x10f/0x190
+[  343.274405]  ? sendmsg_copy_msghdr+0x80/0x80
+[  343.274984]  ? slab_post_alloc_hook+0x70/0x230
+[  343.275597]  ? futex_wait_setup+0x240/0x240
+[  343.276175]  ? security_file_alloc+0x3e/0x170
+[  343.276779]  ? write_comp_data+0x2f/0x90
+[  343.277313]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.277969]  ? write_comp_data+0x2f/0x90
+[  343.278515]  ? __fget_files+0x1ad/0x260
+[  343.279048]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.279685]  ? write_comp_data+0x2f/0x90
+[  343.280234]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.280874]  ? sockfd_lookup_light+0xd1/0x190
+[  343.281481]  __sys_sendmsg+0x118/0x200
+[  343.281998]  ? __sys_sendmsg_sock+0x40/0x40
+[  343.282578]  ? alloc_fd+0x229/0x5e0
+[  343.283070]  ? write_comp_data+0x2f/0x90
+[  343.283610]  ? write_comp_data+0x2f/0x90
+[  343.284135]  ? __sanitizer_cov_trace_pc+0x21/0x60
+[  343.284776]  ? ktime_get_coarse_real_ts64+0xb8/0xf0
+[  343.285450]  __x64_sys_sendmsg+0x7d/0xc0
+[  343.285981]  ? syscall_enter_from_user_mode+0x4d/0x70
+[  343.286664]  do_syscall_64+0x3a/0x80
+[  343.287158]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  343.287850] RIP: 0033:0x7fdde24cf289
+[  343.288344] Code: 01 00 48 81 c4 80 00 00 00 e9 f1 fe ff ff 0f 1f 00
+48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f
+05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b7 db 2c 00 f7 d8 64 89 01 48
+[  343.290729] RSP: 002b:00007fdde2bd6d98 EFLAGS: 00000246 ORIG_RAX:
+000000000000002e
+[  343.291730] RAX: ffffffffffffffda RBX: 0000000000000000 RCX:
+00007fdde24cf289
+[  343.292673] RDX: 0000000000000000 RSI: 00000000200000c0 RDI:
+0000000000000004
+[  343.293618] RBP: 00007fdde2bd6e20 R08: 0000000100000001 R09:
+0000000000000000
+[  343.294557] R10: 0000000100000001 R11: 0000000000000246 R12:
+0000000000000000
+[  343.295493] R13: 0000000000021000 R14: 0000000000000000 R15:
+00007fdde2bd7700
+[  343.296432]  </TASK>
+[  343.296735] Modules linked in: sch_netem ip6_vti ip_vti ip_gre ipip
+sit ip_tunnel geneve macsec macvtap tap ipvlan macvlan 8021q garp mrp
+hsr wireguard libchacha20poly1305 chacha_x86_64 poly1305_x86_64
+ip6_udp_tunnel udp_tunnel libblake2s blake2s_x86_64 libblake2s_generic
+curve25519_x86_64 libcurve25519_generic libchacha xfrm_interface
+xfrm6_tunnel tunnel4 veth netdevsim psample batman_adv nlmon dummy team
+bonding tls vcan ip6_gre ip6_tunnel tunnel6 gre tun ip6t_rpfilter
+ipt_REJECT nf_reject_ipv4 ip6t_REJECT nf_reject_ipv6 xt_conntrack ip_set
+ebtable_nat ebtable_broute ip6table_nat ip6table_mangle
+ip6table_security ip6table_raw iptable_nat nf_nat nf_conntrack
+nf_defrag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_security
+iptable_raw ebtable_filter ebtables rfkill ip6table_filter ip6_tables
+iptable_filter ppdev bochs drm_vram_helper drm_ttm_helper ttm
+drm_kms_helper cec parport_pc drm joydev floppy parport sg syscopyarea
+sysfillrect sysimgblt i2c_piix4 qemu_fw_cfg fb_sys_fops pcspkr
+[  343.297459]  ip_tables xfs virtio_net net_failover failover sd_mod
+sr_mod cdrom t10_pi ata_generic pata_acpi ata_piix libata virtio_pci
+virtio_pci_legacy_dev serio_raw virtio_pci_modern_dev dm_mirror
+dm_region_hash dm_log dm_mod
+[  343.311074] Dumping ftrace buffer:
+[  343.311532]    (ftrace buffer empty)
+[  343.312040] ---[ end trace a2e3db5a6ae05099 ]---
+[  343.312691] RIP: 0010:netem_enqueue+0x1590/0x33c0 [sch_netem]
+[  343.313481] Code: 89 85 58 ff ff ff e8 5f 5d e9 d3 48 8b b5 48 ff ff
+ff 8b 8d 50 ff ff ff 8b 85 58 ff ff ff 48 8b bd 70 ff ff ff 31 d2 2b 4f
+74 <f7> f1 48 b8 00 00 00 00 00 fc ff df 49 01 d5 4c 89 e9 48 c1 e9 03
+[  343.315893] RSP: 0018:ffff88800bcd7368 EFLAGS: 00010246
+[  343.316622] RAX: 00000000ba7c0a9c RBX: 0000000000000001 RCX:
+0000000000000000
+[  343.317585] RDX: 0000000000000000 RSI: ffff88800f8edb10 RDI:
+ffff88800f8eda40
+[  343.318549] RBP: ffff88800bcd7458 R08: 0000000000000000 R09:
+ffffffff94fb8445
+[  343.319503] R10: ffffffff94fb8336 R11: ffffffff94fb8445 R12:
+0000000000000000
+[  343.320455] R13: ffff88800a5a7000 R14: ffff88800a5b5800 R15:
+0000000000000020
+[  343.321414] FS:  00007fdde2bd7700(0000) GS:ffff888109780000(0000)
+knlGS:0000000000000000
+[  343.322489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  343.323283] CR2: 00000000200000c0 CR3: 000000000ef4c000 CR4:
+00000000000006e0
+[  343.324264] Kernel panic - not syncing: Fatal exception in interrupt
+[  343.333717] Dumping ftrace buffer:
+[  343.334175]    (ftrace buffer empty)
+[  343.334653] Kernel Offset: 0x13600000 from 0xffffffff81000000
+(relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+[  343.336027] Rebooting in 86400 seconds..
 
-As the function has now become very small, inline it.
-
-With this change, on an 8xx the time spent in the loop in
-ftrace_replace_code() is reduced by 23% at function tracer activation
-and 27% at nop tracer activation.
-The overall time to activate function tracer (measured with shell
-command 'time') is 570ms before the patch and 470ms after the patch.
-
-Even vmlinux size is reduced (by 152 instruction).
-
-Before the patch:
-
-	00000018 <copy_inst_from_kernel_nofault>:
-	  18:	94 21 ff e0 	stwu    r1,-32(r1)
-	  1c:	7c 08 02 a6 	mflr    r0
-	  20:	38 a0 00 04 	li      r5,4
-	  24:	93 e1 00 1c 	stw     r31,28(r1)
-	  28:	7c 7f 1b 78 	mr      r31,r3
-	  2c:	38 61 00 08 	addi    r3,r1,8
-	  30:	90 01 00 24 	stw     r0,36(r1)
-	  34:	48 00 00 01 	bl      34 <copy_inst_from_kernel_nofault+0x1c>
-				34: R_PPC_REL24	copy_from_kernel_nofault
-	  38:	2c 03 00 00 	cmpwi   r3,0
-	  3c:	40 82 00 0c 	bne     48 <copy_inst_from_kernel_nofault+0x30>
-	  40:	81 21 00 08 	lwz     r9,8(r1)
-	  44:	91 3f 00 00 	stw     r9,0(r31)
-	  48:	80 01 00 24 	lwz     r0,36(r1)
-	  4c:	83 e1 00 1c 	lwz     r31,28(r1)
-	  50:	38 21 00 20 	addi    r1,r1,32
-	  54:	7c 08 03 a6 	mtlr    r0
-	  58:	4e 80 00 20 	blr
-
-After the patch (before inlining):
-
-	00000018 <copy_inst_from_kernel_nofault>:
-	  18:	3d 20 b0 00 	lis     r9,-20480
-	  1c:	7c 04 48 40 	cmplw   r4,r9
-	  20:	7c 69 1b 78 	mr      r9,r3
-	  24:	41 80 00 14 	blt     38 <copy_inst_from_kernel_nofault+0x20>
-	  28:	81 44 00 00 	lwz     r10,0(r4)
-	  2c:	38 60 00 00 	li      r3,0
-	  30:	91 49 00 00 	stw     r10,0(r9)
-	  34:	4e 80 00 20 	blr
-
-	  38:	38 60 ff de 	li      r3,-34
-	  3c:	4e 80 00 20 	blr
-	  40:	38 60 ff f2 	li      r3,-14
-	  44:	4e 80 00 20 	blr
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 ---
-v4: Inline and remove pagefault_disable()
+Changes v1->v2: Removed dropping of packet and just added a check on
+skb_headlen before corruption.
+Changes v2->v3: Add check on len to prevent empty skb.
+Changes v3->v4: Add a pr_warn_once() statement.
 
-v3: New
----
- arch/powerpc/include/asm/inst.h | 21 ++++++++++++++++++++-
- arch/powerpc/mm/maccess.c       | 17 -----------------
- 2 files changed, 20 insertions(+), 18 deletions(-)
+ net/netlink/af_netlink.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/arch/powerpc/include/asm/inst.h b/arch/powerpc/include/asm/inst.h
-index 53a40faf362a..631436f3f5c3 100644
---- a/arch/powerpc/include/asm/inst.h
-+++ b/arch/powerpc/include/asm/inst.h
-@@ -4,6 +4,8 @@
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 4c575324a985..9eba2e648385 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -1852,6 +1852,11 @@ static int netlink_sendmsg(struct socket *sock, struct msghdr *msg, size_t len)
+ 	if (msg->msg_flags & MSG_OOB)
+ 		return -EOPNOTSUPP;
  
- #include <asm/ppc-opcode.h>
- #include <asm/reg.h>
-+#include <asm/disassemble.h>
-+#include <asm/uaccess.h>
- 
- #define ___get_user_instr(gu_op, dest, ptr)				\
- ({									\
-@@ -148,6 +150,23 @@ static inline char *__ppc_inst_as_str(char str[PPC_INST_STR_LEN], ppc_inst_t x)
- 	__str;				\
- })
- 
--int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src);
-+static inline int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
-+{
-+	unsigned int val, suffix;
-+
-+	if (unlikely(!is_kernel_addr((unsigned long)src)))
-+		return -ERANGE;
-+
-+	__get_kernel_nofault(&val, src, u32, Efault);
-+	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
-+		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
-+		*inst = ppc_inst_prefix(val, suffix);
-+	} else {
-+		*inst = ppc_inst(val);
++	if (len == 0) {
++		pr_warn_once("Zero length message leads to an empty skb\n");
++		return -ENODATA;
 +	}
-+	return 0;
-+Efault:
-+	return -EFAULT;
-+}
- 
- #endif /* _ASM_POWERPC_INST_H */
-diff --git a/arch/powerpc/mm/maccess.c b/arch/powerpc/mm/maccess.c
-index 5abae96b2b46..ea821d0ffe16 100644
---- a/arch/powerpc/mm/maccess.c
-+++ b/arch/powerpc/mm/maccess.c
-@@ -11,20 +11,3 @@ bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
- {
- 	return is_kernel_addr((unsigned long)unsafe_src);
- }
--
--int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
--{
--	unsigned int val, suffix;
--	int err;
--
--	err = copy_from_kernel_nofault(&val, src, sizeof(val));
--	if (err)
--		return err;
--	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
--		err = copy_from_kernel_nofault(&suffix, src + 1, sizeof(suffix));
--		*inst = ppc_inst_prefix(val, suffix);
--	} else {
--		*inst = ppc_inst(val);
--	}
--	return err;
--}
++
+ 	err = scm_send(sock, msg, &scm, true);
+ 	if (err < 0)
+ 		return err;
 -- 
-2.33.1
+2.27.0
 

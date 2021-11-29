@@ -2,79 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A27A9462570
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645EB4624A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbhK2WjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S233217AbhK2WXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234326AbhK2Wib (ORCPT
+        with ESMTP id S231855AbhK2WVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:38:31 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9758EC21884D
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 12:12:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=03RItMg0M2HfikfUQJ2uQM/WPVH5m+4bpjbxZJ5j+s8=; b=3HEudj3w0x4FaRvV6GSN6VghFW
-        0ilwuhNDZZ0PNXqAFhUbGi5hr7xpnjH0KEnFNSJHXCEYxYsVG6KHgnn8jn8BUzBBWVh+GboRGLnjm
-        UX0rvhgY/hBHEtKLYGEj0OfWa3/FQUgnKc3JXsdxh69aFVVdWqfWEXM5LoY6BPNoIUhA6SpvgSFcq
-        eO/odnUC9AYOmITea5UuaL75Y9/pB49vzaL6YAvczYPqJPmJNXg0E3gcvIqwLTy+SRpIYz/ECThOS
-        s9288SDEqZgy82LHO6t+HCRXG/S4Qbg/78Kpsry4Acja4MUIff1ogy1/OyKGXoeA8aPSzE0twXr3L
-        hkF9eGhA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mrn0M-002H2F-VF; Mon, 29 Nov 2021 20:12:02 +0000
-Date:   Mon, 29 Nov 2021 12:12:02 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Xiaoming Ni <nixiaoming@huawei.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [mcgrof-next:20211124-sysctl-cleanups-v2 41/41]
- kernel/kprobes.c:2605:2: error: implicit declaration of function
- 'kprobe_sysctls_init'
-Message-ID: <YaU0EuR8neVB9hEX@bombadil.infradead.org>
-References: <202111271451.VDtFz59Q-lkp@intel.com>
+        Mon, 29 Nov 2021 17:21:54 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0CFC21885B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 12:13:14 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso16519780pji.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 12:13:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=from:to:cc:subject:references:date:in-reply-to:message-id
+         :user-agent:mime-version;
+        bh=8kKuma19DoqzJ6QAXbY90QDUkkq9MPNT/HcFRm8bmRg=;
+        b=HFz5zG0dzzFQmfT6iG5mC35PnwMndF/W86P5u8+xxJ1DltPKn/4Y0auSUFjws1mfAG
+         8y9FeIIUhctb1hvuFb99P8grFz3yZdwDRommevmGAVLhbdY1e4xyFO9+BGWzIywxbSv9
+         ibCun9EqnWmQkd6c3aSWJB/rJooYrNXHF8AClkrc8w5JsytSNgjO1kFfEK23oLv0Dbww
+         iWVe+KXTTNfp4D/4CcSLj467oqoAFH8+SrHgAXjdSPrl9UIll0tNe7cshTglxqzy7JuE
+         dvHVE2KYsp0Ucd8/i+y6ZpyR6AzpM5bORmkRzAFBnbjspY3y+kbuhzSIQonEbxbm1k2W
+         wivA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:references:date:in-reply-to
+         :message-id:user-agent:mime-version;
+        bh=8kKuma19DoqzJ6QAXbY90QDUkkq9MPNT/HcFRm8bmRg=;
+        b=bn20QD71agKPSklzT9TNTbMQnAdehw9GyGUjJDjWpQnlAP34pxlpj7S21IUrBOEu/b
+         a+Yf7L5jQQ/D8KeKFHk8hF/cGjsz+LYRTqEJJspUaPFOs8ti+wgdI7yvoZ9GACPpsdeQ
+         AyQvlliAuqZ71bKC7l8v8y2Xl4rmcfMyF9OLHgTrBexNuoZnKzOFyqGaT4OWhmrEE09C
+         9906CRnl65OVy5ukPJMs3patc6rTcbZLIrpB2z+PfxwCu4IL5bA2igyDmMqIaOpT2+ZW
+         I/MKW/zoSMTBoYXhbhpRwbBvIDaFBAKQJifOvxgpKgedhi0i1/i610DlhTh9mIvsmEf4
+         FZCw==
+X-Gm-Message-State: AOAM531nyeF938fMuAN11469n4kifKV9eG7z6XJmgs0kJxx2rykH04UA
+        VZbom0sL42S+ZfGsZUWp6K1lJw==
+X-Google-Smtp-Source: ABdhPJxJGlP2y8vm6IffHIAEPUn0GxzUipHLBwUCVb75Wz1QBpaxqnv8PF6Lt0mIf4wHViDBeZW4iA==
+X-Received: by 2002:a17:90a:d3c3:: with SMTP id d3mr278723pjw.209.1638216793987;
+        Mon, 29 Nov 2021 12:13:13 -0800 (PST)
+Received: from bsegall-glaptop.localhost (c-73-71-82-80.hsd1.ca.comcast.net. [73.71.82.80])
+        by smtp.gmail.com with ESMTPSA id gc22sm153123pjb.57.2021.11.29.12.13.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 12:13:12 -0800 (PST)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Honglei Wang <wanghonglei@didichuxing.com>,
+        Huaixin Chang <changhuaixin@linux.alibaba.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Mel Gorman" <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <jameshongleiwang@126.com>
+Subject: Re: [PATCH] sched/fair: prevent cpu burst too many periods
+References: <20211129162807.21966-1-wanghonglei@didichuxing.com>
+Date:   Mon, 29 Nov 2021 12:13:02 -0800
+In-Reply-To: <20211129162807.21966-1-wanghonglei@didichuxing.com> (Honglei
+        Wang's message of "Tue, 30 Nov 2021 00:28:07 +0800")
+Message-ID: <xm26mtlmpvox.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202111271451.VDtFz59Q-lkp@intel.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 02:48:14PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git 20211124-sysctl-cleanups-v2
-> head:   c66aee3b7120f4a5f1d40cc9109dcf684643cc17
-> commit: c66aee3b7120f4a5f1d40cc9109dcf684643cc17 [41/41] kprobe: move sysctl_kprobes_optimization to kprobes.c
-> config: arm64-randconfig-r006-20211126 (https://download.01.org/0day-ci/archive/20211127/202111271451.VDtFz59Q-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 5162b558d8c0b542e752b037e72a69d5fd51eb1e)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git/commit/?id=c66aee3b7120f4a5f1d40cc9109dcf684643cc17
->         git remote add mcgrof-next https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux-next.git
->         git fetch --no-tags mcgrof-next 20211124-sysctl-cleanups-v2
->         git checkout c66aee3b7120f4a5f1d40cc9109dcf684643cc17
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> kernel/kprobes.c:2605:2: error: implicit declaration of function 'kprobe_sysctls_init' [-Werror,-Wimplicit-function-declaration]
->            kprobe_sysctls_init();
->            ^
->    1 error generated.
+Honglei Wang <wanghonglei@didichuxing.com> writes:
 
-Fixed.
+> Tasks might get more cpu than quota in persistent periods due to the
+> cpu burst introduced by commit f4183717b370 ("sched/fair: Introduce the
+> burstable CFS controller"). For example, one task group whose quota is
+> 100ms per period and can get 100ms burst, and its avg utilization is
+> around 105ms per period. Once this group gets a free period which
+> leaves enough runtime, it has a chance to get computting power more
+> than its quota for 10 periods or more in common bandwidth configuration
+> (say, 100ms as period). It means tasks can 'steal' the bursted power to
+> do daily jobs because all tasks could be scheduled out or sleep to help
+> the group get free periods.
+>
+> I believe the purpose of cpu burst is to help handling bursty worklod.
+> But if one task group can get computting power more than its quota for
+> persistent periods even there is no bursty workload, it's kinda broke.
+>
+> This patch limits the burst to one period so that it won't break the
+> quota limit for long. With this, we can give task group more cpu burst
+> power to handle the real bursty workload and don't worry about the
+> 'stealing'.
 
-  Luis
+CC ing the burst patch author.
+
+Whether or not burst is useful only for burst, or also for a bit of
+long-term-only fairness is not entirely clear to me. Assuming we want it
+only for burst, cutting off this sharply has a bit of additional
+downside because it means that if a period refresh lands in the middle
+of a burst then you lose the burst runtime. Permitting only two periods
+in a row to make use of burst should be doable but it's yet another
+piece of state added to cfs_b for this, and given typical ~100ms periods
+that may be low enough odds that we don't care.
+
+>
+> Signed-off-by: Honglei Wang <wanghonglei@didichuxing.com>
+> ---
+>  kernel/sched/fair.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6e476f6d9435..cc2c4567fc81 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4640,14 +4640,17 @@ void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)
+>  	if (unlikely(cfs_b->quota == RUNTIME_INF))
+>  		return;
+>  
+> -	cfs_b->runtime += cfs_b->quota;
+> -	runtime = cfs_b->runtime_snap - cfs_b->runtime;
+> +	runtime = cfs_b->runtime_snap - cfs_b->quota - cfs_b->runtime;
+> +
+>  	if (runtime > 0) {
+>  		cfs_b->burst_time += runtime;
+>  		cfs_b->nr_burst++;
+> +		cfs_b->runtime = cfs_b->quota;
+> +	} else {
+> +		cfs_b->runtime += cfs_b->quota;
+> +		cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
+>  	}
+>  
+> -	cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
+>  	cfs_b->runtime_snap = cfs_b->runtime;
+>  }
+
+If we do this, it should also be mentioned in
+Documentation/scheduler/sched-bwc.rst, since the straightforward
+description of burst as extra max runtime is no longer enough.

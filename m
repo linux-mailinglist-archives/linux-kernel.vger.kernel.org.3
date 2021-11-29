@@ -2,142 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF46462492
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:19:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2552046249C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:19:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233062AbhK2WVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:21:23 -0500
-Received: from ms.lwn.net ([45.79.88.28]:53558 "EHLO ms.lwn.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234017AbhK2WT7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:19:59 -0500
-Received: from localhost (unknown [IPv6:2601:281:8300:104d::5f6])
+        id S232799AbhK2WWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:22:46 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54876 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231901AbhK2WVD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 17:21:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id B5EC62CA;
-        Mon, 29 Nov 2021 22:16:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net B5EC62CA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1638224200; bh=iTY2/h04UezM1V4M7XZgBk0FWcWxT9Syov9TVxzHjFE=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=RhFQy3d6hB3kKajco72EVJtAjF4CN0+4BU2CNPr3lsAX0gkg+pA0UicUHclGgHdZK
-         YZ6EU0zHf46kFqdEPwysyZa1A+FEIyl37q6VD5GMk+xTyjM5/+CizHRLS6dS/rFbAl
-         y/PTDx66u4qjRkCMJTQM58fkXZ+/Wk24YAusD+n9jFFXuN+H+9VtMgHwzR70o8fSow
-         nTNtSF/83dOSIcR1N5fk/eeN2lbMRK8X7TtCBNEmNDcGKTclyf4O80Be86IQjxUFMR
-         wok32rcbbMNXwWneh8Qu/5KD4nNcO1ee0K4lZyH6ckPhzvIczl5vYJFJZRbeSPVYMm
-         xjsX1WH5P2vOQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Thorsten Leemhuis <linux@leemhuis.info>, workflows@vger.kernel.org
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Subject: Re: [RFC PATCH v1 1/1] docs: add the new commit-msg tags
- 'Reported:' and 'Reviewed:'
-In-Reply-To: <6b760115ecdd3687d4b82680b284f55a04f3ad90.1637566224.git.linux@leemhuis.info>
-References: <cover.1637566224.git.linux@leemhuis.info>
- <6b760115ecdd3687d4b82680b284f55a04f3ad90.1637566224.git.linux@leemhuis.info>
-Date:   Mon, 29 Nov 2021 15:16:40 -0700
-Message-ID: <8735nesj3r.fsf@meer.lwn.net>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9185DCE13DE;
+        Mon, 29 Nov 2021 22:17:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0530AC53FAD;
+        Mon, 29 Nov 2021 22:17:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638224259;
+        bh=7Y8o+kRb5lFcHI2kNBKy53IwhXDgTaXMAJ8OkS7EUEk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uY6lyF9mGAcTnEtrCyivCMwlFOCqXRP3qwW3O/ZYrWrY/yYDvTVqJywZ0wygUL00T
+         Nft23eBMx96EqLrvGk/0rK56eQI4kbtW1Ibg9+DSu+sLrWU0c+KQsSAO0cJ8XebUOv
+         V6o19xLP6NcYV2BlzgUqQqE9pov/vsvvahH4FXsL1gnFpcElYFZoeie+I8HL8Utxwe
+         +O39W2LuHglJqR1QBo8RFVuZbrFA85dekAczIvzQlHU9RHL0y5XjufTsHDb1NaDU4e
+         vmDguIc8KMfUaCs3gNbxpxkRI1CkhVMPT0xfS+tya5FKI+Tv04efr6OE3n/NdDk+GA
+         0JtqHyPwJSQXA==
+Date:   Mon, 29 Nov 2021 23:17:36 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>, agross@kernel.org,
+        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
+        marijn.suijten@somainline.org, martin.botka@somainline.org,
+        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        phone-devel@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] dt-bindings: i2c: qcom,i2c-qup: Convert txt to
+ YAML schema
+Message-ID: <YaVRgPDunBrc+Puc@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        martin.botka@somainline.org, bjorn.andersson@linaro.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, phone-devel@vger.kernel.org
+References: <20210114180415.404418-1-angelogioacchino.delregno@somainline.org>
+ <20210114180415.404418-2-angelogioacchino.delregno@somainline.org>
+ <20210125221633.GA1112939@robh.at.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BDbSGWnI4B1eLNfB"
+Content-Disposition: inline
+In-Reply-To: <20210125221633.GA1112939@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thorsten Leemhuis <linux@leemhuis.info> writes:
 
-> Introduce the tags 'Reported:' and 'Reviewed:' in addition to 'Link:',
-> as the latter is overloaded and hence doesn't indicate what the provided
-> URL is about. Documenting these also provides clarity, as a few
-> developers have used 'References:' to point to problem reports;
-> nevertheless 'Reported:' was chosen for this purpose, as it perfectly
-> matches up with the 'Reported-by:' tag commonly used already and needed
-> in this situation already.
->
-> Signed-off-by: Thorsten Leemhuis <linux@leemhuis.info>
-> To: workflows@vger.kernel.org
+--BDbSGWnI4B1eLNfB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for flooding my inbox during a holiday week :)  Just looking at
-this now.
+Hi Angelo,
 
-> v1/RFC:
-> - first, *rough version* to see how this idea is received in the
->   community
-> ---
->  Documentation/maintainer/configure-git.rst   |  6 +--
->  Documentation/process/5.Posting.rst          | 54 ++++++++++++++------
->  Documentation/process/submitting-patches.rst | 22 ++++----
->  3 files changed, 53 insertions(+), 29 deletions(-)
->
-> diff --git a/Documentation/maintainer/configure-git.rst b/Documentation/maintainer/configure-git.rst
-> index 80ae5030a590..8429d45d661c 100644
-> --- a/Documentation/maintainer/configure-git.rst
-> +++ b/Documentation/maintainer/configure-git.rst
-> @@ -40,12 +40,12 @@ Creating commit links to lore.kernel.org
->  The web site http://lore.kernel.org is meant as a grand archive of all mail
->  list traffic concerning or influencing the kernel development. Storing archives
->  of patches here is a recommended practice, and when a maintainer applies a
-> -patch to a subsystem tree, it is a good idea to provide a Link: tag with a
-> +patch to a subsystem tree, it is a good idea to provide a Reviewed: tag with a
->  reference back to the lore archive so that people that browse the commit
->  history can find related discussions and rationale behind a certain change.
->  The link tag will look like this:
->  
-> -    Link: https://lore.kernel.org/r/<message-id>
-> +    Reviewed: https://lore.kernel.org/r/<message-id>
+On Mon, Jan 25, 2021 at 04:16:33PM -0600, Rob Herring wrote:
+> On Thu, Jan 14, 2021 at 07:04:13PM +0100, AngeloGioacchino Del Regno wrot=
+e:
+> > Convert the qcom,i2c-qup binding to YAML schema.
+> >=20
+> > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@so=
+mainline.org>
 
-The *link* tag will look like that?
+Do you plan to update this accordings to Rob's comments? It would be a
+shame to let this go to waste...
 
-[...]
+Happy hacking,
 
-> +The tags in common use are:
-> +
-> + - ``Reported:`` points to a report of a problem fixed by this patch. The
-> +   provided URL thus might point to a entry in a bug tracker or a mail in a
-> +   mailing list archive. Typically this tag is followed by a "Reported-by:"
-> +   tag (see below).
-> +
-> + - ``Link:`` points to websites providing additional backgrounds or details,
-> +   for example a document with a specification implemented by the patch.
+   Wolfram
 
-So this is a serious change from how Link: is used now, and runs counter
-to the scripts used by a lot of maintainers.  I suspect that this thread
-is only as short as it is because a lot of people haven't seen this yet;
-it could be a hard change to sell.
 
-Also, I think that documents like specs should be called out separately
-in the changelog, with text saying what they actually are.
+--BDbSGWnI4B1eLNfB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> + - ``Reviewed:`` ignore this, as maintainers add it when applying a patch, to
-> +   make the commit point to the latest public review of the patch.
+-----BEGIN PGP SIGNATURE-----
 
-Another question would be: what's the interplay between the (quite
-similar) "Reviewed" and "Reviewed-by" tags (and the same for the report
-tags).  If there's a "Reviewed" do we still need "Reviewed-by"?  That
-should be spelled out, whichever way is wanted.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlUXwACgkQFA3kzBSg
+KbYLfg/9HveOSnXAxjgb+hfTRR1qvUocHZaG/jTARuC6ombCNRLJMxKGMIhRFRHq
+bVUYiwKNOAEH5zbI+arwsRAIYWhKHq3kLK1qdvqfNDY4pBs012BDLNN7WOdjRh6/
+tACdFzdDx1WKQ5vVUfyFuuqI1pwuYqwjfeRl27RNOspD9JsHOgGXvvLhSfbGtLVD
+ztvoA939YPzK6PX+Homi9hGKq9CnaxrMl87RDEso5blZ48FNZKtj3rIpktgmnxh6
+vamZf8bhIuemZMz6dX0qVDL3As5BSulv70E4KjwkVw24VJxRiQRxn77aKJMyiTgQ
+Db2sAacaldOl7tEslE8PwG9xqXq4QRFE69UxxlLMWhmuvi89Ngy043nF1EnxaYAy
+lDcHBPN60ztIZv9P86RGx7VsF2oIgnMyrE413QNaVvA4SVARu6hvwmszdDMNurmE
+j0UVAjh8okV6Y9q0PgKEd8ZjMbENMv1kdfvaZQb9ZW1oMogQ/YnOJPd2H40BbA/R
+c+Gfm258ek3i7OUFOz6HMwuwvfPjeCauWGRvmH09P34Ws2/PHrUkLJpF3DjIM0K8
+w+RHk75me4S+0Yek72bqtZ9Bh5oObVX+IyDdOvUaSpV6PZ+HtOL9sP2zlDkG2AY3
+x1qKueAllzdznrkV0dgaxyyOQRLFV0pXgzoPGMMIZPP1x8IAlZw=
+=s2FF
+-----END PGP SIGNATURE-----
 
-I do worry that the similarity is going to lead to a certain amount of
-confusion and use of the wrong tag.  People have a hard time getting all
-the tags we have now right; adding more that look almost like the
-existing ones seems like a recipe for trouble.
-
-For these reasons, I would be more inclined toward Konstantin's
-suggestion of adding notes to the existing Link: tags.
-
-> +A third kind of tags are used to document which developers were involved in
-> +the development of the patch. Each of these uses this format::
->  
->  	tag: Full Name <email address>  optional-other-stuff
->  
->  The tags in common use are:
->  
-> - - Signed-off-by: this is a developer's certification that he or she has
-> + - ``Signed-off-by:`` is a developer's certification that he or she has
-
-So this markup addition is a separate change that would belong in its
-own patch.  Do we really need it, though?  It clutters the text and
-irritates the anti-RST minority (which has been mercifully quiet
-recently) without really adding any benefit.
-
-Thanks,
-
-jon
+--BDbSGWnI4B1eLNfB--

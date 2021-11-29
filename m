@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D72574623C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF22446262F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbhK2VyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 16:54:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S235129AbhK2Wsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:48:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbhK2Vvx (ORCPT
+        with ESMTP id S235280AbhK2Wrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:51:53 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3E3FC0F4B14;
-        Mon, 29 Nov 2021 10:25:49 -0800 (PST)
+        Mon, 29 Nov 2021 17:47:49 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4324C047CC5;
+        Mon, 29 Nov 2021 10:31:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0D8E6CE13E1;
-        Mon, 29 Nov 2021 18:25:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB518C53FC7;
-        Mon, 29 Nov 2021 18:25:45 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9D890B815B1;
+        Mon, 29 Nov 2021 18:31:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D000BC53FAD;
+        Mon, 29 Nov 2021 18:31:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210346;
-        bh=aIsSuVCCgbUOpWoXf+WcMrC7S9RJFcJFxztfTo5lozw=;
+        s=korg; t=1638210666;
+        bh=FizMX89KWAN1teQcdmUbzyU2kTMzyQmu95FLWYJismY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UtNDJr8U4YE7z4qu81T4Ps4Re3soAQO1L/KHvxKNQM8Fmtd5FqdEE0AIunOQWK8Gm
-         FRxZXTPFLVUm9hPQUnY90oV/ImhtQF5C4RY8+U+GnSIcqm/niWS4Hz43dz21rWmwkT
-         df9rpS1Z5TITYTCiirCadvCaw332tWQssMFs5fAE=
+        b=Udlj4nlmcO3/3IX4gx3SDODzvvn3lHuif9gBuX2fJxa9aJl4Y0o8VYq28ryBYZyZW
+         jneciQNAPa0gtBkf9YT1TYR/H7YlashWp1i/SoiBNi84MmZTGVPQbJ9S6+kTTnrdUv
+         Ve1CtxeKKgNBBaIuKYE4ReCvxCclbfz1L15jfDq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Maxime Ripard <maxime@cerno.tech>,
+        stable@vger.kernel.org, Tony Lu <tonylu@linux.alibaba.com>,
+        Wen Gu <guwen@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 56/92] drm/vc4: fix error code in vc4_create_object()
-Date:   Mon, 29 Nov 2021 19:18:25 +0100
-Message-Id: <20211129181709.287452263@linuxfoundation.org>
+Subject: [PATCH 5.10 075/121] net/smc: Ensure the active closing peer first closes clcsock
+Date:   Mon, 29 Nov 2021 19:18:26 +0100
+Message-Id: <20211129181714.178011422@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
-References: <20211129181707.392764191@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+References: <20211129181711.642046348@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,36 +50,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Tony Lu <tonylu@linux.alibaba.com>
 
-[ Upstream commit 96c5f82ef0a145d3e56e5b26f2bf6dcd2ffeae1c ]
+[ Upstream commit 606a63c9783a32a45bd2ef0eee393711d75b3284 ]
 
-The ->gem_create_object() functions are supposed to return NULL if there
-is an error.  None of the callers expect error pointers so returing one
-will lead to an Oops.  See drm_gem_vram_create(), for example.
+The side that actively closed socket, it's clcsock doesn't enter
+TIME_WAIT state, but the passive side does it. It should show the same
+behavior as TCP sockets.
 
-Fixes: c826a6e10644 ("drm/vc4: Add a BO cache.")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://patchwork.freedesktop.org/patch/msgid/20211118111416.GC1147@kili
+Consider this, when client actively closes the socket, the clcsock in
+server enters TIME_WAIT state, which means the address is occupied and
+won't be reused before TIME_WAIT dismissing. If we restarted server, the
+service would be unavailable for a long time.
+
+To solve this issue, shutdown the clcsock in [A], perform the TCP active
+close progress first, before the passive closed side closing it. So that
+the actively closed side enters TIME_WAIT, not the passive one.
+
+Client                                            |  Server
+close() // client actively close                  |
+  smc_release()                                   |
+      smc_close_active() // PEERCLOSEWAIT1        |
+          smc_close_final() // abort or closed = 1|
+              smc_cdc_get_slot_and_msg_send()     |
+          [A]                                     |
+                                                  |smc_cdc_msg_recv_action() // ACTIVE
+                                                  |  queue_work(smc_close_wq, &conn->close_work)
+                                                  |    smc_close_passive_work() // PROCESSABORT or APPCLOSEWAIT1
+                                                  |      smc_close_passive_abort_received() // only in abort
+                                                  |
+                                                  |close() // server recv zero, close
+                                                  |  smc_release() // PROCESSABORT or APPCLOSEWAIT1
+                                                  |    smc_close_active()
+                                                  |      smc_close_abort() or smc_close_final() // CLOSED
+                                                  |        smc_cdc_get_slot_and_msg_send() // abort or closed = 1
+smc_cdc_msg_recv_action()                         |    smc_clcsock_release()
+  queue_work(smc_close_wq, &conn->close_work)     |      sock_release(tcp) // actively close clc, enter TIME_WAIT
+    smc_close_passive_work() // PEERCLOSEWAIT1    |    smc_conn_free()
+      smc_close_passive_abort_received() // CLOSED|
+      smc_conn_free()                             |
+      smc_clcsock_release()                       |
+        sock_release(tcp) // passive close clc    |
+
+Link: https://www.spinics.net/lists/netdev/msg780407.html
+Fixes: b38d732477e4 ("smc: socket closing and linkgroup cleanup")
+Signed-off-by: Tony Lu <tonylu@linux.alibaba.com>
+Reviewed-by: Wen Gu <guwen@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_bo.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/smc/smc_close.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_bo.c b/drivers/gpu/drm/vc4/vc4_bo.c
-index 72d30d90b856c..0af246a5609ca 100644
---- a/drivers/gpu/drm/vc4/vc4_bo.c
-+++ b/drivers/gpu/drm/vc4/vc4_bo.c
-@@ -389,7 +389,7 @@ struct drm_gem_object *vc4_create_object(struct drm_device *dev, size_t size)
- 
- 	bo = kzalloc(sizeof(*bo), GFP_KERNEL);
- 	if (!bo)
--		return ERR_PTR(-ENOMEM);
-+		return NULL;
- 
- 	bo->madv = VC4_MADV_WILLNEED;
- 	refcount_set(&bo->usecnt, 0);
+diff --git a/net/smc/smc_close.c b/net/smc/smc_close.c
+index 0f9ffba07d268..04620b53b74a7 100644
+--- a/net/smc/smc_close.c
++++ b/net/smc/smc_close.c
+@@ -228,6 +228,12 @@ int smc_close_active(struct smc_sock *smc)
+ 			/* send close request */
+ 			rc = smc_close_final(conn);
+ 			sk->sk_state = SMC_PEERCLOSEWAIT1;
++
++			/* actively shutdown clcsock before peer close it,
++			 * prevent peer from entering TIME_WAIT state.
++			 */
++			if (smc->clcsock && smc->clcsock->sk)
++				rc = kernel_sock_shutdown(smc->clcsock, SHUT_RDWR);
+ 		} else {
+ 			/* peer event has changed the state */
+ 			goto again;
 -- 
 2.33.0
 

@@ -2,80 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD784619E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:39:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A795461602
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:13:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346885AbhK2Ome (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379018AbhK2OkW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:40:22 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDD7C08ED7C;
-        Mon, 29 Nov 2021 05:10:13 -0800 (PST)
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 34A24B81135;
-        Mon, 29 Nov 2021 13:10:12 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id E384360E92;
-        Mon, 29 Nov 2021 13:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638191410;
-        bh=7Hj74nheowp4ciRWkGklKqvWkQVJ89Ooc5h5UfcuYBM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=fRHoLCNswiFv59k1AW5iqrC3x+5k0MKz4B585EtViCRV/mEllIR1cWh6j4ahYv/Wo
-         Hj/E7WRHfrW/WNiuVoJ6loTCwArEJBUJZl4qfYg+0CDbUtuGUE8aWq0adAiwzs5muR
-         YSBF+YT6cGSnHpW3kQS3qrlcwYyJ99W063zbohFT7Q+wbbaIqlfl8XM/JzK5ZhTaCs
-         DW5x6XAhB9xC8C4HNyUiDBCXyDIpMxnbL0SOn19Ptaoyitd8hgyE2c6IztdGOgl7oN
-         h3RVpFjNZdnPkr4qogjTB8olk5ILnD6DBiKodppcviBBydbf71SOuSKZG8onWZno4W
-         iadGbENRFCxGA==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id DCE1860A4D;
-        Mon, 29 Nov 2021 13:10:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        id S239203AbhK2NRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:17:14 -0500
+Received: from foss.arm.com ([217.140.110.172]:39010 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232071AbhK2NPN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 08:15:13 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 724A0150C;
+        Mon, 29 Nov 2021 05:11:55 -0800 (PST)
+Received: from e123427-lin.arm.com (unknown [10.57.34.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 738B53F766;
+        Mon, 29 Nov 2021 05:11:52 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     nsaenz@kernel.org, bcm-kernel-feedback-list@broadcom.com,
+        f.fainelli@gmail.com, robh@kernel.org, jim2101024@gmail.com,
+        kw@linux.com, Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        bhelgaas@google.com
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org
+Subject: Re: [PATCH] PCI: brcmstb: Declare a bitmap as a bitmap, not as a plain 'unsigned long'
+Date:   Mon, 29 Nov 2021 13:11:45 +0000
+Message-Id: <163819142462.10670.2516167038486090067.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <e6d9da2112aab2939d1507b90962d07bfd735b4c.1636273671.git.christophe.jaillet@wanadoo.fr>
+References: <e6d9da2112aab2939d1507b90962d07bfd735b4c.1636273671.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v1] devlink: Remove misleading internal_flags from
- health reporter dump
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163819141090.10588.4054297154663803863.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Nov 2021 13:10:10 +0000
-References: <f85ab0a57f0206e9452c32ab28dc81e1b2aae3d4.1638101585.git.leonro@nvidia.com>
-In-Reply-To: <f85ab0a57f0206e9452c32ab28dc81e1b2aae3d4.1638101585.git.leonro@nvidia.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, leonro@nvidia.com,
-        ayal@mellanox.com, jiri@nvidia.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, saeedm@mellanox.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Sun, 28 Nov 2021 14:14:46 +0200 you wrote:
-> From: Leon Romanovsky <leonro@nvidia.com>
+On Sun, 7 Nov 2021 09:32:58 +0100, Christophe JAILLET wrote:
+> The 'used' field of 'struct brcm_msi' is used as a bitmap. So it should
+> be declared as so (i.e. unsigned long *).
 > 
-> DEVLINK_CMD_HEALTH_REPORTER_DUMP_GET command doesn't have .doit callback
-> and has no use in internal_flags at all. Remove this misleading assignment.
+> This fixes an harmless Coverity warning about array vs singleton usage.
 > 
-> Fixes: e44ef4e4516c ("devlink: Hang reporter's dump method on a dumpit cb")
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
-> 
-> [...]
+> This bitmap can be BRCM_INT_PCI_MSI_LEGACY_NR or BRCM_INT_PCI_MSI_NR long.
+> So, while at it, document it, should it help someone in the future.
 
-Here is the summary with links:
-  - [net-next,v1] devlink: Remove misleading internal_flags from health reporter dump
-    https://git.kernel.org/netdev/net-next/c/e9538f8270db
+Applied to pci/brcmstb, thanks!
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+[1/1] PCI: brcmstb: Declare a bitmap as a bitmap, not as a plain 'unsigned long'
+      https://git.kernel.org/lpieralisi/pci/c/3e46790d16
 
-
+Thanks,
+Lorenzo

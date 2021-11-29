@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6A0462248
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3CDD462088
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:30:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbhK2UjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 15:39:05 -0500
-Received: from ip-15.mailobj.net ([213.182.54.15]:60318 "EHLO msg-4.mailo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232484AbhK2UhE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:37:04 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=net-c.es; s=mailo;
-        t=1638214067; bh=2tcgcuVx80VzE4HILFYDigYj1ddMAtFMGwsLwzeYJTE=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=kFbX93nVReDYouw6rmj01uRjYOerEJ1fhlHSgiBtoJheGnRRkAqFLM4VTPmtEiAqY
-         Qo2Lx8/PNvJR7p1Vx9hF/sb0xvhnKtzbhoh+Xv1P1CejhN1doggzivEAEFlLp7ri7g
-         2iEW2X0BfFBNBcTAyQSyIxWSINJ/qVviAJ297xjU=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Mon, 29 Nov 2021 20:27:47 +0100 (CET)
-X-EA-Auth: f6dgvTlaAqO2oTPEOC2hHY8CdKMsDGMTCWBI8qLYN/QciFxzFyYn367HsKxggpua43yNhgBTghzuyu8g8HNK1DNA8kPcBq0V
-Date:   Mon, 29 Nov 2021 20:27:45 +0100
-From:   Claudio Suarez <cssk@net-c.es>
-To:     dri-devel@lists.freedesktop.org
-Cc:     0day robot <lkp@intel.com>, LKML <linux-kernel@vger.kernel.org>,
-        lkp@lists.01.org, dri-devel@lists.freedesktop.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH] drm: fix error found in some cases after the patch
- d1af5cd86997
-Message-ID: <YaUpsaP7hng6zpFh@gineta.localdomain>
-References: <YaC7zXW119tlzfVh@gineta.localdomain>
- <20211128142015.GB5295@xsang-OptiPlex-9020>
+        id S1351782AbhK2Tdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:33:55 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:41614 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234229AbhK2Tbw (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 14:31:52 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AB143CE139A;
+        Mon, 29 Nov 2021 19:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B93C53FC7;
+        Mon, 29 Nov 2021 19:28:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638214109;
+        bh=2bPVsYZGEvkL7ytZo1aPhJLz8c1dMzifaUDBAFLBItw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RtS0hE/RdKbW2RIa+5sY4JhJGIASzeNdLiXgnE2CvByw5/D6yWy1yzpalKRn7eIMI
+         LBfNJFBa/8ahvFMiZSN0JY93AiP9IHv58oIPdGp3ATx0sxVXkZCsKmjuw6MVJcBVBl
+         igGqH+VxeubgN/PW78WX3y5fsc49drl9BCBY9Y2Ql0mctKfRBSjXAiqnQMHcQFPwHD
+         bbelxeaP7FWqlm4zt3oBJZfjWfZ38IHBATxez5NOyzZzWgpEpzDWfxiY8HGBr8UzVy
+         Q9izPxPeZqy8ONCM3oje/wWR3bXUKBvTgCkQeXKqXiOU82uvA+jSLslVMo/tfwNJYY
+         qxCTfJbPIhv7w==
+Date:   Mon, 29 Nov 2021 20:28:26 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     "Lawrence,Wang" <lawrence.wang@nokia-sbell.com>
+Cc:     jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wang@wrlinb193.emea.nsn-net.net
+Subject: Re: [PATCH] i2c: designware: Get HCNT/LCNT values from dts
+Message-ID: <YaUp2pFmrDJhv4T+@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        "Lawrence,Wang" <lawrence.wang@nokia-sbell.com>,
+        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        mika.westerberg@linux.intel.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wang@wrlinb193.emea.nsn-net.net
+References: <20211115093556.7154-1-lawrence.wang@nokia-sbell.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rJlXTTk3u6DNV2nZ"
 Content-Disposition: inline
-In-Reply-To: <20211128142015.GB5295@xsang-OptiPlex-9020>
+In-Reply-To: <20211115093556.7154-1-lawrence.wang@nokia-sbell.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log
-calls in drm core, files drm_a*.c") fails when the drm_device
-cannot be found in the parameter plane_state. Fix it.
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Fixes: d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log calls in drm core, files drm_a*.c")
-Signed-off-by: Claudio Suarez <cssk@net-c.es>
----
- drivers/gpu/drm/drm_atomic_helper.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-index aef2fbd676e5..8bd4472d7949 100644
---- a/drivers/gpu/drm/drm_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_helper.c
-@@ -312,7 +312,7 @@ update_connector_routing(struct drm_atomic_state *state,
- 
- 	if (!new_connector_state->crtc) {
- 		drm_dbg_atomic(connector->dev, "Disabling [CONNECTOR:%d:%s]\n",
--				connector->base.id, connector->name);
-+			       connector->base.id, connector->name);
- 
- 		set_best_encoder(state, new_connector_state, NULL);
- 
-@@ -805,6 +805,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
- 					bool can_update_disabled)
- {
- 	struct drm_framebuffer *fb = plane_state->fb;
-+	struct drm_device *dev = plane_state->plane ? plane_state->plane->dev : NULL;
- 	struct drm_rect *src = &plane_state->src;
- 	struct drm_rect *dst = &plane_state->dst;
- 	unsigned int rotation = plane_state->rotation;
-@@ -828,8 +829,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
- 	}
- 
- 	if (!crtc_state->enable && !can_update_disabled) {
--		drm_dbg_kms(plane_state->crtc->dev,
--			       "Cannot update plane of a disabled CRTC.\n");
-+		drm_dbg_kms(dev, "Cannot update plane of a disabled CRTC.\n");
- 		return -EINVAL;
- 	}
- 
-@@ -839,8 +839,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
- 	hscale = drm_rect_calc_hscale(src, dst, min_scale, max_scale);
- 	vscale = drm_rect_calc_vscale(src, dst, min_scale, max_scale);
- 	if (hscale < 0 || vscale < 0) {
--		drm_dbg_kms(plane_state->crtc->dev,
--			       "Invalid scaling of plane\n");
-+		drm_dbg_kms(dev, "Invalid scaling of plane\n");
- 		drm_rect_debug_print("src: ", &plane_state->src, true);
- 		drm_rect_debug_print("dst: ", &plane_state->dst, false);
- 		return -ERANGE;
-@@ -864,8 +863,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
- 		return 0;
- 
- 	if (!can_position && !drm_rect_equals(dst, &clip)) {
--		drm_dbg_kms(plane_state->crtc->dev,
--			       "Plane must cover entire CRTC\n");
-+		drm_dbg_kms(dev, "Plane must cover entire CRTC\n");
- 		drm_rect_debug_print("dst: ", dst, false);
- 		drm_rect_debug_print("clip: ", &clip, false);
- 		return -EINVAL;
--- 
-2.33.0
+--rJlXTTk3u6DNV2nZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
+> +	ret = device_property_read_u16_array(dev->dev, "dw-i2c-scl-timing",
+> +					(u16 *)&i2c_scl_timing, sizeof(i2c_scl_timing)/sizeof(u16));
 
+Putting hex values directly into DT is not a proper binding. They need
+to be more generic. Sadly, I don't know the DW hardware, so I can't be
+of much more help. But Andy already gave some pointers, as I saw.
+
+
+--rJlXTTk3u6DNV2nZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGlKdoACgkQFA3kzBSg
+Kbba/w/8CVu53eC17FKot1rqbl6DF8+zh83feyfclXNWwPPu82Nr0jZBNDz+Mnbg
+enjpxSnqEFVInmwS+yQ2SNkgMtbovCMXuUigYbJrfZl310+ku2b/lcD+v14wmLJE
+DrrPoVDBa4UB4hq5zwvEbtXtd+XjGuQyABJUMo7iALfDjkgT/bkSBaGyPE4z3wNU
+0HI0U8fFkvX/dQ1nFlaehJoQEeZuhoy6gzKy+kIn1rTNUiBsQBAqV+IagDkGH5Uf
+PpjC0J7ZhbgZnjGwG7ISA0kJJnCWLfUpTOTCkKWB9xa4Dk4Hx4WBc1fAydjcwNrF
+LB8Nn62NovLSGoVENEBwnX5bNk+MbJUlX7karobnDcoc8XAzRVrGOvRy6BfNRAu+
+KowQEndq4FHmCH0CuzYxUF3y3AJmJxkCJx8LCStaIZ6lJd6+Ymt4jHWgo5cUDkyF
+t4XzV/pNJ51ONFBzzV+kxHXGFv0cvVqDm3OTgAA0OSta9wW66NvaDkLqQsVd9G4y
+c7TAcTYT/16n9dHyrvkDEZ373bhjF/JFW9Z4BOAzCYKWBlgV8fpi8KDUJT4nJoeX
+yIDuRmsDthDu7pH4p5aXf4IQyq33/edA3TI/MlV0dMV/YYT5gRTO6Blbs/q2lQt9
+ETbiAUpslY+nAU+cim4pbJgAwBejQA679D8QrhhhqM3Sg9Tyagg=
+=Np68
+-----END PGP SIGNATURE-----
+
+--rJlXTTk3u6DNV2nZ--

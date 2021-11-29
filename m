@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F76846245A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E551462672
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232911AbhK2WRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
+        id S236020AbhK2Wwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:52:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbhK2WQo (ORCPT
+        with ESMTP id S235531AbhK2WuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:16:44 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2805C08ED8F;
-        Mon, 29 Nov 2021 10:20:50 -0800 (PST)
+        Mon, 29 Nov 2021 17:50:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B151C12B6B2;
+        Mon, 29 Nov 2021 10:38:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 36E5CCE13D5;
-        Mon, 29 Nov 2021 18:20:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5BF5C53FC7;
-        Mon, 29 Nov 2021 18:20:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11A26B81630;
+        Mon, 29 Nov 2021 18:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41142C53FC7;
+        Mon, 29 Nov 2021 18:38:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210048;
-        bh=62zfnLtY6sigOaOUyXC1QYoLen+uqHrw7HKSLpKKm1Q=;
+        s=korg; t=1638211099;
+        bh=PNfJYavmxmD1mSQO4+BCCkDlZAxZcQqzg92mqCseBfE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hQTGLzpwakyDTyHriTee8vNe/1rhNZ4nnqdGyrHmhVPl6X41oNDzvjaVisgEcwT+r
-         B8rn6OJIgAJ9YNd0hw+pGnS1Oh6pzHasXS+ez/YRkLILODHuBricW4fu4sd5QJvbKp
-         yb5UF4fxS32ZdKeibEjYgEx70+aGuXzMyrocOd9s=
+        b=NTtUGidkrvJ785D+7q9nghqgYz10p4zKIXnPO2S6Zs1IMmFdYeyYSl58cT+A6W0Kz
+         pcChNDOxSCBMgHR4llkGYUgVoFRsRML3jwx4Z1aVyon8bKD18xIbFC45AmG+HU/04P
+         Jc8kFEvlsEK1Y0AVU+tZdwBs9J3ZZcy1JwuEW4zA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
-Subject: [PATCH 4.19 24/69] PCI: aardvark: Dont touch PCIe registers if no card connected
+        stable@vger.kernel.org, Oskar Senft <osk@google.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 092/179] drm/aspeed: Fix vga_pw sysfs output
 Date:   Mon, 29 Nov 2021 19:18:06 +0100
-Message-Id: <20211129181704.463324459@linuxfoundation.org>
+Message-Id: <20211129181721.961334674@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -50,52 +51,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pali Rohár <pali@kernel.org>
+From: Joel Stanley <joel@jms.id.au>
 
-commit 70e380250c3621c55ff218cbaf2272830d9dbb1d upstream.
+[ Upstream commit b4a6aaeaf4aa79f23775f6688a7e8db3ee1c1303 ]
 
-When there is no PCIe card connected and advk_pcie_rd_conf() or
-advk_pcie_wr_conf() is called for PCI bus which doesn't belong to emulated
-root bridge, the aardvark driver throws the following error message:
+Before the drm driver had support for this file there was a driver that
+exposed the contents of the vga password register to userspace. It would
+present the entire register instead of interpreting it.
 
-  advk-pcie d0070000.pcie: config read/write timed out
+The drm implementation chose to mask of the lower bit, without explaining
+why. This breaks the existing userspace, which is looking for 0xa8 in
+the lower byte.
 
-Obviously accessing PCIe registers of disconnected card is not possible.
+Change our implementation to expose the entire register.
 
-Extend check in advk_pcie_valid_device() function for validating
-availability of PCIe bus. If PCIe link is down, then the device is marked
-as Not Found and the driver does not try to access these registers.
-
-This is just an optimization to prevent accessing PCIe registers when card
-is disconnected. Trying to access PCIe registers of disconnected card does
-not cause any crash, kernel just needs to wait for a timeout. So if card
-disappear immediately after checking for PCIe link (before accessing PCIe
-registers), it does not cause any problems.
-
-Link: https://lore.kernel.org/r/20200702083036.12230-1-pali@kernel.org
-Signed-off-by: Pali Rohár <pali@kernel.org>
-Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Signed-off-by: Marek Behún <kabel@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 696029eb36c0 ("drm/aspeed: Add sysfs for output settings")
+Reported-by: Oskar Senft <osk@google.com>
+Signed-off-by: Joel Stanley <joel@jms.id.au>
+Reviewed-by: Jeremy Kerr <jk@codeconstruct.com.au>
+Tested-by: Oskar Senft <osk@google.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Link: https://patchwork.freedesktop.org/patch/msgid/20211117010145.297253-1-joel@jms.id.au
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pci/controller/pci-aardvark.c |    7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/aspeed/aspeed_gfx_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/pci/controller/pci-aardvark.c
-+++ b/drivers/pci/controller/pci-aardvark.c
-@@ -525,6 +525,13 @@ static bool advk_pcie_valid_device(struc
- 	if ((bus->number == pcie->root_bus_nr) && PCI_SLOT(devfn) != 0)
- 		return false;
+diff --git a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+index b53fee6f1c170..65f172807a0d5 100644
+--- a/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
++++ b/drivers/gpu/drm/aspeed/aspeed_gfx_drv.c
+@@ -291,7 +291,7 @@ vga_pw_show(struct device *dev, struct device_attribute *attr, char *buf)
+ 	if (rc)
+ 		return rc;
  
-+	/*
-+	 * If the link goes down after we check for link-up, nothing bad
-+	 * happens but the config access times out.
-+	 */
-+	if (bus->number != pcie->root_bus_nr && !advk_pcie_link_up(pcie))
-+		return false;
-+
- 	return true;
+-	return sprintf(buf, "%u\n", reg & 1);
++	return sprintf(buf, "%u\n", reg);
  }
+ static DEVICE_ATTR_RO(vga_pw);
  
+-- 
+2.33.0
+
 
 

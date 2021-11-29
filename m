@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFF9461FF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327E6461FFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:14:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349744AbhK2TNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        id S234209AbhK2TRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:17:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233738AbhK2TLl (ORCPT
+        with ESMTP id S239433AbhK2TPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:11:41 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC94BC052925;
-        Mon, 29 Nov 2021 07:32:36 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id m6so35334023oim.2;
-        Mon, 29 Nov 2021 07:32:36 -0800 (PST)
+        Mon, 29 Nov 2021 14:15:41 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02CD8C05293B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:33:33 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id s13so37769799wrb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:33:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=xn0HWQDqGoSI5N5BzKsI9k86k0ZFmdy7lZiWdeS54vs=;
-        b=HWZpuBpzAWtgOoDnqsVg6oglNAy+4ld48MGugS4I/Td1xYLRZJE9i6cjsfRb4rIFU9
-         PNRKArUz2Ze/L2exNv/p8zD8zpbZV3FetIZajlhczdh9kJEiTbLE6e/r7cJex9icFzm+
-         p914BUBXDHjCLH5c1F6brY3VZQYEcXX4hMNoZAtwMmYXz+RKB0VNXA5QHkx01Sgvdpp+
-         msZVr6PA4+cy5OonS1fiqsfvur8Pd4hJw7Ht4T0+xrq/4iKe3uondgJwFJscBLuHK5v8
-         zfyEpzXFITc4N0aM/SIVGvmC16SnGqxKeljNbnRdVQSnSIPcn0tvJimKxXLsOs06RX4H
-         2xXA==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=NTUQ6aLhKD5jn8vygozqrLUU4s5A3V1kXbkGA/ru7lM=;
+        b=HVzF6BkeS36kyfG+xhXLEfxtbXCiiG/rILiuPP4Fm4PsRykXWuBQOq1ebLsVW5XbVC
+         95EXaGYX2KadOC3OLsUpmCr+PV24wovvVOQp3WiFEj0qISMCqG/eEEArA3971cRC80/G
+         dwZnChO8PzFenjS6ReFCoerZwcjT+q0Iaem5AslenQ04adryZLoV+Bk24/XbqGe6rApq
+         a7ax2GcUHB2LobsfqLVVZaPPYpxF+dLCLAwVo1yGdD5SPA2++n6xpC6em3KJlK1p5+tl
+         hN6nBA1G1gTQ7+yGf6VxKTly7FI28S4I9xeo+2RtIubH2IBmQ2RSq3IetRJ4Iv+X12F5
+         OdAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mime-version:content-disposition;
-        bh=xn0HWQDqGoSI5N5BzKsI9k86k0ZFmdy7lZiWdeS54vs=;
-        b=lSEfD16FzYcrovX8m3oZvybpEgexhF3r7Z36geCG4fYQP/5Xlkq61Z8HB5zYIykz7z
-         yWyxHUrUWXwBuWAt3BvKUC5IN8NL10q/Oy+57v/ZcpxK8Gpfvjong6wqQc4KSJCCXrLk
-         6iA3VwKzJ3ErQC6t3syO4018YpAZMAsSIXE5GoJz9NoZagWZEa7jriZNZS5NHrHO499R
-         pqZvgw4t4CWhQYe/6vsL2CIzqma3Ged5OuB66OtgpszZR0NlEmIAHTKRhXKwU95WSfEh
-         Xj/LboWT9+/dMtMvZD8LG/az3mySi+pyDKBs6kl8i+4lIuY9rGobYQoY0cAM8J93a1G+
-         JHbw==
-X-Gm-Message-State: AOAM532FYdK5nfPkqCYVpwptXD5ntgGQW3Vza06wLEsrA1vVSUyAE0vQ
-        fh/zXeMUataqc8aukLBqLBo=
-X-Google-Smtp-Source: ABdhPJxy16yU9FQY4WxueZw8hkgLl864I/mAKQfE9n8/rrWWTh2LZQI01zlQTpGQAqXjDk+mVK8zjg==
-X-Received: by 2002:aca:ab84:: with SMTP id u126mr40568449oie.41.1638199956401;
-        Mon, 29 Nov 2021 07:32:36 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c4sm1003909ook.16.2021.11.29.07.32.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=NTUQ6aLhKD5jn8vygozqrLUU4s5A3V1kXbkGA/ru7lM=;
+        b=0Ao2vyNn9+NxQTNuF7avTJD/LWn5zwIvaqh/dgZSSOntMd3eeu1gcgSny9EeqhKJE4
+         22T5By749CpRrF5Fjt9k5XpLOQvYMehzJyDzz9D0BbZsr1fdbzpbrsjdYQK78TplQW0d
+         tLzFdg8jR8Gwf2fHWs7oaRYWSbkHDPUyqpMmtnHOX6ML5jAM/yWFWpbT1tef3HuUNwz8
+         xhUPJlkZbXEhMhOHlII14XKLbSIbU9RPl9yeXN/3JEV64IMEXFGeEzXuFCNbScV4xV0O
+         UWiZ7jYsC51gOK4iOdui1GWGlZcq2vvLewfc3luxSiWZGAnRoOZXlxeQnSeqwrc/CfdO
+         OKMw==
+X-Gm-Message-State: AOAM531cCNCLWpskhCZ09G8McrHlBPYr9R4yyVkGaHUmPVs4vsb4PXRD
+        Uv0Z97n1sAGu3WI69U4z1iuKPg==
+X-Google-Smtp-Source: ABdhPJyuq3ERsFsDH/xpS1bayhStVieKQtcrUQihIbVIry9BiRsUSwe1lWVq20WEpHG3+o4ITfyuAw==
+X-Received: by 2002:a5d:4b82:: with SMTP id b2mr35021998wrt.419.1638200011561;
+        Mon, 29 Nov 2021 07:33:31 -0800 (PST)
+Received: from myrica (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
+        by smtp.gmail.com with ESMTPSA id r8sm17738405wrz.43.2021.11.29.07.33.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 07:32:35 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Nov 2021 07:32:34 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Andrej Picej <andrej.picej@norik.com>
-Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
-        y.bas@phytec.de, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] watchdog: da9063: Add hard dependency on I2C
-Message-ID: <20211129153234.GA2627247@roeck-us.net>
+        Mon, 29 Nov 2021 07:33:31 -0800 (PST)
+Date:   Mon, 29 Nov 2021 15:33:08 +0000
+From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
+To:     Eric Auger <eric.auger@redhat.com>
+Cc:     joro@8bytes.org, will@kernel.org, mst@redhat.com,
+        jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        sebastien.boeuf@intel.com, kevin.tian@intel.com,
+        pasic@linux.ibm.com
+Subject: Re: [PATCH v2 1/5] iommu/virtio: Add definitions for
+ VIRTIO_IOMMU_F_BYPASS_CONFIG
+Message-ID: <YaTytI6P3/HEwVrQ@myrica>
+References: <20211123155301.1047943-1-jean-philippe@linaro.org>
+ <20211123155301.1047943-2-jean-philippe@linaro.org>
+ <b9068111-bc1e-cc0a-155d-04585d6f4138@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <b9068111-bc1e-cc0a-155d-04585d6f4138@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 02:49:38PM +0100, Andrej Picej wrote:
-> Commit 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in
-> reset handler") implements atomic save i2c transfer which uses i2c
-> functions directly. Add I2C hard dependency which overrides COMPILE_TEST.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Fixes: 5ea29919c294 ("watchdog: da9063: use atomic safe i2c transfer in reset handler")
-> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+Hi Eric,
 
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+On Sat, Nov 27, 2021 at 08:59:25AM +0100, Eric Auger wrote:
+> > @@ -36,6 +37,8 @@ struct virtio_iommu_config {
+> >  	struct virtio_iommu_range_32		domain_range;
+> >  	/* Probe buffer size */
+> >  	__le32					probe_size;
+> > +	__u8					bypass;
+> > +	__u8					reserved[7];
+> in [PATCH v3] virtio-iommu: Rework the bypass feature I see
+> 
+> +  u8 bypass;
+> +  u8 reserved[3];
+> 
+> What was exactly voted?
 
-> ---
->  drivers/watchdog/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index 9d222ba17ec6..3207085f799f 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -207,6 +207,7 @@ config DA9055_WATCHDOG
->  config DA9063_WATCHDOG
->  	tristate "Dialog DA9063 Watchdog"
->  	depends on MFD_DA9063 || COMPILE_TEST
-> +	depends on I2C
->  	select WATCHDOG_CORE
->  	help
->  	  Support for the watchdog in the DA9063 PMIC.
-> -- 
-> 2.25.1
-> 
+Good catch, this should be 3. It brings the config struct to 40 bytes,
+which is the size compilers generate when there is no reserved field.
+
+Thanks,
+Jean

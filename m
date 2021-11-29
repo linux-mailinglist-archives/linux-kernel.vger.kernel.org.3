@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A824F4626D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:54:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 360BA4625B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:39:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235543AbhK2W5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:57:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
+        id S229840AbhK2Wm6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:42:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235714AbhK2W5J (ORCPT
+        with ESMTP id S233965AbhK2Wl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:57:09 -0500
+        Mon, 29 Nov 2021 17:41:57 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79119C03AA3A;
-        Mon, 29 Nov 2021 10:20:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 039AAC0443CC;
+        Mon, 29 Nov 2021 10:29:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C490FCE13D7;
-        Mon, 29 Nov 2021 18:20:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ABBBC53FCD;
-        Mon, 29 Nov 2021 18:20:06 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 504B0CE167C;
+        Mon, 29 Nov 2021 18:29:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00663C53FAD;
+        Mon, 29 Nov 2021 18:29:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210007;
-        bh=NCz/p+WVJI3R+wx/mdu+dIy7lV1eBXTYn4mlKNp02vA=;
+        s=korg; t=1638210580;
+        bh=UfdAoQDGyc+48qTkqvrj5H6Ic2W5FLrDqeLuRM2yp8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZUDnmW2qFt3mNNRSSN4uEwBnPFtLHArLGaXwnAPUo3PPeUZCl6qIsZyx8hKyRU9ph
-         v/I9IE8aCYt0QFKCySml4jRFvt23ur8Ht6yCKUc/bHd68cefYAeBsurxHsVUD+e0u6
-         7/GtBRywB5Zl5MhZOmof3BQaRR75adoHVrPRTcIo=
+        b=G9NW8FA+jOUnvclEGRwIjIk2wghZbE6E/o74jFhvbg1VaL2kqTPvoKez8Evn0ByhA
+         YzJsRuEpTJvl3qlflWU6jw00yQcQ9Xc6XIxD/isVRIOkB2CaMmjtNdEgG5Tg3f9YXw
+         BH2u8AmcIZuC08GmMtvSKZmujrCCajk34ELxK1xs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Frank Dinoff <fdinoff@google.com>,
-        Miklos Szeredi <mszeredi@redhat.com>
-Subject: [PATCH 4.19 11/69] fuse: fix page stealing
-Date:   Mon, 29 Nov 2021 19:17:53 +0100
-Message-Id: <20211129181704.031200295@linuxfoundation.org>
+        stable@vger.kernel.org, Chuanqi Liu <legend050709@qq.com>,
+        yangxingwu <xingwu.yang@gmail.com>,
+        Simon Horman <horms@verge.net.au>,
+        Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 043/121] netfilter: ipvs: Fix reuse connection if RS weight is 0
+Date:   Mon, 29 Nov 2021 19:17:54 +0100
+Message-Id: <20211129181713.108926643@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+References: <20211129181711.642046348@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,64 +52,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miklos Szeredi <mszeredi@redhat.com>
+From: yangxingwu <xingwu.yang@gmail.com>
 
-commit 712a951025c0667ff00b25afc360f74e639dfabe upstream.
+[ Upstream commit c95c07836fa4c1767ed11d8eca0769c652760e32 ]
 
-It is possible to trigger a crash by splicing anon pipe bufs to the fuse
-device.
+We are changing expire_nodest_conn to work even for reused connections when
+conn_reuse_mode=0, just as what was done with commit dc7b3eb900aa ("ipvs:
+Fix reuse connection if real server is dead").
 
-The reason for this is that anon_pipe_buf_release() will reuse buf->page if
-the refcount is 1, but that page might have already been stolen and its
-flags modified (e.g. PG_lru added).
+For controlled and persistent connections, the new connection will get the
+needed real server depending on the rules in ip_vs_check_template().
 
-This happens in the unlikely case of fuse_dev_splice_write() getting around
-to calling pipe_buf_release() after a page has been stolen, added to the
-page cache and removed from the page cache.
-
-Fix by calling pipe_buf_release() right after the page was inserted into
-the page cache.  In this case the page has an elevated refcount so any
-release function will know that the page isn't reusable.
-
-Reported-by: Frank Dinoff <fdinoff@google.com>
-Link: https://lore.kernel.org/r/CAAmZXrsGg2xsP1CK+cbuEMumtrqdvD-NKnWzhNcvn71RV3c1yw@mail.gmail.com/
-Fixes: dd3bb14f44a6 ("fuse: support splice() writing to fuse device")
-Cc: <stable@vger.kernel.org> # v2.6.35
-Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: d752c3645717 ("ipvs: allow rescheduling of new connections when port reuse is detected")
+Co-developed-by: Chuanqi Liu <legend050709@qq.com>
+Signed-off-by: Chuanqi Liu <legend050709@qq.com>
+Signed-off-by: yangxingwu <xingwu.yang@gmail.com>
+Acked-by: Simon Horman <horms@verge.net.au>
+Acked-by: Julian Anastasov <ja@ssi.bg>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/fuse/dev.c |   14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+ Documentation/networking/ipvs-sysctl.rst | 3 +--
+ net/netfilter/ipvs/ip_vs_core.c          | 8 ++++----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
 
---- a/fs/fuse/dev.c
-+++ b/fs/fuse/dev.c
-@@ -905,6 +905,12 @@ static int fuse_try_move_page(struct fus
- 		goto out_put_old;
- 	}
+diff --git a/Documentation/networking/ipvs-sysctl.rst b/Documentation/networking/ipvs-sysctl.rst
+index 2afccc63856ee..1cfbf1add2fc9 100644
+--- a/Documentation/networking/ipvs-sysctl.rst
++++ b/Documentation/networking/ipvs-sysctl.rst
+@@ -37,8 +37,7 @@ conn_reuse_mode - INTEGER
  
-+	/*
-+	 * Release while we have extra ref on stolen page.  Otherwise
-+	 * anon_pipe_buf_release() might think the page can be reused.
-+	 */
-+	pipe_buf_release(cs->pipe, buf);
-+
- 	get_page(newpage);
+ 	0: disable any special handling on port reuse. The new
+ 	connection will be delivered to the same real server that was
+-	servicing the previous connection. This will effectively
+-	disable expire_nodest_conn.
++	servicing the previous connection.
  
- 	if (!(buf->flags & PIPE_BUF_FLAG_LRU))
-@@ -2054,8 +2060,12 @@ static ssize_t fuse_dev_splice_write(str
+ 	bit 1: enable rescheduling of new connections when it is safe.
+ 	That is, whenever expire_nodest_conn and for TCP sockets, when
+diff --git a/net/netfilter/ipvs/ip_vs_core.c b/net/netfilter/ipvs/ip_vs_core.c
+index c0b8215ab3d47..3a76da58d88bb 100644
+--- a/net/netfilter/ipvs/ip_vs_core.c
++++ b/net/netfilter/ipvs/ip_vs_core.c
+@@ -1976,7 +1976,6 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
+ 	struct ip_vs_proto_data *pd;
+ 	struct ip_vs_conn *cp;
+ 	int ret, pkts;
+-	int conn_reuse_mode;
+ 	struct sock *sk;
  
- 	pipe_lock(pipe);
- out_free:
--	for (idx = 0; idx < nbuf; idx++)
--		pipe_buf_release(pipe, &bufs[idx]);
-+	for (idx = 0; idx < nbuf; idx++) {
-+		struct pipe_buffer *buf = &bufs[idx];
-+
-+		if (buf->ops)
-+			pipe_buf_release(pipe, buf);
-+	}
- 	pipe_unlock(pipe);
+ 	/* Already marked as IPVS request or reply? */
+@@ -2053,15 +2052,16 @@ ip_vs_in(struct netns_ipvs *ipvs, unsigned int hooknum, struct sk_buff *skb, int
+ 	cp = INDIRECT_CALL_1(pp->conn_in_get, ip_vs_conn_in_get_proto,
+ 			     ipvs, af, skb, &iph);
  
- 	kvfree(bufs);
+-	conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
+-	if (conn_reuse_mode && !iph.fragoffs && is_new_conn(skb, &iph) && cp) {
++	if (!iph.fragoffs && is_new_conn(skb, &iph) && cp) {
++		int conn_reuse_mode = sysctl_conn_reuse_mode(ipvs);
+ 		bool old_ct = false, resched = false;
+ 
+ 		if (unlikely(sysctl_expire_nodest_conn(ipvs)) && cp->dest &&
+ 		    unlikely(!atomic_read(&cp->dest->weight))) {
+ 			resched = true;
+ 			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
+-		} else if (is_new_conn_expected(cp, conn_reuse_mode)) {
++		} else if (conn_reuse_mode &&
++			   is_new_conn_expected(cp, conn_reuse_mode)) {
+ 			old_ct = ip_vs_conn_uses_old_conntrack(cp, skb);
+ 			if (!atomic_read(&cp->n_control)) {
+ 				resched = true;
+-- 
+2.33.0
+
 
 

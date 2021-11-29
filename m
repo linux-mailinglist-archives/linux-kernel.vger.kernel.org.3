@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE97461F2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3E0461E13
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1380178AbhK2So1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:44:27 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:55154 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354250AbhK2SmA (ORCPT
+        id S1378751AbhK2ScO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:32:14 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34822 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379059AbhK2SaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:42:00 -0500
+        Mon, 29 Nov 2021 13:30:06 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 807B3CE13BF;
-        Mon, 29 Nov 2021 18:38:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AED6C53FAD;
-        Mon, 29 Nov 2021 18:38:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 19054B815F8;
+        Mon, 29 Nov 2021 18:26:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8A1C53FCD;
+        Mon, 29 Nov 2021 18:26:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638211119;
-        bh=33vH23L7fE+IaDyhc63rH9wswM2kTd+BJ7+ewrBiV8M=;
+        s=korg; t=1638210405;
+        bh=8+B12Z2kLtdYTzTycUhAkA/ExSUrQLkZ5YM/3khJ8uw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LDq4dffDhIf5uZUnjrnsqiw4EpzentDj+AiUyDrMLhWHA/3t4lN7vQw8bI/gmACKw
-         1Y9bIGDMTYwXLPPp+z1/pa7aK2VSN7na/zYKHn8LmMc+F1JKvOIgNB9GBCZAAffpHa
-         Axl/fTIqWc7XO26c+/FoEMsobzq4HK0tdxqwp5z4=
+        b=R9u8nlK1N44/jsGFUUji2uR2zRoqPeDP9VnTjUTXMt50BMKWV/1f23kvMri3Lqt2s
+         brxRJbTIhueCBdq+CVQAi2eYRgsfDFQZxedw5iciPyyV62LafBExpHtDufvE+0KICK
+         5PCISCi2ZtB75WQX8GZXWGkfoxXLC5PUIFNEwGlM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jan Sokolowski <jan.sokolowski@intel.com>,
-        Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 099/179] iavf: Fix refreshing iavf adapter stats on ethtool request
+        stable@vger.kernel.org,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <marek.behun@nic.cz>,
+        Remi Pommarel <repk@triplefau.lt>,
+        Tomasz Maciej Nowak <tmn505@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 5.4 44/92] arm64: dts: marvell: armada-37xx: Set pcie_reset_pin to gpio function
 Date:   Mon, 29 Nov 2021 19:18:13 +0100
-Message-Id: <20211129181722.188359843@linuxfoundation.org>
+Message-Id: <20211129181708.900926243@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
-References: <20211129181718.913038547@linuxfoundation.org>
+In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
+References: <20211129181707.392764191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -48,114 +50,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
+From: Marek Behún <kabel@kernel.org>
 
-[ Upstream commit 3b5bdd18eb76e7570d9bacbcab6828a9b26ae121 ]
+commit 715878016984b2617f6c1f177c50039e12e7bd5b upstream.
 
-Currently iavf adapter statistics are refreshed only in a
-watchdog task, triggered approximately every two seconds,
-which causes some ethtool requests to return outdated values.
+We found out that we are unable to control the PERST# signal via the
+default pin dedicated to be PERST# pin (GPIO2[3] pin) on A3700 SOC when
+this pin is in EP_PCIE1_Resetn mode. There is a register in the PCIe
+register space called PERSTN_GPIO_EN (D0088004[3]), but changing the
+value of this register does not change the pin output when measuring
+with voltmeter.
 
-Add explicit statistics refresh when requested by ethtool -S.
+We do not know if this is a bug in the SOC, or if it works only when
+PCIe controller is in a certain state.
 
-Fixes: b476b0030e61 ("iavf: Move commands processing to the separate function")
-Signed-off-by: Jan Sokolowski <jan.sokolowski@intel.com>
-Signed-off-by: Jedrzej Jagielski <jedrzej.jagielski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Commit f4c7d053d7f7 ("PCI: aardvark: Wait for endpoint to be ready
+before training link") says that when this pin changes pinctrl mode
+from EP_PCIE1_Resetn to GPIO, the PERST# signal is asserted for a brief
+moment.
+
+So currently the situation is that on A3700 boards the PERST# signal is
+asserted in U-Boot (because the code in U-Boot issues reset via this pin
+via GPIO mode), and then in Linux by the obscure and undocumented
+mechanism described by the above mentioned commit.
+
+We want to issue PERST# signal in a known way, therefore this patch
+changes the pcie_reset_pin function from "pcie" to "gpio" and adds the
+reset-gpios property to the PCIe node in device tree files of
+EspressoBin and Armada 3720 Dev Board (Turris Mox device tree already
+has this property and uDPU does not have a PCIe port).
+
+Signed-off-by: Marek Behún <marek.behun@nic.cz>
+Cc: Remi Pommarel <repk@triplefau.lt>
+Tested-by: Tomasz Maciej Nowak <tmn505@gmail.com>
+Acked-by: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf.h         |  2 ++
- drivers/net/ethernet/intel/iavf/iavf_ethtool.c |  3 +++
- drivers/net/ethernet/intel/iavf/iavf_main.c    | 18 ++++++++++++++++++
- .../net/ethernet/intel/iavf/iavf_virtchnl.c    |  2 ++
- 4 files changed, 25 insertions(+)
+ arch/arm64/boot/dts/marvell/armada-3720-db.dts          |    3 +++
+ arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts |    1 +
+ arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts  |    4 ----
+ arch/arm64/boot/dts/marvell/armada-37xx.dtsi            |    2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf.h b/drivers/net/ethernet/intel/iavf/iavf.h
-index 46312a4415baf..dd81698f0d596 100644
---- a/drivers/net/ethernet/intel/iavf/iavf.h
-+++ b/drivers/net/ethernet/intel/iavf/iavf.h
-@@ -305,6 +305,7 @@ struct iavf_adapter {
- #define IAVF_FLAG_AQ_DEL_FDIR_FILTER		BIT(26)
- #define IAVF_FLAG_AQ_ADD_ADV_RSS_CFG		BIT(27)
- #define IAVF_FLAG_AQ_DEL_ADV_RSS_CFG		BIT(28)
-+#define IAVF_FLAG_AQ_REQUEST_STATS		BIT(29)
+--- a/arch/arm64/boot/dts/marvell/armada-3720-db.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-db.dts
+@@ -128,6 +128,9 @@
  
- 	/* OS defined structs */
- 	struct net_device *netdev;
-@@ -398,6 +399,7 @@ int iavf_up(struct iavf_adapter *adapter);
- void iavf_down(struct iavf_adapter *adapter);
- int iavf_process_config(struct iavf_adapter *adapter);
- void iavf_schedule_reset(struct iavf_adapter *adapter);
-+void iavf_schedule_request_stats(struct iavf_adapter *adapter);
- void iavf_reset(struct iavf_adapter *adapter);
- void iavf_set_ethtool_ops(struct net_device *netdev);
- void iavf_update_stats(struct iavf_adapter *adapter);
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-index 71b23922089fb..0cecaff38d042 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_ethtool.c
-@@ -354,6 +354,9 @@ static void iavf_get_ethtool_stats(struct net_device *netdev,
- 	struct iavf_adapter *adapter = netdev_priv(netdev);
- 	unsigned int i;
+ /* CON15(V2.0)/CON17(V1.4) : PCIe / CON15(V2.0)/CON12(V1.4) :mini-PCIe */
+ &pcie0 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pcie_reset_pins &pcie_clkreq_pins>;
++	reset-gpios = <&gpiosb 3 GPIO_ACTIVE_LOW>;
+ 	status = "okay";
+ };
  
-+	/* Explicitly request stats refresh */
-+	iavf_schedule_request_stats(adapter);
-+
- 	iavf_add_ethtool_stats(&data, adapter, iavf_gstrings_stats);
+--- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
+@@ -59,6 +59,7 @@
+ 	phys = <&comphy1 0>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pcie_reset_pins &pcie_clkreq_pins>;
++	reset-gpios = <&gpiosb 3 GPIO_ACTIVE_LOW>;
+ };
  
- 	rcu_read_lock();
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index aaf8a2f396e46..5173b6293c6d9 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -165,6 +165,19 @@ void iavf_schedule_reset(struct iavf_adapter *adapter)
- 	}
- }
+ /* J6 */
+--- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
++++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+@@ -127,10 +127,6 @@
+ 	};
+ };
  
-+/**
-+ * iavf_schedule_request_stats - Set the flags and schedule statistics request
-+ * @adapter: board private structure
-+ *
-+ * Sets IAVF_FLAG_AQ_REQUEST_STATS flag so iavf_watchdog_task() will explicitly
-+ * request and refresh ethtool stats
-+ **/
-+void iavf_schedule_request_stats(struct iavf_adapter *adapter)
-+{
-+	adapter->aq_required |= IAVF_FLAG_AQ_REQUEST_STATS;
-+	mod_delayed_work(iavf_wq, &adapter->watchdog_task, 0);
-+}
-+
- /**
-  * iavf_tx_timeout - Respond to a Tx Hang
-  * @netdev: network interface device structure
-@@ -1700,6 +1713,11 @@ static int iavf_process_aq_command(struct iavf_adapter *adapter)
- 		iavf_del_adv_rss_cfg(adapter);
- 		return 0;
- 	}
-+	if (adapter->aq_required & IAVF_FLAG_AQ_REQUEST_STATS) {
-+		iavf_request_stats(adapter);
-+		return 0;
-+	}
-+
- 	return -EAGAIN;
- }
+-&pcie_reset_pins {
+-	function = "gpio";
+-};
+-
+ &pcie0 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pcie_reset_pins &pcie_clkreq_pins>;
+--- a/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
++++ b/arch/arm64/boot/dts/marvell/armada-37xx.dtsi
+@@ -318,7 +318,7 @@
  
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-index 3c735968e1b85..33bde032ca37e 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-@@ -784,6 +784,8 @@ void iavf_request_stats(struct iavf_adapter *adapter)
- 		/* no error message, this isn't crucial */
- 		return;
- 	}
-+
-+	adapter->aq_required &= ~IAVF_FLAG_AQ_REQUEST_STATS;
- 	adapter->current_op = VIRTCHNL_OP_GET_STATS;
- 	vqs.vsi_id = adapter->vsi_res->vsi_id;
- 	/* queue maps are ignored for this message - only the vsi is used */
--- 
-2.33.0
-
+ 				pcie_reset_pins: pcie-reset-pins {
+ 					groups = "pcie1";
+-					function = "pcie";
++					function = "gpio";
+ 				};
+ 
+ 				pcie_clkreq_pins: pcie-clkreq-pins {
 
 

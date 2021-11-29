@@ -2,91 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C8454611F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F23461200
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237239AbhK2KXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:23:31 -0500
-Received: from mga05.intel.com ([192.55.52.43]:41774 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229597AbhK2KV3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:21:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="322171887"
-X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
-   d="scan'208";a="322171887"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 02:18:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,272,1631602800"; 
-   d="scan'208";a="652957479"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmsmga001.fm.intel.com with ESMTP; 29 Nov 2021 02:18:09 -0800
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        gregkh@linuxfoundation.org
-Cc:     stern@rowland.harvard.edu,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Andrew Lunn <andrew@lunn.ch>, Rajat Jain <rajatja@google.com>,
-        Chris Chiu <chris.chiu@canonical.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211126115652.1134230-1-kai.heng.feng@canonical.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH v2] usb: core: Avoid doing warm reset on disconnect event
-Message-ID: <745bd358-c34c-9deb-42e6-6f6a54fd3e2e@linux.intel.com>
-Date:   Mon, 29 Nov 2021 12:19:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.8.1
+        id S245708AbhK2KZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:25:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:34019 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236643AbhK2KXV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 05:23:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638181203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=e6SaX+NTgiaFDnrzD5rOQdn6fQZIVXiBx5LgIgNJIdg=;
+        b=Vbr5Vf2BhuLvUZVqzUr6aJYtFc8i/CZ528WhkFO5V+U1jpU0lelSxwRmjej6kK+sFwvmld
+        /TDWyKCPHsjU1B3u+iXUcadFSoOPSGv5TvcJXZwObXTJolGxoSfhK3lgQv+C+kqF6FS0aW
+        AkpR8GJIomzVS3khj1LGIKzeRnjwz7Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-175-Lc5EhORMMfagTkSimab4og-1; Mon, 29 Nov 2021 05:19:59 -0500
+X-MC-Unique: Lc5EhORMMfagTkSimab4og-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 9340E343CB;
+        Mon, 29 Nov 2021 10:19:58 +0000 (UTC)
+Received: from localhost (unknown [10.39.195.30])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 69EF960C13;
+        Mon, 29 Nov 2021 10:19:52 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 10:19:51 +0000
+From:   Stefan Hajnoczi <stefanha@redhat.com>
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Vivek Goyal <vgoyal@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2] fuse: rename some files and clean up Makefile
+Message-ID: <YaSpRwMlMvcIIMZo@stefanha-x1.localdomain>
+References: <1638008002-3037-1-git-send-email-yangtiezhu@loongson.cn>
 MIME-Version: 1.0
-In-Reply-To: <20211126115652.1134230-1-kai.heng.feng@canonical.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Z2Ce6dDVMZ60RS5B"
+Content-Disposition: inline
+In-Reply-To: <1638008002-3037-1-git-send-email-yangtiezhu@loongson.cn>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.11.2021 13.56, Kai-Heng Feng wrote:
-> Unplugging USB device may cause an incorrect warm reset loop:
-> [  143.039019] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x4202c0
-> [  143.039025] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-> [  143.039051] hub 2-0:1.0: state 7 ports 10 chg 0000 evt 0008
-> [  143.039058] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x4202c0, return 0x4102c0
-> [  143.039092] xhci_hcd 0000:00:14.0: clear port3 connect change, portsc: 0x4002c0
-> [  143.039096] usb usb2-port3: link state change
-> [  143.039099] xhci_hcd 0000:00:14.0: clear port3 link state change, portsc: 0x2c0
-> [  143.039101] usb usb2-port3: do warm reset
-> [  143.096736] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2b0, return 0x2b0
-> [  143.096751] usb usb2-port3: not warm reset yet, waiting 50ms
-> [  143.131500] xhci_hcd 0000:00:14.0: Can't queue urb, port error, link inactive
-> [  143.138260] xhci_hcd 0000:00:14.0: Port change event, 2-3, id 19, portsc: 0x2802a0
-> [  143.138263] xhci_hcd 0000:00:14.0: handle_port_status: starting usb2 port polling.
-> [  143.160756] xhci_hcd 0000:00:14.0: Get port status 2-3 read: 0x2802a0, return 0x3002a0
-> [  143.160798] usb usb2-port3: not warm reset yet, waiting 200ms
-> 
-> The warm reset is due to its PLS is in eSS.Inactive state. However, USB
-> 3.2 spec table 10-13 mentions "Ports can be disabled by either a fault
-> condition (disconnect event or other fault condition)", xHCI 1.2 spec
-> table 5-27 also states that "This flag shall automatically be cleared to
-> ‘0’ by a disconnect event or other fault condition." on PED.
-> 
-> So use CSC = 0 and PED = 0 as indication that device is disconnecting to
-> avoid doing warm reset.
 
-My understanding is that PED = 0 in case of disconnect, error (PLS=Inactive), or
-during active reset signalling. See xHCI Figure 4-27: USB3 Root Hub Port State Machine.
-signal states (0,0,0,0) are PP,CCS,PED,PR.
+--Z2Ce6dDVMZ60RS5B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I'm looking at a similar case where Inactive link is reported at disconnect for a while
-before missing terminations are detected and link finally goes to RxDetect.
+On Sat, Nov 27, 2021 at 06:13:22PM +0800, Tiezhu Yang wrote:
+> No need to generate virtio_fs.o first and then link to virtiofs.o, just
+> rename virtio_fs.c to virtiofs.c and remove "virtiofs-y := virtio_fs.o"
+> in Makefile, also update MAINTAINERS. Additionally, rename the private
+> header file fuse_i.h to fuse.h, like ext4.h in fs/ext4, xfs.h in fs/xfs
+> and f2fs.h in fs/f2fs.
 
-If the port was reset immediately when Inactive link state was reported the port stays stuck 
-in port reset.
-This might have been related to the address0 locking issues recently fixed.
+There are two separate changes in this patch (virtio_fs.c -> virtiofs.c
+and fuse_i.h -> fuse.h). A patch series with two patches would be easier
+to review and cleaner to backport.
 
-Anyway, to avoid the extra reset of a removed USB3 device I started polling the link state of
-the Inactive link for some time before resetting it. This gives the link time to detect
-missing terminations and go to RxDetect, and driver can skip the reset.
+I'm happy with renaming virtio_fs.c to virtiofs.c:
 
-Planning on upstreaming it, patch is here:
-https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=fix_avoid_disconnect_reset&id=72d20c026b7812d096c6b5184a3888894401c829
+Reviewed-by: Stefan Hajnoczi <stefanha@redhat.com>
 
--Mathias
+--Z2Ce6dDVMZ60RS5B
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEhpWov9P5fNqsNXdanKSrs4Grc8gFAmGkqUcACgkQnKSrs4Gr
+c8hcDwf9GKHQ6ydDAUWUl6kfFQdbJcYRM28PABP2g94fv4RMNpFyPVMxz6gMQ0pv
+eplzXRrlAfIeHUMmw/6LAG6VMygzxo5dApigaKd94inPQbGvdQziO3axf3vKyshe
+nk0GSOvwk0adN9LUvJOP4v/zaia6SrH/mTTNLCHRXyq/mnN5wPEImGHR1l4Sr+NM
+spQp+XoBrjQEuikwBL9wEg7ZP+Oyy64tC0kzXzQnq4XY+UdVNIyLZ+BvAxJGJxtR
+Fup9FzJNPiVRC7Y0Np12bQBa/wv+KAHH/g/GYOKpkHiCbczTCeDZUe+TcQNaJE0t
+f+3+ZCQAbio2j/rvXWtoy+WK33we5A==
+=GXwS
+-----END PGP SIGNATURE-----
+
+--Z2Ce6dDVMZ60RS5B--
+

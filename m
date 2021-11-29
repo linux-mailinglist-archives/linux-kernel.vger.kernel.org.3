@@ -2,72 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB29446233E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75376462343
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231543AbhK2V3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 16:29:39 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:35385 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbhK2V1i (ORCPT
+        id S232036AbhK2V3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 16:29:50 -0500
+Received: from hostingweb31-40.netsons.net ([89.40.174.40]:35937 "EHLO
+        hostingweb31-40.netsons.net" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229635AbhK2V1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:27:38 -0500
-Received: by mail-oi1-f178.google.com with SMTP id m6so37164568oim.2;
-        Mon, 29 Nov 2021 13:24:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8P42aAKBV8S4LvUKHyVzOqAuami2IMb7sD0ZrRnSWyo=;
-        b=plnLtuD+N64VN5RlOuMIbDFvnWIZsum9L/nxhNCQJcfqKpiv91d30X3kx2uYoL6Gp9
-         7Dxf8E4zbGNlFFvJQ8IIGocv/hhRdIB4JXymZPH08ZcDTd7uwdjpfi7wz9dSRuewGUfU
-         Ud8w0bcVM9/JbrrDdyiJNEImwg/Zatq0xsmo4AmfZjS0KDoRBIxe/6KzSdF3jXpFBc7D
-         m4u4dTSbPtuEANIiB5MadML9sKaC8XxPWQWN7J6gixMuRHnBkQwousYGq5nsgnF4iiH8
-         EQp6gig/ug+JUj++4oEfYKu0916HG2QLQMAK+rzZfOoukhzjn1lkcZbZ5vIsH1xunO/b
-         g03A==
-X-Gm-Message-State: AOAM532nYmYVg85+/A5JlNvICGYUDV0TnAe6ci3dtsPbSB6RJWF2tQ8Q
-        9Ae3bf6XVvEibfyZPkBR6Q==
-X-Google-Smtp-Source: ABdhPJx0EJBI7GuYe1BD0nnxLGzq9XPUrMt4flTh1Z8UeMoK+aVbKJ1f47RPGw+VYxaBRSOgS+QNMg==
-X-Received: by 2002:a05:6808:1a83:: with SMTP id bm3mr516246oib.173.1638221060008;
-        Mon, 29 Nov 2021 13:24:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id l6sm2822483otu.12.2021.11.29.13.24.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 13:24:19 -0800 (PST)
-Received: (nullmailer pid 634858 invoked by uid 1000);
-        Mon, 29 Nov 2021 21:24:18 -0000
-Date:   Mon, 29 Nov 2021 15:24:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Hector Martin <marcan@marcan.st>,
+        Mon, 29 Nov 2021 16:27:49 -0500
+Received: from [77.244.183.192] (port=61954 helo=[192.168.178.41])
+        by hostingweb31.netsons.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <luca@lucaceresoli.net>)
+        id 1mro8S-0001y6-Vg; Mon, 29 Nov 2021 22:24:29 +0100
+From:   Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v4 7/9] watchdog: max77620: add support for the max77714
+ variant
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
         Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/2] dt-bindings: watchdog: Add Apple Watchdog
-Message-ID: <YaVFApM9K0lAzUze@robh.at.kernel.org>
-References: <20211113094732.73889-1-sven@svenpeter.dev>
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20211120155707.4019487-1-luca@lucaceresoli.net>
+ <20211120155707.4019487-8-luca@lucaceresoli.net>
+ <20211129155320.GA2761477@roeck-us.net>
+Message-ID: <8efe5354-6308-4f0c-a0c8-6657f705cfb1@lucaceresoli.net>
+Date:   Mon, 29 Nov 2021 22:24:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211113094732.73889-1-sven@svenpeter.dev>
+In-Reply-To: <20211129155320.GA2761477@roeck-us.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - hostingweb31.netsons.net
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - lucaceresoli.net
+X-Get-Message-Sender-Via: hostingweb31.netsons.net: authenticated_id: luca@lucaceresoli.net
+X-Authenticated-Sender: hostingweb31.netsons.net: luca@lucaceresoli.net
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 13 Nov 2021 10:47:31 +0100, Sven Peter wrote:
-> Apple SoCs come with a simple embedded watchdog. This watchdog is also
-> required in order to reset the SoC.
-> 
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
-> ---
->  .../bindings/watchdog/apple,wdt.yaml          | 52 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 53 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
-> 
+Hi Guenter,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+thanks for you review!
+
+On 29/11/21 16:53, Guenter Roeck wrote:
+> On Sat, Nov 20, 2021 at 04:57:05PM +0100, Luca Ceresoli wrote:
+>> The MAX77714 is a MFD chip whose watchdog has the same programming
+>> procedures as the MAX77620 watchdog, but most register offsets and bit
+>> masks are different, as well as some features.
+>>
+>> Support the MAX77714 watchdog by adding a variant description table holding
+>> the differences.
+>>
+>> All the features implemented by this driver are available on the MAX77714
+>> except for the lack of a WDTOFFC bit. Instead of using a "HAS_*" flag we
+>> handle this by holding in the cnfg_glbl2_cfg_bits struct field the bits
+>> (i.e. the features) to enable in the CNFG_GLBL2 register. These bits differ
+>> among the two models. This implementation allows to avoid any conditional
+>> code, keeping the execution flow unchanged.
+>>
+>> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+>> ---
+>>
+>> This patch is new in v4. It replaces v3 patch 7 ("watchdog: max77714: add
+>> driver for the watchdog in the MAX77714 PMIC") by adding MAX77714 wdog
+>> support to the existing MAX77620 wdog driver instead of adding a new
+>> driver. Suggested by Guenter Roeck and Krzysztof Kozlowski.
+>> ---
+>>  drivers/watchdog/Kconfig        |  2 +-
+>>  drivers/watchdog/max77620_wdt.c | 96 +++++++++++++++++++++++++--------
+>>  2 files changed, 75 insertions(+), 23 deletions(-)
+>>
+>> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+>> index a6d97f30325a..f920ad271dde 100644
+>> --- a/drivers/watchdog/Kconfig
+>> +++ b/drivers/watchdog/Kconfig
+>> @@ -677,7 +677,7 @@ config MAX63XX_WATCHDOG
+>>  
+>>  config MAX77620_WATCHDOG
+>>  	tristate "Maxim Max77620 Watchdog Timer"
+>> -	depends on MFD_MAX77620 || COMPILE_TEST
+>> +	depends on MFD_MAX77620 || MFD_MAX77714 || COMPILE_TEST
+>>  	select WATCHDOG_CORE
+>>  	help
+>>  	  This is the driver for the Max77620 watchdog timer.
+>> diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
+>> index be6a53c30002..06b48295fab6 100644
+>> --- a/drivers/watchdog/max77620_wdt.c
+>> +++ b/drivers/watchdog/max77620_wdt.c
+>> @@ -3,8 +3,10 @@
+>>   * Maxim MAX77620 Watchdog Driver
+>>   *
+>>   * Copyright (C) 2016 NVIDIA CORPORATION. All rights reserved.
+>> + * Copyright (C) 2021 Luca Ceresoli
+>>   *
+>>   * Author: Laxman Dewangan <ldewangan@nvidia.com>
+>> + * Author: Luca Ceresoli <luca@lucaceresoli.net>
+>>   */
+>>  
+>>  #include <linux/err.h>
+>> @@ -13,6 +15,7 @@
+>>  #include <linux/module.h>
+>>  #include <linux/mod_devicetable.h>
+>>  #include <linux/mfd/max77620.h>
+>> +#include <linux/mfd/max77714.h>
+>>  #include <linux/platform_device.h>
+>>  #include <linux/regmap.h>
+>>  #include <linux/slab.h>
+>> @@ -20,17 +23,66 @@
+>>  
+>>  static bool nowayout = WATCHDOG_NOWAYOUT;
+>>  
+>> +/**
+>> + * struct max77620_variant - Data specific to a chip variant
+>> + * @wdt_info:            watchdog descriptor
+>> + * @reg_onoff_cnfg2:     ONOFF_CNFG2 register offset
+>> + * @reg_cnfg_glbl2:      CNFG_GLBL2 register offset
+>> + * @reg_cnfg_glbl3:      CNFG_GLBL3 register offset
+>> + * @wdtc_mask:           WDTC bit mask in CNFG_GLBL3 (=bits to update to ping the watchdog)
+>> + * @bit_wd_rst_wk:       WD_RST_WK bit offset within ONOFF_CNFG2
+>> + * @cnfg_glbl2_cfg_bits: configuration bits to enable in CNFG_GLBL2 register
+>> + */
+>> +struct max77620_variant {
+>> +	const struct watchdog_info wdt_info;
+>> +	u8 reg_onoff_cnfg2;
+>> +	u8 reg_cnfg_glbl2;
+>> +	u8 reg_cnfg_glbl3;
+>> +	u8 wdtc_mask;
+>> +	u8 bit_wd_rst_wk;
+>> +	u8 cnfg_glbl2_cfg_bits;
+>> +};
+>> +
+>>  struct max77620_wdt {
+>>  	struct device			*dev;
+>>  	struct regmap			*rmap;
+>> +	const struct max77620_variant	*drv_data;
+>>  	struct watchdog_device		wdt_dev;
+>>  };
+>>  
+>> +static const struct max77620_variant max77620_wdt_data = {
+>> +	.wdt_info = {
+>> +		.identity = "max77620-watchdog",
+>> +		.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+>> +	},
+> 
+> That does not have to be, and should not be, part of device specific data,
+> just because of the identity string.
+
+Ok, no problem, will fix, but I have two questions.
+
+First, what's the reason? Coding style or a functional difference?
+Usually const data is preferred to runtime assignment.
+
+Second: it's not clear how you expect it to be done. Looking into the
+kernel it looks like almost all drivers set a constant string. I could
+find only one exception, f71808e_wdt:
+https://elixir.bootlin.com/linux/v5.16-rc3/source/drivers/watchdog/f71808e_wdt.c#L471
+
+> Either keep the current identity string,
+> mark max77620_wdt_info as __ro_after_init and overwrite the identity string
+> there during probe
+
+And also remove 'static' I guess. Hm, I don't love this, as above I tend
+to prefer static const when possible for file-scoped data.
+
+> or add the structure to max77620_wdt and fill it out there.
+
+Do you mean like the following, untested, kind-of-pseudocode?
+
+ struct max77620_wdt {
+ 	struct device			*dev;
+ 	struct regmap			*rmap;
+	const struct max77620_variant	*drv_data;
++	struct watchdog_info		info;     /* not a pointer! */
+ 	struct watchdog_device		wdt_dev;
+ };
+
+and then, in probe:
+
+   wdt->dev = dev;
+   wdt->drv_data = (const struct max77620_variant *)id->driver_data;
+   /* ... assign other wdt fields ... */
++  strlcpy(wdt_dev->info.identity, id->name, \
++          sizeof(wdt_dev->info.identity));
++  wdt_dev->info.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | \
++                          WDIOF_MAGICCLOSE;
+
+Finally, what about simply:
+
+ static const struct max77620_variant max77620_wdt_data = {
+	.wdt_info = {
+-		.identity = "max77620-watchdog",
++		.identity = "max77xxx-watchdog",
+		.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | ...
+	},
+
+and always use that struct unconditionally? The max63xx_wdt.c driver
+seems to do that. Or, if this is an issue for backward compatibility (is
+it?), just leave max77620_wdt_data and the .identity field will always
+be "max77620-watchdog" even when using a MAX77714.
+
+Thanks for you patience in reading so far.
+-- 
+Luca (slightly confused, but very open to learning)

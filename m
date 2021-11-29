@@ -2,195 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 352AC4613AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D8F461351
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377689AbhK2LP3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 06:15:29 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:49979 "EHLO
-        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239066AbhK2LNY (ORCPT
+        id S1354484AbhK2LL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:11:58 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:52874 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233362AbhK2LJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:13:24 -0500
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-342-DyWoeAsiMumoG4o6FMtrmw-1; Mon, 29 Nov 2021 06:09:53 -0500
-X-MC-Unique: DyWoeAsiMumoG4o6FMtrmw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CADF8835B65;
-        Mon, 29 Nov 2021 11:09:51 +0000 (UTC)
-Received: from x1.com (unknown [10.22.8.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 847CC5D9DE;
-        Mon, 29 Nov 2021 11:09:45 +0000 (UTC)
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Tao Zhou <tao.zhou@linux.dev>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V8 14/14] rtla: Add rtla timerlat hist documentation
-Date:   Mon, 29 Nov 2021 12:07:52 +0100
-Message-Id: <0e2bd067f32d9da3244396741d37c09278a04f91.1638182284.git.bristot@kernel.org>
-In-Reply-To: <cover.1638182284.git.bristot@kernel.org>
-References: <cover.1638182284.git.bristot@kernel.org>
+        Mon, 29 Nov 2021 06:09:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1638184000; x=1669720000;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=px9O/Bq5B4DL5jCTNt3L7dJdnR2fEC1xr8C2iqfLWtU=;
+  b=bwCDp6gNmzMKX5vAgsJe8BqezpB+96n9TBcOrx5vb2EcNSAoZghf6eq/
+   VI/19J+Zk1IHNNZHIE25MphIptaN5KrF01q5PMEP5dqFt1DgG8IPj4IIG
+   iWDvGNGK3Tb/cgGywk4q9AhZqnVzdqLZoFMkDN0cRrRjIg+7rFQXvaolY
+   ea6O3Hu5qokej34ZPhVX4USFs4wq3h8N2P6jMhFZ0T0kbjXj6XQ8CUUME
+   A+Muda6fGIeYYVFtbQuly3UtHZE34PBVJeCtowwRhjqLO9eeyYYYW91Vj
+   T2CKm0u4E9P9frvcGg1Ermr7L1cRRZKzy9vsqDmIdtjfneK8iqnzj2din
+   A==;
+IronPort-SDR: 80zuOpP18NibtUCEZqIRvXSBV++FIA/BG92vVkFxqNwpRKtLQypaupvoZnXrrR3vaWu3v53xUd
+ Rwuu3BoD0zEoHGqPO8TzmBg5TSm8Plskqow4bo44/ev3qxCnPw0AuNr89h62laYd8+x6fIeqg3
+ F6qzvlff3cGRsiGDvuqSfCFmxJoFd6VKtgku1l1dpQwoh/6V1ZK9XE3mrXZlPFQv4Ne40syZGC
+ opn0CJ/I9OSAQQKNB3lq6pNf33Dj438oT5RuItm6+NDvufUk86gSqqRwgUvjKzcIR5wmAgyUyS
+ a3LEb/7jL3qyBTIZIn8Nz6/J
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="140561184"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2021 04:06:39 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Mon, 29 Nov 2021 04:06:39 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2176.14 via Frontend
+ Transport; Mon, 29 Nov 2021 04:06:38 -0700
+Date:   Mon, 29 Nov 2021 12:08:34 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+CC:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <p.zabel@pengutronix.de>,
+        <andrew@lunn.ch>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next v4 3/6] net: lan966x: add port module support
+Message-ID: <20211129110834.yy6wai63vaftnias@soft-dev3-1.localhost>
+References: <20211126090540.3550913-1-horatiu.vultur@microchip.com>
+ <20211126090540.3550913-4-horatiu.vultur@microchip.com>
+ <YaC/OT0f2JKBPMOb@shell.armlinux.org.uk>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=CUSA124A263 smtp.mailfrom=bristot@kernel.org
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: kernel.org
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <YaC/OT0f2JKBPMOb@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Man page for rtla timerlat hist mode.
+The 11/26/2021 11:04, Russell King (Oracle) wrote:
+> 
+> On Fri, Nov 26, 2021 at 10:05:37AM +0100, Horatiu Vultur wrote:
+> > This patch adds support for netdev and phylink in the switch. The
+> > injection + extraction is register based. This will be replaced with DMA
+> > accees.
+> >
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> 
+> This looks mostly good now, thanks. There's one remaining issue:
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Tom Zanussi <zanussi@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Clark Williams <williams@redhat.com>
-Cc: John Kacur <jkacur@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: linux-rt-users@vger.kernel.org
-Cc: linux-trace-devel@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- .../tools/rtla/rtla-timerlat-hist.rst         | 106 ++++++++++++++++++
- 1 file changed, 106 insertions(+)
- create mode 100644 Documentation/tools/rtla/rtla-timerlat-hist.rst
+Thanks for the help!
 
-diff --git a/Documentation/tools/rtla/rtla-timerlat-hist.rst b/Documentation/tools/rtla/rtla-timerlat-hist.rst
-new file mode 100644
-index 000000000000..e12eae1f3301
---- /dev/null
-+++ b/Documentation/tools/rtla/rtla-timerlat-hist.rst
-@@ -0,0 +1,106 @@
-+=====================
-+rtla-timerlat-hist
-+=====================
-+------------------------------------------------
-+Histograms of the operating system timer latency
-+------------------------------------------------
-+
-+:Manual section: 1
-+
-+SYNOPSIS
-+========
-+**rtla timerlat hist** [*OPTIONS*] ...
-+
-+DESCRIPTION
-+===========
-+
-+.. include:: common_timerlat_description.rst
-+
-+The **rtla timerlat hist** displays a histogram of each tracer event
-+occurrence. This tool uses the periodic information, and the
-+**osnoise:** tracepoints are enabled when using the **-T** option.
-+
-+OPTIONS
-+=======
-+
-+.. include:: common_timerlat_options.rst
-+
-+.. include:: common_hist_options.rst
-+
-+.. include:: common_options.rst
-+
-+EXAMPLE
-+=======
-+In the example below, **rtla timerlat hist** is set to run for *10* minutes,
-+in the cpus *0-4*, *skipping zero* only lines. Moreover, **rtla timerlat
-+hist** will change the priority of the *timelat* threads to run under
-+*SCHED_DEADLINE* priority, with a *10us* runtime every *1ms* period. The
-+*1ms* period is also passed to the *timerlat* tracer::
-+
-+  [root@alien ~]# timerlat hist -d 10m -c 0-4 -P d:100us:1ms -p 1ms
-+  # RTLA timerlat histogram
-+  # Time unit is microseconds (us)
-+  # Duration:   0 00:10:00
-+  Index   IRQ-000   Thr-000   IRQ-001   Thr-001   IRQ-002   Thr-002   IRQ-003   Thr-003   IRQ-004   Thr-004
-+  0        276489         0    206089         0    466018         0    481102         0    205546         0
-+  1        318327     35487    388149     30024     94531     48382     83082     71078    388026     55730
-+  2          3282    122584      4019    126527     28231    109012     23311     89309      4568     98739
-+  3           940     11815       837      9863      6209     16227      6895     17196       910      9780
-+  4           444     17287       424     11574      2097     38443      2169     36736       462     13476
-+  5           206     43291       255     25581      1223    101908      1304    101137       236     28913
-+  6           132    101501        96     64584       635    213774       757    215471        99     73453
-+  7            74    169347        65    124758       350     57466       441     53639        69    148573
-+  8            53     85183        31    156751       229      9052       306      9026        39    139907
-+  9            22     10387        12     42762       161      2554       225      2689        19     26192
-+  10           13      1898         8      5770       114      1247       128      1405        13      3772
-+  11            9       560         9       924        71       686        76       765         8       713
-+  12            4       256         2       360        50       411        64       474         3       278
-+  13            2       167         2       172        43       256        53       350         4       180
-+  14            1        88         1       116        15       198        42       223         0       115
-+  15            2        63         3        94        11       139        20       150         0        58
-+  16            2        37         0        56         5        78        10       102         0        39
-+  17            0        18         0        28         4        57         8        80         0        15
-+  18            0         8         0        17         2        50         6        56         0        12
-+  19            0         9         0         5         0        19         0        48         0        18
-+  20            0         4         0         8         0        11         2        27         0         4
-+  21            0         2         0         3         1         9         1        18         0         6
-+  22            0         1         0         3         1         7         0         3         0         5
-+  23            0         2         0         4         0         2         0         7         0         2
-+  24            0         2         0         2         1         3         0         3         0         5
-+  25            0         0         0         1         0         1         0         1         0         3
-+  26            0         1         0         0         0         2         0         2         0         0
-+  27            0         0         0         3         0         1         0         0         0         1
-+  28            0         0         0         3         0         0         0         1         0         0
-+  29            0         0         0         2         0         2         0         1         0         3
-+  30            0         1         0         0         0         0         0         0         0         0
-+  31            0         1         0         0         0         0         0         2         0         2
-+  32            0         0         0         1         0         2         0         0         0         0
-+  33            0         0         0         2         0         0         0         0         0         1
-+  34            0         0         0         0         0         0         0         0         0         2
-+  35            0         1         0         1         0         0         0         0         0         1
-+  36            0         1         0         0         0         1         0         1         0         0
-+  37            0         0         0         1         0         0         0         0         0         0
-+  40            0         0         0         0         0         1         0         1         0         0
-+  41            0         0         0         0         0         0         0         0         0         1
-+  42            0         0         0         0         0         0         0         0         0         1
-+  44            0         0         0         0         0         1         0         0         0         0
-+  46            0         0         0         0         0         0         0         1         0         0
-+  47            0         0         0         0         0         0         0         0         0         1
-+  50            0         0         0         0         0         0         0         0         0         1
-+  54            0         0         0         1         0         0         0         0         0         0
-+  58            0         0         0         1         0         0         0         0         0         0
-+  over:         0         0         0         0         0         0         0         0         0         0
-+  count:   600002    600002    600002    600002    600002    600002    600002    600002    600002    600002
-+  min:          0         1         0         1         0         1         0         1         0         1
-+  avg:          0         5         0         5         0         4         0         4         0         5
-+  max:         16        36        15        58        24        44        21        46        13        50
-+
-+SEE ALSO
-+========
-+**rtla-timerlat**\(1), **rtla-timerlat-top**\(1)
-+
-+*timerlat* tracer documentation: <https://www.kernel.org/doc/html/latest/trace/timerlat-tracer.html>
-+
-+AUTHOR
-+======
-+Written by Daniel Bristot de Oliveira <bristot@kernel.org>
+> 
+> > +int lan966x_port_pcs_set(struct lan966x_port *port,
+> > +                      struct lan966x_port_config *config)
+> > +{
+> > +     struct lan966x *lan966x = port->lan966x;
+> > +     bool inband_aneg = false;
+> > +     bool outband;
+> > +     int err;
+> > +
+> > +     lan966x_port_link_down(port);
+> 
+> This looks like something the MAC layer should be doing. Phylink won't
+> change the interface mode by just calling the PCS - it will do this
+> sequence, known as a major reconfiguration:
+> 
+> mac_link_down() (if the link was previously up)
+> mac_prepare()
+> mac_config()
+> if (pcs_config() > 0)
+>   pcs_an_restart()
+> mac_finish()
+> 
+> pcs_config() will also be called thusly:
+> 
+> if (pcs_config() > 0)
+>   pcs_an_restart()
+> 
+> to change the ethtool advertising mask which changes the inband advert
+> or the Autoneg bit, which has an effect only on your DEV_PCS1G_ANEG_CFG()
+> register, and this may be called with the link up or down.
+> 
+> Also, pcs_config() is supposed to return 0 if the inband advert has not
+> changed, or positive if it has (so pcs_an_restart() is called to cause
+> in-band negotiation to be restarted.)
+> 
+> Note also that pcs_an_restart() may  also be called when ethtool
+> requests negotiation restart when we're operating in 802.3z modes.
+> 
+> So, my question is - do you need to be so heavy weight with the call to
+> lan966x_port_link_down() to take everything down when pcs_config() is
+> called, and is it really in the right place through the sequence for
+> a major reconfiguration?
+
+Thanks for the detail explanation.
+You are right, it doesn't look like it is needed to call
+lan966x_port_link_down when pcs_config is called.
+I can put the lan966x_port_link_down() inside the mac_link_down() callback.
+
+> 
+> Thanks.
+> 
+> --
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+
 -- 
-2.31.1
-
+/Horatiu

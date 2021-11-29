@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56857461EFA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2562461DA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379848AbhK2SmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:42:19 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:45458 "EHLO
+        id S1378233AbhK2S1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:27:17 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:58848 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379345AbhK2SkQ (ORCPT
+        with ESMTP id S1345604AbhK2SYx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:40:16 -0500
+        Mon, 29 Nov 2021 13:24:53 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BF270B815D2;
-        Mon, 29 Nov 2021 18:36:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E83F8C53FAD;
-        Mon, 29 Nov 2021 18:36:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A6306B815CE;
+        Mon, 29 Nov 2021 18:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4591C53FC7;
+        Mon, 29 Nov 2021 18:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638211016;
-        bh=L7PJGtgk51mjSUL2KueB+rBv6XSeZNfM0qrD3CHOCLE=;
+        s=korg; t=1638210093;
+        bh=dv/skIBrfhpQe+V223FByW2PvouIpFhUAjG1X4D31ZY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=osqDql35uJ5zmmWEX2LmRL7lFTqcgmDmDueUnpwdq3+PvIxIo/I4/6ZqPB51yeDyL
-         FsPsP903Y4cTVrgW4bGpBm6qLuOaoLcaIc0P88m+5xqkNcBKPKWBQ6KpWf+qsq1a/a
-         3s9eXn87l7Z39xjHJj1tpAdJpD7jECJGFM+CG23E=
+        b=sgqYZ+qG5eA24WYfHOJEwoogLMWqz6DauSTyMS8AA0w+bIXbQgymbQXAQma1F+9oP
+         vIIFYCxx4HJcfdYIBQmnxaJw9NZVIp/BVC3ewAXPdDhJB606DSQb88Spxar5dvvzxj
+         rQ6yRh7FKQ6eFbhzbxQEIadk3Ggpp8E+x3wXY7Zg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 075/179] ASoC: qdsp6: q6asm: fix q6asm_dai_prepare error handling
-Date:   Mon, 29 Nov 2021 19:17:49 +0100
-Message-Id: <20211129181721.424338782@linuxfoundation.org>
+        stable@vger.kernel.org, Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: [PATCH 4.19 08/69] media: cec: copy sequence field for the reply
+Date:   Mon, 29 Nov 2021 19:17:50 +0100
+Message-Id: <20211129181703.938276206@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
-References: <20211129181718.913038547@linuxfoundation.org>
+In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
+References: <20211129181703.670197996@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,70 +45,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+From: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 
-[ Upstream commit 721a94b4352dc8e47bff90b549a0118c39776756 ]
+commit 13cbaa4c2b7bf9f8285e1164d005dbf08244ecd5 upstream.
 
-Error handling in q6asm_dai_prepare() seems to be completely broken,
-Fix this by handling it properly.
+When the reply for a non-blocking transmit arrives, the sequence
+field for that reply was never filled in, so userspace would have no
+way of associating the reply to the original transmit.
 
-Fixes: 2a9e92d371db ("ASoC: qdsp6: q6asm: Add q6asm dai driver")
-Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Link: https://lore.kernel.org/r/20211116114721.12517-4-srinivas.kandagatla@linaro.org
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Copy the sequence field to ensure that this is now possible.
+
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Fixes: 0dbacebede1e ([media] cec: move the CEC framework out of staging and to media)
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/qcom/qdsp6/q6asm-dai.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ drivers/media/cec/cec-adap.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/sound/soc/qcom/qdsp6/q6asm-dai.c b/sound/soc/qcom/qdsp6/q6asm-dai.c
-index 46f365528d501..b74b67720ef43 100644
---- a/sound/soc/qcom/qdsp6/q6asm-dai.c
-+++ b/sound/soc/qcom/qdsp6/q6asm-dai.c
-@@ -269,9 +269,7 @@ static int q6asm_dai_prepare(struct snd_soc_component *component,
+--- a/drivers/media/cec/cec-adap.c
++++ b/drivers/media/cec/cec-adap.c
+@@ -1146,6 +1146,7 @@ void cec_received_msg_ts(struct cec_adap
+ 			if (abort)
+ 				dst->rx_status |= CEC_RX_STATUS_FEATURE_ABORT;
+ 			msg->flags = dst->flags;
++			msg->sequence = dst->sequence;
+ 			/* Remove it from the wait_queue */
+ 			list_del_init(&data->list);
  
- 	if (ret < 0) {
- 		dev_err(dev, "%s: q6asm_open_write failed\n", __func__);
--		q6asm_audio_client_free(prtd->audio_client);
--		prtd->audio_client = NULL;
--		return -ENOMEM;
-+		goto open_err;
- 	}
- 
- 	prtd->session_id = q6asm_get_session_id(prtd->audio_client);
-@@ -279,7 +277,7 @@ static int q6asm_dai_prepare(struct snd_soc_component *component,
- 			      prtd->session_id, substream->stream);
- 	if (ret) {
- 		dev_err(dev, "%s: stream reg failed ret:%d\n", __func__, ret);
--		return ret;
-+		goto routing_err;
- 	}
- 
- 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
-@@ -301,10 +299,19 @@ static int q6asm_dai_prepare(struct snd_soc_component *component,
- 	}
- 	if (ret < 0)
- 		dev_info(dev, "%s: CMD Format block failed\n", __func__);
-+	else
-+		prtd->state = Q6ASM_STREAM_RUNNING;
- 
--	prtd->state = Q6ASM_STREAM_RUNNING;
-+	return ret;
- 
--	return 0;
-+routing_err:
-+	q6asm_cmd(prtd->audio_client, prtd->stream_id,  CMD_CLOSE);
-+open_err:
-+	q6asm_unmap_memory_regions(substream->stream, prtd->audio_client);
-+	q6asm_audio_client_free(prtd->audio_client);
-+	prtd->audio_client = NULL;
-+
-+	return ret;
- }
- 
- static int q6asm_dai_trigger(struct snd_soc_component *component,
--- 
-2.33.0
-
 
 

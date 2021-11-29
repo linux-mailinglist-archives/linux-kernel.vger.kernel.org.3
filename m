@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C36FC4613AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B82A4613AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377640AbhK2LPR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 06:15:17 -0500
-Received: from us-smtp-delivery-44.mimecast.com ([207.211.30.44]:36307 "EHLO
+        id S1377650AbhK2LPT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 06:15:19 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:45375 "EHLO
         us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1376997AbhK2LNH (ORCPT
+        by vger.kernel.org with ESMTP id S1377016AbhK2LNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Nov 2021 06:13:07 -0500
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-563-M80VWAF8MjutGVkCMBk1KA-1; Mon, 29 Nov 2021 06:09:44 -0500
-X-MC-Unique: M80VWAF8MjutGVkCMBk1KA-1
+ us-mta-602-P_G6TXsjP5yZoNo5xebzPg-1; Mon, 29 Nov 2021 06:09:46 -0500
+X-MC-Unique: P_G6TXsjP5yZoNo5xebzPg-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 09FCF835B4B;
-        Mon, 29 Nov 2021 11:09:42 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4D36281CCB5;
+        Mon, 29 Nov 2021 11:09:45 +0000 (UTC)
 Received: from x1.com (unknown [10.22.8.188])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 89CF85D9DE;
-        Mon, 29 Nov 2021 11:09:36 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4549A5D9DE;
+        Mon, 29 Nov 2021 11:09:42 +0000 (UTC)
 From:   Daniel Bristot de Oliveira <bristot@kernel.org>
 To:     Steven Rostedt <rostedt@goodmis.org>
 Cc:     Tao Zhou <tao.zhou@linux.dev>,
@@ -40,9 +40,9 @@ Cc:     Tao Zhou <tao.zhou@linux.dev>,
         Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
         linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V8 12/14] rtla: Add rtla timerlat documentation
-Date:   Mon, 29 Nov 2021 12:07:50 +0100
-Message-Id: <644599d0041c53a2d0646ca72eaa783100dc32a2.1638182284.git.bristot@kernel.org>
+Subject: [PATCH V8 13/14] rtla: Add rtla timerlat top documentation
+Date:   Mon, 29 Nov 2021 12:07:51 +0100
+Message-Id: <df06fa7801571078e43d77002c6645bdc49f779a.1638182284.git.bristot@kernel.org>
 In-Reply-To: <cover.1638182284.git.bristot@kernel.org>
 References: <cover.1638182284.git.bristot@kernel.org>
 MIME-Version: 1.0
@@ -57,7 +57,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Man page for rtla timerlat tool.
+Man page for rtla timerlat top mode.
 
 Cc: Steven Rostedt <rostedt@goodmis.org>
 Cc: Ingo Molnar <mingo@redhat.com>
@@ -75,37 +75,43 @@ Cc: linux-trace-devel@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- .../rtla/common_timerlat_description.rst      | 10 ++++
- Documentation/tools/rtla/rtla-timerlat.rst    | 57 +++++++++++++++++++
- 2 files changed, 67 insertions(+)
- create mode 100644 Documentation/tools/rtla/common_timerlat_description.rst
- create mode 100644 Documentation/tools/rtla/rtla-timerlat.rst
+ .../tools/rtla/common_timerlat_options.rst    |  16 ++
+ .../tools/rtla/rtla-timerlat-top.rst          | 145 ++++++++++++++++++
+ 2 files changed, 161 insertions(+)
+ create mode 100644 Documentation/tools/rtla/common_timerlat_options.rst
+ create mode 100644 Documentation/tools/rtla/rtla-timerlat-top.rst
 
-diff --git a/Documentation/tools/rtla/common_timerlat_description.rst b/Documentation/tools/rtla/common_timerlat_description.rst
+diff --git a/Documentation/tools/rtla/common_timerlat_options.rst b/Documentation/tools/rtla/common_timerlat_options.rst
 new file mode 100644
-index 000000000000..321201cb8597
+index 000000000000..e9c1bfd55d48
 --- /dev/null
-+++ b/Documentation/tools/rtla/common_timerlat_description.rst
-@@ -0,0 +1,10 @@
-+The **rtla timerlat** tool is an interface for the *timerlat* tracer. The
-+*timerlat* tracer dispatches a kernel thread per-cpu. These threads
-+set a periodic timer to wake themselves up and go back to sleep. After
-+the wakeup, they collect and generate useful information for the
-+debugging of operating system timer latency.
++++ b/Documentation/tools/rtla/common_timerlat_options.rst
+@@ -0,0 +1,16 @@
++**-p**, **--period** *us*
 +
-+The *timerlat* tracer outputs information in two ways. It periodically
-+prints the timer latency at the timer *IRQ* handler and the *Thread*
-+handler. It also enable the trace of the most relevant information via
-+**osnoise:** tracepoints.
-diff --git a/Documentation/tools/rtla/rtla-timerlat.rst b/Documentation/tools/rtla/rtla-timerlat.rst
++        Set the *timerlat* tracer period in microseconds.
++
++**-i**, **--irq** *us*
++
++        Stop trace if the *IRQ* latency is higher than the argument in us.
++
++**-T**, **--thread** *us*
++
++        Stop trace if the *Thread* latency is higher than the argument in us.
++
++**-s**, **--stack** *us*
++
++        Save the stack trace at the *IRQ* if a *Thread* latency is higher than the
++        argument in us.
+diff --git a/Documentation/tools/rtla/rtla-timerlat-top.rst b/Documentation/tools/rtla/rtla-timerlat-top.rst
 new file mode 100644
-index 000000000000..44a49e6f302b
+index 000000000000..1c321de1c171
 --- /dev/null
-+++ b/Documentation/tools/rtla/rtla-timerlat.rst
-@@ -0,0 +1,57 @@
-+================
-+rtla-timerlat
-+================
++++ b/Documentation/tools/rtla/rtla-timerlat-top.rst
+@@ -0,0 +1,145 @@
++====================
++rtla-timerlat-top
++====================
 +-------------------------------------------
 +Measures the operating system timer latency
 +-------------------------------------------
@@ -114,49 +120,137 @@ index 000000000000..44a49e6f302b
 +
 +SYNOPSIS
 +========
-+**rtla timerlat** [*MODE*] ...
++**rtla timerlat top** [*OPTIONS*] ...
 +
 +DESCRIPTION
 +===========
 +
 +.. include:: common_timerlat_description.rst
 +
-+The *timerlat* tracer outputs information in two ways. It periodically
-+prints the timer latency at the timer *IRQ* handler and the *Thread* handler.
-+It also provides information for each noise via the **osnoise:** tracepoints.
-+The **rtla timerlat top** mode displays a summary of the periodic output
-+from the *timerlat* tracer. The **rtla hist hist** mode displays a histogram
-+of each tracer event occurrence. For further details, please refer to the
-+respective man page.
-+
-+MODES
-+=====
-+**top**
-+
-+        Prints the summary from *timerlat* tracer.
-+
-+**hist**
-+
-+        Prints a histogram of timerlat samples.
-+
-+If no *MODE* is given, the top mode is called, passing the arguments.
++The **rtla timerlat top** displays a summary of the periodic output
++from the *timerlat* tracer. It also provides information for each
++operating system noise via the **osnoise:** tracepoints that can be
++seem with the option **-T**.
 +
 +OPTIONS
 +=======
-+**-h**, **--help**
 +
-+        Display the help text.
++.. include:: common_timerlat_options.rst
 +
-+For other options, see the man page for the corresponding mode.
++.. include:: common_top_options.rst
++
++.. include:: common_options.rst
++
++EXAMPLE
++=======
++
++In the example below, the *timerlat* tracer is set to capture the stack trace at
++the IRQ handler, printing it to the buffer if the *Thread* timer latency is
++higher than *30 us*. It is also set to stop the session if a *Thread* timer
++latency higher than *30 us* is hit. Finally, it is set to save the trace
++buffer if the stop condition is hit::
++
++  [root@alien ~]# rtla timerlat top -s 30 -t 30 -T
++                   Timer Latency
++    0 00:00:59   |          IRQ Timer Latency (us)        |         Thread Timer Latency (us)
++  CPU COUNT      |      cur       min       avg       max |      cur       min       avg       max
++    0 #58634     |        1         0         1        10 |       11         2        10        23
++    1 #58634     |        1         0         1         9 |       12         2         9        23
++    2 #58634     |        0         0         1        11 |       10         2         9        23
++    3 #58634     |        1         0         1        11 |       11         2         9        24
++    4 #58634     |        1         0         1        10 |       11         2         9        26
++    5 #58634     |        1         0         1         8 |       10         2         9        25
++    6 #58634     |       12         0         1        12 |       30         2        10        30 <--- CPU with spike
++    7 #58634     |        1         0         1         9 |       11         2         9        23
++    8 #58633     |        1         0         1         9 |       11         2         9        26
++    9 #58633     |        1         0         1         9 |       10         2         9        26
++   10 #58633     |        1         0         1        13 |       11         2         9        28
++   11 #58633     |        1         0         1        13 |       12         2         9        24
++   12 #58633     |        1         0         1         8 |       10         2         9        23
++   13 #58633     |        1         0         1        10 |       10         2         9        22
++   14 #58633     |        1         0         1        18 |       12         2         9        27
++   15 #58633     |        1         0         1        10 |       11         2         9        28
++   16 #58633     |        0         0         1        11 |        7         2         9        26
++   17 #58633     |        1         0         1        13 |       10         2         9        24
++   18 #58633     |        1         0         1         9 |       13         2         9        22
++   19 #58633     |        1         0         1        10 |       11         2         9        23
++   20 #58633     |        1         0         1        12 |       11         2         9        28
++   21 #58633     |        1         0         1        14 |       11         2         9        24
++   22 #58633     |        1         0         1         8 |       11         2         9        22
++   23 #58633     |        1         0         1        10 |       11         2         9        27
++  timerlat hit stop tracing
++  saving trace to timerlat_trace.txt
++  [root@alien bristot]# tail -60 timerlat_trace.txt
++  [...]
++      timerlat/5-79755   [005] .......   426.271226: #58634 context thread timer_latency     10823 ns
++              sh-109404  [006] dnLh213   426.271247: #58634 context    irq timer_latency     12505 ns
++              sh-109404  [006] dNLh313   426.271258: irq_noise: local_timer:236 start 426.271245463 duration 12553 ns
++              sh-109404  [006] d...313   426.271263: thread_noise:       sh:109404 start 426.271245853 duration 4769 ns
++      timerlat/6-79756   [006] .......   426.271264: #58634 context thread timer_latency     30328 ns
++      timerlat/6-79756   [006] ....1..   426.271265: <stack trace>
++  => timerlat_irq
++  => __hrtimer_run_queues
++  => hrtimer_interrupt
++  => __sysvec_apic_timer_interrupt
++  => sysvec_apic_timer_interrupt
++  => asm_sysvec_apic_timer_interrupt
++  => _raw_spin_unlock_irqrestore			<---- spinlock that disabled interrupt.
++  => try_to_wake_up
++  => autoremove_wake_function
++  => __wake_up_common
++  => __wake_up_common_lock
++  => ep_poll_callback
++  => __wake_up_common
++  => __wake_up_common_lock
++  => fsnotify_add_event
++  => inotify_handle_inode_event
++  => fsnotify
++  => __fsnotify_parent
++  => __fput
++  => task_work_run
++  => exit_to_user_mode_prepare
++  => syscall_exit_to_user_mode
++  => do_syscall_64
++  => entry_SYSCALL_64_after_hwframe
++  => 0x7265000001378c
++  => 0x10000cea7
++  => 0x25a00000204a
++  => 0x12e302d00000000
++  => 0x19b51010901b6
++  => 0x283ce00726500
++  => 0x61ea308872
++  => 0x00000fe3
++            bash-109109  [007] d..h...   426.271265: #58634 context    irq timer_latency      1211 ns
++      timerlat/6-79756   [006] .......   426.271267: timerlat_main: stop tracing hit on cpu 6
++
++In the trace, it is possible the notice that the *IRQ* timer latency was
++already high, accounting *12505 ns*. The IRQ delay was caused by the
++*bash-109109* process that disabled IRQs in the wake-up path
++(*_try_to_wake_up()* function). The duration of the IRQ handler that woke
++up the timerlat thread, informed with the **osnoise:irq_noise** event, was
++also high and added more *12553 ns* to the Thread latency. Finally, the
++**osnoise:thread_noise** added by the currently running thread (including
++the scheduling overhead) added more *4769 ns*. Summing up these values,
++the *Thread* timer latency accounted for *30328 ns*.
++
++The primary reason for this high value is the wake-up path that was hit
++twice during this case: when the *bash-109109* was waking up a thread
++and then when the *timerlat* thread was awakened. This information can
++then be used as the starting point of a more fine-grained analysis.
++
++Note that **rtla timerlat** was dispatched without changing *timerlat* tracer
++threads' priority. That is generally not needed because these threads hava
++priority *FIFO:95* by default, which is a common priority used by real-time
++kernel developers to analyze scheduling delays.
 +
 +SEE ALSO
-+========
-+**rtla-timerlat-top**\(1), **rtla-timerlat-hist**\(1)
++--------
++**rtla-timerlat**\(1), **rtla-timerlat-hist**\(1)
 +
 +*timerlat* tracer documentation: <https://www.kernel.org/doc/html/latest/trace/timerlat-tracer.html>
 +
 +AUTHOR
-+======
++------
 +Written by Daniel Bristot de Oliveira <bristot@kernel.org>
 +
 +.. include:: common_appendix.rst

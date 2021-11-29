@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AB34615ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A351D4619F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377649AbhK2NP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:15:28 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:56392 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377835AbhK2NN0 (ORCPT
+        id S1378958AbhK2OnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:43:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1379002AbhK2OkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:13:26 -0500
+        Mon, 29 Nov 2021 09:40:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1846FC08EC31;
+        Mon, 29 Nov 2021 05:10:12 -0800 (PST)
 Received: from mail.kernel.org (unknown [198.145.29.99])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2984614D4;
-        Mon, 29 Nov 2021 13:10:08 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPS id 4EDA560184;
-        Mon, 29 Nov 2021 13:10:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 737A1614E0;
+        Mon, 29 Nov 2021 13:10:11 +0000 (UTC)
+Received: by mail.kernel.org (Postfix) with ESMTPS id DB6FB60E0B;
+        Mon, 29 Nov 2021 13:10:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638191408;
-        bh=LbXp/8u1CeGkCAxRN5Nfg4W8o4qGxClR38ODgpiv/kQ=;
+        s=k20201202; t=1638191410;
+        bh=yerHb8vdcZxS7nrRsH2RhlSyC1bbWy2Pb/PnUBY2o1k=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ioCJIjjWs6s6kxDYH45CfgnKLYoSzAW72I3L6D+uWC66WG5gPxqrbsgA7q7omNtPG
-         hs3wfbSUIkir17tS9FSnXFk0JSBobJHDavhoS7vh2LyiqN73Z6eT9CYL7CMCDCbxyb
-         ynZmnfCxwUjDF8gfFO//lhhnDUd1c4HvKDfHUuRlHaz/HMHoq7Jh2yGlG40Y+R4G07
-         fH7gwscfStaD4Ci7r7jL76Fm1aqqYMSlRe9YlsHy93gHDgtsY/+Rwyk2W/Ki2psMpH
-         36nUQg7fZ3WnuGb1k3Fvu7TRee2i9UvJb1G17YXO2du8/CVDOD01f8pqY2Q48QRTd5
-         6VW3xZl0cc7+g==
+        b=keUHJE1DedwczHqnOQhmy+If7rEoIwaT48c0b2hPfLdY3fhT9cx0KKJLIADXJqoV1
+         8yIJPd2p05Fo2e9oyICP9vp1dh7SenPjtHLEoGus3QHFMdDQh50EfB1UfNQe/4H786
+         zBX5NdLLQivAvUs8dBlwUneHag+YQC+o8KhleIzwjfhBHL3RKG3QuMVnTcM4jqOYAW
+         Kg0aeBRKDUwzldiRFSmNPsu/s6ZPkYQJh+JEvmGYuKJTq4bCGoMG8HON/6j0Scdixd
+         ksiEUciwgCG4XsWMnmDyp3+XJ8LSUOrjxQZOG7RQV8FtuS22Oe6fGSq2LN23r3YOrk
+         kMECREFbc3GMw==
 Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 4095160A4D;
-        Mon, 29 Nov 2021 13:10:08 +0000 (UTC)
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id D061C60A5A;
+        Mon, 29 Nov 2021 13:10:10 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net/mlx4_en: Update reported link modes for 1/10G
+Subject: Re: [PATCH v3 net-next 0/3] update seville to use shared MDIO driver
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163819140825.10588.15476422794960132673.git-patchwork-notify@kernel.org>
-Date:   Mon, 29 Nov 2021 13:10:08 +0000
-References: <20211128123712.82096-1-erik@kryo.se>
-In-Reply-To: <20211128123712.82096-1-erik@kryo.se>
-To:     Erik Ekman <erik@kryo.se>
-Cc:     tariqt@nvidia.com, davem@davemloft.net, kuba@kernel.org,
-        michael@stapelberg.ch, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <163819141084.10588.639521745351740705.git-patchwork-notify@kernel.org>
+Date:   Mon, 29 Nov 2021 13:10:10 +0000
+References: <20211129015737.132054-1-colin.foster@in-advantage.com>
+In-Reply-To: <20211129015737.132054-1-colin.foster@in-advantage.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, kuba@kernel.org, hkallweit1@gmail.com,
+        linux@armlinux.org.uk
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (master)
+This series was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Sun, 28 Nov 2021 13:37:11 +0100 you wrote:
-> When link modes were initially added in commit 2c762679435dc
-> ("net/mlx4_en: Use PTYS register to query ethtool settings") and
-> later updated for the new ethtool API in commit 3d8f7cc78d0eb
-> ("net: mlx4: use new ETHTOOL_G/SSETTINGS API") the only 1/10G non-baseT
-> link modes configured were 1000baseKX, 10000baseKX4 and 10000baseKR.
-> It looks like these got picked to represent other modes since nothing
-> better was available.
+On Sun, 28 Nov 2021 17:57:34 -0800 you wrote:
+> This patch set exposes and utilizes the shared MDIO bus in
+> drivers/net/mdio/msio-mscc-miim.c
+> 
+> v3:
+>     * Fix errors using uninitilized "dev" inside the probe function.
+>     * Remove phy_regmap from the setup function, since it currently
+>     isn't used
+>     * Remove GCB_PHY_PHY_CFG definition from ocelot.h - it isn't used
+>     yet...
 > 
 > [...]
 
 Here is the summary with links:
-  - net/mlx4_en: Update reported link modes for 1/10G
-    https://git.kernel.org/netdev/net/c/2191b1dfef7d
+  - [v3,net-next,1/3] net: mdio: mscc-miim: convert to a regmap implementation
+    https://git.kernel.org/netdev/net-next/c/a27a76282837
+  - [v3,net-next,2/3] net: dsa: ocelot: seville: utilize of_mdiobus_register
+    https://git.kernel.org/netdev/net-next/c/5186c4a05b97
+  - [v3,net-next,3/3] net: dsa: ocelot: felix: utilize shared mscc-miim driver for indirect MDIO access
+    https://git.kernel.org/netdev/net-next/c/b99658452355
 
 You are awesome, thank you!
 -- 

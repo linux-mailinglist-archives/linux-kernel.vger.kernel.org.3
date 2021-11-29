@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 865D1462474
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B9EA462729
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:59:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234323AbhK2WTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:19:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56766 "EHLO
+        id S236536AbhK2XBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:01:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbhK2WQ5 (ORCPT
+        with ESMTP id S236926AbhK2XAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:16:57 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3053C041F40
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:23:41 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id iq11so13352489pjb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:23:41 -0800 (PST)
+        Mon, 29 Nov 2021 18:00:37 -0500
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A91C03AA2C;
+        Mon, 29 Nov 2021 10:18:27 -0800 (PST)
+Received: by mail-pg1-x532.google.com with SMTP id s37so7271592pga.9;
+        Mon, 29 Nov 2021 10:18:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ieSn6CI4O2ZLeLlECiGDLKzxg/GtHx0Kn0OdLIkrPs8=;
-        b=I42OIB8Tn0Kh3k4AbnHLbuRddHu0E2lCAIKiefyjD2VTpViiDcXGJ02muiwA7dHbX0
-         pwT+ViUYAviPVahPNOqA0mCXULr8XhFRLJddPEV7xpwj4fcgcCZGiniR04ckN3+UwnzF
-         pdAF7qjoYwgd9RUvYjgn0qJ7IaVWzneCHsFF61+ZqcW9fVBj7K/IAGGiZZ8/FSAYthnZ
-         VQvb61hOqu9UKDG2IGdIgmR4pKokTwA/3tqKmbkDf/0vXHazLzuMopwMN9b82Fqz+19t
-         NddG8U3dNtEcEUJBotClzD5ZWr4gzJwZ+ls1I+dHRKgeOBM2232yGVKwKkJ1lY4lcHdk
-         pPgg==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fUNuveYGMtrqjB2VQZVCUJJ1mSxi3vYF+lEWoSAESLM=;
+        b=SdrRH1TrlPjoH3o1ImcgrE+JbnNbd74DzvJjimwCmDhp3OiBNEk18o0Ys4Uicpze3g
+         zCw9IGuUC4v9BZ3CYiScmVgbZeZiuvOS2RLrM/6RhKvqepnADkdKhvVbDrJ3NewrVm2e
+         QkJbwFI67r2N1UWhs9XjfbDcNC8N67++NnHIH83L8flrOCi9RFPkIyFGQxiwV1+t69kZ
+         xb3y0ca8ks1Fwi5AovNNmkOezoX6/KDZR5IqLoti7r5uqWZ7tAFDuyivhX2knAKqZNQi
+         4RHrssSrZg9WIhHbA/vUFfaq8NU/kED7xEz2fNqm+STCQIV0P9QO+dogodmRpk1RwMzw
+         9gJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ieSn6CI4O2ZLeLlECiGDLKzxg/GtHx0Kn0OdLIkrPs8=;
-        b=fdZGt99J49oiMe0Ms0MM//Vv7EUVNN+TISYs66BeTfBvwCQcBCFkTWLJhOJYYhnJCy
-         7rlCutHU7+z+WTJVohAbCwsN9zZ4SdDQ5ayDprsMubSXQrKiCQrDJGCAUCQ5+onaw85D
-         7nPWr3hsvlaxd1ZX0yBseLjgl6SH+lZReFVyHxHNj1t9yBQ9+2ei/5NA9otetISm/sex
-         aCbq0GN4axRrh++kg9M9GJAaxDkmoakv+4+Qnm0AuU9pLBHL/3MsKQXsxv3mAxWsDJXi
-         29sjbFK1xRWV+FYOInfPSSbYzIbcfchspiLY4hbF4GjaVQ5f9xrtnoAeP2LiYnUFxN6Q
-         kw2g==
-X-Gm-Message-State: AOAM530Fwanv41YHvswgLKb/LoXhuwNlnELPUki+OFtir0RLEnZUfN97
-        awFVQiiAMZHMmyUOxwPH89e9fw==
-X-Google-Smtp-Source: ABdhPJy0eOYRLQITkw9U0pff+97vxzgm8hmIub7itZ9EEtr3SCgjyDhTUMe2DGGaWbUWbAV6gASeRw==
-X-Received: by 2002:a17:90a:fd93:: with SMTP id cx19mr30827pjb.190.1638210221054;
-        Mon, 29 Nov 2021 10:23:41 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y4sm19146496pfi.178.2021.11.29.10.23.40
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fUNuveYGMtrqjB2VQZVCUJJ1mSxi3vYF+lEWoSAESLM=;
+        b=40xj9Va9rI4ToSET+4h1yOyQ8UTET050SJJ7RTtVLI31JLuryD32kMDwbNHSfOPsd1
+         MeG3tqAkYUXbPFkACt9/mDzr+ILxE99SIwM6kT8dlor+g5EB0FI90h5mMVqIePAWnl5a
+         TBDBHcfe+fiWAH20ndctXyOFUKSZaJS6eleLP1qpcCn02po8bbJQRVm7kPCVvwnDyJom
+         ltAwdAhgHievH70fL3FEUoW3oeKh+DvZbK3IxvRYI4pUCE3CFFB1psNj3Gm6TRy/GAJK
+         spigzEvXJ40VGOJY9TNMaUOvZZXdcJtvbrmDjhgCp2NBCd/hcoHdHH2/zvk5aDpS7Tv+
+         XLMA==
+X-Gm-Message-State: AOAM532EzfOYEhDkKBFvoI/JH5T7fR2FLQKVz24qHfnFJVPcp3/ZdPnF
+        YypxTed1rAUnu7wPyJPi32Q=
+X-Google-Smtp-Source: ABdhPJyJeydSjX4k1OB1bo6HrPO31iSNMLC3cBqM8orkTUv7tItFGjyOmE00ZWY2AuQIhUqjA3OxNA==
+X-Received: by 2002:a63:3190:: with SMTP id x138mr35037673pgx.401.1638209906886;
+        Mon, 29 Nov 2021 10:18:26 -0800 (PST)
+Received: from localhost ([2601:1c0:5200:a6:307:a401:7b76:c6e5])
+        by smtp.gmail.com with ESMTPSA id d7sm19415554pfj.91.2021.11.29.10.18.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 10:23:40 -0800 (PST)
-Date:   Mon, 29 Nov 2021 18:23:37 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [RFC PATCH v3 46/59] KVM: VMX: Move register caching logic to
- common code
-Message-ID: <YaUaqTfzSUB2tpkR@google.com>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <2f3c1207f66f44fdd2f3eb0809d552f5632e4b41.1637799475.git.isaku.yamahata@intel.com>
- <87mtlshu66.ffs@tglx>
- <620e127f-59d3-ccad-e0f6-39ca9ee7098e@redhat.com>
+        Mon, 29 Nov 2021 10:18:25 -0800 (PST)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] drm/msm/gpu: Don't allow zero fence_id
+Date:   Mon, 29 Nov 2021 10:23:44 -0800
+Message-Id: <20211129182344.292609-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <620e127f-59d3-ccad-e0f6-39ca9ee7098e@redhat.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021, Paolo Bonzini wrote:
-> On 11/25/21 21:11, Thomas Gleixner wrote:
-> > > 
-> > > Use kvm_x86_ops.cache_reg() in ept_update_paging_mode_cr0() rather than
-> > > trying to expose vt_cache_reg() to vmx.c, even though it means taking a
-> > > retpoline.  The code runs if and only if EPT is enabled but unrestricted
-> > > guest.
-> > This sentence does not parse because it's not a proper sentence.
+From: Rob Clark <robdclark@chromium.org>
 
-Heh, supposed to be "... but unrestricted guest is disabled".
+Elsewhere we treat zero as "no fence" and __msm_gem_submit_destroy()
+skips removal from fence_idr.  We could alternately change this to use
+negative values for "no fence" but I think it is more clear to not allow
+zero as a valid fence_id.
 
-> > > Only one generation of CPU, Nehalem, supports EPT but not
-> > > unrestricted guest, and disabling unrestricted guest without also
-> > > disabling EPT is, to put it bluntly, dumb.
-> > This one is only significantly better and lacks an explanation what this
-> > means for the dumb case.
-> 
-> Well, it means a retpoline (see paragraph before).
+Signed-off-by: Rob Clark <robdclark@chromium.org>
+---
+ drivers/gpu/drm/msm/msm_gem_submit.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-No, the point being made is that, on a CPU that supports Unrestricted Guest (UG),
-disabling UG without disabling EPT is really, really stupid.  UG requires EPT, so
-disabling EPT _and_ UG is reasonable as there are scenarios where using shadow
-paging is desirable.  But inentionally disabling UG and enabling EPT makes no
-sense.  It forces KVM to emulate non-trivial amounts of guest code and has zero
-benefits for anything other than testing KVM itself.
+diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
+index 282628d6b72c..6cfa984dee6a 100644
+--- a/drivers/gpu/drm/msm/msm_gem_submit.c
++++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+@@ -881,7 +881,7 @@ int msm_ioctl_gem_submit(struct drm_device *dev, void *data,
+ 	 * to the underlying fence.
+ 	 */
+ 	submit->fence_id = idr_alloc_cyclic(&queue->fence_idr,
+-			submit->user_fence, 0, INT_MAX, GFP_KERNEL);
++			submit->user_fence, 1, INT_MAX, GFP_KERNEL);
+ 	if (submit->fence_id < 0) {
+ 		ret = submit->fence_id = 0;
+ 		submit->fence_id = 0;
+-- 
+2.33.1
 
-> why it one wouldn't create a vt.h header with all vt_* functions.
-> 
-> Paolo
-> 

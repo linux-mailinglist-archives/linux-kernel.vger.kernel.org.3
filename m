@@ -2,102 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 659E24626C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B552462614
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235968AbhK2W5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S234338AbhK2Wq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:46:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234029AbhK2W5A (ORCPT
+        with ESMTP id S230376AbhK2WoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:57:00 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A4CC0C20EA;
-        Mon, 29 Nov 2021 09:29:08 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so12943687wme.4;
-        Mon, 29 Nov 2021 09:29:08 -0800 (PST)
+        Mon, 29 Nov 2021 17:44:18 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41E8C111CC4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:35:00 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id y5so35691812ual.7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:35:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=snUyZmX49ru2DxVA1QAuDQ2irOH1QZcg7Kt2R5LKKWA=;
-        b=Y6AcF3jqLTQfik4x4LzAlDhqYQEGVK/QibQuHs0n/w1FmHLhdAIimow51Xk6wvo9Dd
-         +j1Ki3GuabZUY7f0fwMnuMM8SmAomLcMRHXZorpK451L2d1AwLPaPIfVefkyglDvNLQc
-         ANiRYra38Sj9dEAcAFjQeo+yCn73kVy1iutaiq6MvzsOpDQwc4Mud47Br9qBqnr2eg85
-         p8qVMr2pO8dqHem46+AQxYgSPK1ZpnNq2MJiHjDy8r9JYgjpfyQrw4NHTxyi3/sAyNVo
-         Lvy6RyoEyA7su2D185Pz/xkFTv8cDIEbbNzN8wND1uCgf+8+YbZgljL989B+lRYuELHo
-         57FA==
+        d=posk.io; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=AIjIIVQ7ixbmozsrjR12LGtgUYz5Lx+js9nwRfEIfrg=;
+        b=AmEDvqhfrEDGrX1BMjsYRbs+39o1Cqcb9JBdMjjMmN7M2u6rtZGl3AjbguSjTheOmk
+         p0HJs9eVoy4TYLUjFVMnItXYGnpN9HCx7OivXS7PFr9NdVxU//cTUHcthRpy814/fTX6
+         Slp6YSPYzPEn2zsejVljLNcYGGVv3aCKv1/hKnCuHUZ1BbfOR8Y1+c0PZKPrJN/IH3sw
+         /f42MtBKUJfFtsRI7BwxZFcyE5bylBONRDfaGSOsZUc3W8Gdi812yrk+xaPUtAk5no/k
+         AuiEHtCa5/5u8wv4ae6e1MRaLfFvNl4GPez8d7Ja6RMiV36DuYG3eqwRRLfEHFtXbAmV
+         FrrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=snUyZmX49ru2DxVA1QAuDQ2irOH1QZcg7Kt2R5LKKWA=;
-        b=32/gz+TV2ZPvEpEbNYTbL2QAWgTRN9LzDBfkf3TGNiwDl5Vv1/q2GJO2e5ho3MoYyN
-         zk85v6J+M4EsiXFzc6Xck3Zs39SUgtLZs4iZi/NTHIQE2DJuHWZbP1Sb5LF5gZqwHpOZ
-         loAFx3vGRWqJ1rojOZHTdDexzvsJNudl8XXYX5fBAM4fPiHvx/vhistKN52FkXiYB9r9
-         dWGjF51lrTXOQjD94JoXW+kZTqmoSMyWkHS5N+F633k95cYBacxWi2DFvAs1uyk0vX2t
-         DRlw1jErqiAHyjYiPVntK12Eo990bOIYhq1iq8Z7EJ+e1bb57H2ev93oaI7SrUX2GWgk
-         FJoQ==
-X-Gm-Message-State: AOAM530BI4w5S9m09ULciAtLUaNHjb2s+PZ0SAPcToRb19z8aRtRmESE
-        3EuYLqcZzWIdw2mMT52ESrs=
-X-Google-Smtp-Source: ABdhPJyYfAAl2JWSuMRXT7tjdS//D0XTqPX2pxL3Jw8TBUDKfnIv56MLGMyEa4sMII81Uq6dT3Oubg==
-X-Received: by 2002:a05:600c:19d0:: with SMTP id u16mr37736357wmq.111.1638206947141;
-        Mon, 29 Nov 2021 09:29:07 -0800 (PST)
-Received: from kista.localnet (cpe-86-58-29-253.static.triera.net. [86.58.29.253])
-        by smtp.gmail.com with ESMTPSA id f15sm19025488wmg.30.2021.11.29.09.29.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 09:29:06 -0800 (PST)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     wens@csie.org
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michael Klein <michael@fossekall.de>
-Subject: Re: Re: [PATCH v2] ARM: dts: sun8i: Adjust power key nodes
-Date:   Mon, 29 Nov 2021 18:29:01 +0100
-Message-ID: <5516984.DvuYhMxLoT@kista>
-In-Reply-To: <CAGb2v67M2Qi5tUq0BNbgahTsY4bbYGQeqzjoH8RZ6fYWzrWsYA@mail.gmail.com>
-References: <20211129165510.370717-1-jernej.skrabec@gmail.com> <CAGb2v67M2Qi5tUq0BNbgahTsY4bbYGQeqzjoH8RZ6fYWzrWsYA@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=AIjIIVQ7ixbmozsrjR12LGtgUYz5Lx+js9nwRfEIfrg=;
+        b=4XVwDpVxVyinLfbeJ7Zco+ksGqlSPuv8SvQGQ7A2PRM210Gb6Skqv/lvvyMF6rFQaG
+         HkI5tBheZ97VAmKe2m2lY3TTy/PtVoVwXOd4aYPmBdtpSuCR8Qd6rkcBNWNZsMIpa/tc
+         +thTiB4YcFXmg/jovLA+vrTOajWWXulTxVQnvDskCvxXsqGcL/7GxXingyS7D1Kq/Mu5
+         VSZZ45mYt1mjAiq6jaiCmgJLUxl8qJk2V7k4SNWhDSZicakBy9PxdLYERUbRFzQFGlF9
+         /kaSu53YwIZW5+UcdwTED/589PxgmNqqRn7xuIfscp9XpOfqF6a2hOJpBRkWe3V9eQ6V
+         rZxw==
+X-Gm-Message-State: AOAM531NF+lvT/luZ2KOfkfereGtImyBVIRuvLtMi6F9x74mUO9jUgCj
+        43RQE8QZu1D/yNg12z6RIJJ0p2+ID0718GQsByotFQ==
+X-Google-Smtp-Source: ABdhPJxuhBgPB2YEkaeqdK/gbS/Jsd69sgWzbw+8KZ3pYwtUMiRiS/2drBV7Q8k+ucoGPY3fGhPvsGWzG1SJHJxN3X4=
+X-Received: by 2002:ab0:6f4f:: with SMTP id r15mr51378074uat.17.1638207299827;
+ Mon, 29 Nov 2021 09:34:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+References: <20211122211327.5931-1-posk@google.com> <20211122211327.5931-4-posk@google.com>
+ <20211124200822.GF721624@worktop.programming.kicks-ass.net>
+ <CAFTs51Uka8VRCHuGidw7mRwATufp87U6S8SWUVod_kU-h6T3ew@mail.gmail.com>
+ <YaEUts3RbOLyvAjl@hirez.programming.kicks-ass.net> <CAFTs51XnN+N74i1XHvRUAUWd04-Fs9uV6ouXo=CQSQs8MaEM5A@mail.gmail.com>
+ <YaUCoe07Wl9Stlch@hirez.programming.kicks-ass.net>
+In-Reply-To: <YaUCoe07Wl9Stlch@hirez.programming.kicks-ass.net>
+From:   Peter Oskolkov <posk@posk.io>
+Date:   Mon, 29 Nov 2021 09:34:49 -0800
+Message-ID: <CAFTs51UzR=m6+vcjTCNOGwGu3ZwB5GMrg+cSQy2ecvCWxhZvEQ@mail.gmail.com>
+Subject: Re: [PATCH v0.9.1 3/6] sched/umcg: implement UMCG syscalls
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-api@vger.kernel.org, Paul Turner <pjt@google.com>,
+        Ben Segall <bsegall@google.com>,
+        Peter Oskolkov <posk@google.com>,
+        Andrei Vagin <avagin@google.com>, Jann Horn <jannh@google.com>,
+        Thierry Delisle <tdelisle@uwaterloo.ca>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 29. november 2021 ob 18:16:31 CET je Chen-Yu Tsai napisal(a):
-> On Tue, Nov 30, 2021 at 12:55 AM Jernej Skrabec
-> <jernej.skrabec@gmail.com> wrote:
-> >
-> > Several H3 and one H2+ board have power key nodes, which are slightly
-> > off. Some are missing wakeup-source property and some have BTN_0 code
-> > assigned instead of KEY_POWER.
-> 
-> It might have been that after shutdown there was really no way to
-> "power on" the board with these GPIO power keys, so we didn't use
-> KEY_POWER for them?
+On Mon, Nov 29, 2021 at 8:41 AM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Sun, Nov 28, 2021 at 04:29:11PM -0800, Peter Oskolkov wrote:
+>
+> > wait_wake_only is not needed if you have both next_tid and server_tid,
+> > as your patch has. In my version of the patch, next_tid is the same as
+> > server_tid, so the flag is needed to indicate to the kernel that
+> > next_tid is the wakee, not the server.
+>
+> Ah, okay.
+>
+> > re: (idle_)server_tid_ptr: it seems that you assume that blocked
+> > workers keep their servers, while in my patch they "lose them" once
+> > they block, and so there should be a global idle server pointer to
+> > wake the server in my scheme (if there is an idle one). The main
+> > difference is that in my approach a server has only a single, running,
+> > worker assigned to it, while in your approach it can have a number of
+> > blocked/idle workers to take care of as well.
+>
+> Correct; I've been thinking in analogues of the way we schedule CPUs.
+> Each CPU has a ready/run queue along with the current task.
+> fundamentally the RUNNABLE tasks need to go somewhere when all servers
+> are busy. So at that point the previous server is as good a place as
+> any.
+>
+> Now, I sympathise with a blocked task not having a relation; I often
+> argue this same, since we have wakeup balancing etc. And I've not really
+> thought about how to best do wakeup-balancing, also see below.
+>
+> > The main difference between our approaches, as I see it: in my
+> > approach if a worker is running, its server is sleeping, period. If we
+> > have N servers, and N running workers, there are no servers to wake
+> > when a previously blocked worker finishes its blocking op. In your
+> > approach, it seems that N servers have each a bunch of workers
+> > pointing at them, and a single worker running. If a previously blocked
+> > worker wakes up, it wakes the server it was assigned to previously,
+>
+> Right; it does that. It can check the ::state of it's current task,
+> possibly set TF_PREEMPT or just go back to sleep.
+>
+> > and so now we have more than N physical tasks/threads running: N
+> > workers and the woken server. This is not ideal: if the process is
+> > affined to only N CPUs, that means a worker will be preempted to let
+> > the woken server run, which is somewhat against the goal of letting
+> > the workers run more or less uninterrupted. This is not deal breaking,
+> > but maybe something to keep in mind.
+>
+> I suppose it's easy enough to make this behaviour configurable though;
+> simply enqueue and not wake.... Hmm.. how would this worker know if the
+> server was 'busy' or not? The whole 'current' thing is a user-space
+> construct. I suppose that's what your pointer was for? Puts an actual
+> idle server in there, if there is one. Let me ponder that a bit.
 
-KEY_POWER is actually processed by userspace, so it would still make sense to 
-power down board if power key is pressed. Correct me if I'm wrong, but in 
-combination with wfi it could work before SCP FW was available?
+Yes, the idle_server_ptr was there to point to an idle server; this
+naturally did wakeup balancing.
 
-> 
-> > Adjust them, so they can function as intended by designer.
-> >
-> > Co-developed-by: Michael Klein <michael@fossekall.de>
-> > Signed-off-by: Michael Klein <michael@fossekall.de>
-> > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> 
-> Acked-by: Chen-Yu Tsai <wens@csie.org>
-> 
+>
+> However, do note this whole scheme fundamentally has some of that, the
+> moment the syscall unblocks until sys_exit is 'unmanaged' runtime for
+> all tasks, they can consume however much time the syscall needs there.
+>
+> Also, timeout on sys_umcg_wait() gets you the exact same situation (or
+> worse, multiple running workers).
 
-Thanks!
+It should not. Timed out workers should be added to the runnable list
+and not become running unless a server chooses so. So sys_umcg_wait()
+with a timeout should behave similarly to a normal sleep, in that the
+server is woken upon the worker blocking, and upon the worker wakeup
+the worker is added to the woken workers list and waits for a server
+to run it. The only difference is that in a sleep the worker becomes
+BLOCKED, while in sys_umcg_wait() the worker is RUNNABLE the whole
+time.
 
-Best regards,
-Jernej
+Why then have sys_umcg_wait() with a timeout at all, instead of
+calling nanosleep()? Because the worker in sys_umcg_wait() can be
+context-switched into by another worker, or made running by a server;
+if the worker is in nanosleep(), it just sleeps.
+
+>
+> > Another big concern I have is that you removed UMCG_TF_LOCKED. I
+>
+> OOh yes, I forgot to mention that. I couldn't figure out what it was
+> supposed to do.
+>
+> > definitely needed it to guard workers during "sched work" in the
+> > userspace in my approach. I'm not sure if the flag is absolutely
+> > needed with your approach, but most likely it is - the kernel-side
+> > scheduler does lock tasks and runqueues and disables interrupts and
+> > migrations and other things so that the scheduling logic is not
+> > hijacked by concurrent stuff. Why do you assume that the userspace
+> > scheduling code does not need similar protections?
+>
+> I've not yet come across a case where this is needed. Migration for
+> instance is possible when RUNNABLE, simply write ::server_tid before
+> ::state. Userspace just needs to make sure who actually owns the task,
+> but it can do that outside of this state.
+>
+> But like I said; I've not yet done the userspace part (and I lost most
+> of today trying to install a new machine), so perhaps I'll run into it
+> soon enough.
+
+The most obvious scenario where I needed locking is when worker A
+wants to context switch into worker B, while another worker C wants to
+context switch into worker A, and worker A pagefaults. This involves:
+
+worker A context: worker A context switches into worker B:
+
+- worker B::server_tid = worker A::server_tid
+- worker A::server_tid = none
+- worker A::state = runnable
+- worker B::state = running
+- worker A::next_tid = worker B
+- worker A calls sys_umcg_wait()
+
+worker B context: before the above completes, worker C wants to
+context switch into worker A, with similar steps.
+
+"interrupt context": in the middle of the mess above, worker A pagefaults
+
+Too many moving parts. UMCG_TF_LOCKED helped me make this mess
+manageable. Maybe without pagefaults clever ordering of the operations
+listed above could make things work, but pagefaults mess things badly,
+so some kind of "preempt_disable()" for the userspace scheduling code
+was needed, and UMCG_TF_LOCKED was the solution I had.
 
 
+
+>
+>

@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77910462504
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:31:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A52EF462470
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233475AbhK2WeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60746 "EHLO
+        id S231407AbhK2WTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232445AbhK2WdP (ORCPT
+        with ESMTP id S231442AbhK2WQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:33:15 -0500
+        Mon, 29 Nov 2021 17:16:48 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED5DC048F70;
-        Mon, 29 Nov 2021 10:40:57 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E970CC127137;
+        Mon, 29 Nov 2021 10:22:36 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9570BB81642;
-        Mon, 29 Nov 2021 18:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C02D5C53FAD;
-        Mon, 29 Nov 2021 18:40:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE82BB815DB;
+        Mon, 29 Nov 2021 18:22:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F09C53FAD;
+        Mon, 29 Nov 2021 18:22:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638211256;
-        bh=xMJrK2BvIw4m4Y1YBl3YT+eVpB5qu/F26LCrc3lM44E=;
+        s=korg; t=1638210154;
+        bh=NSCTX1scdSQAoI5XZx8ANgtfKgdgdc6lM7PaYiImTXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=D6JNwNiaWetYOKMAG/w0+bN8xrVGNdwi8k6xlyoDAIMVQbHbR4xXUQ2Bj8whpR1iQ
-         L0s+WH9w8LOBbDLXv0nX+P7QD+Y3CMi0fl1EzDSb8sCpvC/Rcx1XexKGeAZK2awpG0
-         sjlG57U6y9qxIJ8OkUkTI/b4Inw0aoqLPSey4IWA=
+        b=ZNgqO+IGQEuUwnFqNJIno1LLnHFpKPX5hcV8D9H0cGT4HTbRPPpslh+RJTz/Fp/+F
+         UJvAZpiwaZpwwrEgwXMCaXfz8UJUgbFjWc6ypJemnPDxuOwXbbeEXj6GdG/yjqBwkL
+         Hoplmd/wlEYitlzFtfNE0HFZonDXCovZtGokib1M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Varun Prakash <varun@chelsio.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 126/179] nvmet-tcp: fix incomplete data digest send
-Date:   Mon, 29 Nov 2021 19:18:40 +0100
-Message-Id: <20211129181723.111510390@linuxfoundation.org>
+        stable@vger.kernel.org, Justin Forbes <jmforbes@linuxtx.org>,
+        Miklos Szeredi <mszeredi@redhat.com>
+Subject: [PATCH 4.19 60/69] fuse: release pipe buf after last use
+Date:   Mon, 29 Nov 2021 19:18:42 +0100
+Message-Id: <20211129181705.603467667@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
-References: <20211129181718.913038547@linuxfoundation.org>
+In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
+References: <20211129181703.670197996@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -49,53 +48,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Varun Prakash <varun@chelsio.com>
+From: Miklos Szeredi <mszeredi@redhat.com>
 
-[ Upstream commit 102110efdff6beedece6ab9b51664c32ac01e2db ]
+commit 473441720c8616dfaf4451f9c7ea14f0eb5e5d65 upstream.
 
-Current nvmet_try_send_ddgst() code does not check whether
-all data digest bytes are transmitted, fix this by returning
--EAGAIN if all data digest bytes are not transmitted.
+Checking buf->flags should be done before the pipe_buf_release() is called
+on the pipe buffer, since releasing the buffer might modify the flags.
 
-Fixes: 872d26a391da ("nvmet-tcp: add NVMe over TCP target driver")
-Signed-off-by: Varun Prakash <varun@chelsio.com>
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This is exactly what page_cache_pipe_buf_release() does, and which results
+in the same VM_BUG_ON_PAGE(PageLRU(page)) that the original patch was
+trying to fix.
+
+Reported-by: Justin Forbes <jmforbes@linuxtx.org>
+Fixes: 712a951025c0 ("fuse: fix page stealing")
+Cc: <stable@vger.kernel.org> # v2.6.35
+Signed-off-by: Miklos Szeredi <mszeredi@redhat.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 ---
- drivers/nvme/target/tcp.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ fs/fuse/dev.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
-index 84c387e4bf431..2b8bab28417b8 100644
---- a/drivers/nvme/target/tcp.c
-+++ b/drivers/nvme/target/tcp.c
-@@ -700,10 +700,11 @@ static int nvmet_try_send_r2t(struct nvmet_tcp_cmd *cmd, bool last_in_batch)
- static int nvmet_try_send_ddgst(struct nvmet_tcp_cmd *cmd, bool last_in_batch)
- {
- 	struct nvmet_tcp_queue *queue = cmd->queue;
-+	int left = NVME_TCP_DIGEST_LENGTH - cmd->offset;
- 	struct msghdr msg = { .msg_flags = MSG_DONTWAIT };
- 	struct kvec iov = {
- 		.iov_base = (u8 *)&cmd->exp_ddgst + cmd->offset,
--		.iov_len = NVME_TCP_DIGEST_LENGTH - cmd->offset
-+		.iov_len = left
- 	};
- 	int ret;
+--- a/fs/fuse/dev.c
++++ b/fs/fuse/dev.c
+@@ -905,17 +905,17 @@ static int fuse_try_move_page(struct fus
+ 		goto out_put_old;
+ 	}
  
-@@ -717,6 +718,10 @@ static int nvmet_try_send_ddgst(struct nvmet_tcp_cmd *cmd, bool last_in_batch)
- 		return ret;
- 
- 	cmd->offset += ret;
-+	left -= ret;
++	get_page(newpage);
 +
-+	if (left)
-+		return -EAGAIN;
++	if (!(buf->flags & PIPE_BUF_FLAG_LRU))
++		lru_cache_add_file(newpage);
++
+ 	/*
+ 	 * Release while we have extra ref on stolen page.  Otherwise
+ 	 * anon_pipe_buf_release() might think the page can be reused.
+ 	 */
+ 	pipe_buf_release(cs->pipe, buf);
  
- 	if (queue->nvme_sq.sqhd_disabled) {
- 		cmd->queue->snd_cmd = NULL;
--- 
-2.33.0
-
+-	get_page(newpage);
+-
+-	if (!(buf->flags & PIPE_BUF_FLAG_LRU))
+-		lru_cache_add_file(newpage);
+-
+ 	err = 0;
+ 	spin_lock(&cs->req->waitq.lock);
+ 	if (test_bit(FR_ABORTED, &cs->req->flags))
 
 

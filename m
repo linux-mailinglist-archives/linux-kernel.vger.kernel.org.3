@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A1ED2461E61
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C7A461DE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379403AbhK2Sfl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:35:41 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37792 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379535AbhK2Sd2 (ORCPT
+        id S1351602AbhK2SaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:30:05 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47850 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351307AbhK2S1z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:33:28 -0500
+        Mon, 29 Nov 2021 13:27:55 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEB24B815CE;
-        Mon, 29 Nov 2021 18:30:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28069C53FAD;
-        Mon, 29 Nov 2021 18:30:07 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9BCCFCE167D;
+        Mon, 29 Nov 2021 18:24:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49616C53FAD;
+        Mon, 29 Nov 2021 18:24:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210608;
-        bh=5XxzqIbmaTosNEAtYD2VdF4vcJ5rQNvDoFyob4e30hg=;
+        s=korg; t=1638210274;
+        bh=qsT2tlP3Dh1TzlaNCd1y/SMQPnJ76ylQRmy1AgwRj+E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=e/dYlCL/1Tmk81u5w1N7SRKmTFlETVzIaJas1Y0H6UM442YuON7HuucZqDbmaTuR8
-         Ic2Gchmte6rzOdP9NLeL+yGTY/Qsg7YJBc+P4/Een5695JR9SITMPsQZgpK32Y2pCU
-         AdlUZtYmmQjhnXZtFaoF3mdbcdMkQwscol44J6S8=
+        b=wAt/tAn+MVA/Awd/sJ2n0nRkfe4Gdw6S7Gmm7JgVIwcRHNcvYpetIJpRnB56okAFE
+         PwthXaLNuTR1f7ujRzfVaoCxvGabsT+Fi070TVL6O8TqGZk6kImhZPcW0mVTykSuJu
+         XCcBUi7LTb3GAl0lH1ut4xDQBNenPphmC/mNh6Rk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jim Quinlan <jim2101024@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 047/121] ARM: dts: bcm2711: Fix PCIe interrupts
-Date:   Mon, 29 Nov 2021 19:17:58 +0100
-Message-Id: <20211129181713.240825179@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>
+Subject: [PATCH 5.4 30/92] PCI: aardvark: Dont touch PCIe registers if no card connected
+Date:   Mon, 29 Nov 2021 19:17:59 +0100
+Message-Id: <20211129181708.414533084@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
+References: <20211129181707.392764191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,51 +47,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 98481f3d72fb88cb5b973153434061015f094925 ]
+commit 70e380250c3621c55ff218cbaf2272830d9dbb1d upstream.
 
-The PCIe host bridge has two interrupt lines, one that goes towards it
-PCIE_INTR2 second level interrupt controller and one for its MSI second
-level interrupt controller. The first interrupt line is not currently
-managed by the driver, which is why it was not a functional problem.
+When there is no PCIe card connected and advk_pcie_rd_conf() or
+advk_pcie_wr_conf() is called for PCI bus which doesn't belong to emulated
+root bridge, the aardvark driver throws the following error message:
 
-The interrupt-map property was also only listing the PCI_INTA interrupts
-when there are also the INTB, C and D.
+  advk-pcie d0070000.pcie: config read/write timed out
 
-Reported-by: Jim Quinlan <jim2101024@gmail.com>
-Fixes: d5c8dc0d4c88 ("ARM: dts: bcm2711: Enable PCIe controller")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Obviously accessing PCIe registers of disconnected card is not possible.
+
+Extend check in advk_pcie_valid_device() function for validating
+availability of PCIe bus. If PCIe link is down, then the device is marked
+as Not Found and the driver does not try to access these registers.
+
+This is just an optimization to prevent accessing PCIe registers when card
+is disconnected. Trying to access PCIe registers of disconnected card does
+not cause any crash, kernel just needs to wait for a timeout. So if card
+disappear immediately after checking for PCIe link (before accessing PCIe
+registers), it does not cause any problems.
+
+Link: https://lore.kernel.org/r/20200702083036.12230-1-pali@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/bcm2711.dtsi | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/pci/controller/pci-aardvark.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/arch/arm/boot/dts/bcm2711.dtsi b/arch/arm/boot/dts/bcm2711.dtsi
-index 398ecd7b9b68b..4ade854bdcdaf 100644
---- a/arch/arm/boot/dts/bcm2711.dtsi
-+++ b/arch/arm/boot/dts/bcm2711.dtsi
-@@ -480,11 +480,17 @@ pcie0: pcie@7d500000 {
- 			#address-cells = <3>;
- 			#interrupt-cells = <1>;
- 			#size-cells = <2>;
--			interrupts = <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>,
-+			interrupts = <GIC_SPI 147 IRQ_TYPE_LEVEL_HIGH>,
- 				     <GIC_SPI 148 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "pcie", "msi";
- 			interrupt-map-mask = <0x0 0x0 0x0 0x7>;
- 			interrupt-map = <0 0 0 1 &gicv2 GIC_SPI 143
-+							IRQ_TYPE_LEVEL_HIGH>,
-+					<0 0 0 2 &gicv2 GIC_SPI 144
-+							IRQ_TYPE_LEVEL_HIGH>,
-+					<0 0 0 3 &gicv2 GIC_SPI 145
-+							IRQ_TYPE_LEVEL_HIGH>,
-+					<0 0 0 4 &gicv2 GIC_SPI 146
- 							IRQ_TYPE_LEVEL_HIGH>;
- 			msi-controller;
- 			msi-parent = <&pcie0>;
--- 
-2.33.0
-
+--- a/drivers/pci/controller/pci-aardvark.c
++++ b/drivers/pci/controller/pci-aardvark.c
+@@ -806,6 +806,13 @@ static bool advk_pcie_valid_device(struc
+ 	if ((bus->number == pcie->root_bus_nr) && PCI_SLOT(devfn) != 0)
+ 		return false;
+ 
++	/*
++	 * If the link goes down after we check for link-up, nothing bad
++	 * happens but the config access times out.
++	 */
++	if (bus->number != pcie->root_bus_nr && !advk_pcie_link_up(pcie))
++		return false;
++
+ 	return true;
+ }
+ 
 
 

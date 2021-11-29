@@ -2,159 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 970454628A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:53:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 432A646289F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbhK2X4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:56:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S229729AbhK2Xz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:55:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230387AbhK2X4U (ORCPT
+        with ESMTP id S229697AbhK2Xzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:56:20 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED957C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:53:01 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id v203so47166228ybe.6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:53:01 -0800 (PST)
+        Mon, 29 Nov 2021 18:55:54 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86451C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:52:36 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id m16-20020a628c10000000b004a282d715b2so11729148pfd.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:52:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=y/NqQPRNvUZU+0JCCk7H1tIikjeN2hJL0ywpfLSeC3A=;
-        b=TkEax+J0bmDp+JZ1p+gK7Ddy3ukqn5PKlRVbahmc8OO8xw4OygaukebcomL6UBH4zl
-         3zVQ+upp+tk9io+DfWXBOWa66VhPX+yZohE9cfeT2IEclCIeM6LBi2k68JVX0RYqA7YR
-         NLTtvpq+AtgaHw6DChA47rnIMqojcQ/pxgPCs2ai5FYCg9Y8kesYImR++fYtsNbaeWWp
-         nBlUMbrJE4vstivGG+0/mDeHHKaCT9MEDFeETmyG+8VifiOre6xdonXXogLUBKsRmJyu
-         ebXQr3F2T8inIBMTlL6w/eC/Redlxr14icmXGlrBKODijT9jbGT2X8A0+66SEqKVRGSh
-         4xNA==
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=0Gmtrp3NH5uXwCtG181ObBI/n19QY3gSbtUjJkb+q2M=;
+        b=D5xlL7hwJPlgWEiwJTo08vPV9G0H5ZA+oRdXuIj9NCStElLvjUsHJ7NA9Xav/D5RHa
+         fyZ7B7YsMaeg9SEzLMOHwCBeKNRRxlK92Tn4CI3MezwnPW18upIXoDvfLVYsFqSd40sH
+         xBMA3kGHIYnIulZDhOsboTHQubK7mLy5ndSJMPzFA3twmpxfds9XDEm9AxrTFc3m5BSe
+         W25Hzq5llNSSCRXt27wFUTBkCxXWXArULqojzDivAU+A0QIS+qQKh09FGs6lu+1ACgej
+         UFJEl5MiN/aDsW2KyWVQpUQrIa8tlnK8JJ1KG70wNsmArRKqFPI2sh59z2XQqdpT2i7l
+         8N3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=y/NqQPRNvUZU+0JCCk7H1tIikjeN2hJL0ywpfLSeC3A=;
-        b=136UGBub6hwKJhM5LVsPd5e2DGjKiFCCleJaCmn8J6mM5JqGKHrxqjU5kYHzulWfL2
-         08/kmbCdihacN5FyEYyfzRyoOIl5ibT8GFJf0M3uCukaJeR/0gIcKJKyjUVELEgsKPbq
-         5sWEQzjjcM2XstBYlj1jSGmooetkQRTwqwACNLDDLVnXLdgx4FHCk0EsxWDIuK19bJeh
-         3D8KC1lczLrsuKjSDcQEwvL2peG3Z4LdfeFkp980Kju3Pmr78ePVpnTZJvleoqLjZEtc
-         J1DVTO2sbG1ca9g+QZofEMMd+FzCHuil7YzVIXMAEqR4ND2mbalBACWijJ1wWM8bVT/I
-         YY4w==
-X-Gm-Message-State: AOAM532co77hkV8/9Mqs42V6uKZ6qEsr+VbcZMa1HHVS4UuM5QCshkSI
-        TfBbxsNfGEvzq0Dshdp71F3+8nIl8NHEBa48xi9KYw==
-X-Google-Smtp-Source: ABdhPJzLGkscmACsLBxU/CcE3gRHToupkDUY7Fb+tdemWE/3/jA9m+2MAnq/P0ziJocyYBFSLjYNX7809g7ZSqzzpgI=
-X-Received: by 2002:a25:2d67:: with SMTP id s39mr39943320ybe.140.1638229980878;
- Mon, 29 Nov 2021 15:53:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20211125183622.597177-1-dmitry.baryshkov@linaro.org> <CAGETcx-_6OvcJM1nAoX3pxE3Rard5CRxEuEsmhfLANOzOS1BSQ@mail.gmail.com>
-In-Reply-To: <CAGETcx-_6OvcJM1nAoX3pxE3Rard5CRxEuEsmhfLANOzOS1BSQ@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Mon, 29 Nov 2021 15:52:25 -0800
-Message-ID: <CAGETcx86iFm04PxnmrRQhooxtd4_kv87rAu=T0RauqFXmRLKNA@mail.gmail.com>
-Subject: Re: [PATCH] of: property: do not create clocks device link for clock controllers
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=0Gmtrp3NH5uXwCtG181ObBI/n19QY3gSbtUjJkb+q2M=;
+        b=pUrcg5xV4gDAU8yu0JqyZGzVbdC6IH37HeEVS4kZIAC9IxJ3PNIWY8yWbvDdmfgFu4
+         V/wVj7spjm+84baJ8B+6tcRlJqO+EgzbRp/LyYSXbrBL3xQNGbrCu46VusXd89U+OsMm
+         A8HMOz/9SH/2W7uUfc6sQPhcOQI4dNyqgw2iJyxYKABHQHn+SmQUriHJ7xbaHIoeY/LH
+         tjJn3imkY1flFiuQ/2N3tBiykxcL5viIzJh8BE6ks4v5iUejD0i4rAYkPn3ar1J/dL79
+         uOhzW9tZm6ArHmJyiVJxY4eRNVfPZTbVavsf8zcEHUGLu8RX+RVUGO6Zm50fHHs4D9xX
+         KZ6Q==
+X-Gm-Message-State: AOAM5305AS7/lFXgdMhQhbJjB+VYzNgcmF2GCb/aHO1qCUFLDr/HNfTx
+        AE2hwLDP/K9MjnSVJvDMrJXQG5VRWJk=
+X-Google-Smtp-Source: ABdhPJx5/Zc7ZiQKs9kKczsYqMkf748/5k1+Bg3UxWj5lVtqGKqQRrhURDo1NOy8lml7KuRt5m2jB2Rr6ic=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:8c2:b0:4a8:3013:145a with SMTP id
+ s2-20020a056a0008c200b004a83013145amr4172981pfu.5.1638229955970; Mon, 29 Nov
+ 2021 15:52:35 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Mon, 29 Nov 2021 23:52:33 +0000
+Message-Id: <20211129235233.1277558-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
+Subject: [PATCH v2] KVM: x86/mmu: Update number of zapped pages even if page
+ list is stable
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 3:48 PM Saravana Kannan <saravanak@google.com> wrote:
->
-> On Thu, Nov 25, 2021 at 10:36 AM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > Do not create device link for clock controllers.
->
-> Nak.
->
-> > Some of the clocks
-> > provided to the device via OF can be the clocks that are just parents to
-> > the clocks provided by this clock controller. Clock subsystem already
-> > has support for handling missing clock parents correctly (clock
-> > orphans). Later when the parent clock is registered, clocks get
-> > populated properly.
-> >
-> > An example of the system where this matters is the SDM8450 MTP board
-> > (see arch/arm64/boot/dts/qcom/sdm845-mtp.dts). Here the dispcc uses
-> > clocks provided by dsi0_phy and dsi1_phy device tree nodes. However the
-> > dispcc itself provides clocks to both PHYs, to the PHY parent device,
-> > etc. With just dsi0_phy in place devlink is able to break the
-> > dependency,
->
-> Right, because I wrote code to make sure we handle these clock
-> controller cases properly. If that logic isn't smart enough, let's fix
-> that.
->
-> > but with two PHYs, dispcc doesn't get probed at all, thus
-> > breaking display support.
->
-> Then let's find out why and fix this instead of hiding some
-> dependencies from fw_devlink. You could be breaking other cases/boards
-> with this change you are making.
+When zapping obsolete pages, update the running count of zapped pages
+regardless of whether or not the list has become unstable due to zapping
+a shadow page with its own child shadow pages.  If the VM is backed by
+mostly 4kb pages, KVM can zap an absurd number of SPTEs without bumping
+the batch count and thus without yielding.  In the worst case scenario,
+this can cause a soft lokcup.
 
-Btw, forgot to mention. I'll look into this one and try to find the
-reason why it wasn't handled automatically. And then come up with a
-fix.
+ watchdog: BUG: soft lockup - CPU#12 stuck for 22s! [dirty_log_perf_:13020]
+   RIP: 0010:workingset_activation+0x19/0x130
+   mark_page_accessed+0x266/0x2e0
+   kvm_set_pfn_accessed+0x31/0x40
+   mmu_spte_clear_track_bits+0x136/0x1c0
+   drop_spte+0x1a/0xc0
+   mmu_page_zap_pte+0xef/0x120
+   __kvm_mmu_prepare_zap_page+0x205/0x5e0
+   kvm_mmu_zap_all_fast+0xd7/0x190
+   kvm_mmu_invalidate_zap_pages_in_memslot+0xe/0x10
+   kvm_page_track_flush_slot+0x5c/0x80
+   kvm_arch_flush_shadow_memslot+0xe/0x10
+   kvm_set_memslot+0x1a8/0x5d0
+   __kvm_set_memory_region+0x337/0x590
+   kvm_vm_ioctl+0xb08/0x1040
 
-If you want to find out why fw_devlink didn't notice the cycle
-correctly for the case of 2 PHYs vs 1 PHY, I'd appreciate that too.
+Fixes: fbb158cb88b6 ("KVM: x86/mmu: Revert "Revert "KVM: MMU: zap pages in batch""")
+Reported-by: David Matlack <dmatlack@google.com>
+Reviewed-by: Ben Gardon <bgardon@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
 
-Btw, same comment for remote-endpoint. I'll look into what's going on
-in that case. Btw, I'm assuming all the code and DT you are testing
-this on is already upstream. Can you please confirm that?
+v2:
+ - Rebase to kvm/master, commit 30d7c5d60a88 ("KVM: SEV: expose...")
+ - Collect Ben's review, modulo bad splat.
+ - Copy+paste the correct splat and symptom. [David].
 
--Saravana
+@David, I kept the unstable declaration out of the loop, mostly because I
+really don't like putting declarations in loops, but also because
+nr_zapped is declared out of the loop and I didn't want to change that
+unnecessarily or make the code inconsistent.
 
->
-> -Saravana
->
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: Stephen Boyd <swboyd@chromium.org>
-> > Cc: Saravana Kannan <saravanak@google.com>
-> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > ---
-> >  drivers/of/property.c | 16 +++++++++++++++-
-> >  1 file changed, 15 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/of/property.c b/drivers/of/property.c
-> > index a3483484a5a2..f7229e4030e3 100644
-> > --- a/drivers/of/property.c
-> > +++ b/drivers/of/property.c
-> > @@ -1264,7 +1264,6 @@ struct supplier_bindings {
-> >         bool node_not_dev;
-> >  };
-> >
-> > -DEFINE_SIMPLE_PROP(clocks, "clocks", "#clock-cells")
-> >  DEFINE_SIMPLE_PROP(interconnects, "interconnects", "#interconnect-cells")
-> >  DEFINE_SIMPLE_PROP(iommus, "iommus", "#iommu-cells")
-> >  DEFINE_SIMPLE_PROP(mboxes, "mboxes", "#mbox-cells")
-> > @@ -1294,6 +1293,21 @@ DEFINE_SIMPLE_PROP(backlight, "backlight", NULL)
-> >  DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
-> >  DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
-> >
-> > +static struct device_node *parse_clocks(struct device_node *np,
-> > +                                       const char *prop_name, int index)
-> > +{
-> > +       /*
-> > +        * Do not create clock-related device links for clocks controllers,
-> > +        * clock orphans will handle missing clock parents automatically.
-> > +        */
-> > +       if (!strcmp(prop_name, "clocks") &&
-> > +           of_find_property(np, "#clock-cells", NULL))
-> > +               return NULL;
-> > +
-> > +       return parse_prop_cells(np, prop_name, index, "clocks",
-> > +                                      "#clock-cells");
-> > +}
-> > +
-> >  static struct device_node *parse_gpios(struct device_node *np,
-> >                                        const char *prop_name, int index)
-> >  {
-> > --
-> > 2.33.0
-> >
+ arch/x86/kvm/mmu/mmu.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 0c839ee1282c..208c892136bf 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5576,6 +5576,7 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
+ {
+ 	struct kvm_mmu_page *sp, *node;
+ 	int nr_zapped, batch = 0;
++	bool unstable;
+ 
+ restart:
+ 	list_for_each_entry_safe_reverse(sp, node,
+@@ -5607,11 +5608,12 @@ static void kvm_zap_obsolete_pages(struct kvm *kvm)
+ 			goto restart;
+ 		}
+ 
+-		if (__kvm_mmu_prepare_zap_page(kvm, sp,
+-				&kvm->arch.zapped_obsolete_pages, &nr_zapped)) {
+-			batch += nr_zapped;
++		unstable = __kvm_mmu_prepare_zap_page(kvm, sp,
++				&kvm->arch.zapped_obsolete_pages, &nr_zapped);
++		batch += nr_zapped;
++
++		if (unstable)
+ 			goto restart;
+-		}
+ 	}
+ 
+ 	/*
+-- 
+2.34.0.rc2.393.gf8c9666880-goog
+

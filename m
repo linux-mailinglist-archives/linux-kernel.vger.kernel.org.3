@@ -2,90 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FDD462552
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0AD44626D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:54:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233798AbhK2Whw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S235771AbhK2W5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233468AbhK2WhX (ORCPT
+        with ESMTP id S235682AbhK2W5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:37:23 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE3EC127105
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:05:14 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id k23so36171546lje.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:05:14 -0800 (PST)
+        Mon, 29 Nov 2021 17:57:05 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76652C12710D
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:05:53 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id gx15-20020a17090b124f00b001a695f3734aso14965524pjb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:05:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=IDi3zvjd6u7ZBVvXAka/LTSyAvUkqeh+L5SnX6c8Zdk=;
-        b=ELtQ57DjVTWJPnvASv4jZtvg9xzVjpRXdLK6WadVUiqQO2Tejx2Y4rP/jZvsvwdaGM
-         wVK5qYNcJTRTVvihhUy6a3XfzO7ShXe3HSKg9CJ9S9TdxAt3X4+ddQNsKXsRbhOEV3Nn
-         NeS7l4DPoqAaH0j+Gm2rrnRobzgyBp+zZRI4nhmfoSItyMTQPe6HJsrb3a8uXIO7pAUp
-         d0pHSCno/fnC3Fp0q+W51eSWigYy/I5qIJhRZa/O1KEhI708OF8jeLET61Dg8b9kw0VH
-         st1/mw7gEQ1NVGLv+ANo/xqXiZgR94N5ykkWzVgrrh3SWq2UdJQ1DTZyuwBI86rq3HIq
-         HE3g==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5sDERUw/7RbLmxxw3xc+XUUsW1NhTfcSaWrTPeN89uc=;
+        b=qLkRoFUS14KP9zMKn6XmRpx6dla8pF2XGci+7CpOi3Gjf+BLW/uLJiuFW25KIxCu0p
+         qY5sqlfl3WesbrORA0FxzLxupmW1lr02GJodHH/tuCP6PnvpYfxorAml4ZVRXL/OWJre
+         OogxJ6fLvCb5Y8LGYUk+qdFr8WEahfJtPaUMDauxT9GbfvtyJwHFSjQn5P0McgIELHuy
+         j0uS+KBx5GrQ8WSI2rFhbrQeJHrm7BmE4kHIrPQ9afUuFI7gBgw0ZkI+W9CZrpfLoBDP
+         6rEjGqIeAu9rzNodCIMJ3pCvrbTr8jYrUiOycTPG8p3HDIjL9QyfNf12XW8bm1uzpOGU
+         kHzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=IDi3zvjd6u7ZBVvXAka/LTSyAvUkqeh+L5SnX6c8Zdk=;
-        b=s13eEEVnB+C6q0e1we0DNGtuJg7QuJNWoD554uYq+UMw4ScKmhAqIDU3IGhrQKEnTs
-         k19DZqRQBx6AbAWDX1zg73ub9whKJyGlBAtC+4pxBR3jOh/k+vBOVMF1gKo2GGZWCI/q
-         uiNzaMvhV87OBqMmm+1AWjJD4BWrpyPR70QUYrqGOHDi65ctaXfz7txvyuwkjDoi26fp
-         1UfHcfOyhQqzZ/Cykne76CbWsk72wDupz0pou1j/CyHjwxXOsaTKlihJix/jmqSUQJT3
-         mOq2Rdhuul7BWnM2pHLXe8wadBGINMfH1R7q+ihsAIGIbOY3vIShuRxkX4rldm3xP/GG
-         iboA==
-X-Gm-Message-State: AOAM533bgtEsgKXRYVGy5/67Y1oP7BuwJh26GOoeWDkykwIJhvWI+TfN
-        Y+9bOFojE2Pk3YI3nJ30fDaOsJePREEW5bDN8i8rfA==
-X-Google-Smtp-Source: ABdhPJz00rJJqhFv+eY/G4mQJbhWwtM/vfpfxJXb8qlKInsjRYgNcLli9eLdqgC5XVztKYKpkdzK0NNalzo7Gw9l8CQ=
-X-Received: by 2002:a2e:95d3:: with SMTP id y19mr50881703ljh.175.1638209112922;
- Mon, 29 Nov 2021 10:05:12 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5sDERUw/7RbLmxxw3xc+XUUsW1NhTfcSaWrTPeN89uc=;
+        b=VmPTRMEYm1c6D8br3CJ5r0L+Wuj/+C/yMynxQZzO+qEAU1kJSf54Qx8ekYChVXW/GO
+         hGBvs4rsLxjSKqpLVB/cZF3SSwePpuNRa/yyRyDPgsqcqkyW/sxZHkZRhF3SP7QCYOo6
+         h5Xs+UzhHJM2CIHaOSL/Ni4Hn/HkJSJdkTrfLJU8ppk96SyQkQQ7NFZ54CWlt4AoSjP6
+         TUDlZXug5gQS5tr9Z/UM+dJ8YAWTLrt9DBtDEikgBP2ubtRA+u2YZjTOwFNVD3mgg4eM
+         nHyhEaxwsFCCx+w7dakK/2ZiP2X8fNC9sYYF9c2iJsVIjgjR7OmWaTcgUIVRQQqd3IrZ
+         +9Fw==
+X-Gm-Message-State: AOAM532XqFy88Xtmk901tNt4CK7ERVkWdiUnEwZarmcVYLYVbqHD3cOh
+        cU8cHevCVeZqlE5H7F7We8vRJg==
+X-Google-Smtp-Source: ABdhPJwbXd6qyKHBxqqgFKv6ap8JyMFbqJzbWzhavHwdCVDLk23PO4HZqOGhhXb7L6PXNPxBe/Jt6g==
+X-Received: by 2002:a17:90b:3890:: with SMTP id mu16mr40379960pjb.186.1638209152601;
+        Mon, 29 Nov 2021 10:05:52 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b10sm18148352pft.179.2021.11.29.10.05.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 10:05:52 -0800 (PST)
+Date:   Mon, 29 Nov 2021 18:05:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     isaku.yamahata@intel.com, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Kai Huang <kai.huang@linux.intel.com>
+Subject: Re: [RFC PATCH v3 18/59] KVM: x86: Add flag to mark TSC as immutable
+ (for TDX)
+Message-ID: <YaUWfFpYP/7lcpmZ@google.com>
+References: <cover.1637799475.git.isaku.yamahata@intel.com>
+ <00772535f09b2bf98e6bc7008e81c6ffb381ed84.1637799475.git.isaku.yamahata@intel.com>
+ <87ilwgja6x.ffs@tglx>
 MIME-Version: 1.0
-References: <YaB/JHP/pMbgRJ1O@kroah.com> <20211126074904.88388-1-guangming.cao@mediatek.com>
-In-Reply-To: <20211126074904.88388-1-guangming.cao@mediatek.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 29 Nov 2021 10:05:00 -0800
-Message-ID: <CALAqxLVF1BPznzwjem2BcsDDoo5gMoBqjKEceZDLJan4zCtk3w@mail.gmail.com>
-Subject: Re: [PATCH v4] dma-buf: system_heap: Use 'for_each_sgtable_sg' in
- pages free flow
-To:     guangming.cao@mediatek.com
-Cc:     greg@kroah.com, Brian.Starkey@arm.com,
-        benjamin.gaignard@linaro.org, christian.koenig@amd.com,
-        dri-devel@lists.freedesktop.org, labbott@redhat.com,
-        linaro-mm-sig@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        lmark@codeaurora.org, matthias.bgg@gmail.com, robin.murphy@arm.com,
-        stable@vger.kernel.org, sumit.semwal@linaro.org,
-        wsd_upstream@mediatek.com, kuan-ying.lee@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87ilwgja6x.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 11:48 PM <guangming.cao@mediatek.com> wrote:
->
-> From: Guangming <Guangming.Cao@mediatek.com>
->
-> For previous version, it uses 'sg_table.nent's to traverse sg_table in pages
-> free flow.
-> However, 'sg_table.nents' is reassigned in 'dma_map_sg', it means the number of
-> created entries in the DMA adderess space.
-> So, use 'sg_table.nents' in pages free flow will case some pages can't be freed.
->
-> Here we should use sg_table.orig_nents to free pages memory, but use the
-> sgtable helper 'for each_sgtable_sg'(, instead of the previous rather common
-> helper 'for_each_sg' which maybe cause memory leak) is much better.
->
-> Fixes: d963ab0f15fb0 ("dma-buf: system_heap: Allocate higher order pages if available")
-> Signed-off-by: Guangming <Guangming.Cao@mediatek.com>
-> Reviewed-by: Robin Murphy <robin.murphy@arm.com>
-> Cc: <stable@vger.kernel.org> # 5.11.*
+On Thu, Nov 25, 2021, Thomas Gleixner wrote:
+> On Wed, Nov 24 2021 at 16:20, isaku yamahata wrote:
+> > From: Sean Christopherson <sean.j.christopherson@intel.com>
+> >
+> > The TSC for TDX1 guests is fixed at TD creation time.  Add tsc_immutable
+> 
+> What's a TDX1 guest?
 
-Thanks so much for catching this and sending in all the revisions!
+The "revision 1.0" version of TDX.  Some of these patches use "TDX1" to identify
+behaviors that may not hold true in future iterations of TDX, and also to highlight
+things that are dictated by the spec, e.g. some of the guest TSC frequency values.
+For this patch in particular, there's probably no need to differentiate TDX1 vs. TDX,
+the qualification was more for cases where KVM needs to define magic values to adhere
+to the spec, e.g. to make it clear that the magic values aren't made up by KVM.
 
-Reviewed-by: John Stultz <john.stultz@linaro.org>
+> > to reflect that the TSC of the guest cannot be changed in any way, and
+> > use it to short circuit all paths that lead to one of the myriad TSC
+> > adjustment flows.
+> 
+> I can kinda see the reason for this being valuable on it's own, but in
+> general why does TDX need a gazillion flags to disable tons of different
+> things if _ALL_ these flags are going to be set by for TDX guests
+> anyway?
+> 
+> Seperate flags make only sense when they have a value on their own,
+> i.e. are useful for things outside of TDX. If not they are just useless
+> ballast.
+
+SEV-SNP and TDX have different, but overlapping, restrictions.  And SEV-ES also
+shares most SEV-SNP's restrictions.  TDX guests that can be debugged and/or profiled
+also have different restrictions, though I forget if any of these flags would be
+affected.
+
+The goal with individual flags is to avoid seemingly arbitrary is_snp_guest() and
+is_tdx_guest() checks throughout common x86 code, e.g. to avoid confusion over why
+KVM does X for TDX but Y for SNP.  And I personally find it easer to audit KVM
+behavior with respect to the SNP/TDX specs if the non-obvious restrictions are
+explicitly set when the VM is created.
+
+For some of the flags, there's also hope that future iterations of TDX will remove
+some of the restrictions, though that's more of a bonus than a direct justification
+for adding individual flags.

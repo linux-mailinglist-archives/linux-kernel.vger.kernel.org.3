@@ -2,218 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3905462323
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:20:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63360462510
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbhK2VYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 16:24:15 -0500
-Received: from mail-oi1-f181.google.com ([209.85.167.181]:34796 "EHLO
-        mail-oi1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbhK2VWO (ORCPT
+        id S230039AbhK2Wex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:34:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232791AbhK2WeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:22:14 -0500
-Received: by mail-oi1-f181.google.com with SMTP id t19so37144904oij.1;
-        Mon, 29 Nov 2021 13:18:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=LGyswygMip+gM0Zn2BGMTWYAL3PU4WmvGzxWJOLmzEI=;
-        b=NgaCvlXwu7NJpuPtEJD0Q3j41fWjPyX4rPM68M7/fbXhEYuifRNSbnp01yxOyN5rOa
-         YM9us3ORBdHHsqKXSqArr19MeDFtJ8oPHhbW55t/8kDVdZ/HZLCxnbXq+YyteRjMEfE/
-         25fX1SuKVV5V8GQ4aM4Xq2i3dg2SYldceG8SZG9NBoU5lCpXcdyyr9Y5R+F6p2vW9LZG
-         ncfnZSWa1VYX1dmFM5UBjx3X6IBIsiccx/b8WJdZlTuZCO+iyp9sQDNd4wkWsmIL5Lw+
-         MMh7z5hcQ1Jhs5BGfnxo8j0ge5sw0A3JlpWoNxbSCKPtZoLymc9YqrP2Lv+ziky1/0kY
-         Ctiw==
-X-Gm-Message-State: AOAM533Iq43sGuUlA9VTBr9qqASJfpl2zMO0DfnNEqAZwkXCMUdFxbbU
-        i/XnouH+8uCjqoa931QmptgtEqNHhA==
-X-Google-Smtp-Source: ABdhPJxk0fy0MyrB5DhYEmPvPi2RqSF74r4uL04+jlY31ic2yvmMwZcSajbKwIAAsp4mpfYe0uJF7Q==
-X-Received: by 2002:a05:6808:9ae:: with SMTP id e14mr531360oig.68.1638220735718;
-        Mon, 29 Nov 2021 13:18:55 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id c3sm3331057oiw.8.2021.11.29.13.18.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 13:18:55 -0800 (PST)
-Received: (nullmailer pid 627249 invoked by uid 1000);
-        Mon, 29 Nov 2021 21:18:54 -0000
-Date:   Mon, 29 Nov 2021 15:18:54 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ansuel Smith <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: net: dsa: split generic port definition
- from dsa.yaml
-Message-ID: <YaVDvuXlU64I8GL+@robh.at.kernel.org>
-References: <20211112165752.1704-1-ansuelsmth@gmail.com>
+        Mon, 29 Nov 2021 17:34:11 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDA4DC09B196;
+        Mon, 29 Nov 2021 13:19:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=x/zQypJPuTEP0Tjk66V8wyYvNmILMyia+VZFyUf2E84=; b=InTJS8JcKM32KTuZiXxsZwxc9g
+        9xrDU0SA7DFTjHD4QMhh31k/iI0aC4idKkSIzSyKmjfO1Bp/CVTL9xnu8hWoFzn8aOpwuvscGkkGv
+        HCJIRj7fyyvSwPMf8tSowOqiCAMb1O5R4fIJAR0AT1mItytXdtWaOhcoQEUNFbbpTGNkxNv4dz7t+
+        jbp/B8dq8GZ83fWE30EwhfB+fM9DlKb2jGtoZKlt9Yj12x2qYuoKUUS6q6z8yClwfi5opJn5Vm3kF
+        FlYci30kOc7lR3xEAc1wAo0sOC8otIJyS3IlxRXsIVfEalbmDtQudr9lOCNGqJ5xpoEs3hUc4MmKJ
+        quqU04zg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mro3s-002gZt-JO; Mon, 29 Nov 2021 21:19:44 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        keescook@chromium.org, yzaikin@google.com, nixiaoming@huawei.com,
+        ebiederm@xmission.com, steve@sk2.org,
+        mcgrof@bombadil.infradead.org, mcgrof@kernel.org,
+        christian.brauner@ubuntu.com, ebiggers@google.com,
+        naveen.n.rao@linux.ibm.com, davem@davemloft.net,
+        mhiramat@kernel.org, anil.s.keshavamurthy@intel.com
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/6] sysctl: 5th set of kernel/sysctl cleanups
+Date:   Mon, 29 Nov 2021 13:19:37 -0800
+Message-Id: <20211129211943.640266-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211112165752.1704-1-ansuelsmth@gmail.com>
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 12, 2021 at 05:57:51PM +0100, Ansuel Smith wrote:
-> Some switch may require to add additional binding to the node port.
-> Move DSA generic port definition to a dedicated yaml to permit this.
-> 
-> Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
-> ---
->  .../devicetree/bindings/net/dsa/dsa-port.yaml | 70 +++++++++++++++++++
->  .../devicetree/bindings/net/dsa/dsa.yaml      | 54 +-------------
->  2 files changed, 72 insertions(+), 52 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-> new file mode 100644
-> index 000000000000..258df41c9133
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-> @@ -0,0 +1,70 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/dsa/dsa-port.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Ethernet Switch port Device Tree Bindings
-> +
-> +maintainers:
-> +  - Andrew Lunn <andrew@lunn.ch>
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +  - Vivien Didelot <vivien.didelot@gmail.com>
-> +
-> +description:
-> +  Ethernet switch port Description
-> +
-> +properties:
-> +  reg:
-> +    description: Port number
-> +
-> +  label:
-> +    description:
-> +      Describes the label associated with this port, which will become
-> +      the netdev name
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +
-> +  link:
-> +    description:
-> +      Should be a list of phandles to other switch's DSA port. This
-> +      port is used as the outgoing port towards the phandle ports. The
-> +      full routing information must be given, not just the one hop
-> +      routes to neighbouring switches
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +
-> +  ethernet:
-> +    description:
-> +      Should be a phandle to a valid Ethernet device node.  This host
-> +      device is what the switch port is connected to
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
-> +  dsa-tag-protocol:
-> +    description:
-> +      Instead of the default, the switch will use this tag protocol if
-> +      possible. Useful when a device supports multiple protocols and
-> +      the default is incompatible with the Ethernet device.
-> +    enum:
-> +      - dsa
-> +      - edsa
-> +      - ocelot
-> +      - ocelot-8021q
-> +      - seville
-> +
-> +  phy-handle: true
-> +
-> +  phy-mode: true
-> +
-> +  fixed-link: true
-> +
-> +  mac-address: true
-> +
-> +  sfp: true
-> +
-> +  managed: true
-> +
-> +required:
-> +  - reg
-> +
-> +additionalProperties: true
-> +
-> +...
-> diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> index 224cfa45de9a..15ea9ef3def9 100644
-> --- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> +++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
-> @@ -46,58 +46,8 @@ patternProperties:
->          type: object
->          description: Ethernet switch ports
->  
-> -        properties:
-> -          reg:
-> -            description: Port number
-> -
-> -          label:
-> -            description:
-> -              Describes the label associated with this port, which will become
-> -              the netdev name
-> -            $ref: /schemas/types.yaml#/definitions/string
-> -
-> -          link:
-> -            description:
-> -              Should be a list of phandles to other switch's DSA port. This
-> -              port is used as the outgoing port towards the phandle ports. The
-> -              full routing information must be given, not just the one hop
-> -              routes to neighbouring switches
-> -            $ref: /schemas/types.yaml#/definitions/phandle-array
-> -
-> -          ethernet:
-> -            description:
-> -              Should be a phandle to a valid Ethernet device node.  This host
-> -              device is what the switch port is connected to
-> -            $ref: /schemas/types.yaml#/definitions/phandle
-> -
-> -          dsa-tag-protocol:
-> -            description:
-> -              Instead of the default, the switch will use this tag protocol if
-> -              possible. Useful when a device supports multiple protocols and
-> -              the default is incompatible with the Ethernet device.
-> -            enum:
-> -              - dsa
-> -              - edsa
-> -              - ocelot
-> -              - ocelot-8021q
-> -              - seville
-> -
-> -          phy-handle: true
-> -
-> -          phy-mode: true
-> -
-> -          fixed-link: true
-> -
-> -          mac-address: true
-> -
-> -          sfp: true
-> -
-> -          managed: true
-> -
-> -        required:
-> -          - reg
-> -
-> -        additionalProperties: false
-> +        allOf:
-> +          - $ref: dsa-port.yaml#
+This is my 5th set of sysctl cleanups for kernel/sysctl. In this
+patch series we start addressing base directories, and so we start
+with the "fs" sysctls. The end goal is we end up completely moving
+all "fs" sysctl knobs out from kernel/sysctl.
 
-Don't need 'allOf' here. And you need to add 'unevaluatedProperties: 
-false'. With that,
+My queue of patches is done with this patch series, and so help from
+others on trimming down kernel/sysctl.c further would be greatly
+appreciated now that we have a path to move the rest of the stuff out.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Luis Chamberlain (3):
+  sysctl: add and use base directory declarer and registration helper
+  fs: move namespace sysctls and declare fs base directory
+  kernel/sysctl.c: rename sysctl_init() to sysctl_init_bases()
 
-(This needs to go in net-next to avoid conflicts, but given the 
-maintainers didn't apply it already unreviewed they probably expect I 
-will apply it.)
+Xiaoming Ni (3):
+  printk: fix build warning when CONFIG_PRINTK=n
+  fs/coredump: move coredump sysctls into its own file
+  kprobe: move sysctl_kprobes_optimization to kprobes.c
+
+ arch/arm/mm/alignment.c  |  2 +-
+ arch/sh/mm/alignment.c   |  2 +-
+ fs/Makefile              |  3 +-
+ fs/coredump.c            | 66 ++++++++++++++++++++++++++++++++++++---
+ fs/exec.c                | 55 ---------------------------------
+ fs/namespace.c           | 24 +++++++++++++-
+ fs/proc/proc_sysctl.c    | 13 ++++++--
+ fs/sysctls.c             |  9 +++---
+ include/linux/coredump.h | 10 +++---
+ include/linux/kprobes.h  |  6 ----
+ include/linux/mount.h    |  3 --
+ include/linux/printk.h   |  4 ---
+ include/linux/sysctl.h   | 25 ++++++++++++++-
+ kernel/kprobes.c         | 30 +++++++++++++++---
+ kernel/printk/internal.h |  2 ++
+ kernel/printk/printk.c   |  3 +-
+ kernel/sysctl.c          | 67 ++++++----------------------------------
+ 17 files changed, 173 insertions(+), 151 deletions(-)
+
+-- 
+2.33.0
+

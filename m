@@ -2,139 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A9324610A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:56:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F29AA4610AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241674AbhK2JAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 04:00:07 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:59044
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243520AbhK2I6A (ORCPT
+        id S241768AbhK2JBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 04:01:23 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:51650 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242252AbhK2I7X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 03:58:00 -0500
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com [209.85.128.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 29 Nov 2021 03:59:23 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id E335F1FCA1;
+        Mon, 29 Nov 2021 08:56:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1638176164; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=46Ewntptqey7Nb8utRTMlE0lWeg1WoxNDUViibdnCTQ=;
+        b=mQjNkj4jddg4aAzRNLHJfaGwJ9uhFcRto/6bZ/e/rW57sitgY4Nz87XFj54rTjwqRQxf4f
+        3K4eXNUCQR6sNb29av8NWaWHsPdTdNpYpo02lPBRoLQcxUYq6Jj6xtJug58QthhbfDt1T2
+        0DSHofD1aQaGV/q7sDV+E7i4aSoNOaQ=
+Received: from suse.cz (unknown [10.100.201.86])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id E38214000A
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 08:54:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638176082;
-        bh=+cIyWIIE7i87hR1qslQO4QHxm41aJn/0jtncJRQ6V2I=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=GZ4/9yuA+9jPjdcXr5XCzevPVFeFpS1oFRzUyh6iY1nqLzoS9GWgJu5lVjtKxZs7V
-         4L7vW39LgTeE/Ved+pSnYtyFBJlVUwsy3DjX1hMvAL0E6yTtZCE4H4na2dOun6/8DL
-         5tpAlQjKaO0vzZJuMYm0baG6s/svXcL0NekWUNOn41H+xw99+TkY43Pa/z1AJS0iCg
-         gK33Ve463F1LCy4DO2Dpj9jsZkOgiDZVHWfM3tGwVyh5HLuINMiA9gYOYqreP3Jyql
-         +i0AYWKwK60+fH6gj/a0sS/4MSDYvWFjkSkNVkcUXn1Wbs9YIEESz9NR2Nk/e6m8rY
-         lVkf7/wj+vbtA==
-Received: by mail-wm1-f70.google.com with SMTP id b142-20020a1c8094000000b0033f27b76819so5388781wmd.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 00:54:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=+cIyWIIE7i87hR1qslQO4QHxm41aJn/0jtncJRQ6V2I=;
-        b=OdEc4DPt+9yhQ/CqlBXJ94qNKn3FnRBk1qBvK6iYZfxNeSE1pMw87CP45+Fl4NDeSl
-         YeKoGgX8lXRGcjYuZPHfhMdbHUmOO0tt8pmbdpJtjsrbPfQL7zBC17BxnMfpn/zi1DbX
-         EBKxmq9o99m+38TRcp4KVahWC5uV0DgNtI6LW3lkU9vQVrduL2eK0ypewWDjuI8OiOz6
-         lYKzNY3FmbWFK+eC+VTVMFieG2i+hPdgifPmJY2/YuyTfCnBxZUaVGgpgrkzwsi3Yz2B
-         vBdJqS6CJX6ZEkyYtmnYf6RRq9jmxPAYnkqRD5BQwXx8wN4HeNVAgNBrijjyWkrMKCgx
-         WcNA==
-X-Gm-Message-State: AOAM530CUTJmJ5lK2GCL8JGNP4ZS38hUnZ1RGpzv5DgmEjlTMLANOCmI
-        70NMfDCVY09ZjQfC29Q1wpTHoEAeeC4wUYc3vu59YaZPt2p/XS2tt13vqjfxkIJ3tqw4kF2oYd3
-        bEUIwy2DcYrnvsMTgKYP4j+7/y1dfZX4PtZ1ri+yTwA==
-X-Received: by 2002:adf:dbd1:: with SMTP id e17mr32019322wrj.480.1638176082359;
-        Mon, 29 Nov 2021 00:54:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJz5iHsTpnNO012VAWrcN7a2oQNs88jJzbfoGr42p3pu8vfwhrpau7QH1zWWIbpBuF3IZjaRnQ==
-X-Received: by 2002:adf:dbd1:: with SMTP id e17mr32019289wrj.480.1638176082157;
-        Mon, 29 Nov 2021 00:54:42 -0800 (PST)
-Received: from [192.168.123.55] (ip-88-152-144-157.hsi03.unitymediagroup.de. [88.152.144.157])
-        by smtp.gmail.com with ESMTPSA id m17sm12760100wrz.22.2021.11.29.00.54.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 00:54:41 -0800 (PST)
-Message-ID: <97431cab-d67d-4bc7-e181-d64534791f03@canonical.com>
-Date:   Mon, 29 Nov 2021 09:54:39 +0100
+        by relay2.suse.de (Postfix) with ESMTPS id B0D28A3B81;
+        Mon, 29 Nov 2021 08:56:04 +0000 (UTC)
+Date:   Mon, 29 Nov 2021 09:56:04 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Dave Chinner <david@fromorbit.com>, Neil Brown <neilb@suse.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>
+Subject: Re: [PATCH v2 2/4] mm/vmalloc: add support for __GFP_NOFAIL
+Message-ID: <YaSVpL+Rx0q2rGbh@dhcp22.suse.cz>
+References: <20211122153233.9924-1-mhocko@kernel.org>
+ <20211122153233.9924-3-mhocko@kernel.org>
+ <YaC7jij1hHtdOJdE@dhcp22.suse.cz>
+ <20211127160043.1512b4063f30b4d043b37420@linux-foundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions
- support for Svpbmt
-Content-Language: en-US
-To:     wefu@redhat.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        taiten.peng@canonical.com, aniket.ponkshe@canonical.com,
-        gordan.markus@canonical.com, guoren@linux.alibaba.com,
-        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        dlustig@nvidia.com, gfavor@ventanamicro.com,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        huffman@cadence.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, Anup Patel <anup@brainfault.org>,
-        Rob Herring <robh+dt@kernel.org>, anup.patel@wdc.com,
-        atishp04@gmail.com, palmer@dabbelt.com, guoren@kernel.org,
-        christoph.muellner@vrull.eu, philipp.tomsich@vrull.eu, hch@lst.de,
-        liush@allwinnertech.com, lazyparser@gmail.com, drew@beagleboard.org
-References: <20211129014007.286478-1-wefu@redhat.com>
- <20211129014007.286478-2-wefu@redhat.com>
-From:   Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-In-Reply-To: <20211129014007.286478-2-wefu@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211127160043.1512b4063f30b4d043b37420@linux-foundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/21 02:40, wefu@redhat.com wrote:
-> From: Wei Fu <wefu@redhat.com>
+On Sat 27-11-21 16:00:43, Andrew Morton wrote:
+> On Fri, 26 Nov 2021 11:48:46 +0100 Michal Hocko <mhocko@suse.com> wrote:
 > 
-> Previous patch has added svpbmt in arch/riscv and add "riscv,svpmbt"
-> in the DT mmu node. Update dt-bindings related property here.
+> > On Mon 22-11-21 16:32:31, Michal Hocko wrote:
+> > > From: Michal Hocko <mhocko@suse.com>
+> > > 
+> > > Dave Chinner has mentioned that some of the xfs code would benefit from
+> > > kvmalloc support for __GFP_NOFAIL because they have allocations that
+> > > cannot fail and they do not fit into a single page.
+> > > 
+> > > The large part of the vmalloc implementation already complies with the
+> > > given gfp flags so there is no work for those to be done. The area
+> > > and page table allocations are an exception to that. Implement a retry
+> > > loop for those.
+> > > 
+> > > Add a short sleep before retrying. 1 jiffy is a completely random
+> > > timeout. Ideally the retry would wait for an explicit event - e.g.
+> > > a change to the vmalloc space change if the failure was caused by
+> > > the space fragmentation or depletion. But there are multiple different
+> > > reasons to retry and this could become much more complex. Keep the retry
+> > > simple for now and just sleep to prevent from hogging CPUs.
+> > > 
+> > > Signed-off-by: Michal Hocko <mhocko@suse.com>
+> > 
+> > Are there still any concerns around this patch or the approach in
+> > general?
 > 
-> Signed-off-by: Wei Fu <wefu@redhat.com>
-> Co-developed-by: Guo Ren <guoren@kernel.org>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Anup Patel <anup@brainfault.org>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> ---
->   Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
->   1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> index aa5fb64d57eb..9ff9cbdd8a85 100644
-> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> @@ -63,6 +63,16 @@ properties:
->         - riscv,sv48
->         - riscv,none
->   
-> +  mmu:
+> Well.  Like GFP_NOFAIL, every use is a sin.  But I don't think I've
+> ever seen a real-world report of anyone hitting GFP_NOFAIL's
+> theoretical issues.
 
-Shouldn't we keep the items be in alphabetic order, i.e. mmu before 
-mmu-type?
+I am not sure what you mean here. If you are missing real GFP_NOFAIL use
+cases then some have been mentioned in the discussion
 
-> +    description:
-> +      Describes the CPU's MMU Standard Extensions support.
-> +      These values originate from the RISC-V Privileged
-> +      Specification document, available from
-> +      https://riscv.org/specifications/
-> +    $ref: '/schemas/types.yaml#/definitions/string'
-> +    enum:
-> +      - riscv,svpmbt
+> I assume there will be a v3?
 
-The privileged specification has multiple MMU related extensions: 
-Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enum?
+Currently I do not have any follow up changes on top of neither of the
+patch except for acks and review tags. I can repost with those if you
+prefer.
 
-Best regards
-
-Heinrich
-
-> +
->     riscv,isa:
->       description:
->         Identifies the specific RISC-V instruction set architecture
-> 
-
+-- 
+Michal Hocko
+SUSE Labs

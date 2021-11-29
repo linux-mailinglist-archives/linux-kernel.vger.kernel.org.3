@@ -2,147 +2,330 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F466461083
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5090546108C
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:51:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242267AbhK2Ix0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 03:53:26 -0500
-Received: from mail-bo1ind01olkn0161.outbound.protection.outlook.com ([104.47.101.161]:7184
-        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244543AbhK2IvT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 03:51:19 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k2PNyFSHFknT1bdWN7V+Xs8Au+r49FVQTgDhU6H3q1urRWc1mO0txQB5TFcMkNo64QM0A+9rxN5v7iK1Nba4fyKqVQL/ijWSIDOvBI1143ZI4dyrFJlaGY7sFVyb4MhuTqZtTLK5Dtr/7CB/itjZs8mtUjhZX4hxsf/mSk54Ni2DErj3a8gWapHntGfD/VfZwAfZsHyAzgSZbrliJEARPdHGeMieyld7rrAOtiulfwS0r3WCctWC+ntbqlm4obKiKJd35B3GGDYdXe6gQnQEegPhPzNvPMBH+XswIpPrccmiq87ruLEHddfAkKUylFomWOTgi2XifVhQv1SydRm1BQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8vEud8zuFRUmj8kSbT+RUarBiLPpItGOiCEfnOIpb0M=;
- b=ADDFAfz1EatXHi3300TE+vnaTSba9fb6ay8gKMYSAoVOYQy/1h8qcUQktSjAqheqZcwCRX8Y2fcGtHbu5smWe1qnmM1ty9uVI6TvhTWXVauexrlZoLjfsZIIcEOXRl69DbAVPwY7zgZ1ugcALtgtP2cee3VYayi726h0zQ25yrgi8H3WQ19vr7PihvBg+R3hgOdMsS6HPZFmk6viGyz+Dgv/Mde6I5h2IkAt6YSDGQ84j6ZHtCS8KvydgZ+sLzo+G20su7yJSd1v6wlQhM2XiP/JuuqAdS4z81k2jpX6u4VO2/AGjmG2LgJ2QsKdCX6ZMgaw8v546UES5gApdjlOhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8vEud8zuFRUmj8kSbT+RUarBiLPpItGOiCEfnOIpb0M=;
- b=YcnvvylYjSdQZea+feQW6CyxGvCrhQruNKvuunSgmmBrWNKkwY3UwNG+sLs/1NhKd1+/j5Rz5kMMF7BuKjikbYGeBra3JZClsS9eiYUmR01d4fGqJbRo5ENaog0McBJ0WKoOMV/L8eRFXRfAdwUkV3X9opm7LAnpA5LUrutqe73fYXErks+/fpd4joxgdMVxGRScWWj/yNDpE5eHZGQZ8/vzIhkXC9AjiGsVykP8E1r+FpPrP1ElvAEfXSNcCUXgcK0DCx6Z9ISQ6y4jo5smfmjGxZ6rMhOz4C5ilV3vxQ8hfywwf7NLQAIP8qo5LQSRZO1vDWGWh//JLAJIDmHI3Q==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PN2PR01MB5288.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:5c::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Mon, 29 Nov
- 2021 08:47:56 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7%5]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
- 08:47:56 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Marcel Holtmann <marcel@holtmann.org>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Daniel Winkler <danielwinkler@google.com>,
-        Johan Hedberg <johan.hedberg@intel.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v3 resend 1/2] Bluetooth: add quirk disabling LE Read Transmit
- Power
-Thread-Topic: [PATCH v3 resend 1/2] Bluetooth: add quirk disabling LE Read
- Transmit Power
-Thread-Index: AQHX5P3NVTKsUkd7SE2S0NWSKg8CeA==
-Date:   Mon, 29 Nov 2021 08:47:56 +0000
-Message-ID: <92FBACD6-F4F2-4DE8-9000-2D30852770FC@live.com>
-References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
- <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
- <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
- <20211117124717.12352-1-redecorating@protonmail.com>
- <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
- <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
- <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
- <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
- <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
- <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
- <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
- <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
-In-Reply-To: <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [Ios6rTkf3ISP5Qm0/Z3xICyasrT2YoZdoJuUr+pQzHh3g0ABFXmMIMdMAawlsPqi]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6afde5c1-c5f7-4e45-b5ec-08d9b314f079
-x-ms-traffictypediagnostic: PN2PR01MB5288:
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Cu+NsfRVjAHc02AuttabYkrmpqIZ/cA09zD1qdmbBU99jtMwQzwGZNsz8ENZej78vu6nPST8j277bexU5e+RFyPUQdIxXugfI/nC4IjCqexGAvkl6gbivhZQMoUchYmecHBIXnVp8DlRtqs7KTmgtrVauA9PqbrfJeULV2XjKWOwd3Itf092poWtdILzV8gUKbcPIou7JnoWpVOx+KKoEuUPjDZal/qugCZ4dLcsP5FE/IiGpvXPKEg7GPRh0H7avNocln9eNUgmGhV9iMzyE3avnImri0auFtv1Z7askFBnGrCGZl3RQozz8vvKVtbN1dJzapIRmy/eC3z0M8auc9hvtWS9z3DnMvD7eQAhoHav9pKXpXeWt9tJNi063uY57qy5AJGOhCejqXJh9hAajOQlkgI+4dU+5aqDAcDYr1IcCqDdws/2A0AtvfJ3rTEtiY53VveBnY4gxEsTPSfufiC/+4U1+gcfJtjuqLpUiEirNUKsnfZ1+tl3IvCXM35d/joU1Zg5zH/4xtNmkpyCrhpALbRNVyuI+6MBIgEsLqbUmbXsj0IaXebrUwNAfXc7WDcIbqLZfNCq6+fBNnhGJQ==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: AGGKcvduWmiqLwkddfbyL9Wlm1XxlRFdUIRrWUI7aavtnI7kmCml5uSBrTtllpmcrFNEO2BH5vKKQ/jPdIymQyiX4lB0wtTICov8oOR4FKzKzfon91cyYOrjqccL4HIDKu3FQrft7Z+no4QNf//uthGjamJtfV3NmGWvtrDKfLJfPWri4eJjDp0GH6c0l5TvGpimHZagX1SmJIJPt0pSled8GA6fyQK7AIEpah8dHneKBQdrcZl9BX1kijZpTweczb8G9BjgypuyeLTdhF52aj6p8Gkz7CxQq9k2y01GFil/OIR7l1kHAyP1pmFLvxn4A4ULmu+BY8oK4X7ddrE3y0cTKDjwwBMmb+IWuS+cVSIaDJa/9Q+ClZ1DRg4jWMmlaxoHVgukfwjRVyL03Mh9IsUeqrvMKhNXofRMAT2nRAaAZxk9gQaz1TGhgln+Uvrh9RIo29Q7Niy3M9V96jE6NeUgEfUZqOWYe6aYd0VQWi0/kAiWiC2iSKEUAvRLOEhYAr2XBPrK0LuGQNIdwQHmV+KWt4WZByKXADCZpQmUe/WRqS9qZLyQCPvKMZOQnOpmMbwaBcq+qpfX7Kq6OB9w1fFcJrZF6S1VEozS8Df4LakyntBXTB7Dg30PQ0KjHTeEjwoCSAcvdPfXI2jypcuCPvjaM/YpIt5dkB99fKR+KBM6NZ20V6HkcTBG97Z89RNqD7OidOZzthiHitrEeYBa+kcGkYpoY3P7yzKZ/pdjw9xTka1xRJS06HzdWgcwDrsyG6kkGbDboKf3a6EUjOmLdQ==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <B2C72EF06BC21E46B5CEF89ED862924E@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        id S242636AbhK2Iyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 03:54:51 -0500
+Received: from smtp-relay-internal-0.canonical.com ([185.125.188.122]:40924
+        "EHLO smtp-relay-internal-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1350707AbhK2Iwt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 03:52:49 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 55A0C40A02
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 08:49:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638175771;
+        bh=7nEjPvTDQEfY5mZYJtglfa59N8Yj/omdJxmTIOTreCo=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=gd8KbijmgpQ27ieVsvKIBRZX0ryUH8cauaC6CFQF53C2z6vC4x8u350oWJM0xiRep
+         EAfEaVHIeFcQ6+BlOxRxI4rVK5Fj+QfBax+KODTIyvzu+57Wbra0MkwgUpNHo976hD
+         1Ybog+9bu6Bl1RWqzSrg5RMSooodIqz68GmXOBfzVqyh0t2esvM7/iTVfQwgQl3JPW
+         WcUfqG887bYOFQ+mT70qrF2tmyrmiWSI7s12+frTxD6BoUADz+nd1Rdejtz7m6cWay
+         qmo0DzfInrdctgoaAJjDgS/qDD1wUsD4rQ3jFUzKX88zzNw6sq21HJ+UQaD+syK4+I
+         J1HECUGcrKXqQ==
+Received: by mail-lf1-f70.google.com with SMTP id c40-20020a05651223a800b004018e2f2512so5527251lfv.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 00:49:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=7nEjPvTDQEfY5mZYJtglfa59N8Yj/omdJxmTIOTreCo=;
+        b=WqXkcg50Ar/z9R/VrM9CSUsLo0UlNBHLSjmzyF7CpOaWCiqr/TZRpJrbvE5R+S2Un1
+         uRDbD2P/8ZdfyjYkSY94l2X5jquYLIxPmCKOu24gsmFLKQ3Hd6iYw4YCTPjqlR+d8/SU
+         52ZwOgPJPm3NYGWUksm0Oy2s13aH6zcDzLnIuYjD1ebP+ksvliFUxMj4Mj9heGr9UFjl
+         700QgZnp6NdO2I1NLML4inhSJ3DIa/dTt99LMpohnuXYH5NY+jD/M5rwrqIjqaOEw0Bg
+         VJoYQ47CfpEqFDAknLx2IHkjcOOCgbZiQf/f8TPztR9lyzGlPdaERtGa9AUAaw0Bz0As
+         CNIA==
+X-Gm-Message-State: AOAM533caizgOvC2RbVpOcYWqn4ctLUMSNjeFfky7ce7f05421OClRKK
+        2JihtJTzrx0g0uuautZVxF2LB8GcC9XmO3aqX+nKSTbUUGOoK0FlTko1Hknz8lCnBEQ3I59+waU
+        A94RTyK4Tht/yPnmYX2gnCuApxMbToobltvZCYEZi2Q==
+X-Received: by 2002:ac2:4d29:: with SMTP id h9mr46682473lfk.633.1638175770233;
+        Mon, 29 Nov 2021 00:49:30 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzE9LyxbljzEGBzL+EObwvtjS/b3x08ndNZWzdeUwxrzt8gLR4oaIc/qAMnlM9Cjzkai3+MCg==
+X-Received: by 2002:ac2:4d29:: with SMTP id h9mr46682452lfk.633.1638175770012;
+        Mon, 29 Nov 2021 00:49:30 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id x199sm1264377lff.284.2021.11.29.00.49.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 00:49:29 -0800 (PST)
+Message-ID: <26fffd4f-4d40-1cdd-0210-1ae02146d50c@canonical.com>
+Date:   Mon, 29 Nov 2021 09:49:28 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-a1a1a.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6afde5c1-c5f7-4e45-b5ec-08d9b314f079
-X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 08:47:56.1596
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB5288
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 3/8] soc: samsung: Add USIv2 driver
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+ <20211127223253.19098-4-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211127223253.19098-4-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+On 27/11/2021 23:32, Sam Protsenko wrote:
+> USIv2 IP-core is found on modern ARM64 Exynos SoCs (like Exynos850) and
+> provides selectable serial protocol (one of: UART, SPI, I2C). USIv2
+> registers usually reside in the same register map as a particular
+> underlying protocol it implements, but have some particular offset. E.g.
+> on Exynos850 the USI_UART has 0x13820000 base address, where UART
+> registers have 0x00..0x40 offsets, and USI registers have 0xc0..0xdc
+> offsets. Desired protocol can be chosen via SW_CONF register from System
+> Register block of the same domain as USI.
+> 
+> Before starting to use a particular protocol, USIv2 must be configured
+> properly:
+>   1. Select protocol to be used via System Register
+>   2. Clear "reset" flag in USI_CON
+>   3. Configure HWACG behavior (e.g. for UART Rx the HWACG must be
+>      disabled, so that the IP clock is not gated automatically); this is
+>      done using USI_OPTION register
+>   4. Keep both USI clocks (PCLK and IPCLK) running during USI registers
+>      modification
+> 
+> This driver implements above behavior. Of course, USIv2 driver should be
+> probed before UART/I2C/SPI drivers. It can be achived by embedding
+> UART/I2C/SPI nodes inside of USI node (in Device Tree); driver then
+> walks underlying nodes and instantiates those. Driver also handles USI
+> configuration on PM resume, as register contents can be lost during CPU
+> suspend.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+>  drivers/soc/samsung/Kconfig         |  14 ++
+>  drivers/soc/samsung/Makefile        |   2 +
+>  drivers/soc/samsung/exynos-usi-v2.c | 242 ++++++++++++++++++++++++++++
 
-Some devices have a bug causing them to not work if they query=20
-LE tx power on startup. Thus we add a quirk in order to not query it=20
-and default min/max tx power values to HCI_TX_POWER_INVALID.
+You used everywhere v2 naming, but I actually hope this driver will be
+able to support also v1 and vx of USI. IOW, I expect to have only one
+USI driver, so please drop everywhere v2 (bindings, symbols, Kconfig,
+functions) except the compatible.
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
----
-include/net/bluetooth/hci.h | 9 +++++++++
-net/bluetooth/hci_core.c    | 3 ++-
-2 files changed, 11 insertions(+), 1 deletion(-)
+>  3 files changed, 258 insertions(+)
+>  create mode 100644 drivers/soc/samsung/exynos-usi-v2.c
+> 
+> diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
+> index e2cedef1e8d1..b168973c887f 100644
+> --- a/drivers/soc/samsung/Kconfig
+> +++ b/drivers/soc/samsung/Kconfig
+> @@ -23,6 +23,20 @@ config EXYNOS_CHIPID
+>  	  Support for Samsung Exynos SoC ChipID and Adaptive Supply Voltage.
+>  	  This driver can also be built as module (exynos_chipid).
+>  
+> +config EXYNOS_USI_V2
+> +	tristate "Exynos USIv2 (Universal Serial Interface) driver"
+> +	default ARCH_EXYNOS && ARM64
+> +	depends on ARCH_EXYNOS || COMPILE_TEST
+> +	select MFD_SYSCON
+> +	help
+> +	  Enable support for USIv2 block. USI (Universal Serial Interface) is an
+> +	  IP-core found in modern Samsung Exynos SoCs, like Exynos850 and
+> +	  ExynosAutoV0. USI block can be configured to provide one of the
+> +	  following serial protocols: UART, SPI or High Speed I2C.
+> +
+> +	  This driver allows one to configure USI for desired protocol, which
+> +	  is usually done in USI node in Device Tree.
+> +
+>  config EXYNOS_PMU
+>  	bool "Exynos PMU controller driver" if COMPILE_TEST
+>  	depends on ARCH_EXYNOS || ((ARM || ARM64) && COMPILE_TEST)
+> diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
+> index 2ae4bea804cf..0b746b2fd78f 100644
+> --- a/drivers/soc/samsung/Makefile
+> +++ b/drivers/soc/samsung/Makefile
+> @@ -4,6 +4,8 @@ obj-$(CONFIG_EXYNOS_ASV_ARM)	+= exynos5422-asv.o
+>  obj-$(CONFIG_EXYNOS_CHIPID)	+= exynos_chipid.o
+>  exynos_chipid-y			+= exynos-chipid.o exynos-asv.o
+>  
+> +obj-$(CONFIG_EXYNOS_USI_V2)	+= exynos-usi-v2.o
+> +
+>  obj-$(CONFIG_EXYNOS_PMU)	+= exynos-pmu.o
+>  
+>  obj-$(CONFIG_EXYNOS_PMU_ARM_DRIVERS)	+= exynos3250-pmu.o exynos4-pmu.o \
+> diff --git a/drivers/soc/samsung/exynos-usi-v2.c b/drivers/soc/samsung/exynos-usi-v2.c
+> new file mode 100644
+> index 000000000000..5a315890e4ec
+> --- /dev/null
+> +++ b/drivers/soc/samsung/exynos-usi-v2.c
+> @@ -0,0 +1,242 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 Linaro Ltd.
+> + * Author: Sam Protsenko <semen.protsenko@linaro.org>
+> + *
+> + * Samsung Exynos USI v2 driver (Universal Serial Interface).
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+> +
+> +#include <dt-bindings/soc/samsung,exynos-usi-v2.h>
+> +
+> +/* System Register: SW_CONF register bits */
+> +#define SW_CONF_UART		BIT(0)
+> +#define SW_CONF_SPI		BIT(1)
+> +#define SW_CONF_I2C		BIT(2)
+> +#define SW_CONF_MASK		(SW_CONF_UART | SW_CONF_SPI | SW_CONF_I2C)
+> +
+> +/* USI register offsets */
+> +#define USI_CON			0x04
+> +#define USI_OPTION		0x08
+> +
+> +/* USI register bits */
+> +#define USI_CON_RESET		BIT(0)
+> +#define USI_OPTION_CLKREQ_ON	BIT(1)
+> +#define USI_OPTION_CLKSTOP_ON	BIT(2)
+> +
+> +struct usi_v2_mode {
 
-diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-index 63065bc01b766c..383342efcdc464 100644
---- a/include/net/bluetooth/hci.h
-+++ b/include/net/bluetooth/hci.h
-@@ -246,6 +246,15 @@ enum {
-	 * HCI after resume.
-	 */
-	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
-+
-+	/*
-+	 * When this quirk is set, LE tx power is not queried on startup
-+	 * and the min/max tx power values default to HCI_TX_POWER_INVALID.
-+	 *
-+	 * This quirk can be set before hci_register_dev is called or
-+	 * during the hdev->setup vendor callback.
-+	 */
-+	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
-};
+Everywhere here:
+s/usi_v2/exynos_usi/
 
-/* HCI device flags */
-diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-index 8d33aa64846b1c..434c6878fe9640 100644
---- a/net/bluetooth/hci_core.c
-+++ b/net/bluetooth/hci_core.c
-@@ -619,7 +619,8 @@ static int hci_init3_req(struct hci_request *req, unsig=
-ned long opt)
-			hci_req_add(req, HCI_OP_LE_READ_ADV_TX_POWER, 0, NULL);
-		}
+> +	const char *name;		/* mode name */
+> +	unsigned int val;		/* mode register value */
+> +};
+> +
+> +struct usi_v2 {
+> +	struct device *dev;> +	void __iomem *regs;		/* USI register map */
+> +	struct clk *pclk;		/* USI bus clock */
+> +	struct clk *ipclk;		/* USI operating clock */
+> +
+> +	size_t mode;			/* current USI SW_CONF mode index */
+> +	bool clkreq_on;			/* always provide clock to IP */
+> +
+> +	/* System Register */
+> +	struct regmap *sysreg;		/* System Register map */
+> +	unsigned int sw_conf;		/* SW_CONF register offset in sysreg */
+> +};
+> +
+> +static const struct usi_v2_mode usi_v2_modes[] = {
+> +	[USI_V2_UART] =	{ .name = "uart", .val = SW_CONF_UART },
+> +	[USI_V2_SPI] =	{ .name = "spi",  .val = SW_CONF_SPI },
+> +	[USI_V2_I2C] =	{ .name = "i2c",  .val = SW_CONF_I2C },
+> +};
+> +
+> +/**
+> + * usi_v2_set_sw_conf - Set USI block configuration mode
+> + * @usi: USI driver object
+> + * @mode: Mode index
+> + *
+> + * Select underlying serial protocol (UART/SPI/I2C) in USI IP-core.
+> + *
+> + * Return: 0 on success, or negative error code on failure.
+> + */
+> +static int usi_v2_set_sw_conf(struct usi_v2 *usi, size_t mode)
+> +{
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	if (mode >= ARRAY_SIZE(usi_v2_modes))
+> +		return -EINVAL;
+> +
+> +	val = usi_v2_modes[mode].val;
+> +	ret = regmap_update_bits(usi->sysreg, usi->sw_conf, SW_CONF_MASK, val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	usi->mode = mode;
+> +	dev_dbg(usi->dev, "USIv2 protocol: %s\n", usi_v2_modes[usi->mode].name);
+> +
+> +	return 0;
+> +}
+> +
+> +/**
+> + * usi_v2_enable - Initialize USI block
+> + * @usi: USI driver object
+> + *
+> + * USI IP-core start state is "reset" (on startup and after CPU resume). This
+> + * routine enables USI block by clearing the reset flag. It also configures
+> + * HWACG behavior (needed e.g. for UART Rx). It should be performed before
+> + * underlying protocol becomes functional.
+> + *
+> + * Both 'pclk' and 'ipclk' clocks should be enabled when running this function.
+> + */
+> +static void usi_v2_enable(const struct usi_v2 *usi)
+> +{
+> +	u32 val;
+> +
+> +	/* Enable USI block */
+> +	val = readl(usi->regs + USI_CON);
+> +	val &= ~USI_CON_RESET;
+> +	writel(val, usi->regs + USI_CON);
+> +	udelay(1);
+> +
+> +	/* Continuously provide the clock to USI IP w/o gating */
+> +	if (usi->clkreq_on) {
+> +		val = readl(usi->regs + USI_OPTION);
+> +		val &= ~USI_OPTION_CLKSTOP_ON;
+> +		val |= USI_OPTION_CLKREQ_ON;
+> +		writel(val, usi->regs + USI_OPTION);
+> +	}
+> +}
+> +
+> +static int usi_v2_configure(struct usi_v2 *usi)
+> +{
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(usi->pclk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(usi->ipclk);
+> +	if (ret)
+> +		goto err_pclk;
+> +
+> +	ret = usi_v2_set_sw_conf(usi, usi->mode);
+> +	if (ret)
+> +		goto err_ipclk;
+> +
+> +	usi_v2_enable(usi);
+> +
+> +err_ipclk:
+> +	clk_disable_unprepare(usi->ipclk);
+> +err_pclk:
+> +	clk_disable_unprepare(usi->pclk);
+> +	return ret;
+> +}
+> +
+> +static int usi_v2_parse_dt(struct device_node *np, struct usi_v2 *usi)
+> +{
+> +	int ret;
+> +	u32 mode;
+> +
+> +	ret = of_property_read_u32(np, "samsung,mode", &mode);
+> +	if (ret)
+> +		return ret;
+> +	usi->mode = mode;
 
--		if (hdev->commands[38] & 0x80) {
-+		if (hdev->commands[38] & 0x80 &&
-+		!test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks)) {
-			/* Read LE Min/Max Tx Power*/
-			hci_req_add(req, HCI_OP_LE_READ_TRANSMIT_POWER,
-				    0, NULL);=
+Parse and validate mode here, instead of usi_v2_set_sw_conf(). We expect
+DT to be correct, so if it is not, then there is no point to probe the
+device.
+
+Best regards,
+Krzysztof

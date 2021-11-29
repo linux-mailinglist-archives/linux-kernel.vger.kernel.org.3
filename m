@@ -2,112 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 372DD462543
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8E246233F
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:26:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbhK2WhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233780AbhK2Wg3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:36:29 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82AC0C093B59
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 13:21:15 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id k4so13208896plx.8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 13:21:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vTbh7aMdkVU2cnIaX6D7qbh+Z4p8232l+qU6dAcs9x4=;
-        b=G8XdUOVk/Af3Ui5DfIB3/ikbiJ7GY2s5wvC/HOIFhBIam5Pz3ldQ1H2ynr7JbPqp3O
-         re3/JvzVtv6dYnjmNS5qWXoHBgzVFMAOT17e4a/6b2T1JCq4P5JIuYipQshBjPAFI1ps
-         dNiRrBNWw0FFjytFmACBGtSXefn/ZQEULpkb5qz4P0VaAzdTJ09x46CtfN9jtnl5JuPz
-         uAsRyehQ466wFzPv6BTeODZsr7Pe69VmeLGsy66HyBwk8mp3qmuFkCnv4fwx4+D6nfjK
-         nYPUtn9pnZ2QXPCS16n9u7qgUN2RT6ra+5F2LZuNmzZQFMtfTFPfYgIRlhg6o5MwFX+C
-         wdiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vTbh7aMdkVU2cnIaX6D7qbh+Z4p8232l+qU6dAcs9x4=;
-        b=urj5o8/btc22Sbn721DTKZ4HhulSy/TOBa395FHExM0QccYlu80dQW9lWsJJx25P2P
-         YwbWwLdNJ1NAvFWgxOTW4XwHbBgBnZvw5wkjwoO3PhYr1AtFjj5kqjyjtTsRmbgk1oam
-         pZVrGA+w2+KIkf9qwpT9Zw4effaANB9tllLpcsFt+GS6DB+F4PSEvZaUxyUNqTANF5ip
-         Z6avd8Vu1Zgwyma2nobSGzoOGEmn1pLYSdbWfr/on0lT7Hmd3mLmCBLVp4LVrgxxdVrb
-         tybaCm0OR+wyexZ3mJlS8ebR4QUsWgzDuxjNNRVSVyjWvwlm/KDhGfn857GEVrUZBg4m
-         8X6Q==
-X-Gm-Message-State: AOAM533rudwxo99keP+GqZpR5qwvozEgZmYqRCrE70wrA3GKgao7sHpz
-        edUTNbsBGFS9xy/AASW03a7vsA==
-X-Google-Smtp-Source: ABdhPJwYounno/EIO+D542MzhtWgmcz65LU2sUa/hZMVgFVjaQp4rGDaoomCk7tGf9A2eVM9efxzpg==
-X-Received: by 2002:a17:902:64c2:b0:141:c171:b99b with SMTP id y2-20020a17090264c200b00141c171b99bmr62232728pli.55.1638220874835;
-        Mon, 29 Nov 2021 13:21:14 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b4sm18810116pfl.60.2021.11.29.13.21.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 13:21:14 -0800 (PST)
-Date:   Mon, 29 Nov 2021 21:21:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [RFC PATCH v3 23/59] KVM: x86: Allow host-initiated WRMSR to set
- X2APIC regardless of CPUID
-Message-ID: <YaVERrcOp9ctdj8Y@google.com>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <63556f13e9608cbccf97d356be46a345772d76d3.1637799475.git.isaku.yamahata@intel.com>
- <87fsrkja4j.ffs@tglx>
- <d449a4c2-131d-5406-b7a2-7549bacc02f9@redhat.com>
+        id S229602AbhK2V3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 16:29:46 -0500
+Received: from mga04.intel.com ([192.55.52.120]:12255 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229529AbhK2V1k (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 16:27:40 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="234806232"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="234806232"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 13:24:22 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="458591298"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 29 Nov 2021 13:24:20 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mro8J-000CLv-Qp; Mon, 29 Nov 2021 21:24:19 +0000
+Date:   Tue, 30 Nov 2021 05:23:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [norov:bitmap_tmp 12/12] include/linux/bitmap.h:419:29: error:
+ expected identifier or '('
+Message-ID: <202111300515.ZhTwh0ao-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d449a4c2-131d-5406-b7a2-7549bacc02f9@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021, Paolo Bonzini wrote:
-> On 11/25/21 20:41, Thomas Gleixner wrote:
-> > On Wed, Nov 24 2021 at 16:20, isaku yamahata wrote:
-> > > Let userspace, or in the case of TDX, KVM itself, enable X2APIC even if
-                                            ^^^^^^^^^^
+tree:   https://github.com/norov/linux bitmap_tmp
+head:   985b0047eb9f4a5916eeb4f85e9e173d220d8fc7
+commit: 985b0047eb9f4a5916eeb4f85e9e173d220d8fc7 [12/12] aaa
+config: hexagon-randconfig-r045-20211129 (https://download.01.org/0day-ci/archive/20211130/202111300515.ZhTwh0ao-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/norov/linux/commit/985b0047eb9f4a5916eeb4f85e9e173d220d8fc7
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap_tmp
+        git checkout 985b0047eb9f4a5916eeb4f85e9e173d220d8fc7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon prepare
 
-> > > X2APIC is not reported as supported in the guest's CPU model.  KVM
-> > > generally does not force specific ordering between ioctls(), e.g. this
-> > > forces userspace to configure CPUID before MSRs.  And for TDX, vCPUs
-> > > will always run with X2APIC enabled, e.g. KVM will want/need to enable
-                                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> > > X2APIC from time zero.
-      ^^^^^^^^^^^^^^^^^^^^^
-> > 
-> > This is complete crap. Fix the broken user space and do not add
-> > horrible hacks to the kernel.
-> 
-> tl;dr: I agree that it's a userspace issue but "configure CPUID before MSR"
-> is not the issue (in fact QEMU calls KVM_SET_CPUID2 before any call to
-> KVM_SET_MSRS).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Specifically for TDX, it's not a userspace issue.  To simplify other checks and
-to report sane values for KVM_GET_MSRS, KVM forces X2APIC for TDX guests when the
-vCPU is created, before its exposed to usersepace.  The bit about not forcing
-specific ordering is justification for making the change independent of TDX,
-i.e. to call out that APIC_BASE is different from every other MSR, and is even
-inconsistent in its own behavior since illegal transitions are allowed when
-userspace is stuffing the MSR.
+All errors (new ones prefixed by >>):
 
-IMO, this patch is valid irrespective of TDX.  It's included in the TDX series
-because TDX support forces the issue.
+   In file included from arch/hexagon/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:5:
+   In file included from include/linux/spinlock.h:62:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:12:
+>> include/linux/bitmap.h:419:29: error: expected identifier or '('
+   static __always_inline bool bitmap_weight_le(const unsigned long *src,
+                               ^
+   include/linux/bitmap.h:417:41: note: expanded from macro 'bitmap_weight_le'
+   #define bitmap_weight_le(src, nbits, n) !bitmap_weight_gt((src), (nbits), (n))
+                                           ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:122: arch/hexagon/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1284: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-That said, an alternative for TDX would be do handle this in kvm_lapic_reset()
-now that the lAPIC RESET flows are consolidated.  Back when this patch was first
-written, that wasn't really an option.
+
+vim +419 include/linux/bitmap.h
+
+985b0047eb9f4a Yury Norov 2021-11-29  418  
+899f6b60178855 Yury Norov 2021-11-23 @419  static __always_inline bool bitmap_weight_le(const unsigned long *src,
+899f6b60178855 Yury Norov 2021-11-23  420  			unsigned int nbits, unsigned int num)
+899f6b60178855 Yury Norov 2021-11-23  421  {
+899f6b60178855 Yury Norov 2021-11-23  422  	if (small_const_nbits(nbits))
+899f6b60178855 Yury Norov 2021-11-23  423  		return hweight_long(*src & BITMAP_LAST_WORD_MASK(nbits)) < num;
+899f6b60178855 Yury Norov 2021-11-23  424  
+899f6b60178855 Yury Norov 2021-11-23  425  	return __bitmap_weight_le(src, nbits, num);
+899f6b60178855 Yury Norov 2021-11-23  426  }
+899f6b60178855 Yury Norov 2021-11-23  427  
+
+:::::: The code at line 419 was first introduced by commit
+:::::: 899f6b60178855d893aef0cb83aa1d9320216121 lib/bitmap: add bitmap_weight_{eq,gt,le}
+
+:::::: TO: Yury Norov <yury.norov@gmail.com>
+:::::: CC: Yury Norov <yury.norov@gmail.com>
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,74 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C27461052
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987DB46105E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:42:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348330AbhK2Iok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 03:44:40 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:39288 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350040AbhK2Imh (ORCPT
+        id S1349495AbhK2IqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 03:46:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:41658 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229624AbhK2Iny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 03:42:37 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id B6ECA212CB;
-        Mon, 29 Nov 2021 08:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638175157; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Mon, 29 Nov 2021 03:43:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638175237;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=y1/HRvQWe5bupilVHXWVZDusBm8nr9LZt0uqBedKdKA=;
-        b=J4qijL9j7NKJC0s4vnqOlrDs2BSFPsMfOKHgq75fzXUbUMmG6kDFsHC446/t8l9HnhxQGi
-        1X48f8fJWJ9sQfbIUtxwtWBvay0Vz0aMdUE83pfyyc4cYhcZsz7fW82PhBT10czrrivQxi
-        qE3pMx7MyDOyufnfhAhM+rP1LoUdXcM=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 8242FA3B83;
-        Mon, 29 Nov 2021 08:39:17 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 09:39:16 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Hao Lee <haolee.swjtu@gmail.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, vdavydov.dev@gmail.com,
-        Shakeel Butt <shakeelb@google.com>, cgroups@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm: reduce spinlock contention in release_pages()
-Message-ID: <YaSRtKwTCOj7JnR6@dhcp22.suse.cz>
-References: <YZ5o/VmU59evp65J@dhcp22.suse.cz>
- <CA+PpKPmy-u_BxYMCQOFyz78t2+3uM6nR9mQeX+MPyH6H2tOOHA@mail.gmail.com>
- <YZ8DZHERun6Fej2P@casper.infradead.org>
- <20211125080238.GA7356@haolee.io>
- <YZ9e3pzHKmn5nev0@dhcp22.suse.cz>
- <20211125123133.GA7758@haolee.io>
- <YZ+bI1fNpKar0bSU@dhcp22.suse.cz>
- <CA+PpKP=hsuBmvv09OcD2Nct8B8Cqa03UfKFHAHzKxwE0SXGP4g@mail.gmail.com>
- <YaC7BcTSijFj+bxR@dhcp22.suse.cz>
- <20211126162623.GA10277@haolee.io>
+        bh=7dfmfZx/oTtlvSbTuXbHxY4wt7Cbbp2yPAyLGt1QqFg=;
+        b=AU2FKbw9YIsWikpUKfTxxePJzZ6oskE6VxZksFcQ2DYhf0mKtryOYkaSAj9pjjuYz3ivwC
+        npyXEgdV32DGkiw8bCJFZZJRYEVP+sNCgcrSDWaEexjdeTXaBcvA3Mof0E6GukkSsaFc1V
+        J6MWbfyyoevIb6eY9kloG5Kzw4I6KXE=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-525-VHsTZSV3MEuY2BLemoi-Dg-1; Mon, 29 Nov 2021 03:40:35 -0500
+X-MC-Unique: VHsTZSV3MEuY2BLemoi-Dg-1
+Received: by mail-wr1-f71.google.com with SMTP id q17-20020adff791000000b00183e734ba48so2570276wrp.8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 00:40:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=7dfmfZx/oTtlvSbTuXbHxY4wt7Cbbp2yPAyLGt1QqFg=;
+        b=pMBj0ORL3V3Dzx9Pg6NM4XJGFf7vYjkNtAP+IOagnxRrFE7ldhwe0cjpwp26ZRQX3/
+         iSqZED3LyUIFdk5BGN5ZsNtSUU4HHCk/cy9oAM9ImQ/A6taB1kozDwr1y51cfuvQ2O1V
+         fEykiRUT7aY8wW/xS+68sNZRWc/BSTS520sZnkUbYCFwT38BgH1qF+d2UTUA16K7C5yC
+         QMyVlfaHcJKoi7J23W8EHRQobNT15NRIyXuQQQIG34jhJvL47nHsNkj1Za2aTQl0Id6s
+         eyn8NCjm0t9W0jAFxuuwPX2y2+ZRwC8nvA3Ukk5GVHuR7XDxjbYR7DvnlnI5zw6HPwkL
+         HMhQ==
+X-Gm-Message-State: AOAM5330+Po6MHGRD69YGB4lb0ywRL6db/uscfF8k4qL6RKy9nJGClWv
+        rAtl0tW8REr3HuvHa8YnzR2e8999B7H3PVenlPc+U90jnZ47nCBe2BqphHJX77Qw8Pter9pogb/
+        6RNCwO4DFBrK7nNruah6pQqC0
+X-Received: by 2002:adf:e512:: with SMTP id j18mr32721465wrm.532.1638175234323;
+        Mon, 29 Nov 2021 00:40:34 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwarss23e2ed4Ips4qwa1sTOMdQ8tiDjZ9+GLFrGV/WtsuKWGho3Z9R3S1FYhQg1owAydxxRg==
+X-Received: by 2002:adf:e512:: with SMTP id j18mr32721456wrm.532.1638175234160;
+        Mon, 29 Nov 2021 00:40:34 -0800 (PST)
+Received: from [192.168.3.132] (p5b0c6664.dip0.t-ipconnect.de. [91.12.102.100])
+        by smtp.gmail.com with ESMTPSA id a10sm19941453wmq.27.2021.11.29.00.40.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 00:40:33 -0800 (PST)
+Message-ID: <7fdab1f3-abf7-1214-8d74-8cdcc6d96918@redhat.com>
+Date:   Mon, 29 Nov 2021 09:40:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126162623.GA10277@haolee.io>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH for 4.14-stable] s390/mm: validate VMA in PGSTE
+ manipulation functions
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        borntraeger@de.ibm.com, hca@linux.ibm.com, imbrenda@linux.ibm.com
+References: <16371715631177@kroah.com>
+ <20211126171536.22963-1-david@redhat.com> <YaNuALgYu4OQDVXN@kroah.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YaNuALgYu4OQDVXN@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 26-11-21 16:26:23, Hao Lee wrote:
-[...]
-> I will try Matthew's idea to use semaphore or mutex to limit the number of BE
-> jobs that are in the exiting path. This sounds like a feasible approach for
-> our scenario...
+On 28.11.21 12:54, Greg KH wrote:
+> On Fri, Nov 26, 2021 at 06:15:36PM +0100, David Hildenbrand wrote:
+>> commit fe3d10024073f06f04c74b9674bd71ccc1d787cf upstream.
+>>
+>> We should not walk/touch page tables outside of VMA boundaries when
+>> holding only the mmap sem in read mode. Evil user space can modify the
+>> VMA layout just before this function runs and e.g., trigger races with
+>> page table removal code since commit dd2283f2605e ("mm: mmap: zap pages
+>> with read mmap_sem in munmap"). gfn_to_hva() will only translate using
+>> KVM memory regions, but won't validate the VMA.
+>>
+>> Further, we should not allocate page tables outside of VMA boundaries: if
+>> evil user space decides to map hugetlbfs to these ranges, bad things will
+>> happen because we suddenly have PTE or PMD page tables where we
+>> shouldn't have them.
+>>
+>> Similarly, we have to check if we suddenly find a hugetlbfs VMA, before
+>> calling get_locked_pte().
+>>
+>> Fixes: 2d42f9477320 ("s390/kvm: Add PGSTE manipulation functions")
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+>> Acked-by: Heiko Carstens <hca@linux.ibm.com>
+>> Link: https://lore.kernel.org/r/20210909162248.14969-4-david@redhat.com
+>> Signed-off-by: Christian Borntraeger <borntraeger@de.ibm.com>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> ---
+>>  arch/s390/mm/pgtable.c | 13 +++++++++++++
+>>  1 file changed, 13 insertions(+)
+> 
+> What about for 5.10-stable and 5.4-stable and 4.19-stable?  Will this
+> commit work there as well?
 
-I am not really sure this is something that would be acceptable. Your
-problem is resource partitioning. Papering that over by a lock is not
-the right way to go. Besides that you will likely hit a hard question on
-how many tasks to allow to run concurrently. Whatever the value some
-workload will very likely going to suffer. We cannot assume admin to
-chose the right value because there is no clear answer for that. Not to
-mention other potential problems - e.g. even more priority inversions
-etc.
+Good point, I only have "FAILED: patch "[PATCH] s390/mm: validate VMA in
+PGSTE manipulation functions" failed to apply to 4.14-stable tree" in my
+inbox ... but maybe I accidentally deleted the others.
+
+
+This commit can also be used for:
+- 4.19-stable
+- 5.4-stable
+- 5.10-stable
+
+They all lack vma_lookup() and we have to implement the start address
+check manually.
+
 -- 
-Michal Hocko
-SUSE Labs
+Thanks,
+
+David / dhildenb
+

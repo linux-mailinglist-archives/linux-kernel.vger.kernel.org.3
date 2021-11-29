@@ -2,104 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A4A4626B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E63AD462566
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236049AbhK2W4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:56:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
+        id S233832AbhK2Wij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:38:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236150AbhK2WzT (ORCPT
+        with ESMTP id S233285AbhK2Whs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:55:19 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62939C1A0D1F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:36:36 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id j5-20020a17090a318500b001a6c749e697so12240125pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:36:36 -0800 (PST)
+        Mon, 29 Nov 2021 17:37:48 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B370C048F72
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:40:58 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id x15so75830497edv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:40:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tlAzD3aQxZNbhH82DiZEqP09YfqX3PXGzrFEKOt1BUE=;
-        b=VMyEtGnE90jgPkfdArsfFQ73biEKasoDaOcmKYoZKhQrm4TkNFsD5TTOC+i1xSw4IA
-         QwSOEIYqYFet0ZZuJcRlz/K5uFQE/fenSx0d0EnnQ6oZbMNHkjflfqpu20QoV/0Nih3R
-         nMzQUwHTrrLjS0cxhTgTVwhC7ZASBaqm1glT2gMVZ9zfl+0rqU/1lxZr1KBKehahtfy9
-         cXLL/bvyEMQd0qujLL/xmH/ESnBM3510+1Nuicl2fKEThRU8WVOA8JCJKg3STPnXD26P
-         DDqxVmJCx2aXGJ6DArW+HHKb8MeCVbRgGp2m7sZZjJfZ78gCHNoKusXy9dix+Y0oTbAR
-         QSXA==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7TgPSN7BGol1Tl+v3cbObp6eM3owptNkUS6MUKapLgk=;
+        b=dDhGyayvTiVZ54M7kQkeYpixbZJ21FDA4H+XgW5qfma9xVodQ+ykL0UVDfVCnj3oGS
+         XCxC3zzyDIbY203VjKnyF4PRo5sWL2wGeRMysXQpu6w6X3f1ZKzEOJPs+7uJC0mulw3W
+         kWegC2qcRszmcWmuLJGCfK9FiXD9y5MpmqsEo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tlAzD3aQxZNbhH82DiZEqP09YfqX3PXGzrFEKOt1BUE=;
-        b=gN/HWKT82a1jY8wCnEe3PbjCI2tIPnpdCsuF/jzRIEg0+e7axIQrzcxGgqBa2OUIRd
-         vFqHNqDXMx7iyJx3hcKpYnT4apqyUxJpb/wa4Z3eOdh5oKlCtqlqCp+YY83Ea3l7reSF
-         qkA8XhhWip+VCj3TCoR6LTKMhVw92gykyOuuIEsamC7MAPfQ1lviyVmPs67YRgKASete
-         B0vVg7O8DtOM09OQORGG+kTWaJwHhHiKDVF9tdcEk22mJfEuPQhzE4bSMWS59DBkla3n
-         m7kfKOMjDToOykoqq25W0GNw5bzAGxrAASFWkdcfr19v8SgAJexlWtYKwsmeNzlA7KG7
-         MDpA==
-X-Gm-Message-State: AOAM5320kxDovq1r/jgp7gthoXOc1Kxr8djzqkxCu65JKmhZJGT53asi
-        J4Gh4dPJDrkD1lUaz2TlSClDKw==
-X-Google-Smtp-Source: ABdhPJx8WtPK3FSjNprjLl/l1toByBy/n2qpSmC6t2XTOO85rqwFTlV9d2tAz2CyzikyPU9sLpNeRg==
-X-Received: by 2002:a17:902:aa43:b0:143:e20b:f37f with SMTP id c3-20020a170902aa4300b00143e20bf37fmr61456504plr.65.1638210995742;
-        Mon, 29 Nov 2021 10:36:35 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id 95sm62436pjo.2.2021.11.29.10.36.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 10:36:35 -0800 (PST)
-Date:   Mon, 29 Nov 2021 18:36:31 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     isaku.yamahata@intel.com, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: Re: [RFC PATCH v3 47/59] KVM: TDX: Define TDCALL exit reason
-Message-ID: <YaUdr5tL7d+kpsX5@google.com>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <eb5dd2a1d02c7afe320ab3beb6390da43a9bf0bc.1637799475.git.isaku.yamahata@intel.com>
- <87k0gwhttc.ffs@tglx>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7TgPSN7BGol1Tl+v3cbObp6eM3owptNkUS6MUKapLgk=;
+        b=nS7b3hV+krKmnhhU1fvDZ3S9UiEoSltijeJjxIxE2jbYpdTrKPqfPmyOhZPVtKyULH
+         DlGlYWpzFT5fTQOcP8gWIUHJIOvLKNQX+2Fs+dMeXl9/Ph8p6plGsPi/ZJ7cWRmpZ91j
+         g1fxsPSSjcW+XVFk2WxsICL516ikDUEeyxibAQC+YNuaYzSwQxKzNTeefSPHMom8M4Kt
+         yexXTty68KzYF/MdT9b6ylf/xUFbtSa0tE7nlgff1YkRIFU20fn9yL5UVeYHBfDHvEZY
+         iM3jDHAp9ozhPPcSXNy8IuVhuDhgervEMF9D/rILlMG6JoxfGl0EAtUMNmnurJXL/TzA
+         ztTg==
+X-Gm-Message-State: AOAM532O0tV14wNQDDPakV9obkLDGNsf9fozwAzTFSJ5PZNKbZVkAqXh
+        /k6HMRXkQUU1fa6MlGJblVbIQDOQ4FdWpSREh4M=
+X-Google-Smtp-Source: ABdhPJwpBVYocsmHcdDdmxpfj4PmWvLKgRXIVbxRQoJMh3waje1WAFU6v5gSNAR38HkPxrBN51Jdlw==
+X-Received: by 2002:a17:906:d54e:: with SMTP id cr14mr61889525ejc.458.1638211256391;
+        Mon, 29 Nov 2021 10:40:56 -0800 (PST)
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com. [209.85.221.41])
+        by smtp.gmail.com with ESMTPSA id yd20sm7707377ejb.47.2021.11.29.10.40.54
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 10:40:55 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id s13so38981691wrb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 10:40:54 -0800 (PST)
+X-Received: by 2002:adf:f8c3:: with SMTP id f3mr35865238wrq.495.1638211254717;
+ Mon, 29 Nov 2021 10:40:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k0gwhttc.ffs@tglx>
+References: <20211124192024.2408218-1-catalin.marinas@arm.com>
+ <20211124192024.2408218-4-catalin.marinas@arm.com> <YZ6arlsi2L3LVbFO@casper.infradead.org>
+ <YZ6idVy3zqQC4atv@arm.com> <CAHc6FU4-P9sVexcNt5CDQxROtMAo=kH8hEu==AAhZ_+Zv53=Ag@mail.gmail.com>
+ <20211127123958.588350-1-agruenba@redhat.com> <YaJM4n31gDeVzUGA@arm.com>
+ <CAHc6FU7BSL58GVkOh=nsNQczRKG3P+Ty044zs7PjKPik4vzz=Q@mail.gmail.com>
+ <YaTEkAahkCwuQdPN@arm.com> <CAHc6FU6zVi9A2D3V3T5zE71YAdkBiJTs0ao1Q6ysSuEp=bz8fQ@mail.gmail.com>
+ <YaTziROgnFwB6Ddj@arm.com>
+In-Reply-To: <YaTziROgnFwB6Ddj@arm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 29 Nov 2021 10:40:38 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiZgAgcynfLsop+D1xBUAZ-Z+NUBxe9mb-AedecFRNm+w@mail.gmail.com>
+Message-ID: <CAHk-=wiZgAgcynfLsop+D1xBUAZ-Z+NUBxe9mb-AedecFRNm+w@mail.gmail.com>
+Subject: Re: [PATCH 3/3] btrfs: Avoid live-lock in search_ioctl() on hardware
+ with sub-page faults
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andreas Gruenbacher <agruenba@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021, Thomas Gleixner wrote:
-> On Wed, Nov 24 2021 at 16:20, isaku yamahata wrote:
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> >
-> > Define the TDCALL exit reason, which is carved out from the VMX exit
-> > reason namespace as the TDCALL exit from TDX guest to TDX-SEAM is really
-> > just a VM-Exit.
-> 
-> How is this carved out? What's the value of this word salad?
-> 
-> It's simply a new exit reason. Not more, not less. So what?
+On Mon, Nov 29, 2021 at 7:36 AM Catalin Marinas <catalin.marinas@arm.com> wrote:
+>
+> That's what this series does when it probes the whole range in
+> fault_in_writeable(). The main reason was that it's more efficient to do
+> a read than a write on a large range (the latter dirtying the cache
+> lines).
 
-The changelog is alluding to the fact that KVM should never directly see a TDCALL
-VM-Exit.  For TDX, KVM deals only with "returns" from the TDX-Module.  The "carved
-out" bit is calling out that the transition from SEAM Non-Root (the TDX guest) to
-SEAM Root (the TDX Module) is actually a VT-x/VMX VM-Exit, e.g. if TDX were somehow
-implemented without relying on VT-x/VMX, then the TDCALL exit reason wouldn't exist.
+The more this thread goes on, the more I'm starting to think that we
+should just make "fault_in_writable()" (and readable, of course) only
+really work on the beginning of the area.
 
-> > Co-developed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> > Signed-off-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> 
-> I'm pretty sure that it does not take two engineers to add a new exit
-> reason define, but it takes at least two engineers to come up with a
-> convoluted explanation for it.
+Not just for the finer-granularity pointer color probing, but for the
+page probing too.
 
-Nah, just one ;-)
+I'm looking at our current fault_in_writeable(), and I'm going
+
+ (a) it uses __put_user() without range checks, which is really not great
+
+ (b) it looks like a disaster from another standpoint: essentially
+user-controlled loop size with no limit checking, no preemption, and
+no check for fatal signals.
+
+Now, (a) should be fixed with a access_ok() or similar.
+
+And (b) can easily be fixed multiple ways, with one option simply just
+being adding a can_resched() call and checking for fatal signals.
+
+But faulting in the whole region is actually fundamentally wrong in
+low-memory situations - the beginning of the region might be swapped
+out by the time we get to the end. That's unlikely to be a problem in
+real life, but it's an example of how it's simply not conceptually
+sensible.
+
+So I do wonder why we don't just say "fault_in_writable will fault in
+_at_most_ X bytes", and simply limit the actual fault-in size to
+something reasonable.
+
+That solves _all_ the problems. It solves the lack of preemption and
+fatal signals (by virtue of just limiting the amount of work we do).
+It solves the low memory situation. And it solves the "excessive dirty
+cachelines" case too.
+
+Of course, we want to have some minimum bytes we fault in too, but
+that minimum range might well be "we guarantee at least a full page
+worth of data" (and in practice make it a couple of pages).
+
+It's not like fault_in_writeable() avoids page faults or anything like
+that - it just moves them around. So there's really very little reason
+to fault in a large range, and there are multiple reasons _not_ to do
+it.
+
+Hmm?
+
+               Linus

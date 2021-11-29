@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 679C44613E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2284613EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242694AbhK2LeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:34:17 -0500
-Received: from mga17.intel.com ([192.55.52.151]:33743 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236392AbhK2LcR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:32:17 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10182"; a="216644486"
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="216644486"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 03:28:59 -0800
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="476663912"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 03:28:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1mreq9-00BhiZ-6O;
-        Mon, 29 Nov 2021 13:28:57 +0200
-Date:   Mon, 29 Nov 2021 13:28:56 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 1/1] MIPS: TXx9: Convert SPI platform data to software
- nodes
-Message-ID: <YaS5ePueppEHb5AN@smile.fi.intel.com>
-References: <20211126102339.28908-1-andriy.shevchenko@linux.intel.com>
- <CAK8P3a3GuGgdp7Gq5N9XKTGhKbBUym9BiEb94RWyL1CDxS0ffw@mail.gmail.com>
- <CAMuHMdV4HVn+GcCBNQ+1-Kva2XiHQ03L5y9JLXH7qONtBvkV+w@mail.gmail.com>
- <YaDx/MaMuajAEp1H@smile.fi.intel.com>
- <20211126173707.GA13686@alpha.franken.de>
+        id S235994AbhK2Lhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:37:33 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:1628 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231928AbhK2Lf1 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 06:35:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638185530; x=1669721530;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=P8T6GMRaoUsaW1teib2aTnmVJZRBn2CgKFeyhSz+lDg=;
+  b=FcJIc104FjraFumkMQ2UGMJhSNCumcToPQ0CW6iUVGOPudpp/2AsefBX
+   Gh4NR+9tFTybLyAy7vMHb+yn/D/MCpxJbfblHZ02Mv+JXP8nX/fXIbjJp
+   fvf4sriIRuEqSLXooyUnaaZRVqe85pXkXOaamcmnuo8ZrHLecRHz1oovL
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 29 Nov 2021 03:32:10 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 03:32:09 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 29 Nov 2021 03:32:09 -0800
+Received: from blr-ubuntu-173.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Mon, 29 Nov 2021 03:32:06 -0800
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <robh+dt@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <dianders@chromium.org>,
+        <mka@chromium.org>, <kgodara@codeaurora.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: [PATCH v2 0/4] arm64: dts: qcom: Add support for the sc7280 CRD board
+Date:   Mon, 29 Nov 2021 17:01:33 +0530
+Message-ID: <1638185497-26477-1-git-send-email-quic_rjendra@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126173707.GA13686@alpha.franken.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 06:37:07PM +0100, Thomas Bogendoerfer wrote:
-> On Fri, Nov 26, 2021 at 04:41:00PM +0200, Andy Shevchenko wrote:
-> > On Fri, Nov 26, 2021 at 01:16:22PM +0100, Geert Uytterhoeven wrote:
-> > > On Fri, Nov 26, 2021 at 11:58 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > On Fri, Nov 26, 2021 at 11:23 AM Andy Shevchenko
-> > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > 
-> > ...
-> > 
-> > > Probably all of this can be removed, given the SPI controller driver
-> > > itself was removed in commit 74523a5dae0c96d6 ("spi: txx9: Remove
-> > > driver")?
-> > 
-> > Even better! Let Thomas speak on this.
-> 
-> let's remove it then.
+Add support for sc7280 CRD (Compute Reference Design) Board.
+It shares the same EC and H1 as the IDP2 boards, comes with an eDP
+display and supports both touch and trackpad.
+Since the EC and H1 nodes are identical across CRD and IDP2 this
+series also adds support for EC/H1 on IDP2 devices.
 
-Okay, who will send a patch?
+Kshitiz Godara (2):
+  arm64: dts: qcom: sc7280: Define EC and H1 nodes for IDP/CRD
+  arm64: dts: qcom: sc7280-crd: Add Touchscreen and touchpad support
 
-P.S. I'm not a MIPS expert, I feel I'm not the right person to do,
-but I can try my best.
+Rajendra Nayak (2):
+  dt-bindings: arm: qcom: Document qcom,sc7280-crd board
+  arm64: dts: qcom: sc7280-crd: Add device tree files for CRD
+
+ Documentation/devicetree/bindings/arm/qcom.yaml |   2 +
+ arch/arm64/boot/dts/qcom/Makefile               |   1 +
+ arch/arm64/boot/dts/qcom/sc7280-crd.dts         |  93 +++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi  | 105 ++++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp2.dts        |   1 +
+ 5 files changed, 202 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-crd.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-idp-ec-h1.dtsi
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.7.4
 

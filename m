@@ -2,93 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D65354616BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2FDE4616C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345432AbhK2NlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:41:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
+        id S1346758AbhK2NlP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:41:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238219AbhK2NjI (ORCPT
+        with ESMTP id S231942AbhK2NjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:39:08 -0500
+        Mon, 29 Nov 2021 08:39:10 -0500
 Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357C7C09B125;
-        Mon, 29 Nov 2021 04:17:28 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669CCC09B127;
+        Mon, 29 Nov 2021 04:17:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 82183CE114A;
-        Mon, 29 Nov 2021 12:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F379C53FCB;
-        Mon, 29 Nov 2021 12:17:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B301CCE110A;
+        Mon, 29 Nov 2021 12:17:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1AE1C004E1;
+        Mon, 29 Nov 2021 12:17:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638188244;
-        bh=MF4pWr2Q+9m9KQijQj8/y5kE5CLSfMRfQm3KSe1TCZY=;
+        s=k20201202; t=1638188262;
+        bh=TS0mCU94vpdYlwPE1yfgV3rJM5zYoKRFZ02zqnwnIc8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hGbs6nYN6P63/qzyFkNaJ8lepdzFPoR+5IZRNrqqNUYMKj1sL150IBliUPbE6DHNv
-         YcpFpm6b7t4dDMgmGe/gzw1xbK66vvqD/f++myigEr2hbjFwPQCtITZ9L8u/g6eEB7
-         /VA+YZcOc/jdBVxc0zSPeBtd7FEkx51GYWE/uHNziDAwt7vxrhWdxx4aWkAnvj0E2g
-         R7AsL5hJ++8OzuIEzR1Am3SmJOdplTZ+4drdtQjnjz+s58Q2KTcksgJk94hi7tfJZF
-         5s+u8d2W+HY9OGWCFTwSbkeXN4dM8JeKAtRdkaAkXGqhEnHa/B22vdUNa3QGhQe+Lu
-         OjAro4Rco0atQ==
-Date:   Mon, 29 Nov 2021 13:17:21 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 2/4] i2c: stm32f7: recover the bus on access timeout
-Message-ID: <YaTE0f9ciy5JRZ3Q@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
- <1632151292-18503-3-git-send-email-alain.volmat@foss.st.com>
+        b=q2FdC8BxDJO5arAsfllDiOjmNKcMbKtMHhH8KXyX5jN3sswMsNvwGp2GB+ANob4dn
+         jsyxsSewepb2cASZGni/DwtBlY4P1h3/DWkbY2JPIRaG2QpOW/IrYZg7wXiKI08zaQ
+         9Dl4B9AspiN23D9z8CjQi2oewTY40dMQ02WpbFGtwW2eNe0llodNES7fxUN9GRUgbl
+         YnmXdS6MJYxrd0CcWTSOwdrIjy0nafs1m4Gr7+eBJFLHVUX+wLWzS7Y/aiszon3jb+
+         Mtk20qYDNKhJSvK8HhYinxSaqzbOXJdbcFgZorWuksilN6qpZARwshlNQpK+W5xoMT
+         X1PgcPBdnDmEg==
+Date:   Mon, 29 Nov 2021 12:17:38 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Dominik Kobinski <dominikkobinski314@gmail.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        ivo.ivanov.ivanov1@gmail.com, linus.walleij@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, dominikkobinski314@gmail.com
+Subject: Re: (subset) [PATCH 1/4] pinctrl: qcom: spmi-gpio: Add pm8226
+ compatibility
+Message-ID: <YaTENEobjxF7Cgx+@sirena.org.uk>
+References: <20211127122626.GA3798@debian.domena>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0e/kpnV1GKTrdwmD"
+        protocol="application/pgp-signature"; boundary="g2QDtMqK+ThNTGXI"
 Content-Disposition: inline
-In-Reply-To: <1632151292-18503-3-git-send-email-alain.volmat@foss.st.com>
+In-Reply-To: <20211127122626.GA3798@debian.domena>
+X-Cookie: Thank god!! ... It's HENNY YOUNGMAN!!
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---0e/kpnV1GKTrdwmD
+--g2QDtMqK+ThNTGXI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
+On Sat, Nov 27, 2021 at 01:26:31PM +0100, Dominik Kobinski wrote:
+> I have sent a v2 of this series (https://patchwork.kernel.org/project/linux-arm-msm/list/?series=586091), but forgot to set this patch series to superseded. Sorry for the confusion.
+> The only change that was actually made to this patchset was the commit message to the [4/4] patch, as pointed out by Bjorn Andersson. There was also another patch added at the end of the v2 series, but I believe it doesn't concern this subsystem.
+> I'm not sure how it should be handled now. I am really sorry for not setting this series to superseded earlier and complicating the whole situation.
 
-> +		stm32f7_i2c_wait_free_bus(i2c_dev);
+Since you didn't quote any context in your reply I'm not 100% sure what
+this is all about, the message you're replying to is a pinctrl one but
+the message is to me so I guess it's something I applied.  If there's
+any changes needed in code that's already applied please send an
+incremental patch with those changes.
 
-This does only a controller reset, not a bus recovery with 9 toggling
-pulses, or?
+Please also look at your mail client setup - it's not word wrapping
+within paragraphs and for some reason it set a Reply-To with the message
+ID of the message you're replying to which confuses things.
 
-
---0e/kpnV1GKTrdwmD
+--g2QDtMqK+ThNTGXI
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkxNEACgkQFA3kzBSg
-KbbreA//dH/TKvFG6peSxcSRE8ktcwY1eyHGCEfFXRdOU2Ml0I0KsEkCqSB7se0L
-sfsuxAN5mxQfpZdP70KODDZGpRi8s5z9nL4kRyBY/VM7qBzxTwz1J3+TbnTeLXC4
-A1VsgIvK8uIamtx/aFiCcpVk1AGd8zXnUJxhJts1k9feRIFAIq5niNBX60A9bbZA
-2TTnBQ7qH03ecmKOV0kbRzch+ajceayx29YMWeuUV6hNFmc99VH4uVdBoL0bg3nv
-VdqA6nWLS2AEtmR5TVClTuw5NoU5n6KxgVE37Bj9B5FUHHkNeUpljZmWt2y1bHLJ
-8HbfkA/q36lO3qzF2iKWSKR8Lxrq87+XTnwhY4duCgUSuP+b8nLvmiTRYhD+Y4bx
-4GGATMCAyvZuLD6JdNds26HMgefF5yCgi/DHUf3p7adhghGqeESb094Ewd9oZDGy
-2a33eTMcIDYVqmtWV51D+dPafXBkIXYV92w4+vdAPiV1aJUmSUppSqUh9TvYD0Zs
-422GgRNP2HLqzN4mawITWLYiGiTH/alzWAcwCI6dsg+fvz5GbIUBO5gc0miSpYO/
-6Za169OnI06nOXP44e9LIkUbtO4b7q+XFGsPfW5w8WSCSmG7R26j/C0w0v1zuLy8
-34ZjwNpxaCvFraneXFoJQwEDXCE4ayjMr6D1KWYVHyC3uvN32eU=
-=k33g
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGkxOEACgkQJNaLcl1U
+h9AeNAf/ZN2/Uki9zWoyT12smlvz/CQBeTgBV8gkVXzd+pMsP8ho1rDC0gi95qoc
+brej3HMCNG3Ft8qnyzQGswbea//vlwy4iV/97gXB96DzzX85/n2fdeFr3U7bl5Aa
+ZNpmmxttXF4GSzbIAE2t6yUdEGvIthsRhzKE2OW8/6nVUUl06cncchIHZR/t93Hy
+/K8d9Dz+CkL4XHDFcBRUrqScCuCt+xmv+qqOhzxJUiD4ljCdFxz1PryhwF4OA4HA
+lK3DGoj1XsUa6j/29Nq1RTJnATlxHXxn3Zsg8ZCptPEl/3lPGDAFXDQvblUeEQrw
+naAW8IgzSpWPYS1ye15ZTd8hDYgiKg==
+=tGim
 -----END PGP SIGNATURE-----
 
---0e/kpnV1GKTrdwmD--
+--g2QDtMqK+ThNTGXI--

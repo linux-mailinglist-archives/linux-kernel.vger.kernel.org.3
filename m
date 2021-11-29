@@ -2,153 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B37D94613D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1F14613DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:28:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242616AbhK2L3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:29:16 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3676 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239790AbhK2L1P (ORCPT
+        id S241259AbhK2Lb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:31:58 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:50542 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232211AbhK2L35 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:27:15 -0500
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1ATBFdog001856;
-        Mon, 29 Nov 2021 11:23:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=uWELD1rP4wP6QD8zFTScewoO15gPNuOlLH+WwV0bYUY=;
- b=gPkdgBb01CJhiSyYm7coWr4C9DnIzXYI24kXKvh661XHQiL3+MSUhuL//FwZ4U2NI/bC
- Ag4k+/EAt2NamyyMxFQm2JJgsbPpeqrXAfqLbybEjliYpK/1V07ZDo1sT0IKMpiztDI9
- IjeFCsSItZhXAWVJjQMK+RBQxoYROsQzlWIqhsyLD29gtaqcQlp+0+UAuUBArDN4ruVY
- M+59gQVHVwzwwSdfAYm153Yi7+LriEjSLmdE0507096lUxaEGeQVNizbnWzorjsWm42C
- S8VWF5kpuZzzohpqZLyNysXRURTzYwePrXrzitd9BbR4ZYySfmF1akuxxKvqfRjOL2h9 zg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmwu5069c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 11:23:56 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1ATBNtaG002395;
-        Mon, 29 Nov 2021 11:23:55 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cmwu5067p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 11:23:55 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1ATBIaTJ020969;
-        Mon, 29 Nov 2021 11:23:53 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06fra.de.ibm.com with ESMTP id 3ckbxjb7u5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 29 Nov 2021 11:23:53 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1ATBNn6n15073716
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 29 Nov 2021 11:23:49 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D06BFAE053;
-        Mon, 29 Nov 2021 11:23:49 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8448DAE056;
-        Mon, 29 Nov 2021 11:23:49 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 29 Nov 2021 11:23:49 +0000 (GMT)
-From:   Thomas Richter <tmricht@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        acme@kernel.org, irogers@google.com
-Cc:     svens@linux.ibm.com, gor@linux.ibm.com, sumanthk@linux.ibm.com,
-        hca@linux.ibm.com, Thomas Richter <tmricht@linux.ibm.com>
-Subject: [PATCH v2] tools/perf: Fix perf test 7 Simple expression parser
-Date:   Mon, 29 Nov 2021 12:23:39 +0100
-Message-Id: <20211129112339.3003036-1-tmricht@linux.ibm.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 29 Nov 2021 06:29:57 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4A0C2212C5;
+        Mon, 29 Nov 2021 11:26:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638185199; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uyeD61G0icp3J1TdJP8AWxOrAGeJ77KjoN9LFoIb5T0=;
+        b=G0zqE/lKiyd7B7DEQdRo0VT6O8rjuk4qwA9WKoOpq27gIhg8l3tgn+gVFZoCvz3oBH/Hah
+        76mSVyMk8WbvZr7hNQT/1Olksnr32CCZ8b3IbPbwfax6RXhArRSls6LcU22RgS7l0gxdEu
+        E0sxAa30pNZthll/2cFJQmwj74Ohz1w=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638185199;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uyeD61G0icp3J1TdJP8AWxOrAGeJ77KjoN9LFoIb5T0=;
+        b=IsoaSTbm3+RVE8pj0xNBAeskmhk/M0OP9o7sYgID3C7zsSZV8/XIMK8OpeInRDsHXwtXi3
+        wPrRlzg4R9D6fBBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 14E5913B53;
+        Mon, 29 Nov 2021 11:26:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id g54eBO+4pGHrEQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 29 Nov 2021 11:26:39 +0000
+Message-ID: <f4b39541-3213-341d-bbf5-e6de9c1ad8f5@suse.de>
+Date:   Mon, 29 Nov 2021 12:26:38 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: o9Y9fGPS_2BhgaQ672o4IikBai3RT85c
-X-Proofpoint-GUID: nSwQyw7UN6rvdD1YYqVc00FPaidY2HBx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-29_07,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
- priorityscore=1501 lowpriorityscore=0 bulkscore=0 malwarescore=0
- phishscore=0 suspectscore=0 mlxlogscore=999 mlxscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111290055
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
+Content-Language: en-US
+To:     Hector Martin <marcan@marcan.st>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211117145829.204360-1-marcan@marcan.st>
+ <20211117145829.204360-2-marcan@marcan.st>
+ <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de>
+ <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------4TPyDD8UaA508Fl0dHc8CnpN"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some platforms do not have CPU die support, for example s390.
-Commit fdf1e29b6118 ("perf expr: Add metric literals for topology.")
-fails on s390:
- # ./perf test -Fv 7
-   ...
- # FAILED tests/expr.c:173 #num_dies >= #num_packages
-   ---- end ----
-   Simple expression parser: FAILED!
- #
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------4TPyDD8UaA508Fl0dHc8CnpN
+Content-Type: multipart/mixed; boundary="------------pvJ6Y0v5xZgW0Ta4QDP0nNMV";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Hector Martin <marcan@marcan.st>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
+ Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh+dt@kernel.org>
+Cc: Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-ID: <f4b39541-3213-341d-bbf5-e6de9c1ad8f5@suse.de>
+Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
+References: <20211117145829.204360-1-marcan@marcan.st>
+ <20211117145829.204360-2-marcan@marcan.st>
+ <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de>
+ <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
+In-Reply-To: <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
 
-Investigating this issue leads to these functions:
- build_cpu_topology()
-   +--> has_die_topology(void)
-        {
-           struct utsname uts;
+--------------pvJ6Y0v5xZgW0Ta4QDP0nNMV
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-           if (uname(&uts) < 0)
-                  return false;
-           if (strncmp(uts.machine, "x86_64", 6))
-                  return false;
-           ....
-        }
+SGkNCg0KQW0gMjAuMTEuMjEgdW0gMDQ6MjMgc2NocmllYiBIZWN0b3IgTWFydGluOg0KPiBP
+biAxOC8xMS8yMDIxIDE4LjE5LCBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+IEhpDQo+
+Pg0KPj4gQW0gMTcuMTEuMjEgdW0gMTU6NTggc2NocmllYiBIZWN0b3IgTWFydGluOg0KPj4+
+IEBAIC04OTcsNSArODk4LDIxIEBAIHN0YXRpYyBzdHJ1Y3QgcGxhdGZvcm1fZHJpdmVyIA0K
+Pj4+IHNpbXBsZWRybV9wbGF0Zm9ybV9kcml2ZXIgPSB7DQo+Pj4gwqDCoCBtb2R1bGVfcGxh
+dGZvcm1fZHJpdmVyKHNpbXBsZWRybV9wbGF0Zm9ybV9kcml2ZXIpOw0KPj4+ICtzdGF0aWMg
+aW50IF9faW5pdCBzaW1wbGVkcm1faW5pdCh2b2lkKQ0KPj4+ICt7DQo+Pj4gK8KgwqDCoCBz
+dHJ1Y3QgZGV2aWNlX25vZGUgKm5wOw0KPj4+ICsNCj4+PiArwqDCoMKgIGlmIChJU19FTkFC
+TEVEKENPTkZJR19PRl9BRERSRVNTKSAmJiBvZl9jaG9zZW4pIHsNCj4+PiArwqDCoMKgwqDC
+oMKgwqAgZm9yX2VhY2hfY2hpbGRfb2Zfbm9kZShvZl9jaG9zZW4sIG5wKSB7DQo+Pj4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgaWYgKG9mX2RldmljZV9pc19jb21wYXRpYmxlKG5wLCAi
+c2ltcGxlLWZyYW1lYnVmZmVyIikpDQo+Pj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCBvZl9wbGF0Zm9ybV9kZXZpY2VfY3JlYXRlKG5wLCBOVUxMLCBOVUxMKTsNCj4+PiAr
+wqDCoMKgwqDCoMKgwqAgfQ0KPj4+ICvCoMKgwqAgfQ0KPj4+ICsNCj4+PiArwqDCoMKgIHJl
+dHVybiAwOw0KPj4+ICt9DQo+Pj4gKw0KPj4+ICtmc19pbml0Y2FsbChzaW1wbGVkcm1faW5p
+dCk7DQo+Pj4gKw0KPj4NCj4+IFNpbXBsZWRybSBpcyBqdXN0IGEgZHJpdmVyLCBidXQgdGhp
+cyBpcyBwbGF0Zm9ybSBzZXR1cCBjb2RlLiBXaHkgaXMgdGhpcw0KPj4gY29kZSBsb2NhdGVk
+IGhlcmUgYW5kIG5vdCB1bmRlciBhcmNoLyBvciBkcml2ZXJzL2Zpcm13YXJlLz8NCj4+DQo+
+PiBJIGtub3cgdGhhdCBvdGhlciBkcml2ZXJzIGRvIHNpbWlsYXIgdGhpbmdzLCBpdCBkb2Vz
+bid0IHNlZW0gdG8gYmVsb25nIA0KPj4gaGVyZS4NCj4gDQo+IFRoaXMgZGVmaW5pdGVseSBk
+b2Vzbid0IGJlbG9uZyBpbiBlaXRoZXIgb2YgdGhvc2UsIHNpbmNlIGl0IGlzIG5vdCBhcmNo
+LSANCj4gb3IgZmlybXdhcmUtc3BlY2lmaWMuIEl0IGlzIGltcGxlbWVudGluZyBzdXBwb3J0
+IGZvciB0aGUgc3RhbmRhcmQgDQo+IHNpbXBsZS1mcmFtZWJ1ZmZlciBPRiBiaW5kaW5nLCB3
+aGljaCBzcGVjaWZpZXMgdGhhdCBpdCBtdXN0IGJlIGxvY2F0ZWQgDQo+IHdpdGhpbiB0aGUg
+L2Nob3NlbiBub2RlIChhbmQgdGh1cyB0aGUgZGVmYXVsdCBPRiBzZXR1cCBjb2RlIHdvbid0
+IGRvIHRoZSANCj4gbWF0Y2hpbmcgZm9yIHlvdSk7IHRoaXMgYXBwbGllcyB0byBhbGwgT0Yg
+cGxhdGZvcm1zIFsxXQ0KPiANCj4gQWRkaW5nIFJvYjsgZG8geW91IHRoaW5rIHRoaXMgc2hv
+dWxkIG1vdmUgZnJvbSBzaW1wbGVmYi9zaW1wbGVkcm0gdG8gDQo+IGNvbW1vbiBPRiBjb2Rl
+PyAod2hlcmU/KQ0KDQpwaW5nIQ0KDQo+IA0KPiBbMV0gRG9jdW1lbnRhdGlvbi9kZXZpY2V0
+cmVlL2JpbmRpbmdzL2Rpc3BsYXkvc2ltcGxlLWZyYW1lYnVmZmVyLnlhbWwNCj4gDQoNCi0t
+IA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0Ug
+U29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkg
+TsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOk
+ZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-which always returns false on s390. The caller build_cpu_topology()
-checks has_die_topology() return value. On false the
-the struct cpu_topology::die_cpu_list is not contructed and has zero
-entries. This leads to the failing comparison: #num_dies >= #num_packages.
-s390 of course has a positive number of packages.
+--------------pvJ6Y0v5xZgW0Ta4QDP0nNMV--
 
-Fix this and check if the function build_cpu_topology() did build up
-a die_cpus_list. The number of entries in this list should be larger
-than 0. If the number of list element is zero, the die_cpus_list has
-not been created and the check in function test__expr()
-    TEST_ASSERT_VAL("#num_dies >= #num_packages", \
-		    num_dies >= num_packages)
-always fails.
+--------------4TPyDD8UaA508Fl0dHc8CnpN
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Output after:
- # ./perf test -Fv 7
-  7: Simple expression parser                                        :
-  --- start ---
-  division by zero
-  syntax error
-  ---- end ----
-  Simple expression parser: Ok
- #
-Cc: Ian Rogers <irogers@google.com>
-Fixes: fdf1e29b6118 ("perf expr: Add metric literals for topology.")
+-----BEGIN PGP SIGNATURE-----
 
-Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-Acked-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/expr.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGkuO4FAwAAAAAACgkQlh/E3EQov+D6
+9A/8DUk3vwTjfkCaj0jM1eXuz4tpUGPB60I2nAv0hydW4KkI2M5QJuoYZPyDpspIUZThl0/3/QFR
+5qexhNgaccHJ3uBwDalAmwtj3qtxTdsMGDX9VR5qYbItjHuApqDW3P+8pZq8ZjTnhfi0sWhDYFxx
+7JIVXR3GiRkm7fHkN24dYFN+vCs7Gp6gsLFa85Qvd681re5gvIdRHs4qMPEM0KEGg9WYc1B4olR4
+CllJnVoYb89cOpTtVAoEXjUFJBNSCWOgXEiq28kuEIbai6DSH5zchJvtYmBYw70OiyCfjN3+z+Qk
+f5j3nyhL4P8RyelfaSnFSMeIihqKbYnlBvYVDKokS5kwFL5+fzGpjXD4ZcdVOUQWc3fdXFCu5TDD
+mOX4Vb2CA6oVceMdHbqfEo6ZJ1rwczCRgb1edlreaGVEdS/QSJzga6UGRQJ2hrUm5lD8L+ebl4ex
+bN2YO/3V8GkTvIGEAjvzCumnoXc1OVz1faAZisr54OXRMtbDUBnW/V6h8earMx3Daz5JMNTwDxD+
+DvpbdsbhBjav7BBdWExb6lEAD0E0B75ffx70IHdpu13elSQWYLsOKqJvCUHJ3Po45IKNXD2Miu35
+EvGKifLcQb/Ql96m0zdKbE0nXwOwyS3RfgC4hXLZry1bnMmCHtQkHIBXlgvDRPzWyS7hLxgwRBbc
+PfA=
+=uuq9
+-----END PGP SIGNATURE-----
 
-diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-index c895de481fe1..9356d90bf8db 100644
---- a/tools/perf/tests/expr.c
-+++ b/tools/perf/tests/expr.c
-@@ -169,7 +169,8 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
- 	TEST_ASSERT_VAL("#num_dies", expr__parse(&num_dies, ctx, "#num_dies") == 0);
- 	TEST_ASSERT_VAL("#num_cores >= #num_dies", num_cores >= num_dies);
- 	TEST_ASSERT_VAL("#num_packages", expr__parse(&num_packages, ctx, "#num_packages") == 0);
--	TEST_ASSERT_VAL("#num_dies >= #num_packages", num_dies >= num_packages);
-+	if (num_dies)
-+		TEST_ASSERT_VAL("#num_dies >= #num_packages", num_dies >= num_packages);
- 
- 	/*
- 	 * Source count returns the number of events aggregating in a leader
--- 
-2.31.1
-
+--------------4TPyDD8UaA508Fl0dHc8CnpN--

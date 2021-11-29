@@ -2,226 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB27461291
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7E24612B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 11:41:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345219AbhK2Km7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 05:42:59 -0500
-Received: from m43-7.mailgun.net ([69.72.43.7]:18219 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231773AbhK2Kk6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 05:40:58 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638182261; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=NfRWfQ/kjNZZNKYjAgXr3woDR9TbFsk4RacT+8xIke8=; b=lrgyGjSE9PiYUckDwY6xElgCSo4ZejO56w63xfd/XQcMyqT/P+zSXCurs4e3RWl/GyffZzvP
- qfq+R39ZJljh80hokN9ItXm3DgPozDdY3eBeaAleIGiSPFz2kosX/PbvG7x3PsTfcsUU9q+u
- tdgdYNiqGXsoiJFGAk0RlpRODL4=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
- 61a4ad74135a8a9d0e4bcda4 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Nov 2021 10:37:40
- GMT
-Sender: srivasam=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 24951C43616; Mon, 29 Nov 2021 10:37:40 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-4.2 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [10.242.143.72] (unknown [202.46.23.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S237668AbhK2Koe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:44:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:31515 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239729AbhK2Km3 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 05:42:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638182351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=xKFytTEGQgFDdoS02K4fYtHl+AtxFknVy07vOSvGI8c=;
+        b=Xq44mqlYRKNAGi2x/EmHjThMQJMpoOkC+D21T+EGDBvQkcGJTyGljmnW96bIDfevESlDAo
+        VaLkUbJPLBR3G+yzG1/NwyE6UF7XjBndhR2Xx5xf2CuXpokejxEbJ3js5wMwc7UKkNUh9m
+        bIqVKSEK2DuNJLhrScJ5OTiULVAkQLU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-108-2VEt_MKjMUOhbKMFhUW3BQ-1; Mon, 29 Nov 2021 05:39:07 -0500
+X-MC-Unique: 2VEt_MKjMUOhbKMFhUW3BQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: srivasam)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 0E59BC4338F;
-        Mon, 29 Nov 2021 10:37:33 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 0E59BC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH v6 08/10] ASoC: dt-bindings: Add SC7280 lpass cpu bindings
-To:     Rob Herring <robh@kernel.org>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, plai@codeaurora.org, bgoswami@codeaurora.org,
-        perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org,
-        Venkata Prasad Potturu <potturu@codeaurora.org>
-References: <1637928282-2819-1-git-send-email-srivasam@codeaurora.org>
- <1637928282-2819-9-git-send-email-srivasam@codeaurora.org>
- <YaO0ER2pNIQrvlxM@robh.at.kernel.org>
-From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Organization: Qualcomm India Private Limited.
-Message-ID: <9c21dc98-6bbb-bf33-361c-a768d185f07a@codeaurora.org>
-Date:   Mon, 29 Nov 2021 16:07:31 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8B8C219251B8;
+        Mon, 29 Nov 2021 10:39:06 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B6224694D7;
+        Mon, 29 Nov 2021 10:39:04 +0000 (UTC)
+Message-ID: <dfdc836d4c9eb6b571a32b19cae74c0a426c5a9b.camel@redhat.com>
+Subject: Re: Commit 'hugetlbfs: extend the definition of hugepages parameter
+ to support node allocation' breaks old numa less syntax of reserving
+ hugepages on boot.
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Zhenguo Yao <yaozhenguo1@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 29 Nov 2021 12:39:03 +0200
+In-Reply-To: <ff89f867-0709-d8bb-b6f5-51b2be4cc2dd@oracle.com>
+References: <e52068a6e98031a386b5052a166a55c94fe940f6.camel@redhat.com>
+         <ff89f867-0709-d8bb-b6f5-51b2be4cc2dd@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-In-Reply-To: <YaO0ER2pNIQrvlxM@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, 2021-11-28 at 20:31 -0800, Mike Kravetz wrote:
+> On 11/28/21 03:18, Maxim Levitsky wrote:
+> > dmesg prints this:
+> > 
+> > HugeTLB: allocating 64 of page size 1.00 GiB failed.  Only allocated 0 hugepages
+> > 
+> > Huge pages were allocated on kernel command line (1/2 of 128GB system):
+> > 
+> > 'default_hugepagesz=1G hugepagesz=1G hugepages=64'
+> > 
+> > This is 3970X and no real support/need for NUMA, thus only fake NUMA node 0 is present.
+> > 
+> > Reverting the commit helps.
+> > 
+> > New syntax also works ( hugepages=0:64 )
+> > 
+> > I can test any patches for this bug.
+> 
+> Argh!  I think preallocation of gigantic pages on all systems with only
+> a single node is broken.  The issue is at the beginning of
+> __alloc_bootmem_huge_page:
+> 
+> int __alloc_bootmem_huge_page(struct hstate *h, int nid)
+> {
+>         struct huge_bootmem_page *m = NULL; /* initialize for clang */
+>         int nr_nodes, node;
+> 
+>         if (nid >= nr_online_nodes)
+>                 return 0;
+> 
+> Without using the node specific syntax, nid == NUMA_NO_NODE == -1.  For the
+> comparison, nid will be converted to an unsigned into to match nr_online_nodes
+> so we will immediately return 0 instead of doing the allocations.
+> 
+> Zhenguo Yao,
+> Can you verify and perhaps put together a patch?does
+> 
+> > Also unrelated, is there any progress on allocating 1GB pages on demand so that I could
+> > allocate them only when I run a VM?
+> 
+> That should be possible.  Such support was added back in 2014 with commit
+> 944d9fec8d7a "hugetlb: add support for gigantic page allocation at runtime".
+> 
+> > i don't mind having these pages to be marked as to be used for userspace only,
+> > since as far as I remember its the kernel usage that makes some page unmoveable.
+> > 
+> 
+> Of course, finding 1GB of contiguous space for a gigantic page is often
+> difficult at runtime.  So, allocations are likely to fail the longer the
+> system is up and running and fragmentation increases.
+> 
+> > Last time (many years ago) I tried to create a zone with only userspace pages
+> > (I don't remember what options I used) but it didn't work.
+> 
+> Not too long ago, support was added to use CMA for gigantic page allocation.
+> See commit cf11e85fc08c "mm: hugetlb: optionally allocate gigantic hugepages
+> using cma".  This sounds like something you might want to try.
 
-On 11/28/2021 10:23 PM, Rob Herring wrote:
-Thanks for Your Time Rob!!!
-> On Fri, Nov 26, 2021 at 05:34:40PM +0530, Srinivasa Rao Mandadapu wrote:
->> Add bindings for sc7280 lpass cpu driver which supports
->> audio over i2s based speaker, soundwire based headset, msm dmics
->> and HDMI Port.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
->> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
->> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
->> ---
->>   .../devicetree/bindings/sound/qcom,lpass-cpu.yaml  | 69 +++++++++++++++++++---
->>   1 file changed, 61 insertions(+), 8 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml b/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
->> index 1e23c0e..0f5a57c 100644
->> --- a/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
->> +++ b/Documentation/devicetree/bindings/sound/qcom,lpass-cpu.yaml
->> @@ -22,35 +22,36 @@ properties:
->>         - qcom,lpass-cpu
->>         - qcom,apq8016-lpass-cpu
->>         - qcom,sc7180-lpass-cpu
->> +      - qcom,sc7280-lpass-cpu
->>   
->>     reg:
->> -    maxItems: 2
->> +    maxItems: 5
->>       description: LPAIF core registers
->>   
->>     reg-names:
->> -    maxItems: 2
->> +    maxItems: 5
->>   
->>     clocks:
->>       minItems: 3
->> -    maxItems: 6
->> +    maxItems: 7
->>   
->>     clock-names:
->>       minItems: 3
->> -    maxItems: 6
->> +    maxItems: 7
->>   
->>     interrupts:
->> -    maxItems: 2
->> +    maxItems: 4
->>       description: LPAIF DMA buffer interrupt
->>   
->>     interrupt-names:
->> -    maxItems: 2
->> +    maxItems: 4
->>   
->>     qcom,adsp:
->>       $ref: /schemas/types.yaml#/definitions/phandle
->>       description: Phandle for the audio DSP node
->>   
->>     iommus:
->> -    maxItems: 2
->> +    maxItems: 3
->>       description: Phandle to apps_smmu node with sid mask
->>   
->>     power-domains:
->> @@ -69,7 +70,7 @@ patternProperties:
->>     "^dai-link@[0-9a-f]$":
->>       type: object
->>       description: |
->> -      LPASS CPU dai node for each I2S device. Bindings of each node
->> +      LPASS CPU dai node for each I2S device or Soundwire device. Bindings of each node
->>         depends on the specific driver providing the functionality and
->>         properties.
->>       properties:
->> @@ -174,6 +175,58 @@ allOf:
->>           - iommus
->>           - power-domains
->>   
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: qcom,sc7280-lpass-cpu
->> +
->> +    then:
->> +      properties:
->> +        clock-names:
->> +          oneOf:
->> +            - items:   #for I2S
->> +                - const: lpass_aon_cc_audio_hm_h_clk
->> +                - const: lpass_core_cc_sysnoc_mport_core_clk
->> +                - const: lpass_core_cc_ext_if1_ibit_clk
->> +            - items:   #for Soundwire
->> +                - const: lpass_aon_cc_audio_hm_h_clk
->> +                - const: lpass_audio_cc_codec_mem0_clk
->> +                - const: lpass_audio_cc_codec_mem1_clk
->> +                - const: lpass_audio_cc_codec_mem2_clk
->> +            - items:   #for HDMI
->> +                - const: lpass_aon_cc_audio_hm_h_clk
-> 'lpass_' and '_clk' are redundant.
-Yes. but these clock names are defined by HW design team. clock drivers 
-fallowed the same,  hence in audio drivers.
->
->> +
->> +        reg-names:
->> +          anyOf:
->> +            - items:   #for I2S
->> +                - const: lpass-lpaif
->> +            - items:   #for I2S and HDMI
->> +                - const: lpass-hdmiif
->> +                - const: lpass-lpaif
-> Doesn't this apply to other SoCs?
->
->> +            - items:   #for I2S, soundwire and HDMI
->> +                - const: lpass-cdc-lpm
->> +                - const: lpass-rxtx-lpaif
->> +                - const: lpass-va-lpaif
->> +                - const: lpass-hdmiif
->> +                - const: lpass-lpaif
-> 'lpass-' is redundant too, but consistency across SoCs is better.
->
-> hdmiif and lpaif should be first. (Add new resources on the end.)
-Okay.. order is maintained as per register addresses. if it's okay, even 
-address range is out of order, will change accordingly.
->
->> +        interrupt-names:
->> +          anyOf:
->> +            - items:   #for I2S
->> +                - const: lpass-irq-lpaif
->> +            - items:   #for I2S and HDMI
->> +                - const: lpass-irq-lpaif
->> +                - const: lpass-irq-hdmi
->> +            - items:   #for I2S, soundwire and HDMI
->> +                - const: lpass-irq-lpaif
->> +                - const: lpass-irq-vaif
->> +                - const: lpass-irq-rxtxif
->> +                - const: lpass-irq-hdmi
-> Again, add new entries to the end.
-  Replied above for the same.
->> +
->> +      required:
->> +        - iommus
->> +        - power-domains
->> +
->>   examples:
->>     - |
->>       #include <dt-bindings/sound/sc7180-lpass.h>
->> -- 
->> Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
->> is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
->>
->>
--- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
-is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+This is exactly what I had in mind and it seems to work very well.
+Thank you very much!
+
+Best regards,
+	Maxim Levitsky
 

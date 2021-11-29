@@ -2,74 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C05E446112E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:34:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7315B461184
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 10:58:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245289AbhK2Jhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 04:37:42 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:58636 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244552AbhK2Jfd (ORCPT
+        id S1344824AbhK2KBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 05:01:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243537AbhK2J7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 04:35:33 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0Uyf2n9o_1638178333;
-Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Uyf2n9o_1638178333)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Mon, 29 Nov 2021 17:32:14 +0800
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Boris Pismenny <borisp@nvidia.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Vakul Garg <vakul.garg@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Subject: [PATCH] net/tls: Fix authentication failure in CCM mode
-Date:   Mon, 29 Nov 2021 17:32:12 +0800
-Message-Id: <20211129093212.4053-1-tianjia.zhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.32.0
+        Mon, 29 Nov 2021 04:59:49 -0500
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A15C0619D5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 01:37:48 -0800 (PST)
+Received: from [2a02:fe0:c700:2:bd83:e4f3:bd3e:98d5] (port=63897)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.92)
+        (envelope-from <Ywe_C4rlyn@norir.net>)
+        id 1mrd6R-00028P-PT
+        for linux-kernel@vger.kernel.org; Mon, 29 Nov 2021 10:37:45 +0100
+Message-ID: <c3158ad9-183f-cbec-41dc-d1b91838d189@norir.net>
+Date:   Mon, 29 Nov 2021 10:37:18 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 6.1; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+To:     linux-kernel@vger.kernel.org
+From:   =?UTF-8?Q?Ywe_C=c3=a6rlyn?= <Ywe_C4rlyn@norir.net>
+Subject: Fair IT Retrospect
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the TLS cipher suite uses CCM mode, including AES CCM and
-SM4 CCM, the first byte of the B0 block is flags, and the real
-IV starts from the second byte. The XOR operation of the IV and
-rec_seq should be skip this byte, that is, add the iv_offset.
+IT X, with Bitcoin seems to be the ultimate development.
 
-Fixes: f295b3ae9f59 ("net/tls: Add support of AES128-CCM based ciphers")
-Signed-off-by: Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-Cc: Vakul Garg <vakul.garg@nxp.com>
-Cc: stable@vger.kernel.org # v5.2+
----
- net/tls/tls_sw.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+And started with thoughts on inner loop optimization.
+That became Rave https://soundcloud.com/bitpre2k
+And IT Lol - https://www.youtube.com/channel/UCkrhLWMvTc09IxFG9lt9mHg
+And Zensufism - https://bitpost2k.bandcamp.com/album/zensufi
 
-diff --git a/net/tls/tls_sw.c b/net/tls/tls_sw.c
-index d3e7ff90889e..dfe623a4e72f 100644
---- a/net/tls/tls_sw.c
-+++ b/net/tls/tls_sw.c
-@@ -521,7 +521,7 @@ static int tls_do_encryption(struct sock *sk,
- 	memcpy(&rec->iv_data[iv_offset], tls_ctx->tx.iv,
- 	       prot->iv_size + prot->salt_size);
- 
--	xor_iv_with_seq(prot, rec->iv_data, tls_ctx->tx.rec_seq);
-+	xor_iv_with_seq(prot, rec->iv_data + iv_offset, tls_ctx->tx.rec_seq);
- 
- 	sge->offset += prot->prepend_size;
- 	sge->length -= prot->prepend_size;
-@@ -1499,7 +1499,7 @@ static int decrypt_internal(struct sock *sk, struct sk_buff *skb,
- 	else
- 		memcpy(iv + iv_offset, tls_ctx->rx.iv, prot->salt_size);
- 
--	xor_iv_with_seq(prot, iv, tls_ctx->rx.rec_seq);
-+	xor_iv_with_seq(prot, iv + iv_offset, tls_ctx->rx.rec_seq);
- 
- 	/* Prepare AAD */
- 	tls_make_aad(aad, rxm->full_len - prot->overhead_size +
--- 
-2.32.0
+And ultimately the correct translation of the arabic Dia, XA (Cursive), 
+for Fair Pay background. https://norir.net/
 
+Serenity.
+Ywe Cærlyn
+IT X Philosophy.

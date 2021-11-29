@@ -2,90 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 056234616CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F5A4616DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:43:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239024AbhK2NpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:45:03 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:41304 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232892AbhK2NnC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:43:02 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 004E11FD39;
-        Mon, 29 Nov 2021 13:39:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1638193184; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MCR2AjsamUOBWBaNMd3hj2AgMrYiQAsklcYI7+6tUNc=;
-        b=BF5tF/zTTzcePDATMm5ORv0aj2GjCP5cOtzN4OFHtX5kugS+UYnnvq8iIVlAj5+YX67rPU
-        N1SgE1s+MKgLvYeBKJBG8FmbAW4++jm4NgeKnbZN6iYGUrq+j+PdCSs94+YaVrVmeD8r6p
-        9pOiWBR86RlkVMXhKlBclXTwMIayApg=
-Received: from suse.cz (unknown [10.100.201.86])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id C3F67A3B84;
-        Mon, 29 Nov 2021 13:39:43 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 14:39:43 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Hao Lee <haolee.swjtu@gmail.com>, Linux MM <linux-mm@kvack.org>,
-        Johannes Weiner <hannes@cmpxchg.org>, vdavydov.dev@gmail.com,
-        Shakeel Butt <shakeelb@google.com>, cgroups@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mm: reduce spinlock contention in release_pages()
-Message-ID: <YaTYH67jSNWqYySF@dhcp22.suse.cz>
-References: <YZ8DZHERun6Fej2P@casper.infradead.org>
- <20211125080238.GA7356@haolee.io>
- <YZ9e3pzHKmn5nev0@dhcp22.suse.cz>
- <20211125123133.GA7758@haolee.io>
- <YZ+bI1fNpKar0bSU@dhcp22.suse.cz>
- <CA+PpKP=hsuBmvv09OcD2Nct8B8Cqa03UfKFHAHzKxwE0SXGP4g@mail.gmail.com>
- <YaC7BcTSijFj+bxR@dhcp22.suse.cz>
- <20211126162623.GA10277@haolee.io>
- <YaSRtKwTCOj7JnR6@dhcp22.suse.cz>
- <YaTUR9WcGoOG4oLo@casper.infradead.org>
+        id S240716AbhK2Nqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:46:31 -0500
+Received: from foss.arm.com ([217.140.110.172]:39724 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237756AbhK2Noa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 08:44:30 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DC2C1042;
+        Mon, 29 Nov 2021 05:41:12 -0800 (PST)
+Received: from e123427-lin.arm.com (unknown [10.57.34.225])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 073773F766;
+        Mon, 29 Nov 2021 05:41:10 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        robh@kernel.org, bhelgaas@google.com, kw@linux.com,
+        michal.simek@xilinx.com
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] PCI: xilinx-nwl: Simplify code and fix a memory leak
+Date:   Mon, 29 Nov 2021 13:41:05 +0000
+Message-Id: <163819324863.26090.8890227197735152343.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <5483f10a44b06aad55728576d489adfa16c3be91.1636279388.git.christophe.jaillet@wanadoo.fr>
+References: <5483f10a44b06aad55728576d489adfa16c3be91.1636279388.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaTUR9WcGoOG4oLo@casper.infradead.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 29-11-21 13:23:19, Matthew Wilcox wrote:
-> On Mon, Nov 29, 2021 at 09:39:16AM +0100, Michal Hocko wrote:
-> > On Fri 26-11-21 16:26:23, Hao Lee wrote:
-> > [...]
-> > > I will try Matthew's idea to use semaphore or mutex to limit the number of BE
-> > > jobs that are in the exiting path. This sounds like a feasible approach for
-> > > our scenario...
-> > 
-> > I am not really sure this is something that would be acceptable. Your
-> > problem is resource partitioning. Papering that over by a lock is not
-> > the right way to go. Besides that you will likely hit a hard question on
-> > how many tasks to allow to run concurrently. Whatever the value some
-> > workload will very likely going to suffer. We cannot assume admin to
-> > chose the right value because there is no clear answer for that. Not to
-> > mention other potential problems - e.g. even more priority inversions
-> > etc.
+On Sun, 7 Nov 2021 11:04:43 +0100, Christophe JAILLET wrote:
+> Allocate space for 'bitmap' in 'struct nwl_msi' at build time instead of
+> dynamically allocating the memory at runtime.
 > 
-> I don't see how we get priority inversions.  These tasks are exiting; at
-> the point they take the semaphore, they should not be holding any locks.
-> They're holding a resource (memory) that needs to be released, but a
-> task wanting to acquire memory must already be prepared to sleep.
+> This simplifies code (especially error handling paths) and avoid some
+> open-coded arithmetic in allocator arguments
+> 
+> This also fixes a potential memory leak. The bitmap was never freed. It is
+> now part of a managed resource.
+> 
+> [...]
 
-At least these scenarios come to mind
-- a task being blocked by other lower priority tasks slowly tearing down
-  their address space - essentially a different incarnation of the same
-  problem this is trying to handle
-- a huge memory backed task waiting many for smaller ones to finish
-- waste of resources on properly partitioned systems. Why should
-  somebody block tasks when they are acting on different lruvecs and
-  cpus?
+Applied to pci/xilinx-nwl, thanks!
 
--- 
-Michal Hocko
-SUSE Labs
+[1/1] PCI: xilinx-nwl: Simplify code and fix a memory leak
+      https://git.kernel.org/lpieralisi/pci/c/e2b86f9777
+
+Thanks,
+Lorenzo

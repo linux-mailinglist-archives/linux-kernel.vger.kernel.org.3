@@ -2,103 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43176461CD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:37:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D20EB461CDB
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349590AbhK2RlH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 29 Nov 2021 12:41:07 -0500
-Received: from mail-ua1-f51.google.com ([209.85.222.51]:45843 "EHLO
-        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243629AbhK2RjG (ORCPT
+        id S1349691AbhK2RlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:41:20 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:52210
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349374AbhK2RjT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 12:39:06 -0500
-Received: by mail-ua1-f51.google.com with SMTP id ay21so35674924uab.12;
-        Mon, 29 Nov 2021 09:35:48 -0800 (PST)
+        Mon, 29 Nov 2021 12:39:19 -0500
+Received: from mail-lf1-f71.google.com (mail-lf1-f71.google.com [209.85.167.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2AEFA3F1B7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:35:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638207354;
+        bh=iK3riauy7r4LiWngeJOokJxhZZPLu5etYNKqwE1epw0=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=LS2LaSBCKz4bkvVqvJ8ua7GA5+5R6U4AFL6HSLOeIRXkn7OM5VZXwB+hg0HpFPqQT
+         Gw3XUSBBJ83GLJqlwtXFZzKGA6+eFRLuilhAQdoYKacUNzfa0lHl1joOvMeiB/J1ce
+         PbCLo6nhr0TwjNcyLwydZovdN8vrcAFPBVXBhukajvFwH21N8LK9hyVmSWiYnAliNq
+         tRE1JeRx0gb2o+6lQlI4VKlVCNYjoGZBWb4yEhPTEdzBxQbrGK2Hzn46ogluwDRDS6
+         qFYTraome7P99+Fw5NVX9U9nfv1aRGOBR88vNyxC7WFwfmXdPWM28TVn2E2DTGKlxH
+         f/9FgDSsluHbA==
+Received: by mail-lf1-f71.google.com with SMTP id bp10-20020a056512158a00b0040376f60e35so6381806lfb.8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 09:35:54 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
-         :from:date:message-id:subject:to:cc:content-transfer-encoding;
-        bh=LNSjwgPBAW69tYr5ppeJRmtuxxe2teojG1+3mTlzbk8=;
-        b=MFRBRw8AuP50KywGjykujHpvaMtsLVXRCE+LHoGflCkNTZYF6FF0LSnDd31cW8ApMk
-         9DI51qQ35d23dLcu01htvqoHdhfG2wlXQDKXboU+M51KnAujXbo+6Q4XRhmtBbZ5U/wd
-         yW9Of3oNLQywdrRuj6XWkwFHG/w5tF6YK60rj1jqTQYZRwm56z0XNG+qZUy+C28ktyZ2
-         ZlretbzwZyojrSxVHvyLtYYL73T2YhguaU1Mdts2WStfOOzi3Vl6SlDcJPMG9vIn2g66
-         Br3VK3GaSidMfVYzRDH2yMyV6PoWFTU5RsXbQCo0B3b7xuDOhhRjDjr7iv0AIgu5gJ2k
-         6lCg==
-X-Gm-Message-State: AOAM5331GnRAgtxlUIVgZSCiuRt3XiMGWh4MwROtDyTnQZ+YpT0SZ7bi
-        O3GwPN7XeMD7Kvyvy9mgvjIJi8L/1AlOEQ==
-X-Google-Smtp-Source: ABdhPJytZa6+epuVqQi94Eg9aJIdN07pdl7EU7jg5r44weqWA5zpTtoqAcKqECdyYp2clA4p7e5m9w==
-X-Received: by 2002:ab0:3349:: with SMTP id h9mr52239155uap.111.1638207348213;
-        Mon, 29 Nov 2021 09:35:48 -0800 (PST)
-Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com. [209.85.222.43])
-        by smtp.gmail.com with ESMTPSA id j145sm8527641vke.47.2021.11.29.09.35.47
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=iK3riauy7r4LiWngeJOokJxhZZPLu5etYNKqwE1epw0=;
+        b=hy+AXuzoUwhb6KnCk/CSiAYjghZqJCnLT7LidN4P6XuLGQzR3xvLp/7OScjYOnC00Q
+         z6PtuKOWqGIIbFHKeXEBiPXeaPrUJb75tBmKpAt+V1HvfFcxCwaXanjKnCL8v5PfzGQa
+         gxzlJfubEsMH0LJlv1LvrWkzMnIjpYDjqMLwKlBSJp7hhF2Idix+Yvx1pnqgZ+ov0WSP
+         j5vw7EUi510+isQZHnrQcMYHU/o1GhLUvxUwAl0G7x5zCRgK73u7c+2PtuaFFWNio9VM
+         k/0gHiCj7/NCQmBv8EngB0VNqo4zGhGhsihkJ/aKpPcyHPYeGtBLD14G08cU1UuLeWhD
+         rRsQ==
+X-Gm-Message-State: AOAM530ip0jzG3lSSRx6WkKgeTbhq0zXxShijNaP+UO8gR74+FFDw9vU
+        tc/6Iv2rti+4TkKs7PvBYSuyZ1pq4f5NiqzQys8yFy135eaDDvX55RfXFwuIeEBVJJjeRSGEaLP
+        0IjoWXeNdvZEVy2cEoNTMP+zIUNJXI1vuk+xhXCd+fQ==
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr48531718ljp.202.1638207353501;
+        Mon, 29 Nov 2021 09:35:53 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwCdgVQtvrXN9pR82hH5Jlf+5Oj6LFpV+QeH8GC4DH4X/4Agtjois4piKytzHJd5SDX416Alg==
+X-Received: by 2002:a05:651c:545:: with SMTP id q5mr48531704ljp.202.1638207353283;
+        Mon, 29 Nov 2021 09:35:53 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id w14sm1339120ljj.7.2021.11.29.09.35.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 09:35:48 -0800 (PST)
-Received: by mail-ua1-f43.google.com with SMTP id r15so35727535uao.3;
-        Mon, 29 Nov 2021 09:35:47 -0800 (PST)
-X-Received: by 2002:a67:c90a:: with SMTP id w10mr34928412vsk.22.1638207347791;
- Mon, 29 Nov 2021 09:35:47 -0800 (PST)
+        Mon, 29 Nov 2021 09:35:52 -0800 (PST)
+Message-ID: <5687bb27-973e-b774-b876-46c8dffc1176@canonical.com>
+Date:   Mon, 29 Nov 2021 18:35:51 +0100
 MIME-Version: 1.0
-References: <20211129165510.370717-1-jernej.skrabec@gmail.com>
- <CAGb2v67M2Qi5tUq0BNbgahTsY4bbYGQeqzjoH8RZ6fYWzrWsYA@mail.gmail.com> <5516984.DvuYhMxLoT@kista>
-In-Reply-To: <5516984.DvuYhMxLoT@kista>
-Reply-To: wens@csie.org
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Tue, 30 Nov 2021 01:35:35 +0800
-X-Gmail-Original-Message-ID: <CAGb2v66ZGMxqgU7sGrSrnog3yHZ+Ny_xJdvBFVYZWH2Q5XbiCQ@mail.gmail.com>
-Message-ID: <CAGb2v66ZGMxqgU7sGrSrnog3yHZ+Ny_xJdvBFVYZWH2Q5XbiCQ@mail.gmail.com>
-Subject: Re: Re: [PATCH v2] ARM: dts: sun8i: Adjust power key nodes
-To:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Michael Klein <michael@fossekall.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        David Virag <virag.david003@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-i2c@vger.kernel.org
+References: <20211127223253.19098-1-semen.protsenko@linaro.org>
+ <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
+ <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 1:29 AM Jernej Škrabec <jernej.skrabec@gmail.com> wrote:
->
-> Dne ponedeljek, 29. november 2021 ob 18:16:31 CET je Chen-Yu Tsai napisal(a):
-> > On Tue, Nov 30, 2021 at 12:55 AM Jernej Skrabec
-> > <jernej.skrabec@gmail.com> wrote:
-> > >
-> > > Several H3 and one H2+ board have power key nodes, which are slightly
-> > > off. Some are missing wakeup-source property and some have BTN_0 code
-> > > assigned instead of KEY_POWER.
-> >
-> > It might have been that after shutdown there was really no way to
-> > "power on" the board with these GPIO power keys, so we didn't use
-> > KEY_POWER for them?
->
-> KEY_POWER is actually processed by userspace, so it would still make sense to
-> power down board if power key is pressed. Correct me if I'm wrong, but in
-> combination with wfi it could work before SCP FW was available?
+On 29/11/2021 14:56, Sam Protsenko wrote:
+> On Sun, 28 Nov 2021 at 05:15, David Virag <virag.david003@gmail.com> wrote:
+>>
+>> Also this way is pretty USIv2 centric. Adding USIv1 support to this
+>> driver is difficult this way because of the the lack of USI_CON and
+>> USI_OPTION registers as a whole (so having nowhere to actually set the
+>> reg of the USI node to, as the only thing USIv1 has is the SW_CONF
+>> register). In my opinion being able to use the same driver and same
+>> device tree layout for USIv1 and USIv2 is a definite plus
+>>
+> 
+> Well, it's USIv2 driver after all. I never expected it can be extended
+> for USIv1 support. If you think it can be reused for USIv1, it's fine
+> by me. But we need to consider next things:
+>   - rename the driver to just "usi.c" (and also its configuration symbol)
+>   - provide different compatible for USIv1 (and maybe corresponding driver data)
+>   - rework bindings (header and doc); make sure existing bindings are
+> intact (we shouldn't change already introduced interfaces)
+>   - in case of USIv1 compatible; don't try to tinker with USIv2 registers
+>   - samsung,clkreq-on won't be available in case of USIv1 compatible
 
-I guess it could? But where would it do wfi, and what would execute
-after wfi?
+I expect this driver to be in future extended for USIv1 and I do not see
+any problems in doing that for current Sam's approach. Most of our
+drivers support several devices, sometimes with differences, and we
+already have patterns solving it, e.g. ops structure or quirks bitmap.
+Driver for new USIv1 compatible would skip setting USI_CON (or any other
+unrelated register). Modification of SW_CONF could be shared or could be
+also split, depending on complexity.
 
-IIRC the kernel's halt sequence doesn't really clean up interrupts,
-so wfi isn't going to get very far.
+> 
+> Because I don't have USIv1 SoC TRM (and neither do I possess some
+> USIv1 board which I can use for test), I don't think it's my place to
+> add USIv1 support. But I think it's possible to do so, using my input
+> above.
+> 
+> I can see how it might be frustrating having to do some extra work
+> (comparing to just using the code existing in downstream). But I guess
+> that's the difference: vendor is mostly concerned about competitive
+> advantage and getting to market fast, while upstream is more concerned
+> about quality, considering all use cases, and having proper design.
+> Anyway, we can work together to make it right, and to have both
+> IP-cores support. In the worst case, if those are too different, we
+> can have two separate drivers for those.
+> 
+>> The only real drawback of that way is having to add code for USIv2
+>> inside the UART, HSI2C, and SPI drivers but in my opinion the benefits
+>> overweigh the drawbacks greatly. We could even make the uart/spi/hsi2c
+>> drivers call a helper function in the USI driver to set their USI_CON
+>> and USI_OPTION registers up so that code would be shared and not
+>> duplicated. Wether this patch gets applied like this is not my choice
+>> though, I'll let the people responsible decide
+>> :-)
+>>
+> 
+> I'd argue that there are a lot of real drawbacks of using downstream
+> driver as is. That's why I completely re-designed and re-implemented
+> it. Downstream driver can't be built and function as a module, it
+> doesn't respect System Register sharing between consumers, it leads to
+> USI reset code duplication scattered across protocol drivers (that
+> arguably shouldn't even be aware of that), it doesn't reflect HW
+> structure clearly, it's not holding clocks needed for registers access
+> (btw, sysreg clock can be provided in syscon node, exactly for that
+> reason). As Krzysztof said, it also can't handle correct probe order
+> and deferred probes. Downstream driver might work fine for some
+> particular use-cases the vendor has, but in upstream it's better to
+> cover more cases we can expect, as upstream kernel is used on more
+> platforms, with more user space variants, etc.
 
-> >
-> > > Adjust them, so they can function as intended by designer.
-> > >
-> > > Co-developed-by: Michael Klein <michael@fossekall.de>
-> > > Signed-off-by: Michael Klein <michael@fossekall.de>
-> > > Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> >
-> > Acked-by: Chen-Yu Tsai <wens@csie.org>
-> >
->
-> Thanks!
->
-> Best regards,
-> Jernej
->
->
+Implementing USI in each of I2C/SPI/UART drivers is a big minus. Current
+approach nicely encapsulates USI in dedicated driver without polluting
+the other drivers with unrelated bus/protocol stuff.
+
+Best regards,
+Krzysztof

@@ -2,222 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3029946144B
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F382461461
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 12:55:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242929AbhK2L4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 06:56:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:57391 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239667AbhK2Lys (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 06:54:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638186690;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o1hbT83UZyzEpMcYnWEfjfHejJ/ev9mdgbjpKbK1VxE=;
-        b=jPSCvnH3AmIEJgnraLey8Z5aFFc8AIeOcFcsX+DzhdtTb0SAGz8twzNMycBFyTfseM1MSS
-        8w+KBStygLCLMuokWtNVxaJiSfRKO+isstyAF4hpUsR6KCkexSxNid9nv4QxiUG0bDtO4c
-        Kw91vHSrw0dewmGQCdIUe1mphja4ZQA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-236-0RUPr8GeNKa5FNXeq5UITg-1; Mon, 29 Nov 2021 06:51:29 -0500
-X-MC-Unique: 0RUPr8GeNKa5FNXeq5UITg-1
-Received: by mail-ed1-f70.google.com with SMTP id d13-20020a056402516d00b003e7e67a8f93so13537609ede.0
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:51:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version:content-transfer-encoding;
-        bh=o1hbT83UZyzEpMcYnWEfjfHejJ/ev9mdgbjpKbK1VxE=;
-        b=vmiVl7G+rFrU2rZqYZR95aujZfBARA0rsVX0m1JaPhBfwvRhcbqsZuzNU6peFk8NDk
-         /QdgFJ/lh5ChIhcEREmGX8A1QiqnBEg6coOjRNqcrGkmXfWjgWUnoXnBZm//auKpY6Sj
-         FKSFDmlv+G0LQDUFMgy/pjbzcNqif/YWo8cT5y99N7XftyeEJAzkl5SMwgeXxE8Z3kqx
-         +c/b+GZ8qIgsp59mUjWGr84arsQorNSUnC8hgP5iKPkBTpeCo7Ir04RccQrjxxe1vqyZ
-         Pb0L1dTWUG20aKkbPNicQOQ2DUiAi4dIT9Tz0P5BOnAjP5R9zvki805xXGraEhbObitD
-         xRSw==
-X-Gm-Message-State: AOAM532P8iJVnvTpYE6WArHGpKWiUaoRmFTFfNEb91Lj8Y8Y8How7aOJ
-        MgHsWzB7BIp9XbVhDxBja7UQCIsfU05OqqxWceQA2KWeuTAYbnckZ8BIlqelmYH/iLZy2Ybp/rH
-        th7Te87msRj4K81dCtxXWh7Fi
-X-Received: by 2002:a05:6402:90c:: with SMTP id g12mr72820068edz.36.1638186687988;
-        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy//h6DqzMZ3cIjns1ItOPHoyCEI8XwGnDfYQ/w255YG7ez18OJaBJc76mESug2RLwzmhwD5w==
-X-Received: by 2002:a05:6402:90c:: with SMTP id g12mr72820014edz.36.1638186687643;
-        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id z1sm9056421edq.54.2021.11.29.03.51.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 03:51:27 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 6858F1802A0; Mon, 29 Nov 2021 12:51:26 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
- per-channel statistics
-In-Reply-To: <871ae82a-3d5b-2693-2f77-7c86d725a056@iogearbox.net>
-References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
- <20211123163955.154512-22-alexandr.lobakin@intel.com>
- <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
- <87bl28bga6.fsf@toke.dk>
- <20211125170708.127323-1-alexandr.lobakin@intel.com>
- <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <20211125204007.133064-1-alexandr.lobakin@intel.com>
- <87sfvj9k13.fsf@toke.dk>
- <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
- <871ae82a-3d5b-2693-2f77-7c86d725a056@iogearbox.net>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Mon, 29 Nov 2021 12:51:26 +0100
-Message-ID: <878rx79o3l.fsf@toke.dk>
+        id S1343890AbhK2L6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 06:58:37 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:44121 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S238348AbhK2L4e (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 06:56:34 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J2kJC4jgQz9sSr;
+        Mon, 29 Nov 2021 12:53:15 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id djs3iYgPjbQ7; Mon, 29 Nov 2021 12:53:15 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J2kJC3pfMz9sSP;
+        Mon, 29 Nov 2021 12:53:15 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6AF578B775;
+        Mon, 29 Nov 2021 12:53:15 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id N2AI2FPaDhJX; Mon, 29 Nov 2021 12:53:15 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4025E8B76E;
+        Mon, 29 Nov 2021 12:53:15 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1ATBr6DJ895113
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Mon, 29 Nov 2021 12:53:06 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1ATBr6XR895112;
+        Mon, 29 Nov 2021 12:53:06 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v4 1/5] powerpc/inst: Refactor ___get_user_instr()
+Date:   Mon, 29 Nov 2021 12:53:01 +0100
+Message-Id: <97a171efd8c582e2bae82c31f2a9519823a20d3f.1638186773.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1638186784; l=1409; s=20211009; h=from:subject:message-id; bh=zIo/9aHkNL26PXcoL1CcR42y7+ImikzNzgYR0PCbPKI=; b=X8WaJenduw62ESQHEadrOxaqk399Qj2JBj2a/ebVNFYFbkjALuT64oWK8TcZucbHZg8+fipI9Fij lt5JQqboCVp/cWMjSQzMXUDXOuQKzWCgJrdL87fX+EjrZs0Z9JfF
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Daniel Borkmann <daniel@iogearbox.net> writes:
+PPC64 version of ___get_user_instr() can be used for PPC32 as well,
+by simply disabling the suffix part with IS_ENABLED(CONFIG_PPC64).
 
-> On 11/26/21 7:06 PM, Jakub Kicinski wrote:
->> On Fri, 26 Nov 2021 13:30:16 +0100 Toke H=C3=B8iland-J=C3=B8rgensen wrot=
-e:
->>>>> TBH I wasn't following this thread too closely since I saw Daniel
->>>>> nacked it already. I do prefer rtnl xstats, I'd just report them
->>>>> in -s if they are non-zero. But doesn't sound like we have an agreeme=
-nt
->>>>> whether they should exist or not.
->>>>
->>>> Right, just -s is fine, if we drop the per-channel approach.
->>>
->>> I agree that adding them to -s is fine (and that resolves my "no one
->>> will find them" complain as well). If it crowds the output we could also
->>> default to only output'ing a subset, and have the more detailed
->>> statistics hidden behind a verbose switch (or even just in the JSON
->>> output)?
->>>
->>>>> Can we think of an approach which would make cloudflare and cilium
->>>>> happy? Feels like we're trying to make the slightly hypothetical
->>>>> admin happy while ignoring objections of very real users.
->>>>
->>>> The initial idea was to only uniform the drivers. But in general
->>>> you are right, 10 drivers having something doesn't mean it's
->>>> something good.
->>>
->>> I don't think it's accurate to call the admin use case "hypothetical".
->>> We're expending a significant effort explaining to people that XDP can
->>> "eat" your packets, and not having any standard statistics makes this
->>> way harder. We should absolutely cater to our "early adopters", but if
->>> we want XDP to see wider adoption, making it "less weird" is critical!
->>=20
->> Fair. In all honesty I said that hoping to push for a more flexible
->> approach hidden entirely in BPF, and not involving driver changes.
->> Assuming the XDP program has more fine grained stats we should be able
->> to extract those instead of double-counting. Hence my vague "let's work
->> with apps" comment.
->>=20
->> For example to a person familiar with the workload it'd be useful to
->> know if program returned XDP_DROP because of configured policy or
->> failure to parse a packet. I don't think that sort distinction is
->> achievable at the level of standard stats.
->
-> Agree on the additional context. How often have you looked at tc clsact
-> /dropped/ stats specifically when you debug a more complex BPF program
-> there?
->
->    # tc -s qdisc show clsact dev foo
->    qdisc clsact ffff: parent ffff:fff1
->     Sent 6800 bytes 120 pkt (dropped 0, overlimits 0 requeues 0)
->     backlog 0b 0p requeues 0
->
-> Similarly, XDP_PASS counters may be of limited use as well for same reason
-> (and I think we might not even have a tc counter equivalent for it).
->
->> The information required by the admin is higher level. As you say the
->> primary concern there is "how many packets did XDP eat".
->
-> Agree. Above said, for XDP_DROP I would see one use case where you compare
-> different drivers or bond vs no bond as we did in the past in [0] when
-> testing against a packet generator (although I don't see bond driver cove=
-red
-> in this series here yet where it aggregates the XDP stats from all bond s=
-lave
-> devs).
->
-> On a higher-level wrt "how many packets did XDP eat", it would make sense
-> to have the stats for successful XDP_{TX,REDIRECT} given these are out
-> of reach from a BPF prog PoV - we can only count there how many times we
-> returned with XDP_TX but not whether the pkt /successfully made it/.
->
-> In terms of error cases, could we just standardize all drivers on the beh=
-avior
-> of e.g. mlx5e_xdp_handle(), meaning, a failure from XDP_{TX,REDIRECT} will
-> hit the trace_xdp_exception() and then fallthrough to bump a drop counter
-> (same as we bump in XDP_DROP then). So the drop counter will account for
-> program drops but also driver-related drops.
->
-> At some later point the trace_xdp_exception() could be extended with an e=
-rror
-> code that the driver would propagate (given some of them look quite simil=
-ar
-> across drivers, fwiw), and then whoever wants to do further processing wi=
-th
-> them can do so via bpftrace or other tooling.
->
-> So overall wrt this series: from the lrstats we'd be /dropping/ the pass,
-> tx_errors, redirect_errors, invalid, aborted counters. And we'd be /keepi=
-ng/
-> bytes & packets counters that XDP sees, (driver-)successful tx & redirect
-> counters as well as drop counter. Also, XDP bytes & packets counters shou=
-ld
-> not be counted twice wrt ethtool stats.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/inst.h | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
-This sounds reasonable to me, and I also like the error code to
-tracepoint idea :)
-
--Toke
+diff --git a/arch/powerpc/include/asm/inst.h b/arch/powerpc/include/asm/inst.h
+index b11c0e2f9639..fea4d46155a9 100644
+--- a/arch/powerpc/include/asm/inst.h
++++ b/arch/powerpc/include/asm/inst.h
+@@ -4,8 +4,6 @@
+ 
+ #include <asm/ppc-opcode.h>
+ 
+-#ifdef CONFIG_PPC64
+-
+ #define ___get_user_instr(gu_op, dest, ptr)				\
+ ({									\
+ 	long __gui_ret;							\
+@@ -16,7 +14,7 @@
+ 	__chk_user_ptr(ptr);						\
+ 	__gui_ret = gu_op(__prefix, __gui_ptr);				\
+ 	if (__gui_ret == 0) {						\
+-		if ((__prefix >> 26) == OP_PREFIX) {			\
++		if (IS_ENABLED(CONFIG_PPC64) && (__prefix >> 26) == OP_PREFIX) { \
+ 			__gui_ret = gu_op(__suffix, __gui_ptr + 1);	\
+ 			__gui_inst = ppc_inst_prefix(__prefix, __suffix); \
+ 		} else {						\
+@@ -27,13 +25,6 @@
+ 	}								\
+ 	__gui_ret;							\
+ })
+-#else /* !CONFIG_PPC64 */
+-#define ___get_user_instr(gu_op, dest, ptr)				\
+-({									\
+-	__chk_user_ptr(ptr);						\
+-	gu_op((dest).val, (u32 __user *)(ptr));				\
+-})
+-#endif /* CONFIG_PPC64 */
+ 
+ #define get_user_instr(x, ptr) ___get_user_instr(get_user, x, ptr)
+ 
+-- 
+2.33.1
 

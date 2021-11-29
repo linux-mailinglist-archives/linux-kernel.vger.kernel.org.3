@@ -2,128 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86A41461099
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFC54610A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:55:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243431AbhK2I5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 03:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
+        id S244723AbhK2I6o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 03:58:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234400AbhK2Izt (ORCPT
+        with ESMTP id S241213AbhK2I4n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 03:55:49 -0500
+        Mon, 29 Nov 2021 03:56:43 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481A4C0613ED;
-        Mon, 29 Nov 2021 00:40:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02083C06179E;
+        Mon, 29 Nov 2021 00:41:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06139B80E2D;
-        Mon, 29 Nov 2021 08:40:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F97C004E1;
-        Mon, 29 Nov 2021 08:40:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B6F27B80933;
+        Mon, 29 Nov 2021 08:41:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88EFC004E1;
+        Mon, 29 Nov 2021 08:41:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638175245;
-        bh=o9WtiRuVoveXSOInMHstY0TgqXEQ4BeT0x32wVvwrF4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KYSe5UbCWzL84TWEfT0tzU3BRd4IyItvgqzoV/xzcLY9og55jsXsaC792FH4NcORP
-         LjAewMDMM78KrwxAnikIlaupHikZxMaTYsNLd+/P2TZUFPsRH38/dLu7gXdd+wP+Lo
-         zTLCDTxdxQB62eASwzUOT19CwZuIvSx/Ou0MNmpKLjGwjKk2wPh0c5s7WDAO+/Qlek
-         KQclZ3nQW6xQw4o5ocPRCJUQLuL2KYcplYuDf5Q+yWHBSwoL+fhoBb6RreDQAp8sKP
-         7qhQUH9kJIeGO4AYWCRORrkSewy2l3/1mjmNH7t08/qyjYGCKJ3ehI0wMbQHvlgoub
-         JkbAlu3Rim4jg==
-Date:   Mon, 29 Nov 2021 09:40:41 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     linuxarm@huawei.com, mauro.chehab@huawei.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 07/20] media: si21xx: report eventual errors at
- set_frontend
-Message-ID: <20211129094041.4fec2ef0@coco.lan>
-In-Reply-To: <YaE5Uz0+dEtG7gaN@archlinux-ax161>
-References: <cover.1637781097.git.mchehab+huawei@kernel.org>
-        <36d55de3be035253bf1b07506db13eab04ad803d.1637781097.git.mchehab+huawei@kernel.org>
-        <YaE5Uz0+dEtG7gaN@archlinux-ax161>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        s=k20201202; t=1638175315;
+        bh=Mj7X1l1gdYa1BrDv7xW5CTAYeo/8ZoHro5zWrCtQfS0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bWPFZ95lyp63A1gGOC+Esl2VtWEQ+pmcM1sHVtoMW7W9OEmKrRd2w1pmjXIW4woJw
+         gfVqQKgSIEFKBG+mNjX+pYdi2EtBXWwA3zSsu4PpZRdCA0451kDdslP+IwqpObKQ3z
+         PG9w8lhi71WWpP0X36nTMlqA0Czqq1orJXyPlHdRuIhbFC3eMIsC2LTFPa9Dqh5Hud
+         I6uez9ZrrUPRWYmaNWdQtUCR8FOVbk+mwlm4cJDzxHWbLE3/JKQ03XS9j0fE3/rYrx
+         LcurGcStuFLkw0rx2j36f4dodIhoBzK0gfkGt5AmV2nEJX+QjEpjv7xhB/5QC9mjDw
+         Zyy+4DI4HXqiw==
+Date:   Mon, 29 Nov 2021 09:41:52 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Abel Vesa <abel.vesa@nxp.com>
+Cc:     Rob Herring <robh@kernel.org>, Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 11/12] dt-bindings: i2c: imx-lpi2c: Add i.MX8DXL
+ compatible match
+Message-ID: <YaSSUHH2e9mHxhtx@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Abel Vesa <abel.vesa@nxp.com>, Rob Herring <robh@kernel.org>,
+        Dong Aisheng <aisheng.dong@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Fabio Estevam <festevam@gmail.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+References: <1636566415-22750-1-git-send-email-abel.vesa@nxp.com>
+ <1636566415-22750-12-git-send-email-abel.vesa@nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DOW3NFxjw4Y5rvlF"
+Content-Disposition: inline
+In-Reply-To: <1636566415-22750-12-git-send-email-abel.vesa@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, 26 Nov 2021 12:45:23 -0700
-Nathan Chancellor <nathan@kernel.org> escreveu:
 
-> On Wed, Nov 24, 2021 at 08:13:10PM +0100, Mauro Carvalho Chehab wrote:
-> > If an error occurs while setting the registers at set_frontend,
-> > it is silently ignored. Yet, the variable status is updated.
-> > 
-> > Change the logic to return an error if it fails to write values
-> > to the registers.
-> > 
-> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>  
-> 
-> I am not super familiar with the different return codes so I assume it
-> is appropriate (the sites that I see calling set_frontend() appears to
-> only check for a negative return code).
+--DOW3NFxjw4Y5rvlF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-There are a couple of return codes used on media when I/O transfer fails.
-Some places use -EREMOTEIO. Others use -EIO or -ENXIO.
+On Wed, Nov 10, 2021 at 07:46:54PM +0200, Abel Vesa wrote:
+> Add i.MX8DXL lpi2c compatible to the bindings documentation.
+>=20
+> Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
 
-I guess -EREMOTEIO is a little bit better than -EIO for I2C transfers,
-as the problem usually happened inside an I2C bus at the DVB adapter.
-
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
-> 
-> > ---
-> > 
-> > To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> > See [PATCH 00/20] at: https://lore.kernel.org/all/cover.1637781097.git.mchehab+huawei@kernel.org/
-> > 
-> >  drivers/media/dvb-frontends/si21xx.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/media/dvb-frontends/si21xx.c b/drivers/media/dvb-frontends/si21xx.c
-> > index e31eb2c5cc4c..001b23588389 100644
-> > --- a/drivers/media/dvb-frontends/si21xx.c
-> > +++ b/drivers/media/dvb-frontends/si21xx.c
-> > @@ -711,7 +711,7 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
-> >  	int i;
-> >  	bool inband_interferer_div2[ALLOWABLE_FS_COUNT];
-> >  	bool inband_interferer_div4[ALLOWABLE_FS_COUNT];
-> > -	int status;
-> > +	int status = 0;
-> >  
-> >  	/* allowable sample rates for ADC in MHz */
-> >  	int afs[ALLOWABLE_FS_COUNT] = { 200, 192, 193, 194, 195,
-> > @@ -747,8 +747,6 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
-> >  	rf_freq = 10 * c->frequency ;
-> >  	data_rate = c->symbol_rate / 100;
-> >  
-> > -	status = PASS;
-> > -
-> >  	band_low = (rf_freq - lnb_lo) - ((lnb_uncertanity * 200)
-> >  					+ (data_rate * 135)) / 200;
-> >  
-> > @@ -832,6 +830,9 @@ static int si21xx_set_frontend(struct dvb_frontend *fe)
-> >  	state->fs = sample_rate;/*ADC MHz*/
-> >  	si21xx_setacquire(fe, c->symbol_rate, c->fec_inner);
-> >  
-> > +	if (status)
-> > +		return -EREMOTEIO;
-> > +
-> >  	return 0;
-> >  }
-> >  
-> > -- 
-> > 2.33.1
-> > 
-> >   
+Applied to for-next, thanks!
 
 
+--DOW3NFxjw4Y5rvlF
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Mauro
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkklAACgkQFA3kzBSg
+KbafeA/8CuvjQGEPMI9aeqCJabLH5w3PdiM3Jxbt5FxwFcHpcPZEqbOPxQWWjCQ2
+gKwxwCmf0ZrZx3+AxMYkNx3B5iL4E0E3ArecwVJavz/SG+kq0NoIhX6YvVGYJV8r
+j8qKyP934FsPOsJlwuULcjmwT4eZQPTjc++oCslYvYMY6Z1DJEPL3BGILab38kQy
+S30YPaxpTsJEWfqGhUixUjCh5LhglzXoe4sHKKfhViPeeHzMFX78gZwwIwr7UyDc
+cvGHFsbF5f0kItFkcchyQRuSEkok5pXzzyzq8fYjAKTdaPMzhGVtsOLj6f3sUl7q
+KtZnUI3PvLryFP/IjuHhbs23dEjfU9EH8xuYVxfBYriBHQPct6GmogEaSkw0WqVs
+UqmR/olx/CPTYBhw+XkiDb+lgglb21yIHeaQ3LHO4+gBGTcWPY5ieiqt3xZXKKdl
+C5KoE3gB2NoaX1gYBObJb+txyXpMYJJynmzzruQKA7hwK3wwsEMaZqffBzfwwk8p
+7xUQ/qPoa+/+hB0xb1lvcv9W0lujSe+z5QbFMQ8rkvKZqtst0hQelmO1PCVbcfG+
+xFkAz6afeMaUAW8M28hBuFbQlAvHqNqT+tQn0BCEhgZBVe5L+YOxSJ7PuJMCLBPB
+eFolg3Anrbfp2UMonwjNlFKvxx/9XpkXy0I2HO7Swb2DZ7s6dt0=
+=tzkd
+-----END PGP SIGNATURE-----
+
+--DOW3NFxjw4Y5rvlF--

@@ -2,131 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A25E5462236
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:29:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D7946222A
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 21:26:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbhK2UaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 15:30:03 -0500
-Received: from mail-dm6nam11on2078.outbound.protection.outlook.com ([40.107.223.78]:17865
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S235604AbhK2U0i (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 15:26:38 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Z1u+UxyE/5Vgkgk1OTGpTNpGYY0u7tNrr2OiND2ooYL1yOtyKb1ka9kpVe0GHnB68PEJQuHmQjh6Kpt5F5htKIDZOWTpfWvGTqT6xJ2YgxB6vL7itXchVHqaOY47Y5eWadjAarMUj8VirsH8FKlc1rfW4R1dBdtJWt4jwInymjNvcxnwq8bVRMLLFTAQavs5RIxLmWJWvOGBcDLhsQnMzfSZ3CYRxM2nJr5cCdmKlb+ZhG+iME474T5Fhrwpc+Hn8pcAPq263O7cyD53+M6LV8jSVUCiFFEGt0Z0s93Ext0v/e+SuTLCNd/kh0vkiLv8LjVPzezfFw0So4TXaQi6hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O4KpTwdMijh6Yv2VmyXXOVKy1RdwztxNfksgrK594vk=;
- b=mINsfiVRgGEIp75M5NZDGSjX91BrMllOitcrKwwcaKk8XG+cvvBZYCxXG2AckVL6bo8hU8iT7W7TGRt2ceN/fYH5DuFZi74M8wCLgOHX2hMiRMF/mBCSE+jTMByGv+k9t8Lf71u73oru2+NzJnq4nThEhPT/EAYPfAfB+oaLyoCNEqkYjb9GSUuJbJkOCRrmUTe05VW7YxCn03R+HiZjcnujjbSvbklX+Oa8gqaOx1mqRQZ5pGeWDbkYUcIIBBuX3xoqDVMu9CRXara7wx/404Oj27sSRDIUiQxsZnPRqTW/NSDtV1gXXxiQz9xjJyzyCH5Jvg3zhM4npyaAyM8WUA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=xilinx.com; dmarc=pass (p=none sp=none pct=100) action=none
- header.from=xilinx.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O4KpTwdMijh6Yv2VmyXXOVKy1RdwztxNfksgrK594vk=;
- b=HkJqW2/z7W8IloQUgCM+Iw4MZOf5AAPBzk4ckJxJ2wvkdsm1tLqG5qnYy4klG1sASL5fQCT/MSBnCTkwvK4t7TSgT7j5QAZytE2GeIZ96uDP0AVRUdSK1j15P+asosinPuiZQPZ3Il+XcI2ezFKDssVYWJbpM8QjB32GMJo+5OI=
-Received: from BN9PR03CA0031.namprd03.prod.outlook.com (2603:10b6:408:fb::6)
- by BL0PR02MB5635.namprd02.prod.outlook.com (2603:10b6:208:82::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Mon, 29 Nov
- 2021 20:23:18 +0000
-Received: from BN1NAM02FT064.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:fb:cafe::19) by BN9PR03CA0031.outlook.office365.com
- (2603:10b6:408:fb::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend
- Transport; Mon, 29 Nov 2021 20:23:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT064.mail.protection.outlook.com (10.13.2.170) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4734.20 via Frontend Transport; Mon, 29 Nov 2021 20:23:18 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 29 Nov 2021 12:23:14 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 29 Nov 2021 12:23:14 -0800
-Envelope-to: gregkh@linuxfoundation.org,
- jacmet@sunsite.dk,
- linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org,
- stable@vger.kernel.org
-Received: from [172.19.72.93] (port=50376 helo=xsj-xw9400.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <lizhi.hou@xilinx.com>)
-        id 1mrnBC-00047h-4c; Mon, 29 Nov 2021 12:23:14 -0800
-Received: by xsj-xw9400.xilinx.com (Postfix, from userid 21952)
-        id 0F675600ACD; Mon, 29 Nov 2021 12:23:14 -0800 (PST)
-From:   Lizhi Hou <lizhi.hou@xilinx.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        <gregkh@linuxfoundation.org>, <jacmet@sunsite.dk>
-CC:     Lizhi Hou <lizhi.hou@xilinx.com>, <stable@vger.kernel.org>
-Subject: [PATCH 1/1] tty: serial: uartlite: allow 64 bit address
-Date:   Mon, 29 Nov 2021 12:23:02 -0800
-Message-ID: <20211129202302.1319033-1-lizhi.hou@xilinx.com>
-X-Mailer: git-send-email 2.25.1
+        id S236349AbhK2UaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 15:30:00 -0500
+Received: from mail-oi1-f180.google.com ([209.85.167.180]:38827 "EHLO
+        mail-oi1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231637AbhK2U0e (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 15:26:34 -0500
+Received: by mail-oi1-f180.google.com with SMTP id r26so36809085oiw.5;
+        Mon, 29 Nov 2021 12:23:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=lDk8BlneSuRVeKSf5grrrIRYXl1VbeT1udhOyG1OtVk=;
+        b=Dn0HbFSXMVpM8g6TPx9ce76jmgRiR5Pm8r3oRIbCj2W/MNB87naj3CYoT1KvRfBVHv
+         XU5N84CuUAnnWKU97nA3CaKQKkpvS4BZ0M5yF5qqaEoVEPMjrOK1KUUHAhoVlGYVBfbN
+         2YRcmRsH+VhP/FDmg2KTQfgsQ76AP7SZPElqJ76g6Nvkk5sxEKxKUz1N9AVaPyK/V5FH
+         nZqG74h97ILvQRViBCAvYlpf1EIgEVmZVoWDC3AyDyj/zsuBc2QxDSy0blG/kkjycM5W
+         lGKjhvzVWqyQPbSqnwOkLbI9NU8GWpF4i9lTyyA2MnoEHgbQgr1x5T9mUTKueU/FnZoF
+         jnIA==
+X-Gm-Message-State: AOAM532XcQyvSgRi2OFLuXmCX4UfMjqHIOJexDjs/cKCKt1C/yF6XBPd
+        SdIVDAM1s3M1QqnR96neSw==
+X-Google-Smtp-Source: ABdhPJwF7Y+9YhXyqxZGUYPifOjP+P5BOlnWsiZCV4rCVdjToGw+1EGueSoksyzSxVFXxzRBg793XQ==
+X-Received: by 2002:aca:ab86:: with SMTP id u128mr271578oie.41.1638217396125;
+        Mon, 29 Nov 2021 12:23:16 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id x17sm2419929oot.30.2021.11.29.12.23.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 12:23:15 -0800 (PST)
+Received: (nullmailer pid 540951 invoked by uid 1000);
+        Mon, 29 Nov 2021 20:23:14 -0000
+Date:   Mon, 29 Nov 2021 14:23:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "LH.Kuo" <lhjeff911@gmail.com>
+Cc:     p.zabel@pengutronix.de, daniel.thompson@linaro.org,
+        lee.jones@linaro.org, u.kleine-koenig@pengutronix.de,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, qinjian@cqplus1.com,
+        wells.lu@sunplus.com, "LH.Kuo" <lh.kuo@sunplus.com>
+Subject: Re: [PATCH v2 2/2] devicetree bindings I2C Add bindings doc for
+ Sunplus SP7021
+Message-ID: <YaU2snDw5KiGjgjJ@robh.at.kernel.org>
+References: <1635496955-13985-1-git-send-email-lh.kuo@sunplus.com>
+ <1636441166-8127-1-git-send-email-lh.kuo@sunplus.com>
+ <1636441166-8127-3-git-send-email-lh.kuo@sunplus.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0020cc3f-8520-42d8-9e8a-08d9b37614ed
-X-MS-TrafficTypeDiagnostic: BL0PR02MB5635:
-X-Microsoft-Antispam-PRVS: <BL0PR02MB5635F7E89E943CB9302C2003A1669@BL0PR02MB5635.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lI1rt1qXD5ba/C167cdKKGHY2KUJf4yAVKadudfB/+NdcPhV3lbU+6+ijHkhZW+38RUnRVMH1o7nRN3xn/q9NFR2QgIMDq6hzcoy3V49xIrTYWfOchjh5Zmxr0nE2/2lHBc2DYL0bzdgF/ndGaVGo6q3cwhiAqnzQb7iV0Y8lLFAnZVw2GmPP2Vz3wdgjh4oUYrt4S+fZ+O+8pFDe0pqOFwWansWqr9EeDTdRMKLVevq4P4GPc7Gh5tJ8yElD4OR50KtyAJ2NCTCQOu74st65NYUYW/nyjt7fOtQGN3ZLN05VBFMZYnmAfXFEATMDH1ytmxqEsnRZ7H3zV2uBmoaC0AxqpKxUm2cWVK51vPQDDO06BA9xCQVlhKq8bcFHFSxkH3McpbPSJIrmtXdqeeDVEFNds6FpDMgIN2ab9RBVVolaCLftc51kD5dNehOsNkTFHasNgJG6m/m92PdaLo5C6+htQJUCdNyKnYjY2qul89oSkdIGJzwkFKgRClkprwQlgcKsrn+JZ3elv3HPl25Empv4f+ZzVH/sStVyfJyKH0C+le/z3Go8ow7czQNOOVqyGGeIKQCwU7EXBZBl3myD7FMlUWjX7VMQ81H4lIrUUYbvnMZDGHDNyhjjSuJyOPHrXj5f9JJSJA3zfgCLYeW5+0BPyKsjttEb31m/rIjaIoSSWOmcrefaBBt67WD0O/zQgofNVQAzDEjVJc65EpCZw==
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(42186006)(316002)(5660300002)(356005)(8936002)(70206006)(83380400001)(8676002)(7636003)(47076005)(54906003)(1076003)(26005)(4326008)(2616005)(336012)(426003)(6266002)(70586007)(508600001)(2906002)(36756003)(186003)(6666004)(82310400004)(44832011)(110136005)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2021 20:23:18.6776
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0020cc3f-8520-42d8-9e8a-08d9b37614ed
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT064.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR02MB5635
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1636441166-8127-3-git-send-email-lh.kuo@sunplus.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The base address of uartlite registers could be 64 bit address which is from
-device resource. When ulite_probe() calls ulite_assign(), this 64 bit
-address is casted to 32-bit. The fix is to replace "u32" type with
-"phys_addr_t" type for the base address in ulite_assign() argument list.
+On Tue, Nov 09, 2021 at 02:59:26PM +0800, LH.Kuo wrote:
+> Add devicetree bindings I2C Add bindings doc for Sunplus SP7021
+> 
+> Signed-off-by: LH.Kuo <lh.kuo@sunplus.com>
 
-Fixes: 8fa7b6100693 ("[POWERPC] Uartlite: Separate the bus binding from the driver proper")
+As with other SunPlus patches, author and S-o-b must match.
 
-Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
----
- drivers/tty/serial/uartlite.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> ---
+> Changes in v2:
+>  - Addressed all comments from Mr. Rob Herring.
+>  - Modified the structure and register access method.
+>  - Modifiedthe path about MAINTAINERS. ( wrong messages PATH in v1).
+>  - Modifiedthe the YAML file.
+> 
+>  .../devicetree/bindings/i2c/i2c-sunplus.yaml       | 82 ++++++++++++++++++++++
+>  MAINTAINERS                                        |  1 +
+>  2 files changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> new file mode 100644
+> index 0000000..af860ee
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+> @@ -0,0 +1,82 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +# Copyright (C) Sunplus Co., Ltd. 2021
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/i2c-sunplus.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Sunplus's I2C controller
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +maintainers:
+> +  - lh.kuo <lh.kuo@sunplus.com>
 
-diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-index d3d9566e5dbd..e1fa52d31474 100644
---- a/drivers/tty/serial/uartlite.c
-+++ b/drivers/tty/serial/uartlite.c
-@@ -626,7 +626,7 @@ static struct uart_driver ulite_uart_driver = {
-  *
-  * Returns: 0 on success, <0 otherwise
-  */
--static int ulite_assign(struct device *dev, int id, u32 base, int irq,
-+static int ulite_assign(struct device *dev, int id, phys_addr_t base, int irq,
- 			struct uartlite_data *pdata)
- {
- 	struct uart_port *port;
--- 
-2.27.0
+Full name here please.
 
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - sunplus,sp7021-i2cm
+> +      - sunplus,q645-i2cm
+> +
+> +  reg:
+> +    items:
+> +      - description: Base address and length of the I2C registers
+> +      - description: Base address and length of the I2C DMA registers
+
+Drop 'Base address and length of the '.
+
+> +
+> +  reg-names:
+> +    items:
+> +      - const: i2cm
+> +      - const: i2cmdma
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  clock-frequency:
+> +    enum: [ 100000, 400000 ]
+
+You can't support other frequencies?
+
+> +
+> +  pinctrl-names:
+> +    description:
+> +      A pinctrl state named "default" must be defined.
+> +    const: default
+> +
+> +  pinctrl-0:
+> +    description:
+> +      A phandle to the default pinctrl state.
+
+You don't have to define pinctrl properties when there's only 'default'.
+
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - clocks
+> +  - resets
+> +  - pinctrl-names
+> +  - pinctrl-0
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/sp-sp7021.h>
+> +    #include <dt-bindings/reset/sp-sp7021.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c@9C004600 {
+> +        compatible = "sunplus,sp7021-i2cm";
+> +        reg = <0x9c004600 0x80>, <0x9c004680 0x80>;
+> +        reg-names = "i2cm", "i2cmdma";
+> +        interrupt-parent = <&intc>;
+> +        interrupts = <174 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&clkc I2CM0>;
+> +        resets = <&rstc RST_I2CM0>;
+> +        clock-frequency = <100000>;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&i2cm0_pins>;
+> +    };
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5b7a8a2..575a8e0 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18193,6 +18193,7 @@ SUNPLUS I2C CONTROLLER INTERFACE DRIVER
+>  M:	LH Kuo <lh.kuo@sunplus.com>
+>  L:	linux-i2c@vger.kernel.org
+>  S:	Maintained
+> +F:	Documentation/devicetree/bindings/i2c/i2c-sunplus.yaml
+>  F:	drivers/i2c/busses/i2c-sunplus.c
+>  
+>  SUPERH
+> -- 
+> 2.7.4
+> 
+> 

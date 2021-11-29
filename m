@@ -2,210 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4086461BA2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC0B461BA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 17:15:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344160AbhK2QRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 11:17:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30807 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232280AbhK2QPf (ORCPT
+        id S1344888AbhK2QSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 11:18:41 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:52126 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345410AbhK2QQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 11:15:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638202337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=iTSHlGaC4RwA82Y9GrcD/zJlYkWwy778pvuaQM45jus=;
-        b=Aawuj5BGvMhGUV04rS1Vz8ut53qNQyY4S7STZnX1T2Jeswk7MO+yZJB3JEUtljgjNcEccH
-        LaxbzZe0CmbLa6A3rzeVZ0ONJt4mew0XK6HsoPxcQKvUyUel1qY/UP67xjL91xJqXSEoB7
-        0nqEdp6xQUCI9nwjB+9Gsy2wAvuOWNY=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-225-KOZkUan0Mj6OLbQmUCVLiA-1; Mon, 29 Nov 2021 11:12:11 -0500
-X-MC-Unique: KOZkUan0Mj6OLbQmUCVLiA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 307DA1898292;
-        Mon, 29 Nov 2021 16:12:09 +0000 (UTC)
-Received: from llong.com (unknown [10.22.9.166])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 235DD45D61;
-        Mon, 29 Nov 2021 16:12:07 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vladimir Davydov <vdavydov.dev@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org, Shakeel Butt <shakeelb@google.com>,
-        Roman Gushchin <guro@fb.com>, Waiman Long <longman@redhat.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] mm/memcg: Relocate mod_objcg_mlstate(), get_obj_stock() and put_obj_stock()
-Date:   Mon, 29 Nov 2021 11:11:40 -0500
-Message-Id: <20211129161140.306488-1-longman@redhat.com>
+        Mon, 29 Nov 2021 11:16:40 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 6D7C91FCA1;
+        Mon, 29 Nov 2021 16:13:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1638202401;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rScVNxr4TVVnzusXkesoEKZZv5Q1aX4f/dKE5XP6q9c=;
+        b=NTUHWH+tTUCSSrKe/soToE2DHJLnM3p0QqTYCB0AwpXSrMCyd6edcnqchWtTpCTa5syNVy
+        NvNovnqlRSjxB+G/JsTH6DC17iydqeYPBbpAZMDzhPISqQgDwnXkMifZ81f5mRD+SEh9LH
+        Fc4TJRX+5LUaaJOSE3lLb8PiMDHb0Dg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1638202401;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rScVNxr4TVVnzusXkesoEKZZv5Q1aX4f/dKE5XP6q9c=;
+        b=f20q2Bc2DxqbbvaIvBu8b3E1YVjU3vt0yGrJ4QXEyo8+sVtHvUriNdL6VF8Od+UazIWLmV
+        N3lLTYcGXEq9UpCA==
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 663E6A3B83;
+        Mon, 29 Nov 2021 16:13:21 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 0C410DA735; Mon, 29 Nov 2021 17:13:10 +0100 (CET)
+Date:   Mon, 29 Nov 2021 17:13:10 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Sterba <dsterba@suse.com>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] Btrfs fixes for 5.16-rc3
+Message-ID: <20211129161310.GE28560@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Sterba <dsterba@suse.com>,
+        linux-btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <cover.1637940049.git.dsterba@suse.com>
+ <CAHk-=wia6jNRQDm51wNf2X2cNGeN+5Uz3DWQ2bgnGyVRK4LRJA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wia6jNRQDm51wNf2X2cNGeN+5Uz3DWQ2bgnGyVRK4LRJA@mail.gmail.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All the calls to mod_objcg_mlstate(), get_obj_stock() and put_obj_stock()
-are done by functions defined within the same "#ifdef CONFIG_MEMCG_KMEM"
-compilation block. When CONFIG_MEMCG_KMEM isn't defined, the following
-compilation warnings will be issued [1] and [2].
+On Fri, Nov 26, 2021 at 12:48:15PM -0800, Linus Torvalds wrote:
+> On Fri, Nov 26, 2021 at 7:42 AM David Sterba <dsterba@suse.com> wrote:
+> >
+> > one more fix to the lzo code, a missing put_page causing memory leaks
+> > when some error branches are taken.
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-5.16-rc2-tag
+> 
+> Hmm.
+> 
+> pr-tracker-bot didn't react to this one, and it wasn't obvious why.
+> 
+> Until I started looking closer. You claim:
+> 
+> > for you to fetch changes up to 504d851ab360dc00e2163acef2e200ea69ac800a:
+> >
+> >   btrfs: fix the memory leak caused in lzo_compress_pages() (2021-11-26 14:32:40 +0100)
+> 
+> but in fact it's commit daf87e953527, not as the pull request claims
+> 504d851ab360..
+> 
+> And no, it's not the tag either, that was d0a295f521e2.
+> 
+> The diffstat and the shortlog matched, so I had pulled it without
+> noticing. But something went wrong in there in the pull request.
 
-  mm/memcontrol.c:785:20: warning: unused function 'mod_objcg_mlstate'
-  mm/memcontrol.c:2113:33: warning: unused function 'get_obj_stock'
-
-Fix these warning by moving those functions to under the same
-CONFIG_MEMCG_KMEM compilation block. There is no functional change.
-
-[1] https://lore.kernel.org/lkml/202111272014.WOYNLUV6-lkp@intel.com/
-[2] https://lore.kernel.org/lkml/202111280551.LXsWYt1T-lkp@intel.com/
-
-Fixes: 559271146efc ("mm/memcg: optimize user context object stock access")
-Fixes: 68ac5b3c8db2 ("mm/memcg: cache vmstat data in percpu memcg_stock_pcp")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- mm/memcontrol.c | 106 ++++++++++++++++++++++++------------------------
- 1 file changed, 53 insertions(+), 53 deletions(-)
-
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 6863a834ed42..2ed5f2a0879d 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -776,24 +776,6 @@ void __mod_lruvec_kmem_state(void *p, enum node_stat_item idx, int val)
- 	rcu_read_unlock();
- }
- 
--/*
-- * mod_objcg_mlstate() may be called with irq enabled, so
-- * mod_memcg_lruvec_state() should be used.
-- */
--static inline void mod_objcg_mlstate(struct obj_cgroup *objcg,
--				     struct pglist_data *pgdat,
--				     enum node_stat_item idx, int nr)
--{
--	struct mem_cgroup *memcg;
--	struct lruvec *lruvec;
--
--	rcu_read_lock();
--	memcg = obj_cgroup_memcg(objcg);
--	lruvec = mem_cgroup_lruvec(memcg, pgdat);
--	mod_memcg_lruvec_state(lruvec, idx, nr);
--	rcu_read_unlock();
--}
--
- /**
-  * __count_memcg_events - account VM events in a cgroup
-  * @memcg: the memory cgroup
-@@ -2137,41 +2119,6 @@ static bool obj_stock_flush_required(struct memcg_stock_pcp *stock,
- }
- #endif
- 
--/*
-- * Most kmem_cache_alloc() calls are from user context. The irq disable/enable
-- * sequence used in this case to access content from object stock is slow.
-- * To optimize for user context access, there are now two object stocks for
-- * task context and interrupt context access respectively.
-- *
-- * The task context object stock can be accessed by disabling preemption only
-- * which is cheap in non-preempt kernel. The interrupt context object stock
-- * can only be accessed after disabling interrupt. User context code can
-- * access interrupt object stock, but not vice versa.
-- */
--static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
--{
--	struct memcg_stock_pcp *stock;
--
--	if (likely(in_task())) {
--		*pflags = 0UL;
--		preempt_disable();
--		stock = this_cpu_ptr(&memcg_stock);
--		return &stock->task_obj;
--	}
--
--	local_irq_save(*pflags);
--	stock = this_cpu_ptr(&memcg_stock);
--	return &stock->irq_obj;
--}
--
--static inline void put_obj_stock(unsigned long flags)
--{
--	if (likely(in_task()))
--		preempt_enable();
--	else
--		local_irq_restore(flags);
--}
--
- /**
-  * consume_stock: Try to consume stocked charge on this cpu.
-  * @memcg: memcg to consume from.
-@@ -2816,6 +2763,59 @@ static struct mem_cgroup *get_mem_cgroup_from_objcg(struct obj_cgroup *objcg)
-  */
- #define OBJCGS_CLEAR_MASK	(__GFP_DMA | __GFP_RECLAIMABLE | __GFP_ACCOUNT)
- 
-+/*
-+ * Most kmem_cache_alloc() calls are from user context. The irq disable/enable
-+ * sequence used in this case to access content from object stock is slow.
-+ * To optimize for user context access, there are now two object stocks for
-+ * task context and interrupt context access respectively.
-+ *
-+ * The task context object stock can be accessed by disabling preemption only
-+ * which is cheap in non-preempt kernel. The interrupt context object stock
-+ * can only be accessed after disabling interrupt. User context code can
-+ * access interrupt object stock, but not vice versa.
-+ */
-+static inline struct obj_stock *get_obj_stock(unsigned long *pflags)
-+{
-+	struct memcg_stock_pcp *stock;
-+
-+	if (likely(in_task())) {
-+		*pflags = 0UL;
-+		preempt_disable();
-+		stock = this_cpu_ptr(&memcg_stock);
-+		return &stock->task_obj;
-+	}
-+
-+	local_irq_save(*pflags);
-+	stock = this_cpu_ptr(&memcg_stock);
-+	return &stock->irq_obj;
-+}
-+
-+static inline void put_obj_stock(unsigned long flags)
-+{
-+	if (likely(in_task()))
-+		preempt_enable();
-+	else
-+		local_irq_restore(flags);
-+}
-+
-+/*
-+ * mod_objcg_mlstate() may be called with irq enabled, so
-+ * mod_memcg_lruvec_state() should be used.
-+ */
-+static inline void mod_objcg_mlstate(struct obj_cgroup *objcg,
-+				     struct pglist_data *pgdat,
-+				     enum node_stat_item idx, int nr)
-+{
-+	struct mem_cgroup *memcg;
-+	struct lruvec *lruvec;
-+
-+	rcu_read_lock();
-+	memcg = obj_cgroup_memcg(objcg);
-+	lruvec = mem_cgroup_lruvec(memcg, pgdat);
-+	mod_memcg_lruvec_state(lruvec, idx, nr);
-+	rcu_read_unlock();
-+}
-+
- int memcg_alloc_page_obj_cgroups(struct page *page, struct kmem_cache *s,
- 				 gfp_t gfp, bool new_page)
- {
--- 
-2.27.0
-
+Possible explanation: I had problems pushing to k.org repo from work
+machine (ssh timeout, fetching worked) so I pushed it from a different
+one. The branch to pull was recreated from the same commit, with id
+daf87e953527b03c0b and pushed to k.org but I must have kept the previous
+for-5.16-rc2 branch without update when preparing the pull request mail.

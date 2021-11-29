@@ -2,88 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BF74614D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A582A4614D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242216AbhK2MRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:17:37 -0500
-Received: from cpanel.siel.si ([46.19.9.99]:53930 "EHLO cpanel.siel.si"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234457AbhK2MPf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:15:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
-        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=ViBlr2ET0ChVWPO5jDyMBAX+WCiIakHViFVfkY+8k1Q=; b=COWMoJDH7mCbKKjsBARm0O5BYp
-        c+HPp2TUxJs5fWG44WHk08UxzthLjM6ba2Da8c2wIaRVZMv5cys5TL1Oy3ttLfYAG1ywxcxd/5dLM
-        65ZcZNor0vhNBLiEs4MfoRUgp8froUOEi0frnu1M1n7pipQ6+K3eAf0/nauw+rtHQIdleO7Epko4q
-        K2ihjsdoPTGUj9PZyXzOyM+oUH4SOpjEJt7nVJxYApmBW3YwmSEpvEUcC2WejsROXMzREinusx6lm
-        MwTZAfrYixd/rWgNPciZWokMCDBslihPUhKIJ/GhuBVgXw5VH6hKhrqgy67rJmuBpxARgqtx9Mn2B
-        l1W0qO5A==;
-Received: from [89.212.21.243] (port=59668 helo=[192.168.69.215])
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1mrfW0-00F5oN-K6; Mon, 29 Nov 2021 13:12:12 +0100
-Subject: Re: [PATCH 2/2] watchdog: da9062: reset board on watchdog timeout
-To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
-        Support Opensource <Support.Opensource@diasemi.com>,
-        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
-Cc:     "y.bas@phytec.de" <y.bas@phytec.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20211124083258.2606511-1-andrej.picej@norik.com>
- <20211124083258.2606511-2-andrej.picej@norik.com>
- <DB9PR10MB4652529FAC6253C266B172EF80639@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-From:   Andrej Picej <andrej.picej@norik.com>
-Message-ID: <b65c9c58-485d-1735-bda2-e750ee8d8a8a@norik.com>
-Date:   Mon, 29 Nov 2021 13:12:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S244226AbhK2MRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 07:17:54 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:57904 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236912AbhK2MPx (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 07:15:53 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 655256131D;
+        Mon, 29 Nov 2021 12:12:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 289B2C53FCE;
+        Mon, 29 Nov 2021 12:12:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638187954;
+        bh=J6RU2160OUE42YClmwCyG+Es52HOmnCZuL2GlsaaDUA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YPRGsL++uiB3n5nNE5PzP2RGHUyBDokqG/NKvrtScM9Oh4RKIMg86l5nanCG7PrFx
+         iFMbwUcqhy8fRD/W++CIRzMnk0Ptf91HS6XtY7JReJiexj3VhWRdau+eg+Ij/GZU2F
+         2bOcooFnAgY59Yql6MD9P700Q+vT0NRVCUwlUwyRb5NAO+UY7RvmxyHtFQEFcd5uts
+         S8+zK4cvkKzcXZA1T141wTP7p2XzALwsLeEbN9ZWYIH04ccR125TZgrvTPiSqtKfil
+         V1uvWJj9SyRzRCjoD2qtCwvxRowyesZwEkIvV8gS4jJlxbWCiImkx31eBObYUovW64
+         xi4aJxt5yV8CA==
+Date:   Mon, 29 Nov 2021 13:12:31 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Alain Volmat <alain.volmat@foss.st.com>
+Cc:     pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
+        linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
+Subject: Re: [PATCH 1/4] i2c: stm32f7: flush TX FIFO upon transfer errors
+Message-ID: <YaTDr7tFo844UAIf@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
+        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
+References: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
+ <1632151292-18503-2-git-send-email-alain.volmat@foss.st.com>
 MIME-Version: 1.0
-In-Reply-To: <DB9PR10MB4652529FAC6253C266B172EF80639@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1sYfu5XiG+wi/5C6"
+Content-Disposition: inline
+In-Reply-To: <1632151292-18503-2-git-send-email-alain.volmat@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
 
-On 26. 11. 21 14:28, Adam Thomson wrote:
-> 
-> I'm a little concerned about forcing this change in the driver. There may be
-> platforms which don't want the PMIC to perform a full reset through OTP re-read
-> and if we hard code this change then that's impacting those platforms. If we
-> want/need this then I think it should probably be a DT binding for da9061/2
-> which then indicates the behaviour we want.
+--1sYfu5XiG+wi/5C6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Ok, I see the impact this might have on the platforms that are relying 
-on the current default setting. I will start on the DT binding 
-implementation and submit a new patch.
+On Mon, Sep 20, 2021 at 05:21:29PM +0200, Alain Volmat wrote:
+> While handling an error during transfer (ex: NACK), it could
+> happen that the driver has already written data into TXDR
+> before the transfer get stopped.
+> This commit add TXDR Flush after end of transfer in case of error to
+> avoid sending a wrong data on any other slave upon next transfer.
+>=20
+> Fixes: aeb068c57214 ("i2c: i2c-stm32f7: add driver")
+>=20
+> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
 
-> 
-> NRES_MODE bit also plays a part here as it controls whether or not the nRESET
-> line state is changed as part of the power-down/up process. I'm assuming for
-> your setup this bit is 0?
-> 
-We leave NRES_MODE as it is, 0 by default I guess? So do you want a 
-separate dt binding for NRES_MODE?
+Applied to for-current, thanks!
 
-BR,
-Andrej
+
+--1sYfu5XiG+wi/5C6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkw68ACgkQFA3kzBSg
+KbY0GQ/9FflxoUzCZMy+SZ4u/71HEEbXOxCS4MJG2HYHtPtgSgzzXqHEnPkkO7y1
+3w0wztsBDOVyam0ooiwOgYaP2sQmB3WPFnz3e3OcV2nXgr7Y9MravpnwKF9LO6Lq
+tywOzSI/MVbuRQeb2RlzGyIQ0l3Cbm/rzKoc1bPmhklD6j0qzHV4EH+HQpSHbSZy
+sehUSx3tA8KL8CtGr9Nr2mwj3d3rtjHXB5SLzR3tPH+0ScALH/E3B3OUK69xUaHz
+crKTFwdQL8Rx2XNsyRbGpO3LKanzcu36iTUZGGo5OI8JOh6eD4O8ft0HSId4wIr1
+56fiIUU84iVh6cTPWhSOsHFE46w+bxiTgtqR3x5KiWUSFTf1VljdVKW/e38d55M0
+CY69kMcYirqiOtrsdHpYGDjUZ/5QWI8zNxYTKVuln1JGIcv3sZF9U6yTEdbUzPbG
+GJ/vatVo7LJJlFoFrxZma40ozkUUp+Xb19yN6lxlk/w08N0lRyDyxu0gCHV7Ho8A
+A8gODXZDfw9POXXJPXSf2CZzoN9myMiEks1U33JmbLlNUZA012x9mU2V3Zk0Pbi7
+r0EEngpsrnXeH6laHBTHdjXTH2fSOLP6uxA0GDZwhz1+OuIrhDvHSmhROnjmtNWj
+gbt0uIPbT+BWcveNKvB7pBkJ0uAtsrP/PItvYm1k8aS9qQva99E=
+=tguV
+-----END PGP SIGNATURE-----
+
+--1sYfu5XiG+wi/5C6--

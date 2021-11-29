@@ -2,114 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C47546209A
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CED44620A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 20:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234348AbhK2TiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:38:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48808 "EHLO
+        id S1353296AbhK2Tjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 14:39:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbhK2TgS (ORCPT
+        with ESMTP id S1347496AbhK2Thm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 14:36:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70093C0619FF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:52:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59011B811EF
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5199CC53FAD;
-        Mon, 29 Nov 2021 15:52:25 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 16:52:21 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     syzbot <syzbot+dfac92a50024b54acaa4@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, cxfcosmos@gmail.com,
-        ebiederm@xmission.com, legion@kernel.org,
-        linux-kernel@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KMSAN: uninit-value in from_kuid
-Message-ID: <20211129155221.fvbtsrz6zumo5bpf@wittgenstein>
-References: <000000000000a0d53f05d1c72a4c@google.com>
- <20211129114713.at2mo64hgnlmkx3x@wittgenstein>
- <CAG_fn=UGPTizsqgvYNnVkPK9TeXhyyi8f92Qnpy=cN7S4JzeCw@mail.gmail.com>
+        Mon, 29 Nov 2021 14:37:42 -0500
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241E5C061746;
+        Mon, 29 Nov 2021 07:53:23 -0800 (PST)
+Received: by mail-oi1-x22a.google.com with SMTP id m6so35455305oim.2;
+        Mon, 29 Nov 2021 07:53:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=wTOygh+0IsyH0qrmJyNeFfxY+htXI1jpneAU8FF9FOs=;
+        b=L693j74MxYBP4Aod5/b+4pYBkglwlM14q5nlN7j3Jr86pFqQ+u3IBQFr619APJyDdH
+         jiYAf/af4ptjFF/owb0oyVZDNvLm4tt3YQkdJ+oIc5EOyF7DEtb86gJH9C2FmfauHUB9
+         /Y68mVKZw/E6UiVXq64qJM6hDX5IOswrpc+EnVTGy/Q5dSvjgEiWfqwXKrMiEsBA/g9G
+         AXCgWz1mu/Dgs9oP2yOTXaC8El2yMvt0iHJsVIYB69HfRRhLBIZNCPc+Ro5JMcrkmCzI
+         MxVgbcZRzPmXQCWT6HqVEdPPG30Xmpfg23AL0JdbeDokwispzlPxE5iRp++jThuacSMs
+         dixg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=wTOygh+0IsyH0qrmJyNeFfxY+htXI1jpneAU8FF9FOs=;
+        b=3N0cuW7oNOL3EY3v6MgBWNf1rLiteR9afGM3bzAe8ftpi7qqOEIZdMZGe+h3RQ+EeY
+         yylO5JfwOjzb0YIVqhz3W9qAHIZfE9ah+bTxjNpJKxQxxwmvaKzwbbZ0Kf47V33kSEpJ
+         z6Mqb37AsSZ02GEq6jKIX6DgHHkvjBR2KBM+fCF3SG7B7Ae9KcYv844kY45Uzh9bhbP7
+         Ep/o/aqyzqxO2UMHqdF1Y954sbWlyVW2was/F8AmZ2nWWBNRxNxRgBblOUmAdbkkA+jy
+         Op9GbIXUP7d5s4nQY8Cets+HzhwNlPtM8bqWnXDuP6OSieAeHzAOCBwnCm8Yj8nEQxxG
+         eBJA==
+X-Gm-Message-State: AOAM533WvSjrZU0s8j1Ntn6y1FPAmdj0IRF1O2c93tokpjSGs4c98056
+        7765Wz1HHMfCcNw3tU0EcYc=
+X-Google-Smtp-Source: ABdhPJzgHpqvWtAVCwqamg7dqhN+hD7Mt7mP+SN6WQJ1hT/JAZXfIaftIdqMypINH5ou85GolEXKcA==
+X-Received: by 2002:a05:6808:a03:: with SMTP id n3mr40226384oij.125.1638201202344;
+        Mon, 29 Nov 2021 07:53:22 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id bb8sm3063060oib.9.2021.11.29.07.53.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 07:53:21 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 29 Nov 2021 07:53:20 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Luca Ceresoli <luca@lucaceresoli.net>
+Cc:     linux-kernel@vger.kernel.org, Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        Chiwoong Byun <woong.byun@samsung.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH v4 7/9] watchdog: max77620: add support for the max77714
+ variant
+Message-ID: <20211129155320.GA2761477@roeck-us.net>
+References: <20211120155707.4019487-1-luca@lucaceresoli.net>
+ <20211120155707.4019487-8-luca@lucaceresoli.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAG_fn=UGPTizsqgvYNnVkPK9TeXhyyi8f92Qnpy=cN7S4JzeCw@mail.gmail.com>
+In-Reply-To: <20211120155707.4019487-8-luca@lucaceresoli.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 04:16:21PM +0100, Alexander Potapenko wrote:
-> On Mon, Nov 29, 2021 at 12:47 PM Christian Brauner
-> <christian.brauner@ubuntu.com> wrote:
-> >
-> > On Sat, Nov 27, 2021 at 07:50:27AM -0800, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    425295055ce6 kmsan: core: address comments to kmsan-checks.h
-> > > git tree:       https://github.com/google/kmsan.git master
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1640209ab00000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=2d142cdf4204061
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=dfac92a50024b54acaa4
-> > > compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
-> > > userspace arch: i386
-> > >
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+dfac92a50024b54acaa4@syzkaller.appspotmail.com
-> > >
-> > > =====================================================
-> > > BUG: KMSAN: uninit-value in map_id_up_base kernel/user_namespace.c:335 [inline]
-> > > BUG: KMSAN: uninit-value in map_id_up kernel/user_namespace.c:365 [inline]
-> > > BUG: KMSAN: uninit-value in from_kuid+0x51d/0xbd0 kernel/user_namespace.c:413
-> > >  map_id_up_base kernel/user_namespace.c:335 [inline]
-> > >  map_id_up kernel/user_namespace.c:365 [inline]
-> > >  from_kuid+0x51d/0xbd0 kernel/user_namespace.c:413
-> > >  p9pdu_vwritef+0x15ab/0x5120 net/9p/protocol.c:398
-> > >  p9pdu_writef+0x23a/0x280 net/9p/protocol.c:539
-> > >  p9pdu_vwritef+0x21f0/0x5120 net/9p/protocol.c:490
-> > >  p9_client_prepare_req+0xa4b/0xff0 net/9p/client.c:709
-> > >  p9_client_rpc+0x278/0x1410 net/9p/client.c:740
-> > >  p9_client_setattr+0x115/0x2c0 net/9p/client.c:1899
-> > >  v9fs_vfs_setattr_dotl+0x7e2/0xd70 fs/9p/vfs_inode_dotl.c:590
-> > >  notify_change+0x1fe3/0x2170 fs/attr.c:410
-> > >  vfs_utimes+0x8aa/0xc70 fs/utimes.c:65
-> > >  do_utimes_path fs/utimes.c:98 [inline]
-> > >  do_utimes fs/utimes.c:144 [inline]
-> > >  __do_sys_utime32 fs/utimes.c:247 [inline]
-> > >  __se_sys_utime32+0x386/0x520 fs/utimes.c:235
-> > >  __ia32_sys_utime32+0x91/0xc0 fs/utimes.c:235
-> > >  do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
-> > >  __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
-> > >  do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
-> > >  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
-> > >  entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-> > >
-> > > Uninit was stored to memory at:
-> > >  v9fs_vfs_setattr_dotl+0x58a/0xd70 fs/9p/vfs_inode_dotl.c:567
-> >
-> > That's a bug in the 9P2000.L implementation of .setattr.
-> > It copies struct iattr values without checking ia_valid. That's causing
-> > uninitalized memory to be copied. I sent a fix to 9p for this.
-> >
-> > Christian
+On Sat, Nov 20, 2021 at 04:57:05PM +0100, Luca Ceresoli wrote:
+> The MAX77714 is a MFD chip whose watchdog has the same programming
+> procedures as the MAX77620 watchdog, but most register offsets and bit
+> masks are different, as well as some features.
 > 
-> Christian,
+> Support the MAX77714 watchdog by adding a variant description table holding
+> the differences.
 > 
-> Do you think it makes sense to request a CVE for this issue?
-> If so, were you going to request one? Otherwise I can do that.
+> All the features implemented by this driver are available on the MAX77714
+> except for the lack of a WDTOFFC bit. Instead of using a "HAS_*" flag we
+> handle this by holding in the cnfg_glbl2_cfg_bits struct field the bits
+> (i.e. the features) to enable in the CNFG_GLBL2 register. These bits differ
+> among the two models. This implementation allows to avoid any conditional
+> code, keeping the execution flow unchanged.
+> 
+> Signed-off-by: Luca Ceresoli <luca@lucaceresoli.net>
+> ---
+> 
+> This patch is new in v4. It replaces v3 patch 7 ("watchdog: max77714: add
+> driver for the watchdog in the MAX77714 PMIC") by adding MAX77714 wdog
+> support to the existing MAX77620 wdog driver instead of adding a new
+> driver. Suggested by Guenter Roeck and Krzysztof Kozlowski.
+> ---
+>  drivers/watchdog/Kconfig        |  2 +-
+>  drivers/watchdog/max77620_wdt.c | 96 +++++++++++++++++++++++++--------
+>  2 files changed, 75 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
+> index a6d97f30325a..f920ad271dde 100644
+> --- a/drivers/watchdog/Kconfig
+> +++ b/drivers/watchdog/Kconfig
+> @@ -677,7 +677,7 @@ config MAX63XX_WATCHDOG
+>  
+>  config MAX77620_WATCHDOG
+>  	tristate "Maxim Max77620 Watchdog Timer"
+> -	depends on MFD_MAX77620 || COMPILE_TEST
+> +	depends on MFD_MAX77620 || MFD_MAX77714 || COMPILE_TEST
+>  	select WATCHDOG_CORE
+>  	help
+>  	  This is the driver for the Max77620 watchdog timer.
+> diff --git a/drivers/watchdog/max77620_wdt.c b/drivers/watchdog/max77620_wdt.c
+> index be6a53c30002..06b48295fab6 100644
+> --- a/drivers/watchdog/max77620_wdt.c
+> +++ b/drivers/watchdog/max77620_wdt.c
+> @@ -3,8 +3,10 @@
+>   * Maxim MAX77620 Watchdog Driver
+>   *
+>   * Copyright (C) 2016 NVIDIA CORPORATION. All rights reserved.
+> + * Copyright (C) 2021 Luca Ceresoli
+>   *
+>   * Author: Laxman Dewangan <ldewangan@nvidia.com>
+> + * Author: Luca Ceresoli <luca@lucaceresoli.net>
+>   */
+>  
+>  #include <linux/err.h>
+> @@ -13,6 +15,7 @@
+>  #include <linux/module.h>
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/mfd/max77620.h>
+> +#include <linux/mfd/max77714.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+> @@ -20,17 +23,66 @@
+>  
+>  static bool nowayout = WATCHDOG_NOWAYOUT;
+>  
+> +/**
+> + * struct max77620_variant - Data specific to a chip variant
+> + * @wdt_info:            watchdog descriptor
+> + * @reg_onoff_cnfg2:     ONOFF_CNFG2 register offset
+> + * @reg_cnfg_glbl2:      CNFG_GLBL2 register offset
+> + * @reg_cnfg_glbl3:      CNFG_GLBL3 register offset
+> + * @wdtc_mask:           WDTC bit mask in CNFG_GLBL3 (=bits to update to ping the watchdog)
+> + * @bit_wd_rst_wk:       WD_RST_WK bit offset within ONOFF_CNFG2
+> + * @cnfg_glbl2_cfg_bits: configuration bits to enable in CNFG_GLBL2 register
+> + */
+> +struct max77620_variant {
+> +	const struct watchdog_info wdt_info;
+> +	u8 reg_onoff_cnfg2;
+> +	u8 reg_cnfg_glbl2;
+> +	u8 reg_cnfg_glbl3;
+> +	u8 wdtc_mask;
+> +	u8 bit_wd_rst_wk;
+> +	u8 cnfg_glbl2_cfg_bits;
+> +};
+> +
+>  struct max77620_wdt {
+>  	struct device			*dev;
+>  	struct regmap			*rmap;
+> +	const struct max77620_variant	*drv_data;
+>  	struct watchdog_device		wdt_dev;
+>  };
+>  
+> +static const struct max77620_variant max77620_wdt_data = {
+> +	.wdt_info = {
+> +		.identity = "max77620-watchdog",
+> +		.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+> +	},
 
-I mean, it's neither my bug nor did I detect it, I just fixed it. :)
-If you would like this to be a CVE then sure go ahead.
+That does not have to be, and should not be, part of device specific data,
+just because of the identity string. Either keep the current identity string,
+mark max77620_wdt_info as __ro_after_init and overwrite the identity string
+there during probe, or add the structure to max77620_wdt and fill it out there.
 
-(I don't understand the rules around this well enough tbh. For example,
-during the last merge window there were at least 3 or 4 NULL pointer
-derefs or UAFs in newly added but already released code. Should all of
-these get a CVE without a working exploit?)
+Guenter
+
+> +	.reg_onoff_cnfg2     = MAX77620_REG_ONOFFCNFG2,
+> +	.reg_cnfg_glbl2      = MAX77620_REG_CNFGGLBL2,
+> +	.reg_cnfg_glbl3      = MAX77620_REG_CNFGGLBL3,
+> +	.wdtc_mask           = MAX77620_WDTC_MASK,
+> +	.bit_wd_rst_wk       = MAX77620_ONOFFCNFG2_WD_RST_WK,
+> +	/* Set WDT clear in OFF and sleep mode */
+> +	.cnfg_glbl2_cfg_bits = MAX77620_WDTSLPC | MAX77620_WDTOFFC,
+> +};
+> +
+> +static const struct max77620_variant max77714_wdt_data = {
+> +	.wdt_info = {
+> +		.identity = "max77714-watchdog",
+> +		.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+> +	},
+> +	.reg_onoff_cnfg2     = MAX77714_CNFG2_ONOFF,
+> +	.reg_cnfg_glbl2      = MAX77714_CNFG_GLBL2,
+> +	.reg_cnfg_glbl3      = MAX77714_CNFG_GLBL3,
+> +	.wdtc_mask           = MAX77714_WDTC,
+> +	.bit_wd_rst_wk       = MAX77714_WD_RST_WK,
+> +	/* Set WDT clear in sleep mode (there is no WDTOFFC on MAX77714) */
+> +	.cnfg_glbl2_cfg_bits = MAX77714_WDTSLPC,
+> +};
+> +
+>  static int max77620_wdt_start(struct watchdog_device *wdt_dev)
+>  {
+>  	struct max77620_wdt *wdt = watchdog_get_drvdata(wdt_dev);
+>  
+> -	return regmap_update_bits(wdt->rmap, MAX77620_REG_CNFGGLBL2,
+> +	return regmap_update_bits(wdt->rmap, wdt->drv_data->reg_cnfg_glbl2,
+>  				  MAX77620_WDTEN, MAX77620_WDTEN);
+>  }
+>  
+> @@ -38,7 +90,7 @@ static int max77620_wdt_stop(struct watchdog_device *wdt_dev)
+>  {
+>  	struct max77620_wdt *wdt = watchdog_get_drvdata(wdt_dev);
+>  
+> -	return regmap_update_bits(wdt->rmap, MAX77620_REG_CNFGGLBL2,
+> +	return regmap_update_bits(wdt->rmap, wdt->drv_data->reg_cnfg_glbl2,
+>  				  MAX77620_WDTEN, 0);
+>  }
+>  
+> @@ -46,8 +98,8 @@ static int max77620_wdt_ping(struct watchdog_device *wdt_dev)
+>  {
+>  	struct max77620_wdt *wdt = watchdog_get_drvdata(wdt_dev);
+>  
+> -	return regmap_update_bits(wdt->rmap, MAX77620_REG_CNFGGLBL3,
+> -				  MAX77620_WDTC_MASK, 0x1);
+> +	return regmap_update_bits(wdt->rmap, wdt->drv_data->reg_cnfg_glbl3,
+> +				  wdt->drv_data->wdtc_mask, 0x1);
+>  }
+>  
+>  static int max77620_wdt_set_timeout(struct watchdog_device *wdt_dev,
+> @@ -80,12 +132,12 @@ static int max77620_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>  		break;
+>  	}
+>  
+> -	ret = regmap_update_bits(wdt->rmap, MAX77620_REG_CNFGGLBL3,
+> -				 MAX77620_WDTC_MASK, 0x1);
+> +	ret = regmap_update_bits(wdt->rmap, wdt->drv_data->reg_cnfg_glbl3,
+> +				 wdt->drv_data->wdtc_mask, 0x1);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	ret = regmap_update_bits(wdt->rmap, MAX77620_REG_CNFGGLBL2,
+> +	ret = regmap_update_bits(wdt->rmap, wdt->drv_data->reg_cnfg_glbl2,
+>  				 MAX77620_TWD_MASK, regval);
+>  	if (ret < 0)
+>  		return ret;
+> @@ -95,11 +147,6 @@ static int max77620_wdt_set_timeout(struct watchdog_device *wdt_dev,
+>  	return 0;
+>  }
+>  
+> -static const struct watchdog_info max77620_wdt_info = {
+> -	.identity = "max77620-watchdog",
+> -	.options = WDIOF_SETTIMEOUT | WDIOF_KEEPALIVEPING | WDIOF_MAGICCLOSE,
+> -};
+> -
+>  static const struct watchdog_ops max77620_wdt_ops = {
+>  	.start		= max77620_wdt_start,
+>  	.stop		= max77620_wdt_stop,
+> @@ -109,6 +156,7 @@ static const struct watchdog_ops max77620_wdt_ops = {
+>  
+>  static int max77620_wdt_probe(struct platform_device *pdev)
+>  {
+> +	const struct platform_device_id *id = platform_get_device_id(pdev);
+>  	struct device *dev = &pdev->dev;
+>  	struct max77620_wdt *wdt;
+>  	struct watchdog_device *wdt_dev;
+> @@ -120,6 +168,8 @@ static int max77620_wdt_probe(struct platform_device *pdev)
+>  		return -ENOMEM;
+>  
+>  	wdt->dev = dev;
+> +	wdt->drv_data = (const struct max77620_variant *) id->driver_data;
+> +
+>  	wdt->rmap = dev_get_regmap(dev->parent, NULL);
+>  	if (!wdt->rmap) {
+>  		dev_err(wdt->dev, "Failed to get parent regmap\n");
+> @@ -127,7 +177,7 @@ static int max77620_wdt_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	wdt_dev = &wdt->wdt_dev;
+> -	wdt_dev->info = &max77620_wdt_info;
+> +	wdt_dev->info = &wdt->drv_data->wdt_info;
+>  	wdt_dev->ops = &max77620_wdt_ops;
+>  	wdt_dev->min_timeout = 2;
+>  	wdt_dev->max_timeout = 128;
+> @@ -136,25 +186,25 @@ static int max77620_wdt_probe(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, wdt);
+>  
+>  	/* Enable WD_RST_WK - WDT expire results in a restart */
+> -	ret = regmap_update_bits(wdt->rmap, MAX77620_REG_ONOFFCNFG2,
+> -				 MAX77620_ONOFFCNFG2_WD_RST_WK,
+> -				 MAX77620_ONOFFCNFG2_WD_RST_WK);
+> +	ret = regmap_update_bits(wdt->rmap, wdt->drv_data->reg_onoff_cnfg2,
+> +				 wdt->drv_data->bit_wd_rst_wk,
+> +				 wdt->drv_data->bit_wd_rst_wk);
+>  	if (ret < 0) {
+>  		dev_err(wdt->dev, "Failed to set WD_RST_WK: %d\n", ret);
+>  		return ret;
+>  	}
+>  
+> -	/* Set WDT clear in OFF and sleep mode */
+> -	ret = regmap_update_bits(wdt->rmap, MAX77620_REG_CNFGGLBL2,
+> -				 MAX77620_WDTOFFC | MAX77620_WDTSLPC,
+> -				 MAX77620_WDTOFFC | MAX77620_WDTSLPC);
+> +	/* Set the "auto WDT clear" bits available on the chip */
+> +	ret = regmap_update_bits(wdt->rmap, wdt->drv_data->reg_cnfg_glbl2,
+> +				 wdt->drv_data->cnfg_glbl2_cfg_bits,
+> +				 wdt->drv_data->cnfg_glbl2_cfg_bits);
+>  	if (ret < 0) {
+>  		dev_err(wdt->dev, "Failed to set WDT OFF mode: %d\n", ret);
+>  		return ret;
+>  	}
+>  
+>  	/* Check if WDT running and if yes then set flags properly */
+> -	ret = regmap_read(wdt->rmap, MAX77620_REG_CNFGGLBL2, &regval);
+> +	ret = regmap_read(wdt->rmap, wdt->drv_data->reg_cnfg_glbl2, &regval);
+>  	if (ret < 0) {
+>  		dev_err(wdt->dev, "Failed to read WDT CFG register: %d\n", ret);
+>  		return ret;
+> @@ -186,7 +236,8 @@ static int max77620_wdt_probe(struct platform_device *pdev)
+>  }
+>  
+>  static const struct platform_device_id max77620_wdt_devtype[] = {
+> -	{ .name = "max77620-watchdog", },
+> +	{ "max77620-watchdog", (kernel_ulong_t)&max77620_wdt_data },
+> +	{ "max77714-watchdog", (kernel_ulong_t)&max77714_wdt_data },
+>  	{ },
+>  };
+>  MODULE_DEVICE_TABLE(platform, max77620_wdt_devtype);
+> @@ -208,4 +259,5 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started "
+>  	"(default=" __MODULE_STRING(WATCHDOG_NOWAYOUT) ")");
+>  
+>  MODULE_AUTHOR("Laxman Dewangan <ldewangan@nvidia.com>");
+> +MODULE_AUTHOR("Luca Ceresoli <luca@lucaceresoli.net>");
+>  MODULE_LICENSE("GPL v2");

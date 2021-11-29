@@ -2,93 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F5846187E
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 770824615CC
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378333AbhK2Obz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:31:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348983AbhK2O3L (ORCPT
+        id S1346202AbhK2NKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:10:09 -0500
+Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:42404 "EHLO
+        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1377554AbhK2NIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:29:11 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAEEC0048D8;
-        Mon, 29 Nov 2021 05:04:45 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638191084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SrMx0EikLor0m9R8RMLCsVyJFUvZ7DWG9Nt3FfGUjHw=;
-        b=Z5w7/WyffNWkPpVy2OwqkWVdnch2IT/5obz3VzycGQuRvXEK+12h3jDmVBGCq36Z9VreAI
-        JkirRTFU2cf9EKwPVMGPoO6yKJO0iKAi3l0aAJfgQXDjIypVGvr8EQsZyWoPztdjN3AWR2
-        JEhcakuIYe/1waQNlHLU5WkmdTtbVrIPo0U5bcLxCa5QHza++5ccIYlzf/i1crGIC56f2a
-        vxfdI6Q3oY8ziLmra6HLeBWIemaiUiSSnje2qAYh0n1/IJu573hE55d3ZXxhfVQoXelytq
-        DV7UDSkDtPhOgMXRXxvGyPfBqqoEix6Na23ZzxT136Ay7DPkAiwi0eaLHmPA+A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638191084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=SrMx0EikLor0m9R8RMLCsVyJFUvZ7DWG9Nt3FfGUjHw=;
-        b=uFEsq4VQIKwpP4IPvBxJj7CH5oO01savZVSv+qKxq28D2EkgSK+FTImT6+XanOuO6wpsZf
-        XOQtUeHRkXGYnuBQ==
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com
-Subject: Re: [patch 14/32] s390/pci: Rework MSI descriptor walk
-In-Reply-To: <22589eefb62ac6f99f576082a65e7987a6761329.camel@linux.ibm.com>
-References: <20211126230957.239391799@linutronix.de>
- <20211126232735.130164978@linutronix.de>
- <22589eefb62ac6f99f576082a65e7987a6761329.camel@linux.ibm.com>
-Date:   Mon, 29 Nov 2021 14:04:43 +0100
-Message-ID: <87fsrfdses.ffs@tglx>
+        Mon, 29 Nov 2021 08:08:07 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R741e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0Uyjobts_1638191085;
+Received: from 30.240.100.124(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Uyjobts_1638191085)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Mon, 29 Nov 2021 21:04:46 +0800
+Message-ID: <138d5b8d-e189-4203-9bd0-c51f05f97a06@linux.alibaba.com>
+Date:   Mon, 29 Nov 2021 21:04:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH] fs: Eliminate compilation warnings for misc
+Content-Language: en-US
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211116080611.31199-1-tianjia.zhang@linux.alibaba.com>
+ <YZPoD0SV8F/QfE1c@casper.infradead.org>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <YZPoD0SV8F/QfE1c@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Niklas,
+Hi Matthew,
 
-On Mon, Nov 29 2021 at 11:31, Niklas Schnelle wrote:
-> On Sat, 2021-11-27 at 02:23 +0100, Thomas Gleixner wrote:
->
-> while the change looks good to me I ran into some trouble trying to
-> test it. I tried with the git repository you linked in the cover
-> letter:
-> git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git msi-v1-part-3
->
-> But with that I get the following linker error on s390:
->
-> s390x-11.2.0-ld: drivers/pci/msi/legacy.o: in function `pci_msi_legacy_setup_msi_irqs':
-> /home/nschnelle/mainline/drivers/pci/msi/legacy.c:72: undefined reference to `msi_device_populate_sysfs'
-> s390x-11.2.0-ld: drivers/pci/msi/legacy.o: in function `pci_msi_legacy_teardown_msi_irqs':
-> /home/nschnelle/mainline/drivers/pci/msi/legacy.c:78: undefined reference to `msi_device_destroy_sysfs'
-> make: *** [Makefile:1161: vmlinux] Error 1
+On 11/17/21 1:19 AM, Matthew Wilcox wrote:
+> On Tue, Nov 16, 2021 at 04:06:11PM +0800, Tianjia Zhang wrote:
+>> Eliminate the following clang compilation warnings by adding or
+>> fixing function comment:
+> 
+> These warnings have nothing to do with clang.  They're produced by
+> scripts/kernel-doc:
+> 
+>                  if (show_warnings($type, $declaration_name) && $param !~ /\./) {
+>                          print STDERR
+>                                "${file}:$.: warning: Function parameter or member '$param' not described in '$declaration_name'\n";
+>                          ++$warnings;
+>                  }
+> 
+> They show up in any W=1 build (which tells you that people are not
+> checking their patches with W=1)
+> 
 
-Yes, that got reported before and I fixed it locally already.
+Yes, there will be this warning when compiling with W=1.
 
-> This is caused by a misspelling of CONFIG_PCI_MSI_ARCH_FALLBACKS
-> (missing the final S) in kernel/irq/msi.c. With that fixed everything
-> builds and MSI IRQs work fine. So with that fixed you have my
->
-> Acked-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>> +++ b/fs/file.c
+>> @@ -645,7 +645,7 @@ EXPORT_SYMBOL(close_fd); /* for ksys_close() */
+>>   
+>>   /**
+>>    * last_fd - return last valid index into fd table
+>> - * @cur_fds: files struct
+>> + * @fdt: fdtable struct
+> 
+> I don't think the word 'struct' there really conveys any meaning.
+> 
+I think this is already a primitive, or is there any better suggestion?
 
-Thanks for testing and dealing with my ineptness.
-
-       tglx
+Kind regards,
+Tianjia

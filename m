@@ -2,94 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B3C54615C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:04:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068594615CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 14:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377517AbhK2NHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 08:07:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48170 "EHLO
+        id S1376963AbhK2NKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 08:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354489AbhK2NFi (ORCPT
+        with ESMTP id S1377623AbhK2NIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 08:05:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADF4C08EB4C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:47:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01AF661290
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:47:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F90DC004E1;
-        Mon, 29 Nov 2021 11:47:16 +0000 (UTC)
-Date:   Mon, 29 Nov 2021 12:47:13 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     syzbot <syzbot+dfac92a50024b54acaa4@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, cxfcosmos@gmail.com,
-        ebiederm@xmission.com, glider@google.com, legion@kernel.org,
-        linux-kernel@vger.kernel.org, serge@hallyn.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KMSAN: uninit-value in from_kuid
-Message-ID: <20211129114713.at2mo64hgnlmkx3x@wittgenstein>
-References: <000000000000a0d53f05d1c72a4c@google.com>
+        Mon, 29 Nov 2021 08:08:13 -0500
+Received: from mail-io1-xd44.google.com (mail-io1-xd44.google.com [IPv6:2607:f8b0:4864:20::d44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D46AC0698DC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:50:41 -0800 (PST)
+Received: by mail-io1-xd44.google.com with SMTP id v23so21013839iom.12
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 03:50:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=rf85IIrYDoX56EbvJwzXLS38sc5yj7QH4axMImYh7js=;
+        b=Q2hyTQehMmTaEpHBXH0QJIEuR/lGrA2JIAtGU8GMPKasZ8BYjU11AQ1gV6XVvADdnG
+         Vf7KbDYbKqgD9jhrKxxBliP4DdxCsSYx1VBOACFaZPRPmGVGxYaCiowtk76FbX974mCq
+         Jikk8RhClvLOTM1TijelKe8o8zh6ujfa2ytQVJ+h6mkTYoglvkBETz2RTpBnQ7wFA1/n
+         giFC1kRAlIA+PuJImNgV2hkMuwtf6KGqmMYVs4GuIQHSZ0HgsJRiMN5C57fWsIzrjMyT
+         YRkqx/c3cbZDblw7/7Uvj1svExldzpnCj6Ddv05goOjZ87qXrVLX2WRTrNXo1ZOqQc1b
+         gJEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=rf85IIrYDoX56EbvJwzXLS38sc5yj7QH4axMImYh7js=;
+        b=b8ttc7egd7zul9ol11GouhPRIt0Bg5erO9nShVWK0PwMktMgjG2aql6LZIAa/drGiL
+         zMwQP+pQr1E0dgqLdvi9T2P1c08Kjkqp6FoIbwbN29xhHu1qp2DWXUMBOzO6C1/8M6P8
+         IY728PDNx2o2hSqDJm3oXHwnzdA02LDliN7CDeqW18hYE1zQIExfXGdVggbCdVU3u2or
+         lOIjutwGHzrz3x7v8yN7PshqqglFvR002MoG0yh/hmGXihUuXO7+Gnn85Pi2IKFM9KOs
+         2sCdCitPKFuUDmvLCL20fPnb7LJGE/HD0a6pvmHLCbDWut/R9S1hNrCX06y07ebjoTBx
+         Dj0g==
+X-Gm-Message-State: AOAM530NTAizHvN7e1+uF9f9L820PgxSQYl6DGmISxaQT/Ol1jWZrS9w
+        ztzVwQ2RH1PmVd/l+g9weQpjCW/ZTVRR9ei7MTY=
+X-Google-Smtp-Source: ABdhPJxspZfTBV2deUV1RzbhnSRfEq5nNZ2pU2PskGGfp5Z+4eAdNHnJtqq53IgQfzNuYBp8IrVBC6Zn7zPl2XTWBpw=
+X-Received: by 2002:a02:a91a:: with SMTP id n26mr65177831jam.46.1638186640500;
+ Mon, 29 Nov 2021 03:50:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <000000000000a0d53f05d1c72a4c@google.com>
+Received: by 2002:a92:d651:0:0:0:0:0 with HTTP; Mon, 29 Nov 2021 03:50:40
+ -0800 (PST)
+Reply-To: mr.sawadogomichel1@gmail.com
+From:   "Mr.Sawadogo Michel" <usmanmushi2018@gmail.com>
+Date:   Mon, 29 Nov 2021 03:50:40 -0800
+Message-ID: <CAAF7X7_hGD=YcydK-nUxAe6sqy2kHoLRaXp5tjBKrUQAkt0jng@mail.gmail.com>
+Subject: I NEED YOUR URGENT RESPONSE
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 07:50:27AM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    425295055ce6 kmsan: core: address comments to kmsan-checks.h
-> git tree:       https://github.com/google/kmsan.git master
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1640209ab00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=2d142cdf4204061
-> dashboard link: https://syzkaller.appspot.com/bug?extid=dfac92a50024b54acaa4
-> compiler:       clang version 14.0.0 (git@github.com:llvm/llvm-project.git 0996585c8e3b3d409494eb5f1cad714b9e1f7fb5), GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+dfac92a50024b54acaa4@syzkaller.appspotmail.com
-> 
-> =====================================================
-> BUG: KMSAN: uninit-value in map_id_up_base kernel/user_namespace.c:335 [inline]
-> BUG: KMSAN: uninit-value in map_id_up kernel/user_namespace.c:365 [inline]
-> BUG: KMSAN: uninit-value in from_kuid+0x51d/0xbd0 kernel/user_namespace.c:413
->  map_id_up_base kernel/user_namespace.c:335 [inline]
->  map_id_up kernel/user_namespace.c:365 [inline]
->  from_kuid+0x51d/0xbd0 kernel/user_namespace.c:413
->  p9pdu_vwritef+0x15ab/0x5120 net/9p/protocol.c:398
->  p9pdu_writef+0x23a/0x280 net/9p/protocol.c:539
->  p9pdu_vwritef+0x21f0/0x5120 net/9p/protocol.c:490
->  p9_client_prepare_req+0xa4b/0xff0 net/9p/client.c:709
->  p9_client_rpc+0x278/0x1410 net/9p/client.c:740
->  p9_client_setattr+0x115/0x2c0 net/9p/client.c:1899
->  v9fs_vfs_setattr_dotl+0x7e2/0xd70 fs/9p/vfs_inode_dotl.c:590
->  notify_change+0x1fe3/0x2170 fs/attr.c:410
->  vfs_utimes+0x8aa/0xc70 fs/utimes.c:65
->  do_utimes_path fs/utimes.c:98 [inline]
->  do_utimes fs/utimes.c:144 [inline]
->  __do_sys_utime32 fs/utimes.c:247 [inline]
->  __se_sys_utime32+0x386/0x520 fs/utimes.c:235
->  __ia32_sys_utime32+0x91/0xc0 fs/utimes.c:235
->  do_syscall_32_irqs_on arch/x86/entry/common.c:114 [inline]
->  __do_fast_syscall_32+0x96/0xf0 arch/x86/entry/common.c:180
->  do_fast_syscall_32+0x34/0x70 arch/x86/entry/common.c:205
->  do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:248
->  entry_SYSENTER_compat_after_hwframe+0x4d/0x5c
-> 
-> Uninit was stored to memory at:
->  v9fs_vfs_setattr_dotl+0x58a/0xd70 fs/9p/vfs_inode_dotl.c:567
+Hello Dear Friend,
 
-That's a bug in the 9P2000.L implementation of .setattr.
-It copies struct iattr values without checking ia_valid. That's causing
-uninitalized memory to be copied. I sent a fix to 9p for this.
+My name is Mr.Sawadogo Michel. I have decided to seek a confidential
+co-operation  with you in the execution of the deal described
+here-under for our both  mutual benefit and I hope you will keep it a
+top secret because of the nature  of the transaction, During the
+course of our bank year auditing, I discovered  an unclaimed/abandoned
+fund, sum total of {US$19.3 Million United State  Dollars} in the bank
+account that belongs to a Saudi Arabia businessman Who unfortunately
+lost his life and entire family in a Motor Accident.
 
-Christian
+Now our bank has been waiting for any of the relatives to come-up for
+the claim but nobody has done that. I personally has been unsuccessful
+in locating any of the relatives, now, I sincerely seek your consent
+to present you as the next of kin / Will Beneficiary to the deceased
+so that the proceeds of this account valued at {US$19.3 Million United
+State Dollars} can be paid to you, which we will share in these
+percentages ratio, 60% to me and 40% to you. All I request is your
+utmost sincere co-operation; trust and maximum confidentiality to
+achieve this project successfully. I have carefully mapped out the
+moralities for execution of this transaction under a legitimate
+arrangement to protect you from any breach of the law both in your
+country and here in Burkina Faso when the fund is being transferred to
+your bank account.
+
+I will have to provide all the relevant document that will be
+requested to indicate that you are the rightful beneficiary of this
+legacy and our bank will release the fund to you without any further
+delay, upon your consideration and acceptance of this offer, please
+send me the following information as stated below so we can proceed
+and get this fund transferred to your designated bank account
+immediately.
+
+-Your Full Name:
+-Your Contact Address:
+-Your direct Mobile telephone Number:
+-Your Date of Birth:
+-Your occupation:
+
+I await your swift response and re-assurance.
+
+Best regards,
+Mr.Sawadogo Michel.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B74462826
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098B546282B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbhK2XVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:21:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S231488AbhK2XWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbhK2XVv (ORCPT
+        with ESMTP id S231294AbhK2XWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:21:51 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AF1C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:18:33 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id 8so18564215pfo.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:18:33 -0800 (PST)
+        Mon, 29 Nov 2021 18:22:13 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70C9C06174A
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:18:51 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id 71so17689527pgb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:18:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+uR2HHqWw2zxt6EFtlx4KZ9cOz9+dmrG6vRUgKtbvHY=;
-        b=QgR/kpWalsPXEJCq3vuiTpY1GwWJ0/slXRM/nmvrSqgIkD0QKVoib3Luds+cEc2hpT
-         1or1f78CudHFZsQKB6HQb54Olp0wjGnnIFvvcZLemz1Uc7rYh2BQhaNzavT7SkQ6c45+
-         Mqj37L6l1XeoGva7wz40NkyG5lK5iB4XEIQkHao690XTYAMBeyyYenehlMSZV0vN2WJZ
-         NUu4ZoXmXe0+R7DAZPlWhODgwfs+nUZbM3Lfb1Ws0x0amnj8k17NZ4gvLvxW7eJHL55L
-         cAKutkjHHUOfQL3YoFDje0Gy1+KB7NN+mNv1EYsEfcXF1lOvecVy+tOMtX8ydTyNdQti
-         uHeg==
+        h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=SAyAzJ5taVIYm32wiupcjIXsXfuuqlIHwLrCj5uNLVw=;
+        b=X1Th978QN6NJGfSkS2HPXGzKGBeAHR/rjTvNUSwN/57UOGgWmJVYjGyQHR9c/SJ6V+
+         ZbGkdhQy21Uf7IFWrtas+4koC4MwDBG/SWwx32APykjBt73cDwrKlKUAHXvZqhOnq4Ug
+         4765p5SuMlVA39jpgR0NAD3JlQMjFakVNZlPvJBRo8JeB7qRHz8vlEW3zDwk2sXmq7xv
+         DjJ9lh17E0Fo5IRbSou+gxa7w8qXfUGySIwTcspalgmmA47g9pFPyxmIpikJPcStVIvI
+         2ZXBMYwE3O3/fcMaE76QEVFVW3H+yT8dWsSN1Qq6cIDYWkcZqiBzZmrROrfj+pJwUmrD
+         qaNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
-         :mime-version:content-transfer-encoding;
-        bh=+uR2HHqWw2zxt6EFtlx4KZ9cOz9+dmrG6vRUgKtbvHY=;
-        b=GqY5GgnoNL6XdsZD2ye8rcg0LrHhUSamlPmyYx6eu9Wdm6yJ9b2GkTGElrbuLjepgE
-         Osa6anAAKK5dtmm1ocvbSZ0pEDS5wW1oltwQHRgF9nLTVNgsjtyUR8cfwb8EOsxzVsLN
-         Rw/wsrndhXUBIldXWiKxAXa/fWaGcmdiv9jcz4gNuGbbGOOXtLSoZOcfx1kx3qxaxeJD
-         g1ADawHPWQbsEL01e2j7MWMSUoJy78gRhrB+0GkM85dpu9KolYZ+TBeHsQt2H5mLRqCq
-         4GH5Ixdo7BXoLUWwFtuDKjRrxQGwzpRNTOz0+2o5WQuDu2cjTcArEVWubs9P6igM3Y2P
-         NMEQ==
-X-Gm-Message-State: AOAM530oSwVIgj6ATbMZ2q32s4VBtfoC2iUBxvyVt/bbJ66cuZqHFId/
-        wONZeuMqlgXn3RbRl2kb080=
-X-Google-Smtp-Source: ABdhPJzykeR1spiez7xS7BaUP6XytU4fLObih8ReLcdfwUykJi5AqwaiQ3Rtnp6EYyejDV9gf6u36Q==
-X-Received: by 2002:a63:84c3:: with SMTP id k186mr37600569pgd.390.1638227912636;
-        Mon, 29 Nov 2021 15:18:32 -0800 (PST)
+         :in-reply-to:references:mime-version:content-transfer-encoding;
+        bh=SAyAzJ5taVIYm32wiupcjIXsXfuuqlIHwLrCj5uNLVw=;
+        b=GaUPt3Y9p/wZfWOOBLJKvI3St2gjjZGTDPMcE8v/DhpZUPtU7qNWWHciyFPSGbUQF1
+         KDZq2sYUzAuaGXjhQQ5/g1yAjNrOkdKt3paUy4Puz3VL7TBi+BR2/iZsYTqYvzp8uGL8
+         7YK7JlmLjrhUUH5mzEKyKVHv9lCJH67/4mHS7IWkfHFRuFtcviLqZZdYCP9ybuAPChTN
+         g8mkkB/pa1j3Mev7lxNyFQqRPYZArJH+AFRKV0sP2nDYB8U1bdfi8q7v7ULQw7V5iqjg
+         ybHDkv1JhHz0ebBAn+4EYfRmaxIaeIeGgENL6CdLwf8fktBrW9ova5q11OOHqbtBspm2
+         dxtw==
+X-Gm-Message-State: AOAM532GXXS4I9oSE/cCAvneRvMqAzySOPiHcdYyenb+teNdrL5nNzOa
+        /uQb+tsAjrxH41IBLm3h7ro=
+X-Google-Smtp-Source: ABdhPJzR8qfkEf3ezF+ASs97jJyPKIFen+0dF9+GRka0EPY4J0rKzKkoZeNJxtxkE3NV3LL265dHKw==
+X-Received: by 2002:a63:5d3:: with SMTP id 202mr6314130pgf.454.1638227914358;
+        Mon, 29 Nov 2021 15:18:34 -0800 (PST)
 Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:5800:7f54:1f52:ae81:8c78])
-        by smtp.gmail.com with ESMTPSA id j7sm18334762pfu.164.2021.11.29.15.18.31
+        by smtp.gmail.com with ESMTPSA id j7sm18334762pfu.164.2021.11.29.15.18.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 15:18:32 -0800 (PST)
+        Mon, 29 Nov 2021 15:18:33 -0800 (PST)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -60,112 +60,93 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Stephane Eranian <eranian@google.com>,
         Song Liu <songliubraving@fb.com>,
         Changbin Du <changbin.du@gmail.com>
-Subject: [RFC/PATCHSET 0/5] perf ftrace: Implement function latency histogram (v1)
-Date:   Mon, 29 Nov 2021 15:18:25 -0800
-Message-Id: <20211129231830.1117781-1-namhyung@kernel.org>
+Subject: [PATCH 1/5] perf ftrace: Add 'trace' subcommand
+Date:   Mon, 29 Nov 2021 15:18:26 -0800
+Message-Id: <20211129231830.1117781-2-namhyung@kernel.org>
 X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
+In-Reply-To: <20211129231830.1117781-1-namhyung@kernel.org>
+References: <20211129231830.1117781-1-namhyung@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+This is a preparation to add more sub-commands for ftrace.  The
+'trace' subcommand does the same thing when no subcommand is given.
 
-I've implemented 'latency' subcommand in the perf ftrace command to
-show a histogram of function latency.
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/builtin-ftrace.c | 35 +++++++++++++++++++++++------------
+ 1 file changed, 23 insertions(+), 12 deletions(-)
 
-To handle new subcommands, the existing functionality is moved to
-'trace' subcommand while preserving backward compatibility of not
-having a subcommand at all (defaults to 'trace').
-
-The latency subcommand accepts a target (kernel, for now) function
-with -T option and shows a histogram like below:
-
-  $ sudo ./perf ftrace latency -a -T mutex_lock sleep 1
-  #   DURATION     |      COUNT | GRAPH                                          |
-       0 - 1    us |       2686 | ######################                         |
-       1 - 2    us |        976 | ########                                       |
-       2 - 4    us |        879 | #######                                        |
-       4 - 8    us |        481 | ####                                           |
-       8 - 16   us |        445 | ###                                            |
-      16 - 32   us |          1 |                                                |
-      32 - 64   us |          0 |                                                |
-      64 - 128  us |          0 |                                                |
-     128 - 256  us |          0 |                                                |
-     256 - 512  us |          0 |                                                |
-     512 - 1024 us |          0 |                                                |
-       1 - 2    ms |          0 |                                                |
-       2 - 4    ms |          0 |                                                |
-       4 - 8    ms |          0 |                                                |
-       8 - 16   ms |          0 |                                                |
-      16 - 32   ms |          0 |                                                |
-      32 - 64   ms |          0 |                                                |
-      64 - 128  ms |          0 |                                                |
-     128 - 256  ms |          0 |                                                |
-     256 - 512  ms |          0 |                                                |
-     512 - 1024 ms |          0 |                                                |
-       1 - ...   s |          0 |                                                |
-  
-It basically use the function graph tracer to extract the duration of
-the function.  But with -b/--use-bpf option, it can use BPF to save
-the histogram in the kernel.  For the same function, it gets:
-
-  $ sudo ./perf ftrace latency -a -b -T mutex_lock sleep 1
-  #   DURATION     |      COUNT | GRAPH                                          |
-       0 - 1    us |       4682 | #############################################  |
-       1 - 2    us |         11 |                                                |
-       2 - 4    us |          0 |                                                |
-       4 - 8    us |          0 |                                                |
-       8 - 16   us |          7 |                                                |
-      16 - 32   us |          6 |                                                |
-      32 - 64   us |          0 |                                                |
-      64 - 128  us |          0 |                                                |
-     128 - 256  us |          0 |                                                |
-     256 - 512  us |          0 |                                                |
-     512 - 1024 us |          0 |                                                |
-       1 - 2    ms |          0 |                                                |
-       2 - 4    ms |          0 |                                                |
-       4 - 8    ms |          0 |                                                |
-       8 - 16   ms |          0 |                                                |
-      16 - 32   ms |          0 |                                                |
-      32 - 64   ms |          0 |                                                |
-      64 - 128  ms |          0 |                                                |
-     128 - 256  ms |          0 |                                                |
-     256 - 512  ms |          0 |                                                |
-     512 - 1024 ms |          0 |                                                |
-       1 - ...   s |          0 |                                                |
-
-
-You can get the patches at 'perf/ftrace-latency-v1' branch on
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-
-
-Thanks,
-Namhyung
-
-
-Namhyung Kim (5):
-  perf ftrace: Add 'trace' subcommand
-  perf ftrace: Move out common code from __cmd_ftrace
-  perf ftrace: Add 'latency' subcommand
-  perf ftrace: Add -b/--use-bpf option for latency subcommand
-  perf ftrace: Implement cpu and task filters in BPF
-
- tools/perf/Makefile.perf                    |   2 +-
- tools/perf/builtin-ftrace.c                 | 443 +++++++++++++++++---
- tools/perf/util/Build                       |   1 +
- tools/perf/util/bpf_ftrace.c                | 154 +++++++
- tools/perf/util/bpf_skel/func_latency.bpf.c | 113 +++++
- tools/perf/util/ftrace.h                    |  81 ++++
- 6 files changed, 724 insertions(+), 70 deletions(-)
- create mode 100644 tools/perf/util/bpf_ftrace.c
- create mode 100644 tools/perf/util/bpf_skel/func_latency.bpf.c
- create mode 100644 tools/perf/util/ftrace.h
-
-
-base-commit: 8ab774587903771821b59471cc723bba6d893942
+diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
+index 87cb11a7a3ee..b28e762c5d54 100644
+--- a/tools/perf/builtin-ftrace.c
++++ b/tools/perf/builtin-ftrace.c
+@@ -879,17 +879,7 @@ int cmd_ftrace(int argc, const char **argv)
+ 		.tracer = DEFAULT_TRACER,
+ 		.target = { .uid = UINT_MAX, },
+ 	};
+-	const char * const ftrace_usage[] = {
+-		"perf ftrace [<options>] [<command>]",
+-		"perf ftrace [<options>] -- <command> [<options>]",
+-		NULL
+-	};
+-	const struct option ftrace_options[] = {
+-	OPT_STRING('t', "tracer", &ftrace.tracer, "tracer",
+-		   "Tracer to use: function_graph(default) or function"),
+-	OPT_CALLBACK_DEFAULT('F', "funcs", NULL, "[FILTER]",
+-			     "Show available functions to filter",
+-			     opt_list_avail_functions, "*"),
++	const struct option common_options[] = {
+ 	OPT_STRING('p', "pid", &ftrace.target.pid, "pid",
+ 		   "Trace on existing process id"),
+ 	/* TODO: Add short option -t after -t/--tracer can be removed. */
+@@ -901,6 +891,14 @@ int cmd_ftrace(int argc, const char **argv)
+ 		    "System-wide collection from all CPUs"),
+ 	OPT_STRING('C', "cpu", &ftrace.target.cpu_list, "cpu",
+ 		    "List of cpus to monitor"),
++	OPT_END()
++	};
++	const struct option ftrace_options[] = {
++	OPT_STRING('t', "tracer", &ftrace.tracer, "tracer",
++		   "Tracer to use: function_graph(default) or function"),
++	OPT_CALLBACK_DEFAULT('F', "funcs", NULL, "[FILTER]",
++			     "Show available functions to filter",
++			     opt_list_avail_functions, "*"),
+ 	OPT_CALLBACK('T', "trace-funcs", &ftrace.filters, "func",
+ 		     "Trace given functions using function tracer",
+ 		     parse_filter_func),
+@@ -923,7 +921,15 @@ int cmd_ftrace(int argc, const char **argv)
+ 		    "Trace children processes"),
+ 	OPT_UINTEGER('D', "delay", &ftrace.initial_delay,
+ 		     "Number of milliseconds to wait before starting tracing after program start"),
+-	OPT_END()
++	OPT_PARENT(common_options),
++	};
++
++	const char * const ftrace_usage[] = {
++		"perf ftrace [<options>] [<command>]",
++		"perf ftrace [<options>] -- [<command>] [<options>]",
++		"perf ftrace trace [<options>] [<command>]",
++		"perf ftrace trace [<options>] -- [<command>] [<options>]",
++		NULL
+ 	};
+ 
+ 	INIT_LIST_HEAD(&ftrace.filters);
+@@ -935,6 +941,11 @@ int cmd_ftrace(int argc, const char **argv)
+ 	if (ret < 0)
+ 		return -1;
+ 
++	if (argc > 1 && !strcmp(argv[1], "trace")) {
++		argc--;
++		argv++;
++	}
++
+ 	argc = parse_options(argc, argv, ftrace_options, ftrace_usage,
+ 			    PARSE_OPT_STOP_AT_NON_OPTION);
+ 	if (!argc && target__none(&ftrace.target))
 -- 
 2.34.0.rc2.393.gf8c9666880-goog
 

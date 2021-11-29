@@ -2,105 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EAD4623D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 22:58:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C674623E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:02:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231336AbhK2WBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:01:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52062 "EHLO
+        id S232810AbhK2WFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbhK2V7t (ORCPT
+        with ESMTP id S229987AbhK2WDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 16:59:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448E3C061A13
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:29:50 -0800 (PST)
+        Mon, 29 Nov 2021 17:03:48 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4169C061D6D;
+        Mon, 29 Nov 2021 11:32:01 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0CEFDB815CE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 19:29:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEF6CC53FAD
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 19:29:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2A1D7CE13DE;
+        Mon, 29 Nov 2021 19:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53271C53FAD;
+        Mon, 29 Nov 2021 19:31:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638214187;
-        bh=ejZQQUbAl2en4OrZqhaRxXhMmoxR9zvdS59nSPLP1lM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YY3PaMlXoLBrfESQjX8RQcxceb1iKcgznBZeWMsye+WZkbvi/rsd5ELkuahHrN94Q
-         HUDk110IP+mKnEEh+GbaT8VVe/9V2/YGV7iMuMXjR/0Et35wAMl0lKFX9fItDovgZW
-         AlJE4Zaayru1SgxbPZgF3aBBsJL1wsNx5e0OXVH3lQ13F4soymFWDRJw+3kIDE8R4z
-         +y/qvIbncJz6njH461bxnOn4iIuXBzRMGZixCkuAAfwbwV0+LM9ctFSQ6Dr3s4lfSk
-         wGy4G8Hbh+jg/jQrkYxHEwejO9YPIVrCLubB5E+JBujDktni1sEt1uCxKJMWoKJp+/
-         Pl9xCOde80Tqw==
-Received: by mail-ed1-f41.google.com with SMTP id x6so76171181edr.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 11:29:47 -0800 (PST)
-X-Gm-Message-State: AOAM533svlvZk4LBJNJNsZWmdqjRf5EVU88pCpmJ8pt13HT0Ix3ZW12J
-        8SoaWHfhl5UGNyMdh5RJxQwhZ6ul9ossLcPlig==
-X-Google-Smtp-Source: ABdhPJzsMmSxeViscHuzy0KbvAv4a0mHXQEc6+wJ70K+GZOauw3j9FEql3MZalMfGbBglVNUPZe8KEqTo3HV6S9Qg4c=
-X-Received: by 2002:a17:907:16ac:: with SMTP id hc44mr60376458ejc.363.1638214186096;
- Mon, 29 Nov 2021 11:29:46 -0800 (PST)
-MIME-Version: 1.0
-References: <20211117145829.204360-1-marcan@marcan.st> <20211117145829.204360-2-marcan@marcan.st>
- <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de> <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
-In-Reply-To: <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Mon, 29 Nov 2021 13:29:34 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
-Message-ID: <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        s=k20201202; t=1638214318;
+        bh=2Hmk66f0LCHA6CH3FyMG0wildTaLAEfV129JiS/S6Zk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DqQ/ZgEHckFLB88XiBiN7ZXK4EyWX+kfpUlnJQlK9Ufz/Y0lWixhFINugsZpoxjbF
+         D3aDQgk88vF3WB41FiSqgJLxR9rvFyGmDgM4AKa2+ika7dnx1OPDxv9Cyvu4RgZ4vz
+         BNhXP+33ad3z2oq4BFATug6uAlG33hAGo6+H03a4NYkwmQ9VIlC3eiQe0tffAFaFKe
+         bZO51VEFQZc6Zb03sUb/62jdyM0RrkPDFCm+8H0K/wKDW4sRhZ93rVbQ6lBiCd+Ejd
+         HUmHuQdxiabQv799/SuTFtdVwSdyVKj4bD8fzXmgewxn3YfLlKizaCKts0ETBss3kT
+         NOi6W0qkQq4sg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mrmNY-008gZo-9T; Mon, 29 Nov 2021 19:31:56 +0000
+Date:   Mon, 29 Nov 2021 19:31:55 +0000
+Message-ID: <87mtlmn4gk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        Android Kernel Team <kernel-team@android.com>,
+        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH] of/irq: Add a quirk for controllers with their own definition of interrupt-map
+In-Reply-To: <CAL_Jsq+kLK-277FOSvOCVDdw8_j-6xL-SnHs15Zj4MddsxZqNw@mail.gmail.com>
+References: <20211122103032.517923-1-maz@kernel.org>
+        <CAL_Jsq+kLK-277FOSvOCVDdw8_j-6xL-SnHs15Zj4MddsxZqNw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: robh@kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kernel-team@android.com, john@phrozen.org, biwen.li@nxp.com, chris.brandt@renesas.com, geert+renesas@glider.be
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 9:24 PM Hector Martin <marcan@marcan.st> wrote:
->
-> On 18/11/2021 18.19, Thomas Zimmermann wrote:
-> > Hi
+On Mon, 29 Nov 2021 19:15:27 +0000,
+Rob Herring <robh@kernel.org> wrote:
+> 
+> On Mon, Nov 22, 2021 at 4:30 AM Marc Zyngier <maz@kernel.org> wrote:
 > >
-> > Am 17.11.21 um 15:58 schrieb Hector Martin:
-> >> @@ -897,5 +898,21 @@ static struct platform_driver simpledrm_platform_driver = {
-> >>
-> >>    module_platform_driver(simpledrm_platform_driver);
-> >>
-> >> +static int __init simpledrm_init(void)
-> >> +{
-> >> +    struct device_node *np;
-> >> +
-> >> +    if (IS_ENABLED(CONFIG_OF_ADDRESS) && of_chosen) {
-> >> +            for_each_child_of_node(of_chosen, np) {
-> >> +                    if (of_device_is_compatible(np, "simple-framebuffer"))
-> >> +                            of_platform_device_create(np, NULL, NULL);
-> >> +            }
-> >> +    }
-> >> +
-> >> +    return 0;
-> >> +}
-> >> +
-> >> +fs_initcall(simpledrm_init);
-> >> +
+> > Since 041284181226 ("of/irq: Allow matching of an interrupt-map local
+> > to an interrupt controller"), a handful of interrupt controllers have
+> > stopped working correctly. This is due to the DT exposing a non-sensical
+> > interrupt-map property, and their drivers relying on the kernel ignoring
+> > this property.
 > >
-> > Simpledrm is just a driver, but this is platform setup code. Why is this
-> > code located here and not under arch/ or drivers/firmware/?
+> > Since we cannot realistically fix this terrible behaviour, add a quirk
+> > for the limited set of devices that have implemented this monster,
+> > and document that this is a pretty bad practice.
 > >
-> > I know that other drivers do similar things, it doesn't seem to belong here.
->
-> This definitely doesn't belong in either of those, since it is not arch-
-> or firmware-specific. It is implementing support for the standard
-> simple-framebuffer OF binding, which specifies that it must be located
-> within the /chosen node (and thus the default OF setup code won't do the
-> matching for you); this applies to all OF platforms [1]
->
-> Adding Rob; do you think this should move from simplefb/simpledrm to
-> common OF code? (where?)
+> > Cc: Rob Herring <robh@kernel.org>
+> > Cc: John Crispin <john@phrozen.org>
+> > Cc: Biwen Li <biwen.li@nxp.com>
+> > Cc: Chris Brandt <chris.brandt@renesas.com>
+> > Cc: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > ---
+> >  drivers/of/irq.c | 37 +++++++++++++++++++++++++++++++++++--
+> >  1 file changed, 35 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/of/irq.c b/drivers/of/irq.c
+> > index b10f015b2e37..27a5173c813c 100644
+> > --- a/drivers/of/irq.c
+> > +++ b/drivers/of/irq.c
+> > @@ -76,6 +76,36 @@ struct device_node *of_irq_find_parent(struct device_node *child)
+> >  }
+> >  EXPORT_SYMBOL_GPL(of_irq_find_parent);
+> >
+> > +/*
+> > + * These interrupt controllers abuse interrupt-map for unspeakable
+> > + * reasons and rely on the core code to *ignore* it (the drivers do
+> > + * their own parsing of the property).
+> > + *
+> > + * If you think of adding to the list for something *new*, think
+> > + * again. There is a high chance that you will be sent back to the
+> > + * drawing board.
+> > + */
+> > +static const char * const of_irq_imap_abusers[] = {
+> > +       "CBEA,platform-spider-pic",
+> > +       "sti,platform-spider-pic",
+> > +       "realtek,rtl-intc",
+> > +       "fsl,ls1021a-extirq",
+> > +       "fsl,ls1043a-extirq",
+> > +       "fsl,ls1088a-extirq",
+> > +       "renesas,rza1-irqc",
+> > +};
+> 
+> I guess this list was obtained by with a: git grep '"interrupt-map"'
 
-of_platform_default_populate_init() should work.
+Yes. Anyone having its own interrupt-map parser is likely to have the
+same problem.
+
+> I suppose that should be sufficient to find all the cases. I'd like to
+> be able to identify this case just from a DT file, but it's not really
+> clear
+
+Indeed. Not to mention that the PPC stuff doesn't has its DT hidden in
+some firmware.
+
+> Perhaps a simpler solution to all this is only handle interrupt-map
+> with interrupt-controller if it points to its own node. That works for
+> Apple and I don't see a need beyond that case.
+
+The problem is that interrupt-map can point to more than a single
+controller. What if the map points to a both a local interrupt and a a
+remote one?
+
+It feels weird to standardise on a behaviour that seems to contradict
+the spec and to single out the one that (IMO) matches the expected
+behaviour. At the end of the day, I'll implement whichever solution
+you prefer.
+
+> > +static bool of_irq_abuses_interrupt_map(struct device_node *np)
+> > +{
+> > +       int i;
+> > +
+> > +       for (i = 0; i < ARRAY_SIZE(of_irq_imap_abusers); i++)
+> > +               if (of_device_is_compatible(np, of_irq_imap_abusers[i]))
+> > +                       return true;
+> > +
+> > +       return false;
+> 
+> With a NULL terminated list, you can use of_device_compatible_match() instead .
+
+Ah, neat.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

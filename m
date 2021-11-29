@@ -2,129 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F514614B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:08:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB144614BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239555AbhK2ML7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:11:59 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:38980 "EHLO gloria.sntech.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S231688AbhK2MJ6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:09:58 -0500
-Received: from ip5f5b2004.dynamic.kabel-deutschland.de ([95.91.32.4] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1mrfQP-0006lK-70; Mon, 29 Nov 2021 13:06:25 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     wefu@redhat.com, linux-riscv@lists.infradead.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        taiten.peng@canonical.com, aniket.ponkshe@canonical.com,
-        gordan.markus@canonical.com, guoren@linux.alibaba.com,
-        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        dlustig@nvidia.com, gfavor@ventanamicro.com,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        huffman@cadence.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, Anup Patel <anup@brainfault.org>,
-        Rob Herring <robh+dt@kernel.org>, anup.patel@wdc.com,
-        atishp04@gmail.com, palmer@dabbelt.com, guoren@kernel.org,
-        christoph.muellner@vrull.eu, philipp.tomsich@vrull.eu, hch@lst.de,
-        liush@allwinnertech.com, lazyparser@gmail.com,
-        drew@beagleboard.org,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
-Date:   Mon, 29 Nov 2021 13:06:23 +0100
-Message-ID: <9930802.MB9u6SvQ6m@diego>
-In-Reply-To: <97431cab-d67d-4bc7-e181-d64534791f03@canonical.com>
-References: <20211129014007.286478-1-wefu@redhat.com> <20211129014007.286478-2-wefu@redhat.com> <97431cab-d67d-4bc7-e181-d64534791f03@canonical.com>
+        id S243617AbhK2MMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 07:12:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:47854 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234638AbhK2MKY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 07:10:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE87CB80F4B;
+        Mon, 29 Nov 2021 12:07:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D414EC004E1;
+        Mon, 29 Nov 2021 12:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638187624;
+        bh=EWMYjNgMHCp0eROVow1StTt9tqAPUUbN9NbYCcwS4dQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=T7SyOLNOcFSVa1U6ZcvE5ZzkC89w8fJT2YUUWHGZoSYVlLO6xnYjq7EERwcIkh6xk
+         e7+YC4h0fgIE6zIKZm+c8OFQRUF5024W1VOlritZiyS2nmyrdUGpq8T6AF9hi/4hmI
+         3K8TLg0bMS9o2nGFp9q+HgbQXbLeKjSKur7cg2p1qGOwMCtr1qzqaPwhDU0t9SAF2z
+         tpvhrMaoBJA597zYC1s6VdD9eWmIq1+T0iOseMlfQhPY2eJToL+S3lGicRsvHJaV0c
+         5JAwT7KwCJfRYxxssQUxg7fVMMibfJ5gCeurI3nfwk58WrYFPtMIOteMr5AZr+M85A
+         1HTMK5D10CJjw==
+Message-ID: <045052dc02ce7bbf01dc73bdcd9809cac36b5e51.camel@kernel.org>
+Subject: Re: [PATCH] rbd: make const pointer speaces a static const array
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Colin Ian King <colin.i.king@googlemail.com>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Jens Axboe <axboe@kernel.dk>, ceph-devel@vger.kernel.org,
+        linux-block@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 29 Nov 2021 07:07:02 -0500
+In-Reply-To: <20211127172104.102994-1-colin.i.king@gmail.com>
+References: <20211127172104.102994-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.1 (3.42.1-1.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich Schuchardt:
-> On 11/29/21 02:40, wefu@redhat.com wrote:
-> > From: Wei Fu <wefu@redhat.com>
-> > 
-> > Previous patch has added svpbmt in arch/riscv and add "riscv,svpmbt"
-> > in the DT mmu node. Update dt-bindings related property here.
-> > 
-> > Signed-off-by: Wei Fu <wefu@redhat.com>
-> > Co-developed-by: Guo Ren <guoren@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Anup Patel <anup@brainfault.org>
-> > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > ---
-> >   Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
-> >   1 file changed, 10 insertions(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > index aa5fb64d57eb..9ff9cbdd8a85 100644
-> > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > @@ -63,6 +63,16 @@ properties:
-> >         - riscv,sv48
-> >         - riscv,none
-> >   
-> > +  mmu:
+On Sat, 2021-11-27 at 17:21 +0000, Colin Ian King wrote:
+> Don't populate the const array spaces on the stack but make it static
+> const and make the pointer an array to remove a dereference. Shrinks
+> object code a little too.  Also clean up intent, currently it is spaces
+> and should be a tab.
 > 
-> Shouldn't we keep the items be in alphabetic order, i.e. mmu before 
-> mmu-type?
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/block/rbd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> > +    description:
-> > +      Describes the CPU's MMU Standard Extensions support.
-> > +      These values originate from the RISC-V Privileged
-> > +      Specification document, available from
-> > +      https://riscv.org/specifications/
-> > +    $ref: '/schemas/types.yaml#/definitions/string'
-> > +    enum:
-> > +      - riscv,svpmbt
-> 
-> The privileged specification has multiple MMU related extensions: 
-> Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enum?
+> diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+> index 8f140da1efe3..de7ede6aa95a 100644
+> --- a/drivers/block/rbd.c
+> +++ b/drivers/block/rbd.c
+> @@ -6189,7 +6189,7 @@ static inline size_t next_token(const char **buf)
+>          * These are the characters that produce nonzero for
+>          * isspace() in the "C" and "POSIX" locales.
+>          */
+> -        const char *spaces = " \f\n\r\t\v";
+> +	static const char spaces[] = " \f\n\r\t\v";
+>  
+>          *buf += strspn(*buf, spaces);	/* Find start of token */
+>  
 
-I remember in some earlier version some way back there was the
-suggestion of using a sub-node instead and then adding boolean
-properties for the supported extensions.
-
-Aka something like
-	mmu {
-		riscv,svpbmt;	
-	};
-
-Which I guess would be a lot nicer. Also right now there is string-
-comparison done on the code side, which would look way easier
-when just looking for booleans in the dt instead.
-
-Also isn't an enum a "one-of" selection, so wouldn't work directly
-for multiple extensions?
-
-
-Heiko
-
-
-> 
-> Best regards
-> 
-> Heinrich
-> 
-> > +
-> >     riscv,isa:
-> >       description:
-> >         Identifies the specific RISC-V instruction set architecture
-> > 
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
-
-
-
-
+Thanks, Colin. Merged into our "testing" branch. It should make v5.17.
+-- 
+Jeff Layton <jlayton@kernel.org>

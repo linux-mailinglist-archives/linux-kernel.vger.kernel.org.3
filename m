@@ -2,113 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6445A460F9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B67046103B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 09:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242382AbhK2HxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 02:53:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:60846 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240906AbhK2HvO (ORCPT
+        id S1346662AbhK2IiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 03:38:06 -0500
+Received: from 10.mo548.mail-out.ovh.net ([46.105.77.235]:33601 "EHLO
+        10.mo548.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238658AbhK2IgF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:51:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C688B80D77;
-        Mon, 29 Nov 2021 07:47:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98DF8C004E1;
-        Mon, 29 Nov 2021 07:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638172074;
-        bh=kPK1gJMxvTYCVwiHG1lGyKaBQ0tpNH+0ELh1qIRljDk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uCWl9wqLt64nU7dBHqAm5WC9ZxLliBmfMMEzq2DP5A6usB0ePrNbohkenq4qVosZ3
-         NoVIniDOk60OZapzXchP7TL3QAE2mNR5ZPE5AvCnasNcwbKgMXbNSfI0TVhGWQjyhQ
-         XX+oWncCVTXWvAGAKPlyHJJc7tM6lwSVEbk/NWR8=
-Date:   Mon, 29 Nov 2021 08:47:51 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Daniel Winkler <danielwinkler@google.com>,
-        Johan Hedberg <johan.hedberg@intel.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH v2 1/6] Bluetooth: add quirk disabling LE Read Transmit
- Power
-Message-ID: <YaSFp8TpRPjP54nX@kroah.com>
-References: <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
- <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
- <20211117124717.12352-1-redecorating@protonmail.com>
- <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
- <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
- <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
- <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
- <BC534C52-7FCF-4238-8933-C5706F494A11@live.com>
- <YaSCJg+Xkyx8w2M1@kroah.com>
- <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
+        Mon, 29 Nov 2021 03:36:05 -0500
+Received: from mxplan5.mail.ovh.net (unknown [10.108.16.148])
+        by mo548.mail-out.ovh.net (Postfix) with ESMTPS id BB56A20523;
+        Mon, 29 Nov 2021 07:47:59 +0000 (UTC)
+Received: from kaod.org (37.59.142.103) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Mon, 29 Nov
+ 2021 08:47:58 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-103G00595d4a801-821e-4892-b50b-80a730e95f26,
+                    3279756C2EB34864E332BB908A933B747C53BE44) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 82.64.250.170
+Message-ID: <7e3022e0-2183-288b-a4ae-e2e1e0551b38@kaod.org>
+Date:   Mon, 29 Nov 2021 08:47:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [patch 17/22] PCI/MSI: Split out !IRQDOMAIN code
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <linux-hyperv@vger.kernel.org>, Paul Mackerras <paulus@samba.org>,
+        <sparclinux@vger.kernel.org>, Wei Liu <wei.liu@kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
+        <x86@kernel.org>, Christian Borntraeger <borntraeger@de.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>, <linux-pci@vger.kernel.org>,
+        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+References: <20211126222700.862407977@linutronix.de>
+ <20211126223825.093887718@linutronix.de>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <20211126223825.093887718@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [37.59.142.103]
+X-ClientProxiedBy: DAG7EX2.mxp5.local (172.16.2.62) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: 0f0123d7-fbb1-4bc8-86c7-5f8c7875e9d6
+X-Ovh-Tracer-Id: 9632918131166251932
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrheekgdehtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfhfhfgjtgfgihesthejredttdefjeenucfhrhhomhepveorughrihgtpgfnvggpifhorghtvghruceotghlgheskhgrohgurdhorhhgqeenucggtffrrghtthgvrhhnpefhhfelgeeukedtteffvdffueeiuefgkeekleehleetfedtgfetffefheeugeelheenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhg
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:42:39AM +0000, Aditya Garg wrote:
-> From: Aditya Garg <gargaditya08@live.com>
+On 11/27/21 02:19, Thomas Gleixner wrote:
+> Split out the non irqdomain code into its own file.
 > 
-> Some devices have a bug causing them to not work if they query LE tx power on startup. Thus we add a 
-> quirk in order to not query it and default min/max tx power values to HCI_TX_POWER_INVALID.
-> 
-> v2: Wrap the changeling at 72 columns, correct email and remove tested by.
-> 
-> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 > ---
->  include/net/bluetooth/hci.h | 9 +++++++++
->  net/bluetooth/hci_core.c    | 3 ++-
->  2 files changed, 11 insertions(+), 1 deletion(-)
+>   drivers/pci/msi/Makefile |    5 ++--
+>   drivers/pci/msi/legacy.c |   51 +++++++++++++++++++++++++++++++++++++++++++++++
+>   drivers/pci/msi/msi.c    |   46 ------------------------------------------
+>   3 files changed, 54 insertions(+), 48 deletions(-)
 > 
-> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
-> index 63065bc01b766c..383342efcdc464 100644
-> --- a/include/net/bluetooth/hci.h
-> +++ b/include/net/bluetooth/hci.h
-> @@ -246,6 +246,15 @@ enum {
->  	 * HCI after resume.
->  	 */
->  	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
+> --- a/drivers/pci/msi/Makefile
+> +++ b/drivers/pci/msi/Makefile
+> @@ -1,5 +1,6 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   #
+>   # Makefile for the PCI/MSI
+> -obj-$(CONFIG_PCI)		+= pcidev_msi.o
+> -obj-$(CONFIG_PCI_MSI)		+= msi.o
+> +obj-$(CONFIG_PCI)			+= pcidev_msi.o
+> +obj-$(CONFIG_PCI_MSI)			+= msi.o
+> +obj-$(CONFIG_PCI_MSI_ARCH_FALLBACKS)	+= legacy.o
+> --- /dev/null
+> +++ b/drivers/pci/msi/legacy.c
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * PCI Message Signaled Interrupt (MSI).
+> + *
+> + * Legacy architecture specific setup and teardown mechanism.
+> + */
+> +#include "msi.h"
+
+
+I am getting a :
+
+../drivers/pci/msi/legacy.c:7:10: fatal error: msi.h: No such file or directory
+     7 | #include "msi.h"
+
+which seems to be fixed later.
+
+C.
+
+> +
+> +/* Arch hooks */
+> +int __weak arch_setup_msi_irq(struct pci_dev *dev, struct msi_desc *desc)
+> +{
+> +	return -EINVAL;
+> +}
+> +
+> +void __weak arch_teardown_msi_irq(unsigned int irq)
+> +{
+> +}
+> +
+> +int __weak arch_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
+> +{
+> +	struct msi_desc *desc;
+> +	int ret;
 > +
 > +	/*
-> +	 * When this quirk is set, LE tx power is not queried on startup
-> +	 * and the min/max tx power values default to HCI_TX_POWER_INVALID.
-> +	 *
-> +	 * This quirk can be set before hci_register_dev is called or
-> +	 * during the hdev->setup vendor callback.
+> +	 * If an architecture wants to support multiple MSI, it needs to
+> +	 * override arch_setup_msi_irqs()
 > +	 */
-> +	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
->  };
->  
->  /* HCI device flags */
-> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> index 8d33aa64846b1c..434c6878fe9640 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -619,7 +619,8 @@ static int hci_init3_req(struct hci_request *req, unsigned long opt)
->  			hci_req_add(req, HCI_OP_LE_READ_ADV_TX_POWER, 0, NULL);
->  		}
->  
-> -		if (hdev->commands[38] & 0x80) {
-> +		if (hdev->commands[38] & 0x80 &&
-> +		!test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks)) {
+> +	if (type == PCI_CAP_ID_MSI && nvec > 1)
+> +		return 1;
+> +
+> +	for_each_pci_msi_entry(desc, dev) {
+> +		ret = arch_setup_msi_irq(dev, desc);
+> +		if (ret)
+> +			return ret < 0 ? ret : -ENOSPC;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +void __weak arch_teardown_msi_irqs(struct pci_dev *dev)
+> +{
+> +	struct msi_desc *desc;
+> +	int i;
+> +
+> +	for_each_pci_msi_entry(desc, dev) {
+> +		if (desc->irq) {
+> +			for (i = 0; i < entry->nvec_used; i++)
+> +				arch_teardown_msi_irq(desc->irq + i);
+> +		}
+> +	}
+> +}
+> --- a/drivers/pci/msi/msi.c
+> +++ b/drivers/pci/msi/msi.c
+> @@ -50,52 +50,6 @@ static void pci_msi_teardown_msi_irqs(st
+>   #define pci_msi_teardown_msi_irqs	arch_teardown_msi_irqs
+>   #endif
+>   
+> -#ifdef CONFIG_PCI_MSI_ARCH_FALLBACKS
+> -/* Arch hooks */
+> -int __weak arch_setup_msi_irq(struct pci_dev *dev, struct msi_desc *desc)
+> -{
+> -	return -EINVAL;
+> -}
+> -
+> -void __weak arch_teardown_msi_irq(unsigned int irq)
+> -{
+> -}
+> -
+> -int __weak arch_setup_msi_irqs(struct pci_dev *dev, int nvec, int type)
+> -{
+> -	struct msi_desc *entry;
+> -	int ret;
+> -
+> -	/*
+> -	 * If an architecture wants to support multiple MSI, it needs to
+> -	 * override arch_setup_msi_irqs()
+> -	 */
+> -	if (type == PCI_CAP_ID_MSI && nvec > 1)
+> -		return 1;
+> -
+> -	for_each_pci_msi_entry(entry, dev) {
+> -		ret = arch_setup_msi_irq(dev, entry);
+> -		if (ret < 0)
+> -			return ret;
+> -		if (ret > 0)
+> -			return -ENOSPC;
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+> -void __weak arch_teardown_msi_irqs(struct pci_dev *dev)
+> -{
+> -	int i;
+> -	struct msi_desc *entry;
+> -
+> -	for_each_pci_msi_entry(entry, dev)
+> -		if (entry->irq)
+> -			for (i = 0; i < entry->nvec_used; i++)
+> -				arch_teardown_msi_irq(entry->irq + i);
+> -}
+> -#endif /* CONFIG_PCI_MSI_ARCH_FALLBACKS */
+> -
+>   /*
+>    * PCI 2.3 does not specify mask bits for each MSI interrupt.  Attempting to
+>    * mask all MSI interrupts by clearing the MSI enable bit does not work
+> 
 
-You did not fix this formatting?  Why not?
-
-thanks,
-
-greg k-h

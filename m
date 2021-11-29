@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E06204623E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:02:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E75394623F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:03:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbhK2WF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:05:28 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:41852 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230516AbhK2WDZ (ORCPT
+        id S233226AbhK2WHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:07:13 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:44740 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S229779AbhK2WFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:03:25 -0500
-X-UUID: 76bd48bca8b544ec8ef351fa17929f4e-20211130
-X-UUID: 76bd48bca8b544ec8ef351fa17929f4e-20211130
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        Mon, 29 Nov 2021 17:05:13 -0500
+X-UUID: e9d9054cb79340fb9cfe2a5e45159849-20211130
+X-UUID: e9d9054cb79340fb9cfe2a5e45159849-20211130
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
         (envelope-from <sean.wang@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1236191533; Tue, 30 Nov 2021 06:00:02 +0800
+        with ESMTP id 537633194; Tue, 30 Nov 2021 06:01:50 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Tue, 30 Nov 2021 06:00:01 +0800
+ Tue, 30 Nov 2021 06:01:49 +0800
 Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 30 Nov 2021 06:00:01 +0800
+ Transport; Tue, 30 Nov 2021 06:01:49 +0800
 From:   <sean.wang@mediatek.com>
 To:     <lb@semihalf.com>
 CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
@@ -33,9 +33,9 @@ CC:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>,
         "Sean Wang" <sean.wang@mediatek.com>
-Subject: =?UTF-8?q?Re=3A?=
-Date:   Tue, 30 Nov 2021 05:59:58 +0800
-Message-ID: <1638223198-31652-1-git-send-email-sean.wang@mediatek.com>
+Subject: =?UTF-8?q?Re=3A=5BPATCH=20v1=5D=20Bluetooth=3A=20btmtksdio=3A=20enable=20msft=20opcode?=
+Date:   Tue, 30 Nov 2021 06:01:48 +0800
+Message-ID: <1638223308-32622-1-git-send-email-sean.wang@mediatek.com>
 X-Mailer: git-send-email 1.7.9.5
 In-Reply-To: <20211126221034.21331-1-lukasz.bartosik@semihalf.com--annotate>
 References: <20211126221034.21331-1-lukasz.bartosik@semihalf.com--annotate>

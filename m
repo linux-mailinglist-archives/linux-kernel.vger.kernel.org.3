@@ -2,161 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2F90460F48
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:24:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 155B6460F4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 08:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236443AbhK2H1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 02:27:42 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:58935 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229777AbhK2HZl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 02:25:41 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4J2cHg211vz9sSk;
-        Mon, 29 Nov 2021 08:22:23 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UPVQNJoArrEd; Mon, 29 Nov 2021 08:22:23 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4J2cHg1BMJz9sSh;
-        Mon, 29 Nov 2021 08:22:23 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 19C2D8B76D;
-        Mon, 29 Nov 2021 08:22:23 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 95kUX8e7kcKx; Mon, 29 Nov 2021 08:22:23 +0100 (CET)
-Received: from [172.25.230.108] (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id BD33C8B763;
-        Mon, 29 Nov 2021 08:22:22 +0100 (CET)
-Message-ID: <e1f310b4-2e23-0fa4-424d-271395824438@csgroup.eu>
-Date:   Mon, 29 Nov 2021 08:22:22 +0100
+        id S238207AbhK2H1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 02:27:52 -0500
+Received: from mail-ma1ind01olkn0188.outbound.protection.outlook.com ([104.47.100.188]:61622
+        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S231732AbhK2HZv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 02:25:51 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nK7kfsiVAuZmMeOn1oAldYo4G24GN7Y2Pwj7WMEKICSLK6UZOC8Ue3evbpvjVhFxQbgZ0mA/6Eontjeb6sMWEHEY+CJSRdGP5qxua4gAJYEFwqZt4kBTkDRTa1RqlC+HKnPzjE5W47kceiL7npANBVzXzl/PKOo8GEIDADmtkCI0bTW68BngnyL01Cdd/38U1X6h5mL8iQ3vTY08BFBq0Kk3jHz01ZYFoivRWZXNVsqOo8fzQXCKbnnLuqjgC+2EViy2Cwf6CHjhDpFkeO0Hv5e0U+WPiYXC4arwi1Sm8xu0Sn3TaMW+W+lRr+IEk6RwthWVZXE/DUbG4A7+NJ8EuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=KDekUeYhlnHAZ0XcwiJX3Q70EYZRW5X3JVk+42N1x5g=;
+ b=mtui7ZLVyPAuCzDyRqzbNGq2bcAdR2dQrSy9WqrnMEMQj8Q7i67vF7ApnblkhQ2Ry3Gdwzgsg9Kq5nBFB0QLHOkiL9E01HD1sNsSHc+FYlJ8/TtSexyhbH9uScljx+8QH6UntHXkXKLjY1Ow57K4YTGNdf6wN4Gv0tOZ7HFl/halYXhtv/C1WB4zV7ggdr3DnHNRF+2Z4gYTZKAuiKi76Cjo+k0NGBoHzekMHci0DjvfBE1uhDx9+keVeVLfjUHUvAooXS0GVtnEUEjOH0/VC8qeDZAd1/4Mq3SUapz3+wq65XEEnZqyqK5Fw3Xrtr4lP3l2HTCdUi4byU21hWGolw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=KDekUeYhlnHAZ0XcwiJX3Q70EYZRW5X3JVk+42N1x5g=;
+ b=oIqTsG23xUuX3FEnez1Y4eMeUyvLq3AO1BptHukWTicAt+u8BJcFioPhjZ9NPFk8/x7G8qp9itBbV97sl2SypgcZfivjCLrQlHSHnAuqMedsSkNWu9Hw3XeFtkQzQpKU0mYGScdIajgh5H0VkGBoMFAHvn4CB0MT+z8BrpHOEm2qpXZH29IgZsbPVdJYNM28XWKHORBzvxmhupAbKNHFPcovxtWe8rvNWBsUlLtGMM8cw/WMO/t0HcMedO70AYu5LX/VSspRnkPMraON6AweIN2jRGPVgYLVM51EapB6hnbv+7y7LGFc97WBPuT5KUzUbMVenIWrxUUdGbYlfSw0Jg==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PNZPR01MB4494.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Mon, 29 Nov
+ 2021 07:22:28 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%5]) with mapi id 15.20.4734.024; Mon, 29 Nov 2021
+ 07:22:28 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+CC:     Marcel Holtmann <marcel@holtmann.org>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH 1/6] Bluetooth: add quirk disabling LE Read Transmit Power
+Thread-Topic: [PATCH 1/6] Bluetooth: add quirk disabling LE Read Transmit
+ Power
+Thread-Index: AQHX5PHdg9R7tTuOZUGKQm9G6AVEOA==
+Date:   Mon, 29 Nov 2021 07:22:27 +0000
+Message-ID: <BC534C52-7FCF-4238-8933-C5706F494A11@live.com>
+References: <20211001083412.3078-1-redecorating@protonmail.com>
+ <YYePw07y2DzEPSBR@kroah.com>
+ <70a875d0-7162-d149-dbc1-c2f5e1a8e701@leemhuis.info>
+ <20211116090128.17546-1-redecorating@protonmail.com>
+ <e75bf933-9b93-89d2-d73f-f85af65093c8@leemhuis.info>
+ <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com> <YZSuWHB6YCtGclLs@kroah.com>
+ <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
+ <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
+ <20211117124717.12352-1-redecorating@protonmail.com>
+ <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
+ <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
+ <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
+ <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+In-Reply-To: <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [YYJnhi6fM2c3u0nOMpD1D4ZXGHeABSQzq2bOXc4+TLTlDhjwXx6l1e7ZotEQM/YN]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0b50db91-93ba-4369-78c6-08d9b308ffb7
+x-ms-traffictypediagnostic: PNZPR01MB4494:
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: diiWJqbTEfMP8/rbq3MYNNqs7WAokn6+7Q+Q7MABUAWViAIljL1Fqxn5WvOGMp713NGCHGWuNVw2uHQLTjS2KQfFx/LjgisXDAM+x8iKvb3uFsVgpNz21mwyxS7JRfn+Dv3zRm8x2f0Yp5Dypx+yJDQRh9MMHZlHQJ4cUgjPoBjXxIlbNbksSrc/f86fByoTjUed5EfGwdCqgJLO1ObMFWjspPCxVatRDbPWuF6heFN7zNm2tIH5lL0NitqNU+V15IvWNmABeMCzSGCDaOSMqxptJ+H8U9ttu41rfGZlet2IxzH+yx9/9H5dUwG06wKxwZkGOOOQ+lYAaazfgcs/tUry8BwG1z7tRWXlj6GBBulBeBO5I63/3NfwsPw6CPnRW29K4a0Qf3upJApjyRBLbsHgyfiDHdRiubyU7soTCTUCn1gXKcJu2xbTwvyqcPIcfSeSyPYtVqbqF8wLeJVDgmRMyyGjDdgtTb83eACe7qTvfBKhJB85lx/BYxXS7Y+8RVAjdi28fy+lwHpQ+FNEnPELwCuRE/KbANB4LsrVjjMixrY19NHzwj2Ua6nEIGuRGt3pK33wYLqsMM6+yG+K4A==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: D7NSkNTOEEhC1SvmZht5XyyQfos2lbusGqS5lDMS/4fFq5ApQkmeHa5wG56UhWO6+bYXu7n1454uCFVYeSCyUjfEG3bLxtXcFtoq+iJmXjnlw6oWgndJRkKBOpececLxilpVXFAiZMLpy9u2wtydISNwEUI6uO/TSrqt5FybeZAwT6tSXtd8ov/MIJi33XrD0SIz6XKjxz8cnhkhmh4zmLYB7L2iH1Yr63BjaNuupfYG16I5qHfDzEOamtVdvyt9CCf6mJvsQaeAcx+08NgtnaA47kQdXy4FZ0KR1Eit54LTqtu/RKMHlg6GT8jhLuLXjS7Ifev0bd5j1mz6mTIaU4JjEGk8NrrlaXxu9AG6RWrWrPHTqsfTPL0Cm3mBVrPJR3alYzd8I8uXtv58vsOpXpT7gPI6gaPtJh/oFBqUMKvzjPuFURL+NerjB0OwW9VrugH1oWgrowE86stLMxU27GnZNhv8xYi+7q5omBBIsnYdQiBaTqqkRk5w9HfxD013qk5KbWZdQiKdnZsEWTg7uu0ycQ4eASyn1MvxQuC19bgZhxUcKUvlcnKbOTlpMtrDCBkz3EwKsfbvFbAz0/bs+ebqDgXAxtqVc65Nbz+aT+CoLcDvs3YYsQGS5N2pZPJffKyuUL+xRWWTPabPd00tJFQwuVzqyCc1yFFI+d5AA+d0CB0RZf/10VSxozBHrUXLl2/+yJOxC2t/8Oh72kgf5xmFgr0AFQYarG3IFTgAvjGsiMyJEFq0YsP8TDWvi91Q5L7YKvNzEPqtn2fMhzfjFw==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D6BE5728506AFB46B47747E3B7901F1F@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v3 4/4] powerpc/inst: Optimise
- copy_inst_from_kernel_nofault()
-Content-Language: fr-FR
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <1a8623dce54a72c7af172027caa7c44b1fefa8c4.1638036607.git.christophe.leroy@csgroup.eu>
- <cfcff31e25dd6556b6cdf85842fb4e70174fabaa.1638036607.git.christophe.leroy@csgroup.eu>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <cfcff31e25dd6556b6cdf85842fb4e70174fabaa.1638036607.git.christophe.leroy@csgroup.eu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-a1a1a.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0b50db91-93ba-4369-78c6-08d9b308ffb7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 29 Nov 2021 07:22:27.8212
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB4494
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Aditya Garg <redecorating@protonmail.com>
 
+Some devices have a bug causing them to not work if they query LE tx power =
+on startup. Thus we add a quirk in order to not query it and default min/ma=
+x tx power values to HCI_TX_POWER_INVALID.
 
-Le 27/11/2021 à 19:10, Christophe Leroy a écrit :
-> copy_inst_from_kernel_nofault() uses copy_from_kernel_nofault() to
-> copy one or two 32bits words. This means calling an out-of-line
-> function which itself calls back copy_from_kernel_nofault_allowed()
-> then performs a generic copy with loops.
-> 
-> Rewrite copy_inst_from_kernel_nofault() to do everything at a
-> single place and use __get_kernel_nofault() directly to perform
-> single accesses without loops.
-> 
-> Before the patch:
-> 
-> 	00000018 <copy_inst_from_kernel_nofault>:
-> 	  18:	94 21 ff e0 	stwu    r1,-32(r1)
-> 	  1c:	7c 08 02 a6 	mflr    r0
-> 	  20:	38 a0 00 04 	li      r5,4
-> 	  24:	93 e1 00 1c 	stw     r31,28(r1)
-> 	  28:	7c 7f 1b 78 	mr      r31,r3
-> 	  2c:	38 61 00 08 	addi    r3,r1,8
-> 	  30:	90 01 00 24 	stw     r0,36(r1)
-> 	  34:	48 00 00 01 	bl      34 <copy_inst_from_kernel_nofault+0x1c>
-> 				34: R_PPC_REL24	copy_from_kernel_nofault
-> 	  38:	2c 03 00 00 	cmpwi   r3,0
-> 	  3c:	40 82 00 0c 	bne     48 <copy_inst_from_kernel_nofault+0x30>
-> 	  40:	81 21 00 08 	lwz     r9,8(r1)
-> 	  44:	91 3f 00 00 	stw     r9,0(r31)
-> 	  48:	80 01 00 24 	lwz     r0,36(r1)
-> 	  4c:	83 e1 00 1c 	lwz     r31,28(r1)
-> 	  50:	38 21 00 20 	addi    r1,r1,32
-> 	  54:	7c 08 03 a6 	mtlr    r0
-> 	  58:	4e 80 00 20 	blr
-> 
-> After the patch:
-> 
-> 	00000018 <copy_inst_from_kernel_nofault>:
-> 	  18:	3d 20 b0 00 	lis     r9,-20480
-> 	  1c:	7c 04 48 40 	cmplw   r4,r9
-> 	  20:	7c 69 1b 78 	mr      r9,r3
-> 	  24:	41 80 00 2c 	blt     50 <copy_inst_from_kernel_nofault+0x38>
-> 	  28:	81 42 04 d0 	lwz     r10,1232(r2)
-> 	  2c:	39 4a 00 01 	addi    r10,r10,1
-> 	  30:	91 42 04 d0 	stw     r10,1232(r2)
-> 	  34:	80 e4 00 00 	lwz     r7,0(r4)
-> 	  38:	81 42 04 d0 	lwz     r10,1232(r2)
-> 	  3c:	38 60 00 00 	li      r3,0
-> 	  40:	39 4a ff ff 	addi    r10,r10,-1
-> 	  44:	91 42 04 d0 	stw     r10,1232(r2)
-> 	  48:	90 e9 00 00 	stw     r7,0(r9)
-> 	  4c:	4e 80 00 20 	blr
-> 
-> 	  50:	38 60 ff de 	li      r3,-34
-> 	  54:	4e 80 00 20 	blr
-> 	  58:	81 22 04 d0 	lwz     r9,1232(r2)
-> 	  5c:	38 60 ff f2 	li      r3,-14
-> 	  60:	39 29 ff ff 	addi    r9,r9,-1
-> 	  64:	91 22 04 d0 	stw     r9,1232(r2)
-> 	  68:	4e 80 00 20 	blr
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-> v3: New
-> ---
->   arch/powerpc/mm/maccess.c | 18 ++++++++++++------
->   1 file changed, 12 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/powerpc/mm/maccess.c b/arch/powerpc/mm/maccess.c
-> index 5abae96b2b46..90309806f5eb 100644
-> --- a/arch/powerpc/mm/maccess.c
-> +++ b/arch/powerpc/mm/maccess.c
-> @@ -15,16 +15,22 @@ bool copy_from_kernel_nofault_allowed(const void *unsafe_src, size_t size)
->   int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
->   {
->   	unsigned int val, suffix;
-> -	int err;
->   
-> -	err = copy_from_kernel_nofault(&val, src, sizeof(val));
-> -	if (err)
-> -		return err;
-> +	if (unlikely(!is_kernel_addr((unsigned long)src)))
-> +		return -ERANGE;
-> +
-> +	pagefault_disable();
+Signed-off-by: Aditya Garg <gargaditya08@live.com>
+Tested-by: Aditya Garg <gargaditya08@live.com>
+---
+ include/net/bluetooth/hci.h | 9 +++++++++
+ net/bluetooth/hci_core.c    | 3 ++-
+ 2 files changed, 11 insertions(+), 1 deletion(-)
 
-Allthough generic version of copy_from_kernel_nofault() does it, 
-disabling pagefault is pointless here because we are accessing kernel 
-addresses only, so a page fault will always fail via bad_kernel_fault(), 
-it will never reach the faulthandler_disabled() test.
+diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+index 63065bc01b766c..383342efcdc464 100644
+--- a/include/net/bluetooth/hci.h
++++ b/include/net/bluetooth/hci.h
+@@ -246,6 +246,15 @@ enum {
+ 	 * HCI after resume.
+ 	 */
+ 	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
++
++	/*
++	 * When this quirk is set, LE tx power is not queried on startup
++	 * and the min/max tx power values default to HCI_TX_POWER_INVALID.
++	 *
++	 * This quirk can be set before hci_register_dev is called or
++	 * during the hdev->setup vendor callback.
++	 */
++	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
+ };
+=20
+ /* HCI device flags */
+diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+index 8d33aa64846b1c..434c6878fe9640 100644
+--- a/net/bluetooth/hci_core.c
++++ b/net/bluetooth/hci_core.c
+@@ -619,7 +619,8 @@ static int hci_init3_req(struct hci_request *req, unsig=
+ned long opt)
+ 			hci_req_add(req, HCI_OP_LE_READ_ADV_TX_POWER, 0, NULL);
+ 		}
+=20
+-		if (hdev->commands[38] & 0x80) {
++		if (hdev->commands[38] & 0x80 &&
++		!test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks)) {
+ 			/* Read LE Min/Max Tx Power*/
+ 			hci_req_add(req, HCI_OP_LE_READ_TRANSMIT_POWER,
+ 				    0, NULL);
 
-> +	__get_kernel_nofault(&val, src, u32, Efault);
->   	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
-> -		err = copy_from_kernel_nofault(&suffix, src + 1, sizeof(suffix));
-> +		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
-> +		pagefault_enable();
->   		*inst = ppc_inst_prefix(val, suffix);
->   	} else {
-> +		pagefault_enable();
->   		*inst = ppc_inst(val);
->   	}
-> -	return err;
-> +	return 0;
-> +Efault:
-> +	pagefault_enable();
-> +	return -EFAULT;
->   }
-> 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E905B461E69
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E275D461F28
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236451AbhK2Sfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 13:35:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:37936 "EHLO
+        id S232711AbhK2SoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 13:44:18 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44598 "EHLO
         ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379606AbhK2Sdk (ORCPT
+        with ESMTP id S1379674AbhK2Slv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:33:40 -0500
+        Mon, 29 Nov 2021 13:41:51 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 849DBB815D1;
-        Mon, 29 Nov 2021 18:30:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B13A8C53FC7;
-        Mon, 29 Nov 2021 18:30:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8820AB815DB;
+        Mon, 29 Nov 2021 18:38:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F55C53FAD;
+        Mon, 29 Nov 2021 18:38:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638210620;
-        bh=UTvlurV/sfHx9xw/LUd3+W9q6H0lm0zCB8ZXp0xCVl0=;
+        s=korg; t=1638211111;
+        bh=8TQiQF5wAUWqIZhPncuWfp4/Fwa5Zyv/dzddyFXo+G4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kcAObXNPdaEN/dcvX273KM0XgXY6SGsVxgZL1E1PIM883wz+arIQSk9pPyqdolb8n
-         FN8eKO4bo4+PY7LvUgnJBLWKz3ZTUaOw1e03b4WOUyJ5QGjaC0YHry7lgNdCGjVt7h
-         PQdfT7Kl8TpgKakgsYKcVrwvHM0VEnbFIYymICQ0=
+        b=2wTosMHklS6ZTrjvAUB3Yhc6DlgjwFjqd07ufTkvWBE83pTn00Enc2PfVXGEO+psM
+         Zm5ywUHy5MpzWkSTSvcDReil+uAhER93d6iB1DYg5paFItaSmtvaW22To2touNTwKW
+         kOjgX0JT0vRXQLjgvQjowzD033ATiSCfhHyXddmQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Volodymyr Mytnyk <vmytnyk@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 059/121] net: marvell: prestera: fix double free issue on err path
+        stable@vger.kernel.org, Brent Roman <brent@mbari.org>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 096/179] HID: input: set usage type to key on keycode remap
 Date:   Mon, 29 Nov 2021 19:18:10 +0100
-Message-Id: <20211129181713.633408997@linuxfoundation.org>
+Message-Id: <20211129181722.088037855@linuxfoundation.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
-References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211129181718.913038547@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -46,64 +47,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Volodymyr Mytnyk <vmytnyk@marvell.com>
+From: Thomas Weißschuh <linux@weissschuh.net>
 
-[ Upstream commit e8d032507cb7912baf1d3e0af54516f823befefd ]
+[ Upstream commit 3e6a950d98366f5e716904e9a7e8ffc7ed638bd6 ]
 
-fix error path handling in prestera_bridge_port_join() that
-cases prestera driver to crash (see below).
+When a scancode is manually remapped that previously was not handled as
+key, then the old usage type was incorrectly reused.
 
- Trace:
-   Internal error: Oops: 96000044 [#1] SMP
-   Modules linked in: prestera_pci prestera uio_pdrv_genirq
-   CPU: 1 PID: 881 Comm: ip Not tainted 5.15.0 #1
-   pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-   pc : prestera_bridge_destroy+0x2c/0xb0 [prestera]
-   lr : prestera_bridge_port_join+0x2cc/0x350 [prestera]
-   sp : ffff800011a1b0f0
-   ...
-   x2 : ffff000109ca6c80 x1 : dead000000000100 x0 : dead000000000122
-    Call trace:
-   prestera_bridge_destroy+0x2c/0xb0 [prestera]
-   prestera_bridge_port_join+0x2cc/0x350 [prestera]
-   prestera_netdev_port_event.constprop.0+0x3c4/0x450 [prestera]
-   prestera_netdev_event_handler+0xf4/0x110 [prestera]
-   raw_notifier_call_chain+0x54/0x80
-   call_netdevice_notifiers_info+0x54/0xa0
-   __netdev_upper_dev_link+0x19c/0x380
+This caused issues on a "04b3:301b IBM Corp. SK-8815 Keyboard" which has
+marked some of its keys with an invalid HID usage.  These invalid usage
+keys are being ignored since support for USB programmable buttons was
+added.
 
-Fixes: e1189d9a5fbe ("net: marvell: prestera: Add Switchdev driver implementation")
-Signed-off-by: Volodymyr Mytnyk <vmytnyk@marvell.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+The scancodes are however remapped explicitly by the systemd hwdb to the
+keycodes that are printed on the physical buttons.  During this mapping
+step the existing usage is retrieved which will be found with a default
+type of 0 (EV_SYN) instead of EV_KEY.
+
+The events with the correct code but EV_SYN type are not forwarded to
+userspace.
+
+This also leads to a kernel oops when trying to print the report descriptor
+via debugfs.  hid_resolv_event() tries to resolve a EV_SYN event with an
+EV_KEY code which leads to an out-of-bounds access in the EV_SYN names
+array.
+
+Fixes: bcfa8d1457 ("HID: input: Add support for Programmable Buttons")
+Fixes: f5854fad39 ("Input: hid-input - allow mapping unknown usages")
+Reported-by: Brent Roman <brent@mbari.org>
+Tested-by: Brent Roman <brent@mbari.org>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Signed-off-by: Jiri Kosina <jkosina@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/marvell/prestera/prestera_switchdev.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/hid/hid-input.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/marvell/prestera/prestera_switchdev.c b/drivers/net/ethernet/marvell/prestera/prestera_switchdev.c
-index 7d83e1f91ef17..9101d00e96b9d 100644
---- a/drivers/net/ethernet/marvell/prestera/prestera_switchdev.c
-+++ b/drivers/net/ethernet/marvell/prestera/prestera_switchdev.c
-@@ -439,8 +439,8 @@ static int prestera_port_bridge_join(struct prestera_port *port,
+diff --git a/drivers/hid/hid-input.c b/drivers/hid/hid-input.c
+index 4b3f4a5e23058..6561770f1af55 100644
+--- a/drivers/hid/hid-input.c
++++ b/drivers/hid/hid-input.c
+@@ -160,6 +160,7 @@ static int hidinput_setkeycode(struct input_dev *dev,
+ 	if (usage) {
+ 		*old_keycode = usage->type == EV_KEY ?
+ 				usage->code : KEY_RESERVED;
++		usage->type = EV_KEY;
+ 		usage->code = ke->keycode;
  
- 	br_port = prestera_bridge_port_add(bridge, port->dev);
- 	if (IS_ERR(br_port)) {
--		err = PTR_ERR(br_port);
--		goto err_brport_create;
-+		prestera_bridge_put(bridge);
-+		return PTR_ERR(br_port);
- 	}
- 
- 	if (bridge->vlan_enabled)
-@@ -454,8 +454,6 @@ static int prestera_port_bridge_join(struct prestera_port *port,
- 
- err_port_join:
- 	prestera_bridge_port_put(br_port);
--err_brport_create:
--	prestera_bridge_put(bridge);
- 	return err;
- }
- 
+ 		clear_bit(*old_keycode, dev->keybit);
 -- 
 2.33.0
 

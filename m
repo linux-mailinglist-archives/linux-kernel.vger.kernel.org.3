@@ -2,90 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F252461574
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1979546157E
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 13:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234729AbhK2Mtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 07:49:43 -0500
-Received: from esa.microchip.iphmx.com ([68.232.153.233]:50652 "EHLO
-        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230391AbhK2Mrm (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 07:47:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1638189866; x=1669725866;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=DdVxmhjETMnI2QDRtd3TVl+AMLSq2tr/39GpckqtkfM=;
-  b=pODauCoZj1gPHTPRM5Ugn43yt3UNuJ3aTxmjcrsL8ZVnUrjCCnjqLC2/
-   Gi/FqUfSsyeQT9b34QSxl7yuHeYkJWBwNmXDY5beipNFBLKQ831zV1TP/
-   AmhHWBI6+cqFJaDXnVTziXgM2wwjYBvRhc4mg59nodOcMk5OHZyvLPK9r
-   T0kAFF6PEGncGcC4PyV0AsIb8GnQqH9yVo300swQntpfV3QauujNyOrbs
-   wihb7xtsU9YueFHd9fue1z/zBNOIzKBVVc9X2ilV7LZMVEILR4e9ln8LQ
-   Ru38hfnt/ggiYrmoe7BK6afWNzAKcXrH/6IMo7WiSSNa/tPxqKdpc/t//
-   w==;
-IronPort-SDR: Rbl5vP+VMjKJ9x02xDVhI8N5csMXEBbD3Bl8cyT5mIb21rU/0BhintDae3G/VnN0ncgDMl7VyL
- q/vDEbSTA9EJavVM0jxYMiLpQA1Cpf7X38+INqwAhsPgbDMgwAutJzDwjVtdExeij7XZc2kKwS
- bSmNr/AEGX6jcypFZkX8xX/biMfqSLEuphqbWgaTWRTSm4j0Fj2appe2gjKl5P1zoGwY+YPGGO
- cvgm5fZbiOggKXTWVYdTf5LNivZyfZHKevMD4cOTFx1NZTn8y1ksjVO+FPwQ4nfasJsrOrW14h
- MxfOOi78XYAAjO0pM0Huo4QL
-X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
-   d="scan'208";a="144833734"
-Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 29 Nov 2021 05:42:42 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 29 Nov 2021 05:42:40 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 29 Nov 2021 05:42:38 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <robh+dt@kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <p.zabel@pengutronix.de>,
-        <linux@armlinux.org.uk>, <andrew@lunn.ch>,
-        <netdev@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next v5 6/6] net: lan966x: Update MAINTAINERS to include lan966x driver
-Date:   Mon, 29 Nov 2021 13:43:59 +0100
-Message-ID: <20211129124359.4069432-7-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211129124359.4069432-1-horatiu.vultur@microchip.com>
-References: <20211129124359.4069432-1-horatiu.vultur@microchip.com>
+        id S236638AbhK2My1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 07:54:27 -0500
+Received: from sauhun.de ([88.99.104.3]:41764 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235038AbhK2Mw0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 07:52:26 -0500
+Received: from localhost (p54b33788.dip0.t-ipconnect.de [84.179.55.136])
+        by pokefinder.org (Postfix) with ESMTPSA id 177802C00AC;
+        Mon, 29 Nov 2021 13:49:06 +0100 (CET)
+Date:   Mon, 29 Nov 2021 13:49:05 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Kewei Xu <kewei.xu@mediatek.com>, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com, leilk.liu@mediatek.com,
+        qii.wang@mediatek.com, liguo.zhang@mediatek.com,
+        caiyu.chen@mediatek.com, ot_daolong.zhu@mediatek.com,
+        yuhan.wei@mediatek.com
+Subject: Re: [PATCH v7 6/7] i2c: mediatek: Isolate speed setting via dts for
+ special devices
+Message-ID: <YaTMQQhENmJAIUk4@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@the-dreams.de>,
+        Kewei Xu <kewei.xu@mediatek.com>, matthias.bgg@gmail.com,
+        robh+dt@kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        srv_heupstream@mediatek.com, leilk.liu@mediatek.com,
+        qii.wang@mediatek.com, liguo.zhang@mediatek.com,
+        caiyu.chen@mediatek.com, ot_daolong.zhu@mediatek.com,
+        yuhan.wei@mediatek.com
+References: <20210917101416.20760-1-kewei.xu@mediatek.com>
+ <20210917101416.20760-7-kewei.xu@mediatek.com>
+ <YVf+83LdUEPjoLdI@kunai>
+ <1891acec7f5c417f62081a8b10249b265df7ea62.camel@mediatek.com>
+ <YWQYbaTIhud2QHNP@kunai>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jENikAxoMoLFIwSJ"
+Content-Disposition: inline
+In-Reply-To: <YWQYbaTIhud2QHNP@kunai>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update MAINTAINERS to include lan966x driver
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- MAINTAINERS | 7 +++++++
- 1 file changed, 7 insertions(+)
+--jENikAxoMoLFIwSJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 360e9aa0205d..2235014c16c4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12524,6 +12524,13 @@ L:	netdev@vger.kernel.org
- S:	Maintained
- F:	drivers/net/ethernet/microchip/lan743x_*
- 
-+MICROCHIP LAN966X ETHERNET DRIVER
-+M:	Horatiu Vultur <horatiu.vultur@microchip.com>
-+M:	UNGLinuxDriver@microchip.com
-+L:	netdev@vger.kernel.org
-+S:	Maintained
-+F:	drivers/net/ethernet/microchip/lan966x/*
-+
- MICROCHIP LCDFB DRIVER
- M:	Nicolas Ferre <nicolas.ferre@microchip.com>
- L:	linux-fbdev@vger.kernel.org
--- 
-2.33.0
 
+> > stretching. But if the slave device stretch the SCL line for too long
+> > time, our design still cannot make tSU,STA/tHD,STA/tSU,STO meet spec.
+>=20
+> Isn't the new algorithm broken if it cannot support clock stretching?
+> What was the problem of the old algorithm not meeting the spec?
+>=20
+> > However in the old (default) timing algorithm before the commit
+> > be5ce0e97cc7 ("i2c: mediatek: Add i2c ac-timing adjust support"),
+> > tSU,STA/tHD,STA/tSU,STO can meet spec. So we want to define a new
+> > setting "default-adjust-timing" for using the old (default) timing
+> > algorithm."
+>=20
+> What I still do not get: the old algorithm was able to handle clock
+> stretching. Why can't you update the new one to handle clock stretching
+> as well. I might be missing something, but what is it?
+
+I am still interested. Especially in the last question. Is the last
+question clear to you? I can explain some more otherwise.
+
+
+--jENikAxoMoLFIwSJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGkzD0ACgkQFA3kzBSg
+KbZJ4w/+KijOL+ZUEZ6LpgcHKAXFLv5FFa7WMHqAT6VluNHAVbrHkqyv1Ezlk8fh
+fNYgiB80C3VNLIyuBDiarW4yqIgw3v9HVOSqdpkTnF9uo4QFEmh6k1cmMcsjoVb2
+biNx5LnauS95Prup1NPApFsCX4X/pSyN28AZF9VwCZTkHOGHcXzqZs9sEX3+ztyd
+PnhQZvsn89nBBdwTNY+SqmsIWapYVBeQ+Cii1y88ZTfWCH6PJMBIineUCmRDAYZc
+8uLMnxh1y+RjLIda3KrtfScv/YhpsaXZ6LZjgNBIO5OTsGTrLodgoTLa+AKuZuyw
+fAg55T+gQEtPYW3bFB+Ereu6sA4Nk99QL9588VSowT/A2aiHWCJN0eyNhSBVgFDO
+bgzRgZIaB/bXAC+WdEtNBoH78j4gX+REtgWESTRA1MZdAxFZ7j1m3N19s9TTin78
+CD1ESqS6WkUVUnvrT49uJJtPqE859IPd64N9egpYBASbMniJMImHVdkbpeZVXD4O
+ffYV40aL/frsHqTZGPmoqrVfgUa90OnMExdwfeR1Ei45ptUhxHWiSlw2rUj5/QmA
+fIyXoOBWLaKSfRZDRvQK6mnCWfEipYIZPd3GB1bXGl8OgO09xfELzgVjM4+EQgZy
+qEnZyfpSHw0CeqEOupM7gstslBxmMaw8Ryx88BMfbDQmPcnpQOY=
+=PbfA
+-----END PGP SIGNATURE-----
+
+--jENikAxoMoLFIwSJ--

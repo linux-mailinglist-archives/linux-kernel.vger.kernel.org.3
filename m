@@ -2,168 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C1FF5461A51
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 330F9461A73
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 15:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240326AbhK2Oxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 09:53:33 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:47462 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345713AbhK2OvP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 09:51:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E929F6155F;
-        Mon, 29 Nov 2021 14:47:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0AD3C004E1;
-        Mon, 29 Nov 2021 14:47:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638197277;
-        bh=CoopZV0b/bKiDlV+HhvUfNkMdjiGJvIMlADMRIGNB4I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rYabvzP1gx9omCtgDIauPYZdStR3jR6UpWkgTE6hmLhH4cRWrQHf6TxS28YeH+RKr
-         SRcur0lcx5xMeZ+8gBonuXpPN+wFYA1Lnq5+OdnzLkc8KNVKvQ8FTjiUENH4dADxoG
-         /CQRR1zslN7soB04e2Atkf4XOvb5euaKzwtxmB7CrfEi+/pw8J501IDFdgTQfoX+qh
-         aU4MOGaSBGWP/0MNcgDm38CsdUb3iakU5Lv602Tqilqvw1F59jAhtD4rzXmCOi1oyk
-         ChqJVkhxVGeMImLerX7GfVKOyFo1URKOnTAfJ/U54kUQVPz3vbu3h0tj4JGlrxsuaC
-         gexT8LLb6/BNw==
-Date:   Mon, 29 Nov 2021 06:47:55 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, petrm@nvidia.com,
-        nikolay@nvidia.com
-Subject: Re: [PATCH v2 net-next 21/26] ice: add XDP and XSK generic
- per-channel statistics
-Message-ID: <20211129064755.539099c0@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <YaPCbaMVaVlxXcHC@shredder>
-References: <20211123163955.154512-22-alexandr.lobakin@intel.com>
-        <77407c26-4e32-232c-58e0-2d601d781f84@iogearbox.net>
-        <87bl28bga6.fsf@toke.dk>
-        <20211125170708.127323-1-alexandr.lobakin@intel.com>
-        <20211125094440.6c402d63@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <20211125204007.133064-1-alexandr.lobakin@intel.com>
-        <87sfvj9k13.fsf@toke.dk>
-        <20211126100611.514df099@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <87ee72ah56.fsf@toke.dk>
-        <20211126111431.4a2ed007@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-        <YaPCbaMVaVlxXcHC@shredder>
+        id S1345139AbhK2O7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 09:59:47 -0500
+Received: from foss.arm.com ([217.140.110.172]:41692 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1346090AbhK2O5q (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 09:57:46 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F18AD1042;
+        Mon, 29 Nov 2021 06:54:25 -0800 (PST)
+Received: from [10.57.34.182] (unknown [10.57.34.182])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B7D1C3F766;
+        Mon, 29 Nov 2021 06:54:21 -0800 (PST)
+Message-ID: <b192ad88-5e4e-6f32-1cc7-7a50fc0676a1@arm.com>
+Date:   Mon, 29 Nov 2021 14:54:18 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
+Content-Language: en-GB
+To:     Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>
+Cc:     Nishanth Menon <nm@ti.com>, Mark Rutland <mark.rutland@arm.com>,
+        Stuart Yoder <stuyoder@gmail.com>, linux-pci@vger.kernel.org,
+        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
+        x86@kernel.org, Sinan Kaya <okaya@kernel.org>,
+        iommu@lists.linux-foundation.org,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Megha Dey <megha.dey@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Tero Kristo <kristo@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+References: <20211126224100.303046749@linutronix.de>
+ <20211126230525.885757679@linutronix.de>
+ <20211129105506.GA22761@willie-the-truck>
+ <76a1b5c1-01c8-bb30-6105-b4073dc23065@arm.com> <87czmjdnw9.ffs@tglx>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <87czmjdnw9.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Nov 2021 19:54:53 +0200 Ido Schimmel wrote:
-> > > Right, sure, I am also totally fine with having only a somewhat
-> > > restricted subset of stats available at the interface level and make
-> > > everything else be BPF-based. I'm hoping we can converge of a common
-> > > understanding of what this "minimal set" should be :)
-> > > 
-> > > Agreed. My immediate thought is that "XDP packets are interface packets"
-> > > but that is certainly not what we do today, so not sure if changing it
-> > > at this point would break things?  
-> > 
-> > I'd vote for taking the risk and trying to align all the drivers.  
+On 2021-11-29 14:42, Thomas Gleixner wrote:
+> On Mon, Nov 29 2021 at 13:13, Robin Murphy wrote:
+>> On 2021-11-29 10:55, Will Deacon wrote:
+>>>> -	}
+>>>> +	smmu->evtq.q.irq = msi_get_virq(dev, EVTQ_MSI_INDEX);
+>>>> +	smmu->gerr_irq = msi_get_virq(dev, GERROR_MSI_INDEX);
+>>>> +	smmu->priq.q.irq = msi_get_virq(dev, PRIQ_MSI_INDEX);
+>>>
+>>> Prviously, if retrieval of the MSI failed then we'd fall back to wired
+>>> interrupts. Now, I think we'll clobber the interrupt with 0 instead. Can
+>>> we make the assignments to smmu->*irq here conditional on the MSI being
+>>> valid, please?
+>>
+>> I was just looking at that too, but reached the conclusion that it's
+>> probably OK, since consumption of this value later is gated on
+>> ARM_SMMU_FEAT_PRI, so the fact that it changes from 0 to an error value
+>> in the absence of PRI should make no practical difference.
 > 
-> I agree. I think IFLA_STATS64 in RTM_NEWLINK should contain statistics
-> of all the packets seen by the netdev. The breakdown into software /
-> hardware / XDP should be reported via RTM_NEWSTATS.
+> It's actually 0 when the vector cannot be found.
 
-Hm, in the offload case "seen by the netdev" may be unclear. For 
-the offload case I believe our recommendation was phrased more like 
-"all packets which would be seen by the netdev if there was no
-routing/tc offload", right?
+Oh, -1 for my reading comprehension but +1 for my confidence in the 
+patch then :)
 
-> Currently, for soft devices such as VLANs, bridges and GRE, user space
-> only sees statistics of packets forwarded by software, which is quite
-> useless when forwarding is offloaded from the kernel to hardware.
-> 
-> Petr is working on exposing hardware statistics for such devices via
-> rtnetlink. Unlike XDP (?), we need to be able to let user space enable /
-> disable hardware statistics as we have a limited number of hardware
-> counters and they can also reduce the bandwidth when enabled. We are
-> thinking of adding a new RTM_SETSTATS for that:
-> 
-> # ip stats set dev swp1 hw_stats on
+I'll let Will have the final say over how cautious we really want to be 
+here, but as far as I'm concerned it's a welcome cleanup as-is. Ditto 
+for patch #32 based on the same reasoning, although I don't have a 
+suitable test platform on-hand to sanity-check that one.
 
-Does it belong on the switch port? Not the netdev we want to track?
+Cheers,
+Robin.
 
-> For query, something like (under discussion):
+>> If we don't have MSIs at all, we'd presumably still fail earlier
+>> either at the dev->msi_domain check or upon trying to allocate the
+>> vectors, so we'll still fall back to any previously-set wired values
+>> before getting here.  The only remaining case is if we've
+>> *successfully* allocated the expected number of vectors yet are then
+>> somehow unable to retrieve one or more of them - presumably the system
+>> has to be massively borked for that to happen, at which point do we
+>> really want to bother trying to reason about anything?
 > 
-> # ip stats show dev swp1 // all groups
-> # ip stats show dev swp1 group link
-> # ip stats show dev swp1 group offload // all sub-groups
-> # ip stats show dev swp1 group offload sub-group cpu
-> # ip stats show dev swp1 group offload sub-group hw
+> Probably not. At that point something is going to explode sooner than
+> later in colorful ways.
 > 
-> Like other iproute2 commands, these follow the nesting of the
-> RTM_{NEW,GET}STATS uAPI.
-
-But we do have IFLA_STATS_LINK_OFFLOAD_XSTATS, isn't it effectively 
-the same use case?
-
-> Looking at patch #1 [1], I think that whatever you decide to expose for
-> XDP can be queried via:
+> Thanks,
 > 
-> # ip stats show dev swp1 group xdp
-> # ip stats show dev swp1 group xdp sub-group regular
-> # ip stats show dev swp1 group xdp sub-group xsk
+>          tglx
 > 
-> Regardless, the following command should show statistics of all the
-> packets seen by the netdev:
-> 
-> # ip -s link show dev swp1
-> 
-> There is a PR [2] for node_exporter to use rtnetlink to fetch netdev
-> statistics instead of the old proc interface. It should be possible to
-> extend it to use RTM_*STATS for more fine-grained statistics.
-> 
-> [1] https://lore.kernel.org/netdev/20211123163955.154512-2-alexandr.lobakin@intel.com/
-> [2] https://github.com/prometheus/node_exporter/pull/2074
-
-Nice!

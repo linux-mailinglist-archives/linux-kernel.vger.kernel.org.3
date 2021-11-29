@@ -2,101 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9619462937
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CE8462790
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:05:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234194AbhK3ApH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:45:07 -0500
-Received: from sender4-op-o15.zoho.com ([136.143.188.15]:17561 "EHLO
-        sender4-op-o15.zoho.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbhK3ApG (ORCPT
+        id S235162AbhK2XHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40592 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236545AbhK2XHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:45:06 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1638057926; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=k+N01kzcipbexhHQsG88X2M0FQGUx7o/+bnRg1X6P6lyVOiD8+BbReMlTn0+Oi3d1c7w9m6u7kcgTCTv6d+BOpVO36r0mVQQy1L/o97VJEK3ohLVz927iOckGst0cFmLQti4Chc/9y20bMbd+0kgLRNjeZ1TGdTUALgolDYT0dw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1638057926; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=k/axBYgs8ePu82NKai1qn+cHK8gQhlozWwXZnDXD8yk=; 
-        b=OexewUidtTGMEGSPfuJVLpIck/dTD52CYt8S+WPys75HdmGs49nYiKODg5XEu699gIqo6TlVR7iU2GAApuAuR+8azPDH0YknNLHpDhsT7vOPmhaChYD8tKyUKjTb8/hx7tx2psFIBtsXZa3dxJz8poIP0FMO7ke5CSZtFmK+xno=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=szanni.org;
-        spf=pass  smtp.mailfrom=angelo@szanni.org;
-        dmarc=pass header.from=<lkml@szanni.org>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1638057926;
-        s=zoho; d=szanni.org; i=lkml@szanni.org;
-        h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type:Content-Transfer-Encoding;
-        bh=k/axBYgs8ePu82NKai1qn+cHK8gQhlozWwXZnDXD8yk=;
-        b=Kn37IrDoVNidrb6X54m7LkCfk4fXsdTOh1vVjU4K3AaFUzv40tFX+7/y6FOyJiit
-        +2Ds4yqz4mGD6AhFB16H8bryGG1OuVI2zQkSqpJ6kprfETH+K8YPj+CPxc0WBKJ6/hL
-        FeasMNHSlJ8BPf4AO798O5gnGRu/2f/mEroY59iI=
-Received: from [192.168.0.128] (200.60.135.218 [200.60.135.218]) by mx.zohomail.com
-        with SMTPS id 1638057923743427.7880943683017; Sat, 27 Nov 2021 16:05:23 -0800 (PST)
-Message-ID: <5475c3ab-a53c-8728-98c5-98fd948ff556@szanni.org>
-Date:   Sat, 27 Nov 2021 19:07:49 -0500
+        Mon, 29 Nov 2021 18:07:01 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8A3C111CE8;
+        Mon, 29 Nov 2021 09:39:51 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso14883047pjb.2;
+        Mon, 29 Nov 2021 09:39:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=jXtNF/sPL2y+FUYzBp0rUX3UsbHP3l0DZcj0VSipxzQ=;
+        b=Ja64lXFdxwDLTwzcCX7CVYDIpHTlZxNqc0Fa6bm28nUCevMarEHl0xIPFIx8/H8NUV
+         D6NCwIn8E8TV6liXLFYmB4hDBK+HIz/lThf6bZVJvocJ6J8syTB/g5X05Cy3eJ9NaB7C
+         y+0wNiXp0x+DIlrvBdRkEkoHGRIU/0Dm4uEoEqcz4r0bl5SL7dMtug4+HlZrwpnfTWG+
+         b4Q3Wnge5QIK3/lfxSIvRUWuJv8am15+opOEPf2Nvv+FpbXzfqW5csZiK4GwB7vE/MFm
+         yQ27hpi+zg0inn1ldPqVacjNX9vRBj02UV6zz//ORkQLpARoEcY7eJNKPhvuF/3ZkFpA
+         Oq6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=jXtNF/sPL2y+FUYzBp0rUX3UsbHP3l0DZcj0VSipxzQ=;
+        b=qijwwUirGg6hVpthCvcDTlI1K0OmrFbjarSSwx+SxvAzRdta/2FkkVcW18voo7t5vp
+         vl2ovR4/Mk75IzL9AnZg/9onfkbtv/DEKeb5SSlBwK0LWT+TXcmB2AlwfOs9LaCn1yDZ
+         cgDU6QVQ1AmVZrWgoed2SWBkEBzuVn3d78EtTYROYAV6a2Dq/qg48NGpE2S1Cc/z/Zuo
+         269CEkZhXtE3gJrVDSOLeUo2kDrAd6od0ovP4kYhXIBrf9abUzhWw/ycxijWbfl3jgrR
+         a8PrhUzMA00TmGPDYmn/d5j797f4p3sAvMVIOoi0ETWcXH7rVPCeRnjz/1o4NIVpKVkM
+         6X3A==
+X-Gm-Message-State: AOAM532jdutxZaGBLQgfUGOKcjfsa3wLvQcU3IuQ0obictRuBqvynla8
+        Agam/nrc+vE9cGhkhHH63roW4UZZyea8hQ==
+X-Google-Smtp-Source: ABdhPJzd+h973yGq3DVl8eJnnV9BbvEFLAN0O4J92uD5Ql1r9Jj3DYZ1Z+UzjCjdGXiUaNMRFVNu4Q==
+X-Received: by 2002:a17:90a:3045:: with SMTP id q5mr40478485pjl.58.1638207591089;
+        Mon, 29 Nov 2021 09:39:51 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id p16sm19000913pfh.97.2021.11.29.09.39.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 09:39:50 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 29 Nov 2021 07:39:49 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Wei Yang <richard.weiyang@gmail.com>
+Cc:     lizefan.x@bytedance.com, hannes@cmpxchg.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] cgroup: get the wrong css for css_alloc() during
+ cgroup_init_subsys()
+Message-ID: <YaUQZZbFDDOpwHYY@slm.duckdns.org>
+References: <20211127145919.31159-1-richard.weiyang@gmail.com>
+ <20211127145919.31159-2-richard.weiyang@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Will Deacon <will@kernel.org>, linux-rt-users@vger.kernel.org
-From:   Angelo Haller <lkml@szanni.org>
-Subject: sched: some non-GPL symbols becoming GPL-only with CONFIG_PREEMPT_RT
- enabled
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211127145919.31159-2-richard.weiyang@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greetings. I hope I picked the right mailing list, as this issue might 
-be one that affects various subsystems and components:
+On Sat, Nov 27, 2021 at 02:59:19PM +0000, Wei Yang wrote:
+> css_alloc() needs the parent css, while cgroup_css() gets current
+> cgropu's css. So we are getting the wrong css during
+> cgroup_init_subsys().
+> 
+> Fortunately, cgrp_dfl_root.cgrp's css is not set yet, so the value we
+> pass to css_alloc() doesn't harm to the system.
+> 
+> Let's pass NULL directly during init, since we know there is no parent
+> yet.
+> 
+> Signed-off-by: Wei Yang <richard.weiyang@gmail.com>
 
-When compiling kernel 5.15 (and 5.16-rc2) with `CONFIG_PREEMPT_RT` 
-enabled, some of the symbols being exported as `EXPORT_SYMBOL` suddenly 
-become `EXPORT_SYMBOL_GPL` through transitive effects.
+Applied to cgroup/for-5.17 w/ minor description adjustment.
 
-In particular the symbols `migrate_enable` and `migrate_disable` are 
-currently marked as `EXPORT_SYMBOL_GPL` - yet are called from multiple 
-functions that are marked as `EXPORT_SYMBOL`.
+Thanks.
 
-Here an (incomplete?) listing of call sites I came across:
-
-kernel/locking/spinlock_rt.c - rt_spin_unlock()
-kernel/locking/spinlock_rt.c - rt_read_unlock()
-kernel/locking/spinlock_rt.c - rt_write_unlock()
-mm/highmem.c - kunmap_local_indexed()
-
-The issue I'm facing in particular is kmap_atomic() calling 
-`migrate_disable` and therefore suddenly becoming GPL-only. This breaks 
-the out-of-tree CDDL licensed module ZFS and has been reported before 
-already [0]. The conversation seemingly going nowhere - or patches at 
-least not being applied upstream. Downstream issue for reference [1].
-
-As the original implementation of `migrate_enable` and `migrate_disable` 
-is apparently by Peter Zijlstra [2]. Peter would you be willing to 
-re-license both symbols `migrate_enable` and `migrate_disable` as 
-`EXPORT_SYMBOL`?
-
-The bigger issue I'm seeing though is that there is currently no 
-automated test to uncover exported symbols changing their license 
-depending on build configuration? I am not intimately familiar with the 
-API guarantees the kernel gives, but this seems like a violation. There 
-might be other symbols with similar licensing problems.
-
-I can open a bugzilla ticket too - if that is preferred.
-
-Angelo
-
-
-[0] 
-https://lore.kernel.org/linux-rt-users/20201208212841.694b3022@orivej.orivej.org/T/
-[1] https://github.com/openzfs/zfs/issues/11097
-[2] 
-https://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git/diff/patches/0009-sched-Add-migrate_disable.patch?h=v5.9-rc8-rt14-patches&id=9a89bfdb3bc77aecdd0ff8cc69b595541c7b50c4
-
+-- 
+tejun

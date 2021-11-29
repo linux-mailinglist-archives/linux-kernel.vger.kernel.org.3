@@ -2,153 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6A646287F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:41:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651CE462882
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbhK2XpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:45:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S233045AbhK2Xqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:46:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbhK2XpM (ORCPT
+        with ESMTP id S231546AbhK2Xqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:45:12 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A8FC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:41:54 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id c29so6735065pgl.12
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:41:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=PDG0Bl8E6wlHiv8lfcoAy+JyQ0H+H21DxcHuwLiwAi8=;
-        b=YHhv+ReJo9k2w1FFWtWlaPGT1O4O9PwdOFSROBlMrHS8iqi5qQAzDpbGhh7/DS718i
-         yu8BBK8pMQIGNcMLZUYYZv2N5HOxKmDgwW71n/w2kqsplpyfq4XD+gUjgvfggIaK2hc2
-         zoaWFXGPA4Bqtuq59fzBlki05ld9qNBD1Gcr63c92sNaIBJojY+uNCkSdXUG6gT9Ibp5
-         AEZbTddRaD9q5lEwRKGtt4bGTW27j/MrQf01dZDxve9uRPofhTueAQWzR5h4yHAii/Ws
-         Gqz3tJmbN7pRgTgbzCROImBo4dC3q+zaCDskXhSthAcDmqxTXO1wsTSf7ekTd5MfUuyv
-         rX+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=PDG0Bl8E6wlHiv8lfcoAy+JyQ0H+H21DxcHuwLiwAi8=;
-        b=hEeyVPYvfTFY5CvSYji0rJNA+G+hEnAD4SgTxlb7RS9iq7BmZd5pobB3BIqAol7+Yd
-         skOrYzEZuZSHfi5p16Kw76J2K3gK7ImSn/n2+PYk1BLX0OnLyZyczkXNi/SQfDQsfMGH
-         LleBLHrCSLseYXrBxmolV6HgdTft8BxSE6NBfZFKAA2RaCBicRs0RYAMovqPxaVR6k88
-         d+Uj1KfA2jIkb1d7sMkiUxlZ96cI2M2pad1BJnRgqgxFw/Izb8pwLLQ279W6tk01nQtO
-         WRse4eRT/ms1jkho01Bk8C3c6DSO2KoNRCRMerD1ba4Uwhe7MbybgNsaPS0jNVtMPbDZ
-         ihUg==
-X-Gm-Message-State: AOAM530pxxQ5cLtSvUrIIKGOJInupXq+0bFFLy52gpDbYUf73vk5a5KC
-        qb+5v94kAyqjxp7a2YiG0L/bMg==
-X-Google-Smtp-Source: ABdhPJxuBGPuA+T2tL92nF8nTaKDlOozw7oEPFI09uY+LONaAJeW35fY35HO46VjMrr8r0+nE/lVvg==
-X-Received: by 2002:a63:4918:: with SMTP id w24mr23854492pga.598.1638229314214;
-        Mon, 29 Nov 2021 15:41:54 -0800 (PST)
-Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
-        by smtp.gmail.com with ESMTPSA id t4sm19332194pfq.163.2021.11.29.15.41.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 15:41:53 -0800 (PST)
-Date:   Mon, 29 Nov 2021 23:41:50 +0000
-From:   David Matlack <dmatlack@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        seanjc@google.com, stable@vger.kernel.org
-Subject: Re: [PATCH 4/4] KVM: x86: Use a stable condition around all VT-d PI
- paths
-Message-ID: <YaVlPso5X2dM+kXC@google.com>
-References: <20211123004311.2954158-1-pbonzini@redhat.com>
- <20211123004311.2954158-5-pbonzini@redhat.com>
+        Mon, 29 Nov 2021 18:46:33 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E5FC061574;
+        Mon, 29 Nov 2021 15:43:15 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D16DB80E60;
+        Mon, 29 Nov 2021 23:43:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E85C53FC7;
+        Mon, 29 Nov 2021 23:43:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638229393;
+        bh=v0akOi0mvD4yAAD/9uHOV/phrtGDtd87F2BTeHC8rCs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qjtwn6sClt3hk+bYK30jgyULuNHdqpCQo+KyNMhVUsnc+x4HHKxC+Wup5C5bDzMhp
+         H3DN67Q+yHKbzeP/e0B5e7bHProA74UldcB/OiK9tZSlbb73TPFx2sCH2oODrI+a3K
+         xKa+gIgLfBidm607gvqlFU6JYSeTgIMmt4ur0HHDnuudpMOfpG9w1dKShJx8K7ciIJ
+         3ObNnoqe9JTPtMkrCGsMLi1Aduvw69kY4qCqqlyJ3+PKtiy7v2jl5xqRNQ8FETbtEd
+         i0MhmVU9AjoVEDN8O+LXdAPtHV20fXlBlCp8b880OeUOedoCVdZWtTRCffEQsrLcjy
+         InW/h9FxUoQ0Q==
+Date:   Tue, 30 Nov 2021 01:43:10 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org, Stefan Berger <stefanb@linux.ibm.com>
+Subject: Re: [PATCH v4 2/2] selftests: tpm2: Reset the dictionary attack lock
+Message-ID: <YaVljk1vLRZ/TDJ/@iki.fi>
+References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
+ <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211123004311.2954158-5-pbonzini@redhat.com>
+In-Reply-To: <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021 at 07:43:11PM -0500, Paolo Bonzini wrote:
-> Currently, checks for whether VT-d PI can be used refer to the current
-> status of the feature in the current vCPU; or they more or less pick
-> vCPU 0 in case a specific vCPU is not available.
+On Sat, Nov 27, 2021 at 11:10:52PM -0500, Stefan Berger wrote:
+> From: Stefan Berger <stefanb@linux.ibm.com>
 > 
-> However, these checks do not attempt to synchronize with changes to
-> the IRTE.  In particular, there is no path that updates the IRTE when
-> APICv is re-activated on vCPU 0; and there is no path to wakeup a CPU
-> that has APICv disabled, if the wakeup occurs because of an IRTE
-> that points to a posted interrupt.
+> Reset the dictionary attack lock to avoid the following types of test
+> failures after running the test 2 times:
 > 
-> To fix this, always go through the VT-d PI path as long as there are
-> assigned devices and APICv is available on both the host and the VM side.
-> Since the relevant condition was copied over three times, take the hint
-> and factor it into a separate function.
+> ======================================================================
+> ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
+> ----------------------------------------------------------------------
+> Traceback (most recent call last):
+>   File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2_tests.py", line 105, in test_unseal_with_wrong_policy
+>     blob = self.client.seal(self.root_key, data, auth, policy_dig)
+>   File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 620, in seal
+>     rsp = self.send_cmd(cmd)
+>   File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 397, in send_cmd
+>     raise ProtocolError(cc, rc)
+> tpm2.ProtocolError: TPM_RC_LOCKOUT: cc=0x00000153, rc=0x00000921
 > 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Cc: stable@vger.kernel.org
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-
-Reviewed-by: David Matlack <dmatlack@google.com>
-
+> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
 > ---
->  arch/x86/kvm/vmx/posted_intr.c | 20 +++++++++++---------
->  1 file changed, 11 insertions(+), 9 deletions(-)
+>  tools/testing/selftests/tpm2/tpm2_tests.py | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
-> index 5f81ef092bd4..1c94783b5a54 100644
-> --- a/arch/x86/kvm/vmx/posted_intr.c
-> +++ b/arch/x86/kvm/vmx/posted_intr.c
-> @@ -5,6 +5,7 @@
->  #include <asm/cpu.h>
+> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+> index e63a37819978..ad6f54c01adf 100644
+> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
+> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+> @@ -139,6 +139,8 @@ class SmokeTest(unittest.TestCase):
+>          except:
+>              self.client.flush_context(handle)
+>              raise
+> +        finally:
+> +            self.client.reset_da_lock()
 >  
->  #include "lapic.h"
-> +#include "irq.h"
->  #include "posted_intr.h"
->  #include "trace.h"
->  #include "vmx.h"
-> @@ -77,13 +78,18 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
->  		pi_set_on(pi_desc);
->  }
+>          self.assertEqual(rc, tpm2.TPM2_RC_POLICY_FAIL)
 >  
-> +static bool vmx_can_use_vtd_pi(struct kvm *kvm)
-> +{
-> +	return irqchip_in_kernel(kvm) && enable_apicv &&
-> +		kvm_arch_has_assigned_device(kvm) &&
-> +		irq_remapping_cap(IRQ_POSTING_CAP);
-> +}
-> +
->  void vmx_vcpu_pi_put(struct kvm_vcpu *vcpu)
->  {
->  	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
->  
-> -	if (!kvm_arch_has_assigned_device(vcpu->kvm) ||
-> -		!irq_remapping_cap(IRQ_POSTING_CAP)  ||
-> -		!kvm_vcpu_apicv_active(vcpu))
-> +	if (!vmx_can_use_vtd_pi(vcpu->kvm))
->  		return;
->  
->  	/* Set SN when the vCPU is preempted */
-> @@ -141,9 +147,7 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
->  	struct pi_desc old, new;
->  	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
->  
-> -	if (!kvm_arch_has_assigned_device(vcpu->kvm) ||
-> -		!irq_remapping_cap(IRQ_POSTING_CAP)  ||
-> -		!kvm_vcpu_apicv_active(vcpu))
-> +	if (!vmx_can_use_vtd_pi(vcpu->kvm))
->  		return 0;
->  
->  	WARN_ON(irqs_disabled());
-> @@ -270,9 +274,7 @@ int pi_update_irte(struct kvm *kvm, unsigned int host_irq, uint32_t guest_irq,
->  	struct vcpu_data vcpu_info;
->  	int idx, ret = 0;
->  
-> -	if (!kvm_arch_has_assigned_device(kvm) ||
-> -	    !irq_remapping_cap(IRQ_POSTING_CAP) ||
-> -	    !kvm_vcpu_apicv_active(kvm->vcpus[0]))
-> +	if (!vmx_can_use_vtd_pi(kvm))
->  		return 0;
->  
->  	idx = srcu_read_lock(&kvm->irq_srcu);
 > -- 
-> 2.27.0
+> 2.31.1
 > 
+
+I don't agree with this as a DA lock has legit use. This would be adequate
+for systems dedicated for kernel testing only.
+
+We could make this available in the folder where TPM2 tests are:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-scripts.git/tree/tpm2-reset-da-lock
+
+/Jarkko

@@ -2,76 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE2B4624DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA958462568
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 23:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbhK2Wbv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 17:31:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbhK2Wbp (ORCPT
+        id S231229AbhK2Wim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 17:38:42 -0500
+Received: from out5-smtp.messagingengine.com ([66.111.4.29]:40415 "EHLO
+        out5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231501AbhK2WiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 17:31:45 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21720C096768
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:28:27 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id n8so13352320plf.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 14:28:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=qb3aXm+BA5Ia7gXPfB86sDSJOCEYidsMA7C1EHNFxFE=;
-        b=NOsZWOJOfJXO1Pk9eoMVSVfCfxt3B+3igQuJqyokpPIUVHfg/7HIIdrDgLmRkOLsot
-         HJuNDMd6AyuIixsg4fTvZ3VrPRnhz6rWB9JSJHBizWqm78CZYaNd7jLHj/QOzNnLx3y5
-         PrnYMI0L539PXaAl/Oml1cKsb7j34Qi6NaLvL/+Okla9Tb0n+1JaNK4jgL9FHH+MuGkX
-         cGeovkF/Go7RZMsPzEdcEYsDXL8oIFYZYe49B1L4eefUSPpP9lkC7et/m4T1uf/57Ei8
-         sfBQOplfL/CjxVQfOnrCcgZ9SOzQq+e5vKH0loz0M2pohnISIsoW6EfniyZZSbxJrYfa
-         YuyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=qb3aXm+BA5Ia7gXPfB86sDSJOCEYidsMA7C1EHNFxFE=;
-        b=wx05BZOBtl9piJEDxaBguNfQQqFK566ejM+ugnRsHJi4AmtylPvOlkd80nSnyCMOTF
-         mb1yAE11POsWgMphee5ktBfldJT+mIS1prqtfhWjcahjyrQQ1Jtd3EANCx99bDloEjnn
-         0/yesUaIto1lrKjRVb5sfCdkm1/GKP1HuPF67sp/NlkkztrqpKkqog8Jf6UWDzOXHmbK
-         qWN3xdtJNJDmXZC7OymmbGODvin1BLWUdYukgVJQqn/YhMjw3baSMZFGjQvCKjW4Hyox
-         SgDvKPLOILFaRPulqxcIUbTDZnHBHZc4P/+KVQAiVIWlYvNKw3ZO0Zz3R04yXlZaCftY
-         Q+XQ==
-X-Gm-Message-State: AOAM531N9noOEb70Cx+83DG/tGmIg/QD9eOtldIcBwwAkpR+CioYXc4/
-        TurCxJbcXAqslwrXYkwLB4cGCQ==
-X-Google-Smtp-Source: ABdhPJxvABtMr1ja365UozpBKiWE0/Yp9OkEqo54cSSBleqV2UXwGArNbbe9CYtub7yCgoR5cHgMKg==
-X-Received: by 2002:a17:902:aa86:b0:145:90c:f4aa with SMTP id d6-20020a170902aa8600b00145090cf4aamr62802971plr.79.1638224906469;
-        Mon, 29 Nov 2021 14:28:26 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id f2sm19668270pfe.132.2021.11.29.14.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 14:28:26 -0800 (PST)
-Date:   Mon, 29 Nov 2021 22:28:22 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        pgonda@google.com
-Subject: Re: [PATCH 03/12] KVM: SEV: expose KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM
- capability
-Message-ID: <YaVUBv9ILIkElc/2@google.com>
-References: <20211123005036.2954379-1-pbonzini@redhat.com>
- <20211123005036.2954379-4-pbonzini@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211123005036.2954379-4-pbonzini@redhat.com>
+        Mon, 29 Nov 2021 17:38:05 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id E9A495C019E;
+        Mon, 29 Nov 2021 17:34:45 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Mon, 29 Nov 2021 17:34:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm3; bh=nak5LLj7hhbHiQ3bZxbtQxMEyoqm
+        oK2+u/U9XmUMMoc=; b=THtCY7wkN/LcNfZsiY6qA3Z5wl8SrUNoDQdhre1m32or
+        xXwFlPbIeq4T7sCxkvXWWqLU0wIndzQRo1e3w7X6TPxHrcmbdlN4s9+JP9D+uT+v
+        u5x/ef/5I2XDXd+kkfqh1c8KgGlq/gbEbOCtRFctyliNdfHGxr3kUcgbeGnrx914
+        BzWbLeVdSNNVcE5iAZsZGDCEC0nCMIeVNcctl0Dllk9l36YowjHlHgN5TUqqF1ta
+        ResCWamcVlEQ4k8HTJZLa3MIE3iJlwnmJoiXh8dNKkuMDVq/xW1m+/vhXEhUvJSH
+        jVmeMDwVM/P3a8Tb/2hcaiblzfVnK2V3wcQzW8mpGw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=nak5LL
+        j7hhbHiQ3bZxbtQxMEyoqmoK2+u/U9XmUMMoc=; b=ea2pzyNyhML2wK/z0O8odQ
+        6ude99ahq4hO3z6Kspo4G0O8LWGST+J62JO11HmqUp7CjYjmNFCUjn4Y+sTNJdLn
+        3UjWrq4krZjwSj2Lw1VBrMRloGxNyH3nDYybdfccJ/uYWObptf/OlrTQNimE1JZT
+        EkP1Bru+1a3cGKwBrjVRvIXkVQM4Hzahp651L0hUPTHXrERbGC9zcWjczgMo4T8h
+        nl6Ii051ICABSNgG3jQpj7YLcu71L38xr0Ky7e+LvxmpXbVWZsW79t3am3umfrUF
+        43FhB5ZyBaO0OK3T42FI/blnp8Q+5hdByyiaFBfo9e8OyUzfMnOoaxhGgyvPk4PA
+        ==
+X-ME-Sender: <xms:hVWlYYVr53cB3hUsRMEnoYkT3mph035pFKO1ZloTpfqIZzJTjJjkOQ>
+    <xme:hVWlYclhtLS9EXXK1DDxNQPtCVGB3ytwPjypfL9N_vdIpNlQWuRu6uQ2EaMce2_VK
+    F_THxC0rEAtiG2G77A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrheelgdduieefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdfuvhgv
+    nhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrg
+    htthgvrhhnpeehtdffledvffegveejgeegvdeujedtteefgfelffehtdetudekteethfet
+    keeuudenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvght
+    vghrrdguvghv
+X-ME-Proxy: <xmx:hVWlYcaQVGukXnjV1thivnYKbqj2kj_VF9BQWNV4mUBNeBEmi4jgug>
+    <xmx:hVWlYXX0fhxwE5auQvj3nId5W7diEzvBj4LmtcbR1vSb3z9gYdLONw>
+    <xmx:hVWlYSn4zj8upU9tYUZ4DZ1CBy_zfTBJWiy33GC_aZWeByA77_ZIkQ>
+    <xmx:hVWlYQa8SoRKcrKDWlE9VIg3rxbbH8S1CISuiDkLp00MAf7QoVIltQ>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 407A427407A2; Mon, 29 Nov 2021 17:34:45 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4409-g12559b250c-fm-20211129.001-g12559b25
+Mime-Version: 1.0
+Message-Id: <78db7a00-93a4-46de-8071-2801c84bc171@www.fastmail.com>
+In-Reply-To: <YaQseO5kF71vABji@robh.at.kernel.org>
+References: <20211108170946.49689-1-sven@svenpeter.dev>
+ <YaQseO5kF71vABji@robh.at.kernel.org>
+Date:   Mon, 29 Nov 2021 23:34:24 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Rob Herring" <robh@kernel.org>
+Cc:     "Felipe Balbi" <balbi@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Hector Martin" <marcan@marcan.st>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>,
+        "Mark Kettenis" <mark.kettenis@xs4all.nl>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: Add Apple dwc3 bindings
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 22, 2021, Paolo Bonzini wrote:
-> The capability, albeit present, was never exposed via KVM_CHECK_EXTENSION.
-> 
-> Fixes: b56639318bb2 ("KVM: SEV: Add support for SEV intra host migration")
-> Cc: Peter Gonda <pgonda@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
+Hi,
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Thanks for the review!
+
+On Mon, Nov 29, 2021, at 02:27, Rob Herring wrote:
+> On Mon, Nov 08, 2021 at 06:09:45PM +0100, Sven Peter wrote:
+>> Apple Silicon SoCs such as the M1 have multiple USB controllers based on
+>> the Synopsys DesignWare USB3 controller.
+>> References to the ATC PHY required for SuperSpeed are left out for now
+>> until support has been upstreamed as well.
+>> 
+>> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+>> ---
+>> v1 -> v2:
+>>  - added apple,dwc3 bindings instead of a property for the reset quirk
+>>    as requested by robh
+>> 
+>> I think I have to use GPL-2.0 for this binding since it's based
+>> on and references snps,dwc3.yaml which is also only GPL-2.0.
+>> Otherwise I'd be fine with the usual GPL/BSD dual license as well.
+>> 
+>>  .../devicetree/bindings/usb/apple,dwc3.yaml   | 64 +++++++++++++++++++
+>>  MAINTAINERS                                   |  1 +
+>>  2 files changed, 65 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/usb/apple,dwc3.yaml b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+>> new file mode 100644
+>> index 000000000000..fb3b3489e6b2
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/usb/apple,dwc3.yaml
+>> @@ -0,0 +1,64 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>
+> Dual license please.
+
+I'd like to but I'm not sure if I can do that. This binding is based on
+snps,dwc3.yaml and rockchip,dwc3.yaml which are both only GPL-2.0.
+
+>
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/usb/apple,dwc3.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Apple Silicon DWC3 USB controller
+>> +
+>> +maintainers:
+>> +  - Sven Peter <sven@svenpeter.dev>
+>> +
+>> +description:
+>> +  On Apple Silicon SoCs such as the M1 each Type-C port has a corresponding
+>> +  USB controller based on the Synopsys DesignWare USB3 controller.
+>> +
+>> +  The common content of this binding is defined in snps,dwc3.yaml.
+>> +
+>> +allOf:
+>> +  - $ref: snps,dwc3.yaml#
+>> +
+>> +select:
+>> +  properties:
+>> +    compatible:
+>> +      contains:
+>> +        const: apple,dwc3
+>
+> This needs to list all possible compatibles except snps,dwc3 so the 
+> schema is applied for any incorrect mixture of compatibles.
+
+Makes sense, will do that for the next version.
+
+
+
+Thanks,
+
+Sven

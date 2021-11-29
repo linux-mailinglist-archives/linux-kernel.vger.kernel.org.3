@@ -2,158 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 085A746288E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:48:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91009462893
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:49:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233422AbhK2Xvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:51:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51780 "EHLO
+        id S233231AbhK2Xw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:52:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233265AbhK2Xvh (ORCPT
+        with ESMTP id S233008AbhK2Xw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:51:37 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FD7C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:48:19 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id a11so18976272ilj.6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:48:19 -0800 (PST)
+        Mon, 29 Nov 2021 18:52:27 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 511AAC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:49:09 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id q74so47057425ybq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 15:49:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=zp15zRundB/Hha02wZX4a60zrBKiLIyu7v5URoolVVM=;
-        b=fcx5mF/00Z0YicmJ73Lh2DvEw9G7dVYuY45un3tlQU5WwjCBsfktmHoLkhX5EDDlPl
-         oa0KBldjkp92Coxjcv1hobCAeghCDimjUXtq91eaC3iFfX7wuwKPcNxRyNquUoqCbacC
-         VaAhJSKu3jeWtjpn1vZ2ri/nKyVXt5OBS1jnSKnlH/5fxsrDRUg/Ec/Mwne9kQBM+KRf
-         2DFbIEEjWFWbqJ9yyTnWoZls+yIOCYaOHiv05xJlRo281l1DmvY6Q12TDK1V6EusAFXJ
-         bgOLgIa9Xr13jGLV+4iG7IN+4LbShw3BE09AfdwUd17aNBE/vFljSVXhFg/iUSeA6+Ef
-         fJfw==
+        bh=eO9+tTPAhguPZ8mpWMSxEU5vryW6o/Y+2ysionl6LLk=;
+        b=k2xXFwJjvBrMSd6kVDv+baDaLzQ4quTxwtlEk0J6WyVbiSJN4jrEUTqZ3VlC7O8RhL
+         SRX4dMFarF1nTTokZYqEmKf6UjSHKGbaxVFWoFLl+s8YjI2yusR2LZsx/0VsfQ2V2j9w
+         gMjy2mPARvqimDIhMMaQcmHKNWIIm8aGU2OTCM7F/tFV+3Knx24zd/Qkc1ycWys+AlWp
+         ipdma5i5SQce0rhrGiFtce8/f4coS206qA7aby4BcmeuZElBTmZeKPufKdi5rT1z6h5k
+         iPmPqn+8+/gPll1dqy/U2mhXRdnOaHRQNuYx5Vuzp1W/RHdjcpuQpememlbQ9fJRkZJz
+         lipw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=zp15zRundB/Hha02wZX4a60zrBKiLIyu7v5URoolVVM=;
-        b=nAITuGFFvrOkMWNVCiVULWK6gB+6E88M6COpvJWwvVGDXU2iTBlbrdP8Kq3VJwTkkX
-         atmivwFArvGke+qFULTG+LBt1ioo2gH5NwPviypfsBDy89BdLOoZuEmpcic9UNzVRTXs
-         eW0TDI4sdWw8jDZyyGu+8+V08FsxnhAhKY3ce+5s9Q0z1md9OpA+YqxFre8bXVT+crBV
-         A6f1bqFBv2W1NZPyly+Lhr/+qXKXSQPCxqyH8lKGOdT0Vd/cBccOcY3xKi9qzDkxWzrj
-         8ovfjHjwE1kNrldqDquk2o9jgkC/gwci/Fbt/vqkTvrfhrUa2f31dIMOX+aVBOT2isin
-         GA9w==
-X-Gm-Message-State: AOAM530VbcKzYqcMrXPY5U0Q2MgkdIDCgTH4hlwh+fceYXttsDWIJBi5
-        yKPJ9JRfwxyNLM+PfDdFCJZ3LIm3V0IzU53LRG/E/Q==
-X-Google-Smtp-Source: ABdhPJySalFBc/rMmzKvvFyj+waGeAoRaOeSShWAl3OZmvdyBYPbnivFX/jc1FleWGk6HBna6KisP3IgpuuXsMHs97E=
-X-Received: by 2002:a05:6e02:f51:: with SMTP id y17mr38037345ilj.2.1638229698614;
- Mon, 29 Nov 2021 15:48:18 -0800 (PST)
+        bh=eO9+tTPAhguPZ8mpWMSxEU5vryW6o/Y+2ysionl6LLk=;
+        b=IWwQGWVBQ4NLi46x1ZopZVOXHfypi0jhXz9iXVc+r4SeTUJcGF7XX6Z35ItcpNje9F
+         HeWi90lAfyqSYueG+BCK+45PqVrO6qp97fcnO5cQMjqE2c7LmsRspkvoFZNYa9kNakv6
+         ESXKWghBtHY4mZzbFJ1DT8Z5SneCes5Zf3whlxMYebzhRdn2eKjU/mJA+xDLQSvbtiaG
+         wxFf8rtBamIznUclaTErKXtxB0kCoTMGn3cP0WdnrR1bRC3J6eKOjWS02eHHYoYlTZgK
+         NN+coN2mPpzBrQ/y20ssgBTgZ91bm/ZoAqJWiNLD7T/0sJ4Sjs8QponMe4RJcmIvWDCB
+         KfhA==
+X-Gm-Message-State: AOAM531aFfLOEDRSQUzPks3lWC9LwxYN7iobb1OLESYxqvRarvhngnyA
+        OCr9u85Z2VJM3v5VcLruNZ2VTkoiU2OGO6mxEs/DuA==
+X-Google-Smtp-Source: ABdhPJwKV3sCSduHOtIvf7K+3+5Nh9llrWBCZFm7AkoXo0WmZU5sSvRsVY0Hq8bKT0h8n28IUDt2DzxhYLOErw/Cm8k=
+X-Received: by 2002:a25:6c6:: with SMTP id 189mr9913450ybg.753.1638229748392;
+ Mon, 29 Nov 2021 15:49:08 -0800 (PST)
 MIME-Version: 1.0
-References: <20211123020341.3073673-1-irogers@google.com> <20211123020341.3073673-2-irogers@google.com>
- <YaO1FIOYpF/Y5BDK@krava>
-In-Reply-To: <YaO1FIOYpF/Y5BDK@krava>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 29 Nov 2021 15:48:04 -0800
-Message-ID: <CAP-5=fU5MFQAidNWTp0hRjesKpFper6wy9MJ0taL9k804amn6A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf evsel: Improve error message for uncore events
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eranian@google.com
+References: <20211125183622.597177-1-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20211125183622.597177-1-dmitry.baryshkov@linaro.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Mon, 29 Nov 2021 15:48:32 -0800
+Message-ID: <CAGETcx-_6OvcJM1nAoX3pxE3Rard5CRxEuEsmhfLANOzOS1BSQ@mail.gmail.com>
+Subject: Re: [PATCH] of: property: do not create clocks device link for clock controllers
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 28, 2021 at 8:58 AM Jiri Olsa <jolsa@redhat.com> wrote:
+On Thu, Nov 25, 2021 at 10:36 AM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> On Mon, Nov 22, 2021 at 06:03:41PM -0800, Ian Rogers wrote:
-> > When a group has multiple events and the leader fails it can yield
-> > errors like:
-> >
-> > $ perf stat -e '{uncore_imc/cas_count_read/},instructions' /bin/true
-> > Error:
-> > The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (uncore_imc/cas_count_read/).
-> > /bin/dmesg | grep -i perf may provide additional information.
-> >
-> > However, when not the group leader <not supported> is given:
-> >
-> > $ perf stat -e '{instructions,uncore_imc/cas_count_read/}' /bin/true
-> > ...
-> >          1,619,057      instructions
-> >    <not supported> MiB  uncore_imc/cas_count_read/
-> >
-> > This is necessary because get_group_fd will fail if the leader fails and
-> > is the direct result of the check on line 750 of builtin-stat.c in
-> > stat_handle_error that returns COUNTER_SKIP for the latter case.
-> >
-> > This patch improves the error message to:
-> >
-> > $ perf stat -e '{uncore_imc/cas_count_read/},instructions' /bin/true
-> > Error:
-> > Invalid event (uncore_imc/cas_count_read/) in per-thread mode, enable system wide with '-a'.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/evsel.c | 5 +++++
-> >  1 file changed, 5 insertions(+)
-> >
-> > diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> > index a59fb2ecb84e..48696ff4bddb 100644
-> > --- a/tools/perf/util/evsel.c
-> > +++ b/tools/perf/util/evsel.c
-> > @@ -2950,6 +2950,11 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
-> >                       return scnprintf(msg, size, "wrong clockid (%d).", clockid);
-> >               if (perf_missing_features.aux_output)
-> >                       return scnprintf(msg, size, "The 'aux_output' feature is not supported, update the kernel.");
-> > +             if ((evsel__leader(evsel) == evsel) &&
-> > +                 (evsel->core.leader->nr_members > 1))
-> > +                     return scnprintf(msg, size,
-> > +     "Invalid event (%s) in per-thread mode, enable system wide with '-a'.",
-> > +                                     evsel__name(evsel));
+> Do not create device link for clock controllers.
+
+Nak.
+
+> Some of the clocks
+> provided to the device via OF can be the clocks that are just parents to
+> the clocks provided by this clock controller. Clock subsystem already
+> has support for handling missing clock parents correctly (clock
+> orphans). Later when the parent clock is registered, clocks get
+> populated properly.
 >
-> should we rather check 'target' pointer for the per-thread mode?
-> I'm not sure that per-thread mode will always be the case for the failure
+> An example of the system where this matters is the SDM8450 MTP board
+> (see arch/arm64/boot/dts/qcom/sdm845-mtp.dts). Here the dispcc uses
+> clocks provided by dsi0_phy and dsi1_phy device tree nodes. However the
+> dispcc itself provides clocks to both PHYs, to the PHY parent device,
+> etc. With just dsi0_phy in place devlink is able to break the
+> dependency,
 
-Unfortunately the target isn't populated at that point:
+Right, because I wrote code to make sure we handle these clock
+controller cases properly. If that logic isn't smart enough, let's fix
+that.
 
-gdb --args perf stat -e '{uncore_imc/cas_count_write/},instructions' /bin/true
-(gdb) p *target
-$2 = {pid = 0x0, tid = 0x0, cpu_list = 0x0, uid_str = 0x0, bpf_str =
-0x0, uid = 4294967295, system_wide = false, uses_mmap = false,
-  default_per_cpu = false, per_thread = false, use_bpf = false, hybrid
-= false, attr_map = 0x0}
+> but with two PHYs, dispcc doesn't get probed at all, thus
+> breaking display support.
 
-#0  evsel__open_strerror (evsel=0x616000015680, target=0x5555586aa140
-<target>, err=22, msg=0x7fffffff78d0 "]k\264WUU", size=8192)
-    at util/evsel.c:2857
-#1  0x00005555561744e8 in stat_handle_error (counter=0x616000015680)
-at builtin-stat.c:771
-#2  0x0000555556174f05 in __run_perf_stat (argc=1,
-argv=0x7fffffffe450, run_idx=0) at builtin-stat.c:852
-#3  0x00005555561763e1 in run_perf_stat (argc=1, argv=0x7fffffffe450,
-run_idx=0) at builtin-stat.c:1048
-#4  0x000055555617df82 in cmd_stat (argc=1, argv=0x7fffffffe450) at
-builtin-stat.c:2550
-#5  0x00005555562f36b8 in run_builtin (p=0x5555586bad00
-<commands+288>, argc=4, argv=0x7fffffffe450) at perf.c:313
-#6  0x00005555562f3c11 in handle_internal_command (argc=4,
-argv=0x7fffffffe450) at perf.c:365
-#7  0x00005555562f3fce in run_argv (argcp=0x7fffffffe230,
-argv=0x7fffffffe240) at perf.c:409
-#8  0x00005555562f47bd in main (argc=4, argv=0x7fffffffe450) at perf.c:539
+Then let's find out why and fix this instead of hiding some
+dependencies from fw_devlink. You could be breaking other cases/boards
+with this change you are making.
 
-Thanks,
-Ian
+-Saravana
 
-> jirka
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Stephen Boyd <swboyd@chromium.org>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/of/property.c | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
 >
-> >               break;
-> >       case ENODATA:
-> >               return scnprintf(msg, size, "Cannot collect data source with the load latency event alone. "
-> > --
-> > 2.34.0.rc2.393.gf8c9666880-goog
-> >
+> diff --git a/drivers/of/property.c b/drivers/of/property.c
+> index a3483484a5a2..f7229e4030e3 100644
+> --- a/drivers/of/property.c
+> +++ b/drivers/of/property.c
+> @@ -1264,7 +1264,6 @@ struct supplier_bindings {
+>         bool node_not_dev;
+>  };
+>
+> -DEFINE_SIMPLE_PROP(clocks, "clocks", "#clock-cells")
+>  DEFINE_SIMPLE_PROP(interconnects, "interconnects", "#interconnect-cells")
+>  DEFINE_SIMPLE_PROP(iommus, "iommus", "#iommu-cells")
+>  DEFINE_SIMPLE_PROP(mboxes, "mboxes", "#mbox-cells")
+> @@ -1294,6 +1293,21 @@ DEFINE_SIMPLE_PROP(backlight, "backlight", NULL)
+>  DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
+>  DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
+>
+> +static struct device_node *parse_clocks(struct device_node *np,
+> +                                       const char *prop_name, int index)
+> +{
+> +       /*
+> +        * Do not create clock-related device links for clocks controllers,
+> +        * clock orphans will handle missing clock parents automatically.
+> +        */
+> +       if (!strcmp(prop_name, "clocks") &&
+> +           of_find_property(np, "#clock-cells", NULL))
+> +               return NULL;
+> +
+> +       return parse_prop_cells(np, prop_name, index, "clocks",
+> +                                      "#clock-cells");
+> +}
+> +
+>  static struct device_node *parse_gpios(struct device_node *np,
+>                                        const char *prop_name, int index)
+>  {
+> --
+> 2.33.0
 >

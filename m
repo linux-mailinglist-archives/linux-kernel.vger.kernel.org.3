@@ -2,124 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 761D5461FBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 19:58:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B39F461C5B
+	for <lists+linux-kernel@lfdr.de>; Mon, 29 Nov 2021 18:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379360AbhK2TBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 14:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237844AbhK2S7k (ORCPT
+        id S233204AbhK2RGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 12:06:33 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:51234 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230361AbhK2REa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 13:59:40 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E4BC04C323
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:25:07 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so25954210otl.8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 07:25:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=DVhMy1DLd64PqxSid7384bVdy1XI0nO4z4wNgY1YTRw=;
-        b=lQc0xiWfu+BU18vZymRgxTnZymtf6jqzubeoiue3gBljt7GjkDG3/B4xiEjRzoEIHz
-         FqqAeuHrJYhN+5NcTpWUlLxbnxAjl2dM6LywGimCZOCmfaovOczD/ZMT0eUENcL0T3q+
-         lK4AQ2cPJUZ4kNnN1JdsQIWctp7hx/uNHLCsuqiC3wGQQAHGhOZOROCF5vqO7nS0O1vA
-         Xl6TGx9taLpItac9caKxy39ho8bURJ+R1ChHxPdE7R8+tl4nHSVc+P19rahzyzOGe5Iz
-         0Q1iioAcmZCVo9x+Ya8yM9Qk7jHUeET5d5yZVfh2ZqLTFoJBiR6QL/RTJaGeFGIqT5Zr
-         AL5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=DVhMy1DLd64PqxSid7384bVdy1XI0nO4z4wNgY1YTRw=;
-        b=LiSKn8J2YPsGHUKrQAaMSQAgmOm3CC330TiP1uItgyustJAX+h6jD8+p+EWeh7MiUc
-         5Esur0tO5L+EqgnQ5UA0ZNef07WElbQ6nCKbvwiRyTkBAHHUxzHCMa1PUoVJ6dphQG/m
-         uDgXhjswqTNTezCElmFZOyLn7abgC9V9SOX1ZrKXL7Gi7XGTd6/8MbDodCx8s0RJNf0Y
-         K3HFUT72HSqr6TcPG9+I2WUHLdDX4Pv4fG8SJTaAHJSausdd7Z2KR3nWtf1Gylim99mb
-         x/Q7Mn1Ay/3n5gfcv9YicbWq+fExntIjl5Dj5upnreQ8ba6C/pU0X8aLXVsg8ffIGUdG
-         5LYA==
-X-Gm-Message-State: AOAM531LAbBVGHPZUGU+MN2gYJXYo9C2ErwPjEtOhJ9hJaj9hdo1f8bY
-        niAcveayMbT5B3v+5mhklww=
-X-Google-Smtp-Source: ABdhPJwsvom1By6QJQMCkmqL3ID040WpC+0VyuLMVtKCt49SXeHh0T7XDBKAwHPDrKwX2WkiQOaFXA==
-X-Received: by 2002:a9d:2d81:: with SMTP id g1mr46169152otb.25.1638199507155;
-        Mon, 29 Nov 2021 07:25:07 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c8sm2723768otk.40.2021.11.29.07.25.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 07:25:06 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 29 Nov 2021 07:25:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: Linux 5.16-rc3
-Message-ID: <20211129152504.GA2283304@roeck-us.net>
-References: <CAHk-=wgtC_D-irsmyC89JPE1mnAAGJTc8qaNwaqcNUrt66TDMw@mail.gmail.com>
- <20211129015909.GA921717@roeck-us.net>
- <09df5c2a-8e03-8afd-ffe3-628dcd326497@infradead.org>
- <53f0b09c-58b3-bd37-5309-5c43242cbecd@roeck-us.net>
- <CAMhs-H-nm1-B8tZejcZPN3jxF_HGr2tWMWmYJUJnz0jau=QcfQ@mail.gmail.com>
+        Mon, 29 Nov 2021 12:04:30 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89F14615D7;
+        Mon, 29 Nov 2021 17:01:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B734C53FC7;
+        Mon, 29 Nov 2021 17:01:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638205272;
+        bh=ptC8NyT5DfcMR/qX2dnTn4fLGDCjkRgQFnE8IIO4UyA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=EzP392fLrFLu9xn/LrEznBvsk8+ukD+0jgB81pDEkK4HZGLYwv5GFaa32UgUdDszO
+         rN2pnMYgfqJlSHBqTN6xH6BUAwthoONFKTp7WiFVN0z2nlDwva9MFbcqegntR6aNTH
+         3+ibOY2s/zUhgDm6VC/YYOWolAmDGOjc2Osu0dlWLU0o0gAY5td81RW2lrNO9Hr0aB
+         SIDUaFqdd0m5tPL3lESJzv47O1hn8ITfsMASB03ZZT5mkEkA0sqrkVXioXPUuzC+Fm
+         q/0fuYmcWJmRb+c60wYIYdtIIirTcPrt4pRAewiHs6Fw8Bf3js6iRh17nNaD6V5nzn
+         pgShxxJxyRw/w==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Tom Stellard <tstellar@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
+        kernelci@groups.io, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH RFC 1/6] Documentation: Raise the minimum supported version of LLVM to 11.0.0
+Date:   Mon, 29 Nov 2021 09:57:58 -0700
+Message-Id: <20211129165803.470795-2-nathan@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20211129165803.470795-1-nathan@kernel.org>
+References: <20211129165803.470795-1-nathan@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMhs-H-nm1-B8tZejcZPN3jxF_HGr2tWMWmYJUJnz0jau=QcfQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 01:18:12PM +0100, Sergio Paracuellos wrote:
-[ ... ]
+LLVM versions prior to 11.0.0 have a harder time with dead code
+elimination, which can cause issues with commonly used expressions such
+as BUILD_BUG_ON and the bitmask functions/macros in bitfield.h (see the
+first two issues links below).
 
-> >
-> > All proposals I have seen assume that PCIE_MT7621=m. As I said, I think
-> > that it is pointless to do that because the driver can only be built
-> > as module if COMPILE_TEST=y. We should not [have to] export symbols
-> > because of that.
-> 
-Of course, the above is wrong. Of course a driver can be build as module
-if all of its dependencies are built into the kernel. No idea what I was
-thinking.
+Whenever there is an issue within LLVM that has been resolved in a later
+release, the only course of action is to gate the problematic
+configuration or source code on the toolchain verson or raise the
+minimum supported version of LLVM for building the kernel, as LLVM has a
+limited support lifetime compared to GCC. GCC major releases will
+typically see a few point releases across a two year period on average
+whereas LLVM major releases are only supported until the next major
+release and will only see one or two point releases within that
+timeframe. For example, GCC 8.1 was released in May 2018 and GCC 8.5 was
+released in May 2021, whereas LLVM 12.0.0 was released in April 2021 and
+its only point release, 12.0.1, was released in July 2021, giving a
+minimal window for fixes to be backported.
 
-> The proposal I sent when this error was reported in rc1 [0] does not
-> need to do any export of symbol at all since moves all MIPS related
-> code inside the driver into ralink architecture mt7621 specific site
-> making use of core api 'pcibios_root_bridge_prepare()'. The only
-> problem that seems to be is with PATCH 1 of the series because it
-> seems that nobody remember why already parsed addresses from device
-> tree which are stored in 'bridge->windows' are temporary moved into an
-> internal 'resources' variable at the beginning of
-> 'pci_register_host_bridge()' function and also moved back again at the
-> end. I do think the approach in this series is correct and really want
-> a reason for why it is not, since for me passing around an incomplete
-> 'bridge' pointer to 'pcibios_root_bridge_prepare()' when things are
-> supposed to be parsed already is a bit odd, but I don't have all the
-> problems of that code along the time... With the approach of this
-> series we:
-> - avoid MIPS architecture specific code in PCI controller driver.
-> - Allow the driver to be compile tested for any single architecture
-> for all yes* and mod* configurations.
-> 
-> Other ralink drivers have also been asked to be compiled as modules.
-> See for example, commit fef532ea0cd8 ("MIPS: ralink: export
-> rt_sysc_membase for rt2880_wdt.c") (here an export symbol was
-> needed...). Also I was advised in the past that new drivers don't have
-> to be 'bool' but 'tristate'. See this is commit 15692a80d949 ("phy:
-> Revert "phy: ralink: Kconfig: convert mt7621-pci-phy into 'bool'"")
-> where my 'bool' was reverted to 'tristate' and phy subsystem pull
-> request refused to be applied in first try because of this commit [1].
-> 
-> [0]: https://marc.info/?l=linux-pci&m=163696011110084&w=3ç
-> [1]: https://www.spinics.net/lists/kernel/msg3986821.html
-> 
-> Thanks in advance for your time.
-> 
-Guess we'll have to live with the build failure for a while then.
+To resolve these build errors around improper dead code elimination,
+raise the minimum supported version of LLVM for building the kernel to
+11.0.0. Doing so is a more proper solution than mucking around with core
+kernel macros that have always worked with GCC or disabling drivers for
+using these macros in a proper manner. This type of issue may continue
+to crop up and require patching, which creates more debt for bumping the
+minimum supported version in the future.
 
-Guenter
+This should have a minimal impact to distributions. Using a script to
+pull several different Docker images and check the output of
+'clang --version':
+
+archlinux:latest: clang version 13.0.0
+
+debian:oldoldstable-slim: clang version 3.8.1-24 (tags/RELEASE_381/final)
+debian:oldstable-slim: clang version 7.0.1-8+deb10u2 (tags/RELEASE_701/final)
+debian:stable-slim: Debian clang version 11.0.1-2
+debian:testing-slim: Debian clang version 11.1.0-4
+debian:unstable-slim: Debian clang version 11.1.0-4
+
+fedora:34: clang version 12.0.1 (Fedora 12.0.1-1.fc34)
+fedora:latest: clang version 13.0.0 (Fedora 13.0.0-3.fc35)
+fedora:rawhide: clang version 13.0.0 (Fedora 13.0.0-5.fc36)
+
+opensuse/leap:15.2: clang version 9.0.1
+opensuse/leap:latest: clang version 11.0.1
+opensuse/tumbleweed:latest: clang version 13.0.0
+
+ubuntu:bionic: clang version 6.0.0-1ubuntu2 (tags/RELEASE_600/final)
+ubuntu:latest: clang version 10.0.0-4ubuntu1
+ubuntu:hirsute: Ubuntu clang version 12.0.0-3ubuntu1~21.04.2
+ubuntu:rolling: Ubuntu clang version 13.0.0-2
+ubuntu:devel: Ubuntu clang version 13.0.0-9
+
+In every case, the distribution's version of clang is either older than
+the current minimum supported version of LLVM 10.0.1 or equal to or
+greater than the proposed 11.0.0 so nothing should change.
+
+Another benefit of this change is LLVM=1 works better with arm64 and
+x86_64 since commit f12b034afeb3 ("scripts/Makefile.clang: default to
+LLVM_IAS=1") enabled the integrated assembler by default, which only
+works well with clang 11+ (clang-10 required it to be disabled to
+successfully build a kernel).
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1293
+Link: https://github.com/ClangBuiltLinux/linux/issues/1506
+Link: https://github.com/ClangBuiltLinux/linux/issues/1511
+Link: https://github.com/llvm/llvm-project/commit/fa496ce3c6774097080c8a9cb808da56f383b938
+Link: https://groups.google.com/g/clang-built-linux/c/mPQb9_ZWW0s/m/W7o6S-QTBAAJ
+Link: https://github.com/ClangBuiltLinux/misc-scripts
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ Documentation/process/changes.rst | 2 +-
+ scripts/min-tool-version.sh       | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
+index b398b8576417..17182b537141 100644
+--- a/Documentation/process/changes.rst
++++ b/Documentation/process/changes.rst
+@@ -30,7 +30,7 @@ you probably needn't concern yourself with pcmciautils.
+         Program        Minimal version       Command to check the version
+ ====================== ===============  ========================================
+ GNU C                  5.1              gcc --version
+-Clang/LLVM (optional)  10.0.1           clang --version
++Clang/LLVM (optional)  11.0.0           clang --version
+ GNU make               3.81             make --version
+ binutils               2.23             ld -v
+ flex                   2.5.35           flex --version
+diff --git a/scripts/min-tool-version.sh b/scripts/min-tool-version.sh
+index 4edc708baa63..7c20252a90c6 100755
+--- a/scripts/min-tool-version.sh
++++ b/scripts/min-tool-version.sh
+@@ -28,7 +28,7 @@ llvm)
+ 	if [ "$SRCARCH" = s390 ]; then
+ 		echo 13.0.0
+ 	else
+-		echo 10.0.1
++		echo 11.0.0
+ 	fi
+ 	;;
+ *)
+-- 
+2.34.1
+

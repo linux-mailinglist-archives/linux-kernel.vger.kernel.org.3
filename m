@@ -2,141 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 196FA46280A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:15:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F10164627BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 00:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbhK2XSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 18:18:47 -0500
-Received: from sdc-v-sdnmail2-ext.epnet.com ([140.234.254.213]:56480 "EHLO
-        sdc-v-sdnmail2-ext.epnet.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232778AbhK2XS2 (ORCPT
+        id S237129AbhK2XJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 18:09:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237121AbhK2XIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 18:18:28 -0500
-X-Greylist: delayed 10784 seconds by postgrey-1.27 at vger.kernel.org; Mon, 29 Nov 2021 18:18:27 EST
-Received: from sdc-epwebmail1 (sdc-v-epwebmail1.epnet.com [10.83.102.226])
-        by sdc-v-sdnmail2-ext.epnet.com (8.14.7/8.14.7/EIS8.14) with ESMTP id 1ATK6eFT010700;
-        Mon, 29 Nov 2021 15:06:40 -0500
-Message-Id: <202111292006.1ATK6eFT010700@sdc-v-sdnmail2-ext.epnet.com>
+        Mon, 29 Nov 2021 18:08:41 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79A5C093B6C;
+        Mon, 29 Nov 2021 12:09:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 14106CE13F9;
+        Mon, 29 Nov 2021 20:09:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C32C53FC7;
+        Mon, 29 Nov 2021 20:09:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638216576;
+        bh=HdIvwUw01pQG2zy2l1sOI1S6QWrIy1eeE7pkego8dWQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=OOQ+WfbCyIcoZPueiw2jpFttexN0cv+ShoJPQWx6anEaIT8gsipRD6Fgr82fRDwT1
+         T+VVCCGyPCnfc91RMiW0RfivfUlXnfKTcdn5GQQt6WZ9c57HqePs0uzS3Tc8/+XuCg
+         p3MYvNaVqm8DPgJ1m8LeOGQdM0U8MdOw/1dMqqNSsxCHSI+XBastAh078AUYHSLSPG
+         B3u5XtXN1cNt3TUIZTc0bsW8tliD77c3csYAZR4kjEiyV52jjtzHfKrE71Ymn7qPNY
+         kvWpNDARu0NrlL8XHgKfmtfT3iWJtV6UrBgS8LXMOcQ0z9w5Ss3RLjU/F8e2lRaEeV
+         zujpgeOvGqZOQ==
+Message-ID: <455f66b569d81606e05775c4ac04a4b16e4c1782.camel@kernel.org>
+Subject: Re: [PATCH] tpm: make const pointer desc a static const array
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Colin Ian King <colin.i.king@googlemail.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 29 Nov 2021 22:09:33 +0200
+In-Reply-To: <20211127172604.126322-1-colin.i.king@gmail.com>
+References: <20211127172604.126322-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.40.4-1 
 MIME-Version: 1.0
-Sender: ephost@ebsco.com
-From:   support@ebsco.com
-To:     fvaldesmora@ccia.org.au, ycolinosanguino@ccia.org.au,
-        joanna.loizou@meduniwien.ac.at, adam7.thomas@uwe.ac.uk,
-        sk875@cam.ac.uk, sarah.lambert@curie.fr,
-        argyris.papantonis@med.uni-goettingen.de, kate.johnson@utas.edu.au,
-        timothy.brodribb@utas.edu.au, tech.eu@invivogen.com,
-        u003etech.eu@invivogen.com, info.eu@invivogen.com,
-        u003einfo.eu@invivogen.com, orders.eu@invivogen.com,
-        u003eorders.eu@invivogen.com, guolongbiao@caas.cn,
-        fanlj@zju.edu.cn, chli@nefu.edu.cn, baosheng.wang@scbg.ac.cn,
-        buckleyy@tcd.ie, j.ton@sheffield.ac.uk, feng_yu@hnu.edu.cn,
-        sandmann@bio.uni-frankfurt.de, n.radomski@izs.it,
-        alexandra.weigelt@uni-leipzig.de, maoyong@xmu.edu.cn,
-        sheerin.d@wehi.edu.au, karen.aitken@csiro.au, l.hickey@uq.edu.au,
-        kai.voss-fels@hs-gm.de, yangyi528@scu.edu.cn, linanxie@nefu.edu.cn,
-        seema.yadav@uq.edu.au, b.hayes@uq.edu.au, zhp@sicau.edu.cn,
-        begonamarina.jugo@ehu.eus, jdelmazo@cib.csic.es, 08162@njnu.edu.cn,
-        gyang@njnu.edu.cn, pangerli@bnu.edu.cn, b.drinkwater@bristol.ac.uk,
-        jangi@tll.org.sg, d.bathoorn@umcg.nl, donagh.berry@teagasc.ie,
-        ivana.bilic@vetmeduni.ac.at, sean.fair@ul.ie,
-        cesar.arenasmena@csi.cuny.edu, lizhonghu@nwu.edu.cn,
-        shutao.he@sibcb.ac.cn, chennan@buaa.edu.cn, peipei.ma@sjtu.edu.cn,
-        chenn@qdio.ac.cn, ricardowesley@usp.br, rogerio.curi@unesp.br,
-        liuchangning@xtbg.ac.cn, maojunxia@dlou.edu.cn,
-        martin.kuhlwilm@univie.ac.at, saidi.achari@agriculture.vic.gov.au,
-        zhouwenhao@fudan.edu.cn, ml-pwp-ff-addons@securebrain.co.jp,
-        info.asia@securebrain.co.jp, ntp-amigo@corp.mail.ru,
-        collector@broceliand.fr, openmultipleurls@ustat.de,
-        ameliabkoba1112@yahoo.co.jp, eres_un_vago@yahoo.es,
-        number.0131@web.de, kagami222@hotmail.fr,
-        maria.khan@connexone.co.uk, robin.j.rubrecht@gmail.com,
-        breakedcode@sapo.pt, emmanuel.goua-de-baix@agreenculture.fr,
-        nao.e.o.meu.nome.pois@gmail.com, rob.kent@proofbydesign.com,
-        tinobambino@hotmail.fr, firefox.chuck@gmail.com, zeus@hilfri.de,
-        tlm2408@mpx.com.au, bruceliou@free.fr, admin@justreport.it,
-        markus.naeher@web.de, mhmd.demerdash@gmail.com, jgd24@gmx.fr,
-        rosti@designcontainer.no, admin@mact.ru, nic@nic.fr,
-        hostmast@publicf.bta.net.cn,
-        b12542a86e22f8207ec971930b6f19@as8p193mb1254.eurp193.prod.outlook.com,
-        b12624c21ae412be95ba4d4a4b6f09@paxp193mb1262.eurp193.prod.outlook.com,
-        87im0x1lqi.fsf@mpe.ellerman.id.au,
-        debian-bugs-dist@lists.debian.org, linux-kernel@vger.kernel.org,
-        dig@eksempel.dk, voce@exemplo.com.br, info@caribbeanchamber.eu,
-        bernise.stoffer@rvo.nl, info@yourcompanyformations.co.uk,
-        info@membermojo.co.uk, faxmail@faxprovider.de,
-        ismael.dabo@hotmail.fr
-Date:   29 Nov 2021 15:07:07 -0500
-Subject: Fat Removes and Protein Bars
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Q29tbWVudHM6DQpIZXksDQripLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXi
-pLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXi
-pLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXi
-pLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXipLXi
-pLXipLXipLXipLXipLXipLXipLXipLXipLUNCkFmcmljYW4gTWFuZ28gaXMgYSB3ZWln
-aHQgbG9zcyBzdXBwbGVtZW50IHRoYXQgYnVybnMgZmF0LCBzdXBwcmVzc2VzDQpodW5n
-ZXIgYW5kIGNyYXZpbmdzLCBhbmQgaGVscHMgbWFpbnRhaW4gaGVhbHRoeSBjaG9sZXN0
-ZXJvbCBsZXZlbHMuIEl0cw0KdW5pcXVlIGZvcm11bGF0aW9uIGlzIGJhc2VkIG9uIGEg
-bmF0dXJhbCBtb2xlY3VsZSBjYWxsZWQgcGFsbWl0b2xlaWMNCmFjaWQsIGFsc28ga25v
-d24gYXMgT21lZ2EgNy4gVGhpcyB1bmlxdWUgZmF0dHkgYWNpZCBoZWxwcyBmYXQgY2Vs
-bHMNCmNvbW11bmljYXRlIHdpdGggZWFjaCBvdGhlciwgZm9yY2luZyDigJxiYWQgZmF0
-4oCdIGluIHRoZSBib2R5IHRvIGJlDQpyZWxlYXNlZCBhbmQgdXNlZCBmb3IgZW5lcmd5
-LiBXaGljaCBtZWFucyBldmVuIGFzIHlvdSBzdGFydCBkcm9wcGluZw0KdGhvc2Ugc3R1
-YmJvcm4gcG91bmRzLCB5b3XigJlyZSBnb2luZyB0byBmZWVsIGdyZWF0IGFuZCBmdWxs
-IG9mIGVuZXJneSBhcw0KZmF0IHRoYXTigJlzIHJlbGVhc2VkIGZyb20geW91ciBjZWxs
-cyBnZXQgY29udmVydGVkIGludG8gZnVlbCBmb3IgeW91cg0KYm9keS4gPj4+PiBodHRw
-czovL2N1dHQubHkvM1Q4WjdNeA0K4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1
-4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1
-4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1
-4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1
-4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1DQpOdXZpYUdvIGlzIGEgZGVsaWNp
-b3VzIHByb3RlaW4gYmFyIHdpdGggYSBjb29raWUgYW5kIGNyZWFtIGZsYXZvciBsb3Zl
-ZA0KYWxsIG92ZXIgdGhlIHdvcmxkISBEdWUgdG8gdGhlIGxhcmdlIGRvc2Ugb2YgcHJv
-dGVpbiBhbmQgYSBzbWFsbCBhbW91bnQNCm9mIHN1Z2FyLCB0aGlzIHByb2R1Y3QgY2Fu
-IHJlcGxhY2UgYW55IG1lYWwuIE51dmlhR28gcHJvdmlkZXMgdGhlIGJvZHkNCndpdGgg
-YW4gZW5lcmd5IGJvb3N0LCBoZWxwcyBidWlsZCBtdXNjbGUgbWFzcyBhbmQgYWNjZWxl
-cmF0ZXMgcmVjb3ZlcnkNCmFmdGVyIHRyYWluaW5nLiBOdXZpYUdvIGJhcnMgYXJlIGNy
-ZWF0ZWQgd2l0aCBwYXNzaW9uIGFuZCBpbiBoYXJtb255DQp3aXRoIG5hdHVyZS4gVGhp
-cyBwcm9kdWN0IGNvbnRhaW5zIHRoZSByaWdodCBwcm9wb3J0aW9ucyBvZg0KbWFjcm9u
-dXRyaWVudHMgdG8gc3RyZW5ndGhlbiB0aGUgYm9keSBhbmQgaGVscCBtYWludGFpbiBh
-IGZpdC1maWd1cmUuDQpOdXZpYUdvIGJhcnMgYXJlIG5vdCBvbmx5IGEgZGVsaWNpb3Vz
-LCBzd2VldCBzbmFjaywgYnV0IGFib3ZlIGFsbCBhDQpyZWFsLCB3aG9sZXNvbWUgbWVh
-bCE+Pj4gaHR0cHM6Ly9jdXR0Lmx5L2tUOFhLZkUNCuKkteKkteKkteKkteKkteKkteKk
-teKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKk
-teKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKk
-teKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKk
-teKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKkteKktQ0KUmVnYXJkcw0K
-4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1
-4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1
-4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1
-4qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS14qS1
-4qS14qS14qS1DQpKdWxpYQ0KICBfX19fXyAgDQoNCg0KUmVjb3JkOiAxDQoNClRpdGxl
-OglCT09LUy4gCQ0KDQpTb3VyY2U6CVByZXNlbnQgU3RhdGUgb2YgRXVyb3BlLiBKdW4x
-Njk4LCBWb2wuIDkgSXNzdWUgNiwgZm9sbG93aW5nDQpwMjQ5LTI0OS4gMXAuIAkNCg0K
-UHVibGljYXRpb24gVHlwZToJUGVyaW9kaWNhbAkNCg0KRG9jdW1lbnQgVHlwZToJQXJ0
-aWNsZQkNCg0KU3ViamVjdHM6CVJIT0RFUywgSGVucnkNCkJPT0tTCQ0KDQpMQ0NOOglz
-bjg0LTQ2MzY1CQ0KDQpBY2Nlc3Npb24gTnVtYmVyOgkzMzIzODg5MQkNCg0KUGVyc2lz
-dGVudCBsaW5rIHRvIHRoaXMgcmVjb3JkIChQZXJtYWxpbmspOiANCmh0dHBzOi8vc2Vh
-cmNoLmVic2NvaG9zdC5jb20vbG9naW4uYXNweD9kaXJlY3Q9dHJ1ZSZkYj1oOWgmQU49
-MzMyMzg4OTEmcw0KaXRlPWVob3N0LWxpdmUNCkN1dCBhbmQgUGFzdGU6IDxhDQpocmVm
-PSJodHRwczovL3NlYXJjaC5lYnNjb2hvc3QuY29tL2xvZ2luLmFzcHg/ZGlyZWN0PXRy
-dWUmZGI9aDloJkFOPTMzMjMNCjg4OTEmc2l0ZT1laG9zdC1saXZlIj5CT09LUy48L2E+
-DQoNCiAgX19fX18gIA0KDQpUaGUgbGluayBpbmZvcm1hdGlvbiBhYm92ZSBwcm92aWRl
-cyBhIHBlcnNpc3RlbnQgbGluayB0byB0aGUgYXJ0aWNsZQ0KeW91J3ZlIHJlcXVlc3Rl
-ZC4NCg0KUGVyc2lzdGVudCBsaW5rIHRvIHRoaXMgcmVjb3JkOiBGb2xsb3dpbmcgdGhl
-IGxpbmsgYWJvdmUgd2lsbCBicmluZyB5b3UNCnRvIHRoZSBzdGFydCBvZiB0aGUgYXJ0
-aWNsZSBvciBjaXRhdGlvbi4NCg0KQ3V0IGFuZCBQYXN0ZTogVG8gcGxhY2UgYXJ0aWNs
-ZSBsaW5rcyBpbiBhbiBleHRlcm5hbCB3ZWIgZG9jdW1lbnQsDQpzaW1wbHkgY29weSBh
-bmQgcGFzdGUgdGhlIEhUTUwgYWJvdmUsIHN0YXJ0aW5nIHdpdGggIjxhIGhyZWYiDQoN
-CklmIHlvdSBoYXZlIGFueSBwcm9ibGVtcyBvciBxdWVzdGlvbnMsIGNvbnRhY3QgVGVj
-aG5pY2FsIFN1cHBvcnQgYXQNCmh0dHA6Ly9zdXBwb3J0LmVwbmV0LmNvbS9jb250YWN0
-L2Fza3VzLnBocCBvciBjYWxsIDgwMC03NTgtNTk5NS4NCg0KVGhpcyBlLW1haWwgd2Fz
-IGdlbmVyYXRlZCBieSBhIHVzZXIgb2YgRUJTQ09ob3N0IHdobyBnYWluZWQgYWNjZXNz
-IHZpYQ0KdGhlIE1JTklURVggTElCUkFSWSBJTkZPIE5FVFdPUksgYWNjb3VudC4gTmVp
-dGhlciBFQlNDTyBub3IgTUlOSVRFWA0KTElCUkFSWSBJTkZPIE5FVFdPUksgaXMgcmVz
-cG9uc2libGUgZm9yIHRoZSBjb250ZW50IG9mIHRoaXMgZS1tYWlsLg0K
+On Sat, 2021-11-27 at 17:26 +0000, Colin Ian King wrote:
+> Make const pointer desc a static const array, removes a dereference
+> and shrinks object code a few bytes.
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+> =C2=A0drivers/char/tpm/tpm_tis_core.c | 2 +-
+> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_c=
+ore.c
+> index b2659a4c4016..649b4229e76e 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -716,7 +716,7 @@ static irqreturn_t tis_int_handler(int dummy, void *d=
+ev_id)
+> =C2=A0
+> =C2=A0static int tpm_tis_gen_interrupt(struct tpm_chip *chip)
+> =C2=A0{
+> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const char *desc =3D "attempti=
+ng to generate an interrupt";
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0static const char desc[] =3D "=
+attempting to generate an interrupt";
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0u32 cap2;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cap_t cap;
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
 
+I'd rather go for:
+
+#define TPM_TIS_GEN_INTERRUPT_DESC "attempting to generate an interrupt"
+
+/Jarkko

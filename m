@@ -2,130 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C367463D7F
+	by mail.lfdr.de (Postfix) with ESMTP id 65BA9463D80
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239436AbhK3SSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:18:41 -0500
-Received: from mta-p5.oit.umn.edu ([134.84.196.205]:33058 "EHLO
-        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239395AbhK3SSh (ORCPT
+        id S245384AbhK3SSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:18:46 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45746 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S245369AbhK3SSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:18:37 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3VkY1nTLz9vvMn
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:15:17 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p5.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id F7XT4zs-9LYs for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 12:15:17 -0600 (CST)
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3VkX6sPkz9vvMP
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:15:16 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3VkX6sPkz9vvMP
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3VkX6sPkz9vvMP
-Received: by mail-pg1-f200.google.com with SMTP id x30-20020a637c1e000000b00324ab629735so10693992pgc.17
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:15:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8aLbqDVidZ+7wdd4GicAjvyHH7eASjXq9vZdA7OEF94=;
-        b=h/zqG5CfkaTPj/bhN4usylXAlQ5g3qbkk70kfXHrteu7ovjt/eVh76QH8Bi0XLCdey
-         Lf+TKwTx+LZRn+z5ZdGRTqc8PDJOux825xOZBFTdsbOGAKEYBhkKT7GULROrT2rOQ4NX
-         Bo0SzKsQ2P+RpvQZNxmig4beiRzO8jxiMDmnUVPlgM6pobobo16jj9RTxOd8x/k8Bx6l
-         v/L4zJiGIKdaWmgOhrQZt4v5rnT8nGpTShtgfrSAdtNG9UhWjwagJr2Kjo2p36ViCVY6
-         hYBJH7k5zlfIq8v/iTS2MND/PLDf+4AlUkWy6MC7snl8knter3gEJV+sl52xlobTbYGR
-         uP4g==
+        Tue, 30 Nov 2021 13:18:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638296123;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=y0D83E+cNuncrGmthDykUEYreLlJf9PXpFpFy6oL8G4=;
+        b=Y4vTnBzOn5rNkNgkpKEghbDi81pA+v1Zy6sKXJKt2zFMjCTlLnsm6jmAO65ikyH1kkxoYP
+        QNQXv906z2T/tsjB74M527ZhUT1uW7oD+hz6eHh5uAZ3qA/DtQ/4usRe72dV+NrKHLkMGb
+        nygFcW2bl5PHugS+4Gu6c0EfJtGNfkU=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-289-LybBJQp9NnaIRaGNES-rOA-1; Tue, 30 Nov 2021 13:15:22 -0500
+X-MC-Unique: LybBJQp9NnaIRaGNES-rOA-1
+Received: by mail-wm1-f70.google.com with SMTP id z138-20020a1c7e90000000b003319c5f9164so14205516wmc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:15:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8aLbqDVidZ+7wdd4GicAjvyHH7eASjXq9vZdA7OEF94=;
-        b=1HT8hId7rkRRKe4fdS89gPKDSh4EkEVFShDBka/LDi/h6+ETlV/rUg9G4VGnVknJyz
-         As7lUZ+4zaitHtsCx1zYqbTNQtI66JNR/Ik2FyGZsV+J3l+uEvRKdbjiI+H+4bkHY7nR
-         nUAlWHHuc931QJWipXyGO5x7Unurqo09LdskXvk78Adiz7OzcYTVetsQWNGA+J9f1hIf
-         q2qgw59P9uNH2tTFDIH9825IePSTYJrpfbmkyCVYZLxSEV58bg06q4TM8oi9hfX0DXGK
-         A4QwZTrG/Y7jNs3/uNI7ahU0I95MuPzPZsFGInr9C8otpCTZ4i+WyonUFrRhulzy60VI
-         sH8A==
-X-Gm-Message-State: AOAM531aqji6uKqXOz6O2SWupeGynLVAUckVMGQmCvtp1enx5SnTGt3v
-        hoZrHAGF2jGY1F0tglOhRuvxMMhCWNGDnA8i3TacR8nvPaF53o561n71cd7uuH2XzTxQDv8Y8Qi
-        1LdQ+MQ3H7JKITe05m7ApshDCWBAl
-X-Received: by 2002:a17:902:e749:b0:141:edaa:fde1 with SMTP id p9-20020a170902e74900b00141edaafde1mr1041436plf.72.1638296116223;
-        Tue, 30 Nov 2021 10:15:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzFonit7jQbQqW7wbtpwt79Yj99amZxiuzPUHMEFm11chH74+RimyI/4fW4yprB8GZxNrvZFQ==
-X-Received: by 2002:a17:902:e749:b0:141:edaa:fde1 with SMTP id p9-20020a170902e74900b00141edaafde1mr1041407plf.72.1638296115986;
-        Tue, 30 Nov 2021 10:15:15 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id y8sm22530397pfi.56.2021.11.30.10.15.13
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=y0D83E+cNuncrGmthDykUEYreLlJf9PXpFpFy6oL8G4=;
+        b=iPNppFSaRRY2RTHnD+T5nnEEYYW+iC1oocbuaAOfci0jombxopo7/Wmnqt5PaRhsqT
+         OfllVLQf9kDcgHNP1CFF/iLvtvghGSxItW67yFUXGZDCSk2Np+woTAULpNxiif0HFUdq
+         1Ln88YT9qgPExhAXMUCASNLUJt/fGhlVGr3QIemvQ6XidIR6H6cEPsifx8FUtARkY5rA
+         7gXdNMDy/bhwtJNHHLhACY7hj+22zS4TTBE0dpmvHecmfrJyk83X+Zhn7l5tCtGgvSQT
+         xbhBDbwMbfY/48aZSNPSPN+ve1ruEXgwr/lNOm+BJRTDdgHpNBIKT4w1qlV4TtWHMxIM
+         JF3Q==
+X-Gm-Message-State: AOAM531D7NweN+TKx9RLU+sE0fhbdTjH+IChiFuXVyct+4v5xmC+SyI6
+        NSySvDpEjk1sEBUoefdWcsKUAlEVpHtK1nPWej17ro6vXSlvqWHxK0A9Wr8R5s5SV1xA4vyC4kl
+        1Mc4eC3Kp2T5b9jmULIEUYvAN
+X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr379462wmk.92.1638296121323;
+        Tue, 30 Nov 2021 10:15:21 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxJOfgIgumC5g74zQIlaoVNpamCUEIoCBerSrxJ7TK28QsNQXxRyH3lzwA87n0HLFsyC3Og3Q==
+X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr379437wmk.92.1638296121134;
+        Tue, 30 Nov 2021 10:15:21 -0800 (PST)
+Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
+        by smtp.gmail.com with ESMTPSA id g16sm3959688wmq.20.2021.11.30.10.15.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 10:15:15 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Wenzhen Yu <wenzhen.yu@mediatek.com>,
-        Rob Herring <robh@kernel.org>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: mediatek: mt7629: Fix a NULL pointer dereference in mtk_topckgen_init()
-Date:   Wed,  1 Dec 2021 02:15:07 +0800
-Message-Id: <20211130181509.222496-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Nov 2021 10:15:20 -0800 (PST)
+Date:   Tue, 30 Nov 2021 19:15:19 +0100
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf header: Fix memory leaks
+Message-ID: <YaZqN5UQfhBmgznT@krava>
+References: <20211118201730.2302927-1-irogers@google.com>
+ <YaOkbojVb2gZtfCk@krava>
+ <CAP-5=fVRE8dcDtivYaAm=DQze4d2966X7oWTWVzstzWeC-xeSw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fVRE8dcDtivYaAm=DQze4d2966X7oWTWVzstzWeC-xeSw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mtk_topckgen_init(), mtk_alloc_clk_data() is assigned to clk_data
-and used in clk_prepare_enable(). There is dereference of clk_data
-in clk_prepare_enable(), which could lead to a NULL pointer dereference
-on failure of mtk_alloc_clk_data().
+On Mon, Nov 29, 2021 at 03:38:28PM -0800, Ian Rogers wrote:
+> On Sun, Nov 28, 2021 at 7:47 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> >
+> > On Thu, Nov 18, 2021 at 12:17:30PM -0800, Ian Rogers wrote:
+> > > These leaks were found with leak sanitizer running "perf pipe recording
+> > > and injection test". In pipe mode feat_fd may hold onto an events struct
+> > > that needs freeing. When string features are processed they may
+> > > overwrite an already created string, so free this before the overwrite.
+> > >
+> > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > ---
+> > >  tools/perf/util/header.c | 15 ++++++++++-----
+> > >  1 file changed, 10 insertions(+), 5 deletions(-)
+> > >
+> > > diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+> > > index 79cce216727e..e3c1a532d059 100644
+> > > --- a/tools/perf/util/header.c
+> > > +++ b/tools/perf/util/header.c
+> > > @@ -2321,6 +2321,7 @@ static int perf_header__read_build_ids(struct perf_header *header,
+> > >  #define FEAT_PROCESS_STR_FUN(__feat, __feat_env) \
+> > >  static int process_##__feat(struct feat_fd *ff, void *data __maybe_unused) \
+> > >  {\
+> > > +     free(ff->ph->env.__feat_env);                \
+> >
+> > hm, how is this set before this callback is triggered?
+> 
+> I see it for cpuid which is initially set in:
+> #0  perf_env__read_cpuid (env=0x62b000007240) at util/env.c:363
+> #1  0x0000555556325153 in perf_env__cpuid (env=0x62b000007240) at util/env.c:456
+> #2  0x00005555564002ff in evlist__init_trace_event_sample_raw
 
-Fix this bug by adding a check of clk_data.
+ok, I forgot we do this one, thanks for explanation
 
-Another way to fix this bug is to add a check of clk_data in
-clk_prepare_enable(), which may solve many similar bugs but could
-cause potential problems to previously correct cases as the API is changed.
+Acked-by: Jiri Olsa <jolsa@redhat.com>
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+jirka
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
 
-Builds with CONFIG_COMMON_CLK_MT7629=y show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 3b5e748615e7 ("clk: mediatek: add clock support for MT7629 SoC")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/clk/mediatek/clk-mt7629.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/clk/mediatek/clk-mt7629.c b/drivers/clk/mediatek/clk-mt7629.c
-index 856929f94ebd..f791e53b812a 100644
---- a/drivers/clk/mediatek/clk-mt7629.c
-+++ b/drivers/clk/mediatek/clk-mt7629.c
-@@ -580,6 +580,8 @@ static int mtk_topckgen_init(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
-+	if (!clk_data)
-+		return -ENOMEM;
- 
- 	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
- 				    clk_data);
--- 
-2.25.1
+> (evlist=0x61e000000080) at util/sample-raw.c:17
+> #3  0x00005555563f01f4 in __perf_session__new (data=0x7fffffffb8b0,
+> repipe=false, repipe_fd=-1, tool=0x7fffffffbaa0)
+>     at util/session.c:228
+> #4  0x000055555615f26b in perf_session__new (data=0x7fffffffb8b0,
+> tool=0x7fffffffbaa0) at util/session.h:70
+> #5  0x000055555616d991 in cmd_report (argc=0, argv=0x7fffffffe468) at
+> builtin-report.c:1408
+> #6  0x00005555562f36b8 in run_builtin (p=0x5555586bacd0
+> <commands+240>, argc=5, argv=0x7fffffffe468) at perf.c:313
+> #7  0x00005555562f3c11 in handle_internal_command (argc=5,
+> argv=0x7fffffffe468) at perf.c:365
+> #8  0x00005555562f3fce in run_argv (argcp=0x7fffffffe240,
+> argv=0x7fffffffe250) at perf.c:409
+> #9  0x00005555562f47bd in main (argc=5, argv=0x7fffffffe468) at perf.c:539
+> 
+> And then overwritten causing the leak:
+> #0  0x00005555563b965a in process_cpuid (ff=0x7fffffffad50, data=0x0)
+> at util/header.c:2333
+> #1  0x00005555563c53d2 in perf_event__process_feature
+> (session=0x62b000007200, event=0x621000006500) at util/header.c:4144
+> #2  0x000055555615fdef in process_feature_event
+> (session=0x62b000007200, event=0x621000006500) at builtin-report.c:230
+> #3  0x00005555563fa033 in perf_session__process_user_event
+> (session=0x62b000007200, event=0x621000006500, file_offset=868)
+>     at util/session.c:1668
+> #4  0x00005555563fae08 in perf_session__process_event
+> (session=0x62b000007200, event=0x621000006500, file_offset=868)
+>     at util/session.c:1803
+> #5  0x00005555563fc4e6 in __perf_session__process_pipe_events
+> (session=0x62b000007200) at util/session.c:2044
+> #6  0x00005555563ff005 in perf_session__process_events
+> (session=0x62b000007200) at util/session.c:2418
+> #7  0x000055555616508a in __cmd_report (rep=0x7fffffffbaa0) at
+> builtin-report.c:940
+> #8  0x000055555616f5c9 in cmd_report (argc=0, argv=0x7fffffffe468) at
+> builtin-report.c:1629
+> #9  0x00005555562f36b8 in run_builtin (p=0x5555586bacd0
+> <commands+240>, argc=5, argv=0x7fffffffe468) at perf.c:313
+> #10 0x00005555562f3c11 in handle_internal_command (argc=5,
+> argv=0x7fffffffe468) at perf.c:365
+> #11 0x00005555562f3fce in run_argv (argcp=0x7fffffffe240,
+> argv=0x7fffffffe250) at perf.c:409
+> #12 0x00005555562f47bd in main (argc=5, argv=0x7fffffffe468) at perf.c:539
+> 
+> Thanks,
+> Ian
+> 
+> > jirka
+> >
+> > >       ff->ph->env.__feat_env = do_read_string(ff); \
+> > >       return ff->ph->env.__feat_env ? 0 : -ENOMEM; \
+> > >  }
+> > > @@ -4124,6 +4125,7 @@ int perf_event__process_feature(struct perf_session *session,
+> > >       struct perf_record_header_feature *fe = (struct perf_record_header_feature *)event;
+> > >       int type = fe->header.type;
+> > >       u64 feat = fe->feat_id;
+> > > +     int ret = 0;
+> > >
+> > >       if (type < 0 || type >= PERF_RECORD_HEADER_MAX) {
+> > >               pr_warning("invalid record type %d in pipe-mode\n", type);
+> > > @@ -4141,11 +4143,13 @@ int perf_event__process_feature(struct perf_session *session,
+> > >       ff.size = event->header.size - sizeof(*fe);
+> > >       ff.ph = &session->header;
+> > >
+> > > -     if (feat_ops[feat].process(&ff, NULL))
+> > > -             return -1;
+> > > +     if (feat_ops[feat].process(&ff, NULL)) {
+> > > +             ret = -1;
+> > > +             goto out;
+> > > +     }
+> > >
+> > >       if (!feat_ops[feat].print || !tool->show_feat_hdr)
+> > > -             return 0;
+> > > +             goto out;
+> > >
+> > >       if (!feat_ops[feat].full_only ||
+> > >           tool->show_feat_hdr >= SHOW_FEAT_HEADER_FULL_INFO) {
+> > > @@ -4154,8 +4158,9 @@ int perf_event__process_feature(struct perf_session *session,
+> > >               fprintf(stdout, "# %s info available, use -I to display\n",
+> > >                       feat_ops[feat].name);
+> > >       }
+> > > -
+> > > -     return 0;
+> > > +out:
+> > > +     free_event_desc(ff.events);
+> > > +     return ret;
+> > >  }
+> > >
+> > >  size_t perf_event__fprintf_event_update(union perf_event *event, FILE *fp)
+> > > --
+> > > 2.34.0.rc2.393.gf8c9666880-goog
+> > >
+> >
+> 
 

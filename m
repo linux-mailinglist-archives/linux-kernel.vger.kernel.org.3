@@ -2,248 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 329C3463BBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC1E463BC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235446AbhK3Qbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:31:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56130 "EHLO
+        id S243819AbhK3Qdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbhK3Qbi (ORCPT
+        with ESMTP id S239752AbhK3Qdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:31:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84EE3C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:28:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 409EFB81A50
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:28:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECE12C53FC7;
-        Tue, 30 Nov 2021 16:28:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638289696;
-        bh=leH03mhETEVMKC0j7UcNpT7K1OYPsXTOzwQFY29box8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=TplB6OeR+GyAM/0Jj+B987j4Y29ChwiMoZ65bcB5xzVtUEdlF58wvfHfQrkzlSxrl
-         nLvXhjmkc7aBs98jgbnNtH7q4RjJ7p6zIIypZEpa85ynq6cnHK/NaBbTHHNgTfW7wd
-         PrlVxl02dSNdEjpqJvlkwqn07zy3EnfPGPEAsN71N7JRMF/LeCgizcUYLOpaoVIE/L
-         hnV5XCZwxcI0VE+SPNg0Ddn3iq0zBoI+Tzk7fxXZtCibRl5HkOQ2OtxGNpPyZwUYcW
-         eNqOyCKYgLPpy07tp0LZXChDTai4S8pZyQ9ZHh3bO8H1QCx4tTWrZlZ1hpWnYWV47U
-         Jb+9CM3SeaWbA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AAF6A5C0367; Tue, 30 Nov 2021 08:28:15 -0800 (PST)
-Date:   Tue, 30 Nov 2021 08:28:15 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        andi.kleen@intel.com, len.brown@intel.com, tim.c.chen@intel.com
-Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for qualified
- platforms
-Message-ID: <20211130162815.GU641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211117023751.24190-1-feng.tang@intel.com>
- <20211117023751.24190-2-feng.tang@intel.com>
- <20211130064623.GB96474@shbuild999.sh.intel.com>
- <20211130144048.GQ641268@paulmck-ThinkPad-P17-Gen-1>
- <20211130150256.GA19477@shbuild999.sh.intel.com>
+        Tue, 30 Nov 2021 11:33:38 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED60C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:30:18 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id z18so26852747iof.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:30:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FR3RsxVyijnbsxzY0RlOxZ6lexSIMl0xHsJznnIZU9w=;
+        b=kg14S4Ke3a8IL1ItjkBUscIDA4qbPKaK/UEhTqHPB2JR4ct2DwzXUPOCA4ljZm+OWm
+         iRo+QGfRu9MwQxnzys2mXB+pKMeHvT91pfr4vnfKeIGMhtiB+3IyedrkZpvAC6dQ1BNF
+         OiSciKSd4w1srV3Nt1Ya19crUiOyS2hxY4/EY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FR3RsxVyijnbsxzY0RlOxZ6lexSIMl0xHsJznnIZU9w=;
+        b=zKBHdBF5jIzL7T96Tjfv+/Md94Ma30XyeVkSmD15ke9TLifggNGoPasnjQw505xKwo
+         +nBvVVLWj1R2gVRzuAAAKJKU+7L+dMqGTH527Gj4GDUS+XteFJzmQvX0mB/iruSYOdG6
+         aWlTA4I3IT0yRnHyd26mZExI6xF4KwOLqbmkey0RnTSsdBaV5p2dow9iwxBiPAXjSeZp
+         L0k9sqzf5E0LuUca4sh3RNM23YeQQiMvWGwh2NOcoNtsmjUk+TWw6kFYZtAA7BrmGYpS
+         8E/B+JxFPWBjMk3Fr/QmDmDkPiNsenhinfuhSxrO0yeCCdaVA9WP0evlCcxWSEnCsSiH
+         M7eg==
+X-Gm-Message-State: AOAM531fabfsJg+iJNy2WSCHlGvCqaXU0DYjNCuGeD3yZS2xVG7DMhRa
+        9FRU4VRnrmiBZ94n45Qc/eNV32CHksQWUw==
+X-Google-Smtp-Source: ABdhPJyXlAhKpJlQdjBUGvgfX7mfYuz94jiwXFjtHtrQ/6GzDLhFLUaqxq8h4sfkEn+lhFE3GSlZyw==
+X-Received: by 2002:a05:6602:2f15:: with SMTP id q21mr365794iow.113.1638289817691;
+        Tue, 30 Nov 2021 08:30:17 -0800 (PST)
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com. [209.85.166.44])
+        by smtp.gmail.com with ESMTPSA id m7sm11925372ilu.58.2021.11.30.08.30.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 08:30:17 -0800 (PST)
+Received: by mail-io1-f44.google.com with SMTP id v23so26813793iom.12
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:30:17 -0800 (PST)
+X-Received: by 2002:a6b:440f:: with SMTP id r15mr392999ioa.128.1638289816639;
+ Tue, 30 Nov 2021 08:30:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130150256.GA19477@shbuild999.sh.intel.com>
+References: <20211115170241.1.I94825a614577505bd1a8be9aeff208a49cb39b3d@changeid>
+In-Reply-To: <20211115170241.1.I94825a614577505bd1a8be9aeff208a49cb39b3d@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 30 Nov 2021 08:30:04 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UZNxt7y6bTipyvYFGMJhgp6nRozNt=iEaOYP6yc4OFpg@mail.gmail.com>
+Message-ID: <CAD=FV=UZNxt7y6bTipyvYFGMJhgp6nRozNt=iEaOYP6yc4OFpg@mail.gmail.com>
+Subject: Re: [PATCH] sched/rt: Don't reschedule a throttled task even if it's
+ higher priority
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Joel Fernandes <joelaf@google.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:02:56PM +0800, Feng Tang wrote:
-> Hi Paul,
-> 
-> Thanks for the review!
-> 
-> On Tue, Nov 30, 2021 at 06:40:48AM -0800, Paul E. McKenney wrote:
-> > On Tue, Nov 30, 2021 at 02:46:23PM +0800, Feng Tang wrote:
-> > > On Wed, Nov 17, 2021 at 10:37:51AM +0800, Feng Tang wrote:
-> > > > There are cases that tsc clocksources are wrongly judged as unstable by
-> > > > clocksource watchdogs like hpet, acpi_pm or 'refined-jiffies'. While
-> > > > there is hardly a general reliable way to check the validity of a
-> > > > watchdog, and to protect the innocent tsc, Thomas Gleixner proposed [1]:
-> > > 
-> > > Hi All,
-> > > 
-> > > Some more update, last week we got report from validation team that
-> > > the "tsc judged as unstable" happened on latest desktop platform,
-> > > which has serial earlyprintk enabled, and the watchdog here is
-> > > 'refined-jiffies' while hpet is disabled during the PC10 check. I
-> > > tried severy other client platforms I can find: Kabylake, Icelake
-> > > and Alderlake, and the mis-judging can be easily reproduced on
-> > > Icelake and Alderlake (not on Kabylake). Which could be cued by
-> > > this 2/2 patch.
-> > > 
-> > > Also, today we got same report on a 2-sockets Icelake Server with
-> > > 5.5 kernel, while the watchdog is 'hpet', and the system is running
-> > > stressful big-data workload.
-> > 
-> > Were these tests run with Waiman's latest patch series?  The first
-> > two of them are on RCU's "dev" branch.
->  
-> No, I haven't tried Waiman's patches, which are more about refining
-> cs_watchdog_read() check, while these 2 cases are about the really
-> big gap between watchog and cur_clocksource
-> 
-> The error log of first client platform (5.15 kernel) is: 
-> 
-> [    2.994266] clocksource:                       'refined-jiffies' wd_nsec: 516032250 wd_now: fffedc09 wd_last: fffedb88 mask: ffffffff
-> [    2.998352] initcall irq_sysfs_init+0x0/0x97 returned 0 after 0 usecs
-> [    3.002266] clocksource:                       'tsc-early' cs_nsec: 767553349 cs_now: 71a87fd2f cs_last: 6db4968ff mask: ffffffffffffffff
-> [    3.006266] calling  dma_atomic_pool_init+0x0/0x152 @ 1
-> [    3.010266] clocksource:                       No current clocksource.
-> [    3.010267] tsc: Marking TSC unstable due to clocksource watchdog
-> 
-> We can see the gap is 516 ms vs 767 ms, and the delta is 267 ms. 
-> And the root cause is with earlyprintk serial console enabled,
-> the periodic timer interrupt is severely affected to be not
-> accurate.
-> 
-> And similar big gap between 'tsc' and 'hpet' is seen for the server
-> case (5.5 kernel which doesn't have the cs_watchdog_read() patchset). 
-> 
-> [1196945.314929] clocksource: timekeeping watchdog on CPU67: Marking clocksource 'tsc' as unstable because the skew is too large:
-> [1196945.314935] clocksource:                       'hpet' wd_now: 25272026 wd_last: 2e9ce418 mask: ffffffff
-> [1196945.314938] clocksource:                       'tsc' cs_now: 95b400003fdf1 cs_last: 95ae7ed7c33f7 mask: ffffffffffffffff
-> [1196945.314948] tsc: Marking TSC unstable due to clocksource watchdog
-> [1196945.314977] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
-> [1196945.314981] sched_clock: Marking unstable (1196945264804527, 50153181)<-(1196945399926576, -84962703)
-> [1196945.316255] clocksource: Switched to clocksource hpet
-> 
-> For this case, I don't have access to the HW and only have the
-> dmesg log, from which it seems the watchdog timer has been postponed
-> a very long time from running.
+Hi,
 
-Thank you for the analysis!
+On Mon, Nov 15, 2021 at 5:03 PM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> While testing RT_GROUP_SCHED, I found that my system would go bonkers
+> if my test RT tasks ever got throttled (even if my test RT tasks were
+> set to only get a tiny slice of CPU time). Specifically I found that
+> whenever my test RT tasks were throttled that all other RT tasks in
+> the system were being starved (!!). Several important RT tasks in the
+> kernel were suddenly getting almost no timeslices and my system became
+> unusable.
+>
+> After some experimentation, I determined that this behavior only
+> happened when I gave my test RT tasks a high priority. If I gave my
+> test RT tasks a low priority then they were throttled as expected and
+> nothing was starved.
+>
+> I managed to come up with a test case that hopefully anyone can run to
+> demonstrate the problem. The test case uses shell commands and python
+> but certainly you could reproduce in other ways:
+>
+> echo "Allow 20 ms more of RT at system and top cgroup"
+> old_rt=$(cat /proc/sys/kernel/sched_rt_runtime_us)
+> echo $((old_rt + 20000)) > /proc/sys/kernel/sched_rt_runtime_us
+> old_rt=$(cat /sys/fs/cgroup/cpu/cpu.rt_runtime_us)
+> echo $((old_rt + 20000)) > /sys/fs/cgroup/cpu/cpu.rt_runtime_us
+>
+> echo "Give 10 ms each to spinny and printy groups"
+> mkdir /sys/fs/cgroup/cpu/spinny
+> echo 10000 > /sys/fs/cgroup/cpu/spinny/cpu.rt_runtime_us
+> mkdir /sys/fs/cgroup/cpu/printy
+> echo 10000 > /sys/fs/cgroup/cpu/printy/cpu.rt_runtime_us
+>
+> echo "Fork off a printy thing to be a nice RT citizen"
+> echo "Prints once per second. Priority only 1."
+> python -c "import time;
+> last_time = time.time()
+> while True:
+>   time.sleep(1)
+>   now_time = time.time()
+>   print('Time fies %f' % (now_time - last_time))
+>   last_time = now_time" &
+> pid=$!
+> echo "Give python a few seconds to get started"
+> sleep 3
+> echo $pid >> /sys/fs/cgroup/cpu/printy/tasks
+> chrt -p -f 1 $pid
+>
+> echo "Sleep to observe that everything is peachy"
+> sleep 3
+>
+> echo "Fork off a bunch of evil spinny things"
+> echo "Chews CPU time. Priority 99."
+> for i in $(seq 13); do
+>   python -c "while True: pass"&
+>   pid=$!
+>   echo $pid >> /sys/fs/cgroup/cpu/spinny/tasks
+>   chrt -p -f 99 $pid
+> done
+>
+> echo "Huh? Almost no more prints?"
+>
+> I believe that the problem is an "if" test that's been in
+> push_rt_task() forever where we will just reschedule the current task
+> if it's higher priority than the next one. If I just remove that
+> special case then everything works for me. I tried making it
+> conditional on just `!rq->rt.rt_throttled` but for whatever reason
+> that wasn't enough. The `if` test looks like an unlikely special case
+> optimization and it seems like things ought to be fine without it.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> I know less than zero about the scheduler (so if I told you something,
+> it's better than 50% chance the the opposite is true!). Here I'm
+> asserting that we totally don't need this special case and the system
+> will be fine without it, but I actually don't have any data to back
+> that up. If nothing else, hopefully my test case in the commit message
+> would let someone else reproduce and see what I'm talking about and
+> can come up with a better fix.
+>
+>  kernel/sched/rt.c | 10 ----------
+>  1 file changed, 10 deletions(-)
 
-One approach to handle this situation would be to avoid checking for
-clock skew if the time since the last watchdog read was more than (say)
-twice the desired watchdog spacing.  This does leave open the question of
-exactly which clocksource to use to measure the time between successive
-clocksource reads.  My thought is to check this only once upon entry to
-the handler and to use the designated-good clocksource.
+I know this isn't crazy urgent and I'm happy to sit and twiddle my
+thumbs a bit longer if everyone is still sleepy from tryptophan, but
+I'm curious if anyone had a chance to look at this. Can anyone confirm
+that my script reproduces for them on something other than my system?
+Does my patch seem sane?
 
-Does that make sense, or would something else work better?
+Thanks!
 
-							Thanx, Paul
-
-> Thanks,
-> Feng
-> 
-> 
-> > 							Thanx, Paul
-> > 
-> > > Thanks,
-> > > Feng
-> > > 
-> > > 
-> > > > "I'm inclined to lift that requirement when the CPU has:
-> > > > 
-> > > >     1) X86_FEATURE_CONSTANT_TSC
-> > > >     2) X86_FEATURE_NONSTOP_TSC
-> > > >     3) X86_FEATURE_NONSTOP_TSC_S3
-> > > >     4) X86_FEATURE_TSC_ADJUST
-> > > >     5) At max. 4 sockets
-> > > > 
-> > > >  After two decades of horrors we're finally at a point where TSC seems
-> > > >  to be halfway reliable and less abused by BIOS tinkerers. TSC_ADJUST
-> > > >  was really key as we can now detect even small modifications reliably
-> > > >  and the important point is that we can cure them as well (not pretty
-> > > >  but better than all other options)."
-> > > > 
-> > > > As feature #3 X86_FEATURE_NONSTOP_TSC_S3 only exists on several generations
-> > > > of Atom processor, and is always coupled with X86_FEATURE_CONSTANT_TSC
-> > > > and X86_FEATURE_NONSTOP_TSC, skip checking it, and also be more defensive
-> > > > to use maxim of 2 sockets.
-> > > > 
-> > > > The check is done inside tsc_init() before registering 'tsc-early' and
-> > > > 'tsc' clocksources, as there were cases that both of them had been
-> > > > wrongly judged as unreliable.
-> > > > 
-> > > > For more background of tsc/watchdog, there is a good summary in [2]
-> > > > 
-> > > > [1]. https://lore.kernel.org/lkml/87eekfk8bd.fsf@nanos.tec.linutronix.de/
-> > > > [2]. https://lore.kernel.org/lkml/87a6pimt1f.ffs@nanos.tec.linutronix.de/
-> > > > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> > > > Signed-off-by: Feng Tang <feng.tang@intel.com>
-> > > > ---
-> > > > Change log:
-> > > > 
-> > > >   v3:
-> > > >     * rebased against 5.16-rc1
-> > > >     * refine commit log
-> > > > 
-> > > >   v2:
-> > > >     * Directly skip watchdog check without messing flag
-> > > >       'tsc_clocksource_reliable' (Thomas)
-> > > > 
-> > > >  arch/x86/kernel/tsc.c | 22 ++++++++++++++++++----
-> > > >  1 file changed, 18 insertions(+), 4 deletions(-)
-> > > > 
-> > > > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> > > > index 2e076a459a0c..389511f59101 100644
-> > > > --- a/arch/x86/kernel/tsc.c
-> > > > +++ b/arch/x86/kernel/tsc.c
-> > > > @@ -1180,6 +1180,12 @@ void mark_tsc_unstable(char *reason)
-> > > >  
-> > > >  EXPORT_SYMBOL_GPL(mark_tsc_unstable);
-> > > >  
-> > > > +static void __init tsc_skip_watchdog_verify(void)
-> > > > +{
-> > > > +	clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> > > > +	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> > > > +}
-> > > > +
-> > > >  static void __init check_system_tsc_reliable(void)
-> > > >  {
-> > > >  #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
-> > > > @@ -1196,6 +1202,17 @@ static void __init check_system_tsc_reliable(void)
-> > > >  #endif
-> > > >  	if (boot_cpu_has(X86_FEATURE_TSC_RELIABLE))
-> > > >  		tsc_clocksource_reliable = 1;
-> > > > +
-> > > > +	/*
-> > > > +	 * Ideally the socket number should be checked, but this is called
-> > > > +	 * by tsc_init() which is in early boot phase and the socket numbers
-> > > > +	 * may not be available. Use 'nr_online_nodes' as a fallback solution
-> > > > +	 */
-> > > > +	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
-> > > > +	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
-> > > > +	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
-> > > > +	    nr_online_nodes <= 2)
-> > > > +		tsc_skip_watchdog_verify();
-> > > >  }
-> > > >  
-> > > >  /*
-> > > > @@ -1387,9 +1404,6 @@ static int __init init_tsc_clocksource(void)
-> > > >  	if (tsc_unstable)
-> > > >  		goto unreg;
-> > > >  
-> > > > -	if (tsc_clocksource_reliable || no_tsc_watchdog)
-> > > > -		clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> > > > -
-> > > >  	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
-> > > >  		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
-> > > >  
-> > > > @@ -1527,7 +1541,7 @@ void __init tsc_init(void)
-> > > >  	}
-> > > >  
-> > > >  	if (tsc_clocksource_reliable || no_tsc_watchdog)
-> > > > -		clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> > > > +		tsc_skip_watchdog_verify();
-> > > >  
-> > > >  	clocksource_register_khz(&clocksource_tsc_early, tsc_khz);
-> > > >  	detect_art();
-> > > > -- 
-> > > > 2.27.0
+-Doug

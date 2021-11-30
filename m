@@ -2,127 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A35D46333A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B19846333E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241377AbhK3Luu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:50:50 -0500
-Received: from mail-oo1-f50.google.com ([209.85.161.50]:36481 "EHLO
-        mail-oo1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241436AbhK3LuL (ORCPT
+        id S241200AbhK3Lu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241287AbhK3Lu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:50:11 -0500
-Received: by mail-oo1-f50.google.com with SMTP id g11-20020a4a754b000000b002c679a02b18so6625853oof.3;
-        Tue, 30 Nov 2021 03:46:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WjMUthcTPIiga1LMGsJE+FmlQCkDz2Z0fHsgTYEAKpI=;
-        b=dSyP+BKAcc/IwjooLfDZUCInAu+i+htAhWOjO4l+mfRO1sYMVEdz4FH7MXKvQiCaVM
-         ocCnzBk82h6nZ//hKEEzgAi9+YT2zV0FZFXWmgtk84d4ZCBrbXsoIGkQAb3TXNchg6Pg
-         fmZwAoFtZRgV/vTh3GnYmDbC8YBLrCrDChRYItkk3sLXhf4TpwFGPz875qcDy1UEbgjQ
-         326Sd1RiDEiLeKUD5O7UfkC43GtOVNZYgclnZ1TC+TOhG+cTOoG/n8hxzAnwcrBEFHMv
-         JLy0wgrYrvk7Ts4AIUlZvghQpULKTw3FBXJFrRTQe/Mhq2dt+vAEkIPUPT+pJg99AAcb
-         OjVQ==
-X-Gm-Message-State: AOAM532SOX0MUxu9aJqmHvnKSgT0D0j4V+ZhXGJoYbJfE+RxNib4Uu45
-        9ZuyyzkhIT/G0Qrrg78sZ2NaixIPfNMTrEwwdmU=
-X-Google-Smtp-Source: ABdhPJzZz9fmKhAIzkZDOWBm78WYvwBLWziGXnbzHzeu/W7/mlQoZXyKxNxgTt1MZyDOKnFdVtL1bUeI6KZFAnpn6oc=
-X-Received: by 2002:a05:6820:388:: with SMTP id r8mr35255875ooj.0.1638272811661;
- Tue, 30 Nov 2021 03:46:51 -0800 (PST)
+        Tue, 30 Nov 2021 06:50:29 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231E7C061763;
+        Tue, 30 Nov 2021 03:47:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ZHmEYF4LZeF4drtWTO7d/7EufUy+uE8BPoSmH0E4R64=; b=Jhj9YSp2RJQcU2ECFjWZaMYhua
+        JUhlttpK8G8pMJvU0PVvvVKhg/RJwZaqUBg77r+n7xCEgflF91GNrnigEJu2nklPDmHtU+WrhsPPR
+        wTHs3GOgl/zjGAZtdODWlPh+wR9W14vDejxNFwedsM6B7Zm2fTtMGROQWRb2idvl+HvV1it/r06sq
+        RUi+mt/P4jkCqz05xpQLiMqwYhbMPjsFcuwv32qRNgEmDDmyEu0DcrB9oKZi0MC0phS3046LjgYMZ
+        rd6n/8gaEAT8LcwTWDjHnFAkE5JpGaXL9rTDzU3/oPCc2zf6E1qnIN49BMr8ytt9pLXh052h7pQ8E
+        UEBXry5A==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55976)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ms1bA-0006nS-LC; Tue, 30 Nov 2021 11:47:00 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ms1b6-000719-Mn; Tue, 30 Nov 2021 11:46:56 +0000
+Date:   Tue, 30 Nov 2021 11:46:56 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>, Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] modpost: file2alias: fixup mdio alias garbled
+ code in modules.alias
+Message-ID: <YaYPMOJ/+OXIWcnj@shell.armlinux.org.uk>
+References: <1637919957-21635-1-git-send-email-zhuyinbo@loongson.cn>
+ <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
 MIME-Version: 1.0
-References: <20211029122359.1.I1e23f382fbd8beb19fe1c06d70798b292012c57a@changeid>
- <CAE=gft4MRvq-VCBW4EX4dGfPi4s7Lco8h6Z_ejRH5A1e-K2-yA@mail.gmail.com>
- <CAJZ5v0hsGFHxcTb8PUkGSm9oas1wdquB=euofS19zriRc1CXYw@mail.gmail.com>
- <CAE=gft6CjUhkcrmcjVEOp5S+rgqN1_ZGTKbK0DierTanu0d16A@mail.gmail.com>
- <CAJZ5v0gamixc4dkBEXJjjw5zQynuz8BkQ9xv8YpbjkTkdMb2TQ@mail.gmail.com> <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com>
-In-Reply-To: <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Nov 2021 12:46:34 +0100
-Message-ID: <CAJZ5v0ixOCnT_JyQ1gpvc9rdH_zK7gLrke0wJSLUagd=-qf0sA@mail.gmail.com>
-Subject: Re: [PATCH] PM / hibernate: Fix snapshot partial write lengths
-To:     Evan Green <evgreen@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 5:50 PM Evan Green <evgreen@chromium.org> wrote:
->
-> On Wed, Nov 24, 2021 at 4:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Tue, Nov 16, 2021 at 9:22 PM Evan Green <evgreen@chromium.org> wrote:
-> > >
-> > > On Tue, Nov 16, 2021 at 9:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > >
-> > > > On Mon, Nov 15, 2021 at 6:13 PM Evan Green <evgreen@chromium.org> wrote:
-> > > > >
-> > > > > Gentle bump.
-> > > > >
-> > > > >
-> > > > > On Fri, Oct 29, 2021 at 12:24 PM Evan Green <evgreen@chromium.org> wrote:
-> > > > > >
-> > > > > > snapshot_write() is inappropriately limiting the amount of data that can
-> > > > > > be written in cases where a partial page has already been written. For
-> > > > > > example, one would expect to be able to write 1 byte, then 4095 bytes to
-> > > > > > the snapshot device, and have both of those complete fully (since now
-> > > > > > we're aligned to a page again). But what ends up happening is we write 1
-> > > > > > byte, then 4094/4095 bytes complete successfully.
-> > > > > >
-> > > > > > The reason is that simple_write_to_buffer()'s second argument is the
-> > > > > > total size of the buffer, not the size of the buffer minus the offset.
-> > > > > > Since simple_write_to_buffer() accounts for the offset in its
-> > > > > > implementation, snapshot_write() can just pass the full page size
-> > > > > > directly down.
-> > > > > >
-> > > > > > Signed-off-by: Evan Green <evgreen@chromium.org>
-> > > > > > ---
-> > > > > >
-> > > > > >  kernel/power/user.c | 2 +-
-> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/kernel/power/user.c b/kernel/power/user.c
-> > > > > > index 740723bb388524..ad241b4ff64c58 100644
-> > > > > > --- a/kernel/power/user.c
-> > > > > > +++ b/kernel/power/user.c
-> > > > > > @@ -177,7 +177,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
-> > > > > >                 if (res <= 0)
-> > > > > >                         goto unlock;
-> > > > > >         } else {
-> > > > > > -               res = PAGE_SIZE - pg_offp;
-> > > > > > +               res = PAGE_SIZE;
-> > > > > >         }
-> > > > > >
-> > > > > >         if (!data_of(data->handle)) {
-> > > > > > --
-> > > >
-> > > > Do you actually see this problem in practice?
-> > >
-> > > Yes. I may fire up another thread to explain why I'm stuck doing a
-> > > partial page write, and how I might be able to stop doing that in the
-> > > future with some kernel help. But either way, this is a bug.
-> >
-> > OK, patch applied as 5.16-rc material.
-> >
-> > I guess it should go into -stable kernels too?
->
-> Yes, putting it into -stable would make sense also. I should have CCed
-> them originally, doing that now.
+On Fri, Nov 26, 2021 at 11:21:03AM +0100, Heiner Kallweit wrote:
+> On 26.11.2021 10:45, Yinbo Zhu wrote:
+> > After module compilation, module alias mechanism will generate a ugly
+> > mdio modules alias configure if ethernet phy was selected, this patch
+> > is to fixup mdio alias garbled code.
+> > 
+> > In addition, that ugly alias configure will cause ethernet phy module
+> > doens't match udev, phy module auto-load is fail, but add this patch
+> > that it is well mdio driver alias configure match phy device uevent.
+> > 
+> I think Andrew asked you for an example already.
+> For which PHY's the driver isn't auto-loaded?
+> 
+> In addition your commit descriptions are hard to read, especially the
+> one for patch 2. Could you please try to change them to proper English?
+> Not being a native speaker myself ..
 
-Well, you need to point them to the upstream commit to backport.
+Let's clear this up. PHY module loading is quite different - it does
+_not_ use MODALIAS nor does it use the usual udev approach.
 
-In this particular case it would be
+The modalias strings use aliases of the form "mdio:<semi-binary-string>"
+with "?" used as a wildcard for each bit not in the mask. This is an
+entirely appropriate scheme to use, as it allows matching an ID with
+an arbitary mask. There is nothing wrong with this format - it may be
+a bit on the long side, but it is an entirely valid solution.
 
-commit 88a5045f176b78c33a269a30a7b146e99c550bd9 (pm-sleep)
-Author: Evan Green <evgreen@chromium.org>
-Date:   Fri Oct 29 12:24:22 2021 -0700
+The kernel has never generated a MODALIAS of this form, which is fine,
+because we don't use MODALIAS or the uevent/udev approach to loading
+the modules.
 
-   PM: hibernate: Fix snapshot partial write lengths
+We instead use phy_request_driver_module() at PHY device creation time
+to explicitly request modprobe to load a module of the form
+"mdio:<binary-id>" which we know works (I have had the marvell10g and
+bcm84881 modules autoloaded as a result of inserting SFPs.)
 
-I'll send an inclusion request for this.  I guess it should go into
-all of the applicable -stable series, right?
+However, this won't work for PHY devices created _before_ the kernel
+has mounted the rootfs, whether or not they end up being used. So,
+every PHY mentioned in DT will be created before the rootfs is mounted,
+and none of these PHYs will have their modules loaded.
+
+I believe this is the root cause of Yinbo Zhu's issue.
+
+However, changing the modalias format that we use is not a solution -
+it _will_ cause DSA module loading to break. We've been here with the
+SPI subsystem, where a patch was merged to change the modalias format
+allegedly to fix loading of one or two modules, resulting in the
+spi-nor driver failing to load (as it had done for years) - and the
+resulting change was reverted and the revert backported to all the
+stable trees. It created quite a mess. Linus has always been very clear
+that if fixing one issue causes regressions, then the fix is wrong and
+needs to be reverted. This is exactly what happened in the case of SPI.
+
+This teaches us a lesson: changes to any modalias scheme that has been
+in use for years need _extremely_ careful consideration and thorough
+testing as they risk causing regressions. Without that, such changes
+can result in difficult decisions where no matter what decision is
+made, some breakage occurs as a result of sorting out the resulting
+mess from not having considered the change carefully enough. It is far
+better to avoid boxing oneself into a corner.
+
+We can see that Yinbo Zhu's changes to fix his issue will cause
+regressions with DSA, so it is simply an unacceptable fix. Reposting
+the same code will _never_ change that fact. So please, Yinbo Zhu, stop
+reposting your change. It is provably regression-creating and as such
+will never be accepted. You also seem to be resistant to feedback -
+I've asked you to separate out the "mdio_bus" change but you still have
+not in your version 3 posted today. Therefore, I will assume that you
+won't read this email, and in future if I see those patches again, I
+will reply with a one-line "NAK" and a reference to this email.
+
+We instead need a different approach to solving this issue. What that
+approach is, I'm not sure right now - the tooling is setup to only
+permit one MODALIAS published by the kernel, so we can't publish both
+a DT based modalias and a mdio: based modalias together. It's one or
+the other.
+
+What we _could_ do is review all device trees and PHY drivers to see
+whether DT modaliases are ever used for module loading. If they aren't,
+then we _could_ make the modalias published by the kernel conditional
+on the type of mdio device - continue with the DT approach for non-PHY
+devices, and switch to the mdio: scheme for PHY devices. I repeat, this
+can only happen if no PHY drivers match using the DT scheme, otherwise
+making this change _will_ cause a regression.
+
+The alternative is we simply declare that udev based module auto-loading
+of PHY drivers required for PHYs in DT is simply not supported, and is
+something we are unable to support. For something like root-NFS or IP
+autoconfiguration by the kernel, that is already the case - the PHY
+driver modules _must_ be built-in to the kernel in just the same way as
+the network driver modules must be.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

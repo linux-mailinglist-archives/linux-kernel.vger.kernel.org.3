@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD2C462D1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D6A462D22
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:53:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238824AbhK3GzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 01:55:09 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:50464 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233165AbhK3GzC (ORCPT
+        id S238840AbhK3G45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 01:56:57 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:28194 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232051AbhK3G44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 01:55:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C4B67CE16B4;
-        Tue, 30 Nov 2021 06:51:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50335C53FCD;
-        Tue, 30 Nov 2021 06:51:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638255100;
-        bh=OthBuHhfpZ4/HumyxwCHFcZfepI57tWKm7cCN1XPAcM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CFnEY0cPq0R4fUZR6llZkhp1qmSxqaz8Sxu2VW3Brvryg2l+UT6W5S8Nh57QovOet
-         KdFc1wKs/HNeUwcWWjzsHXs7jzzkZMUOvcAissyPMI2bB7U5e3LEQBPwu2OCvaKZP8
-         rtb37/hENcTMR0aDB5njxbnRpwz2CiMm3aMDC3Q8=
-Date:   Tue, 30 Nov 2021 07:51:36 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH] PM / hibernate: Fix snapshot partial write lengths
-Message-ID: <YaXJ+LqbmlKJ21Ja@kroah.com>
-References: <20211029122359.1.I1e23f382fbd8beb19fe1c06d70798b292012c57a@changeid>
- <CAE=gft4MRvq-VCBW4EX4dGfPi4s7Lco8h6Z_ejRH5A1e-K2-yA@mail.gmail.com>
- <CAJZ5v0hsGFHxcTb8PUkGSm9oas1wdquB=euofS19zriRc1CXYw@mail.gmail.com>
- <CAE=gft6CjUhkcrmcjVEOp5S+rgqN1_ZGTKbK0DierTanu0d16A@mail.gmail.com>
- <CAJZ5v0gamixc4dkBEXJjjw5zQynuz8BkQ9xv8YpbjkTkdMb2TQ@mail.gmail.com>
- <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com>
+        Tue, 30 Nov 2021 01:56:56 -0500
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J3CYk04yNz8vg4;
+        Tue, 30 Nov 2021 14:51:38 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 14:53:35 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 14:53:34 +0800
+Message-ID: <617f11ad-3033-473f-162e-cb7ecd67a78a@huawei.com>
+Date:   Tue, 30 Nov 2021 14:53:33 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH RFC 0/4] mm: percpu: Cleanup percpu first chunk funciton
+Content-Language: en-US
+To:     Dennis Zhou <dennis@kernel.org>
+CC:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <tj@kernel.org>,
+        <gregkh@linuxfoundation.org>, <cl@linux.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <tsbogend@alpha.franken.de>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-ia64@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <sparclinux@vger.kernel.org>, <x86@kernel.org>
+References: <20211121093557.139034-1-wangkefeng.wang@huawei.com>
+ <YaVaTwjiZmWz8PKY@fedora>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <YaVaTwjiZmWz8PKY@fedora>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme705-chm.china.huawei.com (10.1.199.101) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 08:50:06AM -0800, Evan Green wrote:
-> On Wed, Nov 24, 2021 at 4:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Tue, Nov 16, 2021 at 9:22 PM Evan Green <evgreen@chromium.org> wrote:
-> > >
-> > > On Tue, Nov 16, 2021 at 9:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > >
-> > > > On Mon, Nov 15, 2021 at 6:13 PM Evan Green <evgreen@chromium.org> wrote:
-> > > > >
-> > > > > Gentle bump.
-> > > > >
-> > > > >
-> > > > > On Fri, Oct 29, 2021 at 12:24 PM Evan Green <evgreen@chromium.org> wrote:
-> > > > > >
-> > > > > > snapshot_write() is inappropriately limiting the amount of data that can
-> > > > > > be written in cases where a partial page has already been written. For
-> > > > > > example, one would expect to be able to write 1 byte, then 4095 bytes to
-> > > > > > the snapshot device, and have both of those complete fully (since now
-> > > > > > we're aligned to a page again). But what ends up happening is we write 1
-> > > > > > byte, then 4094/4095 bytes complete successfully.
-> > > > > >
-> > > > > > The reason is that simple_write_to_buffer()'s second argument is the
-> > > > > > total size of the buffer, not the size of the buffer minus the offset.
-> > > > > > Since simple_write_to_buffer() accounts for the offset in its
-> > > > > > implementation, snapshot_write() can just pass the full page size
-> > > > > > directly down.
-> > > > > >
-> > > > > > Signed-off-by: Evan Green <evgreen@chromium.org>
-> > > > > > ---
-> > > > > >
-> > > > > >  kernel/power/user.c | 2 +-
-> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/kernel/power/user.c b/kernel/power/user.c
-> > > > > > index 740723bb388524..ad241b4ff64c58 100644
-> > > > > > --- a/kernel/power/user.c
-> > > > > > +++ b/kernel/power/user.c
-> > > > > > @@ -177,7 +177,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
-> > > > > >                 if (res <= 0)
-> > > > > >                         goto unlock;
-> > > > > >         } else {
-> > > > > > -               res = PAGE_SIZE - pg_offp;
-> > > > > > +               res = PAGE_SIZE;
-> > > > > >         }
-> > > > > >
-> > > > > >         if (!data_of(data->handle)) {
-> > > > > > --
-> > > >
-> > > > Do you actually see this problem in practice?
-> > >
-> > > Yes. I may fire up another thread to explain why I'm stuck doing a
-> > > partial page write, and how I might be able to stop doing that in the
-> > > future with some kernel help. But either way, this is a bug.
-> >
-> > OK, patch applied as 5.16-rc material.
-> >
-> > I guess it should go into -stable kernels too?
-> 
-> Yes, putting it into -stable would make sense also. I should have CCed
-> them originally, doing that now.
 
+On 2021/11/30 6:55, Dennis Zhou wrote:
+> Hello,
+>
+> On Sun, Nov 21, 2021 at 05:35:53PM +0800, Kefeng Wang wrote:
+>> When support page mapping percpu first chunk allocator on arm64, we
+>> found there are lots of duplicated codes in percpu embed/page first
+>> chunk allocator. This patchset is aimed to cleanup them and should
+>> no funciton change, only test on arm64.
+>>
+>> Kefeng Wang (4):
+>>    mm: percpu: Generalize percpu related config
+>>    mm: percpu: Add pcpu_fc_cpu_to_node_fn_t typedef
+>>    mm: percpu: Add generic pcpu_fc_alloc/free funciton
+>>    mm: percpu: Add generic pcpu_populate_pte() function
+>>
+>>   arch/arm64/Kconfig             |  20 +----
+>>   arch/ia64/Kconfig              |   9 +--
+>>   arch/mips/Kconfig              |  10 +--
+>>   arch/mips/mm/init.c            |  14 +---
+>>   arch/powerpc/Kconfig           |  17 +---
+>>   arch/powerpc/kernel/setup_64.c |  92 +--------------------
+>>   arch/riscv/Kconfig             |  10 +--
+>>   arch/sparc/Kconfig             |  12 +--
+>>   arch/sparc/kernel/smp_64.c     | 105 +-----------------------
+>>   arch/x86/Kconfig               |  17 +---
+>>   arch/x86/kernel/setup_percpu.c |  66 ++-------------
+>>   drivers/base/arch_numa.c       |  68 +---------------
+>>   include/linux/percpu.h         |  13 +--
+>>   mm/Kconfig                     |  12 +++
+>>   mm/percpu.c                    | 143 +++++++++++++++++++++++++--------
+>>   15 files changed, 165 insertions(+), 443 deletions(-)
+>>
+>> -- 
+>> 2.26.2
+>>
+> I've made a few comments. I think this will be a little bit of a
+> challenge to get through due to it touching so many architectures. For
+> ease, it probably makes sense to run it through mny tree, but we'll need
+> explicit acks as I mentioned.
+>
+> I like getting rid of the pcpu_alloc_bootmem()/pcpu_free_bootmem()
+> functions. However, let's keep the implementation identical to x86.
+ok , will change patch3 in v2
+>
+>
+> I don't think we should get rid of the populate_pte_fn(). I'm not
+> comfortable changing x86's implementation. Simply offer a NULL, and if
+> NULL use the default.
 
-<formletter>
+As replied in patch4, we use __weak method, and x86's implementation is
 
-This is not the correct way to submit patches for inclusion in the
-stable kernel tree.  Please read:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for how to do this properly.
+not changed in patch4, is this ok?
 
-</formletter>
+>
+> Do you have a tree that intel pulls? I suggest cleaning up the patches
+> and pushing to a remote branch that they pick up. That would have caught
+> the mips typo. Send a PR creating a file in [1] for your branch, github
+> is fine. Basic validation needs to be done before I can pick this up
+> too on more than arm64.
+
+Ok, x86/arm64/riscv are tested, but I don't has ppc/mips/sparc compliler.
+
+I will try to push new version into github and test by lkp.
+
+Thanks.
+
+>
+> [1] https://github.com/intel/lkp-tests/tree/master/repo/linux
+>
+> Thanks,
+> Dennis
+> .

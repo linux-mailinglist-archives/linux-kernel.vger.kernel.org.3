@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7E45464054
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:36:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C406464056
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344224AbhK3VkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:40:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235087AbhK3VkH (ORCPT
+        id S1344117AbhK3Vk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:40:27 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51820 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344057AbhK3VkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:40:07 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1288C061574;
-        Tue, 30 Nov 2021 13:36:47 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638308204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XB+2u5uEBJEn4Qm0c+1ERye9sFiy1dxB5m1DCsCRIdU=;
-        b=lYKsjQggunBjL//xtzE/JaYSyEicoLfIP7C2ag+SfIKg5zJT3qSryEVhpm6FQhZJf+ZWFX
-        04tDjFlnWaBo5DT60Gloq90FMqmyhV5nmMj7vlxoexKqrCF9yMFc7vzG2L9xEizsdepbk+
-        My6/gRPMT2ahdUIASrk2Vsm9DxgaElpRwffWh4SNIJ3qiQ0UF2nHIF2HMWTr0dUiy4jSFg
-        Vy8Ir48C56SdrMw/QLtQLlwNJCZRQFeCZIeq4rJQ9wGdlcZOsi1U4XbI+PlUI6/tPsWT2d
-        XuqXU8fy/DX+ICv7l1uEaXHWVvGqt2EOYoV4+srchMwFgoCMmY8edqhCjA4wKw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638308204;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XB+2u5uEBJEn4Qm0c+1ERye9sFiy1dxB5m1DCsCRIdU=;
-        b=EtGNw3/2HkClYokrjpc8z7ivJxVQb0a6HsEsOkaPJ8e55RcS5bFYLxZVpJRg2KuyTC48R5
-        0mTpLkYGI80NZWCA==
-To:     zhenwei pi <pizhenwei@bytedance.com>, pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
-        zhenwei pi <pizhenwei@bytedance.com>
-Subject: Re: [PATCH 1/2] x86/cpu: introduce x86_get_freq
-In-Reply-To: <20211129052038.43758-1-pizhenwei@bytedance.com>
-References: <20211129052038.43758-1-pizhenwei@bytedance.com>
-Date:   Tue, 30 Nov 2021 22:36:43 +0100
-Message-ID: <87lf15ba1g.ffs@tglx>
+        Tue, 30 Nov 2021 16:40:23 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88857B81CDD;
+        Tue, 30 Nov 2021 21:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB1C1C53FC7;
+        Tue, 30 Nov 2021 21:37:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638308221;
+        bh=MZMyEnMSvEk8R5TGwwDHjwcmN8HW9IXH8UDHhjIr0ao=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=c9RqmnK9oiIGvjJ5a9bFvTeAObgU1/rE8hqiXR5o8teGb01SmQ+oHeh19ypv8QUkF
+         7KXVB2jVSv4GOoGEn7/gUAcutKjVxAvA2WwQwr5rh2t72C7DiCWdJRW+BYb+rHBSKf
+         UyqbghqTIr+M7FBnPQmeOjTLCxENg75NIHR7P9YamT/J6xBTJv83ywaHM6ixY5caoy
+         vVpoY7md5Ncm7lo8SzHAwYFqNCoMuMsfGs11gbki+ZI68C49WDZla6s0OHeu36iPjF
+         rEUqvi7iTn5lJvsR292lRbYKtt2unHJAhJyzlkkubPa73YTKMcB27lk5PY0iWW6Izx
+         J0+epgFxPn7Ew==
+Date:   Tue, 30 Nov 2021 22:36:58 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [RESEND PATCH] i2c: rk3x: Handle a spurious start completion
+ interrupt flag
+Message-ID: <YaaZejhnqHa/nlYI@kunai>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        =?utf-8?Q?Ond=C5=99ej?= Jirman <megous@megous.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>,
+        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20210924111528.2924251-1-megous@megous.com>
+ <YaSfZxtYtV+SfJqL@kunai>
+ <20211130155443.sbvpirzj6moikxl2@core>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Lz55wWF51uLbNsJl"
+Content-Disposition: inline
+In-Reply-To: <20211130155443.sbvpirzj6moikxl2@core>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29 2021 at 13:20, zhenwei pi wrote:
 
-> Wrapper function x86_get_freq to get freq on a x86 platform, hide
-> detailed implementation for proc routine.
+--Lz55wWF51uLbNsJl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Please rename this to x86_get_cpufreq_khz() simply because
-x86_get_freq() is way too unspecific.
 
-Please mention function names with 'function()' which makes it obvious
-what it is. Here and in the Subject.
+> Spurious interupt happens in both modes.
 
-Also spell out frequency all over the place in the change log. There is
-no reason for using abbreviations in text.
+Thanks for the detailed explanation!
 
-> +
-> +unsigned int x86_get_freq(unsigned int cpu)
-> +{
-> +	unsigned int freq = 0;
-> +
-> +	if (cpu_has(&cpu_data(cpu), X86_FEATURE_TSC)) {
 
-Please use cpu_feature_enabled(X86....) and make this condition
-negated:
+--Lz55wWF51uLbNsJl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-     if (!cpu_feature_enabled(X86_FEATURE_TSC))
-            return 0;
+-----BEGIN PGP SIGNATURE-----
 
-which spares an indentation level and the 0 initialization of the variable.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGmmXoACgkQFA3kzBSg
+KbYtFBAAkT42AT46O5Tr1IZfV+kaz0A0tROXvUJpREPcg/T9BmAOVf9DGBum9vCV
+UKLEEvLJzhYaNzftddVxThxKUy8szPMElaos1rYMRwev9VPgk/GcNl8/ldAS5JRN
+6ZePQC8OucKFmv3LeR0pcD7Q1deBl14kPS7THgE3zhI9Zd7IqKM5VD/ljdZtw46u
+8L5I9AoVzdklzcpwUzBRF8+uxkliuyJ3TNXM5AVURt6pEmmCTw3v+JsaxKTokH8B
+NCgDWtwei8TCAzfWiTxKs9gBTw9lngECv/9YkmlmDIA28lIAZWQzwlAkKidXjWoX
+Qu5fKsZrOco9c1nRe0iHMCraOhC0tAt4jLvH/1R129PHVE+N3bAeINTcwe+V+RqG
+bmNReFVYJZxiABWHxZBzUj5pqologdGiP2U08sbeGnENOlV9mzlPbjC2Oj57HjXG
+vpfdfg5jqAJE3rD43feRKaFBLnjVQOYdmYY96EMzLGtBCXOXr7sfBnaMKkgSfnXb
+zNVM5XpBNa08TodMXHIhMiqVfRmAtL1BdIcfcne/o7vzO8ZxFHhm+TnsZCA470R6
+umBk2wZg9AqUdxbmemiO4Vpoh4dfQIUkfnaUs8OnJmjxRmySKz5oo3Wz+qWEmsVm
+u0JdXcI6oBkIDMuRL1ataDAM74h8BwEXf9gaz3CTksTd00WZAMg=
+=AEvi
+-----END PGP SIGNATURE-----
 
-Thanks,
-
-        tglx
+--Lz55wWF51uLbNsJl--

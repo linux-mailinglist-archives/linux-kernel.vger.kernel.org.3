@@ -2,133 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BBC9463F24
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C83463F2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:23:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343649AbhK3UYa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 15:24:30 -0500
-Received: from mga05.intel.com ([192.55.52.43]:37697 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234770AbhK3UY3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 15:24:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="322554487"
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="322554487"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 12:21:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="512348767"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2021 12:21:07 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1ms9cg-000Dj1-GF; Tue, 30 Nov 2021 20:21:06 +0000
-Date:   Wed, 1 Dec 2021 04:20:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jeya R <jeyr@codeaurora.org>, linux-arm-msm@vger.kernel.org,
-        srinivas.kandagatla@linaro.org
-Cc:     kbuild-all@lists.01.org, Jeya R <jeyr@codeaurora.org>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        fastrpc.upstream@qti.qualcomm.com, bkumar@qti.qualcomm.com,
-        ekangupt@qti.qualcomm.com, jeyr@qti.qualcomm.com
-Subject: Re: [PATCH 1/2] misc: fastrpc: Add fdlist implementation
-Message-ID: <202112010402.quLlpjqn-lkp@intel.com>
-References: <1638277072-6459-3-git-send-email-jeyr@codeaurora.org>
+        id S1343670AbhK3U0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 15:26:44 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:38818 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235402AbhK3U0g (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 15:26:36 -0500
+Received: by mail-ot1-f48.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso31919393ota.5;
+        Tue, 30 Nov 2021 12:23:17 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=GP0G3mi93Tk0S+zMq1Y9xib6nRVOzxT1ojVllfCzEjM=;
+        b=4NoXyFnPMSX1h96EbjnvVMuMvRk5PtBqlrfXYN3nzRywb/l5b15u0SV6UQf6Liccdy
+         HpJ/8Jkz4X2JjzMwipb9fupNbka2jnTmElx3gr7NNZxujI+KcaqO9/84rj8323/bp5uU
+         YmyBS9bdJWMhhYlin4Ks/vTxukmdAEJ1uQCJ5BAQy/RpnQW0eU4AmEwrSWBaa4bLGz4y
+         ixeFSO3TN7lw9PUK50hr1lEQGwzQkRTTDL/TdEepIMVy+ewPdf67BzJ32OHDj0ZSBEeC
+         JlC6aAePAyjofPYzojLBVp3vObSpED5giHeOPei360gfrvTi5iyppLu93qN+T9/ykOzp
+         VxiA==
+X-Gm-Message-State: AOAM533f7VKFPH0+Rzmnnm56cuwVgVL/VFN/b5Q94jRFGYQUkkuVpwgI
+        CXi49vNx6/grcfe6It39sw==
+X-Google-Smtp-Source: ABdhPJxafuv3dfSoZyGP/ll4kbKKe7HdaoPWJoDp5p9QG50ZG8BdF4d9x4h3in9L+azPVeB8SNWC6w==
+X-Received: by 2002:a9d:326:: with SMTP id 35mr1437970otv.41.1638303796864;
+        Tue, 30 Nov 2021 12:23:16 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id v2sm3264639oto.3.2021.11.30.12.23.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 12:23:15 -0800 (PST)
+Received: (nullmailer pid 2948128 invoked by uid 1000);
+        Tue, 30 Nov 2021 20:23:14 -0000
+Date:   Tue, 30 Nov 2021 14:23:14 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, UNGLinuxDriver@microchip.com,
+        p.zabel@pengutronix.de, linux@armlinux.org.uk, andrew@lunn.ch,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v5 1/6] dt-bindings: net: lan966x: Add
+ lan966x-switch bindings
+Message-ID: <YaaIMizLkPG81gAO@robh.at.kernel.org>
+References: <20211129124359.4069432-1-horatiu.vultur@microchip.com>
+ <20211129124359.4069432-2-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638277072-6459-3-git-send-email-jeyr@codeaurora.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211129124359.4069432-2-horatiu.vultur@microchip.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeya,
+On Mon, Nov 29, 2021 at 01:43:54PM +0100, Horatiu Vultur wrote:
+> Document the lan966x switch device driver bindings
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> ---
+>  .../net/microchip,lan966x-switch.yaml         | 158 ++++++++++++++++++
+>  1 file changed, 158 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> new file mode 100644
+> index 000000000000..d54dc183a033
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml
+> @@ -0,0 +1,158 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/microchip,lan966x-switch.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Microchip Lan966x Ethernet switch controller
+> +
+> +maintainers:
+> +  - Horatiu Vultur <horatiu.vultur@microchip.com>
+> +
+> +description: |
+> +  The lan966x switch is a multi-port Gigabit AVB/TSN Ethernet Switch with
+> +  two integrated 10/100/1000Base-T PHYs. In addition to the integrated PHYs,
+> +  it supports up to 2RGMII/RMII, up to 3BASE-X/SERDES/2.5GBASE-X and up to
+> +  2 Quad-SGMII/Quad-USGMII interfaces.
+> +
+> +properties:
+> +  $nodename:
+> +    pattern: "^switch@[0-9a-f]+$"
+> +
+> +  compatible:
+> +    const: microchip,lan966x-switch
+> +
+> +  reg:
+> +    items:
+> +      - description: cpu target
+> +      - description: general control block target
+> +
+> +  reg-names:
+> +    items:
+> +      - const: cpu
+> +      - const: gcb
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    items:
+> +      - description: register based extraction
+> +      - description: frame dma based extraction
+> +
+> +  interrupt-names:
+> +    minItems: 1
+> +    items:
+> +      - const: xtr
+> +      - const: fdma
+> +
+> +  resets:
+> +    items:
+> +      - description: Reset controller used for switch core reset (soft reset)
+> +      - description: Reset controller used for releasing the phy from reset
+> +
+> +  reset-names:
+> +    items:
+> +      - const: switch
+> +      - const: phy
+> +
+> +  ethernet-ports:
+> +    type: object
 
-Thank you for the patch! Yet something to improve:
+       additionalProperties: false
 
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on v5.16-rc3 next-20211130]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> +    patternProperties:
+> +      "^port@[0-9a-f]+$":
+> +        type: object
+> +
+> +        allOf:
 
-url:    https://github.com/0day-ci/linux/commits/Jeya-R/misc-fastrpc-Add-fdlist-implementation/20211130-215833
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 5d331b5922551637c586cdf5fdc1778910fc937f
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20211201/202112010402.quLlpjqn-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/d9eaed76074c94c9751c3a587ef2409fa7ce153e
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Jeya-R/misc-fastrpc-Add-fdlist-implementation/20211130-215833
-        git checkout d9eaed76074c94c9751c3a587ef2409fa7ce153e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/misc/
+Don't need allOf here.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> +          - $ref: "http://devicetree.org/schemas/net/ethernet-controller.yaml#"
 
-All errors (new ones prefixed by >>):
+Drop 'http://devicetree.org'. (If you copied that from somewhere, please 
+fix them too.)
 
-   drivers/misc/fastrpc.c: In function 'fastrpc_put_args':
->> drivers/misc/fastrpc.c:923:39: error: 'fl' undeclared (first use in this function); did you mean 'fd'?
-     923 |                 if (!fastrpc_map_find(fl, (int)fdlist[i], &mmap))
-         |                                       ^~
-         |                                       fd
-   drivers/misc/fastrpc.c:923:39: note: each undeclared identifier is reported only once for each function it appears in
+           unevaluatedProperties: false
 
-
-vim +923 drivers/misc/fastrpc.c
-
-   886	
-   887	static int fastrpc_put_args(struct fastrpc_invoke_ctx *ctx,
-   888				    u32 kernel)
-   889	{
-   890		struct fastrpc_remote_arg *rpra = ctx->rpra;
-   891		struct fastrpc_map *mmap = NULL;
-   892		struct fastrpc_invoke_buf *list;
-   893		struct fastrpc_phy_page *pages;
-   894		u64 *fdlist;
-   895		int i, inbufs, outbufs, handles;
-   896	
-   897		inbufs = REMOTE_SCALARS_INBUFS(ctx->sc);
-   898		outbufs = REMOTE_SCALARS_OUTBUFS(ctx->sc);
-   899		handles = REMOTE_SCALARS_INHANDLES(ctx->sc) + REMOTE_SCALARS_OUTHANDLES(ctx->sc);
-   900		list = ctx->buf->virt + ctx->nscalars * sizeof(*rpra);
-   901		pages = ctx->buf->virt + ctx->nscalars * (sizeof(*list) +
-   902			sizeof(*rpra));
-   903		fdlist = (uint64_t *)(pages + inbufs + outbufs + handles);
-   904	
-   905		for (i = inbufs; i < ctx->nbufs; ++i) {
-   906			if (!ctx->maps[i]) {
-   907				void *src = (void *)(uintptr_t)rpra[i].pv;
-   908				void *dst = (void *)(uintptr_t)ctx->args[i].ptr;
-   909				u64 len = rpra[i].len;
-   910	
-   911				if (!kernel) {
-   912					if (copy_to_user((void __user *)dst, src, len))
-   913						return -EFAULT;
-   914				} else {
-   915					memcpy(dst, src, len);
-   916				}
-   917			}
-   918		}
-   919	
-   920		for (i = 0; i < FASTRPC_MAX_FDLIST; i++) {
-   921			if (!fdlist[i])
-   922				break;
- > 923			if (!fastrpc_map_find(fl, (int)fdlist[i], &mmap))
-   924				fastrpc_map_put(mmap);
-   925		}
-   926	
-   927		return 0;
-   928	}
-   929	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+> +
+> +        properties:
+> +          '#address-cells':
+> +            const: 1
+> +          '#size-cells':
+> +            const: 0
+> +
+> +          reg:
+> +            description:
+> +              Switch port number
+> +
+> +          phys:
+> +            description:
+> +              Phandle of a Ethernet SerDes PHY
+> +
+> +          phy-mode:
+> +            description:
+> +              This specifies the interface used by the Ethernet SerDes towards
+> +              the PHY or SFP.
+> +            enum:
+> +              - gmii
+> +              - sgmii
+> +              - qsgmii
+> +              - 1000base-x
+> +              - 2500base-x
+> +
+> +          phy-handle:
+> +            description:
+> +              Phandle of a Ethernet PHY.
+> +
+> +          sfp:
+> +            description:
+> +              Phandle of an SFP.
+> +
+> +          managed: true
+> +
+> +        required:
+> +          - reg
+> +          - phys
+> +          - phy-mode
+> +
+> +        oneOf:
+> +          - required:
+> +              - phy-handle
+> +          - required:
+> +              - sfp
+> +              - managed
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - reg-names
+> +  - interrupts
+> +  - interrupt-names
+> +  - resets
+> +  - reset-names
+> +  - ethernet-ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    switch: switch@e0000000 {
+> +      compatible = "microchip,lan966x-switch";
+> +      reg =  <0xe0000000 0x0100000>,
+> +             <0xe2000000 0x0800000>;
+> +      reg-names = "cpu", "gcb";
+> +      interrupts = <GIC_SPI 30 IRQ_TYPE_LEVEL_HIGH>;
+> +      interrupt-names = "xtr";
+> +      resets = <&switch_reset 0>, <&phy_reset 0>;
+> +      reset-names = "switch", "phy";
+> +      ethernet-ports {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        port0: port@0 {
+> +          reg = <0>;
+> +          phy-handle = <&phy0>;
+> +          phys = <&serdes 0 0>;
+> +          phy-mode = "gmii";
+> +        };
+> +
+> +        port1: port@1 {
+> +          reg = <1>;
+> +          sfp = <&sfp_eth1>;
+> +          managed = "in-band-status";
+> +          phys = <&serdes 2 4>;
+> +          phy-mode = "sgmii";
+> +        };
+> +      };
+> +    };
+> +
+> +...
+> -- 
+> 2.33.0
+> 
+> 

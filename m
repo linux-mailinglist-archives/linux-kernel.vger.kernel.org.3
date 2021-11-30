@@ -2,277 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2C3463DD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89802463DDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245485AbhK3Scz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:32:55 -0500
-Received: from foss.arm.com ([217.140.110.172]:45364 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233978AbhK3Scx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:32:53 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2516B106F;
-        Tue, 30 Nov 2021 10:29:34 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.65.89])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 469C23F694;
-        Tue, 30 Nov 2021 10:29:32 -0800 (PST)
-Date:   Tue, 30 Nov 2021 18:29:27 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v11 1/5] arm64: Call stack_backtrace() only from within
- walk_stackframe()
-Message-ID: <YaZtUmBn1NUkY876@FVFF77S0Q05N>
-References: <8b861784d85a21a9bf08598938c11aff1b1249b9>
- <20211123193723.12112-1-madvenka@linux.microsoft.com>
- <20211123193723.12112-2-madvenka@linux.microsoft.com>
- <YaY9zLNumYZ1lLkc@FVFF77S0Q05N>
- <f2dfa6cd-7a23-e1b7-09d5-737d4a95b90c@linux.microsoft.com>
+        id S245500AbhK3SgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:36:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244668AbhK3SgA (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 13:36:00 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241DBC061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:32:40 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v1so90549565edx.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:32:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Go/81xVzZnhSKrXXt1Oku01bzv41r4nEoZnz9LX/CNo=;
+        b=V5A5u+2GJDz6goQ4POTOs+NBG96bqznhfM/KNENVTWUYwRiTOswVz1gYaBOW5Jdw0q
+         xKXHYsiHbDIYScUFk5YmP/+BPgJyaQoj3UBRv1nwT2PLv6pYM1fqWUKw5hWLwQo5F9Ej
+         pWmSm5c16Vb+vRKprQtqmQGj+O+PpqPeyIN2dXTPcT0xTrghz5CSHCRMZj33yT37o3ih
+         /PIsR/MYbu98FVysewGtFjF/wgV6XJoiiR7dzPELKRxQrUbD1Hpfl6qI9GMrlimByGUp
+         4l0vmkrWH4D9oq1e87xf1yHyblam+n2mk8ng4PywvXP6acObKSIi/SENMb3OUXDtUJ8V
+         oelw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Go/81xVzZnhSKrXXt1Oku01bzv41r4nEoZnz9LX/CNo=;
+        b=MSSCAbiEAQH6RDOr6Ki2agXp7fuuY2gB2KtCJSRgo+HDl5QbezCYyF6Lk5kMBRjNDi
+         xl4WmwFNsk4asibTRxnwLCG4eoUKMzisFQE+8zQUVIB4EkHVDrFO0Z01ujgGBUh3FbG1
+         2TUY7gqUtZU2dgwbmKcsV26Pz8eLFQiCVPQZRj8wWEVUDdA+JGMio2LCtkXQBersZogq
+         C/NIbRDFpKsrwDNJpOEQU4E6lunfsKxS3zDLTj1Wbmh3C0+xrJy9k26/PGJ7NBXuhACc
+         7SsxeDxweQR5QeYbKgSf9ixuGOyhfaHzg+kFmAXmbboRaD7seP7u8jBIyu7wcGZpGCFb
+         jRHg==
+X-Gm-Message-State: AOAM532FvYmW+6CPqsjTCk3c1Sv/ngrO9zbkwbRcNdYYehWPGTLrBoyX
+        Bn337eVfTwdiouv4fmlbRb6nlk0ugzmjGiIBA9qu+1R0uT5XRA==
+X-Google-Smtp-Source: ABdhPJzWYR3y3DREARkuzeXWj5zsrF63zUTM2SaKSKHvEtDMUJDBwG2a3cN0weWZRSrCI2BUf/z2HjoeN5LJ/KjYfYk=
+X-Received: by 2002:a17:907:c15:: with SMTP id ga21mr860248ejc.349.1638297158632;
+ Tue, 30 Nov 2021 10:32:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2dfa6cd-7a23-e1b7-09d5-737d4a95b90c@linux.microsoft.com>
+References: <20211130154127.12272-1-brgl@bgdev.pl> <20211130154127.12272-3-brgl@bgdev.pl>
+ <YaZNyMV5gX5cZpar@smile.fi.intel.com> <YaZPACT53i4LovrM@smile.fi.intel.com>
+In-Reply-To: <YaZPACT53i4LovrM@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 30 Nov 2021 19:32:28 +0100
+Message-ID: <CAMRc=MdRMeyzonY+AZa8CWfh6Bk64e3OXAmGk3X=rx=DrM4-mw@mail.gmail.com>
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:13:28AM -0600, Madhavan T. Venkataraman wrote:
-> On 11/30/21 9:05 AM, Mark Rutland wrote:
-> > On Tue, Nov 23, 2021 at 01:37:19PM -0600, madvenka@linux.microsoft.com wrote:
-> >> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-> >>
-> >> Currently, arch_stack_walk() calls start_backtrace() and walk_stackframe()
-> >> separately. There is no need to do that. Instead, call start_backtrace()
-> >> from within walk_stackframe(). In other words, walk_stackframe() is the only
-> >> unwind function a consumer needs to call.
+On Tue, Nov 30, 2021 at 5:20 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Tue, Nov 30, 2021 at 06:14:01PM +0200, Andy Shevchenko wrote:
+> > On Tue, Nov 30, 2021 at 04:41:23PM +0100, Bartosz Golaszewski wrote:
+>
+> ...
+>
+> > Not sure I understand the proposal. Can you provide couple of (simplest)
+> > examples?
+> >
+> > And also it sounds like reinventing a wheel. What problem do you have that you
+> > need to solve this way?
+>
+> Have you seen these:
+>         drivers/gpio/gpio-dwapb.c
+>         drivers/mfd/intel_quark_i2c_gpio.c
+> ?
+>
+> GPIO driver has a main (controller level) node along with children on per bank
+> basis. Currently it works with the provided approach (see second driver).
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
-> >> @@ -143,15 +140,19 @@ static int notrace unwind_frame(struct task_struct *tsk,
-> >>  NOKPROBE_SYMBOL(unwind_frame);
-> >>  
-> >>  static void notrace walk_stackframe(struct task_struct *tsk,
-> >> -				    struct stackframe *frame,
-> >> +				    unsigned long fp, unsigned long pc,
-> >>  				    bool (*fn)(void *, unsigned long), void *data)
-> >>  {
-> >> +	struct stackframe frame;
-> >> +
-> >> +	start_backtrace(&frame, fp, pc);
-> >> +
-> >>  	while (1) {
-> >>  		int ret;
-> >>  
-> >> -		if (!fn(data, frame->pc))
-> >> +		if (!fn(data, frame.pc))
-> >>  			break;
-> >> -		ret = unwind_frame(tsk, frame);
-> >> +		ret = unwind_frame(tsk, &frame);
-> >>  		if (ret < 0)
-> >>  			break;
-> >>  	}
-> >> @@ -195,17 +196,19 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
-> >>  			      void *cookie, struct task_struct *task,
-> >>  			      struct pt_regs *regs)
-> >>  {
-> >> -	struct stackframe frame;
-> >> -
-> >> -	if (regs)
-> >> -		start_backtrace(&frame, regs->regs[29], regs->pc);
-> >> -	else if (task == current)
-> >> -		start_backtrace(&frame,
-> >> -				(unsigned long)__builtin_frame_address(1),
-> >> -				(unsigned long)__builtin_return_address(0));
-> >> -	else
-> >> -		start_backtrace(&frame, thread_saved_fp(task),
-> >> -				thread_saved_pc(task));
-> >> -
-> >> -	walk_stackframe(task, &frame, consume_entry, cookie);
-> >> +	unsigned long fp, pc;
-> >> +
-> >> +	if (regs) {
-> >> +		fp = regs->regs[29];
-> >> +		pc = regs->pc;
-> >> +	} else if (task == current) {
-> >> +		/* Skip arch_stack_walk() in the stack trace. */
-> >> +		fp = (unsigned long)__builtin_frame_address(1);
-> >> +		pc = (unsigned long)__builtin_return_address(0);
-> >> +	} else {
-> >> +		/* Caller guarantees that the task is not running. */
-> >> +		fp = thread_saved_fp(task);
-> >> +		pc = thread_saved_pc(task);
-> >> +	}
-> >> +	walk_stackframe(task, fp, pc, consume_entry, cookie);
-> > 
-> > I'd prefer to leave this as-is. The new and old structure are largely
-> > equivalent, so we haven't made this any simpler, but we have added more
-> > arguments to walk_stackframe().
-> > 
-> 
-> This is just to simplify things when we eventually add arch_stack_walk_reliable().
-> That is all. All of the unwinding is done by a single unwinding function and
-> there are two consumers of that unwinding function - arch_stack_walk() and
-> arch_stack_walk_reliable().
+Yep, I know dwapd. What happens in probe is that each bank device is
+created using the properties from the associated child fwnode but the
+parent device's fwnode is actually assigned as the gpiochip's fwnode.
+This is logically wrong and OF doesn't do it - it assigns the child
+of_node to the child device if gpio_chip->of_node is assigned in the
+driver. I'm not sure if ACPI does this.
 
-I understand the theory, but I don't think that moving the start_backtrace()
-call actually simplifies this in a meaningful way, and I think it'll make it
-harder for us to make more meaningful simplifications later on.
+Non-OF drivers don't have a way to do this and this patch enables it.
 
-As of patch 4 of this series, we'll have:
+I want to add it mostly because gpio-sim can then use the software
+node to identify the device in the configfs by that software node but
+IMO this is logically correct too.
 
-| noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
-| 				      void *cookie, struct task_struct *task,
-| 				      struct pt_regs *regs)
-| {
-| 	unsigned long fp, pc;
-| 
-| 	if (regs) {
-| 		fp = regs->regs[29];
-| 		pc = regs->pc;
-| 	} else if (task == current) {
-| 		/* Skip arch_stack_walk() in the stack trace. */
-| 		fp = (unsigned long)__builtin_frame_address(1);
-| 		pc = (unsigned long)__builtin_return_address(0);
-| 	} else {
-| 		/* Caller guarantees that the task is not running. */
-| 		fp = thread_saved_fp(task);
-| 		pc = thread_saved_pc(task);
-| 	}
-| 	walk_stackframe(task, fp, pc, consume_entry, cookie);
-| }
-| 
-| noinline int notrace arch_stack_walk_reliable(stack_trace_consume_fn consume_fn,
-|                                              void *cookie,
-|                                              struct task_struct *task)
-| {
-| 	unsigned long fp, pc;
-| 
-| 	if (task == current) {
-| 		/* Skip arch_stack_walk_reliable() in the stack trace. */
-| 		fp = (unsigned long)__builtin_frame_address(1);
-| 		pc = (unsigned long)__builtin_return_address(0);
-| 	} else {
-| 		/* Caller guarantees that the task is not running. */
-| 		fp = thread_saved_fp(task);
-| 		pc = thread_saved_pc(task);
-| 	}
-| 	if (unwind(task, fp, pc, consume_fn, cookie))
-| 		return 0;
-| 	return -EINVAL;
-| }
-
-Which I do not think is substantially simpler than the naive extrapolation from
-what we currently have, e.g.
-
-| noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
-| 				      void *cookie, struct task_struct *task,
-| 				      struct pt_regs *regs)
-| {
-|	struct stackframe frame;
-| 
-| 	if (regs) {
-|		unwind_init(&frame, regs->regs[29], regs->pc)
-| 	} else if (task == current) {
-|		unwind_init(&frame, __builtin_frame_address(1),
-|			    __builtin_return_address(0));
-| 	} else {
-|		unwind_init(&frame, thread_saved_fp(task),
-|			    thread_saved_pc(task);
-| 	}
-| 	walk_stackframe(task, &frame, consume_entry, cookie);
-| }
-| 
-| noinline int notrace arch_stack_walk_reliable(stack_trace_consume_fn consume_fn,
-|                                              void *cookie,
-|                                              struct task_struct *task)
-| {
-|	struct stackframe frame;
-| 
-| 	if (task == current) {
-|		unwind_init(&frame, __builtin_frame_address(1),
-|			    __builtin_return_address(0));
-| 	} else {
-|		unwind_init(&frame, thread_saved_fp(task),
-|			    thread_saved_pc(task);
-| 	}
-| 	if (unwind(task, &frame, consume_fn, cookie))
-| 		return 0;
-| 	return -EINVAL;
-| }
-
-Further, I think we can factor this in a different way to reduce the
-duplication:
-
-| /*
-|  * TODO: document requirements here
-|  */
-| static inline void unwind_init_from_current_regs(struct stackframe *frame,
-| 						 struct pt_regs *regs)
-| {
-| 	unwind_init(frame, regs->regs[29], regs->pc);
-| }
-| 
-| /*
-|  * TODO: document requirements here
-|  */
-| static inline void unwind_init_from_blocked_task(struct stackframe *frame,
-| 						 struct task_struct *tsk)
-| {
-| 	unwind_init(&frame, thread_saved_fp(task),
-| 		    thread_saved_pc(task));
-| }
-| 
-| /*
-|  * TODO: document requirements here
-|  *
-|  * Note: this is always inlined, and we expect our caller to be a noinline
-|  * function, such that this starts from our caller's caller.
-|  */
-| static __always_inline void unwind_init_from_caller(struct stackframe *frame)
-| {
-| 	unwind_init(frame, __builtin_frame_address(1),
-| 		    __builtin_return_address(0));
-| }
-|
-| noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
-| 				      void *cookie, struct task_struct *task,
-| 				      struct pt_regs *regs)
-| {
-|	struct stackframe frame;
-| 
-| 	if (regs)
-|		unwind_init_current_regs(&frame, regs);
-|	else if (task == current)
-|		unwind_init_from_caller(&frame);
-|	else
-|		unwind_init_blocked_task(&frame, task);
-|
-|	unwind(task, &frame, consume_entry, cookie);
-| }
-|
-| noinline int notrace arch_stack_walk_reliable(stack_trace_consume_fn consume_fn,
-|                                              void *cookie,
-|                                              struct task_struct *task)
-| {
-|	struct stackframe frame;
-| 
-| 	if (task == current)
-|		unwind_init_from_caller(&frame);
-| 	else
-|		unwind_init_from_blocked_task(&frame, task);
-|
-| 	if (unwind(task, &frame, consume_fn, cookie))
-| 		return 0;
-| 	return -EINVAL;
-| }
-
-... which minimizes the duplication and allows us to add specialized
-initialization for each case if necessary, which I believe we will need in
-future to make unwinding across exception boundaries (such as when starting
-with regs) more useful.
-
-Thanks,
-Mark.
+Bart

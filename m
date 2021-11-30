@@ -2,109 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89802463DDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:32:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EC2463DE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245500AbhK3SgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56440 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244668AbhK3SgA (ORCPT
+        id S245503AbhK3Sib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:38:31 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44552 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244668AbhK3Si0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:36:00 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241DBC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:32:40 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id v1so90549565edx.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:32:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Go/81xVzZnhSKrXXt1Oku01bzv41r4nEoZnz9LX/CNo=;
-        b=V5A5u+2GJDz6goQ4POTOs+NBG96bqznhfM/KNENVTWUYwRiTOswVz1gYaBOW5Jdw0q
-         xKXHYsiHbDIYScUFk5YmP/+BPgJyaQoj3UBRv1nwT2PLv6pYM1fqWUKw5hWLwQo5F9Ej
-         pWmSm5c16Vb+vRKprQtqmQGj+O+PpqPeyIN2dXTPcT0xTrghz5CSHCRMZj33yT37o3ih
-         /PIsR/MYbu98FVysewGtFjF/wgV6XJoiiR7dzPELKRxQrUbD1Hpfl6qI9GMrlimByGUp
-         4l0vmkrWH4D9oq1e87xf1yHyblam+n2mk8ng4PywvXP6acObKSIi/SENMb3OUXDtUJ8V
-         oelw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Go/81xVzZnhSKrXXt1Oku01bzv41r4nEoZnz9LX/CNo=;
-        b=MSSCAbiEAQH6RDOr6Ki2agXp7fuuY2gB2KtCJSRgo+HDl5QbezCYyF6Lk5kMBRjNDi
-         xl4WmwFNsk4asibTRxnwLCG4eoUKMzisFQE+8zQUVIB4EkHVDrFO0Z01ujgGBUh3FbG1
-         2TUY7gqUtZU2dgwbmKcsV26Pz8eLFQiCVPQZRj8wWEVUDdA+JGMio2LCtkXQBersZogq
-         C/NIbRDFpKsrwDNJpOEQU4E6lunfsKxS3zDLTj1Wbmh3C0+xrJy9k26/PGJ7NBXuhACc
-         7SsxeDxweQR5QeYbKgSf9ixuGOyhfaHzg+kFmAXmbboRaD7seP7u8jBIyu7wcGZpGCFb
-         jRHg==
-X-Gm-Message-State: AOAM532FvYmW+6CPqsjTCk3c1Sv/ngrO9zbkwbRcNdYYehWPGTLrBoyX
-        Bn337eVfTwdiouv4fmlbRb6nlk0ugzmjGiIBA9qu+1R0uT5XRA==
-X-Google-Smtp-Source: ABdhPJzWYR3y3DREARkuzeXWj5zsrF63zUTM2SaKSKHvEtDMUJDBwG2a3cN0weWZRSrCI2BUf/z2HjoeN5LJ/KjYfYk=
-X-Received: by 2002:a17:907:c15:: with SMTP id ga21mr860248ejc.349.1638297158632;
- Tue, 30 Nov 2021 10:32:38 -0800 (PST)
-MIME-Version: 1.0
-References: <20211130154127.12272-1-brgl@bgdev.pl> <20211130154127.12272-3-brgl@bgdev.pl>
- <YaZNyMV5gX5cZpar@smile.fi.intel.com> <YaZPACT53i4LovrM@smile.fi.intel.com>
-In-Reply-To: <YaZPACT53i4LovrM@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 30 Nov 2021 19:32:28 +0100
-Message-ID: <CAMRc=MdRMeyzonY+AZa8CWfh6Bk64e3OXAmGk3X=rx=DrM4-mw@mail.gmail.com>
-Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 30 Nov 2021 13:38:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16A16B818F9;
+        Tue, 30 Nov 2021 18:35:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4D51C53FC7;
+        Tue, 30 Nov 2021 18:35:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638297303;
+        bh=dmWxrwodX74CblEMoop7i738yKwTIqHPQZdl6UnJp0U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bMmOHGM+iQXJLxU2/6t+I0YU0yYQpg0uyrnHGKd76mveQerfjBwJFNfcDX+fBOMlV
+         oi5/ZoRSFmqECvaht3bsXVaM86DJ6zGMShb8QWyFdPWBJjBw0+y/xRM44OHo7EutSC
+         j4WIGP+Y/2pddIfqWShg/As1sR3wfbbNBgyjVevXaKx0h2RTmd9anqvz1DU+e6JrZN
+         13eVFRBrR4SNqhsWAmDmAeFkdliOPhA7kUmA/kbN8UjHhVTHC7+jgHzDwXLETtrbid
+         cffp8LRfKq4cHAKtKLiSXQ0FmUh2d9yhB4t/Tz/u+uCFoAbYTw6s2MqAoghwLsfXGE
+         60fGBOpaqHcYA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ms7y1-008xP9-Lt; Tue, 30 Nov 2021 18:35:01 +0000
+Date:   Tue, 30 Nov 2021 18:35:01 +0000
+Message-ID: <87czmhmqzu.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        lorenzo.pieralisi@arm.com, bhelgaas@google.com,
+        svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>
+Subject: Re: [PATCH] PCI: qcom: Fix warning generated due to the incorrect data type
+In-Reply-To: <20211130160338.GA2739234@bhelgaas>
+References: <20211130062137.GD205712@thinkpad>
+        <20211130160338.GA2739234@bhelgaas>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: helgaas@kernel.org, manivannan.sadhasivam@linaro.org, lorenzo.pieralisi@arm.com, bhelgaas@google.com, svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org, linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, lkp@intel.com, alyssa@rosenzweig.io, sven@svenpeter.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 5:20 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Nov 30, 2021 at 06:14:01PM +0200, Andy Shevchenko wrote:
-> > On Tue, Nov 30, 2021 at 04:41:23PM +0100, Bartosz Golaszewski wrote:
->
-> ...
->
-> > Not sure I understand the proposal. Can you provide couple of (simplest)
-> > examples?
-> >
-> > And also it sounds like reinventing a wheel. What problem do you have that you
-> > need to solve this way?
->
-> Have you seen these:
->         drivers/gpio/gpio-dwapb.c
->         drivers/mfd/intel_quark_i2c_gpio.c
-> ?
->
-> GPIO driver has a main (controller level) node along with children on per bank
-> basis. Currently it works with the provided approach (see second driver).
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+On Tue, 30 Nov 2021 16:03:38 +0000,
+Bjorn Helgaas <helgaas@kernel.org> wrote:
+> 
+> [+cc Marc, Alyssa, Sven for RID-to-SID mapping insight.  The patch at
+> https://lore.kernel.org/all/20211130062137.GD205712@thinkpad/ merely
+> fixes a warning.  My meta-question is about the qcom BDF-to-SID
+> mapping.]
+> 
+> On Tue, Nov 30, 2021 at 11:51:37AM +0530, Manivannan Sadhasivam wrote:
+> > On Mon, Nov 29, 2021 at 09:36:14PM -0600, Bjorn Helgaas wrote:
+> > > ...
+> > > I'm also curious why pcie-qcom.c is the only driver that does this.
+> > > "iommu-map" is not specific to qcom, but no other drivers do similar
+> > > things with it.
+> > 
+> > Yes, on the recent qcom platforms starting from sm8250 we need to program
+> > the BDF to SID mapping in the controller and that's the reason we are
+> > extracting the "iommu-map" property in DT.
+> 
+> This sounds like something that may not really be specific to sm8250.
+> 
+> It looks vaguely similar to apple_pcie_add_device().  Compare the qcom
+> code at [1] with the Apple code at [2].
 
-Yep, I know dwapd. What happens in probe is that each bank device is
-created using the properties from the associated child fwnode but the
-parent device's fwnode is actually assigned as the gpiochip's fwnode.
-This is logically wrong and OF doesn't do it - it assigns the child
-of_node to the child device if gpio_chip->of_node is assigned in the
-driver. I'm not sure if ACPI does this.
+It looks indeed similar in spirit, though the implementation seems
+different. The qcom code seems to brute-force the mappings upfront,
+while the apple driver relies on bus notifiers to map things on
+demand.
 
-Non-OF drivers don't have a way to do this and this patch enables it.
+The annoying thing with these blocks is that they are neither part of
+the IOMMU nor the PCIe block. It is just a piece of glue logic in
+the middle...
 
-I want to add it mostly because gpio-sim can then use the software
-node to identify the device in the configfs by that software node but
-IMO this is logically correct too.
+Thanks,
 
-Bart
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

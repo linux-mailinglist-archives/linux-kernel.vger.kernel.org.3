@@ -2,173 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C80463592
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9442F463594
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:36:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbhK3NjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:39:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:38366 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240824AbhK3NjQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:39:16 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C2CE8ED1;
-        Tue, 30 Nov 2021 05:35:56 -0800 (PST)
-Received: from [192.168.178.2] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8CE6F3F5A1;
-        Tue, 30 Nov 2021 05:35:55 -0800 (PST)
-Subject: Re: [PATCH] sched/fair: Fix detection of per-CPU kthreads waking a
- task
-To:     Vincent Donnefort <vincent.donnefort@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Valentin Schneider <Valentin.Schneider@arm.com>,
-        peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net
-References: <CAKfTPtDX8sOfguZhJt5QV3j5D_JetcgncuF2w+uLa0XDk7UXkw@mail.gmail.com>
- <8735nkcwov.mognet@arm.com>
- <CAKfTPtDPskVdEd-KQ_cwe-R_zVFPQOgdbk9x+3eD12pKs8fGFw@mail.gmail.com>
- <87zgpsb6de.mognet@arm.com>
- <CAKfTPtCnusWJXJLDEudQ_q8MWaZYbPJK-QjAbBYWFW8Nw-J+Ww@mail.gmail.com>
- <87sfvjavqk.mognet@arm.com>
- <CAKfTPtC4iXXaptm9+2bHvX2E3xAWU4M3xN0ZuwpFQ1RyXAyxyA@mail.gmail.com>
- <87pmqmc16f.mognet@arm.com> <20211126171817.GA3798214@ubiquitous>
- <CAKfTPtCGyp8JZq1EOgEhTeD+PBV2rMnTQ=uV-ZgsaN1RVmPk0w@mail.gmail.com>
- <20211129164545.GA3981328@ubiquitous>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Message-ID: <59df959f-c0bc-2635-eb7c-bad2e9964357@arm.com>
-Date:   Tue, 30 Nov 2021 14:35:47 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S241229AbhK3NjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:39:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240974AbhK3NjV (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 08:39:21 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBD9C061574;
+        Tue, 30 Nov 2021 05:36:02 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id l16so44483001wrp.11;
+        Tue, 30 Nov 2021 05:36:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Kd/PIpmYaLUF1O2eJ98CX6rZ8nmgEvejw2gH2/LRG4Y=;
+        b=HJ7W5FGbNE3/u2oB438mBrtAFyavCbqGa87yKoYhwlil3eLvSGmZ/41E2zB9fNJr8W
+         6D6jrNqFDYy8B4kmNcakQqBSPoN/XUWEx740RIOx8XTarh47tttuZPOLBaNVb2dxt+ZH
+         VGJFdsAAnsR//l0Ena+5wD7eG0vJuZAQCURwRrGAFdr43FGzRNULm1N7cOwYyhI1tySk
+         1cK1S9sFkAIPP0tvrWAmuHVT+TzmTVh+4RDkzY+Q1cTE4G0O8xCeNOPm07nYmIEImLaZ
+         S23KcLoCuxjpIb2QBOe204GvrzQJMvsWOW7JFQM26b8JlkQzI5prpIVcfmqH3s7ph3IM
+         fznw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Kd/PIpmYaLUF1O2eJ98CX6rZ8nmgEvejw2gH2/LRG4Y=;
+        b=FOvC3f1o/ELVfTRHsl6Huzloyrn0mHVRuxYgXZbTLF0b3L4qqT4gPFE84xcVp7hAoO
+         BiSY5y80EYj12E7rL7vCGgLN47o0ZVFYrOd+q2PoRA1pHscj0dG0NjvgFBs7mCrburua
+         6lyNygM9We9ePrH5dzrigsp/N/jo26XJIq6xPzq+aSqFZp3kZutMBvZrTxRVgT6Vl0/n
+         C+WSCkjgjJHYUcSdWrAbHoraRCDmuZAU+/qkS7x87c1hOBxQSwV25yWMxxcpxFrL03BR
+         QIr8L7UyHwk8COTfoal3L97l354agIo18LcjXemK49hel82cSHR4IZ9i/YFylGi+9o3E
+         tYPA==
+X-Gm-Message-State: AOAM533GkqgzYN310+wlTvQjUv0RB3dBYYgl7rAxWGbjf1w+AmO/pGlG
+        +pAy9QESpc3RWAmiM342aaXgOtW31OA=
+X-Google-Smtp-Source: ABdhPJwPQ4CbgKVFJFMipUY07IGCj7+eKtDT+kkFUE3RgfiqFDHqqNuWxN7wcmF2ElMi2fp43dxe8A==
+X-Received: by 2002:adf:f189:: with SMTP id h9mr42486139wro.463.1638279360678;
+        Tue, 30 Nov 2021 05:36:00 -0800 (PST)
+Received: from debian (host-2-99-153-109.as13285.net. [2.99.153.109])
+        by smtp.gmail.com with ESMTPSA id w7sm16719370wru.51.2021.11.30.05.35.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 05:36:00 -0800 (PST)
+Date:   Tue, 30 Nov 2021 13:35:58 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 000/121] 5.10.83-rc1 review
+Message-ID: <YaYovvQ9sXKEI4i/@debian>
+References: <20211129181711.642046348@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20211129164545.GA3981328@ubiquitous>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.11.21 17:54, Vincent Donnefort wrote:
-> [...]
-> 
->>>>>
->>>>> still i don't see the need of !is_idle_task(current)
->>>>>
->>>>
->>>> Admittedly, belts and braces. The existing condition checks rq->nr_running <= 1
->>>> which can lead to coscheduling when the wakeup is issued by the idle task
->>>> (or even if rq->nr_running == 0, you can have rq->ttwu_pending without
->>>> having sent an IPI due to polling). Essentially this overrides the first
->>>> check in sis() that uses idle_cpu(target) (prev == smp_processor_id() ==
->>>> target).
->>>>
->>>> I couldn't prove such wakeups can happen right now, but if/when they do
->>>> (AIUI it would just take someone to add a wake_up_process() down some
->>>> smp_call_function() callback) then we'll need the above. If you're still
->>>> not convinced by now, I won't push it further.
->>>
->>> From a quick experiment, even with the asym_fits_capacity(), I can trigger
->>> the following:
->>>
->>> [    0.118855] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
->>> [    0.128214] select_idle_sibling: wakee=rcu_gp:3 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
->>> [    0.137327] select_idle_sibling: wakee=rcu_par_gp:4 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
->>> [    0.147221] select_idle_sibling: wakee=kworker/u16:0:7 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
->>> [    0.156994] select_idle_sibling: wakee=mm_percpu_wq:8 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
->>
->> Timestamp shows its booting phase and thread name above shows per cpu
->> thread. Could it happen just while creating per cpu thread at boot and
->> as a result not relevant ?
-> 
-> I have more of those logs a bit later in the boot:
-> 
-> [    0.484791] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.516495] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.525758] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.535078] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.547486] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> [    0.579192] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> 
-> The nr_cpus_allowed=8 suggest that none of the threads from the logs I
-> shared are per-CPU. Sorry if the format is confusing, I used:
-> 
->   wakee=<comm>:<pid> current=<comm>:<pid>.
-> 
->>
->> Can you see similar things later after booting ?
-> 
-> I tried few scenarios other than the boot time but none of them produced
-> "current=swapper/X:1 in_task=1"
+Hi Greg,
 
-I don't see them on hikey620 (SMP), not even during boot. I use a
-BUG_ON(is_idle_task(current) && in_task()) in sis()'
-`is_per_cpu_kthread` condition.
+On Mon, Nov 29, 2021 at 07:17:11PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.83 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
+> Anything received after that time might be too late.
 
-I can only spot `is_idle_task(current)=1` (1) or `in_task()=1` (2):
+Build test:
+mips (gcc version 11.2.1 20211112): 63 configs -> no new failure
+arm (gcc version 11.2.1 20211112): 105 configs -> no new failure
+arm64 (gcc version 11.2.1 20211112): 3 configs -> no failure
+x86_64 (gcc version 11.2.1 20211112): 4 configs -> no failure
 
-<idle>-0 [006] dNh3.   274.137473: select_task_rq_fair: (1):
-is_idle_task(current)=1 in_task()=0 this=6 prev=6 target=6
-rq->nr_running=1 p=[task_n10-1 1158] p->cpus_ptr=0-7 current=[swapper/6 0]
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
 
-[  104.463685] CPU: 4 PID: 0 Comm: swapper/4 Not tainted
-5.16.0-rc1-00008-g8c92606ab810-dirty #78
-[  104.472385] Hardware name: HiKey Development Board (DT)
-[  104.477627] Call trace:
-
-[  104.490808]  dump_stack+0x1c/0x38
-[  104.494146]  select_task_rq_fair+0x1200/0x120c
-[  104.498620]  try_to_wake_up+0x168/0x670
-[  104.502486]  wake_up_process+0x1c/0x30
-[  104.506260]  hrtimer_wakeup+0x24/0x3c
-[  104.509948]  __hrtimer_run_queues+0x184/0x36c
-[  104.514330]  hrtimer_interrupt+0xec/0x250
-[  104.518365]  tick_receive_broadcast+0x30/0x50
-[  104.522751]  ipi_handler+0x1dc/0x350
+[1]. https://openqa.qa.codethink.co.uk/tests/455
+[2]. https://openqa.qa.codethink.co.uk/tests/450
 
 
-  kworker/3:2-87 [003] d..3.   270.954929: select_task_rq_fair: (2):
-is_idle_task(current)=0 in_task()=1  this=3 prev=3 target=3
-rq->nr_running=1 p=[kworker/u16:1 74] p->cpus_ptr=0-7
-current=[kworker/3:2 87]
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
 
-> 
->>
->> I have tried to trigger the situation but failed to get wrong
->> sequence. All are coming from interrupt while idle.
->> After adding in_task() condition, I haven't been able to trigger the
->> warn() that I added to catch the wrong situations on SMP, Heterogenous
->> or NUMA system. Could you share more details on your setup ?
->>
-> 
-> This is just my Hikey960 with the asym_fits_capacity() fix [1] to make sure I
-> don't simply hit the other issue with asym platforms.
-> 
-> Then I just added my log in the per-CPU kthread wakee stacking exit path
-> 
->     printk("%s: wakee=%s:%d nr_cpus_allowed=%d current=%s:%d in_task=%d\n",
->             __func__, p->comm, p->pid, p->nr_cpus_allowed, current->comm, current->pid, in_task());
-> 
-> 
-> [1] https://lore.kernel.org/all/20211125101239.3248857-1-vincent.donnefort@arm.com/
-> 
-> 
-> From the same logs I also see:
-> 
->   wakee=xfsaild/mmcblk0:4855 nr_cpus_allowed=8 current=kworker/1:1:1070 in_task=0
-> 
-> Doesn't that look like a genuine wakeup that would escape the per-CPU kthread
-> stacking exit path because of the in_task test?
-
-I get a couple of `is_idle_task(current)=0 && in_task()=0` mostly with
-`current=ksoftirqd/X` and occasionally with `current=[kworker/X:1H` or
-`current=kworker/X:1`.
-
-ksoftirqd/7-46 [007] d.s4.   330.275122: select_task_rq_fair: (3):
-is_idle_task(current)=0 in_task()=0  this=7 prev=7 target=7
-rq->nr_running=1 p=[kworker/u16:2 75] p->cpus_ptr=0-7
-current=[ksoftirqd/7 46]
-
-kworker/7:1H-144 [007] d.h3.   335.284388: select_task_rq_fair: (3):
-is_idle_task(current)=0 in_task()=0  this=7 prev=7 target=7
-rq->nr_running=1 p=[task_n10-1 2397] p->cpus_ptr=0-7
-current=[kworker/7:1H 144]
+--
+Regards
+Sudip

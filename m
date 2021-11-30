@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D706E464032
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B03F464038
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344163AbhK3Vaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:30:55 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.122]:9000 "EHLO
+        id S1344112AbhK3VbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:31:23 -0500
+Received: from mo4-p04-ob.smtp.rzone.de ([81.169.146.177]:13226 "EHLO
         mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240640AbhK3Vac (ORCPT
+        with ESMTP id S240728AbhK3Vaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:30:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638307608;
+        Tue, 30 Nov 2021 16:30:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638307609;
     s=strato-dkim-0002; d=goldelico.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=CCzoD26r5WYLfaWl8adjwn/dam2pLbSIK+t8rP3qAZQ=;
-    b=fyru67L0MqCKbfk/QqcZue4IEvgTSLrnPMRUE2nCLiul80jy3m/1MZUWo49yRwO771
-    Gjtnl29dbNju+/ISUidAQccHpHtRDTFKAXSAAzi0QhvGddNMs+GI/idUbp4/9yX1/PDN
-    6wwRiaqFSURBWLqmAMyM0wK7g1/IJmLE11aH08SIk2OHunHcCihlMmCT48kYPxCKE4Y1
-    Xx8ODTzIqs8ohl/REHQH1XXMwfMVPHjelf7t5dY/XYHwR3L2gfC+NRiwXhsH2uJwTAJ5
-    r2joWPKAmmiU6K9CvYmdUSR6WE45gNyi2uCW5d+t4dsSG9QwWksQAa2Scrqd57Ca6vKM
-    1nLA==
+    bh=mgm9FcGOkzWufyh28STSVM1vIR8mFSf+dMssEkkvORM=;
+    b=FAnLeIr4XZBKAJoOcTlBe0JuXSlL1E+PyQkx6k6P+MeIE/96uToDtxaDCUvMuRwOCH
+    xeOSe9uCQQDR2KZQKChoumFm41BtA8VaolT+OlmigcjR2GXvG8Ih5bVQ7Y6im4UsHfe6
+    b3dbUG89Ks4Sg5r8v57REvY7w3vUwOcTPgAV2vbPf4BMo1JxH8DIsLKKKRfSooT1U5sm
+    PsUKg+bs69lfbQOcxt18hmoE7tOUVvwcWEWleidQoayR5WiJLB3Hf8Q8tC53hzTcVR/P
+    fcxvzEJZ/POS3yTWY8lYbxJdCeFdoC2R/Ddn6NAb2+JhArGgt17CKrnFWCqrgyxCKAcq
+    6v9g==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o1KHeBQyh+ITDDJuCr4="
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
-    with ESMTPSA id e05ed8xAULQmToB
+    with ESMTPSA id e05ed8xAULQmToC
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
     Tue, 30 Nov 2021 22:26:48 +0100 (CET)
@@ -59,10 +59,11 @@ To:     Paul Cercueil <paul@crapouillou.net>,
 Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
         Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v10 6/8] MIPS: DTS: CI20: Add DT nodes for HDMI setup
-Date:   Tue, 30 Nov 2021 22:26:39 +0100
-Message-Id: <7ea4b955be3531bf3988c383e0a5775488d2d56c.1638307601.git.hns@goldelico.com>
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: [PATCH v10 7/8] MIPS: defconfig: CI20: configure for DRM_DW_HDMI_JZ4780
+Date:   Tue, 30 Nov 2021 22:26:40 +0100
+Message-Id: <f673256fbb8fc2e4f7b0c8933e32b20028f32d7d.1638307601.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1638307601.git.hns@goldelico.com>
 References: <cover.1638307601.git.hns@goldelico.com>
@@ -72,132 +73,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Boddie <paul@boddie.org.uk>
+Enable CONFIG options as modules.
 
-We need to hook up
-* HDMI connector
-* HDMI power regulator
-* JZ4780_CLK_HDMI @ 27 MHz
-* DDC pinmux
-* HDMI and LCDC endpoint connections
-
-Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/boot/dts/ingenic/ci20.dts | 72 ++++++++++++++++++++++++++++-
- 1 file changed, 70 insertions(+), 2 deletions(-)
+ arch/mips/configs/ci20_defconfig | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ingenic/ci20.dts b/arch/mips/boot/dts/ingenic/ci20.dts
-index b249a4f0f6b62..3e336b3dbb109 100644
---- a/arch/mips/boot/dts/ingenic/ci20.dts
-+++ b/arch/mips/boot/dts/ingenic/ci20.dts
-@@ -78,6 +78,18 @@ eth0_power: fixedregulator@0 {
- 		enable-active-high;
- 	};
- 
-+	hdmi_out: connector {
-+		compatible = "hdmi-connector";
-+		label = "HDMI OUT";
-+		type = "a";
-+
-+		port {
-+			hdmi_con: endpoint {
-+				remote-endpoint = <&dw_hdmi_out>;
-+			};
-+		};
-+	};
-+
- 	ir: ir {
- 		compatible = "gpio-ir-receiver";
- 		gpios = <&gpe 3 GPIO_ACTIVE_LOW>;
-@@ -102,6 +114,17 @@ otg_power: fixedregulator@2 {
- 		gpio = <&gpf 14 GPIO_ACTIVE_LOW>;
- 		enable-active-high;
- 	};
-+
-+	hdmi_power: fixedregulator@3 {
-+		compatible = "regulator-fixed";
-+
-+		regulator-name = "hdmi_power";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+
-+		gpio = <&gpa 25 0>;
-+		enable-active-high;
-+	};
- };
- 
- &ext {
-@@ -114,11 +137,12 @@ &cgu {
- 	 * precision.
- 	 */
- 	assigned-clocks = <&cgu JZ4780_CLK_OTGPHY>, <&cgu JZ4780_CLK_RTC>,
--			  <&cgu JZ4780_CLK_SSIPLL>, <&cgu JZ4780_CLK_SSI>;
-+			  <&cgu JZ4780_CLK_SSIPLL>, <&cgu JZ4780_CLK_SSI>,
-+			  <&cgu JZ4780_CLK_HDMI>;
- 	assigned-clock-parents = <0>, <&cgu JZ4780_CLK_RTCLK>,
- 				 <&cgu JZ4780_CLK_MPLL>,
- 				 <&cgu JZ4780_CLK_SSIPLL>;
--	assigned-clock-rates = <48000000>, <0>, <54000000>;
-+	assigned-clock-rates = <48000000>, <0>, <54000000>, <0>, <27000000>;
- };
- 
- &tcu {
-@@ -509,6 +533,12 @@ pins_i2c4: i2c4 {
- 		bias-disable;
- 	};
- 
-+	pins_hdmi_ddc: hdmi_ddc {
-+		function = "hdmi-ddc";
-+		groups = "hdmi-ddc";
-+		bias-disable;
-+	};
-+
- 	pins_nemc: nemc {
- 		function = "nemc";
- 		groups = "nemc-data", "nemc-cle-ale", "nemc-rd-we", "nemc-frd-fwe";
-@@ -539,3 +569,41 @@ pins_mmc1: mmc1 {
- 		bias-disable;
- 	};
- };
-+
-+&hdmi {
-+	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pins_hdmi_ddc>;
-+
-+	hdmi-5v-supply = <&hdmi_power>;
-+
-+	ports {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		port@0 {
-+			reg = <0>;
-+			dw_hdmi_in: endpoint {
-+				remote-endpoint = <&lcd_out>;
-+			};
-+		};
-+
-+		port@1 {
-+			reg = <1>;
-+			dw_hdmi_out: endpoint {
-+				remote-endpoint = <&hdmi_con>;
-+			};
-+		};
-+	};
-+};
-+
-+&lcdc0 {
-+	status = "okay";
-+
-+	port {
-+		lcd_out: endpoint {
-+			remote-endpoint = <&dw_hdmi_in>;
-+		};
-+	};
-+};
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index ab7ebb0668340..cc69b215854ea 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -98,7 +98,13 @@ CONFIG_RC_DEVICES=y
+ CONFIG_IR_GPIO_CIR=m
+ CONFIG_IR_GPIO_TX=m
+ CONFIG_MEDIA_SUPPORT=m
++CONFIG_DRM=m
++CONFIG_DRM_INGENIC=m
++CONFIG_DRM_INGENIC_DW_HDMI=m
++CONFIG_DRM_DISPLAY_CONNECTOR=m
+ # CONFIG_VGA_CONSOLE is not set
++CONFIG_FB=y
++CONFIG_FRAMEBUFFER_CONSOLE=y
+ # CONFIG_HID is not set
+ CONFIG_USB=y
+ CONFIG_USB_STORAGE=y
 -- 
 2.33.0
 

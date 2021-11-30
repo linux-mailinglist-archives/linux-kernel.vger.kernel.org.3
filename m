@@ -2,165 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A0464633C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4574633C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:04:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241205AbhK3MHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:07:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49754 "EHLO
+        id S241229AbhK3MHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbhK3MHf (ORCPT
+        with ESMTP id S241212AbhK3MHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:07:35 -0500
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E7F6C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:04:16 -0800 (PST)
-Received: by mail-qk1-x735.google.com with SMTP id i9so26445618qki.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:04:16 -0800 (PST)
+        Tue, 30 Nov 2021 07:07:37 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83696C061574;
+        Tue, 30 Nov 2021 04:04:18 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id v19so14735175plo.7;
+        Tue, 30 Nov 2021 04:04:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=0TDfEMK/KsWzDzMYVf16B8nf+1SscGhMhouVQsRYobA=;
-        b=PyDcfZpXtYt3oGURyS+5a12jt0Y5bvbUlNrbCZz1w0WLKpTTZwftgbaHiJAsW0HSV3
-         lyURilx6RGKAAJfAPihxYa/9smThOFBYpttJdjv6/b/H/LHOfwcmpyDu47CI0ZvJtWjm
-         Ok6By6cZC7JyccNda3BE+8h6F/VSvhttvpNrI9kz+KWq4D5cJ/BUx+NGSjJvbVcY7lr6
-         hDhzVfe2hER7ylpQrb7aJj4lq/RNWSqjQrGeiQDm3PTnPWSoX1xlpJzShhPjk8BuW+JN
-         6+DfjZ+xO+ZouKrFOppCMoTysuuE8ZFjZyOvgUsDqkOoOdhUPcBMl9W+wLP0ktUtfZ3o
-         jfQg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=bjVpDyjxHskTZYTfM4axp1DnsWXtF9XEukYNPnEOBEs=;
+        b=c65utgY9gnMHOEwKrhRPlI5bYOl/Zy6OKNJXH2C0RO80MxYXjQpQVsvEX4lMRphL0I
+         xGNEmJZ4lqOoHB0cn1E26Vvd78QEYa/gaMciW2S1It9G5R3gBIv8x3Rv5hf+odxclYSU
+         vZpf79IMZT6ORm8sI5LVN3lA6fRRnYPYCEQnBc0dTz3BdOrAl/Se7ec/UAMynM32XNc2
+         MWUEcOYZU61rOKSdhZ2T7xtmcxouV7JZeuW6kpr44/EiAXY5M+pwEdW+PQvTzy56kF3s
+         izfa+tu8ZSqwrPHjlxNvSoAUjZM7ejYiCklzZTFk8VH2q4P5ZWe2wopIosncnOqx/zx8
+         DATw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0TDfEMK/KsWzDzMYVf16B8nf+1SscGhMhouVQsRYobA=;
-        b=nxcMB2BFbLaa0kWJl3hGkhAUJNTLTyaB9QRQxu9f6ELh86BAAwNBMyse8ATWtPyxrS
-         UVdcQQc31rM1e3mPTUE42uYLPCeZBL2rjsP9Dv0uZcXYMva7gHF9R+ktKoAjzEJ9k8+4
-         0ghcUcOR7EqaIMaz8+Fk+dQbYtUezL5IgLWuB/TgiOrPB+u4Xwu3/GkD5+TI5V/oGQvK
-         dfnjeGRZ89ZnmwPv7fidRJ2KqSTo6JHZ2WnBBQXxt3cM9LbgDI7m6N5Qac1Ww896x/ll
-         yRn+oSyqhWEphl2CyI/ILxenkjkumEknxrpESAY7NdWFUHq77n47VudS9RuS8EQ9KkdI
-         jOhw==
-X-Gm-Message-State: AOAM533xGgKEfJPLqJ5z22cEAJKS4JVlOXlAC2tOSAhLsO+pzWeet5QK
-        Nr1wqgY1yvCM1ZZo9ZY5gekq5MCO+5hsdgb37vcZLw==
-X-Google-Smtp-Source: ABdhPJwUsLfTa42RaUov5RS9fCUqXRqbdlJQej/TrtDN+wj6yAPMSmvLGq5UUPagfhJbUp/7Nt/oEtRA+7wRJzCr0AE=
-X-Received: by 2002:a05:620a:d84:: with SMTP id q4mr37009939qkl.610.1638273855141;
- Tue, 30 Nov 2021 04:04:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20211130095727.2378739-1-elver@google.com>
-In-Reply-To: <20211130095727.2378739-1-elver@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 30 Nov 2021 13:03:37 +0100
-Message-ID: <CAG_fn=X8FhDPKFGM2zrVp=OACDXSxe3J32CDOQ9_jr0sSCBaoA@mail.gmail.com>
-Subject: Re: [PATCH] lib/stackdepot: always do filter_irq_stacks() in stack_depot_save()
-To:     Marco Elver <elver@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vijayanand Jitta <vjitta@codeaurora.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Imran Khan <imran.f.khan@oracle.com>,
-        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-        linux-mm@kvack.org, Chris Wilson <chris@chris-wilson.co.uk>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        h=x-gm-message-state:message-id:date:from:in-reply-to:subject:to:cc
+         :content-transfer-encoding;
+        bh=bjVpDyjxHskTZYTfM4axp1DnsWXtF9XEukYNPnEOBEs=;
+        b=kg/KZlevGflSYfB3Ph1gNwOGHV6PTdBqe/4VFLp8zhcoth5+wH+qFbe94bFKdp1ROV
+         oPxx4uCkuqlrPStwFulIHSVVwWXpw/fOCdU74i/6G0zd5TfL2WpnWT8QaQBE8hTGMLcT
+         02KLL2dHeWjcC5IOejopVi3T4YH/JvVzHLHZMeZwlpQZ9eAjKWLv+0dtFweoiY4KOF/X
+         5kTixYKp1VQqvL0HL/yHzno3r/AEiqdBNAF6jmvnxz57/VKHx9dn7jNlK/Y+O7ay4Dx0
+         Sd6SgwLL+M1JB+K5WtKfLQOuXttQyx63mWaWHYX9Vv0Aq8w2Y/9dJe+6gMKfjv2SUnCq
+         E3ZA==
+X-Gm-Message-State: AOAM530w04a7C+Js5OT+y7JOFarpBpvMW7dbKh1qiAlIkOyryMkcQkbq
+        uxve5hVOkNLq5DbupRvNoIV48ENXmDnV+/eSeVA=
+X-Google-Smtp-Source: ABdhPJxce92w+RYkbwZbMZnT7baaaqcyNYCS8n+3UgSU/qJKpF6aZP/B1DjzRRGqD7IXkAOVmv7d7Q==
+X-Received: by 2002:a17:902:684b:b0:143:84c4:6561 with SMTP id f11-20020a170902684b00b0014384c46561mr66960890pln.33.1638273857440;
+        Tue, 30 Nov 2021 04:04:17 -0800 (PST)
+Received: from cl-arch-kdev (cl-arch-kdev.xen.prgmr.com. [71.19.144.195])
+        by smtp.gmail.com with ESMTPSA id u17sm11233541pfi.120.2021.11.30.04.04.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 04:04:16 -0800 (PST)
+Message-ID: <61a61340.1c69fb81.4b6a9.cd00@mx.google.com>
+Date:   Tue, 30 Nov 2021 04:04:16 -0800 (PST)
+X-Google-Original-Date: Tue, 30 Nov 2021 12:04:10 GMT
+From:   Fox Chen <foxhlchen@gmail.com>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+Subject: RE: [PATCH 5.10 000/121] 5.10.83-rc1 review
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org,
+        Fox Chen <foxhlchen@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:14 AM Marco Elver <elver@google.com> wrote:
->
-> The non-interrupt portion of interrupt stack traces before interrupt
-> entry is usually arbitrary. Therefore, saving stack traces of interrupts
-> (that include entries before interrupt entry) to stack depot leads to
-> unbounded stackdepot growth.
->
-> As such, use of filter_irq_stacks() is a requirement to ensure
-> stackdepot can efficiently deduplicate interrupt stacks.
->
-> Looking through all current users of stack_depot_save(), none (except
-> KASAN) pass the stack trace through filter_irq_stacks() before passing
-> it on to stack_depot_save().
->
-> Rather than adding filter_irq_stacks() to all current users of
-> stack_depot_save(), it became clear that stack_depot_save() should
-> simply do filter_irq_stacks().
->
-> Signed-off-by: Marco Elver <elver@google.com>
-Reviewed-by: Alexander Potapenko <glider@google.com>
-> ---
->  lib/stackdepot.c  | 13 +++++++++++++
->  mm/kasan/common.c |  1 -
->  2 files changed, 13 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> index b437ae79aca1..519c7898c7f2 100644
-> --- a/lib/stackdepot.c
-> +++ b/lib/stackdepot.c
-> @@ -305,6 +305,9 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
->   * (allocates using GFP flags of @alloc_flags). If @can_alloc is %false,=
- avoids
->   * any allocations and will fail if no space is left to store the stack =
-trace.
->   *
-> + * If the stack trace in @entries is from an interrupt, only the portion=
- up to
-> + * interrupt entry is saved.
-> + *
->   * Context: Any context, but setting @can_alloc to %false is required if
->   *          alloc_pages() cannot be used from the current context. Curre=
-ntly
->   *          this is the case from contexts where neither %GFP_ATOMIC nor
-> @@ -323,6 +326,16 @@ depot_stack_handle_t __stack_depot_save(unsigned lon=
-g *entries,
->         unsigned long flags;
->         u32 hash;
->
-> +       /*
-> +        * If this stack trace is from an interrupt, including anything b=
-efore
-> +        * interrupt entry usually leads to unbounded stackdepot growth.
-> +        *
-> +        * Because use of filter_irq_stacks() is a requirement to ensure
-> +        * stackdepot can efficiently deduplicate interrupt stacks, alway=
-s
-> +        * filter_irq_stacks() to simplify all callers' use of stackdepot=
-.
-> +        */
-> +       nr_entries =3D filter_irq_stacks(entries, nr_entries);
-> +
->         if (unlikely(nr_entries =3D=3D 0) || stack_depot_disable)
->                 goto fast_exit;
->
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index 8428da2aaf17..efaa836e5132 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -36,7 +36,6 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool=
- can_alloc)
->         unsigned int nr_entries;
->
->         nr_entries =3D stack_trace_save(entries, ARRAY_SIZE(entries), 0);
-> -       nr_entries =3D filter_irq_stacks(entries, nr_entries);
->         return __stack_depot_save(entries, nr_entries, flags, can_alloc);
->  }
->
-> --
-> 2.34.0.rc2.393.gf8c9666880-goog
->
+On Mon, 29 Nov 2021 19:17:11 +0100, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+> This is the start of the stable review cycle for the 5.10.83 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.83-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
+5.10.83-rc1 Successfully Compiled and booted on my Raspberry PI 4b (8g) (bcm2711)
+                
+Tested-by: Fox Chen <foxhlchen@gmail.com>
 
---=20
-Alexander Potapenko
-Software Engineer
-
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
-
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg

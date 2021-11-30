@@ -2,93 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5BBD462ED7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:47:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CE4462EDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239787AbhK3Iul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:50:41 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27586 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S239781AbhK3Iud (ORCPT
+        id S239782AbhK3IvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:51:17 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55962 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235027AbhK3IvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:50:33 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638262033;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=iHEcxWX/hnu+skhv46r4CV8pF6jbkPwZ6560HYUpego=;
-        b=Y3Efly1pd0RStRYyNiOMrEMAZRGqRsZyokaS3IYhk231VUNstX/ntKo+J1outAOETivJK+
-        Ky8VKl5TTD5MP2zX+RyCQCySXTZlIcrVTtky+mkIhqYf/OxBgeLn1dJos6XKqy+7Mm7emZ
-        /5iLn3cxpROmJHsEwYTgredQcU8sh5U=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-442-ekjKe4tSMBe_3qw00V5qcg-1; Tue, 30 Nov 2021 03:47:09 -0500
-X-MC-Unique: ekjKe4tSMBe_3qw00V5qcg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 30 Nov 2021 03:51:16 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6D23410168C3;
-        Tue, 30 Nov 2021 08:47:08 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B72045DF3A;
-        Tue, 30 Nov 2021 08:46:44 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     mlevitsk@redhat.com, Sean Christopherson <seanjc@google.com>
-Subject: [PATCH] KVM: fix avic_set_running for preemptable kernels
-Date:   Tue, 30 Nov 2021 03:46:44 -0500
-Message-Id: <20211130084644.248435-1-pbonzini@redhat.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+        by sin.source.kernel.org (Postfix) with ESMTPS id 604DBCE181F;
+        Tue, 30 Nov 2021 08:47:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FBEBC53FC1;
+        Tue, 30 Nov 2021 08:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638262074;
+        bh=psMimz0pO+oQFczoJqzaMemQvUUVjII8gZ43yp8LhvQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tOLQ5yewmzR7mXEZc4ShLH36bFKuom9nP4C9WqF9wRbY6crK3OYEPlNq5SxW5lz4w
+         fbQ0S5vUW4wFAC40k4gPqVXQkNEuPjNg82nZGU73d5PWuGYf2Sdp49jnQg1Dq1MWMD
+         r3sAyCt9H3tnFU/YAWLk1AbIxjLEnidzDz45RBm6VJy69UCLTKiyFLJT7XFswumQXb
+         xBV9oziduzet+pkvGc6oBhlAQkGd7SyqeHlrShTboMflp+xbihBPsXGNRPhKlcEVMs
+         4Nvu0Vzd1Q+Yt7AYVr/kZQIvASkBq70L7pOS4usqYJhroiWoRDyktcsueNcH8WREJ8
+         kbaog2zG3ZEFQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mryno-008ozq-PH; Tue, 30 Nov 2021 08:47:52 +0000
+Date:   Tue, 30 Nov 2021 08:47:52 +0000
+Message-ID: <87k0gqm3lz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     Shawn Guo <shawn.guo@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/2] irqchip: Add Qualcomm MPM controller driver
+In-Reply-To: <2e821841-a921-3fda-9ee6-3d5127653033@quicinc.com>
+References: <20211126093529.31661-1-shawn.guo@linaro.org>
+        <20211126093529.31661-3-shawn.guo@linaro.org>
+        <87czmmbu8k.wl-maz@kernel.org>
+        <20211129133308.GB10105@dragon>
+        <87pmqjm1c8.wl-maz@kernel.org>
+        <20211130023151.GD10105@dragon>
+        <2e821841-a921-3fda-9ee6-3d5127653033@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: quic_mkshah@quicinc.com, shawn.guo@linaro.org, tglx@linutronix.de, bjorn.andersson@linaro.org, robh+dt@kernel.org, loic.poulain@linaro.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-avic_set_running() passes the current CPU to avic_vcpu_load(), albeit
-via vcpu->cpu rather than smp_processor_id().  If the thread is migrated
-while avic_set_running runs, the call to avic_vcpu_load() can use a stale
-value for the processor id.  Avoid this by blocking preemption over the
-entire execution of avic_set_running().
+On Tue, 30 Nov 2021 07:49:48 +0000,
+Maulik Shah <quic_mkshah@quicinc.com> wrote:
+> 
+> [1  <text/plain; UTF-8 (7bit)>]
+> Hi Shawn,
+> 
+> On 11/30/2021 8:01 AM, Shawn Guo wrote:
+> >>>>> +	do {
+> >>>>> +		r_val = readl(priv->base + offset);
+> >>>>> +		udelay(5);
+> >>>>> +	} while (r_val != val);
+> >>>> What? Is this waiting for a bit to clear? Why isn't this one of the
+> >>>> read*_poll_timeout*() function instead? Surely you can't wait forever
+> >>>> here.
+> >>> This is taken from downstream, and it seems to double check the written
+> >>> value by reading it back.  But to be honest, I'm not really this is
+> >>> necessary.  I will do some testing with the read-back check dropped.
+> >> How about asking for specs instead? There are QC people on Cc, and
+> >> many more reading the list. Hopefully they can explain what this is
+> >> all about.
+> > Maulik,
+> > 
+> > If you have some information about this, that would be great.
+> 
+> This can be converted to read poll_timeout(). This was introduced in
+> place of wmb() to make sure writes are completed.
 
-Reported-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/svm/avic.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+A string of reads isn't equivalent to a dsb(st). If there is a
+requirement for the write to complete, then use the required barrier.
 
-diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-index 0a58283005f3..560807a2edd4 100644
---- a/arch/x86/kvm/svm/avic.c
-+++ b/arch/x86/kvm/svm/avic.c
-@@ -1000,16 +1000,18 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
- static void avic_set_running(struct kvm_vcpu *vcpu, bool is_run)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
-+	int cpu = get_cpu();
- 
-+	WARN_ON(cpu != vcpu->cpu);
- 	svm->avic_is_running = is_run;
- 
--	if (!kvm_vcpu_apicv_active(vcpu))
--		return;
--
--	if (is_run)
--		avic_vcpu_load(vcpu, vcpu->cpu);
--	else
--		avic_vcpu_put(vcpu);
-+	if (kvm_vcpu_apicv_active(vcpu)) {
-+		if (is_run)
-+			avic_vcpu_load(vcpu, cpu);
-+		else
-+			avic_vcpu_put(vcpu);
-+	}
-+	put_cpu();
- }
- 
- void svm_vcpu_blocking(struct kvm_vcpu *vcpu)
+	M.
+
 -- 
-2.31.1
-
+Without deviation from the norm, progress is not possible.

@@ -2,95 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B84FF462B3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 04:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168B6462B1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 04:32:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237945AbhK3Djj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 22:39:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237921AbhK3Djh (ORCPT
+        id S237914AbhK3DfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 22:35:22 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:28191 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237894AbhK3DfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 22:39:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D153C061574;
-        Mon, 29 Nov 2021 19:36:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFFD7B80DE0;
-        Tue, 30 Nov 2021 03:36:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CF36C53FC7;
-        Tue, 30 Nov 2021 03:36:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638243376;
-        bh=IycgnrvCMNHeENFLTGVnJuL3IdXlmzt7FRjEBZ4ijb4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=I1OxSd5rT9W0FplE3jccvEC8b4Ddl3So10QcWdDwbwezIRQ8jbiXaN4wkjceOMJ/g
-         c27PxhSSwfw38F9E/+e6GRnnDy355gJh2dDB+ry/6XnOr5ormX7E8HJ3ZN8dQLRmVj
-         pF+7tJpydphATIPisalNsdD/uob8cHmI8B8n3vMWRnHAwmFBpjv5GDmirKypXp1m+G
-         C4a2rUtTwTK5Fo/Cano8aiX+B+oY9cJuvyzO6ewGfY8oeQvvxN0wEdVE+XY1++AQ/m
-         3J+VakHd1Pveh/OvN4lJ3E2hyZJKpxA8EBJTv5uYbK5lpagJr49FTYDr41eA32nBSP
-         8X+5LXfpHfpVQ==
-Date:   Mon, 29 Nov 2021 21:36:14 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     lorenzo.pieralisi@arm.com, bhelgaas@google.com,
-        svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH] PCI: qcom: Fix warning generated due to the incorrect
- data type
-Message-ID: <20211130033614.GA2721688@bhelgaas>
+        Mon, 29 Nov 2021 22:35:13 -0500
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J37501x1vz8vg4;
+        Tue, 30 Nov 2021 11:29:56 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 11:31:53 +0800
+Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
+ (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 30 Nov
+ 2021 11:31:52 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <olek2@wp.pl>, <davem@davemloft.net>, <kuba@kernel.org>
+Subject: [PATCH -next] net: lantiq: fix missing free_netdev() on error in ltq_etop_probe()
+Date:   Tue, 30 Nov 2021 11:38:37 +0800
+Message-ID: <20211130033837.778452-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211124140424.51675-1-manivannan.sadhasivam@linaro.org>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 07:34:24PM +0530, Manivannan Sadhasivam wrote:
-> Fix the below sparse warning due to the use of incorrect initializer
-> data type (u16) for bdf_be variable that receives the return value of
-> cpu_to_be16(). The correct type should be __be16.
+Add the missing free_netdev() before return from ltq_etop_probe()
+in the error handling case.
 
-I think the patch looks OK, but the reason to change this is not to
-"fix the warning".  The reason is to fix the *problem*, i.e.,
-cpu_to_be16() returns "__be16", which is incompatible with "u16".
+Fixes: 14d4e308e0aa ("net: lantiq: configure the burst length in ethernet drivers")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/net/ethernet/lantiq_etop.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The warning is only a helpful hint, and should not be part of the
-subject line.  "cpu_to_be16" or "iommu-map" would be much more
-useful information in the subject.
+diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
+index 072391c494ce..14059e11710a 100644
+--- a/drivers/net/ethernet/lantiq_etop.c
++++ b/drivers/net/ethernet/lantiq_etop.c
+@@ -687,13 +687,13 @@ ltq_etop_probe(struct platform_device *pdev)
+ 	err = device_property_read_u32(&pdev->dev, "lantiq,tx-burst-length", &priv->tx_burst_len);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "unable to read tx-burst-length property\n");
+-		return err;
++		goto err_free;
+ 	}
+ 
+ 	err = device_property_read_u32(&pdev->dev, "lantiq,rx-burst-length", &priv->rx_burst_len);
+ 	if (err < 0) {
+ 		dev_err(&pdev->dev, "unable to read rx-burst-length property\n");
+-		return err;
++		goto err_free;
+ 	}
+ 
+ 	for (i = 0; i < MAX_DMA_CHAN; i++) {
+-- 
+2.25.1
 
-I'm also curious why pcie-qcom.c is the only driver that does this.
-"iommu-map" is not specific to qcom, but no other drivers do similar
-things with it.
-
-> sparse warnings: (new ones prefixed by >>)
-> >> drivers/pci/controller/dwc/pcie-qcom.c:1305:30: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned short [usertype] bdf_be @@     got restricted __be16 [usertype] @@
->    drivers/pci/controller/dwc/pcie-qcom.c:1305:30: sparse:     expected unsigned short [usertype] bdf_be
->    drivers/pci/controller/dwc/pcie-qcom.c:1305:30: sparse:     got restricted __be16 [usertype]
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/pci/controller/dwc/pcie-qcom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 8a7a300163e5..6c3b034e9946 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -1312,7 +1312,7 @@ static int qcom_pcie_config_sid_sm8250(struct qcom_pcie *pcie)
->  
->  	/* Look for an available entry to hold the mapping */
->  	for (i = 0; i < nr_map; i++) {
-> -		u16 bdf_be = cpu_to_be16(map[i].bdf);
-> +		__be16 bdf_be = cpu_to_be16(map[i].bdf);
->  		u32 val;
->  		u8 hash;
->  
-> -- 
-> 2.25.1
-> 

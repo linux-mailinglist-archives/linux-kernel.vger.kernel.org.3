@@ -2,118 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EC346343B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:29:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05AD5463442
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241580AbhK3MdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:33:15 -0500
-Received: from foss.arm.com ([217.140.110.172]:36732 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230089AbhK3MdN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:33:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6845E1042;
-        Tue, 30 Nov 2021 04:29:54 -0800 (PST)
-Received: from e113632-lin (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F6EF3F766;
-        Tue, 30 Nov 2021 04:29:53 -0800 (PST)
-From:   Valentin Schneider <valentin.schneider@arm.com>
-To:     Qais Yousef <qais.yousef@arm.com>
-Cc:     "Peter Zijlstra \(Intel\)" <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/uclamp: Fix rq->uclamp_max not set on first enqueue
-In-Reply-To: <20211130112356.25bm5s66sywtdgw4@e107158-lin.cambridge.arm.com>
-References: <20211125165233.1425633-1-qais.yousef@arm.com> <87wnkvb35n.mognet@arm.com> <20211130112356.25bm5s66sywtdgw4@e107158-lin.cambridge.arm.com>
-Date:   Tue, 30 Nov 2021 12:29:48 +0000
-Message-ID: <875ys9bzcz.mognet@arm.com>
+        id S241602AbhK3Mdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241583AbhK3Mdd (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:33:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19F7C061574;
+        Tue, 30 Nov 2021 04:30:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0900DCE198D;
+        Tue, 30 Nov 2021 12:30:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3889BC53FC1;
+        Tue, 30 Nov 2021 12:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638275410;
+        bh=BJ9T3FNnRvhxz4szJraDXAdjmi4P9UuJ+CNLkgZW7Jk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=mg9JoyndL3QzFic26VDYKDhiyC6GzjAdc/d6Oq+I+I3vwpENw5JWrB4kvjlF/r8bb
+         NKLczQ9fmg7b0o3PEUSZ1BCZhnmY7O2fjDsIttJSE7VB9DlqixjHcFf35wqdTcA11e
+         b74idoUHsP2EGwoCSOnQdyLyHXmeoUxDQUUr9xqDIH/XJ0KZtq83JZfIq3YN8PnPsF
+         4+A82dzKduAgKCpHQNqVqFwtXkLq1wrBa06aelG6vp9qlAEz02XB09ibV/CE3ds1cA
+         vVXV0Tah/Pc/r0Ao/TIG00noXIpD320f3zkd1pRzAcc+PbTZoiyIc/LZiAW1y/QL5x
+         5WudH+Hdyg9+g==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 109F560A50;
+        Tue, 30 Nov 2021 12:30:10 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] dpaa2-eth: destroy workqueue at the end of remove function
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163827541006.1181.5056135751143485597.git-patchwork-notify@kernel.org>
+Date:   Tue, 30 Nov 2021 12:30:10 +0000
+References: <20211130040554.868846-1-mudongliangabcd@gmail.com>
+In-Reply-To: <20211130040554.868846-1-mudongliangabcd@gmail.com>
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     ioana.ciornei@nxp.com, davem@davemloft.net, kuba@kernel.org,
+        yangbo.lu@nxp.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/21 11:23, Qais Yousef wrote:
-> Hi Valentin
->
-> On 11/26/21 10:51, Valentin Schneider wrote:
->> On 25/11/21 16:52, Qais Yousef wrote:
->> > Commit d81ae8aac85c ("sched/uclamp: Fix initialization of struct
->> > uclamp_rq") introduced a bug where uclamp_max of the rq is not reset to
->> > match the woken up task's uclamp_max when the rq is idle. This only
->> > impacts the first wake up after enabling the static key. And it only
->>
->> Wouldn't that rather be all wakeups after enabling the static key, until
->> the rq goes idle and gains UCLAMP_FLAG_IDLE? e.g. if you enqueue N
->> uclamp_max=512 tasks, the first enqueue flips the static key and the rq
->> max-aggregate will stay at 1024 after the remaining enqueues.
->
-> Yep. Bad phrasing from my side. How about:
->
-> "This is visible from first wake up(s) until the first dequeue to idle after
-> enabling the static key"?
->
+Hello:
 
-Sounds good.
+This patch was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
->>
->> > matters if the uclamp_max of this task is < 1024 since only then its
->> > uclamp_max will be effectively ignored.
->> >
->> > Fix it by properly initializing rq->uclamp_flags = UCLAMP_FLAG_IDLE to
->> > ensure we reset rq uclamp_max when waking up from idle.
->> >
->> > Fixes: d81ae8aac85c ("sched/uclamp: Fix initialization of struct uclamp_rq")
->>
->> Looking at this again, I'm starting to think this actually stems from the
->> introduction of the flag:
->>
->>   e496187da710 ("sched/uclamp: Enforce last task's UCLAMP_MAX")
->>
->> Before the commit you point at, we would still initialize ->uclamp_flags to
->> 0. This was probably hidden by all the activity at boot-time (e.g. just
->> unparking smpboot threads) which yielded an nr_running>0 -> nr_running==0
->> transition, IOW we'd most likely get UCLAMP_FLAG_IDLE set on a rq before
->> any userspace task could get on there.
->>
->> The static key would have only made this problem more visible.
->
-> Hmm. I can't see the sequence of events. I guess you could argue in theory that
-> this commit should have initialized the ->uclamp_flags to UCLAMP_FLAG_IDLE but
-> I think it used to work because uc_rq->value = 0 by default
->
->       static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
->                                           enum uclamp_id clamp_id)
->       {
->               ...
->
->               if (uc_se->value > READ_ONCE(uc_rq->value))
->                       WRITE_ONCE(uc_rq->value, uc_se->value);
->       }
->
-> The commit I point to changed makes uc_rq->value = 1024 by default, hence we
-> miss the first update.
->
-> I don't mind updating the FIXES tag here, though AFAICT there's no visible side
-> effect from it.
->
+On Tue, 30 Nov 2021 12:05:54 +0800 you wrote:
+> The commit c55211892f46 ("dpaa2-eth: support PTP Sync packet one-step
+> timestamping") forgets to destroy workqueue at the end of remove
+> function.
+> 
+> Fix this by adding destroy_workqueue before fsl_mc_portal_free and
+> free_netdev.
+> 
+> [...]
 
-Oh, you're right, that initial uc_rq->value ends up being equivalent to
-having the flag. Sorry for the confusion!
+Here is the summary with links:
+  - dpaa2-eth: destroy workqueue at the end of remove function
+    https://git.kernel.org/netdev/net/c/f4a8adbfe484
 
-Patching up that original commit would only really be a "code correctness"
-thing, it wouldn't fix any visible problem, so I think it's better to keep
-your current Fixes:.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
->>
->> > Signed-off-by: Qais Yousef <qais.yousef@arm.com>
->>
->> Changelog nitpicking aside:
->> Reviewed-by: Valentin Schneider <Valentin.Schneider@arm.com>
->
-> Thanks!
->
-> --
-> Qais Yousef
+

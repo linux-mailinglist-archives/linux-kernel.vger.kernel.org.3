@@ -2,110 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BE4462E72
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88DEA462E74
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239196AbhK3IZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:25:56 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:39886 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S229951AbhK3IZw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:25:52 -0500
-Received: from localhost.localdomain.localdomain (unknown [10.2.5.46])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxz8on36Vhh7UBAA--.4073S3;
-        Tue, 30 Nov 2021 16:22:06 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Cc:     zhuyinbo@loongson.cn
-Subject: [PATCH v3 2/2] net: mdio: rework mdio_uevent for mdio ethernet phy device
-Date:   Tue, 30 Nov 2021 16:21:57 +0800
-Message-Id: <1638260517-13634-2-git-send-email-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1638260517-13634-1-git-send-email-zhuyinbo@loongson.cn>
-References: <1638260517-13634-1-git-send-email-zhuyinbo@loongson.cn>
-X-CM-TRANSID: AQAAf9Dxz8on36Vhh7UBAA--.4073S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tw48GF15Arykuw48Zr4Utwb_yoW8CFy5pF
-        4rJFyrtrWjgr47Wwn5C3yDWF1a9397K397GryF9wsY9rs8AryDXFyftFy29r13AFW8u3W7
-        ta4vqr18ua4DJa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPm14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-        x26xkF7I0E14v26r4j6ryUM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-        Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
-        8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
-        jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
-        kIwI1lc2xSY4AK6svPMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
-        Xa7VUjLL07UUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+        id S239583AbhK3I1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:27:46 -0500
+Received: from mail-ua1-f51.google.com ([209.85.222.51]:44576 "EHLO
+        mail-ua1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234234AbhK3I1p (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 03:27:45 -0500
+Received: by mail-ua1-f51.google.com with SMTP id p2so39634611uad.11;
+        Tue, 30 Nov 2021 00:24:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=J5WX3b9eBzW68ooaz80a8Xaxaty63apmS35CTcN24SU=;
+        b=xlK/ACjGX5AiqAU3DwKahbIusndCQFhWcJHCcBL2TKZPdaejlY0hLafthfssSlVnGk
+         nIj871rQtvnf0toPniChR0Bwk2FFWvO345x+uOYP88sBVS5n6ktWEFJrPtEICMUeI7UP
+         DxsLe/wEDaRzft1hHQ/V80IzlD6SOJejOdrFT9nLMOChAbhXnme2WUdbl8UFkRADgsHU
+         +wcOjjZ9NBlPhbzZ8H9CkMhWrFf0HXMuGcV2RrhyzGj6gnZQB7DtLnW1CQeNgd29GDKG
+         cWkVKiNkBD2wkIKVMgQfPBFP4DYBi6ZdNONjFtWR9z7T/vekXqsUDfm8v8Xr1HlM5/T2
+         k/Rw==
+X-Gm-Message-State: AOAM533cHU25fUUVHOUI5tSCFjRnMDmM8Dag1RVDUD04JrkMtmlLn+LM
+        zqHFwEOXQ+WOih7egtn3AYgvjhDZfTL95w==
+X-Google-Smtp-Source: ABdhPJwbYSZXeqV6CQT8qfwl7U40MCKLzJCLs/63sT459r1IAOh1qs1JYvC1rv80SfP3/3tseS3NXQ==
+X-Received: by 2002:ab0:70cd:: with SMTP id r13mr54397416ual.99.1638260666183;
+        Tue, 30 Nov 2021 00:24:26 -0800 (PST)
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com. [209.85.221.177])
+        by smtp.gmail.com with ESMTPSA id q26sm10341433vsp.23.2021.11.30.00.24.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 00:24:25 -0800 (PST)
+Received: by mail-vk1-f177.google.com with SMTP id u68so12998207vke.11;
+        Tue, 30 Nov 2021 00:24:25 -0800 (PST)
+X-Received: by 2002:a05:6122:2193:: with SMTP id j19mr43169775vkd.7.1638260665465;
+ Tue, 30 Nov 2021 00:24:25 -0800 (PST)
+MIME-Version: 1.0
+References: <cover.1637566224.git.linux@leemhuis.info> <6b760115ecdd3687d4b82680b284f55a04f3ad90.1637566224.git.linux@leemhuis.info>
+ <20211123185237.M476855@dcvr> <12cefa81-495b-3083-5f19-b319c704ebf7@leemhuis.info>
+ <20211126171141.GA21826@dcvr> <42ff6b8d-0b7c-12e0-4648-a9232b0f577c@leemhuis.info>
+ <20211127195231.GA4636@dcvr> <xmqqtufx5p19.fsf@gitster.g> <87mtlnjhj6.fsf@intel.com>
+ <20211129172618.GA26651@dcvr>
+In-Reply-To: <20211129172618.GA26651@dcvr>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 30 Nov 2021 09:24:14 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWygx9kTemsrZdru-ieYyJXm=8276Q_ZSxZGkqsu5OWVg@mail.gmail.com>
+Message-ID: <CAMuHMdWygx9kTemsrZdru-ieYyJXm=8276Q_ZSxZGkqsu5OWVg@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/1] docs: add the new commit-msg tags 'Reported:'
+ and 'Reviewed:'
+To:     Eric Wong <e@80x24.org>
+Cc:     Jani Nikula <jani.nikula@intel.com>,
+        Junio C Hamano <gitster@pobox.com>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        workflows@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Git Mailing List <git@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The of_device_uevent_modalias is service for 'of' type platform driver
-, which ask the first args must be 'of' that use MODULE_DEVICE_TABLE
-when driver was exported, but ethernet phy is a kind of 'mdio' type
-device and it is inappropriate if driver use 'of' type for exporting,
-in fact, most mainstream ethernet phy driver hasn't used 'of' type,
-even though phy driver was exported use 'of' type and it's irrelevant
-with mdio_uevent, at this time, platform_uevent was responsible for
-reporting uevent to match modules.alias configure, so, whatever that
-of_device_uevent_modalias was unnecessary, this patch was to remove it
-and add phy_id as modio uevent then ethernet phy module auto load
-function will work well.
+Hi Eric,
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v3:
-		Rework the patch commit log information.
+On Mon, Nov 29, 2021 at 11:29 PM Eric Wong <e@80x24.org> wrote:
+> It's a bit much for common cases with git-send-email and
+> reasonable MUAs, I think.  I don't know if formail is commonly
+> installed, nowadays...
 
- drivers/net/phy/mdio_bus.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Of course ;-) You need it to run checkpatch on patch series obtained
+through "b4 am", before you apply them to your tree:
 
-diff --git a/drivers/net/phy/mdio_bus.c b/drivers/net/phy/mdio_bus.c
-index 6865d93..999f0d4 100644
---- a/drivers/net/phy/mdio_bus.c
-+++ b/drivers/net/phy/mdio_bus.c
-@@ -962,12 +962,12 @@ static int mdio_bus_match(struct device *dev, struct device_driver *drv)
- 
- static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
- {
--	int rc;
-+	struct phy_device *pdev;
- 
--	/* Some devices have extra OF data and an OF-style MODALIAS */
--	rc = of_device_uevent_modalias(dev, env);
--	if (rc != -ENODEV)
--		return rc;
-+	pdev = to_phy_device(dev);
-+
-+	if (add_uevent_var(env, "MODALIAS=mdio:p%08X", pdev->phy_id))
-+		return -ENOMEM;
- 
- 	return 0;
- }
-@@ -991,7 +991,7 @@ static int mdio_uevent(struct device *dev, struct kobj_uevent_env *env)
- };
- 
- struct bus_type mdio_bus_type = {
--	.name		= "mdio_bus",
-+	.name		= "mdio",
- 	.dev_groups	= mdio_bus_dev_groups,
- 	.match		= mdio_bus_match,
- 	.uevent		= mdio_uevent,
--- 
-1.8.3.1
+$ cat *mbx | formail -s scripts/checkpatch.pl
 
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E67B463F92
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D2C463F90
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:59:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240357AbhK3VDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:03:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
+        id S1343926AbhK3VBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:01:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343864AbhK3U7X (ORCPT
+        with ESMTP id S240393AbhK3U7Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 15:59:23 -0500
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB47DC061748
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:56:03 -0800 (PST)
-Received: by mail-qv1-xf35.google.com with SMTP id p3so12068079qvj.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:56:03 -0800 (PST)
+        Tue, 30 Nov 2021 15:59:25 -0500
+Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97415C06174A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:56:04 -0800 (PST)
+Received: by mail-qk1-x736.google.com with SMTP id b67so28329102qkg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:56:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=q1UTq0XNjoj63bKGJUn764nBUtFsBCgYgAcoKfwHlbw=;
-        b=gWTOWBWkcjjHySYevMLCznt45eHqQtdD8J4x/RdcO0aIQS/9QmLVMC8p0L+VyQHL/I
-         oNdqX+5cPFZOVOC8XR5nWqIFAM/P49yqcCr/I1oZJOJrE1DtntbCU1Tx1UlBWY/YcJ/i
-         SlgrNGnBJ43t8FFmQubVTXZeHA+0O9OHdz2HpO/Q3s1e0MKz5Rrbw81u5js9IlPS4tk3
-         OpDu3FBoKYjTEYsXq7gkGQlChD4dQZyDUurIkZNj8Jr5RSWNGcl8GM4T8X8ck6fZT2mF
-         m1w0r2yKSq5WGPBOS3ywzQVcPl5STt0eGKIaDr27oPbnV6gv42VV+h+U1T3WYQl6wqIQ
-         HCRw==
+        bh=h9+TCZLLMqZE4Cspbo3e1dwusVFmwRs3cKgkqAh7H7o=;
+        b=mvGoCUsYUcro7S5D7derj9nuzdLIrLHS0UeOyRfOC8rT8/Lc4Sv5vOArPHZ8omtZak
+         S44jTf9V5N9rDov1CWDI5K3H2vwaXnnyOGe5p8tyeWV59/THZCUF/nzAQc1IXqNCjpG4
+         l1b9tE/lw4TGsAGhpwJc5OwPm6AXct7x7aOC53LlK8lYuNvxRs6dMANucAzTxirHwnxb
+         QTwKKWjffHAL4I1sZMGkwnC47u+qmFmTHj+LACelu6lgyCOdC9b7fljcJMWcVWRjQbRM
+         9Mn/aWXHPQhATaCa26dfLUW1TQpaE5YMputUvw3ulKdfAV79x0gmRu3sU/4UVHsGDxEW
+         8FTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=q1UTq0XNjoj63bKGJUn764nBUtFsBCgYgAcoKfwHlbw=;
-        b=0khkyMyQuf86kpDmWbKGsFHgptgI+sG19Ncnsykz249Um5WhleCer4iAZbMLGgBExE
-         Dp8l6WRJMW56rUP2yeRIqMyb5Bk7QIk8XTbe/vdG20DIUfw7Pa+Jp3zuh4lIrKSnTL6A
-         yDZsbMlZ+hX58uuKoGzB1+uixQqqAUzQP1g3YL1ZvezVyRIaZEa/fsIJM8KIGd7tiN4y
-         FNwR6hGGdgIPufoLHgo6Zsn2Ak8qDz9KN8/VIH+qfjFSmjwvSgtLCx/sOTKIAAfYaR4d
-         2jIRPSe8311KOSe1pQord69ZMNXXI11hCOw7O059DUA7ARidYby56Jktp5JAjFq7kbn2
-         ay6g==
-X-Gm-Message-State: AOAM531SifxvhzM1KGh0sInk8ubpKflQSymi5i+GVXoNyTOxdQVm7xFx
-        WH+4E91zkD3Szb/xJ1PL4Z8Dkb4teg==
-X-Google-Smtp-Source: ABdhPJy+02rbr3epQtwmGZI8L7hRy493mSIZLl2dqeNqG7UvuE3Sv03A3VGWKMVKRtnodtaB52LoOg==
-X-Received: by 2002:a05:6214:761:: with SMTP id f1mr2206676qvz.90.1638305762663;
-        Tue, 30 Nov 2021 12:56:02 -0800 (PST)
+        bh=h9+TCZLLMqZE4Cspbo3e1dwusVFmwRs3cKgkqAh7H7o=;
+        b=uq0mWOzpIG6im5HQcMrjZEs5hMdtcxO4HhG9FkSAmKTIIjM8eoz0vKzGRNIIiEcFKc
+         F09DlHC6vhJegwex/rZ7+O/zMtUp0P4jw9RRPz/batV/79fyr6JzWIGR8KMpNnptMIgX
+         aBpvJkhpiDQ0QtFltnL3fNFc3zgzUKOAmX7cQ5qDcn/KlITqDCJdwAf38dQHISpIcmkb
+         lY72PoGwq09whNd0dVl1PcCEJgKLQ0hDD1I927N2qA8p56GUYkrGFxUiToPrUmsDZXSM
+         rUE4AVPYNns84BuVlEFYhgZTNvJA/SD56KJSpsl84zTms0J+zDI2EqFYize8OYzqVPoz
+         a+Tw==
+X-Gm-Message-State: AOAM530H+RMhbIizgTHebfF78k9+fBP4xg4QCW3IbxTOVw/YH38vKkih
+        bKgYXuHfgMtGbvoCqHBIlYW6Qroh9Q==
+X-Google-Smtp-Source: ABdhPJziEC0Whwwnh0ZT4xoCeQwm1w/yGOxXC3LLZcLOrkf8H/TA0SqGa36259vbUa95+JLW5HD5sw==
+X-Received: by 2002:a05:620a:2682:: with SMTP id c2mr2008075qkp.24.1638305763513;
+        Tue, 30 Nov 2021 12:56:03 -0800 (PST)
 Received: from citadel.. (174-084-153-250.res.spectrum.com. [174.84.153.250])
-        by smtp.gmail.com with ESMTPSA id t11sm10549356qkp.56.2021.11.30.12.56.01
+        by smtp.gmail.com with ESMTPSA id t11sm10549356qkp.56.2021.11.30.12.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 12:56:02 -0800 (PST)
+        Tue, 30 Nov 2021 12:56:03 -0800 (PST)
 From:   Brian Gerst <brgerst@gmail.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
@@ -55,9 +55,9 @@ Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Brian Gerst <brgerst@gmail.com>
-Subject: [PATCH v2 2/6] x86-64: Convert stack protector to normal percpu variable
-Date:   Tue, 30 Nov 2021 15:55:45 -0500
-Message-Id: <20211130205549.116673-3-brgerst@gmail.com>
+Subject: [PATCH v2 3/6] x86-64: Use relative per-cpu offsets
+Date:   Tue, 30 Nov 2021 15:55:46 -0500
+Message-Id: <20211130205549.116673-4-brgerst@gmail.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211130205549.116673-1-brgerst@gmail.com>
 References: <20211130205549.116673-1-brgerst@gmail.com>
@@ -67,351 +67,385 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Older versions of GCC fixed the location of the stack protector canary
-at %gs:40.  This constraint forced the percpu section to be linked at
-virtual address 0 so that the canary could be the first data object in
-the percpu section.  Supporting the zero-based percpu section requires
-additional code to handle relocations for RIP-relative references to
-percpu data, extra complexity to kallsyms, and workarounds for linker
-bugs due to the use of absolute symbols.
-
-Since version 8.1, GCC has options to configure the location of the
-canary value.  This allows the canary to be turned into a normal
-percpu variable and removes the constraint that the percpu section
-be zero-based.
+The per-cpu section is currently linked at virtual address 0, because
+older compilers hardcoded the stack protector canary value at a fixed
+offset from the start of the GS segment.  Now that the canary is a
+normal per-cpu variable, the special handling of the per-cpu section
+can be removed.
 
 Signed-off-by: Brian Gerst <brgerst@gmail.com>
 ---
- arch/x86/Kconfig                      |  2 +-
- arch/x86/Makefile                     | 19 ++++++++------
- arch/x86/entry/entry_64.S             |  2 +-
- arch/x86/include/asm/processor.h      | 25 ++++---------------
- arch/x86/include/asm/stackprotector.h | 36 ++++++---------------------
- arch/x86/kernel/asm-offsets_64.c      |  6 -----
- arch/x86/kernel/cpu/common.c          |  8 ++----
- arch/x86/kernel/head_64.S             | 12 +++++----
- arch/x86/kernel/vmlinux.lds.S         |  6 -----
- arch/x86/tools/relocs.c               |  1 -
- arch/x86/xen/xen-head.S               | 10 +++-----
- 11 files changed, 39 insertions(+), 88 deletions(-)
+ arch/x86/include/asm/percpu.h  |  22 ------
+ arch/x86/kernel/head_64.S      |   6 +-
+ arch/x86/kernel/irq_64.c       |   1 -
+ arch/x86/kernel/setup_percpu.c |  12 +--
+ arch/x86/kernel/vmlinux.lds.S  |  27 -------
+ arch/x86/tools/relocs.c        | 135 +--------------------------------
+ init/Kconfig                   |   1 -
+ 7 files changed, 6 insertions(+), 198 deletions(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 82ed7fdddc75..a8177ece6a99 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -392,7 +392,7 @@ config PGTABLE_LEVELS
+diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
+index a3c33b79fb86..5418f0a4d073 100644
+--- a/arch/x86/include/asm/percpu.h
++++ b/arch/x86/include/asm/percpu.h
+@@ -16,12 +16,6 @@
+ #define PER_CPU_VAR(var)	var
+ #endif	/* SMP */
  
- config CC_HAS_SANE_STACKPROTECTOR
- 	bool
--	default y if 64BIT
-+	default $(cc-option,-mstack-protector-guard-reg=gs -mstack-protector-guard-symbol=__stack_chk_guard) if 64BIT
- 	default $(cc-option,-mstack-protector-guard-reg=fs -mstack-protector-guard-symbol=__stack_chk_guard)
- 	help
- 	   We have to make sure stack protector is unconditionally disabled if
-diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-index 42243869216d..f25ba649abf8 100644
---- a/arch/x86/Makefile
-+++ b/arch/x86/Makefile
-@@ -79,13 +79,7 @@ ifeq ($(CONFIG_X86_32),y)
-         # temporary until string.h is fixed
-         KBUILD_CFLAGS += -ffreestanding
- 
--	ifeq ($(CONFIG_STACKPROTECTOR),y)
--		ifeq ($(CONFIG_SMP),y)
--			KBUILD_CFLAGS += -mstack-protector-guard-reg=fs -mstack-protector-guard-symbol=__stack_chk_guard
--		else
--			KBUILD_CFLAGS += -mstack-protector-guard=global
--		endif
--	endif
-+	percpu_seg := fs
- else
-         BITS := 64
-         UTS_MACHINE := x86_64
-@@ -126,6 +120,17 @@ else
- 
-         KBUILD_CFLAGS += -mno-red-zone
-         KBUILD_CFLAGS += -mcmodel=kernel
-+
-+	percpu_seg := gs
-+endif
-+
-+ifeq ($(CONFIG_STACKPROTECTOR),y)
-+	ifeq ($(CONFIG_SMP),y)
-+		KBUILD_CFLAGS += -mstack-protector-guard-reg=$(percpu_seg) \
-+				 -mstack-protector-guard-symbol=__stack_chk_guard
-+	else
-+		KBUILD_CFLAGS += -mstack-protector-guard=global
-+	endif
- endif
- 
- ifdef CONFIG_X86_X32
-diff --git a/arch/x86/entry/entry_64.S b/arch/x86/entry/entry_64.S
-index e38a4cf795d9..7bfa3b99b5d9 100644
---- a/arch/x86/entry/entry_64.S
-+++ b/arch/x86/entry/entry_64.S
-@@ -240,7 +240,7 @@ SYM_FUNC_START(__switch_to_asm)
- 
- #ifdef CONFIG_STACKPROTECTOR
- 	movq	TASK_stack_canary(%rsi), %rbx
--	movq	%rbx, PER_CPU_VAR(fixed_percpu_data) + stack_canary_offset
-+	movq	%rbx, PER_CPU_VAR(__stack_chk_guard)
- #endif
- 
- #ifdef CONFIG_RETPOLINE
-diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
-index 2c5f12ae7d04..a63cb7680bcb 100644
---- a/arch/x86/include/asm/processor.h
-+++ b/arch/x86/include/asm/processor.h
-@@ -427,25 +427,13 @@ struct irq_stack {
- DECLARE_PER_CPU(unsigned long, cpu_current_top_of_stack);
- 
- #ifdef CONFIG_X86_64
--struct fixed_percpu_data {
--	/*
--	 * GCC hardcodes the stack canary as %gs:40.  Since the
--	 * irq_stack is the object at %gs:0, we reserve the bottom
--	 * 48 bytes of the irq stack for the canary.
--	 *
--	 * Once we are willing to require -mstack-protector-guard-symbol=
--	 * support for x86_64 stackprotector, we can get rid of this.
--	 */
--	char		gs_base[40];
--	unsigned long	stack_canary;
--};
--
--DECLARE_PER_CPU_FIRST(struct fixed_percpu_data, fixed_percpu_data) __visible;
--DECLARE_INIT_PER_CPU(fixed_percpu_data);
--
- static inline unsigned long cpu_kernelmode_gs_base(int cpu)
- {
--	return (unsigned long)per_cpu(fixed_percpu_data.gs_base, cpu);
-+#ifdef CONFIG_SMP
-+	return per_cpu_offset(cpu);
-+#else
-+	return 0;
-+#endif
- }
- 
- DECLARE_PER_CPU(void *, hardirq_stack_ptr);
-@@ -455,9 +443,6 @@ extern asmlinkage void ignore_sysret(void);
- /* Save actual FS/GS selectors and bases to current->thread */
- void current_save_fsgs(void);
- #else	/* X86_64 */
--#ifdef CONFIG_STACKPROTECTOR
--DECLARE_PER_CPU(unsigned long, __stack_chk_guard);
--#endif
- DECLARE_PER_CPU(struct irq_stack *, hardirq_stack_ptr);
- DECLARE_PER_CPU(struct irq_stack *, softirq_stack_ptr);
- #endif	/* !X86_64 */
-diff --git a/arch/x86/include/asm/stackprotector.h b/arch/x86/include/asm/stackprotector.h
-index 24a8d6c4fb18..6a755a5c4fec 100644
---- a/arch/x86/include/asm/stackprotector.h
-+++ b/arch/x86/include/asm/stackprotector.h
-@@ -2,26 +2,13 @@
- /*
-  * GCC stack protector support.
-  *
-- * Stack protector works by putting predefined pattern at the start of
-+ * Stack protector works by putting a predefined pattern at the start of
-  * the stack frame and verifying that it hasn't been overwritten when
-- * returning from the function.  The pattern is called stack canary
-- * and unfortunately gcc historically required it to be at a fixed offset
-- * from the percpu segment base.  On x86_64, the offset is 40 bytes.
-+ * returning from the function.  The pattern is called the stack canary
-+ * and is a unique value for each task.
-  *
-- * The same segment is shared by percpu area and stack canary.  On
-- * x86_64, percpu symbols are zero based and %gs (64-bit) points to the
-- * base of percpu area.  The first occupant of the percpu area is always
-- * fixed_percpu_data which contains stack_canary at the appropriate
-- * offset.  On x86_32, the stack canary is just a regular percpu
-- * variable.
-- *
-- * Putting percpu data in %fs on 32-bit is a minor optimization compared to
-- * using %gs.  Since 32-bit userspace normally has %fs == 0, we are likely
-- * to load 0 into %fs on exit to usermode, whereas with percpu data in
-- * %gs, we are likely to load a non-null %gs on return to user mode.
-- *
-- * Once we are willing to require GCC 8.1 or better for 64-bit stackprotector
-- * support, we can remove some of this complexity.
-+ * GCC is configured to read the stack canary value from the __stack_chk_guard
-+ * per-cpu variable, which is changed on task switch.
-  */
- 
- #ifndef _ASM_STACKPROTECTOR_H
-@@ -37,6 +24,8 @@
- #include <linux/random.h>
- #include <linux/sched.h>
- 
-+DECLARE_PER_CPU(unsigned long, __stack_chk_guard);
-+
- /*
-  * Initialize the stackprotector canary value.
-  *
-@@ -53,9 +42,6 @@ static __always_inline void boot_init_stack_canary(void)
- 	u64 canary;
- 	u64 tsc;
- 
--#ifdef CONFIG_X86_64
--	BUILD_BUG_ON(offsetof(struct fixed_percpu_data, stack_canary) != 40);
--#endif
- 	/*
- 	 * We both use the random pool and the current TSC as a source
- 	 * of randomness. The TSC only matters for very early init,
-@@ -68,20 +54,12 @@ static __always_inline void boot_init_stack_canary(void)
- 	canary &= CANARY_MASK;
- 
- 	current->stack_canary = canary;
--#ifdef CONFIG_X86_64
--	this_cpu_write(fixed_percpu_data.stack_canary, canary);
+-#ifdef CONFIG_X86_64_SMP
+-#define INIT_PER_CPU_VAR(var)  init_per_cpu__##var
 -#else
- 	this_cpu_write(__stack_chk_guard, canary);
+-#define INIT_PER_CPU_VAR(var)  var
 -#endif
- }
+-
+ #else /* ...!ASSEMBLY */
  
- static inline void cpu_init_stack_canary(int cpu, struct task_struct *idle)
- {
--#ifdef CONFIG_X86_64
--	per_cpu(fixed_percpu_data.stack_canary, cpu) = idle->stack_canary;
+ #include <linux/kernel.h>
+@@ -49,22 +43,6 @@
+ 
+ #define __percpu_arg(x)		__percpu_prefix "%" #x
+ 
+-/*
+- * Initialized pointers to per-cpu variables needed for the boot
+- * processor need to use these macros to get the proper address
+- * offset from __per_cpu_load on SMP.
+- *
+- * There also must be an entry in vmlinux_64.lds.S
+- */
+-#define DECLARE_INIT_PER_CPU(var) \
+-       extern typeof(var) init_per_cpu_var(var)
+-
+-#ifdef CONFIG_X86_64_SMP
+-#define init_per_cpu_var(var)  init_per_cpu__##var
 -#else
- 	per_cpu(__stack_chk_guard, cpu) = idle->stack_canary;
+-#define init_per_cpu_var(var)  var
 -#endif
- }
- 
- #else	/* STACKPROTECTOR */
-diff --git a/arch/x86/kernel/asm-offsets_64.c b/arch/x86/kernel/asm-offsets_64.c
-index b14533af7676..985dc3455993 100644
---- a/arch/x86/kernel/asm-offsets_64.c
-+++ b/arch/x86/kernel/asm-offsets_64.c
-@@ -54,11 +54,5 @@ int main(void)
- 	BLANK();
- #undef ENTRY
- 
--	BLANK();
 -
--#ifdef CONFIG_STACKPROTECTOR
--	DEFINE(stack_canary_offset, offsetof(struct fixed_percpu_data, stack_canary));
--	BLANK();
--#endif
- 	return 0;
- }
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 0663642d6199..0462de9b9921 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1767,10 +1767,6 @@ static __init int setup_clearcpuid(char *arg)
- __setup("clearcpuid=", setup_clearcpuid);
+ /* For arch-specific code, we can use direct single-insn ops (they
+  * don't give an lvalue though). */
  
- #ifdef CONFIG_X86_64
--DEFINE_PER_CPU_FIRST(struct fixed_percpu_data,
--		     fixed_percpu_data) __aligned(PAGE_SIZE) __visible;
--EXPORT_PER_CPU_SYMBOL_GPL(fixed_percpu_data);
--
- /*
-  * The following percpu variables are hot.  Align current_task to
-  * cacheline size such that they fall in the same cacheline.
-@@ -1851,13 +1847,13 @@ DEFINE_PER_CPU(unsigned long, cpu_current_top_of_stack) =
- 	(unsigned long)&init_thread_union + THREAD_SIZE;
- EXPORT_PER_CPU_SYMBOL(cpu_current_top_of_stack);
- 
-+#endif	/* CONFIG_X86_64 */
-+
- #ifdef CONFIG_STACKPROTECTOR
- DEFINE_PER_CPU(unsigned long, __stack_chk_guard);
- EXPORT_PER_CPU_SYMBOL(__stack_chk_guard);
- #endif
- 
--#endif	/* CONFIG_X86_64 */
--
- /*
-  * Clear all 6 debug registers:
-  */
 diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-index d8b3ebd2bb85..833f747e74ee 100644
+index 833f747e74ee..1b8c9919afdb 100644
 --- a/arch/x86/kernel/head_64.S
 +++ b/arch/x86/kernel/head_64.S
-@@ -198,10 +198,8 @@ SYM_INNER_LABEL(secondary_startup_64_no_verify, SYM_L_GLOBAL)
- 	movl %eax,%fs
- 	movl %eax,%gs
- 
--	/* Set up %gs.
--	 *
--	 * The base of %gs always points to fixed_percpu_data. If the
--	 * stack protector canary is enabled, it is located at %gs:40.
-+	/*
-+	 * Set up GS base.
- 	 * Note that, on SMP, the boot cpu uses init data section until
- 	 * the per cpu areas are set up.
- 	 */
-@@ -337,7 +335,11 @@ SYM_CODE_END(vc_boot_ghcb)
+@@ -335,11 +335,7 @@ SYM_CODE_END(vc_boot_ghcb)
  	__REFDATA
  	.balign	8
  SYM_DATA(initial_code,	.quad x86_64_start_kernel)
--SYM_DATA(initial_gs,	.quad INIT_PER_CPU_VAR(fixed_percpu_data))
-+#ifdef CONFIG_SMP
-+SYM_DATA(initial_gs,	.quad __per_cpu_load)
-+#else
-+SYM_DATA(initial_gs,	.quad 0)
-+#endif
+-#ifdef CONFIG_SMP
+-SYM_DATA(initial_gs,	.quad __per_cpu_load)
+-#else
+ SYM_DATA(initial_gs,	.quad 0)
+-#endif
  #ifdef CONFIG_AMD_MEM_ENCRYPT
  SYM_DATA(initial_vc_handler,	.quad handle_vc_boot_ghcb)
  #endif
-diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
-index 3d6dc12d198f..18a01ece43ee 100644
---- a/arch/x86/kernel/vmlinux.lds.S
-+++ b/arch/x86/kernel/vmlinux.lds.S
-@@ -481,14 +481,8 @@ SECTIONS
-  */
- #define INIT_PER_CPU(x) init_per_cpu__##x = ABSOLUTE(x) + __per_cpu_load
- INIT_PER_CPU(gdt_page);
--INIT_PER_CPU(fixed_percpu_data);
- INIT_PER_CPU(irq_stack_backing_store);
+@@ -572,7 +568,7 @@ SYM_DATA_END(level1_fixmap_pgt)
+ 	.align 16
  
--#ifdef CONFIG_SMP
--. = ASSERT((fixed_percpu_data == 0),
--           "fixed_percpu_data is not at start of per-cpu area");
+ SYM_DATA(early_gdt_descr,		.word GDT_ENTRIES*8-1)
+-SYM_DATA_LOCAL(early_gdt_descr_base,	.quad INIT_PER_CPU_VAR(gdt_page))
++SYM_DATA_LOCAL(early_gdt_descr_base,	.quad gdt_page)
+ 
+ 	.align 16
+ /* This must match the first entry in level2_kernel_pgt */
+diff --git a/arch/x86/kernel/irq_64.c b/arch/x86/kernel/irq_64.c
+index 1c0fb96b9e39..df537518983e 100644
+--- a/arch/x86/kernel/irq_64.c
++++ b/arch/x86/kernel/irq_64.c
+@@ -26,7 +26,6 @@
+ #include <asm/apic.h>
+ 
+ DEFINE_PER_CPU_PAGE_ALIGNED(struct irq_stack, irq_stack_backing_store) __visible;
+-DECLARE_INIT_PER_CPU(irq_stack_backing_store);
+ 
+ #ifdef CONFIG_VMAP_STACK
+ /*
+diff --git a/arch/x86/kernel/setup_percpu.c b/arch/x86/kernel/setup_percpu.c
+index 7b65275544b2..a2489b31564e 100644
+--- a/arch/x86/kernel/setup_percpu.c
++++ b/arch/x86/kernel/setup_percpu.c
+@@ -26,18 +26,10 @@
+ DEFINE_PER_CPU_READ_MOSTLY(int, cpu_number);
+ EXPORT_PER_CPU_SYMBOL(cpu_number);
+ 
+-#ifdef CONFIG_X86_64
+-#define BOOT_PERCPU_OFFSET ((unsigned long)__per_cpu_load)
+-#else
+-#define BOOT_PERCPU_OFFSET 0
 -#endif
 -
- #endif /* CONFIG_X86_64 */
+-DEFINE_PER_CPU_READ_MOSTLY(unsigned long, this_cpu_off) = BOOT_PERCPU_OFFSET;
++DEFINE_PER_CPU_READ_MOSTLY(unsigned long, this_cpu_off);
+ EXPORT_PER_CPU_SYMBOL(this_cpu_off);
  
+-unsigned long __per_cpu_offset[NR_CPUS] __ro_after_init = {
+-	[0 ... NR_CPUS-1] = BOOT_PERCPU_OFFSET,
+-};
++unsigned long __per_cpu_offset[NR_CPUS] __ro_after_init;
+ EXPORT_SYMBOL(__per_cpu_offset);
+ 
+ /*
+diff --git a/arch/x86/kernel/vmlinux.lds.S b/arch/x86/kernel/vmlinux.lds.S
+index 18a01ece43ee..a72288fa4691 100644
+--- a/arch/x86/kernel/vmlinux.lds.S
++++ b/arch/x86/kernel/vmlinux.lds.S
+@@ -103,9 +103,6 @@ PHDRS {
+ 	text PT_LOAD FLAGS(5);          /* R_E */
+ 	data PT_LOAD FLAGS(6);          /* RW_ */
+ #ifdef CONFIG_X86_64
+-#ifdef CONFIG_SMP
+-	percpu PT_LOAD FLAGS(6);        /* RW_ */
+-#endif
+ 	init PT_LOAD FLAGS(7);          /* RWE */
+ #endif
+ 	note PT_NOTE FLAGS(0);          /* ___ */
+@@ -215,17 +212,6 @@ SECTIONS
+ 		__init_begin = .; /* paired with __init_end */
+ 	}
+ 
+-#if defined(CONFIG_X86_64) && defined(CONFIG_SMP)
+-	/*
+-	 * percpu offsets are zero-based on SMP.  PERCPU_VADDR() changes the
+-	 * output PHDR, so the next output section - .init.text - should
+-	 * start another segment - init.
+-	 */
+-	PERCPU_VADDR(INTERNODE_CACHE_BYTES, 0, :percpu)
+-	ASSERT(SIZEOF(.data..percpu) < CONFIG_PHYSICAL_START,
+-	       "per-CPU data too large - increase CONFIG_PHYSICAL_START")
+-#endif
+-
+ 	INIT_TEXT_SECTION(PAGE_SIZE)
+ #ifdef CONFIG_X86_64
+ 	:init
+@@ -339,9 +325,7 @@ SECTIONS
+ 		EXIT_DATA
+ 	}
+ 
+-#if !defined(CONFIG_X86_64) || !defined(CONFIG_SMP)
+ 	PERCPU_SECTION(INTERNODE_CACHE_BYTES)
+-#endif
+ 
+ 	. = ALIGN(PAGE_SIZE);
+ 
+@@ -474,17 +458,6 @@ SECTIONS
+ . = ASSERT((_end - LOAD_OFFSET <= KERNEL_IMAGE_SIZE),
+ 	   "kernel image bigger than KERNEL_IMAGE_SIZE");
+ 
+-#ifdef CONFIG_X86_64
+-/*
+- * Per-cpu symbols which need to be offset from __per_cpu_load
+- * for the boot processor.
+- */
+-#define INIT_PER_CPU(x) init_per_cpu__##x = ABSOLUTE(x) + __per_cpu_load
+-INIT_PER_CPU(gdt_page);
+-INIT_PER_CPU(irq_stack_backing_store);
+-
+-#endif /* CONFIG_X86_64 */
+-
  #ifdef CONFIG_KEXEC_CORE
+ #include <asm/kexec.h>
+ 
 diff --git a/arch/x86/tools/relocs.c b/arch/x86/tools/relocs.c
-index c736cf2ac76b..9b3d51cb2cd1 100644
+index 9b3d51cb2cd1..b27980291ff8 100644
 --- a/arch/x86/tools/relocs.c
 +++ b/arch/x86/tools/relocs.c
-@@ -810,7 +810,6 @@ static void percpu_init(void)
-  *	__per_cpu_load
-  *
-  * The "gold" linker incorrectly associates:
-- *	init_per_cpu__fixed_percpu_data
-  *	init_per_cpu__gdt_page
-  */
- static int is_percpu_sym(ElfW(Sym) *sym, const char *symname)
-diff --git a/arch/x86/xen/xen-head.S b/arch/x86/xen/xen-head.S
-index 6a64496edefb..ba738835db11 100644
---- a/arch/x86/xen/xen-head.S
-+++ b/arch/x86/xen/xen-head.S
-@@ -54,16 +54,14 @@ SYM_CODE_START(startup_xen)
- 	mov %rsi, xen_start_info
- 	mov initial_stack(%rip), %rsp
+@@ -83,8 +83,6 @@ static const char * const sym_regex_kernel[S_NSYMTYPES] = {
+ 	"__initramfs_start|"
+ 	"(jiffies|jiffies_64)|"
+ #if ELF_BITS == 64
+-	"__per_cpu_load|"
+-	"init_per_cpu__.*|"
+ 	"__end_rodata_hpage_align|"
+ #endif
+ 	"__vvar_page|"
+@@ -280,33 +278,6 @@ static const char *sym_name(const char *sym_strtab, Elf_Sym *sym)
+ 	return name;
+ }
  
--	/* Set up %gs.
--	 *
--	 * The base of %gs always points to fixed_percpu_data.  If the
--	 * stack protector canary is enabled, it is located at %gs:40.
-+	/*
-+	 * Set up GS base.
- 	 * Note that, on SMP, the boot cpu uses init data section until
- 	 * the per cpu areas are set up.
- 	 */
- 	movl	$MSR_GS_BASE,%ecx
--	movq	$INIT_PER_CPU_VAR(fixed_percpu_data),%rax
--	cdq
-+	movl	initial_gs(%rip),%eax
-+	movl	initial_gs+4(%rip),%edx
- 	wrmsr
+-static Elf_Sym *sym_lookup(const char *symname)
+-{
+-	int i;
+-	for (i = 0; i < shnum; i++) {
+-		struct section *sec = &secs[i];
+-		long nsyms;
+-		char *strtab;
+-		Elf_Sym *symtab;
+-		Elf_Sym *sym;
+-
+-		if (sec->shdr.sh_type != SHT_SYMTAB)
+-			continue;
+-
+-		nsyms = sec->shdr.sh_size/sizeof(Elf_Sym);
+-		symtab = sec->symtab;
+-		strtab = sec->link->strtab;
+-
+-		for (sym = symtab; --nsyms >= 0; sym++) {
+-			if (!sym->st_name)
+-				continue;
+-			if (strcmp(symname, strtab + sym->st_name) == 0)
+-				return sym;
+-		}
+-	}
+-	return 0;
+-}
+-
+ #if BYTE_ORDER == LITTLE_ENDIAN
+ #define le16_to_cpu(val) (val)
+ #define le32_to_cpu(val) (val)
+@@ -749,80 +720,8 @@ static void walk_relocs(int (*process)(struct section *sec, Elf_Rel *rel,
+ 	}
+ }
  
- 	call xen_start_kernel
+-/*
+- * The .data..percpu section is a special case for x86_64 SMP kernels.
+- * It is used to initialize the actual per_cpu areas and to provide
+- * definitions for the per_cpu variables that correspond to their offsets
+- * within the percpu area. Since the values of all of the symbols need
+- * to be offsets from the start of the per_cpu area the virtual address
+- * (sh_addr) of .data..percpu is 0 in SMP kernels.
+- *
+- * This means that:
+- *
+- *	Relocations that reference symbols in the per_cpu area do not
+- *	need further relocation (since the value is an offset relative
+- *	to the start of the per_cpu area that does not change).
+- *
+- *	Relocations that apply to the per_cpu area need to have their
+- *	offset adjusted by by the value of __per_cpu_load to make them
+- *	point to the correct place in the loaded image (because the
+- *	virtual address of .data..percpu is 0).
+- *
+- * For non SMP kernels .data..percpu is linked as part of the normal
+- * kernel data and does not require special treatment.
+- *
+- */
+-static int per_cpu_shndx	= -1;
+-static Elf_Addr per_cpu_load_addr;
+-
+-static void percpu_init(void)
+-{
+-	int i;
+-	for (i = 0; i < shnum; i++) {
+-		ElfW(Sym) *sym;
+-		if (strcmp(sec_name(i), ".data..percpu"))
+-			continue;
+-
+-		if (secs[i].shdr.sh_addr != 0)	/* non SMP kernel */
+-			return;
+-
+-		sym = sym_lookup("__per_cpu_load");
+-		if (!sym)
+-			die("can't find __per_cpu_load\n");
+-
+-		per_cpu_shndx = i;
+-		per_cpu_load_addr = sym->st_value;
+-		return;
+-	}
+-}
+-
+ #if ELF_BITS == 64
+ 
+-/*
+- * Check to see if a symbol lies in the .data..percpu section.
+- *
+- * The linker incorrectly associates some symbols with the
+- * .data..percpu section so we also need to check the symbol
+- * name to make sure that we classify the symbol correctly.
+- *
+- * The GNU linker incorrectly associates:
+- *	__init_begin
+- *	__per_cpu_load
+- *
+- * The "gold" linker incorrectly associates:
+- *	init_per_cpu__gdt_page
+- */
+-static int is_percpu_sym(ElfW(Sym) *sym, const char *symname)
+-{
+-	int shndx = sym_index(sym);
+-
+-	return (shndx == per_cpu_shndx) &&
+-		strcmp(symname, "__init_begin") &&
+-		strcmp(symname, "__per_cpu_load") &&
+-		strncmp(symname, "init_per_cpu_", 13);
+-}
+-
+-
+ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
+ 		      const char *symname)
+ {
+@@ -833,47 +732,21 @@ static int do_reloc64(struct section *sec, Elf_Rel *rel, ElfW(Sym) *sym,
+ 	if (sym->st_shndx == SHN_UNDEF)
+ 		return 0;
+ 
+-	/*
+-	 * Adjust the offset if this reloc applies to the percpu section.
+-	 */
+-	if (sec->shdr.sh_info == per_cpu_shndx)
+-		offset += per_cpu_load_addr;
+-
+ 	switch (r_type) {
+ 	case R_X86_64_NONE:
+-		/* NONE can be ignored. */
+-		break;
+-
+ 	case R_X86_64_PC32:
+ 	case R_X86_64_PLT32:
+-		/*
+-		 * PC relative relocations don't need to be adjusted unless
+-		 * referencing a percpu symbol.
+-		 *
+-		 * NB: R_X86_64_PLT32 can be treated as R_X86_64_PC32.
+-		 */
+-		if (is_percpu_sym(sym, symname))
+-			add_reloc(&relocs32neg, offset);
+-		break;
+-
+ 	case R_X86_64_PC64:
+ 		/*
+-		 * Only used by jump labels
++		 * NONE can be ignored and PC relative relocations don't need
++		 * to be adjusted. Because sym must be defined, R_X86_64_PLT32 can
++		 * be treated the same way as R_X86_64_PC32.
+ 		 */
+-		if (is_percpu_sym(sym, symname))
+-			die("Invalid R_X86_64_PC64 relocation against per-CPU symbol %s\n",
+-			    symname);
+ 		break;
+ 
+ 	case R_X86_64_32:
+ 	case R_X86_64_32S:
+ 	case R_X86_64_64:
+-		/*
+-		 * References to the percpu area don't need to be adjusted.
+-		 */
+-		if (is_percpu_sym(sym, symname))
+-			break;
+-
+ 		if (shn_abs) {
+ 			/*
+ 			 * Whitelisted absolute symbols do not require
+@@ -1175,8 +1048,6 @@ void process(FILE *fp, int use_real_mode, int as_text,
+ 	read_strtabs(fp);
+ 	read_symtabs(fp);
+ 	read_relocs(fp);
+-	if (ELF_BITS == 64)
+-		percpu_init();
+ 	if (show_absolute_syms) {
+ 		print_absolute_symbols();
+ 		return;
+diff --git a/init/Kconfig b/init/Kconfig
+index 41a728debdbd..943552dc9c19 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -1714,7 +1714,6 @@ config KALLSYMS_ALL
+ config KALLSYMS_ABSOLUTE_PERCPU
+ 	bool
+ 	depends on KALLSYMS
+-	default X86_64 && SMP
+ 
+ config KALLSYMS_BASE_RELATIVE
+ 	bool
 -- 
 2.31.1
 

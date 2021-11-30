@@ -2,83 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3D7464088
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C7D46409B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:46:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344427AbhK3Vps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:45:48 -0500
-Received: from out1.migadu.com ([91.121.223.63]:50394 "EHLO out1.migadu.com"
+        id S234572AbhK3Vth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:49:37 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:56490 "EHLO vps-vb.mhejs.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344323AbhK3Vo7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:44:59 -0500
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638308497;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2VlRNVgjD8s3LiQBttrzG+uL14gJGV2zDjLV32J+vek=;
-        b=O1N5ChXOugWJB6+QRXIZUB5o0s8EIG4DrohccwfveR/ePyG/uOTU2Vr3uQ5CLC5yZ0d+0A
-        eGSsm6vFEgIjBpqKJdRm/maniY9N+gPYUEDQvLIb0sapJp7Yek5uLmAeDiRXfQRcILFV2y
-        bxPZpZ/X4eJsx3ImbI/t3f5FciFB7xs=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Collingbourne <pcc@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 06/31] mm: clarify __GFP_ZEROTAGS comment
-Date:   Tue, 30 Nov 2021 22:41:28 +0100
-Message-Id: <4f6d3dd6f1ab9d7774c96ca0ad6d8cabebf0914b.1638308023.git.andreyknvl@google.com>
-In-Reply-To: <cover.1638308023.git.andreyknvl@google.com>
-References: <cover.1638308023.git.andreyknvl@google.com>
+        id S1344544AbhK3Vq4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 16:46:56 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1msAuA-00066P-9O; Tue, 30 Nov 2021 22:43:14 +0100
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 16/29] KVM: Don't make a full copy of the old memslot in __kvm_set_memory_region()
+Date:   Tue, 30 Nov 2021 22:41:29 +0100
+Message-Id: <fe529974c0754d724d3fa48d03841a15797a5e93.1638304316.git.maciej.szmigiero@oracle.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+From: Sean Christopherson <seanjc@google.com>
 
-__GFP_ZEROTAGS is intended as an optimization: if memory is zeroed during
-allocation, it's possible to set memory tags at the same time with little
-performance impact.
+Stop making a full copy of the old memslot in __kvm_set_memory_region()
+now that metadata updates are handled by kvm_set_memslot(), i.e. now that
+the old memslot's dirty bitmap doesn't need to be referenced after the
+memslot and its pointer is modified/invalidated by kvm_set_memslot().
 
-Clarify this intention of __GFP_ZEROTAGS in the comment.
+No functional change intended.
 
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 ---
- include/linux/gfp.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ virt/kvm/kvm_main.c | 35 +++++++++++++----------------------
+ 1 file changed, 13 insertions(+), 22 deletions(-)
 
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index b976c4177299..dddd7597689f 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -232,8 +232,8 @@ struct vm_area_struct;
-  *
-  * %__GFP_ZERO returns a zeroed page on success.
-  *
-- * %__GFP_ZEROTAGS returns a page with zeroed memory tags on success, if
-- * __GFP_ZERO is set.
-+ * %__GFP_ZEROTAGS zeroes memory tags at allocation time if the memory itself
-+ * is being zeroed (either via __GFP_ZERO or via init_on_alloc).
-  *
-  * %__GFP_SKIP_KASAN_POISON returns a page which does not need to be poisoned
-  * on deallocation. Typically used for userspace pages. Currently only has an
--- 
-2.25.1
-
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 1689f598fe9e..1f37c4ce5f97 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -1732,8 +1732,8 @@ static int kvm_set_memslot(struct kvm *kvm,
+ int __kvm_set_memory_region(struct kvm *kvm,
+ 			    const struct kvm_userspace_memory_region *mem)
+ {
+-	struct kvm_memory_slot old, new;
+-	struct kvm_memory_slot *tmp;
++	struct kvm_memory_slot *old, *tmp;
++	struct kvm_memory_slot new;
+ 	enum kvm_mr_change change;
+ 	int as_id, id;
+ 	int r;
+@@ -1763,25 +1763,16 @@ int __kvm_set_memory_region(struct kvm *kvm,
+ 		return -EINVAL;
+ 
+ 	/*
+-	 * Make a full copy of the old memslot, the pointer will become stale
+-	 * when the memslots are re-sorted by update_memslots(), and the old
+-	 * memslot needs to be referenced after calling update_memslots(), e.g.
+-	 * to free its resources and for arch specific behavior.
++	 * Note, the old memslot (and the pointer itself!) may be invalidated
++	 * and/or destroyed by kvm_set_memslot().
+ 	 */
+-	tmp = id_to_memslot(__kvm_memslots(kvm, as_id), id);
+-	if (tmp) {
+-		old = *tmp;
+-		tmp = NULL;
+-	} else {
+-		memset(&old, 0, sizeof(old));
+-		old.id = id;
+-	}
++	old = id_to_memslot(__kvm_memslots(kvm, as_id), id);
+ 
+ 	if (!mem->memory_size) {
+-		if (!old.npages)
++		if (!old || !old->npages)
+ 			return -EINVAL;
+ 
+-		if (WARN_ON_ONCE(kvm->nr_memslot_pages < old.npages))
++		if (WARN_ON_ONCE(kvm->nr_memslot_pages < old->npages))
+ 			return -EIO;
+ 
+ 		memset(&new, 0, sizeof(new));
+@@ -1801,7 +1792,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+ 	if (new.npages > KVM_MEM_MAX_NR_PAGES)
+ 		return -EINVAL;
+ 
+-	if (!old.npages) {
++	if (!old || !old->npages) {
+ 		change = KVM_MR_CREATE;
+ 
+ 		/*
+@@ -1811,14 +1802,14 @@ int __kvm_set_memory_region(struct kvm *kvm,
+ 		if ((kvm->nr_memslot_pages + new.npages) < kvm->nr_memslot_pages)
+ 			return -EINVAL;
+ 	} else { /* Modify an existing slot. */
+-		if ((new.userspace_addr != old.userspace_addr) ||
+-		    (new.npages != old.npages) ||
+-		    ((new.flags ^ old.flags) & KVM_MEM_READONLY))
++		if ((new.userspace_addr != old->userspace_addr) ||
++		    (new.npages != old->npages) ||
++		    ((new.flags ^ old->flags) & KVM_MEM_READONLY))
+ 			return -EINVAL;
+ 
+-		if (new.base_gfn != old.base_gfn)
++		if (new.base_gfn != old->base_gfn)
+ 			change = KVM_MR_MOVE;
+-		else if (new.flags != old.flags)
++		else if (new.flags != old->flags)
+ 			change = KVM_MR_FLAGS_ONLY;
+ 		else /* Nothing to change. */
+ 			return 0;

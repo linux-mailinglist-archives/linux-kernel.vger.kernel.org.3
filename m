@@ -2,116 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DD15463F2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B05DB463F34
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343679AbhK3U3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 15:29:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53596 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343649AbhK3U3H (ORCPT
+        id S1343649AbhK3UbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 15:31:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38877 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229898AbhK3Uaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 15:29:07 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F802C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:25:47 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id o20so91321797eds.10
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xpYmBvvU2DPI7NcOwAcZSrIaZbaadaJOsW8BtQ8JfsY=;
-        b=QOBsF9hzrVRWPXdCFhpZuR4jsOgv/PbGcdPPNYZUt5DG4/iBezYWX1WZDgA0tgfEA6
-         OJIt8S7xtfNk+N/5dUYLKcc+MPrpL4mbHNtrWzrYpoSX6/2sSaTo4TzRwoWopP/XEX5Y
-         sYJaXyyAkU5FYlgR8ZFpsDSNPBLvzws/JfxDL9pxUKWpiAEk47HJv8aujeGTvQIwd88j
-         KDjgQvpFeLu4jcjvLZVPg7UrlqB+0bKiX6IsFny5BNdfMP6Hgy8feP3IspXF53NG4CYE
-         AQYb1Wm10vNq40KNQdLZCU5P05vBv003hxJr5usGB/BdtBz1ZhFHO3pZ9xSUw3SufWRN
-         7CFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xpYmBvvU2DPI7NcOwAcZSrIaZbaadaJOsW8BtQ8JfsY=;
-        b=MFTv6OsrXMx5by5ABQ0Ym672kmr0PG2UkpAdNEHjtn828jb3WSJwqQ+UVpz/YnMFnT
-         kzqcLGd7Tlmwen5hWXVkWdmuqFFbjjhvvEkiYPw0vkyak6SM50hY57TWbQuLjJRLCdBR
-         ZoIT4vgw3Ug1OzndrR2g9wDKC8JM37qttQkHXW2bh0616T6mjRebqMVxEigNJnWEAoQy
-         /6wzRNolaUKCPMsjWNau8WxKiAajH1O+7hnyT7VbLVYzZNTmd0MoyfZ6zga8/ckfY+yJ
-         w9ZhJIr47Hkwu7Yec9aTnfo4YPKXpyA3jSZKRUIOcbUt5aOvnk4BQxLvXZqtPHMtmCkz
-         NqrA==
-X-Gm-Message-State: AOAM532AyMf/imvPqgf1VQU/PMaik02Yr/X4V348FKDIqMidvID3YpUz
-        joyABuRbBm+I3YuyyMikmiqUq4aUafT3nVPZEdb4QqpkAPAgMA==
-X-Google-Smtp-Source: ABdhPJwpOHyPwU//D02mvaCTvO/t1OLrgHo0CeWbUJpEeGnRI0W9ae13A12b4shvOogyxUNSpXpEEiT0kISG5r5dZdU=
-X-Received: by 2002:a17:907:75f0:: with SMTP id jz16mr1567072ejc.77.1638303945785;
- Tue, 30 Nov 2021 12:25:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20211130154127.12272-1-brgl@bgdev.pl> <20211130154127.12272-3-brgl@bgdev.pl>
- <YaZNyMV5gX5cZpar@smile.fi.intel.com>
-In-Reply-To: <YaZNyMV5gX5cZpar@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 30 Nov 2021 21:25:35 +0100
-Message-ID: <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
-Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
+        Tue, 30 Nov 2021 15:30:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638304056;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=AcMNv7Mr+B4p3hEjaHnnJQgfgj2Zfos0EhRVXhwbDc0=;
+        b=EFeJ76h22hyTp3Z7a4mqfU5/CaSTOkeyqYhzreZ2wPeegqXyfduFt77TGfa7O/3EHIS0XI
+        nzMI/+hDfGXwPbMlM492iM53pg1OaDGDeIaTdlr8kkSIBZ0MbSsEn3xmvndg2sJJJGR5KG
+        Cr2CuKV8moms3SyAWTs+Nf7iA33Fy8w=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-385-sFhFSPFrP4CIoucnQlO17Q-1; Tue, 30 Nov 2021 15:27:34 -0500
+X-MC-Unique: sFhFSPFrP4CIoucnQlO17Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BAE6310144E3;
+        Tue, 30 Nov 2021 20:27:29 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.193.123])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 611AE45D64;
+        Tue, 30 Nov 2021 20:27:17 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?utf-8?Q?Tr=C3=A9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
+References: <20211115185304.198460-1-mic@digikod.net>
+Date:   Tue, 30 Nov 2021 21:27:15 +0100
+In-Reply-To: <20211115185304.198460-1-mic@digikod.net> (=?utf-8?Q?=22Micka?=
+ =?utf-8?Q?=C3=ABl_Sala=C3=BCn=22's?=
+        message of "Mon, 15 Nov 2021 19:53:01 +0100")
+Message-ID: <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 5:15 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Nov 30, 2021 at 04:41:23PM +0100, Bartosz Golaszewski wrote:
-> > Software nodes allow us to represent hierarchies for device components
-> > that don't have their struct device representation yet - for instance:
-> > banks of GPIOs under a common GPIO expander. The core gpiolib core
->
-> core .. core ?!
->
-> > however doesn't offer any way of passing this information from the
-> > drivers.
-> >
-> > This extends struct gpio_chip with a pointer to fwnode that can be set
-> > by the driver and used to pass device properties for child nodes.
-> >
-> > This is similar to how we handle device-tree sub-nodes with
-> > CONFIG_OF_GPIO enabled.
->
-> Not sure I understand the proposal. Can you provide couple of (simplest)
-> examples?
->
-> And also it sounds like reinventing a wheel. What problem do you have that you
-> need to solve this way?
->
-> ...
->
-> > +#if IS_ENABLED(CONFIG_OF_GPIO)
-> > +     if (gc->of_node && gc->fwnode) {
-> > +             pr_err("%s: tried to set both the of_node and fwnode in gpio_chip\n",
-> > +                    __func__);
-> > +             return -EINVAL;
-> > +     }
-> > +#endif /* CONFIG_OF_GPIO */
->
-> I don't like this. It seems like a hack right now.
->
-> Is it possible to convert all GPIO controller drivers to provide an fwnode
-> rather than doing this? (I believe in most of the drivers we can drop
-> completely the of_node assignment).
->
+* Micka=C3=ABl Sala=C3=BCn:
 
-Yes, it's definitely a good idea but I would be careful with just
-dropping the of_node assignments as callbacks may depend on them
-later. Also it's not just about the gpio_chip of_node assignment -
-drivers also use a bunch of OF APIs all around the place. I would
-prefer that it be done one by one and every modified driver be tested.
+> Primary goal of trusted_for(2)
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D
+>
+> This new syscall enables user space to ask the kernel: is this file
+> descriptor's content trusted to be used for this purpose?  The set of
+> usage currently only contains execution, but other may follow (e.g.
+> configuration, sensitive data).  If the kernel identifies the file
+> descriptor as trustworthy for this usage, user space should then take
+> this information into account.  The "execution" usage means that the
+> content of the file descriptor is trusted according to the system policy
+> to be executed by user space, which means that it interprets the content
+> or (try to) maps it as executable memory.
 
-Bart
+I sketched my ideas about =E2=80=9CIMA gadgets=E2=80=9D here:
+
+  IMA gadgets
+  <https://www.openwall.com/lists/oss-security/2021/11/30/1>
+
+I still don't think the proposed trusted_for interface is sufficient.
+The example I gave is a Perl module that does nothing (on its own) when
+loaded as a Perl module (although you probably don't want to sign it
+anyway, given what it implements), but triggers an unwanted action when
+sourced (using .) as a shell script.
+
+> @usage identifies the user space usage intended for @fd: only
+> TRUSTED_FOR_EXECUTION for now, but trusted_for_usage could be extended
+> to identify other usages (e.g. configuration, sensitive data).
+
+We would need TRUSTED_FOR_EXECUTION_BY_BASH,
+TRUSTED_FOR_EXECUTION_BY_PERL, etc.  I'm not sure that actually works.
+
+Caller process context does not work because we have this confusion
+internally between glibc's own use (for the dynamic linker
+configuration), and for loading programs/shared objects (there seems to
+be a corner case where you can execute arbitrary code even without
+executable mappings in the ELF object), and the script interpreter
+itself (the primary target for trusted_for).
+
+But for generating auditing events, trusted_for seems is probably quite
+helpful.
+
+Thanks,
+Florian
+

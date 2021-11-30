@@ -2,81 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15731463DF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8969D463DE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:37:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245557AbhK3SrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:47:04 -0500
-Received: from mga12.intel.com ([192.55.52.136]:10335 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244935AbhK3SrC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:47:02 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216309789"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="216309789"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 10:37:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="511648276"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Nov 2021 10:37:40 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1AUIbcaG013253;
-        Tue, 30 Nov 2021 18:37:39 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     intel-wired-lan@lists.osuosl.org
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Cristian Dumitrescu <cristian.dumitrescu@intel.com>,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 2/2] ice: remove dead store on XSK hotpath
-Date:   Tue, 30 Nov 2021 19:36:49 +0100
-Message-Id: <20211130183649.1166842-2-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211130183649.1166842-1-alexandr.lobakin@intel.com>
-References: <20211130183649.1166842-1-alexandr.lobakin@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S245528AbhK3Skc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:40:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244668AbhK3SkY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 13:40:24 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF892C061574;
+        Tue, 30 Nov 2021 10:37:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4313ACE1AEF;
+        Tue, 30 Nov 2021 18:37:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D832C53FC7;
+        Tue, 30 Nov 2021 18:37:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638297421;
+        bh=o3Iz7VwsUP948/hQZNiQs7goDefOwmFTcWB682uxvjY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZnsQZ77XCRuNu1E3WqhpiVkADzYug7CqIU0FQQK6xpUmZdnRp4uH6Y/qp8SJ15qCQ
+         7X1kEX2dgcxBJinvvujaJNDF5J6Qms1Y7AeDqdEb8FY8BlFPeVE0td+7uQlY+d3PiP
+         ylO6iP53N3/jvQJS0Ew3RTmnlKcDv8qfmGV9IAt0uQEMdlG+CKiF1MnFGSiGEldMJc
+         F8ZBhII/STPwnTl7IuDCbffvX4yOMJY2db76TZBXWgHXHCAg8Zr82qgslewkX92Yk6
+         yNCoUQdsxpZnp4Vuuud51AfR/2by0NiINvCLnGF9DrlNeh0X4zPTOtaREzXJAGrUKq
+         f4GV2RjctEQtQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ms7zv-008xQB-M5; Tue, 30 Nov 2021 18:36:59 +0000
+Date:   Tue, 30 Nov 2021 18:36:59 +0000
+Message-ID: <87bl21mqwk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
+        Chris Brandt <Chris.Brandt@renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
+Subject: Re: [PATCH] of/irq: Add a quirk for controllers with their own definition of interrupt-map
+In-Reply-To: <CA+V-a8sVS_1hUWJ3uM+VffGyMtdnctBOJTyHTQAoJZGOh0a1Tw@mail.gmail.com>
+References: <20211122103032.517923-1-maz@kernel.org>
+        <CAMuHMdX2ZRvDYA3idmw3nBcP6CO=2od6ZU-UeJo9vYsuB=fQNQ@mail.gmail.com>
+        <8735no70tt.wl-maz@kernel.org>
+        <CAMuHMdVS67BLP2XEdD6ZvVBVE2x11gKnQa1TqG659HXPM5scqQ@mail.gmail.com>
+        <CAMuHMdWJhnXabKGpW7k944dzQHtwQtxw-yb2bRBsoaMw6N6nuA@mail.gmail.com>
+        <87tug3clvc.wl-maz@kernel.org>
+        <CAMuHMdWGb2xik+94RVwtq8E6+9eN=HfQLX3a4sTjKQXR96Udkw@mail.gmail.com>
+        <87r1b7ck40.wl-maz@kernel.org>
+        <OSZPR01MB7019E7DD7119EFF9C994AA62AA649@OSZPR01MB7019.jpnprd01.prod.outlook.com>
+        <87tufvmes9.wl-maz@kernel.org>
+        <CA+V-a8siHRjF+bJu88QFwz0a_MZ+kiJEwmER58_feyr8O+WNGA@mail.gmail.com>
+        <CAL_JsqK+GcnChx3i9fsYnw+FzZgON4PtKB=CzYLUj6sXtxX6fQ@mail.gmail.com>
+        <CA+V-a8sVS_1hUWJ3uM+VffGyMtdnctBOJTyHTQAoJZGOh0a1Tw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: prabhakar.csengg@gmail.com, robh@kernel.org, prabhakar.mahadev-lad.rj@bp.renesas.com, geert@linux-m68k.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kernel-team@android.com, john@phrozen.org, biwen.li@nxp.com, Chris.Brandt@renesas.com, linux-renesas-soc@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 'if (ntu == rx_ring->count)' block in ice_alloc_rx_buffers_zc()
-was previously residing in the loop, but after introducing the
-batched interface it is used only to wrap-around the NTU descriptor,
-thus no more need to assign 'xdp'.
+On Tue, 30 Nov 2021 12:52:21 +0000,
+"Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> 
+> On Mon, Nov 29, 2021 at 6:33 PM Rob Herring <robh@kernel.org> wrote:
+> >
+> > interrupts would work just fine here:
+> >
+> > interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> >   <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> >   <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> >   <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> >   <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> >   <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> >   <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
+> >   <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> >
+> > We don't need a different solution for N:1 interrupts from N:M. Sure,
+> > that could become unweldy if there are a lot of interrupts (just like
+> > interrupt-map), but is that an immediate problem?
+> >
+> It's just that with this approach the driver will have to index the
+> interrupts instead of reading from DT.
+> 
+> Marc - is it OK with the above approach?
 
-Fixes: db804cfc21e9 ("ice: Use the xsk batched rx allocation interface")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- drivers/net/ethernet/intel/ice/ice_xsk.c | 1 -
- 1 file changed, 1 deletion(-)
+Anything that uses standard properties in a standard way works for me.
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_xsk.c b/drivers/net/ethernet/intel/ice/ice_xsk.c
-index ff55cb415b11..8573d2a3d873 100644
---- a/drivers/net/ethernet/intel/ice/ice_xsk.c
-+++ b/drivers/net/ethernet/intel/ice/ice_xsk.c
-@@ -391,7 +391,6 @@ bool ice_alloc_rx_bufs_zc(struct ice_rx_ring *rx_ring, u16 count)
- 	ntu += nb_buffs;
- 	if (ntu == rx_ring->count) {
- 		rx_desc = ICE_RX_DESC(rx_ring, 0);
--		xdp = rx_ring->xdp_buf;
- 		ntu = 0;
- 	}
- 
+	M.
+
 -- 
-2.33.1
-
+Without deviation from the norm, progress is not possible.

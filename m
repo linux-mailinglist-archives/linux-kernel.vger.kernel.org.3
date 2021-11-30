@@ -2,148 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C47462E19
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48116462E1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:00:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239310AbhK3IDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:03:52 -0500
-Received: from mailgw02.mediatek.com ([210.61.82.184]:34596 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S234489AbhK3IDu (ORCPT
+        id S239345AbhK3ID6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:03:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239332AbhK3IDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:03:50 -0500
-X-UUID: d7b937f007eb4fc0bca4e15665ae95c2-20211130
-X-UUID: d7b937f007eb4fc0bca4e15665ae95c2-20211130
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 2002383739; Tue, 30 Nov 2021 16:00:27 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Tue, 30 Nov 2021 16:00:26 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 30 Nov
- 2021 16:00:25 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 30 Nov 2021 16:00:25 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
-        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
-        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
-        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
-        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
-        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
-        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <jemele@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mark Chen <mark-yw.chen@mediatek.com>
-Subject: [PATCH] Bluetooth: btmtksdio: add the support of wake on bluetooth
-Date:   Tue, 30 Nov 2021 16:00:23 +0800
-Message-ID: <b9d604e7789aab33dafdf258b80a3bba268b39d1.1638259039.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Tue, 30 Nov 2021 03:03:55 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C45AC061714;
+        Tue, 30 Nov 2021 00:00:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D5065CE1805;
+        Tue, 30 Nov 2021 08:00:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2E8C53FC7;
+        Tue, 30 Nov 2021 08:00:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638259232;
+        bh=gwVGC0FCLR9lTUsfRmzZgc76rFUCFN275E0muoiWsyo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GtpdM2vtVEDqKjuuYCPFplX6Kqy//iHakJXjcI2g+X0C7os4V9LAO/Yrg1scbZY6h
+         p2lGycR7k+oLbh/mNGJ4M+QTYvtAtvHDwomFRKntFb4o/A5GhR9UMOCmshuFnAXPZT
+         8sVX1IPLrK9JovYJCSkVzsDGfxd+xjffJEMaI9Th65BrHYAI4cEidHdwROVvr7vtXJ
+         DbSNCF+4ZhPL0GltwHdmSHp852EALV4PWICJMSp/BIJM6d/IuhFiZq8LtbuFW/5Flj
+         14R+kg/vi3LQtoUilvtt3htt7X88SMq75PIFEyWW+G4baYmC65rLKiXxQzGVU2RQeS
+         CieIW90nZRewQ==
+Date:   Tue, 30 Nov 2021 10:00:28 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net-next v1] devlink: Simplify devlink resources
+ unregister call
+Message-ID: <YaXaHCW3/WQiiTeS@unreal>
+References: <e8684abc2c8ced4e35026e8fa85fe29447ef60b6.1638103213.git.leonro@nvidia.com>
+ <20211129201400.488c8ef9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129201400.488c8ef9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Chen <mark-yw.chen@mediatek.com>
+On Mon, Nov 29, 2021 at 08:14:00PM -0800, Jakub Kicinski wrote:
+> On Sun, 28 Nov 2021 14:42:44 +0200 Leon Romanovsky wrote:
+> > The devlink_resources_unregister() used second parameter as an
+> > entry point for the recursive removal of devlink resources. None
+> > of external to devlink users needed to use this field, so lat's
+> 
+> None of the callers outside of devlink core...
+> s/lat/let/
+> 
+> > remove it.
+> 
+> > diff --git a/include/net/devlink.h b/include/net/devlink.h
+> > index e3c88fabd700..043fcec8b0aa 100644
+> > --- a/include/net/devlink.h
+> > +++ b/include/net/devlink.h
+> > @@ -361,33 +361,6 @@ devlink_resource_size_params_init(struct devlink_resource_size_params *size_para
+> >  
+> >  typedef u64 devlink_resource_occ_get_t(void *priv);
+> >  
+> > -/**
+> > - * struct devlink_resource - devlink resource
+> > - * @name: name of the resource
+> > - * @id: id, per devlink instance
+> > - * @size: size of the resource
+> > - * @size_new: updated size of the resource, reload is needed
+> > - * @size_valid: valid in case the total size of the resource is valid
+> > - *              including its children
+> > - * @parent: parent resource
+> > - * @size_params: size parameters
+> > - * @list: parent list
+> > - * @resource_list: list of child resources
+> > - */
+> > -struct devlink_resource {
+> > -	const char *name;
+> > -	u64 id;
+> > -	u64 size;
+> > -	u64 size_new;
+> > -	bool size_valid;
+> > -	struct devlink_resource *parent;
+> > -	struct devlink_resource_size_params size_params;
+> > -	struct list_head list;
+> > -	struct list_head resource_list;
+> > -	devlink_resource_occ_get_t *occ_get;
+> > -	void *occ_get_priv;
+> > -};
+> 
+> > diff --git a/net/core/devlink.c b/net/core/devlink.c
+> > index fd21022145a3..db3b52110cf2 100644
+> > --- a/net/core/devlink.c
+> > +++ b/net/core/devlink.c
+> > @@ -69,6 +69,35 @@ struct devlink {
+> >  	char priv[] __aligned(NETDEV_ALIGN);
+> >  };
+> >  
+> > +/**
+> > + * struct devlink_resource - devlink resource
+> > + * @name: name of the resource
+> > + * @id: id, per devlink instance
+> > + * @size: size of the resource
+> > + * @size_new: updated size of the resource, reload is needed
+> > + * @size_valid: valid in case the total size of the resource is valid
+> > + *              including its children
+> > + * @parent: parent resource
+> > + * @size_params: size parameters
+> > + * @list: parent list
+> > + * @resource_list: list of child resources
+> > + * @occ_get: occupancy getter callback
+> > + * @occ_get_priv: occupancy getter callback priv
+> > + */
+> > +struct devlink_resource {
+> > +	const char *name;
+> > +	u64 id;
+> > +	u64 size;
+> > +	u64 size_new;
+> > +	bool size_valid;
+> > +	struct devlink_resource *parent;
+> > +	struct devlink_resource_size_params size_params;
+> > +	struct list_head list;
+> > +	struct list_head resource_list;
+> > +	devlink_resource_occ_get_t *occ_get;
+> > +	void *occ_get_priv;
+> > +};
+> 
+> Hiding struct devlink_resource is not mentioned in the commit message
+> and entirely unrelated to removal of the unused argument.
 
-Add the support to enable wake on bluetooth
+devlink_resources_unregister() was the API function that is declared in
+the devlink.h that used "struct devlink_resource". Once we removed extra
+parameter from that function, the "struct devlink_resource" left as not
+used at all. So this "hiding" is related and part of this simplification
+patch.
 
-Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
----
- drivers/bluetooth/btmtk.h     |  8 ++++++++
- drivers/bluetooth/btmtksdio.c | 31 ++++++++++++++++++++++++++++++-
- 2 files changed, 38 insertions(+), 1 deletion(-)
+I will add it to the commit message.
 
-diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-index 6e7b0c7567c0..2be1d2680ad8 100644
---- a/drivers/bluetooth/btmtk.h
-+++ b/drivers/bluetooth/btmtk.h
-@@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
- 	u8 time_compensation;
- } __packed;
- 
-+struct btmtk_wakeon {
-+	u8 mode;
-+	u8 gpo;
-+	u8 active_high;
-+	__le16 enable_delay;
-+	__le16 wakeup_delay;
-+} __packed;
-+
- struct btmtk_hci_wmt_params {
- 	u8 op;
- 	u8 flag;
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index d9cf0c492e29..bdd2afccc32e 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -951,6 +951,30 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
- 	return 0;
- }
- 
-+static bool btmtk_sdio_wakeup(struct hci_dev *hdev)
-+{
-+	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
-+	bool may_wakeup = device_may_wakeup(bdev->dev);
-+	struct btmtk_wakeon bt_awake = {
-+		.mode = 0x1,
-+		.gpo = 0,
-+		.active_high = 0x1,
-+		.enable_delay = cpu_to_le16(0xc80),
-+		.wakeup_delay = cpu_to_le16(0x20)
-+	};
-+	struct sk_buff *skb;
-+
-+	if (may_wakeup &&
-+	    bdev->data->chipid == 0x7921) {
-+		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
-+				      &bt_awake, HCI_CMD_TIMEOUT);
-+		if (IS_ERR(skb))
-+			may_wakeup = false;
-+	}
-+
-+	return may_wakeup;
-+}
-+
- static int btmtksdio_probe(struct sdio_func *func,
- 			   const struct sdio_device_id *id)
- {
-@@ -991,6 +1015,7 @@ static int btmtksdio_probe(struct sdio_func *func,
- 	hdev->shutdown = btmtksdio_shutdown;
- 	hdev->send     = btmtksdio_send_frame;
- 	hdev->set_bdaddr = btmtk_set_bdaddr;
-+	hdev->wakeup = btmtk_sdio_wakeup;
- 
- 	SET_HCIDEV_DEV(hdev, &func->dev);
- 
-@@ -1025,7 +1050,11 @@ static int btmtksdio_probe(struct sdio_func *func,
- 	 */
- 	pm_runtime_put_noidle(bdev->dev);
- 
--	return 0;
-+	err = device_init_wakeup(bdev->dev, true);
-+	if (err)
-+		bt_dev_err(hdev, "%s: failed to init_wakeup", __func__);
-+
-+	return err;
- }
- 
- static void btmtksdio_remove(struct sdio_func *func)
--- 
-2.25.1
-
+Thanks

@@ -2,114 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6AC8463BF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:39:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81791463BFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244063AbhK3Qmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:42:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58722 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbhK3Qmo (ORCPT
+        id S244093AbhK3QnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:43:13 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:57666 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232542AbhK3QnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:42:44 -0500
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192E2C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:39:25 -0800 (PST)
-Received: by mail-il1-x136.google.com with SMTP id j7so21872191ilk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:39:25 -0800 (PST)
+        Tue, 30 Nov 2021 11:43:12 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3ScR5kb2z9y5gl
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:39:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id x7hTaEAOyzug for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 10:39:51 -0600 (CST)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3ScR3XfLz9y5gr
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:39:51 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3ScR3XfLz9y5gr
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3ScR3XfLz9y5gr
+Received: by mail-pj1-f70.google.com with SMTP id m20-20020a17090aab1400b001ad6e2148ccso153045pjq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:39:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=rVbzJZAER7QfTyzK1T5QAFXDNOIsJOe26LVGoyaw3RQ=;
-        b=ebcHhHwSixp9Uz89h8cWyk5y5LS0t4KnC/zPzheZEGdEbbYmFHikmBnQxRJt+BcNSJ
-         fxRSm2Ixt8Xk9Ome2CzBdK8nJEo5nvmYxAm/fCTO0Pt2HMQkXcyZgEj2OH/z6dD51Gt9
-         AP6BjqiQTBB/zN6Vh6JWn9JEjcSuhCYVKw+Wo=
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m7joVp9ZGPeCi9ib/4Zk8tpyk8ZFFr30BOqRtbM2qm0=;
+        b=ghKddV5vhe9R2iiR2g7/xEa0wQFHcVdeTvN6Hu6qGRai76wxmDEe5uFgPyam/6RGTL
+         dG7et/pJ9pC13zR12TKcu9NHSG41t1u2tszo3S2qDGkE+Bb0nfcz/gP7+b/gfctTJ4Ry
+         a3GUtaqFCs3tYwM2sJW0dm97GlIsHqi9QENqtqm/dteBH60NAyTUFM93vMvfOvSQaFDG
+         BGEyPK9/yZUSs+dSD7ChhQWpirAeTTkTxAahyT1PwGWwSQCGGQ/PdEoKUVMvdensVWSJ
+         EaaiDqj9KEvP2OsKXjRmPX9pjMWZnb76C0s0J3rbc0gmMgoptZstpU7quFo6XeG5/+VT
+         izJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rVbzJZAER7QfTyzK1T5QAFXDNOIsJOe26LVGoyaw3RQ=;
-        b=i0obmIrbc2JyKafI4SNXmqfq18ZdqdfEnoAAIfZkr933g5qdFqPRCPw8SyqB8ieix4
-         +cq0EH0yMiNPmzvX92rlCdFkwKWHJGYuj+ro8LKN3yPvHOF2S6I96a9oWbDfmpHZGcoj
-         04cNM3NpYmAMCjAEvBUQpD/OSY7p5LPO4l1JA4t/rZpL/japKhCplBVZNJC2bsKvHO/T
-         U2tHaTYSfCJakUO+ixcqwIxXhwV7ocr2lzYi+iYoRZIMCz0PBnp8XTw+cVB1MWvriV9n
-         tKsOAuPlSQ5gGYizJ1HZ5jKiKyGPhbinf0XACSyXGnViKHG/+27eIXAUcDw4LvCQiwwm
-         FvgQ==
-X-Gm-Message-State: AOAM5311tWgHr08UQ0YafawnjSnToMbkI1SFS3tinvjni8TIje6mwbqo
-        FXIRwg6iaZFgh3P+iv9FTcfirE/whYelQg==
-X-Google-Smtp-Source: ABdhPJxZIE+zYgCmbGksVmvDgeFPlTn5W6lb1q5M1upidhvoMPJ7oUCQ84c9FD6RoBqVT3Izy+Es8A==
-X-Received: by 2002:a05:6e02:1d1b:: with SMTP id i27mr138058ila.248.1638290364494;
-        Tue, 30 Nov 2021 08:39:24 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id c19sm10935012ioa.30.2021.11.30.08.39.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 08:39:24 -0800 (PST)
-Subject: Re: [PATCH] selftests/ftrace: make kprobe profile testcase
- description unique
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211130122546.3622291-1-hca@linux.ibm.com>
- <20211130231130.41f9bfcc35ceda68471bbb0b@kernel.org>
- <20211130110102.7ee120f2@gandalf.local.home>
- <0fc3e982-456f-628d-17a3-f9c631108f6f@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <33704769-6819-0db8-b005-c68d7b747aea@linuxfoundation.org>
-Date:   Tue, 30 Nov 2021 09:39:23 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        bh=m7joVp9ZGPeCi9ib/4Zk8tpyk8ZFFr30BOqRtbM2qm0=;
+        b=ZC1AGK62rH2o0C0qn5bxN5TYt85PUGAic607wRTKS2CGKnI/pziVOcQ0lBD+oB2k8P
+         3n6jkQDgWO0YAIdQObVwTuPUPbw/Ugja3ECmRclAO5TLZEJcHqL+wl6k0cOQbz0g72UQ
+         zFmiEpdnOzNMxM03kpjRKrERVUcvMHcmhgouqvTCIRHNl9QVWocM88l331ohHg4CtWkZ
+         HGoJ9VPJH1vdc7dSn32jvY/NGjQAW1OMklwPOGkzkgawu1/UQOZfy9DyLNJkiscTgP+q
+         JZRWq4MLUauNNGRkgvpMQ/PRp36an/7A6jnC8jplBNIpXFK8wWHY/OLvP9pgRRi15OE+
+         xXng==
+X-Gm-Message-State: AOAM533GxOSz6qACFj9+/N33CjcY1ru0BRo5F7ZnlvtZ2HTFEfrEnmd2
+        HsyY4j+X3DB5D/b1A8mBaJF3OY4DoxLV/wE94aEXOs46r/JV+5Ixk9xx0ax0X/8zxTYUKgo5a5E
+        xfma0FvN6LZSZLEqJHGRB0Qz2aQVB
+X-Received: by 2002:a63:654:: with SMTP id 81mr222369pgg.218.1638290390608;
+        Tue, 30 Nov 2021 08:39:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyawp1G79vl80DYOCucv1k9O4bRauliVE99jsaHmQOoxxj9MO6RJiMr+CN4ZQlSBX/KLZJ8FA==
+X-Received: by 2002:a63:654:: with SMTP id 81mr222353pgg.218.1638290390430;
+        Tue, 30 Nov 2021 08:39:50 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id e19sm15175741pgt.49.2021.11.30.08.39.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 08:39:49 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: vidtv: Fix a wild pointer dereference in vidtv_channel_pmt_match_sections()
+Date:   Wed,  1 Dec 2021 00:39:45 +0800
+Message-Id: <20211130163946.189005-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <0fc3e982-456f-628d-17a3-f9c631108f6f@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/21 9:21 AM, Shuah Khan wrote:
-> On 11/30/21 9:01 AM, Steven Rostedt wrote:
->> On Tue, 30 Nov 2021 23:11:30 +0900
->> Masami Hiramatsu <mhiramat@kernel.org> wrote:
->>
->>> On Tue, 30 Nov 2021 13:25:46 +0100
->>> Heiko Carstens <hca@linux.ibm.com> wrote:
->>>
->>>> Commit 32f6e5da83c7 ("selftests/ftrace: Add kprobe profile testcase")
->>>> added a new kprobes testcase, but has a description which does not
->>>> describe what the test case is doing and is duplicating the desription
-> 
-> Typo - I can fix it when I apply. checkpatch.pl does it for you btw.
-> 
->>>> of another test case.
->>>> Therefore change the test case description, so it is unique and then
->>>> allows easily to tell which test case actually passed or failed.
->>>
->>> Good catch!
->>>
->>> This looks good to me.
->>>
->>> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
->>>
->>
->> Shuah,
->>
->> Care to take this through your tree?
->>
-> 
-> Yes. I can queue this up.
-> 
+In vidtv_channel_pmt_match_sections(), vidtv_psi_pmt_stream_init() is
+assigned to tail and &tail->descriptor is used in
+vidtv_psi_desc_assign(). There is a dereference of &tail->descriptor
+in vidtv_psi_desc_assign(), which could lead to a wild pointer
+dereference onfailure of vidtv_psi_pmt_stream_init().
 
-Heiko,
+Fix this bug by adding a check of tail.
 
-Applied now to linux-kselftest next. Run get_maintainers.pl and include
-linux-kselftest on your future patches.
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-thanks,
--- Shuah
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_DVB_VIDTV=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/media/test-drivers/vidtv/vidtv_channel.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+index 7838e6272712..f2faa5504642 100644
+--- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
++++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
+@@ -318,6 +318,10 @@ vidtv_channel_pmt_match_sections(struct vidtv_channel *channels,
+ 	struct vidtv_psi_table_pmt_stream *s = NULL;
+ 	struct vidtv_channel *cur_chnl = channels;
+ 	struct vidtv_psi_desc *desc = NULL;
++	struct vidtv_mux *m = container_of(&channels,
++					struct vidtv_mux,
++					channels);
++
+ 	u16 e_pid; /* elementary stream pid */
+ 	u16 curr_id;
+ 	u32 j;
+@@ -341,6 +345,13 @@ vidtv_channel_pmt_match_sections(struct vidtv_channel *channels,
+ 					tail = vidtv_psi_pmt_stream_init(tail,
+ 									 s->type,
+ 									 e_pid);
++
++					if (!tail) {
++						vidtv_psi_pmt_stream_destroy(head);
++						dev_warn_ratelimited(m->dev,
++							"No enough memory for vidtv_psi_pmt_stream_init");
++						return;
++					}
+
+ 					if (!head)
+ 						head = tail;
+-- 
+2.25.1
+

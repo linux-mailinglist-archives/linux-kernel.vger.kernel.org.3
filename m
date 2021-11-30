@@ -2,189 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77DDC463297
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F20463298
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240848AbhK3Lnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:43:35 -0500
-Received: from mail-bo1ind01olkn0162.outbound.protection.outlook.com ([104.47.101.162]:35184
-        "EHLO IND01-BO1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S234242AbhK3Lne (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:43:34 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G8nBBJekrtacK+mbmoJdUSOyB+5WHfU4u5Bp+87zDe2ki9MiRgcw/Aj6tPTexjUYGd4F1Tiw1rVlgvd6yl8G6cb0xrS9MZwcPFTv9yJzq9x0sSLteCDiOBzT95VOvlc34xnH/2nu5yfLNPKLplGjGU28mVL2vLHsO2BfOneObjY/Ejv1okp+SDtgds5uCsH5svCL12vXtJyHOnZK8R1hCXWATJ+g3nqYVz6N6bwdascAwPCUFaJX5YoqbN6jCuKYgXXafTqCIysma2YtHoXmy9sCcmhndAYX+QEvBvv/Iie1YbvMbzY1p6/swtDmLtUB5jUj9/sOWIx//u9hkDvrVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vK+VwjTMEbqcZ5ld7pbmgMM7zlF0/HJ6/JL3hZRTScw=;
- b=cO7kh0DdrYy3iCLp1tYIJ+GQnwpTXzWi2JCIF06zfo2W4QO38ehD6pIQYnaxL2S4vqqudQ9t/SdKfmo35EnxX1JFewDh8SHi5dv1M63FiCrzrrmBEzNBIgoY6cQuuK4HowFRyZ2Ci3TNSof+4hjLaiojeq3GVZtPMWK1oXouDzma/SAqN7imKA1x9f7UwV5gVB+2XWVxHPFB0p1JKFTPLheglmtlp1y93YtFV3McM4y8Lf5DLvSzO0Egcfb71kN8v2Ef0U0xlvMcpZ0L6JPae71lpvNLshz1epcDlp5qfl+hTXsglwZ7DXKJgIgOqwTuCMtlqX9mWyWaFLaOAKrJhQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vK+VwjTMEbqcZ5ld7pbmgMM7zlF0/HJ6/JL3hZRTScw=;
- b=hH9Pc0DlituPD2X048Rlz0hK16U5hYcKOAFWrEovR2KCieGnKZnal0X22+S6wFZEECDZH8pFtzNsE175hbDDVeVfO3SQqVQd3vlM3vRyi200CPiU4jRi59w4SEIK+O8pjmd6k3FlSErt9Id9PVm9iXVDiEd0cxU8c6mcX2YTrEUdVzlmkcDmTOVECUJlphIbWhoA7wSEXgfvkK5+AYDrdzjssMFeNiN0OPW+ckfFD9mC5JY8TWnMD01eA7dNnyxidPlHSKM+CBsLPJev7HnK88rbRTYuDQj6vhfm15FA3JgVXaMTYNUu247E2PmbVmsxtzWi0Ve+cheoWWgrPtnWXQ==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by PNXPR01MB7092.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:c7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Tue, 30 Nov
- 2021 11:40:09 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::7ca6:9165:19ec:4cd7%5]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
- 11:40:09 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     Marcel Holtmann <marcel@holtmann.org>
-CC:     Greg KH <gregkh@linuxfoundation.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        Daniel Winkler <danielwinkler@google.com>,
-        Johan Hedberg <johan.hedberg@intel.com>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v7 2/2] btbcm: disable read tx power for affected Macs with
- the T2 Security chip
-Thread-Topic: [PATCH v7 2/2] btbcm: disable read tx power for affected Macs
- with the T2 Security chip
-Thread-Index: AQHX5d8HYZ7MtLFF3keeGj/PgDdb4Q==
-Date:   Tue, 30 Nov 2021 11:40:09 +0000
-Message-ID: <83D9E5B4-980D-4F1C-B1B8-78E9E7E1095A@live.com>
-References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
- <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
- <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
- <20211117124717.12352-1-redecorating@protonmail.com>
- <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
- <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
- <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
- <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
- <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
- <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
- <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
- <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
- <92FBACD6-F4F2-4DE8-9000-2D30852770FC@live.com>
- <3716D644-CD1B-4A5C-BC96-A51FF360E31D@live.com>
- <9E6473A2-2ABE-4692-8DCF-D8F06BDEAE29@live.com>
- <64E15BD0-665E-471F-94D9-991DFB87DEA0@live.com>
- <A6DD9616-E669-4382-95A0-B9DBAF46712D@live.com>
-In-Reply-To: <A6DD9616-E669-4382-95A0-B9DBAF46712D@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [u9E76kECZrl/eFG+kx5dS4MqQuCwopRGIbrm1EXrkvE9RpaYzVTiDyDVnLhTu+j8]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: bd8d96d7-b10e-405a-0d12-08d9b3f629cd
-x-ms-traffictypediagnostic: PNXPR01MB7092:
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: a2znqPu6RYpFQqXom/7JOEt5mTRa75aoKYYfzRjAFQK6YKEEUiCoOE7rUiuKlFWOBBFDzZ7jWwGh+WtQxMT8WVBqwJARveAfmIQ1Nlqn4C8eFBnk9Gi01DLMX9iXUixAuln1gFu0pWcVOQWo2MxeYGwaP6dx0oYnWa7THUG8ZU9Oo9SLsRFyt/0FAeAOzcJqKogkeliQvf0oRfX6qk9PTAIlm0K7dBpnqrP/c3xP57OrHxyHFd+sM9GNqTxx1HxJ4L38iAa05ey8lmPXQqm5MikQ63TGb2Pp5+1wdidDgmILqEQMoloaWUeOxXFe3kk8714zrzE5kJ2D+R3lQOdWdYnWmYjI6hboEvubjtL6FFcmd7L3SW78ld3roEe7ILVJiyVttK9ix3UhQR31hiZia4/893mN+H5bd/UmdZYRuNNZ4Us+R4CZRL92xvz8+opKMf/B95Hyy3b1VkjReGYg6UCQy1z38kj7lM4+9L3YuyfZ93V6j37/HHRhp3QTfpUlna3KJ0xZswHzqPG7ayZtGb4UTEy3kUpoX9MgWJK/8XbkiueHk0npNP1ajQ2kFQNHiTJBrvEHu5gn9Df/X8hy3WK1Kge2iNCLnJq05m9xglBNXAJxlIKsMZOY4NLDIH/2
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: 3PjU5xwS8BaN+qhigKe7SVQwjmq1UVyVcCHp/N2ML79eu11Gl8xyKgaxKXq1Z85q/m+4NPkxNRwNb1tOpvvvZhWXHMdcu47oY+uddD1FT+cRrtMJNPQwFpV7+7zub8GNAPc7KOt9rtM6vlp3iPHGEEpkL+c6HfUB/WhclURlXktsCzFA42zSaMF4s3Ak1MbAOWsVRDVGsHDQhH6mnzu3gNTUz6EgNO3omGjSXp5Sg0lJ6KKXWjQclTssVSpKNOgvWCnqdYN1oBDxbykFMA+YCkybDrKZoRNlaXmrRraVeAhKYP6LX54eBhVwijJhZsPLfMcJqU6nuXO/HVhgjyGQmKmVXxPfRmLalGT5QrSS13F2fEU67t6RGJByvDynwD0oZVoliyOqKKW27HnjQ88mzlO/0bvzvOJY6wPPG4yCNwPp5aR2KO9wc+/KiBNitopvIZcuwX2v2nEjmPqG+DzhtPJdNbV2//JkdedY7UeNax1GUso0zkd6FlkYjAkn66zpfofOyGrM0vev130RZ17+5iDbh2qLYdjf7T4dj6FjFz//+SgrneII8DKUkAeo+1pM8ykKxIGrYnEX/zmQ6IPPl3oNXTWYZeC794GBddaLbCLvEgMEofm+Nylrp9y94hPERMcX6F9YzRSuFR7f1rt9zH8uiR3q/p/9BgEd7jQQ0SlN0Wb2Da9nmSDgOml6VJHXOSlym8hhu8L65tSgXpVlT1ka0Fi3YTSXz8aoswgOVO4LMSkEcRo3JAkfMsxVRWDU+od9NJKsILR8DXV/od3exA==
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <364D2BC9EC01CB4DAC1D449431619DEE@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+        id S240867AbhK3Lno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234242AbhK3Lnm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 06:43:42 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35C8C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:40:23 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3Kyq370Qz4xZ3;
+        Tue, 30 Nov 2021 22:40:19 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1638272419;
+        bh=iKguq9yFf+d9JwGO5hyACws2GSu66/aOb7glMpKwtrE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=IZ9QUD5b90hMdBYnoU+XoUtmL0zoVAWq7OlHOHMF+rKqqkJmaZRCo9Qv5XkK209S8
+         hFIKFeOhcHf3Ez/ICGS/YoSMh4Ynrh2xGCE5lLRbJNDw9MjiYuvfjyc03T59MPoQRc
+         w3GUaikAl44iJ+2Sls032dR7FerrbvJwEBIdSo0yLHjLUkFXHHF+mfDVoRtQuo7djB
+         J78Xa1akkZQEpZA1Ci6w8FL8rGGYjoCDxqCpqLpYC7B4/T3ovb2CVcpHqRB8cKVZMo
+         +07czgoYuaOnYOaOD224cJcKpbzCmWrRR3yCmwGje0lR7nNtuADewuVD2n/B5X1P6d
+         Jp5NhW9NBR01w==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     LEROY Christophe <christophe.leroy@csgroup.eu>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Subject: Re: [PATCH v5 1/3] powerpc/bitops: Use immediate operand when possible
+In-Reply-To: <4092f4e9-5b2a-a5ca-946b-bb7b92a74f7c@csgroup.eu>
+References: <e6f815d9181bab09df3b350af51149437863e9f9.1632236981.git.christophe.leroy@csgroup.eu>
+ <4092f4e9-5b2a-a5ca-946b-bb7b92a74f7c@csgroup.eu>
+Date:   Tue, 30 Nov 2021 22:40:18 +1100
+Message-ID: <877dcpq3bx.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-a1a1a.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd8d96d7-b10e-405a-0d12-08d9b3f629cd
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2021 11:40:09.0841
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNXPR01MB7092
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+LEROY Christophe <christophe.leroy@csgroup.eu> writes:
+> Hi Michael,
+>
+> Any chance to get this series merged this cycle ?
 
-Some Macs with the T2 security chip had Bluetooth not working.
-To fix it we add DMI based quirks to disable querying of LE Tx power.
+Yeah. I hesitated a bit at the changes which make the atomic asm even
+more complicated, but I guess it's worth it.
 
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
-Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
-Tested-by: Orlando Chamberlain <redecorating@protonmail.com>
-Link:
-https://lore.kernel.org/r/4970a940-211b-25d6-edab-21a815313954@protonmail.c=
-om
-Fixes: 7c395ea521e6 ("Bluetooth: Query LE tx power on startup")
----
-v7 :- Removed unused variable and added Tested-by.
- drivers/bluetooth/btbcm.c | 39 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 39 insertions(+)
+cheers
 
-diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
-index e4182acee488c5..07fabaa5aa2979 100644
---- a/drivers/bluetooth/btbcm.c
-+++ b/drivers/bluetooth/btbcm.c
-@@ -8,6 +8,7 @@
-=20
- #include <linux/module.h>
- #include <linux/firmware.h>
-+#include <linux/dmi.h>
- #include <asm/unaligned.h>
-=20
- #include <net/bluetooth/bluetooth.h>
-@@ -343,6 +344,40 @@ static struct sk_buff *btbcm_read_usb_product(struct h=
-ci_dev *hdev)
- 	return skb;
- }
-=20
-+static const struct dmi_system_id disable_broken_read_transmit_power[] =3D=
- {
-+	{
-+		 .matches =3D {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,1"),
-+		},
-+	},
-+	{
-+		 .matches =3D {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,2"),
-+		},
-+	},
-+	{
-+		 .matches =3D {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,4"),
-+		},
-+	},
-+	{
-+		 .matches =3D {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,1"),
-+		},
-+	},
-+	{
-+		 .matches =3D {
-+			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,2"),
-+		},
-+	},
-+	{ }
-+};
-+
- static int btbcm_read_info(struct hci_dev *hdev)
- {
- 	struct sk_buff *skb;
-@@ -363,6 +398,10 @@ static int btbcm_read_info(struct hci_dev *hdev)
- 	bt_dev_info(hdev, "BCM: features 0x%2.2x", skb->data[1]);
- 	kfree_skb(skb);
-=20
-+	/* Read DMI and disable broken Read LE Min/Max Tx Power */
-+	if (dmi_first_match(disable_broken_read_transmit_power))
-+		set_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks);
-+
- 	return 0;
- }
-=20
-
+> Le 21/09/2021 =C3=A0 17:09, Christophe Leroy a =C3=A9crit=C2=A0:
+>> Today we get the following code generation for bitops like
+>> set or clear bit:
+>>=20
+>> 	c0009fe0:	39 40 08 00 	li      r10,2048
+>> 	c0009fe4:	7c e0 40 28 	lwarx   r7,0,r8
+>> 	c0009fe8:	7c e7 53 78 	or      r7,r7,r10
+>> 	c0009fec:	7c e0 41 2d 	stwcx.  r7,0,r8
+>>=20
+>> 	c000d568:	39 00 18 00 	li      r8,6144
+>> 	c000d56c:	7c c0 38 28 	lwarx   r6,0,r7
+>> 	c000d570:	7c c6 40 78 	andc    r6,r6,r8
+>> 	c000d574:	7c c0 39 2d 	stwcx.  r6,0,r7
+>>=20
+>> Most set bits are constant on lower 16 bits, so it can easily
+>> be replaced by the "immediate" version of the operation. Allow
+>> GCC to choose between the normal or immediate form.
+>>=20
+>> For clear bits, on 32 bits 'rlwinm' can be used instead of 'andc' for
+>> when all bits to be cleared are consecutive.
+>>=20
+>> On 64 bits we don't have any equivalent single operation for clearing,
+>> single bits or a few bits, we'd need two 'rldicl' so it is not
+>> worth it, the li/andc sequence is doing the same.
+>>=20
+>> With this patch we get:
+>>=20
+>> 	c0009fe0:	7d 00 50 28 	lwarx   r8,0,r10
+>> 	c0009fe4:	61 08 08 00 	ori     r8,r8,2048
+>> 	c0009fe8:	7d 00 51 2d 	stwcx.  r8,0,r10
+>>=20
+>> 	c000d558:	7c e0 40 28 	lwarx   r7,0,r8
+>> 	c000d55c:	54 e7 05 64 	rlwinm  r7,r7,0,21,18
+>> 	c000d560:	7c e0 41 2d 	stwcx.  r7,0,r8
+>>=20
+>> On pmac32_defconfig, it reduces the text by approx 10 kbytes.
+>>=20
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
+>> ---
+>> v5: Fixed the argument of is_rlwinm_mask_valid() in test_and_clear_bits()
+>>=20
+>> v4: Rebased
+>>=20
+>> v3:
+>> - Using the mask validation proposed by Segher
+>>=20
+>> v2:
+>> - Use "n" instead of "i" as constraint for the rlwinm mask
+>> - Improve mask verification to handle more than single bit masks
+>>=20
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> ---
+>>   arch/powerpc/include/asm/bitops.h | 89 ++++++++++++++++++++++++++++---
+>>   1 file changed, 81 insertions(+), 8 deletions(-)
+>>=20
+>> diff --git a/arch/powerpc/include/asm/bitops.h b/arch/powerpc/include/as=
+m/bitops.h
+>> index 11847b6a244e..a05d8c62cbea 100644
+>> --- a/arch/powerpc/include/asm/bitops.h
+>> +++ b/arch/powerpc/include/asm/bitops.h
+>> @@ -71,19 +71,61 @@ static inline void fn(unsigned long mask,	\
+>>   	__asm__ __volatile__ (			\
+>>   	prefix					\
+>>   "1:"	PPC_LLARX "%0,0,%3,0\n"			\
+>> -	stringify_in_c(op) "%0,%0,%2\n"		\
+>> +	#op "%I2 %0,%0,%2\n"			\
+>>   	PPC_STLCX "%0,0,%3\n"			\
+>>   	"bne- 1b\n"				\
+>>   	: "=3D&r" (old), "+m" (*p)		\
+>> -	: "r" (mask), "r" (p)			\
+>> +	: "rK" (mask), "r" (p)			\
+>>   	: "cc", "memory");			\
+>>   }
+>>=20=20=20
+>>   DEFINE_BITOP(set_bits, or, "")
+>> -DEFINE_BITOP(clear_bits, andc, "")
+>> -DEFINE_BITOP(clear_bits_unlock, andc, PPC_RELEASE_BARRIER)
+>>   DEFINE_BITOP(change_bits, xor, "")
+>>=20=20=20
+>> +static __always_inline bool is_rlwinm_mask_valid(unsigned long x)
+>> +{
+>> +	if (!x)
+>> +		return false;
+>> +	if (x & 1)
+>> +		x =3D ~x;	// make the mask non-wrapping
+>> +	x +=3D x & -x;	// adding the low set bit results in at most one bit set
+>> +
+>> +	return !(x & (x - 1));
+>> +}
+>> +
+>> +#define DEFINE_CLROP(fn, prefix)					\
+>> +static inline void fn(unsigned long mask, volatile unsigned long *_p)	\
+>> +{									\
+>> +	unsigned long old;						\
+>> +	unsigned long *p =3D (unsigned long *)_p;				\
+>> +									\
+>> +	if (IS_ENABLED(CONFIG_PPC32) &&					\
+>> +	    __builtin_constant_p(mask) && is_rlwinm_mask_valid(~mask)) {\
+>> +		asm volatile (						\
+>> +			prefix						\
+>> +		"1:"	"lwarx	%0,0,%3\n"				\
+>> +			"rlwinm	%0,%0,0,%2\n"				\
+>> +			"stwcx.	%0,0,%3\n"				\
+>> +			"bne- 1b\n"					\
+>> +			: "=3D&r" (old), "+m" (*p)			\
+>> +			: "n" (~mask), "r" (p)				\
+>> +			: "cc", "memory");				\
+>> +	} else {							\
+>> +		asm volatile (						\
+>> +			prefix						\
+>> +		"1:"	PPC_LLARX "%0,0,%3,0\n"				\
+>> +			"andc %0,%0,%2\n"				\
+>> +			PPC_STLCX "%0,0,%3\n"				\
+>> +			"bne- 1b\n"					\
+>> +			: "=3D&r" (old), "+m" (*p)			\
+>> +			: "r" (mask), "r" (p)				\
+>> +			: "cc", "memory");				\
+>> +	}								\
+>> +}
+>> +
+>> +DEFINE_CLROP(clear_bits, "")
+>> +DEFINE_CLROP(clear_bits_unlock, PPC_RELEASE_BARRIER)
+>> +
+>>   static inline void arch_set_bit(int nr, volatile unsigned long *addr)
+>>   {
+>>   	set_bits(BIT_MASK(nr), addr + BIT_WORD(nr));
+>> @@ -116,12 +158,12 @@ static inline unsigned long fn(			\
+>>   	__asm__ __volatile__ (				\
+>>   	prefix						\
+>>   "1:"	PPC_LLARX "%0,0,%3,%4\n"			\
+>> -	stringify_in_c(op) "%1,%0,%2\n"			\
+>> +	#op "%I2 %1,%0,%2\n"				\
+>>   	PPC_STLCX "%1,0,%3\n"				\
+>>   	"bne- 1b\n"					\
+>>   	postfix						\
+>>   	: "=3D&r" (old), "=3D&r" (t)			\
+>> -	: "r" (mask), "r" (p), "i" (IS_ENABLED(CONFIG_PPC64) ? eh : 0)	\
+>> +	: "rK" (mask), "r" (p), "i" (IS_ENABLED(CONFIG_PPC64) ? eh : 0)	\
+>>   	: "cc", "memory");				\
+>>   	return (old & mask);				\
+>>   }
+>> @@ -130,11 +172,42 @@ DEFINE_TESTOP(test_and_set_bits, or, PPC_ATOMIC_EN=
+TRY_BARRIER,
+>>   	      PPC_ATOMIC_EXIT_BARRIER, 0)
+>>   DEFINE_TESTOP(test_and_set_bits_lock, or, "",
+>>   	      PPC_ACQUIRE_BARRIER, 1)
+>> -DEFINE_TESTOP(test_and_clear_bits, andc, PPC_ATOMIC_ENTRY_BARRIER,
+>> -	      PPC_ATOMIC_EXIT_BARRIER, 0)
+>>   DEFINE_TESTOP(test_and_change_bits, xor, PPC_ATOMIC_ENTRY_BARRIER,
+>>   	      PPC_ATOMIC_EXIT_BARRIER, 0)
+>>=20=20=20
+>> +static inline unsigned long test_and_clear_bits(unsigned long mask, vol=
+atile unsigned long *_p)
+>> +{
+>> +	unsigned long old, t;
+>> +	unsigned long *p =3D (unsigned long *)_p;
+>> +
+>> +	if (IS_ENABLED(CONFIG_PPC32) &&
+>> +	    __builtin_constant_p(mask) && is_rlwinm_mask_valid(~mask)) {
+>> +		asm volatile (
+>> +			PPC_ATOMIC_ENTRY_BARRIER
+>> +		"1:"	"lwarx %0,0,%3\n"
+>> +			"rlwinm	%1,%0,0,%2\n"
+>> +			"stwcx. %1,0,%3\n"
+>> +			"bne- 1b\n"
+>> +			PPC_ATOMIC_EXIT_BARRIER
+>> +			: "=3D&r" (old), "=3D&r" (t)
+>> +			: "n" (~mask), "r" (p)
+>> +			: "cc", "memory");
+>> +	} else {
+>> +		asm volatile (
+>> +			PPC_ATOMIC_ENTRY_BARRIER
+>> +		"1:"	PPC_LLARX "%0,0,%3,0\n"
+>> +			"andc	%1,%0,%2\n"
+>> +			PPC_STLCX "%1,0,%3\n"
+>> +			"bne- 1b\n"
+>> +			PPC_ATOMIC_EXIT_BARRIER
+>> +			: "=3D&r" (old), "=3D&r" (t)
+>> +			: "r" (mask), "r" (p)
+>> +			: "cc", "memory");
+>> +	}
+>> +
+>> +	return (old & mask);
+>> +}
+>> +
+>>   static inline int arch_test_and_set_bit(unsigned long nr,
+>>   					volatile unsigned long *addr)
+>>   {
+>>=20

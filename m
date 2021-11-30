@@ -2,97 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD24462CF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74063462CF2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238734AbhK3Gpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 01:45:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59512 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238721AbhK3Gpv (ORCPT
+        id S238719AbhK3Gpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 01:45:42 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:31925 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233500AbhK3Gpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 01:45:51 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2674EC061746
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 22:42:33 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id u80so19580981pfc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 22:42:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IvByH85k2GhB0gfAkNHfHQT5cnwP0kCymtjlqEmdVEg=;
-        b=rP2XIR3SzL0k9UD5LzqH+maIwpmypopDDn1/s7o6aJmnQ37C5OcSmZtlLBvGgWJcCd
-         vFhOzv1iDCXGhscwnSqOV2e9LNuFCYmeveIEHJbCB/Sh04hzCHkrQ9I3LZFX6Gjl4NPG
-         zV5SZuBx/pIo+vA4NzXYw0VrVyBJOAjZu8iAfj2BbU0/K4vL4e+P91LjeT3gfS5PrsPk
-         uoQy1BPdSB2b3Dz9tCzOIn6dq03GYyorwPk3fzKzokhve5HtVOMmP9Wp8agZ42O6br8d
-         ACWNPFQBDN4pabVExFzoi+uDIZrKzDHDETW5lkCkLhEewJ7f/9C8oUOX1oWy/zszSNRW
-         c8rQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=IvByH85k2GhB0gfAkNHfHQT5cnwP0kCymtjlqEmdVEg=;
-        b=6kxj48v7lwi7XPAEk+Kr5qWB1T11ZRe2tuzoZ7ejq4+1c/rQ68rTR2Y+H4wFLmtipV
-         EPETNwxP1PtGCeIG4SWbwgEOTKmuLRG+tohdsAs+piJCLksXZldrJUCWxgaznwn78tJO
-         jHZuxP7J5Z6+1yIClPAGig6fCYB0Epbz3K6G3v1orQajk9vBtR9/fFuPMG7Rolla9z+l
-         Ef061uX/77LHvfcXLNQq/lzVPqH7zcWzc5FN0/rERYSs1mLSYSk+oXrcpRSB0GZ+XwIe
-         rF7UR1apWbfCDs2gtY5vDa31iw91QadNTW85ShmNift8ZuJoItrthoinqxdXgld0yLlc
-         Z+/w==
-X-Gm-Message-State: AOAM530ROnjuLGgALrOJowgubh4sH3YpCMKyHPWX2Uiq2+gB4Qwqep1e
-        va1mlY7/OxQKXPjCg7Ed4a6rh8bKov1u
-X-Google-Smtp-Source: ABdhPJzyr8nxGH+zQ/RuB47Y7mPcsgB7bQfz8SJ2nSbYjceTWZnsTbpIwiJmSvc4z146UCWg4sW00w==
-X-Received: by 2002:a65:5b41:: with SMTP id y1mr38857743pgr.481.1638254552633;
-        Mon, 29 Nov 2021 22:42:32 -0800 (PST)
-Received: from localhost.localdomain ([202.21.42.3])
-        by smtp.gmail.com with ESMTPSA id d19sm19683993pfv.199.2021.11.29.22.42.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 22:42:32 -0800 (PST)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     lorenzo.pieralisi@arm.com, bhelgaas@google.com
-Cc:     svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] PCI: qcom: Use __be16 for catching cpu_to_be16() return instead of u16
-Date:   Tue, 30 Nov 2021 12:12:15 +0530
-Message-Id: <20211130064215.207393-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Nov 2021 01:45:41 -0500
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J3CLt4BgzzcbkW;
+        Tue, 30 Nov 2021 14:42:14 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 14:42:20 +0800
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 14:42:19 +0800
+Message-ID: <b3253299-7381-b977-d19a-b76169d9c9a6@huawei.com>
+Date:   Tue, 30 Nov 2021 14:42:18 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH RFC 4/4] mm: percpu: Add generic pcpu_populate_pte()
+ function
+Content-Language: en-US
+To:     Dennis Zhou <dennis@kernel.org>
+CC:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <tj@kernel.org>,
+        <gregkh@linuxfoundation.org>, <cl@linux.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <tsbogend@alpha.franken.de>, <mpe@ellerman.id.au>,
+        <benh@kernel.crashing.org>, <paulus@samba.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-ia64@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
+        <sparclinux@vger.kernel.org>, <x86@kernel.org>
+References: <20211121093557.139034-1-wangkefeng.wang@huawei.com>
+ <20211121093557.139034-5-wangkefeng.wang@huawei.com>
+ <YaVZB/Lcis4iQ3RY@fedora>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <YaVZB/Lcis4iQ3RY@fedora>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggeme705-chm.china.huawei.com (10.1.199.101) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpu_to_be16() returns __be16 value but the driver uses u16 and that's
-incorrect. Fix it by using __be16 as the datatype of bdf_be variable.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
+On 2021/11/30 6:49, Dennis Zhou wrote:
+> On Sun, Nov 21, 2021 at 05:35:57PM +0800, Kefeng Wang wrote:
+>> When NEED_PER_CPU_PAGE_FIRST_CHUNK enabled, we need a function to
+>> populate pte, add a generic pcpu populate pte function and switch
+>> to use it.
+>>
+>> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+>> ---
+>>   arch/powerpc/kernel/setup_64.c | 47 +--------------------
+>>   arch/sparc/kernel/smp_64.c     | 57 +------------------------
+>>   arch/x86/kernel/setup_percpu.c |  5 +--
+>>   drivers/base/arch_numa.c       | 51 +---------------------
+>>   include/linux/percpu.h         |  5 +--
+>>   mm/percpu.c                    | 77 +++++++++++++++++++++++++++++++---
+>>   6 files changed, 79 insertions(+), 163 deletions(-)
+>>
+...
+>> diff --git a/arch/x86/kernel/setup_percpu.c b/arch/x86/kernel/setup_percpu.c
+>> index cd672bd46241..4eadbe45078e 100644
+>> --- a/arch/x86/kernel/setup_percpu.c
+>> +++ b/arch/x86/kernel/setup_percpu.c
+>> @@ -101,7 +101,7 @@ static int __init pcpu_cpu_to_node(int cpu)
+>>   	return IS_ENABLED(CONFIG_NUMA) ? early_cpu_to_node(cpu) : NUMA_NO_NODE;
+>>   }
+>>   
+>> -static void __init pcpup_populate_pte(unsigned long addr)
+>> +void __init pcpu_populate_pte(unsigned long addr)
+>>   {
+>>   	populate_extra_pte(addr);
+>>   }
+>> @@ -163,8 +163,7 @@ void __init setup_per_cpu_areas(void)
+>>   	}
+>>   	if (rc < 0)
+>>   		rc = pcpu_page_first_chunk(PERCPU_FIRST_CHUNK_RESERVE,
+>> -					   pcpu_cpu_to_node,
+>> -					   pcpup_populate_pte);
+>> +					   pcpu_cpu_to_node);
+> x86 has it's own implementation that differs for 32 bit. I'm not
+> confident this is correct to drop in as a replacement for x86, so I'd
+> prefer to keep populate_pte_fn() around.
 
-Changes in v2:
 
-* Modified the commit message and subject to describe the actual issue
-as per comments from Bjorn.
+The x86's pcpup_populate_pte() version is not dropped.
 
- drivers/pci/controller/dwc/pcie-qcom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We define a __weak pcpu_populate_pte function in mm/percpu.c,
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 1c3d1116bb60..ddecd7f341c5 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -1343,7 +1343,7 @@ static int qcom_pcie_config_sid_sm8250(struct qcom_pcie *pcie)
- 
- 	/* Look for an available entry to hold the mapping */
- 	for (i = 0; i < nr_map; i++) {
--		u16 bdf_be = cpu_to_be16(map[i].bdf);
-+		__be16 bdf_be = cpu_to_be16(map[i].bdf);
- 		u32 val;
- 		u8 hash;
- 
--- 
-2.25.1
+and there is a own version on x86,  so no function change on x86.
+
+I will add this into changelog,
+
+arch/x86/kernel/setup_percpu.c:  void __init pcpu_populate_pte(unsigned 
+long addr)
+include/linux/percpu.h:                 void __init 
+pcpu_populate_pte(unsigned long addr);
+mm/percpu.c:                                void __init __weak 
+pcpu_populate_pte(unsigned long addr)
+mm/percpu.c: pcpu_populate_pte(unit_addr + (i << PAGE_SHIFT));
+
+
+>> diff --git a/include/linux/percpu.h b/include/linux/percpu.h
+>> index d73c97ef4ff4..f1ec5ad1351c 100644
+>> --- a/include/linux/percpu.h
+>> +++ b/include/linux/percpu.h
+>> @@ -95,7 +95,6 @@ extern const char * const pcpu_fc_names[PCPU_FC_NR];
+>>   extern enum pcpu_fc pcpu_chosen_fc;
+>>   
+>>   typedef int (pcpu_fc_cpu_to_node_fn_t)(int cpu);
+>> -typedef void (*pcpu_fc_populate_pte_fn_t)(unsigned long addr);
+>>   typedef int (pcpu_fc_cpu_distance_fn_t)(unsigned int from, unsigned int to);
+>>   
+>>   extern struct pcpu_alloc_info * __init pcpu_alloc_alloc_info(int nr_groups,
+>> @@ -113,9 +112,9 @@ extern int __init pcpu_embed_first_chunk(size_t reserved_size, size_t dyn_size,
+>>   #endif
+>>   
+>>   #ifdef CONFIG_NEED_PER_CPU_PAGE_FIRST_CHUNK
+>> +void __init pcpu_populate_pte(unsigned long addr);
+>>   extern int __init pcpu_page_first_chunk(size_t reserved_size,
+>> -				pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn,
+>> -				pcpu_fc_populate_pte_fn_t populate_pte_fn);
+>> +				pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn);
+>>   #endif
+>>   
+>>   extern void __percpu *__alloc_reserved_percpu(size_t size, size_t align) __alloc_size(1);
+>> diff --git a/mm/percpu.c b/mm/percpu.c
+>> index efaa1cbaf73d..d907daed04eb 100644
+>> --- a/mm/percpu.c
+>> +++ b/mm/percpu.c
+>> @@ -3162,11 +3162,80 @@ int __init pcpu_embed_first_chunk(size_t reserved_size, size_t dyn_size,
+>>   #endif /* BUILD_EMBED_FIRST_CHUNK */
+>>   
+...
+>> +void __init __weak pcpu_populate_pte(unsigned long addr)
+>> +{
+>> +	pgd_t *pgd = pgd_offset_k(addr);
+>> +	p4d_t *p4d;
+>> +	pud_t *pud;
+>> +	pmd_t *pmd;
+>> +
+>> +	if (pgd_none(*pgd)) {
+>> +		p4d_t *new;
+>> +
+>> +		new = memblock_alloc_from(P4D_TABLE_SIZE, P4D_TABLE_SIZE, PAGE_SIZE);
+> It's unnecessary to specify a min_addr to memblock_alloc_from() as it
+> won't allocate 0 anyway. So please use memblock_alloc() instead.
+
+ok, will use memblock_alloc in this function
 

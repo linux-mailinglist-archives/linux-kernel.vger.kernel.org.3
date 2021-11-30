@@ -2,155 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7902B463517
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1121A46351E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236658AbhK3NJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:09:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbhK3NJa (ORCPT
+        id S237675AbhK3NM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:12:59 -0500
+Received: from outbound-smtp47.blacknight.com ([46.22.136.64]:41653 "EHLO
+        outbound-smtp47.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236313AbhK3NM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:09:30 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E2BC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:06:11 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id x10so25920853ioj.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:06:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=ybfeDMenyXZ8KVSOyw+elPKhdpvWAlXbcAd9cwBz0e0=;
-        b=rG88AuieJkNWJJTx63X3oXa8ePCmuwC9utBX5jleohx9hb2U3X2cvgYnpgG4Z825i4
-         Ppf78d6ARl7bHieoMRdQKG/SuS3ig/V+bUkAbEwVMpnbdzVaHMwW07xz1r6W9iGEzx5V
-         vxOGrl0rEb9BZm2HHz05KAFY9EakNRdKyOvqo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=ybfeDMenyXZ8KVSOyw+elPKhdpvWAlXbcAd9cwBz0e0=;
-        b=HdivILJID9/tte9oVdxlLadmxGXi2HPI4HpoAUOTsIxmKbwiQslzs+hXc4cC55woul
-         xQ0mYHk+RP1uTFv3HTep2W+WP0zNEw4Q7D8N7RIubpeMXIvKg/K/rwvmVlzGc4Tt34AO
-         4Or7La4PuS3wUdVwBPwJoHikMr8M3OnFyTuqZxQ809RM2Pu8ARTqQWlh7aGljDIWuhgt
-         7CWrU31atfn48gvWzTOJFQbWRC15nc2DiCjHlOLPuLmkhV/p2Q+fK+7G1DYd1hPNQPvK
-         i/O8dDxCEBMPNF/4zRDt4eL2NCLy6zHCvm6pgNUsDwbW+sAqRYr0qdR8ahE3oe74EJvO
-         rY4w==
-X-Gm-Message-State: AOAM533Es1+PkJ+JnAjkNLHSjBaCEokCvQs6rEiyXSGIMZvOjCcCb3Jo
-        nOz4aK8hbqogskOCYHXW58AFMdfUdMNd+nnEtQuyjA==
-X-Google-Smtp-Source: ABdhPJzkE65UtGxLS903M4ORucpU2DrpB/BHbEz4zh94Nex6IPPoAYddokWIYf/UFEf37UnAEim0+lzk2fB5CSPa1V0=
-X-Received: by 2002:a05:6602:2d84:: with SMTP id k4mr63023644iow.168.1638277570657;
- Tue, 30 Nov 2021 05:06:10 -0800 (PST)
+        Tue, 30 Nov 2021 08:12:58 -0500
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp47.blacknight.com (Postfix) with ESMTPS id 57AE8FA7E4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:09:38 +0000 (GMT)
+Received: (qmail 27593 invoked from network); 30 Nov 2021 13:09:38 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 30 Nov 2021 13:09:38 -0000
+Date:   Tue, 30 Nov 2021 13:09:35 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Mike Galbraith <efault@gmx.de>
+Cc:     Alexey Avramov <hakavlad@inbox.lv>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+Message-ID: <20211130130935.GR3366@techsingularity.net>
+References: <20211125151853.8540-1-mgorman@techsingularity.net>
+ <20211127011246.7a8ac7b8@mail.inbox.lv>
+ <20211129150117.GO3366@techsingularity.net>
+ <a20f17c4b1b5fdfade3f48375d148e97bd162dd6.camel@gmx.de>
+ <20211130112244.GQ3366@techsingularity.net>
+ <b8f607c771a4f698fcb651379ca30d3bb6a83ccd.camel@gmx.de>
+ <b966ccc578ac60d3684cff0c88c1b9046b408ea3.camel@gmx.de>
 MIME-Version: 1.0
-References: <20211130123746.293379-1-pbonzini@redhat.com>
-In-Reply-To: <20211130123746.293379-1-pbonzini@redhat.com>
-From:   Ignat Korchagin <ignat@cloudflare.com>
-Date:   Tue, 30 Nov 2021 13:05:59 +0000
-Message-ID: <CALrw=nHs-3vm7jxsLvNYxU8XqHqDbJp+vy+AULqTEwdPu0razg@mail.gmail.com>
-Subject: Re: [PATCH] KVM: ensure APICv is considered inactive if there is no APIC
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b966ccc578ac60d3684cff0c88c1b9046b408ea3.camel@gmx.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 12:37 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
->
-> kvm_vcpu_apicv_active() returns false if a virtual machine has no in-kernel
-> local APIC, however kvm_apicv_activated might still be true if there are
-> no reasons to disable APICv; in fact it is quite likely that there is none
-> because APICv is inhibited by specific configurations of the local APIC
-> and those configurations cannot be programmed.  This triggers a WARN:
->
->    WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
->
-> To avoid this, introduce another cause for APICv inhibition, namely the
-> absence of an in-kernel local APIC.  This cause is enabled by default,
-> and is dropped by either KVM_CREATE_IRQCHIP or the enabling of
-> KVM_CAP_IRQCHIP_SPLIT.
->
-> Reported-by: Ignat Korchagin <ignat@cloudflare.com>
-> Fixes: ee49a8932971 ("KVM: x86: Move SVM's APICv sanity check to common x86", 2021-10-22)
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 1 +
->  arch/x86/kvm/svm/avic.c         | 1 +
->  arch/x86/kvm/vmx/vmx.c          | 1 +
->  arch/x86/kvm/x86.c              | 9 +++++----
->  4 files changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 6ac61f85e07b..860ed500580c 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1036,6 +1036,7 @@ struct kvm_x86_msr_filter {
->  #define APICV_INHIBIT_REASON_PIT_REINJ  4
->  #define APICV_INHIBIT_REASON_X2APIC    5
->  #define APICV_INHIBIT_REASON_BLOCKIRQ  6
-> +#define APICV_INHIBIT_REASON_ABSENT    7
->
->  struct kvm_arch {
->         unsigned long n_used_mmu_pages;
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index affc0ea98d30..5a55a78e2f50 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -900,6 +900,7 @@ int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
->  bool svm_check_apicv_inhibit_reasons(ulong bit)
->  {
->         ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
-> +                         BIT(APICV_INHIBIT_REASON_ABSENT) |
->                           BIT(APICV_INHIBIT_REASON_HYPERV) |
->                           BIT(APICV_INHIBIT_REASON_NESTED) |
->                           BIT(APICV_INHIBIT_REASON_IRQWIN) |
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 1fadec8cbf96..ca1fd93c1dc9 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -7525,6 +7525,7 @@ static void hardware_unsetup(void)
->  static bool vmx_check_apicv_inhibit_reasons(ulong bit)
->  {
->         ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
-> +                         BIT(APICV_INHIBIT_REASON_ABSENT) |
->                           BIT(APICV_INHIBIT_REASON_HYPERV) |
->                           BIT(APICV_INHIBIT_REASON_BLOCKIRQ);
->
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 0ee1a039b490..e0aa4dd53c7f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -5740,6 +5740,7 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->                 smp_wmb();
->                 kvm->arch.irqchip_mode = KVM_IRQCHIP_SPLIT;
->                 kvm->arch.nr_reserved_ioapic_pins = cap->args[0];
-> +               kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
->                 r = 0;
->  split_irqchip_unlock:
->                 mutex_unlock(&kvm->lock);
-> @@ -6120,6 +6121,7 @@ long kvm_arch_vm_ioctl(struct file *filp,
->                 /* Write kvm->irq_routing before enabling irqchip_in_kernel. */
->                 smp_wmb();
->                 kvm->arch.irqchip_mode = KVM_IRQCHIP_KERNEL;
-> +               kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
->         create_irqchip_unlock:
->                 mutex_unlock(&kvm->lock);
->                 break;
-> @@ -8818,10 +8820,9 @@ static void kvm_apicv_init(struct kvm *kvm)
->  {
->         init_rwsem(&kvm->arch.apicv_update_lock);
->
-> -       if (enable_apicv)
-> -               clear_bit(APICV_INHIBIT_REASON_DISABLE,
-> -                         &kvm->arch.apicv_inhibit_reasons);
-> -       else
-> +       set_bit(APICV_INHIBIT_REASON_ABSENT,
-> +               &kvm->arch.apicv_inhibit_reasons);
-> +       if (!enable_apicv)
->                 set_bit(APICV_INHIBIT_REASON_DISABLE,
->                         &kvm->arch.apicv_inhibit_reasons);
->  }
-> --
-> 2.31.1
->
+On Tue, Nov 30, 2021 at 01:51:10PM +0100, Mike Galbraith wrote:
+> On Tue, 2021-11-30 at 13:00 +0100, Mike Galbraith wrote:
+> > On Tue, 2021-11-30 at 11:22 +0000, Mel Gorman wrote:
+> > > On Tue, Nov 30, 2021 at 11:14:32AM +0100, Mike Galbraith wrote:
+> > > > >       }
+> > > > > +       if (2 * write_pending <= reclaimable)
+> > > >
+> > > > That is always true here...
+> > > >
+> > >
+> > > Always true for you or always true in general?
+> >
+> > "Here" as in the boxen located at my GPS coordinates :)
+> >
+> > > The intent of the check is "are a majority of reclaimable pages
+> > > marked WRITE_PENDING?". It's similar to the check that existed prior
+> > > to 132b0d21d21f ("mm/page_alloc: remove the throttling logic from the
+> > > page allocator").
+> >
+> > I'll put my trace_printk() back and see if I can't bend-adjust it.
+> 
+> As it sits, write_pending is always 0 with tail /dev/zero.
+> 
 
-Tested-by: Ignat Korchagin <ignat@cloudflare.com>
+That is not a surprise for the test in question as it doesn't trigger
+a case where there are lots of page cache being marked dirty and write
+pending.
+
+-- 
+Mel Gorman
+SUSE Labs

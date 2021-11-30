@@ -2,110 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1028C462E93
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:31:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B03DB462EB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239676AbhK3IfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:35:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239630AbhK3IfJ (ORCPT
+        id S239733AbhK3IrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:47:02 -0500
+Received: from mta-p7.oit.umn.edu ([134.84.196.207]:51248 "EHLO
+        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239665AbhK3IrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:35:09 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3CCC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:31:51 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id u80so19855330pfc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:31:51 -0800 (PST)
+        Tue, 30 Nov 2021 03:47:00 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4J3FtV38Swz9vCFq
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:36:18 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p7.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9xDCtbwGK1QF for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 02:36:18 -0600 (CST)
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4J3FtV1WDzz9vCFn
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:36:18 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4J3FtV1WDzz9vCFn
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4J3FtV1WDzz9vCFn
+Received: by mail-pl1-f200.google.com with SMTP id l14-20020a170903120e00b00143cc292bc3so7900568plh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:36:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=X2rX5g1aB3ao6Mz+KBNuCJKa2ATJHaYDNFIn2W26y0k=;
-        b=Vvf9yRDbDirxKAxZG/3T/MRzfvWn4X3bVmO6Q+T9At9jezo3XTJLTr08aof/C6VMCs
-         UvFx4/WoENskJGjeiCmK8jw97ea/Jdl4KfUggvOUN76ztl1VY5lM32kGoY2hxFjTl8U8
-         efCQioAGrR1sRorj4bRQx+3fORaIuoWJbjyWJ9p6jZ2Ds2X4suinMYYQ3jKiTUWri3qj
-         bfOHpCdmd8WhoCNWfMXdnFDGYmJePi2FuvreIqLtqG3HUsaVi+5v0UkEwUvfrdLE6ugm
-         40SaVQ28WKa3/bm6lVk7batcP8lwtUFkSCjfhGjdKWw8Ib6UYBf8w9EgVUYvrSiGdh8x
-         exhQ==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZhEErkZCigUJYNrSyl6K06r7YUXY23GOFWnaTYadjwc=;
+        b=kBI00LVU38RVTMiz4h/7y4L3o4zuRoJswbEObfowuxOhdzkCQSgLZU6JlzuCXSnuvj
+         XeRmjripbTIa/RdMn4K1vfrN+Dpt0UeJzbiP3SSNFJMSNzeU52pab7XMZNOngRNlR9e2
+         /CmE6OxBWDnJ7eem/R3BYgaD2ovHzMf8/HK1/tXX5+dxXMHaJjB3n/UkO0HdX8kvTua0
+         Uxq1lMLzBEB9idT+E5l5MxuttW4/K0lEZg6nzY0ESVDKJ/SJ7IjYB/Y6Dc2API+Gk1Gf
+         3AR9ukVCYIhfeSdSpCLywGYCRQXaEDTJz6pnX4sfixXJ0mCGCGvKQNVD4c5OT98/2EFD
+         QqRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=X2rX5g1aB3ao6Mz+KBNuCJKa2ATJHaYDNFIn2W26y0k=;
-        b=EQ/OIfOIMvUf4jQfPx+YDRndz709ksdMUbahccwgCboLlhvARtZOdrUcupTnrBDm3n
-         b/oRI5hsF2VhidOXt15O0liqENrC1Gq/OPv7vOrEXsYiHY2xVqr7zy6kC57S171uaJv2
-         MfSQ/xDKtCNhHj8wZPG0ARirr+uS69guO7uVK+tyHnbamjS7e2W1B0lTsLJh0ih7AFzx
-         lSm7xuYEf5+owZwYKcRA7+9EGrxDfKx9FeCQ5JCbwn0HzVDZR1n5MJW+qSabSDG4i1F9
-         r7qkgghIZZXPTYPBP38hGdMIbCC586acW+6nsRm9RyGfAahjnP6Gu1txpnKilxx5dKgc
-         N4yQ==
-X-Gm-Message-State: AOAM531tfftxBmb5ZYQVR1V+HB2ANUAPgHk6FZvUVSuMkvry2OZOO038
-        SWBHNSxymv4Jx85SOK9gZsM52A==
-X-Google-Smtp-Source: ABdhPJxX/0BAg0okPbx9lj9wYat5fdBiNW3O/EylVD0yCf550J23PN1GTSeFNwRiBtqdIFYDPTcwPQ==
-X-Received: by 2002:a62:1a03:0:b0:494:64b5:3e01 with SMTP id a3-20020a621a03000000b0049464b53e01mr45220700pfa.35.1638261110526;
-        Tue, 30 Nov 2021 00:31:50 -0800 (PST)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id z15sm19622141pfc.2.2021.11.30.00.31.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 30 Nov 2021 00:31:50 -0800 (PST)
-Date:   Tue, 30 Nov 2021 16:31:44 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] irqchip: Add Qualcomm MPM controller driver
-Message-ID: <20211130083143.GF10105@dragon>
-References: <20211126093529.31661-1-shawn.guo@linaro.org>
- <20211126093529.31661-3-shawn.guo@linaro.org>
- <87czmmbu8k.wl-maz@kernel.org>
- <20211129133308.GB10105@dragon>
- <87pmqjm1c8.wl-maz@kernel.org>
- <20211130023151.GD10105@dragon>
- <2e821841-a921-3fda-9ee6-3d5127653033@quicinc.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ZhEErkZCigUJYNrSyl6K06r7YUXY23GOFWnaTYadjwc=;
+        b=WDjIyfhK3IevuAxHDCTuu41tLYHxDOa/VEKFx0Rycp1Aigr3IdWYf8F4M4gQE7op01
+         5Xu9mxb+rxw0b2Me3X9WKs+m+F5iPtCHA4orP0pTAmLZgjImc5fXbaJKLxnmfUh7IDvT
+         BAOy+DeNk4PnmJQNh5rxa01vfrltygRvLucC96YUt98U2NKr5+MyJ4c9M+gk3uZpj23O
+         P6UH1HxcsfuH6lDdB0hQoxZV7djMy9oV+aGq2vQ7UsjJdd3VDlrrQ/8IkNUHdQDpn7wb
+         yKOuORq56obH9+mfqnLPKN4MfNqZeJfSi6UNJo6FDOYmll/+z8sLIwumQSZnoVzCxzcv
+         CkVg==
+X-Gm-Message-State: AOAM532d2GP/KADkDWHxx+jZEPPoIryRzAk9gPjHeJ8uFcKnM6FgeGag
+        k9CB3jf42G0FKvfSXOpx/lKXtaK1nhcZPXQ9L/mPSjzRzyDaL4snTitSew7Ay0C2D6SOEX4qiMx
+        zsVPYAPHhS/nR7+QYDU5WXTxmOH7W
+X-Received: by 2002:a17:90a:d684:: with SMTP id x4mr4400978pju.244.1638261377431;
+        Tue, 30 Nov 2021 00:36:17 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyd8GIE6ShFTJjNUz9rIv3i6CwFmtvx34oUHqnZYANefLtL9MmSjoW2Td/4PDJWw3GcPRdKxg==
+X-Received: by 2002:a17:90a:d684:: with SMTP id x4mr4400958pju.244.1638261377196;
+        Tue, 30 Nov 2021 00:36:17 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id m24sm14190575pgk.39.2021.11.30.00.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 00:36:16 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: sa1100: Fix a wild pointer dereference in sa11xx_clk_init()
+Date:   Tue, 30 Nov 2021 16:34:11 +0800
+Message-Id: <20211130083412.68732-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2e821841-a921-3fda-9ee6-3d5127653033@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 01:19:48PM +0530, Maulik Shah wrote:
->    Hi Shawn,
-> 
->    On 11/30/2021 8:01 AM, Shawn Guo wrote:
-> 
-> +       do {
-> +               r_val = readl(priv->base + offset);
-> +               udelay(5);
-> +       } while (r_val != val);
-> 
-> What? Is this waiting for a bit to clear? Why isn't this one of the
-> read*_poll_timeout*() function instead? Surely you can't wait forever
-> here.
-> 
-> This is taken from downstream, and it seems to double check the written
-> value by reading it back.  But to be honest, I'm not really this is
-> necessary.  I will do some testing with the read-back check dropped.
-> 
-> How about asking for specs instead? There are QC people on Cc, and
-> many more reading the list. Hopefully they can explain what this is
-> all about.
-> 
-> Maulik,
-> 
-> If you have some information about this, that would be great.
-> 
->    This can be converted to read poll_timeout(). This was introduced in
->    place of wmb() to make sure writes are completed.
+In sa11xx_clk_init(), the return value of clk_hw_register_mux() is
+assigned to hw, and there is a dereference of it in sa11xx_clk_init().
+clk_hw_register_mux() is a wrapper of __clk_hw_register_mux(), which
+could return a ERR_PTR on error, and lead to a wild pointer dereference.
 
-Hmm, in this case, writel() will just do the right thing, as it wraps
-wmb() there.  Or am I missing something?
+Fix this bug by adding a return value check.
 
-Shawn
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Since I do not have a sa1100 machine, I can not actually evaluate this
+patch.
+
+Fixes: d6c8204659eb ("ARM: sa1100: convert to common clock framework")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ arch/arm/mach-sa1100/clock.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/arm/mach-sa1100/clock.c b/arch/arm/mach-sa1100/clock.c
+index e8691921c69a..5b4d8e556ad2 100644
+--- a/arch/arm/mach-sa1100/clock.c
++++ b/arch/arm/mach-sa1100/clock.c
+@@ -127,6 +127,9 @@ int __init sa11xx_clk_init(void)
+ 				 ARRAY_SIZE(clk_tucr_parents), 0,
+ 				 (void __iomem *)&TUCR, FShft(TUCR_TSEL),
+ 				 FAlnMsk(TUCR_TSEL), 0, &tucr_lock);
++	if (IS_ERR(hw))
++		return PTR_ERR(hw);
++
+ 	clk_set_rate(hw->clk, 3686400);
+ 
+ 	hw = kzalloc(sizeof(*hw), GFP_KERNEL);
+-- 
+2.25.1
+

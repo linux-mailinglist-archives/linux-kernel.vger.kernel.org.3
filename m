@@ -2,157 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED1E464040
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:31:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABACF464044
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:31:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344160AbhK3Vej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:34:39 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:56518 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbhK3Vef (ORCPT
+        id S1344179AbhK3VfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344195AbhK3VfD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:34:35 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8E68DCE1C63
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 21:31:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCBDC53FCC;
-        Tue, 30 Nov 2021 21:31:12 +0000 (UTC)
-Date:   Tue, 30 Nov 2021 16:31:10 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Tom Zanussi <zanussi@kernel.org>
-Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] tracing: Have existing event_command
- implementations use helpers
-Message-ID: <20211130163110.492a0df3@gandalf.local.home>
-In-Reply-To: <2b451d62e0b1a12fc99391dfdda9be2d8e9ca499.1637700535.git.zanussi@kernel.org>
-References: <cover.1637700535.git.zanussi@kernel.org>
-        <2b451d62e0b1a12fc99391dfdda9be2d8e9ca499.1637700535.git.zanussi@kernel.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 30 Nov 2021 16:35:03 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B60C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:31:43 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id x10so28089890ioj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:31:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QIjUhHqT3I7yZhNSyjjqGWIqrlg0jw98kAJKFJqT2YE=;
+        b=f6wqnQVLJ/QypuLiFKBo++Q/jnDWh5SE3YACOp/LVwre7fBIRnF7XivKVEkvV3izbS
+         Pz8sEFp6zKpHK/mtiaH1eJezYlGcD1sb1MCKEjXB8IPmSYucTxmb0zdmRT2mR250MUsC
+         WVXvNyv/S+bVXzjGATk3wAXm8zrXOAd4t0y8A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QIjUhHqT3I7yZhNSyjjqGWIqrlg0jw98kAJKFJqT2YE=;
+        b=CzYlwGM2hvMx4QZ6wG+/VzoIpc6Pnp8/VDpMwHnrh9kVoxWrklCg0BFTQFj7YnzdxW
+         VqRJNVGBLdwYKNRtXJTCbd3L/WQUgU+iaGAhJgLv3s4QWJhTR1I5Wr3Gf6nrkTAuHFsn
+         o8qNdbYgAs2QOdURqDx1j1S0oG5J/3/kXUbx9LroqUtymiTQYmwffHjSFftrc8Ta6l2d
+         OFHIOoR50WfBbM2/gyqoUTbOhABY7r2K2BX3vgJn5lfDL/He8T06h19OgZYNv+O3L0a+
+         4GgID9H1dQohZdg9e2dn1RTK3lUfWHM86CPltPqIS1Q/aODwofiTU0qjRauVEGU3DHcN
+         cKDg==
+X-Gm-Message-State: AOAM533Vhf8HkVfFejSfZRPQoCBx4rtLbqdcMLHI8RR/dcrrhTx8O6Xp
+        OLXtxZU1lBSHcF1l0cttabz0rRFJNmwm2A==
+X-Google-Smtp-Source: ABdhPJxMCQSb5B2qCfV+VEyr8+JFq1eMfsdrq6YA4I7IKRZIjnZE/TCMOSnQQeQ07QVQzAhRIDGEpw==
+X-Received: by 2002:a6b:7e49:: with SMTP id k9mr2744575ioq.212.1638307903001;
+        Tue, 30 Nov 2021 13:31:43 -0800 (PST)
+Received: from mail-io1-f53.google.com (mail-io1-f53.google.com. [209.85.166.53])
+        by smtp.gmail.com with ESMTPSA id j15sm7619004ile.68.2021.11.30.13.31.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 13:31:42 -0800 (PST)
+Received: by mail-io1-f53.google.com with SMTP id p65so4054864iof.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:31:41 -0800 (PST)
+X-Received: by 2002:a05:6638:2590:: with SMTP id s16mr3336928jat.93.1638307901229;
+ Tue, 30 Nov 2021 13:31:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <1637909640-32232-1-git-send-email-quic_c_sbhanu@quicinc.com>
+In-Reply-To: <1637909640-32232-1-git-send-email-quic_c_sbhanu@quicinc.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 30 Nov 2021 13:31:29 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=W_LAJDKgLf5mZKe9Ku=GSvV=m4Tg=5VLYZWvT8=Ds10Q@mail.gmail.com>
+Message-ID: <CAD=FV=W_LAJDKgLf5mZKe9Ku=GSvV=m4Tg=5VLYZWvT8=Ds10Q@mail.gmail.com>
+Subject: Re: [PATCH V1] mtd: spi-nor: winbond: Add support for winbond chip
+To:     Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+Cc:     tudor.ambarus@microchip.com, michael@walle.cc, p.yadav@ti.com,
+        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        stummala@codeaurora.org, vbadigan@codeaurora.org,
+        quic_rampraka@quicinc.com, quic_pragalla@quicinc.com,
+        sartgarg@codeaurora.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Nov 2021 14:53:54 -0600
-Tom Zanussi <zanussi@kernel.org> wrote:
+Hi,
 
+On Thu, Nov 25, 2021 at 10:56 PM Shaik Sajida Bhanu
+<quic_c_sbhanu@quicinc.com> wrote:
+>
+> Add support for winbond W25Q512NW-IM chip.
+>
+> Signed-off-by: Shaik Sajida Bhanu <quic_c_sbhanu@quicinc.com>
+> ---
+>  drivers/mtd/spi-nor/winbond.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/mtd/spi-nor/winbond.c b/drivers/mtd/spi-nor/winbond.c
+> index 96573f6..cdfa2ee 100644
+> --- a/drivers/mtd/spi-nor/winbond.c
+> +++ b/drivers/mtd/spi-nor/winbond.c
+> @@ -100,6 +100,9 @@ static const struct flash_info winbond_parts[] = {
+>                              SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
+>         { "w25m512jv", INFO(0xef7119, 0, 64 * 1024, 1024,
+>                             SECT_4K | SPI_NOR_QUAD_READ | SPI_NOR_DUAL_READ) },
+> +       {"w25q512nw", INFO(0xef8020, 0, 64 * 1024, 1024,
+> +                          SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ |
+> +                          SPI_NOR_HAS_LOCK | SPI_NOR_HAS_TB) },
+>         { "w25q512jvq", INFO(0xef4020, 0, 64 * 1024, 1024,
+>                              SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
 
-> index a873f4e8be04..1d1716d5bee2 100644
-> --- a/kernel/trace/trace_events_trigger.c
-> +++ b/kernel/trace/trace_events_trigger.c
-> @@ -931,89 +931,47 @@ event_trigger_callback(struct event_command *cmd_ops,
->  	struct event_trigger_data *trigger_data;
->  	struct event_trigger_ops *trigger_ops;
->  	char *trigger = NULL;
-> -	char *number;
-> +	bool remove;
->  	int ret;
->  
-> -	/* separate the trigger from the filter (t:n [if filter]) */
-> -	if (param && isdigit(param[0])) {
-> -		trigger = strsep(&param, " \t");
-> -		if (param) {
-> -			param = skip_spaces(param);
-> -			if (!*param)
-> -				param = NULL;
-> -		}
-> -	}
-> +	remove = event_trigger_check_remove(glob);
->  
-> -	trigger_ops = cmd_ops->get_trigger_ops(cmd, trigger);
-> +	ret = event_trigger_separate_filter(&trigger, &param, false);
-> +	if (ret)
-> +		return ret;
->  
->  	ret = -ENOMEM;
-> -	trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
-> +	trigger_data = event_trigger_alloc(cmd_ops, cmd, trigger, file);
->  	if (!trigger_data)
->  		goto out;
->  
-> -	trigger_data->count = -1;
-> -	trigger_data->ops = trigger_ops;
-> -	trigger_data->cmd_ops = cmd_ops;
-> -	trigger_data->private_data = file;
-> -	INIT_LIST_HEAD(&trigger_data->list);
-> -	INIT_LIST_HEAD(&trigger_data->named_list);
-> -
-> -	if (glob[0] == '!') {
-> +	if (remove) {
->  		cmd_ops->unreg(glob+1, trigger_ops, trigger_data, file);
-> -		kfree(trigger_data);
+I have no comments on the contents of this patch, but your spacing is
+off. The entry above and below you have a space between the "{" and
+the string with the name of the flash part. You should match.
 
-How is trigger_data freed on error here?
-
--- Steve
-
->  		ret = 0;
->  		goto out;
->  	}
->  
-> -	if (trigger) {
-> -		number = strsep(&trigger, ":");
-> -
-> -		ret = -EINVAL;
-> -		if (!strlen(number))
-> -			goto out_free;
-> -
-> -		/*
-> -		 * We use the callback data field (which is a pointer)
-> -		 * as our counter.
-> -		 */
-> -		ret = kstrtoul(number, 0, &trigger_data->count);
-> -		if (ret)
-> -			goto out_free;
-> -	}
-> -
-> -	if (!param) /* if param is non-empty, it's supposed to be a filter */
-> -		goto out_reg;
-> -
-> -	if (!cmd_ops->set_filter)
-> -		goto out_reg;
-> +	ret = event_trigger_parse_num(trigger, trigger_data);
-> +	if (ret)
-> +		goto out_free;
->  
-> -	ret = cmd_ops->set_filter(param, trigger_data, file);
-> +	ret = event_trigger_set_filter(cmd_ops, file, param, trigger_data);
->  	if (ret < 0)
->  		goto out_free;
->  
-> - out_reg:
->  	/* Up the trigger_data count to make sure reg doesn't free it on failure */
->  	event_trigger_init(trigger_ops, trigger_data);
-> -	ret = cmd_ops->reg(glob, trigger_ops, trigger_data, file);
-> -	/*
-> -	 * The above returns on success the # of functions enabled,
-> -	 * but if it didn't find any functions it returns zero.
-> -	 * Consider no functions a failure too.
-> -	 */
-> -	if (!ret) {
-> -		cmd_ops->unreg(glob, trigger_ops, trigger_data, file);
-> -		ret = -ENOENT;
-> -	} else if (ret > 0)
-> -		ret = 0;
-> +
-> +	ret = event_trigger_register(cmd_ops, file, glob, cmd, trigger, trigger_data, NULL);
-> +	if (ret)
-> +		goto out_free;
->  
->  	/* Down the counter of trigger_data or free it if not used anymore */
->  	event_trigger_free(trigger_ops, trigger_data);
->   out:
->  	return ret;
-> -
->   out_free:
-> -	if (cmd_ops->set_filter)
-> -		cmd_ops->set_filter(NULL, trigger_data, NULL);
-> +	event_trigger_reset_filter(cmd_ops, trigger_data);
->  	kfree(trigger_data);
->  	goto out;
->  }
-> 
+-Doug

@@ -2,96 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 305284641E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 00:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB984641EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 00:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236703AbhK3XER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 18:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33634 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbhK3XEP (ORCPT
+        id S1344996AbhK3XEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 18:04:47 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:51156 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344981AbhK3XEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 18:04:15 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80159C061574;
-        Tue, 30 Nov 2021 15:00:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=7s1aPT3qHD5YCR49RxSxx9XhraS/zuizMh2ONmra3+g=; b=a6j7Q0Qtys/oL3gKZPuCruyL1Y
-        VwlL8cYDBwKH5FRU4FMWBN50k2BTulOcIKq7sDwiCVCBOvZTDoUYKF58EYkvQ2nIqrwcxjYieVg5i
-        ML9yKmWO6IhTMAGkGqsHddvZc0JHQsxlMObhfA9eL+7BUUyyzlKmoA/84W47Mo2WMr0GLHslKsCOV
-        OwfqFPgRkksEJzVbqaZHzyibcS/+8CyzkgH+W+i5mFCg57nf6hJ4um2P8TOUrfQrEq7WBhjNOS9jv
-        uikMInCZlMSs9ltTZ+2y2lIm5iOR47m5MoqZg/HsYPI/vRBEIEUIxVh2pawRZ7OR5dB6RB6kIJcrJ
-        sSeFmWBA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1msC6C-001Wgu-SU; Tue, 30 Nov 2021 22:59:45 +0000
-Message-ID: <183b6172-c04e-42d9-00c5-d760c04f0b96@infradead.org>
-Date:   Tue, 30 Nov 2021 14:59:36 -0800
+        Tue, 30 Nov 2021 18:04:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 593E1CE1D17;
+        Tue, 30 Nov 2021 23:01:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A1FDC53FD5;
+        Tue, 30 Nov 2021 23:01:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638313280;
+        bh=/XtvKBKIAZgBZpHU5l7FFP9bobAXH0K3MiMhbZFKhcQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NCEJwq1PwtA2WtEEXgXy7oE5yCR4XLm7KyNx9pdJSkaA98LBgnAteKPHhmwFa9nmv
+         cyrskbRaNNTZWwwYZ3Q8dQ/V+5AwGCU8/vq3OeFNB9Xxa1MrqYdEpPR7krzwt6bPNk
+         /7v1wtzVQNkB6axchbw/auOcQAq1fiqIUfxg1Z3JHc71VFN4b36QXS/CZSmx+xmLJl
+         4u7gDAm8yFXEzZYgoT10Xltlnl5AeHxChLM+XE5JZRnKSLsL4c+zXX8vG82KO8xixC
+         jiAcWEFc7gWX3LeZefMuQoTOT/Tyf6O02kul3zbFVaeTFbPqHtBmZXgO/O9p9DJsY6
+         zpUMRQSg2bmlw==
+Received: by mail-ed1-f50.google.com with SMTP id y12so93419373eda.12;
+        Tue, 30 Nov 2021 15:01:20 -0800 (PST)
+X-Gm-Message-State: AOAM530M0+zlaa28oQrMu44NFRrjk4a1b89R0NrDf7VVCnOZA4LSvnXd
+        4+u+MkI4aE1C1nv5EPUY/35o9Z1ohHMYqOvgYg==
+X-Google-Smtp-Source: ABdhPJwGYPJE956LksSZBLju/I83pfHQ4ZXNie2up3wXJY0kmFL+GyQypPQQpG6PQ2wQLmlwFlJGQwnP8sUWSYsJU9s=
+X-Received: by 2002:a05:6402:440f:: with SMTP id y15mr3055651eda.22.1638313278675;
+ Tue, 30 Nov 2021 15:01:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] firmware_loader: export sysctl registration
-Content-Language: en-US
-To:     Luis Chamberlain <mcgrof@kernel.org>, akpm@linux-foundation.org,
-        keescook@chromium.org, yzaikin@google.com, nixiaoming@huawei.com,
-        ebiederm@xmission.com, steve@sk2.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, tytso@mit.edu, viro@zeniv.linux.org.uk,
-        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, dgilbert@interlog.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        mcgrof@bombadil.infradead.org, linux-scsi@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211130164525.1478009-1-mcgrof@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20211130164525.1478009-1-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211125152233.162868-1-geert@linux-m68k.org> <161F972E-7972-4001-BE19-C88F81EF8047@jrtc27.com>
+ <CAMuHMdXpmnmAy7cvA4b9LZe1skzjyOmYgUMgY7KiLRPznSj+2Q@mail.gmail.com>
+In-Reply-To: <CAMuHMdXpmnmAy7cvA4b9LZe1skzjyOmYgUMgY7KiLRPznSj+2Q@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 30 Nov 2021 17:01:06 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLr53hm2ai6EwxGg=nMoYqJnOkPGHXmjA1Yh31ReE_hUA@mail.gmail.com>
+Message-ID: <CAL_JsqLr53hm2ai6EwxGg=nMoYqJnOkPGHXmjA1Yh31ReE_hUA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: interrupt-controller: sifive, plic: Fix
+ number of interrupts
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Michael Zhu <michael.zhu@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Nov 26, 2021 at 2:58 AM Geert Uytterhoeven <geert@linux-m68k.org> w=
+rote:
+>
+> Hi Jessica,
+>
+> On Thu, Nov 25, 2021 at 5:08 PM Jessica Clarke <jrtc27@jrtc27.com> wrote:
+> > On 25 Nov 2021, at 15:22, Geert Uytterhoeven <geert@linux-m68k.org> wro=
+te:
+> > > To improve human readability and enable automatic validation, the tup=
+les
+> > > in "interrupts-extended" properties should be grouped using angle
+> > > brackets.  As the DT bindings lack an upper bound on the number of
+> > > interrupts, thus assuming one, proper grouping is currently flagged a=
+s
+> > > an error.
+>
+> Rob: Is this a bug in the tooling that should be fixed?
 
+The grouping or upper bound? The tools default to minItems =3D=3D
+maxItems, so you be getting 'maxItems: 1' here.
 
-On 11/30/21 08:45, Luis Chamberlain wrote:
-> The firmware loader fallback sysctl table is always built-in,
-> but when FW_LOADER=m the build will fail. We need to export
-> the sysctl registration and de-registration. Use the private
-> symbol namespace so that only the firmware loader uses these
-> calls.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Fixes: firmware_loader: move firmware sysctl to its own files
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+For grouping, I plan to make this not matter for validation. I'm
+working on making the validation operate on dtbs and we lose any
+source grouping with that. I'll probably switch the kernel to use dtbs
+as well because I don't want to maintain both. Still, I think the
+grouping is good from a source consistency POV.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+> Regardless, specifying a real upper limit is always a good idea.
 
-Thanks.
+Yes. A 'should be enough for now' limit is better than none IMO, too.
 
-> ---
->  drivers/base/firmware_loader/fallback_table.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/base/firmware_loader/fallback_table.c b/drivers/base/firmware_loader/fallback_table.c
-> index 51751c46cdcf..255823887c70 100644
-> --- a/drivers/base/firmware_loader/fallback_table.c
-> +++ b/drivers/base/firmware_loader/fallback_table.c
-> @@ -56,10 +56,12 @@ int register_firmware_config_sysctl(void)
->  		return -ENOMEM;
->  	return 0;
->  }
-> +EXPORT_SYMBOL_NS_GPL(register_firmware_config_sysctl, FIRMWARE_LOADER_PRIVATE);
->  
->  void unregister_firmware_config_sysctl(void)
->  {
->  	unregister_sysctl_table(firmware_config_sysct_table_header);
->  	firmware_config_sysct_table_header = NULL;
->  }
-> +EXPORT_SYMBOL_NS_GPL(unregister_firmware_config_sysctl, FIRMWARE_LOADER_PRIVATE);
->  #endif /* CONFIG_SYSCTL */
-> 
+>
+> > > Fix this by adding the missing "maxItems", limiting it to 9 interrupt=
+s
+> > > (one interrupt for a system management core, and two interrupts per c=
+ore
+> > > for other cores), which should be sufficient for now.
+> >
+> > This is SiFive=E2=80=99s IP, so is this actually true? I would imagine =
+it=E2=80=99s
+> > just parameterised and could be generated with as many targets as fit
+> > in the MMIO space, and that this is thus inaccurate. Besides, such a
+>
+> Yes, this is implementation-defined.  I just used the maximum value
+> currently in use.
+>
+> drivers/irqchip/irq-sifive-plic.c has #define MAX_CONTEXTS 15872,
+> which matches the value of CONTEXT_PER_HART and the available address
+> space in the driver and in [1].
+> Would you be more comfortable with "maxItems: 15872"?
 
--- 
-~Randy
+Always good to have a real value rather than an unknown implementation limi=
+t.
+
+Rob

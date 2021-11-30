@@ -2,200 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 491A3463AA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:53:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91976463AAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243131AbhK3P4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:56:44 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24127 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243247AbhK3P4B (ORCPT
+        id S242623AbhK3P51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:57:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237730AbhK3P5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:56:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638287558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jH9EXfZHYnVVr/gc0bkKyv6b3sFlfwoXqOh2jbmFu5w=;
-        b=HEB7MkjyQWoSwnjqzVY7IFPi1UCy/D3mdUg26HfTIBFief4xM2kNHSgWyNMO88MJIP1PGK
-        AmHrl/8Lm3LWz2GETgpj5RPI3ZyieoO1FPOzl+17xQexW9vyn0e2QCMZK+AMMkbTjaxVRJ
-        ldVjZ90JcmErXnLinHuYCPLAylh6TUc=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-212-I8r--JkIMy-PptfLcau1Cw-1; Tue, 30 Nov 2021 10:52:37 -0500
-X-MC-Unique: I8r--JkIMy-PptfLcau1Cw-1
-Received: by mail-wm1-f72.google.com with SMTP id m14-20020a05600c3b0e00b0033308dcc933so13111965wms.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:52:37 -0800 (PST)
+        Tue, 30 Nov 2021 10:57:25 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B32FC061574;
+        Tue, 30 Nov 2021 07:54:06 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id d2so27208110qki.12;
+        Tue, 30 Nov 2021 07:54:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5jfG9Qw6wgd9sRjYfyHDytET8Ac/XcqwnteljgGuckk=;
+        b=BntxTnwecg6BJSWIvVKExBquBtQ30s/lQ1YU/vtHIPa1Rx8ar/0r4fbnZzkVxmuMAb
+         OzAbN7axchp00LTYFaxf1R9+06zsQfibPFDthdJkWHwessPgB59jSkf2hhJC9Jya5qyy
+         HlASVFBQYACqEYVUo0srq3QkMFzJGpti1VVHtgcnXPBDChfHu3LanOSzPF2UPdSdM8Gk
+         ouRdu2IXl6S/VnlWEksWw3jwf6CY3mhCilbCsObeM91dghSXL7b0a41ke+NdWEQkEgzh
+         Won2HU6OUxb+j1fd9BYxScLJplAHx9QZ5JOlu9jWIR1hHSvIoz2zJCWmVGE6ELg+suCU
+         X1ZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:organization:subject
-         :in-reply-to:content-transfer-encoding;
-        bh=jH9EXfZHYnVVr/gc0bkKyv6b3sFlfwoXqOh2jbmFu5w=;
-        b=yrMDm+9iTADWz5Z5VPf7jPOWon45s6lj5nZV1fb76OURbWvm8nprJXVZl948CGVcib
-         oB8CbqIIzAKmQJadsTPv9ngzmGxaO65dgXE23wXyYPUSMGtb018+aF6r/f4cU1SslYVZ
-         6/okxseitKu0V/FdrCJtfVblkQWgLlQ9n5JzYYQZ9EsYkkGoj9EsfjFJr4MSL9MYqBEO
-         vzNBmejsAXNSLixzNnWkfgQ+d4lQvBGgurN7PcPiDkyMzPACcNipP40VWRQltlniVf79
-         xaArqEDIA8vYH2Tk5zItlqiAul7CBx39AlvYwFjl5IxIzTnbcspvG9yYJK4ioX5jnNnp
-         hu+A==
-X-Gm-Message-State: AOAM5327hZy16eYlDYeudtlKYDbH63lpSsNTdU/0DBrYD4aWbQvVHL5D
-        PKQLu6h1VqIfMBl5C87BvBqApEKZ+OYFbaBKA7ARIH/sj9BmmF5u0/RB2BXEwGT2mT96/Z7mADr
-        TZq/v0n39vB7zqw9JUyCq47Om
-X-Received: by 2002:a5d:4ed1:: with SMTP id s17mr43275366wrv.310.1638287556324;
-        Tue, 30 Nov 2021 07:52:36 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyCk0Kh25FxWu333V+ypoDmQYiIbGoNO0Q+dLf07zWjEGO0dC+mlmyLLG91wlwVMItlU6Av5Q==
-X-Received: by 2002:a5d:4ed1:: with SMTP id s17mr43275336wrv.310.1638287556029;
-        Tue, 30 Nov 2021 07:52:36 -0800 (PST)
-Received: from [192.168.3.132] (p5b0c68ec.dip0.t-ipconnect.de. [91.12.104.236])
-        by smtp.gmail.com with ESMTPSA id t8sm3227398wmq.32.2021.11.30.07.52.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 07:52:35 -0800 (PST)
-Message-ID: <8f82eacb-c6ad-807c-7e13-cd369e91a43d@redhat.com>
-Date:   Tue, 30 Nov 2021 16:52:34 +0100
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5jfG9Qw6wgd9sRjYfyHDytET8Ac/XcqwnteljgGuckk=;
+        b=QYu8T1KZNItC3Ow00Hp4fcFAx9qIKgKa93R0Bdf7diNfT1y2kfSr7LZF8bTFEA9rzJ
+         vQDUq+LeP5zkG0V1d+YUQFMnwqif4tsZg8GN4iLgL6CWODCtibYyc4Lcv/w6EyZB+IeJ
+         1T+dI+X9sQ8vcwwlHGnSKrwIbQWs4nraED1OKHNCRTZzRrwKzfXxozYIINl4XjahE4PJ
+         tPALFOyxes7JSa4jsvCLDh8u9S20GEQuH2nhQZsgvcnJH+q1JWFYrGWws/J/sUxDtgWn
+         VZ5L7kAZNJjgsNbMrYJrKCVPLldMEDmX4pGt4HultIKI/VWBdqYQPDbrZM+E52wK1qtq
+         p5sw==
+X-Gm-Message-State: AOAM530gmFMeBNgWhlcwRZ9s7kMo0HSPkAh81OcsG7lC/JMw8kfwwWkS
+        DH7lH3JN3ZWjtouwppGoSY22fH9pnZ02BFk/juY=
+X-Google-Smtp-Source: ABdhPJyonKn3G8UIi6BT3phblLDnrVQm6qLkdWviQusM/bKsEz//a+DZxT6MhXu5EzeyFmfNCV15y1QUuJs0ifkzE2Y=
+X-Received: by 2002:a05:620a:2e3:: with SMTP id a3mr7577qko.451.1638287645274;
+ Tue, 30 Nov 2021 07:54:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Vlastimil Babka <vbabka@suse.cz>, Jens Axboe <axboe@kernel.dk>,
-        Andrew Dona-Couch <andrew@donacou.ch>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Drew DeVault <sir@cmpwn.com>,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        io_uring Mailing List <io-uring@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>, linux-mm@kvack.org
-References: <20211124132353.GG5112@ziepe.ca>
- <cca0229e-e53e-bceb-e215-327b6401f256@redhat.com>
- <20211124132842.GH5112@ziepe.ca>
- <eab5aeba-e064-9f3e-fbc3-f73cd299de83@redhat.com>
- <20211124134812.GI5112@ziepe.ca>
- <2cdbebb9-4c57-7839-71ab-166cae168c74@redhat.com>
- <20211124153405.GJ5112@ziepe.ca>
- <63294e63-cf82-1f59-5ea8-e996662e6393@redhat.com>
- <20211124183544.GL5112@ziepe.ca>
- <cc9d3f3e-2fe1-0df0-06b2-c54e020161da@redhat.com>
- <20211124231133.GM5112@ziepe.ca>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] Increase default MLOCK_LIMIT to 8 MiB
-In-Reply-To: <20211124231133.GM5112@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20211120112738.45980-1-laoar.shao@gmail.com> <20211120112738.45980-5-laoar.shao@gmail.com>
+ <20211129110140.733475f3@gandalf.local.home> <CALOAHbB-2ESG0QgESN_b=bXzESbq+UBP-dqttirKnt1c9TZHZA@mail.gmail.com>
+ <20211130092240.312f68a4@gandalf.local.home>
+In-Reply-To: <20211130092240.312f68a4@gandalf.local.home>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Tue, 30 Nov 2021 23:53:30 +0800
+Message-ID: <CALOAHbB6oTNpRUHvgMaH+kxJn7Fr7zE2bkvkniPFsPzH-SuHjA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/7] fs/binfmt_elf: replace open-coded string copy with get_task_comm
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kbuild test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(sorry, was busy working on other stuff)
+On Tue, Nov 30, 2021 at 10:22 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Tue, 30 Nov 2021 11:01:27 +0800
+> Yafang Shao <laoar.shao@gmail.com> wrote:
+>
+> > There are three options,
+> > - option 1
+> >   comment on all the hard-coded 16 to explain why it is hard-coded
+> > - option 2
+> >   replace the hard-coded 16 that can be replaced and comment on the
+> > others which can't be replaced.
+> > - option 3
+> >    replace the hard-coded 16 that can be replaced and specifically
+> > define TASK_COMM_LEN_16 in other files which can't include
+> > linux/sched.h.
+> >
+> > Which one do you prefer ?
+> >
+>
+> Option 3. Since TASK_COMM_LEN_16 is, by it's name, already hard coded to
+> 16, it doesn't really matter if you define it in more than one location.
+>
+> Or we could define it in another header that include/sched.h can include.
+>
+> The idea of having TASK_COMM_LEN_16 is to easily grep for it, and also know
+> exactly what it is used for when people see it being used.
+>
 
->> That would be giving up on compound pages (hugetlbfs, THP, ...) on any
->> current Linux system that does not use ZONE_MOVABLE -- which is not
->> something I am not willing to buy into, just like our customers ;)
-> 
-> So we have ZONE_MOVABLE but users won't use it?
+I will send a separate patch (or patchset) to replace all the old
+hard-coded 16 with TASK_COMM_LEN_16 based on the -mm tree.
 
-It's mostly used in the memory hot(un)plug context and we'll see growing
-usage there in the near future (mostly due to dax/kmem, virtio-mem).
-
-One has to be very careful how to size ZONE_MOVABLE, though, and it's
-incompatible with various use cases (even huge pages on some
-architectures are not movable and cannot be placed on ZONE_MOVABLE ...).
-That's why we barely see it getting used automatically outside of memory
-hot(un)plug context or when explicitly setup by the admin for a well
-fine-tuned system.
-
-> 
-> Then why is the solution to push the same kinds of restrictions as
-> ZONE_MOVABLE on to ZONE_NORMAL?
-
-On any zone except ZONE_DEVICE to be precise. Defragmentation is one of
-the main reasons we have pageblocks after all -- besides CMA and page
-isolation. If we don't care about de-fragmentation we could just squash
-MIGRATE_MOVABLE, MIGRATE_UNMOVABLE, MIGRATE_RECLAIMABLE into a single
-type. But after all that's the only thing that provides us with THP in
-most setups out there.
-
-Note that some people (IIRC Mel) even proposed to remove ZONE_MOVABLE
-and instead have "sticky" MIGRATE_MOVABLE pageblocks, meaning
-MIGRATE_MOVABLE pageblocks that cannot be converted to a different type
-or stolen from -- which would mimic the same thing as the pageblocks we
-essentially have in ZONE_MOVABLE.
-
->  
->> See my other mail, the upstream version of my reproducer essentially
->> shows what FOLL_LONGTERM is currently doing wrong with pageblocks. And
->> at least to me that's an interesting insight :)
-> 
-> Hmm. To your reproducer it would be nice if we could cgroup control
-> the # of page blocks a cgroup has pinned. Focusing on # pages pinned
-> is clearly the wrong metric, I suggested the whole compound earlier,
-> but your point about the entire page block being ruined makes sense
-> too.
-
-# pages pinned is part of the story, but yes, "pinned something inside a
-pageblocks" is a better metric.
-
-I would think that this might be complicated to track, though ...
-especially once we have multiple cgroups pinning inside a single
-pageblock. Hm ...
-
-> 
-> It means pinned pages will have be migrated to already ruined page
-> blocks the cgroup owns, which is a more controlled version of the
-> FOLL_LONGTERM migration you have been thinking about.
-
-MIGRATE_UNMOVABLE pageblocks are already ruined. But we'd need some way
-to manage/charge pageblocks per cgroup I guess? that sounds very
-interesting.
-
-> 
-> This would effectively limit the fragmentation a hostile process group
-> can create. If we further treated unmovable cgroup charged kernel
-> allocations as 'pinned' and routed them to the pinned page blocks it
-> start to look really interesting. Kill the cgroup, get all your THPs
-> back? Fragmentation cannot extend past the cgroup?
-
-So essentially any accounted unmovable kernel allocation (e.g., page
-tables, secretmem, ... ) would try to be placed on a MIGRATE_UNMOVABLE
-pageblock "charged" to the respective cgroup?
-
-> 
-> ie there are lots of batch workloads that could be interesting there -
-> wrap the batch in a cgroup, run it, then kill everything and since the
-> cgroup gives some lifetime clustering to the allocator you get a lot
-> less fragmentation when the batch is finished, so the next batch gets
-> more THPs, etc.
-> 
-> There is also sort of an interesting optimization opportunity - many
-> FOLL_LONGTERM users would be happy to spend more time pinning to get
-> nice contiguous memory ranges. Might help convince people that the
-> extra pin time for migrations is worthwhile.
-
-Indeed. And fortunately, huge page users (heavily used in vfio context
-and for VMs) wouldn't be affected because they only pin huge pages and
-there is nothing to migrate then (well, excluding MIGRATE_CMA and
-ZONE_MOVABLE what we have already, of course).
-
-> 
->>> Something like io_ring is registering a bulk amount of memory and then
->>> doing some potentially long operations against it.
->>
->> The individual operations it performs are comparable to O_DIRECT I think
-> 
-> Yes, and O_DIRECT can take 10s's of seconds in troubled cases with IO
-> timeouts and things.
-> 
-
-I might be wrong about O_DIRECT semantics, though. Staring at
-fs/io_uring.c I don't really have a clue how they are getting used. I
-assume they are getting used for DMA directly.
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+--
+Thanks
+Yafang

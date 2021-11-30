@@ -2,121 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD9A4630C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA384630CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbhK3KR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:17:26 -0500
-Received: from mout.gmx.net ([212.227.17.20]:59303 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229729AbhK3KRY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:17:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638267238;
-        bh=z+lkEpp8CtXh8BnnGEgWNMyATCAdkFl13007QbDbsNo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=LGUKVt4mF407KFlSA+VM1cs/x3BsW/QdDbFXfjuJBJozsem4PBeUZ8ORIVIeB0ilj
-         9FAHuU/rbzXueXOFN6ehBJ8BfsNEen8UC6pqa+NDrxvhHkpi/c9xegmSQB7krl7Nyg
-         OkdbcBHtsrhj50ZUiyDG7To6Z+/MsbfiRNq561J8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.145.109]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5GE1-1mPzUm2tjp-0117qM; Tue, 30
- Nov 2021 11:13:57 +0100
-Message-ID: <25f8e66c-09e8-f5d8-e3d5-ec48fbd8287d@gmx.de>
-Date:   Tue, 30 Nov 2021 11:13:52 +0100
+        id S230303AbhK3KRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:17:44 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:37684 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229729AbhK3KRn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 05:17:43 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3J3g5YLWz9vBt2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:14:23 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 92V0S6M5oSDf for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 04:14:23 -0600 (CST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3J3g3Tpwz9vBtK
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:14:23 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3J3g3Tpwz9vBtK
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3J3g3Tpwz9vBtK
+Received: by mail-pf1-f197.google.com with SMTP id q2-20020a056a00084200b004a2582fcec1so12588608pfk.15
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:14:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ezPDMyg4z6FUtdCtlSvrXZjWSKm8o+6pNXDt3YFkKII=;
+        b=Q54MRiSiawsPKrbhwo2sZaqpTRa/egZ01MFGeAUM/DZ82+sJerdvNIHnksW6nM/pta
+         QVvvv3AOILqpqIUGAsZnGjhDuZUxY8mAyX0zTIx80kN8PEb9AEsRK5jJGHWUMLXq/+9p
+         18FLISF6m1jmgoMj7A59ud8iJTJv5unr1HFInzCEsKS+QB+t/YR4V3rzZ1LvapFYGkbM
+         QXfePCn+j3l7xY4BDmkJJY2XL+0JaBjQlw6vW+JCLzuLiPZgyoEb13RWjnpJptvj6N8Z
+         a8f7HWlh5y7VeizpsvQbTZpU78wh84cs8PkNO9HlyMA53OgdVR/HBwqSynVvwZI04iP4
+         0joA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ezPDMyg4z6FUtdCtlSvrXZjWSKm8o+6pNXDt3YFkKII=;
+        b=cOAYtZ8MBpji59kAyLU0xz2jfOLAwTTF1bvKtuh5AAveVLFoj3aZe86gL3ZyJgJl8d
+         hhWC2B0OyFFz7t0fBhCw5cr8aQkPgl3e3Xb7AcrxtmAbWZE6211CwkVitpZB2RjNO5Dd
+         A3CAB+8QYkpTWdgb5fsX2vR848CncnSAf5eHjAUsMxiBDQxbZsm0oezGa4Xq83vcdqii
+         hqKutprUEXsjqglUIvUiXi6qT+wNU5BT5XYfgPHGT2K9vrypLkBwmvuR3RSk4Ua4tbMc
+         /EbLP1t9kMcIOsMQlOGrXI1gp8VrfwchYDjArxmVAj5BdSuDsE6DthkNBdiaQbdYSmp0
+         8tqQ==
+X-Gm-Message-State: AOAM530aY/8wucIg02+A0YKR3ASqSJdmvpzUwjeupF79GeMAXIsIut1K
+        HBMJRtAFG/Auo3HzXGKyushoI8cgLRl+vQZvrvjL9hwsqxCpcBaTKwR88xQ1Ii02MJ+8juXHAIA
+        TnKTdDiDrtnqrDEi1jqUEd2wrHxHj
+X-Received: by 2002:a17:902:ce8c:b0:141:d218:954 with SMTP id f12-20020a170902ce8c00b00141d2180954mr66086313plg.1.1638267262768;
+        Tue, 30 Nov 2021 02:14:22 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwZhxN9ocyihGfNCGLMaz0RjGDMqMGBOZyUXuyOBDhzdCoh/2u3iNSfs04TgQLOMNklWxKYFw==
+X-Received: by 2002:a17:902:ce8c:b0:141:d218:954 with SMTP id f12-20020a170902ce8c00b00141d2180954mr66086293plg.1.1638267262561;
+        Tue, 30 Nov 2021 02:14:22 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id t23sm12504231pgo.35.2021.11.30.02.14.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 02:14:22 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Nicolas Boichat <drinkcat@chromium.org>,
+        Weiyi Lu <weiyi.lu@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: mediatek: mt8183: Fix a NULL pointer dereference in clk_mt8183_apmixed_probe()
+Date:   Tue, 30 Nov 2021 18:14:14 +0800
+Message-Id: <20211130101416.102608-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 5/7] agp/nvidia: Ignore value returned by readl()
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, airlied@linux.ie,
-        daniel.vetter@ffwll.ch, arnd@arndb.de, gregkh@linuxfoundation.org,
-        James.Bottomley@HansenPartnership.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20211112141628.12904-1-tzimmermann@suse.de>
- <20211112141628.12904-6-tzimmermann@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20211112141628.12904-6-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:dRfPSSYh1TVh5d5cFLP5Od6HlMcPXgpHTkESTdsjj++SHSyY4Tq
- 8mdnp8HL3YtqOje53u3LSveK1icJG27ENSKshLTWZx3jiIueB+WuwqRMq8i78UQsVhFWmmi
- 1v5wUbHbki2H0MBnWhrESFRSvDjweFcKeMC3PRilHAszI44ETNOuHf5onJDyzC9LUv+SrTC
- WtaQZ5nDGZI7wEJwOJR0g==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QlkEoOWzQ/c=:vUkolq60akCO8xrXMjm2qE
- yJ5zI6zop2VPwe+DhymDxhEhuJXbP6lvEA66zU8IFqgcM89saEq3Klm5VQMF4HMn0kPefI+aY
- Ay3QdC7MSha4O46azOsd5B6dLM1g/uq9g1Rz4JVjKv1+M/KzPTJIpafcOOG7BzIMwf5e6rLqB
- ymLV7Mzn2ZsAkAFyiHhvU5zxTsDqXZuB/G1mg3MRDpGUc4LxQTJIbieuOwk+g6u44FXgaaaYK
- vQGvyAGVyzmX0HLGaWrB3CKLSfgfrQuZ7C77rvf9at6HWXh8RhxYTtuUeI+ZHMvmatWrbTzvc
- 9MeWzYcudXw2Z/cDRQdF0zs+GOxZhTJ9vcqREW21Q0FyIveilVPshN1buuEvA12vUu1jtyvyV
- asTqUWzf3VvYOrYG0EtlV24qZyB4pHEV1/GuXYO001GQ4tw74SL1Qr2D765w2kUAquJnFg133
- DJfCcgt3uspDWuvtPH9GrFYRWKuAfFnxHxq7Sq6gmNh4bRy9wnidMNe59VRhzrWtVMGJto3EW
- T/BXIcGjTtsOSs2KDZRRHaBp3FTdqs7TZK/4mVldzmcloZI8xic8ztx99dCQ8wAI4/dl1VaWB
- hK318ci4vpACP+vr1gfOvIQFNNX96NVCIc3Ov+boF6OFZlVcwjwZqhRDDHMSH/roVevwDOSFL
- A5ws6s2UgTs9X14OumNtho50HR4wuv3dvouWSBRVEoCwqn85knD2OW5HC/Dk6dvJFYUkbyLMm
- EgpznBfDEikG23xJZMy6ImHctxbz8Cmrw/ZzFwxN16+3OWyTqmQ0CCd7C17I8wmwTxnAq1zUQ
- Vv32rr2wUM36X2qjLaCwagx8bdmC5SlvNSwIz23WJ053rhfey8o07vki18d+3WASnI3Vd//bR
- C//54TOIzOJfWUum0ckmfvaKPHXxkbwMeWeBambICH8lHSQi11EIrEyeNLkdE40GeCoQONyE+
- X8fRq55SRwBipwPVPZb5ic45GaM6oDMxSI8FNdUo0rw7p5GvzLm11bFGPFh+AmLdcvArtnitZ
- i+kr0ep8fzgHOKctimwxF/63TcomyrqCsSp1ReEKfjxK6GRxnQMiBBWysEH8M60c5gdMGBD5C
- pL6mwK6g/QMOXs=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/12/21 15:16, Thomas Zimmermann wrote:
-> Fix the compiler warning
->
->   drivers/char/agp/nvidia-agp.c: In function 'nvidia_tlbflush':
->   drivers/char/agp/nvidia-agp.c:264:22: warning: variable 'temp' set but=
- not used [-Wunused-but-set-variable]
->     264 |         u32 wbc_reg, temp;
->
-> by removing the unused variable. The affected readl() is only
-> required for flushing caches, but the returned value is not of
-> interest.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
->  drivers/char/agp/nvidia-agp.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/char/agp/nvidia-agp.c b/drivers/char/agp/nvidia-agp=
-.c
-> index f78e756157db..437b3581cbe5 100644
-> --- a/drivers/char/agp/nvidia-agp.c
-> +++ b/drivers/char/agp/nvidia-agp.c
-> @@ -261,7 +261,7 @@ static int nvidia_remove_memory(struct agp_memory *m=
-em, off_t pg_start, int type
->  static void nvidia_tlbflush(struct agp_memory *mem)
->  {
->  	unsigned long end;
-> -	u32 wbc_reg, temp;
-> +	u32 wbc_reg;
->  	int i;
->
->  	/* flush chipset */
-> @@ -283,9 +283,9 @@ static void nvidia_tlbflush(struct agp_memory *mem)
->
->  	/* flush TLB entries */
->  	for (i =3D 0; i < 32 + 1; i++)
-> -		temp =3D readl(nvidia_private.aperture+(i * PAGE_SIZE / sizeof(u32)))=
-;
-> +		(void)readl(nvidia_private.aperture+(i * PAGE_SIZE / sizeof(u32)));
+In clk_mt8183_apmixed_probe(), the return value of
+mtk_alloc_clk_data() is assigned to clk_data and used in
+mtk_clk_register_plls(). There is a dereference of clk_data in
+mtk_clk_register_plls(), which could lead to a NULL pointer
+dereference on failure of mtk_alloc_clk_data().
 
-IMHO the void is ugly.
-Would tagging temp with "__maybe_unused" work ?
+Fix this bug by adding a check of clk_data.
 
-Helge
+Another way to fix this bug is to add a check of clk_data in
+mtk_clk_register_plls(), which may solve many similar bugs but could
+cause potential problems to previously correct cases as the API is changed.
 
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
->  	for (i =3D 0; i < 32 + 1; i++)
-> -		temp =3D readl(nvidia_private.aperture+(i * PAGE_SIZE / sizeof(u32)))=
-;
-> +		(void)readl(nvidia_private.aperture+(i * PAGE_SIZE / sizeof(u32)));
->  }
->
->
->
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_COMMON_CLK_MT8183=y show no new warnings, and our
+static analyzer no longer warns about this code.
+
+Fixes: acddfc2c261b ("clk: mediatek: Add MT8183 clock support")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/clk/mediatek/clk-mt8183.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
+index 5046852eb0fd..9eca62186ec5 100644
+--- a/drivers/clk/mediatek/clk-mt8183.c
++++ b/drivers/clk/mediatek/clk-mt8183.c
+@@ -1158,6 +1158,8 @@ static int clk_mt8183_apmixed_probe(struct platform_device *pdev)
+ 	struct device_node *node = pdev->dev.of_node;
+ 
+ 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
++	if (!clk_data)
++		return -ENOMEM;
+ 
+ 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
+ 
+-- 
+2.25.1
 

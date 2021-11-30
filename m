@@ -2,147 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4F14463EAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A7C463EB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:35:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235308AbhK3Tha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 14:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233740AbhK3Th3 (ORCPT
+        id S238512AbhK3Ti5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 14:38:57 -0500
+Received: from mx0b-002e3701.pphosted.com ([148.163.143.35]:3446 "EHLO
+        mx0b-002e3701.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232989AbhK3Tiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 14:37:29 -0500
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB683C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:34:09 -0800 (PST)
-Received: by mail-qt1-x829.google.com with SMTP id t11so21379666qtw.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:34:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=beagleboard-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8zaMGeRfyPWwhrpK4hlWNibcjKi7zgMyl76pGBmvMas=;
-        b=DP2ZuuADuq4ve2aheQWcyU6KIsAFFdohg6gRu+JNuTgWBaJHh4dyY0DqWg0RR4gnc4
-         OTy9VDIdJLJkEF85AUC4qv13XTawi5y5pZPVhxbx90ekxARus/eDXWgariZmM4Vdcy6X
-         LkwuX4VoC/3O5HE9nh8Vt+H+/4SLrsCXA4MD2sGjZY+ubc7iMfjgLv5uVHQwj52Iev9b
-         4PR96btq4ixWChGuS5hOWnFNZpWraKrcG/xSx3QCq9zWMKlGu8xAXaWRgnNTfCphik5Y
-         miUb/4kNiBlOt0FRvTuTRdQRJajKrV4CGVnEqacvckgB1/0UHUrOIeHbkKFcBHQDrxmT
-         OhMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=8zaMGeRfyPWwhrpK4hlWNibcjKi7zgMyl76pGBmvMas=;
-        b=YTZ2Hm0JjgfuFYvb6z0aOKJREY6cKusKqjhjzIGzlTGxhwAXGJshB3T3QkF2SvMGOs
-         /GBT4gbF34N/f9pyzgtiwpSdFaTGHct8wmH025iNVmAKxcllKd6uThW4uShXBZJbExrB
-         rPqAkchz4U2ToRMCa+q4MAnpuMu65IybWfaMqh9mdPfcMMyZQbKEJIjvzHwplqg/v3Nz
-         W6FYpMNlzFpw6g1cdwALPTSiKQHmZMUuRczlKoLckYh6wrRGKk1QcTa41l9C53jw2b7/
-         ZdkZ/oPuQatp8P/GMsDPvpN8xTX8sXMk0Rmnimu2Fn5PThfbWf+H6NcxVAw7mNt9epmw
-         meOg==
-X-Gm-Message-State: AOAM531Ne4BfR8LzE/0ukTE8oO5xYOuXxtCM3Mqc2FMEE3iQnu3p/QnT
-        CS7FfsjzqEcXgQxAzgRBPWwPLw==
-X-Google-Smtp-Source: ABdhPJwI+s+jofwgDiLgAyn4mUWC4TGLN6gaMCv+15hzOQiD2tLr++nf1f8dALxgtr5e2WphXeKziw==
-X-Received: by 2002:a05:622a:14d1:: with SMTP id u17mr1610188qtx.579.1638300848931;
-        Tue, 30 Nov 2021 11:34:08 -0800 (PST)
-Received: from localhost.localdomain (c-68-36-215-189.hsd1.mi.comcast.net. [68.36.215.189])
-        by smtp.gmail.com with ESMTPSA id r20sm11104832qkp.21.2021.11.30.11.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 11:34:08 -0800 (PST)
-From:   Jason Kridner <jkridner@beagleboard.org>
-To:     William Breathitt Gray <vilhelm.gray@gmail.com>
-Cc:     Jason Kridner <jkridner@beagleboard.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] counter: ti-eqep: Enable for TDA4VM/J721E
-Date:   Tue, 30 Nov 2021 14:33:46 -0500
-Message-Id: <20211130193346.678544-1-jkridner@beagleboard.org>
-X-Mailer: git-send-email 2.30.2
+        Tue, 30 Nov 2021 14:38:54 -0500
+Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUJW0Eg009015;
+        Tue, 30 Nov 2021 19:34:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pps0720; bh=uX3TIgoSD9/JBwbYFekuBk7vehHfGD91y40CU8no8E4=;
+ b=TKGpr31geMq1wraUVPpdLjgNRxOKUCEzsv7AW4CZfisOJs7daDR6H07CjjXT5F5+Sskq
+ QCSBhF4sSXI/+0Ih9kyqc5vSabbktfAs7wc51YPTyBTXdw4SB22hzODyDY1I5sVxqivx
+ quxtQYQ+QRIlrLngeB/U3mW2EbuuISUyGmIPskgugtmqwrk7snJi0d1q3/473uCw54er
+ IQqJM8z/G2ReVxUKwjzTHHkg6OTFUL8vGhonGsENqSHmHcZhcSziMAA7X9Sk9GkWcyRJ
+ dE0csticfX+W4XjYeV1gz/wxtpcITxkFLQwDJIJhYeutB2Wku/9UFGDfarDZeb+J6zBT 9A== 
+Received: from g2t2353.austin.hpe.com (g2t2353.austin.hpe.com [15.233.44.26])
+        by mx0b-002e3701.pphosted.com with ESMTP id 3cncxjy5bd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 19:34:29 +0000
+Received: from g2t2360.austin.hpecorp.net (g2t2360.austin.hpecorp.net [16.196.225.135])
+        by g2t2353.austin.hpe.com (Postfix) with ESMTP id 46CA465;
+        Tue, 30 Nov 2021 19:34:25 +0000 (UTC)
+Received: from swahl-home.5wahls.com (unknown [16.99.162.214])
+        by g2t2360.austin.hpecorp.net (Postfix) with ESMTP id E230F3D;
+        Tue, 30 Nov 2021 19:34:22 +0000 (UTC)
+Date:   Tue, 30 Nov 2021 13:34:22 -0600
+From:   Steve Wahl <steve.wahl@hpe.com>
+To:     Colin Ian King <colin.i.king@googlemail.com>
+Cc:     Steve Wahl <steve.wahl@hpe.com>, Mike Travis <mike.travis@hpe.com>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Russ Anderson <russ.anderson@hpe.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        platform-driver-x86@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/platform/uv: make const pointer dots a static const
+ array
+Message-ID: <YaZ8vtajDKUVDCne@swahl-home.5wahls.com>
+References: <20211127170320.77963-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211127170320.77963-1-colin.i.king@gmail.com>
+X-Proofpoint-ORIG-GUID: nAk4mZy6CxvkL1DBI41uWiXK86LjwcVX
+X-Proofpoint-GUID: nAk4mZy6CxvkL1DBI41uWiXK86LjwcVX
+X-HPE-SCL: -1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ mlxscore=0 adultscore=0 impostorscore=0 phishscore=0 spamscore=0
+ priorityscore=1501 clxscore=1011 mlxlogscore=999 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111300099
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Counter TI-EQEP was tested on TDA4VM/J721E SoC.
+On Sat, Nov 27, 2021 at 05:03:20PM +0000, Colin Ian King wrote:
+> Don't populate the const array dots on the stack
 
-Overlay used for testing EQEP0 and EQEP1:
+That is a misunderstanding of what the original code does.  The
+original code has a constant char array (string constant) that is
+placed in an initialized data section of memory, the address off which
+would be assigned to the pointer "dots" on the stack -- to be clear,
+stack contents would not be a full array, but a pointer to it.  Then
+that pointer would be passed to the pr_info function (which boils down
+to a call to printk).
 
-    &cbass_main {
-	#address-cells = <2>;
-	#size-cells = <2>;
+Examination of the disassembly shows that the compiler actually
+eliminates the creation of the pointer "dots" on the stack and just
+passes the address of the string constant to the printk function.
 
-	eqep0: qep@3200000 {
-		compatible = "ti,am3352-eqep";
-		reg = <0 0x3200000 0 0x100>;
-		power-domains = <&k3_pds 94 TI_SCI_PD_EXCLUSIVE>;
-		clocks = <&k3_clks 94 0>;
-		clock-names = "eqep0-ficlk";
-		interrupts = <GIC_SPI 322 IRQ_TYPE_EDGE_RISING>;
-		interrupt-names = "eqep0";
-		symlink = "bone/eQEP0"; /* A - P9_42, B - P9_27 */
+So this change should not have any actual effect (I don't know where
+you got the "shrinks object code" from), and in my humble opinion
+makes the code less clear.
 
-		count_mode = <0>;
-		swap_input = <0>;
-		invert_qa = <1>;
-		invert_qb = <1>;
-		invert_qi = <0>;
-		invert_qs = <0>;
-	};
+As such, unless there's something here I don't understand, I vote to
+reject this patch.
 
-	eqep1: qep@3210000 {
-		compatible = "ti,am3352-eqep";
-		reg = <0 0x3210000 0 0x100>;
-		power-domains = <&k3_pds 95 TI_SCI_PD_EXCLUSIVE>;
-		clocks = <&k3_clks 95 0>;
-		clock-names = "eqep1-ficlk";
-		interrupts = <GIC_SPI 323 IRQ_TYPE_EDGE_RISING>;
-		interrupt-names = "eqep1";
-		symlink = "bone/eQEP1"; /* A - P8_35, B - P8_33 */
+--> Steve Wahl <steve.wahl@hpe.com>
 
-		count_mode = <0>;
-		swap_input = <0>;
-		invert_qa = <1>;
-		invert_qb = <1>;
-		invert_qi = <0>;
-		invert_qs = <0>;
-	};
+> but make it static
+> const and make the pointer an array to remove a dereference. Shrinks
+> object code a few bytes too.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  arch/x86/platform/uv/uv_nmi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/platform/uv/uv_nmi.c b/arch/x86/platform/uv/uv_nmi.c
+> index 1e9ff28bc2e0..2c69a0c30632 100644
+> --- a/arch/x86/platform/uv/uv_nmi.c
+> +++ b/arch/x86/platform/uv/uv_nmi.c
+> @@ -725,7 +725,7 @@ static void uv_nmi_dump_cpu_ip(int cpu, struct pt_regs *regs)
+>   */
+>  static void uv_nmi_dump_state_cpu(int cpu, struct pt_regs *regs)
+>  {
+> -	const char *dots = " ................................. ";
+> +	static const char dots[] = " ................................. ";
+>  
+>  	if (cpu == 0)
+>  		uv_nmi_dump_cpu_ip_hdr();
+> -- 
+> 2.33.1
+> 
 
-	eqep2: qep@3220000 {
-		status = "disabled";
-		compatible = "ti,am3352-eqep";
-		reg = <0 0x3220000 0 0x100>;
-		power-domains = <&k3_pds 96 TI_SCI_PD_EXCLUSIVE>;
-		clocks = <&k3_clks 96 0>;
-		clock-names = "eqep2-ficlk";
-		interrupts = <GIC_SPI 324 IRQ_TYPE_EDGE_RISING>;
-		interrupt-names = "eqep2";
-
-		count_mode = <0>;
-		swap_input = <0>;
-		invert_qa = <1>;
-		invert_qb = <1>;
-		invert_qi = <0>;
-		invert_qs = <0>;
-	};
-    };
-
-Signed-off-by: Jason Kridner <jkridner@beagleboard.org>
----
- drivers/counter/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
-index 2de53ab0dd25..453490059c88 100644
---- a/drivers/counter/Kconfig
-+++ b/drivers/counter/Kconfig
-@@ -51,7 +51,7 @@ config STM32_LPTIMER_CNT
- 
- config TI_EQEP
- 	tristate "TI eQEP counter driver"
--	depends on (SOC_AM33XX || COMPILE_TEST)
-+	depends on (SOC_AM33XX || ARCH_K3 || COMPILE_TEST)
- 	select REGMAP_MMIO
- 	help
- 	  Select this option to enable the Texas Instruments Enhanced Quadrature
 -- 
-2.30.2
-
+Steve Wahl, Hewlett Packard Enterprise

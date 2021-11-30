@@ -2,102 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 238A4463AEC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01641463AEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:04:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243202AbhK3QHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:07:03 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:56252 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbhK3QHC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:07:02 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1A03ECE1410;
-        Tue, 30 Nov 2021 16:03:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2398C53FC7;
-        Tue, 30 Nov 2021 16:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638288220;
-        bh=tK9LCxQALG+XYMfehzdMiewK02vT2wEJJjF+v9T3HCs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IOr3RAEWSfHqvq/PrjBge2DDC3vR5Su23evbXIaXf4kRwUxGFSj5LoZ0otmQkmM+G
-         7qX/ewmErJNnHmPj1mdSoBppPzX1QV5k1kxB/7+gnOADYajFu/wUxhuQUq6sFMVQci
-         upiltg9llpLNe1HwF2oTunW+cWWiGnmW3yUwmu8BS8MU5j2TjrwWdGccmMEQGgzRKo
-         QRO/CFAuae8boOHr2rwI1k0jvX0Znfe4XWdaWzpaSXCoJra6FApxUudtboKtc3ETTF
-         IUJOWSBH3puHQbjz2nkiKFPpshtOCIAVIamBU5kE7LaSfY8OlKV+cAynjHZbxD+kCm
-         gCovLG3cMvCbg==
-Date:   Tue, 30 Nov 2021 10:03:38 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     lorenzo.pieralisi@arm.com, bhelgaas@google.com,
-        svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Sven Peter <sven@svenpeter.dev>
-Subject: Re: [PATCH] PCI: qcom: Fix warning generated due to the incorrect
- data type
-Message-ID: <20211130160338.GA2739234@bhelgaas>
+        id S243342AbhK3QHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:07:22 -0500
+Received: from shark4.inbox.lv ([194.152.32.84]:40650 "EHLO shark4.inbox.lv"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237958AbhK3QHU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:07:20 -0500
+Received: from shark4.inbox.lv (localhost [127.0.0.1])
+        by shark4-out.inbox.lv (Postfix) with ESMTP id 0B852C01B9;
+        Tue, 30 Nov 2021 18:04:00 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv; s=30062014;
+        t=1638288240; bh=MaBmrbP8dDC347/MJhlAP6RXqkK7vpRItGnOjqKVKMc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References;
+        b=NHNGWgWsZJ0U++0xL+tMHjxROjFFZ/sdn4qopEIzHxDtyrUFP4nkbPUkdk0PGvmPU
+         bbAtMtPxn6lE1RTAMHf7rcZHmk13R+Aw042Wb5lv5NJS6683c6bFAjfWHKYiaCpqau
+         +C6ATRtiK7Z8iF+gG+/sd2Jqghb6wZPHk6t3bfd8=
+Received: from localhost (localhost [127.0.0.1])
+        by shark4-in.inbox.lv (Postfix) with ESMTP id F33CCC01A8;
+        Tue, 30 Nov 2021 18:03:59 +0200 (EET)
+Received: from shark4.inbox.lv ([127.0.0.1])
+        by localhost (shark4.inbox.lv [127.0.0.1]) (spamfilter, port 35)
+        with ESMTP id wR-tlqMNy4Vw; Tue, 30 Nov 2021 18:03:59 +0200 (EET)
+Received: from mail.inbox.lv (pop1 [127.0.0.1])
+        by shark4-in.inbox.lv (Postfix) with ESMTP id 76F78C018F;
+        Tue, 30 Nov 2021 18:03:59 +0200 (EET)
+Date:   Wed, 1 Dec 2021 01:03:48 +0900
+From:   Alexey Avramov <hakavlad@inbox.lv>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+Message-ID: <20211201010348.31e99637@mail.inbox.lv>
+In-Reply-To: <20211129150117.GO3366@techsingularity.net>
+References: <20211125151853.8540-1-mgorman@techsingularity.net>
+        <20211127011246.7a8ac7b8@mail.inbox.lv>
+        <20211129150117.GO3366@techsingularity.net>
+X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130062137.GD205712@thinkpad>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: OK
+X-ESPOL: G4mERXADmHlDpsG9Ippu5OH4tai+FgVjoUWJw7wx9RAtu7LHst18d2eTGIHzanG0EAbD
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Marc, Alyssa, Sven for RID-to-SID mapping insight.  The patch at
-https://lore.kernel.org/all/20211130062137.GD205712@thinkpad/ merely
-fixes a warning.  My meta-question is about the qcom BDF-to-SID
-mapping.]
+I tested this [1] patch on top of 5.16-rc2. It's the same test with 10 tails.
 
-On Tue, Nov 30, 2021 at 11:51:37AM +0530, Manivannan Sadhasivam wrote:
-> On Mon, Nov 29, 2021 at 09:36:14PM -0600, Bjorn Helgaas wrote:
-> > ...
-> > I'm also curious why pcie-qcom.c is the only driver that does this.
-> > "iommu-map" is not specific to qcom, but no other drivers do similar
-> > things with it.
-> 
-> Yes, on the recent qcom platforms starting from sm8250 we need to program
-> the BDF to SID mapping in the controller and that's the reason we are
-> extracting the "iommu-map" property in DT.
+- with noswap
 
-This sounds like something that may not really be specific to sm8250.
+Summary:
 
-It looks vaguely similar to apple_pcie_add_device().  Compare the qcom
-code at [1] with the Apple code at [2].
+2021-11-30 23:32:36,890: Stall times for the last 548.6s:
+2021-11-30 23:32:36,890: -----------
+2021-11-30 23:32:36,891: some cpu     3.7s, avg 0.7%
+2021-11-30 23:32:36,891: -----------
+2021-11-30 23:32:36,891: some io      187.6s, avg 34.2%
+2021-11-30 23:32:36,891: full io      178.3s, avg 32.5%
+2021-11-30 23:32:36,891: -----------
+2021-11-30 23:32:36,892: some memory  392.2s, avg 71.5%
+2021-11-30 23:32:36,892: full memory  390.7s, avg 71.2%
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/dwc/pcie-qcom.c?id=v5.16-rc1#n1308
-[2] https://git.kernel.org/linus/468c8d52c332
+full psi:
+https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap/psi
 
-> > > sparse warnings: (new ones prefixed by >>)
-> > > >> drivers/pci/controller/dwc/pcie-qcom.c:1305:30: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned short [usertype] bdf_be @@     got restricted __be16 [usertype] @@
-> > >    drivers/pci/controller/dwc/pcie-qcom.c:1305:30: sparse:     expected unsigned short [usertype] bdf_be
-> > >    drivers/pci/controller/dwc/pcie-qcom.c:1305:30: sparse:     got restricted __be16 [usertype]
-> > > 
-> > > Reported-by: kernel test robot <lkp@intel.com>
-> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > ---
-> > >  drivers/pci/controller/dwc/pcie-qcom.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > index 8a7a300163e5..6c3b034e9946 100644
-> > > --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> > > +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> > > @@ -1312,7 +1312,7 @@ static int qcom_pcie_config_sid_sm8250(struct qcom_pcie *pcie)
-> > >  
-> > >  	/* Look for an available entry to hold the mapping */
-> > >  	for (i = 0; i < nr_map; i++) {
-> > > -		u16 bdf_be = cpu_to_be16(map[i].bdf);
-> > > +		__be16 bdf_be = cpu_to_be16(map[i].bdf);
-> > >  		u32 val;
-> > >  		u8 hash;
-> > >  
-> > > -- 
-> > > 2.25.1
-> > > 
+mem:
+https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap/mem
+
+- with swappiness=0
+
+Summary:
+
+2021-11-30 23:51:48,969: Stall times for the last 919.4s:
+2021-11-30 23:51:48,969: -----------
+2021-11-30 23:51:48,969: some cpu     5.5s, avg 0.6%
+2021-11-30 23:51:48,970: -----------
+2021-11-30 23:51:48,970: some io      240.4s, avg 26.2%
+2021-11-30 23:51:48,970: full io      230.6s, avg 25.1%
+2021-11-30 23:51:48,970: -----------
+2021-11-30 23:51:48,970: some memory  806.1s, avg 87.7%
+2021-11-30 23:51:48,971: full memory  800.5s, avg 87.1%
+
+psi log:
+https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/swappiness0/psi
+
+mem log:
+https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/swappiness0/mem
+
+In some cases stalls was very short, but in many cases stalls was long. 
+The result is still not good enough.
+
+
+offtop
+======
+
+The same test with the patch [1] on top of 5.16-rc2 + le9 patch [2] 
+with vm.clean_min_kbytes=99000.
+
+- with noswap
+
+Summary:
+
+2021-11-30 23:59:32,209: Stall times for the last 73.1s:
+2021-11-30 23:59:32,209: -----------
+2021-11-30 23:59:32,209: some cpu     0.4s, avg 0.5%
+2021-11-30 23:59:32,209: -----------
+2021-11-30 23:59:32,210: some io      5.8s, avg 8.0%
+2021-11-30 23:59:32,210: full io      5.3s, avg 7.3%
+2021-11-30 23:59:32,210: -----------
+2021-11-30 23:59:32,210: some memory  3.3s, avg 4.5%
+2021-11-30 23:59:32,210: full memory  3.1s, avg 4.2%
+
+This is just an example of what a result close to the expected 
+result might be (especially note io pressure values).
+
+full psi:
+https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap_le9_min99k/psi
+
+mem:
+https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap_le9_min99k/mem
+
+[1] https://lore.kernel.org/lkml/20211129150117.GO3366@techsingularity.net/
+[2] https://lore.kernel.org/all/20211130201652.2218636d@mail.inbox.lv/

@@ -2,152 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C37463C59
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2AD463C5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244453AbhK3Q7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:59:10 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:43856 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238952AbhK3Q7J (ORCPT
+        id S244476AbhK3RBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:01:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31920 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236570AbhK3RBB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:59:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 Nov 2021 12:01:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638291462;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=o3GqI+aQzSaZmc8uceGxj8T0XIl/xXTBH7K23L4gwg8=;
+        b=bFRYNBQjqHd4HF0Vj4m9u6+PYX52h7XEZuDgNaco73hvTYCypj1WA8XWZAndvuhrxj7DnI
+        4mbsy+Gl9MSNwpeZnnE0BSiAaM+PdMGeSKvtgWptp687WivDNjSY7dFS8Pzb9MFdm+nKLh
+        WGBA6/84A/kZRKmkUFyl3ZKQq9HLbRA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-557-8fA2DhY6Nta_OeExNDqJGw-1; Tue, 30 Nov 2021 11:57:40 -0500
+X-MC-Unique: 8fA2DhY6Nta_OeExNDqJGw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C3785CE1A7B;
-        Tue, 30 Nov 2021 16:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1878C53FC7;
-        Tue, 30 Nov 2021 16:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638291347;
-        bh=YkEoSmWzjqSns21oDlublZ8L9PXWXYHB2QcWBlMNzQc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=D3J/uf1ROWLew2Ud89oM4CnMx3YUAJbaYk1e2af14OAxWNMsUiXO18jNO2D8FAJPr
-         3Ig2IaOMFVFvHUDb5WJ9ALqLYM3dl2hqdZBW+0rWwF5vmOY/rt9rUKm3rD8Pze1wSA
-         Luv4T7VRAeu9ouO5mCsffod5Cpr32G6aNWicZ+1zVCV+4DjZHkwBS/IWe0UhAwL8c3
-         FaMje8n9qHLad9UyMXY1uzarTRfhvWVT4iMoUWTLWEqW/XrTiUemyCjcg+kmH61bzx
-         HBKhwZX3K19/0rd69hi2CW97Pk/7rXTosbINVuGjW4X7P5C7imSS1R9XzmTNTTPNUF
-         TDCdis1BZZ+Nw==
-Date:   Tue, 30 Nov 2021 10:55:45 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, michal.simek@xilinx.com,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] PCI: xilinx-nwl: Simplify code and fix a memory leak
-Message-ID: <20211130165545.GA2743072@bhelgaas>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4014B1006AAC;
+        Tue, 30 Nov 2021 16:57:39 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E452B76612;
+        Tue, 30 Nov 2021 16:57:38 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for 5.16-rc4
+Date:   Tue, 30 Nov 2021 11:57:38 -0500
+Message-Id: <20211130165738.358058-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5483f10a44b06aad55728576d489adfa16c3be91.1636279388.git.christophe.jaillet@wanadoo.fr>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Nov 07, 2021 at 11:04:43AM +0100, Christophe JAILLET wrote:
-> Allocate space for 'bitmap' in 'struct nwl_msi' at build time instead of
-> dynamically allocating the memory at runtime.
+Linus,
 
-Definitely a good change.  To be pedantic, I don't think this converts
-the alloc to *build* time.  It converts it to probe-time, when
-nwl_pcie_probe() calls devm_pci_alloc_host_bridge().
+The following changes since commit 136057256686de39cc3a07c2e39ef6bc43003ff6:
 
-> This simplifies code (especially error handling paths) and avoid some
-> open-coded arithmetic in allocator arguments
-> 
-> This also fixes a potential memory leak. The bitmap was never freed. It is
-> now part of a managed resource.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
->  drivers/pci/controller/pcie-xilinx-nwl.c | 30 ++++++------------------
->  1 file changed, 7 insertions(+), 23 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pcie-xilinx-nwl.c b/drivers/pci/controller/pcie-xilinx-nwl.c
-> index a72b4f9a2b00..40d070e54ad2 100644
-> --- a/drivers/pci/controller/pcie-xilinx-nwl.c
-> +++ b/drivers/pci/controller/pcie-xilinx-nwl.c
-> @@ -146,7 +146,7 @@
->  
->  struct nwl_msi {			/* MSI information */
->  	struct irq_domain *msi_domain;
-> -	unsigned long *bitmap;
-> +	DECLARE_BITMAP(bitmap, INT_PCI_MSI_NR);
->  	struct irq_domain *dev_domain;
->  	struct mutex lock;		/* protect bitmap variable */
->  	int irq_msi0;
-> @@ -335,12 +335,10 @@ static void nwl_pcie_leg_handler(struct irq_desc *desc)
->  
->  static void nwl_pcie_handle_msi_irq(struct nwl_pcie *pcie, u32 status_reg)
->  {
-> -	struct nwl_msi *msi;
-> +	struct nwl_msi *msi = &pcie->msi;
->  	unsigned long status;
->  	u32 bit;
->  
-> -	msi = &pcie->msi;
-> -
->  	while ((status = nwl_bridge_readl(pcie, status_reg)) != 0) {
->  		for_each_set_bit(bit, &status, 32) {
->  			nwl_bridge_writel(pcie, 1 << bit, status_reg);
-> @@ -560,30 +558,21 @@ static int nwl_pcie_enable_msi(struct nwl_pcie *pcie)
->  	struct nwl_msi *msi = &pcie->msi;
->  	unsigned long base;
->  	int ret;
-> -	int size = BITS_TO_LONGS(INT_PCI_MSI_NR) * sizeof(long);
->  
->  	mutex_init(&msi->lock);
->  
-> -	msi->bitmap = kzalloc(size, GFP_KERNEL);
-> -	if (!msi->bitmap)
-> -		return -ENOMEM;
-> -
->  	/* Get msi_1 IRQ number */
->  	msi->irq_msi1 = platform_get_irq_byname(pdev, "msi1");
-> -	if (msi->irq_msi1 < 0) {
-> -		ret = -EINVAL;
-> -		goto err;
-> -	}
-> +	if (msi->irq_msi1 < 0)
-> +		return -EINVAL;
->  
->  	irq_set_chained_handler_and_data(msi->irq_msi1,
->  					 nwl_pcie_msi_handler_high, pcie);
->  
->  	/* Get msi_0 IRQ number */
->  	msi->irq_msi0 = platform_get_irq_byname(pdev, "msi0");
-> -	if (msi->irq_msi0 < 0) {
-> -		ret = -EINVAL;
-> -		goto err;
-> -	}
-> +	if (msi->irq_msi0 < 0)
-> +		return -EINVAL;
->  
->  	irq_set_chained_handler_and_data(msi->irq_msi0,
->  					 nwl_pcie_msi_handler_low, pcie);
-> @@ -592,8 +581,7 @@ static int nwl_pcie_enable_msi(struct nwl_pcie *pcie)
->  	ret = nwl_bridge_readl(pcie, I_MSII_CAPABILITIES) & MSII_PRESENT;
->  	if (!ret) {
->  		dev_err(dev, "MSI not present\n");
-> -		ret = -EIO;
-> -		goto err;
-> +		return -EIO;
->  	}
->  
->  	/* Enable MSII */
-> @@ -632,10 +620,6 @@ static int nwl_pcie_enable_msi(struct nwl_pcie *pcie)
->  	nwl_bridge_writel(pcie, MSGF_MSI_SR_LO_MASK, MSGF_MSI_MASK_LO);
->  
->  	return 0;
-> -err:
-> -	kfree(msi->bitmap);
-> -	msi->bitmap = NULL;
-> -	return ret;
->  }
->  
->  static int nwl_pcie_bridge_init(struct nwl_pcie *pcie)
-> -- 
-> 2.30.2
-> 
+  Linux 5.16-rc2 (2021-11-21 13:47:39 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+
+for you to fetch changes up to 7cfc5c653b07782e7059527df8dc1e3143a7591e:
+
+  KVM: fix avic_set_running for preemptable kernels (2021-11-30 07:40:48 -0500)
+
+----------------------------------------------------------------
+ARM64:
+
+* Fix constant sign extension affecting TCR_EL2 and preventing
+running on ARMv8.7 models due to spurious bits being set
+
+* Fix use of helpers using PSTATE early on exit by always sampling
+it as soon as the exit takes place
+
+* Move pkvm's 32bit handling into a common helper
+
+RISC-V:
+
+* Fix incorrect KVM_MAX_VCPUS value
+
+* Unmap stage2 mapping when deleting/moving a memslot
+
+x86:
+
+* Fix and downgrade BUG_ON due to uninitialized cache
+
+* Many APICv and MOVE_ENC_CONTEXT_FROM fixes
+
+* Correctly emulate TLB flushes around nested vmentry/vmexit
+and when the nested hypervisor uses VPID
+
+* Prevent modifications to CPUID after the VM has run
+
+* Other smaller bugfixes
+
+Generic:
+
+* Memslot handling bugfixes
+
+----------------------------------------------------------------
+This is the large bugfix pull request that I mentioned just before rc2,
+with the APICv and MOVE_ENC_CONTEXT_FROM/COPY_ENC_CONTEXT_FROM bug
+shakedown.  It missed rc3 due to Thanksgiving (half of the patches
+are mine and I wanted to get reviews on them for obvious reasons).
+
+Thanks,
+
+Paolo
+
+Anup Patel (1):
+      RISC-V: KVM: Fix incorrect KVM_MAX_VCPUS value
+
+Ben Gardon (1):
+      KVM: x86/mmu: Fix TLB flush range when handling disconnected pt
+
+Catalin Marinas (1):
+      KVM: arm64: Avoid setting the upper 32 bits of TCR_EL2 and CPTR_EL2 to 1
+
+Hou Wenlong (2):
+      KVM: x86/mmu: Skip tlb flush if it has been done in zap_gfn_range()
+      KVM: x86/mmu: Pass parameter flush as false in kvm_tdp_mmu_zap_collapsible_sptes()
+
+Juergen Gross (1):
+      x86/kvm: remove unused ack_notifier callbacks
+
+Lai Jiangshan (2):
+      KVM: X86: Fix when shadow_root_level=5 && guest root_level<4
+      KVM: X86: Use vcpu->arch.walk_mmu for kvm_mmu_invlpg()
+
+Maciej S. Szmigiero (1):
+      KVM: selftests: page_table_test: fix calculation of guest_test_phys_mem
+
+Marc Zyngier (2):
+      KVM: arm64: Save PSTATE early on exit
+      KVM: arm64: Move pkvm's special 32bit handling into a generic infrastructure
+
+Paolo Bonzini (24):
+      Merge tag 'kvm-riscv-fixes-5.16-1' of https://github.com/kvm-riscv/linux into HEAD
+      Merge tag 'kvmarm-fixes-5.16-2' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+      Merge branch 'kvm-5.16-fixes-pre-rc2' into HEAD
+      KVM: VMX: do not use uninitialized gfn_to_hva_cache
+      KVM: downgrade two BUG_ONs to WARN_ON_ONCE
+      KVM: x86: ignore APICv if LAPIC is not enabled
+      selftests: fix check for circular KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM
+      selftests: sev_migrate_tests: free all VMs
+      KVM: SEV: expose KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM capability
+      KVM: MMU: shadow nested paging does not have PKU
+      KVM: VMX: prepare sync_pir_to_irr for running with APICv disabled
+      KVM: x86: check PIR even for vCPUs with disabled APICv
+      KVM: x86: Use a stable condition around all VT-d PI paths
+      KVM: SEV: do not use list_replace_init on an empty list
+      KVM: SEV: cleanup locking for KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM
+      KVM: SEV: initialize regions_list of a mirror VM
+      KVM: SEV: move mirror status to destination of KVM_CAP_VM_MOVE_ENC_CONTEXT_FROM
+      selftests: sev_migrate_tests: add tests for KVM_CAP_VM_COPY_ENC_CONTEXT_FROM
+      KVM: SEV: Do COPY_ENC_CONTEXT_FROM with both VMs locked
+      KVM: SEV: Prohibit migration of a VM that has mirrors
+      KVM: SEV: do not take kvm->lock when destroying
+      KVM: SEV: accept signals in sev_lock_two_vms
+      KVM: VMX: clear vmx_x86_ops.sync_pir_to_irr if APICv is disabled
+      KVM: fix avic_set_running for preemptable kernels
+
+Sean Christopherson (9):
+      KVM: Ensure local memslot copies operate on up-to-date arch-specific data
+      KVM: Disallow user memslot with size that exceeds "unsigned long"
+      KVM: RISC-V: Unmap stage2 mapping when deleting/moving a memslot
+      KVM: nVMX: Flush current VPID (L1 vs. L2) for KVM_REQ_TLB_FLUSH_GUEST
+      KVM: nVMX: Abide to KVM_REQ_TLB_FLUSH_GUEST request on nested vmentry/vmexit
+      KVM: nVMX: Emulate guest TLB flush on nested VM-Enter with new vpid12
+      KVM: x86/mmu: Use yield-safe TDP MMU root iter in MMU notifier unmapping
+      KVM: x86/mmu: Remove spurious TLB flushes in TDP MMU zap collapsible path
+      KVM: x86/mmu: Handle "default" period when selectively waking kthread
+
+Vitaly Kuznetsov (3):
+      KVM: selftests: Avoid KVM_SET_CPUID2 after KVM_RUN in hyperv_features test
+      KVM: x86: Forbid KVM_SET_CPUID{,2} after KVM_RUN
+      KVM: selftests: Make sure kvm_create_max_vcpus test won't hit RLIMIT_NOFILE
+
+ arch/arm64/include/asm/kvm_arm.h                   |   4 +-
+ arch/arm64/kvm/hyp/include/hyp/switch.h            |  14 ++
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h         |   7 +-
+ arch/arm64/kvm/hyp/nvhe/switch.c                   |   8 +-
+ arch/arm64/kvm/hyp/vhe/switch.c                    |   4 +
+ arch/riscv/include/asm/kvm_host.h                  |   8 +-
+ arch/riscv/kvm/mmu.c                               |   6 +
+ arch/x86/kvm/ioapic.h                              |   1 -
+ arch/x86/kvm/irq.h                                 |   1 -
+ arch/x86/kvm/lapic.c                               |   2 +-
+ arch/x86/kvm/mmu/mmu.c                             |  97 ++++++------
+ arch/x86/kvm/mmu/tdp_mmu.c                         |  38 ++---
+ arch/x86/kvm/mmu/tdp_mmu.h                         |   5 +-
+ arch/x86/kvm/svm/avic.c                            |  16 +-
+ arch/x86/kvm/svm/sev.c                             | 161 ++++++++++----------
+ arch/x86/kvm/svm/svm.c                             |   1 -
+ arch/x86/kvm/svm/svm.h                             |   1 +
+ arch/x86/kvm/vmx/nested.c                          |  49 +++---
+ arch/x86/kvm/vmx/posted_intr.c                     |  20 +--
+ arch/x86/kvm/vmx/vmx.c                             |  66 +++++----
+ arch/x86/kvm/x86.c                                 |  66 +++++++--
+ arch/x86/kvm/x86.h                                 |   7 +-
+ tools/testing/selftests/kvm/kvm_create_max_vcpus.c |  30 ++++
+ tools/testing/selftests/kvm/kvm_page_table_test.c  |   2 +-
+ .../testing/selftests/kvm/x86_64/hyperv_features.c | 140 ++++++++---------
+ .../selftests/kvm/x86_64/sev_migrate_tests.c       | 165 +++++++++++++++++++--
+ virt/kvm/kvm_main.c                                |  56 ++++---
+ 27 files changed, 623 insertions(+), 352 deletions(-)
+

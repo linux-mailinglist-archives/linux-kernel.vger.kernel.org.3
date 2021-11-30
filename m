@@ -2,148 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4D2463336
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:47:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B99914632CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:45:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241260AbhK3Lud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:50:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236159AbhK3Ltv (ORCPT
+        id S240958AbhK3Lsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:48:37 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55224 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232723AbhK3Ls1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:49:51 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDF0C0619D5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:46:05 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id b142-20020a1c8094000000b0033f27b76819so7430857wmd.4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:46:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=ykQMG7f7HitTY02bjgroWOqQwac8nTYOVAZLqTXm/og=;
-        b=qfKYXOVzY2MTzD2zIwUpOpLCYIanN5AfAyzY4pD6y/00NCNsZhMgCXyQuHgqHRjMQP
-         2Q4GpB2kKiA9NG+mxwbdwhx/T6uztpsr0cPDZKwOOV4NBkpo8wKmqUMwj6QIZ50+WTGC
-         rj+XujQ6x15SViviNrLc8ryKZTpDmfQ59NmqPKusALt7vIXW09vUdxRhx/IHgX0O1Fi0
-         peXM6+tWJqwR46RttMZspmzxuv6mgkZjTPQRNEx0+Evh/SfhzkOebPUPea948l/PAD60
-         8d8gkegUNMa+NHH1FPVvEqF67z8VdDW4GAXutQLRg58SDKDe/Mh9BClDvEsEpsff6SiM
-         sbTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=ykQMG7f7HitTY02bjgroWOqQwac8nTYOVAZLqTXm/og=;
-        b=DKKv0eXxjI9IY2rlk8q1zgGyOF9YzWxNeEF51FRVFlN1RpKCi717ruTD+uReZdmKHH
-         blnG+wD3WEoKDShLF1PInFBB/wZH8mcUndYDcKhgHvVTXONNVaHFlXmpR12WdFOIzw6q
-         OfZK3wD7Mz8DWIAmGFjCm3i+nyYROoPGVzEK1RaiLHtdK8Z8lLfrD+ATo8Zc8iH9WSDT
-         BSg3swcjfzYWl/LQdaA2yA2HvI04z7xBJVsLPAmT3u1hrORdHj7zV/iOqW6RsZETD6JE
-         NMyFjkrvzFi7OmP/sx7JSALpdrjrswH2BiTWNa4EZ92/kZ65tSHcUfEyFnNxKE5U9wns
-         o5ow==
-X-Gm-Message-State: AOAM530sSvO+bVEXGH5WHgOQQE4xxP1vyqzy9G4lxkqPb7VYrqdWlZOd
-        Y2VGJqSC4qeL19Exfim8LB5j7D1Z3w==
-X-Google-Smtp-Source: ABdhPJw6whH8Hls3EC+BgAy91BvIDfMtsebOG9cJCkHwE7EfRIVxArLwzYtCPhRhlBjkro/EFip+BpGtoQ==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:86b7:11e9:7797:99f0])
- (user=elver job=sendgmr) by 2002:a05:600c:4f0b:: with SMTP id
- l11mr626212wmq.0.1638272763966; Tue, 30 Nov 2021 03:46:03 -0800 (PST)
-Date:   Tue, 30 Nov 2021 12:44:33 +0100
-In-Reply-To: <20211130114433.2580590-1-elver@google.com>
-Message-Id: <20211130114433.2580590-26-elver@google.com>
-Mime-Version: 1.0
-References: <20211130114433.2580590-1-elver@google.com>
-X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v3 25/25] kcsan: Support WEAK_MEMORY with Clang where no
- objtool support exists
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, kasan-dev@googlegroups.com,
-        linux-arch@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 30 Nov 2021 06:48:27 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C3535CE189B;
+        Tue, 30 Nov 2021 11:45:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32B47C53FD1;
+        Tue, 30 Nov 2021 11:45:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638272705;
+        bh=2h877NUNcxuYoPp2Gk4J/rQHwqfdOCqinlttcnauj50=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pRLVxdO2S5UcB5Ej6DKrLPUqUO/AH4IcNzudkuPuCF7915XrRs2mVDg7A0EMsXfGw
+         uvzziA0cwsIN6afsgGqwDz2nGqL5+qhuP+jEmxFkgmdBLKWbhZyNMjGtuk2evEU1od
+         RuOT2TMEEJV+ZZm+IQ9iU0UEJ0Q6PoSODJcsI9ts=
+Date:   Tue, 30 Nov 2021 12:45:02 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Neal Liu <neal_liu@aspeedtech.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Tao Ren <rentao.bupt@gmail.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        kernel test robot <lkp@intel.com>,
+        Sasha Levin <sashal@kernel.org>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, BMC-SW@aspeedtech.com
+Subject: Re: [PATCH v2 1/4] usb: aspeed-vhub: add qualifier descriptor
+Message-ID: <YaYOvgCaO4FJ8r+z@kroah.com>
+References: <20211130104256.3106797-1-neal_liu@aspeedtech.com>
+ <20211130104256.3106797-2-neal_liu@aspeedtech.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130104256.3106797-2-neal_liu@aspeedtech.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang and GCC behave a little differently when it comes to the
-__no_sanitize_thread attribute, which has valid reasons, and depending
-on context either one could be right.
+On Tue, Nov 30, 2021 at 06:42:53PM +0800, Neal Liu wrote:
+> Support qualifier descriptor to pass USB30CV compliance test.
 
-Traditionally, user space ThreadSanitizer [1] still expects instrumented
-builtin atomics (to avoid false positives) and __tsan_func_{entry,exit}
-(to generate meaningful stack traces), even if the function has the
-attribute no_sanitize("thread").
+Please provide more information here in this description.  This does not
+explain what is happening here very well.
 
-[1] https://clang.llvm.org/docs/ThreadSanitizer.html#attribute-no-sanitize-thread
+Also, what is "USB30CV"?
 
-GCC doesn't follow the same policy (for better or worse), and removes
-all kinds of instrumentation if no_sanitize is added. Arguably, since
-this may be a problem for user space ThreadSanitizer, we expect this may
-change in future.
+> 
+> Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> ---
+>  drivers/usb/gadget/udc/aspeed-vhub/hub.c  | 24 +++++++++++++++++++++++
+>  drivers/usb/gadget/udc/aspeed-vhub/vhub.h |  1 +
+>  2 files changed, 25 insertions(+)
+> 
+> diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> index b9960fdd8a51..93f27a745760 100644
+> --- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> +++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> @@ -68,6 +68,18 @@ static const struct usb_device_descriptor ast_vhub_dev_desc = {
+>  	.bNumConfigurations	= 1,
+>  };
+>  
+> +static const struct usb_qualifier_descriptor ast_vhub_qual_desc = {
+> +	.bLength = 0xA,
+> +	.bDescriptorType = USB_DT_DEVICE_QUALIFIER,
+> +	.bcdUSB = cpu_to_le16(0x0200),
+> +	.bDeviceClass = USB_CLASS_HUB,
+> +	.bDeviceSubClass = 0,
+> +	.bDeviceProtocol = 0,
+> +	.bMaxPacketSize0 = 64,
+> +	.bNumConfigurations = 1,
+> +	.bRESERVED = 0,
 
-Since KCSAN != ThreadSanitizer, the likelihood of false positives even
-without barrier instrumentation everywhere, is much lower by design.
+Fields that are to be set to zero do not need to be set here, the
+compiler does it for you.
 
-At least for Clang, however, to fully remove all sanitizer
-instrumentation, we must add the disable_sanitizer_instrumentation
-attribute, which is available since Clang 14.0.
+thanks,
 
-Signed-off-by: Marco Elver <elver@google.com>
----
-v3:
-* New patch.
----
- include/linux/compiler_types.h | 13 ++++++++++++-
- lib/Kconfig.kcsan              |  2 +-
- 2 files changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index 1d32f4c03c9e..3c1795fdb568 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -198,9 +198,20 @@ struct ftrace_likely_data {
- # define __no_kasan_or_inline __always_inline
- #endif
- 
--#define __no_kcsan __no_sanitize_thread
- #ifdef __SANITIZE_THREAD__
-+/*
-+ * Clang still emits instrumentation for __tsan_func_{entry,exit}() and builtin
-+ * atomics even with __no_sanitize_thread (to avoid false positives in userspace
-+ * ThreadSanitizer). The kernel's requirements are stricter and we really do not
-+ * want any instrumentation with __no_kcsan.
-+ *
-+ * Therefore we add __disable_sanitizer_instrumentation where available to
-+ * disable all instrumentation. See Kconfig.kcsan where this is mandatory.
-+ */
-+# define __no_kcsan __no_sanitize_thread __disable_sanitizer_instrumentation
- # define __no_sanitize_or_inline __no_kcsan notrace __maybe_unused
-+#else
-+# define __no_kcsan
- #endif
- 
- #ifndef __no_sanitize_or_inline
-diff --git a/lib/Kconfig.kcsan b/lib/Kconfig.kcsan
-index e4394ea8068b..63b70b8c5551 100644
---- a/lib/Kconfig.kcsan
-+++ b/lib/Kconfig.kcsan
-@@ -198,7 +198,7 @@ config KCSAN_WEAK_MEMORY
- 	# We can either let objtool nop __tsan_func_{entry,exit}() and builtin
- 	# atomics instrumentation in .noinstr.text, or use a compiler that can
- 	# implement __no_kcsan to really remove all instrumentation.
--	depends on STACK_VALIDATION || CC_IS_GCC
-+	depends on STACK_VALIDATION || CC_IS_GCC || CLANG_VERSION >= 140000
- 	help
- 	  Enable support for modeling a subset of weak memory, which allows
- 	  detecting a subset of data races due to missing memory barriers.
--- 
-2.34.0.rc2.393.gf8c9666880-goog
-
+greg k-h

@@ -2,50 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7613D463995
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D2E46389E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244128AbhK3PP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:15:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
+        id S244749AbhK3PFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:05:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243236AbhK3O4x (ORCPT
+        with ESMTP id S230435AbhK3O4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:56:53 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02AAC061D75;
-        Tue, 30 Nov 2021 06:50:50 -0800 (PST)
+        Tue, 30 Nov 2021 09:56:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE6DC061D7B;
+        Tue, 30 Nov 2021 06:50:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 65120CE1A4B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 793ACB81A52;
+        Tue, 30 Nov 2021 14:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40C2EC53FC7;
         Tue, 30 Nov 2021 14:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA05C53FC1;
-        Tue, 30 Nov 2021 14:50:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283848;
-        bh=rciJuTE6DGsaNP2VDDiRHUBLpuiwr4thrV766TIgig4=;
+        s=k20201202; t=1638283851;
+        bh=Z/tw+q0KjEN4a3fO7zZN2tqAT9jijX8ngH7qsDGJvnw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZgrD3McvH2umJ/+zAtdMSUK0zl6i3fZ+6cOWM71nIlAGeH+h1/nCbg8iTUt9igHj5
-         g25b02K+HQC9q8gm5IYS60hSuhjwUiSEnqim7J18b45m/9idHX67sKx55+0o4fiNe8
-         DpkULZKbgbbu/8wCqoO+X0pOnW8kVr0VDnJawusm7z2gI3RiXlfEVYCcYjnriSQhG+
-         0z29f1wORS3DmKmvI1TRj+mIh5/v/y2+OKptsR7yEPuoQKiU1/AlGmafeRwJxXD+mi
-         YbYzlIQK5p5hoyOQ76cU+k9vYRE8mcOKjDMVNK+aUlMPq9toq6gkAK7lokcAF78kr5
-         KRATerID7xFOg==
+        b=CCBv9zieRWlD3Y7Se4pInUb+HueJMnXPrXFwwoRcYQAr9XWitCL3Z004uOG7ONMYo
+         M3zow58LJm4Vhtjd5tSfbSV7SyBhCmWiM6fqvmHlNB2MxLwEUSr52AYtnuWgeghDM1
+         RnEWwSXB9se74CZ2UrRjCOUEu8ev0wE6ixIho7tOjpWOO24t7KaFRFlT2JucmEbquu
+         wBXK54lVsWiomhTLm2vPZVm4Xa9W04AQxNBxnhbpA0KR+LdghpdasV+k45m0odfIXB
+         C1pfpjPzbcS+uOsmzcA3+3MmwI5ZkUjROTG9ghrRXpHbfKZOUiOuRUEj9X/bqIrIEK
+         IoHQOptRjbUnA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, matthias.bgg@gmail.com,
-        kuninori.morimoto.gx@renesas.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 08/43] ASoC: mediatek: mt8173: Fix debugfs registration for components
-Date:   Tue, 30 Nov 2021 09:49:45 -0500
-Message-Id: <20211130145022.945517-8-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, bgoswami@codeaurora.org,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.10 09/43] ASoC: qdsp6: q6adm: improve error reporting
+Date:   Tue, 30 Nov 2021 09:49:46 -0500
+Message-Id: <20211130145022.945517-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130145022.945517-1-sashal@kernel.org>
 References: <20211130145022.945517-1-sashal@kernel.org>
@@ -57,114 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit 8c32984bc7da29828260ac514d5d4967f7e8f62d ]
+[ Upstream commit 0a270471d68533f59c5cfd631a3fce31a3b17144 ]
 
-When registering the mt8173-afe-pcm driver, we are also adding two
-components: one is for the PCM DAIs and one is for the HDMI DAIs, but
-when debugfs is enabled, we're getting the following issue:
+reset value for port is -1 so printing an hex would not give us very
+useful debug information, so use %d instead.
 
-[   17.279176] debugfs: Directory '11220000.audio-controller' with parent 'mtk-rt5650' already present!
-[   17.288345] debugfs: Directory '11220000.audio-controller' with parent 'mtk-rt5650' already present!
-
-To overcome to that without any potentially big rewrite of this driver,
-similarly to what was done in mt8195-afe-pcm, add a debugfs_prefix to
-the components before actually adding them.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20211111161108.502344-1-angelogioacchino.delregno@collabora.com
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20211116114721.12517-5-srinivas.kandagatla@linaro.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8173/mt8173-afe-pcm.c | 51 ++++++++++++++++++----
- 1 file changed, 43 insertions(+), 8 deletions(-)
+ sound/soc/qcom/qdsp6/q6adm.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c b/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-index 7e7bda70d12e9..a8c7617978a66 100644
---- a/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-afe-pcm.c
-@@ -1054,6 +1054,7 @@ static int mt8173_afe_pcm_dev_probe(struct platform_device *pdev)
- 	int irq_id;
- 	struct mtk_base_afe *afe;
- 	struct mt8173_afe_private *afe_priv;
-+	struct snd_soc_component *comp_pcm, *comp_hdmi;
+diff --git a/sound/soc/qcom/qdsp6/q6adm.c b/sound/soc/qcom/qdsp6/q6adm.c
+index 72f29720398cd..9316775a882a3 100644
+--- a/sound/soc/qcom/qdsp6/q6adm.c
++++ b/sound/soc/qcom/qdsp6/q6adm.c
+@@ -390,7 +390,7 @@ struct q6copp *q6adm_open(struct device *dev, int port_id, int path, int rate,
+ 	int ret = 0;
  
- 	ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(33));
- 	if (ret)
-@@ -1142,23 +1143,55 @@ static int mt8173_afe_pcm_dev_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_pm_disable;
+ 	if (port_id < 0) {
+-		dev_err(dev, "Invalid port_id 0x%x\n", port_id);
++		dev_err(dev, "Invalid port_id %d\n", port_id);
+ 		return ERR_PTR(-EINVAL);
+ 	}
  
--	ret = devm_snd_soc_register_component(&pdev->dev,
--					 &mt8173_afe_pcm_dai_component,
--					 mt8173_afe_pcm_dais,
--					 ARRAY_SIZE(mt8173_afe_pcm_dais));
-+	comp_pcm = devm_kzalloc(&pdev->dev, sizeof(*comp_pcm), GFP_KERNEL);
-+	if (!comp_pcm) {
-+		ret = -ENOMEM;
-+		goto err_pm_disable;
-+	}
-+
-+	ret = snd_soc_component_initialize(comp_pcm,
-+					   &mt8173_afe_pcm_dai_component,
-+					   &pdev->dev);
- 	if (ret)
- 		goto err_pm_disable;
+@@ -508,7 +508,7 @@ int q6adm_matrix_map(struct device *dev, int path,
+ 		int port_idx = payload_map.port_id[i];
  
--	ret = devm_snd_soc_register_component(&pdev->dev,
--					 &mt8173_afe_hdmi_dai_component,
--					 mt8173_afe_hdmi_dais,
--					 ARRAY_SIZE(mt8173_afe_hdmi_dais));
-+#ifdef CONFIG_DEBUG_FS
-+	comp_pcm->debugfs_prefix = "pcm";
-+#endif
-+
-+	ret = snd_soc_add_component(comp_pcm,
-+				    mt8173_afe_pcm_dais,
-+				    ARRAY_SIZE(mt8173_afe_pcm_dais));
-+	if (ret)
-+		goto err_pm_disable;
-+
-+	comp_hdmi = devm_kzalloc(&pdev->dev, sizeof(*comp_hdmi), GFP_KERNEL);
-+	if (!comp_hdmi) {
-+		ret = -ENOMEM;
-+		goto err_pm_disable;
-+	}
-+
-+	ret = snd_soc_component_initialize(comp_hdmi,
-+					   &mt8173_afe_hdmi_dai_component,
-+					   &pdev->dev);
- 	if (ret)
- 		goto err_pm_disable;
- 
-+#ifdef CONFIG_DEBUG_FS
-+	comp_hdmi->debugfs_prefix = "hdmi";
-+#endif
-+
-+	ret = snd_soc_add_component(comp_hdmi,
-+				    mt8173_afe_hdmi_dais,
-+				    ARRAY_SIZE(mt8173_afe_hdmi_dais));
-+	if (ret)
-+		goto err_cleanup_components;
-+
- 	dev_info(&pdev->dev, "MT8173 AFE driver initialized.\n");
- 	return 0;
- 
-+err_cleanup_components:
-+	snd_soc_unregister_component(&pdev->dev);
- err_pm_disable:
- 	pm_runtime_disable(&pdev->dev);
- 	return ret;
-@@ -1166,6 +1199,8 @@ static int mt8173_afe_pcm_dev_probe(struct platform_device *pdev)
- 
- static int mt8173_afe_pcm_dev_remove(struct platform_device *pdev)
- {
-+	snd_soc_unregister_component(&pdev->dev);
-+
- 	pm_runtime_disable(&pdev->dev);
- 	if (!pm_runtime_status_suspended(&pdev->dev))
- 		mt8173_afe_runtime_suspend(&pdev->dev);
+ 		if (port_idx < 0) {
+-			dev_err(dev, "Invalid port_id 0x%x\n",
++			dev_err(dev, "Invalid port_id %d\n",
+ 				payload_map.port_id[i]);
+ 			kfree(pkt);
+ 			return -EINVAL;
 -- 
 2.33.0
 

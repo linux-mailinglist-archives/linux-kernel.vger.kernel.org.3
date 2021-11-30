@@ -2,82 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2EFD462A83
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC25D462A87
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237586AbhK3Cfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 21:35:37 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:58268 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237559AbhK3Cfg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 21:35:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=vUFHwoBtOS6VZw8Tg61xsLT12K9iQ5jz7v/Dv9NP0jg=; b=uILZyEXasalRvxQPVTMLuFr8uC
-        WNnaqkoMzXDZRXyEsO6Kpq3itXcJKpLrXulH/08FYLoGycoMlKRvHEynsaRSOqtZ/A5RVK2+qIP4/
-        uwXc3nOZvpN6WiBNPWTEfo0IvU6tNITio2OMiukH/kFebBLZas83DvO2J+EB8249HdQc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1mrswE-00EzQQ-4N; Tue, 30 Nov 2021 03:32:10 +0100
-Date:   Tue, 30 Nov 2021 03:32:10 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     Tianhao Chai <cth451@gmail.com>,
-        Igor Russkikh <irusskikh@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Subject: Re: [PATCH] ethernet: aquantia: Try MAC address from device tree
-Message-ID: <YaWNKiXwr/uHlNJD@lunn.ch>
-References: <20211128023733.GA466664@cth-desktop-dorm.mad.wi.cth451.me>
- <YaOvShya4kP4SRk7@lunn.ch>
- <37679b8b-7a81-5605-23af-e442f9e91816@marcan.st>
+        id S237599AbhK3Cg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 21:36:26 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44644 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233451AbhK3CgZ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 21:36:25 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12C7DB816C5;
+        Tue, 30 Nov 2021 02:33:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2D7EC53FC7;
+        Tue, 30 Nov 2021 02:33:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638239584;
+        bh=6dK1A1KLQrmLHmky6JoKWhl4u7mQlEeB1XsXSSDqfpo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WK3ASy8TVV/NKFCNde2/l4BbaNFeYRuC6Q0XPLy1odYwZWLNat7Fnx1yl6eRYB5Ak
+         T6BEId/YVS0sCHUFI8YX+OFeYRvgvM7Bl48Q16/AFyxldokqfS8DVOSkQhjOUzLsv8
+         V9mPBC61MjZw4vqSxkrbkOlqT/HSP7+SY83wYN6WLlqRO4CyiEiMWYWfR7kjo+jH6b
+         YLWVRYgEsL4SpYx5B6h5bCnaJp6npiLN16GVykZ00pdHmhIEfvTAjtJDVsFzF3Hos6
+         T9GlKu6opbQIlsOLCKrMNhF2V5PWixGhrbvpm5yf3U9PH6s+VpNMYJZOx2u+9IhAIM
+         m/I8lI9U0jUKA==
+Date:   Mon, 29 Nov 2021 18:33:03 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] ima: define a new signature type named
+ IMA_VERITY_DIGSIG
+Message-ID: <YaWNX3nwslG/Q2aH@sol.localdomain>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+ <20211129170057.243127-3-zohar@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <37679b8b-7a81-5605-23af-e442f9e91816@marcan.st>
+In-Reply-To: <20211129170057.243127-3-zohar@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 02:08:28AM +0900, Hector Martin wrote:
-> On 29/11/2021 01.33, Andrew Lunn wrote:
-> > On Sat, Nov 27, 2021 at 08:37:33PM -0600, Tianhao Chai wrote:
-> > > Apple M1 Mac minis (2020) with 10GE NICs do not have MAC address in the
-> > > card, but instead need to obtain MAC addresses from the device tree. In
-> > > this case the hardware will report an invalid MAC.
-> > > 
-> > > Currently atlantic driver does not query the DT for MAC address and will
-> > > randomly assign a MAC if the NIC doesn't have a permanent MAC burnt in.
-> > > This patch causes the driver to perfer a valid MAC address from OF (if
-> > > present) over HW self-reported MAC and only fall back to a random MAC
-> > > address when neither of them is valid.
-> > 
-> > This is a change in behaviour, and could cause regressions. It would
-> > be better to keep with the current flow. Call
-> > aq_fw_ops->get_mac_permanent() first. If that does not give a valid
-> > MAC address, then try DT, and lastly use a random MAC address.
+On Mon, Nov 29, 2021 at 12:00:55PM -0500, Mimi Zohar wrote:
+> To differentiate between a regular file hash and an fs-verity file digest
+> based signature stored as security.ima xattr, define a new signature type
+> named IMA_VERITY_DIGSIG.
 > 
-> On DT platforms, it is expected that the device tree MAC will override
-> whatever the device thinks is its MAC address.
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
 
-Can you point to any documentation of that expectation?
+For this new signature type, what bytes are actually signed?  It looks like it's
+just the raw digest, which isn't sufficient since it is ambiguous.  It needs to
+include information that makes it clear what the signer is actually signing,
+such as "this is an fs-verity SHA-256 file digest".  See
+'struct fsverity_formatted_digest' for an example of this (but it isn't
+necessary to use that exact structure).
 
-> I would not expect any other existing platform to have a MAC assigned to the
-> device in this way using these cards; if any platforms do, chances are they
-> intended it for it to be used and this patch will fix a current bug. If some
-> platforms out there really have bogus MACs assigned in this way, that's a
-> firmware bug, and we'd have to find out and add explicit, targeted
-> workaround code. Are you aware of any such platforms? :)
+I think the existing IMA signatures have the same problem (but it is hard for me
+to understand the code).  However, a new signature type doesn't have
+backwards-compatibility concerns, so it could be done right.
 
-I'm not aware of any, because i try to avoid making behaviour changes.
-
-Anyway, lets go with this, and if stuff breaks we can always change
-the order to what i suggested in order to unbreak stuff. I'm assuming
-for Apple M1 Mac minis the order does not actually matter?
-
-    Andrew
+- Eric

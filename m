@@ -2,66 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0854639AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954A44639A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:15:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239078AbhK3PTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:19:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36870 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243247AbhK3PP6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:15:58 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513BCC08E867
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:07:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CrtvFVO4bzb7EHtHJr/l5tavV6LHAtf/pbvHToYKOcw=; b=Z8PTT9xfQTkO/ve7FB5E4aCFVr
-        I0D7kgVdzDbUD6qk80Yzmyga6gRDLXQL9hw38K4RPFwIBFX5SLfjPBZbUKGmZCXCK+0f8/PSCBtwK
-        zStqYpWnJ2ty8GQW6TTCVffc+e8iRaFhSCFAvVInM3O/AsW/Lq9HrtZZE4Va2dvtOn0qDRKUxX3A7
-        LNR4ik6lmXu0IvvxTFMVHU0lX1caVQJNfoHwR3hhLa4eTv2TMWj/c6uHobu58wyPY1xmXqh9tUwPD
-        HjtJ9qmt9/5dju37rwoTlOlTYqtwDvP0w9xaM/gib+qKgkO8gqEq7iBX9j+eJj7Ty1qvhsFbklb+p
-        dL/fb8LQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ms4iu-00CjJ9-VG; Tue, 30 Nov 2021 15:07:13 +0000
-Date:   Tue, 30 Nov 2021 15:07:12 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools: Fix math.h breakage
-Message-ID: <YaY+IFrgBOUGomW6@casper.infradead.org>
-References: <20211130141316.2987986-1-willy@infradead.org>
- <YaY3hKLejcy09bZk@smile.fi.intel.com>
+        id S242503AbhK3PSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:18:13 -0500
+Received: from foss.arm.com ([217.140.110.172]:41114 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233778AbhK3PMR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 10:12:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 557041063;
+        Tue, 30 Nov 2021 07:08:57 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 296C33F5A1;
+        Tue, 30 Nov 2021 07:08:54 -0800 (PST)
+Date:   Tue, 30 Nov 2021 15:08:48 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     madvenka@linux.microsoft.com
+Cc:     broonie@kernel.org, jpoimboe@redhat.com, ardb@kernel.org,
+        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
+        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
+        linux-arm-kernel@lists.infradead.org,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 2/5] arm64: Rename unwinder functions
+Message-ID: <YaY+gMPSQMx1M5Pj@FVFF77S0Q05N>
+References: <8b861784d85a21a9bf08598938c11aff1b1249b9>
+ <20211123193723.12112-1-madvenka@linux.microsoft.com>
+ <20211123193723.12112-3-madvenka@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YaY3hKLejcy09bZk@smile.fi.intel.com>
+In-Reply-To: <20211123193723.12112-3-madvenka@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 04:39:00PM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 30, 2021 at 02:13:16PM +0000, Matthew Wilcox (Oracle) wrote:
-> > Commit 98e1385ef24b broke the radix tree test suite in two different ways;
-> > first by including math.h which didn't exist in the tools directory, and
-> > second by removing an implicit include of spinlock.h before lockdep.h.
-> > Fix both issues.
+On Tue, Nov 23, 2021 at 01:37:20PM -0600, madvenka@linux.microsoft.com wrote:
+> From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 > 
-> Sorry for that and thank you for the fix.
-> Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Rename unwinder functions for consistency and better naming.
 > 
-> I'm wondering if there is a way of not copying kernel headers manually,
-> otherwise we always will have such breakages.
+> 	- Rename start_backtrace() to unwind_start().
+> 	- Rename unwind_frame() to unwind_next().
+> 	- Rename walk_stackframe() to unwind().
 
-It's not necessarily that these are _copies_ of kernel headers, so much as
-they're ways of mocking kernel interfaces when building userspace code.
-We could separate out pieces and include them from each direction, but
-that has its own problems, and doesn't necessarily solve these kinds of
-problems either.
+Super trivial, but could we s/unwind_start/unwind_init/ ? That makes it
+slightly clearer that it's not performing an unwind step.
 
-I think the only way to prevent these kinds of breakages is to make sure
-the build bots are also building things.
+Otherwise, this looks good to me.
+
+For the rename:
+
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+
+It's be nice if we could also clean up 'struct stackframe' into 'struct
+unwind_state', but that can be a follow-up, and this is fine as it is, modulo
+the super trivial comment above.
+
+Thanks,
+Mark.
+
+> 
+> Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
+> ---
+>  arch/arm64/kernel/stacktrace.c | 28 ++++++++++++++--------------
+>  1 file changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> index 7217c4f63ef7..918852cd2681 100644
+> --- a/arch/arm64/kernel/stacktrace.c
+> +++ b/arch/arm64/kernel/stacktrace.c
+> @@ -33,8 +33,8 @@
+>   */
+>  
+>  
+> -static void start_backtrace(struct stackframe *frame, unsigned long fp,
+> -			    unsigned long pc)
+> +static void unwind_start(struct stackframe *frame, unsigned long fp,
+> +			 unsigned long pc)
+>  {
+>  	frame->fp = fp;
+>  	frame->pc = pc;
+> @@ -45,7 +45,7 @@ static void start_backtrace(struct stackframe *frame, unsigned long fp,
+>  	/*
+>  	 * Prime the first unwind.
+>  	 *
+> -	 * In unwind_frame() we'll check that the FP points to a valid stack,
+> +	 * In unwind_next() we'll check that the FP points to a valid stack,
+>  	 * which can't be STACK_TYPE_UNKNOWN, and the first unwind will be
+>  	 * treated as a transition to whichever stack that happens to be. The
+>  	 * prev_fp value won't be used, but we set it to 0 such that it is
+> @@ -63,8 +63,8 @@ static void start_backtrace(struct stackframe *frame, unsigned long fp,
+>   * records (e.g. a cycle), determined based on the location and fp value of A
+>   * and the location (but not the fp value) of B.
+>   */
+> -static int notrace unwind_frame(struct task_struct *tsk,
+> -				struct stackframe *frame)
+> +static int notrace unwind_next(struct task_struct *tsk,
+> +			       struct stackframe *frame)
+>  {
+>  	unsigned long fp = frame->fp;
+>  	struct stack_info info;
+> @@ -104,7 +104,7 @@ static int notrace unwind_frame(struct task_struct *tsk,
+>  
+>  	/*
+>  	 * Record this frame record's values and location. The prev_fp and
+> -	 * prev_type are only meaningful to the next unwind_frame() invocation.
+> +	 * prev_type are only meaningful to the next unwind_next() invocation.
+>  	 */
+>  	frame->fp = READ_ONCE_NOCHECK(*(unsigned long *)(fp));
+>  	frame->pc = READ_ONCE_NOCHECK(*(unsigned long *)(fp + 8));
+> @@ -137,27 +137,27 @@ static int notrace unwind_frame(struct task_struct *tsk,
+>  
+>  	return 0;
+>  }
+> -NOKPROBE_SYMBOL(unwind_frame);
+> +NOKPROBE_SYMBOL(unwind_next);
+>  
+> -static void notrace walk_stackframe(struct task_struct *tsk,
+> -				    unsigned long fp, unsigned long pc,
+> -				    bool (*fn)(void *, unsigned long), void *data)
+> +static void notrace unwind(struct task_struct *tsk,
+> +			   unsigned long fp, unsigned long pc,
+> +			   bool (*fn)(void *, unsigned long), void *data)
+>  {
+>  	struct stackframe frame;
+>  
+> -	start_backtrace(&frame, fp, pc);
+> +	unwind_start(&frame, fp, pc);
+>  
+>  	while (1) {
+>  		int ret;
+>  
+>  		if (!fn(data, frame.pc))
+>  			break;
+> -		ret = unwind_frame(tsk, &frame);
+> +		ret = unwind_next(tsk, &frame);
+>  		if (ret < 0)
+>  			break;
+>  	}
+>  }
+> -NOKPROBE_SYMBOL(walk_stackframe);
+> +NOKPROBE_SYMBOL(unwind);
+>  
+>  static bool dump_backtrace_entry(void *arg, unsigned long where)
+>  {
+> @@ -210,5 +210,5 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+>  		fp = thread_saved_fp(task);
+>  		pc = thread_saved_pc(task);
+>  	}
+> -	walk_stackframe(task, fp, pc, consume_entry, cookie);
+> +	unwind(task, fp, pc, consume_entry, cookie);
+>  }
+> -- 
+> 2.25.1
+> 

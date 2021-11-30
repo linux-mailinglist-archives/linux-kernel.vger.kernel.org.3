@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4465546362B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B486D46362D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236374AbhK3ON7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:13:59 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:60350 "EHLO
+        id S241780AbhK3OOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:14:01 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:60360 "EHLO
         smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbhK3ONz (ORCPT
+        with ESMTP id S236619AbhK3ON5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:13:55 -0500
+        Tue, 30 Nov 2021 09:13:57 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id ADDED21891;
-        Tue, 30 Nov 2021 14:10:35 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4916D212B9;
+        Tue, 30 Nov 2021 14:10:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638281435; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1638281437; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rDuo7pVZQTFs4L5N2DQh9ls5njhAaSZRsIp1d0oOqqM=;
-        b=MycXBvQZy+GhLoWQ7GNY9rDq4mB3nDKifmrEY4aL7chFMNKTe8iWIW3Gt452qksK7xjpK8
-        yagjWkXKUWtHUSglmWsG292wQDVUKUak3z5rAs5nOGfJJ4RIXBmFgvYqqq5BccV9mcYDHT
-        eFCkq8eDRIouyiWbpB9rBYjkqhMt2Zc=
+        bh=dnEkwdPdKAGHHGEF5tN3IGx4PVT9y27Bh+g38lvNuD8=;
+        b=IrZVVeItAjLfU3plqmvLpiZ+EgpBKl4wr3oTUnlRawpj0tDyhxXs3KJUe/J+M1Dpf0Z4cA
+        2vu6d9eyAQd18otipYRqd9UT6DPI2DlZH0wmE3/fO8HPQitv0GrxvCPC3VXoOvagASd4Me
+        JfocHcGufjJtcQLlWUt7zgQk2D7AJoc=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638281435;
+        s=susede2_ed25519; t=1638281437;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=rDuo7pVZQTFs4L5N2DQh9ls5njhAaSZRsIp1d0oOqqM=;
-        b=BdYWYQ0RA7zY45InW2ROkYg0LVk6BEQf8XrnQ4OAZwvQLijXJYqlXO6OvIkHyR4HRgRLit
-        PIlqmbj/qs/gg3BA==
+        bh=dnEkwdPdKAGHHGEF5tN3IGx4PVT9y27Bh+g38lvNuD8=;
+        b=sPNMXm29oqfapF1QVtdvr9ljx8SRLPUiqcW/RXV6fxnlJ7kFihwQJRBGgM8CKfTs4d5deO
+        leDadFFmX4VlHsDw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 91A7613D4E;
-        Tue, 30 Nov 2021 14:10:35 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3139E13D4E;
+        Tue, 30 Nov 2021 14:10:37 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id K+L6IdswpmFzLgAAMHmgww
-        (envelope-from <nstange@suse.de>); Tue, 30 Nov 2021 14:10:35 +0000
+        id xicGC90wpmF3LgAAMHmgww
+        (envelope-from <nstange@suse.de>); Tue, 30 Nov 2021 14:10:37 +0000
 From:   Nicolai Stange <nstange@suse.de>
 To:     =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>
 Cc:     Torsten Duwe <duwe@suse.de>, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org, Nicolai Stange <nstange@suse.de>
-Subject: [PATCH 1/3] crypto: drbg - ignore jitterentropy errors if not in FIPS mode
-Date:   Tue, 30 Nov 2021 15:10:07 +0100
-Message-Id: <20211130141009.6791-2-nstange@suse.de>
+Subject: [PATCH 2/3] crypto: jitter - don't limit ->health_failure check to FIPS mode
+Date:   Tue, 30 Nov 2021 15:10:08 +0100
+Message-Id: <20211130141009.6791-3-nstange@suse.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20211130141009.6791-1-nstange@suse.de>
 References: <20211130141009.6791-1-nstange@suse.de>
@@ -64,42 +64,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A subsequent patch will make the jitterentropy RNG to unconditionally
-report health test errors back to callers, independent of whether
-fips_enabled is set or not. The DRBG needs access to a functional
-jitterentropy instance only in FIPS mode (because it's the only SP800-90B
-compliant entropy source as it currently stands). Thus, it is perfectly
-fine for the DRBGs to obtain entropy from the jitterentropy source only
-on a best effort basis if fips_enabled is off.
+The jitterentropy's Repetition Count Test (RCT) as well as the Adaptive
+Proportion Test (APT) are run unconditionally on any collected samples.
+However, their result, i.e. ->health_failure, will only get checked if
+fips_enabled is set, c.f. the jent_health_failure() wrapper.
 
-Make the DRBGs to ignore jitterentropy failures if fips_enabled is not set.
+I would argue that a RCT or APT failure indicates that something's
+seriously off and that this should always be reported as an error,
+independently of whether FIPS mode is enabled or not: it should be up to
+callers whether or not and how to handle jitterentropy failures.
+
+Make jent_health_failure() to unconditionally return ->health_failure,
+independent of whether fips_enabled is set.
+
+Note that fips_enabled isn't accessed from the jitterentropy code anymore
+now. Remove the linux/fips.h include as well as the jent_fips_enabled()
+wrapper.
 
 Signed-off-by: Nicolai Stange <nstange@suse.de>
 ---
- crypto/drbg.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ crypto/jitterentropy-kcapi.c | 6 ------
+ crypto/jitterentropy.c       | 4 ----
+ crypto/jitterentropy.h       | 1 -
+ 3 files changed, 11 deletions(-)
 
-diff --git a/crypto/drbg.c b/crypto/drbg.c
-index 5977a72afb03..177983b6ae38 100644
---- a/crypto/drbg.c
-+++ b/crypto/drbg.c
-@@ -1193,11 +1193,14 @@ static int drbg_seed(struct drbg_state *drbg, struct drbg_string *pers,
- 			pr_devel("DRBG: (re)seeding with %u bytes of entropy\n",
- 				 entropylen);
- 		} else {
--			/* Get seed from Jitter RNG */
-+			/*
-+			 * Get seed from Jitter RNG, failures are
-+			 * fatal only in FIPS mode.
-+			 */
- 			ret = crypto_rng_get_bytes(drbg->jent,
- 						   entropy + entropylen,
- 						   entropylen);
--			if (ret) {
-+			if (fips_enabled && ret) {
- 				pr_devel("DRBG: jent failed with %d\n", ret);
+diff --git a/crypto/jitterentropy-kcapi.c b/crypto/jitterentropy-kcapi.c
+index e8a4165a1874..2d115bec15ae 100644
+--- a/crypto/jitterentropy-kcapi.c
++++ b/crypto/jitterentropy-kcapi.c
+@@ -40,7 +40,6 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
+-#include <linux/fips.h>
+ #include <linux/time.h>
+ #include <crypto/internal/rng.h>
  
- 				/*
+@@ -60,11 +59,6 @@ void jent_zfree(void *ptr)
+ 	kfree_sensitive(ptr);
+ }
+ 
+-int jent_fips_enabled(void)
+-{
+-	return fips_enabled;
+-}
+-
+ void jent_panic(char *s)
+ {
+ 	panic("%s", s);
+diff --git a/crypto/jitterentropy.c b/crypto/jitterentropy.c
+index 788d90749715..24e087c3f526 100644
+--- a/crypto/jitterentropy.c
++++ b/crypto/jitterentropy.c
+@@ -298,10 +298,6 @@ static int jent_stuck(struct rand_data *ec, __u64 current_delta)
+  */
+ static int jent_health_failure(struct rand_data *ec)
+ {
+-	/* Test is only enabled in FIPS mode */
+-	if (!jent_fips_enabled())
+-		return 0;
+-
+ 	return ec->health_failure;
+ }
+ 
+diff --git a/crypto/jitterentropy.h b/crypto/jitterentropy.h
+index c83fff32d130..b7397b617ef0 100644
+--- a/crypto/jitterentropy.h
++++ b/crypto/jitterentropy.h
+@@ -2,7 +2,6 @@
+ 
+ extern void *jent_zalloc(unsigned int len);
+ extern void jent_zfree(void *ptr);
+-extern int jent_fips_enabled(void);
+ extern void jent_panic(char *s);
+ extern void jent_memcpy(void *dest, const void *src, unsigned int n);
+ extern void jent_get_nstime(__u64 *out);
 -- 
 2.26.2
 

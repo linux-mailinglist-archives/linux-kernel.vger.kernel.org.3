@@ -2,71 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 099E6462A0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:57:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77678462A12
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:00:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237116AbhK3CBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 21:01:10 -0500
-Received: from mout.gmx.net ([212.227.15.18]:42793 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232152AbhK3CBJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 21:01:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638237469;
-        bh=hqg6E5t4awXX3JNLr2yX0h9W3eNMEcDR7674htguDMs=;
-        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
-        b=TLKp+ftMN+z4+9Ye0TnOU9Ma4wtFh5PLVOPnUBI6kUQaznZXZjuH7sELCOKyTXf+O
-         mEypTrSbiPZgckapwyN/AQPBRitGwgPhTVHThQDa+73oD6eF2OjxSON05pJ6VH2K7J
-         C6LAdw5IlQgApV0yKbFw/7rBSaX0URNcvoDIjCPA=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.34.15]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MoO6M-1mGOzV0qOO-00opUk; Tue, 30
- Nov 2021 02:57:49 +0100
-Message-ID: <486ef17a-e26c-5191-f76b-941e8e01ced8@gmx.de>
-Date:   Tue, 30 Nov 2021 02:57:48 +0100
+        id S237070AbhK3CDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 21:03:16 -0500
+Received: from mail-ot1-f49.google.com ([209.85.210.49]:38645 "EHLO
+        mail-ot1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231567AbhK3CDP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 21:03:15 -0500
+Received: by mail-ot1-f49.google.com with SMTP id n104-20020a9d2071000000b005799790cf0bso28175945ota.5;
+        Mon, 29 Nov 2021 17:59:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=eq2Z4p4zmg6qNiDpmQANYb40whj6Zi1W7Ros/gT3PVM=;
+        b=I+uscPLC9xXpgiIodzDvB2NEN+5YGRdVSMP/p6OMBuC7OoSB11Sqik42gjuMjyVKdV
+         Ux+k0gIy2nF7hDnKjIYCHl6BjKQWUx6cLyuk8wXvXJWQaqu4xQF91hIEatCjvgUQFj12
+         /60eAUaRieP23XO8hjF4NUpha75JsK1HzK/a9sMMhZS+FR1r5DYcwyCFfV99fMRkthGu
+         tY4CBJU41jMUCVSSevwUD8tyqDiZXl++qiqR+CFJmJev3Gu3das3teBVLOlWflL0VL+y
+         0oVuKPYGdi7d3KHqjyw2mDnwow4jXYRviJMXR4V9ElTCJg2hdGmduWXmDUJol0V9z3uW
+         XfDg==
+X-Gm-Message-State: AOAM530tBi0MQcMSaX2T+POcsTBNVgTtphurXOhbkeAnU7u45IXgeBW2
+        jd06PH3hA7YQACCr6q+mb3o4Xa7uSg==
+X-Google-Smtp-Source: ABdhPJztfBf2qLY6rXo6eVAOY+UBltdFv38CUE8gB4tcGUPdUaDXNfkzI9Aq8jRoA00ZAR6vTkC5hg==
+X-Received: by 2002:a9d:5f9d:: with SMTP id g29mr47487375oti.335.1638237589365;
+        Mon, 29 Nov 2021 17:59:49 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id l6sm2929052otu.12.2021.11.29.17.59.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 17:59:47 -0800 (PST)
+Received: (nullmailer pid 1019098 invoked by uid 1000);
+        Tue, 30 Nov 2021 01:59:46 -0000
+Date:   Mon, 29 Nov 2021 19:59:46 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lizhi Hou <lizhi.hou@xilinx.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
+        maxz@xilinx.com, sonal.santan@xilinx.com, yliu@xilinx.com,
+        michal.simek@xilinx.com, stefanos@xilinx.com,
+        devicetree@vger.kernel.org, trix@redhat.com, mdf@kernel.org,
+        dwmw2@infradead.org, Max Zhen <max.zhen@xilinx.com>
+Subject: Re: [PATCH V2 XRT Alveo Infrastructure 4/9] of: create empty of root
+Message-ID: <YaWFksVvfQQWqKcG@robh.at.kernel.org>
+References: <20211119222412.1092763-1-lizhi.hou@xilinx.com>
+ <20211119222412.1092763-5-lizhi.hou@xilinx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-Subject: Re: [PATCH 5.15 000/179] 5.15.6-rc1 review
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Content-Language: de-DE
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:l/v65sNoRZ+O9sjB8c3+loU+r25OGFpBdrssXwtr8C4HnCw3kpT
- XMorhBe54tSOW1m0Ph9XdSo1HogejtEiktG/fLXoDyzXKVr/WFMS6v+nn3UIg0MxpYQOQyM
- 0n3AQVDS69Pu51x54VVfBjO206w6dK+gC0+Cfkot2/TPMpTvFvRhCZtth/kk9Je/7eXGa5Z
- 9YFDKguGH9F7VijZqOKsQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:6H3KpLfwxeU=:lXEDhlM0K1QEjAa954RYK5
- mzhPtGnepmApYyu2jPo2B3jsfHgrtI+8u7KzudMPin6oTEmQhZAPmDp8kGTNp4ptByeuc1Dzz
- XG5ed1e+19lH6O7FfnLqHg1lMnXzHHU2+5Dlk+kAi44eHK7uvOopvVKBXxYS2JiCPfNPZbrYd
- s3XplkSTf5z8tz6D7It7kG2iTML+WcBg2VJ7ebf9rGiiA8as1UAgm/OOpPktk2mSc8GxIOMQU
- YJgn1odEU8XsKAJDP+nsi1tDKhCzQ1k3IEFMNUp6mR7oa+2d0ZcG91K/1z/7cEK86NMp7EnAs
- GCGTJ46RJ3wM0rfAlzIEFdnBf0Q8R7O1Y7L+MOoybs12HmYESThXDLZ8RWrCSSYGrHjmtQAuu
- l5BQv9kB3EMDSnY7K6GL5RGVrCC4YJG5+tFjQbsDeG8CDAM8hTkZaBTbvDWOOHbdlDuhkvTVG
- 9iIN+r2T1ZBFkDpdXFcS6DDwLokEaJtVeTAK0I8DV9O3F0pSpnZ3eUvN+2Nv4ufqi8FpY8mG6
- nEYCOeX+P384g12uQc2myAqCUkhVIsrJzvzCsdXs5dvcfSDRvgIVHRTIi1alVkqhxI3PAG1uU
- DP1ZeQvglgdFcs3YfF0PVvpReOzYVDxSFQCDcKl65HJcnyReAemWwb2dDlslMCYmX2h+DrBit
- 1fMmAOKbX2yHFVuSbcT24TtcdodqvtQ9DOVxr+zoIlVsrilzKnvXUCnnGnOIVmDu21Z1tHui2
- OMEbwfFOONZDsoW631Nuzh+iroGz8etPxOwuH/7fePoxueGIxtoXfGpOqOLG0rzSgqz6btEsJ
- to1ZboA3b2Ggsj9JfQJfIkF+K8/POg4tkTqUq6guWCVGphBbrNXaLR7yHR6u/c0M8lnpUX7lW
- bwbII49s1BoxPd8FuVldQbmlwdTarg2ZIJsvmqQLKNVGMvveeIED4P66XXnWk9uaaMZUsD64r
- T1DrvbaObDiPTSTs+Vnly2a0ceKOKiCE89+zjWD9xRZ+8/53oItRvipdITygB46Dp0ZLeB3am
- s5oqzFKFsXjKGayCle9RVdLJwf2/EXJlix5NUc3MgjZduOTpnP3BLUB0Bzm9IilB4dZ0D6Qd0
- RljT0WXMX6xWUM=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211119222412.1092763-5-lizhi.hou@xilinx.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5.15.6-rc1 successfully compiled, booted and suspended on an x86_64
-(Intel i5-11400)
+On Fri, Nov 19, 2021 at 02:24:07PM -0800, Lizhi Hou wrote:
+> When OF_FLATTREE is selected and there is not a device tree, create an
+> empty device tree root node. of/unittest.c code is referenced.
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
+What does the last sentence mean? You copied the code? If so, that's a 
+sign you should refactor the unittest code to use this.
 
-thanks
-
-=2D-
-Ronald
-
+> 
+> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
+> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
+> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
+> ---
+>  drivers/of/Makefile        |  2 +-
+>  drivers/of/fdt.c           | 20 ++++++++++++++++++++
+>  drivers/of/fdt_default.dts |  5 +++++
+>  drivers/of/of_private.h    |  5 +++++
+>  4 files changed, 31 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/of/fdt_default.dts
+> 
+> diff --git a/drivers/of/Makefile b/drivers/of/Makefile
+> index c13b982084a3..815f5220465b 100644
+> --- a/drivers/of/Makefile
+> +++ b/drivers/of/Makefile
+> @@ -2,7 +2,7 @@
+>  obj-y = base.o device.o platform.o property.o
+>  obj-$(CONFIG_OF_KOBJ) += kobj.o
+>  obj-$(CONFIG_OF_DYNAMIC) += dynamic.o
+> -obj-$(CONFIG_OF_FLATTREE) += fdt.o
+> +obj-$(CONFIG_OF_FLATTREE) += fdt.o fdt_default.dtb.o
+>  obj-$(CONFIG_OF_EARLY_FLATTREE) += fdt_address.o
+>  obj-$(CONFIG_OF_PROMTREE) += pdt.o
+>  obj-$(CONFIG_OF_ADDRESS)  += address.o
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index d64445e43ceb..3d6e4543419e 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -481,6 +481,26 @@ void *of_fdt_unflatten_tree(const unsigned long *blob,
+>  }
+>  EXPORT_SYMBOL_GPL(of_fdt_unflatten_tree);
+>  
+> +static int __init of_fdt_root_init(void)
+> +{
+> +	struct device_node *np;
+> +
+> +	if (of_root)
+> +		return 0;
+> +
+> +	if (!of_fdt_unflatten_tree((const unsigned long *)__dtb_fdt_default_begin,
+> +				   NULL, &of_root)) {
+> +		pr_warn("%s: unflatten default tree failed\n", __func__);
+> +		return -ENODATA;
+> +	}
+> +
+> +	for_each_of_allnodes(np)
+> +		__of_attach_node_sysfs(np);
+> +
+> +	return 0;
+> +}
+> +late_initcall(of_fdt_root_init);
+> +
+>  /* Everything below here references initial_boot_params directly. */
+>  int __initdata dt_root_addr_cells;
+>  int __initdata dt_root_size_cells;
+> diff --git a/drivers/of/fdt_default.dts b/drivers/of/fdt_default.dts
+> new file mode 100644
+> index 000000000000..d1f12a76dfc6
+> --- /dev/null
+> +++ b/drivers/of/fdt_default.dts
+> @@ -0,0 +1,5 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/dts-v1/;
+> +
+> +/ {
+> +};
+> diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+> index 631489f7f8c0..47c6bb47ef25 100644
+> --- a/drivers/of/of_private.h
+> +++ b/drivers/of/of_private.h
+> @@ -41,6 +41,11 @@ extern struct mutex of_mutex;
+>  extern struct list_head aliases_lookup;
+>  extern struct kset *of_kset;
+>  
+> +#if defined(CONFIG_OF_FLATTREE)
+> +extern u8 __dtb_fdt_default_begin[];
+> +extern u8 __dtb_fdt_default_end[];
+> +#endif
+> +
+>  #if defined(CONFIG_OF_DYNAMIC)
+>  extern int of_property_notify(int action, struct device_node *np,
+>  			      struct property *prop, struct property *old_prop);
+> -- 
+> 2.27.0
+> 
+> 

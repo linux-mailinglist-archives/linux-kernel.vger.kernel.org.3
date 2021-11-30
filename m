@@ -2,103 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD13462EA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24844462EAF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239693AbhK3IqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        id S239696AbhK3IqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:46:24 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54200 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239666AbhK3IqS (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Nov 2021 03:46:18 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:39637 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239665AbhK3IqQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:46:16 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4J3G283yDSz9sSS;
-        Tue, 30 Nov 2021 09:42:56 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id dKXfUxfeFQ06; Tue, 30 Nov 2021 09:42:56 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3G2838c1z9sSP;
-        Tue, 30 Nov 2021 09:42:56 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3F97B8B779;
-        Tue, 30 Nov 2021 09:42:56 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id 0SG1YhGodZJM; Tue, 30 Nov 2021 09:42:56 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.93])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 079B48B763;
-        Tue, 30 Nov 2021 09:42:55 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1AU8gf1C063015
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 09:42:41 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1AU8gdpY063014;
-        Tue, 30 Nov 2021 09:42:39 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Erhard Furtner <erhard_f@mailbox.org>
-Subject: [PATCH] powerpc/32s: Fix shift-out-of-bounds in KASAN init
-Date:   Tue, 30 Nov 2021 09:42:37 +0100
-Message-Id: <15cbc3439d4ad988b225e2119ec99502a5cc6ad3.1638261744.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.33.1
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1638261756; l=1919; s=20211009; h=from:subject:message-id; bh=wli3SWXo3YOK/NxzckV1p2wzUokEybic7rAj14I6KLQ=; b=xr5oOz5wFeUxRLCvDTFfzbPeBY2sNbt9hmRecBeYOB9alAP3R1p+Txp48n1VgzCYoSw6kjTxd0vL IRB6+N/8CQ6SHmoOd7XelgoJouPU/0uPUR+vbXrJ/qpQWPaz1UmZ
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id AD97DCE1812;
+        Tue, 30 Nov 2021 08:42:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6697C53FC1;
+        Tue, 30 Nov 2021 08:42:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638261775;
+        bh=kop9ekaNxcrvm1nzG7ZaL3bUmyF0UPMTsxU7AW0+IsE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tN2dE1R+510zjPlOOblJ1YMjDC/3lkzIy9sA0QbUnp5hu5kuqnli5b7Nxt7PNMpWC
+         r0KZTmCME458FYwr0pM0j2RoLH4rSpMsfXW4xUI61wnQQvS60iAcf2A6QWjPFSo1ta
+         5ihZujakLwGXoWYXEEwoRSRONBpGLeDfGtWg7q062Y8ViQi9FRwaPZtcIjw02VH/Ew
+         TopiFIfYk1FA4rkfLLUufgXTIb+gA05MVVyvhtjApP9qPNDGG+VDv1DHlYkBd+DyEB
+         kKTMiIYovYm55WupBH9I6FhkGXixsD8dg6IcIHYKjwHoHsXhvI9zTTYPdNnxLRPtRN
+         RBvudAt1W+Nbg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mryiz-008oud-EP; Tue, 30 Nov 2021 08:42:53 +0000
+Date:   Tue, 30 Nov 2021 08:42:53 +0000
+Message-ID: <87lf16m3ua.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Maulik Shah <quic_mkshah@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] irqchip: Add Qualcomm MPM controller driver
+In-Reply-To: <20211130023151.GD10105@dragon>
+References: <20211126093529.31661-1-shawn.guo@linaro.org>
+        <20211126093529.31661-3-shawn.guo@linaro.org>
+        <87czmmbu8k.wl-maz@kernel.org>
+        <20211129133308.GB10105@dragon>
+        <87pmqjm1c8.wl-maz@kernel.org>
+        <20211130023151.GD10105@dragon>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shawn.guo@linaro.org, tglx@linutronix.de, quic_mkshah@quicinc.com, bjorn.andersson@linaro.org, robh+dt@kernel.org, loic.poulain@linaro.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-================================================================================
-UBSAN: shift-out-of-bounds in arch/powerpc/mm/kasan/book3s_32.c:22:23
-shift exponent -1 is negative
-CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.5-gentoo-PowerMacG4 #9
-Call Trace:
-[c214be60] [c0ba0048] dump_stack_lvl+0x80/0xb0 (unreliable)
-[c214be80] [c0b99288] ubsan_epilogue+0x10/0x5c
-[c214be90] [c0b98fe0] __ubsan_handle_shift_out_of_bounds+0x94/0x138
-[c214bf00] [c1c0f010] kasan_init_region+0xd8/0x26c
-[c214bf30] [c1c0ed84] kasan_init+0xc0/0x198
-[c214bf70] [c1c08024] setup_arch+0x18/0x54c
-[c214bfc0] [c1c037f0] start_kernel+0x90/0x33c
-[c214bff0] [00003610] 0x3610
-================================================================================
+On Tue, 30 Nov 2021 02:31:52 +0000,
+Shawn Guo <shawn.guo@linaro.org> wrote:
+> 
+> + Maulik
+> 
+> On Mon, Nov 29, 2021 at 03:24:39PM +0000, Marc Zyngier wrote:
+> [...]
+> > > > > @@ -430,6 +430,14 @@ config QCOM_PDC
+> > > > >  	  Power Domain Controller driver to manage and configure wakeup
+> > > > >  	  IRQs for Qualcomm Technologies Inc (QTI) mobile chips.
+> > > > >  
+> > > > > +config QCOM_MPM
+> > > > > +	bool "QCOM MPM"
+> > > > 
+> > > > Can't be built as a module?
+> > > 
+> > > The driver is implemented as a builtin_platform_driver().
+> > 
+> > This, on its own, shouldn't preclude the driver from being built as a
+> > module. However, the config option only allows it to be built in. Why?
+> 
+> I just tried to build it as a module, and it seems that "irq_to_desc" is
+> only available for built-in build.
 
-This happens when the directly mapped memory is a power of 2.
+Yet another thing that you should not be using. The irqdomain code
+gives you everything you need without having to resort to the
+internals of the core IRQ infrastructure.
 
-Fix it by checking the shift and set the result to 0 when shift is -1
+> > Furthermore, why would you look up anywhere other than the wake-up
+> > domain? My impression was that only these interrupts would require
+> > being re-triggered.
+> 
+> Both domains have MPM pins that could wake up system.
 
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215169
-Fixes: 7974c4732642 ("powerpc/32s: Implement dedicated kasan_init_region()")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/mm/kasan/book3s_32.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Then why do you need two domains?
 
-diff --git a/arch/powerpc/mm/kasan/book3s_32.c b/arch/powerpc/mm/kasan/book3s_32.c
-index 202bd260a009..35b287b0a8da 100644
---- a/arch/powerpc/mm/kasan/book3s_32.c
-+++ b/arch/powerpc/mm/kasan/book3s_32.c
-@@ -19,7 +19,8 @@ int __init kasan_init_region(void *start, size_t size)
- 	block = memblock_alloc(k_size, k_size_base);
- 
- 	if (block && k_size_base >= SZ_128K && k_start == ALIGN(k_start, k_size_base)) {
--		int k_size_more = 1 << (ffs(k_size - k_size_base) - 1);
-+		int shift = ffs(k_size - k_size_base);
-+		int k_size_more = shift ? 1 << (shift - 1) : 0;
- 
- 		setbat(-1, k_start, __pa(block), k_size_base, PAGE_KERNEL);
- 		if (k_size_more >= SZ_128K)
+	M.
+
 -- 
-2.33.1
-
+Without deviation from the norm, progress is not possible.

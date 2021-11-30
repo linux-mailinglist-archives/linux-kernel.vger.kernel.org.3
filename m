@@ -2,233 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FCC2462FB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:32:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF5A462FBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:33:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240235AbhK3Jfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 04:35:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235582AbhK3Jfd (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:35:33 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5ECC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:32:14 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id w1so84244448edc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:32:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=xoXOLJWpD0lHUX6hFbdZV58Ab4Q2/gT90EA5saamkEU=;
-        b=D6SapCyyPKCp06PaCKTy+m7XXWQ0waD1v0k39IbTt4l5t/a7TFWxI2IWxmrUjSAhZE
-         mOWpnkm/05w+FW9vwwuAPuAT/tUzql3Y8J+aO+ex6tYsIw/4PlJ6rkCewmSbLggY5/px
-         1AUjAPXNzGOlj+wgCR0sK3xYdDytMhFWSn+hu8ejP9QcaxnQRFNffnT3g2zun1ugblef
-         O6y9R/t2yF97g2mGbo5+5ZKtkMPCIh6rXLpT4WaVahMnKgTCNKTygTvW6W87TitKdwEL
-         FnyA478ZIq09E8/xGpubbyStQuUG2DYgFCXHQ7EU+L76JKOdK+g+AmGnNdSoHeu6gt4V
-         m0uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=xoXOLJWpD0lHUX6hFbdZV58Ab4Q2/gT90EA5saamkEU=;
-        b=vP8S/mmVEuIK54+MujtEwExmxI0SkCGbPwidVXaUeztMqhrVn5LqpDg5L1EunCnAXo
-         f1cdBKcJEalnGLNYZK0zadFDbJ34Eac+6ZbJ31xKNAupVg3OYsFEiQjSYAocC/i55NT/
-         2w0epY/71wXEq6vg+1S3Z6QTlzLPWUx4N77RQ1fu0Pn1lOdqeJK7+xMstEMydD0tI3hC
-         YULL/PwscR5ycCiGNS6VvabbMPbQG5ksnSeMq+rFWlRvMpI21xcCaAnUJSBxiRJTr5iU
-         RRCbjDzD+9PzStZPW04aFjGYTMUPbHBQO0CmCVoXRySGyccnV9sGLkZwzNPJqpUOuuRp
-         3kRw==
-X-Gm-Message-State: AOAM5332Z+r75vkpLK+NO59Vh4rwTFj3ZKEJXGs2gicF2xvzId2R8Cu5
-        7swDqJGTvspYxoWoPHLPM/zqKknu2DNhYMIip7mfkg==
-X-Google-Smtp-Source: ABdhPJwVC/Jc+0BLK1FXkRMFbLvZzD456y/TUVHcnDXZ7SKN27TolOtE5iiz9/cnlZ61+U3t8nFD7+BZZzF9v4/J0mU=
-X-Received: by 2002:a05:6402:14f:: with SMTP id s15mr38056725edu.118.1638264732486;
- Tue, 30 Nov 2021 01:32:12 -0800 (PST)
+        id S240245AbhK3JgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 04:36:19 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:35617 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235138AbhK3JgS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 04:36:18 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J3H7t4qKvz9sSS;
+        Tue, 30 Nov 2021 10:32:58 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id M8dvxSuXvK3x; Tue, 30 Nov 2021 10:32:58 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3H7t42YRz9sSP;
+        Tue, 30 Nov 2021 10:32:58 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 76F198B779;
+        Tue, 30 Nov 2021 10:32:58 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id OZQIerElkGTJ; Tue, 30 Nov 2021 10:32:58 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.93])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3E6E78B763;
+        Tue, 30 Nov 2021 10:32:58 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1AU9Wh7o087713
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 10:32:43 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1AU9WhcQ087712;
+        Tue, 30 Nov 2021 10:32:43 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Erhard Furtner <erhard_f@mailbox.org>
+Subject: [PATCH] powerpc/powermac: Add missing lockdep_register_key()
+Date:   Tue, 30 Nov 2021 10:32:42 +0100
+Message-Id: <69e4f55565bb45ebb0843977801b245af0c666fe.1638264741.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-References: <20211129181703.670197996@linuxfoundation.org>
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 30 Nov 2021 15:02:01 +0530
-Message-ID: <CA+G9fYuQEFsYa-pQBCqu5kFpKHnTODZRZj2agOxFh+XJWagy6A@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/69] 4.19.219-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1638264761; l=2154; s=20211009; h=from:subject:message-id; bh=pEt+Jk2y0jzMiZJdN1RkeSCWdiDbGBZApQ2iXQ3zvBA=; b=Lo4PAS/pkJ9BZS68a5C1KH12Euzq8XLNij2qEEFMFP//VD9ZS7YIZCk8KPXZmvoZhdu6qVplZJ1T QCP9Pw3tDd//jRjGE5Fzz5AAKtew03csxH+pa/GrHcp67AFp/tH+
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 at 23:51, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.219 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.219-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+KeyWest i2c @0xf8001003 irq 42 /uni-n@f8000000/i2c@f8001000
+BUG: key c2d00cbc has not been registered!
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 1 at kernel/locking/lockdep.c:4801 lockdep_init_map_type+0x4c0/0xb4c
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.5-gentoo-PowerMacG4 #9
+NIP:  c01a9428 LR: c01a9428 CTR: 00000000
+REGS: e1033cf0 TRAP: 0700   Not tainted  (5.15.5-gentoo-PowerMacG4)
+MSR:  00029032 <EE,ME,IR,DR,RI>  CR: 24002002  XER: 00000000
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+GPR00: c01a9428 e1033db0 c2d1cf20 00000016 00000004 00000001 c01c0630 e1033a73
+GPR08: 00000000 00000000 00000000 e1033db0 24002004 00000000 f8729377 00000003
+GPR16: c1829a9c 00000000 18305357 c1416fc0 c1416f80 c006ac60 c2d00ca8 c1416f00
+GPR24: 00000000 c21586f0 c2160000 00000000 c2d00cbc c2170000 c216e1a0 c2160000
+NIP [c01a9428] lockdep_init_map_type+0x4c0/0xb4c
+LR [c01a9428] lockdep_init_map_type+0x4c0/0xb4c
+Call Trace:
+[e1033db0] [c01a9428] lockdep_init_map_type+0x4c0/0xb4c (unreliable)
+[e1033df0] [c1c177b8] kw_i2c_add+0x334/0x424
+[e1033e20] [c1c18294] pmac_i2c_init+0x9ec/0xa9c
+[e1033e80] [c1c1a790] smp_core99_probe+0xbc/0x35c
+[e1033eb0] [c1c03cb0] kernel_init_freeable+0x190/0x5a4
+[e1033f10] [c000946c] kernel_init+0x28/0x154
+[e1033f30] [c0035148] ret_from_kernel_thread+0x14/0x1c
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Add missing lockdep_register_key()
 
-## Build
-* kernel: 4.19.219-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 9697017144726ee73f348d6bb4c549151f92320a
-* git describe: v4.19.218-70-g969701714472
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.218-70-g969701714472
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/platforms/powermac/low_i2c.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-## No regressions (compared to v4.19.217-321-g078e3b8561f3)
+diff --git a/arch/powerpc/platforms/powermac/low_i2c.c b/arch/powerpc/platforms/powermac/low_i2c.c
+index f77a59b5c2e1..de34fa34c42d 100644
+--- a/arch/powerpc/platforms/powermac/low_i2c.c
++++ b/arch/powerpc/platforms/powermac/low_i2c.c
+@@ -582,6 +582,7 @@ static void __init kw_i2c_add(struct pmac_i2c_host_kw *host,
+ 	bus->close = kw_i2c_close;
+ 	bus->xfer = kw_i2c_xfer;
+ 	mutex_init(&bus->mutex);
++	lockdep_register_key(&bus->lock_key);
+ 	lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 	if (controller == busnode)
+ 		bus->flags = pmac_i2c_multibus;
+-- 
+2.33.1
 
-## No fixes (compared to v4.19.217-321-g078e3b8561f3)
-
-## Test result summary
-total: 66999, pass: 54132, fail: 570, skip: 10820, xfail: 1477
-
-## Build Summary
-* arm: 130 total, 130 passed, 0 failed
-* arm64: 35 total, 35 passed, 0 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 19 total, 19 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 26 total, 26 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 22 total, 22 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kvm-unit-tests
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org

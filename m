@@ -2,111 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2396D463129
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E7A46312F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbhK3Kkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:40:31 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34878 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbhK3Kk3 (ORCPT
+        id S234189AbhK3Kl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:41:29 -0500
+Received: from mail-vk1-f169.google.com ([209.85.221.169]:37423 "EHLO
+        mail-vk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234054AbhK3Kl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:40:29 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F4097CE186D;
-        Tue, 30 Nov 2021 10:37:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E0FDC53FC1;
-        Tue, 30 Nov 2021 10:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638268627;
-        bh=B1f1qFBORy7uax4+Rx0SsEvUYRnj1q+Nmg/DTw1kfaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DgMWXjD7iEmVExrWZ2kf3Xw8agYY9Q7RCL054d7aN8JBtgULP6lWwvYz8ydyvDLjj
-         70whZ390KRhAxCLkXG36t8Jfku+mwfLa/lhhcW/UpRNxMF1UXCh4XXkq9pAmdFDyy3
-         zAzCY/o50SKcjrt9FZYcHW1xI6LuoRvdxTDJ2lve5eagB2m1OzPqzE9hjTctR7h4jP
-         wEc2gacZlBJqHNhQwiW+/Izk6KLaEkSpE2/bUUAXGe3MQ1O/hPPrIMLj/+ZoCOuZoZ
-         ex+1vQFgpBZKN5R41/wlGB78cFNDwaTXsCnQSpBM12sgjRfJQpEOIWnX8IvHL33fz+
-         2595dFAX4+wYg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ms0VA-0006aN-MN; Tue, 30 Nov 2021 11:36:44 +0100
-Date:   Tue, 30 Nov 2021 11:36:44 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH 3/7] serial: 8250_port: properly handle runtime PM in IRQ
-Message-ID: <YaX+vNpQ0ZwjxEyN@hovoldconsulting.com>
-References: <20211115084203.56478-1-tony@atomide.com>
- <20211115084203.56478-4-tony@atomide.com>
+        Tue, 30 Nov 2021 05:41:28 -0500
+Received: by mail-vk1-f169.google.com with SMTP id e27so13261179vkd.4;
+        Tue, 30 Nov 2021 02:38:09 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zEj8NBQjLbsOVUD9Cul394pEoRRBEePEWmIxln6/XGY=;
+        b=B+gD2l7ink7J/PaqALdt2vld/Ffm29QAECdiWIY15XXuaOGIrAp4qdiW9b73Twt5aG
+         bp7ZzCkthnn8oJBCQ+s7PdZLzvJBW8Mh3YOZRSh8GQ/NOpbFhaqdPy9vrHzHVmGJa907
+         vg7BUTwYUTgoDkdOjmoolKw/CEjPk94f0NWCxlWzOs7D8P6VsyBtPfxxlDkq4ifvfQy3
+         zxjygKqV9OUQkxBuPVSPsj4oy5LUA8DowzRGKdz0Sn18IeI8XE8mDSgKyHpiXRaPomDS
+         0MBodToTAOhiyHiGZeU0DOX40zz9llU0RYeJRvb0+Lnkj8IuI+XS4jZW96ViYmdAsKQw
+         wYbQ==
+X-Gm-Message-State: AOAM531/uFVC06gsLzWnUL0v7pNA70QdBlbZTxTHDeY6EqIaLWhcXvFI
+        67I2t/qhhzy0jghLPkF2DC+l6S/fqhN2hQ==
+X-Google-Smtp-Source: ABdhPJwaV0O0fJIbUxYc8ii1M/kw4LHfmXHKS+5l4j7PWt7Bgz0TPQKHvP+B1QzB/VBVBe8QBvUYNg==
+X-Received: by 2002:a05:6122:1313:: with SMTP id e19mr43938780vkp.4.1638268688696;
+        Tue, 30 Nov 2021 02:38:08 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id t132sm9462699vkb.19.2021.11.30.02.38.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 02:38:08 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id n6so40424704uak.1;
+        Tue, 30 Nov 2021 02:38:07 -0800 (PST)
+X-Received: by 2002:a67:c106:: with SMTP id d6mr39218065vsj.77.1638268687771;
+ Tue, 30 Nov 2021 02:38:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211115084203.56478-4-tony@atomide.com>
+References: <20211123164902.35370-1-wsa+renesas@sang-engineering.com> <20211123164902.35370-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20211123164902.35370-2-wsa+renesas@sang-engineering.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 30 Nov 2021 11:37:56 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUGOEmB8QeHufXVHifYpvZxNpu_kku05eGKk=+YRf+PsQ@mail.gmail.com>
+Message-ID: <CAMuHMdUGOEmB8QeHufXVHifYpvZxNpu_kku05eGKk=+YRf+PsQ@mail.gmail.com>
+Subject: Re: [PATCH v5 1/1] gpio: add sloppy logic analyzer using polling
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 10:41:59AM +0200, Tony Lindgren wrote:
-> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> We can't and basically don't need to call runtime PM in IRQ handler. If
-> IRQ is ours, device must be powered on. Otherwise check if the device is
-> powered off and return immediately.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> [tony@atomide.com: use port->runtime_suspended]
-> Signed-off-by: Tony Lindgren <tony@atomide.com>
-> ---
->  drivers/tty/serial/8250/8250_port.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-> @@ -1939,17 +1939,19 @@ EXPORT_SYMBOL_GPL(serial8250_handle_irq);
->  
->  static int serial8250_default_handle_irq(struct uart_port *port)
->  {
-> -	struct uart_8250_port *up = up_to_u8250p(port);
->  	unsigned int iir;
-> -	int ret;
->  
-> -	serial8250_rpm_get(up);
-> +	/*
-> +	 * The IRQ might be shared with other peripherals so we must first
-> +	 * check that are we RPM suspended or not. If we are we assume that
-> +	 * the IRQ was not for us (we shouldn't be RPM suspended when the
-> +	 * interrupt is enabled).
-> +	 */
-> +	if (port->runtime_suspended)
-> +		return 0;
+Hi Wolfram,
 
-This function is called without holding the port lock that protects
-this flag.
+On Tue, Nov 23, 2021 at 5:49 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+> This is a sloppy logic analyzer using GPIOs. It comes with a script to
+> isolate a CPU for polling. While this is definitely not a production
+> level analyzer, it can be a helpful first view when remote debugging.
+> Read the documentation for details.
+>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-Also what prevents the device from being suspended after checking it?
+> --- a/drivers/gpio/Makefile
+> +++ b/drivers/gpio/Makefile
+> @@ -74,6 +74,7 @@ obj-$(CONFIG_GPIO_IT87)                       += gpio-it87.o
+>  obj-$(CONFIG_GPIO_IXP4XX)              += gpio-ixp4xx.o
+>  obj-$(CONFIG_GPIO_JANZ_TTL)            += gpio-janz-ttl.o
+>  obj-$(CONFIG_GPIO_KEMPLD)              += gpio-kempld.o
+> +obj-$(CONFIG_GPIO_SLOPPY_LOGIC_ANALYZER) += gpio-sloppy-logic-analyzer.o
+>  obj-$(CONFIG_GPIO_LOGICVC)             += gpio-logicvc.o
+>  obj-$(CONFIG_GPIO_LOONGSON1)           += gpio-loongson1.o
+>  obj-$(CONFIG_GPIO_LOONGSON)            += gpio-loongson.o
 
-Note that this handler is called from a timer callback when polling and
-that case needs to be considered too.
+(noticed while resolving a merge conflict with the out-of-tree
+ gpio-litex)
 
->  
->  	iir = serial_port_in(port, UART_IIR);
-> -	ret = serial8250_handle_irq(port, iir);
-> -
-> -	serial8250_rpm_put(up);
-> -	return ret;
-> +	return serial8250_handle_irq(port, iir);
->  }
->  
->  /*
+Please preserve sort order, cfr. the (hilarious?) comment at the top
+of the list:
 
-Johan
+    # Device drivers. Generally keep list sorted alphabetically
+    obj-$(CONFIG_GPIO_REGMAP)       += gpio-regmap.o
+    obj-$(CONFIG_GPIO_GENERIC)      += gpio-generic.o
+
+    # directly supported by gpio-generic
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

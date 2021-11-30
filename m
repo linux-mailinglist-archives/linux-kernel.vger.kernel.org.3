@@ -2,144 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0FE462EC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8B9F462EC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:45:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239735AbhK3Isr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:48:47 -0500
-Received: from mail.loongson.cn ([114.242.206.163]:45244 "EHLO loongson.cn"
+        id S239664AbhK3ItK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:49:10 -0500
+Received: from mail-ma1ind01olkn0183.outbound.protection.outlook.com ([104.47.100.183]:36416
+        "EHLO IND01-MA1-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239664AbhK3Isq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:48:46 -0500
-Received: from [10.180.13.93] (unknown [10.180.13.93])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9AxismT5KVh97YBAA--.3687S2;
-        Tue, 30 Nov 2021 16:45:14 +0800 (CST)
-Subject: Re: [PATCH v2 1/2] modpost: file2alias: fixup mdio alias garbled code
- in modules.alias
-To:     Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-References: <1637919957-21635-1-git-send-email-zhuyinbo@loongson.cn>
- <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Russell King <linux@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, zhuyinbo@loongson.cn
-Message-ID: <a569842b-a1e9-0ace-67a4-96d4d0429fbd@loongson.cn>
-Date:   Tue, 30 Nov 2021 16:45:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S234320AbhK3ItJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 03:49:09 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bPWhVFOKdJKWgZ7NeAqJktoEDXqqEVImzNDsmN4cq+JHtuJnWc8y0KYpklKxBklFshr4WhpFdHfxuCfXzwuUEF+VMnpsJLDqXRq3Nxxb3N4sRMKZPBvOEoJRMjI1TyBoSVHbVw4HOgSqQWZpif+LE3U2QhIo0V01h41P2bgRXDvFMYMKn8NcIuoNOmf6BYpnIJ+phI8rkxmcReGGw3quoqAFWfPFctaxrf969UFf62Cdw2vEGuKx1xHaiDcQq6ArNQ2Q4LS0WzAHpA6VrS5V0X/oBjRcg7XA6khfU2sa07yrSXEIsy3btsvZJ/7ra/Ey9UwfuGWd+b2L9KxeXwupRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=A57IResl8mC2kO1DnaSYlabXCUw3vWFloeZX/B3CFCQ=;
+ b=GDsLlpwoXypZv0qpZUn2gvImiq0FOKSwhgmvJwSNG6LZuitbrrIgt69tImm63zyrW+9qaTJmLgJrM8oRhCuh+hcYVzuj5Yybu3vK7DHKSQzAbjoEqHiIo9UEQMfXj4uvFSKVFwBt5mIgMY2NY/itHwM7RDykYLqe5Kb7SqhOwIIdVUp0E3SusUWj1PVrlGKFioDPP+GslNvdwpxm7qPqGwcL2mBqHfGr0TXaKHOi9DqPzOgpFxG7DmPd70Pet7rFqK62bUWxQWQLn49hX6ZkXnt3VmejZLX94D+8skE9Eris6nSgGXRBo4WNDNPJFULd5Tttm/nmRJQt+Tux9cM2pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=A57IResl8mC2kO1DnaSYlabXCUw3vWFloeZX/B3CFCQ=;
+ b=R2Vqt4tmCx653x+AW9DreqChNOE1UYDHNpbsJsWlyhynbgmFUx/pdIFDdz4PWjSejG/eqQ1QHImh7zDyAHSqxVb8fR9RZNHsc1T86kXjrI1bjZg8b9/AlD5gPTMCfnzj5S1Nz3AKcw7VAN4bD7Sx/DObO669KQrEVC9p2VaESaUO14Beysxdbqs/MZmCMxj5HlTktXU3DEL4/0+iTAHuzXzN0FMAU1QXqfrPUDqqKWdxT0NfEf5oZRF3hFqWBGn/JpvYiBxNgOzXoG/UwWPkIqET9jTDw3D2eUGX/MBVPREYeorPtDytJ8trzQ2QxVvOAzFLEuxu9OS7ymmybCu3hg==
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
+ by PNZPR01MB4336.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1c::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Tue, 30 Nov
+ 2021 08:45:44 +0000
+Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::7ca6:9165:19ec:4cd7%5]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
+ 08:45:44 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Marcel Holtmann <marcel@holtmann.org>
+CC:     Greg KH <gregkh@linuxfoundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v6 2/2] btbcm: disable read tx power for affected Macs
+ with the T2 Security chip
+Thread-Topic: [PATCH v6 2/2] btbcm: disable read tx power for affected Macs
+ with the T2 Security chip
+Thread-Index: AQHX5SmAzZ+x4ZZz8USx8gB+oemfXKwbwv0A
+Date:   Tue, 30 Nov 2021 08:45:44 +0000
+Message-ID: <087A6F82-BC44-41DE-9FE9-05B5932A2911@live.com>
+References: <3B8E16FA-97BF-40E5-9149-BBC3E2A245FE@live.com>
+ <YZSuWHB6YCtGclLs@kroah.com> <52DEDC31-EEB2-4F39-905F-D5E3F2BBD6C0@live.com>
+ <8919a36b-e485-500a-2722-529ffa0d2598@leemhuis.info>
+ <20211117124717.12352-1-redecorating@protonmail.com>
+ <F8D12EA8-4B37-4887-998E-DC0EBE60E730@holtmann.org>
+ <40550C00-4EE5-480F-AFD4-A2ACA01F9DBB@live.com>
+ <332a19f1-30f0-7058-ac18-c21cf78759bb@leemhuis.info>
+ <D9375D91-1062-4265-9DE9-C7CF2B705F3F@live.com>
+ <BC534C52-7FCF-4238-8933-C5706F494A11@live.com> <YaSCJg+Xkyx8w2M1@kroah.com>
+ <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
+ <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
+ <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
+ <92FBACD6-F4F2-4DE8-9000-2D30852770FC@live.com>
+ <3716D644-CD1B-4A5C-BC96-A51FF360E31D@live.com>
+ <9E6473A2-2ABE-4692-8DCF-D8F06BDEAE29@live.com>
+ <64E15BD0-665E-471F-94D9-991DFB87DEA0@live.com>
+ <75EC7983-3043-41E7-BBC6-BAB56C16E298@live.com>
+In-Reply-To: <75EC7983-3043-41E7-BBC6-BAB56C16E298@live.com>
+Accept-Language: en-US
 Content-Language: en-US
-X-CM-TRANSID: AQAAf9AxismT5KVh97YBAA--.3687S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGw17XF1xGFy8Jr1xZF17trb_yoW5Xr4UpF
-        W3GFy5KFWkGF429a1F93WUWryUXw47Kr95Wa1jqF1vgF9Iyry0vr4SkF4Sga4kZFZ2va40
-        g3W5uFyDur4DZrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
-        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
-        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
-        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
-        cIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [GsOPWDi2qFYZbf14dmc5Y4YrKuKCQ6oGcMypPM3y84C38Cdvm4EX3bCLrOBjLWrN]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e67706b7-e0fd-4538-5c38-08d9b3ddcc55
+x-ms-traffictypediagnostic: PNZPR01MB4336:
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HvH59m0emLhqs2B5h0n4oRqrZhJf1hSPYJX5D5R0IwtqXJo3yMtzUa5Za3HS1ZCDLPTwD3NZCsWr+97uCdcNSUba+RAzmm3UTphNc7X6HHzzBlz8ucMarVFpQUFUPmPmSwrIWR9NKR9ChIhx/lP66LV/S4/uym4AyIsD6Elys2mui185cnXWZofmq+90fXGFIrmaFqfZzsj77HBw8904h5VC+xBntmxBqrWf1t+vKuUii08zQg3HYHiYgbTN4FGxb345++AojCnwUyP8hnAJ2M8nj6doE4AkC4OXBbJmqO5V+GfPEfySvFql3HQ2JFIirfx/poOLQ4HozaaM9JZRtXtS2bI6doFkmfka10+S6HzMXSL9x4O2IE3vgWjf1Z2kHMBqJ18+g5lcGXZk6/AqmNz3phWnT675kxrLAG12jXP3nLOZ3OFamOg8WvDYkVeNvCABTkg+r7twEflg1Ssr1D38g/RQtC/527p+dB2wHOX5O7Ry3S7oiemhs9NqqZu0lXXB+p6KIV7hRuaFYW9PJYXREFlZps1jp+aXCp68fWWTKj7WJiJEWB4T+ZziUH9MqsNLVbkAOrmMmN1GpRgumEmKmDkApbWtZsMfr+kGk8ObbW++oJ9Eagtmwf9+CwuP
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: Sre7rId3iSKv7dJMkDbTSu8rA4ItxVSRRdxL1ME/+A0wH6s6zE9JNUCWsAU9zpkOR9IYO2oMpTueNixHBMqnH6iAfEI9dZQME3R7WT+GJQb97BqMdvH1tLUYebE2majnggKGha2fXD4V1RMGidufVlqu/zFj6duBfelJVW8/WyUqszrgQbNPfbE+8/wJzkgMKAZeVOr+MEQEUll4QaiLPiYoy5otWmRFb6HEA/vwOlpKREDgmPMlzRATUUzeKJJWVb0YmAW6ydXUdPBYzvWkazGsHfCd7mqx6BcawsV0JYxkb52tUJMDqNvZ5IkGZ9zIVkaPmEZ8zl+sYUvJ6oxuRueEWulbIEDXCMnWVF2Z2skTv/dFZAOzjiIsmmc1dYfgpUUeVLjmQ7QsmgWgyUuWZnaG++VO9s9SOQZ2F6CK4uTDUbSpRxseEbiPW088SmIT0i/hhTgE71xFYeOcuVL9+t11zyHZF461RLmjwJDjSwzz7Z7m8VXpn8AT0H5FFhUKfCAuBL+qSPV4557+eh1kpSh125KPUpKyWCTM+bUaac6sHkrpa8itomt2xx7GV02cDFmAGAcBC+8jjB5Stfs+gVxa+SdXqwKCjEGD37fH7dSZcQ/+hZYmo9jpac/dAbLGFK/ty8V8LzqYS2itwYwQk18nQWmEmCJOhj7C2uX4O8U8OfCDRSUtmiW4Lzp2rWkH+AA3YS+rRUhFrcgdjaqpB2m0hM4Ek6gCYohqAS/rFALr6n9yz3u1bBh/gXdB06BGoMK+uk5669jpzhTcme3TJA==
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6C04D3BF4E1DD646AD8D1B56A54DBCB7@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: sct-15-20-3174-20-msonline-outlook-a1a1a.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: e67706b7-e0fd-4538-5c38-08d9b3ddcc55
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2021 08:45:44.6209
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNZPR01MB4336
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-在 2021/11/26 下午6:21, Heiner Kallweit 写道:
-> On 26.11.2021 10:45, Yinbo Zhu wrote:
->> After module compilation, module alias mechanism will generate a ugly
->> mdio modules alias configure if ethernet phy was selected, this patch
->> is to fixup mdio alias garbled code.
->>
->> In addition, that ugly alias configure will cause ethernet phy module
->> doens't match udev, phy module auto-load is fail, but add this patch
->> that it is well mdio driver alias configure match phy device uevent.
->>
-> I think Andrew asked you for an example already.
-> For which PHY's the driver isn't auto-loaded?
 
-I test that use marvell phy, another colleague use motorcomm phy,  which 
-auto load function was all fail.
-
-and I need to emphasize one thing that the mdio auto load issue is 
-generally issue, not special phy issue.
-
-
->
-> In addition your commit descriptions are hard to read, especially the
-> one for patch 2. Could you please try to change them to proper English?
-> Not being a native speaker myself ..
-I had changed commit information as v3 version, please you check.
->> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->> ---
->> Change in v2:
->> 		Add a MDIO_ANY_ID for considering some special phy device
->> 		which phy id doesn't be read from phy register.
->>
->>
->>   include/linux/mod_devicetable.h |  2 ++
->>   scripts/mod/file2alias.c        | 17 +----------------
->>   2 files changed, 3 insertions(+), 16 deletions(-)
->>
->> diff --git a/include/linux/mod_devicetable.h b/include/linux/mod_devicetable.h
->> index ae2e75d..7bd23bf 100644
->> --- a/include/linux/mod_devicetable.h
->> +++ b/include/linux/mod_devicetable.h
->> @@ -595,6 +595,8 @@ struct platform_device_id {
->>   	kernel_ulong_t driver_data;
->>   };
->>   
->> +#define MDIO_ANY_ID (~0)
->> +
->>   #define MDIO_NAME_SIZE		32
->>   #define MDIO_MODULE_PREFIX	"mdio:"
->>   
->> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
->> index 49aba86..63f3149 100644
->> --- a/scripts/mod/file2alias.c
->> +++ b/scripts/mod/file2alias.c
->> @@ -1027,24 +1027,9 @@ static int do_platform_entry(const char *filename,
->>   static int do_mdio_entry(const char *filename,
->>   			 void *symval, char *alias)
->>   {
->> -	int i;
->>   	DEF_FIELD(symval, mdio_device_id, phy_id);
->> -	DEF_FIELD(symval, mdio_device_id, phy_id_mask);
->> -
->>   	alias += sprintf(alias, MDIO_MODULE_PREFIX);
->> -
->> -	for (i = 0; i < 32; i++) {
->> -		if (!((phy_id_mask >> (31-i)) & 1))
->> -			*(alias++) = '?';
->> -		else if ((phy_id >> (31-i)) & 1)
->> -			*(alias++) = '1';
->> -		else
->> -			*(alias++) = '0';
->> -	}
->> -
->> -	/* Terminate the string */
->> -	*alias = 0;
->> -
->> +	ADD(alias, "p", phy_id != MDIO_ANY_ID, phy_id);
->>   	return 1;
->>   }
->>   
->>
+> On 29-Nov-2021, at 7:30 PM, Aditya Garg <gargaditya08@live.com> wrote:
+>=20
+> From: Aditya Garg <gargaditya08@live.com>
+>=20
+> Some Macs with the T2 security chip had Bluetooth not working.
+> To fix it we add DMI based quirks to disable querying of LE Tx power.
+>=20
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
+> Link:
+> https://lore.kernel.org/r/4970a940-211b-25d6-edab-21a815313954@protonmail=
+.com
+> Fixes: 7c395ea521e6 ("Bluetooth: Query LE tx power on startup")
+> ---
+> drivers/bluetooth/btbcm.c | 40 +++++++++++++++++++++++++++++++++++++++
+> 1 file changed, 40 insertions(+)
+>=20
+> diff --git a/drivers/bluetooth/btbcm.c b/drivers/bluetooth/btbcm.c
+> index e4182acee488c5..40f7c9c5cf0a5a 100644
+> --- a/drivers/bluetooth/btbcm.c
+> +++ b/drivers/bluetooth/btbcm.c
+> @@ -8,6 +8,7 @@
+>=20
+> #include <linux/module.h>
+> #include <linux/firmware.h>
+> +#include <linux/dmi.h>
+> #include <asm/unaligned.h>
+>=20
+> #include <net/bluetooth/bluetooth.h>
+> @@ -343,9 +344,44 @@ static struct sk_buff *btbcm_read_usb_product(struct=
+ hci_dev *hdev)
+> 	return skb;
+> }
+>=20
+> +static const struct dmi_system_id disable_broken_read_transmit_power[] =
+=3D {
+> +	{
+> +		 .matches =3D {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,1"),
+> +		},
+> +	},
+> +	{
+> +		 .matches =3D {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,2"),
+> +		},
+> +	},
+> +	{
+> +		 .matches =3D {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "MacBookPro16,4"),
+> +		},
+> +	},
+> +	{
+> +		 .matches =3D {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,1"),
+> +		},
+> +	},
+> +	{
+> +		 .matches =3D {
+> +			DMI_MATCH(DMI_BOARD_VENDOR, "Apple Inc."),
+> +			DMI_MATCH(DMI_PRODUCT_NAME, "iMac20,2"),
+> +		},
+> +	},
+> +	{ }
+> +};
+> +
+> static int btbcm_read_info(struct hci_dev *hdev)
+> {
+> 	struct sk_buff *skb;
+> +	const struct dmi_system_id;
+>=20
+> 	/* Read Verbose Config Version Info */
+> 	skb =3D btbcm_read_verbose_config(hdev);
+> @@ -363,6 +399,10 @@ static int btbcm_read_info(struct hci_dev *hdev)
+> 	bt_dev_info(hdev, "BCM: features 0x%2.2x", skb->data[1]);
+> 	kfree_skb(skb);
+>=20
+> +	/* Read DMI and disable broken Read LE Min/Max Tx Power */
+> +	if (dmi_first_match(disable_broken_read_transmit_power))
+> +		set_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks);
+> +
+> 	return 0;
+> }
+>=20
+May I know whether this is fine or not.
+>=20
 

@@ -2,187 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC3C463CE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12DD8463CEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:36:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244138AbhK3Rid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:38:33 -0500
-Received: from mail-bn7nam10on2058.outbound.protection.outlook.com ([40.107.92.58]:2017
-        "EHLO NAM10-BN7-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S244836AbhK3RiY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:38:24 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SjIxmE4/e0GmdHI6W0TBtjIAIwm1gScdMhk6WrPSh/3L2TBvIU/YCobdkmfb6kCVqVfWkSrQNEJSIUABiDLsxN/aMdk94gZS5KrYIiyE/Qai+AKmHywHr4zQdYKeJuX1nFTYpAwl0+CpKcz4t2gSoF07nrNiqzBE4QK5ZcA2gojjJrAtvr2AmnBzCuXUGbjHwHpA7E/5cXWM5/cGoYYoJp5/N1oyBC3M3xuKakpUlFNT3xD27ck90vFlIni2b5FkxrG3oP2+1MLDwjgpmn5VWNRDNmw7cVy4ytCFf4sUZPKP3l/v48A0sfIvtJTn2r0vU9tOJBogGJXTgMfjM1iApA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PgOvg1PK/JvXeQJBSTwu7z2Jlhz0Vvbfw/LHaTi5aG0=;
- b=L8OLcwR9Afp0kAe4ALg6aiBD4kuDxCfkf+1Dm7vCGK7SuzciTnWw0NL60nvEs/YoRgAlXvwSrhNeauiIasWLhPdibsedFeVstldxPiVgmLoNAmJY8eLh4jPdWud8r7jS8qcMiwiO5CL/01ly3In+pUowHUyvd5Vh+0cbr/4w71qJmNuA74+CI0oHJhRlYKYRSks+P8NVe5LJx8YO6FS2wn7QALmbw3JJS766vdj83xcPgPXfeU7p4AS6DdxXgfCEHxdUST4+/baBb6VLfrAoRK9jYdZevrg0vOFQNnJ+F8+hDyCYIozv8Gx2Zme2yG3JCFhWaRGXPXN7q6fq5KrbpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PgOvg1PK/JvXeQJBSTwu7z2Jlhz0Vvbfw/LHaTi5aG0=;
- b=tJUjDl7Qyb1v8rgBVXJ5JRpADAGd2hovH3dbcT0PlNAvd2PbHiBplCzM6U9xIwYcRvZ8Xyo+WXua5grOb1rtnOs0heByp1vhMZ9O2KQVgc9Sa6sc/PjwuaFmVepagtXM18bStCUD20KlRr7oM3m7b9S8OchyUOxIqlKlBvg+Xds=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by BN9PR12MB5146.namprd12.prod.outlook.com (2603:10b6:408:137::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Tue, 30 Nov
- 2021 17:35:03 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::9dfe:ccc6:102c:5300]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::9dfe:ccc6:102c:5300%9]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
- 17:35:03 +0000
-Subject: Re: [PATCH] drm/amdkfd: Fix a wild pointer dereference in
- svm_range_add()
-To:     philip yang <yangp@amd.com>, Zhou Qingyang <zhou1615@umn.edu>
-Cc:     kjlu@umn.edu, Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Philip Yang <Philip.Yang@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20211130112644.116604-1-zhou1615@umn.edu>
- <b78771ca-2ca2-a369-b67f-dc479eb87d90@amd.com>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-Message-ID: <4a457ba1-67df-993f-1a7a-9868a954de99@amd.com>
-Date:   Tue, 30 Nov 2021 12:35:01 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-In-Reply-To: <b78771ca-2ca2-a369-b67f-dc479eb87d90@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-ClientProxiedBy: YTXPR0101CA0022.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b00::35) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
+        id S244837AbhK3Rj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:39:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230443AbhK3RjW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 12:39:22 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1BFC061574;
+        Tue, 30 Nov 2021 09:36:02 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id y13so89950178edd.13;
+        Tue, 30 Nov 2021 09:36:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Oywvq+utTerFq6V8S/x70IeHU0QO5TyY6jTfAnkHZ9I=;
+        b=cfojqhysDIMRwY+mqnD9kh3WDnYnhLEiUMTbj+w3NNvkofPxAL0FuELgxKL/o9Jqvc
+         1twq8TqzePvIO+ya7YgXvK/2bJul8eN13GdklzL75WmOk8bf7btZoTtZqHPRpswx8E9h
+         BCYfi9mtp+FoTixbdaVD0VDX6Jbk8wjWuJAtFIKXyEueo4+E5ipefcQu6wTdf5EIq4X8
+         X4sh7jWhd+8X//LKwLTkDwqlDqEMpLbI9/qbRQ3HAxoAjV907M7DpCJLh48agnXXrfiV
+         rpJsCnp9/yUrBe+MTnfRUJ85UDVpv4VeJIrKFmq6V+H4wIUmvp8bvMfPg2h/1OaPtlfj
+         tl5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Oywvq+utTerFq6V8S/x70IeHU0QO5TyY6jTfAnkHZ9I=;
+        b=tLqneVtGT1eS9BJIf1M/JcScxuqkvEF5kFQ8lTLEaeoMNS3I9LsiUl1GmGKmm5plow
+         tqVmgnm8qhVhcgKK2Ft5VlIO+6xAg1+2C7rrpjaVvIg2WHzBTHx7q0XvINzM0lMS7RhF
+         gdfTKGYAbqxqH/7j4p9uvgn5sD7UO2FahU1UCrbQsVZlfVEs7GIshj+ZmTINzDjcRMTE
+         Wv5RXGMUpu9UkUk8XTKv4xBMjRcErfH7ghraSSUxYNAxRPUOVoivLWB6KGB3TirAwDvj
+         go3kedWN0qYiQCxzOcYjaKL1Qasff1BrCkJRwtEQ0Rg9BzPPP2eQ5BXWa6l4+vVYNhtX
+         vCJQ==
+X-Gm-Message-State: AOAM5301DitPnOvIfgQML/GmW5gItzsJ95wDR+3F5z3jPhWlUUm+gJpe
+        G2LLmRNHmFgibvcG6GgfOKU=
+X-Google-Smtp-Source: ABdhPJwX+VqmCvUvIH+Vrzn67m5keK1nVizErpKsz9xY5hMnklBKQ0T/tH8iHItv+tP4C3Zz7cXSsg==
+X-Received: by 2002:a50:ce46:: with SMTP id k6mr532940edj.45.1638293760775;
+        Tue, 30 Nov 2021 09:36:00 -0800 (PST)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id oz11sm9583941ejc.81.2021.11.30.09.35.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 09:36:00 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <ecb2f3c6-af8c-dd43-1dcf-0b5e8a9d8848@redhat.com>
+Date:   Tue, 30 Nov 2021 18:35:52 +0100
 MIME-Version: 1.0
-Received: from [192.168.2.100] (142.127.191.123) by YTXPR0101CA0022.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b00::35) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend Transport; Tue, 30 Nov 2021 17:35:02 +0000
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 66f0b76f-c64a-436e-46f1-08d9b427bdb8
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5146:
-X-Microsoft-Antispam-PRVS: <BN9PR12MB5146984D2973A999A1508B9492679@BN9PR12MB5146.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TTljsilqF90cvSQUhfS8HCktM+XzytWN8uNvMAi+UbTHIoj7BaM6dEPzaaC751f7ryYVKAk2CEKEJmNHOrDg4osR2qv4pM2fSiVDgaD53T6YRJnBOT4o/3dnVr3ktpI4Ni3QkcKRfo2DGmelgqAAFvbNDM5+A4RpDys13XREO0jTe903aOuuLdfhr78KVGo/t4nIjWdjvvHBCRFgVQRAj3dlQrzIj4tVa90Swp4Vdy2elYIHx3m1atSl8hB9dtaA12JHhhBy+SmfTxcV5+Yq5ZlpB+Fbh1aJnK2O2AhMOQaZX5Drco0fqNgvnGkWnHQh0VUmivEi9sssa3tmCDumh7ZfB8gTtwrBnLeYui2tLqQVnDWWsMUKn+G54BRUplqFqLf8yUVvSwSFro7sT8WYLiDDqOhfpZvmZr8m+5pR8A2lqFW6jIyc7WSOjkZPuXcxIBwD5lp407viOeiZX/NhgnMIyXGNkFz5zQQh9Uzy41FpzyRPlzeePYAWEoXrpBnqw0pIH3qB0j/B4BATd8o8QazzENG2z8UIzX8qfjxUJ0XYQnp+OlQYtsdWzyTBUMO9Ll7TXn1RcxQ3YyPWRLSpiBgLfjCI4uWYd3k3Yw+eJ4tMigaQZm1on97gqvfRAKQ5ZdgmLj2D05ODjMS4W3SAj3OHRNnL21UghFUaAnNFNDlWB50zYKOE8tunWsKiACDLAaLrwCnGXGPxjHKl7ApoL3S4ppcQWvs11l2pzHyadfZluZK1mJjTN4gC+TcB3QXJ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(4326008)(38100700002)(83380400001)(5660300002)(53546011)(2616005)(4001150100001)(44832011)(36756003)(186003)(31696002)(16576012)(31686004)(316002)(54906003)(508600001)(956004)(110136005)(66946007)(66556008)(26005)(2906002)(8676002)(86362001)(66476007)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cDNtN1RwOXo5MUxHRDVRZFRhRjM4d1BEMUxIajlpNWo3b05Hb2dnSXRwendO?=
- =?utf-8?B?TlFRUGphSEE1RnZ6WWlRc2V0K09uaDIrQ0VCRGptaHpFVGxQa3YwVFFiSkNJ?=
- =?utf-8?B?WkQvY2pOWUJMYVdoSk1kR3E5WExGL1ZJbEs4a09jcDc2dy9TNzcrSjVYcG9z?=
- =?utf-8?B?d1Iwd2xjeTBSQmtrVWNqRlN2QzhESkZZdjNPWGVtTmIrT25vblhMVTdMdXVa?=
- =?utf-8?B?bm8raXFLU01uQjZ4d3FER1pjdGFPTkxXRGRTMWpxVisxZTd0LzNETHR6UVZ4?=
- =?utf-8?B?WWR6WTdjRUlublRVTXlaME9qM2gwQmh1ZmRvMWUzOUt4dWl1YmpXWUhDT1ZJ?=
- =?utf-8?B?SGY4dmZQWFhwYzlkMWlSc2dEaUNDdmRneWcvMkhvcnNzak5Iazh0c3grbFZJ?=
- =?utf-8?B?TGZaUmg1dDNyVWYxTkNYMytGbzlGSXRSQStCdldleXpHN1NhK0FlcjVoaHV0?=
- =?utf-8?B?bjJRc25GQnRSNXAydmUrbHE3dTRhditKOGliT2JFMWRleFkzbHhWWFRXK3FZ?=
- =?utf-8?B?OEM3UUpmY1FONldnZ0FMOHcxeVNpbk9VOVRnN1NCclN1Z09oVnhQZzVRT05a?=
- =?utf-8?B?a2xjemk3OHBzWDU4c0ZCVklYOTZWcFgrRkFmNnVEM1NEdnRtNWthNVlxQW1j?=
- =?utf-8?B?N3dSSWNXMFlhQmxnOE44VEJ5SXN1dHc0WkI5RldIYjJuT0NYZll4RlR4Witt?=
- =?utf-8?B?MDE5bERUNGxucFUwUTQ1Wjl4WTA3MEpHUFVyL0RkQVJ1anYxdzZhL05CN3l1?=
- =?utf-8?B?cmpMK2I1S25wbGI5amhBZ0lrWVBPOWxoc3hOSEhtc2wzK0lvMG1RQm0zOHNp?=
- =?utf-8?B?SW5YZm0xM01NYTVSL3NpUVVuQjZzUUIvSzZ5M1ZpSnp6bXZTOFBla2ZPQVJD?=
- =?utf-8?B?SVVSWW1XYWhSWGFPaTh0MDJDK3ZIQkJLcUlIcXJIN3FSMEc5enZXYmU0YjNW?=
- =?utf-8?B?dHpwYnJCUTc3cUhDSFV3RHNyWUc2UU9tVjU4VTBuMTNXcGVOSW5vb2xCVWZO?=
- =?utf-8?B?SXFJZlVsTVJ5ZlRVaHZTQ2FxWE9SaFpNaWpiM1V4Mzg0VU5SRVV4OWRpN3dH?=
- =?utf-8?B?ek1vb2FPU200QjJXR1VqK1hZL1BJTE4rakFqRHZBSlBaaFgxNytDazhWK3Y4?=
- =?utf-8?B?MmFlTDNrZGZIT2lNdC9xaUt4WTZnQWVkaUtTQmVzM3ZWWmIxMHU1c1d0NUtm?=
- =?utf-8?B?VGZQYkt0ajVaODd4NWRCTHkrMjQ3Qm1XRXpFZHZkN1VCb0s0R2NRWnVIOTgw?=
- =?utf-8?B?Q090cmduMVBNU1YyazBwVVJGNXBWUFViYnI3TVRPekhoa2x2dzF2U3VCd0hV?=
- =?utf-8?B?ZWJpSlRXdjd5YVJDNVFJb0lHYTUyM3lnT3VUL1ZJVVc0ckZUTStYRzhvcUhO?=
- =?utf-8?B?c25zZ1Y4RUwweUJPajJZN1dUa250U3hxajhPZThQNUs5WVg1UFpVTjEvK2tJ?=
- =?utf-8?B?OFZ5WEx5VDFJaE80QWd3QXB4MlV1VHkwcGczdlhTNG9MdnFwUlhac1piMSt6?=
- =?utf-8?B?akFqbFpTWnhOaWNldlNuWndPU1R5R3lNR21Oc2tBZ1VURForaWJhMk9jZVVZ?=
- =?utf-8?B?b3dTTWlQQjkzWTEzR253WmwzSzBmOEI1Z1dpQ3M0SS9yNHhxTzIyRjUrWk00?=
- =?utf-8?B?SkRJM0FMcS9NZUNWR2ttY0hMN1EzVUtLYk13eWJQNnkrdVZYSU9UaEFiWVNm?=
- =?utf-8?B?ZmVENmxqOS81cnJhSUVtVm9adEZsVlZrMmE0eWZqZVhQRmgwWjRNOTI5YlBS?=
- =?utf-8?B?SjBNOEkwalpvSk5iTHRKL2VsZGVZRmdIY3V2aGVWZFRuQTVZZFYvb2dBb2JV?=
- =?utf-8?B?ZnBFb0gxeTFzRnEyMUdBc0RZay9GWmdWMXIzdTRob2V3ay9MeExLR0RLN0xB?=
- =?utf-8?B?UTZoSVVXbU9ncWJYSnVudGhYOFJqTG0rYVFnMHhLRFRWMlBTNllQNW5KZVNo?=
- =?utf-8?B?bXhDdlNlWUgrdzZTejhzZ0tKa3U2YjltMElRbVpEaW5HdVE5TmUwU3psN1lj?=
- =?utf-8?B?aXlZTG9BU2crMjI1UkE4Wk44RUdueXViS1A5V1U4NHJtY2NBQm9KT3RKVEhZ?=
- =?utf-8?B?Y3FhRWhyS3V3YkhKMXMyM0ovdy92dmhoWVFrVVBvZCsrK3dibkd3QUo4amt6?=
- =?utf-8?B?eFBrWS9rOW52TXJ5a000a0xRS3Fqd1NTamxHaloxVS9qb1oydm9XenVaN1Ri?=
- =?utf-8?Q?4wLmLsFoOZwisc/pcgZoF2c=3D?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66f0b76f-c64a-436e-46f1-08d9b427bdb8
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 17:35:03.1063
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Bc3809WTF6UTl/2AXacbpDCSeQjcWcq7eAIodsPQ1JbNj4fmDsVNTEPwF7LxkTA33O4AQVMvrDqCO0DWTO3mpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5146
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] scsi: virtio_scsi: Fix a NULL pointer dereference in
+ virtscsi_rescan_hotunplug()
+Content-Language: en-US
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Matt Lupfer <mlupfer@ddn.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211130171901.202229-1-zhou1615@umn.edu>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20211130171901.202229-1-zhou1615@umn.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2021-11-30 um 11:51 a.m. schrieb philip yang:
->
->
-> On 2021-11-30 6:26 a.m., Zhou Qingyang wrote:
->> In svm_range_add(), the return value of svm_range_new() is assigned
->> to prange and &prange->insert_list is used in list_add(). There is a
->> a dereference of &prange->insert_list in list_add(), which could lead
->> to a wild pointer dereference on failure of vm_range_new() if
->> CONFIG_DEBUG_LIST is unset in .config file.
->>
->> Fix this bug by adding a check of prange.
->>
->> This bug was found by a static analyzer. The analysis employs
->> differential checking to identify inconsistent security operations
->> (e.g., checks or kfrees) between two code paths and confirms that the
->> inconsistent operations are not recovered in the current function or
->> the callers, so they constitute bugs.
->>
->> Note that, as a bug found by static analysis, it can be a false
->> positive or hard to trigger. Multiple researchers have cross-reviewed
->> the bug.
->>
->> Builds with CONFIG_DRM_AMDGPU=m, CONFIG_HSA_AMD=y, and
->> CONFIG_HSA_AMD_SVM=y show no new warnings, and our static analyzer no
->> longer warns about this code.
->>
->> Fixes: 42de677f7999 ("drm/amdkfd: register svm range")
->> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> Reviewed-by: Philip Yang <Philip.Yang@amd.com>
+On 11/30/21 18:19, Zhou Qingyang wrote:
+> --- a/drivers/scsi/virtio_scsi.c
+> +++ b/drivers/scsi/virtio_scsi.c
+> @@ -337,7 +337,11 @@ static void virtscsi_rescan_hotunplug(struct virtio_scsi *vscsi)
+>   	unsigned char scsi_cmd[MAX_COMMAND_SIZE];
+>   	int result, inquiry_len, inq_result_len = 256;
+>   	char *inq_result = kmalloc(inq_result_len, GFP_KERNEL);
+> -
+> +	if (!inq_result) {
+> +		pr_err("%s:no enough memory for inq_result\n",
+> +			__func__);
+> +		return;
+> +	}
+>   	shost_for_each_device(sdev, shost) {
+>   		inquiry_len = sdev->inquiry_len ? sdev->inquiry_len : 36;
+>   
 
-The patch looks good to me. It's an obvious bug and definitely not a
-false positive. The patch description is a bit verbose. Is this
-auto-generated output from the static checker? It could be replaced with
-something more concise. Especially the comment about this possibly being
-a false positive should not be in the final submission.
+In practice this will never happen, since the kmalloc is very small, so 
+I think it's easier to just return early without a printk.  On the other 
+hand, if the out-of-memory really could happen, this should be a 
+pr_err_ratelimited.
 
-Regards,
-  Felix
-
-
->> ---
->>  drivers/gpu/drm/amd/amdkfd/kfd_svm.c | 3 +++
->>  1 file changed, 3 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->> index 58b89b53ebe6..e40c2211901d 100644
->> --- a/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->> +++ b/drivers/gpu/drm/amd/amdkfd/kfd_svm.c
->> @@ -2940,6 +2940,9 @@ svm_range_add(struct kfd_process *p, uint64_t start, uint64_t size,
->>  
->>  	if (left) {
->>  		prange = svm_range_new(svms, last - left + 1, last);
->> +		if (!prange)
->> +			return -ENOMEM;
->> +
->>  		list_add(&prange->insert_list, insert_list);
->>  		list_add(&prange->update_list, update_list);
->>  	}
+Paolo

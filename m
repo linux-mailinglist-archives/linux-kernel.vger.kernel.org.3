@@ -2,95 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAE3462D19
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD2C462D1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:51:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238821AbhK3Gym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 01:54:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232181AbhK3Gyl (ORCPT
+        id S238824AbhK3GzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 01:55:09 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:50464 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233165AbhK3GzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 01:54:41 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B747CC061574;
-        Mon, 29 Nov 2021 22:51:22 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 30 Nov 2021 01:55:02 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3CYN4rSLz4xQv;
-        Tue, 30 Nov 2021 17:51:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638255080;
-        bh=lhL5PUUFXrK2X40tGvNjCzFWRNBeX05n6jOvo1zH29w=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OGG3qNcBauFKetv9NJNhW2Qwq4BBVSxRNLrZTl/ITwMGen9z0t4RMPLqlam1TpfDx
-         AFrogANUKHNrFKfTbumDaHiAyblIWHjHpwxgaboSnEYrln6OUp8uOnCf6eijhl7Nty
-         hnK2+Xk50eGUjdYX/zddE/iw8yStYh53ooeRJhH3AdIk+8W1snQNC3PPEVHP+LzPpV
-         63wAi5ZsDeWR/OFqLLwVeq0giA22m8ul6KpgjrcpiGwRMDElxTSpJNQ4pVo7V+0gwd
-         K/zk/lg1QtjXXFQ6CL7X8oAE4TAKdgRDunGyBgnnQ1ee6Hf68vRn3jw36zUECHfrKE
-         nodrM02PHXzfA==
-Date:   Tue, 30 Nov 2021 17:51:19 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the fscache tree
-Message-ID: <20211130175119.63d0e7aa@canb.auug.org.au>
-In-Reply-To: <20211130162311.105fcfa5@canb.auug.org.au>
-References: <20211130162311.105fcfa5@canb.auug.org.au>
+        by sin.source.kernel.org (Postfix) with ESMTPS id C4B67CE16B4;
+        Tue, 30 Nov 2021 06:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50335C53FCD;
+        Tue, 30 Nov 2021 06:51:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638255100;
+        bh=OthBuHhfpZ4/HumyxwCHFcZfepI57tWKm7cCN1XPAcM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CFnEY0cPq0R4fUZR6llZkhp1qmSxqaz8Sxu2VW3Brvryg2l+UT6W5S8Nh57QovOet
+         KdFc1wKs/HNeUwcWWjzsHXs7jzzkZMUOvcAissyPMI2bB7U5e3LEQBPwu2OCvaKZP8
+         rtb37/hENcTMR0aDB5njxbnRpwz2CiMm3aMDC3Q8=
+Date:   Tue, 30 Nov 2021 07:51:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>, stable@vger.kernel.org
+Subject: Re: [PATCH] PM / hibernate: Fix snapshot partial write lengths
+Message-ID: <YaXJ+LqbmlKJ21Ja@kroah.com>
+References: <20211029122359.1.I1e23f382fbd8beb19fe1c06d70798b292012c57a@changeid>
+ <CAE=gft4MRvq-VCBW4EX4dGfPi4s7Lco8h6Z_ejRH5A1e-K2-yA@mail.gmail.com>
+ <CAJZ5v0hsGFHxcTb8PUkGSm9oas1wdquB=euofS19zriRc1CXYw@mail.gmail.com>
+ <CAE=gft6CjUhkcrmcjVEOp5S+rgqN1_ZGTKbK0DierTanu0d16A@mail.gmail.com>
+ <CAJZ5v0gamixc4dkBEXJjjw5zQynuz8BkQ9xv8YpbjkTkdMb2TQ@mail.gmail.com>
+ <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4dQe+d0r.Z4JHi+93mEG4nb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/4dQe+d0r.Z4JHi+93mEG4nb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 29, 2021 at 08:50:06AM -0800, Evan Green wrote:
+> On Wed, Nov 24, 2021 at 4:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Tue, Nov 16, 2021 at 9:22 PM Evan Green <evgreen@chromium.org> wrote:
+> > >
+> > > On Tue, Nov 16, 2021 at 9:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > >
+> > > > On Mon, Nov 15, 2021 at 6:13 PM Evan Green <evgreen@chromium.org> wrote:
+> > > > >
+> > > > > Gentle bump.
+> > > > >
+> > > > >
+> > > > > On Fri, Oct 29, 2021 at 12:24 PM Evan Green <evgreen@chromium.org> wrote:
+> > > > > >
+> > > > > > snapshot_write() is inappropriately limiting the amount of data that can
+> > > > > > be written in cases where a partial page has already been written. For
+> > > > > > example, one would expect to be able to write 1 byte, then 4095 bytes to
+> > > > > > the snapshot device, and have both of those complete fully (since now
+> > > > > > we're aligned to a page again). But what ends up happening is we write 1
+> > > > > > byte, then 4094/4095 bytes complete successfully.
+> > > > > >
+> > > > > > The reason is that simple_write_to_buffer()'s second argument is the
+> > > > > > total size of the buffer, not the size of the buffer minus the offset.
+> > > > > > Since simple_write_to_buffer() accounts for the offset in its
+> > > > > > implementation, snapshot_write() can just pass the full page size
+> > > > > > directly down.
+> > > > > >
+> > > > > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > > > > > ---
+> > > > > >
+> > > > > >  kernel/power/user.c | 2 +-
+> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > >
+> > > > > > diff --git a/kernel/power/user.c b/kernel/power/user.c
+> > > > > > index 740723bb388524..ad241b4ff64c58 100644
+> > > > > > --- a/kernel/power/user.c
+> > > > > > +++ b/kernel/power/user.c
+> > > > > > @@ -177,7 +177,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+> > > > > >                 if (res <= 0)
+> > > > > >                         goto unlock;
+> > > > > >         } else {
+> > > > > > -               res = PAGE_SIZE - pg_offp;
+> > > > > > +               res = PAGE_SIZE;
+> > > > > >         }
+> > > > > >
+> > > > > >         if (!data_of(data->handle)) {
+> > > > > > --
+> > > >
+> > > > Do you actually see this problem in practice?
+> > >
+> > > Yes. I may fire up another thread to explain why I'm stuck doing a
+> > > partial page write, and how I might be able to stop doing that in the
+> > > future with some kernel help. But either way, this is a bug.
+> >
+> > OK, patch applied as 5.16-rc material.
+> >
+> > I guess it should go into -stable kernels too?
+> 
+> Yes, putting it into -stable would make sense also. I should have CCed
+> them originally, doing that now.
 
-Hi all,
 
-On Tue, 30 Nov 2021 16:23:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> After merging the fscache tree, today's linux-next build (htmldocs)
-> produced this warning:
->=20
-> Documentation/filesystems/caching/backend-api.rst:417: WARNING: undefined=
- label: documentation/filesystems/netfs_library.rst
->=20
-> Introduced by commit
->=20
->   b3c088faf78b ("fscache: Rewrite documentation")
+<formletter>
 
-Also
+This is not the correct way to submit patches for inclusion in the
+stable kernel tree.  Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
 
-Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasis s=
-tart-string without end-string.
-Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasis s=
-tart-string without end-string.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4dQe+d0r.Z4JHi+93mEG4nb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGlyecACgkQAVBC80lX
-0GzJdQgAnGS4QXC0fuUor8W+9y+6SwoqIagBratLuQpFCxPUgJBBB3rEzwtvd8K1
-btIePlBCUPucF3cPeJ6v3grxe2cm9JNlLpjaqxr43MEV0CO2BzYTsRncsE7RfDc/
-LLiPz11cn/eh/UwI7/uTIPsvJl7T5ET4KNfYjAqzBCeH+F39seA5/s21N6lNcVD+
-6rRFuyE5jrp4Da9y2+FyRMIF8MjsiT4TU9A2CANn2LGfPuyBLdk6t2WU5WbkpU7j
-PRNsgsm5uWNm4c+szLtTRzYdoO09rYuevb2GYp/knCazABpl62+MlgDaIFN3m/XO
-jBdIs30ZuIO/t7bU2n3jkVaVWg4EDA==
-=FdLT
------END PGP SIGNATURE-----
-
---Sig_/4dQe+d0r.Z4JHi+93mEG4nb--
+</formletter>

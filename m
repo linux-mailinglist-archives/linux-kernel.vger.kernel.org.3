@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9FC4638AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F155D46392D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242980AbhK3PFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:05:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50812 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238321AbhK3O5A (ORCPT
+        id S243259AbhK3PIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244563AbhK3PCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:57:00 -0500
+        Tue, 30 Nov 2021 10:02:33 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ACD0C061746;
+        Tue, 30 Nov 2021 06:53:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2A21B81A42;
-        Tue, 30 Nov 2021 14:53:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E4BC53FC7;
-        Tue, 30 Nov 2021 14:53:37 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 57F2BCE1A6C;
+        Tue, 30 Nov 2021 14:53:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D595AC53FCF;
+        Tue, 30 Nov 2021 14:53:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284018;
-        bh=Xo2gsgyROap7QOttu0XsXfMsEq+ZGFwbLGW3XIFrExc=;
+        s=k20201202; t=1638284019;
+        bh=sv6SHN8BiLPKNf1x5CfhepLuwQcvghPgfP6OXk2juBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lePRmLYW1els49i4ZYQehK2JTmavy16s3iO9nn7ALrhHcn/bhjEru4I7+3u/9I2D0
-         IVJ7DNQgHcXdjmdLqDm8nxW8u94uwdusrE5JY5TbRpenpuxCDzESt4EVaC+UCQguAn
-         D8MhpRqLovWwVwmlhTDrRllekIDYkxm8s7LzUshGs/sOOtLHSTOr+49+ImeZOaGb7C
-         MRa0FFDVQSxkBilJaIZb2q/WRKmOtigvg7TlxKtzqlJKnPJZx0qYwaKMeWV9Xh8A9T
-         0A1VQCt6m75nv/u43aoBWAjBivyjv4xnL3e72vMaY/CyxN02t1lLMURgi8id4e5Wjr
-         qBKufgvv8+e4Q==
+        b=pwTTsdB8nSxOaERr10r7cHKNLMzFP7PEKJY2/rJW3GQ6ZOQhvVab6RkKGD0ePyQdd
+         PHGobzslbY6v8SNg1DKmKAxinG+MxOl3foBlU4uBKYYQYQK20LJTFfYLmw22aImLH7
+         pGiYbwuJT2nRUQ1L7be13tKY+8VJIK1Y49U1ASrhCuB1VMmQxlPpYs3ZcCj82eXva/
+         KwwDSkHWox2UKBKT0Ha1LnQPdWT6h/4e9tPaHQ9xXZ68UBf4CjCe7p1C9FsWmU2/4h
+         2A84BaaM/Gg6F8jrTQPemeeOdt3b0YsMDNA/aMkVqZB8geAObGt6NB0cca9m0IPe3Q
+         rpJiCm6DbIeBQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 13/14] net: ptp: add a definition for the UDP port for IEEE 1588 general messages
-Date:   Tue, 30 Nov 2021 09:53:14 -0500
-Message-Id: <20211130145317.946676-13-sashal@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux-ntfs-dev@lists.sourceforge.net
+Subject: [PATCH AUTOSEL 4.14 14/14] fs: ntfs: Limit NTFS_RW to page sizes smaller than 64k
+Date:   Tue, 30 Nov 2021 09:53:15 -0500
+Message-Id: <20211130145317.946676-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130145317.946676-1-sashal@kernel.org>
 References: <20211130145317.946676-1-sashal@kernel.org>
@@ -49,39 +53,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Guenter Roeck <linux@roeck-us.net>
 
-[ Upstream commit ec15baec3272bbec576f2ce7ce47765a8e9b7b1c ]
+[ Upstream commit 4eec7faf6775263d9e450ae7ee5bc4101d4a0bc9 ]
 
-As opposed to event messages (Sync, PdelayReq etc) which require
-timestamping, general messages (Announce, FollowUp etc) do not.
-In PTP they are part of different streams of data.
+NTFS_RW code allocates page size dependent arrays on the stack. This
+results in build failures if the page size is 64k or larger.
 
-IEEE 1588-2008 Annex D.2 "UDP port numbers" states that the UDP
-destination port assigned by IANA is 319 for event messages, and 320 for
-general messages. Yet the kernel seems to be missing the definition for
-general messages. This patch adds it.
+  fs/ntfs/aops.c: In function 'ntfs_write_mst_block':
+  fs/ntfs/aops.c:1311:1: error:
+	the frame size of 2240 bytes is larger than 2048 bytes
 
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Acked-by: Richard Cochran <richardcochran@gmail.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Since commit f22969a66041 ("powerpc/64s: Default to 64K pages for 64 bit
+book3s") this affects ppc:allmodconfig builds, but other architectures
+supporting page sizes of 64k or larger are also affected.
+
+Increasing the maximum frame size for affected architectures just to
+silence this error does not really help.  The frame size would have to
+be set to a really large value for 256k pages.  Also, a large frame size
+could potentially result in stack overruns in this code and elsewhere
+and is therefore not desirable.  Make NTFS_RW dependent on page sizes
+smaller than 64k instead.
+
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Cc: Anton Altaparmakov <anton@tuxera.com>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/ptp_classify.h | 1 +
+ fs/ntfs/Kconfig | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
-index a079656b614cd..c0a02aa7ed9bd 100644
---- a/include/linux/ptp_classify.h
-+++ b/include/linux/ptp_classify.h
-@@ -45,6 +45,7 @@
- #define PTP_CLASS_L4      (PTP_CLASS_IPV4 | PTP_CLASS_IPV6)
+diff --git a/fs/ntfs/Kconfig b/fs/ntfs/Kconfig
+index f5a868cc9152e..5b384ec44793f 100644
+--- a/fs/ntfs/Kconfig
++++ b/fs/ntfs/Kconfig
+@@ -51,6 +51,7 @@ config NTFS_DEBUG
+ config NTFS_RW
+ 	bool "NTFS write support"
+ 	depends on NTFS_FS
++	depends on PAGE_SIZE_LESS_THAN_64KB
+ 	help
+ 	  This enables the partial, but safe, write support in the NTFS driver.
  
- #define PTP_EV_PORT 319
-+#define PTP_GEN_PORT 320
- #define PTP_GEN_BIT 0x08 /* indicates general message, if set in message type */
- 
- #define OFF_PTP_SOURCE_UUID	22 /* PTPv1 only */
 -- 
 2.33.0
 

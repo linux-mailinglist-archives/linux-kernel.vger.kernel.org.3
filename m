@@ -2,137 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C304463955
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EAC463938
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244281AbhK3PKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:10:12 -0500
-Received: from mga02.intel.com ([134.134.136.20]:21490 "EHLO mga02.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245425AbhK3PDh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S244759AbhK3PIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:08:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245239AbhK3PDh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Nov 2021 10:03:37 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223457588"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="223457588"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 06:58:22 -0800
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="459629860"
-Received: from sghadai-mobl.amr.corp.intel.com (HELO [10.213.181.11]) ([10.213.181.11])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 06:58:20 -0800
-Message-ID: <a5f5c675-0a7a-8049-d9d6-185cf4f2d91b@linux.intel.com>
-Date:   Tue, 30 Nov 2021 14:58:18 +0000
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D03C061756;
+        Tue, 30 Nov 2021 07:00:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9EB52B81A23;
+        Tue, 30 Nov 2021 15:00:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EB3C53FCD;
+        Tue, 30 Nov 2021 15:00:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638284411;
+        bh=BQwhEyj52pS1l1fg+KPjQveNu4vJG6JkJekPivvjPDM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s52V/VC1pce7mMpz9z5kuG60j9699IWN0FXqKNyuaiyrO4f0PacSSWYUm3WXiDycR
+         4czsmyi7J9tWYNsOTb4560WhtKRyYUNLC6+yvCAyfIRHpM6rLQ7l8/QeOM+6UY0h0J
+         umKrTS5O/aBCHmiBP5Qr35nFu71VbxyTi3K/JHP6GnjwEYUdRL3qcdQiv6pA30jxp/
+         TPTYva+DS5zzkuTlaRlDkvIuPxYfEBld9X52VkLBcIZ7LW9Gt8TGWAPMKhKI/iNCZB
+         KGq5FRU7+ooGb2XC6Pt3oEnk0x54KxH1TZH6VqymlgK2vnlRBUS11nYgxYP3qKGsvz
+         POUu9A+MoywOw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DF02840002; Tue, 30 Nov 2021 12:00:08 -0300 (-03)
+Date:   Tue, 30 Nov 2021 12:00:08 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf map: Fix namespace memory leak
+Message-ID: <YaY8eBB+PnklIxZA@kernel.org>
+References: <20211118193714.2293728-1-irogers@google.com>
+ <YaOi6pYqoc3boYX/@krava>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.1
-Subject: Re: [Intel-gfx] [PATCH] drm/i915/gem: Fix a NULL pointer dereference
- in igt_request_rewind()
-Content-Language: en-US
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
-        dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        intel-gfx@lists.freedesktop.org, kjlu@umn.edu,
-        linux-kernel@vger.kernel.org,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Zhihao Cheng <chengzhihao1@huawei.com>
-References: <20211130141545.153899-1-zhou1615@umn.edu>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <20211130141545.153899-1-zhou1615@umn.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaOi6pYqoc3boYX/@krava>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 30/11/2021 14:15, Zhou Qingyang wrote:
-> In igt_request_rewind(), mock_context(i915, "A") is assigned to ctx[0]
-> and used in i915_gem_context_get_engine(). There is a dereference
-> of ctx[0] in i915_gem_context_get_engine(), which could lead to a NULL
-> pointer dereference on failure of mock_context(i915, "A") .
+Em Sun, Nov 28, 2021 at 04:40:26PM +0100, Jiri Olsa escreveu:
+> On Thu, Nov 18, 2021 at 11:37:14AM -0800, Ian Rogers wrote:
+> > This leak was happening reliably with test "Lookup mmap thread" with
+> > stack traces like:
+> > 
+> > Direct leak of 5504 byte(s) in 172 object(s) allocated from:
+> >     #0 0x7f4685e47987 in __interceptor_calloc
+> >     #1 0x56063b974c2a in nsinfo__new util/namespaces.c:142
+> >     #2 0x56063b9781ff in thread__new util/thread.c:70
+> >     #3 0x56063b944953 in ____machine__findnew_thread util/machine.c:543
+> >     #4 0x56063b944ac6 in __machine__findnew_thread util/machine.c:574
+> >     #5 0x56063b944b36 in machine__findnew_thread util/machine.c:584
+> >     #6 0x56063b94c892 in machine__process_fork_event util/machine.c:1954
+> >     #7 0x56063b94cc1f in machine__process_event util/machine.c:2019
+> >     #8 0x56063b894f18 in perf_event__process util/event.c:567
+> >     #9 0x56063ba17951 in perf_tool__process_synth_event util/synthetic-events.c:65
+> >     #10 0x56063ba19086 in perf_event__synthesize_fork util/synthetic-events.c:287
+> >     #11 0x56063ba1c39d in __event__synthesize_thread util/synthetic-events.c:775
+> >     #12 0x56063ba1cf6f in __perf_event__synthesize_threads util/synthetic-events.c:929
+> >     #13 0x56063ba1d4ab in perf_event__synthesize_threads util/synthetic-events.c:1000
+> >     #14 0x56063b821a3d in synth_all tests/mmap-thread-lookup.c:136
+> >     #15 0x56063b821c86 in mmap_events tests/mmap-thread-lookup.c:174
+> >     #16 0x56063b8221b7 in test__mmap_thread_lookup tests/mmap-thread-lookup.c:230
+> > 
+> > The dso->nsinfo is overwritten, but without a nsinfo__put this can leak
+> > the overwritten nsinfo.
+> > 
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 > 
-> So as mock_context(i915, "B").
+> nice catch!
 > 
-> Although this bug is not serious for it belongs to testing code, it is
-> better to be fixed to avoid unexpected failure in testing.
+> Acked-by: Jiri Olsa <jolsa@redhat.com>
+
+This one is tricky, I have to retrieve the details from last time this
+surfaced, but try:
+
+# perf top -F 10000
+
+leave it for a while and press 'q':
+
+perf: /home/acme/git/perf/tools/include/linux/refcount.h:131: refcount_sub_and_test: Assertion `!(new > val)' failed.
+                                                                                                                     Aborted (core dumped)
+
+I reproduced the above assertion a few times, now I'm not being able,
+probably some namespace related activity took place when it hit.
+
+- Arnaldo
+ 
+> thanks,
+> jirka
 > 
-> Fix this bugs by adding checks about ctx[0] and ctx[1].
-> 
-> This bug was found by a static analyzer. The analysis employs
-> differential checking to identify inconsistent security operations
-> (e.g., checks or kfrees) between two code paths and confirms that the
-> inconsistent operations are not recovered in the current function or
-> the callers, so they constitute bugs.
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
-> 
-> Builds with CONFIG_DRM_I915_SELFTEST=y show no new warnings,
-> and our static analyzer no longer warns about this code.
-> 
-> Fixes: ca883c304f54 ("drm/i915/selftests: Pass intel_context to mock_request")
+> > ---
+> >  tools/perf/util/map.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
+> > index 8af693d9678c..ceed8f407bc0 100644
+> > --- a/tools/perf/util/map.c
+> > +++ b/tools/perf/util/map.c
+> > @@ -192,6 +192,7 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
+> >  			if (!(prot & PROT_EXEC))
+> >  				dso__set_loaded(dso);
+> >  		}
+> > +		nsinfo__put(dso->nsinfo);
+> >  		dso->nsinfo = nsi;
+> >  
+> >  		if (build_id__is_defined(bid))
+> > -- 
+> > 2.34.0.rc2.393.gf8c9666880-goog
+> > 
 
-I think it is this one instead:
+-- 
 
-591c0fb85d1c ("drm/i915: Exercise request cancellation using a mock selftest")
-
-Fix looks correct so:
-
-Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-
-Thanks for the patch!
-
-Regards,
-
-Tvrtko
-
-P.S.
-Although Fixes: is probably a bit over the top since it is selftests only so I'll probably drop it while applying.
-
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> ---
->   drivers/gpu/drm/i915/selftests/i915_request.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/i915/selftests/i915_request.c b/drivers/gpu/drm/i915/selftests/i915_request.c
-> index d67710d10615..d6fc7b892793 100644
-> --- a/drivers/gpu/drm/i915/selftests/i915_request.c
-> +++ b/drivers/gpu/drm/i915/selftests/i915_request.c
-> @@ -209,6 +209,10 @@ static int igt_request_rewind(void *arg)
->   	int err = -EINVAL;
->   
->   	ctx[0] = mock_context(i915, "A");
-> +	if (!ctx[0]) {
-> +		err = -ENOMEM;
-> +		goto err_ctx_0;
-> +	}
->   
->   	ce = i915_gem_context_get_engine(ctx[0], RCS0);
->   	GEM_BUG_ON(IS_ERR(ce));
-> @@ -223,6 +227,10 @@ static int igt_request_rewind(void *arg)
->   	i915_request_add(request);
->   
->   	ctx[1] = mock_context(i915, "B");
-> +	if (!ctx[1]) {
-> +		err = -ENOMEM;
-> +		goto err_ctx_1;
-> +	}
->   
->   	ce = i915_gem_context_get_engine(ctx[1], RCS0);
->   	GEM_BUG_ON(IS_ERR(ce));
-> @@ -261,9 +269,11 @@ static int igt_request_rewind(void *arg)
->   	i915_request_put(vip);
->   err_context_1:
->   	mock_context_close(ctx[1]);
-> +err_ctx_1:
->   	i915_request_put(request);
->   err_context_0:
->   	mock_context_close(ctx[0]);
-> +err_ctx_0:
->   	mock_device_flush(i915);
->   	return err;
->   }
-> 
+- Arnaldo

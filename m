@@ -2,225 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F987463B4F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:10:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C73FB463B55
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238459AbhK3QOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:14:14 -0500
-Received: from sender2-pp-o92.zoho.com.cn ([163.53.93.251]:25301 "EHLO
-        sender2-pp-o92.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244293AbhK3QN2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:13:28 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1638288556; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=SBY1/pLmOX7pw9gnrP64yI13o3y3rwmACsQT6miGYjao3G43Pib5aSAtBCpUoYfQWpEoVmb39qccy3O7M6YGX4tIcBWFpfpf9M9orCLS08KxaI6DPSHW6KCoNiJgmFQbfYlS1+1anaGIkwSMHvaBYdR5FG1c65mM88r6r3U61io=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1638288556; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=le2jP4zZr2Oj/4+xBXN47Nj05pQ6pMRytJX82KSxAyM=; 
-        b=aR802JcHFkC1xkEUtgF7cxnZFIZLOQLItak+uJEY9BOalqEpCY70pCz6P2rh/SO8ItnFeosxsOw/do1aQfaphIWHc3k9EdUec/Mg8RWPjKSsEUxvE7hEUgDI3RIRn4gIrnV86QrdDgmHys+k80Yj6rgoo+px3TWtnH0cK1/m5gs=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=mykernel.net;
-        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
-        dmarc=pass header.from=<cgxu519@mykernel.net>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1638288556;
-        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
-        h=Date:From:Reply-To:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=le2jP4zZr2Oj/4+xBXN47Nj05pQ6pMRytJX82KSxAyM=;
-        b=EA/2d5A0lj8e2QXiC2ibVVjLV0cCtPbMbbT+HwtBbmlv+Z6cPt/gb2qFi7q/2vAT
-        xLfowkislQHJVFiE3L5fJnZN4kvVAhM0163TjHZywYfSmr3e+FNjq3/dRMy64XAsLpw
-        8sOP89rVeSEgqCe5dDPd0plG/OdW3rO6RQA0ofnY=
-Received: from mail.baihui.com by mx.zoho.com.cn
-        with SMTP id 1638288554514727.797018234731; Wed, 1 Dec 2021 00:09:14 +0800 (CST)
-Date:   Wed, 01 Dec 2021 00:09:14 +0800
-From:   Chengguang Xu <cgxu519@mykernel.net>
-Reply-To: cgxu519@mykernel.net
-To:     "Jan Kara" <jack@suse.cz>
-Cc:     "Miklos Szeredi" <miklos@szeredi.hu>,
-        "Amir Goldstein" <amir73il@gmail.com>,
-        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-        "overlayfs" <linux-unionfs@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "ronyjin" <ronyjin@tencent.com>,
-        "charliecgxu" <charliecgxu@tencent.com>
-Message-ID: <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
-In-Reply-To: <20211130112206.GE7174@quack2.suse.cz>
-References: <17c5adfe5ea.12f1be94625921.4478415437452327206@mykernel.net>
- <CAJfpegt4jZpSCXGFk2ieqUXVm3m=ng7QtSzZp2bXVs07bfrbXg@mail.gmail.com>
- <17d268ba3ce.1199800543649.1713755891767595962@mykernel.net>
- <CAJfpegttQreuuD_jLgJmrYpsLKBBe2LmB5NSj6F5dHoTzqPArw@mail.gmail.com>
- <17d2c858d76.d8a27d876510.8802992623030721788@mykernel.net>
- <17d31bf3d62.1119ad4be10313.6832593367889908304@mykernel.net>
- <20211118112315.GD13047@quack2.suse.cz>
- <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
- <20211118164349.GB8267@quack2.suse.cz>
- <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net> <20211130112206.GE7174@quack2.suse.cz>
-Subject: Re: [RFC PATCH v5 06/10] ovl: implement overlayfs' ->write_inode
- operation
+        id S238696AbhK3QO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:14:56 -0500
+Received: from mail-eopbgr20059.outbound.protection.outlook.com ([40.107.2.59]:6917
+        "EHLO EUR02-VE1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S243960AbhK3QOe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:14:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M0r8DIHLQo123YM2wWi32hJaaB7f5TCMxQsauJoHRY2ZgiHHQXlCNgx4Ax7beVioT5JH9mkaMl1FblkXiMJ5A+ClY3nSZDgSKSTlJgUR9H/Ttx1+e8AqK0XzqJuGviOvfj1Fa74fR/SNXJfO5J6QOR6K6vfQTthY/emKiNUY2Ka07HiG70cDjxXq6M7A7mXGE8CU6GAiqqnXaWbLAXF90VDYebEibmiUHqqcpa6dbBQhBS3pbY0j+Yro3n3gWRQ4BCcBRUQqYeS7YPmRb+o6lmxrqcZzU0kqHm8xoVV83iGXjeF9SxZ0+Hy0OrezYk2qpR+ED/oc+2nIP35Wqol35A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QfTBKL8S/AUK1lCBko2fMUnGNpoSz+xldQtmKHKVhNg=;
+ b=BdrO7rOJeZMD/4kvmvz2Zax1gsNyLjXeuOiHX18yjuGNxiPvIdUspSIe7CHcETnxBxa8JlR/GHUYUNDqYoB6ItfLWv0d33xIueZ04Dz2GkcjFV7BQrRfq5HHS9pbyWsP8OAA+OiFOQ0nap5wraT4WxywajgGp2HeISt3duSPD/8opbBunt8XBm/taQPlxS5xMh5z7oLLugwz6B5Wgx9igusN3JtvaLYYjjRDOEPRSMpBW0e8EtTAaBcUF3c6mmYlYG04phlaRfxBcBSUvbCKk2vHRQuodZxJ/1HzLSMX3GkDi9bVzm64B0tBi5UNWLw7yohnerqCVkE6jq+MLo2JcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QfTBKL8S/AUK1lCBko2fMUnGNpoSz+xldQtmKHKVhNg=;
+ b=lEaz9v24jepULIsQT/RUHyo4+Fg4SkDKd98CcNJ+5Owvn3gW8c+WzM0N64WO7GL3iPBH5JY6BP6OojL24/IjMp+VV45db/ALiZFCi9NruBjdSsYWQohPKfaCuf+zr2PeNtgKjgpk/HCdNjvHiVR7LFnl3/vmK4SBVZTfGhvBvgs=
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
+ by DB6PR1001MB1398.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:b6::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Tue, 30 Nov
+ 2021 16:11:06 +0000
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::852d:c54f:8414:3276]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::852d:c54f:8414:3276%3]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
+ 16:11:06 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Andrej Picej <andrej.picej@norik.com>
+CC:     Support Opensource <Support.Opensource@diasemi.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v2 3/4] dt-bindings: watchdog: da9062: add watchdog
+ timeout mode
+Thread-Topic: [PATCH v2 3/4] dt-bindings: watchdog: da9062: add watchdog
+ timeout mode
+Thread-Index: AQHX5fAwp6aBl2Hn4kyu/pPkB5+TWawcImuAgAAZNOA=
+Date:   Tue, 30 Nov 2021 16:11:06 +0000
+Message-ID: <DB9PR10MB4652C8A69A6A3F38B93ED18880679@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+References: <20211130134242.3516619-1-andrej.picej@norik.com>
+ <20211130134242.3516619-3-andrej.picej@norik.com>
+ <4591cdd6-9a7b-cd1d-817d-8950c8976d10@roeck-us.net>
+In-Reply-To: <4591cdd6-9a7b-cd1d-817d-8950c8976d10@roeck-us.net>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4b8aa8ec-eeee-423a-e1ad-08d9b41c03f1
+x-ms-traffictypediagnostic: DB6PR1001MB1398:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-microsoft-antispam-prvs: <DB6PR1001MB1398F099B8F53BBF7DB8D4F3A7679@DB6PR1001MB1398.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8273;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: i5uEIncwgEw7a/coAb+XR3b3Pr9EQuE+adJNAJonV+oY41eEFqXdCByfYt24Ot8ftWn7tVlDPVufzo67vVfJQregT7kvoau2znsG45WK70qqZbpPdOYdWd9W11WJMV3xUXmumg+2WLF/IVhQlC7XgLumQvVoS99XPa9wOKIDMxppNKHdQoKCSTwJVl38Frc85VV4ATuz+09C2wkEnVeNyFVdiNWa0fwA7BTIclSDMnYOAJCuZ419tlGHmVhHV2zMTmrQl3qJsikyU/A0EjEJD/KQ/aoVE7OwTtlKWxBTSxyq+jniJB9Mc0X7XMg/LvEx2EnQnmX0e88NZqDY4EIClZshALadlQYoeJ4UkqX9bmUIB38DG7hNYNdcz7HJUr5+Suv5cbjel+bQfCsA+JGZcSPfVfyOBfaQ6e3jT3xrFandTOZrQ3Joc74vTWohbc/l39ZfmvfvrbGpC085/m4VCekCIL+c2ziFN2RntcpMNtpMaRYnKmYS9Jx9oZ6WSpaACjiFDANUjXe27NVF6smK8v4kBWNfIU8WdKlIKTNPWKqJizT0NgeyiayNGTXEIWx2zquDwm6omlAcSqZ+wnet8dfY/Sng2BsmnGiO2WlW6DOEgeGWJDN88fanm9VBksY0MUlD2OQ1C3lncJ64cJb0mZSdfKeZQMFGuZX/L7SMoauWSL4BNzvi6JPCkBj5r2oIJhA5svAJGWOfA51i/3/QDg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(508600001)(66446008)(186003)(55016003)(66476007)(316002)(6506007)(26005)(4326008)(2906002)(66556008)(38070700005)(64756008)(71200400001)(66946007)(76116006)(86362001)(122000001)(8676002)(38100700002)(52536014)(83380400001)(7416002)(7696005)(33656002)(110136005)(8936002)(54906003)(9686003)(55236004)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dTBKQkU4eC9ZYm1PaDRnMisvOC9jeWFsSXA4VXhLTk9LaDZmYU44a2tUaUdB?=
+ =?utf-8?B?aW1yUHhIcGs3WVdPVExpL2xlMUExNkJONHZlU205Z2duNW53WjZVR3FHUy9K?=
+ =?utf-8?B?cUt4bmtmVTh0ZzU1dE1PN21MbVpPUGxIOFEyZDBuZ3FpeXpsekkvMU9peTls?=
+ =?utf-8?B?SGd1SHh6YVdyejMzVmpVWG9CN3dIVVNGbXVRVjcvTCtjWExkUXFsNmM0a1Q2?=
+ =?utf-8?B?WTBaaUtkYnFqa3JqTjY5NzVZcEFBdVlMME4ydXZwSlQ2QmtheWZ0Qi9jdTlO?=
+ =?utf-8?B?T2FQbk1EMU0zc0FxV1RBMGJwRFE5dEt2OGdBOTQ0TEdlZlYveE11aUR0N3JM?=
+ =?utf-8?B?bXl5TzJaWEVpM3ExMjV4QUdJM05qSWtZRy80b25POVhMZWk5UUxkQjFKc3c1?=
+ =?utf-8?B?RlNTT2wybHJiNytzZm9ZL2FuaUlUYklrUlQ5MXYwM2FiRnE5TEhRN1VzbzRp?=
+ =?utf-8?B?aThZTWMrMUZIRE1ZZTZkUFdGbzFnenhYZXlWczJxUDloUHBIS1R3NWJUeFBS?=
+ =?utf-8?B?SUVEc3k5aTdxTHdFa2VyN29ubkRzME9GT3hoOENhQndOakdvL09ieFZ4T1Zl?=
+ =?utf-8?B?eG9aNFRHdi9VdEJVUzg0VlhYcFF0bWlPMDdkS1NFNElWbWF0MGc5YW02cGht?=
+ =?utf-8?B?YXNEK0x4ekZKbVRIYTFSb0kxOGo2aFVCVFpweTAvNTlJTHVTQzdja1NrN0NK?=
+ =?utf-8?B?Z25PTlkvUngyR3crc0didWdXTVA0ZzRjTzRYUHVYNStOKzBVdWlSelczYWdk?=
+ =?utf-8?B?ajV0S3lIQkt1UGxhbW5xVytMTVpnMmQ5a1ZGdTVkdWlpNWh2MDdQNjRDdUc5?=
+ =?utf-8?B?QUZDSFVad3FzWnVXWXhlUmRBVWdBaTdHTXFlc3hQZjNsVDFnVW5pSFlUMmFl?=
+ =?utf-8?B?enlvVENKa1QrOEo3WE11aVZvWFdNMUxBUUZ5VUxOMU1EZW80NUtKT1hTQzlH?=
+ =?utf-8?B?VEIybGY5dXkyQnJnVGVweTlmZXJMM1kxQ3JCYW56L2M2UTgwUXlqRlZrTUdx?=
+ =?utf-8?B?b2l6M214aDhWN25TeC9UTHpkWHJQaXpXaDEzUnJId1M4RmJIT3RuZ251a2o1?=
+ =?utf-8?B?SDBHWDNKR2FiTitzdnM1bVNLUS9RdWpzc1pGR3RaWUJxWFdtNDlta1BHUkE4?=
+ =?utf-8?B?b1A0bUtma2NqZkR6TlVSMGtSTzRGbGVDbGhmUWY4V2NVNXZnaE55dkF2T3lQ?=
+ =?utf-8?B?UlpHMjZNTm9mak5vT0JMc2hIeWNMVDd0TlRxMGQycUJIN3hFaDlSUzZaQ3lF?=
+ =?utf-8?B?V2g3OWV0YWZVenpKTzMxcDJFVXRqNFROVm1aMFNuTXh1NlhPM24rbHFRQWhm?=
+ =?utf-8?B?RFhxbHlIdG91bksySlZhUG52VWRkZS8yRjc0NVMrOUFPVTBCR0xwbzN0R0N3?=
+ =?utf-8?B?U3Vzb0c3dXRLZXh5R1U4a3grNHZRa2FHelZYZkplaEZyR2hkQnNOOEx0bVNR?=
+ =?utf-8?B?UDFiYzRSMTJZZTZsWFh5SzhtTGlFcE1mSzd0UUZ5ZEdpTStRRmQ2RUM0VFl1?=
+ =?utf-8?B?bG5iVHY5ejlPQWZzanVmWVNEWUxqZ28vQjBRQjN5cWZMSUxtNkU2Vy9ZT29l?=
+ =?utf-8?B?TGxNMDhleEQyVVUxdFZ6RU5aL1NEdjBkVVFVY0ZvOVY5b0ZBZHpldFdJZDNV?=
+ =?utf-8?B?eWFoWHYrUElXMHFZZnVhVnQybExEZTZoZkdUcEVFT0w4QndBeFlLWDdIb3VB?=
+ =?utf-8?B?Ty9ZNVltUUZYTHpFcGFpZGxCOElHLzk1ZVV4QW50VVI4N1g0Zkxha3JzaUNi?=
+ =?utf-8?B?dzJmVEhrT0pOdjF3c1RkTUlDTVBqUEN4b3V0ajNJK00yNmdQenV5N0plTG9I?=
+ =?utf-8?B?ZGJDdGtjaEpUUGpTRlJ0c1dndnAyMGpnWmtkajdybitVckFMSHlDeHRSVTZ6?=
+ =?utf-8?B?eC9PSmd5Q1ZYOWh1ZFptYVUxT2JIUFRnOTVTSkk3Vi9qeVFQYVp5Z0NJNFhB?=
+ =?utf-8?B?aVdPclQ1NFF5S1QyaVYwWGsramNTWUgwQlRFSjB6TzFRRkF4UXBvbkVIdE9P?=
+ =?utf-8?B?N1A0T2tkU244RnFwWmhRdk90ZEtTdlNwRHFPMDU5TUhLSU1XeUxlRHFyUmpC?=
+ =?utf-8?B?YWxCaC9GOS91bWRtK0w5YkZJRlI5WjdsYWY2bGNjQVg2bERhU0Q3Q3lwV3Br?=
+ =?utf-8?B?WmpmbUI5bEhKZTlTZURIOGs3bUp0eGlwZ0RybVJDZ01ZMFJTVXhOUSt6bDhl?=
+ =?utf-8?B?RGZjalRSbmJQcWdWVWFNaG9heEJxMFVMc25WcUlCRnNhd0lkbERHL2xiWHQ1?=
+ =?utf-8?B?bGVGWk9JNVRoLzVobHhxMXNNY1JRPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Importance: Medium
-User-Agent: ZohoCN Mail
-X-Mailer: ZohoCN Mail
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b8aa8ec-eeee-423a-e1ad-08d9b41c03f1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2021 16:11:06.6858
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LNyPwhVrtyRJUQMMWOgd3jk6SGpQToQ6C8SqITcIvdRBWD/b/5dl3fFL0u34qXJDMZS3LhyJYNIYWRLQ7esjUM1n8HBAHT/AATCAcGIdHUQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR1001MB1398
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
- ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=BA=8C, 2021-11-30 19:22:06 Jan Kara <=
-jack@suse.cz> =E6=92=B0=E5=86=99 ----
- > On Fri 19-11-21 14:12:46, Chengguang Xu wrote:
- > >  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=BA=94, 2021-11-19 00:43:49 Jan K=
-ara <jack@suse.cz> =E6=92=B0=E5=86=99 ----
- > >  > On Thu 18-11-21 20:02:09, Chengguang Xu wrote:
- > >  > >  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E5=9B=9B, 2021-11-18 19:23:15 =
-Jan Kara <jack@suse.cz> =E6=92=B0=E5=86=99 ----
- > >  > >  > On Thu 18-11-21 14:32:36, Chengguang Xu wrote:
- > >  > >  > >=20
- > >  > >  > >  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=89, 2021-11-17 14:1=
-1:29 Chengguang Xu <cgxu519@mykernel.net> =E6=92=B0=E5=86=99 ----
- > >  > >  > >  >  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=BA=8C, 2021-11-16 2=
-0:35:55 Miklos Szeredi <miklos@szeredi.hu> =E6=92=B0=E5=86=99 ----
- > >  > >  > >  >  > On Tue, 16 Nov 2021 at 03:20, Chengguang Xu <cgxu519@m=
-ykernel.net> wrote:
- > >  > >  > >  >  > >
- > >  > >  > >  >  > >  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E5=9B=9B, 2021-10=
--07 21:34:19 Miklos Szeredi <miklos@szeredi.hu> =E6=92=B0=E5=86=99 ----
- > >  > >  > >  >  > >  > On Thu, 7 Oct 2021 at 15:10, Chengguang Xu <cgxu5=
-19@mykernel.net> wrote:
- > >  > >  > >  >  > >  > >  > However that wasn't what I was asking about.=
-  AFAICS ->write_inode()
- > >  > >  > >  >  > >  > >  > won't start write back for dirty pages.   Ma=
-ybe I'm missing something,
- > >  > >  > >  >  > >  > >  > but there it looks as if nothing will actual=
-ly trigger writeback for
- > >  > >  > >  >  > >  > >  > dirty pages in upper inode.
- > >  > >  > >  >  > >  > >  >
- > >  > >  > >  >  > >  > >
- > >  > >  > >  >  > >  > > Actually, page writeback on upper inode will be=
- triggered by overlayfs ->writepages and
- > >  > >  > >  >  > >  > > overlayfs' ->writepages will be called by vfs w=
-riteback function (i.e writeback_sb_inodes).
- > >  > >  > >  >  > >  >
- > >  > >  > >  >  > >  > Right.
- > >  > >  > >  >  > >  >
- > >  > >  > >  >  > >  > But wouldn't it be simpler to do this from ->writ=
-e_inode()?
- > >  > >  > >  >  > >  >
- > >  > >  > >  >  > >  > I.e. call write_inode_now() as suggested by Jan.
- > >  > >  > >  >  > >  >
- > >  > >  > >  >  > >  > Also could just call mark_inode_dirty() on the ov=
-erlay inode
- > >  > >  > >  >  > >  > regardless of the dirty flags on the upper inode =
-since it shouldn't
- > >  > >  > >  >  > >  > matter and results in simpler logic.
- > >  > >  > >  >  > >  >
- > >  > >  > >  >  > >
- > >  > >  > >  >  > > Hi Miklos=EF=BC=8C
- > >  > >  > >  >  > >
- > >  > >  > >  >  > > Sorry for delayed response for this, I've been busy =
-with another project.
- > >  > >  > >  >  > >
- > >  > >  > >  >  > > I agree with your suggesion above and further more h=
-ow about just mark overlay inode dirty
- > >  > >  > >  >  > > when it has upper inode? This approach will make mar=
-king dirtiness simple enough.
- > >  > >  > >  >  >=20
- > >  > >  > >  >  > Are you suggesting that all non-lower overlay inodes s=
-hould always be dirty?
- > >  > >  > >  >  >=20
- > >  > >  > >  >  > The logic would be simple, no doubt, but there's the c=
-ost to walking
- > >  > >  > >  >  > those overlay inodes which don't have a dirty upper in=
-ode, right? =20
- > >  > >  > >  >=20
- > >  > >  > >  > That's true.
- > >  > >  > >  >=20
- > >  > >  > >  >  > Can you quantify this cost with a benchmark?  Can be t=
-otally synthetic,
- > >  > >  > >  >  > e.g. lookup a million upper files without modifying th=
-em, then call
- > >  > >  > >  >  > syncfs.
- > >  > >  > >  >  >=20
- > >  > >  > >  >=20
- > >  > >  > >  > No problem, I'll do some tests for the performance.
- > >  > >  > >  >=20
- > >  > >  > >=20
- > >  > >  > > Hi Miklos,
- > >  > >  > >=20
- > >  > >  > > I did some rough tests and the results like below.  In pract=
-ice,  I don't
- > >  > >  > > think that 1.3s extra time of syncfs will cause significant =
-problem.
- > >  > >  > > What do you think?
- > >  > >  >=20
- > >  > >  > Well, burning 1.3s worth of CPU time for doing nothing seems l=
-ike quite a
- > >  > >  > bit to me. I understand this is with 1000000 inodes but althou=
-gh that is
- > >  > >  > quite a few it is not unheard of. If there would be several co=
-ntainers
- > >  > >  > calling sync_fs(2) on the machine they could easily hog the ma=
-chine... That
- > >  > >  > is why I was originally against keeping overlay inodes always =
-dirty and
- > >  > >  > wanted their dirtiness to at least roughly track the real need=
- to do
- > >  > >  > writeback.
- > >  > >  >=20
- > >  > >=20
- > >  > > Hi Jan,
- > >  > >=20
- > >  > > Actually, the time on user and sys are almost same with directly =
-excute syncfs on underlying fs.
- > >  > > IMO, it only extends syncfs(2) waiting time for perticular contai=
-ner but not burning cpu.
- > >  > > What am I missing?
- > >  >=20
- > >  > Ah, right, I've missed that only realtime changed, not systime. I'm=
- sorry
- > >  > for confusion. But why did the realtime increase so much? Are we wa=
-iting
- > >  > for some IO?
- > >  >=20
- > >=20
- > > There are many places to call cond_resched() in writeback process,
- > > so sycnfs process was scheduled several times.
- >=20
- > I was thinking about this a bit more and I don't think I buy this
- > explanation. What I rather think is happening is that real work for sync=
-fs
- > (writeback_inodes_sb() and sync_inodes_sb() calls) gets offloaded to a f=
-lush
- > worker. E.g. writeback_inodes_sb() ends up calling
- > __writeback_inodes_sb_nr() which does:
- >=20
- > bdi_split_work_to_wbs()
- > wb_wait_for_completion()
- >=20
- > So you don't see the work done in the times accounted to your test
- > program. But in practice the flush worker is indeed burning 1.3s worth o=
-f
- > CPU to scan the 1 million inode list and do nothing.
- >=20
-
-That makes sense. However, in real container use case,  the upper dir is al=
-ways empty,
-so I don't think there is meaningful difference compare to accurately marki=
-ng overlay
-inode dirty. =20
-
-I'm not very familiar with other use cases of overlayfs except container, s=
-hould we consider
-other use cases? Maybe we can also ignore the cpu burden because those use =
-cases don't
-have density deployment like container.
-
-
-
-Thanks,
-Chengguang
-
-
-
+T24gR3VlbnRlciBSb2VjayB3cm90ZToNCg0KPiA+IERvY3VtZW50IHRoZSB3YXRjaGRvZyB0aW1l
+b3V0IG1vZGUgcHJvcGVydHkuIElmIHRoaXMgcHJvcGVydHkgaXMgdXNlZA0KPiA+IHRoZSB1c2Vy
+IGNhbiBzZWxlY3Qgd2hhdCBoYXBwZW5zIG9uIHdhdGNoZG9nIHRpbWVvdXQuIFNldCB0aGlzIHBy
+b3BlcnR5DQo+ID4gdG8gMSB0byBlbmFibGUgU0hVVERPV04gKHRoZSBkZXZpY2UgcmVzZXRzKSwg
+c2V0IGl0IHRvIDAgYW5kIHRoZSBkZXZpY2UNCj4gPiB3aWxsIGdvIHRvIFBPV0VSRE9XTiBvbiB3
+YXRjaGRvZyB0aW1lb3V0Lg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQW5kcmVqIFBpY2VqIDxh
+bmRyZWoucGljZWpAbm9yaWsuY29tPg0KPiA+IC0tLQ0KPiA+ICAgRG9jdW1lbnRhdGlvbi9kZXZp
+Y2V0cmVlL2JpbmRpbmdzL3dhdGNoZG9nL2RhOTA2Mi13ZHQudHh0IHwgMyArKysNCj4gPiAgIDEg
+ZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9Eb2N1
+bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvZGE5MDYyLXdkdC50eHQNCj4g
+Yi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvZGE5MDYyLXdkdC50
+eHQNCj4gPiBpbmRleCA5NTBlNGZiYThkYmMuLmUzZTZlNTZjZWUyMSAxMDA2NDQNCj4gPiAtLS0g
+YS9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cvZGE5MDYyLXdkdC50
+eHQNCj4gPiArKysgYi9Eb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3Mvd2F0Y2hkb2cv
+ZGE5MDYyLXdkdC50eHQNCj4gPiBAQCAtMTAsNiArMTAsOSBAQCBPcHRpb25hbCBwcm9wZXJ0aWVz
+Og0KPiA+ICAgLSBkbGcsdXNlLXN3LXBtOiBBZGQgdGhpcyBwcm9wZXJ0eSB0byBkaXNhYmxlIHRo
+ZSB3YXRjaGRvZyBkdXJpbmcgc3VzcGVuZC4NCj4gPiAgIAlPbmx5IHVzZSB0aGlzIG9wdGlvbiBp
+ZiB5b3UgY2FuJ3QgdXNlIHRoZSB3YXRjaGRvZyBhdXRvbWF0aWMgc3VzcGVuZA0KPiA+ICAgCWZ1
+bmN0aW9uIGR1cmluZyBhIHN1c3BlbmQgKHNlZSByZWdpc3RlciBDT05UUk9MX0IpLg0KPiA+ICst
+IGRsZyx3ZHQtc2Q6IFNldCB3aGF0IGhhcHBlbnMgb24gd2F0Y2hkb2cgdGltZW91dC4gSWYgdGhp
+cyBiaXQgaXMgc2V0IHRoZQ0KPiA+ICsJd2F0Y2hkb2cgdGltZW91dCB0cmlnZ2VycyBTSFVURE9X
+TiwgaWYgY2xlYXJlZCB0aGUgd2F0Y2hkb2cgdHJpZ2dlcnMNCj4gPiArCVBPV0VSRE9XTi4gQ2Fu
+IGJlIDAgb3IgMS4NCj4gPg0KPiANCj4gV2h5IGRvZXMgaXQgbmVlZCBhIHZhbHVlID8gV2h5IG5v
+dCBqdXN0IGJvb2wgPw0KDQpPbmUgYXJndW1lbnQgbWlnaHQgYmUgdGhhdCBpZiB0aGUgcHJvcGVy
+dHkgaXNuJ3QgcHJvdmlkZWQgdGhlbiB0aGUgT1RQDQpjb25maWd1cmVkIHZhbHVlIGNhbiBwZXJz
+aXN0IHdpdGhvdXQgbmVlZGluZyBhIEZXIGNoYW5nZSBhcm91bmQgdGhpcyBEVCBiaW5kaW5nLg0K
+DQpNeSBiZWxpZWYgdGhvdWdoIGlzIHRoYXQgdGhlIG1ham9yaXR5IG9mIHVzZXJzIHdvdWxkIGhh
+dmUgdGhpcyBwcm9wZXJ0eSBzZXQgdG8gMA0KYnkgZGVmYXVsdCBpbiBPVFAsIHNvIGEgYm9vbGVh
+biB3b3VsZCBiZSBPSyBJIHRoaW5rIGhlcmUgdG8gZW5hYmxlIHdhdGNoZG9nDQpzaHV0ZG93bi4N
+Cg==

@@ -2,106 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C385463B9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D68E9463B9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:21:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243679AbhK3QYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:24:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54468 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243034AbhK3QYj (ORCPT
+        id S243331AbhK3QYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:24:38 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51598 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243034AbhK3QYh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:24:39 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F70C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:21:20 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id be32so42216620oib.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:21:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=KRBxZpidTkO2QxopshQT/A40mDseNm0ZVbQJ6N2Yh3A=;
-        b=ZBxLlB0F309xy+jBUyF4Rw8n+ilMsxWltcs4sU9sIUV2cjGlbKe/AY38ScPqdkPFF1
-         Ss5a+y2yYQNL+362Fw7o70CN4WuLkhW5xIqNfTr5TuHgOYjpWp8QmbvMnJnCvHMdaT9X
-         zLIa5GbRyCt/QXJA5agYzjDoHfRYE4pHUXZxc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=KRBxZpidTkO2QxopshQT/A40mDseNm0ZVbQJ6N2Yh3A=;
-        b=CDn3JL5AAtFLdjZkrJt+DixVCnHkocCpfY/bF//fGU4zar8523lpSIFRI4YO7XC2OI
-         hvR++JPqUhaI5f2I5eDtQGeNNPOAkFZxsVhBD+WwvRddsWtBInfKAb+ZcyGzcLkHiLzt
-         zkUI6vTaiOIb/NHDQ2AswWVHIQkj2wa03COvs1OW/bn2KVNLWe9AARpziqrYUwtMR0AV
-         pDp+s8D/jAYTqx5VhRuhvHHqCujFi2gf1O116AAJUlY32aEb7TUrlf10B+CvA8FvMMwB
-         lHr7qO1ntqj5+3ifrTDca1Ki4Yb5RubsdxJ4uV2kMsUVAMv2Ru9c+Z1hjSFrlHP5Dfty
-         2mYw==
-X-Gm-Message-State: AOAM530XtyqzFvJxRz/mATMMTISAOI/lySmHuD7FNsrD1vDlKf+9TCVg
-        SmMQjFKdRNi1/1+KX/80sd4DaRfLV47Mow==
-X-Google-Smtp-Source: ABdhPJxM+LpAlzV2ojwlpiF1PEnx14fOvj6LBUjk+kewnHavN6SbB6by5PCBrNzpy8bRX+BEAo4vKw==
-X-Received: by 2002:a05:6808:643:: with SMTP id z3mr57791oih.110.1638289268920;
-        Tue, 30 Nov 2021 08:21:08 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id v10sm2880397oor.33.2021.11.30.08.21.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 08:21:08 -0800 (PST)
-Subject: Re: [PATCH] selftests/ftrace: make kprobe profile testcase
- description unique
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Egorenkov <egorenar@linux.ibm.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211130122546.3622291-1-hca@linux.ibm.com>
- <20211130231130.41f9bfcc35ceda68471bbb0b@kernel.org>
- <20211130110102.7ee120f2@gandalf.local.home>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <0fc3e982-456f-628d-17a3-f9c631108f6f@linuxfoundation.org>
-Date:   Tue, 30 Nov 2021 09:21:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 30 Nov 2021 11:24:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D817FB817FA;
+        Tue, 30 Nov 2021 16:21:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43730C53FCD;
+        Tue, 30 Nov 2021 16:21:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638289275;
+        bh=/nrsI8u9KiV6D9wKyCt4jEF4zLbK0cDtpbiJJgjYZ/I=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IE+AhUdVxHgJjF/BD9vSFxqTJaiqIUB2PQ18YFvZekhYAVoZnIE7c0WXOLi+txlPc
+         uklWSV32cEkjaTho2jMUKCmUqIac56e1gXfd9rMXLSuBy6Sa+ou+fkBBGNwrg2+DsQ
+         lj+OZkU3WnYjCNSOYiie7iaqfFbShPARccfi5UUkuffwKC5fJfq/9w46FXSRlHU2JK
+         S6aRH2DUa4oo4m5Bq7JtZbmnIpbdFtcse/OEjY9xHhJBBKnoBDZjEoS3SkXJCY7gfu
+         hIbkB8Zglh+kT1z2syY9wAMDBeyl+5oYNRXn0lcai6Gr6auH4ag3qqmVF7r572fzfN
+         8QZJ+QSvY0sMg==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org
+Subject: [PATCH] rcu/exp: Mark current CPU as exp-QS in IPI loop second pass
+Date:   Tue, 30 Nov 2021 17:21:08 +0100
+Message-Id: <20211130162108.605092-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211130110102.7ee120f2@gandalf.local.home>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/21 9:01 AM, Steven Rostedt wrote:
-> On Tue, 30 Nov 2021 23:11:30 +0900
-> Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> 
->> On Tue, 30 Nov 2021 13:25:46 +0100
->> Heiko Carstens <hca@linux.ibm.com> wrote:
->>
->>> Commit 32f6e5da83c7 ("selftests/ftrace: Add kprobe profile testcase")
->>> added a new kprobes testcase, but has a description which does not
->>> describe what the test case is doing and is duplicating the desription
+While looping through the rnp's CPUs to IPI for an expedited grace
+period, a first pass excludes the current CPU and the CPUs in dynticks
+idle mode. The workqueue will report their QS on their behalf later.
 
-Typo - I can fix it when I apply. checkpatch.pl does it for you btw.
+The second pass processes the IPIs and also ignores the current CPU,
+assuming it has been previously included in the group of CPUs whose
+QS are to be reported by the workqueue.
 
->>> of another test case.
->>> Therefore change the test case description, so it is unique and then
->>> allows easily to tell which test case actually passed or failed.
->>
->> Good catch!
->>
->> This looks good to me.
->>
->> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
->>
-> 
-> Shuah,
-> 
-> Care to take this through your tree?
-> 
+Unfortunately the current CPU may have changed between the first and
+second pass, due to the rnp lock being dropped, re-enabling preemption.
+As a result the current CPU, if different in the second pass, may be
+ignored by the expedited grace period. No IPI will be sent to it
+so it won't be requested to report an expedited quiescent state.
 
-Yes. I can queue this up.
+This ends up in an expedited grace period stall.
 
-thanks,
--- Shuah
+Fix this with including the current CPU in the second round in the group
+of CPUs to report a QS for by the workqueue.
+
+Fixes: b9ad4d6ed18e ("rcu: Avoid self-IPI in sync_rcu_exp_select_node_cpus()")
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Cc: Uladzislau Rezki <urezki@gmail.com>
+Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+---
+ kernel/rcu/tree_exp.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+index a96d17206d87..237a79989aba 100644
+--- a/kernel/rcu/tree_exp.h
++++ b/kernel/rcu/tree_exp.h
+@@ -387,6 +387,7 @@ static void sync_rcu_exp_select_node_cpus(struct work_struct *wp)
+ 			continue;
+ 		}
+ 		if (get_cpu() == cpu) {
++			mask_ofl_test |= mask;
+ 			put_cpu();
+ 			continue;
+ 		}
+-- 
+2.25.1
+

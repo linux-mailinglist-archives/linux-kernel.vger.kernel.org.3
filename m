@@ -2,85 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3C0463BD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8F1463BDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243913AbhK3QhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:37:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbhK3QhB (ORCPT
+        id S243960AbhK3QiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:38:12 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:37328 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243933AbhK3QiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:37:01 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD90BC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:33:41 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id a9so45739522wrr.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:33:41 -0800 (PST)
+        Tue, 30 Nov 2021 11:38:10 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3SVg1WYTz9wKsL
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:34:51 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XVrZjGe7y6DP for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 10:34:51 -0600 (CST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3SVf6Wlhz9wKsX
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:34:50 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3SVf6Wlhz9wKsX
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3SVf6Wlhz9wKsX
+Received: by mail-pf1-f197.google.com with SMTP id 4-20020a621604000000b004a4ab765028so13133806pfw.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:34:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=HRnctZBN3KhAIJkBe2HZYJWNwVrPzx0pDMVoslI75XM=;
-        b=P0thRGylkwgkwe5JrcvGJEUyRiKjZaaVV/oow9f9vVq0QSt5xQL0NDr4uvHuqheUew
-         XrvKbxvZ/TyA6p68OGvEJKqzxsPewzFwIR9g2aAAoQTS7IvGBEsxRzb6hG8N00HqgHZF
-         vWZ9JGHbAVV091c64Qde1cvjR19LiIqfFgRat+Cxaa3B3SJhh61gWJ0IGCu++7BauNu1
-         W9Isf2WGFXwxEeZz16gNViyZSn5VCq1rMUED1A1eobCGk+tf4Vs+bViUodqAt2wosY/+
-         4xk87MeAWqnQc6ge/zsURP7UAb6zuNL/eWqxLoltJ7zlniTHqxyy1vybnpqcz0qkmluU
-         cqlQ==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=MYKPwzoyWHGBZEGP0FkOr9CYpQBhpzZCOik0AM0Sdo8=;
+        b=RQvZuZ/nafGnDHfmXwZ6cvDchA8m96Wqp83qYLW8PItuj18LiYEUF7E0gGqYAsfEqZ
+         Yl1TzRZfWQgYfXflUnI2tZ3pN92A+wMmbW/sQmhYm5wSQo5EUVydtCcVgL7ww3uepPPk
+         nKuNDs/h0zTqgCVt5Xwh1DTQxXPa/jNT8qKRmpYc6sPn5JOgMVGH9OSxgqnjvPZ0L09F
+         3QXDFI5UV+cGuX0rVJfUe8eT9FXX7z/KG4kasM1j/seDvlHvbzXZckJsH7FkyuBlbr8D
+         BBqwXMDnuRSYt4yK4dI9fApDRMEJgmq8HvNoRN0G62+ERrInJ16avofCcp9Cm4M3BOYJ
+         y+Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=HRnctZBN3KhAIJkBe2HZYJWNwVrPzx0pDMVoslI75XM=;
-        b=DUJBIbqywwl79gevOuVUrOnvDQYL+q3BbCil+Aw96lPbCOptQKwRUG/vXtfn2pvXal
-         sRal1X4EXam0QRcaqtgo6xNUejtLR07cGn0S6mQdSXw/bbC+Vfb60e+TI1HuibdgBLas
-         Gf9kz4zwGnPHVHLDWqXn3uK5fjV++j/b8sypoC9TNScFRuaZN2SA+VstVSgFyfGk+akj
-         oJKzzqImcEwSL6Mp7K7uhj2h5Fqjpnb5zcJF0VsX5A+EKp8YNXasR0mcjfXY1kC1yAin
-         SqOvn+P4s+5yCpliDGEZGOVMp9jIhq3fsKD4o1Zx0eSpRtdKEx7BKQauE4/gfBpeo3My
-         DvIw==
-X-Gm-Message-State: AOAM5302a0oVM4a3hVZfaV+asrjvT3G222wNXl/WyjqKKFC8PTUIE+87
-        UxlIC8vVMTAMdUZqSjYXRYBVsp7fuNLQtw==
-X-Google-Smtp-Source: ABdhPJxDvVSIxypQLPI5sKKXXwPixI86qAmokC49hWqFpxnWDPCBTHPW5JcCFMMIkxCEwqb7AKMsQQ==
-X-Received: by 2002:a5d:61ca:: with SMTP id q10mr33081wrv.102.1638290020056;
-        Tue, 30 Nov 2021 08:33:40 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id t17sm3325441wmq.15.2021.11.30.08.33.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 08:33:39 -0800 (PST)
-Subject: Re: [PATCH 2/4] ASoC: codecs: wcd934x: remove redundant ret variable
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20211130160507.22180-1-srinivas.kandagatla@linaro.org>
- <20211130160507.22180-3-srinivas.kandagatla@linaro.org>
- <YaZR56MLanjnQH1p@sirena.org.uk>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <8279f250-59cc-368d-13aa-b46cc3cb108e@linaro.org>
-Date:   Tue, 30 Nov 2021 16:33:38 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        bh=MYKPwzoyWHGBZEGP0FkOr9CYpQBhpzZCOik0AM0Sdo8=;
+        b=UI4zTKIFuluCT0COhCZQ+UYFPBgGJOmd2LFF55hWuzQSbVYNef8hXyudh1Ncxs356x
+         QwyJXld9UDa5LlU30LQ3Y236ENhDhMthIewBDZZR8PE1QBitoHz2hSKlY1u707vGvI6F
+         lCQB5KBBdCEITujNx/mqlbOL8hCabVwqYFIoeMBXmNyNtdW8TWSyk2FuGu0/GqH7J/jD
+         gj3eRUnzutQ4Bue9DxBsWpLEppeDnW2tnetMsNiVVy3UXW6S1jEVRxGojCs1FqB3+yDJ
+         Ut5SKr3u+7QmejKKiMkjS2Z9+C0Wl/qgPCZez3h8DgBoIoBV03f2nIip33SlNEGQCoun
+         Ox/g==
+X-Gm-Message-State: AOAM531tpzSqfH7F1KE7mBp8P1jND/BDAsJzqs+GLIKA1zSnhvD9b/yO
+        TXxZ2bdXcsvVtuFsjAmDHyVfg1oI6pRh4ymqUa8eocz1TGScD+svPEg8LJBO9IXt/5uC91UOALs
+        0UcwLc08coOwCCNtkjcU3RkuV8/xO
+X-Received: by 2002:aa7:9a04:0:b0:4a2:ebcd:89a with SMTP id w4-20020aa79a04000000b004a2ebcd089amr313335pfj.60.1638290090019;
+        Tue, 30 Nov 2021 08:34:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx+NapTRF+0qmVV/9UAF+h46DreJOU+o0UfalFcHhDwJazFFZuJ6wR8xlNc24zy9KZydggueQ==
+X-Received: by 2002:aa7:9a04:0:b0:4a2:ebcd:89a with SMTP id w4-20020aa79a04000000b004a2ebcd089amr313313pfj.60.1638290089808;
+        Tue, 30 Nov 2021 08:34:49 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id j127sm21533925pfg.14.2021.11.30.08.34.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 08:34:49 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Hans Verkuil <hverkuil@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: saa7146: mxb: Fix a NULL pointer dereference in mxb_attach()
+Date:   Wed,  1 Dec 2021 00:34:44 +0800
+Message-Id: <20211130163445.187403-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <YaZR56MLanjnQH1p@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In mxb_attach(dev, info), saa7146_vv_init() is called to allocate a
+new memory for dev->vv_data. saa7146_vv_release() will be called on
+failure of mxb_probe(dev). There is a dereference of dev->vv_data
+in saa7146_vv_release(), which could lead to a NULL pointer dereference
+on failure of saa7146_vv_init().
 
+Fix this bug by adding a check of saa7146_vv_init().
 
-On 30/11/2021 16:31, Mark Brown wrote:
-> On Tue, Nov 30, 2021 at 04:05:05PM +0000, Srinivas Kandagatla wrote:
->> return value form snd_soc_dapm_put_enum_double() directly instead
->> of taking this in another redundant variable.
-> 
-> Cleanups like this should come after any fixes in a series.
-> 
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Noted, do you want me to resend a v2 fixing the order?
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
---srini
+Builds with CONFIG_VIDEO_MXB=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 03b1930efd3c ("V4L/DVB: saa7146: fix regression of the av7110/budget-av driver")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/media/pci/saa7146/mxb.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
+index 73fc901ecf3d..bf0b9b0914cd 100644
+--- a/drivers/media/pci/saa7146/mxb.c
++++ b/drivers/media/pci/saa7146/mxb.c
+@@ -683,10 +683,16 @@ static struct saa7146_ext_vv vv_data;
+ static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
+ {
+ 	struct mxb *mxb;
++	int ret;
+ 
+ 	DEB_EE("dev:%p\n", dev);
+ 
+-	saa7146_vv_init(dev, &vv_data);
++	ret = saa7146_vv_init(dev, &vv_data);
++	if (ret) {
++		ERR("Error in saa7146_vv_init()");
++		return ret;
++	}
++
+ 	if (mxb_probe(dev)) {
+ 		saa7146_vv_release(dev);
+ 		return -1;
+-- 
+2.25.1
+

@@ -2,97 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9914635A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C34DE4635A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:39:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241378AbhK3NmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43514 "EHLO
+        id S241445AbhK3NnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:43:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbhK3NmL (ORCPT
+        with ESMTP id S229473AbhK3Nm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:42:11 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC86C061574;
-        Tue, 30 Nov 2021 05:38:52 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id c4so44484497wrd.9;
-        Tue, 30 Nov 2021 05:38:52 -0800 (PST)
+        Tue, 30 Nov 2021 08:42:58 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E94C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:39:37 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id j3so44547977wrp.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:39:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=K8mP5TAS7JaLSQBB0OyAZaEHHalMAWxdT2nx3ZJkwG8=;
-        b=kkCu7zgvx3brxbrhDfaSnqQKXLpxGmbjeo4fNvmLJhVaHrRibnBFhyqlLpLdEj3ytP
-         0YtgrV3JrBsNDQiyRjQnAomAbu7W7zD0dMtVbqCow3c72rcwhQlTCAXl8mp9pPgqFk7B
-         6tc6K1/TrdR7Dfz4054yFx+Iopkap2Mks7+g7IBmP1r90mZTkJ3igFCuUYiJ1+Jm8kNq
-         YJ4J9EwvWZ/e8BgSy2Qxvxd+fZiG6Is8Y+fDDS8EUx4WUlV2bYVx2gQa0ExWT0msTM1A
-         SRSpyeatOuebNshB3FSn/wIgBFDF/93bh4uuvX7vWCShT5s+BDINNBfNn8M7vWFpjIDj
-         HoQA==
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FJCq9TCGEAAe0QLHunar03JYEki0s6MYd1+NMSRrcoQ=;
+        b=d/w+E5n/V+5hBxhdk0g75WsoErH+8H1iKLmZannde2++Fr/6UjHzfMvAlp6aRufDQn
+         dNc9G4BjfygJXuYQaYdMG7DePZa9rbuor1BqxlhBPgHLnVEAVOLir+CgWz19Y6hcvEAF
+         pa+yni/MVoSpRewsyjGS12kYZyzKWsXDONXNYhDPArkX1FN0jqUtVnPUnMZybLKrcyzE
+         uk8nqN8ABlVRP11ghqXlndfp+JGqhxIowfwfJOSMvxCN4n3X+6kr/VlbqRIs96lGPK3b
+         cups+JT+cG0I8cFb2w+EwlB0cuTu9Ua1hkXg89tO0WL/tqnH9j84LtmVWLXEh64RBcEM
+         GM5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K8mP5TAS7JaLSQBB0OyAZaEHHalMAWxdT2nx3ZJkwG8=;
-        b=ET94ykRQM04dPqz/nRULPopU6kHHa6K/ayBfTerMrVOIlC7bGzm5oG8jgDmyCJZSp3
-         LdLn/VcLIqRLav40dUOE5LRcILtuYgEPM545cdQ7eufXWdE0juY5yhBjAY0BtTdLM4qL
-         EBVBsR2btgYsq/3mGmtRkkl0JuykcEGlh71qnzEUp3cBuavt94W1uxM0MqhJEVLSykoV
-         8vdxC39hyGHWyZm8Bbqbei72Rz8GPJ50rNIFTvHdbXi7rIKfH8XVvkUohxaEFOQ0RnO8
-         8tjTCraZQqD9Dz7Jid/fXcSklPF5wBd/lCdj3y2w6iZOfvb6wENH2G3dmBAwBtD3JBPR
-         Bx5w==
-X-Gm-Message-State: AOAM533FXwzkwTvIcjVhugk7I+fuAZ082imDaMBaXtlKR2nODfi84agE
-        e8FJEbg059dCqmIpLBq6t2RrYhi6Riw=
-X-Google-Smtp-Source: ABdhPJx5joDaB9EYiUx0Qpsnde5lO14LKiax4gLb+qBq6wroWHgiO2zeK6k59BKggOJ/8zS6Ip0oNw==
-X-Received: by 2002:a5d:6a47:: with SMTP id t7mr42401855wrw.367.1638279531128;
-        Tue, 30 Nov 2021 05:38:51 -0800 (PST)
-Received: from debian (host-2-99-153-109.as13285.net. [2.99.153.109])
-        by smtp.gmail.com with ESMTPSA id r7sm16114610wrq.29.2021.11.30.05.38.50
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FJCq9TCGEAAe0QLHunar03JYEki0s6MYd1+NMSRrcoQ=;
+        b=58geNFfVLCOlCMMhXl4hYzRUc1GXWFf+8eqoC9j/kFTjmMzSNEapJCW6xm5H4QnCOm
+         PmoSOy7cHZVxBRxeAgXKcYSxU5V7sWhy1f3BLUmGorZ71dHBI27rw3LOMryl2HmhYkZm
+         f7A54kp/1Cq0LaJ5HqIQ3L2bD0FhzA4jPKXkz9k8bz2gDYu/7ZEprSdDMDjN7GN5Lcin
+         RJdAAT2bIvjE9V01EmWccrmEWlQqRAHcHkVEaSQIgcy3K4ZxzRPCPWbLq95K93+bp0Oh
+         i8IS2gPNnKXuKRw//i5DJMmSiY0PaGlRdla3mozzsd0hfhgqulTqRdrsdADZaB75DmAb
+         StxQ==
+X-Gm-Message-State: AOAM533noSAroYhnMQUBkepVzbktyMVbtD79MDzw5cxXkxPKSbmbdzN+
+        bmy+JjhvWKDV6Dg79pmBICBNeLpjofRm0w==
+X-Google-Smtp-Source: ABdhPJxEmuREGy9jGWmDmVT4kO+DDDSfvPjc8VXIgod+dlmXN1TdJOBQlniYcjGxWcZ7v68yg7j7ww==
+X-Received: by 2002:adf:e60e:: with SMTP id p14mr41374973wrm.470.1638279575919;
+        Tue, 30 Nov 2021 05:39:35 -0800 (PST)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id f7sm2825820wmg.6.2021.11.30.05.39.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 05:38:50 -0800 (PST)
-Date:   Tue, 30 Nov 2021 13:38:49 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 4.19 00/69] 4.19.219-rc1 review
-Message-ID: <YaYpaekf7HWrZQj8@debian>
-References: <20211129181703.670197996@linuxfoundation.org>
+        Tue, 30 Nov 2021 05:39:35 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Gilles BULOZ <gilles.buloz@kontron.com>
+Subject: [PATCH] nvmem: core: set size for sysfs bin file
+Date:   Tue, 30 Nov 2021 13:39:09 +0000
+Message-Id: <20211130133909.6154-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+For some reason we never set the size for nvmem sysfs binary file.
+Set this.
 
-On Mon, Nov 29, 2021 at 07:17:42PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.219 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
-> Anything received after that time might be too late.
+Reported-by: Gilles BULOZ <gilles.buloz@kontron.com>
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ drivers/nvmem/core.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Build test:
-mips (gcc version 11.2.1 20211112): 63 configs -> no failure
-arm (gcc version 11.2.1 20211112): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20211112): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20211112): 4 configs -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/452
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index e765d3d0542e..23a38dcf0fc4 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -312,6 +312,8 @@ static umode_t nvmem_bin_attr_is_visible(struct kobject *kobj,
+ 	struct device *dev = kobj_to_dev(kobj);
+ 	struct nvmem_device *nvmem = to_nvmem_device(dev);
+ 
++	attr->size = nvmem->size;
++
+ 	return nvmem_bin_attr_get_umode(nvmem);
+ }
+ 
+-- 
+2.21.0
 

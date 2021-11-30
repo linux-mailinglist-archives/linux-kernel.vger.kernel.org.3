@@ -2,38 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4147D462AAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:43:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B927462AAB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:43:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237752AbhK3Cqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 21:46:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237685AbhK3Cql (ORCPT
+        id S237709AbhK3Cqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 21:46:44 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49108 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229505AbhK3Cqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 21:46:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A164C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 18:43:23 -0800 (PST)
+        Mon, 29 Nov 2021 21:46:40 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5E89FB816C7
+        by ams.source.kernel.org (Postfix) with ESMTPS id 870ABB816CA
         for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:43:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DCBFC53FD3;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4772EC53FD4;
         Tue, 30 Nov 2021 02:43:20 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.95)
         (envelope-from <rostedt@goodmis.org>)
-        id 1mrt71-000RU6-7W;
+        id 1mrt71-000RUe-Da;
         Mon, 29 Nov 2021 21:43:19 -0500
-Message-ID: <20211130024319.068451680@goodmis.org>
+Message-ID: <20211130024319.257430762@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Mon, 29 Nov 2021 21:39:48 -0500
+Date:   Mon, 29 Nov 2021 21:39:49 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH 3/5] tracing: Have eprobes use filtering logic of trace events
+        Andrew Morton <akpm@linux-foundation.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH 4/5] tracing/kprobes: Do not open code event reserve logic
 References: <20211130023945.789683928@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -43,43 +41,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
 
-The eprobes open code the reserving of the event on the ring buffer for
-ftrace instead of using the ftrace event wrappers, which means that it
-doesn't get affected by the filters, breaking the filtering logic on user
-space.
+As kprobe events use trace_event_buffer_commit() to commit the event to
+the ftrace ring buffer, for consistency, it should use
+trace_event_buffer_reserve() to allocate it, as the two functions are
+related.
 
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
 Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 ---
- kernel/trace/trace_eprobe.c | 16 +++++-----------
- 1 file changed, 5 insertions(+), 11 deletions(-)
+ kernel/trace/trace_kprobe.c | 25 +++++++------------------
+ 1 file changed, 7 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 928867f527e7..88487752d307 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -489,18 +489,12 @@ __eprobe_trace_func(struct eprobe_data *edata, void *rec)
- 	if (trace_trigger_soft_disabled(edata->file))
+diff --git a/kernel/trace/trace_kprobe.c b/kernel/trace/trace_kprobe.c
+index 33272a7b6912..d10c01948e68 100644
+--- a/kernel/trace/trace_kprobe.c
++++ b/kernel/trace/trace_kprobe.c
+@@ -1383,17 +1383,11 @@ __kprobe_trace_func(struct trace_kprobe *tk, struct pt_regs *regs,
+ 	if (trace_trigger_soft_disabled(trace_file))
  		return;
  
 -	fbuffer.trace_ctx = tracing_gen_ctx();
--	fbuffer.trace_file = edata->file;
+-	fbuffer.trace_file = trace_file;
 -
- 	dsize = get_eprobe_size(&edata->ep->tp, rec);
--	fbuffer.regs = NULL;
--
+ 	dsize = __get_data_size(&tk->tp, regs);
+ 
 -	fbuffer.event =
--		trace_event_buffer_lock_reserve(&fbuffer.buffer, edata->file,
+-		trace_event_buffer_lock_reserve(&fbuffer.buffer, trace_file,
 -					call->event.type,
--					sizeof(*entry) + edata->ep->tp.size + dsize,
+-					sizeof(*entry) + tk->tp.size + dsize,
 -					fbuffer.trace_ctx);
 -	if (!fbuffer.event)
-+
-+	entry = trace_event_buffer_reserve(&fbuffer, edata->file,
-+					   sizeof(*entry) + edata->ep->tp.size + dsize);
-+
++	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
++					   sizeof(*entry) + tk->tp.size + dsize);
 +	if (!entry)
  		return;
  
- 	entry = fbuffer.entry = ring_buffer_event_data(fbuffer.event);
+ 	fbuffer.regs = regs;
+@@ -1430,16 +1424,11 @@ __kretprobe_trace_func(struct trace_kprobe *tk, struct kretprobe_instance *ri,
+ 	if (trace_trigger_soft_disabled(trace_file))
+ 		return;
+ 
+-	fbuffer.trace_ctx = tracing_gen_ctx();
+-	fbuffer.trace_file = trace_file;
+-
+ 	dsize = __get_data_size(&tk->tp, regs);
+-	fbuffer.event =
+-		trace_event_buffer_lock_reserve(&fbuffer.buffer, trace_file,
+-					call->event.type,
+-					sizeof(*entry) + tk->tp.size + dsize,
+-					fbuffer.trace_ctx);
+-	if (!fbuffer.event)
++
++	entry = trace_event_buffer_reserve(&fbuffer, trace_file,
++					   sizeof(*entry) + tk->tp.size + dsize);
++	if (!entry)
+ 		return;
+ 
+ 	fbuffer.regs = regs;
 -- 
 2.33.0

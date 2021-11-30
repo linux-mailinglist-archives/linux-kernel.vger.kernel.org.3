@@ -2,128 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A959D4636B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC784636AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:30:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242204AbhK3OeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:34:20 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:46913 "EHLO pegase2.c-s.fr"
+        id S242196AbhK3OeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:34:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:39722 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242195AbhK3OeT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:34:19 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4J3Plk6XJQz9sSj;
-        Tue, 30 Nov 2021 15:30:58 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id vU463tmi0809; Tue, 30 Nov 2021 15:30:58 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3Plk5km0z9sSh;
-        Tue, 30 Nov 2021 15:30:58 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id B40778B779;
-        Tue, 30 Nov 2021 15:30:58 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id aCNCFI98Zzae; Tue, 30 Nov 2021 15:30:58 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.93])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6F76D8B763;
-        Tue, 30 Nov 2021 15:30:58 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1AUEUix0256050
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 15:30:44 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1AUEUgdI256048;
-        Tue, 30 Nov 2021 15:30:42 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Erhard Furtner <erhard_f@mailbox.org>
-Subject: [PATCH v2] powerpc/powermac: Add missing lockdep_register_key()
-Date:   Tue, 30 Nov 2021 15:30:42 +0100
-Message-Id: <34b423d68d170676fc3367594d17d1ca5c3844a4.1638282630.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.33.1
+        id S242174AbhK3OeM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 09:34:12 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DB281063;
+        Tue, 30 Nov 2021 06:30:53 -0800 (PST)
+Received: from e123427-lin.arm.com (unknown [10.57.34.132])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6FACB3F5A1;
+        Tue, 30 Nov 2021 06:30:51 -0800 (PST)
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        Rob Herring <robh@kernel.org>,
+        Toan Le <toan@os.amperecomputing.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
+        stable@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
+Date:   Tue, 30 Nov 2021 14:30:46 +0000
+Message-Id: <163828263383.20216.14338890370157557636.b4-ty@arm.com>
+X-Mailer: git-send-email 2.31.0
+In-Reply-To: <20211129173637.303201-1-robh@kernel.org>
+References: <20211129173637.303201-1-robh@kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1638282641; l=2966; s=20211009; h=from:subject:message-id; bh=jMUA6/CdNEAwxuuseeJkPI/0xYNf89rYf+05Sg3f9cM=; b=RdVnPmEhY+dz+Fq1Kvdj0A+gXpK2+pfhR3eqjMo73J6P90G23cLnmJLv97RbMWmJcVhm3j4kBYHa 4hJS/m1/BAtnMFTiZawt9bB/EYC54R7WbYVFrs0UezUzWywcLcMY
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-KeyWest i2c @0xf8001003 irq 42 /uni-n@f8000000/i2c@f8001000
-BUG: key c2d00cbc has not been registered!
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(1)
-WARNING: CPU: 0 PID: 1 at kernel/locking/lockdep.c:4801 lockdep_init_map_type+0x4c0/0xb4c
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.5-gentoo-PowerMacG4 #9
-NIP:  c01a9428 LR: c01a9428 CTR: 00000000
-REGS: e1033cf0 TRAP: 0700   Not tainted  (5.15.5-gentoo-PowerMacG4)
-MSR:  00029032 <EE,ME,IR,DR,RI>  CR: 24002002  XER: 00000000
+On Mon, 29 Nov 2021 11:36:37 -0600, Rob Herring wrote:
+> Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
+> broke PCI support on XGene. The cause is the IB resources are now sorted
+> in address order instead of being in DT dma-ranges order. The result is
+> which inbound registers are used for each region are swapped. I don't
+> know the details about this h/w, but it appears that IB region 0
+> registers can't handle a size greater than 4GB. In any case, limiting
+> the size for region 0 is enough to get back to the original assignment
+> of dma-ranges to regions.
+> 
+> [...]
 
-GPR00: c01a9428 e1033db0 c2d1cf20 00000016 00000004 00000001 c01c0630 e1033a73
-GPR08: 00000000 00000000 00000000 e1033db0 24002004 00000000 f8729377 00000003
-GPR16: c1829a9c 00000000 18305357 c1416fc0 c1416f80 c006ac60 c2d00ca8 c1416f00
-GPR24: 00000000 c21586f0 c2160000 00000000 c2d00cbc c2170000 c216e1a0 c2160000
-NIP [c01a9428] lockdep_init_map_type+0x4c0/0xb4c
-LR [c01a9428] lockdep_init_map_type+0x4c0/0xb4c
-Call Trace:
-[e1033db0] [c01a9428] lockdep_init_map_type+0x4c0/0xb4c (unreliable)
-[e1033df0] [c1c177b8] kw_i2c_add+0x334/0x424
-[e1033e20] [c1c18294] pmac_i2c_init+0x9ec/0xa9c
-[e1033e80] [c1c1a790] smp_core99_probe+0xbc/0x35c
-[e1033eb0] [c1c03cb0] kernel_init_freeable+0x190/0x5a4
-[e1033f10] [c000946c] kernel_init+0x28/0x154
-[e1033f30] [c0035148] ret_from_kernel_thread+0x14/0x1c
+Applied to pci/xgene, thanks!
 
-Add missing lockdep_register_key()
+[1/1] PCI: xgene: Fix IB window setup
+      https://git.kernel.org/lpieralisi/pci/c/c7a75d0782
 
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=200055
-Fixes: 9e607f72748d ("i2c_powermac: shut up lockdep warning")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-v2: Added lockdep_register_key() at two other places.
----
- arch/powerpc/platforms/powermac/low_i2c.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/powerpc/platforms/powermac/low_i2c.c b/arch/powerpc/platforms/powermac/low_i2c.c
-index f77a59b5c2e1..df89d916236d 100644
---- a/arch/powerpc/platforms/powermac/low_i2c.c
-+++ b/arch/powerpc/platforms/powermac/low_i2c.c
-@@ -582,6 +582,7 @@ static void __init kw_i2c_add(struct pmac_i2c_host_kw *host,
- 	bus->close = kw_i2c_close;
- 	bus->xfer = kw_i2c_xfer;
- 	mutex_init(&bus->mutex);
-+	lockdep_register_key(&bus->lock_key);
- 	lockdep_set_class(&bus->mutex, &bus->lock_key);
- 	if (controller == busnode)
- 		bus->flags = pmac_i2c_multibus;
-@@ -810,6 +811,7 @@ static void __init pmu_i2c_probe(void)
- 		bus->hostdata = bus + 1;
- 		bus->xfer = pmu_i2c_xfer;
- 		mutex_init(&bus->mutex);
-+		lockdep_register_key(&bus->lock_key);
- 		lockdep_set_class(&bus->mutex, &bus->lock_key);
- 		bus->flags = pmac_i2c_multibus;
- 		list_add(&bus->link, &pmac_i2c_busses);
-@@ -933,6 +935,7 @@ static void __init smu_i2c_probe(void)
- 		bus->hostdata = bus + 1;
- 		bus->xfer = smu_i2c_xfer;
- 		mutex_init(&bus->mutex);
-+		lockdep_register_key(&bus->lock_key);
- 		lockdep_set_class(&bus->mutex, &bus->lock_key);
- 		bus->flags = 0;
- 		list_add(&bus->link, &pmac_i2c_busses);
--- 
-2.33.1
-
+Thanks,
+Lorenzo

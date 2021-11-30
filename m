@@ -2,116 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CFC4633B7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D56414633B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbhK3MDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbhK3MDB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:03:01 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9BC061574;
-        Tue, 30 Nov 2021 03:59:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E0E24CE18FE;
-        Tue, 30 Nov 2021 11:59:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C9BC53FC7;
-        Tue, 30 Nov 2021 11:59:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638273579;
-        bh=nGzxpZJWSCKzpRqYJRSIk5w5ewqGleaL9kREzEMMTm0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=bXXy+uZDSzifTQFRwczjKuHFmOV+jMJldtLzV1t6J6WNjbxOfzERZc3bPWPhWm3Yj
-         7XMOZm0vyo2HweT9tuMLIQrblKkMc5tidTavCs+XdZSbkO3OFo2O/Y3t/CThmhN1TU
-         hlQV6h1k027CfmFAIadoxL0ZC+dV4m8bTXSUCQrGniW5ZtakRKHAFqengoDZsT0/fk
-         3/xvWVIACugeQUfuZoXvg6+rKLmGaF66ubQydNcolGZnCPk5xmHYpsZWQGmIT7SulB
-         PqbEgocg+Lr/qQifPvUohu+4TAQQhWL0V1ONSp//M+Tkw6EnguQEsI/swkF2IbJjmf
-         8RftIB1IOm90A==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1ms1nI-008rZE-MQ; Tue, 30 Nov 2021 11:59:34 +0000
+        id S237001AbhK3MDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:03:10 -0500
+Received: from mga06.intel.com ([134.134.136.31]:46885 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235058AbhK3MDI (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:03:08 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="297002692"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="297002692"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 03:59:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="458805958"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 30 Nov 2021 03:59:47 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ms1nW-000DF3-G5; Tue, 30 Nov 2021 11:59:46 +0000
+Date:   Tue, 30 Nov 2021 19:59:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Josh Don <joshdon@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Peter Zijlstra <peterz@infradead.org>
+Subject: [tip:sched/core 3/8] kernel/sched/core_sched.c:278:37: sparse:
+ sparse: incompatible types in conditional expression (different address
+ spaces):
+Message-ID: <202111301958.OvjPxCJ2-lkp@intel.com>
 MIME-Version: 1.0
-Date:   Tue, 30 Nov 2021 11:59:32 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Luca Ceresoli <luca@lucaceresoli.net>, kernel-team@android.com
-Subject: Re: [PATCH v3 0/3] PCI: apple: Assorted #PERST fixes
-In-Reply-To: <20211130115632.GA3355@lpieralisi>
-References: <20211123180636.80558-1-maz@kernel.org>
- <20211130115632.GA3355@lpieralisi>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <b2a06abf476b3e89504a227b3d1bea7c@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: lorenzo.pieralisi@arm.com, bhelgaas@google.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, pali@kernel.org, alyssa@rosenzweig.io, mark.kettenis@xs4all.nl, luca@lucaceresoli.net, kernel-team@android.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lorenzo, Bjorn,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
+head:   8c92606ab81086db00cbb73347d124b4eb169b7e
+commit: 4feee7d12603deca8775f9f9ae5e121093837444 [3/8] sched/core: Forced idle accounting
+config: i386-randconfig-s001-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301958.OvjPxCJ2-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=4feee7d12603deca8775f9f9ae5e121093837444
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip sched/core
+        git checkout 4feee7d12603deca8775f9f9ae5e121093837444
+        # save the config file to linux build tree
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash kernel/sched/
 
-On 2021-11-30 11:56, Lorenzo Pieralisi wrote:
-> On Tue, Nov 23, 2021 at 06:06:33PM +0000, Marc Zyngier wrote:
->> Apologies for the rapid fire (I tend to be much more conservative when
->> resending series), but given that this series has a direct impact on
->> other projects (such as u-boot), I'm trying to converge as quickly as
->> possible.
->> 
->> This series aims at fixing a number of issues for the recently merged
->> Apple PCIe driver, all revolving around the mishandling of #PERST:
->> 
->> - we didn't properly drive #PERST, and we didn't follow the specified
->>   timings
->> 
->> - the DT had the wrong polarity, which has impacts on the driver
->>   itself
->> 
->> Hopefully, this should address all the issues reported so far.
->> 
->> * From v2:
->>   - Fixed DT
->>   - Fixed #PERST polarity in the driver
->>   - Collected Pali's ack on patch #1
->> 
->> [1] https://lore.kernel.org/r/20211122104156.518063-1-maz@kernel.org
->> 
->> Marc Zyngier (3):
->>   PCI: apple: Follow the PCIe specifications when resetting the port
->>   arm64: dts: apple: t8103: Fix PCIe #PERST polarity
->>   PCI: apple: Fix #PERST polarity
->> 
->>  arch/arm64/boot/dts/apple/t8103.dtsi |  7 ++++---
->>  drivers/pci/controller/pcie-apple.c  | 12 +++++++++++-
->>  2 files changed, 15 insertions(+), 4 deletions(-)
-> 
-> Hi Bjorn,
-> 
-> this series is v5.16-rcX material for PCI fixes, can you pick patches 
-> 1,3
-> up please ?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Do you mind picking patch #2 as well? Or shall I route it somewhere 
-else?
 
-Thanks,
+sparse warnings: (new ones prefixed by >>)
+>> kernel/sched/core_sched.c:278:37: sparse: sparse: incompatible types in conditional expression (different address spaces):
+>> kernel/sched/core_sched.c:278:37: sparse:    struct task_struct *
+>> kernel/sched/core_sched.c:278:37: sparse:    struct task_struct [noderef] __rcu *
+   kernel/sched/core_sched.c: note: in included file:
+   kernel/sched/sched.h:1185:30: sparse: sparse: context imbalance in 'sched_core_update_cookie' - wrong count at exit
 
-         M.
--- 
-Jazz is not dead. It just smells funny...
+vim +278 kernel/sched/core_sched.c
+
+   240	
+   241	/* REQUIRES: rq->core's clock recently updated. */
+   242	void __sched_core_account_forceidle(struct rq *rq)
+   243	{
+   244		const struct cpumask *smt_mask = cpu_smt_mask(cpu_of(rq));
+   245		u64 delta, now = rq_clock(rq->core);
+   246		struct rq *rq_i;
+   247		struct task_struct *p;
+   248		int i;
+   249	
+   250		lockdep_assert_rq_held(rq);
+   251	
+   252		WARN_ON_ONCE(!rq->core->core_forceidle_count);
+   253	
+   254		if (rq->core->core_forceidle_start == 0)
+   255			return;
+   256	
+   257		delta = now - rq->core->core_forceidle_start;
+   258		if (unlikely((s64)delta <= 0))
+   259			return;
+   260	
+   261		rq->core->core_forceidle_start = now;
+   262	
+   263		if (WARN_ON_ONCE(!rq->core->core_forceidle_occupation)) {
+   264			/* can't be forced idle without a running task */
+   265		} else if (rq->core->core_forceidle_count > 1 ||
+   266			   rq->core->core_forceidle_occupation > 1) {
+   267			/*
+   268			 * For larger SMT configurations, we need to scale the charged
+   269			 * forced idle amount since there can be more than one forced
+   270			 * idle sibling and more than one running cookied task.
+   271			 */
+   272			delta *= rq->core->core_forceidle_count;
+   273			delta = div_u64(delta, rq->core->core_forceidle_occupation);
+   274		}
+   275	
+   276		for_each_cpu(i, smt_mask) {
+   277			rq_i = cpu_rq(i);
+ > 278			p = rq_i->core_pick ?: rq_i->curr;
+   279	
+   280			if (!p->core_cookie)
+   281				continue;
+   282	
+   283			__schedstat_add(p->stats.core_forceidle_sum, delta);
+   284		}
+   285	}
+   286	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

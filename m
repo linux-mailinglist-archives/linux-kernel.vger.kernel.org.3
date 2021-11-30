@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91976463AAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C52463AB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242623AbhK3P51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47832 "EHLO
+        id S242911AbhK3P56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:57:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237730AbhK3P5Z (ORCPT
+        with ESMTP id S230247AbhK3P54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:57:25 -0500
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B32FC061574;
-        Tue, 30 Nov 2021 07:54:06 -0800 (PST)
-Received: by mail-qk1-x734.google.com with SMTP id d2so27208110qki.12;
-        Tue, 30 Nov 2021 07:54:06 -0800 (PST)
+        Tue, 30 Nov 2021 10:57:56 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D1FC061574;
+        Tue, 30 Nov 2021 07:54:37 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id l22so54937952lfg.7;
+        Tue, 30 Nov 2021 07:54:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=5jfG9Qw6wgd9sRjYfyHDytET8Ac/XcqwnteljgGuckk=;
-        b=BntxTnwecg6BJSWIvVKExBquBtQ30s/lQ1YU/vtHIPa1Rx8ar/0r4fbnZzkVxmuMAb
-         OzAbN7axchp00LTYFaxf1R9+06zsQfibPFDthdJkWHwessPgB59jSkf2hhJC9Jya5qyy
-         HlASVFBQYACqEYVUo0srq3QkMFzJGpti1VVHtgcnXPBDChfHu3LanOSzPF2UPdSdM8Gk
-         ouRdu2IXl6S/VnlWEksWw3jwf6CY3mhCilbCsObeM91dghSXL7b0a41ke+NdWEQkEgzh
-         Won2HU6OUxb+j1fd9BYxScLJplAHx9QZ5JOlu9jWIR1hHSvIoz2zJCWmVGE6ELg+suCU
-         X1ZQ==
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=U5qik7JkxsV5L1nyIiJAzLGGqdU8Lv8lfNJJdZtpwB0=;
+        b=RylwZe89Gypz3GfzQSBHd0yTJdUBDZytxEh0mEKj30BcarBB4LEdiIcNBm+4gc2f7l
+         6lhx7QrVSHrj3DhV7qmkd8tGWUmyM8xsXbocB6Z+O9SVijMvhXlnAVxD8CwuZTCXCDgV
+         HP81x3lmR8wGcfB3cd/sQYSjmGp/Xf3WrdKqFn4XEuN/KMnCjrnnSdclgF7AL81C6wWA
+         U1ssQsizpD3vG2qtB1jbdA2tLh+79Z8NWh53EhmDBdL6vWrQz1/FKKY7REB/ckXWLN5d
+         yIBhDKP5SSC2QUxiovsBjVhKbpimlyiEKhoFpIH+46pR8ZI6VuAaB50DCxAjtSlytoJU
+         t8xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=5jfG9Qw6wgd9sRjYfyHDytET8Ac/XcqwnteljgGuckk=;
-        b=QYu8T1KZNItC3Ow00Hp4fcFAx9qIKgKa93R0Bdf7diNfT1y2kfSr7LZF8bTFEA9rzJ
-         vQDUq+LeP5zkG0V1d+YUQFMnwqif4tsZg8GN4iLgL6CWODCtibYyc4Lcv/w6EyZB+IeJ
-         1T+dI+X9sQ8vcwwlHGnSKrwIbQWs4nraED1OKHNCRTZzRrwKzfXxozYIINl4XjahE4PJ
-         tPALFOyxes7JSa4jsvCLDh8u9S20GEQuH2nhQZsgvcnJH+q1JWFYrGWws/J/sUxDtgWn
-         VZ5L7kAZNJjgsNbMrYJrKCVPLldMEDmX4pGt4HultIKI/VWBdqYQPDbrZM+E52wK1qtq
-         p5sw==
-X-Gm-Message-State: AOAM530gmFMeBNgWhlcwRZ9s7kMo0HSPkAh81OcsG7lC/JMw8kfwwWkS
-        DH7lH3JN3ZWjtouwppGoSY22fH9pnZ02BFk/juY=
-X-Google-Smtp-Source: ABdhPJyonKn3G8UIi6BT3phblLDnrVQm6qLkdWviQusM/bKsEz//a+DZxT6MhXu5EzeyFmfNCV15y1QUuJs0ifkzE2Y=
-X-Received: by 2002:a05:620a:2e3:: with SMTP id a3mr7577qko.451.1638287645274;
- Tue, 30 Nov 2021 07:54:05 -0800 (PST)
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=U5qik7JkxsV5L1nyIiJAzLGGqdU8Lv8lfNJJdZtpwB0=;
+        b=rc6ReoR/WDYe5OJVi8/7//nScR0dvO1knpvdJQs5EwtaA3WIfv2XxZmgXGdvAwRjDH
+         ANth6O+cvf/oZ0auOVbT91uufHBILyzGyTJZW1A6KADwjQevtUKwZf3JH/PUIEI4MIXV
+         fmeLKzWczSQRl26ZQmCDbnYtDQBCNZAylSFObIaoFqghxXMxO7jF6aclZ6zYK18+WdXz
+         9P9hCw2fGWLhfZnWSEwNh1gTpfRpMjfZTcYjLvD2sO/jxvC68THlDucQnSNlf6h0mymG
+         rzS2Qcks6HPXGLBuP+8qXrXIB8GIUCr+zLC2b2bqZZ9duPy6q7t1HGFKzUTkrvO8FJ84
+         z0mA==
+X-Gm-Message-State: AOAM532oGxr8ape2Yoq3JqL4ozXhGz5JYjZUQa+CeaSmWPYt4E3BArL6
+        wALdnZ934dVeB+rvf4Q+E1Yt46LyjD4=
+X-Google-Smtp-Source: ABdhPJy7QhmKwfLB5R6+JEk12Qsc2zj/1kqkJEqaJM8bGr5pAdx1OFEqLSkVbe3uceco1zRz+Cg/Gg==
+X-Received: by 2002:a05:6512:39c7:: with SMTP id k7mr10824lfu.571.1638287675500;
+        Tue, 30 Nov 2021 07:54:35 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id b13sm1985266lfv.200.2021.11.30.07.54.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 07:54:35 -0800 (PST)
+Subject: Re: [PATCH v1 1/2] dt-bindings: sharp,lq101r1sx01: Add compatible for
+ LQ101R1SX03
+To:     Rob Herring <robh@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Anton Bambura <jenneron@protonmail.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211114200717.28986-1-digetx@gmail.com>
+ <20211114200717.28986-2-digetx@gmail.com>
+ <YaVG93LCF6MQYiSi@robh.at.kernel.org>
+From:   Dmitry Osipenko <digetx@gmail.com>
+Message-ID: <a8f05850-1c18-1a7d-e529-08d9a6bd9923@gmail.com>
+Date:   Tue, 30 Nov 2021 18:54:34 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211120112738.45980-1-laoar.shao@gmail.com> <20211120112738.45980-5-laoar.shao@gmail.com>
- <20211129110140.733475f3@gandalf.local.home> <CALOAHbB-2ESG0QgESN_b=bXzESbq+UBP-dqttirKnt1c9TZHZA@mail.gmail.com>
- <20211130092240.312f68a4@gandalf.local.home>
-In-Reply-To: <20211130092240.312f68a4@gandalf.local.home>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Tue, 30 Nov 2021 23:53:30 +0800
-Message-ID: <CALOAHbB6oTNpRUHvgMaH+kxJn7Fr7zE2bkvkniPFsPzH-SuHjA@mail.gmail.com>
-Subject: Re: [PATCH v2 4/7] fs/binfmt_elf: replace open-coded string copy with get_task_comm
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Petr Mladek <pmladek@suse.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YaVG93LCF6MQYiSi@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:22 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Tue, 30 Nov 2021 11:01:27 +0800
-> Yafang Shao <laoar.shao@gmail.com> wrote:
->
-> > There are three options,
-> > - option 1
-> >   comment on all the hard-coded 16 to explain why it is hard-coded
-> > - option 2
-> >   replace the hard-coded 16 that can be replaced and comment on the
-> > others which can't be replaced.
-> > - option 3
-> >    replace the hard-coded 16 that can be replaced and specifically
-> > define TASK_COMM_LEN_16 in other files which can't include
-> > linux/sched.h.
-> >
-> > Which one do you prefer ?
-> >
->
-> Option 3. Since TASK_COMM_LEN_16 is, by it's name, already hard coded to
-> 16, it doesn't really matter if you define it in more than one location.
->
-> Or we could define it in another header that include/sched.h can include.
->
-> The idea of having TASK_COMM_LEN_16 is to easily grep for it, and also know
-> exactly what it is used for when people see it being used.
->
+30.11.2021 00:32, Rob Herring пишет:
+> On Sun, Nov 14, 2021 at 11:07:16PM +0300, Dmitry Osipenko wrote:
+>> From: Anton Bambura <jenneron@protonmail.com>
+>>
+>> LQ101R1SX03 is compatible with LQ101R1SX01, document it.
+> 
+> Then sounds like '"sharp,lq101r1sx03", "sharp,lq101r1sx01"' would be the 
+> appropriate compatible value. Do that, and you don't need a driver 
+> change.
 
-I will send a separate patch (or patchset) to replace all the old
-hard-coded 16 with TASK_COMM_LEN_16 based on the -mm tree.
-
---
-Thanks
-Yafang
+Apparently you're right. The "sharp,lq101r1sx03" should be a slightly
+improved revision of "sharp,lq101r1sx01". I see now that LQ101R1SX03 is
+sold as a spare part panel for ASUS TF701T, hence these panels should be
+entirely compatible with each other.

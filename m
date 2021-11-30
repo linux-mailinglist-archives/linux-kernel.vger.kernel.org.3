@@ -2,118 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A996B462D5F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE90E462D64
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:16:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238994AbhK3HRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 02:17:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        id S239008AbhK3HUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:20:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233216AbhK3HRD (ORCPT
+        with ESMTP id S233216AbhK3HUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 02:17:03 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9186DC061574;
-        Mon, 29 Nov 2021 23:13:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DC20DCE17F3;
-        Tue, 30 Nov 2021 07:13:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350DBC53FC1;
-        Tue, 30 Nov 2021 07:13:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638256421;
-        bh=yxjJWBzEG4lH4KkmrvIfKelb/QABtOCYFRxeeCh7FaU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ssbYfAYaXyhzUsOTZIr0z7VN9//jo+wu/hFK79E+m/WBG3LMDpEU6Xqk330BeBzaO
-         pfNPaBQo1sP1U2KwVfOcJbmvILIuD6jCroAdBZKFDjfv9XBclSnMC8h6OBsHDSazhT
-         xJcuSgVLWkCKODQwL2KCVZ48H+tL1BaIpmKZE8UE=
-Date:   Tue, 30 Nov 2021 08:13:37 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mmc@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH v2 3/3] blk-crypto: show crypto capabilities in sysfs
-Message-ID: <YaXPIYHg8Xnk1Lbh@kroah.com>
-References: <20211130040306.148925-1-ebiggers@kernel.org>
- <20211130040306.148925-4-ebiggers@kernel.org>
+        Tue, 30 Nov 2021 02:20:03 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1D4C061574;
+        Mon, 29 Nov 2021 23:16:44 -0800 (PST)
+Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1mrxNZ-0004mq-9M; Tue, 30 Nov 2021 08:16:41 +0100
+Message-ID: <a61df03d-2e36-9e91-ff02-2f48eb660181@leemhuis.info>
+Date:   Tue, 30 Nov 2021 08:16:40 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130040306.148925-4-ebiggers@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [REGRESSION] 5-10% increase in IO latencies with nohz balance
+ patch
+Content-Language: en-BS
+To:     Josef Bacik <josef@toxicpanda.com>, valentin.schneider@arm.com,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     peterz@infradead.org, vincent.guittot@linaro.org,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+References: <YaUH5GFFoLiS4/3/@localhost.localdomain>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <YaUH5GFFoLiS4/3/@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638256604;c928f8be;
+X-HE-SMSGID: 1mrxNZ-0004mq-9M
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 08:03:06PM -0800, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Add sysfs files that expose the inline encryption capabilities of
-> request queues:
-> 
-> 	/sys/class/block/$disk/queue/crypto/max_dun_bits
-> 	/sys/class/block/$disk/queue/crypto/modes/$mode
-> 	/sys/class/block/$disk/queue/crypto/num_keyslots
-> 
-> Userspace can use these new files to decide what encryption settings to
-> use, or whether to use inline encryption at all.  This also brings the
-> crypto capabilities in line with the other queue properties, which are
-> already discoverable via the queue directory in sysfs.
-> 
-> Design notes:
-> 
->   - Place the new files in a new subdirectory "crypto" to group them
->     together and to avoid complicating the main "queue" directory.  This
->     also makes it possible to replace "crypto" with a symlink later if
->     we ever make the blk_crypto_profiles into real kobjects (see below).
-> 
->   - It was necessary to define a new kobject that corresponds to the
->     crypto subdirectory.  For now, this kobject just contains a pointer
->     to the blk_crypto_profile.  Note that multiple queues (and hence
->     multiple such kobjects) may refer to the same blk_crypto_profile.
-> 
->     An alternative design would more closely match the current kernel
->     data structures: the blk_crypto_profile could be a kobject itself,
->     located directly under the host controller device's kobject, while
->     /sys/class/block/$disk/queue/crypto would be a symlink to it.
-> 
->     I decided not to do that for now because it would require a lot more
->     changes, such as no longer embedding blk_crypto_profile in other
->     structures, and also because I'm not sure we can rule out moving the
->     crypto capabilities into 'struct queue_limits' in the future.  (Even
->     if multiple queues share the same crypto engine, maybe the supported
->     data unit sizes could differ due to other queue properties.)  It
->     would also still be possible to switch to that design later without
->     breaking userspace, by replacing the directory with a symlink.
-> 
->   - Use "max_dun_bits" instead of "max_dun_bytes".  Currently, the
->     kernel internally stores this value in bytes, but that's an
->     implementation detail.  It probably makes more sense to talk about
->     this value in bits, and choosing bits is more future-proof.
-> 
->   - "modes" is a sub-subdirectory, since there may be multiple supported
->     crypto modes, and sysfs is supposed to have one value per file.
-> 
->   - Each mode had to be named.  The crypto API names like "xts(aes)" are
->     not appropriate because they don't specify the key size.  Therefore,
->     I assigned new names.  The exact names chosen are arbitrary, but
->     they happen to match the names used in log messages in fs/crypto/.
-> 
->   - The "num_keyslots" file is a bit different from the others in that
->     it is only useful to know for performance reasons.  However, it's
->     included as it can still be useful.  For example, a user might not
->     want to use inline encryption if there aren't very many keyslots.
-> 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-> ---
->  Documentation/block/queue-sysfs.rst |  30 +++++
+Hi, this is your Linux kernel regression tracker speaking.
 
-Same objection as before.  Please add these to Documentation/ABI/
-otherwise when running 'scripts/get_abi undefined' will show these new
-sysfs files you are adding as having no documentation :(
+Top-posting for once, to make this easy accessible to everyone.
 
-thanks,
+Adding the regression mailing list to the list of recipients, as it
+should be in the loop for all regressions, as explained here:
+https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
 
-greg k-h
+To be sure this issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
+
+#regzbot ^introduced 7fd7a9e0caba
+#regzbot ignore-activity
+
+Reminder: when fixing the issue, please add a 'Link:' tag with the URL
+to the report (the parent of this mail), then regzbot will automatically
+mark the regression as resolved once the fix lands in the appropriate
+tree. For more details about regzbot see footer.
+
+Sending this to everyone that got the initial report, to make all aware
+of the tracking. I also hope that messages like this motivate people to
+directly get at least the regression mailing list and ideally even
+regzbot involved when dealing with regressions, as messages like this
+wouldn't be needed then.
+
+Don't worry, I'll send further messages wrt to this regression just to
+the lists (with a tag in the subject so people can filter them away), as
+long as they are intended just for regzbot. With a bit of luck no such
+messages will be needed anyway.
+
+Ciao, Thorsten, your Linux kernel regression tracker.
+
+---
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and/or the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+tell #regzbot about it in the report, as that will ensure the regression
+gets on the radar of regzbot and the regression tracker. That's in your
+interest, as they will make sure the report won't fall through the
+cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include a 'Link:' tag to the report in the commit message, as explained
+in Documentation/process/submitting-patches.rst
+That aspect was recently was made more explicit in commit 1f57bd42b77c:
+https://git.kernel.org/linus/1f57bd42b77c
+
+
+On 29.11.21 18:03, Josef Bacik wrote:
+> 
+> Our nightly performance testing found a performance regression when we rebased
+> our devel tree onto v5.16-rc.  This took me a few days to bisect down, but this
+> patch
+> 
+> 7fd7a9e0caba ("sched/fair: Trigger nohz.next_balance updates when a CPU goes NOHZ-idle")
+> 
+> is the one that introduces the regression.  My performance testing box is a 2
+> socket, with a model name "Intel(R) Xeon(R) Bronze 3204 CPU @ 1.90GHz", for a
+> total of 12 cpu's reported in cpuinfo.  It has 128gib of RAM, and these perf
+> tests are being run against a SSD and spinning rust device, but the regression
+> is consistent across both configurations.  You can see the historical graph of
+> the completion latencies for this specific run
+> 
+> http://toxicpanda.com/performance/emptyfiles500k_write_clat_ns_p99.png
+> 
+> Or for something a little more braindead (untar firefox) you can see a increase
+> in the runtime
+> 
+> http://toxicpanda.com/performance/untarfirefox_elapsed.png
+> 
+> These two tests are single threaded, the regression doesn't appear to affect
+> multi-threaded tests.  For a simple reproducer you can simply download a tarball
+> of the firefox sources and untar it onto a clean btrfs file system.  The time
+> before and after this commit goes up ~1-2 seconds on my machine.  For a less
+> simple test you can create a clean btrfs file system and run
+> 
+> fio --name emptyfiles500k --create_on_open=1 --nrfiles=31250 --readwrite=write \
+> 	--readwrite=write --ioengine=filecreate --fallocate=none --filesize=4k \
+> 	--openfiles=1 --alloc-size 98304 --allrandrepeat=1 --randseed=12345 \
+> 	--directory <mount point>
+> 
+> And you are looking for the "Write clat ns p99" metric.  You'll see a 5-10%
+> increase in the latency time.  If you want to run our tests directly it's
+> relatively easy to setup, you can clone the fsperf repo
+> 
+> https://github.com/josefbacik/fsperf
+> 
+> Then in the fsperf directory edit the local.cfg and add
+> 
+> [main]
+> directory=/mnt/test
+> 
+> [btrfs]
+> device=/dev/sdc
+> iosched=none
+> mkfs=mkfs.btrfs -f
+> mount=mount -o noatime
+> 
+> And then run the following on the baseline kernel
+> 
+> ./fsperf -p regression -c btrfs -n 10 emptyfiles500k
+> 
+> This will run the test 10 times and save the results to the database.  Then you
+> can boot into your changed kernel and runn
+> 
+> ./fsperf -p regrssion -c btrfs -n 10 -t emptyfiles500k
+> 
+> This will run the test 10 times and take the average and compare it to the
+> baseline and print out the values, you'll see the increase latency values there.
+> 
+> I can reproduce this at will, if you want to just throw patches at me I'm happy
+> to run it and let you know what happens.  I'm attaching my .config as well in
+> case that is needed, but the HZ and PREEMPT settings are
+> 
+> CONFIG_NO_HZ_COMMON=y
+> CONFIG_NO_HZ_FULL=y
+> CONFIG_NO_HZ=y
+> CONFIG_HZ_1000=y
+> CONFIG_PREEMPT=y
+> CONFIG_PREEMPT_COUNT=y
+> CONFIG_PREEMPTION=y
+> CONFIG_PREEMPT_DYNAMIC=y
+> CONFIG_PREEMPT_RCU=y
+> CONFIG_HAVE_PREEMPT_DYNAMIC=y
+> CONFIG_PREEMPT_NOTIFIERS=y
+> CONFIG_DEBUG_PREEMPT=y
+> 
+> Thanks,
+> 
+> Josef
+> 
+

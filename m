@@ -2,201 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C08464070
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:42:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C142A464091
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:44:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344389AbhK3Vpc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:45:32 -0500
-Received: from out2.migadu.com ([188.165.223.204]:36451 "EHLO out2.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344355AbhK3Vp0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:45:26 -0500
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638308525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=098zVxilZL3/80DAvLC4qpo6yXA1SYFMfUJP4UlD304=;
-        b=rwcQF6Q0pygnB6yVPjDN7dy+AGZNwG1cE8VKCxoShW0dtdeXhNB2p6uPEfnFRuIrcV/RiJ
-        I9IAm/SnZuWLLDks+l33piuGIrg/z18BGr2i6SmkcQzhVgSw1V6ToAG9/ScTEcQv7dzY5H
-        nfxuDiG5vU8Kt8RqLR+WwcZgB4Lrie8=
-From:   andrey.konovalov@linux.dev
-To:     Marco Elver <elver@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Collingbourne <pcc@google.com>
-Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 09/31] kasan, page_alloc: merge kasan_alloc_pages into post_alloc_hook
-Date:   Tue, 30 Nov 2021 22:42:03 +0100
-Message-Id: <3025e0e482b3e4a213529811e5d4e2861acdba6e.1638308023.git.andreyknvl@google.com>
-In-Reply-To: <cover.1638308023.git.andreyknvl@google.com>
-References: <cover.1638308023.git.andreyknvl@google.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+        id S1344669AbhK3Vr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:47:29 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:54480 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344403AbhK3Vpj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 16:45:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A04EB81D03
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 21:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DD69C53FD0;
+        Tue, 30 Nov 2021 21:42:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638308537;
+        bh=JVXoenM53ogJxfhNA1GE7C/t2r5T+ogqyqsov8WWiDM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=f+o5BIrV37bgsrtaUUKFgxvcCe7d3Lxr4+KJpOCBOFhe92NZX/WScznZKtqwKS/6T
+         gb8/MjflHx/UHUkQoRRBWmhFSlAsrzDY/aIPfeH6hPds4Jd47tCB+F1tfjYHXT9WY/
+         YlNhQxdRXiQaDrxgIcmv87njpNlBTAV3Rdf858cFfN8PyQ+1Ef5alMJzLU6G5SKeBP
+         s+8QJj2+P82ogfxExAqrKsqwc2Qt1EMfovrbwqlKaU6BpGqSFAldezpcvxvDDI7WsV
+         hP3+dVaJER/Ldm9NzLuSDZxuit51kcUe70KR/1E2IEya4Zpz2U+4i6HEfx0VmQSyu4
+         P0gb11a+2GUGQ==
+Message-ID: <953e64171a94b6ee6528f7b7441d73fda9d30657.camel@kernel.org>
+Subject: Re: [PATCH v3 2/2] tracing: Have existing event_command
+ implementations use helpers
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     mhiramat@kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 30 Nov 2021 15:42:16 -0600
+In-Reply-To: <20211130163110.492a0df3@gandalf.local.home>
+References: <cover.1637700535.git.zanussi@kernel.org>
+         <2b451d62e0b1a12fc99391dfdda9be2d8e9ca499.1637700535.git.zanussi@kernel.org>
+         <20211130163110.492a0df3@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrey Konovalov <andreyknvl@google.com>
+Hi Steve,
 
-Currently, the code responsible for initializing and poisoning memory in
-post_alloc_hook() is scattered across two locations: kasan_alloc_pages()
-hook for HW_TAGS KASAN and post_alloc_hook() itself. This is confusing.
+On Tue, 2021-11-30 at 16:31 -0500, Steven Rostedt wrote:
+> On Tue, 23 Nov 2021 14:53:54 -0600
+> Tom Zanussi <zanussi@kernel.org> wrote:
+> 
+> 
+> > index a873f4e8be04..1d1716d5bee2 100644
+> > --- a/kernel/trace/trace_events_trigger.c
+> > +++ b/kernel/trace/trace_events_trigger.c
+> > @@ -931,89 +931,47 @@ event_trigger_callback(struct event_command
+> > *cmd_ops,
+> >  	struct event_trigger_data *trigger_data;
+> >  	struct event_trigger_ops *trigger_ops;
+> >  	char *trigger = NULL;
+> > -	char *number;
+> > +	bool remove;
+> >  	int ret;
+> >  
+> > -	/* separate the trigger from the filter (t:n [if filter]) */
+> > -	if (param && isdigit(param[0])) {
+> > -		trigger = strsep(&param, " \t");
+> > -		if (param) {
+> > -			param = skip_spaces(param);
+> > -			if (!*param)
+> > -				param = NULL;
+> > -		}
+> > -	}
+> > +	remove = event_trigger_check_remove(glob);
+> >  
+> > -	trigger_ops = cmd_ops->get_trigger_ops(cmd, trigger);
+> > +	ret = event_trigger_separate_filter(&trigger, &param, false);
+> > +	if (ret)
+> > +		return ret;
+> >  
+> >  	ret = -ENOMEM;
+> > -	trigger_data = kzalloc(sizeof(*trigger_data), GFP_KERNEL);
+> > +	trigger_data = event_trigger_alloc(cmd_ops, cmd, trigger,
+> > file);
+> >  	if (!trigger_data)
+> >  		goto out;
+> >  
+> > -	trigger_data->count = -1;
+> > -	trigger_data->ops = trigger_ops;
+> > -	trigger_data->cmd_ops = cmd_ops;
+> > -	trigger_data->private_data = file;
+> > -	INIT_LIST_HEAD(&trigger_data->list);
+> > -	INIT_LIST_HEAD(&trigger_data->named_list);
+> > -
+> > -	if (glob[0] == '!') {
+> > +	if (remove) {
+> >  		cmd_ops->unreg(glob+1, trigger_ops, trigger_data,
+> > file);
+> > -		kfree(trigger_data);
+> 
+> How is trigger_data freed on error here?
 
-This and a few following patches combine the code from these two
-locations. Along the way, these patches do a step-by-step restructure
-the many performed checks to make them easier to follow.
+You're right, that kfree() shouldn't have been removed, will add it
+back.
 
-This patch replaces the only caller of kasan_alloc_pages() with its
-implementation.
+Thanks for picking that up,
 
-As kasan_has_integrated_init() is only true when CONFIG_KASAN_HW_TAGS
-is enabled, moving the code does no functional changes.
+Tom
 
-The patch also moves init and init_tags variables definitions out of
-kasan_has_integrated_init() clause in post_alloc_hook(), as they have
-the same values regardless of what the if condition evaluates to.
-
-This patch is not useful by itself but makes the simplifications in
-the following patches easier to follow.
-
-Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
----
- include/linux/kasan.h |  9 ---------
- mm/kasan/common.c     |  2 +-
- mm/kasan/hw_tags.c    | 22 ----------------------
- mm/page_alloc.c       | 20 +++++++++++++++-----
- 4 files changed, 16 insertions(+), 37 deletions(-)
-
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index 89a43d8ae4fe..1031070be3f3 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -94,8 +94,6 @@ static inline bool kasan_hw_tags_enabled(void)
- 	return kasan_enabled();
- }
- 
--void kasan_alloc_pages(struct page *page, unsigned int order, gfp_t flags);
--
- #else /* CONFIG_KASAN_HW_TAGS */
- 
- static inline bool kasan_enabled(void)
-@@ -108,13 +106,6 @@ static inline bool kasan_hw_tags_enabled(void)
- 	return false;
- }
- 
--static __always_inline void kasan_alloc_pages(struct page *page,
--					      unsigned int order, gfp_t flags)
--{
--	/* Only available for integrated init. */
--	BUILD_BUG();
--}
--
- #endif /* CONFIG_KASAN_HW_TAGS */
- 
- static inline bool kasan_has_integrated_init(void)
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index 66078cc1b4f0..d7168bfca61a 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -536,7 +536,7 @@ void * __must_check __kasan_kmalloc_large(const void *ptr, size_t size,
- 		return NULL;
- 
- 	/*
--	 * The object has already been unpoisoned by kasan_alloc_pages() for
-+	 * The object has already been unpoisoned by kasan_unpoison_pages() for
- 	 * alloc_pages() or by kasan_krealloc() for krealloc().
- 	 */
- 
-diff --git a/mm/kasan/hw_tags.c b/mm/kasan/hw_tags.c
-index c643740b8599..76cf2b6229c7 100644
---- a/mm/kasan/hw_tags.c
-+++ b/mm/kasan/hw_tags.c
-@@ -192,28 +192,6 @@ void __init kasan_init_hw_tags(void)
- 		kasan_stack_collection_enabled() ? "on" : "off");
- }
- 
--void kasan_alloc_pages(struct page *page, unsigned int order, gfp_t flags)
--{
--	/*
--	 * This condition should match the one in post_alloc_hook() in
--	 * page_alloc.c.
--	 */
--	bool init = !want_init_on_free() && want_init_on_alloc(flags);
--	bool init_tags = init && (flags & __GFP_ZEROTAGS);
--
--	if (flags & __GFP_SKIP_KASAN_POISON)
--		SetPageSkipKASanPoison(page);
--
--	if (init_tags) {
--		int i;
--
--		for (i = 0; i != 1 << order; ++i)
--			tag_clear_highpage(page + i);
--	} else {
--		kasan_unpoison_pages(page, order, init);
--	}
--}
--
- #if IS_ENABLED(CONFIG_KASAN_KUNIT_TEST)
- 
- void kasan_enable_tagging_sync(void)
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 0561cdafce36..2a85aeb45ec1 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -2384,6 +2384,9 @@ static bool check_new_pages(struct page *page, unsigned int order)
- inline void post_alloc_hook(struct page *page, unsigned int order,
- 				gfp_t gfp_flags)
- {
-+	bool init = !want_init_on_free() && want_init_on_alloc(gfp_flags);
-+	bool init_tags = init && (gfp_flags & __GFP_ZEROTAGS);
-+
- 	set_page_private(page, 0);
- 	set_page_refcounted(page);
- 
-@@ -2399,15 +2402,22 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
- 
- 	/*
- 	 * As memory initialization might be integrated into KASAN,
--	 * kasan_alloc_pages and kernel_init_free_pages must be
-+	 * KASAN unpoisoning and memory initializion code must be
- 	 * kept together to avoid discrepancies in behavior.
- 	 */
- 	if (kasan_has_integrated_init()) {
--		kasan_alloc_pages(page, order, gfp_flags);
--	} else {
--		bool init = !want_init_on_free() && want_init_on_alloc(gfp_flags);
--		bool init_tags = init && (gfp_flags & __GFP_ZEROTAGS);
-+		if (gfp_flags & __GFP_SKIP_KASAN_POISON)
-+			SetPageSkipKASanPoison(page);
-+
-+		if (init_tags) {
-+			int i;
- 
-+			for (i = 0; i != 1 << order; ++i)
-+				tag_clear_highpage(page + i);
-+		} else {
-+			kasan_unpoison_pages(page, order, init);
-+		}
-+	} else {
- 		kasan_unpoison_pages(page, order, init);
- 
- 		if (init_tags) {
--- 
-2.25.1
+> 
+> -- Steve
+> 
+> >  		ret = 0;
+> >  		goto out;
+> >  	}
+> >  
+> > -	if (trigger) {
+> > -		number = strsep(&trigger, ":");
+> > -
+> > -		ret = -EINVAL;
+> > -		if (!strlen(number))
+> > -			goto out_free;
+> > -
+> > -		/*
+> > -		 * We use the callback data field (which is a pointer)
+> > -		 * as our counter.
+> > -		 */
+> > -		ret = kstrtoul(number, 0, &trigger_data->count);
+> > -		if (ret)
+> > -			goto out_free;
+> > -	}
+> > -
+> > -	if (!param) /* if param is non-empty, it's supposed to be a
+> > filter */
+> > -		goto out_reg;
+> > -
+> > -	if (!cmd_ops->set_filter)
+> > -		goto out_reg;
+> > +	ret = event_trigger_parse_num(trigger, trigger_data);
+> > +	if (ret)
+> > +		goto out_free;
+> >  
+> > -	ret = cmd_ops->set_filter(param, trigger_data, file);
+> > +	ret = event_trigger_set_filter(cmd_ops, file, param,
+> > trigger_data);
+> >  	if (ret < 0)
+> >  		goto out_free;
+> >  
+> > - out_reg:
+> >  	/* Up the trigger_data count to make sure reg doesn't free it
+> > on failure */
+> >  	event_trigger_init(trigger_ops, trigger_data);
+> > -	ret = cmd_ops->reg(glob, trigger_ops, trigger_data, file);
+> > -	/*
+> > -	 * The above returns on success the # of functions enabled,
+> > -	 * but if it didn't find any functions it returns zero.
+> > -	 * Consider no functions a failure too.
+> > -	 */
+> > -	if (!ret) {
+> > -		cmd_ops->unreg(glob, trigger_ops, trigger_data, file);
+> > -		ret = -ENOENT;
+> > -	} else if (ret > 0)
+> > -		ret = 0;
+> > +
+> > +	ret = event_trigger_register(cmd_ops, file, glob, cmd, trigger,
+> > trigger_data, NULL);
+> > +	if (ret)
+> > +		goto out_free;
+> >  
+> >  	/* Down the counter of trigger_data or free it if not used
+> > anymore */
+> >  	event_trigger_free(trigger_ops, trigger_data);
+> >   out:
+> >  	return ret;
+> > -
+> >   out_free:
+> > -	if (cmd_ops->set_filter)
+> > -		cmd_ops->set_filter(NULL, trigger_data, NULL);
+> > +	event_trigger_reset_filter(cmd_ops, trigger_data);
+> >  	kfree(trigger_data);
+> >  	goto out;
+> >  }
+> > 
 

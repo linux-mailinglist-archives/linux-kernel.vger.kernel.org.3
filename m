@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0D1463BA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BD6463BA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243435AbhK3QZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:25:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238933AbhK3QZw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:25:52 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90787C061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:22:32 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so20033776wme.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:22:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=b6a6PLyF+M7wwZ1FDN/UTeFdO9+p7QSJdzSxXo0nQ6w=;
-        b=U7yVGOdqpzRq412biVH6h4R9wrDhW/Cw4WDky3rZrAYQyvrJiTYAh3ZfQVcKrwZ8Ud
-         O7MFHnJga29Yhrf4pZEfZQ95tXiVSgtMSpvV2xosWhpDmaqgsPOHRIxN0sbXD1GaC3p6
-         cQUvOQtAtzoavUjpNSm7PN9uXsg1JQhkzNtIaCa1ZPlN+wifCO+1OEehUN3eLWE/UAmC
-         mQS0qCYu2KGBxmC4HaXTejkNfRGpYT8+lVX+/3RCPI4pguqDv7fT3DLCLglba3pG+gk8
-         h4aAe95hTF5TWBl8LhioJuVoa7OeZ7e3RZQZrBkxtpjHMQ+WBMJCJ0m5nCBk0r7RaOJH
-         2B2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=b6a6PLyF+M7wwZ1FDN/UTeFdO9+p7QSJdzSxXo0nQ6w=;
-        b=cntYG6tb2ekzb5SZzVIgKt5j0XQrqxP/wm0/sqXXgYczrMZesLJ0O7IcuD/vWdXBub
-         SaUgsxB4nNcqKUA3z3lPj7p5NnH8ot/EiPHXzaY+nFqSF0P+/x1wFfsQD+U+1Kxf1YMs
-         rkD2tFSaJxEXyNkxzAkJjfBw0P7TuG0pTdm8Rtk/etDeYuPdEbmsIypRyOLJF6rg46E8
-         21gzedf3gtNAWLHWe4FA4xXUGpLqPLAyJajMN6LO+W5vOFe/gPmFqpFq7fYf5eGzxzxE
-         J6BZKD0s09tj0WZQBnwW4lC35+YKfdecG0n/TSFMYv2L+Q14mythVic29X35PpZGNp6d
-         SGiQ==
-X-Gm-Message-State: AOAM531JL4NxIENhcU2T58nSXIikfLn+T3cvMGXamw3GdULevBbL9rv6
-        ogcBQOONLVt7uEe5WSZR9l2d1FD/3hYf0A==
-X-Google-Smtp-Source: ABdhPJwOIBYOKR3hSaNFiEBsqZLhO8lZTu4Kh9Wv9+SiBlvi7awXIKHajW0vvKtRvI5aaU1uoAI51g==
-X-Received: by 2002:a1c:1f94:: with SMTP id f142mr517714wmf.192.1638289350935;
-        Tue, 30 Nov 2021 08:22:30 -0800 (PST)
-Received: from [192.168.86.34] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id j18sm3278314wmq.44.2021.11.30.08.22.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 08:22:30 -0800 (PST)
-Subject: Re: [PATCH] ASoC: qdsp6: q6routing: Fix return value from
- msm_routing_put_audio_mixer
-To:     Mark Brown <broonie@kernel.org>
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20211130160414.21616-1-srinivas.kandagatla@linaro.org>
- <YaZOnJIrl2bO98mL@sirena.org.uk>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Message-ID: <b663a16e-e503-3f74-6d16-1b59df41e619@linaro.org>
-Date:   Tue, 30 Nov 2021 16:22:29 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S243486AbhK3Q0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:26:13 -0500
+Received: from mga04.intel.com ([192.55.52.120]:33086 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234862AbhK3Q0M (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:26:12 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="234975213"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="234975213"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:22:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="540465576"
+Received: from stinkbox.fi.intel.com (HELO stinkbox) ([10.237.72.171])
+  by orsmga001.jf.intel.com with SMTP; 30 Nov 2021 08:22:49 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 30 Nov 2021 18:22:48 +0200
+Date:   Tue, 30 Nov 2021 18:22:48 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     David Airlie <airlied@linux.ie>, kjlu@umn.edu,
+        linux-kernel@vger.kernel.org, Zhao Yakui <yakui.zhao@intel.com>,
+        dri-devel@lists.freedesktop.org, Dave Airlie <airlied@redhat.com>,
+        Alan Cox <alan@linux.intel.com>
+Subject: Re: [PATCH] drm/gma500/cdv: Fix a wild pointer dereference in
+ cdv_intel_dp_get_modes()
+Message-ID: <YaZP2HzTQw1QJxOK@intel.com>
+References: <20211130132328.129383-1-zhou1615@umn.edu>
 MIME-Version: 1.0
-In-Reply-To: <YaZOnJIrl2bO98mL@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211130132328.129383-1-zhou1615@umn.edu>
+X-Patchwork-Hint: comment
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30/11/2021 16:17, Mark Brown wrote:
-> On Tue, Nov 30, 2021 at 04:04:14PM +0000, Srinivas Kandagatla wrote:
->> msm_routing_put_audio_mixer() can return incorrect value in various scenarios.
->> Fix this, so that change notifications are sent correctly.
+On Tue, Nov 30, 2021 at 09:23:28PM +0800, Zhou Qingyang wrote:
+> In cdv_intel_dp_get_modes(), the third return value of
+> drm_mode_duplicate() is assigned to mode and used in
+> drm_mode_probed_add(). drm_mode_probed_add() passes mode->head to
+> list_add_tail(). list_add_tail() will further call __list_add() and
+> there is a dereference of mode->head in __list_add(), which could lead
+> to a wild pointer dereference on failure of drm_mode_duplicate().
 > 
-> This really isn't a good commit message - I can't tell what the change
-> is supposed to fix or how it fixes it.  Which values in which scenarios
-> are incorrect in what way?
-
-I agree,
-
-the cases that get incorrect return values are:
-
-scenario 1:
-amixer cset iface=MIXER,name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 1
-amixer cset iface=MIXER,name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 0
-
-return value is  0 instead of 1
-
-scenario 2:
-amixer cset iface=MIXER,name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 1
-amixer cset iface=MIXER,name='SLIMBUS_0_RX Audio Mixer MultiMedia1' 1
-
-return value is  1 instead of 0
-
-
-I will add these details in next spin commit log.
-
---srini
+> Fix this bug by adding a check of mode.
 > 
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
+> 
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+> 
+> Builds with CONFIG_DRM_GMA500=m show no new warnings,
+> and our static analyzer no longer warns about this code.
+> 
+> Fixes: d112a8163f83 ("gma500/cdv: Add eDP support")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+>  drivers/gpu/drm/gma500/cdv_intel_dp.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/gma500/cdv_intel_dp.c b/drivers/gpu/drm/gma500/cdv_intel_dp.c
+> index ba6ad1466374..b389008965a9 100644
+> --- a/drivers/gpu/drm/gma500/cdv_intel_dp.c
+> +++ b/drivers/gpu/drm/gma500/cdv_intel_dp.c
+> @@ -1773,6 +1773,9 @@ static int cdv_intel_dp_get_modes(struct drm_connector *connector)
+>  		if (intel_dp->panel_fixed_mode != NULL) {
+>  			struct drm_display_mode *mode;
+>  			mode = drm_mode_duplicate(dev, intel_dp->panel_fixed_mode);
+> +			if (!mode)
+> +				return -ENOMEM;
 
+.get_modes() isn't supposed to return negative values.
+
+> +
+>  			drm_mode_probed_add(connector, mode);
+>  			return 1;
+>  		}
+> -- 
+> 2.25.1
+
+-- 
+Ville Syrjälä
+Intel

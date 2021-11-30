@@ -2,122 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 206D2463210
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03B346321A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237292AbhK3LSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237021AbhK3LSd (ORCPT
+        id S238011AbhK3LSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:18:49 -0500
+Received: from mta-p7.oit.umn.edu ([134.84.196.207]:49366 "EHLO
+        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237792AbhK3LSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:18:33 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B42CEC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:15:14 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id u11so14661370plf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:15:14 -0800 (PST)
+        Tue, 30 Nov 2021 06:18:46 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4J3KQ66DFWzB52k3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:15:26 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p7.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2c6vkQ2Ak1sK for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 05:15:26 -0600 (CST)
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4J3KQ64ByGzB52jx
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:15:25 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4J3KQ64ByGzB52jx
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4J3KQ64ByGzB52jx
+Received: by mail-pl1-f198.google.com with SMTP id l14-20020a170903120e00b00143cc292bc3so8098651plh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:15:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=umn.edu; s=google;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rdsjfFHqX642qunomfVevr0xZO4B7l7BwZzd9GncTMg=;
-        b=YjLjEJ4yELBTYRjMTc/fX9pW67vArm4i/SowWdVZWtLN3bA1NgpPCWVcb0WJhfGtFk
-         Uip7lllxMxDB+prkwQfpNjNM6ZrAI1tYUum8AfCPslX5jL1kGQa/3r/P+KSUx0OPcZuC
-         ZbOQka1QSchSrPg06A4eFJiXZFIYnldiIkyU0=
+        bh=Eyu825ZfzMp52FyCTeP84ZIiGupHVtUogaq83T982ZQ=;
+        b=P0NDYAqzWJ0fD+/qqMovmu1URmRdBsaKorXujUebhN44V+w51n5IADQN8g/d7t9mEl
+         NAEsSrJb3QsAS4QbWXGFI3JA0qfoDh0d6su/WUox9jdy9ajjQhea7x/aeCZ0BX66eNHP
+         KiRU3x4ytFxSYaebYOh/FGY3/GczhkKvGTbLWdKQh6fNB/1UEH4Mu2B41de9QaCr5MQN
+         n7LtAbSNBBXVelCZ7xlIxGGtVMJQjAMsZli82JoqqC63/Xb1Dka+x57b+W04x3gJN8d9
+         AfC8oHQD86+9FUt6o0cubY8s2yUAGiAr1oAW9goCIFL1EwRTZGgPxmi4Ghl/s6MayeiS
+         HZ1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=rdsjfFHqX642qunomfVevr0xZO4B7l7BwZzd9GncTMg=;
-        b=xUETnsmFJs1OHAFwIlz8Eib4zOIYCKhptX26IhZOclbT/a8luQ9DNw9zWCTAesukoL
-         k5ncY+wiIyuaWBobduAzKZRitHnKTfV0CIre64y4D/6uLQ1qttYPTJ7AY1X0ab0MrcBU
-         +4ewmcKVDuh7uTQliFzbSjo8AI/W7n9AEw+zwG6JDUqOdb2T7uAziw36ThI4x8AYpSwl
-         1sMHmnr9dS2On+Dd+x2GqLZwrxKyDelpV/jhZDk76brNVeEB0+1nwKb3Kj5aHA5DrNI0
-         IPYM4WiHwKWkztwRjVgJw4H20/LlelRNMhgwG4pjnznErFWoYJc8zlMHfrRf6v195zj0
-         I3Sw==
-X-Gm-Message-State: AOAM531hDRcayeEV8tBW9EoEvKNfn499b31oSKuYbfDeV5LylCBVVisA
-        85jsrra9mByQT2zDVW0UE7y0mA==
-X-Google-Smtp-Source: ABdhPJwr05mwONjYFKktSg6D9PwX/cNhWN0ds3xJvtnD4qdwvn1PIwNh2hF0abiJ8CW5MmyPxU8K/w==
-X-Received: by 2002:a17:902:a40e:b0:143:ca72:be9d with SMTP id p14-20020a170902a40e00b00143ca72be9dmr67090947plq.67.1638270914271;
-        Tue, 30 Nov 2021 03:15:14 -0800 (PST)
-Received: from tigerii.tok.corp.google.com ([2401:fa00:8f:203:8ed3:948d:3bfd:26b3])
-        by smtp.gmail.com with ESMTPSA id h36sm15624206pgb.9.2021.11.30.03.15.12
+        bh=Eyu825ZfzMp52FyCTeP84ZIiGupHVtUogaq83T982ZQ=;
+        b=7VXEF8I/8A5dRd484mXq9Mc05c9O7iWOIAZXo/YWr8RkezEVMfU3RhaNrxKfemJV+0
+         kt76FvUxh2GY+kW3n36LG6N6MM2+4ufhZRTnv3p3VGp/0KBgASe5riPmOvUtwRw3yFdK
+         p1ym3ZhfeO/PHzJ6KXorY5jZ7KqC5dxjJ0VlzQdhrEyfBXNTrdTHHMzW8qL7glYzuWKi
+         T7CaAy6ie5UTL8j76IeF7qMwI8ICMcxYrzWkzb9HLLsZMRH4Mtw43tAtRtc3PD64FbMp
+         f941QhXAoJoMeMuV0RNVoso57w0zBYR67p6rgt/HrqAITi29MzJo78yRsQA7KZRUBlO3
+         t8OQ==
+X-Gm-Message-State: AOAM530OCMvxEAaxYvzfuB00a2Kiwfnb4g0iz8vrXrqisWriP9/X6Hqj
+        Y2t9kesdc5VmdqpiYDgC/MrTefmVgZmuHH7SMEFYzjhk+5b5pNAm/URzdmbqPjz0uNX7srwfFsT
+        fmlknm16w+NtzNFzj8oLJ3kDpRjye
+X-Received: by 2002:a17:90a:fd93:: with SMTP id cx19mr5157491pjb.190.1638270925230;
+        Tue, 30 Nov 2021 03:15:25 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxg0rzDMJGlLM5MaTeFJLvHiuhz4TJIbeAf5yDuP5dB/SifcuoLcRAP8F3+7EQymBao3YxZNQ==
+X-Received: by 2002:a17:90a:fd93:: with SMTP id cx19mr5157459pjb.190.1638270925024;
+        Tue, 30 Nov 2021 03:15:25 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id j7sm2258855pjf.41.2021.11.30.03.15.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 03:15:13 -0800 (PST)
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: [RFC][PATCH] checkpatch: require Fixes tag for fixup patches
-Date:   Tue, 30 Nov 2021 20:15:03 +0900
-Message-Id: <20211130111503.2930770-1-senozhatsky@chromium.org>
-X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
+        Tue, 30 Nov 2021 03:15:24 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Akshu Agrawal <akshu.agrawal@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: x86: Fix a wild pointer dereference in fch_clk_probe()
+Date:   Tue, 30 Nov 2021 19:15:17 +0800
+Message-Id: <20211130111518.112374-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Require "Fixes: hash" tag in those patches that appear to be
-fixing some particular commit.
+In fch_clk_probe(), the return value of clk_hw_register_mux() is
+assigned to hws[ST_CLK_MUX] and there is a dereference of it in
+fch_clk_probe(), which could lead to a wild pointer dereference on
+failure of clk_hw_register_mux().
 
-Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Fix this bug by adding a check of hws[ST_CLK_MUX].
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_X86_AMD_PLATFORM_DEVICE=y show no new warnings, and
+our static analyzer no longer warns about this code.
+
+Fixes: 19fe87fd854a ("clk: x86: Support RV architecture")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 ---
- scripts/checkpatch.pl | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ drivers/clk/x86/clk-fch.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index df8b23dc1eb0..4e97d0f6b995 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -2493,6 +2493,9 @@ sub process {
- 	my $commit_log_has_diff = 0;
- 	my $reported_maintainer_file = 0;
- 	my $non_utf8_charset = 0;
-+	my $fixes_id = 0;
-+	my $fixes_description = 0;
-+	my $fixes_tag = 0;
+diff --git a/drivers/clk/x86/clk-fch.c b/drivers/clk/x86/clk-fch.c
+index 8f7c5142b0f0..1539ee59c04a 100644
+--- a/drivers/clk/x86/clk-fch.c
++++ b/drivers/clk/x86/clk-fch.c
+@@ -51,6 +51,8 @@ static int fch_clk_probe(struct platform_device *pdev)
+ 			clk_oscout1_parents, ARRAY_SIZE(clk_oscout1_parents),
+ 			0, fch_data->base + CLKDRVSTR2, OSCOUT1CLK25MHZ, 3, 0,
+ 			NULL);
++		if (IS_ERR(hws[ST_CLK_MUX]))
++			return PTR_ERR(hws[ST_CLK_MUX]);
  
- 	my $last_blank_line = 0;
- 	my $last_coalesced_string_linenr = -1;
-@@ -3076,6 +3079,11 @@ sub process {
- 			}
- 		}
+ 		clk_set_parent(hws[ST_CLK_MUX]->clk, hws[ST_CLK_48M]->clk);
  
-+# Check for Fixes tag
-+		if ($in_commit_log && $line =~ /\b[Ff]ixes:\s*[0-9a-f]{12,40}/) {
-+			$fixes_tag = 1;
-+		}
-+
- # Check for git id commit length and improperly formed commit descriptions
- 		if ($in_commit_log && !$commit_log_possible_stack_dump &&
- 		    $line !~ /^\s*(?:Link|Patchwork|http|https|BugLink|base-commit):/i &&
-@@ -3128,6 +3136,11 @@ sub process {
- 			($id, $description) = git_commit_info($orig_commit,
- 							      $id, $orig_desc);
- 
-+			if (defined($id)) {
-+				$fixes_id = $id;
-+				$fixes_description = $description;
-+			}
-+
- 			if (defined($id) &&
- 			   ($short || $long || $space || $case || ($orig_desc ne $description) || !$hasparens)) {
- 				ERROR("GIT_COMMIT_ID",
-@@ -7326,6 +7339,12 @@ sub process {
- 		}
- 	}
- 
-+	if ($is_patch && $has_commit_log && $fixes_id && !$fixes_tag) {
-+		ERROR("GIT_COMMIT_ID",
-+		      "Please add 'Fixes: $fixes_id (\"$fixes_description\")'\n", );
-+		$fixes_id = 0;
-+	}
-+
- 	print report_dump();
- 	if ($summary && !($clean == 1 && $quiet == 1)) {
- 		print "$filename " if ($summary_file);
 -- 
-2.34.0.rc2.393.gf8c9666880-goog
+2.25.1
 

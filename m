@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C83104641D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:56:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BE24641DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344820AbhK3XAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 18:00:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60848 "EHLO
+        id S1345034AbhK3XAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 18:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344769AbhK3XAA (ORCPT
+        with ESMTP id S1344819AbhK3XAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 18:00:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52AE9C061748;
-        Tue, 30 Nov 2021 14:56:39 -0800 (PST)
-Date:   Tue, 30 Nov 2021 22:56:37 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638312998;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fnqnyIPZkUAgwlA/RcC3vXJqFQl4gWJOjAnzRqj6Ubw=;
-        b=2q3tjkCzunbWpc8AWgIMrv5XpzFYYcd6ET33OqeLF/t5treQPCL63Y2Dj7p02QWeMcqeSd
-        YdHBfTLKKVxMgYrVaggDG9LTE0LaC2skP+isPj+hlegArtWPfd+bvLCKmWDsOhXHcoXhXK
-        3SbjDh3tpDr5xLNa/SwFcJZ2DSoqRD/Jk643GGSL3Hpnr3Bx8I6MvmM39hG42qzOk19ZMi
-        IfPUPzGBgdyd72yoxw17rf0XgwBg606VEQAdd7vOLaNBm5ViYIdwxgRunpSC5SqfVr+lNo
-        retjpwcjgEtr/5Fsdv6soxYiSDcjMLYREyzk3kAwW6JS7h2ZmMNMECy+791Hfw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638312998;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fnqnyIPZkUAgwlA/RcC3vXJqFQl4gWJOjAnzRqj6Ubw=;
-        b=Wxrg9tjA9xAWhaAzgQFd2/kXabUOobd1vffuyNGCvQyb69t3OXiLmsRC1MCK0qjM1xcLGK
-        b5RHjJGOkONnwzBQ==
-From:   "tip-bot2 for Kirill A. Shutemov" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/misc] x86/insn-eval: Handle insn_get_opcode() failure
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211130184933.31005-2-kirill.shutemov@linux.intel.com>
-References: <20211130184933.31005-2-kirill.shutemov@linux.intel.com>
+        Tue, 30 Nov 2021 18:00:09 -0500
+Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75D2C061574;
+        Tue, 30 Nov 2021 14:56:48 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jeanthomas.me;
+        s=key1; t=1638313007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dyqan58KK4Vj1U5mzXx1IapLYaJZe0oyYkrA0sFvVOk=;
+        b=Vd4+zZeZJkcLl35UXrOTAOgsqMbCRll+NqVSC9mcD7TUHYZf7KMbILW8SL8YiITMKA+iWB
+        DaYrR997lkMj8Dtlj3KEiukyCW+XyqPpgoEW5sMWquuFjWfRWOfw4ABYjUgBe+qMoy8feJ
+        hNx8DlIWmso3xNJNaafwYUbdML/cJUrEAQTrkR/6U5rOdg2O70xxXq/JjJ2EB391pdzsMW
+        RNerAegT84sZ47KqlsnKmL0zVWkc2QKUOoDstzPxGO0hluNEAc+lqXXljxjMEm8Ftob53R
+        7TYrDI6DE1n1e+MB/62SXimdDjYcVumpbyFwqQiO42BFj+hPjk1Ei/APXBq3Cw==
+From:   Jean THOMAS <virgule@jeanthomas.me>
+To:     virgule@jeanthomas.me, devicetree@vger.kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, petr.vorel@gmail.com
+Subject: [PATCH 1/2] arm64: dts: Place LG Bullhead generic code into a DTSI file
+Date:   Tue, 30 Nov 2021 23:56:44 +0100
+Message-Id: <20211130225645.171725-1-virgule@jeanthomas.me>
 MIME-Version: 1.0
-Message-ID: <163831299708.11128.7866012474234259026.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: jeanthomas.me
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/misc branch of tip:
+This patch puts the generic code common across all hardware revisions
+into a DTSI file.
 
-Commit-ID:     23ef731e4365196bfc186358eb4f6265d60ab352
-Gitweb:        https://git.kernel.org/tip/23ef731e4365196bfc186358eb4f6265d60ab352
-Author:        Kirill A. Shutemov <kirill@shutemov.name>
-AuthorDate:    Tue, 30 Nov 2021 21:49:30 +03:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 30 Nov 2021 14:52:26 -08:00
-
-x86/insn-eval: Handle insn_get_opcode() failure
-
-is_string_insn() calls insn_get_opcode() that can fail, but does not
-handle the failure.
-
-is_string_insn() interface does not allow to communicate an error to the
-caller.
-
-Push insn_get_opcode() to the only non-static user of is_string_insn()
-and fail it early if insn_get_opcode() fails.
-
-[ dhansen: fix tabs-versus-spaces breakage ]
-
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Tested-by: Joerg Roedel <jroedel@suse.de>
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
-Link: https://lkml.kernel.org/r/20211130184933.31005-2-kirill.shutemov@linux.intel.com
+It also prefixes the DTS filename with the vendor name, to follow the
+naming convention used by other DTS files.
 ---
- arch/x86/lib/insn-eval.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/arm64/boot/dts/qcom/Makefile                    |  2 +-
+ .../boot/dts/qcom/msm8992-lg-bullhead-rev-101.dts    | 12 ++++++++++++
+ ...bullhead-rev-101.dts => msm8992-lg-bullhead.dtsi} |  2 --
+ 3 files changed, 13 insertions(+), 3 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dts
+ rename arch/arm64/boot/dts/qcom/{msm8992-bullhead-rev-101.dts => msm8992-lg-bullhead.dtsi} (98%)
 
-diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
-index eb3ccff..1c51e8a 100644
---- a/arch/x86/lib/insn-eval.c
-+++ b/arch/x86/lib/insn-eval.c
-@@ -37,8 +37,6 @@ enum reg_type {
-  */
- static bool is_string_insn(struct insn *insn)
- {
--	insn_get_opcode(insn);
--
- 	/* All string instructions have a 1-byte opcode. */
- 	if (insn->opcode.nbytes != 1)
- 		return false;
-@@ -1405,6 +1403,9 @@ void __user *insn_get_addr_ref(struct insn *insn, struct pt_regs *regs)
- 	if (!insn || !regs)
- 		return (void __user *)-1L;
- 
-+	if (insn_get_opcode(insn))
-+		return (void __user *)-1L;
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 6b816eb33309..3617157f1420 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -17,7 +17,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-a3u-eur.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-a5u-eur.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+-dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-bullhead-rev-101.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-lg-bullhead-rev-101.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-msft-lumia-octagon-talkman.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-xiaomi-libra.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= msm8994-angler-rev-101.dtb
+diff --git a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dts b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dts
+new file mode 100644
+index 000000000000..5151c6128b09
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-101.dts
+@@ -0,0 +1,12 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) Jean Thomas <virgule@jeanthomas.me>
++ */
 +
- 	switch (insn->addr_bytes) {
- 	case 2:
- 		return get_addr_ref_16(insn, regs);
++/dts-v1/;
++
++#include "msm8992-lg-bullhead.dtsi"
++
++/ {
++	/* required for bootloader to select correct board */
++	qcom,board-id = <0xb64 0>;
++};
+diff --git a/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
+similarity index 98%
+rename from arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
+rename to arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
+index 4da6c44bf532..3b0cc85d6674 100644
+--- a/arch/arm64/boot/dts/qcom/msm8992-bullhead-rev-101.dts
++++ b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead.dtsi
+@@ -18,9 +18,7 @@ / {
+ 	compatible = "lg,bullhead", "qcom,msm8992";
+ 	chassis-type = "handset";
+ 
+-	/* required for bootloader to select correct board */
+ 	qcom,msm-id = <251 0>, <252 0>;
+-	qcom,board-id = <0xb64 0>;
+ 	qcom,pmic-id = <0x10009 0x1000A 0x0 0x0>;
+ 
+ 	/* Bullhead firmware doesn't support PSCI */
+-- 
+2.33.1
+

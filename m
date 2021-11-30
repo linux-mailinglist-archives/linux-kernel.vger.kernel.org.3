@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC20463887
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343B146388E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243005AbhK3PEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:04:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
+        id S244010AbhK3PFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:05:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243143AbhK3O41 (ORCPT
+        with ESMTP id S243372AbhK3O4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:56:27 -0500
+        Tue, 30 Nov 2021 09:56:34 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F7BC061A20;
-        Tue, 30 Nov 2021 06:50:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96770C061A31;
+        Tue, 30 Nov 2021 06:50:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 59F8AB81A29;
-        Tue, 30 Nov 2021 14:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C306C53FC1;
-        Tue, 30 Nov 2021 14:50:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D924B81A29;
+        Tue, 30 Nov 2021 14:50:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDA4FC53FC7;
+        Tue, 30 Nov 2021 14:50:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283816;
-        bh=meQhLRbhvx/RwYVCeyTbQAwKAyZcEHM+S8EeTgnF/VM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bef7MfDwhALHzu09GgWI0mYofUpfc/qeIw9QgZ0nLAHsdiSs5gqBB6E8A6pm9VYYJ
-         TaZEGi4Zz3mCeSQIW5BpAG1NDPmfV49UnS5bTCjvQ6DudgQ7f6tt8R1I2Sxf4Vvyl6
-         HFJZNcGqMprJW0NZkzi8kRc3PjHiW3aB1ihn4W34gBxMH5Aih4HEopi4DqMQqFqRV4
-         PkApKVGgQrvM6pJenfx7RnyJkKPgpsWGrlPZlnQ2h2lMh/iM8anLdPSBrblGLpBLFP
-         qKABbkmSK42xrpLP0xbF1pf0NDQAUkIgSbqd8bSSWO2muSMuWK0fezWy6bnjpfRGLN
-         VasCvc5McoEUQ==
+        s=k20201202; t=1638283825;
+        bh=o8MeOq2N49p/FP/LqG1XAuTyIVVzI/eO1y3ZWHzfHpk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dN44Nwgc8fUTHcq4zZ8z+algYTkMZd+neMowjNHG/s18nNtfsniAJ9Hroh45Op/BE
+         gjybt2PMUwPXB2N+2Z0vThSdfBoGa1yIDcTuCMv1VjlHove6ehmJJmwg9EEtZ2y6Mo
+         yNOZnnWiPeGgdOaaBIYUgzrcQQvqMIGZ1mpa+sdveHn1xIYhWudFgecH6UhnTge1BN
+         s32sv4pMdPmM6mhmqEIVDt71b+igGIvBir4js6OIWFpHyksIoAKa9wXsVTV9OV+OHh
+         pt517j23yibTMWv8RbBXhIMETSRkMHkEw1ToPw/xwLaNDgAOeWIrqSFFaYiveXLX1Q
+         BKBocIgvO1YTQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 66/68] net: ptp: add a definition for the UDP port for IEEE 1588 general messages
-Date:   Tue, 30 Nov 2021 09:47:02 -0500
-Message-Id: <20211130144707.944580-66-sashal@kernel.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
+        perex@perex.cz, tiwai@suse.com, matthias.bgg@gmail.com,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 5.10 01/43] ASoC: mediatek: mt8173-rt5650: Rename Speaker control to Ext Spk
+Date:   Tue, 30 Nov 2021 09:49:38 -0500
+Message-Id: <20211130145022.945517-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211130144707.944580-1-sashal@kernel.org>
-References: <20211130144707.944580-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -52,39 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-[ Upstream commit ec15baec3272bbec576f2ce7ce47765a8e9b7b1c ]
+[ Upstream commit 0a8facac0d1e38dc8b86ade6d3f0d8b33dae7c58 ]
 
-As opposed to event messages (Sync, PdelayReq etc) which require
-timestamping, general messages (Announce, FollowUp etc) do not.
-In PTP they are part of different streams of data.
+Some RT5645 and RT5650 powered platforms are using "Ext Spk"
+instead of "Speaker", and this is also reflected in alsa-lib
+configurations for the generic RT5645 usecase manager configs.
 
-IEEE 1588-2008 Annex D.2 "UDP port numbers" states that the UDP
-destination port assigned by IANA is 319 for event messages, and 320 for
-general messages. Yet the kernel seems to be missing the definition for
-general messages. This patch adds it.
+Rename the "Speaker" control to "Ext Spk" in order to be able
+to make the userspace reuse/inherit the same configurations also
+for this machine, along with the others.
 
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Acked-by: Richard Cochran <richardcochran@gmail.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20211105152013.75252-1-angelogioacchino.delregno@collabora.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/ptp_classify.h | 1 +
- 1 file changed, 1 insertion(+)
+ sound/soc/mediatek/mt8173/mt8173-rt5650.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
-index ae04968a3a472..9afd34a2d36c5 100644
---- a/include/linux/ptp_classify.h
-+++ b/include/linux/ptp_classify.h
-@@ -37,6 +37,7 @@
- #define PTP_MSGTYPE_PDELAY_RESP 0x3
+diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+index c28ebf891cb05..2cbf679f5c74b 100644
+--- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
++++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
+@@ -30,15 +30,15 @@ static struct mt8173_rt5650_platform_data mt8173_rt5650_priv = {
+ };
  
- #define PTP_EV_PORT 319
-+#define PTP_GEN_PORT 320
- #define PTP_GEN_BIT 0x08 /* indicates general message, if set in message type */
+ static const struct snd_soc_dapm_widget mt8173_rt5650_widgets[] = {
+-	SND_SOC_DAPM_SPK("Speaker", NULL),
++	SND_SOC_DAPM_SPK("Ext Spk", NULL),
+ 	SND_SOC_DAPM_MIC("Int Mic", NULL),
+ 	SND_SOC_DAPM_HP("Headphone", NULL),
+ 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
+ };
  
- #define OFF_PTP_SOURCE_UUID	22 /* PTPv1 only */
+ static const struct snd_soc_dapm_route mt8173_rt5650_routes[] = {
+-	{"Speaker", NULL, "SPOL"},
+-	{"Speaker", NULL, "SPOR"},
++	{"Ext Spk", NULL, "SPOL"},
++	{"Ext Spk", NULL, "SPOR"},
+ 	{"DMIC L1", NULL, "Int Mic"},
+ 	{"DMIC R1", NULL, "Int Mic"},
+ 	{"Headphone", NULL, "HPOL"},
+@@ -48,7 +48,7 @@ static const struct snd_soc_dapm_route mt8173_rt5650_routes[] = {
+ };
+ 
+ static const struct snd_kcontrol_new mt8173_rt5650_controls[] = {
+-	SOC_DAPM_PIN_SWITCH("Speaker"),
++	SOC_DAPM_PIN_SWITCH("Ext Spk"),
+ 	SOC_DAPM_PIN_SWITCH("Int Mic"),
+ 	SOC_DAPM_PIN_SWITCH("Headphone"),
+ 	SOC_DAPM_PIN_SWITCH("Headset Mic"),
 -- 
 2.33.0
 

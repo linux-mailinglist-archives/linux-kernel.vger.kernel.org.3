@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AE5C462B73
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F32EB462B7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238094AbhK3EIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 23:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53102 "EHLO
+        id S238121AbhK3EIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 23:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230427AbhK3EIm (ORCPT
+        with ESMTP id S238084AbhK3EIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 23:08:42 -0500
+        Mon, 29 Nov 2021 23:08:43 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61076C061574;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81B0C061714;
         Mon, 29 Nov 2021 20:05:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2516DB811FF;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A7EFB816D6;
         Tue, 30 Nov 2021 04:05:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9180C53FC1;
-        Tue, 30 Nov 2021 04:05:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FBA5C53FCB;
+        Tue, 30 Nov 2021 04:05:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638245121;
-        bh=a1liu2Lo3sMfRhCcP9f3gWfgoXAydt5G60CI7Sx/zkI=;
+        s=k20201202; t=1638245122;
+        bh=M0sQRTxbyS0q3abkpmgvNfkIhDxP38RRMZpip4Rf994=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EUR9YgE8gOCFkseE2T9VubdkQlpzKqiCFRjZhcDlQ0ajPbaD2bYnY9Lmk63AZCJcw
-         KqpoGKRUwVGuU+eFvEhp44poaIzAR/wl0xODYqy1BmRaLZlXAzDLFGMYqQ2WU9A/mu
-         pIkSNRvWYGAPGNSZ0y5spllEimYnzwa08wYwtfC+pNi2cBiIuLqMHbRPesTNAQ8cEh
-         OhJZqXlGYIm0Iu/kaWdQRUE0bmk3qESF4pTijllTvnPXNxxhotag/kYP0pFkw58TMv
-         20ONYzB2fXvOHl/cY+L8YivHKBCynSc87nEpvvJFLKYwTg9dr0ESMyuZys+VjVmU3z
-         IdV7YhScBC9BA==
+        b=e9gV/YgK6uofnNU7EwGYWKR0A7JaSfTqv062khzJ44S5rbCDQXzm5ZAwoXIDlDLSD
+         RzDuNN4UKB2cWFwsNtlYUVsMDAe3cjwMRszHLS1+mkJt/kA+E7EimokcfItSGTopxF
+         ACsMkA1BWWj3QnUR0vJM1aKNnvVXGm2cyCbD9v5Gpn2MGz1QgbLCCfd+QcOBp+Mfc1
+         kxoz/VX0wCc3Af/IOM59nycq197z0sWKUUjOgN6jPM7oO7/EpuN9ALuEW2bK8gsmG9
+         n2BKhoPOvjMitx532ps3aY6BQqvzrEtjzYP7HNOWmQEDRbIkkX/WPNpAwKjlL+JBqc
+         ZQjRhRFe/TJpw==
 From:   Eric Biggers <ebiggers@kernel.org>
 To:     linux-block@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
         linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Bart Van Assche <bvanassche@acm.org>
-Subject: [PATCH v2 1/3] block: simplify calling convention of elv_unregister_queue()
-Date:   Mon, 29 Nov 2021 20:03:04 -0800
-Message-Id: <20211130040306.148925-2-ebiggers@kernel.org>
+Subject: [PATCH v2 2/3] block: don't delete queue kobject before its children
+Date:   Mon, 29 Nov 2021 20:03:05 -0800
+Message-Id: <20211130040306.148925-3-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20211130040306.148925-1-ebiggers@kernel.org>
 References: <20211130040306.148925-1-ebiggers@kernel.org>
@@ -52,62 +52,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eric Biggers <ebiggers@google.com>
 
-Make elv_unregister_queue() a no-op if q->elevator is NULL or is not
-registered.
+kobjects aren't supposed to be deleted before their child kobjects are
+deleted.  Apparently this is usually benign; however, a WARN will be
+triggered if one of the child kobjects has a named attribute group:
 
-This simplifies the existing callers, as well as the future caller in
-the error path of blk_register_queue().
+    sysfs group 'modes' not found for kobject 'crypto'
+    WARNING: CPU: 0 PID: 1 at fs/sysfs/group.c:278 sysfs_remove_group+0x72/0x80
+    ...
+    Call Trace:
+      sysfs_remove_groups+0x29/0x40 fs/sysfs/group.c:312
+      __kobject_del+0x20/0x80 lib/kobject.c:611
+      kobject_cleanup+0xa4/0x140 lib/kobject.c:696
+      kobject_release lib/kobject.c:736 [inline]
+      kref_put include/linux/kref.h:65 [inline]
+      kobject_put+0x53/0x70 lib/kobject.c:753
+      blk_crypto_sysfs_unregister+0x10/0x20 block/blk-crypto-sysfs.c:159
+      blk_unregister_queue+0xb0/0x110 block/blk-sysfs.c:962
+      del_gendisk+0x117/0x250 block/genhd.c:610
 
-Also don't bother checking whether q is NULL, since it never is.
+Fix this by moving the kobject_del() and the corresponding
+kobject_uevent() to the correct place.
 
+Fixes: 2c2086afc2b8 ("block: Protect less code with sysfs_lock in blk_{un,}register_queue()")
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- block/blk-sysfs.c | 3 +--
- block/elevator.c  | 8 ++++----
- 2 files changed, 5 insertions(+), 6 deletions(-)
+ block/blk-sysfs.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
-index 4622da4bb9927..91d3805a6ec6b 100644
+index 91d3805a6ec6b..1368dfe3ee500 100644
 --- a/block/blk-sysfs.c
 +++ b/block/blk-sysfs.c
-@@ -957,8 +957,7 @@ void blk_unregister_queue(struct gendisk *disk)
+@@ -951,15 +951,17 @@ void blk_unregister_queue(struct gendisk *disk)
+ 	 */
+ 	if (queue_is_mq(q))
+ 		blk_mq_unregister_dev(disk_to_dev(disk), q);
+-
+-	kobject_uevent(&q->kobj, KOBJ_REMOVE);
+-	kobject_del(&q->kobj);
  	blk_trace_remove_sysfs(disk_to_dev(disk));
  
  	mutex_lock(&q->sysfs_lock);
--	if (q->elevator)
--		elv_unregister_queue(q);
-+	elv_unregister_queue(q);
+ 	elv_unregister_queue(q);
  	disk_unregister_independent_access_ranges(disk);
  	mutex_unlock(&q->sysfs_lock);
- 	mutex_unlock(&q->sysfs_dir_lock);
-diff --git a/block/elevator.c b/block/elevator.c
-index ec98aed39c4f5..b062c5bc10b9a 100644
---- a/block/elevator.c
-+++ b/block/elevator.c
-@@ -516,9 +516,11 @@ int elv_register_queue(struct request_queue *q, bool uevent)
- 
- void elv_unregister_queue(struct request_queue *q)
- {
-+	struct elevator_queue *e = q->elevator;
 +
- 	lockdep_assert_held(&q->sysfs_lock);
++	/* Now that all child objects were deleted, the queue can be deleted. */
++	kobject_uevent(&q->kobj, KOBJ_REMOVE);
++	kobject_del(&q->kobj);
++
+ 	mutex_unlock(&q->sysfs_dir_lock);
  
--	if (q) {
-+	if (e && e->registered) {
- 		struct elevator_queue *e = q->elevator;
- 
- 		kobject_uevent(&e->kobj, KOBJ_REMOVE);
-@@ -593,9 +595,7 @@ int elevator_switch_mq(struct request_queue *q,
- 	lockdep_assert_held(&q->sysfs_lock);
- 
- 	if (q->elevator) {
--		if (q->elevator->registered)
--			elv_unregister_queue(q);
--
-+		elv_unregister_queue(q);
- 		ioc_clear_queue(q);
- 		blk_mq_sched_free_rqs(q);
- 		elevator_exit(q);
+ 	kobject_put(&disk_to_dev(disk)->kobj);
 -- 
 2.34.1
 

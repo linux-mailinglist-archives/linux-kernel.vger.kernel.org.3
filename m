@@ -2,130 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33462462F7D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD54F462F80
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:24:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240129AbhK3J1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 04:27:55 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:35388 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240123AbhK3J1y (ORCPT
+        id S240137AbhK3J2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 04:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40284 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240134AbhK3J17 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:27:54 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3GyC4BG8z9vC8C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:24:35 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Rw2wextg1wpm for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 03:24:35 -0600 (CST)
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3GyC26zGz9vC7k
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:24:35 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3GyC26zGz9vC7k
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3GyC26zGz9vC7k
-Received: by mail-pg1-f200.google.com with SMTP id o11-20020a635a0b000000b00320daef2ad6so10015059pgb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:24:35 -0800 (PST)
+        Tue, 30 Nov 2021 04:27:59 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC24CC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:24:40 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id u1so42841888wru.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:24:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=9Kpv95WvUkW/Ud7pYJF6QRY1ECX/+UULSLWzxdPLIgk=;
-        b=Fw5Z8AyCfUSIgxqiupoCR9sjMbdmQ29AFdnEjQPhopEri3nPVfkJbbGXd6nS/bLtFS
-         zJ1IE20IzWpQ5+g4mkZh0efIGFxNISOolZx8KzAjvK62U2xWPwSELLRUFvMzGdRQgGjK
-         3JSQdoGAolMpLrYM08uIBskshSCFQI0Ku+X4icBsRT1XAZDWFNO6iHcOvhMVfqpAP/gz
-         Cu75DjY0gzdTU1ghoWOTAOwBmjSMMMYX0mmH+jO45HeRyCOYnPkSsBLqBwGPhZt5TLx5
-         v1IMQ+rr7RXzh5BohSs3s98ln71POKNNZhxZbNolKcIT9KWiYqbbhtypq7744QDgI+pg
-         RudQ==
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=yB0eWfE4eeemBgIkAqSMbGTWDerG7jyNQ2dFqY6J6Iw=;
+        b=aWaKTO/tUiOdel7w7i49eEDCCTHBWt76TvmKCMvsR0kJu1ICOrGglzBYV7sJ4wAEVV
+         HEu4abOrsMHg7WjvjE5Alvwiiulpoo8fHfKhhon/0fexy5E3gSah9RWGYHELAuIWxuLM
+         9BC7mJ5eu/7hmjSfvd+XFgWCdfi0g6xqjUleWTfXKLx/FgfJSgGezhwwOFuAUzOAW6gK
+         rXHhJNN1ElK3jYJhK7mRTk6Cp3M6YVde80PMT1j66j5bpYhalj2l1b3faPPgnQP6ZGnW
+         fNLLpQaOU3Q6N0kJjWzOZEKmAey3XZ60BOnjgoeEDzW60NGNei/ApL0Jmh4oeWGdEYHS
+         JVVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=9Kpv95WvUkW/Ud7pYJF6QRY1ECX/+UULSLWzxdPLIgk=;
-        b=yUgYysGR5NH2MgOWaOCqP5LN9UFdSbKgRRQJmmMuAKGmLEBUm+P/6mWjnQz/rlC2ra
-         yS7XkD3D358ZJ6NqcsTTnBOwEOVvTG+3wveRt1AK30n3Aa1wlcHUuI3lfLpe8JZkofK5
-         hID8nRmuLyGYkIIzrROKIrMCqnIYcf/iDAOgfHrf+bBMYiSfiZNU2cEVBwAqx/25qDUC
-         /uyz0vYoLjfFzOjjED62bAsUUM7+nHF5CJ7O+JClKISs1CEE3fbD0DWwtnld6hjrmLBD
-         EZ4aZsq2jcZHgTn5Q+kVcfnHdOkUfI918VN67Yo5uR38SL4rQFSp0mwcWG0VFQEuoCHb
-         hzXQ==
-X-Gm-Message-State: AOAM531pqAFyDdGvZeU8oiN1S1PJZ1vR2bqwbsHIK6EbTA7KjcR3b1+9
-        XVb+R2qOQH/4s850xfu9rmJIJeEOZMiyQ2XhEolBN+H6HxGzmBzMxRTDq1c3CKFp4JB3/NBlKDp
-        xPX29jpLiU1swSdKljSgl3LXCgtD6
-X-Received: by 2002:a17:90b:8d6:: with SMTP id ds22mr4588535pjb.194.1638264273957;
-        Tue, 30 Nov 2021 01:24:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwDBGO+aaLim+LpVySQCOJYODPf3ehU0UEx5GMCZAkK4vXF25CONHenek8Yf1aGNTHZ8rqCww==
-X-Received: by 2002:a17:90b:8d6:: with SMTP id ds22mr4588512pjb.194.1638264273756;
-        Tue, 30 Nov 2021 01:24:33 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id b8sm1921015pfr.213.2021.11.30.01.24.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 01:24:33 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        mtk01761 <wendell.lin@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: mediatek: mt6779: Fix a NULL pointer dereference in clk_mt6779_apmixed_probe()
-Date:   Tue, 30 Nov 2021 17:24:26 +0800
-Message-Id: <20211130092428.82262-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        bh=yB0eWfE4eeemBgIkAqSMbGTWDerG7jyNQ2dFqY6J6Iw=;
+        b=PnoXkzXCsqxd2x8CkG0CvmK42PgLpiovnTYPlfaJPWHrFt1sNzMyBjLTzWQZXJLw0c
+         lw8ky8xEN1OfCeS4M22yxVeIlUEwGlWEtIMVxqDM9uSjatjqan+F6WNS8pi9UZqfNpxk
+         QTZAW5ZpPZFclUFQj7D472eSaRy4jQCUfXr8YP529ejDoz9Pycm5iskbU3Hq/ZADfI3o
+         9kpT1SjEaIwfPUae7vre8Oyfrwck1f/id7aN+C+OThIoc9BMR2dJnueJmrfQnC2/jtEJ
+         ZPrYRCkFg6Xwc10dp+bd3bFSCZTEyTiiwuc7wTya8gHqtLHYTQvLM9Adu6sCVGcfyMpp
+         XXPQ==
+X-Gm-Message-State: AOAM532Dhxx8NNpoHr/VQlnRbawRbvDS3ZTh4yT0FKjVJiTeCAXr55XK
+        BPIdyZqEIVePIy201BXD0wWwOWCdwNbBIA==
+X-Google-Smtp-Source: ABdhPJwtkbhBHUtQ/K6qf88p2EgqL4dRD3bgO+PKHEoiEabkzpxApR+DYjMi2jEb7cv2c7pNk4pFrw==
+X-Received: by 2002:adf:f151:: with SMTP id y17mr39346595wro.153.1638264279264;
+        Tue, 30 Nov 2021 01:24:39 -0800 (PST)
+Received: from ?IPv6:2a01:e34:ed2f:f020:7880:daae:2d50:bb5e? ([2a01:e34:ed2f:f020:7880:daae:2d50:bb5e])
+        by smtp.googlemail.com with ESMTPSA id r8sm20090958wrz.43.2021.11.30.01.24.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 01:24:38 -0800 (PST)
+Subject: Re: [PATCH 1/7] x86/Documentation: Describe the Intel Hardware
+ Feedback Interface
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org
+Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-2-ricardo.neri-calderon@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Message-ID: <81bca26d-eac8-31ed-e5ec-81812664d671@linaro.org>
+Date:   Tue, 30 Nov 2021 10:24:36 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
+In-Reply-To: <20211106013312.26698-2-ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In clk_mt6779_apmixed_probe(), the return value of
-mtk_alloc_clk_data() is assigned to clk_data and used in
-mtk_clk_register_plls(). There is a dereference of clk_data in
-mtk_clk_register_plls(), which could lead to a NULL pointer
-dereference on failure of mtk_alloc_clk_data().
+Hi Ricardo,
 
-Fix this bug by adding a check of clk_data.
+On 06/11/2021 02:33, Ricardo Neri wrote:
+> Start a documentation file to describe the purpose and operation of Intel's
+> Hardware Feedback Interface. Describe how this interface is used in Linux
+> to relay performance and energy efficiency updates to userspace.
+> 
+> Cc: Andi Kleen <ak@linux.intel.com>
+> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: "Ravi V. Shankar" <ravi.v.shankar@intel.com>
+> Reviewed-by: Len Brown <len.brown@intel.com>
+> Suggested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+>  Documentation/x86/index.rst     |  1 +
+>  Documentation/x86/intel-hfi.rst | 68 +++++++++++++++++++++++++++++++++
+>  2 files changed, 69 insertions(+)
+>  create mode 100644 Documentation/x86/intel-hfi.rst
+> 
+> diff --git a/Documentation/x86/index.rst b/Documentation/x86/index.rst
+> index 383048396336..f103821ee095 100644
+> --- a/Documentation/x86/index.rst
+> +++ b/Documentation/x86/index.rst
+> @@ -21,6 +21,7 @@ x86-specific Documentation
+>     tlb
+>     mtrr
+>     pat
+> +   intel-hfi
+>     intel-iommu
+>     intel_txt
+>     amd-memory-encryption
+> diff --git a/Documentation/x86/intel-hfi.rst b/Documentation/x86/intel-hfi.rst
+> new file mode 100644
+> index 000000000000..f5cb738170a5
+> --- /dev/null
+> +++ b/Documentation/x86/intel-hfi.rst
+> @@ -0,0 +1,68 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +============================================================
+> +Hardware-Feedback Interface for scheduling on Intel Hardware
+> +============================================================
+> +
+> +Overview
+> +--------
+> +
+> +Intel has described the Hardware Feedback Interface (HFI) in the Intel 64 and
+> +IA-32 Architectures Software Developer's Manual (Intel SDM) Volume 3 Section
+> +14.6 [1]_.
+> +
+> +The HFI gives the operating system a performance and energy efficiency
+> +capability data for each CPU in the system. Linux can use the information from
+> +the HFI to influence task placement decisions.
+> +
+> +The Hardware Feedback Interface
+> +-------------------------------
+> +
+> +The Hardware Feedback Interface provides to the operating system information
+> +about the performance and energy efficiency of each CPU in the system. Each
+> +capability is given as a unit-less quantity in the range [0-255]. Higher values
+> +indicate higher capability. Energy efficiency and performance are reported in
+> +separate capabilities.
 
-Another way to fix this bug is to add a check of clk_data in
-mtk_clk_register_plls(), which may solve many similar bugs but could
-cause potential problems to previously correct cases as the API is changed.
+Are they linked together (eg. higher energy efficiency => lower
+performance)?
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+> +These capabilities may change at runtime as a result of changes in the
+> +operating conditions of the system or the action of external factors.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+Is it possible to give examples?
 
-Builds with CONFIG_COMMON_CLK_MT6779=y show no new warnings, and our
-static analyzer no longer warns about this code.
+> The rate
+> +at which these capabilities are updated is specific to each processor model. On
+> +some models, capabilities are set at boot time and never change. On others,
+> +capabilities may change every tens of milliseconds.
+> +
+> +The kernel or a userspace policy daemon can use these capabilities to modify
+> +task placement decisions. For instance, if either the performance or energy
+> +capabilities of a given logical processor becomes zero, it is an indication that
+> +the hardware recommends to the operating system to not schedule any tasks on
+> +that processor for performance or energy efficiency reasons, respectively.
 
-Fixes: 710774e04861 ("clk: mediatek: Add MT6779 clock support)
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/clk/mediatek/clk-mt6779.c | 2 ++
- 1 file changed, 2 insertions(+)
+How the userspace can be involved in these decisions? If the performance
+is impacted then that should be reflected in the CPU capacity. The
+scheduler will prevent to put task on CPU with a low capacity, no?
 
-diff --git a/drivers/clk/mediatek/clk-mt6779.c b/drivers/clk/mediatek/clk-mt6779.c
-index 9825385c9f94..f22bf4025f55 100644
---- a/drivers/clk/mediatek/clk-mt6779.c
-+++ b/drivers/clk/mediatek/clk-mt6779.c
-@@ -1217,6 +1217,8 @@ static int clk_mt6779_apmixed_probe(struct platform_device *pdev)
- 	struct device_node *node = pdev->dev.of_node;
- 
- 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-+	if (!clk_data)
-+		return -ENOMEM;
- 
- 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
- 
+I'm also worried about the overhead of the userspace notifications.
+
+That sounds like similar to the thermal pressure? Wouldn't make sense to
+create a generic component where HFI, cpufreq cooling, LMh, etc ... are
+the backend?
+
+
+
+> +Implementation details for Linux
+> +--------------------------------
+> +
+> +The infrastructure to handle thermal event interrupts has two parts. In the
+> +Local Vector Table of a CPU's local APIC, there exists a register for the
+> +Thermal Monitor Register. This register controls how interrupts are delivered
+> +to a CPU when the thermal monitor generates and interrupt. Further details
+> +can be found in the Intel SDM Vol. 3 Section 10.5 [1]_.
+> +
+> +The thermal monitor may generate interrupts per CPU or per package. The HFI
+> +generates package-level interrupts. This monitor is configured and initialized
+> +via a set of machine-specific registers. Specifically, the HFI interrupt and
+> +status are controlled via designated bits in the IA32_PACKAGE_THERM_INTERRUPT
+> +and IA32_PACKAGE_THERM_STATUS registers, respectively. There exists one HFI
+> +table per package. Further details can be found in the Intel SDM Vol. 3
+> +Section 14.9 [1]_.
+> +
+> +The hardware issues an HFI interrupt after updating the HFI table and is ready
+> +for the operating system to consume it. CPUs receive such interrupt via the
+> +thermal entry in the Local APIC's Local Vector Table.
+> +
+> +When servicing such interrupt, the HFI driver parses the updated table and
+> +relays the update to userspace using the thermal notification framework. Given
+> +that there may be many HFI updates every second, the updates relayed to
+> +userspace are throttled at a rate of CONFIG_HZ jiffies.
+> +
+> +References
+> +----------
+> +
+> +.. [1] https://www.intel.com/sdm
+> 
+
+
 -- 
-2.25.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,97 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD32846296B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:04:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD8D462978
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234923AbhK3BHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 20:07:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S233141AbhK3BLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 20:11:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbhK3BH3 (ORCPT
+        with ESMTP id S230144AbhK3BLp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 20:07:29 -0500
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5306C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:04:10 -0800 (PST)
-Received: by mail-io1-xd2f.google.com with SMTP id z18so23951992iof.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:04:10 -0800 (PST)
+        Mon, 29 Nov 2021 20:11:45 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F802C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:08:26 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id x15so79434482edv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:08:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=v08//6x23RK24d1djPjWJ/lHAx7ybQ6yNemTD+/1QbI=;
-        b=KZXr6znYobJE5JXq+dT+7jJ5K08DqFjWSSz2dudSjeO/boDceD3mSIlzr+w8wevZ1B
-         wUrfAfNFV7Zt6zJIBdrmDlytryiPCPNslPISH+iBUSAShuF2X6oLJ4eskt4Hsn/O34D+
-         SKh3B0FmSmMWlPJe8/tNnAIYSb14dwNZ3RjWc=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uZu7UjvJplufOF9+7fh7DwgasTNaeysf/GdFPm1qyhk=;
+        b=iw4X3fGjUe5H07MsNmn9YgtKzZVgL109OYBQHlRqUvg6dxUG8j1Ryn+WS/5Wg9r8ho
+         USFW84+FRix+l3o0urzdIfseFnrHr7XZBh4ldwRHFvnVGs2wevPXnrCUBVlHWW0YqmFi
+         sL3PmsPm3goprIyy1pzfO51dmNmtoowA3os14p9CzueRCpziJN3OFZcMAkpRayz5VX/r
+         jZ7qagYaSY6hyL5pYQhtIcE2YBBrMG9MqxBv1Ot9io+e4EPcs/8gT/VYu1ZHtcpx93ak
+         sUeYdrE0JwINtEQnTKGYJDdZdYhUTqJ38Gl7IgKs3pToERTupH3qtgx9Op9q/R+7bDwW
+         gtJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=v08//6x23RK24d1djPjWJ/lHAx7ybQ6yNemTD+/1QbI=;
-        b=3hYFLmMBvrGJP0CxJF3gP4e/KeeJ6fvaShPwEre4GdKuCTdEh6BI8C7eplh8kvfjo5
-         DqtanFb9Kto+VAIXSrsPjxREysQv+Q5FxSM1iyN4b4xga8vts5Mt7lGw8RJ2wXSe5OZq
-         OA4sXHbRUu4jkiFSPRToVqayC54sIZWAc7AH87/D63YP/glwsuffESWlMJk92hHzmpJ/
-         B6RTm3DDe2LMguKax7HIz7TSDl+nsQP4H368ZRgjwyMn7p1OqpSqLQ2Sx6HwwUulA/CM
-         EW9aPKz7d34wiGjxouEKYMm9mbKj2kZaOxx6TYswh5+r98nwSv+589OJ3/y/ztt8Zdjc
-         fWMA==
-X-Gm-Message-State: AOAM533WGSMG/bqiyX0fTCXgT6LnX9aUOGXj5QoImDPV0X5DqgqlynIO
-        wFHKbZIHsjczUmJ25d2RbHlEOg==
-X-Google-Smtp-Source: ABdhPJyuGwkbb2z5oSzX9keZLzhTm8VTIhVkpzk+CbrNNj4TyWNcK6iwL3PAU3E2/tU9qNh3iuKhJw==
-X-Received: by 2002:a02:a708:: with SMTP id k8mr72088452jam.26.1638234249851;
-        Mon, 29 Nov 2021 17:04:09 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id f4sm9224328ilr.79.2021.11.29.17.04.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 17:04:09 -0800 (PST)
-Subject: Re: [PATCH 4.19 00/69] 4.19.219-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211129181703.670197996@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <7e7e4446-9e8b-a694-1d45-70634052a3c7@linuxfoundation.org>
-Date:   Mon, 29 Nov 2021 18:04:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uZu7UjvJplufOF9+7fh7DwgasTNaeysf/GdFPm1qyhk=;
+        b=BnBxDsGqVlrgSRsIQcZCz3LGVW5Cjb6BFBiDBmo1zgGYSra999IlUbfO4aYzu+seXg
+         S19cID8wLscUbFFcSj5GRwBsvACE5bq3Agq0p/A4g0beSH50UyHT2SCqb1wOKZb43PTt
+         UdftVa+0FaxveBwLaDk8D/9KffJL8RnsTo1iijFULP/wXNsw+0weaTq40Ayl/DB0gBMa
+         lY/VXbL45YwIA5qxEWWPmngZMrIPffQrtIiAB0B/uKhfPKYM0fKH9XiKwevjGGF+iN5A
+         GORIImtT7Et45z6op/kcF9yONBqoRaI3mIFi56Nbayp78yZ3CH62bMI6nnc2G4+TNcNn
+         AhZQ==
+X-Gm-Message-State: AOAM533OMfitjO/4tWBbvOGeyNuJxhuDkotUYQ9b7v9+YsBXb7zwFIkY
+        70/o1izxfOS9KfTajQaAToS0iRzAHfmDX83pHHY=
+X-Google-Smtp-Source: ABdhPJy3VpD7CpiS0ih0miEanV7BErsqoi8QIsiJJa8kqY2mH4AWPMQAt9ZZd/bRdIprlOIYOSNo+wWpCKecrBeQXVs=
+X-Received: by 2002:aa7:c353:: with SMTP id j19mr79602672edr.227.1638234505147;
+ Mon, 29 Nov 2021 17:08:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20211110095856.469360-1-bobo.shaobowang@huawei.com>
+ <YaELI8+QnBeXXIVm@kroah.com> <20211126183954.scu2wfirrzlgqxxi@bogus> <YaH1ZOr36chJ4DdB@kroah.com>
+In-Reply-To: <YaH1ZOr36chJ4DdB@kroah.com>
+From:   Barry Song <21cnbao@gmail.com>
+Date:   Tue, 30 Nov 2021 14:08:14 +1300
+Message-ID: <CAGsJ_4yX2eiJ3hu8rNXZ5b7dkFm3bw8yTQmRNC26p9UPKMrLcw@mail.gmail.com>
+Subject: Re: [PATCH] arch_topology: Fix missing clear cluster_cpumask in remove_cpu_topology()
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Wang ShaoBo <bobo.shaobowang@huawei.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, cj.chengjian@huawei.com,
+        huawei.libin@huawei.com, weiyongjun1@huawei.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/21 11:17 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.219 release.
-> There are 69 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.219-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Tue, Nov 30, 2021 at 8:21 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Nov 26, 2021 at 06:39:54PM +0000, Sudeep Holla wrote:
+> > On Fri, Nov 26, 2021 at 05:28:19PM +0100, Greg KH wrote:
+> > > On Wed, Nov 10, 2021 at 05:58:56PM +0800, Wang ShaoBo wrote:
+> > > > When testing cpu online and offline, warning happened like this:
+> > > >
+> > > > [  146.746743] WARNING: CPU: 92 PID: 974 at kernel/sched/topology.c:2215 build_sched_domains+0x81c/0x11b0
+> > > > [  146.749988] CPU: 92 PID: 974 Comm: kworker/92:2 Not tainted 5.15.0 #9
+> > > > [  146.750402] Hardware name: Huawei TaiShan 2280 V2/BC82AMDDA, BIOS 1.79 08/21/2021
+> > > > [  146.751213] Workqueue: events cpuset_hotplug_workfn
+> > > > [  146.751629] pstate: 00400009 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > > [  146.752048] pc : build_sched_domains+0x81c/0x11b0
+> > > > [  146.752461] lr : build_sched_domains+0x414/0x11b0
+> > > > [  146.752860] sp : ffff800040a83a80
+> > > > [  146.753247] x29: ffff800040a83a80 x28: ffff20801f13a980 x27: ffff20800448ae00
+> > > > [  146.753644] x26: ffff800012a858e8 x25: ffff800012ea48c0 x24: 0000000000000000
+> > > > [  146.754039] x23: ffff800010ab7d60 x22: ffff800012f03758 x21: 000000000000005f
+> > > > [  146.754427] x20: 000000000000005c x19: ffff004080012840 x18: ffffffffffffffff
+> > > > [  146.754814] x17: 3661613030303230 x16: 30303078303a3239 x15: ffff800011f92b48
+> > > > [  146.755197] x14: ffff20be3f95cef6 x13: 2e6e69616d6f642d x12: 6465686373204c4c
+> > > > [  146.755578] x11: ffff20bf7fc83a00 x10: 0000000000000040 x9 : 0000000000000000
+> > > > [  146.755957] x8 : 0000000000000002 x7 : ffffffffe0000000 x6 : 0000000000000002
+> > > > [  146.756334] x5 : 0000000090000000 x4 : 00000000f0000000 x3 : 0000000000000001
+> > > > [  146.756705] x2 : 0000000000000080 x1 : ffff800012f03860 x0 : 0000000000000001
+> > > > [  146.757070] Call trace:
+> > > > [  146.757421]  build_sched_domains+0x81c/0x11b0
+> > > > [  146.757771]  partition_sched_domains_locked+0x57c/0x978
+> > > > [  146.758118]  rebuild_sched_domains_locked+0x44c/0x7f0
+> > > > [  146.758460]  rebuild_sched_domains+0x2c/0x48
+> > > > [  146.758791]  cpuset_hotplug_workfn+0x3fc/0x888
+> > > > [  146.759114]  process_one_work+0x1f4/0x480
+> > > > [  146.759429]  worker_thread+0x48/0x460
+> > > > [  146.759734]  kthread+0x158/0x168
+> > > > [  146.760030]  ret_from_fork+0x10/0x20
+> > > > [  146.760318] ---[ end trace 82c44aad6900e81a ]---
+> > > >
+> > > > For some architectures like risc-v and arm64 which use common code
+> > > > clear_cpu_topology() in shutting down CPUx, When CONFIG_SCHED_CLUSTER
+> > > > is set, cluster_sibling in cpu_topology of each sibling adjacent
+> > > > to CPUx is missed clearing, this causes checking failed in
+> > > > topology_span_sane() and rebuilding topology failure at end when CPU online.
+> > > >
+> > > > Different sibling's cluster_sibling in cpu_topology[] when CPU92 offline
+> > > > (CPU 92, 93, 94, 95 are in one cluster):
+> > > >
+> > > > Before revision:
+> > > > CPU                 [92]      [93]      [94]      [95]
+> > > > cluster_sibling     [92]     [92-95]   [92-95]   [92-95]
+> > > >
+> > > > After revision:
+> > > > CPU                 [92]      [93]      [94]      [95]
+> > > > cluster_sibling     [92]     [93-95]   [93-95]   [93-95]
+> > > >
+> > > > Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+> > > > ---
+> > > >  drivers/base/arch_topology.c | 2 ++
+> > > >  1 file changed, 2 insertions(+)
+> > >
+> > > What commit id does this fix?
+> > >
+> >
+> > v2[1] has the information and all the tags IIUC.
+>
+> Odd, I don't see that in my queue :(
 
-Compiled and booted on my test system. No dmesg regressions.
+Greg, this commit:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4cc4cc28ec4154c4f1395648ab67ac9fd3e71fdc
+which is shaobo's v1 patch lacking fixes tag.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
-
+Thanks
+Barry

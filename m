@@ -2,67 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B57FE463D16
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:43:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D73AB463D12
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245068AbhK3Rqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:46:33 -0500
-Received: from mail-oi1-f172.google.com ([209.85.167.172]:40581 "EHLO
-        mail-oi1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245054AbhK3Rq1 (ORCPT
+        id S245061AbhK3Rq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:46:28 -0500
+Received: from mail-oi1-f175.google.com ([209.85.167.175]:41704 "EHLO
+        mail-oi1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238847AbhK3RqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:46:27 -0500
-Received: by mail-oi1-f172.google.com with SMTP id bk14so42754535oib.7;
-        Tue, 30 Nov 2021 09:43:08 -0800 (PST)
+        Tue, 30 Nov 2021 12:46:25 -0500
+Received: by mail-oi1-f175.google.com with SMTP id u74so42743562oie.8;
+        Tue, 30 Nov 2021 09:43:06 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=KOr9fOym22LN3Vmi79Rc9gKhOAdZkrFN5TntEcaqynU=;
-        b=m9RZopGugw3bMARD1esCkCes++1uJ6uLhN65dATc8kvnLMjX+f+L9HvI+eGWDvFiEx
-         jTiWVEAsYpSTfSfsHxxY5ObQAmRCqopllHRaw2q6rzxAxbAoDxVMWKMkhBjh7FwJvXMR
-         OynCL5EMfL2sSK261gV65ZlXfHdH6XSX5LgS4lU/YSNplSE8NCBXJvPMpqt7E/diuCkh
-         yUmfMvbOKXTfDNR3pn/G5HHu4/wx06d9kJ/dV4bT1e/Sfnjy1gDkPHv+u43uKyoW0W9d
-         cVS5qFslUTl0x+ghzevJy+IsgdblsqLQm8DhsDkvLTkieT4YdoL0e/rQRC7B2gn07SSK
-         CSYw==
-X-Gm-Message-State: AOAM531Mh4e+NEiSk2kgJzFyFUsAVI61wRXrTx7SnV5Af2OGvfYlUXGt
-        sXu3/Uz6k066/6K5IwN+dPlmxbiqEg==
-X-Google-Smtp-Source: ABdhPJyoSeMBzjlATY+tg+5Yr2+nzO4zZxmIP4ZpLhfbvN/2xFF+jJXqBStE3svx6EQo6MQVR2lOCw==
-X-Received: by 2002:aca:5b87:: with SMTP id p129mr402512oib.30.1638294187809;
-        Tue, 30 Nov 2021 09:43:07 -0800 (PST)
+        bh=ybArtp5NAo1h9pHzQHYt4+Qs6w6iIvokhHnIINTzz0I=;
+        b=qftcKr4sOsBIREMtVai33g8u791raNbou+On9oUBMNdjgb19mw06ybGKdw8ACaqm+T
+         sdvFJ+Tc0bcU4cdMgPyGc7ZQjQ5wU0r2UGkkaKFt/4eo67cLCYJHz7akQq4NfzoAHXOo
+         lGame3nv6g49nxTuOz3peByCEgcK6GtFuOi/IMsoSbu+V87kQK35k68TSWpzqb4eGDdm
+         REKGlhfilQMygH0bR5dgz/DCeR1aKVUItplASTrq4yGZDmacq163qN9cIFp6tv479djs
+         npceBK6Ks9sta4jmdVZ+SnrXU5vsR3Ohzlpny3BJ4+soxDGU2cPm+E0e+xcG2IcKdXGa
+         7LMw==
+X-Gm-Message-State: AOAM533AaRDR2LJ4Om1NeR3MROi/pFId4cvt50wrb77Ts/uFlGZv/P9v
+        gPaOrTcYxHyPanj/IqW1Qg==
+X-Google-Smtp-Source: ABdhPJxpfwZHaJJsQJrxxxdGKQhKNwmK7qoAn5Ox2tfeIPsdhQ8/yFLYB/VG+xooU2jW+OEAPMZFqg==
+X-Received: by 2002:a05:6808:144f:: with SMTP id x15mr329339oiv.157.1638294185979;
+        Tue, 30 Nov 2021 09:43:05 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id 111sm3214603otu.55.2021.11.30.09.43.06
+        by smtp.gmail.com with ESMTPSA id v19sm3208026ott.13.2021.11.30.09.43.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 09:43:06 -0800 (PST)
-Received: (nullmailer pid 2713646 invoked by uid 1000);
+        Tue, 30 Nov 2021 09:43:05 -0800 (PST)
+Received: (nullmailer pid 2713643 invoked by uid 1000);
         Tue, 30 Nov 2021 17:43:04 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>, devicetree@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-samsung-soc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Chanho Park <chanho61.park@samsung.com>,
+        linux-serial@vger.kernel.org,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        David Virag <virag.david003@gmail.com>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
         Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org
-In-Reply-To: <20211130121847.11112-2-a-govindraju@ti.com>
-References: <20211130121847.11112-1-a-govindraju@ti.com> <20211130121847.11112-2-a-govindraju@ti.com>
-Subject: Re: [PATCH 1/2] dt-bindings: mux: Document mux-states property
+In-Reply-To: <20211130111325.29328-2-semen.protsenko@linaro.org>
+References: <20211130111325.29328-1-semen.protsenko@linaro.org> <20211130111325.29328-2-semen.protsenko@linaro.org>
+Subject: Re: [PATCH v2 RESEND 1/5] dt-bindings: soc: samsung: Add Exynos USI bindings
 Date:   Tue, 30 Nov 2021 11:43:04 -0600
-Message-Id: <1638294184.190493.2713645.nullmailer@robh.at.kernel.org>
+Message-Id: <1638294184.179325.2713642.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 17:48:46 +0530, Aswath Govindraju wrote:
-> In some cases, it is required to provide the state to which the mux
-> controller has be set to, from the consumer device tree node. Document the
-> property mux-states that can be used for adding this support.
+On Tue, 30 Nov 2021 13:13:21 +0200, Sam Protsenko wrote:
+> Add constants for choosing USIv2 configuration mode in device tree.
+> Those are further used in USI driver to figure out which value to write
+> into SW_CONF register. Also document USIv2 IP-core bindings.
 > 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
->  .../devicetree/bindings/mux/gpio-mux.yaml     | 11 ++++++--
->  .../devicetree/bindings/mux/mux-consumer.yaml | 14 ++++++++++
->  .../bindings/mux/mux-controller.yaml          | 26 ++++++++++++++++++-
->  3 files changed, 48 insertions(+), 3 deletions(-)
+> Changes in v2:
+>   - Combined dt-bindings doc and dt-bindings header patches
+>   - Added i2c node to example in bindings doc
+>   - Added mentioning of shared internal circuits
+>   - Added USI_V2_NONE value to bindings header
+> 
+>  .../bindings/soc/samsung/exynos-usi.yaml      | 135 ++++++++++++++++++
+>  include/dt-bindings/soc/samsung,exynos-usi.h  |  17 +++
+>  2 files changed, 152 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml
+>  create mode 100644 include/dt-bindings/soc/samsung,exynos-usi.h
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -71,12 +84,12 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mux/mux-controller.example.dt.yaml: can-phy4: 'mux-states' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/phy/ti,tcan104x-can.yaml
+Documentation/devicetree/bindings/soc/samsung/exynos-usi.example.dts:35.39-42.15: Warning (unique_unit_address): /example-0/usi@138200c0/serial@13820000: duplicate unit-address (also used in node /example-0/usi@138200c0/i2c@13820000)
+Documentation/devicetree/bindings/soc/samsung/exynos-usi.example.dt.yaml:0:0: /example-0/usi@138200c0/i2c@13820000: failed to match any schema with compatible: ['samsung,exynosautov9-hsi2c']
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1561624
+See https://patchwork.ozlabs.org/patch/1561571
 
 This check can fail if there are any dependencies. The base for a patch
 series is generally the most recent rc1.

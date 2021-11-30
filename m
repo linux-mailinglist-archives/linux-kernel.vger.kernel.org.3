@@ -2,155 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 851B2463F9D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D01DF463FA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240513AbhK3VIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:08:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235624AbhK3VH7 (ORCPT
+        id S1343875AbhK3VJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:09:36 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33926 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343841AbhK3VJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:07:59 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 087FEC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:04:40 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id w1so92555042edc.6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:04:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BWwYMH2QXD8RdUA4ARWeTtAI5cdUZzTQzP59cE/DcyM=;
-        b=DFwE/Jt9m0dyRM4buFbduTu7WcsnUL2piaBhy02HNohEZGbDBC+POJ03HMyDT2tkCx
-         8ptui4G9N8pW0pfA8rYZW89uSRLFGQlGtNpwY4PcFqIsc1bYEGvzBuaJGwD/oOroChcL
-         b/b7AcJHBd8x25FXWbEEdbjpG0LdPPr8ipHeXBwjtd/5UdpAYB/Mmt9rJkXvN0YiHjDF
-         WVIo69R0PTLDkL+y9XU2/rf3KRdmZz5B0sH7lEg7M7hWOuL7QLZPG/kY+prUWII6ZQoe
-         SYp2F6zfeI2jEWCIeAQJK8kIfDiRvHnmKkULoj4oKc8nClAWpdN9eIQT1uMV7A9C3QwK
-         uuEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BWwYMH2QXD8RdUA4ARWeTtAI5cdUZzTQzP59cE/DcyM=;
-        b=tipu1BFLCplGeeud4fEhuOePr5aj0lV0OiwM07gYQKdVafO9vHb5g78PM1Rw+UIrwe
-         VGSdxVIC2mU8Tbz9cG/83LFaXdOUcQ0LxyL0QdDHiGhzcOpdq8DYJyCK7OnP++N9H9VF
-         1IfY3BH/T6tVkBdqGoYZMNBm0CKqppEHkNxx7kHiY5F94/y2eiOmLxZ3kavpSyO0gyuD
-         xtmARyo5PrXrTs4S3Pwn41hi3HknvlnxI0NMFSX99TxZkP1JjdsptDyvIMfmSxhwRxRb
-         3uAwrK4aKhEv7WWFMSAD6FaWuORfi0r0XTlQwyVEDKUHPZuEtr1+c/sIktFP9z5SKDNI
-         jUXg==
-X-Gm-Message-State: AOAM533qjM/f4rInr8aryhKEvRkxKtAx25pHg0szUw3eQHE61KzYDT84
-        U1rKS/2QXMiJRis79g9jlVAfUoCjoFqW4VAMs923lA==
-X-Google-Smtp-Source: ABdhPJwsck9dzegaqyD1ZCTbKPCXQRGaCD3hmU681+zXZ0dURe9qvueKcDsKME504ulmNnxrqM8XHAxmOXWEHL2UxJo=
-X-Received: by 2002:a17:907:1deb:: with SMTP id og43mr1750653ejc.189.1638306278433;
- Tue, 30 Nov 2021 13:04:38 -0800 (PST)
+        Tue, 30 Nov 2021 16:09:32 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638306371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ovfGlfFYOBiNEdFFUCvznobAjXbygpnoFNwMXB/Sg+Q=;
+        b=FUNTLK9AaS5vAjpi2321RkkF6EgxD0n8xA/n/jIZHBJdm8m3ApYj/1KjnVnEoeR78/j878
+        UqXeivQn/ECB0dFKOf669D+BsbbMhzbX+gQzB/oGJodwnt05WDlgxZIo9tua7dbrkBT4L8
+        vaQVKc9pZmJ5/POR3NvDi3Cn1G9jaCs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-503-ojpTxzvvOhGXgffSsKK03g-1; Tue, 30 Nov 2021 16:06:08 -0500
+X-MC-Unique: ojpTxzvvOhGXgffSsKK03g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 712C91853026;
+        Tue, 30 Nov 2021 21:06:05 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BABF910013D7;
+        Tue, 30 Nov 2021 21:05:49 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <YaZOCk9zxApPattb@archlinux-ax161>
+References: <YaZOCk9zxApPattb@archlinux-ax161> <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk> <163819647945.215744.17827962047487125939.stgit@warthog.procyon.org.uk>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
+        Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <anna.schumaker@netapp.com>,
+        Steve French <sfrench@samba.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Omar Sandoval <osandov@osandov.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
+        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 51/64] cachefiles: Implement the I/O routines
 MIME-Version: 1.0
-References: <20211130154127.12272-1-brgl@bgdev.pl> <20211130154127.12272-3-brgl@bgdev.pl>
- <YaZNyMV5gX5cZpar@smile.fi.intel.com> <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
- <YaaQp2rq7N71dm1l@smile.fi.intel.com>
-In-Reply-To: <YaaQp2rq7N71dm1l@smile.fi.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Tue, 30 Nov 2021 22:04:27 +0100
-Message-ID: <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
-Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <503521.1638306348.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 30 Nov 2021 21:05:48 +0000
+Message-ID: <503522.1638306348@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:00 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Nov 30, 2021 at 09:25:35PM +0100, Bartosz Golaszewski wrote:
-> > On Tue, Nov 30, 2021 at 5:15 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > On Tue, Nov 30, 2021 at 04:41:23PM +0100, Bartosz Golaszewski wrote:
-> > > > Software nodes allow us to represent hierarchies for device components
-> > > > that don't have their struct device representation yet - for instance:
-> > > > banks of GPIOs under a common GPIO expander. The core gpiolib core
-> > >
-> > > core .. core ?!
-> > >
-> > > > however doesn't offer any way of passing this information from the
-> > > > drivers.
-> > > >
-> > > > This extends struct gpio_chip with a pointer to fwnode that can be set
-> > > > by the driver and used to pass device properties for child nodes.
-> > > >
-> > > > This is similar to how we handle device-tree sub-nodes with
-> > > > CONFIG_OF_GPIO enabled.
-> > >
-> > > Not sure I understand the proposal. Can you provide couple of (simplest)
-> > > examples?
-> > >
-> > > And also it sounds like reinventing a wheel. What problem do you have that you
-> > > need to solve this way?
-> > >
-> > > ...
-> > >
-> > > > +#if IS_ENABLED(CONFIG_OF_GPIO)
-> > > > +     if (gc->of_node && gc->fwnode) {
-> > > > +             pr_err("%s: tried to set both the of_node and fwnode in gpio_chip\n",
-> > > > +                    __func__);
-> > > > +             return -EINVAL;
-> > > > +     }
-> > > > +#endif /* CONFIG_OF_GPIO */
-> > >
-> > > I don't like this. It seems like a hack right now.
-> > >
-> > > Is it possible to convert all GPIO controller drivers to provide an fwnode
-> > > rather than doing this? (I believe in most of the drivers we can drop
-> > > completely the of_node assignment).
-> > >
-> >
-> > Yes, it's definitely a good idea but I would be careful with just
-> > dropping the of_node assignments as callbacks may depend on them
-> > later.
->
-> GPIO library does it for us among these lines:
->
->         struct fwnode_handle *fwnode = gc->parent ? dev_fwnode(gc->parent) : NULL;
->
->         of_gpio_dev_init(gc, gdev); <<< HERE!
->         acpi_gpio_dev_init(gc, gdev);
->
->         /*
->          * Assign fwnode depending on the result of the previous calls,
->          * if none of them succeed, assign it to the parent's one.
->          */
->         gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
->
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-Except that it doesn't and I noticed that when working on the
-subsequent patch. The child gpiochipX devices all had the parent's
-fwnode assigned as their primary fwnode and no secondary fwnode.
+> This patch as commit 0443b01eccbb ("cachefiles: Implement the I/O
+> routines") in -next causes the following clang warning/error:
+> =
 
-Note that this driver doesn't use neither OF nor ACPI in which case
-gdev->dev has no fwnode and the parent's one is used. This patch
-addresses it. If you have a better idea, let me know.
+> fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized wh=
+enever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>         if (pos =3D=3D 0)
+>             ^~~~~~~~
+> fs/cachefiles/io.c:492:6: note: uninitialized use occurs here
+>         if (ret < 0) {
+>             ^~~
+> fs/cachefiles/io.c:489:2: note: remove the 'if' if its condition is alwa=
+ys true
+>         if (pos =3D=3D 0)
+>         ^~~~~~~~~~~~~
+> fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silence=
+ this warning
+>         int ret;
+>                ^
+>                 =3D 0
+> 1 error generated.
 
-Bart
+	pos =3D cachefiles_inject_remove_error();
+	if (pos =3D=3D 0)
+		ret =3D vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
 
->
-> > Also it's not just about the gpio_chip of_node assignment -
-> > drivers also use a bunch of OF APIs all around the place. I would
-> > prefer that it be done one by one and every modified driver be tested.
->
-> That's why we want to eliminate dev->fwnode explicit dereference as a first
-> step (see dev_fwnode() / device_set_node() APIs).
->
-> --
-> With Best Regards,
-> Andy Shevchenko
->
->
+That should be:
+
+	ret =3D cachefiles_inject_remove_error();
+	if (ret =3D=3D 0)
+		ret =3D vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
+
+David
+

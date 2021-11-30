@@ -2,40 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A70A463681
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 411C5463686
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237533AbhK3OWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:22:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:39380 "EHLO foss.arm.com"
+        id S237536AbhK3OY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:24:28 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:59455 "EHLO pegase2.c-s.fr"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233520AbhK3OWR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:22:17 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6A49C1063;
-        Tue, 30 Nov 2021 06:18:57 -0800 (PST)
-Received: from [10.57.35.239] (unknown [10.57.35.239])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 43AED3F5A1;
-        Tue, 30 Nov 2021 06:18:56 -0800 (PST)
-Subject: Re: [FYI][PATCH 1/1] tools build: Remove needless libpython-version
- feature check that breaks test-all fast path
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        =?UTF-8?Q?Jaroslav_=c5=a0karvada?= <jskarvad@redhat.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-References: <YaYmeeC6CS2b8OSz@kernel.org>
-From:   James Clark <james.clark@arm.com>
-Message-ID: <4df4b76a-fbb5-89d8-fbef-fa844d8c1d3b@arm.com>
-Date:   Tue, 30 Nov 2021 14:18:54 +0000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S237388AbhK3OY1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 09:24:27 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J3PXL58l3z9sSC;
+        Tue, 30 Nov 2021 15:21:06 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id UFUe9ZVdgRmd; Tue, 30 Nov 2021 15:21:06 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3PXL483Qz9sS8;
+        Tue, 30 Nov 2021 15:21:06 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7DCC08B779;
+        Tue, 30 Nov 2021 15:21:06 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id iqpiEzFHOVom; Tue, 30 Nov 2021 15:21:06 +0100 (CET)
+Received: from [192.168.232.93] (unknown [192.168.232.93])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 12D7C8B763;
+        Tue, 30 Nov 2021 15:21:06 +0100 (CET)
+Message-ID: <d515418b-9300-df6b-c6a0-d90e16380e9a@csgroup.eu>
+Date:   Tue, 30 Nov 2021 15:21:05 +0100
 MIME-Version: 1.0
-In-Reply-To: <YaYmeeC6CS2b8OSz@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH] powerpc/modules: Don't WARN on first module allocation
+ tentative
+Content-Language: fr-FR
+To:     "Erhard F." <erhard_f@mailbox.org>
+Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <93c9b84d6ec76aaf7b4f03468e22433a6d308674.1638267035.git.christophe.leroy@csgroup.eu>
+ <20211130150651.4aefba87@yea>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20211130150651.4aefba87@yea>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
@@ -43,113 +56,142 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 30/11/2021 13:26, Arnaldo Carvalho de Melo wrote:
-> Since 66dfdff03d196e51 ("perf tools: Add Python 3 support") we don't use
-> the tools/build/feature/test-libpython-version.c version in any Makefile
-> feature check:
+Le 30/11/2021 à 15:06, Erhard F. a écrit :
+> On Tue, 30 Nov 2021 11:10:43 +0100
+> Christophe Leroy <christophe.leroy@csgroup.eu> wrote:
 > 
->   $ find tools/ -type f | xargs grep feature-libpython-version
->   $
+>> module_alloc() first tries to allocate module text within
+>> 24 bits direct jump from kernel text, and tries a wider
+>> allocation if first one fails.
+>>
+>> When first allocation fails the following is observed in kernel logs:
+>>
+>> vmap allocation for size 2400256 failed: use vmalloc=<size> to increase size
+>> systemd-udevd: vmalloc error: size 2395133, vm_struct allocation failed, mode:0xcc0(GFP_KERNEL), nodemask=(null)
+>> CPU: 0 PID: 127 Comm: systemd-udevd Tainted: G        W         5.15.5-gentoo-PowerMacG4 #9
+>> Call Trace:
+>> [e2a53a50] [c0ba0048] dump_stack_lvl+0x80/0xb0 (unreliable)
+>> [e2a53a70] [c0540128] warn_alloc+0x11c/0x2b4
+>> [e2a53b50] [c0531be8] __vmalloc_node_range+0xd8/0x64c
+>> [e2a53c10] [c00338c0] module_alloc+0xa0/0xac
+>> [e2a53c40] [c027a368] load_module+0x2ae0/0x8148
+>> [e2a53e30] [c027fc78] sys_finit_module+0xfc/0x130
+>> [e2a53f30] [c0035098] ret_from_syscall+0x0/0x28
+>> --- interrupt: c00 at 0x25df10
+>> NIP:  0025df10 LR: 00416180 CTR: 00000000
+>> REGS: e2a53f40 TRAP: 0c00   Tainted: G        W          (5.15.5-gentoo-PowerMacG4)
+>> MSR:  0000d032 <EE,PR,ME,IR,DR,RI>  CR: 2822242c  XER: 20000000
+>>
+>> GPR00: 00000161 afa8f060 a73a6160 00000011 0041dfa5 00000000 00000011 00000000
+>> GPR08: 00000000 20000000 0000007a afa8efe0 002113f8 0072f924 00000000 00000000
+>> GPR16: 00000005 afa8f1fc afa8f1e8 00000000 22222422 00000000 009603b0 22222422
+>> GPR24: 00000000 00000000 0041dfa5 008a5fc0 00020000 00000000 00444cc4 009958f0
+>> NIP [0025df10] 0x25df10
+>> LR [00416180] 0x416180
+>> --- interrupt: c00
+>> Mem-Info:
+>> active_anon:36 inactive_anon:4417 isolated_anon:0
+>>   active_file:3496 inactive_file:10535 isolated_file:0
+>>   unevictable:0 dirty:59 writeback:0
+>>   slab_reclaimable:3672 slab_unreclaimable:20540
+>>   mapped:5700 shmem:166 pagetables:185 bounce:0
+>>   kernel_misc_reclaimable:0
+>>   free:438282 free_pcp:1121 free_cma:0
+>> Node 0 active_anon:144kB inactive_anon:17668kB active_file:13984kB inactive_file:42140kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:22800kB dirty:404kB writeback:0kB shmem:664kB writeback_tmp:0kB kernel_stack:1352kB pagetables:740kB all_unreclaimable? no
+>> DMA free:267900kB min:2488kB low:3108kB high:3728kB reserved_highatomic:4096KB active_anon:0kB inactive_anon:0kB active_file:4016kB inactive_file:4224kB unevictable:0kB writepending:76kB present:524288kB managed:389432kB mlocked:0kB bounce:0kB free_pcp:2480kB local_pcp:1176kB free_cma:0kB
+>> lowmem_reserve[]: 0 0 1536 1536
+>> HighMem free:1485036kB min:512kB low:3032kB high:5552kB reserved_highatomic:0KB active_anon:136kB inactive_anon:17612kB active_file:9976kB inactive_file:37912kB unevictable:0kB writepending:364kB present:1572864kB managed:1572864kB mlocked:0kB bounce:0kB free_pcp:1776kB local_pcp:404kB free_cma:0kB
+>> BTRFS: selftest: sectorsize: 4096  nodesize: 8192
+>> lowmem_reserve[]: 0 0 0 0
+>> BTRFS: selftest: running btrfs free space cache tests
+>> DMA: 283*4kB (UMH) 282*8kB (UMH) 242*16kB (UMEH) 422*32kB (UMH) 187*64kB (UMH) 139*128kB (UME) 118*256kB (UM) 87*512kB (UME) 61*1024kB (UME) 27*2048kB (U) 6*4096kB (U) = 267612kB
+>> BTRFS: selftest: running extent only tests
+>> HighMem: 1*4kB (M) 1*8kB (M) 92*16kB (M) 43*32kB (UM) 21*64kB (M) 7*128kB (M) 3*256kB (UM) 1*512kB (U) 2*1024kB (UM) 1*2048kB (U) 360*4096kB (UM) = 1485036kB
+>> BTRFS: selftest: running bitmap only tests
+>> 14218 total pagecache pages
+>> 0 pages in swap cache
+>> Swap cache stats: add 0, delete 0, find 0/0
+>> Free swap  = 8388604kB
+>> Total swap = 8388604kB
+>> 524288 pages RAM
+>> 393216 pages HighMem/MovableOnly
+>> 33714 pages reserved
+>>
+>> Add __GFP_NOWARN flag to first allocation so that no warning appears
+>> when it fails.
+>>
+>> Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+>> Fixes: 2ec13df16704 ("powerpc/modules: Load modules closer to kernel text")
+>> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+>> ---
+>>   arch/powerpc/kernel/module.c | 11 ++++++-----
+>>   1 file changed, 6 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/arch/powerpc/kernel/module.c b/arch/powerpc/kernel/module.c
+>> index ed04a3ba66fe..40a583e9d3c7 100644
+>> --- a/arch/powerpc/kernel/module.c
+>> +++ b/arch/powerpc/kernel/module.c
+>> @@ -90,16 +90,17 @@ int module_finalize(const Elf_Ehdr *hdr,
+>>   }
+>>   
+>>   static __always_inline void *
+>> -__module_alloc(unsigned long size, unsigned long start, unsigned long end)
+>> +__module_alloc(unsigned long size, unsigned long start, unsigned long end, bool nowarn)
+>>   {
+>>   	pgprot_t prot = strict_module_rwx_enabled() ? PAGE_KERNEL : PAGE_KERNEL_EXEC;
+>> +	gfp_t gfp = GFP_KERNEL | (nowarn ? __GFP_NOWARN : 0);
+>>   
+>>   	/*
+>>   	 * Don't do huge page allocations for modules yet until more testing
+>>   	 * is done. STRICT_MODULE_RWX may require extra work to support this
+>>   	 * too.
+>>   	 */
+>> -	return __vmalloc_node_range(size, 1, start, end, GFP_KERNEL, prot,
+>> +	return __vmalloc_node_range(size, 1, start, end, gfp, prot,
+>>   				    VM_FLUSH_RESET_PERMS | VM_NO_HUGE_VMAP,
+>>   				    NUMA_NO_NODE, __builtin_return_address(0));
+>>   }
+>> @@ -114,13 +115,13 @@ void *module_alloc(unsigned long size)
+>>   
+>>   	/* First try within 32M limit from _etext to avoid branch trampolines */
+>>   	if (MODULES_VADDR < PAGE_OFFSET && MODULES_END > limit)
+>> -		ptr = __module_alloc(size, limit, MODULES_END);
+>> +		ptr = __module_alloc(size, limit, MODULES_END, true);
+>>   
+>>   	if (!ptr)
+>> -		ptr = __module_alloc(size, MODULES_VADDR, MODULES_END);
+>> +		ptr = __module_alloc(size, MODULES_VADDR, MODULES_END, false);
+>>   
+>>   	return ptr;
+>>   #else
+>> -	return __module_alloc(size, VMALLOC_START, VMALLOC_END);
+>> +	return __module_alloc(size, VMALLOC_START, VMALLOC_END, false);
+>>   #endif
+>>   }
+>> -- 
+>> 2.33.1
 > 
-> The only place where this was used was removed in 66dfdff03d196e51:
+> The patch applies on 5.15.5 but I still get this vmalloc error. Looks a bit different though:
 > 
->   -        ifneq ($(feature-libpython-version), 1)
->   -          $(warning Python 3 is not yet supported; please set)
->   -          $(warning PYTHON and/or PYTHON_CONFIG appropriately.)
->   -          $(warning If you also have Python 2 installed, then)
->   -          $(warning try something like:)
->   -          $(warning $(and ,))
->   -          $(warning $(and ,)  make PYTHON=python2)
->   -          $(warning $(and ,))
->   -          $(warning Otherwise, disable Python support entirely:)
->   -          $(warning $(and ,))
->   -          $(warning $(and ,)  make NO_LIBPYTHON=1)
->   -          $(warning $(and ,))
->   -          $(error   $(and ,))
->   -        else
->   -          LDFLAGS += $(PYTHON_EMBED_LDFLAGS)
->   -          EXTLIBS += $(PYTHON_EMBED_LIBADD)
->   -          LANG_BINDINGS += $(obj-perf)python/perf.so
->   -          $(call detected,CONFIG_LIBPYTHON)
->   -        endif
-> 
-> And nowadays we either build with PYTHON=python3 or just install the
-> python3 devel packages and perf will build against it.
+> [..]
+> Running code patching self-tests ...
+> vmap allocation for size 33562624 failed: use vmalloc=<size> to increase size
+> swapper/0: vmalloc error: size 33558528, vm_struct allocation failed, mode:0xcc0(GFP_KERNEL), nodemask=(null)
+> CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        W         5.15.5-PowerMacG4+ #2
+> Call Trace:
+> [f1033ba0] [c0b9fff0] dump_stack_lvl+0x80/0xb0 (unreliable)
+> [f1033bc0] [c05400d0] warn_alloc+0x11c/0x2b4
+> [f1033ca0] [c0531b90] __vmalloc_node_range+0xd8/0x64c
+> [f1033d60] [c05319a8] __vmalloc_node+0xec/0xf4
+> [f1033da0] [c1c0f998] test_code_patching+0x72c/0xd50
 
-I just tried this and found a combo that doesn't work and fails with this
-error (unrelated to this change): 
+This one is something different.
 
-  Makefile.config:812: No 'python-config' tool was found: disables Python support - please install python-devel/python-dev
+The one I fixed with this patch is the one that was almost at the end of 
+your dmesg, it was related to the loading of some module.
 
-The combo is when the python2 runtime is installed, but the python3 devtools
-are installed. I didn't realise this when I added the python 3 autodetection,
-I only fixed the issue for a system that was solely python3.
+The one that remains comes from test_code_patching() and is a real 
+failure that is due to LOWMEM being to high. This one should disappear 
+when you reduce LOWMEM.
 
-Do you think I should fix this? Currently the workaround is PYTHON=python3,
-maybe it's enough of an edge case that it's ok?
-
-
-> 
-> But the leftover feature-libpython-version check made the fast path
-> feature detection to break in all cases except when python2 devel files
-> were installed:
-> 
->   $ rpm -qa | grep python.*devel
->   python3-devel-3.9.7-1.fc34.x86_64
->   $ rm -rf /tmp/build/perf ; mkdir -p /tmp/build/perf ;
->   $ make -C tools/perf O=/tmp/build/perf install-bin
->   make: Entering directory '/var/home/acme/git/perf/tools/perf'
->     BUILD:   Doing 'make -j32' parallel build
->     HOSTCC  /tmp/build/perf/fixdep.o
->   <SNIP>
->   $ cat /tmp/build/perf/feature/test-all.make.output
->   In file included from test-all.c:18:
->   test-libpython-version.c:5:10: error: #error
->       5 |         #error
->         |          ^~~~~
->   $ ldd ~/bin/perf | grep python
-> 	libpython3.9.so.1.0 => /lib64/libpython3.9.so.1.0 (0x00007fda6dbcf000)
->   $
-> 
-> As python3 is the norm these days, fix this by just removing the unused
-> feature-libpython-version feature check, making the test-all fast path
-> to work with the common case.
-> 
-> With this:
-> 
->   $ rm -rf /tmp/build/perf ; mkdir -p /tmp/build/perf ;
->   $ make -C tools/perf O=/tmp/build/perf install-bin |& head
->   make: Entering directory '/var/home/acme/git/perf/tools/perf'
->     BUILD:   Doing 'make -j32' parallel build
->     HOSTCC  /tmp/build/perf/fixdep.o
->     HOSTLD  /tmp/build/perf/fixdep-in.o
->     LINK    /tmp/build/perf/fixdep
-> 
->   Auto-detecting system features:
->   ...                         dwarf: [ on  ]
->   ...            dwarf_getlocations: [ on  ]
->   ...                         glibc: [ on  ]
->   $ ldd ~/bin/perf | grep python
-> 	libpython3.9.so.1.0 => /lib64/libpython3.9.so.1.0 (0x00007f58800b0000)
->   $ cat /tmp/build/perf/feature/test-all.make.output
->   $
-> 
-> Fixes: 66dfdff03d196e51 ("perf tools: Add Python 3 support")
-> Cc: Adrian Hunter <adrian.hunter@intel.com>
-> Cc: Ian Rogers <irogers@google.com>
-> Cc: Jaroslav Škarvada <jskarvad@redhat.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> ---
->  tools/build/Makefile.feature                 |  1 -
->  tools/build/feature/Makefile                 |  4 ----
->  tools/build/feature/test-all.c               |  5 -----
->  tools/build/feature/test-libpython-version.c | 11 -----------
->  tools/perf/Makefile.config                   |  2 --
->  5 files changed, 23 deletions(-)
->  delete mode 100644 tools/build/feature/test-libpython-version.c
-> 
-
-
-Reviewed-by: James Clark <james.clark@arm.com>
+Christophe

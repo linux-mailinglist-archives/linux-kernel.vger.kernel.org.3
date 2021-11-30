@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D244634FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDF574634FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:58:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235043AbhK3NBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:01:33 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:30487 "EHLO
+        id S234603AbhK3NBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:01:31 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:37429 "EHLO
         alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232294AbhK3NBV (ORCPT
+        with ESMTP id S232327AbhK3NB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:01:21 -0500
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 30 Nov 2021 04:58:02 -0800
+        Tue, 30 Nov 2021 08:01:26 -0500
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 30 Nov 2021 04:58:03 -0800
 X-QCInternal: smtphost
 Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 30 Nov 2021 04:58:00 -0800
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 30 Nov 2021 04:58:02 -0800
 X-QCInternal: smtphost
 Received: from ekangupt-linux.qualcomm.com ([10.204.67.11])
   by ironmsg01-blr.qualcomm.com with ESMTP; 30 Nov 2021 18:27:55 +0530
 Received: by ekangupt-linux.qualcomm.com (Postfix, from userid 2319895)
-        id 7FF1943B7; Tue, 30 Nov 2021 18:27:54 +0530 (IST)
+        id 90E6943B0; Tue, 30 Nov 2021 18:27:54 +0530 (IST)
 From:   Jeya R <jeyr@codeaurora.org>
 To:     linux-arm-msm@vger.kernel.org, srinivas.kandagatla@linaro.org
 Cc:     Jeya R <jeyr@codeaurora.org>, gregkh@linuxfoundation.org,
         linux-kernel@vger.kernel.org, fastrpc.upstream@qti.qualcomm.com,
         bkumar@qti.qualcomm.com, ekangupt@qti.qualcomm.com,
         jeyr@qti.qualcomm.com
-Subject: [PATCH 2/2] misc: fastrpc: Add dma handle implementation
-Date:   Tue, 30 Nov 2021 18:27:50 +0530
-Message-Id: <1638277072-6459-4-git-send-email-jeyr@codeaurora.org>
+Subject: [PATCH 2/3] misc: fastrpc: Read virtual machine IDs during probe
+Date:   Tue, 30 Nov 2021 18:27:51 +0530
+Message-Id: <1638277072-6459-5-git-send-email-jeyr@codeaurora.org>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1638277072-6459-1-git-send-email-jeyr@codeaurora.org>
 References: <1638277072-6459-1-git-send-email-jeyr@codeaurora.org>
@@ -38,170 +38,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add dma handle instructions to remote arguments.
+Read virtual machine IDs DT property during rpmsg probe. This property is used
+to set up memory protection for remote processor.
 
 Signed-off-by: Jeya R <jeyr@codeaurora.org>
 ---
- drivers/misc/fastrpc.c | 75 ++++++++++++++++++++++++++++++++++++--------------
- 1 file changed, 55 insertions(+), 20 deletions(-)
+ drivers/misc/fastrpc.c | 23 ++++++++++++++++++++++-
+ 1 file changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-index 3c937ff..77071ee3 100644
+index 39aca77..a9adfa4d 100644
 --- a/drivers/misc/fastrpc.c
 +++ b/drivers/misc/fastrpc.c
-@@ -92,9 +92,20 @@ struct fastrpc_invoke_buf {
- 	u32 pgidx;		/* index to start of contiguous region */
- };
+@@ -17,6 +17,7 @@
+ #include <linux/rpmsg.h>
+ #include <linux/scatterlist.h>
+ #include <linux/slab.h>
++#include <linux/qcom_scm.h>
+ #include <uapi/misc/fastrpc.h>
  
--struct fastrpc_remote_arg {
--	u64 pv;
--	u64 len;
-+struct fastrpc_remote_dmahandle {
-+	s32 fd;			/* dma handle fd */
-+	u32 offset;		/* dma handle offset */
-+	u32 len;		/* dma handle length */
-+};
-+
-+struct fastrpc_remote_buf {
-+	u64 pv;			/* buffer pointer */
-+	u64 len;		/* length of buffer */
-+};
-+
-+union fastrpc_remote_arg {
-+	struct fastrpc_remote_buf buf;
-+	struct fastrpc_remote_dmahandle dma;
- };
- 
- struct fastrpc_mmap_rsp_msg {
-@@ -189,7 +200,7 @@ struct fastrpc_invoke_ctx {
- 	struct work_struct put_work;
- 	struct fastrpc_msg msg;
- 	struct fastrpc_user *fl;
--	struct fastrpc_remote_arg *rpra;
-+	union fastrpc_remote_arg *rpra;
- 	struct fastrpc_map **maps;
- 	struct fastrpc_buf *buf;
- 	struct fastrpc_invoke_args *args;
-@@ -760,12 +771,26 @@ static int fastrpc_create_maps(struct fastrpc_invoke_ctx *ctx)
- 	return 0;
- }
- 
-+static struct fastrpc_invoke_buf *fastrpc_invoke_buf_start(union fastrpc_remote_arg *pra, u32 sc)
-+{
-+	unsigned int len = REMOTE_SCALARS_LENGTH(sc);
-+
-+	return (struct fastrpc_invoke_buf *)(&pra[len]);
-+}
-+
-+static struct fastrpc_phy_page *fastrpc_phy_page_start(u32 sc, struct fastrpc_invoke_buf *buf)
-+{
-+	unsigned int len = REMOTE_SCALARS_LENGTH(sc);
-+
-+	return (struct fastrpc_phy_page *)(&buf[len]);
-+}
-+
- static int fastrpc_get_args(u32 kernel, struct fastrpc_invoke_ctx *ctx)
+ #define ADSP_DOMAIN_ID (0)
+@@ -25,6 +26,7 @@
+ #define CDSP_DOMAIN_ID (3)
+ #define FASTRPC_DEV_MAX		4 /* adsp, mdsp, slpi, cdsp*/
+ #define FASTRPC_MAX_SESSIONS	13 /*12 compute, 1 cpz*/
++#define FASTRPC_MAX_VMIDS	16
+ #define FASTRPC_ALIGN		128
+ #define FASTRPC_MAX_FDLIST	16
+ #define FASTRPC_MAX_CRCLIST	64
+@@ -207,6 +209,9 @@ struct fastrpc_session_ctx {
+ struct fastrpc_channel_ctx {
+ 	int domain_id;
+ 	int sesscount;
++	int vmcount;
++	u32 perms;
++	struct qcom_scm_vmperm vmperms[FASTRPC_MAX_VMIDS];
+ 	struct rpmsg_device *rpdev;
+ 	struct fastrpc_session_ctx session[FASTRPC_MAX_SESSIONS];
+ 	spinlock_t lock;
+@@ -1610,8 +1615,9 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
  {
- 	struct device *dev = ctx->fl->sctx->dev;
--	struct fastrpc_remote_arg *rpra;
-+	union fastrpc_remote_arg *rpra = NULL;
- 	struct fastrpc_invoke_buf *list;
--	struct fastrpc_phy_page *pages;
-+	struct fastrpc_phy_page *pages, *ipage;
- 	int inbufs, i, oix, err = 0;
- 	u64 len, rlen, pkt_size;
- 	u64 pg_start, pg_end;
-@@ -773,7 +798,13 @@ static int fastrpc_get_args(u32 kernel, struct fastrpc_invoke_ctx *ctx)
- 	int metalen;
+ 	struct device *rdev = &rpdev->dev;
+ 	struct fastrpc_channel_ctx *data;
+-	int i, err, domain_id = -1;
++	int i, err, domain_id = -1, vmcount;
+ 	const char *domain;
++	unsigned int vmids[FASTRPC_MAX_VMIDS];
  
- 	inbufs = REMOTE_SCALARS_INBUFS(ctx->sc);
--	metalen = fastrpc_get_meta_size(ctx);
-+	list = fastrpc_invoke_buf_start(rpra, ctx->sc);
-+	pages = fastrpc_phy_page_start(ctx->sc, list);
-+	ipage = pages;
-+	ipage += ctx->nscalars;
-+	metalen = (size_t)&ipage[0] +
-+		sizeof(u64) * FASTRPC_MAX_FDLIST +
-+		sizeof(u32) * FASTRPC_MAX_CRCLIST;
- 	pkt_size = fastrpc_get_payload_size(ctx, metalen);
- 
- 	err = fastrpc_create_maps(ctx);
-@@ -788,12 +819,11 @@ static int fastrpc_get_args(u32 kernel, struct fastrpc_invoke_ctx *ctx)
- 	memset(ctx->buf->virt, 0, pkt_size);
- 
- 	rpra = ctx->buf->virt;
--	list = ctx->buf->virt + ctx->nscalars * sizeof(*rpra);
--	pages = ctx->buf->virt + ctx->nscalars * (sizeof(*list) +
--		sizeof(*rpra));
-+	ctx->rpra = rpra;
-+	list = fastrpc_invoke_buf_start(rpra, ctx->sc);
-+	pages = fastrpc_phy_page_start(ctx->sc, list);
- 	args = (uintptr_t)ctx->buf->virt + metalen;
- 	rlen = pkt_size - metalen;
--	ctx->rpra = rpra;
- 
- 	for (oix = 0; oix < ctx->nbufs; ++oix) {
- 		int mlen;
-@@ -801,8 +831,8 @@ static int fastrpc_get_args(u32 kernel, struct fastrpc_invoke_ctx *ctx)
- 		i = ctx->olaps[oix].raix;
- 		len = ctx->args[i].length;
- 
--		rpra[i].pv = 0;
--		rpra[i].len = len;
-+		rpra[i].buf.pv = 0;
-+		rpra[i].buf.len = len;
- 		list[i].num = len ? 1 : 0;
- 		list[i].pgidx = i;
- 
-@@ -812,7 +842,7 @@ static int fastrpc_get_args(u32 kernel, struct fastrpc_invoke_ctx *ctx)
- 		if (ctx->maps[i]) {
- 			struct vm_area_struct *vma = NULL;
- 
--			rpra[i].pv = (u64) ctx->args[i].ptr;
-+			rpra[i].buf.pv = (u64) ctx->args[i].ptr;
- 			pages[i].addr = ctx->maps[i]->phys;
- 
- 			mmap_read_lock(current->mm);
-@@ -839,7 +869,7 @@ static int fastrpc_get_args(u32 kernel, struct fastrpc_invoke_ctx *ctx)
- 			if (rlen < mlen)
- 				goto bail;
- 
--			rpra[i].pv = args - ctx->olaps[oix].offset;
-+			rpra[i].buf.pv = args - ctx->olaps[oix].offset;
- 			pages[i].addr = ctx->buf->phys -
- 					ctx->olaps[oix].offset +
- 					(pkt_size - rlen);
-@@ -853,7 +883,7 @@ static int fastrpc_get_args(u32 kernel, struct fastrpc_invoke_ctx *ctx)
- 		}
- 
- 		if (i < inbufs && !ctx->maps[i]) {
--			void *dst = (void *)(uintptr_t)rpra[i].pv;
-+			void *dst = (void *)(uintptr_t)rpra[i].buf.pv;
- 			void *src = (void *)(uintptr_t)ctx->args[i].ptr;
- 
- 			if (!kernel) {
-@@ -869,12 +899,17 @@ static int fastrpc_get_args(u32 kernel, struct fastrpc_invoke_ctx *ctx)
+ 	err = of_property_read_string(rdev->of_node, "label", &domain);
+ 	if (err) {
+@@ -1631,9 +1637,24 @@ static int fastrpc_rpmsg_probe(struct rpmsg_device *rpdev)
+ 		return -EINVAL;
  	}
  
- 	for (i = ctx->nbufs; i < ctx->nscalars; ++i) {
--		rpra[i].pv = (u64) ctx->args[i].ptr;
--		rpra[i].len = ctx->args[i].length;
-+		rpra[i].buf.pv = (u64) ctx->args[i].ptr;
-+		rpra[i].buf.len = ctx->args[i].length;
- 		list[i].num = ctx->args[i].length ? 1 : 0;
- 		list[i].pgidx = i;
--		pages[i].addr = ctx->maps[i]->phys;
--		pages[i].size = ctx->maps[i]->size;
-+		if (ctx->maps[i]) {
-+			pages[i].addr = ctx->maps[i]->phys;
-+			pages[i].size = ctx->maps[i]->size;
++	vmcount = of_property_read_variable_u32_array(rdev->of_node,
++				"qcom,vmids", &vmids[0], 0, FASTRPC_MAX_VMIDS);
++	if (vmcount < 0)
++		vmcount = 0;
++	else if (!qcom_scm_is_available())
++		return -EPROBE_DEFER;
++
+ 	data = kzalloc(sizeof(*data), GFP_KERNEL);
+ 	if (!data)
+ 		return -ENOMEM;
++	if (vmcount) {
++		data->vmcount = vmcount;
++		data->perms = BIT(QCOM_SCM_VMID_HLOS);
++		for (i = 0; i < data->vmcount; i++) {
++			data->vmperms[i].vmid = vmids[i];
++			data->vmperms[i].perm = QCOM_SCM_PERM_RWX;
 +		}
-+		rpra[i].dma.fd = ctx->args[i].fd;
-+		rpra[i].dma.len = ctx->args[i].length;
-+		rpra[i].dma.offset = (u64) ctx->args[i].ptr;
- 	}
++	}
  
- bail:
+ 	data->miscdev.minor = MISC_DYNAMIC_MINOR;
+ 	data->miscdev.name = devm_kasprintf(rdev, GFP_KERNEL, "fastrpc-%s",
 -- 
 2.7.4
 

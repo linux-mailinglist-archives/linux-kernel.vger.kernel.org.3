@@ -2,67 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A61BB464136
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:18:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2EF46413D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235522AbhK3WVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:21:25 -0500
-Received: from mail-oi1-f173.google.com ([209.85.167.173]:43637 "EHLO
-        mail-oi1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235295AbhK3WVW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:21:22 -0500
-Received: by mail-oi1-f173.google.com with SMTP id o4so44208849oia.10;
-        Tue, 30 Nov 2021 14:18:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=64PSQYR4mrOg5NMVu2GtkuhPXarpcvAI5FbGR86CFuE=;
-        b=A4bdvBFH+yR8xi2w4FL8IOYD/+bzSFp9rnTtK8MuKAX0q7O4fPuTwQt1MKlzSHoUdF
-         jo0o9Z3R/g2HxO2m9DfB6aLSe3qUy4x42KdmdCplMI4WuovtyvdBjnh8s/XKXcd0h6my
-         FLQ1zv6NEqOFoJBNEXDH+MZ1Spl7XMHhOTFhbwhvNDegK/3I3zKl3BNjFgluVK+Bz35Z
-         xp5tk7i2crBDZP/m0tB+w21AGL80gUXTivdZL1dFQTUNKiBjCmssZIjWxEatSj5RYvcA
-         iPbMbQBP4ic7o6Ce2FKXiZ7nF1WSKJmPox8kf+f/+Pa5IJT6y3UB89kEyF8Xp85+m/RT
-         /40g==
-X-Gm-Message-State: AOAM531GlaISKleutbtE9tVaFV13BNz7QTUzxC7ReJyXWPCAsCZtlzvx
-        rH6IlK1BnToBAA0SGGjRNw==
-X-Google-Smtp-Source: ABdhPJyEmRnCsSlO1MohjwD4S1U5XA1oYI4iwehAhMwrbMQZkaRGhcGfaYXjL4uP3BRncVX7qt7vKw==
-X-Received: by 2002:a05:6808:118a:: with SMTP id j10mr1902823oil.101.1638310682423;
-        Tue, 30 Nov 2021 14:18:02 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bf17sm4305466oib.27.2021.11.30.14.18.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 14:18:01 -0800 (PST)
-Received: (nullmailer pid 3110035 invoked by uid 1000);
-        Tue, 30 Nov 2021 22:18:01 -0000
-Date:   Tue, 30 Nov 2021 16:18:01 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Antoniu Miclaus <antoniu.miclaus@analog.com>
-Cc:     linux-kernel@vger.kernel.org, jic23@kernel.org, robh+dt@kernel.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/4] dt-bindings:iio:filter: add admv8818 doc
-Message-ID: <YaajGXF36Db1WurY@robh.at.kernel.org>
-References: <20211123133900.133027-1-antoniu.miclaus@analog.com>
- <20211123133900.133027-3-antoniu.miclaus@analog.com>
+        id S235600AbhK3W14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:27:56 -0500
+Received: from mga09.intel.com ([134.134.136.24]:15864 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235555AbhK3W1u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 17:27:50 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236151021"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="236151021"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 14:24:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="477288379"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 30 Nov 2021 14:24:28 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msBY4-000DpU-6q; Tue, 30 Nov 2021 22:24:28 +0000
+Date:   Wed, 1 Dec 2021 06:23:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Paul Blakey <paulb@nvidia.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+        Oz Shlomo <ozsh@nvidia.com>
+Subject: [saeed:testing/mlx5-queue-next 597/628]
+ net/openvswitch/flow.c:915:19: warning: variable 'zone' is uninitialized
+ when used here
+Message-ID: <202112010637.b4mONzF9-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211123133900.133027-3-antoniu.miclaus@analog.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Nov 2021 15:38:59 +0200, Antoniu Miclaus wrote:
-> Add device tree bindings for the ADMV8818 Filter.
-> 
-> Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
-> ---
-> changes in v2:
->  - remove `bw-hz` dt property
->  .../bindings/iio/filter/adi,admv8818.yaml     | 69 +++++++++++++++++++
->  1 file changed, 69 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/filter/adi,admv8818.yaml
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git testing/mlx5-queue-next
+head:   28c32f565d2be3795dfe2acd0c00b7dcda32645a
+commit: 0685a5cf41c932ac2392ebb9145cd002c5b687d0 [597/628] net: openvswitch: Fix matching zone id for invalid conns arriving from tc
+config: x86_64-randconfig-r022-20211130 (https://download.01.org/0day-ci/archive/20211201/202112010637.b4mONzF9-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git/commit/?id=0685a5cf41c932ac2392ebb9145cd002c5b687d0
+        git remote add saeed https://git.kernel.org/pub/scm/linux/kernel/git/saeed/linux.git
+        git fetch --no-tags saeed testing/mlx5-queue-next
+        git checkout 0685a5cf41c932ac2392ebb9145cd002c5b687d0
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/openvswitch/
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/openvswitch/flow.c:915:19: warning: variable 'zone' is uninitialized when used here [-Wuninitialized]
+                           key->ct_zone = zone;
+                                          ^~~~
+   net/openvswitch/flow.c:864:10: note: initialize the variable 'zone' to silence this warning
+           u16 zone;
+                   ^
+                    = 0
+   1 warning generated.
+
+
+vim +/zone +915 net/openvswitch/flow.c
+
+   910	
+   911		err = key_extract(skb, key);
+   912		if (!err) {
+   913			ovs_ct_fill_key(skb, key, post_ct);   /* Must be after key_extract(). */
+   914			if (post_ct && !skb_get_nfct(skb))
+ > 915				key->ct_zone = zone;
+   916		}
+   917		return err;
+   918	}
+   919	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

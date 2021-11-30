@@ -2,87 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90C1A4640EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BFE94640EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344391AbhK3WIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:08:50 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:41931 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbhK3WIs (ORCPT
+        id S1344431AbhK3WJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:09:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344480AbhK3WI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:08:48 -0500
-Received: by mail-ot1-f43.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so32245627otl.8;
-        Tue, 30 Nov 2021 14:05:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=17xD67r1Po50dKFrN6zPSs2unPvmO1WfBjCX12oxOdY=;
-        b=1Sy3TOka/6xcf7Du2aw1fD7G70c5zY8hC9HihFZW4XCAtzINQOqc9i0MBirAFDEibD
-         2ukB/xeUhkimHO+lGsh8AFN9ZFIM8+LNn7Kj29PF7NM3z17nAFfr5xzDiDBEiLOQIr77
-         VZ+7q2WDIa01FE13F9zBy8rT6UPJGRX9LikoHbKi6Mr6iShEyi5RNGxATTkJ8LWKgM01
-         uBlYAoZ8Xlze9D9CzAkXxY6eEGHqyJcjsceWdj6sXwUSCNQ4oQo9Jayme10jmTwPM/0e
-         jFTVLVnadS5Ql5JXc6TWXdFoo9qFgz9Z+N8+IohtkL7xAItyQ0d62NcIw9HVwzZH/dPZ
-         EvuQ==
-X-Gm-Message-State: AOAM533gPSQIbuFYrjE6lh6S1XrJ9mn46Eg7IfO/1ESBLB5uJ7kC8xaV
-        0JxNTRwGWXyRUjVjFJy2vQ==
-X-Google-Smtp-Source: ABdhPJyj4IRd5mFpSXJj1d5bjNj+dfT6nlMA5FsUuzkeuwrS0n3omP/gEosMzBWySdeTy8h7PGCUyw==
-X-Received: by 2002:a9d:7855:: with SMTP id c21mr1891595otm.167.1638309928423;
-        Tue, 30 Nov 2021 14:05:28 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id m12sm3348035ots.59.2021.11.30.14.05.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 14:05:27 -0800 (PST)
-Received: (nullmailer pid 3093201 invoked by uid 1000);
-        Tue, 30 Nov 2021 22:05:25 -0000
-Date:   Tue, 30 Nov 2021 16:05:25 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Vivek Goyal <vgoyal@redhat.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-doc@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        devicetree@vger.kernel.org,
+        Tue, 30 Nov 2021 17:08:57 -0500
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0ECAC06175B
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 14:05:34 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1638309933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QgrHb09Vj6aJ0+9nbQZNm9kk14SqendbAdApMN1ty98=;
+        b=kKuuQS7/dsa+tGRFwUmdluLYwH181K80+n9qftIO6/pGTMzmQQf0P2nkonmZrMoKqotGhC
+        2gQtyPERQxs3yUsHIEeHisTO4bsyHx2NpZwdslj0iQ+hkkJxsH6bB5oFHsleWBfHpWH05r
+        LRw4k8NLXCsQjuzaov4w7A1b2oPTagQ=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Baoquan He <bhe@redhat.com>, kexec@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Will Deacon <will@kernel.org>,
         linux-arm-kernel@lists.infradead.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Will Deacon <will@kernel.org>, Dave Young <dyoung@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v16 09/11] of: fdt: Aggregate the processing of
- "linux,usable-memory-range"
-Message-ID: <YaagJQqq2Cx2zyVw@robh.at.kernel.org>
-References: <20211123124646.1995-1-thunder.leizhen@huawei.com>
- <20211123124646.1995-10-thunder.leizhen@huawei.com>
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH 13/31] kasan, page_alloc: simplify kasan_unpoison_pages call site
+Date:   Tue, 30 Nov 2021 23:05:30 +0100
+Message-Id: <4e23fb3399fbc2bd59effeb89946a75c3c75b6a2.1638308023.git.andreyknvl@google.com>
+In-Reply-To: <cover.1638308023.git.andreyknvl@google.com>
+References: <cover.1638308023.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211123124646.1995-10-thunder.leizhen@huawei.com>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Nov 2021 20:46:44 +0800, Zhen Lei wrote:
-> Currently, we parse the "linux,usable-memory-range" property in
-> early_init_dt_scan_chosen(), to obtain the specified memory range of the
-> crash kernel. We then reserve the required memory after
-> early_init_dt_scan_memory() has identified all available physical memory.
-> Because the two pieces of code are separated far, the readability and
-> maintainability are reduced. So bring them together.
-> 
-> Suggested-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
->  drivers/of/fdt.c | 15 +++++++++++----
->  1 file changed, 11 insertions(+), 4 deletions(-)
-> 
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Simplify the checks around kasan_unpoison_pages() call in
+post_alloc_hook().
+
+The logical condition for calling this function is:
+
+- If a software KASAN mode is enabled, we need to mark shadow memory.
+- Otherwise, HW_TAGS KASAN is enabled, and it only makes sense to
+  set tags if they haven't already been cleared by tag_clear_highpage(),
+  which is indicated by init_tags.
+
+This patch concludes the simplifications for post_alloc_hook().
+
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
+---
+ mm/page_alloc.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index ba950889f5ea..4eb341351124 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -2420,15 +2420,18 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+ 		/* Note that memory is already initialized by the loop above. */
+ 		init = false;
+ 	}
+-	if (kasan_has_integrated_init()) {
+-		if (!init_tags) {
+-			kasan_unpoison_pages(page, order, init);
++	/*
++	 * If either a software KASAN mode is enabled, or,
++	 * in the case of hardware tag-based KASAN,
++	 * if memory tags have not been cleared via tag_clear_highpage().
++	 */
++	if (!IS_ENABLED(CONFIG_KASAN_HW_TAGS) || !init_tags) {
++		/* Mark shadow memory or set memory tags. */
++		kasan_unpoison_pages(page, order, init);
+ 
+-			/* Note that memory is already initialized by KASAN. */
++		/* Note that memory is already initialized by KASAN. */
++		if (kasan_has_integrated_init())
+ 			init = false;
+-		}
+-	} else {
+-		kasan_unpoison_pages(page, order, init);
+ 	}
+ 	/* If memory is still not initialized, do it now. */
+ 	if (init)
+-- 
+2.25.1
+

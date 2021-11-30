@@ -2,103 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3597646412D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:16:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69808464130
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233604AbhK3WTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:19:41 -0500
-Received: from mga11.intel.com ([192.55.52.93]:41932 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230215AbhK3WTl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:19:41 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="233830372"
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="233830372"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 14:16:21 -0800
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="511701902"
-Received: from jordanhi-mobl.amr.corp.intel.com (HELO [10.212.191.92]) ([10.212.191.92])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 14:16:20 -0800
-Subject: Re: [PATCH] x86/csum: fix initial seed for odd buffers
-To:     Eric Dumazet <eric.dumazet@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Noah Goldstein <goldstein.w.n@gmail.com>,
-        Alexander Duyck <alexanderduyck@fb.com>
-References: <20211125141817.3541501-1-eric.dumazet@gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
- z5cecg==
-Message-ID: <6e94236d-7e91-80a6-f55d-15bd503e52c4@intel.com>
-Date:   Tue, 30 Nov 2021 14:16:17 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        id S235129AbhK3WTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:19:45 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:34488 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230215AbhK3WTn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 17:19:43 -0500
+Received: by mail-ot1-f48.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso32301760otj.1;
+        Tue, 30 Nov 2021 14:16:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=T59yjRvPcbWOKoUxdTO62y1BQorOr6NcoUwNDk8i+VM=;
+        b=IYXgZhVQO/wxXgbOKn+WHoZpJtBp1NTLRs8tZG4GuBQl0PCppVBnw1LsGg7St6/l4O
+         esTsZ99FCxkS/GtXEBJpgn7/AAs8NnS+Nur5c59hyotyFZXV477ohTJOMWbgQkCCMpUn
+         +9RGyWcTIyDzUxZto/IiK8rgtVMomu4TcaLcUV+NLz/yWAl8QyAnB+kxTyfFVjQn1fX2
+         mH6cG2bgiKPtNgl8TOwCkRSw4F3gIW1aviclcofk+5E76kvJTGNjc0uuufhYTl0GH0nR
+         v9lcvG42+HaWjhYV8UEbENxKC2Z6SXx0Mirbdpmn/qt6W2tandX6F/4P3nO1CTWl1LkB
+         t40A==
+X-Gm-Message-State: AOAM532NG0gcwcbDuOU+PMCJz7ozgNAnIq7BAwOjhmf11jbu36UvUB7Q
+        Tae9CIbl3JEdhr8KaoBrug==
+X-Google-Smtp-Source: ABdhPJyQZxRpJ8Oes6rHpmTqF4skhy7f5op1iHR2HGyXwvc1N3UrOasp3Lypdn+IpEHkhKbjgss5mw==
+X-Received: by 2002:a9d:4e93:: with SMTP id v19mr1970722otk.146.1638310582805;
+        Tue, 30 Nov 2021 14:16:22 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id m12sm3352717ots.59.2021.11.30.14.16.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 14:16:21 -0800 (PST)
+Received: (nullmailer pid 3107725 invoked by uid 1000);
+        Tue, 30 Nov 2021 22:16:20 -0000
+Date:   Tue, 30 Nov 2021 16:16:20 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        linux-kernel@vger.kernel.org, Dave Young <dyoung@redhat.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        kexec@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Chen Zhou <dingguo.cz@antgroup.com>
+Subject: Re: [PATCH v16 10/11] of: fdt: Add memory for devices by DT property
+ "linux,usable-memory-range"
+Message-ID: <YaaitPTArUZEriob@robh.at.kernel.org>
+References: <20211123124646.1995-1-thunder.leizhen@huawei.com>
+ <20211123124646.1995-11-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-In-Reply-To: <20211125141817.3541501-1-eric.dumazet@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123124646.1995-11-thunder.leizhen@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/25/21 6:18 AM, Eric Dumazet wrote:
-> From: Eric Dumazet <edumazet@google.com>
+On Tue, Nov 23, 2021 at 08:46:45PM +0800, Zhen Lei wrote:
+> From: Chen Zhou <chenzhou10@huawei.com>
 > 
-> When I folded do_csum() into csum_partial(), I missed that we
-> had to swap odd/even bytes from @sum argument.
-...
-> Fixes: df4554cebdaa ("x86/csum: Rewrite/optimize csum_partial()")
+> When reserving crashkernel in high memory, some low memory is reserved
+> for crash dump kernel devices and never mapped by the first kernel.
+> This memory range is advertised to crash dump kernel via DT property
+> under /chosen,
+>         linux,usable-memory-range = <BASE1 SIZE1 [BASE2 SIZE2]>
+> 
+> We reused the DT property linux,usable-memory-range and made the low
+> memory region as the second range "BASE2 SIZE2", which keeps compatibility
+> with existing user-space and older kdump kernels.
+> 
+> Crash dump kernel reads this property at boot time and call memblock_add()
+> to add the low memory region after memblock_cap_memory_range() has been
+> called.
+> 
+> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  drivers/of/fdt.c | 36 ++++++++++++++++++++++++++----------
+>  1 file changed, 26 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index 37b477a51175359..1ea2a0b1657e3a9 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -967,6 +967,15 @@ static void __init early_init_dt_check_for_elfcorehdr(unsigned long node)
+>  
+>  static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
+>  
+> +/*
+> + * The main usage of linux,usable-memory-range is for crash dump kernel.
+> + * Originally, the number of usable-memory regions is one. Now there may
+> + * be two regions, low region and high region.
+> + * To make compatibility with existing user-space and older kdump, the low
+> + * region is always the last range of linux,usable-memory-range if exist.
+> + */
+> +#define MAX_USABLE_RANGES		2
+> +
+>  /**
+>   * early_init_dt_check_for_usable_mem_range - Decode usable memory range
+>   * location from flat tree
+> @@ -974,10 +983,9 @@ static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
+>   */
+>  static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
+>  {
+> -	const __be32 *prop;
+> -	int len;
+> -	phys_addr_t cap_mem_addr;
+> -	phys_addr_t cap_mem_size;
+> +	struct memblock_region rgn[MAX_USABLE_RANGES] = {0};
+> +	const __be32 *prop, *endp;
+> +	int len, i = 0;
+>  
+>  	if ((long)node < 0)
+>  		return;
+> @@ -985,16 +993,24 @@ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
+>  	pr_debug("Looking for usable-memory-range property... ");
+>  
+>  	prop = of_get_flat_dt_prop(node, "linux,usable-memory-range", &len);
+> -	if (!prop || (len < (dt_root_addr_cells + dt_root_size_cells)))
+> +	if (!prop)
 
-Hi Eric,
+if (!prop || (len % (dt_root_addr_cells + dt_root_size_cells)))
 
-That Fixes: sha1 doesn't match anything that I can find.  Should it be
-Fixes: this commit:
+>  		return;
+>  
+> -	cap_mem_addr = dt_mem_next_cell(dt_root_addr_cells, &prop);
+> -	cap_mem_size = dt_mem_next_cell(dt_root_size_cells, &prop);
+> +	endp = prop + (len / sizeof(__be32));
+> +	while ((endp - prop) >= (dt_root_addr_cells + dt_root_size_cells)) {
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/core&id=d31c3c683ee668ba5d87c0730610442fd672525f
+for (i = 0; i < MAX_USABLE_RANGES, prop < endp; i++) {
 
-I'm happy to fix it up when I apply it.  Just wanted to double-check
-what you intended.
+> +		rgn[i].base = dt_mem_next_cell(dt_root_addr_cells, &prop);
+> +		rgn[i].size = dt_mem_next_cell(dt_root_size_cells, &prop);
+> +
+> +		pr_debug("cap_mem_regions[%d]: base=%pa, size=%pa\n",
+> +			 i, &rgn[i].base, &rgn[i].size);
+>  
+> -	pr_debug("cap_mem_start=%pa cap_mem_size=%pa\n", &cap_mem_addr,
+> -		 &cap_mem_size);
+> +		if (++i >= MAX_USABLE_RANGES)
+> +			break;
+
+And drop this if.
+
+> +	}
+>  
+> -	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
+> +	memblock_cap_memory_range(rgn[0].base, rgn[0].size);
+> +	for (i = 1; i < MAX_USABLE_RANGES && rgn[i].size; i++)
+
+s/ &&/,/
+
+> +		memblock_add(rgn[i].base, rgn[i].size);
+>  }
+>  
+>  #ifdef CONFIG_SERIAL_EARLYCON
+> -- 
+> 2.25.1
+> 
+> 
+

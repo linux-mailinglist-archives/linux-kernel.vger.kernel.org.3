@@ -2,124 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E6CD8462B9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 688A6462BA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238161AbhK3EX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 23:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56420 "EHLO
+        id S238174AbhK3EZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 23:25:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238140AbhK3EXz (ORCPT
+        with ESMTP id S231327AbhK3EZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 23:23:55 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8319EC061574;
-        Mon, 29 Nov 2021 20:20:36 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id s37so8670189pga.9;
-        Mon, 29 Nov 2021 20:20:36 -0800 (PST)
+        Mon, 29 Nov 2021 23:25:37 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F173C061574;
+        Mon, 29 Nov 2021 20:22:19 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 200so18378363pga.1;
+        Mon, 29 Nov 2021 20:22:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fCSTrj/Ah8qdnBVomdm8hlVtn7d/6AtWYHymihwvGjA=;
-        b=VXj8vUok0VJa3A92OwcTRlQnwiV6Rp5RqOQ1T5QRsTkRkMFjuxCLARGmF4Yr1avjmE
-         HUUDJ9nsGG6kR04bHg8V8eNzB26a0fe0dK2n5i2k/J+rTcS/Tviiay2QTRjSQJDg/Gd3
-         dARYQphEvtmCG9n9/wTIx/4MHb3u8+CX2Vp+0uAR+jD0MjgYVRcAzgvtgc6UOA0QklMx
-         Cma+f2i0zgbZWFE9pMF4fLSR/Z4dgZ3fchEjQU1B1evpFicyKwsdd/KMb1aO7OSCWNgu
-         blASR+DUWlZthN/E9ln5s+L68Ce5Xep9PYBKTTq/BnBftI5/puzEgUQkHx7810b2OP3v
-         D53g==
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ScDwun1MrWy25Wkpi1S5wmjeMsWgqTKemnA94CqnCC0=;
+        b=GJk6qzBQtJbHdAqWlNGbMEaVRY9LEWl92CchJdQnCOuSueWvZHXD6AMueOui77AQrV
+         hv1l6QB26NEm/RRFsWUFIA3dzicZoX0QzKHBAX0IIzS6dpx81hyz+ldsuHjS7pvZUvW6
+         hIK7YEAIRcpEJJepZOaYPmgvEViK+xblmIUchfli563v+EjKxZHHJyKYXThrJ+Y3szID
+         tyMwnkdzm/BkxJOIUVj5l4XLMpMIkRJVaXvDlYmub6ETU4ksEmMwiecApaKoRsV4TUXF
+         07ML0nnEqEW2T+exaq10/9z7Sp/ESHDzWYysvUpuTe6X+JZtj+CCVrG9ciBwIKumF853
+         2AjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=fCSTrj/Ah8qdnBVomdm8hlVtn7d/6AtWYHymihwvGjA=;
-        b=cqauRfn3jY18B0RtJo3UKTtSJzxNVMIAYtLtTS4MiRfyurYIrYlrJSUsnxEDqbNDlY
-         VwNzcqppLjiCeV6jnv1CjCRBBRkvuA+ZgqhxdEQcpNYq/wYWTRbTfee4MgP5mzTF+Iwt
-         11Wrk0AHg7QLxxzdTbTsdsIhMerF87WkQ9COFiOGz3UEFug4w4ffBi2sHlZhmdZogpaa
-         ReWyXMOuEzlnyiGAEDLlW+4oRDjQmE+nGjcd9TH9kJNhwnpfHca/8jlR5mTXY8btv8gf
-         KHaeISqXaUaXNdldMfD8xxnUX58p8paCf1G1zQVt69/4j7XEh5rWQvoTGk3T6ygbscV0
-         vZog==
-X-Gm-Message-State: AOAM530BvUX1OrEu2Q4nSCKCOWOIZTnI7HPZlcdoKkANmEyOVbN2cOIh
-        FsFpqFwikw7nh0hwHSIHaxM=
-X-Google-Smtp-Source: ABdhPJx1KIzIBda81s5eRywA7YhzAb/SraPtKnO+FhQwPRWUTmcDnPbQAdlr4lB8xHzryxxY16aWXQ==
-X-Received: by 2002:a63:8749:: with SMTP id i70mr24621682pge.511.1638246033833;
-        Mon, 29 Nov 2021 20:20:33 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.4])
-        by smtp.gmail.com with ESMTPSA id d7sm20388971pfj.91.2021.11.29.20.20.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 20:20:33 -0800 (PST)
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     Ioana Ciornei <ioana.ciornei@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dpaa2-eth: add error handling code for dpaa2_eth_dl_register
-Date:   Tue, 30 Nov 2021 12:20:21 +0800
-Message-Id: <20211130042021.869529-1-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=ScDwun1MrWy25Wkpi1S5wmjeMsWgqTKemnA94CqnCC0=;
+        b=m8W0u3ptFyFvBzVchpALJtdt5vS1SikbcHcP4C6D6QIJ8/te//49yFbMaaGGa8VrQQ
+         hL5UOGtMHyRv69m8ki/lN9GDIzcwLV4+/V601YT/+AInpQ37g9qkxk5wc5tPXCeL6THH
+         exqU9KlAFZ2cFoXR0jB24uKQz3amCGyJq9tbUl/DaFJwcpsdeqG1kE9F4GCplK5l4GzI
+         tBoimM4D5xUFeVc0l6o9xlO6uMKu3wYgpx68ABODwgphVKSQlO7vRHFeMCXeuBk/vTuh
+         lBmXBwRrLz0QIMpaIv3/A7TXQi8fdBnuW4hIhy7FQr24mpY04dVP/6HHkjAaFxd7dOr4
+         nGBA==
+X-Gm-Message-State: AOAM530OKD/NPla4Q/zbl546cn3baY42aUD2dyI0ZcCRfeqAzG74oEPN
+        wXu0xWVKDRY02yzAGOaz3t0=
+X-Google-Smtp-Source: ABdhPJw++JZt5RiApt6e/IvDUAsyYXdffjtOGiBZrFYoDbLPNtB46pMgWcX0rJxFBr6XgB9VcE7UFQ==
+X-Received: by 2002:a63:4963:: with SMTP id y35mr9407652pgk.279.1638246138928;
+        Mon, 29 Nov 2021 20:22:18 -0800 (PST)
+Received: from [10.230.1.174] ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id j7sm20046731pfc.74.2021.11.29.20.22.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 20:22:18 -0800 (PST)
+Message-ID: <c1a556cb-be08-a48d-f6f6-6efc52d04b89@gmail.com>
+Date:   Mon, 29 Nov 2021 20:22:16 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 5.15 000/179] 5.15.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        stable@vger.kernel.org
+References: <20211129181718.913038547@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The commit bbb9ae25fc67 ("dpaa2-eth: Register devlink instance at the end
-of probe") moves dpaa2_eth_dl_register at the end of dpaa2_eth_probe.
-However, dpaa2_eth_dl_register can return errno when memory allocation or
-devlink_register fails.
 
-Fix this by adding error handling code for dpaa2_eth_dl_register
 
-Fixes: bbb9ae25fc67 ("dpaa2-eth: Register devlink instance at the end of probe")
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
----
- drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+On 11/29/2021 10:16 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.6 release.
+> There are 179 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-index 6451c8383639..4bb2b838fa50 100644
---- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-+++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
-@@ -4442,7 +4442,7 @@ static int dpaa2_eth_probe(struct fsl_mc_device *dpni_dev)
- 
- 	err = dpaa2_eth_dl_alloc(priv);
- 	if (err)
--		goto err_dl_register;
-+		goto err_dl_alloc;
- 
- 	err = dpaa2_eth_dl_traps_register(priv);
- 	if (err)
-@@ -4462,17 +4462,26 @@ static int dpaa2_eth_probe(struct fsl_mc_device *dpni_dev)
- 	dpaa2_dbg_add(priv);
- #endif
- 
--	dpaa2_eth_dl_register(priv);
-+	err = dpaa2_eth_dl_register(priv);
-+	if (err < 0) {
-+		dev_err(dev, "dpaa2_eth_dl_register failed\n");
-+		goto err_dl_register;
-+	}
- 	dev_info(dev, "Probed interface %s\n", net_dev->name);
- 	return 0;
- 
-+err_dl_register:
-+#ifdef CONFIG_DEBUG_FS
-+	dpaa2_dbg_remove(priv);
-+#endif
-+	unregister_netdev(net_dev);
- err_netdev_reg:
- 	dpaa2_eth_dl_port_del(priv);
- err_dl_port_add:
- 	dpaa2_eth_dl_traps_unregister(priv);
- err_dl_trap_register:
- 	dpaa2_eth_dl_free(priv);
--err_dl_register:
-+err_dl_alloc:
- 	dpaa2_eth_disconnect_mac(priv);
- err_connect_mac:
- 	if (priv->do_link_poll)
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-2.25.1
-
+Florian

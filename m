@@ -2,282 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F943463E7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74F15463E8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:19:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245712AbhK3TSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 14:18:15 -0500
-Received: from mga12.intel.com ([192.55.52.136]:13477 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230100AbhK3TSN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 14:18:13 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216316676"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="216316676"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 11:14:53 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="511659480"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Nov 2021 11:14:44 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1AUJEfUt019797;
-        Tue, 30 Nov 2021 19:14:41 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Shay Agroskin <shayagr@amazon.com>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "Michal Swiatkowski" <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Arthur Kiyanovski" <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        "Noam Dagan" <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        "Ioana Ciornei" <ioana.ciornei@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        "Leon Romanovsky" <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        "Martin Habets" <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "Lorenzo Bianconi" <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        "Sergey Ryazanov" <ryazanov.s.a@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 03/26] ena: implement generic XDP statistics callbacks
-Date:   Tue, 30 Nov 2021 20:14:29 +0100
-Message-Id: <20211130191429.1171038-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <pj41zlh7bvyt75.fsf@u570694869fb251.ant.amazon.com>
-References: <20211123163955.154512-1-alexandr.lobakin@intel.com> <20211123163955.154512-4-alexandr.lobakin@intel.com> <pj41zlh7bvyt75.fsf@u570694869fb251.ant.amazon.com>
+        id S245721AbhK3TW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 14:22:28 -0500
+Received: from mail-ot1-f47.google.com ([209.85.210.47]:33291 "EHLO
+        mail-ot1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245699AbhK3TW0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 14:22:26 -0500
+Received: by mail-ot1-f47.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso31768315otf.0;
+        Tue, 30 Nov 2021 11:19:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OF1LduFTTSRI9VRvBAmxpKfvR5vYDD0TXr59BS8NBsk=;
+        b=6exX1GNUyKmqWS/UgOqu1fylVaoNQLKdu54Wxvvt4hmdJk+fYptVyN3nljitEPaxzS
+         NQnJIF62xu+arThRUXLMgtTWCbHoSmCoGrTxIKra2YyXjjWaT+dXyOGzWoDqTFndqQ/Y
+         qNXvdhefRPxL/px/Ojhe7+j9Dn6+KRB3gFR+lmqJaV/4CxPpOAmh1XMETYqvKkxkt4yS
+         TXryN8n8xa7/2Mokv8m1hQ1jGMrMTyDSt5CO0fwmSUZBqKYoTgzu5s8Y1QxRMyaywk32
+         WlS+MhU4U9sCenDDLMvsHJZb5n68I1fxf0QnxN8P5vzgbtibStojKzUTl+oaFiZ2oA27
+         jrgA==
+X-Gm-Message-State: AOAM530VTaVaCVuww5E+WAzNIY8NUGyEhTcb5ocU9ykELTS35wvmE8jR
+        vRQBIvI13iphI1IsdMtB+g==
+X-Google-Smtp-Source: ABdhPJxPuvTylUr8LHoXN6srxSCAQqg8d9HqWMXsxY0z3t4QMbxbqZQ9Y51mP+wRoX5sJHuOz24LKQ==
+X-Received: by 2002:a9d:24c3:: with SMTP id z61mr1157237ota.100.1638299942808;
+        Tue, 30 Nov 2021 11:19:02 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id e21sm3262978ote.72.2021.11.30.11.19.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 11:19:01 -0800 (PST)
+Received: (nullmailer pid 2848687 invoked by uid 1000);
+        Tue, 30 Nov 2021 19:19:00 -0000
+Date:   Tue, 30 Nov 2021 13:19:00 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Subject: Re: [RFC PATCH] dt-bindings: nvmem: add transformation support
+Message-ID: <YaZ5JNCFeKcdIfu8@robh.at.kernel.org>
+References: <20211123134425.3875656-1-michael@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211123134425.3875656-1-michael@walle.cc>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shay Agroskin <shayagr@amazon.com>
-Date: Mon, 29 Nov 2021 15:34:19 +0200
-
-> Alexander Lobakin <alexandr.lobakin@intel.com> writes:
+On Tue, Nov 23, 2021 at 02:44:25PM +0100, Michael Walle wrote:
+> This is my second attempt to solve the use case where there is only the
+> base MAC address stored in an EEPROM or similar storage provider. This
+> is the case for the Kontron sl28 board and multiple openwrt supported
+> boards.
 > 
-> > ena driver has 6 XDP counters collected per-channel. Add 
-> > callbacks
-> > for getting the number of channels and those counters using 
-> > generic
-> > XDP stats infra.
-> >
-> > Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-> > Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-> > ---
-> >  drivers/net/ethernet/amazon/ena/ena_netdev.c | 53 
-> >  ++++++++++++++++++++
-> >  1 file changed, 53 insertions(+)
-> >
-> > diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
-> > b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> > index 7d5d885d85d5..83e9b85cc998 100644
-> > --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> > +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> > @@ -3313,12 +3313,65 @@ static void ena_get_stats64(struct 
-> > net_device *netdev,
-> >  	stats->tx_errors = 0;
-> >  }
-> >
-> > +static int ena_get_xdp_stats_nch(const struct net_device 
-> > *netdev, u32 attr_id)
-> > +{
-> > +	const struct ena_adapter *adapter = netdev_priv(netdev);
-> > +
-> > +	switch (attr_id) {
-> > +	case IFLA_XDP_XSTATS_TYPE_XDP:
-> > +		return adapter->num_io_queues;
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +}
-> > +
-> > +static int ena_get_xdp_stats(const struct net_device *netdev, 
-> > u32 attr_id,
-> > +			     void *attr_data)
-> > +{
-> > +	const struct ena_adapter *adapter = netdev_priv(netdev);
-> > +	struct ifla_xdp_stats *xdp_stats = attr_data;
-> > +	u32 i;
-> > +
-> > +	switch (attr_id) {
-> > +	case IFLA_XDP_XSTATS_TYPE_XDP:
-> > +		break;
-> > +	default:
-> > +		return -EOPNOTSUPP;
-> > +	}
-> > +
-> > +	for (i = 0; i < adapter->num_io_queues; i++) {
-> > +		const struct u64_stats_sync *syncp;
-> > +		const struct ena_stats_rx *stats;
-> > +		u32 start;
-> > +
-> > +		stats = &adapter->rx_ring[i].rx_stats;
-> > +		syncp = &adapter->rx_ring[i].syncp;
-> > +
-> > +		do {
-> > +			start = u64_stats_fetch_begin_irq(syncp);
-> > +
-> > +			xdp_stats->drop = stats->xdp_drop;
-> > +			xdp_stats->pass = stats->xdp_pass;
-> > +			xdp_stats->tx = stats->xdp_tx;
-> > +			xdp_stats->redirect = stats->xdp_redirect;
-> > +			xdp_stats->aborted = stats->xdp_aborted;
-> > +			xdp_stats->invalid = stats->xdp_invalid;
-> > +		} while (u64_stats_fetch_retry_irq(syncp, start));
-> > +
-> > +		xdp_stats++;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
+> The first proposal [1] didn't find much appreciation and there wasn't
+> any reply to my question or new proposal [2]. So here we are with my new
+> proposal, that is more flexible and doesn't fix the ethernet mac only.
+> This is just an RFC for the device tree representation for now to see if
+> this is the correct way to tackle this.
 > 
-> Hi,
-> thank you for the time you took in adding ENA support, this code 
-> doesn't update the XDP TX queues (which only available when an XDP 
-> program is loaded).
+> I'm also aware of the latest post process hook support [3]. This doesn't
+> fix the base mac address issue, but I think it also doesn't solve the
+> case with swapped ethernet addresses in the general case. That hook will
+> involve the driver to do the swapping, but how would the driver know
+> if that swapping is actually required. Usually the interpretation of the
+> content is opaque to the driver, after all it is the user/board
+> manufacturer who does program the storage device. We might be lucky in
+> the imx-ocotp case because the IMX reference manual actually states
+> where and in which format the mac address is programmed.
+
+A compatible string can define what is the format of the data.
+
+> Introduce a transformation property. This is intended to be just an
+> enumeration of operations. If there will be a new operation, support for
+> it has to be added to the nvmem core.
 > 
-> In theory the following patch should fix it, but I was unable to 
-> compile your version of iproute2 and test the patch properly. Can 
-> you please let me know if I need to do anything special to bring 
-> up your version of iproute2 and test this patch?
+> A transformation might have multiple output values, like in the base mac
+> address case. It reads the mac address from the nvmem storage and
+> generates multiple individual addresses, i.e. on our board we reserve 8
+> consecutive addresses. These addresses then can be assigned to different
+> network interfaces. To make it possible to reference different values we
+> need to introduce an argument to the phandle. This additional argument
+> is then an index into a list of values.
 
-Did you clone 'xdp_stats' branch? I've just rechecked on a freshly
-cloned copy, works for me.
+I still don't think trying to encode transformations of data into the DT 
+is right approach.
 
-> diff --git a/drivers/net/ethernet/amazon/ena/ena_netdev.c 
-> b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> index 7d5d885d8..4e89a7d60 100644
-> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> @@ -3313,12 +3313,85 @@ static void ena_get_stats64(struct 
-> net_device *netdev,
->  	stats->tx_errors = 0;
->  }
+> 
+> Example:
+>   mac_addresses: base-mac-address@10 {
+>     #nvmem-cell-cells = <1>;
+>     reg = <10 6>;
+>     transformation = <NVMEM_T_ETH_OFFSET 0 1 7>;
+>   }
+> 
+>   &eth0 {
+>     nvmem-cells = <&mac_addresses 0>;
+>     nvmem-cell-names = "mac-address";
+>   };
+> 
+>   &eth1 {
+>     nvmem-cells = <&mac_addresses 2>;
+>     nvmem-cell-names = "mac-address";
+>   };
+> 
+> The NVMEM_T_ETH_OFFSET transformation takes N additional (dt) cells and
+> will generate N values. In this example BASE_MAC+0, BASE_MAC+1, BASE_MAC+7.
+> An nvmem consumer can then reference the nvmem cell with an index. So eth0
+> will get BASE_MAC+0 and eth1 will get BASE_MAC+7.
+> 
+> This should be sufficient flexible for many different transformations
+> without having to touch the bindings except for adding documentation and
+> checks for new transformations.
+
+The content and number of cells is supposed to be opaque to the client 
+and interpreted by the provider. That's sort of true here, but not 
+really because the interpretation is tied to 'transformation'. So I'm 
+okay with adding cells, but not fixing the interpretation of them. A 
+compatible should determine how the cells are interpreted.
+
+
+> I do have one question regarding "#nvmem-cell-cells" (aside from the
+> awkward naming): is it allowed to have that property optional if there
+> is no additional argument to the phandle?
+
+We don't have any choice if we add "#nvmem-cell-cells". There's already 
+cases without it.
+
+> 
+> [1] https://lore.kernel.org/all/20210414152657.12097-2-michael@walle.cc/
+> [2] https://lore.kernel.org/linux-devicetree/362f1c6a8b0ec191b285ac6a604500da@walle.cc/
+> [3] https://lore.kernel.org/lkml/20211013131957.30271-1-srinivas.kandagatla@linaro.org/
+> 
+> Signed-off-by: Michael Walle <michael@walle.cc>
+> ---
+>  .../devicetree/bindings/nvmem/nvmem.yaml      | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+> index 456fb808100a..8893d045be77 100644
+> --- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+> +++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+> @@ -26,11 +26,34 @@ properties:
+>    "#size-cells":
+>      const: 1
 >  
-> +static int ena_get_xdp_stats_nch(const struct net_device *netdev, 
-> u32 attr_id)
-> +{
-> +	const struct ena_adapter *adapter = netdev_priv(netdev);
+> +  '#nvmem-cell-cells':
+> +    enum: [0, 1]
+> +    description:
+> +      Must be 1 if the transformations has multiple output values.
+> +      The argument is then the index into the list of output values.
+> +      For example, if the nvmem cell only specify a base ethernet
+> +      address the transformation can then create different individual
+> +      ethernet addresses.
 > +
-> +	switch (attr_id) {
-> +	case IFLA_XDP_XSTATS_TYPE_XDP:
-> +		return adapter->num_io_queues;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
+>    read-only:
+>      $ref: /schemas/types.yaml#/definitions/flag
+>      description:
+>        Mark the provider as read only.
+>  
+> +  transformation:
+> +    description:
+> +      Transform the content of a NVMEM cell. Sometimes it is necessary
+> +      to preprocess the content of a cell so it is usable by the NVMEM
+> +      consumer. There are also cases where one NVMEM cell value can
+> +      generate a list of values.
 > +
-> +static int ena_get_xdp_stats(const struct net_device *netdev, u32 
-> attr_id,
-> +			     void *attr_data)
-> +{
-> +	const struct ena_adapter *adapter = netdev_priv(netdev);
-> +	struct ifla_xdp_stats *xdp_stats = attr_data;
-> +	const struct u64_stats_sync *syncp;
-> +	u32 start;
-> +	u32 i;
+> +      Use one of the NVMEM_T_* prefixed definitions from the header
+> +      include/dt-bindings/nvmem/nvmem.h.
 > +
-> +	switch (attr_id) {
-> +	case IFLA_XDP_XSTATS_TYPE_XDP:
-> +		break;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
+> +      Some transformations might have additional arguments.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
 > +
-> +	for (i = 0; i < adapter->num_io_queues; i++) {
-> +		const struct ena_stats_rx *rx_stats;
 > +
-> +		rx_stats = &adapter->rx_ring[i].rx_stats;
-> +		syncp = &adapter->rx_ring[i].syncp;
+>    wp-gpios:
+>      description:
+>        GPIO to which the write-protect pin of the chip is connected.
+> @@ -98,6 +121,12 @@ examples:
+>                reg = <0xc 0x1>;
+>                bits = <2 3>;
+>            };
 > +
-> +		do {
-> +			start = u64_stats_fetch_begin_irq(syncp);
-> +
-> +			xdp_stats->drop = rx_stats->xdp_drop;
-> +			xdp_stats->pass = rx_stats->xdp_pass;
-> +			xdp_stats->tx = rx_stats->xdp_tx;
-> +			xdp_stats->redirect = 
-> rx_stats->xdp_redirect;
-> +			xdp_stats->aborted = 
-> rx_stats->xdp_aborted;
-> +			xdp_stats->invalid = 
-> rx_stats->xdp_invalid;
-> +		} while (u64_stats_fetch_retry_irq(syncp, start));
-> +
-> +		xdp_stats++;
-> +	}
-> +
-> +	xdp_stats = attr_data;
-> +	/* xdp_num_queues can be 0 if an XDP program isn't loaded 
-> */
-> +	for (i = 0; i < adapter->xdp_num_queues; i++) {
-> +		const struct ena_stats_tx *tx_stats;
-> +
-> +		tx_stats = 
-> &adapter->rx_ring[i].xdp_ring->tx_stats;
-> +		syncp = &adapter->rx_ring[i].xdp_ring->syncp;
-> +
-> +		do {
-> +			start = u64_stats_fetch_begin_irq(syncp);
-> +
-> +			xdp_stats->xmit_packets = tx_stats->cnt;
-> +			xdp_stats->xmit_bytes = tx_stats->bytes;
-> +			xdp_stats->xmit_errors = 
-> tx_stats->dma_mapping_err +
-> + 
-> tx_stats->prepare_ctx_err;
-> +		} while (u64_stats_fetch_retry_irq(syncp, start));
-> +
-> +		xdp_stats++;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  static const struct net_device_ops ena_netdev_ops = {
->  	.ndo_open		= ena_open,
->  	.ndo_stop		= ena_close,
->  	.ndo_start_xmit		= ena_start_xmit,
->  	.ndo_select_queue	= ena_select_queue,
->  	.ndo_get_stats64	= ena_get_stats64,
-> +	.ndo_get_xdp_stats_nch	= ena_get_xdp_stats_nch,
-> +	.ndo_get_xdp_stats	= ena_get_xdp_stats,
->  	.ndo_tx_timeout		= ena_tx_timeout,
->  	.ndo_change_mtu		= ena_change_mtu,
->  	.ndo_set_mac_address	= NULL,
-
-I'll update it in v3 and mention you, thanks!
-
-Al
+> +          ethernet_base_mac: base-mac-address@100 {
+> +              #nvmem-cell-cells = <1>;
+> +              reg = <0x100 0x6>;
+> +              transformation = <NVMEM_T_ETH_OFFSET 0 1 2 7>;
+> +          };
+>        };
+>  
+>  ...
+> -- 
+> 2.30.2
+> 
+> 

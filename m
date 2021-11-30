@@ -2,167 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D92B463BE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F008B463BEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243985AbhK3QiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:38:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243996AbhK3QiU (ORCPT
+        id S238048AbhK3QjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:39:21 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:56127 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238032AbhK3QjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:38:20 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B82CFC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:34:59 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id 137so18013958wma.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:34:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:to:cc:references:from:organization:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sVBcHRn6XhRgKrNxDSzVe9awm1/8zE1c8t30yxDxCRI=;
-        b=xuygAaQuliB1uV19EACuXbaX++7P0zyTKkADKvsO9mZ/IF67E4vH6m5bvZemQbtNkV
-         tFrsMqJ0PPZZMszPTYIHQ6nXCE9m57yedoz70VmOFjayWaKojQE48523Twth0GHTJg2g
-         d59mvMnqcg38+it+wF88AQT06Js5rzGKzTdWu3VTxLUcf+2ja0zKW018c7QP/IJKu4qQ
-         MfK3sKWFLY2SqQH8bre4XLDpP5QuSgfYPw/mG1pFiAa+44GOBnXwxgTOM4XGwbq8WzWZ
-         c24i0XwJEwDo8oEsNvxPD4iN4WLYl0ujqawvzDZqjP1+ZBHTD3HNHL4UO5lnkv25CEC1
-         Cohg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:organization
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=sVBcHRn6XhRgKrNxDSzVe9awm1/8zE1c8t30yxDxCRI=;
-        b=QbEMXu3fB2THKsDuqvdsqCszUBi2+2j1e88t46w2f+/izKLtR30bZbpnI/yXaBO3Qo
-         RE8tHAuVF+Orf6I4ohSJXfXMzTBsDSLoct8YQZ44B8W0MhcVbCSrhdHkqExntA3TLP4n
-         uz87iNPeAZK0AEWRW74nP+Qt6c3JJ/M+4SZKm6FWqEF6qpUyeGzo0k1TxbJwxGGE8Z00
-         4VgRTXn4dXAnJMN3ZEbRn1rzpt7Sf2ueAKz+lkcWc4FKmNDvw9e0CxPeeJdzYdZdRsPg
-         C/iHZK/EBL2ag1ZHPOZLox0oGTAcMq0IiMW+/daoH8e/2cRzRZnu7MV7zKwnhvthKwvI
-         tIxg==
-X-Gm-Message-State: AOAM532Q07/1pYnh4V3Y1LurUZ/d+jDK24Gq0qLmqGlV4fpZIsYPhEQR
-        eAjOlR6krfx/EmJTQ7VYUg1GQQ==
-X-Google-Smtp-Source: ABdhPJzbASU0G517H6mvwWDHq+lGU4Xu5RKHvfwThu92WEepEJHdfV8bfjSLIz+12Bm27Gl+YtBK1g==
-X-Received: by 2002:a05:600c:3658:: with SMTP id y24mr546060wmq.161.1638290098124;
-        Tue, 30 Nov 2021 08:34:58 -0800 (PST)
-Received: from ?IPv6:2001:861:44c0:66c0:f80b:b9bd:4d6e:b61a? ([2001:861:44c0:66c0:f80b:b9bd:4d6e:b61a])
-        by smtp.gmail.com with ESMTPSA id n2sm2983591wmi.36.2021.11.30.08.34.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 08:34:57 -0800 (PST)
-Subject: Re: [PATCH v7 0/9] drm/omap: Add virtual-planes support
-To:     tomba@kernel.org
-Cc:     linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com
-References: <20211117141928.771082-1-narmstrong@baylibre.com>
-From:   Neil Armstrong <narmstrong@baylibre.com>
-Organization: Baylibre
-Message-ID: <797a3b9a-be04-26ef-9d1a-e5283198ab15@baylibre.com>
-Date:   Tue, 30 Nov 2021 17:34:57 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
-MIME-Version: 1.0
-In-Reply-To: <20211117141928.771082-1-narmstrong@baylibre.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Tue, 30 Nov 2021 11:39:09 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 57BBE580131;
+        Tue, 30 Nov 2021 11:35:49 -0500 (EST)
+Received: from imap47 ([10.202.2.97])
+  by compute3.internal (MEProxy); Tue, 30 Nov 2021 11:35:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=mime-version:message-id:in-reply-to:references:date:from:to
+        :cc:subject:content-type; s=fm3; bh=jY6BiEiqqEX3r2Q5KUj5NScjlUZf
+        fg61Yq1tlm97XYA=; b=jyB3/dh+y7c9vt/oLRpNSfNC/oiUOK/VJK8JZyNRCFOc
+        bbeesyoIbl0CSqNRur2TB14V/liIrJm4KX65Ik5ZGo1zySpONG4YtTYzxS9CUKqo
+        NadBNNjzdNLypkNQ0jqUx8ihBa7tFdlcJZ+mGSzOsWBPYZXi4QI48dbCjTPCKc5Y
+        imDYW1yZvArYKhwyp0CUULMH+TDwPYZwXkrriKohEY1X5H/zQAaPyMzgBO7q5Cg7
+        K35cAUIOssmHF9cib9gSoodhxLIIP6rEjUQRWSyBeJDJDGwUQEyFCCbTWHTAflun
+        Gf1K62APOkgUU9E3NuoB2p/MdnsLAq+TZzTuNdzy4g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=jY6BiE
+        iqqEX3r2Q5KUj5NScjlUZffg61Yq1tlm97XYA=; b=exCdb3Nlcw6TyjODvHWX5M
+        AR4JsRPKMCpnb4auq1n3u4nBIjfoQu+GhUoAi2rLTUxifFSh1/E9pI4pOM214S1n
+        y7F99nqoJl5pf6X6pnTbXPgmd2Ff9LSDFno6mF3LCa7cu6ToYwDsg40cFloTMm6X
+        T8BPVW9CqytvDYZud5nRlSMqScxpaRp2wizBe8djXxwO1vWYLmUEasWdoecS7S+/
+        up8vIDqSqu9xxrKrZo0PojWXnjMUYnv+3Zw1W3tqMOvQOO/bs2kXY8Q1KOcpBK3U
+        opHeutP31WvAe7KgYdw6A3LDPVHkLeiyINTvGjDU/vMG4EO8OX7MknPAdljc9YGg
+        ==
+X-ME-Sender: <xms:5FKmYShZZhFZh_IqmL6zHDeut9llF2lsBwsB5ob6JIMrKfKQufKHZA>
+    <xme:5FKmYTAChIUwXNvY3MibWHPgF9kZgGL3xHeFJpb6V8JNAtxzdQuVdbF_rQ4CJOJpV
+    QQep3Wcyj173qdgvIQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddriedugdelvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhvvghn
+    ucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
+    htvghrnhepvedvgeevuddvvedvgfelfeegiedvgeehieeutdelvedvieevveeljeefvedt
+    leehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggv
+    vh
+X-ME-Proxy: <xmx:5FKmYaFmzA6NDcLu9LRzcsdsr0jSn8GM_Cu20YrnjBaUO3k5fIxcfA>
+    <xmx:5FKmYbTEi3CfNwGKFxUyj_LkA-infyZrfKX1l9P8p3GPOnW5tEiHUQ>
+    <xmx:5FKmYfw8cCiPIb3PwaLkom8BOFImZuMrUAtPEuPt0dPAg__QyHfuAA>
+    <xmx:5VKmYUoGkNdE6vr5qBJo0dj_y2WXJf4TWEUMQSqeDoNjOG5NFDuvdg>
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BDB3C27407E3; Tue, 30 Nov 2021 11:35:48 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.5.0-alpha0-4410-g5528bb82a8-fm-20211130.003-g5528bb82
+Mime-Version: 1.0
+Message-Id: <0f3c9f9e-caf9-462a-ba8d-882266d4c7c4@www.fastmail.com>
+In-Reply-To: <20211130160338.GA2739234@bhelgaas>
+References: <20211130160338.GA2739234@bhelgaas>
+Date:   Tue, 30 Nov 2021 17:35:16 +0100
+From:   "Sven Peter" <sven@svenpeter.dev>
+To:     "Bjorn Helgaas" <helgaas@kernel.org>,
+        "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>
+Cc:     "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
+        "Bjorn Helgaas" <bhelgaas@google.com>, svarbanov@mm-sol.com,
+        bjorn.andersson@linaro.org, "Rob Herring" <robh@kernel.org>,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
+Subject: Re: [PATCH] PCI: qcom: Fix warning generated due to the incorrect data type
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
+Hi,
 
-On 17/11/2021 15:19, Neil Armstrong wrote:
-> This patchset is the follow-up the v4 patchset from Benoit Parrot at [1].
-> 
-> This patch series adds virtual-plane support to omapdrm driver to allow the use
-> of display wider than 2048 pixels.
-> 
-> In order to do so we introduce the concept of hw_overlay which can then be
-> dynamically allocated to a plane. When the requested output width exceed what
-> be supported by one overlay a second is then allocated if possible to handle
-> display wider then 2048.
-> 
-> This series replaces an earlier series which was DT based and using statically
-> allocated resources.
-> 
-> This implementation is inspired from the work done in msm/disp/mdp5
-> driver.
-> 
-> Changes since v6 at [3]:
-> - Patch 1: Added comment for drm_atomic_helper_check_plane_state, added Reviewed-by
-> - Patch 2: added Reviewed-by
-> - Patch 3: added Reviewed-by
-> - Patch 4: added Reviewed-by
-> - Patch 5: added Reviewed-by
-> - Patch 6: No changes
-> - Patch 7: No changes
-> - Patch 8: Reformatted omap_plane_atomic_print_state() output for overlays
-> - Patch 9: Added a comment of the utility of the local omap_atomic_update_normalize_zpos() + atomic_print_state() reformat
-> 
-> Changes since v5 at [2]:
-> - Patch 1: renamed width/height_fp to max_width/height
-> - Patch 2: no changes
-> - Patch 3: removed possible_crtcs stuff,
-> 	added cleanup on failure to allocate,
-> 	removed name in omap_plane struct & plane_id_to_name in omap_plane.c,
-> 	switched all omap_plane->name to plane->name or omap_plane->id
-> - Patch 4: aligned omap_plane_atomic_duplicate_state the the crtc style
-> - Patch 5: removed glob_obj_lock & reformated global state declaration in omap_drv.h
-> - Patch 6: moved drm_atomic_helper_check_plane_state() from atomic_check() in separate commit,
-> 	removed zpos change, updated debug messages to be useful,
-> 	renamed omap_overlay_disable() to omap_overlay_update_state(),
-> 	added useful comments for omap_overlay_assign() & omap_overlay_update_state(),
-> 	simplified omap_overlay_assign() & omap_overlay_update_state() for actual use-cases,
-> 	refactored omap_plane_atomic_check() changes to be cleaner & simpler
-> - Patch 7: no changes (except possible_crtcs print removal)
-> - Patch 8: Reformated omap_plane_atomic_check() & omap_overlay_assign() changes to match previous patches layout 
-> 
-> Changes since v4 at [1]:
-> - rebased on v5.15-rc2
-> - adapted to drm_atomic_get_new/old_plane_state()
-> - tested on Beagle-x15
-> - checked for non-regression on Beagle-x15
-> - removed unused "state" variable in omap_global_state
-> 
-> [1] https://lore.kernel.org/all/20181012201703.29065-1-bparrot@ti.com/
-> [2] https://lore.kernel.org/all/20210923070701.145377-1-narmstrong@baylibre.com/
-> [3] https://lore.kernel.org/all/20211018142842.2511200-1-narmstrong@baylibre.com
-> 
-> Benoit Parrot (8):
->   drm/omap: Add ability to check if requested plane modes can be
->     supported
->   drm/omap: Add ovl checking funcs to dispc_ops
->   drm/omap: introduce omap_hw_overlay
->   drm/omap: omap_plane: subclass drm_plane_state
->   drm/omap: Add global state as a private atomic object
->   drm/omap: dynamically assign hw overlays to planes
->   drm/omap: add plane_atomic_print_state support
->   drm/omap: Add a 'right overlay' to plane state
-> 
-> Neil Armstrong (1):
->   drm/omap: add sanity plane state check
-> 
->  drivers/gpu/drm/omapdrm/Makefile       |   1 +
->  drivers/gpu/drm/omapdrm/dss/dispc.c    |  31 ++-
->  drivers/gpu/drm/omapdrm/dss/dss.h      |   5 +
->  drivers/gpu/drm/omapdrm/omap_drv.c     | 196 +++++++++++++-
->  drivers/gpu/drm/omapdrm/omap_drv.h     |  24 ++
->  drivers/gpu/drm/omapdrm/omap_fb.c      |  33 ++-
->  drivers/gpu/drm/omapdrm/omap_fb.h      |   4 +-
->  drivers/gpu/drm/omapdrm/omap_overlay.c | 212 +++++++++++++++
->  drivers/gpu/drm/omapdrm/omap_overlay.h |  35 +++
->  drivers/gpu/drm/omapdrm/omap_plane.c   | 349 +++++++++++++++++++++----
->  drivers/gpu/drm/omapdrm/omap_plane.h   |   1 +
->  11 files changed, 832 insertions(+), 59 deletions(-)
->  create mode 100644 drivers/gpu/drm/omapdrm/omap_overlay.c
->  create mode 100644 drivers/gpu/drm/omapdrm/omap_overlay.h
-> 
-> 
-> base-commit: 49c39ec4670a8f045729e3717af2e1a74caf89a5
-> 
+On Tue, Nov 30, 2021, at 17:03, Bjorn Helgaas wrote:
+> [+cc Marc, Alyssa, Sven for RID-to-SID mapping insight.  The patch at
+> https://lore.kernel.org/all/20211130062137.GD205712@thinkpad/ merely
+> fixes a warning.  My meta-question is about the qcom BDF-to-SID
+> mapping.]
+>
+> On Tue, Nov 30, 2021 at 11:51:37AM +0530, Manivannan Sadhasivam wrote:
+>> On Mon, Nov 29, 2021 at 09:36:14PM -0600, Bjorn Helgaas wrote:
+>> > ...
+>> > I'm also curious why pcie-qcom.c is the only driver that does this.
+>> > "iommu-map" is not specific to qcom, but no other drivers do similar
+>> > things with it.
+>> 
+>> Yes, on the recent qcom platforms starting from sm8250 we need to program
+>> the BDF to SID mapping in the controller and that's the reason we are
+>> extracting the "iommu-map" property in DT.
+>
+> This sounds like something that may not really be specific to sm8250.
+
+So a single IOMMU can possibly differentiate between N different devices [1].
+Each device [1] is identified by some number which is called sid (stream id?
+security id? who knows.) on Apple hardware (and apparently also on qcom).
+Now I don't know much about PCI but the way I understand it is that the
+bus/device/function tuple can be used to uniquely identify a single device on the bus.
+All iommu-map does is to provide the mapping between those two different spaces [2].
+
+For most iommus this seems to be just a static mapping that's hardwired in silicon
+and I think that's why almost no PCI driver needs to care about it: The iommu
+core will just use it to convert the PCI requester ID to a number the iommu
+driver understands.
+
+Apple's frankenchip however allows to configure this mapping from software
+after a device has been attached and that's why we need that special code inside
+the PCI driver: We have to make sure that whatever is configured inside iommu-map
+(and used by the iommu core to match PCI devices to iommu groups) matches to what
+the HW does.
+
+I can only assume that qcom does something similar. It looks like the qcom HW can be
+fully configured during probe time though while we really have to wait until a device
+is attached for the Apple chip (mostly because we only have 16 slots there).
 
 
-Gentle ping,
+Hope that helps.
 
-Neil
+
+Best,
+
+Sven
+
+
+
+[1] Technically the smallest unit are iommu groups which can contain multiple
+devices but we can just ignore that. The iommu code will do the correct thing
+if it gets told that two PCI devices have the same identification number.
+
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/iommu/of_iommu.c#n53

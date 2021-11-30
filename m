@@ -2,94 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B0E4463701
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCF0046377B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242347AbhK3Ot5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:49:57 -0500
-Received: from phobos.denx.de ([85.214.62.61]:42624 "EHLO phobos.denx.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233823AbhK3Otz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:49:55 -0500
-Received: from janitor.denx.de (unknown [62.91.23.180])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        id S242790AbhK3OyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:54:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242746AbhK3Owh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 09:52:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ADFC0613F6;
+        Tue, 30 Nov 2021 06:48:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: noc@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 5DACA8305E;
-        Tue, 30 Nov 2021 15:46:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1638283595;
-        bh=BZYi9ht2xy65JyC43IPolVUMbyaxhCW/7gh9Gp9ztQE=;
-        h=To:cc:From:Subject:In-reply-to:References:Date:From;
-        b=wBut36DpGx3qEDMfNoBVNMbRR4lO4jyH1JnQCjRHO3oSsxDKHStFrq/Q6ow10W6EQ
-         dZ9TVgOLHNQaHRArc/Q/BOgc66GiyCa4Pk/Lmm/iR9O5iZwSQWhjLzSDadDDD3GrYj
-         gAPrgB8zjdmIbbVagcz4sqOu03b/UEBqvThwCpNB8B0MO7PX9BC01q+k8QfmayFI6A
-         v/aiwXM7/QOguwjE0oERvWOwhM6JIr7g3FIEl6Lr4ja+sXZArRoQs5I4/VFF/t50GS
-         2gk6B7SHKfK9zQG2ExpH8uiDWu86z/RPlfSE6eZt2bKLOjT8C6meAcmTJQ3wMppCjR
-         Vil/zNP5GwL1A==
-Received: by janitor.denx.de (Postfix, from userid 108)
-        id 0D329A0260; Tue, 30 Nov 2021 15:46:35 +0100 (CET)
-X-Spam-Checker-Version: SpamAssassin 3.4.2 (2018-09-13) on janitor.denx.de
-X-Spam-Level: *
-X-Spam-Status: No, score=1.5 required=5.0 tests=ALL_TRUSTED,SUSPICIOUS_RECIPS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.2
-Received: from gemini.denx.de (gemini.denx.de [10.4.0.2])
-        by janitor.denx.de (Postfix) with ESMTPS id 8D5B6A00AA;
-        Tue, 30 Nov 2021 15:46:25 +0100 (CET)
-Received: from gemini.denx.de (localhost [IPv6:::1])
-        by gemini.denx.de (Postfix) with ESMTP id 253191E0BCB;
-        Tue, 30 Nov 2021 15:46:25 +0100 (CET)
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-cc:     linux-raid@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        linux-accelerators@lists.ozlabs.org, linux-nvme@lists.infradead.org
-From:   Wolfgang Denk <wd@denx.de>
-Subject: Re: Using aGPU for RAID calculations (proprietary GRAID SupremeRAID)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3A7BCB81A22;
+        Tue, 30 Nov 2021 14:48:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E21C53FC1;
+        Tue, 30 Nov 2021 14:48:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638283710;
+        bh=Or+rphS/DIxiLVxUPs0uu1VUl3TELVGbxF0kTlRLYx0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Wm/41jMADOQEAt+c2jInlh9YXejHhk+jy0aT/S9CeAMyX6jcNJbVbc0io4z+e2gjU
+         oBJjEJNzitOcm0UDkz2GQqQegJfQbdBhJcQC8bhdycOgWzXn00qZkC9pLuMNjKdHro
+         8ZWx+EiBwgTwGom5WMZIx32r8odIZuTfHE8zwn+LIZcln8WuyDNXTzoxRlNzfAMJyo
+         dNuTMoSJOp8tgUaaEWnd9Ijoga784WljM2KEwC4ZXnOo24FhxRQXW0b56JBvTPFfwx
+         BOiBXkOM41EFGr4jWo50JIp+Jf2mDPAG2TcgpFR4Rf1MT0WHxnL9PddVOGcNh8nvbB
+         MnUqWsxpOxSZQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
+        James.Bottomley@HansenPartnership.com, svens@stackframe.org,
+        dave.anglin@bell.net, linux-parisc@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 29/68] parisc: Convert PTE lookup to use extru_safe() macro
+Date:   Tue, 30 Nov 2021 09:46:25 -0500
+Message-Id: <20211130144707.944580-29-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211130144707.944580-1-sashal@kernel.org>
+References: <20211130144707.944580-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-type: text/plain; charset=UTF-8
-Content-transfer-encoding: 8bit
-In-reply-to: <ccdbb0d7-d043-d41f-508b-4a464ffa5fe9@molgen.mpg.de>
-References: <ccdbb0d7-d043-d41f-508b-4a464ffa5fe9@molgen.mpg.de>
-Comments: In-reply-to Paul Menzel <pmenzel@molgen.mpg.de>
-   message dated "Tue, 30 Nov 2021 12:58:10 +0100."
-Date:   Tue, 30 Nov 2021 15:46:25 +0100
-Message-ID: <3846571.1638283585@gemini.denx.de>
-X-Virus-Scanned: clamav-milter 0.103.2 at phobos.denx.de
-X-Virus-Status: Clean
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Paul,
+From: Helge Deller <deller@gmx.de>
 
-In message <ccdbb0d7-d043-d41f-508b-4a464ffa5fe9@molgen.mpg.de> you wrote:
-> 
-> I read about GRAID SupremeRAID [1], which seems to be an Nvidia T1000 
-> card and software to use the card for RAID calculations.
+[ Upstream commit 3fbdc121bd051d9f1b3b2e232ad734c44b47d32c ]
 
-I doubt this is an efficient way.
+Convert the PTE lookup functions to use the safer extru_safe macro.
 
-The (IMHO) most efficient solution I have seen so far was the AMCC
-PPC440SPe Power Architecture processors.  These we able to calculate
-the needed parity information on the fly in the DMA controller while
-writing the data to disk.
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/parisc/kernel/entry.S | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-> Does the Linux kernel already have an API to offload calculations to 
-> accelerator cards, so it’s basically plug and play (with AMD graphics 
-> cards for example using HSA/KFD)? Entropy sources, like the ChaosKey 
-> [3], work like that. If not, would the implementation go under `lib/raid6`?
-
-We implemented Linux driver support for adma/async_tx/raid6 for this
-hardware, but that was a long time ago (2008/2009), and I doubt this
-has been tested recently.  But at least some code is still in
-mainline, see for example arch/powerpc/platforms/44x/ppc440spe_dma_engines.c
-
-
-Best regards,
-
-Wolfgang Denk
-
+diff --git a/arch/parisc/kernel/entry.S b/arch/parisc/kernel/entry.S
+index 437c8d31f3907..625c19884905b 100644
+--- a/arch/parisc/kernel/entry.S
++++ b/arch/parisc/kernel/entry.S
+@@ -393,17 +393,9 @@
+ 	 */
+ 	.macro		L2_ptep	pmd,pte,index,va,fault
+ #if CONFIG_PGTABLE_LEVELS == 3
+-	extru		\va,31-ASM_PMD_SHIFT,ASM_BITS_PER_PMD,\index
++	extru_safe	\va,31-ASM_PMD_SHIFT,ASM_BITS_PER_PMD,\index
+ #else
+-# if defined(CONFIG_64BIT)
+-	extrd,u		\va,63-ASM_PGDIR_SHIFT,ASM_BITS_PER_PGD,\index
+-  #else
+-  # if PAGE_SIZE > 4096
+-	extru		\va,31-ASM_PGDIR_SHIFT,32-ASM_PGDIR_SHIFT,\index
+-  # else
+-	extru		\va,31-ASM_PGDIR_SHIFT,ASM_BITS_PER_PGD,\index
+-  # endif
+-# endif
++	extru_safe	\va,31-ASM_PGDIR_SHIFT,ASM_BITS_PER_PGD,\index
+ #endif
+ 	dep             %r0,31,PAGE_SHIFT,\pmd  /* clear offset */
+ #if CONFIG_PGTABLE_LEVELS < 3
+@@ -413,7 +405,7 @@
+ 	bb,>=,n		\pmd,_PxD_PRESENT_BIT,\fault
+ 	dep		%r0,31,PxD_FLAG_SHIFT,\pmd /* clear flags */
+ 	SHLREG		\pmd,PxD_VALUE_SHIFT,\pmd
+-	extru		\va,31-PAGE_SHIFT,ASM_BITS_PER_PTE,\index
++	extru_safe	\va,31-PAGE_SHIFT,ASM_BITS_PER_PTE,\index
+ 	dep		%r0,31,PAGE_SHIFT,\pmd  /* clear offset */
+ 	shladd		\index,BITS_PER_PTE_ENTRY,\pmd,\pmd /* pmd is now pte */
+ 	.endm
 -- 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-10 Fax: (+49)-8142-66989-80 Email: wd@denx.de
-Another megabytes the dust.
+2.33.0
+

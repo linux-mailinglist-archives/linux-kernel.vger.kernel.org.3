@@ -2,107 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE55462986
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:16:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDBE346296F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235371AbhK3BUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 20:20:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43684 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230248AbhK3BUJ (ORCPT
+        id S234963AbhK3BIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 20:08:43 -0500
+Received: from szxga08-in.huawei.com ([45.249.212.255]:28125 "EHLO
+        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230144AbhK3BIn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 20:20:09 -0500
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C88C061574;
-        Mon, 29 Nov 2021 17:16:51 -0800 (PST)
-Received: by mail-ot1-x332.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso27994990ots.6;
-        Mon, 29 Nov 2021 17:16:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1ZEmtCcFbx9RGf9eWexeNci8XqT+MY8xIxIUzBU+qPY=;
-        b=kPJn/KGyUqhDtgvrcieRooin88XOS9kdXOFSBFGS0TfmK3qD9wT02IrojDfa2N0Pza
-         MmzQTK6P2Lx1EWb+CZPdSWYP10oXmpeqQ7QL1uPkHMi94gDlrBX21XRgQZmxfB9DBPbm
-         Pw197b0CmFwvB5gP6mBKe+Kw+YEUxutl6cHqSZQHgdXDCw+seLQb1tLzqJcYVIIdt9c+
-         2P+KxJ5DVfRPc3sIo7QB6gR5voXKv7m2rJD8Qi9fEqtBNU9NH1080P9mMX96Erg29PI+
-         ppyCkroOWbGig3dJraXTa5QSiWNiL5QnkuKkHlrP+Ugdx7Ur2Tzy0iSTk88t8iqU09iz
-         dFpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1ZEmtCcFbx9RGf9eWexeNci8XqT+MY8xIxIUzBU+qPY=;
-        b=AtnhJ7WTHt+CdK9Gv/FkCGenGurmmAqio9FngupiYhnMjwUz+bsp0UIqeuOLGPaiJh
-         3A/bc0t+2rutrynyg0WqeEqZjrPTrIP0vZMbEUqTQu/8QNMXnbqyfjA8uzMF18oLhvVt
-         +I3rMzq8eTpdG32I+/R5hHHefyIVkBCTYrsMMV+m5/kuY1rjc5PL0bFnFmnUCuBQG2Gi
-         LoAhtNXyvtA5xRr76ht/9RsE3zkdNc9N4qRIVqQ6iYPpwTGctS4CJoBF7NZ0Glwb0ooV
-         Fi1KyUggNzXOghwiNgKsE3QdskmSa4meIKh5ZHe9r8Jc8x1rCR7XBYAcSMItiuQN+Ub1
-         HqhQ==
-X-Gm-Message-State: AOAM5325WMdeLHYTP/lEshiMkYHh+r7KsGa/e8zt8ztjGwH67G1Cf6Vj
-        jEvdhjKUXsFeuSGc/j/J1YM=
-X-Google-Smtp-Source: ABdhPJzzokVnyg4AooF1Lp7IY1QG9zSS1syyGl9CzTYszpvRgzHYJA5UIPw+otUO2SxTZ8fYAE0IGw==
-X-Received: by 2002:a9d:798d:: with SMTP id h13mr46205333otm.132.1638235010442;
-        Mon, 29 Nov 2021 17:16:50 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id i3sm2501566ooq.39.2021.11.29.17.16.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 17:16:50 -0800 (PST)
-Message-ID: <c19ebcb5-2e25-ce9c-af83-e934cc3d0996@gmail.com>
-Date:   Mon, 29 Nov 2021 18:16:48 -0700
+        Mon, 29 Nov 2021 20:08:43 -0500
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J33q72WQwz1DJnr;
+        Tue, 30 Nov 2021 09:02:43 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 09:05:22 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 30 Nov
+ 2021 09:05:21 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <hch@infradead.org>, <tj@kernel.org>, <axboe@kernel.dk>
+CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH v2 0/2] cancel all throttled bios in del_gendisk()
+Date:   Tue, 30 Nov 2021 09:17:28 +0800
+Message-ID: <20211130011730.2584339-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.1
-Subject: Re: [PATCH net v2] selftests/fib_tests: ping from dummy0 in
- fib_rp_filter_test()
-Content-Language: en-US
-To:     Peilin Ye <yepeilin.cs@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211129225230.3668-1-yepeilin.cs@gmail.com>
- <20211130004905.4146-1-yepeilin.cs@gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20211130004905.4146-1-yepeilin.cs@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/21 5:49 PM, Peilin Ye wrote:
-> diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-> index 5abe92d55b69..b8bceae00f8e 100755
-> --- a/tools/testing/selftests/net/fib_tests.sh
-> +++ b/tools/testing/selftests/net/fib_tests.sh
-> @@ -453,15 +453,19 @@ fib_rp_filter_test()
->  	$NS_EXEC sysctl -qw net.ipv4.conf.all.accept_local=1
->  	$NS_EXEC sysctl -qw net.ipv4.conf.all.route_localnet=1
->  
-> +	$NS_EXEC tc qd add dev dummy0 parent root handle 1: fq_codel
-> +	$NS_EXEC tc filter add dev dummy0 parent 1: protocol arp basic action mirred egress redirect dev dummy1
-> +	$NS_EXEC tc filter add dev dummy0 parent 1: protocol ip basic action mirred egress redirect dev dummy1
-> +
->  	$NS_EXEC tc qd add dev dummy1 parent root handle 1: fq_codel
->  	$NS_EXEC tc filter add dev dummy1 parent 1: protocol arp basic action mirred egress redirect dev lo
->  	$NS_EXEC tc filter add dev dummy1 parent 1: protocol ip basic action mirred egress redirect dev lo
->  	set +e
->  
-> -	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 198.51.100.1"
-> +	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 198.51.100.1"
->  	log_test $? 0 "rp_filter passes local packets"
->  
-> -	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 127.0.0.1"
-> +	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 127.0.0.1"
->  	log_test $? 0 "rp_filter passes loopback packets"
->  
->  	cleanup
-> 
+If del_gendisk() is done when some io are still throttled, such io
+will not be handled until the throttle is done, which is not
+necessary.
 
-confused by the point of this test if you are going to change dummy1 to
-dummy0. dummy0 has 198.51.100.1 assigned to it, so the ping should
-always work.
+Changes in v2:
+ - move WARN_ON_ONCE() from throtl_rb_first() to it's caller
+ - merge some patches into one.
+
+Yu Kuai (2):
+  blk-throtl: move WARN_ON_ONCE() from throtl_rb_first() to it's caller
+  block: cancel all throttled bios in del_gendisk()
+
+ block/blk-throttle.c | 68 ++++++++++++++++++++++++++++++++++++++++++--
+ block/blk-throttle.h |  2 ++
+ block/genhd.c        |  2 ++
+ 3 files changed, 69 insertions(+), 3 deletions(-)
+
+-- 
+2.31.1
+

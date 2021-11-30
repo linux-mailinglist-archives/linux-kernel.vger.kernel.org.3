@@ -2,109 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E544B462C38
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:33:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CEEF462C43
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:39:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238329AbhK3Fgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 00:36:49 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:46422 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbhK3Fgs (ORCPT
+        id S238353AbhK3Fmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 00:42:40 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:33796 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233650AbhK3Fmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 00:36:48 -0500
-Received: from [10.137.112.111] (unknown [131.107.147.111])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E2F0B20DEED2;
-        Mon, 29 Nov 2021 21:33:29 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E2F0B20DEED2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1638250410;
-        bh=Ka0mPJgYWmiDnzwsdqmRMIk4RJt332upLQtsgsCn/dc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=DovVDIeZ3Wk5BWgvAvkCFlTP8xh0m4/KwjRKzNT4UxmUoMb2HGiKFwl23OmtgG64p
-         dcuIW/1LucLBJ+M5s70CVF0Ei9Ctthc0h7PgLAampsdeRfK0KaEbt5pVgnHFigvWJJ
-         LpSZ1pMQoiwVz9ZInscmql2LI9ohi6qHkLpek2XM=
-Message-ID: <53ee68b8-e3fe-887c-89d3-a327c8dc181f@linux.microsoft.com>
-Date:   Mon, 29 Nov 2021 21:33:29 -0800
+        Tue, 30 Nov 2021 00:42:38 -0500
+X-UUID: 1f360361fbe74e1d9620dd415c113adc-20211130
+X-UUID: 1f360361fbe74e1d9620dd415c113adc-20211130
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <trevor.wu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 868584682; Tue, 30 Nov 2021 13:39:09 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Tue, 30 Nov 2021 13:39:07 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 30 Nov 2021 13:39:07 +0800
+From:   Trevor Wu <trevor.wu@mediatek.com>
+To:     <broonie@kernel.org>, <tiwai@suse.com>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <trevor.wu@mediatek.com>, <alsa-devel@alsa-project.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <yc.hung@mediatek.com>
+Subject: [PATCH 0/2] ASoC: mediatek: support memory-region assignment
+Date:   Tue, 30 Nov 2021 13:39:03 +0800
+Message-ID: <20211130053905.28470-1-trevor.wu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 1/4] fs-verity: define a function to return the integrity
- protected file digest
-Content-Language: en-US
-To:     Eric Biggers <ebiggers@kernel.org>,
-        Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211129170057.243127-1-zohar@linux.ibm.com>
- <20211129170057.243127-2-zohar@linux.ibm.com>
- <YaWKJEqD6G23uG/A@sol.localdomain>
-From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
-In-Reply-To: <YaWKJEqD6G23uG/A@sol.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mimi,
+This series of patches adds support for memory-region assignment, so the 
+access region of DMA engine could be restricted.
+Patches are based on broonie tree "for-next" branch.
 
-On 11/29/2021 6:19 PM, Eric Biggers wrote:
-> Generally looks fine.  A few nits below:
-> 
-> On Mon, Nov 29, 2021 at 12:00:54PM -0500, Mimi Zohar wrote:
->> Define a function named fsverity_measure() to return the verity file digest
->> and the associated hash algorithm (enum hash_algo).
->>
->> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
->> ---
->>   fs/verity/fsverity_private.h |  6 -----
->>   fs/verity/measure.c          | 49 ++++++++++++++++++++++++++++++++++++
->>   include/linux/fsverity.h     | 17 +++++++++++++
->>   3 files changed, 66 insertions(+), 6 deletions(-)
->>
->> diff --git a/fs/verity/fsverity_private.h b/fs/verity/fsverity_private.h
->> index a7920434bae5..54c5f0993541 100644
->> --- a/fs/verity/fsverity_private.h
->> +++ b/fs/verity/fsverity_private.h
->> @@ -26,12 +26,6 @@ struct ahash_request;
->>    */
->>   #define FS_VERITY_MAX_LEVELS		8
->>   
->> -/*
->> - * Largest digest size among all hash algorithms supported by fs-verity.
->> - * Currently assumed to be <= size of fsverity_descriptor::root_hash.
->> - */
->> -#define FS_VERITY_MAX_DIGEST_SIZE	SHA512_DIGEST_SIZE
-> 
-> The include of sha2.h should be removed from this file.
-> 
->> +/**
->> + * fsverity_measure() - get a verity file's digest
-nit: The function name seems to suggest it is measuring the fs-verity 
-file's digest. Since it is reading the file's digest: 
-fsverity_read_digest() or fsverity_read_measure()?
+Trevor Wu (2):
+  ASoC: mediatek: mt8195: support reserved memory assignment
+  dt-bindings: mediatek: mt8195: add memory-region property
 
-  -lakshmi
+ .../devicetree/bindings/sound/mt8195-afe-pcm.yaml         | 8 ++++++++
+ sound/soc/mediatek/mt8195/mt8195-afe-pcm.c                | 7 +++++++
+ 2 files changed, 15 insertions(+)
 
->> + * @inode: inode to get digest of
->> + * @digest: pointer to the digest
->> + * @alg: pointer to the hash algorithm enumeration
-> 
-> It should be made clear that @digest and @alg are output, for example:
-> 
->   * @digest: (out) pointer to the digest
->   * @alg: (out) pointer to the hash algorithm enumeration
-> 
->> + * Return the file hash algorithm, digest size, and digest of an fsverity
->> + * protected file.
-> 
-> The digest size is implied, not returned.
-> 
->> +
->> +		if (!strcmp(hash_alg->name, hash_algo_name[i])) {
-> 
-> As the kernel test robot pointed out, this creates a dependency on
-> CRYPTO_HASH_INFO.  So FS_VERITY will need to select CRYPTO_HASH_INFO.
-> 
-> - Eric
-> 
+-- 
+2.18.0
+

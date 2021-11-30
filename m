@@ -2,118 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16ACA463223
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEBB146322A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:18:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238372AbhK3LVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:21:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38546 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235674AbhK3LVB (ORCPT
+        id S238486AbhK3LWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:22:01 -0500
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:52696 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235674AbhK3LWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:21:01 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07B9C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:17:42 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id i5-20020a05683033e500b0057a369ac614so8273676otu.10
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:17:42 -0800 (PST)
+        Tue, 30 Nov 2021 06:22:00 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3KTs0Mnpz9w6RS
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:18:41 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2mAgZOKHw_7x for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 05:18:40 -0600 (CST)
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3KTr5Jt1z9w6RG
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:18:40 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3KTr5Jt1z9w6RG
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3KTr5Jt1z9w6RG
+Received: by mail-pf1-f198.google.com with SMTP id p1-20020aa79e81000000b004a82ea1b82bso2307779pfq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:18:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vi8MbxG85CYq9CNpZ44LAbBeodXmRyoupGjEHyG65DY=;
-        b=iXezmFuJH1+Hgbo84C2QcMaXq6A4xQh3hOkRD9HWk7yHCPke2h6HeTl5PIURVm4tMU
-         z9cH+9PY0fZy04TPo5fq33vjbfBhBHtwkn3HckuoJ9dulZNoeg9D4uG45Shx6WVqaeRh
-         tbi98kBIcEmV93EKb49a2PP5+bgTw3o5Ni2CI5sNR92YWsIXIrpBWkpCLbcYhvbaAzK7
-         aCZxW9hrP+Aij4zvRy4VwVybWiI6G/Hs6Q34Zog+2O6kS7iJZaUZzB9cjd+Vw0dOp8l1
-         U5NNQndYtFX4Ei+IHUWknENj+emjKSvchbGOYwcydulPKJAmaBw0gNuzLJglsA3J1hU6
-         GqFw==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fcDXlkwYy3RGfIkoC7nwMHwkoGJwFkeLToaTBjqpVz0=;
+        b=IZFo2LaVF/UDFGHVpkS6dD5TA6dpvZiDSB/3rKX1VSVjqxWP/lhMO39QYI3NPLoRgq
+         cRXSmh8e41mhZP6Z6pASFNZgCl2xPwfVgz6CBJ4rCuCZ5ixas3pK71sx3cvXjwkJTop+
+         3T/yiRiF1QWYne/jINn7ouKO7OjCe6gsRwokRuSedKnx6jzsAq8pHSJdN03f8AET5TzU
+         a3BC2bkGlVrwO6yuzbS4R4Uw0sjIcFhIuR8RmeSA1Od8jCr3Qr3cmM751Tht6hvFkmqk
+         ZRyDmDTDs5KOn9FrJ5pzFxU474Na5c2560b3P8n5J2SDV8k/mizEVWFX2R0RVU+iUKxp
+         O0cA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vi8MbxG85CYq9CNpZ44LAbBeodXmRyoupGjEHyG65DY=;
-        b=bN9OVUFdUuYclIRdz0gpTygQioKAakoTeV2oyLcKKsPUH7Wr2pePWYukdVf+Gwx/ii
-         1DHz8UyDKn6uBHMbPuJKCmL56ANxdHQcdLihpbkTvY2DpTum4rVZHvsxT1r8Gq5rvPR1
-         Nd26H8/NKRGUsLPpqaBjhICvdfb1k+ON1lgRO46BryKygd29WtGpP99Bjh9SZrNFirf3
-         IyV38EgWR5WgpRflK5AU2IXaeIy4qTPKcAp4ey0+Y8Xh/yQnpJDjtVd5tMYQl1krfwGz
-         2LXwG3p032ldYWZPtNbLfgBnokz/X+X4ZRR9pZHp8OP0MMSleu/sPDwj83OoijiVtQJa
-         yjGg==
-X-Gm-Message-State: AOAM532I5IuS5OqFECPHFXasjoXfvGDAazZd6Cw0vIczmkWlHJPrKwTh
-        nC5uegSosGLW7eb4jVJ650S0mLqFqHX9PaaKwzUJU0L0AyQ=
-X-Google-Smtp-Source: ABdhPJzFuM1afuBfC8qppB4kUGyroaS87FAAfDg3iDhWzguxH+Ey/QnltKVZi8ZXLaP1OaZfp0JpspEBQSMDCMbLq5E=
-X-Received: by 2002:a9d:326:: with SMTP id 35mr49780081otv.41.1638271062090;
- Tue, 30 Nov 2021 03:17:42 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=fcDXlkwYy3RGfIkoC7nwMHwkoGJwFkeLToaTBjqpVz0=;
+        b=Hil4oS4proVe3i21VSd66z1GpFK9LMp6ZGykOuymQO+CrYqgYUUsiHBCj5glaKlNLY
+         8d5e1D9Cv+bPC3IIs8Kub34uleMlhg3Nv5FfljHskiIjCfEL7VVE3e7rrBb1azLAJcv9
+         JboU6b4vcjMIXfDU67dsKfsSMPs2THGhierc2lku4hoUROZmitp8h4xG4Lacxu4HVLwq
+         fIEQZ0dSC1qBUA4pOmBe/L0XiDqPPhh1wRYOeoRji4t0XUsRX4tDYEKxR1ue6aZsGBLa
+         Mtr4Fd5hL8q9nPXnaRnULjBD6uWc6NXUA9L+xUHFeZKy0BPy1IQBx6yH0eU7+Gtut+eF
+         bLrQ==
+X-Gm-Message-State: AOAM531qMZSc8RfiEV3TNVfj8gf4Zn+7+NarUdjM4lEdDUyi22ZXZ47s
+        0iSHc4TkU+s9B4uN911o9c19XGjrhw3Up07GxTd0mTgXm30VG63NCELIHpj3KQ+gzGcVIpNRQbT
+        ofJ2NWoRtcwb8fCkMl8kitGp8YofF
+X-Received: by 2002:a63:4815:: with SMTP id v21mr33476636pga.204.1638271119978;
+        Tue, 30 Nov 2021 03:18:39 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz86b37XtXDhaWTJbzxcPVwFldWszd3ZgCjYlChRIfA1Lxm91iK1IJ9p5k5TxfqRc7ZaUDHCg==
+X-Received: by 2002:a63:4815:: with SMTP id v21mr33476628pga.204.1638271119786;
+        Tue, 30 Nov 2021 03:18:39 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id q18sm19100280pfn.83.2021.11.30.03.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 03:18:39 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, hongao <hongao@uniontech.com>,
+        Jammy Zhou <Jammy.Zhou@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] fix a NULL pointer dereference in amdgpu_connector_lcd_native_mode()
+Date:   Tue, 30 Nov 2021 19:18:30 +0800
+Message-Id: <20211130111832.113821-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211129221346.365883-1-makvihas@gmail.com> <20211130094727.GT6514@kadam>
-In-Reply-To: <20211130094727.GT6514@kadam>
-From:   Vihas Mak <makvihas@gmail.com>
-Date:   Tue, 30 Nov 2021 16:47:31 +0530
-Message-ID: <CAH1kMwTbjN4_fqG94j4Ei2SWmjSsjanwMaSJrk4M6kGOzfB9fw@mail.gmail.com>
-Subject: Re: [PATCH] staging: r8188eu: use ARRAY_SIZE() macro and fix
- camelcase issues
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Larry.Finger@lwfinger.net, Phillip Potter <phil@philpotter.co.uk>,
-        Greg KH <gregkh@linuxfoundation.org>, martin@kaiser.cx,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Get rid of both the "arraylen" and "array" variables.  They only obscure
->> what the code is doing.  You may need to do additional clean up to make
->> it work without making the lines too long...
-Alright.
+In amdgpu_connector_lcd_native_mode(), the return value of
+drm_mode_duplicate() is assigned to mode, and there is a dereference
+of it in amdgpu_connector_lcd_native_mode(), which will lead to a NULL
+pointer dereference on failure of drm_mode_duplicate().
 
+Fix this bug add a check of mode.
 
-On Tue, Nov 30, 2021 at 3:18 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> On Tue, Nov 30, 2021 at 03:43:47AM +0530, Vihas Mak wrote:
-> > Fix camelcase warnings from checkpatch.pl and use ARRAY_SIZE()
-> > to make the code cleaner and avoid following cocci warnings:
-> >
-> >       drivers/staging/r8188eu/hal/HalHWImg8188E_RF.c:142:51-52: WARNING: Use ARRAY_SIZE
-> >       drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c:174:52-53: WARNING: Use ARRAY_SIZE
-> >       drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c:450:52-53: WARNING: Use ARRAY_SIZE
-> >       drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c:655:49-50: WARNING: Use ARRAY_SIZE
-> >       drivers/staging/r8188eu/hal/HalHWImg8188E_MAC.c:136:50-51: WARNING: Use ARRAY_SIZE
-> >
-> > Signed-off-by: Vihas Mak <makvihas@gmail.com>
-> > ---
-> >  .../staging/r8188eu/hal/HalHWImg8188E_BB.c    |  6 ++---
-> >  .../staging/r8188eu/hal/HalHWImg8188E_MAC.c   |  2 +-
-> >  .../staging/r8188eu/hal/HalHWImg8188E_RF.c    | 24 +++++++++----------
-> >  3 files changed, 16 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c b/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
-> > index f6e4243e0..ce46b3651 100644
-> > --- a/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
-> > +++ b/drivers/staging/r8188eu/hal/HalHWImg8188E_BB.c
-> > @@ -171,7 +171,7 @@ enum HAL_STATUS ODM_ReadAndConfig_AGC_TAB_1T_8188E(struct odm_dm_struct *dm_odm)
-> >  {
-> >       u32     hex         = 0;
-> >       u32     i           = 0;
-> > -     u32     arraylen    = sizeof(array_agc_tab_1t_8188e) / sizeof(u32);
-> > +     u32     arraylen    = ARRAY_SIZE(array_agc_tab_1t_8188e);
-> >       u32    *array       = array_agc_tab_1t_8188e;
->
-> Get rid of both the "arraylen" and "array" variables.  They only obscure
-> what the code is doing.  You may need to do additional clean up to make
-> it work without making the lines too long...
->
-> Same for the rest.
->
-> If that is too complicated then it's fine too, just leave it as-is for
-> now.  I know that sometimes people just want to silence the checkpatch
-> warnings but I prefer to keep the warning as a marker for bad code so
-> let's leave it until someone can fix this in the correct way.
->
-> regards,
-> dan carpenter
->
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
---
-Thanks,
-Vihas
+Builds with CONFIG_DRM_AMDGPU=m show no new warnings, and
+our static analyzer no longer warns about this code.
+
+Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+index 0de66f59adb8..0170aa84c5e6 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+@@ -387,6 +387,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
+ 	    native_mode->vdisplay != 0 &&
+ 	    native_mode->clock != 0) {
+ 		mode = drm_mode_duplicate(dev, native_mode);
++		if (!mode)
++			return NULL;
++
+ 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
+ 		drm_mode_set_name(mode);
+ 
+-- 
+2.25.1
+

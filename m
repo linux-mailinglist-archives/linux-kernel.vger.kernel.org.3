@@ -2,107 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3484546368C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:22:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E46BE46368F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237590AbhK3OZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:25:50 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:33190 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237388AbhK3OZt (ORCPT
+        id S242070AbhK3O0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:26:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229604AbhK3O0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:25:49 -0500
+        Tue, 30 Nov 2021 09:26:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B3DC061574;
+        Tue, 30 Nov 2021 06:22:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DF0F5B81A02;
-        Tue, 30 Nov 2021 14:22:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 532E0C53FCD;
-        Tue, 30 Nov 2021 14:22:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638282147;
-        bh=3+/5iwystls40fckNW8SLuocskVo5H8LAK4JbnvcCtM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=RAzG8hmI7LxL3BsrQSEg7baE1yLleKswlv0YpfPcJLzTquLaLi/7BpU3PA/G84B42
-         D3WwknTGIZx4Ynpe6iySTdD3lpPU8HcAqvch7j8IGOti/G3RJxgo2QAcH1gJWkPR6Q
-         t/jPZ5g5hnTq2YJseuGnW8nse+3JncCDkDGK9sVkx/aQBRIvVWqJ1DNjhn616oafZs
-         r4wZGlvG+RXkBzADJJyZPw1Ezwz1YUmbyYOto6MjXD87N76nm+lu4jOlc7Z/Ts8Rod
-         XwtXFF73NFsAKDEzjTW1ZZ8ChMJ4QvjLi0+chh+5n8laVO+CT7yJ9jZrHThcLyG8EY
-         /Qpp9ylavnytg==
-Date:   Tue, 30 Nov 2021 08:22:25 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
-Subject: Re: [PATCH 4/4] dt-bindings: pci: layerscape-pci: define aer/pme
- interrupts
-Message-ID: <20211130142225.GA2731608@bhelgaas>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9F03CB819E7;
+        Tue, 30 Nov 2021 14:22:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59D55C53FC1;
+        Tue, 30 Nov 2021 14:22:41 +0000 (UTC)
+Date:   Tue, 30 Nov 2021 09:22:40 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kbuild test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH v2 4/7] fs/binfmt_elf: replace open-coded string copy
+ with get_task_comm
+Message-ID: <20211130092240.312f68a4@gandalf.local.home>
+In-Reply-To: <CALOAHbB-2ESG0QgESN_b=bXzESbq+UBP-dqttirKnt1c9TZHZA@mail.gmail.com>
+References: <20211120112738.45980-1-laoar.shao@gmail.com>
+        <20211120112738.45980-5-laoar.shao@gmail.com>
+        <20211129110140.733475f3@gandalf.local.home>
+        <CALOAHbB-2ESG0QgESN_b=bXzESbq+UBP-dqttirKnt1c9TZHZA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211120001621.21246-5-leoyang.li@nxp.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 06:16:21PM -0600, Li Yang wrote:
-> Some platforms using this controller have separated interrupt lines for
-> aer or pme events instead of having a single interrupt line for
-> miscellaneous events.  Define interrupts in the binding for these
-> interrupt lines.
+On Tue, 30 Nov 2021 11:01:27 +0800
+Yafang Shao <laoar.shao@gmail.com> wrote:
 
-s/separated/separate/
-
-In subject, commit log, and description and comments below:
-
-s/aer/AER/
-s/pme/PME/
-
-These are acronyms, not words, and capitalizing them matches usage in
-the specs.
-
-It's OK to keep them lower-case in code-like things like variable
-names and interrupt-names.
-
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> ---
->  .../devicetree/bindings/pci/layerscape-pci.txt     | 14 ++++++++++----
->  1 file changed, 10 insertions(+), 4 deletions(-)
+> There are three options,
+> - option 1
+>   comment on all the hard-coded 16 to explain why it is hard-coded
+> - option 2
+>   replace the hard-coded 16 that can be replaced and comment on the
+> others which can't be replaced.
+> - option 3
+>    replace the hard-coded 16 that can be replaced and specifically
+> define TASK_COMM_LEN_16 in other files which can't include
+> linux/sched.h.
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/layerscape-pci.txt b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> index 8fd6039a826b..bcf11bfc4bab 100644
-> --- a/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> +++ b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> @@ -31,8 +31,13 @@ Required properties:
->  - reg: base addresses and lengths of the PCIe controller register blocks.
->  - interrupts: A list of interrupt outputs of the controller. Must contain an
->    entry for each entry in the interrupt-names property.
-> -- interrupt-names: Must include the following entries:
-> -  "intr": The interrupt that is asserted for controller interrupts
-> +- interrupt-names: It could include the following entries:
-> +  "aer": For interrupt line reporting aer events when non MSI/MSI-X/INTx mode
-> +		is used
-> +  "pme": For interrupt line reporting pme events when non MSI/MSI-X/INTx mode
-> +		is used
-> +  "intr": For interrupt line reporting miscellaneous controller events
-> +  ......
->  - fsl,pcie-scfg: Must include two entries.
->    The first entry must be a link to the SCFG device node
->    The second entry is the physical PCIe controller index starting from '0'.
-> @@ -52,8 +57,9 @@ Example:
->  		reg = <0x00 0x03400000 0x0 0x00010000   /* controller registers */
->  		       0x40 0x00000000 0x0 0x00002000>; /* configuration space */
->  		reg-names = "regs", "config";
-> -		interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>; /* controller interrupt */
-> -		interrupt-names = "intr";
-> +		interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>, /* aer interrupt */
-> +			<GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>; /* pme interrupt */
-> +		interrupt-names = "aer", "pme";
->  		fsl,pcie-scfg = <&scfg 0>;
->  		#address-cells = <3>;
->  		#size-cells = <2>;
-> -- 
-> 2.25.1
+> Which one do you prefer ?
 > 
+
+Option 3. Since TASK_COMM_LEN_16 is, by it's name, already hard coded to
+16, it doesn't really matter if you define it in more than one location.
+
+Or we could define it in another header that include/sched.h can include.
+
+The idea of having TASK_COMM_LEN_16 is to easily grep for it, and also know
+exactly what it is used for when people see it being used.
+
+-- Steve

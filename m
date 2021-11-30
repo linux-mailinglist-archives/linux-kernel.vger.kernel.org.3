@@ -2,87 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4F64636E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:38:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47D6E4636EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242276AbhK3Olz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbhK3Olv (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:41:51 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7A7C061574;
-        Tue, 30 Nov 2021 06:38:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CD9F2B81A10;
-        Tue, 30 Nov 2021 14:38:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C144C53FC7;
-        Tue, 30 Nov 2021 14:38:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283109;
-        bh=misPsdso/ucl7FldjYFPOJZ2946tkLT3Cuk4N7R+27c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RwHUa9sjp3r1GGWLhIGcVHM4qBqhPpfgHZYvmPi0pYYK5Yn5fM2tdYlVwKc7Uz/5S
-         IvaxHw9aI+edHV8dMDdvD40cuswPNQvAI5sYWmnmJYI4A1mAKo+Cr5RQ1OPGohvB7Q
-         W05dT/8MynKn14bpFMJruY+aQV57ZlSnKw3AEpU1zQzz7xox70AeGb4bJKiPOdgNBD
-         RExeNzwzguFRWbjBsQSXsE/hOn2v4a+mf2cMgdber2K+d9+ooGkEi0SiOlKvFAQ3Bd
-         b4NRNGgddUdqraD4nWq/kQ2DZsDlEYQRWF55SwZkCoIyKgSvu2Hmey0lovgicIVbIR
-         HM60xco+1WZJA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 1385140002; Tue, 30 Nov 2021 11:38:27 -0300 (-03)
-Date:   Tue, 30 Nov 2021 11:38:27 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1 v2] Documentation: Add minimum pahole version
-Message-ID: <YaY3Yypl80gZ5TFl@kernel.org>
-References: <YZfzQ0DvHD5o26Bt@kernel.org>
- <87k0gqsked.fsf@meer.lwn.net>
+        id S237291AbhK3On0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:43:26 -0500
+Received: from mga02.intel.com ([134.134.136.20]:20459 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232476AbhK3OnZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 09:43:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223454402"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="223454402"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 06:40:05 -0800
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="499790615"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 06:40:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ms4Hc-000ZLw-FP;
+        Tue, 30 Nov 2021 16:39:00 +0200
+Date:   Tue, 30 Nov 2021 16:39:00 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tools: Fix math.h breakage
+Message-ID: <YaY3hKLejcy09bZk@smile.fi.intel.com>
+References: <20211130141316.2987986-1-willy@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87k0gqsked.fsf@meer.lwn.net>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20211130141316.2987986-1-willy@infradead.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Nov 29, 2021 at 02:48:42PM -0700, Jonathan Corbet escreveu:
-> Arnaldo Carvalho de Melo <acme@kernel.org> writes:
+On Tue, Nov 30, 2021 at 02:13:16PM +0000, Matthew Wilcox (Oracle) wrote:
+> Commit 98e1385ef24b broke the radix tree test suite in two different ways;
+> first by including math.h which didn't exist in the tools directory, and
+> second by removing an implicit include of spinlock.h before lockdep.h.
+> Fix both issues.
+
+Sorry for that and thank you for the fix.
+Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+I'm wondering if there is a way of not copying kernel headers manually,
+otherwise we always will have such breakages.
+
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> ---
+>  tools/include/linux/kernel.h             | 22 +--------------------
+>  tools/include/linux/math.h               | 25 ++++++++++++++++++++++++
+>  tools/testing/radix-tree/linux/lockdep.h |  3 +++
+>  3 files changed, 29 insertions(+), 21 deletions(-)
+>  create mode 100644 tools/include/linux/math.h
 > 
-> > A report was made in https://github.com/acmel/dwarves/issues/26 about
-> > pahole not being listed in the process/changes.rst file as being needed
-> > for building the kernel, address that.
-> >
-> > Link: https://github.com/acmel/dwarves/issues/26
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > Acked-by: Andrii Nakryiko <andrii@kernel.org>
-> > Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Jiri Olsa <jolsa@redhat.com>
-> > Cc: Jonathan Corbet <corbet@lwn.net>
-> > Cc: bpf@vger.kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Link: http://lore.kernel.org/lkml/YZPQ6+u2wTHRfR+W@kernel.org
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > ---
-> >  Documentation/process/changes.rst | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
+> diff --git a/tools/include/linux/kernel.h b/tools/include/linux/kernel.h
+> index a7e54a08fb54..3e8df500cfbd 100644
+> --- a/tools/include/linux/kernel.h
+> +++ b/tools/include/linux/kernel.h
+> @@ -7,6 +7,7 @@
+>  #include <assert.h>
+>  #include <linux/build_bug.h>
+>  #include <linux/compiler.h>
+> +#include <linux/math.h>
+>  #include <endian.h>
+>  #include <byteswap.h>
+>  
+> @@ -14,8 +15,6 @@
+>  #define UINT_MAX	(~0U)
+>  #endif
+>  
+> -#define DIV_ROUND_UP(n,d) (((n) + (d) - 1) / (d))
+> -
+>  #define PERF_ALIGN(x, a)	__PERF_ALIGN_MASK(x, (typeof(x))(a)-1)
+>  #define __PERF_ALIGN_MASK(x, mask)	(((x)+(mask))&~(mask))
+>  
+> @@ -52,15 +51,6 @@
+>  	_min1 < _min2 ? _min1 : _min2; })
+>  #endif
+>  
+> -#ifndef roundup
+> -#define roundup(x, y) (                                \
+> -{                                                      \
+> -	const typeof(y) __y = y;		       \
+> -	(((x) + (__y - 1)) / __y) * __y;	       \
+> -}                                                      \
+> -)
+> -#endif
+> -
+>  #ifndef BUG_ON
+>  #ifdef NDEBUG
+>  #define BUG_ON(cond) do { if (cond) {} } while (0)
+> @@ -104,16 +94,6 @@ int scnprintf_pad(char * buf, size_t size, const char * fmt, ...);
+>  
+>  #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+>  
+> -/*
+> - * This looks more complex than it should be. But we need to
+> - * get the type for the ~ right in round_down (it needs to be
+> - * as wide as the result!), and we want to evaluate the macro
+> - * arguments just once each.
+> - */
+> -#define __round_mask(x, y) ((__typeof__(x))((y)-1))
+> -#define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
+> -#define round_down(x, y) ((x) & ~__round_mask(x, y))
+> -
+>  #define current_gfp_context(k) 0
+>  #define synchronize_rcu()
+>  
+> diff --git a/tools/include/linux/math.h b/tools/include/linux/math.h
+> new file mode 100644
+> index 000000000000..4e7af99ec9eb
+> --- /dev/null
+> +++ b/tools/include/linux/math.h
+> @@ -0,0 +1,25 @@
+> +#ifndef _TOOLS_MATH_H
+> +#define _TOOLS_MATH_H
+> +
+> +/*
+> + * This looks more complex than it should be. But we need to
+> + * get the type for the ~ right in round_down (it needs to be
+> + * as wide as the result!), and we want to evaluate the macro
+> + * arguments just once each.
+> + */
+> +#define __round_mask(x, y) ((__typeof__(x))((y)-1))
+> +#define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
+> +#define round_down(x, y) ((x) & ~__round_mask(x, y))
+> +
+> +#define DIV_ROUND_UP(n,d) (((n) + (d) - 1) / (d))
+> +
+> +#ifndef roundup
+> +#define roundup(x, y) (                                \
+> +{                                                      \
+> +	const typeof(y) __y = y;		       \
+> +	(((x) + (__y - 1)) / __y) * __y;	       \
+> +}                                                      \
+> +)
+> +#endif
+> +
+> +#endif
+> diff --git a/tools/testing/radix-tree/linux/lockdep.h b/tools/testing/radix-tree/linux/lockdep.h
+> index 565fccdfe6e9..016cff473cfc 100644
+> --- a/tools/testing/radix-tree/linux/lockdep.h
+> +++ b/tools/testing/radix-tree/linux/lockdep.h
+> @@ -1,5 +1,8 @@
+>  #ifndef _LINUX_LOCKDEP_H
+>  #define _LINUX_LOCKDEP_H
+> +
+> +#include <linux/spinlock.h>
+> +
+>  struct lock_class_key {
+>  	unsigned int a;
+>  };
+> -- 
+> 2.33.0
 > 
-> Applied (with the duplicate SOB removed), thanks.
 
-Oops, one should be enough indeed :-)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks!
 
-- Arnaldo

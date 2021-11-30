@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85AC4463956
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF9FC4638AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244449AbhK3PKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244561AbhK3PCc (ORCPT
+        id S242980AbhK3PFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:05:25 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:50812 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238321AbhK3O5A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:02:32 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D6E9C0619FF;
-        Tue, 30 Nov 2021 06:53:39 -0800 (PST)
+        Tue, 30 Nov 2021 09:57:00 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AA66FCE1A81;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2A21B81A42;
+        Tue, 30 Nov 2021 14:53:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E4BC53FC7;
         Tue, 30 Nov 2021 14:53:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55A7FC53FD0;
-        Tue, 30 Nov 2021 14:53:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284017;
-        bh=r2+hGVkNf5ayMWDym0CWmxwQAfcI0oZSKo0wah+zbyk=;
+        s=k20201202; t=1638284018;
+        bh=Xo2gsgyROap7QOttu0XsXfMsEq+ZGFwbLGW3XIFrExc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lh16bvySDfUKvIf1tUWloILQD2uA4u5NUBc7P/jQ0IA0X2U3kpJ4Xxo3Uo2flig8M
-         64eAxkEJDvW1xyRyjD6Is29Cjye/ZmalEduLEhDzZR3BWFwXEnxXh9JvmOeuK63bIj
-         9G7z0JT+1iZRjXGwLPkV46fidjQnzXWsXzWSUIjTa69o1OfT4mCnFM5/37mWjEO6Cy
-         NBY08Mdjgep0EtZFvbnO42rUBJ/HpJjhhkc0AW8mfBMVaTJFasYChvablxd58j9e9Z
-         r2gD8veBW9c+noIT+lyPxYbokCTtaLzMwJrPps52i1xDpniB1Y1V++0GXOEQA0hBHY
-         t8DiZLoW04Wow==
+        b=lePRmLYW1els49i4ZYQehK2JTmavy16s3iO9nn7ALrhHcn/bhjEru4I7+3u/9I2D0
+         IVJ7DNQgHcXdjmdLqDm8nxW8u94uwdusrE5JY5TbRpenpuxCDzESt4EVaC+UCQguAn
+         D8MhpRqLovWwVwmlhTDrRllekIDYkxm8s7LzUshGs/sOOtLHSTOr+49+ImeZOaGb7C
+         MRa0FFDVQSxkBilJaIZb2q/WRKmOtigvg7TlxKtzqlJKnPJZx0qYwaKMeWV9Xh8A9T
+         0A1VQCt6m75nv/u43aoBWAjBivyjv4xnL3e72vMaY/CyxN02t1lLMURgi8id4e5Wjr
+         qBKufgvv8+e4Q==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     zhangyue <zhangyue1@kylinos.cn>, Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, aelior@marvell.com,
-        manishc@marvell.com, davem@davemloft.net, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 12/14] net: qed: fix the array may be out of bound
-Date:   Tue, 30 Nov 2021 09:53:13 -0500
-Message-Id: <20211130145317.946676-12-sashal@kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.14 13/14] net: ptp: add a definition for the UDP port for IEEE 1588 general messages
+Date:   Tue, 30 Nov 2021 09:53:14 -0500
+Message-Id: <20211130145317.946676-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130145317.946676-1-sashal@kernel.org>
 References: <20211130145317.946676-1-sashal@kernel.org>
@@ -51,57 +49,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhangyue <zhangyue1@kylinos.cn>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 0435a4d08032c8fba2966cebdac870e22238cacc ]
+[ Upstream commit ec15baec3272bbec576f2ce7ce47765a8e9b7b1c ]
 
-If the variable 'p_bit->flags' is always 0,
-the loop condition is always 0.
+As opposed to event messages (Sync, PdelayReq etc) which require
+timestamping, general messages (Announce, FollowUp etc) do not.
+In PTP they are part of different streams of data.
 
-The variable 'j' may be greater than or equal to 32.
+IEEE 1588-2008 Annex D.2 "UDP port numbers" states that the UDP
+destination port assigned by IANA is 319 for event messages, and 320 for
+general messages. Yet the kernel seems to be missing the definition for
+general messages. This patch adds it.
 
-At this time, the array 'p_aeu->bits[32]' may be out
-of bound.
-
-Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
-Link: https://lore.kernel.org/r/20211125113610.273841-1-zhangyue1@kylinos.cn
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Acked-by: Richard Cochran <richardcochran@gmail.com>
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/qlogic/qed/qed_int.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/ptp_classify.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/qlogic/qed/qed_int.c b/drivers/net/ethernet/qlogic/qed/qed_int.c
-index f8d1d02a3cd4a..289101ce0e409 100644
---- a/drivers/net/ethernet/qlogic/qed/qed_int.c
-+++ b/drivers/net/ethernet/qlogic/qed/qed_int.c
-@@ -865,7 +865,7 @@ static int qed_int_deassertion(struct qed_hwfn  *p_hwfn,
- 		if (!parities)
- 			continue;
+diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
+index a079656b614cd..c0a02aa7ed9bd 100644
+--- a/include/linux/ptp_classify.h
++++ b/include/linux/ptp_classify.h
+@@ -45,6 +45,7 @@
+ #define PTP_CLASS_L4      (PTP_CLASS_IPV4 | PTP_CLASS_IPV6)
  
--		for (j = 0, bit_idx = 0; bit_idx < 32; j++) {
-+		for (j = 0, bit_idx = 0; bit_idx < 32 && j < 32; j++) {
- 			struct aeu_invert_reg_bit *p_bit = &p_aeu->bits[j];
+ #define PTP_EV_PORT 319
++#define PTP_GEN_PORT 320
+ #define PTP_GEN_BIT 0x08 /* indicates general message, if set in message type */
  
- 			if (qed_int_is_parity_flag(p_hwfn, p_bit) &&
-@@ -903,7 +903,7 @@ static int qed_int_deassertion(struct qed_hwfn  *p_hwfn,
- 			 * to current group, making them responsible for the
- 			 * previous assertion.
- 			 */
--			for (j = 0, bit_idx = 0; bit_idx < 32; j++) {
-+			for (j = 0, bit_idx = 0; bit_idx < 32 && j < 32; j++) {
- 				long unsigned int bitmask;
- 				u8 bit, bit_len;
- 
-@@ -1201,7 +1201,7 @@ static void qed_int_sb_attn_init(struct qed_hwfn *p_hwfn,
- 	memset(sb_info->parity_mask, 0, sizeof(u32) * NUM_ATTN_REGS);
- 	for (i = 0; i < NUM_ATTN_REGS; i++) {
- 		/* j is array index, k is bit index */
--		for (j = 0, k = 0; k < 32; j++) {
-+		for (j = 0, k = 0; k < 32 && j < 32; j++) {
- 			struct aeu_invert_reg_bit *p_aeu;
- 
- 			p_aeu = &aeu_descs[i].bits[j];
+ #define OFF_PTP_SOURCE_UUID	22 /* PTPv1 only */
 -- 
 2.33.0
 

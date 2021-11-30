@@ -2,86 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1B42463D01
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:41:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4249F463D02
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:41:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244935AbhK3RoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:44:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S244972AbhK3Rol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:44:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238926AbhK3RoV (ORCPT
+        with ESMTP id S238926AbhK3Roi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:44:21 -0500
-Received: from mail-oi1-x230.google.com (mail-oi1-x230.google.com [IPv6:2607:f8b0:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9797CC061574;
-        Tue, 30 Nov 2021 09:41:01 -0800 (PST)
-Received: by mail-oi1-x230.google.com with SMTP id r26so42692673oiw.5;
-        Tue, 30 Nov 2021 09:41:01 -0800 (PST)
+        Tue, 30 Nov 2021 12:44:38 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC16C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:41:18 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 137so18184304wma.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:41:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zToj2Rjqq4S6f39WW7C0z5QcCMf0yz8gvkCFQu0Qxhk=;
-        b=b8jKqy661WTC+hCaZW1euw+wfeV6j/8ygjykV28xDNf70xbphrBtM4acIRw+pBSYad
-         DOlcwD8AHJyCZui8bg7icKPiIiHCsnQpqpRuUmtkRbgvTVscnvhWdOzhvZjcgsswvz0Z
-         0lD3OojpBtDlKu81N90oicC+M8wsBl7hyNGW5vl+yNwXy3LYsk0HEpVpobVpxIDohKtU
-         xLI9VN9MOpwiHMDmc3B+qQVIk5LrxwnmNORU3lZGNO9fiGzkDk0ke30Ugqq4KfTC5qAD
-         cn7dzuFrHyY+Ne+XOt5fm5+C2XT481En3faxErE+45n0kt2ppAb7sFJ35AHB/q3Oo8kQ
-         bdgw==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sgi8hVAxJ2TC6lAQZcV7YIf3cslbDjz/FU37PQWsli0=;
+        b=qWcEKjhS9fZxpthQ0sYoRA1mHDvYqBvtUfeqHNrQ0BDIg+02mH3WwN77xCgRzB6MaD
+         5o8FaxMnn5F/sb1kB6F27fIvo46TINJc2gOF5b24aWGcHLnsGw/giiveZYRv/HAgGhYz
+         onXo6RokHNdVlOmefDIehZFEaoll2Qzl5BhdnnPhvXqHWjaPB5ApiusiCxRvx1050UVh
+         TSuSRVxM9G5SHMwr99VECJtZ1h8dMO5i2qOZbNgI69Zvo6AFPLjZd3GjE4ENeJ5kSOZK
+         9s+q5LMrCpmEnXbYzHy2UdE+loIRJCza0Kkp5xFK6fT9bBIgat6CWGHmPJ6eFzqYmWuP
+         PMsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=zToj2Rjqq4S6f39WW7C0z5QcCMf0yz8gvkCFQu0Qxhk=;
-        b=yMHaMpgjZ3oiUBrbn/AOjlu/oHi9KDgPB4YaWc41dlJgXfbbU43K+j1mgg9P4DM5UW
-         /im85xCVlV565YiQyCX141FQbfQpIIqMk7S+rjvsX6/suhlrjQYFzRBGNUDXcix5Bmqw
-         b567REnJVV5n4UatMoxdJra3eMmsOO2nYoe5gcVSISP2ZixrjY1db4g2PU4O+zMSFLce
-         K8UadgN0Aat3k+44Qz41+YklxFPNDNt4doxPRf2XWSkX9A9Gy2PrtjR0j8QOBA9rznGu
-         DHnsUAVM4Sr22ozToFmbLU5BKBzkgw/wce30/s9F+bfZ9l0f/gtTcWEUwMu6JdEv4C2R
-         HCwg==
-X-Gm-Message-State: AOAM532Nfr83nRlF6mPEkIWDD7HPR42ohAjdriEgQ4YN8RBq3imbt7b4
-        p529XymXaZA0cdgfOb0sVp0=
-X-Google-Smtp-Source: ABdhPJwKv5HxcMTc1mZDkrZuhdrL3f2ax411fc6Kk9DMmlyDRQd2B41Q2WF8GqZkRMFfSXUsOKYa4A==
-X-Received: by 2002:a54:4819:: with SMTP id j25mr369414oij.66.1638294060965;
-        Tue, 30 Nov 2021 09:41:00 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c4sm1568865ook.16.2021.11.30.09.41.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 09:41:00 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 30 Nov 2021 09:40:59 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.15 000/179] 5.15.6-rc1 review
-Message-ID: <20211130174059.GA3226251@roeck-us.net>
-References: <20211129181718.913038547@linuxfoundation.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sgi8hVAxJ2TC6lAQZcV7YIf3cslbDjz/FU37PQWsli0=;
+        b=laEw3S0w8stV/tfRwjk1G1IGrhbGo6l0Tn4oZSeAJVyu+TinS5uiaLyZ5430ou/OZl
+         B/pr6484xhX/on3/lxCRAmTTFdzUEE/2MIQhpQbhrJBWkdceiF0ifi17yiP0h6CPemUE
+         80I850a1PeQ89sZphEtpfxndsGenkJdxWL3l8f1OdqHOogfyygngYg3pKBujn7OgdB2E
+         uJ8TqkfXfUTE5gDFe2NqfEilTNdP6675GpUluOqm2pox8t8YfNPPEUFCeCWlqGsvWmch
+         6OHWP8YhMyONQncIAlWt+9coxjQxNxpUXPBi0VU4ArzLJ6w5s3e0E9qZVS3nBjX4M8VO
+         4XFw==
+X-Gm-Message-State: AOAM532chyRTsQLNn0nglECXAaIY5vkvtTvuE/0W1gPxLoACIXohSDkH
+        traJlWcMq+WiGRko4ceIOcti1HCIb9pVAdBMN3Q=
+X-Google-Smtp-Source: ABdhPJwhnV01V8gG6iYtFPGsQ5YkF+4GQRLPbqDPYOVqcxI9xtzW4TnJhFihxZBeGpP0rt5m8BM4SaONGY5cZSsG3WM=
+X-Received: by 2002:a1c:4c19:: with SMTP id z25mr54768wmf.177.1638294077177;
+ Tue, 30 Nov 2021 09:41:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
+References: <20211117093734.17407-1-daniel.baluta@oss.nxp.com>
+ <20211117093734.17407-8-daniel.baluta@oss.nxp.com> <CAMuHMdVV6Os8Gzc9JVjD2CAtN38=7KFn9GqosnWvByQc-7uA=Q@mail.gmail.com>
+ <bdbea252-09e4-eb60-acf8-4ea8a1d924c4@linux.intel.com> <YaZZzSPQDz0vHRQY@sirena.org.uk>
+In-Reply-To: <YaZZzSPQDz0vHRQY@sirena.org.uk>
+From:   Daniel Baluta <daniel.baluta@gmail.com>
+Date:   Tue, 30 Nov 2021 19:41:05 +0200
+Message-ID: <CAEnQRZA7Nr+MMP7v+4T8G2y4L4HvSPVdoy4zekBFgynXJ16tCg@mail.gmail.com>
+Subject: Re: [PATCH 07/21] ASoC: amd: Add module to determine ACP configuration
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Daniel Baluta <daniel.baluta@oss.nxp.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        AjitKumar.Pandey@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Julian.Schroeder@amd.com, linux-mediatek@lists.infradead.org,
+        Balakishore.pati@amd.com,
+        =?UTF-8?B?WUMgSHVuZyAo5rSq5aCv5L+KKQ==?= <yc.hung@mediatek.com>,
+        vishnuvardhanrao.ravulapati@amd.com, vsreddy@amd.com,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Bard Liao <bard.liao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:16:34PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.6 release.
-> There are 179 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
-> Anything received after that time might be too late.
-> 
+On Tue, Nov 30, 2021 at 7:05 PM Mark Brown <broonie@kernel.org> wrote:
+>
+> On Tue, Nov 30, 2021 at 10:49:30AM -0600, Pierre-Louis Bossart wrote:
+>
+> > To Geert's point, there may be an additional need to add a
+>
+> > depends on SND_SOC_AMD_ACP
+>
+> > There are also a set of
+>
+> > SND_SOC_AMD_ACPyx options, not sure if any applies as a dependency here?
+>
+> Or put them in an if block (IIRC I thought they were which was why the
+> dependency wasn't needed but I don't know what I was looking at if I did
+> check that).
 
-Build results:
-	total: 154 pass: 154 fail: 0
-Qemu test results:
-	total: 482 pass: 482 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+There will be some delays in handling this as I'm in vacation until next Monday.

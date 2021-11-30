@@ -2,26 +2,16 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C826464065
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:41:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C267A464063
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:40:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344289AbhK3VoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:44:14 -0500
-Received: from out0.migadu.com ([94.23.1.103]:57218 "EHLO out0.migadu.com"
+        id S1344237AbhK3VoF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:44:05 -0500
+Received: from out0.migadu.com ([94.23.1.103]:57198 "EHLO out0.migadu.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240581AbhK3VoD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:44:03 -0500
+        id S240617AbhK3VoC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 16:44:02 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638308439;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4G8h4hgySaJey6iKxW5y4/UhksHPaOzWIIS8r9vmE5w=;
-        b=A1yF/QsaaGgCWx0h1RW9egY+fehjW3boeHhP2Yo5mWMzg53tyIxxYzhTdtK996BhzHh/+A
-        F7ZSckNDm6sxG/X+MKHkCJ35ayid5uDb1hB/9+Y9LI00s9rIm3rZQb1gjc/xojvll/ka+q
-        tJGGTs7dePKNfWk+n84zzLleyrj8g/g=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -38,116 +28,91 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 01/31] kasan, page_alloc: deduplicate should_skip_kasan_poison
-Date:   Tue, 30 Nov 2021 22:39:07 +0100
-Message-Id: <4d98c25d3cb7898fa27510d612742b6693b37cd5.1638308023.git.andreyknvl@google.com>
+Subject: [PATCH 02/31] kasan, page_alloc: move tag_clear_highpage out of kernel_init_free_pages
+Date:   Tue, 30 Nov 2021 22:39:08 +0100
+Message-Id: <e64fc8cd8e08fac044368aaba27be9fc6f60ff9c.1638308023.git.andreyknvl@google.com>
 In-Reply-To: <cover.1638308023.git.andreyknvl@google.com>
 References: <cover.1638308023.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-Currently, should_skip_kasan_poison() has two definitions: one for when
-CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled, one for when it's not.
-Instead of duplicating the checks, add a deferred_pages_enabled()
-helper and use it in a single should_skip_kasan_poison() definition.
+Currently, kernel_init_free_pages() serves two purposes: either only
+zeroes memory or zeroes both memory and memory tags via a different
+code path. As this function has only two callers, each using only one
+code path, this behaviour is confusing.
 
-Also move should_skip_kasan_poison() closer to its caller and clarify
-all conditions in the comment.
+This patch pulls the code that zeroes both memory and tags out of
+kernel_init_free_pages().
+
+As a result of this change, the code in free_pages_prepare() starts to
+look complicated, but this is improved in the few following patches.
+Those improvements are not integrated into this patch to make diffs
+easier to read.
+
+This patch does no functional changes.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/page_alloc.c | 55 +++++++++++++++++++++++++++++--------------------
- 1 file changed, 33 insertions(+), 22 deletions(-)
+ mm/page_alloc.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
 diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index c5952749ad40..c99566a3b67e 100644
+index c99566a3b67e..3589333b5b77 100644
 --- a/mm/page_alloc.c
 +++ b/mm/page_alloc.c
-@@ -375,25 +375,9 @@ int page_group_by_mobility_disabled __read_mostly;
-  */
- static DEFINE_STATIC_KEY_TRUE(deferred_pages);
- 
--/*
-- * Calling kasan_poison_pages() only after deferred memory initialization
-- * has completed. Poisoning pages during deferred memory init will greatly
-- * lengthen the process and cause problem in large memory systems as the
-- * deferred pages initialization is done with interrupt disabled.
-- *
-- * Assuming that there will be no reference to those newly initialized
-- * pages before they are ever allocated, this should have no effect on
-- * KASAN memory tracking as the poison will be properly inserted at page
-- * allocation time. The only corner case is when pages are allocated by
-- * on-demand allocation and then freed again before the deferred pages
-- * initialization is done, but this is not likely to happen.
-- */
--static inline bool should_skip_kasan_poison(struct page *page, fpi_t fpi_flags)
-+static inline bool deferred_pages_enabled(void)
- {
--	return static_branch_unlikely(&deferred_pages) ||
--	       (!IS_ENABLED(CONFIG_KASAN_GENERIC) &&
--		(fpi_flags & FPI_SKIP_KASAN_POISON)) ||
--	       PageSkipKASanPoison(page);
-+	return static_branch_unlikely(&deferred_pages);
+@@ -1269,16 +1269,10 @@ static inline bool should_skip_kasan_poison(struct page *page, fpi_t fpi_flags)
+ 	       PageSkipKASanPoison(page);
  }
  
- /* Returns true if the struct page for the pfn is uninitialised */
-@@ -444,11 +428,9 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
- 	return false;
- }
- #else
--static inline bool should_skip_kasan_poison(struct page *page, fpi_t fpi_flags)
-+static inline bool deferred_pages_enabled(void)
- {
--	return (!IS_ENABLED(CONFIG_KASAN_GENERIC) &&
--		(fpi_flags & FPI_SKIP_KASAN_POISON)) ||
--	       PageSkipKASanPoison(page);
-+	return false;
- }
- 
- static inline bool early_page_uninitialised(unsigned long pfn)
-@@ -1258,6 +1240,35 @@ static int free_tail_pages_check(struct page *head_page, struct page *page)
- 	return ret;
- }
- 
-+/*
-+ * Skip KASAN memory poisoning when either:
-+ *
-+ * 1. Deferred memory initialization has not yet completed,
-+ *    see the explanation below.
-+ * 2. Skipping poisoning is requested via FPI_SKIP_KASAN_POISON,
-+ *    see the comment next to it.
-+ * 3. Skipping poisoning is requested via __GFP_SKIP_KASAN_POISON,
-+ *    see the comment next to it.
-+ *
-+ * Poisoning pages during deferred memory init will greatly lengthen the
-+ * process and cause problem in large memory systems as the deferred pages
-+ * initialization is done with interrupt disabled.
-+ *
-+ * Assuming that there will be no reference to those newly initialized
-+ * pages before they are ever allocated, this should have no effect on
-+ * KASAN memory tracking as the poison will be properly inserted at page
-+ * allocation time. The only corner case is when pages are allocated by
-+ * on-demand allocation and then freed again before the deferred pages
-+ * initialization is done, but this is not likely to happen.
-+ */
-+static inline bool should_skip_kasan_poison(struct page *page, fpi_t fpi_flags)
-+{
-+	return deferred_pages_enabled() ||
-+	       (!IS_ENABLED(CONFIG_KASAN_GENERIC) &&
-+		(fpi_flags & FPI_SKIP_KASAN_POISON)) ||
-+	       PageSkipKASanPoison(page);
-+}
-+
- static void kernel_init_free_pages(struct page *page, int numpages, bool zero_tags)
+-static void kernel_init_free_pages(struct page *page, int numpages, bool zero_tags)
++static void kernel_init_free_pages(struct page *page, int numpages)
  {
  	int i;
+ 
+-	if (zero_tags) {
+-		for (i = 0; i < numpages; i++)
+-			tag_clear_highpage(page + i);
+-		return;
+-	}
+-
+ 	/* s390's use of memset() could override KASAN redzones. */
+ 	kasan_disable_current();
+ 	for (i = 0; i < numpages; i++) {
+@@ -1372,7 +1366,7 @@ static __always_inline bool free_pages_prepare(struct page *page,
+ 		bool init = want_init_on_free();
+ 
+ 		if (init)
+-			kernel_init_free_pages(page, 1 << order, false);
++			kernel_init_free_pages(page, 1 << order);
+ 		if (!skip_kasan_poison)
+ 			kasan_poison_pages(page, order, init);
+ 	}
+@@ -2415,9 +2409,17 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+ 		bool init = !want_init_on_free() && want_init_on_alloc(gfp_flags);
+ 
+ 		kasan_unpoison_pages(page, order, init);
+-		if (init)
+-			kernel_init_free_pages(page, 1 << order,
+-					       gfp_flags & __GFP_ZEROTAGS);
++
++		if (init) {
++			if (gfp_flags & __GFP_ZEROTAGS) {
++				int i;
++
++				for (i = 0; i < 1 << order; i++)
++					tag_clear_highpage(page + i);
++			} else {
++				kernel_init_free_pages(page, 1 << order);
++			}
++		}
+ 	}
+ 
+ 	set_page_owner(page, order, gfp_flags);
 -- 
 2.25.1
 

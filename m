@@ -2,165 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 463ED462E14
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C47462E19
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:00:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239121AbhK3IBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:01:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36878 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232233AbhK3IBf (ORCPT
+        id S239310AbhK3IDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:03:52 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:34596 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S234489AbhK3IDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:01:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638259096;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ofQ+mTAvWB+lgCzceqE6eZM4DqOGEYL7WnumgczCy5o=;
-        b=QHj4XHD1IWfLWWxn3kY4kEq8kakorG6YKXQdLoI8/OE9aU9xo/9WSfcFw2wVv0qL8m3z3m
-        y+emExU7EPQv98QHPGlTnvDvmFZtf6nFRq7XGCwRBegmJwofhFY9DQZ9gfMDLIb8WfVCCL
-        w7M+OXr6xC+LP4zUw/4g1TuHCczu23o=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-461-LUw9QfZNPaa6gwh_icSZSg-1; Tue, 30 Nov 2021 02:58:11 -0500
-X-MC-Unique: LUw9QfZNPaa6gwh_icSZSg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3634785EE62;
-        Tue, 30 Nov 2021 07:58:10 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F2221002388;
-        Tue, 30 Nov 2021 07:58:08 +0000 (UTC)
-Message-ID: <f73c491ce789234d92275e0529b55ebd48f4cfb6.camel@redhat.com>
-Subject: Re: [PATCH 3/4] KVM: x86: check PIR even for vCPUs with disabled
- APICv
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     seanjc@google.com, stable@vger.kernel.org
-Date:   Tue, 30 Nov 2021 09:58:07 +0200
-In-Reply-To: <20211123004311.2954158-4-pbonzini@redhat.com>
-References: <20211123004311.2954158-1-pbonzini@redhat.com>
-         <20211123004311.2954158-4-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Tue, 30 Nov 2021 03:03:50 -0500
+X-UUID: d7b937f007eb4fc0bca4e15665ae95c2-20211130
+X-UUID: d7b937f007eb4fc0bca4e15665ae95c2-20211130
+Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 2002383739; Tue, 30 Nov 2021 16:00:27 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Tue, 30 Nov 2021 16:00:26 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 30 Nov
+ 2021 16:00:25 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Tue, 30 Nov 2021 16:00:25 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
+CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
+        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
+        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
+        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
+        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
+        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
+        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
+        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
+        <steve.lee@mediatek.com>, <jsiuda@google.com>,
+        <frankgor@google.com>, <jemele@google.com>,
+        <abhishekpandit@google.com>, <michaelfsun@google.com>,
+        <mcchou@chromium.org>, <shawnku@google.com>,
+        <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mark Chen <mark-yw.chen@mediatek.com>
+Subject: [PATCH] Bluetooth: btmtksdio: add the support of wake on bluetooth
+Date:   Tue, 30 Nov 2021 16:00:23 +0800
+Message-ID: <b9d604e7789aab33dafdf258b80a3bba268b39d1.1638259039.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-11-22 at 19:43 -0500, Paolo Bonzini wrote:
-> The IRTE for an assigned device can trigger a POSTED_INTR_VECTOR even
-> if APICv is disabled on the vCPU that receives it.  In that case, the
-> interrupt will just cause a vmexit and leave the ON bit set together
-> with the PIR bit corresponding to the interrupt.
-> 
-> Right now, the interrupt would not be delivered until APICv is re-enabled.
-> However, fixing this is just a matter of always doing the PIR->IRR
-> synchronization, even if the vCPU has temporarily disabled APICv.
-> 
-> This is not a problem for performance, or if anything it is an
-> improvement.  First, in the common case where vcpu->arch.apicv_active is
-> true, one fewer check has to be performed.  Second, static_call_cond will
-> elide the function call if APICv is not present or disabled.  Finally,
-> in the case for AMD hardware we can remove the sync_pir_to_irr callback:
-> it is only needed for apic_has_interrupt_for_ppr, and that function
-> already has a fallback for !APICv.
-> 
-> Cc: stable@vger.kernel.org
-> Co-developed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/lapic.c   |  2 +-
->  arch/x86/kvm/svm/svm.c |  1 -
->  arch/x86/kvm/x86.c     | 18 +++++++++---------
->  3 files changed, 10 insertions(+), 11 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 759952dd1222..f206fc35deff 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -707,7 +707,7 @@ static void pv_eoi_clr_pending(struct kvm_vcpu *vcpu)
->  static int apic_has_interrupt_for_ppr(struct kvm_lapic *apic, u32 ppr)
->  {
->  	int highest_irr;
-> -	if (apic->vcpu->arch.apicv_active)
-> +	if (kvm_x86_ops.sync_pir_to_irr)
->  		highest_irr = static_call(kvm_x86_sync_pir_to_irr)(apic->vcpu);
->  	else
->  		highest_irr = apic_find_highest_irr(apic);
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 5630c241d5f6..d0f68d11ec70 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -4651,7 +4651,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
->  	.load_eoi_exitmap = svm_load_eoi_exitmap,
->  	.hwapic_irr_update = svm_hwapic_irr_update,
->  	.hwapic_isr_update = svm_hwapic_isr_update,
-> -	.sync_pir_to_irr = kvm_lapic_find_highest_irr,
->  	.apicv_post_state_restore = avic_post_state_restore,
->  
->  	.set_tss_addr = svm_set_tss_addr,
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 441f4769173e..a8f12c83db4b 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4448,8 +4448,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
->  static int kvm_vcpu_ioctl_get_lapic(struct kvm_vcpu *vcpu,
->  				    struct kvm_lapic_state *s)
->  {
-> -	if (vcpu->arch.apicv_active)
-> -		static_call(kvm_x86_sync_pir_to_irr)(vcpu);
-> +	static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
->  
->  	return kvm_apic_get_state(vcpu, s);
->  }
-> @@ -9528,8 +9527,7 @@ static void vcpu_scan_ioapic(struct kvm_vcpu *vcpu)
->  	if (irqchip_split(vcpu->kvm))
->  		kvm_scan_ioapic_routes(vcpu, vcpu->arch.ioapic_handled_vectors);
->  	else {
-> -		if (vcpu->arch.apicv_active)
-> -			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
-> +		static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
->  		if (ioapic_in_kernel(vcpu->kvm))
->  			kvm_ioapic_scan_entry(vcpu, vcpu->arch.ioapic_handled_vectors);
->  	}
-> @@ -9802,10 +9800,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  
->  	/*
->  	 * This handles the case where a posted interrupt was
-> -	 * notified with kvm_vcpu_kick.
-> +	 * notified with kvm_vcpu_kick.  Assigned devices can
-> +	 * use the POSTED_INTR_VECTOR even if APICv is disabled,
-> +	 * so do it even if APICv is disabled on this vCPU.
->  	 */
-> -	if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
-> -		static_call(kvm_x86_sync_pir_to_irr)(vcpu);
-> +	if (kvm_lapic_enabled(vcpu))
-> +		static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
->  
->  	if (kvm_vcpu_exit_request(vcpu)) {
->  		vcpu->mode = OUTSIDE_GUEST_MODE;
-> @@ -9849,8 +9849,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
->  			break;
->  
-> -		if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
-> -			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
-> +		if (kvm_lapic_enabled(vcpu))
-> +			static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
->  
->  		if (unlikely(kvm_vcpu_exit_request(vcpu))) {
->  			exit_fastpath = EXIT_FASTPATH_EXIT_HANDLED;
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+From: Mark Chen <mark-yw.chen@mediatek.com>
 
-Best regards,
-	Maxim Levitsky
+Add the support to enable wake on bluetooth
+
+Co-developed-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+Signed-off-by: Mark Chen <mark-yw.chen@mediatek.com>
+---
+ drivers/bluetooth/btmtk.h     |  8 ++++++++
+ drivers/bluetooth/btmtksdio.c | 31 ++++++++++++++++++++++++++++++-
+ 2 files changed, 38 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
+index 6e7b0c7567c0..2be1d2680ad8 100644
+--- a/drivers/bluetooth/btmtk.h
++++ b/drivers/bluetooth/btmtk.h
+@@ -68,6 +68,14 @@ struct btmtk_tci_sleep {
+ 	u8 time_compensation;
+ } __packed;
+ 
++struct btmtk_wakeon {
++	u8 mode;
++	u8 gpo;
++	u8 active_high;
++	__le16 enable_delay;
++	__le16 wakeup_delay;
++} __packed;
++
+ struct btmtk_hci_wmt_params {
+ 	u8 op;
+ 	u8 flag;
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index d9cf0c492e29..bdd2afccc32e 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -951,6 +951,30 @@ static int btmtksdio_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
+ 	return 0;
+ }
+ 
++static bool btmtk_sdio_wakeup(struct hci_dev *hdev)
++{
++	struct btmtksdio_dev *bdev = hci_get_drvdata(hdev);
++	bool may_wakeup = device_may_wakeup(bdev->dev);
++	struct btmtk_wakeon bt_awake = {
++		.mode = 0x1,
++		.gpo = 0,
++		.active_high = 0x1,
++		.enable_delay = cpu_to_le16(0xc80),
++		.wakeup_delay = cpu_to_le16(0x20)
++	};
++	struct sk_buff *skb;
++
++	if (may_wakeup &&
++	    bdev->data->chipid == 0x7921) {
++		skb =  __hci_cmd_sync(hdev, 0xfc27, sizeof(bt_awake),
++				      &bt_awake, HCI_CMD_TIMEOUT);
++		if (IS_ERR(skb))
++			may_wakeup = false;
++	}
++
++	return may_wakeup;
++}
++
+ static int btmtksdio_probe(struct sdio_func *func,
+ 			   const struct sdio_device_id *id)
+ {
+@@ -991,6 +1015,7 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 	hdev->shutdown = btmtksdio_shutdown;
+ 	hdev->send     = btmtksdio_send_frame;
+ 	hdev->set_bdaddr = btmtk_set_bdaddr;
++	hdev->wakeup = btmtk_sdio_wakeup;
+ 
+ 	SET_HCIDEV_DEV(hdev, &func->dev);
+ 
+@@ -1025,7 +1050,11 @@ static int btmtksdio_probe(struct sdio_func *func,
+ 	 */
+ 	pm_runtime_put_noidle(bdev->dev);
+ 
+-	return 0;
++	err = device_init_wakeup(bdev->dev, true);
++	if (err)
++		bt_dev_err(hdev, "%s: failed to init_wakeup", __func__);
++
++	return err;
+ }
+ 
+ static void btmtksdio_remove(struct sdio_func *func)
+-- 
+2.25.1
 

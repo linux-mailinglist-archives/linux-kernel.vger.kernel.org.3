@@ -2,74 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8724641C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:51:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5139C4641CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344678AbhK3Wyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:54:39 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:36360 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233731AbhK3Wyh (ORCPT
+        id S1344786AbhK3W4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60162 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233731AbhK3W4s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:54:37 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638312676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IxA+hkYYVjZHxRc6THX5MxPHFVrZJQ8zH99/DHDF0go=;
-        b=HKchDQFnVY/VXzCkwfX8yCS8N0bmszIQkeg7ZgUvvyhzFasiElAxGRUsfQ6ql7eIYF7AS+
-        YP8C5qfhZySCsgBDxuGTa0sna6f5y1rhAKAP8ep9HgI+iA/prNEQMwuQabCgpO8U1+jz0X
-        Bskjgfxb3tJCl6b4+oWWcpZbBY/J0deDXwp0ZaAQgk/O3wwstb3gFEb6+pHiLHOQQtEq2Z
-        6RPYT13e7BvW4WPAWXeTrU77GTgSSJu67lJyHQ/Jw8i+st4Rht+4s2D1NccKu2HgwjjPB8
-        45uTeGziiqrr95VhyHyFQdDoQy6KogyHFFN3w78n1BAdWfM85CTSo51+P5ad5w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638312676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IxA+hkYYVjZHxRc6THX5MxPHFVrZJQ8zH99/DHDF0go=;
-        b=JsekOn2ubU6M1MKijpmxmWPQYDF/lzeaEBxkPg0nnHsdUdQhkbs5CAfkkYR4dlT2REG/zh
-        1eicH1hHDe/a/VAg==
-To:     Rob Herring <robh@kernel.org>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH v12 1/5] x86: perf: Move RDPMC event flag to a common
- definition
-In-Reply-To: <20211027201641.2076427-2-robh@kernel.org>
-References: <20211027201641.2076427-1-robh@kernel.org>
- <20211027201641.2076427-2-robh@kernel.org>
-Date:   Tue, 30 Nov 2021 23:51:15 +0100
-Message-ID: <8735ndb6l8.ffs@tglx>
+        Tue, 30 Nov 2021 17:56:48 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57053C061574;
+        Tue, 30 Nov 2021 14:53:28 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id 131so57399969ybc.7;
+        Tue, 30 Nov 2021 14:53:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IWmAAXa9pjC4EoqzChkZJaBqSIgJLKarMG+xKoHvRDs=;
+        b=VmwSq84INeu/Qn3AsnjWJ0DU7BawUMaHEwht0V2qDRsbDAKFVMFTWtLa0+FbSAZcd2
+         W5csmdUvHO3LDaG4XQiuLRKzEPQ+AEgvEv5GCeh0V6i6YY0tB8yxAY5RvyOgYHIxr6wN
+         wdpGvxtWnaWOWshLRHa5vNrSHBcHchSIRbYNDt8Xt9c/Vivwh3+dG+QJ4bfzpoRXMb27
+         ixkRqrTaTaos4/NyZ7VMAprmNyQwHiWR/HlCj0Nf08P+mbopAZxUmXVVYYu3Ujo99OUI
+         6yHUi+UBd+BZh4UqrYdBieJhc0vWPX/aXEN2bRLgnL4LQqIuQqbGVJZumNkX58i25c8C
+         lssw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IWmAAXa9pjC4EoqzChkZJaBqSIgJLKarMG+xKoHvRDs=;
+        b=gevsea9fSM17IIG/YGJnNpCHBWoDnR3A1RhnbdLmMeXg0g6Dhmyvc+kRfMbC3KK0aD
+         GZ4LQjGOuvMr/B1yz1f0KU+T2PbERNwzN6BI8duc2Towa+OIBm9q/ZaRPgHFDqAEDSOD
+         C3fD47JhlHO/1XOEwrJTI9DM3fPmjH9GjCVWRBZYIYUz7fAOJ+is2lw8qVX4YEq9bjJE
+         Y9WOBl9amNiNCM/TnhrdFYZ9nChjdxJ9NyYESFjJnvmPUBhjjIISzxD7X+DQlxLJWTXs
+         eJsZ0N5J7s9Q5l4kiIpFlYKtVYM+YhSU5PT8NNyeowfAIYSFSWOUA5PlX/LXLXdh8/Dh
+         UibQ==
+X-Gm-Message-State: AOAM532yh3USp2IBr6AifnRHjY6ux9eUyZ9dgGgFpn7jFqgKVjOm4Wow
+        jC0bD6yl84SN7GHldUuG2xuXrzwOjUG4mYZRzTY=
+X-Google-Smtp-Source: ABdhPJzUU4qXaHZ7S/0ey52ccLEJxZXY/ZqwQOyktHVC6pgjLhE3jqkNaxjz8nDisWn7VsfLQ8vZEeZYXJhieuHwWBc=
+X-Received: by 2002:a25:54e:: with SMTP id 75mr2440929ybf.393.1638312807553;
+ Tue, 30 Nov 2021 14:53:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <1638027102-22686-1-git-send-email-cuibixuan@linux.alibaba.com>
+In-Reply-To: <1638027102-22686-1-git-send-email-cuibixuan@linux.alibaba.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 30 Nov 2021 14:53:16 -0800
+Message-ID: <CAEf4BzbV=s+C=dFS5YfAdJhiBv+3ocanaZ-NNHoPz8RzHhGCbQ@mail.gmail.com>
+Subject: Re: [PATCH -next] bpf: Add oversize check before call kvmalloc()
+To:     Bixuan Cui <cuibixuan@linux.alibaba.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, Networking <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        john fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 27 2021 at 15:16, Rob Herring wrote:
-> In preparation to enable user counter access on arm64 and to move some
-> of the user access handling to perf core, create a common event flag for
-> user counter access and convert x86 to use it.
+On Sat, Nov 27, 2021 at 7:32 AM Bixuan Cui <cuibixuan@linux.alibaba.com> wrote:
 >
-> Since the architecture specific flags start at the LSB, starting at the
-> MSB for common flags.
+> Commit 7661809d493b ("mm: don't allow oversized kvmalloc() calls") add
+> the oversize check. When the allocation is larger than what kvmalloc()
+> supports, the following warning triggered:
+>
+> WARNING: CPU: 1 PID: 372 at mm/util.c:597 kvmalloc_node+0x111/0x120
+> mm/util.c:597
+> Modules linked in:
+> CPU: 1 PID: 372 Comm: syz-executor.4 Not tainted 5.15.0-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
+> Google 01/01/2011
+> RIP: 0010:kvmalloc_node+0x111/0x120 mm/util.c:597
+> Code: 01 00 00 00 4c 89 e7 e8 7d f7 0c 00 49 89 c5 e9 69 ff ff ff e8 60
+> 20 d1 ff 41 89 ed 41 81 cd 00 20 01 00 eb 95 e8 4f 20 d1 ff <0f> 0b e9
+> 4c ff ff ff 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 36
+> RSP: 0018:ffffc90002bf7c98 EFLAGS: 00010216
+> RAX: 00000000000000ec RBX: 1ffff9200057ef9f RCX: ffffc9000ac63000
+> RDX: 0000000000040000 RSI: ffffffff81a6a621 RDI: 0000000000000003
+> RBP: 0000000000102cc0 R08: 000000007fffffff R09: 00000000ffffffff
+> R10: ffffffff81a6a5de R11: 0000000000000000 R12: 00000000ffff9aaa
+> R13: 0000000000000000 R14: 00000000ffffffff R15: 0000000000000000
+> FS:  00007f05f2573700(0000) GS:ffff8880b9d00000(0000)
+> knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000001b2f424000 CR3: 0000000027d2c000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  kvmalloc include/linux/slab.h:741 [inline]
+>  map_lookup_elem kernel/bpf/syscall.c:1090 [inline]
+>  __sys_bpf+0x3a5b/0x5f00 kernel/bpf/syscall.c:4603
+>  __do_sys_bpf kernel/bpf/syscall.c:4722 [inline]
+>  __se_sys_bpf kernel/bpf/syscall.c:4720 [inline]
+>  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4720
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x44/0xae
+>
+> The type of 'value_size' is u32, its value may exceed INT_MAX.
+>
+> Reported-by: syzbot+cecf5b7071a0dfb76530@syzkaller.appspotmail.com
+> Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
+> ---
+>  kernel/bpf/syscall.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index 1033ee8..f5bc380 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -1094,6 +1094,10 @@ static int map_lookup_elem(union bpf_attr *attr)
+>         }
+>
+>         value_size = bpf_map_value_size(map);
+> +       if (value_size > INT_MAX) {
+> +               err = -EINVAL;
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+-E2BIG makes a bit more sense in this scenario?
 
-Thanks,
-
-        tglx
+> +               goto err_put;
+> +       }
+>
+>         err = -ENOMEM;
+>         value = kvmalloc(value_size, GFP_USER | __GFP_NOWARN);
+> --
+> 1.8.3.1
+>

@@ -2,161 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 556B5462E0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE50C462DF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:55:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234876AbhK3IAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:00:30 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:37592 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234505AbhK3IAY (ORCPT
+        id S239255AbhK3H7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:59:09 -0500
+Received: from mail-pj1-f46.google.com ([209.85.216.46]:38555 "EHLO
+        mail-pj1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239244AbhK3H7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:00:24 -0500
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AU6fCtI000697;
-        Tue, 30 Nov 2021 08:56:52 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=selector1;
- bh=s7kOc9rz1OlOoz1QIFijPdtLi7gNjG7VJzQJv0JYfT0=;
- b=dcHKDLg4DolBQV+nH3GUtBJC3heU+jmRnpqiODbE7qczOrP4JPO99rANtPrAUR+UGbNl
- 4axmyJ1YCAQFmZRPoKWNp9Zkch0bE6/f6Oox0CLROlFQA1BJUVcPZ6NI3TwmXnTunYN1
- rmRfZP/U6fg5cvkfkp8IxF860tE0y+hf90JYTXKGod2lsp2Hd0ef+xq5nhlIhLWmDJIo
- DvMr9YPYsfLiJ/flhtM/aMHePyQy5ILbWlOb7fej3UeQYhd6VXPPZKb8TPP+UNGTQotM
- Xtlr5qakIocx4uJsHOo2TDFgAHBTpx/nK6EVHEPSCCGLkH4KuELHNMOG/A6jObiyMDnD Kw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cnewbgdpn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 08:56:52 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 92F7710002A;
-        Tue, 30 Nov 2021 08:56:51 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 89C8721A224;
-        Tue, 30 Nov 2021 08:56:51 +0100 (CET)
-Received: from localhost (10.75.127.44) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Tue, 30 Nov 2021 08:56:51
- +0100
-From:   Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-CC:     Marek Vasut <marex@denx.de>,
-        Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        <linux-crypto@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 9/9] crypto: stm32/cryp - reorder hw initialization
-Date:   Tue, 30 Nov 2021 08:55:01 +0100
-Message-ID: <20211130075501.21958-10-nicolas.toromanoff@foss.st.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211130075501.21958-1-nicolas.toromanoff@foss.st.com>
-References: <20211130075501.21958-1-nicolas.toromanoff@foss.st.com>
+        Tue, 30 Nov 2021 02:59:06 -0500
+Received: by mail-pj1-f46.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so17634596pju.3;
+        Mon, 29 Nov 2021 23:55:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=VYPuISL5AV9b4E/5sq8DgKC5OFOrBQe6hWM4JGgFD7o=;
+        b=qNoOGEFgWIZgA4tBDVsZq62otoKejdLUpOuiIKkoyzRNXYTl0KYfifv92sRraIt+EX
+         trgR1zG4w1zkea3rXjCfjB8J3vi0QuRLVc7NPJviKuuzD1iT37GeO66cnXBN5+6K99xw
+         OeAGPLPvoKxB5HQOpi1ELZvpvULuGgt9xbviWbifSbRSJ75PBw0yGGeluqcAb6HyHcsF
+         /qRR9OYPhpaUP+HZ7TJU1yZjtExy/lTAF8saW2md/h5grxYHcgScbIl+AP7leU34Pn2A
+         yTpqVv5xICoEBHFiLEQBOXKJPuriEHDqRolwMRHxCL1696FxeOBfDOVKnQTZXk9yIx7r
+         xdCg==
+X-Gm-Message-State: AOAM533yCIKFaAFZ3ab5CjxEPcCS6xzQ6G9ig8z9nBNzA7kwkiA0QMrW
+        RWjpJG3gGVd+dfgj3h7NG2FVLuBJZW5o3A==
+X-Google-Smtp-Source: ABdhPJz04yNg4GA4sIOYmmtxvpiWBf/F88jQ6hPP605g1rdkloZvN21YQRwYETsFQa6KnRACldUzrg==
+X-Received: by 2002:a17:90a:4414:: with SMTP id s20mr4170745pjg.132.1638258947157;
+        Mon, 29 Nov 2021 23:55:47 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id s38sm13895518pga.40.2021.11.29.23.55.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 23:55:46 -0800 (PST)
+Date:   Tue, 30 Nov 2021 08:55:36 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Toan Le <toan@os.amperecomputing.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andrew Murray <amurray@thegoodpenguin.co.uk>,
+        =?utf-8?B?U3TDqXBoYW5l?= Graber <stgraber@ubuntu.com>,
+        stable@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: xgene: Fix IB window setup
+Message-ID: <YaXY+E2Uto4O43c3@rocinante>
+References: <20211129173637.303201-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.44]
-X-ClientProxiedBy: SFHDAG1NODE3.st.com (10.75.127.3) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_06,2021-11-28_01,2020-04-07_01
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211129173637.303201-1-robh@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CRYP IP checks the written key depending of the configuration, it's
-safer to write the whole configuration to hardware then the key to avoid
-unexpected key rejection.
+Hi,
 
-Signed-off-by: Nicolas Toromanoff <nicolas.toromanoff@foss.st.com>
----
- drivers/crypto/stm32/stm32-cryp.c | 39 ++++++++++++++++++++-----------
- 1 file changed, 26 insertions(+), 13 deletions(-)
+> Commit 6dce5aa59e0b ("PCI: xgene: Use inbound resources for setup")
+> broke PCI support on XGene. The cause is the IB resources are now sorted
+> in address order instead of being in DT dma-ranges order. The result is
+> which inbound registers are used for each region are swapped. I don't
+> know the details about this h/w, but it appears that IB region 0
+> registers can't handle a size greater than 4GB. In any case, limiting
+> the size for region 0 is enough to get back to the original assignment
+> of dma-ranges to regions.
 
-diff --git a/drivers/crypto/stm32/stm32-cryp.c b/drivers/crypto/stm32/stm32-cryp.c
-index faae7ad262ac..c6640f616d8d 100644
---- a/drivers/crypto/stm32/stm32-cryp.c
-+++ b/drivers/crypto/stm32/stm32-cryp.c
-@@ -232,6 +232,11 @@ static inline int stm32_cryp_wait_busy(struct stm32_cryp *cryp)
- 			!(status & SR_BUSY), 10, 100000);
- }
- 
-+static inline void stm32_cryp_enable(struct stm32_cryp *cryp)
-+{
-+	writel_relaxed(readl_relaxed(cryp->regs + CRYP_CR) | CR_CRYPEN, cryp->regs + CRYP_CR);
-+}
-+
- static inline int stm32_cryp_wait_enable(struct stm32_cryp *cryp)
- {
- 	u32 status;
-@@ -534,9 +539,6 @@ static int stm32_cryp_hw_init(struct stm32_cryp *cryp)
- 	/* Disable interrupt */
- 	stm32_cryp_write(cryp, CRYP_IMSCR, 0);
- 
--	/* Set key */
--	stm32_cryp_hw_write_key(cryp);
--
- 	/* Set configuration */
- 	cfg = CR_DATA8 | CR_FFLUSH;
- 
-@@ -562,23 +564,36 @@ static int stm32_cryp_hw_init(struct stm32_cryp *cryp)
- 	/* AES ECB/CBC decrypt: run key preparation first */
- 	if (is_decrypt(cryp) &&
- 	    ((hw_mode == CR_AES_ECB) || (hw_mode == CR_AES_CBC))) {
--		stm32_cryp_write(cryp, CRYP_CR, cfg | CR_AES_KP | CR_CRYPEN);
-+		/* Configure in key preparation mode */
-+		stm32_cryp_write(cryp, CRYP_CR, cfg | CR_AES_KP);
- 
-+		/* Set key only after full configuration done */
-+		stm32_cryp_hw_write_key(cryp);
-+
-+		/* Start prepare key */
-+		stm32_cryp_enable(cryp);
- 		/* Wait for end of processing */
- 		ret = stm32_cryp_wait_busy(cryp);
- 		if (ret) {
- 			dev_err(cryp->dev, "Timeout (key preparation)\n");
- 			return ret;
- 		}
--	}
- 
--	cfg |= hw_mode;
-+		cfg |= hw_mode | CR_DEC_NOT_ENC;
- 
--	if (is_decrypt(cryp))
--		cfg |= CR_DEC_NOT_ENC;
-+		/* Apply updated config (Decrypt + algo) and flush */
-+		stm32_cryp_write(cryp, CRYP_CR, cfg);
-+	} else {
-+		cfg |= hw_mode;
-+		if (is_decrypt(cryp))
-+			cfg |= CR_DEC_NOT_ENC;
- 
--	/* Apply config and flush (valid when CRYPEN = 0) */
--	stm32_cryp_write(cryp, CRYP_CR, cfg);
-+		/* Apply config and flush */
-+		stm32_cryp_write(cryp, CRYP_CR, cfg);
-+
-+		/* Set key only after configuration done */
-+		stm32_cryp_hw_write_key(cryp);
-+	}
- 
- 	switch (hw_mode) {
- 	case CR_AES_GCM:
-@@ -606,9 +621,7 @@ static int stm32_cryp_hw_init(struct stm32_cryp *cryp)
- 	}
- 
- 	/* Enable now */
--	cfg |= CR_CRYPEN;
--
--	stm32_cryp_write(cryp, CRYP_CR, cfg);
-+	stm32_cryp_enable(cryp);
- 
- 	return 0;
- }
--- 
-2.17.1
+A small nitpick: it would be "X-Gene" in the above as per Applied Micro's
+(or rather MACOM Technology Solutions these days, I suppose) product line
+naming.
 
+> @@ -465,7 +465,7 @@ static int xgene_pcie_select_ib_reg(u8 *ib_reg_mask, u64 size)
+>  		return 1;
+>  	}
+>  
+> -	if ((size > SZ_1K) && (size < SZ_1T) && !(*ib_reg_mask & (1 << 0))) {
+> +	if ((size > SZ_1K) && (size < SZ_4G) && !(*ib_reg_mask & (1 << 0))) {
+>  		*ib_reg_mask |= (1 << 0);
+>  		return 0;
+>  	}
+
+Thank you!
+
+Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+
+Also, thank you Stéphane for testing!  Much appreciated!
+
+	Krzysztof

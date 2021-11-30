@@ -2,140 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 109E04637EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF6346379D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:52:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242899AbhK3O5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:57:00 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58722 "EHLO
+        id S243307AbhK3Oy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:54:59 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:57940 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243155AbhK3Oyj (ORCPT
+        with ESMTP id S242896AbhK3Ox0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:54:39 -0500
+        Tue, 30 Nov 2021 09:53:26 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 278AECE1A6C;
-        Tue, 30 Nov 2021 14:51:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 507D2C53FD1;
-        Tue, 30 Nov 2021 14:51:16 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 55A98CE1A5E;
+        Tue, 30 Nov 2021 14:50:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A54BC53FD0;
+        Tue, 30 Nov 2021 14:50:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283877;
-        bh=nBFNjj7kN5fu4QEFNCrr25riYqAoZy7fH2LbFUGUo1g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N/FdNRfh9jBQOJcyoHu8XjP8loca0Q51ykSiC4cwOLpmi+P4OpDu/7ypySHTyMtrw
-         W0t9dvqIFP6BfVm0HcG9rAcrdKSvvcrjYtNbV+Y2NiF9KXr2s1+CVzHCPgo0WlYga2
-         3QjPCq6rscuvgkXf/P33LsK7GauE0j+Igos3fEV7qDwo1lIM50QVVJB98HfC2mEYRz
-         wMXwwWyxo9vfipaQSsGC91sdLslBGRgqrXUHj2SodKumk3krl+26gFk3h8FTCxWIpD
-         ON8BlqjCPqx/eJ3y0Z4zLvAlHFv4llrsqlzlMeuDkdLPGlTFEETq5CaOtC8ZIuagyA
-         2AFTiAbMbdh+A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        ck+kernelbugzilla@bl4ckb0x.de, stephane.poignant@protonmail.com,
-        Jean Delvare <jdelvare@suse.de>, Wolfram Sang <wsa@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com,
-        linux-i2c@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 23/43] i2c: i801: Fix interrupt storm from SMB_ALERT signal
-Date:   Tue, 30 Nov 2021 09:50:00 -0500
-Message-Id: <20211130145022.945517-23-sashal@kernel.org>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211130145022.945517-1-sashal@kernel.org>
-References: <20211130145022.945517-1-sashal@kernel.org>
+        s=k20201202; t=1638283804;
+        bh=HE2oOh39yQJe14YTlEp9AbmC1U5Mk6YUUJMA2GaCuS4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bxU7M1ihXn0ifIMt4wcUTYI9XK3AUWlleOmrC/9NE3DBSZj0V9PpkCArhlFmT+Oqj
+         SCW5jYPbQToje7FMzAxkhxDsZQldk+nX4eVggy3aCTGlKudRMDzlpgf4Mz708pglZI
+         qrwS8E1nLNruZQtgWSByVIS37DP5PQqHb1LHnkTgR1ohG/MLB8q9ku5KoM2TjEteSk
+         qQFvm2reuIebnqYlgj4R4R6NvsO8cmp4Bng5MZHQtZiH9qeYJrBRt+4RGV1cVMAngJ
+         4+X2CFbsiun+6kv1g1+KPORW83+Bh9Vp42zJ/3aAa1SyN4/Ayti2GmrV5ft/ktsLHX
+         R2PbpttWOLCqg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 5F33540002; Tue, 30 Nov 2021 11:50:01 -0300 (-03)
+Date:   Tue, 30 Nov 2021 11:50:01 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Ian Rogers <irogers@google.com>, Andi Kleen <ak@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        eranian@google.com
+Subject: Re: [PATCH] perf test: Reset shadow counts before loading
+Message-ID: <YaY6GXquDQoviL66@kernel.org>
+References: <20211128085810.4027314-1-irogers@google.com>
+ <YaOuadwZWje6HeTg@krava>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaOuadwZWje6HeTg@krava>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Em Sun, Nov 28, 2021 at 05:29:29PM +0100, Jiri Olsa escreveu:
+> On Sun, Nov 28, 2021 at 12:58:10AM -0800, Ian Rogers wrote:
+> > Otherwise load counting is an average. Without this change
+> > duration_time in test_memory_bandwidth will alter its value if an
+> > earlier test contains duration_time.
+> > 
+> > This patch fixes an issue that's introduced in the proposed patch:
+> > https://lore.kernel.org/lkml/20211124015226.3317994-1-irogers@google.com/
+> > in perf test "Parse and process metrics".
+> > 
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> 
+> Acked-by: Jiri Olsa <jolsa@redhat.com>
 
-[ Upstream commit 03a976c9afb5e3c4f8260c6c08a27d723b279c92 ]
+Thanks, applied.
 
-Currently interrupt storm will occur from i2c-i801 after first
-transaction if SMB_ALERT signal is enabled and ever asserted. It is
-enough if the signal is asserted once even before the driver is loaded
-and does not recover because that interrupt is not acknowledged.
+- Arnaldo
 
-This fix aims to fix it by two ways:
-- Add acknowledging for the SMB_ALERT interrupt status
-- Disable the SMB_ALERT interrupt on platforms where possible since the
-  driver currently does not make use for it
-
-Acknowledging resets the SMB_ALERT interrupt status on all platforms and
-also should help to avoid interrupt storm on older platforms where the
-SMB_ALERT interrupt disabling is not available.
-
-For simplicity this fix reuses the host notify feature for disabling and
-restoring original register value.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=177311
-Reported-by: ck+kernelbugzilla@bl4ckb0x.de
-Reported-by: stephane.poignant@protonmail.com
-Signed-off-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Reviewed-by: Jean Delvare <jdelvare@suse.de>
-Tested-by: Jean Delvare <jdelvare@suse.de>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/i2c/busses/i2c-i801.c | 25 +++++++++++++++++++------
- 1 file changed, 19 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-i801.c b/drivers/i2c/busses/i2c-i801.c
-index eab6fd6b890eb..28d02e1663f5e 100644
---- a/drivers/i2c/busses/i2c-i801.c
-+++ b/drivers/i2c/busses/i2c-i801.c
-@@ -196,6 +196,7 @@
- #define SMBSLVSTS_HST_NTFY_STS	BIT(0)
  
- /* Host Notify Command register bits */
-+#define SMBSLVCMD_SMBALERT_DISABLE	BIT(2)
- #define SMBSLVCMD_HST_NTFY_INTREN	BIT(0)
- 
- #define STATUS_ERROR_FLAGS	(SMBHSTSTS_FAILED | SMBHSTSTS_BUS_ERR | \
-@@ -664,12 +665,20 @@ static irqreturn_t i801_isr(int irq, void *dev_id)
- 		i801_isr_byte_done(priv);
- 
- 	/*
--	 * Clear irq sources and report transaction result.
-+	 * Clear remaining IRQ sources: Completion of last command, errors
-+	 * and the SMB_ALERT signal. SMB_ALERT status is set after signal
-+	 * assertion independently of the interrupt generation being blocked
-+	 * or not so clear it always when the status is set.
-+	 */
-+	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS | SMBHSTSTS_SMBALERT_STS;
-+	if (status)
-+		outb_p(status, SMBHSTSTS(priv));
-+	status &= ~SMBHSTSTS_SMBALERT_STS; /* SMB_ALERT not reported */
-+	/*
-+	 * Report transaction result.
- 	 * ->status must be cleared before the next transaction is started.
- 	 */
--	status &= SMBHSTSTS_INTR | STATUS_ERROR_FLAGS;
- 	if (status) {
--		outb_p(status, SMBHSTSTS(priv));
- 		priv->status = status;
- 		wake_up(&priv->waitq);
- 	}
-@@ -1007,9 +1016,13 @@ static void i801_enable_host_notify(struct i2c_adapter *adapter)
- 	if (!(priv->features & FEATURE_HOST_NOTIFY))
- 		return;
- 
--	if (!(SMBSLVCMD_HST_NTFY_INTREN & priv->original_slvcmd))
--		outb_p(SMBSLVCMD_HST_NTFY_INTREN | priv->original_slvcmd,
--		       SMBSLVCMD(priv));
-+	/*
-+	 * Enable host notify interrupt and block the generation of interrupt
-+	 * from the SMB_ALERT signal because the driver does not support
-+	 * SMBus Alert.
-+	 */
-+	outb_p(SMBSLVCMD_HST_NTFY_INTREN | SMBSLVCMD_SMBALERT_DISABLE |
-+	       priv->original_slvcmd, SMBSLVCMD(priv));
- 
- 	/* clear Host Notify bit to allow a new notification */
- 	outb_p(SMBSLVSTS_HST_NTFY_STS, SMBSLVSTS(priv));
+> jirka
+> 
+> > ---
+> >  tools/perf/tests/parse-metric.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/tools/perf/tests/parse-metric.c b/tools/perf/tests/parse-metric.c
+> > index 574b7e4efd3a..07b6f4ec024f 100644
+> > --- a/tools/perf/tests/parse-metric.c
+> > +++ b/tools/perf/tests/parse-metric.c
+> > @@ -109,6 +109,7 @@ static void load_runtime_stat(struct runtime_stat *st, struct evlist *evlist,
+> >  	struct evsel *evsel;
+> >  	u64 count;
+> >  
+> > +	perf_stat__reset_shadow_stats();
+> >  	evlist__for_each_entry(evlist, evsel) {
+> >  		count = find_value(evsel->name, vals);
+> >  		perf_stat__update_shadow_stats(evsel, count, 0, st);
+> > -- 
+> > 2.34.0.rc2.393.gf8c9666880-goog
+> > 
+
 -- 
-2.33.0
 
+- Arnaldo

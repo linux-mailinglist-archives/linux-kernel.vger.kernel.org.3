@@ -2,113 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAC62463E05
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:50:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D9F463E0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245600AbhK3SxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:53:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60140 "EHLO
+        id S245625AbhK3Sx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:53:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245598AbhK3Sw2 (ORCPT
+        with ESMTP id S245621AbhK3SxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:52:28 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBED9C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:49:08 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id d27-20020a25addb000000b005c2355d9052so30726873ybe.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:49:08 -0800 (PST)
+        Tue, 30 Nov 2021 13:53:13 -0500
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC2BC06174A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:49:52 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id 13so42909719ljj.11
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:49:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=KC1KslsAWcLKbueuly8tNpIr1XMybfLtjcHTyhp9kPA=;
-        b=eoiEVlkLUz8iLCc3q+yUTxvA+3ZF7VsDhtl4WNZsBLzc6K46xzxSsjbsJD2C/tUHQu
-         hn1szDmsYDQEtq4mVVsib7hSyrVVtFUHOJSMktoUe0M9QwqANtBjEzFHCYFOlQohZlb2
-         5V1qSXN0RYsQe+2wNIcWm1OBS+pLNVRZUErpC1A+gDCf/ym+cIRx7gmDsg8Gt9X00Cmw
-         S9tsr0LIM5s5DUGziknCita87jgmV0kvP4+Zuoe0ZB0PfsGX4cinsHwwz+9yuxPi8wB5
-         Dm/KpffAoPLZyqeBhsP02HHxIQDeavUkd0f3aiCzPLLVcb4ifSEkagflgH4726bZx6v8
-         9SdQ==
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R0XVwWI0CDDryaRAyrcVHRt6GWu/D/+Wb5DibCwyPj8=;
+        b=uhNYgiyPXG0gGAKEZ5PDwbzHU6/5W4MwrHbVw9Q6Fadx+bCVBZrysvoh2Vp4K1P3e0
+         XTqNeNU2IgN4RZLHNNjOcva7OyS2EE6dd0tm+ZrfjlxL6dKY30ZL4xVXQe4eVLH90J87
+         HjR3YngRRuPK9TdVJmqNNfVi0jIwrSqlVmuy8ExKCKWnL8Oct9ru1/zcZ8uf/P8CSQS3
+         xHcWuenCP83gZe1EM6MuGe5uJBldxvwZ2YRnVzeTZOZ8Bdv6TJEpFwpM89o8AOLW51Ho
+         73DCfS9jKYcwQWgjZgCFGgwyQgKQu9yg4AO0M8CGW73EDwrceHjvRxKWKMjDh4jgaILn
+         JN1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=KC1KslsAWcLKbueuly8tNpIr1XMybfLtjcHTyhp9kPA=;
-        b=bkFsax0oELjTucC711vFRWFBpYuBp/iIiTZSHBEc9d5mm368/3VVPSXE7FL9ndmrt5
-         oBxxmJfJDe5TVTLV++kz7zpWmHpLPVjrkjVJ8n2tO9q6VfTm25nE2ZsYWf36ttbf7uNB
-         FBjlYwpKfAmfEn+9v7NIdhFfPZ8Bek3nruZFMXOi7DxERaUIqN54orTylx03sLObg9Sh
-         2EVU/njDMsNRQc9XoFUaU2GSXpeZWTgNYflmENeGPreJmc9mG+2ttGxfMwUUqRnjbsYc
-         3ZkVqYlrV6WnAOHoV1u6OoV01Mjkex5vbZX9iqbHPfwmtWHMo2PP6AGc3ToMBExoIYwO
-         piKg==
-X-Gm-Message-State: AOAM531+MF1b/Ql4WPXsDI2MHG7zM153RajDl4XSMdgf72Jg58vlctMs
-        Y0zbmLtlSNIj4rRvvOce77pt+Wk=
-X-Google-Smtp-Source: ABdhPJywuox5pRKXk/NzXZXHKmmoDVKC5pZnFGHOmy8w2yLDI/QOrQVy8Knol8P4jpbS+i0jDk7kXL4=
-X-Received: from osk.cam.corp.google.com ([2620:15c:93:a:bd6e:e7b3:bbdb:f3df])
- (user=osk job=sendgmr) by 2002:a25:9781:: with SMTP id i1mr1064086ybo.638.1638298148193;
- Tue, 30 Nov 2021 10:49:08 -0800 (PST)
-Date:   Tue, 30 Nov 2021 13:48:55 -0500
-Message-Id: <20211130184855.1779353-1-osk@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH] ARM: dts: aspeed: tyan-s7106: Add uart_routing and fix vuart config
-From:   Oskar Senft <osk@google.com>
-To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Cc:     aaelhaj@google.com, Oskar Senft <osk@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=R0XVwWI0CDDryaRAyrcVHRt6GWu/D/+Wb5DibCwyPj8=;
+        b=c1i6z7ooy33zsM0qalnxA8tpVw47FmgziuLReKjPd99UCkQf0dbHsGIOfCsI/KTv6+
+         PQdsS5ByzF6xFjGtbxjemjIp7ckLmGe4rLUX/jialnAjN0f98hm8kEgV6ugX3x1YiR5r
+         4y2qgQO0fdTrMxOwuZ+6hJIaLo2N9uh0fXxGGTYKRce3EU91Ih69ekhfNM8EizwaULSV
+         +sk3hjqybs8frarcDTWUVraKP7+ZVNHOWh2mMkc/8BFKDrcGNN6FBOruqIShEfi4dely
+         1/fHcHo00slYlfZ/hBleFrARHaU+mnxSKcQkjEyaJS79aDlbCV+WXD69kIcYXwmpo6zS
+         64dQ==
+X-Gm-Message-State: AOAM533UTgIH0LgkU6oDmq6Gh8K0HWbif/2h8Lm86TWkPSyrFzA5coEW
+        9ST0STkt57GqVFbJzV4n8ZiZJA==
+X-Google-Smtp-Source: ABdhPJxKHcxiQM0382WVNTj8j4caEFaktjfqod9dQqOdNnvSm7hP8KeJmxSqDyBdFJrFQntA5NMmuw==
+X-Received: by 2002:a2e:9e10:: with SMTP id e16mr726764ljk.492.1638298190838;
+        Tue, 30 Nov 2021 10:49:50 -0800 (PST)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id t12sm1780266ljg.63.2021.11.30.10.49.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 10:49:48 -0800 (PST)
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+X-Google-Original-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 9189F103666; Tue, 30 Nov 2021 21:49:49 +0300 (+03)
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Joerg Roedel <jroedel@suse.de>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv4 0/4] Add generic MMIO instruction deconding to be used in SEV and TDX
+Date:   Tue, 30 Nov 2021 21:49:29 +0300
+Message-Id: <20211130184933.31005-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure the vuart in such a way that it does not inhibit the SuperIO's
-UART from functioning correctly. This allows the same DTS to be used for
-both configurations with SuperIO and VUART (depending on the BIOS
-build). The decision on whether to actually enable VUART can then be
-made at runtime.
+Both AMD SEV and Intel TDX has to decode MMIO instruction to be able to
+handle MMIO.
 
-This change also enables the new uart_routing driver for the SuperIO
-case.
+Extract insn_decode_mmio() from SEV code. TDX will also use this helper.
 
-Signed-off-by: Oskar Senft <osk@google.com>
----
- arch/arm/boot/dts/aspeed-bmc-tyan-s7106.dts | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+v4:
+ - Use enum mmio_type inside insn_decode_mmio() (Tom)
+ - Keep a comment in vc_handle_mmio() (Tom)
+ - Tested-by on AMD HW from Joerg.
+v3:
+ - Handle insn_get_opcode() in is_string_insn()
+v2:
+ - insn_get_modrm_reg_ptr() returns unsigned long pointer now (PeterZ);
+ - Handle insn_get_opcode() failure in insn_decode_mmio() (PeterZ);
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-tyan-s7106.dts b/arch/arm/boot/dts/aspeed-bmc-tyan-s7106.dts
-index 60ac6d3f03b5..aff27c1d4b06 100644
---- a/arch/arm/boot/dts/aspeed-bmc-tyan-s7106.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-tyan-s7106.dts
-@@ -3,6 +3,7 @@
- 
- #include "aspeed-g5.dtsi"
- #include <dt-bindings/gpio/aspeed-gpio.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
- 
- / {
- 	model = "Tyan S7106 BMC";
-@@ -127,8 +128,23 @@ &uart5 {
- 	status = "okay";
- };
- 
-+&uart_routing {
-+	status = "okay";
-+};
-+
- &vuart {
- 	status = "okay";
-+
-+	/* We enable the VUART here, but leave it in a state that does
-+	 * not interfere with the SuperIO. The goal is to have both the
-+	 * VUART and the SuperIO available and decide at runtime whether
-+	 * the VUART should actually be used. For that reason, configure
-+	 * an "invalid" IO address and an IRQ that is not used by the
-+	 * BMC.
-+	 */
-+
-+	aspeed,lpc-io-reg = <0xffff>;
-+	aspeed,lpc-interrupts = <15 IRQ_TYPE_LEVEL_HIGH>;
- };
- 
- &lpc_ctrl {
+
+Kirill A. Shutemov (4):
+  x86/insn-eval: Handle insn_get_opcode() failure
+  x86/insn-eval: Introduce insn_get_modrm_reg_ptr()
+  x86/insn-eval: Introduce insn_decode_mmio()
+  x86/sev-es: Use insn_decode_mmio() for MMIO implementation
+
+ arch/x86/include/asm/insn-eval.h |  13 +++
+ arch/x86/kernel/sev.c            | 172 ++++++++-----------------------
+ arch/x86/lib/insn-eval.c         | 109 +++++++++++++++++++-
+ 3 files changed, 161 insertions(+), 133 deletions(-)
+
 -- 
-2.34.0.rc2.393.gf8c9666880-goog
-
+2.32.0

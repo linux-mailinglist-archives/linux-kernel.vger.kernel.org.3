@@ -2,151 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17607462944
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57803462946
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:48:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234390AbhK3Au4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:50:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
+        id S234499AbhK3Avs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234379AbhK3Auz (ORCPT
+        with ESMTP id S231298AbhK3Avs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:50:55 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D69C061746
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:47:37 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id m15so17870976pgu.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:47:37 -0800 (PST)
+        Mon, 29 Nov 2021 19:51:48 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2648C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:48:29 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id fv9-20020a17090b0e8900b001a6a5ab1392so15699490pjb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:48:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=FNHzIeoNF4E/ChvY8iqCZpHku0EJ1HjjIEUDqrvYteE=;
-        b=hdoyQm+SZqT3VqIFKhsA87GHz6tPX+yEJy7VUqZ1vOh1fbV0K8hdAD8xEfN4BSZijq
-         UyhMIWU5P7CpypZVPwH7GbgIRGa04Hb+DK5SWapT9cbNBnpIqzg77bQj3AvHEk7ojrJh
-         6xH4pD1x9Ltc9c5yLj5yuWR+HZqdVVal7S35g=
+        bh=SKb0tyWyh5coPyGBhZ1CTtyPx1ZKuebzYgiNQtZtLDQ=;
+        b=FXlb8DHnsHvayR6ZOPHsYMujupoG7HgpC2377wMXQusARXxPsyVI8pBJQYeV4GUP8x
+         I7F5Yb2Dt8YtbqNlwg0MYOoZl6ietGWJHZ5qTfGRpx6DeGgXSS1s2BEDIZFxAh6g/nM+
+         ETX9huOwK1rmIVGiXQjVDQNUyfd+DlEkYu0Yf+wenmKRtqhSAyvjw7OojhY1ylz+Dvrb
+         yb499G3x1X36cHaqzSJ88CuEJu7VR6RqWhSojfYPbRhrD3maUAhHQjpBEthiytL2PPhW
+         eYO+kMwUfNwdczDOuD0xQnazIPv1WpEubC31qVticdDi0X/lnnK/qAjubLaeXvZy8RV/
+         C/gQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=FNHzIeoNF4E/ChvY8iqCZpHku0EJ1HjjIEUDqrvYteE=;
-        b=r+xcMYuUZNB0BQ5M4I7TEndchxzXW/Vt5ybYp5AuTGvLuvzsZeWpEAQkJIK9t5OZ+N
-         8JeLqjiBYjxj2/NtjcrjpLu+DFagz5jyqP5k2Pww6FuY4fjH2qZgcEYZQXxHbvHRqXYv
-         JJvhAsnpOqPqgo4RA7lBgkmpjPEWiwMMGA8evhAVeOPce0H3i64PcVw0ZFDNSgUt6I8s
-         mqLzaOFg7ntql6UL9OIFSJ9/NznKEKy65Rb8NLw8Vfr6sZjGRJCJ91GWthX8GAJRSki3
-         LZR9rwHXtuSHA0UFbqysheKBdEIKvZiIHK23EX8dFZMLkciqYiUPDadvl6R83nNF6hEW
-         yG0g==
-X-Gm-Message-State: AOAM530NMzZuYelFXOTsJ/4H+gEqdNpgXfwu6h5YDdO0SnN7jeEMiRq7
-        JLA1NHU+XdJrrhBE/JxnHV9TMw==
-X-Google-Smtp-Source: ABdhPJzqbcpo6hlWldDlPjrL230SXiWqrqs/mRNPc8dujTRCS/HMUGkCX5XfHZw0PIVrhJ83oQCu0g==
-X-Received: by 2002:a63:554:: with SMTP id 81mr34328310pgf.298.1638233256675;
-        Mon, 29 Nov 2021 16:47:36 -0800 (PST)
-Received: from google.com ([2620:15c:202:201:8b47:583d:a0:4f2d])
-        by smtp.gmail.com with ESMTPSA id m12sm20441202pfk.27.2021.11.29.16.47.35
+        bh=SKb0tyWyh5coPyGBhZ1CTtyPx1ZKuebzYgiNQtZtLDQ=;
+        b=ISxQYLnfoXlTeipkKkcIow4cAr9tlLP6r4zI2I5biwM1BqIGe3r4gNBjiu6gam1JAw
+         Ofc3F1zDOY/RtCDQKlG5ldqRn0j5NYmsJbAmLrkQGyOsGrq0QBvaNlZFtHdShpEqsYEv
+         3PFJEKlpWkdQS8lUTrQ7UofV41EfJE1dhn7g+aoFH044REQC6aqdl86IuOIrH6uE3u0v
+         Ii8o7mgnP0F3EAN6izJKoVHWyEoAMRPDNewzvXFK9zQaW410y6PmQ3RCSm+Q0dh78oPx
+         23VBXnLJWfOtK8UAio4j///Y03b4SyyVur/3p/5EJihwpaz639Q4KOHMLNl3aEbPCfxe
+         meOA==
+X-Gm-Message-State: AOAM533qk3wI5FQSnKKMTtmsaXJ4m+m+10xDxFQutmtXUxu2CgcVAtvl
+        +IzBa235Ln+bK4dq5xN9gE2obw==
+X-Google-Smtp-Source: ABdhPJy+FCDHetyo1p1dnxEvjT6M/DKbtD2rUpSQGv3rbeWeeevKJJrU6ZhXSKN5TmY7gbKvSPPmlg==
+X-Received: by 2002:a17:90b:1a87:: with SMTP id ng7mr1911697pjb.86.1638233309125;
+        Mon, 29 Nov 2021 16:48:29 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id z71sm12947783pgz.52.2021.11.29.16.48.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 16:47:36 -0800 (PST)
-Date:   Mon, 29 Nov 2021 16:47:34 -0800
-From:   Brian Norris <briannorris@chromium.org>
-To:     Jia-Ju Bai <baijiaju1990@gmail.com>
-Cc:     amitkarwar@gmail.com, ganapathi017@gmail.com,
-        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
-        kvalo@codeaurora.org, David Miller <davem@davemloft.net>,
-        kuba@kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Doug Anderson <dianders@chromium.org>
-Subject: [PATCH] mwifiex: Fix possible ABBA deadlock
-Message-ID: <YaV0pllJ5p/EuUat@google.com>
-References: <0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com>
+        Mon, 29 Nov 2021 16:48:28 -0800 (PST)
+Date:   Tue, 30 Nov 2021 00:48:24 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 2/2] KVM: mmu/x86: optimize zapping by retaining non-leaf
+ SPTEs and avoid rcu stall
+Message-ID: <YaV02MdGYlfGs35T@google.com>
+References: <20211124214421.458549-1-mizhang@google.com>
+ <20211124214421.458549-3-mizhang@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com>
+In-Reply-To: <20211124214421.458549-3-mizhang@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Jia-Ju Bai <baijiaju1990@gmail.com>:
+On Wed, Nov 24, 2021 at 09:44:21PM +0000, Mingwei Zhang wrote:
+> TDP MMU SPTE zapping process currently uses two levels of iterations. The
+> first level iteration happens at the for loop within the zap_gfn_range()
+> with the purpose of calibrating the accurate range for zapping. The second
+> level itreration start at tdp_mmu_set_spte{,_atomic}() that tears down the
 
-  mwifiex_dequeue_tx_packet()
-     spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 1432 (Lock A)
-     mwifiex_send_addba()
-       spin_lock_bh(&priv->sta_list_spinlock); --> Line 608 (Lock B)
+iteration
 
-  mwifiex_process_sta_tx_pause()
-     spin_lock_bh(&priv->sta_list_spinlock); --> Line 398 (Lock B)
-     mwifiex_update_ralist_tx_pause()
-       spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 941 (Lock A)
+> whole paging structures (leaf and non-leaf SPTEs) within the range. The
+> former iteration is yield safe, while the second one is not.
 
-Similar report for mwifiex_process_uap_tx_pause().
+I know what you mean but I'd suggest being more specific than "yield
+safe". For example:
 
-While the locking expectations in this driver are a bit unclear, the
-Fixed commit only intended to protect the sta_ptr, so we can drop the
-lock as soon as we're done with it.
+  Unlike the outer loop, the recursive zapping done under
+  tdp_mmu_set_spte{,_atomic} does not yield. Since zapping is done with
+  a pre-order traversal, zapping sufficiently large ranges can lead to
+  RCU stall warnings.
 
-IIUC, this deadlock cannot actually happen, because command event
-processing (which calls mwifiex_process_sta_tx_pause()) is
-sequentialized with TX packet processing (e.g.,
-mwifiex_dequeue_tx_packet()) via the main loop (mwifiex_main_process()).
-But it's good not to leave this potential issue lurking.
+I'd also clarify here that the TDP MMU iterator uses a pre-order
+traversal which causes us KVM to end up doing the maximum amount of
+zapping under tdp_mmu_set_spte{,_atomic} and not the outer for loop.
 
-Fixes: ("f0f7c2275fb9 mwifiex: minor cleanups w/ sta_list_spinlock in cfg80211.c")
-Cc: Douglas Anderson <dianders@chromium.org>
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Link: https://lore.kernel.org/linux-wireless/0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com/
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
+> 
+> In many cases, zapping SPTE process could be optimized since the non-leaf
+> SPTEs could most likely be retained for the next allocation. On the other
+> hand, for large scale SPTE zapping scenarios, we may end up zapping too
+> many SPTEs and use excessive CPU time that causes the RCU stall warning.
+> 
+> The follow selftest reproduces the warning:
+> 
+> 	(env: kvm.tdp_mmu=Y)
+> 	./dirty_log_perf_test -v 64 -b 8G
+> 
+> Optimize the zapping process by skipping all SPTEs above a certain level in
+> the first iteration. This allows us to control the granularity of the
+> actual zapping and invoke tdp_mmu_iter_cond_resched() on time. In addition,
+> we would retain some of the non-leaf SPTEs to accelerate next allocation.
+> 
+> For the selection of the `certain level`, we choose the PG_LEVEL_1G because
+> it is currently the largest page size supported and it natually fits the
+> scenario of splitting large pages.
+> 
+> For `zap_all` case (usually) at VM teardown time, we use a two-phase
+> mechanism: the 1st phase zaps all SPTEs at PG_LEVEL_1G level and 2nd phase
+> zaps everything else. This is achieved by the helper function
+> __zap_gfn_range().
+> 
+> Cc: Sean Christopherson <seanjc@google.com>
+> Cc: Ben Gardon <bgardon@google.com>
+> Cc: David Matlack <dmatlack@google.com>
+> 
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  arch/x86/kvm/mmu/tdp_mmu.c | 57 ++++++++++++++++++++++++++------------
+>  1 file changed, 40 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 89d16bb104de..3fadc51c004a 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -697,24 +697,16 @@ static inline bool tdp_mmu_iter_cond_resched(struct kvm *kvm,
+>   * account for the possibility that other threads are modifying the paging
+>   * structures concurrently. If shared is false, this thread should hold the
+>   * MMU lock in write mode.
+> + *
+> + * If zap_all is true, eliminate all the paging structures that contains the
+> + * SPTEs.
+>   */
+> -static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> -			  gfn_t start, gfn_t end, bool can_yield, bool flush,
+> -			  bool shared)
+> +static bool __zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> +			    gfn_t start, gfn_t end, bool can_yield, bool flush,
+> +			    bool shared, bool zap_all)
+>  {
+> -	gfn_t max_gfn_host = 1ULL << (shadow_phys_bits - PAGE_SHIFT);
+> -	bool zap_all = (start == 0 && end >= max_gfn_host);
+>  	struct tdp_iter iter;
+>  
+> -	/*
+> -	 * Bound the walk at host.MAXPHYADDR, guest accesses beyond that will
+> -	 * hit a #PF(RSVD) and never get to an EPT Violation/Misconfig / #NPF,
+> -	 * and so KVM will never install a SPTE for such addresses.
+> -	 */
+> -	end = min(end, max_gfn_host);
+> -
+> -	kvm_lockdep_assert_mmu_lock_held(kvm, shared);
+> -
+>  	rcu_read_lock();
+>  
+>  	tdp_root_for_each_pte(iter, root, start, end) {
+> @@ -725,17 +717,24 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>  			continue;
+>  		}
+>  
+> -		if (!is_shadow_present_pte(iter.old_spte))
+> +		/*
+> +		 * In zap_all case, ignore the checking of present since we have
+> +		 * to zap everything.
+> +		 */
+> +		if (!zap_all && !is_shadow_present_pte(iter.old_spte))
+>  			continue;
 
-On Tue, Nov 23, 2021 at 11:31:34AM +0800, Jia-Ju Bai wrote:
-> I am not quite sure whether these possible deadlocks are real and how to fix
-> them if they are real.
-> Any feedback would be appreciated, thanks :)
+I don't believe there's any reason to attempt to zap a non-present spte,
+even in the zap_all case. In any case, this change deserves its own
+patch and a commit message that describes why the old logic is incorrect
+and how this fixes it.
 
-I think these are at least theoretically real, and so we should take
-something like the $subject patch probably. But I don't believe we can
-actually hit this due to the main-loop structure of this driver.
+>  
+>  		/*
+>  		 * If this is a non-last-level SPTE that covers a larger range
+>  		 * than should be zapped, continue, and zap the mappings at a
+> -		 * lower level, except when zapping all SPTEs.
+> +		 * lower level. Actual zapping started at proper granularity
+> +		 * that is not so large as to cause a soft lockup when handling
+> +		 * the changed pte (which does not yield).
+>  		 */
+>  		if (!zap_all &&
+>  		    (iter.gfn < start ||
+> -		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end) &&
+> +		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end ||
+> +		     iter.level > PG_LEVEL_1G) &&
+>  		    !is_last_spte(iter.old_spte, iter.level))
+>  			continue;
 
-Anyway, see the surrounding patch.
+This if statement is getting a bit long. I'd suggest breaking out the
+level check and also using KVM_MAX_HUGEPAGE_LEVEL.
 
-Thanks,
-Brian
+e.g.
 
+        /*
+         * If not doing zap_all, only zap up to the huge page level to
+         * avoid doing too much work in the recursive tdp_mmu_set_spte*
+         * call below, since it does not yield.
+         *
+         * This will potentially leave behind some childless page tables
+         * but that's ok because ...
+         */
+         if (!zap_all && iter.level > KVM_MAX_HUGEPAGE_LEVEL)
+                continue;
 
- drivers/net/wireless/marvell/mwifiex/sta_event.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+And on that note, what is the reasoning for why it's ok to leave behind
+childless page tables? I assume it's because most of the time we'll use
+that page table again in the future, and at worst we leave the page
+table allocated until the VM is cleaned up?
 
-diff --git a/drivers/net/wireless/marvell/mwifiex/sta_event.c b/drivers/net/wireless/marvell/mwifiex/sta_event.c
-index 80e5d44bad9d..7d42c5d2dbf6 100644
---- a/drivers/net/wireless/marvell/mwifiex/sta_event.c
-+++ b/drivers/net/wireless/marvell/mwifiex/sta_event.c
-@@ -365,10 +365,12 @@ static void mwifiex_process_uap_tx_pause(struct mwifiex_private *priv,
- 		sta_ptr = mwifiex_get_sta_entry(priv, tp->peermac);
- 		if (sta_ptr && sta_ptr->tx_pause != tp->tx_pause) {
- 			sta_ptr->tx_pause = tp->tx_pause;
-+			spin_unlock_bh(&priv->sta_list_spinlock);
- 			mwifiex_update_ralist_tx_pause(priv, tp->peermac,
- 						       tp->tx_pause);
-+		} else {
-+			spin_unlock_bh(&priv->sta_list_spinlock);
- 		}
--		spin_unlock_bh(&priv->sta_list_spinlock);
- 	}
- }
- 
-@@ -400,11 +402,13 @@ static void mwifiex_process_sta_tx_pause(struct mwifiex_private *priv,
- 			sta_ptr = mwifiex_get_sta_entry(priv, tp->peermac);
- 			if (sta_ptr && sta_ptr->tx_pause != tp->tx_pause) {
- 				sta_ptr->tx_pause = tp->tx_pause;
-+				spin_unlock_bh(&priv->sta_list_spinlock);
- 				mwifiex_update_ralist_tx_pause(priv,
- 							       tp->peermac,
- 							       tp->tx_pause);
-+			} else {
-+				spin_unlock_bh(&priv->sta_list_spinlock);
- 			}
--			spin_unlock_bh(&priv->sta_list_spinlock);
- 		}
- 	}
- }
--- 
-2.34.0.rc2.393.gf8c9666880-goog
+>  
+> @@ -756,6 +755,30 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+>  	return flush;
+>  }
+>  
+> +static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> +			  gfn_t start, gfn_t end, bool can_yield, bool flush,
+> +			  bool shared)
+> +{
+> +	gfn_t max_gfn_host = 1ULL << (shadow_phys_bits - PAGE_SHIFT);
+> +	bool zap_all = (start == 0 && end >= max_gfn_host);
+> +
+> +	/*
+> +	 * Bound the walk at host.MAXPHYADDR, guest accesses beyond that will
+> +	 * hit a #PF(RSVD) and never get to an EPT Violation/Misconfig / #NPF,
+> +	 * and so KVM will never install a SPTE for such addresses.
+> +	 */
+> +	end = min(end, max_gfn_host);
+> +
+> +	kvm_lockdep_assert_mmu_lock_held(kvm, shared);
+> +
+> +	flush = __zap_gfn_range(kvm, root, start, end, can_yield, flush, shared,
+> +				false);
+> +	if (zap_all)
+> +		flush = __zap_gfn_range(kvm, root, start, end, can_yield, flush,
+> +					shared, true);
+> +	return flush;
+> +}
+> +
+>  /*
+>   * Tears down the mappings for the range of gfns, [start, end), and frees the
+>   * non-root pages mapping GFNs strictly within that range. Returns true if
+> -- 
+> 2.34.0.rc2.393.gf8c9666880-goog
+> 

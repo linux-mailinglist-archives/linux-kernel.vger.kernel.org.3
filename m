@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740CF463E96
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D9D463E98
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241872AbhK3T16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 14:27:58 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:40338 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234414AbhK3T15 (ORCPT
+        id S245758AbhK3T3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 14:29:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244254AbhK3T3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 14:27:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F0437B81BEF;
-        Tue, 30 Nov 2021 19:24:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7489FC53FC7;
-        Tue, 30 Nov 2021 19:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638300275;
-        bh=RDjAjTT2Axoh9tpgNPzL6dph+lg0w6WidvQZF5Tmhls=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LG6Q21+UW6ZutW7RQfv4P5i7HpUWwouxw+qtmcXrsGH4FYWSjNKbyjdSXvaLi2lub
-         jDan2Uhh9tl1G1GNLGIyUfR70XfQvZT09RkrhckEm9OVWfTNrcAy0tJGM/LkBPPa2N
-         Q5gbhdTeOYEG4+Gm2J3yZOZGlyIYXBkyW3UevcLxQFrIXIlvMszPyXBAWMqr+TnBZk
-         EKy/r8z2akPohLVKKjXDT2xIltIlUUUSjAJtF8XtGXOi6WV1eV4x9DhopJ+1IwMz3x
-         Wo3Zs27mjTvBDk5h9LpXyojzBTWe3A5pBuwE3pMSAfrOGfUd0UcCVmXpna1zLx5vey
-         FEwrK8EkBzXYw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 76E3E40002; Tue, 30 Nov 2021 16:24:33 -0300 (-03)
-Date:   Tue, 30 Nov 2021 16:24:33 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Ian Rogers <irogers@google.com>, Andi Kleen <ak@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        "Paul A . Clarke" <pc@us.ibm.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        eranian@google.com
-Subject: Re: [PATCH v2] perf metric: Reduce multiplexing with duration_time
-Message-ID: <YaZ6cVidgo1e4h0g@kernel.org>
-References: <20211124015226.3317994-1-irogers@google.com>
- <YaOs+DjuoQvuqIrC@krava>
- <CAP-5=fXBRa7+ugLAWjuOkwr3vqWtaby86e8zovUvkX2wmYV4ag@mail.gmail.com>
- <YaZpWOi26cLgYnPz@krava>
+        Tue, 30 Nov 2021 14:29:08 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAC9C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:25:47 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id r11so91391869edd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:25:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=soleen.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mUe1etHTeAh3A2xC3mRSG89zpXC1bCrhy9fylkJ/lXk=;
+        b=l7SSwJJsh3Dg1tolC6JDaZE65vqBeF+DWW4JEX7SK8u/Bc5JOX45lyYGuxXNt4ohmt
+         dzLJRk/olbLvNfAQAuAaisTAxYTL4LSzmKlMzxpWU3KQMq+cWhyVPpQ0aR/x+V0GF9F+
+         D1dTINT6K6t9wQL4kIUh7i4XMhHNMubDqTsYP+/nmsYJ3GUryuRtov5FeXoBhCCjbYMe
+         YlGIFHCLGRvsejevuXFXpcGY/Ij9cn8Q+cGhIsaCcu6Y8gAqEsZS5FRxoKBVtoqZ6JgB
+         hxmNrIdNUtvqmi2U+QHr6lsXfqQuJDHMS6WValSK1DBjBemRLAvx6QNEeB35xWNZaIid
+         snkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mUe1etHTeAh3A2xC3mRSG89zpXC1bCrhy9fylkJ/lXk=;
+        b=NOW55AKRk2BGU5EgP5F62xT190cfONwWI5ROmdba4L+tcl2zsMU00WineK80xJefx/
+         kUDVvYCajgW32mnNQ7tv1/DdZD5CeVzYpBp5gZdRo2cRAMs90QoqtukeuV8VZJzUuhrx
+         /3sew1gYCk4JOCHcyyVi2aKWTCIRZQbPKOQd60jLTJWQ56b53pWpT4ipkO7t4R21mnvN
+         GRiScLdyM4QSQF82kS9uBCBA0ThWgiUs7taJoyiykMAhqIWhkA6gYLTZQli/BSITcHLB
+         MGpaEnn+7fXPGelCiRK56ghvyi6Jwuoj3RVDoZgxbHo1udRPFUFnpzeDKbSJi4b7tEeP
+         rsMw==
+X-Gm-Message-State: AOAM530VmrB/EWO1yP61ZsrwPJPF42WwSa9uKom6b9N7fXHzXFwHDQt3
+        hFrMm1mvof4dPbAkBd9oXR0yK7Zy7TInDXOIltp9Pw==
+X-Google-Smtp-Source: ABdhPJxTaOkNeqHy63NuVfX5HVhSVZk5X1GCRN36lztXyJE++faH21KWi2lLIRlKAgTyh5rggcRNpmE6mEV6Y+GzSlA=
+X-Received: by 2002:a17:906:2b12:: with SMTP id a18mr1206115ejg.254.1638300345509;
+ Tue, 30 Nov 2021 11:25:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaZpWOi26cLgYnPz@krava>
-X-Url:  http://acmel.wordpress.com
+References: <20211123214814.3756047-1-pasha.tatashin@soleen.com>
+ <20211123214814.3756047-3-pasha.tatashin@soleen.com> <6d82e674-76dc-f3b0-2e53-a92eeb249eff@gmail.com>
+ <CA+CK2bAX2XmMrt9RBGiUV7LG_sbpB7ov6bxMVjr5FSBVirE1CA@mail.gmail.com>
+ <7d339956-27fb-4eb6-bd73-791807ddef56@gmail.com> <9e0014e8-e251-360c-ad82-334ad0f28303@gmail.com>
+ <CA+CK2bDiWc2y=CW6d=6raaf9Haq2vuWQDTQZ-aAyLDdpq5aQPQ@mail.gmail.com> <aee858af-f0f7-1da6-5976-cf0057092afa@gmail.com>
+In-Reply-To: <aee858af-f0f7-1da6-5976-cf0057092afa@gmail.com>
+From:   Pasha Tatashin <pasha.tatashin@soleen.com>
+Date:   Tue, 30 Nov 2021 14:25:09 -0500
+Message-ID: <CA+CK2bBQE0-Tw0XhAyPm0R3hsCkUqN7Oij4vNEDfut80KBxGZA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] mm: page table check
+To:     Fusion Future <qydwhotmail@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Paul Turner <pjt@google.com>, weixugc@google.com,
+        Greg Thelen <gthelen@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>, masahiroy@kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE" <x86@kernel.org>,
+        frederic@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Nov 30, 2021 at 07:11:36PM +0100, Jiri Olsa escreveu:
-> On Mon, Nov 29, 2021 at 09:46:31AM -0800, Ian Rogers wrote:
-> > On Sun, Nov 28, 2021 at 8:23 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > >
-> > > On Tue, Nov 23, 2021 at 05:52:26PM -0800, Ian Rogers wrote:
-> > > > It is common to use the same counters with and without
-> > > > duration_time. The ID sharing code treats duration_time as if it
-> > > > were a hardware event placed in the same group. This causes
-> > > > unnecessary multiplexing such as in the following example where
-> > > > l3_cache_access isn't shared:
-> > > >
-> > > > $ perf stat -M l3 -a sleep 1
-> > > >
-> > > >  Performance counter stats for 'system wide':
-> > > >
-> > > >          3,117,007      l3_cache_miss             #    199.5 MB/s  l3_rd_bw
-> > > >                                                   #     43.6 %  l3_hits
-> > > >                                                   #     56.4 %  l3_miss               (50.00%)
-> > > >          5,526,447      l3_cache_access                                               (50.00%)
-> > > >          5,392,435      l3_cache_access           # 5389191.2 access/s  l3_access_rate  (50.00%)
-> > > >      1,000,601,901 ns   duration_time
-> > > >
-> > > >        1.000601901 seconds time elapsed
-> > > >
-> > > > Fix this by placing duration_time in all groups unless metric
-> > > > sharing has been disabled on the command line:
-> > > >
-> > > > $ perf stat -M l3 -a sleep 1
-> > > >
-> > > >  Performance counter stats for 'system wide':
-> > > >
-> > > >          3,597,972      l3_cache_miss             #    230.3 MB/s  l3_rd_bw
-> > > >                                                   #     48.0 %  l3_hits
-> > > >                                                   #     52.0 %  l3_miss
-> > > >          6,914,459      l3_cache_access           # 6909935.9 access/s  l3_access_rate
-> > > >      1,000,654,579 ns   duration_time
-> > > >
-> > > >        1.000654579 seconds time elapsed
-> > > >
-> > > > $ perf stat --metric-no-merge -M l3 -a sleep 1
-> > > >
-> > > >  Performance counter stats for 'system wide':
-> > > >
-> > > >          3,501,834      l3_cache_miss             #     53.5 %  l3_miss               (24.99%)
-> > > >          6,548,173      l3_cache_access                                               (24.99%)
-> > > >          3,417,622      l3_cache_miss             #     45.7 %  l3_hits               (25.04%)
-> > > >          6,294,062      l3_cache_access                                               (25.04%)
-> > > >          5,923,238      l3_cache_access           # 5919688.1 access/s  l3_access_rate  (24.99%)
-> > > >      1,000,599,683 ns   duration_time
-> > > >          3,607,486      l3_cache_miss             #    230.9 MB/s  l3_rd_bw           (49.97%)
-> > > >
-> > > >        1.000599683 seconds time elapsed
-> > > >
-> > > > v2. Doesn't count duration_time in the metric_list_cmp function that
-> > > >     sorts larger metrics first. Without this a metric with duration_time
-> > > >     and an event is sorted the same as a metric with two events,
-> > > >     possibly not allowing the first metric to share with the second.
-> > >
-> > > hum, isn't the change about adding duration_time in every metric?
-> > > or you could still end up with metric without duration_time
-> > 
-> > It is about adding duration_time to all metrics. Sorting of the
-> > metrics by number of IDs happens before we insert duration_time which
-> > happens just prior to parsing. duration_time needn't be inserted if
-> > --metric-no-merge is passed.
-> 
-> I see, so that sorting takes place before it's added, makes sense then
-> 
-> Acked-by: Jiri Olsa <jolsa@redhat.com>
+On Sun, Nov 28, 2021 at 9:57 PM Fusion Future <qydwhotmail@gmail.com> wrote:
+>
+> On 2021/11/29 00:57, Pasha Tatashin wrote:
+> > This commit by itself would not cause the freeze or BUG_ON(), but the
+> > next commit which enables it on x86 arch might.
+>
+> Yes, you are right. At the commit
+> "[1e67abff1820489435aad3fcf258708c21c283ef] x86: mm: add x86_64 support
+> for page table check" my system starts to experience the freeze.
+>
+> I can now reproduce the freeze by following the steps below:
+>
+> 1. Open 20 YouTube video pages, and a YouTube Music page.
+> 2. Play music in the background. (The step can be omitted)
+> 3. Run `git clone
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git ln`
 
-Thanks, applied.
+Thanks, I found a reliable way to reproduce this problem on my workstation:
+reduce the amount of physical memory to 4G via memmap kernel
+parameter,  and use a script that starts chrome browser with 20 tabs
+each pointing to a youtube.com page.
 
-- Arnaldo
+I will send an update after root cause.
 
+> git will never successfully clone the repo because the system will
+> freeze during the operation.
+>
+> I also tried adding `page_table_check=off` to the boot option but still
+
+I will add support for page_table_check=off even when
+CONFIG_PAGE_TABLE_CHECK_ENFORCED is set
+
+Thanks,
+Pasha

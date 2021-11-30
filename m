@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E3F463952
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28A374638D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236118AbhK3PJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244691AbhK3PCl (ORCPT
+        id S244646AbhK3PGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:06:07 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:49028 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243399AbhK3O5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:02:41 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29202C08EA41;
-        Tue, 30 Nov 2021 06:53:54 -0800 (PST)
+        Tue, 30 Nov 2021 09:57:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 76166CE1A84;
-        Tue, 30 Nov 2021 14:53:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE798C53FCD;
-        Tue, 30 Nov 2021 14:53:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B59CB81A4C;
+        Tue, 30 Nov 2021 14:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29D7EC53FC7;
+        Tue, 30 Nov 2021 14:53:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284030;
-        bh=EGDJvL6BOLQxfNAUYSF7urXaPeK+GMK9kP0lBV4i+94=;
+        s=k20201202; t=1638284032;
+        bh=yjbAbRrz144tLm8Pej8VpCF5ckyPGzdNYIQToGzmyEo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aoHrm0wc2Gw4huw/0eJNyuh32YIlw7TTyloWZtbH9YaiuD4VGq0/5yEz6BMCQ0tdY
-         wdu4Gw9HZERU2Pmc7/wqXvwmphGz/0+CxJTPVRkDsrbgETmARvWy7jZjyaEurt+/Jm
-         R4yZzP78Aa4hQBlHEEqQpW2z1puaYlrpKVBGbiySe76SeQzHSAmQ57Kea1hgQxaySl
-         CdGOpKegu4rK/JjokVbvHyN+fscJUVK4C7lAKdNWO1SmE4IMPrtY8ENGcP+E2Sb+2c
-         wuA6mP7AQZ7E9kOSnESH4ksmfANFQothVhWFu6WJQscdOJLW0zpZulixr7ERYSqNlf
-         HzBFSA3B5IOKA==
+        b=AF9K09ob7hxA26HPhOpz//6X+LliPh5XEwqgW/+VRx94NuU/RdI1KgLCr75N7WNbd
+         3GZfJyTb74dHxzKu7sES0LqP3eNqhF9fpfhwBUnAKOIBmk55DoTOoNEbhD9AN3Sgk0
+         ZHTHk02qXtvG/a42oh3CWObm+P+uXogwyZzTnrmQcBiMMRLmxaKO9xutFAmXmuwSJz
+         3hCz5igFIOfyDF/lD0hPc9MsK1oC4W2gysoDZ98PJhfEO8KR6zUzQe8bnX/caQ13uD
+         EWdNEsW2e/e2+FGDKNN7CNDgpBj0RAFnTQT8zpYn9Kaz7ATn0wLHpI9Hho2e8WzFvd
+         TAptlfFN/7CRw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        Sasha Levin <sashal@kernel.org>,
-        James.Bottomley@HansenPartnership.com, svens@stackframe.org,
-        linux-parisc@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 05/12] parisc: Provide an extru_safe() macro to extract unsigned bits
-Date:   Tue, 30 Nov 2021 09:53:33 -0500
-Message-Id: <20211130145341.946891-5-sashal@kernel.org>
+Cc:     George Kennedy <george.kennedy@oracle.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 06/12] scsi: scsi_debug: Sanity check block descriptor length in resp_mode_select()
+Date:   Tue, 30 Nov 2021 09:53:34 -0500
+Message-Id: <20211130145341.946891-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130145341.946891-1-sashal@kernel.org>
 References: <20211130145341.946891-1-sashal@kernel.org>
@@ -53,43 +51,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Helge Deller <deller@gmx.de>
+From: George Kennedy <george.kennedy@oracle.com>
 
-[ Upstream commit 169d1a4a2adb2c246396c56aa2f9eec3868546f1 ]
+[ Upstream commit e0a2c28da11e2c2b963fc01d50acbf03045ac732 ]
 
-The extru instruction leaves the most significant 32 bits of the
-target register in an undefined state on PA 2.0 systems.
-Provide a macro to safely use extru on 32- and 64-bit machines.
+In resp_mode_select() sanity check the block descriptor len to avoid UAF.
 
-Suggested-by: John David Anglin <dave.anglin@bell.net>
-Signed-off-by: Helge Deller <deller@gmx.de>
+BUG: KASAN: use-after-free in resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
+Read of size 1 at addr ffff888026670f50 by task scsicmd/15032
+
+CPU: 1 PID: 15032 Comm: scsicmd Not tainted 5.15.0-01d0625 #15
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x89/0xb5 lib/dump_stack.c:107
+ print_address_description.constprop.9+0x28/0x160 mm/kasan/report.c:257
+ kasan_report.cold.14+0x7d/0x117 mm/kasan/report.c:443
+ __asan_report_load1_noabort+0x14/0x20 mm/kasan/report_generic.c:306
+ resp_mode_select+0xa4c/0xb40 drivers/scsi/scsi_debug.c:2509
+ schedule_resp+0x4af/0x1a10 drivers/scsi/scsi_debug.c:5483
+ scsi_debug_queuecommand+0x8c9/0x1e70 drivers/scsi/scsi_debug.c:7537
+ scsi_queue_rq+0x16b4/0x2d10 drivers/scsi/scsi_lib.c:1521
+ blk_mq_dispatch_rq_list+0xb9b/0x2700 block/blk-mq.c:1640
+ __blk_mq_sched_dispatch_requests+0x28f/0x590 block/blk-mq-sched.c:325
+ blk_mq_sched_dispatch_requests+0x105/0x190 block/blk-mq-sched.c:358
+ __blk_mq_run_hw_queue+0xe5/0x150 block/blk-mq.c:1762
+ __blk_mq_delay_run_hw_queue+0x4f8/0x5c0 block/blk-mq.c:1839
+ blk_mq_run_hw_queue+0x18d/0x350 block/blk-mq.c:1891
+ blk_mq_sched_insert_request+0x3db/0x4e0 block/blk-mq-sched.c:474
+ blk_execute_rq_nowait+0x16b/0x1c0 block/blk-exec.c:63
+ sg_common_write.isra.18+0xeb3/0x2000 drivers/scsi/sg.c:837
+ sg_new_write.isra.19+0x570/0x8c0 drivers/scsi/sg.c:775
+ sg_ioctl_common+0x14d6/0x2710 drivers/scsi/sg.c:941
+ sg_ioctl+0xa2/0x180 drivers/scsi/sg.c:1166
+ __x64_sys_ioctl+0x19d/0x220 fs/ioctl.c:52
+ do_syscall_64+0x3a/0x80 arch/x86/entry/common.c:50
+ entry_SYSCALL_64_after_hwframe+0x44/0xae arch/x86/entry/entry_64.S:113
+
+Link: https://lore.kernel.org/r/1637262208-28850-1-git-send-email-george.kennedy@oracle.com
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Acked-by: Douglas Gilbert <dgilbert@interlog.com>
+Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/parisc/include/asm/assembly.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/scsi/scsi_debug.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/parisc/include/asm/assembly.h b/arch/parisc/include/asm/assembly.h
-index eb83d65153b83..2272cbeb65f22 100644
---- a/arch/parisc/include/asm/assembly.h
-+++ b/arch/parisc/include/asm/assembly.h
-@@ -153,6 +153,17 @@
- 	extrd,u \r, 63-(\sa), 64-(\sa), \t
- 	.endm
- 
-+	/* Extract unsigned for 32- and 64-bit
-+	 * The extru instruction leaves the most significant 32 bits of the
-+	 * target register in an undefined state on PA 2.0 systems. */
-+	.macro extru_safe r, p, len, t
-+#ifdef CONFIG_64BIT
-+	extrd,u	\r, 32+(\p), \len, \t
-+#else
-+	extru	\r, \p, \len, \t
-+#endif
-+	.endm
-+
- 	/* load 32-bit 'value' into 'reg' compensating for the ldil
- 	 * sign-extension when running in wide mode.
- 	 * WARNING!! neither 'value' nor 'reg' can be expressions
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index 99bfb003be3fc..4358eb158c48c 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -2175,11 +2175,11 @@ static int resp_mode_select(struct scsi_cmnd *scp,
+ 			    __func__, param_len, res);
+ 	md_len = mselect6 ? (arr[0] + 1) : (get_unaligned_be16(arr + 0) + 2);
+ 	bd_len = mselect6 ? arr[3] : get_unaligned_be16(arr + 6);
+-	if (md_len > 2) {
++	off = bd_len + (mselect6 ? 4 : 8);
++	if (md_len > 2 || off >= res) {
+ 		mk_sense_invalid_fld(scp, SDEB_IN_DATA, 0, -1);
+ 		return check_condition_result;
+ 	}
+-	off = bd_len + (mselect6 ? 4 : 8);
+ 	mpage = arr[off] & 0x3f;
+ 	ps = !!(arr[off] & 0x80);
+ 	if (ps) {
 -- 
 2.33.0
 

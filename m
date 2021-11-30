@@ -2,171 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F64D462E90
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1028C462E93
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239629AbhK3IfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:35:08 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:41548 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239630AbhK3IfF (ORCPT
+        id S239676AbhK3IfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56386 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239630AbhK3IfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:35:05 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 7106B21763;
-        Tue, 30 Nov 2021 08:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638261101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HVh/XuOleLbNSL1OBcamrsGmZpYGUTHL+VT/XNi/jd0=;
-        b=hFJk+NoISirKhIO0NYHWRKhQbCzDqjTlmGbdWJnnqEwGsXFT/sCwuYl9WzeHgmQCcSKin7
-        3MhrNI7SPBBOPROLPHGKHrxiNrHgGEuwO0dTKkGQpPFeHj9rvZ6IEz0tVW30e1xXlAITD0
-        cvBM/BCcXxki+e8M4CWbvOXAyWnPVrU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638261101;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=HVh/XuOleLbNSL1OBcamrsGmZpYGUTHL+VT/XNi/jd0=;
-        b=QpFq+RWSwwQMTwXUIenkIGLgnAuFmVG1J/BjTvsqe2v79HDxzpqg7TLz8gXyl/ilpIP8HQ
-        UC4AK8b4eeql2MDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 466D913C6E;
-        Tue, 30 Nov 2021 08:31:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id +vktEG3hpWFlegAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Tue, 30 Nov 2021 08:31:41 +0000
-Message-ID: <9315c6f5-48f6-4f29-1e31-87ab5ed771b5@suse.de>
-Date:   Tue, 30 Nov 2021 09:31:40 +0100
+        Tue, 30 Nov 2021 03:35:09 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3CCC061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:31:51 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id u80so19855330pfc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:31:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=X2rX5g1aB3ao6Mz+KBNuCJKa2ATJHaYDNFIn2W26y0k=;
+        b=Vvf9yRDbDirxKAxZG/3T/MRzfvWn4X3bVmO6Q+T9At9jezo3XTJLTr08aof/C6VMCs
+         UvFx4/WoENskJGjeiCmK8jw97ea/Jdl4KfUggvOUN76ztl1VY5lM32kGoY2hxFjTl8U8
+         efCQioAGrR1sRorj4bRQx+3fORaIuoWJbjyWJ9p6jZ2Ds2X4suinMYYQ3jKiTUWri3qj
+         bfOHpCdmd8WhoCNWfMXdnFDGYmJePi2FuvreIqLtqG3HUsaVi+5v0UkEwUvfrdLE6ugm
+         40SaVQ28WKa3/bm6lVk7batcP8lwtUFkSCjfhGjdKWw8Ib6UYBf8w9EgVUYvrSiGdh8x
+         exhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=X2rX5g1aB3ao6Mz+KBNuCJKa2ATJHaYDNFIn2W26y0k=;
+        b=EQ/OIfOIMvUf4jQfPx+YDRndz709ksdMUbahccwgCboLlhvARtZOdrUcupTnrBDm3n
+         b/oRI5hsF2VhidOXt15O0liqENrC1Gq/OPv7vOrEXsYiHY2xVqr7zy6kC57S171uaJv2
+         MfSQ/xDKtCNhHj8wZPG0ARirr+uS69guO7uVK+tyHnbamjS7e2W1B0lTsLJh0ih7AFzx
+         lSm7xuYEf5+owZwYKcRA7+9EGrxDfKx9FeCQ5JCbwn0HzVDZR1n5MJW+qSabSDG4i1F9
+         r7qkgghIZZXPTYPBP38hGdMIbCC586acW+6nsRm9RyGfAahjnP6Gu1txpnKilxx5dKgc
+         N4yQ==
+X-Gm-Message-State: AOAM531tfftxBmb5ZYQVR1V+HB2ANUAPgHk6FZvUVSuMkvry2OZOO038
+        SWBHNSxymv4Jx85SOK9gZsM52A==
+X-Google-Smtp-Source: ABdhPJxX/0BAg0okPbx9lj9wYat5fdBiNW3O/EylVD0yCf550J23PN1GTSeFNwRiBtqdIFYDPTcwPQ==
+X-Received: by 2002:a62:1a03:0:b0:494:64b5:3e01 with SMTP id a3-20020a621a03000000b0049464b53e01mr45220700pfa.35.1638261110526;
+        Tue, 30 Nov 2021 00:31:50 -0800 (PST)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id z15sm19622141pfc.2.2021.11.30.00.31.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 30 Nov 2021 00:31:50 -0800 (PST)
+Date:   Tue, 30 Nov 2021 16:31:44 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Maulik Shah <quic_mkshah@quicinc.com>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] irqchip: Add Qualcomm MPM controller driver
+Message-ID: <20211130083143.GF10105@dragon>
+References: <20211126093529.31661-1-shawn.guo@linaro.org>
+ <20211126093529.31661-3-shawn.guo@linaro.org>
+ <87czmmbu8k.wl-maz@kernel.org>
+ <20211129133308.GB10105@dragon>
+ <87pmqjm1c8.wl-maz@kernel.org>
+ <20211130023151.GD10105@dragon>
+ <2e821841-a921-3fda-9ee6-3d5127653033@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
-Content-Language: en-US
-To:     Javier Martinez Canillas <javier@dowhile0.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>, David Airlie <airlied@linux.ie>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-References: <20211117145829.204360-1-marcan@marcan.st>
- <20211117145829.204360-2-marcan@marcan.st>
- <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de>
- <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
- <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
- <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------KbLmPxxfGOWwTMxFKEV0Vlcc"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e821841-a921-3fda-9ee6-3d5127653033@quicinc.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------KbLmPxxfGOWwTMxFKEV0Vlcc
-Content-Type: multipart/mixed; boundary="------------6adlezqjbPb4jwaHRY9VY0zr";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Javier Martinez Canillas <javier@dowhile0.org>,
- Rob Herring <robh+dt@kernel.org>
-Cc: Hector Martin <marcan@marcan.st>, David Airlie <airlied@linux.ie>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- dri-devel <dri-devel@lists.freedesktop.org>,
- Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Message-ID: <9315c6f5-48f6-4f29-1e31-87ab5ed771b5@suse.de>
-Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
-References: <20211117145829.204360-1-marcan@marcan.st>
- <20211117145829.204360-2-marcan@marcan.st>
- <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de>
- <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
- <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
- <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
-In-Reply-To: <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
+On Tue, Nov 30, 2021 at 01:19:48PM +0530, Maulik Shah wrote:
+>    Hi Shawn,
+> 
+>    On 11/30/2021 8:01 AM, Shawn Guo wrote:
+> 
+> +       do {
+> +               r_val = readl(priv->base + offset);
+> +               udelay(5);
+> +       } while (r_val != val);
+> 
+> What? Is this waiting for a bit to clear? Why isn't this one of the
+> read*_poll_timeout*() function instead? Surely you can't wait forever
+> here.
+> 
+> This is taken from downstream, and it seems to double check the written
+> value by reading it back.  But to be honest, I'm not really this is
+> necessary.  I will do some testing with the read-back check dropped.
+> 
+> How about asking for specs instead? There are QC people on Cc, and
+> many more reading the list. Hopefully they can explain what this is
+> all about.
+> 
+> Maulik,
+> 
+> If you have some information about this, that would be great.
+> 
+>    This can be converted to read poll_timeout(). This was introduced in
+>    place of wmb() to make sure writes are completed.
 
---------------6adlezqjbPb4jwaHRY9VY0zr
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Hmm, in this case, writel() will just do the right thing, as it wraps
+wmb() there.  Or am I missing something?
 
-SGkNCg0KQW0gMzAuMTEuMjEgdW0gMDc6NDQgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
-aWxsYXM6DQo+Pj4+DQo+Pj4+IFNpbXBsZWRybSBpcyBqdXN0IGEgZHJpdmVyLCBidXQgdGhp
-cyBpcyBwbGF0Zm9ybSBzZXR1cCBjb2RlLiBXaHkgaXMgdGhpcw0KPj4+PiBjb2RlIGxvY2F0
-ZWQgaGVyZSBhbmQgbm90IHVuZGVyIGFyY2gvIG9yIGRyaXZlcnMvZmlybXdhcmUvPw0KPj4+
-Pg0KPiANCj4gQWdyZWVkLiBDcmVhdGluZyBwbGF0Zm9ybSBkZXZpY2VzIGlzIHNvbWV0aGlu
-ZyBmb3IgcGxhdGZvcm0gY29kZSBhbmQNCj4gbm90IHJlYWxseSBhIERSTSBkcml2ZXIuDQo+
-IA0KPj4+PiBJIGtub3cgdGhhdCBvdGhlciBkcml2ZXJzIGRvIHNpbWlsYXIgdGhpbmdzLCBp
-dCBkb2Vzbid0IHNlZW0gdG8gYmVsb25nIGhlcmUuDQo+Pj4NCj4gDQo+IFllYWgsIHRoZSBz
-aW1wbGVmYiBkcml2ZXIgZG9lcyB0aGlzIGJ1dCB0aGF0IHNlZW1zIGxpa2Ugc29tZXRoaW5n
-IHRoYXQNCj4gc2hvdWxkIGJlIGNoYW5nZWQuDQo+IA0KPj4+IFRoaXMgZGVmaW5pdGVseSBk
-b2Vzbid0IGJlbG9uZyBpbiBlaXRoZXIgb2YgdGhvc2UsIHNpbmNlIGl0IGlzIG5vdCBhcmNo
-LQ0KPj4+IG9yIGZpcm13YXJlLXNwZWNpZmljLiBJdCBpcyBpbXBsZW1lbnRpbmcgc3VwcG9y
-dCBmb3IgdGhlIHN0YW5kYXJkDQo+Pj4gc2ltcGxlLWZyYW1lYnVmZmVyIE9GIGJpbmRpbmcs
-IHdoaWNoIHNwZWNpZmllcyB0aGF0IGl0IG11c3QgYmUgbG9jYXRlZA0KPj4+IHdpdGhpbiB0
-aGUgL2Nob3NlbiBub2RlIChhbmQgdGh1cyB0aGUgZGVmYXVsdCBPRiBzZXR1cCBjb2RlIHdv
-bid0IGRvIHRoZQ0KPj4+IG1hdGNoaW5nIGZvciB5b3UpOyB0aGlzIGFwcGxpZXMgdG8gYWxs
-IE9GIHBsYXRmb3JtcyBbMV0NCj4+Pg0KPj4+IEFkZGluZyBSb2I7IGRvIHlvdSB0aGluayB0
-aGlzIHNob3VsZCBtb3ZlIGZyb20gc2ltcGxlZmIvc2ltcGxlZHJtIHRvDQo+Pj4gY29tbW9u
-IE9GIGNvZGU/ICh3aGVyZT8pDQo+Pg0KPj4gb2ZfcGxhdGZvcm1fZGVmYXVsdF9wb3B1bGF0
-ZV9pbml0KCkgc2hvdWxkIHdvcmsuDQo+IA0KPiBUaGF0IHNob3VsZCB3b3JrIGJ1dCBJIHN0
-aWxsIHdvbmRlciBpZiBpdCBpcyB0aGUgY29ycmVjdCBwbGFjZSB0byBhZGQNCj4gdGhpcyBs
-b2dpYy4NCj4gDQo+IEkgdGhpbmsgdGhhdCBpbnN0ZWFkIGl0IGNvdWxkIGJlIGRvbmUgaW4g
-dGhlIHN5c2ZiX2NyZWF0ZV9zaW1wbGVmYigpDQo+IGZ1bmN0aW9uIFswXSwgd2hpY2ggYWxy
-ZWFkeSBjcmVhdGVzIHRoZSAic2ltcGxlLWZyYW1lYnVmZmVyIiBkZXZpY2UNCj4gZm9yIHg4
-NiBsZWdhY3kgQklPUyBhbmQgeDg2L2FybTY0L3Jpc2N2IEVGSSBzbyBpdCBtYWtlcyBzZW5z
-ZSB0byBkbw0KPiB0aGUgc2FtZSBmb3IgT0YuIFRoYXQgd2F5IHRoZSBzaW1wbGVmYiBwbGF0
-Zm9ybSBkZXZpY2UgcmVnaXN0cmF0aW9uDQo+IGNvZGUgY291bGQgYWxzbyBiZSBkcm9wcGVk
-IGZyb20gdGhlIGRyaXZlciBhbmQgdXNlcnMgd291bGQganVzdCBuZWVkDQo+IHRvIGVuYWJs
-ZSBDT05GSUdfU1lTRkIgYW5kIENPTkZJR19TWVNGQl9TSU1QTEVGQiB0byBoYXZlIHRoZSBz
-YW1lLg0KPiANCj4gSSBoYXZlIGEgY291cGxlIG9mIGJvYXJkcyB3aXRoIGEgYm9vdGxvYWRl
-ciB0aGF0IHBvcHVsYXRlcyBhDQo+ICJzaW1wbGUtZnJhbWVidWZmZXIiIGluIHRoZSAvY2hv
-c2VuIG5vZGUgc28gSSBjb3VsZCBhdHRlbXB0IHRvIHdyaXRlDQo+IHRoZSBwYXRjaGVzLiBC
-dXQgcHJvYmFibHkgd29uJ3QgaGFwcGVuIHVudGlsIG5leHQgd2Vlay4NCg0KSU1ITyBpdCdz
-IGJldHRlciB0byBrZWVwIHRoZSBPRi1yZWxhdGVkIHNldHVwIGluIHRoZSBPRiBjb2RlLiBU
-aGUgc3lzZmIgDQpjb2RlIGlzIGZvciBzY3JlZW5faW5mby4gV2UgY2FuIHRyeSB0byBmaW5k
-IGNvbW1vbiBjb2RlIGZvciBPRiBhbmQgc3lzZmIgDQp0aGF0IHRoZW4gbGl2ZXMgaW4gYSBz
-aGFyZWQgbG9jYXRpb24uDQoNClVzaW5nIGEgc2luZ2xlIGdsb2JhbCBzY3JlZW5faW5mbyB2
-YXJpYWJsZSBpcyBzb21ld2hhdCBhd2t3YXJkIHRoZXNlIA0KZGF5cy4gSW4gdGhlIGxvbmcg
-dGVybSwgSSBjYW4gdGhpbmsgb2YgcHVzaGluZyBzeXNmYiBjb2RlIGludG8gDQphcmNoaXRl
-Y3R1cmVzLiBFYWNoIGFyY2hpdGVjdHVyZSB3b3VsZCB0aGVuIHNldHVwIHRoZSBwbGF0Zm9y
-bSBkZXZpY2VzIA0KdGhhdCBpdCBzdXBwb3J0cy4gQnV0IHRoYXQncyBub3QgcmVhbGx5IGlt
-cG9ydGFudCByaWdodCBub3cuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IFsw
-XTogaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTYtcmMzL3NvdXJjZS9k
-cml2ZXJzL2Zpcm13YXJlL3N5c2ZiX3NpbXBsZWZiLmMjTDYwDQo+IA0KPiBCZXN0IHJlZ2Fy
-ZHMsDQo+IEphdmllcg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
-RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
-DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
-IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
-
---------------6adlezqjbPb4jwaHRY9VY0zr--
-
---------------KbLmPxxfGOWwTMxFKEV0Vlcc
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGl4WwFAwAAAAAACgkQlh/E3EQov+C1
-2xAAi/x+Sa890DYEMNr0oe+sDQMPAFO/ZiPisZIoMsvi6kYtwcjA6yX/9z6hVnWRZg9ggh30R6s2
-xcGIdnhXAgyon7gWPuXOyz4eKO1MLzJ+a70OFkxpg+e3CXMh5s+P70JjsxBb31LL7NQtygReZ/b2
-I98KITzgLS+0WKffjzzsLDfCfBgmb0pqwaWeT0BAmL06Kq8JJKcacqREDUqmAKrqQIlfFU2NL9/L
-n4awSkmo69SyErdmpo8jQcPQQti/bd5SabYHsryU+nhDNhobXCTxO0e8GZOQEQRe5tbKILkZom4c
-UCnKBeYDXY4454lcS7vbgKTLPHo+tqyQDxL8TtAjCkT0Vf773P0XfENzUza3v5aPfAX6DQv1TAAz
-ksgb1QyAEIe6xuzvMSVJ113R53Z5KRUiHF2Vg0FqsZS+DZkbNssQ36bR1sob9XPAM6nB+B2EikYP
-0929ZTwIJCZndq6/rJT1R07c0lPu5cw90rP6Lcl4dbVQ3E5z1I9tc7tlodQridX2c6jyNioG27oL
-tiYof5vwMNcnUemJFBrgEkyT5VRFBFdVyjO2FH7DV0hgHgwXhDrApu5cZ7s+5x/AbRkR1eBMDK8p
-bCM+I/3CieHjm3Kp24GM+f9gJydzlCsvVQnmDRzJca/nrXIlaEZFpgMKsaCgHgyaN2YiBxm/yTPE
-JoA=
-=0WdY
------END PGP SIGNATURE-----
-
---------------KbLmPxxfGOWwTMxFKEV0Vlcc--
+Shawn

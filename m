@@ -2,119 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48728463598
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:36:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0371E46359A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:37:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240706AbhK3NkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:40:12 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12268 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229921AbhK3NkK (ORCPT
+        id S240974AbhK3Nkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:40:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229724AbhK3Nkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:40:10 -0500
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUDHOmp003917;
-        Tue, 30 Nov 2021 13:36:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=qyOEgt+j8v4rot0tCjopd92DtEHy28X+Qjah5atxKE0=;
- b=ZTaRGoGRjtzvqGblV3xeWyfNB2Pveas7xqyEKACcROWo9TzJNgUoJeF4GqZY/wPV7m8G
- G6QDcf+wKXQZPZnSgx4siULAkAl3TclwWlceNpokYoH8kX0B/nkkk3IP15Vf7Od/qLot
- c/pluHAMdxQF/j4VaG60cg2UMmeiDPzi/5aeCpLuQzJnDLgXXaMfUA71ZqnaCiMjAvIp
- DNwA2Gu6EmHdl+IJFbV9b4XFNYe+UkiTznYwOXQxBuZiXgVWFtDrRvryaK1Mni60yoHo
- jVaLoXlvS2beuSGvTrRxqo4l/zc3oVi4C2lGIICdzsshfoZ10sO8C0LVlnlOO+nCYurj 6g== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cnmq88d3c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 13:36:49 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUDWeg0017485;
-        Tue, 30 Nov 2021 13:36:47 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma02fra.de.ibm.com with ESMTP id 3ckca9wtes-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 13:36:46 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUDai1S27984382
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Nov 2021 13:36:44 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D76552098;
-        Tue, 30 Nov 2021 13:36:44 +0000 (GMT)
-Received: from sig-9-65-92-250.ibm.com (unknown [9.65.92.250])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 85C1952093;
-        Tue, 30 Nov 2021 13:36:42 +0000 (GMT)
-Message-ID: <138c2aa0dba46d5e6bb163ca8bb62b4117cc8459.camel@linux.ibm.com>
-Subject: Re: [PATCH 4/4] ima: support fs-verity file digest based signatures
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        linux-integrity@vger.kernel.org
-Cc:     linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>
-Date:   Tue, 30 Nov 2021 08:36:41 -0500
-In-Reply-To: <7dfa283e-13b2-40de-158d-8642778d74cc@linux.microsoft.com>
-References: <20211129170057.243127-1-zohar@linux.ibm.com>
-         <20211129170057.243127-5-zohar@linux.ibm.com>
-         <7dfa283e-13b2-40de-158d-8642778d74cc@linux.microsoft.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-Mime-Version: 1.0
+        Tue, 30 Nov 2021 08:40:35 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D57C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:37:13 -0800 (PST)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 89EDB1F44DFF;
+        Tue, 30 Nov 2021 13:37:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638279432; bh=OLHGwPnmn8zIki++rhva0n5ayu7LNiGatei9XQAUfvA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nDeZm9ViQXDIUsbOYVr3axpdnx4Vnk+KlX1OvEbDGEfLtmeSF2Nd4/dVLCFdQ+/E/
+         Wck3k95Xi0Cp6mf9MogR21LFvsfdhPQ9srZlOAPCj5DUM6j0yokYVMiXqDh7UzgzvD
+         cAoMhkKOV9g+22a49dHidAvMGXVQq18hSg5FAg5KnBX3ucY97fVDFUjEWwGmxKi0X4
+         btVayNqcS2/HCgbZtFwDJAebyPeMW382eJTPPMJkpneNeWccSjqoFo9XV5uB+zojeE
+         zVoMBzjYsvZMzmPB1PXUg9ayuom9IIQHCjgjFMCC9FJv83MBr+BOf/MggMBSG6m7fs
+         5eKM+2c3Ed6SA==
+Date:   Tue, 30 Nov 2021 14:37:05 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Sean Nyekjaer <sean@geanix.com>, linux-kernel@vger.kernel.org
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        linux-mtd@lists.infradead.org
+Subject: Re: [PATCH v5 3/4] mtd: core: protect access to MTD devices while
+ in suspend
+Message-ID: <20211130143705.5d0404aa@collabora.com>
+In-Reply-To: <20211130132912.v6v45boce2zbnoy3@skn-laptop>
+References: <20211102110204.3334609-4-sean@geanix.com>
+        <CGME20211123120353eucas1p2fb2561b7cfddd8d6e7decaef8b504f4c@eucas1p2.samsung.com>
+        <21092c0f-e11b-ac16-ab96-2a0556c0e30a@samsung.com>
+        <20211123125012.ibzqu44ixmykbhkt@skn-laptop>
+        <20211123140715.280b2f70@collabora.com>
+        <20211129101908.6f1aa715@xps13>
+        <20211129094129.xn364czofrgtvfb4@skn-laptop>
+        <63be9121-18c3-1ef2-c448-f99fb861490f@samsung.com>
+        <20211130124131.6pgu7enjgk6y536m@skn-laptop>
+        <20211130141551.400331c8@collabora.com>
+        <20211130132912.v6v45boce2zbnoy3@skn-laptop>
+Organization: Collabora
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uBM_6rOdkwnp30mb3N8Al8z1WBT7Nvay
-X-Proofpoint-GUID: uBM_6rOdkwnp30mb3N8Al8z1WBT7Nvay
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_08,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0
- malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0 phishscore=0
- clxscore=1015 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2111300078
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lakshmi, Eric,
+On Tue, 30 Nov 2021 14:29:12 +0100
+Sean Nyekjaer <sean@geanix.com> wrote:
 
-On Mon, 2021-11-29 at 21:56 -0800, Lakshmi Ramasubramanian wrote:
-> Hi Mimi,
+> On Tue, Nov 30, 2021 at 02:15:51PM +0100, Boris Brezillon wrote:
+> > On Tue, 30 Nov 2021 13:41:31 +0100
+> > Sean Nyekjaer <sean@geanix.com> wrote:
+> >   
+> > > > On 29.11.2021 10:41, Sean Nyekjaer wrote:    
+> > > > > On Mon, Nov 29, 2021 at 10:19:08AM +0100, Miquel Raynal wrote:    
+> > > > >> boris.brezillon@collabora.com wrote on Tue, 23 Nov 2021 14:07:15 +0100:    
+> > > > >>> On Tue, 23 Nov 2021 13:50:12 +0100
+> > > > >>> Sean Nyekjaer <sean@geanix.com> wrote:    
+> > > > >>>> @Boris do we need to do something similar here to what we did with the
+> > > > >>>> mtdconcat stuff?    
+> > > > >>> Absolutely, physmasp subdevices are never initialized/registered, so
+> > > > >>> you can't call any of the mtd helpers taking the suspend lock on those.
+> > > > >>> I guess it'd be better to call mtd_suspend/resume() on the concat device
+> > > > >>> in though:    
+> > > > >> Any chance that you will come up with a fix or v6 of the series anytime
+> > > > >> soon?
+> > > > >>    
+> > > > >>> static void physmap_flash_shutdown(struct platform_device *dev)
+> > > > >>> {
+> > > > >>> 	struct physmap_flash_info *info = platform_get_drvdata(dev);
+> > > > >>>
+> > > > >>> 	mtd_suspend(info->cmtd);    
+> > > 
+> > > There is one more issue when using concat during boot, I think we should
+> > > start here :)
+> > > It uses uninitialized rwsm.
+> > > 
+> > > 
+> > > [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x411fd070]
+> > > [    0.000000] Linux version 5.16.0-rc1-00013-g67bcbe202b48 (sean@zen) (aarch64-linux-gnu-gcc (GCC) 11.2.0, GNU ld (GNU Binutils) 2.37) #207 SMP PREEMPT Tue Nov 30 13:22:48 CET 2021
+> > > [    0.000000] Machine model: linux,dummy-virt
+> > > [    0.000000] efi: UEFI not found.
+> > > [    0.000000] NUMA: No NUMA configuration found
+> > > 
+> > > [ ... ]
+> > > 
+> > > [    1.848327] 0.flash: Found 2 x16 devices at 0x0 in 32-bit bank. Manufacturer ID 0x000000 Chip ID 0x000000
+> > > [    1.848567] Intel/Sharp Extended Query Table at 0x0031
+> > > [    1.848999] Using buffer write method
+> > > [    1.849237] Concatenating MTD devices:
+> > > [    1.849347] (0): "0.flash"
+> > > [    1.849637] (1): "0.flash"
+> > > [    1.849726] into device "0.flash"
+> > > [    1.904985] libphy: Fixed MDIO Bus: probed
+> > > [    1.915812] tun: Universal TUN/TAP device driver, 1.6
+> > > 
+> > > [ ... ]
+> > > 
+> > > [    6.064628] The code is fine but needs lockdep annotation, or maybe
+> > > [    6.064756] you didn't initialize this object before use?
+> > > [    6.064857] turning off the locking correctness validator.
+> > > [    6.065111] CPU: 0 PID: 49 Comm: kworker/0:1H Not tainted 5.16.0-rc1-00013-g67bcbe202b48 #207
+> > > [    6.065273] Hardware name: linux,dummy-virt (DT)
+> > > [    6.065572] Workqueue: kblockd blk_mq_run_work_fn
+> > > [    6.065879] Call trace:
+> > > [    6.065943]  dump_backtrace+0x0/0x1a0
+> > > [    6.066057]  show_stack+0x1c/0x30
+> > > [    6.066130]  dump_stack_lvl+0x8c/0xb8
+> > > [    6.066206]  dump_stack+0x1c/0x38
+> > > [    6.066270]  register_lock_class+0x49c/0x4c0
+> > > [    6.066352]  __lock_acquire+0x78/0x20cc
+> > > [    6.066422]  lock_acquire.part.0+0xe0/0x230
+> > > [    6.066497]  lock_acquire+0x6c/0x90
+> > > [    6.066562]  down_read+0x58/0x7c
+> > > [    6.066626]  mtd_read_oob_std+0x98/0x170
+> > > [    6.066703]  mtd_read_oob+0x80/0x13c
+> > > [    6.066770]  mtd_read+0x64/0xa0
+> > > [    6.066834]  concat_read+0xd4/0x1b0
+> > > [    6.066900]  mtd_read_oob_std+0x158/0x170
+> > > [    6.066972]  mtd_read_oob+0x80/0x13c
+> > > [    6.067038]  mtd_read+0x64/0xa0
+> > > [    6.067099]  mtdblock_readsect+0x6c/0x160
+> > > [    6.067169]  mtd_queue_rq+0x240/0x460
+> > > [    6.067234]  blk_mq_dispatch_rq_list+0x19c/0x830
+> > > [    6.067313]  __blk_mq_do_dispatch_sched+0x248/0x2d4
+> > > [    6.067397]  __blk_mq_sched_dispatch_requests+0x110/0x170
+> > > [    6.067487]  blk_mq_sched_dispatch_requests+0x3c/0x80
+> > > [    6.067573]  __blk_mq_run_hw_queue+0x60/0xa0
+> > > [    6.067647]  blk_mq_run_work_fn+0x24/0x30
+> > > [    6.067718]  process_one_work+0x28c/0x6e4
+> > > [    6.067790]  worker_thread+0x78/0x464
+> > > [    6.067856]  kthread+0x180/0x190
+> > > [    6.067919]  ret_from_fork+0x10/0x20
+> > > [    6.068868] ------------[ cut here ]------------
+> > > [    6.068993] DEBUG_RWSEMS_WARN_ON(sem->magic != sem): count = 0x100, magic = 0x0, owner = 0xffff528f84c617c1, curr 0xffff528f84c617c0, list not empty
+> > > [    6.069592] WARNING: CPU: 0 PID: 49 at kernel/locking/rwsem.c:1302 __up_read+0x1e8/0x270
+> > > [    6.069790] Modules linked in:
+> > > [    6.069963] CPU: 0 PID: 49 Comm: kworker/0:1H Not tainted 5.16.0-rc1-00013-g67bcbe202b48 #207
+> > > [    6.070099] Hardware name: linux,dummy-virt (DT)
+> > > [    6.070179] Workqueue: kblockd blk_mq_run_work_fn
+> > > [    6.070347] pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > [    6.070487] pc : __up_read+0x1e8/0x270
+> > > [    6.070577] lr : __up_read+0x1e8/0x270
+> > > [    6.070660] sp : ffff80001026b740
+> > > [    6.070728] x29: ffff80001026b740 x28: 000000000003ff88 x27: 0000000000040000
+> > > [    6.070912] x26: ffff80001026ba28 x25: ffff528f84e92000 x24: ffff528f8576d000
+> > > [    6.071040] x23: 0000000000000000 x22: 0000000003ff0000 x21: ffff80001026b878
+> > > [    6.071165] x20: ffffadee32213000 x19: ffff528f84e918b0 x18: ffffffffffffffff
+> > > [    6.071292] x17: 672d33313030302d x16: 3163722d302e3631 x15: ffff80009026b457
+> > > [    6.071418] x14: 0000000000000007 x13: ffffadee32236658 x12: 0000000000000384
+> > > [    6.071543] x11: 000000000000012c x10: ffffadee32236658 x9 : ffffadee32236658
+> > > [    6.071692] x8 : 00000000ffffefff x7 : ffffadee3228e658 x6 : ffffadee3228e658
+> > > [    6.071817] x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+> > > [    6.071942] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff528f84c617c0
+> > > [    6.072094] Call trace:
+> > > [    6.072163]  __up_read+0x1e8/0x270
+> > > [    6.072238]  up_read+0x44/0x300
+> > > [    6.072301]  mtd_read_oob_std+0xd0/0x170
+> > > [    6.072374]  mtd_read_oob+0x80/0x13c
+> > > [    6.072441]  mtd_read+0x64/0xa0
+> > > [    6.072502]  concat_read+0xd4/0x1b0
+> > > [    6.072567]  mtd_read_oob_std+0x158/0x170
+> > > [    6.072640]  mtd_read_oob+0x80/0x13c
+> > > [    6.072706]  mtd_read+0x64/0xa0
+> > > [    6.072766]  mtdblock_readsect+0x6c/0x160
+> > > [    6.072843]  mtd_queue_rq+0x240/0x460
+> > > [    6.072909]  blk_mq_dispatch_rq_list+0x19c/0x830
+> > > [    6.072990]  __blk_mq_do_dispatch_sched+0x248/0x2d4
+> > > [    6.073073]  __blk_mq_sched_dispatch_requests+0x110/0x170
+> > > [    6.073163]  blk_mq_sched_dispatch_requests+0x3c/0x80
+> > > [    6.073249]  __blk_mq_run_hw_queue+0x60/0xa0
+> > > [    6.073325]  blk_mq_run_work_fn+0x24/0x30
+> > > [    6.073421]  process_one_work+0x28c/0x6e4
+> > > [    6.073568]  worker_thread+0x78/0x464
+> > > [    6.073643]  kthread+0x180/0x190
+> > > [    6.073710]  ret_from_fork+0x10/0x20
+> > > [    6.073820] irq event stamp: 1529
+> > > [    6.073891] hardirqs last  enabled at (1529): [<ffffadee3114576c>] _raw_spin_unlock_irq+0x48/0x9c
+> > > [    6.074067] hardirqs last disabled at (1528): [<ffffadee31145b70>] _raw_spin_lock_irq+0xac/0xb0
+> > > [    6.074211] softirqs last  enabled at (1444): [<ffffadee30010528>] __do_softirq+0x478/0x5f0
+> > > [    6.074350] softirqs last disabled at (1429): [<ffffadee3009f064>] __irq_exit_rcu+0x184/0x1b0
+> > > [    6.074506] ---[ end trace 738f7ffe764b66d5 ]---
+> > > 
+> > > I can solve this with this hack from mtd_set_dev_defaults():
+> > > 
+> > > diff --git a/drivers/mtd/mtdconcat.c b/drivers/mtd/mtdconcat.c
+> > > index f4a4274489b4..a4b69b9558c9 100644
+> > > --- a/drivers/mtd/mtdconcat.c
+> > > +++ b/drivers/mtd/mtdconcat.c
+> > > @@ -693,6 +693,8 @@ struct mtd_info *mtd_concat_create(struct mtd_info *subdev[],	/* subdevices to c
+> > >  	concat->mtd.oobavail = subdev[0]->oobavail;
+> > >  
+> > >  	subdev_master = mtd_get_master(subdev[0]);
+> > > +	init_waitqueue_head(&subdev_master->master.resume_wq);
+> > > +	init_rwsem(&subdev_master->master.suspend_lock);
+> > >  	if (subdev_master->_writev)
+> > >  		concat->mtd._writev = concat_writev;
+> > >  	if (subdev_master->_read_oob)
+> > > @@ -740,6 +742,8 @@ struct mtd_info *mtd_concat_create(struct mtd_info *subdev[],	/* subdevices to c
+> > >  		}
+> > >  
+> > >  		subdev_master = mtd_get_master(subdev[i]);
+> > > +		init_waitqueue_head(&subdev_master->master.resume_wq);
+> > > +		init_rwsem(&subdev_master->master.suspend_lock);
+> > >  		concat->mtd.size += subdev[i]->size;
+> > >  		concat->mtd.ecc_stats.badblocks +=
+> > >  			subdev[i]->ecc_stats.badblocks;
+> > > 
+> > > I do not have a great overview of what is happing here with all these
+> > > master devices :/
+> > > 
+> > > Any ideas Boris/Miquel?  
+> > 
+> > It's the same problem, over and over again: the master device uses MTD
+> > helpers on its unregistered/unitialized subdevices. The following diff
+> > should fix the issue, but let's be honest, it's just papering over the
+> > real design issue, that his, MTD implementations use the MTD helpers
+> > assuming nothing needs to be initialized. So, I'm tempted to just drop
+> > the series and work an a more robust solution. In the meantime, I guess
+> > getting back to a raw-NAND-only fix would make sense.
+> >   
 > 
-> On 11/29/2021 9:00 AM, Mimi Zohar wrote:
-> > Instead of calculating a file hash and verifying the signature stored
-> > in the security.ima xattr against the calculated file hash, verify the
-> > signature of the fs-verity's file digest.  The fs-verity file digest is
-> > a hash that includes the Merkle tree root hash.
-
-> This patch is reading the fs-verity signature for the given file using 
-> the new function fsverity_measure() that was defined in [Patch 1/4]. Is 
-> it also verifying the fs-verity signature here?
-
-Yes, the signature stored in the security.ima xattr may be a file hash,
-a regular file signature, or a signature of the fs-verity file digest. 
-The signature is verified like any other signature stored as an xattr.
-
+> Fine by me, lets drop this series.
+> 
+> We have +10.000 devices that runs with this patch:
+> 
+> diff --git a/drivers/mtd/nand/raw/nand_base.c b/drivers/mtd/nand/raw/nand_base.c
+> index 1f0d542d5923..58d48c3070fa 100644
+> --- a/drivers/mtd/nand/raw/nand_base.c
+> +++ b/drivers/mtd/nand/raw/nand_base.c
+> @@ -4337,7 +4337,6 @@ static int nand_suspend(struct mtd_info *mtd)
+>  		ret = chip->ops.suspend(chip);
+>  	if (!ret)
+>  		chip->suspended = 1;
+> -	mutex_unlock(&chip->lock);
 >  
-> > +static int ima_collect_verity_measurement(struct integrity_iint_cache *iint,
-> > +					  struct ima_digest_data *hash)
-> > +{
-> > +	u8 verity_digest[FS_VERITY_MAX_DIGEST_SIZE];
-> > +	enum hash_algo verity_alg;
-> > +	int rc;
-> > +
-> > +	rc = fsverity_measure(iint->inode, verity_digest, &verity_alg);
-> nit: fsverity_collect_measurement() may be more appropriate for this 
-> function (defined in [PATCH 1/4]).
+>  	return ret;
+>  }
+> @@ -4350,7 +4349,6 @@ static void nand_resume(struct mtd_info *mtd)
+>  {
+>  	struct nand_chip *chip = mtd_to_nand(mtd);
+>  
+> -	mutex_lock(&chip->lock);
+>  	if (chip->suspended) {
+>  		if (chip->ops.resume)
+>  			chip->ops.resume(chip);
+> 
 
-From an IMA perspective it certainly would be a better function name,
-but this function may be used by other kernel subsystems.  Eric
-suggested renaming the function as fsverity_get_digest(), as opposed to
-fsverity_read_digest().   get/put are normally used to bump a reference
-count or to get/release a lock.   Perhaps a combination like
-fsverity_collect_digest() would be acceptable.
-
-thanks,
-
-Mimi
-
+But it's abusing the chip lock... Use a wait queue as we did at the MTD
+level, and make nand_get_device() wait on this wait queue when the
+device is suspended.

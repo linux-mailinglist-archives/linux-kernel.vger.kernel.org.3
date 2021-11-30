@@ -2,138 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81791463BFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4441C463C01
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244093AbhK3QnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:43:13 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:57666 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232542AbhK3QnM (ORCPT
+        id S244138AbhK3Qnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232542AbhK3Qnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:43:12 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3ScR5kb2z9y5gl
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:39:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id x7hTaEAOyzug for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 10:39:51 -0600 (CST)
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3ScR3XfLz9y5gr
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:39:51 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3ScR3XfLz9y5gr
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3ScR3XfLz9y5gr
-Received: by mail-pj1-f70.google.com with SMTP id m20-20020a17090aab1400b001ad6e2148ccso153045pjq.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:39:51 -0800 (PST)
+        Tue, 30 Nov 2021 11:43:40 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6606DC061574;
+        Tue, 30 Nov 2021 08:40:21 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id r26so42341422oiw.5;
+        Tue, 30 Nov 2021 08:40:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=m7joVp9ZGPeCi9ib/4Zk8tpyk8ZFFr30BOqRtbM2qm0=;
-        b=ghKddV5vhe9R2iiR2g7/xEa0wQFHcVdeTvN6Hu6qGRai76wxmDEe5uFgPyam/6RGTL
-         dG7et/pJ9pC13zR12TKcu9NHSG41t1u2tszo3S2qDGkE+Bb0nfcz/gP7+b/gfctTJ4Ry
-         a3GUtaqFCs3tYwM2sJW0dm97GlIsHqi9QENqtqm/dteBH60NAyTUFM93vMvfOvSQaFDG
-         BGEyPK9/yZUSs+dSD7ChhQWpirAeTTkTxAahyT1PwGWwSQCGGQ/PdEoKUVMvdensVWSJ
-         EaaiDqj9KEvP2OsKXjRmPX9pjMWZnb76C0s0J3rbc0gmMgoptZstpU7quFo6XeG5/+VT
-         izJw==
+        d=gmail.com; s=20210112;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=eg2/gpyOdiIomdCdelA6H7DCG0PWicFoqQpH5lOFnDs=;
+        b=RnktTIw+dSyyOAS1q1ZCi7423/03SJvhJ800pC0zSszQogcR9Z2QtI0vrJa7q2f8yJ
+         lNLlcK7G4U/hx0InOTfEed+OgL7+EyqFMGDe69i4L2DXJ1K43lFpeQ0P7iInY/P+kdi7
+         V+2ZMguDhQizW5xBFjODd9QY5eCRLmLFuI9bTeh3iMmVivDNP2a95xfY7qM1rqvdZ+EV
+         zD5V+id/mvsEixIdn7a5QmmmP9VuR4X549agw/L89MacGhyr3d675XJcQuJa4MqIanII
+         7TE2OVUNlSJ4oIRK25JUSOZcNR2ylX9DHaF3oGsSArummjMt8liCEhyVMGD6vHmXqaO5
+         eswg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=m7joVp9ZGPeCi9ib/4Zk8tpyk8ZFFr30BOqRtbM2qm0=;
-        b=ZC1AGK62rH2o0C0qn5bxN5TYt85PUGAic607wRTKS2CGKnI/pziVOcQ0lBD+oB2k8P
-         3n6jkQDgWO0YAIdQObVwTuPUPbw/Ugja3ECmRclAO5TLZEJcHqL+wl6k0cOQbz0g72UQ
-         zFmiEpdnOzNMxM03kpjRKrERVUcvMHcmhgouqvTCIRHNl9QVWocM88l331ohHg4CtWkZ
-         HGoJ9VPJH1vdc7dSn32jvY/NGjQAW1OMklwPOGkzkgawu1/UQOZfy9DyLNJkiscTgP+q
-         JZRWq4MLUauNNGRkgvpMQ/PRp36an/7A6jnC8jplBNIpXFK8wWHY/OLvP9pgRRi15OE+
-         xXng==
-X-Gm-Message-State: AOAM533GxOSz6qACFj9+/N33CjcY1ru0BRo5F7ZnlvtZ2HTFEfrEnmd2
-        HsyY4j+X3DB5D/b1A8mBaJF3OY4DoxLV/wE94aEXOs46r/JV+5Ixk9xx0ax0X/8zxTYUKgo5a5E
-        xfma0FvN6LZSZLEqJHGRB0Qz2aQVB
-X-Received: by 2002:a63:654:: with SMTP id 81mr222369pgg.218.1638290390608;
-        Tue, 30 Nov 2021 08:39:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyawp1G79vl80DYOCucv1k9O4bRauliVE99jsaHmQOoxxj9MO6RJiMr+CN4ZQlSBX/KLZJ8FA==
-X-Received: by 2002:a63:654:: with SMTP id 81mr222353pgg.218.1638290390430;
-        Tue, 30 Nov 2021 08:39:50 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id e19sm15175741pgt.49.2021.11.30.08.39.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 08:39:49 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, "Daniel W. S. Almeida" <dwlsalmeida@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: vidtv: Fix a wild pointer dereference in vidtv_channel_pmt_match_sections()
-Date:   Wed,  1 Dec 2021 00:39:45 +0800
-Message-Id: <20211130163946.189005-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        bh=eg2/gpyOdiIomdCdelA6H7DCG0PWicFoqQpH5lOFnDs=;
+        b=SWxygVw5vCuQoyGEqBnoCdZfCaGcIE4ulKsZEBpOtByqPKQR6A/ta/5kc0TZbguYPB
+         EGafz8JTlkvo6yL+ygLxq19hh0AJHRmm/vZBRkEE9njE4NtiJe7N6t0VGqnDikQkIcrx
+         SFlLw9CnnKCCqSHIiBlfvit93n68qYbIMJzrPw5zzPmUXyNa/8TS+zMMTPAhPT2P4YlZ
+         Fy5AlWrID+afo+sgTqYgrO83E2xbWGvQIOsSrumcC26avoEVccsLdBclf6yGPzTrUAOD
+         WqrTYb8UXsET+oQbnvvSstJdlTftf75UujvSqt76jesX/nYYnrsX2uHGLZ9E6Me4Mk5V
+         dAbQ==
+X-Gm-Message-State: AOAM532Xrd6gza9G4yB/OMWMzNoxI1RLoM49JuP1FObwBcoYg2LleHAC
+        WIJcOTCP81GYo+bQy8WXj+A=
+X-Google-Smtp-Source: ABdhPJwLW7RWf2bJLcllr9oXFsxnRR7DaHlPuADOa93/8O9xTtx9b0JUWVFr6BWeFUsYJ5Q+VFckNw==
+X-Received: by 2002:a05:6808:1a01:: with SMTP id bk1mr33582oib.46.1638290420694;
+        Tue, 30 Nov 2021 08:40:20 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b1sm3210587otj.5.2021.11.30.08.40.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 08:40:19 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Subject: Re: [PATCH v2 3/4] dt-bindings: watchdog: da9062: add watchdog
+ timeout mode
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Andrej Picej <andrej.picej@norik.com>
+Cc:     Support Opensource <Support.Opensource@diasemi.com>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211130134242.3516619-1-andrej.picej@norik.com>
+ <20211130134242.3516619-3-andrej.picej@norik.com>
+ <4591cdd6-9a7b-cd1d-817d-8950c8976d10@roeck-us.net>
+ <DB9PR10MB4652C8A69A6A3F38B93ED18880679@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <dcd75a82-5837-8d78-0a9f-6e5b7eafff28@roeck-us.net>
+Date:   Tue, 30 Nov 2021 08:40:17 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <DB9PR10MB4652C8A69A6A3F38B93ED18880679@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In vidtv_channel_pmt_match_sections(), vidtv_psi_pmt_stream_init() is
-assigned to tail and &tail->descriptor is used in
-vidtv_psi_desc_assign(). There is a dereference of &tail->descriptor
-in vidtv_psi_desc_assign(), which could lead to a wild pointer
-dereference onfailure of vidtv_psi_pmt_stream_init().
+On 11/30/21 8:11 AM, Adam Thomson wrote:
+> On Guenter Roeck wrote:
+> 
+>>> Document the watchdog timeout mode property. If this property is used
+>>> the user can select what happens on watchdog timeout. Set this property
+>>> to 1 to enable SHUTDOWN (the device resets), set it to 0 and the device
+>>> will go to POWERDOWN on watchdog timeout.
+>>>
+>>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>>> ---
+>>>    Documentation/devicetree/bindings/watchdog/da9062-wdt.txt | 3 +++
+>>>    1 file changed, 3 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+>> b/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+>>> index 950e4fba8dbc..e3e6e56cee21 100644
+>>> --- a/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+>>> +++ b/Documentation/devicetree/bindings/watchdog/da9062-wdt.txt
+>>> @@ -10,6 +10,9 @@ Optional properties:
+>>>    - dlg,use-sw-pm: Add this property to disable the watchdog during suspend.
+>>>    	Only use this option if you can't use the watchdog automatic suspend
+>>>    	function during a suspend (see register CONTROL_B).
+>>> +- dlg,wdt-sd: Set what happens on watchdog timeout. If this bit is set the
+>>> +	watchdog timeout triggers SHUTDOWN, if cleared the watchdog triggers
+>>> +	POWERDOWN. Can be 0 or 1.
+>>>
+>>
+>> Why does it need a value ? Why not just bool ?
+> 
+> One argument might be that if the property isn't provided then the OTP
+> configured value can persist without needing a FW change around this DT binding.
+> 
+> My belief though is that the majority of users would have this property set to 0
+> by default in OTP, so a boolean would be OK I think here to enable watchdog
+> shutdown.
+> 
 
-Fix this bug by adding a check of tail.
+Sorry, you lost me.
+	dlg,wdt-sd = <0>;
+is the current situation, and identical to not having the property in
+the first place.
+	dlg,wdt-sd = <1>;
+is new. I don't see the difference to
+	dlg,wdt-sd;
+vs. not having the property at all (which is, again, the current situation).
+Since it has to be backward compatible,
+	dlg,wdt-sd = <0>;
+will always be identical to not having the property at all.
+I can not find a situation where an integer would have any benefits over a boolean.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DVB_VIDTV=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: f90cf6079bf6 ("media: vidtv: add a bridge driver")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/media/test-drivers/vidtv/vidtv_channel.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/media/test-drivers/vidtv/vidtv_channel.c b/drivers/media/test-drivers/vidtv/vidtv_channel.c
-index 7838e6272712..f2faa5504642 100644
---- a/drivers/media/test-drivers/vidtv/vidtv_channel.c
-+++ b/drivers/media/test-drivers/vidtv/vidtv_channel.c
-@@ -318,6 +318,10 @@ vidtv_channel_pmt_match_sections(struct vidtv_channel *channels,
- 	struct vidtv_psi_table_pmt_stream *s = NULL;
- 	struct vidtv_channel *cur_chnl = channels;
- 	struct vidtv_psi_desc *desc = NULL;
-+	struct vidtv_mux *m = container_of(&channels,
-+					struct vidtv_mux,
-+					channels);
-+
- 	u16 e_pid; /* elementary stream pid */
- 	u16 curr_id;
- 	u32 j;
-@@ -341,6 +345,13 @@ vidtv_channel_pmt_match_sections(struct vidtv_channel *channels,
- 					tail = vidtv_psi_pmt_stream_init(tail,
- 									 s->type,
- 									 e_pid);
-+
-+					if (!tail) {
-+						vidtv_psi_pmt_stream_destroy(head);
-+						dev_warn_ratelimited(m->dev,
-+							"No enough memory for vidtv_psi_pmt_stream_init");
-+						return;
-+					}
-
- 					if (!head)
- 						head = tail;
--- 
-2.25.1
-
+Guenter

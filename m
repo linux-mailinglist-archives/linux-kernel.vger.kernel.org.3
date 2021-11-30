@@ -2,69 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 438C24633CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273584633D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:07:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241307AbhK3MIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:08:43 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48450 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241281AbhK3MIj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:08:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8146BB81846;
-        Tue, 30 Nov 2021 12:05:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 940D1C53FCF;
-        Tue, 30 Nov 2021 12:05:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638273915;
-        bh=BKaO6kLYHyi6gZ59PeSbDaTBZNbumFvE8rNJV7KzBlo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hOF11PwF8K02hkwjdiO7NNATq3dgnUdSInx6jH8I2MQrgB14tcs6k1ABlD5nF09Kk
-         YQevQKXR/0LMspeXSihyjYp+weSiCKaNtt2SYK7aEaSYk6rApaJ6x4M3JRTDejckk9
-         0TSBp31MYGDXStoZhwTz/J1PfdJzZsnallQrkqLRsF8KRy5N3zeMxK1SgTgF8OzAJ/
-         0IkmYPur0X91lab3GZ/relF9o28mWTSdSO2/0wnmTjFuwCmIRXA4HiUq2AARUA28q1
-         ZA4MjzIiazd1BYwA07/g5ALL77md8TEcC2jkNCZxDifGIWT80v/UW/bQ6fhZbx2lmV
-         nKwBMfWClWjLw==
-Date:   Tue, 30 Nov 2021 13:05:11 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>, paulmck@kernel.org,
-        mtosatti <mtosatti@redhat.com>
-Subject: Re: Question WRT early IRQ/NMI entry code
-Message-ID: <20211130120511.GB599355@lothringen>
-References: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
+        id S241310AbhK3MLM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 Nov 2021 07:11:12 -0500
+Received: from gloria.sntech.de ([185.11.138.130]:47586 "EHLO gloria.sntech.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236174AbhK3MLJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:11:09 -0500
+Received: from ip5f5b2004.dynamic.kabel-deutschland.de ([95.91.32.4] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <heiko@sntech.de>)
+        id 1ms1v9-0004iV-CX; Tue, 30 Nov 2021 13:07:39 +0100
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     wefu@redhat.com, linux-riscv@lists.infradead.org
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        taiten.peng@canonical.com, aniket.ponkshe@canonical.com,
+        gordan.markus@canonical.com, guoren@linux.alibaba.com,
+        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        dlustig@nvidia.com, gfavor@ventanamicro.com,
+        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
+        huffman@cadence.com, mick@ics.forth.gr,
+        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
+        rtrauben@gmail.com, Anup Patel <anup@brainfault.org>,
+        Rob Herring <robh+dt@kernel.org>, anup.patel@wdc.com,
+        atishp04@gmail.com, palmer@dabbelt.com, guoren@kernel.org,
+        christoph.muellner@vrull.eu, philipp.tomsich@vrull.eu, hch@lst.de,
+        liush@allwinnertech.com, lazyparser@gmail.com,
+        drew@beagleboard.org,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
+        Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
+Date:   Tue, 30 Nov 2021 13:07:37 +0100
+Message-ID: <1909580.k68io2XIxi@diego>
+In-Reply-To: <9930802.MB9u6SvQ6m@diego>
+References: <20211129014007.286478-1-wefu@redhat.com> <97431cab-d67d-4bc7-e181-d64534791f03@canonical.com> <9930802.MB9u6SvQ6m@diego>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="iso-8859-1"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 12:28:41PM +0100, Nicolas Saenz Julienne wrote:
-> Hi All,
-> while going over the IRQ/NMI entry code I've found a small 'inconsistency':
-> while in the IRQ entry path, we inform RCU of the context change *before*
-> incrementing the preempt counter, the opposite happens for the NMI entry
-> path. This applies to both arm64 and x86[1].
+Am Montag, 29. November 2021, 13:06:23 CET schrieb Heiko St�bner:
+> Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich Schuchardt:
+> > On 11/29/21 02:40, wefu@redhat.com wrote:
+> > > From: Wei Fu <wefu@redhat.com>
+> > > 
+> > > Previous patch has added svpbmt in arch/riscv and add "riscv,svpmbt"
+> > > in the DT mmu node. Update dt-bindings related property here.
+> > > 
+> > > Signed-off-by: Wei Fu <wefu@redhat.com>
+> > > Co-developed-by: Guo Ren <guoren@kernel.org>
+> > > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > > Cc: Anup Patel <anup@brainfault.org>
+> > > Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> > > Cc: Rob Herring <robh+dt@kernel.org>
+> > > ---
+> > >   Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
+> > >   1 file changed, 10 insertions(+)
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> > > index aa5fb64d57eb..9ff9cbdd8a85 100644
+> > > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> > > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> > > @@ -63,6 +63,16 @@ properties:
+> > >         - riscv,sv48
+> > >         - riscv,none
+> > >   
+> > > +  mmu:
+> > 
+> > Shouldn't we keep the items be in alphabetic order, i.e. mmu before 
+> > mmu-type?
+> > 
+> > > +    description:
+> > > +      Describes the CPU's MMU Standard Extensions support.
+> > > +      These values originate from the RISC-V Privileged
+> > > +      Specification document, available from
+> > > +      https://riscv.org/specifications/
+> > > +    $ref: '/schemas/types.yaml#/definitions/string'
+> > > +    enum:
+> > > +      - riscv,svpmbt
+> > 
+> > The privileged specification has multiple MMU related extensions: 
+> > Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enum?
 > 
-> Actually, rcu_nmi_enter() — which is also the main RCU context switch function
-> for the IRQ entry path — uses the preempt counter to verify it's not in NMI
-> context. So it would make sense to assume all callers have the same updated
-> view of the preempt count, which isn't true ATM.
+> I remember in some earlier version some way back there was the
+> suggestion of using a sub-node instead and then adding boolean
+> properties for the supported extensions.
 > 
-> I'm sure there an obscure/non-obvious reason for this, right?
+> Aka something like
+> 	mmu {
+> 		riscv,svpbmt;	
+> 	};
 
-At least I can't find an immediate reason for it either :-)
+For the record, I'm talking about the mail from september
+https://lore.kernel.org/linux-riscv/CAAeLtUChjjzG+P8yg45GLZMJy5UR2K5RRBoLFVZhtOaZ5pPtEA@mail.gmail.com/
 
-Thanks!
+So having a sub-node would make adding future extensions
+way nicer.
+
+> 
+> Which I guess would be a lot nicer. Also right now there is string-
+> comparison done on the code side, which would look way easier
+> when just looking for booleans in the dt instead.
+> 
+> Also isn't an enum a "one-of" selection, so wouldn't work directly
+> for multiple extensions?
+> 
+> 
+> Heiko
+> 
+> 
+> > 
+> > Best regards
+> > 
+> > Heinrich
+> > 
+> > > +
+> > >     riscv,isa:
+> > >       description:
+> > >         Identifies the specific RISC-V instruction set architecture
+> > > 
+> > 
+> > 
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> > 
+> 
+> 
+> 
+> 
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
+
+
+
+

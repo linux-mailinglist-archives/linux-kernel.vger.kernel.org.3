@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1168D462958
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:56:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29FC946295D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbhK3A7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:59:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
+        id S234819AbhK3BAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 20:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbhK3A7u (ORCPT
+        with ESMTP id S229691AbhK3BAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:59:50 -0500
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291E0C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:56:32 -0800 (PST)
-Received: by mail-yb1-xb2c.google.com with SMTP id e136so47388137ybc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:56:32 -0800 (PST)
+        Mon, 29 Nov 2021 20:00:33 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32836C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:57:15 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id g17so47397661ybe.13
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:57:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UOe8xLQUrobMoVj2LWKph442G97MrEyMo1+66bK4AnQ=;
-        b=FT/MMfw3Z54vvePSuoBM82z5aYziyJ/hw+1SBgZU0yVtGaJTzrybhgYZmrNnzFLo3S
-         h1ZNfSAv80YX1nI8h2BzJ48K6jO1aRltwcZ11HlMyGTcRag/Z9NBeVIq0daLl0K4riY/
-         73HMHtbeHN/Vi5qzYZaqp/YJ0aEYH1BiJ5ZF1yfQMhS9jY98+TmbeawNL5wWIDsBnWKH
-         Kna9CLaKtQzBWsoNu+J1/qLfzlwM3mD7rlWp2yguoQm56fd/Y3jDBWDlsTjjxoLmdYfa
-         ilfHm9gsyDYyzPYKguEaD6464dliwN9f8XdpIrxK/gp9bH27kGvA89yQATDVWbYTrAeD
-         IBTg==
+        bh=esRLWzH6dw+Ce7phJ2ONogztplO8dpDdVUer7uLYFyE=;
+        b=U5aJzHs/FlOo0fNLHNpFTCG7aV5AVGzHjOwJv+ZRQZ2UYblO/Xoq68Mh+LgMAMEAwG
+         gwa4zJ90Q4Vp3p//JZbIjVpEVxN22f3h+4+7sxeGO3sWwSmqmkrdz9jnHCSb8YiN2upS
+         D5/Ndr10UjtHbiuh4FI5cWeoCkqsB0aTL44awIBISsM9N3zTXpwRLBVNjjFjIWCBIAR2
+         CqaFqQtCrMACvIkUHE15giu+ir9UH3UZ8bOr0YqtuXy0pXWMKyxt97pf5dNW50HQAd3P
+         Xq4aMkwtelVEamSaY/KLEzVzDqoYGw++6mQuJua5WoTXkJxRUXI/ALyHcOXeHdQOkQOB
+         T1FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UOe8xLQUrobMoVj2LWKph442G97MrEyMo1+66bK4AnQ=;
-        b=0UG7K68QbDEtThuHblyOAj+Q5c7omxneKI8jJ0dj00z9xs8WSh5K4kPl+oI2yRC1h3
-         fllyRl4Rxz9wNMsNWyMhGreJXJiEqOr7Hmg/QOh7TVEtusY3iV/Oh8WBLogiBFQ/Etci
-         HCAjLqYydPQaUR3LoY7/RuY/IX60qXkHmBmMJCw/WPW8zPUIoVkmFZZD1kq+B8szI7m9
-         /d78doKTaRsjtU4YxjCxF8LFg2x1kTHvo8AyA1zGrg3XYdXrVjdFc0i9fJvx9zCGuD/Q
-         /3QH8x2ikjdDNurCIS4fLUym3ql/Bjq+sxgaZ3E5NmO475zIcRvAXd+wWJheCW5YdrmM
-         mAGw==
-X-Gm-Message-State: AOAM531qJQwIGgRxUpU51eZzUZgoT/icSXTS8FAshMe7DDCeDBbvdWfe
-        6u0Kv6MqLP9es1eWaZiLFIppecaV9uwbpJOLiPqvWg==
-X-Google-Smtp-Source: ABdhPJzuNwYyFAs0/QDKiUFukkaFiCuy93y83TOBorW284YUYtixvHwu36tKkxWMLJVFO1mfNh44B4UeZy/NUZD8/V4=
-X-Received: by 2002:a25:86c4:: with SMTP id y4mr39744643ybm.144.1638233790998;
- Mon, 29 Nov 2021 16:56:30 -0800 (PST)
+        bh=esRLWzH6dw+Ce7phJ2ONogztplO8dpDdVUer7uLYFyE=;
+        b=zbqatO+VQoaJjZRSlUCEXmtiAmAM76h/WFFDyT4kAFi0c6t4KQWPawlUU5Di/67tBq
+         kEmz52b4vk8oKt8F2ow+uNxoBNEGltUg9/hwPRnKjTKhczN1aylaQwrpJfk1PhL9E9j8
+         8y4RYYGTaY9j+vYFGq0OddJX7Y7go9JBPP0OOGvw1OohU27+7R2SrPihmXzWgq3Hvpiv
+         rY2blhpms0Eu4uXvHOoHxm4I7l8Abux1dSghDYeH6TwtQfXQmY1L4SI8jspFZmy09IMt
+         qn4epVqxL46EW0krHPNghDE6lp9FGEbF2tAE2zklybmI3gyoDy8OiKTHkAXWHhmh0v8M
+         6Duw==
+X-Gm-Message-State: AOAM530OtMLln6QRVoFSlo/FL7AmmnsilwE4TyF11HRTY41Gom4k9PS5
+        YZO+qWO7RBF2fTSH3GAfwYok/PvqZmIr8vI9ZTtMmg==
+X-Google-Smtp-Source: ABdhPJxBtrnBwZDK0SfMN9ZP26BpdgE0OykhJRvFEkCn6qO1fburjBb59wkMhZpu1UbE5WIus+YADqwKUV0GYHNYlNY=
+X-Received: by 2002:a25:d003:: with SMTP id h3mr33831953ybg.184.1638233834133;
+ Mon, 29 Nov 2021 16:57:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20211113012234.1443009-1-rananta@google.com> <20211113012234.1443009-5-rananta@google.com>
- <87wnl0cdfn.wl-maz@kernel.org> <CAJHc60ydffBkqqb6xyObiK-66psaPODsOo0DpLFv7thx=zHjZw@mail.gmail.com>
- <20211127172720.zte6wfdguoyi3gd6@gator.home>
-In-Reply-To: <20211127172720.zte6wfdguoyi3gd6@gator.home>
+References: <20211113012234.1443009-1-rananta@google.com> <20211113012234.1443009-2-rananta@google.com>
+ <20211127131628.iihianybqbeyjdbg@gator.home>
+In-Reply-To: <20211127131628.iihianybqbeyjdbg@gator.home>
 From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 29 Nov 2021 16:56:19 -0800
-Message-ID: <CAJHc60x=Egb=vRu1JHNK6f1ep+t+gDSKxJyfH88-w=v9pwsRsQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 04/11] KVM: arm64: Setup a framework for hypercall
- bitmap firmware registers
+Date:   Mon, 29 Nov 2021 16:57:03 -0800
+Message-ID: <CAJHc60yfmkPxchCgLT7FMabcmodYLhcJJDiJA3EDiS2nMSHQgg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 01/11] KVM: arm64: Factor out firmware register
+ handling from psci.c
 To:     Andrew Jones <drjones@redhat.com>
 Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -72,112 +71,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 9:27 AM Andrew Jones <drjones@redhat.com> wrote:
+On Sat, Nov 27, 2021 at 5:16 AM Andrew Jones <drjones@redhat.com> wrote:
 >
-> On Tue, Nov 23, 2021 at 10:34:23AM -0800, Raghavendra Rao Ananta wrote:
-> > On Mon, Nov 22, 2021 at 9:23 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > I keep being baffled by this. Why should we track the VMM accesses or
-> > > the VMM writeback? This logic doesn't seem to bring anything useful as
-> > > far as I can tell. All we need to ensure is that what is written to
-> > > the pseudo-register is an acceptable subset of the previous value, and
-> > > I cannot see why this can't be done at write-time.
-> > >
-> > > If you want to hide this behind a capability, fine (although my guts
-> > > feeling is that we don't need that either). But I really want to be
-> > > convinced about all this tracking.
-> > >
-> > The tracking of each owner register is necessary here to safe-guard
-> > the possibility that the user-space may not be aware of a newly
-> > introduced register, and hence, hasn't accessed it. If it had at least
-> > read the register, but not write-back, we assume that the user-space
-> > is happy with the configuration. But the fact that the register has
-> > not even been read would state that user-space is unaware of the
-> > existence of this new register. In such a case, if we don't sanitize
-> > (clear all the bits) this register, the features will be exposed
-> > unconditionally to the guest.
+> On Sat, Nov 13, 2021 at 01:22:24AM +0000, Raghavendra Rao Ananta wrote:
+> > Common hypercall firmware register handing is currently employed
+> > by psci.c. Since the upcoming patches add more of these registers,
+> > it's better to move the generic handling to hypercall.c for a
+> > cleaner presentation.
 > >
-> > The capability is introduced here to make sure that this new
-> > infrastructure is backward compatible with old VMMs. If the VMMs don't
-> > enable this capability, they are probably unaware of this, and this
-> > will work as it always has- expose new services to the guest
-> > unconditionally as and when they are introduced.
+> > While we are at it, collect all the firmware registers under
+> > fw_reg_ids[] to help implement kvm_arm_get_fw_num_regs() and
+> > kvm_arm_copy_fw_reg_indices() in a generic way.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> > ---
+> >  arch/arm64/kvm/guest.c       |   2 +-
+> >  arch/arm64/kvm/hypercalls.c  | 170 +++++++++++++++++++++++++++++++++++
+> >  arch/arm64/kvm/psci.c        | 166 ----------------------------------
+> >  include/kvm/arm_hypercalls.h |   7 ++
+> >  include/kvm/arm_psci.h       |   7 --
+> >  5 files changed, 178 insertions(+), 174 deletions(-)
+> >
+> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
+> > index 5ce26bedf23c..625f97f7b304 100644
+> > --- a/arch/arm64/kvm/guest.c
+> > +++ b/arch/arm64/kvm/guest.c
+> > @@ -18,7 +18,7 @@
+> >  #include <linux/string.h>
+> >  #include <linux/vmalloc.h>
+> >  #include <linux/fs.h>
+> > -#include <kvm/arm_psci.h>
+> > +#include <kvm/arm_hypercalls.h>
+> >  #include <asm/cputype.h>
+> >  #include <linux/uaccess.h>
+> >  #include <asm/fpsimd.h>
+> > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
+> > index 30da78f72b3b..9e136d91b470 100644
+> > --- a/arch/arm64/kvm/hypercalls.c
+> > +++ b/arch/arm64/kvm/hypercalls.c
+> > @@ -146,3 +146,173 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
+> >       smccc_set_retval(vcpu, val[0], val[1], val[2], val[3]);
+> >       return 1;
+> >  }
+> > +
+> > +static const u64 fw_reg_ids[] = {
+> > +     KVM_REG_ARM_PSCI_VERSION,
+> > +     KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1,
+> > +     KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
+> > +};
+> > +
+> > +int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
+> > +{
+> > +     return ARRAY_SIZE(fw_reg_ids);
+> > +}
+> > +
+> > +int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
+> > +{
+> > +     int i;
+> > +
+> > +     for (i = 0; i < ARRAY_SIZE(fw_reg_ids); i++) {
+> > +             if (put_user(fw_reg_ids[i], uindices))
 >
-> Hi Raghavendra,
+> This is missing the ++ on uindices, so it just writes the same offset
+> three times.
 >
-> I don't think we need a CAP that has to be enabled or to make any
-> assumptions or policy decisions in the kernel. I think we just need to
-> provide a bit more information to the VMM when it checks if KVM has the
-> CAP. If KVM would tell the VMM how may pseudo registers there are, which
-> can be done with the return value of the CAP, then the VMM code could be
-> something like this
->
->   r = check_cap(KVM_CAP_ARM_HVC_FW_REG_BMAP);
->   if (r) {
->     num_regs = r;
->
->     for (idx = 0; idx < num_regs; ++idx) {
->       reg = hvc_fw_reg(idx);
->
->       if (idx > vmm_last_known_idx) {
->         ...
->       } else {
->         ...
->       }
->     }
->   }
->
-> With this, the VMM is free to decide if it wants to clear all registers
-> greater than the last index it was aware of or if it wants to let those
-> registers just get exposed to the guest without knowing what's getting
-> exposed. Along with documenting that by default everything gets exposed
-> by KVM, which is the backwards compatible thing to do, then the VMM has
-> been warned and given everything it needs to manage its guests.
->
-Hi Andrew,
+Thanks for catching this! I believe I realized this later and
+corrected it in patch-04/11 of the series and missed it here.
+I'll fix it here as well.
 
-Thanks for your comments and suggestions!
-
-I like the idea of sharing info via a read of the CAP, and not having
-to explicitly sanitize/clear the registers before the guest begins to
-run.
-However the handshake is done over an API doc, which is a little
-concerning. The user-space must remember and explicitly clear any new
-register that it doesn't want to expose to the guest, while the
-current approach does this automatically.
-Any bug in VMM's implementation could be risky and unintentionally
-expose features to the guest. What do you think?
-
-> Another thing that might be nice is giving userspace control of how many
-> pseudo registers show up in get-reg-list. In order to migrate from a host
-> with a more recent KVM to a host with an older KVM[*] we should only
-> expose the number of pseudo registers that the older host is aware of.
-> The VMM would zero these registers out anyway, in order to be compatible
-> for migration, but that's not enough when they also show up in the list
-> (at least not with QEMU that aborts migration when the destination
-> expects less registers than what get-reg-list provides)
+> > +                     return -EFAULT;
+> > +     }
+> > +
+> > +     return 0;
+> > +}
 >
-> [*] This isn't a great idea, but it'd be nice if we can make it work,
-> because users may want to rollback upgrades or, after migrating to a
-> host with a newer kernel, they may want to migrate back to where they
-> started.
+> I assume the rest of the patch is just a cut+paste move of code.
 >
-Good point. But IIUC, if the user-space is able to communicate the
-info that it's expecting a certain get-reg-list, do you think it can
-handle it at its end too, rather than relying on the kernel to send a
-list back?
-
-My assumption was that VMM would statically maintain a known set of
-registers that it wants to work with and are to be modified by hand,
-rather than relying on get-reg-list. This could be the least common
-set of registers that are present in all the host kernels (higher or
-lower versions) of the migration fleet. This config doesn't change
-even with get-reg-list declaring a new register as the features
-exposed by it could still be untested. Although, migrating to a host
-with a missing register shouldn't be possible in this setting, but if
-it encounters the scenario, it should be able to avoid migration to
-the host (similar to QEMU).
-
-Please correct me if you think it's a false assumption to proceed with.
+That's right.
 
 Regards,
 Raghavendra

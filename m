@@ -2,183 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDEF5463254
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:25:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F20646325B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:26:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240730AbhK3L3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:29:07 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:36221 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236162AbhK3L3G (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:29:06 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3Kf10g6wz4xPv;
-        Tue, 30 Nov 2021 22:25:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1638271546;
-        bh=nKlZETLEBCIwqXXojFKIvNI8XaTBsA/rBsc8S8G5uMk=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=OuN9dVkIZh85h3WdJCnej8pPVOYexe7HDrnaRr5zrtCRu1qh+4eEtIr5wSux3M/jI
-         Ps+v8BZ4YieYIRVk03NzsWzjZBv2XVl5d+syfxPZ1TCP2Lc+3gnJK5Jt+T77aQoW1s
-         YBXCmayRhuUDUv9qeaDlVbJXdCp+pjxb1Ry63zx5msmfqja1hcc6kgR6E2p5J2dTbB
-         IJCZqzG6J+yz17JSEL8X9bJkd+7jeZW/Cv6EPTBLPJ7Xh6a/H0zz21PT4z0KGYgryc
-         1bKLTAwC8vLVW1TnFOERG6rizMv5IKca/fmrzteaRJFDgOcZf5Yf6vFB3fgxYy+UAi
-         owjdE0jS0CXhQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        kernel test robot <lkp@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
- copy_inst_from_kernel_nofault()
-In-Reply-To: <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
-References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
- <202111300652.0yDBNvyJ-lkp@intel.com>
- <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
-Date:   Tue, 30 Nov 2021 22:25:43 +1100
-Message-ID: <87a6hlq408.fsf@mpe.ellerman.id.au>
+        id S240770AbhK3L3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:29:33 -0500
+Received: from mail-bn8nam11on2062.outbound.protection.outlook.com ([40.107.236.62]:51393
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240763AbhK3L3b (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 06:29:31 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TrEonCKcwtgHsX/FZTLhjKSis0bnVexIgv0o9eVRLBwlDoso28wt7uYQUHCvgQNuDpXdBQKOEiULRWfFiQ6DSzLIZsCto/fQ/gLu/Zvne0Y1vI/W1bGYzc4BgPprWWc+fg8gtau1COH3Tx2GKsObYl+Rgyhx0WFwZfrGuJXgTM9O1Y2Ra7vbB3MZJ9rX9sHcvfSyNW0vSJu4WJDdT++TwveFIKUWY1jr5Fya9kbAT5FGKcCoIZQi1hgTHD6/edcQbIboN7Un5gTkT/V2TNsGJGFI6d3I1svW6pSeRs5Gy4ZiOcATFrL8cEDirYbJ/pNm3dYOaAPj13dGebdvF7apWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=axI6ltolPD44VaHPccfZvXpd9TEdhwvpHdS4J9WBDy0=;
+ b=WK/QW9IWVswE2DBHr3BOM+de+Fr9g5jYCPe5f1jDKu0WC/tHEnlJQc/ltLVnpI9LOkkB2fA5g4Ot5EKquzXh/qZBVhlcUBxql4SOBJftVi0qGLDE3GhkBNHfCujRC11iYF1lCRMZoRdgJjpe24O9h7Kihusz8vrriMxcn67qzAWypby0OgOCeM0+791WL5GewDG3wlUv4RjMirdSUl8lgH+7QVDEO7rFCiHd2mqahaeeIRc7l6wFjpcVV6SkEEndp0sltL09hKimkz0xQC2ra7TtZ4Hc+2Pk9pNSJYEG2QxylF3WhZda5ipBvHmeSv6leVHPB9s/XfPhtN4JSYG4bg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=axI6ltolPD44VaHPccfZvXpd9TEdhwvpHdS4J9WBDy0=;
+ b=NMXXhoaFgXw3kEsLjoCCMthJq6k35CJKngEPBUagfhm/4YThz9uHosWfFf7qV8v7riKm0/mPm4hnWEuEtQsrEMw3lNHhbmJlqymZtqX5uzKxGuL/l9NjkS43rU1hWqo+419oNJvHl/0FDnp58SypPEtxYKezLlkPexdWq/wfPH3L/kMGzOR2XFM/logrETtcFZpRMkFxaMEveLnYWibH5DTlld24MBylpJiH7TlxiDrABkjxP8BoCyX/Lih8PsnWaFBYVCcq3FJF8xUvZVsV7ODIBIirVAdY1hOM1Up8kxeNaev9U+r6+Om5IN6wnbfv7BcxTUoI5XOoPL0tJxD/ow==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ CO6PR12MB5393.namprd12.prod.outlook.com (2603:10b6:5:356::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4755.11; Tue, 30 Nov 2021 11:26:10 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::ecac:528f:e36c:39d0]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::ecac:528f:e36c:39d0%4]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
+ 11:26:10 +0000
+Subject: Re: [PATCH] mtd: dataflash: Add device-tree SPI IDs
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Mark Brown <broonie@kernel.org>
+References: <20211119183316.1329089-1-miquel.raynal@bootlin.com>
+ <a799095a-e046-ae56-c2db-f527e199b5fb@nvidia.com>
+ <20211130121110.6026f788@xps13>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <71994534-1c56-f5b4-c054-f643c409d131@nvidia.com>
+Date:   Tue, 30 Nov 2021 11:26:02 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <20211130121110.6026f788@xps13>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR0701CA0051.eurprd07.prod.outlook.com
+ (2603:10a6:800:5f::13) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Received: from [10.26.49.14] (195.110.77.193) by VI1PR0701CA0051.eurprd07.prod.outlook.com (2603:10a6:800:5f::13) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.7 via Frontend Transport; Tue, 30 Nov 2021 11:26:08 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: f9beae1d-7cc2-4904-fd4d-08d9b3f43587
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5393:
+X-Microsoft-Antispam-PRVS: <CO6PR12MB539373CB345B56114E8895C1D9679@CO6PR12MB5393.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4125;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XaJetvj5P3tDtFb83nmP0O7XBh6Fd2qZLz4t7Iihrcm18MUW1cfzveef6LHwi4oX7tUTm2yGSL4UCxezHN9dd900L5lqy8eX+XhdcVU06RBYXwfEMJLyVKGTEB894qrw+Qi7M0Bovt6we3PpqiOvSHOZo3dHvii5Y9Pw1RUXQ5kVNDDGpvYRvC2FtlbYzE7HP0rGcf36LxSG9GQPaGZbuFuyHQGcGsgnc2zVGjas0ggg0s0OfnJPnhXjDwAAZ+aPja4Po1+ToGSsjUNnm+xeNoejcOngMcibjmo/cYKZUzIdgXbcyp35gMFgYyOkGX1IwU41QSLIB47KRC6PBuHwKvodrXO7m7UXXn6v1WM+eLtsO6o6C+2AsCi4r8HQuMmNXvpZWxB6IjzGld8kVVmOpQ0NhIot9c1aIt7YR3TZjovYOKVYssdlM81+y247HKiDNpxLYSkdMN/3uckD/dN20YpXbEPTNcL7guW0my8Xy6ulI2w9BcOR0RvHgpJzbUFAOI8RI5SwT1fNi9arkBccIOCdJqoZ0SX+3ZjK9S4fgK0P9UqOD+7rg9dJ+pzAtQuaTRZ9w9YLdwulZMGzrfQh5Hyehm/eAlGbwhLafbGWJs2rvl9WRp48XMsI1teO6i4AaotZRMwNOYHzMNBHMD47HdQb8OM9QRghdBOrHxtZyTglF0ILMUaikpllWvfxzUGvGjXNSFoYBr/HcOHRmHfUqVmhRt4mArzYpjOxx47Ed4gC+BLhR0Ul4OZjpAUrAHT+EdwsPr6Ht01+WdpH6FenYFLm9EnA7kRci0J6dy5g6ghe015gstAR2tH/mut1Pxve
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(508600001)(966005)(6486002)(4326008)(66556008)(36756003)(83380400001)(6916009)(8936002)(8676002)(66476007)(66946007)(31696002)(6666004)(2616005)(38100700002)(5660300002)(2906002)(53546011)(186003)(16576012)(956004)(31686004)(316002)(26005)(55236004)(54906003)(4001150100001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OHhsTzY3M3lVQXZkaGdHNE5rUjVTZWMxWWFxanVJV0xYN2VIOWxkMis2ZldH?=
+ =?utf-8?B?RGIzaUpISjlUYXFqZDcrU083YnhtTUVEK3poQ05NQ1lOL3BXV09mVUJ2Vk5G?=
+ =?utf-8?B?dGJOUmx3c1hBcGcxMWJsK0hsenp0cExQNWlYUVJwNGk1OGYraHFERHJod2Nr?=
+ =?utf-8?B?bEdDYlFrSFlmUVZxUHhhaEVHajloLzE2c3VUVENFTWRORHpZR003ZnZKaUZG?=
+ =?utf-8?B?MTNqTnVzK2VCZGFTWUt5SkFhSVRRVFJiek1jT3NiQlFzOGl3Y2h0U1ZPUVRS?=
+ =?utf-8?B?N2svWlJPSjRubHhmQm9lNU9DUkFoVjZCN05QWFl4U0pWanF6b2pmaWp1aW5r?=
+ =?utf-8?B?OVk3SlI2WWhzTXYvSzRIbGU3T25RYlhkdkxFUWNMRVNzKzFOVzBvM3RsWXR4?=
+ =?utf-8?B?aWNMWjN5Y2VqbnFKOE5QdGI5TksyS2RxN0N5MmlmOUVRM3lvSlRBT0czTEtD?=
+ =?utf-8?B?VkNyUGxCV3hyQTkrWExId2IrVWpTV2x1UjYyVERIajhOdkJ6MmU5bU1RVGFy?=
+ =?utf-8?B?RGN1R0xSR1g4cUxGbVpTMGM5RkJxV2RncDdoTTNSL1o5MGVMRE13bjVZaEhZ?=
+ =?utf-8?B?WE9QWXFTdmErOEJYM2RiT0RDYkw2NTJvQ0k1cDZlQlRtZFNVQ3V1UHA1aWhD?=
+ =?utf-8?B?OHdYY21nVHI2SG1zNHppNnBpU0xIN2JnTjM2T2hJTUVEWm52K3JFd0V2MTFH?=
+ =?utf-8?B?SUo2M0UveGh3UzRZdml2cmQvVzQ5MTNlcndpbEszekVmeFRwTGJVZlFkSHhU?=
+ =?utf-8?B?eGNHTm55QmxGY3NYREpQK3JUckxCSHJpMG5HVmlWVGtTUU82OWFzZ2Jrb2l4?=
+ =?utf-8?B?WFM0a0lxeWdSenhKbVhVSjNWNzZ5Q0hJamE1MThGRVljZXJGN1YrOTNpWlVD?=
+ =?utf-8?B?R0N1V1dSaDQ5VW9WZlIzTkJ0ZWd2TDJMZGh6ckhjbWNabHVxMEcyODE4SmZ2?=
+ =?utf-8?B?djhpbjRoUmNrYzJTbHhiVmZXcDFwVEtTZ0tIMTAwdTV4NFIvQXhBMUd1M2pR?=
+ =?utf-8?B?SllNNkp3STdlZTNJYmJxcWdMSVZzUWtkTGQzVEN0N3NJblVQR2pMbDZCS0ZP?=
+ =?utf-8?B?MDk2aHFiV2J5YkM4UFZoRk9WcmhxS0tlYnBrSjAwK3pJQVhuZTNCTHp3a3px?=
+ =?utf-8?B?ak1jNFY1SU1kY0lUTi90Vkp6Y09WS1lnV1VPM1VZNWFrZDg3K01VRHA5akVM?=
+ =?utf-8?B?VTV6K1Y1NzUwemVwaU52TDNRTG1ISDhOQzBkc25QazljU0pYQXdiOGtSTEdY?=
+ =?utf-8?B?MkpFL0xBbktRNS9LcUJaWVhyTGdJWGVoOTVCWTRvSU5RaitxTUhGVkplSmgx?=
+ =?utf-8?B?RVRYSWRQbnp5ZUhMTXZzYWtNMWFtMktVL2xWbjdMU2dJNGNJWGhmYVJPbHBn?=
+ =?utf-8?B?YlE2bmswM1pTOGRIMXJNVnk3Z3RUbWZuNnNsZEZYZDE0U0JWU28vZHBDY0pu?=
+ =?utf-8?B?ZUptSUxpNm05bFZhQUYrYXVDa3pHVkRiRUdkSlBKTGFoWDk4OHY1bUhKNjJV?=
+ =?utf-8?B?THByUlRDRXA0dlEzSnNCMXVLcEhDMXc0dWJjdUZKWGVWekpjc3lBUlk4czMy?=
+ =?utf-8?B?VlBDSC9lNmNybXdaZFY5Yjg5Nlk5c0trYU5JZDM4ZUlRbW9jMnlWYnRIRDh2?=
+ =?utf-8?B?c1d5cnA1WUJJd0FNelQvei8xN091VVRhV2JUaWNiS0QwTEJJK1poT3N3WlFU?=
+ =?utf-8?B?WHk0bzRPN3IyeU5nVDM4S0NnVzVJNldlK1U3S2kyM0cyd3l6S1lUMjVXU2d6?=
+ =?utf-8?B?S3ZFbXdlN09jbGxOWUZpRElkTlpYUmJwUXFFS1ZhVjdldTRVKzRCYVlrOVhP?=
+ =?utf-8?B?aGZCaGE4UHlKV2dPUGx4R1h1RkphWTREVUtSNW9oSHMvZndmRWh0NHh1Tzls?=
+ =?utf-8?B?WGpsclZVMlM2b3RkcCtYMjE4ZFJxQ1VjeEd1OGhiYVA1aWlxTVN3dzBTN2RX?=
+ =?utf-8?B?ektrdC9wanBPb3dYTWhET1JZYk4va3U4YmIxanBiczVJRUF3L0p3L1QrMERC?=
+ =?utf-8?B?YW85Zkh4L1pXNTVuL3dMODlpU1QyK01LMHV0MmJxY3FPV2JMdTJwMW9KMXhZ?=
+ =?utf-8?B?c3gwVVg2cmZPcXNmdmE0bXdnTytoTEJYZzd0dHRsTEFCU3gvQTBBMDBTU2Vq?=
+ =?utf-8?B?Qmw1bDdQYTBpeGFtMTJ0Y1dadkRkb1JjdFRSRm0zejlKdnZNUzJCWktweUFO?=
+ =?utf-8?Q?v/cG61q/6SqyjMqscmUVxlU=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9beae1d-7cc2-4904-fd4d-08d9b3f43587
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 11:26:10.3452
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Yh1uRafywuOpzy+3M+7VGUlLRN0rA2/ORT1cCB071j2YVz0mPq21KqpoCeHt1rP3a/2TdT99EsOXTbSmN0YixA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5393
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy <christophe.leroy@csgroup.eu> writes:
-> Le 29/11/2021 =C3=A0 23:55, kernel test robot a =C3=A9crit=C2=A0:
->> Hi Christophe,
->>=20
->> I love your patch! Perhaps something to improve:
->>=20
->> [auto build test WARNING on powerpc/next]
->> [also build test WARNING on v5.16-rc3 next-20211129]
->> [If your patch is applied to the wrong git tree, kindly drop us a note.
->> And when submitting patch, we suggest to use '--base' as documented in
->> https://git-scm.com/docs/git-format-patch]
->>=20
->> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerp=
-c-inst-Refactor-___get_user_instr/20211130-015346
->> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.gi=
-t next
->> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0day-c=
-i/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
->> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df0=
-8b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
->> reproduce (this is a W=3D1 build):
->>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
-bin/make.cross -O ~/bin/make.cross
->>          chmod +x ~/bin/make.cross
->>          # install powerpc cross compiling tool for clang build
->>          # apt-get install binutils-powerpc-linux-gnu
->>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b=
-48bb69de1f325eee826
->>          git remote add linux-review https://github.com/0day-ci/linux
->>          git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-=
-Refactor-___get_user_instr/20211130-015346
->>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
->>          # save the config file to linux build tree
->>          mkdir build_dir
->>          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
-W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc prepare
->>=20
->> If you fix the issue, kindly add following tag as appropriate
->> Reported-by: kernel test robot <lkp@intel.com>
->>=20
->> All warnings (new ones prefixed by >>):
->>=20
->>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
->>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
->>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is uni=
-nitialized when used here [-Wuninitialized]
->>                     *inst =3D ppc_inst(val);
->>                                      ^~~
->>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro 'pp=
-c_inst'
->>     #define ppc_inst(x) (x)
->>                          ^
->>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the variabl=
-e 'val' to silence this warning
->>             unsigned int val, suffix;
->>                             ^
->>                              =3D 0
->
-> I can't understand what's wrong here.
->
-> We have
->
-> 	__get_kernel_nofault(&val, src, u32, Efault);
-> 	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) =3D=3D OP_PREFIX) {
-> 		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
-> 		*inst =3D ppc_inst_prefix(val, suffix);
-> 	} else {
-> 		*inst =3D ppc_inst(val);
-> 	}
->
-> With
->
-> #define __get_kernel_nofault(dst, src, type, err_label)			\
-> 	__get_user_size_goto(*((type *)(dst)),				\
-> 		(__force type __user *)(src), sizeof(type), err_label)
->
->
-> And
->
-> #define __get_user_size_goto(x, ptr, size, label)				\
-> do {										\
-> 	BUILD_BUG_ON(size > sizeof(x));						\
-> 	switch (size) {								\
-> 	case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;	\
-> 	case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); break;	\
-> 	case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); break;	\
-> 	case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break;	\
-> 	default: x =3D 0; BUILD_BUG();						\
-> 	}									\
-> } while (0)
->
-> And
->
-> #define __get_user_asm_goto(x, addr, label, op)			\
-> 	asm_volatile_goto(					\
-> 		"1:	"op"%U1%X1 %0, %1	# get_user\n"	\
-> 		EX_TABLE(1b, %l2)				\
-> 		: "=3Dr" (x)					\
-> 		: "m<>" (*addr)				\
-> 		:						\
-> 		: label)
->
->
-> I see no possibility, no alternative path where val wouldn't be set. The=
-=20
-> asm clearly has *addr as an output param so it is always set.
 
-I guess clang can't convince itself of that?
+On 30/11/2021 11:11, Miquel Raynal wrote:
+> Hi Jon,
+> 
+> jonathanh@nvidia.com wrote on Tue, 30 Nov 2021 08:53:08 +0000:
+> 
+>> Hi Miquel,
+>>
+>> On 19/11/2021 18:33, Miquel Raynal wrote:
+>>> On Mon, 2021-11-15 at 11:36:55 UTC, Jon Hunter wrote:
+>>>> Commit 5fa6863ba692 ("spi: Check we have a spi_device_id for each DT
+>>>> compatible") added a test to check that every SPI driver has a
+>>>> spi_device_id for each DT compatiable string defined by the driver
+>>>> and warns if the spi_device_id is missing. The spi_device_ids are
+>>>> missing for the dataflash driver and the following warnings are now
+>>>> seen.
+>>>>
+>>>>    WARNING KERN SPI driver mtd_dataflash has no spi_device_id for atmel,at45
+>>>>    WARNING KERN SPI driver mtd_dataflash has no spi_device_id for atmel,dataflash
+>>>>
+>>>> Fix this by adding the necessary spi_device_ids.
+>>>>
+>>>> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+>>>
+>>> Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.
+>>
+>>
+>> Please can you submit as a fix for v5.16? The commit that introduced this is already in the mainline.
+> 
+> Yes of course. Can you resubmit with a Fixes tag?
 
->>     1 warning generated.
->>     <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#war=
-nings]
->>     #warning syscall futex_waitv not implemented
->>      ^
->>     1 warning generated.
->>     arch/powerpc/kernel/vdso32/gettimeofday.S:72:8: error: unsupported d=
-irective '.stabs'
->>     .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_=
-x; _restgpr_31_x:
->>            ^
->>     arch/powerpc/kernel/vdso32/gettimeofday.S:73:8: error: unsupported d=
-irective '.stabs'
->>     .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32g=
-pr_31_x; _rest32gpr_31_x:
->
-> How should we fix that ? Will clang support .stabs in the future ?
 
-I think we should drop any stabs annotations / support. AFAICT none of
-the toolchains we support produce it anymore.
+Thanks. I have sent a V2. I used the same Fixes tag that Mark has used 
+in similar changes for consistency.
 
-cheers
+Jon
+
+-- 
+nvpublic

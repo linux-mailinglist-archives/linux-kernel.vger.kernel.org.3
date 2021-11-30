@@ -2,51 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EFC4629E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1DFE4629ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:43:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236805AbhK3BoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 20:44:11 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:55756 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229779AbhK3BoI (ORCPT
+        id S236848AbhK3Bq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 20:46:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236822AbhK3Bq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 20:44:08 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R921e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UyoPEMz_1638236446;
-Received: from 30.21.164.33(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0UyoPEMz_1638236446)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 30 Nov 2021 09:40:47 +0800
-Message-ID: <ccb002e0-7ea6-5289-0f01-48f1a23eaf46@linux.alibaba.com>
-Date:   Tue, 30 Nov 2021 09:41:38 +0800
+        Mon, 29 Nov 2021 20:46:27 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2ABC061714;
+        Mon, 29 Nov 2021 17:43:09 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id h24so14113488pjq.2;
+        Mon, 29 Nov 2021 17:43:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=JY7fwQCwIaLfvZtlRwfTmDedzscAuvWuqTYb3KzttUg=;
+        b=mH0iAA8d4E8HBrmhuCRlvw2GL8ByI1FrcQflgOVinjg69pqvwkhifJHFW9rJundWbd
+         E6PlUHkS2sQViTk1As18ReK+Y5flLu7jUWfZRliBUF4wZV9s7m6tirR3rEuPWEtoDDb2
+         HNSXwuchL/ZGoLNpKS6SFvxakonv3yIkfttMiiDpaBhGGPYsgWIR/m52UwYoqvcEy08l
+         nIaNPF01Nn0vfRS6sD1DmUUA1OLcuQsZlaXppe5NrZnk4BWgr5xUi1KfBwlxLCG7nb/I
+         DazJ8YVWT8YpJFsuegXr34AtTVjbcYaw0QYVgaC/28Dh3c/2jChM2lbWC7PTTQdFX/7O
+         MLuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JY7fwQCwIaLfvZtlRwfTmDedzscAuvWuqTYb3KzttUg=;
+        b=bsP+4+LSodng8lfbm7U00sp+B9PhDmLbTrInA93ud4uHcpujAlfgxO9g81dr9JhKjC
+         gVj4eyWBVvWAaSU9ezqw3b2ScanNkAXv+UhQk1rEy1eJHKAZqScsLV14znNfDLIcwTJx
+         8usI0tgITKD4CVSORBxZoCAKpwMURkbaQSKKHe4ERF1U33AW97DbxqOweerAonTVPi1a
+         yLFm1+pagfBeUwRrafnBH2hgKHJrFmkFLlmuO0NtxyZxfH1o5zoZxeO5KaDgGGxrl4xb
+         n6m4z6HxFfyUhY0MQMTSv2dnDDwTn/lYos/kWiBCAwsY5GVT5KyHc2eLB4b8LQI51L5I
+         wvYw==
+X-Gm-Message-State: AOAM5335WLny58ERxgpB4bAHJ2MlCz/fWFMx855gG1QiaULztiMeoVoL
+        hJdYwASDIDsk/xsrXbLM000jXMseHQpxK+Op97s=
+X-Google-Smtp-Source: ABdhPJxQh1DY/xLlyMot6KckjYcWPrvNOctDL3HP93M8an6dWdCJ1ioZqcv63qE4ZB2jiDnn24AEUFIZ1oCU5ApBTM4=
+X-Received: by 2002:a17:903:2306:b0:141:e52e:457d with SMTP id
+ d6-20020a170903230600b00141e52e457dmr64272456plh.3.1638236589015; Mon, 29 Nov
+ 2021 17:43:09 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [BUG] hugetlbfs: Fix issue of preallocation of gigantic pages
- can't work
-To:     Zhenguo Yao <yaozhenguo1@gmail.com>, mike.kravetz@oracle.com,
-        akpm@linux-foundation.org, mlevitsk@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20211129133803.15653-1-yaozhenguo1@gmail.com>
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20211129133803.15653-1-yaozhenguo1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211123205607.452497-1-zenczykowski@gmail.com>
+In-Reply-To: <20211123205607.452497-1-zenczykowski@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Mon, 29 Nov 2021 17:42:57 -0800
+Message-ID: <CAADnVQJG8_vHfHZJkN9MkZvK_70s8mQ2KyUVHWY6-tndLDfqdA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: allow readonly direct path access for skfilter
+To:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <zenczykowski@gmail.com>
+Cc:     =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Linux Network Development Mailing List 
+        <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        BPF Mailing List <bpf@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Nov 23, 2021 at 12:56 PM Maciej =C5=BBenczykowski
+<zenczykowski@gmail.com> wrote:
+>
+> From: Maciej =C5=BBenczykowski <maze@google.com>
+>
+> skfilter bpf programs can read the packet directly via llvm.bpf.load.byte=
+/
+> /half/word which are 8/16/32-bit primitive bpf instructions and thus
+> behave basically as well as DPA reads.  But there is no 64-bit equivalent=
+,
+> due to the support for the equivalent 64-bit bpf opcode never having been
+> added (unclear why, there was a patch posted).
+> DPA uses a slightly different mechanism, so doesn't suffer this limitatio=
+n.
+>
+> Using 64-bit reads, 128-bit ipv6 address comparisons can be done in just
+> 2 steps, instead of the 4 steps needed with llvm.bpf.word.
 
-On 2021/11/29 21:38, Zhenguo Yao wrote:
-> Preallocation of gigantic pages can't work bacause of commit:b5389086ad7b
-> (hugetlbfs: extend the definition of hugepages parameter to support node
-> allocation). When nid is NUMA_NO_NODE(-1), alloc_bootmem_huge_page will
-> always return without doing allocation. Fix this by adding more check.
-> 
-> Signed-off-by: Zhenguo Yao <yaozhenguo1@gmail.com>
+llvm.bpf.word is a pseudo instruction.
+It's actually a function call for classic bpf.
+See bpf_gen_ld_abs.
+We used to have ugly special cases for them in JITs,
+but then got rid of it.
+Don't use them if performance is a requirement.
 
-You should add a fixes tag, otherwise LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> This should hopefully allow simpler (less instructions, and possibly less
+> logic and maybe even less jumps) programs.  Less jumps may also mean vast=
+ly
+> faster bpf verifier times (it can be exponential in the number of jumps..=
+.).
+>
+> This can be particularly important when trying to do something like scan
+> a netlink message for a pattern (2000 iteration loop) to decide whether
+> a message should be dropped, or delivered to userspace (thus waking it up=
+).
+>
+> I'm requiring CAP_NET_ADMIN because I'm not sure of the security
+> implications...
+>
+> Tested: only build tested
+> Signed-off-by: Maciej =C5=BBenczykowski <maze@google.com>
+> ---
+>  kernel/bpf/verifier.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 331b170d9fcc..0c2e25fb9844 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -3258,6 +3258,11 @@ static bool may_access_direct_pkt_data(struct bpf_=
+verifier_env *env,
+>         enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+>
+>         switch (prog_type) {
+> +       case BPF_PROG_TYPE_SOCKET_FILTER:
+> +               if (meta || !capable(CAP_NET_ADMIN))
+> +                       return false;
 
-Fixes: b5389086ad7b ("hugetlbfs: extend the definition of hugepages 
-parameter to support node allocation")
+probably needs CAP_BPF too.
+
+Other than that I think it's fine.

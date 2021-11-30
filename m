@@ -2,78 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1A64631AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B63664631BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236590AbhK3LAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:00:15 -0500
-Received: from mga04.intel.com ([192.55.52.120]:4915 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S235667AbhK3LAO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:00:14 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="234914651"
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="234914651"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 02:56:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="654117650"
-Received: from kuha.fi.intel.com ([10.237.72.166])
-  by fmsmga001.fm.intel.com with SMTP; 30 Nov 2021 02:56:52 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 30 Nov 2021 12:56:52 +0200
-Date:   Tue, 30 Nov 2021 12:56:52 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     steven_syu <steven_syu@asus.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: clear usb_pd flag if change to typec only
- mode
-Message-ID: <YaYDdIJbOyAiiFsY@kuha.fi.intel.com>
-References: <1638241033-12467-1-git-send-email-steven_syu@asus.com>
+        id S236768AbhK3LFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:05:44 -0500
+Received: from out30-44.freemail.mail.aliyun.com ([115.124.30.44]:35579 "EHLO
+        out30-44.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236684AbhK3LFo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 06:05:44 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0UysYt4a_1638270135;
+Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0UysYt4a_1638270135)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Tue, 30 Nov 2021 19:02:23 +0800
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Colin Foster <colin.foster@in-advantage.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tianchen Ding <dtcccc@linux.alibaba.com>
+Subject: [PATCH] net: mdio: mscc-miim: Add depend of REGMAP_MMIO on MDIO_MSCC_MIIM
+Date:   Tue, 30 Nov 2021 19:02:09 +0800
+Message-Id: <20211130110209.804536-1-dtcccc@linux.alibaba.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638241033-12467-1-git-send-email-steven_syu@asus.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:57:13AM +0800, steven_syu wrote:
-> This patch handle power mode change from PD to Type-C only
-> and the user space unknown power delivery  was turned off
-> by typec driver.
-> 
-> Signed-off-by: steven_syu <steven_syu@asus.com>
-> ---
->  drivers/usb/typec/class.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index aeef453..11e2a98 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1718,6 +1718,10 @@ void typec_set_pwr_opmode(struct typec_port *port,
->                         partner->usb_pd = 1;
->                         sysfs_notify(&partner_dev->kobj, NULL,
->                                      "supports_usb_power_delivery");
-> +               } else if (opmode != TYPEC_PWR_MODE_PD && partner->usb_pd) {
-> +                       partner->usb_pd = 0;
-> +                       sysfs_notify(&partner_dev->kobj, NULL,
-> +                                    "supports_usb_power_delivery");
->                 }
->                 put_device(partner_dev);
->         }
-> --
-> 2.7.4
-> 
-> ===================================================================================================================================
-> ???K???T This email and any attachments to it contain confidential information and are intended solely for the use of the individual to whom it is addressed.If you are not the intended recipient or receive it accidentally, please immediately notify the sender by e-mail and delete the message and any attachments from your computer system, and destroy all hard copies. If any, please be advised that any unauthorized disclosure, copying, distribution or any action taken or omitted in reliance on this, is illegal and prohibited. Furthermore, any views or opinions expressed are solely those of the author and do not represent those of ASUSTeK. Thank you for your cooperation.
-> ===================================================================================================================================
+There's build error while CONFIG_REGMAP_MMIO is not set
+and CONFIG_MDIO_MSCC_MIIM=m.
 
-Please remove that footer from the next mail.
+ERROR: modpost: "__devm_regmap_init_mmio_clk"
+[drivers/net/mdio/mdio-mscc-miim.ko] undefined!
 
-thanks,
+Add the depend of REGMAP_MMIO to fix it.
 
+Fixes: a27a76282837 ("net: mdio: mscc-miim: convert to a regmap implementation")
+Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+---
+ drivers/net/mdio/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/mdio/Kconfig b/drivers/net/mdio/Kconfig
+index 6da1fcb25847..bfa16826a6e1 100644
+--- a/drivers/net/mdio/Kconfig
++++ b/drivers/net/mdio/Kconfig
+@@ -141,7 +141,7 @@ config MDIO_MVUSB
+ 
+ config MDIO_MSCC_MIIM
+ 	tristate "Microsemi MIIM interface support"
+-	depends on HAS_IOMEM
++	depends on HAS_IOMEM && REGMAP_MMIO
+ 	select MDIO_DEVRES
+ 	help
+ 	  This driver supports the MIIM (MDIO) interface found in the network
 -- 
-heikki
+2.27.0
+

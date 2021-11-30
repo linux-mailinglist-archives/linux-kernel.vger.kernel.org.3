@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66036463888
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFD846393C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243757AbhK3PEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:04:47 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59958 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243154AbhK3O4c (ORCPT
+        id S234544AbhK3PIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244483AbhK3PB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:56:32 -0500
+        Tue, 30 Nov 2021 10:01:59 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE45C08E9AE;
+        Tue, 30 Nov 2021 06:53:13 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6E063CE1A67;
-        Tue, 30 Nov 2021 14:53:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F55C53FCF;
-        Tue, 30 Nov 2021 14:53:08 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C4787CE1A7A;
+        Tue, 30 Nov 2021 14:53:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24980C53FC1;
+        Tue, 30 Nov 2021 14:53:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283989;
-        bh=XvDXe8QlYkOVYvlj8rPsLiboo21ZuxznWhjSYzSen4E=;
+        s=k20201202; t=1638283991;
+        bh=Vq2BUP7U2OhILi6TMYWhb5X6RNIV1LJqN9la6OYqdwI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Y6x6t91QEzkLH2ieIMjS0BJ/oFQfQkVi+ZnnEzaX66URI2zQg4wt8yBGlPjzFQ+R3
-         L/lATZOrqNUWzONeBTpEkBU2RQELogag/8LLwnW+iwZxQ2BSBCYiEbIkTZOpE+8U+q
-         6A0NGYMGYhHBMnby+F8frEztZIIaqXZLA+MAoyX3MJbDkJfP7OC4yCxLL6nSVd+09V
-         09qWbB3rG6ik7pKHkSiQ0q7Ae7fUADzcQLPlPm2gUDkSAUghc0qFut6467swVu6hxQ
-         1H5AOKUpd8fLFHZO4LLEh+60v8NnSe8QR8wrfJck8ntELc/gi3zFWcL4xfCJGiLHGA
-         N7CA4ehEKzgUw==
+        b=AQxmLdTcXGhHBGp6srl4pW9EFcHqkLGkLNbGJFSMH8B/ImvrcZAg5MiBafS+U031h
+         oUAd9RdZ58d3AHcbGcUJFQJydPQpb7YNNn9dd+7MIGE8u1fRMeT9sz9UQG1uB5j2b/
+         l3X4lGS3xo91d5CQdobUbi6gmCGVwqf0yS+V9QinYT3Rm6yZRl7hfVoq6/lyhUvt46
+         VMx/CyQlbhkpz4/Jg5QoU3XqfM2DzodwXZks9p3O/OabNN6gRfh5pIyE2ZaB+9QVRI
+         2EchndqonojCXBgv63o5osznwMqslf7GdkyNuxlZkhOFFbIgRUYuNw//+h3bueQs7D
+         FG43XBPXfjTxA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Steve French <stfrench@microsoft.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Paulo Alcantara <pc@cjr.nz>, Sasha Levin <sashal@kernel.org>,
-        sfrench@samba.org, linux-cifs@vger.kernel.org,
-        samba-technical@lists.samba.org
-Subject: [PATCH AUTOSEL 4.19 13/17] smb2: clarify rc initialization in smb2_reconnect
-Date:   Tue, 30 Nov 2021 09:52:37 -0500
-Message-Id: <20211130145243.946407-13-sashal@kernel.org>
+Cc:     Evan Green <evgreen@chromium.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 14/17] PM: hibernate: Fix snapshot partial write lengths
+Date:   Tue, 30 Nov 2021 09:52:38 -0500
+Message-Id: <20211130145243.946407-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130145243.946407-1-sashal@kernel.org>
 References: <20211130145243.946407-1-sashal@kernel.org>
@@ -51,34 +52,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steve French <stfrench@microsoft.com>
+From: Evan Green <evgreen@chromium.org>
 
-[ Upstream commit 350f4a562e1ffc2e4869e3083dc9b0ec4bca6c3a ]
+[ Upstream commit 88a5045f176b78c33a269a30a7b146e99c550bd9 ]
 
-It is clearer to initialize rc at the beginning of the function.
+snapshot_write() is inappropriately limiting the amount of data that can
+be written in cases where a partial page has already been written. For
+example, one would expect to be able to write 1 byte, then 4095 bytes to
+the snapshot device, and have both of those complete fully (since now
+we're aligned to a page again). But what ends up happening is we write 1
+byte, then 4094/4095 bytes complete successfully.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+The reason is that simple_write_to_buffer()'s second argument is the
+total size of the buffer, not the size of the buffer minus the offset.
+Since simple_write_to_buffer() accounts for the offset in its
+implementation, snapshot_write() can just pass the full page size
+directly down.
+
+Signed-off-by: Evan Green <evgreen@chromium.org>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/smb2pdu.c | 2 +-
+ kernel/power/user.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/cifs/smb2pdu.c b/fs/cifs/smb2pdu.c
-index 43478ec6fd67a..757ac782f405b 100644
---- a/fs/cifs/smb2pdu.c
-+++ b/fs/cifs/smb2pdu.c
-@@ -155,7 +155,7 @@ smb2_hdr_assemble(struct smb2_sync_hdr *shdr, __le16 smb2_cmd,
- static int
- smb2_reconnect(__le16 smb2_command, struct cifs_tcon *tcon)
- {
--	int rc;
-+	int rc = 0;
- 	struct nls_table *nls_codepage;
- 	struct cifs_ses *ses;
- 	struct TCP_Server_Info *server;
+diff --git a/kernel/power/user.c b/kernel/power/user.c
+index 2d8b60a3c86b9..d5f58a541ff61 100644
+--- a/kernel/power/user.c
++++ b/kernel/power/user.c
+@@ -183,7 +183,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+ 		if (res <= 0)
+ 			goto unlock;
+ 	} else {
+-		res = PAGE_SIZE - pg_offp;
++		res = PAGE_SIZE;
+ 	}
+ 
+ 	if (!data_of(data->handle)) {
 -- 
 2.33.0
 

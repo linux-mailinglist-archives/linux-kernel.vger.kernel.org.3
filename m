@@ -2,137 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAE4E462B90
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:14:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48FAC462B9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238149AbhK3ERZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 23:17:25 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:37890 "EHLO
+        id S238179AbhK3EXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 23:23:36 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:39456 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232110AbhK3ERY (ORCPT
+        with ESMTP id S238140AbhK3EXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 23:17:24 -0500
+        Mon, 29 Nov 2021 23:23:33 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 77705CE1415;
-        Tue, 30 Nov 2021 04:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C8EC53FC1;
-        Tue, 30 Nov 2021 04:14:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 379DCCE1774;
+        Tue, 30 Nov 2021 04:20:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 56852C53FCC;
+        Tue, 30 Nov 2021 04:20:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638245642;
-        bh=eRgr8ruLS/HXkYygaB9wTl2f3VahlDG+KskOZEp4GJ0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BIZL3x9UXrd584JCXX49+ZFOKJrODOqaJ3JvCIKuc9EiVoCqPaNBqATP4B4C2vJ69
-         CJsG/XYckW/0eq6yswqAu93U4MFw4bSwbANKfFB/HZ8g31UlSEOb8QFRezvkKia3ZG
-         qRLiTIJZGko5HGUuhfyJ1i59LB8vouTgbA/GKx6S2Fm/InT2PwvNMzrwcisAnH8iwi
-         GBX6IPRXboDZTfmQpTD+60H5dfneTDmZiJzst5sIwBATjiSPYNIk3kTPksvpJ3hf+D
-         4DPzYlla0l5kKMpIHnPhUUlgH7L7BpZRsiKdHBSVu9zm8QqlAUxsPtLM5HvutL5KWy
-         GdGoanpFxA4eQ==
-Date:   Mon, 29 Nov 2021 20:14:00 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>
-Subject: Re: [PATCH net-next v1] devlink: Simplify devlink resources
- unregister call
-Message-ID: <20211129201400.488c8ef9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <e8684abc2c8ced4e35026e8fa85fe29447ef60b6.1638103213.git.leonro@nvidia.com>
-References: <e8684abc2c8ced4e35026e8fa85fe29447ef60b6.1638103213.git.leonro@nvidia.com>
+        s=k20201202; t=1638246011;
+        bh=FdnIHTyocyzQQLGNo2feJtJEXjqHUWQkOpxIOGJFXrw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=U3f5Ldza0eP+JNvdDqqegPkCpWX6kkcGmk+iV+Bpw+6YwRFKVpBki00w+Ox0XrDe4
+         qKVZJg7Bf03uTSYTfXEAZDjxsLlzqta8UOReTuvrqIaWuuSTRCzZYDBxfYVaW/XCpP
+         3FugnmNsSdf3e2+ZVRKcaN8B5nQWRQIcfFv96PrT1JsdfRlI58q5AMQZN6AlUQKsP6
+         ZxgS28YpJdcsgviME11Xz4xmflIqvZwSDtOW8uVcXUmyp7El07ql5pftJZgQwPWao8
+         Ty7KDgBg7v303Ndo8xuiZpgD0SMNU3lQWXOxQ3lKIeJQo68G3eRPmzBpAs+zcCiznb
+         ORqeJWvO+omVw==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 3093B60A5A;
+        Tue, 30 Nov 2021 04:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net 0/2] rxrpc: Leak fixes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163824601119.29763.1146825132755537453.git-patchwork-notify@kernel.org>
+Date:   Tue, 30 Nov 2021 04:20:11 +0000
+References: <163820097905.226370.17234085194655347888.stgit@warthog.procyon.org.uk>
+In-Reply-To: <163820097905.226370.17234085194655347888.stgit@warthog.procyon.org.uk>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-afs@lists.infradead.org,
+        marc.dionne@auristor.com, eiichi.tsukata@nutanix.com,
+        linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Nov 2021 14:42:44 +0200 Leon Romanovsky wrote:
-> The devlink_resources_unregister() used second parameter as an
-> entry point for the recursive removal of devlink resources. None
-> of external to devlink users needed to use this field, so lat's
+Hello:
 
-None of the callers outside of devlink core...
-s/lat/let/
+This series was applied to netdev/net.git (master)
+by David Howells <dhowells@redhat.com>:
 
-> remove it.
+On Mon, 29 Nov 2021 15:49:39 +0000 you wrote:
+> Here are a couple of fixes for leaks in AF_RXRPC:
+> 
+>  (1) Fix a leak of rxrpc_peer structs in rxrpc_look_up_bundle().
+> 
+>  (2) Fix a leak of rxrpc_local structs in rxrpc_lookup_peer().
+> 
+> The patches are tagged here:
+> 
+> [...]
 
-> diff --git a/include/net/devlink.h b/include/net/devlink.h
-> index e3c88fabd700..043fcec8b0aa 100644
-> --- a/include/net/devlink.h
-> +++ b/include/net/devlink.h
-> @@ -361,33 +361,6 @@ devlink_resource_size_params_init(struct devlink_resource_size_params *size_para
->  
->  typedef u64 devlink_resource_occ_get_t(void *priv);
->  
-> -/**
-> - * struct devlink_resource - devlink resource
-> - * @name: name of the resource
-> - * @id: id, per devlink instance
-> - * @size: size of the resource
-> - * @size_new: updated size of the resource, reload is needed
-> - * @size_valid: valid in case the total size of the resource is valid
-> - *              including its children
-> - * @parent: parent resource
-> - * @size_params: size parameters
-> - * @list: parent list
-> - * @resource_list: list of child resources
-> - */
-> -struct devlink_resource {
-> -	const char *name;
-> -	u64 id;
-> -	u64 size;
-> -	u64 size_new;
-> -	bool size_valid;
-> -	struct devlink_resource *parent;
-> -	struct devlink_resource_size_params size_params;
-> -	struct list_head list;
-> -	struct list_head resource_list;
-> -	devlink_resource_occ_get_t *occ_get;
-> -	void *occ_get_priv;
-> -};
+Here is the summary with links:
+  - [net,1/2] rxrpc: Fix rxrpc_peer leak in rxrpc_look_up_bundle()
+    https://git.kernel.org/netdev/net/c/ca77fba82135
+  - [net,2/2] rxrpc: Fix rxrpc_local leak in rxrpc_lookup_peer()
+    https://git.kernel.org/netdev/net/c/beacff50edbd
 
-> diff --git a/net/core/devlink.c b/net/core/devlink.c
-> index fd21022145a3..db3b52110cf2 100644
-> --- a/net/core/devlink.c
-> +++ b/net/core/devlink.c
-> @@ -69,6 +69,35 @@ struct devlink {
->  	char priv[] __aligned(NETDEV_ALIGN);
->  };
->  
-> +/**
-> + * struct devlink_resource - devlink resource
-> + * @name: name of the resource
-> + * @id: id, per devlink instance
-> + * @size: size of the resource
-> + * @size_new: updated size of the resource, reload is needed
-> + * @size_valid: valid in case the total size of the resource is valid
-> + *              including its children
-> + * @parent: parent resource
-> + * @size_params: size parameters
-> + * @list: parent list
-> + * @resource_list: list of child resources
-> + * @occ_get: occupancy getter callback
-> + * @occ_get_priv: occupancy getter callback priv
-> + */
-> +struct devlink_resource {
-> +	const char *name;
-> +	u64 id;
-> +	u64 size;
-> +	u64 size_new;
-> +	bool size_valid;
-> +	struct devlink_resource *parent;
-> +	struct devlink_resource_size_params size_params;
-> +	struct list_head list;
-> +	struct list_head resource_list;
-> +	devlink_resource_occ_get_t *occ_get;
-> +	void *occ_get_priv;
-> +};
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Hiding struct devlink_resource is not mentioned in the commit message
-and entirely unrelated to removal of the unused argument.
+

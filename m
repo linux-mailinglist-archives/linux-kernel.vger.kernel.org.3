@@ -2,84 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 460B7462D67
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:17:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A996B462D5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:13:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239014AbhK3HUu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 02:20:50 -0500
-Received: from cotrava1.ixole.es ([5.56.56.199]:52467 "EHLO foescog.net"
-        rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org with ESMTP
-        id S233216AbhK3HUt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 02:20:49 -0500
-X-Greylist: delayed 418 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Nov 2021 02:20:49 EST
-Received: from 42.91-116-32.dynamic.clientes.euskaltel.es (unknown [91.116.32.42])
-        by foescog.net (Postfix) with ESMTPSA id 3DB4D1F7CD7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:10:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=serys.net;
-        s=default; t=1638256227;
-        bh=hipabJXTD+MAqWwLaV9wORfZlFye5KRUiNXWcxoSZoU=; h=From:To:Subject;
-        b=ySNe41EQRB4sm3Lx+bqmB+fQL1cM1XCYvBM7FhZin6gwhwEndeT94nEOtYUeJargV
-         JrA7JdV0EcFGkn2s7PRe8nYMwiIj1Qo98sOx6RZQr0/LzsyQ89pJ0QmQfiO/0Ed+Tz
-         p0YPJ3WYhgegZBS2Dr1jkCRNs7zAWzVKBwfhLbI8=
+        id S238994AbhK3HRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:17:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233216AbhK3HRD (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 02:17:03 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9186DC061574;
+        Mon, 29 Nov 2021 23:13:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DC20DCE17F3;
+        Tue, 30 Nov 2021 07:13:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 350DBC53FC1;
+        Tue, 30 Nov 2021 07:13:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638256421;
+        bh=yxjJWBzEG4lH4KkmrvIfKelb/QABtOCYFRxeeCh7FaU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ssbYfAYaXyhzUsOTZIr0z7VN9//jo+wu/hFK79E+m/WBG3LMDpEU6Xqk330BeBzaO
+         pfNPaBQo1sP1U2KwVfOcJbmvILIuD6jCroAdBZKFDjfv9XBclSnMC8h6OBsHDSazhT
+         xJcuSgVLWkCKODQwL2KCVZ48H+tL1BaIpmKZE8UE=
+Date:   Tue, 30 Nov 2021 08:13:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH v2 3/3] blk-crypto: show crypto capabilities in sysfs
+Message-ID: <YaXPIYHg8Xnk1Lbh@kroah.com>
+References: <20211130040306.148925-1-ebiggers@kernel.org>
+ <20211130040306.148925-4-ebiggers@kernel.org>
 MIME-Version: 1.0
-From:   "SERYS" <info6@serys.net>
-Reply-To: info6@serys.net
-To:     linux-kernel@vger.kernel.org
-Subject: Consulta SERYS
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Smart_Send_4_4_2
-Date:   Tue, 30 Nov 2021 08:10:27 +0100
-Message-ID: <894025813688842211516@DESKTOP-3333CU2>
-X-Priority: 1
-X-MSMail-Priority: High
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130040306.148925-4-ebiggers@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Buenos d=EDas
+On Mon, Nov 29, 2021 at 08:03:06PM -0800, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> Add sysfs files that expose the inline encryption capabilities of
+> request queues:
+> 
+> 	/sys/class/block/$disk/queue/crypto/max_dun_bits
+> 	/sys/class/block/$disk/queue/crypto/modes/$mode
+> 	/sys/class/block/$disk/queue/crypto/num_keyslots
+> 
+> Userspace can use these new files to decide what encryption settings to
+> use, or whether to use inline encryption at all.  This also brings the
+> crypto capabilities in line with the other queue properties, which are
+> already discoverable via the queue directory in sysfs.
+> 
+> Design notes:
+> 
+>   - Place the new files in a new subdirectory "crypto" to group them
+>     together and to avoid complicating the main "queue" directory.  This
+>     also makes it possible to replace "crypto" with a symlink later if
+>     we ever make the blk_crypto_profiles into real kobjects (see below).
+> 
+>   - It was necessary to define a new kobject that corresponds to the
+>     crypto subdirectory.  For now, this kobject just contains a pointer
+>     to the blk_crypto_profile.  Note that multiple queues (and hence
+>     multiple such kobjects) may refer to the same blk_crypto_profile.
+> 
+>     An alternative design would more closely match the current kernel
+>     data structures: the blk_crypto_profile could be a kobject itself,
+>     located directly under the host controller device's kobject, while
+>     /sys/class/block/$disk/queue/crypto would be a symlink to it.
+> 
+>     I decided not to do that for now because it would require a lot more
+>     changes, such as no longer embedding blk_crypto_profile in other
+>     structures, and also because I'm not sure we can rule out moving the
+>     crypto capabilities into 'struct queue_limits' in the future.  (Even
+>     if multiple queues share the same crypto engine, maybe the supported
+>     data unit sizes could differ due to other queue properties.)  It
+>     would also still be possible to switch to that design later without
+>     breaking userspace, by replacing the directory with a symlink.
+> 
+>   - Use "max_dun_bits" instead of "max_dun_bytes".  Currently, the
+>     kernel internally stores this value in bytes, but that's an
+>     implementation detail.  It probably makes more sense to talk about
+>     this value in bits, and choosing bits is more future-proof.
+> 
+>   - "modes" is a sub-subdirectory, since there may be multiple supported
+>     crypto modes, and sysfs is supposed to have one value per file.
+> 
+>   - Each mode had to be named.  The crypto API names like "xts(aes)" are
+>     not appropriate because they don't specify the key size.  Therefore,
+>     I assigned new names.  The exact names chosen are arbitrary, but
+>     they happen to match the names used in log messages in fs/crypto/.
+> 
+>   - The "num_keyslots" file is a bit different from the others in that
+>     it is only useful to know for performance reasons.  However, it's
+>     included as it can still be useful.  For example, a user might not
+>     want to use inline encryption if there aren't very many keyslots.
+> 
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>  Documentation/block/queue-sysfs.rst |  30 +++++
 
+Same objection as before.  Please add these to Documentation/ABI/
+otherwise when running 'scripts/get_abi undefined' will show these new
+sysfs files you are adding as having no documentation :(
 
+thanks,
 
-Desde SERYS ENERGIA estamos informando a todas las empresas, particulares y=
- entidades p=FAblicas acerca del servicio de autoconsumo el=E9ctrico median=
-te la instalaci=F3n totalmente financidada de placas solares fotovoltaicas.
-
-
-Por este motivo rogamos pod=E1is respondernos indicando una de la siguiente=
-s respuestas:
-
-
-1 - Precisamos recibir presupuesto personalizado y sin compromiso (Indicar =
-por favor nombre y tel=E9fono de contacto).
-
-2 - No precisamos recibir informaci=F3n, disponemos ya de una instalaci=F3n=
- fotovoltaica.
-
-3 - No precisamos recibir informaci=F3n, no nos interesa cambiar.
-
-
-Gracias por vuestra colaboraci=F3n, quedamos a la espera de vuestra respues=
-ta.
-
-
-Saludos cordiales.
-
-
-Departamento de autoconsumo y renovables
-SERYS-WATIOX ESPA=D1A
-Tel. 604213428
-Email. info@serys-energia.com
-
-www.serys-energia.com
-
-Antes de imprimir este e-mail piense bien si es necesario hacerlo. De confo=
-rmidad con lo dispuesto en el Reglamento Europeo del 2016/679, del 27 de Ab=
-ril de 2016 le informamos que la informaci=F3n transmitida en este mensaje =
-est=E1 dirigida solamente a las personas o entidades que figuran en el enca=
-bezamiento y contiene informaci=F3n confidencial, por lo que, si usted lo r=
-ecibiera por error, por favor destr=FAyalo sin copiarlo, usarlo ni distribu=
-irlo, comunic=E1ndolo inmediatamente al emisor del mensaje.=20
-
-Puede solicitar BAJA en el env=EDo de correos electr=F3nicos "PULSANDO AQUI=
-" <mailto:bajas@serys.net=3FSubject=3DBAJA%20CORREOS> y "ENVIAR".
+greg k-h

@@ -2,123 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1999F463A3F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:38:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FA72463A43
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238424AbhK3PmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:42:05 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:47608 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232311AbhK3PmE (ORCPT
+        id S238748AbhK3Pmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:42:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234909AbhK3Pmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:42:04 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3RFw5X85z9vY6w
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 15:38:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id BHe0xdW24BQi for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 09:38:44 -0600 (CST)
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 30 Nov 2021 10:42:35 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D9B7C061748;
+        Tue, 30 Nov 2021 07:39:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3RFw3j2Bz9vY6m
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:38:44 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3RFw3j2Bz9vY6m
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3RFw3j2Bz9vY6m
-Received: by mail-pg1-f198.google.com with SMTP id x30-20020a637c1e000000b00324ab629735so10430874pgc.17
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:38:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wiBMlf8w+Lvhex8SpMtIm4owez3P1WFv8J1K31m9Xfk=;
-        b=eBnJj+J1oCY/53Ah+ONQeTSeJY/Ln7eJcdvt5yMdD2hNKgvaYSx3bMTWKzC84DHT2w
-         E/u5qULkJqxdc7XfWlon0PKAp2iBsd7SKyDyWo5YfJqQ4qHIWhzyRjFxZLVc3J4usN5p
-         h0ekndsLhUSMEGRyFiY0TtGDyw2AoBEuli9ARA+aZnDiv8TIsIwB28WLRySjnX47bQVW
-         Lzt9JkW6wjUEZGfGz7Rg7WXmOMklaF2GPGGUCaIcG+Kahfe/PzU1ApfxH6V8XIrteDLY
-         ZxHIkppWtGsrey7AZoWbuq32f8sZIUeMGhi8j44+2A5+DDkovcUQp/WK9m2phX/VhefA
-         4+lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wiBMlf8w+Lvhex8SpMtIm4owez3P1WFv8J1K31m9Xfk=;
-        b=MlUWXzqPCSk8HJlRpDFKny/saab2WfWGVRgfDRNslfRCpl4XuO2rXTI1ItIumXVXRD
-         +FrZn4VvcF2PGz36KgxI6yDrhIosM2R05fvVcij0INptTV5hQj6Xb9/w0/3SovwBPsRm
-         tKFZ/GYazLxcLhxj9zO4bDTEdB0MSlt5Nlcb3zCQNPEDw3HlJy9AsYmcviXdP8ve206B
-         oIjF/Q6ULt0AGMsGA9gh+yqF+nFoET/tSWT544OmE76bNAdJsU19fk/ZYRf0BeytcoR5
-         6ljdrXu2Pa8HA4y19eoEU9KsOzSpn/0iRJ6hYzKMbtb/Eu5rw/dGPcx1KJvJMg+ualPd
-         Uf4w==
-X-Gm-Message-State: AOAM532+hj3L5oCSTrmoiVTADmmyX/UYpu1zpfF3WsGMI70C5iwG+/93
-        Abf97N47MsOByK1tWP5E9y76ydoVICQLTk7VgKjhRkqC8XtZpmNSsK9ZJS3uYbOR2VQRuY0JXWp
-        xsoaKpxyiuJeB/y65xRyEan8AQnMx
-X-Received: by 2002:a17:902:c745:b0:143:d220:9196 with SMTP id q5-20020a170902c74500b00143d2209196mr130271plq.74.1638286723701;
-        Tue, 30 Nov 2021 07:38:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxL9G+X20LYX5a66BCeYXRKS/K99ZgpXXqKaXiwAAlEOjlIhunhmegyKfocs1S086lQzw4Jrw==
-X-Received: by 2002:a17:902:c745:b0:143:d220:9196 with SMTP id q5-20020a170902c74500b00143d2209196mr130252plq.74.1638286723495;
-        Tue, 30 Nov 2021 07:38:43 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id d10sm21346300pfl.139.2021.11.30.07.38.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 07:38:43 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Patrick Boettcher <pboettcher@dibcom.fr>,
-        Olivier Grenie <Olivier.Grenie@dibcom.fr>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: dib8000: Fix a memleak in dib8000_init()
-Date:   Tue, 30 Nov 2021 23:38:05 +0800
-Message-Id: <20211130153807.174852-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2F11BCE1A44;
+        Tue, 30 Nov 2021 15:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDECFC53FC7;
+        Tue, 30 Nov 2021 15:39:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638286752;
+        bh=9wV20obSinXS+ABsgOuQMAFzhvhGcNOouX9VfzNg/S4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=METdwXbwh7NFIXdrY/nO4exuSLNBH3QC37K8CD6oZ3Kl7RnJsNV9fRkZDl8B5fqZf
+         np2XYSRXfUpATJC16TKmsvQduKfDNgWO29rPgqYy2kzlPCyXUpMh3z2LtB6SIwBjv1
+         1m+cZx5qHv5fzXbx0/Vll5sDbH9Cp62K8Iq7luIk=
+Date:   Tue, 30 Nov 2021 16:39:10 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jeffrey Walton <noloader@gmail.com>
+Cc:     Stephan Mueller <smueller@chronox.de>,
+        Simo Sorce <simo@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+Message-ID: <YaZFni65mRi7Yx/4@kroah.com>
+References: <2036923.9o76ZdvQCi@positron.chronox.de>
+ <22137816.pfsBpAd9cS@tauon.chronox.de>
+ <YaEJtv4A6SoDFYjc@kroah.com>
+ <9311513.S0ZZtNTvxh@tauon.chronox.de>
+ <YaT+9MueQIa5p8xr@kroah.com>
+ <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
+ <YaYvYdnSaAvS8MAk@kroah.com>
+ <CAH8yC8nWLk9vhV1iACE+vmtby2rRN8RDqeuS54qZahE-xH2X_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH8yC8nWLk9vhV1iACE+vmtby2rRN8RDqeuS54qZahE-xH2X_w@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In dib8000_init(), the variable fe is not freed or passed out on the
-failure of dib8000_identify(&state->i2c), which could lead to a memleak.
+On Tue, Nov 30, 2021 at 10:13:26AM -0500, Jeffrey Walton wrote:
+> On Tue, Nov 30, 2021 at 9:04 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Nov 30, 2021 at 07:24:15AM -0500, Jeffrey Walton wrote:
+> > > On Mon, Nov 29, 2021 at 6:07 PM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > > ...
+> > > > Sometimes, yes, it is valid to have different implementations for things
+> > > > that do different things in the same area (like filesystems), but for a
+> > > > core function of the kernel, so far the existing random maintainer has
+> > > > not wanted to have multiple implementations.  Same goes for other parts
+> > > > of the kernel, it's not specific only to this one very tiny driver.
+> > > >
+> > > > As a counterpoint, we do not allow duplicate drivers that control the
+> > > > same hardware types in the tree.  We have tried that in the past and it
+> > > > was a nightmare to support and maintain and just caused massive user
+> > > > confusion as well.  One can argue that the random driver is in this same
+> > > > category.
+> > >
+> > > I think an argument could be made that they are different drivers
+> > > since they have different requirements and security goals. I don't
+> > > think it matters where the requirements came from, whether it was ad
+> > > hoc from the developer, NIST, KISA, CRYPTREC, NESSIE, or another
+> > > organization.
+> > >
+> > > Maybe the problem is with the name of the driver? Perhaps the current
+> > > driver should be named random-linux, Stephan's driver should be named
+> > > random-nist, and the driver should be wired up based on a user's
+> > > selection. That should sidestep the problems associated with the
+> > > "duplicate drivers" policy.
+> >
+> > The "problem" here is that the drivers/char/random.c file has three users,
+> > the userspace /dev/random and syscall api, the in-kernel "here's some
+> > entropy for the random core to use" api, and the in-kernel "give me some
+> > random data" api.
+> >
+> > Odds are, you REALLY do not want the in-kernel calls to be pulling from
+> > the "random-government-crippled-specification" implementation, right?
+> 
+> It's not a question of whether some folks want it or not. They have to
+> accept it due to policy. They have no choice in the matter.
 
-Fix this bug by adding a kfree of fe in the error path.
+I strongly doubt that policy dictates all of the current calls to
+get_random_*() require that they return data that is dictated by that
+policy.  If so, that's not a valid specification for a variety of
+reasons (i.e. it will break other specification requirements...)
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+thanks,
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DVB_DIB8000=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 77e2c0f5d471 ("V4L/DVB (12900): DiB8000: added support for DiBcom ISDB-T/ISDB-Tsb demodulator DiB8000")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/media/dvb-frontends/dib8000.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/dvb-frontends/dib8000.c b/drivers/media/dvb-frontends/dib8000.c
-index bb02354a48b8..d67f2dd997d0 100644
---- a/drivers/media/dvb-frontends/dib8000.c
-+++ b/drivers/media/dvb-frontends/dib8000.c
-@@ -4473,8 +4473,10 @@ static struct dvb_frontend *dib8000_init(struct i2c_adapter *i2c_adap, u8 i2c_ad
- 
- 	state->timf_default = cfg->pll->timf;
- 
--	if (dib8000_identify(&state->i2c) == 0)
-+	if (dib8000_identify(&state->i2c) == 0) {
-+		kfree(fe);
- 		goto error;
-+	}
- 
- 	dibx000_init_i2c_master(&state->i2c_master, DIB8000, state->i2c.adap, state->i2c.addr);
- 
--- 
-2.25.1
-
+greg k-h

@@ -2,19 +2,19 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61187463FFD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C820464006
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:24:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344080AbhK3V10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:27:26 -0500
-Received: from m-r2.th.seeweb.it ([5.144.164.171]:35649 "EHLO
+        id S1344128AbhK3V1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:27:36 -0500
+Received: from m-r2.th.seeweb.it ([5.144.164.171]:33593 "EHLO
         m-r2.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344011AbhK3V1I (ORCPT
+        with ESMTP id S1344027AbhK3V1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:27:08 -0500
+        Tue, 30 Nov 2021 16:27:12 -0500
 Received: from localhost.localdomain (adsl-d210.84-47-0.t-com.sk [84.47.0.210])
-        by m-r2.th.seeweb.it (Postfix) with ESMTPA id BF3BA3F43B;
-        Tue, 30 Nov 2021 22:23:46 +0100 (CET)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPA id 6D2F33F4E8;
+        Tue, 30 Nov 2021 22:23:47 +0100 (CET)
 From:   Martin Botka <martin.botka@somainline.org>
 To:     martin.botka1@gmail.com
 Cc:     ~postmarketos/upstreaming@lists.sr.ht,
@@ -28,9 +28,9 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Rob Herring <robh+dt@kernel.org>,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] drivers: soc: qcom: rpmpd: Add support for sm6125
-Date:   Tue, 30 Nov 2021 22:23:30 +0100
-Message-Id: <20211130212332.25401-2-martin.botka@somainline.org>
+Subject: [PATCH 3/4] arm64: dt: sm6125: Add RPMPD node
+Date:   Tue, 30 Nov 2021 22:23:31 +0100
+Message-Id: <20211130212332.25401-3-martin.botka@somainline.org>
 X-Mailer: git-send-email 2.34.0
 In-Reply-To: <20211130212332.25401-1-martin.botka@somainline.org>
 References: <20211130212332.25401-1-martin.botka@somainline.org>
@@ -40,55 +40,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add RPM power domains located in Qualcomm SM6125
-SoC.
+Add RPM Power Distribution node for sm6125 SoC.
 
 Signed-off-by: Martin Botka <martin.botka@somainline.org>
 ---
- drivers/soc/qcom/rpmpd.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+ arch/arm64/boot/dts/qcom/sm6125.dtsi | 50 ++++++++++++++++++++++++++++
+ 1 file changed, 50 insertions(+)
 
-diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/soc/qcom/rpmpd.c
-index 36b2381039e6..0a8d8d24bfb7 100644
---- a/drivers/soc/qcom/rpmpd.c
-+++ b/drivers/soc/qcom/rpmpd.c
-@@ -395,6 +395,28 @@ static const struct rpmpd_desc sm6115_desc = {
- 	.max_state = RPM_SMD_LEVEL_TURBO_NO_CPR,
- };
+diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+index 78f4705e4117..1e280c4d402d 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+@@ -303,6 +303,56 @@ rpmcc: clock-controller {
+ 				compatible = "qcom,rpmcc-sm6125", "qcom,rpmcc";
+ 				#clock-cells = <1>;
+ 			};
++
++			rpmpd: power-controller {
++				compatible = "qcom,sm6125-rpmpd";
++				#power-domain-cells = <1>;
++				operating-points-v2 = <&rpmpd_opp_table>;
++
++				rpmpd_opp_table: opp-table {
++					compatible = "operating-points-v2";
++
++					rpmpd_opp_ret: opp1 {
++						opp-level = <RPM_SMD_LEVEL_RETENTION>;
++					};
++
++					rpmpd_opp_ret_plus: opp2 {
++						opp-level = <RPM_SMD_LEVEL_RETENTION_PLUS>;
++					};
++
++					rpmpd_opp_min_svs: opp3 {
++						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
++					};
++
++					rpmpd_opp_low_svs: opp4 {
++						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
++					};
++
++					rpmpd_opp_svs: opp5 {
++						opp-level = <RPM_SMD_LEVEL_SVS>;
++					};
++
++					rpmpd_opp_svs_plus: opp6 {
++						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
++					};
++
++					rpmpd_opp_nom: opp7 {
++						opp-level = <RPM_SMD_LEVEL_NOM>;
++					};
++
++					rpmpd_opp_nom_plus: opp8 {
++						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
++					};
++
++					rpmpd_opp_turbo: opp9 {
++						opp-level = <RPM_SMD_LEVEL_TURBO>;
++					};
++
++					rpmpd_opp_turbo_no_cpr: opp10 {
++						opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
++					};
++				};
++			};
+ 		};
+ 	};
  
-+/* sm6125 RPM Power domains */
-+DEFINE_RPMPD_PAIR(sm6125, vddcx, vddcx_ao, RWCX, LEVEL, 0);
-+DEFINE_RPMPD_VFL(sm6125, vddcx_vfl, RWCX, 0);
-+
-+DEFINE_RPMPD_PAIR(sm6125, vddmx, vddmx_ao, RWMX, LEVEL, 0);
-+DEFINE_RPMPD_VFL(sm6125, vddmx_vfl, RWMX, 0);
-+
-+static struct rpmpd *sm6125_rpmpds[] = {
-+	[SM6125_VDDCX] =		&sm6125_vddcx,
-+	[SM6125_VDDCX_AO] =		&sm6125_vddcx_ao,
-+	[SM6125_VDDCX_VFL] =		&sm6125_vddcx_vfl,
-+	[SM6125_VDDMX] =		&sm6125_vddmx,
-+	[SM6125_VDDMX_AO] =		&sm6125_vddmx_ao,
-+	[SM6125_VDDMX_VFL] =		&sm6125_vddmx_vfl,
-+};
-+
-+static const struct rpmpd_desc sm6125_desc = {
-+	.rpmpds = sm6125_rpmpds,
-+	.num_pds = ARRAY_SIZE(sm6125_rpmpds),
-+	.max_state = RPM_SMD_LEVEL_BINNING,
-+};
-+
- static struct rpmpd *qcm2290_rpmpds[] = {
- 	[QCM2290_VDDCX] = &sm6115_vddcx,
- 	[QCM2290_VDDCX_AO] = &sm6115_vddcx_ao,
-@@ -425,6 +447,7 @@ static const struct of_device_id rpmpd_match_table[] = {
- 	{ .compatible = "qcom,qcs404-rpmpd", .data = &qcs404_desc },
- 	{ .compatible = "qcom,sdm660-rpmpd", .data = &sdm660_desc },
- 	{ .compatible = "qcom,sm6115-rpmpd", .data = &sm6115_desc },
-+	{ .compatible = "qcom,sm6125-rpmpd", .data = &sm6125_desc },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, rpmpd_match_table);
 -- 
 2.34.0
 

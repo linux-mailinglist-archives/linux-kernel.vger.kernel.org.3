@@ -2,107 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 794E0464381
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 00:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2014F46438E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 00:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241458AbhK3XiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 18:38:20 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:47881 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241388AbhK3XiS (ORCPT
+        id S1345209AbhK3Xka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 18:40:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345628AbhK3XkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 18:38:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638315298;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GdpNBT7tOVqqTmqVJ8xdgf1nbTSEx6kcMW8RvUyDwUQ=;
-        b=X4SwTL5jZvKKrF1kMjDFV2RVhf0S0b4Msu3UoU/xf87iwz3DrcVWGLSkEEXcsr7i7x7BG4
-        ALLvuEJ3aH8xd6gCkbKWaRsvJB06Q38n2mgREm8+leKwp89sTtncTx+iWWI1vSWpNf4Dc5
-        S8QIBrPTZtNlfgajYQ5WY26c1REMFy4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-459-XuZCKD5aMgeFCRkfQYmPoQ-1; Tue, 30 Nov 2021 18:34:57 -0500
-X-MC-Unique: XuZCKD5aMgeFCRkfQYmPoQ-1
-Received: by mail-ed1-f71.google.com with SMTP id w18-20020a056402071200b003e61cbafdb4so18414607edx.4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 15:34:56 -0800 (PST)
+        Tue, 30 Nov 2021 18:40:24 -0500
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F566C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 15:37:04 -0800 (PST)
+Received: by mail-qk1-x72f.google.com with SMTP id b67so28799020qkg.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 15:37:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=QRFrGSoUXQy5HyRnh2s9d9Qk3ennLiQfcJOlftVc0Jg=;
+        b=smhhc1pkJ5jt13RJCClZy3YgbdRAfvgYw6fDJccZT8DLgPBFMHRWplO+Mk9pOkg9Zn
+         SPYZYCytnH2cqy6u2Xn1JmGkwap8+LL8sjRykeRzQP3eYTevtXSP3mwugLEPkLHF0A9n
+         sqpYVl/GScee7RhDf4NYIE+74qb01LBFn5VELU3JBrzYNOwaYwtHdH4W5W1u+GNJvz+q
+         AYrh4Wv1fMe2AhRS6lKSY1L0dl2LuGhDdYLYV/h+LA25xwSdOLb3bUnEWu94Hd4OT4G0
+         eab19p2K3kH0c6B8uUH1OAgpj7u109ibf+hhEy1+TykUg/y6knwuSCvwCBMGT/jn1W72
+         tDsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=GdpNBT7tOVqqTmqVJ8xdgf1nbTSEx6kcMW8RvUyDwUQ=;
-        b=UhkTZNGEn0K6sfYDwGeAb1VG4vSKznDzZtYqrBBPGRhhtKVeI4NiS9DcFRUz13KzcX
-         w66gGBAViMDcoCCo7aO6uBJzbmFy5u6RLKqR/EhUcxBMIA0tiyX8ybgPxnSfs+RCnM0J
-         OnQWaepd9KfYXcvGjqWo/CUDTFsK+9aXEqE8iNkSre5rKkiai9Y2ixV/8/6RD0fbzFJH
-         QB4AF+TKf457+FSKdcIaGxe9taVFwMs4UVysevaWpqxD2Aq2LJD+noAVkcA5+sG+nxY4
-         P4e4B10vS2BC4sefQuYR01HI3dR9+3l3PUigljqUE+eYpdRRaVLXD5k4wBRoUqBKfI3/
-         Y3dQ==
-X-Gm-Message-State: AOAM530KG+tmI9ge0cLNnqm0IUYz+qB+b3x/eKAFSriTrgXe0VSdAbuI
-        /+SbUWD0uSIEMIM/jgJsTf4JX9FTxoYi1aHEMej5UlhiHjrkU2oC+NDtYhRyt0meLVu7Bs6CDS2
-        ABfrutueeMRuoQG5JwEOl9/ey
-X-Received: by 2002:a17:906:4e42:: with SMTP id g2mr2642866ejw.230.1638315296070;
-        Tue, 30 Nov 2021 15:34:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyf8H+HN0kOqlHFT43UIstlOhAvrRhtSbI9tcJcD/y7tQP4Qind2uTR2BwAPdeqaxhjTGu6Bw==
-X-Received: by 2002:a17:906:4e42:: with SMTP id g2mr2642852ejw.230.1638315295943;
-        Tue, 30 Nov 2021 15:34:55 -0800 (PST)
-Received: from redhat.com ([2.53.15.215])
-        by smtp.gmail.com with ESMTPSA id e1sm12182243edc.27.2021.11.30.15.34.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 15:34:55 -0800 (PST)
-Date:   Tue, 30 Nov 2021 18:34:51 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Parav Pandit <parav@nvidia.com>
-Cc:     virtualization@lists.linux-foundation.org, jasowang@redhat.com,
-        edumazet@google.com, kbuild-all@lists.01.org, lkp@intel.com,
-        linux-kernel@vger.kernel.org, kbuild@lists.01.org, elic@nvidia.com,
-        dan.carpenter@oracle.com
-Subject: Re: [PATCH v1] vdpa: Consider device id larger than 31
-Message-ID: <20211130183432-mutt-send-email-mst@kernel.org>
-References: <20211130042949.88958-1-parav@nvidia.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=QRFrGSoUXQy5HyRnh2s9d9Qk3ennLiQfcJOlftVc0Jg=;
+        b=SdT2Vfg0Hv0A2iO73GQ45xiRXdrpAKF2HKcyx2UbUTB5HrCuqivmFkW7x9Rw+wzI0R
+         B1HlbdwbbelFCJhL+WC8yAX3tbgyiFGil+rQPI8boCMjMsVYxD7UQ1aW4Z0WmtcrHXsG
+         +KcGAgCJCyZUF9OAgAGLTUoJ36nC6WooP95ciP2gIkfUXUBY0Am3QrfWiClqgAg67vix
+         FFDSJskgYjonEWtqMtZ3fxquhhpjRvtnJ3iL7Z5J0QEMmipkkhtVkviTMvSnpWzdyEAQ
+         RTvlEN6nE5hy6ejREzEtPmGxV+FbsgP+Wsq8Yip3Q5G6tOYwWADfc9eTzArkBXIPkZ3X
+         91sg==
+X-Gm-Message-State: AOAM532M8zc9eYS+ee/rUxa60tgVAEsfOLjnWb4KTjdWa0hYuqEi8dj1
+        aJp8KWxJ0KAXpvahQfxzxME37+Z6+lh62j9Z5kb1Ng==
+X-Google-Smtp-Source: ABdhPJzGtXjdMbMM/GsyjUK1dt6LJdKXXx5TXzyfV3qsBUJLVLduzkwVY1GI2ihcB867i4GvIboh6gWmKxGwbpqAO5c=
+X-Received: by 2002:a05:620a:4454:: with SMTP id w20mr2776732qkp.369.1638315423230;
+ Tue, 30 Nov 2021 15:37:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130042949.88958-1-parav@nvidia.com>
+References: <20211115170241.1.I94825a614577505bd1a8be9aeff208a49cb39b3d@changeid>
+ <CAD=FV=UZNxt7y6bTipyvYFGMJhgp6nRozNt=iEaOYP6yc4OFpg@mail.gmail.com>
+In-Reply-To: <CAD=FV=UZNxt7y6bTipyvYFGMJhgp6nRozNt=iEaOYP6yc4OFpg@mail.gmail.com>
+From:   Joel Fernandes <joelaf@google.com>
+Date:   Tue, 30 Nov 2021 18:36:52 -0500
+Message-ID: <CAJWu+ora8F0eurnYkSXRqcT4mB8k8wy9CyKj1EGk52vEVEkT3A@mail.gmail.com>
+Subject: Re: [PATCH] sched/rt: Don't reschedule a throttled task even if it's
+ higher priority
+To:     Doug Anderson <dianders@chromium.org>,
+        Qais Yousef <qais.yousef@arm.com>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Mel Gorman <mgorman@suse.de>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 06:29:49AM +0200, Parav Pandit wrote:
-> virtio device id value can be more than 31. Hence, use BIT_ULL in
-> assignment.
-> 
-> Fixes: 33b347503f01 ("vdpa: Define vdpa mgmt device, ops and a netlink interface")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Parav Pandit <parav@nvidia.com>
-> Acked-by: Jason Wang <jasowang@redhat.com>
-> ---
-> changelog:
-> v0->v1:
->  - supporting device id up to 63
-> ---
->  drivers/vdpa/vdpa.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-> index 7332a74a4b00..09bbe53c3ac4 100644
-> --- a/drivers/vdpa/vdpa.c
-> +++ b/drivers/vdpa/vdpa.c
-> @@ -404,7 +404,8 @@ static int vdpa_mgmtdev_fill(const struct vdpa_mgmt_dev *mdev, struct sk_buff *m
->  		goto msg_err;
->  
->  	while (mdev->id_table[i].device) {
-> -		supported_classes |= BIT(mdev->id_table[i].device);
-> +		if (mdev->id_table[i].device <= 63)
-> +			supported_classes |= BIT_ULL(mdev->id_table[i].device);
->  		i++;
->  	}
+On Tue, Nov 30, 2021 at 11:30 AM Doug Anderson <dianders@chromium.org> wrote:
+> I know this isn't crazy urgent and I'm happy to sit and twiddle my
+> thumbs a bit longer if everyone is still sleepy from tryptophan, but
+> I'm curious if anyone had a chance to look at this. Can anyone confirm
+> that my script reproduces for them on something other than my system?
 
+Maybe +Qais Yousef can also chime in. Just to add, I think Doug's
+issue is that under RT group scheduling, he expects *other* well
+behaved RT tasks to not be throttled while the tasks that are
+misbehaving to be *gracefully* throttled. Gracefully being- it is
+probably WAI that they are exceeding their runtime and so *should
+naturally* be bandwidth-limited similar to deadline. I am not sure if
+the design of RT throttling considers throttling as an anomaly or
+something that's expected to happen. If it is expected to happen, then
+I see Doug's point that the mechanism shouldn't affect other RT tasks.
 
-Not for this release, but a for loop will be cleaner here.
+> Does my patch seem sane?
 
-> -- 
-> 2.26.2
+To be honest, I don't understand that bit enough :(
 
+ -Joel

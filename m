@@ -2,100 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F301A46362E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93BBC463630
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:10:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242022AbhK3OOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:14:05 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:60380 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236613AbhK3ON6 (ORCPT
+        id S236824AbhK3OOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:14:15 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:54074 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239117AbhK3OOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:13:58 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B78D521892;
-        Tue, 30 Nov 2021 14:10:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638281438; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hQhE8yGgIftiH52A4CWTfhYlnu/uKm6rar23ZjE1g3o=;
-        b=aeJVE1FSV0RHgteozLe3XORqMLb6MMqMztrFgX6zfnf1E23LZRpbBUl60rNhTY2DqlDIH7
-        DNuYrsxOUBPBykeUyx7NEjtye1nCRpPgeqLOv7VxVcsLTXUdxHGxyivPx9GymTa6Wpvb0s
-        tH8PX5f6yqdKx7SgLgTUfktObnQgIhU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638281438;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hQhE8yGgIftiH52A4CWTfhYlnu/uKm6rar23ZjE1g3o=;
-        b=c6M2CeKp2xc7kB3QI2ga49txlMS65eLPFlgQg+z/aN1iMAmltVyyAQ8ecvDtbwWnGDGz/w
-        0zPwpkJGbaOVtODw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A366213D4E;
-        Tue, 30 Nov 2021 14:10:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id p/XRJt4wpmF5LgAAMHmgww
-        (envelope-from <nstange@suse.de>); Tue, 30 Nov 2021 14:10:38 +0000
-From:   Nicolai Stange <nstange@suse.de>
-To:     =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Torsten Duwe <duwe@suse.de>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Nicolai Stange <nstange@suse.de>
-Subject: [PATCH 3/3] crypto: jitter - quit sample collection loop upon RCT failure
-Date:   Tue, 30 Nov 2021 15:10:09 +0100
-Message-Id: <20211130141009.6791-4-nstange@suse.de>
-X-Mailer: git-send-email 2.26.2
-In-Reply-To: <20211130141009.6791-1-nstange@suse.de>
-References: <20211130141009.6791-1-nstange@suse.de>
+        Tue, 30 Nov 2021 09:14:14 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id AC40F1F45136
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638281454; bh=As7FWtUArYkJ1BMuawn6z919UJm2kcgAiwW3X4n6lVM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=A+Bc1GVNr7CRVpt76jol4eE8vsDot8RenfmeZUJyZD6Su+G/kjTTgLBZHTMhxMVZ8
+         pSG5j6kfmfVQPuGcwDaXaqc/+XO6yGqHOCo3Us68kp6IA2uhP1zpDzU1RAOVtCD6xx
+         B9EpG4UyntVknMnHUVfVOaemLbkb2oZmkNldOOQiYhAG+cI1DAIsl0o5CwuJ4qzCgW
+         WS/Tr1mBAnZLasik/wHm/3UPYuyWx7LVTwAmj3Gr+ID7OQ06WLSnhuIYC7x61/gBsd
+         osv/jqVSchXNUicWVFnA6JpPonvXqSZWUcan97mrU+e6LymFfMjXduEqs5meh6e/QG
+         4YBPoM6H0dhtQ==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     robdclark@gmail.com
+Cc:     dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@linux.ie,
+        daniel@ffwll.ch, maxime@cerno.tech, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
+        jami.kettunen@somainline.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH v2 0/2] drm/msm: Fix dsi/bridge probe
+Date:   Tue, 30 Nov 2021 15:10:46 +0100
+Message-Id: <20211130141048.294246-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The jitterentropy collection loop in jent_gen_entropy() can in principle
-run indefinitely without making any progress if it only receives stuck
-measurements as determined by jent_stuck(). After 31 consecutive stuck
-samples, the Repetition Count Test (RCT) would fail anyway and the
-jitterentropy RNG instances moved into ->health_failure == 1 state.
-jent_gen_entropy()'s caller, jent_read_entropy() would then check for
-this ->health_failure condition and return an error if found set. It
-follows that there's absolutely no point in continuing the collection loop
-in jent_gen_entropy() once the RCT has failed.
+Context, from patch 2/2:
+Since commit 8f59ee9a570c ("drm/msm/dsi: Adjust probe order"), the
+DSI host gets initialized earlier, but this caused unability to probe
+the entire stack of components because they all depend on interrupts
+coming from the main `mdss` node (mdp5, or dpu1).
 
-Make the jitterentropy collection loop more robust by terminating it upon
-jent_health_failure() so that it won't continue to run indefinitely without
-making any progress.
+Series v2:
+After a very nice conversation with Dmitry, it turned out that my first
+approach to solve this issue wasn't great: even though it appeared to
+actually work, it was introducing a number of issues, one of which was
+critical as it was not removing down the DRM device when it's supposed to.
 
-Signed-off-by: Nicolai Stange <nstange@suse.de>
----
- crypto/jitterentropy.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Instead of actually fixing that patch, I went for "simplifying" the
+approach by not initializing the entire MDSS, but just the interrupt
+controller, which still untangles the infinite probe deferrals, but
+actually doesn't even touch most of the already present logic in place.
 
-diff --git a/crypto/jitterentropy.c b/crypto/jitterentropy.c
-index 24e087c3f526..8f5283f28ed3 100644
---- a/crypto/jitterentropy.c
-+++ b/crypto/jitterentropy.c
-@@ -547,7 +547,7 @@ static void jent_gen_entropy(struct rand_data *ec)
- 	/* priming of the ->prev_time value */
- 	jent_measure_jitter(ec);
- 
--	while (1) {
-+	while (!jent_health_failure(ec)) {
- 		/* If a stuck measurement is received, repeat measurement */
- 		if (jent_measure_jitter(ec))
- 			continue;
+AngeloGioacchino Del Regno (2):
+  drm/msm: Allocate msm_drm_private early and pass it as driver data
+  drm/msm: Initialize MDSS irq domain at probe time
+
+ drivers/gpu/drm/msm/adreno/adreno_device.c | 16 ++----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c    |  4 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c   | 50 ++++++++++------
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c   |  3 +-
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_mdss.c  | 58 +++++++++++++------
+ drivers/gpu/drm/msm/dp/dp_display.c        | 10 +---
+ drivers/gpu/drm/msm/dsi/dsi.c              |  6 +-
+ drivers/gpu/drm/msm/edp/edp.c              |  6 +-
+ drivers/gpu/drm/msm/hdmi/hdmi.c            |  7 +--
+ drivers/gpu/drm/msm/msm_drv.c              | 67 +++++++++++++---------
+ drivers/gpu/drm/msm/msm_kms.h              |  3 +
+ 11 files changed, 133 insertions(+), 97 deletions(-)
+
 -- 
-2.26.2
+2.33.1
 

@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AE64637DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:53:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B94384637D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:53:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243469AbhK3O4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:56:37 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58330 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243087AbhK3OyB (ORCPT
+        id S243421AbhK3O4e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:56:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48072 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243124AbhK3OyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:54:01 -0500
+        Tue, 30 Nov 2021 09:54:15 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8DD1ACE1A65;
-        Tue, 30 Nov 2021 14:50:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BB1BC53FD3;
-        Tue, 30 Nov 2021 14:50:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FC1FB81A58;
+        Tue, 30 Nov 2021 14:50:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3866C53FCD;
+        Tue, 30 Nov 2021 14:50:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283838;
-        bh=fyEvy9kwtzdKYhjm1Uj8axEeKB4Dex6IpQa9k4RQyPY=;
+        s=k20201202; t=1638283854;
+        bh=askHQZC0W79e5jCS/bMEBre5DvmcTh/+I9+Rqtlm5cE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GluosqRNMlgODbPL6Mzp31231DNFGOMe9J1kdiP4c9tuFUs3yCh50OxEboggirl12
-         dujQ+YErJUsshZ4R+nAWeHnQD2nqK3p88hZT/J4KvG8KzETxwWN9hQ2g6ZmQzCGFfb
-         fWMpJcMfBOyOVdtJ9m1Io9DvhiY9qbwXwcFMvlQDymKaV30WKMFu7X42RZ20DAHuiA
-         YuhdJHOiSyU8SzUknFMc7aa9P0TfV05njwfmMAeTFqmSRiVk3btLWUh2OnRK0bcSOK
-         3wrjnd3ecW1rS9C+rOKadP0mJphyr2m0MtrMYmBFx5y3bbyQaHW0R30hEWXLCRnwx6
-         Ovw6b7NEpxBgA==
+        b=W4n+KqVTN0RiWzi/xpNyg1adME/Y2nMfTV9UNwfH+XtI2pkYzf3TXXlwB33vxxWZB
+         zRosqzRX116Ea7GLMIZwlxxYgSW2DAWwebs1Cin+Txt6bD46LGKpxIUo9NQaX8zaPK
+         xm76QFEjv94NKacoxnPigaziI6GY0zVEbZYd+EqBQXOm8iLXWb0Btjz8FxJwwZoQVz
+         +HrFFUBFu0UmqzbgT0q5SBK8SD860k20JNCbyEZzG5YFvy4VQ577+PfWr4z1JMblTj
+         2uiKvFs5z9Wo6bIFGDpXXak0dKAquYn759/r9vIKnAXZbsw9fqtk8T3Mo96q6edZBu
+         JsiTNpiLQsrxQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Gongjun Song <gongjun.song@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, cezary.rojewski@intel.com,
-        liam.r.girdwood@linux.intel.com, yang.jie@linux.intel.com,
-        perex@perex.cz, tiwai@suse.com, kai.vehmanen@linux.intel.com,
-        vamshi.krishna.gopal@intel.com, yong.zhi@intel.com,
+        Sasha Levin <sashal@kernel.org>, bgoswami@codeaurora.org,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        stephan@gerhold.net, ultracoolguy@disroot.org,
         alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.10 05/43] ASoC: Intel: sof_sdw: Add support for SKU 0B13 product
-Date:   Tue, 30 Nov 2021 09:49:42 -0500
-Message-Id: <20211130145022.945517-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 10/43] ASoC: qdsp6: q6routing: validate port id before setting up route
+Date:   Tue, 30 Nov 2021 09:49:47 -0500
+Message-Id: <20211130145022.945517-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130145022.945517-1-sashal@kernel.org>
 References: <20211130145022.945517-1-sashal@kernel.org>
@@ -55,44 +51,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gongjun Song <gongjun.song@intel.com>
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-[ Upstream commit 6448d0596e48dbc16a910f04ffc248c3f3c0a65c ]
+[ Upstream commit 6712c2e18c06b0976559fd4bd47774b243038e9c ]
 
-This product supports SoundWire capture from local microphones
-and one SoundWire amplifier(no headset codec).
+Validate port id before it starts sending commands to dsp this would
+make error handling simpler.
 
-Signed-off-by: Gongjun Song <gongjun.song@intel.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Link: https://lore.kernel.org/r/20211105022646.26305-6-yung-chuan.liao@linux.intel.com
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Link: https://lore.kernel.org/r/20211116114721.12517-6-srinivas.kandagatla@linaro.org
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/intel/boards/sof_sdw.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ sound/soc/qcom/qdsp6/q6routing.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/sound/soc/intel/boards/sof_sdw.c b/sound/soc/intel/boards/sof_sdw.c
-index c7a6a4d6570cf..f141b38ed71d6 100644
---- a/sound/soc/intel/boards/sof_sdw.c
-+++ b/sound/soc/intel/boards/sof_sdw.c
-@@ -239,6 +239,15 @@ static const struct dmi_system_id sof_sdw_quirk_table[] = {
- 					RT711_JD2 |
- 					SOF_SDW_FOUR_SPK),
- 	},
-+	{
-+		.callback = sof_sdw_quirk_cb,
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc"),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_SKU, "0B13"),
-+		},
-+		/* No Jack */
-+		.driver_data = (void *)SOF_SDW_TGL_HDMI,
-+	},
- 	{}
- };
+diff --git a/sound/soc/qcom/qdsp6/q6routing.c b/sound/soc/qcom/qdsp6/q6routing.c
+index 0a6b9433f6acf..81fd2c7bdd1b1 100644
+--- a/sound/soc/qcom/qdsp6/q6routing.c
++++ b/sound/soc/qcom/qdsp6/q6routing.c
+@@ -368,6 +368,12 @@ int q6routing_stream_open(int fedai_id, int perf_mode,
+ 	}
  
+ 	session = &routing_data->sessions[stream_id - 1];
++	if (session->port_id < 0) {
++		dev_err(routing_data->dev, "Routing not setup for MultiMedia%d Session\n",
++			session->fedai_id);
++		return -EINVAL;
++	}
++
+ 	pdata = &routing_data->port_data[session->port_id];
+ 
+ 	mutex_lock(&routing_data->lock);
 -- 
 2.33.0
 

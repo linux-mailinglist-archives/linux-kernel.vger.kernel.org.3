@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2FA46397F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F32463989
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:13:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238410AbhK3POa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:14:30 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:59378 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242762AbhK3O5m (ORCPT
+        id S242560AbhK3POv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:14:51 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:51952 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238457AbhK3O5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:57:42 -0500
+        Tue, 30 Nov 2021 09:57:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 38097CE1A8D;
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE1E8B81A65;
         Tue, 30 Nov 2021 14:54:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BC35C53FCF;
-        Tue, 30 Nov 2021 14:54:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47E4C53FCD;
+        Tue, 30 Nov 2021 14:54:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284055;
-        bh=FffVs0YZYMlJiKC9drWO34HxJwSet7WBPs3qouGbUlE=;
+        s=k20201202; t=1638284056;
+        bh=Xo2gsgyROap7QOttu0XsXfMsEq+ZGFwbLGW3XIFrExc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VbWeH9QdF1ZE6BRbvfWhswIcqiO6DnUhDcCqZDNAdWfFPSrmI+W2yuKBY3je/5wdf
-         aeaD4FW9VV0rksm8NXQaRaDZgdn59ug3yF7OicaD/eVw3xRHsfgmGgraMgwa7kz0h0
-         U3Yl6wuR8CH+Wxk2cI6QMdCPyKizv4sy4DirUQ5p6llXhWuYnUpNp4cqJhGj4OqHlh
-         mLpwDZ9frGNcIc1PR4PiXZBZOKuiUVO4KhwVau2Xol+QkD4FCGsZZQn1VpGmScnYsc
-         ShFMAQZYhIy9V/4O0GiBq/O1OpjLeqjvcn7ctKpuDWgAkQ6f7EmnrCdu+/RxQnbnZi
-         zWzmMaGbXn6hQ==
+        b=GKB2DiVs/36Z0yP5inuNFIjw3mYtD3ds8/oWm3UmJImMuXT4JPr5KcCaaIaeGj/pz
+         9ReYRQKnBbmpOMqolUiWYZrsrdvMchOmBfdcpWevrUyrmj+tef+kaZq03DfKDDmvg0
+         iXQNkCv3LLSnC1e+t8ntET/z1nLTgSuA9JvkUSPaCtpeyLrc1oEmiltqj8RESe7YAU
+         4FL2JoBf8fS5roE3aTHtvNm/lyVkzosp2YzHYlvAtWvsS7++81lD1XHOaJP/0KznMZ
+         dai5ZLmdQ2Z9YzTu76VGCZScpMm9H96UKBoYXG3KeyW0YvvEP2dF/B+vzStsBAo0ap
+         SgdDgGF7NGE6g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Evan Green <evgreen@chromium.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        pavel@ucw.cz, len.brown@intel.com, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.4 7/9] PM: hibernate: Fix snapshot partial write lengths
-Date:   Tue, 30 Nov 2021 09:54:00 -0500
-Message-Id: <20211130145402.947049-7-sashal@kernel.org>
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.4 8/9] net: ptp: add a definition for the UDP port for IEEE 1588 general messages
+Date:   Tue, 30 Nov 2021 09:54:01 -0500
+Message-Id: <20211130145402.947049-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130145402.947049-1-sashal@kernel.org>
 References: <20211130145402.947049-1-sashal@kernel.org>
@@ -49,43 +49,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Evan Green <evgreen@chromium.org>
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-[ Upstream commit 88a5045f176b78c33a269a30a7b146e99c550bd9 ]
+[ Upstream commit ec15baec3272bbec576f2ce7ce47765a8e9b7b1c ]
 
-snapshot_write() is inappropriately limiting the amount of data that can
-be written in cases where a partial page has already been written. For
-example, one would expect to be able to write 1 byte, then 4095 bytes to
-the snapshot device, and have both of those complete fully (since now
-we're aligned to a page again). But what ends up happening is we write 1
-byte, then 4094/4095 bytes complete successfully.
+As opposed to event messages (Sync, PdelayReq etc) which require
+timestamping, general messages (Announce, FollowUp etc) do not.
+In PTP they are part of different streams of data.
 
-The reason is that simple_write_to_buffer()'s second argument is the
-total size of the buffer, not the size of the buffer minus the offset.
-Since simple_write_to_buffer() accounts for the offset in its
-implementation, snapshot_write() can just pass the full page size
-directly down.
+IEEE 1588-2008 Annex D.2 "UDP port numbers" states that the UDP
+destination port assigned by IANA is 319 for event messages, and 320 for
+general messages. Yet the kernel seems to be missing the definition for
+general messages. This patch adds it.
 
-Signed-off-by: Evan Green <evgreen@chromium.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Acked-by: Richard Cochran <richardcochran@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/power/user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/ptp_classify.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/power/user.c b/kernel/power/user.c
-index f83c1876b39c0..67659e507747e 100644
---- a/kernel/power/user.c
-+++ b/kernel/power/user.c
-@@ -181,7 +181,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
- 		if (res <= 0)
- 			goto unlock;
- 	} else {
--		res = PAGE_SIZE - pg_offp;
-+		res = PAGE_SIZE;
- 	}
+diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
+index a079656b614cd..c0a02aa7ed9bd 100644
+--- a/include/linux/ptp_classify.h
++++ b/include/linux/ptp_classify.h
+@@ -45,6 +45,7 @@
+ #define PTP_CLASS_L4      (PTP_CLASS_IPV4 | PTP_CLASS_IPV6)
  
- 	if (!data_of(data->handle)) {
+ #define PTP_EV_PORT 319
++#define PTP_GEN_PORT 320
+ #define PTP_GEN_BIT 0x08 /* indicates general message, if set in message type */
+ 
+ #define OFF_PTP_SOURCE_UUID	22 /* PTPv1 only */
 -- 
 2.33.0
 

@@ -2,210 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65BA9463D80
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:15:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7545463D82
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245384AbhK3SSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:18:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:45746 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S245369AbhK3SSn (ORCPT
+        id S245399AbhK3STS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:19:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239483AbhK3STR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:18:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638296123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=y0D83E+cNuncrGmthDykUEYreLlJf9PXpFpFy6oL8G4=;
-        b=Y4vTnBzOn5rNkNgkpKEghbDi81pA+v1Zy6sKXJKt2zFMjCTlLnsm6jmAO65ikyH1kkxoYP
-        QNQXv906z2T/tsjB74M527ZhUT1uW7oD+hz6eHh5uAZ3qA/DtQ/4usRe72dV+NrKHLkMGb
-        nygFcW2bl5PHugS+4Gu6c0EfJtGNfkU=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-289-LybBJQp9NnaIRaGNES-rOA-1; Tue, 30 Nov 2021 13:15:22 -0500
-X-MC-Unique: LybBJQp9NnaIRaGNES-rOA-1
-Received: by mail-wm1-f70.google.com with SMTP id z138-20020a1c7e90000000b003319c5f9164so14205516wmc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:15:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=y0D83E+cNuncrGmthDykUEYreLlJf9PXpFpFy6oL8G4=;
-        b=iPNppFSaRRY2RTHnD+T5nnEEYYW+iC1oocbuaAOfci0jombxopo7/Wmnqt5PaRhsqT
-         OfllVLQf9kDcgHNP1CFF/iLvtvghGSxItW67yFUXGZDCSk2Np+woTAULpNxiif0HFUdq
-         1Ln88YT9qgPExhAXMUCASNLUJt/fGhlVGr3QIemvQ6XidIR6H6cEPsifx8FUtARkY5rA
-         7gXdNMDy/bhwtJNHHLhACY7hj+22zS4TTBE0dpmvHecmfrJyk83X+Zhn7l5tCtGgvSQT
-         xbhBDbwMbfY/48aZSNPSPN+ve1ruEXgwr/lNOm+BJRTDdgHpNBIKT4w1qlV4TtWHMxIM
-         JF3Q==
-X-Gm-Message-State: AOAM531D7NweN+TKx9RLU+sE0fhbdTjH+IChiFuXVyct+4v5xmC+SyI6
-        NSySvDpEjk1sEBUoefdWcsKUAlEVpHtK1nPWej17ro6vXSlvqWHxK0A9Wr8R5s5SV1xA4vyC4kl
-        1Mc4eC3Kp2T5b9jmULIEUYvAN
-X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr379462wmk.92.1638296121323;
-        Tue, 30 Nov 2021 10:15:21 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxJOfgIgumC5g74zQIlaoVNpamCUEIoCBerSrxJ7TK28QsNQXxRyH3lzwA87n0HLFsyC3Og3Q==
-X-Received: by 2002:a7b:c2f7:: with SMTP id e23mr379437wmk.92.1638296121134;
-        Tue, 30 Nov 2021 10:15:21 -0800 (PST)
-Received: from krava (nat-pool-brq-u.redhat.com. [213.175.37.12])
-        by smtp.gmail.com with ESMTPSA id g16sm3959688wmq.20.2021.11.30.10.15.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 10:15:20 -0800 (PST)
-Date:   Tue, 30 Nov 2021 19:15:19 +0100
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] perf header: Fix memory leaks
-Message-ID: <YaZqN5UQfhBmgznT@krava>
-References: <20211118201730.2302927-1-irogers@google.com>
- <YaOkbojVb2gZtfCk@krava>
- <CAP-5=fVRE8dcDtivYaAm=DQze4d2966X7oWTWVzstzWeC-xeSw@mail.gmail.com>
+        Tue, 30 Nov 2021 13:19:17 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C6FC061574;
+        Tue, 30 Nov 2021 10:15:57 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 842FBCE1AF9;
+        Tue, 30 Nov 2021 18:15:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56B4C53FC7;
+        Tue, 30 Nov 2021 18:15:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638296153;
+        bh=KszbXaHbfOc2Nhur115bSEzw+sxwzvVpgaoXce0hUeU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pvoBhd3HTrfwP/+FCfUG763klv8OrF/++24trInXsRoQ+avLpr+z0q/0jj/luWbPJ
+         0rwuyx2LhQKj52N5hpDHs4FuXRw11OLjVWunfDFDXoFKTMl5ZzWjK058CYRsNeiPVZ
+         E6kbLcPkUQcGKZ+dmTXXE36mkPbphNcNwte52S23AENgBhu3PWjSGZnnORI+p0xqAV
+         7qDW+1sPQYqArCNmryQFLq8SzihNEscYcGRTbdtz7gUfwJDZ6ehgie8/HgiFN7z+Qm
+         VbUZyboZMswuZFrjPuoYTH1OtgfRf+ZOazEmnfVK4k1Snou75crhMV/36Y3AskKZW1
+         VRvHNXSgkJTag==
+Date:   Tue, 30 Nov 2021 10:15:51 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Simo Sorce <simo@redhat.com>, Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+Message-ID: <YaZqVxI1C8RByq+w@gmail.com>
+References: <2036923.9o76ZdvQCi@positron.chronox.de>
+ <22137816.pfsBpAd9cS@tauon.chronox.de>
+ <YaEJtv4A6SoDFYjc@kroah.com>
+ <9311513.S0ZZtNTvxh@tauon.chronox.de>
+ <YaT+9MueQIa5p8xr@kroah.com>
+ <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
+ <YaYvYdnSaAvS8MAk@kroah.com>
+ <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
+ <YaZHKHjomEivul6U@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAP-5=fVRE8dcDtivYaAm=DQze4d2966X7oWTWVzstzWeC-xeSw@mail.gmail.com>
+In-Reply-To: <YaZHKHjomEivul6U@kroah.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 03:38:28PM -0800, Ian Rogers wrote:
-> On Sun, Nov 28, 2021 at 7:47 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > On Thu, Nov 18, 2021 at 12:17:30PM -0800, Ian Rogers wrote:
-> > > These leaks were found with leak sanitizer running "perf pipe recording
-> > > and injection test". In pipe mode feat_fd may hold onto an events struct
-> > > that needs freeing. When string features are processed they may
-> > > overwrite an already created string, so free this before the overwrite.
-> > >
-> > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > ---
-> > >  tools/perf/util/header.c | 15 ++++++++++-----
-> > >  1 file changed, 10 insertions(+), 5 deletions(-)
-> > >
-> > > diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
-> > > index 79cce216727e..e3c1a532d059 100644
-> > > --- a/tools/perf/util/header.c
-> > > +++ b/tools/perf/util/header.c
-> > > @@ -2321,6 +2321,7 @@ static int perf_header__read_build_ids(struct perf_header *header,
-> > >  #define FEAT_PROCESS_STR_FUN(__feat, __feat_env) \
-> > >  static int process_##__feat(struct feat_fd *ff, void *data __maybe_unused) \
-> > >  {\
-> > > +     free(ff->ph->env.__feat_env);                \
-> >
-> > hm, how is this set before this callback is triggered?
+On Tue, Nov 30, 2021 at 04:45:44PM +0100, Greg Kroah-Hartman wrote:
+> > And the main question here is, how can we get there, in any case, if
+> > the maintainer of the random device doesn't even participate in
+> > discussions, does not pick obvious bug fixes and is simply not engaging
+> > at all?
 > 
-> I see it for cpuid which is initially set in:
-> #0  perf_env__read_cpuid (env=0x62b000007240) at util/env.c:363
-> #1  0x0000555556325153 in perf_env__cpuid (env=0x62b000007240) at util/env.c:456
-> #2  0x00005555564002ff in evlist__init_trace_event_sample_raw
-
-ok, I forgot we do this one, thanks for explanation
-
-Acked-by: Jiri Olsa <jolsa@redhat.com>
-
-jirka
-
-
-> (evlist=0x61e000000080) at util/sample-raw.c:17
-> #3  0x00005555563f01f4 in __perf_session__new (data=0x7fffffffb8b0,
-> repipe=false, repipe_fd=-1, tool=0x7fffffffbaa0)
->     at util/session.c:228
-> #4  0x000055555615f26b in perf_session__new (data=0x7fffffffb8b0,
-> tool=0x7fffffffbaa0) at util/session.h:70
-> #5  0x000055555616d991 in cmd_report (argc=0, argv=0x7fffffffe468) at
-> builtin-report.c:1408
-> #6  0x00005555562f36b8 in run_builtin (p=0x5555586bacd0
-> <commands+240>, argc=5, argv=0x7fffffffe468) at perf.c:313
-> #7  0x00005555562f3c11 in handle_internal_command (argc=5,
-> argv=0x7fffffffe468) at perf.c:365
-> #8  0x00005555562f3fce in run_argv (argcp=0x7fffffffe240,
-> argv=0x7fffffffe250) at perf.c:409
-> #9  0x00005555562f47bd in main (argc=5, argv=0x7fffffffe468) at perf.c:539
-> 
-> And then overwritten causing the leak:
-> #0  0x00005555563b965a in process_cpuid (ff=0x7fffffffad50, data=0x0)
-> at util/header.c:2333
-> #1  0x00005555563c53d2 in perf_event__process_feature
-> (session=0x62b000007200, event=0x621000006500) at util/header.c:4144
-> #2  0x000055555615fdef in process_feature_event
-> (session=0x62b000007200, event=0x621000006500) at builtin-report.c:230
-> #3  0x00005555563fa033 in perf_session__process_user_event
-> (session=0x62b000007200, event=0x621000006500, file_offset=868)
->     at util/session.c:1668
-> #4  0x00005555563fae08 in perf_session__process_event
-> (session=0x62b000007200, event=0x621000006500, file_offset=868)
->     at util/session.c:1803
-> #5  0x00005555563fc4e6 in __perf_session__process_pipe_events
-> (session=0x62b000007200) at util/session.c:2044
-> #6  0x00005555563ff005 in perf_session__process_events
-> (session=0x62b000007200) at util/session.c:2418
-> #7  0x000055555616508a in __cmd_report (rep=0x7fffffffbaa0) at
-> builtin-report.c:940
-> #8  0x000055555616f5c9 in cmd_report (argc=0, argv=0x7fffffffe468) at
-> builtin-report.c:1629
-> #9  0x00005555562f36b8 in run_builtin (p=0x5555586bacd0
-> <commands+240>, argc=5, argv=0x7fffffffe468) at perf.c:313
-> #10 0x00005555562f3c11 in handle_internal_command (argc=5,
-> argv=0x7fffffffe468) at perf.c:365
-> #11 0x00005555562f3fce in run_argv (argcp=0x7fffffffe240,
-> argv=0x7fffffffe250) at perf.c:409
-> #12 0x00005555562f47bd in main (argc=5, argv=0x7fffffffe468) at perf.c:539
-> 
-> Thanks,
-> Ian
-> 
-> > jirka
-> >
-> > >       ff->ph->env.__feat_env = do_read_string(ff); \
-> > >       return ff->ph->env.__feat_env ? 0 : -ENOMEM; \
-> > >  }
-> > > @@ -4124,6 +4125,7 @@ int perf_event__process_feature(struct perf_session *session,
-> > >       struct perf_record_header_feature *fe = (struct perf_record_header_feature *)event;
-> > >       int type = fe->header.type;
-> > >       u64 feat = fe->feat_id;
-> > > +     int ret = 0;
-> > >
-> > >       if (type < 0 || type >= PERF_RECORD_HEADER_MAX) {
-> > >               pr_warning("invalid record type %d in pipe-mode\n", type);
-> > > @@ -4141,11 +4143,13 @@ int perf_event__process_feature(struct perf_session *session,
-> > >       ff.size = event->header.size - sizeof(*fe);
-> > >       ff.ph = &session->header;
-> > >
-> > > -     if (feat_ops[feat].process(&ff, NULL))
-> > > -             return -1;
-> > > +     if (feat_ops[feat].process(&ff, NULL)) {
-> > > +             ret = -1;
-> > > +             goto out;
-> > > +     }
-> > >
-> > >       if (!feat_ops[feat].print || !tool->show_feat_hdr)
-> > > -             return 0;
-> > > +             goto out;
-> > >
-> > >       if (!feat_ops[feat].full_only ||
-> > >           tool->show_feat_hdr >= SHOW_FEAT_HEADER_FULL_INFO) {
-> > > @@ -4154,8 +4158,9 @@ int perf_event__process_feature(struct perf_session *session,
-> > >               fprintf(stdout, "# %s info available, use -I to display\n",
-> > >                       feat_ops[feat].name);
-> > >       }
-> > > -
-> > > -     return 0;
-> > > +out:
-> > > +     free_event_desc(ff.events);
-> > > +     return ret;
-> > >  }
-> > >
-> > >  size_t perf_event__fprintf_event_update(union perf_event *event, FILE *fp)
-> > > --
-> > > 2.34.0.rc2.393.gf8c9666880-goog
-> > >
-> >
+> What obvious bug fixes have been dropped?
 > 
 
+The RNDRESEEDCRNG ioctl was totally broken, and I sent out a patch to fix it
+which was ignored for months:
+https://lore.kernel.org/linux-crypto/20200916041908.66649-1-ebiggers@kernel.org/
+
+Reminders didn't help:
+
+First ping: https://lore.kernel.org/linux-crypto/20201007035021.GB912@sol.localdomain/
+Second ping: https://lore.kernel.org/linux-crypto/20201026163343.GA858@sol.localdomain/
+Third ping: https://lore.kernel.org/linux-crypto/X7gQXgoXHHEr6HXC@sol.localdomain/
+Fourth ping: https://lore.kernel.org/linux-crypto/X%2FNkrKpaIBTjQzbv@sol.localdomain/
+Resent to Andrew Morton: https://lore.kernel.org/linux-crypto/20210112192818.69921-1-ebiggers@kernel.org/
+Pinged Andrew: https://lore.kernel.org/linux-crypto/YBiEJ9Md60HjAWJg@sol.localdomain/
+
+Finally *you* took the patch: https://lore.kernel.org/linux-crypto/YBwZ1a0VIdpTDNuD@kroah.com/
+
+Here's another random.c bug fix which was ignored, this one for 6 months before
+Herbert Xu finally took it through the crypto tree:
+https://lore.kernel.org/linux-crypto/20210322051347.266831-1-ebiggers@kernel.org/
+
+Here's a dead code cleanup which was ignored for 6 months before being taken by
+Herbert Xu through the crypto tree:
+https://lore.kernel.org/linux-crypto/20200916043652.96640-1-ebiggers@kernel.org/
+
+Here's a patch to random.c which was taken by the arm64 maintainers due to being
+ignored by the random.c maintainer:
+https://lore.kernel.org/lkml/20201105152944.16953-1-ardb@kernel.org/
+
+So unfortunately, as far as I can tell, Ted is not maintaining random.c anymore.  
+
+- Eric

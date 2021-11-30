@@ -2,451 +2,576 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A014628CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327404628C3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230499AbhK3AGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:06:13 -0500
-Received: from mail-ua1-f48.google.com ([209.85.222.48]:37557 "EHLO
-        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbhK3AGM (ORCPT
+        id S230303AbhK3AFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:05:15 -0500
+Received: from mail-ot1-f50.google.com ([209.85.210.50]:46609 "EHLO
+        mail-ot1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229446AbhK3AFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:06:12 -0500
-Received: by mail-ua1-f48.google.com with SMTP id o1so37727993uap.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:02:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=HZZygbV7zHiCmGrUMXtbzzqKRXX6tbAL/5OPMq1714E=;
-        b=oJCQ/KaJVsHQLKIhT8kk4itVbP+m+S7/9pS73damHBFlR4Cy9JN7I5G4Pk/Mm7U0+c
-         EnZpbucbd3Ay4dGISIOaBBscAZoYfqiTK1cDrzdZNfrzml1vQlWUUi/jFunYmvV5k+Eb
-         Mk0uHjPpuxK0/isebgZyN6x2zDY7mdFQdi8+t0zoVwKIn+N9AjyNE2V7XOvVo2VPZIe+
-         xNArko7IhH/7O6Iz4NdIotvaqWVGaqCsafkwfjw2wHG9Xdb5XeU+QbTiigj8RuCviA+c
-         ExSL3kQsusiAlP6V0g3VcsGGeoavMvCNLIBtnR/zHaJcMOaA/J8LSh3jSmhchjUJ6XkZ
-         Q+bw==
+        Mon, 29 Nov 2021 19:05:13 -0500
+Received: by mail-ot1-f50.google.com with SMTP id 98-20020a9d086b000000b0057a403bbd4eso3223502oty.13;
+        Mon, 29 Nov 2021 16:01:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=HZZygbV7zHiCmGrUMXtbzzqKRXX6tbAL/5OPMq1714E=;
-        b=Mjml0zKqYjXF8ZypEo0ED6Beoe9mvuAUcXdDVSPEzwMzusg3YpWLkeclS2pIjDfFZL
-         /5TI96O9UxaL72zMM0lhBUn7boQ06ur6U88tnolJwin5cEUBBWADVn7QbJTVO0RA0htg
-         zjOWFQI7wR9FiqQeIx86JYuMJ+JHJA7cj8N0HTqgVBZ56VBA6X7NUAXeDiX+1DL5SSbf
-         3bXhm5FWbPK0DFyvkXEGGi2lK1uIKSwF+gAPhZQTWH9UAibVM7QSGkcgZl05fUaDaPam
-         jr9pTvIwZFJHtX+8ky3XUtt9IWOZfkcKk+gNCVJj2WO7tITM8chElMnU9pR/l2SQxXJt
-         3grw==
-X-Gm-Message-State: AOAM533m+YXHNmkKYujcKO09GWTK16h+ubHBU1plxWMp0fzEFD4Urr2Q
-        DYdw4IDLMtoT91sJMMrx0Fj/ZexUjw4snua9ZxyRRw==
-X-Google-Smtp-Source: ABdhPJzhgbadz/Hl0DuwolR2Pr9IAPkXYvVqh3xdRefwOraLF3I+ir2hY+/JWz/ZI13Fp1T9ykYi+4docnwwAsi0g3Y=
-X-Received: by 2002:a05:6102:f10:: with SMTP id v16mr38425789vss.86.1638230513148;
- Mon, 29 Nov 2021 16:01:53 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=aV2EodJh346t+Wbm3YErslm1vIVsKkg3za0JyncYukQ=;
+        b=SzEGo+6wb8eNtc0a0u6yQLkR/iKGSiIo1g4os4KiTWEWOjj1TFWgzX3OR//h1yKLxV
+         jnsGzLV0saeU/zVUpm6Pyvb6dXgEeswQrTaOucciK7VkcVzAbb2isdSH5CcKs+cJWBQC
+         XxsD0LFQ2N4w/ggPQqEyPHv2EJDV/t9bBxpTLQKIF5w+A6aryh+DtzRkx0R4ALC67p/x
+         QjOLvnFhjDtnSPbgzGwV4A7xptkXG3fcWdxlEE4NJKZhdMU7wjm7NylJJ2SRsgaOKqpv
+         /mG8M9g6W62P3qT/KLYzfjnzetbuZ29XhRtMJQYe8kqCDxDnjmhFGdFyoGpPuCBHJnOj
+         ItRw==
+X-Gm-Message-State: AOAM530e30EH5JPjLH+2hURaWisVjo8ZapDPM4HS1LixLnQGgYa3cmeX
+        YOshBVcxseIq1xovFokmiQ==
+X-Google-Smtp-Source: ABdhPJxGmP7W+hR5b8+EQ325tbSTlD38AnnrDu+nyHVAQB1cJ7/x12F1fry2XTHV2cl6Sy01eQGOWA==
+X-Received: by 2002:a05:6830:4389:: with SMTP id s9mr47068865otv.97.1638230514850;
+        Mon, 29 Nov 2021 16:01:54 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s17sm2465101ooj.42.2021.11.29.16.01.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 16:01:53 -0800 (PST)
+Received: (nullmailer pid 855745 invoked by uid 1000);
+        Tue, 30 Nov 2021 00:01:51 -0000
+Date:   Mon, 29 Nov 2021 18:01:50 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Calvin Zhang <calvinzhang.cool@gmail.com>
+Cc:     Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nick Hu <nickhu@andestech.com>,
+        Greentime Hu <green.hu@gmail.com>,
+        Vincent Chen <deanbo422@gmail.com>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Rich Felker <dalias@libc.org>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Vladimir Isaev <isaev@synopsys.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Marc Zyngier <maz@kernel.org>,
+        David Brazdil <dbrazdil@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Souptick Joarder <jrdr.linux@gmail.com>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Alexander Sverdlin <alexander.sverdlin@nokia.com>,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
+        Andreas Oetken <andreas.oetken@siemens.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Zhang Yunkai <zhang.yunkai@zte.com.cn>,
+        Markus Elfring <elfring@users.sourceforge.net>,
+        Ganesh Goudar <ganeshgr@linux.ibm.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Nick Kossifidis <mick@ics.forth.gr>,
+        Alexandre Ghiti <alex@ghiti.fr>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Guo Ren <guoren@linux.alibaba.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Mauri Sandberg <sandberg@mailfence.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        uclinux-h8-devel@lists.sourceforge.jp, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-sh@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/2] of: Sort reserved_mem related code
+Message-ID: <YaVp7ubpCLN1xWfF@robh.at.kernel.org>
+References: <20211119075844.2902592-1-calvinzhang.cool@gmail.com>
+ <20211119075844.2902592-2-calvinzhang.cool@gmail.com>
 MIME-Version: 1.0
-References: <20211127223253.19098-1-semen.protsenko@linaro.org>
- <b9807fcc69713fb016838958a3df1c4e54309fc4.camel@gmail.com>
- <CAPLW+4kkVNSvEQjVnSWA2BjkWJXzV-4n1i+10a9FCNL0sD0n3A@mail.gmail.com> <97a28ade85f31f709c7848da5ebab0bdc802afd2.camel@gmail.com>
-In-Reply-To: <97a28ade85f31f709c7848da5ebab0bdc802afd2.camel@gmail.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Tue, 30 Nov 2021 02:01:40 +0200
-Message-ID: <CAPLW+4=wfAHRi5CvzcyZf6R2sCQ1WMC11MFwqfLnzPbXMyUTtA@mail.gmail.com>
-Subject: Re: [PATCH 0/8] soc: samsung: Add USIv2 driver
-To:     David Virag <virag.david003@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211119075844.2902592-2-calvinzhang.cool@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 at 21:19, David Virag <virag.david003@gmail.com> wrote:
->
-> On Mon, 2021-11-29 at 15:56 +0200, Sam Protsenko wrote:
-> > On Sun, 28 Nov 2021 at 05:15, David Virag <virag.david003@gmail.com>
-> > wrote:
-> > >
-> > > On Sun, 2021-11-28 at 00:32 +0200, Sam Protsenko wrote:
-> > > > USIv2 IP-core provides selectable serial protocol (UART, SPI or
-> > > > High-Speed I2C); only one can be chosen at a time. This series
-> > > > implements USIv2 driver, which allows one to select particular USI
-> > > > function in device tree, and also performs USI block
-> > > > initialization.
-> > > >
-> > > > With that driver implemented, it's not needed to do USI
-> > > > initialization
-> > > > in protocol drivers anymore, so that code is removed from the
-> > > > serial
-> > > > driver.
-> > > >
-> > >
-> > > I think the downstream way of doing this (USI node reg being on the
-> > > SW_CONF register itself rather than an offset from uart/i2c/spi, the
-> > > USI driver only controlling the SW_CONF, and the uart/i2c/spi drivers
-> > > controlling their USI_CON and USI_OPTION regs) is cleaner, better,
-> > > and
-> > > easier to adapt to USIv1 too.
-> > >
-> >
-> > One reason why I think it's better to provide SW_CONF register via
-> > syscon node, is that it helps us to avoid possible register access
-> > conflicts in future, and also conflicts when requesting corresponding
-> > resources. In other words, the System Register block can be used by
-> > many consumers (drivers) in future; those consumers might try to
-> > modify the same registers simultaneously, which might lead to race
-> > conditions (as RMW operation is not atomic), so some kind of
-> > serialization should be done (like locking in regmap), which is
-> > provided by syscon. Also, that wouldn't even come to that: you just
-> > can't request the same I/O area twice in Linux. So if SW_CONF is
-> > passed via "reg" property to USI driver, and then we try to map the
-> > whole System Register (or its portion that includes SW_CONF), that
-> > request would fail.
->
-> I've got to admit, that's something I didn't think about much, partly
-> because the lack of TRM on my hand, as I'm working with just vendor
-> kernel sources and consumer phones. What other things are in the sysreg
-> in your case? Looking at my vendor device tree, the USI SW_CONF
-> registers are at 0x10032000-0x10032008 in my case and the DT lacks
-> anything else close by (in the 0x1003xxxx region).
->
+On Fri, Nov 19, 2021 at 03:58:18PM +0800, Calvin Zhang wrote:
+> Move code about parsing /reserved-memory and initializing of
+> reserved_mems array to of_reserved_mem.c for better modularity.
+> 
+> Rename array name from reserved_mem to reserved_mems to distinguish
+> from type definition.
+> 
+> Signed-off-by: Calvin Zhang <calvinzhang.cool@gmail.com>
+> ---
+>  drivers/of/fdt.c                | 108 +--------------------
+>  drivers/of/of_private.h         |  12 ++-
+>  drivers/of/of_reserved_mem.c    | 163 ++++++++++++++++++++++++++------
+>  include/linux/of_reserved_mem.h |   4 +
+>  4 files changed, 149 insertions(+), 138 deletions(-)
+> 
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index bdca35284ceb..445af4e69300 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -80,7 +80,7 @@ void __init of_fdt_limit_memory(int limit)
+>  	}
+>  }
+>  
+> -static bool of_fdt_device_is_available(const void *blob, unsigned long node)
+> +bool of_fdt_device_is_available(const void *blob, unsigned long node)
+>  {
+>  	const char *status = fdt_getprop(blob, node, "status", NULL);
+>  
+> @@ -476,7 +476,7 @@ void *initial_boot_params __ro_after_init;
+>  
+>  static u32 of_fdt_crc32;
+>  
+> -static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+> +int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+>  					phys_addr_t size, bool nomap)
 
-Just in case, System Register is not a single register, but a register
-block. In case of Exynos850 I have all sorts of registers in SYSREG.
-Basically I have one SYSREG per domain, e.g. for PERI domain I have
-SYSREG_PERI. Registers inside of each SYSREG may vary. SYREG_PERI has
-IPCLK control register, SW_CONF registers, APB register, some USER
-registers, etc, etc...
+I think you can move this function too if you change the nomap==false 
+callers to just call memblock_reserve directly.
 
-You can use something like this to find SYSREG info in your kernel:
 
-    $ find drivers/ -type f -name '*7885*' -exec grep -Hni 'SYSREG' {} \;
-    $ git grep -n --all-match -e SYSREG -e 1003 -- drivers/*7885*
+>  {
+>  	if (nomap) {
+> @@ -492,108 +492,6 @@ static int __init early_init_dt_reserve_memory_arch(phys_addr_t base,
+>  	return memblock_reserve(base, size);
+>  }
+>  
+> -/*
+> - * __reserved_mem_reserve_reg() - reserve all memory described in 'reg' property
+> - */
+> -static int __init __reserved_mem_reserve_reg(unsigned long node,
+> -					     const char *uname)
+> -{
+> -	int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
+> -	phys_addr_t base, size;
+> -	int len;
+> -	const __be32 *prop;
+> -	int first = 1;
+> -	bool nomap;
+> -
+> -	prop = of_get_flat_dt_prop(node, "reg", &len);
+> -	if (!prop)
+> -		return -ENOENT;
+> -
+> -	if (len && len % t_len != 0) {
+> -		pr_err("Reserved memory: invalid reg property in '%s', skipping node.\n",
+> -		       uname);
+> -		return -EINVAL;
+> -	}
+> -
+> -	nomap = of_get_flat_dt_prop(node, "no-map", NULL) != NULL;
+> -
+> -	while (len >= t_len) {
+> -		base = dt_mem_next_cell(dt_root_addr_cells, &prop);
+> -		size = dt_mem_next_cell(dt_root_size_cells, &prop);
+> -
+> -		if (size &&
+> -		    early_init_dt_reserve_memory_arch(base, size, nomap) == 0)
+> -			pr_debug("Reserved memory: reserved region for node '%s': base %pa, size %lu MiB\n",
+> -				uname, &base, (unsigned long)(size / SZ_1M));
+> -		else
+> -			pr_info("Reserved memory: failed to reserve memory for node '%s': base %pa, size %lu MiB\n",
+> -				uname, &base, (unsigned long)(size / SZ_1M));
+> -
+> -		len -= t_len;
+> -		if (first) {
+> -			fdt_reserved_mem_save_node(node, uname, base, size);
+> -			first = 0;
+> -		}
+> -	}
+> -	return 0;
+> -}
+> -
+> -/*
+> - * __reserved_mem_check_root() - check if #size-cells, #address-cells provided
+> - * in /reserved-memory matches the values supported by the current implementation,
+> - * also check if ranges property has been provided
+> - */
+> -static int __init __reserved_mem_check_root(unsigned long node)
+> -{
+> -	const __be32 *prop;
+> -
+> -	prop = of_get_flat_dt_prop(node, "#size-cells", NULL);
+> -	if (!prop || be32_to_cpup(prop) != dt_root_size_cells)
+> -		return -EINVAL;
+> -
+> -	prop = of_get_flat_dt_prop(node, "#address-cells", NULL);
+> -	if (!prop || be32_to_cpup(prop) != dt_root_addr_cells)
+> -		return -EINVAL;
+> -
+> -	prop = of_get_flat_dt_prop(node, "ranges", NULL);
+> -	if (!prop)
+> -		return -EINVAL;
+> -	return 0;
+> -}
+> -
+> -/*
+> - * fdt_scan_reserved_mem() - scan a single FDT node for reserved memory
+> - */
+> -static int __init fdt_scan_reserved_mem(void)
+> -{
+> -	int node, child;
+> -	const void *fdt = initial_boot_params;
+> -
+> -	node = fdt_path_offset(fdt, "/reserved-memory");
+> -	if (node < 0)
+> -		return -ENODEV;
+> -
+> -	if (__reserved_mem_check_root(node) != 0) {
+> -		pr_err("Reserved memory: unsupported node format, ignoring\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	fdt_for_each_subnode(child, fdt, node) {
+> -		const char *uname;
+> -		int err;
+> -
+> -		if (!of_fdt_device_is_available(fdt, child))
+> -			continue;
+> -
+> -		uname = fdt_get_name(fdt, child, NULL);
+> -
+> -		err = __reserved_mem_reserve_reg(child, uname);
+> -		if (err == -ENOENT && of_get_flat_dt_prop(child, "size", NULL))
+> -			fdt_reserved_mem_save_node(child, uname, 0, 0);
+> -	}
+> -	return 0;
+> -}
+> -
+>  /*
+>   * fdt_reserve_elfcorehdr() - reserves memory for elf core header
+>   *
+> @@ -642,7 +540,7 @@ void __init early_init_fdt_scan_reserved_mem(void)
+>  	}
+>  
+>  	fdt_scan_reserved_mem();
+> -	fdt_init_reserved_mem();
+> +	of_reserved_mem_init();
+>  	fdt_reserve_elfcorehdr();
+>  }
+>  
+> diff --git a/drivers/of/of_private.h b/drivers/of/of_private.h
+> index 9324483397f6..88b67f8ed698 100644
+> --- a/drivers/of/of_private.h
+> +++ b/drivers/of/of_private.h
+> @@ -163,8 +163,14 @@ static inline int of_dma_get_range(struct device_node *np,
+>  }
+>  #endif
+>  
+> -void fdt_init_reserved_mem(void);
+> -void fdt_reserved_mem_save_node(unsigned long node, const char *uname,
+> -			       phys_addr_t base, phys_addr_t size);
+> +bool of_fdt_device_is_available(const void *blob, unsigned long node);
+> +int early_init_dt_reserve_memory_arch(phys_addr_t base,
+> +					phys_addr_t size, bool nomap);
+> +#ifdef CONFIG_OF_RESERVED_MEM
+> +int fdt_scan_reserved_mem(void);
+> +#else
+> +static inline int fdt_scan_reserved_mem(void) { }
+> +#endif
+> +
+>  
+>  #endif /* _LINUX_OF_PRIVATE_H */
+> diff --git a/drivers/of/of_reserved_mem.c b/drivers/of/of_reserved_mem.c
+> index 9c0fb962c22b..784cfc5cd251 100644
+> --- a/drivers/of/of_reserved_mem.c
+> +++ b/drivers/of/of_reserved_mem.c
+> @@ -20,13 +20,14 @@
+>  #include <linux/of_reserved_mem.h>
+>  #include <linux/sort.h>
+>  #include <linux/slab.h>
+> +#include <linux/libfdt.h>
+>  #include <linux/memblock.h>
+>  #include <linux/kmemleak.h>
+>  
+>  #include "of_private.h"
+>  
+>  #define MAX_RESERVED_REGIONS	64
+> -static struct reserved_mem reserved_mem[MAX_RESERVED_REGIONS];
+> +static struct reserved_mem reserved_mems[MAX_RESERVED_REGIONS];
 
-Looking at Exynos7885 downstream kernel, you have next SYSREGs:
+Would be a bit easier to review without the rename.
 
-    SYSREG_PERI    0x10030000
-    SYSREG_MIF0    0x10470000
-    SYSREG_MIF1    0x10570000
-    SYSREG_CPUCL0    0x10910000
-    SYSREG_CPUCL1    0x10810000
-    SYSREG_CPUCL2    0x10A10000
-    SYSREG_APM    0x11C20000
-    SYSREG_CORE    0x12010000
-    SYSREG_FSYS    0x13420000
 
-Those are base addresses for each sysreg. My wild guess, each SYSREG
-size would be at least 0x10000.
-
-SYSREG which contains SW_CONF registers for USI blocks is apparently
-SYSREG_PERI. And SW_CONF offsets for each USI (inside of SYSREG_PERIO)
-are:
-
-    USI0: 0x2000
-    USI1: 0x2004
-    USI2: 0x2008
-
-> >
-> > Although passing one SW_CONF register via "reg" might look easier to
-> > implement, it might also bring us all sort of problems later on. And I
-> > think a good design should account for such pitfalls.
-> >
-> > As for the USI registers: I really don't think that duplicating the
-> > code for USI block reset across uart/i2c/spi drivers would help us to
-> > accomplish anything. Why those drivers should be even aware of USI
-> > reset? At least in USIv2 block, the USI registers and uart/i2c/spi
-> > registers are not mixed: they are located at different and always
-> > fixed addresses. We can benefit from that fact, and provide Device
-> > Tree structure which reflects the hardware one, separating USI control
-> > from actual protocol nodes.
-> >
-> > > For example: I'm sure this is the case on USIv2 devices too, but on
-> > > Exynos7885, different devices have USI modes configured differently.
-> > > For example a Samsung Galaxy A8 (2018) has all the USI blocks
-> > > configured as SPI while a Samsung Galaxy M20 has the first USI
-> > > configured as dual HSI2C, the second as HSI2C on the first 2 pins and
-> > > the third as HSI2C on the last 2 pins. With this way of doing
-> > > everything on USIv2 we'd need 3 disabled USIv2 nodes in the SoC DTSI
-> > > for one USI block, each for every protocol the USI block can do, all
-> > > having a single child for their protocol and each referencing the
-> > > same
-> > > sysreg (not even sure if that's even supported). Then the board DTS
-> > > could enable the USI node it needs.
-> > >
-> >
-> > If I'm following you correctly, then it's not like that. I guess
-> > Krzysztof already replied to that, so I'll probably just repeat his
-> > words. In that case you'll have something like this in your SoC dtsi
-> > (for your USIv1 case of course, because dual HSI2C is not present in
-> > USIv2):
-> >
-> > <<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
-> > usi1 {
-> >     spi1 {
-> >     };
-> >
-> >     hsi2c1_1 {
-> >     };
-> >
-> >     hsi2c1_2 {
-> >     };
-> > };
-> >
-> > usi2 {
-> >     spi2 {
-> >     };
-> >
-> >     hsi2c2_1 {
-> >     };
-> > };
-> >
-> >
-> > usi3 {
-> >     spi3 {
-> >     };
-> >
-> >     hsi2c2_2 {
-> >     };
-> > };
-> > <<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
-> >
-> > and then in your board dts you just have to enable corresponding usi's
-> > with proper modes, and enable chosen protocol nodes, like this:
-> >
-> > <<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
-> > &usi1 {
-> >     status = "okay"
-> >     samsung,mode = <USI_V1_DUAL_I2C>;
-> > };
-> >
-> > &hsi2c1_1 {
-> >     status = "okay"
-> > };
-> >
-> > &hsi2c1_2 {
-> >     status = "okay"
-> > };
-> > <<<<<<<<<<<<<<<<<<<<<<<<< cut here >>>>>>>>>>>>>>>>>>>>>>>
->
-> What got me confused is the following: Upon checking vendor drivers I
-> was under the impression that we have all 3 protocols at seperate
-> addresses, and the USI SW_CONF register kind of works like a
-> multiplexer for the USI pins to switch between protocols. Now I see
-> that I was wrong, and the addresses are in fact the same. Now on a
-> hardware level it might still work just as a multiplexer but it
-> swithches the entire address space for a whole different protocol
-> block. Dumb little misunderstanding on my part, never mind! They are on
-> the same address even on USIv1. Not sure how I haven't noticed that
-> before, I guess since I never started experimenting with USI before,
-> just looked at the code as a reference I assumed a lot of things.
->
-
-Ah, yeah, USI block actually shares most of its internal circuits
-within each protocol. So you can only choose one protocol per USI. I
-should probably add that info to the bindings doc.
-
-> >
-> > > With the downstream way we could have just one USI node and we could
-> > > add the 3 protocols it can do disabled as seperate or child nodes.
-> > > This
-> > > way the board DTS only needs to set the appropriate mode setting and
-> > > enable the protocol it needs. I'd say much better than having 3 USI
-> > > nodes for the same USI block.
-> > >
-> >
-> > Not sure if with downstream USI driver you can actually have protocols
-> > as sub-nodes in USI node though. It doesn't do anything like
-> > of_platform_populate().
->
-> It can't as far as I'm aware, I was just thinking that did seem like a
-> good idea to keep.
->
-> >
-> > Also, with this USIv2 driver you can do the same thing you described:
-> > you can have just one USI node with 3 protocols as sub-nodes (or you
-> > can even have protocol nodes outside of USI node, but I'd not
-> > recommend that).
-> >
-> > Actually I can see that it's my fault for not describing that case in
-> > bindings example. I'll make sure to do that in v2. You also got me
-> > thinking about default mode: sometimes SW_CONF reset value chooses
-> > some protocol. In that case maybe it'd useful to have something like
-> > USI_V2_DEFAULT, to tell driver to not touch SW_CONF at all.
->
-> Not sure if that's useful, I'm thinking we specify some protocol for
-> the USIs in board dts anyways, and if we don't, then we probably don't
-> use that USI block anyways, so at a minimum all protocols should be
-> probably disabled in that case, and probably the USI block as a whole
-> too. (SoC dtsi has them disabled, board dts doesn't touch them, so they
-> remain disabled). May I know how do you think a defult mode would be
-> useful?
->
-
-Yeah, you are right. I'll probably add USI_NONE configuration for 0x0.
-Default one is really of no use.
-
-> > And also I
-> > can add USI_V2_NONE while at it, so that driver can write 0x0 to
-> > SW_CONF: that way no protocol will be selected. Maybe that can be
-> > beneficial for PM reasons, if some board doesn't use some USI blocks
-> > at all. Do you think it's feasible to add those two values to
-> > dt-bindings header? And is it possible to do so in USIv1?
->
-> I think I saw some downstream driver do something similiar, that sounds
-> like a good idea. In USIv1 I can see the HSI2C driver writing 0 to the
-> SW_CONF register at pm suspend. Not sure why that's in the HSI2C driver
-> rather than the USI but I'm guessing it should do the same thing as for
-> you. I have no TRM though, so not sure. We'll probably just have to
-> assume that's how it works here, maybe someone that has access to an
-> USIv1 SoC TRM could confirm? Probably won't get any response from
-> anyone who has it though.
->
-
-I guess it's enough to have that kernel source code to figure out
-essentials. When you set 0x0, no protocol is chosen, so we can imagine
-roughly what happens inside of USI IP-core (internal circuits are not
-connected, muxes are opened, etc). As I understand, 0x0 might be the
-reset value for some SW_CONF registers, so it'll appear on PM resume,
-so one should set SW_CONF on resume again (which is done in my driver
-already).
-
-> >
-> > > Also this way is pretty USIv2 centric. Adding USIv1 support to this
-> > > driver is difficult this way because of the the lack of USI_CON and
-> > > USI_OPTION registers as a whole (so having nowhere to actually set
-> > > the
-> > > reg of the USI node to, as the only thing USIv1 has is the SW_CONF
-> > > register). In my opinion being able to use the same driver and same
-> > > device tree layout for USIv1 and USIv2 is a definite plus
-> > >
-> >
-> > Well, it's USIv2 driver after all. I never expected it can be extended
-> > for USIv1 support. If you think it can be reused for USIv1, it's fine
-> > by me. But we need to consider next things:
-> >   - rename the driver to just "usi.c" (and also its configuration
-> > symbol)
-> >   - provide different compatible for USIv1 (and maybe corresponding
-> > driver data)
-> >   - rework bindings (header and doc); make sure existing bindings are
-> > intact (we shouldn't change already introduced interfaces)
-> >   - in case of USIv1 compatible; don't try to tinker with USIv2
-> > registers
-> >   - samsung,clkreq-on won't be available in case of USIv1 compatible
-> >
-> > Because I don't have USIv1 SoC TRM (and neither do I possess some
-> > USIv1 board which I can use for test), I don't think it's my place to
-> > add USIv1 support. But I think it's possible to do so, using my input
-> > above.
-> >
-> > I can see how it might be frustrating having to do some extra work
-> > (comparing to just using the code existing in downstream). But I guess
-> > that's the difference: vendor is mostly concerned about competitive
-> > advantage and getting to market fast, while upstream is more concerned
-> > about quality, considering all use cases, and having proper design.
->
-> It's not really the extra work, I just didn't see the benefits of this
-> way, and my misunderstanding caused me to not see how this would work.
-> I never really wanted to use the downstream driver as is, but in my
-> head I was thinking that "layout" should work.
->
-> > Anyway, we can work together to make it right, and to have both
-> > IP-cores support. In the worst case, if those are too different, we
-> > can have two separate drivers for those.
-> >
-> > > The only real drawback of that way is having to add code for USIv2
-> > > inside the UART, HSI2C, and SPI drivers but in my opinion the
-> > > benefits
-> > > overweigh the drawbacks greatly. We could even make the
-> > > uart/spi/hsi2c
-> > > drivers call a helper function in the USI driver to set their
-> > > USI_CON
-> > > and USI_OPTION registers up so that code would be shared and not
-> > > duplicated. Wether this patch gets applied like this is not my
-> > > choice
-> > > though, I'll let the people responsible decide
-> > > :-)
-> > >
-> >
-> > I'd argue that there are a lot of real drawbacks of using downstream
-> > driver as is. That's why I completely re-designed and re-implemented
-> > it. Downstream driver can't be built and function as a module, it
-> > doesn't respect System Register sharing between consumers, it leads
-> > to
-> > USI reset code duplication scattered across protocol drivers (that
-> > arguably shouldn't even be aware of that), it doesn't reflect HW
-> > structure clearly, it's not holding clocks needed for registers
-> > access
-> > (btw, sysreg clock can be provided in syscon node, exactly for that
-> > reason). As Krzysztof said, it also can't handle correct probe order
-> > and deferred probes. Downstream driver might work fine for some
-> > particular use-cases the vendor has, but in upstream it's better to
-> > cover more cases we can expect, as upstream kernel is used on more
-> > platforms, with more user space variants, etc.
->
-> I do agree now, as I said a bit of a misunderstanding made me believe
-> this was wrong. (as if the addresses were different and the downstream
-> drivers worked the same way that would mean each USIv2 would have 3
-> sets of USI_CON and USI_OPTION registers for each protocol which would
-> definitely have to be handled somewhat differently.
->
-
-I've checked USIv2 driver code in Exynos7885 kernel (publicly
-available), and it looks like it would be relatively easy to add that
-to the driver I submitted. Please wait for my series to be Acked or
-applied, then you can go ahead and send your additions on top of that.
-I don't want to do that, as I don't have any HW I can validate that,
-so it doesn't make much sense.
-
-> >
-> > I don't really think protocol drivers should be aware of USI
-> > registers
-> > at all, but if we they do -- we can provide some API from USIv2
-> > driver
-> > later, with EXPORT_SYMBOL(), referencing corresponding USI instance
-> > by
-> > phandle or using some other mechanism for inter-driver communication.
-> >
-> > Of course, it's not my place to decide on patch acceptance too. But I
-> > was under the impression that maintainers would be ok with this
-> > course
-> > of actions. Also, upstream kernel seems to already follow the same
-> > design for some similar drivers. See for example
-> > drivers/soc/qcom/qcom_gsbi.c.
-> >
-> > > Anyways, soon enough I can write an USIv1 driver after I submit all
-> > > the
-> > > 7885 stuff I'm working on currently. If you want to, you can add
-> > > USIv2
-> > > support to that driver, or if an USIv2 driver is already in
-> > > upstream at
-> > > that point, if it is written in the downstream way I can add v1
-> > > support
-> > > to that, or if it's like this I'll have to make a whole seperate
-> > > driver
-> > > with a whole seperate DT structure.
-> > >
-> >
-> > If it's like you said (USIv1 only touches the SW_CONF register), I
-> > guess USIv2 driver can be extended for USIv1 case. I already provided
-> > my thoughts on such rework above. It's probably better to consult
-> > with
-> > Krzysztof first. I guess the only way to figure out if it's feasible
-> > or it's better to have separate exynos-usi-v1.c for USIv1, is to try
-> > and add USIv1 support into USIv2 driver and see how pretty or ugly it
-> > is :) Whatever the way you decide to go with, please add me to Cc
-> > list
-> > when sending USIv1 patches.
->
-> Sure, I'll try doing it on top of the final version of your driver
-> then! Sorry for the misunderstanding there!
->
-> >
-> > > Best regards,
-> > > David
->
+>  static int reserved_mem_count;
+>  
+>  static int __init early_init_dt_alloc_reserved_memory_arch(phys_addr_t size,
+> @@ -56,12 +57,12 @@ static int __init early_init_dt_alloc_reserved_memory_arch(phys_addr_t size,
+>  /*
+>   * fdt_reserved_mem_save_node() - save fdt node for second pass initialization
+>   */
+> -void __init fdt_reserved_mem_save_node(unsigned long node, const char *uname,
+> +static void __init fdt_reserved_mem_save_node(unsigned long node, const char *uname,
+>  				      phys_addr_t base, phys_addr_t size)
+>  {
+> -	struct reserved_mem *rmem = &reserved_mem[reserved_mem_count];
+> +	struct reserved_mem *rmem = &reserved_mems[reserved_mem_count];
+>  
+> -	if (reserved_mem_count == ARRAY_SIZE(reserved_mem)) {
+> +	if (reserved_mem_count == ARRAY_SIZE(reserved_mems)) {
+>  		pr_err("not enough space for all defined regions.\n");
+>  		return;
+>  	}
+> @@ -173,29 +174,105 @@ static const struct of_device_id __rmem_of_table_sentinel
+>  	__used __section("__reservedmem_of_table_end");
+>  
+>  /*
+> - * __reserved_mem_init_node() - call region specific reserved memory init code
+> + * __reserved_mem_check_root() - check if #size-cells, #address-cells provided
+> + * in /reserved-memory matches the values supported by the current implementation,
+> + * also check if ranges property has been provided
+>   */
+> -static int __init __reserved_mem_init_node(struct reserved_mem *rmem)
+> +static int __init __reserved_mem_check_root(unsigned long node)
+>  {
+> -	extern const struct of_device_id __reservedmem_of_table[];
+> -	const struct of_device_id *i;
+> -	int ret = -ENOENT;
+> +	const __be32 *prop;
+>  
+> -	for (i = __reservedmem_of_table; i < &__rmem_of_table_sentinel; i++) {
+> -		reservedmem_of_init_fn initfn = i->data;
+> -		const char *compat = i->compatible;
+> +	prop = of_get_flat_dt_prop(node, "#size-cells", NULL);
+> +	if (!prop || be32_to_cpup(prop) != dt_root_size_cells)
+> +		return -EINVAL;
+>  
+> -		if (!of_flat_dt_is_compatible(rmem->fdt_node, compat))
+> -			continue;
+> +	prop = of_get_flat_dt_prop(node, "#address-cells", NULL);
+> +	if (!prop || be32_to_cpup(prop) != dt_root_addr_cells)
+> +		return -EINVAL;
+>  
+> -		ret = initfn(rmem);
+> -		if (ret == 0) {
+> -			pr_info("initialized node %s, compatible id %s\n",
+> -				rmem->name, compat);
+> -			break;
+> +	prop = of_get_flat_dt_prop(node, "ranges", NULL);
+> +	if (!prop)
+> +		return -EINVAL;
+> +	return 0;
+> +}
+> +
+> +/*
+> + * __reserved_mem_reserve_reg() - reserve all memory described in 'reg' property
+> + */
+> +static int __init __reserved_mem_reserve_reg(unsigned long node,
+> +					     const char *uname)
+> +{
+> +	int t_len = (dt_root_addr_cells + dt_root_size_cells) * sizeof(__be32);
+> +	phys_addr_t base, size;
+> +	int len;
+> +	const __be32 *prop;
+> +	int first = 1;
+> +	bool nomap;
+> +
+> +	prop = of_get_flat_dt_prop(node, "reg", &len);
+> +	if (!prop)
+> +		return -ENOENT;
+> +
+> +	if (len && len % t_len != 0) {
+> +		pr_err("Reserved memory: invalid reg property in '%s', skipping node.\n",
+> +		       uname);
+> +		return -EINVAL;
+> +	}
+> +
+> +	nomap = of_get_flat_dt_prop(node, "no-map", NULL) != NULL;
+> +
+> +	while (len >= t_len) {
+> +		base = dt_mem_next_cell(dt_root_addr_cells, &prop);
+> +		size = dt_mem_next_cell(dt_root_size_cells, &prop);
+> +
+> +		if (size &&
+> +		    early_init_dt_reserve_memory_arch(base, size, nomap) == 0)
+> +			pr_debug("Reserved memory: reserved region for node '%s': base %pa, size %lu MiB\n",
+> +				uname, &base, (unsigned long)(size / SZ_1M));
+> +		else
+> +			pr_info("Reserved memory: failed to reserve memory for node '%s': base %pa, size %lu MiB\n",
+> +				uname, &base, (unsigned long)(size / SZ_1M));
+> +
+> +		len -= t_len;
+> +		if (first) {
+> +			fdt_reserved_mem_save_node(node, uname, base, size);
+> +			first = 0;
+>  		}
+>  	}
+> -	return ret;
+> +	return 0;
+> +}
+> +
+> +/*
+> + * fdt_scan_reserved_mem() - scan a single FDT node for reserved memory
+> + */
+> +int __init fdt_scan_reserved_mem(void)
+> +{
+> +	int node, child;
+> +	const void *fdt = initial_boot_params;
+> +
+> +	node = fdt_path_offset(fdt, "/reserved-memory");
+> +	if (node < 0)
+> +		return -ENODEV;
+> +
+> +	if (__reserved_mem_check_root(node) != 0) {
+> +		pr_err("Reserved memory: unsupported node format, ignoring\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	fdt_for_each_subnode(child, fdt, node) {
+> +		const char *uname;
+> +		int err;
+> +
+> +		if (!of_fdt_device_is_available(fdt, child))
+> +			continue;
+> +
+> +		uname = fdt_get_name(fdt, child, NULL);
+> +
+> +		err = __reserved_mem_reserve_reg(child, uname);
+> +		if (err == -ENOENT && of_get_flat_dt_prop(child, "size", NULL))
+> +			fdt_reserved_mem_save_node(child, uname, 0, 0);
+> +	}
+> +	return 0;
+>  }
+>  
+>  static int __init __rmem_cmp(const void *a, const void *b)
+> @@ -228,13 +305,13 @@ static void __init __rmem_check_for_overlap(void)
+>  	if (reserved_mem_count < 2)
+>  		return;
+>  
+> -	sort(reserved_mem, reserved_mem_count, sizeof(reserved_mem[0]),
+> +	sort(reserved_mems, reserved_mem_count, sizeof(reserved_mems[0]),
+>  	     __rmem_cmp, NULL);
+>  	for (i = 0; i < reserved_mem_count - 1; i++) {
+>  		struct reserved_mem *this, *next;
+>  
+> -		this = &reserved_mem[i];
+> -		next = &reserved_mem[i + 1];
+> +		this = &reserved_mems[i];
+> +		next = &reserved_mems[i + 1];
+>  
+>  		if (this->base + this->size > next->base) {
+>  			phys_addr_t this_end, next_end;
+> @@ -248,10 +325,36 @@ static void __init __rmem_check_for_overlap(void)
+>  	}
+>  }
+>  
+> +/*
+> + * __reserved_mem_init_node() - call region specific reserved memory init code
+> + */
+> +static int __init __reserved_mem_init_node(struct reserved_mem *rmem)
+> +{
+> +	extern const struct of_device_id __reservedmem_of_table[];
+> +	const struct of_device_id *i;
+> +	int ret = -ENOENT;
+> +
+> +	for (i = __reservedmem_of_table; i < &__rmem_of_table_sentinel; i++) {
+> +		reservedmem_of_init_fn initfn = i->data;
+> +		const char *compat = i->compatible;
+> +
+> +		if (!of_flat_dt_is_compatible(rmem->fdt_node, compat))
+> +			continue;
+> +
+> +		ret = initfn(rmem);
+> +		if (ret == 0) {
+> +			pr_info("initialized node %s, compatible id %s\n",
+> +				rmem->name, compat);
+> +			break;
+> +		}
+> +	}
+> +	return ret;
+> +}
+> +
+>  /**
+> - * fdt_init_reserved_mem() - allocate and init all saved reserved memory regions
+> + * of_reserved_mem_init() - allocate and init all saved reserved memory regions
+>   */
+> -void __init fdt_init_reserved_mem(void)
+> +void __init of_reserved_mem_init(void)
+>  {
+>  	int i;
+>  
+> @@ -259,7 +362,7 @@ void __init fdt_init_reserved_mem(void)
+>  	__rmem_check_for_overlap();
+>  
+>  	for (i = 0; i < reserved_mem_count; i++) {
+> -		struct reserved_mem *rmem = &reserved_mem[i];
+> +		struct reserved_mem *rmem = &reserved_mems[i];
+>  		unsigned long node = rmem->fdt_node;
+>  		int len;
+>  		const __be32 *prop;
+> @@ -299,8 +402,8 @@ static inline struct reserved_mem *__find_rmem(struct device_node *node)
+>  		return NULL;
+>  
+>  	for (i = 0; i < reserved_mem_count; i++)
+> -		if (reserved_mem[i].phandle == node->phandle)
+> -			return &reserved_mem[i];
+> +		if (reserved_mems[i].phandle == node->phandle)
+> +			return &reserved_mems[i];
+>  	return NULL;
+>  }
+>  
+> @@ -442,8 +545,8 @@ struct reserved_mem *of_reserved_mem_lookup(struct device_node *np)
+>  
+>  	name = kbasename(np->full_name);
+>  	for (i = 0; i < reserved_mem_count; i++)
+> -		if (!strcmp(reserved_mem[i].name, name))
+> -			return &reserved_mem[i];
+> +		if (!strcmp(reserved_mems[i].name, name))
+> +			return &reserved_mems[i];
+>  
+>  	return NULL;
+>  }
+> diff --git a/include/linux/of_reserved_mem.h b/include/linux/of_reserved_mem.h
+> index 4de2a24cadc9..34e134bec606 100644
+> --- a/include/linux/of_reserved_mem.h
+> +++ b/include/linux/of_reserved_mem.h
+> @@ -32,6 +32,8 @@ typedef int (*reservedmem_of_init_fn)(struct reserved_mem *rmem);
+>  #define RESERVEDMEM_OF_DECLARE(name, compat, init)			\
+>  	_OF_DECLARE(reservedmem, name, compat, init, reservedmem_of_init_fn)
+>  
+> +void of_reserved_mem_init(void);
+> +
+>  int of_reserved_mem_device_init_by_idx(struct device *dev,
+>  				       struct device_node *np, int idx);
+>  int of_reserved_mem_device_init_by_name(struct device *dev,
+> @@ -45,6 +47,8 @@ struct reserved_mem *of_reserved_mem_lookup(struct device_node *np);
+>  #define RESERVEDMEM_OF_DECLARE(name, compat, init)			\
+>  	_OF_DECLARE_STUB(reservedmem, name, compat, init, reservedmem_of_init_fn)
+>  
+> +static inline void of_reserved_mem_init(void) { }
+> +
+>  static inline int of_reserved_mem_device_init_by_idx(struct device *dev,
+>  					struct device_node *np, int idx)
+>  {
+> -- 
+> 2.30.2
+> 
+> 

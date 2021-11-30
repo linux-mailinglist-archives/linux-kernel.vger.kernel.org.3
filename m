@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8928462F5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FC9462F63
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240066AbhK3JRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 04:17:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240055AbhK3JRR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:17:17 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDF4C061574;
-        Tue, 30 Nov 2021 01:13:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6FE8t/IQzjs7MZIoLedBwmtqQBazVHkPq7YtRv1GtbQ=; b=YCz4YL0YBFmkpK+oFR6GCnpFuu
-        gwYIKQ5jg0mF2+JncETedwjw6q3YZPoLN62c8SgZmGgrsZ3Sg2jFsoimhuPF7bma/IyJ5V+NM5Azl
-        d0TpLEN3as0K9XcLW3HzXGLfqM0CyGvrnbFVQcmD96/pVkPahgRZRG0wNhA/MfoBzsz2g644LEuFo
-        EUQ6ao8i1Sgbh4yr+ngS4i/IyskddbXGsVGNT+9Zeufj4jJMKWLzrZOVTJ+SZVurZEjj4mqCSY2eA
-        gg2wChfJtm26k312JuF31RXFpamDUXDSyde+/YnqO7+wPzzBjpxMXBjEO6Wtb74L5oh+McwW5FQvw
-        3gSBtf9Q==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:55974)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1mrzCy-0006et-E1; Tue, 30 Nov 2021 09:13:52 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1mrzCw-0006vp-Rm; Tue, 30 Nov 2021 09:13:50 +0000
-Date:   Tue, 30 Nov 2021 09:13:50 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] net: mdio: rework mdio_uevent for mdio ethernet
- phy device
-Message-ID: <YaXrTkI/KFxLmYrx@shell.armlinux.org.uk>
-References: <1638260517-13634-1-git-send-email-zhuyinbo@loongson.cn>
- <1638260517-13634-2-git-send-email-zhuyinbo@loongson.cn>
+        id S240046AbhK3JTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 04:19:23 -0500
+Received: from mga09.intel.com ([134.134.136.24]:11777 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S235402AbhK3JTW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 04:19:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="236001416"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="236001416"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 01:16:03 -0800
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="601334397"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 01:16:01 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1mrzE1-000P6g-8K;
+        Tue, 30 Nov 2021 11:14:57 +0200
+Date:   Tue, 30 Nov 2021 11:14:56 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Wolfram Sang <wsa@kernel.org>, lakshmi.sowjanya.d@intel.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jarkko.nikula@linux.intel.com, bala.senthil@intel.com,
+        pandith.n@intel.com
+Subject: Re: [PATCH v1 2/2] i2c: designware-pci: Set ideal timing parameters
+ for Elkhart Lake PSE
+Message-ID: <YaXrkJbsktXFAgFJ@smile.fi.intel.com>
+References: <20211109103552.18677-1-lakshmi.sowjanya.d@intel.com>
+ <20211109103552.18677-2-lakshmi.sowjanya.d@intel.com>
+ <YaUGX27+jHwQxg48@kunai>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <1638260517-13634-2-git-send-email-zhuyinbo@loongson.cn>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YaUGX27+jHwQxg48@kunai>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 04:21:57PM +0800, Yinbo Zhu wrote:
-> The of_device_uevent_modalias is service for 'of' type platform driver
-> , which ask the first args must be 'of' that use MODULE_DEVICE_TABLE
-> when driver was exported, but ethernet phy is a kind of 'mdio' type
-> device and it is inappropriate if driver use 'of' type for exporting,
-> in fact, most mainstream ethernet phy driver hasn't used 'of' type,
-> even though phy driver was exported use 'of' type and it's irrelevant
-> with mdio_uevent, at this time, platform_uevent was responsible for
-> reporting uevent to match modules.alias configure, so, whatever that
-> of_device_uevent_modalias was unnecessary, this patch was to remove it
-> and add phy_id as modio uevent then ethernet phy module auto load
-> function will work well.
+On Mon, Nov 29, 2021 at 05:57:03PM +0100, Wolfram Sang wrote:
+> On Tue, Nov 09, 2021 at 04:05:52PM +0530, lakshmi.sowjanya.d@intel.com wrote:
+> > From: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+> > 
+> > Set optimal HCNT, LCNT and hold time values for all the speeds supported
+> > in Intel Programmable Service Engine I2C controller in Intel Elkhart
+> > Lake.
+> > 
+> > Signed-off-by: Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>
+> 
+> Applied to for-next, thanks!
 
-NAK.
+Oh là là! Can we revert these, please?
+
+After the commit 64d0a0755c7d ("i2c: designware: Read counters from ACPI for
+PCI driver") the PCI driver should get this from ACPI tables, no hard coding
+needed anymore. I did that series to address this very issue.
+
+So, Lakshmi, please ask for BIOS fix as we discussed long time ago.
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+With Best Regards,
+Andy Shevchenko
+
+

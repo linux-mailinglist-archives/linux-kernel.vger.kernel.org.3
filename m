@@ -2,148 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 273584633D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4F34633E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241310AbhK3MLM convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 Nov 2021 07:11:12 -0500
-Received: from gloria.sntech.de ([185.11.138.130]:47586 "EHLO gloria.sntech.de"
+        id S241434AbhK3MOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:14:23 -0500
+Received: from mga11.intel.com ([192.55.52.93]:50616 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236174AbhK3MLJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:11:09 -0500
-Received: from ip5f5b2004.dynamic.kabel-deutschland.de ([95.91.32.4] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <heiko@sntech.de>)
-        id 1ms1v9-0004iV-CX; Tue, 30 Nov 2021 13:07:39 +0100
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     wefu@redhat.com, linux-riscv@lists.infradead.org
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        taiten.peng@canonical.com, aniket.ponkshe@canonical.com,
-        gordan.markus@canonical.com, guoren@linux.alibaba.com,
-        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        dlustig@nvidia.com, gfavor@ventanamicro.com,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        huffman@cadence.com, mick@ics.forth.gr,
-        allen.baum@esperantotech.com, jscheid@ventanamicro.com,
-        rtrauben@gmail.com, Anup Patel <anup@brainfault.org>,
-        Rob Herring <robh+dt@kernel.org>, anup.patel@wdc.com,
-        atishp04@gmail.com, palmer@dabbelt.com, guoren@kernel.org,
-        christoph.muellner@vrull.eu, philipp.tomsich@vrull.eu, hch@lst.de,
-        liush@allwinnertech.com, lazyparser@gmail.com,
-        drew@beagleboard.org,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions support for Svpbmt
-Date:   Tue, 30 Nov 2021 13:07:37 +0100
-Message-ID: <1909580.k68io2XIxi@diego>
-In-Reply-To: <9930802.MB9u6SvQ6m@diego>
-References: <20211129014007.286478-1-wefu@redhat.com> <97431cab-d67d-4bc7-e181-d64534791f03@canonical.com> <9930802.MB9u6SvQ6m@diego>
+        id S241421AbhK3MOJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:14:09 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="233702502"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="233702502"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 04:10:49 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="459575301"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2021 04:10:47 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ms1yA-000DFf-Ln; Tue, 30 Nov 2021 12:10:46 +0000
+Date:   Tue, 30 Nov 2021 20:09:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Romain Perier <romain.perier@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Palmer <daniel@0x0f.com>
+Subject: [chenxing:rperier-timer 13/17]
+ drivers/clocksource/timer-msc313e.c:38:28: error: field 'delay' has
+ incomplete type
+Message-ID: <202111302025.vIcz0Js4-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Montag, 29. November 2021, 13:06:23 CET schrieb Heiko Stübner:
-> Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich Schuchardt:
-> > On 11/29/21 02:40, wefu@redhat.com wrote:
-> > > From: Wei Fu <wefu@redhat.com>
-> > > 
-> > > Previous patch has added svpbmt in arch/riscv and add "riscv,svpmbt"
-> > > in the DT mmu node. Update dt-bindings related property here.
-> > > 
-> > > Signed-off-by: Wei Fu <wefu@redhat.com>
-> > > Co-developed-by: Guo Ren <guoren@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > Cc: Anup Patel <anup@brainfault.org>
-> > > Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> > > Cc: Rob Herring <robh+dt@kernel.org>
-> > > ---
-> > >   Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
-> > >   1 file changed, 10 insertions(+)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > index aa5fb64d57eb..9ff9cbdd8a85 100644
-> > > --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> > > @@ -63,6 +63,16 @@ properties:
-> > >         - riscv,sv48
-> > >         - riscv,none
-> > >   
-> > > +  mmu:
-> > 
-> > Shouldn't we keep the items be in alphabetic order, i.e. mmu before 
-> > mmu-type?
-> > 
-> > > +    description:
-> > > +      Describes the CPU's MMU Standard Extensions support.
-> > > +      These values originate from the RISC-V Privileged
-> > > +      Specification document, available from
-> > > +      https://riscv.org/specifications/
-> > > +    $ref: '/schemas/types.yaml#/definitions/string'
-> > > +    enum:
-> > > +      - riscv,svpmbt
-> > 
-> > The privileged specification has multiple MMU related extensions: 
-> > Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enum?
-> 
-> I remember in some earlier version some way back there was the
-> suggestion of using a sub-node instead and then adding boolean
-> properties for the supported extensions.
-> 
-> Aka something like
-> 	mmu {
-> 		riscv,svpbmt;	
-> 	};
+tree:   git://github.com/linux-chenxing/linux.git rperier-timer
+head:   96c4511f78eef5bec91d8660fcb6e1d6bfeffad1
+commit: 815e233bfe5e6e91e4e26f7311498e64c633c396 [13/17] clocksource: Add MStar MSC313e timer support
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20211130/202111302025.vIcz0Js4-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/linux-chenxing/linux/commit/815e233bfe5e6e91e4e26f7311498e64c633c396
+        git remote add chenxing git://github.com/linux-chenxing/linux.git
+        git fetch --no-tags chenxing rperier-timer
+        git checkout 815e233bfe5e6e91e4e26f7311498e64c633c396
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/
 
-For the record, I'm talking about the mail from september
-https://lore.kernel.org/linux-riscv/CAAeLtUChjjzG+P8yg45GLZMJy5UR2K5RRBoLFVZhtOaZ5pPtEA@mail.gmail.com/
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So having a sub-node would make adding future extensions
-way nicer.
+All errors (new ones prefixed by >>):
 
-> 
-> Which I guess would be a lot nicer. Also right now there is string-
-> comparison done on the code side, which would look way easier
-> when just looking for booleans in the dt instead.
-> 
-> Also isn't an enum a "one-of" selection, so wouldn't work directly
-> for multiple extensions?
-> 
-> 
-> Heiko
-> 
-> 
-> > 
-> > Best regards
-> > 
-> > Heinrich
-> > 
-> > > +
-> > >     riscv,isa:
-> > >       description:
-> > >         Identifies the specific RISC-V instruction set architecture
-> > > 
-> > 
-> > 
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> > 
-> 
-> 
-> 
-> 
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
+>> drivers/clocksource/timer-msc313e.c:38:28: error: field 'delay' has incomplete type
+      38 |         struct delay_timer delay;
+         |                            ^~~~~
+   drivers/clocksource/timer-msc313e.c: In function 'msc313e_clksrc_init':
+>> drivers/clocksource/timer-msc313e.c:197:9: error: implicit declaration of function 'register_current_timer_delay' [-Werror=implicit-function-declaration]
+     197 |         register_current_timer_delay(&msc313e_delay.delay);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
 
+vim +/delay +38 drivers/clocksource/timer-msc313e.c
 
+    35	
+    36	struct msc313e_delay {
+    37		void __iomem *base;
+  > 38		struct delay_timer delay;
+    39	};
+    40	
+    41	static void __iomem *msc313e_clksrc;
+    42	static struct msc313e_delay msc313e_delay;
+    43	
+    44	static void msc313e_timer_stop(void __iomem *base)
+    45	{
+    46		writew(0, base + MSC313E_REG_CTRL);
+    47	}
+    48	
+    49	static void msc313e_timer_start(void __iomem *base, bool periodic)
+    50	{
+    51		u16 reg;
+    52	
+    53		reg = readw(base + MSC313E_REG_CTRL);
+    54		if (periodic)
+    55			reg |= MSC313E_REG_CTRL_TIMER_EN;
+    56		else
+    57			reg |= MSC313E_REG_CTRL_TIMER_TRIG;
+    58		writew(reg | MSC313E_REG_CTRL_TIMER_INT_EN, base + MSC313E_REG_CTRL);
+    59	}
+    60	
+    61	static void msc313e_timer_setup(void __iomem *base, unsigned long delay)
+    62	{
+    63		writew(delay >> 16, base + MSC313E_REG_TIMER_MAX_HIGH);
+    64		writew(delay & 0xffff, base + MSC313E_REG_TIMER_MAX_LOW);
+    65	}
+    66	
+    67	static unsigned long msc313e_timer_current_value(void __iomem *base)
+    68	{
+    69		unsigned long result;
+    70	
+    71		result = readw(base + MSC313E_REG_COUNTER_LOW);
+    72		result |= readw(base + MSC313E_REG_COUNTER_HIGH) << 16;
+    73	
+    74		return result;
+    75	}
+    76	
+    77	static int msc313e_timer_clkevt_shutdown(struct clock_event_device *evt)
+    78	{
+    79		struct timer_of *timer = to_timer_of(evt);
+    80	
+    81		msc313e_timer_stop(timer_of_base(timer));
+    82	
+    83		return 0;
+    84	}
+    85	
+    86	static int msc313e_timer_clkevt_set_oneshot(struct clock_event_device *evt)
+    87	{
+    88		struct timer_of *timer = to_timer_of(evt);
+    89	
+    90		msc313e_timer_stop(timer_of_base(timer));
+    91		msc313e_timer_start(timer_of_base(timer), false);
+    92	
+    93		return 0;
+    94	}
+    95	
+    96	static int msc313e_timer_clkevt_set_periodic(struct clock_event_device *evt)
+    97	{
+    98		struct timer_of *timer = to_timer_of(evt);
+    99	
+   100		msc313e_timer_stop(timer_of_base(timer));
+   101		msc313e_timer_setup(timer_of_base(timer), timer_of_period(timer));
+   102		msc313e_timer_start(timer_of_base(timer), true);
+   103	
+   104		return 0;
+   105	}
+   106	
+   107	static int msc313e_timer_clkevt_next_event(unsigned long evt, struct clock_event_device *clkevt)
+   108	{
+   109		struct timer_of *timer = to_timer_of(clkevt);
+   110	
+   111		msc313e_timer_stop(timer_of_base(timer));
+   112		msc313e_timer_setup(timer_of_base(timer), evt);
+   113		msc313e_timer_start(timer_of_base(timer), false);
+   114	
+   115		return 0;
+   116	}
+   117	
+   118	static irqreturn_t msc313e_timer_clkevt_irq(int irq, void *dev_id)
+   119	{
+   120		struct clock_event_device *evt = dev_id;
+   121	
+   122		evt->event_handler(evt);
+   123	
+   124		return IRQ_HANDLED;
+   125	}
+   126	
+   127	static u64 msc313e_timer_clksrc_read(struct clocksource *cs)
+   128	{
+   129		return msc313e_timer_current_value(msc313e_clksrc) & cs->mask;
+   130	}
+   131	
+   132	static unsigned long msc313e_read_delay_timer_read(void)
+   133	{
+   134		return msc313e_timer_current_value(msc313e_delay.base);
+   135	}
+   136	
+   137	static u64 msc313e_timer_sched_clock_read(void)
+   138	{
+   139		return msc313e_timer_current_value(msc313e_clksrc);
+   140	}
+   141	
+   142	static struct clock_event_device msc313e_clkevt = {
+   143		.name = TIMER_NAME,
+   144		.rating = 300,
+   145		.features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT,
+   146		.set_state_shutdown = msc313e_timer_clkevt_shutdown,
+   147		.set_state_periodic = msc313e_timer_clkevt_set_periodic,
+   148		.set_state_oneshot = msc313e_timer_clkevt_set_oneshot,
+   149		.tick_resume = msc313e_timer_clkevt_shutdown,
+   150		.set_next_event = msc313e_timer_clkevt_next_event,
+   151	};
+   152	
+   153	static int __init msc313e_clkevt_init(struct device_node *np)
+   154	{
+   155		int ret;
+   156		struct timer_of *to;
+   157	
+   158		to = kzalloc(sizeof(*to), GFP_KERNEL);
+   159		if (!to)
+   160			return -ENOMEM;
+   161	
+   162		to->flags = TIMER_OF_IRQ | TIMER_OF_CLOCK | TIMER_OF_BASE;
+   163		to->of_irq.handler = msc313e_timer_clkevt_irq;
+   164		ret = timer_of_init(np, to);
+   165		if (ret)
+   166			return ret;
+   167	
+   168		msc313e_clkevt.cpumask = cpu_possible_mask;
+   169		msc313e_clkevt.irq = to->of_irq.irq;
+   170		to->clkevt = msc313e_clkevt;
+   171	
+   172		clockevents_config_and_register(&to->clkevt, timer_of_rate(to),
+   173						TIMER_SYNC_TICKS, 0xffffffff);
+   174		return 0;
+   175	}
+   176	
+   177	static int __init msc313e_clksrc_init(struct device_node *np)
+   178	{
+   179		struct timer_of to = { 0 };
+   180		int ret;
+   181		u16 reg;
+   182	
+   183		to.flags = TIMER_OF_BASE | TIMER_OF_CLOCK;
+   184		ret = timer_of_init(np, &to);
+   185		if (ret)
+   186			return ret;
+   187	
+   188		msc313e_delay.base = timer_of_base(&to);
+   189		msc313e_delay.delay.read_current_timer = msc313e_read_delay_timer_read;
+   190		msc313e_delay.delay.freq = timer_of_rate(&to);
+   191	
+   192		msc313e_clksrc = timer_of_base(&to);
+   193		reg = readw(msc313e_clksrc + MSC313E_REG_CTRL);
+   194		reg |= MSC313E_REG_CTRL_TIMER_EN;
+   195		writew(reg, msc313e_clksrc + MSC313E_REG_CTRL);
+   196	
+ > 197		register_current_timer_delay(&msc313e_delay.delay);
+   198	
+   199		sched_clock_register(msc313e_timer_sched_clock_read, 32, timer_of_rate(&to));
+   200		return clocksource_mmio_init(timer_of_base(&to), TIMER_NAME, timer_of_rate(&to), 300, 32,
+   201					     msc313e_timer_clksrc_read);
+   202	}
+   203	
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

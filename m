@@ -2,347 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A58463C8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6532463C8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244646AbhK3RLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:11:34 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47464 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233127AbhK3RLd (ORCPT
+        id S244668AbhK3RMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:12:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36308 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233127AbhK3RMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:11:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C7077CE1864
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:08:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68072C53FC1;
-        Tue, 30 Nov 2021 17:08:10 +0000 (UTC)
-Date:   Tue, 30 Nov 2021 12:08:08 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yinan Liu <yinan@linux.alibaba.com>
-Cc:     peterz@infradead.org, mark-pk.tsai@mediatek.com, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] scripts: ftrace - move the sort-processing in
- ftrace_init to compile time
-Message-ID: <20211130120808.0db8af81@gandalf.local.home>
-In-Reply-To: <20211123105404.22166-2-yinan@linux.alibaba.com>
-References: <20210911135043.16014-1-yinan@linux.alibaba.com>
-        <20211123105404.22166-1-yinan@linux.alibaba.com>
-        <20211123105404.22166-2-yinan@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 30 Nov 2021 12:12:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638292136;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7K30WnjkuEnR0TFOmhGj++nMZbWrnMpgZrgfYl/y8Q0=;
+        b=ORx9/m6aU0/j5BToHHtaoav0R21UmfrBXLxMj8bc9YVW48qWsdYggnVVccFOCsOW6oFdTp
+        HLmNI70J3xcrFP0SXtvPLcxRQD3ndtOI8J7Wysldo35p6ATutdH0wdVt1uTrJSFizfv6Li
+        U2wOdBzaWWWXNLzHCPBwAHhUKgwJlPI=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-572-hbADqkFTN4ObbJCZJ3aX6Q-1; Tue, 30 Nov 2021 12:08:55 -0500
+X-MC-Unique: hbADqkFTN4ObbJCZJ3aX6Q-1
+Received: by mail-qv1-f72.google.com with SMTP id kk1-20020a056214508100b003a9d1b987caso30119131qvb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:08:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=7K30WnjkuEnR0TFOmhGj++nMZbWrnMpgZrgfYl/y8Q0=;
+        b=zTt4xS4Dvd5vJsWO5gbNnoXQeOzhJTaHpkeGKMejFB4ZWaY/jzXYQ6Wc/8dXoQZPPP
+         2INa+XDiTdXcEQEAixlpUSfunjfZhJem+SHyoYvZ8IUTJgK6AXPZV3Ciz7DXt/KLRLzq
+         n5rrlTzxa/xNB+S0TCOQ86wSaiL1Qt67FMQn/uTiUPi24r0aoZM78lHpizeqbhE9khnP
+         5bpBnFpxibphrZSc9+9Bxmje7fHSpmYKalIeUzJGFsdH61kq+ukjEusF3J9NWl4CbCig
+         H2yR+OGVsXv84isGoWiMEC/3TD9c4UjCcB4L/ui0TF8tuKXwGoavT++IFcIGG279KyVa
+         Vp1Q==
+X-Gm-Message-State: AOAM530td1Ap3X1LIlN1FyGt9hWcYBlxeubv8/jyRqEpx2jLxK0uJepy
+        brmDmhADjivMS3w42/S2x0pwbCy0tOAMwvUV2QFmIdCdtJ/XqgfKDYV7jK3LavNm0HFNgrODLX+
+        uUBRA4d4mXerq2B/kunQxgoI1
+X-Received: by 2002:a05:620a:17a2:: with SMTP id ay34mr516395qkb.543.1638292134481;
+        Tue, 30 Nov 2021 09:08:54 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwfOvEddTXllJYDns2FXJd+Ixkks0Jpy+tw+aPyiZlvUhKtZP+GM/0LBApC5tq++47DqSPywA==
+X-Received: by 2002:a05:620a:17a2:: with SMTP id ay34mr516351qkb.543.1638292134211;
+        Tue, 30 Nov 2021 09:08:54 -0800 (PST)
+Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
+        by smtp.gmail.com with ESMTPSA id u21sm11136841qtw.29.2021.11.30.09.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 09:08:53 -0800 (PST)
+Message-ID: <67cea601fd6b3e1deb6fe0c3401ca8410219ecf1.camel@redhat.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+From:   Simo Sorce <simo@redhat.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Date:   Tue, 30 Nov 2021 12:08:51 -0500
+In-Reply-To: <YaZHKHjomEivul6U@kroah.com>
+References: <2036923.9o76ZdvQCi@positron.chronox.de>
+         <22137816.pfsBpAd9cS@tauon.chronox.de> <YaEJtv4A6SoDFYjc@kroah.com>
+         <9311513.S0ZZtNTvxh@tauon.chronox.de> <YaT+9MueQIa5p8xr@kroah.com>
+         <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
+         <YaYvYdnSaAvS8MAk@kroah.com>
+         <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
+         <YaZHKHjomEivul6U@kroah.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Nov 2021 18:54:04 +0800
-Yinan Liu <yinan@linux.alibaba.com> wrote:
-
-> When the kernel starts, the initialization of ftrace takes
-> up a portion of the time (approximately 6~8ms) to sort mcount
-> addresses. We can save this time by moving mcount-sorting to
-> compile time.
+On Tue, 2021-11-30 at 16:45 +0100, Greg Kroah-Hartman wrote:
+> On Tue, Nov 30, 2021 at 09:31:09AM -0500, Simo Sorce wrote:
+> > On Tue, 2021-11-30 at 15:04 +0100, Greg Kroah-Hartman wrote:
+> > > On Tue, Nov 30, 2021 at 07:24:15AM -0500, Jeffrey Walton wrote:
+> > > > On Mon, Nov 29, 2021 at 6:07 PM Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > ...
+> > > > > Sometimes, yes, it is valid to have different implementations for things
+> > > > > that do different things in the same area (like filesystems), but for a
+> > > > > core function of the kernel, so far the existing random maintainer has
+> > > > > not wanted to have multiple implementations.  Same goes for other parts
+> > > > > of the kernel, it's not specific only to this one very tiny driver.
+> > > > > 
+> > > > > As a counterpoint, we do not allow duplicate drivers that control the
+> > > > > same hardware types in the tree.  We have tried that in the past and it
+> > > > > was a nightmare to support and maintain and just caused massive user
+> > > > > confusion as well.  One can argue that the random driver is in this same
+> > > > > category.
+> > > > 
+> > > > I think an argument could be made that they are different drivers
+> > > > since they have different requirements and security goals. I don't
+> > > > think it matters where the requirements came from, whether it was ad
+> > > > hoc from the developer, NIST, KISA, CRYPTREC, NESSIE, or another
+> > > > organization.
+> > > > 
+> > > > Maybe the problem is with the name of the driver? Perhaps the current
+> > > > driver should be named random-linux, Stephan's driver should be named
+> > > > random-nist, and the driver should be wired up based on a user's
+> > > > selection. That should sidestep the problems associated with the
+> > > > "duplicate drivers" policy.
+> > > 
+> > > The "problem" here is that the drivers/char/random.c file has three users,
+> > > the userspace /dev/random and syscall api, the in-kernel "here's some
+> > > entropy for the random core to use" api, and the in-kernel "give me some
+> > > random data" api.
+> > > 
+> > > Odds are, you REALLY do not want the in-kernel calls to be pulling from
+> > > the "random-government-crippled-specification" implementation, right?
+> > 
+> > You really *do* want that.
+> > When our customers are mandated to use FIPS certified cryptography,
+> > they want to use it for kernel cryptography as well, and in general
+> > they want to use a certified randomness source as well.
 > 
+> There are huge numbers of internal kernel calls that use random data for
+> non-crypto things.
 
-Hmm, this depends on CONFIG_BUILDTIME_TABLE_SORT, and not every
-architecture that defines CONFIG_HAVE_DYNAMIC_FTRACE also defines
-CONFIG_BUILDTIME_TABLE_SORT. So this will break those architectures.
+Sure, but it makes little sense to use different random implementations
+unless there are specific issues in terms of performance. It is also
+not always easy to establish if a certain use of random numbers is
+actually security relevant, may be context dependent, so it is
+generally safer to just use the certified implementation for everything
+if possible.
 
-> Signed-off-by: Yinan Liu <yinan@linux.alibaba.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> ---
->  kernel/trace/ftrace.c   |   6 ++-
->  scripts/Makefile        |   2 +-
->  scripts/link-vmlinux.sh |   6 +--
->  scripts/sorttable.c     |   2 +
->  scripts/sorttable.h     | 113 ++++++++++++++++++++++++++++++++++++++++++++++--
->  5 files changed, 119 insertions(+), 10 deletions(-)
+> > I do not get why you call the implementation crippled? The
+> > specification is quite thorough and provides well reasoned requirements
+> > as well as self-test that insure coding mistakes won't end up returning
+> > non-random values.
 > 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index 7b180f6..f5af419 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -6189,8 +6189,10 @@ static int ftrace_process_locs(struct module *mod,
->  	if (!count)
->  		return 0;
->  
-> -	sort(start, count, sizeof(*start),
-> -	     ftrace_cmp_ips, NULL);
+> Which specification are you talking about exactly?  There are loads of
+> different ones it seems that people wish to follow, so it's hard to
+> claim that they all are sane :)
 
-Should have a comment:
+Well, given I am interested primarily in FIPS certifications I was
+referring specifically to SP800-90A/B/C:
+https://csrc.nist.gov/publications/detail/sp/800-90a/rev-1/final
+https://csrc.nist.gov/publications/detail/sp/800-90b/final
+https://csrc.nist.gov/publications/detail/sp/800-90c/draft
 
-	/* Modules can not be sorted at build time */
-> +	if (mod) {
+> > I understand the mistrust vs gov agencies due to past mishaps like the
+> > Dual-DRBG thing, but we are not talking about something like that in
+> > this case. NIST is not mandating any specific algorithmic
+> > implementation, the requirement set forth allow to use a variety of
+> > different algorithms so that everyone can choose what they think is
+> > sane.
+> > 
+> > > Again, just try evolving the existing code to meet the needs that you
+> > > all have, stop trying to do wholesale reimplementations.  Those never
+> > > succeed, and it's pretty obvious that no one wants a "plugin a random
+> > > random driver" interface, right?
+> > 
+> > I think one of the issues is that the number of changes required
+> > against the current random driver amount essentially to a re-
+> > implementation. Sure, you can do it as a series of patches that
+> > transform the current code in something completely different.
+> 
+> That is how kernel development works, it is nothing new.
+> 
+> > And the main question here is, how can we get there, in any case, if
+> > the maintainer of the random device doesn't even participate in
+> > discussions, does not pick obvious bug fixes and is simply not engaging
+> > at all?
+> 
+> What obvious bug fixes have been dropped?
 
-And perhaps even add:
+Stephan posted you the link a few days ago for one of the examples.
+If you look at the last year you also will see that multiple patches
+have gone in w/o the maintainer interacting, which is fine for obvious
+stuff, but does not work for stuff that requires more feedback.
 
-	if (!IS_ENABLED(CONFIG_BUILDTIME_TABLE_SORT) || mod) {
+> > Your plan requires an active maintainer that guides these changes and
+> > interact with the people proposing them to negotiate the best outcome.
+> > But that is not happening so that road seem blocked at the moment.
+> 
+> We need working patches that fit with the kernel development model first
+> before people can start blaming maintainers :)
 
-> +		sort(start, count, sizeof(*start),
-> +		     ftrace_cmp_ips, NULL);
-> +	}
->  
->  	start_pg = ftrace_allocate_pages(count);
->  	if (!start_pg)
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> index 9adb6d2..b286e11 100644
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -17,6 +17,7 @@ hostprogs-always-$(CONFIG_SYSTEM_EXTRA_CERTIFICATE)	+= insert-sys-cert
->  hostprogs-always-$(CONFIG_SYSTEM_REVOCATION_LIST)	+= extract-cert
->  
->  HOSTCFLAGS_sorttable.o = -I$(srctree)/tools/include
-> +HOSTLDLIBS_sorttable = -lpthread
->  HOSTCFLAGS_asn1_compiler.o = -I$(srctree)/include
->  HOSTCFLAGS_sign-file.o = $(CRYPTO_CFLAGS)
->  HOSTLDLIBS_sign-file = $(CRYPTO_LIBS)
-> @@ -29,7 +30,6 @@ ARCH := x86
->  endif
->  HOSTCFLAGS_sorttable.o += -I$(srctree)/tools/arch/x86/include
->  HOSTCFLAGS_sorttable.o += -DUNWINDER_ORC_ENABLED
-> -HOSTLDLIBS_sorttable = -lpthread
->  endif
->  
->  # The following programs are only built on demand
-> diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-> index 36ef7b3..e2e1a8f 100755
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@ -422,6 +422,9 @@ if [ -n "${CONFIG_DEBUG_INFO_BTF}" -a -n "${CONFIG_BPF}" ]; then
->  	${RESOLVE_BTFIDS} vmlinux
->  fi
->  
-> +info SYSMAP System.map
-> +mksysmap vmlinux System.map
-> +
->  if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
->  	info SORTTAB vmlinux
->  	if ! sorttable vmlinux; then
-> @@ -430,9 +433,6 @@ if [ -n "${CONFIG_BUILDTIME_TABLE_SORT}" ]; then
->  	fi
->  fi
->  
-> -info SYSMAP System.map
-> -mksysmap vmlinux System.map
-> -
->  # step a (see comment above)
->  if [ -n "${CONFIG_KALLSYMS}" ]; then
->  	mksysmap ${kallsyms_vmlinux} .tmp_System.map
-> diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-> index 0ef3abf..11a595c 100644
-> --- a/scripts/sorttable.c
-> +++ b/scripts/sorttable.c
-> @@ -30,6 +30,8 @@
->  #include <stdlib.h>
->  #include <string.h>
->  #include <unistd.h>
-> +#include <errno.h>
-> +#include <pthread.h>
->  
->  #include <tools/be_byteshift.h>
->  #include <tools/le_byteshift.h>
-> diff --git a/scripts/sorttable.h b/scripts/sorttable.h
-> index a2baa2f..81dbf37 100644
-> --- a/scripts/sorttable.h
-> +++ b/scripts/sorttable.h
-> @@ -19,6 +19,9 @@
->  
->  #undef extable_ent_size
->  #undef compare_extable
-> +#undef get_mcount_loc
-> +#undef sort_mcount_loc
-> +#undef elf_mcount_loc
->  #undef do_sort
->  #undef Elf_Addr
->  #undef Elf_Ehdr
-> @@ -41,6 +44,9 @@
->  #ifdef SORTTABLE_64
->  # define extable_ent_size	16
->  # define compare_extable	compare_extable_64
-> +# define get_mcount_loc		get_mcount_loc_64
-> +# define sort_mcount_loc	sort_mcount_loc_64
-> +# define elf_mcount_loc		elf_mcount_loc_64
->  # define do_sort		do_sort_64
->  # define Elf_Addr		Elf64_Addr
->  # define Elf_Ehdr		Elf64_Ehdr
-> @@ -62,6 +68,9 @@
->  #else
->  # define extable_ent_size	8
->  # define compare_extable	compare_extable_32
-> +# define get_mcount_loc		get_mcount_loc_32
-> +# define sort_mcount_loc	sort_mcount_loc_32
-> +# define elf_mcount_loc		elf_mcount_loc_32
->  # define do_sort		do_sort_32
->  # define Elf_Addr		Elf32_Addr
->  # define Elf_Ehdr		Elf32_Ehdr
-> @@ -84,8 +93,6 @@
->  
->  #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
->  /* ORC unwinder only support X86_64 */
-> -#include <errno.h>
-> -#include <pthread.h>
->  #include <asm/orc_types.h>
->  
->  #define ERRSTR_MAXSZ	256
-> @@ -191,6 +198,62 @@ static int compare_extable(const void *a, const void *b)
->  		return 1;
->  	return 0;
->  }
-> +struct elf_mcount_loc {
-> +	Elf_Ehdr *ehdr;
-> +	Elf_Shdr *init_data_sec;
-> +	uint_t start_mcount_loc;
-> +	uint_t stop_mcount_loc;
-> +};
-> +
-> +/* Sort the addresses stored between __start_mcount_loc to __stop_mcount_loc in vmlinux */
-> +static void *sort_mcount_loc(void *arg)
-> +{
-> +	struct elf_mcount_loc *emloc = (struct elf_mcount_loc *)arg;
-> +	uint_t offset = emloc->start_mcount_loc - _r(&(emloc->init_data_sec)->sh_addr)
-> +					+ _r(&(emloc->init_data_sec)->sh_offset);
-> +	uint_t count = emloc->stop_mcount_loc - emloc->start_mcount_loc;
-> +	unsigned char *start_loc = (void *)emloc->ehdr + offset;
-> +
-> +	qsort(start_loc, count/sizeof(uint_t), sizeof(uint_t), compare_extable);
-> +	return NULL;
-> +}
-> +
-> +/* Get the address of __start_mcount_loc and __stop_mcount_loc in System.map */
-> +static void get_mcount_loc(uint_t *_start, uint_t *_stop)
-> +{
-> +	FILE *file_start, *file_stop;
-> +	char start_buff[20];
-> +	char stop_buff[20];
-> +	int len = 0;
-> +
-> +	file_start = popen(" grep start_mcount System.map | awk '{print $1}' ", "r");
-> +	if (!file_start) {
-> +		fprintf(stderr, "get start_mcount_loc error!");
-> +		return;
-> +	}
-> +
-> +	file_stop = popen(" grep stop_mcount System.map | awk '{print $1}' ", "r");
-> +	if (!file_stop) {
-> +		fprintf(stderr, "get stop_mcount_loc error!");
-> +		pclose(file_start);
-> +		return;
-> +	}
-> +
-> +	while (fgets(start_buff, sizeof(start_buff), file_start) != NULL) {
-> +		len = strlen(start_buff);
-> +		start_buff[len - 1] = '\0';
-> +	}
-> +	*_start = strtoul(start_buff, NULL, 16);
-> +
-> +	while (fgets(stop_buff, sizeof(stop_buff), file_stop) != NULL) {
-> +		len = strlen(stop_buff);
-> +		stop_buff[len - 1] = '\0';
-> +	}
-> +	*_stop = strtoul(stop_buff, NULL, 16);
-> +
-> +	pclose(file_start);
-> +	pclose(file_stop);
-> +}
->  
->  static int do_sort(Elf_Ehdr *ehdr,
->  		   char const *const fname,
-> @@ -217,6 +280,10 @@ static int do_sort(Elf_Ehdr *ehdr,
->  	int idx;
->  	unsigned int shnum;
->  	unsigned int shstrndx;
-> +	struct elf_mcount_loc mstruct;
-> +	uint_t _start_mcount_loc = 0;
-> +	uint_t _stop_mcount_loc = 0;
-> +	pthread_t mcount_sort_thread;
->  #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
->  	unsigned int orc_ip_size = 0;
->  	unsigned int orc_size = 0;
-> @@ -253,6 +320,14 @@ static int do_sort(Elf_Ehdr *ehdr,
->  			symtab_shndx = (Elf32_Word *)((const char *)ehdr +
->  						      _r(&s->sh_offset));
->  
-> +		/* locate the .init.data section in vmlinux */
-> +		if (!strcmp(secstrings + idx, ".init.data")) {
-> +			get_mcount_loc(&_start_mcount_loc, &_stop_mcount_loc);
-> +			mstruct.ehdr = ehdr;
-> +			mstruct.init_data_sec = s;
-> +			mstruct.start_mcount_loc = _start_mcount_loc;
-> +			mstruct.stop_mcount_loc = _stop_mcount_loc;
-> +		}
->  #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
->  		/* locate the ORC unwind tables */
->  		if (!strcmp(secstrings + idx, ".orc_unwind_ip")) {
-> @@ -294,6 +369,21 @@ static int do_sort(Elf_Ehdr *ehdr,
->  		goto out;
->  	}
->  #endif
-> +	if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
+This is a Catch-22, the maintainer is mum in what would be acceptable,
+and whenever there are patches sent, there is no feedback on whether
+they are acceptable or not. It's not like I like blaming anyone, but it
+would be nice to have at least one word that gives a direction to
+follow that the maintainer is willing to then engage with and review or
+at least accept with proper third party review.
 
-This is triggered when CONFIG_FUNCTION_TRACER is not defined.
+> I see almost 300 changes accepted for this tiny random.c file over the
+> years we have had git (17 years).  I think that's a very large number of
+> changes for a 2300 line file that is relied upon by everyone.
 
-In other words, do not fail if mcount section does not exist.
+Seem like a lot more are desired too :-)
+
+Simo.
+
+-- 
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
 
 
-> +		fprintf(stderr,
-> +			"incomplete mcount's sort in file: %s\n",
-> +			fname);
-> +		goto out;
-> +	}
-> +
-> +	/* create thread to sort mcount_loc concurrently */
-> +	if (pthread_create(&mcount_sort_thread, NULL, &sort_mcount_loc, &mstruct)) {
-> +		fprintf(stderr,
-> +			"pthread_create mcount_sort_thread failed '%s': %s\n",
-> +			strerror(errno), fname);
-> +		goto out;
-> +	}
-> +
->  	if (!extab_sec) {
->  		fprintf(stderr,	"no __ex_table in file: %s\n", fname);
->  		goto out;
-> @@ -364,11 +454,11 @@ static int do_sort(Elf_Ehdr *ehdr,
->  		void *retval = NULL;
->  		/* wait for ORC tables sort done */
->  		rc = pthread_join(orc_sort_thread, &retval);
-> -		if (rc)
-> +		if (rc) {
->  			fprintf(stderr,
->  				"pthread_join failed '%s': %s\n",
->  				strerror(errno), fname);
-> -		else if (retval) {
-> +		} else if (retval) {
->  			rc = -1;
->  			fprintf(stderr,
->  				"failed to sort ORC tables '%s': %s\n",
 
-Looks like you added parenthesis that was not yours. I would ignore this
-for your patch, but feel free to send a separate clean up patch.
 
-> @@ -376,5 +466,20 @@ static int do_sort(Elf_Ehdr *ehdr,
->  		}
->  	}
->  #endif
-> +	if (mcount_sort_thread) {
-> +		void *retval = NULL;
-> +		/* wait for mcount sort done */
-> +		rc = pthread_join(mcount_sort_thread, &retval);
-> +		if (rc) {
-> +			fprintf(stderr,
-> +				"pthread_join failed '%s': %s\n",
-> +				strerror(errno), fname);
-> +		} else if (retval) {
-> +			rc = -1;
-> +			fprintf(stderr,
-> +				"failed to sort mcount '%s': %s\n",
-> +				(char *)retval, fname);
-> +		}
-> +	}
->  	return rc;
->  }
-
--- Steve

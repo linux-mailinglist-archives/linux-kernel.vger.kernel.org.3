@@ -2,157 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC24462929
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:33:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9540D462928
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232620AbhK3AhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:37:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S234080AbhK3AhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:37:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbhK3AhJ (ORCPT
+        with ESMTP id S229763AbhK3AhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:37:09 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B78C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:33:51 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id 14so23784023ioe.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:33:51 -0800 (PST)
+        Mon, 29 Nov 2021 19:37:03 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29400C061574;
+        Mon, 29 Nov 2021 16:33:45 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id e3so79341716edu.4;
+        Mon, 29 Nov 2021 16:33:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ns9r+Mn1i99LgBNIGful/tYBPqRygN2Chhi57Wy6mVQ=;
-        b=ejTrhtaQShd+LH+iZ5iihsPHjOsoOhOzQ+55b4CnhGCT7OrIpFFwds8ttOJe2Ni1Uy
-         q7qIcXsRxOFYOhGhNmh5O6734Mf2GAzYEa0c5VvuYsgSynI3eva2dhB/7qlXrcG/Psle
-         mrdhJkq1N9YODzlKa3vyWcAJHU0Erl49K8VvR+68XOEeW5cA00QC0cbU1fqNBTCPEq4N
-         h2GwJQguBE/kdSihiU2vLe7GXh9eBMpuhi6Vh3HabHcji1KkdaQOI0BV2UEzfPlYXLXD
-         ve4ibZVQNecEXqbj6UUwjmVlplJ5+X2Xq/TF9n4ed8SU64EMS4i2kUGM3f8lM9ewsqXj
-         7KOQ==
+        h=date:from:to:cc:subject:message-id:reply-to:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=HAWGRtmFkA3dGuVLOofW70iShXqEXTjub0/LjbjNnFs=;
+        b=IQRCFvgoknPXI0N4anxUO98CR3D/fjWKhTqrhYTYwOKYZsKOEniugBe0rkgFDw+pEU
+         DYclfBs3n0AJ5fN2vus+UgQSerhKFugGcb6Mgd7kxRc1vYsU/DHjCV9fFtV/ymONFo4U
+         LA1VGMzsfHSyWs5RXIv3SdFR/hzBwbKXS0WGdTu38+8JoJD0maFQIsPL+h6/Jq44ezcT
+         p+X1xcJLRcr82Ge3gKfMSIAFbmwPKjBxN5AaNadC6jgyqyIgRnGfQ7RITSQPRobf5+Y8
+         gk2GMJdFxz8lfROwCzTbf45184nSX0StWPKlVXexB1B778+GjEdlyaC/+NcBi5arD68v
+         E12g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ns9r+Mn1i99LgBNIGful/tYBPqRygN2Chhi57Wy6mVQ=;
-        b=g2Rhb5hLdBTWgltnB/wPFED3vGXcg8dzthoiPOsfCS9DkUJwbKrXBf6Ju74UqW+9lS
-         0obYTDaGJJ3+KCOB3Qyl0abkCXTmDjxxuJEfJeTAmVfsIC8C55q1HlfbzXnWl1JIMCJ3
-         6kUjB8bJ1pIjfxwMq5uhXzqsr73shh2dqD7cp2JWS4M5tj+5d7XXDBDwi8vTbJllXo9j
-         3AshvKMzrQjEq5741auKfut0RHc2MrqT3aA/G+WKbfHWZOmckhsSxHd9fsUN85bPY14w
-         VD4eBjFeLJ8l7b+bD/rJMLLxCuzb30X0oLzB6B9JlFytdp/1bnU/w0HdsBQ3KFoG333U
-         y2Gw==
-X-Gm-Message-State: AOAM533xU2SnAufvZ929oN1045sCF+UZOXWgIIA3sX3W9RnQ0rxvyXeD
-        /ij1l6S3v2yLX0v2VnLm+igDfaIYTvTdCYU1qrux5QXr/Do=
-X-Google-Smtp-Source: ABdhPJykfy6SOwlmY5dhLg2Soxmrn/N1Ubp7vZ242Gek3JTdfqYtOlyWP4f2jE9zfiaMlYSHiB1I/CUrFaNEu2tMvbY=
-X-Received: by 2002:a05:6638:1382:: with SMTP id w2mr71006440jad.50.1638232430503;
- Mon, 29 Nov 2021 16:33:50 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:reply-to
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=HAWGRtmFkA3dGuVLOofW70iShXqEXTjub0/LjbjNnFs=;
+        b=BwXVCCi9dkmHLCPyUQ8uqwEndzrLIY8Wh1Nj1+cCC1NKjnKleqEFtVaY5HF2l+MpZm
+         oeRQu+piyVRfBW0CHon13AjLNWjcqPu5pEFuF0XeyGOP6VmGP9WBroCuVMHkt0oq1RBB
+         UKQUj5HVSnq2UDONmTVlMoF47SL0d7bvGOeD5lHq2i6uhHsNL3AHx/bjd0yphrhYe4Ey
+         jUjkY5FTRdnpSpMvatkc9scX+pz1T8uDidiFsbA2pgt5yWO3ouRqD9aYlCSFgRWJx6Tl
+         xj6Sqp8FLKXiY7Dzj/dHjkRpdfl5N0+SvMu/NvmIahTvZEqpi/bFcpGflVJZKyTu5VvF
+         PFlw==
+X-Gm-Message-State: AOAM532Uobb5mjiOlUUpuIyd5iz05lOhg5ZS2Czuelk4s/8ZGMI+bV3s
+        feMQPA9/lx+MZ+NDwyhgLsc=
+X-Google-Smtp-Source: ABdhPJylgZCE0afSuwYl768krAFtUqxsKvBOtr2B8YBB4Gp3PnDkZuvBHoXju5xrMbFbWso2TPXY2w==
+X-Received: by 2002:a17:906:b304:: with SMTP id n4mr19543422ejz.116.1638232423198;
+        Mon, 29 Nov 2021 16:33:43 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id c7sm8397536ejd.91.2021.11.29.16.33.42
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Mon, 29 Nov 2021 16:33:42 -0800 (PST)
+Date:   Tue, 30 Nov 2021 00:33:41 +0000
+From:   Wei Yang <richard.weiyang@gmail.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Wei Yang <richard.weiyang@gmail.com>, lizefan.x@bytedance.com,
+        hannes@cmpxchg.org, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] cgroup: cgroup_subsys[ssid] is never NULL
+Message-ID: <20211130003341.kbakqtpjffvprxxm@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <20211127145919.31159-1-richard.weiyang@gmail.com>
+ <YaUPej4QUZoFAuOM@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20211130000612.591368-1-frederic@kernel.org> <20211130000612.591368-2-frederic@kernel.org>
-In-Reply-To: <20211130000612.591368-2-frederic@kernel.org>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Tue, 30 Nov 2021 08:33:39 +0800
-Message-ID: <CAJhGHyAF=itoQAf3mBqebQOFK=2FU+Bafg9qZhE1cBH_LGhEXA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/2] workqueue: Fix unbind_workers() VS
- wq_worker_running() race
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaUPej4QUZoFAuOM@slm.duckdns.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 8:06 AM Frederic Weisbecker <frederic@kernel.org> wrote:
+On Mon, Nov 29, 2021 at 07:35:54AM -1000, Tejun Heo wrote:
+>On Sat, Nov 27, 2021 at 02:59:18PM +0000, Wei Yang wrote:
+>> When the check, (ssid) < CGROUP_SUBSYS_COUNT, passed, it means
+>> cgroup_subsys[ssid] is defined to its proper value. It is not
+>> necessary to use a true to enter the loop.
+>...
+>>  #define for_each_subsys(ss, ssid)					\
+>>  	for ((ssid) = 0; (ssid) < CGROUP_SUBSYS_COUNT &&		\
+>> -	     (((ss) = cgroup_subsys[ssid]) || true); (ssid)++)
+>> +	     ((ss) = cgroup_subsys[ssid]); (ssid)++)
 >
-> At CPU-hotplug time, unbind_worker() may preempt a worker while it is
-> waking up. In that case the following scenario can happen:
+>So, now the compiler has to test whether ss is NULL or not before each
+>iteration even though we know that it's never NULL. The whole point of that
+>"|| true" is telling the compiler that the pointer is never NULL.
 >
->         unbind_workers()                     wq_worker_running()
->         --------------                      -------------------
->                                       if (!(worker->flags & WORKER_NOT_RUNNING))
->                                           //PREEMPTED by unbind_workers
->         worker->flags |= WORKER_UNBOUND;
->         [...]
->         atomic_set(&pool->nr_running, 0);
->         //resume to worker
->                                               atomic_inc(&worker->pool->nr_running);
->
-> After unbind_worker() resets pool->nr_running, the value is expected to
-> remain 0 until the pool ever gets rebound in case cpu_up() is called on
-> the target CPU in the future. But here the race leaves pool->nr_running
-> with a value of 1, triggering the following warning when the worker goes
-> idle:
->
->         WARNING: CPU: 3 PID: 34 at kernel/workqueue.c:1823 worker_enter_idle+0x95/0xc0
->         Modules linked in:
->         CPU: 3 PID: 34 Comm: kworker/3:0 Not tainted 5.16.0-rc1+ #34
->         Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba527-rebuilt.opensuse.org 04/01/2014
->         Workqueue:  0x0 (rcu_par_gp)
->         RIP: 0010:worker_enter_idle+0x95/0xc0
->         Code: 04 85 f8 ff ff ff 39 c1 7f 09 48 8b 43 50 48 85 c0 74 1b 83 e2 04 75 99 8b 43 34 39 43 30 75 91 8b 83 00 03 00 00 85 c0 74 87 <0f> 0b 5b c3 48 8b 35 70 f1 37 01 48 8d 7b 48 48 81 c6 e0 93  0
->         RSP: 0000:ffff9b7680277ed0 EFLAGS: 00010086
->         RAX: 00000000ffffffff RBX: ffff93465eae9c00 RCX: 0000000000000000
->         RDX: 0000000000000000 RSI: ffff9346418a0000 RDI: ffff934641057140
->         RBP: ffff934641057170 R08: 0000000000000001 R09: ffff9346418a0080
->         R10: ffff9b768027fdf0 R11: 0000000000002400 R12: ffff93465eae9c20
->         R13: ffff93465eae9c20 R14: ffff93465eae9c70 R15: ffff934641057140
->         FS:  0000000000000000(0000) GS:ffff93465eac0000(0000) knlGS:0000000000000000
->         CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->         CR2: 0000000000000000 CR3: 000000001cc0c000 CR4: 00000000000006e0
->         DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->         DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->         Call Trace:
->           <TASK>
->           worker_thread+0x89/0x3d0
->           ? process_one_work+0x400/0x400
->           kthread+0x162/0x190
->           ? set_kthread_struct+0x40/0x40
->           ret_from_fork+0x22/0x30
->           </TASK>
->
-> Also due to this incorrect "nr_running == 1", further queued work may
-> end up not being served, because no worker is awaken at work insert time.
-> This raises rcutorture writer stalls for example.
->
-> Fix this with disabling preemption in the right place in
-> wq_worker_running().
->
-> It's worth noting that if the worker migrates and runs concurrently with
-> unbind_workers(), it is guaranteed to see the WORKER_UNBOUND flag update
-> due to set_cpus_allowed_ptr() acquiring/releasing rq->lock.
->
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 
-Fixes: 6d25be5782e4 ("sched/core, workqueues: Distangle worker
-accounting from rq lock")
+That's interesting. Thanks.
 
-Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
+>Thanks.
+>
+>-- 
+>tejun
 
-> Cc: Paul E. McKenney <paulmck@kernel.org>
-> ---
->  kernel/workqueue.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-> index 332361cf215f..5094573e8b45 100644
-> --- a/kernel/workqueue.c
-> +++ b/kernel/workqueue.c
-> @@ -868,8 +868,17 @@ void wq_worker_running(struct task_struct *task)
->
->         if (!worker->sleeping)
->                 return;
-> +
-> +       /*
-> +        * If preempted by unbind_workers() between the WORKER_NOT_RUNNING check
-> +        * and the nr_running increment below, we may ruin the nr_running reset
-> +        * and leave with an unexpected pool->nr_running == 1 on the newly unbound
-> +        * pool. Protect against such race.
-> +        */
-> +       preempt_disable();
->         if (!(worker->flags & WORKER_NOT_RUNNING))
->                 atomic_inc(&worker->pool->nr_running);
-> +       preempt_enable();
->         worker->sleeping = 0;
->  }
->
-> --
-> 2.25.1
->
+-- 
+Wei Yang
+Help you, Help me

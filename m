@@ -2,79 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E0F463B87
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:18:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FF6463B8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:18:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240240AbhK3QVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:21:34 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:48722 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243932AbhK3QVD (ORCPT
+        id S238833AbhK3QVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:21:51 -0500
+Received: from new4-smtp.messagingengine.com ([66.111.4.230]:42027 "EHLO
+        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234552AbhK3QVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:21:03 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24F7BB81A56
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:17:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40918C53FC7;
-        Tue, 30 Nov 2021 16:17:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638289057;
-        bh=MZnl0m0UlSGNeDrL9sapE0g2YD1NMkMtPnbDj8SAK+0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gg3STzay0QZRm3E9SW2UXSNlJlPrWOia6C2DHwbH1gviANhFaHenZJqyzTQYr1+Vz
-         AejGr4duQzTULR+N9JM1fw3I3ymCYe0u6flainBkcRjTfvx7y22R+se3M9eODLib9l
-         rwlp+udvw6zUlE9MnUY2JRgCxQhEtXPkJv3CS/nY9/OU2g8YoRlI5+nGsZjr5AU072
-         5B7xQbXWt51P5fvjmRt/dZ8QE83Y2cOyMO5d27dlgsrZ1jGFDciQsV32pboynjoQuD
-         eoxJuNN9GFXLU6/A3Sbv0v65I6T6Lm6H24uJxMLd9JUkEC/vHpKjCK3r77fMjQ0nwD
-         LbE0nOayjqZFQ==
-Date:   Tue, 30 Nov 2021 16:17:32 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ASoC: qdsp6: q6routing: Fix return value from
- msm_routing_put_audio_mixer
-Message-ID: <YaZOnJIrl2bO98mL@sirena.org.uk>
-References: <20211130160414.21616-1-srinivas.kandagatla@linaro.org>
+        Tue, 30 Nov 2021 11:21:48 -0500
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6E760580129;
+        Tue, 30 Nov 2021 11:18:24 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Tue, 30 Nov 2021 11:18:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding; s=fm3; bh=yqwoBj/vWfeXNQgCvpj+YqonSU
+        yi2vtvBoiOZzTnEUE=; b=ULWafKAXsOC4xDUqQoDhiXfx1RWMiIAmrDWWBX8qzl
+        ni1OfFtOpZGeBIq3Xtk5YCO1Z4gsTP0Id5qI+f6HBeLqD8GwOlb7ns1KsPr+t3Th
+        fFw9/oCNEHG+1kVB1TYPluxJrBGS1ZneiC3Jpm/xzLbB9+cAi2AqAVyzN0Hjju9f
+        Pi+SCnzMdp8PeeUOqCtibzozOwPQF2241J+bw/oBDOGO9sg3YGxEkJzK5xxbQ/Iz
+        R7FbJcMEwTllpHYOe32I+a3FKJiyeDTd7Z6WuyzjewarXZDcmQnO8JGeHwJ0RLrS
+        7BygfMfp2EzuWMtaUO57b8CsjFpBra3z1l4iEUU0Rv0w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-transfer-encoding:date:from
+        :message-id:mime-version:subject:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=yqwoBj/vWfeXNQgCv
+        pj+YqonSUyi2vtvBoiOZzTnEUE=; b=a5sCJf0LHQjoYtkMzotyeH+cK5YxpoWrx
+        9t2t8wogWoaYqXwU9bNjtjhyEflfUsIBw+L2EjjtKIbO70yPz44tin3eGChm6aIO
+        diIdIg48lZt6qizBn9TfxEsqS6KSGULMM+JLXKJoXazFWbxzTThgoeAd38udFGP3
+        Ghq+atmLLvrvpSKM2VjDmC2UxmAHFcEnvq5oyHyP9tcYAuv+aHxUsqccf9ej3z09
+        3CkwbSdt3UL4IyDwuNgnAwTTCOweCTWX4fNiddiM9ZJGPJLYy0XjqHJJwlfGPwnK
+        PH1SyuUifM3mlsQk6bL63Xy7ByN5T8JG2lD+IXRbvLUdxvXRPjEog==
+X-ME-Sender: <xms:zk6mYZfODQkcXoBDMklRzjYFNRhtv4EW7LjcB9gb3fb0MIM2kL_qyg>
+    <xme:zk6mYXO8pu-tHKb6yuDlCR_d1Hc1EjqetkBmhNXXRRiCEj4pl8Lo4BanRVetnqKp6
+    B2ZR8dYKURBTc0jCT8>
+X-ME-Received: <xmr:zk6mYSjnsUKyGfGrA21nJvKgRPs2PxnozFlFufvkzEoWPlLwcJq_iHq7zWDLFH9ue18HxWPAOqv9jcZlx2eyqiuqFC8fq8r2PdTt1fjJvSAtXSA64iDZYaa-7bNUig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddriedugdekjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvffufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfrvght
+    vghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrhhnpe
+    duffejkeevlefggfekkeevjeffgeekjedtjedtfeethfeludehkeehgfeuteekhfenucff
+    ohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnsehsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:zk6mYS_IMEmtmXTbC9SM0zfNK-3G0PYuW5JvOQk4PvHM90D-hw5Hkg>
+    <xmx:zk6mYVs6N4df1vEWS4r8xesFb-3QktPtoyXBCXG96x-vdu2BVxruhA>
+    <xmx:zk6mYRE3vGdO-relrVef_wyVif1EenhIS0qmn33aTTXRMfrOUcZMcQ>
+    <xmx:0E6mYREwgmGM23QNvd__2xfwrX1MDAwYojBx2RIRm8XG2Jjbsyl7Aw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 Nov 2021 11:18:20 -0500 (EST)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Hector Martin <marcan@marcan.st>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, Janne Grunau <j@jannau.net>,
+        Mark Kettenis <kettenis@openbsd.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 1/2] dt-bindings: watchdog: Add Apple Watchdog
+Date:   Tue, 30 Nov 2021 17:18:08 +0100
+Message-Id: <20211130161809.64591-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="reGMIgm/lItL/shk"
-Content-Disposition: inline
-In-Reply-To: <20211130160414.21616-1-srinivas.kandagatla@linaro.org>
-X-Cookie: Check your local listings.
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Apple SoCs come with a simple embedded watchdog. This watchdog is also
+required in order to reset the SoC.
 
---reGMIgm/lItL/shk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+v1 --> v2:
+  - add Mark's and Rob's r-b tags
 
-On Tue, Nov 30, 2021 at 04:04:14PM +0000, Srinivas Kandagatla wrote:
-> msm_routing_put_audio_mixer() can return incorrect value in various scenarios.
-> Fix this, so that change notifications are sent correctly.
+ .../bindings/watchdog/apple,wdt.yaml          | 52 +++++++++++++++++++
+ MAINTAINERS                                   |  1 +
+ 2 files changed, 53 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
 
-This really isn't a good commit message - I can't tell what the change
-is supposed to fix or how it fixes it.  Which values in which scenarios
-are incorrect in what way?
+diff --git a/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+new file mode 100644
+index 000000000000..e58c56a6fdf6
+--- /dev/null
++++ b/Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+@@ -0,0 +1,52 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/watchdog/apple,wdt.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Apple SoC Watchdog
++
++allOf:
++  - $ref: "watchdog.yaml#"
++
++maintainers:
++  - Sven Peter <sven@svenpeter.dev>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - apple,t8103-wdt
++          - apple,t6000-wdt
++      - const: apple,wdt
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/apple-aic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    wdt: watchdog@50000000 {
++        compatible = "apple,t8103-wdt", "apple,wdt";
++        reg = <0x50000000 0x4000>;
++        clocks = <&clk>;
++        interrupts = <AIC_IRQ 123 IRQ_TYPE_LEVEL_HIGH>;
++    };
++
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 360e9aa0205d..859201bbd4e8 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1750,6 +1750,7 @@ F:	Documentation/devicetree/bindings/interrupt-controller/apple,aic.yaml
+ F:	Documentation/devicetree/bindings/mailbox/apple,mailbox.yaml
+ F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
+ F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
++F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
+ F:	arch/arm64/boot/dts/apple/
+ F:	drivers/i2c/busses/i2c-pasemi-core.c
+ F:	drivers/i2c/busses/i2c-pasemi-platform.c
+-- 
+2.25.1
 
---reGMIgm/lItL/shk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGmTpwACgkQJNaLcl1U
-h9DZWQgAhJmvaqN0eGrzB9U7ieeGabIcljlgUyilqA/VqDFY67InjYGqepeftVTD
-Ku5SexhDIBYUC4VyY3aLpdmezxPMV5K7FOpnQoqrHMmyB9HT0EOWariE5DML5Dyj
-C5vnHJklRawGk8pTUQWVRi0PW9thM4Bh1XyFqaP4JTutrpQbjv4cP5s+KNwlVKnO
-o7zc+f3aD8QhgidTIHSgN3DRaD7/w8VcxhpoKINuHyTcPz8bjA+qeTiGCmqSbuqe
-3uVpANXD1JboUIKXfgErBeQJWKCRBOHxYI3FZaeTdO1XlwLK+VpTfXM7TZv6g7uP
-ZjntZxXtF6ytmDCYvP1rytMj5KLzfA==
-=2i4Y
------END PGP SIGNATURE-----
-
---reGMIgm/lItL/shk--

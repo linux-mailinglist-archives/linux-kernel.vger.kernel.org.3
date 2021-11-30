@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16884462EEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:52:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D948E462EED
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239822AbhK3Izi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:55:38 -0500
-Received: from mta-p5.oit.umn.edu ([134.84.196.205]:41474 "EHLO
-        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239807AbhK3Izf (ORCPT
+        id S239831AbhK3I4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:56:09 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:37798 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232024AbhK3I4I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:55:35 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3GDv35CNz9vBqZ
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:52:15 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p5.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id AyBWzSSQk7K6 for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 02:52:15 -0600 (CST)
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 30 Nov 2021 03:56:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3GDv1Nz0z9vBqj
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:52:15 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3GDv1Nz0z9vBqj
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3GDv1Nz0z9vBqj
-Received: by mail-pj1-f71.google.com with SMTP id x3-20020a17090a1f8300b001a285b9f2cbso6581830pja.6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B9fMCH0NKWt3molLrHA4oJZ0OiPJH79kluyM8NW1Juo=;
-        b=cFFfjaZFN1GoVY96cCbHXCCcPpXrRofrjx9REKmLinJwH6Jdd7yVbD9Rsf1STazZua
-         z8Yg+iscarQMfvNuc4TAG+psZURIDxZpaXXW4YG4Xp9om0OUh38bgJun/za43QKqcky8
-         5bybTB5CZm25g6FhrXZwzDFmQHr5i0jYRh/846nSVnfV0XlWyR4UylZefiVRv9dxywsD
-         UtziPp8cwHrXhjavRoaN1esnyL0MIwrD7a9o5rsk+znkQoXRTxoxVWtjVPUHE4k3IdiV
-         +8ZDHFukr9hwTWUtIdh8A712lX1Wr9wtAXSEBNuFXTp12EBHJzJV/MwEzq5UY3sJigDw
-         uieg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=B9fMCH0NKWt3molLrHA4oJZ0OiPJH79kluyM8NW1Juo=;
-        b=zlBUZRg1/ZdJPcEa/QQYBZuGsx4Fok/xHGFB0sPaVQrRNYJcBtYngZMjeeEzwnd4Hh
-         MD7H6F3vGGtEawKIv+L9QEnYyuwMeu7m6Q6eSRdnKYFJCc+Ns8aNrRBQ5IcxfegOwHOa
-         pX8e9bLmeR46/eG7bJvfIwWZI+MIk1aqlWic6erk2S5tqnNdbJDeu6PYg4VkItMJEUrQ
-         GbsvsSaejeY6DPpcQIVUJjTdvjdLSiQX1HY5BPZjzCFrgW4Bcn2wIsGyw0z0gOVDjxkr
-         QMnK0Lfbnm9QtAujyn5bLvXesRxzGd55rVArkVxO61inDP2JrWapFXTanE8Y0uupWeUx
-         sPNQ==
-X-Gm-Message-State: AOAM530ClTPI92LpdUrxvDU4Cp5T8fTTZMpVqp2notXhA5KY9St3gIiH
-        V6FXbfZVFp2ohJAq4q9CFmSATOXP/yE3GnIwJekaVX27ISr2aaTxToIRKqBaQglmiLcnqj5V6i3
-        XaCgAVkLSGZCS5/xtOw8BFs8mN4/h
-X-Received: by 2002:a05:6a00:1a04:b0:4a6:4384:2e5f with SMTP id g4-20020a056a001a0400b004a643842e5fmr43962065pfv.36.1638262334252;
-        Tue, 30 Nov 2021 00:52:14 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzc/xABQRyGcSc35TzwobPSt4/vjPNihBOIqmq1/ibTgf7iYbomHvroaZ+E2hqCKqlaTZyIoQ==
-X-Received: by 2002:a05:6a00:1a04:b0:4a6:4384:2e5f with SMTP id g4-20020a056a001a0400b004a643842e5fmr43962051pfv.36.1638262334041;
-        Tue, 30 Nov 2021 00:52:14 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id j1sm20305982pfu.47.2021.11.30.00.52.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 00:52:13 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Coly Li <colyli@suse.de>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Hannes Reinecke <hare@suse.com>, Michael Lyle <mlyle@lyle.org>,
-        Tang Junhui <tang.junhui@zte.com.cn>,
-        Jens Axboe <axboe@kernel.dk>, linux-bcache@vger.kernel.org,
+        by ams.source.kernel.org (Postfix) with ESMTPS id CF386B817E9;
+        Tue, 30 Nov 2021 08:52:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E5CC53FC1;
+        Tue, 30 Nov 2021 08:52:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638262367;
+        bh=ih3AY0QPfJoKRjmKwA/yOEv7T4sdxUirO4pl6SrDYzU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PIuX3CH2rcz9AqYbc/PJapM8CcozDdOZZWZlRi8YbaH0L2Fd898QyRIOcc5oShB6z
+         uKGXZzwysAd2G2Popa/ywdGEz51BBdnX0pQGuFnLPfO4JEjhKrwoDRdsle/KX5A5BB
+         4/JGl58N7T1TueUd3RImMwz2RKWxrMoixiw770vXemBs6bUl7xfWRI17f3lALXOLSb
+         vIBfPo1iO7T5NqtFC6x9AZOk42L+8hDdS/CCNXeEgJlv0SDuJrc5hiC+DVadqQuQj1
+         mQlVvPIac5ON/R4pGaa4A4SVJbifGbJagjKsBBczJPmUNn4V+6EqxmRf3Bj+etd6cK
+         edqLppEKzhpLw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1mrysX-008p33-Kt; Tue, 30 Nov 2021 08:52:45 +0000
+Date:   Tue, 30 Nov 2021 08:52:45 +0000
+Message-ID: <87ilwam3du.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     Maulik Shah <quic_mkshah@quicinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH] bcache: Fix a NULL pointer dereference in detached_dev_do_request()
-Date:   Tue, 30 Nov 2021 16:51:39 +0800
-Message-Id: <20211130085139.74175-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 2/2] irqchip: Add Qualcomm MPM controller driver
+In-Reply-To: <20211130083143.GF10105@dragon>
+References: <20211126093529.31661-1-shawn.guo@linaro.org>
+        <20211126093529.31661-3-shawn.guo@linaro.org>
+        <87czmmbu8k.wl-maz@kernel.org>
+        <20211129133308.GB10105@dragon>
+        <87pmqjm1c8.wl-maz@kernel.org>
+        <20211130023151.GD10105@dragon>
+        <2e821841-a921-3fda-9ee6-3d5127653033@quicinc.com>
+        <20211130083143.GF10105@dragon>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shawn.guo@linaro.org, quic_mkshah@quicinc.com, tglx@linutronix.de, bjorn.andersson@linaro.org, robh+dt@kernel.org, loic.poulain@linaro.org, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In detached_dev_do_request(), the return value of kzalloc() is
-assigned to ddip, and there is a dereference of it in
-detached_dev_do_request(), which could lead to a NULL pointer
-dereference on failure of kzalloc().
+On Tue, 30 Nov 2021 08:31:44 +0000,
+Shawn Guo <shawn.guo@linaro.org> wrote:
+> 
+> On Tue, Nov 30, 2021 at 01:19:48PM +0530, Maulik Shah wrote:
+> >    Hi Shawn,
+> > 
+> >    On 11/30/2021 8:01 AM, Shawn Guo wrote:
+> > 
+> > +       do {
+> > +               r_val = readl(priv->base + offset);
+> > +               udelay(5);
+> > +       } while (r_val != val);
+> > 
+> > What? Is this waiting for a bit to clear? Why isn't this one of the
+> > read*_poll_timeout*() function instead? Surely you can't wait forever
+> > here.
+> > 
+> > This is taken from downstream, and it seems to double check the written
+> > value by reading it back.  But to be honest, I'm not really this is
+> > necessary.  I will do some testing with the read-back check dropped.
+> > 
+> > How about asking for specs instead? There are QC people on Cc, and
+> > many more reading the list. Hopefully they can explain what this is
+> > all about.
+> > 
+> > Maulik,
+> > 
+> > If you have some information about this, that would be great.
+> > 
+> >    This can be converted to read poll_timeout(). This was introduced in
+> >    place of wmb() to make sure writes are completed.
+> 
+> Hmm, in this case, writel() will just do the right thing, as it wraps
+> wmb() there.  Or am I missing something?
 
-Fix this bug by adding a check of ddip. This patch imitates the
-failure-handling logic in cached_dev_submit_bio().
+writel() places the wmb() *before* the MMIO access. This is use for
+ordering with RAM access if the device is DMA capable, for example. I
+seriously doubt this is the case.
 
-Note that we found the fixing of the bug hard, as the return value of
-the callers is void and we cannot pass an error status upstream.
-Please adivce if there is a better way for fixing.
+My understanding of Maulik's comment is that there is a requirement
+for the MMIO access to complete. And for that, a barrier *after* the
+write is the right tool for the job.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+	M.
 
-Note that, as a bug found by static analysis, it might be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_BCACHE=m show no new warnings, and our static
-analyzer no longer warns about this code.
-
-Fixes:  bc082a55d25c ("bcache: fix inaccurate io state for detached bcache devices")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/md/bcache/request.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/md/bcache/request.c b/drivers/md/bcache/request.c
-index d15aae6c51c1..3a17925c734b 100644
---- a/drivers/md/bcache/request.c
-+++ b/drivers/md/bcache/request.c
-@@ -1107,6 +1107,11 @@ static void detached_dev_do_request(struct bcache_device *d, struct bio *bio,
- 	 * which would call closure_get(&dc->disk.cl)
- 	 */
- 	ddip = kzalloc(sizeof(struct detached_dev_io_private), GFP_NOIO);
-+	if (!ddip) {
-+		bio->bi_status = BLK_STS_RESOURCE;
-+		bio_endio(bio);
-+		return;
-+	}
- 	ddip->d = d;
- 	/* Count on the bcache device */
- 	ddip->orig_bdev = orig_bdev;
 -- 
-2.25.1
-
+Without deviation from the norm, progress is not possible.

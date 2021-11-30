@@ -2,64 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C38464226
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 00:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7640346422C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 00:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237463AbhK3XPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 18:15:37 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:36660 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbhK3XPf (ORCPT
+        id S238388AbhK3XWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 18:22:49 -0500
+Received: from relay12.mail.gandi.net ([217.70.178.232]:34987 "EHLO
+        relay12.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231514AbhK3XWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 18:15:35 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638313934;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=orwrqGwIeCn/Frr8jmrZeo75Harp9WXBZKPjyFCkCgU=;
-        b=XlaWw8v1tGvFfkw1ZLkbaMYlqE/4rSNs5peGJDFr9s1nn1Njhcu4gWAaRgsjipfvULVGGU
-        nKD3RbzX1uJ70szoamLAJllSsbDcsVDR+kkFPek4y5vO1OIoj/8yz7Y5qu81YuYpKD6nyA
-        CA8ULOu+ZIAAGUP21X0s3lRdbHqVlNnoxM4qPaxSdR/3eee9JvsjAx8a2Gdm7GCymNml8j
-        mpOZBsWH3uUUKgLova48uzJLH2zCdtfz2gk5TbUdo82YdlbKgIWbRDFkZs8ZwArEVufmdW
-        KcgNzkZQS9xmaGuGokbO3Illjf6JFruuKxiNV/hU1Tzd79OQX+X1IusTexdxNQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638313934;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=orwrqGwIeCn/Frr8jmrZeo75Harp9WXBZKPjyFCkCgU=;
-        b=NGvkEfzUzaBuw4G0BuGOLjDivfpz+RFevNwga62NXsDavb45jUTFymNyLSt1TVQyWJjy0e
-        h513vPFsRgQBUvAQ==
-To:     Maulik Shah <quic_mkshah@quicinc.com>, bjorn.andersson@linaro.org,
-        rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ulf.hansson@linaro.org,
-        quic_lsrao@quicinc.com, rnayak@codeaurora.org,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH 1/4] tick/sched: Export symbols used by cpuidle governors
-In-Reply-To: <1637830481-21709-2-git-send-email-quic_mkshah@quicinc.com>
-References: <1637830481-21709-1-git-send-email-quic_mkshah@quicinc.com>
- <1637830481-21709-2-git-send-email-quic_mkshah@quicinc.com>
-Date:   Wed, 01 Dec 2021 00:12:13 +0100
-Message-ID: <87wnkp9r1u.ffs@tglx>
+        Tue, 30 Nov 2021 18:22:34 -0500
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by relay12.mail.gandi.net (Postfix) with ESMTPSA id EE0B2200002;
+        Tue, 30 Nov 2021 23:19:12 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 00:19:12 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, kernel@axis.com,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: pcf8523: fix alarm interrupt disabling
+Message-ID: <YaaxcFn/di3wCnO1@piout.net>
+References: <20211103152253.22844-1-vincent.whitchurch@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211103152253.22844-1-vincent.whitchurch@axis.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25 2021 at 14:24, Maulik Shah wrote:
->  bool tick_nohz_enabled __read_mostly  = true;
-> +EXPORT_SYMBOL(tick_nohz_enabled);
+Hello,
 
-If any of this gets ever exported then with EXPORT_SYMBOL_GPL(), but I
-agree with Rafael that there is no real value for this, so the exports
-are not required either.
+On 03/11/2021 16:22:52+0100, Vincent Whitchurch wrote:
+> Fix the driver to actually disable the IRQ and not overwrite other bits
+> in the CONTROL_1 register when it is asked to disable the alarm
+> interrupt.
+> 
+> Compile-tested only.
+> 
+> Fixes: 13e37b7fb75dfaeb4 ("rtc: pcf8523: add alarm support")
+> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> ---
+>  drivers/rtc/rtc-pcf8523.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
+> index 8b6fb20774bf..e26477267451 100644
+> --- a/drivers/rtc/rtc-pcf8523.c
+> +++ b/drivers/rtc/rtc-pcf8523.c
+> @@ -347,7 +347,7 @@ static int pcf8523_irq_enable(struct device *dev, unsigned int enabled)
+>  	if (err < 0)
+>  		return err;
+>  
+> -	value &= PCF8523_CONTROL1_AIE;
+> +	value &= ~PCF8523_CONTROL1_AIE;
+>  
 
-Thanks,
+I was going to apply that but it seems this was fixed by:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=91f3849d956d58073ef55e01f2e8871dc30847a5
 
-        tglx
+>  	if (enabled)
+>  		value |= PCF8523_CONTROL1_AIE;
+> -- 
+> 2.28.0
+> 
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

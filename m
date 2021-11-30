@@ -2,135 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09058463170
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:44:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6C7646315B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236049AbhK3Krx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:47:53 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:30193 "EHLO
-        twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235861AbhK3Krm (ORCPT
+        id S235570AbhK3Kqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58724 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235484AbhK3Kq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:47:42 -0500
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AUAIWAq077388;
-        Tue, 30 Nov 2021 18:18:32 +0800 (GMT-8)
-        (envelope-from neal_liu@aspeedtech.com)
-Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 30 Nov
- 2021 18:43:03 +0800
-From:   Neal Liu <neal_liu@aspeedtech.com>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Cai Huoqing <caihuoqing@baidu.com>,
-        Tao Ren <rentao.bupt@gmail.com>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        "kernel test robot" <lkp@intel.com>,
-        Sasha Levin <sashal@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-aspeed@lists.ozlabs.org>
-CC:     Neal Liu <neal_liu@aspeedtech.com>, <BMC-SW@aspeedtech.com>
-Subject: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
-Date:   Tue, 30 Nov 2021 18:42:56 +0800
-Message-ID: <20211130104256.3106797-5-neal_liu@aspeedtech.com>
+        Tue, 30 Nov 2021 05:46:27 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FA1AC061756
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:43:08 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id u1so43316556wru.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:43:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=jTHuYMzNLIH+1EREfrK23LGcaA/r+2HAUHMYWHTbK0E=;
+        b=8AU4j1dXGyXQzi/uOV/ptlQLu7n5vNfIJWecdLQT8PxPK+4CrdkZuL0dYAlvoQAo6H
+         FAJwmS6/QbMdGcwjzTy9aqSwkf2ZDQsf/JySYiSf960T/oGHLCNcUOL6zDmk7Nz5pT39
+         KwjTdt3e0FqwJvf+OrfwS6Ox5WH8KASJeRlVXV+T+Rtf3p5BN+gHeBtVD16fAd+driri
+         p+cZlg5qaXkJDH4Z3cKkm5HiuWLS1iNG6N3XBGI3IZwq9XDmzfxykAo9+Uj4Ax867M1L
+         UNyRBr18fT66sHHaZ4HHCmnH4uCwVNIwpDzHIGnQwfpdZg1Ks99CF7xNbARs/Qz/ERGT
+         uSHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=jTHuYMzNLIH+1EREfrK23LGcaA/r+2HAUHMYWHTbK0E=;
+        b=givEkBAf7f3n/a9paLqcHDRJGwDmD5nBSAnrlZo6VmJnE90Oy0Z2hRjfTDvMJ7CxGN
+         YtmrzDQ5/F742gs5dsEnvKpwcnOigQTHOrchuQikcUzZjhRXqM/TCwTW7orQSahJfgiA
+         wCJHWB+2hZloNPFsFu/8Dm7BOtatnXpxC3x94ELnwc8+zCNV+lZ4fzhnvs61WeP+BIyo
+         cZLKz4Yr0o90fpOcAFWakKzAV7GH7rkDIOdSXWYdjBpmXiYQXQT5pqb4HYemESHvv/d0
+         SJhrA9xbiam8/EAoAJBh5y1RcSZ2Jp+7qEqSRdvNt78kf87ojK92E8J38zECV3IqwzgD
+         g7jg==
+X-Gm-Message-State: AOAM533LBBMGuow6Y2pMhFQsgSmBUuLDR3iFDwzPqniXXIBJ1/Ld8+/p
+        S1ImOQ+uhssPHtzDugsnMZsgug==
+X-Google-Smtp-Source: ABdhPJxoxwtLa58DHcN5BX/aqFazIPZzvKQDcbKnJ8TD0G5IhqcDtB/Vhcs6l1jpvcR/iGcYKHg8XA==
+X-Received: by 2002:adf:f88c:: with SMTP id u12mr40916159wrp.29.1638268986722;
+        Tue, 30 Nov 2021 02:43:06 -0800 (PST)
+Received: from localhost.localdomain ([2001:861:44c0:66c0:f80b:b9bd:4d6e:b61a])
+        by smtp.gmail.com with ESMTPSA id g13sm21775686wrd.57.2021.11.30.02.43.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 02:43:06 -0800 (PST)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     Kevin Hilman <khilman@baylibre.com>,
+        Vyacheslav Bocharov <adeep@lexina.in>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH] arm64: meson: fix dts for JetHub D1
+Date:   Tue, 30 Nov 2021 11:43:04 +0100
+Message-Id: <163826896367.1309037.1000352899984422910.b4-ty@baylibre.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211130104256.3106797-1-neal_liu@aspeedtech.com>
-References: <20211130104256.3106797-1-neal_liu@aspeedtech.com>
+In-Reply-To: <20211125130246.1086627-1-adeep@lexina.in>
+References: <20211125130246.1086627-1-adeep@lexina.in>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.10.10]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AUAIWAq077388
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support aspeed usb vhub set feature to test mode.
+Hi,
 
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
----
- drivers/usb/gadget/udc/aspeed-vhub/dev.c | 18 ++++++++++++++----
- drivers/usb/gadget/udc/aspeed-vhub/hub.c | 22 ++++++++++++++++------
- 2 files changed, 30 insertions(+), 10 deletions(-)
+On Thu, 25 Nov 2021 16:02:47 +0300, Vyacheslav Bocharov wrote:
+> Fix misplace of cpu_cooling_maps for JetHub D1, move it to right place.
+> 
+> 
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-index d918e8b2af3c..4462f4b73b04 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
-@@ -110,15 +110,25 @@ static int ast_vhub_dev_feature(struct ast_vhub_dev *d,
- 				u16 wIndex, u16 wValue,
- 				bool is_set)
- {
-+	u32 val;
-+
- 	DDBG(d, "%s_FEATURE(dev val=%02x)\n",
- 	     is_set ? "SET" : "CLEAR", wValue);
- 
--	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
--		return std_req_driver;
-+	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-+		d->wakeup_en = is_set;
-+		return std_req_complete;
- 
--	d->wakeup_en = is_set;
-+	} else if (wValue == USB_DEVICE_TEST_MODE) {
-+		val = readl(d->vhub->regs + AST_VHUB_CTRL);
-+		val &= ~GENMASK(10, 8);
-+		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-+		writel(val, d->vhub->regs + AST_VHUB_CTRL);
- 
--	return std_req_complete;
-+		return std_req_complete;
-+	}
-+
-+	return std_req_driver;
- }
- 
- static int ast_vhub_ep_feature(struct ast_vhub_dev *d,
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/hub.c b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-index 93f27a745760..e52805fbdebd 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
-@@ -212,17 +212,27 @@ static int ast_vhub_hub_dev_feature(struct ast_vhub_ep *ep,
- 				    u16 wIndex, u16 wValue,
- 				    bool is_set)
- {
-+	u32 val;
-+
- 	EPDBG(ep, "%s_FEATURE(dev val=%02x)\n",
- 	      is_set ? "SET" : "CLEAR", wValue);
- 
--	if (wValue != USB_DEVICE_REMOTE_WAKEUP)
--		return std_req_stall;
-+	if (wValue == USB_DEVICE_REMOTE_WAKEUP) {
-+		ep->vhub->wakeup_en = is_set;
-+		EPDBG(ep, "Hub remote wakeup %s\n",
-+		      is_set ? "enabled" : "disabled");
-+		return std_req_complete;
- 
--	ep->vhub->wakeup_en = is_set;
--	EPDBG(ep, "Hub remote wakeup %s\n",
--	      is_set ? "enabled" : "disabled");
-+	} else if (wValue == USB_DEVICE_TEST_MODE) {
-+		val = readl(ep->vhub->regs + AST_VHUB_CTRL);
-+		val &= ~GENMASK(10, 8);
-+		val |= VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
-+		writel(val, ep->vhub->regs + AST_VHUB_CTRL);
- 
--	return std_req_complete;
-+		return std_req_complete;
-+	}
-+
-+	return std_req_stall;
- }
- 
- static int ast_vhub_hub_ep_feature(struct ast_vhub_ep *ep,
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.17/dt64)
+
+[1/1] arm64: meson: fix dts for JetHub D1
+      https://git.kernel.org/amlogic/c/03caf87822220b4e22c349d170881d122df0b349
+
 -- 
-2.25.1
-
+Neil

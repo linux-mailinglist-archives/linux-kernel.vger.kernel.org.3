@@ -2,236 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6532463C8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDE1463C93
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:12:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244668AbhK3RMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:12:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:36308 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233127AbhK3RMQ (ORCPT
+        id S244694AbhK3RPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:15:24 -0500
+Received: from mta-p5.oit.umn.edu ([134.84.196.205]:36560 "EHLO
+        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243657AbhK3RPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:12:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638292136;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7K30WnjkuEnR0TFOmhGj++nMZbWrnMpgZrgfYl/y8Q0=;
-        b=ORx9/m6aU0/j5BToHHtaoav0R21UmfrBXLxMj8bc9YVW48qWsdYggnVVccFOCsOW6oFdTp
-        HLmNI70J3xcrFP0SXtvPLcxRQD3ndtOI8J7Wysldo35p6ATutdH0wdVt1uTrJSFizfv6Li
-        U2wOdBzaWWWXNLzHCPBwAHhUKgwJlPI=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-572-hbADqkFTN4ObbJCZJ3aX6Q-1; Tue, 30 Nov 2021 12:08:55 -0500
-X-MC-Unique: hbADqkFTN4ObbJCZJ3aX6Q-1
-Received: by mail-qv1-f72.google.com with SMTP id kk1-20020a056214508100b003a9d1b987caso30119131qvb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:08:55 -0800 (PST)
+        Tue, 30 Nov 2021 12:15:20 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3TKX5V8Wz9w94m
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:12:00 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p5.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id Zms3DVVCGrD3 for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 11:12:00 -0600 (CST)
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3TKX3YkGz9w951
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:12:00 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3TKX3YkGz9w951
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3TKX3YkGz9w951
+Received: by mail-pf1-f199.google.com with SMTP id u4-20020a056a00098400b004946fc3e863so13183426pfg.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:12:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=V0lWGpYWyNpOYPxuRnSF3f8gDAFkgkH4nbP8crWjnQc=;
+        b=mpUcODJ4kpde9Ay7Z/krQyfktHenkFWFmQDS1w2AgoRAY3OABAVNotR4Qf0OmlvfUZ
+         1NyBd2+ivU57FrKLRsu4L5zm1mxOvHK2ZQFcEfdSaimtmL26gxkPGarzPQ3w2H7YmEN8
+         zJmebwb793bOf0EE+JCw22LFOLO01H2DqptjFlEcW7SHfVU5PKzz72trj+0es4RvgsCj
+         J748A2Ft+WA2Y8A0xtwwnKQYcy+e+rHPIHGoi6rs48IcSaNqeHutinnctETP9RNNAxt7
+         8Hoisxxnj1Evfb8tr9vEcNjVKXzB2DMisXyIA/j5rR+gZGcvDvEqm9V4/3WiFE9PhO52
+         7I/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7K30WnjkuEnR0TFOmhGj++nMZbWrnMpgZrgfYl/y8Q0=;
-        b=zTt4xS4Dvd5vJsWO5gbNnoXQeOzhJTaHpkeGKMejFB4ZWaY/jzXYQ6Wc/8dXoQZPPP
-         2INa+XDiTdXcEQEAixlpUSfunjfZhJem+SHyoYvZ8IUTJgK6AXPZV3Ciz7DXt/KLRLzq
-         n5rrlTzxa/xNB+S0TCOQ86wSaiL1Qt67FMQn/uTiUPi24r0aoZM78lHpizeqbhE9khnP
-         5bpBnFpxibphrZSc9+9Bxmje7fHSpmYKalIeUzJGFsdH61kq+ukjEusF3J9NWl4CbCig
-         H2yR+OGVsXv84isGoWiMEC/3TD9c4UjCcB4L/ui0TF8tuKXwGoavT++IFcIGG279KyVa
-         Vp1Q==
-X-Gm-Message-State: AOAM530td1Ap3X1LIlN1FyGt9hWcYBlxeubv8/jyRqEpx2jLxK0uJepy
-        brmDmhADjivMS3w42/S2x0pwbCy0tOAMwvUV2QFmIdCdtJ/XqgfKDYV7jK3LavNm0HFNgrODLX+
-        uUBRA4d4mXerq2B/kunQxgoI1
-X-Received: by 2002:a05:620a:17a2:: with SMTP id ay34mr516395qkb.543.1638292134481;
-        Tue, 30 Nov 2021 09:08:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwfOvEddTXllJYDns2FXJd+Ixkks0Jpy+tw+aPyiZlvUhKtZP+GM/0LBApC5tq++47DqSPywA==
-X-Received: by 2002:a05:620a:17a2:: with SMTP id ay34mr516351qkb.543.1638292134211;
-        Tue, 30 Nov 2021 09:08:54 -0800 (PST)
-Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
-        by smtp.gmail.com with ESMTPSA id u21sm11136841qtw.29.2021.11.30.09.08.52
+        bh=V0lWGpYWyNpOYPxuRnSF3f8gDAFkgkH4nbP8crWjnQc=;
+        b=y6EOYeExD/K7v/aUAOA7XrWJNfCcTx4/14YdWynDbpO5qrQu3JgKT1X77uTVv8aPid
+         rVYYfN7XeXUxn3iLNyRPoG4vcwtYFGC5OiW5jjQ5Xkh7LMsm5nrpwYQzOOjiwARSZGA5
+         Bs73yNq0wKp80ntHgQBNzeAhSpeuu6tIKnUulucvVfNlxS9CRiAhBS196+NFqfVqOH9U
+         z6lhD6WX9s8pjdbatEkSZvtq0DPqE4rIHHuxckw22EwKkhzFvOtEZKG5bC3q2hNlJ40M
+         vvuB6ewdniT5mnSDKZj4Wvqc/97vbRHYJsx2g33ekkU2hQ/Hk6bfVQY+RKxqILT72+j+
+         DR0w==
+X-Gm-Message-State: AOAM531XIZwowIC1L9YcWY7ZYuCKRXiPKlCtdo4Glu2MsFkbrYhq7Qch
+        G5VQAme7jG7PGDl8wSEYL1/3uBhTg6CiDSOi7+nDYxhqcizgYj7lm0dUOEMFkOKdwiwb88wkLSn
+        4JBBGrwK9+DPlhemh/QBheAFQMXvZ
+X-Received: by 2002:a17:902:c410:b0:142:2506:cb5b with SMTP id k16-20020a170902c41000b001422506cb5bmr495035plk.36.1638292319706;
+        Tue, 30 Nov 2021 09:11:59 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJz2fXuTGnSmdHQRZFTjtJ71nlh0+Fs1qffHsWrGRYAwEWvVrGJGew4rmr+xWPQ0i+cAagA6qQ==
+X-Received: by 2002:a17:902:c410:b0:142:2506:cb5b with SMTP id k16-20020a170902c41000b001422506cb5bmr494998plk.36.1638292319396;
+        Tue, 30 Nov 2021 09:11:59 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id p2sm3124816pja.55.2021.11.30.09.11.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 09:08:53 -0800 (PST)
-Message-ID: <67cea601fd6b3e1deb6fe0c3401ca8410219ecf1.camel@redhat.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-From:   Simo Sorce <simo@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
-Date:   Tue, 30 Nov 2021 12:08:51 -0500
-In-Reply-To: <YaZHKHjomEivul6U@kroah.com>
-References: <2036923.9o76ZdvQCi@positron.chronox.de>
-         <22137816.pfsBpAd9cS@tauon.chronox.de> <YaEJtv4A6SoDFYjc@kroah.com>
-         <9311513.S0ZZtNTvxh@tauon.chronox.de> <YaT+9MueQIa5p8xr@kroah.com>
-         <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
-         <YaYvYdnSaAvS8MAk@kroah.com>
-         <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
-         <YaZHKHjomEivul6U@kroah.com>
-Organization: Red Hat
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
+        Tue, 30 Nov 2021 09:11:59 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Hannes Reinecke <hare@suse.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Johannes Thumshirn <jth@kernel.org>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: libfc: Fix a NULL pointer dereference in fc_lport_ptp_setup()
+Date:   Wed,  1 Dec 2021 01:10:49 +0800
+Message-Id: <20211130171049.199111-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-11-30 at 16:45 +0100, Greg Kroah-Hartman wrote:
-> On Tue, Nov 30, 2021 at 09:31:09AM -0500, Simo Sorce wrote:
-> > On Tue, 2021-11-30 at 15:04 +0100, Greg Kroah-Hartman wrote:
-> > > On Tue, Nov 30, 2021 at 07:24:15AM -0500, Jeffrey Walton wrote:
-> > > > On Mon, Nov 29, 2021 at 6:07 PM Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > > > > ...
-> > > > > Sometimes, yes, it is valid to have different implementations for things
-> > > > > that do different things in the same area (like filesystems), but for a
-> > > > > core function of the kernel, so far the existing random maintainer has
-> > > > > not wanted to have multiple implementations.  Same goes for other parts
-> > > > > of the kernel, it's not specific only to this one very tiny driver.
-> > > > > 
-> > > > > As a counterpoint, we do not allow duplicate drivers that control the
-> > > > > same hardware types in the tree.  We have tried that in the past and it
-> > > > > was a nightmare to support and maintain and just caused massive user
-> > > > > confusion as well.  One can argue that the random driver is in this same
-> > > > > category.
-> > > > 
-> > > > I think an argument could be made that they are different drivers
-> > > > since they have different requirements and security goals. I don't
-> > > > think it matters where the requirements came from, whether it was ad
-> > > > hoc from the developer, NIST, KISA, CRYPTREC, NESSIE, or another
-> > > > organization.
-> > > > 
-> > > > Maybe the problem is with the name of the driver? Perhaps the current
-> > > > driver should be named random-linux, Stephan's driver should be named
-> > > > random-nist, and the driver should be wired up based on a user's
-> > > > selection. That should sidestep the problems associated with the
-> > > > "duplicate drivers" policy.
-> > > 
-> > > The "problem" here is that the drivers/char/random.c file has three users,
-> > > the userspace /dev/random and syscall api, the in-kernel "here's some
-> > > entropy for the random core to use" api, and the in-kernel "give me some
-> > > random data" api.
-> > > 
-> > > Odds are, you REALLY do not want the in-kernel calls to be pulling from
-> > > the "random-government-crippled-specification" implementation, right?
-> > 
-> > You really *do* want that.
-> > When our customers are mandated to use FIPS certified cryptography,
-> > they want to use it for kernel cryptography as well, and in general
-> > they want to use a certified randomness source as well.
-> 
-> There are huge numbers of internal kernel calls that use random data for
-> non-crypto things.
+In fc_lport_ptp_setup(), fc_rport_create() is assigned to
+lport->ptp_rdata and there is a dereference of in fc_lport_ptp_setup(),
+which could lead to a NULL pointer dereference on failure of
+fc_rport_create().
 
-Sure, but it makes little sense to use different random implementations
-unless there are specific issues in terms of performance. It is also
-not always easy to establish if a certain use of random numbers is
-actually security relevant, may be context dependent, so it is
-generally safer to just use the certified implementation for everything
-if possible.
+Fix this bug by adding a check of fc_rport_create().
 
-> > I do not get why you call the implementation crippled? The
-> > specification is quite thorough and provides well reasoned requirements
-> > as well as self-test that insure coding mistakes won't end up returning
-> > non-random values.
-> 
-> Which specification are you talking about exactly?  There are loads of
-> different ones it seems that people wish to follow, so it's hard to
-> claim that they all are sane :)
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Well, given I am interested primarily in FIPS certifications I was
-referring specifically to SP800-90A/B/C:
-https://csrc.nist.gov/publications/detail/sp/800-90a/rev-1/final
-https://csrc.nist.gov/publications/detail/sp/800-90b/final
-https://csrc.nist.gov/publications/detail/sp/800-90c/draft
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-> > I understand the mistrust vs gov agencies due to past mishaps like the
-> > Dual-DRBG thing, but we are not talking about something like that in
-> > this case. NIST is not mandating any specific algorithmic
-> > implementation, the requirement set forth allow to use a variety of
-> > different algorithms so that everyone can choose what they think is
-> > sane.
-> > 
-> > > Again, just try evolving the existing code to meet the needs that you
-> > > all have, stop trying to do wholesale reimplementations.  Those never
-> > > succeed, and it's pretty obvious that no one wants a "plugin a random
-> > > random driver" interface, right?
-> > 
-> > I think one of the issues is that the number of changes required
-> > against the current random driver amount essentially to a re-
-> > implementation. Sure, you can do it as a series of patches that
-> > transform the current code in something completely different.
-> 
-> That is how kernel development works, it is nothing new.
-> 
-> > And the main question here is, how can we get there, in any case, if
-> > the maintainer of the random device doesn't even participate in
-> > discussions, does not pick obvious bug fixes and is simply not engaging
-> > at all?
-> 
-> What obvious bug fixes have been dropped?
+Builds with CONFIG_LIBFC=m show no new warnings,
+and our static analyzer no longer warns about this code.
 
-Stephan posted you the link a few days ago for one of the examples.
-If you look at the last year you also will see that multiple patches
-have gone in w/o the maintainer interacting, which is fine for obvious
-stuff, but does not work for stuff that requires more feedback.
+Fixes: 2580064b5ec6 ("scsi: libfc: Replace ->rport_create callback with function call")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/scsi/libfc/fc_lport.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> > Your plan requires an active maintainer that guides these changes and
-> > interact with the people proposing them to negotiate the best outcome.
-> > But that is not happening so that road seem blocked at the moment.
-> 
-> We need working patches that fit with the kernel development model first
-> before people can start blaming maintainers :)
-
-This is a Catch-22, the maintainer is mum in what would be acceptable,
-and whenever there are patches sent, there is no feedback on whether
-they are acceptable or not. It's not like I like blaming anyone, but it
-would be nice to have at least one word that gives a direction to
-follow that the maintainer is willing to then engage with and review or
-at least accept with proper third party review.
-
-> I see almost 300 changes accepted for this tiny random.c file over the
-> years we have had git (17 years).  I think that's a very large number of
-> changes for a 2300 line file that is relied upon by everyone.
-
-Seem like a lot more are desired too :-)
-
-Simo.
-
+diff --git a/drivers/scsi/libfc/fc_lport.c b/drivers/scsi/libfc/fc_lport.c
+index 19cd4a95d354..5cd716afb711 100644
+--- a/drivers/scsi/libfc/fc_lport.c
++++ b/drivers/scsi/libfc/fc_lport.c
+@@ -241,6 +241,13 @@ static void fc_lport_ptp_setup(struct fc_lport *lport,
+ 	}
+ 	mutex_lock(&lport->disc.disc_mutex);
+ 	lport->ptp_rdata = fc_rport_create(lport, remote_fid);
++	if (!lport->ptp_rdata) {
++		mutex_unlock(&lport->disc.disc_mutex);
++		printk(KERN_WARNING "libfc: Failed to allocate for the port (%6.6x)\n",
++				remote_fid);
++		return;
++	}
++
+ 	kref_get(&lport->ptp_rdata->kref);
+ 	lport->ptp_rdata->ids.port_name = remote_wwpn;
+ 	lport->ptp_rdata->ids.node_name = remote_wwnn;
 -- 
-Simo Sorce
-RHEL Crypto Team
-Red Hat, Inc
-
-
-
+2.25.1
 

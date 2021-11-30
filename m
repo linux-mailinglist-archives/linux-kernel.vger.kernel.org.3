@@ -2,78 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CB2463C5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:57:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2C37463C59
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238952AbhK3RAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:00:13 -0500
-Received: from mga07.intel.com ([134.134.136.100]:42072 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244462AbhK3RAB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:00:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="299652138"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="299652138"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:56:25 -0800
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="459671782"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:56:23 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ms6PX-000cax-Io;
-        Tue, 30 Nov 2021 18:55:19 +0200
-Date:   Tue, 30 Nov 2021 18:55:19 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-Message-ID: <YaZXd6XM0yL3C9vp@smile.fi.intel.com>
-References: <20211130154127.12272-1-brgl@bgdev.pl>
- <20211130154127.12272-3-brgl@bgdev.pl>
- <YaZNyMV5gX5cZpar@smile.fi.intel.com>
- <YaZPACT53i4LovrM@smile.fi.intel.com>
+        id S244453AbhK3Q7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:59:10 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:43856 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238952AbhK3Q7J (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:59:09 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id C3785CE1A7B;
+        Tue, 30 Nov 2021 16:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1878C53FC7;
+        Tue, 30 Nov 2021 16:55:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638291347;
+        bh=YkEoSmWzjqSns21oDlublZ8L9PXWXYHB2QcWBlMNzQc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=D3J/uf1ROWLew2Ud89oM4CnMx3YUAJbaYk1e2af14OAxWNMsUiXO18jNO2D8FAJPr
+         3Ig2IaOMFVFvHUDb5WJ9ALqLYM3dl2hqdZBW+0rWwF5vmOY/rt9rUKm3rD8Pze1wSA
+         Luv4T7VRAeu9ouO5mCsffod5Cpr32G6aNWicZ+1zVCV+4DjZHkwBS/IWe0UhAwL8c3
+         FaMje8n9qHLad9UyMXY1uzarTRfhvWVT4iMoUWTLWEqW/XrTiUemyCjcg+kmH61bzx
+         HBKhwZX3K19/0rd69hi2CW97Pk/7rXTosbINVuGjW4X7P5C7imSS1R9XzmTNTTPNUF
+         TDCdis1BZZ+Nw==
+Date:   Tue, 30 Nov 2021 10:55:45 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com,
+        bhelgaas@google.com, michal.simek@xilinx.com,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] PCI: xilinx-nwl: Simplify code and fix a memory leak
+Message-ID: <20211130165545.GA2743072@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YaZPACT53i4LovrM@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <5483f10a44b06aad55728576d489adfa16c3be91.1636279388.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 06:19:12PM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 30, 2021 at 06:14:01PM +0200, Andy Shevchenko wrote:
-> > On Tue, Nov 30, 2021 at 04:41:23PM +0100, Bartosz Golaszewski wrote:
-> 
-> ...
-> 
-> > Not sure I understand the proposal. Can you provide couple of (simplest)
-> > examples?
-> > 
-> > And also it sounds like reinventing a wheel. What problem do you have that you
-> > need to solve this way?
-> 
-> Have you seen these:
-> 	drivers/gpio/gpio-dwapb.c
-> 	drivers/mfd/intel_quark_i2c_gpio.c
-> ?
-> 
-> GPIO driver has a main (controller level) node along with children on per bank
-> basis. Currently it works with the provided approach (see second driver).
+On Sun, Nov 07, 2021 at 11:04:43AM +0100, Christophe JAILLET wrote:
+> Allocate space for 'bitmap' in 'struct nwl_msi' at build time instead of
+> dynamically allocating the memory at runtime.
 
-Btw, may be helpful to debug swnodes application
-https://lore.kernel.org/lkml/20210327222012.54103-3-andriy.shevchenko@linux.intel.com/#t
+Definitely a good change.  To be pedantic, I don't think this converts
+the alloc to *build* time.  It converts it to probe-time, when
+nwl_pcie_probe() calls devm_pci_alloc_host_bridge().
 
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> This simplifies code (especially error handling paths) and avoid some
+> open-coded arithmetic in allocator arguments
+> 
+> This also fixes a potential memory leak. The bitmap was never freed. It is
+> now part of a managed resource.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  drivers/pci/controller/pcie-xilinx-nwl.c | 30 ++++++------------------
+>  1 file changed, 7 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-xilinx-nwl.c b/drivers/pci/controller/pcie-xilinx-nwl.c
+> index a72b4f9a2b00..40d070e54ad2 100644
+> --- a/drivers/pci/controller/pcie-xilinx-nwl.c
+> +++ b/drivers/pci/controller/pcie-xilinx-nwl.c
+> @@ -146,7 +146,7 @@
+>  
+>  struct nwl_msi {			/* MSI information */
+>  	struct irq_domain *msi_domain;
+> -	unsigned long *bitmap;
+> +	DECLARE_BITMAP(bitmap, INT_PCI_MSI_NR);
+>  	struct irq_domain *dev_domain;
+>  	struct mutex lock;		/* protect bitmap variable */
+>  	int irq_msi0;
+> @@ -335,12 +335,10 @@ static void nwl_pcie_leg_handler(struct irq_desc *desc)
+>  
+>  static void nwl_pcie_handle_msi_irq(struct nwl_pcie *pcie, u32 status_reg)
+>  {
+> -	struct nwl_msi *msi;
+> +	struct nwl_msi *msi = &pcie->msi;
+>  	unsigned long status;
+>  	u32 bit;
+>  
+> -	msi = &pcie->msi;
+> -
+>  	while ((status = nwl_bridge_readl(pcie, status_reg)) != 0) {
+>  		for_each_set_bit(bit, &status, 32) {
+>  			nwl_bridge_writel(pcie, 1 << bit, status_reg);
+> @@ -560,30 +558,21 @@ static int nwl_pcie_enable_msi(struct nwl_pcie *pcie)
+>  	struct nwl_msi *msi = &pcie->msi;
+>  	unsigned long base;
+>  	int ret;
+> -	int size = BITS_TO_LONGS(INT_PCI_MSI_NR) * sizeof(long);
+>  
+>  	mutex_init(&msi->lock);
+>  
+> -	msi->bitmap = kzalloc(size, GFP_KERNEL);
+> -	if (!msi->bitmap)
+> -		return -ENOMEM;
+> -
+>  	/* Get msi_1 IRQ number */
+>  	msi->irq_msi1 = platform_get_irq_byname(pdev, "msi1");
+> -	if (msi->irq_msi1 < 0) {
+> -		ret = -EINVAL;
+> -		goto err;
+> -	}
+> +	if (msi->irq_msi1 < 0)
+> +		return -EINVAL;
+>  
+>  	irq_set_chained_handler_and_data(msi->irq_msi1,
+>  					 nwl_pcie_msi_handler_high, pcie);
+>  
+>  	/* Get msi_0 IRQ number */
+>  	msi->irq_msi0 = platform_get_irq_byname(pdev, "msi0");
+> -	if (msi->irq_msi0 < 0) {
+> -		ret = -EINVAL;
+> -		goto err;
+> -	}
+> +	if (msi->irq_msi0 < 0)
+> +		return -EINVAL;
+>  
+>  	irq_set_chained_handler_and_data(msi->irq_msi0,
+>  					 nwl_pcie_msi_handler_low, pcie);
+> @@ -592,8 +581,7 @@ static int nwl_pcie_enable_msi(struct nwl_pcie *pcie)
+>  	ret = nwl_bridge_readl(pcie, I_MSII_CAPABILITIES) & MSII_PRESENT;
+>  	if (!ret) {
+>  		dev_err(dev, "MSI not present\n");
+> -		ret = -EIO;
+> -		goto err;
+> +		return -EIO;
+>  	}
+>  
+>  	/* Enable MSII */
+> @@ -632,10 +620,6 @@ static int nwl_pcie_enable_msi(struct nwl_pcie *pcie)
+>  	nwl_bridge_writel(pcie, MSGF_MSI_SR_LO_MASK, MSGF_MSI_MASK_LO);
+>  
+>  	return 0;
+> -err:
+> -	kfree(msi->bitmap);
+> -	msi->bitmap = NULL;
+> -	return ret;
+>  }
+>  
+>  static int nwl_pcie_bridge_init(struct nwl_pcie *pcie)
+> -- 
+> 2.30.2
+> 

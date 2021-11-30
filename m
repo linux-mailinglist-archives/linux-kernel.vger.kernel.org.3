@@ -2,133 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C9EAC463938
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A38E463994
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:14:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244759AbhK3PIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:08:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S243794AbhK3PPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245239AbhK3PDh (ORCPT
+        with ESMTP id S243372AbhK3PFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:03:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D03C061756;
-        Tue, 30 Nov 2021 07:00:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9EB52B81A23;
-        Tue, 30 Nov 2021 15:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20EB3C53FCD;
-        Tue, 30 Nov 2021 15:00:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284411;
-        bh=BQwhEyj52pS1l1fg+KPjQveNu4vJG6JkJekPivvjPDM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s52V/VC1pce7mMpz9z5kuG60j9699IWN0FXqKNyuaiyrO4f0PacSSWYUm3WXiDycR
-         4czsmyi7J9tWYNsOTb4560WhtKRyYUNLC6+yvCAyfIRHpM6rLQ7l8/QeOM+6UY0h0J
-         umKrTS5O/aBCHmiBP5Qr35nFu71VbxyTi3K/JHP6GnjwEYUdRL3qcdQiv6pA30jxp/
-         TPTYva+DS5zzkuTlaRlDkvIuPxYfEBld9X52VkLBcIZ7LW9Gt8TGWAPMKhKI/iNCZB
-         KGq5FRU7+ooGb2XC6Pt3oEnk0x54KxH1TZH6VqymlgK2vnlRBUS11nYgxYP3qKGsvz
-         POUu9A+MoywOw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id DF02840002; Tue, 30 Nov 2021 12:00:08 -0300 (-03)
-Date:   Tue, 30 Nov 2021 12:00:08 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH] perf map: Fix namespace memory leak
-Message-ID: <YaY8eBB+PnklIxZA@kernel.org>
-References: <20211118193714.2293728-1-irogers@google.com>
- <YaOi6pYqoc3boYX/@krava>
+        Tue, 30 Nov 2021 10:05:19 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D29C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:01:59 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id d24so45154546wra.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:01:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vrull-eu.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=Tt3rzy7U8jtDDkOr2bs9fpOdOEtwyk7EaYJRM5UbHUM=;
+        b=YtrhNfmIJKIvBB5hQT4rkZcNSUkuhiHkssVg4vSjLhGAv4gArvLcH7KCIyD13B71oR
+         7XsW7sbLRob+sa6/ydYT/y637VgYkbATtaIzB13BbjxHFFqLCggDMprBYkVd+xJ28uzq
+         q8FijndPMSoI3y4fyC0TKf65YCw8iRCfnP75HnWlTQQPoR5ZgYS5gRUI8mbXWsmNikas
+         yX8zqrJjfoiYNlFmXtN7C0cErClOsxn7hpoSyQkNlRqSpIfG97GTt5EsS2e0coeFnUtu
+         X9gYcTuPJIs+y01E3KHl1nBZnze0L5qBkqE1rvmklVeIzVHyc7EZYUF9CSegGpF3F/vj
+         SujA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=Tt3rzy7U8jtDDkOr2bs9fpOdOEtwyk7EaYJRM5UbHUM=;
+        b=QiPO+Kqbw0ZBmTqTIelCefxX1PQZpX+nrSMQ8mFpIzs6vJEA0R3U2ruRsgfZp0abrb
+         dU7QZ6mvp9vgLo9Nysz5F+FwkAmp0fU3IaNMe7/ZuZTqJS+MoqKEB+TAVUYLAnURQM+S
+         PJw48XmmR2DLabIWWrDHhy/Siz0y0caNCPvhyf3lFT8gu0TSoNrWPMDpwypaFn3fakVd
+         gIpD0Y/Jrf+PMcLCp5frWlLCEIYH+DZ8JOMv/S9LzkfgGVpAr1sbcTq892ufdpqNM8P5
+         Ho26IS+itdsEkIblkK/7fuZWqvkkFwtAG7gpiMkS7fzDFyLttqBm75MRPf+wSjzYygPK
+         bUdQ==
+X-Gm-Message-State: AOAM531v/pFBp7k5d2rXoo1JmnTWj6vPcJv6Ddsk++gpjqWFLOt0ICgM
+        1/eVpxsvq2yCX1V6Xml5dILbZsLdkhiXjgv9JhGDZw==
+X-Google-Smtp-Source: ABdhPJzPtijXN7E4GbyZ8xSeGh+7wpmLdDsqXOAZ5ENfPFxSIVDg6BjfnnRGBSaLa1O64aYfYAIau9hY1/IrEKqETZ8=
+X-Received: by 2002:adf:eac8:: with SMTP id o8mr42150427wrn.337.1638284517883;
+ Tue, 30 Nov 2021 07:01:57 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaOi6pYqoc3boYX/@krava>
-X-Url:  http://acmel.wordpress.com
+References: <20211129014007.286478-1-wefu@redhat.com> <1909580.k68io2XIxi@diego>
+ <D7F256F9-F31F-4663-AADD-A535E159F87C@jrtc27.com> <2728314.U2HhIfhhqV@diego> <C19C85E6-821B-4A87-B764-56CF4D53E7FA@jrtc27.com>
+In-Reply-To: <C19C85E6-821B-4A87-B764-56CF4D53E7FA@jrtc27.com>
+From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
+Date:   Tue, 30 Nov 2021 16:01:47 +0100
+Message-ID: <CAAeLtUC0Qc6ysf31sh0dkvfJD-JsREZbyFFk=Ko0vQeBRzyjaw@mail.gmail.com>
+Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions
+ support for Svpbmt
+To:     Jessica Clarke <jrtc27@jrtc27.com>
+Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Wei Fu <wefu@redhat.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        taiten.peng@canonical.com, aniket.ponkshe@canonical.com,
+        gordan.markus@canonical.com, Guo Ren <guoren@linux.alibaba.com>,
+        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
+        Dan Lustig <dlustig@nvidia.com>,
+        Greg Favor <gfavor@ventanamicro.com>,
+        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
+        huffman@cadence.com, Nick Kossifidis <mick@ics.forth.gr>,
+        Allen Baum <allen.baum@esperantotech.com>,
+        jscheid@ventanamicro.com, rtrauben@gmail.com,
+        Anup Patel <anup@brainfault.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Anup Patel <Anup.Patel@wdc.com>, atishp04@gmail.com,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Guo Ren <guoren@kernel.org>,
+        =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
+        hch@lst.de, liush@allwinnertech.com, Wei Wu <lazyparser@gmail.com>,
+        drew@beagleboard.org,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sun, Nov 28, 2021 at 04:40:26PM +0100, Jiri Olsa escreveu:
-> On Thu, Nov 18, 2021 at 11:37:14AM -0800, Ian Rogers wrote:
-> > This leak was happening reliably with test "Lookup mmap thread" with
-> > stack traces like:
-> > 
-> > Direct leak of 5504 byte(s) in 172 object(s) allocated from:
-> >     #0 0x7f4685e47987 in __interceptor_calloc
-> >     #1 0x56063b974c2a in nsinfo__new util/namespaces.c:142
-> >     #2 0x56063b9781ff in thread__new util/thread.c:70
-> >     #3 0x56063b944953 in ____machine__findnew_thread util/machine.c:543
-> >     #4 0x56063b944ac6 in __machine__findnew_thread util/machine.c:574
-> >     #5 0x56063b944b36 in machine__findnew_thread util/machine.c:584
-> >     #6 0x56063b94c892 in machine__process_fork_event util/machine.c:1954
-> >     #7 0x56063b94cc1f in machine__process_event util/machine.c:2019
-> >     #8 0x56063b894f18 in perf_event__process util/event.c:567
-> >     #9 0x56063ba17951 in perf_tool__process_synth_event util/synthetic-events.c:65
-> >     #10 0x56063ba19086 in perf_event__synthesize_fork util/synthetic-events.c:287
-> >     #11 0x56063ba1c39d in __event__synthesize_thread util/synthetic-events.c:775
-> >     #12 0x56063ba1cf6f in __perf_event__synthesize_threads util/synthetic-events.c:929
-> >     #13 0x56063ba1d4ab in perf_event__synthesize_threads util/synthetic-events.c:1000
-> >     #14 0x56063b821a3d in synth_all tests/mmap-thread-lookup.c:136
-> >     #15 0x56063b821c86 in mmap_events tests/mmap-thread-lookup.c:174
-> >     #16 0x56063b8221b7 in test__mmap_thread_lookup tests/mmap-thread-lookup.c:230
-> > 
-> > The dso->nsinfo is overwritten, but without a nsinfo__put this can leak
-> > the overwritten nsinfo.
-> > 
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> 
-> nice catch!
-> 
-> Acked-by: Jiri Olsa <jolsa@redhat.com>
+We did touch on this in our coordination call a few weeks ago: the
+grouping under mmu and the bool-entries were chosen because of their
+similarity to other extensions (i.e. for Zb[abcs] there could/should
+be a bool-entry under each cpu-node =E2=80=94 for some Zv* entries a subnod=
+e
+might be needed with further parameters).
 
-This one is tricky, I have to retrieve the details from last time this
-surfaced, but try:
+The string-based approach (as in the originally proposed "mmu-type=3D")
+would like not scale with the proliferation of small & modular
+extensions.
 
-# perf top -F 10000
+Philipp.
 
-leave it for a while and press 'q':
 
-perf: /home/acme/git/perf/tools/include/linux/refcount.h:131: refcount_sub_and_test: Assertion `!(new > val)' failed.
-                                                                                                                     Aborted (core dumped)
-
-I reproduced the above assertion a few times, now I'm not being able,
-probably some namespace related activity took place when it hit.
-
-- Arnaldo
- 
-> thanks,
-> jirka
-> 
-> > ---
-> >  tools/perf/util/map.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/tools/perf/util/map.c b/tools/perf/util/map.c
-> > index 8af693d9678c..ceed8f407bc0 100644
-> > --- a/tools/perf/util/map.c
-> > +++ b/tools/perf/util/map.c
-> > @@ -192,6 +192,7 @@ struct map *map__new(struct machine *machine, u64 start, u64 len,
-> >  			if (!(prot & PROT_EXEC))
-> >  				dso__set_loaded(dso);
-> >  		}
-> > +		nsinfo__put(dso->nsinfo);
-> >  		dso->nsinfo = nsi;
-> >  
-> >  		if (build_id__is_defined(bid))
-> > -- 
-> > 2.34.0.rc2.393.gf8c9666880-goog
-> > 
-
--- 
-
-- Arnaldo
+On Tue, 30 Nov 2021 at 14:59, Jessica Clarke <jrtc27@jrtc27.com> wrote:
+>
+> On 30 Nov 2021, at 13:27, Heiko St=C3=BCbner <heiko@sntech.de> wrote:
+> >
+> > Hi,
+> >
+> > Am Dienstag, 30. November 2021, 14:17:41 CET schrieb Jessica Clarke:
+> >> On 30 Nov 2021, at 12:07, Heiko St=C3=BCbner <heiko@sntech.de> wrote:
+> >>>
+> >>> Am Montag, 29. November 2021, 13:06:23 CET schrieb Heiko St=C3=BCbner=
+:
+> >>>> Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich Schuchar=
+dt:
+> >>>>> On 11/29/21 02:40, wefu@redhat.com wrote:
+> >>>>>> From: Wei Fu <wefu@redhat.com>
+> >>>>>>
+> >>>>>> Previous patch has added svpbmt in arch/riscv and add "riscv,svpmb=
+t"
+> >>>>>> in the DT mmu node. Update dt-bindings related property here.
+> >>>>>>
+> >>>>>> Signed-off-by: Wei Fu <wefu@redhat.com>
+> >>>>>> Co-developed-by: Guo Ren <guoren@kernel.org>
+> >>>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
+> >>>>>> Cc: Anup Patel <anup@brainfault.org>
+> >>>>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
+> >>>>>> Cc: Rob Herring <robh+dt@kernel.org>
+> >>>>>> ---
+> >>>>>> Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
+> >>>>>> 1 file changed, 10 insertions(+)
+> >>>>>>
+> >>>>>> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/D=
+ocumentation/devicetree/bindings/riscv/cpus.yaml
+> >>>>>> index aa5fb64d57eb..9ff9cbdd8a85 100644
+> >>>>>> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
+> >>>>>> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
+> >>>>>> @@ -63,6 +63,16 @@ properties:
+> >>>>>>       - riscv,sv48
+> >>>>>>       - riscv,none
+> >>>>>>
+> >>>>>> +  mmu:
+> >>>>>
+> >>>>> Shouldn't we keep the items be in alphabetic order, i.e. mmu before
+> >>>>> mmu-type?
+> >>>>>
+> >>>>>> +    description:
+> >>>>>> +      Describes the CPU's MMU Standard Extensions support.
+> >>>>>> +      These values originate from the RISC-V Privileged
+> >>>>>> +      Specification document, available from
+> >>>>>> +      https://riscv.org/specifications/
+> >>>>>> +    $ref: '/schemas/types.yaml#/definitions/string'
+> >>>>>> +    enum:
+> >>>>>> +      - riscv,svpmbt
+> >>>>>
+> >>>>> The privileged specification has multiple MMU related extensions:
+> >>>>> Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enum?
+> >>>>
+> >>>> I remember in some earlier version some way back there was the
+> >>>> suggestion of using a sub-node instead and then adding boolean
+> >>>> properties for the supported extensions.
+> >>>>
+> >>>> Aka something like
+> >>>>    mmu {
+> >>>>            riscv,svpbmt;
+> >>>>    };
+> >>>
+> >>> For the record, I'm talking about the mail from september
+> >>> https://lore.kernel.org/linux-riscv/CAAeLtUChjjzG+P8yg45GLZMJy5UR2K5R=
+RBoLFVZhtOaZ5pPtEA@mail.gmail.com/
+> >>>
+> >>> So having a sub-node would make adding future extensions
+> >>> way nicer.
+> >>
+> >> Svpbmt is just an ISA extension, and should be treated like any other.
+> >> Let=E2=80=99s not invent two different ways of representing that in th=
+e device
+> >> tree.
+> >
+> > Heinrich asked how the other extensions should be handled
+> > (Svnapot, Svpbmt, Svinval), so what do you suggest to do with these?
+>
+> Whatever is done for Zb[abcs], Zk*, Zv*, Zicbo*, etc. There may not be
+> a concrete plan for that yet, but that means you should speak with the
+> people involved with such extensions and come up with something
+> appropriate together.
+>
+> Jess
+>

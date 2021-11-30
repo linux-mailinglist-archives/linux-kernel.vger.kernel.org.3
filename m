@@ -2,203 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A1D462C6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8AB462C6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbhK3GBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 01:01:49 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:46735 "EHLO pegase2.c-s.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229658AbhK3GBr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 01:01:47 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4J3BNM60LCz9sSS;
-        Tue, 30 Nov 2021 06:58:27 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id VJnpcIrt215C; Tue, 30 Nov 2021 06:58:27 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3BNM4v9hz9sSP;
-        Tue, 30 Nov 2021 06:58:27 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 93DDE8B778;
-        Tue, 30 Nov 2021 06:58:27 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id HJlyjb9UKWoj; Tue, 30 Nov 2021 06:58:27 +0100 (CET)
-Received: from [192.168.232.93] (unknown [192.168.232.93])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 0AAA58B763;
-        Tue, 30 Nov 2021 06:58:27 +0100 (CET)
-Message-ID: <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
-Date:   Tue, 30 Nov 2021 06:58:26 +0100
+        id S238438AbhK3GCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 01:02:08 -0500
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:52786 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234353AbhK3GCH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 01:02:07 -0500
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AU5waLk012915;
+        Mon, 29 Nov 2021 23:58:36 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638251916;
+        bh=06AH7OacKmkmVXzcwOhpzHW1hNSQrCuxfuYNjbXV8Kg=;
+        h=Subject:From:To:CC:References:Date:In-Reply-To;
+        b=e8BY3vbRf6GcN5EcqcWRkbwmX3WnbAzIu/WDDX/YxoTMWXwBEU0UggUQ/eIe5/EGd
+         NYMQnU7rJS+sYlSD6K18jC8/kSDalzlujKbpelUS8yex43VDcdqtgxMVT9orQ/EA+B
+         gB6a9pMVOLqUUj6zyKcwwnSzrvjlreaLKhEIgO+U=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AU5wagB038199
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 29 Nov 2021 23:58:36 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 29
+ Nov 2021 23:58:36 -0600
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 29 Nov 2021 23:58:36 -0600
+Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AU5wWtJ038213;
+        Mon, 29 Nov 2021 23:58:32 -0600
+Subject: Re: [PATCH RFC v3 3/4] mux: Add support for reading mux enable state
+ from DT
+From:   Aswath Govindraju <a-govindraju@ti.com>
+To:     Peter Rosin <peda@axentia.se>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>, Nishanth Menon <nm@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <linux-phy@lists.infradead.org>
+References: <20211123081222.27979-1-a-govindraju@ti.com>
+ <20211123081222.27979-4-a-govindraju@ti.com>
+ <5a530528-27a9-f5c8-abd4-025897a1c197@axentia.se>
+ <06126316-53ef-6c32-2fbe-cff68e1ea064@ti.com>
+Message-ID: <81e5d8e2-d91a-1832-1854-2eacb60df7d6@ti.com>
+Date:   Tue, 30 Nov 2021 11:28:31 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
- copy_inst_from_kernel_nofault()
-Content-Language: fr-FR
-To:     kernel test robot <lkp@intel.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
- <202111300652.0yDBNvyJ-lkp@intel.com>
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <202111300652.0yDBNvyJ-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <06126316-53ef-6c32-2fbe-cff68e1ea064@ti.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Peter,
 
-
-Le 29/11/2021 à 23:55, kernel test robot a écrit :
-> Hi Christophe,
+On 30/11/21 11:14 am, Aswath Govindraju wrote:
+> Hi Peter,
 > 
-> I love your patch! Perhaps something to improve:
+> On 25/11/21 7:22 pm, Peter Rosin wrote:
+>> Hi!
+>>
+>> On 2021-11-23 09:12, Aswath Govindraju wrote:
+>>> In some cases, we might need to provide the state of the mux to be set for
+>>> the operation of a given peripheral. Therefore, pass this information using
+>>> the second argument of the mux-controls property.
+>>>
+>>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>>> ---
+>>>  drivers/mux/core.c           | 146 ++++++++++++++++++++++++++++++++++-
+>>>  include/linux/mux/consumer.h |  19 ++++-
+>>>  include/linux/mux/driver.h   |  13 ++++
+>>>  3 files changed, 173 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/mux/core.c b/drivers/mux/core.c
+>>> index 22f4709768d1..9622b98f9818 100644
+>>> --- a/drivers/mux/core.c
+>>> +++ b/drivers/mux/core.c
+>>> @@ -370,6 +370,29 @@ int mux_control_select_delay(struct mux_control *mux, unsigned int state,
+>>>  }
+>>>  EXPORT_SYMBOL_GPL(mux_control_select_delay);
+>>>  
 > 
-> [auto build test WARNING on powerpc/next]
-> [also build test WARNING on v5.16-rc3 next-20211129]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch]
+> [...]
 > 
-> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0day-ci/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
-> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
-> reproduce (this is a W=1 build):
->          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->          chmod +x ~/bin/make.cross
->          # install powerpc cross compiling tool for clang build
->          # apt-get install binutils-powerpc-linux-gnu
->          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b48bb69de1f325eee826
->          git remote add linux-review https://github.com/0day-ci/linux
->          git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
->          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
->          # save the config file to linux build tree
->          mkdir build_dir
->          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->     In file included from arch/powerpc/kernel/asm-offsets.c:71:
->     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
->>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
->                     *inst = ppc_inst(val);
->                                      ^~~
->     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro 'ppc_inst'
->     #define ppc_inst(x) (x)
->                          ^
->     arch/powerpc/include/asm/inst.h:155:18: note: initialize the variable 'val' to silence this warning
->             unsigned int val, suffix;
->                             ^
->                              = 0
-
-I can't understand what's wrong here.
-
-We have
-
-	__get_kernel_nofault(&val, src, u32, Efault);
-	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
-		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
-		*inst = ppc_inst_prefix(val, suffix);
-	} else {
-		*inst = ppc_inst(val);
-	}
-
-With
-
-#define __get_kernel_nofault(dst, src, type, err_label)			\
-	__get_user_size_goto(*((type *)(dst)),				\
-		(__force type __user *)(src), sizeof(type), err_label)
-
-
-And
-
-#define __get_user_size_goto(x, ptr, size, label)				\
-do {										\
-	BUILD_BUG_ON(size > sizeof(x));						\
-	switch (size) {								\
-	case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;	\
-	case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); break;	\
-	case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); break;	\
-	case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break;	\
-	default: x = 0; BUILD_BUG();						\
-	}									\
-} while (0)
-
-And
-
-#define __get_user_asm_goto(x, addr, label, op)			\
-	asm_volatile_goto(					\
-		"1:	"op"%U1%X1 %0, %1	# get_user\n"	\
-		EX_TABLE(1b, %l2)				\
-		: "=r" (x)					\
-		: "m<>" (*addr)				\
-		:						\
-		: label)
-
-
-I see no possibility, no alternative path where val wouldn't be set. The 
-asm clearly has *addr as an output param so it is always set.
-
->     1 warning generated.
->     <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#warnings]
->     #warning syscall futex_waitv not implemented
->      ^
->     1 warning generated.
->     arch/powerpc/kernel/vdso32/gettimeofday.S:72:8: error: unsupported directive '.stabs'
->     .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_x; _restgpr_31_x:
->            ^
->     arch/powerpc/kernel/vdso32/gettimeofday.S:73:8: error: unsupported directive '.stabs'
->     .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32gpr_31_x; _rest32gpr_31_x:
-
-How should we fix that ? Will clang support .stabs in the future ?
-
-
->            ^
->     make[2]: *** [arch/powerpc/kernel/vdso32/Makefile:55: arch/powerpc/kernel/vdso32/gettimeofday.o] Error 1
->     make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
->     make[1]: *** [arch/powerpc/Makefile:421: vdso_prepare] Error 2
->     make[1]: Target 'prepare' not remade because of errors.
->     make: *** [Makefile:219: __sub-make] Error 2
->     make: Target 'prepare' not remade because of errors.
+>>>  }
+>>>  
+>>>  /**
+>>> - * mux_control_get() - Get the mux-control for a device.
+>>> + * mux_get() - Get the mux-control for a device.
+>>>   * @dev: The device that needs a mux-control.
+>>>   * @mux_name: The name identifying the mux-control.
+>>> + * @enable_state: The variable to store the enable state for the requested device
+>>>   *
+>>>   * Return: A pointer to the mux-control, or an ERR_PTR with a negative errno.
+>>>   */
+>>> -struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
+>>> +static struct mux_control *mux_get(struct device *dev, const char *mux_name,
+>>> +				   unsigned int *enable_state)
+>>
+>> s/enable_state/state/ (goes for all of the patch).
+>>
+>>>  {
+>>>  	struct device_node *np = dev->of_node;
+>>>  	struct of_phandle_args args;
+>>> @@ -481,8 +545,7 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
+>>>  	if (!mux_chip)
+>>>  		return ERR_PTR(-EPROBE_DEFER);
+>>>  
+>>> -	if (args.args_count > 1 ||
+>>
+>> It is inconsistent to allow more than 2 args, but then only allow
+>> digging out the state from the 2nd arg if the count is exactly 2.
+>>
+>>> -	    (!args.args_count && (mux_chip->controllers > 1))) {
+>>> +	if (!args.args_count && mux_chip->controllers > 1) {
+>>>  		dev_err(dev, "%pOF: wrong #mux-control-cells for %pOF\n",
+>>>  			np, args.np);
+>>>  		put_device(&mux_chip->dev);
+>>> @@ -500,8 +563,25 @@ struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
+>>>  		return ERR_PTR(-EINVAL);
+>>>  	}
+>>>  
+>>> +	if (args.args_count == 2)
+>>> +		*enable_state = args.args[1];
+>>> +
+>>
+>> With the suggested binding in my comment for patch 1/4, you'd need to do
+>> either
+>>
+>> 	ret = of_parse_phandle_with_args(np,
+>> 					 "mux-controls", "#mux-control-cells",
+>> 					 index, &args);
+>>
+>> or
+>>
+>> 	ret = of_parse_phandle_with_args(np,
+>> 					 "mux-states", "#mux-state-cells",
+>> 					 index, &args);
+>>
+>> depending on if the mux_get helper gets a NULL (enable_)state pointer or a "real"
+>> address, and then...
+>>
 > 
 > 
-> vim +/val +165 arch/powerpc/include/asm/inst.h
+> Sorry, while trying to implement the above method, I came across one
+> more question. So, in a given consumer DT node we will be either having
+> only mux-states or mux-controls right? How would we take care of the
+> condition when we would want to set the state of a given line in the
+> controller. Especially when a single mux chip is used by multiple
+> consumers each using a different line. Wouldn't we require both
+> mux-controls and mux-states in that case? So, shouldn't the
+> implementation be such that we need to first read mux-controls and then
+> based whether the enable_state is NULL, we read mux-states?
 > 
->     152	
->     153	static inline int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
->     154	{
->     155		unsigned int val, suffix;
->     156	
->     157		if (unlikely(!is_kernel_addr((unsigned long)src)))
->     158			return -ERANGE;
->     159	
->     160		__get_kernel_nofault(&val, src, u32, Efault);
->     161		if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
->     162			__get_kernel_nofault(&suffix, src + 1, u32, Efault);
->     163			*inst = ppc_inst_prefix(val, suffix);
->     164		} else {
->   > 165			*inst = ppc_inst(val);
->     166		}
->     167		return 0;
->     168	Efault:
->     169		return -EFAULT;
->     170	}
->     171	
+> Just to add more clarity, if we go about this method then we would have
+> both mux-controls and mux-states in the consumer DT node when we want to
+> specify the state.
 > 
-> ---
-> 0-DAY CI Kernel Test Service, Intel Corporation
-> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+I now understood the implementation that you described. mux-states will
+be similar to the mux-controls after this patch is applied. mux-states
+can have 2 arguments(mux line and state) whereas mux-controls can have
+only one argument(mux line).
+
+Sorry, for the inconvenience.
+
+Thanks,
+Aswath
+
+> Thanks,
+> Aswath
 > 
+>>>  	return &mux_chip->mux[controller];
+>>>  }
+>>> +
+>>> +/**
+>>> + * mux_control_get() - Get the mux-control for a device.
+>>> + * @dev: The device that needs a mux-control.
+>>> + * @mux_name: The name identifying the mux-control.
+>>> + *
+>>> + * Return: A pointer to the mux-control, or an ERR_PTR with a negative errno.
+>>> + */
+>>> +struct mux_control *mux_control_get(struct device *dev, const char *mux_name)
+>>> +{
+> 
+> [...]
+> 
+

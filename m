@@ -2,183 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0CA3462E10
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36682462ED3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:47:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234582AbhK3IA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48416 "EHLO
+        id S239801AbhK3Iu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:50:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239324AbhK3IAv (ORCPT
+        with ESMTP id S239766AbhK3IuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:00:51 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D65C061748
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 23:57:32 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id p65so869964iof.3
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 23:57:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ANwdMOL5b2y3RX/fmlScMbR5sfXgdjPAWQRFJ08uvUw=;
-        b=plZJO0HRqe+GhQPlFiNUiQ4FmsS/vSGPcixliMx+8yRfacPCCYr2hVJosl/YY1iBMy
-         N6HqRFQM+Hs5YUOMvuita6QtneqC2rJoogozkt8is2EBx4g/zBeoh4dtM5GQtpLzGGsD
-         fa2ZzrNTvje+TusQQUFyNs4FIAZQa9dmR4FrFv2hU6xxWqnz8+IkjJU5VyQIdzF9Prjp
-         D2s18S7IUbddmxz2DA8V418O6BEWY3Y4HvhHM/FTRkF9CsPXhfy8RAui2MvMkeXQ/qw0
-         p0kKA6qPjMk49D/k2sCr4w4nyxKxLRoV6PHZc6Zbt5HIPRJHIshNbsRyjjAlzpsh3rpd
-         yysQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ANwdMOL5b2y3RX/fmlScMbR5sfXgdjPAWQRFJ08uvUw=;
-        b=pWdBHnvpFCcRQCNvdds7XfSE69erIaESY2TuFkJrcr4JqVU2OQ/Jr+LktjBK+z2eZi
-         QLq7Rz9hBPnGNSVu9AP/sYd24N5QC/+ZeIIbifLsVJMZ2ou7G+EIeDV/Cox9fp8Aden9
-         Zxx4IRbQ2MK8MMM0sHxmg/qzc1C4ZAyAG3CYVz4YkWcN8l+6ohOKxYtIGCrjizaNhnRm
-         xYUmACOPKvBKtW45AybZvvRNfikebJ+RQESYysUPxh+z1Yy1XWccNhcbRBNhJshDEYEa
-         oEpFVaO1tfvyXYA3y9l9IhIpXvKc9kXTUXv0JbOBAfVww5p2Sej5ybwB/+1qvH89rnP2
-         oRxQ==
-X-Gm-Message-State: AOAM530+oaimT5Qv51nt1f/CnBmdhuZgFNGfC9FHZQ0Q/NGibNCj6gLc
-        Cc/lutjXT0au9OCzi6APYj1ZCOMh8G5VyoNNa9TnvQ==
-X-Google-Smtp-Source: ABdhPJxjBF0LZNIDXFuDLc4mx/wWydE35Z6CuXhkYqD4OllkmOmYjOjnmpo1wl+xa/eAPu9mH/7jNh7DCFZcSnB9nps=
-X-Received: by 2002:a05:6638:144f:: with SMTP id l15mr70873142jad.21.1638259051695;
- Mon, 29 Nov 2021 23:57:31 -0800 (PST)
+        Tue, 30 Nov 2021 03:50:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654ACC061574;
+        Tue, 30 Nov 2021 00:47:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B17F9CE1805;
+        Tue, 30 Nov 2021 08:47:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA27C53FC1;
+        Tue, 30 Nov 2021 08:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638262018;
+        bh=IV7CfOvh14lM4qBOoT7nyIPMnQ7INl8FL+DbIr8jUZE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o2BY48q9b0Ye9pSk35j13Q+j8G0HeZe1QHlM+h7Orbf0jTJ9DJdmIr63oT9heOYXa
+         fSZSz95xEaiCzaKMybcESOR/NOJGhW2Mgkm+lxoPZ8e2nVguY6z/isFukOu9qlzYdL
+         d+ajnwmYvmoh526ziVvV5uj0TVB6KCRjIhvskXiE=
+Date:   Tue, 30 Nov 2021 08:57:46 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Salvatore Bonaccorso <carnil@debian.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Ben Hutchings <benh@debian.org>
+Subject: Re: [PATCH 4.19 088/323] locking/lockdep: Avoid RCU-induced noinstr
+ fail
+Message-ID: <YaXZevLfOkCTzQTV@kroah.com>
+References: <20211124115718.822024889@linuxfoundation.org>
+ <20211124115721.937655496@linuxfoundation.org>
+ <YaNP46ypf6xcTcJH@eldamar.lan>
+ <YaNvGtWfuCRkmWwi@eldamar.lan>
+ <YaNx31QvvjHy2IGh@eldamar.lan>
+ <YaN+1gwQwt0aGKte@kroah.com>
+ <YaN/ZQYSAUfzjq0d@kroah.com>
+ <YaUcRuy050ZrtucJ@eldamar.lan>
 MIME-Version: 1.0
-References: <20211123020341.3073673-1-irogers@google.com> <20211123020341.3073673-2-irogers@google.com>
- <YaO1FIOYpF/Y5BDK@krava> <CAP-5=fU5MFQAidNWTp0hRjesKpFper6wy9MJ0taL9k804amn6A@mail.gmail.com>
- <CAM9d7cgiy4at+Tc1n9xRHNi=icYnurYDtxWJ=BPO-pLV=aVBEA@mail.gmail.com>
-In-Reply-To: <CAM9d7cgiy4at+Tc1n9xRHNi=icYnurYDtxWJ=BPO-pLV=aVBEA@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 29 Nov 2021 23:57:19 -0800
-Message-ID: <CAP-5=fUYO2ebkQ_1=Wn50MouymbJ4DFHogG-JcM-XT4uaD-CGw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] perf evsel: Improve error message for uncore events
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YaUcRuy050ZrtucJ@eldamar.lan>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 10:55 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hi Ian,
->
-> On Mon, Nov 29, 2021 at 3:48 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > On Sun, Nov 28, 2021 at 8:58 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> > >
-> > > On Mon, Nov 22, 2021 at 06:03:41PM -0800, Ian Rogers wrote:
-> > > > When a group has multiple events and the leader fails it can yield
-> > > > errors like:
-> > > >
-> > > > $ perf stat -e '{uncore_imc/cas_count_read/},instructions' /bin/true
-> > > > Error:
-> > > > The sys_perf_event_open() syscall returned with 22 (Invalid argument) for event (uncore_imc/cas_count_read/).
-> > > > /bin/dmesg | grep -i perf may provide additional information.
-> > > >
-> > > > However, when not the group leader <not supported> is given:
-> > > >
-> > > > $ perf stat -e '{instructions,uncore_imc/cas_count_read/}' /bin/true
-> > > > ...
-> > > >          1,619,057      instructions
-> > > >    <not supported> MiB  uncore_imc/cas_count_read/
-> > > >
-> > > > This is necessary because get_group_fd will fail if the leader fails and
-> > > > is the direct result of the check on line 750 of builtin-stat.c in
-> > > > stat_handle_error that returns COUNTER_SKIP for the latter case.
-> > > >
-> > > > This patch improves the error message to:
-> > > >
-> > > > $ perf stat -e '{uncore_imc/cas_count_read/},instructions' /bin/true
-> > > > Error:
-> > > > Invalid event (uncore_imc/cas_count_read/) in per-thread mode, enable system wide with '-a'.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > > ---
-> > > >  tools/perf/util/evsel.c | 5 +++++
-> > > >  1 file changed, 5 insertions(+)
-> > > >
-> > > > diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> > > > index a59fb2ecb84e..48696ff4bddb 100644
-> > > > --- a/tools/perf/util/evsel.c
-> > > > +++ b/tools/perf/util/evsel.c
-> > > > @@ -2950,6 +2950,11 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
-> > > >                       return scnprintf(msg, size, "wrong clockid (%d).", clockid);
-> > > >               if (perf_missing_features.aux_output)
-> > > >                       return scnprintf(msg, size, "The 'aux_output' feature is not supported, update the kernel.");
-> > > > +             if ((evsel__leader(evsel) == evsel) &&
-> > > > +                 (evsel->core.leader->nr_members > 1))
-> > > > +                     return scnprintf(msg, size,
-> > > > +     "Invalid event (%s) in per-thread mode, enable system wide with '-a'.",
-> > > > +                                     evsel__name(evsel));
-> > >
-> > > should we rather check 'target' pointer for the per-thread mode?
-> > > I'm not sure that per-thread mode will always be the case for the failure
-> >
-> > Unfortunately the target isn't populated at that point:
->
-> It might be populated properly, as in this case
-> it should have no target.  I think you can use
-> !target__has_cpu().
+On Mon, Nov 29, 2021 at 07:30:30PM +0100, Salvatore Bonaccorso wrote:
+> Hi Greg,
+> 
+> (Adding Ben as well)
+> 
+> On Sun, Nov 28, 2021 at 02:08:53PM +0100, Greg Kroah-Hartman wrote:
+> > On Sun, Nov 28, 2021 at 02:06:30PM +0100, Greg Kroah-Hartman wrote:
+> > > On Sun, Nov 28, 2021 at 01:11:11PM +0100, Salvatore Bonaccorso wrote:
+> > > > Hi,
+> > > > 
+> > > > On Sun, Nov 28, 2021 at 12:59:24PM +0100, Salvatore Bonaccorso wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On Sun, Nov 28, 2021 at 10:46:13AM +0100, Salvatore Bonaccorso wrote:
+> > > > > > Hi,
+> > > > > > 
+> > > > > > On Wed, Nov 24, 2021 at 12:54:38PM +0100, Greg Kroah-Hartman wrote:
+> > > > > > > From: Peter Zijlstra <peterz@infradead.org>
+> > > > > > > 
+> > > > > > > [ Upstream commit ce0b9c805dd66d5e49fd53ec5415ae398f4c56e6 ]
+> > > > > > > 
+> > > > > > > vmlinux.o: warning: objtool: look_up_lock_class()+0xc7: call to rcu_read_lock_any_held() leaves .noinstr.text section
+> > > > > > 
+> > > > > > For 4.19.218 at least this commit seems to cause a build failure for
+> > > > > > cpupower, if warnings are treated as errors, I have not seen the same
+> > > > > > for the 5.10.80 build:
+> > > > > > 
+> > > > > > gcc -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -DVERSION=\"4.19\" -DPACKAGE=\"cpupower\" -DPACKAGE_BUGREPORT=\"Debian\ \(reportbug\ linux-cpupower\)\" -D_GNU_SOURCE -pipe -DNLS -Wall -Wchar-subscripts -Wpointer-arith
+> > > > > >  -Wsign-compare -Wno-pointer-sign -Wdeclaration-after-statement -Wshadow -Os -fomit-frame-pointer -fPIC -o /home/build/linux-4.19.218/debian/build/build-tools/tools/power/cpupower/lib/cpupower.o -c lib/cpupower.c
+> > > > > > In file included from lockdep.c:28:
+> > > > > > ../../../kernel/locking/lockdep.c: In function ‘look_up_lock_class’:
+> > > > > > ../../../kernel/locking/lockdep.c:694:2: error: implicit declaration of function ‘hlist_for_each_entry_rcu_notrace’; did you mean ‘hlist_for_each_entry_continue’? [-Werror=implicit-function-declaration]
+> > > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
+> > > > > >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > > >   hlist_for_each_entry_continue
+> > > > > > ../../../kernel/locking/lockdep.c:694:53: error: ‘hash_entry’ undeclared (first use in this function); did you mean ‘hash_ptr’?
+> > > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
+> > > > > >                                                      ^~~~~~~~~~
+> > > > > >                                                      hash_ptr
+> > > > > > ../../../kernel/locking/lockdep.c:694:53: note: each undeclared identifier is reported only once for each function it appears in
+> > > > > > ../../../kernel/locking/lockdep.c:694:64: error: expected ‘;’ before ‘{’ token
+> > > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
+> > > > > >                                                                 ^~
+> > > > > >                                                                 ;
+> > > > > > ../../../kernel/locking/lockdep.c:706:1: warning: control reaches end of non-void function [-Wreturn-type]
+> > > > > >  }
+> > > > > >  ^
+> > > > > > cc1: some warnings being treated as errors
+> > > > > > make[5]: *** [/home/build/linux-4.19.218/tools/build/Makefile.build:97: /home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep/lockdep.o] Error 1
+> > > > > > make[4]: *** [Makefile:121: /home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep/liblockdep-in.o] Error 2
+> > > > > > make[4]: Leaving directory '/home/build/linux-4.19.218/tools/lib/lockdep'
+> > > > > > make[3]: *** [/home/build/linux-4.19.218/debian/rules.d/tools/lib/lockdep/Makefile:16: all] Error 2
+> > > > > > make[3]: Leaving directory '/home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep'
+> > > > > > make[2]: *** [debian/rules.real:795: build-liblockdep] Error 2
+> > > > > > make[2]: *** Waiting for unfinished jobs....
+> > > > > > 
+> > > > > > I was not yet able to look further on it.
+> > > > > 
+> > > > > Might actually be a distro specific issue, needs some further
+> > > > > investigation.
+> > > > 
+> > > > I'm really sorry about the doubled noice, so here is the stance. I can
+> > > > reproduce distro indpeendent, but the initial claim was wrong. It can
+> > > > be reproduced for 4.19.218:
+> > > > 
+> > > > $ LC_ALL=C.UTF-8 V=1 ARCH=x86 make -C tools liblockdep
+> > > > make: Entering directory '/home/build/linux-stable/tools'
+> > > > mkdir -p lib/lockdep && make  subdir=lib/lockdep  -C lib/lockdep 
+> > > > make[1]: Entering directory '/home/build/linux-stable/tools/lib/lockdep'
+> > > > make -f /home/build/linux-stable/tools/build/Makefile.build dir=. obj=fixdep
+> > > >   gcc -Wp,-MD,./.fixdep.o.d -Wp,-MT,fixdep.o  -D"BUILD_STR(s)=#s"   -c -o fixdep.o fixdep.c
+> > > >    ld -r -o fixdep-in.o  fixdep.o
+> > > > gcc  -o fixdep fixdep-in.o
+> > > >   gcc -Wp,-MD,./.common.o.d -Wp,-MT,common.o -g -DCONFIG_LOCKDEP -DCONFIG_STACKTRACE -DCONFIG_PROVE_LOCKING -DBITS_PER_LONG=__WORDSIZE -DLIBLOCKDEP_VERSION='"4.19.218"' -rdynamic -O0 -g -fPIC -Wall -I. -I./uinclude -I./include -I../../include -D"BUILD_STR(s)=#s" -c -o common.o common.c
+> > > >   gcc -Wp,-MD,./.lockdep.o.d -Wp,-MT,lockdep.o -g -DCONFIG_LOCKDEP -DCONFIG_STACKTRACE -DCONFIG_PROVE_LOCKING -DBITS_PER_LONG=__WORDSIZE -DLIBLOCKDEP_VERSION='"4.19.218"' -rdynamic -O0 -g -fPIC -Wall -I. -I./uinclude -I./include -I../../include -D"BUILD_STR(s)=#s" -c -o lockdep.o lockdep.c
+> > > > In file included from lockdep.c:28:
+> > > > ../../../kernel/locking/lockdep.c: In function ‘look_up_lock_class’:
+> > > > ../../../kernel/locking/lockdep.c:692:2: warning: implicit declaration of function ‘hlist_for_each_entry_rcu_notrace’; did you mean ‘hlist_for_each_entry_continue’? [-Wimplicit-function-declaration]
+> > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
+> > > >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > >   hlist_for_each_entry_continue
+> > > > ../../../kernel/locking/lockdep.c:692:53: error: ‘hash_entry’ undeclared (first use in this function); did you mean ‘hash_ptr’?
+> > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
+> > > >                                                      ^~~~~~~~~~
+> > > >                                                      hash_ptr
+> > > > ../../../kernel/locking/lockdep.c:692:53: note: each undeclared identifier is reported only once for each function it appears in
+> > > > ../../../kernel/locking/lockdep.c:692:64: error: expected ‘;’ before ‘{’ token
+> > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
+> > > >                                                                 ^~
+> > > >                                                                 ;
+> > > > ../../../kernel/locking/lockdep.c:704:1: warning: control reaches end of non-void function [-Wreturn-type]
+> > > >  }
+> > > >  ^
+> > > > make[2]: *** [/home/build/linux-stable/tools/build/Makefile.build:97: lockdep.o] Error 1
+> > > > make[1]: *** [Makefile:121: liblockdep-in.o] Error 2
+> > > > make[1]: Leaving directory '/home/build/linux-stable/tools/lib/lockdep'
+> > > > make: *** [Makefile:66: liblockdep] Error 2
+> > > > make: Leaving directory '/home/build/linux-stable/tools'
+> > > > 
+> > > > Reverting upstream ce0b9c805dd6 ("locking/lockdep: Avoid RCU-induced
+> > > > noinstr fail") on top of 4.19.218 fixes the issue.
+> > > > 
+> > > > So back to square one, and again apologies for the intermediate noise!
+> > > 
+> > > What config/arch is causing this to break?  And if you add rchlist.h to
+> > > the include files for lockdep.c, does that resolve the issue?  I haven't
+> > > seen any other reports of this yet.
+> > 
+> > Ah, it's the tools being built here, sorry, that was confusing.
+> 
+> Ah yes, sorry this was not clear. It's all about the tools, which some
+> are built as well as packages in Debian accompaning, tools/lib/lockdep
+> is one of those built.
 
-Thanks :-) I'm not sure having !target__has_cpu is intention
-revealing. Perhaps changing the error to say that an
-invalid/unsupported event can't be the group leader, unless it is the
-only event, and then suggest system wide mode.
+Ok, fair enough, I'll gladly take a patch that fixes this up for the
+4.19.y releases.
 
-Thanks,
-Ian
+thanks,
 
-> Thanks,
-> Namhyung
->
->
-> >
-> > gdb --args perf stat -e '{uncore_imc/cas_count_write/},instructions' /bin/true
-> > (gdb) p *target
-> > $2 = {pid = 0x0, tid = 0x0, cpu_list = 0x0, uid_str = 0x0, bpf_str =
-> > 0x0, uid = 4294967295, system_wide = false, uses_mmap = false,
-> >   default_per_cpu = false, per_thread = false, use_bpf = false, hybrid
-> > = false, attr_map = 0x0}
-> >
-> > #0  evsel__open_strerror (evsel=0x616000015680, target=0x5555586aa140
-> > <target>, err=22, msg=0x7fffffff78d0 "]k\264WUU", size=8192)
-> >     at util/evsel.c:2857
-> > #1  0x00005555561744e8 in stat_handle_error (counter=0x616000015680)
-> > at builtin-stat.c:771
-> > #2  0x0000555556174f05 in __run_perf_stat (argc=1,
-> > argv=0x7fffffffe450, run_idx=0) at builtin-stat.c:852
-> > #3  0x00005555561763e1 in run_perf_stat (argc=1, argv=0x7fffffffe450,
-> > run_idx=0) at builtin-stat.c:1048
-> > #4  0x000055555617df82 in cmd_stat (argc=1, argv=0x7fffffffe450) at
-> > builtin-stat.c:2550
-> > #5  0x00005555562f36b8 in run_builtin (p=0x5555586bad00
-> > <commands+288>, argc=4, argv=0x7fffffffe450) at perf.c:313
-> > #6  0x00005555562f3c11 in handle_internal_command (argc=4,
-> > argv=0x7fffffffe450) at perf.c:365
-> > #7  0x00005555562f3fce in run_argv (argcp=0x7fffffffe230,
-> > argv=0x7fffffffe240) at perf.c:409
-> > #8  0x00005555562f47bd in main (argc=4, argv=0x7fffffffe450) at perf.c:539
-> >
-> > Thanks,
-> > Ian
-> >
-> > > jirka
-> > >
-> > > >               break;
-> > > >       case ENODATA:
-> > > >               return scnprintf(msg, size, "Cannot collect data source with the load latency event alone. "
-> > > > --
-> > > > 2.34.0.rc2.393.gf8c9666880-goog
-> > > >
-> > >
+greg k-h

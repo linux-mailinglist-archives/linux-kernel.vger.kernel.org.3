@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDDA462D17
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:50:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADAE3462D19
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238818AbhK3GxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 01:53:18 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:48196 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbhK3GxP (ORCPT
+        id S238821AbhK3Gym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 01:54:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232181AbhK3Gyl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 01:53:15 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Tue, 30 Nov 2021 01:54:41 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B747CC061574;
+        Mon, 29 Nov 2021 22:51:22 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6A8DD1FD2F;
-        Tue, 30 Nov 2021 06:49:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638254995; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hPMSjAKUvWrxkyumPjAUQRt3wWFJYgrlV6wdEOiht/I=;
-        b=PGJVRHICcc8IILBvJDuzDgZwDz6Qkh7yf850L7I7o31/zrc3I6oqwcOO8p6d5ZNbc69cHs
-        U9T1FZuLMXt7tX/lB3+VD+UniOqFlU4YPlsmIfAYxLajulZeGdgM8BAW0KDymcmSHJsiiY
-        9heMsTkTuBAeVFI1dNoO/ZExDPR++Rk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638254995;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=hPMSjAKUvWrxkyumPjAUQRt3wWFJYgrlV6wdEOiht/I=;
-        b=QRRkhJfYi+SD5N2gnL0qDMxV97N76RaXiOZP5vBVQRhhBl52qQST9LwQSFlaodnRSmOnqe
-        3xa+H9bPzh4LA5BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0D6D713BA9;
-        Tue, 30 Nov 2021 06:49:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id u30XApPJpWEWVQAAMHmgww
-        (envelope-from <hare@suse.de>); Tue, 30 Nov 2021 06:49:55 +0000
-Subject: Re: [PATCH v2 3/3] blk-crypto: show crypto capabilities in sysfs
-To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bart Van Assche <bvanassche@acm.org>
-References: <20211130040306.148925-1-ebiggers@kernel.org>
- <20211130040306.148925-4-ebiggers@kernel.org>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <8745aed7-d4b6-eb8d-60ad-f4d768d62a62@suse.de>
-Date:   Tue, 30 Nov 2021 07:49:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3CYN4rSLz4xQv;
+        Tue, 30 Nov 2021 17:51:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638255080;
+        bh=lhL5PUUFXrK2X40tGvNjCzFWRNBeX05n6jOvo1zH29w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OGG3qNcBauFKetv9NJNhW2Qwq4BBVSxRNLrZTl/ITwMGen9z0t4RMPLqlam1TpfDx
+         AFrogANUKHNrFKfTbumDaHiAyblIWHjHpwxgaboSnEYrln6OUp8uOnCf6eijhl7Nty
+         hnK2+Xk50eGUjdYX/zddE/iw8yStYh53ooeRJhH3AdIk+8W1snQNC3PPEVHP+LzPpV
+         63wAi5ZsDeWR/OFqLLwVeq0giA22m8ul6KpgjrcpiGwRMDElxTSpJNQ4pVo7V+0gwd
+         K/zk/lg1QtjXXFQ6CL7X8oAE4TAKdgRDunGyBgnnQ1ee6Hf68vRn3jw36zUECHfrKE
+         nodrM02PHXzfA==
+Date:   Tue, 30 Nov 2021 17:51:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the fscache tree
+Message-ID: <20211130175119.63d0e7aa@canb.auug.org.au>
+In-Reply-To: <20211130162311.105fcfa5@canb.auug.org.au>
+References: <20211130162311.105fcfa5@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20211130040306.148925-4-ebiggers@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/4dQe+d0r.Z4JHi+93mEG4nb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/21 5:03 AM, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
-> 
-> Add sysfs files that expose the inline encryption capabilities of
-> request queues:
-> 
-> 	/sys/class/block/$disk/queue/crypto/max_dun_bits
-> 	/sys/class/block/$disk/queue/crypto/modes/$mode
-> 	/sys/class/block/$disk/queue/crypto/num_keyslots
-> 
-> Userspace can use these new files to decide what encryption settings to
-> use, or whether to use inline encryption at all.  This also brings the
-> crypto capabilities in line with the other queue properties, which are
-> already discoverable via the queue directory in sysfs.
-> 
-> Design notes:
-> 
->    - Place the new files in a new subdirectory "crypto" to group them
->      together and to avoid complicating the main "queue" directory.  This
->      also makes it possible to replace "crypto" with a symlink later if
->      we ever make the blk_crypto_profiles into real kobjects (see below).
-> 
->    - It was necessary to define a new kobject that corresponds to the
->      crypto subdirectory.  For now, this kobject just contains a pointer
->      to the blk_crypto_profile.  Note that multiple queues (and hence
->      multiple such kobjects) may refer to the same blk_crypto_profile.
-> 
->      An alternative design would more closely match the current kernel
->      data structures: the blk_crypto_profile could be a kobject itself,
->      located directly under the host controller device's kobject, while
->      /sys/class/block/$disk/queue/crypto would be a symlink to it.
-> 
->      I decided not to do that for now because it would require a lot more
->      changes, such as no longer embedding blk_crypto_profile in other
->      structures, and also because I'm not sure we can rule out moving the
->      crypto capabilities into 'struct queue_limits' in the future.  (Even
->      if multiple queues share the same crypto engine, maybe the supported
->      data unit sizes could differ due to other queue properties.)  It
->      would also still be possible to switch to that design later without
->      breaking userspace, by replacing the directory with a symlink.
-> 
->    - Use "max_dun_bits" instead of "max_dun_bytes".  Currently, the
->      kernel internally stores this value in bytes, but that's an
->      implementation detail.  It probably makes more sense to talk about
->      this value in bits, and choosing bits is more future-proof.
-> 
->    - "modes" is a sub-subdirectory, since there may be multiple supported
->      crypto modes, and sysfs is supposed to have one value per file.
-> 
-Why do you have a sub-directory here?
- From what I can see, that subdirectory just contains the supported 
-modes, so wouldn't it be easier to create individual files like 
-'mode_<modename>' instead of a subdirectory?
+--Sig_/4dQe+d0r.Z4JHi+93mEG4nb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
+
+On Tue, 30 Nov 2021 16:23:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> After merging the fscache tree, today's linux-next build (htmldocs)
+> produced this warning:
+>=20
+> Documentation/filesystems/caching/backend-api.rst:417: WARNING: undefined=
+ label: documentation/filesystems/netfs_library.rst
+>=20
+> Introduced by commit
+>=20
+>   b3c088faf78b ("fscache: Rewrite documentation")
+
+Also
+
+Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasis s=
+tart-string without end-string.
+Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasis s=
+tart-string without end-string.
+
+--=20
 Cheers,
+Stephen Rothwell
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+--Sig_/4dQe+d0r.Z4JHi+93mEG4nb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGlyecACgkQAVBC80lX
+0GzJdQgAnGS4QXC0fuUor8W+9y+6SwoqIagBratLuQpFCxPUgJBBB3rEzwtvd8K1
+btIePlBCUPucF3cPeJ6v3grxe2cm9JNlLpjaqxr43MEV0CO2BzYTsRncsE7RfDc/
+LLiPz11cn/eh/UwI7/uTIPsvJl7T5ET4KNfYjAqzBCeH+F39seA5/s21N6lNcVD+
+6rRFuyE5jrp4Da9y2+FyRMIF8MjsiT4TU9A2CANn2LGfPuyBLdk6t2WU5WbkpU7j
+PRNsgsm5uWNm4c+szLtTRzYdoO09rYuevb2GYp/knCazABpl62+MlgDaIFN3m/XO
+jBdIs30ZuIO/t7bU2n3jkVaVWg4EDA==
+=FdLT
+-----END PGP SIGNATURE-----
+
+--Sig_/4dQe+d0r.Z4JHi+93mEG4nb--

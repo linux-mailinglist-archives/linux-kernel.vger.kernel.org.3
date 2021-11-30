@@ -2,98 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A1746322C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:18:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D07D546322F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238649AbhK3LWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238533AbhK3LWD (ORCPT
+        id S238681AbhK3LWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:22:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50987 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S238708AbhK3LWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:22:03 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675BCC061574;
-        Tue, 30 Nov 2021 03:18:44 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id e8so20730928ilu.9;
-        Tue, 30 Nov 2021 03:18:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=+v5hTuJ8jqJE0jLup8J5GnzDoMmyqlqcX2vMFJVi53E=;
-        b=cgHCR5fy4vrVBWJAATdqr56wW81DX4qJ7lS3CbdgbX/ixc7RSfcW0G1ylxd7hyDVi9
-         nnKC1szAV3hW3D4ZWdQxZnHsiwHFsydLpb29H+B9AkrThUISnV+GYAhXd2hLO88u180K
-         CGYB3J56YrCH6OZX7KblzfeqPjqaKoWGBXSJGXf5NLLqP3iO1gh/Ci4YQRmO4PrsuayY
-         4w5WMQ/RUidGF++M3Xax9fNjV5tbDK51vgprY0RyXMgvSM1QZp5n0hMJMTl6Em3K2RCH
-         gSZNrZl18x7vPbAHUYkFVG8q3emfy9uU/IfVWAVs7QU73YeNFnO9Hg2iFVFQpXVqKp4p
-         XH5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=+v5hTuJ8jqJE0jLup8J5GnzDoMmyqlqcX2vMFJVi53E=;
-        b=wnDXky8YrU4L9zXXmBThfEqqtIzHB0OZJFLksyJh8jWOPNBe+86d9lrdOx5+RGryxg
-         d3VWzTb1K1BOjzSmkLljMeT+YEHeZNikRm2FOWg0an5v2uGt4e+2sR+/YfxD5UfJzyqx
-         0ACq4qgPLREgz02jsjiYw1x2n5+FARKq0aeXpmy3SvTAat0DkEbo02pqnHccOeQr/uqR
-         60MdsXkLEvABeFY6U8+p959/NVfcchFg9D3YYkSuYacCcJbU0c2RGqQ5bwLDFvD7Y45d
-         Cw67jUf8YaNfVCXRAdf6pqLP/m6u5l29qMix4XgIEo6gSasF4O5HdZNzkbVBDFN5ogS2
-         XNuQ==
-X-Gm-Message-State: AOAM531f0vsG+pqghuTU2AomWd8ResGoc/XhS5nSnyDq1UHiOiK7mTFc
-        twUCXK5uRJlf39klE4fGg8IO5U2E0ByORU4d55Y=
-X-Google-Smtp-Source: ABdhPJxV/onctk3CTFhpQT598gRPXsk0xxEz5ALwMsLuNOW0Aqa/v7nVr2r1C3H88x4R9u5qHvSJoBFDSogD5otlGQ8=
-X-Received: by 2002:a05:6e02:15c9:: with SMTP id q9mr60154971ilu.28.1638271123895;
- Tue, 30 Nov 2021 03:18:43 -0800 (PST)
+        Tue, 30 Nov 2021 06:22:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638271137;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8StU74rOzS6uUZ+msBZh+ui9wYjXSzs0fR8p0dc/LVI=;
+        b=MZKK4RpgR/MZ0UvliXkOtO4vjDgHctXjiScCFzFni01xUVYZtQ31qpLeR7vqT52ezuGX3J
+        n/0P1bdd+JfegxgF8yuk5U2BPWbmM1e32SQyYNHA6NjPMLiCaeTaJCoNL9IlpMvUvEY4PR
+        4nYB81+6qSp2sWMetk+eIQohauiFobk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-365-2Tefnm82P9eD880zOE1i_g-1; Tue, 30 Nov 2021 06:18:54 -0500
+X-MC-Unique: 2Tefnm82P9eD880zOE1i_g-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 803231006AA0;
+        Tue, 30 Nov 2021 11:18:53 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B24B9100E125;
+        Tue, 30 Nov 2021 11:18:47 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20211130175119.63d0e7aa@canb.auug.org.au>
+References: <20211130175119.63d0e7aa@canb.auug.org.au> <20211130162311.105fcfa5@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the fscache tree
 MIME-Version: 1.0
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <4ede5c987a4ae938a37ab7fe70d5e1d561ee97d4.1637799475.git.isaku.yamahata@intel.com>
- <878rxcht3g.ffs@tglx> <20211126091913.GA11523@gao-cwp> <CAJhGHyAbBUyyVKL7=Cior_uat9rij1BB4iBwX+EDCAUVs1Npgg@mail.gmail.com>
- <20211129092605.GA30191@gao-cwp> <CAJhGHyCiZn8ZwBbVepU+tfmTV6gcDhXxzvS39BwpgUj+6LCZ0g@mail.gmail.com>
- <20211130081954.GA4357@gao-cwp>
-In-Reply-To: <20211130081954.GA4357@gao-cwp>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Tue, 30 Nov 2021 19:18:32 +0800
-Message-ID: <CAJhGHyA4EEiW37iwrZ7EXOTXC7aQHvGLaK_RSrMc++u1bepj5g@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 53/59] KVM: x86: Add a helper function to restore 4
- host MSRs on exit to user space
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        isaku.yamahata@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <429851.1638271126.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 30 Nov 2021 11:18:46 +0000
+Message-ID: <429852.1638271126@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 4:10 PM Chao Gao <chao.gao@intel.com> wrote:
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
->
-> No, it is already documented in public spec.
+> Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasi=
+s start-string without end-string.
+> Documentation/filesystems/netfs_library.rst:518: WARNING: Inline emphasi=
+s start-string without end-string.
 
-In intel-tdx-module-1.5-base-spec-348549001.pdf, page 79
-"recoverability hist",  I think it is a "hint".
+Ah...  I worked out what that's about.  It's not actually on the line
+specified, but rather later in the same paragraph:
 
->
-> TDX module spec just says some MSRs are reset to INIT state by TDX module
-> (un)conditionally during TD exit. When to restore these MSRs to host's
-> values is decided by host.
->
+   the write.  *_start and *_len indicate the region to be written; the re=
+gion
 
+with the two asterisks.  I guess wrapping them like:
 
-Sigh, it is quite a common solution to reset a register to a default
-value here, for example in VMX, the host GDT.limit and host TSS.limit
-is reset after VMEXIT, so load_fixmap_gdt() and invalidate_tss_limit()
-have to be called in host in vmx_vcpu_put().
+   the write.  ``*_start`` and ``*_len`` indicate the region to be written=
+; the
 
-Off-topic: Is it a good idea to also put load_fixmap_gdt() and
-invalidate_tss_limit() in user-return-notfier?
+might be the right thing to do.
+
+David
+

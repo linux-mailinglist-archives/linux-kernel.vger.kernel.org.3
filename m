@@ -2,143 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 441F5462D6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6947462D74
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:23:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239022AbhK3HXl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 Nov 2021 02:23:41 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:42805 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239016AbhK3HXk (ORCPT
+        id S234350AbhK3H1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:27:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229655AbhK3H1G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 02:23:40 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 15A6FE0005;
-        Tue, 30 Nov 2021 07:20:18 +0000 (UTC)
-Date:   Tue, 30 Nov 2021 08:20:17 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Olga Kitaina <okitain@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, nagasure@xilinx.com, richard@nod.at,
-        vigneshr@ti.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mtd: rawnand: arasan: Fix clock rate in NV-DDR
-Message-ID: <20211130082017.1400f24b@xps13>
-In-Reply-To: <3da5dff5-53d4-15db-075d-9b195f2f75dd@gmail.com>
-References: <20211127180758.30884-1-okitain@gmail.com>
-        <20211129095559.01aa63a6@xps13>
-        <3da5dff5-53d4-15db-075d-9b195f2f75dd@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 30 Nov 2021 02:27:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 876CBC061574;
+        Mon, 29 Nov 2021 23:23:47 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 39B30B817CC;
+        Tue, 30 Nov 2021 07:23:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC41C53FC1;
+        Tue, 30 Nov 2021 07:23:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638257024;
+        bh=F46x2qJNTqovpA/GqUsfypSWX4NyVFNu1IvSifRrJ1w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iZuzlWLxETXbThXuJ8MK8+XThHSqAhuXKZq+rY5fuZ7DDUeQELuyer4Fygnpn024f
+         UXqELY7rGDt1m9wK1UBV5QGkTMo3K7mlZo2LFgh0iAgFfm1WajrCUrMQs8XBXxAVNx
+         dJ0X3BDQUhu0A/o1SuL/oa7I67on/OK56Ajhjyo7pjPTNM/5co5C5ouMr8dKntD/6w
+         ZNOHEFxusmFSR3m54Ylkd3pf37OxtzgT3hYtn0uF2XsHfRpneIuzTn5QAXqKQ8srBC
+         fmSK6DHsuwZK7/zfL38EL0p/zKIUusPaOCAIUGSAyUbf5/D4ZeRjTB8ZL4g8QX2cwF
+         lbqc+h/VeZH8w==
+Date:   Mon, 29 Nov 2021 23:23:43 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "mingo@kernel.org" <mingo@kernel.org>,
+        "Lutomirski, Andy" <luto@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "Gairuboyina, Charishma1" <charishma1.gairuboyina@intel.com>,
+        "Dwarakanath, Kumar N" <kumar.n.dwarakanath@intel.com>,
+        "Krishnakumar, Lalithambika" <lalithambika.krishnakumar@intel.com>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v3 00/15] x86: Support Key Locker
+Message-ID: <YaXRf2B+Gz6os3g5@sol.localdomain>
+References: <20211124200700.15888-1-chang.seok.bae@intel.com>
+ <YaWaGfwjLLbrBzHk@sol.localdomain>
+ <6A743265-A298-435A-9D59-E3BDCFDCFD1D@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6A743265-A298-435A-9D59-E3BDCFDCFD1D@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olga,
-
-okitain@gmail.com wrote on Mon, 29 Nov 2021 21:06:05 +0300:
-
-> Hi Miquel,
-> 
-> On 29.11.2021 11:55, Miquel Raynal wrote:
-> > Hi Olga,
+On Tue, Nov 30, 2021 at 06:36:15AM +0000, Bae, Chang Seok wrote:
+> On Nov 29, 2021, at 19:27, Eric Biggers <ebiggers@kernel.org> wrote:
+> > On Wed, Nov 24, 2021 at 12:06:45PM -0800, Chang S. Bae wrote:
+> >> 
+> >> == Non Use Cases ==
+> >> 
+> >> Bare metal disk encryption is the only use case intended by these patches.
 > > 
-> > Please add all the MTD maintainers in copy, as requested by
-> > get_maintainers.pl.
-> > 
-> > okitain@gmail.com wrote on Sat, 27 Nov 2021 21:07:58
-> > +0300:
-> >   
-> >> According to the Arasan NAND controller spec,
-> >> the flash clock rate for SDR must be <= 100 MHz,
-> >> while for NV-DDR it must be the same as the rate
-> >> of the CLK line for the mode.  
-> > 
-> > I completely missed that, where did you get the information?  
+> > If that's the case, why are so many encryption modes being added (ECB, CTR, CBC,
+> > and XTS)?  Wouldn't just XTS be sufficient?
 > 
-> The "Data Interface Transitions" chapter of the spec contains timings for flash clock setup in NV-DDR
-> and NV-DDR2 modes. The "time period" of those clocks is equal to tCK in NV-DDR and tRC in NV-DDR2.
-> 
-> The same chapter should have information about necessary steps to switch from NV-DDR to SDR,
-> which includes setting the flash clock to 100 MHz.
-> 
-> 
-> Just to make sure i'm not shooting myself in the foot: am I changing the right clock?
-> The documentation points out that we have to change flash_clk, which i thought was
-> nfc->controller_clk and set up by anand->clk, but it seems like it might actually be nfc->bus_clk.
-
-I believe I made a serious mistake, re-reading the code it feels like
-I'm changing the system's clock (which basically changes nothing in our
-case) instead of changing the NAND bus clock.
-
-> In that case, does setting nfc->controller_clk to 100 MHz by default make sense?
-> There isn't a hard limit on what the system clock might be (beyond a specific SoC),
-> but there are timing requirements for the flash clock, and so setting a specific 
-> system clock frequency seems unnecessary for most devices.
+> Right, it would reduce the crypt library changes significantly. But it is
+> clueless whether XTS is sufficient to support DM-crypt, because a user may
+> select the kernel’s crypto API via ‘capi:', [1].
 > 
 
-Please create a two-patch series:
-1- Setting the right clock in the current code base (inverting bus_clk
-and controller_clk where relevant, setting one to 100MHz and letting
-the other as it is)
-2- Changing the default NV-DDR rate based on tCK (below patch).
+Just because dm-crypt allows you to create a ECB or CTR encrypted disk does not
+mean that it is a good idea.
 
-Do you have the necessary hardware for testing?
- 
-> >> The driver previously always set 100 MHz for NV-DDR, which
-> >> would result in incorrect behavior for NV-DDR modes 0-4.
-> >>
-> >> The appropriate clock rate can be calculated
-> >> from the NV-DDR timing parameters as 1/tCK, or for rates
-> >> measured in picoseconds, 10^12 / nand_nvddr_timings->tCK_min.
-> >>  
-> > 
-> > You need a couple of Fixes + Cc: stable tags here, otherwise the
-> > patch looks good to me.
-> >   
-> 
-> Will include in the next iteration of the patch, thank you.
-> 
-> >> Signed-off-by: Olga Kitaina <okitain@gmail.com>
-> >> ---
-> >>  drivers/mtd/nand/raw/arasan-nand-controller.c | 8 +++++++-
-> >>  1 file changed, 7 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/arasan-nand-controller.c b/drivers/mtd/nand/raw/arasan-nand-controller.c
-> >> index 53bd10738418..ed4ee9942441 100644
-> >> --- a/drivers/mtd/nand/raw/arasan-nand-controller.c
-> >> +++ b/drivers/mtd/nand/raw/arasan-nand-controller.c
-> >> @@ -18,6 +18,7 @@
-> >>  #include <linux/gpio/consumer.h>
-> >>  #include <linux/interrupt.h>
-> >>  #include <linux/iopoll.h>
-> >> +#include <linux/math64.h>
-> >>  #include <linux/module.h>
-> >>  #include <linux/mtd/mtd.h>
-> >>  #include <linux/mtd/partitions.h>
-> >> @@ -1043,7 +1044,12 @@ static int anfc_setup_interface(struct nand_chip *chip, int target,
-> >>  				 DQS_BUFF_SEL_OUT(dqs_mode);
-> >>  	}
-> >>  
-> >> -	anand->clk = ANFC_XLNX_SDR_DFLT_CORE_CLK;
-> >> +	if (nand_interface_is_sdr)
-> >> +		anand->clk = ANFC_XLNX_SDR_DFLT_CORE_CLK;
-> >> +	else
-> >> +		/* ONFI timings are defined in picoseconds */
-> >> +		anand->clk = div_u64((u64)NSEC_PER_SEC * 1000,
-> >> +				     conf->timings.nvddr.tCK_min);
-> >>  
-> >>  	/*
-> >>  	 * Due to a hardware bug in the ZynqMP SoC, SDR timing modes 0-1 work
-> >>
-> >> base-commit: f53d4c109a666bf1a4883b45d546fba079258717  
-> > 
-> > 
-> > Thanks,
-> > Miquèl
-> >   
-
-
-Thanks,
-Miquèl
+- Eric

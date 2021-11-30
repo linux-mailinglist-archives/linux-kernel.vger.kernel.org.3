@@ -2,130 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA384630CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7DF4630CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbhK3KRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:17:44 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:37684 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbhK3KRn (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:17:43 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3J3g5YLWz9vBt2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:14:23 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 92V0S6M5oSDf for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 04:14:23 -0600 (CST)
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3J3g3Tpwz9vBtK
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:14:23 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3J3g3Tpwz9vBtK
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3J3g3Tpwz9vBtK
-Received: by mail-pf1-f197.google.com with SMTP id q2-20020a056a00084200b004a2582fcec1so12588608pfk.15
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:14:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ezPDMyg4z6FUtdCtlSvrXZjWSKm8o+6pNXDt3YFkKII=;
-        b=Q54MRiSiawsPKrbhwo2sZaqpTRa/egZ01MFGeAUM/DZ82+sJerdvNIHnksW6nM/pta
-         QVvvv3AOILqpqIUGAsZnGjhDuZUxY8mAyX0zTIx80kN8PEb9AEsRK5jJGHWUMLXq/+9p
-         18FLISF6m1jmgoMj7A59ud8iJTJv5unr1HFInzCEsKS+QB+t/YR4V3rzZ1LvapFYGkbM
-         QXfePCn+j3l7xY4BDmkJJY2XL+0JaBjQlw6vW+JCLzuLiPZgyoEb13RWjnpJptvj6N8Z
-         a8f7HWlh5y7VeizpsvQbTZpU78wh84cs8PkNO9HlyMA53OgdVR/HBwqSynVvwZI04iP4
-         0joA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ezPDMyg4z6FUtdCtlSvrXZjWSKm8o+6pNXDt3YFkKII=;
-        b=cOAYtZ8MBpji59kAyLU0xz2jfOLAwTTF1bvKtuh5AAveVLFoj3aZe86gL3ZyJgJl8d
-         hhWC2B0OyFFz7t0fBhCw5cr8aQkPgl3e3Xb7AcrxtmAbWZE6211CwkVitpZB2RjNO5Dd
-         A3CAB+8QYkpTWdgb5fsX2vR848CncnSAf5eHjAUsMxiBDQxbZsm0oezGa4Xq83vcdqii
-         hqKutprUEXsjqglUIvUiXi6qT+wNU5BT5XYfgPHGT2K9vrypLkBwmvuR3RSk4Ua4tbMc
-         /EbLP1t9kMcIOsMQlOGrXI1gp8VrfwchYDjArxmVAj5BdSuDsE6DthkNBdiaQbdYSmp0
-         8tqQ==
-X-Gm-Message-State: AOAM530aY/8wucIg02+A0YKR3ASqSJdmvpzUwjeupF79GeMAXIsIut1K
-        HBMJRtAFG/Auo3HzXGKyushoI8cgLRl+vQZvrvjL9hwsqxCpcBaTKwR88xQ1Ii02MJ+8juXHAIA
-        TnKTdDiDrtnqrDEi1jqUEd2wrHxHj
-X-Received: by 2002:a17:902:ce8c:b0:141:d218:954 with SMTP id f12-20020a170902ce8c00b00141d2180954mr66086313plg.1.1638267262768;
-        Tue, 30 Nov 2021 02:14:22 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwZhxN9ocyihGfNCGLMaz0RjGDMqMGBOZyUXuyOBDhzdCoh/2u3iNSfs04TgQLOMNklWxKYFw==
-X-Received: by 2002:a17:902:ce8c:b0:141:d218:954 with SMTP id f12-20020a170902ce8c00b00141d2180954mr66086293plg.1.1638267262561;
-        Tue, 30 Nov 2021 02:14:22 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id t23sm12504231pgo.35.2021.11.30.02.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 02:14:22 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Nicolas Boichat <drinkcat@chromium.org>,
-        Weiyi Lu <weiyi.lu@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: mediatek: mt8183: Fix a NULL pointer dereference in clk_mt8183_apmixed_probe()
-Date:   Tue, 30 Nov 2021 18:14:14 +0800
-Message-Id: <20211130101416.102608-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        id S230187AbhK3KSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:18:39 -0500
+Received: from mout.gmx.net ([212.227.17.21]:54675 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231407AbhK3KSO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 05:18:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638267276;
+        bh=CMXfuKcLXjGPWdeqSaOhdOOASlp/euZJFVIobOJQNL4=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=lSZw8P4yIh1Mgn7GNXW8ieJwhkFUbYhc/SWPB7+MdIksfONJlrnFOTsSQwm36PpRC
+         8mIVeGt1pBvWsc7D3Q3LWPlvMnZtLJ6yz4VpMA3BNgEVogVk5W45KUkBO6AmNMb9tI
+         utrPr6xTb4uU1QdWI9O+LFYLB0mA2LG3eJ5lYc80=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from homer.fritz.box ([185.146.50.175]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mv31c-1maCDs1OMK-00qwWe; Tue, 30
+ Nov 2021 11:14:36 +0100
+Message-ID: <a20f17c4b1b5fdfade3f48375d148e97bd162dd6.camel@gmx.de>
+Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+From:   Mike Galbraith <efault@gmx.de>
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Alexey Avramov <hakavlad@inbox.lv>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Tue, 30 Nov 2021 11:14:32 +0100
+In-Reply-To: <20211129150117.GO3366@techsingularity.net>
+References: <20211125151853.8540-1-mgorman@techsingularity.net>
+         <20211127011246.7a8ac7b8@mail.inbox.lv>
+         <20211129150117.GO3366@techsingularity.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:sytcikg7p1xG3fNmhiGZL7NBY2K9XUyGYavCjYpY2QegNfOTUGd
+ MYc+6pI02R2B89qVs2Qu5cNCBH4Cw8Az4HxrukT6H9IYYmGQqKRj/gBnf9pzd4ku48TDWQ9
+ cYBN+TGa1+g9yy1jYk4iiLf5xW4798Z8xdoF86Yt/Cff7MDwphKngEa8J+FuRemUzaOqcEx
+ D2iHP0oFPfVNMG02Ei6Cg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ff7RvvjqUTU=:ZiHJf8Tty843FB013Jywaf
+ ckHZ7D6y32XvUacpdjCrlAjoIfGLYSEQnjsPw5G5y+QmlkX/l4PVMOreHfhvihFcqpaprtuRN
+ T3W9phRZe4uB/aiWVDiiggTCdcQ1jXdf0u7SzlkoF6443n/xjy1hOt7ymgpG32Ie41MRozlR6
+ ItZuufxllAWnqWCJ/bUWI+x0r9US9b/54uZKdwRJt4M7+MBfcgxwh13iK/a8e/WlfNHk76fu9
+ Mncs6rN42AeJyBro7glctCfa/gVPMj6D7iOArLSAAmf9DgDrAP3QmItC2oRzzZ2HfkzUGqZ0K
+ vpOd88l0c16t//fJBMYdhMVFcaao8Vsy5+HxzdLpHu3hMkq8cU61JykLhJdcg2oQMjQKSLKyj
+ 9VRcu2EFcxtVifV4kjmN+vdqbug24KmLOqp4SFONf2TkAAOmqTCakifSobYvkWFAD/bJidjoj
+ QLbJpSj0FSax9xwaCK0NleJsAyRD5nOFcjSAchd0i6wPcqxjn1GWBJTza4bZNYfYFpleA1gsS
+ NMshmVG6wjFJDJFdiLY6/GhPjhClLV0bq5vL+vxRDSIF3Khttfkw4pjmjtTfrJYdhJzZgBZB2
+ ozJ0MlyYFBJGR0JqLl7MUeeOZYTBbWNaQX+12LfG/qdm60tujI5lB4OqTkTqTuT6kx5GsYe69
+ iKxF/cD8o/9vuqtqsRhhlOYv/3eF31zEcCQwMJmKOTD4yk6/qBzWyaei9zc4b594Lsle7yqHt
+ 3OAr13o6so1erXptTjzhtjnnCYheesTyBO4s2OdCvw85IPdX005Tw9KxGWr2CFzKjZ/U7KVHi
+ VreGwe05kf7tV5Q6aUJrurepyZQjgw+w1iHdeAI8VOf4efqYNT1O8zlEuLfflkvRMX6xoZqXR
+ rvDisbaaUnSK86CLDo1Gcm97t9a/TKTPaIbycaX4tJXneewkYbwgXMwEgPTzn8pMTIsc7W0es
+ 1CtujsFQccTLgHhdSWYGLE3RPzoOrcNaIzwq38DbRHPJ1f+CtpahpaNALMqV8KuwOkMgPgMgK
+ TMFX/HCRY99vr5vYfntQaU7Y3AORQitrrbO+0t3DqYVz4g3CMYJePj6QqYO8HrOPJGSYf4MKR
+ 62eNISEwSyhk6M=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In clk_mt8183_apmixed_probe(), the return value of
-mtk_alloc_clk_data() is assigned to clk_data and used in
-mtk_clk_register_plls(). There is a dereference of clk_data in
-mtk_clk_register_plls(), which could lead to a NULL pointer
-dereference on failure of mtk_alloc_clk_data().
-
-Fix this bug by adding a check of clk_data.
-
-Another way to fix this bug is to add a check of clk_data in
-mtk_clk_register_plls(), which may solve many similar bugs but could
-cause potential problems to previously correct cases as the API is changed.
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_COMMON_CLK_MT8183=y show no new warnings, and our
-static analyzer no longer warns about this code.
-
-Fixes: acddfc2c261b ("clk: mediatek: Add MT8183 clock support")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/clk/mediatek/clk-mt8183.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/clk/mediatek/clk-mt8183.c b/drivers/clk/mediatek/clk-mt8183.c
-index 5046852eb0fd..9eca62186ec5 100644
---- a/drivers/clk/mediatek/clk-mt8183.c
-+++ b/drivers/clk/mediatek/clk-mt8183.c
-@@ -1158,6 +1158,8 @@ static int clk_mt8183_apmixed_probe(struct platform_device *pdev)
- 	struct device_node *node = pdev->dev.of_node;
- 
- 	clk_data = mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
-+	if (!clk_data)
-+		return -ENOMEM;
- 
- 	mtk_clk_register_plls(node, plls, ARRAY_SIZE(plls), clk_data);
- 
--- 
-2.25.1
-
+T24gTW9uLCAyMDIxLTExLTI5IGF0IDE1OjAxICswMDAwLCBNZWwgR29ybWFuIHdyb3RlOg0KPiBP
+biBTYXQsIE5vdiAyNywgMjAyMSBhdCAwMToxMjo0NkFNICswOTAwLCBBbGV4ZXkgQXZyYW1vdiB3
+cm90ZToNCj4gPiA+IEFmdGVyIHRoZSBwYXRjaCwgdGhlIHRlc3QgZ2V0cyBraWxsZWQgYWZ0ZXIg
+cm91Z2hseSAxNSBzZWNvbmRzIHdoaWNoIGlzDQo+ID4gPiB0aGUgc2FtZSBsZW5ndGggb2YgdGlt
+ZSB0YWtlbiBpbiA1LjE1Lg0KPiA+IA0KPiA+IEluIG15IHRlc3RzLCB0aGUgNS4xNSBzdGlsbCBw
+ZXJmb3JtcyBtdWNoIGJldHRlci4NCj4gPiANCj4gPiBOZXcgcXVlc3Rpb246IGlzIHRpbWVvdXQ9
+MSBoYXMgc2Vuc2U/IFdpbGwgaXQgc2F2ZSBDUFU/DQo+IA0KPiBPaywgdGhlIGZvbGxvd2luZyBv
+biB0b3Agb2YgNS4xNi1yYzEgc3Vydml2ZWQgOCBtaW51dGVzIG9mIHdhdGNoaW5nIHlvdXR1YmUN
+Cj4gb24gYSBsYXB0b3Agd2hpbGUgInRhaWwgL2Rldi96ZXJvIiB3YXMgcnVubmluZyB3aXRoaW4g
+dGhlIGJhY2tncm91bmQuIFdoaWxlDQo+IHRoZXJlIHdlcmUgc29tZSB2ZXJ5IHNob3J0IGdsaXRj
+aGVzLCB0aGV5IHdlcmUgbm8gd29yc2UgdGhhbiA1LjE1LiBJJ3ZlDQo+IG5vdCByZXByb2R1Y2Vk
+IHlvdXIgZXhhY3QgdGVzdCBjYXNlIHlldCBvciB0aGUgbWVtY2cgb25lcyB5ZXQgYnV0IHNlbmRp
+bmcNCj4gbm93IGluIGNhc2UgSSBkb24ndCBjb21wbGV0ZSB0aGVtIGJlZm9yZSB0aGUgZW5kIG9m
+IHRoZSBkYXkuDQo+IA0KPiBkaWZmIC0tZ2l0IGEvbW0vdm1zY2FuLmMgYi9tbS92bXNjYW4uYw0K
+PiBpbmRleCBmYjk1ODQ2NDFhYzcuLjFhZjEyMDcyZjQwZSAxMDA2NDQNCj4gLS0tIGEvbW0vdm1z
+Y2FuLmMNCj4gKysrIGIvbW0vdm1zY2FuLmMNCj4gQEAgLTEwMjEsNiArMTAyMSwzOSBAQCBzdGF0
+aWMgdm9pZCBoYW5kbGVfd3JpdGVfZXJyb3Ioc3RydWN0IGFkZHJlc3Nfc3BhY2UgKm1hcHBpbmcs
+DQo+IMKgwqDCoMKgwqDCoMKgwqB1bmxvY2tfcGFnZShwYWdlKTsNCj4gwqB9DQo+IMKgDQo+ICti
+b29sIHNraXBfdGhyb3R0bGVfbm9wcm9ncmVzcyhwZ19kYXRhX3QgKnBnZGF0KQ0KPiArew0KPiAr
+wqDCoMKgwqDCoMKgwqBpbnQgcmVjbGFpbWFibGUgPSAwLCB3cml0ZV9wZW5kaW5nID0gMDsNCj4g
+K8KgwqDCoMKgwqDCoMKgaW50IGk7DQo+ICsNCj4gK8KgwqDCoMKgwqDCoMKgLyoNCj4gK8KgwqDC
+oMKgwqDCoMKgICogSWYga3N3YXBkIGlzIGRpc2FibGVkLCByZXNjaGVkdWxlIGlmIG5lY2Vzc2Fy
+eSBidXQgZG8gbm90DQo+ICvCoMKgwqDCoMKgwqDCoCAqIHRocm90dGxlIGFzIHRoZSBzeXN0ZW0g
+aXMgbGlrZWx5IG5lYXIgT09NLg0KPiArwqDCoMKgwqDCoMKgwqAgKi8NCj4gK8KgwqDCoMKgwqDC
+oMKgaWYgKHBnZGF0LT5rc3dhcGRfZmFpbHVyZXMgPj0gTUFYX1JFQ0xBSU1fUkVUUklFUykNCj4g
+K8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVybiB0cnVlOw0KPiArDQo+ICvCoMKg
+wqDCoMKgwqDCoC8qDQo+ICvCoMKgwqDCoMKgwqDCoCAqIElmIHRoZXJlIGFyZSBhIGxvdCBvZiBk
+aXJ0eS93cml0ZWJhY2sgcGFnZXMgdGhlbiBkbyBub3QNCj4gK8KgwqDCoMKgwqDCoMKgICogdGhy
+b3R0bGUgYXMgdGhyb3R0bGluZyB3aWxsIG9jY3VyIHdoZW4gdGhlIHBhZ2VzIGN5Y2xlDQo+ICvC
+oMKgwqDCoMKgwqDCoCAqIHRvd2FyZHMgdGhlIGVuZCBvZiB0aGUgTFJVIGlmIHN0aWxsIHVuZGVy
+IHdyaXRlYmFjay4NCj4gK8KgwqDCoMKgwqDCoMKgICovDQo+ICvCoMKgwqDCoMKgwqDCoGZvciAo
+aSA9IDA7IGkgPCBNQVhfTlJfWk9ORVM7IGkrKykgew0KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgc3RydWN0IHpvbmUgKnpvbmUgPSBwZ2RhdC0+bm9kZV96b25lcyArIGk7DQo+ICsN
+Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICghcG9wdWxhdGVkX3pvbmUoem9u
+ZSkpDQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29u
+dGludWU7DQo+ICsNCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJlY2xhaW1hYmxl
+ICs9IHpvbmVfcmVjbGFpbWFibGVfcGFnZXMoem9uZSk7DQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqB3cml0ZV9wZW5kaW5nICs9IHpvbmVfcGFnZV9zdGF0ZV9zbmFwc2hvdCh6b25l
+LA0KPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIE5SX1pPTkVfV1JJ
+VEVfUEVORElORyk7DQo+ICvCoMKgwqDCoMKgwqDCoH0NCj4gK8KgwqDCoMKgwqDCoMKgaWYgKDIg
+KiB3cml0ZV9wZW5kaW5nIDw9IHJlY2xhaW1hYmxlKQ0KDQpUaGF0IGlzIGFsd2F5cyB0cnVlIGhl
+cmUuLi4NCg0KCS1NaWtlDQoNCg==

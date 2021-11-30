@@ -2,86 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DC6463FF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8C40463FF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344112AbhK3V1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:27:18 -0500
-Received: from mga05.intel.com ([192.55.52.43]:42041 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344169AbhK3V0u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:26:50 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="322564435"
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="322564435"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 13:23:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="459768272"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 30 Nov 2021 13:23:28 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msAb1-000Dn1-E0; Tue, 30 Nov 2021 21:23:27 +0000
-Date:   Wed, 1 Dec 2021 05:22:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [ardb:for-kernelci 18/28] arch/arm/mach-footbridge/common.c:102:6:
- warning: no previous prototype for 'dc21285_handle_irq'
-Message-ID: <202112010520.F2sIDAwN-lkp@intel.com>
+        id S1344078AbhK3V1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:27:12 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:35816 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344146AbhK3V0i (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 16:26:38 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638307397;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=in98yBSPQ1jj4nb7z9Wj+iGoSHUoXZb4meQtKeaOU84=;
+        b=MiSAy+MxwlGTJvI0Nft8vmU3vCwy9rjUEWmRpHVGmBcoQ/weQpSSiLlWum6ML5meeF7VAD
+        kgI04GRG6PDCFL60YOnF59s95PcMMCLelLa9mjBAjZcqqNLMNrO7UVlkaC+ZbEoPjtbRnC
+        fxuSprKFedzx3yWGEuYSaoA0RXObjPofxqK7RB+Zgik0jZeMM9YxKEyQLPuQE6Cdop/nOq
+        WGFN3rqMhV0aXxt2FlxxLWhMCE9AqACQ2ToCqINxJ9y6ZlIzso5EZM5zAr6XKYG4AXpvGI
+        hf6FlP6QWaQ4FXtiPPennkpeBs1NsFGKAFfHCSHsElsM2MdYpwh0VP92qkr4kw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638307397;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=in98yBSPQ1jj4nb7z9Wj+iGoSHUoXZb4meQtKeaOU84=;
+        b=+u9BMLqbSJf6XkRa5fee8Qy2vcmPs8xE+VHAIoxmsrMDFWOB2P9PCnHtQIfJOKfO32TJtb
+        mSz4vtSe4H9XObBA==
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+In-Reply-To: <20211130202800.GE4670@nvidia.com>
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
+ <20211130202800.GE4670@nvidia.com>
+Date:   Tue, 30 Nov 2021 22:23:16 +0100
+Message-ID: <87o861banv.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   6999340fcf7f37e2a82eb35452b08c5893a2872d
-commit: 9a2235df531e427be5777a894b3fa355ce127894 [18/28] ARM: footbridge: use GENERIC_IRQ_MULTI_HANDLER
-config: arm-footbridge_defconfig (https://download.01.org/0day-ci/archive/20211201/202112010520.F2sIDAwN-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=9a2235df531e427be5777a894b3fa355ce127894
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout 9a2235df531e427be5777a894b3fa355ce127894
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash
+On Tue, Nov 30 2021 at 16:28, Jason Gunthorpe wrote:
+> On Tue, Nov 30, 2021 at 08:48:03PM +0100, Thomas Gleixner wrote:
+>> On Tue, Nov 30 2021 at 12:21, Logan Gunthorpe wrote:
+>> > On 2021-11-29 5:29 p.m., Thomas Gleixner wrote:
+>> >> I'm way too tired to come up with a proper solution for that, but that
+>> >> PCI_IRQ_VIRTUAL has to die ASAP.
+>> >
+>> > I'm willing to volunteer a bit of my time to clean this up, but I'd need
+>> > a bit more direction on what a proper solution would look like. The MSI
+>> > domain code is far from well documented nor is it easy to understand.
+>> 
+>> Fair enough. I'm struggling with finding time to document that properly.
+>> 
+>> I've not yet made my mind up what the best way forward for this is, but
+>> I have a few ideas which I want to explore deeper.
+>
+> I may have lost the plot in all of these patches, but I thought the
+> direction was moving toward the msi_domain_alloc_irqs() approach IDXD
+> demo'd here:
+>
+> https://lore.kernel.org/kvm/162164243591.261970.3439987543338120797.stgit@djiang5-desk3.ch.intel.com/
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, that's something I have in mind. Though this patch series would not
+be really required to support IDXD, it's making stuff simpler.
 
-All warnings (new ones prefixed by >>):
+The main point of this is to cure the VFIO issue of tearing down MSI-X
+of passed through devices in order to expand the MSI-X vector space on
+the host.
 
->> arch/arm/mach-footbridge/common.c:102:6: warning: no previous prototype for 'dc21285_handle_irq' [-Wmissing-prototypes]
-     102 | void dc21285_handle_irq(struct pt_regs *regs)
-         |      ^~~~~~~~~~~~~~~~~~
+> I'd expect all the descriptor handling code in drivers/ntb/msi.c to
+> get wrapped in an irq_chip instead of inserting a single-use callback
+> to the pci core code's implementation:
+>
+> void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
+> {
+>         if (entry->write_msi_msg)
+>                 entry->write_msi_msg(entry, entry->write_msi_msg_data);
+>
+> If this doesn't become an irq_chip what other way is there to properly
+> program the addr/data pair as drivers/ntb/msi.c is doing?
+
+That's not the question. This surely will be a separate irq chip and a
+separate irqdomain.
+
+The real problem is where to store the MSI descriptors because the PCI
+device has its own real PCI/MSI-X interrupts which means it still shares
+the storage space.
+
+IDXD is different in that regard because IDXD creates subdevices which
+have their own struct device and they just store the MSI descriptors in
+the msi data of that device.
+
+I'm currently tending to partition the index space in the xarray:
+
+ 0x00000000 - 0x0000ffff          PCI/MSI-X
+ 0x00010000 - 0x0001ffff          NTB
+
+which is feasible now with the range modifications and way simpler to do
+with xarray than with the linked list.
+
+Thanks,
+
+        tglx
 
 
-vim +/dc21285_handle_irq +102 arch/arm/mach-footbridge/common.c
-
-   101	
- > 102	void dc21285_handle_irq(struct pt_regs *regs)
-   103	{
-   104		int irq;
-   105		do {
-   106			irq = dc21285_get_irq();
-   107			if (!irq)
-   108				break;
-   109	
-   110			generic_handle_irq(irq);
-   111		} while (1);
-   112	}
-   113	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

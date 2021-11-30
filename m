@@ -2,146 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD0B4628F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 257094628F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbhK3ASr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:18:47 -0500
-Received: from mail-oi1-f178.google.com ([209.85.167.178]:43914 "EHLO
-        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbhK3ASr (ORCPT
+        id S233106AbhK3ATm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:19:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229716AbhK3ATl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:18:47 -0500
-Received: by mail-oi1-f178.google.com with SMTP id o4so37812908oia.10;
-        Mon, 29 Nov 2021 16:15:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=yTXlF6Gnm/rT0qldVGXfz0tI0LWvoagfDepzULfghYw=;
-        b=jpnIWVJE7+Vl6MZxhVUcuE7ZyqyLEDeJVyeX9k90TgdOhl1+lqn8BN6jmokd1w4A51
-         KeLGGI1R9WNZovBrASPN2gKTAir3U7MX5rc7lH1VRTRs43Xe/SHD+16+OUjsrFsqB13f
-         wjU5SsqgjjpKJsXEx+HkV5P3OQZ02tgu/SrpGArvwCEz6pnqvtrbetwklTJB79rcN+cw
-         ZjL7HjtAcMoC40Tv8SHmtlPwnuIj+oIVpElRdzE3ijyRWh1vnqDFEOMUyGPC8u7p5sXB
-         hSmGsQWA+O21je4oudcuthF7Z6vR6I2IG2Gty0hk73fb/l8+sokwYxAb7tOdjr2gnXh6
-         5eiA==
-X-Gm-Message-State: AOAM533Vjt4GtkjWSWgBKFnsqPKH1UY1lPqkB93dMNe8Sfc8uYyQ3v9T
-        5y64toZEzA1LYVy+CqpZRw==
-X-Google-Smtp-Source: ABdhPJzWvVLBFUM1w9MIGxp1dvanjID+SCvk9UvCvwk3mkyhqzj1CD5wwDV8UPTwhuCcK/jo7SmJvA==
-X-Received: by 2002:a05:6808:1381:: with SMTP id c1mr1161897oiw.129.1638231328337;
-        Mon, 29 Nov 2021 16:15:28 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bg38sm3563993oib.40.2021.11.29.16.15.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 16:15:27 -0800 (PST)
-Received: (nullmailer pid 875053 invoked by uid 1000);
-        Tue, 30 Nov 2021 00:15:26 -0000
-Date:   Mon, 29 Nov 2021 18:15:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Manish Narani <manish.narani@xilinx.com>
-Cc:     git@xilinx.com, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        michal.simek@xilinx.com, linux-kernel@vger.kernel.org,
-        gregkh@linuxfoundation.org
-Subject: Re: [PATCH] dt-bindings: usb: dwc3-xilinx: Convert USB DWC3 bindings
-Message-ID: <YaVtHpb5kQk9xduz@robh.at.kernel.org>
-References: <1637329568-31756-1-git-send-email-manish.narani@xilinx.com>
- <1637341102.285159.4078689.nullmailer@robh.at.kernel.org>
+        Mon, 29 Nov 2021 19:19:41 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D9CC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:16:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=EwykYvWN8YnSwIQ3myJ9bi7OawmTY6LVqM+iZEWeJyc=; b=XJyTzv6r1kx7GDO6l7yL0zRDln
+        qElcXINvJUV2XxthstweAzGugncG+qT95TG+M6a9TdvKXXQCf/dWyIcm4HRnFNfpEgH8h7v2U2Mpm
+        PrxTsqd90MG+zwcXGahdfKuNkoeeyIxbKI8vUimDu1gFlwj7iml0os79QmXaAbfgxVrgGIZDRKchN
+        B+F7T8MQUHEZabM4F8NdJyx4v5yrKZePXmVpSjJRnrFR3CFUXXCXu0PL8QDlfHTAHZyaaNJs90rLg
+        aP4v+WPNft3B3gKBqfB0myXYBMzd+2ztBumIkjeG42DP4+VMcHQq/QxvY58WFq5eBB6+FfN0P099R
+        UImnW5Tw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mrqom-001LJE-Pk; Tue, 30 Nov 2021 00:16:21 +0000
+Message-ID: <e6de22e4-93ae-1dd8-7589-df75d395c920@infradead.org>
+Date:   Mon, 29 Nov 2021 16:16:18 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1637341102.285159.4078689.nullmailer@robh.at.kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: =?UTF-8?Q?Re=3a_Kernel_driver=3a_W1_DALLAS=e2=80=99S_1-WIRE_BUS_inv?=
+ =?UTF-8?Q?alid_calculation?=
+Content-Language: en-US
+To:     linux-kernel@miltschek.de, linux-kernel@vger.kernel.org,
+        Evgeniy Polyakov <zbr@ioremap.net>
+References: <5be0e863-cb9b-c448-9089-6a95f59b8f74@miltschek.de>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <5be0e863-cb9b-c448-9089-6a95f59b8f74@miltschek.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 10:58:22AM -0600, Rob Herring wrote:
-> On Fri, 19 Nov 2021 19:16:08 +0530, Manish Narani wrote:
-> > Convert USB DWC3 bindings to DT schema format using json-schema.
-> > 
-> > Signed-off-by: Manish Narani <manish.narani@xilinx.com>
-> > ---
-> >  .../devicetree/bindings/usb/dwc3-xilinx.txt        |  56 ----------
-> >  .../devicetree/bindings/usb/dwc3-xilinx.yaml       | 119 +++++++++++++++++++++
-> >  2 files changed, 119 insertions(+), 56 deletions(-)
-> >  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.txt
-> >  create mode 100644 Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-> > 
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/1557119
-> 
-> 
-> usb@ff9d0000: 'phy-names', 'phys' do not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
-> 	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
 
-Looks like the schema is missing some properties.
+On 11/29/21 11:26, K. wrote:
+> Dear kernel-driver developers,
+> 
+> I believe there is a mistake in calculation of the fine part of the temperature value as received from 1-Wire DS18x20-family sensors.
+> 
+> The current implementation does indeed follow the official datasheet, but exactly the datasheet seems to be incorrect in this place.
+> 
+> Datasheet: https://datasheets.maximintegrated.com/en/ds/DS18S20.pdf
+> says two different things on Page 6:
+> 
 
-> 
-> usb@ff9d0000: usb@fe200000:interrupt-names: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
-> 
-> usb@ff9e0000: 'phy-names', 'phys' do not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
-> 	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
-> 
-> usb@ff9e0000: usb@fe300000:interrupt-names: 'oneOf' conditional failed, one must be fixed:
-> 	arch/arm64/boot/dts/xilinx/avnet-ultra96-rev1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-smk-k26-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1232-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1254-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1275-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm015-dc1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm016-dc2.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm017-dc3.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm018-dc4.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zc1751-xm019-dc5.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu100-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.0.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-rev1.1.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu102-revB.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu104-revC.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu106-revA.dt.yaml
-> 	arch/arm64/boot/dts/xilinx/zynqmp-zcu111-revA.dt.yaml
-> 
-> 
+[snip]
+
+> For your info: I have contacted Evgeniy P. as an author of the driver, but according to the response, he is not maintaining the driver anymore. That's why a question to all of you, if anyone could take a look at this please.
+
+Evgeniy, if this is correct, please send a patch to update the W1 entry in the MAINTAINERS file
+to Orphan status.  (or at a minimum, reply and ask someone else to do that [e.g., me])
+
+I don't have any idea who could take over as being the W1 maintainer.
+
+Thanks.
+
+-- 
+~Randy

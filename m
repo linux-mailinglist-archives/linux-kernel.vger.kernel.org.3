@@ -2,134 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35995462EB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:43:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4FC462EB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239719AbhK3Iqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:46:35 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:44378 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239718AbhK3Iqc (ORCPT
+        id S239731AbhK3Iqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239665AbhK3Iqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:46:32 -0500
-X-Greylist: delayed 415 seconds by postgrey-1.27 at vger.kernel.org; Tue, 30 Nov 2021 03:46:32 EST
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3G2T13q3z9vBt2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:43:13 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id UpfzFkyU7Y3Z for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 02:43:13 -0600 (CST)
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3G2S64tFz9vBtf
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:43:12 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3G2S64tFz9vBtf
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3G2S64tFz9vBtf
-Received: by mail-pj1-f69.google.com with SMTP id r23-20020a17090a941700b001a74be6cf80so6578115pjo.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:43:12 -0800 (PST)
+        Tue, 30 Nov 2021 03:46:33 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D70DC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:43:13 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso17765326pji.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:43:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w2+HpAwDa/HBxXc2VVtjYSYS1Y8V8tVj3abGe9wGHDk=;
-        b=EdYA5Q2GIemYjDJPqF+oyaUvV3P5LSX4m2c2Kd71J8lrsdewKdAelfbMsXMWGixvrE
-         ceKGqkzdfu8BTzITpU7Bm7eMLDRwZt88KJfPHAoCldicPib4kTbctWhbM4Z0CVSrYQ/8
-         vGzBDlg9UraEEmBUNVNcH8xEhdqXIh/XQsxbCHVdsGRvu4JXwsVeyXY975BWku96n/c9
-         5AzccnN4ccJtbQUCTa1LR8sTLof+wAgnBHqGPsmURKhn5E9qvuMok2t9/t+ywJdKUv8x
-         avhvMdfqPYAzobUSeT6iNOln3B8KwSyqpIXxQCh34ZTuPOoxxHEFw/CLdOrLZt35x+S1
-         MAgQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=fHVy98BTaUQF52BWKLZtuQVRzz01N8+H95C8cB4Mhtg=;
+        b=dkAqbyqTPRY4L/DB0uLdYdRPU6b1N+TybDCY0FHBvSZn/2S8Ae0v0tdFZwYj7zBLDi
+         8QqrjFuNnxaIPD8BAr2rJhpwB2cDkqWynWjh0Ac4qLo6dTsE54UqsPiCOX+RddtIHAO2
+         8JBLdxXwcjC/F/oqOtekIMDpqcxK4ymeEg2t/OKu6eb2DQDHJUzH+N2n7plAhq184vX+
+         3ilr42mjOAMqMwT+OGrhYyComtrMz2+AeX0KPKFk06V5xiL+cTmcyS3TObk+6xDdalRD
+         5Gaot3pJL+djNMmQ9F1IXX3Sxk97PgB1c7iou+/rl9Rq5op0ena4PcLEXQYlr5biumJp
+         qtzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=w2+HpAwDa/HBxXc2VVtjYSYS1Y8V8tVj3abGe9wGHDk=;
-        b=Jx/dfZuAPH7OdddZXZR9yA79DpJejSwB1NciceQX/maZnYLwiLvqYc0QsKNFVJkses
-         K9FflYQvqiIJ/xB8J+WWxeBNkrgb+xxzpuCELsynxdg0XrVpCeN57OXQ7iyjPHgbrWvv
-         I18qyoail5OGzUpmRosPaVWAS5dMVmmL7WnxgovZxiU/Vyd+jiI24hgAAa+m18EgnwYW
-         G/A9PdPmnlbMTsJW+0EKAfRQUJ+Web3PwuqrgJat143jJ5CO3rK2DsDCHXp+sENC6b46
-         mFyZMdxeTOCRSYFzTG6nV7Su9VBmRvyfeDhNSRKb0yBZdi4crgc9SEcKG/vbisuDB8v7
-         loog==
-X-Gm-Message-State: AOAM531R1jVpLKq+uEaoqupiN3ZYF//OejYDAthvzDy67/pZ8nhcvg/F
-        NpvCvyhb5Vy3kWFruLhNLnKLx5IC3yOQwdbqwdQGkQfjiLz/9EiUn55ycSTr44pk7PcA8ntt2Zq
-        F/LpPn47oYlAtPSbxwgB85RDIO9kt
-X-Received: by 2002:a17:90a:c58f:: with SMTP id l15mr4344402pjt.168.1638261790863;
-        Tue, 30 Nov 2021 00:43:10 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy0xFxpS2KHZUTUB75/FtM3PAAx67zjQxerMVpND32xQFqaPgXo3bBmJYOsoiUb/JCP/+UwFQ==
-X-Received: by 2002:a17:90a:c58f:: with SMTP id l15mr4344381pjt.168.1638261790641;
-        Tue, 30 Nov 2021 00:43:10 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id d2sm20962168pfj.42.2021.11.30.00.43.07
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=fHVy98BTaUQF52BWKLZtuQVRzz01N8+H95C8cB4Mhtg=;
+        b=dolro4h12kH9s2PltOOc7NgzcFE1vCxSlQbz9wHiRT+jwApkC0FIzAepAg3wbt0Z6F
+         ZY6ISMT+NIPNL3HNp1X/K0CIEmYdRRxgAUmUc6YbgJq8B81It+heb3NAPzqjBNLSlspy
+         VNxPzSPYp6MdBCstMjxMDN6vMhdur+yW7XxvzHV6282U3lNsc5GbmVYPmbCMSy16MdXI
+         r8eTeoQFfgtM6pLBTMqeDrYm/UU7D2MbiFuho9+uMvYkMO5sQLnzYzq4yVeW+RN8LWvr
+         jwniIWA0ptzC4nAMQJjQwYzGzznhOv2b4/aojJdER12GTCn/OQOBuM98uQy8Kb/YNUuo
+         Dvng==
+X-Gm-Message-State: AOAM5333GzkSKoSuSi2LGI6Z/c78pd98M2DoX7Y8wOE/ydbSdwPtvscu
+        OrOkh+hqtb3P/0QUKJw8n37j5g==
+X-Google-Smtp-Source: ABdhPJxue2FBF6O8NbPbziRrwGNOciaOEZ/z8FnZ1b/zhjeFgaTTmvLKkjb9rz4cIuDD9UU5GWKBaQ==
+X-Received: by 2002:a17:903:24d:b0:143:beb5:b6b1 with SMTP id j13-20020a170903024d00b00143beb5b6b1mr66622707plh.54.1638261792852;
+        Tue, 30 Nov 2021 00:43:12 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:6cb4:a0cc:6d7f:cba7])
+        by smtp.gmail.com with ESMTPSA id v10sm20770644pfu.123.2021.11.30.00.43.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 00:43:10 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Manikanta Pubbisetty <mpubbise@codeaurora.org>,
-        Shashidhar Lakkavalli <slakkavalli@datto.com>,
-        Govindaraj Saminathan <gsamin@codeaurora.org>,
-        Vasanthakumar Thiagarajan <vthiagar@codeaurora.org>,
-        Pradeep Kumar Chitrapu <pradeepc@codeaurora.org>,
-        ath11k@lists.infradead.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ath11k: Fix a NULL pointer dereference in ath11k_mac_op_hw_scan()
-Date:   Tue, 30 Nov 2021 16:43:04 +0800
-Message-Id: <20211130084304.72160-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Nov 2021 00:43:12 -0800 (PST)
+Date:   Tue, 30 Nov 2021 16:43:07 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        cujomalainey@google.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        sound-open-firmware@alsa-project.org
+Subject: Re: [PATCH v8 3/3] mailbox: mediatek: add support for adsp mailbox
+ controller
+Message-ID: <YaXkGym5QQDBSfcP@google.com>
+References: <20211129101946.6008-1-allen-kh.cheng@mediatek.com>
+ <20211129101946.6008-4-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129101946.6008-4-allen-kh.cheng@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ath11k_mac_op_hw_scan(), the return value of kzalloc() is directly
-used in memcpy(), which may lead to a NULL pointer dereference on
-failure of kzalloc().
+On Mon, Nov 29, 2021 at 06:19:45PM +0800, allen-kh.cheng wrote:
+> diff --git a/drivers/mailbox/mtk-adsp-mailbox.c b/drivers/mailbox/mtk-adsp-mailbox.c
+[...]
+> +static int mtk_adsp_mbox_probe(struct platform_device *pdev)
+> +{
+[...]
+> +	mbox->dev = dev;
+> +	mbox->ops = &mtk_adsp_mbox_chan_ops;
+> +	mbox->txdone_irq = false;
+> +	mbox->txdone_poll = true;
+> +	mbox->of_xlate = mtk_adsp_mbox_xlate;
+> +	mbox->num_chans = 1;
+> +	mbox->chans = devm_kzalloc(mbox->dev, sizeof(*mbox->chans), GFP_KERNEL);
 
-Fix this bug by adding a check of arg.extraie.ptr.
+I have commented in the v3[1].  To be neat, I prefer to use "dev" instead of "mbox->dev".  If you ever have the chance to respin the series, please fix it.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_ATH11K=m show no new warnings, and our static
-analyzer no longer warns about this code.
-
-Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/net/wireless/ath/ath11k/mac.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
-index 1cc55602787b..095f1f9b7611 100644
---- a/drivers/net/wireless/ath/ath11k/mac.c
-+++ b/drivers/net/wireless/ath/ath11k/mac.c
-@@ -3237,8 +3237,13 @@ static int ath11k_mac_op_hw_scan(struct ieee80211_hw *hw,
- 	arg.scan_id = ATH11K_SCAN_ID;
- 
- 	if (req->ie_len) {
--		arg.extraie.len = req->ie_len;
- 		arg.extraie.ptr = kzalloc(req->ie_len, GFP_KERNEL);
-+		if (!arg.extraie.ptr) {
-+			ret = -ENOMEM;
-+			goto exit;
-+		}
-+
-+		arg.extraie.len = req->ie_len;
- 		memcpy(arg.extraie.ptr, req->ie, req->ie_len);
- 	}
- 
--- 
-2.25.1
-
+[1]: https://patchwork.kernel.org/project/linux-mediatek/patch/20211124084514.28002-3-allen-kh.cheng@mediatek.com/#24614933

@@ -2,90 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD13746307E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF04463087
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240623AbhK3KFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:05:49 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:43002 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235524AbhK3KFr (ORCPT
+        id S235524AbhK3KGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:06:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49398 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235159AbhK3KGI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:05:47 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7FCC9B817EB;
-        Tue, 30 Nov 2021 10:02:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 178A1C53FC1;
-        Tue, 30 Nov 2021 10:02:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638266545;
-        bh=uvfhP3wDsqp2sLZLzqwLmrkaZ/VK2MfBZFqJU936Qv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mh2hfS6Gw67B48wTiqhi0UiqGeJhIoaRNt8K7v9Mg7lhHotZ2KWMk+gJhD389rOfp
-         Ire0MgGCbIGSiOl3vEKEEti/fEvbOypcINfAQarVEEdFXOyG5FuhAgAnKLCIxM+i4X
-         WcUxEHKSYNx7ZGuFMFzwfveaUpcO2hYxUV6LrpLx6JXgDSQ4ipzILen6pPizHD6VrR
-         EGMW1nGS03CDjDqtqCSEKY8leolcZsEFkUWsOxl3kDPFEKk/80mJkfZIzKmiGttKLL
-         TZ8UrxP/G6t4dVv9RMBuA5F7WbavuGvXzQFtCXYIem7VByocKeWRSOWYVUhPMA2CXM
-         s1Qn2jP41qcRw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1mrzxZ-0006Mo-9O; Tue, 30 Nov 2021 11:02:02 +0100
-Date:   Tue, 30 Nov 2021 11:02:01 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCHv4 0/7] Serial port generic PM to fix 8250 PM
-Message-ID: <YaX2mbUv9Yv3icl4@hovoldconsulting.com>
-References: <20211115084203.56478-1-tony@atomide.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211115084203.56478-1-tony@atomide.com>
+        Tue, 30 Nov 2021 05:06:08 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE99C061574;
+        Tue, 30 Nov 2021 02:02:49 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id s137so19241399pgs.5;
+        Tue, 30 Nov 2021 02:02:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=l1L3Wfgv7hXmKfSeVoSWOOaT+iJpEmEXH9jk/Ny4R8w=;
+        b=JIH0xpiC8UwqgJ0Q+ip+i0xbc7GbhnUSTJnZeRdPMvHuKRRcnPcbsYLf9FhUlqLr6j
+         Aprtsrx1+Lu45+1JDNAN1yoC1sCv3rj+oXqUbkHkT/Nvn4hxW5FeufRTDq55o/PhKSeU
+         ev7PL1DwOSsov7IY+Ysg3JvZeU3/cJkyaLYC7tcJ3ZLA2a3T/+KTUPv/QJVmKbWu111Q
+         W0FezK3m37t+oS+gyhhaGQhrPMgKvXQzULZ7aGT/iNJftYso7nQlFf/SKhiXHeEE16bG
+         roFWj1E5vEyeJhi0xLL3aQ369q3aZrTDqhzXi/Lvizbksqeyy7SUsFh0ooGY2g6HFhx0
+         JwCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=l1L3Wfgv7hXmKfSeVoSWOOaT+iJpEmEXH9jk/Ny4R8w=;
+        b=5OlCgM9DVA5RVedwWB9eGJ1VOgXdtCST9TxuFWYldAN03VaVsDcZ88E1a9uVGvideE
+         0/RZFugPm1sIHH0tbZaKgL1XD7Tcmue8XMigE4d24JRV+mkPgY7TbSdnuqOgf1faf++l
+         acNu1c2oap6ljMQwSJQ4cS7EJlzU2rcfTGgX7XWiFvXK1CltbSxknEFzpXfEgA4Xhi5T
+         Dq5DT3wNySC7aEuVgcXisiavQWklKl7RcqT0jz+N0M5SCxkMSEdRjtBcD3RWo8E8ryh/
+         1ZPR8hb5HZ2b69IyK74bmkgLq7OcSRi/R1mkCuIOdexeq9CBP4N/M7WAHjR5iOVd4oXS
+         SRVA==
+X-Gm-Message-State: AOAM532tj4seVyXsw7vFmmGzREzYsUyv8+EfG4jZyrgNfdv+wVOwfScC
+        T7o7DN0XwEple/V0scJ4L8NKMstIrDw=
+X-Google-Smtp-Source: ABdhPJw9oFmGRTwNh6ojXx3ZFK+VMY1kzKTWTS0rX6bVQvk9rIYW5j/f9daHAJuUlLVOE44osnWoZw==
+X-Received: by 2002:a63:1d63:: with SMTP id d35mr5562570pgm.135.1638266569159;
+        Tue, 30 Nov 2021 02:02:49 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id e29sm10497114pge.17.2021.11.30.02.02.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Nov 2021 02:02:48 -0800 (PST)
+From:   Wells Lu <wellslutw@gmail.com>
+To:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de
+Cc:     wells.lu@sunplus.com, vincent.shih@sunplus.com,
+        Wells Lu <wellslutw@gmail.com>
+Subject: [PATCH net-next v3 0/2] This is a patch series for pinctrl driver for Sunplus SP7021 SoC.
+Date:   Tue, 30 Nov 2021 18:02:50 +0800
+Message-Id: <1638266572-5831-1-git-send-email-wellslutw@gmail.com>
+X-Mailer: git-send-email 2.7.4
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 10:41:56AM +0200, Tony Lindgren wrote:
-> Hi,
-> 
-> Here are v4 patches for serial port generic PM. The scope has now expanded
-> a bit from the earlier attempts to get rid of pm_runtime_irq_safe() for
-> the 8250_omap driver. I've now picked up three patches from Andy's earlier
-> generic serial port PM series.
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control
+applications.
 
-So this looks like another step in the right direction but there are
-still some missing pieces.
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-First, you need to provide an overview of the design decisions made here
-in cover letter. It's currently spread out over several patches and
-those commit messages still do not hold all the details.
+Wells Lu (2):
+  devicetree: bindings: net: Add bindings doc for Sunplus SP7021.
+  net: ethernet: Add driver for Sunplus SP7021
 
-Specifically, it looks like tx can still stall indefinitely if the
-autosuspend timer fires. This can happen at low baud rates and also when
-using flow control.
+ .../bindings/net/sunplus,sp7021-emac.yaml          | 172 ++++++
+ MAINTAINERS                                        |   8 +
+ drivers/net/ethernet/Kconfig                       |   1 +
+ drivers/net/ethernet/Makefile                      |   1 +
+ drivers/net/ethernet/sunplus/Kconfig               |  36 ++
+ drivers/net/ethernet/sunplus/Makefile              |   6 +
+ drivers/net/ethernet/sunplus/spl2sw_define.h       | 301 ++++++++++
+ drivers/net/ethernet/sunplus/spl2sw_desc.c         | 224 ++++++++
+ drivers/net/ethernet/sunplus/spl2sw_desc.h         |  21 +
+ drivers/net/ethernet/sunplus/spl2sw_driver.c       | 627 +++++++++++++++++++++
+ drivers/net/ethernet/sunplus/spl2sw_driver.h       |  19 +
+ drivers/net/ethernet/sunplus/spl2sw_int.c          | 272 +++++++++
+ drivers/net/ethernet/sunplus/spl2sw_int.h          |  15 +
+ drivers/net/ethernet/sunplus/spl2sw_mac.c          | 336 +++++++++++
+ drivers/net/ethernet/sunplus/spl2sw_mac.h          |  23 +
+ drivers/net/ethernet/sunplus/spl2sw_mdio.c         | 117 ++++
+ drivers/net/ethernet/sunplus/spl2sw_mdio.h         |  14 +
+ drivers/net/ethernet/sunplus/spl2sw_phy.c          |  89 +++
+ drivers/net/ethernet/sunplus/spl2sw_phy.h          |  14 +
+ drivers/net/ethernet/sunplus/spl2sw_register.h     |  96 ++++
+ 20 files changed, 2392 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/sunplus,sp7021-emac.yaml
+ create mode 100644 drivers/net/ethernet/sunplus/Kconfig
+ create mode 100644 drivers/net/ethernet/sunplus/Makefile
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_define.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_desc.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_desc.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_driver.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_driver.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_int.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_int.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_mac.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_mac.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_mdio.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_mdio.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_phy.c
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_phy.h
+ create mode 100644 drivers/net/ethernet/sunplus/spl2sw_register.h
 
-It also looks like the expected calls to update the last busy timestamp
-might be missing from the interrupt handlers or related helpers.
+-- 
+2.7.4
 
-Please also describe how this interacts with the console. Is a console
-port now never suspended? Where is that enforced? The final patch
-appears to rely on this when it drops PM calls from for example some
-console poll callbacks.
-
-> Changes since v3:
-> - Pick three patches from Andy's earlier serial port PM series to handle
->   issues pointed out by Johan
-
-Please also be more specific here when sending an updated series. I
-can't really tell what has changed from just this one sentence.
-
-Johan

@@ -2,137 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F008B463BEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2780A463BEE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238048AbhK3QjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:39:21 -0500
-Received: from new4-smtp.messagingengine.com ([66.111.4.230]:56127 "EHLO
-        new4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S238032AbhK3QjJ (ORCPT
+        id S244032AbhK3Qjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:39:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58036 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238032AbhK3Qjp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:39:09 -0500
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 57BBE580131;
-        Tue, 30 Nov 2021 11:35:49 -0500 (EST)
-Received: from imap47 ([10.202.2.97])
-  by compute3.internal (MEProxy); Tue, 30 Nov 2021 11:35:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=mime-version:message-id:in-reply-to:references:date:from:to
-        :cc:subject:content-type; s=fm3; bh=jY6BiEiqqEX3r2Q5KUj5NScjlUZf
-        fg61Yq1tlm97XYA=; b=jyB3/dh+y7c9vt/oLRpNSfNC/oiUOK/VJK8JZyNRCFOc
-        bbeesyoIbl0CSqNRur2TB14V/liIrJm4KX65Ik5ZGo1zySpONG4YtTYzxS9CUKqo
-        NadBNNjzdNLypkNQ0jqUx8ihBa7tFdlcJZ+mGSzOsWBPYZXi4QI48dbCjTPCKc5Y
-        imDYW1yZvArYKhwyp0CUULMH+TDwPYZwXkrriKohEY1X5H/zQAaPyMzgBO7q5Cg7
-        K35cAUIOssmHF9cib9gSoodhxLIIP6rEjUQRWSyBeJDJDGwUQEyFCCbTWHTAflun
-        Gf1K62APOkgUU9E3NuoB2p/MdnsLAq+TZzTuNdzy4g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=jY6BiE
-        iqqEX3r2Q5KUj5NScjlUZffg61Yq1tlm97XYA=; b=exCdb3Nlcw6TyjODvHWX5M
-        AR4JsRPKMCpnb4auq1n3u4nBIjfoQu+GhUoAi2rLTUxifFSh1/E9pI4pOM214S1n
-        y7F99nqoJl5pf6X6pnTbXPgmd2Ff9LSDFno6mF3LCa7cu6ToYwDsg40cFloTMm6X
-        T8BPVW9CqytvDYZud5nRlSMqScxpaRp2wizBe8djXxwO1vWYLmUEasWdoecS7S+/
-        up8vIDqSqu9xxrKrZo0PojWXnjMUYnv+3Zw1W3tqMOvQOO/bs2kXY8Q1KOcpBK3U
-        opHeutP31WvAe7KgYdw6A3LDPVHkLeiyINTvGjDU/vMG4EO8OX7MknPAdljc9YGg
-        ==
-X-ME-Sender: <xms:5FKmYShZZhFZh_IqmL6zHDeut9llF2lsBwsB5ob6JIMrKfKQufKHZA>
-    <xme:5FKmYTAChIUwXNvY3MibWHPgF9kZgGL3xHeFJpb6V8JNAtxzdQuVdbF_rQ4CJOJpV
-    QQep3Wcyj173qdgvIQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddriedugdelvdcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfufhvvghn
-    ucfrvghtvghrfdcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrth
-    htvghrnhepvedvgeevuddvvedvgfelfeegiedvgeehieeutdelvedvieevveeljeefvedt
-    leehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnhesshhvvghnphgvthgvrhdruggv
-    vh
-X-ME-Proxy: <xmx:5FKmYaFmzA6NDcLu9LRzcsdsr0jSn8GM_Cu20YrnjBaUO3k5fIxcfA>
-    <xmx:5FKmYbTEi3CfNwGKFxUyj_LkA-infyZrfKX1l9P8p3GPOnW5tEiHUQ>
-    <xmx:5FKmYfw8cCiPIb3PwaLkom8BOFImZuMrUAtPEuPt0dPAg__QyHfuAA>
-    <xmx:5VKmYUoGkNdE6vr5qBJo0dj_y2WXJf4TWEUMQSqeDoNjOG5NFDuvdg>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id BDB3C27407E3; Tue, 30 Nov 2021 11:35:48 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4410-g5528bb82a8-fm-20211130.003-g5528bb82
-Mime-Version: 1.0
-Message-Id: <0f3c9f9e-caf9-462a-ba8d-882266d4c7c4@www.fastmail.com>
-In-Reply-To: <20211130160338.GA2739234@bhelgaas>
-References: <20211130160338.GA2739234@bhelgaas>
-Date:   Tue, 30 Nov 2021 17:35:16 +0100
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "Bjorn Helgaas" <helgaas@kernel.org>,
-        "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>
-Cc:     "Lorenzo Pieralisi" <lorenzo.pieralisi@arm.com>,
-        "Bjorn Helgaas" <bhelgaas@google.com>, svarbanov@mm-sol.com,
-        bjorn.andersson@linaro.org, "Rob Herring" <robh@kernel.org>,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "kernel test robot" <lkp@intel.com>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Alyssa Rosenzweig" <alyssa@rosenzweig.io>
-Subject: Re: [PATCH] PCI: qcom: Fix warning generated due to the incorrect data type
-Content-Type: text/plain
+        Tue, 30 Nov 2021 11:39:45 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7433DC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:36:26 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id r130so21237076pfc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:36:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=G9UcRoG6n7uSI6RSS4bAaNF3e1CzNs1fxTdoBdfl5jM=;
+        b=qZzQYJspZBn9YHGzADbzUQDDgasoS0mJZE6iz43pBaZOB9DrtPqAZfVeKmjEvpnQMh
+         WIstXIKb8Pvdomnzw0bE738NbVYon3tkYh17Oj/dGEQhAbz1HkTqduNSvKfi8+xMHbyU
+         lCf3rrxazetPwRTvBBHwT4jTJqZZufec9V2wjeq5iZYAKssY5VwOBTjPLKQw/kkBPQzw
+         t2/HIQJum/cCNW6sQJsAH1SDYlki1m8CO1KqWVFuEUZnqKjNI7tHbowweJN1XOnP0pVL
+         Y49cNbPmXjppJQhi8Wbo75i57YAeZygk4jp6LjTTMnDU19/y4yqrKSsku0/PhXUnpToL
+         nZKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=G9UcRoG6n7uSI6RSS4bAaNF3e1CzNs1fxTdoBdfl5jM=;
+        b=qBoqQh7HpsvEXdDpnOoYe8ff2O3Za9u7SVyXLSijVEt4elYDbTcNziooDBQY8c2Nqh
+         e648Ch4mzCMXx2J3FX4LZmbe9Ujkf3FQAYkAix7BuiUbKug4F2uLBNAwO/j4mhIwZehd
+         SzcEXeDWQ9SV9KhkldCMTseLJR47c1fyCrAy/x/q2UaxQEYRyhuCcBKrHAgDn58UUJh5
+         qEVw8UuU0X2vU1QMJ0iyNsto4QcuxDGV+yv3H9EpQEg9yFI4pCRMPqYl5Mm9i4YFvauK
+         sYEcHW/Qsd4Dni4oRYOxUnygHa5BOLsLd3fjEoO9qzm2Oi7bjTrpsJn1Cj8XMIOgFdf7
+         wJ6w==
+X-Gm-Message-State: AOAM532OS8nk3XhdkudEV5kU/WhUUDW7P3uzWOg9OHb5IbDwIy5jGYO8
+        klIKY/uLDob2HmMIlcDZoycsvUdmsGiw/g==
+X-Google-Smtp-Source: ABdhPJxiowYGgzDK3NHQz7bpm7p97sY1CByZVkt+RsJ2uGDGZ1cE0012erL4Fct6P5/KKPMu/QiWvg==
+X-Received: by 2002:a62:18d2:0:b0:4a2:b2d0:c39f with SMTP id 201-20020a6218d2000000b004a2b2d0c39fmr273009pfy.69.1638290185838;
+        Tue, 30 Nov 2021 08:36:25 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id a18sm20378723pfn.185.2021.11.30.08.36.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 08:36:25 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 30 Nov 2021 06:36:23 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: Re: [RFC PATCH 0/2] workqueue: Fix hotplug races
+Message-ID: <YaZTB/XiC6VNMR0d@slm.duckdns.org>
+References: <20211130000612.591368-1-frederic@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130000612.591368-1-frederic@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Nov 30, 2021 at 01:06:10AM +0100, Frederic Weisbecker wrote:
+> While triggering rcutorture splats, I couldn't trace down to the exact
+> cause due to the issue being tracing-unfriendly. But looking at the code,
+> those two potential races look like plausible causes and also after
+> these two patches, I couldn't reproduce the rcutorture issues again (yet...).
+> 
+> Frederic Weisbecker (2):
+>   workqueue: Fix unbind_workers() VS wq_worker_running() race
+>   workqueue: Fix unbind_workers() VS wq_worker_sleeping() race
 
-On Tue, Nov 30, 2021, at 17:03, Bjorn Helgaas wrote:
-> [+cc Marc, Alyssa, Sven for RID-to-SID mapping insight.  The patch at
-> https://lore.kernel.org/all/20211130062137.GD205712@thinkpad/ merely
-> fixes a warning.  My meta-question is about the qcom BDF-to-SID
-> mapping.]
->
-> On Tue, Nov 30, 2021 at 11:51:37AM +0530, Manivannan Sadhasivam wrote:
->> On Mon, Nov 29, 2021 at 09:36:14PM -0600, Bjorn Helgaas wrote:
->> > ...
->> > I'm also curious why pcie-qcom.c is the only driver that does this.
->> > "iommu-map" is not specific to qcom, but no other drivers do similar
->> > things with it.
->> 
->> Yes, on the recent qcom platforms starting from sm8250 we need to program
->> the BDF to SID mapping in the controller and that's the reason we are
->> extracting the "iommu-map" property in DT.
->
-> This sounds like something that may not really be specific to sm8250.
+Both patches look good to me. Lai, thanks for finding the offending commits.
+Frederic, can you please repost them w/ scheduler folks and tglx cc'd?
 
-So a single IOMMU can possibly differentiate between N different devices [1].
-Each device [1] is identified by some number which is called sid (stream id?
-security id? who knows.) on Apple hardware (and apparently also on qcom).
-Now I don't know much about PCI but the way I understand it is that the
-bus/device/function tuple can be used to uniquely identify a single device on the bus.
-All iommu-map does is to provide the mapping between those two different spaces [2].
+Thanks.
 
-For most iommus this seems to be just a static mapping that's hardwired in silicon
-and I think that's why almost no PCI driver needs to care about it: The iommu
-core will just use it to convert the PCI requester ID to a number the iommu
-driver understands.
-
-Apple's frankenchip however allows to configure this mapping from software
-after a device has been attached and that's why we need that special code inside
-the PCI driver: We have to make sure that whatever is configured inside iommu-map
-(and used by the iommu core to match PCI devices to iommu groups) matches to what
-the HW does.
-
-I can only assume that qcom does something similar. It looks like the qcom HW can be
-fully configured during probe time though while we really have to wait until a device
-is attached for the Apple chip (mostly because we only have 16 slots there).
-
-
-Hope that helps.
-
-
-Best,
-
-Sven
-
-
-
-[1] Technically the smallest unit are iommu groups which can contain multiple
-devices but we can just ignore that. The iommu code will do the correct thing
-if it gets told that two PCI devices have the same identification number.
-
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/iommu/of_iommu.c#n53
+-- 
+tejun

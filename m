@@ -2,90 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 10BBE4635D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2574635D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241780AbhK3NyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:54:02 -0500
-Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:61894 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241761AbhK3NyB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:54:01 -0500
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AUBvm3O018641;
-        Tue, 30 Nov 2021 07:50:40 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type;
- s=PODMain02222019; bh=Ax6ssAcwQRjsy8iTK9gvd5o/h7aKkUSTKjNwBGy0ji4=;
- b=jJaqiwVO+BE6RgUx7iOiGE7qAlyn+dPZ7EFqMsRmlcAiOq3MZBdVh9Wja6vPtimwWQ/4
- 83S1RvV51T47xfAh8uFD4ysnAIOJsYfHjNPPHtgzHd4wiOJO7Nxz8zKQiqk7Q5Ld341m
- eT3NwLHTKv1yvtzM3PbmjYgLf0VoDeSKO4tJ1253OjuQlRtbdua8UZyw+uWO/lHPeNnD
- 1cGNwoH1n/uMQ1ZvkydQzPqaCqXinZDFduP/CHVoOcvN9972prz9jDpHKtlxRJ7m1CoC
- s8f1GZu+ROaO9UbIOdBQLX93pWQGGKTtErdj1/q70d5dQBzoA/QsxpB8eBFWrPU6sPR/ Aw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3cmv5u1m5e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Tue, 30 Nov 2021 07:50:40 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 30 Nov
- 2021 13:50:39 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Tue, 30 Nov 2021 13:50:39 +0000
-Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 360312AA;
-        Tue, 30 Nov 2021 13:50:39 +0000 (UTC)
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     <dmitry.torokhov@gmail.com>
-CC:     <linux-input@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] Input: ff-core - Correct magnitude setting for rumble compatibility
-Date:   Tue, 30 Nov 2021 13:50:39 +0000
-Message-ID: <20211130135039.13726-1-ckeepax@opensource.cirrus.com>
-X-Mailer: git-send-email 2.11.0
+        id S241799AbhK3NzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:55:17 -0500
+Received: from mga07.intel.com ([134.134.136.100]:23353 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241821AbhK3NzN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 08:55:13 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="299609782"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="299609782"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 05:51:53 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="744738557"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 30 Nov 2021 05:51:50 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ms3Xx-000DN9-Pn; Tue, 30 Nov 2021 13:51:49 +0000
+Date:   Tue, 30 Nov 2021 21:51:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Wells Lu <wellslutw@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, robh+dt@kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        p.zabel@pengutronix.de
+Cc:     kbuild-all@lists.01.org, wells.lu@sunplus.com,
+        vincent.shih@sunplus.com, Wells Lu <wellslutw@gmail.com>
+Subject: Re: [PATCH net-next v3 2/2] net: ethernet: Add driver for Sunplus
+ SP7021
+Message-ID: <202111302126.kdjsLCiQ-lkp@intel.com>
+References: <1638266572-5831-3-git-send-email-wellslutw@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-GUID: qtUNgmsBJJXBzABks0jeBI2ARI7Hmk3G
-X-Proofpoint-ORIG-GUID: qtUNgmsBJJXBzABks0jeBI2ARI7Hmk3G
-X-Proofpoint-Spam-Reason: safe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1638266572-5831-3-git-send-email-wellslutw@gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When converting a rumble into a periodic effect, for compatibility,
-the magnitude is effectively calculated using:
+Hi Wells,
 
-magnitude = max(strong_rubble / 3 + weak_rubble / 6, 0x7fff);
+I love your patch! Perhaps something to improve:
 
-The rumble magnitudes are both u16 and the resulting magnitude is
-s16. The max is presumably an attempt to limit the result of the
-calculation to the maximum possible magnitude for the s16 result,
-and thus should be a min.
+[auto build test WARNING on net-next/master]
 
-However in the case of strong = weak = 0xffff, the result of the first
-part of the calculation is 0x7fff, meaning that the min would be
-redundant anyway, so simply remove the current max.
+url:    https://github.com/0day-ci/linux/commits/Wells-Lu/This-is-a-patch-series-for-pinctrl-driver-for-Sunplus-SP7021-SoC/20211130-180452
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 09ae03e2fc9d04240c21759ce9f1ef63d7651850
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20211130/202111302126.kdjsLCiQ-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/c5416cd4312a02ecbd1752129b61392a857a45fb
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Wells-Lu/This-is-a-patch-series-for-pinctrl-driver-for-Sunplus-SP7021-SoC/20211130-180452
+        git checkout c5416cd4312a02ecbd1752129b61392a857a45fb
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=alpha SHELL=/bin/bash drivers/net/ethernet/sunplus/
 
-Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/net/ethernet/sunplus/spl2sw_int.c: In function 'spl2sw_tx_poll':
+>> drivers/net/ethernet/sunplus/spl2sw_int.c:157:28: warning: variable 'mac' set but not used [-Wunused-but-set-variable]
+     157 |         struct spl2sw_mac *mac;
+         |                            ^~~
+
+
+vim +/mac +157 drivers/net/ethernet/sunplus/spl2sw_int.c
+
+   151	
+   152	int spl2sw_tx_poll(struct napi_struct *napi, int budget)
+   153	{
+   154		struct spl2sw_common *comm = container_of(napi, struct spl2sw_common, tx_napi);
+   155		struct spl2sw_skb_info *skbinfo;
+   156		struct net_device_stats *stats;
+ > 157		struct spl2sw_mac *mac;
+   158		u32 tx_done_pos;
+   159		u32 mask;
+   160		u32 cmd;
+   161		int i;
+   162	
+   163		spin_lock(&comm->tx_lock);
+   164	
+   165		tx_done_pos = comm->tx_done_pos;
+   166		while ((tx_done_pos != comm->tx_pos) || (comm->tx_desc_full == 1)) {
+   167			cmd = comm->tx_desc[tx_done_pos].cmd1;
+   168			if (cmd & TXD_OWN)
+   169				break;
+   170	
+   171			skbinfo = &comm->tx_temp_skb_info[tx_done_pos];
+   172			if (unlikely(!skbinfo->skb))
+   173				goto spl2sw_tx_poll_next;
+   174	
+   175			i = spl2sw_bit_pos_to_port_num(FIELD_GET(TXD_VLAN, cmd));
+   176			if (i < MAX_NETDEV_NUM && comm->ndev[i]) {
+   177				mac = netdev_priv(comm->ndev[i]);
+   178				stats = &comm->ndev[i]->stats;
+   179			} else {
+   180				goto spl2sw_tx_poll_unmap;
+   181			}
+   182	
+   183			if (unlikely(cmd & (TXD_ERR_CODE))) {
+   184				stats->tx_errors++;
+   185			} else {
+   186				stats->tx_packets++;
+   187				stats->tx_bytes += skbinfo->len;
+   188			}
+   189	
+   190	spl2sw_tx_poll_unmap:
+   191			dma_unmap_single(&comm->pdev->dev, skbinfo->mapping, skbinfo->len,
+   192					 DMA_TO_DEVICE);
+   193			skbinfo->mapping = 0;
+   194			dev_kfree_skb_irq(skbinfo->skb);
+   195			skbinfo->skb = NULL;
+   196	
+   197	spl2sw_tx_poll_next:
+   198			/* Move tx_done_pos to next position */
+   199			tx_done_pos = ((tx_done_pos + 1) == TX_DESC_NUM) ? 0 : tx_done_pos + 1;
+   200	
+   201			if (comm->tx_desc_full == 1)
+   202				comm->tx_desc_full = 0;
+   203		}
+   204	
+   205		comm->tx_done_pos = tx_done_pos;
+   206		if (!comm->tx_desc_full)
+   207			for (i = 0; i < MAX_NETDEV_NUM; i++)
+   208				if (comm->ndev[i])
+   209					if (netif_queue_stopped(comm->ndev[i]))
+   210						netif_wake_queue(comm->ndev[i]);
+   211	
+   212		spin_unlock(&comm->tx_lock);
+   213	
+   214		wmb();			/* make sure settings are effective. */
+   215		mask = readl(comm->l2sw_reg_base + L2SW_SW_INT_MASK_0);
+   216		mask &= ~MAC_INT_TX;
+   217		writel(mask, comm->l2sw_reg_base + L2SW_SW_INT_MASK_0);
+   218	
+   219		napi_complete(napi);
+   220		return 0;
+   221	}
+   222	
+
 ---
- drivers/input/ff-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/input/ff-core.c b/drivers/input/ff-core.c
-index 1cf5deda06e19..fa8d1a4660142 100644
---- a/drivers/input/ff-core.c
-+++ b/drivers/input/ff-core.c
-@@ -67,7 +67,7 @@ static int compat_effect(struct ff_device *ff, struct ff_effect *effect)
- 		effect->type = FF_PERIODIC;
- 		effect->u.periodic.waveform = FF_SINE;
- 		effect->u.periodic.period = 50;
--		effect->u.periodic.magnitude = max(magnitude, 0x7fff);
-+		effect->u.periodic.magnitude = magnitude;
- 		effect->u.periodic.offset = 0;
- 		effect->u.periodic.phase = 0;
- 		effect->u.periodic.envelope.attack_length = 0;
--- 
-2.11.0
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

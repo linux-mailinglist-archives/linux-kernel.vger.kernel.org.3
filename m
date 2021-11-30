@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 343B146388E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A75463892
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244010AbhK3PFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:05:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        id S244093AbhK3PFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243372AbhK3O4e (ORCPT
+        with ESMTP id S243476AbhK3O4i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:56:34 -0500
+        Tue, 30 Nov 2021 09:56:38 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96770C061A31;
-        Tue, 30 Nov 2021 06:50:27 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D0CC061D6E;
+        Tue, 30 Nov 2021 06:50:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5D924B81A29;
-        Tue, 30 Nov 2021 14:50:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDA4FC53FC7;
-        Tue, 30 Nov 2021 14:50:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6B9ABB81A49;
+        Tue, 30 Nov 2021 14:50:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BF00C53FC1;
+        Tue, 30 Nov 2021 14:50:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283825;
-        bh=o8MeOq2N49p/FP/LqG1XAuTyIVVzI/eO1y3ZWHzfHpk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dN44Nwgc8fUTHcq4zZ8z+algYTkMZd+neMowjNHG/s18nNtfsniAJ9Hroh45Op/BE
-         gjybt2PMUwPXB2N+2Z0vThSdfBoGa1yIDcTuCMv1VjlHove6ehmJJmwg9EEtZ2y6Mo
-         yNOZnnWiPeGgdOaaBIYUgzrcQQvqMIGZ1mpa+sdveHn1xIYhWudFgecH6UhnTge1BN
-         s32sv4pMdPmM6mhmqEIVDt71b+igGIvBir4js6OIWFpHyksIoAKa9wXsVTV9OV+OHh
-         pt517j23yibTMWv8RbBXhIMETSRkMHkEw1ToPw/xwLaNDgAOeWIrqSFFaYiveXLX1Q
-         BKBocIgvO1YTQ==
+        s=k20201202; t=1638283842;
+        bh=KNjS1SLMC/teqIvGOs42hCPnKvK18oeDY75m4lW8lwQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=s7OIQctyvIhdEPiPi/dq57mXJdN6WWqy7is6EG+8Eoqdl+TBXYfdZ1dmfMdwm0T4K
+         PfE/n6D96iabkTI+bz/LlFwV7wrafE2wnwcxkPCHOH8HdS0A1KYpKSuyawknGXdTNt
+         UE3I+W099PUN1z4ZvdHhiG5W+wuOzTODgTbkKGIqCTlPVahAAv6ejwIOa4ZvFDm4X6
+         RjsjHyQeWplc9PPomFQ0E8lr6QPVAnOGImM6COKTZrhVyOCfo3co4Ur/cpN62iR783
+         1XJ8AAlkgD39s8huJuq7yvHPhYo+W5xTXcpPDiH1sJ0oO2ijI939KBHq+RF9cT2of9
+         g16v8BFi+RNTQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
+Cc:     Gongjun Song <gongjun.song@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Rander Wang <rander.wang@intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
         Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, matthias.bgg@gmail.com,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 5.10 01/43] ASoC: mediatek: mt8173-rt5650: Rename Speaker control to Ext Spk
-Date:   Tue, 30 Nov 2021 09:49:38 -0500
-Message-Id: <20211130145022.945517-1-sashal@kernel.org>
+        Sasha Levin <sashal@kernel.org>, cezary.rojewski@intel.com,
+        liam.r.girdwood@linux.intel.com, yang.jie@linux.intel.com,
+        perex@perex.cz, tiwai@suse.com, kai.vehmanen@linux.intel.com,
+        libin.yang@intel.com, vamshi.krishna.gopal@intel.com,
+        yong.zhi@intel.com, alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 5.10 06/43] ASoC: Intel: sof_sdw: Add support for SKU 0B29 product
+Date:   Tue, 30 Nov 2021 09:49:43 -0500
+Message-Id: <20211130145022.945517-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211130145022.945517-1-sashal@kernel.org>
+References: <20211130145022.945517-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -53,58 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+From: Gongjun Song <gongjun.song@intel.com>
 
-[ Upstream commit 0a8facac0d1e38dc8b86ade6d3f0d8b33dae7c58 ]
+[ Upstream commit 0c2ed4f03f0bfe2be34efbabbebe9875c3aa9ca9 ]
 
-Some RT5645 and RT5650 powered platforms are using "Ext Spk"
-instead of "Speaker", and this is also reflected in alsa-lib
-configurations for the generic RT5645 usecase manager configs.
+This product supports a SoundWire headset codec, SoundWire
+capture from local microphones and two SoundWire amplifiers.
 
-Rename the "Speaker" control to "Ext Spk" in order to be able
-to make the userspace reuse/inherit the same configurations also
-for this machine, along with the others.
-
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20211105152013.75252-1-angelogioacchino.delregno@collabora.com
+Signed-off-by: Gongjun Song <gongjun.song@intel.com>
+Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Reviewed-by: Rander Wang <rander.wang@intel.com>
+Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+Link: https://lore.kernel.org/r/20211105022646.26305-8-yung-chuan.liao@linux.intel.com
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mediatek/mt8173/mt8173-rt5650.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ sound/soc/intel/boards/sof_sdw.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/sound/soc/mediatek/mt8173/mt8173-rt5650.c b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-index c28ebf891cb05..2cbf679f5c74b 100644
---- a/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-+++ b/sound/soc/mediatek/mt8173/mt8173-rt5650.c
-@@ -30,15 +30,15 @@ static struct mt8173_rt5650_platform_data mt8173_rt5650_priv = {
+diff --git a/sound/soc/intel/boards/sof_sdw.c b/sound/soc/intel/boards/sof_sdw.c
+index f141b38ed71d6..de3706125fe1a 100644
+--- a/sound/soc/intel/boards/sof_sdw.c
++++ b/sound/soc/intel/boards/sof_sdw.c
+@@ -248,6 +248,16 @@ static const struct dmi_system_id sof_sdw_quirk_table[] = {
+ 		/* No Jack */
+ 		.driver_data = (void *)SOF_SDW_TGL_HDMI,
+ 	},
++	{
++		.callback = sof_sdw_quirk_cb,
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc"),
++			DMI_EXACT_MATCH(DMI_PRODUCT_SKU, "0B29"),
++		},
++		.driver_data = (void *)(SOF_SDW_TGL_HDMI |
++					RT711_JD2 |
++					SOF_SDW_FOUR_SPK),
++	},
+ 	{}
  };
  
- static const struct snd_soc_dapm_widget mt8173_rt5650_widgets[] = {
--	SND_SOC_DAPM_SPK("Speaker", NULL),
-+	SND_SOC_DAPM_SPK("Ext Spk", NULL),
- 	SND_SOC_DAPM_MIC("Int Mic", NULL),
- 	SND_SOC_DAPM_HP("Headphone", NULL),
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
- };
- 
- static const struct snd_soc_dapm_route mt8173_rt5650_routes[] = {
--	{"Speaker", NULL, "SPOL"},
--	{"Speaker", NULL, "SPOR"},
-+	{"Ext Spk", NULL, "SPOL"},
-+	{"Ext Spk", NULL, "SPOR"},
- 	{"DMIC L1", NULL, "Int Mic"},
- 	{"DMIC R1", NULL, "Int Mic"},
- 	{"Headphone", NULL, "HPOL"},
-@@ -48,7 +48,7 @@ static const struct snd_soc_dapm_route mt8173_rt5650_routes[] = {
- };
- 
- static const struct snd_kcontrol_new mt8173_rt5650_controls[] = {
--	SOC_DAPM_PIN_SWITCH("Speaker"),
-+	SOC_DAPM_PIN_SWITCH("Ext Spk"),
- 	SOC_DAPM_PIN_SWITCH("Int Mic"),
- 	SOC_DAPM_PIN_SWITCH("Headphone"),
- 	SOC_DAPM_PIN_SWITCH("Headset Mic"),
 -- 
 2.33.0
 

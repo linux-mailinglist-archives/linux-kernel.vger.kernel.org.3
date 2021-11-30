@@ -2,113 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 851BB463D1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3039C463D1D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:44:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244972AbhK3Rrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:47:33 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:36626 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbhK3Rrc (ORCPT
+        id S245087AbhK3RsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:48:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245006AbhK3Rr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:47:32 -0500
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8C4F020DED70;
-        Tue, 30 Nov 2021 09:44:12 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8C4F020DED70
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1638294252;
-        bh=EAfl+8ZtWcOr7MGbBjK12p6Zs4Xgqan1DBcDEBeNGnM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PVCqwbrC42Rctjz/oCpjE/+qfi10+tb44cz1rY8RbAY38zDia0+kOb2v9DpH0RspM
-         7/QeFddVmlCumensX99JkbMURgZkHs+zeHVwD0wwJOwmbGqNZlICiY1FoYdHHyQOMH
-         waJpJtmqcw+AOflqAgICWUEGPijV4fajkxCCUnC8=
-Date:   Tue, 30 Nov 2021 09:44:11 -0800
-From:   Katherine Perez <kaperez@linux.microsoft.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] arm64: dts: add minimal DTS for Microsoft Surface
- Duo2
-Message-ID: <20211130174411.GA18994@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20211122190552.74073-1-kaperez@linux.microsoft.com>
- <20211122190552.74073-2-kaperez@linux.microsoft.com>
- <YZxnQfB6V7GOlygq@matsya>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YZxnQfB6V7GOlygq@matsya>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+        Tue, 30 Nov 2021 12:47:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD0AC061574;
+        Tue, 30 Nov 2021 09:44:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A711B819D9;
+        Tue, 30 Nov 2021 17:44:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 29DBCC53FC1;
+        Tue, 30 Nov 2021 17:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638294276;
+        bh=Rp2Gp/egZ4qHFOaTZvslUxL2rU44Tl2+N/LVxzWLTTI=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=mbZZmXWY+Fn2sOEY86FbsMl1XBUY39licUCY5b8JeBbE/T7oFvqIC4fEevEmretWY
+         vvhupL2wg66zZpVduvmdPNuw9onrxd+Me6a7moxXq10cQgEXeso+gGrFBpOjKbHDEw
+         tCuJVaPk9GgAQtyTRjAKA61jftZfMkz6uca+TK3oZdRdAzZhmJgU2LsLVTTRTsYfJA
+         tegL803WskJaY/yCIThpkEMyGS9RvUpB9kaHsjJYSvRdxKYbkz//ZLgHO9cdYtfct/
+         kijrSV2fMVNiuW3J7IDw32umnqRjPabS71sz2ojO6MAiR8XHJ7Sao/CS6SPLYyCgrN
+         E2zWFVMFzHlQg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F285C60BE4;
+        Tue, 30 Nov 2021 17:44:35 +0000 (UTC)
+Subject: Re: [GIT PULL] KVM fixes for 5.16-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211130165738.358058-1-pbonzini@redhat.com>
+References: <20211130165738.358058-1-pbonzini@redhat.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211130165738.358058-1-pbonzini@redhat.com>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+X-PR-Tracked-Commit-Id: 7cfc5c653b07782e7059527df8dc1e3143a7591e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f080815fdb3e3cff5a004ca83b3815ac17ef71b1
+Message-Id: <163829427593.13483.5255490699168250098.pr-tracker-bot@kernel.org>
+Date:   Tue, 30 Nov 2021 17:44:35 +0000
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 09:30:01AM +0530, Vinod Koul wrote:
-> On 22-11-21, 11:05, Katherine Perez wrote:
-> > This is a minimal devicetree for Microsoft Surface Duo 2 with SM8350
-> > Chipset
-> > 
-> > Signed-off-by: Katherine Perez <kaperez@linux.microsoft.com>
-> > ---
-> > 
-> > Changes since v1:
-> > - Change remoteprocs firmware-naming scheme to qcom/sm8350/microsft/*
-> > - Add chassis-type
-> > 
-> >  arch/arm64/boot/dts/qcom/Makefile             |   1 +
-> >  .../qcom/sm8350-microsoft-surface-duo2.dts    | 369 ++++++++++++++++++
-> >  2 files changed, 370 insertions(+)
-> >  create mode 100644 arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-> > 
-> > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> > index 6b816eb33309..a8cc6bd3c423 100644
-> > --- a/arch/arm64/boot/dts/qcom/Makefile
-> > +++ b/arch/arm64/boot/dts/qcom/Makefile
-> > @@ -106,4 +106,5 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-mtp.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-hdk.dtb
-> > +dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-microsoft-surface-duo2.dtb
-> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-> > new file mode 100644
-> > index 000000000000..d4963c9015cb
-> > --- /dev/null
-> > +++ b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
-> > @@ -0,0 +1,369 @@
-> > +// SPDX-License-Identifier: BSD-3-Clause
-> > +/*
-> > + * Copyright (C) 2021, Microsoft Corporation
-> > + */
-> > +
-> > +/dts-v1/;
-> > +
-> > +#include <dt-bindings/gpio/gpio.h>
-> > +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
-> > +#include "sm8350.dtsi"
-> > +#include "pm8350.dtsi"
-> > +#include "pm8350b.dtsi"
-> > +#include "pm8350c.dtsi"
-> > +#include "pmk8350.dtsi"
-> > +#include "pmr735a.dtsi"
-> > +#include "pmr735b.dtsi"
-> > +
-> > +/ {
-> > +	model = "Microsoft Surface Duo 2";
-> > +	compatible = "microsoft,surface-duo2", "qcom,sm8350";
-> > +	chassis-type = "handset";
-> 
-> This is interesting, I see it used at lot of place, unfortunately, it
-> does not seem to be documented :(
-> 
-> -- 
-> ~Vinod
+The pull request you sent on Tue, 30 Nov 2021 11:57:38 -0500:
 
-Hi Vinod,
+> https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-Looks like "chassis-type" is documented in the Devicetree Specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter3-devicenodes.html.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f080815fdb3e3cff5a004ca83b3815ac17ef71b1
 
--Katherine
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

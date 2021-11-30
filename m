@@ -2,186 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53060463A2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 315AF463A35
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:36:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235792AbhK3Pii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:38:38 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:39896 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbhK3Pih (ORCPT
+        id S237898AbhK3Pjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:39:37 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:43137 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237291AbhK3Pjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:38:37 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3R9x51YZz9w839
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 15:35:17 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id wSdGYaegOa3Q for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 09:35:17 -0600 (CST)
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 30 Nov 2021 10:39:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638286575;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mYdDpVKE6HMENU0IWcdSWHpUYx2GYwvXy4Yo3zA0Sdg=;
+        b=IkrOAQwittZrM4GoIkjxpTsUcHnaLPGf5pNlxdqpVC1e0TVNQr/bdsUPyfEkpUqdz/EyAb
+        FoQCtmFmNp/tNtbe88l5O4kma07ZoeIwBerXwgg2KVfowHUhK/YytAhgWtFFKgWmHh0jzS
+        3cKIuJ5JbYLEE1y3KaRLAPEbRNSWnFE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-503-9fv7N_W3MjKGUuwsqBjjlg-1; Tue, 30 Nov 2021 10:36:13 -0500
+X-MC-Unique: 9fv7N_W3MjKGUuwsqBjjlg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3R9x2mcFz9w831
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:35:17 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3R9x2mcFz9w831
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3R9x2mcFz9w831
-Received: by mail-pg1-f197.google.com with SMTP id z19-20020a630a53000000b002dc2f4542faso10443342pgk.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:35:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=3IJp0VzK2AW2AvxA2fBsTmPC0vUs1+BGahqUKKGay5Y=;
-        b=evDsA2VcwrEZzgsvCUb8/IrAyMJOV5I95FUG+IhdDWMwmYhxxoexzNRJNhWT7uH7z3
-         SrXZ7r2RNm733myu1qe0rsxSy4Hhpwd+RMP25wK2MhNUYRkUfDn4NILP/+2/XVnAO7mB
-         knunNQRaRPf2qag/mOIcLkSCkSnayXTv7V9dHaqIiYwjlbrlqrKF75loKDz2bQZD398H
-         B9KcQzQfeg3xS00hgBecp7939F3/KGbOpaKQfr7nIyXg+GmoGzKUnpNfq+eqTi2ZN2GI
-         j/Wh+eBEkfJpFhdjeOA1VkLdnNOMm9GwUx6WpRQWUs21tJmdtEG4vEMb/oZCwDvc5Y6J
-         Nl1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=3IJp0VzK2AW2AvxA2fBsTmPC0vUs1+BGahqUKKGay5Y=;
-        b=PJL3dugwdHaRoXwPBo3Vg0oS6IIL3gwUTWAEkUbIUtlXhgggEAMhbFnfTz3Ytnpi+Q
-         SwUOqeeRSbLslTsRYt1++cAo7B0As2ZQd/RYxDuwc3JCg0iXK76mnNtmCk0NC0lsVAVM
-         P2R7Wu+BUbe/LrWvNGBdRHeeP194PpB/LERx7ek8VjCO+WYqapu2ipjDi/frgFCq1aVl
-         aoBIWKQxjiksYbFZ0Ytwz8rPRc6R6ViBY7aC5p+R0QNDr9cPPVd4WlLCvWlt7wzEiQrd
-         h78I9XDuSiw6juiAcOPdoUIYVtewQP5IDNK89ZBRStggsdLb04bDys8Qc75EuMdl7WTZ
-         9/jg==
-X-Gm-Message-State: AOAM532HkJMqUsNwzrLkP7zm0N0t2nQeEtWxC5Nl1aVcBhe4JtV1XCB7
-        fD3Oct1ZYYklIgNnp5EmpGLScgGIq7p/EC9j8gz2cOxDEUsg9ulM+RWUOvldtBcduh8p61FxGEr
-        up+48o2FOuFMcJUCn0daU6EDOjNlD
-X-Received: by 2002:a63:8641:: with SMTP id x62mr25727003pgd.232.1638286516483;
-        Tue, 30 Nov 2021 07:35:16 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxTuBUr122HvExMNui3ZqMfH0TaFipGe6J6kH9s7Fpe1UFJBElPyr3AWBuwDUnD/XH3A0AyuQ==
-X-Received: by 2002:a63:8641:: with SMTP id x62mr25726988pgd.232.1638286516257;
-        Tue, 30 Nov 2021 07:35:16 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id h5sm18025144pfi.46.2021.11.30.07.35.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 07:35:16 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/radeon/radeon_kms: Fix a NULL pointer dereference in  radeon_driver_open_kms()
-Date:   Tue, 30 Nov 2021 23:33:59 +0800
-Message-Id: <20211130153400.174047-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <dc81cea8-f0f2-12c4-bb7b-a6e65dfe6f10@amd.com>
-References: <dc81cea8-f0f2-12c4-bb7b-a6e65dfe6f10@amd.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C1E2F10E5CA;
+        Tue, 30 Nov 2021 15:35:23 +0000 (UTC)
+Received: from [10.22.34.203] (unknown [10.22.34.203])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5463679595;
+        Tue, 30 Nov 2021 15:35:20 +0000 (UTC)
+Message-ID: <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
+Date:   Tue, 30 Nov 2021 10:35:19 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211018143619.205065-6-longman@redhat.com>
+ <20211115193122.GA16798@blackbody.suse.cz>
+ <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
+ <20211116175411.GA50019@blackbody.suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20211116175411.GA50019@blackbody.suse.cz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In radeon_driver_open_kms(), radeon_vm_bo_add() is assigned to
-vm->ib_bo_va and passes and used in radeon_vm_bo_set_addr(). In
-radeon_vm_bo_set_addr(), there is a dereference of vm->ib_bo_va,
-which could lead to a NULL pointer dereference on failure of
-radeon_vm_bo_add().
+On 11/16/21 12:54, Michal Koutný wrote:
+> On Mon, Nov 15, 2021 at 04:10:29PM -0500, Waiman Long <longman@redhat.com> wrote:
+>>> On Mon, Oct 18, 2021 at 10:36:18AM -0400, Waiman Long <longman@redhat.com> wrote:
+>>>> +	scheduler.  Tasks in such a partition must be explicitly bound
+>>>> +	to each individual CPU.
+>>>> [...]
+>>>>
+>>>> It can be a problem when one is trying to move from one cgroup to another
+>>>> cgroup with non-overlapping cpus laterally. However, if a task is initially
+>>>> from a parent cgroup with affinity mask that include cpus in the isolated
+>>>> child cgroup, I believe it should be able to move to the isolated child
+>>>> cgroup without problem. Otherwise, it is a bug that needs to be fixed.
+> app_root	cpuset.cpus=0-3
+> `- non_rt	cpuset.cpus=0-1	cpuset.cpus.partition=member
+> `- rt		cpuset.cpus=2-3	cpuset.cpus.partition=isolated
+>
+> The app_root would have cpuset.cpus.effective=0-1 so even the task in
+> app_root can't sched_setaffinity() to cpus 2-3.
+> But AFAICS, the migration calls set_cpus_allowed_ptr() anyway, so the
+> task in the isolated partition needn't to bind explicitly with
+> sched_setaffinity(). (It'd have two cpus available, so one more
+> sched_setaffinity() or migration into a single-cpu list is desirable.)
+>
+> All in all, I think the behavior is OK and the explicit binding of tasks
+> in an isolated cpuset is optional (not a must as worded currently).
+>
+>
+>> I think the wording may be confusing. What I meant is none of the requested
+>> cpu can be granted. So if there is at least one granted, the effective cpus
+>> won't be empty.
+> Ack.
+>
+>> You currently cannot make change to cpuset.cpus that violates the cpu
+>> exclusivity rule. The above constraints will not disallow you to make the
+>> change. They just affect the validity of the partition root.
+> Sibling exclusivity should be a validity condition regardless of whether
+> transition is allowed or not. (At least it looks simpler to me.)
+>
+>
+>>>> +        Changing a partition root to "member" is always allowed.
+>>>> +        If there are child partition roots underneath it, however,
+>>>> +        they will be forced to be switched back to "member" too and
+>>>> +        lose their partitions. So care must be taken to double check
+>>>> +        for this condition before disabling a partition root.
+>>> (Or is this how delegation is intended?) However, AFAICS, parent still
+>>> can't remove cpuset.cpus even when the child is a "member". Otherwise,
+>>> I agree with the back-switch.
+>> There are only 2 possibilities here. Either we force the child partitions to
+>> be become members or invalid partition root.
+> My point here was mostly about preempting the cpus (as a v2 specific
+> feature). (I'm rather indifferent whether children turn into invalid
+> roots or members.)
 
-Fix this bug by adding a check of vm->ib_bo_va.
+Below is my latest iterations of the cpuset.cpus.partition 
+documentation. If there is no objection or other suggestion for 
+improvement, I am going to send out another iteration of the patch 
+series with the updated documentation.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+Cheers,
+Longman
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+--------------------------------------------------------------
 
-Builds with CONFIG_DRM_RADEON=m show no new warnings,
-and our static analyzer no longer warns about this code.
+   cpuset.cpus.partition
+     A read-write single value file which exists on non-root
+     cpuset-enabled cgroups.  This flag is owned by the parent cgroup
+     and is not delegatable.
 
-Fixes: cc9e67e3d700 ("drm/radeon: fix VM IB handling")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
-Changes in v2:
-  -  Improve the error handling into goto style
+     It accepts only the following input values when written to.
 
- drivers/gpu/drm/radeon/radeon_kms.c | 24 ++++++++++++++----------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+       ========    ================================
+       "member"    Non-root member of a partition
+       "root"    Partition root
+       "isolated"    Partition root without load balancing
+       ========    ================================
 
-diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/radeon/radeon_kms.c
-index 482fb0ae6cb5..e49a9d160e52 100644
---- a/drivers/gpu/drm/radeon/radeon_kms.c
-+++ b/drivers/gpu/drm/radeon/radeon_kms.c
-@@ -649,6 +649,8 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
- {
- 	struct radeon_device *rdev = dev->dev_private;
- 	int r;
-+	struct radeon_fpriv *fpriv;
-+	struct radeon_vm *vm;
- 
- 	file_priv->driver_priv = NULL;
- 
-@@ -660,8 +662,6 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
- 
- 	/* new gpu have virtual address space support */
- 	if (rdev->family >= CHIP_CAYMAN) {
--		struct radeon_fpriv *fpriv;
--		struct radeon_vm *vm;
- 
- 		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
- 		if (unlikely(!fpriv)) {
-@@ -673,34 +673,38 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
- 			vm = &fpriv->vm;
- 			r = radeon_vm_init(rdev, vm);
- 			if (r) {
--				kfree(fpriv);
--				goto out_suspend;
-+				goto out_fpriv;
- 			}
- 
- 			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
- 			if (r) {
--				radeon_vm_fini(rdev, vm);
--				kfree(fpriv);
--				goto out_suspend;
-+				goto out_vm_fini;
- 			}
- 
- 			/* map the ib pool buffer read only into
- 			 * virtual address space */
- 			vm->ib_bo_va = radeon_vm_bo_add(rdev, vm,
- 							rdev->ring_tmp_bo.bo);
-+			if (!vm->ib_bo_va) {
-+				r = -ENOMEM;
-+				goto out_vm_fini;
-+			}
-+
- 			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
- 						  RADEON_VA_IB_OFFSET,
- 						  RADEON_VM_PAGE_READABLE |
- 						  RADEON_VM_PAGE_SNOOPED);
- 			if (r) {
--				radeon_vm_fini(rdev, vm);
--				kfree(fpriv);
--				goto out_suspend;
-+				goto out_vm_fini;
- 			}
- 		}
- 		file_priv->driver_priv = fpriv;
- 	}
- 
-+out_vm_fini:
-+	radeon_vm_fini(rdev, vm);
-+out_fpriv:
-+	kfree(fpriv);
- out_suspend:
- 	pm_runtime_mark_last_busy(dev->dev);
- 	pm_runtime_put_autosuspend(dev->dev);
--- 
-2.25.1
+     The root cgroup is always a partition root and its state
+     cannot be changed.  All other non-root cgroups start out as
+     "member".
+
+     When set to "root", the current cgroup is the root of a new
+     partition or scheduling domain that comprises itself and
+     all its descendants except those that are separate partition
+     roots themselves and their descendants.
+
+     The value shown in "cpuset.cpus.effective" of a partition root is
+     the CPUs that the parent partition root can dedicate to the new
+     partition root.  They are subtracted from "cpuset.cpus.effective"
+     of the parent and may be different from "cpuset.cpus"
+
+     When set to "isolated", the CPUs in that partition root will
+     be in an isolated state without any load balancing from the
+     scheduler.  Tasks placed in such a partition with multiple
+     CPUs should be carefully distributed and bound to each of the
+     individual CPUs for optimal performance.
+
+     A partition root ("root" or "isolated") can be in one of the
+     two possible states - valid or invalid.  An invalid partition
+     root is in a degraded state where some state information are
+     retained, but behaves more like a "member".
+
+     On read, the "cpuset.cpus.partition" file can show the following
+     values.
+
+       ======================    ==============================
+       "member"            Non-root member of a partition
+       "root"            Partition root
+       "isolated"            Partition root without load balancing
+       "root invalid (<reason>)"    Invalid partition root
+       ======================    ==============================
+
+     In the case of an invalid partition root, a descriptive string on
+     why the partition is invalid is included within parentheses.
+
+     Almost all possible state transitions among "member", valid
+     and invalid partition roots are allowed except from "member"
+     to invalid partition root.
+
+     Before the "member" to partition root transition can happen,
+     the following conditions must be met or the transition will
+     not be allowed.
+
+     1) The "cpuset.cpus" is non-empty and exclusive, i.e. they are
+        not shared by any of its siblings.
+     2) The parent cgroup is a valid partition root.
+     3) The "cpuset.cpus" is a subset of parent's "cpuset.cpus".
+     4) There is no child cgroups with cpuset enabled.  This avoids
+        cpu migrations of multiple cgroups simultaneously which can
+        be problematic.
+
+     Once becoming a partition root, the following two rules restrict
+     what changes can be made to "cpuset.cpus".
+
+     1) The value must be exclusive.
+     2) If child cpusets exist, the value must be a superset of what
+        are defined in the child cpusets.
+
+     The second rule applies even for "member". Other changes to
+     "cpuset.cpus" that do not violate the above rules are always
+     allowed.
+
+     External events like hotplug or inappropriate changes to
+     "cpuset.cpus" can cause a valid partition root to become invalid.
+     Besides the constraints on changing "cpuset.cpus" listed above,
+     the other conditions required to maintain the validity of a
+     partition root are as follows:
+
+     1) The parent cgroup is a valid partition root.
+     2) If "cpuset.cpus.effective" is empty, the partition must have
+        no task associated with it. Otherwise, the partition becomes
+        invalid and "cpuset.cpus.effective" will fall back to that
+        of the nearest non-empty ancestor.
+
+     A corollary of a valid partition root is that
+     "cpuset.cpu.effective" is always a subset of "cpuset.cpus".
+     Note that a task cannot be moved to a cgroup with empty
+     "cpuset.cpus.effective".
+
+     Changing a partition root (valid or invalid) to "member" is
+     always allowed.  If there are child partition roots underneath
+     it, however, they will be forced to be switched back to "member"
+     too and lose their partitions. So care must be taken to double
+     check for this condition before disabling a partition root.
+
+     A valid parent partition may distribute out all its CPUs to
+     its child partitions as long as it is not the root cgroup and
+     there is no task associated with it.
+
+     An invalid partition root can be reverted back to a valid one
+     if none of the validity constraints of a valid partition root
+     are violated.
+
+     Poll and inotify events are triggered whenever the state of
+     "cpuset.cpus.partition" changes.  That includes changes caused by
+     write to "cpuset.cpus.partition", cpu hotplug and other changes
+     that make the partition invalid.  This will allow user space
+     agents to monitor unexpected changes to "cpuset.cpus.partition"
+     without the need to do continuous polling.
+
 

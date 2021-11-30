@@ -2,173 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D624633D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E704633CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:05:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241378AbhK3MLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:11:41 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16324 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241321AbhK3MLN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:11:13 -0500
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J3LZ02S3yz91NF;
-        Tue, 30 Nov 2021 20:07:20 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 30 Nov 2021 20:07:52 +0800
-Received: from localhost.localdomain (10.67.165.103) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 30 Nov 2021 20:07:51 +0800
-From:   Qi Liu <liuqi115@huawei.com>
-To:     <will@kernel.org>, <mark.rutland@arm.com>, <bhelgaas@google.com>
-CC:     <linux-pci@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-        <zhangshaokun@hisilicon.com>
-Subject: [PATCH v12 1/2] docs: perf: Add description for HiSilicon PCIe PMU driver
-Date:   Tue, 30 Nov 2021 20:04:49 +0800
-Message-ID: <20211130120450.2747-2-liuqi115@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211130120450.2747-1-liuqi115@huawei.com>
-References: <20211130120450.2747-1-liuqi115@huawei.com>
+        id S241282AbhK3MIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:08:40 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:48137 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S241261AbhK3MIh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:08:37 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J3LWZ3f49z9sSh;
+        Tue, 30 Nov 2021 13:05:14 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fKcoTWm5tK1Q; Tue, 30 Nov 2021 13:05:14 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3LWZ2sMFz9sSc;
+        Tue, 30 Nov 2021 13:05:14 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 5234F8B77A;
+        Tue, 30 Nov 2021 13:05:14 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 36Xau2wfNXcp; Tue, 30 Nov 2021 13:05:14 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.93])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 1897E8B779;
+        Tue, 30 Nov 2021 13:05:14 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1AUC4xKW213784
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 13:04:59 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1AUC4ttM213782;
+        Tue, 30 Nov 2021 13:04:55 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH 1/2] powerpc/32: Remove remaining .stabs annotations
+Date:   Tue, 30 Nov 2021 13:04:49 +0100
+Message-Id: <68932ec2ba6b868d35006b96e90f0890f3da3c05.1638273868.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.103]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1638273888; l=2086; s=20211009; h=from:subject:message-id; bh=v+6AZUUAIkm1K1ji4BPI7+k/pYtl39F3bINLpb4mnRU=; b=HrX/aG4xs2klbJH/bh2DRpHnYQsvR55tEM05r6+vIMslXtUGY93tlHCuDY9O/GPsCKLNc4M+eIKo FKqcNbKIB2qxPw7sJVTm/WVMQDZ9tnhjEa+rSdy9NPa50Tw1SKKO
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCIe PMU Root Complex Integrated End Point(RCiEP) device is supported on
-HiSilicon HIP09 platform. Document it to provide guidance on how to
-use it.
+STABS debug format has been superseded long time ago by DWARF.
 
-Reviewed-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Qi Liu <liuqi115@huawei.com>
+Remove the few remaining .stabs annotations from old 32 bits code.
+
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- .../admin-guide/perf/hisi-pcie-pmu.rst        | 106 ++++++++++++++++++
- 1 file changed, 106 insertions(+)
- create mode 100644 Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+ arch/powerpc/include/asm/ppc_asm.h   | 1 -
+ arch/powerpc/kernel/head_book3s_32.S | 3 ---
+ arch/powerpc/lib/checksum_32.S       | 3 ---
+ arch/powerpc/lib/copy_32.S           | 3 ---
+ 4 files changed, 10 deletions(-)
 
-diff --git a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
-new file mode 100644
-index 000000000000..294ebbdb22af
---- /dev/null
-+++ b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
-@@ -0,0 +1,106 @@
-+================================================
-+HiSilicon PCIe Performance Monitoring Unit (PMU)
-+================================================
-+
-+On Hip09, HiSilicon PCIe Performance Monitoring Unit (PMU) could monitor
-+bandwidth, latency, bus utilization and buffer occupancy data of PCIe.
-+
-+Each PCIe Core has a PMU to monitor multi Root Ports of this PCIe Core and
-+all Endpoints downstream these Root Ports.
-+
-+
-+HiSilicon PCIe PMU driver
-+=========================
-+
-+The PCIe PMU driver registers a perf PMU with the name of its sicl-id and PCIe
-+Core id.::
-+
-+  /sys/bus/event_source/hisi_pcie<sicl>_<core>
-+
-+PMU driver provides description of available events and filter options in sysfs,
-+see /sys/bus/event_source/devices/hisi_pcie<sicl>_<core>.
-+
-+The "format" directory describes all formats of the config (events) and config1
-+(filter options) fields of the perf_event_attr structure. The "events" directory
-+describes all documented events shown in perf list.
-+
-+The "identifier" sysfs file allows users to identify the version of the
-+PMU hardware device.
-+
-+The "bus" sysfs file allows users to get the bus number of Root Ports
-+monitored by PMU.
-+
-+Example usage of perf::
-+
-+  $# perf list
-+  hisi_pcie0_0/rx_mwr_latency/ [kernel PMU event]
-+  hisi_pcie0_0/rx_mwr_cnt/ [kernel PMU event]
-+  ------------------------------------------
-+
-+  $# perf stat -e hisi_pcie0_0/rx_mwr_latency/
-+  $# perf stat -e hisi_pcie0_0/rx_mwr_cnt/
-+  $# perf stat -g -e hisi_pcie0_0/rx_mwr_latency/ -e hisi_pcie0_0/rx_mwr_cnt/
-+
-+The current driver does not support sampling. So "perf record" is unsupported.
-+Also attach to a task is unsupported for PCIe PMU.
-+
-+Filter options
-+--------------
-+
-+1. Target filter
-+PMU could only monitor the performance of traffic downstream target Root Ports
-+or downstream target Endpoint. PCIe PMU driver support "port" and "bdf"
-+interfaces for users, and these two interfaces aren't supported at the same
-+time.
-+
-+-port
-+"port" filter can be used in all PCIe PMU events, target Root Port can be
-+selected by configuring the 16-bits-bitmap "port". Multi ports can be selected
-+for AP-layer-events, and only one port can be selected for TL/DL-layer-events.
-+
-+For example, if target Root Port is 0000:00:00.0 (x8 lanes), bit0 of bitmap
-+should be set, port=0x1; if target Root Port is 0000:00:04.0 (x4 lanes),
-+bit8 is set, port=0x100; if these two Root Ports are both monitored, port=0x101.
-+
-+Example usage of perf::
-+
-+  $# perf stat -e hisi_pcie0_0/rx_mwr_latency,port=0x1/ sleep 5
-+
-+-bdf
-+
-+"bdf" filter can only be used in bandwidth events, target Endpoint is selected
-+by configuring BDF to "bdf". Counter only counts the bandwidth of message
-+requested by target Endpoint.
-+
-+For example, "bdf=0x3900" means BDF of target Endpoint is 0000:39:00.0.
-+
-+Example usage of perf::
-+
-+  $# perf stat -e hisi_pcie0_0/rx_mrd_flux,bdf=0x3900/ sleep 5
-+
-+2. Trigger filter
-+Event statistics start when the first time TLP length is greater/smaller
-+than trigger condition. You can set the trigger condition by writing "trig_len",
-+and set the trigger mode by writing "trig_mode". This filter can only be used
-+in bandwidth events.
-+
-+For example, "trig_len=4" means trigger condition is 2^4 DW, "trig_mode=0"
-+means statistics start when TLP length > trigger condition, "trig_mode=1"
-+means start when TLP length < condition.
-+
-+Example usage of perf::
-+
-+  $# perf stat -e hisi_pcie0_0/rx_mrd_flux,trig_len=0x4,trig_mode=1/ sleep 5
-+
-+3. Threshold filter
-+Counter counts when TLP length within the specified range. You can set the
-+threshold by writing "thr_len", and set the threshold mode by writing
-+"thr_mode". This filter can only be used in bandwidth events.
-+
-+For example, "thr_len=4" means threshold is 2^4 DW, "thr_mode=0" means
-+counter counts when TLP length >= threshold, and "thr_mode=1" means counts
-+when TLP length < threshold.
-+
-+Example usage of perf::
-+
-+  $# perf stat -e hisi_pcie0_0/rx_mrd_flux,thr_len=0x4,thr_mode=1/ sleep 5
+diff --git a/arch/powerpc/include/asm/ppc_asm.h b/arch/powerpc/include/asm/ppc_asm.h
+index 7be24048b8d1..35544ba93352 100644
+--- a/arch/powerpc/include/asm/ppc_asm.h
++++ b/arch/powerpc/include/asm/ppc_asm.h
+@@ -197,7 +197,6 @@ GLUE(.,name):
+ n:
+ 
+ #define _GLOBAL(n)	\
+-	.stabs __stringify(n:F-1),N_FUN,0,0,n;\
+ 	.globl n;	\
+ n:
+ 
+diff --git a/arch/powerpc/kernel/head_book3s_32.S b/arch/powerpc/kernel/head_book3s_32.S
+index 68e5c0a7e99d..dae813539851 100644
+--- a/arch/powerpc/kernel/head_book3s_32.S
++++ b/arch/powerpc/kernel/head_book3s_32.S
+@@ -50,9 +50,6 @@
+ 	mtspr	SPRN_DBAT##n##L,RB
+ 
+ 	__HEAD
+-	.stabs	"arch/powerpc/kernel/",N_SO,0,0,0f
+-	.stabs	"head_book3s_32.S",N_SO,0,0,0f
+-0:
+ _ENTRY(_stext);
+ 
+ /*
+diff --git a/arch/powerpc/lib/checksum_32.S b/arch/powerpc/lib/checksum_32.S
+index 27d9070617df..4541e8e29467 100644
+--- a/arch/powerpc/lib/checksum_32.S
++++ b/arch/powerpc/lib/checksum_32.S
+@@ -116,9 +116,6 @@ EXPORT_SYMBOL(__csum_partial)
+ 	EX_TABLE(8 ## n ## 7b, fault);
+ 
+ 	.text
+-	.stabs	"arch/powerpc/lib/",N_SO,0,0,0f
+-	.stabs	"checksum_32.S",N_SO,0,0,0f
+-0:
+ 
+ CACHELINE_BYTES = L1_CACHE_BYTES
+ LG_CACHELINE_BYTES = L1_CACHE_SHIFT
+diff --git a/arch/powerpc/lib/copy_32.S b/arch/powerpc/lib/copy_32.S
+index a3bcf4786e4a..3e9c27c46331 100644
+--- a/arch/powerpc/lib/copy_32.S
++++ b/arch/powerpc/lib/copy_32.S
+@@ -57,9 +57,6 @@
+ 	EX_TABLE(8 ## n ## 7b,9 ## n ## 1b)
+ 
+ 	.text
+-	.stabs	"arch/powerpc/lib/",N_SO,0,0,0f
+-	.stabs	"copy_32.S",N_SO,0,0,0f
+-0:
+ 
+ CACHELINE_BYTES = L1_CACHE_BYTES
+ LG_CACHELINE_BYTES = L1_CACHE_SHIFT
 -- 
-2.33.0
+2.33.1
 

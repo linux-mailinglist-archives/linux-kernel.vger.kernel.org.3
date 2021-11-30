@@ -2,169 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BAD462A9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:36:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13227462A9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237675AbhK3CkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 21:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33598 "EHLO
+        id S232777AbhK3CkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 21:40:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237668AbhK3CkJ (ORCPT
+        with ESMTP id S237657AbhK3CkS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 21:40:09 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11500C061746;
-        Mon, 29 Nov 2021 18:36:51 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so28240748otj.7;
-        Mon, 29 Nov 2021 18:36:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=D5Qw61WmuAj/yZDhi/A0/VNyCBrtN87SU10VbO44er4=;
-        b=SLylTV1/Dr/0glxOCuNvB4fRMnD9BGxXeIIOHxWZK64w7G3XgItLJqZdpP+qSZmfSD
-         S5dkB6jiCPz+DppG6cti58VcdaW8vVdhxPFOVUcAetqVc0Hni3wi0MowxGUNY27+JOMG
-         owALRhUgLgmswLCPVu0sQYwGG4Qv540iZZ49Oj8UbQxyffuonqioQvCtE+2EjqR/qsfT
-         AQWD3Vj7qbOZa0z41HMkSvsdVPC4qqUYxOqcSi9QOK2Tiy0Y35+YcJY6IaneYO/RpcC4
-         jGrj5IOfY5tAaK/I+/FLlQw4m7pgFfSxGktcaPLugOvQM5YTMY5rEQa7bgjEKlfWbkut
-         4Rlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=D5Qw61WmuAj/yZDhi/A0/VNyCBrtN87SU10VbO44er4=;
-        b=lnJ0AYyKYeWXhj8do8VbtW15LO8FVqkYq8sNQMJzpb1BSBBVk0i7twl/782obUem+f
-         b+SlJXiWcHzA+90VGtlsr1tgQyYupbmazoDbzkyuoLKLe6u6z7PRiyLEvvGyVfvq2tan
-         4UR0scGJEgwx6VcRtGnFoBFFOsTnCEqXDZIYwSvOp6pg/sAMRRKxrA5vbdcjuuvW2JTh
-         T3K+CIs0MByk85EqegzMgqqRgyMRJiHlF2XFO9maR96FqgIzjb73I52AWMWjXD/0jBF3
-         SLfMEa1rg7734rpD8FOtl/fGEhdJaNKcGEq/TQeoNxv1mK3F/jrfDVGCq44suA+UWqq2
-         gB0g==
-X-Gm-Message-State: AOAM531BFL0j0GIoSCT97ujMzRSakNwM2QqGXHUyX3QBlGU5yO58ZyMr
-        3QLU9bhypyKOBodszDmLp80=
-X-Google-Smtp-Source: ABdhPJwAB8aer13liJpqkRyfHbeZSflBDN+Fnw2AzwkjsdSAtn1sPGJsHlQ3ZEokrCc1yFs+5fXVgA==
-X-Received: by 2002:a9d:6084:: with SMTP id m4mr35205706otj.324.1638239810501;
-        Mon, 29 Nov 2021 18:36:50 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id s9sm3056211otg.42.2021.11.29.18.36.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 18:36:49 -0800 (PST)
-Message-ID: <a4602b15-25b1-c388-73b4-1f97f6f0e555@gmail.com>
-Date:   Mon, 29 Nov 2021 19:36:46 -0700
+        Mon, 29 Nov 2021 21:40:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027BAC061574;
+        Mon, 29 Nov 2021 18:36:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A365EB80D1E;
+        Tue, 30 Nov 2021 02:36:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21AE5C53FAD;
+        Tue, 30 Nov 2021 02:36:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638239817;
+        bh=HeQc/9NihZ7cBBi42KaXPDogv19hU3v73HAJN/cZTSc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OucQndYxihrnoGB8UuFkyVfSlw+qCcbsgUV1hFo2NR0p3FSag1Orw2LQ3HtT3rccx
+         Aiz919dkGGbHD89tFspPtN6zSQ+YG8PFI7B5O4+cRDtZ4GRWRAPOwVdXoNHtjGmxu6
+         g3zeRuL13ny0uxSPpS5h0yzXL+4IT8daBLBnfNiau3Xb9O7l2VsWggnybWl2jACwBH
+         YLRvqk5JWkibkWV8REUfGC351Lo+X4sV/nmM+ua6sloWGL+AbMqk4F+Oocmi694LO+
+         Olk7JW2raKX5KwdHTQyQ+qwufMzZOTwh+kbOC55/qRE04xrRFBkb3IxY4lP4EANReM
+         4TlUg90wmcCtQ==
+Date:   Mon, 29 Nov 2021 18:36:55 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/4] ima: support fs-verity signatures stored as
+Message-ID: <YaWOR+Bav6PBgHHq@sol.localdomain>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.1
-Subject: Re: [PATCH v2 net-next 01/26] rtnetlink: introduce generic XDP
- statistics
-Content-Language: en-US
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
- <20211123163955.154512-2-alexandr.lobakin@intel.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20211123163955.154512-2-alexandr.lobakin@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129170057.243127-1-zohar@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/21 9:39 AM, Alexander Lobakin wrote:
-> +static bool rtnl_get_xdp_stats_xdpxsk(struct sk_buff *skb, u32 ch,
-> +				      const void *attr_data)
-> +{
-> +	const struct ifla_xdp_stats *xstats = attr_data;
-> +
-> +	xstats += ch;
-> +
-> +	if (nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_PACKETS, xstats->packets,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_BYTES, xstats->bytes,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_ERRORS, xstats->errors,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_ABORTED, xstats->aborted,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_DROP, xstats->drop,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_INVALID, xstats->invalid,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_PASS, xstats->pass,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_REDIRECT, xstats->redirect,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_REDIRECT_ERRORS,
-> +			      xstats->redirect_errors,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_TX, xstats->tx,
-> +			      IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_TX_ERRORS,
-> +			      xstats->tx_errors, IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_XMIT_PACKETS,
-> +			      xstats->xmit_packets, IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_XMIT_BYTES,
-> +			      xstats->xmit_bytes, IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_XMIT_ERRORS,
-> +			      xstats->xmit_errors, IFLA_XDP_XSTATS_UNSPEC) ||
-> +	    nla_put_u64_64bit(skb, IFLA_XDP_XSTATS_XMIT_FULL,
-> +			      xstats->xmit_full, IFLA_XDP_XSTATS_UNSPEC))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +
+On Mon, Nov 29, 2021 at 12:00:53PM -0500, Mimi Zohar wrote:
+> Support for fs-verity file digests in IMA was discussed from the beginning,
+> prior to fs-verity being upstreamed[1,2].  This patch set adds signature
+> verification support based on the fs-verity file digest.  Both the
+> file digest and the signature must be included in the IMA measurement list
+> in order to disambiguate the type of file digest.
+> 
+> [1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
+> [2] Documentation/filesystems/fsverity.rst
+> 
+> Mimi Zohar (4):
+>   fs-verity: define a function to return the integrity protected file
+>     digest
+>   ima: define a new signature type named IMA_VERITY_DIGSIG
+>   ima: limit including fs-verity's file digest in measurement list
+>   ima: support fs-verity file digest based signatures
+> 
+>  fs/verity/fsverity_private.h              |  6 ---
+>  fs/verity/measure.c                       | 49 +++++++++++++++++++++++
+>  include/linux/fsverity.h                  | 17 ++++++++
+>  security/integrity/ima/ima.h              |  3 +-
+>  security/integrity/ima/ima_api.c          | 23 ++++++++++-
+>  security/integrity/ima/ima_appraise.c     |  9 ++++-
+>  security/integrity/ima/ima_main.c         |  7 +++-
+>  security/integrity/ima/ima_template_lib.c |  3 +-
+>  security/integrity/integrity.h            |  1 +
+>  9 files changed, 107 insertions(+), 11 deletions(-)
 
-Another thought on this patch: with individual attributes you could save
-some overhead by not sending 0 counters to userspace. e.g., define a
-helper that does:
+I left some comments, but this generally looks like the right approach.
+However, I'm not an expert in IMA, so it's hard for me to review the IMA parts.
 
-static inline int nla_put_u64_if_set(struct sk_buff *skb, int attrtype,
-                                     u64 value, int padattr)
-{
-	if (value)
-		return nla_put_u64_64bit(skb, attrtype, value, padattr);
+Can you add documentation for this feature?
 
-	return 0;
-}
+- Eric

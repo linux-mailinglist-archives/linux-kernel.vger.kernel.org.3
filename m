@@ -2,129 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3712463CED
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E35463D69
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244880AbhK3RkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:40:00 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:49432 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244873AbhK3Rj7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:39:59 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3Tt013DHz9vf8Y
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:36:40 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id Vva9f5JB9unI for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 11:36:40 -0600 (CST)
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3Tsz60dvz9vf8R
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:36:39 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3Tsz60dvz9vf8R
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3Tsz60dvz9vf8R
-Received: by mail-pf1-f200.google.com with SMTP id m16-20020a628c10000000b004a282d715b2so13245573pfd.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P5cblcIjdeCMfmyjDsX3UotdjIWrFfTaBh8mADY3+xM=;
-        b=FUENcG5Qe/ALF7PQ2LjG97LD8lSia2k26JzFlv+uX/u62oSjm42FHUVXgzDNpMkPff
-         b+1cGw+QgNft8C+iUuJ52UTC32B4yNn36j7BggIjztyZ81A+fUghF53m7zlmyEg1x88u
-         HUQyh3qvPmWS0N+6rlDm3OnFmuhZ9eEmu4OTK7LS93TlNVBFWCnLMVIG4m4g4YxlPf4H
-         OidgSdguEzAr2iu/h2ob1vYA0T9ZRt2KnaoG51I6SOvA9ykg/5wJe3JSmW612o7xmLGF
-         vrAmyJFq8ixnbHaHeUkB65gfeOwjDIgmTc25Hjt+SBV38hwrDcYzL6jSkiXJam/A1AkF
-         7BLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=P5cblcIjdeCMfmyjDsX3UotdjIWrFfTaBh8mADY3+xM=;
-        b=EvGd5X2D5LvNS3C3TrAMa1IMU/ggk//Sf8s5ISxEIEWnMncYgNjRdR0QZ8CAdelmje
-         45gsRtadldRiWb61M+DUzjBs2Zri/iyDiB66lKejvOlpEoKIE3dh6hEeybFtY8wdccxc
-         8GKQhGRuNFrWplWhjr7T7xKIXfM0I+B6SqiYB8LWMcTC0WXJyfZyNbs2zHaCwV7rYlrG
-         cijsF5YBmJMoNKsIlZ7S9Ope2YZYxJPgOEcsLHfWVz+cJPqqsCEDUyO8ztR0ky3ZaRcl
-         RqouSaG2laXJOwxjQoRo3MBO6trgluysTN0+wYw3U988S7Wab8nRRIL72ELdFY48XizP
-         ie0w==
-X-Gm-Message-State: AOAM532RNRzBsrKfrgqIoSYSuJXXIWSlNRZ4LoWY4/QuGgq+xwtIAdYw
-        UwTXMn7btsgEBK+305fmaCRdAB8M7fu2Cxw2Evm2Td5qLQ/XvJJxmYWD+BAuEo/bLy7cZHBOVqx
-        +9MB+ODSlz8pcXecn32xMi6cRcGHn
-X-Received: by 2002:a17:90a:e7c2:: with SMTP id kb2mr434908pjb.200.1638293799037;
-        Tue, 30 Nov 2021 09:36:39 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJw187bYFOnFYXpjl7iwYSNqNVZ0EgJuuUWNuhT3gfgeEjsME32I8/ofS4pvOfIww2f6a5taZQ==
-X-Received: by 2002:a17:90a:e7c2:: with SMTP id kb2mr434878pjb.200.1638293798822;
-        Tue, 30 Nov 2021 09:36:38 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id y8sm22470105pfi.56.2021.11.30.09.36.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 09:36:38 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        mtk01761 <wendell.lin@mediatek.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clk: mediatek: mt6779: Fix a NULL pointer dereference in clk_mt6779_top_probe()
-Date:   Wed,  1 Dec 2021 01:36:32 +0800
-Message-Id: <20211130173634.212143-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        id S245301AbhK3SNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:13:12 -0500
+Received: from mga09.intel.com ([134.134.136.24]:57565 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S245291AbhK3SNK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 13:13:10 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236102337"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="236102337"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 09:38:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="746804821"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Nov 2021 09:38:02 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1ms74r-000Dah-Or; Tue, 30 Nov 2021 17:38:01 +0000
+Date:   Wed, 1 Dec 2021 01:36:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xiaoming Ni <nixiaoming@huawei.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: [linux-stable-rc:linux-5.10.y 2101/2411]
+ arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:89:12: error: no previous
+ prototype for function 'mpc85xx_setup_pmc'
+Message-ID: <202112010112.YOpAIovm-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In clk_mt6779_top_probe(), mtk_alloc_clk_data() is assigned to clk_data
-and used in mtk_clk_register_muxes(). There is dereference of clk_data
-in mtk_clk_register_muxes(), which could lead to a NULL pointer
-dereference on failure of mtk_alloc_clk_data().
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+head:   cd4fd0597d3787df6c6771a7b41379d35a8f31b0
+commit: 1023355234ca441c7296a58e762b420eef88884e [2101/2411] powerpc/85xx: fix timebase sync issue when CONFIG_HOTPLUG_CPU=n
+config: powerpc64-randconfig-r014-20211129 (https://download.01.org/0day-ci/archive/20211201/202112010112.YOpAIovm-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=1023355234ca441c7296a58e762b420eef88884e
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.10.y
+        git checkout 1023355234ca441c7296a58e762b420eef88884e
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
 
-Fix this bug by adding a check of clk_data.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Another way to fix this bug is to add a check of clk_data in
-mtk_clk_register_muxes(), which may solve many similar bugs but could
-cause potential problems to previously correct cases as the API is changed.
+Note: the linux-stable-rc/linux-5.10.y HEAD cd4fd0597d3787df6c6771a7b41379d35a8f31b0 builds fine.
+      It only hurts bisectability.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+All errors (new ones prefixed by >>):
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+   ^
+   arch/powerpc/include/asm/io.h:522:62: note: expanded from macro '__do_outl'
+   #define __do_outl(val, port)    writel(val,(PCI_IO_ADDR)_IO_BASE+port);
+                                              ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:604:
+   arch/powerpc/include/asm/io-defs.h:43:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insb, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:55:1: note: expanded from here
+   __do_insb
+   ^
+   arch/powerpc/include/asm/io.h:541:56: note: expanded from macro '__do_insb'
+   #define __do_insb(p, b, n)      readsb((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:604:
+   arch/powerpc/include/asm/io-defs.h:45:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insw, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:57:1: note: expanded from here
+   __do_insw
+   ^
+   arch/powerpc/include/asm/io.h:542:56: note: expanded from macro '__do_insw'
+   #define __do_insw(p, b, n)      readsw((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:604:
+   arch/powerpc/include/asm/io-defs.h:47:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:59:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:543:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:604:
+   arch/powerpc/include/asm/io-defs.h:49:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:61:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:544:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:604:
+   arch/powerpc/include/asm/io-defs.h:51:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:63:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:545:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:12:
+   In file included from include/linux/of_address.h:7:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:604:
+   arch/powerpc/include/asm/io-defs.h:53:1: error: performing pointer arithmetic on a null pointer has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:601:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:65:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:546:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+>> arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:89:12: error: no previous prototype for function 'mpc85xx_setup_pmc' [-Werror,-Wmissing-prototypes]
+   int __init mpc85xx_setup_pmc(void)
+              ^
+   arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c:89:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int __init mpc85xx_setup_pmc(void)
+   ^
+   static 
+   13 errors generated.
 
-Builds with CONFIG_COMMON_CLK_MT6779=y show no new warnings,
-and our static analyzer no longer warns about this code.
 
-Fixes: 710774e04861 ("clk: mediatek: Add MT6779 clock support")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+vim +/mpc85xx_setup_pmc +89 arch/powerpc/platforms/85xx/mpc85xx_pm_ops.c
+
+56f1ba28071946 chenhui zhao 2015-11-20  88  
+56f1ba28071946 chenhui zhao 2015-11-20 @89  int __init mpc85xx_setup_pmc(void)
+
+:::::: The code at line 89 was first introduced by commit
+:::::: 56f1ba280719469bffc870b6b2d935f3a3019ea4 powerpc/mpc85xx: refactor the PM operations
+
+:::::: TO: chenhui zhao <chenhui.zhao@freescale.com>
+:::::: CC: Scott Wood <oss@buserror.net>
+
 ---
- drivers/clk/mediatek/clk-mt6779.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/clk/mediatek/clk-mt6779.c b/drivers/clk/mediatek/clk-mt6779.c
-index f22bf4025f55..fb43d23b715b 100644
---- a/drivers/clk/mediatek/clk-mt6779.c
-+++ b/drivers/clk/mediatek/clk-mt6779.c
-@@ -1239,6 +1239,8 @@ static int clk_mt6779_top_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
- 
- 	clk_data = mtk_alloc_clk_data(CLK_TOP_NR_CLK);
-+	if (!clk_data)
-+		return -ENOMEM;
- 
- 	mtk_clk_register_fixed_clks(top_fixed_clks, ARRAY_SIZE(top_fixed_clks),
- 				    clk_data);
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

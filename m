@@ -2,137 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15ED8462905
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E029B462909
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233223AbhK3AWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:22:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        id S233492AbhK3AXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:23:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbhK3AWE (ORCPT
+        with ESMTP id S230195AbhK3AXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:22:04 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BA4C061714
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:18:46 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id h2-20020a632102000000b003210bade52bso9363941pgh.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:18:46 -0800 (PST)
+        Mon, 29 Nov 2021 19:23:01 -0500
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B852AC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:19:43 -0800 (PST)
+Received: by mail-io1-xd2f.google.com with SMTP id m9so23948990iop.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:19:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=fqiIppSe7u1NnW3cvLakhtzd+THR0eb6aNRG1jCvBe4=;
-        b=o+uUnHGtT31rOsMLzjD2lzn032LEfjUdq3Sw0top7vsPbr4ClyZZiDG2r3dG12KXzc
-         ddIZgBMBZsAwPqGqU9bjdpTiJedG/w6RUN80tOam1c+EwmoIYC84qpPWyo8DAKaNg+Xe
-         qKhuATpmTHS09T9YDJNAm/NsPa21R9JwQXsuOso97HZMAiyP9szju2Py5OZ5H/hUb8+W
-         nflBKNoZQb5tWpdGPVogs9yATn5g4oB0Iw5Gwd5rp5xu11/6WiycWSVaSih4Q1UCEAU+
-         E705eoE4QC+r0p2RBxl+EnRs2fLyWaxChEttYE3iTo2Zq4GvTfiVnVe2ZUX2eS5YTnAL
-         rrjg==
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=XVdnzwGGQAXYZhMMw7RdhGS83GpDEAMdHspEpAeHJpM=;
+        b=JBrWP5gHT51LQzPYhdA4VAomps44xCU8LhhSK2Bx1F1tVEYFPki+zoEGaGxsBaFrNC
+         d9TJX+V07TVh1euztC31OXrBSoSdF+liKsegk5taJKyExVSxUM+oCxHX22LOPitJ29vI
+         6F7yHM+oPaLf7rTJZTaqpkiY4xsa+Z9uDxus8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=fqiIppSe7u1NnW3cvLakhtzd+THR0eb6aNRG1jCvBe4=;
-        b=ShGBS5jWJmEuilh95xqCQs90vQFm6BgZomQz9lf0Mp/2b1IjQFJUuLEoadK7CiaHK4
-         szVJzMlEglJxtfY6K9KjihKPXC4eUFRHYjgfObYKyzDiw2WRsc65UWFa4OdJnyxKLV66
-         4GyPanojQRxq/WO3IXQU6VJXfUjtmFuUXiTSGe72VUZX4Ec8zzZCCY/gkm4dTDWR73PH
-         i/HcyLkuIRnxnfVf+vzb+BJs4rhHd+izh0h0mkhd4HczrITCzNIWjPnkBtXTGWr9F8IU
-         LBU1yRCXfMmJEbfvLQgVmfXwqbVPkCCoRQDk2YoEWCLm4096ME5pWtCypU/7JAkyqkz1
-         /zJw==
-X-Gm-Message-State: AOAM5301hyvHIdmAxOMVxDEmSq17Pi8nDDSL2aJMS8WAUAe+sCQsVF0p
-        TF/wvwUcn1P+Vu5EZV5GcR3Qr1glhek=
-X-Google-Smtp-Source: ABdhPJy2g0UQKNf/QdSpzVdCY6bn6T4kSInxTQJ9sAF7rPJyaI+QNeOmoyBpD2Y/QM542UalnyZLBrNmIig=
-X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:ee3f:d2a:7fda:5c6])
- (user=badhri job=sendgmr) by 2002:a05:6a00:8cc:b0:4a8:262:49e1 with SMTP id
- s12-20020a056a0008cc00b004a8026249e1mr27639423pfu.28.1638231525981; Mon, 29
- Nov 2021 16:18:45 -0800 (PST)
-Date:   Mon, 29 Nov 2021 16:18:25 -0800
-Message-Id: <20211130001825.3142830-1-badhri@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v2] usb: typec: tcpm: Wait in SNK_DEBOUNCED until disconnect
-From:   Badhri Jagan Sridharan <badhri@google.com>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
-        Badhri Jagan Sridharan <badhri@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=XVdnzwGGQAXYZhMMw7RdhGS83GpDEAMdHspEpAeHJpM=;
+        b=L+cyngVXncmbq/dnCapePLqVEfSf2oz2aosZLxAtFy+KDga8g2+NVGLGIEAz6Q/31p
+         Nnp6Gmej0yYbYSU//F0zOhEdaKAH27l5dw4T2YlbLviWJRlsBonf9W3V4QPzV3XH9Iur
+         UKzzIgVy8QHZfxKb6ROkT0tSkdNAhkluA7q3MV5j7CZg9Iwz2Ctw5FvEwva8OEOuM2j+
+         8T/376LXSgCmZgNolcJxJt6I+zKmbniXltEf87jZ1HvS2ceTmLf2kthLI5c3TSm01YZD
+         sGUGdO7ofwsvVr8ey4EmCRs4gPWvRCuJqicxW9fj93VhE+LpuEXasBBG6XqEqkuIBuI0
+         qQEA==
+X-Gm-Message-State: AOAM533WvBRLqrj6B3CutktG2S+tpIfQfORFCFC6eD6bT35Fi2M+tlX/
+        z9a5xkON3Rji/F9FDegKnZ409oKLEv9d9A==
+X-Google-Smtp-Source: ABdhPJyx6R6ML7XL/iSseXWcOAQHuwAahj7jihdlEkXjnBlrSVnb9q1UjPPj9A/nuq0IaSWLFWWEDQ==
+X-Received: by 2002:a6b:2cc5:: with SMTP id s188mr61699185ios.218.1638231582963;
+        Mon, 29 Nov 2021 16:19:42 -0800 (PST)
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com. [209.85.166.52])
+        by smtp.gmail.com with ESMTPSA id h14sm10061004ild.16.2021.11.29.16.19.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Nov 2021 16:19:42 -0800 (PST)
+Received: by mail-io1-f52.google.com with SMTP id x10so23860853ioj.9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:19:42 -0800 (PST)
+X-Received: by 2002:a6b:440f:: with SMTP id r15mr58122525ioa.128.1638231582031;
+ Mon, 29 Nov 2021 16:19:42 -0800 (PST)
+MIME-Version: 1.0
+References: <202111261447.lxHTeAhi-lkp@intel.com>
+In-Reply-To: <202111261447.lxHTeAhi-lkp@intel.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 29 Nov 2021 16:19:30 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
+Message-ID: <CAD=FV=XZv1LuGm59vJDQKuwqO0zdFZQQthfct7Z_bPcdkm4UUQ@mail.gmail.com>
+Subject: Re: drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format
+ specifies type 'unsigned short' but the argument has type 'int'
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Stub from the spec:
-"4.5.2.2.4.2 Exiting from AttachWait.SNK State
-A Sink shall transition to Unattached.SNK when the state of both
-the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
-A DRP shall transition to Unattached.SRC when the state of both
-the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
+<Beep> <Boop> <Bop> (translates as "Hello Mr. Robot"),
 
-This change makes TCPM to wait in SNK_DEBOUNCED state until
-CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
-TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
-This causes TCPM to loop continuously when connected to a
-faulty power source that does not present vbus. Waiting in
-SNK_DEBOUNCED also ensures that TCPM is adherant to
-"4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
+On Thu, Nov 25, 2021 at 10:44 PM kernel test robot <lkp@intel.com> wrote:
+>
+> Hi Douglas,
+>
+> First bad commit (maybe != root cause):
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   a4849f6000e29235a2707f22e39da6b897bb9543
+> commit: c1ed18c11bdb80eced208a61d40b1988f36a014f HID: i2c-hid: Introduce goodix-i2c-hid using i2c-hid core
+> date:   10 months ago
+> config: arm64-randconfig-r034-20211116 (https://download.01.org/0day-ci/archive/20211126/202111261447.lxHTeAhi-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project fbe72e41b99dc7994daac300d208a955be3e4a0a)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm64 cross compiling tool for clang build
+>         # apt-get install binutils-aarch64-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c1ed18c11bdb80eced208a61d40b1988f36a014f
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout c1ed18c11bdb80eced208a61d40b1988f36a014f
+>         # save the config file to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm64
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
+> >> drivers/hid/i2c-hid/i2c-hid-core.c:867:4: warning: format specifies type 'unsigned short' but the argument has type 'int' [-Wformat]
+>                            le16_to_cpu(hdesc->bcdVersion));
+>                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/linux/dev_printk.h:112:32: note: expanded from macro 'dev_err'
+>            _dev_err(dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                  ~~~     ^~~~~~~~~~~
+>    include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
+>    #define le16_to_cpu __le16_to_cpu
+>                        ^
+>    include/uapi/linux/byteorder/big_endian.h:36:26: note: expanded from macro '__le16_to_cpu'
+>    #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+>                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    include/uapi/linux/swab.h:105:2: note: expanded from macro '__swab16'
+>            (__builtin_constant_p((__u16)(x)) ?     \
+>            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-[ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-[ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-[ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
-[ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-[ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-[ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-[ 6169.931296] disable vbus discharge ret:0
-[ 6169.931301] Setting usb_comm capable false
-[ 6169.932783] Setting voltage/current limit 0 mV 0 mA
-[ 6169.932802] polarity 0
-[ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
-[ 6169.936689] cc:=0
-[ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-[ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
-[ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
-[ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
-[ 6170.036896] Start toggling
-[ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-[ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
-[ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
-[ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
-[ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
-[ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
-[ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
-[ 6170.693304] disable vbus discharge ret:0
-[ 6170.693308] Setting usb_comm capable false
-[ 6170.695193] Setting voltage/current limit 0 mV 0 mA
-[ 6170.695210] polarity 0
-[ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
-[ 6170.701896] cc:=0
-[ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
-[ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+May I kindly point to the reply I gave to the same error last month
+when you mailed it out?
 
-Cc: stable@vger.kernel.org
-Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 4 ----
- 1 file changed, 4 deletions(-)
-
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 7f2f3ff1b391..6010b9901126 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -4110,11 +4110,7 @@ static void run_state_machine(struct tcpm_port *port)
- 				       tcpm_try_src(port) ? SRC_TRY
- 							  : SNK_ATTACHED,
- 				       0);
--		else
--			/* Wait for VBUS, but not forever */
--			tcpm_set_state(port, PORT_RESET, PD_T_PS_SOURCE_ON);
- 		break;
--
- 	case SRC_TRY:
- 		port->try_src_count++;
- 		tcpm_set_cc(port, tcpm_rp_cc(port));
--- 
-2.34.0.rc2.393.gf8c9666880-goog
-
+https://lore.kernel.org/r/CAD=FV=WkUEkkkfGa+6QJSBvj8EgVrnGYYbd6RrC_5HdTue=mDw@mail.gmail.com/

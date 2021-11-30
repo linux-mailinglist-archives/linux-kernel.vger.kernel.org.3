@@ -2,124 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D7545463D82
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B07463D8B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:17:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245399AbhK3STS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:19:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239483AbhK3STR (ORCPT
+        id S245403AbhK3SUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:20:53 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:37974 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239500AbhK3SUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:19:17 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C6FC061574;
-        Tue, 30 Nov 2021 10:15:57 -0800 (PST)
+        Tue, 30 Nov 2021 13:20:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 842FBCE1AF9;
-        Tue, 30 Nov 2021 18:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B56B4C53FC7;
-        Tue, 30 Nov 2021 18:15:52 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 31809CE1AF9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:17:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB67BC53FCC;
+        Tue, 30 Nov 2021 18:17:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638296153;
-        bh=KszbXaHbfOc2Nhur115bSEzw+sxwzvVpgaoXce0hUeU=;
+        s=k20201202; t=1638296249;
+        bh=we0XXIEykccEkXZEaJhZNjX+PQK69G70xjfm//KyBgA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pvoBhd3HTrfwP/+FCfUG763klv8OrF/++24trInXsRoQ+avLpr+z0q/0jj/luWbPJ
-         0rwuyx2LhQKj52N5hpDHs4FuXRw11OLjVWunfDFDXoFKTMl5ZzWjK058CYRsNeiPVZ
-         E6kbLcPkUQcGKZ+dmTXXE36mkPbphNcNwte52S23AENgBhu3PWjSGZnnORI+p0xqAV
-         7qDW+1sPQYqArCNmryQFLq8SzihNEscYcGRTbdtz7gUfwJDZ6ehgie8/HgiFN7z+Qm
-         VbUZyboZMswuZFrjPuoYTH1OtgfRf+ZOazEmnfVK4k1Snou75crhMV/36Y3AskKZW1
-         VRvHNXSgkJTag==
-Date:   Tue, 30 Nov 2021 10:15:51 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Simo Sorce <simo@redhat.com>, Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-Message-ID: <YaZqVxI1C8RByq+w@gmail.com>
-References: <2036923.9o76ZdvQCi@positron.chronox.de>
- <22137816.pfsBpAd9cS@tauon.chronox.de>
- <YaEJtv4A6SoDFYjc@kroah.com>
- <9311513.S0ZZtNTvxh@tauon.chronox.de>
- <YaT+9MueQIa5p8xr@kroah.com>
- <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
- <YaYvYdnSaAvS8MAk@kroah.com>
- <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
- <YaZHKHjomEivul6U@kroah.com>
+        b=rigIwMrgMPCkepAryW1j2rkkbvPAjrSv7o5Rc+jAMdkurrFl33bZPO2BEl55yqpQD
+         ylkFUhCN6RuZo0jTXSQluq10v/HjJjEuUs7TpgPR26Wwe9yRGKnFQgmwQU0ovCAXao
+         DkiQffFoZvr6AeBnAcouF6YULvoqnhcKDLQdZlk4cTwhytra+kJBJ9Z8jUmbmDPnQi
+         cwOCshj0WO3ycrLOBukz03c0ViQJbLNOayYfOON9xlJ/H/42HaADYVxq0iOmpgsUQR
+         QRJSV7brQAzhFAVwPwKOe87CK+miGoK8rqkMxluAVorROSUoMmXrzevYFiclY8Gx6O
+         d0hFSMOg4vauA==
+Date:   Tue, 30 Nov 2021 11:17:23 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kernel test robot <lkp@intel.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Bill Wendling <morbo@google.com>
+Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
+ copy_inst_from_kernel_nofault()
+Message-ID: <YaZqs2tPxMzhgkAW@archlinux-ax161>
+References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
+ <202111300652.0yDBNvyJ-lkp@intel.com>
+ <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
+ <87a6hlq408.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <YaZHKHjomEivul6U@kroah.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87a6hlq408.fsf@mpe.ellerman.id.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 04:45:44PM +0100, Greg Kroah-Hartman wrote:
-> > And the main question here is, how can we get there, in any case, if
-> > the maintainer of the random device doesn't even participate in
-> > discussions, does not pick obvious bug fixes and is simply not engaging
-> > at all?
+On Tue, Nov 30, 2021 at 10:25:43PM +1100, Michael Ellerman wrote:
+> Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> > Le 29/11/2021 à 23:55, kernel test robot a écrit :
+> >> Hi Christophe,
+> >> 
+> >> I love your patch! Perhaps something to improve:
+> >> 
+> >> [auto build test WARNING on powerpc/next]
+> >> [also build test WARNING on v5.16-rc3 next-20211129]
+> >> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> >> And when submitting patch, we suggest to use '--base' as documented in
+> >> https://git-scm.com/docs/git-format-patch]
+> >> 
+> >> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
+> >> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+> >> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0day-ci/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
+> >> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df08b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+> >> reproduce (this is a W=1 build):
+> >>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> >>          chmod +x ~/bin/make.cross
+> >>          # install powerpc cross compiling tool for clang build
+> >>          # apt-get install binutils-powerpc-linux-gnu
+> >>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+> >>          git remote add linux-review https://github.com/0day-ci/linux
+> >>          git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
+> >>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+> >>          # save the config file to linux build tree
+> >>          mkdir build_dir
+> >>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+> >> 
+> >> If you fix the issue, kindly add following tag as appropriate
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >> 
+> >> All warnings (new ones prefixed by >>):
+> >> 
+> >>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
+> >>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
+> >>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
+> >>                     *inst = ppc_inst(val);
+> >>                                      ^~~
+> >>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro 'ppc_inst'
+> >>     #define ppc_inst(x) (x)
+> >>                          ^
+> >>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the variable 'val' to silence this warning
+> >>             unsigned int val, suffix;
+> >>                             ^
+> >>                              = 0
+> >
+> > I can't understand what's wrong here.
+> >
+> > We have
+> >
+> > 	__get_kernel_nofault(&val, src, u32, Efault);
+> > 	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
+> > 		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+> > 		*inst = ppc_inst_prefix(val, suffix);
+> > 	} else {
+> > 		*inst = ppc_inst(val);
+> > 	}
+> >
+> > With
+> >
+> > #define __get_kernel_nofault(dst, src, type, err_label)			\
+> > 	__get_user_size_goto(*((type *)(dst)),				\
+> > 		(__force type __user *)(src), sizeof(type), err_label)
+> >
+> >
+> > And
+> >
+> > #define __get_user_size_goto(x, ptr, size, label)				\
+> > do {										\
+> > 	BUILD_BUG_ON(size > sizeof(x));						\
+> > 	switch (size) {								\
+> > 	case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;	\
+> > 	case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); break;	\
+> > 	case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); break;	\
+> > 	case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break;	\
+> > 	default: x = 0; BUILD_BUG();						\
+> > 	}									\
+> > } while (0)
+> >
+> > And
+> >
+> > #define __get_user_asm_goto(x, addr, label, op)			\
+> > 	asm_volatile_goto(					\
+> > 		"1:	"op"%U1%X1 %0, %1	# get_user\n"	\
+> > 		EX_TABLE(1b, %l2)				\
+> > 		: "=r" (x)					\
+> > 		: "m<>" (*addr)				\
+> > 		:						\
+> > 		: label)
+> >
+> >
+> > I see no possibility, no alternative path where val wouldn't be set. The 
+> > asm clearly has *addr as an output param so it is always set.
 > 
-> What obvious bug fixes have been dropped?
-> 
+> I guess clang can't convince itself of that?
 
-The RNDRESEEDCRNG ioctl was totally broken, and I sent out a patch to fix it
-which was ignored for months:
-https://lore.kernel.org/linux-crypto/20200916041908.66649-1-ebiggers@kernel.org/
+A simplified reproducer:
 
-Reminders didn't help:
+$ cat test.c
+static inline int copy_inst_from_kernel_nofault(unsigned int *inst,
+                                                unsigned int *src)
+{
+        unsigned int val;
 
-First ping: https://lore.kernel.org/linux-crypto/20201007035021.GB912@sol.localdomain/
-Second ping: https://lore.kernel.org/linux-crypto/20201026163343.GA858@sol.localdomain/
-Third ping: https://lore.kernel.org/linux-crypto/X7gQXgoXHHEr6HXC@sol.localdomain/
-Fourth ping: https://lore.kernel.org/linux-crypto/X%2FNkrKpaIBTjQzbv@sol.localdomain/
-Resent to Andrew Morton: https://lore.kernel.org/linux-crypto/20210112192818.69921-1-ebiggers@kernel.org/
-Pinged Andrew: https://lore.kernel.org/linux-crypto/YBiEJ9Md60HjAWJg@sol.localdomain/
+        asm goto("1: lwz %U1%X1 %0, %1   # get_user\n"
+                 ".section __ex_table,\"a\";"
+                 ".balign 4;"
+                 ".long (1b) - . ;"
+                 ".long (%l2) - . ;"
+                 ".previous"
+                 : "=r" (*(unsigned int *)(&val))
+                 : "m<>" (*(unsigned int *)(src))
+                 :
+                 : Efault);
 
-Finally *you* took the patch: https://lore.kernel.org/linux-crypto/YBwZ1a0VIdpTDNuD@kroah.com/
+        *inst = val;
+        return 0;
 
-Here's another random.c bug fix which was ignored, this one for 6 months before
-Herbert Xu finally took it through the crypto tree:
-https://lore.kernel.org/linux-crypto/20210322051347.266831-1-ebiggers@kernel.org/
+Efault:
+        return -14; /* -EFAULT */
+}
 
-Here's a dead code cleanup which was ignored for 6 months before being taken by
-Herbert Xu through the crypto tree:
-https://lore.kernel.org/linux-crypto/20200916043652.96640-1-ebiggers@kernel.org/
+$ clang --target=powerpc-linux-gnu -Wuninitialized -fsyntax-only test.c
+test.c:17:10: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
+        *inst = val;
+                ^~~
+test.c:4:18: note: initialize the variable 'val' to silence this warning
+        unsigned int val;
+                        ^
+                         = 0
+1 warning generated.
 
-Here's a patch to random.c which was taken by the arm64 maintainers due to being
-ignored by the random.c maintainer:
-https://lore.kernel.org/lkml/20201105152944.16953-1-ardb@kernel.org/
+It certainly looks like there is something wrong with how clang is
+tracking the initialization of the variable because it looks to me like
+val is only used in the fallthrough path, which happens after it is
+initialized via lwz.  Perhaps something is wrong with the logic of
+https://reviews.llvm.org/D71314?  I've added Bill to CC (LLVM issues are
+being migrated from Bugzilla to GitHub Issues right now so I cannot file
+this upstream at the moment).
 
-So unfortunately, as far as I can tell, Ted is not maintaining random.c anymore.  
-
-- Eric
+Cheers,
+Nathan

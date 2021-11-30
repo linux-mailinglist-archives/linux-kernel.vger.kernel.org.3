@@ -2,285 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6021F462DB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:43:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04432462DBD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239190AbhK3HqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 02:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239188AbhK3HqH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 02:46:07 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29B6C061574;
-        Mon, 29 Nov 2021 23:42:48 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id u80so19734095pfc.9;
-        Mon, 29 Nov 2021 23:42:48 -0800 (PST)
+        id S234651AbhK3Hqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:46:48 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:3424 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234235AbhK3Hqs (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 02:46:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=cEKEHXAnFqEWs2cfAOj4tplx3BT8KgIMnHJkci37HdI=;
-        b=exXJRTbrcpxxUIL8XuHBUBDOgTvpMBZxmWpOqkW91KubfM0SgvmoBy+xEDb4TEbAvD
-         PvfTvgLQYVgI1aQLkr1QCGLxleSqcPz9E7ZlZY9fnDgnpheu4SmxPnbrSRp89ztgTApx
-         zIqIbBE8R53LZsHO2LdlfjHAe7cZvr8agIRNaXVJPqD0cc5MgWY3xKg9/q+jeZC63oc2
-         QIE/ceyNygW1YwXfQHoRUzFUJuvKt6q6cV0MkLeQ4mclddbP1m7ALsP75BQ+RQL/dTMQ
-         z25BJ+MBuJPp/bbht9tfXMavuzHu2Z7/8lzW/GR5qbyUo/UeUc3Bg0P0UlxW8Gwh6jf5
-         k3QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=cEKEHXAnFqEWs2cfAOj4tplx3BT8KgIMnHJkci37HdI=;
-        b=GOHpqmU3jTo87h4c9mRUErcLbaNedNd/n2kyPL3svUSDfqEGb36FHCpapkhBth52/y
-         THQSv1mVCEfeLak4B8l72EdPWe22GnpigD++29NWAgVTsZ3GPzXnyUOG4TWXav1qlYO6
-         yeYDvMjpFTouUEnn1ooX1uj6FpQjv0GbgQQkBA78woCNau+4726FZvKzlPViK3gOYADj
-         SO6/r+zayQMkvscW5yUg6stlWP31KLh7JP22QJL5BdhMBtwOZ2tsPh1jSyC6EmRg50qj
-         UVcTf2z9CnU4ZB/xZEZyDcOCRj6c04Xr18QRDZbY53dJNv9lc67IPY8bKQq5aTpKVkEY
-         0+rg==
-X-Gm-Message-State: AOAM532b3kmTfkG7HsD2zFdX6hA6W4f2X1vfRCH9hRsgIfuesmAbG0+O
-        XHV1AIMrA2feaFhyIztMcUQ=
-X-Google-Smtp-Source: ABdhPJzUJVhiosPwm1YLAtHvzVGeRfs7/j087Pwo5LgS77p94Ub+3/N8EuQYSQE40rZkW9GqltVgdA==
-X-Received: by 2002:a63:6882:: with SMTP id d124mr39543074pgc.234.1638258168170;
-        Mon, 29 Nov 2021 23:42:48 -0800 (PST)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id h13sm19066010pfv.84.2021.11.29.23.42.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 29 Nov 2021 23:42:47 -0800 (PST)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] KVM: x86: Update vPMCs when retiring branch instructions
-Date:   Tue, 30 Nov 2021 15:42:21 +0800
-Message-Id: <20211130074221.93635-7-likexu@tencent.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211130074221.93635-1-likexu@tencent.com>
-References: <20211130074221.93635-1-likexu@tencent.com>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638258209; x=1669794209;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XtNs5P1lQ25usXDwgWkMhdgcJrs80sI61JAMIb/ZdDs=;
+  b=hkOE6RqHorPm6UZfRCalZeupSlXqsHJaKKENxwJzYx2WsQEEivBjAue3
+   3SgUfRFC13nqwNDzmTNqDXgd/CI7UbtzSs270s19lf1HKCs8iThnKalxe
+   zohFJmOUOGV86TUi6TS6+bd2H5XBjNQ8CDA7Hzp8DVc7AQy8o3AViBwVA
+   0wxsmzw/Ceq8iB9G5fYgY1CWBsZ2y7lFmkTjPhWo3armRhTSHGNT9y5wu
+   N17S79m1QBZMjFETQK3NGPb8/6fdsha5cDc3xLqham2Z4idKuiQVpIhaa
+   O8c34iQse037gPg6EKsKEKb41wV/qx4GFJTULrw3lZHpdIhdqro1S+jJx
+   A==;
+X-IronPort-AV: E=Sophos;i="5.87,275,1631570400"; 
+   d="scan'208";a="20746155"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 30 Nov 2021 08:43:28 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 30 Nov 2021 08:43:28 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 30 Nov 2021 08:43:28 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638258208; x=1669794208;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=XtNs5P1lQ25usXDwgWkMhdgcJrs80sI61JAMIb/ZdDs=;
+  b=Z7g7XCFuE6/9KjX4OzBUPKyVfP9AUWlpV9A+HcHTBeZqG9adELwhgjgb
+   HHoQdUX54RCib02aXdJfcH3vM1383ES9ECDurnUqL6Ukp1/gy6uSN4Hde
+   O6THaZrPe5/LfUitQm89z/y5BFsv79CmrpzbOXJSfUOPW/98kmpMSYt7t
+   QSgAdft0BpobSfG2cgyhU4ezWN16Fyep+WBgg5SwjRz1yUWXVq9lMkThZ
+   Ai66mUiFgI2nutba/CIqnIRNEwa/I+me2RqBEwmUKRugmbDAFk+IKoOx4
+   OwuBfHMWwOwHlCk49iSQEOC/qyVHgCnbTUUvXthyQoHtIGrGiQ9PAYnR2
+   g==;
+X-IronPort-AV: E=Sophos;i="5.87,275,1631570400"; 
+   d="scan'208";a="20746154"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 30 Nov 2021 08:43:28 +0100
+Received: from steina-w (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id D7C1A280065;
+        Tue, 30 Nov 2021 08:43:27 +0100 (CET)
+Message-ID: <b1ddf6f61179c2445710d8540dd42ed6d71ae353.camel@ew.tq-group.com>
+Subject: Re: (EXT) Re: [PATCH] media: Add 16-bit Bayer formats
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dorota Czaplejewicz <dorota.czaplejewicz@puri.sm>
+Cc:     Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>, kernel@puri.sm,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Date:   Tue, 30 Nov 2021 08:43:25 +0100
+In-Reply-To: <YaWNkcljqIR6BSdZ@pendragon.ideasonboard.com>
+References: <20211019114718.827400-1-dorota.czaplejewicz@puri.sm>
+         <163820077159.3059017.10242072140890692995@Monstersaurus>
+         <20211129170356.7258d6db.dorota.czaplejewicz@puri.sm>
+         <YaWNkcljqIR6BSdZ@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jim Mattson <jmattson@google.com>
+Am Dienstag, dem 30.11.2021 um 04:33 +0200 schrieb Laurent Pinchart:
+> Hi Dorota,
+> 
+> On Mon, Nov 29, 2021 at 05:05:23PM +0100, Dorota Czaplejewicz wrote:
+> > On Mon, 29 Nov 2021 15:46:11 +0000 Kieran Bingham wrote:
+> > > Quoting Dorota Czaplejewicz (2021-10-19 12:59:29)
+> > > > 16-bit bayer formats are used by the i.MX driver.  
+> > > 
+> > > Can we expand upon this at all?
+> > > 
+> > > The Subject says "Add 16-bit Bayer formats" but this isn't adding
+> > > the
+> > > format, it's purely extending the v4l2_format_info table with the
+> > > information for that format which is otherwise missing.
+> > 
+> > What do you suggest for a better commit message? My reasoning was
+> > that
+> > I'm adding entries to a table.
+> 
+> The format is defined by V4L2 but isn't present in that table. I'd
+> state
+> the this patch is fixing an oversight, and reference the commit that
+> forgot to add these formats in a Fixes: tag. While at it, I'd also
+> add
+> at least the 14bpp Bayer formats, and possibly the packed formats
+> too.
+> 
+> > > I wonder what other formats are missing from that table too?
+> > > 
+> > > > Signed-off-by: Dorota Czaplejewicz <
+> > > > dorota.czaplejewicz@puri.sm
+> > > > >
+> > > > ---
+> > > > Hello,
+> > > > 
+> > > > While working on the i.MX8 video driver, I discovered that
+> > > > `v4l2_fill_pixfmt` will fail when using 10-bit sensor formats.
+> > > > (For background, see the conversation at
+> > > > https://lkml.org/lkml/2021/10/17/93
+> > > >  .)
+> > > > 
+> > > > It appears that the video hardware will fill a 16-bit-per-pixel
+> > > > buffer when fed 10-bit-per-pixel Bayer data, making
+> > > > `v4l2_fill_pixfmt` effectively broken for this case.  
+> > > 
+> > > This statement is confusing to me. Are you saying you're
+> > > programming the
+> > > hardware with 10 bit, and it's using 16 bits per pixel to store
+> > > that
+> > > data? (Which is simply 'unpacked' I think ?)
+> > 
+> > I know the sensor I'm dealing with sends 10-bit data. I'm observing
+> > that the data arriving at this stage of the pipeline is encoded
+> > with
+> > 16 bits per pixel. As far as I understand, that's what i.MX8 does
+> > at
+> > some stage of the MIPI/CSI2 pipeline by design, but I can't
+> > elaborate
+> > at the moment, and I don't think it affects the validity of the
+> > addition.
+> 
+> Is the 10 bit data stored in the MSB or LSB of the 2 bytes ?
 
-When KVM retires a guest branch instruction through emulation,
-increment any vPMCs that are configured to monitor "branch
-instructions retired," and update the sample period of those counters
-so that they will overflow at the right time.
+Oh, I get a dejavu here. I assume this is on an i.MX8QM or i.MX8QXP,
+but not one of the other i.MX8 ones. They have a similar name, but are
+very (!) diffeent in some aspects.
 
-Signed-off-by: Eric Hankland <ehankland@google.com>
-[jmattson:
-  - Split the code to increment "branch instructions retired" into a
-    separate commit.
-  - Moved/consolidated the calls to kvm_pmu_trigger_event() in the
-    emulation of VMLAUNCH/VMRESUME to accommodate the evolution of
-    that code.
-]
-Fixes: f5132b01386b ("KVM: Expose a version 2 architectural PMU to a guests")
-Signed-off-by: Jim Mattson <jmattson@google.com>
----
- arch/x86/kvm/emulate.c     | 55 +++++++++++++++++++++-----------------
- arch/x86/kvm/kvm_emulate.h |  1 +
- arch/x86/kvm/vmx/nested.c  |  7 +++--
- arch/x86/kvm/x86.c         |  2 ++
- 4 files changed, 39 insertions(+), 26 deletions(-)
+To answer your question, neither of those two alignments. The RM for
+i.MX8QM and i.MX8QXP states:
+> NOTE
+> The CSI data is right LSB aligned and zero padded depending
+> on data format. When interfacing ISI, CSI data is shifted 6-bits
+> due to ISI bits [5:0] always being zero
+> (0bxxCSIDATAxxxxxx). All RAW14, RAW12, RAW10,
+> RAW8, and RAW6 video data is filled from BIT[13] to LSB,
+> the remaining bits are zero padded. Only RAW16 input data
+> will be saved to memory from BIT[15] to LSB.
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index 28b1a4e57827..166a145fc1e6 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -175,6 +175,7 @@
- #define No16	    ((u64)1 << 53)  /* No 16 bit operand */
- #define IncSP       ((u64)1 << 54)  /* SP is incremented before ModRM calc */
- #define TwoMemOp    ((u64)1 << 55)  /* Instruction has two memory operand */
-+#define IsBranch    ((u64)1 << 56)  /* Instruction is considered a branch. */
- 
- #define DstXacc     (DstAccLo | SrcAccHi | SrcWrite)
- 
-@@ -191,8 +192,9 @@
- #define FASTOP_SIZE 8
- 
- struct opcode {
--	u64 flags : 56;
--	u64 intercept : 8;
-+	u64 flags;
-+	u8 intercept;
-+	u8 pad[7];
- 	union {
- 		int (*execute)(struct x86_emulate_ctxt *ctxt);
- 		const struct opcode *group;
-@@ -4364,10 +4366,10 @@ static const struct opcode group4[] = {
- static const struct opcode group5[] = {
- 	F(DstMem | SrcNone | Lock,		em_inc),
- 	F(DstMem | SrcNone | Lock,		em_dec),
--	I(SrcMem | NearBranch,			em_call_near_abs),
--	I(SrcMemFAddr | ImplicitOps,		em_call_far),
--	I(SrcMem | NearBranch,			em_jmp_abs),
--	I(SrcMemFAddr | ImplicitOps,		em_jmp_far),
-+	I(SrcMem | NearBranch | IsBranch,       em_call_near_abs),
-+	I(SrcMemFAddr | ImplicitOps | IsBranch, em_call_far),
-+	I(SrcMem | NearBranch | IsBranch,       em_jmp_abs),
-+	I(SrcMemFAddr | ImplicitOps | IsBranch, em_jmp_far),
- 	I(SrcMem | Stack | TwoMemOp,		em_push), D(Undefined),
- };
- 
-@@ -4577,7 +4579,7 @@ static const struct opcode opcode_table[256] = {
- 	I2bvIP(DstDI | SrcDX | Mov | String | Unaligned, em_in, ins, check_perm_in), /* insb, insw/insd */
- 	I2bvIP(SrcSI | DstDX | String, em_out, outs, check_perm_out), /* outsb, outsw/outsd */
- 	/* 0x70 - 0x7F */
--	X16(D(SrcImmByte | NearBranch)),
-+	X16(D(SrcImmByte | NearBranch | IsBranch)),
- 	/* 0x80 - 0x87 */
- 	G(ByteOp | DstMem | SrcImm, group1),
- 	G(DstMem | SrcImm, group1),
-@@ -4596,7 +4598,7 @@ static const struct opcode opcode_table[256] = {
- 	DI(SrcAcc | DstReg, pause), X7(D(SrcAcc | DstReg)),
- 	/* 0x98 - 0x9F */
- 	D(DstAcc | SrcNone), I(ImplicitOps | SrcAcc, em_cwd),
--	I(SrcImmFAddr | No64, em_call_far), N,
-+	I(SrcImmFAddr | No64 | IsBranch, em_call_far), N,
- 	II(ImplicitOps | Stack, em_pushf, pushf),
- 	II(ImplicitOps | Stack, em_popf, popf),
- 	I(ImplicitOps, em_sahf), I(ImplicitOps, em_lahf),
-@@ -4616,17 +4618,19 @@ static const struct opcode opcode_table[256] = {
- 	X8(I(DstReg | SrcImm64 | Mov, em_mov)),
- 	/* 0xC0 - 0xC7 */
- 	G(ByteOp | Src2ImmByte, group2), G(Src2ImmByte, group2),
--	I(ImplicitOps | NearBranch | SrcImmU16, em_ret_near_imm),
--	I(ImplicitOps | NearBranch, em_ret),
-+	I(ImplicitOps | NearBranch | SrcImmU16 | IsBranch, em_ret_near_imm),
-+	I(ImplicitOps | NearBranch | IsBranch, em_ret),
- 	I(DstReg | SrcMemFAddr | ModRM | No64 | Src2ES, em_lseg),
- 	I(DstReg | SrcMemFAddr | ModRM | No64 | Src2DS, em_lseg),
- 	G(ByteOp, group11), G(0, group11),
- 	/* 0xC8 - 0xCF */
--	I(Stack | SrcImmU16 | Src2ImmByte, em_enter), I(Stack, em_leave),
--	I(ImplicitOps | SrcImmU16, em_ret_far_imm),
--	I(ImplicitOps, em_ret_far),
--	D(ImplicitOps), DI(SrcImmByte, intn),
--	D(ImplicitOps | No64), II(ImplicitOps, em_iret, iret),
-+	I(Stack | SrcImmU16 | Src2ImmByte | IsBranch, em_enter),
-+	I(Stack | IsBranch, em_leave),
-+	I(ImplicitOps | SrcImmU16 | IsBranch, em_ret_far_imm),
-+	I(ImplicitOps | IsBranch, em_ret_far),
-+	D(ImplicitOps | IsBranch), DI(SrcImmByte | IsBranch, intn),
-+	D(ImplicitOps | No64 | IsBranch),
-+	II(ImplicitOps | IsBranch, em_iret, iret),
- 	/* 0xD0 - 0xD7 */
- 	G(Src2One | ByteOp, group2), G(Src2One, group2),
- 	G(Src2CL | ByteOp, group2), G(Src2CL, group2),
-@@ -4637,14 +4641,15 @@ static const struct opcode opcode_table[256] = {
- 	/* 0xD8 - 0xDF */
- 	N, E(0, &escape_d9), N, E(0, &escape_db), N, E(0, &escape_dd), N, N,
- 	/* 0xE0 - 0xE7 */
--	X3(I(SrcImmByte | NearBranch, em_loop)),
--	I(SrcImmByte | NearBranch, em_jcxz),
-+	X3(I(SrcImmByte | NearBranch | IsBranch, em_loop)),
-+	I(SrcImmByte | NearBranch | IsBranch, em_jcxz),
- 	I2bvIP(SrcImmUByte | DstAcc, em_in,  in,  check_perm_in),
- 	I2bvIP(SrcAcc | DstImmUByte, em_out, out, check_perm_out),
- 	/* 0xE8 - 0xEF */
--	I(SrcImm | NearBranch, em_call), D(SrcImm | ImplicitOps | NearBranch),
--	I(SrcImmFAddr | No64, em_jmp_far),
--	D(SrcImmByte | ImplicitOps | NearBranch),
-+	I(SrcImm | NearBranch | IsBranch, em_call),
-+	D(SrcImm | ImplicitOps | NearBranch | IsBranch),
-+	I(SrcImmFAddr | No64 | IsBranch, em_jmp_far),
-+	D(SrcImmByte | ImplicitOps | NearBranch | IsBranch),
- 	I2bvIP(SrcDX | DstAcc, em_in,  in,  check_perm_in),
- 	I2bvIP(SrcAcc | DstDX, em_out, out, check_perm_out),
- 	/* 0xF0 - 0xF7 */
-@@ -4660,7 +4665,7 @@ static const struct opcode opcode_table[256] = {
- static const struct opcode twobyte_table[256] = {
- 	/* 0x00 - 0x0F */
- 	G(0, group6), GD(0, &group7), N, N,
--	N, I(ImplicitOps | EmulateOnUD, em_syscall),
-+	N, I(ImplicitOps | EmulateOnUD | IsBranch, em_syscall),
- 	II(ImplicitOps | Priv, em_clts, clts), N,
- 	DI(ImplicitOps | Priv, invd), DI(ImplicitOps | Priv, wbinvd), N, N,
- 	N, D(ImplicitOps | ModRM | SrcMem | NoAccess), N, N,
-@@ -4691,8 +4696,8 @@ static const struct opcode twobyte_table[256] = {
- 	IIP(ImplicitOps, em_rdtsc, rdtsc, check_rdtsc),
- 	II(ImplicitOps | Priv, em_rdmsr, rdmsr),
- 	IIP(ImplicitOps, em_rdpmc, rdpmc, check_rdpmc),
--	I(ImplicitOps | EmulateOnUD, em_sysenter),
--	I(ImplicitOps | Priv | EmulateOnUD, em_sysexit),
-+	I(ImplicitOps | EmulateOnUD | IsBranch, em_sysenter),
-+	I(ImplicitOps | Priv | EmulateOnUD | IsBranch, em_sysexit),
- 	N, N,
- 	N, N, N, N, N, N, N, N,
- 	/* 0x40 - 0x4F */
-@@ -4710,7 +4715,7 @@ static const struct opcode twobyte_table[256] = {
- 	N, N, N, N,
- 	N, N, N, GP(SrcReg | DstMem | ModRM | Mov, &pfx_0f_6f_0f_7f),
- 	/* 0x80 - 0x8F */
--	X16(D(SrcImm | NearBranch)),
-+	X16(D(SrcImm | NearBranch | IsBranch)),
- 	/* 0x90 - 0x9F */
- 	X16(D(ByteOp | DstMem | SrcNone | ModRM| Mov)),
- 	/* 0xA0 - 0xA7 */
-@@ -5224,6 +5229,8 @@ int x86_decode_insn(struct x86_emulate_ctxt *ctxt, void *insn, int insn_len, int
- 		ctxt->d |= opcode.flags;
- 	}
- 
-+	ctxt->is_branch = opcode.flags & IsBranch;
-+
- 	/* Unrecognised? */
- 	if (ctxt->d == 0)
- 		return EMULATION_FAILED;
-diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
-index 68b420289d7e..39eded2426ff 100644
---- a/arch/x86/kvm/kvm_emulate.h
-+++ b/arch/x86/kvm/kvm_emulate.h
-@@ -369,6 +369,7 @@ struct x86_emulate_ctxt {
- 	struct fetch_cache fetch;
- 	struct read_cache io_read;
- 	struct read_cache mem_read;
-+	bool is_branch;
- };
- 
- /* Repeat String Operation Prefix */
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 95f3823b3a9d..6e05d36aedd5 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3504,10 +3504,13 @@ static int nested_vmx_run(struct kvm_vcpu *vcpu, bool launch)
- 	if (evmptrld_status == EVMPTRLD_ERROR) {
- 		kvm_queue_exception(vcpu, UD_VECTOR);
- 		return 1;
--	} else if (CC(evmptrld_status == EVMPTRLD_VMFAIL)) {
--		return nested_vmx_failInvalid(vcpu);
- 	}
- 
-+	kvm_pmu_trigger_event(vcpu, PERF_COUNT_HW_BRANCH_INSTRUCTIONS);
-+
-+	if (CC(evmptrld_status == EVMPTRLD_VMFAIL))
-+		return nested_vmx_failInvalid(vcpu);
-+
- 	if (CC(!evmptr_is_valid(vmx->nested.hv_evmcs_vmptr) &&
- 	       vmx->nested.current_vmptr == INVALID_GPA))
- 		return nested_vmx_failInvalid(vcpu);
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 83371be00771..c28226dcbe4e 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -8243,6 +8243,8 @@ int x86_emulate_instruction(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
- 		if (!ctxt->have_exception ||
- 		    exception_type(ctxt->exception.vector) == EXCPT_TRAP) {
- 			kvm_pmu_trigger_event(vcpu, PERF_COUNT_HW_INSTRUCTIONS);
-+			if (ctxt->is_branch)
-+				kvm_pmu_trigger_event(vcpu, PERF_COUNT_HW_BRANCH_INSTRUCTIONS);
- 			kvm_rip_write(vcpu, ctxt->eip);
- 			if (r && (ctxt->tf || (vcpu->guest_debug & KVM_GUESTDBG_SINGLESTEP)))
- 				r = kvm_vcpu_do_singlestep(vcpu);
--- 
-2.33.1
+See also [1]. 
+
+This essentially means, unless you use RAW16, you will get RAW14 with a
+different amount of LSB bits set to 0.
+IIRC there was some patchset to introduce a RAW14 format ([2]) for
+exactly this use cas.
+There is also some kind of demo doing post-processing ([3]).
+
+Best regards,
+Alexander
+
+[1] 
+https://community.nxp.com/t5/i-MX-Processors/i-MX8QM-MIPI-Raw-formats-not-working-correctly/m-p/1040832/highlight/true#M153336
+[2] 
+https://yhbt.net/lore/all/20200226151431.GY5379@paasikivi.fi.intel.com/T/
+[3] 
+https://community.nxp.com/t5/i-MX-Processors-Knowledge-Base/i-MX8QXP-capture-raw-bayer-data-and-debayer/ta-p/1098963
+
 

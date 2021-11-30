@@ -2,111 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD1646409D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3D7464088
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344884AbhK3Vtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:49:42 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:56468 "EHLO vps-vb.mhejs.net"
+        id S1344427AbhK3Vps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:45:48 -0500
+Received: from out1.migadu.com ([91.121.223.63]:50394 "EHLO out1.migadu.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344456AbhK3Vqy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:46:54 -0500
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1msAu4-00065c-Vi; Tue, 30 Nov 2021 22:43:09 +0100
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v6 15/29] KVM: s390: Skip gfn/size sanity checks on memslot DELETE or FLAGS_ONLY
+        id S1344323AbhK3Vo7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 16:44:59 -0500
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1638308497;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2VlRNVgjD8s3LiQBttrzG+uL14gJGV2zDjLV32J+vek=;
+        b=O1N5ChXOugWJB6+QRXIZUB5o0s8EIG4DrohccwfveR/ePyG/uOTU2Vr3uQ5CLC5yZ0d+0A
+        eGSsm6vFEgIjBpqKJdRm/maniY9N+gPYUEDQvLIb0sapJp7Yek5uLmAeDiRXfQRcILFV2y
+        bxPZpZ/X4eJsx3ImbI/t3f5FciFB7xs=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH 06/31] mm: clarify __GFP_ZEROTAGS comment
 Date:   Tue, 30 Nov 2021 22:41:28 +0100
-Message-Id: <faf55a0064e104fab8c0f47dd1d5bf4320cd0b09.1638304316.git.maciej.szmigiero@oracle.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <cover.1638304315.git.maciej.szmigiero@oracle.com>
-References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+Message-Id: <4f6d3dd6f1ab9d7774c96ca0ad6d8cabebf0914b.1638308023.git.andreyknvl@google.com>
+In-Reply-To: <cover.1638308023.git.andreyknvl@google.com>
+References: <cover.1638308023.git.andreyknvl@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Christopherson <seanjc@google.com>
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Sanity check the hva, gfn, and size of a userspace memory region only if
-any of those properties can change, i.e. skip the checks for DELETE and
-FLAGS_ONLY.  KVM doesn't allow moving the hva or changing the size, a gfn
-change shows up as a MOVE even if flags are being modified, and the
-checks are pointless for the DELETE case as userspace_addr and gfn_base
-are zeroed by common KVM.
+__GFP_ZEROTAGS is intended as an optimization: if memory is zeroed during
+allocation, it's possible to set memory tags at the same time with little
+performance impact.
 
-No functional change intended.
+Clarify this intention of __GFP_ZEROTAGS in the comment.
 
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- arch/s390/kvm/kvm-s390.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ include/linux/gfp.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 481789873c81..a92e36d8a827 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -5011,7 +5011,14 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
- 				   struct kvm_memory_slot *new,
- 				   enum kvm_mr_change change)
- {
--	gpa_t size = new->npages * PAGE_SIZE;
-+	gpa_t size;
-+
-+	/* When we are protected, we should not change the memory slots */
-+	if (kvm_s390_pv_get_handle(kvm))
-+		return -EINVAL;
-+
-+	if (change == KVM_MR_DELETE || change == KVM_MR_FLAGS_ONLY)
-+		return 0;
- 
- 	/* A few sanity checks. We can have memory slots which have to be
- 	   located/ended at a segment boundary (1MB). The memory in userland is
-@@ -5021,15 +5028,13 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
- 	if (new->userspace_addr & 0xffffful)
- 		return -EINVAL;
- 
-+	size = new->npages * PAGE_SIZE;
- 	if (size & 0xffffful)
- 		return -EINVAL;
- 
- 	if ((new->base_gfn * PAGE_SIZE) + size > kvm->arch.mem_limit)
- 		return -EINVAL;
- 
--	/* When we are protected, we should not change the memory slots */
--	if (kvm_s390_pv_get_handle(kvm))
--		return -EINVAL;
- 	return 0;
- }
- 
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index b976c4177299..dddd7597689f 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -232,8 +232,8 @@ struct vm_area_struct;
+  *
+  * %__GFP_ZERO returns a zeroed page on success.
+  *
+- * %__GFP_ZEROTAGS returns a page with zeroed memory tags on success, if
+- * __GFP_ZERO is set.
++ * %__GFP_ZEROTAGS zeroes memory tags at allocation time if the memory itself
++ * is being zeroed (either via __GFP_ZERO or via init_on_alloc).
+  *
+  * %__GFP_SKIP_KASAN_POISON returns a page which does not need to be poisoned
+  * on deallocation. Typically used for userspace pages. Currently only has an
+-- 
+2.25.1
+

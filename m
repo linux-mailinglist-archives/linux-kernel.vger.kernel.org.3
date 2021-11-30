@@ -2,126 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 682F4463581
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03B9F46358B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240663AbhK3NgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:36:19 -0500
-Received: from mail-oo1-f54.google.com ([209.85.161.54]:43970 "EHLO
-        mail-oo1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbhK3NgS (ORCPT
+        id S240770AbhK3Nhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:37:38 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:53678 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231627AbhK3Nhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:36:18 -0500
-Received: by mail-oo1-f54.google.com with SMTP id w5-20020a4a2745000000b002c2649b8d5fso6696024oow.10;
-        Tue, 30 Nov 2021 05:32:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uvp94v0vIhe+inYzF2P6jtmQ6owRJVQi+9jnPYRrKZc=;
-        b=YSrtvN51zAmf8S7RAD/EsjfALsgtp91i0ttz5IfBB4ZcyVEbLY6ZT+/Imhnz6Z8fLW
-         5ukq9+7xt+Esg7phldqqDfd5fkQAfTq70WlxCvMTEVw/ka4POBExd3vLFbTNP5HdHz6L
-         gFhV6/0Uo5wQ/oBQLsuIPngYb1i85d7jBZ07yGFS3PiCmTZnxXgwUrdXUBn3jHukAE3f
-         njk9vexSGHX6ZTOZ0Ni1mJYLsDYS8y83zjfwpMijJqsUFmbrRNjPwSKnVgdSwxioSJTH
-         KuZ2IxZ0bqfguCp1Ay32zVVFPF3m1h1qHx0CgVrWhC0YRMVH3iJweuFTvOV8zYx/UrmY
-         SlMw==
-X-Gm-Message-State: AOAM531lU4JaGZ3I7bpkYKU14sxD9PIJPM7NvCRPJdZW0HTBEb0qUUP7
-        +kbl2i9d9gyXVJSWc2MA7+Ss0PydRHSQ1E0KcVU=
-X-Google-Smtp-Source: ABdhPJzkb4vCKXSDAAMNocRw1+ADbn4KnhnQ1m7tCucnFiBm5axEl/0R7ZICxHFfRH9dE5gVDFzNEq2Dcl9HZLx/YbA=
-X-Received: by 2002:a05:6820:388:: with SMTP id r8mr35608148ooj.0.1638279179124;
- Tue, 30 Nov 2021 05:32:59 -0800 (PST)
+        Tue, 30 Nov 2021 08:37:36 -0500
+Received: from [IPv6:2a01:e0a:120:3210:b422:9841:4afb:11b5] (unknown [IPv6:2a01:e0a:120:3210:b422:9841:4afb:11b5])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 331AC1F450C4;
+        Tue, 30 Nov 2021 13:34:11 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638279251; bh=8dFt0ved6B1YlHXel+R6Z2zNSNgLE7JvZbncVuRC5Qw=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CXXTXeNJfZ9/XZgE6YFUstBI4Ouw4A5FsgohbT2N95JbtcK2UIipznG5/gVg8Sfem
+         JCpbIkg8WQz69wj4MwV68UV40duRU21gjgJFkjoUma0tvpF6V3TmFiLdyhORfTItD9
+         /R124eq8PRPWQYM4QqhiMUgfBZnzdfyvYb3rb37PdMwAOuSOQGehdscmDifViugAFH
+         mEhQ/PuzYsPcY/L0OCUhp4r0Gf/lYpE1D+9ZT3iiYuLqFxocIyV+GNSdae1CRYolzI
+         2PMMkcwokvYFBO1SwrmmVUTFgsj8//HfcsE9pyAjEBFQtt3oBrbKPl3TbheQKrlmRO
+         8jrbiFcGxJf1A==
+Subject: Re: [PATCH v11, 04/19] media: mtk-vcodec: export decoder pm functions
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20211129034201.5767-1-yunfei.dong@mediatek.com>
+ <20211129034201.5767-5-yunfei.dong@mediatek.com>
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Message-ID: <2fa4e19f-d57c-6264-4284-8387c4182d1f@collabora.com>
+Date:   Tue, 30 Nov 2021 14:34:07 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
- <20211106013312.26698-5-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0gemmV1Lz3+9iKz1eiXtkyDc3+4+po4Eidchzk+J2=ceA@mail.gmail.com> <20211130132137.GA25524@ranerica-svr.sc.intel.com>
-In-Reply-To: <20211130132137.GA25524@ranerica-svr.sc.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Nov 2021 14:32:42 +0100
-Message-ID: <CAJZ5v0iXBn1o9ZFzNaYU4ft=JcRfNv7AJ8Sq-9HbBJbp60LpWQ@mail.gmail.com>
-Subject: Re: [PATCH 4/7] thermal: intel: hfi: Handle CPU hotplug events
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211129034201.5767-5-yunfei.dong@mediatek.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 2:22 PM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
+
+Le 29/11/2021 à 04:41, Yunfei Dong a écrit :
+> Register each hardware as platform device, need to call pm functions
+> to open/close power and clock from module mtk-vcodec-dec, export these
+> functions.
+
+The commit message confuse me, maybe something like:
+"When mtk vcodec decoder is build as a module we need to export
+mtk-vcodec-dec pm functions to make them visible by the other components"
+
+With that:
+Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+
 >
-> On Wed, Nov 24, 2021 at 03:48:49PM +0100, Rafael J. Wysocki wrote:
-> > On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
-> > <ricardo.neri-calderon@linux.intel.com> wrote:
-
-[cut]
-
-> > > +/**
-> > > + * intel_hfi_offline() - Disable HFI on @cpu
-> > > + * @cpu:       CPU in which the HFI will be disabled
-> > > + *
-> > > + * Remove @cpu from those covered by its HFI instance.
-> > > + *
-> > > + * On some processors, hardware remembers previous programming settings even
-> > > + * after being reprogrammed. Thus, keep HFI enabled even if all CPUs in the
-> > > + * die/package of @cpu are offline. See note in intel_hfi_online().
-> > > + */
-> > > +void intel_hfi_offline(unsigned int cpu)
-> > > +{
-> > > +       struct cpumask *die_cpumask = topology_core_cpumask(cpu);
-> > > +       struct hfi_cpu_info *info = &per_cpu(hfi_cpu_info, cpu);
-> > > +       struct hfi_instance *hfi_instance;
-> > > +
-> > > +       if (!boot_cpu_has(X86_FEATURE_INTEL_HFI))
-> > > +               return;
-> > > +
-> > > +       hfi_instance = info->hfi_instance;
-> > > +       if (!hfi_instance)
-> > > +               return;
-> > > +
-> > > +       if (!hfi_instance->initialized)
-> > > +               return;
-> > > +
-> > > +       mutex_lock(&hfi_lock);
-> > > +
-> > > +       /*
-> > > +        * We were using the core cpumask of @cpu to track CPUs in the same
-> > > +        * die/package. Now it is going offline and we need to find another
-> > > +        * CPU we can use.
-> > > +        */
-> > > +       if (die_cpumask == hfi_instance->cpus) {
-> > > +               int new_cpu;
-> > > +
-> > > +               new_cpu = cpumask_any_but(hfi_instance->cpus, cpu);
-> > > +               if (new_cpu >= nr_cpu_ids)
-> > > +                       /* All other CPUs in the package are offline. */
-> > > +                       hfi_instance->cpus = NULL;
-> > > +               else
-> > > +                       hfi_instance->cpus = topology_core_cpumask(new_cpu);
-> >
-> > Hmmm.  Is topology_core_cpumask() updated when CPUs go offline and online?
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>   drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
 >
-> Yes. A CPU going offline is cleared from its siblings' cpumask [1] and its own [2]
-> in remove_siblinginfo() via cpu_disable_common(). A CPU going online is set
-> in its siblings' cpumask and its own in set_cpu_sibling_map() [3].
-
-OK, so it is necessary to ensure that intel_hfi_offline() will always
-run after remove_siblinginfo() so it sees the updated mask.  How do we
-ensure that?
-
-> [1]. https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/smpboot.c?h=v5.16-rc3#n1592
-> [2]. https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/smpboot.c?h=v5.16-rc3#n1617
-> [3]. https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/x86/kernel/smpboot.c?h=v5.16-rc3#n657
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+> index 20bd157a855c..221cf60e9fbf 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_pm.c
+> @@ -77,12 +77,14 @@ int mtk_vcodec_init_dec_pm(struct platform_device *pdev,
+>   	put_device(pm->larbvdec);
+>   	return ret;
+>   }
+> +EXPORT_SYMBOL_GPL(mtk_vcodec_init_dec_pm);
+>   
+>   void mtk_vcodec_release_dec_pm(struct mtk_vcodec_pm *pm)
+>   {
+>   	pm_runtime_disable(pm->dev);
+>   	put_device(pm->larbvdec);
+>   }
+> +EXPORT_SYMBOL_GPL(mtk_vcodec_release_dec_pm);
+>   
+>   int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+>   {
+> @@ -94,6 +96,7 @@ int mtk_vcodec_dec_pw_on(struct mtk_vcodec_pm *pm)
+>   
+>   	return ret;
+>   }
+> +EXPORT_SYMBOL_GPL(mtk_vcodec_dec_pw_on);
+>   
+>   void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+>   {
+> @@ -103,6 +106,7 @@ void mtk_vcodec_dec_pw_off(struct mtk_vcodec_pm *pm)
+>   	if (ret)
+>   		mtk_v4l2_err("pm_runtime_put_sync fail %d", ret);
+>   }
+> +EXPORT_SYMBOL_GPL(mtk_vcodec_dec_pw_off);
+>   
+>   void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+>   {
+> @@ -129,6 +133,7 @@ void mtk_vcodec_dec_clock_on(struct mtk_vcodec_pm *pm)
+>   	for (i -= 1; i >= 0; i--)
+>   		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+>   }
+> +EXPORT_SYMBOL_GPL(mtk_vcodec_dec_clock_on);
+>   
+>   void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
+>   {
+> @@ -139,3 +144,4 @@ void mtk_vcodec_dec_clock_off(struct mtk_vcodec_pm *pm)
+>   	for (i = dec_clk->clk_num - 1; i >= 0; i--)
+>   		clk_disable_unprepare(dec_clk->clk_info[i].vcodec_clk);
+>   }
+> +EXPORT_SYMBOL_GPL(mtk_vcodec_dec_clock_off);

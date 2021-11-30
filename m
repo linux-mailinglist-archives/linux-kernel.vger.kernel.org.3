@@ -2,177 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36682462ED3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:47:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05391462E17
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:00:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239801AbhK3Iu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:50:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239766AbhK3IuV (ORCPT
+        id S239307AbhK3IDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:03:41 -0500
+Received: from mx1.didiglobal.com ([36.110.17.22]:8373 "HELO
+        mailgate01.didichuxing.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with SMTP id S234489AbhK3IDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:50:21 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654ACC061574;
-        Tue, 30 Nov 2021 00:47:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B17F9CE1805;
-        Tue, 30 Nov 2021 08:47:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EA27C53FC1;
-        Tue, 30 Nov 2021 08:46:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638262018;
-        bh=IV7CfOvh14lM4qBOoT7nyIPMnQ7INl8FL+DbIr8jUZE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o2BY48q9b0Ye9pSk35j13Q+j8G0HeZe1QHlM+h7Orbf0jTJ9DJdmIr63oT9heOYXa
-         fSZSz95xEaiCzaKMybcESOR/NOJGhW2Mgkm+lxoPZ8e2nVguY6z/isFukOu9qlzYdL
-         d+ajnwmYvmoh526ziVvV5uj0TVB6KCRjIhvskXiE=
-Date:   Tue, 30 Nov 2021 08:57:46 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Salvatore Bonaccorso <carnil@debian.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Ben Hutchings <benh@debian.org>
-Subject: Re: [PATCH 4.19 088/323] locking/lockdep: Avoid RCU-induced noinstr
- fail
-Message-ID: <YaXZevLfOkCTzQTV@kroah.com>
-References: <20211124115718.822024889@linuxfoundation.org>
- <20211124115721.937655496@linuxfoundation.org>
- <YaNP46ypf6xcTcJH@eldamar.lan>
- <YaNvGtWfuCRkmWwi@eldamar.lan>
- <YaNx31QvvjHy2IGh@eldamar.lan>
- <YaN+1gwQwt0aGKte@kroah.com>
- <YaN/ZQYSAUfzjq0d@kroah.com>
- <YaUcRuy050ZrtucJ@eldamar.lan>
+        Tue, 30 Nov 2021 03:03:40 -0500
+Received: from mail.didiglobal.com (unknown [172.20.36.31])
+        by mailgate01.didichuxing.com (Maildata Gateway V2.8) with ESMTP id E37F2D81B920B;
+        Tue, 30 Nov 2021 15:58:13 +0800 (CST)
+Received: from BJSGEXMBX12.didichuxing.com (172.20.15.142) by
+ BJSGEXMBX10.didichuxing.com (172.20.15.140) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Tue, 30 Nov 2021 15:58:13 +0800
+Received: from [172.24.140.44] (172.24.140.44) by BJSGEXMBX12.didichuxing.com
+ (172.20.15.142) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 30 Nov
+ 2021 15:58:13 +0800
+Message-ID: <bb88899e-3c54-4583-eef9-d30f01efe4bb@didichuxing.com>
+Date:   Tue, 30 Nov 2021 15:58:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YaUcRuy050ZrtucJ@eldamar.lan>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH] sched/fair: prevent cpu burst too many periods
+Content-Language: en-US
+To:     Benjamin Segall <bsegall@google.com>,
+        Huaixin Chang <changhuaixin@linux.alibaba.com>
+CC:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>,
+        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <jameshongleiwang@126.com>
+X-MD-Sfrom: wanghonglei@didiglobal.com
+X-MD-SrcIP: 172.20.36.31
+From:   Honglei Wang <wanghonglei@didichuxing.com>
+In-Reply-To: <xm26mtlmpvox.fsf@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.24.140.44]
+X-ClientProxiedBy: BJEXCAS35.didichuxing.com (172.20.36.196) To
+ BJSGEXMBX12.didichuxing.com (172.20.15.142)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:30:30PM +0100, Salvatore Bonaccorso wrote:
-> Hi Greg,
-> 
-> (Adding Ben as well)
-> 
-> On Sun, Nov 28, 2021 at 02:08:53PM +0100, Greg Kroah-Hartman wrote:
-> > On Sun, Nov 28, 2021 at 02:06:30PM +0100, Greg Kroah-Hartman wrote:
-> > > On Sun, Nov 28, 2021 at 01:11:11PM +0100, Salvatore Bonaccorso wrote:
-> > > > Hi,
-> > > > 
-> > > > On Sun, Nov 28, 2021 at 12:59:24PM +0100, Salvatore Bonaccorso wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > On Sun, Nov 28, 2021 at 10:46:13AM +0100, Salvatore Bonaccorso wrote:
-> > > > > > Hi,
-> > > > > > 
-> > > > > > On Wed, Nov 24, 2021 at 12:54:38PM +0100, Greg Kroah-Hartman wrote:
-> > > > > > > From: Peter Zijlstra <peterz@infradead.org>
-> > > > > > > 
-> > > > > > > [ Upstream commit ce0b9c805dd66d5e49fd53ec5415ae398f4c56e6 ]
-> > > > > > > 
-> > > > > > > vmlinux.o: warning: objtool: look_up_lock_class()+0xc7: call to rcu_read_lock_any_held() leaves .noinstr.text section
-> > > > > > 
-> > > > > > For 4.19.218 at least this commit seems to cause a build failure for
-> > > > > > cpupower, if warnings are treated as errors, I have not seen the same
-> > > > > > for the 5.10.80 build:
-> > > > > > 
-> > > > > > gcc -g -O2 -fstack-protector-strong -Wformat -Werror=format-security -DVERSION=\"4.19\" -DPACKAGE=\"cpupower\" -DPACKAGE_BUGREPORT=\"Debian\ \(reportbug\ linux-cpupower\)\" -D_GNU_SOURCE -pipe -DNLS -Wall -Wchar-subscripts -Wpointer-arith
-> > > > > >  -Wsign-compare -Wno-pointer-sign -Wdeclaration-after-statement -Wshadow -Os -fomit-frame-pointer -fPIC -o /home/build/linux-4.19.218/debian/build/build-tools/tools/power/cpupower/lib/cpupower.o -c lib/cpupower.c
-> > > > > > In file included from lockdep.c:28:
-> > > > > > ../../../kernel/locking/lockdep.c: In function ‘look_up_lock_class’:
-> > > > > > ../../../kernel/locking/lockdep.c:694:2: error: implicit declaration of function ‘hlist_for_each_entry_rcu_notrace’; did you mean ‘hlist_for_each_entry_continue’? [-Werror=implicit-function-declaration]
-> > > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > > > >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > > > >   hlist_for_each_entry_continue
-> > > > > > ../../../kernel/locking/lockdep.c:694:53: error: ‘hash_entry’ undeclared (first use in this function); did you mean ‘hash_ptr’?
-> > > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > > > >                                                      ^~~~~~~~~~
-> > > > > >                                                      hash_ptr
-> > > > > > ../../../kernel/locking/lockdep.c:694:53: note: each undeclared identifier is reported only once for each function it appears in
-> > > > > > ../../../kernel/locking/lockdep.c:694:64: error: expected ‘;’ before ‘{’ token
-> > > > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > > > >                                                                 ^~
-> > > > > >                                                                 ;
-> > > > > > ../../../kernel/locking/lockdep.c:706:1: warning: control reaches end of non-void function [-Wreturn-type]
-> > > > > >  }
-> > > > > >  ^
-> > > > > > cc1: some warnings being treated as errors
-> > > > > > make[5]: *** [/home/build/linux-4.19.218/tools/build/Makefile.build:97: /home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep/lockdep.o] Error 1
-> > > > > > make[4]: *** [Makefile:121: /home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep/liblockdep-in.o] Error 2
-> > > > > > make[4]: Leaving directory '/home/build/linux-4.19.218/tools/lib/lockdep'
-> > > > > > make[3]: *** [/home/build/linux-4.19.218/debian/rules.d/tools/lib/lockdep/Makefile:16: all] Error 2
-> > > > > > make[3]: Leaving directory '/home/build/linux-4.19.218/debian/build/build-tools/tools/lib/lockdep'
-> > > > > > make[2]: *** [debian/rules.real:795: build-liblockdep] Error 2
-> > > > > > make[2]: *** Waiting for unfinished jobs....
-> > > > > > 
-> > > > > > I was not yet able to look further on it.
-> > > > > 
-> > > > > Might actually be a distro specific issue, needs some further
-> > > > > investigation.
-> > > > 
-> > > > I'm really sorry about the doubled noice, so here is the stance. I can
-> > > > reproduce distro indpeendent, but the initial claim was wrong. It can
-> > > > be reproduced for 4.19.218:
-> > > > 
-> > > > $ LC_ALL=C.UTF-8 V=1 ARCH=x86 make -C tools liblockdep
-> > > > make: Entering directory '/home/build/linux-stable/tools'
-> > > > mkdir -p lib/lockdep && make  subdir=lib/lockdep  -C lib/lockdep 
-> > > > make[1]: Entering directory '/home/build/linux-stable/tools/lib/lockdep'
-> > > > make -f /home/build/linux-stable/tools/build/Makefile.build dir=. obj=fixdep
-> > > >   gcc -Wp,-MD,./.fixdep.o.d -Wp,-MT,fixdep.o  -D"BUILD_STR(s)=#s"   -c -o fixdep.o fixdep.c
-> > > >    ld -r -o fixdep-in.o  fixdep.o
-> > > > gcc  -o fixdep fixdep-in.o
-> > > >   gcc -Wp,-MD,./.common.o.d -Wp,-MT,common.o -g -DCONFIG_LOCKDEP -DCONFIG_STACKTRACE -DCONFIG_PROVE_LOCKING -DBITS_PER_LONG=__WORDSIZE -DLIBLOCKDEP_VERSION='"4.19.218"' -rdynamic -O0 -g -fPIC -Wall -I. -I./uinclude -I./include -I../../include -D"BUILD_STR(s)=#s" -c -o common.o common.c
-> > > >   gcc -Wp,-MD,./.lockdep.o.d -Wp,-MT,lockdep.o -g -DCONFIG_LOCKDEP -DCONFIG_STACKTRACE -DCONFIG_PROVE_LOCKING -DBITS_PER_LONG=__WORDSIZE -DLIBLOCKDEP_VERSION='"4.19.218"' -rdynamic -O0 -g -fPIC -Wall -I. -I./uinclude -I./include -I../../include -D"BUILD_STR(s)=#s" -c -o lockdep.o lockdep.c
-> > > > In file included from lockdep.c:28:
-> > > > ../../../kernel/locking/lockdep.c: In function ‘look_up_lock_class’:
-> > > > ../../../kernel/locking/lockdep.c:692:2: warning: implicit declaration of function ‘hlist_for_each_entry_rcu_notrace’; did you mean ‘hlist_for_each_entry_continue’? [-Wimplicit-function-declaration]
-> > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > > >   hlist_for_each_entry_continue
-> > > > ../../../kernel/locking/lockdep.c:692:53: error: ‘hash_entry’ undeclared (first use in this function); did you mean ‘hash_ptr’?
-> > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > >                                                      ^~~~~~~~~~
-> > > >                                                      hash_ptr
-> > > > ../../../kernel/locking/lockdep.c:692:53: note: each undeclared identifier is reported only once for each function it appears in
-> > > > ../../../kernel/locking/lockdep.c:692:64: error: expected ‘;’ before ‘{’ token
-> > > >   hlist_for_each_entry_rcu_notrace(class, hash_head, hash_entry) {
-> > > >                                                                 ^~
-> > > >                                                                 ;
-> > > > ../../../kernel/locking/lockdep.c:704:1: warning: control reaches end of non-void function [-Wreturn-type]
-> > > >  }
-> > > >  ^
-> > > > make[2]: *** [/home/build/linux-stable/tools/build/Makefile.build:97: lockdep.o] Error 1
-> > > > make[1]: *** [Makefile:121: liblockdep-in.o] Error 2
-> > > > make[1]: Leaving directory '/home/build/linux-stable/tools/lib/lockdep'
-> > > > make: *** [Makefile:66: liblockdep] Error 2
-> > > > make: Leaving directory '/home/build/linux-stable/tools'
-> > > > 
-> > > > Reverting upstream ce0b9c805dd6 ("locking/lockdep: Avoid RCU-induced
-> > > > noinstr fail") on top of 4.19.218 fixes the issue.
-> > > > 
-> > > > So back to square one, and again apologies for the intermediate noise!
-> > > 
-> > > What config/arch is causing this to break?  And if you add rchlist.h to
-> > > the include files for lockdep.c, does that resolve the issue?  I haven't
-> > > seen any other reports of this yet.
-> > 
-> > Ah, it's the tools being built here, sorry, that was confusing.
-> 
-> Ah yes, sorry this was not clear. It's all about the tools, which some
-> are built as well as packages in Debian accompaning, tools/lib/lockdep
-> is one of those built.
 
-Ok, fair enough, I'll gladly take a patch that fixes this up for the
-4.19.y releases.
 
-thanks,
+On 2021/11/30 04:13, Benjamin Segall wrote:
+> Honglei Wang <wanghonglei@didichuxing.com> writes:
+> 
+>> Tasks might get more cpu than quota in persistent periods due to the
+>> cpu burst introduced by commit f4183717b370 ("sched/fair: Introduce the
+>> burstable CFS controller"). For example, one task group whose quota is
+>> 100ms per period and can get 100ms burst, and its avg utilization is
+>> around 105ms per period. Once this group gets a free period which
+>> leaves enough runtime, it has a chance to get computting power more
+>> than its quota for 10 periods or more in common bandwidth configuration
+>> (say, 100ms as period). It means tasks can 'steal' the bursted power to
+>> do daily jobs because all tasks could be scheduled out or sleep to help
+>> the group get free periods.
+>>
+>> I believe the purpose of cpu burst is to help handling bursty worklod.
+>> But if one task group can get computting power more than its quota for
+>> persistent periods even there is no bursty workload, it's kinda broke.
+>>
+>> This patch limits the burst to one period so that it won't break the
+>> quota limit for long. With this, we can give task group more cpu burst
+>> power to handle the real bursty workload and don't worry about the
+>> 'stealing'.
+> 
+> CC ing the burst patch author.
+> 
+> Whether or not burst is useful only for burst, or also for a bit of
+> long-term-only fairness is not entirely clear to me. Assuming we want it
+> only for burst, cutting off this sharply has a bit of additional
+> downside because it means that if a period refresh lands in the middle
+> of a burst then you lose the burst runtime. Permitting only two periods
+> in a row to make use of burst should be doable but it's yet another
+> piece of state added to cfs_b for this, and given typical ~100ms periods
+> that may be low enough odds that we don't care.
+> 
 
-greg k-h
+Originally, I was thinking if we should permit 2 periods, but in another 
+hand, I thought if we just permit 1, we can give more cpu.max.burst to 
+help the workloads sharp enough and can use up the quota even when they 
+start working in the middle of one period. In this way, they have chance 
+to get job done in part period with quota+bursted cpu and probably one 
+more period with only quota. It's kind of different views of the usage.
+
+If you think it can't cover the burst work loads, we can permit more 
+periods.
+
+>>
+>> Signed-off-by: Honglei Wang <wanghonglei@didichuxing.com>
+>> ---
+>>   kernel/sched/fair.c | 9 ++++++---
+>>   1 file changed, 6 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index 6e476f6d9435..cc2c4567fc81 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -4640,14 +4640,17 @@ void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)
+>>   	if (unlikely(cfs_b->quota == RUNTIME_INF))
+>>   		return;
+>>   
+>> -	cfs_b->runtime += cfs_b->quota;
+>> -	runtime = cfs_b->runtime_snap - cfs_b->runtime;
+>> +	runtime = cfs_b->runtime_snap - cfs_b->quota - cfs_b->runtime;
+>> +
+>>   	if (runtime > 0) {
+>>   		cfs_b->burst_time += runtime;
+>>   		cfs_b->nr_burst++;
+>> +		cfs_b->runtime = cfs_b->quota;
+>> +	} else {
+>> +		cfs_b->runtime += cfs_b->quota;
+>> +		cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
+>>   	}
+>>   
+>> -	cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
+>>   	cfs_b->runtime_snap = cfs_b->runtime;
+>>   }
+> 
+> If we do this, it should also be mentioned in
+> Documentation/scheduler/sched-bwc.rst, since the straightforward
+> description of burst as extra max runtime is no longer enough.
+> 
+
+Yep, I'll try to refine the description of the documentation next time 
+if we decide to do this.
+
+Thank,
+Honglei

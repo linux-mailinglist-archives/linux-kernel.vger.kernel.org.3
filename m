@@ -2,98 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9442F463594
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48728463598
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:36:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241229AbhK3NjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240974AbhK3NjV (ORCPT
+        id S240706AbhK3NkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:40:12 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12268 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S229921AbhK3NkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:39:21 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBD9C061574;
-        Tue, 30 Nov 2021 05:36:02 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id l16so44483001wrp.11;
-        Tue, 30 Nov 2021 05:36:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Kd/PIpmYaLUF1O2eJ98CX6rZ8nmgEvejw2gH2/LRG4Y=;
-        b=HJ7W5FGbNE3/u2oB438mBrtAFyavCbqGa87yKoYhwlil3eLvSGmZ/41E2zB9fNJr8W
-         6D6jrNqFDYy8B4kmNcakQqBSPoN/XUWEx740RIOx8XTarh47tttuZPOLBaNVb2dxt+ZH
-         VGJFdsAAnsR//l0Ena+5wD7eG0vJuZAQCURwRrGAFdr43FGzRNULm1N7cOwYyhI1tySk
-         1cK1S9sFkAIPP0tvrWAmuHVT+TzmTVh+4RDkzY+Q1cTE4G0O8xCeNOPm07nYmIEImLaZ
-         S23KcLoCuxjpIb2QBOe204GvrzQJMvsWOW7JFQM26b8JlkQzI5prpIVcfmqH3s7ph3IM
-         fznw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Kd/PIpmYaLUF1O2eJ98CX6rZ8nmgEvejw2gH2/LRG4Y=;
-        b=FOvC3f1o/ELVfTRHsl6Huzloyrn0mHVRuxYgXZbTLF0b3L4qqT4gPFE84xcVp7hAoO
-         BiSY5y80EYj12E7rL7vCGgLN47o0ZVFYrOd+q2PoRA1pHscj0dG0NjvgFBs7mCrburua
-         6lyNygM9We9ePrH5dzrigsp/N/jo26XJIq6xPzq+aSqFZp3kZutMBvZrTxRVgT6Vl0/n
-         C+WSCkjgjJHYUcSdWrAbHoraRCDmuZAU+/qkS7x87c1hOBxQSwV25yWMxxcpxFrL03BR
-         QIr8L7UyHwk8COTfoal3L97l354agIo18LcjXemK49hel82cSHR4IZ9i/YFylGi+9o3E
-         tYPA==
-X-Gm-Message-State: AOAM533GkqgzYN310+wlTvQjUv0RB3dBYYgl7rAxWGbjf1w+AmO/pGlG
-        +pAy9QESpc3RWAmiM342aaXgOtW31OA=
-X-Google-Smtp-Source: ABdhPJwPQ4CbgKVFJFMipUY07IGCj7+eKtDT+kkFUE3RgfiqFDHqqNuWxN7wcmF2ElMi2fp43dxe8A==
-X-Received: by 2002:adf:f189:: with SMTP id h9mr42486139wro.463.1638279360678;
-        Tue, 30 Nov 2021 05:36:00 -0800 (PST)
-Received: from debian (host-2-99-153-109.as13285.net. [2.99.153.109])
-        by smtp.gmail.com with ESMTPSA id w7sm16719370wru.51.2021.11.30.05.35.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 05:36:00 -0800 (PST)
-Date:   Tue, 30 Nov 2021 13:35:58 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, stable@vger.kernel.org
-Subject: Re: [PATCH 5.10 000/121] 5.10.83-rc1 review
-Message-ID: <YaYovvQ9sXKEI4i/@debian>
-References: <20211129181711.642046348@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+        Tue, 30 Nov 2021 08:40:10 -0500
+Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUDHOmp003917;
+        Tue, 30 Nov 2021 13:36:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=qyOEgt+j8v4rot0tCjopd92DtEHy28X+Qjah5atxKE0=;
+ b=ZTaRGoGRjtzvqGblV3xeWyfNB2Pveas7xqyEKACcROWo9TzJNgUoJeF4GqZY/wPV7m8G
+ G6QDcf+wKXQZPZnSgx4siULAkAl3TclwWlceNpokYoH8kX0B/nkkk3IP15Vf7Od/qLot
+ c/pluHAMdxQF/j4VaG60cg2UMmeiDPzi/5aeCpLuQzJnDLgXXaMfUA71ZqnaCiMjAvIp
+ DNwA2Gu6EmHdl+IJFbV9b4XFNYe+UkiTznYwOXQxBuZiXgVWFtDrRvryaK1Mni60yoHo
+ jVaLoXlvS2beuSGvTrRxqo4l/zc3oVi4C2lGIICdzsshfoZ10sO8C0LVlnlOO+nCYurj 6g== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cnmq88d3c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 13:36:49 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUDWeg0017485;
+        Tue, 30 Nov 2021 13:36:47 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma02fra.de.ibm.com with ESMTP id 3ckca9wtes-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 13:36:46 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUDai1S27984382
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Nov 2021 13:36:44 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7D76552098;
+        Tue, 30 Nov 2021 13:36:44 +0000 (GMT)
+Received: from sig-9-65-92-250.ibm.com (unknown [9.65.92.250])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 85C1952093;
+        Tue, 30 Nov 2021 13:36:42 +0000 (GMT)
+Message-ID: <138c2aa0dba46d5e6bb163ca8bb62b4117cc8459.camel@linux.ibm.com>
+Subject: Re: [PATCH 4/4] ima: support fs-verity file digest based signatures
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        linux-integrity@vger.kernel.org
+Cc:     linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>
+Date:   Tue, 30 Nov 2021 08:36:41 -0500
+In-Reply-To: <7dfa283e-13b2-40de-158d-8642778d74cc@linux.microsoft.com>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+         <20211129170057.243127-5-zohar@linux.ibm.com>
+         <7dfa283e-13b2-40de-158d-8642778d74cc@linux.microsoft.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uBM_6rOdkwnp30mb3N8Al8z1WBT7Nvay
+X-Proofpoint-GUID: uBM_6rOdkwnp30mb3N8Al8z1WBT7Nvay
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_08,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ suspectscore=0 priorityscore=1501 mlxlogscore=999 adultscore=0
+ malwarescore=0 spamscore=0 mlxscore=0 bulkscore=0 phishscore=0
+ clxscore=1015 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2111300078
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Hi Lakshmi, Eric,
 
-On Mon, Nov 29, 2021 at 07:17:11PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.83 release.
-> There are 121 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, 2021-11-29 at 21:56 -0800, Lakshmi Ramasubramanian wrote:
+> Hi Mimi,
 > 
-> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
-> Anything received after that time might be too late.
+> On 11/29/2021 9:00 AM, Mimi Zohar wrote:
+> > Instead of calculating a file hash and verifying the signature stored
+> > in the security.ima xattr against the calculated file hash, verify the
+> > signature of the fs-verity's file digest.  The fs-verity file digest is
+> > a hash that includes the Merkle tree root hash.
 
-Build test:
-mips (gcc version 11.2.1 20211112): 63 configs -> no new failure
-arm (gcc version 11.2.1 20211112): 105 configs -> no new failure
-arm64 (gcc version 11.2.1 20211112): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20211112): 4 configs -> no failure
+> This patch is reading the fs-verity signature for the given file using 
+> the new function fsverity_measure() that was defined in [Patch 1/4]. Is 
+> it also verifying the fs-verity signature here?
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+Yes, the signature stored in the security.ima xattr may be a file hash,
+a regular file signature, or a signature of the fs-verity file digest. 
+The signature is verified like any other signature stored as an xattr.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/455
-[2]. https://openqa.qa.codethink.co.uk/tests/450
+>  
+> > +static int ima_collect_verity_measurement(struct integrity_iint_cache *iint,
+> > +					  struct ima_digest_data *hash)
+> > +{
+> > +	u8 verity_digest[FS_VERITY_MAX_DIGEST_SIZE];
+> > +	enum hash_algo verity_alg;
+> > +	int rc;
+> > +
+> > +	rc = fsverity_measure(iint->inode, verity_digest, &verity_alg);
+> nit: fsverity_collect_measurement() may be more appropriate for this 
+> function (defined in [PATCH 1/4]).
 
+From an IMA perspective it certainly would be a better function name,
+but this function may be used by other kernel subsystems.  Eric
+suggested renaming the function as fsverity_get_digest(), as opposed to
+fsverity_read_digest().   get/put are normally used to bump a reference
+count or to get/release a lock.   Perhaps a combination like
+fsverity_collect_digest() would be acceptable.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+thanks,
 
---
-Regards
-Sudip
+Mimi
+

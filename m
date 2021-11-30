@@ -2,107 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CA5F463D53
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D42463D5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245213AbhK3SDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:03:46 -0500
-Received: from mout.gmx.net ([212.227.17.21]:33073 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S238677AbhK3SDq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:03:46 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638295203;
-        bh=p0H2cqMkifqjvSF0fOMCU23FVPx2ReNpJKrlUcqatUI=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=K5wHVjQFW3Vizg/YlVvPHdM5z3L30o5/AVVQuaWC23PIDvrRx/bfCyJhBzNI4WX24
-         mVXqxuljiZRLJhfdzMQP+Fki6NRDpmRp0+yOOy3hAQSkhBz0C1tfpKOlUS0iA2eOjl
-         E/j2MFt9ZFlY+PB7s4ls6ujzAXIVodSZHDidqEH0=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from homer.fritz.box ([185.146.50.175]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MsYux-1mcWLY0Q5j-00u1ej; Tue, 30
- Nov 2021 19:00:03 +0100
-Message-ID: <c2aee7e6b9096556aab9b47156e91082c9345a90.camel@gmx.de>
-Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-From:   Mike Galbraith <efault@gmx.de>
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Alexey Avramov <hakavlad@inbox.lv>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Tue, 30 Nov 2021 18:59:58 +0100
-In-Reply-To: <20211130172754.GS3366@techsingularity.net>
-References: <20211125151853.8540-1-mgorman@techsingularity.net>
-         <20211127011246.7a8ac7b8@mail.inbox.lv>
-         <20211129150117.GO3366@techsingularity.net>
-         <20211201010348.31e99637@mail.inbox.lv>
-         <20211130172754.GS3366@techsingularity.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 
+        id S245242AbhK3SEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:04:31 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:46296 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243794AbhK3SE2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 13:04:28 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3VQD59R0z9vtYm
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:01:08 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id GC1kN1ZCC2gr for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 12:01:08 -0600 (CST)
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3VQD33wSz9vtZ5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:01:08 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3VQD33wSz9vtZ5
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3VQD33wSz9vtZ5
+Received: by mail-pl1-f197.google.com with SMTP id m17-20020a170902db1100b001421cb34857so8661584plx.15
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:01:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NL0IN42+vhkt/BQxOMaS6WGBCL/vDaM2/NJLkQGW6Vk=;
+        b=IaCGRRGoGX4BQNCdCbpZEfJZm3PIHsvhvVBLRoPiWw+RvC37CMC3NTitW531yMPkaT
+         O1Yq1i9zlKp/5yaP6of6CLu9qm5hg00DvTmSt6b2AsmJAjXby8IoZ6eS/SIVksrnKeIs
+         BNoqrLWZdT6Fc/tMq1nxhbvYi+oSQ/SNJ40+S6Hd1bEdXwPSevtc/PGCT15t+Pn1oZZ1
+         zj/x6V2r5Y38YhkMqTFobafEXF7iAL/0SXe2ep6OR/s83D+04N/iDxc8WAoM7wKy6Tq7
+         HsZZevzc4mf6pvRSmith9h3i6OwDTgLFyGmNbm2KQA2GHcl+kgrZSMDEadxymDZFqy4H
+         z7FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NL0IN42+vhkt/BQxOMaS6WGBCL/vDaM2/NJLkQGW6Vk=;
+        b=JZsyuXYdE4q5fC32cSHW5lFTPJ0pQmwtH+zaP0++03Y7wm+M4Qx1fSW9VRj1Iz8Bwk
+         U5Jf7QPCFJnk6v6KXSvWmZal0OZflWHwoLmRm4t+u64WBhYADk6ibg3n+JHLrlfnCFUG
+         eTlj9Gos1hAMn2H5c2is57fs1FlNschH4GQ+qKcirlDJ1x9AUhWVAZl/838v3I2SLdax
+         hqjNz2gcGIEroQuWeNKqKN1QL3JtStCxvOsXR4hbMPb2Qi9SPQPXogFWYLyjF24DYS03
+         HKziq+huJ+bJ68uuiyM7eL25dwIu+mFBnlOhBJjFdM83h6t20M/13/Og1m+/JaPeGuwl
+         wS5A==
+X-Gm-Message-State: AOAM533TYCUUe7vD6crMlCFTfCjoJ3MrBl2hwxsNp/LaSmsAawTdEI0d
+        6v/bfqg9PGiFDmkUHkl6JqvhyEQxDvAwws8hhAYRtknQ9A7nqFjwgCOwLN/4bfKgKNmmb8XecHd
+        5wxI0p2JiKdtU6nOKCDu0KmNhBcXb
+X-Received: by 2002:a17:902:c78a:b0:142:1b7a:930 with SMTP id w10-20020a170902c78a00b001421b7a0930mr800468pla.8.1638295261894;
+        Tue, 30 Nov 2021 10:01:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyqLTafcr/AGzb9we55yXJTEdf36evhqdpEWPD52bvrAmxYJsSWPtReDc97dx8xlqMJehP4Tw==
+X-Received: by 2002:a17:902:c78a:b0:142:1b7a:930 with SMTP id w10-20020a170902c78a00b001421b7a0930mr800290pla.8.1638295259505;
+        Tue, 30 Nov 2021 10:00:59 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id s19sm22444973pfu.104.2021.11.30.10.00.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 10:00:59 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Wenzhen Yu <wenzhen.yu@mediatek.com>,
+        Rob Herring <robh@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: mediatek: mt7629: Fix a NULL pointer dereference in  mtk_pericfg_init()
+Date:   Wed,  1 Dec 2021 02:00:20 +0800
+Message-Id: <20211130180022.216947-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:RpBUBEAGZmeNkXxqfTXCYJ3JGdKKlx/k6qsoxqkn+eNZyGA17fS
- 6A0ECgR6AmCvDIINwTQw9d1a9fWix5WcL+PFG6LwZuoc+MPZtHvKjTta2iYTLM3ApLzUbrp
- VMi4+tOapr0qwJuHz7v+a9vPW7AOJcr6+GJ0ZIKack7d13WWCT2pF6ORBJH36TMO22VgnY3
- 1aFU7c4j4KNX9Vz0ycPGw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:aGQmldvLPl0=:NQTJciD5A+GpoR/z/5yBt+
- QOsVJt5cfxoNYpfuMxn+P4TZmJYIfkJMSLRBobj46VN6YKawDdCdOGm9dfcieUtAZbOjExRKP
- TGZ7J6hrhzXOBINZ47sKO2tFl5PrcxsW7rJPR9vnpVdl9on4/8sXZdoM9+ecAHap+S/r6Im69
- K0SLpbd+nQJp79dHkj3iLTEWhYa2U+hfy/j7DOJpBTVsyw6GcOkrhtwRlteT0kwXgzCfztArW
- ByPG4L6vbjSGQYzXjLJJXpXglcbNN71MAsvq10ZmhsaY8tzwB49+lyijjEfQL3fxUFCaJ3lfl
- l7ICZ0CzVXnfGSyt59aChCyZ5wH/BFSskNz2ajXNtaBReSsZYxKUJgJtImPREF8hXOUWPNQYz
- cs2iIC0I2DtzSCQD2Q1o8/M17Kunu8HLRPWJPGkJ2NXcFEj0FENSInthzRh2t7PQm0CUTmXAO
- UVOfd6V0acPtxJsZN0QfTtLZ8omSMAAWH430IEISln8kt+yV+VCksZyzd2WS2g0UvSDWAw0gO
- QeZVgt0yz1VIDlZd2dqEk3zEQ5EZqlXfpWg/kP2j9eLRgEV5IiVZ07lpcMeWTyo7g8sICcgKR
- NGQfPqrMlY5X007xvvJCUssyNk8CWfzmU+wZRrqIbvWKFyQ8hgKKxTVVHVJPyjJGIRMnHhX5L
- yR6BoWVaWNXSCIV5LY+eeedzTJYaVNt75+qvfa1yzUxsPCXkqqYBSItt5di8SkTJHtrd3y/7h
- 0s5GKo4YiCcNWTKTgobiIavBdfHcnox9rTQKCf8tNfXKLvRy4ER3CsKe5bwAfjk+E0dy1Zhbf
- leJ9Z2kOHmwquwZc+/gBEsOgoDpnRh5Vn6tP1KkeqUH5ke+ZuLW+Ane1W/6ymURfvVfNcXDDp
- TyS8iV0uN0Oz0zFsi0v1P8Cxrfl6dMM8DjznjISkhgD0SxIjhVakefBiitS+TE3+8QKQm4UES
- cU4xPIhOVmemF3TlUXXQZ6Epawlw++CjyRnxBewZwuSaTxOTYpeSDjxGAzikpv9Uw4CMWCg9V
- IeIhEuO4nNBlUmxLXB5tt1jn3iCDx3oR+cTY91W/h+XiD0G7xUVi0pNy0lQ/XCe+rBrY5w1Jp
- dMwp7Xc2nv4mfY=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-11-30 at 17:27 +0000, Mel Gorman wrote:
->
-> Obviously a fairly different experience and most likely due to the
-> underlying storage.
+In mtk_pericfg_init(), mtk_alloc_clk_data() is assigned to clk_data
+and used in clk_prepare_enable(). There is dereference of clk_data
+in clk_prepare_enable(), which could lead to a NULL pointer dereference
+on failure of mtk_alloc_clk_data().
 
-I bet a virtual nickle this is the sore spot.
+Fix this bug by adding a check of clk_data.
 
-=2D--
- mm/vmscan.c |   10 ++++++++++
- 1 file changed, 10 insertions(+)
+Another way to fix this bug is to add a check of clk_data in
+clk_prepare_enable(), which may solve many similar bugs but could
+cause potential problems to previously correct cases as the API is changed.
 
-=2D-- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3360,7 +3360,17 @@ static void shrink_node(pg_data_t *pgdat
- 	if (!current_is_kswapd() && current_may_throttle() &&
- 	    !sc->hibernation_mode &&
- 	    test_bit(LRUVEC_CONGESTED, &target_lruvec->flags))
-+#if 0
- 		reclaim_throttle(pgdat, VMSCAN_THROTTLE_WRITEBACK);
-+#else
-+		/*
-+		 * wait_iff_congested() used to live here and was
-+		 * _apparently_ a misspelled cond_resched()?????
-+		 * In any case, we are most definitely NOT starting
-+		 * any IO in reclaim_throttle(), so why bother?
-+		 */
-+		cond_resched();
-+#endif
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
- 	if (should_continue_reclaim(pgdat, sc->nr_reclaimed -
-nr_reclaimed,
- 				    sc))
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_COMMON_CLK_MT7629=y show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes:  3b5e748615e7 ("clk: mediatek: add clock support for MT7629 SoC")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/clk/mediatek/clk-mt7629.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/clk/mediatek/clk-mt7629.c b/drivers/clk/mediatek/clk-mt7629.c
+index 30fe4b9b9fda..856929f94ebd 100644
+--- a/drivers/clk/mediatek/clk-mt7629.c
++++ b/drivers/clk/mediatek/clk-mt7629.c
+@@ -628,6 +628,8 @@ static int mtk_pericfg_init(struct platform_device *pdev)
+ 		return PTR_ERR(base);
+ 
+ 	clk_data = mtk_alloc_clk_data(CLK_PERI_NR_CLK);
++	if (!clk_data)
++		return -ENOMEM;
+ 
+ 	mtk_clk_register_gates(node, peri_clks, ARRAY_SIZE(peri_clks),
+ 			       clk_data);
+-- 
+2.25.1
 

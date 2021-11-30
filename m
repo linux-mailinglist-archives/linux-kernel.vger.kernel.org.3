@@ -2,44 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F36AC4637D0
+	by mail.lfdr.de (Postfix) with ESMTP id 144D84637CD
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243098AbhK3O4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:56:22 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58124 "EHLO
+        id S238118AbhK3O4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:56:10 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:58132 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243020AbhK3Oxh (ORCPT
+        with ESMTP id S242543AbhK3Oxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:53:37 -0500
+        Tue, 30 Nov 2021 09:53:38 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ADDA1CE1A5D;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 9F583CE1A5B;
+        Tue, 30 Nov 2021 14:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 847BBC53FCD;
         Tue, 30 Nov 2021 14:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2A1C53FCF;
-        Tue, 30 Nov 2021 14:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638283814;
-        bh=Bjexz0kYT2ZxeQujlzx1Ck7HxUZ1U2LiuLmVzBxO43A=;
+        s=k20201202; t=1638283817;
+        bh=zxBJljs7e23+XZomIM7RI2roqvd+GMCfR/TzbPr+C60=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Hk/cOShc8GnCWGP30p8wxzD0YjXOcD0m58kUg2WXfAWF4ZRkOxkmz7uzSypUaftz1
-         wlxyIuYa8Mll1scvAk+WHZm2IjocKx2G7YtZ5JN8CgbSbSxP80arF5zJajzT2YM4rV
-         /1WqkI3VXzYyfosivCdSNFxTIKGUSgW7VoX2HqcX21s6A1A5j2NCROSpjkSVEZEi5G
-         V4xh6huYsVMBhZjPAh+cI1aiEUjisjwLfGg36ywe8kyrtHfEZ+W4M2e/Q2vgj4m77T
-         sXPX7jlWqjPo03Ld5Q0j5aFlReC85dSOYfQhHBjVfNSbgvIOno7qarcCLDz4kzASae
-         xjEAy0/mnw8nQ==
+        b=pAATUUS0rab94SV43r+lk4HMp6vOMBAw/akMFMDsCqw3sSaq/uiZyvFIRefjiEB+l
+         Xlk/OICNF+VhGstrffZw7VsE3uWvhzhrVIha0ZK8gvj/RuGkJ1UxdXqI3JHKsLBi7t
+         ux66vhzXZ1MYDkVbxboqngxyfqVwAU2uqkB1b4AKDy0WQs7TD5bi7Acgdmo5XYB5mD
+         ZsSwIc+Wt+NHnTfKsVpT1az3ujTEc0lWVkmE/DMbsfzs//McH5GZ8dwPMGZ7nageEB
+         wHRXwVzIgIRzqjW3T2bfqJzxGtnQQrs1LCVfoHViAZJtBa0NRJzw8vwQrBYlTxJHJp
+         3V3YKwmDO1KlQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, claudiu.manoil@nxp.com,
-        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 65/68] net: mscc: ocelot: create a function that replaces an existing VCAP filter
-Date:   Tue, 30 Nov 2021 09:47:01 -0500
-Message-Id: <20211130144707.944580-65-sashal@kernel.org>
+Cc:     Ye Bin <yebin10@huawei.com>, Jens Axboe <axboe@kernel.dk>,
+        Sasha Levin <sashal@kernel.org>, io-uring@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 67/68] io_uring: Fix undefined-behaviour in io_issue_sqe
+Date:   Tue, 30 Nov 2021 09:47:03 -0500
+Message-Id: <20211130144707.944580-67-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130144707.944580-1-sashal@kernel.org>
 References: <20211130144707.944580-1-sashal@kernel.org>
@@ -51,81 +47,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+From: Ye Bin <yebin10@huawei.com>
 
-[ Upstream commit 95706be13b9f755d93b5b82bdc782af439f1ec22 ]
+[ Upstream commit f6223ff799666235a80d05f8137b73e5580077b9 ]
 
-VCAP (Versatile Content Aware Processor) is the TCAM-based engine behind
-tc flower offload on ocelot, among other things. The ingress port mask
-on which VCAP rules match is present as a bit field in the actual key of
-the rule. This means that it is possible for a rule to be shared among
-multiple source ports. When the rule is added one by one on each desired
-port, that the ingress port mask of the key must be edited and rewritten
-to hardware.
+We got issue as follows:
+================================================================================
+UBSAN: Undefined behaviour in ./include/linux/ktime.h:42:14
+signed integer overflow:
+-4966321760114568020 * 1000000000 cannot be represented in type 'long long int'
+CPU: 1 PID: 2186 Comm: syz-executor.2 Not tainted 4.19.90+ #12
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace+0x0/0x3f0 arch/arm64/kernel/time.c:78
+ show_stack+0x28/0x38 arch/arm64/kernel/traps.c:158
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x170/0x1dc lib/dump_stack.c:118
+ ubsan_epilogue+0x18/0xb4 lib/ubsan.c:161
+ handle_overflow+0x188/0x1dc lib/ubsan.c:192
+ __ubsan_handle_mul_overflow+0x34/0x44 lib/ubsan.c:213
+ ktime_set include/linux/ktime.h:42 [inline]
+ timespec64_to_ktime include/linux/ktime.h:78 [inline]
+ io_timeout fs/io_uring.c:5153 [inline]
+ io_issue_sqe+0x42c8/0x4550 fs/io_uring.c:5599
+ __io_queue_sqe+0x1b0/0xbc0 fs/io_uring.c:5988
+ io_queue_sqe+0x1ac/0x248 fs/io_uring.c:6067
+ io_submit_sqe fs/io_uring.c:6137 [inline]
+ io_submit_sqes+0xed8/0x1c88 fs/io_uring.c:6331
+ __do_sys_io_uring_enter fs/io_uring.c:8170 [inline]
+ __se_sys_io_uring_enter fs/io_uring.c:8129 [inline]
+ __arm64_sys_io_uring_enter+0x490/0x980 fs/io_uring.c:8129
+ invoke_syscall arch/arm64/kernel/syscall.c:53 [inline]
+ el0_svc_common+0x374/0x570 arch/arm64/kernel/syscall.c:121
+ el0_svc_handler+0x190/0x260 arch/arm64/kernel/syscall.c:190
+ el0_svc+0x10/0x218 arch/arm64/kernel/entry.S:1017
+================================================================================
 
-But the API in ocelot_vcap.c does not allow for this. For one thing,
-ocelot_vcap_filter_add() and ocelot_vcap_filter_del() are not symmetric,
-because ocelot_vcap_filter_add() works with a preallocated and
-prepopulated filter and programs it to hardware, and
-ocelot_vcap_filter_del() does both the job of removing the specified
-filter from hardware, as well as kfreeing it. That is to say, the only
-option of editing a filter in place, which is to delete it, modify the
-structure and add it back, does not work because it results in
-use-after-free.
+As ktime_set only judge 'secs' if big than KTIME_SEC_MAX, but if we pass
+negative value maybe lead to overflow.
+To address this issue, we must check if 'sec' is negative.
 
-This patch introduces ocelot_vcap_filter_replace, which trivially
-reprograms a VCAP entry to hardware, at the exact same index at which it
-existed before, without modifying any list or allocating any memory.
-
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Acked-by: Richard Cochran <richardcochran@gmail.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+Link: https://lore.kernel.org/r/20211118015907.844807-1-yebin10@huawei.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/mscc/ocelot_vcap.c | 16 ++++++++++++++++
- include/soc/mscc/ocelot_vcap.h          |  2 ++
- 2 files changed, 18 insertions(+)
+ fs/io_uring.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/net/ethernet/mscc/ocelot_vcap.c b/drivers/net/ethernet/mscc/ocelot_vcap.c
-index 99d7376a70a74..337cd08b1a543 100644
---- a/drivers/net/ethernet/mscc/ocelot_vcap.c
-+++ b/drivers/net/ethernet/mscc/ocelot_vcap.c
-@@ -1217,6 +1217,22 @@ int ocelot_vcap_filter_del(struct ocelot *ocelot,
- }
- EXPORT_SYMBOL(ocelot_vcap_filter_del);
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 365f8b350b7f0..d0933789bf3ce 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -6147,6 +6147,9 @@ static int io_timeout_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe,
+ 	if (get_timespec64(&data->ts, u64_to_user_ptr(sqe->addr)))
+ 		return -EFAULT;
  
-+int ocelot_vcap_filter_replace(struct ocelot *ocelot,
-+			       struct ocelot_vcap_filter *filter)
-+{
-+	struct ocelot_vcap_block *block = &ocelot->block[filter->block_id];
-+	int index;
++	if (data->ts.tv_sec < 0 || data->ts.tv_nsec < 0)
++		return -EINVAL;
 +
-+	index = ocelot_vcap_block_get_filter_index(block, filter);
-+	if (index < 0)
-+		return index;
-+
-+	vcap_entry_set(ocelot, index, filter);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL(ocelot_vcap_filter_replace);
-+
- int ocelot_vcap_filter_stats_update(struct ocelot *ocelot,
- 				    struct ocelot_vcap_filter *filter)
- {
-diff --git a/include/soc/mscc/ocelot_vcap.h b/include/soc/mscc/ocelot_vcap.h
-index 4869ebbd438d9..56c19068d9911 100644
---- a/include/soc/mscc/ocelot_vcap.h
-+++ b/include/soc/mscc/ocelot_vcap.h
-@@ -693,6 +693,8 @@ int ocelot_vcap_filter_add(struct ocelot *ocelot,
- 			   struct netlink_ext_ack *extack);
- int ocelot_vcap_filter_del(struct ocelot *ocelot,
- 			   struct ocelot_vcap_filter *rule);
-+int ocelot_vcap_filter_replace(struct ocelot *ocelot,
-+			       struct ocelot_vcap_filter *filter);
- struct ocelot_vcap_filter *
- ocelot_vcap_block_find_filter_by_id(struct ocelot_vcap_block *block,
- 				    unsigned long cookie, bool tc_offload);
+ 	data->mode = io_translate_timeout_mode(flags);
+ 	hrtimer_init(&data->timer, io_timeout_get_clock(data), data->mode);
+ 
 -- 
 2.33.0
 

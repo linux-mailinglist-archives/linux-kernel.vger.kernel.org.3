@@ -2,103 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA211462FB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCC2462FB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235751AbhK3JfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 04:35:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42072 "EHLO
+        id S240235AbhK3Jfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 04:35:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233674AbhK3JfW (ORCPT
+        with ESMTP id S235582AbhK3Jfd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:35:22 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AA4C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:32:03 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id a2so19519928qtx.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:32:03 -0800 (PST)
+        Tue, 30 Nov 2021 04:35:33 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5ECC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:32:14 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id w1so84244448edc.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:32:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=aUO0zYMOFTImjhGnSua4FGc7M45+0o91QH3P+KyNO88=;
-        b=C03OfCYd9KW5usMblxVVjO4GA8qqiIkLGOcYZdvMMcY9dVe047o0+AGFOm2iqa267O
-         f9Xmd0H1uoP8+2QugfNG4NhBvL2p3O/6FS8+8JprxI431e001pvtmmOIcSfoG4Xtg//I
-         KpgfBKzR8okx3vZ7nsdpD/EG+FrWNSiUmZirNJyCmnUXcqrMb0R+hxidJbo7MsSyuiK2
-         iuTLyvb3zhaBhKXInoBNQ2H5NOxAbmzsvlWqip5omDpqyQe4i+VIxeKKyaM44CgJkqlg
-         VUL7g/WEuRDD5HgmFjIl8JN3ExPHJL4PUaEuGjteHIn+7JIpgFNW0XfMvGap6N/jWPSG
-         1G8A==
+         :cc:content-transfer-encoding;
+        bh=xoXOLJWpD0lHUX6hFbdZV58Ab4Q2/gT90EA5saamkEU=;
+        b=D6SapCyyPKCp06PaCKTy+m7XXWQ0waD1v0k39IbTt4l5t/a7TFWxI2IWxmrUjSAhZE
+         mOWpnkm/05w+FW9vwwuAPuAT/tUzql3Y8J+aO+ex6tYsIw/4PlJ6rkCewmSbLggY5/px
+         1AUjAPXNzGOlj+wgCR0sK3xYdDytMhFWSn+hu8ejP9QcaxnQRFNffnT3g2zun1ugblef
+         O6y9R/t2yF97g2mGbo5+5ZKtkMPCIh6rXLpT4WaVahMnKgTCNKTygTvW6W87TitKdwEL
+         FnyA478ZIq09E8/xGpubbyStQuUG2DYgFCXHQ7EU+L76JKOdK+g+AmGnNdSoHeu6gt4V
+         m0uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=aUO0zYMOFTImjhGnSua4FGc7M45+0o91QH3P+KyNO88=;
-        b=5rMk488UvtqkETXgZPYpB6d4TcgLc+1W3Hkd16ROUKxnvZvGlTCptlqD3KWNSt3kvw
-         0M2UrFgMSP9ZPnUZ8e/rnWEFIL/fH4gK3lJPTryJYiRFgbPcaGMAuNWsr/o9SqTyJE28
-         wTBoDDc1qCDNZwZXDTca5FtstHyjUTW+HDEHKE2KgCqpCbBsNsLUV9vD1O87upfpe/OD
-         pomjfZJTfxhs0rR6ISTKLnO0KWfRba1cKxMD1MfF+yHMOEupzPuO21iIgl77G0+qdjNf
-         8LeGVz1Mp6vbUe4hPkYfqkvUO+Pqf4ibJZNuEX1/ihZzDz+/eU8E3bHeOkEW3kH3s3+4
-         kqNQ==
-X-Gm-Message-State: AOAM53140F3XohGQdV10U2jN0EcyGvmkEV9hIWUENq7G/FCIUXlo8hkb
-        JYLls/RNL66Fb5sDId8NI/DnCZWmzRjcdpIz+GeqHA==
-X-Google-Smtp-Source: ABdhPJxmLDZCFj0xvJYiN+/PqdA9cil06ermArqh0vD0zpnelQPpEweDRgPqu4aIMcAqQlHtdTH8wFo7SO3yeN29Ldk=
-X-Received: by 2002:a05:622a:202:: with SMTP id b2mr49227244qtx.34.1638264723012;
- Tue, 30 Nov 2021 01:32:03 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=xoXOLJWpD0lHUX6hFbdZV58Ab4Q2/gT90EA5saamkEU=;
+        b=vP8S/mmVEuIK54+MujtEwExmxI0SkCGbPwidVXaUeztMqhrVn5LqpDg5L1EunCnAXo
+         f1cdBKcJEalnGLNYZK0zadFDbJ34Eac+6ZbJ31xKNAupVg3OYsFEiQjSYAocC/i55NT/
+         2w0epY/71wXEq6vg+1S3Z6QTlzLPWUx4N77RQ1fu0Pn1lOdqeJK7+xMstEMydD0tI3hC
+         YULL/PwscR5ycCiGNS6VvabbMPbQG5ksnSeMq+rFWlRvMpI21xcCaAnUJSBxiRJTr5iU
+         RRCbjDzD+9PzStZPW04aFjGYTMUPbHBQO0CmCVoXRySGyccnV9sGLkZwzNPJqpUOuuRp
+         3kRw==
+X-Gm-Message-State: AOAM5332Z+r75vkpLK+NO59Vh4rwTFj3ZKEJXGs2gicF2xvzId2R8Cu5
+        7swDqJGTvspYxoWoPHLPM/zqKknu2DNhYMIip7mfkg==
+X-Google-Smtp-Source: ABdhPJwVC/Jc+0BLK1FXkRMFbLvZzD456y/TUVHcnDXZ7SKN27TolOtE5iiz9/cnlZ61+U3t8nFD7+BZZzF9v4/J0mU=
+X-Received: by 2002:a05:6402:14f:: with SMTP id s15mr38056725edu.118.1638264732486;
+ Tue, 30 Nov 2021 01:32:12 -0800 (PST)
 MIME-Version: 1.0
-References: <20211117145829.204360-1-marcan@marcan.st> <20211117145829.204360-2-marcan@marcan.st>
- <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de> <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
- <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
- <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com> <9315c6f5-48f6-4f29-1e31-87ab5ed771b5@suse.de>
-In-Reply-To: <9315c6f5-48f6-4f29-1e31-87ab5ed771b5@suse.de>
-From:   Javier Martinez Canillas <javier@dowhile0.org>
-Date:   Tue, 30 Nov 2021 10:31:52 +0100
-Message-ID: <CABxcv=kWa8ghQkVeKFN+emQ1wRV=AErULVr9E6R3ZBBiCkMxcw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Rob Herring <robh+dt@kernel.org>, Hector Martin <marcan@marcan.st>,
-        David Airlie <airlied@linux.ie>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+References: <20211129181703.670197996@linuxfoundation.org>
+In-Reply-To: <20211129181703.670197996@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 30 Nov 2021 15:02:01 +0530
+Message-ID: <CA+G9fYuQEFsYa-pQBCqu5kFpKHnTODZRZj2agOxFh+XJWagy6A@mail.gmail.com>
+Subject: Re: [PATCH 4.19 00/69] 4.19.219-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Thomas,
-
-On Tue, Nov 30, 2021 at 9:31 AM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Am 30.11.21 um 07:44 schrieb Javier Martinez Canillas:
-
-[snip]
-
-> >
-> > I think that instead it could be done in the sysfb_create_simplefb()
-> > function [0], which already creates the "simple-framebuffer" device
-> > for x86 legacy BIOS and x86/arm64/riscv EFI so it makes sense to do
-> > the same for OF. That way the simplefb platform device registration
-> > code could also be dropped from the driver and users would just need
-> > to enable CONFIG_SYSFB and CONFIG_SYSFB_SIMPLEFB to have the same.
-> >
-> > I have a couple of boards with a bootloader that populates a
-> > "simple-framebuffer" in the /chosen node so I could attempt to write
-> > the patches. But probably won't happen until next week.
+On Mon, 29 Nov 2021 at 23:51, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> IMHO it's better to keep the OF-related setup in the OF code. The sysfb
-> code is for screen_info. We can try to find common code for OF and sysfb
-> that then lives in a shared location.
+> This is the start of the stable review cycle for the 4.19.219 release.
+> There are 69 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-
-Ok. As long as we don't end with code duplication then that works for me too.
-
-> Using a single global screen_info variable is somewhat awkward these
-> days. In the long term, I can think of pushing sysfb code into
-> architectures. Each architecture would then setup the platform devices
-> that it supports. But that's not really important right now.
+> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
+> Anything received after that time might be too late.
 >
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.219-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-That makes sense. And provide a set of helpers as you mentioned that could
-be shared across the different architectures and firmware interfaces.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Best regards,
-Javier
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 4.19.219-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: 9697017144726ee73f348d6bb4c549151f92320a
+* git describe: v4.19.218-70-g969701714472
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.218-70-g969701714472
+
+## No regressions (compared to v4.19.217-321-g078e3b8561f3)
+
+## No fixes (compared to v4.19.217-321-g078e3b8561f3)
+
+## Test result summary
+total: 66999, pass: 54132, fail: 570, skip: 10820, xfail: 1477
+
+## Build Summary
+* arm: 130 total, 130 passed, 0 failed
+* arm64: 35 total, 35 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 19 total, 19 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 26 total, 26 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 22 total, 22 passed, 0 failed
+
+## Test suites summary
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

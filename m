@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E896A46327E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C95CB46327F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240787AbhK3LmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:42:17 -0500
-Received: from twspam01.aspeedtech.com ([211.20.114.71]:6930 "EHLO
+        id S240802AbhK3LmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:42:20 -0500
+Received: from twspam01.aspeedtech.com ([211.20.114.71]:42858 "EHLO
         twspam01.aspeedtech.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbhK3LmN (ORCPT
+        with ESMTP id S240794AbhK3LmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:42:13 -0500
+        Tue, 30 Nov 2021 06:42:18 -0500
 Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 1AUBEM3p082288;
+        by twspam01.aspeedtech.com with ESMTP id 1AUBEMnm082289;
         Tue, 30 Nov 2021 19:14:22 +0800 (GMT-8)
         (envelope-from neal_liu@aspeedtech.com)
 Received: from localhost.localdomain (192.168.10.10) by TWMBX02.aspeed.com
@@ -34,9 +34,9 @@ To:     Felipe Balbi <balbi@kernel.org>,
         <linux-aspeed@lists.ozlabs.org>
 CC:     Neal Liu <neal_liu@aspeedtech.com>, <benh@kernel.crashing.org>,
         <BMC-SW@aspeedtech.com>
-Subject: [PATCH v2 2/4] usb: aspeed-vhub: support auto remote wakeup feature
-Date:   Tue, 30 Nov 2021 19:38:45 +0800
-Message-ID: <20211130113847.1405873-3-neal_liu@aspeedtech.com>
+Subject: [PATCH v2 3/4] usb: aspeed-vhub: fix ep0 OUT ack received wrong length issue
+Date:   Tue, 30 Nov 2021 19:38:46 +0800
+Message-ID: <20211130113847.1405873-4-neal_liu@aspeedtech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211130113847.1405873-1-neal_liu@aspeedtech.com>
 References: <20211130113847.1405873-1-neal_liu@aspeedtech.com>
@@ -47,7 +47,7 @@ X-Originating-IP: [192.168.10.10]
 X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
  (192.168.0.24)
 X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 1AUBEM3p082288
+X-MAIL: twspam01.aspeedtech.com 1AUBEMnm082289
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -55,29 +55,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 +Ben.
 ---
 
-Remote wakeup signaling will be automatically issued
-whenever any write commands has been received in suspend
-state.
+If multiple devices in vhub are enumerated simultaneously, ep0 OUT
+ack might received wrong data length. Using expected data length
+instead.
 
+Acked-by: Benjamin Herrenschmidt <benh@kernel.crashing.org>
 Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
 ---
- drivers/usb/gadget/udc/aspeed-vhub/core.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/gadget/udc/aspeed-vhub/ep0.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-index 7a635c499777..122ee7ef0b03 100644
---- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
-+++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
-@@ -240,6 +240,9 @@ void ast_vhub_init_hw(struct ast_vhub *vhub)
- 	if (vhub->force_usb1)
- 		ctrl |= VHUB_CTRL_FULL_SPEED_ONLY;
- 
-+	/* Enable auto remote wakeup */
-+	ctrl |= VHUB_CTRL_AUTO_REMOTE_WAKEUP;
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/ep0.c b/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
+index 74ea36c19b1e..bea9cbb191a2 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/ep0.c
+@@ -251,6 +251,13 @@ static void ast_vhub_ep0_do_receive(struct ast_vhub_ep *ep, struct ast_vhub_req
+ 		len = remain;
+ 		rc = -EOVERFLOW;
+ 	}
 +
- 	ctrl |= VHUB_CTRL_UPSTREAM_CONNECT;
- 	writel(ctrl, vhub->regs + AST_VHUB_CTRL);
- 
++	/* HW return wrong data len */
++	if (len < ep->ep.maxpacket && len != remain) {
++		EPDBG(ep, "using expected data len instead\n");
++		len = remain;
++	}
++
+ 	if (len && req->req.buf)
+ 		memcpy(req->req.buf + req->req.actual, ep->buf, len);
+ 	req->req.actual += len;
 -- 
 2.25.1
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C78F463496
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:38:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1EE463497
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:38:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241907AbhK3Mlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:41:37 -0500
-Received: from mail-mw2nam10on2081.outbound.protection.outlook.com ([40.107.94.81]:59777
+        id S241970AbhK3Mly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:41:54 -0500
+Received: from mail-mw2nam10on2074.outbound.protection.outlook.com ([40.107.94.74]:14304
         "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241734AbhK3MlO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:41:14 -0500
+        id S233380AbhK3MlT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:41:19 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NKFWopc228v5JaD/ZIz/MP6g+UH7gdmo4Xm/5iE+McwffkvMsrbwIl+vy5PPOD2qf8Qe3rXlVylut27QyQx/n2ORhtb7iQ9/FJ39yEW+tSGa7uDQRB2u4pnI3RMCV2ATZV4oK49CqMOkCTW4AmwG+f7sLSWkFuPyXr+SdjK7NnsUR7bqCb9REFk5ju/GP8YOFCymEoYMFAbZGGO6qXFrbcl7Z3yy4xRfhSyJnkfUBFNyGQ30NilQ2cicDvD3i6NVtHV+SHoHqXzr4fJfoYYXT7seb8RpXiAS2kToz3A6qSjt3BCSIGkjvIukFyKYVOfzRpVpzXT5L7d5DPMOQi9D3Q==
+ b=Q0KoqHQPBn3gb1h6TVgeMlXacC9av59VenIRXoCIpGg+86DqQ8aNUebJy2muOurEbCIc1SimBwDxEfXUOrSTioFNLIAWJHspjQbtpfRxoM2rOU3KcbW7veek/ix2ht5Bf/7DLewcgTqLJlQQPNKB2QuPOhtZxX3UYts0ZcC5bY9B/lGsh4lNED4+46ub9Vh3fVV8D5E1Gg0EfQAaRpa9C+oPvvGBtEFLVcMnEHKdyDHqSeJ3FfVqi+XYUqMjPorYdv3OwA9rAfgo+Hio5NIBxg072eIflcjS1eWXe7sJ0XZYwYkmNmkZh5BQyyplVaC4XP5zNQ3MDa3dD/leEhUq/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EOa2psuYI9AE9KzYFlXBfifTVOwFsxZlAY+KN69Omqo=;
- b=DRjq/Ucty5QO+JvOcA5JY6M2RYix5ZYwRV4NOkptQs6nfLjN0C3GHXoy8dkGxz575AvMYGrwpoK/mUdgKjLr22KhRmc3aU58KS2Oip+aJREFqL1JIzMIKKWzWyMJ+5gZOUJqvnfNd2fgi7xuiozsSvd8So6zI6HfBlaW+Mw9v55jTOcX6ZXtiTTYW2/Pj0CPaK+npcoEYFJR6/IimK57TKBU6HUJP3FESEbFNv57gj9K2xgVTS2j/6iKcA0cYRJV1pMixhXbSXb/vQQv9gnULEQ9zDmIKBElaRnu/pkWITYQcUuDZ+YlF+ViBxgpkWbXrvHFT6nwrTNrYnM1WjOjGg==
+ bh=GfWIDe1EJej8mh4zOsSKWNNBsYw808aMLAtiEg28ST0=;
+ b=YGPxaZlWfQ59YGtnZfvCu3qEW/OtnCV/9VDxywaL7g75yVfVxiND5JY2QzIRyrbacfATvFd2QiAkFZ0SDpbaD0jwAd+R91AAuczdEVflcKimhymkzNe7wBp7LU3JrALf9QpT5IBUJlQsiSC2+UJpb/LGLKGgWhAUtq/vzFm8ybdLQ9zivrB0VO/6kzu+L8Pfql/TH5LU17Oek3P+Ep+bq+hAIievikrGoLSsGmv/IbEqpUfxrO9VL9GIfL0+F+f8NF7FbhvJ1aZjXAKXtqjMsAinYOfPJp2J3Hla8biQUYY+8vgMNK4dM1lCJODcElga8Ifzs1m6BQowkzoFfE6oTA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EOa2psuYI9AE9KzYFlXBfifTVOwFsxZlAY+KN69Omqo=;
- b=39tXDqdTRve14T2M/NLBmAlxLuUxKQJcsKlDlp80VWDTYzL6F9vjBRBm5K4V6mp4/l2O1XrCLAGI7Dr3ed26HdyUMGjWzHHlQI+czemjVhMw4Ay/wt6s+BXyqdlk6+b0sl49nvM+7tF7F+/uPshp+w36C570TlcBl7/8bFq90nQ=
-Received: from BN6PR19CA0051.namprd19.prod.outlook.com (2603:10b6:404:e3::13)
- by BN8PR12MB3507.namprd12.prod.outlook.com (2603:10b6:408:6e::32) with
+ bh=GfWIDe1EJej8mh4zOsSKWNNBsYw808aMLAtiEg28ST0=;
+ b=Qf/VPS0Z02oxIWS0dZtzgdj7+BGDzwLjkTT3Z341EtyOd7bCl9idFiVyD4oR3JE7bPH9inLKymf61YsxtAAYT2oqH8bRwBmhyKQPYiFdeet++AwahFyl8QJ0py45BpJ84V0zEFKNmjNen0amwhNwHo1fE6qq41GgJYuRHUedXY4=
+Received: from BN6PR22CA0051.namprd22.prod.outlook.com (2603:10b6:404:ca::13)
+ by SN6PR12MB2701.namprd12.prod.outlook.com (2603:10b6:805:6f::30) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.20; Tue, 30 Nov
- 2021 12:37:52 +0000
-Received: from BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:e3:cafe::ef) by BN6PR19CA0051.outlook.office365.com
- (2603:10b6:404:e3::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend
- Transport; Tue, 30 Nov 2021 12:37:52 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.19; Tue, 30 Nov
+ 2021 12:37:57 +0000
+Received: from BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:404:ca:cafe::d5) by BN6PR22CA0051.outlook.office365.com
+ (2603:10b6:404:ca::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend
+ Transport; Tue, 30 Nov 2021 12:37:57 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -44,13 +44,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT017.mail.protection.outlook.com (10.13.177.93) with Microsoft SMTP
+ BN8NAM11FT023.mail.protection.outlook.com (10.13.177.103) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4734.22 via Frontend Transport; Tue, 30 Nov 2021 12:37:52 +0000
+ 15.20.4734.22 via Frontend Transport; Tue, 30 Nov 2021 12:37:56 +0000
 Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 30 Nov
- 2021 06:37:47 -0600
+ 2021 06:37:52 -0600
 From:   Huang Rui <ray.huang@amd.com>
 To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -69,9 +69,9 @@ CC:     Deepak Sharma <deepak.sharma@amd.com>,
         Xiaojian Du <Xiaojian.Du@amd.com>,
         <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
         Huang Rui <ray.huang@amd.com>
-Subject: [PATCH v5 11/22] cpufreq: amd: add amd-pstate frequencies attributes
-Date:   Tue, 30 Nov 2021 20:36:30 +0800
-Message-ID: <20211130123641.1449041-12-ray.huang@amd.com>
+Subject: [PATCH v5 12/22] cpufreq: amd: add amd-pstate performance attributes
+Date:   Tue, 30 Nov 2021 20:36:31 +0800
+Message-ID: <20211130123641.1449041-13-ray.huang@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211130123641.1449041-1-ray.huang@amd.com>
 References: <20211130123641.1449041-1-ray.huang@amd.com>
@@ -83,101 +83,71 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1d0f7a45-62c6-4c9d-b3ad-08d9b3fe39fb
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3507:
-X-Microsoft-Antispam-PRVS: <BN8PR12MB350737A0B5D55DC441448C43EC679@BN8PR12MB3507.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:5236;
+X-MS-Office365-Filtering-Correlation-Id: db7ba157-87d4-4943-a8dd-08d9b3fe3ca0
+X-MS-TrafficTypeDiagnostic: SN6PR12MB2701:
+X-Microsoft-Antispam-PRVS: <SN6PR12MB2701C9EAD243451C2C6B93F7EC679@SN6PR12MB2701.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wygKUhZl2DoI2KNUyapzSEHWBy8D3CV39OdSZA1GLHl+njUOnFVxoieHrvdGQEb5oUMciRA/9He0O3VlVTFEGEwGe1tlCyyqHeBM14f3sbHCkojzrreUB+qUYSQ7Cgxlvtzv/awNeaxjpY9Z/Yz1S1wiJPbyVhty2PpI5IrnM1Ll9Fr2QrPxOVejwX5cj50fAN6mWlUCpBFe8kpYgl1P1Ujm1807l7WFPpIYeBmZovt/RU2/x/pfAa0bjcg7z2N1nsJRj+DuO87KksCkHn++qanO00fmx5o9uJ5+W7widstcd1+9kgUeLqpMgiVrUiHyGibOyTxTAg7heM8rB+F54cNX5r04HLEMqEp/doR9gTVzWVLCKhq4yLTt751NYl1KPPWdRQSaIxTPUM7QVeDmksN1+SlKMlLbfwiq/dOPz0CySth94eJ56TGKuHwuaer+idU+2larToZhfW0tYcJWxPiupCuJRjpTmztXtJzfd8dLdcc9cRv0xAAfphFjvsvAhAlRDmNyUFj0x7kCa9jXAo2Rnay72aIlKIhWIEI/I77ZC1Vu+2wbvg6UzLhI3U8pG374sAK+yJQUdP6Bji/ydZGKYjFizMTBg58ZnGkEiLa7QtOoT6PCEpUjdbzfVfQyGmL//BnFxeRwaObMkhuZlnaOXJDivkUMVfQH2dnLpEX/JLCGVs8KNO24/mZYhyGWa4kDzmzLuI0t5WQnlhp/pJGBvcTZG4XZEijOUn8EzETeTokme2uPvyhSldR741EF8yQXfCckvogF8gphuODt4HWsJGHu3ZtkxQxSfPCkWvU=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(16526019)(5660300002)(8936002)(4326008)(7416002)(186003)(47076005)(356005)(426003)(110136005)(36756003)(8676002)(86362001)(7696005)(2906002)(70206006)(54906003)(36860700001)(70586007)(82310400004)(83380400001)(1076003)(6666004)(508600001)(336012)(26005)(316002)(2616005)(40460700001)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 0e/HjG3qldqD5zWUizZn9TizoN18VpSs++4arALHmB6z1j4CBGL6LX261M4Ws4c3tbYNuprGxv2xVJJGPLq000jQ3w7G+SoZh55/6Xta1BoROw1gt8X0HS2WMfQyXs/d0nU6Y+grlgH/Uqrv3hZHOA08JbdssGVUVQOjZYB/uNT+tl7i1puSs/FUTY25YQJ7yv41EID5sRM/aTOAQgXCG27S3ErxYdcBHgL3maQaRumKV6zIYrbBfGClEV8yUekPjvesNrfER7xS+6bgSTsGrtZFH8TY4iRPk4B6+Rb1IldOzpbPTXNzCip97NBrBfPsUYAKOlnQMOEfKSPkKO7dw2K3ew8roC+imm3VnF9zMC2ySvrva9duwRvh2XOe0eJHhiB4MgT9uFt4le1JKb8snE2wEfN/hZBZ/yfr/Lg7lAIS6bkEnarHXmZlsobbgvKENZp6As1PnzNDZkEAMDoTH9h9SA+TNvUEx5ZgG0aYJPOG8GJlDRtKYeUfAu3Iy2Qas/xpWKYFlUGEounjYenTYM27EL9G35fTuX6xUdG+MrenV0etZhhfqHNGn3Sor5Q3lCmjBFyZxiPjTUNciMXNvveCtD3FwIIF0z8Al6wkGK2Va+r9i7y3KXTAQpxtpYc931oWVQnbGETqos7DneuW8RK7TslW8oW8oawnNNrWY5sALGQI8uNuQAH09tAHyKJUD++HVUbUzlWBvc8w2YOH7Ru4ozx8kBxFO9kzf9TYH43VW8YP1wbwG5EsRObNaKVakjq253LJVRUQfROvKGPV+cvD8JlXjNx2gCxNyvqx8+w=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(82310400004)(7416002)(508600001)(36860700001)(6666004)(2616005)(86362001)(81166007)(7696005)(83380400001)(356005)(70586007)(16526019)(8936002)(36756003)(2906002)(70206006)(1076003)(110136005)(54906003)(47076005)(186003)(316002)(8676002)(426003)(5660300002)(336012)(40460700001)(26005)(4326008)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 12:37:52.5068
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 12:37:56.9413
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d0f7a45-62c6-4c9d-b3ad-08d9b3fe39fb
+X-MS-Exchange-CrossTenant-Network-Message-Id: db7ba157-87d4-4943-a8dd-08d9b3fe3ca0
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT017.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT023.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB3507
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR12MB2701
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce sysfs attributes to get the different level processor
-frequencies.
+Introduce sysfs attributes to get the different level amd-pstate
+performances.
 
 Signed-off-by: Huang Rui <ray.huang@amd.com>
 ---
- drivers/cpufreq/amd-pstate.c | 46 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ drivers/cpufreq/amd-pstate.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index c5d786af199d..d462d5a28e08 100644
+index d462d5a28e08..c70274ae4046 100644
 --- a/drivers/cpufreq/amd-pstate.c
 +++ b/drivers/cpufreq/amd-pstate.c
-@@ -477,6 +477,51 @@ static int amd_pstate_cpu_exit(struct cpufreq_policy *policy)
- 	return 0;
+@@ -513,12 +513,29 @@ static ssize_t show_amd_pstate_lowest_nonlinear_freq(struct cpufreq_policy *poli
+ 	return sprintf(&buf[0], "%u\n", freq);
  }
  
-+/* Sysfs attributes */
-+
-+/* This frequency is to indicate the maximum hardware frequency.
-+ * If boost is not active but supported, the frequency will be larger than the
-+ * one in cpuinfo.
++/* In some of ASICs, the highest_perf is not the one in the _CPC table, so we
++ * need to expose it to sysfs.
 + */
-+static ssize_t show_amd_pstate_max_freq(struct cpufreq_policy *policy,
-+					char *buf)
++static ssize_t show_amd_pstate_highest_perf(struct cpufreq_policy *policy,
++					    char *buf)
 +{
-+	int max_freq;
-+	struct amd_cpudata *cpudata;
++	u32 perf;
++	struct amd_cpudata *cpudata = policy->driver_data;
 +
-+	cpudata = policy->driver_data;
++	perf = READ_ONCE(cpudata->highest_perf);
 +
-+	max_freq = amd_get_max_freq(cpudata);
-+	if (max_freq < 0)
-+		return max_freq;
-+
-+	return sprintf(&buf[0], "%u\n", max_freq);
++	return sprintf(&buf[0], "%u\n", perf);
 +}
 +
-+static ssize_t show_amd_pstate_lowest_nonlinear_freq(struct cpufreq_policy *policy,
-+						     char *buf)
-+{
-+	int freq;
-+	struct amd_cpudata *cpudata;
+ cpufreq_freq_attr_ro(amd_pstate_max_freq);
+ cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+ 
++cpufreq_freq_attr_ro(amd_pstate_highest_perf);
 +
-+	cpudata = policy->driver_data;
-+
-+	freq = amd_get_lowest_nonlinear_freq(cpudata);
-+	if (freq < 0)
-+		return freq;
-+
-+	return sprintf(&buf[0], "%u\n", freq);
-+}
-+
-+cpufreq_freq_attr_ro(amd_pstate_max_freq);
-+cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
-+
-+static struct freq_attr *amd_pstate_attr[] = {
-+	&amd_pstate_max_freq,
-+	&amd_pstate_lowest_nonlinear_freq,
-+	NULL,
-+};
-+
- static struct cpufreq_driver amd_pstate_driver = {
- 	.flags		= CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
- 	.verify		= amd_pstate_verify,
-@@ -485,6 +530,7 @@ static struct cpufreq_driver amd_pstate_driver = {
- 	.exit		= amd_pstate_cpu_exit,
- 	.set_boost	= amd_pstate_set_boost,
- 	.name		= "amd-pstate",
-+	.attr           = amd_pstate_attr,
+ static struct freq_attr *amd_pstate_attr[] = {
+ 	&amd_pstate_max_freq,
+ 	&amd_pstate_lowest_nonlinear_freq,
++	&amd_pstate_highest_perf,
+ 	NULL,
  };
  
- static int __init amd_pstate_init(void)
 -- 
 2.25.1
 

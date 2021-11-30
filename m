@@ -2,421 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 673A2463CB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C62463CC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244796AbhK3R3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:29:44 -0500
-Received: from mail-oo1-f43.google.com ([209.85.161.43]:41567 "EHLO
-        mail-oo1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbhK3R3f (ORCPT
+        id S242471AbhK3RbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244840AbhK3RaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:29:35 -0500
-Received: by mail-oo1-f43.google.com with SMTP id a11-20020a4ad1cb000000b002c2657270a0so6920536oos.8;
-        Tue, 30 Nov 2021 09:26:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=DpQvSma6kl6P9hg+8cuB8ywzjhQ7Iofewbulj2guzq0=;
-        b=kebCCna3TFAB/KJnkJHH7o0wO5P+9Ek5FOTtBxf4OQUKI/urrb8VsrmUAk7XoUQWRU
-         /dF5q5R6VmEijT9x5E1kfkTqXsbtbmAvdW/5yz83mkUiVoYQE/CdHbKQLkzJ8wvNnYCk
-         PrN6TlAx8RSahPCCcUEfKqARqZRybRa1WZfRAJPPs0Wa5rC9AxSz1TalZEunOckQzCCY
-         YDIvoECYNv/VTsnM1uALOzVGk+Qy/UWVaVZRmrm03brJ0ylu8aoPNmYDJlle+cXDNGgl
-         Qp792sKaOSsBa4BbeKxRd+AwHdSs0VXgzevSaqpplfTos8/pTwJH4dVBfzDB0QpFKCAh
-         g4Mw==
-X-Gm-Message-State: AOAM533zrzul49JavSuIzjSoSKVgEWeU69Shjqwg4r+Phj3wO3GQnpip
-        YE8g7w3/xEvoHtPbb+EmunW06s9PqUY9aMzYzdw=
-X-Google-Smtp-Source: ABdhPJy+HnDW0DKmzlJl43G5BPV3m4Q9ZgLtJC48eRjSXUWXc4cx45qNY1QtGODeJTandFjELlg3dFL7Td/d4hcIBmU=
-X-Received: by 2002:a4a:ead8:: with SMTP id s24mr334119ooh.89.1638293175568;
- Tue, 30 Nov 2021 09:26:15 -0800 (PST)
+        Tue, 30 Nov 2021 12:30:06 -0500
+Received: from mail.marcansoft.com (marcansoft.com [IPv6:2a01:298:fe:f::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7D3C061574;
+        Tue, 30 Nov 2021 09:26:46 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id A1C7E41DF4;
+        Tue, 30 Nov 2021 17:26:41 +0000 (UTC)
+Subject: Re: [PATCH] PCI: apple: Fix REFCLK1 enable/poll logic
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Marc Zyngier <maz@kernel.org>, bhelgaas@google.com
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211117140044.193865-1-marcan@marcan.st>
+ <87v90q7jk3.wl-maz@kernel.org> <20211130164957.GA4920@lpieralisi>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <845d5f52-05ad-fd2c-1ad1-49e081c3ca14@marcan.st>
+Date:   Wed, 1 Dec 2021 02:26:39 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211026222626.39222-1-ulf.hansson@linaro.org>
- <CAJZ5v0hrTDsCUn4vgmFrTTgd6H=orh-Kb5b3+_H9St4n8fTxBw@mail.gmail.com>
- <CAPDyKFre=tp4919FLoeU-wjLDJ02zmHaXY4wgTUmfmFbeaCadQ@mail.gmail.com>
- <4380690.LvFx2qVVIh@kreacher> <CAPDyKFpyPov-faJ9dUszi38Q7-4OsowX=i8w=NCnTQ66_zooHg@mail.gmail.com>
- <CAJZ5v0iEfE35Aig8XADKbQEJqb8PNmcghLnrVXHkemDjTOLr5g@mail.gmail.com> <CAPDyKFqVrYKyUjxoErPBuahcgDNX7esspWG4Vqi0q-8_u7MoFQ@mail.gmail.com>
-In-Reply-To: <CAPDyKFqVrYKyUjxoErPBuahcgDNX7esspWG4Vqi0q-8_u7MoFQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Nov 2021 18:26:04 +0100
-Message-ID: <CAJZ5v0jV5QS6yxBgK0OHJ_7ivDPs7tL7Ms19dNBTUAYSfKDkCg@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
- PM is disabled
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211130164957.GA4920@lpieralisi>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 5:41 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Tue, 30 Nov 2021 at 14:02, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Tue, Nov 30, 2021 at 12:58 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > [...]
-> > >
-> > > > > > > > >
-> > > > > > > > > Am I thinking correctly that this is mostly about working around the
-> > > > > > > > > limitations of pm_runtime_force_suspend()?
-> > > > > > > >
-> > > > > > > > No, this isn't related at all.
-> > > > > > > >
-> > > > > > > > The cpuidle-psci driver doesn't have PM callbacks, thus using
-> > > > > > > > pm_runtime_force_suspend() would not work here.
-> > > > > > >
-> > > > > > > Just wanted to send a ping on this to see if we can come to a
-> > > > > > > conclusion. Or maybe we did? :-)
-> > > > > > >
-> > > > > > > I think in the end, what slightly bothers me, is that the behavior is
-> > > > > > > a bit inconsistent. Although, maybe it's the best we can do.
-> > > > > >
-> > > > > > I've been thinking about this and it looks like we can do better, but
-> > > > > > instead of talking about this I'd rather send a patch.
-> > > > >
-> > > > > Alright.
-> > > > >
-> > > > > I was thinking along the lines of make similar changes for
-> > > > > rpm_idle|suspend(). That would make the behaviour even more
-> > > > > consistent, I think.
-> > > > >
-> > > > > Perhaps that's what you have in mind? :-)
-> > > >
-> > > > Well, not exactly.
-> > > >
-> > > > The idea is to add another counter (called restrain_depth in the patch)
-> > > > to prevent rpm_resume() from running the callback when that is potentially
-> > > > problematic.  With that, it is possible to actually distinguish devices
-> > > > with PM-runtime enabled and it allows the PM-runtime status to be checked
-> > > > when it is still known to be meaningful.
-> > >
-> > > Hmm, I don't quite understand the benefit of introducing a new flag
-> > > for this. rpm_resume() already checks the disable_depth to understand
-> > > when it's safe to invoke the callback. Maybe there is a reason why
-> > > that isn't sufficient?
-> >
-> > The problem is that disable_depth > 0 may very well mean that runtime
-> > PM has not been enabled at all for the given device which IMO is a
-> > problem.
-> >
-> > As it stands, it is necessary to make assumptions, like disable_depth
-> > == 1 meaning that runtime PM is really enabled, but the PM core has
-> > disabled it temporarily, which is somewhat questionable.
-> >
-> > Another problem with disabling is that it causes rpm_resume() to fail
-> > even if the status is RPM_ACTIVE and it has to do that exactly because
-> > it cannot know why runtime PM has been disabled.  If it has never been
-> > enabled, rpm_resume() must fail, but if it has been disabled
-> > temporarily, rpm_resume() may return 1 when the status is RPM_ACTIVE.
-> >
-> > The new count allows the "enabled in general, but temporarily disabled
-> > at the moment" to be handled cleanly.
->
-> My overall comment is that I fail to understand why we need to
-> distinguish between these two cases. To me, it shouldn't really
-> matter, *why* runtime PM is (or have been) disabled for the device.
+On 01/12/2021 01.49, Lorenzo Pieralisi wrote:
+> On Wed, Nov 17, 2021 at 05:56:12PM +0000, Marc Zyngier wrote:
+>> On Wed, 17 Nov 2021 14:00:44 +0000,
+>> Hector Martin <marcan@marcan.st> wrote:
+>>>
+>>> REFCLK1 has req/ack bits just like REFCLK0
+>>>
+>>> Signed-off-by: Hector Martin <marcan@marcan.st>
+>>> ---
+>>>   drivers/pci/controller/pcie-apple.c | 7 ++++---
+>>>   1 file changed, 4 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+>>> index b665d29af77a..420c291a5c68 100644
+>>> --- a/drivers/pci/controller/pcie-apple.c
+>>> +++ b/drivers/pci/controller/pcie-apple.c
+>>> @@ -42,8 +42,9 @@
+>>>   #define   CORE_FABRIC_STAT_MASK		0x001F001F
+>>>   #define CORE_LANE_CFG(port)		(0x84000 + 0x4000 * (port))
+>>>   #define   CORE_LANE_CFG_REFCLK0REQ	BIT(0)
+>>> -#define   CORE_LANE_CFG_REFCLK1		BIT(1)
+>>> +#define   CORE_LANE_CFG_REFCLK1REQ	BIT(1)
+>>>   #define   CORE_LANE_CFG_REFCLK0ACK	BIT(2)
+>>> +#define   CORE_LANE_CFG_REFCLK1ACK	BIT(3)
+>>>   #define   CORE_LANE_CFG_REFCLKEN	(BIT(9) | BIT(10))
+>>>   #define CORE_LANE_CTL(port)		(0x84004 + 0x4000 * (port))
+>>>   #define   CORE_LANE_CTL_CFGACC		BIT(15)
+>>> @@ -481,9 +482,9 @@ static int apple_pcie_setup_refclk(struct apple_pcie *pcie,
+>>>   	if (res < 0)
+>>>   		return res;
+>>>   
+>>> -	rmw_set(CORE_LANE_CFG_REFCLK1, pcie->base + CORE_LANE_CFG(port->idx));
+>>> +	rmw_set(CORE_LANE_CFG_REFCLK1REQ, pcie->base + CORE_LANE_CFG(port->idx));
+>>>   	res = readl_relaxed_poll_timeout(pcie->base + CORE_LANE_CFG(port->idx),
+>>> -					 stat, stat & CORE_LANE_CFG_REFCLK1,
+>>> +					 stat, stat & CORE_LANE_CFG_REFCLK1ACK,
+>>>   					 100, 50000);
+>>>   
+>>>   	if (res < 0)
+>>> -- 
+>>> 2.33.0
+>>>
+>>>
+>>
+>> Fixes: 1e33888fbe44 ("PCI: apple: Add initial hardware bring-up")
+>> Acked-by: Marc Zyngier <maz@kernel.org>
+> 
+> Hi Hector, Bjorn,
+> 
+> if this is a fix we can aim at one of the upcoming -rcX.
+> 
+> It would be nicer though to explain a bit better what it is
+> fixing in the commit log (and what's broken if we don't merge it),
+> as it stands it is a bit terse.
 
-It matters if you want to trust the status, because "disabled" means
-"the status doesn't matter".
+I don't think anything is broken per se, it still works without this 
+patch (probably because the refclk gets enabled fast enough that we 
+don't have to wait for it); it's just that I think this is the correct 
+logic. This is all reverse engineered anyway, so ultimately there is no 
+hardware documentation to point to to say what's right and what's wrong...
 
-If you want the status to stay meaningful, but prevent callbacks from
-running, you need something else.
-
-> The important point is that the default state for a device is
-> RPM_SUSPENDED and someone has moved into RPM_ACTIVE, for whatever
-> reason. That should be sufficient to allow rpm_resume() to return '1'
-> when disable_depth > 0, shouldn't it?
-
-No, because there is no rule by which the status of devices with
-PM-runtime disabled must be RPM_SUSPENDED.
-
-> >
-> > > >
-> > > > It requires quite a few changes, but is rather straightforward, unless I'm
-> > > > missing something.
-> > > >
-> > > > Please see the patch below.  I've only checked that it builds on x86-64.
-> > > >
-> > > > ---
-> > > >  drivers/base/power/main.c    |   18 +++----
-> > > >  drivers/base/power/runtime.c |  105 ++++++++++++++++++++++++++++++++++++-------
-> > > >  include/linux/pm.h           |    2
-> > > >  include/linux/pm_runtime.h   |    2
-> > > >  4 files changed, 101 insertions(+), 26 deletions(-)
-> > > >
-> > > > Index: linux-pm/include/linux/pm.h
-> > > > ===================================================================
-> > > > --- linux-pm.orig/include/linux/pm.h
-> > > > +++ linux-pm/include/linux/pm.h
-> > > > @@ -598,6 +598,7 @@ struct dev_pm_info {
-> > > >         atomic_t                usage_count;
-> > > >         atomic_t                child_count;
-> > > >         unsigned int            disable_depth:3;
-> > > > +       unsigned int            restrain_depth:3;       /* PM core private */
-> > > >         unsigned int            idle_notification:1;
-> > > >         unsigned int            request_pending:1;
-> > > >         unsigned int            deferred_resume:1;
-> > > > @@ -609,6 +610,7 @@ struct dev_pm_info {
-> > > >         unsigned int            use_autosuspend:1;
-> > > >         unsigned int            timer_autosuspends:1;
-> > > >         unsigned int            memalloc_noio:1;
-> > > > +       unsigned int            already_suspended:1;    /* PM core private */
-> > > >         unsigned int            links_count;
-> > > >         enum rpm_request        request;
-> > > >         enum rpm_status         runtime_status;
-> > > > Index: linux-pm/include/linux/pm_runtime.h
-> > > > ===================================================================
-> > > > --- linux-pm.orig/include/linux/pm_runtime.h
-> > > > +++ linux-pm/include/linux/pm_runtime.h
-> > > > @@ -46,6 +46,8 @@ extern void pm_runtime_enable(struct dev
-> > > >  extern void __pm_runtime_disable(struct device *dev, bool check_resume);
-> > > >  extern void pm_runtime_allow(struct device *dev);
-> > > >  extern void pm_runtime_forbid(struct device *dev);
-> > > > +extern void pm_runtime_restrain(struct device *dev);
-> > > > +extern void pm_runtime_relinquish(struct device *dev);
-> > > >  extern void pm_runtime_no_callbacks(struct device *dev);
-> > > >  extern void pm_runtime_irq_safe(struct device *dev);
-> > > >  extern void __pm_runtime_use_autosuspend(struct device *dev, bool use);
-> > > > Index: linux-pm/drivers/base/power/runtime.c
-> > > > ===================================================================
-> > > > --- linux-pm.orig/drivers/base/power/runtime.c
-> > > > +++ linux-pm/drivers/base/power/runtime.c
-> > > > @@ -744,11 +744,11 @@ static int rpm_resume(struct device *dev
-> > > >   repeat:
-> > > >         if (dev->power.runtime_error)
-> > > >                 retval = -EINVAL;
-> > > > -       else if (dev->power.disable_depth == 1 && dev->power.is_suspended
-> > > > -           && dev->power.runtime_status == RPM_ACTIVE)
-> > > > -               retval = 1;
-> > > >         else if (dev->power.disable_depth > 0)
-> > > >                 retval = -EACCES;
-> > > > +       else if (dev->power.restrain_depth > 0)
-> > > > +               retval = dev->power.runtime_status == RPM_ACTIVE ? 1 : -EAGAIN;
-> > > > +
-> > > >         if (retval)
-> > > >                 goto out;
-> > > >
-> > > > @@ -1164,9 +1164,9 @@ EXPORT_SYMBOL_GPL(pm_runtime_get_if_acti
-> > > >   * @dev: Device to handle.
-> > > >   * @status: New runtime PM status of the device.
-> > > >   *
-> > > > - * If runtime PM of the device is disabled or its power.runtime_error field is
-> > > > - * different from zero, the status may be changed either to RPM_ACTIVE, or to
-> > > > - * RPM_SUSPENDED, as long as that reflects the actual state of the device.
-> > > > + * If runtime PM of the device is disabled or restrained, or its
-> > > > + * power.runtime_error field is nonzero, the status may be changed either to
-> > > > + * RPM_ACTIVE, or to RPM_SUSPENDED, as long as that reflects its actual state.
-> > > >   * However, if the device has a parent and the parent is not active, and the
-> > > >   * parent's power.ignore_children flag is unset, the device's status cannot be
-> > > >   * set to RPM_ACTIVE, so -EBUSY is returned in that case.
-> > > > @@ -1195,13 +1195,16 @@ int __pm_runtime_set_status(struct devic
-> > > >         spin_lock_irq(&dev->power.lock);
-> > > >
-> > > >         /*
-> > > > -        * Prevent PM-runtime from being enabled for the device or return an
-> > > > -        * error if it is enabled already and working.
-> > > > +        * Prevent PM-runtime from being used for the device or return an
-> > > > +        * error if it is in use already.
-> > > >          */
-> > > > -       if (dev->power.runtime_error || dev->power.disable_depth)
-> > > > -               dev->power.disable_depth++;
-> > > > -       else
-> > > > +       if (dev->power.runtime_error || dev->power.disable_depth ||
-> > > > +           dev->power.restrain_depth) {
-> > > > +               pm_runtime_get_noresume(dev);
-> > >
-> > > Why do we need to bump the usage count here? Except for balancing with
-> > > pm_runtime_relinquish() a few lines below, of course?
-> >
-> > First off, I need the usage count to be greater than 0 to prevent the
-> > runtime suspend callback from running while "restrained" (and the
-> > suspend could check the restrain count, but that's one more check in
-> > the suspend path which isn't necessary if the usage counter is always
-> > bumped up upfront).
->
-> If disable_depth > 0 (or restrain_depth > 0), the runtime PM core
-> should prevent the runtime suspend callback from being invoked, no
-> matter whether the usage count has been bumped or not. Or did I get
-> that wrong?
-
-Yes, that's right.  I guess I've tried to over-optimize the
-system-wide suspend-resume case.
-
-> >
-> > Second, the PM core bumps up the usage counter during system-wide
-> > suspend, so bumping it up again isn't strictly needed if this
-> > "temporary disabling" is limited to the system-wide suspend-resume
-> > paths, but I'm not sure if it should be limited this way.
-> >
-> > I would prefer the "temporarily unavailable" case to be clearly
-> > different from the "disabled" one in any case, not just during
-> > system-wide suspend-resume.
-> >
-> > > > +               dev->power.restrain_depth++;
-> > > > +       } else {
-> > > >                 error = -EAGAIN;
-> > > > +       }
-> > > >
-> > > >         spin_unlock_irq(&dev->power.lock);
-> > > >
-> > > > @@ -1278,7 +1281,7 @@ int __pm_runtime_set_status(struct devic
-> > > >                 device_links_read_unlock(idx);
-> > > >         }
-> > > >
-> > > > -       pm_runtime_enable(dev);
-> > > > +       pm_runtime_relinquish(dev);
-> > > >
-> > > >         return error;
-> > > >  }
-> > > > @@ -1513,6 +1516,72 @@ void pm_runtime_allow(struct device *dev
-> > > >  EXPORT_SYMBOL_GPL(pm_runtime_allow);
-> > > >
-> > > >  /**
-> > > > + * pm_runtime_restrain - Temporarily block runtime PM of a device.
-> > > > + * @dev: Device to handle.
-> > > > + *
-> > > > + * Increase the device's usage count and its restrain_dpeth count.  If the
-> > > > + * latter was 0 initially, cancel the runtime PM work for @dev if pending and
-> > > > + * wait for all of the runtime PM operations on it in progress to complete.
-> > > > + *
-> > > > + * After this function has been called, attempts to runtime-suspend @dev will
-> > > > + * fail with -EAGAIN and attempts to runtime-resume it will succeed if its
-> > > > + * runtime PM status is RPM_ACTIVE and will fail with -EAGAIN otherwise.
-> > > > + *
-> > > > + * This function can only be called by the PM core.
-> > > > + */
-> > > > +void pm_runtime_restrain(struct device *dev)
-> > > > +{
-> > > > +       pm_runtime_get_noresume(dev);
-> > > > +
-> > > > +       spin_lock_irq(&dev->power.lock);
-> > > > +
-> > > > +       if (dev->power.restrain_depth++ > 0)
-> > > > +               goto out;
-> > > > +
-> > > > +       if (dev->power.disable_depth > 0) {
-> > > > +               dev->power.already_suspended = false;
-> > > > +               goto out;
-> > > > +       }
-> > > > +
-> > > > +       /* Update time accounting before blocking PM-runtime. */
-> > > > +       update_pm_runtime_accounting(dev);
-> > > > +
-> > > > +       __pm_runtime_barrier(dev);
-> > > > +
-> > > > +       dev->power.already_suspended = pm_runtime_status_suspended(dev);
-> > > > +
-> > > > +out:
-> > > > +       spin_unlock_irq(&dev->power.lock);
-> > > > +}
-> > >
-> > > What if someone calls pm_runtime_disable() after the PM core has
-> > > called pm_runtime_restrain() for a device? It looks like we may run
-> > > another round of __pm_runtime_barrier() and
-> > > update_pm_runtime_accounting(), does that really make sense?
-> >
-> > No, it doesn't, but it's a bug in the patch.  And there are other bugs in it ...
-> >
-> > In this particular case, __pm_runtime_disable() should check the
-> > "restrain" count and do nothing when it is nonzero.
-> >
-> > > > +
-> > > > +/**
-> > > > + * pm_runtime_relinquish - Unblock runtime PM of a device.
-> > > > + * @dev: Device to handle.
-> > > > + *
-> > > > + * Decrease the device's usage count and its restrain_dpeth count.
-> > > > + *
-> > > > + * This function can only be called by the PM core.
-> > > > + */
-> > > > +void pm_runtime_relinquish(struct device *dev)
-> > > > +{
-> > > > +       spin_lock_irq(&dev->power.lock);
-> > > > +
-> > > > +       if (dev->power.restrain_depth > 0) {
-> > > > +               dev->power.restrain_depth--;
-> > > > +
-> > > > +               /* About to unbolck runtime PM, set accounting_timestamp to now */
-> > > > +               if (!dev->power.restrain_depth && !dev->power.disable_depth)
-> > > > +                       dev->power.accounting_timestamp = ktime_get_mono_fast_ns();
-> > > > +       } else {
-> > > > +               dev_warn(dev, "Unbalanced %s!\n", __func__);
-> > > > +       }
-> > > > +
-> > > > +       spin_unlock_irq(&dev->power.lock);
-> > > > +
-> > > > +       pm_runtime_put_noidle(dev);
-> > > > +}
-> > > > +
-> > > > +/**
-> > > >   * pm_runtime_no_callbacks - Ignore runtime PM callbacks for a device.
-> > > >   * @dev: Device to handle.
-> > > >   *
-> > > > @@ -1806,8 +1875,10 @@ int pm_runtime_force_suspend(struct devi
-> > > >         int (*callback)(struct device *);
-> > > >         int ret;
-> > > >
-> > > > -       pm_runtime_disable(dev);
-> > > > -       if (pm_runtime_status_suspended(dev))
-> > > > +       pm_runtime_restrain(dev);
-> > > > +
-> > > > +       /* No suspend if the device has already been suspended by PM-runtime. */
-> > > > +       if (!dev->power.already_suspended)
-> > >
-> > > I assume you are looking at using pm_runtime_force_suspend|resume() to
-> > > support my use case for the cpuidle-psci driver? In other words,
-> > > replace pm_runtime_get_sync() and pm_runtime_put_sync_suspend() in
-> > > __psci_enter_domain_idle_state(), right?
-> >
-> > Not really.  I've been looking at a general "temporarily unavailable"
-> > vs "disabled" problem.
->
-> Okay, so I understand that you want to distinguish between these two
-> cases, but honestly I fail to understand *why* that is needed, sorry.
-
-Well, see above for the reason. :-)
-
->
-> >
-> > > If so, that doesn't really fit well, I think. Not only because we
-> > > don't have system suspend/resume callbacks available, which is really
-> > > the proper place to call the pm_runtime_force_*() functions from, but
-> > > also because we don't want to call __pm_runtime_barrier(), etc, every
-> > > time in the idle path of a CPU. If anything, we should instead strive
-> > > towards a more lightweight path than what we currently have.
-> >
-> > So IMO this can be done with the new counter in place, because for
-> > anything called between device_suspend_late() and
-> > device_resume_early(), PM-runtime would be restrained by the PM core
-> > (it is disabled now), so rpm_resume() would return 1 for devices with
-> > PM-runtime status equal to RPM_ACTIVE (it fails now, unless the usage
-> > counter is exactly 1) and you resume the devices in question upfront,
-> > so it would be always safe to call rpm_resume() and rpm_suspend() for
-> > them during the noirq suspend and resume phases (it is now tricky,
-> > because it depends on the exact usage counter value).
-> >
-> > Between dpm_suspend_noirq() and dpm_resume_noirq(), you need to switch
-> > over to a different type of handling anyway, because all of the
-> > devices are expected to be suspended then.
->
-> Not sure I understand correctly, but I don't think I need to switch to
-> another handling. The devices in __psci_enter_domain_idle_state() are
-> managed as syscore devices with genpd, for the later system suspend
-> phases, this works well.
->
-> Perhaps you also saying that the goal with your change is to allow
-> rpm_resume() to return 1, when the state is RPM_ACTIVE for the device
-> and when the PM core has called pm_runtime_restrain() instead of
-> __pm_runtime_disable()? Right?
-
-Basically, yes, but generally that's a mechanism by which callbacks
-may be prevented from running without confusion with full disabling of
-runtime PM.
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

@@ -2,106 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0809B463D3B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EC6463D4E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244646AbhK3Rxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:53:49 -0500
-Received: from sonic306-27.consmr.mail.ne1.yahoo.com ([66.163.189.89]:41116
-        "EHLO sonic306-27.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235792AbhK3Rxp (ORCPT
+        id S245184AbhK3R7v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:59:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238677AbhK3R7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:53:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1638294623; bh=vsHKDybZ2jrlosXiNEXb9J9i2f57wfoYS/tTO/wPOzs=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=F8xLb7ZJrBUKw4Z/mH8dcR2q/uZKOSjVp6WuCJqWyYuPQrFtNCalzFD9gzTLHl+X2NUZ/N5tPRC1fJaC6xzvoY+jdKZNvKeBogy521YOgK3OMkvYU+mYB6vHftBf99sqt1ZnLQnUw26ZsWK+QdnThiPK8nr8QKPsggPrgYQ8j3Y/t9O0A9XdelpSsSj5wteAP7SID2ALL5ZgiLiY8wKGW+Cf/wggWVYyZ/pfxuxgTP3YhYPV9RgiLdgvQhwfOE7fJRbikXUvIrz9hAXvyyQrtFEwG5nQ8U3wobzSyM3oo71mugCq5SKC21O8Q9LonKOKldkIysSVxrtB2fKLekuU/A==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1638294623; bh=qi3mSy+twszzFxDrkUBLz/jnPjlyvDoBFOZSeBTfOK5=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=pJ+4AHAcpa4kbY4lsAE0j6T+VvMYKbfzT3XRnR36B8BWLMYFJ7+NP7LTkuXGepPw4rl3P9jyyqbSmpwrATvc6eGKwzQdHPRo8KIv1kWpz/dCantknO7WzDER1+CTHrYlZBJ9BpllLc8TZyy58MnrIVQ2/Pn7aVBEe1Lbs9npj+1wrlsqEosgVZvYkCVN0BCRHL8UW8+7zVt7wBV54U9YkBnhD9m8fTuTBgZ/zLDz63HypL5rHvmVVEDXkfD4Wccu9CKdSBBn6LQ2te6HWxVOor5K0Ss+5H3pV+tbGV1gQBdqSrtdlWIbZwiqig0V/CLwha92584z/RSvhRgiNaEccw==
-X-YMail-OSG: JrOYuDIVM1kEVlj1bhV4sfQzsrstJ8PDyEmLySnsrphzrMXQ2zHd2SCZOJcQO8n
- iK._XGiSuCUSppRL_Xhx3ygQMaYVTUlEJr5DBqodUz5TKKN.ICJ38Z0IzLYVwQM3L64IRbYojFNw
- LffrIv1WCuaA3H8Cre_OzqNvNG9toDQ.Wkv2PQ0rytrL7c0EOv3iSbmM96imh_CQwRfxc3VdJp5j
- eNkGbPzeQl8UK3Ml0w3jXC847NgM__L.on1HaWgZVne15U2f3wvZQIdl_nbEBEral.b17j53acZT
- krya5VVfUcQAWfzcA12hjZ68MzXRJvIzJnMc14mSlugd938D._fchL2RCb59Huit1lQCxnKxAwz0
- OJxbQ8ZbpagbNn9rbUrz5IBzZ8NSxl8G4s6J7S_EiA5nvYMCiKHUtiZ0OxUHUT4gY4KeUSycoqRv
- byKroqB9x6jLPBnjmYUwGcAQYB0wKwxbtucoqwn8n0gWbRZE3pUrBaakehYo8cqLUnEoMhGDfUfQ
- 588hCmp.gTQBM2uPSr0RKCVOQGQfv1qzQAjINeEcCV0xNvGVHLgME1S0HBt7.67VB530tMiptscW
- 1Nj3hp_Y7mVHnTMn16F59oiW.XhE6ku0oWoCo3Bi2wS.6N3Ju.FAsOm0guHQtIW03df5u0BMd0rM
- _k3tpBxh8n05Ul1KKp_PTDFcoPtYLpYu4kCsMy.BzhC3y8fKUIpUovQiE8Ub_1Jk0kWHo6emKhOJ
- 0S8q42X7x7fhM62B5nquIiM9RA2coYVSoIMAwUXJrlrlw9zDd5njxXSETLPV0psjeWPHbK0nzOvL
- MGuZaEFjw6RGZFxix9NWLBcnbMWi.SvhwQkVb.loLO0jFK1OGvI7zcImb6fNAmfFU0n1y7JO5cGh
- qtfOdTpl2XZmfGVcUI975WRO4.0J1p1yHEzw0CNALuayQd_2iQBl2ItHGFpxzUa7C5sdJFEQ2WDX
- DNtUxH5SaaaWy22eKB49UDEyMF4pGt.t5EJqG_eP3KSp8RewFHERNH2Xr50kyx8SpjA7r3I_s2js
- i.O0ZPq.w9Hl0UB.lnC_eDvwJNiiY76enlq_ZM0Z7zTwdyhddpRyxQafXZlJmHNPKgWYmdHDluDK
- wuC2y77PHG8Ul0S3.r_ttDRh7O9mSs1_rnTbK96n1ul4tu1elotVpS3oGWHlDrH9GDFQ_0hOhHmv
- QZ5zpozYEnFCWKZVO.ofOyxH90JdTYjDsxFBtwOyElcruFJJ2ZzD5xOMYQDTILGRB.uZ4dc0m1Yf
- 2.sqckbCqpGHlugZ5SgIIgw.IgvcS6BGEM16fsHBabJNNPJR3eMWiMTkmHLY0Bn.dd0OO4SGn4bW
- PuP_ZMgQfU1milqZE_8n3ELRMmJUU32G8X0qR4ZNVA6jkMAFj9rd3_kScJPUMHV1HmA04XEG2iP.
- 6nPFn76RqHckHDcabgfV2oMSfQBok_JmhBqT1HzfuVQ57NbD3Kpndmhn5trlp8mNY6eOR9lqfmyu
- .nWezuhNyKfzqbPiT381SQl5xTnBXBQfyF7LOeR58ZLmr8iLuW0kFE7E04phU2YFN52..beGNo2f
- KbjgeLpr523qBuMTLaKWqmV79yJHBFx4qOc8PA5zQT3rAjumzsc7W1PQzAhehpQcse4UPrYUpYur
- HX3b482MVNTRT3sxmc1u_ul6m9kSsLwiVLAQMfRXxxZ817OhgQWOFVYw6Gv2yY2__NVpMVjSg2Mc
- gHIUk84oXK_xcEHwUTihAWXJWDPjKvrIX.RYlKPLYFqkP5Psf8EMMOUL8PbRIir6rHBt7BCvv_YB
- Cx1VhHLfXjs0yQXyjMpbBUnRan7GcNXNZ57c1sCkmY5_C4opOmnRfiUURgZGSVsHJZ3J7KCj3WxM
- iG9_qayiz2525nZySOd5DNsnpi7Y1Fl4mTGnHAc77U4Oht84k6JQSmHOEFfB.DBboy29.uGS3cc_
- B7oqjJ1KflDfMedKvebaAkTV8OcXzA7H6T8YJPv5f41XbXfep7JvTDGVRLE6un0bycVyaypx6SHh
- LYn4RIuwPzCmtchAF8uXrO_g31bfbSAKnMvo4H8CEhl6pQv73ektBN89kUgMGe8LCQgqaGTWL2PP
- 1qWHsRCBSx.OLXF1rjCL8jooKPq2RHWLEH7e8zswCTpbLUNCKJya6h_a9w93upa46wnISuG7.QTH
- 85GfmoskM7iYmovf_L.VT0FFba55uPM2Bx6V9fGDlwpdQ.saxv_N0Z8wiKYKrN7V4pE9xl2p1LTa
- r9yAvSwfLqIlV8PdjfmMEl5sUeqA.wQ--
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Tue, 30 Nov 2021 17:50:23 +0000
-Received: by kubenode542.mail-prod1.omega.bf1.yahoo.com (VZM Hermes SMTP Server) with ESMTPA ID da9e10bd5721b37c7f2ee8a0729d408b;
-          Tue, 30 Nov 2021 17:50:17 +0000 (UTC)
-Message-ID: <ad6a83da-f99f-a27f-6a22-712e530cfa2a@schaufler-ca.com>
-Date:   Tue, 30 Nov 2021 09:50:14 -0800
+        Tue, 30 Nov 2021 12:59:49 -0500
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6ADC061574;
+        Tue, 30 Nov 2021 09:56:30 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso31304953otf.12;
+        Tue, 30 Nov 2021 09:56:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=sP3a2w9TIAvowtRsPrZvQyg1T33o3v6kWhUG+u0tLlE=;
+        b=b4upmZcT1t7xQzyUYE8KQU475W7lJjkGOOYfS1joYDLLcIERbWMU/rYjx7209HwrNK
+         algIH55puJuHwwc10ZxvR1AEIiK4O2PxuSQVc8xC3OZkhiAusKoWmtGw0R/JSagg5hqj
+         KOOgnN/EGXChaY7ZmP60oildRx3fhZZhcDhel4GtuG1xIv6nTDwuRXVJkksQZWh1IagO
+         omft/vl1YWdZRzgivXLMgLiuDzpHzGrF4WSVr4AH6Usp1IBVbxoh9j+cH1ov3fP5ziir
+         rRlrtvtaHkZ2YdiEPHMCzm8vwp+Gotsvw/4NMmw20OEne3Yob3RGtquWPRUGJqLVs4fO
+         gfmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=sP3a2w9TIAvowtRsPrZvQyg1T33o3v6kWhUG+u0tLlE=;
+        b=XgDoTK2KdmgGZOKfCcXH8MppavQ5Cnv27XeWrioO8OTXLx/e+zkM1B/+ik55tAaaEX
+         nx9hy+94HYdvcHt8kp3IGejG1p/113RDYLcpKt+dxha063E53oW+0FNpfgJWTNiYtU5N
+         FLJLfLthwU2i6lpg2FKWShQMDN3+wUsL5b+XoS5msMSXqWfiuMpyeP7NNMetdcYf7PFt
+         RxBj9pJccork6BWb215fURx7oTjvZobC0Nw0BOliYAp28dhPKowRi1QkjlDLMswwaczZ
+         a+OM2kDIUDkzqAbUDHEzKjTM9xizty8nf/nbttfmM8/KPsAjaiID25bPdADVXqmYRe7F
+         SHbg==
+X-Gm-Message-State: AOAM5321Ve7HOpKNAyaa01KJ73i40OjiDL4xjf9WjM+j7LdnL8bAQu0G
+        BF13+PMwQkNKy6JtgWyjmYU=
+X-Google-Smtp-Source: ABdhPJzy2Yq4AwU02waQ4hZbuxHokWD5+Xy6wCmmsKNJziTS72PXddbDdSp6ndvI+xhGOJyxmVEkkA==
+X-Received: by 2002:a9d:67d5:: with SMTP id c21mr733642otn.128.1638294989887;
+        Tue, 30 Nov 2021 09:56:29 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id r5sm3859326oiw.20.2021.11.30.09.56.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 09:56:29 -0800 (PST)
+Message-ID: <d9be528c-af35-6c10-c458-9e2f7759bbb3@gmail.com>
+Date:   Tue, 30 Nov 2021 10:56:26 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [RFC 15/20] capabilities: Introduce CAP_INTEGRITY_ADMIN
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.1
+Subject: Re: [PATCH v2 net-next 00/26] net: introduce and use generic XDP
+ stats
 Content-Language: en-US
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jejb@linux.ibm.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Denis Semakin <denis.semakin@huawei.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
- <20211130160654.1418231-16-stefanb@linux.ibm.com>
- <e482c499-8bff-72c8-bbda-1ecc5a7f3452@schaufler-ca.com>
- <957f65ce-df0e-5980-57c3-57c05291ccc6@linux.ibm.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <957f65ce-df0e-5980-57c3-57c05291ccc6@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vu?= =?UTF-8?Q?sen?= 
+        <toke@redhat.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+ <20211130155612.594688-1-alexandr.lobakin@intel.com> <871r2x8vor.fsf@toke.dk>
+ <20211130090716.4a557036@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211130090716.4a557036@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.19306 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/2021 9:41 AM, Stefan Berger wrote:
->
-> On 11/30/21 12:27, Casey Schaufler wrote:
->> On 11/30/2021 8:06 AM, Stefan Berger wrote:
->>> From: Denis Semakin <denis.semakin@huawei.com>
+On 11/30/21 10:07 AM, Jakub Kicinski wrote:
+> On Tue, 30 Nov 2021 17:17:24 +0100 Toke Høiland-Jørgensen wrote:
+>>> 1. Channels vs queues vs global.
 >>>
->>> This patch introduces CAP_INTEGRITY_ADMIN, a new capability that allows
->>> to setup IMA (Integrity Measurement Architecture) policies per container
->>> for non-root users.
+>>> Jakub: no per-channel.
+>>> David (Ahern): it's worth it to separate as Rx/Tx.
+>>> Toke is fine with globals at the end I think?  
 >>
->> Why not use CAP_MAC_ADMIN? IMA is a mandatory policy. The scope
->> is system security administration. It seems to fit your needs.
->> I introduced CAP_MAC_ADMIN for Smack, and believe that IMA using
->> it would be completely appropriate.
->
-> Fine by me. I suppose we could be reusing it later on also for setting file extended attributes for IMA?
+>> Well, I don't like throwing data away, so in that sense I do like
+>> per-queue stats, but it's not a very strong preference (i.e., I can live
+>> with either)...
+> 
+> We don't even have a clear definition of a queue in Linux.
+> 
 
-Yes. That would be completely consistent with the intention and the
-Smack implementation.
+The summary above says "Jakub: no per-channel", and then you have this
+comment about a clear definition of a queue. What is your preference
+here, Jakub? I think I have gotten lost in all of the coments.
 
->
->    Stefan
->
->
+My request was just to not lump Rx and Tx together under a 'channel'
+definition as a new API. Proposals like zctap and 'queues as a first
+class citizen' are examples of intentions / desires to move towards Rx
+and Tx queues beyond what exists today.

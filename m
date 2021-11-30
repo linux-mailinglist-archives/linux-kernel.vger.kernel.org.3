@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90812463737
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC20463887
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242630AbhK3OwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:52:05 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16327 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242457AbhK3OvO (ORCPT
+        id S243005AbhK3PEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:04:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243143AbhK3O41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:51:14 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J3Q6c2jGMz91Mh;
-        Tue, 30 Nov 2021 22:47:20 +0800 (CST)
-Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 30 Nov 2021 22:47:52 +0800
-Received: from huawei.com (10.175.100.227) by dggpeml500006.china.huawei.com
- (7.185.36.76) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Tue, 30 Nov
- 2021 22:47:46 +0800
-From:   Tang Yizhou <tangyizhou@huawei.com>
-To:     <viresh.kumar@linaro.org>, <rafael.j.wysocki@intel.com>,
-        <rafael@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Tang Yizhou <tangyizhou@huawei.com>
-Subject: [PATCH 2/2] doc/cpufreq: Update core.rst
-Date:   Tue, 30 Nov 2021 23:15:26 +0800
-Message-ID: <20211130151526.949-3-tangyizhou@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211130151526.949-1-tangyizhou@huawei.com>
-References: <20211130151526.949-1-tangyizhou@huawei.com>
+        Tue, 30 Nov 2021 09:56:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F7BC061A20;
+        Tue, 30 Nov 2021 06:50:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 59F8AB81A29;
+        Tue, 30 Nov 2021 14:50:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C306C53FC1;
+        Tue, 30 Nov 2021 14:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638283816;
+        bh=meQhLRbhvx/RwYVCeyTbQAwKAyZcEHM+S8EeTgnF/VM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Bef7MfDwhALHzu09GgWI0mYofUpfc/qeIw9QgZ0nLAHsdiSs5gqBB6E8A6pm9VYYJ
+         TaZEGi4Zz3mCeSQIW5BpAG1NDPmfV49UnS5bTCjvQ6DudgQ7f6tt8R1I2Sxf4Vvyl6
+         HFJZNcGqMprJW0NZkzi8kRc3PjHiW3aB1ihn4W34gBxMH5Aih4HEopi4DqMQqFqRV4
+         PkApKVGgQrvM6pJenfx7RnyJkKPgpsWGrlPZlnQ2h2lMh/iM8anLdPSBrblGLpBLFP
+         qKABbkmSK42xrpLP0xbF1pf0NDQAUkIgSbqd8bSSWO2muSMuWK0fezWy6bnjpfRGLN
+         VasCvc5McoEUQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.15 66/68] net: ptp: add a definition for the UDP port for IEEE 1588 general messages
+Date:   Tue, 30 Nov 2021 09:47:02 -0500
+Message-Id: <20211130144707.944580-66-sashal@kernel.org>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211130144707.944580-1-sashal@kernel.org>
+References: <20211130144707.944580-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.100.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As the definition of struct cpufreq_freqs has changed, update core.rst
-with the new first member of struct cpufreq_freqs.
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
+[ Upstream commit ec15baec3272bbec576f2ce7ce47765a8e9b7b1c ]
+
+As opposed to event messages (Sync, PdelayReq etc) which require
+timestamping, general messages (Announce, FollowUp etc) do not.
+In PTP they are part of different streams of data.
+
+IEEE 1588-2008 Annex D.2 "UDP port numbers" states that the UDP
+destination port assigned by IANA is 319 for event messages, and 320 for
+general messages. Yet the kernel seems to be missing the definition for
+general messages. This patch adds it.
+
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Acked-by: Richard Cochran <richardcochran@gmail.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/cpu-freq/core.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ include/linux/ptp_classify.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/cpu-freq/core.rst b/Documentation/cpu-freq/core.rst
-index 33cb90bd1d8f..4ceef8e7217c 100644
---- a/Documentation/cpu-freq/core.rst
-+++ b/Documentation/cpu-freq/core.rst
-@@ -73,12 +73,12 @@ CPUFREQ_POSTCHANGE.
- The third argument is a struct cpufreq_freqs with the following
- values:
+diff --git a/include/linux/ptp_classify.h b/include/linux/ptp_classify.h
+index ae04968a3a472..9afd34a2d36c5 100644
+--- a/include/linux/ptp_classify.h
++++ b/include/linux/ptp_classify.h
+@@ -37,6 +37,7 @@
+ #define PTP_MSGTYPE_PDELAY_RESP 0x3
  
--=====	===========================
--cpu	number of the affected CPU
-+======	======================================
-+policy	a pointer to the struct cpufreq_policy
- old	old frequency
- new	new frequency
- flags	flags of the cpufreq driver
--=====	===========================
-+======	======================================
+ #define PTP_EV_PORT 319
++#define PTP_GEN_PORT 320
+ #define PTP_GEN_BIT 0x08 /* indicates general message, if set in message type */
  
- 3. CPUFreq Table Generation with Operating Performance Point (OPP)
- ==================================================================
+ #define OFF_PTP_SOURCE_UUID	22 /* PTPv1 only */
 -- 
-2.17.1
+2.33.0
 

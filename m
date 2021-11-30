@@ -2,120 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F4FA463ADE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E27463AE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243256AbhK3QE7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S243309AbhK3QFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:05:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243070AbhK3QE6 (ORCPT
+        with ESMTP id S243070AbhK3QFP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:04:58 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F047DC061574;
-        Tue, 30 Nov 2021 08:01:38 -0800 (PST)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id C395B2FD;
-        Tue, 30 Nov 2021 17:01:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638288096;
-        bh=POUwBtwosKCmIuxwL/N5NWOX8eiFjMZqcdm5W7Euacc=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=Emr9lYRHm93b77sOv0iiFrbyIboO+Z+H2a7H7yY9UZmJ760Xt2oIZo/iCaQfSF7nX
-         vzN9rC1jegnUKyPR97Ryq99Uq6HhUMK8w7JuTTBtJiq+23+AtI6uJ8nny2d5tM8x7Y
-         TomXjVZfue2UCDPqSL6qn1A231dLjRn3S/S+dqbI=
-Content-Type: text/plain; charset="utf-8"
+        Tue, 30 Nov 2021 11:05:15 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FF5C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:01:55 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id x131so21051813pfc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:01:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=u7qkJO95z6PA+5n1Ta+ydAPJV1GYiaGJee3oSFozDEQ=;
+        b=IFt8Tn+vxT21IpZwc1G2oIIymlaJa/rS9tPtD65lbJffdgHBV1ma5O+UrZYwQ+fpdE
+         uwo6I7onE1BcdE7rFH+Hyh0hfFqAisvMusQkVDnpcHVSrvYxwu/WDFInlFXrsly+Ij2o
+         2/e4EmCPBpf191/pzWGolf7xwlV4RVdA29Ob/MYDXJBNJmWraO+ef5IZrdWd5kTDzB4e
+         d43mrcg7DtKvEkstc8pI3DgJG4GKmHwqmVLDDfyMhJ97ZgjBvOWiiQyopaZ3i2tEV+Wm
+         Ley8rcpzQAb/T5TWz2UVrLchpAFSSyi8rw3PYzcbp2+rhJJ9SoKb3AYBUyt5a90Advl4
+         9BwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=u7qkJO95z6PA+5n1Ta+ydAPJV1GYiaGJee3oSFozDEQ=;
+        b=AjpdSOWcPlpp19k4cuy0nhXGVxsKTlndG3eOffBTLeKdKCmNs/ZNec7WNGLWBEUHjZ
+         WswqHDWaeybumg4P2+gT4XS6o5gfNCEImmz6xYOQaRh3QVoD5P871XjZUV3lnwm4Hm+f
+         j5KgkqtrFweRF0MJNHBt1BOD5/CgnjX8OOclUSv/n7jcGqWkAPBXxd1pYt3SCnRQ36Gg
+         kdfj32G/PDFRMNta0c9pmk9UZ34gcW8U7oEwakJwxR+p0pMMFShZf+7e7RcxAxKUViB0
+         34nvu3FGswtpJ9ai7u9+giGaoqZc3oDUoC2o3d0S/HY7I9fPJlFEXEcsGH0l5IO/b87j
+         GZeg==
+X-Gm-Message-State: AOAM532nHlfteYo5LoFbK1aifI/FoqV2j5pmfUmIx0Q4/Ofn+d4gnpxE
+        Kc6MIFpIVS8DPX81bNQdW9hCag==
+X-Google-Smtp-Source: ABdhPJzONHfSHYXg+nJ0762Y3NxbBOp1zkuKvTXs/1E3XWI7EUSQt6W9dr/3AVTdAHDoxFeRyZbz9A==
+X-Received: by 2002:a65:4bc6:: with SMTP id p6mr23381pgr.544.1638288114791;
+        Tue, 30 Nov 2021 08:01:54 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id lp12sm3366048pjb.24.2021.11.30.08.01.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 08:01:54 -0800 (PST)
+Date:   Tue, 30 Nov 2021 16:01:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Yulei Zhang <yulei.kernel@gmail.com>,
+        Wanpeng Li <kernellwp@gmail.com>,
+        Xiao Guangrong <xiaoguangrong.eric@gmail.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Keqian Zhu <zhukeqian1@huawei.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH 15/15] KVM: x86/mmu: Promote pages in-place when
+ disabling dirty logging
+Message-ID: <YaZK7lxaBMGfYIdz@google.com>
+References: <20211115234603.2908381-1-bgardon@google.com>
+ <20211115234603.2908381-16-bgardon@google.com>
+ <YZ8OpQmB/8k3/Maj@xz-m1.local>
+ <CANgfPd9pK83S+yoRokLg7wiroE6-OkieATTqgGn3yCCzwNFi4A@mail.gmail.com>
+ <YaXSh6RUOH7NHG8G@xz-m1.local>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAMty3ZA3rTqkPtmC2yBq8zSExGd9jRjOPR06tpt2fB_AXHRxdQ@mail.gmail.com>
-References: <20211126101518.938783-1-kieran.bingham+renesas@ideasonboard.com> <20211126101518.938783-5-kieran.bingham+renesas@ideasonboard.com> <CAMty3ZA3rTqkPtmC2yBq8zSExGd9jRjOPR06tpt2fB_AXHRxdQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] drm: rcar-du: mipi-dsi: Support bridge probe ordering
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Date:   Tue, 30 Nov 2021 16:01:33 +0000
-Message-ID: <163828809390.3059017.11403962735628365262@Monstersaurus>
-User-Agent: alot/0.10
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YaXSh6RUOH7NHG8G@xz-m1.local>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jagan,
+On Tue, Nov 30, 2021, Peter Xu wrote:
+> On Mon, Nov 29, 2021 at 10:31:14AM -0800, Ben Gardon wrote:
+> > 2. There could be a pointer to the page table in a vCPU's paging
+> > structure caches, which are similar to the TLB but cache partial
+> > translations. These are also cleared out on TLB flush.
+> 
+> Could you elaborate what's the structure cache that you mentioned?  I thought
+> the processor page walker will just use the data cache (L1-L3) as pgtable
+> caches, in which case IIUC the invalidation happens when we do WRITE_ONCE()
+> that'll invalidate all the rest data cache besides the writter core.  But I
+> could be completely missing something..
 
-Quoting Jagan Teki (2021-11-30 07:38:57)
-> Hi Kieran,
->=20
-> On Fri, Nov 26, 2021 at 3:45 PM Kieran Bingham
-> <kieran.bingham+renesas@ideasonboard.com> wrote:
-> >
-> > The bridge probe ordering for DSI devices has been clarified and further
-> > documented in
-> >
-> > To support connecting with the SN65DSI86 device after commit c3b75d4734=
-cb
-> > ("drm/bridge: sn65dsi86: Register and attach our DSI device at probe"),
-> > update to the new probe ordering to remove a perpetual -EPROBE_DEFER
-> > loop between the two devices.
-> >
-> > Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > ---
-> >  drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c | 48 +++++++++++++------------
-> >  1 file changed, 26 insertions(+), 22 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c b/drivers/gpu/drm/=
-rcar-du/rcar_mipi_dsi.c
-> > index 833f4480bdf3..f783bacee8da 100644
-> > --- a/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
-> > +++ b/drivers/gpu/drm/rcar-du/rcar_mipi_dsi.c
-> > @@ -639,6 +639,8 @@ static int rcar_mipi_dsi_host_attach(struct mipi_ds=
-i_host *host,
-> >                                         struct mipi_dsi_device *device)
-> >  {
-> >         struct rcar_mipi_dsi *dsi =3D host_to_rcar_mipi_dsi(host);
-> > +       struct drm_panel *panel;
-> > +       int ret;
-> >
-> >         if (device->lanes > dsi->num_data_lanes)
-> >                 return -EINVAL;
-> > @@ -646,12 +648,36 @@ static int rcar_mipi_dsi_host_attach(struct mipi_=
-dsi_host *host,
-> >         dsi->lanes =3D device->lanes;
-> >         dsi->format =3D device->format;
-> >
-> > +       ret =3D drm_of_find_panel_or_bridge(dsi->dev->of_node, 1, 0, &p=
-anel,
-> > +                                         &dsi->next_bridge);
-> > +       if (ret) {
-> > +               dev_err_probe(dsi->dev, ret, "could not find next bridg=
-e\n");
-> > +               return ret;
-> > +       }
-> > +
-> > +       if (!dsi->next_bridge) {
-> > +               dsi->next_bridge =3D devm_drm_panel_bridge_add(dsi->dev=
-, panel);
-> > +               if (IS_ERR(dsi->next_bridge)) {
-> > +                       dev_err(dsi->dev, "failed to create panel bridg=
-e\n");
-> > +                       return PTR_ERR(dsi->next_bridge);
-> > +               }
-> > +       }
->=20
-> Can we use the new function devm_drm_of_get_bridge instead of the entire =
-code?
+Ben is referring to the Intel SDM's use of the term "paging-structure caches"
+Intel CPUs, and I'm guessing other x86 CPUs, cache upper level entries, e.g. the
+L4 PTE for a given address, to avoid having to do data cache lookups, reserved
+bits checked, A/D assists, etc...   Like full VA=>PA TLB entries, these entries
+are associated with the PCID, VPID, EPT4A, etc...
 
-I've just tried this, and it works, so yes we can.
-I'll update the branch and re-send it for Laurent to collect and
-apply/squash whichever works best.
+The data caches are still used when reading PTEs that aren't cached in the TLB,
+the extra caching in the "TLB" is optimization on top.
 
-Thanks.
-
-Kieran
-
-
-
->=20
-> Jagan.
+  28.3.1 Information That May Be Cached
+  Section 4.10, “Caching Translation Information” in Intel® 64 and IA-32 Architectures
+  Software Developer’s Manual, Volume 3A identifies two kinds of translation-related
+  information that may be cached by a logical processor: translations, which are mappings
+  from linear page numbers to physical page frames, and paging-structure caches, which
+  map the upper bits of a linear page number to information from the paging-structure
+  entries used to translate linear addresses matching those upper bits.

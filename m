@@ -2,110 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E6C463068
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AE6463076
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240476AbhK3KDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:03:52 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:39171 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235542AbhK3KDt (ORCPT
+        id S240609AbhK3KFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:05:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240601AbhK3KF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:03:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638266430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2hUfdHpcnEJ4n2lCxmRVknomjs+8GCkA9N7GEjxk1tE=;
-        b=YLkLO/CtioewmveWxn1QcPYl49V4HD8k9mKaH61Hegy9YsAETp5Dy0BZIMAA97hZzwvWb3
-        NcOUxBbOObLRfbn/J942c/NntcN3KTkewx8jNdfaX331TNQLImYLldt3HDAlnXBE5ioOVM
-        DTUN5on+XbFt31D02atG2kpELfotx+Q=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-KxnqTc6uPjC6ZYjkZQMLBw-1; Tue, 30 Nov 2021 05:00:26 -0500
-X-MC-Unique: KxnqTc6uPjC6ZYjkZQMLBw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A5CB7101AFC1;
-        Tue, 30 Nov 2021 10:00:25 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 2B3F55D9C0;
-        Tue, 30 Nov 2021 10:00:23 +0000 (UTC)
-Message-ID: <37f072bb6c5b27ec71ec40bd2e34d75c54d9ff69.camel@redhat.com>
-Subject: Re: [PATCH] KVM: fix avic_set_running for preemptable kernels
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>
-Date:   Tue, 30 Nov 2021 12:00:22 +0200
-In-Reply-To: <20211130084644.248435-1-pbonzini@redhat.com>
-References: <20211130084644.248435-1-pbonzini@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Tue, 30 Nov 2021 05:05:29 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DCC7C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:02:10 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id i5so43130121wrb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:02:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mxGGLWiQP1URa2RClGBG4bbowEUOqfLTXCyeksWHJak=;
+        b=5f8ABW1zZtNjGY52IL+i4PbJ8cbZ23szB0iWo74difvp7IqT+JD6Kk7CCUo9/v+RgB
+         /asJDH/j2rKieMVdk3LNhgKhxYqU6ZlIoNd7RJiEhOVFJdjfuqlKUYEtQ3+R/9ZAQ7YF
+         6Vyi9+FnEgCXSWWbo3uskTucO22yeFP3INDaiejKeth45Dm0ZzjKdOsazQZTnJOH7jsJ
+         D3+tAkMNLepuDlMZRXESq5FPZjiN1Jf+uAGzXa7xpc4niNhhUSKk0msiVF9wxwLQ6rth
+         9jFf5jnK4wdJaeq95/6MAAws+UzpLE/zE6+Ocw5BdCz0vujXP8YvNMGvQJBAmqC+X1vE
+         PCOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=mxGGLWiQP1URa2RClGBG4bbowEUOqfLTXCyeksWHJak=;
+        b=J9XF/2z6IPTEYyfNKdPAJQWZmc3jAB9jBj9XtNqwwGjQqsEviFf9FcChyKSSs5zrr8
+         CXONorfGdIpVOJq8Vrus7JTwoZmlK8zfbc6t/mHptDq861ZlkbIhhY1zCd2T8dN3cjF4
+         LYelx0ts03HIsRyavb0fhvfnrZkLRxNyqw7T8Un3AbmPjz2e197pd408MMFH8LOU5CL7
+         A6W+J+B+UgyhUMrZV56QrS72rJ8/nhsIpyUXNA78MJp9/pBZ25V5w7OY4Y9M1AhLqd/e
+         DK/JEWMCXgL418ozZeG087CikrEbOhFkO/fvRImStXX9+XRyyWDJqQEIjM7zswALmXIs
+         KB2w==
+X-Gm-Message-State: AOAM531zLbLi4UPRzSfuJnCF3hg2tAWCJI/EPcmeddwOjVuN2ALZHkst
+        yBzLcqhkJDaVijV4hptdYxV6SQ==
+X-Google-Smtp-Source: ABdhPJz0zFU+8v8aXJOMRSoOlU4RtE0adVzFNEOwgHXFlg5BrDaJcdOIuhVOgvZz+Q6A+FYiEFmi5w==
+X-Received: by 2002:a5d:61ca:: with SMTP id q10mr37714903wrv.102.1638266529024;
+        Tue, 30 Nov 2021 02:02:09 -0800 (PST)
+Received: from jackdaw.lan (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.googlemail.com with ESMTPSA id e12sm21117166wrq.20.2021.11.30.02.02.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 02:02:08 -0800 (PST)
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Kevin Hilman <khilman@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Cc:     Jerome Brunet <jbrunet@baylibre.com>,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] arm64: dts: meson: p241: add internal sound support
+Date:   Tue, 30 Nov 2021 11:01:57 +0100
+Message-Id: <20211130100159.214489-1-jbrunet@baylibre.com>
+X-Mailer: git-send-email 2.34.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+X-Patchwork-Bot: notify
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-11-30 at 03:46 -0500, Paolo Bonzini wrote:
-> avic_set_running() passes the current CPU to avic_vcpu_load(), albeit
-> via vcpu->cpu rather than smp_processor_id().  If the thread is migrated
-> while avic_set_running runs, the call to avic_vcpu_load() can use a stale
-> value for the processor id.  Avoid this by blocking preemption over the
-> entire execution of avic_set_running().
-> 
-> Reported-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 16 +++++++++-------
->  1 file changed, 9 insertions(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 0a58283005f3..560807a2edd4 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -1000,16 +1000,18 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
->  static void avic_set_running(struct kvm_vcpu *vcpu, bool is_run)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
-> +	int cpu = get_cpu();
->  
-> +	WARN_ON(cpu != vcpu->cpu);
->  	svm->avic_is_running = is_run;
->  
-> -	if (!kvm_vcpu_apicv_active(vcpu))
-> -		return;
-> -
-> -	if (is_run)
-> -		avic_vcpu_load(vcpu, vcpu->cpu);
-> -	else
-> -		avic_vcpu_put(vcpu);
-> +	if (kvm_vcpu_apicv_active(vcpu)) {
-> +		if (is_run)
-> +			avic_vcpu_load(vcpu, cpu);
-> +		else
-> +			avic_vcpu_put(vcpu);
-> +	}
-> +	put_cpu();
->  }
->  
->  void svm_vcpu_blocking(struct kvm_vcpu *vcpu)
+This patchset adds support for the internal sound card of the s805x p241
+reference design. Audio is available on HDMI and 3.5mm jack connector.
 
-To be honest, I was thinking to remove vcpu parameter from
-avic_vcpu_load and let it figure it out, but this can be
-always done later.
+Jerome Brunet (2):
+  arm64: dts: meson: p241: add vcc_5v regulator
+  arm64: dts: meson: p241: add sound support
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+ .../boot/dts/amlogic/meson-gxl-s805x-p241.dts | 83 +++++++++++++++++++
+ 1 file changed, 83 insertions(+)
 
-PS: this patch as expected didn't help with the 'is_running' AVIC bug
-I am stuck with.
-
-Best regards,
-	Maxim Levitsky
+-- 
+2.34.0
 

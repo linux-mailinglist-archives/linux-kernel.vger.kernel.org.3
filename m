@@ -2,109 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFCAF462D03
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAD0462D0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238770AbhK3GsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 01:48:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233099AbhK3GsY (ORCPT
+        id S238779AbhK3GtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 01:49:19 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:37930 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233099AbhK3GtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 01:48:24 -0500
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56A6BC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 22:45:05 -0800 (PST)
-Received: by mail-qk1-x733.google.com with SMTP id g28so25696967qkk.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 22:45:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dowhile0-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qKE3SwAPujqmjUAZ9rQU1XdIfpsX7BZWFDwsRhFkyDo=;
-        b=g7xUjsHLoB/kGuWRUDrA4d3KpXufSvrgvzJQ6chy6Ws52RnweR0HKccFg4O6xqRU09
-         T1hqP5mfqLt0B7sLTHR0XX4fZvcW6fg18HQSQ4FGEcBlTJ5G7EgTj8u7fruO+EMHrYQR
-         7Y8nYjZvd0EqxmGFiomh+R9dk0pGYkBmUtMPOHMDW1GCjnFeGA+ci9CC/zW2HhmbpqBw
-         3EHoO4FBD9nxho73oFftoo4XVljvlbn3FQgpwLwnSbYY3CaqfqAuDGkFQjv1g9bJPGox
-         RB3vIiVq6XBFj8BWIkYnHeho85J+mMybfT4FrFsTRj7Wt0GYZhL4Yjs01Lf3u3H9MY5d
-         XK3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qKE3SwAPujqmjUAZ9rQU1XdIfpsX7BZWFDwsRhFkyDo=;
-        b=epNKIORsdMJ0sna3xgkccilju4YAs+bJ45RBaho5xZhrqxNk1N6gvq6sYjgfo+xBTf
-         azdfrNqsjHCi93ePA1I7BpsysSHzmJm6gMYK6dP3GPdYsU/Jw7J56wa+1TGSctag28r0
-         Cqb7iOiViW0adzwuJwIOb20sCpoChj6XYKHrSTI2vM3dt7XOJUGnCr5/MwsirS2hUD1u
-         hZRZbVcHsUPmT4/M5wSK3YLobMEmGuDGGxEQeAkHp10DmNLwoRpNBxpKRbNVYqnc32IB
-         LRn0r1lAP1XglmLhvMH+lVbRL6xdJUjZc1yFc9ODIFjbCt9yCDxkkVwwbj38xC9cTwmm
-         3MqA==
-X-Gm-Message-State: AOAM531vSoUJHNhtGIxLPRTh6jfIwS7AFrpT8Um4UbHoE9tw2zPs0geA
-        vbjaszRHUs9KJZOdspWrNX+YTE/L7/yiNPlYAWlcwaOKDjDLlA==
-X-Google-Smtp-Source: ABdhPJwlh9AXckQRtlJG9Tc6C7SGMudaXmy5jY/4bAoMJccAQqzFx6Kkm7Odxp+lmklWV0D4oI1N34TE5V7Fve1V0FA=
-X-Received: by 2002:a05:620a:430c:: with SMTP id u12mr35141300qko.589.1638254704508;
- Mon, 29 Nov 2021 22:45:04 -0800 (PST)
+        Tue, 30 Nov 2021 01:49:18 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 276F4212C6;
+        Tue, 30 Nov 2021 06:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638254758; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y3A/LpTQO6wAmVg/00VkkkuYuU/LEB4wL0Asx60DQ/4=;
+        b=RpY19WUf5VHMxBlED/my/OzHFCIpYjNC7+93pIkbw/mTTFy78+rzDT9U4WYlO/1jxED4K6
+        twA2DsGOAgj6kkx5mUnFfFgOi+o9dH8fpX840k+LygbrpuFqvrlkWvfS+iCv4o9drSZ+Jy
+        /ebs7E6FiBwsOaiZFSijqFE2Vf8p7u8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638254758;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y3A/LpTQO6wAmVg/00VkkkuYuU/LEB4wL0Asx60DQ/4=;
+        b=OAij2cosM9LxlO9MdfJOanaq2MjYgytpk6ZmPqY/dc5eWmqQRoBYI+g0U+v40lLdirB+Kq
+        3ORyOS0BX4b502DA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F01F913BA9;
+        Tue, 30 Nov 2021 06:45:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id AgSpOaXIpWH3UwAAMHmgww
+        (envelope-from <hare@suse.de>); Tue, 30 Nov 2021 06:45:57 +0000
+Subject: Re: [PATCH v2 2/3] block: don't delete queue kobject before its
+ children
+To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-mmc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bart Van Assche <bvanassche@acm.org>
+References: <20211130040306.148925-1-ebiggers@kernel.org>
+ <20211130040306.148925-3-ebiggers@kernel.org>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <63ab4f9d-86e6-363c-bbd0-a03c51bf3011@suse.de>
+Date:   Tue, 30 Nov 2021 07:45:57 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-References: <20211117145829.204360-1-marcan@marcan.st> <20211117145829.204360-2-marcan@marcan.st>
- <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de> <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
- <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
-In-Reply-To: <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
-From:   Javier Martinez Canillas <javier@dowhile0.org>
-Date:   Tue, 30 Nov 2021 07:44:53 +0100
-Message-ID: <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
-Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211130040306.148925-3-ebiggers@kernel.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > >
-> > > Simpledrm is just a driver, but this is platform setup code. Why is this
-> > > code located here and not under arch/ or drivers/firmware/?
-> > >
+On 11/30/21 5:03 AM, Eric Biggers wrote:
+> From: Eric Biggers <ebiggers@google.com>
+> 
+> kobjects aren't supposed to be deleted before their child kobjects are
+> deleted.  Apparently this is usually benign; however, a WARN will be
+> triggered if one of the child kobjects has a named attribute group:
+> 
+>      sysfs group 'modes' not found for kobject 'crypto'
+>      WARNING: CPU: 0 PID: 1 at fs/sysfs/group.c:278 sysfs_remove_group+0x72/0x80
+>      ...
+>      Call Trace:
+>        sysfs_remove_groups+0x29/0x40 fs/sysfs/group.c:312
+>        __kobject_del+0x20/0x80 lib/kobject.c:611
+>        kobject_cleanup+0xa4/0x140 lib/kobject.c:696
+>        kobject_release lib/kobject.c:736 [inline]
+>        kref_put include/linux/kref.h:65 [inline]
+>        kobject_put+0x53/0x70 lib/kobject.c:753
+>        blk_crypto_sysfs_unregister+0x10/0x20 block/blk-crypto-sysfs.c:159
+>        blk_unregister_queue+0xb0/0x110 block/blk-sysfs.c:962
+>        del_gendisk+0x117/0x250 block/genhd.c:610
+> 
+> Fix this by moving the kobject_del() and the corresponding
+> kobject_uevent() to the correct place.
+> 
+> Fixes: 2c2086afc2b8 ("block: Protect less code with sysfs_lock in blk_{un,}register_queue()")
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>   block/blk-sysfs.c | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Agreed. Creating platform devices is something for platform code and
-not really a DRM driver.
+Cheers,
 
-> > > I know that other drivers do similar things, it doesn't seem to belong here.
-> >
-
-Yeah, the simplefb driver does this but that seems like something that
-should be changed.
-
-> > This definitely doesn't belong in either of those, since it is not arch-
-> > or firmware-specific. It is implementing support for the standard
-> > simple-framebuffer OF binding, which specifies that it must be located
-> > within the /chosen node (and thus the default OF setup code won't do the
-> > matching for you); this applies to all OF platforms [1]
-> >
-> > Adding Rob; do you think this should move from simplefb/simpledrm to
-> > common OF code? (where?)
->
-> of_platform_default_populate_init() should work.
-
-That should work but I still wonder if it is the correct place to add
-this logic.
-
-I think that instead it could be done in the sysfb_create_simplefb()
-function [0], which already creates the "simple-framebuffer" device
-for x86 legacy BIOS and x86/arm64/riscv EFI so it makes sense to do
-the same for OF. That way the simplefb platform device registration
-code could also be dropped from the driver and users would just need
-to enable CONFIG_SYSFB and CONFIG_SYSFB_SIMPLEFB to have the same.
-
-I have a couple of boards with a bootloader that populates a
-"simple-framebuffer" in the /chosen node so I could attempt to write
-the patches. But probably won't happen until next week.
-
-[0]: https://elixir.bootlin.com/linux/v5.16-rc3/source/drivers/firmware/sysfb_simplefb.c#L60
-
-Best regards,
-Javier
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer

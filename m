@@ -2,131 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A5946298A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD7C462992
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235598AbhK3BVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 20:21:08 -0500
-Received: from smtprelay0036.hostedemail.com ([216.40.44.36]:60154 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230411AbhK3BVH (ORCPT
+        id S235703AbhK3BWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 20:22:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230248AbhK3BWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 20:21:07 -0500
-Received: from omf13.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay05.hostedemail.com (Postfix) with ESMTP id C0DFC184B2559;
-        Tue, 30 Nov 2021 01:17:48 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id DFFEB200027C;
-        Tue, 30 Nov 2021 01:17:39 +0000 (UTC)
-Message-ID: <51f8bfafb7543098a0f6274f6b8dd61446f3fda5.camel@perches.com>
-Subject: Re: [PATCH] staging: replace snprintf with sysfs_emit
-From:   Joe Perches <joe@perches.com>
-To:     davidcomponentone@gmail.com, TheSven73@gmail.com
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Yang Guang <yang.guang5@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Date:   Mon, 29 Nov 2021 17:17:45 -0800
-In-Reply-To: <21e2111f6c2590ac24ad15d39e87160f9425045b.1638186054.git.yang.guang5@zte.com.cn>
-References: <21e2111f6c2590ac24ad15d39e87160f9425045b.1638186054.git.yang.guang5@zte.com.cn>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1 
+        Mon, 29 Nov 2021 20:22:20 -0500
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5823CC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:18:59 -0800 (PST)
+Received: by mail-oi1-x234.google.com with SMTP id be32so38054707oib.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:18:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=h7dfI3SuNLbI8eu2t4U0v+H2ni+TuABrtKx5R3CfOHM=;
+        b=yJc94fLQTljmDterLRcug2eR/c+vDp0LTI+vRv2nR+c/ddCjsYXmPTE02Vayv09E3R
+         Kv8LNcOXnMkrzyWweCyKQNq91Omh0l7IFZLiSEs3jXCZXnBJ67lffzr40aZWtneQarqb
+         bKVmqXvIjRi8CEqJPV+fdwbCsmIYY0oya15SfMc4WnqZwgpCckZ2362UkaNMbQ3rnE6Q
+         L2ZqySG/zeIswlIiFzrpwKLl+Vdekd1MbW0XqN5PD7lMKjSU87ArTZPmkYsxYkiO7meU
+         q/F+WzMnW2TPdv54KXLgDmIsF6YCCQZ+rb+ylC+w3Hz/3rP1sQ2Mx1L73iPSSK5zyfls
+         mjsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=h7dfI3SuNLbI8eu2t4U0v+H2ni+TuABrtKx5R3CfOHM=;
+        b=6X5bdpZYURTbXCjUbgTuwu/yFyA76lqekBHwF503Z+HCtmoVF3BhfFLM5io70BJ2I6
+         RJeu0rg0qjGgdh8MkvlkYgBEgVNxMARHVE7OVSfwkyaBA8xxRuHnpzqa8j7HcdjEQsaY
+         S8vAgygD8srX3W9YkFXLxkZmAlksKhMiTw+ops1N9hfQZEtikiG82ihlh4bRh0osPkz7
+         SLmL+F+Tcq/rEITVdfaeltvOMVz6gRfhsspGU2xdCxw1Ql7nsZYN1whNIVvqDhIb1O+Q
+         iLgJKmRpgDWlTa87z4Gfhqni+xaDs7ACE57w6YV0cHuWyiFRQB0d/Izm4fEIQ1wHRs7l
+         mc9A==
+X-Gm-Message-State: AOAM532yw3CTdpP5TZz7OXweHJx7l/+8Xz9I2F5FMyIRXTREMQIPahXd
+        Qr7ipihF6Dx1YhquuYlWwiwY1dlHXU/+NSwyPX2IHw==
+X-Google-Smtp-Source: ABdhPJzmLyeQbxd78GNxBdXwDedwzxM3MZT96tDdvy8hzbjtS6grHN+iBJetLmTlLj/SPYPMXXf9itVMOmqvKPpjHwU=
+X-Received: by 2002:a54:4791:: with SMTP id o17mr1541501oic.114.1638235138666;
+ Mon, 29 Nov 2021 17:18:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.90
-X-Stat-Signature: n6fdcdyytuxaoqnbeaxs3gkugnpmqdpq
-X-Rspamd-Server: rspamout02
-X-Rspamd-Queue-Id: DFFEB200027C
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+mAvjVQPrIAu92Rvh7Dcxa0Fxl70E2He8=
-X-HE-Tag: 1638235059-32403
+References: <20211127192510.35723-1-demonsingur@gmail.com> <20211127192510.35723-4-demonsingur@gmail.com>
+In-Reply-To: <20211127192510.35723-4-demonsingur@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 30 Nov 2021 02:18:46 +0100
+Message-ID: <CACRpkda7-5YDQ6Gc+Ad0eHYO8pW3nLuUh1rKn9dEZ0PS-xHyJg@mail.gmail.com>
+Subject: Re: [PATCH v7 3/3] iio: addac: add AD74413R driver
+To:     Cosmin Tanislav <demonsingur@gmail.com>
+Cc:     cosmin.tanislav@analog.com, Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-11-30 at 08:07 +0800, davidcomponentone@gmail.com wrote:
-> From: Yang Guang <yang.guang5@zte.com.cn>
-> 
-> coccinelle report:
-> ./drivers/staging/fieldbus/dev_core.c:73:8-16:
-> WARNING: use scnprintf or sprintf
-> 
-> Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+On Sat, Nov 27, 2021 at 8:25 PM Cosmin Tanislav <demonsingur@gmail.com> wro=
+te:
 
-Please convert all the show functions and not just 1 of the 6 possible
-cases.
+> The AD74412R and AD74413R are quad-channel software configurable input/ou=
+tput
+> solutions for building and process control applications. They contain
+> functionality for analog output, analog input, digital input, resistance
+> temperature detector, and thermocouple measurements integrated
+> into a single chip solution with an SPI interface.
+> The devices feature a 16-bit ADC and four configurable 13-bit DACs to pro=
+vide
+> four configurable input/output channels and a suite of diagnostic functio=
+ns.
+> The AD74413R differentiates itself from the AD74412R by being HART-compat=
+ible.
+>
+> When configured with channel 0 as voltage output, channel 1 as current
+> output, channel 2 as voltage input and channel 3 as current input, the
+> following structure is created under the corresponding IIO device.
+>
+> .
+> =E2=94=9C=E2=94=80=E2=94=80 in_current0_offset
+> =E2=94=9C=E2=94=80=E2=94=80 in_current0_raw
+> =E2=94=9C=E2=94=80=E2=94=80 in_current0_sampling_frequency
+> =E2=94=9C=E2=94=80=E2=94=80 in_current0_sampling_frequency_available
+> =E2=94=9C=E2=94=80=E2=94=80 in_current0_scale
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage1_offset
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage1_raw
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage1_sampling_frequency
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage1_sampling_frequency_available
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage1_scale
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage2_offset
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage2_raw
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage2_sampling_frequency
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage2_sampling_frequency_available
+> =E2=94=9C=E2=94=80=E2=94=80 in_voltage2_scale
+> =E2=94=9C=E2=94=80=E2=94=80 in_current3_offset
+> =E2=94=9C=E2=94=80=E2=94=80 in_current3_raw
+> =E2=94=9C=E2=94=80=E2=94=80 in_current3_sampling_frequency
+> =E2=94=9C=E2=94=80=E2=94=80 in_current3_sampling_frequency_available
+> =E2=94=9C=E2=94=80=E2=94=80 in_current3_scale
+> =E2=94=9C=E2=94=80=E2=94=80 out_voltage0_raw
+> =E2=94=9C=E2=94=80=E2=94=80 out_voltage0_scale
+> =E2=94=9C=E2=94=80=E2=94=80 out_current1_raw
+> =E2=94=9C=E2=94=80=E2=94=80 out_current1_scale
+> =E2=94=9C=E2=94=80=E2=94=80 name
+> =E2=94=9C=E2=94=80=E2=94=80 buffer
+> =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 data_available
+> =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 enable
+> =E2=94=82   =E2=94=9C=E2=94=80=E2=94=80 length
+> =E2=94=82   =E2=94=94=E2=94=80=E2=94=80 watermark
+> =E2=94=94=E2=94=80=E2=94=80 scan_elements
+>     =E2=94=9C=E2=94=80=E2=94=80 in_current0_en
+>     =E2=94=9C=E2=94=80=E2=94=80 in_current0_index
+>     =E2=94=9C=E2=94=80=E2=94=80 in_current0_type
+>     =E2=94=9C=E2=94=80=E2=94=80 in_voltage1_en
+>     =E2=94=9C=E2=94=80=E2=94=80 in_voltage1_index
+>     =E2=94=9C=E2=94=80=E2=94=80 in_voltage1_type
+>     =E2=94=9C=E2=94=80=E2=94=80 in_voltage2_en
+>     =E2=94=9C=E2=94=80=E2=94=80 in_voltage2_index
+>     =E2=94=9C=E2=94=80=E2=94=80 in_voltage2_type
+>     =E2=94=9C=E2=94=80=E2=94=80 in_current3_en
+>     =E2=94=9C=E2=94=80=E2=94=80 in_current3_index
+>     =E2=94=94=E2=94=80=E2=94=80 in_current3_type
+>
+> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
 
-> diff --git a/drivers/staging/fieldbus/dev_core.c b/drivers/staging/fieldbus/dev_core.c
-[]
-> @@ -70,7 +70,7 @@ static ssize_t card_name_show(struct device *dev, struct device_attribute *attr,
->  	 * card_name was provided by child driver, could potentially be long.
->  	 * protect against buffer overrun.
->  	 */
-> -	return snprintf(buf, PAGE_SIZE, "%s\n", fb->card_name);
-> +	return sysfs_emit(buf, "%s\n", fb->card_name);
->  }
->  static DEVICE_ATTR_RO(card_name);
->  
+From a GPIO point of view there is nothing to complain about here
+so:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
----
- drivers/staging/fieldbus/dev_core.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/staging/fieldbus/dev_core.c b/drivers/staging/fieldbus/dev_core.c
-index 5aab734606eae..9c85bf87a8d7f 100644
---- a/drivers/staging/fieldbus/dev_core.c
-+++ b/drivers/staging/fieldbus/dev_core.c
-@@ -28,7 +28,7 @@ static ssize_t online_show(struct device *dev, struct device_attribute *attr,
- {
- 	struct fieldbus_dev *fb = dev_get_drvdata(dev);
- 
--	return sprintf(buf, "%d\n", !!fb->online);
-+	return sysfs_emit(buf, "%d\n", !!fb->online);
- }
- static DEVICE_ATTR_RO(online);
- 
-@@ -39,7 +39,7 @@ static ssize_t enabled_show(struct device *dev, struct device_attribute *attr,
- 
- 	if (!fb->enable_get)
- 		return -EINVAL;
--	return sprintf(buf, "%d\n", !!fb->enable_get(fb));
-+	return sysfs_emit(buf, "%d\n", !!fb->enable_get(fb));
- }
- 
- static ssize_t enabled_store(struct device *dev, struct device_attribute *attr,
-@@ -70,7 +70,7 @@ static ssize_t card_name_show(struct device *dev, struct device_attribute *attr,
- 	 * card_name was provided by child driver, could potentially be long.
- 	 * protect against buffer overrun.
- 	 */
--	return snprintf(buf, PAGE_SIZE, "%s\n", fb->card_name);
-+	return sysfs_emit(buf, "%s\n", fb->card_name);
- }
- static DEVICE_ATTR_RO(card_name);
- 
-@@ -79,7 +79,7 @@ static ssize_t read_area_size_show(struct device *dev,
- {
- 	struct fieldbus_dev *fb = dev_get_drvdata(dev);
- 
--	return sprintf(buf, "%zu\n", fb->read_area_sz);
-+	return sysfs_emit(buf, "%zu\n", fb->read_area_sz);
- }
- static DEVICE_ATTR_RO(read_area_size);
- 
-@@ -88,7 +88,7 @@ static ssize_t write_area_size_show(struct device *dev,
- {
- 	struct fieldbus_dev *fb = dev_get_drvdata(dev);
- 
--	return sprintf(buf, "%zu\n", fb->write_area_sz);
-+	return sysfs_emit(buf, "%zu\n", fb->write_area_sz);
- }
- static DEVICE_ATTR_RO(write_area_size);
- 
-@@ -116,7 +116,7 @@ static ssize_t fieldbus_type_show(struct device *dev,
- 		break;
- 	}
- 
--	return sprintf(buf, "%s\n", t);
-+	return sysfs_emit(buf, "%s\n", t);
- }
- static DEVICE_ATTR_RO(fieldbus_type);
- 
-
-
+Yours,
+Linus Walleij

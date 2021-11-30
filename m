@@ -2,120 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 70773462F1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:58:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D03A462F1E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:58:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234943AbhK3JB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 04:01:28 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.84]:34488 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234200AbhK3JB1 (ORCPT
+        id S235249AbhK3JBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 04:01:54 -0500
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:58169 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234626AbhK3JBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:01:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638262604;
-    s=strato-dkim-0002; d=chronox.de;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=DDCWyuV1q4Bg8hLGjlZOFkvlJxWKzcNwpLgCQQgqV00=;
-    b=Hy/FuZQ4+1Hb8JRIrOQFEaj6DrstHlgd/qZI/VaFB5IJAFZWUobBcENwj3OQmuHvY0
-    R0Z0GovxyGklFvevpI9qpSdWBjTyZx73MXv9ziMFngUBmYasaQNaIokW9zifMZ3wppg0
-    zeLv3TC/1W6Sr9lLUDVQyGCPCXrN2GTJti3FHLq2rBKtaXr91qiwFb+kyeSwhIy+pfzD
-    qLAHkLCtaBqWICNYr3l1FmkDDYYfsNb0IlN4bjp7Kr/l9vYdKfCXmxz4ZEaYGhzMy6QD
-    gN8tKSEZNgIO1U3cuSeS7P1DhpjH7kbDJZx6czwSmmmJymwRwu14ryxKPvGg+8km7aqq
-    1NAQ==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":P2ERcEykfu11Y98lp/T7+hdri+uKZK8TKWEqNyiHySGSa9k9xmwdNnzGHXvdOeuWroQ="
-X-RZG-CLASS-ID: mo00
-Received: from tauon.chronox.de
-    by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
-    with ESMTPSA id 006230xAU8ufUjK
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Tue, 30 Nov 2021 09:56:41 +0100 (CET)
-From:   Stephan Mueller <smueller@chronox.de>
-To:     Sandy Harris <sandyinchina@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Simo Sorce <simo@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>,
-        John Kelsey <crypto.jmk@gmail.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-Date:   Tue, 30 Nov 2021 09:56:41 +0100
-Message-ID: <2288548.vrFIavQkS3@tauon.chronox.de>
-In-Reply-To: <YaXZCdtyylHMa29o@kroah.com>
-References: <2036923.9o76ZdvQCi@positron.chronox.de> <CACXcFmntNAWYCwQ6CmH5c3pn3fXbxKh=j75GZUeLkuqi3QdS+A@mail.gmail.com> <YaXZCdtyylHMa29o@kroah.com>
+        Tue, 30 Nov 2021 04:01:53 -0500
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 874135C016C;
+        Tue, 30 Nov 2021 03:58:33 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 30 Nov 2021 03:58:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=iAST7h0cs3FmiYaQxyPYfu1DGic
+        7ID1h1xCPFc73iUM=; b=H2bOb8qPBvxRRIKAJvC7RvpXy8hhKaAw1upvu7VbNGr
+        Dp+tAf522cHOqU3kfbUNrQhLzYkjhYoxJMP4/OygXpLlnggl7pk2k5yZ+56MWFAP
+        kN6DfwQcmYr23dwZU6l/5NF/oy8tS4OJvOaV4+CCA2TdFLI8MWuZng1gTCYx2Vl1
+        PCGT4sfypXGGgPqimtTGkbHHqfDMPXKfIxS2pT1NakUJs7OioT/wHkDnJ0sI17iW
+        5T1YzXNl+AujZZDrUzvoUmxKKJxDGSNEei2ZHjemab1BlUjJVpuMjpw7X1Zw/qkK
+        fyo31P9CbPVW8GdAFO1wI/OIh0oEH86ZPE/eeS5opeA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=iAST7h
+        0cs3FmiYaQxyPYfu1DGic7ID1h1xCPFc73iUM=; b=LwFX4TRTZY6St5YOF7LaDz
+        N8vQaq0zqZUKYE3ZazYffMb6l+BCu+pi81mxQkHKxeJBSvnTUnXubayKbvUairyN
+        piknzrLQ4Jy/QMueMyl070L+uWjuxJGQ8DXRobCzaXeZfwuo3Xh+LZHhrjJ5fltz
+        MhaXtCQ5PjKPvo0nXqMxiKzDZ893hCdy9duGsNfeF5euviy6b+CYo05Hwnpayj9h
+        cJqOy18KCnXvbFQ6JA6ZWWyz8qbzouN390cUlY7SYK8WJH9f3OvSYD08MYtMwQfP
+        IMfMLMpJnw4Msvac2x+QTGxJwXUe1TUZ5phAl7JkT0rrT70dCb/vtRW+2Ob0rZ7Q
+        ==
+X-ME-Sender: <xms:uOelYW0fmTyr-7XEJLSDE6ACna-_xI-0EdQIJXQ281tuXtM7lNK_hQ>
+    <xme:uOelYZFr4CVNqq73EjDAyvi_k5lBJt1AizLsWWKLMXjTl9jBD6vGg3XZHRBSNdlqO
+    urzg2MBopPG8DSPp6I>
+X-ME-Received: <xmr:uOelYe5qPqDxrTgjB-FE7hQMm7xeFT9Pl77iIsCZw-mGRgLHj8F1JMBvLfdjD9mKhXoEjwPoUbKYpXi8frvPmoPDdfs82XpO8MA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddriedtgdduvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddvnecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepleekgeehhfdutdeljefgleejffehfffgieejhffgueefhfdtveetgeehieeh
+    gedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:uOelYX3H8IoHGDknnDaTU-RlHqw6snwtx3tNrfADxLkW16-HDIrQEg>
+    <xmx:uOelYZECPwX39TyzGIqxIrA5SO9XupDHjQItcig-ONDzrwYXxhhsTw>
+    <xmx:uOelYQ_6tHTcp7VszQ9gChDIumxY6GFiHoOu4djiTkxRwDGgz5KpnQ>
+    <xmx:ueelYSMwGy-c3C-kl3V0jDUQUAgB7u9lBPCCkIFqQgxRKy2dZIle-Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 Nov 2021 03:58:32 -0500 (EST)
+Date:   Tue, 30 Nov 2021 09:58:31 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the drm tree with the drm-misc-fixes
+ tree
+Message-ID: <20211130085831.wghfw7l4qksg2dbm@houat>
+References: <20211130103353.0ab1a44f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lecmpukyxl4tz6dv"
+Content-Disposition: inline
+In-Reply-To: <20211130103353.0ab1a44f@canb.auug.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 30. November 2021, 08:55:53 CET schrieb Greg Kroah-Hartman:
 
-Hi Greg,
+--lecmpukyxl4tz6dv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> On Tue, Nov 30, 2021 at 03:32:38PM +0800, Sandy Harris wrote:
-> > I think we should eliminate add_disk_randomness() since it does
-> > not work well on current hardware. Also, FIPS requires that
-> > entropy sources be independent & add_interrupt_randomness()
-> > depends on the same disk events so these sources may not be.
-> 
-> This whole "may not be" guessing game when it comes to FIPS
-> certification is a huge problem.  I have heard of different vendors
-> getting different feedback and different implementations "passing" in
-> different ways that totally contradict each other.  It seems that there
-> is a whole certification industry built up that you can use to try to
-> pass these tests, but those tests are different depending on the vendor
-> you use for this, making a total mess.
-> 
-> So perhaps getting solid answers, and having the FIPS people actually
-> implement (or at least review) the changes and submit them (this is all
-> open for everyone to see and work on), would be the best thing as that
-> would at least let us know that this is what they require.
+Hi Stephen,
 
-Just as a note: I am working as FIPS tester. I am part of the NIST entropy 
-working group which oversees the entropy related requirements. The LRNG's FIPS 
-compliant implementation is directly based on those requirements. The LRNG was 
-even reviewed by NIST personnel who mentioned that they do not see any 
-contradiction to the specification. Finally, we are pursuing to get a separate 
-ENT validation from NIST for the LRNG which would indicate that the LRNG meets 
-all their requirements.
+On Tue, Nov 30, 2021 at 10:33:53AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the drm tree got a conflict in:
+>=20
+>   drivers/gpu/drm/vc4/vc4_kms.c
+>=20
+> between commits:
+>=20
+>   f927767978d2 ("drm/vc4: kms: Fix return code check")
+>   d354699e2292 ("drm/vc4: kms: Don't duplicate pending commit")
+>=20
+> from the drm-misc-fixes tree and commit:
+>=20
+>   16e101051f32 ("drm/vc4: Increase the core clock based on HVS load")
+>=20
+> from the drm tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Besides, the LRNG can be configured to have no FIPS bits included at all as 
-documented in the patches and in the separately provided documentation. Yet, 
-it offers a streamlined conditioning operation and a combination of different 
-entropy source data which is obvious to not destroy entropy.
+Unfortunately the merge resolution isn't entirely correct :/
 
-Ciao
-Stephan
+There's multiple conflicts between those two branches on that file, but
+things went wrong between 16e101051f32 and 0c980a006d3f
 
+The first one changes the logic a bit for the clk_set_min_rate argument,
+and the second moves the clk_set_min_rate around.
 
+However, the merge resolution reintroduced the initial clk_set_min_rate
+call line (line 373), without changing the logic of the proper call site
+(line 396).
+
+This is the patch to fix the resolution:
+
+-- >8 --
+--- a/drivers/gpu/drm/vc4/vc4_kms.c	2021-11-30 08:56:28.748524275 +0100
++++ b/drivers/gpu/drm/vc4/vc4_kms.c	2021-11-29 15:46:11.692151678 +0100
+@@ -365,14 +365,6 @@
+ 		vc4_hvs_mask_underrun(dev, vc4_crtc_state->assigned_channel);
+ 	}
+
+-	if (vc4->hvs->hvs5) {
+-		unsigned long core_rate =3D max_t(unsigned long,
+-						500000000,
+-						new_hvs_state->core_clock_rate);
+-
+-		clk_set_min_rate(hvs->core_clk, core_rate);
+-	}
+-
+ 	for (channel =3D 0; channel < HVS_NUM_CHANNELS; channel++) {
+ 		struct drm_crtc_commit *commit;
+ 		int ret;
+@@ -392,8 +384,13 @@
+ 		old_hvs_state->fifo_state[channel].pending_commit =3D NULL;
+ 	}
+
+-	if (vc4->hvs->hvs5)
+-		clk_set_min_rate(hvs->core_clk, 500000000);
++	if (vc4->hvs->hvs5) {
++		unsigned long core_rate =3D max_t(unsigned long,
++						500000000,
++						new_hvs_state->core_clock_rate);
++
++		clk_set_min_rate(hvs->core_clk, core_rate);
++	}
+
+ 	drm_atomic_helper_commit_modeset_disables(dev, state);
+-- >8 --
+
+I'm wondering though, do you have access to the drm-rerere tree? I've
+fixed up the merge yesterday to deal with this conflict and the conflict
+resolution should be stored there already.
+
+Maxime
+
+--lecmpukyxl4tz6dv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYaXntwAKCRDj7w1vZxhR
+xXWnAQCWo7WQ12iqPQQIdseeco061y9zXo6Kig1tPb6yJW30XAD+LQEOgPjIdOe1
+HsHrHdec0SuLbWh5x2laV4o8spBzaQE=
+=aLcJ
+-----END PGP SIGNATURE-----
+
+--lecmpukyxl4tz6dv--

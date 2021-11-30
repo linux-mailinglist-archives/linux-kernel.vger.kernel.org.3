@@ -2,95 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08FEA463515
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7902B463517
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236093AbhK3NJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:09:24 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:51150 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbhK3NJX (ORCPT
+        id S236658AbhK3NJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:09:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230261AbhK3NJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:09:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3860EB817AB;
-        Tue, 30 Nov 2021 13:06:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E948BC53FC7;
-        Tue, 30 Nov 2021 13:05:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638277561;
-        bh=4Kk+iPJ9utmQ+No40KEp/M1GCd0HkU5mgNmfY3Ue3fk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rX7nGVJBReMQH+ADECiLFvL9rGq8ZfBxRay4EgBHKZ1UMVR6r3mVVvLgY0S6hnhpq
-         a8H4etxGPgJOaWLoBfyhJ+b/3BNEOZPItzePUutGVFz0aph5rekDKr3CQKvgi7fHRt
-         D3+jPo7MOuLuFWP1jopsi7UCibTD3yL3kBngDQlYKYDDz3U2Ldj/wqzNmbJkNckvCY
-         nV1cw0IxW7JVzRrugHRn57OscU+VOKUiJcDeERLbjB9ofyipYR7jVL9J5W8eXOZc0z
-         099Xv3UmAgLHzhLXdK8TgTAPg9RgbCeM+zTVyIdtt4TFFcZVa7i2w3+AnyrRuJ8H8J
-         TWDHgxXw7mPjg==
-Date:   Tue, 30 Nov 2021 13:05:56 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krishna Yarlagadda <kyarlagadda@nvidia.com>
-Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] spi: tegra210-quad: add acpi support
-Message-ID: <YaYhtFnHlZob9s0J@sirena.org.uk>
-References: <1637834152-32093-1-git-send-email-kyarlagadda@nvidia.com>
- <1637834152-32093-2-git-send-email-kyarlagadda@nvidia.com>
- <YZ+ImY1LrvB5a5iF@sirena.org.uk>
- <BN6PR12MB124973BF5CBB4AB35CC59B8AC3669@BN6PR12MB1249.namprd12.prod.outlook.com>
- <YaTHKuohUNt/hVLq@sirena.org.uk>
- <BN6PR12MB124927C4F4FAF53B59C2A23CC3679@BN6PR12MB1249.namprd12.prod.outlook.com>
+        Tue, 30 Nov 2021 08:09:30 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E2BC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:06:11 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id x10so25920853ioj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:06:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=ybfeDMenyXZ8KVSOyw+elPKhdpvWAlXbcAd9cwBz0e0=;
+        b=rG88AuieJkNWJJTx63X3oXa8ePCmuwC9utBX5jleohx9hb2U3X2cvgYnpgG4Z825i4
+         Ppf78d6ARl7bHieoMRdQKG/SuS3ig/V+bUkAbEwVMpnbdzVaHMwW07xz1r6W9iGEzx5V
+         vxOGrl0rEb9BZm2HHz05KAFY9EakNRdKyOvqo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=ybfeDMenyXZ8KVSOyw+elPKhdpvWAlXbcAd9cwBz0e0=;
+        b=HdivILJID9/tte9oVdxlLadmxGXi2HPI4HpoAUOTsIxmKbwiQslzs+hXc4cC55woul
+         xQ0mYHk+RP1uTFv3HTep2W+WP0zNEw4Q7D8N7RIubpeMXIvKg/K/rwvmVlzGc4Tt34AO
+         4Or7La4PuS3wUdVwBPwJoHikMr8M3OnFyTuqZxQ809RM2Pu8ARTqQWlh7aGljDIWuhgt
+         7CWrU31atfn48gvWzTOJFQbWRC15nc2DiCjHlOLPuLmkhV/p2Q+fK+7G1DYd1hPNQPvK
+         i/O8dDxCEBMPNF/4zRDt4eL2NCLy6zHCvm6pgNUsDwbW+sAqRYr0qdR8ahE3oe74EJvO
+         rY4w==
+X-Gm-Message-State: AOAM533Es1+PkJ+JnAjkNLHSjBaCEokCvQs6rEiyXSGIMZvOjCcCb3Jo
+        nOz4aK8hbqogskOCYHXW58AFMdfUdMNd+nnEtQuyjA==
+X-Google-Smtp-Source: ABdhPJzkE65UtGxLS903M4ORucpU2DrpB/BHbEz4zh94Nex6IPPoAYddokWIYf/UFEf37UnAEim0+lzk2fB5CSPa1V0=
+X-Received: by 2002:a05:6602:2d84:: with SMTP id k4mr63023644iow.168.1638277570657;
+ Tue, 30 Nov 2021 05:06:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MHPCoeCF66a+8rsk"
-Content-Disposition: inline
-In-Reply-To: <BN6PR12MB124927C4F4FAF53B59C2A23CC3679@BN6PR12MB1249.namprd12.prod.outlook.com>
-X-Cookie: Check your local listings.
+References: <20211130123746.293379-1-pbonzini@redhat.com>
+In-Reply-To: <20211130123746.293379-1-pbonzini@redhat.com>
+From:   Ignat Korchagin <ignat@cloudflare.com>
+Date:   Tue, 30 Nov 2021 13:05:59 +0000
+Message-ID: <CALrw=nHs-3vm7jxsLvNYxU8XqHqDbJp+vy+AULqTEwdPu0razg@mail.gmail.com>
+Subject: Re: [PATCH] KVM: ensure APICv is considered inactive if there is no APIC
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 30, 2021 at 12:37 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> kvm_vcpu_apicv_active() returns false if a virtual machine has no in-kernel
+> local APIC, however kvm_apicv_activated might still be true if there are
+> no reasons to disable APICv; in fact it is quite likely that there is none
+> because APICv is inhibited by specific configurations of the local APIC
+> and those configurations cannot be programmed.  This triggers a WARN:
+>
+>    WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
+>
+> To avoid this, introduce another cause for APICv inhibition, namely the
+> absence of an in-kernel local APIC.  This cause is enabled by default,
+> and is dropped by either KVM_CREATE_IRQCHIP or the enabling of
+> KVM_CAP_IRQCHIP_SPLIT.
+>
+> Reported-by: Ignat Korchagin <ignat@cloudflare.com>
+> Fixes: ee49a8932971 ("KVM: x86: Move SVM's APICv sanity check to common x86", 2021-10-22)
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h | 1 +
+>  arch/x86/kvm/svm/avic.c         | 1 +
+>  arch/x86/kvm/vmx/vmx.c          | 1 +
+>  arch/x86/kvm/x86.c              | 9 +++++----
+>  4 files changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 6ac61f85e07b..860ed500580c 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1036,6 +1036,7 @@ struct kvm_x86_msr_filter {
+>  #define APICV_INHIBIT_REASON_PIT_REINJ  4
+>  #define APICV_INHIBIT_REASON_X2APIC    5
+>  #define APICV_INHIBIT_REASON_BLOCKIRQ  6
+> +#define APICV_INHIBIT_REASON_ABSENT    7
+>
+>  struct kvm_arch {
+>         unsigned long n_used_mmu_pages;
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index affc0ea98d30..5a55a78e2f50 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -900,6 +900,7 @@ int svm_update_pi_irte(struct kvm *kvm, unsigned int host_irq,
+>  bool svm_check_apicv_inhibit_reasons(ulong bit)
+>  {
+>         ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
+> +                         BIT(APICV_INHIBIT_REASON_ABSENT) |
+>                           BIT(APICV_INHIBIT_REASON_HYPERV) |
+>                           BIT(APICV_INHIBIT_REASON_NESTED) |
+>                           BIT(APICV_INHIBIT_REASON_IRQWIN) |
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 1fadec8cbf96..ca1fd93c1dc9 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -7525,6 +7525,7 @@ static void hardware_unsetup(void)
+>  static bool vmx_check_apicv_inhibit_reasons(ulong bit)
+>  {
+>         ulong supported = BIT(APICV_INHIBIT_REASON_DISABLE) |
+> +                         BIT(APICV_INHIBIT_REASON_ABSENT) |
+>                           BIT(APICV_INHIBIT_REASON_HYPERV) |
+>                           BIT(APICV_INHIBIT_REASON_BLOCKIRQ);
+>
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 0ee1a039b490..e0aa4dd53c7f 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -5740,6 +5740,7 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+>                 smp_wmb();
+>                 kvm->arch.irqchip_mode = KVM_IRQCHIP_SPLIT;
+>                 kvm->arch.nr_reserved_ioapic_pins = cap->args[0];
+> +               kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
+>                 r = 0;
+>  split_irqchip_unlock:
+>                 mutex_unlock(&kvm->lock);
+> @@ -6120,6 +6121,7 @@ long kvm_arch_vm_ioctl(struct file *filp,
+>                 /* Write kvm->irq_routing before enabling irqchip_in_kernel. */
+>                 smp_wmb();
+>                 kvm->arch.irqchip_mode = KVM_IRQCHIP_KERNEL;
+> +               kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
+>         create_irqchip_unlock:
+>                 mutex_unlock(&kvm->lock);
+>                 break;
+> @@ -8818,10 +8820,9 @@ static void kvm_apicv_init(struct kvm *kvm)
+>  {
+>         init_rwsem(&kvm->arch.apicv_update_lock);
+>
+> -       if (enable_apicv)
+> -               clear_bit(APICV_INHIBIT_REASON_DISABLE,
+> -                         &kvm->arch.apicv_inhibit_reasons);
+> -       else
+> +       set_bit(APICV_INHIBIT_REASON_ABSENT,
+> +               &kvm->arch.apicv_inhibit_reasons);
+> +       if (!enable_apicv)
+>                 set_bit(APICV_INHIBIT_REASON_DISABLE,
+>                         &kvm->arch.apicv_inhibit_reasons);
+>  }
+> --
+> 2.31.1
+>
 
---MHPCoeCF66a+8rsk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Nov 30, 2021 at 01:50:07AM +0000, Krishna Yarlagadda wrote:
-
-> > That said frankly I'd expect this handling of ACPI reset to be pushed into the
-> > reset code, it's obviously not good to be open coding this in drivers when this
-> > looks like it's completely generic to any ACPI object so shouldn't be being
-> > open coded in individual driers especially with the ifdefery.  Shouldn't the
-> > reset API be able to figure out that an object with _RST has a reset control
-> > and provide access to it through the reset API?
-
-> Common reset apis are not handling _RST. Each driver is implementing
-> _RST method in ACPI and calling from drivers.
-
-I can see that.  What I'm saying is that this seems bad and we should
-instead be implementing this in common code.
-
---MHPCoeCF66a+8rsk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGmIbQACgkQJNaLcl1U
-h9CEiAf8CRl+6hMD+/ZKTgrUelUBql3J4AbFnksldvj6F6pz5SuZ0JlM0injXeAl
-s61rifuDIJsbC37ovaG3We84Cm2a7KiCtR8itIw/oLZQWDVfUNdNaN00zc7sNCPJ
-MnHlielK85ddMbXCYOInOM+LLI8RhuwIH/a2cOfLzWWuumze06hVSCiGuYyV53Pu
-ATrbWKy+keX4pciAZDFfpS+VkNvJ9tsmrmEabkH1PXjMfc2jKqgT5GnuHs/udSk9
-DxZ7Si3T1hLPdb3Ev/z4xiFP/w+4iIE+t0S6IUZx790SoPilV1QIeFjfM3L+dIq+
-710m8ULFLcxUNBs6G3Ut/B5TAO+ArA==
-=0vRn
------END PGP SIGNATURE-----
-
---MHPCoeCF66a+8rsk--
+Tested-by: Ignat Korchagin <ignat@cloudflare.com>

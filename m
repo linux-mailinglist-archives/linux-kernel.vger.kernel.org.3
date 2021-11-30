@@ -2,177 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D2DA0462912
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15546462915
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233731AbhK3A3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:29:01 -0500
-Received: from mail-qt1-f171.google.com ([209.85.160.171]:35365 "EHLO
-        mail-qt1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbhK3A27 (ORCPT
+        id S233795AbhK3A3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:29:38 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:53122 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S230018AbhK3A3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:28:59 -0500
-Received: by mail-qt1-f171.google.com with SMTP id j17so18500344qtx.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:25:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vmZ6yrLmHwc8oKXeav6AR62kh5AMJR8Zb4JZJaz0P08=;
-        b=DBEkx795Uw6fLNqGYRAJVtlZkCRGhXBdFMyUXeEPpWqIb0RbyoU6zJvV/tiK5rlx0Z
-         o/pc5XRqkdNH9++SuLAqP8OoU1NWAhT5R+XH/EpVNuNZGKD4kB3eq3E6aZ2xqrnFE9xW
-         UZw8m+mQ3cP99xYuZqAb2vUV0nJy6eej/Pck3ah/DfB+VnVeRsCpGVPcOg+B4O6OEqYP
-         7kK9Vmut6rztoi676Ra+YzSHb8MzTnpXVtEfT+TkqwU2qltJTH2CRqX3xOf0RDLpQHsK
-         OGnSUs3xGLFWJ7Mimb/g2ao3npiKtRre6wLQNpaz678kLoaOM9Lo/nlWTcHr9UO7bsTi
-         yUCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vmZ6yrLmHwc8oKXeav6AR62kh5AMJR8Zb4JZJaz0P08=;
-        b=0CQQvkP/xjb+2dTMI7R1vFDl679KJlk+GMDq08xquNHR65pVrA0OnOkhpUrtbs9LpK
-         m9plHyCRGSTqkpw468kNzfEzeQnkeP/jbsDoQ9ok5byEoohoXpb2SA27bcI5ktUvujYg
-         OidThxxpjAgcsAcX+rmSlkxn2ZcrzOg0a3iLAMuzRUhD+Sxh55ceLZ+iYaPrG09IK2mn
-         ZQ3mPxFmALTVm1XE7f895CXPhFejrNVeLNAr8Nvy76Y79G96PO49HZRR5db9qnwcloxR
-         ANlU3wX9ekB4uGtbFSXtbhVlzCmx9isU81dpUzx1j9/OPFloGr9RgPwuS5/JUkc9/Q9v
-         19bg==
-X-Gm-Message-State: AOAM5337DMKZ4AOkNgosgQJhN3wY8kneCk37expmmWAHaz4l3UPsvr7p
-        NiMRB9JcGIu8n2sBThoApGJ2HI4B8/ZtClCsqma04w==
-X-Google-Smtp-Source: ABdhPJwuErsaT5p6jX4BOEb7NrgrXWKD2lSqqGnHf0k7Irhr5BOzwSiJBNdUTkXJxVX8QU247dtoj2Z/Wf5u6TZUnN8=
-X-Received: by 2002:a05:622a:15c6:: with SMTP id d6mr38396525qty.439.1638231880398;
- Mon, 29 Nov 2021 16:24:40 -0800 (PST)
+        Mon, 29 Nov 2021 19:29:37 -0500
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AU07xZZ015197;
+        Tue, 30 Nov 2021 00:26:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=iuFClz7+kbeyFS/JDn8ErvHs+egURHv8fQNTm0xzMzc=;
+ b=P5T4XtMUSwZFN/EinCb/Jh2TbTRjobad9IoSWFHFBxj4eDtWhLcjkZlVsAw1zTL3764N
+ lBZ29rsJXhojsrrshdIJVwSvqQbWyfY07uoi5iEmmkXVQtpdLjiyxRec3bsKiShyq5gS
+ 49oq8AGXZ1sCcr9bBdqQHCU1uR/+c5zp17w5FUHR6+ZjfncD4fT2/04ho7sLnDT6uPPg
+ dr5S9LVS9j9uCBSxdU+Rfht0hdv7/QsrTyQJ3n5Lw6XTP+K5m7mgB3IYYa0bcFUHXzaT
+ Fl5deOhKwzNJdLq0E9G7nI+PQ+YyN9n8zihCZzUlQH3TPilt4SzLJMN3vaqStsP6lw9P vg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cn8u6gjr0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 00:26:15 +0000
+Received: from m0098396.ppops.net (m0098396.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AU0BI1h026669;
+        Tue, 30 Nov 2021 00:26:15 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cn8u6gjqp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 00:26:15 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AU0Nu3M021215;
+        Tue, 30 Nov 2021 00:26:14 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma04dal.us.ibm.com with ESMTP id 3ckcabbgjf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 00:26:14 +0000
+Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AU0QDjD28770886
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Nov 2021 00:26:13 GMT
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 567F86E052;
+        Tue, 30 Nov 2021 00:26:13 +0000 (GMT)
+Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BFCAD6E04E;
+        Tue, 30 Nov 2021 00:26:12 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Nov 2021 00:26:12 +0000 (GMT)
+Message-ID: <e569444c-e0cd-52bc-308f-7fa457dbf086@linux.ibm.com>
+Date:   Mon, 29 Nov 2021 19:26:12 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v4 2/2] selftests: tpm2: Reset the dictionary attack lock
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
+ <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
+ <YaVljk1vLRZ/TDJ/@iki.fi>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <YaVljk1vLRZ/TDJ/@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 3xHyV2QAq9-2auLXAoor550Y5zY9QN9O
+X-Proofpoint-GUID: f6k4syvCm65vhtT--XbDAvwD45Xiadgd
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20211125183622.597177-1-dmitry.baryshkov@linaro.org>
- <CAGETcx-_6OvcJM1nAoX3pxE3Rard5CRxEuEsmhfLANOzOS1BSQ@mail.gmail.com> <CAGETcx86iFm04PxnmrRQhooxtd4_kv87rAu=T0RauqFXmRLKNA@mail.gmail.com>
-In-Reply-To: <CAGETcx86iFm04PxnmrRQhooxtd4_kv87rAu=T0RauqFXmRLKNA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 30 Nov 2021 03:24:29 +0300
-Message-ID: <CAA8EJpr4+B1Q3voOr__3M37jxxBRi0g3avzE1Y8CDLkZB+rSGg@mail.gmail.com>
-Subject: Re: [PATCH] of: property: do not create clocks device link for clock controllers
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Android Kernel Team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-29_11,2021-11-28_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ priorityscore=1501 mlxlogscore=999 lowpriorityscore=0 adultscore=0
+ bulkscore=0 impostorscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2111290116
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 at 02:53, Saravana Kannan <saravanak@google.com> wrote:
+
+On 11/29/21 18:43, Jarkko Sakkinen wrote:
+> On Sat, Nov 27, 2021 at 11:10:52PM -0500, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> Reset the dictionary attack lock to avoid the following types of test
+>> failures after running the test 2 times:
+>>
+>> ======================================================================
+>> ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
+>> ----------------------------------------------------------------------
+>> Traceback (most recent call last):
+>>    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2_tests.py", line 105, in test_unseal_with_wrong_policy
+>>      blob = self.client.seal(self.root_key, data, auth, policy_dig)
+>>    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 620, in seal
+>>      rsp = self.send_cmd(cmd)
+>>    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 397, in send_cmd
+>>      raise ProtocolError(cc, rc)
+>> tpm2.ProtocolError: TPM_RC_LOCKOUT: cc=0x00000153, rc=0x00000921
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> ---
+>>   tools/testing/selftests/tpm2/tpm2_tests.py | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+>> index e63a37819978..ad6f54c01adf 100644
+>> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
+>> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+>> @@ -139,6 +139,8 @@ class SmokeTest(unittest.TestCase):
+>>           except:
+>>               self.client.flush_context(handle)
+>>               raise
+>> +        finally:
+>> +            self.client.reset_da_lock()
+>>   
+>>           self.assertEqual(rc, tpm2.TPM2_RC_POLICY_FAIL)
+>>   
+>> -- 
+>> 2.31.1
+>>
+> I don't agree with this as a DA lock has legit use. This would be adequate
+> for systems dedicated for kernel testing only.
+
+The problem is this particular test case I am patching here causes the 
+above test failures upon rerun. We are testing the driver here 
+presumably and not the TPM2, so I think we should leave the TPM2 as 
+cleaned up as possible, thus my suggestion is to reset the DA lock and 
+we won't hear any complaints after that.
+
+
+> We could make this available in the folder where TPM2 tests are:
 >
-> On Mon, Nov 29, 2021 at 3:48 PM Saravana Kannan <saravanak@google.com> wrote:
-> >
-> > On Thu, Nov 25, 2021 at 10:36 AM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > Do not create device link for clock controllers.
-> >
-> > Nak.
-> >
-> > > Some of the clocks
-> > > provided to the device via OF can be the clocks that are just parents to
-> > > the clocks provided by this clock controller. Clock subsystem already
-> > > has support for handling missing clock parents correctly (clock
-> > > orphans). Later when the parent clock is registered, clocks get
-> > > populated properly.
-> > >
-> > > An example of the system where this matters is the SDM8450 MTP board
-> > > (see arch/arm64/boot/dts/qcom/sdm845-mtp.dts). Here the dispcc uses
-> > > clocks provided by dsi0_phy and dsi1_phy device tree nodes. However the
-> > > dispcc itself provides clocks to both PHYs, to the PHY parent device,
-> > > etc. With just dsi0_phy in place devlink is able to break the
-> > > dependency,
-> >
-> > Right, because I wrote code to make sure we handle these clock
-> > controller cases properly. If that logic isn't smart enough, let's fix
-> > that.
+> https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-scripts.git/tree/tpm2-reset-da-lock
 
-As I said, devlink was delaying dispcc probing ,waiting for the second
-DSI PHY clock provider.
-Thus came my proposal to let clock orphans handle the case (which it
-does perfectly).
 
-> >
-> > > but with two PHYs, dispcc doesn't get probed at all, thus
-> > > breaking display support.
-> >
-> > Then let's find out why and fix this instead of hiding some
-> > dependencies from fw_devlink. You could be breaking other cases/boards
-> > with this change you are making.
->
-> Btw, forgot to mention. I'll look into this one and try to find the
-> reason why it wasn't handled automatically. And then come up with a
-> fix.
->
-> If you want to find out why fw_devlink didn't notice the cycle
-> correctly for the case of 2 PHYs vs 1 PHY, I'd appreciate that too.
->
-> Btw, same comment for remote-endpoint. I'll look into what's going on
-> in that case. Btw, I'm assuming all the code and DT you are testing
-> this on is already upstream. Can you please confirm that?
+The tss packages also have command line tools to reset the DA lock, but 
+it shouldn't be necessary to use them after running a **driver** test case.
 
-All the code and basic DT is upstreamed. The DT part I
-referenced/posted was written for the custom extender for the
-qrb5165-rb5 board that I use here to test MSM DRM driver, but the
-result DT should be more or less the same as smd845-mtp.
+
+    stefan
+
 
 >
-> -Saravana
->
-> >
-> > -Saravana
-> >
-> > > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > Cc: Stephen Boyd <swboyd@chromium.org>
-> > > Cc: Saravana Kannan <saravanak@google.com>
-> > > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > ---
-> > >  drivers/of/property.c | 16 +++++++++++++++-
-> > >  1 file changed, 15 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/of/property.c b/drivers/of/property.c
-> > > index a3483484a5a2..f7229e4030e3 100644
-> > > --- a/drivers/of/property.c
-> > > +++ b/drivers/of/property.c
-> > > @@ -1264,7 +1264,6 @@ struct supplier_bindings {
-> > >         bool node_not_dev;
-> > >  };
-> > >
-> > > -DEFINE_SIMPLE_PROP(clocks, "clocks", "#clock-cells")
-> > >  DEFINE_SIMPLE_PROP(interconnects, "interconnects", "#interconnect-cells")
-> > >  DEFINE_SIMPLE_PROP(iommus, "iommus", "#iommu-cells")
-> > >  DEFINE_SIMPLE_PROP(mboxes, "mboxes", "#mbox-cells")
-> > > @@ -1294,6 +1293,21 @@ DEFINE_SIMPLE_PROP(backlight, "backlight", NULL)
-> > >  DEFINE_SUFFIX_PROP(regulators, "-supply", NULL)
-> > >  DEFINE_SUFFIX_PROP(gpio, "-gpio", "#gpio-cells")
-> > >
-> > > +static struct device_node *parse_clocks(struct device_node *np,
-> > > +                                       const char *prop_name, int index)
-> > > +{
-> > > +       /*
-> > > +        * Do not create clock-related device links for clocks controllers,
-> > > +        * clock orphans will handle missing clock parents automatically.
-> > > +        */
-> > > +       if (!strcmp(prop_name, "clocks") &&
-> > > +           of_find_property(np, "#clock-cells", NULL))
-> > > +               return NULL;
-> > > +
-> > > +       return parse_prop_cells(np, prop_name, index, "clocks",
-> > > +                                      "#clock-cells");
-> > > +}
-> > > +
-> > >  static struct device_node *parse_gpios(struct device_node *np,
-> > >                                        const char *prop_name, int index)
-> > >  {
-> > > --
-> > > 2.33.0
-> > >
-
-
-
--- 
-With best wishes
-Dmitry
+> /Jarkko

@@ -2,244 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0E6C462C55
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FD0462C53
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238388AbhK3FuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 00:50:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47058 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238378AbhK3FuB (ORCPT
+        id S238372AbhK3Ftu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 00:49:50 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:47674 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232397AbhK3Ftt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 00:50:01 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E91C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 21:46:42 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id y12so81824769eda.12
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 21:46:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=LYTQe8+qt/B7HUNyS2m6Byeu+yTOhatNCx78l9wCK34=;
-        b=H4CN7rmanFfOYdVnBHF2pV2ZExwYC2jncMha8GqCOkm9alZCvCtNWDu0UruxgXiGOh
-         u7AzkhqM0PzqLvDh0TmSAtSxcrSDh0Z9Rk5Jq7STQPnb4TDqXOFuVkE+IA3vT2OFxdwe
-         xAAc5zhKNT8mCLZ97Co1k/4aXhwSv0fiihYxcPD7SJdaeLWLBOJ+l7VGGvLqUiNxGNrr
-         7UWd9EqRX4lxyQ+qzRvhNWHNBBWHX6OkFu4A551+LmezFQqT0ga2ZIPZGTmyH+Hok6MB
-         PyzQM2fisXY8DQUZAaBqWSLC6wwMDa8jG7qG0yXobk0o7cLemN3hi42dSzz866wLm1y/
-         JN/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=LYTQe8+qt/B7HUNyS2m6Byeu+yTOhatNCx78l9wCK34=;
-        b=MjaTBZD0knmdP3pPhs1U4PUWv34BWQ9mztK0nE/M921wr8DcfX63o65N4ufbasFCs5
-         wjKttvQj6KkX74e0Upcxsp4LbAvpCf2pa/RyexxONmxodTe8T6xhLQN+iACgjWQtUA7u
-         ovgEvMznwgyHme7rxs5OEM1eFdNYMNo/0jJ4QeDTbuAm02on4d+EoRLWh7qw276fMF1f
-         zaLVEgcA4DFZjT04u7fDvnUiynmWmvZ7ElDIrsuPNRrYNMYCqc1I3O6EyIkRxUXmFFR6
-         r65ZRoLm3ur37qdqk9YjOJn36ltkNfcJkw9iOoN6lLE8iC+EuLRzBFVpPwWsysyN1adM
-         TQiQ==
-X-Gm-Message-State: AOAM531pDj3TLcqix7khdSVn7EelywrwC7ovkwHJ6SUiivRmMZu0yf4W
-        rgET0TfSsoj/lcBFpEmfRMrzmukZnS0DvNQap1+8Ig==
-X-Google-Smtp-Source: ABdhPJzHm1Qo9VcunwTeqllot7dsQ7vji1FaMI+dmnIsydXGOCiVWI+b/jmLe6vmdnbU4nnzkg9EJHnzNdhGHf4kAjc=
-X-Received: by 2002:a05:6402:2813:: with SMTP id h19mr81036302ede.267.1638251201083;
- Mon, 29 Nov 2021 21:46:41 -0800 (PST)
+        Tue, 30 Nov 2021 00:49:49 -0500
+Received: from [10.137.112.111] (unknown [131.107.147.111])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 89CA020E0A31;
+        Mon, 29 Nov 2021 21:46:30 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 89CA020E0A31
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1638251190;
+        bh=iOpaHr6qFasi/i3ytiPPbRmOJGx7HOYQVOOl1pw3WQU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QzzGMgkEAX/wnqax1mqf2ie8IqhrQEhsq/azjEprLq4Ns6cTuJ/IbR/7JyhXmVEp9
+         eHQZ1FWX9Nd4OmMwGwhIvUZ9+26W7/EVzkeIn6fKuoW1tAxdhMj1BQtMppJyA1nBgu
+         yAsqPUl5vMWaCS86zgx1yKihEUxKCHxEs0QP7Nxs=
+Message-ID: <e99c6bdd-de23-7e07-37ce-c01b51961402@linux.microsoft.com>
+Date:   Mon, 29 Nov 2021 21:46:30 -0800
 MIME-Version: 1.0
-References: <20211129181718.913038547@linuxfoundation.org>
-In-Reply-To: <20211129181718.913038547@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 30 Nov 2021 11:16:29 +0530
-Message-ID: <CA+G9fYup_akNK-ttEuy3qfUNNb_-SMtuUNXXemkf=mHkuQ1T0Q@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/179] 5.15.6-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
-        f.fainelli@gmail.com, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
-        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, linux@roeck-us.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 3/4] ima: limit including fs-verity's file digest in
+ measurement list
+Content-Language: en-US
+To:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org
+Cc:     linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+ <20211129170057.243127-4-zohar@linux.ibm.com>
+From:   Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+In-Reply-To: <20211129170057.243127-4-zohar@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 at 00:08, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.6 release.
-> There are 179 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.6-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+Hi Mimi,
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Just one nit comment below in the patch description.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+On 11/29/2021 9:00 AM, Mimi Zohar wrote:
+> Without the file signature included the IMA measurement list, the type
+Without the file signature included in the IMA measurement list, the type...
 
-## Build
-* kernel: 5.15.6-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: a6dab1fb6f7d0b0357301dcad771ff9d349fd6bc
-* git describe: v5.15.5-180-ga6dab1fb6f7d
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.5-180-ga6dab1fb6f7d
+  -lakshmi
 
-## No regressions (compared to v5.15.3)
-
-## No fixes (compared to v5.15.3)
-
-
-## Test result summary
-total: 94184, pass: 79366, fail: 1087, skip: 12763, xfail: 968
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 135 total, 135 passed, 0 failed
-* arm64: 37 total, 35 passed, 2 failed
-* dragonboard-410c: 1 total, 1 passed, 0 failed
-* hi6220-hikey: 1 total, 1 passed, 0 failed
-* i386: 36 total, 36 passed, 0 failed
-* juno-r2: 1 total, 1 passed, 0 failed
-* mips: 34 total, 34 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 45 total, 42 passed, 3 failed
-* riscv: 24 total, 24 passed, 0 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 20 total, 20 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x15: 1 total, 1 passed, 0 failed
-* x86: 1 total, 1 passed, 0 failed
-* x86_64: 37 total, 37 passed, 0 failed
-
-## Test suites summary
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-bpf
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-lkdtm
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> of file digest is unclear.  Limit including fs-verity's file digest in
+> the IMA measurement list based on whether the template name is ima-sig.
+> In the future, this could be relaxed to include any template format that
+> includes the file signature.
+> 
+> Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+> ---
+>   security/integrity/ima/ima.h              | 3 ++-
+>   security/integrity/ima/ima_api.c          | 3 ++-
+>   security/integrity/ima/ima_appraise.c     | 3 ++-
+>   security/integrity/ima/ima_main.c         | 7 ++++++-
+>   security/integrity/ima/ima_template_lib.c | 3 ++-
+>   5 files changed, 14 insertions(+), 5 deletions(-)
+> 
+> diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+> index be965a8715e4..ab257e404f8e 100644
+> --- a/security/integrity/ima/ima.h
+> +++ b/security/integrity/ima/ima.h
+> @@ -262,7 +262,8 @@ int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
+>   int ima_must_measure(struct inode *inode, int mask, enum ima_hooks func);
+>   int ima_collect_measurement(struct integrity_iint_cache *iint,
+>   			    struct file *file, void *buf, loff_t size,
+> -			    enum hash_algo algo, struct modsig *modsig);
+> +			    enum hash_algo algo, struct modsig *modsig,
+> +			    bool veritysig);
+>   void ima_store_measurement(struct integrity_iint_cache *iint, struct file *file,
+>   			   const unsigned char *filename,
+>   			   struct evm_ima_xattr_data *xattr_value,
+> diff --git a/security/integrity/ima/ima_api.c b/security/integrity/ima/ima_api.c
+> index 42c6ff7056e6..179c7f0364c2 100644
+> --- a/security/integrity/ima/ima_api.c
+> +++ b/security/integrity/ima/ima_api.c
+> @@ -217,7 +217,8 @@ int ima_get_action(struct user_namespace *mnt_userns, struct inode *inode,
+>    */
+>   int ima_collect_measurement(struct integrity_iint_cache *iint,
+>   			    struct file *file, void *buf, loff_t size,
+> -			    enum hash_algo algo, struct modsig *modsig)
+> +			    enum hash_algo algo, struct modsig *modsig,
+> +			    bool veritysig)
+>   {
+>   	const char *audit_cause = "failed";
+>   	struct inode *inode = file_inode(file);
+> diff --git a/security/integrity/ima/ima_appraise.c b/security/integrity/ima/ima_appraise.c
+> index d43a27a9a9b6..b31be383e668 100644
+> --- a/security/integrity/ima/ima_appraise.c
+> +++ b/security/integrity/ima/ima_appraise.c
+> @@ -510,7 +510,8 @@ void ima_update_xattr(struct integrity_iint_cache *iint, struct file *file)
+>   	    !(iint->flags & IMA_HASH))
+>   		return;
+>   
+> -	rc = ima_collect_measurement(iint, file, NULL, 0, ima_hash_algo, NULL);
+> +	rc = ima_collect_measurement(iint, file, NULL, 0, ima_hash_algo,
+> +				     NULL, FALSE);
+>   	if (rc < 0)
+>   		return;
+>   
+> diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+> index 465865412100..a73e1e845ea8 100644
+> --- a/security/integrity/ima/ima_main.c
+> +++ b/security/integrity/ima/ima_main.c
+> @@ -216,6 +216,7 @@ static int process_measurement(struct file *file, const struct cred *cred,
+>   	bool violation_check;
+>   	enum hash_algo hash_algo;
+>   	unsigned int allowed_algos = 0;
+> +	int veritysig = FALSE;
+>   
+>   	if (!ima_policy_flag || !S_ISREG(inode->i_mode))
+>   		return 0;
+> @@ -333,8 +334,12 @@ static int process_measurement(struct file *file, const struct cred *cred,
+>   	}
+>   
+>   	hash_algo = ima_get_hash_algo(xattr_value, xattr_len);
+> +	if (xattr_value && xattr_value->type == IMA_VERITY_DIGSIG &&
+> +	    strcmp(template_desc->name, "ima-sig") == 0)
+> +		veritysig = TRUE;
+>   
+> -	rc = ima_collect_measurement(iint, file, buf, size, hash_algo, modsig);
+> +	rc = ima_collect_measurement(iint, file, buf, size, hash_algo,
+> +				     modsig, veritysig);
+>   	if (rc != 0 && rc != -EBADF && rc != -EINVAL)
+>   		goto out_locked;
+>   
+> diff --git a/security/integrity/ima/ima_template_lib.c b/security/integrity/ima/ima_template_lib.c
+> index ca017cae73eb..5bad251f3b07 100644
+> --- a/security/integrity/ima/ima_template_lib.c
+> +++ b/security/integrity/ima/ima_template_lib.c
+> @@ -478,7 +478,8 @@ int ima_eventsig_init(struct ima_event_data *event_data,
+>   {
+>   	struct evm_ima_xattr_data *xattr_value = event_data->xattr_value;
+>   
+> -	if ((!xattr_value) || (xattr_value->type != EVM_IMA_XATTR_DIGSIG))
+> +	if ((!xattr_value) || !(xattr_value->type == EVM_IMA_XATTR_DIGSIG ||
+> +				xattr_value->type == IMA_VERITY_DIGSIG))
+>   		return ima_eventevmsig_init(event_data, field_data);
+>   
+>   	return ima_write_template_field_data(xattr_value, event_data->xattr_len,
+> 

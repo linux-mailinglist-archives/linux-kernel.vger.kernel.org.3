@@ -2,219 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5B5462D0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2387462D0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:46:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238782AbhK3Gtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 01:49:31 -0500
-Received: from mga06.intel.com ([134.134.136.31]:40287 "EHLO mga06.intel.com"
+        id S238799AbhK3Gtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 01:49:49 -0500
+Received: from mga07.intel.com ([134.134.136.100]:65413 "EHLO mga07.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233099AbhK3Gta (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 01:49:30 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="296960440"
+        id S238789AbhK3Gts (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 01:49:48 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="299551141"
 X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="296960440"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 22:46:11 -0800
+   d="scan'208";a="299551141"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 22:46:28 -0800
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="499640480"
-Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.238.4.155]) ([10.238.4.155])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 22:46:09 -0800
-Message-ID: <96fa41bb-7e9f-ae47-bf34-accef5c36fa8@linux.intel.com>
-Date:   Tue, 30 Nov 2021 14:46:06 +0800
+   d="scan'208";a="512047635"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by orsmga008.jf.intel.com with ESMTP; 29 Nov 2021 22:46:24 -0800
+Date:   Tue, 30 Nov 2021 14:46:23 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     paulmck@kernel.org, rui.zhang@intel.com, andi.kleen@intel.com,
+        len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for qualified
+ platforms
+Message-ID: <20211130064623.GB96474@shbuild999.sh.intel.com>
+References: <20211117023751.24190-1-feng.tang@intel.com>
+ <20211117023751.24190-2-feng.tang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [LKP] Re: [xfs] bad77c375e: stress-ng.fallocate.ops_per_sec
- -10.0% regression
-Content-Language: en-US
-From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
-To:     kernel test robot <oliver.sang@intel.com>,
-        Dave Chinner <dchinner@redhat.com>
-Cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        Chandan Babu R <chandanrlinux@gmail.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Allison Henderson <allison.henderson@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com
-References: <20210902072704.GC8267@xsang-OptiPlex-9020>
- <36dc5f38-f8ec-591a-8efa-b3bd607ac06e@linux.intel.com>
-In-Reply-To: <36dc5f38-f8ec-591a-8efa-b3bd607ac06e@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211117023751.24190-2-feng.tang@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+On Wed, Nov 17, 2021 at 10:37:51AM +0800, Feng Tang wrote:
+> There are cases that tsc clocksources are wrongly judged as unstable by
+> clocksource watchdogs like hpet, acpi_pm or 'refined-jiffies'. While
+> there is hardly a general reliable way to check the validity of a
+> watchdog, and to protect the innocent tsc, Thomas Gleixner proposed [1]:
 
-    Do you have time to look at this? It still existed in v5.16-rc3. Thanks
+Hi All,
 
-On 9/3/2021 3:40 PM, Xing Zhengjun wrote:
-> Hi Dave,
-> 
->     Do you have time to look at this? Thanks.
-> 
-> On 9/2/2021 3:27 PM, kernel test robot wrote:
->>
->>
->> Greeting,
->>
->> FYI, we noticed a -10.0% regression of stress-ng.fallocate.ops_per_sec 
->> due to commit:
->>
->>
->> commit: bad77c375e8de6c776c848e443f7dc2d0d909be5 ("xfs: CIL checkpoint 
->> flushes caches unconditionally")
->> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
->>
->>
->> in testcase: stress-ng
->> on test machine: 96 threads 2 sockets Intel(R) Xeon(R) Gold 6252 CPU @ 
->> 2.10GHz with 512G memory
->> with following parameters:
->>
->>     nr_threads: 10%
->>     disk: 1HDD
->>     testtime: 60s
->>     fs: xfs
->>     class: filesystem
->>     test: fallocate
->>     cpufreq_governor: performance
->>     ucode: 0x5003006
->>
->>
->> In addition to that, the commit also has significant impact on the 
->> following tests:
->>
->>
->>
->> If you fix the issue, kindly add following tag
->> Reported-by: kernel test robot <oliver.sang@intel.com>
->>
->>
->> Details are as below:
->> --------------------------------------------------------------------------------------------------> 
->>
->>
->>
->> To reproduce:
->>
->>          git clone https://github.com/intel/lkp-tests.git
->>          cd lkp-tests
->>          bin/lkp install                job.yaml  # job file is 
->> attached in this email
->>          bin/lkp split-job --compatible job.yaml  # generate the yaml 
->> file for lkp run
->>          bin/lkp run                    generated-yaml-file
->>
->> ========================================================================================= 
->>
->> class/compiler/cpufreq_governor/disk/fs/kconfig/nr_threads/rootfs/tbox_group/test/testcase/testtime/ucode: 
->>
->>    
->> filesystem/gcc-9/performance/1HDD/xfs/x86_64-rhel-8.3/10%/debian-10.4-x86_64-20200603.cgz/lkp-csl-2sp7/fallocate/stress-ng/60s/0x5003006 
->>
->>
->> commit:
->>    0431d926b3 ("xfs: async blkdev cache flush")
->>    bad77c375e ("xfs: CIL checkpoint flushes caches unconditionally")
->>
->> 0431d926b399d74f bad77c375e8de6c776c848e443f
->> ---------------- ---------------------------
->>           %stddev     %change         %stddev
->>               \          |                \
->>      618.67           -10.0%     556.67 ±  2%  stress-ng.fallocate.ops
->>       10.31           -10.0%       9.28 ±  2%  
->> stress-ng.fallocate.ops_per_sec
->>      111618            -5.7%     105270        
->> stress-ng.time.voluntary_context_switches
->>      502.67 ±  2%     +52.0%     763.83 ± 47%  
->> interrupts.CPU44.CAL:Function_call_interrupts
->>        2.10 ±  2%     -25.1%       1.57        iostat.cpu.iowait
->>        2.16 ±  2%      -0.5        1.62        mpstat.cpu.all.iowait%
->>        0.09 ± 11%     +45.0%       0.14 ± 34%  
->> perf-sched.sch_delay.avg.ms.worker_thread.kthread.ret_from_fork
->>      151.00 ± 19%     +20.2%     181.50 ±  7%  
->> perf-sched.wait_and_delay.count.smpboot_thread_fn.kthread.ret_from_fork
->>        6749            +6.4%       7178        
->> perf-stat.i.context-switches
->>        6640            +6.4%       7063        
->> perf-stat.ps.context-switches
->>      353877            -1.4%     348924        proc-vmstat.pgfree
->>       39122           -15.1%      33221        proc-vmstat.pgpgout
->>        1225 ± 14%      -9.0%       1115        turbostat.Bzy_MHz
->>       86.82 ± 17%     -10.4%      77.83        turbostat.PkgWatt
->>      602.83           -15.1%     511.83        vmstat.io.bo
->>        6953            +6.1%       7376        vmstat.system.cs
->>        1.33 ±  6%      +0.4        1.70 ± 13%  
->> perf-profile.calltrace.cycles-pp.perf_mux_hrtimer_handler.__hrtimer_run_queues.hrtimer_interrupt.__sysvec_apic_timer_interrupt.sysvec_apic_timer_interrupt 
->>
->>        0.08 ± 22%      +0.1        0.17 ± 23%  
->> perf-profile.children.cycles-pp.wait_for_completion
->>        0.07 ± 17%      +0.1        0.19 ± 64%  
->> perf-profile.children.cycles-pp.submit_bio
->>        0.07 ± 17%      +0.1        0.19 ± 64%  
->> perf-profile.children.cycles-pp.submit_bio_noacct
->>        1.40 ±  8%      +0.3        1.74 ± 12%  
->> perf-profile.children.cycles-pp.perf_mux_hrtimer_handler
->>
->>
->>                           stress-ng.fallocate.ops_per_sec
->>    12 
->> +----------------------------------------------------------------------+
->>       
->> |                                                                      |
->>    10 |.+.++.+.+.+  
->> +.+.+.++.+.+.++.+.+.+.++.+.+.++.+.+.++.+.+.+.++.+.+.++.+.|
->>       | O        :  :                             O O   OO O O O 
->> OO          |
->>       |   OO O   :O :            O             O O    
->> O                      |
->>     8 |-+      O :  : O O OO O O  O O O O OO 
->> O                               |
->>       |          : 
->> :                                                         |
->>     6 |-+        : 
->> :                                                         |
->>       |           
->> ::                                                         |
->>     4 |-+         
->> ::                                                         |
->>       |           
->> ::                                                         |
->>       |           
->> ::                                                         |
->>     2 |-+         
->> :                                                          |
->>       |           
->> :                                                          |
->>     0 
->> +----------------------------------------------------------------------+
->> [*] bisect-good sample
->> [O] bisect-bad  sample
->>
->>
->>
->>
->> Disclaimer:
->> Results have been estimated based on internal Intel analysis and are 
->> provided
->> for informational purposes only. Any difference in system hardware or 
->> software
->> design or configuration may affect actual performance.
->>
->>
->> ---
->> 0DAY/LKP+ Test Infrastructure                   Open Source Technology 
->> Center
->> https://lists.01.org/hyperkitty/list/lkp@lists.01.org       Intel 
->> Corporation
->>
->> Thanks,
->> Oliver Sang
->>
-> 
+Some more update, last week we got report from validation team that
+the "tsc judged as unstable" happened on latest desktop platform,
+which has serial earlyprintk enabled, and the watchdog here is
+'refined-jiffies' while hpet is disabled during the PC10 check. I
+tried severy other client platforms I can find: Kabylake, Icelake
+and Alderlake, and the mis-judging can be easily reproduced on
+Icelake and Alderlake (not on Kabylake). Which could be cued by
+this 2/2 patch.
 
--- 
-Zhengjun Xing
+Also, today we got same report on a 2-sockets Icelake Server with
+5.5 kernel, while the watchdog is 'hpet', and the system is running
+stressful big-data workload.
+
+Thanks,
+Feng
+
+
+> "I'm inclined to lift that requirement when the CPU has:
+> 
+>     1) X86_FEATURE_CONSTANT_TSC
+>     2) X86_FEATURE_NONSTOP_TSC
+>     3) X86_FEATURE_NONSTOP_TSC_S3
+>     4) X86_FEATURE_TSC_ADJUST
+>     5) At max. 4 sockets
+> 
+>  After two decades of horrors we're finally at a point where TSC seems
+>  to be halfway reliable and less abused by BIOS tinkerers. TSC_ADJUST
+>  was really key as we can now detect even small modifications reliably
+>  and the important point is that we can cure them as well (not pretty
+>  but better than all other options)."
+> 
+> As feature #3 X86_FEATURE_NONSTOP_TSC_S3 only exists on several generations
+> of Atom processor, and is always coupled with X86_FEATURE_CONSTANT_TSC
+> and X86_FEATURE_NONSTOP_TSC, skip checking it, and also be more defensive
+> to use maxim of 2 sockets.
+> 
+> The check is done inside tsc_init() before registering 'tsc-early' and
+> 'tsc' clocksources, as there were cases that both of them had been
+> wrongly judged as unreliable.
+> 
+> For more background of tsc/watchdog, there is a good summary in [2]
+> 
+> [1]. https://lore.kernel.org/lkml/87eekfk8bd.fsf@nanos.tec.linutronix.de/
+> [2]. https://lore.kernel.org/lkml/87a6pimt1f.ffs@nanos.tec.linutronix.de/
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Feng Tang <feng.tang@intel.com>
+> ---
+> Change log:
+> 
+>   v3:
+>     * rebased against 5.16-rc1
+>     * refine commit log
+> 
+>   v2:
+>     * Directly skip watchdog check without messing flag
+>       'tsc_clocksource_reliable' (Thomas)
+> 
+>  arch/x86/kernel/tsc.c | 22 ++++++++++++++++++----
+>  1 file changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> index 2e076a459a0c..389511f59101 100644
+> --- a/arch/x86/kernel/tsc.c
+> +++ b/arch/x86/kernel/tsc.c
+> @@ -1180,6 +1180,12 @@ void mark_tsc_unstable(char *reason)
+>  
+>  EXPORT_SYMBOL_GPL(mark_tsc_unstable);
+>  
+> +static void __init tsc_skip_watchdog_verify(void)
+> +{
+> +	clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+> +	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+> +}
+> +
+>  static void __init check_system_tsc_reliable(void)
+>  {
+>  #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
+> @@ -1196,6 +1202,17 @@ static void __init check_system_tsc_reliable(void)
+>  #endif
+>  	if (boot_cpu_has(X86_FEATURE_TSC_RELIABLE))
+>  		tsc_clocksource_reliable = 1;
+> +
+> +	/*
+> +	 * Ideally the socket number should be checked, but this is called
+> +	 * by tsc_init() which is in early boot phase and the socket numbers
+> +	 * may not be available. Use 'nr_online_nodes' as a fallback solution
+> +	 */
+> +	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+> +	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+> +	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
+> +	    nr_online_nodes <= 2)
+> +		tsc_skip_watchdog_verify();
+>  }
+>  
+>  /*
+> @@ -1387,9 +1404,6 @@ static int __init init_tsc_clocksource(void)
+>  	if (tsc_unstable)
+>  		goto unreg;
+>  
+> -	if (tsc_clocksource_reliable || no_tsc_watchdog)
+> -		clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+> -
+>  	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
+>  		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
+>  
+> @@ -1527,7 +1541,7 @@ void __init tsc_init(void)
+>  	}
+>  
+>  	if (tsc_clocksource_reliable || no_tsc_watchdog)
+> -		clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+> +		tsc_skip_watchdog_verify();
+>  
+>  	clocksource_register_khz(&clocksource_tsc_early, tsc_khz);
+>  	detect_art();
+> -- 
+> 2.27.0

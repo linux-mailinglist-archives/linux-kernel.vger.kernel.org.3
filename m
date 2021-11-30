@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D9F463E0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37483463E08
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245625AbhK3Sx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:53:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
+        id S239620AbhK3Sxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245621AbhK3SxN (ORCPT
+        with ESMTP id S245622AbhK3SxN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Nov 2021 13:53:13 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC2BC06174A
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDD73C061756
         for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:49:52 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id 13so42909719ljj.11
+Received: by mail-lj1-x22c.google.com with SMTP id z8so42995779ljz.9
         for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:49:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=R0XVwWI0CDDryaRAyrcVHRt6GWu/D/+Wb5DibCwyPj8=;
-        b=uhNYgiyPXG0gGAKEZ5PDwbzHU6/5W4MwrHbVw9Q6Fadx+bCVBZrysvoh2Vp4K1P3e0
-         XTqNeNU2IgN4RZLHNNjOcva7OyS2EE6dd0tm+ZrfjlxL6dKY30ZL4xVXQe4eVLH90J87
-         HjR3YngRRuPK9TdVJmqNNfVi0jIwrSqlVmuy8ExKCKWnL8Oct9ru1/zcZ8uf/P8CSQS3
-         xHcWuenCP83gZe1EM6MuGe5uJBldxvwZ2YRnVzeTZOZ8Bdv6TJEpFwpM89o8AOLW51Ho
-         73DCfS9jKYcwQWgjZgCFGgwyQgKQu9yg4AO0M8CGW73EDwrceHjvRxKWKMjDh4jgaILn
-         JN1g==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=S8JvFrUg/XkYpRnUn/w4Q2QFlAdyzGQLFckDXE4H52c=;
+        b=WS4SoGxPYnlsOfhTthCkLmyF0zVtvB0uslAY9iJk4m/Gu2gcj1qaEJ6UmPkDb53qw5
+         Jk/0fMvq42sP/LV+I/5Z4oRElC36/+qb9UM1OoiUS7AiVVMGhTkHtMn0S2nr1RsE/XLv
+         pKskBghukrvCdLMarF8N9zq379CxWW5Vpg/4qWITUJ/3X4qa4nW9Rbfb7AqkjpQfX3lH
+         fBPmNgj7WtOluVm5qxAdm3Z/xMBbQFapZ7iRAWPt7AkaXHWilxfroTLNfh2+470Xhxsp
+         XxA6SFFIVm9L6wicw4zuCo7bhIz5gYAnoctLq7H0F8FLMxe/o0LIpNnb7oqJ7qDCafSO
+         G27g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=R0XVwWI0CDDryaRAyrcVHRt6GWu/D/+Wb5DibCwyPj8=;
-        b=c1i6z7ooy33zsM0qalnxA8tpVw47FmgziuLReKjPd99UCkQf0dbHsGIOfCsI/KTv6+
-         PQdsS5ByzF6xFjGtbxjemjIp7ckLmGe4rLUX/jialnAjN0f98hm8kEgV6ugX3x1YiR5r
-         4y2qgQO0fdTrMxOwuZ+6hJIaLo2N9uh0fXxGGTYKRce3EU91Ih69ekhfNM8EizwaULSV
-         +sk3hjqybs8frarcDTWUVraKP7+ZVNHOWh2mMkc/8BFKDrcGNN6FBOruqIShEfi4dely
-         1/fHcHo00slYlfZ/hBleFrARHaU+mnxSKcQkjEyaJS79aDlbCV+WXD69kIcYXwmpo6zS
-         64dQ==
-X-Gm-Message-State: AOAM533UTgIH0LgkU6oDmq6Gh8K0HWbif/2h8Lm86TWkPSyrFzA5coEW
-        9ST0STkt57GqVFbJzV4n8ZiZJA==
-X-Google-Smtp-Source: ABdhPJxKHcxiQM0382WVNTj8j4caEFaktjfqod9dQqOdNnvSm7hP8KeJmxSqDyBdFJrFQntA5NMmuw==
-X-Received: by 2002:a2e:9e10:: with SMTP id e16mr726764ljk.492.1638298190838;
-        Tue, 30 Nov 2021 10:49:50 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=S8JvFrUg/XkYpRnUn/w4Q2QFlAdyzGQLFckDXE4H52c=;
+        b=gReOgiir+OgOtL+bj5Azv/OaBF1Rgu6ew2M3EIXIMO7VlirMEMYKpDy+RuWcH0OWZC
+         PlcCdh2kFNwM/2+zdGhnMXJBPNViwfs3OUTqEECEMDB5GPHXzL/8Ij9hdyQ50rM+aI6h
+         7cR1TDYsMzNkDjqhFiONUADMWRe9oJGZ5JASF/qBceUB71BDhkGQFpMYY6n03b0mvZ07
+         MJGy0pRdJax9blfweUxPyeRIMXiMYVrinerxBmWQPuumf6XUpd+4qBEir0BZzR4oXTgC
+         v5s6lL8H7NB17SCrmXsg4Y10owK7JoIowVHmCj6MqDgu24F7R3RGegNVWxf02gu+alf3
+         giRw==
+X-Gm-Message-State: AOAM531JK4A4SGXnR9ck76UsR+7fO58qvQPem9fFNxjD/HS2aRQKJQ/1
+        S4PjdxEHfR5Z/q80sUSLjZg9zw==
+X-Google-Smtp-Source: ABdhPJwhr09clYIXcbtKu2de8HtLwxUjEnDA8i/nbvVyRnYPmFWx0FvS1hHi4nJcJDtoyYAjsHWuhg==
+X-Received: by 2002:a05:651c:1049:: with SMTP id x9mr701233ljm.121.1638298191226;
+        Tue, 30 Nov 2021 10:49:51 -0800 (PST)
 Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id t12sm1780266ljg.63.2021.11.30.10.49.47
+        by smtp.gmail.com with ESMTPSA id b13sm1797741lfc.79.2021.11.30.10.49.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 30 Nov 2021 10:49:48 -0800 (PST)
 From:   "Kirill A. Shutemov" <kirill@shutemov.name>
 X-Google-Original-From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 Received: by box.localdomain (Postfix, from userid 1000)
-        id 9189F103666; Tue, 30 Nov 2021 21:49:49 +0300 (+03)
+        id 9613C103663; Tue, 30 Nov 2021 21:49:49 +0300 (+03)
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Tom Lendacky <thomas.lendacky@amd.com>,
@@ -64,43 +64,60 @@ Cc:     Kuppuswamy Sathyanarayanan
         Peter Zijlstra <peterz@infradead.org>,
         "Nakajima, Jun" <jun.nakajima@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv4 0/4] Add generic MMIO instruction deconding to be used in SEV and TDX
-Date:   Tue, 30 Nov 2021 21:49:29 +0300
-Message-Id: <20211130184933.31005-1-kirill.shutemov@linux.intel.com>
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv4 1/4] x86/insn-eval: Handle insn_get_opcode() failure
+Date:   Tue, 30 Nov 2021 21:49:30 +0300
+Message-Id: <20211130184933.31005-2-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20211130184933.31005-1-kirill.shutemov@linux.intel.com>
+References: <20211130184933.31005-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both AMD SEV and Intel TDX has to decode MMIO instruction to be able to
-handle MMIO.
+From: "Kirill A. Shutemov" <kirill@shutemov.name>
 
-Extract insn_decode_mmio() from SEV code. TDX will also use this helper.
+is_string_insn() calls insn_get_opcode() that can fail, but does not
+handle the failure.
 
-v4:
- - Use enum mmio_type inside insn_decode_mmio() (Tom)
- - Keep a comment in vc_handle_mmio() (Tom)
- - Tested-by on AMD HW from Joerg.
-v3:
- - Handle insn_get_opcode() in is_string_insn()
-v2:
- - insn_get_modrm_reg_ptr() returns unsigned long pointer now (PeterZ);
- - Handle insn_get_opcode() failure in insn_decode_mmio() (PeterZ);
+is_string_insn() interface does not allow to communicate an error to the
+caller.
 
+Push insn_get_opcode() to the only non-static user of is_string_insn()
+and fail it early if insn_get_opcode() fails.
 
-Kirill A. Shutemov (4):
-  x86/insn-eval: Handle insn_get_opcode() failure
-  x86/insn-eval: Introduce insn_get_modrm_reg_ptr()
-  x86/insn-eval: Introduce insn_decode_mmio()
-  x86/sev-es: Use insn_decode_mmio() for MMIO implementation
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Tested-by: Joerg Roedel <jroedel@suse.de>
+---
+ arch/x86/lib/insn-eval.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
- arch/x86/include/asm/insn-eval.h |  13 +++
- arch/x86/kernel/sev.c            | 172 ++++++++-----------------------
- arch/x86/lib/insn-eval.c         | 109 +++++++++++++++++++-
- 3 files changed, 161 insertions(+), 133 deletions(-)
-
+diff --git a/arch/x86/lib/insn-eval.c b/arch/x86/lib/insn-eval.c
+index eb3ccffb9b9d..868d80ea85d9 100644
+--- a/arch/x86/lib/insn-eval.c
++++ b/arch/x86/lib/insn-eval.c
+@@ -37,8 +37,6 @@ enum reg_type {
+  */
+ static bool is_string_insn(struct insn *insn)
+ {
+-	insn_get_opcode(insn);
+-
+ 	/* All string instructions have a 1-byte opcode. */
+ 	if (insn->opcode.nbytes != 1)
+ 		return false;
+@@ -1405,6 +1403,9 @@ void __user *insn_get_addr_ref(struct insn *insn, struct pt_regs *regs)
+ 	if (!insn || !regs)
+ 		return (void __user *)-1L;
+ 
++       if (insn_get_opcode(insn))
++               return (void __user *)-1L;
++
+ 	switch (insn->addr_bytes) {
+ 	case 2:
+ 		return get_addr_ref_16(insn, regs);
 -- 
 2.32.0
+

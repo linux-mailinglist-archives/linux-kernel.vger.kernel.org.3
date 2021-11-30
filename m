@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3AEF4639FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52D504639FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244085AbhK3P2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:28:15 -0500
-Received: from mga05.intel.com ([192.55.52.43]:5566 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243958AbhK3P2M (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:28:12 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="322480411"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="322480411"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:24:53 -0800
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="601541560"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:24:52 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1ms4yy-000aTB-Ei;
-        Tue, 30 Nov 2021 17:23:48 +0200
-Date:   Tue, 30 Nov 2021 17:23:48 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools: Fix math.h breakage
-Message-ID: <YaZCBLVTV7Dy1PWd@smile.fi.intel.com>
-References: <20211130141316.2987986-1-willy@infradead.org>
- <YaY3hKLejcy09bZk@smile.fi.intel.com>
- <YaY+IFrgBOUGomW6@casper.infradead.org>
- <YaZBtvcmFFt1PE5M@smile.fi.intel.com>
+        id S234199AbhK3P3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:29:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231327AbhK3P3a (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 10:29:30 -0500
+Received: from gentwo.de (gentwo.de [IPv6:2a02:c206:2048:5042::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E5DC061574;
+        Tue, 30 Nov 2021 07:26:10 -0800 (PST)
+Received: by gentwo.de (Postfix, from userid 1001)
+        id 328F4B001EC; Tue, 30 Nov 2021 16:26:09 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by gentwo.de (Postfix) with ESMTP id 30B5DB0006D;
+        Tue, 30 Nov 2021 16:26:09 +0100 (CET)
+Date:   Tue, 30 Nov 2021 16:26:09 +0100 (CET)
+From:   Christoph Lameter <cl@gentwo.org>
+X-X-Sender: cl@gentwo.de
+To:     Vlastimil Babka <vbabka@suse.cz>
+cc:     David Laight <David.Laight@ACULAB.COM>,
+        Rustam Kovhaev <rkovhaev@gmail.com>,
+        "penberg@kernel.org" <penberg@kernel.org>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "iamjoonsoo.kim@lge.com" <iamjoonsoo.kim@lge.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "dvyukov@google.com" <dvyukov@google.com>
+Subject: Re: [PATCH v4] slob: add size header to all allocations
+In-Reply-To: <d0927ca6-1710-5b2b-3682-6a80eb4e48d1@suse.cz>
+Message-ID: <alpine.DEB.2.22.394.2111301621140.6112@gentwo.de>
+References: <037227db-c869-7d9c-65e8-8f5f8682171d@suse.cz> <20211122013026.909933-1-rkovhaev@gmail.com> <alpine.DEB.2.22.394.2111221018070.202803@gentwo.de> <3c996e22-034f-1013-3978-1f786aae38fb@suse.cz> <alpine.DEB.2.22.394.2111221133110.204314@gentwo.de>
+ <148d2774-77b9-bb25-c132-80b00e16ea06@suse.cz> <69fc0cead9774dfdba816a8e25f30a53@AcuMS.aculab.com> <d0927ca6-1710-5b2b-3682-6a80eb4e48d1@suse.cz>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaZBtvcmFFt1PE5M@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 05:22:30PM +0200, Andy Shevchenko wrote:
-> On Tue, Nov 30, 2021 at 03:07:12PM +0000, Matthew Wilcox wrote:
-> > On Tue, Nov 30, 2021 at 04:39:00PM +0200, Andy Shevchenko wrote:
-> > > On Tue, Nov 30, 2021 at 02:13:16PM +0000, Matthew Wilcox (Oracle) wrote:
-> > > > Commit 98e1385ef24b broke the radix tree test suite in two different ways;
-> > > > first by including math.h which didn't exist in the tools directory, and
-> > > > second by removing an implicit include of spinlock.h before lockdep.h.
-> > > > Fix both issues.
-> > > 
-> > > Sorry for that and thank you for the fix.
-> > > Acked-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > > 
-> > > I'm wondering if there is a way of not copying kernel headers manually,
-> > > otherwise we always will have such breakages.
-> > 
-> > It's not necessarily that these are _copies_ of kernel headers, so much as
-> > they're ways of mocking kernel interfaces when building userspace code.
-> > We could separate out pieces and include them from each direction, but
-> > that has its own problems, and doesn't necessarily solve these kinds of
-> > problems either.
-> > 
-> > I think the only way to prevent these kinds of breakages is to make sure
-> > the build bots are also building things.
-> 
-> I don't know how to achieve this locally because I'm using `make O=...` and
-> it's broken for many tools/ folders. At some point I simply gave up.
+On Tue, 30 Nov 2021, Vlastimil Babka wrote:
 
-To be clear, it's an argument to support your idea that CI can do it for us.
+> So either I missed something or we violate the rule that kmalloc() provides
+> blocks where ARCH_KMALLOC_MINALIGN is not just the alignment of their
+> beginning but also nothing else touches the N*ARCH_KMALLOC_MINALIGN area
+> containing the allocated object.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Indeed.... The DMA API documentation in the kernel states:
+
+Documentation/DMA-API-HOWTO.rst
+
+2) ARCH_KMALLOC_MINALIGN
+
++   Architectures must ensure that kmalloc'ed buffer is
++   DMA-safe. Drivers and subsystems depend on it. If an architecture
++   isn't fully DMA-coherent (i.e. hardware doesn't ensure that data in
++   the CPU cache is identical to data in main memory),
++   ARCH_KMALLOC_MINALIGN must be set so that the memory allocator
++   makes sure that kmalloc'ed buffer doesn't share a cache line with
++   the others. See arch/arm/include/asm/cache.h as an example.
 
 
+Note that this is only the case for kmalloc. Not for a slab cache setup
+separately from the kmalloc array. That is why ARCH_KMALLOC_MINALIGN
+exists.

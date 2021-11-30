@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF3C4463CC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A14463CD9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:30:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238709AbhK3RbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:31:19 -0500
-Received: from outbound-smtp29.blacknight.com ([81.17.249.32]:49863 "EHLO
-        outbound-smtp29.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242006AbhK3RbR (ORCPT
+        id S244821AbhK3RdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:33:20 -0500
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:43508 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238828AbhK3RdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:31:17 -0500
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp29.blacknight.com (Postfix) with ESMTPS id 202C7BEE4D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:27:56 +0000 (GMT)
-Received: (qmail 22121 invoked from network); 30 Nov 2021 17:27:55 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 30 Nov 2021 17:27:55 -0000
-Date:   Tue, 30 Nov 2021 17:27:54 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Alexey Avramov <hakavlad@inbox.lv>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-Message-ID: <20211130172754.GS3366@techsingularity.net>
-References: <20211125151853.8540-1-mgorman@techsingularity.net>
- <20211127011246.7a8ac7b8@mail.inbox.lv>
- <20211129150117.GO3366@techsingularity.net>
- <20211201010348.31e99637@mail.inbox.lv>
+        Tue, 30 Nov 2021 12:33:19 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3TkG6z47z9vf8D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:29:58 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dhXl3Vm3auKu for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 11:29:58 -0600 (CST)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3TkG4yqgz9vf8F
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:29:58 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3TkG4yqgz9vf8F
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3TkG4yqgz9vf8F
+Received: by mail-pj1-f71.google.com with SMTP id o4-20020a17090a3d4400b001a66f10df6cso7154382pjf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:29:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9pznBESKnWofLpakL5pmxJ7peOOaf1Zo5EKUeNDZGEM=;
+        b=kzhzFTyE+GWmogVbkYEGEkbnwsaA7ObafZWTOIIl6lQKwkKhy5i9SRZF0d04IE+f4U
+         qVYUKPGvMWLhppSw9Zl47sNmMEJM238Pcq980a+zBd/3vcDX1MG2gHb5+vsX71rK9pXA
+         77ibpTsGvu9lJKbqTDKE3d5FnUvuximjXq2nlABC773N8GaVOto2yKbm9ukStLk3hb7w
+         mBoJuFb/mTIb1cMx3YD2wq3CASBlaIWVIQ4kwkj1XTaL8O3NxKrs2a3+SOmsumyg2DUw
+         plBZgJvrQ1lQWFUuT3g3TOjb1WaeWIJWH6ccS6FOo9le5WfLjXVriSwd24Uk2sCKi1yl
+         y85g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9pznBESKnWofLpakL5pmxJ7peOOaf1Zo5EKUeNDZGEM=;
+        b=hlnJl0D5HDYcgUqwxZS7Jo439VfkG5hCLxz/bggH39nlotDeqlPW1V3FVIQIX4KNry
+         iwX5TD16OtLAuUJMH/hr5H721iDoaaM1nIdC/NzEYwyISBAFR/uuVW1pK2S5m46Ldt0A
+         2P2SKS1uq78b4+WilOnlo22fvZTh044TNxktYmuLhSUHWBR/s04S8R1Wu0DCNgalocb6
+         UEVlR6eRu8epcF9l7T896jKisOE8a8HkUjt+9e3IN9ShLW6f0QQ3Hq22cRXyrvedqakX
+         nsdP5gPdV1mrZRlpn4huQa0Wv5f6bUn1OQdTE5sTW2uC+BwrB2zl25H6iNytTyBnW4x0
+         2FeA==
+X-Gm-Message-State: AOAM531w4sUBT5XsL3ULDwHVi71tyvoYKEBoyyJAVZ4viyJqk8J6wN+L
+        N3q6BwNchlbtNsUIIlYED6/lMnChkcnMB/a0slpdmLr+koyhJu/l8AP/ll0MuVdES83ydX7bzI3
+        kSNLXGXaZ58yOp/yRUuSh+adjuJ4y
+X-Received: by 2002:a17:90a:ce02:: with SMTP id f2mr337868pju.77.1638293397949;
+        Tue, 30 Nov 2021 09:29:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxf2pmqIXch/OBlEuEuZunx2vNxCa+wfgpKWnjANdlDUNXev1TH7xbVfl6DPtnhF5K7lGPDXQ==
+X-Received: by 2002:a17:90a:ce02:: with SMTP id f2mr337840pju.77.1638293397688;
+        Tue, 30 Nov 2021 09:29:57 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id e6sm15453845pgr.24.2021.11.30.09.29.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 09:29:57 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Felipe Balbi <balbi@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Johan Hovold <johan@kernel.org>,
+        Nadezda Lutovinova <lutovinova@ispras.ru>,
+        Yu Xu <yuxu@marvell.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: gadget: mv_u3d: Fix a NULL pointer dereference in mv_u3d_req_to_trb()
+Date:   Wed,  1 Dec 2021 01:29:17 +0800
+Message-Id: <20211130172919.207823-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20211201010348.31e99637@mail.inbox.lv>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 01:03:48AM +0900, Alexey Avramov wrote:
-> I tested this [1] patch on top of 5.16-rc2. It's the same test with 10 tails.
-> 
-> - with noswap
-> 
-> Summary:
-> 
-> 2021-11-30 23:32:36,890: Stall times for the last 548.6s:
-> 2021-11-30 23:32:36,890: -----------
-> 2021-11-30 23:32:36,891: some cpu     3.7s, avg 0.7%
-> 2021-11-30 23:32:36,891: -----------
-> 2021-11-30 23:32:36,891: some io      187.6s, avg 34.2%
-> 2021-11-30 23:32:36,891: full io      178.3s, avg 32.5%
-> 2021-11-30 23:32:36,891: -----------
-> 2021-11-30 23:32:36,892: some memory  392.2s, avg 71.5%
-> 2021-11-30 23:32:36,892: full memory  390.7s, avg 71.2%
-> 
-> full psi:
-> https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap/psi
-> 
-> mem:
-> https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap/mem
-> 
+In mv_u3d_req_to_trb(), mv_u3d_build_trb_one() is assigned to trb and
+there is a dereference of it in mv_u3d_req_to_trb(), which could lead
+to a NULL pointer dereference on failure of mv_u3d_build_trb_one().
 
-Ok, taking just noswap in isolation, this is what I saw when running
-firefox + youtube vido and running tail /dev/zero 10 times in a row
+Fix this bug by adding a check of trb.
 
-2021-11-30 17:10:11,817: =================================
-2021-11-30 17:10:11,817: Peak values:  avg10  avg60 avg300
-2021-11-30 17:10:11,817: -----------  ------ ------ ------
-2021-11-30 17:10:11,817: some cpu       1.00   0.96   0.56
-2021-11-30 17:10:11,817: -----------  ------ ------ ------
-2021-11-30 17:10:11,817: some io        0.24   0.06   0.04
-2021-11-30 17:10:11,817: full io        0.24   0.06   0.01
-2021-11-30 17:10:11,817: -----------  ------ ------ ------
-2021-11-30 17:10:11,817: some memory    2.48   0.51   0.38
-2021-11-30 17:10:11,817: full memory    2.48   0.51   0.37
-2021-11-30 17:10:11,817: =================================
-2021-11-30 17:10:11,817: Stall times for the last 53.7s:
-2021-11-30 17:10:11,817: -----------
-2021-11-30 17:10:11,817: some cpu     0.4s, avg 0.8%
-2021-11-30 17:10:11,817: -----------
-2021-11-30 17:10:11,817: some io      0.1s, avg 0.2%
-2021-11-30 17:10:11,817: full io      0.1s, avg 0.2%
-2021-11-30 17:10:11,817: -----------
-2021-11-30 17:10:11,817: some memory  0.3s, avg 0.6%
-2021-11-30 17:10:11,817: full memory  0.3s, avg 0.6%
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Obviously a fairly different experience and most likely due to the
-underlying storage.
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-Can you run the same test but after doing this
+Builds with CONFIG_USB_MV_U3D=m show no new warnings,
+and our static analyzer no longer warns about this code.
 
-$ echo 1 > /sys/kernel/debug/tracing/events/vmscan/mm_vmscan_throttled/enable
-$ cat /sys/kernel/debug/tracing/trace_pipe > trace.out
+Fixes: 3d4eb9dfa3e8 ("usb: gadget: mv: Add USB 3.0 device driver for Marvell PXA2128 chip.")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/usb/gadget/udc/mv_u3d_core.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-and send me the trace.out file please?
-
+diff --git a/drivers/usb/gadget/udc/mv_u3d_core.c b/drivers/usb/gadget/udc/mv_u3d_core.c
+index a1057ddfbda3..e90ef4046a9d 100644
+--- a/drivers/usb/gadget/udc/mv_u3d_core.c
++++ b/drivers/usb/gadget/udc/mv_u3d_core.c
+@@ -417,6 +417,12 @@ static int mv_u3d_req_to_trb(struct mv_u3d_req *req)
+ 	 */
+ 	if (length <= (unsigned)MV_U3D_EP_MAX_LENGTH_TRANSFER) {
+ 		trb = mv_u3d_build_trb_one(req, &count, &dma);
++		if (!trb) {
++			dev_err(u3d->dev, "%s, mv_u3d_build_trb_one fail\n",
++				__func__);
++			return -ENOMEM;
++		}
++
+ 		list_add_tail(&trb->trb_list, &req->trb_list);
+ 		req->trb_head = trb;
+ 		req->trb_count = 1;
 -- 
-Mel Gorman
-SUSE Labs
+2.25.1
+

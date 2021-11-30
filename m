@@ -2,204 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5710F463F15
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C8D463F18
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343624AbhK3USJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 15:18:09 -0500
-Received: from mail-oi1-f182.google.com ([209.85.167.182]:43703 "EHLO
-        mail-oi1-f182.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343618AbhK3USD (ORCPT
+        id S1343634AbhK3USO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 15:18:14 -0500
+Received: from ale.deltatee.com ([204.191.154.188]:58418 "EHLO
+        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343626AbhK3USN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 15:18:03 -0500
-Received: by mail-oi1-f182.google.com with SMTP id o4so43568569oia.10;
-        Tue, 30 Nov 2021 12:14:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6d+ss10iO53NZAt9HGpTQK4XZlOoTAAbyTyzfqydX8s=;
-        b=2yz3CgXScF8Uqx0O+5Fmf0IvjnYkfGWvNBJqxuv/bKggFG8SqUJ8EDcvV6BJ2n9SG7
-         M0RtIT23xhbO0PjbtgNYZG+okPpcwXQlEjMfBSDH0ENjSzoJL62TjTJPeqoG6z6TtTnt
-         ULabxM7V75gvbEHJdJhRejDv//YQNmYMhVOHwi4mXR4/ezoxisle4LDOdV49Aly4AsZs
-         iyXHLNN+McG64Ya6p9J8tOBjkdTkbEjUtZxFmkddmPQpzYuN9zuIJK7x4FHjvVhCGwKa
-         jmYv061nKKpoBSMKzogQMhXdJNetBovTOUH4KOJnMZdGSPtp8Q0yap7I58L4MC2OaO6N
-         slNw==
-X-Gm-Message-State: AOAM533Je0bE/PSIpEmkCKHZIO5jyYPmtp3RkKuEboZbjty6zESe+HM5
-        kinofnybj4sVbGuthdbxag==
-X-Google-Smtp-Source: ABdhPJxUVY5rg+WfjOqdoFf2mwgBYkTGost9flNt2LhldEL+GK2+obmN4BCwbH2K6c88sejyLtyFNA==
-X-Received: by 2002:a54:4692:: with SMTP id k18mr1219732oic.93.1638303284060;
-        Tue, 30 Nov 2021 12:14:44 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bb7sm2988441oob.14.2021.11.30.12.14.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 12:14:43 -0800 (PST)
-Received: (nullmailer pid 2935477 invoked by uid 1000);
-        Tue, 30 Nov 2021 20:14:42 -0000
-Date:   Tue, 30 Nov 2021 14:14:42 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-Subject: Re: [PATCH 1/2] dt-bindings: mux: Document mux-states property
-Message-ID: <YaaGMtE6n0yZNpAI@robh.at.kernel.org>
-References: <20211130121847.11112-1-a-govindraju@ti.com>
- <20211130121847.11112-2-a-govindraju@ti.com>
+        Tue, 30 Nov 2021 15:18:13 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
+        Message-ID:From:References:Cc:To:content-disposition;
+        bh=0e6qph97LvKq8JPi/3FNd4qxcjAsoSfKpY9JBqr3S7c=; b=U+nEWKC8vX6L81PWLuyf8RU1/z
+        qqqdUvc6OmN093ipgotV5I33+4FNd41c8SNkN6XbaMuGa63k6/CSH3iDUxaeRDLa88FTqqtxO76Qu
+        CZngmEesymNwgDTm1GRuc159pfNMgAonPTSfdHROePpQ6NLvIUtyYaO5/12oK1G6+1zvUaPy0KBfx
+        POhHjslTvMcQtxgHqXe6G24+FZw/Z5m6Wg+ueGbFL3z3o+Il3e7rB5YheZ9ac8E3DOvhJrl6TTiKv
+        ppAJYTafyW7PPoPWYfeGf/nS0QNPjFUpfs+5+ej3cihOf8vl1wTIY/bHLOwprdCAaMUn+3yDZ+AAE
+        Qunl9krw==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1ms9WX-00BD79-DR; Tue, 30 Nov 2021 13:14:46 -0700
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
+        Doug Meyer <dmeyer@gigaio.com>
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
+From:   Logan Gunthorpe <logang@deltatee.com>
+Message-ID: <8a1fae8b-3811-6368-50da-9de9e286c8e5@deltatee.com>
+Date:   Tue, 30 Nov 2021 13:14:42 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130121847.11112-2-a-govindraju@ti.com>
+In-Reply-To: <87v909bf2k.ffs@tglx>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-CA
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: dmeyer@gigaio.com, x86@kernel.org, borntraeger@de.ibm.com, hca@linux.ibm.com, linux-s390@vger.kernel.org, linux-ntb@googlegroups.com, allenbh@gmail.com, dave.jiang@intel.com, jdmason@kudzu.us, gregkh@linuxfoundation.org, linux-pci@vger.kernel.org, ashok.raj@intel.com, megha.dey@intel.com, jgg@nvidia.com, kevin.tian@intel.com, alex.williamson@redhat.com, maz@kernel.org, helgaas@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de
+X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-9.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 05:48:46PM +0530, Aswath Govindraju wrote:
-> In some cases, it is required to provide the state to which the mux
-> controller has be set to, from the consumer device tree node. Document the
-> property mux-states that can be used for adding this support.
 
-I having a hard time understanding why you need this. One consumer 
-configures a mux one way and another consumer another way? How do you 
-arbitrate that? Please elaborate on what 'some cases' are and why it's 
-required.
 
-Can't you just add a cell for the 'state' allowing for 1-2 cells 
-instead of 0-1?
+On 2021-11-30 12:48 p.m., Thomas Gleixner wrote:
+> On Tue, Nov 30 2021 at 12:21, Logan Gunthorpe wrote:
+>> On 2021-11-29 5:29 p.m., Thomas Gleixner wrote:
+>>> I'm way too tired to come up with a proper solution for that, but that
+>>> PCI_IRQ_VIRTUAL has to die ASAP.
+>>
+>> I'm willing to volunteer a bit of my time to clean this up, but I'd need
+>> a bit more direction on what a proper solution would look like. The MSI
+>> domain code is far from well documented nor is it easy to understand.
+> 
+> Fair enough. I'm struggling with finding time to document that properly.
+> 
+> I've not yet made my mind up what the best way forward for this is, but
+> I have a few ideas which I want to explore deeper.
+> 
+> But the most important question is right now on which architectures
+> these switchtec virtual interrupt things are used.
+> 
+> If it's used on any architecture which does not use hierarchical
+> irqdomains for MSI (x86, arm, arm64, power64), then using irqdomains is
+> obviously a non-starter unless falling back to a single interrupt would
+> not be considered a regression :)
 
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  .../devicetree/bindings/mux/gpio-mux.yaml     | 11 ++++++--
->  .../devicetree/bindings/mux/mux-consumer.yaml | 14 ++++++++++
->  .../bindings/mux/mux-controller.yaml          | 26 ++++++++++++++++++-
->  3 files changed, 48 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mux/gpio-mux.yaml b/Documentation/devicetree/bindings/mux/gpio-mux.yaml
-> index 0a7c8d64981a..ee4de9fbaf4d 100644
-> --- a/Documentation/devicetree/bindings/mux/gpio-mux.yaml
-> +++ b/Documentation/devicetree/bindings/mux/gpio-mux.yaml
-> @@ -26,7 +26,10 @@ properties:
->        List of gpios used to control the multiplexer, least significant bit first.
->  
->    '#mux-control-cells':
-> -    const: 0
-> +    enum: [ 0, 1 ]
-> +
-> +  '#mux-state-cells':
-> +    enum: [ 1, 2 ]
->  
->    idle-state:
->      default: -1
-> @@ -34,7 +37,11 @@ properties:
->  required:
->    - compatible
->    - mux-gpios
-> -  - "#mux-control-cells"
-> +anyOf:
-> +  - required:
-> +      - "#mux-control-cells"
-> +  - required:
-> +      - "#mux-state-cells"
->  
->  additionalProperties: false
->  
-> diff --git a/Documentation/devicetree/bindings/mux/mux-consumer.yaml b/Documentation/devicetree/bindings/mux/mux-consumer.yaml
-> index 7af93298ab5c..64f353714227 100644
-> --- a/Documentation/devicetree/bindings/mux/mux-consumer.yaml
-> +++ b/Documentation/devicetree/bindings/mux/mux-consumer.yaml
-> @@ -25,6 +25,11 @@ description: |
->    strings to label each of the mux controllers listed in the "mux-controls"
->    property.
->  
-> +  If it is required to provide the state that the mux controller needs to
-> +  be set to, the property "mux-states" must be used. An optional property
-> +  "mux-state-names" can be used to provide a list of strings, to label
-> +  each of the mux controllers listed in the "mux-states" property.
-> +
->    mux-ctrl-specifier typically encodes the chip-relative mux controller number.
->    If the mux controller chip only provides a single mux controller, the
->    mux-ctrl-specifier can typically be left out.
-> @@ -35,12 +40,21 @@ properties:
->    mux-controls:
->      $ref: /schemas/types.yaml#/definitions/phandle-array
->  
-> +  mux-states:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +
->    mux-control-names:
->      description:
->        Devices that use more than a single mux controller can use the
->        "mux-control-names" property to map the name of the requested mux
->        controller to an index into the list given by the "mux-controls" property.
->  
-> +  mux-state-names:
-> +    description:
-> +      Devices that use more than a single mux controller can use the
-> +      "mux-state-names" property to map the name of the requested mux
-> +      controller to an index into the list given by the "mux-states" property.
-> +
->  additionalProperties: true
->  
->  ...
-> diff --git a/Documentation/devicetree/bindings/mux/mux-controller.yaml b/Documentation/devicetree/bindings/mux/mux-controller.yaml
-> index 736a84c3b6a5..b29dbf521f01 100644
-> --- a/Documentation/devicetree/bindings/mux/mux-controller.yaml
-> +++ b/Documentation/devicetree/bindings/mux/mux-controller.yaml
-> @@ -25,7 +25,9 @@ description: |
->    --------------------
->  
->    Mux controller nodes must specify the number of cells used for the
-> -  specifier using the '#mux-control-cells' property.
-> +  specifier using the '#mux-control-cells' or 'mux-state-cells'
-> +  property. Value of '#mux-state-cells' will always be one greater then
-> +  the value of '#mux-control-cells'.
->  
->    Optionally, mux controller nodes can also specify the state the mux should
->    have when it is idle. The idle-state property is used for this. If the
-> @@ -67,6 +69,8 @@ select:
->            pattern: '^mux-controller'
->      - required:
->          - '#mux-control-cells'
-> +    - required:
-> +        - '#mux-state-cells'
->  
->  properties:
->    $nodename:
-> @@ -75,6 +79,9 @@ properties:
->    '#mux-control-cells':
->      enum: [ 0, 1 ]
->  
-> +  '#mux-state-cells':
-> +    enum: [ 1, 2 ]
-> +
->    idle-state:
->      $ref: /schemas/types.yaml#/definitions/int32
->      minimum: -2
-> @@ -179,4 +186,21 @@ examples:
->              };
->          };
->      };
-> +
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    mux1: mux-controller {
-> +        compatible = "gpio-mux";
-> +        #mux-state-cells = <1>;
-> +        mux-gpios = <&exp_som 2 GPIO_ACTIVE_HIGH>;
-> +    };
-> +
-> +    transceiver4: can-phy4 {
-> +        compatible = "ti,tcan1042";
-> +        #phy-cells = <0>;
-> +        max-bitrate = <5000000>;
-> +        standby-gpios = <&exp_som 7 GPIO_ACTIVE_HIGH>;
-> +        mux-states = <&mux1 1>;
-> +    };
->  ...
-> -- 
-> 2.17.1
-> 
-> 
+Well that's a hard question to answer. The switchtec hardware is a very
+generic PCI switch that can technically be used on any architecture that
+supports PCI. However, NTB is a very specialized use case and only a
+handful of companies have attempted to use it for anything, as is. I
+can't say I know for sure, but my gut says the vast majority (if not
+all) are using x86. Maybe some are trying with arm64 or power64, but the
+only architecture not in that list that I'd conceivably think someone
+might care about down the road might be riscv.
+
+Most other NTB hardware (specifically AMD and Intel) are built into x86
+CPUs so should be fine with this restriction.
+
+I personally expect it would be fine to add a dependency on
+CONFIG_IRQ_DOMAIN_HIERARCHY to CONFIG_NTB_MSI. However, I've copied Doug
+from GigaIO who's the only user I know that might have a better informed
+opinion on this.
+
+Logan

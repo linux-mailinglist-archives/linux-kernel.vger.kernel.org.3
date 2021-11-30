@@ -2,140 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C25463091
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:03:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D06463094
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240761AbhK3KGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240736AbhK3KGc (ORCPT
+        id S240477AbhK3KHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:07:01 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45542 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236087AbhK3KHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:06:32 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E75C06175B;
-        Tue, 30 Nov 2021 02:03:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 Nov 2021 05:07:00 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A22F1CE185A;
-        Tue, 30 Nov 2021 10:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B4CFC53FC7;
-        Tue, 30 Nov 2021 10:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638266582;
-        bh=/x0GGzKFVt0Dy7r4zIhS59DKhLpLSCOv6TfyEvgAn/E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aiu3DAfh8MthxvWAwRpRhPEHK7GTD+ROtg4Dm6dvj0giFP+oAyQUQur5meks8hFGP
-         xuoAtkqMJU7VwQOPbx31xQwgPdJ0+dqObWX30klV/fxaYpUJd1uxc3uuXN6efBS6t8
-         qUf7xqXNNwIEhUchAaROr2KK0DqSjkUkxLr6cn1oBAjecy1FeMXbdsY5XGuDJKWubv
-         cMOhPNvXlMq/NAdBslnbglXQvN8JZYemEbx+uDKiEVgmQ57wjqZJK+6hGy4YJ/CNNc
-         vT+Yp2G1ct1I++ZlivOFy/AFf8+7eG88Vfgh17aIeLPuf6VzqN/6CGaw+a2S2Ch+im
-         4/FQP9oDaLUdg==
-Date:   Tue, 30 Nov 2021 11:02:59 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-Subject: Re: [PATCH v5 1/3] i2c: aspeed: Add slave_enable() to toggle slave
- mode
-Message-ID: <YaX2021qO696FG1D@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Quan Nguyen <quan@os.amperecomputing.com>,
-        Corey Minyard <minyard@acm.org>, Rob Herring <robh+dt@kernel.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        openipmi-developer@lists.sourceforge.net,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Open Source Submission <patches@amperecomputing.com>,
-        Phong Vo <phong@os.amperecomputing.com>,
-        "Thang Q . Nguyen" <thang@os.amperecomputing.com>
-References: <20210714033833.11640-1-quan@os.amperecomputing.com>
- <20210714033833.11640-2-quan@os.amperecomputing.com>
- <YRTQP9sX0hkTJMTx@shikoro>
- <YaUoeFZn6zLNoGed@kunai>
- <b8ee3be7-c0f6-d1fd-1ba1-13066b329ee3@os.amperecomputing.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1A6EF212C5;
+        Tue, 30 Nov 2021 10:03:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638266620; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=03JLIC9fjfdV6XrpzK/YgUDK7BA35BqlRCl1TRGN+Zw=;
+        b=t59HqKambuUz6yuOKeL0eve1ms6ozXuGlY3OpGCUCjRu5s1JBHx67OY+DDE9gItr0mTcx8
+        IVHUiOcYOLEWFFL1UB9kdU5DiIJCZ9blgmhODiA2Lah6RM5tNQS2DWawpssJk+pmGceZyn
+        u/shvt31fCxCF8+xsLabUL9oDjbUbOE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638266620;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=03JLIC9fjfdV6XrpzK/YgUDK7BA35BqlRCl1TRGN+Zw=;
+        b=m9/euoAzffv1QOAOOlTzIT9fDvWslC2tkku2r75F647yzQVk/BanB6IlGyq2LfkfGU5cg8
+        sWV6I2bcaCFq0HCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DDF5A13C98;
+        Tue, 30 Nov 2021 10:03:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZotBNfv2pWG3KgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 30 Nov 2021 10:03:39 +0000
+Message-ID: <f84bc3ce-5a9e-6f3a-0e23-eb8adc05b13f@suse.de>
+Date:   Tue, 30 Nov 2021 11:03:39 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GLgFZVkdCWguog1a"
-Content-Disposition: inline
-In-Reply-To: <b8ee3be7-c0f6-d1fd-1ba1-13066b329ee3@os.amperecomputing.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 0/7] agp: Various minor fixes
+Content-Language: en-US
+To:     airlied@linux.ie, daniel.vetter@ffwll.ch, arnd@arndb.de,
+        gregkh@linuxfoundation.org, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211112141628.12904-1-tzimmermann@suse.de>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20211112141628.12904-1-tzimmermann@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------GPvq20nNt2Y3R54vcMxvkwC2"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------GPvq20nNt2Y3R54vcMxvkwC2
+Content-Type: multipart/mixed; boundary="------------RFGvPO7iehQXle5AYrPhyVCE";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: airlied@linux.ie, daniel.vetter@ffwll.ch, arnd@arndb.de,
+ gregkh@linuxfoundation.org, James.Bottomley@HansenPartnership.com,
+ deller@gmx.de
+Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Message-ID: <f84bc3ce-5a9e-6f3a-0e23-eb8adc05b13f@suse.de>
+Subject: Re: [PATCH 0/7] agp: Various minor fixes
+References: <20211112141628.12904-1-tzimmermann@suse.de>
+In-Reply-To: <20211112141628.12904-1-tzimmermann@suse.de>
 
---GLgFZVkdCWguog1a
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+--------------RFGvPO7iehQXle5AYrPhyVCE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Hi,
+UGluZyEgQW55IGZlZWRiYWNrIG9uIHRoZXNlIHBhdGNoZXM/DQoNCkFtIDEyLjExLjIxIHVt
+IDE1OjE2IHNjaHJpZWIgVGhvbWFzIFppbW1lcm1hbm46DQo+IEZpeCBhIG51bWJlciBvZiBj
+b21waWxlciB3YXJuaW5ncyBpbiB0aGUgQUdQIGRyaXZlcnMuIE5vIGZ1bmN0aW9uYWwNCj4g
+Y2hhbmdlcy4NCj4gDQo+IFRob21hcyBaaW1tZXJtYW5uICg3KToNCj4gICAgYWdwOiBSZW1v
+dmUgdHJhaWxpbmcgd2hpdGVzcGFjZXMNCj4gICAgYWdwOiBJbmNsdWRlICJjb21wYXRfaW9j
+dGwuaCIgd2hlcmUgbmVjZXNzYXJ5DQo+ICAgIGFncDogRG9jdW1lbnRhdGlvbiBmaXhlcw0K
+PiAgICBhZ3AvYXRpOiBSZXR1cm4gZXJyb3IgZnJvbSBhdGlfY3JlYXRlX3BhZ2VfbWFwKCkN
+Cj4gICAgYWdwL252aWRpYTogSWdub3JlIHZhbHVlIHJldHVybmVkIGJ5IHJlYWRsKCkNCj4g
+ICAgYWdwL3N3b3JrczogUmVtb3ZlIHVudXNlZCB2YXJpYWJsZSAnY3VycmVudF9zaXplJw0K
+PiAgICBhZ3AvdmlhOiBSZW1vdmUgdW51c2VkIHZhcmlhYmxlICdjdXJyZW50X3NpemUnDQo+
+IA0KPiAgIGRyaXZlcnMvY2hhci9hZ3AvYXRpLWFncC5jICAgIHwgMTAgKysrKysrKystLQ0K
+PiAgIGRyaXZlcnMvY2hhci9hZ3AvYmFja2VuZC5jICAgIHwgIDIgKysNCj4gICBkcml2ZXJz
+L2NoYXIvYWdwL2Zyb250ZW5kLmMgICB8ICA0ICsrKy0NCj4gICBkcml2ZXJzL2NoYXIvYWdw
+L252aWRpYS1hZ3AuYyB8ICA2ICsrKy0tLQ0KPiAgIGRyaXZlcnMvY2hhci9hZ3Avc3dvcmtz
+LWFncC5jIHwgIDUgKy0tLS0NCj4gICBkcml2ZXJzL2NoYXIvYWdwL3ZpYS1hZ3AuYyAgICB8
+ICAzIC0tLQ0KPiAgIDYgZmlsZXMgY2hhbmdlZCwgMTcgaW5zZXJ0aW9ucygrKSwgMTMgZGVs
+ZXRpb25zKC0pDQo+IA0KPiAtLQ0KPiAyLjMzLjENCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1l
+cm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRp
+b25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJt
+YW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZv
+IFRvdGV2DQo=
 
-> Thanks Wolfram to help bring this up,
+--------------RFGvPO7iehQXle5AYrPhyVCE--
 
-Sure thing! It would be sad to see this work bitrot.
-
-> This driver was tested with Aspeed ast2500 and we have tried many way to
-> avoid using slave_enable() to toggle slave mode but there is no progress.
-
-I see. I also can't help you there. I have neither experience with nor
-access to this HW.
-
-> Our expectation is still to have this driver upstream'ed and I'm thinking
-> about testing this driver on other HW and re-post the driver.
-
-That sounds like a good plan.
-
-> I have to admit that you are all right with the above comments. The fact =
-is
-> we still not be able to find any way to solve this differently. We don't =
-own
-> this HW and dont know what happen on this particular issue. The SCL clock
-> stretching on this HW does not work as expected and the slave_enable() is
-> the only solution for now. I hope if someone could help with the issue as
-> well.
-
-=46rom this distance, it looks like HW access and a logic analyzer might
-be helpful in understanding the behaviour. Pity that you don't own the
-HW.
-
-Good luck nonetheless!
-
-   Wolfram
-
-
---GLgFZVkdCWguog1a
-Content-Type: application/pgp-signature; name="signature.asc"
+--------------GPvq20nNt2Y3R54vcMxvkwC2
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGl9tAACgkQFA3kzBSg
-Kba4dA/+LQ+TgyjbUYOZOjpRRji7agnQYuqCWgQAJb0L8O9WQWEaoPwlAYP2DpHP
-WdVIVnuLhRvwWKSI2yNAJRZURY4fbvrSAXFoeyY1DrxxLVj7GB4Ku9dKGUQEu8vk
-SufpI4wpozucy32ZHAY8sDlquSILlCHEchyb8851rfbBWKBhQfKwNtO+vwEYqcy6
-UqEp1wxYUV0WpXCDiGXb3m+qViyb84t54YzBSHzKvBFYyRi1S94BESgQ3W2XVRPA
-BGwy+uhgF32jeBFs6wdv+zCpq+NBmAZg/czXt2naPF6HkNjG4ZTMgROmqoery36M
-VEuhlE6us23UVcCDujArrFcH1+qhhTYSAOxZZ9qDSWYmsxxF0k/fHi55bszcCoyE
-Ba3OFUe8TKMfYARMkjpRtN60aLtq/E7M+X1/774Q2BUvvS9UVUMs5jK7umQsuJ/3
-7BZIFiXT1RKExUKxD5dHVyCXnO6AoF1t3aNZlqlgo9IDmWhQeyfqM+oHwBjqINYD
-hmLL3djjgpe9DksOXDFu17ywiSB33+OvfWhO502tbDrv+QxIbsIR4G+wffxcUG+b
-Ts8pgy7y+6cdNxLvrpUv+SjzATHxRmwWuTGNr8hlgxtckDybKKkWeEmQLdIlrVYg
-Y24ut60ocJP+alOr+eP2bqQDyNqx+ARwSFBP6FKA+04ASyeNrro=
-=qe3w
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGl9vsFAwAAAAAACgkQlh/E3EQov+CA
++g//QqX+2loLojzqdFQlFcc+vQr/iwRoXlEB7RbAo4fcTZLgOJupnbgANxVe98Y4y1tNXnQ6vVE6
+AjlNWdnRqBPoQxJUJDyDzEvidpRPe81gKb8qmLA0wgL+eRNC55P/D5R2wV+Q7t+Oa1ovsIARQ80M
+sHaE6QhWvjA8DX47S8e79B6EsHsDbd/hdz8v+h3Jw9oxbSIK3KPrk3Vd55tNaFnmdIxZJp7a76e/
+JG1P46UmZt3EjQxoa4j82HOaNWtL0eIxo4ryQ7y2IhP0nEAKQXJr/vUz2fZKSkk3NjQXZEl6sxWZ
+sWIyTcWhVDK3Xofyif7FXH/zRBgB4nWqLnkuXdMhfstgDSTq1MaJa7kV2o3EYIUGQ4LRittBE3X1
+7NTPccNfDBImipWBLrEnBsJSm2TnFUM1OCcugf5jlESX+Cj4z3PYhZCuBMEirgLtYLC8rXAtSe1Z
+C09jRVQ3ZerORTynKv+Dvsh/Ddq4QMmVjAmH60Z4EplMS6d5DixtWas+G/h1QGAB13gESplxi6DD
+gdNBKzY05K6rFgfbooyMnrBBHaRPviS+s0cjD4PSelTmrWL7tH8rEqvoqvWM1Lyu/mnQVayN8fNQ
+QXWzV4S78ImRYoH1HUx3TJbEYXEKYuTO5iAheIN0W3vN+PkAZfIak3EyZivbXCRdnb9h8zNdGyQP
+3to=
+=j1//
 -----END PGP SIGNATURE-----
 
---GLgFZVkdCWguog1a--
+--------------GPvq20nNt2Y3R54vcMxvkwC2--

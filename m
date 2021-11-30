@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA2C463491
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D474634B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241857AbhK3Ml1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:41:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:58311 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241716AbhK3MlL (ORCPT
+        id S232910AbhK3MoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:44:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231941AbhK3Mnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:41:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638275870;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=DYBPaw09dsxTzcX0XlGoikC3Bax4b+azuiiGb7GE7BA=;
-        b=MlaGtKHC1+Z0OJpxMPdz2S67LnKEfinzvrrauLx5aHNyY4iGaSvXE5lIPtj4puK7fnItep
-        lWDeoMBeL0cZBXzwwhFpHg2hVHaLcUqfZionigoFqNZj77LBafN+Fm0fOu+Osg1WZA0nx6
-        8zB557dEtwt32rt0dktSU2fK+XXmpgw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-441-AdZ-0Zg5NqubD06LHAr0gw-1; Tue, 30 Nov 2021 07:37:48 -0500
-X-MC-Unique: AdZ-0Zg5NqubD06LHAr0gw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 30 Nov 2021 07:43:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1863C061759;
+        Tue, 30 Nov 2021 04:40:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 998F4102CB73;
-        Tue, 30 Nov 2021 12:37:47 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 591A410013D6;
-        Tue, 30 Nov 2021 12:37:47 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH] KVM: VMX: clear vmx_x86_ops.sync_pir_to_irr if APICv is disabled
-Date:   Tue, 30 Nov 2021 07:37:46 -0500
-Message-Id: <20211130123746.293379-2-pbonzini@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA583B81920;
+        Tue, 30 Nov 2021 12:40:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D7EEC53FCD;
+        Tue, 30 Nov 2021 12:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638276009;
+        bh=LpOXZxtu+1ggM0sCF6B+mum4cTJd1LaYJEOaf4RF2o0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=DCWCJcGzPryYgVtIpA2BZlczZS3hyMMuDMzHnHoTmhSUUNqPxnJ2QmomB19r1e8ZB
+         gTq31mtcUhKBJw0S8exIjYAcJpYRHV3lw7LHW6rTAE7pRl9P9gn7Mf5TTAqAtfMfjI
+         Xji/IzI7jtx8c8T5bWjwHHlOfEKlWvaPrndDv8zxcNiB9O5xcze6sg95c3sM04J+I0
+         r8OdnpDzW9slUDNTzEx4S3mqtFvShtr5dAh4C+wjLkCwkE6aAKq3b2RC72bTn2OXdE
+         wMZc29JBwYmkPWp4N+2Tyel4rWc9xXeINpADSZW2yxaerZakcFC5IVU5mZvUFDzHEo
+         JcYE6DIkRMPWA==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 57B8860A17;
+        Tue, 30 Nov 2021 12:40:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Subject: Re: [PATCH] net: mscc: ocelot: fix mutex_lock not released
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163827600935.5473.4878942506314198203.git-patchwork-notify@kernel.org>
+Date:   Tue, 30 Nov 2021 12:40:09 +0000
+References: <20211130112443.309708-1-lv.ruyi@zte.com.cn>
+In-Reply-To: <20211130112443.309708-1-lv.ruyi@zte.com.cn>
+To:     luo penghao <cgel.zte@gmail.com>
+Cc:     vladimir.oltean@nxp.com, claudiu.manoil@nxp.com,
+        alexandre.belloni@bootlin.com, UNGLinuxDriver@microchip.com,
+        davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lv.ruyi@zte.com.cn, zealci@zte.com.cn
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is nothing to synchronize if APICv is disabled, since neither
-other vCPUs nor assigned devices can set PIR.ON.
+Hello:
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/vmx/vmx.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This patch was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index ca1fd93c1dc9..9453743ce0c4 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7778,10 +7778,10 @@ static __init int hardware_setup(void)
- 		ple_window_shrink = 0;
- 	}
- 
--	if (!cpu_has_vmx_apicv()) {
-+	if (!cpu_has_vmx_apicv())
- 		enable_apicv = 0;
-+	if (!enable_apicv)
- 		vmx_x86_ops.sync_pir_to_irr = NULL;
--	}
- 
- 	if (cpu_has_vmx_tsc_scaling()) {
- 		kvm_has_tsc_control = true;
+On Tue, 30 Nov 2021 11:24:43 +0000 you wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> If err is true, the function will be returned, but mutex_lock isn't
+> released.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> 
+> [...]
+
+Here is the summary with links:
+  - net: mscc: ocelot: fix mutex_lock not released
+    https://git.kernel.org/netdev/net-next/c/9c32950f24f9
+
+You are awesome, thank you!
 -- 
-2.31.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

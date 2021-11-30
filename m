@@ -2,159 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCFF74635C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 987604635C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238400AbhK3NuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
+        id S240974AbhK3Nun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:50:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbhK3NuX (ORCPT
+        with ESMTP id S229379AbhK3Nuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:50:23 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1417BC061574;
-        Tue, 30 Nov 2021 05:47:04 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638280021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qDafw5ZYQW26rsPyBDj9yTdDtGApD5T28fT5XA2pw1E=;
-        b=kY/YhIatU6P6JGyQH3+/wkeL3o4bj8MayRtvaTEwYECehsRlsRt6kUSQsXrnO+3HWUPx3o
-        GATTargEsSHp7NzB6fYNv0b6C93G1o1i4p4YZGXwyEzGi6JiQL4u46aJml6sWkIeyfTcBr
-        XujHeXbsKJLK2RCC/J0ZRNmtQIcBLLJbvNGSsO2nMF/l/9Zwn3CZMm8l85oNvml6YxkU5V
-        oJjOyjz5ml9/NzUvyLeR6sDMQM/swhaXcLpSWlPFRPkufy9Xc/1sKtIf0qAIehLW6Il65Q
-        vRH+S51fC7Ijr+FO3y0KrSqYkyj8ghGtTY6/vaas2pSdADYFgdyivq7jfLCxSg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638280021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qDafw5ZYQW26rsPyBDj9yTdDtGApD5T28fT5XA2pw1E=;
-        b=aH2thSLOdBhVEZqQILE/kh6HQ/W4QkaBo66b5pXACab+M62rkRICrkMnN/tuB9qMfwi6su
-        UNmEWBW5oYXuTsDw==
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu@vger.kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>, paulmck@kernel.org,
-        mtosatti <mtosatti@redhat.com>, frederic <frederic@kernel.org>
-Subject: Re: Question WRT early IRQ/NMI entry code
-In-Reply-To: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
-References: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
-Date:   Tue, 30 Nov 2021 14:47:01 +0100
-Message-ID: <875ys9dacq.ffs@tglx>
+        Tue, 30 Nov 2021 08:50:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418FEC061574;
+        Tue, 30 Nov 2021 05:47:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12904B819AC;
+        Tue, 30 Nov 2021 13:47:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B12C53FCD;
+        Tue, 30 Nov 2021 13:47:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638280038;
+        bh=bJQ0rPNyHmQj5pgvCHo7GRmvI6o8RT3OGU1tv1q6bko=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AO7BmZZRy1HxLAbs2HO/RFNsgNLorMTfB4aP/GhcdC4xZ31CFgYb/6Ag51IdOwsrC
+         98qz+SYTcF0sDOSOjEuswX+iWThb0Q4L/q72ER4h/P2Jamh4YfBXwg8LuJk+dfLxWq
+         qCj0+z71L6bWvQbk4j/XIejw3nMvOeiTCdeE7x/QsZnRrqXtq2UwPIA4TkPFxjvxq6
+         3SiQbTm2qz5eFCnV7t74V4D249bNXX28JMlraE4ltAetfDbI+6vtbx4+h88A0/DdR+
+         6lrQoxIgUfZ+wDN9bzPZefK4nk7PXUHBawRSev4QcCSRN9ITxx25bB24wDBBGh0zL0
+         0gDrVjxIG6aZA==
+Received: by mail-ed1-f52.google.com with SMTP id l25so86760576eda.11;
+        Tue, 30 Nov 2021 05:47:18 -0800 (PST)
+X-Gm-Message-State: AOAM531XPHUy9ytkSsEphoIVoTU/O31iIYyjLF38WolsxdU6QwCZVXcP
+        aeimf7RQNL5trfM3h3+H/gjROivFsGKc6ZOzNw==
+X-Google-Smtp-Source: ABdhPJxg05ApXgN6+7/B6ztitZWjTKrMZV85iNjN6Yfp+XEpFRc9ZZeFWe7fAGUuX9C6qp/x/5QqLeBzKiK7WH8BuHE=
+X-Received: by 2002:aa7:cc82:: with SMTP id p2mr81704238edt.201.1638280037036;
+ Tue, 30 Nov 2021 05:47:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20211120001621.21246-1-leoyang.li@nxp.com> <20211120001621.21246-5-leoyang.li@nxp.com>
+ <YaWGKaBvTpx1pA/x@robh.at.kernel.org> <AS8PR04MB89467DDB9BC3217431716D358F679@AS8PR04MB8946.eurprd04.prod.outlook.com>
+In-Reply-To: <AS8PR04MB89467DDB9BC3217431716D358F679@AS8PR04MB8946.eurprd04.prod.outlook.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 30 Nov 2021 07:47:05 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKdekKnG4CR3aGuOmLCxU9WzOaqLyPwBgUeE5D2WURFnQ@mail.gmail.com>
+Message-ID: <CAL_JsqKdekKnG4CR3aGuOmLCxU9WzOaqLyPwBgUeE5D2WURFnQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: pci: layerscape-pci: define aer/pme interrupts
+To:     Leo Li <leoyang.li@nxp.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Z.Q. Hou" <zhiqiang.hou@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30 2021 at 12:28, Nicolas Saenz Julienne wrote:
-> while going over the IRQ/NMI entry code I've found a small 'inconsistency=
-':
-> while in the IRQ entry path, we inform RCU of the context change *before*
-> incrementing the preempt counter, the opposite happens for the NMI entry
-> path. This applies to both arm64 and x86[1].
+On Mon, Nov 29, 2021 at 9:35 PM Leo Li <leoyang.li@nxp.com> wrote:
 >
-> Actually, rcu_nmi_enter() =E2=80=94 which is also the main RCU context sw=
-itch function
-> for the IRQ entry path =E2=80=94 uses the preempt counter to verify it's =
-not in NMI
-> context. So it would make sense to assume all callers have the same updat=
-ed
-> view of the preempt count, which isn't true ATM.
 >
-> I'm sure there an obscure/non-obvious reason for this, right?
-
-There is.
-
-> IRQ path:
->   -> x86_64 asm (entry_64.S)
->   -> irqentry_enter() -> rcu_irq_enter() -> *rcu_nmi_enter()*
->   -> run_irq_on_irqstack_cond() -> irq_exit_rcu() -> *preempt_count_add(H=
-ARDIRQ_OFFSET)*
->   -> // Run IRQ...
 >
-> NMI path:
->   -> x86_64 asm (entry_64.S)
->   -> irqentry_nmi_enter() -> __nmi_enter() -> *__preempt_count_add(NMI_OF=
-FSET + HARDIRQ_OFFSET)*
->                           -> *rcu_nmi_enter()*
+> > -----Original Message-----
+> > From: Rob Herring <robh@kernel.org>
+> > Sent: Monday, November 29, 2021 8:02 PM
+> > To: Leo Li <leoyang.li@nxp.com>
+> > Cc: Bjorn Helgaas <bhelgaas@google.com>; linux-pci@vger.kernel.org;
+> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; Z.Q. Hou
+> > <zhiqiang.hou@nxp.com>
+> > Subject: Re: [PATCH 4/4] dt-bindings: pci: layerscape-pci: define aer/pme
+> > interrupts
+> >
+> > On Fri, Nov 19, 2021 at 06:16:21PM -0600, Li Yang wrote:
+> > > Some platforms using this controller have separated interrupt lines
+> > > for aer or pme events instead of having a single interrupt line for
+> > > miscellaneous events.  Define interrupts in the binding for these
+> > > interrupt lines.
+> > >
+> > > Signed-off-by: Li Yang <leoyang.li@nxp.com>
+> > > ---
+> > >  .../devicetree/bindings/pci/layerscape-pci.txt     | 14 ++++++++++----
+> > >  1 file changed, 10 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/pci/layerscape-pci.txt
+> > > b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
+> > > index 8fd6039a826b..bcf11bfc4bab 100644
+> > > --- a/Documentation/devicetree/bindings/pci/layerscape-pci.txt
+> > > +++ b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
+> > > @@ -31,8 +31,13 @@ Required properties:
+> > >  - reg: base addresses and lengths of the PCIe controller register blocks.
+> > >  - interrupts: A list of interrupt outputs of the controller. Must contain an
+> > >    entry for each entry in the interrupt-names property.
+> > > -- interrupt-names: Must include the following entries:
+> > > -  "intr": The interrupt that is asserted for controller interrupts
+> > > +- interrupt-names: It could include the following entries:
+> > > +  "aer": For interrupt line reporting aer events when non MSI/MSI-X/INTx
+> > mode
+> > > +           is used
+> > > +  "pme": For interrupt line reporting pme events when non MSI/MSI-
+> > X/INTx mode
+> > > +           is used
+> > > +  "intr": For interrupt line reporting miscellaneous controller
+> > > +events
+> > > +  ......
+> > >  - fsl,pcie-scfg: Must include two entries.
+> > >    The first entry must be a link to the SCFG device node
+> > >    The second entry is the physical PCIe controller index starting from '0'.
+> > > @@ -52,8 +57,9 @@ Example:
+> > >             reg = <0x00 0x03400000 0x0 0x00010000   /* controller
+> > registers */
+> > >                    0x40 0x00000000 0x0 0x00002000>; /* configuration space
+> > */
+> > >             reg-names = "regs", "config";
+> > > -           interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>; /*
+> > controller interrupt */
+> > > -           interrupt-names = "intr";
+> > > +           interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>, /* aer
+> > interrupt */
+> > > +                   <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>; /* pme
+> > interrupt */
+> > > +           interrupt-names = "aer", "pme";
+> >
+> > This isn't a compatible change. The h/w suddenly has no 'intr'
+> > interrupt?
+>
+> The original 'intr' was just a place holder for a HW interrupt signal without a clear definition of events associated.  Some later SoC has more interrupt signals to associate with more specific events.
 
-The reason is symmetry vs. returning from interupt / exception:
+'Later SoC' means new compatible, but you're not changing the
+compatible. If it was just wrong for all SoCs, then state that in the
+commit message. Please define all the interrupts on all SoCs, so it is
+not changing again.
 
- irqentry_enter()
-      exit_rcu =3D false;
+> If needed, we can keep the "intr" interrupt-name there just for backward compatibility although it was never used in Linux.
 
-      if (user_mode(regs)) {
-          irqentry_enter_from_user_mode(regs)
-            __enter_from_user_mode(regs)
-              user_exit_irqoff();       <- RCU handling for NOHZ full
+What about other OSs?
 
-      } else if (is_idle_task_current()) {
-            rcu_irq_enter()
-            exit_rcu =3D true;
-      }
-
- irq_enter_rcu()
-     __irq_enter_raw()
-     preempt_count_add(HARDIRQ_OFFSET);
-
- irq_handler()
-
- irq_exit_rcu()
-     preempt_count_sub(HARDIRQ_OFFSET);
-     if (!in_interrupt() && local_softirq_pending())
-     	 invoke_softirq();
-
- irqentry_exit(regs, exit_rcu)
-
-     if (user_mode(regs)) {
-         irqentry_exit_to_usermode(regs)
-           user_enter_irqoff();     <- RCU handling for NOHZ full
-     } else if (irqs_enabled(regs)) {
-           if (exit_rcu) {          <- Idle task special case
-               rcu_irq_exit();
-           } else {
-              irqentry_exit_cond_resched();
-           }
-
-     } else if (exit_rcu) {
-         rcu_irq_exit();
-     }
-
-On return from interrupt HARDIRQ_OFFSET has to be removed _before_
-handling soft interrupts. It's also required that the preempt count has
-the original state _before_ reaching irqentry_exit() which
-might schedule if the interrupt/exception hit user space or kernel space
-with interrupts enabled.
-
-So doing it symmetric makes sense.
-
-For NMIs the above conditionals do not apply at all and we just do
-
-    __nmi_enter()
-        preempt_count_add(NMI_COUNT + HARDIRQ_COUNT);
-    rcu_nmi_enter();
-
-    handle_nmi();
-
-    rcu_nmi_exit();
-    __nmi_exit()
-        preempt_count_sub(NMI_COUNT + HARDIRQ_COUNT);
-
-The reason why preempt count is incremented before invoking
-rcu_nmi_enter() is simply that RCU has to know about being in NMI
-context, i.e. in_nmi() has to return the correct answer.
-
-Thanks,
-
-        tglx
+Rob

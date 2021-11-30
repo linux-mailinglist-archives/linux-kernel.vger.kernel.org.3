@@ -2,119 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 66967462BC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:41:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8735E462BCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:43:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238253AbhK3EoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 23:44:18 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41800 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233276AbhK3EoS (ORCPT
+        id S238265AbhK3ErJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 23:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33264 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232698AbhK3ErI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 23:44:18 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3836B81696
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4633DC53FC1;
-        Tue, 30 Nov 2021 04:40:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638247257;
-        bh=OBE0b8QgbIdghOY9t72iqEJYQ3j6V6Eey09D6sXt1WI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Cq4cj+gZSEtPll4kM9/txQGEJbc5mM9e+NTKSC/VMrZBcdRAwKRWsmpnQKoEtyIEA
-         8HttajEoajV4dq3o2NPRIw2yuaGfhMQQKt0Gna18dz91G2f8ptH+uDkfVJSNGXipPp
-         vvMOxefCwABy4b0tujtLEyHiXU54h7UY329bq1eTPcGu1O292zrNvp7hMVzLfEYBJv
-         y9dKmNq211CY20JkA+IIKtwu8VAgEYc9gVQ85gd7uNHP8mPma36qZTl97eyP/99Ga/
-         +CPZ1oiL1VQncix+klr085JQ5hOGJaPpvY+O7TCuUAVys7iMldY0AUpXPs801MW+5e
-         MaGfQ9PtAN77w==
-Date:   Tue, 30 Nov 2021 13:40:53 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: Re: [PATCH 5/5] tracing/uprobes: Use trace_event_buffer_reserve()
- helper
-Message-Id: <20211130134053.4115f0d97c683a1b021c1833@kernel.org>
-In-Reply-To: <20211130024319.439953082@goodmis.org>
-References: <20211130023945.789683928@goodmis.org>
-        <20211130024319.439953082@goodmis.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Mon, 29 Nov 2021 23:47:08 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F9DC061574;
+        Mon, 29 Nov 2021 20:43:50 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id h16so19013738ila.4;
+        Mon, 29 Nov 2021 20:43:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HeqaDzTbdMwSCdyiTp9W48kA5llr20ZDAs9jQ6aZ89A=;
+        b=eSUyGpfQvdHvD4AaQu1B1O2V82sW/OvAWBRJQfAf6zDgkDp8Ajjmx6S0IMI8IT01fX
+         ZsakYIazOvwX0HkfeJpREI0nQufVeMblUT4FKoiKVxnNHpc8YvaYl+1AIqKIlyoPfelV
+         F1exsHYA2ktLF6JKGy8HAFn4PUEox413KfqqachmVr0stvceEfrNSVPTYeKxvmi4xJCN
+         rFY7mJtRwE0Rx8Cn2i5v2mzWntWsa3uCgLsSkX4cONXOfICsuAjwt++DhNEqVOkxyq9d
+         H5ttROTWZXxJrURrxSXH7eNyuSj25DTDvfdN3xxwULaIsnF3LNMkUjj3KpvEMe2NEcLC
+         w9rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HeqaDzTbdMwSCdyiTp9W48kA5llr20ZDAs9jQ6aZ89A=;
+        b=mF24bQnKBctUj9vZdDVuFYFETQUcHDAdRbGRic6JTpVIPzOTN7GjAVMKR1R1C1q5Kr
+         hrdIjpZhG2jBaYAAvrXlS9DrmzJbnHQGz701OCbhAY3bqRvUfOB0+z3VEGH8DuMgGEne
+         mnDpg4IrHs8XhIaKuTHCG9sukmUPVFr3NGaz5HqUBiMAbvoFZAVPDwkHLkis81INMA56
+         5qtYwcpK1jGehYuW4CM4CkSQR+isgymhoLficIogDu/6SryA+TSsCfGDVOM6shpOLmyQ
+         HErtPsC8qJqdOyExAMAMODf9dGtLj720rY9IOFp5CpjFtdwETRyx131TQxf6O6Ufduf5
+         BTlw==
+X-Gm-Message-State: AOAM533CbtpXcdEgJPK6YqWCjq7W2VFSF7iSWyXZvLlR7m5gmsrcWSQ6
+        kRcnrXw/UlDh1FS4vdeofO5xynsVhwJHvQ==
+X-Google-Smtp-Source: ABdhPJzhhtgu2XRJWZgzRagGUWBq2vjFLVNXp82rfiCPflecReMfar8JHmTNVAUYxic5cgJPNUxJrA==
+X-Received: by 2002:a05:6e02:1a6a:: with SMTP id w10mr50269233ilv.190.1638247429493;
+        Mon, 29 Nov 2021 20:43:49 -0800 (PST)
+Received: from cth-desktop-dorm.mad.wi.cth451.me ([2600:6c44:113f:8901:6f66:c6f8:91db:cfda])
+        by smtp.gmail.com with ESMTPSA id x2sm8961216ilv.65.2021.11.29.20.43.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 20:43:49 -0800 (PST)
+Date:   Mon, 29 Nov 2021 22:43:46 -0600
+From:   Tianhao Chai <cth451@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Subject: Re: [PATCH] ethernet: aquantia: Try MAC address from device tree
+Message-ID: <20211130044346.GB1416412@cth-desktop-dorm.mad.wi.cth451.me>
+References: <20211128023733.GA466664@cth-desktop-dorm.mad.wi.cth451.me>
+ <YaOvShya4kP4SRk7@lunn.ch>
+ <37679b8b-7a81-5605-23af-e442f9e91816@marcan.st>
+ <YaWNKiXwr/uHlNJD@lunn.ch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaWNKiXwr/uHlNJD@lunn.ch>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 21:39:50 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+On Tue, Nov 30, 2021 at 03:32:10AM +0100, Andrew Lunn wrote:
+> On Mon, Nov 29, 2021 at 02:08:28AM +0900, Hector Martin wrote:
+> > On DT platforms, it is expected that the device tree MAC will override
+> > whatever the device thinks is its MAC address.
 > 
-> To be consistent with kprobes and eprobes, use
-> trace_event_buffer_reserver() and trace_event_buffer_commit(). This will
-> ensure that any updates to trace events will also be implemented on uprobe
-> events.
-> 
+> Can you point to any documentation of that expectation?
 
-Ah, event_trigger_unlock_commit() is the pair commit function. I got it.
-Anyway, the pair of trace_event_buffer_reserve() and trace_event_buffer_commit()
-should be used.
+Since other drivers will prefer DT provided MAC as well, I'd assume
+this to be the case, though I'm not sure where this behavior is documented.
+I'm new to embedded systems and maybe Hector knows better than I do.
 
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+I don't think this will cause regression on platforms that don't even use
+DT, say amd64, but could be a change of behavior where DT and NIC both
+report valid MACs on OF platforms.
 
-Thank you,
+> I'm assuming for Apple M1 Mac minis the order does not actually matter?
 
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> ---
->  kernel/trace/trace_uprobe.c | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
-> 
-> diff --git a/kernel/trace/trace_uprobe.c b/kernel/trace/trace_uprobe.c
-> index f5f0039d31e5..177717c4e74a 100644
-> --- a/kernel/trace/trace_uprobe.c
-> +++ b/kernel/trace/trace_uprobe.c
-> @@ -949,8 +949,8 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
->  				struct trace_event_file *trace_file)
->  {
->  	struct uprobe_trace_entry_head *entry;
-> +	struct trace_event_buffer fbuffer;
->  	struct trace_buffer *buffer;
-> -	struct ring_buffer_event *event;
->  	void *data;
->  	int size, esize;
->  	struct trace_event_call *call = trace_probe_event_call(&tu->tp);
-> @@ -965,12 +965,10 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
->  
->  	esize = SIZEOF_TRACE_ENTRY(is_ret_probe(tu));
->  	size = esize + tu->tp.size + dsize;
-> -	event = trace_event_buffer_lock_reserve(&buffer, trace_file,
-> -						call->event.type, size, 0);
-> -	if (!event)
-> +	entry = trace_event_buffer_reserve(&fbuffer, trace_file, size);
-> +	if (!entry)
->  		return;
->  
-> -	entry = ring_buffer_event_data(event);
->  	if (is_ret_probe(tu)) {
->  		entry->vaddr[0] = func;
->  		entry->vaddr[1] = instruction_pointer(regs);
-> @@ -982,7 +980,7 @@ static void __uprobe_trace_func(struct trace_uprobe *tu,
->  
->  	memcpy(data, ucb->buf, tu->tp.size + dsize);
->  
-> -	event_trigger_unlock_commit(trace_file, buffer, event, entry, 0);
-> +	trace_event_buffer_commit(&fbuffer);
->  }
->  
->  /* uprobe handler */
-> -- 
-> 2.33.0
+The order does not matter in this case. On my M1 mini the hardware
+reports an all-zero MAC address. The MAC from DT matches the one printed
+on the box, and we should use this one instead.
 
-
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+~cth451

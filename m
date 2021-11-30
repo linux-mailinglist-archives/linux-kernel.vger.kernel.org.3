@@ -2,68 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3039C463D1D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF9F463D2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:46:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245087AbhK3RsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
+        id S245061AbhK3RtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:49:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245006AbhK3Rr6 (ORCPT
+        with ESMTP id S231362AbhK3RtQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:47:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD0AC061574;
-        Tue, 30 Nov 2021 09:44:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7A711B819D9;
-        Tue, 30 Nov 2021 17:44:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 29DBCC53FC1;
-        Tue, 30 Nov 2021 17:44:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638294276;
-        bh=Rp2Gp/egZ4qHFOaTZvslUxL2rU44Tl2+N/LVxzWLTTI=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=mbZZmXWY+Fn2sOEY86FbsMl1XBUY39licUCY5b8JeBbE/T7oFvqIC4fEevEmretWY
-         vvhupL2wg66zZpVduvmdPNuw9onrxd+Me6a7moxXq10cQgEXeso+gGrFBpOjKbHDEw
-         tCuJVaPk9GgAQtyTRjAKA61jftZfMkz6uca+TK3oZdRdAzZhmJgU2LsLVTTRTsYfJA
-         tegL803WskJaY/yCIThpkEMyGS9RvUpB9kaHsjJYSvRdxKYbkz//ZLgHO9cdYtfct/
-         kijrSV2fMVNiuW3J7IDw32umnqRjPabS71sz2ojO6MAiR8XHJ7Sao/CS6SPLYyCgrN
-         E2zWFVMFzHlQg==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id F285C60BE4;
-        Tue, 30 Nov 2021 17:44:35 +0000 (UTC)
-Subject: Re: [GIT PULL] KVM fixes for 5.16-rc4
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20211130165738.358058-1-pbonzini@redhat.com>
-References: <20211130165738.358058-1-pbonzini@redhat.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20211130165738.358058-1-pbonzini@redhat.com>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
-X-PR-Tracked-Commit-Id: 7cfc5c653b07782e7059527df8dc1e3143a7591e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f080815fdb3e3cff5a004ca83b3815ac17ef71b1
-Message-Id: <163829427593.13483.5255490699168250098.pr-tracker-bot@kernel.org>
-Date:   Tue, 30 Nov 2021 17:44:35 +0000
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
+        Tue, 30 Nov 2021 12:49:16 -0500
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFDDC061574;
+        Tue, 30 Nov 2021 09:45:56 -0800 (PST)
+Received: by mail-oi1-x231.google.com with SMTP id be32so42705852oib.11;
+        Tue, 30 Nov 2021 09:45:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=XQDjVUqMHzhsaLSX72FpGvCv4WfW3bJNSIFmp2dV73Y=;
+        b=i6RIwWLgsrCTl7jGOwupWsLU63T4N22hibLuzIctrW/RPwt8MAAmE3hpHlxS62fgGH
+         yf83zD2tYKiIL0uvvLSDiG/MtLgPVRNVam85g9P/LDl4DDIA5IKrUdVngb3C4BM6U7/N
+         /rbGn3p9sWO4MfjS9kGWlInpqhsIu+Te3zIhSXlyHUoreFE77oEecisKbn+41TXA8Xih
+         W8JQjZKx2NIInNntdipij+O9RiUv1fWvXzCc2qhJm8Xa+X5oYxUMNFiFojIII9cxydFm
+         J3jvQ1ur3a7M/6jYdHRPkXQ5JA5eeNR0ZuEqNY7/UeJarOJmzBVPDihzZaDtBl8lLAzi
+         ELRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XQDjVUqMHzhsaLSX72FpGvCv4WfW3bJNSIFmp2dV73Y=;
+        b=r+mdWKr0I8EzB8EQ7n+IOljAHW8FN6atGKOPZB3zmbqcoohM1L6sOrVPWXyKU1GTbD
+         r/frXHQwCqgQdMgT+S+2s410fwH7OvdlnMhx1oPJ7fhVc3a4gOjhdHScZ+yc1CyoR00J
+         cBvQBdjwoCmHRyoWb8nzxaFTFxZnJA2S414js2v3s9iwxW4TMER1GbrkVeUxFoxtgw/V
+         FScgzCN0qQgptcC4a+JELwMdk067XJ5IKNM4Yj67rfOGonyN7ijD/Wl6v5sXR9Fv3Opf
+         u2UwKjtxT0VmSLIGG1ZkQmejJJO3YsTYo6O/oyfjeo9YslS/HSTkcfzFY/0FyGWq+JPO
+         H6dQ==
+X-Gm-Message-State: AOAM531t+wwDUk7mf0AHLyMUn95qX9T/ZkWGrobjovQuVrVI1DeljG/i
+        10AOUq1lIjFqEyTtUWh6MZA=
+X-Google-Smtp-Source: ABdhPJzn1aa/vW8m1o9/rqJ9jY1Q1riv+YPz8e4+I2zQ9i+vkgbHrskkZ/2npSiRO579znJxNKX/mA==
+X-Received: by 2002:a54:4614:: with SMTP id p20mr385770oip.39.1638294356099;
+        Tue, 30 Nov 2021 09:45:56 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id a17sm3858966oiw.43.2021.11.30.09.45.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 09:45:55 -0800 (PST)
+Message-ID: <85d2b974-f596-f36e-099f-a698b6be464e@gmail.com>
+Date:   Tue, 30 Nov 2021 10:45:52 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.1
+Subject: Re: [PATCH v2 net-next 00/26] net: introduce and use generic XDP
+ stats
+Content-Language: en-US
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+ <20211130155612.594688-1-alexandr.lobakin@intel.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211130155612.594688-1-alexandr.lobakin@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Tue, 30 Nov 2021 11:57:38 -0500:
+On 11/30/21 8:56 AM, Alexander Lobakin wrote:
+> Rest:
+>  - don't create a separate `ip` command and report under `-s`;
 
-> https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+Reporting XDP stats under 'ip -s' is not going to be scalable from a
+readability perspective.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f080815fdb3e3cff5a004ca83b3815ac17ef71b1
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+ifstat (misc/ifstat.c) has support for extended stats which is where you
+are adding these.

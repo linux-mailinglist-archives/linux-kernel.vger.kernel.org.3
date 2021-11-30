@@ -2,98 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DC1462B48
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 04:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C602E462B4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 04:48:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbhK3DsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 22:48:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S237950AbhK3Dvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 22:51:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbhK3DsW (ORCPT
+        with ESMTP id S229769AbhK3Dvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 22:48:22 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841A7C061574;
-        Mon, 29 Nov 2021 19:45:03 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id q16so18229791pgq.10;
-        Mon, 29 Nov 2021 19:45:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=iP241l8D4Ml97DGKrkVaKmSejRxAC84DOO3x+7kU65A=;
-        b=okOom/tBi8mWTb4ulsp8uU8arus6sb9K4qDEEQVoKU353JOmXEiook3uiR06ajw46S
-         uIavRqOyKW8g8cG13A7kzk3GbCuPjwqkQEacWxOcn6iHueOmJIDoYOAdAa/JLr0VN4fr
-         YlsLe9p75+IHAKVp8fDNv03/sNvma9hoNYurK1mo91MK22n7Sf72EOxwg98vpAggANCb
-         S7Te4grkq0F9NxMJW8Z/tqPlCbPsqbWO2C7BRIHQBtqajvd2umtfaqmxPh3oKC8/jZSU
-         /c7Y36r1nFyEdgzzAtH7yEA66EUBYWHZV/vch1EQz2xQ/uyoatpuWOZeEJmA0qmVm2q1
-         6LHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=iP241l8D4Ml97DGKrkVaKmSejRxAC84DOO3x+7kU65A=;
-        b=DEhzsHKIM+9zwr96OM5aNYvH5GSjra6lO4Wqo51Z5n+gOjRyioknl/PqCny/GrVuVi
-         jbpVdIp5RJVDfqtHnaf0YugZXJI2MrJbOR9Ptk72O3HZA8CeYTVgGEE9xiwcsjIKEEav
-         CWsT+cCxJKJHk0fD6LDTi9syya+vfj/t3uB5yDJ3LjNaNwzbrzl0XmHsbdnGCo9G7KsD
-         GvNfKHOCv793BKEmDzAQor8akHjGfvq2vTwyjAIHE4YBNTa/JRpV7nQC5MATk/BCRaXF
-         +olZDpD/0eUjLJlnTGZug3eWkm3rtZ4YIzJtI8YaCcf5ju59K2TJCxisMaqfDopvQ774
-         zSQw==
-X-Gm-Message-State: AOAM533+jtxoZIx/7OqAwT5QjvpOHB4eX2IXKY7ucpyxKnMQ7GiJosnF
-        SAzg2YC4YgnOIJ6JQG2R5q8=
-X-Google-Smtp-Source: ABdhPJy0d7xlP6swKwTxNcRpPpQdnmYWgSE7+YlKbHpGWa/+h30+6h3pCoy5mE203LSx40CTznIQwA==
-X-Received: by 2002:a05:6a00:2290:b0:49f:c63a:2a5f with SMTP id f16-20020a056a00229000b0049fc63a2a5fmr43610725pfe.69.1638243901768;
-        Mon, 29 Nov 2021 19:45:01 -0800 (PST)
-Received: from [10.230.1.174] ([192.19.161.250])
-        by smtp.gmail.com with ESMTPSA id f15sm20933568pfe.171.2021.11.29.19.45.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 19:45:01 -0800 (PST)
-Message-ID: <31e0f808-d26c-f3cb-7853-de10e95744ed@gmail.com>
-Date:   Mon, 29 Nov 2021 19:44:59 -0800
+        Mon, 29 Nov 2021 22:51:52 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2892AC061574;
+        Mon, 29 Nov 2021 19:48:34 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 642AB8F0;
+        Tue, 30 Nov 2021 04:48:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1638244111;
+        bh=Ju85iL4hNDoC8/eyKjROgknF4Z5dOgHf2nxHw5W0fyw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FXXt811b8LE70eYPo2ULKzDpORmN/2tq+qjrkMX1DRvLYrQjfD29lRn/qNJWSsFbG
+         sWYocMrPzrwfOTPubgPTN58Nxv3dn4dRXvBGIVZHfcwhQAXqome8QRWRF3dMGG9wpM
+         HELbLmvn+QM54/Mzgt9CmknWjsYfTdCrt5E3o4w0=
+Date:   Tue, 30 Nov 2021 05:48:06 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     linux-renesas-soc@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm: rcar-du: crtc: Support external DSI dot clock
+Message-ID: <YaWe9nOzk+zN9d5u@pendragon.ideasonboard.com>
+References: <20211126093514.927340-1-kieran.bingham+renesas@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 5.4 00/92] 5.4.163-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        stable@vger.kernel.org
-References: <20211129181707.392764191@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20211129181707.392764191@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20211126093514.927340-1-kieran.bingham+renesas@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Kieran,
 
+Thank you for the patch.
 
-On 11/29/2021 10:17 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.163 release.
-> There are 92 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Fri, Nov 26, 2021 at 09:35:14AM +0000, Kieran Bingham wrote:
+> On platforms with an external clock, both the group and crtc must be
+> handled accordingly to correctly pass through the external clock and
+> configure the DU to use the external rate.
 > 
-> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
-> Anything received after that time might be too late.
+> The CRTC support was missed while adding the DSI support on the r8a779a0
+> which led to the output clocks being incorrectly determined.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.163-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Ensure that when a CRTC is routed through the DSI encoder, the external
+> clock is used without any further divider being applied.
 > 
-> thanks,
-> 
-> greg k-h
+> Fixes: b291fdcf5114 ("drm: rcar-du: Add r8a779a0 device support")
+> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  drivers/gpu/drm/rcar-du/rcar_du_crtc.c | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> index 5672830ca184..5236f917cc68 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_crtc.c
+> @@ -261,12 +261,13 @@ static void rcar_du_crtc_set_display_timing(struct rcar_du_crtc *rcrtc)
+>  		rcar_du_group_write(rcrtc->group, DPLLCR, dpllcr);
+>  
+>  		escr = ESCR_DCLKSEL_DCLKIN | div;
+> -	} else if (rcdu->info->lvds_clk_mask & BIT(rcrtc->index)) {
+> +	} else if (rcdu->info->lvds_clk_mask & BIT(rcrtc->index) ||
+> +		   rcdu->info->dsi_clk_mask & BIT(rcrtc->index)) {
+>  		/*
+> -		 * Use the LVDS PLL output as the dot clock when outputting to
+> -		 * the LVDS encoder on an SoC that supports this clock routing
+> -		 * option. We use the clock directly in that case, without any
+> -		 * additional divider.
+> +		 * Use the external LVDS or DSI PLL output as the dot clock when
+> +		 * outputting to the LVDS or DSI encoder on an SoC that supports
+> +		 * this clock routing option. We use the clock directly in that
+> +		 * case, without any additional divider.
+>  		 */
+>  		escr = ESCR_DCLKSEL_DCLKIN;
+>  	} else {
+
 -- 
-Florian
+Regards,
+
+Laurent Pinchart

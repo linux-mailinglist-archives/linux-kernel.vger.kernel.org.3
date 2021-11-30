@@ -2,217 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 699914630E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32D544630E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:20:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231949AbhK3KXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:23:25 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33001 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231216AbhK3KXX (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:23:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638267604;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OzpFcvBbG6u7p5sms8xWPW9jQykzma+4R9XPG4RPkT8=;
-        b=goXeFwxDjwwa+tB2OKOF43f4HQjezQUJh+wnequZy3GIpyV7UPRqj/ZMLVbFW1mKAQWDzq
-        emUTARtd0TvyFA2A5Qxk9p20j6LJ4kziAPLUTs8ocKAvzhrH3NP1auNv5hHavYIfBrBrqe
-        H22EjU7khpCwuWPYoeUSD7q1wwcR/CI=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-512-KmkuHuzmOVGLnvma8fo39Q-1; Tue, 30 Nov 2021 05:20:02 -0500
-X-MC-Unique: KmkuHuzmOVGLnvma8fo39Q-1
-Received: by mail-ed1-f72.google.com with SMTP id i19-20020a05640242d300b003e7d13ebeedso16483001edc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:20:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OzpFcvBbG6u7p5sms8xWPW9jQykzma+4R9XPG4RPkT8=;
-        b=vd0ZhT1reX3avbpH6m4FHQXPqhUWQxUZ8MEC2B/EBuZQy53gZsTf/C6FXtmnM7uPpU
-         tN+E5vITYxr2CuE+bQwjuxDmHVapcxulAD8E3QA9ImyN3jIbx7mrMevT5LeM7lDDMohM
-         EJXIXrc2NUAX5M5rf7h/f6Q+gwhdgU7bNq6hLCIH/9GHj7Or1q+S+d/7CtuexkfWDZ0D
-         XldxX+Ule51s943l4d/42mUrw4jWqUAusBF5stg0r0ORWcxYPmR80ADemde6QQvhmw0f
-         qexupyFRDpQu81+9+NPXTjK7UWWucSRhc48SvS+xW3Z0Rxbynr0pPidve1LpC7NjCHRQ
-         o/Ag==
-X-Gm-Message-State: AOAM530MLR1YPrXTzlemevsWe8TKfjG43U2Ihsp4qhASqtqMJXRDR8Xy
-        57vjTOpWRFdRI570iFS3jL77d8EMbIBTxYoRG7NciZermIAZBydxwwixzB1B9/aKiGHdNYk3+zT
-        a0WCPdtBIvi4I89xYzIdLsNp3
-X-Received: by 2002:a05:6402:41a:: with SMTP id q26mr83741478edv.387.1638267601486;
-        Tue, 30 Nov 2021 02:20:01 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwO8sb5ZfWXTnqbvi0ESAmSaw67WDhY9GecOv8WBkx4Pl8wWeORH68lUXXPC0xdOlbVtjRQhg==
-X-Received: by 2002:a05:6402:41a:: with SMTP id q26mr83741439edv.387.1638267601229;
-        Tue, 30 Nov 2021 02:20:01 -0800 (PST)
-Received: from gator.home (cst2-173-70.cust.vodafone.cz. [31.30.173.70])
-        by smtp.gmail.com with ESMTPSA id sh33sm9409065ejc.56.2021.11.30.02.20.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 02:20:00 -0800 (PST)
-Date:   Tue, 30 Nov 2021 11:19:58 +0100
-From:   Andrew Jones <drjones@redhat.com>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [RFC PATCH v2 04/11] KVM: arm64: Setup a framework for hypercall
- bitmap firmware registers
-Message-ID: <20211130101958.fcdqthphyhxzvzla@gator.home>
-References: <20211113012234.1443009-1-rananta@google.com>
- <20211113012234.1443009-5-rananta@google.com>
- <87wnl0cdfn.wl-maz@kernel.org>
- <CAJHc60ydffBkqqb6xyObiK-66psaPODsOo0DpLFv7thx=zHjZw@mail.gmail.com>
- <20211127172720.zte6wfdguoyi3gd6@gator.home>
- <CAJHc60x=Egb=vRu1JHNK6f1ep+t+gDSKxJyfH88-w=v9pwsRsQ@mail.gmail.com>
+        id S232118AbhK3KXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:23:45 -0500
+Received: from mga12.intel.com ([192.55.52.136]:27165 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231216AbhK3KXo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 05:23:44 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="216202399"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="216202399"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 02:20:25 -0800
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="676773337"
+Received: from svalluri-mobl.gar.corp.intel.com ([10.213.116.31])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 02:20:20 -0800
+Message-ID: <49299b089f553ef2878aaa7eaf60f8c3600b939d.camel@linux.intel.com>
+Subject: Re: [PATCH 1/7] x86/Documentation: Describe the Intel Hardware
+ Feedback Interface
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org
+Cc:     x86@kernel.org, linux-doc@vger.kernel.org,
+        Len Brown <len.brown@intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 30 Nov 2021 02:20:16 -0800
+In-Reply-To: <81bca26d-eac8-31ed-e5ec-81812664d671@linaro.org>
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+         <20211106013312.26698-2-ricardo.neri-calderon@linux.intel.com>
+         <81bca26d-eac8-31ed-e5ec-81812664d671@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.0-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJHc60x=Egb=vRu1JHNK6f1ep+t+gDSKxJyfH88-w=v9pwsRsQ@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 04:56:19PM -0800, Raghavendra Rao Ananta wrote:
-> On Sat, Nov 27, 2021 at 9:27 AM Andrew Jones <drjones@redhat.com> wrote:
-> >
-> > On Tue, Nov 23, 2021 at 10:34:23AM -0800, Raghavendra Rao Ananta wrote:
-> > > On Mon, Nov 22, 2021 at 9:23 AM Marc Zyngier <maz@kernel.org> wrote:
-> > > > I keep being baffled by this. Why should we track the VMM accesses or
-> > > > the VMM writeback? This logic doesn't seem to bring anything useful as
-> > > > far as I can tell. All we need to ensure is that what is written to
-> > > > the pseudo-register is an acceptable subset of the previous value, and
-> > > > I cannot see why this can't be done at write-time.
-> > > >
-> > > > If you want to hide this behind a capability, fine (although my guts
-> > > > feeling is that we don't need that either). But I really want to be
-> > > > convinced about all this tracking.
-> > > >
-> > > The tracking of each owner register is necessary here to safe-guard
-> > > the possibility that the user-space may not be aware of a newly
-> > > introduced register, and hence, hasn't accessed it. If it had at least
-> > > read the register, but not write-back, we assume that the user-space
-> > > is happy with the configuration. But the fact that the register has
-> > > not even been read would state that user-space is unaware of the
-> > > existence of this new register. In such a case, if we don't sanitize
-> > > (clear all the bits) this register, the features will be exposed
-> > > unconditionally to the guest.
-> > >
-> > > The capability is introduced here to make sure that this new
-> > > infrastructure is backward compatible with old VMMs. If the VMMs don't
-> > > enable this capability, they are probably unaware of this, and this
-> > > will work as it always has- expose new services to the guest
-> > > unconditionally as and when they are introduced.
-> >
-> > Hi Raghavendra,
-> >
-> > I don't think we need a CAP that has to be enabled or to make any
-> > assumptions or policy decisions in the kernel. I think we just need to
-> > provide a bit more information to the VMM when it checks if KVM has the
-> > CAP. If KVM would tell the VMM how may pseudo registers there are, which
-> > can be done with the return value of the CAP, then the VMM code could be
-> > something like this
-> >
-> >   r = check_cap(KVM_CAP_ARM_HVC_FW_REG_BMAP);
-> >   if (r) {
-> >     num_regs = r;
-> >
-> >     for (idx = 0; idx < num_regs; ++idx) {
-> >       reg = hvc_fw_reg(idx);
-> >
-> >       if (idx > vmm_last_known_idx) {
-> >         ...
-> >       } else {
-> >         ...
-> >       }
-> >     }
-> >   }
-> >
-> > With this, the VMM is free to decide if it wants to clear all registers
-> > greater than the last index it was aware of or if it wants to let those
-> > registers just get exposed to the guest without knowing what's getting
-> > exposed. Along with documenting that by default everything gets exposed
-> > by KVM, which is the backwards compatible thing to do, then the VMM has
-> > been warned and given everything it needs to manage its guests.
-> >
-> Hi Andrew,
-> 
-> Thanks for your comments and suggestions!
-> 
-> I like the idea of sharing info via a read of the CAP, and not having
-> to explicitly sanitize/clear the registers before the guest begins to
-> run.
-> However the handshake is done over an API doc, which is a little
-> concerning. The user-space must remember and explicitly clear any new
-> register that it doesn't want to expose to the guest, while the
-> current approach does this automatically.
-> Any bug in VMM's implementation could be risky and unintentionally
-> expose features to the guest. What do you think?
+Hi Daniel,
 
-The VMM can mess things up in many ways. While KVM should protect itself
-from the VMM, it shouldn't try to protect the VMM from the VMM itself. In
-this case, the risk here isn't that we allow the VMM to do something that
-can harm KVM, or even the guest. The risk is only that the VMM fails to do
-what it wanted to do (assuming it didn't want to expose unknown features
-to the guest). I.e. the risk here is only that the VMM has a bug, and it's
-an easily detectable bug. I say let the VMM developers manage it.
+On Tue, 2021-11-30 at 10:24 +0100, Daniel Lezcano wrote:
+> Hi Ricardo,
+> > 
+
+[...]
+
+> > +The Hardware Feedback Interface
+> > +-------------------------------
+> > +
+> > +The Hardware Feedback Interface provides to the operating system
+> > information
+> > +about the performance and energy efficiency of each CPU in the
+> > system. Each
+> > +capability is given as a unit-less quantity in the range [0-255].
+> > Higher values
+> > +indicate higher capability. Energy efficiency and performance are
+> > reported in
+> > +separate capabilities.
+> 
+> Are they linked together (eg. higher energy efficiency => lower
+> performance)?
+
+Generally true.
+But for some workload and condition higher energy efficient point
+doesn't mean lower performance.
 
 > 
-> > Another thing that might be nice is giving userspace control of how many
-> > pseudo registers show up in get-reg-list. In order to migrate from a host
-> > with a more recent KVM to a host with an older KVM[*] we should only
-> > expose the number of pseudo registers that the older host is aware of.
-> > The VMM would zero these registers out anyway, in order to be compatible
-> > for migration, but that's not enough when they also show up in the list
-> > (at least not with QEMU that aborts migration when the destination
-> > expects less registers than what get-reg-list provides)
-> >
-> > [*] This isn't a great idea, but it'd be nice if we can make it work,
-> > because users may want to rollback upgrades or, after migrating to a
-> > host with a newer kernel, they may want to migrate back to where they
-> > started.
-> >
-> Good point. But IIUC, if the user-space is able to communicate the
-> info that it's expecting a certain get-reg-list, do you think it can
-> handle it at its end too, rather than relying on the kernel to send a
-> list back?
+> > +These capabilities may change at runtime as a result of changes in
+> > the
+> > +operating conditions of the system or the action of external
+> > factors.
+> 
+> Is it possible to give examples?
+For example a server farm decide to save power by reduce cooling cost,
+by lowering TDP. This can be done remotely. This will result in
+notification of a lower performance value or even perf=eff=0 on some
+CPUs via HFI. Intel CPU has capability to change TDP level runtime.
 
-Yes, I think we can probably manage this in the VMM, and maybe/probably
-that's the better place to manage it.
+Or if the system is over heating the firmware can indicate lower
+performance, so OSPM can take action. 
 
 > 
-> My assumption was that VMM would statically maintain a known set of
-> registers that it wants to work with and are to be modified by hand,
-> rather than relying on get-reg-list. This could be the least common
-> set of registers that are present in all the host kernels (higher or
-> lower versions) of the migration fleet. This config doesn't change
-> even with get-reg-list declaring a new register as the features
-> exposed by it could still be untested. Although, migrating to a host
-> with a missing register shouldn't be possible in this setting, but if
-> it encounters the scenario, it should be able to avoid migration to
-> the host (similar to QEMU).
+> > The rate
+> > +at which these capabilities are updated is specific to each
+> > processor model. On
+> > +some models, capabilities are set at boot time and never change.
+> > On others,
+> > +capabilities may change every tens of milliseconds.
+> > +
+> > +The kernel or a userspace policy daemon can use these capabilities
+> > to modify
+> > +task placement decisions. For instance, if either the performance
+> > or energy
+> > +capabilities of a given logical processor becomes zero, it is an
+> > indication that
+> > +the hardware recommends to the operating system to not schedule
+> > any tasks on
+> > +that processor for performance or energy efficiency reasons,
+> > respectively.
 > 
-> Please correct me if you think it's a false assumption to proceed with.
+> How the userspace can be involved in these decisions? If the
+> performance
+> is impacted then that should be reflected in the CPU capacity. The
+> scheduler will prevent to put task on CPU with a low capacity, no?
+> 
+> I'm also worried about the overhead of the userspace notifications.
+> 
+> That sounds like similar to the thermal pressure? Wouldn't make sense
+> to
+> create a generic component where HFI, cpufreq cooling, LMh, etc ...
+> are
+> the backend?
 
-Your assumptions align with mine. It seems as we move towards CPU models,
-get-reg-list's role will likely only be to confirm a host supports the
-minimum required. We should probably implement/change the VMM to allow
-migrating from a host with more registers to one with less as long as
-the one with less includes all the required registers. Of course we
-also need to ensure that any registers we don't want to require are
-not exposed to the guest, but I guess that's precisely what we're trying
-to do with this series for at least some pseudo registers.
+The problem is treatment of perf/eff == 0 of a CPU, which we can
+indicate as capacity  = 0 to scheduler. But this doesn't prevent
+scheduler for using that CPU on a overloaded system. We can offline
+that CPU in kernel, which will be intrusive without notifying user
+space or may fail for CPU0. Tried cpu idle injection, remove from cpu
+sets. But doesn't work when interrupt are affined to that CPU, soft
+irqs or timer scheduled there.
+
+Here the notification are in order of several ms in order ( In reality
+they are in seconds for current use cases). These are not emergency
+events. Same as other thermal notifications, if something urgent FW can
+already force to lowest performance without even notifying user space.
+
 
 Thanks,
-drew
+Srinivas
+
+> 
+> 
+> 
+> > +Implementation details for Linux
+> > +--------------------------------
+> > +
+> > +The infrastructure to handle thermal event interrupts has two
+> > parts. In the
+> > +Local Vector Table of a CPU's local APIC, there exists a register
+> > for the
+> > +Thermal Monitor Register. This register controls how interrupts
+> > are delivered
+> > +to a CPU when the thermal monitor generates and interrupt. Further
+> > details
+> > +can be found in the Intel SDM Vol. 3 Section 10.5 [1]_.
+> > +
+> > +The thermal monitor may generate interrupts per CPU or per
+> > package. The HFI
+> > +generates package-level interrupts. This monitor is configured and
+> > initialized
+> > +via a set of machine-specific registers. Specifically, the HFI
+> > interrupt and
+> > +status are controlled via designated bits in the
+> > IA32_PACKAGE_THERM_INTERRUPT
+> > +and IA32_PACKAGE_THERM_STATUS registers, respectively. There
+> > exists one HFI
+> > +table per package. Further details can be found in the Intel SDM
+> > Vol. 3
+> > +Section 14.9 [1]_.
+> > +
+> > +The hardware issues an HFI interrupt after updating the HFI table
+> > and is ready
+> > +for the operating system to consume it. CPUs receive such
+> > interrupt via the
+> > +thermal entry in the Local APIC's Local Vector Table.
+> > +
+> > +When servicing such interrupt, the HFI driver parses the updated
+> > table and
+> > +relays the update to userspace using the thermal notification
+> > framework. Given
+> > +that there may be many HFI updates every second, the updates
+> > relayed to
+> > +userspace are throttled at a rate of CONFIG_HZ jiffies.
+> > +
+> > +References
+> > +----------
+> > +
+> > +.. [1] https://www.intel.com/sdm
+> > 
+> 
+> 
+
 

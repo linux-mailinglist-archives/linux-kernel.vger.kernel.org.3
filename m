@@ -2,170 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D184630C0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644914630C2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240753AbhK3KOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:14:22 -0500
-Received: from pegase2.c-s.fr ([93.17.235.10]:33171 "EHLO pegase2.c-s.fr"
+        id S234144AbhK3KOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:14:43 -0500
+Received: from mout.gmx.net ([212.227.17.21]:37397 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236183AbhK3KOV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:14:21 -0500
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4J3Hzn35hyz9sSd;
-        Tue, 30 Nov 2021 11:11:01 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id gsDELywhyH98; Tue, 30 Nov 2021 11:11:01 +0100 (CET)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3Hzn1gvlz9sSc;
-        Tue, 30 Nov 2021 11:11:01 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2A5558B779;
-        Tue, 30 Nov 2021 11:11:01 +0100 (CET)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id SgXnWZs3btvD; Tue, 30 Nov 2021 11:11:01 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.93])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id DBB078B763;
-        Tue, 30 Nov 2021 11:11:00 +0100 (CET)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1AUAAjqH094665
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 11:10:45 +0100
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1AUAAhgf094664;
-        Tue, 30 Nov 2021 11:10:43 +0100
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Erhard Furtner <erhard_f@mailbox.org>
-Subject: [PATCH] powerpc/modules: Don't WARN on first module allocation tentative
-Date:   Tue, 30 Nov 2021 11:10:43 +0100
-Message-Id: <93c9b84d6ec76aaf7b4f03468e22433a6d308674.1638267035.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.33.1
+        id S233931AbhK3KOm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 05:14:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638267072;
+        bh=6as+OWQfUBBueP33NqtJSLGs4+mbtX4XzVOWARqtKOo=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=TKmeK3VmPSNHMsECVgAcs8uEh2CjxVSajXw8fxB1GQVhoiITgvSTj+3DVLv5Dq46M
+         eF7mYCPsrh0c1rrdSDxtba11ZdsoGyKPMY7xxV1NLd5TElA2LkzJNryj/a3a8tTCWs
+         ZAnnvaWWiDBHaT7rfaN+T5HojCnYrjIli91XJXUs=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.20.60] ([92.116.145.109]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N95iR-1mUvUV2Lyh-0163pm; Tue, 30
+ Nov 2021 11:11:12 +0100
+Message-ID: <6a73a2c8-1055-ebd5-7f12-dd34e86b7f2d@gmx.de>
+Date:   Tue, 30 Nov 2021 11:11:06 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1638267042; l=5518; s=20211009; h=from:subject:message-id; bh=mCYAogm/65zifEIL01Oksf4pr9Xuln76i2+GlWEIig8=; b=QzQhHLpps4fKYaM7UEeCJvsnqzBXy7obsntt4kqChCOy8MyoxPkHAaJcNiA+0XhTBHIDIOcQ77/Y FPg0rdVzAw6ASCcQM1CnnIYPXAPp9ZpdXxhshDurRbsVz5v0vxbg
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 4/7] agp/ati: Return error from ati_create_page_map()
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>, airlied@linux.ie,
+        daniel.vetter@ffwll.ch, arnd@arndb.de, gregkh@linuxfoundation.org,
+        James.Bottomley@HansenPartnership.com
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211112141628.12904-1-tzimmermann@suse.de>
+ <20211112141628.12904-5-tzimmermann@suse.de>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20211112141628.12904-5-tzimmermann@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:vsXZmWREyyQO4Ei4hi7PGcBdNB7o4W7WlJycF4lrN8y7m8QghWY
+ awXrOrKcpO2aiGIPC4PwoEVwCsCvDganvJb9FMID0k1BSb8zhMcRR9bAUD817IK73V3I2Qj
+ YLY8pe/Yr2PqlBttdV6LdJLQQk8NPXEQzVplIxWciz0PH3lKZ2DbdaKkQn4XiLjA8ErYD0T
+ moMKZpJM+10hX4MgNZsDA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:dQW/7gbB9B0=:Ke5jKM3Vbv4XtclE6M8m1R
+ 69xiFRvhHOigWGdjntZCXaCdSWWk/vaSD2XXiU3GperqW4UVIITcMxyr6/VsqScA5fF0sxV3f
+ Ft1wowUFUNkUZ1j8gmVx0PulFa0ygQ7IyFjJOMsAzr5SDIuk/AQfRPgSDoy2SbAokv7k5xIx4
+ J66skMYzlQ1ibSXiOyg1dzs6ZFztuj56pqvg8SUcL0dg7X5gxgZ8zfRx0iCXeGftLCl7MxO1Z
+ 4q68lZL+2eF8rhgkhvjTknCWJMkgSQ79Hdj9zyt4BZsmYDmShAKCUjuPf5AtkHVnCnnI0sddH
+ pFX6eDx9Thf/mDU8dfmexca9kxVZrv4G3tHQgOY5TATZjKX/gN0gA/TipE3cdBDYNH0JnTV9s
+ oBsHxpolujwZUc+9L2QZN7ML+SduVwkOGWQvahITsFXZlS+kMKpE/m8bnfV0eN17mLeTPW5O9
+ ACXguYCiSAzq2T+JCjjS8tqfcRcqJAp94ln9zqwrQsO21OU1sgVS6fdo4awNVg3peFo6JqmV0
+ fHuTB21Sa2K5Jx5tYMT11hLGm2+2T4BNqYsIklM5+bGdVGdUEC5nPHtvEb/MvJolGou0jSTQf
+ PJ0h9CZjnq2r3IB+xNkN/j4ElobsBrsFZmOyMKz+6Pq4mXrDwaOXUAYbnSgR7tG2crja/r9Dv
+ kADpPSdmnOaas/9fGcc0UjqbxUaThkkVjFqwfmsR7Y0An27UJpaZWQdJcMO9mPRVtq07q3tnt
+ YNWUUhX04F/Dwbph6b7LKU3uAoHBp8BujpbgH9EC+IdPN6r1NIToO0ym1Iy/DVbwdaA+lr43s
+ Xy2KfcOKJLzCd2jzu/sYCbMkdBK2U34sgNaSvIxxpzMfHSJb8M8stoutxZhAd7+4NImMLeLkv
+ VsFdRWJ4GtDd7u/FipyKZGzpVgr/ejKg9bK/b+aoqDjjZW/sBc5B+jLnt2xKsZmJ/utvNSebh
+ zsQlvEc1nqoIXgaTtNNboRiWepfy4HJWSe7ESv1gJhx2mQimcE1Qpx4xBWpzXIlWFIwUo5rL3
+ zTvLgYJFskFMPz7j1Bs38ujAfpMvKjmN81BjK62E0f+6EjC7LBcIPpcJe18tXobqRtc5JoYEm
+ AGt0tVC9uTxw10=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-module_alloc() first tries to allocate module text within
-24 bits direct jump from kernel text, and tries a wider
-allocation if first one fails.
+On 11/12/21 15:16, Thomas Zimmermann wrote:
+> Fix the compiler warning
+>
+>   drivers/char/agp/ati-agp.c: In function 'ati_create_page_map':
+>   drivers/char/agp/ati-agp.c:58:16: warning: variable 'err' set but not =
+used [-Wunused-but-set-variable]
+>     58 |         int i, err =3D 0;
+>
+> by returing the error to the caller.
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> ---
+>  drivers/char/agp/ati-agp.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/char/agp/ati-agp.c b/drivers/char/agp/ati-agp.c
+> index 857b37141a07..785cc1ecf4e0 100644
+> --- a/drivers/char/agp/ati-agp.c
+> +++ b/drivers/char/agp/ati-agp.c
+> @@ -55,7 +55,7 @@ static struct _ati_generic_private {
+>
+>  static int ati_create_page_map(struct ati_page_map *page_map)
+>  {
+> -	int i, err =3D 0;
+> +	int i, err;
+>
+>  	page_map->real =3D (unsigned long *) __get_free_page(GFP_KERNEL);
+>  	if (page_map->real =3D=3D NULL)
+> @@ -63,6 +63,8 @@ static int ati_create_page_map(struct ati_page_map *pa=
+ge_map)
+>
+>  	set_memory_uc((unsigned long)page_map->real, 1);
+>  	err =3D map_page_into_agp(virt_to_page(page_map->real));
+> +	if (err)
+> +		goto err_free_page;
 
-When first allocation fails the following is observed in kernel logs:
+I'd suggest to not use goto here, but instead simply fold
+in the free_page() and return.
 
-vmap allocation for size 2400256 failed: use vmalloc=<size> to increase size
-systemd-udevd: vmalloc error: size 2395133, vm_struct allocation failed, mode:0xcc0(GFP_KERNEL), nodemask=(null)
-CPU: 0 PID: 127 Comm: systemd-udevd Tainted: G        W         5.15.5-gentoo-PowerMacG4 #9
-Call Trace:
-[e2a53a50] [c0ba0048] dump_stack_lvl+0x80/0xb0 (unreliable)
-[e2a53a70] [c0540128] warn_alloc+0x11c/0x2b4
-[e2a53b50] [c0531be8] __vmalloc_node_range+0xd8/0x64c
-[e2a53c10] [c00338c0] module_alloc+0xa0/0xac
-[e2a53c40] [c027a368] load_module+0x2ae0/0x8148
-[e2a53e30] [c027fc78] sys_finit_module+0xfc/0x130
-[e2a53f30] [c0035098] ret_from_syscall+0x0/0x28
---- interrupt: c00 at 0x25df10
-NIP:  0025df10 LR: 00416180 CTR: 00000000
-REGS: e2a53f40 TRAP: 0c00   Tainted: G        W          (5.15.5-gentoo-PowerMacG4)
-MSR:  0000d032 <EE,PR,ME,IR,DR,RI>  CR: 2822242c  XER: 20000000
 
-GPR00: 00000161 afa8f060 a73a6160 00000011 0041dfa5 00000000 00000011 00000000
-GPR08: 00000000 20000000 0000007a afa8efe0 002113f8 0072f924 00000000 00000000
-GPR16: 00000005 afa8f1fc afa8f1e8 00000000 22222422 00000000 009603b0 22222422
-GPR24: 00000000 00000000 0041dfa5 008a5fc0 00020000 00000000 00444cc4 009958f0
-NIP [0025df10] 0x25df10
-LR [00416180] 0x416180
---- interrupt: c00
-Mem-Info:
-active_anon:36 inactive_anon:4417 isolated_anon:0
- active_file:3496 inactive_file:10535 isolated_file:0
- unevictable:0 dirty:59 writeback:0
- slab_reclaimable:3672 slab_unreclaimable:20540
- mapped:5700 shmem:166 pagetables:185 bounce:0
- kernel_misc_reclaimable:0
- free:438282 free_pcp:1121 free_cma:0
-Node 0 active_anon:144kB inactive_anon:17668kB active_file:13984kB inactive_file:42140kB unevictable:0kB isolated(anon):0kB isolated(file):0kB mapped:22800kB dirty:404kB writeback:0kB shmem:664kB writeback_tmp:0kB kernel_stack:1352kB pagetables:740kB all_unreclaimable? no
-DMA free:267900kB min:2488kB low:3108kB high:3728kB reserved_highatomic:4096KB active_anon:0kB inactive_anon:0kB active_file:4016kB inactive_file:4224kB unevictable:0kB writepending:76kB present:524288kB managed:389432kB mlocked:0kB bounce:0kB free_pcp:2480kB local_pcp:1176kB free_cma:0kB
-lowmem_reserve[]: 0 0 1536 1536
-HighMem free:1485036kB min:512kB low:3032kB high:5552kB reserved_highatomic:0KB active_anon:136kB inactive_anon:17612kB active_file:9976kB inactive_file:37912kB unevictable:0kB writepending:364kB present:1572864kB managed:1572864kB mlocked:0kB bounce:0kB free_pcp:1776kB local_pcp:404kB free_cma:0kB
-BTRFS: selftest: sectorsize: 4096  nodesize: 8192
-lowmem_reserve[]: 0 0 0 0
-BTRFS: selftest: running btrfs free space cache tests
-DMA: 283*4kB (UMH) 282*8kB (UMH) 242*16kB (UMEH) 422*32kB (UMH) 187*64kB (UMH) 139*128kB (UME) 118*256kB (UM) 87*512kB (UME) 61*1024kB (UME) 27*2048kB (U) 6*4096kB (U) = 267612kB
-BTRFS: selftest: running extent only tests
-HighMem: 1*4kB (M) 1*8kB (M) 92*16kB (M) 43*32kB (UM) 21*64kB (M) 7*128kB (M) 3*256kB (UM) 1*512kB (U) 2*1024kB (UM) 1*2048kB (U) 360*4096kB (UM) = 1485036kB
-BTRFS: selftest: running bitmap only tests
-14218 total pagecache pages
-0 pages in swap cache
-Swap cache stats: add 0, delete 0, find 0/0
-Free swap  = 8388604kB
-Total swap = 8388604kB
-524288 pages RAM
-393216 pages HighMem/MovableOnly
-33714 pages reserved
-
-Add __GFP_NOWARN flag to first allocation so that no warning appears
-when it fails.
-
-Reported-by: Erhard Furtner <erhard_f@mailbox.org>
-Fixes: 2ec13df16704 ("powerpc/modules: Load modules closer to kernel text")
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/kernel/module.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/arch/powerpc/kernel/module.c b/arch/powerpc/kernel/module.c
-index ed04a3ba66fe..40a583e9d3c7 100644
---- a/arch/powerpc/kernel/module.c
-+++ b/arch/powerpc/kernel/module.c
-@@ -90,16 +90,17 @@ int module_finalize(const Elf_Ehdr *hdr,
- }
- 
- static __always_inline void *
--__module_alloc(unsigned long size, unsigned long start, unsigned long end)
-+__module_alloc(unsigned long size, unsigned long start, unsigned long end, bool nowarn)
- {
- 	pgprot_t prot = strict_module_rwx_enabled() ? PAGE_KERNEL : PAGE_KERNEL_EXEC;
-+	gfp_t gfp = GFP_KERNEL | (nowarn ? __GFP_NOWARN : 0);
- 
- 	/*
- 	 * Don't do huge page allocations for modules yet until more testing
- 	 * is done. STRICT_MODULE_RWX may require extra work to support this
- 	 * too.
- 	 */
--	return __vmalloc_node_range(size, 1, start, end, GFP_KERNEL, prot,
-+	return __vmalloc_node_range(size, 1, start, end, gfp, prot,
- 				    VM_FLUSH_RESET_PERMS | VM_NO_HUGE_VMAP,
- 				    NUMA_NO_NODE, __builtin_return_address(0));
- }
-@@ -114,13 +115,13 @@ void *module_alloc(unsigned long size)
- 
- 	/* First try within 32M limit from _etext to avoid branch trampolines */
- 	if (MODULES_VADDR < PAGE_OFFSET && MODULES_END > limit)
--		ptr = __module_alloc(size, limit, MODULES_END);
-+		ptr = __module_alloc(size, limit, MODULES_END, true);
- 
- 	if (!ptr)
--		ptr = __module_alloc(size, MODULES_VADDR, MODULES_END);
-+		ptr = __module_alloc(size, MODULES_VADDR, MODULES_END, false);
- 
- 	return ptr;
- #else
--	return __module_alloc(size, VMALLOC_START, VMALLOC_END);
-+	return __module_alloc(size, VMALLOC_START, VMALLOC_END, false);
- #endif
- }
--- 
-2.33.1
+>  	page_map->remapped =3D page_map->real;
+>
+>  	for (i =3D 0; i < PAGE_SIZE / sizeof(unsigned long); i++) {
+> @@ -71,6 +73,10 @@ static int ati_create_page_map(struct ati_page_map *p=
+age_map)
+>  	}
+>
+>  	return 0;
+> +
+> +err_free_page:
+> +	free_page((unsigned long)page_map->real);
+> +	return err;
+>  }
+>
+>
+>
 

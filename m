@@ -2,127 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9414636AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A959D4636B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242164AbhK3OeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:34:07 -0500
-Received: from mta-p5.oit.umn.edu ([134.84.196.205]:60498 "EHLO
-        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbhK3Od5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:33:57 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3PlJ6ty7z9w6GY
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 14:30:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p5.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8GmLO12XnArV for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 08:30:36 -0600 (CST)
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3PlJ56Wrz9w6GR
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:30:36 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3PlJ56Wrz9w6GR
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3PlJ56Wrz9w6GR
-Received: by mail-pf1-f197.google.com with SMTP id 184-20020a6217c1000000b0049f9aad0040so12900431pfx.21
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 06:30:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZZULR1F8PiluLDq0yfX4xdKKhgM6tyga9J4hvDhRIDI=;
-        b=j98sbNp4aGJYzZQgx7/157yo3SgUnI/mMvJ0sMqD6xBYraYZ/VnSyRscyGTn1mZca0
-         LnZErg2no+D58Bx5NnS5WYws9ygKRfBUJsrlHzoV/ViYsCnwhaZgB85ElPWaBNfUpe4V
-         V0uC103ZW8xaFVYHWB96eff4zdXKuTIQvcX+WZXtO1+2tu58tNprNj99DOQod31ofnRz
-         YBQjahbHXcA5cnNi0x2UWfo+HHu4hHiCUOTzsqYGe4tTkZApaTbrTw7XtVTn4j2R7hZL
-         XI/LL44uanBqjlyUCjov1JQaJuAl+hm555ofGNNwY0mvzZD5PsAEsWH79U9IjOsdJGAE
-         CEcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ZZULR1F8PiluLDq0yfX4xdKKhgM6tyga9J4hvDhRIDI=;
-        b=Gk3BJ5nHW8ro8vvCNJi9PqkUvX1Mk1RD29dHH8oNK4Wdi8+P0VwPrkAmWoxDYSQp9E
-         a4mqPLppptwI9BJj4O+TtZoeSDdgeeXFRcC3Ibo7aZIe/wcupdhLsh6zj+tOrLGgaFUQ
-         HNyVsCgp4nCVYHw/oXv6kpoHzGY2cd4svekgvpsPM6cBEd+zrKv7YYlaHZQ95bzQ8QjR
-         pdBRChVDHL06lpV5W12jT865bjknmeklE0rjJlv35RYEDW3tdTnx+UuvCzrdl2/D3E/r
-         KeLeEst7HzrqKq0lwoyJZDyJcv5O7kJiBPbOKv4JRvql/3M6fK5bcXpcerO9I0hjkc4i
-         BPTA==
-X-Gm-Message-State: AOAM530vZB2v3+d+nq5SH1i62HjXZVLv1N/bgIWfnDg0/R3zoB4vxPEb
-        bom2Qj84nEXpe2vPAzIRreYItborIG8TP1+jjPw73yQDPB8AKX6UJ2iFWn3X/rSrhgVkMg8H/gq
-        wDRZK/Qa7G40wF7kfenxYukybWr01
-X-Received: by 2002:a63:a1a:: with SMTP id 26mr2298312pgk.350.1638282635545;
-        Tue, 30 Nov 2021 06:30:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzvVF8wTLFjolACqw+b3KkKUeaJ7DTif2YLF7D+bFqP/PZCqaQ+P5pB9IlYEV7eNa7sL2MV8g==
-X-Received: by 2002:a63:a1a:: with SMTP id 26mr2298269pgk.350.1638282635156;
-        Tue, 30 Nov 2021 06:30:35 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id b8sm2974809pfr.213.2021.11.30.06.30.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 06:30:34 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/nouveau: Fix a wild pointer dereference in nouveau_connector_get_modes()
-Date:   Tue, 30 Nov 2021 22:30:29 +0800
-Message-Id: <20211130143030.157754-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        id S242204AbhK3OeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:34:20 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:46913 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242195AbhK3OeT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 09:34:19 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J3Plk6XJQz9sSj;
+        Tue, 30 Nov 2021 15:30:58 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id vU463tmi0809; Tue, 30 Nov 2021 15:30:58 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3Plk5km0z9sSh;
+        Tue, 30 Nov 2021 15:30:58 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B40778B779;
+        Tue, 30 Nov 2021 15:30:58 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id aCNCFI98Zzae; Tue, 30 Nov 2021 15:30:58 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.93])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 6F76D8B763;
+        Tue, 30 Nov 2021 15:30:58 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1AUEUix0256050
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 15:30:44 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1AUEUgdI256048;
+        Tue, 30 Nov 2021 15:30:42 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Erhard Furtner <erhard_f@mailbox.org>
+Subject: [PATCH v2] powerpc/powermac: Add missing lockdep_register_key()
+Date:   Tue, 30 Nov 2021 15:30:42 +0100
+Message-Id: <34b423d68d170676fc3367594d17d1ca5c3844a4.1638282630.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1638282641; l=2966; s=20211009; h=from:subject:message-id; bh=jMUA6/CdNEAwxuuseeJkPI/0xYNf89rYf+05Sg3f9cM=; b=RdVnPmEhY+dz+Fq1Kvdj0A+gXpK2+pfhR3eqjMo73J6P90G23cLnmJLv97RbMWmJcVhm3j4kBYHa 4hJS/m1/BAtnMFTiZawt9bB/EYC54R7WbYVFrs0UezUzWywcLcMY
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In nouveau_connector_get_modes(), the return value of
-drm_mode_duplicate()is assigned to mode and used in
-drm_mode_probed_add(). drm_mode_probed_add() passes mode->head to
-list_add_tail(). list_add_tail() will further call __list_add() and
-there is a dereference of mode->head in __list_add(), which could lead
-to a wild pointer dereference on failure of drm_mode_duplicate().
+KeyWest i2c @0xf8001003 irq 42 /uni-n@f8000000/i2c@f8001000
+BUG: key c2d00cbc has not been registered!
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(1)
+WARNING: CPU: 0 PID: 1 at kernel/locking/lockdep.c:4801 lockdep_init_map_type+0x4c0/0xb4c
+Modules linked in:
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.5-gentoo-PowerMacG4 #9
+NIP:  c01a9428 LR: c01a9428 CTR: 00000000
+REGS: e1033cf0 TRAP: 0700   Not tainted  (5.15.5-gentoo-PowerMacG4)
+MSR:  00029032 <EE,ME,IR,DR,RI>  CR: 24002002  XER: 00000000
 
-Fix this bug by adding a check of mode.
+GPR00: c01a9428 e1033db0 c2d1cf20 00000016 00000004 00000001 c01c0630 e1033a73
+GPR08: 00000000 00000000 00000000 e1033db0 24002004 00000000 f8729377 00000003
+GPR16: c1829a9c 00000000 18305357 c1416fc0 c1416f80 c006ac60 c2d00ca8 c1416f00
+GPR24: 00000000 c21586f0 c2160000 00000000 c2d00cbc c2170000 c216e1a0 c2160000
+NIP [c01a9428] lockdep_init_map_type+0x4c0/0xb4c
+LR [c01a9428] lockdep_init_map_type+0x4c0/0xb4c
+Call Trace:
+[e1033db0] [c01a9428] lockdep_init_map_type+0x4c0/0xb4c (unreliable)
+[e1033df0] [c1c177b8] kw_i2c_add+0x334/0x424
+[e1033e20] [c1c18294] pmac_i2c_init+0x9ec/0xa9c
+[e1033e80] [c1c1a790] smp_core99_probe+0xbc/0x35c
+[e1033eb0] [c1c03cb0] kernel_init_freeable+0x190/0x5a4
+[e1033f10] [c000946c] kernel_init+0x28/0x154
+[e1033f30] [c0035148] ret_from_kernel_thread+0x14/0x1c
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+Add missing lockdep_register_key()
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DRM_NOUVEAU=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: 6ee738610f41 ("drm/nouveau: Add DRM driver for NVIDIA GPUs")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=200055
+Fixes: 9e607f72748d ("i2c_powermac: shut up lockdep warning")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- drivers/gpu/drm/nouveau/nouveau_connector.c | 3 +++
+v2: Added lockdep_register_key() at two other places.
+---
+ arch/powerpc/platforms/powermac/low_i2c.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/drivers/gpu/drm/nouveau/nouveau_connector.c b/drivers/gpu/drm/nouveau/nouveau_connector.c
-index 22b83a6577eb..d960b42724de 100644
---- a/drivers/gpu/drm/nouveau/nouveau_connector.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_connector.c
-@@ -977,6 +977,9 @@ nouveau_connector_get_modes(struct drm_connector *connector)
- 		struct drm_display_mode *mode;
- 
- 		mode = drm_mode_duplicate(dev, nv_connector->native_mode);
-+		if (!mode)
-+			return -ENOMEM;
-+
- 		drm_mode_probed_add(connector, mode);
- 		ret = 1;
- 	}
+diff --git a/arch/powerpc/platforms/powermac/low_i2c.c b/arch/powerpc/platforms/powermac/low_i2c.c
+index f77a59b5c2e1..df89d916236d 100644
+--- a/arch/powerpc/platforms/powermac/low_i2c.c
++++ b/arch/powerpc/platforms/powermac/low_i2c.c
+@@ -582,6 +582,7 @@ static void __init kw_i2c_add(struct pmac_i2c_host_kw *host,
+ 	bus->close = kw_i2c_close;
+ 	bus->xfer = kw_i2c_xfer;
+ 	mutex_init(&bus->mutex);
++	lockdep_register_key(&bus->lock_key);
+ 	lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 	if (controller == busnode)
+ 		bus->flags = pmac_i2c_multibus;
+@@ -810,6 +811,7 @@ static void __init pmu_i2c_probe(void)
+ 		bus->hostdata = bus + 1;
+ 		bus->xfer = pmu_i2c_xfer;
+ 		mutex_init(&bus->mutex);
++		lockdep_register_key(&bus->lock_key);
+ 		lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 		bus->flags = pmac_i2c_multibus;
+ 		list_add(&bus->link, &pmac_i2c_busses);
+@@ -933,6 +935,7 @@ static void __init smu_i2c_probe(void)
+ 		bus->hostdata = bus + 1;
+ 		bus->xfer = smu_i2c_xfer;
+ 		mutex_init(&bus->mutex);
++		lockdep_register_key(&bus->lock_key);
+ 		lockdep_set_class(&bus->mutex, &bus->lock_key);
+ 		bus->flags = 0;
+ 		list_add(&bus->link, &pmac_i2c_busses);
 -- 
-2.25.1
+2.33.1
 

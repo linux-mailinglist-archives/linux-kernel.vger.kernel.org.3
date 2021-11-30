@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECEF463FB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F245A463FB6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240529AbhK3VMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:12:21 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54494 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343932AbhK3VMP (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:12:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638306534;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3GAPrdMvodpqtHg3h179yFFbDiokWWUnbQiFfTfLMBc=;
-        b=A1bOiYaD81uuZim9hwIIU9zH/uUbpKSLDLP3TRWS4FjA2M6WYje4ENS6e3iSa3MD0kBSAa
-        3k5hZqfPzPRlKddVNDdDlDMel4O2SnQTqtdUVXLNbegzdGe5Hvt6SqlMfIwEJfYdYDvOxg
-        4qHZdabLNZ6IAruFg+qz/eKFyZZbnZw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-328-n_StjTtBPMCbv23bA8k5hQ-1; Tue, 30 Nov 2021 16:08:50 -0500
-X-MC-Unique: n_StjTtBPMCbv23bA8k5hQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BB2DC801AE8;
-        Tue, 30 Nov 2021 21:08:49 +0000 (UTC)
-Received: from starship (unknown [10.40.192.24])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C45595F905;
-        Tue, 30 Nov 2021 21:08:47 +0000 (UTC)
-Message-ID: <a7bbdf09c64ef2d343f49a80c7e39fd6ae66b1a0.camel@redhat.com>
-Subject: Re: [PATCH] KVM: ensure APICv is considered inactive if there is no
- APIC
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Ignat Korchagin <ignat@cloudflare.com>
-Date:   Tue, 30 Nov 2021 23:08:46 +0200
-In-Reply-To: <YaaL/Hh5pz3pydDY@google.com>
-References: <20211130123746.293379-1-pbonzini@redhat.com>
-         <YaaL/Hh5pz3pydDY@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        id S1343959AbhK3VM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:12:26 -0500
+Received: from mga06.intel.com ([134.134.136.31]:35034 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343944AbhK3VMX (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 16:12:23 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="297122616"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="297122616"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 13:09:02 -0800
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="511684798"
+Received: from jordanhi-mobl.amr.corp.intel.com (HELO [10.212.191.92]) ([10.212.191.92])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 13:09:01 -0800
+Subject: Re: [PATCH] x86/fpu/signal: initialize sw_bytes in
+ save_xstate_epilog()
+To:     Alexander Potapenko <glider@google.com>, tglx@linutronix.de,
+        chang.seok.bae@intel.com, bp@suse.de
+Cc:     dvyukov@google.com, elver@google.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211126124746.761278-1-glider@google.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <b740b48e-2675-d324-d35c-d96f973f24e0@intel.com>
+Date:   Tue, 30 Nov 2021 13:08:58 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
+In-Reply-To: <20211126124746.761278-1-glider@google.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-11-30 at 20:39 +0000, Sean Christopherson wrote:
-> On Tue, Nov 30, 2021, Paolo Bonzini wrote:
-> > kvm_vcpu_apicv_active() returns false if a virtual machine has no in-kernel
-> > local APIC, however kvm_apicv_activated might still be true if there are
-> > no reasons to disable APICv; in fact it is quite likely that there is none
-> > because APICv is inhibited by specific configurations of the local APIC
-> > and those configurations cannot be programmed.  This triggers a WARN:
-> > 
-> >    WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
-> > 
-> > To avoid this, introduce another cause for APICv inhibition, namely the
-> > absence of an in-kernel local APIC.  This cause is enabled by default,
-> > and is dropped by either KVM_CREATE_IRQCHIP or the enabling of
-> > KVM_CAP_IRQCHIP_SPLIT.
-> > 
-> > Reported-by: Ignat Korchagin <ignat@cloudflare.com>
-> > Fixes: ee49a8932971 ("KVM: x86: Move SVM's APICv sanity check to common x86", 2021-10-22)
-> > Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> > ---
-> 
-> Reviewed-by: Sean Christopherson <seanjc@google.com>
-> 
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 0ee1a039b490..e0aa4dd53c7f 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -5740,6 +5740,7 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
-> >  		smp_wmb();
-> >  		kvm->arch.irqchip_mode = KVM_IRQCHIP_SPLIT;
-> >  		kvm->arch.nr_reserved_ioapic_pins = cap->args[0];
-> > +		kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
-> >  		r = 0;
-> >  split_irqchip_unlock:
-> >  		mutex_unlock(&kvm->lock);
-> > @@ -6120,6 +6121,7 @@ long kvm_arch_vm_ioctl(struct file *filp,
-> >  		/* Write kvm->irq_routing before enabling irqchip_in_kernel. */
-> >  		smp_wmb();
-> >  		kvm->arch.irqchip_mode = KVM_IRQCHIP_KERNEL;
-> > +		kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
-> 
-> Blech, kvm_request_apicv_update() is very counter-intuitive, true == clear. :-/
-> Wrappers along the lines of kvm_{set,clear}_apicv_inhibit() would help a lot, and
-> would likely avoid a handful of newlines as well.  I'll send a patch on top of this,
-> unless you want to do it while pushing this one out.
+On 11/26/21 4:47 AM, Alexander Potapenko wrote:
+> save_sw_bytes() did not fully initialize sw_bytes, which caused KMSAN
+> to report an infoleak (see below).
+> Initialize sw_bytes explicitly to avoid this.
+...
+> Reported-by: Alexander Potapenko <glider@google.com>
+> Signed-off-by: Marco Elver <elver@google.com>
+> Signed-off-by: Alexander Potapenko <glider@google.com>
+> Tested-by: Alexander Potapenko <glider@google.com>
+> Fixes: 53599b4d54b9b8dd ("x86/fpu/signal: Prepare for variable sigframe length")
+> Link: https://lore.kernel.org/all/CAG_fn=V9T6OKPonSjsi9PmWB0hMHFC=yawozdft8i1-MSxrv=w@mail.gmail.com/
 
-100% agree that kvm_request_apicv_update() is very counter-intuitive!
+Hi Alexander,
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Marco's SoB entry is before yours.  Was this authored by you or Marco?
+If it was Marco, it's customary to add a:
 
-Best regards,
-	Maxim Levitsky
+	From: Marco Elver <elver@google.com>
 
-> 
-> >  	create_irqchip_unlock:
-> >  		mutex_unlock(&kvm->lock);
-> >  		break;
-> > @@ -8818,10 +8820,9 @@ static void kvm_apicv_init(struct kvm *kvm)
-> >  {
-> >  	init_rwsem(&kvm->arch.apicv_update_lock);
-> >  
-> > -	if (enable_apicv)
-> > -		clear_bit(APICV_INHIBIT_REASON_DISABLE,
-> > -			  &kvm->arch.apicv_inhibit_reasons);
-> > -	else
-> > +	set_bit(APICV_INHIBIT_REASON_ABSENT,
-> > +		&kvm->arch.apicv_inhibit_reasons);
-> 
-> Nit, this one fits on a single line.
-> 
-> > +	if (!enable_apicv)
-> >  		set_bit(APICV_INHIBIT_REASON_DISABLE,
-> >  			&kvm->arch.apicv_inhibit_reasons);
-> >  }
-> > -- 
-> > 2.31.1
-> > 
-
-
+at the top of the changelog to make sure git gets the author right.  I'm
+happy to fix it up this time, I just need to know who wrote it.

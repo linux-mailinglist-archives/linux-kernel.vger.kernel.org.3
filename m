@@ -2,105 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E7A46312F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4294B463130
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:38:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234189AbhK3Kl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:41:29 -0500
-Received: from mail-vk1-f169.google.com ([209.85.221.169]:37423 "EHLO
-        mail-vk1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234054AbhK3Kl2 (ORCPT
+        id S234219AbhK3Klr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:41:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234254AbhK3Klq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:41:28 -0500
-Received: by mail-vk1-f169.google.com with SMTP id e27so13261179vkd.4;
-        Tue, 30 Nov 2021 02:38:09 -0800 (PST)
+        Tue, 30 Nov 2021 05:41:46 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18820C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:38:27 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id c6-20020a05600c0ac600b0033c3aedd30aso14399602wmr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:38:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=S0WDfd094hQCN0b1mr/jtcBWQltUMMlx+eNjznbKeQ4=;
+        b=7SIqr26sShwrURTElJbKQo2AiIjg4/wznyjqLPhBMKebkmMz04shyLIxiit9A/662M
+         Dmpr+iFssBUkkJPw5Or/lExLW1GwIaKBSlxY4aayeuuXXu0sVAtb8LvJ+IlxIrf98oQ4
+         DcSSpx6EKJA4macVtc1iR+GpJ1ZqtRkYtkKM29sv6zLiSsi0k8QicLE9iMn9EqaMEJV2
+         EMuMq6xuQYozpGr3yc7e7hMhd51Cc37IABldQLbeHRU2X5MNkfPexj6nELnd80LtvuP2
+         2nvvfRyn+aZX+yKyy5lnq9NGj7jwsGtUKOmBBFhmNajkFMlFtHKtu/7gZSMZo1j3p6yD
+         IqFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zEj8NBQjLbsOVUD9Cul394pEoRRBEePEWmIxln6/XGY=;
-        b=B+gD2l7ink7J/PaqALdt2vld/Ffm29QAECdiWIY15XXuaOGIrAp4qdiW9b73Twt5aG
-         bp7ZzCkthnn8oJBCQ+s7PdZLzvJBW8Mh3YOZRSh8GQ/NOpbFhaqdPy9vrHzHVmGJa907
-         vg7BUTwYUTgoDkdOjmoolKw/CEjPk94f0NWCxlWzOs7D8P6VsyBtPfxxlDkq4ifvfQy3
-         zxjygKqV9OUQkxBuPVSPsj4oy5LUA8DowzRGKdz0Sn18IeI8XE8mDSgKyHpiXRaPomDS
-         0MBodToTAOhiyHiGZeU0DOX40zz9llU0RYeJRvb0+Lnkj8IuI+XS4jZW96ViYmdAsKQw
-         wYbQ==
-X-Gm-Message-State: AOAM531/uFVC06gsLzWnUL0v7pNA70QdBlbZTxTHDeY6EqIaLWhcXvFI
-        67I2t/qhhzy0jghLPkF2DC+l6S/fqhN2hQ==
-X-Google-Smtp-Source: ABdhPJwaV0O0fJIbUxYc8ii1M/kw4LHfmXHKS+5l4j7PWt7Bgz0TPQKHvP+B1QzB/VBVBe8QBvUYNg==
-X-Received: by 2002:a05:6122:1313:: with SMTP id e19mr43938780vkp.4.1638268688696;
-        Tue, 30 Nov 2021 02:38:08 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id t132sm9462699vkb.19.2021.11.30.02.38.07
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=S0WDfd094hQCN0b1mr/jtcBWQltUMMlx+eNjznbKeQ4=;
+        b=dq9R+p7D7b42GKUua20ycjIuL197LCGj6jedbxQ8F1PQWY+MUD2/yX5FXGUg4TaqEK
+         fYs4pOhEMAt+cM5vbAzmwMcSUKVTQPCe4QIW/i7Hk525mty4t+4A99fQiHilmsIzIlFg
+         KjNBMyR038TUIbsjmmTRwQbhxzFuNlNvpXf5qHSX5zrmB3+6pVrQDM/+WWUsqHNPlPv7
+         vVEOx9aU6B+LWGcXf67R/Ds7zHcpdIlAwfIwOz+lk+brx2nwF+LPGrUo6GQrUNGgpz0c
+         y0OLYOtXNi74REuGhLIUwzDH1BKP//GCTMuaADk6aaL175+g/6M1av8vDD8YC+eV7kCx
+         kTpA==
+X-Gm-Message-State: AOAM530LZcVHMHM0o5WCPIFI2RgKmwTx8Z57OMApLiYJMwqynjVXrf8A
+        evGnYNU9tsAkHgLSyAGtSmWUVeR1tXeny+im
+X-Google-Smtp-Source: ABdhPJzTeWm9B82jXzzbIKkAI0LYt5rTHVxwV2dBT3C4jipfItJRJuoBY5e+ItbeIuLu6Nom/Nhlcw==
+X-Received: by 2002:a05:600c:4f48:: with SMTP id m8mr4034600wmq.50.1638268705210;
+        Tue, 30 Nov 2021 02:38:25 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:f80b:b9bd:4d6e:b61a? ([2001:861:44c0:66c0:f80b:b9bd:4d6e:b61a])
+        by smtp.gmail.com with ESMTPSA id b15sm14411169wri.62.2021.11.30.02.38.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 02:38:08 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id n6so40424704uak.1;
-        Tue, 30 Nov 2021 02:38:07 -0800 (PST)
-X-Received: by 2002:a67:c106:: with SMTP id d6mr39218065vsj.77.1638268687771;
- Tue, 30 Nov 2021 02:38:07 -0800 (PST)
+        Tue, 30 Nov 2021 02:38:24 -0800 (PST)
+Subject: Re: [PATCH] arm64: meson: fix dts for JetHub D1
+To:     Vyacheslav Bocharov <adeep@lexina.in>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20211125130246.1086627-1-adeep@lexina.in>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <7f61ef3a-5ae5-086b-c63c-3b7b1ea28f13@baylibre.com>
+Date:   Tue, 30 Nov 2021 11:38:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-References: <20211123164902.35370-1-wsa+renesas@sang-engineering.com> <20211123164902.35370-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20211123164902.35370-2-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 30 Nov 2021 11:37:56 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUGOEmB8QeHufXVHifYpvZxNpu_kku05eGKk=+YRf+PsQ@mail.gmail.com>
-Message-ID: <CAMuHMdUGOEmB8QeHufXVHifYpvZxNpu_kku05eGKk=+YRf+PsQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] gpio: add sloppy logic analyzer using polling
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211125130246.1086627-1-adeep@lexina.in>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
+On 25/11/2021 14:02, Vyacheslav Bocharov wrote:
+> Fix misplace of cpu_cooling_maps for JetHub D1, move it to right place.
+> 
+> Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
+> ---
+>  .../amlogic/meson-axg-jethome-jethub-j100.dts | 30 +++++++++----------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
+> index 52ebe371df26..561eec21b4de 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-axg-jethome-jethub-j100.dts
+> @@ -134,23 +134,23 @@ cpu_critical: cpu-critical {
+>  					type = "critical";
+>  				};
+>  			};
+> -		};
+>  
+> -		cpu_cooling_maps: cooling-maps {
+> -			map0 {
+> -				trip = <&cpu_passive>;
+> -				cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -						<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -						<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -						<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> -			};
+> +			cpu_cooling_maps: cooling-maps {
+> +				map0 {
+> +					trip = <&cpu_passive>;
+> +					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+>  
+> -			map1 {
+> -				trip = <&cpu_hot>;
+> -				cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -						<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -						<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -						<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				map1 {
+> +					trip = <&cpu_hot>;
+> +					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +							<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +				};
+>  			};
+>  		};
+>  	};
+> 
 
-On Tue, Nov 23, 2021 at 5:49 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> This is a sloppy logic analyzer using GPIOs. It comes with a script to
-> isolate a CPU for polling. While this is definitely not a production
-> level analyzer, it can be a helpful first view when remote debugging.
-> Read the documentation for details.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -74,6 +74,7 @@ obj-$(CONFIG_GPIO_IT87)                       += gpio-it87.o
->  obj-$(CONFIG_GPIO_IXP4XX)              += gpio-ixp4xx.o
->  obj-$(CONFIG_GPIO_JANZ_TTL)            += gpio-janz-ttl.o
->  obj-$(CONFIG_GPIO_KEMPLD)              += gpio-kempld.o
-> +obj-$(CONFIG_GPIO_SLOPPY_LOGIC_ANALYZER) += gpio-sloppy-logic-analyzer.o
->  obj-$(CONFIG_GPIO_LOGICVC)             += gpio-logicvc.o
->  obj-$(CONFIG_GPIO_LOONGSON1)           += gpio-loongson1.o
->  obj-$(CONFIG_GPIO_LOONGSON)            += gpio-loongson.o
-
-(noticed while resolving a merge conflict with the out-of-tree
- gpio-litex)
-
-Please preserve sort order, cfr. the (hilarious?) comment at the top
-of the list:
-
-    # Device drivers. Generally keep list sorted alphabetically
-    obj-$(CONFIG_GPIO_REGMAP)       += gpio-regmap.o
-    obj-$(CONFIG_GPIO_GENERIC)      += gpio-generic.o
-
-    # directly supported by gpio-generic
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>

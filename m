@@ -2,83 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D1E463C3D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:49:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76C6E463C3E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:50:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244421AbhK3QxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:53:06 -0500
-Received: from mga06.intel.com ([134.134.136.31]:9781 "EHLO mga06.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244424AbhK3Qwy (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:52:54 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="297061726"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="297061726"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:49:34 -0800
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="601572330"
-Received: from vschult-mobl1.amr.corp.intel.com (HELO [10.212.122.173]) ([10.212.122.173])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:49:33 -0800
-Subject: Re: [PATCH 07/21] ASoC: amd: Add module to determine ACP
- configuration
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Daniel Baluta <daniel.baluta@oss.nxp.com>
-Cc:     daniel.baluta@gmail.com,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        AjitKumar.Pandey@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        id S242388AbhK3QxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:53:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244431AbhK3Qwz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:52:55 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF4DC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:49:34 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id b1so55220224lfs.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:49:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ragnatech-se.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=y+9tzdDCGsDUUrL8c3qTMvpYPvBp/D8362sjA+sSoxc=;
+        b=b1YdeDgvuEBYxuKI5iRpU0uIL2G7IvIn23HtKfuf4Hu2s4ACAcbx21l/1IBuBD5haG
+         0c0nAuUIz27f9DBsXonJIoP2UimM6JXNlwFSyq18HBoZx1ab/eajk7U7rSzZsf2GDW5l
+         tFkNESpU7qRULDVUmZO6JfaomBw58IzyWkPiNi61lPpkM10mU5ULje4MEkEutwWoFb/q
+         ZdX/q1tAcuQtyp3H8SFBVto0UMUV66NV455soQ/BRjS2KhShnygJtxBYTiEwW6HehZj6
+         yqVs/DZwFONqhZaVUW8BP11WNYL/DBVKoEBnlqB6olE/zTlzHMq93mzQujRbzrETif7K
+         gxgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=y+9tzdDCGsDUUrL8c3qTMvpYPvBp/D8362sjA+sSoxc=;
+        b=kLOMoCbYJaQzv0dKJn2lgEcAmA8f9WkSqxeUBqIfGyOakUtyqiURQ0s+9LAwvC1Zb7
+         Wfx5adJc0VgaChwoNA/Ts/ZYTAlkOsjKgv2W7KfAeROOibvkELV/NrgrASB8xIYKjYdj
+         s8akG/w7o/HQkcQ0Db5RJc9MSSuitnciUcMLSsDgpoeO+/PQAFjvuo/JZbSMPGXosnYs
+         YrZy9XiEUjgbIEWKCbktG7LQ2VIakI5kaCsjaPiG+tEUc3U36nXBpkJsRNgFHtai19Bn
+         jKlTbyE2/7YUE8SMz7tqkG0K3iSzeGfyfa3Ev8DPQkAMK9+q0EJS+rqJuwdoFoCGw1U/
+         X0Ug==
+X-Gm-Message-State: AOAM532BK1yDtmEVCxzq6bwckKAbMgaiSZ3PHZZIuV1rfakWTtTxehZk
+        YZMw/Pfz66MvIOpTTXLPtFNtHA==
+X-Google-Smtp-Source: ABdhPJwW9pz1BIYwEbsOEzh9cfE3squ8ovlpDNkHfSy6oLtimjIT/JCgbbdRu/Nn+7KfqkAj2sjejA==
+X-Received: by 2002:a05:6512:3217:: with SMTP id d23mr367957lfe.572.1638290972757;
+        Tue, 30 Nov 2021 08:49:32 -0800 (PST)
+Received: from localhost (h-46-59-88-219.A463.priv.bahnhof.se. [46.59.88.219])
+        by smtp.gmail.com with ESMTPSA id q1sm1771260lfh.234.2021.11.30.08.49.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 08:49:32 -0800 (PST)
+Date:   Tue, 30 Nov 2021 17:49:31 +0100
+From:   Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Julian.Schroeder@amd.com, Mark Brown <broonie@kernel.org>,
-        linux-mediatek@lists.infradead.org, Balakishore.pati@amd.com,
-        yc.hung@mediatek.com, vishnuvardhanrao.ravulapati@amd.com,
-        vsreddy@amd.com, daniel.baluta@nxp.com,
-        Bard Liao <bard.liao@intel.com>
-References: <20211117093734.17407-1-daniel.baluta@oss.nxp.com>
- <20211117093734.17407-8-daniel.baluta@oss.nxp.com>
- <CAMuHMdVV6Os8Gzc9JVjD2CAtN38=7KFn9GqosnWvByQc-7uA=Q@mail.gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <bdbea252-09e4-eb60-acf8-4ea8a1d924c4@linux.intel.com>
-Date:   Tue, 30 Nov 2021 10:49:30 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH 0/9] arm64: dts: renesas: Thermal binding validation
+Message-ID: <YaZWG6+ty4UCeQu8@oden.dyn.berto.se>
+References: <20211104224033.3997504-1-kieran.bingham+renesas@ideasonboard.com>
+ <CAMuHMdXVBj58ZM3LqCN3cudsE3VJV8AQC5OCOJP96RaqYf4NDQ@mail.gmail.com>
+ <YYo0syH9m/CYlB2d@oden.dyn.berto.se>
+ <YYo62jdzSTxqCMtk@oden.dyn.berto.se>
+ <CAMuHMdUNZ+TOGU-H9dZu08WKO2fO2sbgL1BbN3JzEVBkOyMhdA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdVV6Os8Gzc9JVjD2CAtN38=7KFn9GqosnWvByQc-7uA=Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdUNZ+TOGU-H9dZu08WKO2fO2sbgL1BbN3JzEVBkOyMhdA@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Geert,
 
-
-
->> --- a/sound/soc/amd/Kconfig
->> +++ b/sound/soc/amd/Kconfig
->> @@ -96,4 +96,10 @@ config SND_SOC_AMD_YC_MACH
->>           Say m if you have such a device.
->>           If unsure select "N".
->>
->> +config SND_AMD_ACP_CONFIG
->> +       tristate "AMD ACP configuration selection"
+On 2021-11-30 17:45:11 +0100, Geert Uytterhoeven wrote:
+> Given Rob said he applied your patch[1], does that mean this series
+> is good to be applied?
+> Thanks!
 > 
-> This definitely needs proper dependencies, to prevent asking the user
-> about this when configuring a kernel without AMD Audio ACP support.
-> 
-> I would have sent a patch, but...
+> [1] https://lore.kernel.org/all/YaU4XuiaJgEjGCdQ@robh.at.kernel.org/
 
-There's indeed a missing dependency that was fixed in
-https://github.com/thesofproject/linux/pull/3284
+Yes, with that patch applied this change won't generate any (new)
+warnings from DT :-)
 
-Daniel, you may want to squash it in an update?
-
-To Geert's point, there may be an additional need to add a
-
-depends on SND_SOC_AMD_ACP
-
-There are also a set of
-
-SND_SOC_AMD_ACPyx options, not sure if any applies as a dependency here?
-
-
+-- 
+Kind Regards,
+Niklas Söderlund

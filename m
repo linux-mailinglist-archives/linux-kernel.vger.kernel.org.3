@@ -2,75 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E18B6462ED5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:47:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5BBD462ED7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239775AbhK3Iub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:50:31 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:55654 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239770AbhK3IuX (ORCPT
+        id S239787AbhK3Iul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:50:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27586 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239781AbhK3Iud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:50:23 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 Nov 2021 03:50:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638262033;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=iHEcxWX/hnu+skhv46r4CV8pF6jbkPwZ6560HYUpego=;
+        b=Y3Efly1pd0RStRYyNiOMrEMAZRGqRsZyokaS3IYhk231VUNstX/ntKo+J1outAOETivJK+
+        Ky8VKl5TTD5MP2zX+RyCQCySXTZlIcrVTtky+mkIhqYf/OxBgeLn1dJos6XKqy+7Mm7emZ
+        /5iLn3cxpROmJHsEwYTgredQcU8sh5U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-442-ekjKe4tSMBe_3qw00V5qcg-1; Tue, 30 Nov 2021 03:47:09 -0500
+X-MC-Unique: ekjKe4tSMBe_3qw00V5qcg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 78D40CE1828;
-        Tue, 30 Nov 2021 08:47:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A3FC53FC1;
-        Tue, 30 Nov 2021 08:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638262021;
-        bh=sKKgJm4IeJL19jVxGxafCC/+cpVZuuY5RM3ezPC40jo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=byeOI0EMHN3rkdANUi0cCgpOHafWsUBW7mDP+rX7yVje97Jl38E+FhzzpiQZLHrpl
-         LHqd+c0n99kjDbOCPdDp+oP08/R6o+328OuSp9mbi04WTCgo8o66gzDB4iazYRGcdG
-         9p6w/ZfUPjQnys/bRgUDvpLNVlqSX41N7Y1Eg0kg=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     tim@cyberelk.net, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] paride: fix up build warning on mips platforms
-Date:   Tue, 30 Nov 2021 09:46:26 +0100
-Message-Id: <20211130084626.3215987-1-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.34.1
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6D23410168C3;
+        Tue, 30 Nov 2021 08:47:08 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B72045DF3A;
+        Tue, 30 Nov 2021 08:46:44 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     mlevitsk@redhat.com, Sean Christopherson <seanjc@google.com>
+Subject: [PATCH] KVM: fix avic_set_running for preemptable kernels
+Date:   Tue, 30 Nov 2021 03:46:44 -0500
+Message-Id: <20211130084644.248435-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=861; h=from:subject; bh=sKKgJm4IeJL19jVxGxafCC/+cpVZuuY5RM3ezPC40jo=; b=owGbwMvMwCRo6H6F97bub03G02pJDIlLn9yPO6wUdO3CzAl3q6Rqbr15tVinImOj+ndVvUU1LFV3 P75V6IhlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJhEYyzNM51+y9RyBk3u6ARzf8q8 8Vr727zI1hnkFDjPZ2/jvxpe90PE92HvzakeuWBgA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MIPS include files define "PC" so when building the paride driver the
-following build warning shows up:
+avic_set_running() passes the current CPU to avic_vcpu_load(), albeit
+via vcpu->cpu rather than smp_processor_id().  If the thread is migrated
+while avic_set_running runs, the call to avic_vcpu_load() can use a stale
+value for the processor id.  Avoid this by blocking preemption over the
+entire execution of avic_set_running().
 
-	rivers/block/paride/bpck.c:32: warning: "PC" redefined
-
-Fix this by undefining PC before redefining it as is done for other
-defines in this driver.
-
-Cc: Tim Waugh <tim@cyberelk.net>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: linux-block@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 ---
- drivers/block/paride/bpck.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/kvm/svm/avic.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/block/paride/bpck.c b/drivers/block/paride/bpck.c
-index f5f63ca2889d..d880a9465e9b 100644
---- a/drivers/block/paride/bpck.c
-+++ b/drivers/block/paride/bpck.c
-@@ -28,6 +28,7 @@
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index 0a58283005f3..560807a2edd4 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -1000,16 +1000,18 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
+ static void avic_set_running(struct kvm_vcpu *vcpu, bool is_run)
+ {
+ 	struct vcpu_svm *svm = to_svm(vcpu);
++	int cpu = get_cpu();
  
- #undef r2
- #undef w2
-+#undef PC
++	WARN_ON(cpu != vcpu->cpu);
+ 	svm->avic_is_running = is_run;
  
- #define PC			pi->private
- #define r2()			(PC=(in_p(2) & 0xff))
+-	if (!kvm_vcpu_apicv_active(vcpu))
+-		return;
+-
+-	if (is_run)
+-		avic_vcpu_load(vcpu, vcpu->cpu);
+-	else
+-		avic_vcpu_put(vcpu);
++	if (kvm_vcpu_apicv_active(vcpu)) {
++		if (is_run)
++			avic_vcpu_load(vcpu, cpu);
++		else
++			avic_vcpu_put(vcpu);
++	}
++	put_cpu();
+ }
+ 
+ void svm_vcpu_blocking(struct kvm_vcpu *vcpu)
 -- 
-2.34.1
+2.31.1
 

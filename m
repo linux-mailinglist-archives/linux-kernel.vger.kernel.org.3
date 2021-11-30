@@ -2,139 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EBB84636FD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B65854636FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:45:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242330AbhK3Osb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:48:31 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:22370 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S235434AbhK3Osa (ORCPT
+        id S242338AbhK3Ost (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:48:49 -0500
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:43680 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242333AbhK3Oss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:48:30 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638283511;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=N/D4Uh2tQePJy9ISUxPytT0nz40Sq7tw+TN3bITgjmE=;
-        b=a1Tpq51B3rWmi0FOuHhYcz7YPxbgsAqOgD8aHPELR6x0HT3UDucNZauTsnn9I04TbMafgJ
-        O6B5NTtnCuNo/02yNF8cKx7jFapPbguc//QG2O9+K7flGakPfb5G218JJT/DoSGtp+Efdn
-        bDHH4fbO5pOS52UnTvo69VVpbVcSxXE=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-371-zjFMEXhYMTyy-JDKsWPrdA-1; Tue, 30 Nov 2021 09:45:08 -0500
-X-MC-Unique: zjFMEXhYMTyy-JDKsWPrdA-1
-Received: by mail-pj1-f72.google.com with SMTP id x6-20020a17090a6c0600b001a724a5696cso9925164pjj.6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 06:45:08 -0800 (PST)
+        Tue, 30 Nov 2021 09:48:48 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3Q4S48JVz9w0Z7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 14:45:28 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id kKdoGZLZUuiP for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 08:45:28 -0600 (CST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3Q4S25X9z9w0Z2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:45:28 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3Q4S25X9z9w0Z2
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3Q4S25X9z9w0Z2
+Received: by mail-pf1-f197.google.com with SMTP id c131-20020a621c89000000b004a343484969so12963907pfc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 06:45:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B6LNCzubAvM1UAFro6OAu5q4vc79ycy1gcnZHWEZqRg=;
+        b=QGu9G8DNB3JtXxMeVuLaeVUC5ZHalORVRodgIEuZm54ot4jgPTStUETLOOnXnDbjAz
+         Uf1CRBp7h6uB323QQZ2vX/yExi7zKEvrxc22B/BxTYRT/5I2EHBwuPhLnYVt+gAm5bHB
+         Uoz07+wDNQ1picLCT1XnAhRXDgWRO6Jzq0N124hRRFGg+LCmxOJCV54Cn7FeIPGM8S8C
+         nMpEKI6d7i4Vk448HiLsQl9ZWhwZmhzQT56bNRRZARPwjdw9TgXEr2FrxqeF7I3q2TW6
+         qRG4FLZ2xqDfpeoZ5Ov9BX992rw5KQWWsGGQ12FxZknX0Jrgk9Ru8YmSQ+i7OSZSXOnH
+         ia5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=N/D4Uh2tQePJy9ISUxPytT0nz40Sq7tw+TN3bITgjmE=;
-        b=SzfmyRaILVaqgIvVNikCCK8Ekych7rQ7TzWqz95y+DcPDPzQvQuqRG/vdYrWRefp7v
-         vxLoiwYlAWo3fhaev1xP04FCy8y+9fsZUr2Bu9RAexjqBDfxuPsAX773UqiNfhpFnk2n
-         6FVLIk/ACSiCaK8ktiUE87xqMTC7++xcbM3rnslHVpF+SpFzi5tUBpAI2H3MrsVwtbRG
-         Ky+CY915nglWIkGt8+aRnMwDOK7uKksPQZIjY3kBku//F+YyMDkq9jcNkl5uuop9nu81
-         c8v13kBLyBkA1EdCwf0gpHVjOGjgR8WtZDmjyiKd6a/aYznOWU4D9OIiVtfhuUH2xZ7i
-         n82Q==
-X-Gm-Message-State: AOAM530y+N38GawB5vwX64DZG6zdm7ENSLxp3bA7mERKbRyUc4WSldII
-        zeAAI/e9ToPPr6ecAA9bWRPEKTBFm/9+fAO7XncPBEYhvYa/bRzi4F7BXui6WZmUNuMs+FqqmFk
-        87jbRGFXwTday7B8lajl4uwVeDQ8eoMWRiP3UQ6SV
-X-Received: by 2002:a17:90b:1185:: with SMTP id gk5mr6565510pjb.113.1638283507716;
-        Tue, 30 Nov 2021 06:45:07 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx/GbMjaHEEpyrXrYvb0pycmTGPDKLSCBDVw5H6za5zXROyd/rafwD0byS0pSYtAcTrnS01FdaeQMM0I0ClGUc=
-X-Received: by 2002:a17:90b:1185:: with SMTP id gk5mr6565466pjb.113.1638283507426;
- Tue, 30 Nov 2021 06:45:07 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B6LNCzubAvM1UAFro6OAu5q4vc79ycy1gcnZHWEZqRg=;
+        b=dYIUWutpGrgwoUtztdk8s4Dl7UARCcDe+8+wF2KXho6vvsKx4kWLjp9w9F/goX13Df
+         p/lKWUn/rqRTelwU8JtKWQYSefiVMo1QRYJOS/qgFbktmrUZGpr+TaLf+Ijy0D97Xic6
+         U+77ffqXd0tjsRjp9RvUHjvCPRceeTciI9m87s+/ZccRBDktXhS126NJMJqtrPG1jYuw
+         69V9XRc4yEoO3mE+lQqyG5E1voU0Yo2Os8prgU68w151D+5l917H22aDOw7S1oXL/gbD
+         A6skuMcNomZip0EvUQHzLs2yJcRG7CDc06lLxGxBy00hMFYk2hrF1TvO6FIit2Ns/M/+
+         0l/A==
+X-Gm-Message-State: AOAM530w6PtbXTvZdEx3+LUI+MlYECYitVRMUVCYJjlsVYrVFpoPzcBU
+        ioYlDMyc2Xc2NkVK5DRJVsfa4lHjyBFQv15ix5qwSY5b+Lp5tNLRQX1x8pBXxNJsyR6tClqZAYj
+        M1SaVRbKoW0OWmzBh32R270suETGR
+X-Received: by 2002:a63:81c1:: with SMTP id t184mr40045776pgd.26.1638283527468;
+        Tue, 30 Nov 2021 06:45:27 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJx8+3UCv1VwdzMjRJfnSg9Zq7bxFF6U71MKKHXfNkC6U9FcxX7fm3QSgTG6F27ZPHGtBA2QTw==
+X-Received: by 2002:a63:81c1:: with SMTP id t184mr40045755pgd.26.1638283527262;
+        Tue, 30 Nov 2021 06:45:27 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id u32sm23701235pfg.220.2021.11.30.06.45.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 06:45:27 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/panel/panel-tpo-tpg110: Fix a NULL pointer dereference in tpg110_get_modes()
+Date:   Tue, 30 Nov 2021 22:45:22 +0800
+Message-Id: <20211130144522.162262-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20211126130141.1811848-1-tero.kristo@linux.intel.com>
-In-Reply-To: <20211126130141.1811848-1-tero.kristo@linux.intel.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 30 Nov 2021 15:44:56 +0100
-Message-ID: <CAO-hwJLq6Jnvos=CR_-D6FD-7W56q2eYRVyRMbmE5NFaXLHrng@mail.gmail.com>
-Subject: Re: [RFCv2 0/8] USI stylus support series
-To:     Tero Kristo <tero.kristo@linux.intel.com>
-Cc:     "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tero,
+In tpg110_get_modes(), the return value of drm_mode_duplicate() is
+assigned to mode and there is a dereference of it in tpg110_get_modes(),
+which could lead to a NULL pointer dereference on failure of
+drm_mode_duplicate().
 
-On Fri, Nov 26, 2021 at 2:02 PM Tero Kristo <tero.kristo@linux.intel.com> wrote:
->
-> Hi,
->
-> This series is an update based on comments from Benjamin. What is done
-> is this series is to ditch the separate hid-driver for USI, and add the
-> generic support to core layers. This part basically brings the support
-> for providing USI events, without programmability (patches 1-6).
+Fix this bug by adding a check of mode.
 
-That part seems to be almost good for now. I have a few things to check:
-- patch2: "HID: hid-input: Add suffix also for HID_DG_PEN" I need to
-ensure there are no touchscreens affected by this (there used to be a
-mess with some vendors where they would not declare things properly)
-- patch5: "HID: core: map USI pen style reports directly" this one
-feels plain wrong. I would need to have a look at the report
-descriptor but this is too specific in a very generic code
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
->
-> Additionally, a HID-BPF based sample is provided which can be used to
-> program / query pen parameters in comparison to the old driver level
-> implementation (patches 7-8, patch #8 is an incremental change on top of
-> patch #7 which just converts the fifo to socket so that the client can
-> also get results back from the server.)
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-After a few more thoughts, I wondered what your input is on this. We
-should be able to do the very same with plain hidraw... However, you
-added a `hid/raw_event` processing that will still be kept in the
-kernel, so maybe bpf would be useful for that at least.
+Builds with CONFIG_DRM_PANEL_TPO_TPG110=m show no new warnings,
+and our static analyzer no longer warns about this code.
 
->
-> The whole series is based on top of Benjamin's hid-bpf support work, and
-> I've pushed a branch at [1] with a series that works and brings in
-> the dependency. There are also a few separate patches in this series to
-> fix the problems I found from Benjamin's initial work for hid-bpf; I
-> wasn't able to get things working without those. The branch is also
-> based on top of 5.16-rc2 which required some extra changes to the
-> patches from Benjamin.
+Fixes: aa6c43644bc5 ("drm/panel: drop drm_device from drm_panel")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/gpu/drm/panel/panel-tpo-tpg110.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Yeah, I also rebased on top of 5.16 shortly after sharing that branch
-and got roughly the same last fix (HID: bpf: compile fix for
-bpf_hid_foreach_rdesc_item). I am *very* interested in your "HID: bpf:
-execute BPF programs in proper context" because that is something that
-was bothering me a lot :)
-
-"HID: bpf: add expected_attach_type to bpf prog during detach" is
-something I'll need to bring in too
-
-but "HID: bpf: fix file mapping" is actually wrong. I initially wanted
-to attach BPF programs to hidraw, but shortly realized that this is
-not working because the `hid/rdesc_fixup` kills the hidraw node and so
-releases the BPF programs. The way I am now attaching it is to use the
-fd associated with the modalias in the sysfs file (for instance: `sudo
-./hid_surface_dial /sys/bus/hid/devices/0005:045E:091B.*/modalias`).
-This way, the reference to the struct hid_device is kept even if we
-disconnect the device and reprobe it.
-
-Thanks again for your work, and I'd be curious to have your thoughts
-on hid-bpf and if you think it is better than hidraw/evdev write/new
-ioctls for your use case.
-
-Cheers,
-Benjamin
-
->
-> -Tero
->
-> [1] https://github.com/t-kristo/linux/tree/usi-5.16-rfc-v2-bpf
->
->
+diff --git a/drivers/gpu/drm/panel/panel-tpo-tpg110.c b/drivers/gpu/drm/panel/panel-tpo-tpg110.c
+index e3791dad6830..ab4b84c1e243 100644
+--- a/drivers/gpu/drm/panel/panel-tpo-tpg110.c
++++ b/drivers/gpu/drm/panel/panel-tpo-tpg110.c
+@@ -379,6 +379,9 @@ static int tpg110_get_modes(struct drm_panel *panel,
+ 	connector->display_info.bus_flags = tpg->panel_mode->bus_flags;
+ 
+ 	mode = drm_mode_duplicate(connector->dev, &tpg->panel_mode->mode);
++	if (!mode)
++		return -ENOMEM;
++
+ 	drm_mode_set_name(mode);
+ 	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
+ 
+-- 
+2.25.1
 

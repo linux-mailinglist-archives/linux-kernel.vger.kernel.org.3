@@ -2,100 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A38DE4630B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF584630B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:09:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240675AbhK3KMQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:12:16 -0500
-Received: from outbound-smtp38.blacknight.com ([46.22.139.221]:39467 "EHLO
-        outbound-smtp38.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240550AbhK3KMP (ORCPT
+        id S240689AbhK3KMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:12:20 -0500
+Received: from esa.microchip.iphmx.com ([68.232.154.123]:34738 "EHLO
+        esa.microchip.iphmx.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240681AbhK3KMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:12:15 -0500
-Received: from mail.blacknight.com (pemlinmail03.blacknight.ie [81.17.254.16])
-        by outbound-smtp38.blacknight.com (Postfix) with ESMTPS id 9B3181E40
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:08:55 +0000 (GMT)
-Received: (qmail 25169 invoked from network); 30 Nov 2021 10:08:55 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 30 Nov 2021 10:08:55 -0000
-Date:   Tue, 30 Nov 2021 10:08:53 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christoph Hellwig <hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        virtualization@lists.linux-foundation.org,
-        iommu@lists.linux-foundation.org
-Subject: Re: [RFC PATCH 0/3] Use pageblock_order for cma and
- alloc_contig_range alignment.
-Message-ID: <20211130100853.GP3366@techsingularity.net>
-References: <20211115193725.737539-1-zi.yan@sent.com>
- <3083463d-978b-fbe6-dadf-670d400ed437@suse.cz>
- <AEFF28CF-0ED8-450F-96A4-A6CD59CB1F3D@nvidia.com>
- <BF8FB68A-6E1D-4465-8A2B-884FC034660B@nvidia.com>
- <52dbf824-76be-cc34-3983-d45510b1b618@suse.cz>
- <35A20739-152A-450E-8535-2236D2B28748@nvidia.com>
- <1c67bb96-24db-f5a6-7520-3d97e54e5192@suse.cz>
+        Tue, 30 Nov 2021 05:12:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1638266940; x=1669802940;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2FwvvqSnok2ooh7zpbRusi+58zDEFAmIqlAKrOG2dMU=;
+  b=j3z7hE4OBNrjc+PT3iTmMjFLj6wThqPXh5jQpKHh8BEF+mlHrbPItn+o
+   6Uh6VNsQREibbrXXRpOS0GFmt0ieI12Y2gqtM0MQbaX/m8skGRWJsPyLD
+   w8K1kjCW3rRY+CVtryZKxmCbhoe4V8NNXKxzLvhnjq1QhK5ePZU+G7rIs
+   zUb2ENnsZir22bLdhOBR/tyi4pvbX8YLi3QH819nwM1HJZsF/972cJQMq
+   zdCm22dAHUEVqdeiRIepI6irZANjQOUp0BIlzCFM1rHTAfH19pG3o5uvu
+   JpWqVUxac19Lu2srKi976eHKh1yO1dwhcDvorYzJbwUCNMzLUgFRZeGZd
+   g==;
+IronPort-SDR: ANvmwIAupJDD9KB0LZfAifUmNYf8kTngsNeZLYi36quUPF4xN39ZIBXIuqO7FjbcahjJIe1Jf3
+ CCqOwRkjssHFYhAl5moZc5HBAiaudDcBt2lDTsY2IwqZk6I8Blvp4EvCXa1kA4s53kCJleMh0/
+ ad3cZysdsfvm4aM7nh+XR4C9i7xgsxN5TKs5m8eaUjPxT85v6j7z55jp4ni4XYxUhMqkSpOUah
+ wvPkqa2OdRNmn9CWMOGEJSxcJUgAHxNYwtOa+X0PMAZZwpR7I1ldiSLcuny1W8rkFy4XZXzv/w
+ RB7u/+SgVVNlYp9LuLI681Um
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="138112841"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Nov 2021 03:08:59 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Tue, 30 Nov 2021 03:08:59 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Tue, 30 Nov 2021 03:08:58 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <kishon@ti.com>, <vkoul@kernel.org>, <linux@armlinux.org.uk>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH] phy: lan966x: Extend lan966x to support multiple phy interfaces.
+Date:   Tue, 30 Nov 2021 11:10:15 +0100
+Message-ID: <20211130101015.164916-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <1c67bb96-24db-f5a6-7520-3d97e54e5192@suse.cz>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:11:36AM +0100, Vlastimil Babka wrote:
-> >>> I find that two pageblocks with different migratetypes, like MIGRATE_RECLAIMABLE
-> >>> and MIGRATE_MOVABLE can be merged into a single free page after I checked
-> >>> __free_one_page() in detail and printed pageblock information during buddy page
-> >>> merging.
-> >>
-> >> Yes, that can happen.
-> >>
-> >> I am not sure what consequence it will cause. Do you have any idea?
-> >>
-> >> For MIGRATE_RECLAIMABLE or MIGRATE_MOVABLE or even MIGRATE_UNMOVABLE it's
-> >> absolutely fine. As long as these pageblocks are fully free (and they are if
-> >> it's a single free page spanning 2 pageblocks), they can be of any of these
-> >> type, as they can be reused as needed without causing fragmentation.
-> >>
-> >> But in case of MIGRATE_CMA and MIGRATE_ISOLATE, uncontrolled merging would
-> >> break the specifics of those types. That's why the code is careful for
-> >> MIGRATE_ISOLATE, and MIGRATE_CMA was until now done in MAX_ORDER granularity.
-> > 
-> > Thanks for the explanation. Basically migratetypes that can fall back to each
-> > other can be merged into a single free page, right?
-> 
-> Yes.
-> 
-> > How about MIGRATE_HIGHATOMIC? It should not be merged with other migratetypes
-> > from my understanding.
-> 
-> Hmm it shouldn't minimally because it has an accounting that would become
-> broken. So it should prevent merging or make sure the reservations are with
-> MAX_ORDER granularity, but seems that neither is true? CCing Mel.
-> 
+Currently the driver is supporting only the interfaces QSGMII, SGMII,
+RGMII and GMII. This patch extend the supported interfaces with
+1000BASE-X and 2500BASE-X.
 
-MIGRATE_HIGHATOMIC pageblocks can have pages allocated of different
-types, particularly UNMOVABLE and potentially RECLAIMABLE. The
-reserving or releasing MIGRATE_HIGHATOMIC pageblocks should be done with
-reserve_highatomic_pageblock and unreserve_highatomic_pageblock to get
-the accounting right.
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/phy/microchip/lan966x_serdes.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-However, there does not appear to be any special protection against a
-page in a highatomic pageblock getting merged with a buddy of another
-pageblock type. The pageblock would still have the right setting but on
-allocation, the pages could split to the wrong free list and be lost
-until the pages belonging to MIGRATE_HIGHATOMIC were freed again.
-
-Not sure how much of a problem that is in practice, it's been a while
-since I've heard of high-order atomic allocation failures.
-
+diff --git a/drivers/phy/microchip/lan966x_serdes.c b/drivers/phy/microchip/lan966x_serdes.c
+index 262bb616b4bb..c0b80a176387 100644
+--- a/drivers/phy/microchip/lan966x_serdes.c
++++ b/drivers/phy/microchip/lan966x_serdes.c
+@@ -392,6 +392,10 @@ static int serdes_set_mode(struct phy *phy, enum phy_mode mode, int submode)
+ 	if (mode != PHY_MODE_ETHERNET)
+ 		return -EOPNOTSUPP;
+ 
++	if (submode == PHY_INTERFACE_MODE_1000BASEX ||
++	    submode == PHY_INTERFACE_MODE_2500BASEX)
++		submode = PHY_INTERFACE_MODE_SGMII;
++
+ 	for (i = 0; i < ARRAY_SIZE(lan966x_serdes_muxes); i++) {
+ 		if (macro->idx != lan966x_serdes_muxes[i].idx ||
+ 		    mode != lan966x_serdes_muxes[i].mode ||
 -- 
-Mel Gorman
-SUSE Labs
+2.33.0
+

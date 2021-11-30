@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BB34463B93
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:19:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71D93463B97
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238080AbhK3QWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:22:33 -0500
-Received: from mail-io1-f72.google.com ([209.85.166.72]:36760 "EHLO
-        mail-io1-f72.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238952AbhK3QWa (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:22:30 -0500
-Received: by mail-io1-f72.google.com with SMTP id w16-20020a5d8a10000000b005e241c13c7bso24071158iod.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:19:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=82PcJsGJmWA9J7EfSsaBo8R7BvPCcHNRldX54MbqtUk=;
-        b=vYD7Ww6iN4go3eBRU0s9d+NOc90Qa/oFWz1Y3v7xlwlXCSin0A3rYwD3RClErvc1jA
-         y0wnEIpuTiKYCDeFWf1EqrGnaafLaHlcNF1xS8VDGNOX4DrmgMZUepYvQEX/gi83iIaq
-         feFE+nr/5It0HBg5iIGyYG8zVDOXeN767zKgG3X3hLQS4nw0qoxYTsIdz75VxY7Wu5TX
-         ZZuvvzVoXAfQVAhUMv6aRSKvJXqPcxymAOCoQiAud+eiCusm9Z6m29Gi/I0iOZyXQqg6
-         m8lOSncVYoMoGJFbZL6OFmMTpeD3IJjoWypJrm+P2oLqdc70BsoGVMQuRJ1nYCXU0HXA
-         F3oQ==
-X-Gm-Message-State: AOAM531juVvfEjFxd9vGeBfjQbH+8JKKk2CqXfKAZhiO0KN886IOKIc/
-        03CNgZmCTOSQ5z3imVTCfZKYTF4hPRf0iRldi1pfmUgv10Vs
-X-Google-Smtp-Source: ABdhPJyxuzWxbXXQxXt/uLUyAQu5gmBfd3on9w/gXZzhkfqblOPzJkm/nRXJfXP2GwX0YVZSMLpgNz44tT0MMcAsVMq1dotg6xoH
+        id S238952AbhK3QXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:23:42 -0500
+Received: from mga18.intel.com ([134.134.136.126]:60499 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230361AbhK3QXj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:23:39 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223130858"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="223130858"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:20:18 -0800
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="595494813"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:20:16 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1ms5qa-000bqW-LJ;
+        Tue, 30 Nov 2021 18:19:12 +0200
+Date:   Tue, 30 Nov 2021 18:19:12 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+Message-ID: <YaZPACT53i4LovrM@smile.fi.intel.com>
+References: <20211130154127.12272-1-brgl@bgdev.pl>
+ <20211130154127.12272-3-brgl@bgdev.pl>
+ <YaZNyMV5gX5cZpar@smile.fi.intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:d8cf:: with SMTP id l15mr1635ilo.59.1638289150573;
- Tue, 30 Nov 2021 08:19:10 -0800 (PST)
-Date:   Tue, 30 Nov 2021 08:19:10 -0800
-In-Reply-To: <000000000000f5964705b7d47d8c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000dc091705d203eac6@google.com>
-Subject: Re: [syzbot] INFO: trying to register non-static key in l2cap_sock_teardown_cb
-From:   syzbot <syzbot+a41dfef1d2e04910eb2e@syzkaller.appspotmail.com>
-To:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org,
-        bobo.shaobowang@huawei.com, davem@davemloft.net, hdanton@sina.com,
-        johan.hedberg@gmail.com, kuba@kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
-        luiz.von.dentz@intel.com, marcel@holtmann.org,
-        mareklindner@neomailbox.ch, miklos@szeredi.hu, mszeredi@redhat.com,
-        netdev@vger.kernel.org, sw@simonwunderlich.de,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaZNyMV5gX5cZpar@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Tue, Nov 30, 2021 at 06:14:01PM +0200, Andy Shevchenko wrote:
+> On Tue, Nov 30, 2021 at 04:41:23PM +0100, Bartosz Golaszewski wrote:
 
-commit 1bff51ea59a9afb67d2dd78518ab0582a54a472c
-Author: Wang ShaoBo <bobo.shaobowang@huawei.com>
-Date:   Wed Sep 1 00:35:37 2021 +0000
+...
 
-    Bluetooth: fix use-after-free error in lock_sock_nested()
+> Not sure I understand the proposal. Can you provide couple of (simplest)
+> examples?
+> 
+> And also it sounds like reinventing a wheel. What problem do you have that you
+> need to solve this way?
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=134c881eb00000
-start commit:   73b7a6047971 net: dsa: bcm_sf2: support BCM4908's integrat..
-git tree:       net-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9ce34124da4c882b
-dashboard link: https://syzkaller.appspot.com/bug?extid=a41dfef1d2e04910eb2e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=166ee4cf500000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1337172f500000
+Have you seen these:
+	drivers/gpio/gpio-dwapb.c
+	drivers/mfd/intel_quark_i2c_gpio.c
+?
 
-If the result looks correct, please mark the issue as fixed by replying with:
+GPIO driver has a main (controller level) node along with children on per bank
+basis. Currently it works with the provided approach (see second driver).
 
-#syz fix: Bluetooth: fix use-after-free error in lock_sock_nested()
+-- 
+With Best Regards,
+Andy Shevchenko
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+

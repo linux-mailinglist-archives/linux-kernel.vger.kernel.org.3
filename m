@@ -2,130 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A3A463996
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:14:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB864639A5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:15:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245444AbhK3PRO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:17:14 -0500
-Received: from mta-p5.oit.umn.edu ([134.84.196.205]:60762 "EHLO
-        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244259AbhK3PIR (ORCPT
+        id S235841AbhK3PSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:18:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243414AbhK3POu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:08:17 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3QVx1rNVz9vpQQ
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 15:04:57 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p5.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id kC-bSb3-JV9i for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 09:04:57 -0600 (CST)
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3QVw6lNpz9vpQS
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:04:56 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3QVw6lNpz9vpQS
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3QVw6lNpz9vpQS
-Received: by mail-pg1-f199.google.com with SMTP id s2-20020a632142000000b0032173c0daf1so10389958pgm.16
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:04:56 -0800 (PST)
+        Tue, 30 Nov 2021 10:14:50 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E513AC07E5E2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:05:44 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id v19so15134728plo.7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:05:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jkm3SRjlEMuj/OoI/keUI8sb3jpLnQn0wJDEn5YUqIA=;
-        b=d+j0Y9bABjd3Q6pxla8ql2DGsgWbafWr4RzOLv5wUlwTydWGasWbCtKgQVgYEpxRze
-         ZkOrFvwRyXqFs8SlIFQG02ZNIfmkVuQsPajnCwkD50d56H3GKZE+xYzBsQEfILfRbBLn
-         M9O0IVxdg/4py2IrGbEO77kF/AESMA2YYEQ6iiDl/QW3qOf6qQ5Zh2YRZUyz4inrdOcD
-         Xf9iNrX4dtooqBoBTrizwztrwu6mVF7qxrhOZxv+vGGBaKMKJ6X0FfldRPNmnTtIhDPD
-         g+71UnqUrZpQwgcqkLG3EIKckBhZAa0GEiYKtlYWGLV6UA/Jnr5ZTkSdyxgiY+YXVLA/
-         q5Dw==
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:in-reply-to:references:from:date:message-id
+         :subject:to:content-transfer-encoding;
+        bh=GMS93CoAKETSWOkFC+22mbrWOJMWtsdrV7yN8LPC6To=;
+        b=Gr/0gPC8lB7hClztyBfA8bZYPb1qw88etxhbyUOldIVUA7/2Hft5u7xmkJrR/Ykq07
+         tKB/cVGCBt1GC+h2NgQ4QpLEwv1snnLlAQUXomv84PfuUHNwLvHs3JcjpwaudcyyttmW
+         yLuZLxXFAGks4srfIJD46TIoBRLY+f12OkpDoO/IEF4MmXI6+SrljRHu8kUqK4CniWYt
+         1UitFxP+DVzRoC6V1oBDjIEVQCMWfStQ2ODEaXM/uZYLCLlhuUXAlk/e/nbmsZh3DNiT
+         Gkaeerjqqgy+/TvQKnfF57lVB+OQyHQnh34o/2tvAHeziBqlEbg2XYG+V+//iPsswhCM
+         Cnhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jkm3SRjlEMuj/OoI/keUI8sb3jpLnQn0wJDEn5YUqIA=;
-        b=nvbR1H6umEiXN+eIUPqJn4zyelGp3SPGu/YMpGanFXDGBVOUVJkQSkvr1rC3941T9u
-         1bGiUw0yny5ZTX98E5RwHcAOcP2auSQFBf3c4UQtnmEsK4SMTIH2nyocbavXYwIOTHI9
-         3rHVzsvGlONz1uyIqywG9vDXFavqIZMPO6KfHRGYKI/sDJLlln5uZLHx/NGgGsKs5v9Q
-         MQ/KzpvdUucsQshZrTnf5W8+IYwICSQC38dHA/bkIGH7U7zHFbiH2sfUTHfPj8WVM7xl
-         nFOjxxzPF4kkD8II8NFrSumLyWcgyly7ThSGMznm37Gc/WY6VA2NfspWPsaBc0bh0Z1D
-         X/Hw==
-X-Gm-Message-State: AOAM533x5reeIgkLoJJleM+Ykt8QzQ65jJqZXuvmEIQhvM5zipKHG8Gi
-        KHdv+/WlZ+dtK76HBznl0LpkH/Y+3X0FzcvzBp22h0am6diK7UvCuBpenbrbp6R7TIb5nv4vYf9
-        1YjnIvI120CX+gacP3uosfY8NJlK7
-X-Received: by 2002:a17:903:2292:b0:141:e76d:1b16 with SMTP id b18-20020a170903229200b00141e76d1b16mr66792823plh.21.1638284696195;
-        Tue, 30 Nov 2021 07:04:56 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJy8GWn6nizJsszaZRStEl3f7YTD0lEXqp9tlfH0fC2cLbTGzG/x+jCHUyEelCV+t398xQYrMQ==
-X-Received: by 2002:a17:903:2292:b0:141:e76d:1b16 with SMTP id b18-20020a170903229200b00141e76d1b16mr66792771plh.21.1638284695794;
-        Tue, 30 Nov 2021 07:04:55 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id y28sm23124794pfa.208.2021.11.30.07.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 07:04:55 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/radeon/radeon_kms: Fix a NULL pointer dereference in radeon_driver_open_kms()
-Date:   Tue, 30 Nov 2021 23:04:49 +0800
-Message-Id: <20211130150449.166144-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:reply-to:in-reply-to:references
+         :from:date:message-id:subject:to:content-transfer-encoding;
+        bh=GMS93CoAKETSWOkFC+22mbrWOJMWtsdrV7yN8LPC6To=;
+        b=MoOcIOakhMgEUe/WVfgOn38dyYTOHhQNRvaReA30cS/qK7dw4bIyJNgo6hXMd+r32T
+         eQqBtg5lo9qIQR2kmcwEFmDyglmoUNJkwoeLWNU6KdrApbNq6p6/O3+laacAR/y3Tkqp
+         AqbCBVTiq6O8yEFXTb1ohdYQt0kjBcu0bO9lnPRD5gke97SUFViWAWvz+qBP8LJnj6Ve
+         KwE20kuEm18fq0UtmXM3o5BwSn0+3dLhxzY2Gt4SPe0XJLt50UxfBmdAOW/fPXAzEefi
+         29rCemYlfU8/CKOT0SGfUlX3ZiFb0xnyXnTGeSEAGtF9Sx413xosZEzIwEH5lHhVybIt
+         EQAg==
+X-Gm-Message-State: AOAM531YNEZoDECvF/yQQGjqwfAxInwRglrjp1rZR8RwjTXds4d21xQE
+        bRZjX7Bowru1dbNJc7rWYLZ+DtdbQEXwE0ZMYCk=
+X-Google-Smtp-Source: ABdhPJyuj+JnUyVPHBaHNZW5LcliSXJs3ofEDz3lepXTR2R12FEFlA7NOujFruurOTHjO5wl2MOOmI1s4+A6RrAy2/w=
+X-Received: by 2002:a17:902:860b:b0:143:87bf:648f with SMTP id
+ f11-20020a170902860b00b0014387bf648fmr68782658plo.11.1638284744262; Tue, 30
+ Nov 2021 07:05:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Received: by 2002:a05:6a10:ed0c:0:0:0:0 with HTTP; Tue, 30 Nov 2021 07:05:43
+ -0800 (PST)
+Reply-To: phillipknight903@gmail.com
+In-Reply-To: <CAG3vQXaF_StLE0pZfoU4tEQ2kTvkBsR_U9jD4V4+UEO233ggcg@mail.gmail.com>
+References: <CAG3vQXaF_StLE0pZfoU4tEQ2kTvkBsR_U9jD4V4+UEO233ggcg@mail.gmail.com>
+From:   Phillip Knight <anajose19004@gmail.com>
+Date:   Tue, 30 Nov 2021 07:05:43 -0800
+Message-ID: <CAG3vQXaAuZDotrg8cgF=KM9uqFgsNqeSdBmzwn-bus_zxc0RzQ@mail.gmail.com>
+Subject: Covid 19 Department
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In radeon_driver_open_kms(), radeon_vm_bo_add() is assigned to
-vm->ib_bo_va and passes and used in radeon_vm_bo_set_addr(). In
-radeon_vm_bo_set_addr(), there is a dereference of vm->ib_bo_va,
-which could lead to a NULL pointer dereference on failure of
-radeon_vm_bo_add().
-
-Fix this bug by adding a check of vm->ib_bo_va.
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DRM_RADEON=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: cc9e67e3d700 ("drm/radeon: fix VM IB handling")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/gpu/drm/radeon/radeon_kms.c | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/radeon/radeon_kms.c
-index 482fb0ae6cb5..ead015c055fb 100644
---- a/drivers/gpu/drm/radeon/radeon_kms.c
-+++ b/drivers/gpu/drm/radeon/radeon_kms.c
-@@ -688,6 +688,13 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
- 			 * virtual address space */
- 			vm->ib_bo_va = radeon_vm_bo_add(rdev, vm,
- 							rdev->ring_tmp_bo.bo);
-+			if (!vm->ib_bo_va) {
-+				r = -ENOMEM;
-+				radeon_vm_fini(rdev, vm);
-+				kfree(fpriv);
-+				goto out_suspend;
-+			}
-+
- 			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
- 						  RADEON_VA_IB_OFFSET,
- 						  RADEON_VM_PAGE_READABLE |
--- 
-2.25.1
-
+ Dear Friend , The first =E2=82=AC6000 euros was sent to you today.

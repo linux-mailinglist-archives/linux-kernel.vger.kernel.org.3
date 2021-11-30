@@ -2,141 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4A1463526
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B473246352B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239149AbhK3NPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:15:18 -0500
-Received: from mta-p7.oit.umn.edu ([134.84.196.207]:50090 "EHLO
-        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236985AbhK3NPP (ORCPT
+        id S239242AbhK3NPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:15:51 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55782 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236093AbhK3NPs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:15:15 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4J3N0W5nvCz9vYdd
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:11:55 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p7.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ZCcktm2I7CH1 for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 07:11:55 -0600 (CST)
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 30 Nov 2021 08:15:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4J3N0W3lSLz9vYdN
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:11:55 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4J3N0W3lSLz9vYdN
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4J3N0W3lSLz9vYdN
-Received: by mail-pg1-f200.google.com with SMTP id t18-20020a632252000000b003252b088f26so6679222pgm.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:11:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zP2V3v73TH3YI7ufMMJbNxUkEcjQUni5BsrXUcho/a8=;
-        b=YkFSDBRcVydtQTX6o8vZyQMx/S8RDL6ju53POTTjGGSacBb5sUabaTM1oRX4Y0bWVU
-         wpBGtby56+bWja18Q1TVf49o3fAsogXfkXb80zVAwbIW4Ff3+nakMzIAE9oiR47CeTQO
-         y1seMLn6woU+LwT4nFqapEz8BvOp8sa4LouTfzyWHva541eIbi0evSMM6J3MbCJzzlYN
-         MGdt6+XaOoVdzOPpSbgkeUzL4WR1ZdVhwHx1oDpS98fkoOFuZkwZVzxkya3o7Y9sC25Z
-         I7ohaEJxkkteHjLUCf+kSy5fVKagAu6+gzbC7GYqJN2+bJA5q6UFAfiNleMA3WYnsxXw
-         KLhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=zP2V3v73TH3YI7ufMMJbNxUkEcjQUni5BsrXUcho/a8=;
-        b=EDulYLXp89EYacejBv5QF7g3vVlQ6lpBHZ15F/iDILm3I3OYUDcjuYvYbqezCr2PYI
-         lWLTgf/dcf3IYUxavHXY9prCHE2Q9Dgu7o1uRG2IpYOXByGLPgHgmotBOD28V0cXuqPq
-         3u5leUikiWGo6M1CPeOC9d1zXoRWhjNvPZjBn7GNMO/65LDZS9cesd11cJjGiYkK8mtr
-         NxH43PCJxbzZZ1Nacd7Bh6ASX+9XVJDCs88FbkEXsn/y3A4sS/ApTyzZGfnUxxpfhZxQ
-         b9WMdtSIMIosC1xvWlgZn1UlhTP6h+GFq55l7OEOz8mSiT/CD9MPmKAngW43TwSf5C5Z
-         1Ldg==
-X-Gm-Message-State: AOAM530oHEwIripruppfQFS4HTwUILGMJwPJKss3g5cQBVPHO6jsb83Z
-        idadOX7k1IHY72iNitZ1Yn0INZvt6vOaI4hIq893fPd/m7Yb+4QZvRXQ6dGSkSnq4K3LAsTnU7X
-        1F5Rnz5ywbhMYxMyZb+VF6azmGeMO
-X-Received: by 2002:a17:90b:4d08:: with SMTP id mw8mr6005296pjb.236.1638277914562;
-        Tue, 30 Nov 2021 05:11:54 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxDAkyZLWvvoJdW2VIMQ+7cqEEnERC++JVHd62eGGU6w2A9FkL534V2oubJjtc7oPYV0SHOuQ==
-X-Received: by 2002:a17:90b:4d08:: with SMTP id mw8mr6005236pjb.236.1638277914216;
-        Tue, 30 Nov 2021 05:11:54 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id j7sm2622428pjf.41.2021.11.30.05.11.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 05:11:53 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Andrzej Hajda <a.hajda@samsung.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Parshuram Thombare <pthombar@cadence.com>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Yu Kuai <yukuai3@huawei.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>,
-        Quentin Schulz <quentin.schulz@free-electrons.com>,
-        Yuti Amonkar <yamonkar@cadence.com>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm: bridge: cdns-mhdp8546: Fix a NULL pointer dereference in cdns_mhdp_atomic_enable()
-Date:   Tue, 30 Nov 2021 21:11:12 +0800
-Message-Id: <20211130131113.126261-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        by sin.source.kernel.org (Postfix) with ESMTPS id 664F6CE19FE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:12:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90CA8C53FC7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638277946;
+        bh=7Jp5scVEy5mI/G2kiMqwA+jZ6W9F59pkGVYXY6aCCqU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Ebp0csiwXCfFkjkSH/kmmBzdS7Xpq5X43oB7pgouteHAOxHFAETknmbrGu8l4ezbV
+         /JLTx8BPtfe5bQKJ6ht8DAmwhR6GmgBN7CgmmjWIwrUMxBLk9RObedAclI8/boa6PL
+         84lF8aNxn8o3iWU2DmlpW++dwKh2gxnUOHCBoHgb/8FANBaK7ufnvkP8r0rRBsJvJm
+         K9ZXFNmoYs/AVforritNuPLvGy/Dj8balwbTIW49w4byJ5YC7yw6KU2sivqalaVOyE
+         CaGrg5djHWWD5/pl0IaSaLc/QD8yvX7RjY+VdR9agYqsZvQRGYmBchAmm+hGJJJ5Nv
+         DCFZnKh1C6/rQ==
+Received: by mail-oo1-f46.google.com with SMTP id w5-20020a4a2745000000b002c2649b8d5fso6677160oow.10
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:12:26 -0800 (PST)
+X-Gm-Message-State: AOAM530ct9qml+e6ora/Pi2N2asAjtULWhw5ZTTzzafGp8arHEbHG3+1
+        cQuUiTHnkB/ymRt6tF1prftu5hxHRZGeoHY/TaE=
+X-Google-Smtp-Source: ABdhPJwAZ391NHSXEptRBPTPOpfcyKVJmW0+b+XHnPKjZQ/TvLVpV1LohJo16UbYFKDNPEPol8PoCmZJ7ZvVgIuvyWk=
+X-Received: by 2002:a4a:a641:: with SMTP id j1mr35370708oom.63.1638277945792;
+ Tue, 30 Nov 2021 05:12:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202111250918.ErFZktQF-lkp@intel.com>
+In-Reply-To: <202111250918.ErFZktQF-lkp@intel.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Tue, 30 Nov 2021 14:12:14 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com>
+Message-ID: <CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com>
+Subject: Re: [ardb:for-kernelci 25/25] arch/arm/kernel/traps.c:865:17:
+ warning: no previous prototype for function 'handle_bad_stack'
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In cdns_mhdp_atomic_enable(), the return value of drm_mode_duplicate()
-is assigned to mhdp_state->current_mode and used in drm_mode_set_name().
-There is a dereference of it in drm_mode_set_name(), which could lead
-to a NULL pointer dereference on failure of drm_mode_duplicate().
+On Thu, 25 Nov 2021 at 02:35, kernel test robot <lkp@intel.com> wrote:
+>
+> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
+> head:   5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
+> commit: 5da04a8b7050432b72f6551b6c95e4b5b5fd68d1 [25/25] ARM: implement THREAD_INFO_IN_TASK for uniprocessor systems
+> config: arm-randconfig-r024-20211124 (https://download.01.org/0day-ci/archive/20211125/202111250918.ErFZktQF-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install arm cross compiling tool for clang build
+>         # apt-get install binutils-arm-linux-gnueabi
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
+>         git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
+>         git fetch --no-tags ardb for-kernelci
+>         git checkout 5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
+>         # save the config file to linux build tree
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm
+>
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+>
+> All warnings (new ones prefixed by >>):
+>
 
-Fix this bug by adding a check of mhdp_state->current_mode.
+This is yet another false positive. asmlinkage routines don't need a
+prototype because they are called from assembler. This is not going to
+get fixed, so please don't report this error anymore.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
 
-Builds with CONFIG_DRM_CDNS_MHDP8546=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Fixes: fb43aa0acdfd ("drm: bridge: Add support for Cadence MHDP8546 DPI/DP bridge")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
-index 5530fbf64f1e..347fbecf76a4 100644
---- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
-+++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
-@@ -2040,6 +2040,11 @@ static void cdns_mhdp_atomic_enable(struct drm_bridge *bridge,
- 	mhdp_state = to_cdns_mhdp_bridge_state(new_state);
- 
- 	mhdp_state->current_mode = drm_mode_duplicate(bridge->dev, mode);
-+	if (!mhdp_state->current_mode) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
- 	drm_mode_set_name(mhdp_state->current_mode);
- 
- 	dev_dbg(mhdp->dev, "%s: Enabling mode %s\n", __func__, mode->name);
--- 
-2.25.1
-
+>    arch/arm/kernel/traps.c:95:6: warning: no previous prototype for function 'dump_backtrace_stm' [-Wmissing-prototypes]
+>    void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
+>         ^
+>    arch/arm/kernel/traps.c:95:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    void dump_backtrace_stm(u32 *stack, u32 instruction, const char *loglvl)
+>    ^
+>    static
+>    arch/arm/kernel/traps.c:446:17: warning: no previous prototype for function 'do_undefinstr' [-Wmissing-prototypes]
+>    asmlinkage void do_undefinstr(struct pt_regs *regs)
+>                    ^
+>    arch/arm/kernel/traps.c:446:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    asmlinkage void do_undefinstr(struct pt_regs *regs)
+>               ^
+>               static
+>    arch/arm/kernel/traps.c:511:39: warning: no previous prototype for function 'handle_fiq_as_nmi' [-Wmissing-prototypes]
+>    asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
+>                                          ^
+>    arch/arm/kernel/traps.c:511:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    asmlinkage void __exception_irq_entry handle_fiq_as_nmi(struct pt_regs *regs)
+>               ^
+>               static
+>    arch/arm/kernel/traps.c:530:17: warning: no previous prototype for function 'bad_mode' [-Wmissing-prototypes]
+>    asmlinkage void bad_mode(struct pt_regs *regs, int reason)
+>                    ^
+>    arch/arm/kernel/traps.c:530:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    asmlinkage void bad_mode(struct pt_regs *regs, int reason)
+>               ^
+>               static
+>    arch/arm/kernel/traps.c:603:16: warning: no previous prototype for function 'arm_syscall' [-Wmissing-prototypes]
+>    asmlinkage int arm_syscall(int no, struct pt_regs *regs)
+>                   ^
+>    arch/arm/kernel/traps.c:603:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    asmlinkage int arm_syscall(int no, struct pt_regs *regs)
+>               ^
+>               static
+>    arch/arm/kernel/traps.c:729:1: warning: no previous prototype for function 'baddataabort' [-Wmissing-prototypes]
+>    baddataabort(int code, unsigned long instr, struct pt_regs *regs)
+>    ^
+>    arch/arm/kernel/traps.c:728:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    asmlinkage void
+>               ^
+>               static
+>    arch/arm/kernel/traps.c:769:17: warning: no previous prototype for function '__div0' [-Wmissing-prototypes]
+>    asmlinkage void __div0(void)
+>                    ^
+>    arch/arm/kernel/traps.c:769:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    asmlinkage void __div0(void)
+>               ^
+>               static
+> >> arch/arm/kernel/traps.c:865:17: warning: no previous prototype for function 'handle_bad_stack' [-Wmissing-prototypes]
+>    asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>                    ^
+>    arch/arm/kernel/traps.c:865:12: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>    asmlinkage void handle_bad_stack(struct pt_regs *regs)
+>               ^
+>               static
+>    8 warnings generated.
+>
+>
+> vim +/handle_bad_stack +865 arch/arm/kernel/traps.c
+>
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  864
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23 @865  asmlinkage void handle_bad_stack(struct pt_regs *regs)
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  866  {
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  867   unsigned long tsk_stk = (unsigned long)current->stack;
+> 5da04a8b705043 Ard Biesheuvel 2021-11-24  868  #ifdef CONFIG_IRQSTACKS
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  869   unsigned long irq_stk = (unsigned long)this_cpu_read(irq_stack_ptr);
+> 5da04a8b705043 Ard Biesheuvel 2021-11-24  870  #endif
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  871   unsigned long ovf_stk = (unsigned long)this_cpu_read(overflow_stack_ptr);
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  872
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  873   console_verbose();
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  874   pr_emerg("Insufficient stack space to handle exception!");
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  875
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  876   pr_emerg("Task stack:     [0x%08lx..0x%08lx]\n",
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  877            tsk_stk, tsk_stk + THREAD_SIZE);
+> 5da04a8b705043 Ard Biesheuvel 2021-11-24  878  #ifdef CONFIG_IRQSTACKS
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  879   pr_emerg("IRQ stack:      [0x%08lx..0x%08lx]\n",
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  880            irq_stk - THREAD_SIZE, irq_stk);
+> 5da04a8b705043 Ard Biesheuvel 2021-11-24  881  #endif
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  882   pr_emerg("Overflow stack: [0x%08lx..0x%08lx]\n",
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  883            ovf_stk - OVERFLOW_STACK_SIZE, ovf_stk);
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  884
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  885   die("kernel stack overflow", regs, 0);
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  886  }
+> adc7d753de62f2 Ard Biesheuvel 2021-09-23  887
+>
+> :::::: The code at line 865 was first introduced by commit
+> :::::: adc7d753de62f220505f528106a6d618104302c5 ARM: implement support for vmap'ed stacks
+>
+> :::::: TO: Ard Biesheuvel <ardb@kernel.org>
+> :::::: CC: Ard Biesheuvel <ardb@kernel.org>
+>
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

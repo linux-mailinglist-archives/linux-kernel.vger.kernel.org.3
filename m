@@ -2,98 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F38463A8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:48:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2531E463A8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbhK3PvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:51:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        id S240321AbhK3Pwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:52:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbhK3Puy (ORCPT
+        with ESMTP id S240309AbhK3PvV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:50:54 -0500
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD748C061574;
-        Tue, 30 Nov 2021 07:47:30 -0800 (PST)
-Received: by mail-qk1-x732.google.com with SMTP id 193so27223356qkh.10;
-        Tue, 30 Nov 2021 07:47:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0E8rI2pldC/kJRYfFj5pOe4f4oCd/4elC+07mJ7cezg=;
-        b=M3TECrBfeRNcmU2wzwJW8xakJwOsl96F7/wzhKVZtGVC4XSClhkZtPmX4O/ArG22Sh
-         jjA+g1x4pyJ/4pviilYQPG+KhhSz3F4DZuFRxnjDPTFhjqCEG4DtQvvJ8KQb64m6allX
-         yyKpYEUobSoiHyXxASAEYQUGG6RRUph0Z3VWpZpdz7lmDRWto1u3+zXWvSbLxkDosk3G
-         7B4KO4BxCe1+OrGLaCgzq2a913mzBdZ+eBV/20lQAFekOCsIcFyVxoB2ZV2YfjeK8rzK
-         SXg7rom0+dWxy0uNUSNNlxxK6f6+bXyctj/awauwEt7A4J/lXSd6tDQSaieEQdgMmo+8
-         LQbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0E8rI2pldC/kJRYfFj5pOe4f4oCd/4elC+07mJ7cezg=;
-        b=aEDwJF6lOKVALR1v3UyQRQHeogd81xev40Ew9jIUQetifgumoPkmSjjzUdbBwJT8gh
-         Aox3c91O/AsZOkas/dnjUVoMHEKtOpCjn/UUfA6phKawDM/kKaQ1B9Jr5QkDaIf6nDCH
-         PfW8pzA2oVoG51jWAqeerte6/2x2L78t2d5Ru4qh5G3cUhWIae1/IOJNKhGXebFubQZ/
-         r7H/QT/CWsGNkIbnt2nj1GG+HkiVc2hpTBie2sgjFp2N7MrxiHQZ2+CLyrYRvWHXwDZ0
-         hkBJf7DXD5f00W1s4GzRDqMTV6Zdg1unpDcr5IvLN92/hkPlP0uQwsGrZWki6uEYxrjz
-         89cQ==
-X-Gm-Message-State: AOAM533lBt32BQn2kBPAMjB0bGD6Ra/DUZEVGI4su675A82UvO8XfFFU
-        D13u9KzrvtZDYnMof721w+pUpy489osVr2bX3rA=
-X-Google-Smtp-Source: ABdhPJztrZJR8wzz1uvKDh9tgCXsCwcvYHaAV5LAj9Tyfjkwz7VlVZjHRc1l9DQlQzaVs/JoaW2gQFPu+qw5proo6JA=
-X-Received: by 2002:a05:620a:134a:: with SMTP id c10mr46334061qkl.207.1638287249916;
- Tue, 30 Nov 2021 07:47:29 -0800 (PST)
+        Tue, 30 Nov 2021 10:51:21 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A347FC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:48:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id EB60ECE1A48
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 15:47:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACCE6C53FC7;
+        Tue, 30 Nov 2021 15:47:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638287277;
+        bh=ht1w0Zxz/2n1bifQGvJqnd2/yqA1jDA28G0XH75K4fs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cxyq76XGheE0psrKTWB/ikTksRmK2Ysik36of6t7Wtq8yMabfKT4tj3cKULpXU6cg
+         FCiUrCm+Od2E1G71M+X8wnb+Kc3INGhzCQX9rpO7oXH/IJGcv8goXBWLTxEz8/kqm+
+         mxmExAQ4kXuIlUEVZ5hPafxzTqn05fMffocZULgnBuTx6h8cd21A9k6Fhowtf/HTEQ
+         Sc2vcc1FtrfrtSCZ6LjMvORgA6NFUJfBvxGzckTdkz5ifN2rqOPlT7CWCUsnVjVqX2
+         4e1ZaNLEanWh7P2fhT6gUYFrujGwvf5IrbysNqgbxiJWso68tAaPerZ69T7aEqIu/p
+         xzHUj+p0yBEMQ==
+Date:   Tue, 30 Nov 2021 07:47:54 -0800
+From:   Keith Busch <kbusch@kernel.org>
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] driver: nvme: fix missing error code
+Message-ID: <20211130154754.GA3627665@dhcp-10-100-145-180.wdc.com>
+References: <20211130135015.1818325-1-mudongliangabcd@gmail.com>
 MIME-Version: 1.0
-References: <20211120112738.45980-1-laoar.shao@gmail.com> <20211120112738.45980-8-laoar.shao@gmail.com>
- <yt9d35nf1d84.fsf@linux.ibm.com> <20211129123043.5cfd687a@gandalf.local.home>
- <CALOAHbCVJcPdYq2j_VvhHBE-xLBnizRRx2oBu-KNgOr5jMf6RQ@mail.gmail.com> <20211130092333.77408a81@gandalf.local.home>
-In-Reply-To: <20211130092333.77408a81@gandalf.local.home>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Tue, 30 Nov 2021 23:46:54 +0800
-Message-ID: <CALOAHbDvxpjW9eD2_FeKMJzXdbEkWJykbdcjtk1Et_+=ybvgVw@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded 16
- with TASK_COMM_LEN
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Sven Schnelle <svens@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        kbuild test robot <lkp@intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130135015.1818325-1-mudongliangabcd@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:23 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->
-> On Tue, 30 Nov 2021 11:03:48 +0800
-> Yafang Shao <laoar.shao@gmail.com> wrote:
->
-> > Many thanks for the quick fix!
-> > It seems this fix should be ahead of patch #7.
-> > I will send v3 which contains your fix.
->
-> Don't bother. I'm actually going to send this to Linus as a bug fix.
->
+On Tue, Nov 30, 2021 at 09:50:14PM +0800, Dongliang Mu wrote:
+> Smatch reports:
+> 
+> drivers/nvme/host/multipath.c:865
+> nvme_mpath_init_identify() warn: missing error code 'error'
+> 
+> In one error handling path of nvme_mpath_init_identify(Line 865), error
+> is not initialized as an errno.
+> 
+> Fix this by assigning error to -EINVAL.
 
-Great!  Thanks for the work.
+Nak, the code is correct as-is. Returning a negetive error will abort
+the initialization process. We don't need ANA support in order to manage
+this controller, so failing a controller for an optional condition
+isn't helpful.
 
--- 
-Thanks
-Yafang
+The other parts of this function returning negetive errors should be
+fixed to return 0, though.
+ 
+> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> ---
+>  drivers/nvme/host/multipath.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
+> index 7f2071f2460c..2cbeb6d6b064 100644
+> --- a/drivers/nvme/host/multipath.c
+> +++ b/drivers/nvme/host/multipath.c
+> @@ -862,6 +862,7 @@ int nvme_mpath_init_identify(struct nvme_ctrl *ctrl, struct nvme_id_ctrl *id)
+>  			"ANA log page size (%zd) larger than MDTS (%zd).\n",
+>  			ana_log_size, max_transfer_size);
+>  		dev_err(ctrl->device, "disabling ANA support.\n");
+> +		error = -EINVAL;
+>  		goto out_uninit;
+>  	}
+>  	if (ana_log_size > ctrl->ana_log_size) {
+> -- 
+> 2.25.1
+> 

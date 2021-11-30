@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4094D463F8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D260D463F8F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:59:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343824AbhK3VBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:01:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
+        id S240423AbhK3VCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343861AbhK3U7W (ORCPT
+        with ESMTP id S1343860AbhK3U7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Nov 2021 15:59:22 -0500
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743C9C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:56:01 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id p19so21578740qtw.12
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:56:01 -0800 (PST)
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6CCC061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:56:02 -0800 (PST)
+Received: by mail-qv1-xf34.google.com with SMTP id kl8so19336456qvb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:56:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YtBtuuKeMAZeMLgnQzbJ3vXXZ92idgns/q9JfanhveI=;
-        b=WFbJXwVEnhxLMzS7Tnth74NWeuWI3CF7UYR8dZ9P3SwawJScXMMGgUabBo/JxqJoe4
-         I4eESVBPhLb+hw63swrtwdgMGX+3sZGb582FHgz/ttTbWTuO0sx31T2Xf/2Ii9fChbJd
-         d4+qhNvBSVwj0YaCFcKTvQAPsX3rv7sXwA7s03CfVBr7PcCrQ7n28ii4nV+2/BMxmjEv
-         bTtqNPNtmOtnkGDsOniPIH3hPeYDwQ5OMO++/FbvKCPPLmF/2j9fS7dycMv7ym98Ct11
-         CqC4K5KyZbe5AYi2s6gSpRX+3+C3x0naFMj3WsAESfWFAg+7EXiXHEUUJO5vtYhIGSM+
-         23jQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=4Bo+Pv75ux3OGEm6ikDV6Ba4T5sjSa44YKAVb8mwSlU=;
+        b=OATjX5FBqQrB/au9HwrGyDr0P1n5KmjZCIlBvsKMXmrNI9tqL54t4Qn+s0PxUZ+J9n
+         uRO0Y5sAoLOmje3P0Bv3aVIGkjarnBz15YPpUObEn2Kv7yT7k01DPceuJNANJFB+OKIB
+         ts16woG+VQfdW+qRpcLLUw5eCm6u+Uwd9Q8RZtMM/ZPce2tavN/XrmaW7eJihaflpr1I
+         dhOGXyIdlCOsWH+ZJjfOb6Kjl3QNiAJgxMmq06bOwBdTau21seh16KO33NASZrYuGNRb
+         rkM6SyKhg+2SL2Lf88jPMkZJtLLpsrOINSnftQfLbJfIKU8XZ07qCohpVJwdsYtzeC+f
+         v2Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YtBtuuKeMAZeMLgnQzbJ3vXXZ92idgns/q9JfanhveI=;
-        b=OZVgHJLZNKg4vqT9EKRlYlaJQCfJNLUQ39TgFlgkHQ74so3itkppjUuiS1G+D0BJGN
-         BmiMHDRVwa0b+6pHfj8kzMh4Ze2j2RqSs4l0blnks0JC12jZTZAb2ZSvvJvvpHiBeOAZ
-         Qt2bGLEtYzN4iVASwGW9DAh0zQ+bExtkJjY1u/p/I1qF1DUCizu4PuzYH1UBCF56KeQS
-         F4tzY2KjP8c4JsbdzZgRCFETkSXFJ4kHtCT90k0XxkI5SPbszxXlEhYYgfpCRW0/y2zN
-         z3SSbWaHoYFG5BB1PvrEmnpII87ieI68eaIt1hqfaRakleWZQE4oOUIbhBT71QYbvsk1
-         tKBQ==
-X-Gm-Message-State: AOAM530Pgi4oE1HUL/TsrbSkxonyK2K38tw0cBrzxhX+12/vAbW2z8t8
-        D7i2NfhRPG7UyExrR/lm9lygFXhTeQ==
-X-Google-Smtp-Source: ABdhPJwWfLE+h6IJC+f8CtMCRdjqbyx8LbdDR8H0yf6QVxp1PNA865RFPbpvsJkJzHk80A+UllNy3A==
-X-Received: by 2002:a05:622a:1790:: with SMTP id s16mr2088243qtk.625.1638305760506;
-        Tue, 30 Nov 2021 12:56:00 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=4Bo+Pv75ux3OGEm6ikDV6Ba4T5sjSa44YKAVb8mwSlU=;
+        b=H0BX/bhAidEmFtH5pvS3k6MVoNYV8Vl9S6bXY2132iR1yHhQPIGWw2mi+XqoebQR+Q
+         3SFv5CNDaQoFgDzFK9I78h9XW2VVOt/3V/bFwJQXW/SMTk3Cj9yJRaS3EqzMsBdu9w+J
+         IhIlcJj4kVLa8oLt9wCgbpPaWO+sARE/oowFuhdJUz09/VxofQyy5FfX2Siu+2ce8tTb
+         D6qMtEb9EXLIIUVDld93369kD2wAOJepDlLCtbLE09LQR2TvCcwuOGatR8W6tCzCQAcg
+         cWPfqF8BLoxLEvZSM7SwD8txSCicdaQDqW6gjt+GQBNz5xYYrT8HtGg63L6Vm3su6XJj
+         AhFA==
+X-Gm-Message-State: AOAM532MmxjQAno5ZbI4U75nWoj0Ee/3PetAKY/FS0EuJlag7d7Ly3od
+        lncAj0ue9ZdF9p79Wq8UaEQTPqgoOA==
+X-Google-Smtp-Source: ABdhPJwJl4cxTR60TgMFp63gz6NhdkpYDBFhrT21J/a+4OqKgInRVp7cOp/8GpHAm7xd65KGNQ82AA==
+X-Received: by 2002:a05:6214:23c9:: with SMTP id hr9mr1627021qvb.80.1638305761431;
+        Tue, 30 Nov 2021 12:56:01 -0800 (PST)
 Received: from citadel.. (174-084-153-250.res.spectrum.com. [174.84.153.250])
-        by smtp.gmail.com with ESMTPSA id t11sm10549356qkp.56.2021.11.30.12.55.59
+        by smtp.gmail.com with ESMTPSA id t11sm10549356qkp.56.2021.11.30.12.56.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 12:56:00 -0800 (PST)
+        Tue, 30 Nov 2021 12:56:01 -0800 (PST)
 From:   Brian Gerst <brgerst@gmail.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
@@ -55,64 +55,79 @@ Cc:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
         "H . Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Brian Gerst <brgerst@gmail.com>
-Subject: [PATCH v2 0/6] x86-64: Stack protector and percpu improvements
-Date:   Tue, 30 Nov 2021 15:55:43 -0500
-Message-Id: <20211130205549.116673-1-brgerst@gmail.com>
+Subject: [PATCH v2 1/6] x86: Remove stack protector test scripts
+Date:   Tue, 30 Nov 2021 15:55:44 -0500
+Message-Id: <20211130205549.116673-2-brgerst@gmail.com>
 X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20211130205549.116673-1-brgerst@gmail.com>
+References: <20211130205549.116673-1-brgerst@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, x86-64 uses an unusual per-cpu layout, where the percpu section
-is linked at absolute address 0.  The reason behind this is that older GCC
-versions placed the stack protector (if enabled) at a fixed offset from the
-GS segment base.  Since the GS segement is also used for percpu variables,
-this forced the current layout.
+For 64-bit, this test for the stack protector was added in 2006 to
+make sure the compiler had the PR28281 patch applied.  With GCC 5.1
+being the minimum supported compiler now, this test is no longer
+necessary.
 
-GCC since version 8.1 supports a configurable location for the stack
-protector value, which allows removal of the restriction on how the percpu
-section is linked.
+For 32-bit, testing for compiler option support can be done directly
+in Kconfig.
 
-Changes from v1:
-- Remove fixed location stack protector support
-
-Brian Gerst (6):
-  x86: Remove stack protector test scripts
-  x86-64: Convert stack protector to normal percpu variable
-  x86-64: Use relative per-cpu offsets
-  x86-64: Remove inverse relocations
-  kallsyms: Remove KALLSYMS_ABSOLUTE_PERCPU
-  percpu: Remove PER_CPU_FIRST_SECTION
-
- arch/x86/Kconfig                          |   7 +-
- arch/x86/Makefile                         |  19 +--
- arch/x86/boot/compressed/misc.c           |  14 +--
- arch/x86/entry/entry_64.S                 |   2 +-
- arch/x86/include/asm/percpu.h             |  22 ----
- arch/x86/include/asm/processor.h          |  25 +---
- arch/x86/include/asm/stackprotector.h     |  36 ++----
- arch/x86/kernel/asm-offsets_64.c          |   6 -
- arch/x86/kernel/cpu/common.c              |   8 +-
- arch/x86/kernel/head_64.S                 |  10 +-
- arch/x86/kernel/irq_64.c                  |   1 -
- arch/x86/kernel/setup_percpu.c            |  12 +-
- arch/x86/kernel/vmlinux.lds.S             |  33 -----
- arch/x86/tools/relocs.c                   | 145 +---------------------
- arch/x86/xen/xen-head.S                   |  10 +-
- include/asm-generic/vmlinux.lds.h         |   1 -
- include/linux/percpu-defs.h               |  12 --
- init/Kconfig                              |  11 +-
- kernel/kallsyms.c                         |  12 +-
- scripts/gcc-x86_32-has-stack-protector.sh |   8 --
- scripts/gcc-x86_64-has-stack-protector.sh |   4 -
- scripts/kallsyms.c                        |  68 ++--------
- scripts/link-vmlinux.sh                   |   4 -
- 23 files changed, 56 insertions(+), 414 deletions(-)
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+---
+ arch/x86/Kconfig                          | 7 +++----
+ scripts/gcc-x86_32-has-stack-protector.sh | 8 --------
+ scripts/gcc-x86_64-has-stack-protector.sh | 4 ----
+ 3 files changed, 3 insertions(+), 16 deletions(-)
  delete mode 100755 scripts/gcc-x86_32-has-stack-protector.sh
  delete mode 100755 scripts/gcc-x86_64-has-stack-protector.sh
 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 8ef4c24cc569..82ed7fdddc75 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -392,12 +392,11 @@ config PGTABLE_LEVELS
+ 
+ config CC_HAS_SANE_STACKPROTECTOR
+ 	bool
+-	default $(success,$(srctree)/scripts/gcc-x86_64-has-stack-protector.sh $(CC)) if 64BIT
+-	default $(success,$(srctree)/scripts/gcc-x86_32-has-stack-protector.sh $(CC))
++	default y if 64BIT
++	default $(cc-option,-mstack-protector-guard-reg=fs -mstack-protector-guard-symbol=__stack_chk_guard)
+ 	help
+ 	   We have to make sure stack protector is unconditionally disabled if
+-	   the compiler produces broken code or if it does not let us control
+-	   the segment on 32-bit kernels.
++	   the compiler does not let us control the segment and symbol.
+ 
+ menu "Processor type and features"
+ 
+diff --git a/scripts/gcc-x86_32-has-stack-protector.sh b/scripts/gcc-x86_32-has-stack-protector.sh
+deleted file mode 100755
+index 825c75c5b715..000000000000
+--- a/scripts/gcc-x86_32-has-stack-protector.sh
++++ /dev/null
+@@ -1,8 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
+-
+-# This requires GCC 8.1 or better.  Specifically, we require
+-# -mstack-protector-guard-reg, added by
+-# https://gcc.gnu.org/bugzilla/show_bug.cgi?id=81708
+-
+-echo "int foo(void) { char X[200]; return 3; }" | $* -S -x c -c -m32 -O0 -fstack-protector -mstack-protector-guard-reg=fs -mstack-protector-guard-symbol=__stack_chk_guard - -o - 2> /dev/null | grep -q "%fs"
+diff --git a/scripts/gcc-x86_64-has-stack-protector.sh b/scripts/gcc-x86_64-has-stack-protector.sh
+deleted file mode 100755
+index 75e4e22b986a..000000000000
+--- a/scripts/gcc-x86_64-has-stack-protector.sh
++++ /dev/null
+@@ -1,4 +0,0 @@
+-#!/bin/sh
+-# SPDX-License-Identifier: GPL-2.0
+-
+-echo "int foo(void) { char X[200]; return 3; }" | $* -S -x c -c -m64 -O0 -mcmodel=kernel -fno-PIE -fstack-protector - -o - 2> /dev/null | grep -q "%gs"
 -- 
 2.31.1
 

@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F375E463C1F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:44:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9C04463C24
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244233AbhK3QsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:48:05 -0500
-Received: from mta-p7.oit.umn.edu ([134.84.196.207]:55440 "EHLO
-        mta-p7.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbhK3QsE (ORCPT
+        id S244283AbhK3Qso convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 Nov 2021 11:48:44 -0500
+Received: from mail-ua1-f41.google.com ([209.85.222.41]:45650 "EHLO
+        mail-ua1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233320AbhK3Qsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:48:04 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p7.oit.umn.edu (Postfix) with ESMTP id 4J3Sk44n7Cz9vwRk
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:44:44 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p7.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p7.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id bOFkWnvaLVpq for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 10:44:44 -0600 (CST)
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p7.oit.umn.edu (Postfix) with ESMTPS id 4J3Sk42gHLz9vwRh
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:44:44 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p7.oit.umn.edu 4J3Sk42gHLz9vwRh
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p7.oit.umn.edu 4J3Sk42gHLz9vwRh
-Received: by mail-pj1-f71.google.com with SMTP id gf12-20020a17090ac7cc00b001a968c11642so10139431pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:44:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PaeiLQYvyxb/egvfxneLGShNKX/REnwSjHvw37uaFCI=;
-        b=kAglzTGrPgxrNYWpODLwneomdarMnjBmCEYpHzg0mlyiVGI8yhZ1Xw14DA/bayXBVe
-         Rvl0VOLQ4PfZsfMPAOYNe1uRNZ/53wiOyS0KL4koX1fOTDxWq1OVasd1H4ZR9Aa2cgaM
-         i/VZuQjRQU2Sx1fZrVJR6rdTlzlBy+67tzFvX2W5cyv5ykIfljv8lbxm/GjagVUZdbPa
-         sNkJmQWE+BWadlmYSikko3EY6/p7tfaEbzuyTL1h5+ZsuquCHRc8Pi3j5+kHCz+Aqj8w
-         +IAQ4N1+Ngwj6jGwvH/wLj0k9cHN/35oFv4MTr8NUyK1IblMMUC8X10oBjhpBJ3Bnnav
-         kQMQ==
+        Tue, 30 Nov 2021 11:48:42 -0500
+Received: by mail-ua1-f41.google.com with SMTP id ay21so42707061uab.12;
+        Tue, 30 Nov 2021 08:45:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=PaeiLQYvyxb/egvfxneLGShNKX/REnwSjHvw37uaFCI=;
-        b=UO8k5ZbVHV7Q8zOLVqupAOxFQ5I86fH+wJEEiJsq4oAI/XngFFma7i/S+khsrbWqtu
-         uT6AP68d5dqr40m4Kac4daTgJazfmhEL7PJStQZgoC0dRUyTvQ3GknlpiRc9cSdtLcAc
-         i9yv72r0gIH0dP8CppwbkVWQN8+zO9zZGEm9qwhmbfNLw9bVBtQKnPsUaGVvuzWLTkRo
-         LDzCh2IygA+54x8e9utzY2o7/soiU8iaLlxIVmzwUULF2vy61smhOMZJZB/XURN146a+
-         T13KgVxQUiyhHorWOR4bCxFHW7RILONi3G2rFLoFA5TlIjjmDwrLsE4JEzreqhTTaIr+
-         hIGA==
-X-Gm-Message-State: AOAM533oLhIveH28CXXDH0eQhfMLv0NEru7fiBbclwBLswE8A55whFa9
-        1R5NkwIK5QNLRdO3BjfPopXQOoa07MJT+TcQ7hf7bZmS3X1QkmxG3vWaoD2g/OGbNO13SpwRIA5
-        odcA77v7EFaeV8S1afrHr/6iLbmCj
-X-Received: by 2002:a17:90b:1b4b:: with SMTP id nv11mr33540pjb.131.1638290683711;
-        Tue, 30 Nov 2021 08:44:43 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx6D96bJSvgqWrNljSraQswVWeIyQsJHaWNZcj0Nla/JfAsxMD4xnJDOQqOo92m0zTctmI0rw==
-X-Received: by 2002:a17:90b:1b4b:: with SMTP id nv11mr33518pjb.131.1638290683492;
-        Tue, 30 Nov 2021 08:44:43 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id c35sm15304312pgm.67.2021.11.30.08.44.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 08:44:43 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eugenia Emantayev <eugenia@mellanox.com>,
-        netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net/mlx4_en: Fix an use-after-free bug in mlx4_en_try_alloc_resources()
-Date:   Wed,  1 Dec 2021 00:44:38 +0800
-Message-Id: <20211130164438.190591-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iWgemuLdY/QvKYnwAaq261iQpjOIP4k64nwlshQt2Gk=;
+        b=06tGN5zT7nu8LL2I5jvkSjwI9uYYQXPRleYUx8BSWYfAWwN9TP6iNn98PUktY7ibyc
+         uGRjxHFZ4vEDU7keyaMe1T9Li7xf5L3xISg+tZXUlU+hdTQjQVjpe2bjemEIbZ0D9Pj6
+         MiZhh9ACG/k8FXTgjYRbFIityyZm55lv61gVokSy9ijOCaxLEpvO9CWZaaXJQh3K6NLP
+         9navW24vMwHADXt5kzcOOTaxgBeiiNUiQHGBNpVdgkOC6oGFAa5DxlJj9StNEAZhSBeW
+         r0XtwaHbkrj8Y0CU7QjpAE3U1FBpzoPX/ftkJyUmYZa8KO29CTzmi4yRtUeqEYXXTFFP
+         eKWQ==
+X-Gm-Message-State: AOAM531GMvFDw2drvg5xTElaU1CiLFMMqmgDpK64YXjoDj4GTUQMx7tO
+        1BDmH6vA+wwwReiJHyJlOqwZ6OwZc4uyug==
+X-Google-Smtp-Source: ABdhPJzWFBi+9YzLqxNYPpo5Vw5ER0M1AsEPaK939U5P1mm6CN5DHogz53UvV5qw4tbm5zk1phUy2Q==
+X-Received: by 2002:a67:eb54:: with SMTP id x20mr42992663vso.18.1638290722616;
+        Tue, 30 Nov 2021 08:45:22 -0800 (PST)
+Received: from mail-ua1-f51.google.com (mail-ua1-f51.google.com. [209.85.222.51])
+        by smtp.gmail.com with ESMTPSA id j17sm10084776vkp.27.2021.11.30.08.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 08:45:22 -0800 (PST)
+Received: by mail-ua1-f51.google.com with SMTP id p2so42632524uad.11;
+        Tue, 30 Nov 2021 08:45:22 -0800 (PST)
+X-Received: by 2002:a67:c106:: with SMTP id d6mr42038722vsj.77.1638290721992;
+ Tue, 30 Nov 2021 08:45:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211104224033.3997504-1-kieran.bingham+renesas@ideasonboard.com>
+ <CAMuHMdXVBj58ZM3LqCN3cudsE3VJV8AQC5OCOJP96RaqYf4NDQ@mail.gmail.com>
+ <YYo0syH9m/CYlB2d@oden.dyn.berto.se> <YYo62jdzSTxqCMtk@oden.dyn.berto.se>
+In-Reply-To: <YYo62jdzSTxqCMtk@oden.dyn.berto.se>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 30 Nov 2021 17:45:11 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUNZ+TOGU-H9dZu08WKO2fO2sbgL1BbN3JzEVBkOyMhdA@mail.gmail.com>
+Message-ID: <CAMuHMdUNZ+TOGU-H9dZu08WKO2fO2sbgL1BbN3JzEVBkOyMhdA@mail.gmail.com>
+Subject: Re: [PATCH 0/9] arm64: dts: renesas: Thermal binding validation
+To:     =?UTF-8?Q?Niklas_S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mlx4_en_try_alloc_resources(), mlx4_en_copy_priv() is called and
-tmp->tx_cq will be freed on the error path of mlx4_en_copy_priv().
-After that mlx4_en_alloc_resources() is called and there is a dereference
-of &tmp->tx_cq[t][i] in mlx4_en_alloc_resources(), which could lead to
-a use after free problem on failure of mlx4_en_copy_priv().
+Hi Niklas,
 
-Fix this bug by adding a check of mlx4_en_copy_priv()
+On Tue, Nov 9, 2021 at 10:09 AM Niklas Söderlund
+<niklas.soderlund+renesas@ragnatech.se> wrote:
+> On 2021-11-09 09:43:33 +0100, Niklas Söderlund wrote:
+> > > > linux/arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dt.yaml:
+> > > > thermal-zones: sensor3-thermal:cooling-maps:map0:contribution:0:0:
+> > > > 1024 is greater than the maximum of 100
+> > > >         From schema: Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+> > > >
+> > > > This validation error appears to be pervasive across all of these
+> > > > bindings, but changing that will be more invasive and require someone to
+> > > > perform dedicated testing with the thermal drivers to ensure that the
+> > > > updates to the ranges do not cause unexpected side effects.
+> > >
+> > > Niklas?
+> >
+> > I will have a look. The thermal driver is the one driver where I have
+> > automated CI test running.
+>
+> So the core of the issue is that the definition of the property changed
+> in the txt to yaml conversion. The original definition was,
+>
+>   Optional property:
+>   - contribution:         The cooling contribution to the thermal zone of the
+>     Type: unsigned        referred cooling device at the referred trip point.
+>     Size: one cell        The contribution is a ratio of the sum
+>                             of all cooling contributions within a thermal zone.
+>
+> While the  new binding states,
+>
+>   contribution:
+>     $ref: /schemas/types.yaml#/definitions/uint32
+>     minimum: 0
+>     maximum: 100
+>     description:
+>       The percentage contribution of the cooling devices at the
+>       specific trip temperature referenced in this map
+>       to this thermal zone
+>
+> Looking at the real world usage of this only 2 out of 17 platforms sets
+> a contribution value less or equal to 100. I will send a patch to fix
+> the bindings.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+Given Rob said he applied your patch[1], does that mean this series
+is good to be applied?
+Thanks!
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+[1] https://lore.kernel.org/all/YaU4XuiaJgEjGCdQ@robh.at.kernel.org/
 
-Builds with CONFIG_MLX4_EN=m show no new warnings,
-and our static analyzer no longer warns about this code.
+Gr{oetje,eeting}s,
 
-Fixes: ec25bc04ed8e ("net/mlx4_en: Add resilience in low memory systems")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/net/ethernet/mellanox/mlx4/en_netdev.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+                        Geert
 
-diff --git a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-index 3f6d5c384637..f1c10f2bda78 100644
---- a/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-+++ b/drivers/net/ethernet/mellanox/mlx4/en_netdev.c
-@@ -2286,9 +2286,14 @@ int mlx4_en_try_alloc_resources(struct mlx4_en_priv *priv,
- 				bool carry_xdp_prog)
- {
- 	struct bpf_prog *xdp_prog;
--	int i, t;
-+	int i, t, ret;
- 
--	mlx4_en_copy_priv(tmp, priv, prof);
-+	ret = mlx4_en_copy_priv(tmp, priv, prof);
-+	if (ret) {
-+		en_warn(priv, "%s: mlx4_en_copy_priv() failed, return\n",
-+			__func__);
-+		return ret;
-+	}
- 
- 	if (mlx4_en_alloc_resources(tmp)) {
- 		en_warn(priv,
--- 
-2.25.1
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

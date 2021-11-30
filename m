@@ -2,83 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E324641E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F014641E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:58:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345017AbhK3XA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 18:00:57 -0500
-Received: from out1.migadu.com ([91.121.223.63]:19616 "EHLO out1.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344955AbhK3XAY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 18:00:24 -0500
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jeanthomas.me;
-        s=key1; t=1638313022;
+        id S1345060AbhK3XBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 18:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345045AbhK3XBP (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 18:01:15 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2306FC061574;
+        Tue, 30 Nov 2021 14:57:20 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638313038;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=nVheI0HHwsC673Oici9qOIZH6KhjlE7nlD+3PNI8Ozc=;
-        b=msKyWKHI0ZdCfLwDzAnNrDH7kX8WjN3hdwsu13wg0kf466M/yBBNKnssVg7v4GWummN/2I
-        4sdqwTDEaCbSk01MJqP6OLnT9JtBev0NY9d/TeeSNWWgcGoSFlhDHbL/vOygF7BYx6mnvd
-        PujjiLFDRgJuXGzcdixjPQSPwZUFKUQIGzOHOkbAc4EL/VmB6dDqojgNzk6InCoKlF/cpc
-        zunOnTr7lEaq2oHeCVyjVB1qJ7eYNG1TeSxH4aI8/A7zdocG5AyFdZu45SByTgouqAktnk
-        6GH19TSCgziTWhp8i53h9304UmHIPzPIwtaPgI70EtTl0tIQTE3bKRGzH6vzLg==
-From:   Jean THOMAS <virgule@jeanthomas.me>
-To:     virgule@jeanthomas.me, devicetree@vger.kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, petr.vorel@gmail.com
-Subject: [PATCH 2/2] arm64: dts: Add support for LG Bullhead rev 1.0
-Date:   Tue, 30 Nov 2021 23:56:45 +0100
-Message-Id: <20211130225645.171725-2-virgule@jeanthomas.me>
-In-Reply-To: <20211130225645.171725-1-virgule@jeanthomas.me>
-References: <20211130225645.171725-1-virgule@jeanthomas.me>
+        bh=9/V2ihpxA3WwS0vURZHQtur+oN9jzv/WY9q6y31GKWQ=;
+        b=H/PJulp8NdWEg5GCLCZNyCcu7PnYq7sn0CrK1aunP9/Va3NAiT2tpFB+9cNLj44UjJgTZb
+        EBidZKWS9bDsAPEW4Dz9m+FHuHmw1RNJV7kVzyh4X6YaE2A8+MJPoXZkfHON4ZzYA73xdW
+        fISR28LMRyJUVKneoL8b5RixqutfQhP8Uk2FUH+tXp1oK3EBeauxPN9ceBnCDUpEQ9hbB+
+        v05bBUHf5+5LfrqWShYKw4pHHl32cy4ui00eeQe+YEE24Uz/PcqtrzLmQFdYY8p5P9Glm0
+        BfWJmQzn3ATb7hGDmkq5lWOw5DojQK1WP2Rpw1aeAhJqyi4gZkhA4dpubIu8LA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638313038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9/V2ihpxA3WwS0vURZHQtur+oN9jzv/WY9q6y31GKWQ=;
+        b=KgpDPuhXZS9DIP5qHaPhe9LJ6uWxazb+cN5ZuoMSHdZa4FSaN083kJFqyi246QrHYf7Ckf
+        lC8ZOAaU4XJn9SAA==
+To:     Rob Herring <robh@kernel.org>, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v12 2/5] perf: Add a counter for number of user access
+ events in context
+In-Reply-To: <20211027201641.2076427-3-robh@kernel.org>
+References: <20211027201641.2076427-1-robh@kernel.org>
+ <20211027201641.2076427-3-robh@kernel.org>
+Date:   Tue, 30 Nov 2021 23:57:17 +0100
+Message-ID: <87zgpl9rqq.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: jeanthomas.me
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit implements a DTS file for LG Bullhead (Nexus 5X) rev 1.0
-with its matching "qcom,board-id" property.
----
- arch/arm64/boot/dts/qcom/Makefile                    |  1 +
- .../boot/dts/qcom/msm8992-lg-bullhead-rev-10.dts     | 12 ++++++++++++
- 2 files changed, 13 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dts
+On Wed, Oct 27 2021 at 15:16, Rob Herring wrote:
+> For controlling user space counter access, we need to know if any event
+> in a context (currently scheduled or not) is using user space counters.
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 3617157f1420..17aa096f8b99 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -17,6 +17,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-a3u-eur.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-a5u-eur.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-lg-bullhead-rev-10.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-lg-bullhead-rev-101.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-msft-lumia-octagon-talkman.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8992-xiaomi-libra.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dts b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dts
-new file mode 100644
-index 000000000000..4d2bea67c646
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/msm8992-lg-bullhead-rev-10.dts
-@@ -0,0 +1,12 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) Jean Thomas <virgule@jeanthomas.me>
-+ */
-+
-+/dts-v1/;
-+
-+#include "msm8992-lg-bullhead.dtsi"
-+
-+/ {
-+	/* required for bootloader to select correct board */
-+	qcom,board-id = <0xa64 0>;
-+};
--- 
-2.33.1
+Who is 'we'?
+
+Come on. How is someone without context supposed to figure out that 'we'
+means ARM64 when staring at that changelog a year later?
+
+Is it really that hard to write coherent changelogs which make sense on
+their own and actually follow Documentation/process/ which exists for a
+reason?
+
+Thanks,
+
+        tglx
+
 

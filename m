@@ -2,166 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6F5462EA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BD13462EA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239661AbhK3Ile (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:41:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57792 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234779AbhK3Ile (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:41:34 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE5CC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:38:15 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id r25so18143976edq.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:38:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=heplViuVuUTSUcpT2+Fmm0bTuboMvINSnURYbdaCaqQ=;
-        b=B2KGp+GAMKVzg/2mSgXYjc7SNCvlVPjJ6amaerWAvXG4vPqiN3EV8sQTomgILduZ0p
-         K7R8lIAwGoBgxBX7yW9Fn50vb++FmAbR+eR6tBHmPkELDy/5RQQyWkblmJSNtxhM/dWw
-         KiTriQEbBAgobbow9MrcN82Er9dV8iYZhENpc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=heplViuVuUTSUcpT2+Fmm0bTuboMvINSnURYbdaCaqQ=;
-        b=Y5g+Hru3z6rxplOYux3LrcrHiY1lP0p6v913l2K5ONpXUAiWTilsB6lZ45+OSrRPvH
-         0Ekizq/mZ9igmweYfDJsrg8n7zqjBy1D7lDl318c2BfkPLDjeolKxiuBlRsRhXED29wJ
-         NH4206aN5OgK1ymJ1TgpoTzFNMvMsYonBPwwFmdjiQsSvF9lNKOlNqEnjldYT5k6W8Bh
-         h/r1rmkoXbYiasuLK8eptrGuvBAL9QHWWaTkNOp0ThB/NivMQyOAdfnROYjLFCRn5FN7
-         yRWbzBGa6rMdJMTUiZhf9o0+yTSyZnlw5SUtyt/6bwlGxBAE3NIsuzhpCbIwmmU4i5+L
-         gIIg==
-X-Gm-Message-State: AOAM533YhfhMegkFhjWi4Lq/WCvlReWo4qknABd/2+h4+Ct2whK+EktX
-        W/8bdsrpjPEKC1dehx0pIYSuAg==
-X-Google-Smtp-Source: ABdhPJzFUZPOd2k/BSSZubG9ypTkB/vBGosz5jOJWqwCksjMpY207KPkdXOtcPR7IDaf9jugoi6wzg==
-X-Received: by 2002:a05:6402:2806:: with SMTP id h6mr80656862ede.120.1638261493998;
-        Tue, 30 Nov 2021 00:38:13 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id x7sm12600105edd.28.2021.11.30.00.38.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 00:38:13 -0800 (PST)
-Date:   Tue, 30 Nov 2021 09:38:11 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Claudio Suarez <cssk@net-c.es>
-Cc:     dri-devel@lists.freedesktop.org, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Subject: Re: [PATCH] drm: fix error found in some cases after the patch
- d1af5cd86997
-Message-ID: <YaXi803g7iv9MxWR@phenom.ffwll.local>
-Mail-Followup-To: Claudio Suarez <cssk@net-c.es>,
-        dri-devel@lists.freedesktop.org, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>
-References: <YaC7zXW119tlzfVh@gineta.localdomain>
- <20211128142015.GB5295@xsang-OptiPlex-9020>
- <YaUpsaP7hng6zpFh@gineta.localdomain>
+        id S239693AbhK3IqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:46:18 -0500
+Received: from pegase2.c-s.fr ([93.17.235.10]:39637 "EHLO pegase2.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239665AbhK3IqQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 03:46:16 -0500
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4J3G283yDSz9sSS;
+        Tue, 30 Nov 2021 09:42:56 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id dKXfUxfeFQ06; Tue, 30 Nov 2021 09:42:56 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4J3G2838c1z9sSP;
+        Tue, 30 Nov 2021 09:42:56 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 3F97B8B779;
+        Tue, 30 Nov 2021 09:42:56 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 0SG1YhGodZJM; Tue, 30 Nov 2021 09:42:56 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.93])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 079B48B763;
+        Tue, 30 Nov 2021 09:42:55 +0100 (CET)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 1AU8gf1C063015
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Tue, 30 Nov 2021 09:42:41 +0100
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 1AU8gdpY063014;
+        Tue, 30 Nov 2021 09:42:39 +0100
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Erhard Furtner <erhard_f@mailbox.org>
+Subject: [PATCH] powerpc/32s: Fix shift-out-of-bounds in KASAN init
+Date:   Tue, 30 Nov 2021 09:42:37 +0100
+Message-Id: <15cbc3439d4ad988b225e2119ec99502a5cc6ad3.1638261744.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaUpsaP7hng6zpFh@gineta.localdomain>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1638261756; l=1919; s=20211009; h=from:subject:message-id; bh=wli3SWXo3YOK/NxzckV1p2wzUokEybic7rAj14I6KLQ=; b=xr5oOz5wFeUxRLCvDTFfzbPeBY2sNbt9hmRecBeYOB9alAP3R1p+Txp48n1VgzCYoSw6kjTxd0vL IRB6+N/8CQ6SHmoOd7XelgoJouPU/0uPUR+vbXrJ/qpQWPaz1UmZ
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 08:27:45PM +0100, Claudio Suarez wrote:
-> The patch d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log
-> calls in drm core, files drm_a*.c") fails when the drm_device
-> cannot be found in the parameter plane_state. Fix it.
-> 
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Fixes: d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log calls in drm core, files drm_a*.c")
-> Signed-off-by: Claudio Suarez <cssk@net-c.es>
-> ---
->  drivers/gpu/drm/drm_atomic_helper.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-> index aef2fbd676e5..8bd4472d7949 100644
-> --- a/drivers/gpu/drm/drm_atomic_helper.c
-> +++ b/drivers/gpu/drm/drm_atomic_helper.c
-> @@ -312,7 +312,7 @@ update_connector_routing(struct drm_atomic_state *state,
->  
->  	if (!new_connector_state->crtc) {
->  		drm_dbg_atomic(connector->dev, "Disabling [CONNECTOR:%d:%s]\n",
-> -				connector->base.id, connector->name);
-> +			       connector->base.id, connector->name);
+================================================================================
+UBSAN: shift-out-of-bounds in arch/powerpc/mm/kasan/book3s_32.c:22:23
+shift exponent -1 is negative
+CPU: 0 PID: 0 Comm: swapper Not tainted 5.15.5-gentoo-PowerMacG4 #9
+Call Trace:
+[c214be60] [c0ba0048] dump_stack_lvl+0x80/0xb0 (unreliable)
+[c214be80] [c0b99288] ubsan_epilogue+0x10/0x5c
+[c214be90] [c0b98fe0] __ubsan_handle_shift_out_of_bounds+0x94/0x138
+[c214bf00] [c1c0f010] kasan_init_region+0xd8/0x26c
+[c214bf30] [c1c0ed84] kasan_init+0xc0/0x198
+[c214bf70] [c1c08024] setup_arch+0x18/0x54c
+[c214bfc0] [c1c037f0] start_kernel+0x90/0x33c
+[c214bff0] [00003610] 0x3610
+================================================================================
 
-Can you pls split this checkpatch fix out?
+This happens when the directly mapped memory is a power of 2.
 
->  
->  		set_best_encoder(state, new_connector_state, NULL);
->  
-> @@ -805,6 +805,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
->  					bool can_update_disabled)
->  {
->  	struct drm_framebuffer *fb = plane_state->fb;
-> +	struct drm_device *dev = plane_state->plane ? plane_state->plane->dev : NULL;
+Fix it by checking the shift and set the result to 0 when shift is -1
 
-For real drivers plane_state->plane really should never be NULL, and
-looking at the test report we blow up in an selftest. I think the right
-fix here is to make the selftest more robust and also mock a drm_plane
-(with a NULL plane->dev pointer, that should be fine).
+Reported-by: Erhard Furtner <erhard_f@mailbox.org>
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215169
+Fixes: 7974c4732642 ("powerpc/32s: Implement dedicated kasan_init_region()")
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/mm/kasan/book3s_32.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Can you pls spin that and test it with the selftests enabled in the
-config?
-
-Thanks, Daniel
-
->  	struct drm_rect *src = &plane_state->src;
->  	struct drm_rect *dst = &plane_state->dst;
->  	unsigned int rotation = plane_state->rotation;
-> @@ -828,8 +829,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
->  	}
->  
->  	if (!crtc_state->enable && !can_update_disabled) {
-> -		drm_dbg_kms(plane_state->crtc->dev,
-> -			       "Cannot update plane of a disabled CRTC.\n");
-> +		drm_dbg_kms(dev, "Cannot update plane of a disabled CRTC.\n");
->  		return -EINVAL;
->  	}
->  
-> @@ -839,8 +839,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
->  	hscale = drm_rect_calc_hscale(src, dst, min_scale, max_scale);
->  	vscale = drm_rect_calc_vscale(src, dst, min_scale, max_scale);
->  	if (hscale < 0 || vscale < 0) {
-> -		drm_dbg_kms(plane_state->crtc->dev,
-> -			       "Invalid scaling of plane\n");
-> +		drm_dbg_kms(dev, "Invalid scaling of plane\n");
->  		drm_rect_debug_print("src: ", &plane_state->src, true);
->  		drm_rect_debug_print("dst: ", &plane_state->dst, false);
->  		return -ERANGE;
-> @@ -864,8 +863,7 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
->  		return 0;
->  
->  	if (!can_position && !drm_rect_equals(dst, &clip)) {
-> -		drm_dbg_kms(plane_state->crtc->dev,
-> -			       "Plane must cover entire CRTC\n");
-> +		drm_dbg_kms(dev, "Plane must cover entire CRTC\n");
->  		drm_rect_debug_print("dst: ", dst, false);
->  		drm_rect_debug_print("clip: ", &clip, false);
->  		return -EINVAL;
-> -- 
-> 2.33.0
-> 
-> 
-> 
-
+diff --git a/arch/powerpc/mm/kasan/book3s_32.c b/arch/powerpc/mm/kasan/book3s_32.c
+index 202bd260a009..35b287b0a8da 100644
+--- a/arch/powerpc/mm/kasan/book3s_32.c
++++ b/arch/powerpc/mm/kasan/book3s_32.c
+@@ -19,7 +19,8 @@ int __init kasan_init_region(void *start, size_t size)
+ 	block = memblock_alloc(k_size, k_size_base);
+ 
+ 	if (block && k_size_base >= SZ_128K && k_start == ALIGN(k_start, k_size_base)) {
+-		int k_size_more = 1 << (ffs(k_size - k_size_base) - 1);
++		int shift = ffs(k_size - k_size_base);
++		int k_size_more = shift ? 1 << (shift - 1) : 0;
+ 
+ 		setbat(-1, k_start, __pa(block), k_size_base, PAGE_KERNEL);
+ 		if (k_size_more >= SZ_128K)
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.33.1
+

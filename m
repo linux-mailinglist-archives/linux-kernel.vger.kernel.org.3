@@ -2,123 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 644914630C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B3D4630CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:14:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbhK3KOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:14:43 -0500
-Received: from mout.gmx.net ([212.227.17.21]:37397 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233931AbhK3KOm (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:14:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638267072;
-        bh=6as+OWQfUBBueP33NqtJSLGs4+mbtX4XzVOWARqtKOo=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=TKmeK3VmPSNHMsECVgAcs8uEh2CjxVSajXw8fxB1GQVhoiITgvSTj+3DVLv5Dq46M
-         eF7mYCPsrh0c1rrdSDxtba11ZdsoGyKPMY7xxV1NLd5TElA2LkzJNryj/a3a8tTCWs
-         ZAnnvaWWiDBHaT7rfaN+T5HojCnYrjIli91XJXUs=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.20.60] ([92.116.145.109]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N95iR-1mUvUV2Lyh-0163pm; Tue, 30
- Nov 2021 11:11:12 +0100
-Message-ID: <6a73a2c8-1055-ebd5-7f12-dd34e86b7f2d@gmx.de>
-Date:   Tue, 30 Nov 2021 11:11:06 +0100
+        id S230497AbhK3KSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:18:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231487AbhK3KRt (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 05:17:49 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A16BC06174A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:14:29 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id a9so43200498wrr.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:14:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=references:user-agent:from:to:cc:subject:date:in-reply-to
+         :message-id:mime-version:content-transfer-encoding;
+        bh=dBYQclrL1vKJA2hPRXt6KeF9g/jxE7KFkoJRa+VO53I=;
+        b=1AfopWS6zkTVa6jdKQAeJJGCeMD6fHQz81yeyoe5PnEej7snZTuH+i2brOhwwuuAKl
+         Ad415D20Z29yvG1BpKgjlqjo2EaqbXSgSqpXOvJRlMztKmI4bxG+dQAFegsm+RPTbBi2
+         1skDls09LikfsHP40q7JVyi0tnfCtKX/flqYJzfbKJA9QZAatjWyotuq+3AfZANvvkKH
+         jJviAflgtTO+clMQg9JcSbSzH129XygWrX/qjFVBFk6/TFo9Gtf3ye4oGKmIGB/K8Svb
+         pxexwZQvUToX5cjLUqg2Zzv6hjlwyH9sZCoJtUtbPC7FVF74YUpuR6GQ4d7as9shHY4k
+         hUmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:references:user-agent:from:to:cc:subject:date
+         :in-reply-to:message-id:mime-version:content-transfer-encoding;
+        bh=dBYQclrL1vKJA2hPRXt6KeF9g/jxE7KFkoJRa+VO53I=;
+        b=OhtesihVlWLnT5VL0pYOKo75a9DHZd8ZXAl0VFLas/c4uc7tsVhdwG3Cg0MkfbyVWW
+         UjVpbRKZ+eUbwRia5r3x20sQGIyDzk6KrGPuoMMvHoBdI/A5CWwEFVHyhGm8B7HT41vo
+         lk9i/BEoR5KX2A0AReAS9UL5uEo/+OYufnxQtG18HEyj9xB/Eg9ViGow3p1Lp2zv90qH
+         upeydx5dizj8PQgAKDOHwR746e/txbovEtEGpDjEy3p0E3o6+ciS/i4FHexJt37elN9o
+         NjjZJfo3qNe7COe9bLx6TEUzgvZixsTqWzQ+Nh/hgV//mImdv/QX1W8XgS3PzhmnB2sw
+         gtQw==
+X-Gm-Message-State: AOAM533scaZzX04z7CWEXbhPq9DWcS+lpyWyETFPVJUHUnHRXzycI0q3
+        V1txG28FFKhuVfCkA7ImfUOOAw==
+X-Google-Smtp-Source: ABdhPJxYuug+7fh9iF3Xer/mVNntASv0BCC/qpNTVPpvQln8yYOB0AEfumefDIRmDn+iSntMtA/T7g==
+X-Received: by 2002:adf:a285:: with SMTP id s5mr40497412wra.468.1638267268433;
+        Tue, 30 Nov 2021 02:14:28 -0800 (PST)
+Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
+        by smtp.gmail.com with ESMTPSA id e24sm11990465wra.78.2021.11.30.02.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 02:14:28 -0800 (PST)
+References: <20211130093617.103147-1-jbrunet@baylibre.com>
+ <alpine.DEB.2.21.2111301104440.30606@lnxricardw1.se.axis.com>
+User-agent: mu4e 1.6.10; emacs 27.1
+From:   Jerome Brunet <jbrunet@baylibre.com>
+To:     Ricard Wanderlof <ricardw@axis.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] ASoC: meson: use dev_err_probe
+Date:   Tue, 30 Nov 2021 11:13:33 +0100
+In-reply-to: <alpine.DEB.2.21.2111301104440.30606@lnxricardw1.se.axis.com>
+Message-ID: <1jmtlmeyrg.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 4/7] agp/ati: Return error from ati_create_page_map()
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, airlied@linux.ie,
-        daniel.vetter@ffwll.ch, arnd@arndb.de, gregkh@linuxfoundation.org,
-        James.Bottomley@HansenPartnership.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20211112141628.12904-1-tzimmermann@suse.de>
- <20211112141628.12904-5-tzimmermann@suse.de>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20211112141628.12904-5-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:vsXZmWREyyQO4Ei4hi7PGcBdNB7o4W7WlJycF4lrN8y7m8QghWY
- awXrOrKcpO2aiGIPC4PwoEVwCsCvDganvJb9FMID0k1BSb8zhMcRR9bAUD817IK73V3I2Qj
- YLY8pe/Yr2PqlBttdV6LdJLQQk8NPXEQzVplIxWciz0PH3lKZ2DbdaKkQn4XiLjA8ErYD0T
- moMKZpJM+10hX4MgNZsDA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:dQW/7gbB9B0=:Ke5jKM3Vbv4XtclE6M8m1R
- 69xiFRvhHOigWGdjntZCXaCdSWWk/vaSD2XXiU3GperqW4UVIITcMxyr6/VsqScA5fF0sxV3f
- Ft1wowUFUNkUZ1j8gmVx0PulFa0ygQ7IyFjJOMsAzr5SDIuk/AQfRPgSDoy2SbAokv7k5xIx4
- J66skMYzlQ1ibSXiOyg1dzs6ZFztuj56pqvg8SUcL0dg7X5gxgZ8zfRx0iCXeGftLCl7MxO1Z
- 4q68lZL+2eF8rhgkhvjTknCWJMkgSQ79Hdj9zyt4BZsmYDmShAKCUjuPf5AtkHVnCnnI0sddH
- pFX6eDx9Thf/mDU8dfmexca9kxVZrv4G3tHQgOY5TATZjKX/gN0gA/TipE3cdBDYNH0JnTV9s
- oBsHxpolujwZUc+9L2QZN7ML+SduVwkOGWQvahITsFXZlS+kMKpE/m8bnfV0eN17mLeTPW5O9
- ACXguYCiSAzq2T+JCjjS8tqfcRcqJAp94ln9zqwrQsO21OU1sgVS6fdo4awNVg3peFo6JqmV0
- fHuTB21Sa2K5Jx5tYMT11hLGm2+2T4BNqYsIklM5+bGdVGdUEC5nPHtvEb/MvJolGou0jSTQf
- PJ0h9CZjnq2r3IB+xNkN/j4ElobsBrsFZmOyMKz+6Pq4mXrDwaOXUAYbnSgR7tG2crja/r9Dv
- kADpPSdmnOaas/9fGcc0UjqbxUaThkkVjFqwfmsR7Y0An27UJpaZWQdJcMO9mPRVtq07q3tnt
- YNWUUhX04F/Dwbph6b7LKU3uAoHBp8BujpbgH9EC+IdPN6r1NIToO0ym1Iy/DVbwdaA+lr43s
- Xy2KfcOKJLzCd2jzu/sYCbMkdBK2U34sgNaSvIxxpzMfHSJb8M8stoutxZhAd7+4NImMLeLkv
- VsFdRWJ4GtDd7u/FipyKZGzpVgr/ejKg9bK/b+aoqDjjZW/sBc5B+jLnt2xKsZmJ/utvNSebh
- zsQlvEc1nqoIXgaTtNNboRiWepfy4HJWSe7ESv1gJhx2mQimcE1Qpx4xBWpzXIlWFIwUo5rL3
- zTvLgYJFskFMPz7j1Bs38ujAfpMvKjmN81BjK62E0f+6EjC7LBcIPpcJe18tXobqRtc5JoYEm
- AGt0tVC9uTxw10=
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/12/21 15:16, Thomas Zimmermann wrote:
-> Fix the compiler warning
->
->   drivers/char/agp/ati-agp.c: In function 'ati_create_page_map':
->   drivers/char/agp/ati-agp.c:58:16: warning: variable 'err' set but not =
-used [-Wunused-but-set-variable]
->     58 |         int i, err =3D 0;
->
-> by returing the error to the caller.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> ---
->  drivers/char/agp/ati-agp.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/char/agp/ati-agp.c b/drivers/char/agp/ati-agp.c
-> index 857b37141a07..785cc1ecf4e0 100644
-> --- a/drivers/char/agp/ati-agp.c
-> +++ b/drivers/char/agp/ati-agp.c
-> @@ -55,7 +55,7 @@ static struct _ati_generic_private {
->
->  static int ati_create_page_map(struct ati_page_map *page_map)
->  {
-> -	int i, err =3D 0;
-> +	int i, err;
->
->  	page_map->real =3D (unsigned long *) __get_free_page(GFP_KERNEL);
->  	if (page_map->real =3D=3D NULL)
-> @@ -63,6 +63,8 @@ static int ati_create_page_map(struct ati_page_map *pa=
-ge_map)
->
->  	set_memory_uc((unsigned long)page_map->real, 1);
->  	err =3D map_page_into_agp(virt_to_page(page_map->real));
-> +	if (err)
-> +		goto err_free_page;
-
-I'd suggest to not use goto here, but instead simply fold
-in the free_page() and return.
-
-
->  	page_map->remapped =3D page_map->real;
->
->  	for (i =3D 0; i < PAGE_SIZE / sizeof(unsigned long); i++) {
-> @@ -71,6 +73,10 @@ static int ati_create_page_map(struct ati_page_map *p=
-age_map)
->  	}
->
->  	return 0;
-> +
-> +err_free_page:
-> +	free_page((unsigned long)page_map->real);
-> +	return err;
->  }
->
->
->
-
+DQpPbiBUdWUgMzAgTm92IDIwMjEgYXQgMTE6MDYsIFJpY2FyZCBXYW5kZXJsb2YgPHJpY2FyZHdA
+YXhpcy5jb20+IHdyb3RlOg0KDQo+IE9uIFR1ZSwgMzAgTm92IDIwMjEsIEplcm9tZSBCcnVuZXQg
+d3JvdGU6DQo+DQo+PiBVc2UgZGV2X2Vycl9wcm9iZSgpIGhlbHBlciBmdW5jdGlvbiB0byBoYW5k
+bGUgcHJvYmUgZGVmZXJyYWwuDQo+PiBJdCByZW1vdmVzIHRoZSBvcGVuIGNvZGVkIHRlc3QgZm9y
+IC1FUFJPQkVfREVGRVIgYnV0IG1vcmUgaW1wb3J0YW50bHksIGl0DQo+PiBzZXRzIHRoZSBkZWZl
+cnJhbCByZWFzb24gaW4gZGVidWdmcyB3aGljaCBpcyBncmVhdCBmb3IgZGVidWdnaW5nLg0KPj4g
+DQo+PiBTaWduZWQtb2ZmLWJ5OiBKZXJvbWUgQnJ1bmV0IDxqYnJ1bmV0QGJheWxpYnJlLmNvbT4N
+Cj4+IC0tLQ0KPj4gwqBzb3VuZC9zb2MvbWVzb24vYWl1LmPCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIHwgMTcgKysrKysrKy0tLS0tLS0tLS0NCj4+IMKgc291bmQvc29jL21lc29uL2F4Zy1m
+aWZvLmPCoMKgwqDCoMKgwqDCoMKgwqAgfMKgIDkgKysrLS0tLS0tDQo+PiDCoHNvdW5kL3NvYy9t
+ZXNvbi9heGctcGRtLmPCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqAgOSArKystLS0tLS0NCj4+IMKg
+c291bmQvc29jL21lc29uL2F4Zy1zcGRpZmluLmPCoMKgwqDCoMKgwqAgfMKgIDYgKystLS0tDQo+
+PiDCoHNvdW5kL3NvYy9tZXNvbi9heGctc3BkaWZvdXQuY8KgwqDCoMKgwqAgfMKgIDYgKystLS0t
+DQo+PiDCoHNvdW5kL3NvYy9tZXNvbi9heGctdGRtLWZvcm1hdHRlci5jIHwgMTggKysrKysrLS0t
+LS0tLS0tLS0tDQo+PiDCoHNvdW5kL3NvYy9tZXNvbi9heGctdGRtLWludGVyZmFjZS5jIHzCoCA5
+ICsrKy0tLS0tLQ0KPj4gwqBzb3VuZC9zb2MvbWVzb24vbWVzb24tY2FyZC11dGlscy5jwqAgfMKg
+IDQgKystLQ0KPj4gwqBzb3VuZC9zb2MvbWVzb24vdDkwMTUuY8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCB8wqAgOCArKysrLS0tLQ0KPj4gwqA5IGZpbGVzIGNoYW5nZWQsIDMyIGluc2VydGlvbnMo
+KyksIDU0IGRlbGV0aW9ucygtKQ0KPj4gDQo+PiBkaWZmIC0tZ2l0IGEvc291bmQvc29jL21lc29u
+L2FpdS5jIGIvc291bmQvc29jL21lc29uL2FpdS5jDQo+PiBpbmRleCBiYTE1ZDU3NjJiMGIuLjM3
+MDM2YWRmMTRjZSAxMDA2NDQNCj4+IC0tLSBhL3NvdW5kL3NvYy9tZXNvbi9haXUuYw0KPj4gKysr
+IGIvc291bmQvc29jL21lc29uL2FpdS5jDQo+PiBAQCAtMjE5LDMxICsyMTksMjkgQEAgc3RhdGlj
+IGludCBhaXVfY2xrX2dldChzdHJ1Y3QgZGV2aWNlICpkZXYpDQo+PiDCoA0KPj4gwqDCoMKgwqDC
+oMKgwqDCoCBhaXUtPnBjbGsgPSBkZXZtX2Nsa19nZXQoZGV2LCAicGNsayIpOw0KPj4gwqDCoMKg
+wqDCoMKgwqDCoCBpZiAoSVNfRVJSKGFpdS0+cGNsaykpIHsNCj4+IC3CoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIGlmIChQVFJfRVJSKGFpdS0+cGNsaykgIT0gLUVQUk9CRV9ERUZFUikNCj4+
+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBkZXZfZXJyKGRl
+diwgIkNhbid0IGdldCB0aGUgYWl1IHBjbGtcbiIpOw0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqAgZGV2X2Vycl9wcm9iZShkZXYsIFBUUl9FUlIoYWl1LT5wY2xrKSwNCj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAiQ2Fu
+J3QgZ2V0IHRoZSBhaXUgcGNsa1xuIik7DQo+PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoCByZXR1cm4gUFRSX0VSUihhaXUtPnBjbGspOw0KPj4gwqDCoMKgwqDCoMKgwqDCoCB9DQo+
+DQo+IEEgbWlub3IgdGhpbmcsIGJ1dCBkZXZfZXJyX3Byb2JlIHJldHVybnMgaXRzIGVyciBhcmd1
+bWVudCwgc28gdGhpcyANCj4gY29uc3RydWN0IGNhbiBiZSB3cml0dGVuIG1vcmUgdGVyc2VseSBh
+czoNCj4NCj4gCQlyZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIFBUUl9FUlIoYWlvLT5wY2xrKSwN
+Cj4gICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICJDYW4ndCBnZXQgdGhlIGFp
+byBwY2xrXG4iKTsNCj4NCj4gYW5kIHRoYXQgYWxzbyBzZWVtcyB0byBiZSBpbiBjb21tb24gdXNh
+Z2Ugd2hlbiBicm93c2luZyBleGlzdGluZyBjb2RlLg0KDQpNaXNzZWQgdGhhdA0KVGhhbmtzIFJp
+Y2FyZCwgSSdsbCB1cGRhdGUgdGhlIGNoYW5nZS4NCg0KPg0KPiAvUmljYXJkDQoNCg==

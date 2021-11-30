@@ -2,111 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BEA462A0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 099E6462A0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237087AbhK3CAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 21:00:44 -0500
-Received: from mail-oo1-f49.google.com ([209.85.161.49]:37678 "EHLO
-        mail-oo1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237037AbhK3CAj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 21:00:39 -0500
-Received: by mail-oo1-f49.google.com with SMTP id v19-20020a4a2453000000b002bb88bfb594so6246231oov.4;
-        Mon, 29 Nov 2021 17:57:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=K6tFSuYZjq4zzwBFopKtf7pBXmFwiVkXCYs6ENTtgC8=;
-        b=cet4nZI4c4ds3iIKRm/Y6UF7qowOLiCo49J5fxIVWGdxQqTAvEZ2ltWZMBUbWxJo19
-         jA501DNh5PhHLbBp37QefiMOsc5Dj7vnkuRjKzX+C7PFdWQ+EPCO4fkeX4chSjjqEQ5x
-         2GwzJuk+pnJHq+nk0t+3OmAosqdA2gIekyfcIpiuZTuAtAJ9Znp52J/wXIslS9+S/aro
-         CpRs3UCOHtkImWVhIZzSL2JbL1b4hnN/Rp/TH98mzkNjlnXz5gUiIMamqC+3kKAVqd3S
-         h0/16VpgDbzHwy8lJqIsJivsmY2Esr6GStqW/L36ZjvYAWUO2qwByb/Qk9L3HVJGutUh
-         m7vg==
-X-Gm-Message-State: AOAM532mBJDgCdNgqcbGV1iFKUskvurSnwltdh4EEuFlq5YWLVZKUf77
-        bbui2oCLfT7Lp7devMJZIA==
-X-Google-Smtp-Source: ABdhPJwyQUjhBj7QFjKWhI2v5QuKToynR3JIRtb3Epp1EqdfASkWTdDdi1trTv6fsV3MThiFZBzdgA==
-X-Received: by 2002:a4a:e701:: with SMTP id y1mr33694681oou.42.1638237440576;
-        Mon, 29 Nov 2021 17:57:20 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n26sm1062405ooc.48.2021.11.29.17.57.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 17:57:20 -0800 (PST)
-Received: (nullmailer pid 1015641 invoked by uid 1000);
-        Tue, 30 Nov 2021 01:57:19 -0000
-Date:   Mon, 29 Nov 2021 19:57:19 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Lizhi Hou <lizhi.hou@xilinx.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fpga@vger.kernel.org,
-        maxz@xilinx.com, sonal.santan@xilinx.com, yliu@xilinx.com,
-        michal.simek@xilinx.com, stefanos@xilinx.com,
-        devicetree@vger.kernel.org, trix@redhat.com, mdf@kernel.org,
-        dwmw2@infradead.org, Max Zhen <max.zhen@xilinx.com>
-Subject: Re: [PATCH V2 XRT Alveo Infrastructure 3/9] of: handle fdt buffer
- alignment inside unflatten function
-Message-ID: <YaWE/2ikgpXi2hzY@robh.at.kernel.org>
-References: <20211119222412.1092763-1-lizhi.hou@xilinx.com>
- <20211119222412.1092763-4-lizhi.hou@xilinx.com>
+        id S237116AbhK3CBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 21:01:10 -0500
+Received: from mout.gmx.net ([212.227.15.18]:42793 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232152AbhK3CBJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 21:01:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638237469;
+        bh=hqg6E5t4awXX3JNLr2yX0h9W3eNMEcDR7674htguDMs=;
+        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
+        b=TLKp+ftMN+z4+9Ye0TnOU9Ma4wtFh5PLVOPnUBI6kUQaznZXZjuH7sELCOKyTXf+O
+         mEypTrSbiPZgckapwyN/AQPBRitGwgPhTVHThQDa+73oD6eF2OjxSON05pJ6VH2K7J
+         C6LAdw5IlQgApV0yKbFw/7rBSaX0URNcvoDIjCPA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.100.20] ([46.142.34.15]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MoO6M-1mGOzV0qOO-00opUk; Tue, 30
+ Nov 2021 02:57:49 +0100
+Message-ID: <486ef17a-e26c-5191-f76b-941e8e01ced8@gmx.de>
+Date:   Tue, 30 Nov 2021 02:57:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211119222412.1092763-4-lizhi.hou@xilinx.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+From:   Ronald Warsow <rwarsow@gmx.de>
+Subject: Re: [PATCH 5.15 000/179] 5.15.6-rc1 review
+To:     stable@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+Content-Language: de-DE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:l/v65sNoRZ+O9sjB8c3+loU+r25OGFpBdrssXwtr8C4HnCw3kpT
+ XMorhBe54tSOW1m0Ph9XdSo1HogejtEiktG/fLXoDyzXKVr/WFMS6v+nn3UIg0MxpYQOQyM
+ 0n3AQVDS69Pu51x54VVfBjO206w6dK+gC0+Cfkot2/TPMpTvFvRhCZtth/kk9Je/7eXGa5Z
+ 9YFDKguGH9F7VijZqOKsQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6H3KpLfwxeU=:lXEDhlM0K1QEjAa954RYK5
+ mzhPtGnepmApYyu2jPo2B3jsfHgrtI+8u7KzudMPin6oTEmQhZAPmDp8kGTNp4ptByeuc1Dzz
+ XG5ed1e+19lH6O7FfnLqHg1lMnXzHHU2+5Dlk+kAi44eHK7uvOopvVKBXxYS2JiCPfNPZbrYd
+ s3XplkSTf5z8tz6D7It7kG2iTML+WcBg2VJ7ebf9rGiiA8as1UAgm/OOpPktk2mSc8GxIOMQU
+ YJgn1odEU8XsKAJDP+nsi1tDKhCzQ1k3IEFMNUp6mR7oa+2d0ZcG91K/1z/7cEK86NMp7EnAs
+ GCGTJ46RJ3wM0rfAlzIEFdnBf0Q8R7O1Y7L+MOoybs12HmYESThXDLZ8RWrCSSYGrHjmtQAuu
+ l5BQv9kB3EMDSnY7K6GL5RGVrCC4YJG5+tFjQbsDeG8CDAM8hTkZaBTbvDWOOHbdlDuhkvTVG
+ 9iIN+r2T1ZBFkDpdXFcS6DDwLokEaJtVeTAK0I8DV9O3F0pSpnZ3eUvN+2Nv4ufqi8FpY8mG6
+ nEYCOeX+P384g12uQc2myAqCUkhVIsrJzvzCsdXs5dvcfSDRvgIVHRTIi1alVkqhxI3PAG1uU
+ DP1ZeQvglgdFcs3YfF0PVvpReOzYVDxSFQCDcKl65HJcnyReAemWwb2dDlslMCYmX2h+DrBit
+ 1fMmAOKbX2yHFVuSbcT24TtcdodqvtQ9DOVxr+zoIlVsrilzKnvXUCnnGnOIVmDu21Z1tHui2
+ OMEbwfFOONZDsoW631Nuzh+iroGz8etPxOwuH/7fePoxueGIxtoXfGpOqOLG0rzSgqz6btEsJ
+ to1ZboA3b2Ggsj9JfQJfIkF+K8/POg4tkTqUq6guWCVGphBbrNXaLR7yHR6u/c0M8lnpUX7lW
+ bwbII49s1BoxPd8FuVldQbmlwdTarg2ZIJsvmqQLKNVGMvveeIED4P66XXnWk9uaaMZUsD64r
+ T1DrvbaObDiPTSTs+Vnly2a0ceKOKiCE89+zjWD9xRZ+8/53oItRvipdITygB46Dp0ZLeB3am
+ s5oqzFKFsXjKGayCle9RVdLJwf2/EXJlix5NUc3MgjZduOTpnP3BLUB0Bzm9IilB4dZ0D6Qd0
+ RljT0WXMX6xWUM=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 02:24:06PM -0800, Lizhi Hou wrote:
-> Add alignment check to of_fdt_unflatten_tree(). If it is not aligned,
-> allocate a aligned buffer and copy the fdt blob. So the caller does not
-> have to deal with the buffer alignment before calling this function.
-> XRT uses this function to unflatten fdt which is from Alveo firmware.
-> 
-> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
-> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
-> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
-> ---
->  drivers/of/fdt.c | 17 ++++++++++++++++-
->  1 file changed, 16 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-> index 4546572af24b..d64445e43ceb 100644
-> --- a/drivers/of/fdt.c
-> +++ b/drivers/of/fdt.c
-> @@ -455,13 +455,28 @@ void *of_fdt_unflatten_tree(const unsigned long *blob,
->  			    struct device_node *dad,
->  			    struct device_node **mynodes)
->  {
-> +	void *new_fdt = NULL, *fdt_align;
->  	void *mem;
->  
-> +	if (fdt_check_header(blob)) {
-> +		pr_err("Invalid fdt blob\n");
-> +		return NULL;
-> +	}
-> +	fdt_align = (void *)PTR_ALIGN(blob, FDT_ALIGN_SIZE);
-> +	if (fdt_align != blob) {
-> +		new_fdt = kmalloc(fdt_totalsize(blob) + FDT_ALIGN_SIZE, GFP_KERNEL);
-> +		if (!new_fdt)
-> +			return NULL;
-> +		fdt_align = PTR_ALIGN(new_fdt, FDT_ALIGN_SIZE);
+5.15.6-rc1 successfully compiled, booted and suspended on an x86_64
+(Intel i5-11400)
 
-Where's the copy?
+Tested-by: Ronald Warsow <rwarsow@gmx.de>
 
-> +	}
-> +
->  	mutex_lock(&of_fdt_unflatten_mutex);
-> -	mem = __unflatten_device_tree(blob, dad, mynodes, &kernel_tree_alloc,
-> +	mem = __unflatten_device_tree(fdt_align, dad, mynodes, &kernel_tree_alloc,
->  				      true);
->  	mutex_unlock(&of_fdt_unflatten_mutex);
->  
-> +	kfree(new_fdt);
+thanks
 
-You know the unflattened DT just references strings and property values 
-from the flattened DT. So you just caused a use after free.
+=2D-
+Ronald
 
-Fix your firmware to align the DT.
-
-Rob

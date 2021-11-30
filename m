@@ -2,133 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DAA462D47
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:03:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9FE462D4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:03:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238937AbhK3HG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 02:06:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36136 "EHLO
+        id S238953AbhK3HHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:07:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233094AbhK3HGy (ORCPT
+        with ESMTP id S238943AbhK3HHO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 02:06:54 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FB4C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 23:03:36 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id s37so9101470pga.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 23:03:36 -0800 (PST)
+        Tue, 30 Nov 2021 02:07:14 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F49C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 23:03:55 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id u22so39240491lju.7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 23:03:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zC9NSf7C+Sd9VsOuPnj6yc8Mzbcb3eklQvox37KbRBI=;
-        b=fHo9izik2jHuftHuQxohxLfoZzTc7/HPsOjuLHJrF25p69I2cc3/VpkHip2d6txbu/
-         YJckxYpgZiAYmocFJ/RWJ2iJdxNi0bTd3c3e14jmUrRLs3QYxsxuq0088YsZ2PYjG55V
-         E7PO8KxdlmB1EudEHJG0XZYjsJi7184lpDQhono0usu7GV1Bg5tSZbqCzdfdogkBj2WJ
-         SXI5PidKnYgyAQU0A8jF8z+VjwfaISJRnhdWU2Jg9upFiYovyIswJPV7UwRjGtAYy4zi
-         wQZTFEq/Zi/Px1K7brs6sphNQBAVhWWeOFQVvd8whYu4932WgnOu0oUpS5QuN3NcBIcr
-         248A==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=szhL5QTmS2bN5B3PECUs+b+yXZvUR0mps5IDDhm4xs0=;
+        b=rmRO2GBGwGWqJc2t/xlmcDeT314JfFtgEqSSS/MxMRT1FLq1E8nMMUB4sXxT5UluCC
+         AUaENTk9kBFgb+i5ihy2XZZ2UgCQWb2I0BA4U+Wg4WlSkBPrViWibRx9xz9fVeueKHbk
+         cqD9S37qSboUk5WQfB2Co47e5G9q0hY4nlfRubmXOsm6TSuCHfl/IQ5U9Yir43RbOjdU
+         Vpyh3YKtEbXVz74ymcbBFSYffCDHezaTp6iq87qb/Z49jO14BgDS9p93P1TziDOG47CR
+         HDCNSAkqJxbd4i+6jjHI2H4NwDbU3uw6LzHkEkImAoxWqjQIaUaiM6BO/tmD7JTgxJqh
+         EQ2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zC9NSf7C+Sd9VsOuPnj6yc8Mzbcb3eklQvox37KbRBI=;
-        b=wvQNfNrad3DKRFUQwCImlc9G/V74lQvAx5HadyhNRq6Bfa4kz2Wa6uW2T0/Tu3Ypxp
-         qd8nKN8r7IDHfauL6lbtcBAfo9UedQ+8Yl889OW0J5+tsrRnxpq9QE8kNVUaoNlNRZmr
-         WcKQls3HToOvwA7t/0fAE/ojASML8EO2rGxpriueIc4X/sWgr54YKjkFRdeMzzFP98E5
-         jgx753/RreWykrsUSdsrYg3J13RFfEYo/x7MERyD0iPwGQrCsx/yGGXCid+sgA/bSpNy
-         YPXKqis3L65pjMCXnWvxYlWzxBcBg9NwGrpagd7bA8XXkJFVX6z1Y3NWDeXK+VYPGTp9
-         5E9g==
-X-Gm-Message-State: AOAM530Ml8xWJ5s8991u6MbjLyscJoxJiZ4voBotyGLEMZVCA3KRBxHE
-        RIq1RBwwxit8AOlCMqZrT8IzD/n1G9oEGRu6+VRtvQ==
-X-Google-Smtp-Source: ABdhPJxidEYMsrLZxmzvvFQre312YLryI7QVOW4rmfMtK9pfuQXgb14cQ9PMCZqF4V+wAnvw8lvc8sTv88wWocOJdvE=
-X-Received: by 2002:a63:d915:: with SMTP id r21mr39558221pgg.40.1638255815643;
- Mon, 29 Nov 2021 23:03:35 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=szhL5QTmS2bN5B3PECUs+b+yXZvUR0mps5IDDhm4xs0=;
+        b=Lcul1scjLsVnQpYb7GEYAYdhtoJsTLSC7YUuTZHKKtKOylMH0AJlVVmEiGQvnDYMPy
+         CCnY7i7AAvTlsKeeX2gLVdbt4EZBhBCM76/8p/XMMNS+tOxseE8qlqZAjW8YbpmRpVGw
+         4O25YW1f0SV1zlgZNDrP5vszmA1hIu0SB1/ySARRO8cvMD6JAVhpBGCCbNHzDkpeos2x
+         a0w87unNcqaZcvuWQzMF0VJ60cQazkESb9BveRmjjobWL8HhpSZp1dtMXGkkGW5bv61Q
+         l6JoVXppawxmZN0SkoxFfXajfPWMnTC0/rEIitdfP47C5/txiEHUw9aQJLBk3gweoyKu
+         Xg2Q==
+X-Gm-Message-State: AOAM531pz1TBwi4pE8zsggik9JUEMIpi1BN0QjeAsmnRjr5NalVyMDRh
+        id9DTm7dINJX0viAN4HT2agFlw==
+X-Google-Smtp-Source: ABdhPJzfiq1GEnhN+ppW5GH1nCQCECE1ASmCX4M4QJp/08lycIuUonrIkxeVqWNwlPZaBOiYq17sSA==
+X-Received: by 2002:a05:651c:c3:: with SMTP id 3mr52346139ljr.170.1638255833674;
+        Mon, 29 Nov 2021 23:03:53 -0800 (PST)
+Received: from jade (h-94-254-48-165.A175.priv.bahnhof.se. [94.254.48.165])
+        by smtp.gmail.com with ESMTPSA id e6sm1615747lfn.172.2021.11.29.23.03.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 23:03:53 -0800 (PST)
+Date:   Tue, 30 Nov 2021 08:03:51 +0100
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+To:     arm@kernel.org, soc@kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        op-tee@lists.trustedfirmware.org,
+        Rijo Thomas <Rijo-john.Thomas@amd.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [GIT PULL] AMD-TEE fix for v5.16
+Message-ID: <20211130070351.GA2308099@jade>
 MIME-Version: 1.0
-References: <20211124200700.15888-1-chang.seok.bae@intel.com>
- <20211124200700.15888-12-chang.seok.bae@intel.com> <YaWfKB+k66MzNtIi@sol.localdomain>
- <011B53ED-6D9E-41EB-834B-8A64485DBED5@intel.com>
-In-Reply-To: <011B53ED-6D9E-41EB-834B-8A64485DBED5@intel.com>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Mon, 29 Nov 2021 23:03:24 -0800
-Message-ID: <CAPcyv4jst3PSPU5HFdcrzQ2Bxt1uXd_-cbundYRP_i=fUsd5-g@mail.gmail.com>
-Subject: Re: [PATCH v3 11/15] crypto: x86/aes-kl - Support AES algorithm using
- Key Locker instructions
-To:     "Bae, Chang Seok" <chang.seok.bae@intel.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@suse.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "mingo@kernel.org" <mingo@kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "Gairuboyina, Charishma1" <charishma1.gairuboyina@intel.com>,
-        "Dwarakanath, Kumar N" <kumar.n.dwarakanath@intel.com>,
-        "Krishnakumar, Lalithambika" <lalithambika.krishnakumar@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 10:57 PM Bae, Chang Seok
-<chang.seok.bae@intel.com> wrote:
->
-> On Nov 29, 2021, at 19:48, Eric Biggers <ebiggers@kernel.org> wrote:
-> > On Wed, Nov 24, 2021 at 12:06:56PM -0800, Chang S. Bae wrote:
-> >> diff --git a/arch/x86/crypto/Makefile b/arch/x86/crypto/Makefile
-> >> index ef6c0b9f69c6..f696b037faa5 100644
-> >> --- a/arch/x86/crypto/Makefile
-> >> +++ b/arch/x86/crypto/Makefile
-> >> @@ -50,6 +50,9 @@ obj-$(CONFIG_CRYPTO_AES_NI_INTEL) += aesni-intel.o
-> >> aesni-intel-y := aesni-intel_asm.o aesni-intel_glue.o aes-intel_glue.o
-> >> aesni-intel-$(CONFIG_64BIT) += aesni-intel_avx-x86_64.o aes_ctrby8_avx-x86_64.o
-> >>
-> >> +obj-$(CONFIG_CRYPTO_AES_KL) += aeskl-intel.o
-> >> +aeskl-intel-y := aeskl-intel_asm.o aesni-intel_asm.o aeskl-intel_glue.o aes-intel_glue.o
-> >
-> > This makes the object files aesni-intel_asm.o and aes-intel_glue.o each be built
-> > into two separate kernel modules.  My understanding is that duplicating code
-> > like that is generally frowned upon.  These files should either be built into a
-> > separate module, which both aesni-intel.ko and aeskl-intel.ko would depend on,
-> > or aeskl-intel.ko should depend on aesni-intel.ko.
->
-> The only reason to include the AES-NI object here is that AES-KL does not
-> support the 192-bit key.
->
-> Maybe the fallback can be the aes-generic driver [1] instead of AES-NI here.
->
-> >> diff --git a/arch/x86/crypto/aeskl-intel_asm.S b/arch/x86/crypto/aeskl-intel_asm.S
-> >> new file mode 100644
-> >> index 000000000000..d56ec8dd6644
-> >> --- /dev/null
-> >> +++ b/arch/x86/crypto/aeskl-intel_asm.S
-> >
-> > This file gets very long after all the modes are added (> 1100 lines).  Is there
-> > really no feasible way to share code between this and aesni-intel_asm.S, similar
-> > to how the arm64 AES implementations work?  Surely most of the logic is the
-> > same, and it's just the actual AES instructions that differ?
->
-> No, these two instruction sets are separate. So I think no room to share the
-> ASM code.
->
-> >> +config CRYPTO_AES_KL
-> >> +    tristate "AES cipher algorithms (AES-KL)"
-> >> +    depends on (LD_VERSION >= 23600) || (LLD_VERSION >= 120000)
-> >> +    depends on DM_CRYPT
-> >
-> > 'depends on DM_CRYPT' doesn't really make sense here, since there is no actual
-> > dependency on dm-crypt in the code.
->
-> I think the intention here is to build a policy that the library is available
-> only when there is a clear use case.
->
-> But maybe putting such restriction is too much here.
->
+Hello arm-soc maintainers,
 
-Yeah, my bad the "depends on DM_CRYPT" can go. Even though the Key
-Locker support has no real pressing reason to be built without it,
-there is still no actual code dependency.
+Please pull this AMDTEE driver fix which takes care of a bug where
+IS_ERR() was used instead of a NULL check for the return value from
+__get_free_pages().
+
+Note that this isn't a usual Arm driver update. This targets AMD instead,
+but is part of the TEE subsystem.
+
+Thanks,
+Jens
+
+The following changes since commit d58071a8a76d779eedab38033ae4c821c30295a5:
+
+  Linux 5.16-rc3 (2021-11-28 14:09:19 -0800)
+
+are available in the Git repository at:
+
+  git://git.linaro.org/people/jens.wiklander/linux-tee.git tags/amdtee-fix-for-v5.16
+
+for you to fetch changes up to 9d7482771fac8d8e38e763263f2ca0ca12dd22c6:
+
+  tee: amdtee: fix an IS_ERR() vs NULL bug (2021-11-29 09:55:49 +0100)
+
+----------------------------------------------------------------
+AMD-TEE fix IS_ERR() bug
+
+----------------------------------------------------------------
+Dan Carpenter (1):
+      tee: amdtee: fix an IS_ERR() vs NULL bug
+
+ drivers/tee/amdtee/core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)

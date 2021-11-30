@@ -2,95 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BAAB44628D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC964628D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbhK3AJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:09:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
+        id S231879AbhK3AJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:09:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbhK3AJd (ORCPT
+        with ESMTP id S231165AbhK3AJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:09:33 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077D6C061574;
-        Mon, 29 Nov 2021 16:06:15 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id iq11so13951359pjb.3;
-        Mon, 29 Nov 2021 16:06:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NPU8E18/rfNO+NGRed1cne32L6+cx+NUy8rxuVdLCdI=;
-        b=APAUZ+P6V7/0qC11v7y+ToCCkwQKZyISJAue7T7o7k7kYnncHcnlkAglBSsyTZ/dlh
-         B8IQgmKyyOTn2D0f3kt4sqEfgIx3X/bEMn0ArFYOnoNrW7RW6RhrqaSv5MeI/nzv6TlD
-         mafbfO3G2WOfdM0g6vDMFpi12GoL3lH8ICJ1bwPrpZChc9p+IP8WQfDGePbXbFaDkqBD
-         bh2LV0zPRK0X4XWryW0Y7+eLxsyaGpRDXvZE0vZBBdBXDcHpGXM2zz9B6t4RwoUMx94t
-         iDxjYluOCpabjDBkcS69PX107K+BOrb9NZ5YU0vHZf25vWHFO83B2I85jrSRVglOH5M3
-         5Cuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=NPU8E18/rfNO+NGRed1cne32L6+cx+NUy8rxuVdLCdI=;
-        b=gKdwLrAPNWObvQXQg33DYts9RdenfNLQkHmNk9EwvFtGr0cMtczn/eRBLflJTTLxi9
-         JOKZham3HK1oeOAbhl3/5niOkHIDY8y5V9QSe73jsonsm+kHsFe/h3bTV4qdQ9IvRBFX
-         2EuLxQjyQHlDcaYGrB6pTPD/JM18+r9PkIgI0DhsthiTblCogCqgC/RFb4ARzMR2uZku
-         Pgnr5O1ccZKC9JH0bi55TtMJy7cWFKAeifRvO0NYqNdBZsOXTFdrd3ySOzompUajmE+H
-         xvzRQQdElpGLe6mMUNNA0k8MU65KU4s+byIqHj9ZZVoYczyUqChxGEb6L9Asv9WvpJub
-         tALQ==
-X-Gm-Message-State: AOAM531mQrvOWYv+0bUoKYcWVGZttNokixg342LEFUMf9qWyzts/u7fE
-        G0RqWIuzjDtDy1Q0oydCXTw=
-X-Google-Smtp-Source: ABdhPJyyKwr7COUgkXlgf5fJU/eSeNrWuXpxppKX2t3WN929YduwwLP7E2MN9rErqvmzvJoQukrZ0Q==
-X-Received: by 2002:a17:902:a60b:b0:142:7621:be0b with SMTP id u11-20020a170902a60b00b001427621be0bmr62807805plq.58.1638230774600;
-        Mon, 29 Nov 2021 16:06:14 -0800 (PST)
-Received: from debian11-dev-61.localdomain (192.243.120.180.16clouds.com. [192.243.120.180])
-        by smtp.gmail.com with ESMTPSA id f5sm417713pju.15.2021.11.29.16.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 16:06:14 -0800 (PST)
-From:   davidcomponentone@gmail.com
-X-Google-Original-From: yang.guang5@zte.com.cn
-To:     yang.guang5@zte.com.cn
-Cc:     davidcomponentone@gmail.com, linux-omap@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] omapfb: replace snprintf with sysfs_emit
-Date:   Tue, 30 Nov 2021 08:06:03 +0800
-Message-Id: <02f27656a2da68cac42ebee55a78b0316ff3d83d.1638185487.git.yang.guang5@zte.com.cn>
-X-Mailer: git-send-email 2.30.2
+        Mon, 29 Nov 2021 19:09:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FE5C061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:06:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 38BF7B80954
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:06:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 522B7C58321;
+        Tue, 30 Nov 2021 00:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638230779;
+        bh=lYhzlhKARfaov7ychHRylbwZBTbCYlOzT1a2yNoU1h8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RACxxlvC1VspiNCZYubIkHNtf0IsNWwZ0lA+AE1L7OpKnpYfFGRAfEOEsai7D0d9h
+         oEMbU6HZtQBMVn8cQKcNSvRHjRO6P5S7op0luKg2/hEnyk7AA55r186Llc5znSBJuY
+         fwNJQrkLHHpoUndKQ7RrQc2E8pAWUTrTWejfWKyQT9x0v1VgP8pGTWGz7XmH09Bq8O
+         qLIdKcgXKY7Kqmz+chvoTgWT1YZLIPt+jJ4eeHYvBd+MHEt8dCJ5M80ynIHfW5xc5I
+         ezmRUY4YT4jsPLARQOnQwOHxcSznyw/sMeakbkUY3hUCBU8cxHMVISCFmbagAzn0+9
+         d5+LXBBbXWNlA==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [RFC PATCH 0/2] workqueue: Fix hotplug races
+Date:   Tue, 30 Nov 2021 01:06:10 +0100
+Message-Id: <20211130000612.591368-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yang Guang <yang.guang5@zte.com.cn>
+While triggering rcutorture splats, I couldn't trace down to the exact
+cause due to the issue being tracing-unfriendly. But looking at the code,
+those two potential races look like plausible causes and also after
+these two patches, I couldn't reproduce the rcutorture issues again (yet...).
 
-coccinelle report:
-./drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c:
-479:9-17: WARNING: use scnprintf or sprintf
+Frederic Weisbecker (2):
+  workqueue: Fix unbind_workers() VS wq_worker_running() race
+  workqueue: Fix unbind_workers() VS wq_worker_sleeping() race
 
-Use sysfs_emit instead of scnprintf or sprintf makes more sense.
+ kernel/workqueue.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
----
- .../video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
-index 8d8b5ff7d43c..3696eb09b69b 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.c
-@@ -476,7 +476,7 @@ static ssize_t show_cabc_available_modes(struct device *dev,
- 	int i;
- 
- 	if (!ddata->has_cabc)
--		return snprintf(buf, PAGE_SIZE, "%s\n", cabc_modes[0]);
-+		return sysfs_emit(buf, "%s\n", cabc_modes[0]);
- 
- 	for (i = 0, len = 0;
- 	     len < PAGE_SIZE && i < ARRAY_SIZE(cabc_modes); i++)
 -- 
-2.30.2
+2.25.1
 

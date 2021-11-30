@@ -2,188 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F64B463EBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A499463EC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343550AbhK3To3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 14:44:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240147AbhK3ToK (ORCPT
+        id S229789AbhK3TqU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 14:46:20 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:59257 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1343565AbhK3Toh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 14:44:10 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80458C06174A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:40:50 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id f125so7709282pgc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:40:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6J28hHyAsorL/rAvGFk46ctVABOLxhsZLPZlu6p1Pm0=;
-        b=hH04HoExcD5kmQqA2QubeZ7zLPmL9jnCIcYvFKDAJPCm+t7FFUf5XetmC4MIrdN1lI
-         C48r6ibi3EJyaMGi4VkiNZADzGW+YmL0O3vYNMu1IEg8PpaL8hToa9NrUd2XIgXhsjVh
-         QT2qUMzot1QNRmaE7tkHLsVvoQY431TCSRWYjNrtrU2ToWuwSXBckmB8zKgWfwtsUH/J
-         GFhgCZEVqxD7ccWsc+zFvt9KgJ4xjUh7f/Ea6wCeksRzxSyIZll62TNCgoGYE2BysxwG
-         SFXbolfIdJmxRTcC+HXDT8uQrF65YTpBu4zUXSWkaKUVGxGq/krjhADlOgzmiIptrjA2
-         gF1w==
+        Tue, 30 Nov 2021 14:44:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638301276;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TfrnItGdUTATVc7verTCm21aEuOKKR+WNjyNl2tTt/s=;
+        b=HhMUcgqTu1uCnisBCrUOcZ2+FjDQSFFv0+VjOAx+G+VoPfpKEaUM9wzjG8GFt+YW9OgJBS
+        LLr042Abls6PErA4a+ipS65v/nteIDwoyTAte0t7PfSaZ9JTB+EBkhGyEThuVVWgRhpy7W
+        v29TqypplYsYNcWYykm1avEE3PhxSuQ=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-321-WaHTCL0jNDeHFQuISGGw6g-1; Tue, 30 Nov 2021 14:41:15 -0500
+X-MC-Unique: WaHTCL0jNDeHFQuISGGw6g-1
+Received: by mail-qk1-f199.google.com with SMTP id s8-20020a05620a254800b0046d6993d174so14643147qko.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:41:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6J28hHyAsorL/rAvGFk46ctVABOLxhsZLPZlu6p1Pm0=;
-        b=ybnvl+h3+RaJOWXReydbr22THQe95fERAWgHNHpXB2ecQ1Dqhiy1Ig0JrSfUnFsa0G
-         OjEhrBhlkvmBokygZX+FMQIKCA8w+/vET2vIB/AAIsnah7kruHamUFJPGPsy/I9JwElC
-         UIPDGKo2yDr6nDBPE6Mz+sbSCCZbU7zL7oqb2isJfYFwydcX3KYXaHg1tohljv9vF/6e
-         3lGH1NlL+tAGIO0oZtdnHUcOEtE0rwsX26XU5EURf5akpWQk+mpcl8YN+EGBgkhUhgrD
-         8pc0SPKWNFxO9gsdc+PFRsHVmk5/908oahAMUsN8QEDlVvPowGmwlwv9lJmFLBWJbB/2
-         Wu2Q==
-X-Gm-Message-State: AOAM532n3g6j0dA3UVS5XRs8v9bLWmD/Kn2PdcM0BBImu86jskItBT9t
-        OI8AP1cJvImtbL6J+2iJGqe5IQ==
-X-Google-Smtp-Source: ABdhPJwVyoJ8SmDSfTfWZHq+rN+X8y4F5ZqChSzdvW17188yvJdItwJ0anbDx6r6qy0eVftvBi0wOA==
-X-Received: by 2002:a62:e406:0:b0:49f:dc1c:f3e1 with SMTP id r6-20020a62e406000000b0049fdc1cf3e1mr970488pfh.21.1638301249830;
-        Tue, 30 Nov 2021 11:40:49 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id d17sm21695474pfj.215.2021.11.30.11.40.49
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=TfrnItGdUTATVc7verTCm21aEuOKKR+WNjyNl2tTt/s=;
+        b=zg2O252Xy5CAUSdAVtHmsZspjLkLlIXrOwTtERQWEdZ7dHEkoCrmhDWPbSM2/zSu4T
+         8XmjvGutr7Vjy2+dl2Rf4sIXIJbWOnA6oKZ4chxMSG86QTdjbkqyyR41Csw5EIlbKB4L
+         MpOTeP+2cd6U6+DFt/KkKjOx3pMxRhx3l4G5Z5r4ybHUaniH7yFQVfSJ3JcMqKj2Aeu6
+         knRdreDlFFS426jiN49nSlgTGcnQVyeVj8lEL88hAFvK1oH7/Sic1W/4TyViDopf96DO
+         8AyJXZ5c/V0opeJfoMHwqdZlH1Kl1sT4Fv0JSOOsNI8b/4eNk70KsTdixKZ+sf0CBKnD
+         ZLXQ==
+X-Gm-Message-State: AOAM533GIItpFNifkgz+AJu9zIPaj7miB2TpUwtJ87OAGzhojmgzl9Me
+        gCijUA+UnM08VCGvSF7f/XpVcqdTJMUBTOKLNuV9KpljnZxdET1ItHFonrzZCiY2xC8zPKFsoKs
+        X5QJZJ+WKjdeTrORrQWtNMayC
+X-Received: by 2002:a05:622a:1207:: with SMTP id y7mr1711719qtx.592.1638301274694;
+        Tue, 30 Nov 2021 11:41:14 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwJ9+FRrK3xh+EE7L6zkfT/RZFYDXNc5DYJN863fnKtTH5CdGDV3FDUn0jq780tf4LLYhY8Og==
+X-Received: by 2002:a05:622a:1207:: with SMTP id y7mr1711675qtx.592.1638301274513;
+        Tue, 30 Nov 2021 11:41:14 -0800 (PST)
+Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
+        by smtp.gmail.com with ESMTPSA id i6sm11067894qkn.26.2021.11.30.11.41.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 11:40:49 -0800 (PST)
-Date:   Tue, 30 Nov 2021 19:40:45 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     David Matlack <dmatlack@google.com>
-Cc:     Mingwei Zhang <mizhang@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
-Subject: Re: [PATCH 2/2] KVM: mmu/x86: optimize zapping by retaining non-leaf
- SPTEs and avoid rcu stall
-Message-ID: <YaZ+PSA9kOBYtpIz@google.com>
-References: <20211124214421.458549-1-mizhang@google.com>
- <20211124214421.458549-3-mizhang@google.com>
- <YaV02MdGYlfGs35T@google.com>
+        Tue, 30 Nov 2021 11:41:13 -0800 (PST)
+Message-ID: <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+From:   Simo Sorce <simo@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>, Tso Ted <tytso@mit.edu>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Date:   Tue, 30 Nov 2021 14:41:12 -0500
+In-Reply-To: <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
+References: <2036923.9o76ZdvQCi@positron.chronox.de>
+         <22137816.pfsBpAd9cS@tauon.chronox.de> <YaEJtv4A6SoDFYjc@kroah.com>
+         <9311513.S0ZZtNTvxh@tauon.chronox.de> <YaT+9MueQIa5p8xr@kroah.com>
+         <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
+         <YaYvYdnSaAvS8MAk@kroah.com>
+         <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
+         <YaZHKHjomEivul6U@kroah.com> <YaZqVxI1C8RByq+w@gmail.com>
+         <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaV02MdGYlfGs35T@google.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021, David Matlack wrote:
-> > +		/*
-> > +		 * In zap_all case, ignore the checking of present since we have
-> > +		 * to zap everything.
-> > +		 */
-> > +		if (!zap_all && !is_shadow_present_pte(iter.old_spte))
-> >  			continue;
+On Tue, 2021-11-30 at 13:39 -0500, Jason A. Donenfeld wrote:
+> On Tue, Nov 30, 2021 at 1:16 PM Eric Biggers <ebiggers@kernel.org> wrote:
+> > So unfortunately, as far as I can tell, Ted is not maintaining random.c anymore.
 > 
-> I don't believe there's any reason to attempt to zap a non-present spte,
-> even in the zap_all case. In any case, this change deserves its own
-> patch and a commit message that describes why the old logic is incorrect
-> and how this fixes it.
+> I am happy to step up here. Feel free to CC me on random.c fixes and
+> I'll review them promptly.
 
-Yep, at best it's wasted cycles, at worst it will trigger WARN/BUG due to using
-accessors that require the caller to check for a shadow present SPTE.
+Jason,
+are you also volunteering to review the patches needed to reach
+compliance with the NIST documents I mentioned in the thread?
 
-> >  		 * If this is a non-last-level SPTE that covers a larger range
-> >  		 * than should be zapped, continue, and zap the mappings at a
-> > -		 * lower level, except when zapping all SPTEs.
-> > +		 * lower level. Actual zapping started at proper granularity
-> > +		 * that is not so large as to cause a soft lockup when handling
-> > +		 * the changed pte (which does not yield).
-> >  		 */
-> >  		if (!zap_all &&
-> >  		    (iter.gfn < start ||
-> > -		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end) &&
-> > +		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end ||
-> > +		     iter.level > PG_LEVEL_1G) &&
-> >  		    !is_last_spte(iter.old_spte, iter.level))
-> >  			continue;
-> 
-> This if statement is getting a bit long. I'd suggest breaking out the
-> level check and also using KVM_MAX_HUGEPAGE_LEVEL.
-> 
-> e.g.
-> 
->         /*
->          * If not doing zap_all, only zap up to the huge page level to
->          * avoid doing too much work in the recursive tdp_mmu_set_spte*
->          * call below, since it does not yield.
->          *
->          * This will potentially leave behind some childless page tables
->          * but that's ok because ...
->          */
->          if (!zap_all && iter.level > KVM_MAX_HUGEPAGE_LEVEL)
->                 continue;
-> 
-> And on that note, what is the reasoning for why it's ok to leave behind
-> childless page tables? I assume it's because most of the time we'll use
-> that page table again in the future, and at worst we leave the page
-> table allocated until the VM is cleaned up?
+Simo.
 
-Yes.  If zap_all=false, KVM is zapping a gfn range but not dropping or invalidating
-the root.  The non-leaf paging structures are perfectly valid and can be reused.
-There's certainly no guarantees that a structure will be reused, but keeping the
-pages is ok because the memory consumed scales with the size of the VM, and the
-number of shadow pages used for TDP is quite small, e.g. an order of magnitude less
-than what's needed for shadow paging.
+-- 
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
 
-If we're ok waiting until my zap n' flush rework[*] lands, this is much easier to
-handle, e.g. I think this will do it.
 
-diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-index 62cb357b1dff..8d3df03024b7 100644
---- a/arch/x86/kvm/mmu/tdp_mmu.c
-+++ b/arch/x86/kvm/mmu/tdp_mmu.c
-@@ -765,7 +765,7 @@ static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-                             bool shared, bool root_is_unreachable)
- {
-        struct tdp_iter iter;
--
-+       bool leafs_only;
-        gfn_t end = tdp_mmu_max_gfn_host();
-        gfn_t start = 0;
 
-@@ -773,12 +773,11 @@ static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
 
-        rcu_read_lock();
-
--       /*
--        * No need to try to step down in the iterator when zapping an entire
--        * root, zapping an upper-level SPTE will recurse on its children.
--        */
-+again:
-+       /* Add comment here. */
-        for_each_tdp_pte_min_level(iter, root->spt, root->role.level,
--                                  root->role.level, start, end) {
-+                                  leafs_only ? PG_LEVEL_4K : root->role.level,
-+                                  start, end) {
- retry:
-                if (tdp_mmu_iter_cond_resched(kvm, &iter, false, shared))
-                        continue;
-@@ -786,6 +785,9 @@ static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-                if (!is_shadow_present_pte(iter.old_spte))
-                        continue;
-
-+               if (leafs_only && !is_last_spte(iter.old_spte, iter.level))
-+                       continue;
-+
-                if (!shared) {
-                        tdp_mmu_set_spte(kvm, &iter, 0);
-                } else if (!tdp_mmu_set_spte_atomic(kvm, &iter, 0)) {
-@@ -807,6 +809,11 @@ static void tdp_mmu_zap_root(struct kvm *kvm, struct kvm_mmu_page *root,
-                WARN_ON_ONCE(root_is_unreachable && root->role.invalid);
-        }
-
-+       if (leafs_only) {
-+               leafs_only = false;
-+               goto again;
-+       }
-+
-        rcu_read_unlock();
- }
-
-[*] https://lore.kernel.org/all/20211120045046.3940942-1-seanjc@google.com/

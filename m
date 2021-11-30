@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 687E64634CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6095D4634D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232424AbhK3Mx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:53:59 -0500
-Received: from foss.arm.com ([217.140.110.172]:37236 "EHLO foss.arm.com"
+        id S233488AbhK3MzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:55:17 -0500
+Received: from mout.gmx.net ([212.227.15.15]:43635 "EHLO mout.gmx.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230150AbhK3Mx5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:53:57 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 781E41042;
-        Tue, 30 Nov 2021 04:50:38 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.66.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DA15C3F5A1;
-        Tue, 30 Nov 2021 04:50:36 -0800 (PST)
-Date:   Tue, 30 Nov 2021 12:50:30 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        mtosatti <mtosatti@redhat.com>, frederic <frederic@kernel.org>,
-        paulmck@kernel.org
-Subject: Re: Question WRT early IRQ/NMI entry code
-Message-ID: <YaYeFu4hi3uVkhkN@FVFF77S0Q05N>
-References: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
+        id S232871AbhK3My6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:54:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638276675;
+        bh=c9z8o/iWr3NTfj+uUiO32jPRashfLcZ877UxpLrEltA=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=YU7up95ZwBXzYuR8k8mB8ZU5cS4Mhh7bYzhx4ccIkEknE6hS2PnasdsOgZKG5aVkY
+         5Z+k0dEqvOlYcHWwyjJ3X7Kjz+nErO7i9nUmZdm/cn2wgDCvhCdgTtF63IJA0ab/hl
+         20QkWptII5d3lWkfL9JjpKcv06/hWHoy33Dt/cR8=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from homer.fritz.box ([185.146.50.175]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M2wL0-1mt8071500-003OtP; Tue, 30
+ Nov 2021 13:51:15 +0100
+Message-ID: <b966ccc578ac60d3684cff0c88c1b9046b408ea3.camel@gmx.de>
+Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+From:   Mike Galbraith <efault@gmx.de>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Alexey Avramov <hakavlad@inbox.lv>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Tue, 30 Nov 2021 13:51:10 +0100
+In-Reply-To: <b8f607c771a4f698fcb651379ca30d3bb6a83ccd.camel@gmx.de>
+References: <20211125151853.8540-1-mgorman@techsingularity.net>
+         <20211127011246.7a8ac7b8@mail.inbox.lv>
+         <20211129150117.GO3366@techsingularity.net>
+         <a20f17c4b1b5fdfade3f48375d148e97bd162dd6.camel@gmx.de>
+         <20211130112244.GQ3366@techsingularity.net>
+         <b8f607c771a4f698fcb651379ca30d3bb6a83ccd.camel@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:HGsRl3HDz3scVmthJ3IF67/Ifz7L1wEt0wBJNxdAE66j4O51TJj
+ CV/qBcer3kOWf/oLFhFopDmDwk2da2kkHHsOak13Tzxd37MpvBsG1+TjjMS396/Ba0FeQpk
+ rdYboQvmOBzs585YMviW9F6z/jM3bbBWeaauok14z9VLWIN/9mqbO5Fomj1n+m0xwHnqVMq
+ 48nMw0GY7KRlgi/11aAfA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:5qzsiGktCB4=:0UIvHvh15dzuz76ASShWyz
+ U+XO5AyMH4hJnuX5sjDsRAHlVit+8S1etVLADZ8Dw2sZPERBNDtZoH/a4HX9IttVDgRM4SheD
+ sYerLEROsnHKFlRB9gPc4IhetRk1Ep9ujrTGAlysqwLVtfwXFxCxMAO3N2Ze8TrRKTV+0r3Fp
+ a18OtQ1Vpm+21qZpfS/U0Gsco1sPDQeNPFposDeQeEsbs+5m5f4rJBaOY3p+uH2NI8bWEQV42
+ aVTYF9o6aIhw7mVzuMbuV9wFM2YSCeXReZnybFy0vZxhMwS1SJ4Wa12L9TAT0xTu7On+/s3IX
+ VXHI8vof63+k5vHTRltKTOUHWeMZ5wT5HLbXDw4tIQhcxMMJ50StMFHXeTFdbVUIDgIzoh0xd
+ /z/nQhDKKFkMDZUP5ti7wt1dy2PT+sUKDW9pbO/Ovuj02HAnI6/EE+yGtRE03gCk65yACwNsa
+ fx6iuMlL5/wbw9hylcR1xfCsi4yh/D5HPFH73WdIyOePVcyyWgBQD93bV75ksipEHWxqmn+2t
+ y452xX1xY4ag41vLvpvbK/qNg5BeHpVs4jFXmrFRQzrk6OvHTo7eIxliKlg+FMtpmFDh7xOPk
+ XJRTthZ6rH/uZXgPSxhGlcsAowt6ZyuYoODJt2Zm5I1npCe+NoqS8XeTVFrFTiC7NnQ5dt5zR
+ emOadZQksoIVxG2ZZOuNdWBrWO+MhWJtzYQstQxnW+W9bDdPuo/E3W7/uLMGyVrojBC45N6rw
+ 0fPTjMSej6VFGdmSxFB4OU2hXNvVzGCHlwrtIveJXf3nIP0i4s3IbZJlN56uPPEGE2hgT9stW
+ VFSz6TxOk8WCmKtPBYNpt1Gv+xNKKO1cGOGglHdGB6WFnb9vJkMwMBZdqdQQOo/QA2UghYM/9
+ HB9/8PlHZGqXw2faArBxPEy2/DFhw/M3tbKmzGJsKAQ0uL+wtBQGGHFhXQ2RcCuw5a049qzx4
+ 2rOv2DpYYR/O2UEr8gjX1WnYqDP2T2GZ4bPS3XaQ+3Fo1Fj4dz+LqSEjyOPwjVSVXjtxyEXze
+ r+6Kr+jeQ0npAYROVZ0/lWbb/81arMpZnxk8UiJJl8q3XukPatpPwVLaeIi14Psdt9UIsOMcs
+ shUtYLeNCJLJy8=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 12:28:41PM +0100, Nicolas Saenz Julienne wrote:
-> Hi All,
+On Tue, 2021-11-30 at 13:00 +0100, Mike Galbraith wrote:
+> On Tue, 2021-11-30 at 11:22 +0000, Mel Gorman wrote:
+> > On Tue, Nov 30, 2021 at 11:14:32AM +0100, Mike Galbraith wrote:
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (2 * write_pending <=
+=3D reclaimable)
+> > >
+> > > That is always true here...
+> > >
+> >
+> > Always true for you or always true in general?
+>
+> "Here" as in the boxen located at my GPS coordinates :)
+>
+> > The intent of the check is "are a majority of reclaimable pages
+> > marked WRITE_PENDING?". It's similar to the check that existed prior
+> > to 132b0d21d21f ("mm/page_alloc: remove the throttling logic from the
+> > page allocator").
+>
+> I'll put my trace_printk() back and see if I can't bend-adjust it.
 
-Hi Nicolas,
+As it sits, write_pending is always 0 with tail /dev/zero.
 
-> while going over the IRQ/NMI entry code I've found a small 'inconsistency':
-> while in the IRQ entry path, we inform RCU of the context change *before*
-> incrementing the preempt counter, the opposite happens for the NMI entry
-> path. This applies to both arm64 and x86[1].
-
-For arm64, the style was copied from the x86 code, and (AFAIK) I had no
-particular reason for following either order other than consistency with x86.
-
-> Actually, rcu_nmi_enter() — which is also the main RCU context switch function
-> for the IRQ entry path — uses the preempt counter to verify it's not in NMI
-> context. So it would make sense to assume all callers have the same updated
-> view of the preempt count, which isn't true ATM.
-
-I agree consistency would be nice, assuming there's no issue preventing us from
-moving the IRQ preempt_count logic earlier.
-
-It sounds like today the ordering is only *required* when entering an NMI, and
-we already do the right thing there. Do you see a case where something would go
-wrong (or would behave differently with the flipped ordering) for IRQ today?
-
-> I'm sure there an obscure/non-obvious reason for this, right?
-
-TBH I suspect this is mostly oversight / legacy, and likely something we can
-tighten up.
-
-Thanks,
-Mark.
-
-> 
-> Thanks!
-> Nicolas
-> 
-> [1] 
-> IRQ path:
->   -> x86_64 asm (entry_64.S)
->   -> irqentry_enter() -> rcu_irq_enter() -> *rcu_nmi_enter()*
->   -> run_irq_on_irqstack_cond() -> irq_exit_rcu() -> *preempt_count_add(HARDIRQ_OFFSET)*
->   -> // Run IRQ...
-> 
-> NMI path:
->   -> x86_64 asm (entry_64.S)
->   -> irqentry_nmi_enter() -> __nmi_enter() -> *__preempt_count_add(NMI_OFFSET + HARDIRQ_OFFSET)*
->                           -> *rcu_nmi_enter()*
-> 
-> For arm64, see 'arch/arm64/kernel/entry-common.c'.
-> 
+	-Mike

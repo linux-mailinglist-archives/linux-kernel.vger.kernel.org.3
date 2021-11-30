@@ -2,149 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CA8462CC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA07462CC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 07:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238540AbhK3Gat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 01:30:49 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:28129 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbhK3Gar (ORCPT
+        id S238555AbhK3Gdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 01:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230443AbhK3Gdk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 01:30:47 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J3Byk5GSHz1DJpF;
-        Tue, 30 Nov 2021 14:24:46 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Tue, 30 Nov 2021 14:27:26 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Tue, 30 Nov 2021 14:27:25 +0800
-Message-ID: <ab9b7446-e955-67da-b9f3-1e1c15566fdb@huawei.com>
-Date:   Tue, 30 Nov 2021 14:27:24 +0800
+        Tue, 30 Nov 2021 01:33:40 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36728C061574;
+        Mon, 29 Nov 2021 22:30:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B438CE13F9;
+        Tue, 30 Nov 2021 06:30:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FEBBC53FC1;
+        Tue, 30 Nov 2021 06:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638253818;
+        bh=aSy6X/HLpYqWHn8R4RV3gb/OanP+Jqq/AK5b1UPu5R8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JxucHg7L/glFjCmLPDqUkT/3WAgRhaVe0utUdCdU3o/GsakEVaNzn1jm5uAtDpzee
+         Leb8YLsOmuOHPuWNT/SAq3o6enMT5/eSP/eyal4H/WCtc7OMa6LyHtbZnA1813XIiz
+         5z+erwNVVMo31Gm+aBcm68QfvPln+RKGBkE8ba8qV9+HJ2HgrclhoFH+F4LtqQxzth
+         qq5BNl8QJkEa+Dns9K8C4KEqTLjYMRoaj4a8MQiv57EFxd33txMNh/d7SaMFdbGlBZ
+         eTRJkX0A/pnQAd0HEUkh7lLGOYxBkN2QlODZHkS4oSIzWf/t9dP4qyZbZUZYL5zPiG
+         5/EKVCUGvl/8A==
+Date:   Mon, 29 Nov 2021 22:30:16 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Lakshmi Ramasubramanian <nramas@linux.microsoft.com>
+Cc:     Mimi Zohar <zohar@linux.ibm.com>, linux-integrity@vger.kernel.org,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] fs-verity: define a function to return the integrity
+ protected file digest
+Message-ID: <YaXE+H17xPZSEcP7@sol.localdomain>
+References: <20211129170057.243127-1-zohar@linux.ibm.com>
+ <20211129170057.243127-2-zohar@linux.ibm.com>
+ <YaWKJEqD6G23uG/A@sol.localdomain>
+ <53ee68b8-e3fe-887c-89d3-a327c8dc181f@linux.microsoft.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH RFC 3/4] mm: percpu: Add generic pcpu_fc_alloc/free
- funciton
-Content-Language: en-US
-To:     Dennis Zhou <dennis@kernel.org>
-CC:     <akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <tj@kernel.org>,
-        <gregkh@linuxfoundation.org>, <cl@linux.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>,
-        <tsbogend@alpha.franken.de>, <mpe@ellerman.id.au>,
-        <benh@kernel.crashing.org>, <paulus@samba.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <davem@davemloft.net>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <hpa@zytor.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-ia64@vger.kernel.org>, <linux-mips@vger.kernel.org>,
-        <linuxppc-dev@lists.ozlabs.org>, <linux-riscv@lists.infradead.org>,
-        <sparclinux@vger.kernel.org>, <x86@kernel.org>
-References: <20211121093557.139034-1-wangkefeng.wang@huawei.com>
- <20211121093557.139034-4-wangkefeng.wang@huawei.com>
- <YaVYGCB+I7QLZo0+@fedora>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <YaVYGCB+I7QLZo0+@fedora>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme704-chm.china.huawei.com (10.1.199.100) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53ee68b8-e3fe-887c-89d3-a327c8dc181f@linux.microsoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Nov 29, 2021 at 09:33:29PM -0800, Lakshmi Ramasubramanian wrote:
+> > > +/**
+> > > + * fsverity_measure() - get a verity file's digest
+> nit: The function name seems to suggest it is measuring the fs-verity file's
+> digest. Since it is reading the file's digest: fsverity_read_digest() or
+> fsverity_read_measure()?
 
-On 2021/11/30 6:45, Dennis Zhou wrote:
-> On Sun, Nov 21, 2021 at 05:35:56PM +0800, Kefeng Wang wrote:
->> With previous patch, we could add a generic pcpu first chunk
->> allocation and free function to cleanup the duplicated definations
->> on each architecture.
->>
->> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
->> ---
->>   arch/mips/mm/init.c            | 16 +--------
->>   arch/powerpc/kernel/setup_64.c | 51 ++------------------------
->>   arch/sparc/kernel/smp_64.c     | 50 +-------------------------
->>   arch/x86/kernel/setup_percpu.c | 59 +-----------------------------
->>   drivers/base/arch_numa.c       | 19 +---------
->>   include/linux/percpu.h         |  9 +----
->>   mm/percpu.c                    | 66 ++++++++++++++++++----------------
->>   7 files changed, 42 insertions(+), 228 deletions(-)
-...
->> diff --git a/include/linux/percpu.h b/include/linux/percpu.h
->> index 41bb54715b0c..d73c97ef4ff4 100644
->> --- a/include/linux/percpu.h
->> +++ b/include/linux/percpu.h
->> @@ -95,9 +95,6 @@ extern const char * const pcpu_fc_names[PCPU_FC_NR];
->>   extern enum pcpu_fc pcpu_chosen_fc;
->>   
->>   typedef int (pcpu_fc_cpu_to_node_fn_t)(int cpu);
->> -typedef void * (*pcpu_fc_alloc_fn_t)(unsigned int cpu, size_t size, size_t align,
->> -				     pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn);
->> -typedef void (*pcpu_fc_free_fn_t)(void *ptr, size_t size);
->>   typedef void (*pcpu_fc_populate_pte_fn_t)(unsigned long addr);
->>   typedef int (pcpu_fc_cpu_distance_fn_t)(unsigned int from, unsigned int to);
->>   
->> @@ -112,15 +109,11 @@ extern void __init pcpu_setup_first_chunk(const struct pcpu_alloc_info *ai,
->>   extern int __init pcpu_embed_first_chunk(size_t reserved_size, size_t dyn_size,
->>   				size_t atom_size,
->>   				pcpu_fc_cpu_distance_fn_t cpu_distance_fn,
->> -				pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn,
->> -				pcpu_fc_alloc_fn_t alloc_fn,
->> -				pcpu_fc_free_fn_t free_fn);
->> +				pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn);
->>   #endif
->>   
->>   #ifdef CONFIG_NEED_PER_CPU_PAGE_FIRST_CHUNK
->>   extern int __init pcpu_page_first_chunk(size_t reserved_size,
->> -				pcpu_fc_alloc_fn_t alloc_fn,
->> -				pcpu_fc_free_fn_t free_fn,
->>   				pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn,
->>   				pcpu_fc_populate_pte_fn_t populate_pte_fn);
->>   #endif
->> diff --git a/mm/percpu.c b/mm/percpu.c
->> index 3f6cf1ff0be2..efaa1cbaf73d 100644
->> --- a/mm/percpu.c
->> +++ b/mm/percpu.c
->> @@ -2992,6 +2992,30 @@ static struct pcpu_alloc_info * __init __flatten pcpu_build_alloc_info(
->>   
->>   	return ai;
->>   }
->> +
->> +static void * __init pcpu_fc_alloc(unsigned int cpu, size_t size, size_t align,
->> +				   pcpu_fc_cpu_to_node_fn_t cpu_to_nd_fn)
->> +{
->> +	const unsigned long goal = __pa(MAX_DMA_ADDRESS);
->> +	int node = NUMA_NO_NODE;
->> +	void *ptr;
->> +
->> +	if (cpu_to_nd_fn)
->> +		node = cpu_to_nd_fn(cpu);
->> +
->> +	if (node == NUMA_NO_NODE || !node_online(node) || !NODE_DATA(node)) {
->> +		ptr = memblock_alloc_from(size, align, goal);
->> +	} else {
->> +		ptr = memblock_alloc_try_nid(size, align, goal,
->> +					     MEMBLOCK_ALLOC_ACCESSIBLE, node);
->> +	}
->> +	return ptr;
->> +}
-> My preference here would be to keep this identical to the x86
-> implementation where we #ifdef CONFIG_NUMA.
+I suggest fsverity_get_digest().  "read" is misleading because it's not being
+read from disk.
 
-I will add back '#ifdef CONFIG_NUMA',  also will add back the 
-pr_debug/pr_info part as x86 does,
-
-> Overall this makes sense.
->
-> Thanks,
-> Dennis
-> .
+- Eric

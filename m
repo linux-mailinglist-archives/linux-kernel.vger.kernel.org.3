@@ -2,129 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D833464058
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:37:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CF846405A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344232AbhK3Vks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:40:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42010 "EHLO
+        id S240740AbhK3Vmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:42:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344057AbhK3Vkn (ORCPT
+        with ESMTP id S1344253AbhK3Vma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:40:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E46C061574;
-        Tue, 30 Nov 2021 13:37:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0C689CE1C5E;
-        Tue, 30 Nov 2021 21:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C0C6C53FC7;
-        Tue, 30 Nov 2021 21:37:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638308240;
-        bh=2LSlkcK5qJnlXtsBWdEyilArV2GlaA8dV4lZT+DRMyQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SbvR54O/ALPMkpKKObmAEX4T/Um4E3iESIWFdwF9hztOtEHukwwlz3Vq/2nLXovy9
-         InYeG1dn/AxGIrLK83kuZeipJm4EtsMf1TaijLvYOIY/jz6TDys+ZhObd2pxQMkE2B
-         4lp2NMCJM7XFQwA0zs2ISutUtK82jM9DaL8W4V6Ww5okv1pEQ1bLcrTYO37YAJC29F
-         k0JzDETl+9mdZrQv9DxGbaHuMTARh8r5ophv78SmKZ+hW4LznUlXCZpD9YDC9EUvx7
-         lQv+XdFe7KMlxS3YPvdl8AiqvIGTDOdXfuPAWWcfxt6RKQwzXt9C+ACBfw6S7TDg40
-         xoY1/bbzcNlQQ==
-Date:   Tue, 30 Nov 2021 22:37:17 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Ondrej Jirman <megous@megous.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH] i2c: rk3x: Handle a spurious start completion
- interrupt flag
-Message-ID: <YaaZjVGtmA5NQVwh@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Ondrej Jirman <megous@megous.com>, Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "moderated list:ARM/Rockchip SoC support" <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC support" <linux-rockchip@lists.infradead.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20210924111528.2924251-1-megous@megous.com>
+        Tue, 30 Nov 2021 16:42:30 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E377C06174A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:39:10 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id t34so21753158qtc.7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:39:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=gmjlNfIqFHjkoSqyGG2+jA20pUXVqvYW14ZXL9GlJYg=;
+        b=oOrVlIwlmBC0xoMqFv6bWncerV6dmDBOzYaa88gA4TFUeV/QBXS7GcHrsWcuJJig7w
+         IjrhYvYIiD3MqHo/F42pGow78IbBM2u6sPm1fp43ho7sY8nXegS60XGzj2Hx73GcJDuj
+         reVB3/t3rqlxqAl3UkHO5XTZtOH5meSprObq6rC2qOmFtorFVMk/YxKybgkbbQREtRe/
+         YthKDu+mQWkytGDVn4qP3ZoN1TMIFxB8EC66pRUh3ta9tTTHafAsyuXgeBCk19ly6jZZ
+         NwQHkqrfi2y1A+lad7vp6JwezlobQucgNkZNUA1niI5ve+B7Usmzyt/0QQyf9UbbgoPu
+         KTyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=gmjlNfIqFHjkoSqyGG2+jA20pUXVqvYW14ZXL9GlJYg=;
+        b=iOmuXr+yblxKcN8fIt8hzvNM8TWlZlmRKQRw0fLuf9s4LXP2BmAVMFc/n7F29BaUma
+         ibonPaTv9AS5/0gztlyT6qsztrR3L1Ueab6KdH3Sh/0elV3gk1oHmSkpRxQARrbKmVrs
+         X70wkdCSRQCqX7QymNlc9UodQZMMv4qlFR1NPY15YAzqpqQnfQ6ce+OJJo5eYqhAo1gv
+         l6vbtlYh0smZbmcD5gG0APT69y38H7jDHGp0msg/5T1mRqMI4sOjOiQA5TG361k3/96K
+         9MpXQkImPudb41QDz2kMsGvGuEd6HBVFLh9uWUvk/PCykO0KaGGuYaJqb0wq52DPNU/R
+         +Jzg==
+X-Gm-Message-State: AOAM533uYJPPLSUJsY2hNaQ6r1awncwSnldTJh8+e+JkFfj9TWBMgyyS
+        FLLBFAsGEPYoWauAlr1zFO+Cv6r/B/2lo3AUimah+g==
+X-Google-Smtp-Source: ABdhPJxl6YtK/h165mnccKscHmrNx8hv+5LU3oxmgVt8xO6NFVkqE7pdFuWXIupjmUN6d4vv2UqvlixHXkWBKv/zKyU=
+X-Received: by 2002:ac8:5f4e:: with SMTP id y14mr2458797qta.620.1638308349300;
+ Tue, 30 Nov 2021 13:39:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="sOF2f5PSKqkWs/pK"
-Content-Disposition: inline
-In-Reply-To: <20210924111528.2924251-1-megous@megous.com>
+References: <20211126124746.761278-1-glider@google.com> <b740b48e-2675-d324-d35c-d96f973f24e0@intel.com>
+In-Reply-To: <b740b48e-2675-d324-d35c-d96f973f24e0@intel.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 30 Nov 2021 22:38:33 +0100
+Message-ID: <CAG_fn=WVwh0593rX-+OwEHxEcHO9GHc-Tux=XzQs5F-T+os_5Q@mail.gmail.com>
+Subject: Re: [PATCH] x86/fpu/signal: initialize sw_bytes in save_xstate_epilog()
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     tglx@linutronix.de, chang.seok.bae@intel.com, bp@suse.de,
+        dvyukov@google.com, elver@google.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 30, 2021 at 10:09 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 11/26/21 4:47 AM, Alexander Potapenko wrote:
+> > save_sw_bytes() did not fully initialize sw_bytes, which caused KMSAN
+> > to report an infoleak (see below).
+> > Initialize sw_bytes explicitly to avoid this.
+> ...
+> > Reported-by: Alexander Potapenko <glider@google.com>
+> > Signed-off-by: Marco Elver <elver@google.com>
+> > Signed-off-by: Alexander Potapenko <glider@google.com>
+> > Tested-by: Alexander Potapenko <glider@google.com>
+> > Fixes: 53599b4d54b9b8dd ("x86/fpu/signal: Prepare for variable sigframe=
+ length")
+> > Link: https://lore.kernel.org/all/CAG_fn=3DV9T6OKPonSjsi9PmWB0hMHFC=3Dy=
+awozdft8i1-MSxrv=3Dw@mail.gmail.com/
+>
+> Hi Alexander,
+>
+> Marco's SoB entry is before yours.  Was this authored by you or Marco?
+> If it was Marco, it's customary to add a:
+>
+>         From: Marco Elver <elver@google.com>
+>
+> at the top of the changelog to make sure git gets the author right.  I'm
+> happy to fix it up this time, I just need to know who wrote it.
 
---sOF2f5PSKqkWs/pK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi Dave,
 
-On Fri, Sep 24, 2021 at 01:15:27PM +0200, Ondrej Jirman wrote:
-> In a typical read transfer, start completion flag is being set after
-> read finishes (notice ipd bit 4 being set):
->=20
-> trasnfer poll=3D0
-> i2c start
-> rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
-> i2c read
-> rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
-> i2c stop
-> rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 33
->=20
-> This causes I2C transfer being aborted in polled mode from a stop complet=
-ion
-> handler:
->=20
-> trasnfer poll=3D1
-> i2c start
-> rk3x-i2c fdd40000.i2c: IRQ: state 1, ipd: 10
-> i2c read
-> rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 0
-> rk3x-i2c fdd40000.i2c: IRQ: state 2, ipd: 1b
-> i2c stop
-> rk3x-i2c fdd40000.i2c: IRQ: state 4, ipd: 13
-> i2c stop
-> rk3x-i2c fdd40000.i2c: unexpected irq in STOP: 0x10
->=20
-> Clearing the START flag after read fixes the issue without any obvious
-> side effects.
->=20
-> This issue was dicovered on RK3566 when adding support for powering
-> off the RK817 PMIC.
->=20
-> Signed-off-by: Ondrej Jirman <megous@megous.com>
-
-Applied to for-current, thanks!
+Yes, it was authored by Marco. Thanks in advance for fixing this, I'll
+keep that in mind next time :)
 
 
---sOF2f5PSKqkWs/pK
-Content-Type: application/pgp-signature; name="signature.asc"
+--=20
+Alexander Potapenko
+Software Engineer
 
------BEGIN PGP SIGNATURE-----
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGmmY0ACgkQFA3kzBSg
-KbZ64xAAhAMsGHyf1dbaH7r+Iv6SZBb652herH6rb0o8011mc8qs0+rIIRSzqZdI
-94wDHAFN8jTGT8j1hWRO64BbUttlcdAJIki9RGbZtvb/++cUBRpNAxaTdeOQ/9jO
-Sy4s1iEvVWpmFcbOJJ2rx4ItSJURgGu6ILN65ws2HNeaKVrNj15wvyUoYLcK1U+V
-9DbwKCF+KQ9OB997fRfLBK7N+7hfSqOCZzLxTdEHBvB7wRNLxwDHDRRD0ensJVSW
-B23WJW0D4B78TLFLa5+uEV9pCbuGogweDPJF62ydxu07brmscwAfdepk+IvQxYmV
-Q1VwulhMPrQSEmNTdu1cAJkHIneNulO9PmGJ8vtJ4V9wztR+1N+8mEzVj/WRo7a8
-1pRq1xGy/YzwH5o8kfDNY6cjdEP6vKOEBFzGQI6D92bJHmhFSb7qpNTuzrzFvzQq
-yV9U8m7/JcLhA4mWsYI69702L5rGdKP8wgMp+VJD9iDWlpBO91d0PC1+3R4ewf92
-eRR20tnEbDGab8N1uOlAW3YZiCOZ9/I503/DWQHhQZBtmKmBy6aJ7S6wY4bVgAhU
-l6f87740Jo7C8lMuxSkYftV6EqWwBZugpXyDw3nPXja2nRp5r2xh4yNrsPhkdFh6
-LufjqDUZBHiVF5AOUZW+3Nx9GWNliWUdEf2b5RMtASK8F37F9Ks=
-=NDfr
------END PGP SIGNATURE-----
-
---sOF2f5PSKqkWs/pK--
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

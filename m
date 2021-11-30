@@ -2,41 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 50CA94634A1
+	by mail.lfdr.de (Postfix) with ESMTP id 9E0BF4634A2
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241909AbhK3Mm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:42:29 -0500
-Received: from mail-mw2nam12on2071.outbound.protection.outlook.com ([40.107.244.71]:38368
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
+        id S241918AbhK3Mmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:42:31 -0500
+Received: from mail-dm3nam07on2050.outbound.protection.outlook.com ([40.107.95.50]:27617
+        "EHLO NAM02-DM3-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S241902AbhK3Mlh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:41:37 -0500
+        id S241919AbhK3Mlk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:41:40 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g/0XolXYJSTsyWbKUL8lepoLRTZtrj+Xuedgw/7rndX7J5+mm6ySOPWiEwQ8+Q7bXj4JFc4ue87eTgI549pgPe7fWc9nCw98x0Zt7fBEBNu5YUNXkl++Z5/kWvdDQsPT4+8kibDvC5LbSeNbpcul/SCY+ivs8SOrQn+ISLhWWMYdm7Sc6UM1pALgsFBOnG+TzqIPqfc1iW+9kTnW/5E3Nl0IrEWr6iW5Ux3KkBQxIreIMmS2r+dyl8xUGZcJb2gtJPUWdZ/PZAzWKFFOQUTkM7GqDQX5D0x8hOb0FDV9zhlsTRJJ8RVEz7cN5mVVClxfLUX6ikYwyIS61K2y4VuTwA==
+ b=fmJ2Ucwe3J5NSundCL6WjuW2dE56EczhOSJVileIn783MERVd/9rrh8XZwJQd8ZsztUzfxVcuv3C/ooVIQNDwC0rUzfWB41yHvpIr9o23qxUqF/eciUKlvb3TW6uTLik+kgUDblL7gYHgQqCpjWAcDBwSixWMeSSH1laVzQJ0bimNEFl7807Cd+v7rLcv+OJbkBLPlT4HmI9p6Tme23v5NlNYjEjbmAyuRGwj8Bd8OTpI6wyogDGVNRC8fXqiRjy2t2OtGhBwy4TjRQ0qJ2Zzo2/jRy1tmOcJrOBNBIJz+/lO3HzId7e1lZlrMVext7A7zvH0iLnZ8QHHM8HSE3cZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4RbkQn3dD3s1QYVuk934xqyMRVB5dSeR+NldY7tUrnk=;
- b=NHUZacc+azhFrUQ0w5Cso5zbbx7kOzaNKfzp55GnW8XxMDmgSAk4iuolBwD/hmQvwr+SLRl05jeb686igpawIg3WnUCRMNMm2M9Hh0h6d05hav58OtTYPMRz8dihPPwGgJbys4/sRkD+voksniK9O1ysXzxdxhAx4IfpQtiphxVYA6JoYmzmk2yFZ6Uk20kNuSMoIg1X6WiK7oGgfz3dzVVxFI/o/vWknQQi0JesFCMcfZChvyO+TJXT2oe5eZ4FmIFR/hR47st7oVVWPWN1Sllk002zHIKZ/7HMN0euqKSl/nBV7S8MK4qqvXO84HTCa37283Ar6MLBlz06t1U7Cw==
+ bh=0k/zus4Ykvg9YQ8ScAPNoaxGrxYCilniKi+hCW4Rdes=;
+ b=chQDhUyijsf/aE7M6vmwhLLZJD3n+b4uqvLy0ftXvnF7rrIU7PGdP4U/u9dHfA/SkhyVDq/Tc/yRZEsMheJCYap9K9EHygrdQevLngU1dDtd4qtc6qAacwbgSrwHYMeKdhpsLpdtc0zExEgjL2lP90EmwByhZY5jxYAbXTkJnPEBVAJIa1463k3VBT2hC1KFuFlT/yKRnqeiwn/Se/qI21LycZt1I9pd0+mi7Q71RsoXkYK77Y5ydXi2oJz2W1bYYmaXGiuTLTnOkr2E83zzZGcxjpaQdE0FeJFCJJU8wjZ7M2aHJKu8Hz5l/Kmm0Ql5eLugiQDCxJsgDp/ZZmKang==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4RbkQn3dD3s1QYVuk934xqyMRVB5dSeR+NldY7tUrnk=;
- b=2ZimuTBu2QKhAbwv4+Ea2Kaz0yksueoLszirQfLTNKz3ZmG2IE43yt7ftf/JP/37FPC187C0UkdUr6CjhjoZs1h6+pRSPSH22hKj7cFLt2MrlSCxov8OPZEroCy8oT9u0tunJXUomGHb8URI09p2l06qbNmKYexFHXOLg1Ig5VU=
-Received: from BN6PR21CA0019.namprd21.prod.outlook.com (2603:10b6:404:8e::29)
- by BY5PR12MB4163.namprd12.prod.outlook.com (2603:10b6:a03:202::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Tue, 30 Nov
- 2021 12:38:14 +0000
-Received: from BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:8e:cafe::52) by BN6PR21CA0019.outlook.office365.com
- (2603:10b6:404:8e::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4778.2 via Frontend
- Transport; Tue, 30 Nov 2021 12:38:14 +0000
+ bh=0k/zus4Ykvg9YQ8ScAPNoaxGrxYCilniKi+hCW4Rdes=;
+ b=Tri7wOsxfExQ7cNaSkfinw/ZzMmTOD7ZgrwybEmgK9wIvV01j8npJZ0zIPcOKqLLSHCpBl0TdlHOZ6sg8YRi/ha7eEiWigyyjP4eYHvz1yWVoj+htkSgpxLBc09v5FtmJ3JCAgwDoYQDcK1GhC0jI11CkLN2j4bExTIA4MS9/dc=
+Received: from BN8PR04CA0029.namprd04.prod.outlook.com (2603:10b6:408:70::42)
+ by DM8PR12MB5413.namprd12.prod.outlook.com (2603:10b6:8:3b::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4755.11; Tue, 30 Nov 2021 12:38:19 +0000
+Received: from BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:70:cafe::d0) by BN8PR04CA0029.outlook.office365.com
+ (2603:10b6:408:70::42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend
+ Transport; Tue, 30 Nov 2021 12:38:19 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -44,13 +43,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com;
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT064.mail.protection.outlook.com (10.13.176.160) with Microsoft SMTP
+ BN8NAM11FT025.mail.protection.outlook.com (10.13.177.136) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4734.22 via Frontend Transport; Tue, 30 Nov 2021 12:38:14 +0000
+ 15.20.4734.22 via Frontend Transport; Tue, 30 Nov 2021 12:38:19 +0000
 Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 30 Nov
- 2021 06:38:09 -0600
+ 2021 06:38:14 -0600
 From:   Huang Rui <ray.huang@amd.com>
 To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -69,9 +68,9 @@ CC:     Deepak Sharma <deepak.sharma@amd.com>,
         Xiaojian Du <Xiaojian.Du@amd.com>,
         <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
         Huang Rui <ray.huang@amd.com>
-Subject: [PATCH v5 16/22] cpupower: add the function to get the sysfs value from specific table
-Date:   Tue, 30 Nov 2021 20:36:35 +0800
-Message-ID: <20211130123641.1449041-17-ray.huang@amd.com>
+Subject: [PATCH v5 17/22] cpupower: introduce acpi cppc library
+Date:   Tue, 30 Nov 2021 20:36:36 +0800
+Message-ID: <20211130123641.1449041-18-ray.huang@amd.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211130123641.1449041-1-ray.huang@amd.com>
 References: <20211130123641.1449041-1-ray.huang@amd.com>
@@ -83,108 +82,155 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9e2ebbfa-71e3-42f0-d891-08d9b3fe471c
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4163:
-X-Microsoft-Antispam-PRVS: <BY5PR12MB4163187017B2B5B1596CE54DEC679@BY5PR12MB4163.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:3383;
+X-MS-Office365-Filtering-Correlation-Id: 886c1bea-e9ad-4c2b-9a1e-08d9b3fe49d1
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5413:
+X-Microsoft-Antispam-PRVS: <DM8PR12MB541390E3F5CB292577E6D2B8EC679@DM8PR12MB5413.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:2331;
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sjNJbJJxkzlSnt/wn2sZX/kw4UxUPDt8lt2vghvrZdOtRfAEGaL0bBDYXk0/LvuEyCc+ksSHPJ1E9tjBY1Krj/voEmNxOlG6c02QxIWZphP2JpwJnk9xEpAwIcEr+Mzp170vNtMHvEbJU7st9RJX4JR840OjHkYk4xtrqWBiAV713ALTXpDyMWb+j2LyF0tz+c3ArZcKMJpTZwQV3JzBD3wNFKiHVlBWeCxQqy4HayJzsZlTCKqF4c2IDf1MySPCPrmlJ8IU/uvVdXm+xgmTr4vRrfpBXvYbHdv8Bvr//qu0+47hTZlwOxZNeAJy4TY85Jp/3DS16efmNdFjjueggTK1I9i749oSjV1uUUsPlehQ+LnbRpERvhu4HAZvc7da89rovxz6i89O2W5V87fEolqjlKwry6Qv9Y9w6z6Pezs/J68Iq5m2GwvGYb0Qd6pQ1SJX6ChycF4xMqgc4QcyTaFcip9Lc9jdXm6VRuEyw/ZwLVgF4fnBmHVhwDHffhT6ssY8XCPmBb7HOPkaV4/KfcX8dneLdvNnaL/WUargGVHKFHRDmpP7OK2D0OC6tCLUiZrnOkxHgk6lIhbmL1dvA7HwR3H8brOrLXBu4fzWrjHFJzEgER65cce9vq8t340x3BXbNfI+ig89CqAcjUBmnqx09jDB68d+eZL+ryfV4EDaQwEpVR6O4GlbiMLR/c7bO33fCCaXiIuFE9U011/euzRawlme0MmWI8Cgo+c/Y9w1iN1X3hQ4mrM+O4Yzz4+sbmpXlANzxaWwNT7w+KJR2ZjPQ7RuGCGaPo1uOm562l8xdcvXtS62ptLzW6IAOwfjslNHHtP+59MwSZMqYmpdgg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(2906002)(5660300002)(7416002)(316002)(54906003)(83380400001)(26005)(336012)(81166007)(1076003)(508600001)(36756003)(7696005)(356005)(86362001)(4326008)(70586007)(426003)(70206006)(110136005)(40460700001)(186003)(36860700001)(8676002)(47076005)(82310400004)(16526019)(2616005)(8936002)(6666004)(15583001)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Yg/1jQtvT5qWVvXZB8DjMn9KRJowdIrt7AObGK8W7ey4OaXrmoDGHb4kWb5UNSVFbEMCNGwiIRwUVkRUKsntXyWBeItGKhF/tWuqXXxjnVBCe5MzDFz6mzfVft8RYldyJLnXwGPztWtDOqKbMbjyMiJlLXbo2mNqnF5RoIIxW8dCPOe8poMsCjUtFilj2iOr3vcNvLKQn67+T8f7z2IH1Ny8zb0zcmAXHsfGzBeixMYO1OF5FTb6nCIG9MpnD8zaABLAV2VhxWtolSnCKPNiBrAX6N0Mbce3CJKeLigHP7tB/du2+uDYUUS05GPcKTUacxml3ZKGNukbGP+TEdnsE0T9MbUL8/lmcAhfsS7riZGHBwkBEQfQKGym55nr/gtfnmJTr9ajgIRKfQidOYXyH1B3FiUbqPPSebYPbdPupC60eA6BUyUOxhWSqR16Kkno2QRYi4fi4sYIzOXXQoV/9y/2C7uTZN5ylB81UOWZ0VBcVs9btI5jgDaf/1KP5nF+kol8CoaYyvQg/uCChmXI6jSlTFngxPbXwLxa0tN8h0xwb/s4E5ciF54+v8oFRpUTf+/vsbio9wQExpFnEpQXM5xwuy/pwz45xLTQXv3q5OgbCF+zpaHsyl2LlgpG53JiJ/0zgJCNsRu9RCh4tvYlETsBsHlfBZuXWfhdDk4+5D9U1i+aIzIj4HxZIFUYFJzSnmTOKKG+KMgoX3oyoSaf7WY94uHUtMvAxjJkl5MbVZwIAzIJDhRcvS4O1N83QPY5zVUhFarInnzOcXZOlWOcfLlZ4xAheS0NS21XRB9Ia2c=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(4636009)(36840700001)(46966006)(40470700001)(83380400001)(356005)(426003)(2616005)(8676002)(81166007)(336012)(86362001)(36860700001)(70586007)(70206006)(6666004)(54906003)(1076003)(2906002)(7696005)(47076005)(36756003)(4326008)(82310400004)(7416002)(5660300002)(40460700001)(110136005)(16526019)(186003)(8936002)(508600001)(26005)(316002)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 12:38:14.5313
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 12:38:19.0734
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9e2ebbfa-71e3-42f0-d891-08d9b3fe471c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 886c1bea-e9ad-4c2b-9a1e-08d9b3fe49d1
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT064.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT025.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4163
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR12MB5413
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose the helper into cpufreq header, then cpufreq driver can use this
-function to get the sysfs value if it has any specific sysfs interfaces.
+Kernel ACPI subsytem introduced the sysfs attributes for acpi cppc
+library in below path:
+
+/sys/devices/system/cpu/cpuX/acpi_cppc/
+
+And these attributes will be used for amd-pstate driver to provide some
+performance and frequency values.
 
 Signed-off-by: Huang Rui <ray.huang@amd.com>
 ---
- tools/power/cpupower/lib/cpufreq.c | 21 +++++++++++++++------
- tools/power/cpupower/lib/cpufreq.h | 12 ++++++++++++
- 2 files changed, 27 insertions(+), 6 deletions(-)
+ tools/power/cpupower/Makefile        |  6 +--
+ tools/power/cpupower/lib/acpi_cppc.c | 59 ++++++++++++++++++++++++++++
+ tools/power/cpupower/lib/acpi_cppc.h | 21 ++++++++++
+ 3 files changed, 83 insertions(+), 3 deletions(-)
+ create mode 100644 tools/power/cpupower/lib/acpi_cppc.c
+ create mode 100644 tools/power/cpupower/lib/acpi_cppc.h
 
-diff --git a/tools/power/cpupower/lib/cpufreq.c b/tools/power/cpupower/lib/cpufreq.c
-index c3b56db8b921..c011bca27041 100644
---- a/tools/power/cpupower/lib/cpufreq.c
-+++ b/tools/power/cpupower/lib/cpufreq.c
-@@ -83,20 +83,21 @@ static const char *cpufreq_value_files[MAX_CPUFREQ_VALUE_READ_FILES] = {
- 	[STATS_NUM_TRANSITIONS] = "stats/total_trans"
- };
+diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+index 3b1594447f29..e9b6de314654 100644
+--- a/tools/power/cpupower/Makefile
++++ b/tools/power/cpupower/Makefile
+@@ -143,9 +143,9 @@ UTIL_HEADERS = utils/helpers/helpers.h utils/idle_monitor/cpupower-monitor.h \
+ 	utils/helpers/bitmask.h \
+ 	utils/idle_monitor/idle_monitors.h utils/idle_monitor/idle_monitors.def
  
--
--static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
--						 enum cpufreq_value which)
-+unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
-+						 const char **table,
-+						 unsigned index,
-+						 unsigned size)
- {
- 	unsigned long value;
- 	unsigned int len;
- 	char linebuf[MAX_LINE_LEN];
- 	char *endp;
+-LIB_HEADERS = 	lib/cpufreq.h lib/cpupower.h lib/cpuidle.h
+-LIB_SRC = 	lib/cpufreq.c lib/cpupower.c lib/cpuidle.c
+-LIB_OBJS = 	lib/cpufreq.o lib/cpupower.o lib/cpuidle.o
++LIB_HEADERS = 	lib/cpufreq.h lib/cpupower.h lib/cpuidle.h lib/acpi_cppc.h
++LIB_SRC = 	lib/cpufreq.c lib/cpupower.c lib/cpuidle.c lib/acpi_cppc.c
++LIB_OBJS = 	lib/cpufreq.o lib/cpupower.o lib/cpuidle.o lib/acpi_cppc.o
+ LIB_OBJS :=	$(addprefix $(OUTPUT),$(LIB_OBJS))
  
--	if (which >= MAX_CPUFREQ_VALUE_READ_FILES)
-+	if (!table || index >= size || !table[index])
- 		return 0;
- 
--	len = sysfs_cpufreq_read_file(cpu, cpufreq_value_files[which],
--				linebuf, sizeof(linebuf));
-+	len = sysfs_cpufreq_read_file(cpu, table[index], linebuf,
-+				      sizeof(linebuf));
- 
- 	if (len == 0)
- 		return 0;
-@@ -109,6 +110,14 @@ static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
- 	return value;
- }
- 
-+static unsigned long sysfs_cpufreq_get_one_value(unsigned int cpu,
-+						 enum cpufreq_value which)
+ override CFLAGS +=	-pipe
+diff --git a/tools/power/cpupower/lib/acpi_cppc.c b/tools/power/cpupower/lib/acpi_cppc.c
+new file mode 100644
+index 000000000000..a07a8922eca2
+--- /dev/null
++++ b/tools/power/cpupower/lib/acpi_cppc.c
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <stdio.h>
++#include <errno.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <fcntl.h>
++#include <unistd.h>
++
++#include "cpupower_intern.h"
++#include "acpi_cppc.h"
++
++/* ACPI CPPC sysfs access ***********************************************/
++
++static int acpi_cppc_read_file(unsigned int cpu, const char *fname,
++			       char *buf, size_t buflen)
 +{
-+	return cpufreq_get_sysfs_value_from_table(cpu, cpufreq_value_files,
-+						  which,
-+						  MAX_CPUFREQ_VALUE_READ_FILES);
++	char path[SYSFS_PATH_MAX];
++
++	snprintf(path, sizeof(path), PATH_TO_CPU "cpu%u/acpi_cppc/%s",
++		 cpu, fname);
++	return cpupower_read_sysfs(path, buf, buflen);
 +}
 +
- /* read access to files which contain one string */
- 
- enum cpufreq_string {
-diff --git a/tools/power/cpupower/lib/cpufreq.h b/tools/power/cpupower/lib/cpufreq.h
-index 95f4fd9e2656..107668c0c454 100644
---- a/tools/power/cpupower/lib/cpufreq.h
-+++ b/tools/power/cpupower/lib/cpufreq.h
-@@ -203,6 +203,18 @@ int cpufreq_modify_policy_governor(unsigned int cpu, char *governor);
- int cpufreq_set_frequency(unsigned int cpu,
- 				unsigned long target_frequency);
- 
-+/*
-+ * get the sysfs value from specific table
-+ *
-+ * Read the value with the sysfs file name from specific table. Does
-+ * only work if the cpufreq driver has the specific sysfs interfaces.
-+ */
++static const char *acpi_cppc_value_files[] = {
++	[HIGHEST_PERF] = "highest_perf",
++	[LOWEST_PERF] = "lowest_perf",
++	[NOMINAL_PERF] = "nominal_perf",
++	[LOWEST_NONLINEAR_PERF] = "lowest_nonlinear_perf",
++	[LOWEST_FREQ] = "lowest_freq",
++	[NOMINAL_FREQ] = "nominal_freq",
++	[REFERENCE_PERF] = "reference_perf",
++	[WRAPAROUND_TIME] = "wraparound_time"
++};
 +
-+unsigned long cpufreq_get_sysfs_value_from_table(unsigned int cpu,
-+						 const char **table,
-+						 unsigned index,
-+						 unsigned size);
++unsigned long acpi_cppc_get_data(unsigned cpu, enum acpi_cppc_value which)
++{
++	unsigned long long value;
++	unsigned int len;
++	char linebuf[MAX_LINE_LEN];
++	char *endp;
 +
- #ifdef __cplusplus
- }
- #endif
++	if (which >= MAX_CPPC_VALUE_FILES)
++		return 0;
++
++	len = acpi_cppc_read_file(cpu, acpi_cppc_value_files[which],
++				  linebuf, sizeof(linebuf));
++	if (len == 0)
++		return 0;
++
++	value = strtoull(linebuf, &endp, 0);
++
++	if (endp == linebuf || errno == ERANGE)
++		return 0;
++
++	return value;
++}
+diff --git a/tools/power/cpupower/lib/acpi_cppc.h b/tools/power/cpupower/lib/acpi_cppc.h
+new file mode 100644
+index 000000000000..576291155224
+--- /dev/null
++++ b/tools/power/cpupower/lib/acpi_cppc.h
+@@ -0,0 +1,21 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++
++#ifndef __ACPI_CPPC_H__
++#define __ACPI_CPPC_H__
++
++enum acpi_cppc_value {
++	HIGHEST_PERF,
++	LOWEST_PERF,
++	NOMINAL_PERF,
++	LOWEST_NONLINEAR_PERF,
++	LOWEST_FREQ,
++	NOMINAL_FREQ,
++	REFERENCE_PERF,
++	WRAPAROUND_TIME,
++	MAX_CPPC_VALUE_FILES
++};
++
++extern unsigned long acpi_cppc_get_data(unsigned cpu,
++					enum acpi_cppc_value which);
++
++#endif /* _ACPI_CPPC_H */
 -- 
 2.25.1
 

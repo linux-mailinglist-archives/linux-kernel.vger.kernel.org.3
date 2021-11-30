@@ -2,114 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2493C462E8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F64D462E90
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239614AbhK3Ie2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234594AbhK3Ie1 (ORCPT
+        id S239629AbhK3IfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:35:08 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:41548 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239630AbhK3IfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:34:27 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959B5C061574;
-        Tue, 30 Nov 2021 00:31:08 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id x6so83070611edr.5;
-        Tue, 30 Nov 2021 00:31:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wxEHzupmidTEPgkCq0lyqX6XmQoNOKfn2zdyBePEV3w=;
-        b=nVNP/d+VJy9HkHn4ALSxPEY6Jt24QCJDF9cRZMgtUShFjdELQPnHHGSOy1Op4XfmVO
-         yRsOV3kuYdZxIW/wkb9TB5L/TuEsWOTw34XD95PBGzzuPzg88ure/ZGYdKB0gb2vF/HU
-         6aKkBvYa6J+9FTXlnUUzYmU0zYXCxiUD++5bdiyHYeF7S9cJXzp5ALYBSbUp6KtNlyby
-         QWpcfX/kj6RSGmGwa1ZrEN43tyVFsyKbLiHFtX1cMcHl3n4k8Ttf2wsyX9yRjClBRIyB
-         sv4lgpKukNTnf2UAKdD+NT6oyGdHDxmYH1PP1U+cH7RhrINT28/CtWAEopGp6iMwOyNg
-         jUug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wxEHzupmidTEPgkCq0lyqX6XmQoNOKfn2zdyBePEV3w=;
-        b=s48mEwruAL3CDNwxPx2pP3WV/SzkYBfJr/VYAN7G6dxZ92MMIb3iekSlmHKQjxqAxW
-         PbcKNBhGd0pekoFlPi7LGGq6Qq8di+z8MJkm9BkQDdy81mgRwG0ikHuNP5GoJgRa+6bB
-         acEQNmW1evmSUKKcSoYl3cd8ggiASTxtRcF2eeBOyiIkmUFWLLkwJMsfqfn/OiDnyW0M
-         26GUgTfbT1XkzylbKNPPJjvI4hCq5UvUi35OQYH+v4uY7TYAo4vkJ5T4VdawhL0XDwGl
-         xJt/CmUBU5WhknfZC+Xq09WOLa+gKeRo8BREwdXSAF9QcwNdQsXR9Dgaujqk6yUVbU3A
-         1gZA==
-X-Gm-Message-State: AOAM53136RPfrLPkJ1m5qvRL2tLLD24Pw8QI8iUARxs+ALcJZo8E2Ir/
-        3dP5oNMbP4DBqHlFPRsRx6E=
-X-Google-Smtp-Source: ABdhPJxDiKVFmsDhFkc6OefndA3xVl2/OwtTOSFwjgQ7oEy0ZOFPKWGGpEtVCOqcBzQD73I4jZCfFw==
-X-Received: by 2002:a17:907:9723:: with SMTP id jg35mr69475749ejc.329.1638261067118;
-        Tue, 30 Nov 2021 00:31:07 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
-        by smtp.googlemail.com with ESMTPSA id de37sm8500815ejc.60.2021.11.30.00.31.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 00:31:06 -0800 (PST)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <64c3e26a-1f58-c121-3a42-38e70fb6f77e@redhat.com>
-Date:   Tue, 30 Nov 2021 09:31:05 +0100
+        Tue, 30 Nov 2021 03:35:05 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7106B21763;
+        Tue, 30 Nov 2021 08:31:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638261101; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HVh/XuOleLbNSL1OBcamrsGmZpYGUTHL+VT/XNi/jd0=;
+        b=hFJk+NoISirKhIO0NYHWRKhQbCzDqjTlmGbdWJnnqEwGsXFT/sCwuYl9WzeHgmQCcSKin7
+        3MhrNI7SPBBOPROLPHGKHrxiNrHgGEuwO0dTKkGQpPFeHj9rvZ6IEz0tVW30e1xXlAITD0
+        cvBM/BCcXxki+e8M4CWbvOXAyWnPVrU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638261101;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HVh/XuOleLbNSL1OBcamrsGmZpYGUTHL+VT/XNi/jd0=;
+        b=QpFq+RWSwwQMTwXUIenkIGLgnAuFmVG1J/BjTvsqe2v79HDxzpqg7TLz8gXyl/ilpIP8HQ
+        UC4AK8b4eeql2MDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 466D913C6E;
+        Tue, 30 Nov 2021 08:31:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +vktEG3hpWFlegAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 30 Nov 2021 08:31:41 +0000
+Message-ID: <9315c6f5-48f6-4f29-1e31-87ab5ed771b5@suse.de>
+Date:   Tue, 30 Nov 2021 09:31:40 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH 2/4] KVM: VMX: prepare sync_pir_to_irr for running with
- APICv disabled
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        stable@vger.kernel.org
-References: <20211123004311.2954158-1-pbonzini@redhat.com>
- <20211123004311.2954158-3-pbonzini@redhat.com> <YaVQxZ42Ve6JNIzt@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <YaVQxZ42Ve6JNIzt@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Javier Martinez Canillas <javier@dowhile0.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>, David Airlie <airlied@linux.ie>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+References: <20211117145829.204360-1-marcan@marcan.st>
+ <20211117145829.204360-2-marcan@marcan.st>
+ <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de>
+ <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
+ <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
+ <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------KbLmPxxfGOWwTMxFKEV0Vlcc"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/21 23:14, Sean Christopherson wrote:
-> Heh, maybe s/max_irr_updated/new_pir_found or so?  This is a bit weird:
-> 
->    1. Update max_irr
->    2. max_irr_updated = false
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------KbLmPxxfGOWwTMxFKEV0Vlcc
+Content-Type: multipart/mixed; boundary="------------6adlezqjbPb4jwaHRY9VY0zr";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Javier Martinez Canillas <javier@dowhile0.org>,
+ Rob Herring <robh+dt@kernel.org>
+Cc: Hector Martin <marcan@marcan.st>, David Airlie <airlied@linux.ie>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ dri-devel <dri-devel@lists.freedesktop.org>,
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Message-ID: <9315c6f5-48f6-4f29-1e31-87ab5ed771b5@suse.de>
+Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
+References: <20211117145829.204360-1-marcan@marcan.st>
+ <20211117145829.204360-2-marcan@marcan.st>
+ <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de>
+ <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
+ <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com>
+ <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
+In-Reply-To: <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
 
-Sounds good (I went for got_posted_interrupt).
+--------------6adlezqjbPb4jwaHRY9VY0zr
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
->>   	}
->> -	vmx_hwapic_irr_update(vcpu, max_irr);
->> +
->> +	/*
->> +	 * If virtual interrupt delivery is not in use, the interrupt
->> +	 * will be processed via KVM_REQ_EVENT, not RVI.  This can happen
-> 
-> I'd strongly prefer to phrase this as a command, e.g. "process the interrupt via
-> KVM_REQ_EVENT".  "will be processed" makes it sound like some other flow is
-> handling the event, which confused me.
+SGkNCg0KQW0gMzAuMTEuMjEgdW0gMDc6NDQgc2NocmllYiBKYXZpZXIgTWFydGluZXogQ2Fu
+aWxsYXM6DQo+Pj4+DQo+Pj4+IFNpbXBsZWRybSBpcyBqdXN0IGEgZHJpdmVyLCBidXQgdGhp
+cyBpcyBwbGF0Zm9ybSBzZXR1cCBjb2RlLiBXaHkgaXMgdGhpcw0KPj4+PiBjb2RlIGxvY2F0
+ZWQgaGVyZSBhbmQgbm90IHVuZGVyIGFyY2gvIG9yIGRyaXZlcnMvZmlybXdhcmUvPw0KPj4+
+Pg0KPiANCj4gQWdyZWVkLiBDcmVhdGluZyBwbGF0Zm9ybSBkZXZpY2VzIGlzIHNvbWV0aGlu
+ZyBmb3IgcGxhdGZvcm0gY29kZSBhbmQNCj4gbm90IHJlYWxseSBhIERSTSBkcml2ZXIuDQo+
+IA0KPj4+PiBJIGtub3cgdGhhdCBvdGhlciBkcml2ZXJzIGRvIHNpbWlsYXIgdGhpbmdzLCBp
+dCBkb2Vzbid0IHNlZW0gdG8gYmVsb25nIGhlcmUuDQo+Pj4NCj4gDQo+IFllYWgsIHRoZSBz
+aW1wbGVmYiBkcml2ZXIgZG9lcyB0aGlzIGJ1dCB0aGF0IHNlZW1zIGxpa2Ugc29tZXRoaW5n
+IHRoYXQNCj4gc2hvdWxkIGJlIGNoYW5nZWQuDQo+IA0KPj4+IFRoaXMgZGVmaW5pdGVseSBk
+b2Vzbid0IGJlbG9uZyBpbiBlaXRoZXIgb2YgdGhvc2UsIHNpbmNlIGl0IGlzIG5vdCBhcmNo
+LQ0KPj4+IG9yIGZpcm13YXJlLXNwZWNpZmljLiBJdCBpcyBpbXBsZW1lbnRpbmcgc3VwcG9y
+dCBmb3IgdGhlIHN0YW5kYXJkDQo+Pj4gc2ltcGxlLWZyYW1lYnVmZmVyIE9GIGJpbmRpbmcs
+IHdoaWNoIHNwZWNpZmllcyB0aGF0IGl0IG11c3QgYmUgbG9jYXRlZA0KPj4+IHdpdGhpbiB0
+aGUgL2Nob3NlbiBub2RlIChhbmQgdGh1cyB0aGUgZGVmYXVsdCBPRiBzZXR1cCBjb2RlIHdv
+bid0IGRvIHRoZQ0KPj4+IG1hdGNoaW5nIGZvciB5b3UpOyB0aGlzIGFwcGxpZXMgdG8gYWxs
+IE9GIHBsYXRmb3JtcyBbMV0NCj4+Pg0KPj4+IEFkZGluZyBSb2I7IGRvIHlvdSB0aGluayB0
+aGlzIHNob3VsZCBtb3ZlIGZyb20gc2ltcGxlZmIvc2ltcGxlZHJtIHRvDQo+Pj4gY29tbW9u
+IE9GIGNvZGU/ICh3aGVyZT8pDQo+Pg0KPj4gb2ZfcGxhdGZvcm1fZGVmYXVsdF9wb3B1bGF0
+ZV9pbml0KCkgc2hvdWxkIHdvcmsuDQo+IA0KPiBUaGF0IHNob3VsZCB3b3JrIGJ1dCBJIHN0
+aWxsIHdvbmRlciBpZiBpdCBpcyB0aGUgY29ycmVjdCBwbGFjZSB0byBhZGQNCj4gdGhpcyBs
+b2dpYy4NCj4gDQo+IEkgdGhpbmsgdGhhdCBpbnN0ZWFkIGl0IGNvdWxkIGJlIGRvbmUgaW4g
+dGhlIHN5c2ZiX2NyZWF0ZV9zaW1wbGVmYigpDQo+IGZ1bmN0aW9uIFswXSwgd2hpY2ggYWxy
+ZWFkeSBjcmVhdGVzIHRoZSAic2ltcGxlLWZyYW1lYnVmZmVyIiBkZXZpY2UNCj4gZm9yIHg4
+NiBsZWdhY3kgQklPUyBhbmQgeDg2L2FybTY0L3Jpc2N2IEVGSSBzbyBpdCBtYWtlcyBzZW5z
+ZSB0byBkbw0KPiB0aGUgc2FtZSBmb3IgT0YuIFRoYXQgd2F5IHRoZSBzaW1wbGVmYiBwbGF0
+Zm9ybSBkZXZpY2UgcmVnaXN0cmF0aW9uDQo+IGNvZGUgY291bGQgYWxzbyBiZSBkcm9wcGVk
+IGZyb20gdGhlIGRyaXZlciBhbmQgdXNlcnMgd291bGQganVzdCBuZWVkDQo+IHRvIGVuYWJs
+ZSBDT05GSUdfU1lTRkIgYW5kIENPTkZJR19TWVNGQl9TSU1QTEVGQiB0byBoYXZlIHRoZSBz
+YW1lLg0KPiANCj4gSSBoYXZlIGEgY291cGxlIG9mIGJvYXJkcyB3aXRoIGEgYm9vdGxvYWRl
+ciB0aGF0IHBvcHVsYXRlcyBhDQo+ICJzaW1wbGUtZnJhbWVidWZmZXIiIGluIHRoZSAvY2hv
+c2VuIG5vZGUgc28gSSBjb3VsZCBhdHRlbXB0IHRvIHdyaXRlDQo+IHRoZSBwYXRjaGVzLiBC
+dXQgcHJvYmFibHkgd29uJ3QgaGFwcGVuIHVudGlsIG5leHQgd2Vlay4NCg0KSU1ITyBpdCdz
+IGJldHRlciB0byBrZWVwIHRoZSBPRi1yZWxhdGVkIHNldHVwIGluIHRoZSBPRiBjb2RlLiBU
+aGUgc3lzZmIgDQpjb2RlIGlzIGZvciBzY3JlZW5faW5mby4gV2UgY2FuIHRyeSB0byBmaW5k
+IGNvbW1vbiBjb2RlIGZvciBPRiBhbmQgc3lzZmIgDQp0aGF0IHRoZW4gbGl2ZXMgaW4gYSBz
+aGFyZWQgbG9jYXRpb24uDQoNClVzaW5nIGEgc2luZ2xlIGdsb2JhbCBzY3JlZW5faW5mbyB2
+YXJpYWJsZSBpcyBzb21ld2hhdCBhd2t3YXJkIHRoZXNlIA0KZGF5cy4gSW4gdGhlIGxvbmcg
+dGVybSwgSSBjYW4gdGhpbmsgb2YgcHVzaGluZyBzeXNmYiBjb2RlIGludG8gDQphcmNoaXRl
+Y3R1cmVzLiBFYWNoIGFyY2hpdGVjdHVyZSB3b3VsZCB0aGVuIHNldHVwIHRoZSBwbGF0Zm9y
+bSBkZXZpY2VzIA0KdGhhdCBpdCBzdXBwb3J0cy4gQnV0IHRoYXQncyBub3QgcmVhbGx5IGlt
+cG9ydGFudCByaWdodCBub3cuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IFsw
+XTogaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvdjUuMTYtcmMzL3NvdXJjZS9k
+cml2ZXJzL2Zpcm13YXJlL3N5c2ZiX3NpbXBsZWZiLmMjTDYwDQo+IA0KPiBCZXN0IHJlZ2Fy
+ZHMsDQo+IEphdmllcg0KPiANCg0KLS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3Mg
+RHJpdmVyIERldmVsb3Blcg0KU1VTRSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJI
+DQpNYXhmZWxkc3RyLiA1LCA5MDQwOSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDks
+IEFHIE7DvHJuYmVyZykNCkdlc2Now6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
-What I wanted to convey is that the interrupt is not processed yet, and 
-the vmentry might have to be canceled.  I changed it to
+--------------6adlezqjbPb4jwaHRY9VY0zr--
 
-          * Newly recognized interrupts are injected via either virtual 
-interrupt
-          * delivery (RVI) or KVM_REQ_EVENT.  Virtual interrupt delivery is
-          * disabled in two cases:
+--------------KbLmPxxfGOWwTMxFKEV0Vlcc
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> 	 * 1) If L2 is running and the vCPU has a new pending interrupt.  If L1
-> 	 * wants to exit on interrupts, KVM_REQ_EVENT is needed to synthesize a
-> 	 * VM-Exit to L1.  If L1 doesn't want to exit, the interrupt is injected
-> 	 * into L2, but KVM doesn't use virtual interrupt delivery to inject
-> 	 * interrupts into L2, and so KVM_REQ_EVENT is again needed.
-> 	 *
-> 	 * 2) If APICv is disabled for this vCPU, assigned devices may still
-> 	 * attempt to post interrupts.  The posted interrupt vector will cause
-> 	 * a VM-Exit and the subsequent entry will call sync_pir_to_irr.
-> 	 */
+-----BEGIN PGP SIGNATURE-----
 
-Applied these.
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmGl4WwFAwAAAAAACgkQlh/E3EQov+C1
+2xAAi/x+Sa890DYEMNr0oe+sDQMPAFO/ZiPisZIoMsvi6kYtwcjA6yX/9z6hVnWRZg9ggh30R6s2
+xcGIdnhXAgyon7gWPuXOyz4eKO1MLzJ+a70OFkxpg+e3CXMh5s+P70JjsxBb31LL7NQtygReZ/b2
+I98KITzgLS+0WKffjzzsLDfCfBgmb0pqwaWeT0BAmL06Kq8JJKcacqREDUqmAKrqQIlfFU2NL9/L
+n4awSkmo69SyErdmpo8jQcPQQti/bd5SabYHsryU+nhDNhobXCTxO0e8GZOQEQRe5tbKILkZom4c
+UCnKBeYDXY4454lcS7vbgKTLPHo+tqyQDxL8TtAjCkT0Vf773P0XfENzUza3v5aPfAX6DQv1TAAz
+ksgb1QyAEIe6xuzvMSVJ113R53Z5KRUiHF2Vg0FqsZS+DZkbNssQ36bR1sob9XPAM6nB+B2EikYP
+0929ZTwIJCZndq6/rJT1R07c0lPu5cw90rP6Lcl4dbVQ3E5z1I9tc7tlodQridX2c6jyNioG27oL
+tiYof5vwMNcnUemJFBrgEkyT5VRFBFdVyjO2FH7DV0hgHgwXhDrApu5cZ7s+5x/AbRkR1eBMDK8p
+bCM+I/3CieHjm3Kp24GM+f9gJydzlCsvVQnmDRzJca/nrXIlaEZFpgMKsaCgHgyaN2YiBxm/yTPE
+JoA=
+=0WdY
+-----END PGP SIGNATURE-----
 
-Paolo
+--------------KbLmPxxfGOWwTMxFKEV0Vlcc--

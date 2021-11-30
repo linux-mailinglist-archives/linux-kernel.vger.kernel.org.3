@@ -2,81 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 343FF462941
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:47:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17607462944
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbhK3Auq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:50:46 -0500
-Received: from mail-qk1-f172.google.com ([209.85.222.172]:34774 "EHLO
-        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbhK3Aup (ORCPT
+        id S234390AbhK3Au4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:50:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37088 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234379AbhK3Auz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:50:45 -0500
-Received: by mail-qk1-f172.google.com with SMTP id t6so24997447qkg.1;
-        Mon, 29 Nov 2021 16:47:27 -0800 (PST)
+        Mon, 29 Nov 2021 19:50:55 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28D69C061746
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:47:37 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id m15so17870976pgu.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:47:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=taVuMg7QGnXLVw89RVaLZa5HlvvUY9Y8F3Bmfo83nQA=;
-        b=GNf6lgvdWJF05h9PXjIU05wxA7QU8Rr3FG3GHhvIm37gJoPKP+ji9ix8OhHgf14cEo
-         0dmWCDJqKuWRiWLjRpFskGn/pGeoRCUlgfW8zK4JmWnLLVcYC9Qx5odlNFl6/Hsz8ash
-         ifp2nuWeLrwxMcURKDfAI618ws6L4OZlLi/F6q5lw/b9GsyDEUVmSTQMY0YMbwvse3hJ
-         CvyxT7k8OyZIQUNPEN3ncIrY55Fz0+XR6SoA2+cM2gbx5ht+l57oqU0CBWbkrodVwKLo
-         4HkoRyej3SZWqb3aeYzRrZNzie2jnF4GmRwSAy+yKpS2tQVquovlm6d7QQavimEbHpsR
-         ddqA==
+        bh=FNHzIeoNF4E/ChvY8iqCZpHku0EJ1HjjIEUDqrvYteE=;
+        b=hdoyQm+SZqT3VqIFKhsA87GHz6tPX+yEJy7VUqZ1vOh1fbV0K8hdAD8xEfN4BSZijq
+         UyhMIWU5P7CpypZVPwH7GbgIRGa04Hb+DK5SWapT9cbNBnpIqzg77bQj3AvHEk7ojrJh
+         6xH4pD1x9Ltc9c5yLj5yuWR+HZqdVVal7S35g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=taVuMg7QGnXLVw89RVaLZa5HlvvUY9Y8F3Bmfo83nQA=;
-        b=T4C5HPZSaxRPnWGn1s+AvUoCETMECLKkGoRFj2SV8zuK42RgHNi65ZfIOldN3WRSqs
-         lVWk6bRIXwMOd9xJ57mDGhaEFJeeIflucO1rKnmgedHXKX2gE9lawoEC0eQNcRSYtJYL
-         YkHsvLajGxUqH8mTvLLCiqg0eaeIQWnWmyA9ZeETcs6Z4tB+X5KDfmdXnLJ4bvmC8on1
-         KYLGs4+cljzUvG80ASSK53lbLEuXI0KOTT7Os3Op2N0UfRN7tQIoDfYufe7gk1BP52ob
-         vrZ4SjdrnNrtSHkhFtYaM7w67nUIh4jOwI9VsjjtYdeTGs2jpE8xc5CykHvaQ12q7zce
-         jI1A==
-X-Gm-Message-State: AOAM530TSjI8Sm3eM7SaJktkfWUf6H4yVAq1DJdH2ekgZUCg7FkHPm3O
-        y2XRFBWW+I9P2QPeGgmCoDdHTpM/UQ==
-X-Google-Smtp-Source: ABdhPJymPq3+noSIJMUnISULM5HTtAhJhMd69rslP7ZCnnFpV+iykVhpbVE97aOE9LhXddOM6Ztj+g==
-X-Received: by 2002:a05:620a:15c8:: with SMTP id o8mr44309577qkm.385.1638233186816;
-        Mon, 29 Nov 2021 16:46:26 -0800 (PST)
-Received: from bytedance (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
-        by smtp.gmail.com with ESMTPSA id c22sm9504658qtd.76.2021.11.29.16.46.24
+        bh=FNHzIeoNF4E/ChvY8iqCZpHku0EJ1HjjIEUDqrvYteE=;
+        b=r+xcMYuUZNB0BQ5M4I7TEndchxzXW/Vt5ybYp5AuTGvLuvzsZeWpEAQkJIK9t5OZ+N
+         8JeLqjiBYjxj2/NtjcrjpLu+DFagz5jyqP5k2Pww6FuY4fjH2qZgcEYZQXxHbvHRqXYv
+         JJvhAsnpOqPqgo4RA7lBgkmpjPEWiwMMGA8evhAVeOPce0H3i64PcVw0ZFDNSgUt6I8s
+         mqLzaOFg7ntql6UL9OIFSJ9/NznKEKy65Rb8NLw8Vfr6sZjGRJCJ91GWthX8GAJRSki3
+         LZR9rwHXtuSHA0UFbqysheKBdEIKvZiIHK23EX8dFZMLkciqYiUPDadvl6R83nNF6hEW
+         yG0g==
+X-Gm-Message-State: AOAM530NMzZuYelFXOTsJ/4H+gEqdNpgXfwu6h5YDdO0SnN7jeEMiRq7
+        JLA1NHU+XdJrrhBE/JxnHV9TMw==
+X-Google-Smtp-Source: ABdhPJzqbcpo6hlWldDlPjrL230SXiWqrqs/mRNPc8dujTRCS/HMUGkCX5XfHZw0PIVrhJ83oQCu0g==
+X-Received: by 2002:a63:554:: with SMTP id 81mr34328310pgf.298.1638233256675;
+        Mon, 29 Nov 2021 16:47:36 -0800 (PST)
+Received: from google.com ([2620:15c:202:201:8b47:583d:a0:4f2d])
+        by smtp.gmail.com with ESMTPSA id m12sm20441202pfk.27.2021.11.29.16.47.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 16:46:25 -0800 (PST)
-Date:   Mon, 29 Nov 2021 16:46:22 -0800
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        David Ahern <dsahern@gmail.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] selftests/fib_tests: ping from dummy0 in
- fib_rp_filter_test()
-Message-ID: <20211130004622.GA4051@bytedance>
-References: <20211129225230.3668-1-yepeilin.cs@gmail.com>
+        Mon, 29 Nov 2021 16:47:36 -0800 (PST)
+Date:   Mon, 29 Nov 2021 16:47:34 -0800
+From:   Brian Norris <briannorris@chromium.org>
+To:     Jia-Ju Bai <baijiaju1990@gmail.com>
+Cc:     amitkarwar@gmail.com, ganapathi017@gmail.com,
+        sharvari.harisangam@nxp.com, huxinming820@gmail.com,
+        kvalo@codeaurora.org, David Miller <davem@davemloft.net>,
+        kuba@kernel.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>
+Subject: [PATCH] mwifiex: Fix possible ABBA deadlock
+Message-ID: <YaV0pllJ5p/EuUat@google.com>
+References: <0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211129225230.3668-1-yepeilin.cs@gmail.com>
+In-Reply-To: <0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+Quoting Jia-Ju Bai <baijiaju1990@gmail.com>:
 
-On Mon, Nov 29, 2021 at 02:52:30PM -0800, Peilin Ye wrote:
-> For example, suppose ping is using a SOCK_RAW socket for ICMP messages.
-> When receiving ping replies, in __raw_v4_lookup(), sk->sk_bound_dev_if
-> is 3 (dummy1), but dif (skb_rtable(skb)->rt_iif) says 2 (dummy0), so the
-> raw_sk_bound_dev_eq() check fails.  Similar things happen in
-> ping_lookup() for SOCK_ICMP sockets.
-		    ^^^^^^^^^
-I actually meant "SOCK_DGRAM".  Will fix in v2 soon.  Sorry about it.
+  mwifiex_dequeue_tx_packet()
+     spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 1432 (Lock A)
+     mwifiex_send_addba()
+       spin_lock_bh(&priv->sta_list_spinlock); --> Line 608 (Lock B)
+
+  mwifiex_process_sta_tx_pause()
+     spin_lock_bh(&priv->sta_list_spinlock); --> Line 398 (Lock B)
+     mwifiex_update_ralist_tx_pause()
+       spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 941 (Lock A)
+
+Similar report for mwifiex_process_uap_tx_pause().
+
+While the locking expectations in this driver are a bit unclear, the
+Fixed commit only intended to protect the sta_ptr, so we can drop the
+lock as soon as we're done with it.
+
+IIUC, this deadlock cannot actually happen, because command event
+processing (which calls mwifiex_process_sta_tx_pause()) is
+sequentialized with TX packet processing (e.g.,
+mwifiex_dequeue_tx_packet()) via the main loop (mwifiex_main_process()).
+But it's good not to leave this potential issue lurking.
+
+Fixes: ("f0f7c2275fb9 mwifiex: minor cleanups w/ sta_list_spinlock in cfg80211.c")
+Cc: Douglas Anderson <dianders@chromium.org>
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Link: https://lore.kernel.org/linux-wireless/0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com/
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
+
+On Tue, Nov 23, 2021 at 11:31:34AM +0800, Jia-Ju Bai wrote:
+> I am not quite sure whether these possible deadlocks are real and how to fix
+> them if they are real.
+> Any feedback would be appreciated, thanks :)
+
+I think these are at least theoretically real, and so we should take
+something like the $subject patch probably. But I don't believe we can
+actually hit this due to the main-loop structure of this driver.
+
+Anyway, see the surrounding patch.
 
 Thanks,
-Peilin Ye
+Brian
 
+
+ drivers/net/wireless/marvell/mwifiex/sta_event.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/wireless/marvell/mwifiex/sta_event.c b/drivers/net/wireless/marvell/mwifiex/sta_event.c
+index 80e5d44bad9d..7d42c5d2dbf6 100644
+--- a/drivers/net/wireless/marvell/mwifiex/sta_event.c
++++ b/drivers/net/wireless/marvell/mwifiex/sta_event.c
+@@ -365,10 +365,12 @@ static void mwifiex_process_uap_tx_pause(struct mwifiex_private *priv,
+ 		sta_ptr = mwifiex_get_sta_entry(priv, tp->peermac);
+ 		if (sta_ptr && sta_ptr->tx_pause != tp->tx_pause) {
+ 			sta_ptr->tx_pause = tp->tx_pause;
++			spin_unlock_bh(&priv->sta_list_spinlock);
+ 			mwifiex_update_ralist_tx_pause(priv, tp->peermac,
+ 						       tp->tx_pause);
++		} else {
++			spin_unlock_bh(&priv->sta_list_spinlock);
+ 		}
+-		spin_unlock_bh(&priv->sta_list_spinlock);
+ 	}
+ }
+ 
+@@ -400,11 +402,13 @@ static void mwifiex_process_sta_tx_pause(struct mwifiex_private *priv,
+ 			sta_ptr = mwifiex_get_sta_entry(priv, tp->peermac);
+ 			if (sta_ptr && sta_ptr->tx_pause != tp->tx_pause) {
+ 				sta_ptr->tx_pause = tp->tx_pause;
++				spin_unlock_bh(&priv->sta_list_spinlock);
+ 				mwifiex_update_ralist_tx_pause(priv,
+ 							       tp->peermac,
+ 							       tp->tx_pause);
++			} else {
++				spin_unlock_bh(&priv->sta_list_spinlock);
+ 			}
+-			spin_unlock_bh(&priv->sta_list_spinlock);
+ 		}
+ 	}
+ }
+-- 
+2.34.0.rc2.393.gf8c9666880-goog

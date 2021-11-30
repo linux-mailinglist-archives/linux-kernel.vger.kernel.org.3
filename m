@@ -2,184 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A38E463994
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEE6F4639A8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243794AbhK3PPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35102 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243372AbhK3PFT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:05:19 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D29C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:01:59 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id d24so45154546wra.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:01:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vrull-eu.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Tt3rzy7U8jtDDkOr2bs9fpOdOEtwyk7EaYJRM5UbHUM=;
-        b=YtrhNfmIJKIvBB5hQT4rkZcNSUkuhiHkssVg4vSjLhGAv4gArvLcH7KCIyD13B71oR
-         7XsW7sbLRob+sa6/ydYT/y637VgYkbATtaIzB13BbjxHFFqLCggDMprBYkVd+xJ28uzq
-         q8FijndPMSoI3y4fyC0TKf65YCw8iRCfnP75HnWlTQQPoR5ZgYS5gRUI8mbXWsmNikas
-         yX8zqrJjfoiYNlFmXtN7C0cErClOsxn7hpoSyQkNlRqSpIfG97GTt5EsS2e0coeFnUtu
-         X9gYcTuPJIs+y01E3KHl1nBZnze0L5qBkqE1rvmklVeIzVHyc7EZYUF9CSegGpF3F/vj
-         SujA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Tt3rzy7U8jtDDkOr2bs9fpOdOEtwyk7EaYJRM5UbHUM=;
-        b=QiPO+Kqbw0ZBmTqTIelCefxX1PQZpX+nrSMQ8mFpIzs6vJEA0R3U2ruRsgfZp0abrb
-         dU7QZ6mvp9vgLo9Nysz5F+FwkAmp0fU3IaNMe7/ZuZTqJS+MoqKEB+TAVUYLAnURQM+S
-         PJw48XmmR2DLabIWWrDHhy/Siz0y0caNCPvhyf3lFT8gu0TSoNrWPMDpwypaFn3fakVd
-         gIpD0Y/Jrf+PMcLCp5frWlLCEIYH+DZ8JOMv/S9LzkfgGVpAr1sbcTq892ufdpqNM8P5
-         Ho26IS+itdsEkIblkK/7fuZWqvkkFwtAG7gpiMkS7fzDFyLttqBm75MRPf+wSjzYygPK
-         bUdQ==
-X-Gm-Message-State: AOAM531v/pFBp7k5d2rXoo1JmnTWj6vPcJv6Ddsk++gpjqWFLOt0ICgM
-        1/eVpxsvq2yCX1V6Xml5dILbZsLdkhiXjgv9JhGDZw==
-X-Google-Smtp-Source: ABdhPJzPtijXN7E4GbyZ8xSeGh+7wpmLdDsqXOAZ5ENfPFxSIVDg6BjfnnRGBSaLa1O64aYfYAIau9hY1/IrEKqETZ8=
-X-Received: by 2002:adf:eac8:: with SMTP id o8mr42150427wrn.337.1638284517883;
- Tue, 30 Nov 2021 07:01:57 -0800 (PST)
+        id S244748AbhK3PSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:18:51 -0500
+Received: from mga18.intel.com ([134.134.136.126]:52124 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S244054AbhK3PPW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 10:15:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223111392"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="223111392"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:03:04 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="595454520"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Nov 2021 07:02:57 -0800
+Date:   Tue, 30 Nov 2021 23:02:56 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        andi.kleen@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for qualified
+ platforms
+Message-ID: <20211130150256.GA19477@shbuild999.sh.intel.com>
+References: <20211117023751.24190-1-feng.tang@intel.com>
+ <20211117023751.24190-2-feng.tang@intel.com>
+ <20211130064623.GB96474@shbuild999.sh.intel.com>
+ <20211130144048.GQ641268@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-References: <20211129014007.286478-1-wefu@redhat.com> <1909580.k68io2XIxi@diego>
- <D7F256F9-F31F-4663-AADD-A535E159F87C@jrtc27.com> <2728314.U2HhIfhhqV@diego> <C19C85E6-821B-4A87-B764-56CF4D53E7FA@jrtc27.com>
-In-Reply-To: <C19C85E6-821B-4A87-B764-56CF4D53E7FA@jrtc27.com>
-From:   Philipp Tomsich <philipp.tomsich@vrull.eu>
-Date:   Tue, 30 Nov 2021 16:01:47 +0100
-Message-ID: <CAAeLtUC0Qc6ysf31sh0dkvfJD-JsREZbyFFk=Ko0vQeBRzyjaw@mail.gmail.com>
-Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions
- support for Svpbmt
-To:     Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Wei Fu <wefu@redhat.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        taiten.peng@canonical.com, aniket.ponkshe@canonical.com,
-        gordan.markus@canonical.com, Guo Ren <guoren@linux.alibaba.com>,
-        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        Dan Lustig <dlustig@nvidia.com>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        huffman@cadence.com, Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        jscheid@ventanamicro.com, rtrauben@gmail.com,
-        Anup Patel <anup@brainfault.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Anup Patel <Anup.Patel@wdc.com>, atishp04@gmail.com,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Guo Ren <guoren@kernel.org>,
-        =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
-        hch@lst.de, liush@allwinnertech.com, Wei Wu <lazyparser@gmail.com>,
-        drew@beagleboard.org,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130144048.GQ641268@paulmck-ThinkPad-P17-Gen-1>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We did touch on this in our coordination call a few weeks ago: the
-grouping under mmu and the bool-entries were chosen because of their
-similarity to other extensions (i.e. for Zb[abcs] there could/should
-be a bool-entry under each cpu-node =E2=80=94 for some Zv* entries a subnod=
-e
-might be needed with further parameters).
+Hi Paul,
 
-The string-based approach (as in the originally proposed "mmu-type=3D")
-would like not scale with the proliferation of small & modular
-extensions.
+Thanks for the review!
 
-Philipp.
+On Tue, Nov 30, 2021 at 06:40:48AM -0800, Paul E. McKenney wrote:
+> On Tue, Nov 30, 2021 at 02:46:23PM +0800, Feng Tang wrote:
+> > On Wed, Nov 17, 2021 at 10:37:51AM +0800, Feng Tang wrote:
+> > > There are cases that tsc clocksources are wrongly judged as unstable by
+> > > clocksource watchdogs like hpet, acpi_pm or 'refined-jiffies'. While
+> > > there is hardly a general reliable way to check the validity of a
+> > > watchdog, and to protect the innocent tsc, Thomas Gleixner proposed [1]:
+> > 
+> > Hi All,
+> > 
+> > Some more update, last week we got report from validation team that
+> > the "tsc judged as unstable" happened on latest desktop platform,
+> > which has serial earlyprintk enabled, and the watchdog here is
+> > 'refined-jiffies' while hpet is disabled during the PC10 check. I
+> > tried severy other client platforms I can find: Kabylake, Icelake
+> > and Alderlake, and the mis-judging can be easily reproduced on
+> > Icelake and Alderlake (not on Kabylake). Which could be cued by
+> > this 2/2 patch.
+> > 
+> > Also, today we got same report on a 2-sockets Icelake Server with
+> > 5.5 kernel, while the watchdog is 'hpet', and the system is running
+> > stressful big-data workload.
+> 
+> Were these tests run with Waiman's latest patch series?  The first
+> two of them are on RCU's "dev" branch.
+ 
+No, I haven't tried Waiman's patches, which are more about refining
+cs_watchdog_read() check, while these 2 cases are about the really
+big gap between watchog and cur_clocksource
+
+The error log of first client platform (5.15 kernel) is: 
+
+[    2.994266] clocksource:                       'refined-jiffies' wd_nsec: 516032250 wd_now: fffedc09 wd_last: fffedb88 mask: ffffffff
+[    2.998352] initcall irq_sysfs_init+0x0/0x97 returned 0 after 0 usecs
+[    3.002266] clocksource:                       'tsc-early' cs_nsec: 767553349 cs_now: 71a87fd2f cs_last: 6db4968ff mask: ffffffffffffffff
+[    3.006266] calling  dma_atomic_pool_init+0x0/0x152 @ 1
+[    3.010266] clocksource:                       No current clocksource.
+[    3.010267] tsc: Marking TSC unstable due to clocksource watchdog
+
+We can see the gap is 516 ms vs 767 ms, and the delta is 267 ms. 
+And the root cause is with earlyprintk serial console enabled,
+the periodic timer interrupt is severely affected to be not
+accurate.
+
+And similar big gap between 'tsc' and 'hpet' is seen for the server
+case (5.5 kernel which doesn't have the cs_watchdog_read() patchset). 
+
+[1196945.314929] clocksource: timekeeping watchdog on CPU67: Marking clocksource 'tsc' as unstable because the skew is too large:
+[1196945.314935] clocksource:                       'hpet' wd_now: 25272026 wd_last: 2e9ce418 mask: ffffffff
+[1196945.314938] clocksource:                       'tsc' cs_now: 95b400003fdf1 cs_last: 95ae7ed7c33f7 mask: ffffffffffffffff
+[1196945.314948] tsc: Marking TSC unstable due to clocksource watchdog
+[1196945.314977] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
+[1196945.314981] sched_clock: Marking unstable (1196945264804527, 50153181)<-(1196945399926576, -84962703)
+[1196945.316255] clocksource: Switched to clocksource hpet
+
+For this case, I don't have access to the HW and only have the
+dmesg log, from which it seems the watchdog timer has been postponed
+a very long time from running.
 
 
-On Tue, 30 Nov 2021 at 14:59, Jessica Clarke <jrtc27@jrtc27.com> wrote:
->
-> On 30 Nov 2021, at 13:27, Heiko St=C3=BCbner <heiko@sntech.de> wrote:
-> >
-> > Hi,
-> >
-> > Am Dienstag, 30. November 2021, 14:17:41 CET schrieb Jessica Clarke:
-> >> On 30 Nov 2021, at 12:07, Heiko St=C3=BCbner <heiko@sntech.de> wrote:
-> >>>
-> >>> Am Montag, 29. November 2021, 13:06:23 CET schrieb Heiko St=C3=BCbner=
-:
-> >>>> Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich Schuchar=
-dt:
-> >>>>> On 11/29/21 02:40, wefu@redhat.com wrote:
-> >>>>>> From: Wei Fu <wefu@redhat.com>
-> >>>>>>
-> >>>>>> Previous patch has added svpbmt in arch/riscv and add "riscv,svpmb=
-t"
-> >>>>>> in the DT mmu node. Update dt-bindings related property here.
-> >>>>>>
-> >>>>>> Signed-off-by: Wei Fu <wefu@redhat.com>
-> >>>>>> Co-developed-by: Guo Ren <guoren@kernel.org>
-> >>>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
-> >>>>>> Cc: Anup Patel <anup@brainfault.org>
-> >>>>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> >>>>>> Cc: Rob Herring <robh+dt@kernel.org>
-> >>>>>> ---
-> >>>>>> Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
-> >>>>>> 1 file changed, 10 insertions(+)
-> >>>>>>
-> >>>>>> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/D=
-ocumentation/devicetree/bindings/riscv/cpus.yaml
-> >>>>>> index aa5fb64d57eb..9ff9cbdd8a85 100644
-> >>>>>> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> >>>>>> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> >>>>>> @@ -63,6 +63,16 @@ properties:
-> >>>>>>       - riscv,sv48
-> >>>>>>       - riscv,none
-> >>>>>>
-> >>>>>> +  mmu:
-> >>>>>
-> >>>>> Shouldn't we keep the items be in alphabetic order, i.e. mmu before
-> >>>>> mmu-type?
-> >>>>>
-> >>>>>> +    description:
-> >>>>>> +      Describes the CPU's MMU Standard Extensions support.
-> >>>>>> +      These values originate from the RISC-V Privileged
-> >>>>>> +      Specification document, available from
-> >>>>>> +      https://riscv.org/specifications/
-> >>>>>> +    $ref: '/schemas/types.yaml#/definitions/string'
-> >>>>>> +    enum:
-> >>>>>> +      - riscv,svpmbt
-> >>>>>
-> >>>>> The privileged specification has multiple MMU related extensions:
-> >>>>> Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enum?
-> >>>>
-> >>>> I remember in some earlier version some way back there was the
-> >>>> suggestion of using a sub-node instead and then adding boolean
-> >>>> properties for the supported extensions.
-> >>>>
-> >>>> Aka something like
-> >>>>    mmu {
-> >>>>            riscv,svpbmt;
-> >>>>    };
-> >>>
-> >>> For the record, I'm talking about the mail from september
-> >>> https://lore.kernel.org/linux-riscv/CAAeLtUChjjzG+P8yg45GLZMJy5UR2K5R=
-RBoLFVZhtOaZ5pPtEA@mail.gmail.com/
-> >>>
-> >>> So having a sub-node would make adding future extensions
-> >>> way nicer.
-> >>
-> >> Svpbmt is just an ISA extension, and should be treated like any other.
-> >> Let=E2=80=99s not invent two different ways of representing that in th=
-e device
-> >> tree.
-> >
-> > Heinrich asked how the other extensions should be handled
-> > (Svnapot, Svpbmt, Svinval), so what do you suggest to do with these?
->
-> Whatever is done for Zb[abcs], Zk*, Zv*, Zicbo*, etc. There may not be
-> a concrete plan for that yet, but that means you should speak with the
-> people involved with such extensions and come up with something
-> appropriate together.
->
-> Jess
->
+Thanks,
+Feng
+
+
+> 							Thanx, Paul
+> 
+> > Thanks,
+> > Feng
+> > 
+> > 
+> > > "I'm inclined to lift that requirement when the CPU has:
+> > > 
+> > >     1) X86_FEATURE_CONSTANT_TSC
+> > >     2) X86_FEATURE_NONSTOP_TSC
+> > >     3) X86_FEATURE_NONSTOP_TSC_S3
+> > >     4) X86_FEATURE_TSC_ADJUST
+> > >     5) At max. 4 sockets
+> > > 
+> > >  After two decades of horrors we're finally at a point where TSC seems
+> > >  to be halfway reliable and less abused by BIOS tinkerers. TSC_ADJUST
+> > >  was really key as we can now detect even small modifications reliably
+> > >  and the important point is that we can cure them as well (not pretty
+> > >  but better than all other options)."
+> > > 
+> > > As feature #3 X86_FEATURE_NONSTOP_TSC_S3 only exists on several generations
+> > > of Atom processor, and is always coupled with X86_FEATURE_CONSTANT_TSC
+> > > and X86_FEATURE_NONSTOP_TSC, skip checking it, and also be more defensive
+> > > to use maxim of 2 sockets.
+> > > 
+> > > The check is done inside tsc_init() before registering 'tsc-early' and
+> > > 'tsc' clocksources, as there were cases that both of them had been
+> > > wrongly judged as unreliable.
+> > > 
+> > > For more background of tsc/watchdog, there is a good summary in [2]
+> > > 
+> > > [1]. https://lore.kernel.org/lkml/87eekfk8bd.fsf@nanos.tec.linutronix.de/
+> > > [2]. https://lore.kernel.org/lkml/87a6pimt1f.ffs@nanos.tec.linutronix.de/
+> > > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> > > Signed-off-by: Feng Tang <feng.tang@intel.com>
+> > > ---
+> > > Change log:
+> > > 
+> > >   v3:
+> > >     * rebased against 5.16-rc1
+> > >     * refine commit log
+> > > 
+> > >   v2:
+> > >     * Directly skip watchdog check without messing flag
+> > >       'tsc_clocksource_reliable' (Thomas)
+> > > 
+> > >  arch/x86/kernel/tsc.c | 22 ++++++++++++++++++----
+> > >  1 file changed, 18 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+> > > index 2e076a459a0c..389511f59101 100644
+> > > --- a/arch/x86/kernel/tsc.c
+> > > +++ b/arch/x86/kernel/tsc.c
+> > > @@ -1180,6 +1180,12 @@ void mark_tsc_unstable(char *reason)
+> > >  
+> > >  EXPORT_SYMBOL_GPL(mark_tsc_unstable);
+> > >  
+> > > +static void __init tsc_skip_watchdog_verify(void)
+> > > +{
+> > > +	clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+> > > +	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+> > > +}
+> > > +
+> > >  static void __init check_system_tsc_reliable(void)
+> > >  {
+> > >  #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
+> > > @@ -1196,6 +1202,17 @@ static void __init check_system_tsc_reliable(void)
+> > >  #endif
+> > >  	if (boot_cpu_has(X86_FEATURE_TSC_RELIABLE))
+> > >  		tsc_clocksource_reliable = 1;
+> > > +
+> > > +	/*
+> > > +	 * Ideally the socket number should be checked, but this is called
+> > > +	 * by tsc_init() which is in early boot phase and the socket numbers
+> > > +	 * may not be available. Use 'nr_online_nodes' as a fallback solution
+> > > +	 */
+> > > +	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
+> > > +	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
+> > > +	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
+> > > +	    nr_online_nodes <= 2)
+> > > +		tsc_skip_watchdog_verify();
+> > >  }
+> > >  
+> > >  /*
+> > > @@ -1387,9 +1404,6 @@ static int __init init_tsc_clocksource(void)
+> > >  	if (tsc_unstable)
+> > >  		goto unreg;
+> > >  
+> > > -	if (tsc_clocksource_reliable || no_tsc_watchdog)
+> > > -		clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+> > > -
+> > >  	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
+> > >  		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
+> > >  
+> > > @@ -1527,7 +1541,7 @@ void __init tsc_init(void)
+> > >  	}
+> > >  
+> > >  	if (tsc_clocksource_reliable || no_tsc_watchdog)
+> > > -		clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+> > > +		tsc_skip_watchdog_verify();
+> > >  
+> > >  	clocksource_register_khz(&clocksource_tsc_early, tsc_khz);
+> > >  	detect_art();
+> > > -- 
+> > > 2.27.0

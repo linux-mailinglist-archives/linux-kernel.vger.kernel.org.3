@@ -2,114 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DC1E463C6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:02:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCC4463C7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:04:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244556AbhK3RF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:05:26 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:32631 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244535AbhK3RFZ (ORCPT
+        id S244585AbhK3RHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229547AbhK3RHm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:05:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638291726; x=1669827726;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+mK++W47HMwEMFNKuyUJKDP/LccL4vEScUgf0gu9vq8=;
-  b=Tt/03SzfU0Qx47zPLv391v6j3if5wNmlwpXyRBFcLsPJVzFCMGRDylSB
-   yc9ya8Uq+t9mmUsUfHVl15coHzV8fhN8vrTeKOe2LmdA/zPn6+XRtIzpH
-   Tu9Uk26rKjKAhet1nU1T3WXtzpOChW8u2ZKPpsyaxsT7s2S5dW8GwNs/v
-   U=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Nov 2021 09:02:05 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 09:02:04 -0800
-Received: from [10.216.9.218] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 30 Nov
- 2021 09:02:01 -0800
-Message-ID: <dee700be-bad1-e497-ccfc-916b98d7d593@quicinc.com>
-Date:   Tue, 30 Nov 2021 22:31:57 +0530
+        Tue, 30 Nov 2021 12:07:42 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A582C061574;
+        Tue, 30 Nov 2021 09:04:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5E2B0CE1849;
+        Tue, 30 Nov 2021 17:04:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39ADDC53FC1;
+        Tue, 30 Nov 2021 17:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638291859;
+        bh=cSn+Ep2v0SL7KJfHgs3j8RbhQX+lAo4RdrTIDkGPmpY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Elt8UquEZNJJ2xkFTrhIXggTrDjb06fXulzTul/7jMrtjYrVoY1BmQpxzElEPWVoN
+         D674Vs+yNHUj/afbrEtFhlZae3ZKDIzJeizf6P4yLxh2hengfZTT3kAB9DWW0jVWDo
+         X/08374AsvWJBB9H6JjCtA+NpIBaaJ7vBdd4Ie1pRjsphOo9v+EDEjskDIuWN3WK/o
+         NBrdwA3e80xuOIx5JlJMTpfkTuY3ML0NXqMCqy7n81cparGcHGdrWwtB73JAu3Uhqk
+         TIpoMRvQcNgfdToZDG/PXj8ilkSjy82LD3zgx+gsGXv66QAzwKxtC5zvpms/vdTDxt
+         7jR3WGiIJuBWA==
+Date:   Tue, 30 Nov 2021 11:04:17 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     nsaenz@kernel.org, jim2101024@gmail.com, f.fainelli@gmail.com,
+        bcm-kernel-feedback-list@broadcom.com, lorenzo.pieralisi@arm.com,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] PCI: brcmstb: Declare a bitmap as a bitmap, not as a
+ plain 'unsigned long'
+Message-ID: <20211130170417.GA2744534@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] rcu/exp: Mark current CPU as exp-QS in IPI loop second
- pass
-Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>
-References: <20211130162108.605092-1-frederic@kernel.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <20211130162108.605092-1-frederic@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6d9da2112aab2939d1507b90962d07bfd735b4c.1636273671.git.christophe.jaillet@wanadoo.fr>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/30/2021 9:51 PM, Frederic Weisbecker wrote:
-> While looping through the rnp's CPUs to IPI for an expedited grace
-> period, a first pass excludes the current CPU and the CPUs in dynticks
-> idle mode. The workqueue will report their QS on their behalf later.
+On Sun, Nov 07, 2021 at 09:32:58AM +0100, Christophe JAILLET wrote:
+> The 'used' field of 'struct brcm_msi' is used as a bitmap. So it should
+> be declared as so (i.e. unsigned long *).
 > 
-> The second pass processes the IPIs and also ignores the current CPU,
-> assuming it has been previously included in the group of CPUs whose
-> QS are to be reported by the workqueue.
+> This fixes an harmless Coverity warning about array vs singleton usage.
 > 
-> Unfortunately the current CPU may have changed between the first and
-> second pass, due to the rnp lock being dropped, re-enabling preemption.
-> As a result the current CPU, if different in the second pass, may be
-> ignored by the expedited grace period. No IPI will be sent to it
-> so it won't be requested to report an expedited quiescent state.
+> This bitmap can be BRCM_INT_PCI_MSI_LEGACY_NR or BRCM_INT_PCI_MSI_NR long.
+> So, while at it, document it, should it help someone in the future.
 > 
-> This ends up in an expedited grace period stall.
-> 
-> Fix this with including the current CPU in the second round in the group
-> of CPUs to report a QS for by the workqueue.
-> 
-> Fixes: b9ad4d6ed18e ("rcu: Avoid self-IPI in sync_rcu_exp_select_node_cpus()")
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Uladzislau Rezki <urezki@gmail.com>
-> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Addresses-Coverity: "Out-of-bounds access (ARRAY_VS_SINGLETON)"
+> Suggested-by: Krzysztof Wilczynski <kw@linux.com>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
-
-Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-
-
-
-Thanks
-Neeraj
-
-
->   kernel/rcu/tree_exp.h | 1 +
->   1 file changed, 1 insertion(+)
+> The BUILD_BUG_ON is surely a bit to much of paranoia :)
 > 
-> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
-> index a96d17206d87..237a79989aba 100644
-> --- a/kernel/rcu/tree_exp.h
-> +++ b/kernel/rcu/tree_exp.h
-> @@ -387,6 +387,7 @@ static void sync_rcu_exp_select_node_cpus(struct work_struct *wp)
->   			continue;
->   		}
->   		if (get_cpu() == cpu) {
-> +			mask_ofl_test |= mask;
->   			put_cpu();
->   			continue;
->   		}
+> I'm also not really pleased about the layout of the DECLARE_BITMAP. This
+> looks odd, but I couldn't find something nicer :(
+> ---
+>  drivers/pci/controller/pcie-brcmstb.c | 15 +++++++++++----
+>  1 file changed, 11 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-brcmstb.c b/drivers/pci/controller/pcie-brcmstb.c
+> index 1fc7bd49a7ad..15d394ac7478 100644
+> --- a/drivers/pci/controller/pcie-brcmstb.c
+> +++ b/drivers/pci/controller/pcie-brcmstb.c
+> @@ -266,8 +266,9 @@ struct brcm_msi {
+>  	struct mutex		lock; /* guards the alloc/free operations */
+>  	u64			target_addr;
+>  	int			irq;
+> -	/* used indicates which MSI interrupts have been alloc'd */
+> -	unsigned long		used;
+> +	/* Used indicates which MSI interrupts have been alloc'd. 'nr' bellow is
+> +	   the real size of the bitmap. It depends on the chip. */
+
+I hate to bike-shed this even more, but IMO we should just drop the
+comment above completely.  It's not the usual commenting style, no
+other drivers provide similar explanation, and "below" is misspelled,
+which will lead to a future fixup patch.
+
+> +	DECLARE_BITMAP		(used, BRCM_INT_PCI_MSI_NR);
+>  	bool			legacy;
+>  	/* Some chips have MSIs in bits [31..24] of a shared register. */
+>  	int			legacy_shift;
+> @@ -534,7 +535,7 @@ static int brcm_msi_alloc(struct brcm_msi *msi)
+>  	int hwirq;
+>  
+>  	mutex_lock(&msi->lock);
+> -	hwirq = bitmap_find_free_region(&msi->used, msi->nr, 0);
+> +	hwirq = bitmap_find_free_region(msi->used, msi->nr, 0);
+>  	mutex_unlock(&msi->lock);
+>  
+>  	return hwirq;
+> @@ -543,7 +544,7 @@ static int brcm_msi_alloc(struct brcm_msi *msi)
+>  static void brcm_msi_free(struct brcm_msi *msi, unsigned long hwirq)
+>  {
+>  	mutex_lock(&msi->lock);
+> -	bitmap_release_region(&msi->used, hwirq, 0);
+> +	bitmap_release_region(msi->used, hwirq, 0);
+>  	mutex_unlock(&msi->lock);
+>  }
+>  
+> @@ -661,6 +662,12 @@ static int brcm_pcie_enable_msi(struct brcm_pcie *pcie)
+>  	msi->irq = irq;
+>  	msi->legacy = pcie->hw_rev < BRCM_PCIE_HW_REV_33;
+>  
+> +	/*
+> +	 * Sanity check to make sure that the 'used' bitmap in struct brcm_msi
+> +	 * is large enough.
+> +	 */
+> +	BUILD_BUG_ON(BRCM_INT_PCI_MSI_LEGACY_NR > BRCM_INT_PCI_MSI_NR);
+> +
+>  	if (msi->legacy) {
+>  		msi->intr_base = msi->base + PCIE_INTR2_CPU_BASE;
+>  		msi->nr = BRCM_INT_PCI_MSI_LEGACY_NR;
+> -- 
+> 2.30.2
 > 

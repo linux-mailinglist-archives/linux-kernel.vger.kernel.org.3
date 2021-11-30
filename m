@@ -2,80 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B44AF463407
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:17:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2548746340C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241479AbhK3MVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:21:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241477AbhK3MU6 (ORCPT
+        id S241486AbhK3MWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:22:34 -0500
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:55258 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231678AbhK3MWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:20:58 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF163C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:17:39 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id g19so20415091pfb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:17:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=hXu04+QUxNwriCyATe0mYK4V2fWk7rKeUqQfH4ZzNho=;
-        b=NFz49q4CXrhyY7CXbxV3z2ldVJwzaldxtc/oUsdRBVtBiXC0KM/JK9hjV95JGIcdR3
-         XDGcDJ+EiGuf4DJ3sc1r8SPmbPHtA01T9BCHnE04fetiIF5bEeO5kMv+Jr7yO/x0BLOV
-         Ih1gTcjC2GEXmWtPZxbvoDVwheVuXdxr7s+SKf5xLZXfPd4SmywfW4UM1xZt3Zfb+4Ja
-         LgC1VaiZ3Ttp+29Rd7+1JBOZOCzIGe+JmkD3y7WyBsDSV7ACAYLlHUF9HslcRP/2pbnV
-         v5jmy3VYLzwITHpHxo3kYxv45vgBs5BUH8ahHHnLp8P38JAI5Fttzm1opmXGLem+cWcF
-         YCIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=hXu04+QUxNwriCyATe0mYK4V2fWk7rKeUqQfH4ZzNho=;
-        b=BSn4AbnBmMkUwsRfl4WXAQ+EDMA3HqmDbIUooqpXz0gJQiXAeSrvxQrjr4iQKQkGRc
-         Sel5RTo6Vxwdja3cOLsr4w6+vdUyRCKeYC6ZY7REFS2kxrmuAUz7U9vMJe8mA1D9Uruw
-         8Y95+B5q4wuauFJwwgbiolF7Sg/RBf1UZuEcTLYWJlWLIB9LJ358hRMNzZuv3fA9jTPJ
-         oDwpxdsOSpMyNRMdBaQkbTeCy1vw8XFCP4GIErV7VolIC9CUMnyL2xWmZ53HbJC5W+zP
-         BulhHItrd4tUSTWxbDpfYWb1fF8asDweDeEeNt0gc28kBzG3jaQuRGxitZKz2UfdbbhM
-         p0uw==
-X-Gm-Message-State: AOAM530cUK3cCihBk/uG9qeayyCnUSsqZ4+LOWP/xHpNYwGPlv7wBqX6
-        IXPzW00Sskr3ZffopRzLwOLS/7daWqZ7+NjwQlXUMg==
-X-Google-Smtp-Source: ABdhPJxXQvjuI9DOLtLA4qoREyXeCJL3uZPQt563tGuuhXX60ozlJ15yWahFJlZ5ASNrD3Cz92l7mKSjcN1q2dr7D/4=
-X-Received: by 2002:a63:414:: with SMTP id 20mr39830109pge.178.1638274659171;
- Tue, 30 Nov 2021 04:17:39 -0800 (PST)
+        Tue, 30 Nov 2021 07:22:23 -0500
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1AUCIpbM008365;
+        Tue, 30 Nov 2021 06:18:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638274731;
+        bh=nmi1IlZcNk9nS1cOKiptvQbp5I9DiELHf08aJ2+lkF4=;
+        h=From:To:CC:Subject:Date;
+        b=d6aoaQXCEEdLyHotUjIObm3MUnt1zdDa53+hwJnv9x4Me21xPxrYRdqqnEJCWDzJ7
+         eLnGWbFyzVgRpnWXmAcbMfMIkbek9BlrM0yB8+/Ib5KKTH/yVRBm00CeR7ikHS/SH7
+         XX1J3KAmNV7dNQjSKJN5E2gCuN24pCch7jU4Rw3c=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1AUCIpsx103242
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 Nov 2021 06:18:51 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 30
+ Nov 2021 06:18:50 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 30 Nov 2021 06:18:50 -0600
+Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1AUCIliP058207;
+        Tue, 30 Nov 2021 06:18:48 -0600
+From:   Aswath Govindraju <a-govindraju@ti.com>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>
+Subject: [PATCH 0/2] MUX: Add support for mux-states
+Date:   Tue, 30 Nov 2021 17:48:45 +0530
+Message-ID: <20211130121847.11112-1-a-govindraju@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20211117020724.2647769-1-pcc@google.com> <YaW3Cff+AJqT8tS/@matsya>
-In-Reply-To: <YaW3Cff+AJqT8tS/@matsya>
-From:   Robert Foss <robert.foss@linaro.org>
-Date:   Tue, 30 Nov 2021 13:17:28 +0100
-Message-ID: <CAG3jFyt802J8nxtc_iifgfbTJk0-Mtu_18aY0cEcjyJDaNLjaA@mail.gmail.com>
-Subject: Re: [PATCH] lontium-lt9611: check a different register bit for HDMI sensing
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Peter Collingbourne <pcc@google.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Anibal Limon <anibal.limon@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 at 06:30, Vinod Koul <vkoul@kernel.org> wrote:
->
-> On 16-11-21, 18:07, Peter Collingbourne wrote:
-> > It has been observed that with certain monitors such as the HP Z27n,
-> > the register 0x825e reads a value of 0x79 when the HDMI cable is
-> > connected and 0x78 when it is disconnected, i.e. bit 0 appears
-> > to correspond to the HDMI connection status and bit 2 is never
-> > set. Therefore, change the driver to check bit 0 instead of bit 2.
->
-> So we have got limited information on this but BIT-2 seems to be related
-> to HPD and empirical data from various monitors supports this, so this
-> seems the right thing to do.
->
-> Reviewed-by: Vinod Koul <vkoul@kernel.org>
->
+The following series of patches add support for reading mux
+state from the device tree.
 
-Applied to drm-misc-next
+Aswath Govindraju (2):
+  dt-bindings: mux: Document mux-states property
+  mux: Add support for reading mux state from consumer DT node
+
+ .../devicetree/bindings/mux/gpio-mux.yaml     |  11 +-
+ .../devicetree/bindings/mux/mux-consumer.yaml |  14 ++
+ .../bindings/mux/mux-controller.yaml          |  26 ++-
+ drivers/mux/core.c                            | 213 ++++++++++++++++--
+ include/linux/mux/consumer.h                  |  19 +-
+ 5 files changed, 260 insertions(+), 23 deletions(-)
+
+-- 
+2.17.1
+

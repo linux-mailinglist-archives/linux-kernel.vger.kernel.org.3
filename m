@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 128B34635B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCAC84635B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241745AbhK3NqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:46:25 -0500
-Received: from cpanel.siel.si ([46.19.9.99]:38776 "EHLO cpanel.siel.si"
+        id S241686AbhK3NqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:46:23 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:38798 "EHLO cpanel.siel.si"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S240974AbhK3NqS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S232272AbhK3NqS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Nov 2021 08:46:18 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=BprRzp7NTlqfFQGFNx7txt6EhUkXQQBm9V5lXLBQLcg=; b=MIKZ9EtUovRfza2Vuz86FTufpQ
-        usm7nF3gMGHW8L1ju5kdcQmfqq54vtNfq3G7qHkOsaj6agsvI11RyPgCrTizcfUgBq+pI534g4Wgz
-        +ai7TE1Dn3AiBeE8B9Vn4goBp4WP60DqlHNFyxCSnACa8sajCiGyacGNy0RzUOrufHWZhtpcHBhee
-        tnCAkrng2T7Nk6TVwx+ipw6ptfRflGrWS/SQrDBzBJanmxGPcuZ6BY8hCKL2h5whkxe9nsGkhdiQX
-        xNMAA3iuCC906vCVctKI9NeGy/qoteFOh9j8RjHoFZkq3L42Z2Mb2mJNtCDZ4KjdwN2ZCEyi7EUMn
-        zgoZ2bYQ==;
+        bh=GQkn179EA6RB5tPAroeqjE3Zjye4M/4SllOBH6o7hPI=; b=TwXaE1j6UOw7LwmcPgBY3TuMI8
+        hxX6aOKGkZB8N5jrOxtlMTeUeHYEQPDTe8mgESYBDbipsVVftHpfKy/VByaSmw6/vLuTrfQKATEha
+        2hd+Tb2eT6pKW12bfgUt8IXUtxRjXQEc1HKYKP/ZgEPxqvDjU5Y4YYkgo+YmiV8eohQV7KWC88SDP
+        kugBwzn5MwXe7x3OWOlqb2wjq5sGw0TprfR1lHFqkCaHitQWrMy8MrXddlJFqCLxFmpva2D1wKMp+
+        hQtedl3lK+cazrJOSamrJ6II/cBmyziOFIHczXKmh+6eixy+tykLoBYJlSfYMzM+jOuU4PVppe5Dl
+        58SGsy6g==;
 Received: from [89.212.21.243] (port=49710 helo=localhost.localdomain)
         by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.94.2)
         (envelope-from <andrej.picej@norik.com>)
-        id 1ms3PJ-0039GW-6o; Tue, 30 Nov 2021 14:42:53 +0100
+        id 1ms3PJ-0039GW-C2; Tue, 30 Nov 2021 14:42:53 +0100
 From:   Andrej Picej <andrej.picej@norik.com>
 Cc:     andrej.picej@norik.com, support.opensource@diasemi.com,
         wim@linux-watchdog.org, linux@roeck-us.net,
@@ -36,10 +36,12 @@ Cc:     andrej.picej@norik.com, support.opensource@diasemi.com,
         shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, linux-imx@nxp.com,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/4] mfd: da9062: make register CONFIG_I writable
-Date:   Tue, 30 Nov 2021 14:42:39 +0100
-Message-Id: <20211130134242.3516619-1-andrej.picej@norik.com>
+Subject: [PATCH v2 2/4] watchdog: da9062: reset board on watchdog timeout
+Date:   Tue, 30 Nov 2021 14:42:40 +0100
+Message-Id: <20211130134242.3516619-2-andrej.picej@norik.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211130134242.3516619-1-andrej.picej@norik.com>
+References: <20211130134242.3516619-1-andrej.picej@norik.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -57,28 +59,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stefan Christ <s.christ@phytec.de>
+Implement a method to change watchdog timeout configuration based on DT
+binding ("dlg,wdt-sd"). There is a possibility to change the bahaviour
+of watchdog reset. Setting WATCHDOG_SD bit enables SHUTDOWN mode, and
+clearing it enables POWERDOWN mode on watchdog timeout.
 
-Make the config register CONFIG_I writable to change the watchdog mode.
+If no DT binding is specified the WATCHDOG_SD bit stays in default
+configuration, not breaking behaviour of devices which might depend on
+default fuse configuration.
 
-Signed-off-by: Stefan Christ <s.christ@phytec.de>
+Note: This patch requires that the config register CONFIG_I is
+configured as writable in the da9062 multi function device.
+
 Signed-off-by: Andrej Picej <andrej.picej@norik.com>
 ---
- drivers/mfd/da9062-core.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/watchdog/da9062_wdt.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/drivers/mfd/da9062-core.c b/drivers/mfd/da9062-core.c
-index 01f8e10dfa55..7041ba53efb4 100644
---- a/drivers/mfd/da9062-core.c
-+++ b/drivers/mfd/da9062-core.c
-@@ -556,6 +556,7 @@ static const struct regmap_range da9062_aa_writeable_ranges[] = {
- 	regmap_reg_range(DA9062AA_VBUCK3_B, DA9062AA_VBUCK3_B),
- 	regmap_reg_range(DA9062AA_VLDO1_B, DA9062AA_VLDO4_B),
- 	regmap_reg_range(DA9062AA_BBAT_CONT, DA9062AA_BBAT_CONT),
-+	regmap_reg_range(DA9062AA_CONFIG_I, DA9062AA_CONFIG_I),
- 	regmap_reg_range(DA9062AA_GP_ID_0, DA9062AA_GP_ID_19),
- };
+diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.c
+index f02cbd530538..e342e9e50cb1 100644
+--- a/drivers/watchdog/da9062_wdt.c
++++ b/drivers/watchdog/da9062_wdt.c
+@@ -85,8 +85,33 @@ static int da9062_wdt_start(struct watchdog_device *wdd)
+ {
+ 	struct da9062_watchdog *wdt = watchdog_get_drvdata(wdd);
+ 	unsigned int selector;
++	unsigned int mask;
++	u32 val;
+ 	int ret;
  
++	/* Configure what happens on watchdog timeout. Can be specified with
++	 * "dlg,wdt-sd" dt-binding (0 -> POWERDOWN, 1 -> SHUTDOWN).
++	 * If "dlg,wdt-sd" dt-binding is NOT set use the default.
++	 */
++	ret = device_property_read_u32(wdd->parent, "dlg,wdt-sd", &val);
++	if (!ret) {
++		if (val)
++			/* Use da9062's SHUTDOWN mode */
++			mask = DA9062AA_WATCHDOG_SD_MASK;
++		else
++			/* Use da9062's POWERDOWN mode. */
++			mask = 0x0;
++
++		ret = regmap_update_bits(wdt->hw->regmap,
++						DA9062AA_CONFIG_I,
++						DA9062AA_WATCHDOG_SD_MASK,
++						mask);
++
++		if (ret)
++			dev_err(wdt->hw->dev, "failed to set wdt reset mode: %d\n",
++				ret);
++	}
++
+ 	selector = da9062_wdt_timeout_to_sel(wdt->wdtdev.timeout);
+ 	ret = da9062_wdt_update_timeout_register(wdt, selector);
+ 	if (ret)
 -- 
 2.25.1
 

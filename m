@@ -2,107 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D01DF463FA5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE3C463FA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:06:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343875AbhK3VJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:09:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:33926 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1343841AbhK3VJc (ORCPT
+        id S1343897AbhK3VJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:09:56 -0500
+Received: from mail-oo1-f41.google.com ([209.85.161.41]:33774 "EHLO
+        mail-oo1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343841AbhK3VJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:09:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638306371;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ovfGlfFYOBiNEdFFUCvznobAjXbygpnoFNwMXB/Sg+Q=;
-        b=FUNTLK9AaS5vAjpi2321RkkF6EgxD0n8xA/n/jIZHBJdm8m3ApYj/1KjnVnEoeR78/j878
-        UqXeivQn/ECB0dFKOf669D+BsbbMhzbX+gQzB/oGJodwnt05WDlgxZIo9tua7dbrkBT4L8
-        vaQVKc9pZmJ5/POR3NvDi3Cn1G9jaCs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-503-ojpTxzvvOhGXgffSsKK03g-1; Tue, 30 Nov 2021 16:06:08 -0500
-X-MC-Unique: ojpTxzvvOhGXgffSsKK03g-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 712C91853026;
-        Tue, 30 Nov 2021 21:06:05 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BABF910013D7;
-        Tue, 30 Nov 2021 21:05:49 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <YaZOCk9zxApPattb@archlinux-ax161>
-References: <YaZOCk9zxApPattb@archlinux-ax161> <163819575444.215744.318477214576928110.stgit@warthog.procyon.org.uk> <163819647945.215744.17827962047487125939.stgit@warthog.procyon.org.uk>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com,
-        Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <anna.schumaker@netapp.com>,
-        Steve French <sfrench@samba.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Omar Sandoval <osandov@osandov.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 51/64] cachefiles: Implement the I/O routines
+        Tue, 30 Nov 2021 16:09:51 -0500
+Received: by mail-oo1-f41.google.com with SMTP id r18-20020a4a7252000000b002c5f52d1834so7123495ooe.0;
+        Tue, 30 Nov 2021 13:06:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=1qvFAfPGfMVn6wwgALZGAIXEcjF+CrrxtfhtyipeF/w=;
+        b=iLTpFTaV/eUDXgTbLGAwcLeLh4f+rqCxnR5gzfvDlj8QvM8MZmYGsLP7rjBo5lKHt+
+         khxUEWChxDH7EGvOv2f4jYIg87sVycbCVOlNGV3hGl5BN1VE85pXkgMiMvmQcJXnm99V
+         LMGBtKvV3bY9/K5/QTZYroy8Uss3j+z0LpQsjMVsLMtE5mZnfwi1AQ0c+e6i2e9R0vRy
+         sar1O8kd2yJMT0yrutqqEXpuQpO62iTPscQWJcvif40uV48Z7s6nBd6sd5JUTyoufZsQ
+         4gnEMt5XY9SoAoXZCG6M0llQULPXrPv6YotHuMSVCxzNJ+ycwFphqPTKBpnkl3WEGEOK
+         unow==
+X-Gm-Message-State: AOAM532oQc+Pk/Yh9adZBzV9BhPF39013wrLtZjnlNiDcpVFC208epfV
+        WBgqnteM/qwizSTlBjK7Icn23oGyYQ==
+X-Google-Smtp-Source: ABdhPJy8TEBufTEXOCiqyXozwA17nAf2iUlb0g9SI0cQLD6pMvk5U6WdsCf5u/yDcWIsFu2b7pb4/g==
+X-Received: by 2002:a4a:6215:: with SMTP id x21mr1181882ooc.16.1638306391707;
+        Tue, 30 Nov 2021 13:06:31 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id w10sm3382091ott.46.2021.11.30.13.06.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 13:06:31 -0800 (PST)
+Received: (nullmailer pid 3012221 invoked by uid 1000);
+        Tue, 30 Nov 2021 21:06:30 -0000
+Date:   Tue, 30 Nov 2021 15:06:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Michal =?utf-8?B?Vm9rw6HEjQ==?= <michal.vokac@ysoft.com>
+Cc:     Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-kernel@vger.kernel.org, Fabio Estevam <festevam@gmail.com>,
+        devicetree@vger.kernel.org, kernel@pengutronix.de,
+        Shawn Guo <shawnguo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>
+Subject: Re: [PATCH 1/2] dt-bindings: arm: fsl: Add Y Soft IOTA Crux/Crux+
+ boards
+Message-ID: <YaaSVug/aoQaLix2@robh.at.kernel.org>
+References: <20211122162520.90211-1-michal.vokac@ysoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <503521.1638306348.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 30 Nov 2021 21:05:48 +0000
-Message-ID: <503522.1638306348@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211122162520.90211-1-michal.vokac@ysoft.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nathan Chancellor <nathan@kernel.org> wrote:
+On Mon, 22 Nov 2021 17:25:19 +0100, Michal Vokáč wrote:
+> Add devicetree binding for Crux/Crux+ boards from the IOTA family.
+> These boards have the very same HW configuration as the Orion board
+> except the usage of Quad/QuadPlus SoC.
+> 
+> Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+> ---
+>  Documentation/devicetree/bindings/arm/fsl.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-> This patch as commit 0443b01eccbb ("cachefiles: Implement the I/O
-> routines") in -next causes the following clang warning/error:
-> =
-
-> fs/cachefiles/io.c:489:6: error: variable 'ret' is used uninitialized wh=
-enever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->         if (pos =3D=3D 0)
->             ^~~~~~~~
-> fs/cachefiles/io.c:492:6: note: uninitialized use occurs here
->         if (ret < 0) {
->             ^~~
-> fs/cachefiles/io.c:489:2: note: remove the 'if' if its condition is alwa=
-ys true
->         if (pos =3D=3D 0)
->         ^~~~~~~~~~~~~
-> fs/cachefiles/io.c:440:9: note: initialize the variable 'ret' to silence=
- this warning
->         int ret;
->                ^
->                 =3D 0
-> 1 error generated.
-
-	pos =3D cachefiles_inject_remove_error();
-	if (pos =3D=3D 0)
-		ret =3D vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-
-That should be:
-
-	ret =3D cachefiles_inject_remove_error();
-	if (ret =3D=3D 0)
-		ret =3D vfs_fallocate(file, FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE,
-
-David
-
+Acked-by: Rob Herring <robh@kernel.org>

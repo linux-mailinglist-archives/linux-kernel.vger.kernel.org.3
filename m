@@ -2,96 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5379C4633BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:00:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB304633C0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239740AbhK3MEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:04:01 -0500
-Received: from mout.gmx.net ([212.227.17.20]:48289 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229538AbhK3MD7 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:03:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638273622;
-        bh=86mLRP7RxLciX6WFesgCpFI0qfy9gXogt8D2ha7z4+A=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=AXivPj5XQ42x2j05j7S7RsluKY6J0DKySHx2IYzGEZWs3E1q5T7RSqLrp3G9GLwNk
-         0akdRYeC/XPTuKnQAVQCaV/ngA4FM097mYbxzBdeisObq2J6LHWVqy4sejvkBbFZOV
-         dPwdwR6mGr4aLnBritwZEcB/Z5qCoxnO/Q/75U80=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from homer.fritz.box ([185.146.50.175]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N1OXT-1mTnrh0aQF-012nJz; Tue, 30
- Nov 2021 13:00:22 +0100
-Message-ID: <b8f607c771a4f698fcb651379ca30d3bb6a83ccd.camel@gmx.de>
-Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-From:   Mike Galbraith <efault@gmx.de>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Alexey Avramov <hakavlad@inbox.lv>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Tue, 30 Nov 2021 13:00:18 +0100
-In-Reply-To: <20211130112244.GQ3366@techsingularity.net>
-References: <20211125151853.8540-1-mgorman@techsingularity.net>
-         <20211127011246.7a8ac7b8@mail.inbox.lv>
-         <20211129150117.GO3366@techsingularity.net>
-         <a20f17c4b1b5fdfade3f48375d148e97bd162dd6.camel@gmx.de>
-         <20211130112244.GQ3366@techsingularity.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 
+        id S241173AbhK3MGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:06:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49504 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229538AbhK3MG2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 07:06:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62681C061574;
+        Tue, 30 Nov 2021 04:03:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 26B5EB8185D;
+        Tue, 30 Nov 2021 12:03:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E56BC53FC7;
+        Tue, 30 Nov 2021 12:03:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638273786;
+        bh=Pgk99Kz0zCajUtaAegp50+7og3gwn9uaBPUhhCTKAqw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n4n3Lym5JoViAIOOWnfHBbKhrB/07tWqj/sgWENiLiPPoaGIZbRFYO4xT+qUoUO1I
+         t0zay8yWokKTIVlj5QZORjYNU88ikWPfdk6DhRxCnMVLN7opEnjls4lI9QGJ68YxSL
+         X+bJaFuaa9zkPLEez5mDp345Md2bKV+qf9lZcUck=
+Date:   Tue, 30 Nov 2021 13:03:04 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Aditya Garg <gargaditya08@live.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Orlando Chamberlain <redecorating@protonmail.com>,
+        Daniel Winkler <danielwinkler@google.com>,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "sonnysasaka@chromium.org" <sonnysasaka@chromium.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH v7 resend 1/2] Bluetooth: add quirk disabling LE Read
+ Transmit Power
+Message-ID: <YaYS+OeOa68EGPa/@kroah.com>
+References: <YaSCJg+Xkyx8w2M1@kroah.com>
+ <287DE71A-2BF2-402D-98C8-24A9AEEE55CB@live.com>
+ <42E2EC08-1D09-4DDE-B8B8-7855379C23C5@holtmann.org>
+ <6ABF3770-A9E8-4DAF-A22D-DA7113F444F3@live.com>
+ <92FBACD6-F4F2-4DE8-9000-2D30852770FC@live.com>
+ <3716D644-CD1B-4A5C-BC96-A51FF360E31D@live.com>
+ <9E6473A2-2ABE-4692-8DCF-D8F06BDEAE29@live.com>
+ <64E15BD0-665E-471F-94D9-991DFB87DEA0@live.com>
+ <A6DD9616-E669-4382-95A0-B9DBAF46712D@live.com>
+ <312202C7-C7BE-497D-8093-218C68176658@live.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Q8Rcm+TDsMGclzpLvPpIUOG460Khlbhybxb+OmjHoQ7eWlSZjwe
- iInZPJV5ei36SlSySfzp57ZCs3OM51mS7uS/FRFL1ovBCSwF4GcSRjYfvB7Q+GCdpxR2D4m
- hnr5S95PsvQKQWjyQuTejCqngOfcVJ6Xck3dqr7ySjF+TRZAV6ZlB8yiDsxB0PN9R/O3Lrw
- dYGqpUqgAVY6735G5zwQw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:4FgWfCmXmJQ=:QpOMsYUbzenGVGbOqzhwNZ
- 6zL4AIN0w6dOK7sxB0IFmJyv9C0MlwGzHcOgoyoBEcsYUXF1QLYv+6l6+HtcVhdTaDlHQi8rG
- FmAVvq4RLvC4cD2ndlS4Or4dvJI+7w1edc5vRgEGoZajS76Kka0UfMBuJEP64QfaIctGFLi1e
- ivjCCcE7w7K5m9l6gtdnfp+6TNkuQCrlJRATdOEscgSTB6qdEep+USC/PgMaEIppktbXifWRP
- Yse6KCWFtOCdsBG+p/ICWTqwbWFu2o0ELpkv0X1qCAevwEQ0WEGchfqfQvKSeM8J7nO9VZzgz
- YOJAO17bwfXFhN3PneNTivUuksJQRTJNPtKrKYdgjN4yiv4VPsY8yGZu+G1Q9keXC8HF2EpD/
- di7q4Jj4gi8FA/kBto8U7SM5seeyqVLLPvgrwOPuHQ0mimAM36V2WUYfvxKN8y8DrWi7oubpw
- KAms+0Ts7QjiyQ1hOs+wrSGPdXL5tlrNdtnyiRZtoYGF5eWG+FoKoYOVbJUrXJe6xKmtqk6fH
- MhCJKhUN1Ti/fy9bBwfSpSFc8mIRLjbjOOXb5dJGX4IPpYnPa9MmjKkYbAJKn95g91tXM4l85
- eOa35a6GtNrAWslosEccnoorhlhXkei+fs1w0BgOnChc4mmHWA0SVKvjMnudHP2E5rCM5qn8N
- s3NZBH8LtLVm6w72tZGtmXxuGEAj8Qa/AqwX809uMeJ8rpdz9JrZHkCsjDAB5OHrs7BLwkHnY
- mE61LUKvf8zdxWvFUssoTY87crGGn1Tb25LrL6YAsDWWy61rhRq6B6EQaQDHm8KHCwcQoon1K
- FodR4TDCsBKGhyZRadedT+SmZ7eojQnOAt62dcOUNWbhK4E35TaeReq5RpSTHfZMFUNLUNQBv
- bAZ7a1yJ95X1OfdF0Rt0EeOefVGLJ5ayfr866ugH1cOzb3bp7UoU980+hrLd+pAt5oj8Z3fOh
- WOEJc2k/qu8aRWSCoDkJfa3yPvqOaotVPfttvBEyIK2Rr1UCy+m4AATm0Yh6XyTuoiYlSDpix
- di9Qm9fHeZcJ/5il7uoFcI6soPBbPS7QYZSC0LXwmszfOB+5k1BE//erw+AU9ZQvn2eJpJ+l/
- qUl/XvzRC87XzU=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <312202C7-C7BE-497D-8093-218C68176658@live.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-11-30 at 11:22 +0000, Mel Gorman wrote:
-> On Tue, Nov 30, 2021 at 11:14:32AM +0100, Mike Galbraith wrote:
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (2 * write_pending <=
-=3D reclaimable)
-> >
-> > That is always true here...
-> >
->
-> Always true for you or always true in general?
+On Tue, Nov 30, 2021 at 11:48:25AM +0000, Aditya Garg wrote:
+> From: Aditya Garg <gargaditya08@live.com>
+> 
+> Some devices have a bug causing them to not work if they query 
+> LE tx power on startup. Thus we add a quirk in order to not query it 
+> and default min/max tx power values to HCI_TX_POWER_INVALID.
+> 
+> Signed-off-by: Aditya Garg <gargaditya08@live.com>
+> Reported-by: Orlando Chamberlain <redecorating@protonmail.com>
+> Tested-by: Orlando Chamberlain <redecorating@protonmail.com>
+> Link:
+> https://lore.kernel.org/r/4970a940-211b-25d6-edab-21a815313954@protonmail.com
+> Fixes: 7c395ea521e6 ("Bluetooth: Query LE tx power on startup")
+> ---
+> v7 :- Added Tested-by.
+>  include/net/bluetooth/hci.h | 9 +++++++++
+>  net/bluetooth/hci_core.c    | 3 ++-
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/net/bluetooth/hci.h b/include/net/bluetooth/hci.h
+> index 63065bc01b766c..383342efcdc464 100644
+> --- a/include/net/bluetooth/hci.h
+> +++ b/include/net/bluetooth/hci.h
+> @@ -246,6 +246,15 @@ enum {
+>  	 * HCI after resume.
+>  	 */
+>  	HCI_QUIRK_NO_SUSPEND_NOTIFIER,
+> +
+> +	/*
+> +	 * When this quirk is set, LE tx power is not queried on startup
+> +	 * and the min/max tx power values default to HCI_TX_POWER_INVALID.
+> +	 *
+> +	 * This quirk can be set before hci_register_dev is called or
+> +	 * during the hdev->setup vendor callback.
+> +	 */
+> +	HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER,
+>  };
+>  
+>  /* HCI device flags */
+> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> index 8d33aa64846b1c..434c6878fe9640 100644
+> --- a/net/bluetooth/hci_core.c
+> +++ b/net/bluetooth/hci_core.c
+> @@ -619,7 +619,8 @@ static int hci_init3_req(struct hci_request *req, unsigned long opt)
+>  			hci_req_add(req, HCI_OP_LE_READ_ADV_TX_POWER, 0, NULL);
+>  		}
+>  
+> -		if (hdev->commands[38] & 0x80) {
+> +		if ((hdev->commands[38] & 0x80) &&
+> +		!test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks)) {
 
-"Here" as in the boxen located at my GPS coordinates :)
+I am getting tired of saying this, but PLEASE use scripts/checkpatch.pl
+before you send out your patches.
 
-> The intent of the check is "are a majority of reclaimable pages
-> marked WRITE_PENDING?". It's similar to the check that existed prior
-> to 132b0d21d21f ("mm/page_alloc: remove the throttling logic from the
-> page allocator").
+If you had done so, you would see the following output in it:
 
-I'll put my trace_printk() back and see if I can't bend-adjust it.
+CHECK: Alignment should match open parenthesis
+#49: FILE: net/bluetooth/hci_core.c:623:
++	        if ((hdev->commands[38] & 0x80) &&
++	        !test_bit(HCI_QUIRK_BROKEN_READ_TRANSMIT_POWER, &hdev->quirks)) {
 
-	-Mike
+
+Please fix.
 

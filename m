@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A753546416C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 137D9464170
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344702AbhK3WmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:42:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56594 "EHLO
+        id S1344773AbhK3WmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344629AbhK3WmA (ORCPT
+        with ESMTP id S1344641AbhK3WmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:42:00 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D292C061574;
-        Tue, 30 Nov 2021 14:38:40 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bu18so57768901lfb.0;
-        Tue, 30 Nov 2021 14:38:40 -0800 (PST)
+        Tue, 30 Nov 2021 17:42:01 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51DBC061756;
+        Tue, 30 Nov 2021 14:38:41 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id p8so30607611ljo.5;
+        Tue, 30 Nov 2021 14:38:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DDDlr9B376Ggk4kgjKCc/UuR9uKjQ0/t5tpcNUpdYW8=;
-        b=lgrsrhHIy5bcM+fxFvLaQna6BdwojpaqarQkIAjXuf7TBgp3lHrrRt+059abQ1D5wW
-         PNWSiZfbyvEZe8+VSZ/5xMa2d/5DqCKjAwZ6j2NlgI9ZhtPRbcZGQE+tgy+un4dfoMqe
-         1ltJghnIVYm+cv/AttBQ0LhChuRpNiXvLliB2Cyz/BRwXkelIXqm5v3JHwlPaVRdKt1A
-         wtCTt/OttELHNs0csGzORlVmg7Oazog8BgF3jedFOOayykM+6IZkrctTMW7wVst4PGKH
-         MJg50Ob3AQRH4n2tEN77WjGvUzq/KLvUMFlpPaWXeYRAUgpDZmkqwcCM9bKM9OdLrQ0P
-         m+fQ==
+        bh=dpd5vViYyggW1vN/6oOV6ghp4iG8XVXPtGDwqtUMgEc=;
+        b=ebey99+MOcQwDXC9O2GRN6gjWkTuSJ/T65u0vtm92d2BTbHpmu6jmiVXG+amdteQTJ
+         xVA+0DT9egXosdeSAbuirMw+WBkd9/wJQM65nDDreRyyo2bK0muh/IFnYeMVk+QTS+V/
+         /G/StYOc5TLXpHEPcx6ddBY+z9lofG9YgZAGwD0/Bm1lQAMEqYBCkRpILT7pyU9CF2tN
+         dFEYVq1IpkLlFKG/B1ZL4FmiakyOTF/YZWPRk4o1W2U8loJfNtkz5RjnDx/9vFhCYDg9
+         UfjUpoNWxENR1qPc2I86CZRHvZpReMuASKm+DQDzEFiVCsMCIXcX176rQT4lRkB7XjbJ
+         6ucQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DDDlr9B376Ggk4kgjKCc/UuR9uKjQ0/t5tpcNUpdYW8=;
-        b=TYEozZfHm5pfsqZRPXitRHjysXUdpTul2lkab/9eDHfJgnQRfstYVOiRCguN5WDT82
-         Hds+pzMVeiT/6fhKjSaKCeitUdeK4ICrHdtGt9byyl8u6K4aI2M8aF7jlCnaIHy8FbyS
-         qiLiwfJhOmdSU7JbunW+dpOwDymHSWaCK/RsXMMdbbzeRw9/AjmJh2mE151BkuzBXUKM
-         Nd0KNB0SNt4FWZjpisnhYslpxu8HWjEWvP80UYbGr9JIxfinhR6f2000S1nV1b6BRO8X
-         50P2ykdf7xJUmmboysiHA6SMUOyXJ9QJpB1L3Gw4iGAOE3C/NC9vDkGFuKnngbKVGMw3
-         xnaQ==
-X-Gm-Message-State: AOAM531dGqd79+uSGzuOxAkFW9dnBtp//NA5DLaYB58l3mQ6DK18Ffeg
-        CfVY8w4uVr3RQGHmNCQ7Ihkwd8zr7jU=
-X-Google-Smtp-Source: ABdhPJzlqvpgCXE3SojGwRJICOwdDknx/S4UvOtTFmUWO7sFiSBNaQczLNpR3ksPtPU2SjGgrkqXSg==
-X-Received: by 2002:a19:6717:: with SMTP id b23mr1956920lfc.659.1638311918815;
-        Tue, 30 Nov 2021 14:38:38 -0800 (PST)
+        bh=dpd5vViYyggW1vN/6oOV6ghp4iG8XVXPtGDwqtUMgEc=;
+        b=30+q15B+jdktzYyoixKyKD+uoPNYN52RrAbEFRjnTRf7vAG7ZkWV6NbA7FUAt8UmAb
+         oVP1XsdoaMQVrqM5uQ8wzQ6fJcG2Tw4EtZR+ZEV0uhliOZrgZSKSChe9q3GW2vphqS3g
+         hEV0m0bp/SM7LCBIlVsNGot52xGyHt9KpwB2TZOacI80ifl8Ka0Sv+2kHQPjUiHiLirC
+         DbXK+8CxvyktuXUn9OteqGdmmbmLJgSbV3U87CcIqQ+eUfILGEG27PppU5/vNwDM331f
+         z8YGpYD8rPsrbuUU1utpIIw07BGNo8oPIcRR/b2NAKdTWyTl8BQ+3rbVOBQOyHHuQJ1O
+         ROIw==
+X-Gm-Message-State: AOAM532ekvi81fPxn3qYq2APrD81e4rF6YrspDLssZ9UuluBhTTWewWE
+        tnnugXUjLo3iR5ucPxY0t9M=
+X-Google-Smtp-Source: ABdhPJwo66t9MEmFy9Zk5ca5lsDuYw6VoRNZV8l5txKb/jUKstySKySmYn8dAKPG4OZxiMgsCF+zkw==
+X-Received: by 2002:a2e:b894:: with SMTP id r20mr1814039ljp.304.1638311920007;
+        Tue, 30 Nov 2021 14:38:40 -0800 (PST)
 Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id y11sm1820518ljd.117.2021.11.30.14.38.37
+        by smtp.gmail.com with ESMTPSA id y11sm1820518ljd.117.2021.11.30.14.38.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 14:38:38 -0800 (PST)
+        Tue, 30 Nov 2021 14:38:39 -0800 (PST)
 From:   Dmitry Osipenko <digetx@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Jonathan Hunter <jonathanh@nvidia.com>,
@@ -67,42 +67,195 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Stefan Eichenberger <stefan.eichenberger@toradex.com>
 Cc:     devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v4 02/24] dt-bindings: ARM: tegra: Document Pegatron Chagall
-Date:   Wed,  1 Dec 2021 01:37:58 +0300
-Message-Id: <20211130223820.23609-3-digetx@gmail.com>
+Subject: [PATCH v4 03/24] ARM: tegra: Add labels to tegra30.dtsi
+Date:   Wed,  1 Dec 2021 01:37:59 +0300
+Message-Id: <20211130223820.23609-4-digetx@gmail.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <20211130223820.23609-1-digetx@gmail.com>
 References: <20211130223820.23609-1-digetx@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Heidelberg <david@ixit.cz>
+From: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 
-Document Pegatron Chagall, which is Tegra30-based tablet device.
+Add phandle names for memory/I2C/SPI/USB/SDMMC controller nodes to allow
+for cleaner device descriptions.
 
-Acked-by: Rob Herring <robh@kernel.org>
-Signed-off-by: David Heidelberg <david@ixit.cz>
+Signed-off-by: Michał Mirosław <mirq-linux@rere.qmqm.pl>
 ---
- Documentation/devicetree/bindings/arm/tegra.yaml | 3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm/boot/dts/tegra30.dtsi | 36 +++++++++++++++++-----------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/tegra.yaml b/Documentation/devicetree/bindings/arm/tegra.yaml
-index 49ae6319336d..91a7d4a75fe6 100644
---- a/Documentation/devicetree/bindings/arm/tegra.yaml
-+++ b/Documentation/devicetree/bindings/arm/tegra.yaml
-@@ -89,6 +89,9 @@ properties:
-       - items:
-           - const: ouya,ouya
-           - const: nvidia,tegra30
-+      - items:
-+          - const: pegatron,chagall
-+          - const: nvidia,tegra30
-       - items:
-           - enum:
-               - asus,tf701t
+diff --git a/arch/arm/boot/dts/tegra30.dtsi b/arch/arm/boot/dts/tegra30.dtsi
+index ae3df73c20a7..a6772171c910 100644
+--- a/arch/arm/boot/dts/tegra30.dtsi
++++ b/arch/arm/boot/dts/tegra30.dtsi
+@@ -585,7 +585,7 @@ rtc@7000e000 {
+ 		clocks = <&tegra_car TEGRA30_CLK_RTC>;
+ 	};
+ 
+-	i2c@7000c000 {
++	i2c1: i2c@7000c000 {
+ 		compatible = "nvidia,tegra30-i2c", "nvidia,tegra20-i2c";
+ 		reg = <0x7000c000 0x100>;
+ 		interrupts = <GIC_SPI 38 IRQ_TYPE_LEVEL_HIGH>;
+@@ -601,7 +601,7 @@ i2c@7000c000 {
+ 		status = "disabled";
+ 	};
+ 
+-	i2c@7000c400 {
++	i2c2: i2c@7000c400 {
+ 		compatible = "nvidia,tegra30-i2c", "nvidia,tegra20-i2c";
+ 		reg = <0x7000c400 0x100>;
+ 		interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
+@@ -617,7 +617,7 @@ i2c@7000c400 {
+ 		status = "disabled";
+ 	};
+ 
+-	i2c@7000c500 {
++	i2c3: i2c@7000c500 {
+ 		compatible = "nvidia,tegra30-i2c", "nvidia,tegra20-i2c";
+ 		reg = <0x7000c500 0x100>;
+ 		interrupts = <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>;
+@@ -633,7 +633,7 @@ i2c@7000c500 {
+ 		status = "disabled";
+ 	};
+ 
+-	i2c@7000c700 {
++	i2c4: i2c@7000c700 {
+ 		compatible = "nvidia,tegra30-i2c", "nvidia,tegra20-i2c";
+ 		reg = <0x7000c700 0x100>;
+ 		interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
+@@ -649,7 +649,7 @@ i2c@7000c700 {
+ 		status = "disabled";
+ 	};
+ 
+-	i2c@7000d000 {
++	i2c5: i2c@7000d000 {
+ 		compatible = "nvidia,tegra30-i2c", "nvidia,tegra20-i2c";
+ 		reg = <0x7000d000 0x100>;
+ 		interrupts = <GIC_SPI 53 IRQ_TYPE_LEVEL_HIGH>;
+@@ -665,7 +665,7 @@ i2c@7000d000 {
+ 		status = "disabled";
+ 	};
+ 
+-	spi@7000d400 {
++	spi1: spi@7000d400 {
+ 		compatible = "nvidia,tegra30-slink", "nvidia,tegra20-slink";
+ 		reg = <0x7000d400 0x200>;
+ 		interrupts = <GIC_SPI 59 IRQ_TYPE_LEVEL_HIGH>;
+@@ -679,7 +679,7 @@ spi@7000d400 {
+ 		status = "disabled";
+ 	};
+ 
+-	spi@7000d600 {
++	spi2: spi@7000d600 {
+ 		compatible = "nvidia,tegra30-slink", "nvidia,tegra20-slink";
+ 		reg = <0x7000d600 0x200>;
+ 		interrupts = <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>;
+@@ -693,7 +693,7 @@ spi@7000d600 {
+ 		status = "disabled";
+ 	};
+ 
+-	spi@7000d800 {
++	spi3: spi@7000d800 {
+ 		compatible = "nvidia,tegra30-slink", "nvidia,tegra20-slink";
+ 		reg = <0x7000d800 0x200>;
+ 		interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+@@ -707,7 +707,7 @@ spi@7000d800 {
+ 		status = "disabled";
+ 	};
+ 
+-	spi@7000da00 {
++	spi4: spi@7000da00 {
+ 		compatible = "nvidia,tegra30-slink", "nvidia,tegra20-slink";
+ 		reg = <0x7000da00 0x200>;
+ 		interrupts = <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>;
+@@ -721,7 +721,7 @@ spi@7000da00 {
+ 		status = "disabled";
+ 	};
+ 
+-	spi@7000dc00 {
++	spi5: spi@7000dc00 {
+ 		compatible = "nvidia,tegra30-slink", "nvidia,tegra20-slink";
+ 		reg = <0x7000dc00 0x200>;
+ 		interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
+@@ -735,7 +735,7 @@ spi@7000dc00 {
+ 		status = "disabled";
+ 	};
+ 
+-	spi@7000de00 {
++	spi6: spi@7000de00 {
+ 		compatible = "nvidia,tegra30-slink", "nvidia,tegra20-slink";
+ 		reg = <0x7000de00 0x200>;
+ 		interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
+@@ -913,7 +913,7 @@ tegra_i2s4: i2s@70080700 {
+ 		};
+ 	};
+ 
+-	mmc@78000000 {
++	sdmmc1: mmc@78000000 {
+ 		compatible = "nvidia,tegra30-sdhci";
+ 		reg = <0x78000000 0x200>;
+ 		interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
+@@ -924,7 +924,7 @@ mmc@78000000 {
+ 		status = "disabled";
+ 	};
+ 
+-	mmc@78000200 {
++	sdmmc2: mmc@78000200 {
+ 		compatible = "nvidia,tegra30-sdhci";
+ 		reg = <0x78000200 0x200>;
+ 		interrupts = <GIC_SPI 15 IRQ_TYPE_LEVEL_HIGH>;
+@@ -935,7 +935,7 @@ mmc@78000200 {
+ 		status = "disabled";
+ 	};
+ 
+-	mmc@78000400 {
++	sdmmc3: mmc@78000400 {
+ 		compatible = "nvidia,tegra30-sdhci";
+ 		reg = <0x78000400 0x200>;
+ 		interrupts = <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+@@ -946,7 +946,7 @@ mmc@78000400 {
+ 		status = "disabled";
+ 	};
+ 
+-	mmc@78000600 {
++	sdmmc4: mmc@78000600 {
+ 		compatible = "nvidia,tegra30-sdhci";
+ 		reg = <0x78000600 0x200>;
+ 		interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>;
+@@ -957,7 +957,7 @@ mmc@78000600 {
+ 		status = "disabled";
+ 	};
+ 
+-	usb@7d000000 {
++	usb1: usb@7d000000 {
+ 		compatible = "nvidia,tegra30-ehci";
+ 		reg = <0x7d000000 0x4000>;
+ 		interrupts = <GIC_SPI 20 IRQ_TYPE_LEVEL_HIGH>;
+@@ -999,7 +999,7 @@ phy1: usb-phy@7d000000 {
+ 		status = "disabled";
+ 	};
+ 
+-	usb@7d004000 {
++	usb2: usb@7d004000 {
+ 		compatible = "nvidia,tegra30-ehci";
+ 		reg = <0x7d004000 0x4000>;
+ 		interrupts = <GIC_SPI 21 IRQ_TYPE_LEVEL_HIGH>;
+@@ -1039,7 +1039,7 @@ phy2: usb-phy@7d004000 {
+ 		status = "disabled";
+ 	};
+ 
+-	usb@7d008000 {
++	usb3: usb@7d008000 {
+ 		compatible = "nvidia,tegra30-ehci";
+ 		reg = <0x7d008000 0x4000>;
+ 		interrupts = <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>;
 -- 
 2.33.1
 

@@ -2,96 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D54463250
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DDEF5463254
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:25:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239117AbhK3L2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:28:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236663AbhK3L2T (ORCPT
+        id S240730AbhK3L3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:29:07 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:36221 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236162AbhK3L3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:28:19 -0500
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3961DC061574;
-        Tue, 30 Nov 2021 03:25:00 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id z9so19786148qtj.9;
-        Tue, 30 Nov 2021 03:25:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ym825Oem8EC5G2GRDZ+HddgbbKOYg4yd7gybO1UTWJY=;
-        b=hqNe3KR/ZaHYLDTzD8T1KYUFb5Avq6sL4TdGldnako+WU07tR52Pci04KsKPBmORgQ
-         AGpoFfXyzUSEH4OlsNDT+WFJAwQ3XyXBoFFU5A/ebIrzWfIPthWh6zQ97LWyE4zKfXmh
-         T7VHKj1jxPFWnGzu6lpc1q9xcDODS9qenZ5l79lr6d6IQE7RJw9q2UnpixS0wHjidksc
-         IGgmzGlXLehGPU4Y/L4OSafxoTi11s9E+mR+LqMu0ydAREaavVFPRsiC1eMptAusk3U9
-         Kn04FYnoPPT8Hhn9Imth5pTIMx4OJZ7Be7m/XqIQxxLii+WNtCejW7on7lPSCAVu+QsB
-         4qYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Ym825Oem8EC5G2GRDZ+HddgbbKOYg4yd7gybO1UTWJY=;
-        b=pzKLNW6m9tGmNq4Fuj9r3NgFwVOMgUPcKJFkm6X2n2iZPyGWtPOWZ5J/RjJMmGjKiy
-         f/doYyG2r1h57G7mi59OChIgpi/n5iQ6K89ToA7Oqo8wuu4h3gqA6MTJcyt0x5ALBAdL
-         p3CE0Q0Vp5OFiD9OPNOId9D4DT8pBh0QfksBxQnb2Iqj2prhyzN1UM2R0AmJ7c9O5r7R
-         dp+8EVU8HxgvjjZfeTLYHw6e4/Sff4VBmykx0ZENF8/FJy3OzI0VFSnL7Kv9FpVTXg2y
-         PZENL5IFCXO5KONsAsYjJ7cvugyfSqNfIq0q2n8HKUwzAHVtcBFjSZGYySUeTqfj8dM2
-         0f7g==
-X-Gm-Message-State: AOAM531yYzEZoP/e+8031SWKcPD2NjyHvu93M189JtXXmtBuHVMiWEm5
-        dLsHBqDx0oNOrAIU8yIxG/8=
-X-Google-Smtp-Source: ABdhPJwGB7NH9co0Rc85irLAspmG/3OKbdKPZWkFqFIXiP95zAEPyFZLAMGDS4WSXo9v0ElYQYNMbQ==
-X-Received: by 2002:a05:622a:164b:: with SMTP id y11mr49370660qtj.87.1638271499392;
-        Tue, 30 Nov 2021 03:24:59 -0800 (PST)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id v2sm10501672qkp.72.2021.11.30.03.24.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 03:24:58 -0800 (PST)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     vladimir.oltean@nxp.com
-Cc:     claudiu.manoil@nxp.com, alexandre.belloni@bootlin.com,
-        UNGLinuxDriver@microchip.com, davem@davemloft.net, kuba@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] net: mscc: ocelot: fix mutex_lock not released
-Date:   Tue, 30 Nov 2021 11:24:43 +0000
-Message-Id: <20211130112443.309708-1-lv.ruyi@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Nov 2021 06:29:06 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3Kf10g6wz4xPv;
+        Tue, 30 Nov 2021 22:25:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1638271546;
+        bh=nKlZETLEBCIwqXXojFKIvNI8XaTBsA/rBsc8S8G5uMk=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=OuN9dVkIZh85h3WdJCnej8pPVOYexe7HDrnaRr5zrtCRu1qh+4eEtIr5wSux3M/jI
+         Ps+v8BZ4YieYIRVk03NzsWzjZBv2XVl5d+syfxPZ1TCP2Lc+3gnJK5Jt+T77aQoW1s
+         YBXCmayRhuUDUv9qeaDlVbJXdCp+pjxb1Ry63zx5msmfqja1hcc6kgR6E2p5J2dTbB
+         IJCZqzG6J+yz17JSEL8X9bJkd+7jeZW/Cv6EPTBLPJ7Xh6a/H0zz21PT4z0KGYgryc
+         1bKLTAwC8vLVW1TnFOERG6rizMv5IKca/fmrzteaRJFDgOcZf5Yf6vFB3fgxYy+UAi
+         owjdE0jS0CXhQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kernel test robot <lkp@intel.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
+ copy_inst_from_kernel_nofault()
+In-Reply-To: <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
+References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
+ <202111300652.0yDBNvyJ-lkp@intel.com>
+ <e7b67ca6-8cd1-da3c-c0f3-e05f7e592828@csgroup.eu>
+Date:   Tue, 30 Nov 2021 22:25:43 +1100
+Message-ID: <87a6hlq408.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+Christophe Leroy <christophe.leroy@csgroup.eu> writes:
+> Le 29/11/2021 =C3=A0 23:55, kernel test robot a =C3=A9crit=C2=A0:
+>> Hi Christophe,
+>>=20
+>> I love your patch! Perhaps something to improve:
+>>=20
+>> [auto build test WARNING on powerpc/next]
+>> [also build test WARNING on v5.16-rc3 next-20211129]
+>> [If your patch is applied to the wrong git tree, kindly drop us a note.
+>> And when submitting patch, we suggest to use '--base' as documented in
+>> https://git-scm.com/docs/git-format-patch]
+>>=20
+>> url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerp=
+c-inst-Refactor-___get_user_instr/20211130-015346
+>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.gi=
+t next
+>> config: powerpc-randconfig-r023-20211129 (https://download.01.org/0day-c=
+i/archive/20211130/202111300652.0yDBNvyJ-lkp@intel.com/config)
+>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project df0=
+8b2fe8b35cb63dfb3b49738a3494b9b4e6f8e)
+>> reproduce (this is a W=3D1 build):
+>>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/s=
+bin/make.cross -O ~/bin/make.cross
+>>          chmod +x ~/bin/make.cross
+>>          # install powerpc cross compiling tool for clang build
+>>          # apt-get install binutils-powerpc-linux-gnu
+>>          # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b=
+48bb69de1f325eee826
+>>          git remote add linux-review https://github.com/0day-ci/linux
+>>          git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-=
+Refactor-___get_user_instr/20211130-015346
+>>          git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+>>          # save the config file to linux build tree
+>>          mkdir build_dir
+>>          COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross =
+W=3D1 O=3Dbuild_dir ARCH=3Dpowerpc prepare
+>>=20
+>> If you fix the issue, kindly add following tag as appropriate
+>> Reported-by: kernel test robot <lkp@intel.com>
+>>=20
+>> All warnings (new ones prefixed by >>):
+>>=20
+>>     In file included from arch/powerpc/kernel/asm-offsets.c:71:
+>>     In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
+>>>> arch/powerpc/include/asm/inst.h:165:20: warning: variable 'val' is uni=
+nitialized when used here [-Wuninitialized]
+>>                     *inst =3D ppc_inst(val);
+>>                                      ^~~
+>>     arch/powerpc/include/asm/inst.h:53:22: note: expanded from macro 'pp=
+c_inst'
+>>     #define ppc_inst(x) (x)
+>>                          ^
+>>     arch/powerpc/include/asm/inst.h:155:18: note: initialize the variabl=
+e 'val' to silence this warning
+>>             unsigned int val, suffix;
+>>                             ^
+>>                              =3D 0
+>
+> I can't understand what's wrong here.
+>
+> We have
+>
+> 	__get_kernel_nofault(&val, src, u32, Efault);
+> 	if (IS_ENABLED(CONFIG_PPC64) && get_op(val) =3D=3D OP_PREFIX) {
+> 		__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+> 		*inst =3D ppc_inst_prefix(val, suffix);
+> 	} else {
+> 		*inst =3D ppc_inst(val);
+> 	}
+>
+> With
+>
+> #define __get_kernel_nofault(dst, src, type, err_label)			\
+> 	__get_user_size_goto(*((type *)(dst)),				\
+> 		(__force type __user *)(src), sizeof(type), err_label)
+>
+>
+> And
+>
+> #define __get_user_size_goto(x, ptr, size, label)				\
+> do {										\
+> 	BUILD_BUG_ON(size > sizeof(x));						\
+> 	switch (size) {								\
+> 	case 1: __get_user_asm_goto(x, (u8 __user *)ptr, label, "lbz"); break;	\
+> 	case 2: __get_user_asm_goto(x, (u16 __user *)ptr, label, "lhz"); break;	\
+> 	case 4: __get_user_asm_goto(x, (u32 __user *)ptr, label, "lwz"); break;	\
+> 	case 8: __get_user_asm2_goto(x, (u64 __user *)ptr, label);  break;	\
+> 	default: x =3D 0; BUILD_BUG();						\
+> 	}									\
+> } while (0)
+>
+> And
+>
+> #define __get_user_asm_goto(x, addr, label, op)			\
+> 	asm_volatile_goto(					\
+> 		"1:	"op"%U1%X1 %0, %1	# get_user\n"	\
+> 		EX_TABLE(1b, %l2)				\
+> 		: "=3Dr" (x)					\
+> 		: "m<>" (*addr)				\
+> 		:						\
+> 		: label)
+>
+>
+> I see no possibility, no alternative path where val wouldn't be set. The=
+=20
+> asm clearly has *addr as an output param so it is always set.
 
-If err is true, the function will be returned, but mutex_lock isn't
-released.
+I guess clang can't convince itself of that?
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
----
- drivers/net/ethernet/mscc/ocelot.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+>>     1 warning generated.
+>>     <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#war=
+nings]
+>>     #warning syscall futex_waitv not implemented
+>>      ^
+>>     1 warning generated.
+>>     arch/powerpc/kernel/vdso32/gettimeofday.S:72:8: error: unsupported d=
+irective '.stabs'
+>>     .stabs "_restgpr_31_x:F-1",36,0,0,_restgpr_31_x; .globl _restgpr_31_=
+x; _restgpr_31_x:
+>>            ^
+>>     arch/powerpc/kernel/vdso32/gettimeofday.S:73:8: error: unsupported d=
+irective '.stabs'
+>>     .stabs "_rest32gpr_31_x:F-1",36,0,0,_rest32gpr_31_x; .globl _rest32g=
+pr_31_x; _rest32gpr_31_x:
+>
+> How should we fix that ? Will clang support .stabs in the future ?
 
-diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc/ocelot.c
-index fe8abb30f185..b1856d8c944b 100644
---- a/drivers/net/ethernet/mscc/ocelot.c
-+++ b/drivers/net/ethernet/mscc/ocelot.c
-@@ -1651,8 +1651,10 @@ int ocelot_hwstamp_set(struct ocelot *ocelot, int port, struct ifreq *ifr)
- 	}
- 
- 	err = ocelot_setup_ptp_traps(ocelot, port, l2, l4);
--	if (err)
-+	if (err) {
-+		mutex_unlock(&ocelot->ptp_lock);
- 		return err;
-+	}
- 
- 	if (l2 && l4)
- 		cfg.rx_filter = HWTSTAMP_FILTER_PTP_V2_EVENT;
--- 
-2.25.1
+I think we should drop any stabs annotations / support. AFAICT none of
+the toolchains we support produce it anymore.
 
+cheers

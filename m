@@ -2,142 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6E1463CA0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D62463CA4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243794AbhK3RUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:20:05 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:45072 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241963AbhK3RT5 (ORCPT
+        id S244726AbhK3RWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:22:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:57460 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241963AbhK3RWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:19:57 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3TQr4Nzgz9wNLP
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:16:36 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id t80ZFG7Q9M8B for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 11:16:36 -0600 (CST)
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 30 Nov 2021 12:22:08 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3TQr2HFMz9wNLM
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:16:36 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3TQr2HFMz9wNLM
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3TQr2HFMz9wNLM
-Received: by mail-pj1-f69.google.com with SMTP id b11-20020a17090acc0b00b001a9179dc89fso11853121pju.6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:16:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Bk5/kAWjAvs+b0GCY85GoUSUo7I89iE76DMJNhOPG2s=;
-        b=Dg8klp2i9BjmR1og+IfFIkoDF2VNFRN2wTwC/n3G4tv46hJyrQMMXN2/52x4Bqb3aL
-         QohG9MrWU5qJuWtFX+C2dkjGkQFdDxG2CXQZ7EGkD+fZLFOrc7MI5FZ/z2KnDKm2cUPm
-         ccPJM7+bytFKbkvK/958x0laxpYKBj0LljYpI0e6+c3cdrM4s9lNXA+bBIlyY1ufGpqo
-         BOWAuHumPPkBb+TZsP7Of3eK7OciJIVYE2h0Wit9Bk4gC2N/6vzfJYZmPGdDrTEjEYXz
-         pO33iwO7b+B55fqfn5H+0w4+t48uwqOMQPtMlo9YHnLIRADyR1HMM2NDbS9JHeQiY9tY
-         lRug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Bk5/kAWjAvs+b0GCY85GoUSUo7I89iE76DMJNhOPG2s=;
-        b=VPvlzdo6/xy26sM/LjY1UXDTKW+SmULBqhZQPY/XToPiqTbrRSS3NC9V8XC70akdKw
-         Tne5T5fe2NyNvetGGBZCFODEF0G+7p+abvTNUvFCMBQGc8xnsFSoCZtgPvnVVCnlL+0a
-         XsrrHBjJ11AWaHXmdC60tpI5h6GK4FcU9jFSVuWC41LH0JEj2J8+DBxrZYvKvan5sIDV
-         P5Dj6vnB/da1yqlatrtEmxLlHJxHXKD3Y+YMYwJG+HyHnS7pjrJ6s7Egkpy1lDAxQ73V
-         AVqcLwNLlDCNpHI0LyzMazD6jBAu2hFryDKlucXMuLWKvDRc34bjB/QRaFqd7OOTief+
-         cwbw==
-X-Gm-Message-State: AOAM5325HWGM4uKaG6mzuli1PQpMd4Sirg4rGFeEDFS9G3lXbajDOa8e
-        u1MiQhBFjNb2voFYVOT5wRwzFRqiSr3O21mIVOpKEFvLphcjbxekNmnKZQbMbpKylimhv5kz55Q
-        ucTxCtEJ3oT6GOWSn8JzjsrGL8S6C
-X-Received: by 2002:aa7:8883:0:b0:49f:f87a:95de with SMTP id z3-20020aa78883000000b0049ff87a95demr148445pfe.53.1638292595625;
-        Tue, 30 Nov 2021 09:16:35 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJwZMePXStjKn4yE+PZSSZX2FKyH2zVOjdwrYOT+9/biQshIsNDwuK8FNg6ZQHWGVAGvvdh7pQ==
-X-Received: by 2002:aa7:8883:0:b0:49f:f87a:95de with SMTP id z3-20020aa78883000000b0049ff87a95demr148416pfe.53.1638292595371;
-        Tue, 30 Nov 2021 09:16:35 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id q13sm22247570pfk.22.2021.11.30.09.16.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 09:16:35 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.garry@huawei.com>,
-        Jason Yan <yanaijie@huawei.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Luo Jiaxing <luojiaxing@huawei.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        James Bottomley <James.Bottomley@SteelEye.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: libsas: Fix a NULL pointer dereference in sas_ex_discover_expander()
-Date:   Wed,  1 Dec 2021 01:16:26 +0800
-Message-Id: <20211130171629.201026-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8A82AB81A96
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:18:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D05EC53FC1;
+        Tue, 30 Nov 2021 17:18:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638292727;
+        bh=G1WVbS81//21rP0WUcWlWVTfe9CPWo90pxb2Kd7mrbE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gy8zqf6BsOoJjGqi3hwrr2n88e862LPIphxiHrpjalScBIMiv++BFm9G/5D36fqyn
+         fub9n5mfs7eZRxBJAXFV5JTzRnHCFzGbBmxEPfVSiVNMMdt2kwYgnRcz94Dz3XSvbT
+         IzFwmvn/33uokqML+TmF6nlg+QseZuBTdve9VL19HiJtzm+UNgXbhO6ku7eJUN49Wk
+         IJ7pQKv2a40SW7c12gA/P1ATJgzbE/HHomL1vHwDj57OMuzQJvbq0MfWygvxlJUw2L
+         bNSSnd8edofbgPTD4RCweb88iHglCJBouQBOb5sTvCQsZj9KxqjDI/KSQRcqpHVrBT
+         LKp29LskcQ9gA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1ms6ls-0000Ip-OV; Tue, 30 Nov 2021 18:18:25 +0100
+Date:   Tue, 30 Nov 2021 18:18:24 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@redhat.com>
+Cc:     Miaoqian Lin <linmq006@gmail.com>, Qiushi Wu <wu000273@umn.edu>,
+        qemu-devel@nongnu.org, linux-kernel@vger.kernel.org,
+        Gabriel Somlo <somlo@cmu.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: Re: [PATCH] fw_cfg: Fix memory leak in fw_cfg_register_file
+Message-ID: <YaZc4LbX5hrJDnec@hovoldconsulting.com>
+References: <20211116114233.29462-1-linmq006@gmail.com>
+ <2ced2fae-2ffd-3a70-f02c-175662baf7bc@redhat.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <2ced2fae-2ffd-3a70-f02c-175662baf7bc@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In sas_ex_discover_expander(), sas_port_alloc() is assigned to phy->port
-and used in sas_port_add(). sas_port_add() further passes phy->port to
-list_empty(), and there is a dereference of it in list_empty(), which
-could lead to a NULL pointer dereference on failure of
-sas_port_alloc().
+On Tue, Nov 16, 2021 at 04:28:34PM +0100, Philippe Mathieu-Daudé wrote:
+> On 11/16/21 12:42, Miaoqian Lin wrote:
+> > When kobject_init_and_add() fails, entry should be freed just like
+> > when sysfs_create_bin_file() fails.
+> > 
+> 
+> Fixes: fe3c60684377 ("firmware: Fix a reference count leak.")
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@redhat.com>
 
-This patch imitates the same error-handling logic in
-sas_ex_discover_end_dev().
+No, no. This patch is completely bogus and would introduce a double
+free.
 
-Fix this bug by adding checks for phy->port and sas_port_add().
+> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> > ---
+> >  drivers/firmware/qemu_fw_cfg.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/firmware/qemu_fw_cfg.c b/drivers/firmware/qemu_fw_cfg.c
+> > index 172c751a4f6c..0f404777f016 100644
+> > --- a/drivers/firmware/qemu_fw_cfg.c
+> > +++ b/drivers/firmware/qemu_fw_cfg.c
+> > @@ -608,6 +608,7 @@ static int fw_cfg_register_file(const struct fw_cfg_file *f)
+> >  				   fw_cfg_sel_ko, "%d", entry->select);
+> >  	if (err) {
+> >  		kobject_put(&entry->kobj);
+> > +		kfree(entry);
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+entry would already have been freed by kobject_put() and
+fw_cfg_sysfs_release_entry() here.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+> >  		return err;
+> >  	}
+> >  
+> > 
 
-Builds with CONFIG_SCSI_SAS_LIBSAS=m show no new warnings,
-and our static analyzer no longer warns about this code.
+Doesn't look like this patch has been picked up yet, so:
 
-Fixes:  2908d778ab3e ("[SCSI] aic94xx: new driver")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/scsi/libsas/sas_expander.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+	NAK.
 
-diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
-index c2150a818423..7530b1773d6b 100644
---- a/drivers/scsi/libsas/sas_expander.c
-+++ b/drivers/scsi/libsas/sas_expander.c
-@@ -957,9 +957,16 @@ static struct domain_device *sas_ex_discover_expander(
- 		return NULL;
- 
- 	phy->port = sas_port_alloc(&parent->rphy->dev, phy_id);
--	/* FIXME: better error handling */
--	BUG_ON(sas_port_add(phy->port) != 0);
-+	if (unlikely(!phy->port)) {
-+		sas_put_device(child);
-+		return NULL;
-+	}
- 
-+	if (sas_port_add(phy->port) != 0) {
-+		sas_port_free(phy->port);
-+		sas_put_device(child);
-+		return NULL;
-+	}
- 
- 	switch (phy->attached_dev_type) {
- 	case SAS_EDGE_EXPANDER_DEVICE:
--- 
-2.25.1
-
+Johan

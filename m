@@ -2,94 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86394464137
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:19:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3597646412D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344893AbhK3WRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:17:10 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:36118 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344592AbhK3WPH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:15:07 -0500
-Date:   Tue, 30 Nov 2021 22:11:32 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638310293;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Da4qoGLkXk4oc5CJFif4JE9e/icdZitIkAFfPm7Z7g8=;
-        b=DBzkjw/aaBCIab1lldv3KsWsoDjU/rq6MzqQ3r4l3vTkckDLcY3c2sWqVbyyiKhePqYKZN
-        w2ZMnx3AidTtvx86gnOiXbbdfWmam3bcj2IZoMqPJMmGDFqJFpwzFBK2CHjZafef/M7tLh
-        8FP5dXV4uiKBLAPfG0m5ggN8ZO+MR0TMVHsqCgnF+GXKY5zg2a5mOVXV7PwJyvDu63wG2r
-        bdObMlPlHBShGg5BrUzG6HS6QcLeg+7sSW5ImI67bjq4LN2eSY6jvmciPzV/DVND17+eDR
-        xdop2woLhtRyyLefZ/Iyo6UlAbT0SVWpmASen8PHr+oephvZQ5DVTfNa1kWvXw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638310293;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Da4qoGLkXk4oc5CJFif4JE9e/icdZitIkAFfPm7Z7g8=;
-        b=hy4bOutgmoJXj3Fy4vXN6poEEopxpceyQ2gB+TzfwREXEsPYh00pRFDmkuug9aDbOohTEs
-        yl4ryWEZIfWjSBCQ==
-From:   "tip-bot2 for Tony Luck" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/cpu: Drop spurious underscore from RAPTOR_LAKE #define
-Cc:     Rui Zhang <rui.zhang@intel.com>, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211119170832.1034220-1-tony.luck@intel.com>
-References: <20211119170832.1034220-1-tony.luck@intel.com>
+        id S233604AbhK3WTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:19:41 -0500
+Received: from mga11.intel.com ([192.55.52.93]:41932 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230215AbhK3WTl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 17:19:41 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="233830372"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="233830372"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 14:16:21 -0800
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="511701902"
+Received: from jordanhi-mobl.amr.corp.intel.com (HELO [10.212.191.92]) ([10.212.191.92])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 14:16:20 -0800
+Subject: Re: [PATCH] x86/csum: fix initial seed for odd buffers
+To:     Eric Dumazet <eric.dumazet@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Noah Goldstein <goldstein.w.n@gmail.com>,
+        Alexander Duyck <alexanderduyck@fb.com>
+References: <20211125141817.3541501-1-eric.dumazet@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <6e94236d-7e91-80a6-f55d-15bd503e52c4@intel.com>
+Date:   Tue, 30 Nov 2021 14:16:17 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Message-ID: <163831029203.11128.6368283864833885477.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20211125141817.3541501-1-eric.dumazet@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On 11/25/21 6:18 AM, Eric Dumazet wrote:
+> From: Eric Dumazet <edumazet@google.com>
+> 
+> When I folded do_csum() into csum_partial(), I missed that we
+> had to swap odd/even bytes from @sum argument.
+...
+> Fixes: df4554cebdaa ("x86/csum: Rewrite/optimize csum_partial()")
 
-Commit-ID:     7d697f0d5737768fa1039b8953b67c08d8d406d1
-Gitweb:        https://git.kernel.org/tip/7d697f0d5737768fa1039b8953b67c08d8d406d1
-Author:        Tony Luck <tony.luck@intel.com>
-AuthorDate:    Fri, 19 Nov 2021 09:08:32 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 30 Nov 2021 14:05:48 -08:00
+Hi Eric,
 
-x86/cpu: Drop spurious underscore from RAPTOR_LAKE #define
+That Fixes: sha1 doesn't match anything that I can find.  Should it be
+Fixes: this commit:
 
-Convention for all the other "lake" CPUs is all one word.
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/core&id=d31c3c683ee668ba5d87c0730610442fd672525f
 
-So s/RAPTOR_LAKE/RAPTORLAKE/
-
-Fixes: fbdb5e8f2926 ("x86/cpu: Add Raptor Lake to Intel family")
-Reported-by: Rui Zhang <rui.zhang@intel.com>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20211119170832.1034220-1-tony.luck@intel.com
----
- arch/x86/include/asm/intel-family.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 5a0bcf8..048b6d5 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -108,7 +108,7 @@
- #define INTEL_FAM6_ALDERLAKE		0x97	/* Golden Cove / Gracemont */
- #define INTEL_FAM6_ALDERLAKE_L		0x9A	/* Golden Cove / Gracemont */
- 
--#define INTEL_FAM6_RAPTOR_LAKE		0xB7
-+#define INTEL_FAM6_RAPTORLAKE		0xB7
- 
- /* "Small Core" Processors (Atom) */
- 
+I'm happy to fix it up when I apply it.  Just wanted to double-check
+what you intended.

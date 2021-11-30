@@ -2,139 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D050464152
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:32:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B75F9464157
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344626AbhK3Wft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:35:49 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:37853 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344545AbhK3Wf3 (ORCPT
+        id S1344584AbhK3Wfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:35:52 -0500
+Received: from mail-oi1-f178.google.com ([209.85.167.178]:42941 "EHLO
+        mail-oi1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344541AbhK3Wfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:35:29 -0500
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id 62E591C0004;
-        Tue, 30 Nov 2021 22:32:05 +0000 (UTC)
-Date:   Tue, 30 Nov 2021 23:32:05 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Alexey Firago <alexey_firago@mentor.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH 1/2] rtc: max31343: Add a driver for Maxim MAX31343
-Message-ID: <YaamZW1nyOGDXfyw@piout.net>
-References: <20211016192118.255624-1-alexey_firago@mentor.com>
- <20211016192118.255624-2-alexey_firago@mentor.com>
+        Tue, 30 Nov 2021 17:35:45 -0500
+Received: by mail-oi1-f178.google.com with SMTP id n66so44278252oia.9;
+        Tue, 30 Nov 2021 14:32:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=R5VC1NUcRNmVkUe9aAqXUwItF46vc+5pXXUf2XO/SoU=;
+        b=CooOb+7N1pWDghI6IdmDu9naCHI/4LhjqxF7auQdBpS5nzuRoF3ALzUIAorAxCcrSD
+         Grmk1yC2S48F6nHKw258skk4fww+r0f9lqObZ/RFr0rj2kjVNuEuSNS46tjz0/pw0tx3
+         CChtdElkUFkmIKwbfvMjrWol5H9JJco/VB/MY9e/+bbNyyH72EzFnBFT3pf+Vl1dvajP
+         sJZs++KlNONaYMMGJFhO7NOgvVVI6jY/8FZysJfrplte16VSlHeYTBjqvx+hwDoH0Kat
+         Utm+jNIqtkL8/3ntfJ/ley7Ds1TUICOpWd8UusGAheyg68+oEpfQq93hPq1+a510wYgJ
+         BZrw==
+X-Gm-Message-State: AOAM533c4UPq8w3Rex9iF9MKuveBIjw3omPYZYXvM7sL67irBb9KwPtJ
+        Cx5Tl7z037uKVw7LoMYnKA==
+X-Google-Smtp-Source: ABdhPJzpBw6bDRVIdzvV2nbva5LK1vnrxKP22uuRmjtcMZj1eXaXLHNb+Q6Zlq/TdVQt6+KI/44i4Q==
+X-Received: by 2002:aca:1b15:: with SMTP id b21mr2000925oib.64.1638311544918;
+        Tue, 30 Nov 2021 14:32:24 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id r22sm3901040oij.36.2021.11.30.14.32.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 14:32:24 -0800 (PST)
+Received: (nullmailer pid 3130635 invoked by uid 1000);
+        Tue, 30 Nov 2021 22:32:23 -0000
+Date:   Tue, 30 Nov 2021 16:32:23 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Dipen Patel <dipenp@nvidia.com>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linus.walleij@linaro.org,
+        bgolaszewski@baylibre.com, warthog618@gmail.com,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [RFC v3 07/12] dt-bindings: gpio: Add hardware-timestamp-engine
+ property
+Message-ID: <Yaamd11lUfjnhCbz@robh.at.kernel.org>
+References: <20211123193039.25154-1-dipenp@nvidia.com>
+ <20211123193039.25154-8-dipenp@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211016192118.255624-2-alexey_firago@mentor.com>
+In-Reply-To: <20211123193039.25154-8-dipenp@nvidia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Nov 23, 2021 at 11:30:34AM -0800, Dipen Patel wrote:
+> Some GPIO controllers can timestamp GPIO lines in real time using
+> hardware timestamp engine. The optional property is added to facilitate
+> this feature.
+> 
+> The nvidia GPIO controller has hardware timestamp engine as a backend
+> to timestamp its GPIO lines in a real time. This change set adds
+> hardware-timestamp-engine property to reflect that fact.
+> 
+> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
+> ---
+>  Documentation/devicetree/bindings/gpio/gpio.txt           | 8 ++++++++
+>  .../devicetree/bindings/gpio/nvidia,tegra186-gpio.txt     | 7 +++++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio.txt b/Documentation/devicetree/bindings/gpio/gpio.txt
+> index a8895d339bfe..c6ae2eaf5762 100644
+> --- a/Documentation/devicetree/bindings/gpio/gpio.txt
+> +++ b/Documentation/devicetree/bindings/gpio/gpio.txt
+> @@ -167,6 +167,13 @@ left to right from the passed array. An incomplete array (where the number
+>  of passed named are less than ngpios) will still be used up until the last
+>  provided valid line index.
+>  
+> +Optionally, a GPIO controller may have a "hardware-timestamp-engine" property.
+> +This specifies the timestamp engine node. The property is only useful if the
+> +hardware timestamp engine (HTE) serves as a back-end to support hardware
+> +timestamp GPIO lines in a real time and GPIO controller has dependency on the
+> +engine. It will be up to GPIO controller and HTE provider drivers to figure out
+> +the mapping between GPIO controller and HTE namespaces of a given GPIO line.
 
-On 16/10/2021 22:21:17+0300, Alexey Firago wrote:
-> +#define MAX31343_REG_TIMER_CFG	(0x05)
-> +#define  TIMER_CFG_TFS		GENMASK(1, 0) /* Timer frequency */
-> +#define  TIMER_CFG_TRPT		BIT(2) /* Timer repeat mode */
-> +#define  TIMER_CFG_TPAUSE	BIT(3) /* Timer Pause */
-> +#define  TIMER_CFG_TE		BIT(4) /* Timer enable */
-> +
-> +/* RTC section */
-> +#define MAX31343_REG_SEC	(0x06)
-> +#define  SEC10_MASK	GENMASK(6, 4) /* RTC seconds in multiples of 10 */
-> +#define  SEC_MASK	GENMASK(3, 0) /* RTC seconds value */
+This needs to be added to schema instead (in dtschema).
 
-I'm not convinced having separate masks is useful here, was that
-automatically generated?
+I find the 'hardware-' part to be redundant. What other type of 
+timestamp engine are we going to have in the h/w description?
 
-> +static int max31343_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> +{
-> +	struct max31343_rtc_data *max31343 = dev_get_drvdata(dev);
-> +	u8 date[7];
-> +	int ret;
 > +
-> +	dev_dbg(dev, "RTC set time %04d-%02d-%02d %02d/%02d/%02d\n",
-> +		tm->tm_year + 1900, tm->tm_mon, tm->tm_mday,
-> +		tm->tm_hour, tm->tm_min, tm->tm_sec);
+>  Example:
+>  
+>  gpio-controller@00000000 {
+> @@ -180,6 +187,7 @@ gpio-controller@00000000 {
+>  		"LED G", "LED B", "Col A", "Col B", "Col C", "Col D",
+>  		"Row A", "Row B", "Row C", "Row D", "NMI button",
+>  		"poweroff", "reset";
+> +	hardware-timestamp-engine = <&hadrware_ts_engine_node>;
+>  }
+>  
+>  The GPIO chip may contain GPIO hog definitions. GPIO hogging is a mechanism
+> diff --git a/Documentation/devicetree/bindings/gpio/nvidia,tegra186-gpio.txt b/Documentation/devicetree/bindings/gpio/nvidia,tegra186-gpio.txt
+> index adff16c71d21..20f6c9e69839 100644
+> --- a/Documentation/devicetree/bindings/gpio/nvidia,tegra186-gpio.txt
+> +++ b/Documentation/devicetree/bindings/gpio/nvidia,tegra186-gpio.txt
+> @@ -127,6 +127,12 @@ Required properties:
+>              - 8: Active low level-sensitive.
+>              Valid combinations are 1, 2, 3, 4, 8.
+>  
+> +Optional properties:
+> +- hardware-timestamp-engine
+> +    AON GPIO controller has timestamp engine which can hardware timestamp
+> +    GPIO configured as input and IRQ. This property specifies hardware
+> +    timestamp engine (HTE) device-tree node.
 > +
-
-This could use %ptR
-
-> +	date[0] = bin2bcd(tm->tm_sec);
-> +	date[1] = bin2bcd(tm->tm_min);
-> +	date[2] = bin2bcd(tm->tm_hour);
-> +	date[3] = tm->tm_wday;
-> +	date[4] = bin2bcd(tm->tm_mday);
-> +	date[5] = bin2bcd(tm->tm_mon + 1);
-> +
-> +	if (tm->tm_year >= 200)
-> +		date[5] |= CENTURY;
-> +	date[6] = bin2bcd(tm->tm_year % 100);
-> +
-> +	ret = regmap_bulk_write(max31343->regmap, MAX31343_REG_SEC, date,
-> +				sizeof(date));
-> +	return ret;
-> +}
-> +
-
-[...]
-
-> +static int
-> +max31343_probe(struct i2c_client *client, const struct i2c_device_id *id)
-> +{
-> +	struct max31343_rtc_data *max31343 = NULL;
-> +	int ret, status;
-> +	struct nvmem_config nvmem_cfg = {
-> +		.name = "max31343_nvram",
-> +		.word_size = 1,
-> +		.stride = 1,
-> +		.size = MAX31343_RAM_SIZE,
-> +		.type = NVMEM_TYPE_BATTERY_BACKED,
-> +		.reg_read = max31343_nvram_read,
-> +		.reg_write = max31343_nvram_write,
-> +	};
-> +
-> +	max31343 = devm_kzalloc(&client->dev, sizeof(struct max31343_rtc_data),
-> +				GFP_KERNEL);
-> +	if (!max31343)
-> +		return -ENOMEM;
-> +
-> +	max31343->regmap = devm_regmap_init_i2c(client, &max31343_regmap_config);
-> +	if (IS_ERR(max31343->regmap))
-> +		return PTR_ERR(max31343->regmap);
-> +
-> +	i2c_set_clientdata(client, max31343);
-> +
-> +	ret = regmap_read(max31343->regmap, MAX31343_REG_STATUS, &status);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	max31343->rtc = devm_rtc_allocate_device(&client->dev);
-> +	if (IS_ERR(max31343->rtc))
-> +		return PTR_ERR(max31343->rtc);
-> +
-> +	max31343->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-> +	max31343->rtc->range_max = RTC_TIMESTAMP_END_2199;
-
-For my information, did you check the time continuity in this interval?
-
-> +	max31343->rtc->ops = &max31343_rtc_ops;
-> +	ret = devm_rtc_register_device(max31343->rtc);
-> +	if (ret)
-> +		return ret;
-> +
-> +	nvmem_cfg.priv = max31343->regmap;
-> +	devm_rtc_nvmem_register(max31343->rtc, &nvmem_cfg);
-> +	max31343_hwmon_register(&client->dev);
-
-The whole driver seems ok, I'd like to get a review from the hwmon
-maintainers on the hwmon part as it is quite large.
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>  Example:
+>  
+>  #include <dt-bindings/interrupt-controller/irq.h>
+> @@ -162,4 +168,5 @@ gpio@c2f0000 {
+>  	#gpio-cells = <2>;
+>  	interrupt-controller;
+>  	#interrupt-cells = <2>;
+> +	hardware-timestamp-engine = <&tegra_hte_aon>;
+>  };
+> -- 
+> 2.17.1
+> 
+> 

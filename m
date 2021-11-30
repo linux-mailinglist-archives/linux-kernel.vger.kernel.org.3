@@ -2,125 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B5008463B7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A633A463B85
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:18:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238554AbhK3QTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:19:40 -0500
-Received: from mta-p6.oit.umn.edu ([134.84.196.206]:33886 "EHLO
-        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238219AbhK3QTQ (ORCPT
+        id S238656AbhK3QV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53348 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238704AbhK3QUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:19:16 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3S4h37Ngz9vJyM
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:15:48 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p6.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id FdJec1YvtDz2 for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 10:15:48 -0600 (CST)
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3S4h14Zhz9vJyb
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:15:48 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3S4h14Zhz9vJyb
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3S4h14Zhz9vJyb
-Received: by mail-pf1-f198.google.com with SMTP id 184-20020a6217c1000000b0049f9aad0040so13064148pfx.21
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:15:48 -0800 (PST)
+        Tue, 30 Nov 2021 11:20:11 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86496C061574;
+        Tue, 30 Nov 2021 08:16:43 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id g14so89072912edb.8;
+        Tue, 30 Nov 2021 08:16:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=uFn5ORD7GPFnKVCFznG5/9Dnj8eBZ7xsNflHNLM00yg=;
-        b=h53udyu5K80mQyOeP0LgjWnnj4oNXGi2uBsCpaYw7NOv3mhLRWGafR5oKELxE9gIxK
-         l8NJolTqsIUeJBrZE9rQ/sH473Tm3+VSMwKQH9wgWnpNZIJM0IMqCCtb2cQO3G+iVr2K
-         ZZosFnKN0jfdIW2UJQf/4WetPiPXuZf1BpOUQpKwkuinejDODuvC53ofyn3Mh/G5Z8Hy
-         gjEDRlke1lvKZ8VtckfcG+10CynY+NieihMMLyD/+OTumAz8fowZDte1EAnSr1bG2TxI
-         q8W8tgLOIIwFZyLs1V29syZhYply7430Q0GTd0CBM5/yeGwQajHSnTITvKirG6+286Y1
-         ZuXQ==
+        bh=mzJ6JGKckSdI9QVOm/WqgiUaO2eWSx9RlGb8CUcCl4w=;
+        b=BGtDTNJa6yl+3sQvIYCTCRiKOhxJrICeiKUd60ghIrHc2JQUA+Eqx2tTD5dNTf3ZkG
+         XWZUJ3n2XZoQGZ/95AZ8JD2PJM4Fxnr3T23YyBkCkacY9C1VdaMM/UVQx7kyizhGWIng
+         6um8VK7YEm4EcrQbDz/mH71PuCrfbNbLl4LRDoKILRik+pciV4t9X/JG9kU5vr/45n+Y
+         JPywVfgr1/KmeuRNF+9Gcu3ECbqpdLhtH4T3lhTVNa5ruU4PPAGual4qZuYTPRXe2DRJ
+         Anwb16sT8Yz+bYLJouW98HYyI8WWk4qFDE7zi9SRSvGASwtKDTQzoQOD75liaDJbMulJ
+         nFMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=uFn5ORD7GPFnKVCFznG5/9Dnj8eBZ7xsNflHNLM00yg=;
-        b=YOQn+Yqqg4EL5+WSQkN1CBvVAwG7Lb7kzFjlplrXoEeHmfdLzu4PfCgWuJ+ryxoCc+
-         AUyclk41Uqr/91TqE3g5qgHwSMKy4szUbBIUaWv9BKWBV42osb3IW46yGQAGDQKRFl2q
-         ouyZ2NLbwaxfCGugGKkgJft1SftzyV8YMvvrzmw0ejfSlSeYamdgl5lXXTNiiky46GYl
-         30jRMF/+0TMakR2ScKMNbo+ZXCJUSkAAoEjdc8QAMmJXw45aQ1/xKN8Dd8HctLQpFQhX
-         OUIk58Pp1djdUTz82/1vCHBQRXlvbBJ9oDnsmnygzFQWIVKtiwdA9csryoG3AuGq7z2J
-         JiGg==
-X-Gm-Message-State: AOAM532SDKR1F8jGMfzwED9M2rZu0BEXaBSgbZtEMDrAENAqr4EnkScd
-        taukeO36nuRntl0GOHWfLS/vSEdi/I1sDEETBgh035UHw8z8LujX4q3dAY7V9ij2BsN3FhiGYOO
-        ZtuE+YAQ5RiJGNH7nz8kTV/3rb5g7
-X-Received: by 2002:a17:902:e0d4:b0:142:8897:94e2 with SMTP id e20-20020a170902e0d400b00142889794e2mr387773pla.58.1638288947234;
-        Tue, 30 Nov 2021 08:15:47 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzMwqXXL5I73GWZCOEcLPx+/s2yZVb5dwcy1yXSqJejeaYlG2OBuTssmfPoBHz/7NBvk5Gi/w==
-X-Received: by 2002:a17:902:e0d4:b0:142:8897:94e2 with SMTP id e20-20020a170902e0d400b00142889794e2mr387729pla.58.1638288946958;
-        Tue, 30 Nov 2021 08:15:46 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id il7sm3338232pjb.54.2021.11.30.08.15.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 08:15:46 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: saa7146: hexium_gemini: Fix a NULL pointer dereference in hexium_attach()
-Date:   Wed,  1 Dec 2021 00:15:38 +0800
-Message-Id: <20211130161538.182313-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        bh=mzJ6JGKckSdI9QVOm/WqgiUaO2eWSx9RlGb8CUcCl4w=;
+        b=tPYtuJzR5vqafd66Yk2WlpWNonnyCmATlzZRnzHxEWCPePdaQdKFimFTkXJdCbbo+I
+         cdZSH5XOqnIoFxFuZmYcRHzubjhffORnTy9b8avNNlSDjeXX/oDap8dbTZ0niV4SCcPE
+         nBNC27H8LbAToFWkux2JAOFzJY/O/ptDmHJL+mfs1DrYHioUia5LrnzTUCRF+3+/uP+J
+         wQb4hhAXpwuLXA7dhufShfBPCAl4ksLIEeGMk3X1I8+Bvser1PbV+ehX+ntafwRHFJuj
+         UcvpyDZFFIE41Ucl3hxa5tD0BZhNKbO1UWgm0mTsXu5beR3O7jbqcRtDaN5y+K+vZlqg
+         wM6g==
+X-Gm-Message-State: AOAM533s42An43zgH6e3VLJ/UD9eZr7NQqWUQY/anWun5jQ/UocTRSED
+        cJZ//Va8c+gs276h3wwVk1E=
+X-Google-Smtp-Source: ABdhPJw2yRCId66xKjvWGOtJo37/MAUXUgEWlbSJBwdXpQc8hXYzqfCbuoni1K2nh9m8fWU22U0H2w==
+X-Received: by 2002:a05:6402:5188:: with SMTP id q8mr86125381edd.181.1638289002148;
+        Tue, 30 Nov 2021 08:16:42 -0800 (PST)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id hr17sm9270702ejc.57.2021.11.30.08.16.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 08:16:41 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <1469b131-cd76-e8bb-304b-73c59e81cb3b@redhat.com>
+Date:   Tue, 30 Nov 2021 17:16:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH 27/28] KVM: x86/mmu: Do remote TLB flush before dropping
+ RCU in TDP MMU resched
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hou Wenlong <houwenlong93@linux.alibaba.com>,
+        Ben Gardon <bgardon@google.com>
+References: <20211120045046.3940942-1-seanjc@google.com>
+ <20211120045046.3940942-28-seanjc@google.com>
+ <df9d430c-2065-804b-2343-d4bcdb7b2464@redhat.com>
+ <YaZG/NopJ7YaVUjD@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YaZG/NopJ7YaVUjD@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
-a new memory for dev->vv_data. saa7146_vv_release() will be called on
-failure of saa7146_register_device(). There is a dereference of
-dev->vv_data in saa7146_vv_release(), which could lead to a NULL
-pointer dereference on failure of saa7146_vv_init().
+On 11/30/21 16:45, Sean Christopherson wrote:
+>> Couldn't this sleep in kvm_make_all_cpus_request, whilst in an RCU read-side
+>> critical section?
+> No.  And if kvm_make_all_cpus_request() can sleep, the TDP MMU is completely hosed
+> as tdp_mmu_zap_spte_atomic() and handle_removed_tdp_mmu_page() currently call
+> kvm_flush_remote_tlbs_with_range() while under RCU protection.
+> 
+> kvm_make_all_cpus_request_except() disables preemption via get_cpu(), and
+> smp_call_function() doubles down on disabling preemption as the inner helpers
+> require preemption to be disabled, so anything below them should complain if
+> there's a might_sleep().  hv_remote_flush_tlb_with_range() takes a spinlock, so
+> nothing in there should be sleeping either.
 
-Fix this bug by adding a check of saa7146_vv_init().
+Yeah, of course you're right.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_VIDEO_HEXIUM_GEMINI=m show no new warnings,
-and our static analyzer no longer warns about this code.
-
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/media/pci/saa7146/hexium_gemini.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
-index 2214c74bbbf1..549b1ddc59b5 100644
---- a/drivers/media/pci/saa7146/hexium_gemini.c
-+++ b/drivers/media/pci/saa7146/hexium_gemini.c
-@@ -284,7 +284,11 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
- 	hexium_set_input(hexium, 0);
- 	hexium->cur_input = 0;
- 
--	saa7146_vv_init(dev, &vv_data);
-+	ret = saa7146_vv_init(dev, &vv_data);
-+	if (ret) {
-+		kfree(hexium);
-+		return ret;
-+	}
- 
- 	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
- 	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
--- 
-2.25.1
-
+Paolo

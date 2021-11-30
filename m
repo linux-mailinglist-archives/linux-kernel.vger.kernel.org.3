@@ -2,163 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31B463C74
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC1E463C6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244564AbhK3RG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:06:29 -0500
-Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:10227 "EHLO
-        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbhK3RGG (ORCPT
+        id S244556AbhK3RF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:05:26 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:32631 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244535AbhK3RFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:06:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638291671;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=UIf15iMEtDEvJh887G0IYN5tzrRPMwEaqTyUehQEpsc=;
-    b=gcTD6DNbCqRZgz3hRCZCtBRA9Ot4gxTXz9DhxAeHr97rIeO6H8W956dM7G8rkpQQKD
-    l4Jww2PBhgDF7Ko6tBTb2NU/SaNsbtuxrAYm0H4hb6u6U7rByUId+2Iq9eCRR1Z1J3KQ
-    pKrCfI8N7jQX71gklajTwYLXpP4Ukf5KTeg+YldFYiL/9OOU+MeEidqg5RyRECuP1G5C
-    GhM3kKUjMnhSPih6otLPI9Fnddx0fN+RTn+j6ZSy8/fwFCs47GRpBzFDq8UO1m8wKpO/
-    ai87qt/r+DTJPVfY9+1e8kpKssTKltSyVxRpURukUsf3pb6Esvd2Xd1oao8SBFJvyc+a
-    c3Pg==
-Authentication-Results: strato.com;
-    dkim=none
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj7gpw91N5y2S3iMERYA=="
-X-RZG-CLASS-ID: mo00
-Received: from imac.fritz.box
-    by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
-    with ESMTPSA id e05ed8xAUH19Sxv
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-        (Client did not present a certificate);
-    Tue, 30 Nov 2021 18:01:09 +0100 (CET)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
-Subject: Re: [PATCH v9 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-From:   "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <1637875562.255498.2858308.nullmailer@robh.at.kernel.org>
-Date:   Tue, 30 Nov 2021 18:01:08 +0100
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Paul Boddie <paul@boddie.org.uk>,
-        David Airlie <airlied@linux.ie>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        linux-mips@vger.kernel.org, letux-kernel@openphoenux.org,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        dri-devel@lists.freedesktop.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Mark Brown <broonie@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonas Karlman <jonas@kwiboo.se>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A72D034E-EDBC-44F5-82DF-9EEBC5EC7E0B@goldelico.com>
-References: <cover.1637789354.git.hns@goldelico.com>
- <d678e785d95487202ac0660eb66796e9fb5beb50.1637789354.git.hns@goldelico.com>
- <1637875562.255498.2858308.nullmailer@robh.at.kernel.org>
-To:     Rob Herring <robh@kernel.org>
-X-Mailer: Apple Mail (2.3445.104.21)
+        Tue, 30 Nov 2021 12:05:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638291726; x=1669827726;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+mK++W47HMwEMFNKuyUJKDP/LccL4vEScUgf0gu9vq8=;
+  b=Tt/03SzfU0Qx47zPLv391v6j3if5wNmlwpXyRBFcLsPJVzFCMGRDylSB
+   yc9ya8Uq+t9mmUsUfHVl15coHzV8fhN8vrTeKOe2LmdA/zPn6+XRtIzpH
+   Tu9Uk26rKjKAhet1nU1T3WXtzpOChW8u2ZKPpsyaxsT7s2S5dW8GwNs/v
+   U=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 30 Nov 2021 09:02:05 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 09:02:04 -0800
+Received: from [10.216.9.218] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Tue, 30 Nov
+ 2021 09:02:01 -0800
+Message-ID: <dee700be-bad1-e497-ccfc-916b98d7d593@quicinc.com>
+Date:   Tue, 30 Nov 2021 22:31:57 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] rcu/exp: Mark current CPU as exp-QS in IPI loop second
+ pass
+Content-Language: en-US
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>
+References: <20211130162108.605092-1-frederic@kernel.org>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <20211130162108.605092-1-frederic@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
 
-> Am 25.11.2021 um 22:26 schrieb Rob Herring <robh@kernel.org>:
->=20
-> On Wed, 24 Nov 2021 22:29:09 +0100, H. Nikolaus Schaller wrote:
->> From: Sam Ravnborg <sam@ravnborg.org>
->>=20
->> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
->> Based on .txt binding from Zubair Lutfullah Kakakhel
->>=20
->> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
->>=20
->> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
->> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
->> Cc: Rob Herring <robh@kernel.org>
->> Cc: devicetree@vger.kernel.org
->> ---
->> .../display/bridge/ingenic,jz4780-hdmi.yaml   | 76 =
-+++++++++++++++++++
->> .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
->> 2 files changed, 79 insertions(+)
->> create mode 100644 =
-Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
->>=20
->=20
-> My bot found errors running 'make DT_CHECKER_FLAGS=3D-m =
-dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->=20
-> yamllint warnings/errors:
->=20
-> dtschema/dtc warnings/errors:
-> Unknown file referenced: [Errno 2] No such file or directory: =
-'/usr/local/lib/python3.8/dist-packages/dtschema/schemas/bridge/bridge/syn=
-opsys,dw-hdmi.yaml'
 
-I wasn't able to fix that.
+On 11/30/2021 9:51 PM, Frederic Weisbecker wrote:
+> While looping through the rnp's CPUs to IPI for an expedited grace
+> period, a first pass excludes the current CPU and the CPUs in dynticks
+> idle mode. The workqueue will report their QS on their behalf later.
+> 
+> The second pass processes the IPIs and also ignores the current CPU,
+> assuming it has been previously included in the group of CPUs whose
+> QS are to be reported by the workqueue.
+> 
+> Unfortunately the current CPU may have changed between the first and
+> second pass, due to the rnp lock being dropped, re-enabling preemption.
+> As a result the current CPU, if different in the second pass, may be
+> ignored by the expedited grace period. No IPI will be sent to it
+> so it won't be requested to report an expedited quiescent state.
+> 
+> This ends up in an expedited grace period stall.
+> 
+> Fix this with including the current CPU in the second round in the group
+> of CPUs to report a QS for by the workqueue.
+> 
+> Fixes: b9ad4d6ed18e ("rcu: Avoid self-IPI in sync_rcu_exp_select_node_cpus()")
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Uladzislau Rezki <urezki@gmail.com>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> ---
 
-If I change
+Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
 
- allOf:
--  - $ref: bridge/synopsys,dw-hdmi.yaml#
-+  - $ref: synopsys,dw-hdmi.yaml#
 
-then make dt_binding_check still reports:
 
-Unknown file referenced: [Errno 2] No such file or directory: =
-'/Users/hns/Library/Python/3.7/lib/python/site-packages/dtschema/schemas/b=
-ridge/synopsys,dw-hdmi.yaml'
+Thanks
+Neeraj
 
-BR and thanks,
-Nikolaus Schaller
 
-> xargs: dt-doc-validate: exited with status 255; aborting
-> make[1]: *** Deleting file =
-'Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.exam=
-ple.dt.yaml'
-> Unknown file referenced: [Errno 2] No such file or directory: =
-'/usr/local/lib/python3.8/dist-packages/dtschema/schemas/bridge/bridge/syn=
-opsys,dw-hdmi.yaml'
-> make[1]: *** [scripts/Makefile.lib:373: =
-Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.examp=
-le.dt.yaml] Error 255
-> make[1]: *** Waiting for unfinished jobs....
-> make: *** [Makefile:1413: dt_binding_check] Error 2
->=20
-> doc reference errors (make refcheckdocs):
->=20
-> See https://patchwork.ozlabs.org/patch/1559375
->=20
-> This check can fail if there are any dependencies. The base for a =
-patch
-> series is generally the most recent rc1.
->=20
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up =
-to
-> date:
->=20
-> pip3 install dtschema --upgrade
->=20
-> Please check and re-submit.
->=20
-
+>   kernel/rcu/tree_exp.h | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/kernel/rcu/tree_exp.h b/kernel/rcu/tree_exp.h
+> index a96d17206d87..237a79989aba 100644
+> --- a/kernel/rcu/tree_exp.h
+> +++ b/kernel/rcu/tree_exp.h
+> @@ -387,6 +387,7 @@ static void sync_rcu_exp_select_node_cpus(struct work_struct *wp)
+>   			continue;
+>   		}
+>   		if (get_cpu() == cpu) {
+> +			mask_ofl_test |= mask;
+>   			put_cpu();
+>   			continue;
+>   		}
+> 

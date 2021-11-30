@@ -2,84 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D18463C18
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEBB7463C0D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:42:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244268AbhK3QpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:45:02 -0500
-Received: from relayfre-01.paragon-software.com ([176.12.100.13]:39096 "EHLO
-        relayfre-01.paragon-software.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S232901AbhK3Qo4 (ORCPT
+        id S244274AbhK3QpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:45:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244338AbhK3QpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:44:56 -0500
-Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
-        by relayfre-01.paragon-software.com (Postfix) with ESMTPS id B95AA40D;
-        Tue, 30 Nov 2021 19:41:30 +0300 (MSK)
+        Tue, 30 Nov 2021 11:45:10 -0500
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0233C061748
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:41:50 -0800 (PST)
+Received: by mail-il1-x12a.google.com with SMTP id e8so21898888ilu.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:41:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paragon-software.com; s=mail; t=1638290490;
-        bh=/gt5meQDcE4KHTZT7C03i/3WGT8X/p7mNPvhNZSWk2k=;
-        h=Date:To:CC:From:Subject;
-        b=mhupN5segY8sg3kmtxwKzBw3B/YaGurptL96TSoz/W6x3KwzD4GQDZRz0mARc3gFq
-         onTMwULXEvLqHPCkVp0/KPYkbnXiQIYIAlfvW3LvIan6EZL3M62NfaLZpU8NDExxnn
-         qtIZovJLSithA3MS79Lt1MBoTk4dWS2L2vPuVwq8=
-Received: from [192.168.211.41] (192.168.211.41) by
- vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 30 Nov 2021 19:41:30 +0300
-Message-ID: <8b4de37d-1073-ca87-1df8-ccd8d09444af@paragon-software.com>
-Date:   Tue, 30 Nov 2021 19:41:29 +0300
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=qNDySkV1TDMjsXZgIAndGnAJEHYPbFyQnbCSCL0UXYc=;
+        b=Fg5EfYqMvlbzQGAt7dGOr94Udoqh9O3lMIDTD7ZCrxLZmLeepT/dYuQY+xvOOJ5Lma
+         o0HpC8crk9O1MHvJki29w57Z+OnRE2LP9BBC9Pn88Be6rrZEMgOT8vSy1kO4Oye/pazb
+         UUaXHDFwAZPlBvDwESDQmFIrr1TUupf/B+ig4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=qNDySkV1TDMjsXZgIAndGnAJEHYPbFyQnbCSCL0UXYc=;
+        b=BBhvtSC4+Ow4lNgUSH614fZ1t8SiKjoN5Js9pWb6919615J48r0zyArAbeIsYTXvlx
+         FjVZmePlEMBanccZwXfPZ3bQbBDm++q2nmBQb6L9nPXYIoN10r2uhVBR/74KzA+g7EP7
+         uwrYwi2909NsUfemHaBBdoaX5XhmreHGWGblw7Tro5IkzkXC+J9B/Uwe8Ij0Nv0TJZnU
+         TtujsCPdcamWuDrTd+9LnFFp0zBYaq0dah/+ACqs+cvDrcI+puIpOFnx/6AEztnsXRE2
+         hCiPUVy/CAqqRMHR4RsKtotexJNOJGymJ0Fx3Gp7oZAE2zdOmmIelea1zAoUZFtquSUn
+         CB0A==
+X-Gm-Message-State: AOAM531wXaHJ9+ox1ZHpHq16ljHghAxwffF9S1shXfGG+y7EwrOrZGb2
+        TV6n11VlrFYT6ZOH5YegVXEjC1cooKW/7w==
+X-Google-Smtp-Source: ABdhPJwZ6qoCwAzlKny10FO8SQ2/Nr4zqiq19J5P5L2Hq1YUBtmMr/yGDSYvri/mgotGD+VbY4YSmg==
+X-Received: by 2002:a05:6e02:1a03:: with SMTP id s3mr109743ild.73.1638290510084;
+        Tue, 30 Nov 2021 08:41:50 -0800 (PST)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id h1sm4820725iow.31.2021.11.30.08.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 08:41:49 -0800 (PST)
+Subject: Re: [PATCH 1/2] selftests: cgroup: build error multiple outpt files
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
+        christian@brauner.io, nathan@kernel.org, ndesaulniers@google.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20211105162530.3307666-1-anders.roxell@linaro.org>
+ <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
+ <20211123142600.r5d52iwhbqhujiux@wittgenstein>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
+Date:   Tue, 30 Nov 2021 09:41:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
+In-Reply-To: <20211123142600.r5d52iwhbqhujiux@wittgenstein>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     <ntfs3@lists.linux.dev>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
-Subject: [PATCH] fs/ntfs3: Fix NULL dereference in ntfs_update_mftmirr
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [192.168.211.41]
-X-ClientProxiedBy: vobn-exch-01.paragon-software.com (172.30.72.13) To
- vdlg-exch-02.paragon-software.com (172.30.1.105)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We can get NULL pointer to struct super_block.
-This commit adds check for such situation.
-Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
-Thread: https://lore.kernel.org/lkml/20211125140816.GC3109@xsang-OptiPlex-9020/
+On 11/23/21 7:26 AM, Christian Brauner wrote:
+> On Fri, Nov 19, 2021 at 05:22:20PM -0700, Shuah Khan wrote:
+>> On 11/5/21 10:25 AM, Anders Roxell wrote:
+>>> When building selftests/cgroup: with clang the following error are seen:
+>>>
+>>> clang -Wall -pthread    test_memcontrol.c cgroup_util.c ../clone3/clone3_selftests.h  -o /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol
+>>> clang: error: cannot specify -o when generating multiple output files
+>>> make[3]: *** [../lib.mk:146: /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol] Error 1
+>>>
+>>> Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
+>>> since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
+>>> file lib.mk.
+>>>
+>>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+>>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+>>> ---
+>>>    tools/testing/selftests/cgroup/Makefile | 12 +++++++-----
+>>>    tools/testing/selftests/lib.mk          |  2 +-
+>>>    2 files changed, 8 insertions(+), 6 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+>>> index 59e222460581..745fe25fa0b9 100644
+>>> --- a/tools/testing/selftests/cgroup/Makefile
+>>> +++ b/tools/testing/selftests/cgroup/Makefile
+>>> @@ -11,10 +11,12 @@ TEST_GEN_PROGS += test_core
+>>>    TEST_GEN_PROGS += test_freezer
+>>>    TEST_GEN_PROGS += test_kill
+>>> +LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+>>> +
+>>
+>> This looks odd to me. Why are we introducing dependencies between tests?
+>> clone3 includes in cgroup? Looks odd to me.
+> 
+> The cgroup tests need access to clone3() functionality in order to test
+> CLONE_INTO_CGROUP which is more suited to be placed alongside the cgroup
+> tests. There are a few other tests that include the clone3 header.
+> 
 
-Signed-off-by: Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
----
- fs/ntfs3/fsntfs.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+If other tests are also including this header, we could move it up under
+selftests level. Might have to add include directory.
 
-diff --git a/fs/ntfs3/fsntfs.c b/fs/ntfs3/fsntfs.c
-index 4de9acb16968..38de8cb53183 100644
---- a/fs/ntfs3/fsntfs.c
-+++ b/fs/ntfs3/fsntfs.c
-@@ -831,14 +831,17 @@ int ntfs_update_mftmirr(struct ntfs_sb_info *sbi, int wait)
- {
- 	int err;
- 	struct super_block *sb = sbi->sb;
--	u32 blocksize = sb->s_blocksize;
-+	u32 blocksize, bytes;
- 	sector_t block1, block2;
--	u32 bytes;
- 
--	if (!(sbi->flags & NTFS_FLAGS_MFTMIRR))
-+	/*
-+	 * sb can be NULL here. In this case sbi->flags should be 0 too.
-+	 */
-+	if (!sb || !(sbi->flags & NTFS_FLAGS_MFTMIRR))
- 		return 0;
- 
- 	err = 0;
-+	blocksize = sb->s_blocksize;
- 	bytes = sbi->mft.recs_mirr << sbi->record_bits;
- 	block1 = sbi->mft.lbo >> sb->s_blocksize_bits;
- 	block2 = sbi->mft.lbo2 >> sb->s_blocksize_bits;
--- 
-2.33.1
-
+thanks,
+-- Shuah

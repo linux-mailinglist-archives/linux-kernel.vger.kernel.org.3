@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4F9463E93
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B84463E94
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245752AbhK3TZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 14:25:13 -0500
-Received: from ale.deltatee.com ([204.191.154.188]:57912 "EHLO
-        ale.deltatee.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239820AbhK3TZL (ORCPT
+        id S232222AbhK3T0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 14:26:17 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55410 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229722AbhK3T0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 14:25:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:MIME-Version:Date:
-        Message-ID:From:References:Cc:To:content-disposition;
-        bh=Dlyz49EtKbJqaNzZfY1tx0m9Yx6JL073qjZfik+uWwE=; b=VEornqptojdVzaRUFG+WqR1CYD
-        GF5KRyNgtfYRTD6G10G4SN4gIAkwQ2CzgN4UUfuM0nazIEfV6ByTXoLsuRLJWIZcC1zrTuAZXLxdb
-        GVND9pkSL5czg6JUyIpVKoyl2mMHN+ZUkB7QML2Ozuabyn5UTrmPnZvmVu2g2zVrlm5zphOgc51X5
-        kziw93b1XB+yHPG1ChiV6lUR4/dTF+cr+AtJ9dN8s5UWqHSFMQpV7n1TNzuc54YPDQqZ3KuKhEs3K
-        DG4mm5pm8xhOKLxvC1gesniPE++b0EoASHbZnuyBPB+f7q1Li4IiO5e+D62zngvT0fqbnyPMZNWwi
-        l1uIvong==;
-Received: from guinness.priv.deltatee.com ([172.16.1.162])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1ms8gy-00BCOF-Ov; Tue, 30 Nov 2021 12:21:29 -0700
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org
-References: <20211126230957.239391799@linutronix.de>
- <20211126232735.547996838@linutronix.de>
- <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
- <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
-From:   Logan Gunthorpe <logang@deltatee.com>
-Message-ID: <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com>
-Date:   Tue, 30 Nov 2021 12:21:21 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 30 Nov 2021 14:26:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 28487CE1AFF;
+        Tue, 30 Nov 2021 19:22:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C4DEC53FC7;
+        Tue, 30 Nov 2021 19:22:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638300160;
+        bh=g8FdUvCnQefFM7xkiIjUudQU6bahirskO/kIhCEVVJo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TogmKySseyWkz6Tbj9vbqvhn8qcWVh5rE/M9KwXoPuNNeOtKlpybqJYeR3O3sxkQx
+         6nUu3NN2D4tPm4tIfbYfmdozRnwiEowd6gFzKgql83VoOrEaB0+vJe6sPlO35iq5Yc
+         b2YIBiGk8PEjaFW1JnA3TXPjuLEQ32jrpeFbfel6xijqg2cYZqV0vU8CsZkATuZR2E
+         OFz/fs6f+t2Wbja9bROlbdrMi5oEDJjt/bjz3DN4Wt7v4vkLE2KDOiIvnTqmGFKTWt
+         zeRFWpAcMbpp4XU1LzqX4dSsWmzJskNuNVbyL3SBHXUmo6iuFj2JyyfE1axruK6buX
+         D4p/sAWPT2ixA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3023140002; Tue, 30 Nov 2021 16:22:36 -0300 (-03)
+Date:   Tue, 30 Nov 2021 16:22:36 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH] perf header: Fix memory leaks
+Message-ID: <YaZ5/Gg9a+5NbEVg@kernel.org>
+References: <20211118201730.2302927-1-irogers@google.com>
+ <YaOkbojVb2gZtfCk@krava>
+ <CAP-5=fVRE8dcDtivYaAm=DQze4d2966X7oWTWVzstzWeC-xeSw@mail.gmail.com>
+ <YaZqN5UQfhBmgznT@krava>
 MIME-Version: 1.0
-In-Reply-To: <87ilwacwp8.ffs@tglx>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-CA
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 172.16.1.162
-X-SA-Exim-Rcpt-To: x86@kernel.org, borntraeger@de.ibm.com, hca@linux.ibm.com, linux-s390@vger.kernel.org, linux-ntb@googlegroups.com, allenbh@gmail.com, dave.jiang@intel.com, jdmason@kudzu.us, gregkh@linuxfoundation.org, linux-pci@vger.kernel.org, ashok.raj@intel.com, megha.dey@intel.com, jgg@nvidia.com, kevin.tian@intel.com, alex.williamson@redhat.com, maz@kernel.org, helgaas@kernel.org, linux-kernel@vger.kernel.org, tglx@linutronix.de
-X-SA-Exim-Mail-From: logang@deltatee.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on ale.deltatee.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-9.1 required=5.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaZqN5UQfhBmgznT@krava>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2021-11-29 5:29 p.m., Thomas Gleixner wrote:
-> At the conceptual level these interrupts are in separate irq domains:
+Em Tue, Nov 30, 2021 at 07:15:19PM +0100, Jiri Olsa escreveu:
+> On Mon, Nov 29, 2021 at 03:38:28PM -0800, Ian Rogers wrote:
+> > On Sun, Nov 28, 2021 at 7:47 AM Jiri Olsa <jolsa@redhat.com> wrote:
+> > >
+> > > On Thu, Nov 18, 2021 at 12:17:30PM -0800, Ian Rogers wrote:
+> > > > These leaks were found with leak sanitizer running "perf pipe recording
+> > > > and injection test". In pipe mode feat_fd may hold onto an events struct
+> > > > that needs freeing. When string features are processed they may
+> > > > overwrite an already created string, so free this before the overwrite.
+> > > >
+> > > > Signed-off-by: Ian Rogers <irogers@google.com>
+> > > > ---
+> > > >  tools/perf/util/header.c | 15 ++++++++++-----
+> > > >  1 file changed, 10 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/tools/perf/util/header.c b/tools/perf/util/header.c
+> > > > index 79cce216727e..e3c1a532d059 100644
+> > > > --- a/tools/perf/util/header.c
+> > > > +++ b/tools/perf/util/header.c
+> > > > @@ -2321,6 +2321,7 @@ static int perf_header__read_build_ids(struct perf_header *header,
+> > > >  #define FEAT_PROCESS_STR_FUN(__feat, __feat_env) \
+> > > >  static int process_##__feat(struct feat_fd *ff, void *data __maybe_unused) \
+> > > >  {\
+> > > > +     free(ff->ph->env.__feat_env);                \
+> > >
+> > > hm, how is this set before this callback is triggered?
+> > 
+> > I see it for cpuid which is initially set in:
+> > #0  perf_env__read_cpuid (env=0x62b000007240) at util/env.c:363
+> > #1  0x0000555556325153 in perf_env__cpuid (env=0x62b000007240) at util/env.c:456
+> > #2  0x00005555564002ff in evlist__init_trace_event_sample_raw
 > 
->      |   _______________________
->      |   |                      |
->      |   | NTB                  |
->      |   |                      |
->      |   | PCI config space     |
->      |   |     MSI-X space      | <- #1 Global or per IOMMU zone PCI/MSI domain
->      |   |_____________________ |
->      |---|                      |
->          | Memory window A      |
->          | Memory window ..     | <- #2 Per device NTB domain
->          | Memory window N      |
->          |______________________|
+> ok, I forgot we do this one, thanks for explanation
 > 
-> You surely can see the disctinction between #1 and #2, right?
+> Acked-by: Jiri Olsa <jolsa@redhat.com>
 
-I wouldn't say that's entirely obvious or even irrefutable. However, I'm
-certainly open to this approach if it improves the code.
+Thanks, applied.
 
-> I'm way too tired to come up with a proper solution for that, but that
-> PCI_IRQ_VIRTUAL has to die ASAP.
+- Arnaldo
 
-I'm willing to volunteer a bit of my time to clean this up, but I'd need
-a bit more direction on what a proper solution would look like. The MSI
-domain code is far from well documented nor is it easy to understand.
-
-Logan

@@ -2,42 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6264638CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:02:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E3F463952
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244624AbhK3PGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:06:05 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:60462 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243345AbhK3O5L (ORCPT
+        id S236118AbhK3PJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244691AbhK3PCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:57:11 -0500
+        Tue, 30 Nov 2021 10:02:41 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29202C08EA41;
+        Tue, 30 Nov 2021 06:53:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 121F0CE1A7B;
-        Tue, 30 Nov 2021 14:53:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78A02C53FC7;
-        Tue, 30 Nov 2021 14:53:47 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 76166CE1A84;
+        Tue, 30 Nov 2021 14:53:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE798C53FCD;
+        Tue, 30 Nov 2021 14:53:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638284028;
-        bh=xmNekxp+A3vErmOByE54PNDSH6nmAIKlZIJkIAXTX0s=;
+        s=k20201202; t=1638284030;
+        bh=EGDJvL6BOLQxfNAUYSF7urXaPeK+GMK9kP0lBV4i+94=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BsusRRSY/woAsV2DCWaJR3/z2Od46LyQ3KAlL6J1tTUjtd98D6QuJdvmjzpDC3eVj
-         I+FgbKC7waHE8wkSBN1BSCy0tSOMN7QAuGwWWKSQlnR6keQriFKU1li7K9gF4JwrZC
-         2qc4S/tzS3g7sl+TgoRh1NzarU5FueQqcHtvTCrGHKZg1iNZQZBUXCTBqg2LESvV6e
-         lSJ8rRJI/qsFjMqgQqL1PXPAq9j1Fu3NZckD31t3gnIVQylQUBjzSQ51vbOtQgJauu
-         FlEo8YxpVcILNCWbuLiPRvEwV9v+y6hjF5kD9VSRmvOS7omJWVWLyxoig0xbAjBC+K
-         7WJh863jbi29Q==
+        b=aoHrm0wc2Gw4huw/0eJNyuh32YIlw7TTyloWZtbH9YaiuD4VGq0/5yEz6BMCQ0tdY
+         wdu4Gw9HZERU2Pmc7/wqXvwmphGz/0+CxJTPVRkDsrbgETmARvWy7jZjyaEurt+/Jm
+         R4yZzP78Aa4hQBlHEEqQpW2z1puaYlrpKVBGbiySe76SeQzHSAmQ57Kea1hgQxaySl
+         CdGOpKegu4rK/JjokVbvHyN+fscJUVK4C7lAKdNWO1SmE4IMPrtY8ENGcP+E2Sb+2c
+         wuA6mP7AQZ7E9kOSnESH4ksmfANFQothVhWFu6WJQscdOJLW0zpZulixr7ERYSqNlf
+         HzBFSA3B5IOKA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ondrej Zary <linux@zary.sk>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jkosina@suse.cz>, Sasha Levin <sashal@kernel.org>,
-        jikos@kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 04/12] HID: multitouch: Fix Iiyama ProLite T1931SAW (0eef:0001 again!)
-Date:   Tue, 30 Nov 2021 09:53:32 -0500
-Message-Id: <20211130145341.946891-4-sashal@kernel.org>
+Cc:     Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        Sasha Levin <sashal@kernel.org>,
+        James.Bottomley@HansenPartnership.com, svens@stackframe.org,
+        linux-parisc@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.9 05/12] parisc: Provide an extru_safe() macro to extract unsigned bits
+Date:   Tue, 30 Nov 2021 09:53:33 -0500
+Message-Id: <20211130145341.946891-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20211130145341.946891-1-sashal@kernel.org>
 References: <20211130145341.946891-1-sashal@kernel.org>
@@ -49,45 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Zary <linux@zary.sk>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 32bea35746097985c48cec836d5f557a3b66b60a ]
+[ Upstream commit 169d1a4a2adb2c246396c56aa2f9eec3868546f1 ]
 
-Iiyama ProLite T1931SAW does not work with Linux - input devices are
-created but cursor does not move.
+The extru instruction leaves the most significant 32 bits of the
+target register in an undefined state on PA 2.0 systems.
+Provide a macro to safely use extru on 32- and 64-bit machines.
 
-It has the infamous 0eef:0001 ID which has been reused for various
-devices before.
-
-It seems to require export_all_inputs = true.
-
-Hopefully there are no HID devices using this ID that will break.
-It should not break non-HID devices (handled by usbtouchscreen).
-
-Signed-off-by: Ondrej Zary <linux@zary.sk>
-Reviewed-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Signed-off-by: Jiri Kosina <jkosina@suse.cz>
+Suggested-by: John David Anglin <dave.anglin@bell.net>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hid/hid-multitouch.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/parisc/include/asm/assembly.h | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-index 258a50ec15727..b1853f8f6af4e 100644
---- a/drivers/hid/hid-multitouch.c
-+++ b/drivers/hid/hid-multitouch.c
-@@ -1277,6 +1277,11 @@ static const struct hid_device_id mt_devices[] = {
- 		MT_USB_DEVICE(USB_VENDOR_ID_CVTOUCH,
- 			USB_DEVICE_ID_CVTOUCH_SCREEN) },
+diff --git a/arch/parisc/include/asm/assembly.h b/arch/parisc/include/asm/assembly.h
+index eb83d65153b83..2272cbeb65f22 100644
+--- a/arch/parisc/include/asm/assembly.h
++++ b/arch/parisc/include/asm/assembly.h
+@@ -153,6 +153,17 @@
+ 	extrd,u \r, 63-(\sa), 64-(\sa), \t
+ 	.endm
  
-+	/* eGalax devices (SAW) */
-+	{ .driver_data = MT_CLS_EXPORT_ALL_INPUTS,
-+		MT_USB_DEVICE(USB_VENDOR_ID_DWAV,
-+			USB_DEVICE_ID_EGALAX_TOUCHCONTROLLER) },
++	/* Extract unsigned for 32- and 64-bit
++	 * The extru instruction leaves the most significant 32 bits of the
++	 * target register in an undefined state on PA 2.0 systems. */
++	.macro extru_safe r, p, len, t
++#ifdef CONFIG_64BIT
++	extrd,u	\r, 32+(\p), \len, \t
++#else
++	extru	\r, \p, \len, \t
++#endif
++	.endm
 +
- 	/* eGalax devices (resistive) */
- 	{ .driver_data = MT_CLS_EGALAX,
- 		MT_USB_DEVICE(USB_VENDOR_ID_DWAV,
+ 	/* load 32-bit 'value' into 'reg' compensating for the ldil
+ 	 * sign-extension when running in wide mode.
+ 	 * WARNING!! neither 'value' nor 'reg' can be expressions
 -- 
 2.33.0
 

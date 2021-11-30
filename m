@@ -2,77 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23878462B8C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE4E462B90
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 05:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238137AbhK3EOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 23:14:50 -0500
-Received: from mga18.intel.com ([134.134.136.126]:48498 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232110AbhK3EOt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 23:14:49 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223021806"
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="223021806"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 20:11:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="676673135"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 29 Nov 2021 20:11:29 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1mruUK-000CjU-Jn; Tue, 30 Nov 2021 04:11:28 +0000
-Date:   Tue, 30 Nov 2021 12:11:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Finn Thain <fthain@telegraphics.com.au>
-Subject: WARNING: modpost: vmlinux.o(.text+0x4fc818): Section mismatch in
- reference from the function sonic_get_stats() to the function
- .init.text:set_reset_devices()
-Message-ID: <202111301241.yBaIcBqw-lkp@intel.com>
+        id S238149AbhK3ERZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 23:17:25 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:37890 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232110AbhK3ERY (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 23:17:24 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 77705CE1415;
+        Tue, 30 Nov 2021 04:14:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C8EC53FC1;
+        Tue, 30 Nov 2021 04:14:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638245642;
+        bh=eRgr8ruLS/HXkYygaB9wTl2f3VahlDG+KskOZEp4GJ0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BIZL3x9UXrd584JCXX49+ZFOKJrODOqaJ3JvCIKuc9EiVoCqPaNBqATP4B4C2vJ69
+         CJsG/XYckW/0eq6yswqAu93U4MFw4bSwbANKfFB/HZ8g31UlSEOb8QFRezvkKia3ZG
+         qRLiTIJZGko5HGUuhfyJ1i59LB8vouTgbA/GKx6S2Fm/InT2PwvNMzrwcisAnH8iwi
+         GBX6IPRXboDZTfmQpTD+60H5dfneTDmZiJzst5sIwBATjiSPYNIk3kTPksvpJ3hf+D
+         4DPzYlla0l5kKMpIHnPhUUlgH7L7BpZRsiKdHBSVu9zm8QqlAUxsPtLM5HvutL5KWy
+         GdGoanpFxA4eQ==
+Date:   Mon, 29 Nov 2021 20:14:00 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>
+Subject: Re: [PATCH net-next v1] devlink: Simplify devlink resources
+ unregister call
+Message-ID: <20211129201400.488c8ef9@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <e8684abc2c8ced4e35026e8fa85fe29447ef60b6.1638103213.git.leonro@nvidia.com>
+References: <e8684abc2c8ced4e35026e8fa85fe29447ef60b6.1638103213.git.leonro@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d58071a8a76d779eedab38033ae4c821c30295a5
-commit: 0f7ba7bc46fa0b574ccacf5672991b321e028492 net/sonic: Fix some resource leaks in error handling paths
-date:   11 months ago
-config: xtensa-randconfig-r025-20211129 (https://download.01.org/0day-ci/archive/20211130/202111301241.yBaIcBqw-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0f7ba7bc46fa0b574ccacf5672991b321e028492
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0f7ba7bc46fa0b574ccacf5672991b321e028492
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
+On Sun, 28 Nov 2021 14:42:44 +0200 Leon Romanovsky wrote:
+> The devlink_resources_unregister() used second parameter as an
+> entry point for the recursive removal of devlink resources. None
+> of external to devlink users needed to use this field, so lat's
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+None of the callers outside of devlink core...
+s/lat/let/
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+> remove it.
 
->> WARNING: modpost: vmlinux.o(.text+0x4fc818): Section mismatch in reference from the function sonic_get_stats() to the function .init.text:set_reset_devices()
-The function sonic_get_stats() references
-the function __init set_reset_devices().
-This is often because sonic_get_stats lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
+> diff --git a/include/net/devlink.h b/include/net/devlink.h
+> index e3c88fabd700..043fcec8b0aa 100644
+> --- a/include/net/devlink.h
+> +++ b/include/net/devlink.h
+> @@ -361,33 +361,6 @@ devlink_resource_size_params_init(struct devlink_resource_size_params *size_para
+>  
+>  typedef u64 devlink_resource_occ_get_t(void *priv);
+>  
+> -/**
+> - * struct devlink_resource - devlink resource
+> - * @name: name of the resource
+> - * @id: id, per devlink instance
+> - * @size: size of the resource
+> - * @size_new: updated size of the resource, reload is needed
+> - * @size_valid: valid in case the total size of the resource is valid
+> - *              including its children
+> - * @parent: parent resource
+> - * @size_params: size parameters
+> - * @list: parent list
+> - * @resource_list: list of child resources
+> - */
+> -struct devlink_resource {
+> -	const char *name;
+> -	u64 id;
+> -	u64 size;
+> -	u64 size_new;
+> -	bool size_valid;
+> -	struct devlink_resource *parent;
+> -	struct devlink_resource_size_params size_params;
+> -	struct list_head list;
+> -	struct list_head resource_list;
+> -	devlink_resource_occ_get_t *occ_get;
+> -	void *occ_get_priv;
+> -};
 
-Note: the below error/warnings can be found in parent commit:
-<< WARNING: modpost: vmlinux.o(.text+0x4fc860): Section mismatch in reference from the function xtsonic_device_remove() to the function .init.text:set_reset_devices()
-<< WARNING: modpost: vmlinux.o(.text+0x4fc8c7): Section mismatch in reference from the function xtsonic_probe() to the function .init.text:sonic_probe1()
+> diff --git a/net/core/devlink.c b/net/core/devlink.c
+> index fd21022145a3..db3b52110cf2 100644
+> --- a/net/core/devlink.c
+> +++ b/net/core/devlink.c
+> @@ -69,6 +69,35 @@ struct devlink {
+>  	char priv[] __aligned(NETDEV_ALIGN);
+>  };
+>  
+> +/**
+> + * struct devlink_resource - devlink resource
+> + * @name: name of the resource
+> + * @id: id, per devlink instance
+> + * @size: size of the resource
+> + * @size_new: updated size of the resource, reload is needed
+> + * @size_valid: valid in case the total size of the resource is valid
+> + *              including its children
+> + * @parent: parent resource
+> + * @size_params: size parameters
+> + * @list: parent list
+> + * @resource_list: list of child resources
+> + * @occ_get: occupancy getter callback
+> + * @occ_get_priv: occupancy getter callback priv
+> + */
+> +struct devlink_resource {
+> +	const char *name;
+> +	u64 id;
+> +	u64 size;
+> +	u64 size_new;
+> +	bool size_valid;
+> +	struct devlink_resource *parent;
+> +	struct devlink_resource_size_params size_params;
+> +	struct list_head list;
+> +	struct list_head resource_list;
+> +	devlink_resource_occ_get_t *occ_get;
+> +	void *occ_get_priv;
+> +};
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Hiding struct devlink_resource is not mentioned in the commit message
+and entirely unrelated to removal of the unused argument.

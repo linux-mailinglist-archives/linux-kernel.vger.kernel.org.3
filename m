@@ -2,240 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A68264636E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31BB54636E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242277AbhK3Om0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:42:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
+        id S237284AbhK3OnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:43:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236345AbhK3OmZ (ORCPT
+        with ESMTP id S232476AbhK3OnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:42:25 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A6EC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 06:39:06 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id 77-20020a1c0450000000b0033123de3425so19760585wme.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 06:39:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=2bmfZ8/yojigYMGWoM6Ilhlpc1qceboy4zfRftSi5oE=;
-        b=LelNjI21+uPTpwJ76SNMdaV3DjtJsBx8dnjf0VwM+0LmcN1y5BCEDw7nCes7XUOh+z
-         yTrad4N4KdCVh/LnluKSRW8e/vcF4dArQZv+RNbruDy1uHiBV4OJKaFUXgVND4uubtB0
-         8eot2gMSqo2kjJct9du0xxt+A6Aj71b0sjIlQKrt32wHieUro8uqKCvHPqRUk9+qtSOq
-         2Dljh1tnUsYvjb1Je36fa5D1T/ltcG2WfTi1otHsxmRkOB4p/SKc0fYI1+3fW/WOfwG7
-         LuH2epm7K+gLsltmVwc5N1MUQYA81PLO5Owp+vVfaZQqhMJargSvH35WC3RRJGtrr2KU
-         Iwiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=2bmfZ8/yojigYMGWoM6Ilhlpc1qceboy4zfRftSi5oE=;
-        b=W4DxZaOTUhtHKBTEUQEfZp29zuAsV2rkTwpSdI+wr6iUW7GDb98JDOtkDqUCd5nlTS
-         dwOUb02t9MH+a6l7vOgNnAI6tE01Jrr009rxm9rJR7pSk/WEGHUdfV+Kb9if9ZDnN+/j
-         3x1lPyIbmigbqrfiLjfdVOVvK6GEENuU0vk+07etyo7GxqSUS5L+qIK1hAiwt3ivbQeP
-         C23gW0WYHAVT4M53Ro9A3uO+v2Grrxv3WPuUf+lxbb3368FgJ1oAuQRDmVQJhPyYuuAl
-         MSaVDVYDkq/0rxJGe7J4inXqBLbAJlmZAlfEy1pVw9bL52ZaD7PGp97I6vL6afTd5BFd
-         pkAA==
-X-Gm-Message-State: AOAM531Isd5BDE9TuXt9Rd33TeJ2rleY5/G5NsLsTMuOjyWsNWvUGwCv
-        BaalABwIt12VSsQnOf9nkLr2rzpJbpEXlg==
-X-Google-Smtp-Source: ABdhPJxZ5sFmuSWzUiRoOR58P5Y8QszFbL7xBmWKGG3s4ojQayuw4RebmZPdbWjTK045kEQSGPY6bQ==
-X-Received: by 2002:a05:600c:4f87:: with SMTP id n7mr5508835wmq.63.1638283144644;
-        Tue, 30 Nov 2021 06:39:04 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:7880:daae:2d50:bb5e? ([2a01:e34:ed2f:f020:7880:daae:2d50:bb5e])
-        by smtp.googlemail.com with ESMTPSA id u13sm3008168wmq.14.2021.11.30.06.39.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 06:39:04 -0800 (PST)
-Subject: Re: [PATCH 1/5] clocksource: Add MStar MSC313e timer support
-To:     Romain Perier <romain.perier@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20211126202144.72936-1-romain.perier@gmail.com>
- <20211126202144.72936-2-romain.perier@gmail.com>
- <6cf881ea-1761-b3b2-5d0d-9a83595c1246@linaro.org>
- <CABgxDo+W3vg_dDTphkOLxRPzKER891CxTJnPPVuryj9YQOg1EQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <4703d6f2-a056-b76b-b313-2695430683be@linaro.org>
-Date:   Tue, 30 Nov 2021 15:39:02 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Tue, 30 Nov 2021 09:43:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D654FC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 06:39:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9E60EB817AB
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 14:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DD34C53FC1;
+        Tue, 30 Nov 2021 14:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638283191;
+        bh=cdF3rEKjcPHHtGWEfPp7Zo08qoyJECgToJN64AqSj4o=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=AnKgiGL7pA4B+u9k98Fffju4Q7RV7ujl1ZZsUXl7Gu38t6MdQr+TYa6vSITAM1mDx
+         iZmho4aaOIwNm3KjbF02WmOMKWDSkKkulM5ukxAaqgsZ/0mDXrcYU13UWig8JfOltn
+         YK1O3LYEACQ3hLnioGjli7rSeYY3Ru2NUaHkMP3Xv03dQh7fCYd3FB4h6rlY58evll
+         SXPubiweQoOuXHE7Jl/ZzpF2pzFgDJwEmOH9sVodY8nM08tYpNAlSTJsKRDvo8ZorK
+         QaiYG3U2AALdYxiyrk5BEgOhSnCxuII2J2u6VoN5BXCkqpn9fFU2x0t/QyyPaiJS6T
+         XUM4bDTd3tcLQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1C7FE5C00AC; Tue, 30 Nov 2021 06:39:51 -0800 (PST)
+Date:   Tue, 30 Nov 2021 06:39:51 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [frederic-dynticks:rcu/dev 120/125]
+ kernel/time/clocksource-wdtest.c:149:12: error: use of undeclared identifier
+ 'max_cswd_coarse_reads'
+Message-ID: <20211130143951.GP641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <202111301537.pHj67CAh-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <CABgxDo+W3vg_dDTphkOLxRPzKER891CxTJnPPVuryj9YQOg1EQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202111301537.pHj67CAh-lkp@intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2021 15:12, Romain Perier wrote:
-> Hi,
+On Tue, Nov 30, 2021 at 04:04:36PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git rcu/dev
+> head:   0a3f160b60a833f2ac5e68a0b3105005c69f185f
+> commit: 21285cc89332025a23fca4c50a9d132d1b4109b5 [120/125] squash! clocksource: Forgive repeated long-latency watchdog clocksource reads
+> config: x86_64-buildonly-randconfig-r001-20211128 (https://download.01.org/0day-ci/archive/20211130/202111301537.pHj67CAh-lkp@intel.com/config)
+> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git/commit/?id=21285cc89332025a23fca4c50a9d132d1b4109b5
+>         git remote add frederic-dynticks https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+>         git fetch --no-tags frederic-dynticks rcu/dev
+>         git checkout 21285cc89332025a23fca4c50a9d132d1b4109b5
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/time/
 > 
-> Le lun. 29 nov. 2021 à 18:02, Daniel Lezcano <daniel.lezcano@linaro.org
-> <mailto:daniel.lezcano@linaro.org>> a écrit :
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
->     On 26/11/2021 21:21, Romain Perier wrote:
->     > The MSC313e-compatible SoCs have 3 timer hardware blocks. All of these
->     > are free running 32-bit increasing counters and can generate
->     interrupts.
->     > This commit adds basic support for these timers, the first timer block
->     > being used as clocksource/sched_clock and delay, while the others will
->     > be used as clockevents.
+> All errors (new ones prefixed by >>):
 > 
->     Please you elaborate a bit more the internals of this timer as it is a
->     initial submission
+> >> kernel/time/clocksource-wdtest.c:149:12: error: use of undeclared identifier 'max_cswd_coarse_reads'
+>                    if (i != max_cswd_coarse_reads)
+>                             ^
+>    1 error generated.
+
+This is due to me incompletely reverting patches from Waiman.  It will
+be fixed on the next rebase.
+
+							Thanx, Paul
+
+> vim +/max_cswd_coarse_reads +149 kernel/time/clocksource-wdtest.c
 > 
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  102  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  103  /* Run the specified series of watchdog tests. */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  104  static int wdtest_func(void *arg)
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  105  {
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  106  	unsigned long j1, j2;
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  107  	char *s1, *s2;
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  108  	int i;
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  109  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  110  	schedule_timeout_uninterruptible(holdoff * HZ);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  111  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  112  	/*
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  113  	 * Verify that jiffies-like clocksources get the manually
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  114  	 * specified uncertainty margin.
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  115  	 */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  116  	pr_info("--- Verify jiffies-like uncertainty margin.\n");
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  117  	__clocksource_register(&clocksource_wdtest_jiffies);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  118  	WARN_ON_ONCE(clocksource_wdtest_jiffies.uncertainty_margin != TICK_NSEC);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  119  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  120  	j1 = clocksource_wdtest_jiffies.read(&clocksource_wdtest_jiffies);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  121  	schedule_timeout_uninterruptible(HZ);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  122  	j2 = clocksource_wdtest_jiffies.read(&clocksource_wdtest_jiffies);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  123  	WARN_ON_ONCE(j1 == j2);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  124  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  125  	clocksource_unregister(&clocksource_wdtest_jiffies);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  126  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  127  	/*
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  128  	 * Verify that tsc-like clocksources are assigned a reasonable
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  129  	 * uncertainty margin.
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  130  	 */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  131  	pr_info("--- Verify tsc-like uncertainty margin.\n");
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  132  	clocksource_register_khz(&clocksource_wdtest_ktime, 1000 * 1000);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  133  	WARN_ON_ONCE(clocksource_wdtest_ktime.uncertainty_margin < NSEC_PER_USEC);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  134  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  135  	j1 = clocksource_wdtest_ktime.read(&clocksource_wdtest_ktime);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  136  	udelay(1);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  137  	j2 = clocksource_wdtest_ktime.read(&clocksource_wdtest_ktime);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  138  	pr_info("--- tsc-like times: %lu - %lu = %lu.\n", j2, j1, j2 - j1);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  139  	WARN_ON_ONCE(time_before(j2, j1 + NSEC_PER_USEC));
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  140  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  141  	/* Verify tsc-like stability with various numbers of errors injected. */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  142  	for (i = 0; i <= max_cswd_read_retries + 1; i++) {
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  143  		if (i <= 1 && i < max_cswd_read_retries)
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  144  			s1 = "";
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  145  		else if (i <= max_cswd_read_retries)
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  146  			s1 = ", expect message";
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  147  		else
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  148  			s1 = ", expect coarse-grained clock skew check and re-initialization";
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22 @149  		if (i != max_cswd_coarse_reads)
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  150  			s2 = "";
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  151  		else if (!s1[0])
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  152  			s2 = ", expect splat";
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  153  		else
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  154  			s2 = " along with a splat";
+> 92b8b82aa04917 Paul E. McKenney 2021-10-22  155  		pr_info("--- Watchdog with %dx error injection, %lu retries%s%s.\n", i, max_cswd_read_retries, s1, s2);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  156  		WRITE_ONCE(wdtest_ktime_read_ndelays, i);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  157  		schedule_timeout_uninterruptible(2 * HZ);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  158  		WARN_ON_ONCE(READ_ONCE(wdtest_ktime_read_ndelays));
+> 83272afd00b829 Paul E. McKenney 2021-05-27  159  		WARN_ON_ONCE(clocksource_wdtest_ktime.flags & CLOCK_SOURCE_UNSTABLE);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  160  		wdtest_ktime_clocksource_reset();
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  161  	}
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  162  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  163  	/* Verify tsc-like stability with clock-value-fuzz error injection. */
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  164  	pr_info("--- Watchdog clock-value-fuzz error injection, expect clock skew and per-CPU mismatches.\n");
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  165  	WRITE_ONCE(wdtest_ktime_read_fuzz, true);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  166  	schedule_timeout_uninterruptible(2 * HZ);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  167  	WARN_ON_ONCE(!(clocksource_wdtest_ktime.flags & CLOCK_SOURCE_UNSTABLE));
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  168  	clocksource_verify_percpu(&clocksource_wdtest_ktime);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  169  	WRITE_ONCE(wdtest_ktime_read_fuzz, false);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  170  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  171  	clocksource_unregister(&clocksource_wdtest_ktime);
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  172  
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  173  	pr_info("--- Done with test.\n");
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  174  	return 0;
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  175  }
+> 1253b9b87e42ab Paul E. McKenney 2021-05-27  176  
 > 
-> Ok, will try to elaborate.
->  
+> :::::: The code at line 149 was first introduced by commit
+> :::::: 92b8b82aa04917537136ad3f8e23f908573c4b73 torture: Test splatting for delay-ridden clocksources
 > 
+> :::::: TO: Paul E. McKenney <paulmck@kernel.org>
+> :::::: CC: Paul E. McKenney <paulmck@kernel.org>
 > 
-> 
->     > Signed-off-by: Romain Perier <romain.perier@gmail.com
->     <mailto:romain.perier@gmail.com>>
->     > Co-developed-by: Daniel Palmer <daniel@0x0f.com
->     <mailto:daniel@0x0f.com>>
->     > Signed-off-by: Daniel Palmer <daniel@0x0f.com
->     <mailto:daniel@0x0f.com>>
->     > ---
->     >  MAINTAINERS                         |   1 +
->     >  drivers/clocksource/Kconfig         |  10 ++
->     >  drivers/clocksource/Makefile        |   1 +
->     >  drivers/clocksource/timer-msc313e.c | 228
->     ++++++++++++++++++++++++++++
->     >  4 files changed, 240 insertions(+)
->     >  create mode 100644 drivers/clocksource/timer-msc313e.c
->     >
->     > diff --git a/MAINTAINERS b/MAINTAINERS
->     > index 7a2345ce8521..f39a1617bf50 100644
->     > --- a/MAINTAINERS
->     > +++ b/MAINTAINERS
->     > @@ -2282,6 +2282,7 @@ F:     
->     Documentation/devicetree/bindings/gpio/mstar,msc313-gpio.yaml
->     >  F:   arch/arm/boot/dts/mstar-*
->     >  F:   arch/arm/mach-mstar/
->     >  F:   drivers/clk/mstar/
->     > +F:   drivers/clocksource/timer-msc313e.c
->     >  F:   drivers/gpio/gpio-msc313.c
->     >  F:   drivers/rtc/rtc-msc313.c
->     >  F:   drivers/watchdog/msc313e_wdt.c
->     > diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
->     > index f65e31bab9ae..822e711da284 100644
->     > --- a/drivers/clocksource/Kconfig
->     > +++ b/drivers/clocksource/Kconfig
->     > @@ -671,6 +671,16 @@ config MILBEAUT_TIMER
->     >       help
->     >         Enables the support for Milbeaut timer driver.
->     > 
->     > +config MSC313E_TIMER
->     > +     bool "MSC313E timer driver"
-> 
->     Silent option please and platform config option enables it.
-> 
-> 
-> What do you mean ? no short description at all ?
-
-We try to let the platform Kconfig option to select silently the timer
-in order to prevent selecting it manually.
-
-If the timer is mandatory on your platform it should be a silent option,
-except for COMPILE_TEST
-
-That leads to:
-
-	bool "MSC313E timer driver" if COMPILE_TEST
-
-and you should be able to compile it on x86, ...
-
-If the timer is optional because there is another one on the platform,
-it could be unselected manually. That is the configuration you've done here.
-
-So if there is no other broadcast timer, this timer should selected for
-the platform and the option should be silent (except in case of
-COMPILE_TEST).
-
->     > +     depends on ARCH_MSTARV7 || COMPILE_TEST
->     > +     select TIMER_OF
->     > +     select CLKSRC_MMIO
->     > +     help
->     > +       Enables support for the MStar MSC313E timer driver.
->     > +       This provides access to multiple interrupt generating
->     > +       programmable 32-bit free running incrementing counters.
->     > +
->     >  config INGENIC_TIMER
-
-[ ... ]
-
->     > +
->     > +struct msc313e_delay {
->     > +     void __iomem *base;
->     > +     struct delay_timer delay;
->     > +};
->     > +
->     > +static void __iomem *msc313e_clksrc;
->     > +static struct msc313e_delay msc313e_delay;
-> 
->     I'm not sure that compiles on other platform than mstarv7
-> 
-> 
-> It is armv7-based, and its size is known at build-time, no ?
-> Everything builds with WERROR here.
-
-I should have say "arch" instead of "platform".
-
-The COMPILE_TEST option is set above, that means the driver can be
-compiled on a x86 (for compilation test coverage, stubs already exists
-except for delay AFAIR).
-
-[ ... ]
-
->     > +     msc313e_delay.base = timer_of_base(&to);
->     > +     msc313e_delay.delay.read_current_timer =
->     msc313e_read_delay_timer_read;
->     > +     msc313e_delay.delay.freq = timer_of_rate(&to);
->     > +
->     > +     msc313e_clksrc = timer_of_base(&to);
->     > +     reg = readw(msc313e_clksrc + MSC313E_REG_CTRL);
->     > +     reg |= MSC313E_REG_CTRL_TIMER_EN;
->     > +     writew(reg, msc313e_clksrc + MSC313E_REG_CTRL);
->     > +
->     > +     register_current_timer_delay(&msc313e_delay.delay);
->     > +
->     > +     sched_clock_register(msc313e_timer_sched_clock_read, 32,
->     timer_of_rate(&to));
->     > +     return clocksource_mmio_init(timer_of_base(&to), TIMER_NAME,
->     timer_of_rate(&to), 300, 32,
->     > +                                  msc313e_timer_clksrc_read);
-> 
->     format 80char max please, run checkpatch.pl <http://checkpatch.pl>
->     before submitting
-> 
-> 
-> max_line_lenght is set to "100" in checkpatch.pl <http://checkpatch.pl>
-> since a while now :) .
-> I have passed it with "--strict" before sending the series, however, if
-> you prefer 80 chars
-> max just ask, I can limit to 80 chars.
-
-Oh, indeed. Fair enough, limit to 80 chars is now deprecated and
-suggested length is 100.
-
-In this case, at your convenience.
-
-Thanks
-  -- Daniel
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> ---
+> 0-DAY CI Kernel Test Service, Intel Corporation
+> https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

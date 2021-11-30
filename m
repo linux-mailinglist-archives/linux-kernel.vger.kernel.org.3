@@ -2,141 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 05391462E17
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 463ED462E14
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239307AbhK3IDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:03:41 -0500
-Received: from mx1.didiglobal.com ([36.110.17.22]:8373 "HELO
-        mailgate01.didichuxing.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with SMTP id S234489AbhK3IDk (ORCPT
+        id S239121AbhK3IBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:01:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:36878 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S232233AbhK3IBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:03:40 -0500
-Received: from mail.didiglobal.com (unknown [172.20.36.31])
-        by mailgate01.didichuxing.com (Maildata Gateway V2.8) with ESMTP id E37F2D81B920B;
-        Tue, 30 Nov 2021 15:58:13 +0800 (CST)
-Received: from BJSGEXMBX12.didichuxing.com (172.20.15.142) by
- BJSGEXMBX10.didichuxing.com (172.20.15.140) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Tue, 30 Nov 2021 15:58:13 +0800
-Received: from [172.24.140.44] (172.24.140.44) by BJSGEXMBX12.didichuxing.com
- (172.20.15.142) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 30 Nov
- 2021 15:58:13 +0800
-Message-ID: <bb88899e-3c54-4583-eef9-d30f01efe4bb@didichuxing.com>
-Date:   Tue, 30 Nov 2021 15:58:04 +0800
+        Tue, 30 Nov 2021 03:01:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638259096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ofQ+mTAvWB+lgCzceqE6eZM4DqOGEYL7WnumgczCy5o=;
+        b=QHj4XHD1IWfLWWxn3kY4kEq8kakorG6YKXQdLoI8/OE9aU9xo/9WSfcFw2wVv0qL8m3z3m
+        y+emExU7EPQv98QHPGlTnvDvmFZtf6nFRq7XGCwRBegmJwofhFY9DQZ9gfMDLIb8WfVCCL
+        w7M+OXr6xC+LP4zUw/4g1TuHCczu23o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-461-LUw9QfZNPaa6gwh_icSZSg-1; Tue, 30 Nov 2021 02:58:11 -0500
+X-MC-Unique: LUw9QfZNPaa6gwh_icSZSg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3634785EE62;
+        Tue, 30 Nov 2021 07:58:10 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5F2221002388;
+        Tue, 30 Nov 2021 07:58:08 +0000 (UTC)
+Message-ID: <f73c491ce789234d92275e0529b55ebd48f4cfb6.camel@redhat.com>
+Subject: Re: [PATCH 3/4] KVM: x86: check PIR even for vCPUs with disabled
+ APICv
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, stable@vger.kernel.org
+Date:   Tue, 30 Nov 2021 09:58:07 +0200
+In-Reply-To: <20211123004311.2954158-4-pbonzini@redhat.com>
+References: <20211123004311.2954158-1-pbonzini@redhat.com>
+         <20211123004311.2954158-4-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH] sched/fair: prevent cpu burst too many periods
-Content-Language: en-US
-To:     Benjamin Segall <bsegall@google.com>,
-        Huaixin Chang <changhuaixin@linux.alibaba.com>
-CC:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <jameshongleiwang@126.com>
-X-MD-Sfrom: wanghonglei@didiglobal.com
-X-MD-SrcIP: 172.20.36.31
-From:   Honglei Wang <wanghonglei@didichuxing.com>
-In-Reply-To: <xm26mtlmpvox.fsf@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.24.140.44]
-X-ClientProxiedBy: BJEXCAS35.didichuxing.com (172.20.36.196) To
- BJSGEXMBX12.didichuxing.com (172.20.15.142)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2021/11/30 04:13, Benjamin Segall wrote:
-> Honglei Wang <wanghonglei@didichuxing.com> writes:
+On Mon, 2021-11-22 at 19:43 -0500, Paolo Bonzini wrote:
+> The IRTE for an assigned device can trigger a POSTED_INTR_VECTOR even
+> if APICv is disabled on the vCPU that receives it.  In that case, the
+> interrupt will just cause a vmexit and leave the ON bit set together
+> with the PIR bit corresponding to the interrupt.
 > 
->> Tasks might get more cpu than quota in persistent periods due to the
->> cpu burst introduced by commit f4183717b370 ("sched/fair: Introduce the
->> burstable CFS controller"). For example, one task group whose quota is
->> 100ms per period and can get 100ms burst, and its avg utilization is
->> around 105ms per period. Once this group gets a free period which
->> leaves enough runtime, it has a chance to get computting power more
->> than its quota for 10 periods or more in common bandwidth configuration
->> (say, 100ms as period). It means tasks can 'steal' the bursted power to
->> do daily jobs because all tasks could be scheduled out or sleep to help
->> the group get free periods.
->>
->> I believe the purpose of cpu burst is to help handling bursty worklod.
->> But if one task group can get computting power more than its quota for
->> persistent periods even there is no bursty workload, it's kinda broke.
->>
->> This patch limits the burst to one period so that it won't break the
->> quota limit for long. With this, we can give task group more cpu burst
->> power to handle the real bursty workload and don't worry about the
->> 'stealing'.
+> Right now, the interrupt would not be delivered until APICv is re-enabled.
+> However, fixing this is just a matter of always doing the PIR->IRR
+> synchronization, even if the vCPU has temporarily disabled APICv.
 > 
-> CC ing the burst patch author.
+> This is not a problem for performance, or if anything it is an
+> improvement.  First, in the common case where vcpu->arch.apicv_active is
+> true, one fewer check has to be performed.  Second, static_call_cond will
+> elide the function call if APICv is not present or disabled.  Finally,
+> in the case for AMD hardware we can remove the sync_pir_to_irr callback:
+> it is only needed for apic_has_interrupt_for_ppr, and that function
+> already has a fallback for !APICv.
 > 
-> Whether or not burst is useful only for burst, or also for a bit of
-> long-term-only fairness is not entirely clear to me. Assuming we want it
-> only for burst, cutting off this sharply has a bit of additional
-> downside because it means that if a period refresh lands in the middle
-> of a burst then you lose the burst runtime. Permitting only two periods
-> in a row to make use of burst should be doable but it's yet another
-> piece of state added to cfs_b for this, and given typical ~100ms periods
-> that may be low enough odds that we don't care.
+> Cc: stable@vger.kernel.org
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/lapic.c   |  2 +-
+>  arch/x86/kvm/svm/svm.c |  1 -
+>  arch/x86/kvm/x86.c     | 18 +++++++++---------
+>  3 files changed, 10 insertions(+), 11 deletions(-)
 > 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 759952dd1222..f206fc35deff 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -707,7 +707,7 @@ static void pv_eoi_clr_pending(struct kvm_vcpu *vcpu)
+>  static int apic_has_interrupt_for_ppr(struct kvm_lapic *apic, u32 ppr)
+>  {
+>  	int highest_irr;
+> -	if (apic->vcpu->arch.apicv_active)
+> +	if (kvm_x86_ops.sync_pir_to_irr)
+>  		highest_irr = static_call(kvm_x86_sync_pir_to_irr)(apic->vcpu);
+>  	else
+>  		highest_irr = apic_find_highest_irr(apic);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 5630c241d5f6..d0f68d11ec70 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -4651,7 +4651,6 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.load_eoi_exitmap = svm_load_eoi_exitmap,
+>  	.hwapic_irr_update = svm_hwapic_irr_update,
+>  	.hwapic_isr_update = svm_hwapic_isr_update,
+> -	.sync_pir_to_irr = kvm_lapic_find_highest_irr,
+>  	.apicv_post_state_restore = avic_post_state_restore,
+>  
+>  	.set_tss_addr = svm_set_tss_addr,
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 441f4769173e..a8f12c83db4b 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -4448,8 +4448,7 @@ void kvm_arch_vcpu_put(struct kvm_vcpu *vcpu)
+>  static int kvm_vcpu_ioctl_get_lapic(struct kvm_vcpu *vcpu,
+>  				    struct kvm_lapic_state *s)
+>  {
+> -	if (vcpu->arch.apicv_active)
+> -		static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+> +	static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
+>  
+>  	return kvm_apic_get_state(vcpu, s);
+>  }
+> @@ -9528,8 +9527,7 @@ static void vcpu_scan_ioapic(struct kvm_vcpu *vcpu)
+>  	if (irqchip_split(vcpu->kvm))
+>  		kvm_scan_ioapic_routes(vcpu, vcpu->arch.ioapic_handled_vectors);
+>  	else {
+> -		if (vcpu->arch.apicv_active)
+> -			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+> +		static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
+>  		if (ioapic_in_kernel(vcpu->kvm))
+>  			kvm_ioapic_scan_entry(vcpu, vcpu->arch.ioapic_handled_vectors);
+>  	}
+> @@ -9802,10 +9800,12 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  
+>  	/*
+>  	 * This handles the case where a posted interrupt was
+> -	 * notified with kvm_vcpu_kick.
+> +	 * notified with kvm_vcpu_kick.  Assigned devices can
+> +	 * use the POSTED_INTR_VECTOR even if APICv is disabled,
+> +	 * so do it even if APICv is disabled on this vCPU.
+>  	 */
+> -	if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
+> -		static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+> +	if (kvm_lapic_enabled(vcpu))
+> +		static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
+>  
+>  	if (kvm_vcpu_exit_request(vcpu)) {
+>  		vcpu->mode = OUTSIDE_GUEST_MODE;
+> @@ -9849,8 +9849,8 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
+>  		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
+>  			break;
+>  
+> -		if (kvm_lapic_enabled(vcpu) && vcpu->arch.apicv_active)
+> -			static_call(kvm_x86_sync_pir_to_irr)(vcpu);
+> +		if (kvm_lapic_enabled(vcpu))
+> +			static_call_cond(kvm_x86_sync_pir_to_irr)(vcpu);
+>  
+>  		if (unlikely(kvm_vcpu_exit_request(vcpu))) {
+>  			exit_fastpath = EXIT_FASTPATH_EXIT_HANDLED;
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Originally, I was thinking if we should permit 2 periods, but in another 
-hand, I thought if we just permit 1, we can give more cpu.max.burst to 
-help the workloads sharp enough and can use up the quota even when they 
-start working in the middle of one period. In this way, they have chance 
-to get job done in part period with quota+bursted cpu and probably one 
-more period with only quota. It's kind of different views of the usage.
+Best regards,
+	Maxim Levitsky
 
-If you think it can't cover the burst work loads, we can permit more 
-periods.
-
->>
->> Signed-off-by: Honglei Wang <wanghonglei@didichuxing.com>
->> ---
->>   kernel/sched/fair.c | 9 ++++++---
->>   1 file changed, 6 insertions(+), 3 deletions(-)
->>
->> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->> index 6e476f6d9435..cc2c4567fc81 100644
->> --- a/kernel/sched/fair.c
->> +++ b/kernel/sched/fair.c
->> @@ -4640,14 +4640,17 @@ void __refill_cfs_bandwidth_runtime(struct cfs_bandwidth *cfs_b)
->>   	if (unlikely(cfs_b->quota == RUNTIME_INF))
->>   		return;
->>   
->> -	cfs_b->runtime += cfs_b->quota;
->> -	runtime = cfs_b->runtime_snap - cfs_b->runtime;
->> +	runtime = cfs_b->runtime_snap - cfs_b->quota - cfs_b->runtime;
->> +
->>   	if (runtime > 0) {
->>   		cfs_b->burst_time += runtime;
->>   		cfs_b->nr_burst++;
->> +		cfs_b->runtime = cfs_b->quota;
->> +	} else {
->> +		cfs_b->runtime += cfs_b->quota;
->> +		cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
->>   	}
->>   
->> -	cfs_b->runtime = min(cfs_b->runtime, cfs_b->quota + cfs_b->burst);
->>   	cfs_b->runtime_snap = cfs_b->runtime;
->>   }
-> 
-> If we do this, it should also be mentioned in
-> Documentation/scheduler/sched-bwc.rst, since the straightforward
-> description of burst as extra max runtime is no longer enough.
-> 
-
-Yep, I'll try to refine the description of the documentation next time 
-if we decide to do this.
-
-Thank,
-Honglei

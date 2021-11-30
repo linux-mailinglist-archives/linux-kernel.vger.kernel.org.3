@@ -2,136 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01641463AEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B0F463AF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243342AbhK3QHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:07:22 -0500
-Received: from shark4.inbox.lv ([194.152.32.84]:40650 "EHLO shark4.inbox.lv"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237958AbhK3QHU (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:07:20 -0500
-Received: from shark4.inbox.lv (localhost [127.0.0.1])
-        by shark4-out.inbox.lv (Postfix) with ESMTP id 0B852C01B9;
-        Tue, 30 Nov 2021 18:04:00 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv; s=30062014;
-        t=1638288240; bh=MaBmrbP8dDC347/MJhlAP6RXqkK7vpRItGnOjqKVKMc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=NHNGWgWsZJ0U++0xL+tMHjxROjFFZ/sdn4qopEIzHxDtyrUFP4nkbPUkdk0PGvmPU
-         bbAtMtPxn6lE1RTAMHf7rcZHmk13R+Aw042Wb5lv5NJS6683c6bFAjfWHKYiaCpqau
-         +C6ATRtiK7Z8iF+gG+/sd2Jqghb6wZPHk6t3bfd8=
-Received: from localhost (localhost [127.0.0.1])
-        by shark4-in.inbox.lv (Postfix) with ESMTP id F33CCC01A8;
-        Tue, 30 Nov 2021 18:03:59 +0200 (EET)
-Received: from shark4.inbox.lv ([127.0.0.1])
-        by localhost (shark4.inbox.lv [127.0.0.1]) (spamfilter, port 35)
-        with ESMTP id wR-tlqMNy4Vw; Tue, 30 Nov 2021 18:03:59 +0200 (EET)
-Received: from mail.inbox.lv (pop1 [127.0.0.1])
-        by shark4-in.inbox.lv (Postfix) with ESMTP id 76F78C018F;
-        Tue, 30 Nov 2021 18:03:59 +0200 (EET)
-Date:   Wed, 1 Dec 2021 01:03:48 +0900
-From:   Alexey Avramov <hakavlad@inbox.lv>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-Message-ID: <20211201010348.31e99637@mail.inbox.lv>
-In-Reply-To: <20211129150117.GO3366@techsingularity.net>
-References: <20211125151853.8540-1-mgorman@techsingularity.net>
-        <20211127011246.7a8ac7b8@mail.inbox.lv>
-        <20211129150117.GO3366@techsingularity.net>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+        id S243124AbhK3QHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:07:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50266 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243089AbhK3QHm (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:07:42 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86ECC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:04:22 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id d72-20020a1c1d4b000000b00331140f3dc8so15145285wmd.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:04:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IBqKZOVerJy7pcVyrJJrQZ25FBoDm1K0Bq5fYG0ijLA=;
+        b=kXrSWYSesneu2dOdRsX/77bitmMhu4G8ptXAtC8ILtscF+oY54VkX24FdrXMWQ2QFm
+         HaWBeeWU/BnocmPDxjFq6uOOh47F+RH150CSNkwUPn2iiCPidY+DTeCb0QmKHalxilp9
+         Z4Tj08BqYxHNaEf0NN4N1QbYtdCjROPmB5b7nJr9Jbvv1kUZmh0DfxKHVJwc5Lk6r78m
+         D6flTjbGV405zK/5cCvyeLUMQuszHMNI3KAaXhrObdL/6uHWpJJYEAtVTFKSgRu13V4v
+         wgXaUAY289x89C816KF4hdHbyKNITPfxkfrRLPZ5RxPwa3bf5R1YpSgGPwi6iXa04Pcr
+         cADg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=IBqKZOVerJy7pcVyrJJrQZ25FBoDm1K0Bq5fYG0ijLA=;
+        b=VuMPhbdFv7mdZvJejIZPsAqBIM9tQjXMmDp1dzSwGLKQgoh24ZmkFDt65qwMoOyIUD
+         SuvxQCzyHskwkuhozESKm4Pe2LFZXM9tkYUJ69UWKySR5jthgga3O+eJc5liyRqrCwKG
+         2EmPLm//WP0hOGnWDBxQWmnyPnFyfGyPrFKUED+Lo/kyxQlMpGMsLEIv6LdK6cfb8IRh
+         BTeQeTbgxfj0QWsN/dVLG6jOOg/kbaCbwFw4LuidvLoq/Ns9i2B1bblGWfmjDMp9NPcN
+         Hw73FkZ0Qfct6DOCKefqeJlcBgyn5nM/2uG7r1Vw4ezspfAOf0HTXhz5aOChEnR7fV04
+         1sbw==
+X-Gm-Message-State: AOAM5310/kc7iWHzAgeshH1sP9U2dlSEbJ5Bwz6hUVriODAJEU+HYqn8
+        r1mCGp5N+hSQgkRBzkSKgYk1g5HKh4xLYA==
+X-Google-Smtp-Source: ABdhPJzH1M+SjpU9Vy+aHmc/yVN/loWXQPV7DkHX3N5YUeLFM1Y1Cn70yiQQDhW77cHNXV7lTr0H+w==
+X-Received: by 2002:a05:600c:b46:: with SMTP id k6mr343605wmr.45.1638288261355;
+        Tue, 30 Nov 2021 08:04:21 -0800 (PST)
+Received: from srini-hackbox.lan (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.gmail.com with ESMTPSA id m20sm3097575wmq.11.2021.11.30.08.04.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 08:04:20 -0800 (PST)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     broonie@kernel.org
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Subject: [PATCH] ASoC: qdsp6: q6routing: Fix return value from msm_routing_put_audio_mixer
+Date:   Tue, 30 Nov 2021 16:04:14 +0000
+Message-Id: <20211130160414.21616-1-srinivas.kandagatla@linaro.org>
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: OK
-X-ESPOL: G4mERXADmHlDpsG9Ippu5OH4tai+FgVjoUWJw7wx9RAtu7LHst18d2eTGIHzanG0EAbD
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I tested this [1] patch on top of 5.16-rc2. It's the same test with 10 tails.
+msm_routing_put_audio_mixer() can return incorrect value in various scenarios.
+Fix this, so that change notifications are sent correctly.
 
-- with noswap
+Fixes: e3a33673e845 ("ASoC: qdsp6: q6routing: Add q6routing driver")
+Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+---
+ sound/soc/qcom/qdsp6/q6routing.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Summary:
+diff --git a/sound/soc/qcom/qdsp6/q6routing.c b/sound/soc/qcom/qdsp6/q6routing.c
+index cd74681e811e..928fd23e2c27 100644
+--- a/sound/soc/qcom/qdsp6/q6routing.c
++++ b/sound/soc/qcom/qdsp6/q6routing.c
+@@ -498,14 +498,16 @@ static int msm_routing_put_audio_mixer(struct snd_kcontrol *kcontrol,
+ 	struct session_data *session = &data->sessions[session_id];
+ 
+ 	if (ucontrol->value.integer.value[0]) {
++		if (session->port_id == be_id)
++			return 0;
++
+ 		session->port_id = be_id;
+ 		snd_soc_dapm_mixer_update_power(dapm, kcontrol, 1, update);
+ 	} else {
+-		if (session->port_id == be_id) {
+-			session->port_id = -1;
++		if (session->port_id == -1 || session->port_id != be_id)
+ 			return 0;
+-		}
+ 
++		session->port_id = -1;
+ 		snd_soc_dapm_mixer_update_power(dapm, kcontrol, 0, update);
+ 	}
+ 
+-- 
+2.21.0
 
-2021-11-30 23:32:36,890: Stall times for the last 548.6s:
-2021-11-30 23:32:36,890: -----------
-2021-11-30 23:32:36,891: some cpu     3.7s, avg 0.7%
-2021-11-30 23:32:36,891: -----------
-2021-11-30 23:32:36,891: some io      187.6s, avg 34.2%
-2021-11-30 23:32:36,891: full io      178.3s, avg 32.5%
-2021-11-30 23:32:36,891: -----------
-2021-11-30 23:32:36,892: some memory  392.2s, avg 71.5%
-2021-11-30 23:32:36,892: full memory  390.7s, avg 71.2%
-
-full psi:
-https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap/psi
-
-mem:
-https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap/mem
-
-- with swappiness=0
-
-Summary:
-
-2021-11-30 23:51:48,969: Stall times for the last 919.4s:
-2021-11-30 23:51:48,969: -----------
-2021-11-30 23:51:48,969: some cpu     5.5s, avg 0.6%
-2021-11-30 23:51:48,970: -----------
-2021-11-30 23:51:48,970: some io      240.4s, avg 26.2%
-2021-11-30 23:51:48,970: full io      230.6s, avg 25.1%
-2021-11-30 23:51:48,970: -----------
-2021-11-30 23:51:48,970: some memory  806.1s, avg 87.7%
-2021-11-30 23:51:48,971: full memory  800.5s, avg 87.1%
-
-psi log:
-https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/swappiness0/psi
-
-mem log:
-https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/swappiness0/mem
-
-In some cases stalls was very short, but in many cases stalls was long. 
-The result is still not good enough.
-
-
-offtop
-======
-
-The same test with the patch [1] on top of 5.16-rc2 + le9 patch [2] 
-with vm.clean_min_kbytes=99000.
-
-- with noswap
-
-Summary:
-
-2021-11-30 23:59:32,209: Stall times for the last 73.1s:
-2021-11-30 23:59:32,209: -----------
-2021-11-30 23:59:32,209: some cpu     0.4s, avg 0.5%
-2021-11-30 23:59:32,209: -----------
-2021-11-30 23:59:32,210: some io      5.8s, avg 8.0%
-2021-11-30 23:59:32,210: full io      5.3s, avg 7.3%
-2021-11-30 23:59:32,210: -----------
-2021-11-30 23:59:32,210: some memory  3.3s, avg 4.5%
-2021-11-30 23:59:32,210: full memory  3.1s, avg 4.2%
-
-This is just an example of what a result close to the expected 
-result might be (especially note io pressure values).
-
-full psi:
-https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap_le9_min99k/psi
-
-mem:
-https://raw.githubusercontent.com/hakavlad/cache-tests/main/516-reclaim-throttle/516-rc2/patch5/noswap_le9_min99k/mem
-
-[1] https://lore.kernel.org/lkml/20211129150117.GO3366@techsingularity.net/
-[2] https://lore.kernel.org/all/20211130201652.2218636d@mail.inbox.lv/

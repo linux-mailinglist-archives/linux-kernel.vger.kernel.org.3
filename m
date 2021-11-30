@@ -2,97 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80DBD463405
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:17:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B44AF463407
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241468AbhK3MUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:20:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
+        id S241479AbhK3MVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:21:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbhK3MUd (ORCPT
+        with ESMTP id S241477AbhK3MU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:20:33 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69105C061574;
-        Tue, 30 Nov 2021 04:17:14 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id bi37so53226053lfb.5;
-        Tue, 30 Nov 2021 04:17:14 -0800 (PST)
+        Tue, 30 Nov 2021 07:20:58 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF163C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:17:39 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id g19so20415091pfb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:17:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=trRzexDm92sVJlThyj/04+7SN11dBJi8qOdq95CaO5g=;
-        b=VzMywNNj2yxWLL2z9DxwtUGbmUnA8iIr6NjgbGU0BU9wo16PrbqrOBttuCtLYiQZai
-         X+logj3jzyHag+GMsJF4KQdBhQD3+3jB7QDDAma0ktWI+bf/ktIfuuEnGeoLSuUJZAZx
-         tjU2bXEV65OCbmjlAZMLxwS8vITLUaNz+WJ5dPsUgUsMcWPhvZcVjZsmib+HuHOqrmhR
-         pZ+OnM2u7Wycjl06k9VcvBZ/H5jk+IeKppVz4NFng/diLaWdERct8E2mmukQYPNkKLIP
-         1zCPwhmSG74DXdpH3jJlCJvUDkYOioGXD941Ri+Mi1eHc/ZLnWx0fWDEb20f7EbPXc9o
-         19oQ==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hXu04+QUxNwriCyATe0mYK4V2fWk7rKeUqQfH4ZzNho=;
+        b=NFz49q4CXrhyY7CXbxV3z2ldVJwzaldxtc/oUsdRBVtBiXC0KM/JK9hjV95JGIcdR3
+         XDGcDJ+EiGuf4DJ3sc1r8SPmbPHtA01T9BCHnE04fetiIF5bEeO5kMv+Jr7yO/x0BLOV
+         Ih1gTcjC2GEXmWtPZxbvoDVwheVuXdxr7s+SKf5xLZXfPd4SmywfW4UM1xZt3Zfb+4Ja
+         LgC1VaiZ3Ttp+29Rd7+1JBOZOCzIGe+JmkD3y7WyBsDSV7ACAYLlHUF9HslcRP/2pbnV
+         v5jmy3VYLzwITHpHxo3kYxv45vgBs5BUH8ahHHnLp8P38JAI5Fttzm1opmXGLem+cWcF
+         YCIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=trRzexDm92sVJlThyj/04+7SN11dBJi8qOdq95CaO5g=;
-        b=obaj7A4coCxUJDQyRHD59vwnou8hCIyRVOcWpQv1SjsK1xZBGproLrzzw5+w9scGq/
-         whf87xoJnh065bpzmb2KPOFExTLX8oh7WMvAfIF5+WqhWT1n02p7I6OxR40gHj2T78Ng
-         sYb0R3yFgn6BFIpVkpcyxpNT6DekQHHoGClR+mdsP/7ivdDGDFpvlvA7CZCK2AbjEQFr
-         WVITL2Sv9FqKKCx/OM9ZSRpp5LuWT21XIqFRZReKtslYd1rcjYO+4ox5WGCp6XTNg1cr
-         DTJiD4HpuYdP1Zfso/EQJNR2VDFQc0raUKxXi8tr2XzHpEc+GOT7eefTSaAvdsKsJsWP
-         T+jQ==
-X-Gm-Message-State: AOAM531jYx9qATmV9PufGQ/cZjI/d/CQbTYOgR0heSIm21DB/rPtLRIq
-        7/d8KDfeyFBYBQ49Si/ayk5WP+PIfjc=
-X-Google-Smtp-Source: ABdhPJyeb69zs1klG9kPMwoTkQRV81S9ZqywFuLxMLusvHux/rRMMtdRtxrotgsIHc3R8AfBdeyY8A==
-X-Received: by 2002:a05:6512:3b2b:: with SMTP id f43mr55139476lfv.629.1638274632435;
-        Tue, 30 Nov 2021 04:17:12 -0800 (PST)
-Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.googlemail.com with ESMTPSA id f23sm1708689ljg.90.2021.11.30.04.17.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 04:17:11 -0800 (PST)
-Subject: Re: [PATCH] serial: tegra: Fixes lower tolerance baud rate limit for
- older tegra chips introduced by d781ec21bae6
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Patrik John <patrik.john@u-blox.com>, linux-kernel@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, ldewangan@nvidia.com,
-        thierry.reding@gmail.com, jonathan@nvidia.com,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
-References: <sig.096060f39c.20211122124425.74031-1-patrik.john@u-blox.com>
- <0165046b-c8bc-ec8e-05c7-bf9aea14339b@gmail.com>
- <727044f2-12d4-0de4-f6b8-ef3ee75d3630@gmail.com>
-Message-ID: <d906ed7f-c507-e5b0-3d46-2750d62414a4@gmail.com>
-Date:   Tue, 30 Nov 2021 15:17:10 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hXu04+QUxNwriCyATe0mYK4V2fWk7rKeUqQfH4ZzNho=;
+        b=BSn4AbnBmMkUwsRfl4WXAQ+EDMA3HqmDbIUooqpXz0gJQiXAeSrvxQrjr4iQKQkGRc
+         Sel5RTo6Vxwdja3cOLsr4w6+vdUyRCKeYC6ZY7REFS2kxrmuAUz7U9vMJe8mA1D9Uruw
+         8Y95+B5q4wuauFJwwgbiolF7Sg/RBf1UZuEcTLYWJlWLIB9LJ358hRMNzZuv3fA9jTPJ
+         oDwpxdsOSpMyNRMdBaQkbTeCy1vw8XFCP4GIErV7VolIC9CUMnyL2xWmZ53HbJC5W+zP
+         BulhHItrd4tUSTWxbDpfYWb1fF8asDweDeEeNt0gc28kBzG3jaQuRGxitZKz2UfdbbhM
+         p0uw==
+X-Gm-Message-State: AOAM530cUK3cCihBk/uG9qeayyCnUSsqZ4+LOWP/xHpNYwGPlv7wBqX6
+        IXPzW00Sskr3ZffopRzLwOLS/7daWqZ7+NjwQlXUMg==
+X-Google-Smtp-Source: ABdhPJxXQvjuI9DOLtLA4qoREyXeCJL3uZPQt563tGuuhXX60ozlJ15yWahFJlZ5ASNrD3Cz92l7mKSjcN1q2dr7D/4=
+X-Received: by 2002:a63:414:: with SMTP id 20mr39830109pge.178.1638274659171;
+ Tue, 30 Nov 2021 04:17:39 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <727044f2-12d4-0de4-f6b8-ef3ee75d3630@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+References: <20211117020724.2647769-1-pcc@google.com> <YaW3Cff+AJqT8tS/@matsya>
+In-Reply-To: <YaW3Cff+AJqT8tS/@matsya>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 30 Nov 2021 13:17:28 +0100
+Message-ID: <CAG3jFyt802J8nxtc_iifgfbTJk0-Mtu_18aY0cEcjyJDaNLjaA@mail.gmail.com>
+Subject: Re: [PATCH] lontium-lt9611: check a different register bit for HDMI sensing
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Peter Collingbourne <pcc@google.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Anibal Limon <anibal.limon@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-29.11.2021 15:36, Dmitry Osipenko пишет:
-> 29.11.2021 15:32, Dmitry Osipenko пишет:
->> 3. Use "Link" tag and put all http links here, before the Signed-off-by
->> tag, like this:
->>
->> Link:
->> https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git/commit/drivers/tty/serial/serial-tegra.c?h=for-next&id=d781ec21bae6ff8f9e07682e8947a654484611f5
->> Link:
->> https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git/tree/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi?h=for-next
->> Link:
->> https://www.kernel.org/doc/Documentation/devicetree/bindings/serial/nvidia%2Ctegra20-hsuart.txt
-> 
-> Actually, it should be like this:
-> 
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git/commit/drivers/tty/serial/serial-tegra.c?h=for-next&id=d781ec21bae6ff8f9e07682e8947a654484611f5
-> Link: https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git/tree/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi?h=for-next
-> Link: https://www.kernel.org/doc/Documentation/devicetree/bindings/serial/nvidia%2Ctegra20-hsuart.txt
-> 
-> I turned off line wrapping for this email.
-> 
+On Tue, 30 Nov 2021 at 06:30, Vinod Koul <vkoul@kernel.org> wrote:
+>
+> On 16-11-21, 18:07, Peter Collingbourne wrote:
+> > It has been observed that with certain monitors such as the HP Z27n,
+> > the register 0x825e reads a value of 0x79 when the HDMI cable is
+> > connected and 0x78 when it is disconnected, i.e. bit 0 appears
+> > to correspond to the HDMI connection status and bit 2 is never
+> > set. Therefore, change the driver to check bit 0 instead of bit 2.
+>
+> So we have got limited information on this but BIT-2 seems to be related
+> to HPD and empirical data from various monitors supports this, so this
+> seems the right thing to do.
+>
+> Reviewed-by: Vinod Koul <vkoul@kernel.org>
+>
 
-For the reference, I just found that there was v3 already on the list:
-
-https://patchwork.ozlabs.org/project/linux-tegra/patch/sig.19614244f8.20211123132737.88341-1-patrik.john@u-blox.com/
+Applied to drm-misc-next

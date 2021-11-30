@@ -2,173 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B86F463FBD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966A5463FC7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:17:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343925AbhK3VSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:18:49 -0500
-Received: from mail-mw2nam12on2050.outbound.protection.outlook.com ([40.107.244.50]:14529
-        "EHLO NAM12-MW2-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S239750AbhK3VSp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:18:45 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iuj9NML98atxn2dHkPQoFVZNlde4rTNKZl47GL1NksykCM1PU8pPZY9ht8B8Z01+XsapuqLfYkuYktGsL3Drv18lEXqKyYNN03NbikneOhWXPx8gPPHu3UEPzHC6iyeNgbEcn+KrOy290dHoMz0P4uZCEn4lHhCoYgw4l7G7MMjMKNaXYawbH2Kmr2eyqCmcUifExVyCQiT9iWd3OGV9QhZ+Abg/3FOrES71bEUxqYHcH5VJlPUmWhGFxJVDZsgR0tST04EhFTGvuvgELMgGy3mL8QDKOfJe/xv3Wz17PwPQmm9slOXo0iIitfKqTaVlYDOwY6RbWV28A9nhGfxBwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=y4a9itjQdnnQ/860RvXVfJvZLU6SRG1BiJOqrx7vFHU=;
- b=MXyiL9fG8rDjqS7WgcC9GrKsicccWnnsPemS2YSHsLofSzMg3vD5B/3u5opPZ5mfgrtyNJIq22t8X0w7iaQxsW/yztfs0Vsh5J6vhZKqtM+QGBYf3Eb+f2SYCl57Ve1P38IYmCI8iOaJXfjpSXAzPZFIOl1fXixi3hIzijSxwUSf4WPuvDzBTnFZQKx0ctvlWDlPQvMVzNSwQ+2ntv4Al+UoNKoh8HTZkIFmxveHvmCovanxaeRbSJKqjfRpYr2X6Z0PcdK59kQKf1WW305H7aPkWkh+3O8fHP7LXRy2lz/l9z8KBilX8/XhsQ3SxxQ2n+K7YC4APzjJHUpD3CBrpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=infradead.org smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        id S1343969AbhK3VUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1343977AbhK3VUG (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 16:20:06 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D0AC061574;
+        Tue, 30 Nov 2021 13:16:46 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id y12so92438876eda.12;
+        Tue, 30 Nov 2021 13:16:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=y4a9itjQdnnQ/860RvXVfJvZLU6SRG1BiJOqrx7vFHU=;
- b=DoVODDY98Q0btE8RMgqU8hQQIk2wyl6r1yMwzosAJMgRurSS+B1EfC9yuh41NyUG0rQghm6IJ+6gtAAdhbZ5uZYI1K9U0Ra4E/ER2RPvaFuyKVdEGyd9TIjQ825mDcoHoujrsK//tl4/O8Mdze9SUp5X2+Nmlj3cWBE5EfgnisQ=
-Received: from BN9PR03CA0132.namprd03.prod.outlook.com (2603:10b6:408:fe::17)
- by SA0PR02MB7420.namprd02.prod.outlook.com (2603:10b6:806:e9::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Tue, 30 Nov
- 2021 21:15:23 +0000
-Received: from BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
- (2603:10b6:408:fe:cafe::5d) by BN9PR03CA0132.outlook.office365.com
- (2603:10b6:408:fe::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend
- Transport; Tue, 30 Nov 2021 21:15:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- BN1NAM02FT049.mail.protection.outlook.com (10.13.2.89) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4755.13 via Frontend Transport; Tue, 30 Nov 2021 21:15:22 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Tue, 30 Nov 2021 13:15:06 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Tue, 30 Nov 2021 13:15:06 -0800
-Envelope-to: dwmw2@infradead.org,
- mdf@kernel.org,
- trix@redhat.com,
- devicetree@vger.kernel.org,
- linux-fpga@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- robh@kernel.org
-Received: from [10.17.2.60] (port=41108)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <lizhi.hou@xilinx.com>)
-        id 1msARe-000Euq-LK; Tue, 30 Nov 2021 13:13:46 -0800
-Subject: Re: [PATCH V2 XRT Alveo Infrastructure 3/9] of: handle fdt buffer
- alignment inside unflatten function
-To:     Rob Herring <robh@kernel.org>, Lizhi Hou <lizhi.hou@xilinx.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-fpga@vger.kernel.org>,
-        <maxz@xilinx.com>, <sonal.santan@xilinx.com>, <yliu@xilinx.com>,
-        <michal.simek@xilinx.com>, <stefanos@xilinx.com>,
-        <devicetree@vger.kernel.org>, <trix@redhat.com>, <mdf@kernel.org>,
-        <dwmw2@infradead.org>, Max Zhen <max.zhen@xilinx.com>
-References: <20211119222412.1092763-1-lizhi.hou@xilinx.com>
- <20211119222412.1092763-4-lizhi.hou@xilinx.com>
- <YaWE/2ikgpXi2hzY@robh.at.kernel.org>
-From:   Lizhi Hou <lizhi.hou@xilinx.com>
-Message-ID: <e76c91d8-f2a2-f11b-14cb-da554bf42793@xilinx.com>
-Date:   Tue, 30 Nov 2021 13:13:46 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.1
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QaKNLcEbd4W+9va6JdgC5Dp/YFctoLABljRpwtI9gAE=;
+        b=cAjV81xggRN5tg7ifBrw/dad14U/K7GKgSV7k9z5kbQznek/YKnuhRfAyecWPtKcKa
+         y1g1eWL5zNolgtxNS3fIqF3lnFGWlgJL+ps0ZGQ2hBexSvkAsIIctoGI4/M1xf0duZvj
+         rpqdYTB4J/SzmLcyAagR02cNsdc7vuORtB8BG0oHQwUZ9upq83x9rMU4PXIauWosQaaq
+         AnbGHdMrfFh6o7wlT7jGWYsV6udYrn3WyJ5CjzYBVk3hWWy9CpO41KYr4JHBgz+cIU8e
+         52KVomjYpx48knvqI1/OfxyudOBettQ7Kcm8wQoPpOLfUXbUPIK+iirxW9x4ryx07mWO
+         i+PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QaKNLcEbd4W+9va6JdgC5Dp/YFctoLABljRpwtI9gAE=;
+        b=tnx/DAw/whEYw42ylP2Qo6MgnYOvm9F7A8TgP7oz8HcDm8HxpRJg31S8WdUp0YfHu4
+         0z8tTSAE0492frk4hX7hD0ZXaeWXhga7cb/xsGvWpi/FnTuQSWSyFCdFJrft67CZLPZw
+         uA/GNr6lNwpwbQQi7WsVSM+eWDraKsYRANFofalTfr9NhfBXUoPE/MaaRsU2DU4slujO
+         yMOCPSKy9zb0m6lmXuZAkBUDENVcciMx1qFwhOXdYOKG//Oz+smg0mnBT6CYD2GhgpDJ
+         oFStjAKmqXQrs8mhi+3pmCPvDj/3XTGZACO06PWPdFlfMWrMm6obfMRi5owB14Xe/OEl
+         vCeg==
+X-Gm-Message-State: AOAM530/9yMN2LWunBI8/2mKuIMpXuQrgnKBHwjNGMv6Msnt5n7atIxe
+        DC1rK8YkmJlIdJvcZd72V+4U2Koo3h8=
+X-Google-Smtp-Source: ABdhPJx9MDQYkX7IUbUNWwWUiXVs9/dGt+kDT/MmEHGywV/IixFMltlNOOnuQFFpD7/T+NTl4mc4ZQ==
+X-Received: by 2002:a17:907:7ba8:: with SMTP id ne40mr1845191ejc.391.1638307005099;
+        Tue, 30 Nov 2021 13:16:45 -0800 (PST)
+Received: from localhost.localdomain (93-42-71-246.ip85.fastwebnet.it. [93.42.71.246])
+        by smtp.googlemail.com with ESMTPSA id p13sm12271753eds.38.2021.11.30.13.16.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 13:16:44 -0800 (PST)
+From:   Ansuel Smith <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ansuel Smith <ansuelsmth@gmail.com>, Rob Herring <robh@kernel.org>
+Subject: [net-next PATCH v2 1/2] dt-bindings: net: dsa: split generic port definition from dsa.yaml
+Date:   Tue, 30 Nov 2021 22:16:24 +0100
+Message-Id: <20211130211625.29724-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-In-Reply-To: <YaWE/2ikgpXi2hzY@robh.at.kernel.org>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 757014e0-438d-477d-3338-08d9b4468591
-X-MS-TrafficTypeDiagnostic: SA0PR02MB7420:
-X-Microsoft-Antispam-PRVS: <SA0PR02MB74200332DB7CF8091708336CA1679@SA0PR02MB7420.namprd02.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:8273;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mHiIaUCg7+9+9lBThf9h8qSOOOhth7Ng9xOBm6uE1k+VepjIKcbvkSRRELSYsQFKzJ//P1wjkfJ3cVtrv7p0GYVAKv3vbVI+Fzqbmeux81Y0qX2LVmACR1fJETS6B/4oXPZ1gWWEIdbIrXIIqqvqGvdX/1L5mqEpQXktT5WE260rGz0ed22mExOLAOWHgtyet/ouYQa2SUWPrGJlsJii/T1Sk+GrH2gnSZFND7WJtj7N9buCEE6kVn/8IPFlcvmjYqXXrpI8G9OY2FaFag9Z/Olnd+/cv2yjcpzDOz+oJfbGbqRqKDzvJkmkXeru5snTg1+EzZhfzhbO2R1sEbgk2e/FVrt8qY55Fb/LkVhVHG/s57SRKwUQ1u/tYIVcO/RbQeYcr6pW9nNDgxfz19UX5QC8NCqjDaWQVVJHuEYVx6/b6q32fkK6K+BNIqDtDsjonPIQRrIGQ9xreNq8jfYfBA1+N2jnqZs7nb90Y7puj24rpFA8SS+CtlsiLB8Ic0GzZ33BU//VJbuH5hFllywfa777o1KuUn30CwRAYJ7rqNq5SZfQtkLzKUj4nkmtRK1mqwtPd8+XXrwpi282VU0vqlHghsiQvHUQlg7Eyuw8jMkR5mGriN1YKzLICLSBxyRDtXbIrGL26uGR9XPOn5kokH8X9W5yfLQ5Ba35Mjj0ffontfbdsyNtjQg5SaUb5uxvrEaVtNjee7/nSpAnoIBoH26rbBk402cLi2DOGYwoJ4S1jBQ25GEJZ9PqqZNu8OF7
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(36840700001)(46966006)(26005)(70206006)(31696002)(8676002)(508600001)(70586007)(82310400004)(107886003)(4326008)(110136005)(54906003)(316002)(9786002)(2906002)(53546011)(8936002)(36756003)(186003)(83380400001)(5660300002)(2616005)(36860700001)(47076005)(7636003)(336012)(31686004)(356005)(44832011)(426003)(50156003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 21:15:22.9825
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 757014e0-438d-477d-3338-08d9b4468591
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT049.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR02MB7420
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some switch may require to add additional binding to the node port.
+Move DSA generic port definition to a dedicated yaml to permit this.
 
-On 11/29/21 5:57 PM, Rob Herring wrote:
-> On Fri, Nov 19, 2021 at 02:24:06PM -0800, Lizhi Hou wrote:
->> Add alignment check to of_fdt_unflatten_tree(). If it is not aligned,
->> allocate a aligned buffer and copy the fdt blob. So the caller does not
->> have to deal with the buffer alignment before calling this function.
->> XRT uses this function to unflatten fdt which is from Alveo firmware.
->>
->> Signed-off-by: Sonal Santan <sonal.santan@xilinx.com>
->> Signed-off-by: Max Zhen <max.zhen@xilinx.com>
->> Signed-off-by: Lizhi Hou <lizhi.hou@xilinx.com>
->> ---
->>   drivers/of/fdt.c | 17 ++++++++++++++++-
->>   1 file changed, 16 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
->> index 4546572af24b..d64445e43ceb 100644
->> --- a/drivers/of/fdt.c
->> +++ b/drivers/of/fdt.c
->> @@ -455,13 +455,28 @@ void *of_fdt_unflatten_tree(const unsigned long *blob,
->>                            struct device_node *dad,
->>                            struct device_node **mynodes)
->>   {
->> +     void *new_fdt = NULL, *fdt_align;
->>        void *mem;
->>
->> +     if (fdt_check_header(blob)) {
->> +             pr_err("Invalid fdt blob\n");
->> +             return NULL;
->> +     }
->> +     fdt_align = (void *)PTR_ALIGN(blob, FDT_ALIGN_SIZE);
->> +     if (fdt_align != blob) {
->> +             new_fdt = kmalloc(fdt_totalsize(blob) + FDT_ALIGN_SIZE, GFP_KERNEL);
->> +             if (!new_fdt)
->> +                     return NULL;
->> +             fdt_align = PTR_ALIGN(new_fdt, FDT_ALIGN_SIZE);
-> Where's the copy?
->
->> +     }
->> +
->>        mutex_lock(&of_fdt_unflatten_mutex);
->> -     mem = __unflatten_device_tree(blob, dad, mynodes, &kernel_tree_alloc,
->> +     mem = __unflatten_device_tree(fdt_align, dad, mynodes, &kernel_tree_alloc,
->>                                      true);
->>        mutex_unlock(&of_fdt_unflatten_mutex);
->>
->> +     kfree(new_fdt);
-> You know the unflattened DT just references strings and property values
-> from the flattened DT. So you just caused a use after free.
->
-> Fix your firmware to align the DT.
+Signed-off-by: Ansuel Smith <ansuelsmth@gmail.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/net/dsa/dsa-port.yaml | 77 +++++++++++++++++++
+ .../devicetree/bindings/net/dsa/dsa.yaml      | 60 +--------------
+ 2 files changed, 79 insertions(+), 58 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
 
-Thanks a lot for pointing this out. I did not aware the direct reference 
-of strings and values from the flattened DT. And I will fix this.
+diff --git a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+new file mode 100644
+index 000000000000..702df848a71d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+@@ -0,0 +1,77 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/dsa/dsa-port.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Ethernet Switch port Device Tree Bindings
++
++maintainers:
++  - Andrew Lunn <andrew@lunn.ch>
++  - Florian Fainelli <f.fainelli@gmail.com>
++  - Vivien Didelot <vivien.didelot@gmail.com>
++
++description:
++  Ethernet switch port Description
++
++allOf:
++  - $ref: "http://devicetree.org/schemas/net/ethernet-controller.yaml#"
++
++properties:
++  reg:
++    description: Port number
++
++  label:
++    description:
++      Describes the label associated with this port, which will become
++      the netdev name
++    $ref: /schemas/types.yaml#/definitions/string
++
++  link:
++    description:
++      Should be a list of phandles to other switch's DSA port. This
++      port is used as the outgoing port towards the phandle ports. The
++      full routing information must be given, not just the one hop
++      routes to neighbouring switches
++    $ref: /schemas/types.yaml#/definitions/phandle-array
++
++  ethernet:
++    description:
++      Should be a phandle to a valid Ethernet device node.  This host
++      device is what the switch port is connected to
++    $ref: /schemas/types.yaml#/definitions/phandle
++
++  dsa-tag-protocol:
++    description:
++      Instead of the default, the switch will use this tag protocol if
++      possible. Useful when a device supports multiple protocols and
++      the default is incompatible with the Ethernet device.
++    enum:
++      - dsa
++      - edsa
++      - ocelot
++      - ocelot-8021q
++      - seville
++
++  phy-handle: true
++
++  phy-mode: true
++
++  fixed-link: true
++
++  mac-address: true
++
++  sfp: true
++
++  managed: true
++
++  rx-internal-delay-ps: true
++
++  tx-internal-delay-ps: true
++
++required:
++  - reg
++
++additionalProperties: true
++
++...
+diff --git a/Documentation/devicetree/bindings/net/dsa/dsa.yaml b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+index 2ad7f79ad371..b9d48e357e77 100644
+--- a/Documentation/devicetree/bindings/net/dsa/dsa.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/dsa.yaml
+@@ -46,65 +46,9 @@ patternProperties:
+         type: object
+         description: Ethernet switch ports
+ 
+-        allOf:
+-          - $ref: "http://devicetree.org/schemas/net/ethernet-controller.yaml#"
++        $ref: dsa-port.yaml#
+ 
+-        properties:
+-          reg:
+-            description: Port number
+-
+-          label:
+-            description:
+-              Describes the label associated with this port, which will become
+-              the netdev name
+-            $ref: /schemas/types.yaml#/definitions/string
+-
+-          link:
+-            description:
+-              Should be a list of phandles to other switch's DSA port. This
+-              port is used as the outgoing port towards the phandle ports. The
+-              full routing information must be given, not just the one hop
+-              routes to neighbouring switches
+-            $ref: /schemas/types.yaml#/definitions/phandle-array
+-
+-          ethernet:
+-            description:
+-              Should be a phandle to a valid Ethernet device node.  This host
+-              device is what the switch port is connected to
+-            $ref: /schemas/types.yaml#/definitions/phandle
+-
+-          dsa-tag-protocol:
+-            description:
+-              Instead of the default, the switch will use this tag protocol if
+-              possible. Useful when a device supports multiple protocols and
+-              the default is incompatible with the Ethernet device.
+-            enum:
+-              - dsa
+-              - edsa
+-              - ocelot
+-              - ocelot-8021q
+-              - seville
+-
+-          phy-handle: true
+-
+-          phy-mode: true
+-
+-          fixed-link: true
+-
+-          mac-address: true
+-
+-          sfp: true
+-
+-          managed: true
+-
+-          rx-internal-delay-ps: true
+-
+-          tx-internal-delay-ps: true
+-
+-        required:
+-          - reg
+-
+-        additionalProperties: false
++        unevaluatedProperties: false
+ 
+ oneOf:
+   - required:
+-- 
+2.32.0
 
-
-Lizhi
-
->
-> Rob

@@ -2,140 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 218B946294C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:51:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 113C0462949
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbhK3AyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:54:16 -0500
-Received: from mail-qk1-f172.google.com ([209.85.222.172]:42878 "EHLO
-        mail-qk1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232650AbhK3AyJ (ORCPT
+        id S234597AbhK3Axi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:53:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229542AbhK3Axf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:54:09 -0500
-Received: by mail-qk1-f172.google.com with SMTP id g28so24947496qkk.9;
-        Mon, 29 Nov 2021 16:50:51 -0800 (PST)
+        Mon, 29 Nov 2021 19:53:35 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031E5C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:50:17 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id v23so13999900pjr.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:50:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=mZwUhNOlTldzwCySZH7KwoLjITrisyHGYQ8WGBoGe0A=;
-        b=Y+jX5SsGSq6Z32i/Dvafwl07I3gQJxEtyADI/WcOjunOGMBOQ80o7e4eU9t4Eug5lF
-         +RoMayesqSi7DaMfHjYUrRtoF2xntY7HEQe43pu39C60A77H9roBAc+4rwEz4G1D/puq
-         iCFbm9zhOe8ptc1zBLV9EcYhYns2lFa8HE8y47wZM6HKRkAj58gwDkca3AALm7U3A6WF
-         w/OwHxmmO6ECqrZx4qrpC9wOQexegQc4JWq334Fn+miT5NIKdQ5c0Adw8nu2vWI8UNPG
-         k8jbkhK0ftq4E2rFuAFiRBfzgnPhLP3ivyna3ZfsErrDNNtX1pU8njkyiLAycAe/w8gS
-         Frqw==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=iG5avsmPgwr7oWVWROfClDdv203lFsOfYp3gzjKq28I=;
+        b=ij9Uyae1f8vOWffcEt4fUYEhkfD/IcnmJNwEdeNwzQ1NGs6jEdaUGjOtfUYH8LYG0L
+         FLCHiDWrZbeYxVybQ4ZZpsIY2p8H+2ZiumlrZ7TRVSVyiA3AaOIia9u43vi3pQaCxMPP
+         Lien3WqTIXFkZQ4YUiV8w4E5uaoPnOfzNTIKXoC76L9HWK+99o7aGo6ZmB9/Zanr9E26
+         4MzwcU8iSYI67A9Gz/Fk4dFR/Nefe1Jr4i6MsSIE05WkN9hly5sV4Rz183kUkPJ/Uwd5
+         DFaVBvPhfR9tyTwJXNwcvpcxyXj+CStHidoArGW9sza3YHpQFd3DdURwOczK4APONRx+
+         6zPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=mZwUhNOlTldzwCySZH7KwoLjITrisyHGYQ8WGBoGe0A=;
-        b=r+Y+k6e/HrV30bnjo0kmn40i9oJBKiQuX5E6upDB+slQx8YyvZcq3nGi4E3jPHvjPN
-         Rj+3TqYkcbuPu5NyYWWM0M5MLSXuSlRdEcK8fAw1nX/zBMpEB6ZyREGO6Recmh4cAxYZ
-         mrPWZPXfsXkbVR9ImM5uhnRMh3Np+l4yte3drgCn/dxbDsAN8htSvvdMrpIuJowrEPFz
-         88Cu0k2Gg5gsGCeM3U0dXJAYNChz7wehMOY/ra+caWBxbDb5+ZjOH4mmqKjiM2Bs/dql
-         lPcef4clHG1PTkfCfQ9GHGlGhySVgL/FiPeCckUU5SzRajMhomrYolMQk+m0ckgs4NN8
-         jKNw==
-X-Gm-Message-State: AOAM531Ftxg2VjalI/rEAJSo8VlM6qoRCnkksiOTrQyaF4ezT1IpX1nt
-        OC8dbE05VMFPX/kLUWBBJg==
-X-Google-Smtp-Source: ABdhPJxeUTniSksqY6gizoFDH8cXkZSbMiqtCG83/FA3cI9YuOBxjhfjNYnyRyF6SEOGHlMvpWrXdA==
-X-Received: by 2002:a05:620a:151a:: with SMTP id i26mr42705229qkk.499.1638233391014;
-        Mon, 29 Nov 2021 16:49:51 -0800 (PST)
-Received: from bytedance.attlocal.net (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
-        by smtp.gmail.com with ESMTPSA id de40sm8858941qkb.99.2021.11.29.16.49.49
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=iG5avsmPgwr7oWVWROfClDdv203lFsOfYp3gzjKq28I=;
+        b=U0oMo67Dl/ngNP5ewnOjNmLF0Vw+bWgWX5lqfZ9p5tO0uaHUbsrOsQcsu3XWJsqK62
+         IT+s4pY7B45Ts1VCmseGjxyXREydlhctvySRP5av0O5zwBZTKZOSPY79dWMZFmtZtWUO
+         sMZWTIfl3uW10YNlv+A+WUcvOVyRqZHpAkwVoBXA5DP74Gg1DDTeTkz6XRYmXe8885lp
+         0Qum8rj8W2QNIXHlXO4bjn0PU5Cq8d7ziXRmxrznGrrq046p7A78XJzlTrCDDsXZtdyH
+         uQdte/achybT4rkZfygUu7ZJC3O6ilBsoBm+LBeGQVAsskdu00EDvcFmuddE2lhi9DZO
+         uyLw==
+X-Gm-Message-State: AOAM531ZNXOXnJCnSLzoXhDz/n7Zh7OcK1U5O7pcAg20suW7LhewVKR0
+        jPdaOwaEpiRtocA86TOJnfbMag==
+X-Google-Smtp-Source: ABdhPJyz4p4sxgrLpyl+d52+s8U2eNJ+kl9si9SEeMwgnIHOwmOgADISt3QiwXDwdPaFAJEVxklxWA==
+X-Received: by 2002:a17:902:c20d:b0:142:1009:585d with SMTP id 13-20020a170902c20d00b001421009585dmr63837885pll.83.1638233416280;
+        Mon, 29 Nov 2021 16:50:16 -0800 (PST)
+Received: from google.com (254.80.82.34.bc.googleusercontent.com. [34.82.80.254])
+        by smtp.gmail.com with ESMTPSA id a11sm18419093pfh.108.2021.11.29.16.50.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 16:49:50 -0800 (PST)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        David Ahern <dsahern@gmail.com>, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2] selftests/fib_tests: ping from dummy0 in fib_rp_filter_test()
-Date:   Mon, 29 Nov 2021 16:49:05 -0800
-Message-Id: <20211130004905.4146-1-yepeilin.cs@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211129225230.3668-1-yepeilin.cs@gmail.com>
-References: <20211129225230.3668-1-yepeilin.cs@gmail.com>
+        Mon, 29 Nov 2021 16:50:15 -0800 (PST)
+Date:   Tue, 30 Nov 2021 00:50:12 +0000
+From:   David Matlack <dmatlack@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH 2/2] KVM: mmu/x86: optimize zapping by retaining non-leaf
+ SPTEs and avoid rcu stall
+Message-ID: <YaV1RNXi/0nTtaG/@google.com>
+References: <20211124214421.458549-1-mizhang@google.com>
+ <20211124214421.458549-3-mizhang@google.com>
+ <YaV02MdGYlfGs35T@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaV02MdGYlfGs35T@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peilin Ye <peilin.ye@bytedance.com>
+On Tue, Nov 30, 2021 at 12:48:24AM +0000, David Matlack wrote:
+> On Wed, Nov 24, 2021 at 09:44:21PM +0000, Mingwei Zhang wrote:
+> > TDP MMU SPTE zapping process currently uses two levels of iterations. The
+> > first level iteration happens at the for loop within the zap_gfn_range()
+> > with the purpose of calibrating the accurate range for zapping. The second
+> > level itreration start at tdp_mmu_set_spte{,_atomic}() that tears down the
+> 
+> iteration
+> 
+> > whole paging structures (leaf and non-leaf SPTEs) within the range. The
+> > former iteration is yield safe, while the second one is not.
+> 
+> I know what you mean but I'd suggest being more specific than "yield
+> safe". For example:
+> 
+>   Unlike the outer loop, the recursive zapping done under
+>   tdp_mmu_set_spte{,_atomic} does not yield. Since zapping is done with
+>   a pre-order traversal, zapping sufficiently large ranges can lead to
+>   RCU stall warnings.
+> 
+> I'd also clarify here that the TDP MMU iterator uses a pre-order
+> traversal which causes us KVM to end up doing the maximum amount of
+> zapping under tdp_mmu_set_spte{,_atomic} and not the outer for loop.
 
-Currently rp_filter tests in fib_tests.sh:fib_rp_filter_test() are
-failing.  ping sockets are bound to dummy1 using the "-I" option
-(SO_BINDTODEVICE), but socket lookup is failing when receiving ping
-replies, since the routing table thinks they belong to dummy0.
+(Ah sorry for the redundant suggestion. I wrote this paragraph and then
+reworded my suggested wording to mention the pre-order traversal.)
 
-For example, suppose ping is using a SOCK_RAW socket for ICMP messages.
-When receiving ping replies, in __raw_v4_lookup(), sk->sk_bound_dev_if
-is 3 (dummy1), but dif (skb_rtable(skb)->rt_iif) says 2 (dummy0), so the
-raw_sk_bound_dev_eq() check fails.  Similar things happen in
-ping_lookup() for SOCK_DGRAM sockets.
-
-Fix the tests by binding to dummy0 instead.  Redirect ping requests to
-dummy1 before redirecting them again to lo, so that sk->sk_bound_dev_if
-agrees with our routing table.
-
-These tests used to pass due to a bug [1] in iputils, where "ping -I"
-actually did not bind ICMP message sockets to device.  The bug has been
-fixed by iputils commit f455fee41c07 ("ping: also bind the ICMP socket
-to the specific device") in 2016, which is why our rp_filter tests
-started to fail.  See [2] .
-
-Tested with ping from iputils 20210722-41-gf9fb573:
-
-$ ./fib_tests.sh -t rp_filter
-
-IPv4 rp_filter tests
-    TEST: rp_filter passes local packets		[ OK ]
-    TEST: rp_filter passes loopback packets		[ OK ]
-
-[1] https://github.com/iputils/iputils/issues/55
-[2] https://github.com/iputils/iputils/commit/f455fee41c077d4b700a473b2f5b3487b8febc1d
-
-Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-Fixes: adb701d6cfa4 ("selftests: add a test case for rp_filter")
-Reviewed-by: Cong Wang <cong.wang@bytedance.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-Change in v2:
-    - s/SOCK_ICMP/SOCK_DGRAM/ in commit message
-
- tools/testing/selftests/net/fib_tests.sh | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index 5abe92d55b69..b8bceae00f8e 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -453,15 +453,19 @@ fib_rp_filter_test()
- 	$NS_EXEC sysctl -qw net.ipv4.conf.all.accept_local=1
- 	$NS_EXEC sysctl -qw net.ipv4.conf.all.route_localnet=1
- 
-+	$NS_EXEC tc qd add dev dummy0 parent root handle 1: fq_codel
-+	$NS_EXEC tc filter add dev dummy0 parent 1: protocol arp basic action mirred egress redirect dev dummy1
-+	$NS_EXEC tc filter add dev dummy0 parent 1: protocol ip basic action mirred egress redirect dev dummy1
-+
- 	$NS_EXEC tc qd add dev dummy1 parent root handle 1: fq_codel
- 	$NS_EXEC tc filter add dev dummy1 parent 1: protocol arp basic action mirred egress redirect dev lo
- 	$NS_EXEC tc filter add dev dummy1 parent 1: protocol ip basic action mirred egress redirect dev lo
- 	set +e
- 
--	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 198.51.100.1"
-+	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 198.51.100.1"
- 	log_test $? 0 "rp_filter passes local packets"
- 
--	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 127.0.0.1"
-+	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 127.0.0.1"
- 	log_test $? 0 "rp_filter passes loopback packets"
- 
- 	cleanup
--- 
-2.20.1
-
+> 
+> > 
+> > In many cases, zapping SPTE process could be optimized since the non-leaf
+> > SPTEs could most likely be retained for the next allocation. On the other
+> > hand, for large scale SPTE zapping scenarios, we may end up zapping too
+> > many SPTEs and use excessive CPU time that causes the RCU stall warning.
+> > 
+> > The follow selftest reproduces the warning:
+> > 
+> > 	(env: kvm.tdp_mmu=Y)
+> > 	./dirty_log_perf_test -v 64 -b 8G
+> > 
+> > Optimize the zapping process by skipping all SPTEs above a certain level in
+> > the first iteration. This allows us to control the granularity of the
+> > actual zapping and invoke tdp_mmu_iter_cond_resched() on time. In addition,
+> > we would retain some of the non-leaf SPTEs to accelerate next allocation.
+> > 
+> > For the selection of the `certain level`, we choose the PG_LEVEL_1G because
+> > it is currently the largest page size supported and it natually fits the
+> > scenario of splitting large pages.
+> > 
+> > For `zap_all` case (usually) at VM teardown time, we use a two-phase
+> > mechanism: the 1st phase zaps all SPTEs at PG_LEVEL_1G level and 2nd phase
+> > zaps everything else. This is achieved by the helper function
+> > __zap_gfn_range().
+> > 
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > Cc: Ben Gardon <bgardon@google.com>
+> > Cc: David Matlack <dmatlack@google.com>
+> > 
+> > Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/tdp_mmu.c | 57 ++++++++++++++++++++++++++------------
+> >  1 file changed, 40 insertions(+), 17 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> > index 89d16bb104de..3fadc51c004a 100644
+> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> > @@ -697,24 +697,16 @@ static inline bool tdp_mmu_iter_cond_resched(struct kvm *kvm,
+> >   * account for the possibility that other threads are modifying the paging
+> >   * structures concurrently. If shared is false, this thread should hold the
+> >   * MMU lock in write mode.
+> > + *
+> > + * If zap_all is true, eliminate all the paging structures that contains the
+> > + * SPTEs.
+> >   */
+> > -static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> > -			  gfn_t start, gfn_t end, bool can_yield, bool flush,
+> > -			  bool shared)
+> > +static bool __zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> > +			    gfn_t start, gfn_t end, bool can_yield, bool flush,
+> > +			    bool shared, bool zap_all)
+> >  {
+> > -	gfn_t max_gfn_host = 1ULL << (shadow_phys_bits - PAGE_SHIFT);
+> > -	bool zap_all = (start == 0 && end >= max_gfn_host);
+> >  	struct tdp_iter iter;
+> >  
+> > -	/*
+> > -	 * Bound the walk at host.MAXPHYADDR, guest accesses beyond that will
+> > -	 * hit a #PF(RSVD) and never get to an EPT Violation/Misconfig / #NPF,
+> > -	 * and so KVM will never install a SPTE for such addresses.
+> > -	 */
+> > -	end = min(end, max_gfn_host);
+> > -
+> > -	kvm_lockdep_assert_mmu_lock_held(kvm, shared);
+> > -
+> >  	rcu_read_lock();
+> >  
+> >  	tdp_root_for_each_pte(iter, root, start, end) {
+> > @@ -725,17 +717,24 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> >  			continue;
+> >  		}
+> >  
+> > -		if (!is_shadow_present_pte(iter.old_spte))
+> > +		/*
+> > +		 * In zap_all case, ignore the checking of present since we have
+> > +		 * to zap everything.
+> > +		 */
+> > +		if (!zap_all && !is_shadow_present_pte(iter.old_spte))
+> >  			continue;
+> 
+> I don't believe there's any reason to attempt to zap a non-present spte,
+> even in the zap_all case. In any case, this change deserves its own
+> patch and a commit message that describes why the old logic is incorrect
+> and how this fixes it.
+> 
+> >  
+> >  		/*
+> >  		 * If this is a non-last-level SPTE that covers a larger range
+> >  		 * than should be zapped, continue, and zap the mappings at a
+> > -		 * lower level, except when zapping all SPTEs.
+> > +		 * lower level. Actual zapping started at proper granularity
+> > +		 * that is not so large as to cause a soft lockup when handling
+> > +		 * the changed pte (which does not yield).
+> >  		 */
+> >  		if (!zap_all &&
+> >  		    (iter.gfn < start ||
+> > -		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end) &&
+> > +		     iter.gfn + KVM_PAGES_PER_HPAGE(iter.level) > end ||
+> > +		     iter.level > PG_LEVEL_1G) &&
+> >  		    !is_last_spte(iter.old_spte, iter.level))
+> >  			continue;
+> 
+> This if statement is getting a bit long. I'd suggest breaking out the
+> level check and also using KVM_MAX_HUGEPAGE_LEVEL.
+> 
+> e.g.
+> 
+>         /*
+>          * If not doing zap_all, only zap up to the huge page level to
+>          * avoid doing too much work in the recursive tdp_mmu_set_spte*
+>          * call below, since it does not yield.
+>          *
+>          * This will potentially leave behind some childless page tables
+>          * but that's ok because ...
+>          */
+>          if (!zap_all && iter.level > KVM_MAX_HUGEPAGE_LEVEL)
+>                 continue;
+> 
+> And on that note, what is the reasoning for why it's ok to leave behind
+> childless page tables? I assume it's because most of the time we'll use
+> that page table again in the future, and at worst we leave the page
+> table allocated until the VM is cleaned up?
+> 
+> >  
+> > @@ -756,6 +755,30 @@ static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> >  	return flush;
+> >  }
+> >  
+> > +static bool zap_gfn_range(struct kvm *kvm, struct kvm_mmu_page *root,
+> > +			  gfn_t start, gfn_t end, bool can_yield, bool flush,
+> > +			  bool shared)
+> > +{
+> > +	gfn_t max_gfn_host = 1ULL << (shadow_phys_bits - PAGE_SHIFT);
+> > +	bool zap_all = (start == 0 && end >= max_gfn_host);
+> > +
+> > +	/*
+> > +	 * Bound the walk at host.MAXPHYADDR, guest accesses beyond that will
+> > +	 * hit a #PF(RSVD) and never get to an EPT Violation/Misconfig / #NPF,
+> > +	 * and so KVM will never install a SPTE for such addresses.
+> > +	 */
+> > +	end = min(end, max_gfn_host);
+> > +
+> > +	kvm_lockdep_assert_mmu_lock_held(kvm, shared);
+> > +
+> > +	flush = __zap_gfn_range(kvm, root, start, end, can_yield, flush, shared,
+> > +				false);
+> > +	if (zap_all)
+> > +		flush = __zap_gfn_range(kvm, root, start, end, can_yield, flush,
+> > +					shared, true);
+> > +	return flush;
+> > +}
+> > +
+> >  /*
+> >   * Tears down the mappings for the range of gfns, [start, end), and frees the
+> >   * non-root pages mapping GFNs strictly within that range. Returns true if
+> > -- 
+> > 2.34.0.rc2.393.gf8c9666880-goog
+> > 

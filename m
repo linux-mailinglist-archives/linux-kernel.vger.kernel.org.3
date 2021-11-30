@@ -2,153 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30580463A14
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4364463A0B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:28:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbhK3PeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:34:22 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:29608 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S229769AbhK3PeU (ORCPT
+        id S232761AbhK3PcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:32:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41670 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229865AbhK3PcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:34:20 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1AUFQE9v005941;
-        Tue, 30 Nov 2021 15:28:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=lRJ9EeRkehNcBeN0Slv1bMFVDNn8zq/kDiLTfuorS78=;
- b=djlV+m4uyuRwJxKWjfgbwasZlTtheaI/iQD1iWPDifkwk6+2q57+Gui7hqzlMkrJdUso
- rohgduHkETF0ss9YUMvAG0gVXd6e9i/HTyEbsbSfhpaxmQTCzUrfvS5x8GHkXyTWfWU9
- l9vVAJ5yHGCCEhZs4r8KjplCmNBt+67jxPvgAxeqBWth2Kt3BI2/ItDvOgOZl5ptvRjB
- yDj+D+9c0dVjtVX6EZZoJYHu5g4dCDBlN5LiXNMWTHDiKW52u2EaBlPqVZ7R+FCwmORf
- vka7rL1E4is9bf/y6hyVgq6RekVhn5OCBK1ZkGh0bOp6Z2RLnygk2kroWzDTUZ3ozrji jA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cnpg7099n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 15:28:38 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1AUFQSLI007382;
-        Tue, 30 Nov 2021 15:28:37 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cnpg7098n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 15:28:37 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1AUFD54u004410;
-        Tue, 30 Nov 2021 15:28:34 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma04ams.nl.ibm.com with ESMTP id 3ckcacg7wg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Nov 2021 15:28:34 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1AUFSTWQ19136886
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Nov 2021 15:28:29 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 05C03A404D;
-        Tue, 30 Nov 2021 15:28:29 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A4C52A4059;
-        Tue, 30 Nov 2021 15:28:27 +0000 (GMT)
-Received: from osiris (unknown [9.145.157.87])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Tue, 30 Nov 2021 15:28:27 +0000 (GMT)
-Date:   Tue, 30 Nov 2021 16:28:26 +0100
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Michal Suchanek <msuchanek@suse.de>
-Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
-        Philipp Rudo <prudo@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
-        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
-        David Howells <dhowells@redhat.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Frank van der Linden <fllinden@amazon.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
-        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Baoquan He <bhe@redhat.com>, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
-Message-ID: <YaZDGjKSaH2YKl/h@osiris>
-References: <cover.1637862358.git.msuchanek@suse.de>
+        Tue, 30 Nov 2021 10:32:07 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A495C061574;
+        Tue, 30 Nov 2021 07:28:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Kl4jDrt0lTZq8RUWESr9jq2BAnd24QRKSF504zE02jo=; b=PDeElGOGe02xxIEM4OTY/z1eeE
+        UqJah6JaGsMTL9IegoCL/cu1eG9mCexMh+NrtVLBhed22f+XD91RoQDOFkFeeWVicS4p4Kus4Ow1k
+        1O5NrIA4i07/Uh+baufG8mhZr2Cr4Y6memj4iL4Iwvw9j3U/BPcTtxU0vbuUHJlV+4cOAxxMFk3d8
+        N+Imw5Hcx2uMhmVzSVL7gBSWIfVjbuoLB1xDpEjckFxXHW74+Tnz32aJ2Ds3SVXVJu5ZdPiNIkgva
+        FjX/fcyNSYcUctN8YPjNzzSsxhI3vBlPkx5ax+/ZYdrUWdNQNigHm3znOJ2+2NG4R02HCT8jFT7O5
+        4cFvN7zw==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ms53g-005tZl-8x; Tue, 30 Nov 2021 15:28:40 +0000
+Date:   Tue, 30 Nov 2021 07:28:40 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Alexey Avramov <hakavlad@inbox.lv>
+Cc:     linux-mm@kvack.org, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        corbet@lwn.net, akpm@linux-foundation.org, keescook@chromium.org,
+        yzaikin@google.com, oleksandr@natalenko.name, kernel@xanmod.org,
+        aros@gmx.com, iam@valdikss.org.ru, hakavlad@gmail.com
+Subject: Re: [PATCH] mm/vmscan: add sysctl knobs for protecting the working
+ set
+Message-ID: <YaZDKLzWBLdcnok7@bombadil.infradead.org>
+References: <20211130201652.2218636d@mail.inbox.lv>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1637862358.git.msuchanek@suse.de>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rSCYo3RBvp-zpEg4RRrySvGTJx2g36_q
-X-Proofpoint-GUID: -IO6R0uBLYVSlOsUgVLBc1VitLs8tbzj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_09,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=829
- impostorscore=0 malwarescore=0 lowpriorityscore=0 suspectscore=0
- bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1011
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2111300081
+In-Reply-To: <20211130201652.2218636d@mail.inbox.lv>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 25, 2021 at 07:02:38PM +0100, Michal Suchanek wrote:
-> Hello,
-> 
-> This is resend of the KEXEC_SIG patchset.
-> 
-> The first patch is new because it'a a cleanup that does not require any
-> change to the module verification code.
-> 
-> The second patch is the only one that is intended to change any
-> functionality.
-> 
-> The rest only deduplicates code but I did not receive any review on that
-> part so I don't know if it's desirable as implemented.
-> 
-> The first two patches can be applied separately without the rest.
-> 
-> Thanks
-> 
-> Michal
-> 
-> Michal Suchanek (6):
->   s390/kexec_file: Don't opencode appended signature check.
->   powerpc/kexec_file: Add KEXEC_SIG support.
->   kexec_file: Don't opencode appended signature verification.
->   module: strip the signature marker in the verification function.
->   module: Use key_being_used_for for log messages in
->     verify_appended_signature
->   module: Move duplicate mod_check_sig users code to mod_parse_sig
-> 
->  arch/powerpc/Kconfig                     | 11 +++++
->  arch/powerpc/kexec/elf_64.c              | 14 ++++++
->  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
->  crypto/asymmetric_keys/asymmetric_type.c |  1 +
->  include/linux/module_signature.h         |  1 +
->  include/linux/verification.h             |  4 ++
->  kernel/module-internal.h                 |  2 -
->  kernel/module.c                          | 12 +++--
->  kernel/module_signature.c                | 56 +++++++++++++++++++++++-
->  kernel/module_signing.c                  | 33 +++++++-------
->  security/integrity/ima/ima_modsig.c      | 22 ++--------
->  11 files changed, 113 insertions(+), 85 deletions(-)
+On Tue, Nov 30, 2021 at 08:16:52PM +0900, Alexey Avramov wrote:
+> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+> index 083be6af2..65fc38756 100644
+> --- a/kernel/sysctl.c
+> +++ b/kernel/sysctl.c
+> @@ -3132,6 +3132,27 @@ static struct ctl_table vm_table[] = {
+>  	},
+>  #endif
+>  	{
+> +		.procname	= "anon_min_kbytes",
+> +		.data		= &sysctl_anon_min_kbytes,
+> +		.maxlen		= sizeof(unsigned long),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_doulongvec_minmax,
+> +	},
+> +	{
+> +		.procname	= "clean_low_kbytes",
+> +		.data		= &sysctl_clean_low_kbytes,
+> +		.maxlen		= sizeof(unsigned long),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_doulongvec_minmax,
+> +	},
+> +	{
+> +		.procname	= "clean_min_kbytes",
+> +		.data		= &sysctl_clean_min_kbytes,
+> +		.maxlen		= sizeof(unsigned long),
+> +		.mode		= 0644,
+> +		.proc_handler	= proc_doulongvec_minmax,
+> +	},
+> +	{
+>  		.procname	= "user_reserve_kbytes",
+>  		.data		= &sysctl_user_reserve_kbytes,
+>  		.maxlen		= sizeof(sysctl_user_reserve_kbytes),
 
-For all patches which touch s390:
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Please don't clutter this file anymore than what we have with random
+sysctls, as otherwise it becomes a pain to deal with merge conficts.
+You can use register_sysctl_init("vm", whatever_your_local_table_name)
+within the file you are adding your sysctl.
+
+ Luis

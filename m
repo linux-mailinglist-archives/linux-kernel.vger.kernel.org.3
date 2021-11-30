@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A0C462F9B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:28:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B1D462F9E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240211AbhK3Jb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 04:31:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
+        id S240221AbhK3JcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 04:32:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234664AbhK3Jb2 (ORCPT
+        with ESMTP id S234712AbhK3JcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:31:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFFBC061574;
-        Tue, 30 Nov 2021 01:28:09 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A7B09B817F2;
-        Tue, 30 Nov 2021 09:28:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D2BC53FC1;
-        Tue, 30 Nov 2021 09:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638264487;
-        bh=TgTB+HvwgE1K6uTIqH5Mm8brLfCpRDbgZBQvLIL6PNs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MabxmVv7aCXsEKQFvEeVFu97DbMxV/cvLNON0JOyB10fQ2cSbY1H5b97NOouaVYrJ
-         5e7mDIWn/sh7BskppfifvCT0mM2B/hRW8cbCoyfM2dW0VyQQdO4ZfUsfAdxLRfkloQ
-         YMGnelqkifHMhiKAmDw807yLfEAy5lxOpEdyuUUmmy/YSEjI2NH7MQEZaGeDTE8Rvs
-         P7hjLSfnYdbz+Bhwr0OpsR1BzOu5QR1h8ogwlXzW7kVugNvFxwbvqwkAI6GlQsmXbw
-         87w+uQTOBEng266LTV5B+4et2tzlsN4w03iuGWe+pZVUgV/JLpzp24IhoMLoBfF2C9
-         V8BsBD+3Pf4xQ==
-Date:   Tue, 30 Nov 2021 10:28:04 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Alain Volmat <alain.volmat@foss.st.com>
-Cc:     pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 4/4] i2c: stm32f7: use proper DMAENGINE API for
- termination
-Message-ID: <YaXupH+h2PU+YUlA@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
- <1632151292-18503-5-git-send-email-alain.volmat@foss.st.com>
+        Tue, 30 Nov 2021 04:32:07 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DCEC061574;
+        Tue, 30 Nov 2021 01:28:48 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id o20so83599335eds.10;
+        Tue, 30 Nov 2021 01:28:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AZ8mITnC21HfY1uu3H4ULc30qrtA5ZbGZsBh6LmlSAM=;
+        b=bn76a7KAwfJq9ZpwE24VoRqoyidQ7M1s4KCZvqajwDcuakABMogt0Rqit/4oCOy9+i
+         CPv/HVvtSVVfuMkv4OwEpJK6tczEWZ81FqndgNygQPrnP9YATIPEvtQkakWPRvEP9Prz
+         MwOYHSnWdGOCchCt3VB30Tew5oTT1onVFYeEkmg2UseV0LX9CRnyZvtzAZdZbCpcIypl
+         FEgf3IlYICCFmEkoPut4wb759djybRqEHLwNuQZDHfXkDjYrODWXLSXH7LsaIQpEH7of
+         QbPPPSNBnFN1U1bAoc78IseT2/qp9GPo5txdSFOR8oaO76/NVQy25BSZBMACqvi3q8r5
+         bTMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AZ8mITnC21HfY1uu3H4ULc30qrtA5ZbGZsBh6LmlSAM=;
+        b=YyTlJU+uogeGkrDnbLTyoNNqSILLcXS2X/I6x2UXi90609Pgg56Wcn+/u3r1vqP58a
+         HmQgsnab5shdQ8XY62IUeM0FnXGZU2DRjQCOfv0/jwGNtT/yuMx8OfS0f1oPuLua3hj3
+         06MZ2vyXbw5m6RhrIy8QP1TiybUCsi0vDW5hdnfiusNn92N7BrGww90cMgosN2Pa8bxw
+         0pKBBpgVEChVfOguQsFCaDqL39wR6dbbvOEC6xLs1bjb8MwwCu0e0rzcOXECdT5q7BTh
+         qbCVkbR9tShACv1y6XeqLwC022ZlQD8nD/7YFwYrgokPbuZhYBXUjYniGUcfEeQvh8Sv
+         2BLg==
+X-Gm-Message-State: AOAM530/UJR0Y6bWnmQW61pHv1IkiSKJEaNU+SfXSf6He/cj7UAtoex6
+        UhFrYdzTDgFXBDxQabkYi68=
+X-Google-Smtp-Source: ABdhPJw6IFqqtcn1aWf+yrqj/qtCTJ0crnrUikbTQUItsYszXJiP1QxYsXcZyO+9cDWIWEQ841DYuQ==
+X-Received: by 2002:a17:907:60cf:: with SMTP id hv15mr20912631ejc.561.1638264525636;
+        Tue, 30 Nov 2021 01:28:45 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e? ([2001:b07:6468:f312:5e2c:eb9a:a8b6:fd3e])
+        by smtp.googlemail.com with ESMTPSA id w22sm11891922edd.49.2021.11.30.01.28.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 01:28:45 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <3d3296f0-9245-40f9-1b5a-efffdb082de9@redhat.com>
+Date:   Tue, 30 Nov 2021 10:28:44 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9BKR1twofcV34c05"
-Content-Disposition: inline
-In-Reply-To: <1632151292-18503-5-git-send-email-alain.volmat@foss.st.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: Q. about KVM and CPU hotplug
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "Nakajima, Jun" <jun.nakajima@intel.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+References: <BL1PR11MB54295ADE4D7A81523EA50B2D8C679@BL1PR11MB5429.namprd11.prod.outlook.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <BL1PR11MB54295ADE4D7A81523EA50B2D8C679@BL1PR11MB5429.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/30/21 09:27, Tian, Kevin wrote:
+> 		r = kvm_arch_hardware_enable();
+> 
+> 		if (r) {
+> 			cpumask_clear_cpu(cpu, cpus_hardware_enabled);
+> 			atomic_inc(&hardware_enable_failed);
+> 			pr_info("kvm: enabling virtualization on CPU%d failed\n", cpu);
+> 		}
+> 	}
+> 
+> Upon error hardware_enable_failed is incremented. However this variable
+> is checked only in hardware_enable_all() called when the 1st VM is called.
+> 
+> This implies that KVM may be left in a state where it doesn't know a CPU
+> not ready to host VMX operations.
+> 
+> Then I'm curious what will happen if a vCPU is scheduled to this CPU. Does
+> KVM indirectly catch it (e.g. vmenter fail) and return a deterministic error
+> to Qemu at some point or may it lead to undefined behavior? And is there
+> any method to prevent vCPU thread from being scheduled to the CPU?
 
---9BKR1twofcV34c05
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It should fail the first vmptrld instruction.  It will result in a few 
+WARN_ONCE and pr_warn_ratelimited (see vmx_insn_failed).  For VMX this 
+should be a pretty bad firmware bug, and it has never been reported. 
+KVM did find some undocumented errata but not this one!
 
-On Mon, Sep 20, 2021 at 05:21:32PM +0200, Alain Volmat wrote:
-> dmaengine_terminate_all() is deprecated in favor of explicitly saying if
-> it should be sync or async.  Here, we use dmaengine_terminate_sync in
-> i2c_xfer and i2c_smbus_xfer handlers and rely on
-> dmaengine_terminate_async within interrupt handlers
-> (transmission error cases).
-> dmaengine_synchronize is added within i2c_xfer and i2c_smbus_xfer handler
-> to finalize terminate started in interrupt handlers.
->=20
-> Signed-off-by: Alain Volmat <alain.volmat@foss.st.com>
+I don't think there's any fix other than pinning userspace.  The WARNs 
+can be eliminated by calling KVM_BUG_ON in the sched_in notifier, plus 
+checking if the VM is bugged before entering the guest or doing a 
+VMREAD/VMWRITE (usually the check is done only in a ioctl).  But some 
+refactoring is probably needed to make the code more robust in general.
 
-Applied to for-current, thanks!
+Paolo
 
-
---9BKR1twofcV34c05
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGl7qQACgkQFA3kzBSg
-Kba9bxAAnolHWrz96xTiK4AAyN69kypXX4qth+xsvFARDQpkOIv02CFxNE877QgF
-8RsfYdvGMPb7fvB5gBebN8o15gETECfW6YCNRI++V6GtO2XqbjcDFv5dfP/X7Gmf
-WTM2uh3efg2yMq9C6gVDPWStys1ZumDxZadMPSN1I78N0On3ySkLepBZWDHgi2jh
-LA5PnsyCCosTF9a7zWTet+sWzsxFxcnwb83QAnv8B27BXUeH+9Z0KWaS7HYV8kP/
-vyPZ5KhkqDwLn/xELfJEjvPcVnOX3BWUEo7QoI1RkrRFhjdf8cooRvgqKfnJ9de+
-+xwpNgeEW948YKQcapM4m6p+/CsUWwBW5eXmzh5rkSF5ZfFk/skj2DZR77Xo288w
-F0/Ar1BqbVDai6jSuKgigSoPhLajIY8W0tw2U6EzB3E/gINtUZ/GwMtI7S8Iucbc
-VE4Bmirx16B5cr9ki9lhFJa1Pg5qUYNBS/tIlqHcGiXFUf+iE/Qq0KfPjNQZ59xP
-nN1oTeWHGHdHq/Jx4vs9PA/opRKt1eSgvHs5vV/bYPcWxjb5WhibzDx96KPGCOwo
-dduUZxp5lcbBgTMPc8ihXV/YjVR2olHOIM5KwKa9EGE6aiNnyAdH7ZcQ6ZIhEFuu
-LVvmvvCjmSr3Xhz8zTRddi+Z6MtqiVnSSWUFEI4oBm/p1+mjMbQ=
-=ZOXV
------END PGP SIGNATURE-----
-
---9BKR1twofcV34c05--
+> By design the current generation of TDX doesn't support CPU hotplug. 
+> Only boot-time CPUs can be initialized for TDX (and must be done en 
+> masse in one breath). Attempting to do seamcalls on a hotplugged CPU
+> simply fails, thus it potentially affects any trusted domain in case its
+> vCPUs are scheduled to the plugged CPU. 

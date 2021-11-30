@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4249F463D02
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EEEF463D04
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:41:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244972AbhK3Rol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:44:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S244984AbhK3Rou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:44:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238926AbhK3Roi (ORCPT
+        with ESMTP id S244978AbhK3Ros (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:44:38 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC16C061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:41:18 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id 137so18184304wma.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:41:18 -0800 (PST)
+        Tue, 30 Nov 2021 12:44:48 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1267C061574;
+        Tue, 30 Nov 2021 09:41:28 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id bf8so42757945oib.6;
+        Tue, 30 Nov 2021 09:41:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sgi8hVAxJ2TC6lAQZcV7YIf3cslbDjz/FU37PQWsli0=;
-        b=qWcEKjhS9fZxpthQ0sYoRA1mHDvYqBvtUfeqHNrQ0BDIg+02mH3WwN77xCgRzB6MaD
-         5o8FaxMnn5F/sb1kB6F27fIvo46TINJc2gOF5b24aWGcHLnsGw/giiveZYRv/HAgGhYz
-         onXo6RokHNdVlOmefDIehZFEaoll2Qzl5BhdnnPhvXqHWjaPB5ApiusiCxRvx1050UVh
-         TSuSRVxM9G5SHMwr99VECJtZ1h8dMO5i2qOZbNgI69Zvo6AFPLjZd3GjE4ENeJ5kSOZK
-         9s+q5LMrCpmEnXbYzHy2UdE+loIRJCza0Kkp5xFK6fT9bBIgat6CWGHmPJ6eFzqYmWuP
-         PMsQ==
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=h7WLI1zuzj8sMT9F+BhGBIz3cLvQ+ELWe3alIeFoHY4=;
+        b=ochaIvbl403fApD/RRKJcNZRpK7LI1wgSgGVIr5CCSQSxpmS1Eneu0wivD/u/8Znq8
+         qj93wo89LTSW9yOJReER/iJD7DkRBrCbcDdZ6hufN77UwEtl/3RwDjjxUs9n65lz7utl
+         LUn/ZwuhvNhO9teVrIQYsdSiYoQO/8V7Nl6WErPYm7FY+60XjijnGnH8t7QupJDMWLF6
+         yiaAjQDCoRkmKXYA7D0pgseZPb7dYB2r62jmsTumE3aFbdqgsSQT4ZomgOmE5CmvYbaL
+         2gd4f5FTg7VtsM8k+PUaHUicJbk6/fPPP8zmG1fbEV4aYRZ46ztMk5Z19Rt/3WMFq2sI
+         AizA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sgi8hVAxJ2TC6lAQZcV7YIf3cslbDjz/FU37PQWsli0=;
-        b=laEw3S0w8stV/tfRwjk1G1IGrhbGo6l0Tn4oZSeAJVyu+TinS5uiaLyZ5430ou/OZl
-         B/pr6484xhX/on3/lxCRAmTTFdzUEE/2MIQhpQbhrJBWkdceiF0ifi17yiP0h6CPemUE
-         80I850a1PeQ89sZphEtpfxndsGenkJdxWL3l8f1OdqHOogfyygngYg3pKBujn7OgdB2E
-         uJ8TqkfXfUTE5gDFe2NqfEilTNdP6675GpUluOqm2pox8t8YfNPPEUFCeCWlqGsvWmch
-         6OHWP8YhMyONQncIAlWt+9coxjQxNxpUXPBi0VU4ArzLJ6w5s3e0E9qZVS3nBjX4M8VO
-         4XFw==
-X-Gm-Message-State: AOAM532chyRTsQLNn0nglECXAaIY5vkvtTvuE/0W1gPxLoACIXohSDkH
-        traJlWcMq+WiGRko4ceIOcti1HCIb9pVAdBMN3Q=
-X-Google-Smtp-Source: ABdhPJwhnV01V8gG6iYtFPGsQ5YkF+4GQRLPbqDPYOVqcxI9xtzW4TnJhFihxZBeGpP0rt5m8BM4SaONGY5cZSsG3WM=
-X-Received: by 2002:a1c:4c19:: with SMTP id z25mr54768wmf.177.1638294077177;
- Tue, 30 Nov 2021 09:41:17 -0800 (PST)
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=h7WLI1zuzj8sMT9F+BhGBIz3cLvQ+ELWe3alIeFoHY4=;
+        b=MSUeIf9oleUhP3e3Q1Q6knFhSo4AhyfvWDhhbQUwACVbFT7I0apjAqm6nouoMO9Yi6
+         aF254dB/Q5RcCAK2d85pEngUpLVnWdWcYgeU90VDdkcD2cwAXy0vLLpM3nR1CuFlWXnv
+         uMpaB0Sb6Clku6jNh+sh8SY+C8u824hMLaUZa3n7WOYfrYsJ8ommciKxOQzxboM0q5Dj
+         VO7uagHXf7QyQTobuvk8WwTipF22YaqPDK29TZCoyugmn8aUNqFpK7Xr62ImEpY//pwo
+         vXWd8r25/LFCgYcBcSogiGu/w2lX6HWV13SCSIJ1xKcOs6mwhjak72b34DJMakgU9hcK
+         zS1Q==
+X-Gm-Message-State: AOAM530/0+93t7uGANn5Gn1UajQboxjAZJ44cHuDigj+W4ag9iHIO49b
+        6AKLRPCep6hWCHAlEtUGsTs=
+X-Google-Smtp-Source: ABdhPJz4G8STjY2aHToAEiPKaSO7I+LAkq1PDHRpLYUku3DZGpAbWnf97orNBBn3XBXf42qbjIs9fQ==
+X-Received: by 2002:a05:6808:ec9:: with SMTP id q9mr350590oiv.160.1638294088394;
+        Tue, 30 Nov 2021 09:41:28 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d3sm3216413otc.0.2021.11.30.09.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 09:41:27 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 30 Nov 2021 09:41:26 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, stable@vger.kernel.org
+Subject: Re: [PATCH 5.10 000/121] 5.10.83-rc1 review
+Message-ID: <20211130174126.GB3226251@roeck-us.net>
+References: <20211129181711.642046348@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20211117093734.17407-1-daniel.baluta@oss.nxp.com>
- <20211117093734.17407-8-daniel.baluta@oss.nxp.com> <CAMuHMdVV6Os8Gzc9JVjD2CAtN38=7KFn9GqosnWvByQc-7uA=Q@mail.gmail.com>
- <bdbea252-09e4-eb60-acf8-4ea8a1d924c4@linux.intel.com> <YaZZzSPQDz0vHRQY@sirena.org.uk>
-In-Reply-To: <YaZZzSPQDz0vHRQY@sirena.org.uk>
-From:   Daniel Baluta <daniel.baluta@gmail.com>
-Date:   Tue, 30 Nov 2021 19:41:05 +0200
-Message-ID: <CAEnQRZA7Nr+MMP7v+4T8G2y4L4HvSPVdoy4zekBFgynXJ16tCg@mail.gmail.com>
-Subject: Re: [PATCH 07/21] ASoC: amd: Add module to determine ACP configuration
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Daniel Baluta <daniel.baluta@oss.nxp.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        AjitKumar.Pandey@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Julian.Schroeder@amd.com, linux-mediatek@lists.infradead.org,
-        Balakishore.pati@amd.com,
-        =?UTF-8?B?WUMgSHVuZyAo5rSq5aCv5L+KKQ==?= <yc.hung@mediatek.com>,
-        vishnuvardhanrao.ravulapati@amd.com, vsreddy@amd.com,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Bard Liao <bard.liao@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 7:05 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Nov 30, 2021 at 10:49:30AM -0600, Pierre-Louis Bossart wrote:
->
-> > To Geert's point, there may be an additional need to add a
->
-> > depends on SND_SOC_AMD_ACP
->
-> > There are also a set of
->
-> > SND_SOC_AMD_ACPyx options, not sure if any applies as a dependency here?
->
-> Or put them in an if block (IIRC I thought they were which was why the
-> dependency wasn't needed but I don't know what I was looking at if I did
-> check that).
+On Mon, Nov 29, 2021 at 07:17:11PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.83 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
+> Anything received after that time might be too late.
+> 
 
-There will be some delays in handling this as I'm in vacation until next Monday.
+Build results:
+	total: 159 pass: 159 fail: 0
+Qemu test results:
+	total: 474 pass: 474 fail: 0
+
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter

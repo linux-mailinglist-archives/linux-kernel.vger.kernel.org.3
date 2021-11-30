@@ -2,141 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A284631D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:09:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB484631DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:11:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237198AbhK3LMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:12:17 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:38912 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237162AbhK3LMP (ORCPT
+        id S237244AbhK3LOf convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 Nov 2021 06:14:35 -0500
+Received: from relay3-d.mail.gandi.net ([217.70.183.195]:39551 "EHLO
+        relay3-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236831AbhK3LOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:12:15 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3KGc1RLCz9vKY8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 11:08:56 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id R1_7z_B3r8-a for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 05:08:56 -0600 (CST)
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3KGb6Nxpz9vKY6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:08:55 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3KGb6Nxpz9vKY6
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3KGb6Nxpz9vKY6
-Received: by mail-pg1-f198.google.com with SMTP id t18-20020a632252000000b003252b088f26so6587370pgm.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:08:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L4d1W48kwHHShV4SEtnKYtW4rYy9ZnpgrsWKK2v2g6k=;
-        b=GtUW2K/WOpbVkir7I1Tp3FYTarK7YibkN6sNrEotnvhlY9v5OkC6trHYw/B6W6GjNZ
-         4QDcoIiSn2o2iY7sELuG/ejW1DjHwKq1RYQVQbSNIJ18HagJl369LgtwiHS69lr/OWGc
-         T9klLrFg/3MncZKUeJdY/41Nas3lB1ZKkmi6o0b17UpILbv1gUq3KQhRhVdTq7ILe1UQ
-         zd2T9i+Shr2di+mwZKL2sfYUGLgkWXi+38tyEylmcQsJ906rVrb3hH9PkJUybA6jRDf1
-         66DsXXSuyZu/3SQ4JzMMN/tXeMdQW1XDcmv1O/Fw5YSblxekSdVUFaMQ+a8OokZdhSIk
-         t//g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=L4d1W48kwHHShV4SEtnKYtW4rYy9ZnpgrsWKK2v2g6k=;
-        b=C0xxWl42hqXrY8aOghzT92u4lvJ+RG1co8h4x4qxB+XqUB0x9MsEtYHnD54BumPraJ
-         rasxryT/LnSxYjEYJEi6lMJXgGXowWLq78GxeNw2L0sfLeiinI57qKke6ZH9RCqANYaV
-         0prG5BIMJm9DwSgSHX2iZtiHeFB5ds6f/5nLYLa5DyQPHFU6n4iGbS+ZpBl3qMgBCvep
-         PqBh19BAQsdYcJp85olKd/6Rq4JS1UFhfIVo81Gi3zaDollI91Yfs27W2ZS7m1bQdUvY
-         cOoibM118xBXFv8fOghdyHrBc1Po2NJhNXeB+AnYqx4tsyKjZwLYBxW3cfZvUyPqFC+r
-         Qk7A==
-X-Gm-Message-State: AOAM532eCd3x/4oj0vlB41ClCtIcclFSpGMzQUnNUY7W3E4pX1JgesyL
-        uzv5IgiNFhFnO2pcVPiQnaHzdUCZfvU32s0XYlFbzKnwFg1MwD+DAbbrMk6tvhMFkbh52Cysc8/
-        DXjgm+C5fQcukZHMYqsUBDAakwTPo
-X-Received: by 2002:a63:5204:: with SMTP id g4mr12856344pgb.319.1638270535143;
-        Tue, 30 Nov 2021 03:08:55 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyhQMDrKlRy9nZ2NlLQm9ytvcBmwZ3NlEtd489Hx6S5Lk90kMvYdn8hmVlN3kWuCXwOlhER/w==
-X-Received: by 2002:a63:5204:: with SMTP id g4mr12856329pgb.319.1638270534953;
-        Tue, 30 Nov 2021 03:08:54 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id u38sm23783318pfg.0.2021.11.30.03.08.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 03:08:54 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Shahed Shaikh <shshaikh@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        GR-Linux-NIC-Dev@marvell.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sucheta Chakraborty <sucheta.chakraborty@qlogic.com>,
-        Sritej Velaga <sritej.velaga@qlogic.com>,
-        Sony Chacko <sony.chacko@qlogic.com>,
-        Anirban Chakraborty <anirban.chakraborty@qlogic.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH] clk: mediatek: net: qlogic: qlcnic: Fix a NULL pointer dereference in qlcnic_83xx_add_rings()
-Date:   Tue, 30 Nov 2021 19:08:48 +0800
-Message-Id: <20211130110848.109026-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Nov 2021 06:14:33 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay3-d.mail.gandi.net (Postfix) with ESMTPSA id B01DF6000C;
+        Tue, 30 Nov 2021 11:11:11 +0000 (UTC)
+Date:   Tue, 30 Nov 2021 12:11:10 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] mtd: dataflash: Add device-tree SPI IDs
+Message-ID: <20211130121110.6026f788@xps13>
+In-Reply-To: <a799095a-e046-ae56-c2db-f527e199b5fb@nvidia.com>
+References: <20211119183316.1329089-1-miquel.raynal@bootlin.com>
+        <a799095a-e046-ae56-c2db-f527e199b5fb@nvidia.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In qlcnic_83xx_add_rings(), the indirect function of
-ahw->hw_ops->alloc_mbx_args will be called to allocate memory for
-cmd.req.arg, and there is a dereference of it in qlcnic_83xx_add_rings(),
-which could lead to a NULL pointer dereference on failure of the
-indirect function like qlcnic_83xx_alloc_mbx_args().
+Hi Jon,
 
-Fix this bug by adding a check of alloc_mbx_args(), this patch
-imitates the logic of mbx_cmd()'s failure handling.
+jonathanh@nvidia.com wrote on Tue, 30 Nov 2021 08:53:08 +0000:
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+> Hi Miquel,
+> 
+> On 19/11/2021 18:33, Miquel Raynal wrote:
+> > On Mon, 2021-11-15 at 11:36:55 UTC, Jon Hunter wrote:  
+> >> Commit 5fa6863ba692 ("spi: Check we have a spi_device_id for each DT
+> >> compatible") added a test to check that every SPI driver has a
+> >> spi_device_id for each DT compatiable string defined by the driver
+> >> and warns if the spi_device_id is missing. The spi_device_ids are
+> >> missing for the dataflash driver and the following warnings are now
+> >> seen.
+> >>
+> >>   WARNING KERN SPI driver mtd_dataflash has no spi_device_id for atmel,at45
+> >>   WARNING KERN SPI driver mtd_dataflash has no spi_device_id for atmel,dataflash
+> >>
+> >> Fix this by adding the necessary spi_device_ids.
+> >>
+> >> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>  
+> > 
+> > Applied to https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git mtd/next, thanks.  
+> 
+> 
+> Please can you submit as a fix for v5.16? The commit that introduced this is already in the mainline.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+Yes of course. Can you resubmit with a Fixes tag?
 
-Builds with CONFIG_QLCNIC=m show no new warnings, and our
-static analyzer no longer warns about this code.
+> 
+> Thanks
+> Jon
+> 
 
-Fixes: 7f9664525f9c ("qlcnic: 83xx memory map and HW access routine")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
-index d51bac7ba5af..bd0607680329 100644
---- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
-+++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
-@@ -1077,8 +1077,14 @@ static int qlcnic_83xx_add_rings(struct qlcnic_adapter *adapter)
- 	sds_mbx_size = sizeof(struct qlcnic_sds_mbx);
- 	context_id = recv_ctx->context_id;
- 	num_sds = adapter->drv_sds_rings - QLCNIC_MAX_SDS_RINGS;
--	ahw->hw_ops->alloc_mbx_args(&cmd, adapter,
--				    QLCNIC_CMD_ADD_RCV_RINGS);
-+	err = ahw->hw_ops->alloc_mbx_args(&cmd, adapter,
-+					QLCNIC_CMD_ADD_RCV_RINGS);
-+	if (err) {
-+		dev_err(&adapter->pdev->dev,
-+			"Failed to alloc mbx args %d\n", err);
-+		return err;
-+	}
-+
- 	cmd.req.arg[1] = 0 | (num_sds << 8) | (context_id << 16);
- 
- 	/* set up status rings, mbx 2-81 */
--- 
-2.25.1
-
+Thanks,
+Miquèl

@@ -2,105 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CF846405A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9A7A464064
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:41:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240740AbhK3Vmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344253AbhK3Vma (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:42:30 -0500
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E377C06174A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:39:10 -0800 (PST)
-Received: by mail-qt1-x82f.google.com with SMTP id t34so21753158qtc.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:39:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=gmjlNfIqFHjkoSqyGG2+jA20pUXVqvYW14ZXL9GlJYg=;
-        b=oOrVlIwlmBC0xoMqFv6bWncerV6dmDBOzYaa88gA4TFUeV/QBXS7GcHrsWcuJJig7w
-         IjrhYvYIiD3MqHo/F42pGow78IbBM2u6sPm1fp43ho7sY8nXegS60XGzj2Hx73GcJDuj
-         reVB3/t3rqlxqAl3UkHO5XTZtOH5meSprObq6rC2qOmFtorFVMk/YxKybgkbbQREtRe/
-         YthKDu+mQWkytGDVn4qP3ZoN1TMIFxB8EC66pRUh3ta9tTTHafAsyuXgeBCk19ly6jZZ
-         NwQHkqrfi2y1A+lad7vp6JwezlobQucgNkZNUA1niI5ve+B7Usmzyt/0QQyf9UbbgoPu
-         KTyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=gmjlNfIqFHjkoSqyGG2+jA20pUXVqvYW14ZXL9GlJYg=;
-        b=iOmuXr+yblxKcN8fIt8hzvNM8TWlZlmRKQRw0fLuf9s4LXP2BmAVMFc/n7F29BaUma
-         ibonPaTv9AS5/0gztlyT6qsztrR3L1Ueab6KdH3Sh/0elV3gk1oHmSkpRxQARrbKmVrs
-         X70wkdCSRQCqX7QymNlc9UodQZMMv4qlFR1NPY15YAzqpqQnfQ6ce+OJJo5eYqhAo1gv
-         l6vbtlYh0smZbmcD5gG0APT69y38H7jDHGp0msg/5T1mRqMI4sOjOiQA5TG361k3/96K
-         9MpXQkImPudb41QDz2kMsGvGuEd6HBVFLh9uWUvk/PCykO0KaGGuYaJqb0wq52DPNU/R
-         +Jzg==
-X-Gm-Message-State: AOAM533uYJPPLSUJsY2hNaQ6r1awncwSnldTJh8+e+JkFfj9TWBMgyyS
-        FLLBFAsGEPYoWauAlr1zFO+Cv6r/B/2lo3AUimah+g==
-X-Google-Smtp-Source: ABdhPJxl6YtK/h165mnccKscHmrNx8hv+5LU3oxmgVt8xO6NFVkqE7pdFuWXIupjmUN6d4vv2UqvlixHXkWBKv/zKyU=
-X-Received: by 2002:ac8:5f4e:: with SMTP id y14mr2458797qta.620.1638308349300;
- Tue, 30 Nov 2021 13:39:09 -0800 (PST)
+        id S1344242AbhK3VoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:44:07 -0500
+Received: from out0.migadu.com ([94.23.1.103]:57160 "EHLO out0.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236406AbhK3VoC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 16:44:02 -0500
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1638308438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Rcspyw3aJSs9x/mVwJKJ/FdDOElM4iaddbIoQBCce4s=;
+        b=gni20/GnmdqNCy/t7JZgLCPTaUWKmqmwegB9OeXRMlKYtEeroZthHsvwu+NnCfAKsJdgrr
+        UQ9gav+YKIGqDmWpPO5WPb3a0BkAhEvPAkKIyg2J2mqK770A/PYB5XsVGwf8h5w1GShu1h
+        hejV8Bh2Dj3+cJ4AEK5F6PxyLvxERxo=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Collingbourne <pcc@google.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        kasan-dev@googlegroups.com,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Evgenii Stepanov <eugenis@google.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH 00/31] kasan, vmalloc, arm64: add vmalloc tagging support for SW/HW_TAGS
+Date:   Tue, 30 Nov 2021 22:39:06 +0100
+Message-Id: <cover.1638308023.git.andreyknvl@google.com>
 MIME-Version: 1.0
-References: <20211126124746.761278-1-glider@google.com> <b740b48e-2675-d324-d35c-d96f973f24e0@intel.com>
-In-Reply-To: <b740b48e-2675-d324-d35c-d96f973f24e0@intel.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Tue, 30 Nov 2021 22:38:33 +0100
-Message-ID: <CAG_fn=WVwh0593rX-+OwEHxEcHO9GHc-Tux=XzQs5F-T+os_5Q@mail.gmail.com>
-Subject: Re: [PATCH] x86/fpu/signal: initialize sw_bytes in save_xstate_epilog()
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     tglx@linutronix.de, chang.seok.bae@intel.com, bp@suse.de,
-        dvyukov@google.com, elver@google.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:09 PM Dave Hansen <dave.hansen@intel.com> wrote:
->
-> On 11/26/21 4:47 AM, Alexander Potapenko wrote:
-> > save_sw_bytes() did not fully initialize sw_bytes, which caused KMSAN
-> > to report an infoleak (see below).
-> > Initialize sw_bytes explicitly to avoid this.
-> ...
-> > Reported-by: Alexander Potapenko <glider@google.com>
-> > Signed-off-by: Marco Elver <elver@google.com>
-> > Signed-off-by: Alexander Potapenko <glider@google.com>
-> > Tested-by: Alexander Potapenko <glider@google.com>
-> > Fixes: 53599b4d54b9b8dd ("x86/fpu/signal: Prepare for variable sigframe=
- length")
-> > Link: https://lore.kernel.org/all/CAG_fn=3DV9T6OKPonSjsi9PmWB0hMHFC=3Dy=
-awozdft8i1-MSxrv=3Dw@mail.gmail.com/
->
-> Hi Alexander,
->
-> Marco's SoB entry is before yours.  Was this authored by you or Marco?
-> If it was Marco, it's customary to add a:
->
->         From: Marco Elver <elver@google.com>
->
-> at the top of the changelog to make sure git gets the author right.  I'm
-> happy to fix it up this time, I just need to know who wrote it.
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Hi Dave,
+Hi,
 
-Yes, it was authored by Marco. Thanks in advance for fixing this, I'll
-keep that in mind next time :)
+This patchset adds vmalloc tagging support for SW_TAGS and HW_TAGS
+KASAN modes.
 
+About half of patches are cleanups I went for along the way. None of
+them seem to be important enough to go through stable, so I decided
+not to split them out into separate patches/series.
 
---=20
-Alexander Potapenko
-Software Engineer
+I'll keep the patchset based on the mainline for now. Once the
+high-level issues are resolved, I'll rebase onto mm - there might be
+a few conflicts right now.
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+The patchset is partially based on an early version of the HW_TAGS
+patchset by Vincenzo that had vmalloc support. Thus, I added a
+Co-developed-by tag into a few patches.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+SW_TAGS vmalloc tagging support is straightforward. It reuses all of
+the generic KASAN machinery, but uses shadow memory to store tags
+instead of magic values. Naturally, vmalloc tagging requires adding
+a few kasan_reset_tag() annotations to the vmalloc code.
+
+HW_TAGS vmalloc tagging support stands out. HW_TAGS KASAN is based on
+Arm MTE, which can only assigns tags to physical memory. As a result,
+HW_TAGS KASAN only tags vmalloc() allocations, which are backed by
+page_alloc memory. It ignores vmap() and others.
+
+Two things about the patchset that might be questionable, and I'd like
+to get input on:
+
+1. In this version of the pathset, if both HW_TAGS KASAN and memory
+   initialization are enabled, the memory for vmalloc() allocations is
+   initialized by page_alloc, while the tags are assigned in vmalloc.
+   Initially I thought that moving memory initialization into vmalloc
+   would be confusing, but I don't have any good arguments to support
+   that. So unless anyone has objecttions, I will move memory
+   initialization for HW_TAGS KASAN into vmalloc in v2.
+
+2. In this version of the patchset, when VMAP_STACK is enabled, pointer
+   tags of stacks allocated via vmalloc() are reset, see the "kasan,
+   fork: don't tag stacks allocated with vmalloc" patch. However,
+   allowing sp to be tagged works just fine in my testing setup. Does
+   anyone has an idea of why having a tagged sp in the kernel could be
+   bad? If not, I can drop the mentioned patch.
+
+Thanks!
+
+Andrey Konovalov (31):
+  kasan, page_alloc: deduplicate should_skip_kasan_poison
+  kasan, page_alloc: move tag_clear_highpage out of
+    kernel_init_free_pages
+  kasan, page_alloc: merge kasan_free_pages into free_pages_prepare
+  kasan, page_alloc: simplify kasan_poison_pages call site
+  kasan, page_alloc: init memory of skipped pages on free
+  mm: clarify __GFP_ZEROTAGS comment
+  kasan: only apply __GFP_ZEROTAGS when memory is zeroed
+  kasan, page_alloc: refactor init checks in post_alloc_hook
+  kasan, page_alloc: merge kasan_alloc_pages into post_alloc_hook
+  kasan, page_alloc: combine tag_clear_highpage calls in post_alloc_hook
+  kasan, page_alloc: move SetPageSkipKASanPoison in post_alloc_hook
+  kasan, page_alloc: move kernel_init_free_pages in post_alloc_hook
+  kasan, page_alloc: simplify kasan_unpoison_pages call site
+  kasan: clean up metadata byte definitions
+  kasan: define KASAN_VMALLOC_INVALID for SW_TAGS
+  kasan, x86, arm64, s390: rename functions for modules shadow
+  kasan, vmalloc: drop outdated VM_KASAN comment
+  kasan: reorder vmalloc hooks
+  kasan: add wrappers for vmalloc hooks
+  kasan, vmalloc: reset tags in vmalloc functions
+  kasan, fork: don't tag stacks allocated with vmalloc
+  kasan, vmalloc: add vmalloc support to SW_TAGS
+  kasan, arm64: allow KASAN_VMALLOC with SW_TAGS
+  kasan, vmalloc, arm64: mark vmalloc mappings as pgprot_tagged
+  kasan, vmalloc: don't unpoison VM_ALLOC pages before mapping
+  kasan, page_alloc: allow skipping unpoisoning for HW_TAGS
+  kasan, vmalloc: add vmalloc support to HW_TAGS
+  kasan: add kasan.vmalloc command line flag
+  kasan, arm64: allow KASAN_VMALLOC with HW_TAGS
+  kasan: documentation updates
+  kasan: improve vmalloc tests
+
+ Documentation/dev-tools/kasan.rst |  17 ++-
+ arch/arm64/Kconfig                |   2 +-
+ arch/arm64/include/asm/vmalloc.h  |  10 ++
+ arch/arm64/kernel/module.c        |   2 +-
+ arch/s390/kernel/module.c         |   2 +-
+ arch/x86/kernel/module.c          |   2 +-
+ include/linux/gfp.h               |  17 ++-
+ include/linux/kasan.h             |  90 +++++++++------
+ include/linux/vmalloc.h           |  18 ++-
+ kernel/fork.c                     |   1 +
+ lib/Kconfig.kasan                 |  20 ++--
+ lib/test_kasan.c                  | 181 +++++++++++++++++++++++++++++-
+ mm/kasan/common.c                 |   4 +-
+ mm/kasan/hw_tags.c                | 142 +++++++++++++++++++----
+ mm/kasan/kasan.h                  |  16 ++-
+ mm/kasan/shadow.c                 |  54 +++++----
+ mm/page_alloc.c                   | 138 +++++++++++++++--------
+ mm/vmalloc.c                      |  65 +++++++++--
+ 18 files changed, 597 insertions(+), 184 deletions(-)
+
+-- 
+2.25.1
+

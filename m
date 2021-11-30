@@ -2,139 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 987604635C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:47:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A404635CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240974AbhK3Nun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbhK3Nuk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:50:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418FEC061574;
-        Tue, 30 Nov 2021 05:47:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12904B819AC;
-        Tue, 30 Nov 2021 13:47:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3B12C53FCD;
-        Tue, 30 Nov 2021 13:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638280038;
-        bh=bJQ0rPNyHmQj5pgvCHo7GRmvI6o8RT3OGU1tv1q6bko=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AO7BmZZRy1HxLAbs2HO/RFNsgNLorMTfB4aP/GhcdC4xZ31CFgYb/6Ag51IdOwsrC
-         98qz+SYTcF0sDOSOjEuswX+iWThb0Q4L/q72ER4h/P2Jamh4YfBXwg8LuJk+dfLxWq
-         qCj0+z71L6bWvQbk4j/XIejw3nMvOeiTCdeE7x/QsZnRrqXtq2UwPIA4TkPFxjvxq6
-         3SiQbTm2qz5eFCnV7t74V4D249bNXX28JMlraE4ltAetfDbI+6vtbx4+h88A0/DdR+
-         6lrQoxIgUfZ+wDN9bzPZefK4nk7PXUHBawRSev4QcCSRN9ITxx25bB24wDBBGh0zL0
-         0gDrVjxIG6aZA==
-Received: by mail-ed1-f52.google.com with SMTP id l25so86760576eda.11;
-        Tue, 30 Nov 2021 05:47:18 -0800 (PST)
-X-Gm-Message-State: AOAM531XPHUy9ytkSsEphoIVoTU/O31iIYyjLF38WolsxdU6QwCZVXcP
-        aeimf7RQNL5trfM3h3+H/gjROivFsGKc6ZOzNw==
-X-Google-Smtp-Source: ABdhPJxg05ApXgN6+7/B6ztitZWjTKrMZV85iNjN6Yfp+XEpFRc9ZZeFWe7fAGUuX9C6qp/x/5QqLeBzKiK7WH8BuHE=
-X-Received: by 2002:aa7:cc82:: with SMTP id p2mr81704238edt.201.1638280037036;
- Tue, 30 Nov 2021 05:47:17 -0800 (PST)
+        id S241727AbhK3Nw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:52:57 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:40168 "EHLO cpanel.siel.si"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240008AbhK3Nw4 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 08:52:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:Subject:Sender:Reply-To:To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=UUkiGbBHuD3eoYdG87cPn3KIRvGU68JXHLpxrL5OQnA=; b=WarnI8/lds1InnXOVfZIELG5iC
+        O/avmgMNYpz41a5i//VEf3U/fQwgciuiunGT99nwUmKSxoSK73VXihYsveJroy5+uDP+Qe5oMjW5I
+        E+lllwkkgfoCRb+U757HjUN4BEgtrI9HsuMIq2b9wnv52bzQ9JCSg3+cudIA6GmZ+5rknHSuKqUnC
+        QrQaZqD6Ta30XUcCCg06d8BMS39kqhAudcr/6Zrp5WkiEp3Q4/T8N5HpPGGTjUIZzqgt3XlfUOfgy
+        YZmORsYGSiq7/l8SOt+toJXPeaKKR8ri286dZ2vffRhyrcb5KWuKHPNPPMnqA/orWqlzMa9AQkP4U
+        hcz6eYBQ==;
+Received: from [89.212.21.243] (port=49774 helo=[192.168.69.215])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1ms3Vj-003AE3-EG; Tue, 30 Nov 2021 14:49:31 +0100
+Subject: Re: [PATCH v2 1/4] mfd: da9062: make register CONFIG_I writable
+Cc:     support.opensource@diasemi.com, wim@linux-watchdog.org,
+        linux@roeck-us.net, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-arm-kernel@lists.infradead.org
+References: <20211130134242.3516619-1-andrej.picej@norik.com>
+From:   Andrej Picej <andrej.picej@norik.com>
+Message-ID: <b62b026d-3f89-6638-d2b9-c8ddd002458b@norik.com>
+Date:   Tue, 30 Nov 2021 14:49:35 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <20211120001621.21246-1-leoyang.li@nxp.com> <20211120001621.21246-5-leoyang.li@nxp.com>
- <YaWGKaBvTpx1pA/x@robh.at.kernel.org> <AS8PR04MB89467DDB9BC3217431716D358F679@AS8PR04MB8946.eurprd04.prod.outlook.com>
-In-Reply-To: <AS8PR04MB89467DDB9BC3217431716D358F679@AS8PR04MB8946.eurprd04.prod.outlook.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 30 Nov 2021 07:47:05 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKdekKnG4CR3aGuOmLCxU9WzOaqLyPwBgUeE5D2WURFnQ@mail.gmail.com>
-Message-ID: <CAL_JsqKdekKnG4CR3aGuOmLCxU9WzOaqLyPwBgUeE5D2WURFnQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] dt-bindings: pci: layerscape-pci: define aer/pme interrupts
-To:     Leo Li <leoyang.li@nxp.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Z.Q. Hou" <zhiqiang.hou@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20211130134242.3516619-1-andrej.picej@norik.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 9:35 PM Leo Li <leoyang.li@nxp.com> wrote:
->
->
->
-> > -----Original Message-----
-> > From: Rob Herring <robh@kernel.org>
-> > Sent: Monday, November 29, 2021 8:02 PM
-> > To: Leo Li <leoyang.li@nxp.com>
-> > Cc: Bjorn Helgaas <bhelgaas@google.com>; linux-pci@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; Z.Q. Hou
-> > <zhiqiang.hou@nxp.com>
-> > Subject: Re: [PATCH 4/4] dt-bindings: pci: layerscape-pci: define aer/pme
-> > interrupts
-> >
-> > On Fri, Nov 19, 2021 at 06:16:21PM -0600, Li Yang wrote:
-> > > Some platforms using this controller have separated interrupt lines
-> > > for aer or pme events instead of having a single interrupt line for
-> > > miscellaneous events.  Define interrupts in the binding for these
-> > > interrupt lines.
-> > >
-> > > Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> > > ---
-> > >  .../devicetree/bindings/pci/layerscape-pci.txt     | 14 ++++++++++----
-> > >  1 file changed, 10 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> > > b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> > > index 8fd6039a826b..bcf11bfc4bab 100644
-> > > --- a/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> > > +++ b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> > > @@ -31,8 +31,13 @@ Required properties:
-> > >  - reg: base addresses and lengths of the PCIe controller register blocks.
-> > >  - interrupts: A list of interrupt outputs of the controller. Must contain an
-> > >    entry for each entry in the interrupt-names property.
-> > > -- interrupt-names: Must include the following entries:
-> > > -  "intr": The interrupt that is asserted for controller interrupts
-> > > +- interrupt-names: It could include the following entries:
-> > > +  "aer": For interrupt line reporting aer events when non MSI/MSI-X/INTx
-> > mode
-> > > +           is used
-> > > +  "pme": For interrupt line reporting pme events when non MSI/MSI-
-> > X/INTx mode
-> > > +           is used
-> > > +  "intr": For interrupt line reporting miscellaneous controller
-> > > +events
-> > > +  ......
-> > >  - fsl,pcie-scfg: Must include two entries.
-> > >    The first entry must be a link to the SCFG device node
-> > >    The second entry is the physical PCIe controller index starting from '0'.
-> > > @@ -52,8 +57,9 @@ Example:
-> > >             reg = <0x00 0x03400000 0x0 0x00010000   /* controller
-> > registers */
-> > >                    0x40 0x00000000 0x0 0x00002000>; /* configuration space
-> > */
-> > >             reg-names = "regs", "config";
-> > > -           interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>; /*
-> > controller interrupt */
-> > > -           interrupt-names = "intr";
-> > > +           interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>, /* aer
-> > interrupt */
-> > > +                   <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>; /* pme
-> > interrupt */
-> > > +           interrupt-names = "aer", "pme";
-> >
-> > This isn't a compatible change. The h/w suddenly has no 'intr'
-> > interrupt?
->
-> The original 'intr' was just a place holder for a HW interrupt signal without a clear definition of events associated.  Some later SoC has more interrupt signals to associate with more specific events.
+Hi,
 
-'Later SoC' means new compatible, but you're not changing the
-compatible. If it was just wrong for all SoCs, then state that in the
-commit message. Please define all the interrupts on all SoCs, so it is
-not changing again.
+On 30. 11. 21 14:42, Andrej Picej wrote:
+> From: Stefan Christ <s.christ@phytec.de>
+> 
+> Make the config register CONFIG_I writable to change the watchdog mode.
+> 
+> Signed-off-by: Stefan Christ <s.christ@phytec.de>
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> ---
+>   drivers/mfd/da9062-core.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/mfd/da9062-core.c b/drivers/mfd/da9062-core.c
+> index 01f8e10dfa55..7041ba53efb4 100644
+> --- a/drivers/mfd/da9062-core.c
+> +++ b/drivers/mfd/da9062-core.c
+> @@ -556,6 +556,7 @@ static const struct regmap_range da9062_aa_writeable_ranges[] = {
+>   	regmap_reg_range(DA9062AA_VBUCK3_B, DA9062AA_VBUCK3_B),
+>   	regmap_reg_range(DA9062AA_VLDO1_B, DA9062AA_VLDO4_B),
+>   	regmap_reg_range(DA9062AA_BBAT_CONT, DA9062AA_BBAT_CONT),
+> +	regmap_reg_range(DA9062AA_CONFIG_I, DA9062AA_CONFIG_I),
+>   	regmap_reg_range(DA9062AA_GP_ID_0, DA9062AA_GP_ID_19),
+>   };
+>   
+> 
 
-> If needed, we can keep the "intr" interrupt-name there just for backward compatibility although it was never used in Linux.
+Changes in v2:
+- no changes
 
-What about other OSs?
+sorry, just noticed I forgot to add what I changed for v2 patch series.
+Should I resend the patches with that fixed/added? Should that be v3 
+then or still v2?
 
-Rob
+Thanks.

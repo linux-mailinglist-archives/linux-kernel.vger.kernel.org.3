@@ -2,133 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC38463F72
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62B2463F73
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343785AbhK3Ums (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 15:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233340AbhK3Ums (ORCPT
+        id S1343782AbhK3Umz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 15:42:55 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:35562 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233340AbhK3Umy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 15:42:48 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1784C061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:39:28 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id g19so21814295pfb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 12:39:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fBpsUP5CKk7s0uj08S+UkM336obzKaZtMzyYiDf1hEY=;
-        b=OfFDrf4VmCwLGLX2gfKWZDsNVEmSiSQJW8psXUnnxekGgpVN3NVbBDC+/kjNIT7/fP
-         zSyPRIyayrzypfNcKKp4uZ+GnGzUQG5Q9S1aqNOfyWAWGX0q6IUQbY2E9YiZRLL0HWSs
-         qLHJg/GzdAseFQEh9A8bpnRYCXrS+n7RJ0O3O6C+eSmgNT+5FY2ZkXPO7Tdv2CRiyIph
-         Zx+OmKK+0cwXSJ5Oe47OnrDznManNTHHRZF8rFPvebPLD3MY5FNW58zsLBSdgwOsVH54
-         5+30l/opb53A+3huptbU+5KNYNzlM7wZwF46yQyEBUfD+q5043eOBCDP5pdJPUnogjIl
-         C8Hw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fBpsUP5CKk7s0uj08S+UkM336obzKaZtMzyYiDf1hEY=;
-        b=TwuMoY8q2uWAh9Ts1SWq2vLdqETtSbu44tsvG+eAoDSVcM4YAFz8it3VuspxJ7LYCl
-         edufQm5abBsOfZgizyt85DcOa/WWgDEaOhTaMKXphOTyAq7GhT9e1c3IlXRFmwJzBhY2
-         nheKhyPUBmxdWXdMVoTfG8klzC4NBchrd1SA0DYMYyLUe5jLoosqQ8trWA7NL+8letht
-         EZeflEMADI8bRZ9bg3p+4B1FCrEoi/lP39Jo7U9r8SxSrAfDO5G+w6WnCl3LuqSXJsau
-         xEkAaXD3lBITdalYCDi074tX1/URBCWLKMcKe7Uk9TDsvc0C+tm9Te8277eXtQgrRQJk
-         bloQ==
-X-Gm-Message-State: AOAM532yYRP3txAoQHCNKasyrj0jcqvwWphYCyBxGVaevwfQ+Kb1kp+7
-        VZM7n45zwZ6SJuOROG3uA4Seng==
-X-Google-Smtp-Source: ABdhPJydBiJCdW+yjKkga6Nv7oxbzoVSFw2vGl/utAzNzOHiJc4lwvgc1LQyopdl0zVEHZDgS6CbPw==
-X-Received: by 2002:a63:78c:: with SMTP id 134mr1179791pgh.373.1638304767990;
-        Tue, 30 Nov 2021 12:39:27 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id e10sm22543608pfv.140.2021.11.30.12.39.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 12:39:27 -0800 (PST)
-Date:   Tue, 30 Nov 2021 20:39:24 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Ignat Korchagin <ignat@cloudflare.com>
-Subject: Re: [PATCH] KVM: ensure APICv is considered inactive if there is no
- APIC
-Message-ID: <YaaL/Hh5pz3pydDY@google.com>
-References: <20211130123746.293379-1-pbonzini@redhat.com>
+        Tue, 30 Nov 2021 15:42:54 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638304773;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ocz4UAzX9H90RlZoo4K+BiBNsMSg7McYV50HWVKdeGk=;
+        b=gnn7/lKUoHgmkwMm1eRhZb+13Fq7Q80anKQs/bXwuxrtdwnMB/qTUuP2b1ZS3hW2lajOA0
+        dsqCV8fPaL8lqR9FGJ/ahU7aG7DG9LkGblKdW91Ep7JVlmgysFXTFF/CWX5SUSirIhkT6A
+        pQZpHONhNP6VqQfDtCTpXAl0IgdIZcx032BHOiC0HSCvMY9kDcnRfR3vPMLSaRCuyuobes
+        Egu2YCoRNT9nKOAJx8FM2Dqjo98wwhMm/Kpk/nkp3OhzOiOy7zKXaLMSLgbX/DQfHanwY/
+        urnQnBIDgsQ+3OqlIHktn60RoIOuwNF6k2BAJWih9h02l8Ufs3F9iIjab0Ikeg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638304773;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ocz4UAzX9H90RlZoo4K+BiBNsMSg7McYV50HWVKdeGk=;
+        b=nDeZObd/KH67YCwggT62X1bX7eP0zO2P1EQgV8LiUMg+GQavf6jLFEVlM36guHPnC8K3X4
+        x/OEd5vhmNTGqWDA==
+To:     paulmck@kernel.org, Feng Tang <feng.tang@intel.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        andi.kleen@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for
+ qualified platforms
+In-Reply-To: <20211130162815.GU641268@paulmck-ThinkPad-P17-Gen-1>
+References: <20211117023751.24190-1-feng.tang@intel.com>
+ <20211117023751.24190-2-feng.tang@intel.com>
+ <20211130064623.GB96474@shbuild999.sh.intel.com>
+ <20211130144048.GQ641268@paulmck-ThinkPad-P17-Gen-1>
+ <20211130150256.GA19477@shbuild999.sh.intel.com>
+ <20211130162815.GU641268@paulmck-ThinkPad-P17-Gen-1>
+Date:   Tue, 30 Nov 2021 21:39:32 +0100
+Message-ID: <87r1axbcor.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130123746.293379-1-pbonzini@redhat.com>
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021, Paolo Bonzini wrote:
-> kvm_vcpu_apicv_active() returns false if a virtual machine has no in-kernel
-> local APIC, however kvm_apicv_activated might still be true if there are
-> no reasons to disable APICv; in fact it is quite likely that there is none
-> because APICv is inhibited by specific configurations of the local APIC
-> and those configurations cannot be programmed.  This triggers a WARN:
-> 
->    WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
-> 
-> To avoid this, introduce another cause for APICv inhibition, namely the
-> absence of an in-kernel local APIC.  This cause is enabled by default,
-> and is dropped by either KVM_CREATE_IRQCHIP or the enabling of
-> KVM_CAP_IRQCHIP_SPLIT.
-> 
-> Reported-by: Ignat Korchagin <ignat@cloudflare.com>
-> Fixes: ee49a8932971 ("KVM: x86: Move SVM's APICv sanity check to common x86", 2021-10-22)
-> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-> ---
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Can you folks please trim your replies? Finding content in the middle of
+quoted nonsense becomes harder with every mail in this thread.
 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 0ee1a039b490..e0aa4dd53c7f 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -5740,6 +5740,7 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
->  		smp_wmb();
->  		kvm->arch.irqchip_mode = KVM_IRQCHIP_SPLIT;
->  		kvm->arch.nr_reserved_ioapic_pins = cap->args[0];
-> +		kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
->  		r = 0;
->  split_irqchip_unlock:
->  		mutex_unlock(&kvm->lock);
-> @@ -6120,6 +6121,7 @@ long kvm_arch_vm_ioctl(struct file *filp,
->  		/* Write kvm->irq_routing before enabling irqchip_in_kernel. */
->  		smp_wmb();
->  		kvm->arch.irqchip_mode = KVM_IRQCHIP_KERNEL;
-> +		kvm_request_apicv_update(kvm, true, APICV_INHIBIT_REASON_ABSENT);
+On Tue, Nov 30 2021 at 08:28, Paul E. McKenney wrote:
+> On Tue, Nov 30, 2021 at 11:02:56PM +0800, Feng Tang wrote:
+>> For this case, I don't have access to the HW and only have the
+>> dmesg log, from which it seems the watchdog timer has been postponed
+>> a very long time from running.
+>
+> Thank you for the analysis!
+>
+> One approach to handle this situation would be to avoid checking for
+> clock skew if the time since the last watchdog read was more than (say)
+> twice the desired watchdog spacing.  This does leave open the question of
+> exactly which clocksource to use to measure the time between successive
+> clocksource reads.  My thought is to check this only once upon entry to
+> the handler and to use the designated-good clocksource.
+>
+> Does that make sense, or would something else work better?
 
-Blech, kvm_request_apicv_update() is very counter-intuitive, true == clear. :-/
-Wrappers along the lines of kvm_{set,clear}_apicv_inhibit() would help a lot, and
-would likely avoid a handful of newlines as well.  I'll send a patch on top of this,
-unless you want to do it while pushing this one out.
+Seriously. Jiffies is not usable as watchdog simply because lost ticks
+cannot be compensated and you cannot use TSC to bridge them because you
+are not trusting TSC. This is simply a circulus vitiosus.
 
->  	create_irqchip_unlock:
->  		mutex_unlock(&kvm->lock);
->  		break;
-> @@ -8818,10 +8820,9 @@ static void kvm_apicv_init(struct kvm *kvm)
->  {
->  	init_rwsem(&kvm->arch.apicv_update_lock);
->  
-> -	if (enable_apicv)
-> -		clear_bit(APICV_INHIBIT_REASON_DISABLE,
-> -			  &kvm->arch.apicv_inhibit_reasons);
-> -	else
-> +	set_bit(APICV_INHIBIT_REASON_ABSENT,
-> +		&kvm->arch.apicv_inhibit_reasons);
+We really need to remove the watchdog requirement for modern hardware.
+Let me stare at those patches and get them merged.
 
-Nit, this one fits on a single line.
+Thanks,
 
-> +	if (!enable_apicv)
->  		set_bit(APICV_INHIBIT_REASON_DISABLE,
->  			&kvm->arch.apicv_inhibit_reasons);
->  }
-> -- 
-> 2.31.1
-> 
+        tglx
+

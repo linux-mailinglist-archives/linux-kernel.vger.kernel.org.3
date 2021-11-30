@@ -2,104 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E99234636E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:39:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098B54636DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242292AbhK3Omb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242282AbhK3Om3 (ORCPT
+        id S236913AbhK3Okv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:40:51 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:53216 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231570AbhK3Okv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:42:29 -0500
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ADAC06174A;
-        Tue, 30 Nov 2021 06:39:09 -0800 (PST)
-Received: by mail-ed1-x541.google.com with SMTP id l25so87454181eda.11;
-        Tue, 30 Nov 2021 06:39:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=M6DtkT7yqdJnxtyLICuawnpZM7p79Wj4fCV0rOvuorc=;
-        b=kWQKHzgCw0nBmZ3KPMcZlngLgy0R3fADL9T6FpN+8T6f0/8Q340Bfe6WTP8fxqMC6B
-         xilA11oYDQ8S8ZRy+cQ9XoC/TRc7a1/pvGKh2ktPlJQ2u8WgaT9APjwT7BNnmwQOwLbn
-         fZmuQ4+gOxaun276AtofMqTN84jvrtBr1fIBOkxT8KcU6Zhw2SI3NL8o7wSxeS9gYukJ
-         WVUGuD2E1fzYGZYrtaLMhk1b2mH+ej3sRDRqMkGnUfXcFiK/MLYFs6i7JvbQXcJ42oef
-         15LDy8T8X1g51OZW/RgDpW0upS3LxWgtcJ3X8bK7+QAbw28vLj3N8gozCfvCsk14nWxG
-         hlJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=M6DtkT7yqdJnxtyLICuawnpZM7p79Wj4fCV0rOvuorc=;
-        b=g5B3vMP4bclXs/vOOSPNtqSb+axnQY3VdTWhs6FxcHVZJYLjWe1TcKh/aoWZH9yQLx
-         +lvimaFekO9sMHnAG+2q9nHh+zGcGLycKUZ6D18XMn6CCOVAjf221NbP5Q2gWeayc4ps
-         Gciy5niVM626LDy5ALG4vLJKpSXRAZGhmB6cS6PD+YAD5ZbFuR0YqpkClAmnfD1sJnGx
-         wgu7oVA0r8f25FQymIYD3YUBYW4552y3FVfAXKL+9qkE5f2rD0crbKkza8J49iUg/W3m
-         GmNgQzH1TUoyh3ifqQSTLilTr06D6QJ8qE8Hj+I/7a/YEAmHhi9WxJi7BHarGDGvQOma
-         mKUA==
-X-Gm-Message-State: AOAM532eF6FTkZnJSQPIQsgLHbCLy+pN3Lj7nDLOP7n1ExDtikS9QHfd
-        CGeDiHhQxKN9205rdodiLrirLPOARJaqL/jTFCk=
-X-Google-Smtp-Source: ABdhPJweaAObaI0URjNLnhUOKtwKK07rAqckNLWdRLVytqGybnD74/eNpXw48zCymxAK4tp2IHkO4NsDn6iMaBNby20=
-X-Received: by 2002:a05:6402:2692:: with SMTP id w18mr83091835edd.220.1638283148308;
- Tue, 30 Nov 2021 06:39:08 -0800 (PST)
-MIME-Version: 1.0
-References: <20211128060102.6504-1-imagedong@tencent.com> <20211129075707.47ab0ffe@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211129075707.47ab0ffe@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Tue, 30 Nov 2021 22:36:59 +0800
-Message-ID: <CADxym3YJwgs1-hYZURUf+K56zTtQmWHbwAvEG27s_w8FwQrkQQ@mail.gmail.com>
-Subject: Re: [PATCH v2 net-next] net: snmp: add statistics for tcp small queue check
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     David Miller <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        dsahern@kernel.org, Eric Dumazet <edumazet@google.com>,
-        Menglong Dong <imagedong@tencent.com>,
-        Yuchung Cheng <ycheng@google.com>, kuniyu@amazon.co.jp,
+        Tue, 30 Nov 2021 09:40:51 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A4C7DCE1A11
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 14:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A7A8C53FC7;
+        Tue, 30 Nov 2021 14:37:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638283048;
+        bh=T7blJkqLvOnx1FPZFpLlvacS3TAs1x9CjmzocANC1kM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VgwIK1Mgl65ku+j8glBWwUMSC9GV2TLel76URMZuEAUZ6IZTLSsQQcvGaC3mcNbhZ
+         UMGfziQgC207Q1WcO4agROzaZWfXqcs2mdpyQ/tYbvKSbMcou9nhtlU1Bzh4TLpgYU
+         p1XvcSjHfAi02qw4KC6/x6wg3eAvmXNyOSTtEIq6z9osteGpNKZYcoCRPPz2k2VQeg
+         plxu/JlgZqgRixB3/dp/Drz0XPIPp4zzruOvAWKRLeRaScCKFSnpMsy3IVNpduT2wA
+         D4IbcrVKoVlKoDhaA/zxS2MiEnBVi0zrxpOUjP6XUfzLcPf69mo9/RtsRnq7hwQ+eD
+         gexrGyH+wNh9Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 79C4440002; Tue, 30 Nov 2021 11:37:26 -0300 (-03)
+Date:   Tue, 30 Nov 2021 11:37:26 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        Song Liu <songliubraving@fb.com>,
+        Changbin Du <changbin.du@gmail.com>
+Subject: Re: [RFC/PATCHSET 0/5] perf ftrace: Implement function latency
+ histogram (v1)
+Message-ID: <YaY3JqOQ2XE22VId@kernel.org>
+References: <20211129231830.1117781-1-namhyung@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129231830.1117781-1-namhyung@kernel.org>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 11:57 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Sun, 28 Nov 2021 14:01:02 +0800 menglong8.dong@gmail.com wrote:
-> > Once tcp small queue check failed in tcp_small_queue_check(), the
-> > throughput of tcp will be limited, and it's hard to distinguish
-> > whether it is out of tcp congestion control.
-> >
-> > Add statistics of LINUX_MIB_TCPSMALLQUEUEFAILURE for this scene.
->
-> Isn't this going to trigger all the time and alarm users because of the
-> "Failure" in the TCPSmallQueueFailure name?  Isn't it perfectly fine
-> for TCP to bake full TSQ amount of data and have it paced out onto the
-> wire? What's your link speed?
+Em Mon, Nov 29, 2021 at 03:18:25PM -0800, Namhyung Kim escreveu:
+> Hello,
+> 
+> I've implemented 'latency' subcommand in the perf ftrace command to
+> show a histogram of function latency.
+> 
+> To handle new subcommands, the existing functionality is moved to
+> 'trace' subcommand while preserving backward compatibility of not
+> having a subcommand at all (defaults to 'trace').
+> 
+> The latency subcommand accepts a target (kernel, for now) function
+> with -T option and shows a histogram like below:
 
-Well, it's a little complex. In my case, there is a guest in kvm, and virti=
-o_net
-is used with napi_tx enabled.
+Humm, wouldn't be interesting to shorten this by having a new 'perf
+flat' (function latency) tool, on the same level as 'perf ftrace' and
+leave 'perf ftrace' to just being a convenient perf interface to what
+ftrace provides?
 
-With napi_tx enabled, skb won't be orphaned after it is passed to virtio_ne=
-t,
-until it is released. The point is that the sending interrupt of
-virtio_net will be
-turned off and the skb can't be released until the next net_rx interrupt co=
-mes.
-So, wmem_alloc can't decrease on time, and the bandwidth is limited. When
-this happens, the bandwidth can decrease from 500M to 10M.
+But all around, nice work, cool new toyz! :-)
 
-In fact, this issue of uapi_tx is fixed in this commit:
-https://lore.kernel.org/lkml/20210719144949.935298466@linuxfoundation.org/
+- Arnaldo
+ 
+>   $ sudo ./perf ftrace latency -a -T mutex_lock sleep 1
+>   #   DURATION     |      COUNT | GRAPH                                          |
+>        0 - 1    us |       2686 | ######################                         |
+>        1 - 2    us |        976 | ########                                       |
+>        2 - 4    us |        879 | #######                                        |
+>        4 - 8    us |        481 | ####                                           |
+>        8 - 16   us |        445 | ###                                            |
+>       16 - 32   us |          1 |                                                |
+>       32 - 64   us |          0 |                                                |
+>       64 - 128  us |          0 |                                                |
+>      128 - 256  us |          0 |                                                |
+>      256 - 512  us |          0 |                                                |
+>      512 - 1024 us |          0 |                                                |
+>        1 - 2    ms |          0 |                                                |
+>        2 - 4    ms |          0 |                                                |
+>        4 - 8    ms |          0 |                                                |
+>        8 - 16   ms |          0 |                                                |
+>       16 - 32   ms |          0 |                                                |
+>       32 - 64   ms |          0 |                                                |
+>       64 - 128  ms |          0 |                                                |
+>      128 - 256  ms |          0 |                                                |
+>      256 - 512  ms |          0 |                                                |
+>      512 - 1024 ms |          0 |                                                |
+>        1 - ...   s |          0 |                                                |
+>   
+> It basically use the function graph tracer to extract the duration of
+> the function.  But with -b/--use-bpf option, it can use BPF to save
+> the histogram in the kernel.  For the same function, it gets:
+> 
+>   $ sudo ./perf ftrace latency -a -b -T mutex_lock sleep 1
+>   #   DURATION     |      COUNT | GRAPH                                          |
+>        0 - 1    us |       4682 | #############################################  |
+>        1 - 2    us |         11 |                                                |
+>        2 - 4    us |          0 |                                                |
+>        4 - 8    us |          0 |                                                |
+>        8 - 16   us |          7 |                                                |
+>       16 - 32   us |          6 |                                                |
+>       32 - 64   us |          0 |                                                |
+>       64 - 128  us |          0 |                                                |
+>      128 - 256  us |          0 |                                                |
+>      256 - 512  us |          0 |                                                |
+>      512 - 1024 us |          0 |                                                |
+>        1 - 2    ms |          0 |                                                |
+>        2 - 4    ms |          0 |                                                |
+>        4 - 8    ms |          0 |                                                |
+>        8 - 16   ms |          0 |                                                |
+>       16 - 32   ms |          0 |                                                |
+>       32 - 64   ms |          0 |                                                |
+>       64 - 128  ms |          0 |                                                |
+>      128 - 256  ms |          0 |                                                |
+>      256 - 512  ms |          0 |                                                |
+>      512 - 1024 ms |          0 |                                                |
+>        1 - ...   s |          0 |                                                |
+> 
+> 
+> You can get the patches at 'perf/ftrace-latency-v1' branch on
+> 
+>   https://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+> 
+> 
+> Thanks,
+> Namhyung
+> 
+> 
+> Namhyung Kim (5):
+>   perf ftrace: Add 'trace' subcommand
+>   perf ftrace: Move out common code from __cmd_ftrace
+>   perf ftrace: Add 'latency' subcommand
+>   perf ftrace: Add -b/--use-bpf option for latency subcommand
+>   perf ftrace: Implement cpu and task filters in BPF
+> 
+>  tools/perf/Makefile.perf                    |   2 +-
+>  tools/perf/builtin-ftrace.c                 | 443 +++++++++++++++++---
+>  tools/perf/util/Build                       |   1 +
+>  tools/perf/util/bpf_ftrace.c                | 154 +++++++
+>  tools/perf/util/bpf_skel/func_latency.bpf.c | 113 +++++
+>  tools/perf/util/ftrace.h                    |  81 ++++
+>  6 files changed, 724 insertions(+), 70 deletions(-)
+>  create mode 100644 tools/perf/util/bpf_ftrace.c
+>  create mode 100644 tools/perf/util/bpf_skel/func_latency.bpf.c
+>  create mode 100644 tools/perf/util/ftrace.h
+> 
+> 
+> base-commit: 8ab774587903771821b59471cc723bba6d893942
+> -- 
+> 2.34.0.rc2.393.gf8c9666880-goog
 
-I added this statistics to monitor the sending failure (may be called
-sending delay)
-caused by qdisc and net_device. When something happen, maybe users can
-raise =E2=80=98/proc/sys/net/ipv4/tcp_pacing_ss_ratio=E2=80=99 to get bette=
-r bandwidth.
+-- 
 
-Thanks!
-Menglong Dong
+- Arnaldo

@@ -2,127 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD3A462BEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA40462BF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234342AbhK3FP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 00:15:29 -0500
-Received: from mga14.intel.com ([192.55.52.115]:36600 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229692AbhK3FP2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 00:15:28 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="236375368"
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="236375368"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 21:12:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
-   d="scan'208";a="540280897"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
-  by orsmga001.jf.intel.com with ESMTP; 29 Nov 2021 21:12:06 -0800
-Date:   Tue, 30 Nov 2021 13:12:06 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, mcgrof@kernel.org,
-        keescook@chromium.org, yzaikin@google.com,
-        akpm@linux-foundation.org, siglesias@igalia.com,
-        kernel@gpiccoli.net
-Subject: Re: [PATCH 2/3] panic: Add option to dump all CPUs backtraces in
- panic_print
-Message-ID: <20211130051206.GB89318@shbuild999.sh.intel.com>
-References: <20211109202848.610874-1-gpiccoli@igalia.com>
- <20211109202848.610874-3-gpiccoli@igalia.com>
+        id S238295AbhK3FQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 00:16:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235269AbhK3FQq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 00:16:46 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809FDC061574;
+        Mon, 29 Nov 2021 21:13:27 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id p4so25510630qkm.7;
+        Mon, 29 Nov 2021 21:13:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=xT3OJBmBSLdDKQA0pF/Eep+RHgJNEz3TGcshjvO7yNM=;
+        b=MVeA5cD2hTTZmfLu3F2ocne4+g4w6KTcjFFyyOBO4tV+EFfu7KyGNKSIwIElhefpTH
+         NW7pWcA+P/9L9mKTlopbnOjTbZmwrGQ+Jd+e615NJljYeHwjYRXFj9qhmDaYdSq4me84
+         n4QOwhih703FmTwCXhQH8BnfNm7B3m+eCmh6d5ZLWe8pmlO2AteNIRm1I737FqlT54Dc
+         RliTSjySiOB9qx+ZVIsdstbNrLe0F8NQtlrb8T27HJC+xtETVqoacAV3B0aES3n5vVXw
+         342hH5l8qWX9daltZgvhKYAr96bKYTEHX98MS5AiGaoKabB+pOo/8aRt1KSqnE0WEIbN
+         sNmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=xT3OJBmBSLdDKQA0pF/Eep+RHgJNEz3TGcshjvO7yNM=;
+        b=jNndvgtflS3xJUT6i44phW0J1jtnwBVfefMxlQBY0TeyVULKL++vmKYEOiLKOochaf
+         58OTfVZILcfyLUbpkCX1QcBwihoOX1czi09y1Xr0RU3ATbwoeAjEMLiA/AGaWRv2CQEz
+         OA7k3FXxPKAAO3sOQzy4x3z6hD/UPvb2LzHOJUzYX4ibxtIY+5ROJIztvMD8Z7/DACRH
+         /9athpPcVoYznN/NSqnI8kYN45JK/VNBiYcF1Qe4rsS48bTVr6tDfN1csWamS4HV2d3L
+         HK/siSw6hxJkC0xYZ+GWBQ23tZyeigbiTKLFx+ERyWrr642gFfZMfo4Ejr8Ng+jgMZ61
+         M1uQ==
+X-Gm-Message-State: AOAM530tVY8fOhVKnUWqcGp3/YkQz9jyviarkH+eaAIyaruitArrJJ9l
+        uFbr7KjxUQh87enIdlc9QQ==
+X-Google-Smtp-Source: ABdhPJxwR6z4vFjYRZTUewtGwlCIjV891UP5pTH35Ox/xk+CLMCyyFjIQbwieGXaVrlS7N8cwWX9IQ==
+X-Received: by 2002:a05:620a:2955:: with SMTP id n21mr34627497qkp.581.1638249206710;
+        Mon, 29 Nov 2021 21:13:26 -0800 (PST)
+Received: from bytedance (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
+        by smtp.gmail.com with ESMTPSA id e13sm10104176qte.56.2021.11.29.21.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 21:13:26 -0800 (PST)
+Date:   Mon, 29 Nov 2021 21:13:22 -0800
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     David Ahern <dsahern@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2] selftests/fib_tests: ping from dummy0 in
+ fib_rp_filter_test()
+Message-ID: <20211130051322.GA4450@bytedance>
+References: <20211129225230.3668-1-yepeilin.cs@gmail.com>
+ <20211130004905.4146-1-yepeilin.cs@gmail.com>
+ <c19ebcb5-2e25-ce9c-af83-e934cc3d0996@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211109202848.610874-3-gpiccoli@igalia.com>
+In-Reply-To: <c19ebcb5-2e25-ce9c-af83-e934cc3d0996@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 09, 2021 at 05:28:47PM -0300, Guilherme G. Piccoli wrote:
-> Currently the "panic_print" parameter/sysctl allows some interesting debug
-> information to be printed during a panic event. This is useful for example
-> in cases the user cannot kdump due to resource limits, or if the user
-> collects panic logs in a serial output (or pstore) and prefers a fast
-> reboot instead of a kdump.
-> 
-> Happens that currently there's no way to see all CPUs backtraces in
-> a panic using "panic_print" on architectures that support that. We do
-> have "oops_all_cpu_backtrace" sysctl, but although partially overlapping
-> in the functionality, they are orthogonal in nature: "panic_print" is
-> a panic tuning (and we have panics without oopses, like direct calls to
-> panic() or maybe other paths that don't go through oops_enter()
-> function), and the original purpose of "oops_all_cpu_backtrace" is to
-> provide more information on oopses for cases in which the users desire
-> to continue running the kernel even after an oops, i.e., used in
-> non-panic scenarios.
-> 
-> So, we hereby introduce an additional bit for "panic_print" to allow
-> dumping the CPUs backtraces during a panic event.
+Hi David,
 
-This looks to be helpful for debugging panic.
+On Mon, Nov 29, 2021 at 06:16:48PM -0700, David Ahern wrote:
+> On 11/29/21 5:49 PM, Peilin Ye wrote:
+> > -	run_cmd "ip netns exec ns1 ping -I dummy1 -w1 -c1 198.51.100.1"
+> > +	run_cmd "ip netns exec ns1 ping -I dummy0 -w1 -c1 198.51.100.1"
+> >  	log_test $? 0 "rp_filter passes local packets"
+> 
+> confused by the point of this test if you are going to change dummy1 to
+> dummy0. dummy0 has 198.51.100.1 assigned to it, so the ping should
+> always work.
 
-Reviewed-by: Feng Tang <feng.tang@intel.com>
+Ah...  Thanks for pointing this out, I'll try to figure out a different
+way to test it in v3.
 
 Thanks,
-Feng
+Peilin Ye
 
-
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 1 +
->  Documentation/admin-guide/sysctl/kernel.rst     | 1 +
->  kernel/panic.c                                  | 4 ++++
->  3 files changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 0905d2cdb2d5..569d035c4332 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3690,6 +3690,7 @@
->  			bit 3: print locks info if CONFIG_LOCKDEP is on
->  			bit 4: print ftrace buffer
->  			bit 5: print all printk messages in buffer
-> +			bit 6: print all CPUs backtrace (if available in the arch)
->  
->  	panic_on_taint=	Bitmask for conditionally calling panic() in add_taint()
->  			Format: <hex>[,nousertaint]
-> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-> index 70b7df9b081a..1666c1a9dbba 100644
-> --- a/Documentation/admin-guide/sysctl/kernel.rst
-> +++ b/Documentation/admin-guide/sysctl/kernel.rst
-> @@ -796,6 +796,7 @@ bit 2  print timer info
->  bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
->  bit 4  print ftrace buffer
->  bit 5: print all printk messages in buffer
-> +bit 6: print all CPUs backtrace (if available in the arch)
->  =====  ============================================
->  
->  So for example to print tasks and memory info on panic, user can::
-> diff --git a/kernel/panic.c b/kernel/panic.c
-> index cefd7d82366f..5da71fa4e5f1 100644
-> --- a/kernel/panic.c
-> +++ b/kernel/panic.c
-> @@ -65,6 +65,7 @@ EXPORT_SYMBOL_GPL(panic_timeout);
->  #define PANIC_PRINT_LOCK_INFO		0x00000008
->  #define PANIC_PRINT_FTRACE_INFO		0x00000010
->  #define PANIC_PRINT_ALL_PRINTK_MSG	0x00000020
-> +#define PANIC_PRINT_ALL_CPU_BT		0x00000040
->  unsigned long panic_print;
->  
->  ATOMIC_NOTIFIER_HEAD(panic_notifier_list);
-> @@ -151,6 +152,9 @@ static void panic_print_sys_info(void)
->  	if (panic_print & PANIC_PRINT_ALL_PRINTK_MSG)
->  		console_flush_on_panic(CONSOLE_REPLAY_ALL);
->  
-> +	if (panic_print & PANIC_PRINT_ALL_CPU_BT)
-> +		trigger_all_cpu_backtrace();
-> +
->  	if (panic_print & PANIC_PRINT_TASK_INFO)
->  		show_state();
->  
-> -- 
-> 2.33.1

@@ -2,77 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A02D84631EE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03ABD4631E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237335AbhK3LPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:15:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:34854 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237572AbhK3LPN (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:15:13 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A7C41063;
-        Tue, 30 Nov 2021 03:11:54 -0800 (PST)
-Received: from e123427-lin.arm.com (unknown [10.57.34.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 142B43F766;
-        Tue, 30 Nov 2021 03:11:49 -0800 (PST)
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 0/5] arm: ioremap: Remove pci_ioremap_io() and mvebu_pci_host_probe()
-Date:   Tue, 30 Nov 2021 11:11:43 +0000
-Message-Id: <163827065859.21977.786435593890374586.b4-ty@arm.com>
-X-Mailer: git-send-email 2.31.0
-In-Reply-To: <20211124154116.916-1-pali@kernel.org>
-References: <20211124154116.916-1-pali@kernel.org>
+        id S237379AbhK3LQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:16:41 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40854 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237313AbhK3LQh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 06:16:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638270798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oIyRTRMg45HHYybEiZyf82qXVtFuQ7XqWTL4S08Kt7w=;
+        b=QLljazhmeYsHbd58b7Wia9swTUfLYUxAb2qedEDvtRbBD5H9GLKkTCpTJd7kcQcesp5F/S
+        cKrq/X/OaN421i+7SdVd30VtyTeAFKOv7XUV31GCKcRGLMCM5C98SrrcMTXKl1yAH0hEr4
+        oGkrZDSA/EHSWMcJEZ+G5bNV6kI3k7c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-10-jgfYVgWLN4KStYf-av9Yeg-1; Tue, 30 Nov 2021 06:13:15 -0500
+X-MC-Unique: jgfYVgWLN4KStYf-av9Yeg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5FCBF83DD20;
+        Tue, 30 Nov 2021 11:13:14 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.25])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 690BB60C13;
+        Tue, 30 Nov 2021 11:13:13 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20211130162311.105fcfa5@canb.auug.org.au>
+References: <20211130162311.105fcfa5@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the fscache tree
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <429231.1638270792.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Tue, 30 Nov 2021 11:13:12 +0000
+Message-ID: <429232.1638270792@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 24 Nov 2021 16:41:11 +0100, Pali Rohár wrote:
-> This patch series removes ARM specific functions pci_ioremap_io() and
-> mvebu_pci_host_probe() functions.
-> 
-> pci_ioremap_io() is replaced by standard PCI core function pci_remap_iospace()
-> and mvebu_pci_host_probe() by standard PCI core function pci_host_probe().
-> 
-> ARM needs custom implementation of pci_remap_iospace() because of
-> pci_ioremap_set_mem_type() hook used by Marvell Armada 375, 38x and 39x
-> platforms due to HW errata.
-> 
-> [...]
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Applied to pci/mvebu, thanks!
+> Documentation/filesystems/caching/backend-api.rst:417: WARNING: undefine=
+d label: documentation/filesystems/netfs_library.rst
 
-[1/5] arm: ioremap: Implement standard PCI function pci_remap_iospace()
-      https://git.kernel.org/lpieralisi/pci/c/bc02973a06
-[2/5] PCI: mvebu: Replace pci_ioremap_io() usage by devm_pci_remap_iospace()
-      https://git.kernel.org/lpieralisi/pci/c/c1aa4b55aa
-[3/5] PCI: mvebu: Remove custom mvebu_pci_host_probe() function
-      https://git.kernel.org/lpieralisi/pci/c/de58d49470
-[4/5] arm: ioremap: Replace pci_ioremap_io() usage by pci_remap_iospace()
-      https://git.kernel.org/lpieralisi/pci/c/9c8facde92
-[5/5] arm: ioremap: Remove unused ARM-specific function pci_ioremap_io()
-      https://git.kernel.org/lpieralisi/pci/c/ea76d27fb3
+That would be this line:
 
-Thanks,
-Lorenzo
+	See :ref:`Documentation/filesystems/netfs_library.rst` for a description.
+
+I'm not sure what's supposed to be the right way to create an inter-doc
+reference.  It does work, though - maybe the warning just needs to be remo=
+ved?
+
+David
+

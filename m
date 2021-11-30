@@ -2,175 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF29463A83
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56F38463A8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbhK3PtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:49:16 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:51036 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbhK3PtI (ORCPT
+        id S240144AbhK3PvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237639AbhK3Puy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:49:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3E33ACE1A4C;
-        Tue, 30 Nov 2021 15:45:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3AA7C53FCD;
-        Tue, 30 Nov 2021 15:45:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638287146;
-        bh=BpRnlKibHzxADBPNri9C9Lp78VhKvvEfah2vybWggZg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U1JOELQxz9NaaOfxZ7StF89uNIWB0664f6Z6pJ0wEU2q6n9Yqqj//g0utxYgL+eUF
-         s4iiZxMSnreQIfRY2AHAUZ7upbBaIs4CkQpmU1LOC+MthWlgN627t9LqSBydlCoqbE
-         42UP/cjU6pfGl4Cue1MiFKz/PSDvyGZVsa5wz9LE=
-Date:   Tue, 30 Nov 2021 16:45:44 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Simo Sorce <simo@redhat.com>
-Cc:     Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-Message-ID: <YaZHKHjomEivul6U@kroah.com>
-References: <2036923.9o76ZdvQCi@positron.chronox.de>
- <22137816.pfsBpAd9cS@tauon.chronox.de>
- <YaEJtv4A6SoDFYjc@kroah.com>
- <9311513.S0ZZtNTvxh@tauon.chronox.de>
- <YaT+9MueQIa5p8xr@kroah.com>
- <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
- <YaYvYdnSaAvS8MAk@kroah.com>
- <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
+        Tue, 30 Nov 2021 10:50:54 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD748C061574;
+        Tue, 30 Nov 2021 07:47:30 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id 193so27223356qkh.10;
+        Tue, 30 Nov 2021 07:47:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0E8rI2pldC/kJRYfFj5pOe4f4oCd/4elC+07mJ7cezg=;
+        b=M3TECrBfeRNcmU2wzwJW8xakJwOsl96F7/wzhKVZtGVC4XSClhkZtPmX4O/ArG22Sh
+         jjA+g1x4pyJ/4pviilYQPG+KhhSz3F4DZuFRxnjDPTFhjqCEG4DtQvvJ8KQb64m6allX
+         yyKpYEUobSoiHyXxASAEYQUGG6RRUph0Z3VWpZpdz7lmDRWto1u3+zXWvSbLxkDosk3G
+         7B4KO4BxCe1+OrGLaCgzq2a913mzBdZ+eBV/20lQAFekOCsIcFyVxoB2ZV2YfjeK8rzK
+         SXg7rom0+dWxy0uNUSNNlxxK6f6+bXyctj/awauwEt7A4J/lXSd6tDQSaieEQdgMmo+8
+         LQbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0E8rI2pldC/kJRYfFj5pOe4f4oCd/4elC+07mJ7cezg=;
+        b=aEDwJF6lOKVALR1v3UyQRQHeogd81xev40Ew9jIUQetifgumoPkmSjjzUdbBwJT8gh
+         Aox3c91O/AsZOkas/dnjUVoMHEKtOpCjn/UUfA6phKawDM/kKaQ1B9Jr5QkDaIf6nDCH
+         PfW8pzA2oVoG51jWAqeerte6/2x2L78t2d5Ru4qh5G3cUhWIae1/IOJNKhGXebFubQZ/
+         r7H/QT/CWsGNkIbnt2nj1GG+HkiVc2hpTBie2sgjFp2N7MrxiHQZ2+CLyrYRvWHXwDZ0
+         hkBJf7DXD5f00W1s4GzRDqMTV6Zdg1unpDcr5IvLN92/hkPlP0uQwsGrZWki6uEYxrjz
+         89cQ==
+X-Gm-Message-State: AOAM533lBt32BQn2kBPAMjB0bGD6Ra/DUZEVGI4su675A82UvO8XfFFU
+        D13u9KzrvtZDYnMof721w+pUpy489osVr2bX3rA=
+X-Google-Smtp-Source: ABdhPJztrZJR8wzz1uvKDh9tgCXsCwcvYHaAV5LAj9Tyfjkwz7VlVZjHRc1l9DQlQzaVs/JoaW2gQFPu+qw5proo6JA=
+X-Received: by 2002:a05:620a:134a:: with SMTP id c10mr46334061qkl.207.1638287249916;
+ Tue, 30 Nov 2021 07:47:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
+References: <20211120112738.45980-1-laoar.shao@gmail.com> <20211120112738.45980-8-laoar.shao@gmail.com>
+ <yt9d35nf1d84.fsf@linux.ibm.com> <20211129123043.5cfd687a@gandalf.local.home>
+ <CALOAHbCVJcPdYq2j_VvhHBE-xLBnizRRx2oBu-KNgOr5jMf6RQ@mail.gmail.com> <20211130092333.77408a81@gandalf.local.home>
+In-Reply-To: <20211130092333.77408a81@gandalf.local.home>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Tue, 30 Nov 2021 23:46:54 +0800
+Message-ID: <CALOAHbDvxpjW9eD2_FeKMJzXdbEkWJykbdcjtk1Et_+=ybvgVw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] tools/testing/selftests/bpf: replace open-coded 16
+ with TASK_COMM_LEN
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Sven Schnelle <svens@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        "linux-perf-use." <linux-perf-users@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        kbuild test robot <lkp@intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Michal Miroslaw <mirq-linux@rere.qmqm.pl>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Tom Zanussi <zanussi@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 09:31:09AM -0500, Simo Sorce wrote:
-> On Tue, 2021-11-30 at 15:04 +0100, Greg Kroah-Hartman wrote:
-> > On Tue, Nov 30, 2021 at 07:24:15AM -0500, Jeffrey Walton wrote:
-> > > On Mon, Nov 29, 2021 at 6:07 PM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > > ...
-> > > > Sometimes, yes, it is valid to have different implementations for things
-> > > > that do different things in the same area (like filesystems), but for a
-> > > > core function of the kernel, so far the existing random maintainer has
-> > > > not wanted to have multiple implementations.  Same goes for other parts
-> > > > of the kernel, it's not specific only to this one very tiny driver.
-> > > > 
-> > > > As a counterpoint, we do not allow duplicate drivers that control the
-> > > > same hardware types in the tree.  We have tried that in the past and it
-> > > > was a nightmare to support and maintain and just caused massive user
-> > > > confusion as well.  One can argue that the random driver is in this same
-> > > > category.
-> > > 
-> > > I think an argument could be made that they are different drivers
-> > > since they have different requirements and security goals. I don't
-> > > think it matters where the requirements came from, whether it was ad
-> > > hoc from the developer, NIST, KISA, CRYPTREC, NESSIE, or another
-> > > organization.
-> > > 
-> > > Maybe the problem is with the name of the driver? Perhaps the current
-> > > driver should be named random-linux, Stephan's driver should be named
-> > > random-nist, and the driver should be wired up based on a user's
-> > > selection. That should sidestep the problems associated with the
-> > > "duplicate drivers" policy.
-> > 
-> > The "problem" here is that the drivers/char/random.c file has three users,
-> > the userspace /dev/random and syscall api, the in-kernel "here's some
-> > entropy for the random core to use" api, and the in-kernel "give me some
-> > random data" api.
-> > 
-> > Odds are, you REALLY do not want the in-kernel calls to be pulling from
-> > the "random-government-crippled-specification" implementation, right?
-> 
-> You really *do* want that.
-> When our customers are mandated to use FIPS certified cryptography,
-> they want to use it for kernel cryptography as well, and in general
-> they want to use a certified randomness source as well.
+On Tue, Nov 30, 2021 at 10:23 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+>
+> On Tue, 30 Nov 2021 11:03:48 +0800
+> Yafang Shao <laoar.shao@gmail.com> wrote:
+>
+> > Many thanks for the quick fix!
+> > It seems this fix should be ahead of patch #7.
+> > I will send v3 which contains your fix.
+>
+> Don't bother. I'm actually going to send this to Linus as a bug fix.
+>
 
-There are huge numbers of internal kernel calls that use random data for
-non-crypto things.
+Great!  Thanks for the work.
 
-> I do not get why you call the implementation crippled? The
-> specification is quite thorough and provides well reasoned requirements
-> as well as self-test that insure coding mistakes won't end up returning
-> non-random values.
-
-Which specification are you talking about exactly?  There are loads of
-different ones it seems that people wish to follow, so it's hard to
-claim that they all are sane :)
-
-> I understand the mistrust vs gov agencies due to past mishaps like the
-> Dual-DRBG thing, but we are not talking about something like that in
-> this case. NIST is not mandating any specific algorithmic
-> implementation, the requirement set forth allow to use a variety of
-> different algorithms so that everyone can choose what they think is
-> sane.
-> 
-> > Again, just try evolving the existing code to meet the needs that you
-> > all have, stop trying to do wholesale reimplementations.  Those never
-> > succeed, and it's pretty obvious that no one wants a "plugin a random
-> > random driver" interface, right?
-> 
-> I think one of the issues is that the number of changes required
-> against the current random driver amount essentially to a re-
-> implementation. Sure, you can do it as a series of patches that
-> transform the current code in something completely different.
-
-That is how kernel development works, it is nothing new.
-
-> And the main question here is, how can we get there, in any case, if
-> the maintainer of the random device doesn't even participate in
-> discussions, does not pick obvious bug fixes and is simply not engaging
-> at all?
-
-What obvious bug fixes have been dropped?
-
-> Your plan requires an active maintainer that guides these changes and
-> interact with the people proposing them to negotiate the best outcome.
-> But that is not happening so that road seem blocked at the moment.
-
-We need working patches that fit with the kernel development model first
-before people can start blaming maintainers :)
-
-I see almost 300 changes accepted for this tiny random.c file over the
-years we have had git (17 years).  I think that's a very large number of
-changes for a 2300 line file that is relied upon by everyone.
-
-
-thanks,
-
-greg k-h
+-- 
+Thanks
+Yafang

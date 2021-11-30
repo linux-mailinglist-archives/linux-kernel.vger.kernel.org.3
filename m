@@ -2,140 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6B3463DB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:20:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D37C463DC1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245473AbhK3SXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
+        id S245453AbhK3S2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 13:28:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239565AbhK3SXR (ORCPT
+        with ESMTP id S234593AbhK3S2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:23:17 -0500
+        Tue, 30 Nov 2021 13:28:36 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6F3C061574;
-        Tue, 30 Nov 2021 10:19:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6374BC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:25:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 79993B81BBE;
-        Tue, 30 Nov 2021 18:19:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28EB6C53FC7;
-        Tue, 30 Nov 2021 18:19:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 13022B81BB6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:25:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80A1C53FD0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:25:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638296395;
-        bh=Rg3X5WgEx/fu1vO7MTLJTKOCZa6PxvqcsrwTHphDJDI=;
+        s=k20201202; t=1638296713;
+        bh=I558V0JgsXljEVAcQXHf/PeyIwz8vKpCjcthI+bmzOg=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=i9FRLvgj2xYrkiwZdLPpY85Fjd6ZvT5+FmwmpPxuUtFK4QNsRJhQU8B+M80/mMbEJ
-         eVLQQqRbZgJBtxNq5289CGCrLodfzfGEXyrOUGSgyiLPJJuoVUsEkqNkH3JwAFgRvm
-         GGV6Z7P5+HN77l28Bpsk1fIQQNyumFBWcvDubcX8gxv7Fyq6mZYv7qsguxqC2kFozs
-         htzdXGmYz1azXmkFiMYJ+M00zXnJyTOT47NERz3vDatUbikeS0R8tiilXVV06eXOGp
-         93/ftkaxSSgw7FlwZjxF+gj/UTRQtTNl6ANpL36vjQ1G1oiKviDRmYoNj6V30VMIl6
-         TrMILntbTqsVw==
-Received: by mail-ed1-f42.google.com with SMTP id y12so90512342eda.12;
-        Tue, 30 Nov 2021 10:19:55 -0800 (PST)
-X-Gm-Message-State: AOAM533UqO3GNaR2ADrYMcpgDBqTshAvtqah8VN+fic8gmim3Gwoho+h
-        UV7HprmqxvD9m8o9ZXixHDVPPu6whCPluXK1jA==
-X-Google-Smtp-Source: ABdhPJzlzmKd9f1PSVWhZws80WIcbDQrGSGIeTyLxWwF+f3fDK1WoMt3xMdzMHMCPFI2ghaCJdwDEwf+RBBhN7lbrhs=
-X-Received: by 2002:a17:907:a411:: with SMTP id sg17mr867105ejc.84.1638296393423;
- Tue, 30 Nov 2021 10:19:53 -0800 (PST)
+        b=Ok5mkNkNfVwqfLLKxswXXEe/YB6OdY2s3GVITXE41NWzE2KfCfyBbxS+3dSpiq/G3
+         aCXiOl6WHQq5OwXgR6OUzlEpiOtN4NB8DQDkM/CMd9RHKTPINhJMPXzMB6NT8PcFPu
+         S9DRJ5otUZnkyyhgQ+b+SVrCl9t4Gr3Le/bqcQwCuG6JIfL02c9sC+8mSAphw8FWWX
+         isdXyWbnv/Eyn+7g3eklet6sutqt6/lQgyQ96P3URbC4zryr7AvzVejIhlTyAWVXzQ
+         Z6+zR8jTRrkX8jvme0KWE8ahFiCOsM0Mx9nIAdaLLBL/w1KqGGbbZBkxrbiftqH7MX
+         jY9g4j7Z47yIQ==
+Received: by mail-ed1-f41.google.com with SMTP id t5so90945031edd.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:25:13 -0800 (PST)
+X-Gm-Message-State: AOAM532vuvHBf5IkgutOXEEHUoYIp7SESWne7jUTTWt0uXR9Xp3H0uPw
+        nDM8ChaNMq75B10JmhaZ+Ywi+Q9y5kcqJFPMpQ==
+X-Google-Smtp-Source: ABdhPJy+uJ3QVXrQFnJdxIORaNgPpu6gm5253sxa9hphGM8Vf5FmWVsu5u0W+x+HwYttlOZwa9H0rmWNKyMP7sPSC8w=
+X-Received: by 2002:a05:6402:35ce:: with SMTP id z14mr888825edc.197.1638296712088;
+ Tue, 30 Nov 2021 10:25:12 -0800 (PST)
 MIME-Version: 1.0
-References: <cover.1637789354.git.hns@goldelico.com> <d678e785d95487202ac0660eb66796e9fb5beb50.1637789354.git.hns@goldelico.com>
- <1637875562.255498.2858308.nullmailer@robh.at.kernel.org> <A72D034E-EDBC-44F5-82DF-9EEBC5EC7E0B@goldelico.com>
-In-Reply-To: <A72D034E-EDBC-44F5-82DF-9EEBC5EC7E0B@goldelico.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 30 Nov 2021 12:19:41 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ_E_USDuK3kEDKm9TsNsRdpcGNEjz==sKFS-Tv5KYCkA@mail.gmail.com>
-Message-ID: <CAL_JsqJ_E_USDuK3kEDKm9TsNsRdpcGNEjz==sKFS-Tv5KYCkA@mail.gmail.com>
-Subject: Re: [PATCH v9 3/8] dt-bindings: display: Add ingenic,jz4780-dw-hdmi
- DT Schema
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        Ezequiel Garcia <ezequiel@collabora.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Kees Cook <keescook@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Paul Boddie <paul@boddie.org.uk>,
+References: <20211117145829.204360-1-marcan@marcan.st> <20211117145829.204360-2-marcan@marcan.st>
+ <f3582c00-925d-91ec-c829-0aaa8f0157c0@suse.de> <36f3cf18-6654-e1bf-1fa6-a5797751ee86@marcan.st>
+ <CAL_JsqLd=NrZgkTw+N2+Ka4zqRVpZMRNSisUDV9MhBQA-0TZQg@mail.gmail.com> <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
+In-Reply-To: <CABxcv=mkuJLrXr_nbELg39qJvUvV2y69FAisFKURR9bqa3FzKg@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 30 Nov 2021 12:25:00 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJr5LYkWafLB0+Voo6pKDbRSF9QaDfavKNvSP0FXcSAkw@mail.gmail.com>
+Message-ID: <CAL_JsqJr5LYkWafLB0+Voo6pKDbRSF9QaDfavKNvSP0FXcSAkw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] drm/simpledrm: Bind to OF framebuffers in /chosen
+To:     Javier Martinez Canillas <javier@dowhile0.org>
+Cc:     Hector Martin <marcan@marcan.st>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         David Airlie <airlied@linux.ie>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Discussions about the Letux Kernel 
-        <letux-kernel@openphoenux.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         dri-devel <dri-devel@lists.freedesktop.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        devicetree@vger.kernel.org,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Mark Brown <broonie@kernel.org>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Jonas Karlman <jonas@kwiboo.se>
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:03 AM H. Nikolaus Schaller <hns@goldelico.com> wrote:
+On Tue, Nov 30, 2021 at 12:45 AM Javier Martinez Canillas
+<javier@dowhile0.org> wrote:
 >
-> Hi Rob,
+> > > >
+> > > > Simpledrm is just a driver, but this is platform setup code. Why is this
+> > > > code located here and not under arch/ or drivers/firmware/?
+> > > >
 >
-> > Am 25.11.2021 um 22:26 schrieb Rob Herring <robh@kernel.org>:
+> Agreed. Creating platform devices is something for platform code and
+> not really a DRM driver.
+>
+> > > > I know that other drivers do similar things, it doesn't seem to belong here.
+> > >
+>
+> Yeah, the simplefb driver does this but that seems like something that
+> should be changed.
+>
+> > > This definitely doesn't belong in either of those, since it is not arch-
+> > > or firmware-specific. It is implementing support for the standard
+> > > simple-framebuffer OF binding, which specifies that it must be located
+> > > within the /chosen node (and thus the default OF setup code won't do the
+> > > matching for you); this applies to all OF platforms [1]
+> > >
+> > > Adding Rob; do you think this should move from simplefb/simpledrm to
+> > > common OF code? (where?)
 > >
-> > On Wed, 24 Nov 2021 22:29:09 +0100, H. Nikolaus Schaller wrote:
-> >> From: Sam Ravnborg <sam@ravnborg.org>
-> >>
-> >> Add DT bindings for the hdmi driver for the Ingenic JZ4780 SoC.
-> >> Based on .txt binding from Zubair Lutfullah Kakakhel
-> >>
-> >> We also add generic ddc-i2c-bus to synopsys,dw-hdmi.yaml
-> >>
-> >> Signed-off-by: Sam Ravnborg <sam@ravnborg.org>
-> >> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> >> Cc: Rob Herring <robh@kernel.org>
-> >> Cc: devicetree@vger.kernel.org
-> >> ---
-> >> .../display/bridge/ingenic,jz4780-hdmi.yaml   | 76 +++++++++++++++++++
-> >> .../display/bridge/synopsys,dw-hdmi.yaml      |  3 +
-> >> 2 files changed, 79 insertions(+)
-> >> create mode 100644 Documentation/devicetree/bindings/display/bridge/ingenic,jz4780-hdmi.yaml
-> >>
-> >
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> >
-> > yamllint warnings/errors:
-> >
-> > dtschema/dtc warnings/errors:
-> > Unknown file referenced: [Errno 2] No such file or directory: '/usr/local/lib/python3.8/dist-packages/dtschema/schemas/bridge/bridge/synopsys,dw-hdmi.yaml'
+> > of_platform_default_populate_init() should work.
 >
-> I wasn't able to fix that.
->
-> If I change
->
->  allOf:
-> -  - $ref: bridge/synopsys,dw-hdmi.yaml#
-> +  - $ref: synopsys,dw-hdmi.yaml#
+> That should work but I still wonder if it is the correct place to add
+> this logic.
 
-That is correct.
+It is because that is where most of the other devices are created
+unless the bus handles it.
 
->
-> then make dt_binding_check still reports:
->
-> Unknown file referenced: [Errno 2] No such file or directory: '/Users/hns/Library/Python/3.7/lib/python/site-packages/dtschema/schemas/bridge/synopsys,dw-hdmi.yaml'
+> I think that instead it could be done in the sysfb_create_simplefb()
+> function [0], which already creates the "simple-framebuffer" device
+> for x86 legacy BIOS and x86/arm64/riscv EFI so it makes sense to do
+> the same for OF. That way the simplefb platform device registration
+> code could also be dropped from the driver and users would just need
+> to enable CONFIG_SYSFB and CONFIG_SYSFB_SIMPLEFB to have the same.
 
-The $id is wrong:
-
-$id: http://devicetree.org/schemas/bridge/ingenic,jz4780-hdmi.yaml#
-
-The path should be:
-http://devicetree.org/schemas/display/bridge/ingenic,jz4780-hdmi.yaml#
+Doesn't look like that would share anything with anything else (BIOS/EFI/ACPI).
 
 Rob

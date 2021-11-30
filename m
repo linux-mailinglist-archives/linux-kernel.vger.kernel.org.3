@@ -2,131 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8F1463BDB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98EDE463BE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:35:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243960AbhK3QiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:38:12 -0500
-Received: from mta-p8.oit.umn.edu ([134.84.196.208]:37328 "EHLO
-        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243933AbhK3QiK (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:38:10 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3SVg1WYTz9wKsL
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:34:51 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p8.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id XVrZjGe7y6DP for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 10:34:51 -0600 (CST)
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3SVf6Wlhz9wKsX
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:34:50 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3SVf6Wlhz9wKsX
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3SVf6Wlhz9wKsX
-Received: by mail-pf1-f197.google.com with SMTP id 4-20020a621604000000b004a4ab765028so13133806pfw.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:34:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MYKPwzoyWHGBZEGP0FkOr9CYpQBhpzZCOik0AM0Sdo8=;
-        b=RQvZuZ/nafGnDHfmXwZ6cvDchA8m96Wqp83qYLW8PItuj18LiYEUF7E0gGqYAsfEqZ
-         Yl1TzRZfWQgYfXflUnI2tZ3pN92A+wMmbW/sQmhYm5wSQo5EUVydtCcVgL7ww3uepPPk
-         nKuNDs/h0zTqgCVt5Xwh1DTQxXPa/jNT8qKRmpYc6sPn5JOgMVGH9OSxgqnjvPZ0L09F
-         3QXDFI5UV+cGuX0rVJfUe8eT9FXX7z/KG4kasM1j/seDvlHvbzXZckJsH7FkyuBlbr8D
-         BBqwXMDnuRSYt4yK4dI9fApDRMEJgmq8HvNoRN0G62+ERrInJ16avofCcp9Cm4M3BOYJ
-         y+Iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MYKPwzoyWHGBZEGP0FkOr9CYpQBhpzZCOik0AM0Sdo8=;
-        b=UI4zTKIFuluCT0COhCZQ+UYFPBgGJOmd2LFF55hWuzQSbVYNef8hXyudh1Ncxs356x
-         QwyJXld9UDa5LlU30LQ3Y236ENhDhMthIewBDZZR8PE1QBitoHz2hSKlY1u707vGvI6F
-         lCQB5KBBdCEITujNx/mqlbOL8hCabVwqYFIoeMBXmNyNtdW8TWSyk2FuGu0/GqH7J/jD
-         gj3eRUnzutQ4Bue9DxBsWpLEppeDnW2tnetMsNiVVy3UXW6S1jEVRxGojCs1FqB3+yDJ
-         Ut5SKr3u+7QmejKKiMkjS2Z9+C0Wl/qgPCZez3h8DgBoIoBV03f2nIip33SlNEGQCoun
-         Ox/g==
-X-Gm-Message-State: AOAM531tpzSqfH7F1KE7mBp8P1jND/BDAsJzqs+GLIKA1zSnhvD9b/yO
-        TXxZ2bdXcsvVtuFsjAmDHyVfg1oI6pRh4ymqUa8eocz1TGScD+svPEg8LJBO9IXt/5uC91UOALs
-        0UcwLc08coOwCCNtkjcU3RkuV8/xO
-X-Received: by 2002:aa7:9a04:0:b0:4a2:ebcd:89a with SMTP id w4-20020aa79a04000000b004a2ebcd089amr313335pfj.60.1638290090019;
-        Tue, 30 Nov 2021 08:34:50 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJx+NapTRF+0qmVV/9UAF+h46DreJOU+o0UfalFcHhDwJazFFZuJ6wR8xlNc24zy9KZydggueQ==
-X-Received: by 2002:aa7:9a04:0:b0:4a2:ebcd:89a with SMTP id w4-20020aa79a04000000b004a2ebcd089amr313313pfj.60.1638290089808;
-        Tue, 30 Nov 2021 08:34:49 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id j127sm21533925pfg.14.2021.11.30.08.34.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 08:34:49 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Hans Verkuil <hverkuil@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] media: saa7146: mxb: Fix a NULL pointer dereference in mxb_attach()
-Date:   Wed,  1 Dec 2021 00:34:44 +0800
-Message-Id: <20211130163445.187403-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        id S244012AbhK3Qil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:38:41 -0500
+Received: from mga02.intel.com ([134.134.136.20]:32903 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243583AbhK3Qii (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:38:38 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223482950"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="223482950"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 08:35:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="458897866"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga003.jf.intel.com with ESMTP; 30 Nov 2021 08:35:08 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1AUGZ5mt017295;
+        Tue, 30 Nov 2021 16:35:05 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2 net-next 00/26] net: introduce and use generic XDP stats
+Date:   Tue, 30 Nov 2021 17:34:54 +0100
+Message-Id: <20211130163454.595897-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211130081207.228f42ba@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com> <20211130155612.594688-1-alexandr.lobakin@intel.com> <20211130081207.228f42ba@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mxb_attach(dev, info), saa7146_vv_init() is called to allocate a
-new memory for dev->vv_data. saa7146_vv_release() will be called on
-failure of mxb_probe(dev). There is a dereference of dev->vv_data
-in saa7146_vv_release(), which could lead to a NULL pointer dereference
-on failure of saa7146_vv_init().
+From: Jakub Kicinski <kuba@kernel.org>
+Date: Tue, 30 Nov 2021 08:12:07 -0800
 
-Fix this bug by adding a check of saa7146_vv_init().
+> On Tue, 30 Nov 2021 16:56:12 +0100 Alexander Lobakin wrote:
+> > 3. XDP and XSK ctrs separately or not.
+> > 
+> > My PoV is that those are two quite different worlds.
+> > However, stats for actions on XSK really make a little sense since
+> > 99% of time we have xskmap redirect. So I think it'd be fine to just
+> > expand stats structure with xsk_{rx,tx}_{packets,bytes} and count
+> > the rest (actions, errors) together with XDP.
+> > 
+> > 
+> > Rest:
+> >  - don't create a separate `ip` command and report under `-s`;
+> >  - save some RTNL skb space by skipping zeroed counters.
+> 
+> Let me ruin this point of clarity for you. I think that stats should 
+> be skipped when they are not collected (see ETHTOOL_STAT_NOT_SET).
+> If messages get large user should use the GETSTATS call and avoid 
+> the problem more effectively.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+Well, it was Dave's thought here: [0]
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+> Another thought on this patch: with individual attributes you could save
+> some overhead by not sending 0 counters to userspace. e.g., define a
+> helper that does:
 
-Builds with CONFIG_VIDEO_MXB=m show no new warnings,
-and our static analyzer no longer warns about this code.
+I know about ETHTOOL_STAT_NOT_SET, but RTNL xstats doesn't use this,
+does it?
+GETSTATS is another thing, and I'll use it, thanks.
 
-Fixes: 03b1930efd3c ("V4L/DVB: saa7146: fix regression of the av7110/budget-av driver")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/media/pci/saa7146/mxb.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> > Also, regarding that I count all on the stack and then add to the
+> > storage once in a polling cycle -- most drivers don't do that and
+> > just increment the values in the storage directly, but this can be
+> > less performant for frequently updated stats (or it's just my
+> > embedded past).
+> > Re u64 vs u64_stats_t -- the latter is more universal and
+> > architecture-friendly, the former is used directly in most of the
+> > drivers primarily because those drivers and the corresponding HW
+> > are being run on 64-bit systems in the vast majority of cases, and
+> > Ethtools stats themselves are not so critical to guard them with
+> > anti-tearing. Anyways, local64_t is cheap on ARM64/x86_64 I guess?
 
-diff --git a/drivers/media/pci/saa7146/mxb.c b/drivers/media/pci/saa7146/mxb.c
-index 73fc901ecf3d..bf0b9b0914cd 100644
---- a/drivers/media/pci/saa7146/mxb.c
-+++ b/drivers/media/pci/saa7146/mxb.c
-@@ -683,10 +683,16 @@ static struct saa7146_ext_vv vv_data;
- static int mxb_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_data *info)
- {
- 	struct mxb *mxb;
-+	int ret;
- 
- 	DEB_EE("dev:%p\n", dev);
- 
--	saa7146_vv_init(dev, &vv_data);
-+	ret = saa7146_vv_init(dev, &vv_data);
-+	if (ret) {
-+		ERR("Error in saa7146_vv_init()");
-+		return ret;
-+	}
-+
- 	if (mxb_probe(dev)) {
- 		saa7146_vv_release(dev);
- 		return -1;
--- 
-2.25.1
+[0] https://lore.kernel.org/netdev/a4602b15-25b1-c388-73b4-1f97f6f0e555@gmail.com/
 
+Al

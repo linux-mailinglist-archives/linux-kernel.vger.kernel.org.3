@@ -2,77 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D413946344A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:30:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4DC46344F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:31:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241593AbhK3Mdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:33:53 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:42252 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241589AbhK3Mde (ORCPT
+        id S241629AbhK3MeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:34:15 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:32822 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231559AbhK3MeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:33:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id EBAB1CE19D4;
-        Tue, 30 Nov 2021 12:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1660CC56747;
-        Tue, 30 Nov 2021 12:30:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638275412;
-        bh=mQweJS5gyLzNUXwAhbkXqZ7Q/q/Ml44PN1m9lAPhzHg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=tiMnAkAVoGnv4ZgJcze2lCSXb5YeYlzQBtcWVSs7NY2a0Nmz0n9Up/ZZf9heXsLvD
-         lFTBjGCMPwFsA1xJnhykvIyL8s4/p1nUNdEaH+YerFKM3Yvzw5bKGt9Ln1dnNaMYcY
-         Re/MEFkeJiZ3EAg2oYdAlTatfPykjUXTmxDViTZT7KlvAuM5fW3nG9lPTsLbvl7WAH
-         Q7qnHpnp1qQFgYauNw9f3OHpfnbvXJQBPmQs2JKQKeqhcJpguMUN972RydAk+1a4iy
-         lA/xMMBvJq95VPzXHHCV1JN2GVzFO8Div15dCwnVgofRKqFr4bfRZ/5TEk3u6wW02L
-         /xEjYSnM5/Ulw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id E83DC60AA1;
-        Tue, 30 Nov 2021 12:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 30 Nov 2021 07:34:14 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638275453;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MoxU22IJJPvJRa8OS7V+vWzcBzYBFKmJ+AzUDqGDJ0c=;
+        b=By9F2CxzS/o9ToFNEiRxLUVS4AyQNuM7azBeEiD814EleLq+hJGIFbr5Pb7s+yxDcghQJZ
+        bz+QmgZkMouYYFY+n8NIMmEVrzBGnKypYEtqksbB0LcQcsXrqkseVFUPXnb/sd5ZkkeCjp
+        Pnu87QVrfqY+aPFRcb2JbkA20ryw2kwZX8Zt58hXMuKopfKcpJeEcYrsQaBCBid5TfxvzR
+        pg01jc6fTOy30S6/4paKJbL3nUdr+wHzyl4B2pcoryuGOAyzDqtURCC8EFqCHDYt+1EdmP
+        Tn7K/VVDH3bM9b/JWsuJU4BSSPJHX1HAmQQ17NBsztNZhn1jdrGHUG7vESjD7A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638275453;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MoxU22IJJPvJRa8OS7V+vWzcBzYBFKmJ+AzUDqGDJ0c=;
+        b=b3LRCCrahGv4zVsp1t2g38jgPS8/TbYK4NCKubQCW9LmpN8f4nz/THoNrepB7KLN6Bne8n
+        caFNq7QymQ+tnnDg==
+To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>
+Cc:     Nishanth Menon <nm@ti.com>, Mark Rutland <mark.rutland@arm.com>,
+        Stuart Yoder <stuyoder@gmail.com>, linux-pci@vger.kernel.org,
+        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
+        x86@kernel.org, Sinan Kaya <okaya@kernel.org>,
+        iommu@lists.linux-foundation.org,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Megha Dey <megha.dey@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Tero Kristo <kristo@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Subject: Re: [patch 33/37] iommu/arm-smmu-v3: Use msi_get_virq()
+In-Reply-To: <20211130093607.GA23941@willie-the-truck>
+References: <20211126224100.303046749@linutronix.de>
+ <20211126230525.885757679@linutronix.de>
+ <20211129105506.GA22761@willie-the-truck>
+ <76a1b5c1-01c8-bb30-6105-b4073dc23065@arm.com> <87czmjdnw9.ffs@tglx>
+ <b192ad88-5e4e-6f32-1cc7-7a50fc0676a1@arm.com>
+ <20211130093607.GA23941@willie-the-truck>
+Date:   Tue, 30 Nov 2021 13:30:53 +0100
+Message-ID: <878rx5ddvm.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2] devlink: Simplify devlink resources unregister
- call
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163827541194.1181.1391720284231896683.git-patchwork-notify@kernel.org>
-Date:   Tue, 30 Nov 2021 12:30:11 +0000
-References: <b5b984a05fd069ff3b01683440f5461a64e44512.1638267154.git.leonro@nvidia.com>
-In-Reply-To: <b5b984a05fd069ff3b01683440f5461a64e44512.1638267154.git.leonro@nvidia.com>
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, leonro@nvidia.com,
-        andrew@lunn.ch, f.fainelli@gmail.com, idosch@nvidia.com,
-        jiri@nvidia.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, vivien.didelot@gmail.com, olteanv@gmail.com
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, Nov 30 2021 at 09:36, Will Deacon wrote:
+> On Mon, Nov 29, 2021 at 02:54:18PM +0000, Robin Murphy wrote:
+>> On 2021-11-29 14:42, Thomas Gleixner wrote:
+>> > It's actually 0 when the vector cannot be found.
+>> 
+>> Oh, -1 for my reading comprehension but +1 for my confidence in the patch
+>> then :)
+>> 
+>> I'll let Will have the final say over how cautious we really want to be
+>> here, but as far as I'm concerned it's a welcome cleanup as-is. Ditto for
+>> patch #32 based on the same reasoning, although I don't have a suitable test
+>> platform on-hand to sanity-check that one.
+>
+> If, as it appears, msi_get_virq() isn't going to fail meaningfully after
+> we've successfully called platform_msi_domain_alloc_irqs() then it sounds
+> like the patch is fine. Just wanted to check though, as Spring cleaning at
+> the end of November raised an eyebrow over here :)
 
-This patch was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
+Fair enough. Next time I'll name it 'Cleaning the Augean stables' when
+it's the wrong season.
 
-On Tue, 30 Nov 2021 12:16:20 +0200 you wrote:
-> From: Leon Romanovsky <leonro@nvidia.com>
-> 
-> The devlink_resources_unregister() used second parameter as an
-> entry point for the recursive removal of devlink resources. None
-> of the callers outside of devlink core needed to use this field,
-> so let's remove it.
-> 
-> [...]
+Thanks,
 
-Here is the summary with links:
-  - [net-next,v2] devlink: Simplify devlink resources unregister call
-    https://git.kernel.org/netdev/net-next/c/4c897cfc46a5
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+        tglx
 

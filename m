@@ -2,143 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A7B463E51
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:00:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 702E6463E6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238979AbhK3TDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 14:03:35 -0500
-Received: from mga01.intel.com ([192.55.52.88]:57429 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S234889AbhK3TDa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 14:03:30 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="260262544"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="260262544"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 11:00:09 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="477231734"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 30 Nov 2021 11:00:05 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1ms8MH-000Dfl-31; Tue, 30 Nov 2021 19:00:05 +0000
-Date:   Wed, 1 Dec 2021 02:59:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     pandith.n@intel.com, djakov@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        mgross@linux.intel.com, furong.zhou@intel.com,
-        mallikarjunappa.sangannavar@intel.com,
-        lakshmi.bai.raja.subramanian@intel.com,
-        Pandith N <pandith.n@intel.com>
-Subject: Re: [PATCH V8 1/1] interconnect: intel: Add Keem Bay noc driver
-Message-ID: <202112010223.Pb0XZMHN-lkp@intel.com>
-References: <20211129154337.14398-1-pandith.n@intel.com>
+        id S245690AbhK3TId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 14:08:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35664 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239650AbhK3TIa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 14:08:30 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB89C061574;
+        Tue, 30 Nov 2021 11:05:11 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id 14so27384890ioe.2;
+        Tue, 30 Nov 2021 11:05:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=tA8rNLmEmTIGMleqHR6JTe/h5SWKaBwqglrHS55I9XA=;
+        b=HhIYf9GuGhLuVNkOq1UPoco6ZyvWOcH19Io95SXOMEMFD4XCs02yNCaJKtuHkZc338
+         b249IUBZiTkjDooHxoQZkFTAsnACfBCgqkvXKYfis0uOl4t9i+m9sMJP/D9qK57T3SMW
+         uKYTyAeKGpzNP83pSQ4Q6AshTLeLN2QTXV7P4LNjTxrXLzzyXaY9EadUPfpvSvA+vJ/p
+         +54+y8CIHlkgQv6GqqACFN8VT6MzuobWeN+hJQewuGkAJXi/h/zNHBs8XKXAUgY/Rp8u
+         sO2dtRvJog51ka7uJpajHPm/SeXfzFPZXKsPx1JtAj26k+FUwGqkPBche8Ub964mNNMV
+         BsiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tA8rNLmEmTIGMleqHR6JTe/h5SWKaBwqglrHS55I9XA=;
+        b=kuIIZ5xtoieiD0LfAmUJFAzzhbxVMRuU6E60WiCS7705VwxjfG2eeeC/APqP/1x/+6
+         TpPfjSU3zbdLIGI/u96/FPED3l+Ge2oWDrqr1rfZ5+g8c9qH60y4ouEYhDWwgD58DjVP
+         XLDlO+kh7vWHmx7h+cmmXRpRs91G2z62y7K83USyb8oBAv59MflgipnpZy1ric0kiTOm
+         O+2IrhGFrFZvCj2CfJfrS5Ox+9HMfYEBkHlnlQEBn7JFXwinG++qkUIAZarlgJ+tqOEg
+         g6qMb8mKbIcDJQ5Q95evwRj90rNg9Hce+Ea/9H8t2lB2qffO/0tG4kqtmSvw+Pceu2lZ
+         sM/A==
+X-Gm-Message-State: AOAM530CmoAXxXf7lCXxL/NmOP8++x655yqe9g9Q9fuRu31ECuZoF6H0
+        iWIcZdSqqTNONN4shO4Na1QLJfniCsXjmeQK7qV5fOor
+X-Google-Smtp-Source: ABdhPJzynjLoYw9pgrZO/Ro6nsOBbraw4PkA3fySltZ5MiGIQS28ii6pG+kVrY0l/zn3KDCk2rmKYuebyTe3bkndFM0=
+X-Received: by 2002:a02:a489:: with SMTP id d9mr1691020jam.47.1638299110774;
+ Tue, 30 Nov 2021 11:05:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129154337.14398-1-pandith.n@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <17c5adfe5ea.12f1be94625921.4478415437452327206@mykernel.net>
+ <CAJfpegt4jZpSCXGFk2ieqUXVm3m=ng7QtSzZp2bXVs07bfrbXg@mail.gmail.com>
+ <17d268ba3ce.1199800543649.1713755891767595962@mykernel.net>
+ <CAJfpegttQreuuD_jLgJmrYpsLKBBe2LmB5NSj6F5dHoTzqPArw@mail.gmail.com>
+ <17d2c858d76.d8a27d876510.8802992623030721788@mykernel.net>
+ <17d31bf3d62.1119ad4be10313.6832593367889908304@mykernel.net>
+ <20211118112315.GD13047@quack2.suse.cz> <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
+ <20211118164349.GB8267@quack2.suse.cz> <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net>
+ <20211130112206.GE7174@quack2.suse.cz> <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
+In-Reply-To: <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 30 Nov 2021 21:04:59 +0200
+Message-ID: <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 06/10] ovl: implement overlayfs' ->write_inode operation
+To:     Chengguang Xu <cgxu519@mykernel.net>
+Cc:     Jan Kara <jack@suse.cz>, Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        ronyjin <ronyjin@tencent.com>,
+        charliecgxu <charliecgxu@tencent.com>,
+        Vivek Goyal <vgoyal@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+>  > I was thinking about this a bit more and I don't think I buy this
+>  > explanation. What I rather think is happening is that real work for syncfs
+>  > (writeback_inodes_sb() and sync_inodes_sb() calls) gets offloaded to a flush
+>  > worker. E.g. writeback_inodes_sb() ends up calling
+>  > __writeback_inodes_sb_nr() which does:
+>  >
+>  > bdi_split_work_to_wbs()
+>  > wb_wait_for_completion()
+>  >
+>  > So you don't see the work done in the times accounted to your test
+>  > program. But in practice the flush worker is indeed burning 1.3s worth of
+>  > CPU to scan the 1 million inode list and do nothing.
+>  >
+>
+> That makes sense. However, in real container use case,  the upper dir is always empty,
+> so I don't think there is meaningful difference compare to accurately marking overlay
+> inode dirty.
+>
 
-I love your patch! Perhaps something to improve:
+It's true the that is a very common case, but...
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v5.16-rc3 next-20211130]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> I'm not very familiar with other use cases of overlayfs except container, should we consider
+> other use cases? Maybe we can also ignore the cpu burden because those use cases don't
+> have density deployment like container.
+>
 
-url:    https://github.com/0day-ci/linux/commits/pandith-n-intel-com/interconnect-intel-Add-Keem-Bay-noc-driver/20211129-235117
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d58071a8a76d779eedab38033ae4c821c30295a5
-config: i386-randconfig-c001-20211130 (https://download.01.org/0day-ci/archive/20211201/202112010223.Pb0XZMHN-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/724e8829a62d4ae6908d011f927e0c3ae5b0a80c
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review pandith-n-intel-com/interconnect-intel-Add-Keem-Bay-noc-driver/20211129-235117
-        git checkout 724e8829a62d4ae6908d011f927e0c3ae5b0a80c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/interconnect/intel/
+metacopy feature was developed for the use case of a container
+that chowns all the files in the lower image.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+In that case, which is now also quite common, all the overlay inodes are
+upper inodes.
 
-All warnings (new ones prefixed by >>):
+What about only re-mark overlay inode dirty if upper inode is dirty or is
+writeably mmapped.
+For other cases, it is easy to know when overlay inode becomes dirty?
+Didn't you already try this?
 
->> drivers/interconnect/intel/keembay-bwmon.c:142: warning: expecting prototype for flexnoc_counterp_capture(). Prototype was for flexnoc_counter_capture() instead
-
-
-vim +142 drivers/interconnect/intel/keembay-bwmon.c
-
-   122	
-   123	/**
-   124	 * flexnoc_counterp_capture() - Capture the counter statistic values
-   125	 * @noc: NOC type to setup counters
-   126	 * @counter:  Counter number to capture statistics values for n and n+1
-   127	 * @value: statistics values read are returned in this address passed
-   128	 *
-   129	 * This function will return the statistics value of started counters.
-   130	 * When this function returns NOC_PROBE_COMPLETED, it is guaranteed that NOC
-   131	 * counters are idle and finished probing.
-   132	 * Algo : The values should not returned when counters are active/running.
-   133	 * Once the counter is frozen, the values are good to read. There is an
-   134	 * iteration logic implemented to check this. An maximum timeout config
-   135	 * is provided to for capture timeout - NOC_CAPTURE_TIMEOUT_MSEC
-   136	 *
-   137	 *  Returns NOC_PROBE_COMPLETED if the counters are stopped or
-   138	 *  NOC_PROBE_ERR_IN_PROGRESS if counters are still running
-   139	 */
-   140	enum noc_status flexnoc_counter_capture(enum noc_ss_type noc,
-   141						enum noc_counter counter, u32  *value)
- > 142	{
-   143		unsigned long timeout;
-   144		u32 c0_0, c0_1;
-   145	
-   146		if (noc >= NOC_TYPE_MAX ||
-   147		    counter >= NOC_COUNTER_MAX  ||
-   148		    !value)
-   149			return NOC_PROBE_ERR_INVALID_ARGS;
-   150	
-   151		timeout = jiffies + msecs_to_jiffies(NOC_CAPTURE_TIMEOUT_MSEC);
-   152		do {
-   153			c0_0 = noc_readl((c_offset[counter] + C_VAL));
-   154			usleep_range(10000, 11000);
-   155			c0_1 = noc_readl((c_offset[counter] + C_VAL));
-   156			/* If mainctrl is zero , return error */
-   157			if (noc_readl(MAINCTL) == 0)
-   158				return NOC_PROBE_ERR_IN_PROGRESS;
-   159			/* If counters are zero, keep reading */
-   160			if (0 == c0_0 && 0 == c0_1) {
-   161				break;
-   162			} else if (c0_0 != c0_1) {
-   163				continue;
-   164			} else {
-   165				/* counters look good break the while */
-   166				break;
-   167			}
-   168		} while (time_before(jiffies, timeout));
-   169	
-   170		if (c0_0 != c0_1)
-   171			return NOC_PROBE_ERR_IN_PROGRESS;
-   172	
-   173		c0_0 = noc_readl((c_offset[counter] + C_VAL));
-   174		c0_1 = noc_readl((c_offset[counter + 1] + C_VAL));
-   175		*value = (c0_0 | (c0_1 << 16));
-   176	
-   177		return NOC_PROBE_COMPLETED;
-   178	}
-   179	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Amir.

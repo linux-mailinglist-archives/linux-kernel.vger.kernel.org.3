@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 465AB4636F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6809C4636F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242306AbhK3OpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:45:18 -0500
-Received: from mga07.intel.com ([134.134.136.100]:28007 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242309AbhK3OpM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:45:12 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="299619908"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="299619908"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 06:41:52 -0800
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="654193890"
-Received: from felsner-mobl2.ger.corp.intel.com (HELO [10.249.36.147]) ([10.249.36.147])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 06:41:49 -0800
-Subject: Re: [RFCv2 0/8] USI stylus support series
-To:     Hyungwoo Yang <hyungwoo.yang@gmail.com>,
-        linux-input@vger.kernel.org, benjamin.tissoires@redhat.com,
-        jikos@kernel.org, mika.westerberg@linux.intel.com
-Cc:     linux-kernel@vger.kernel.org, dmitry.torokhov@gmail.com,
-        peter.hutterer@who-t.net
-References: <20211126130141.1811848-1-tero.kristo@linux.intel.com>
- <1bcb6a07-c1c2-c8c6-a0a7-4eace372dd5e@gmail.com>
-From:   Tero Kristo <tero.kristo@linux.intel.com>
-Message-ID: <447d53c6-280d-da3d-fb04-3fd161aa28f4@linux.intel.com>
-Date:   Tue, 30 Nov 2021 16:41:47 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S242316AbhK3OqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:46:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58674 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242311AbhK3OqW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 09:46:22 -0500
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A49C061574;
+        Tue, 30 Nov 2021 06:43:03 -0800 (PST)
+Received: by mail-oi1-x233.google.com with SMTP id bk14so41670342oib.7;
+        Tue, 30 Nov 2021 06:43:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=oefm58NjnsdL/hN4YReYEUsqMs/3lHxBM+H4kBlTQt8=;
+        b=bFHW5N3FlZWWpNumt0eA0sLzZOMUpWYSEc200H7q2bN0ccA60BjJ1byUhtVxRUNmlY
+         h8AI/fDwBQkgJGyfHCGod/8D8pMhNNiZRHHU83TyMgALoWj1RAA3ejrtiEYO3U7h8qEc
+         HV4w328nOkpMg6/QZ6jMBZNsCbdaRmIpH9U/snA8sQD4gGxqWJDc5g4gMfBykvnsJVSj
+         z6Xkat+Nv8h+zSVOxklIcVz5ix5VfssEL/Pme0s1bzDE9e2xlFLZFixx6BPpMTREKnsg
+         IKjD37DFl90+rXZ5M7g29YeKC48BM2vW9uAPq9eyvmQqwpfB7hM9jbko7+lN2zVrBK/Z
+         TDRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=oefm58NjnsdL/hN4YReYEUsqMs/3lHxBM+H4kBlTQt8=;
+        b=EKZetKyF3aQlGetBkahjnovFx+Ch0pUyiy7PVfjSuwhqi1qgO0kN0Jc9JKJ9x7AG0u
+         4tvZ9tOW8k84RjgQxwRrNv4jFUU6fHJA4F/9nPEWmDdeJkr91CkZEDpxavw+P5Fi/UPj
+         ijAiuFg767yw24Flmr4s+hi/pcL9QAFf6ZKLIdY6+oWyj4HnoyxEGWKQDidOuNmccmbo
+         vM4JzyMqpFvzvyY6q0zmEwmAQrJCiMYAJgyT24x/BI5jG1HxZVXoJpEu22HMFkpwTDKG
+         h8DWgNIJm9elL4jL6N7+pWYfZj2XXpQQAmNSZALdzAkhve/2Qffob7ANMuV5YlZU9LOW
+         +JPQ==
+X-Gm-Message-State: AOAM531By+TA93pf56ZChmGYp+sQDEVdnZS44aXGpr4jWfsEMrPTnyhz
+        xoXrV58CFicZzmTwjCAVVSQ=
+X-Google-Smtp-Source: ABdhPJzUyIVSu9V/90zR6AW5HTCk/oFoGlB+30ylrT3FwjvzwyV49Qotilvy78HvaF70hUVHNWW8ng==
+X-Received: by 2002:aca:add3:: with SMTP id w202mr4587060oie.100.1638283382727;
+        Tue, 30 Nov 2021 06:43:02 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d8sm3884086oiw.24.2021.11.30.06.43.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 06:43:02 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 30 Nov 2021 06:43:00 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Eugene Shalygin <eugene.shalygin@gmail.com>,
+        Denis Pauk <pauk.denis@gmail.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH 1/2] hwmon: (asus_wmi_ec_sensors) fix array overflow
+Message-ID: <20211130144300.GA269056@roeck-us.net>
+References: <20211130105034.GG5827@kili>
 MIME-Version: 1.0
-In-Reply-To: <1bcb6a07-c1c2-c8c6-a0a7-4eace372dd5e@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130105034.GG5827@kili>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hyungwoo,
+On Tue, Nov 30, 2021 at 01:50:34PM +0300, Dan Carpenter wrote:
+> Smatch detected an array out of bounds error:
+> 
+>     drivers/hwmon/asus_wmi_ec_sensors.c:562 asus_wmi_ec_configure_sensor_setup()
+>     error: buffer overflow 'hwmon_attributes' 8 <= 9
+> 
+> The hwmon_attributes[] array needs to be declared with "hwmon_max"
+> elements.
+> 
+> Fixes: c04c7f7bfcbe ("hwmon: (asus_wmi_ec_sensors) Support B550 Asus WMI.")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
 
-On 30/11/2021 08:36, Hyungwoo Yang wrote:
-> Hi Tero,
->
->
-> I have a question. As you know, USI provides a room for vendors to 
-> differentiate their stylus. If a vendor wants to add reach features to 
-> differentiate their stylus. Do you think the vendor needs to come up 
-> with like HID-USI-<vendor>.c to configure the corresponding 
-> usages(vendor-defined data) ? or we should use other approach ? like 
-> register callbacks via HID-core ?
+Applied.
 
-I think this depends quite a bit on what kind of features we are talking 
-about. Looking at this series, we have:
+Thanks,
+Guenter
 
-- hid-core changes to add new event codes / add support for these
-
-- bfp modifications to support caching and write feature for the new 
-event codes (technically they can be written already via /dev/hidraw 
-directly, but the interface is bit clumsy, so we improve it with BFP)
-
-So, depending on the feature you want to add, you can take either way, 
-but probably hacking with BPF is going to be easiest. Vendor could even 
-write their own BPF tool. Also, please note that the location of 
-samples/bpf/hid_usi* is not going to remain, there will most likely be 
-an external repository where the new HID related BPF tools are going to 
-maintained, Benjamin had some thoughts about that already.
-
--Tero
-
-
->
-> -Hyungwoo
->
-> On 11/26/21 5:01 AM, Tero Kristo wrote:
->> Hi,
->>
->> This series is an update based on comments from Benjamin. What is done
->> is this series is to ditch the separate hid-driver for USI, and add the
->> generic support to core layers. This part basically brings the support
->> for providing USI events, without programmability (patches 1-6).
->>
->> Additionally, a HID-BPF based sample is provided which can be used to
->> program / query pen parameters in comparison to the old driver level
->> implementation (patches 7-8, patch #8 is an incremental change on top of
->> patch #7 which just converts the fifo to socket so that the client can
->> also get results back from the server.)
->>
->> The whole series is based on top of Benjamin's hid-bpf support work, and
->> I've pushed a branch at [1] with a series that works and brings in
->> the dependency. There are also a few separate patches in this series to
->> fix the problems I found from Benjamin's initial work for hid-bpf; I
->> wasn't able to get things working without those. The branch is also
->> based on top of 5.16-rc2 which required some extra changes to the
->> patches from Benjamin.
->>
->> -Tero
->>
->> [1] https://github.com/t-kristo/linux/tree/usi-5.16-rfc-v2-bpf
->>
->>
->>
->>
+> ---
+>  drivers/hwmon/asus_wmi_ec_sensors.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/asus_wmi_ec_sensors.c b/drivers/hwmon/asus_wmi_ec_sensors.c
+> index f612abc66c89..22a1459305a7 100644
+> --- a/drivers/hwmon/asus_wmi_ec_sensors.c
+> +++ b/drivers/hwmon/asus_wmi_ec_sensors.c
+> @@ -41,7 +41,7 @@
+>  #define ASUSWMI_MAX_BUF_LEN		128
+>  #define SENSOR_LABEL_LEN		16
+>  
+> -static u32 hwmon_attributes[] = {
+> +static u32 hwmon_attributes[hwmon_max] = {
+>  	[hwmon_chip]	= HWMON_C_REGISTER_TZ,
+>  	[hwmon_temp]	= HWMON_T_INPUT | HWMON_T_LABEL,
+>  	[hwmon_in]	= HWMON_I_INPUT | HWMON_I_LABEL,

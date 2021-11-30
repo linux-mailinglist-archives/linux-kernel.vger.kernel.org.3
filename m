@@ -2,286 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BD874629A5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624374629AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 02:29:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236194AbhK3B2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 20:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45570 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236113AbhK3B2c (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 20:28:32 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5D6C061746
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:25:13 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id k2so37997701lji.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 17:25:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=1aOU62sEoY17NbFNbDybiVS0K59KvQupYrTSRVeXj/A=;
-        b=HyW4IaEHVteybeW/M0Z4jR0YqK2TCk5Kkdv1RkQqD8D63Kpi89zOcDlp1la7UYPsRS
-         3EUwKSVoEsmMH6gkBc59W0P+RrUoBliJY+1gb8XdHPOd/FtlvxAGHeD3qyZsdSkUVLb6
-         bIhlwFqWm2PDTEjHHzRbs7dgZQBjQAecMmwBN7M9oEcoTaTxDdXsnrxej2SdVtW6nG4U
-         m/D77jWQ5ICZeLrA5bUJPb2eBR9fvBHLMsVWYSzz0R6nas82QcrAih0esrPjyMYuA7Px
-         jbeDuTMnj+dbsOl+xhtClgUXR5IA3vr3pj1aJlnVWvoIdj0oLMVJb/oMar+Frtef+gYy
-         ASjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=1aOU62sEoY17NbFNbDybiVS0K59KvQupYrTSRVeXj/A=;
-        b=ept6Tt1mf3JDZEWMy1rJm7bBdM4GVIQvK82u+6lvLfTIGitaERwDz9pLrs0WHPPC7U
-         y+aXR9VMPbpyk8ByCdFWQpuhjIoPNkT+a/VCsKaJX4VupSbnvbTd3XU7x+6hPVOI75rM
-         VXuXHCarzghCdRDUJlK65gS2CH5jsLwvaHjAJOzod3PPBBHdjUKyHqV/9Z6WsdcBK5o6
-         NvnEHSJ+hJRPL8R2IWOkBOjyrfsqEzV4D4whxeQDnz7exoUneZDl/KIgAfDpz9z0k3z8
-         XMHev/ALJgyjPDZ64fqfJvayOWwFt8x1f+H/OTEKNF/S7A1I1d4EyWC7rlHjMigjygzl
-         D4bQ==
-X-Gm-Message-State: AOAM530CWFILW8Er3yhTve7E75jYMSScNGjrNW+9onYuW7fPWnozWMPP
-        1OlzVEXn1j5uqS5tGIsdGFdBOhGDrWeaVv9hlGwweQ==
-X-Google-Smtp-Source: ABdhPJxttSh9XdFPcNOWvXNMWWNt8QdUamM0+EPygp4nvEYFPqPBpnT8xC/kB4mnwwwxF+M2bDGZyQUl/U4Ro5fhkAU=
-X-Received: by 2002:a2e:8991:: with SMTP id c17mr50284659lji.361.1638235511602;
- Mon, 29 Nov 2021 17:25:11 -0800 (PST)
+        id S236265AbhK3Bcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 20:32:50 -0500
+Received: from mga01.intel.com ([192.55.52.88]:53470 "EHLO mga01.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229459AbhK3Bcp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 29 Nov 2021 20:32:45 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="260053833"
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="260053833"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 17:29:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,273,1631602800"; 
+   d="scan'208";a="458646078"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 29 Nov 2021 17:29:25 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1mrrxV-000CZp-4R; Tue, 30 Nov 2021 01:29:25 +0000
+Date:   Tue, 30 Nov 2021 09:28:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-5.10.y 2147/2411]
+ drivers/bus/ti-sysc.c:2446:13: warning: variable 'error' set but not used
+Message-ID: <202111300927.gR4hZApS-lkp@intel.com>
 MIME-Version: 1.0
-References: <20211115211704.2621644-1-bgardon@google.com> <YZL1ZiKQVRQd8rZi@google.com>
-In-Reply-To: <YZL1ZiKQVRQd8rZi@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Mon, 29 Nov 2021 17:24:45 -0800
-Message-ID: <CALzav=cXWUUrKFwKgTEKjb=TQTLTNcQv62BwjdyUqsLjwYZ=hQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] KVM: x86/mmu: Fix TLB flush range when handling
- disconnected pt
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>, Peter Shier <pshier@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Yulei Zhang <yulei.kernel@gmail.com>,
-        Wanpeng Li <kernellwp@gmail.com>,
-        Xiao Guangrong <xiaoguangrong.eric@gmail.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>,
-        David Hildenbrand <david@redhat.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 4:03 PM Sean Christopherson <seanjc@google.com> wro=
-te:
->
-> On Mon, Nov 15, 2021, Ben Gardon wrote:
-> > When recursively clearing out disconnected pts, the range based TLB
-> > flush in handle_removed_tdp_mmu_page uses the wrong starting GFN,
-> > resulting in the flush mostly missing the affected range. Fix this by
-> > using base_gfn for the flush.
-> >
-> > In response to feedback from David Matlack on the RFC version of this
-> > patch, also move a few definitions into the for loop in the function to
-> > prevent unintended references to them in the future.
->
-> Rats, I didn't read David's feedback or I would've responded there.
->
-> > Fixes: a066e61f13cf ("KVM: x86/mmu: Factor out handling of removed page=
- tables")
-> > CC: stable@vger.kernel.org
-> >
-> > Signed-off-by: Ben Gardon <bgardon@google.com>
-> > ---
-> >  arch/x86/kvm/mmu/tdp_mmu.c | 10 ++++------
-> >  1 file changed, 4 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> > index 7c5dd83e52de..4bd541050d21 100644
-> > --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> > +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> > @@ -317,9 +317,6 @@ static void handle_removed_tdp_mmu_page(struct kvm =
-*kvm, tdp_ptep_t pt,
-> >       struct kvm_mmu_page *sp =3D sptep_to_sp(rcu_dereference(pt));
-> >       int level =3D sp->role.level;
-> >       gfn_t base_gfn =3D sp->gfn;
-> > -     u64 old_child_spte;
-> > -     u64 *sptep;
-> > -     gfn_t gfn;
-> >       int i;
-> >
-> >       trace_kvm_mmu_prepare_zap_page(sp);
-> > @@ -327,8 +324,9 @@ static void handle_removed_tdp_mmu_page(struct kvm =
-*kvm, tdp_ptep_t pt,
-> >       tdp_mmu_unlink_page(kvm, sp, shared);
-> >
-> >       for (i =3D 0; i < PT64_ENT_PER_PAGE; i++) {
-> > -             sptep =3D rcu_dereference(pt) + i;
-> > -             gfn =3D base_gfn + i * KVM_PAGES_PER_HPAGE(level);
-> > +             u64 *sptep =3D rcu_dereference(pt) + i;
-> > +             gfn_t gfn =3D base_gfn + i * KVM_PAGES_PER_HPAGE(level);
-> > +             u64 old_child_spte;
->
-> TL;DR: this type of optional refactoring doesn't belong in a patch Cc'd f=
-or stable,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+head:   cd4fd0597d3787df6c6771a7b41379d35a8f31b0
+commit: 5eca1c8412f40dd798c28549cd4c032217ad2faf [2147/2411] bus: ti-sysc: Add quirk handling for reinit on context lost
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20211130/202111300927.gR4hZApS-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=5eca1c8412f40dd798c28549cd4c032217ad2faf
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-5.10.y
+        git checkout 5eca1c8412f40dd798c28549cd4c032217ad2faf
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/bus/
 
-This is a great point. Regardless of our stance on variable function
-declaration, the refactor wouldn't make sense to send to stable (or at
-the minimum it should be considered separately in its own patch).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> and my personal preference is to always declare variables at function sco=
-pe (it's
-> not a hard rule though, Paolo has overruled me at least once :-) ).
->
-> Declaring variables in an inner scope is not always "better".  In particu=
-lar, it
-> can lead to variable shadowing, which can lead to functional issues of a =
-different
-> sort.  Most shadowing is fairly obvious, and truly egregious bugs will of=
-ten result
-> in the compiler complaining about consuming an uninitialized variable.
->
-> But the worst-case scenario is if the inner scope shadows a function para=
-meter, in
-> which the case the compiler will not complain and will even consume an un=
-initialized
-> variable without warning.  IIRC, we actually had a Hyper-V bug of that na=
-ture
-> where an incoming @vcpu was shadowed.  Examples below.
->
-> So yes, on one hand moving the declarations inside the loop avoid potenti=
-al flavor
-> of bug, but they create the possibility for an entirely different class o=
-f bugs.
-> The main reason I prefer declaring at function scope is that I find it ea=
-sier to
-> visually detect using variables after a for loop, versus detecting that a=
- variable
-> is being shadowed, especially if the function is largish and the two decl=
-arations
-> don't fit on the screen.
+All warnings (new ones prefixed by >>):
 
-Ah I have not had the pleasure of debugging a variable shadowing bug
-before :), so I never even considered this.
+   drivers/bus/ti-sysc.c: In function 'sysc_reinit_modules':
+>> drivers/bus/ti-sysc.c:2446:13: warning: variable 'error' set but not used [-Wunused-but-set-variable]
+    2446 |         int error = 0;
+         |             ^~~~~
 
-This is something that a compiler could easily detect and disallow for
-us. In fact GCC has the -Wshadow=3Dlocal option which disallows local
-variables shadowing other local variables and function parameters.
-Unfortunately, Clang either doesn't support this option or spells it
-differently (but I haven't been able to find it). I tried to build KVM
-with -Wshadow=3Dlocal today but it looks like I need to get a newer
-version of GCC and that's as far as I got.
 
-Both Clang and GCC support -Wshadow but that is too broad. It prevents
-local variables from shadowing global variables, which would prevent
-us from having local variables named "apic" among other common names.
+vim +/error +2446 drivers/bus/ti-sysc.c
 
->
-> There are of course counter-examples, e.g. commit 5c49d1850ddd ("KVM: VMX=
-: Fix a
-> TSX_CTRL_CPUID_CLEAR field mask issue") immediately jumps to mind, so the=
-re's
-> certainly an element of personal preference.
->
-> E.g. this will fail with "error: =E2=80=98sptep=E2=80=99 redeclared as di=
-fferent kind of symbol
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 4e226cdb40d9..011639bf633c 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -369,7 +369,7 @@ static void tdp_mmu_unlink_page(struct kvm *kvm, stru=
-ct kvm_mmu_page *sp,
->   * early rcu_dereferences in the function.
->   */
->  static void handle_removed_tdp_mmu_page(struct kvm *kvm, tdp_ptep_t pt,
-> -                                       bool shared)
-> +                                       bool shared, u64 *sptep)
->  {
->         struct kvm_mmu_page *sp =3D sptep_to_sp(rcu_dereference(pt));
->         int level =3D sp->role.level;
-> @@ -431,8 +431,9 @@ static void handle_removed_tdp_mmu_page(struct kvm *k=
-vm, tdp_ptep_t pt,
->                                     shared);
->         }
->
-> -       kvm_flush_remote_tlbs_with_address(kvm, gfn,
-> -                                          KVM_PAGES_PER_HPAGE(level + 1)=
-);
-> +       if (sptep)
-> +               kvm_flush_remote_tlbs_with_address(kvm, gfn,
-> +                                                  KVM_PAGES_PER_HPAGE(le=
-vel + 1));
->
->         call_rcu(&sp->rcu_head, tdp_mmu_free_sp_rcu_callback);
->  }
-> @@ -532,7 +533,7 @@ static void __handle_changed_spte(struct kvm *kvm, in=
-t as_id, gfn_t gfn,
->          */
->         if (was_present && !was_leaf && (is_leaf || !is_present))
->                 handle_removed_tdp_mmu_page(kvm,
-> -                               spte_to_child_pt(old_spte, level), shared=
-);
-> +                               spte_to_child_pt(old_spte, level), shared=
-, NULL);
->  }
->
->  static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
->
->
-> whereas moving the second declaration into the loop will compile happily.
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 4e226cdb40d9..3e83fd66c0dc 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -369,13 +369,12 @@ static void tdp_mmu_unlink_page(struct kvm *kvm, st=
-ruct kvm_mmu_page *sp,
->   * early rcu_dereferences in the function.
->   */
->  static void handle_removed_tdp_mmu_page(struct kvm *kvm, tdp_ptep_t pt,
-> -                                       bool shared)
-> +                                       bool shared, u64 *sptep)
->  {
->         struct kvm_mmu_page *sp =3D sptep_to_sp(rcu_dereference(pt));
->         int level =3D sp->role.level;
->         gfn_t base_gfn =3D sp->gfn;
->         u64 old_child_spte;
-> -       u64 *sptep;
->         gfn_t gfn;
->         int i;
->
-> @@ -384,7 +383,7 @@ static void handle_removed_tdp_mmu_page(struct kvm *k=
-vm, tdp_ptep_t pt,
->         tdp_mmu_unlink_page(kvm, sp, shared);
->
->         for (i =3D 0; i < PT64_ENT_PER_PAGE; i++) {
-> -               sptep =3D rcu_dereference(pt) + i;
-> +               u64 *sptep =3D rcu_dereference(pt) + i;
->                 gfn =3D base_gfn + i * KVM_PAGES_PER_HPAGE(level);
->
->                 if (shared) {
-> @@ -431,8 +430,9 @@ static void handle_removed_tdp_mmu_page(struct kvm *k=
-vm, tdp_ptep_t pt,
->                                     shared);
->         }
->
-> -       kvm_flush_remote_tlbs_with_address(kvm, gfn,
-> -                                          KVM_PAGES_PER_HPAGE(level + 1)=
-);
-> +       if (sptep)
-> +               kvm_flush_remote_tlbs_with_address(kvm, gfn,
-> +                                                  KVM_PAGES_PER_HPAGE(le=
-vel + 1));
->
->         call_rcu(&sp->rcu_head, tdp_mmu_free_sp_rcu_callback);
->  }
-> @@ -532,7 +532,7 @@ static void __handle_changed_spte(struct kvm *kvm, in=
-t as_id, gfn_t gfn,
->          */
->         if (was_present && !was_leaf && (is_leaf || !is_present))
->                 handle_removed_tdp_mmu_page(kvm,
-> -                               spte_to_child_pt(old_spte, level), shared=
-);
-> +                               spte_to_child_pt(old_spte, level), shared=
-, NULL);
->  }
->
->  static void handle_changed_spte(struct kvm *kvm, int as_id, gfn_t gfn,
+  2439	
+  2440	/* Caller needs to take list_lock if ever used outside of cpu_pm */
+  2441	static void sysc_reinit_modules(struct sysc_soc_info *soc)
+  2442	{
+  2443		struct sysc_module *module;
+  2444		struct list_head *pos;
+  2445		struct sysc *ddata;
+> 2446		int error = 0;
+  2447	
+  2448		list_for_each(pos, &sysc_soc->restored_modules) {
+  2449			module = list_entry(pos, struct sysc_module, node);
+  2450			ddata = module->ddata;
+  2451			error = sysc_reinit_module(ddata, ddata->enabled);
+  2452		}
+  2453	}
+  2454	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

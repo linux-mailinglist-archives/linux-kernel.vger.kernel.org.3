@@ -2,114 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEBB7463C0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515FF463C14
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244274AbhK3QpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:45:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244338AbhK3QpK (ORCPT
+        id S244331AbhK3Qqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:46:37 -0500
+Received: from perceval.ideasonboard.com ([213.167.242.64]:44240 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230259AbhK3Qqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:45:10 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0233C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:41:50 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id e8so21898888ilu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:41:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=qNDySkV1TDMjsXZgIAndGnAJEHYPbFyQnbCSCL0UXYc=;
-        b=Fg5EfYqMvlbzQGAt7dGOr94Udoqh9O3lMIDTD7ZCrxLZmLeepT/dYuQY+xvOOJ5Lma
-         o0HpC8crk9O1MHvJki29w57Z+OnRE2LP9BBC9Pn88Be6rrZEMgOT8vSy1kO4Oye/pazb
-         UUaXHDFwAZPlBvDwESDQmFIrr1TUupf/B+ig4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=qNDySkV1TDMjsXZgIAndGnAJEHYPbFyQnbCSCL0UXYc=;
-        b=BBhvtSC4+Ow4lNgUSH614fZ1t8SiKjoN5Js9pWb6919615J48r0zyArAbeIsYTXvlx
-         FjVZmePlEMBanccZwXfPZ3bQbBDm++q2nmBQb6L9nPXYIoN10r2uhVBR/74KzA+g7EP7
-         uwrYwi2909NsUfemHaBBdoaX5XhmreHGWGblw7Tro5IkzkXC+J9B/Uwe8Ij0Nv0TJZnU
-         TtujsCPdcamWuDrTd+9LnFFp0zBYaq0dah/+ACqs+cvDrcI+puIpOFnx/6AEztnsXRE2
-         hCiPUVy/CAqqRMHR4RsKtotexJNOJGymJ0Fx3Gp7oZAE2zdOmmIelea1zAoUZFtquSUn
-         CB0A==
-X-Gm-Message-State: AOAM531wXaHJ9+ox1ZHpHq16ljHghAxwffF9S1shXfGG+y7EwrOrZGb2
-        TV6n11VlrFYT6ZOH5YegVXEjC1cooKW/7w==
-X-Google-Smtp-Source: ABdhPJwZ6qoCwAzlKny10FO8SQ2/Nr4zqiq19J5P5L2Hq1YUBtmMr/yGDSYvri/mgotGD+VbY4YSmg==
-X-Received: by 2002:a05:6e02:1a03:: with SMTP id s3mr109743ild.73.1638290510084;
-        Tue, 30 Nov 2021 08:41:50 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h1sm4820725iow.31.2021.11.30.08.41.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 08:41:49 -0800 (PST)
-Subject: Re: [PATCH 1/2] selftests: cgroup: build error multiple outpt files
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
-        christian@brauner.io, nathan@kernel.org, ndesaulniers@google.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20211105162530.3307666-1-anders.roxell@linaro.org>
- <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
- <20211123142600.r5d52iwhbqhujiux@wittgenstein>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
-Date:   Tue, 30 Nov 2021 09:41:49 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 30 Nov 2021 11:46:36 -0500
+Received: from Monstersaurus.local (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5F10911C5;
+        Tue, 30 Nov 2021 17:43:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1638290595;
+        bh=w7su8/kwCx6CWfTEhlhNUnkf3j4MwZ1D2xFJ9I1Nk7g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JsH90Qz88wRxJDrhkv518x6vHUCBVBohBi4PvHE3lHueFf2TszcVJaatkt7cccjFA
+         z1HwZWLXGWGMU4mNwzZNw4XdjQGP+cTESTxG3EWaaHujCd4JFVYPUwDTD81rmjXsVO
+         AfxgfxgLgGhKTjQA3aYqQ4u0AQWwjDBaHaGqtLn8=
+From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Geert Uytterhoeven <geert@glider.be>,
+        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v5 1/2] arm64: dts: renesas: r8a779a0: Add DSI encoders
+Date:   Tue, 30 Nov 2021 16:43:10 +0000
+Message-Id: <20211130164311.2909616-2-kieran.bingham+renesas@ideasonboard.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20211130164311.2909616-1-kieran.bingham+renesas@ideasonboard.com>
+References: <20211130164311.2909616-1-kieran.bingham+renesas@ideasonboard.com>
 MIME-Version: 1.0
-In-Reply-To: <20211123142600.r5d52iwhbqhujiux@wittgenstein>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/23/21 7:26 AM, Christian Brauner wrote:
-> On Fri, Nov 19, 2021 at 05:22:20PM -0700, Shuah Khan wrote:
->> On 11/5/21 10:25 AM, Anders Roxell wrote:
->>> When building selftests/cgroup: with clang the following error are seen:
->>>
->>> clang -Wall -pthread    test_memcontrol.c cgroup_util.c ../clone3/clone3_selftests.h  -o /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol
->>> clang: error: cannot specify -o when generating multiple output files
->>> make[3]: *** [../lib.mk:146: /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol] Error 1
->>>
->>> Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
->>> since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
->>> file lib.mk.
->>>
->>> Suggested-by: Arnd Bergmann <arnd@arndb.de>
->>> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
->>> ---
->>>    tools/testing/selftests/cgroup/Makefile | 12 +++++++-----
->>>    tools/testing/selftests/lib.mk          |  2 +-
->>>    2 files changed, 8 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
->>> index 59e222460581..745fe25fa0b9 100644
->>> --- a/tools/testing/selftests/cgroup/Makefile
->>> +++ b/tools/testing/selftests/cgroup/Makefile
->>> @@ -11,10 +11,12 @@ TEST_GEN_PROGS += test_core
->>>    TEST_GEN_PROGS += test_freezer
->>>    TEST_GEN_PROGS += test_kill
->>> +LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
->>> +
->>
->> This looks odd to me. Why are we introducing dependencies between tests?
->> clone3 includes in cgroup? Looks odd to me.
-> 
-> The cgroup tests need access to clone3() functionality in order to test
-> CLONE_INTO_CGROUP which is more suited to be placed alongside the cgroup
-> tests. There are a few other tests that include the clone3 header.
-> 
+Provide the two MIPI DSI encoders on the V3U and connect them to the DU
+accordingly.
 
-If other tests are also including this header, we could move it up under
-selftests level. Might have to add include directory.
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+---
+v2
+ - Fixup indentation
 
-thanks,
--- Shuah
+v3
+ - Fix the clock references
+ - Fixup dsi1 as well
+
+-v4:
+ - Use the correct pll clocks.
+
+v5:
+ - Remove dsi_out port endpoints.
+ - They must be added by the definition that links them.
+
+ arch/arm64/boot/dts/renesas/r8a779a0.dtsi | 60 +++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+index 8ac1a31e4146..2bd241b2a588 100644
+--- a/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
++++ b/arch/arm64/boot/dts/renesas/r8a779a0.dtsi
+@@ -2290,12 +2290,14 @@ ports {
+ 				port@0 {
+ 					reg = <0>;
+ 					du_out_dsi0: endpoint {
++						remote-endpoint = <&dsi0_in>;
+ 					};
+ 				};
+ 
+ 				port@1 {
+ 					reg = <1>;
+ 					du_out_dsi1: endpoint {
++						remote-endpoint = <&dsi1_in>;
+ 					};
+ 				};
+ 			};
+@@ -2633,6 +2635,64 @@ isp3vin31: endpoint {
+ 			};
+ 		};
+ 
++		dsi0: dsi-encoder@fed80000 {
++			compatible = "renesas,r8a779a0-dsi-csi2-tx";
++			reg = <0 0xfed80000 0 0x10000>;
++			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
++			clocks = <&cpg CPG_MOD 415>,
++				 <&cpg CPG_CORE R8A779A0_CLK_DSI>,
++				 <&cpg CPG_CORE R8A779A0_CLK_CL16MCK>;
++			clock-names = "fck", "dsi", "pll";
++
++			resets = <&cpg 415>;
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++					dsi0_in: endpoint {
++						remote-endpoint = <&du_out_dsi0>;
++					};
++				};
++
++				port@1 {
++					reg = <1>;
++				};
++			};
++		};
++
++		dsi1: dsi-encoder@fed90000 {
++			compatible = "renesas,r8a779a0-dsi-csi2-tx";
++			reg = <0 0xfed90000 0 0x10000>;
++			power-domains = <&sysc R8A779A0_PD_ALWAYS_ON>;
++			clocks = <&cpg CPG_MOD 415>,
++				 <&cpg CPG_CORE R8A779A0_CLK_DSI>,
++				 <&cpg CPG_CORE R8A779A0_CLK_CL16MCK>;
++			clock-names = "fck", "dsi", "pll";
++
++			resets = <&cpg 416>;
++			status = "disabled";
++
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++
++				port@0 {
++					reg = <0>;
++					dsi1_in: endpoint {
++						remote-endpoint = <&du_out_dsi1>;
++					};
++				};
++
++				port@1 {
++					reg = <1>;
++				};
++			};
++		};
++
+ 		prr: chipid@fff00044 {
+ 			compatible = "renesas,prr";
+ 			reg = <0 0xfff00044 0 4>;
+-- 
+2.30.2
+

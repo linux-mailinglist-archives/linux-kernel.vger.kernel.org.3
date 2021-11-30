@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5DE4641B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:43:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F374641B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236863AbhK3Wq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:46:27 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:36276 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345079AbhK3Wov (ORCPT
+        id S1345419AbhK3WrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:47:20 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:40682 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345332AbhK3WrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:44:51 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638312089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1bOw8HEe7jHxyt1BTzbWx6wvk9iJpbF5Gn0Kg7y1Blo=;
-        b=2IrmNv3Iea3b/0P87xEGqZAZmwL1onSUMGqd0zxtDIRJLTynmNSC7uxIH8L/l5dtLj/5OD
-        JagFWx3aJMiS1LFIeYftEfo0Ur2kNjTtrOTkBnBmsBzvAxM9ucbFfqPVN5bViblbdfTyHh
-        DmsunGG30VGceQJj3KLRF3KIyBTUwjdi6+cIFEZFOGwVLxR6/Qv+GDEs3kZsbO3Sb5vEY4
-        CGDmi02z+2/4fP0CRSLAGmUXhnn/6DLG04oqIJtIelaVlS8RIp1r9e2Sxk09e7hCcOFzEs
-        b9sVLSs/CWxPIfpw834x9ILDVWh3TWdsOj5JuMEeZ6q+sN/NVCvFkfOxPIzp8w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638312089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1bOw8HEe7jHxyt1BTzbWx6wvk9iJpbF5Gn0Kg7y1Blo=;
-        b=wP+0RlPVEZMaKpggmpseYFDjn/awmzpDeY9BMit0WIgaUAvSVTefpWgNK6fro3P2SJv3Ar
-        0+sa+FEk57SExTAA==
-To:     =?utf-8?Q?C=C3=A9dric?= Le Goater <clg@kaod.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     linux-hyperv@vger.kernel.org, Paul Mackerras <paulus@samba.org>,
-        sparclinux@vger.kernel.org, Wei Liu <wei.liu@kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
-        x86@kernel.org, Christian Borntraeger <borntraeger@de.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, ath11k@lists.infradead.org,
-        Kevin Tian <kevin.tian@intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [patch 05/22] genirq/msi: Fixup includes
-In-Reply-To: <87czmhb8gq.ffs@tglx>
-References: <20211126222700.862407977@linutronix.de>
- <20211126223824.382273262@linutronix.de>
- <b1a6d267-c7b4-c4b9-ab0e-f5cc32bfe9bf@kaod.org> <87tufud4m3.ffs@tglx>
- <524d9b84-caa8-dd6f-bb5e-9fc906d279c0@kaod.org> <87czmhb8gq.ffs@tglx>
-Date:   Tue, 30 Nov 2021 23:41:28 +0100
-Message-ID: <875ys9b71j.ffs@tglx>
+        Tue, 30 Nov 2021 17:47:02 -0500
+Received: by mail-ot1-f43.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so32365560otj.7;
+        Tue, 30 Nov 2021 14:43:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=bgNkZ9Km7uslGW9spgB64Ff0uwinA/sUJ4dW12Hx5NQ=;
+        b=7zoMPYl4UsYVZuIdiuSm7NYTRxnoAoz/NRA6kHnoPzIf2eOIjKEwqmKIH9vcdS0NJL
+         D/nE/lpVz/0cXzyEuMSpepnyak8Voz9wcjC98CXS0XG88XsKv7j9E0ajxAA1qxJ5wCw1
+         fT93G4+mjN/qNE0Oa8LvUPPCAdhqyQ7W5KyFAWCQnA94PgCYgX7GCsHpUVbxpkipMDU3
+         Hc7/6PosrS3vhFilA0pbtBnv+jJKiosGeFxBJ3m9miUC709XF7txUCAok8hmKG5F1Swp
+         hYfL2+1Jlws5SGu1B7UXFBVHCW4MszsnAIGyDi89n4iKB4OX5ezYCB4zSxOiJySKxVM+
+         jgCw==
+X-Gm-Message-State: AOAM533zmPdHw7sNvm2oQO9ZfhAfJwYI1dkCLki2SRU0f5ir8wEVwB5l
+        GvgoieBr1ncb5UT767yFmQ==
+X-Google-Smtp-Source: ABdhPJzzNxeCz/g28KThw4laZ7VZ4CBNkktlUh1TUdViKWztFqJrvQFOHaXnbD/wHUUc+yOXcVd/+Q==
+X-Received: by 2002:a9d:364b:: with SMTP id w69mr2131689otb.18.1638312212779;
+        Tue, 30 Nov 2021 14:43:32 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id g1sm2943995ooq.2.2021.11.30.14.43.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 14:43:31 -0800 (PST)
+Received: (nullmailer pid 3146302 invoked by uid 1000);
+        Tue, 30 Nov 2021 22:43:31 -0000
+Date:   Tue, 30 Nov 2021 16:43:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Calvin Zhang <calvinzhang.cool@gmail.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH] of: unmap memory regions in /memreserve node
+Message-ID: <YaapE8oys5zQEdD5@robh.at.kernel.org>
+References: <20211124133347.3861391-1-calvinzhang.cool@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124133347.3861391-1-calvinzhang.cool@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30 2021 at 23:10, Thomas Gleixner wrote:
++linuxppc-dev
 
-> On Tue, Nov 30 2021 at 22:48, C=C3=A9dric Le Goater wrote:
->> On 11/29/21 22:38, Thomas Gleixner wrote:
->>> On Mon, Nov 29 2021 at 08:33, C=C3=A9dric Le Goater wrote:
->>> thanks for having a look. I fixed up this and other fallout and pushed =
-out an
->>> updated series (all 4 parts) to:
->>>=20
->>>          git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel msi
->>
->> pSeries fails to allocate MSIs starting with this patch :
->>
->>   [PATCH 049/101] powerpc/pseries/msi: Let core code check for contiguou=
-s ...
->>
->> I will dig in later on.
->
-> Let me stare at the core function..
+On Wed, Nov 24, 2021 at 09:33:47PM +0800, Calvin Zhang wrote:
+> Reserved memory regions in /memreserve node aren't and shouldn't
+> be referenced elsewhere. So mark them no-map to skip direct mapping
+> for them.
 
-It's not the core function. It's the patch above and I'm a moron.
+I suspect this has a high chance of breaking some platform. There's no 
+rule a region can't be accessed.
 
---- a/arch/powerpc/platforms/pseries/msi.c
-+++ b/arch/powerpc/platforms/pseries/msi.c
-@@ -359,9 +359,6 @@ static int rtas_prepare_msi_irqs(struct
- 	if (quota && quota < nvec)
- 		return quota;
-=20
--	if (type =3D=3D PCI_CAP_ID_MSIX)
--		return -EINVAL;
--
- 	/*
- 	 * Firmware currently refuse any non power of two allocation
- 	 * so we round up if the quota will allow it.
+> 
+> Signed-off-by: Calvin Zhang <calvinzhang.cool@gmail.com>
+> ---
+>  drivers/of/fdt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+> index bdca35284ceb..9e88cc8445f6 100644
+> --- a/drivers/of/fdt.c
+> +++ b/drivers/of/fdt.c
+> @@ -638,7 +638,7 @@ void __init early_init_fdt_scan_reserved_mem(void)
+>  		fdt_get_mem_rsv(initial_boot_params, n, &base, &size);
+>  		if (!size)
+>  			break;
+> -		early_init_dt_reserve_memory_arch(base, size, false);
+> +		early_init_dt_reserve_memory_arch(base, size, true);
+>  	}
+>  
+>  	fdt_scan_reserved_mem();
+> -- 
+> 2.30.2
+> 
+> 

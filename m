@@ -2,96 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EC327462F91
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF45462F8E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240184AbhK3Ja7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 04:30:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234770AbhK3Ja6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240169AbhK3Ja6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 30 Nov 2021 04:30:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02534C061574;
-        Tue, 30 Nov 2021 01:27:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta-p6.oit.umn.edu ([134.84.196.206]:35806 "EHLO
+        mta-p6.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234770AbhK3Ja5 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 04:30:57 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p6.oit.umn.edu (Postfix) with ESMTP id 4J3H1k2KvCz9vC8H
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:27:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p6.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p6.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id F92lqGDwxyx4 for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 03:27:38 -0600 (CST)
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 902FBB817CB;
-        Tue, 30 Nov 2021 09:27:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4E9C53FC7;
-        Tue, 30 Nov 2021 09:27:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638264457;
-        bh=W8CE3cPbhNtMoO8hl1s/FLPTFSn34F1Nw7lE7AMcsIA=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=UoONgVPEsC9vpaoMTTISZa3IDl6GMwNM8x7l0arA0JqyJ0TC8R3RpjC//3iwFGKCu
-         W3d6CnF5tpunDQJHWfgXivE+QiypHBDB1uginz84WtBF5tbmvvCpZ/5PEbPa7MZ3qS
-         uoaJM0MCF1vpP5f1P4XSSCbWh0x1fXYYRgNBTGxYD3vWPrg1YhvZ9Jir+rs54tBdSc
-         t4CpTf+cP5l7ONiAvKW3nQc+ck99H+7UI9ogVympssY6jzvtS/n8t/KPL8g0YKJJLA
-         NY28mvsbKoJN6nNBoyOt76r1H/HSyUqtfL4ocJExR5Nl+ENzr5qz2ANR0ifFC6DZ+9
-         oe0ENo6zoXU9g==
-Date:   Tue, 30 Nov 2021 10:27:30 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-Subject: Re: [PATCH 2/4] i2c: stm32f7: recover the bus on access timeout
-Message-ID: <YaXugmLdXkaM1pk4@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        pierre-yves.mordret@foss.st.com, alexandre.torgue@foss.st.com,
-        linux-i2c@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <1632151292-18503-1-git-send-email-alain.volmat@foss.st.com>
- <1632151292-18503-3-git-send-email-alain.volmat@foss.st.com>
- <YaTE0f9ciy5JRZ3Q@kunai>
- <20211129123302.GB486850@gnbcxd0016.gnb.st.com>
- <YaTNDq7rEyQIopim@kunai>
- <20211130085618.GA668426@gnbcxd0016.gnb.st.com>
+        by mta-p6.oit.umn.edu (Postfix) with ESMTPS id 4J3H1k0Fjwz9vC7k
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:27:38 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p6.oit.umn.edu 4J3H1k0Fjwz9vC7k
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p6.oit.umn.edu 4J3H1k0Fjwz9vC7k
+Received: by mail-pl1-f198.google.com with SMTP id l14-20020a170903120e00b00143cc292bc3so7969459plh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UmVL6Owf91KrAVSVN4T/a2Zm/TSDiHMyV8vSNTqLEAI=;
+        b=crRhkDRObsvIF6ohNtNmm/daP2G/5tvHmMBSCSNq8BRwTiWU3q1tVKg/SsO4nghCBM
+         1MxPVU5HQOkhLvzYnDrF66p7fprRhHdJzXpIXcfNshGvUPaAHB92waRxBIrDtQLsFTFs
+         O+UeUdEQ9puMjaR9V9o2O9h5dZX8/kxD+NlCib48py/kl5FUf8IS07jl/r1bByVipMog
+         dsOT3gpJKjyaFrgkwuWYqosYPaOGApQCBKeWtSp4LfGTIuw8Hev67zxt5yLaR4ZaH2jY
+         38nCHCyaJa4Q84HkjzPFwpSjpEwu3qhfn839JGSJgjBeeGBpQQA77mWECS5mbhMdUkj3
+         wccg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=UmVL6Owf91KrAVSVN4T/a2Zm/TSDiHMyV8vSNTqLEAI=;
+        b=vwf3d/cxwFcALisecrXTkeVdOAGsIHvl5PnKt6pOLMuxb8wV9Z4L6A3zr1GeFwbFDz
+         +WPkkuzusYmcsC7Enwh/HRRV9tPXaC2htZg9unFjhVi9yJIuufnSyEN+EnT8+EOzZdNs
+         RcMTA9uzufUtT8hoYJaavUBmIWZrmN946G5uBLewGO4zbXK6WMa5q2D5WEuBtqcZPKN9
+         LrzU+Qb0Vt+59UlHDqLgTAOpyOQegfh7boNcT/ArLcugqnBHOn9rUSKTOzplaEUJv3bH
+         Edz6Gg4Tx+8fke/pDyj+SUtwjvKhaxvLjqcr/PqVG+IAzOTO3+KqRUfvI8mBDBLXLFSd
+         BO5A==
+X-Gm-Message-State: AOAM533f6cRSL9QjJuhDgwRvkK5/PoLKm+eViD2aTOiTDasp1i9aNCZs
+        Q5RMlV4bJFxz81eB8GcWvmXaBCmt19h9HLwqlxIhMJ9czd5n78QajTFYvUOV4qWv7lScnsml9VP
+        pz6K77K3aSm1zJSA4zjmiyIVsVJBA
+X-Received: by 2002:a63:7c03:: with SMTP id x3mr38833931pgc.394.1638264457383;
+        Tue, 30 Nov 2021 01:27:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxcUS2Pm5qOUBh9nDN92KPHRcDmY3kWaqLBZdVVTaBBj/oCqWJ6lcYyk7AkcWuoMj+QeBfDtg==
+X-Received: by 2002:a63:7c03:: with SMTP id x3mr38833914pgc.394.1638264457136;
+        Tue, 30 Nov 2021 01:27:37 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id e6sm14397203pgr.24.2021.11.30.01.27.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 01:27:36 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kevin-CW Chen <kevin-cw.chen@mediatek.com>,
+        Mars Cheng <mars.cheng@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: mediatek: mt6797: Fix a NULL pointer dereference in mtk_infrasys_init_early()
+Date:   Tue, 30 Nov 2021 17:27:30 +0800
+Message-Id: <20211130092731.83763-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="o1/kEuTPtFxza3Gs"
-Content-Disposition: inline
-In-Reply-To: <20211130085618.GA668426@gnbcxd0016.gnb.st.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In mtk_infrasys_init_early(), mtk_alloc_clk_data() is assigned to
+clk_data, and there is a dereference of it in
+mtk_infrasys_init_early(), which could lead to a NULL pointer
+dereference on failure of mtk_alloc_clk_data().
 
---o1/kEuTPtFxza3Gs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Fix this bug by adding a check of infra_clk_data.
 
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-> I agree with you on the fact to decouple this with the 9 pulses bus
-> recovery and first apply this one first.
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-Good. I noticed something in your driver on the way. Will send an RFC in
-some minutes.
+Builds with CONFIG_COMMON_CLK_MT6796=y show no new warnings, and our
+static analyzer no longer warns about this code.
 
+Fixes: 96596aa06628 ("clk: mediatek: add clk support for MT6797")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/clk/mediatek/clk-mt6797.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
---o1/kEuTPtFxza3Gs
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/drivers/clk/mediatek/clk-mt6797.c b/drivers/clk/mediatek/clk-mt6797.c
+index 428eb24ffec5..184b283b6926 100644
+--- a/drivers/clk/mediatek/clk-mt6797.c
++++ b/drivers/clk/mediatek/clk-mt6797.c
+@@ -563,6 +563,11 @@ static void mtk_infrasys_init_early(struct device_node *node)
+ 
+ 	if (!infra_clk_data) {
+ 		infra_clk_data = mtk_alloc_clk_data(CLK_INFRA_NR);
++		if (!infra_clk_data) {
++			pr_err("%s(): could not register clock provider: %d\n",
++				__func__, -ENOMEM);
++			return;
++		}
+ 
+ 		for (i = 0; i < CLK_INFRA_NR; i++)
+ 			infra_clk_data->clks[i] = ERR_PTR(-EPROBE_DEFER);
+-- 
+2.25.1
 
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGl7n8ACgkQFA3kzBSg
-KbbePA/+NAO90IQcrq/MNtcd5t13UslCVlXXNauFGvI2Ur7HFZ1pf3ZzG22DQP9W
-l36Ta8LtNt+dCrRj+h051bUzS2FJA4Lrt/hQ18sDxKTdysoulGZUXNcn9VyI+xfF
-FNl5EM/YWIPaSQMVm6Ks9vm70v+r2jnxCpIBb6p7qRtAlVSjCgKCvmaX5bG410mW
-Pcl46jss+fySA9j8IyYn/3zVZNharjsH4jlk8yQotVlkRsVTQwviMk48g1XqcqYc
-ha+9FkrklpdYuG6yQ1r2OTiQmZtIgO1OBSB0+3ChqhNyrXtM4vkUehsEUiu0UMyN
-VaPhhSxnDItRPdEwGmU7g4NxA5p5hk+5ejM+26lYNTLqhO63mnflq1b/GI/wgKEB
-glr83SyJnSghjAcIl2EprtkNiU7SEWPm8wEmLmwCs4PZ/DjVy8q0hBu6Zt+CWFVP
-r+VDE9wIxcXYsy58adm/E1oFRlKxSylNhwFj3JJ9lEPSOfmUgcWQeqYgUWr5fBw4
-ofVJAMNqS/rwFHI1xB39u4KZ1UmUvXcxfeH0SHayZwWyBIACKO5/X+M1jMlFlOd6
-EgtWgE9V4buQrVmusLspa3jcs3UHetCo0pfAAKxsPMja8I5PSKLw55F6LYpfk8Ja
-bmyJEKBGR18blkSGZ93VQvC/dapJ/tyvL1aWdJxT4g9GnbzYVhs=
-=x/KB
------END PGP SIGNATURE-----
-
---o1/kEuTPtFxza3Gs--

@@ -2,137 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B05DB463F34
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:27:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24497463F39
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 21:28:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343649AbhK3UbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 15:31:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:38877 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229898AbhK3Uaz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 15:30:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638304056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AcMNv7Mr+B4p3hEjaHnnJQgfgj2Zfos0EhRVXhwbDc0=;
-        b=EFeJ76h22hyTp3Z7a4mqfU5/CaSTOkeyqYhzreZ2wPeegqXyfduFt77TGfa7O/3EHIS0XI
-        nzMI/+hDfGXwPbMlM492iM53pg1OaDGDeIaTdlr8kkSIBZ0MbSsEn3xmvndg2sJJJGR5KG
-        Cr2CuKV8moms3SyAWTs+Nf7iA33Fy8w=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-385-sFhFSPFrP4CIoucnQlO17Q-1; Tue, 30 Nov 2021 15:27:34 -0500
-X-MC-Unique: sFhFSPFrP4CIoucnQlO17Q-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BAE6310144E3;
-        Tue, 30 Nov 2021 20:27:29 +0000 (UTC)
-Received: from oldenburg.str.redhat.com (unknown [10.39.193.123])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 611AE45D64;
-        Tue, 30 Nov 2021 20:27:17 +0000 (UTC)
-From:   Florian Weimer <fweimer@redhat.com>
-To:     =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?utf-8?Q?Tr=C3=A9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
-References: <20211115185304.198460-1-mic@digikod.net>
-Date:   Tue, 30 Nov 2021 21:27:15 +0100
-In-Reply-To: <20211115185304.198460-1-mic@digikod.net> (=?utf-8?Q?=22Micka?=
- =?utf-8?Q?=C3=ABl_Sala=C3=BCn=22's?=
-        message of "Mon, 15 Nov 2021 19:53:01 +0100")
-Message-ID: <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        id S1343703AbhK3Ub1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 15:31:27 -0500
+Received: from mail-bn1nam07on2069.outbound.protection.outlook.com ([40.107.212.69]:34950
+        "EHLO NAM02-BN1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1343667AbhK3UbZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 15:31:25 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jOxUtZK7oQ62pFIZ7VhjQWrGKIrEeKZGIR96PESivHWluxu2FS6RNd/RyXJpPGy7k1T0wg+EYI3xKV7XDyeWKO0aKw+l1JyWCwQOakBUUKxZgquvTJ2IFCwpSJTG0DY4Sn0D7uEytcZIxrwFti3Vj4v6jOyTfxDmwYkMlVo2doPoIB3YQYHSIYDinw24Q9nuBXXZwD/tn9qGJQUO6Yi6h+xJyZEBQB5zmeM5QTWwhGnELoFjqolR9+OZaZVlO5qMieQirKgHPsChsGH33gll9Y4vf/8tjpAGI3RMkAh3ZCVfLz+mIrCM0RF/EQ3T/IXVhoACTd41nNAf+xS+wHfmdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d6ZY5ACMuyUpQLU7ZfWCRPgdiyQKhG8NR8yudvtEaAU=;
+ b=UQwj+S4BMWADsw6XEviddUOvKma79WQfybx5UJtoMAylF459JJ80bMVA3898bsn5sNsTo3d4LvuznDopvnc/cPaieCFxm4JjlDOxnksIKugrxDYd098EuYGN2KKKVlVB9JwEPzeBPs5CEuYBmDOlNf5f/smG6NWeRqbcvsxuiOuEIG3CUD02/PaeyWsg20fJ9XAXwyiphaw98BmR8XBFQvwSO5SfHtIAurmwFFk6Kpfegv263Thk1NKaoUnOTtxHID6wyN4oYk3ZZMO4nO/IeMaDkJX7t275oUiejuw+qqWk1bMFfsHfOChfFziKyxu0+TXa0IApr5e+PkCwRrdNiQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=d6ZY5ACMuyUpQLU7ZfWCRPgdiyQKhG8NR8yudvtEaAU=;
+ b=MhQn51FvGe+HJAklNYsGJsbQ4I5ovlJPZ85Iciobhf1vZSZKmcUB+X0TJxfClsmhT8Wm7cwstLQvX5SzsL52iL3tU5cnljf8F6CUafPm+2iKWoh1qeLdIufGKPwaoFpVi7cUvuge8nkYRSBiffpCG4a3wytSWxI550L5CNigOAqS4VV/jrdzWMw156q4CzG73N5VEO6Kgj/Tx3S6nfw0m0sBCoGJlOnTNitBq1oYeDwo7o8mJTYaD8D4YXDfvoTFULC+f5skx8QXFI2Nvfl9Em8QzblseyshEKxRcDQGiLT1Z1T465k+fkxHspL7qwo9UmKam5U0Z5uNxinTiuN8Eg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com (2603:10b6:208:1cb::22)
+ by BL1PR12MB5240.namprd12.prod.outlook.com (2603:10b6:208:319::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Tue, 30 Nov
+ 2021 20:28:02 +0000
+Received: from BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::5897:83b2:a704:7909]) by BL0PR12MB5506.namprd12.prod.outlook.com
+ ([fe80::5897:83b2:a704:7909%8]) with mapi id 15.20.4734.024; Tue, 30 Nov 2021
+ 20:28:01 +0000
+Date:   Tue, 30 Nov 2021 16:28:00 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+Message-ID: <20211130202800.GE4670@nvidia.com>
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com>
+ <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com>
+ <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com>
+ <87v909bf2k.ffs@tglx>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v909bf2k.ffs@tglx>
+X-ClientProxiedBy: BLAPR03CA0044.namprd03.prod.outlook.com
+ (2603:10b6:208:32d::19) To BL0PR12MB5506.namprd12.prod.outlook.com
+ (2603:10b6:208:1cb::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Received: from mlx.ziepe.ca (142.162.113.129) by BLAPR03CA0044.namprd03.prod.outlook.com (2603:10b6:208:32d::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend Transport; Tue, 30 Nov 2021 20:28:01 +0000
+Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1ms9jM-005jFG-3n; Tue, 30 Nov 2021 16:28:00 -0400
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 63537dc7-528d-4a5b-5613-08d9b43fe7f2
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5240:
+X-Microsoft-Antispam-PRVS: <BL1PR12MB5240EA55F08A1291534E6C52C2679@BL1PR12MB5240.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OAh1PgjjJ7D7KKDTgunpFX7FRJxK3rvNLdVybeOeiLEyRoAzS7zF5tVgJ4gkSIDkDo34Gjv7zS6un+O50GIPTk2rRaxqQlzzoPoWJGzBjFnW0wsNdRiMy/TwMtVOyYLzMAep0x8ryj/VAPwANUK0HkBoBxuCPCmbpNeZfj8IF3vuf5B5ptfuf/8H4ALwLEjwFxhfSG5fPddHoJY/O1bd0VuFBWYF3ktkS2Fk3ItGIrckoo0963cJEipyg9/rycdyOvU3ONaSYHHQkSZQiP881ABrHaf1O4Z1/5ckMsW+XkI5vJQ5JzFyTet9QKFmplHQfpmkDpO5wv/4fT4aaj9TDJRhUv8UVHehuSXaI/jEcAcIHZfrUTn4ePn7rWpGkYOLZf/gEjDevu9hb96SliXAfypsqTDY2TxcT0Uk+YnhAMbN8378oBYeVzTRR08z1i6auZdzf+mx7b7NEQUOErfEw5N8Qmm/bm0WTodHgdqNfx5BeZHetXDyrSqbFBneclL4TsCGaexj9Ml7RLLpeFYS0167utUypmr8DMhrtUorTNV3CBhOmeHaLE1pEX5vuDQHU/JKpcy57Jq2eHg4siRKbmY7rhqmUM1nElD65VZQoXz82XJ5sJxpbcsw48B31ncPL6IyRrsfC+sUtXFuYpEL+na737z7LO52r7e6z6GZZAIMVGy8FMp9qfeDPut4qJSVH6BcmKzVFD9ULSI/fCFqHFc2Ji28I6PXElanp/7kbgU=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB5506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6916009)(2616005)(4001150100001)(38100700002)(8676002)(53546011)(7416002)(8936002)(508600001)(1076003)(966005)(83380400001)(2906002)(426003)(33656002)(86362001)(9786002)(54906003)(9746002)(36756003)(26005)(186003)(4326008)(5660300002)(66556008)(66476007)(66946007)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i79AMh5yCjE/aw1aYbeO9EILecIeHP50tYqPFWT4cJoGAqRRDousvpXnh02x?=
+ =?us-ascii?Q?oQJhnYEdB7Xx5NzQxMcCi5SaJhhWh0TGVhNO0P8pXM1EXbzl2DioTavzdzR1?=
+ =?us-ascii?Q?Bb6n2a8xBFDzQBZHFX19NQwgrx46ZSa7gPQnJqh9mQC39TXV49un12D4qtYF?=
+ =?us-ascii?Q?yBdrtDxZ9lEcrUhGWkbIfTmVdWU1m53srtSz5OeQ2If5Anq/hY/8d1+DKj2O?=
+ =?us-ascii?Q?CdS8LOsgFI0faiv70j8psDLbF9Keq9nXPxx+Fy4vou4PNmZ19eI90GKjKBLK?=
+ =?us-ascii?Q?oCkujlL7CUlk/+Yu3UTSVaCCDGlyJAYsOWHpsCcJ35i3vu1o+a8Ss3mv+TmJ?=
+ =?us-ascii?Q?KuIYxHnomJNfV65SeiFsNKn/qw+/dbNtJUs2TWD9C7j2a+suSoJ+DuJOcJXw?=
+ =?us-ascii?Q?62oJ7XmxWrw3uPv8368xxWORlgISVr2yIYVvMAgBXAyTL23B0XlYQxbd7GRI?=
+ =?us-ascii?Q?rUIU9tN/AOG3n9prkNU7cNWEQiKylYZ/faP7N1UUa72YH5M4XDxFIJlfBGlm?=
+ =?us-ascii?Q?7Mg3i8VNyLiMMFhG0qdux+5vyW6H9ybPmnyBrgSrVFzx4YyIuvzv+cA2KH9Z?=
+ =?us-ascii?Q?AKIc6NhnOHRDO3T7p1XN+V7qygIp0SjzJPdt+7IKYohle+2dN4+T/A58B2/1?=
+ =?us-ascii?Q?h6lAw+qPWCvnBjBXZ1Z8Od4G/Z+6OXrgulZpm3JARYIrIAIDqc8j9Tdx1Yi+?=
+ =?us-ascii?Q?BrLRRP5ki8VoRS9E2IK1SKSHspxf+DOd1gloWPk8JZ1km7Xh0rkOejcwpOXA?=
+ =?us-ascii?Q?fP7YMYKKYei0sMWjx7ldaoC/vP8TS4JzejbzXHL7MREoGrNXdhRrnfEaKLxE?=
+ =?us-ascii?Q?a+G5U+yVxnrxLBeQhKZD+yMCYvCfmAZXbk32rtPtdBBtftuFTcABQXee2MWf?=
+ =?us-ascii?Q?5oYJOQCOO7NqQoPurc2mIOSTUQEic0G/y5ld7tbnbXlcexbgwSIzdnXzQVkK?=
+ =?us-ascii?Q?tnVUZzP2SwmGFffMQlc/hmhnDx41iJhaD1glTSR7FMPafQPAiGrCTbrXvNIH?=
+ =?us-ascii?Q?od9Ma2jXbk3LDEO+0BoOgCSwoJYO3U7H+E9LNzVY39rScJX73sbDdL8hkb41?=
+ =?us-ascii?Q?iZLHJspvyHTBSwWVwgd6x68dVMt7OQXe5a+I5bwDIGUvKB69OBHzMMeUHlmn?=
+ =?us-ascii?Q?KST+Ei7WlD8R56N28IEvd89dczffgwlyRPu1bycozPbhErBYtzu31KwNcFV+?=
+ =?us-ascii?Q?kSi9d3AdCTkMnzvkZ41K0ViacuuOv6F5o8Hr7S7j+jxrdRdNamRv66BuncTf?=
+ =?us-ascii?Q?AMq5eXyktQyLeq8j++JDFiBI1P1MWoVpjg0FOAu3UbFcIREhR517KRLC+pU7?=
+ =?us-ascii?Q?4u3Y6wLfkUbG9lylaU5Ms9kmd3aXLrmisPlDzHE6JItpBEgd4VXr02NBwU7o?=
+ =?us-ascii?Q?fHshWSGq6WToBZle/Yx6XYIgZyUF4ujx/JKKGCRjA0+UrQLMEyW+dUE/3REC?=
+ =?us-ascii?Q?B+0P9j0RKELMGmrT9rMdXQpkiTyzADQdUEMo0brk6eg8P2cwUkGFObMsTJ+x?=
+ =?us-ascii?Q?yXt11LeU/wCckQstLhjOnQncq5NZUWGV+FWj22u9Wa4i1O+DV/cPPH4QqE3M?=
+ =?us-ascii?Q?DuT7jWRMz6UeVYNB3rI=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63537dc7-528d-4a5b-5613-08d9b43fe7f2
+X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB5506.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 20:28:01.8487
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ucpqPuptML+MhNc9/6VfMxvzAvM6pnkO+/XxCtjpSbCVwp0jjQoK4ZDjGInrO+95
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5240
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Micka=C3=ABl Sala=C3=BCn:
+On Tue, Nov 30, 2021 at 08:48:03PM +0100, Thomas Gleixner wrote:
+> Logan,
+> 
+> On Tue, Nov 30 2021 at 12:21, Logan Gunthorpe wrote:
+> > On 2021-11-29 5:29 p.m., Thomas Gleixner wrote:
+> >> I'm way too tired to come up with a proper solution for that, but that
+> >> PCI_IRQ_VIRTUAL has to die ASAP.
+> >
+> > I'm willing to volunteer a bit of my time to clean this up, but I'd need
+> > a bit more direction on what a proper solution would look like. The MSI
+> > domain code is far from well documented nor is it easy to understand.
+> 
+> Fair enough. I'm struggling with finding time to document that properly.
+> 
+> I've not yet made my mind up what the best way forward for this is, but
+> I have a few ideas which I want to explore deeper.
 
-> Primary goal of trusted_for(2)
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
->
-> This new syscall enables user space to ask the kernel: is this file
-> descriptor's content trusted to be used for this purpose?  The set of
-> usage currently only contains execution, but other may follow (e.g.
-> configuration, sensitive data).  If the kernel identifies the file
-> descriptor as trustworthy for this usage, user space should then take
-> this information into account.  The "execution" usage means that the
-> content of the file descriptor is trusted according to the system policy
-> to be executed by user space, which means that it interprets the content
-> or (try to) maps it as executable memory.
+I may have lost the plot in all of these patches, but I thought the
+direction was moving toward the msi_domain_alloc_irqs() approach IDXD
+demo'd here:
 
-I sketched my ideas about =E2=80=9CIMA gadgets=E2=80=9D here:
+https://lore.kernel.org/kvm/162164243591.261970.3439987543338120797.stgit@djiang5-desk3.ch.intel.com/
 
-  IMA gadgets
-  <https://www.openwall.com/lists/oss-security/2021/11/30/1>
+I'd expect all the descriptor handling code in drivers/ntb/msi.c to
+get wrapped in an irq_chip instead of inserting a single-use callback
+to the pci core code's implementation:
 
-I still don't think the proposed trusted_for interface is sufficient.
-The example I gave is a Perl module that does nothing (on its own) when
-loaded as a Perl module (although you probably don't want to sign it
-anyway, given what it implements), but triggers an unwanted action when
-sourced (using .) as a shell script.
+void __pci_write_msi_msg(struct msi_desc *entry, struct msi_msg *msg)
+{
+        if (entry->write_msi_msg)
+                entry->write_msi_msg(entry, entry->write_msi_msg_data);
 
-> @usage identifies the user space usage intended for @fd: only
-> TRUSTED_FOR_EXECUTION for now, but trusted_for_usage could be extended
-> to identify other usages (e.g. configuration, sensitive data).
+If this doesn't become an irq_chip what other way is there to properly
+program the addr/data pair as drivers/ntb/msi.c is doing?
 
-We would need TRUSTED_FOR_EXECUTION_BY_BASH,
-TRUSTED_FOR_EXECUTION_BY_PERL, etc.  I'm not sure that actually works.
-
-Caller process context does not work because we have this confusion
-internally between glibc's own use (for the dynamic linker
-configuration), and for loading programs/shared objects (there seems to
-be a corner case where you can execute arbitrary code even without
-executable mappings in the ELF object), and the script interpreter
-itself (the primary target for trusted_for).
-
-But for generating auditing events, trusted_for seems is probably quite
-helpful.
-
-Thanks,
-Florian
-
+Jason

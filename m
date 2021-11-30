@@ -2,82 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 287484635B1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6216D4635BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:46:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241537AbhK3NqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:46:19 -0500
-Received: from cpanel.siel.si ([46.19.9.99]:38828 "EHLO cpanel.siel.si"
+        id S234229AbhK3Ntm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:49:42 -0500
+Received: from mga11.intel.com ([192.55.52.93]:57964 "EHLO mga11.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241132AbhK3NqS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:46:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=jFZ3uMjYEFalQXScfWqlj3bLcO8oaYoOVDLUfNpK/9U=; b=B8KxikQbrMLQyVt+8LdQwYMs8Q
-        KVyTP1NkAxLof2kbsVRRH95E9/tDKXAt7hId1vOw8lmcg/JutmkR68YVHv98P4XtBfw7QTk9PgdVU
-        s7hG5q8nJegUp91JaRtLDbX0ZaeRiaKeQOQ2Iu9LyBfupLlRZvQDQgWQSdDZBXoOI1goaWxRw0KOv
-        EjukFq6DlTbMIyBQPG6Pb+ljA5ykf8Oup/TzUnynThktmYpCmsSAKTFxZzJuWk7+hsHOYP4MILER+
-        1+neSv01W94V/UY4Y5G4anXXGHRKoG1vkdoBZgXh8vYvPZJtlPHnRP4tcI2OHYamBtyOsvBnmP0aU
-        eD7WBlCw==;
-Received: from [89.212.21.243] (port=49710 helo=localhost.localdomain)
-        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <andrej.picej@norik.com>)
-        id 1ms3PJ-0039GW-Mw; Tue, 30 Nov 2021 14:42:53 +0100
-From:   Andrej Picej <andrej.picej@norik.com>
-Cc:     andrej.picej@norik.com, support.opensource@diasemi.com,
-        wim@linux-watchdog.org, linux@roeck-us.net,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 4/4] ARM: dts: imx6: phycore-som: set watchdog timeout mode to shutdown
-Date:   Tue, 30 Nov 2021 14:42:42 +0100
-Message-Id: <20211130134242.3516619-4-andrej.picej@norik.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211130134242.3516619-1-andrej.picej@norik.com>
-References: <20211130134242.3516619-1-andrej.picej@norik.com>
+        id S229379AbhK3Ntf (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 08:49:35 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="233716753"
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="233716753"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 05:46:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
+   d="scan'208";a="744737168"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga006.fm.intel.com with ESMTP; 30 Nov 2021 05:46:14 -0800
+Date:   Tue, 30 Nov 2021 05:45:10 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/7] thermal: intel: hfi: Minimally initialize the
+ Hardware Feedback Interface
+Message-ID: <20211130134510.GA27861@ranerica-svr.sc.intel.com>
+References: <20211106013312.26698-1-ricardo.neri-calderon@linux.intel.com>
+ <20211106013312.26698-4-ricardo.neri-calderon@linux.intel.com>
+ <CAJZ5v0gd5ZAs4nkbMA4ONt=9ULnrTPqxe_+3M78t9ZC9upEiXw@mail.gmail.com>
+ <20211130032029.GA1371@ranerica-svr.sc.intel.com>
+ <9a463228ef9f668618a4d1470eb9925f8d332465.camel@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - cpanel.siel.si
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - norik.com
-X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
-X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-To:     unlisted-recipients:; (no To-header on input)
+In-Reply-To: <9a463228ef9f668618a4d1470eb9925f8d332465.camel@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable system restart when the watchdog timeout occurs.
+On Mon, Nov 29, 2021 at 07:55:18PM -0800, Srinivas Pandruvada wrote:
+> On Mon, 2021-11-29 at 19:20 -0800, Ricardo Neri wrote:
+> > On Wed, Nov 24, 2021 at 03:09:20PM +0100, Rafael J. Wysocki wrote:
+> > > On Sat, Nov 6, 2021 at 2:34 AM Ricardo Neri
+> > > <ricardo.neri-calderon@linux.intel.com> wrote:
+> > > > 
+> > > > The Intel Hardware Feedback Interface provides guidance to the
+> > > > operating
+> > > > system about the performance and energy efficiency capabilities
+> > > > of each
+> > > > CPU in the system. Capabilities are numbers between 0 and 255
+> > > > where a
+> > > > higher number represents a higher capability. For each CPU,
+> > > > energy
+> > > > efficiency and performance are reported as separate capabilities.
+> > > > 
+> > > > Hardware computes these capabilities based on the operating
+> > > > conditions of
+> > > > the system such as power and thermal limits. These capabilities
+> > > > are shared
+> > > > with the operating system in a table resident in memory. Each
+> > > > package in
+> > > > the system has its own HFI instance. Every logical CPU in the
+> > > > package is
+> > > > represented in the table. More than one logical CPUs may be
+> > > > represented in
+> > > > a single table entry. When the hardware updates the table, it
+> > > > generates a
+> > > > package-level thermal interrupt.
+> > > > 
+> > > > The size and format of the HFI table depend on the supported
+> > > > features and
+> > > > can only be determined at runtime. To minimally initialize the
+> > > > HFI, parse
+> > > > its features and allocate one instance per package of a data
+> > > > structure with
+> > > > the necessary parameters to read and navigate individual HFI
+> > > > tables.
+> > > > 
+> > > > A subsequent changeset will provide per-CPU initialization and
+> > > > interrupt
+> > > > handling.
+> > > > 
+> 
+> [...]
+> 
+> > > > +       /*
+> > > > +        * If we are here we know that CPUID_HFI_LEAF exists.
+> > > > Parse the
+> > > > +        * supported capabilities and the size of the HFI table.
+> > > > +        */
+> > > > +       reg = cpuid_edx(CPUID_HFI_LEAF);
+> > > > +
+> > > > +       hfi_features.capabilities = reg & HFI_CAPABILITIES_MASK;
+> > > > +       if (!(hfi_features.capabilities &
+> > > > HFI_CAPABILITIES_PERFORMANCE)) {
+> > > > +               pr_err("Performance reporting not supported! Not
+> > > > using HFI\n");
+> > > 
+> > > This doesn't need to be pr_err().
+> > 
+> > Should it be a pr_warn() or perhaps pr_info()?
+> May be even pr_debug as we can always enable dynamic debug, where we
+> need to debug.
 
-Signed-off-by: Andrej Picej <andrej.picej@norik.com>
----
- arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+Fair enough. That sounds good. I will make the change.
 
-diff --git a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-index a80aa08a37cb..743343e525cf 100644
---- a/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-phytec-phycore-som.dtsi
-@@ -111,6 +111,7 @@ da9062_onkey: onkey {
- 		watchdog {
- 			compatible = "dlg,da9062-watchdog";
- 			dlg,use-sw-pm;
-+			dlg,wdt-sd = <1>;
- 		};
- 
- 		regulators {
--- 
-2.25.1
-
+Thanks and BR,
+Ricardo

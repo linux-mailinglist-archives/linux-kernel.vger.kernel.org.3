@@ -2,95 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29BCB4631C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C004631C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236864AbhK3LGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 06:06:14 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:51892 "EHLO
+        id S236929AbhK3LG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 06:06:57 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:51900 "EHLO
         bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236684AbhK3LGN (ORCPT
+        with ESMTP id S236890AbhK3LG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 06:06:13 -0500
+        Tue, 30 Nov 2021 06:06:56 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: sre)
-        with ESMTPSA id 9C35E1F44BBC
+        with ESMTPSA id 58B1A1F44BD9
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638270173; bh=l98QiWJLerDn9mqrR91nYQugxDENe5cVgoLVb3pluVc=;
+        t=1638270216; bh=ZCcAJm8XMTByN8/s2WCB4XZxCSS3MKuWYhisPzrM2CI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J4pV1AD9qM8OrAcSvPDBWAsPHYQQ9BQmb2E/mlkJ3L/EEeNQSV4F4BhvIJpmALoRW
-         /5MD1jojOanc6EVvFoEq62Ig390EbIqTFa0UAXdf2AtFKJDHOu4s7Uhy9B2bWNKijn
-         XCxB8vwP1ODKzAaAln0S/1XRVtw3LyhNF3D7I8osuZFNPB2yNyXEtttffAzL94rH/L
-         yEijKCm6RITgEdGa99ZPZZpqXX3wlMwKsSfg4V1j933kKOV7+LSjPii5xCBsemXBny
-         slirmlgUN1VVx0Cejw1079siC6/vANgWCxqs5yHSTzKZ5W+44lvoE9YjYi0yj9ch5+
-         NH4S3Y4t2KP9A==
+        b=jD5LhWuHDWI7252zmLEAakU/zbisVktPIU6kqg/dz7Pp2fdaeR6MJhYG885EPIIz3
+         GE/Ffto9bBL62uX83laQmUotIQiBJ6d4MLQy+Zf74/SBsTdaE5qn5eAis9Q0gKMWwt
+         VUPzrTazexBGWkRa2qvm7MpYzd0NYXKr74IHb9eGiCIZE/te0AkG42TM8Rk31AO66J
+         OXq9Z6aKGzP4Qbg12yBbtvGqT5FVp8EQnRAJrtu021pyHQOoRNoihvu82veyx06WaP
+         w39PEcrsjUuT7B8MeFn7AWHhX7BGwApNBegpID4NO/LPtK+avSWdXonpEqJOnjzK24
+         rE4+eKoapA10g==
 Received: by earth.universe (Postfix, from userid 1000)
-        id 3E42B3C0CA8; Tue, 30 Nov 2021 12:02:51 +0100 (CET)
-Date:   Tue, 30 Nov 2021 12:02:51 +0100
+        id 985443C0CA8; Tue, 30 Nov 2021 12:03:34 +0100 (CET)
+Date:   Tue, 30 Nov 2021 12:03:34 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Luca Weiss <luca@z3ntu.xyz>, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 1/7] dt-bindings: power: supply: pm8941-charger: add
- pm8226
-Message-ID: <20211130110251.o7fdea4spwd5qntl@earth.universe>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/7] power: supply: qcom_smbb: support pm8226
+Message-ID: <20211130110334.egzcne2l7mgmqjfg@earth.universe>
 References: <20211118210210.160895-1-luca@z3ntu.xyz>
- <YaVeBGAnU2CY9SLr@robh.at.kernel.org>
+ <20211118210210.160895-2-luca@z3ntu.xyz>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gjnpwqyqafz37nmp"
+        protocol="application/pgp-signature"; boundary="4bgpwtsgwzqugjwz"
 Content-Disposition: inline
-In-Reply-To: <YaVeBGAnU2CY9SLr@robh.at.kernel.org>
+In-Reply-To: <20211118210210.160895-2-luca@z3ntu.xyz>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---gjnpwqyqafz37nmp
+--4bgpwtsgwzqugjwz
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Nov 29, 2021 at 05:11:00PM -0600, Rob Herring wrote:
-> On Thu, 18 Nov 2021 22:02:04 +0100, Luca Weiss wrote:
-> > The charger in PM8226 (used in MSM8226) is similar to the charger in
-> > PM8941.
-> >=20
-> > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > ---
-> >  .../devicetree/bindings/power/supply/qcom,pm8941-charger.yaml | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >=20
+On Thu, Nov 18, 2021 at 10:02:05PM +0100, Luca Weiss wrote:
+> PM8226 (used in MSM8226) has v1 smbb hardware and works fine with the
+> current driver.
 >=20
-> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
 
 Thanks, queued.
 
 -- Sebastian
 
---gjnpwqyqafz37nmp
+>  drivers/power/supply/qcom_smbb.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/qcom_smbb.c b/drivers/power/supply/qcom=
+_smbb.c
+> index 84cc9fba029d..bd50124eef9f 100644
+> --- a/drivers/power/supply/qcom_smbb.c
+> +++ b/drivers/power/supply/qcom_smbb.c
+> @@ -863,8 +863,8 @@ static int smbb_charger_probe(struct platform_device =
+*pdev)
+>  	}
+> =20
+>  	chg->revision +=3D 1;
+> -	if (chg->revision !=3D 2 && chg->revision !=3D 3) {
+> -		dev_err(&pdev->dev, "v1 hardware not supported\n");
+> +	if (chg->revision !=3D 1 && chg->revision !=3D 2 && chg->revision !=3D =
+3) {
+> +		dev_err(&pdev->dev, "v%d hardware not supported\n", chg->revision);
+>  		return -ENODEV;
+>  	}
+>  	dev_info(&pdev->dev, "Initializing SMBB rev %u", chg->revision);
+> @@ -1012,6 +1012,7 @@ static int smbb_charger_remove(struct platform_devi=
+ce *pdev)
+>  }
+> =20
+>  static const struct of_device_id smbb_charger_id_table[] =3D {
+> +	{ .compatible =3D "qcom,pm8226-charger" },
+>  	{ .compatible =3D "qcom,pm8941-charger" },
+>  	{ }
+>  };
+> --=20
+> 2.34.0
+>=20
+
+--4bgpwtsgwzqugjwz
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGmBNAACgkQ2O7X88g7
-+pptUA/+NOVilzivowBa8AyUf9dPhz6xP9hhQwNeR5I6Fa5Abq3uaHHzOwik2mP3
-SjcOKdazMq6fnpoaqxw5ecVXlGACSvbTJPef1nUH5nxD7NR0gwRlPjBKoepAo83l
-CGAiwNSJ3NG/qmCF52lPS48fle3KB3jSr24ak4bZVU3liIdEkutevgB2EG5ryWi0
-LHu+kpfcXzRsj8qDBsz4O0hraXPr5SxbhxJhNjzwhHeVrwWr40VLTEOV2rwPgWJp
-ttGrXZa3uzYvJkob6B9fLSh+W5dRkFB0ETUofJQbq6EK58ApDqA3l7J6h2/7Vul6
-b0jASLQGWqutcCtyMnD73W3kNuFK3LN4bbYGQ4IqXdnN/Qn/IEbc60s/+BKlSkWq
-/3H9kkY8+P/4IPthLCO3zneTFPbHU59+Qa1g9RDSRDeujzPmmx1uFKC7aLr/EvLK
-+pbKUUfh+ZUT+tCE4pW+WIVS1DoSYn7HbSZ+fg5jwjpfZIMc98+nDkeBgKrdTtxs
-WRPP5HYQG7kDSyrSGKbiApBtinRreOBdoVhpm16rKOtilc0cbb/r3tXiRoWV8q6N
-pgnmUQs2nJlzhKqU864MIds6ACQ9i/cNMm2pww6LsxrmlZ+1XBuZI0W2bBybJhqt
-/4Gihh/ovqwbcoEMKaLnhE0jjzfhhMJDYRx9hNNx3/5C8xq7rvM=
-=3o7m
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmGmBQYACgkQ2O7X88g7
++ppn1A/9GOI9SeAReTku+iJlF65N2VycqAlNWdy4zCDMpjs4Vet1y6qbHfJXWbrW
+bnS/xrj2zClX8bp2vOlkhR8u5qX+YMjpHtFl+QITk9/D/cWcN42VviQqm9sq6YMa
+bQ+NoyygoRAOAbL25dJlv+hZVTke3Kmc4g2F1ULWQ4gvMbnAEzUx8bXCD8o2amLk
+86vwmcGVKsIvKujrx/luu8dr8Y8/UHnSaGVULYVCX4N7wJkDsKMp6nfkYYmoyYxU
+X0YfJ8839IZpQ7qOQUuMgVHQzDBt0707olfj5TB1dFlarx+eQq912EVACDN4ZbEA
+nQ2iVF+4jUhoG46XyyOFqLp0Vc/nSVfSSeeh3IxjLTl0D6SRUe1SToyGbV1slNvV
+YvEpGsFx9Zb23C/SiucxQi8eMUPyK2KFYi1wIuYVMo6D9QUMiJ+CKnpT2RyXXye1
+GW4d4Wx2Y/oKlo/4NNDBieCT8kJPlNB5DT1LFjz/ZVB+eneyBHTcjIRkwO8tq6wR
+pEmuxa0IbecYXNI9d8GUdwVwILyQsN9JRt3IP9nxb40dyKv9GM42GZ2pwXNHF/EG
+/YwsVd2Mjvl/LkL60eTVOJ/zIgigiDR+wpwt4QEuYT1unqMh6HJAaw0NODbCpzPg
+n5Gve9cZO9rd4mdDYC645gysMW04mSjYawIpZt9yEyWMRyKcBcE=
+=0Lrx
 -----END PGP SIGNATURE-----
 
---gjnpwqyqafz37nmp--
+--4bgpwtsgwzqugjwz--

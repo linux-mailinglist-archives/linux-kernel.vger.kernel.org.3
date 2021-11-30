@@ -2,166 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BCE8463400
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DBD463405
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241451AbhK3MTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S241468AbhK3MUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240512AbhK3MTF (ORCPT
+        with ESMTP id S234237AbhK3MUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:19:05 -0500
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495D0C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:15:46 -0800 (PST)
-Received: by mail-ua1-x92d.google.com with SMTP id r15so40901066uao.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 04:15:46 -0800 (PST)
+        Tue, 30 Nov 2021 07:20:33 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69105C061574;
+        Tue, 30 Nov 2021 04:17:14 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bi37so53226053lfb.5;
+        Tue, 30 Nov 2021 04:17:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=D0mw93VUXSvv9PrYmrUAaGd/pqXhij6XVGDbV+g6WIU=;
-        b=wogE/Z0DZ4jA4YAj/X92JyIrHC+m1SB6igDc4ElmWJrRmGbeZB78fUwjuxI/vf8zW2
-         SyCVIqcrZhVSmybJvuSnkKKjwsbiJsQ0iISbs9RpA0EdhSc926sSMLcWW0AxUADxJkdh
-         9ci2MsRyNZn5wxbOh5uUyV6sYOKZRrOKhUgRQICcHoLZUyqQPhm82vSSVznUV6lv+Qfj
-         xYqUhtN3pDbuMetySDbqQPSS3A+qO5XRBCAZ5noUdVzIkfkeg6eFtprA6aSwmcM9XyAu
-         z0JWuSvQJWULvDr63w/RzEzMAukf4QHxBgnulG13eg5X+avdeU6YAQsuuX9IugGoNnLr
-         Krmw==
+        d=gmail.com; s=20210112;
+        h=subject:from:to:cc:references:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=trRzexDm92sVJlThyj/04+7SN11dBJi8qOdq95CaO5g=;
+        b=VzMywNNj2yxWLL2z9DxwtUGbmUnA8iIr6NjgbGU0BU9wo16PrbqrOBttuCtLYiQZai
+         X+logj3jzyHag+GMsJF4KQdBhQD3+3jB7QDDAma0ktWI+bf/ktIfuuEnGeoLSuUJZAZx
+         tjU2bXEV65OCbmjlAZMLxwS8vITLUaNz+WJ5dPsUgUsMcWPhvZcVjZsmib+HuHOqrmhR
+         pZ+OnM2u7Wycjl06k9VcvBZ/H5jk+IeKppVz4NFng/diLaWdERct8E2mmukQYPNkKLIP
+         1zCPwhmSG74DXdpH3jJlCJvUDkYOioGXD941Ri+Mi1eHc/ZLnWx0fWDEb20f7EbPXc9o
+         19oQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=D0mw93VUXSvv9PrYmrUAaGd/pqXhij6XVGDbV+g6WIU=;
-        b=wKHKVLbmatmNmzMxsq8ZGmg5fip5iPWCvtS2XOgQuYWJNuwPecpIPCxvaF0rYkKIhf
-         Ea3fYbypZk3ot44JACSQrGHoPpIpKJ/tABVn6D7QCwIGTZF9G7gH1FRPBI1qqptP9Skf
-         6W7nXneIpQY6uduDmRSo2k7TOXJxFIh2rNSCSOBDlMJoPtglkOFnoYAsgTEfkSe7lmvO
-         ULxz53f7gIjqPwdBpFdhPP5O2Tl/Fqwkm85sV27qZ5HRZNo2jM+81hM0kttbYDam4khn
-         yw0MmKWC23cMEKhHmmNJ1Cl2jsJtKeGIfhAmt3A2lNwqXLB9ttrCSB8Qyld1v0PhcAwo
-         yNpQ==
-X-Gm-Message-State: AOAM532QU4X2C98NGRwwuNz/2Ndmk021aE3dgZ6HmFC53Tmkw+LmfoEZ
-        sG4bMFO/oKJxGbJF5FIhc0y/kQ==
-X-Google-Smtp-Source: ABdhPJyCNxQdSY3YZruzyVJnb1BCD/Sq40KKRtki81VwF4tplQMFk7VK2k8mJuh9ajNFgAKFx10ARg==
-X-Received: by 2002:a05:6102:2c6:: with SMTP id h6mr31346929vsh.13.1638274545465;
-        Tue, 30 Nov 2021 04:15:45 -0800 (PST)
-Received: from eze-laptop (host208.201-253-22.telecom.net.ar. [201.253.22.208])
-        by smtp.gmail.com with ESMTPSA id l190sm9955863vsc.26.2021.11.30.04.15.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 04:15:44 -0800 (PST)
-Date:   Tue, 30 Nov 2021 09:15:39 -0300
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     linux-media@vger.kernel.org, nicolas.dufresne@collabora.com,
-        mchehab@kernel.org, robh+dt@kernel.org, mripard@kernel.org,
-        wens@csie.org, p.zabel@pengutronix.de, andrzej.p@collabora.com,
-        gregkh@linuxfoundation.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v2 2/9] media: hantro: add support for reset lines
-Message-ID: <YaYV62lJ5A/Q5/WX@eze-laptop>
-References: <20211129182633.480021-1-jernej.skrabec@gmail.com>
- <20211129182633.480021-3-jernej.skrabec@gmail.com>
+        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=trRzexDm92sVJlThyj/04+7SN11dBJi8qOdq95CaO5g=;
+        b=obaj7A4coCxUJDQyRHD59vwnou8hCIyRVOcWpQv1SjsK1xZBGproLrzzw5+w9scGq/
+         whf87xoJnh065bpzmb2KPOFExTLX8oh7WMvAfIF5+WqhWT1n02p7I6OxR40gHj2T78Ng
+         sYb0R3yFgn6BFIpVkpcyxpNT6DekQHHoGClR+mdsP/7ivdDGDFpvlvA7CZCK2AbjEQFr
+         WVITL2Sv9FqKKCx/OM9ZSRpp5LuWT21XIqFRZReKtslYd1rcjYO+4ox5WGCp6XTNg1cr
+         DTJiD4HpuYdP1Zfso/EQJNR2VDFQc0raUKxXi8tr2XzHpEc+GOT7eefTSaAvdsKsJsWP
+         T+jQ==
+X-Gm-Message-State: AOAM531jYx9qATmV9PufGQ/cZjI/d/CQbTYOgR0heSIm21DB/rPtLRIq
+        7/d8KDfeyFBYBQ49Si/ayk5WP+PIfjc=
+X-Google-Smtp-Source: ABdhPJyeb69zs1klG9kPMwoTkQRV81S9ZqywFuLxMLusvHux/rRMMtdRtxrotgsIHc3R8AfBdeyY8A==
+X-Received: by 2002:a05:6512:3b2b:: with SMTP id f43mr55139476lfv.629.1638274632435;
+        Tue, 30 Nov 2021 04:17:12 -0800 (PST)
+Received: from [192.168.2.145] (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
+        by smtp.googlemail.com with ESMTPSA id f23sm1708689ljg.90.2021.11.30.04.17.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 04:17:11 -0800 (PST)
+Subject: Re: [PATCH] serial: tegra: Fixes lower tolerance baud rate limit for
+ older tegra chips introduced by d781ec21bae6
+From:   Dmitry Osipenko <digetx@gmail.com>
+To:     Patrik John <patrik.john@u-blox.com>, linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathan@nvidia.com,
+        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
+References: <sig.096060f39c.20211122124425.74031-1-patrik.john@u-blox.com>
+ <0165046b-c8bc-ec8e-05c7-bf9aea14339b@gmail.com>
+ <727044f2-12d4-0de4-f6b8-ef3ee75d3630@gmail.com>
+Message-ID: <d906ed7f-c507-e5b0-3d46-2750d62414a4@gmail.com>
+Date:   Tue, 30 Nov 2021 15:17:10 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129182633.480021-3-jernej.skrabec@gmail.com>
+In-Reply-To: <727044f2-12d4-0de4-f6b8-ef3ee75d3630@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:26:26PM +0100, Jernej Skrabec wrote:
-> Some SoCs like Allwinner H6 use reset lines for resetting Hantro G2. Add
-> support for them.
+29.11.2021 15:36, Dmitry Osipenko пишет:
+> 29.11.2021 15:32, Dmitry Osipenko пишет:
+>> 3. Use "Link" tag and put all http links here, before the Signed-off-by
+>> tag, like this:
+>>
+>> Link:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git/commit/drivers/tty/serial/serial-tegra.c?h=for-next&id=d781ec21bae6ff8f9e07682e8947a654484611f5
+>> Link:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git/tree/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi?h=for-next
+>> Link:
+>> https://www.kernel.org/doc/Documentation/devicetree/bindings/serial/nvidia%2Ctegra20-hsuart.txt
 > 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-
-Thanks!
-
-> ---
->  drivers/staging/media/hantro/hantro.h     |  3 +++
->  drivers/staging/media/hantro/hantro_drv.c | 15 ++++++++++++++-
->  2 files changed, 17 insertions(+), 1 deletion(-)
+> Actually, it should be like this:
 > 
-> diff --git a/drivers/staging/media/hantro/hantro.h b/drivers/staging/media/hantro/hantro.h
-> index 7da23f7f207a..33eb3e092cc1 100644
-> --- a/drivers/staging/media/hantro/hantro.h
-> +++ b/drivers/staging/media/hantro/hantro.h
-> @@ -16,6 +16,7 @@
->  #include <linux/videodev2.h>
->  #include <linux/wait.h>
->  #include <linux/clk.h>
-> +#include <linux/reset.h>
->  
->  #include <media/v4l2-ctrls.h>
->  #include <media/v4l2-device.h>
-> @@ -171,6 +172,7 @@ hantro_vdev_to_func(struct video_device *vdev)
->   * @dev:		Pointer to device for convenient logging using
->   *			dev_ macros.
->   * @clocks:		Array of clock handles.
-> + * @resets:		Array of reset handles.
->   * @reg_bases:		Mapped addresses of VPU registers.
->   * @enc_base:		Mapped address of VPU encoder register for convenience.
->   * @dec_base:		Mapped address of VPU decoder register for convenience.
-> @@ -190,6 +192,7 @@ struct hantro_dev {
->  	struct platform_device *pdev;
->  	struct device *dev;
->  	struct clk_bulk_data *clocks;
-> +	struct reset_control *resets;
->  	void __iomem **reg_bases;
->  	void __iomem *enc_base;
->  	void __iomem *dec_base;
-> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> index 3d3107a39dae..770f4ce71d29 100644
-> --- a/drivers/staging/media/hantro/hantro_drv.c
-> +++ b/drivers/staging/media/hantro/hantro_drv.c
-> @@ -905,6 +905,10 @@ static int hantro_probe(struct platform_device *pdev)
->  			return PTR_ERR(vpu->clocks[0].clk);
->  	}
->  
-> +	vpu->resets = devm_reset_control_array_get(&pdev->dev, false, true);
-> +	if (IS_ERR(vpu->resets))
-> +		return PTR_ERR(vpu->resets);
-> +
->  	num_bases = vpu->variant->num_regs ?: 1;
->  	vpu->reg_bases = devm_kcalloc(&pdev->dev, num_bases,
->  				      sizeof(*vpu->reg_bases), GFP_KERNEL);
-> @@ -978,10 +982,16 @@ static int hantro_probe(struct platform_device *pdev)
->  	pm_runtime_use_autosuspend(vpu->dev);
->  	pm_runtime_enable(vpu->dev);
->  
-> +	ret = reset_control_deassert(vpu->resets);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Failed to deassert resets\n");
-> +		goto err_pm_disable;
-> +	}
-> +
->  	ret = clk_bulk_prepare(vpu->variant->num_clocks, vpu->clocks);
->  	if (ret) {
->  		dev_err(&pdev->dev, "Failed to prepare clocks\n");
-> -		goto err_pm_disable;
-> +		goto err_rst_assert;
->  	}
->  
->  	ret = v4l2_device_register(&pdev->dev, &vpu->v4l2_dev);
-> @@ -1037,6 +1047,8 @@ static int hantro_probe(struct platform_device *pdev)
->  	v4l2_device_unregister(&vpu->v4l2_dev);
->  err_clk_unprepare:
->  	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
-> +err_rst_assert:
-> +	reset_control_assert(vpu->resets);
->  err_pm_disable:
->  	pm_runtime_dont_use_autosuspend(vpu->dev);
->  	pm_runtime_disable(vpu->dev);
-> @@ -1056,6 +1068,7 @@ static int hantro_remove(struct platform_device *pdev)
->  	v4l2_m2m_release(vpu->m2m_dev);
->  	v4l2_device_unregister(&vpu->v4l2_dev);
->  	clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
-> +	reset_control_assert(vpu->resets);
->  	pm_runtime_dont_use_autosuspend(vpu->dev);
->  	pm_runtime_disable(vpu->dev);
->  	return 0;
-> -- 
-> 2.34.1
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git/commit/drivers/tty/serial/serial-tegra.c?h=for-next&id=d781ec21bae6ff8f9e07682e8947a654484611f5
+> Link: https://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git/tree/arch/arm/boot/dts/tegra124-apalis-v1.2.dtsi?h=for-next
+> Link: https://www.kernel.org/doc/Documentation/devicetree/bindings/serial/nvidia%2Ctegra20-hsuart.txt
 > 
+> I turned off line wrapping for this email.
+> 
+
+For the reference, I just found that there was v3 already on the list:
+
+https://patchwork.ozlabs.org/project/linux-tegra/patch/sig.19614244f8.20211123132737.88341-1-patrik.john@u-blox.com/

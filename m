@@ -2,290 +2,229 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E61D462C65
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18858462C5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238420AbhK3F7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 00:59:41 -0500
-Received: from mail-dm6nam08on2084.outbound.protection.outlook.com ([40.107.102.84]:56384
-        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S238403AbhK3F7j (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 00:59:39 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MeDowvvwOdd/Pqw7JyMsH8JEqdX+cC+vtyYvXcYpGErPahhrBpBxrHgdvpPJlQ8scZmcBtXsPlRF+d1DW6nXuaEWKxf88F/MPg/B3TrFLy/KWZDxKyAE05wNQLdoQZXSWdkdaKJYZzBhy5YyRy2xy0tE+XMazPDXqyOBV6/iXHs+aBIQX47Ltt9rB/sHqljub3sQBHPUhUBfkZ8geoH2ALZsJ4VUP4TXWh+6SNBiV9A9C+QO9zL2OqdqDurIpQskdqXg6ljsufYvA+aXrkP4zwvnEVZiLsS3iS49czqGWi+B/zqQcAFsC5J6uOgA5AA5Def6wFfxz2HGUsoD8OZdUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=925sDxT8AMlGoWlpBeRoH1c8uMdyH5Ium4w9RSGFDvs=;
- b=hMulSAyFmrsWT+obeokkhhySoFm3aBhP5aVJz6b9hJqWx4CltUBbk6Zcyg6NgvNGVzNO7s5rCBQp5QexqFryNjChG/py7uiwpXZbd5wWtAESbQEsjY6xSLT6jbpTCM/SncfxRakcvWsXL3NEmtJCuKQUiANqlGzC2UtrcYwmarehafuKByd/F9q1HySgHQHBdJ+sP2NxsGPQi0MDoX4BffQgCbZI3Y4di71448QvK/1j9/2OAQP7m11txj5f/K9qMPE0mA2m8KPGIOYMo9Il+RvsOPucrFaFpvN9LtyzIjAblrJpAD9XO39Nnv/M0yaJJzyy7ObrH2Pa5YjOoNPihw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 149.199.62.198) smtp.rcpttodomain=towertech.it smtp.mailfrom=xilinx.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
- dkim=none (message not signed); arc=none
+        id S238397AbhK3F70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 00:59:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234213AbhK3F7Z (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 00:59:25 -0500
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B7BC061714
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 21:56:06 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id z5so16737369edd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 21:56:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=925sDxT8AMlGoWlpBeRoH1c8uMdyH5Ium4w9RSGFDvs=;
- b=HWBD50jhNKPo4QHURVdePqTAbJKsGOR/QV37XyOM81clDt+hKlb5MbtB4x+d90qQyhvP+nQYKRRMbms9f2+czchRt2UecT7RNEONdfYUMj45iSBG/nMTOre9WEkDdfhkIBzgemixXf49nCjaHu3ULdMCErZRWR9BmfPt83WDSz0=
-Received: from SN7PR04CA0050.namprd04.prod.outlook.com (2603:10b6:806:120::25)
- by SJ0PR02MB8675.namprd02.prod.outlook.com (2603:10b6:a03:3ff::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Tue, 30 Nov
- 2021 05:56:19 +0000
-Received: from SN1NAM02FT0062.eop-nam02.prod.protection.outlook.com
- (2603:10b6:806:120:cafe::4f) by SN7PR04CA0050.outlook.office365.com
- (2603:10b6:806:120::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend
- Transport; Tue, 30 Nov 2021 05:56:19 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
- smtp.mailfrom=xilinx.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=xilinx.com;
-Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
- 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
- client-ip=149.199.62.198; helo=xsj-pvapexch01.xlnx.xilinx.com;
-Received: from xsj-pvapexch01.xlnx.xilinx.com (149.199.62.198) by
- SN1NAM02FT0062.mail.protection.outlook.com (10.97.4.69) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.4734.20 via Frontend Transport; Tue, 30 Nov 2021 05:56:18 +0000
-Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
- xsj-pvapexch01.xlnx.xilinx.com (172.19.86.40) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2176.14; Mon, 29 Nov 2021 21:56:10 -0800
-Received: from smtp.xilinx.com (172.19.127.96) by
- xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
- 15.1.2176.14 via Frontend Transport; Mon, 29 Nov 2021 21:56:10 -0800
-Envelope-to: git@xilinx.com,
- a.zummo@towertech.it,
- alexandre.belloni@bootlin.com,
- linux-rtc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Received: from [10.140.6.18] (port=57772 helo=xhdlakshmis40.xilinx.com)
-        by smtp.xilinx.com with esmtp (Exim 4.90)
-        (envelope-from <srinivas.neeli@xilinx.com>)
-        id 1mrw7d-0005MM-Pc; Mon, 29 Nov 2021 21:56:10 -0800
-From:   Srinivas Neeli <srinivas.neeli@xilinx.com>
-To:     <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
-        <michal.simek@xilinx.com>, <sgoud@xilinx.com>,
-        <shubhraj@xilinx.com>, <radheys@xilinx.com>
-CC:     <linux-rtc@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <git@xilinx.com>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>
-Subject: [PATCH V3 2/2] rtc: zynqmp: Add calibration set and get support
-Date:   Tue, 30 Nov 2021 11:25:41 +0530
-Message-ID: <20211130055541.2789-2-srinivas.neeli@xilinx.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211130055541.2789-1-srinivas.neeli@xilinx.com>
-References: <20211130055541.2789-1-srinivas.neeli@xilinx.com>
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=mU7mxV2SXHu5Qf3ZpewHyy24d1tNVug9FIKuiJMjO7I=;
+        b=tmSvYuXHDXMWZRcT5pXBmVIQs6oQ+wTUD00nTuiSVzRTyax+25sAlKhB72mqR8wRdp
+         DQl25OpRqkgS2eImsKdRMZeN+uyqOjLydWSffknBKfve7WiItS3TpctrDdLF32Rb4EJH
+         xoSgOvvtlzr0QkHONXAwXr8FRd1wYUl2hYOzr1v3bgIEcROlZn1haO8zvuIdZUVgvpqc
+         h/bZT8nIQoS6SQML/3uKnzxAYz+dCHAqsie2aH0EdmQHNzyFfoLlsIGW28g8PRmIICJg
+         ZtDXQORwHWkOv5t3tz6HlGrEMbunVM7v0yY98kD8J4TsAq+TvnMv/SizOwiV60YY1Hwj
+         K6HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=mU7mxV2SXHu5Qf3ZpewHyy24d1tNVug9FIKuiJMjO7I=;
+        b=jWH0EqwrR0u3OyhbzMxFDqPs3cesWWUdkQ4CuLk/Kjmoh8RxDkMukE8Qo3TPi+6aSz
+         jZgdA6XOshz0HKs08ob+tTagQZAY+Wf0PhrxykuG/eYO/SyRmx4oVZaQqBa07x9rtrr1
+         iRSVdV5yVzFXAmfSHyHXkAyR4kKvaEBVI56kYDvni1aVpCrQwOrHf6OimVmZyxCUq2kR
+         OVLhWVpDp90zuZs5/a3kgf/iPIdJrJWc7xMR5+WqIyr2UDgXMDqTh3scUZY3dvpNNipR
+         f5QjYDxOS75vk/Xd9Lc/H4r8p3SwAQHVuFqra5mTXMCV2jqaCX2Vkjkn5h8BAwU/mJkN
+         GBLg==
+X-Gm-Message-State: AOAM530bCwweHVFavQdDqKzxIGe3b0Eb3nP4osmakDjxXoJI4YIHzEYv
+        B5koLDzlqjXmII/01ef2Ij+Fhd1wNTN5ylypYvN77/vJLlvaRQ==
+X-Google-Smtp-Source: ABdhPJyGUvOQUiiLgTrzP8EFun23a7r3DkaGNmq58PHu9rqmsr28Jd+mnwXeOe5ZveU7LyQvHXl+LjxsPef4cZ/EEbM=
+X-Received: by 2002:a05:6402:12d3:: with SMTP id k19mr80462105edx.244.1638251764787;
+ Mon, 29 Nov 2021 21:56:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1355d9e7-6186-40e1-e231-08d9b3c62122
-X-MS-TrafficTypeDiagnostic: SJ0PR02MB8675:
-X-Microsoft-Antispam-PRVS: <SJ0PR02MB8675921CE03E1B8FE4E54BB9AF679@SJ0PR02MB8675.namprd02.prod.outlook.com>
-X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
-X-MS-Oob-TLC-OOBClassifiers: OLM:6790;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 08os37MHqIketBrr8vZeOt7D06SbtfmkaPIKoInLiPQODJ1ES6BGiySgvKSvcSJ96UYLcWwOIuqy6FMTP0UjvD2U/ABuMIDsOb6I6MnV7Kve2g9Ml9ugjzUyYg2LPqmzqkzf43WMC08G3AA2Ndfc3fKtwIy+JlFb0M3nG+bNln9NCNc50/1RF5yKEDGkeuvpLmUtagllzlPXAToRN411YaJ/HIiME9r1qSLKVXTzJvHiqufIV3aEXWxBmRqScEPulWVL1H/3Uwcua50uiA/7uAUgl/5QJaPYJ+ZCAWiOv5RpsYUx1lRSYdpI9vnm28vVheVNF19/X5K7rPC/Wqa6OuwFx20pEAMX3lESlkNKnwDj+ec3enGE0ex8geV/vvDc8aZmj06qQsQva6dKcNV+5hirR0umxhHAcVcLBQck8yr9V8TAtmZY24Spk6Np/a/s+AsiggjqYaiJsrdH+FWVzv4uCc/PjvJqAdxnB5yX6wZ8GldNUd6ih5smgL5gaHzbO3Be72Q98PXT0Gl54R9ndSxkjbKNfYNUGL16lT746nmnRKALQAt/gdfjzrmaJKbY30PliLc5W81/eUkrOTvL2KzFOlTruCG3+Y3fMpllpWwygUpSoR4UhG5244m7IiLoh5mvz9fLN1VsyCuuwkMySaueZ+UqK/kscJbw2a1FOeq/lXPhrZiUPHJ5eiU5ww5qnKfBe9xaXmr6j35YBuAM8Z80CpWWs0RNQCXRNEBRBLFBB7QDyg193fCl1c4QAUqH
-X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch01.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(46966006)(36840700001)(47076005)(7636003)(426003)(83380400001)(107886003)(36756003)(8936002)(7696005)(44832011)(8676002)(356005)(9786002)(70586007)(5660300002)(4326008)(26005)(2906002)(508600001)(6636002)(316002)(186003)(82310400004)(1076003)(6666004)(110136005)(336012)(36860700001)(2616005)(54906003)(70206006)(102446001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: xilinx.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Nov 2021 05:56:18.9666
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1355d9e7-6186-40e1-e231-08d9b3c62122
-X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch01.xlnx.xilinx.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0062.eop-nam02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR02MB8675
+References: <20211129181711.642046348@linuxfoundation.org>
+In-Reply-To: <20211129181711.642046348@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 30 Nov 2021 11:25:53 +0530
+Message-ID: <CA+G9fYtPpcjzkfkTh_RTecLQ+d_2JM7RwODGFH2DDEoUJ5=cqw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 000/121] 5.10.83-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, shuah@kernel.org,
+        f.fainelli@gmail.com, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, jonathanh@nvidia.com,
+        stable@vger.kernel.org, pavel@denx.de, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, linux@roeck-us.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Zynqmp RTC controller has a calibration feature to compensate
-time deviation due to input clock inaccuracy.
-Set and get calibration API's are used for setting and getting
-calibration value from the controller calibration register.
+On Tue, 30 Nov 2021 at 00:01, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.10.83 release.
+> There are 121 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.10.83-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Srinivas Neeli <srinivas.neeli@xilinx.com>
----
-Changes in V3:
- -Calculated tick_mult using crystal frequency.
- -Calibration register updating based on crystal frequency in probe.
- -Supressed MIN an MAX calibration values,Will send separate patch in future.
-Changes in V2:
- -Removed unused macro.
- -Updated code with review comments.
----
- drivers/rtc/rtc-zynqmp.c | 104 +++++++++++++++++++++++++++++++--------
- 1 file changed, 84 insertions(+), 20 deletions(-)
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-diff --git a/drivers/rtc/rtc-zynqmp.c b/drivers/rtc/rtc-zynqmp.c
-index f440bb52be92..eb6ee55ca725 100644
---- a/drivers/rtc/rtc-zynqmp.c
-+++ b/drivers/rtc/rtc-zynqmp.c
-@@ -6,6 +6,7 @@
-  *
-  */
- 
-+#include <linux/clk.h>
- #include <linux/delay.h>
- #include <linux/init.h>
- #include <linux/io.h>
-@@ -36,17 +37,21 @@
- #define RTC_OSC_EN		BIT(24)
- #define RTC_BATT_EN		BIT(31)
- 
--#define RTC_CALIB_DEF		0x198233
-+#define RTC_CALIB_DEF		0x8000
- #define RTC_CALIB_MASK		0x1FFFFF
- #define RTC_ALRM_MASK          BIT(1)
- #define RTC_MSEC               1000
-+#define RTC_FR_MASK		0xF0000
-+#define RTC_FR_MAX_TICKS	16
-+#define RTC_PPB			1000000000LL
- 
- struct xlnx_rtc_dev {
- 	struct rtc_device	*rtc;
- 	void __iomem		*reg_base;
- 	int			alarm_irq;
- 	int			sec_irq;
--	unsigned int		calibval;
-+	struct clk		*rtc_clk;
-+	unsigned int		freq;
- };
- 
- static int xlnx_rtc_set_time(struct device *dev, struct rtc_time *tm)
-@@ -61,13 +66,6 @@ static int xlnx_rtc_set_time(struct device *dev, struct rtc_time *tm)
- 	 */
- 	new_time = rtc_tm_to_time64(tm) + 1;
- 
--	/*
--	 * Writing into calibration register will clear the Tick Counter and
--	 * force the next second to be signaled exactly in 1 second period
--	 */
--	xrtcdev->calibval &= RTC_CALIB_MASK;
--	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
--
- 	writel(new_time, xrtcdev->reg_base + RTC_SET_TM_WR);
- 
- 	/*
-@@ -173,15 +171,71 @@ static void xlnx_init_rtc(struct xlnx_rtc_dev *xrtcdev)
- 	rtc_ctrl = readl(xrtcdev->reg_base + RTC_CTRL);
- 	rtc_ctrl |= RTC_BATT_EN;
- 	writel(rtc_ctrl, xrtcdev->reg_base + RTC_CTRL);
-+}
- 
--	/*
--	 * Based on crystal freq of 33.330 KHz
--	 * set the seconds counter and enable, set fractions counter
--	 * to default value suggested as per design spec
--	 * to correct RTC delay in frequency over period of time.
-+static int xlnx_rtc_read_offset(struct device *dev, long *offset)
-+{
-+	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-+	long offset_val = 0;
-+	unsigned int tick_mult = RTC_PPB / xrtcdev->freq;
-+	unsigned int calibval;
-+
-+	calibval = readl(xrtcdev->reg_base + RTC_CALIB_RD);
-+	/* Offset with seconds ticks */
-+	offset_val = calibval & RTC_TICK_MASK;
-+	offset_val = offset_val - RTC_CALIB_DEF;
-+	offset_val = offset_val * tick_mult;
-+
-+	/* Offset with fractional ticks */
-+	if (calibval & RTC_FR_EN)
-+		offset_val += ((calibval & RTC_FR_MASK) >> RTC_FR_DATSHIFT)
-+			* (tick_mult / RTC_FR_MAX_TICKS);
-+	*offset = offset_val;
-+
-+	return 0;
-+}
-+
-+static int xlnx_rtc_set_offset(struct device *dev, long offset)
-+{
-+	struct xlnx_rtc_dev *xrtcdev = dev_get_drvdata(dev);
-+	short int  max_tick;
-+	unsigned char fract_tick = 0;
-+	unsigned int calibval;
-+	int fract_offset;
-+	unsigned int tick_mult = RTC_PPB / xrtcdev->freq;
-+
-+	/* Number ticks for given offset */
-+	max_tick = div_s64_rem(offset, tick_mult, &fract_offset);
-+
-+	/* Number fractional ticks for given offset */
-+	if (fract_offset) {
-+		if (fract_offset < 0) {
-+			fract_offset = fract_offset + tick_mult;
-+			max_tick--;
-+		}
-+		if (fract_offset > (tick_mult / RTC_FR_MAX_TICKS)) {
-+			for (fract_tick = 1; fract_tick < 16; fract_tick++) {
-+				if (fract_offset <=
-+				    (fract_tick *
-+				     (tick_mult / RTC_FR_MAX_TICKS)))
-+					break;
-+			}
-+		}
-+	}
-+
-+	/* Zynqmp RTC uses second and fractional tick
-+	 * counters for compensation
- 	 */
--	xrtcdev->calibval &= RTC_CALIB_MASK;
--	writel(xrtcdev->calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-+	calibval = max_tick + RTC_CALIB_DEF;
-+
-+	if (fract_tick)
-+		calibval |= RTC_FR_EN;
-+
-+	calibval |= (fract_tick << RTC_FR_DATSHIFT);
-+
-+	writel(calibval, (xrtcdev->reg_base + RTC_CALIB_WR));
-+
-+	return 0;
- }
- 
- static const struct rtc_class_ops xlnx_rtc_ops = {
-@@ -190,6 +244,8 @@ static const struct rtc_class_ops xlnx_rtc_ops = {
- 	.read_alarm	  = xlnx_rtc_read_alarm,
- 	.set_alarm	  = xlnx_rtc_set_alarm,
- 	.alarm_irq_enable = xlnx_rtc_alarm_irq_enable,
-+	.read_offset	  = xlnx_rtc_read_offset,
-+	.set_offset	  = xlnx_rtc_set_offset,
- };
- 
- static irqreturn_t xlnx_rtc_interrupt(int irq, void *id)
-@@ -255,10 +311,18 @@ static int xlnx_rtc_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = of_property_read_u32(pdev->dev.of_node, "calibration",
--				   &xrtcdev->calibval);
--	if (ret)
--		xrtcdev->calibval = RTC_CALIB_DEF;
-+	/* Getting the rtc_clk info */
-+	xrtcdev->rtc_clk = devm_clk_get_optional(&pdev->dev, "rtc_clk");
-+	if (IS_ERR(xrtcdev->rtc_clk)) {
-+		if (PTR_ERR(xrtcdev->rtc_clk) != -EPROBE_DEFER)
-+			dev_warn(&pdev->dev, "Device clock not found.\n");
-+	}
-+	xrtcdev->freq = clk_get_rate(xrtcdev->rtc_clk);
-+	if (!xrtcdev->freq)
-+		xrtcdev->freq = RTC_CALIB_DEF;
-+	ret = readl(xrtcdev->reg_base + RTC_CALIB_RD);
-+	if (!ret)
-+		writel(xrtcdev->freq, (xrtcdev->reg_base + RTC_CALIB_WR));
- 
- 	xlnx_init_rtc(xrtcdev);
- 
--- 
-2.17.1
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.10.83-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: cd4fd0597d3787df6c6771a7b41379d35a8f31b0
+* git describe: v5.10.82-122-gcd4fd0597d37
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
+.82-122-gcd4fd0597d37
+
+## No regressions (compared to v5.10.81-155-gf8f271281cd8)
+
+## No fixes (compared to v5.10.81-155-gf8f271281cd8)
+
+## Test result summary
+total: 86505, pass: 73579, fail: 512, skip: 11613, xfail: 801
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 259 total, 259 passed, 0 failed
+* arm64: 37 total, 37 passed, 0 failed
+* dragonboard-410c: 1 total, 1 passed, 0 failed
+* hi6220-hikey: 1 total, 1 passed, 0 failed
+* i386: 36 total, 36 passed, 0 failed
+* juno-r2: 1 total, 1 passed, 0 failed
+* mips: 34 total, 34 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 54 total, 46 passed, 8 failed
+* riscv: 24 total, 24 passed, 0 failed
+* s390: 18 total, 18 passed, 0 failed
+* sh: 20 total, 20 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x15: 1 total, 1 passed, 0 failed
+* x86: 1 total, 1 passed, 0 failed
+* x86_64: 37 total, 37 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-bpf
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* ssuite
+* v4l2-compliance
+
+--
+Linaro LKFT
+https://lkft.linaro.org

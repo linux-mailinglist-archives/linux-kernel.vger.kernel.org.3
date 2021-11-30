@@ -2,158 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 944894633BA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:00:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CFC4633B7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 12:59:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239527AbhK3MDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:03:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48770 "EHLO
+        id S232488AbhK3MDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:03:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbhK3MDO (ORCPT
+        with ESMTP id S229918AbhK3MDB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:03:14 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F977C061574;
-        Tue, 30 Nov 2021 03:59:55 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id v23so15148960pjr.5;
-        Tue, 30 Nov 2021 03:59:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xj8+VoAa5ErdyHBdKdAIopD6fGg/e7bwG6LigikTmEk=;
-        b=HjpTUJGQV2CWydG+K8sGVwBWAVgaWqVJF4IsrStsHUr0reZu3Au/oTASZi83B61vu3
-         kxAHdsPBcwQnHH75SnWzx0u7CSDI6ojfjr3EoqCtEFu1SAlyJEJTkKSNtMWEYN/1daiE
-         fMwxeo609A9pe+OYPk7MdOLJ2iKYphy1KynKVOkp7kHFJ1CDVBYduXwl1SSTddXh1aa2
-         98cPVzPtKzLSa+Enailsvx8UkXIMKmVG5l/iqbcEPND45v6NOdzhxzTlvBMzoCm0pxvd
-         Wy1qxowe0DUM69hOCiyG2Uh8GGazCcaZhsEPKw/zJuEQSqI29kvH+RQi1FEv9gysxAgA
-         UX6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xj8+VoAa5ErdyHBdKdAIopD6fGg/e7bwG6LigikTmEk=;
-        b=CZNK381FHgTbYyUkqC0TcCamSAmT7YqCY7W3lxDnTXs05YhHEmfDL5rClanN4Fg+gU
-         YqounnLcad9hHNEP/etrUOiYIP9T6cmfncbxjQSAgEGB/U2fEADioH1ged0OzuRYXTRI
-         jL86XULU4AJ4Wp+EQ4cYxfNQUKQE3foJMoH/7q+nmmoMTgI9XxrlRgpwLuDe2K+CGZKK
-         SKOspEjJ0A+94fj1YPwHrpkfSIkcMq5encrM14VS9OBV+CK48IXHPVm4CNSX2yNdqJHt
-         YvrsvOzrOkIMAuxUItFa/D4cr1+RBCt8v+pEtUHrFWO+SjbiaBMZm3ZsiOSENFz0m3Vi
-         ltKg==
-X-Gm-Message-State: AOAM533N7CARwVR4x++IOiRp7uYs51h9txogAKUoar3Qf9LEjA4OPE4W
-        4fQKXM3u6B7DcYhjAG9GiJY=
-X-Google-Smtp-Source: ABdhPJyqcdXCN+mZ0u1qep/O+jSTSw23lNluUedkVylDa+MsoxKzNigQMJYC++/iAzt5n7+w9C137Q==
-X-Received: by 2002:a17:902:b70b:b0:143:74b1:7e3b with SMTP id d11-20020a170902b70b00b0014374b17e3bmr68124338pls.26.1638273594698;
-        Tue, 30 Nov 2021 03:59:54 -0800 (PST)
-Received: from goshun.usen.ad.jp (113x33x71x97.ap113.ftth.ucom.ne.jp. [113.33.71.97])
-        by smtp.gmail.com with ESMTPSA id f4sm22226555pfj.61.2021.11.30.03.59.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 03:59:54 -0800 (PST)
-From:   Akira Kawata <akirakawata1@gmail.com>
-To:     akpm@linux-foundation.org, adobriyan@gmail.com,
-        viro@zeniv.linux.org.uk, keescook@chromium.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     akirakawata1@gmail.com, kernel test robot <lkp@intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] fs/binfmt_elf: Fix AT_PHDR for unusual ELF files
-Date:   Tue, 30 Nov 2021 20:59:07 +0900
-Message-Id: <20211130115906.414176-1-akirakawata1@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Nov 2021 07:03:01 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9BC061574;
+        Tue, 30 Nov 2021 03:59:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E0E24CE18FE;
+        Tue, 30 Nov 2021 11:59:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C9BC53FC7;
+        Tue, 30 Nov 2021 11:59:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638273579;
+        bh=nGzxpZJWSCKzpRqYJRSIk5w5ewqGleaL9kREzEMMTm0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bXXy+uZDSzifTQFRwczjKuHFmOV+jMJldtLzV1t6J6WNjbxOfzERZc3bPWPhWm3Yj
+         7XMOZm0vyo2HweT9tuMLIQrblKkMc5tidTavCs+XdZSbkO3OFo2O/Y3t/CThmhN1TU
+         hlQV6h1k027CfmFAIadoxL0ZC+dV4m8bTXSUCQrGniW5ZtakRKHAFqengoDZsT0/fk
+         3/xvWVIACugeQUfuZoXvg6+rKLmGaF66ubQydNcolGZnCPk5xmHYpsZWQGmIT7SulB
+         PqbEgocg+Lr/qQifPvUohu+4TAQQhWL0V1ONSp//M+Tkw6EnguQEsI/swkF2IbJjmf
+         8RftIB1IOm90A==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ms1nI-008rZE-MQ; Tue, 30 Nov 2021 11:59:34 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date:   Tue, 30 Nov 2021 11:59:32 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        Luca Ceresoli <luca@lucaceresoli.net>, kernel-team@android.com
+Subject: Re: [PATCH v3 0/3] PCI: apple: Assorted #PERST fixes
+In-Reply-To: <20211130115632.GA3355@lpieralisi>
+References: <20211123180636.80558-1-maz@kernel.org>
+ <20211130115632.GA3355@lpieralisi>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <b2a06abf476b3e89504a227b3d1bea7c@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: lorenzo.pieralisi@arm.com, bhelgaas@google.com, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org, pali@kernel.org, alyssa@rosenzweig.io, mark.kettenis@xs4all.nl, luca@lucaceresoli.net, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=197921
+Hi Lorenzo, Bjorn,
 
-As pointed out in the discussion of buglink, we cannot calculate AT_PHDR
-as the sum of load_addr and exec->e_phoff. This is because exec->e_phoff
-is the offset of PHDRs in the file and the address of PHDRs in the
-memory may differ from it. This patch fixes the bug by calculating the
-address of program headers from PT_LOADs directly.
+On 2021-11-30 11:56, Lorenzo Pieralisi wrote:
+> On Tue, Nov 23, 2021 at 06:06:33PM +0000, Marc Zyngier wrote:
+>> Apologies for the rapid fire (I tend to be much more conservative when
+>> resending series), but given that this series has a direct impact on
+>> other projects (such as u-boot), I'm trying to converge as quickly as
+>> possible.
+>> 
+>> This series aims at fixing a number of issues for the recently merged
+>> Apple PCIe driver, all revolving around the mishandling of #PERST:
+>> 
+>> - we didn't properly drive #PERST, and we didn't follow the specified
+>>   timings
+>> 
+>> - the DT had the wrong polarity, which has impacts on the driver
+>>   itself
+>> 
+>> Hopefully, this should address all the issues reported so far.
+>> 
+>> * From v2:
+>>   - Fixed DT
+>>   - Fixed #PERST polarity in the driver
+>>   - Collected Pali's ack on patch #1
+>> 
+>> [1] https://lore.kernel.org/r/20211122104156.518063-1-maz@kernel.org
+>> 
+>> Marc Zyngier (3):
+>>   PCI: apple: Follow the PCIe specifications when resetting the port
+>>   arm64: dts: apple: t8103: Fix PCIe #PERST polarity
+>>   PCI: apple: Fix #PERST polarity
+>> 
+>>  arch/arm64/boot/dts/apple/t8103.dtsi |  7 ++++---
+>>  drivers/pci/controller/pcie-apple.c  | 12 +++++++++++-
+>>  2 files changed, 15 insertions(+), 4 deletions(-)
+> 
+> Hi Bjorn,
+> 
+> this series is v5.16-rcX material for PCI fixes, can you pick patches 
+> 1,3
+> up please ?
 
-Signed-off-by: Akira Kawata <akirakawata1@gmail.com>
-Reported-by: kernel test robot <lkp@intel.com>
----
-Changes in v3:
-- Fix a reported bug from kernel test robot.
+Do you mind picking patch #2 as well? Or shall I route it somewhere 
+else?
 
-Changes in v2:
-- Remove unused load_addr from create_elf_tables.
-- Improve the commit message.
+Thanks,
 
- fs/binfmt_elf.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
-
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index beeb1247b5c4..828e88841cb4 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -170,8 +170,8 @@ static int padzero(unsigned long elf_bss)
- 
- static int
- create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
--		unsigned long load_addr, unsigned long interp_load_addr,
--		unsigned long e_entry)
-+		unsigned long interp_load_addr,
-+		unsigned long e_entry, unsigned long phdr_addr)
- {
- 	struct mm_struct *mm = current->mm;
- 	unsigned long p = bprm->p;
-@@ -257,7 +257,7 @@ create_elf_tables(struct linux_binprm *bprm, const struct elfhdr *exec,
- 	NEW_AUX_ENT(AT_HWCAP, ELF_HWCAP);
- 	NEW_AUX_ENT(AT_PAGESZ, ELF_EXEC_PAGESIZE);
- 	NEW_AUX_ENT(AT_CLKTCK, CLOCKS_PER_SEC);
--	NEW_AUX_ENT(AT_PHDR, load_addr + exec->e_phoff);
-+	NEW_AUX_ENT(AT_PHDR, phdr_addr);
- 	NEW_AUX_ENT(AT_PHENT, sizeof(struct elf_phdr));
- 	NEW_AUX_ENT(AT_PHNUM, exec->e_phnum);
- 	NEW_AUX_ENT(AT_BASE, interp_load_addr);
-@@ -822,7 +822,7 @@ static int parse_elf_properties(struct file *f, const struct elf_phdr *phdr,
- static int load_elf_binary(struct linux_binprm *bprm)
- {
- 	struct file *interpreter = NULL; /* to shut gcc up */
-- 	unsigned long load_addr = 0, load_bias = 0;
-+	unsigned long load_addr, load_bias = 0, phdr_addr = 0;
- 	int load_addr_set = 0;
- 	unsigned long error;
- 	struct elf_phdr *elf_ppnt, *elf_phdata, *interp_elf_phdata = NULL;
-@@ -1168,6 +1168,13 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 				reloc_func_desc = load_bias;
- 			}
- 		}
-+
-+		if (elf_ppnt->p_offset <= elf_ex->e_phoff &&
-+		    elf_ex->e_phoff < elf_ppnt->p_offset + elf_ppnt->p_filesz) {
-+			phdr_addr = elf_ex->e_phoff - elf_ppnt->p_offset +
-+				    elf_ppnt->p_vaddr;
-+		}
-+
- 		k = elf_ppnt->p_vaddr;
- 		if ((elf_ppnt->p_flags & PF_X) && k < start_code)
- 			start_code = k;
-@@ -1203,6 +1210,7 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 	}
- 
- 	e_entry = elf_ex->e_entry + load_bias;
-+	phdr_addr += load_bias;
- 	elf_bss += load_bias;
- 	elf_brk += load_bias;
- 	start_code += load_bias;
-@@ -1266,8 +1274,8 @@ static int load_elf_binary(struct linux_binprm *bprm)
- 		goto out;
- #endif /* ARCH_HAS_SETUP_ADDITIONAL_PAGES */
- 
--	retval = create_elf_tables(bprm, elf_ex,
--			  load_addr, interp_load_addr, e_entry);
-+	retval = create_elf_tables(bprm, elf_ex, interp_load_addr,
-+				   e_entry, phdr_addr);
- 	if (retval < 0)
- 		goto out;
- 
-
-base-commit: 34f255a1e91ab44ff8926cf8294ff9144e62e861
+         M.
 -- 
-2.25.1
-
+Jazz is not dead. It just smells funny...

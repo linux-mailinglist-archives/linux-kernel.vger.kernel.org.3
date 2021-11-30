@@ -2,66 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 989AD462DAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F316B462DAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239106AbhK3Hnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 02:43:40 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:35616 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234567AbhK3Hni (ORCPT
+        id S235001AbhK3Hpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232795AbhK3Hpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 02:43:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5D73DCE1805;
-        Tue, 30 Nov 2021 07:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E728C53FC7;
-        Tue, 30 Nov 2021 07:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638258015;
-        bh=8wHaU3NHGbY/iJw1XdoqJNIjIYIPqE1uNtdpLBq7lZA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S7aIryWTg2VKm7DFY10PkVCnbWl2pWL06C32W6i0wOuJGyLfioy46rnZyBHd48U8C
-         tVfm3Iq2TmxEOUz8xCaGUGKHgDmrEYLhGeGDHdEaEU/YNrZpKaeCL0NI65FM2SxCzq
-         FDMsDfa8kp9N2fD8B3FmuOG5ZJd1VHbf3VojyOf5BaOMJygnYi576xjq70fu7YZOLL
-         IiJDbuJpURfiGakdXXxy/DzI1BlRDWNBu6MfjmVW53vaWToH+yWUa+hn+wPZe2Mm/R
-         40SPmFHryI3/FMGl3GAsXllhmUHOHFygjXMGMD5JzOQ59zWk5srOahAsmOM+kxl/zp
-         +CnvY7HzlrDhg==
-Date:   Mon, 29 Nov 2021 23:40:13 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH v2 3/3] blk-crypto: show crypto capabilities in sysfs
-Message-ID: <YaXVXU77yvKUyVwg@sol.localdomain>
-References: <20211130040306.148925-1-ebiggers@kernel.org>
- <20211130040306.148925-4-ebiggers@kernel.org>
- <8745aed7-d4b6-eb8d-60ad-f4d768d62a62@suse.de>
+        Tue, 30 Nov 2021 02:45:50 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8A5C061574;
+        Mon, 29 Nov 2021 23:42:31 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id i12so19736286pfd.6;
+        Mon, 29 Nov 2021 23:42:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xS7DiSXPiwXIXVS3bMn+o90IeUNq7sqrwQBrl7B1pTY=;
+        b=nhahWABz1xtVJyr3rZhdRMAbs0tZ1KjI8ZpVWUQW7v1YEjocgQCAq15syPEBCs4xme
+         xNT+RYAFgWOmbHaSdxrn2x39Nde/+yOBMR9JwQWeKhyqQZ33+ZgXOk5BV7fBDnwJihHg
+         KZ7NnW0Sk/GYfRQlJBpM4r9g4aPSvdfOCJi47Ha0aeytSjdbXdEmWJfc7ToNFQRebHvc
+         45znFqSip27NbI58PERrLBMAgeR/sARHTKVizKh7ANOpd0NOB2H9hFxaCMRtbpSYjmHU
+         pNJKwpyVRdlIBONmCC9qRm6EnFwozQYeid1lxblDuuDuQ09VRmIN7uTEsphOP7XXF9fv
+         h6iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=xS7DiSXPiwXIXVS3bMn+o90IeUNq7sqrwQBrl7B1pTY=;
+        b=uywglGLjrVqHaTe5a7uqGoLDTStmiHgejx9E3ya3YAxni9MIZg4EUntYDtEMUU6x2+
+         UyVN1TcXRlzpGbvnRwbPuanlXq7zq3rOvmEE6UE6EoJTX/po+hmIzjPDphpdZTNQNB5i
+         KZJnFZmC4yebHKUkK9jaPB2KRNZqty4b0mGkOfT4gS8sPJkvFBR5yHoKYED2FmXR5dTs
+         FYW4e2W6AHZqpc+5P2v6w0f3qnVW5Dw95/Nno3WjEtHZEd/6GZ9VFkl3oiuPPBZ6rgR6
+         S205VX1l1vL09yGwBMGjo6CY+GvQxbmDWQ3pQH/izgamgPCTypJmyR8NWS/cymoAlzU9
+         bvcA==
+X-Gm-Message-State: AOAM533UR7IP4oGUfSVlFxWD18fULdUBkx2ib03Pa8j8ZuMH0Uf8kX0u
+        u+BF4xVurlP/Bks1xIRmiZaPxFXZAQI=
+X-Google-Smtp-Source: ABdhPJze2OYhZJHSDl089lBw18AKk3BAPRklyW0dQdAp7N+o4rjOvICnQwRsPsox/sLJ9Tc7dnEi5A==
+X-Received: by 2002:a62:1cc4:0:b0:49f:99b6:3507 with SMTP id c187-20020a621cc4000000b0049f99b63507mr45010524pfc.76.1638258150888;
+        Mon, 29 Nov 2021 23:42:30 -0800 (PST)
+Received: from localhost.localdomain ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id h13sm19066010pfv.84.2021.11.29.23.42.28
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 29 Nov 2021 23:42:30 -0800 (PST)
+From:   Like Xu <like.xu.linux@gmail.com>
+X-Google-Original-From: Like Xu <likexu@tencent.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <likexu@tencent.com>
+Subject: [PATCH v2 0/6] KVM: x86/pmu: Count two basic events for emulated instructions
+Date:   Tue, 30 Nov 2021 15:42:15 +0800
+Message-Id: <20211130074221.93635-1-likexu@tencent.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8745aed7-d4b6-eb8d-60ad-f4d768d62a62@suse.de>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 07:49:54AM +0100, Hannes Reinecke wrote:
-> >    - "modes" is a sub-subdirectory, since there may be multiple supported
-> >      crypto modes, and sysfs is supposed to have one value per file.
-> > 
-> Why do you have a sub-directory here?
-> From what I can see, that subdirectory just contains the supported modes, so
-> wouldn't it be easier to create individual files like 'mode_<modename>'
-> instead of a subdirectory?
+Hi,
 
-It is a group of attributes, so it makes sense to group them together rather
-than put them all in the parent directory alongside other attributes.  It also
-allows the use of proper names like "AES-256-XTS" rather than weird names like
-"mode_AES-256-XTS" or "mode_aes_256_xts".
+[ Jim is on holiday, so I'm here to continue this work. ]
 
-- Eric
+Some cloud customers need accurate virtualization of two
+basic PMU events on x86 hardware: "instructions retired" and
+"branch instructions retired". The existing PMU virtualization code
+fails to account for instructions (e.g, CPUID) that are emulated by KVM.
+
+Accurately virtualizing all PMU events for all microarchitectures is a
+herculean task, let's just stick to the two events covered by this set.
+
+Eric Hankland wrote this code originally, but his plate is full, so Jim
+and I volunteered to shepherd the changes through upstream acceptance.
+
+Thanks,
+
+v1 -> v2 Changelog:
+- Include the patch set [1] and drop the intel_find_fixed_event(); [Paolo]
+  (we will fix the misleading Intel CPUID events in another patch set)
+- Drop checks for pmc->perf_event or event state or event type;
+- Increase a counter once its umask bits and the first 8 select bits are matched;
+- Rewrite kvm_pmu_incr_counter() with a less invasive approach to the host perf;
+- Rename kvm_pmu_record_event to kvm_pmu_trigger_event;
+- Add counter enable check for kvm_pmu_trigger_event();
+- Add vcpu CPL check for kvm_pmu_trigger_event(); [Jim]
+
+Previous:
+https://lore.kernel.org/kvm/20211112235235.1125060-2-jmattson@google.com/
+
+[1] https://lore.kernel.org/kvm/20211119064856.77948-1-likexu@tencent.com/
+
+Jim Mattson (1):
+  KVM: x86: Update vPMCs when retiring branch instructions
+
+Like Xu (5):
+  KVM: x86/pmu: Setup pmc->eventsel for fixed PMCs
+  KVM: x86/pmu: Refactoring find_arch_event() to pmc_perf_hw_id()
+  KVM: x86/pmu: Reuse pmc_perf_hw_id() and drop find_fixed_event()
+  KVM: x86/pmu: Add pmc->intr to refactor kvm_perf_overflow{_intr}()
+  KVM: x86: Update vPMCs when retiring instructions
+
+ arch/x86/include/asm/kvm_host.h |   1 +
+ arch/x86/kvm/emulate.c          |  55 ++++++++------
+ arch/x86/kvm/kvm_emulate.h      |   1 +
+ arch/x86/kvm/pmu.c              | 128 ++++++++++++++++++++++----------
+ arch/x86/kvm/pmu.h              |   5 +-
+ arch/x86/kvm/svm/pmu.c          |  19 ++---
+ arch/x86/kvm/vmx/nested.c       |   7 +-
+ arch/x86/kvm/vmx/pmu_intel.c    |  44 ++++++-----
+ arch/x86/kvm/x86.c              |   5 ++
+ 9 files changed, 167 insertions(+), 98 deletions(-)
+
+-- 
+2.33.1
+

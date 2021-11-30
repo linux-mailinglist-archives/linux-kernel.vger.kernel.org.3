@@ -2,56 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB004463EB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:39:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21882463EBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 20:41:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239562AbhK3Tmf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 14:42:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:47444 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235308AbhK3Tmd (ORCPT
+        id S243147AbhK3ToK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 14:44:10 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:34796 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239704AbhK3Tnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 14:42:33 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 Nov 2021 14:43:32 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 01D9CB81A8C;
-        Tue, 30 Nov 2021 19:39:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C12AC53FC7;
-        Tue, 30 Nov 2021 19:39:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638301151;
-        bh=Y6jZKrfiz+scxKCSkey8clUNA9CWrzcgBfUmzspPyKE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s/EbTfYZXRwcfluroG10mRjBu+yCutGKy03a+jd7z2bqoiWVJQmqGiDOctRatoygk
-         mhfbKPBBUTENfDxrG13j7MVe9berpiUxgKh5oBAtk/1pv5XvxjqXUyDxxZRrz4IfZh
-         AaffoFYaL8+ZU04ps/hysSM4da0rIcyNtV2pAHJCxJHp2jluW+Mw5SZFEyYICs1JXo
-         DP1Zl/ybuekHtCbLMhIa3YUWRMRjEM9jzN8b4ea0tUODtksGH5pDMqTsOn3aVywQQv
-         nnUJfLnTr52T9GZW4rRmaIp5Y6ft11fRZ9qpHJEZc5/L13uSSkNNPL//sJEHaz7Sh1
-         7HVl41l2aK5uA==
-Date:   Tue, 30 Nov 2021 11:39:10 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Shay Drory <shayd@nvidia.com>
-Cc:     "David S . Miller" <davem@davemloft.net>, <jiri@nvidia.com>,
-        <saeedm@nvidia.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 0/4] net/mlx5: Memory optimizations
-Message-ID: <20211130113910.25a9e3ab@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <20211130150705.19863-1-shayd@nvidia.com>
-References: <20211130150705.19863-1-shayd@nvidia.com>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 903A8212BA;
+        Tue, 30 Nov 2021 19:40:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1638301206; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l63rcUE2OHW5ypUlliWqEBsLyZQmG3Hbq8IWsXXTz4A=;
+        b=12aMtx60u9KBtb604fOld+ki3eVdJ1v+mNTfhocasVNh6L//Rl9NMhqUd4LvoT8jYWgERP
+        nDP9hH9+Mw2T+dxZYAs72VFiJw1hYu8et+1Wb0ANyEzPPNlPeoA+CajjJbC364Nk3LnHuw
+        Fw8oLPqRPqEXZPQcNVflvDFhZnz339I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1638301206;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=l63rcUE2OHW5ypUlliWqEBsLyZQmG3Hbq8IWsXXTz4A=;
+        b=AsYbhWHpnSL6tKhtvFTF+/vcz7c8P+xPT7pr2B/izPpdBA008dOLaGWkJDiCsEoMVgb7NQ
+        zA1obA72fekhGAAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0E43313D6B;
+        Tue, 30 Nov 2021 19:40:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GMaQAhZ+pmEGSAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 30 Nov 2021 19:40:06 +0000
+Message-ID: <f3d2787a-1232-e488-3585-a7dac76fe63a@suse.cz>
+Date:   Tue, 30 Nov 2021 20:40:05 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Content-Language: en-US
+To:     Brijesh Singh <brijesh.singh@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Dave Hansen <dave.hansen@intel.com>
+Cc:     Peter Gonda <pgonda@google.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-coco@lists.linux.dev, linux-mm@kvack.org,
+        linux-crypto@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Tom Lendacky <Thomas.Lendacky@amd.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sergio Lopez <slp@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Dov Murik <dovmurik@linux.ibm.com>,
+        Tobin Feldman-Fitzthum <tobin@ibm.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Michael Roth <michael.roth@amd.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andi Kleen <ak@linux.intel.com>, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com
+References: <20210820155918.7518-1-brijesh.singh@amd.com>
+ <CAMkAt6o0ySn1=iLYsH0LCnNARrUbfaS0cvtxB__y_d+Q6DUzfA@mail.gmail.com>
+ <daf5066b-e89b-d377-ed8a-9338f1a04c0d@amd.com>
+ <d673f082-9023-dafb-e42e-eab32a3ddd0c@intel.com>
+ <f15597a0-e7e0-0a57-39fd-20715abddc7f@amd.com>
+ <5f3b3aab-9ec2-c489-eefd-9136874762ee@intel.com>
+ <d83e6668-bec4-8d1f-7f8a-085829146846@amd.com>
+ <38282b0c-7eb5-6a91-df19-2f4cfa8549ce@intel.com> <YZ5iWJuxjSCmZL5l@suse.de>
+ <bd31abd4-c8a2-bdda-ea74-1c24b29beda7@intel.com> <YZ9gAMHdEo6nQ6a0@suse.de>
+ <9503ac53-1323-eade-2863-df11a5f36b6a@amd.com>
+ <7e368c50-ff94-d87e-e93f-bae044659152@suse.cz>
+ <bf96f5d1-1cc3-1d0c-fd70-ade00cb46671@amd.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH Part2 v5 00/45] Add AMD Secure Nested Paging (SEV-SNP)
+ Hypervisor Support
+In-Reply-To: <bf96f5d1-1cc3-1d0c-fd70-ade00cb46671@amd.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 17:07:02 +0200 Shay Drory wrote:
->  - Patch-1 Provides I/O EQ size resource which enables to save
->    up to 128KB.
->  - Patch-2 Provides event EQ size resource which enables to save up to
->    512KB.
+On 11/29/21 17:13, Brijesh Singh wrote:
+>>
+>> That could work for the kmap() context.
+>> What to do for the userspace context (host userspace)?
+>> - shared->private transition - page has to be unmapped from all userspace,
+>> elevated refcount (gup() in progress) can block this unmap until it goes
+>> away - could be doable
+> 
+> An unmap of the page from all the userspace process during the page state
+> transition will be great. If we can somehow store the state information in
+> the 'struct page' then it can be later used to make better decision. I am
+> not sure that relying on the elevated refcount is the correct approach. e.g
+> in the case of encrypted guests, the HV may pin the page to prevent it from
+> migration.
+> 
+> Thoughts on how you want to approach unmaping the page from userspace page
+> table?
 
-Why is something allocated in host memory a device resource? =F0=9F=A4=94
+After giving it more thought and rereading the threads here it seems I
+thought it would be easier than it really is, and it would have to be
+something at least like Kirill's hwpoison based approach.
 
-Did you analyze if others may need this?
+>> - still, what to do if host userspace then tries to access the unmapped
+>> page? SIGSEGV instead of SIGBUS and it can recover?
+>>
+> 
+> Yes, SIGSEGV makes sense to me.
+
+OTOH the newer fd-based proposal also IIUC takes care of this part better -
+the host userspace controls the guest's shared->private conversion requests
+so it can't be tricked to access a page that's changed under it.
+
+>>
+>>
+>>> Thoughts ?
+>>>
+>>>>
+>>>> This should turn an RMP fault in the kernel which is not covered in the
+>>>> uaccess exception table into a fatal error.
+>>>>
+>>>> Regards,
+>>>>
+>>
+

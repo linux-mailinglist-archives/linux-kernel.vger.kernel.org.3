@@ -2,85 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E71E8462DD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF2F462DDA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239142AbhK3HuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 02:50:13 -0500
-Received: from mail-vk1-f173.google.com ([209.85.221.173]:47004 "EHLO
-        mail-vk1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234539AbhK3HuL (ORCPT
+        id S234786AbhK3Hvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:51:48 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:42735 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S234471AbhK3Hvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 02:50:11 -0500
-Received: by mail-vk1-f173.google.com with SMTP id m16so11991888vkl.13;
-        Mon, 29 Nov 2021 23:46:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qH1mbhNXMXuJmqx9G5IiqTw6JnJwuBozKZoTCU8LW78=;
-        b=HzwLR6ksBcb92rf7Wsbs7g5gNXyh0UukK/UXjv58jVOaxPvj8evuCktYLFc159uMXd
-         Y91kNuxXSIVrzjHIzU9kXWTGe6u9wLJSdet/0d6GtWDhDNhIHxDzQHyQ6GIYtuFNzqKh
-         PXy4xe2QyoSVRyqxfj00YdkCYv8PS65q1mYkmkhUw4mSNZj/yq1+GjfaRw8cx3dSayJF
-         3naEoUWuFRZnbM33oBvztO2iBaZHhPPwYeD7383+4L3i2Ec7hILAGQyroBt/1868gaZG
-         l+JXH1ehbYy4STb63EqUmFZ9/BW3xe/IQ2hWkpPl8zzG8Z3tSSQX77I/nFrM94QMKQAk
-         Mizg==
-X-Gm-Message-State: AOAM533MoX12iXlOD68T6n0fK+/cSN3ktiv64t/g95AQt7NOxUG3t4cN
-        N+zT9sYjnO6LRfcVZCQMQMv3W5VnpDtm8w==
-X-Google-Smtp-Source: ABdhPJzE6vNC0CPq7tnv+JEVRzKv/QpkZi8kODnyF1xsqJhl35cPrlu2udvgXe2LXwBH01aLZI+oiA==
-X-Received: by 2002:a1f:9049:: with SMTP id s70mr42411250vkd.19.1638258412358;
-        Mon, 29 Nov 2021 23:46:52 -0800 (PST)
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com. [209.85.221.176])
-        by smtp.gmail.com with ESMTPSA id 17sm10465203uaq.10.2021.11.29.23.46.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Nov 2021 23:46:52 -0800 (PST)
-Received: by mail-vk1-f176.google.com with SMTP id m16so11991875vkl.13;
-        Mon, 29 Nov 2021 23:46:52 -0800 (PST)
-X-Received: by 2002:a05:6122:104f:: with SMTP id z15mr38804710vkn.39.1638258411890;
- Mon, 29 Nov 2021 23:46:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20211129122706.2719625-1-geert@linux-m68k.org>
-In-Reply-To: <20211129122706.2719625-1-geert@linux-m68k.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 30 Nov 2021 08:46:40 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUSw=MdqMRJAf6W64YTKuu42iDYHKnv=T1x4h+SNUS1xQ@mail.gmail.com>
-Message-ID: <CAMuHMdUSw=MdqMRJAf6W64YTKuu42iDYHKnv=T1x4h+SNUS1xQ@mail.gmail.com>
-Subject: Re: Build regressions/improvements in v5.16-rc3
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     sparclinux <sparclinux@vger.kernel.org>
+        Tue, 30 Nov 2021 02:51:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638258509;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WF/k4TYUb23OKSPNxq7b+VZIkGdN1+576822KS46Fcg=;
+        b=Rutm7EXgUQhkDze3xmywIiuaiAgGLdIcG4oOYQPTGtiKPkiHsNlpaHXQkBKICkZEzdFed9
+        5g1gx/rfrkvkEQK5dNyTWvrFYxXQM1/qpVcUbaDmRsICnXxHkDTHvOIo02KjjGE9YYrseq
+        XyjX/1YyhkvDgBo0eMu0fbBEVyf+SbY=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-421-c_NNSagHP6WIwC0tcl5SUQ-1; Tue, 30 Nov 2021 02:48:21 -0500
+X-MC-Unique: c_NNSagHP6WIwC0tcl5SUQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id DFFF91006AA6;
+        Tue, 30 Nov 2021 07:48:19 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 0FBD760C0F;
+        Tue, 30 Nov 2021 07:48:17 +0000 (UTC)
+Message-ID: <9663b7f1584bc53cc4868a6ede5ef785b3380af6.camel@redhat.com>
+Subject: Re: [BUG] hugetlbfs: Fix issue of preallocation of gigantic pages
+ can't work
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Zhenguo Yao <yaozhenguo1@gmail.com>, mike.kravetz@oracle.com,
+        akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Date:   Tue, 30 Nov 2021 09:48:16 +0200
+In-Reply-To: <20211129133803.15653-1-yaozhenguo1@gmail.com>
+References: <20211129133803.15653-1-yaozhenguo1@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 1:27 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> JFYI, when comparing v5.16-rc3[1] to v5.16-rc2[3], the summaries are:
->   - build errors: +4/-8
+On Mon, 2021-11-29 at 21:38 +0800, Zhenguo Yao wrote:
+> Preallocation of gigantic pages can't work bacause of commit:b5389086ad7b
+> (hugetlbfs: extend the definition of hugepages parameter to support node
+> allocation). When nid is NUMA_NO_NODE(-1), alloc_bootmem_huge_page will
+> always return without doing allocation. Fix this by adding more check.
+> 
+> Signed-off-by: Zhenguo Yao <yaozhenguo1@gmail.com>
+> ---
+>  mm/hugetlb.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 60f9b6a9582e..6d1603387914 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -2876,7 +2876,7 @@ int __alloc_bootmem_huge_page(struct hstate *h, int nid)
+>  	struct huge_bootmem_page *m = NULL; /* initialize for clang */
+>  	int nr_nodes, node;
+>  
+> -	if (nid >= nr_online_nodes)
+> +	if (nid != NUMA_NO_NODE && nid >= nr_online_nodes)
+>  		return 0;
+>  	/* do node specific alloc */
+>  	if (nid != NUMA_NO_NODE) {
 
-  + error: arch/sparc/kernel/head_32.o: relocation truncated to fit:
-R_SPARC_WDISP22 against `.init.text':  => (.head.text+0x5100),
-(.head.text+0x5040)
-  + error: arch/sparc/kernel/head_32.o: relocation truncated to fit:
-R_SPARC_WDISP22 against symbol `leon_smp_cpu_startup' defined in .text
-section in arch/sparc/kernel/trampoline_32.o:  => (.init.text+0xa4)
-  + error: arch/sparc/kernel/process_32.o: relocation truncated to
-fit: R_SPARC_WDISP22 against `.text':  => (.fixup+0xc), (.fixup+0x4)
-  + error: arch/sparc/kernel/signal_32.o: relocation truncated to fit:
-R_SPARC_WDISP22 against `.text':  => (.fixup+0x4), (.fixup+0x10),
-(.fixup+0x34), (.fixup+0x1c), (.fixup+0x28)
+Tested, works fine.
 
-sparc64/sparc-allmodconfig
+Thanks!
+Tested-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/d58071a8a76d779eedab38033ae4c821c30295a5/ (all 90 configs)
-> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/136057256686de39cc3a07c2e39ef6bc43003ff6/ (all 90 configs)
+Best regards,
+	Maxim Levitsky
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

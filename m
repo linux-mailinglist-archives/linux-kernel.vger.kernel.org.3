@@ -2,158 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29FC946295D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A4546295E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234819AbhK3BAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 20:00:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        id S235123AbhK3BAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 20:00:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbhK3BAd (ORCPT
+        with ESMTP id S235127AbhK3BAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 20:00:33 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32836C061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:57:15 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id g17so47397661ybe.13
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:57:15 -0800 (PST)
+        Mon, 29 Nov 2021 20:00:39 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B334CC061574
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:57:21 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id x10so23945931ioj.9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:57:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=esRLWzH6dw+Ce7phJ2ONogztplO8dpDdVUer7uLYFyE=;
-        b=U5aJzHs/FlOo0fNLHNpFTCG7aV5AVGzHjOwJv+ZRQZ2UYblO/Xoq68Mh+LgMAMEAwG
-         gwa4zJ90Q4Vp3p//JZbIjVpEVxN22f3h+4+7sxeGO3sWwSmqmkrdz9jnHCSb8YiN2upS
-         D5/Ndr10UjtHbiuh4FI5cWeoCkqsB0aTL44awIBISsM9N3zTXpwRLBVNjjFjIWCBIAR2
-         CqaFqQtCrMACvIkUHE15giu+ir9UH3UZ8bOr0YqtuXy0pXWMKyxt97pf5dNW50HQAd3P
-         Xq4aMkwtelVEamSaY/KLEzVzDqoYGw++6mQuJua5WoTXkJxRUXI/ALyHcOXeHdQOkQOB
-         T1FA==
+        bh=8fPX6fEDokMAHa0Xq8dB5PRCHm3p4md63oJN/gUh8Fc=;
+        b=bR48epEnyOF5GPGqM8bkfVg/PJKA0144qHTXMo/VnKg4NCRNMwKE7gUAZ1aQzugq43
+         +5/RzOeKohlOFNmfp49B1QjBhrpyNqHhfb8lrvcu1kn6gke6m6Re1aiI/YwQfVhwC7wL
+         j9fMWv6M3qtyURb6TkS1s7psU+CirPMSBmE1rlAb1ydD9kLLPfu6jqtMqR3a2r/Puwbv
+         mpYUjJlm6KFKdQqKFDAwgJbLxCVVQU6o15EA3ml1dPPLrbrbDpJ45LdeSFzeCkqfMHVv
+         ETYa1jNhwWyBDXPYrSJ9eT2/xTVdjTLm4ukExmLhXZ3fOt4SRoZz9jYVG16LFCuaRGHo
+         LXWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=esRLWzH6dw+Ce7phJ2ONogztplO8dpDdVUer7uLYFyE=;
-        b=zbqatO+VQoaJjZRSlUCEXmtiAmAM76h/WFFDyT4kAFi0c6t4KQWPawlUU5Di/67tBq
-         kEmz52b4vk8oKt8F2ow+uNxoBNEGltUg9/hwPRnKjTKhczN1aylaQwrpJfk1PhL9E9j8
-         8y4RYYGTaY9j+vYFGq0OddJX7Y7go9JBPP0OOGvw1OohU27+7R2SrPihmXzWgq3Hvpiv
-         rY2blhpms0Eu4uXvHOoHxm4I7l8Abux1dSghDYeH6TwtQfXQmY1L4SI8jspFZmy09IMt
-         qn4epVqxL46EW0krHPNghDE6lp9FGEbF2tAE2zklybmI3gyoDy8OiKTHkAXWHhmh0v8M
-         6Duw==
-X-Gm-Message-State: AOAM530OtMLln6QRVoFSlo/FL7AmmnsilwE4TyF11HRTY41Gom4k9PS5
-        YZO+qWO7RBF2fTSH3GAfwYok/PvqZmIr8vI9ZTtMmg==
-X-Google-Smtp-Source: ABdhPJxBtrnBwZDK0SfMN9ZP26BpdgE0OykhJRvFEkCn6qO1fburjBb59wkMhZpu1UbE5WIus+YADqwKUV0GYHNYlNY=
-X-Received: by 2002:a25:d003:: with SMTP id h3mr33831953ybg.184.1638233834133;
- Mon, 29 Nov 2021 16:57:14 -0800 (PST)
+        bh=8fPX6fEDokMAHa0Xq8dB5PRCHm3p4md63oJN/gUh8Fc=;
+        b=bKW/Hovcy7G9NFbwPVkjiNFxARROQGnKBgW+qmL6uyJOU1a1sw9XfVNtvbmu4Khraj
+         0fB97TbE9NwTKh65R7tFcA8AeV0MGcasvG25/IUZpI+CTqzXVEB/PViTrw8nO25S36Wk
+         mq7v3USYSUtzJq40idnfROjLvWYsuGU5DD7vgCGvvV22Rfsr5qmLNhYCioDZW7BQqzs4
+         4Nj4dr/PYjIWn5v99ReM8EpGyyMIDvcB3KzV/0qk72dbJjcTqVwcAons2XK8M2EB8oRr
+         xdk8md3sLirijyIyCkAEUZ4eBEOL30dSZY14hsRMFt+2m9v58P0CXjvYJaDEzpCka7S5
+         nH2g==
+X-Gm-Message-State: AOAM530Bz/mZWl/iC/MqHNz8MDMY+Br/sHSPYn8P4GE+FFyI7EouNb8B
+        5tq9qm0JNzD4KFezGb+RdH+kcoysoYBE6Hmo4jveYpRgnVc=
+X-Google-Smtp-Source: ABdhPJx8VvcQGvHhKDT/IquJvyTs2niIV5Cq0Lu+A/ndipu17g6Zdh4+YwRcOBjh0wigabZUziSSKRYSeXO7jSfCVIM=
+X-Received: by 2002:a5d:8e07:: with SMTP id e7mr61561164iod.148.1638233841166;
+ Mon, 29 Nov 2021 16:57:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20211113012234.1443009-1-rananta@google.com> <20211113012234.1443009-2-rananta@google.com>
- <20211127131628.iihianybqbeyjdbg@gator.home>
-In-Reply-To: <20211127131628.iihianybqbeyjdbg@gator.home>
-From:   Raghavendra Rao Ananta <rananta@google.com>
-Date:   Mon, 29 Nov 2021 16:57:03 -0800
-Message-ID: <CAJHc60yfmkPxchCgLT7FMabcmodYLhcJJDiJA3EDiS2nMSHQgg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 01/11] KVM: arm64: Factor out firmware register
- handling from psci.c
-To:     Andrew Jones <drjones@redhat.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Peter Shier <pshier@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20211130000612.591368-1-frederic@kernel.org> <20211130000612.591368-3-frederic@kernel.org>
+In-Reply-To: <20211130000612.591368-3-frederic@kernel.org>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Tue, 30 Nov 2021 08:57:09 +0800
+Message-ID: <CAJhGHyDp+NN_QuaChU-_vdpR+aRj_OOZTMto6kWfOeJ2cNWFUQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/2] workqueue: Fix unbind_workers() VS
+ wq_worker_sleeping() race
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     Tejun Heo <tj@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 5:16 AM Andrew Jones <drjones@redhat.com> wrote:
+On Tue, Nov 30, 2021 at 8:06 AM Frederic Weisbecker <frederic@kernel.org> wrote:
 >
-> On Sat, Nov 13, 2021 at 01:22:24AM +0000, Raghavendra Rao Ananta wrote:
-> > Common hypercall firmware register handing is currently employed
-> > by psci.c. Since the upcoming patches add more of these registers,
-> > it's better to move the generic handling to hypercall.c for a
-> > cleaner presentation.
-> >
-> > While we are at it, collect all the firmware registers under
-> > fw_reg_ids[] to help implement kvm_arm_get_fw_num_regs() and
-> > kvm_arm_copy_fw_reg_indices() in a generic way.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> > ---
-> >  arch/arm64/kvm/guest.c       |   2 +-
-> >  arch/arm64/kvm/hypercalls.c  | 170 +++++++++++++++++++++++++++++++++++
-> >  arch/arm64/kvm/psci.c        | 166 ----------------------------------
-> >  include/kvm/arm_hypercalls.h |   7 ++
-> >  include/kvm/arm_psci.h       |   7 --
-> >  5 files changed, 178 insertions(+), 174 deletions(-)
-> >
-> > diff --git a/arch/arm64/kvm/guest.c b/arch/arm64/kvm/guest.c
-> > index 5ce26bedf23c..625f97f7b304 100644
-> > --- a/arch/arm64/kvm/guest.c
-> > +++ b/arch/arm64/kvm/guest.c
-> > @@ -18,7 +18,7 @@
-> >  #include <linux/string.h>
-> >  #include <linux/vmalloc.h>
-> >  #include <linux/fs.h>
-> > -#include <kvm/arm_psci.h>
-> > +#include <kvm/arm_hypercalls.h>
-> >  #include <asm/cputype.h>
-> >  #include <linux/uaccess.h>
-> >  #include <asm/fpsimd.h>
-> > diff --git a/arch/arm64/kvm/hypercalls.c b/arch/arm64/kvm/hypercalls.c
-> > index 30da78f72b3b..9e136d91b470 100644
-> > --- a/arch/arm64/kvm/hypercalls.c
-> > +++ b/arch/arm64/kvm/hypercalls.c
-> > @@ -146,3 +146,173 @@ int kvm_hvc_call_handler(struct kvm_vcpu *vcpu)
-> >       smccc_set_retval(vcpu, val[0], val[1], val[2], val[3]);
-> >       return 1;
-> >  }
-> > +
-> > +static const u64 fw_reg_ids[] = {
-> > +     KVM_REG_ARM_PSCI_VERSION,
-> > +     KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_1,
-> > +     KVM_REG_ARM_SMCCC_ARCH_WORKAROUND_2,
-> > +};
-> > +
-> > +int kvm_arm_get_fw_num_regs(struct kvm_vcpu *vcpu)
-> > +{
-> > +     return ARRAY_SIZE(fw_reg_ids);
-> > +}
-> > +
-> > +int kvm_arm_copy_fw_reg_indices(struct kvm_vcpu *vcpu, u64 __user *uindices)
-> > +{
-> > +     int i;
-> > +
-> > +     for (i = 0; i < ARRAY_SIZE(fw_reg_ids); i++) {
-> > +             if (put_user(fw_reg_ids[i], uindices))
+> At CPU-hotplug time, unbind_workers() may preempt a worker while it is
+> going to sleep. In that case the following scenario can happen:
 >
-> This is missing the ++ on uindices, so it just writes the same offset
-> three times.
+>     unbind_workers()                     wq_worker_sleeping()
+>     --------------                      -------------------
+>                                       if (worker->flags & WORKER_NOT_RUNNING)
+>                                           return;
+>                                       //PREEMPTED by unbind_workers
+>     worker->flags |= WORKER_UNBOUND;
+>     [...]
+>     atomic_set(&pool->nr_running, 0);
+>     //resume to worker
+>                                        atomic_dec_and_test(&pool->nr_running);
 >
-Thanks for catching this! I believe I realized this later and
-corrected it in patch-04/11 of the series and missed it here.
-I'll fix it here as well.
+> After unbind_worker() resets pool->nr_running, the value is expected to
+> remain 0 until the pool ever gets rebound in case cpu_up() is called on
+> the target CPU in the future. But here the race leaves pool->nr_running
+> with a value of -1, triggering the following warning when the worker goes
+> idle:
+>
+>         WARNING: CPU: 3 PID: 34 at kernel/workqueue.c:1823 worker_enter_idle+0x95/0xc0
+>         Modules linked in:
+>         CPU: 3 PID: 34 Comm: kworker/3:0 Not tainted 5.16.0-rc1+ #34
+>         Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.12.0-59-gc9ba527-rebuilt.opensuse.org 04/01/2014
+>         Workqueue:  0x0 (rcu_par_gp)
+>         RIP: 0010:worker_enter_idle+0x95/0xc0
+>         Code: 04 85 f8 ff ff ff 39 c1 7f 09 48 8b 43 50 48 85 c0 74 1b 83 e2 04 75 99 8b 43 34 39 43 30 75 91 8b 83 00 03 00 00 85 c0 74 87 <0f> 0b 5b c3 48 8b 35 70 f1 37 01 48 8d 7b 48 48 81 c6 e0 93  0
+>         RSP: 0000:ffff9b7680277ed0 EFLAGS: 00010086
+>         RAX: 00000000ffffffff RBX: ffff93465eae9c00 RCX: 0000000000000000
+>         RDX: 0000000000000000 RSI: ffff9346418a0000 RDI: ffff934641057140
+>         RBP: ffff934641057170 R08: 0000000000000001 R09: ffff9346418a0080
+>         R10: ffff9b768027fdf0 R11: 0000000000002400 R12: ffff93465eae9c20
+>         R13: ffff93465eae9c20 R14: ffff93465eae9c70 R15: ffff934641057140
+>         FS:  0000000000000000(0000) GS:ffff93465eac0000(0000) knlGS:0000000000000000
+>         CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>         CR2: 0000000000000000 CR3: 000000001cc0c000 CR4: 00000000000006e0
+>         DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>         DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>         Call Trace:
+>           <TASK>
+>           worker_thread+0x89/0x3d0
+>           ? process_one_work+0x400/0x400
+>           kthread+0x162/0x190
+>           ? set_kthread_struct+0x40/0x40
+>           ret_from_fork+0x22/0x30
+>           </TASK>
+>
+> Also due to this incorrect "nr_running == -1", all sorts of hazards can
+> happen, starting with queued works being ignored because no workers are
+> awaken at insert_work() time.
+>
+> Fix this with checking again the worker flags while pool->lock is locked.
+>
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Paul E. McKenney <paulmck@kernel.org>
 
-> > +                     return -EFAULT;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
->
-> I assume the rest of the patch is just a cut+paste move of code.
->
-That's right.
 
-Regards,
-Raghavendra
+Fixes: b945efcdd07d ("sched: Remove pointless preemption disable in
+sched_submit_work()")
+Reviewed-by: Lai Jiangshan <jiangshanlai@gmail.com>
 
-> Thanks,
-> drew
+It was my fault for not reviewing b945efcdd07d carefully enough.
+
+> ---
+>  kernel/workqueue.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 5094573e8b45..5557d19ea81c 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -912,6 +912,16 @@ void wq_worker_sleeping(struct task_struct *task)
+>         worker->sleeping = 1;
+>         raw_spin_lock_irq(&pool->lock);
+>
+> +       /*
+> +        * Recheck in case unbind_workers() preempted us. We don't
+> +        * want to decrement nr_running after the worker is unbound
+> +        * and nr_running has been reset.
+> +        */
+> +       if (worker->flags & WORKER_NOT_RUNNING) {
+> +               raw_spin_unlock_irq(&pool->lock);
+> +               return;
+> +       }
+> +
+>         /*
+>          * The counterpart of the following dec_and_test, implied mb,
+>          * worklist not empty test sequence is in insert_work().
+> --
+> 2.25.1
 >

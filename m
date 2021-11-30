@@ -2,158 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62323462E33
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:05:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 274DA462E35
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:05:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239428AbhK3IIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239399AbhK3IIW (ORCPT
+        id S239437AbhK3II4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:08:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:44862 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239430AbhK3IIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:08:22 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7AEC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:05:03 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id v23so14705903pjr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=JZnXanF1JncK0+V5i9tCUqeQaS1j9qi6fWSj36F2/GE=;
-        b=vt6p/YYS2aHI2KSFoCQuxryGlbAA50u6Oeyv1Xoz/wN2/lWbP4IZYRQxrJQOUOPXeU
-         j9Z5B0PxWbkvBFfysdCWstkw7fNIyUdlNzfBGw/MbFTD7iXVS0GAQ5NVaS2+28XtSya9
-         k+er8+AzB0KKGaBgXy79lYEAAqqgTDTB2XhYRbwcRfx3oYjk6n812HpZ2ERG6v6K2Vc7
-         BNmTLmR4ogoolBnH8bPvXNE8YdlU794hYnWhBzG0qWu+1NqssEW+mACW/xomImUMw/ZY
-         kWC61cOk1iAIWIiuLZk4Iyl2+UYI6hZJJun57PJ5Kt4+4S1X8gqdZ95/+NYENJifxJcY
-         nhvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=JZnXanF1JncK0+V5i9tCUqeQaS1j9qi6fWSj36F2/GE=;
-        b=1Rvd0WBBxzxLYYJEuR1onBeR3CL/OH86QK+gApztX037YoBnvXibOvK8hsfW2VFUvi
-         wr8AjNfAg4cOBviM8Tn6zUqi8Vr7gpEXQEQrvvU7yqNsxNrTFCD57VqL9nXvva8Me3Mu
-         J+ZGP42L/qklunmCNhJBq0reNGwTRIZjzWc4HOwxrJ4k0bcV+wm0iA/yjK49t2/g+X2r
-         H/e2SDSheAzzGaVxzXJ9G0VW28HlEqBrdYebgFdubxmozAm12e37em6HnUcVwTpJhCcN
-         8R9SzAvAWhChjSk4KGuVEIio6gWp4huSOqlniRceQcy7AylwPL7cCyX4eLiL1KuYOfKY
-         Ls7Q==
-X-Gm-Message-State: AOAM5335lnJxEW7n9B1mq7Or1t+ETqi6zsqUN7DQfFBFFBIQiODuBHrQ
-        Qcae7SBTzUaBYVeu9ydy3J8D
-X-Google-Smtp-Source: ABdhPJzbc6VhIs6rZFW+FJ5RNuSh+cTm0jqcZ+453ict2PMd9f7Hf1zV7t5Qk99/vuZK4OG3BF3+Cw==
-X-Received: by 2002:a17:90b:1b4a:: with SMTP id nv10mr4169969pjb.87.1638259502730;
-        Tue, 30 Nov 2021 00:05:02 -0800 (PST)
-Received: from thinkpad ([202.21.42.3])
-        by smtp.gmail.com with ESMTPSA id lb4sm1753541pjb.18.2021.11.30.00.04.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 00:05:02 -0800 (PST)
-Date:   Tue, 30 Nov 2021 13:34:56 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
-Cc:     lorenzo.pieralisi@arm.com, bhelgaas@google.com,
-        svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2] PCI: qcom: Use __be16 for catching cpu_to_be16()
- return instead of u16
-Message-ID: <20211130080456.GE205712@thinkpad>
-References: <20211130064215.207393-1-manivannan.sadhasivam@linaro.org>
- <YaXSoLpIfrTh81/+@rocinante>
+        Tue, 30 Nov 2021 03:08:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638259535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lpKsajL2rAdqP1S5lo61cmSB7/97AzgWyzs3V8WwZFs=;
+        b=SgAP0EVbtdpiuCkKg/aNN3ZTd55EsI/mXuCX/dk5majDLZ1V/IDd6IWYYMGHeLra6y6zmB
+        Mx9KG5dN2GC1pDDcNuUNhPOKqRGVHUsGFxukQ7qBleSooVnhZI4aNW4+oRKl4X4oHP5mp3
+        fLEp4/F50UhA+049v04ETCHsihtIoEA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-209-Gl3knl_qNzSokHnAp1G4FA-1; Tue, 30 Nov 2021 03:05:29 -0500
+X-MC-Unique: Gl3knl_qNzSokHnAp1G4FA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6165D100CC84;
+        Tue, 30 Nov 2021 08:05:28 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 98FC760C81;
+        Tue, 30 Nov 2021 08:05:26 +0000 (UTC)
+Message-ID: <7632bb4fcc3e6c0e7b610f4c4c310fad19822e94.camel@redhat.com>
+Subject: Re: [PATCH 4/4] KVM: x86: Use a stable condition around all VT-d PI
+ paths
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, stable@vger.kernel.org
+Date:   Tue, 30 Nov 2021 10:05:25 +0200
+In-Reply-To: <20211123004311.2954158-5-pbonzini@redhat.com>
+References: <20211123004311.2954158-1-pbonzini@redhat.com>
+         <20211123004311.2954158-5-pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YaXSoLpIfrTh81/+@rocinante>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+On Mon, 2021-11-22 at 19:43 -0500, Paolo Bonzini wrote:
+> Currently, checks for whether VT-d PI can be used refer to the current
+> status of the feature in the current vCPU; or they more or less pick
+> vCPU 0 in case a specific vCPU is not available.
+> 
+> However, these checks do not attempt to synchronize with changes to
+> the IRTE.  In particular, there is no path that updates the IRTE when
+> APICv is re-activated on vCPU 0; and there is no path to wakeup a CPU
+> that has APICv disabled, if the wakeup occurs because of an IRTE
+> that points to a posted interrupt.
+> 
+> To fix this, always go through the VT-d PI path as long as there are
+> assigned devices and APICv is available on both the host and the VM side.
+> Since the relevant condition was copied over three times, take the hint
+> and factor it into a separate function.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Cc: stable@vger.kernel.org
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>  arch/x86/kvm/vmx/posted_intr.c | 20 +++++++++++---------
+>  1 file changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/posted_intr.c b/arch/x86/kvm/vmx/posted_intr.c
+> index 5f81ef092bd4..1c94783b5a54 100644
+> --- a/arch/x86/kvm/vmx/posted_intr.c
+> +++ b/arch/x86/kvm/vmx/posted_intr.c
+> @@ -5,6 +5,7 @@
+>  #include <asm/cpu.h>
+>  
+>  #include "lapic.h"
+> +#include "irq.h"
+>  #include "posted_intr.h"
+>  #include "trace.h"
+>  #include "vmx.h"
+> @@ -77,13 +78,18 @@ void vmx_vcpu_pi_load(struct kvm_vcpu *vcpu, int cpu)
+>  		pi_set_on(pi_desc);
+>  }
+>  
+> +static bool vmx_can_use_vtd_pi(struct kvm *kvm)
+> +{
+> +	return irqchip_in_kernel(kvm) && enable_apicv &&
+> +		kvm_arch_has_assigned_device(kvm) &&
+> +		irq_remapping_cap(IRQ_POSTING_CAP);
+> +}
+> +
+>  void vmx_vcpu_pi_put(struct kvm_vcpu *vcpu)
+>  {
+>  	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
+>  
+> -	if (!kvm_arch_has_assigned_device(vcpu->kvm) ||
+> -		!irq_remapping_cap(IRQ_POSTING_CAP)  ||
+> -		!kvm_vcpu_apicv_active(vcpu))
+> +	if (!vmx_can_use_vtd_pi(vcpu->kvm))
+>  		return;
+>  
+>  	/* Set SN when the vCPU is preempted */
+> @@ -141,9 +147,7 @@ int pi_pre_block(struct kvm_vcpu *vcpu)
+>  	struct pi_desc old, new;
+>  	struct pi_desc *pi_desc = vcpu_to_pi_desc(vcpu);
+>  
+> -	if (!kvm_arch_has_assigned_device(vcpu->kvm) ||
+> -		!irq_remapping_cap(IRQ_POSTING_CAP)  ||
+> -		!kvm_vcpu_apicv_active(vcpu))
+> +	if (!vmx_can_use_vtd_pi(vcpu->kvm))
+>  		return 0;
+>  
+>  	WARN_ON(irqs_disabled());
+> @@ -270,9 +274,7 @@ int pi_update_irte(struct kvm *kvm, unsigned int host_irq, uint32_t guest_irq,
+>  	struct vcpu_data vcpu_info;
+>  	int idx, ret = 0;
+>  
+> -	if (!kvm_arch_has_assigned_device(kvm) ||
+> -	    !irq_remapping_cap(IRQ_POSTING_CAP) ||
+> -	    !kvm_vcpu_apicv_active(kvm->vcpus[0]))
+> +	if (!vmx_can_use_vtd_pi(kvm))
+>  		return 0;
+>  
+>  	idx = srcu_read_lock(&kvm->irq_srcu);
 
-On Tue, Nov 30, 2021 at 08:28:32AM +0100, Krzysztof Wilczyński wrote:
-> Hi Manivannan,
-> 
-> Thank you for sending the patch over!  Much appreciated!
-> 
-> A small nitpick, thus feel free to ignore it, of course: if I may, I would
-> suggest the following subject:
-> 
->   PCI: qcom: Use __be16 type to store return value from cpu_to_be16()
->
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Will do
- 
-> Or something along the lines.
-> 
-> > cpu_to_be16() returns __be16 value but the driver uses u16 and that's
-> > incorrect. Fix it by using __be16 as the datatype of bdf_be variable.
-> 
-> It would be "data type" in the above.
-> 
-> Not really a requirement to do so, but you could include the actual
-> warning, as sometimes this is useful for reference later, as per:
-> 
->   drivers/pci/controller/dwc/pcie-qcom.c:1346:30: warning: incorrect type in initializer (different base types)
->   drivers/pci/controller/dwc/pcie-qcom.c:1346:30:    expected unsigned short [usertype] bdf_be
->   drivers/pci/controller/dwc/pcie-qcom.c:1346:30:    got restricted __be16 [usertype]
-> 
+Best regards,
+	Maxim Levitsky
 
-I usually do but as per Bjorn's comment I thought it is not recommended for PCI
-subsystem (or maybe I misread his comments). Will add.
-
-> > @@ -1343,7 +1343,7 @@ static int qcom_pcie_config_sid_sm8250(struct qcom_pcie *pcie)
-> >  
-> >  	/* Look for an available entry to hold the mapping */
-> >  	for (i = 0; i < nr_map; i++) {
-> > -		u16 bdf_be = cpu_to_be16(map[i].bdf);
-> > +		__be16 bdf_be = cpu_to_be16(map[i].bdf);
-> >  		u32 val;
-> >  		u8 hash;
-> 
-> Thank you!
-> 
-> Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
-> 
-> Also, since I have your attention, it seems we have a number of unused
-> macros in the qcom driver, as per:
-> 
->   drivers/pci/controller/dwc/pcie-qcom.c:#define PCIE20_PARF_BDF_TRANSLATE_CFG            0x24C
->   drivers/pci/controller/dwc/pcie-qcom.c:#define PCIE20_PARF_SID_OFFSET                   0x234
->   drivers/pci/controller/dwc/pcie-qcom.c:#define PCIE20_PARF_SLV_ADDR_SPACE_SIZE          0x16C
-> 
-> And also in the qcom-ep driver, as per:
-> 
-
-These defines are helpful for someone who wants to add some functionality or
-even bug fix in the future. Since these controllers are not publically
-documented, having these definitions helps a lot.
-
-Thanks,
-Mani
-
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_BRIDGE_FLUSH_N           BIT(12)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_MHI_A7                   BIT(7)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_MHI_Q6                   BIT(6)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_SLV_ADDR_SPACE_SIZE              0x358
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_PLS_PME                  BIT(17)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_SLV_ADDR_MSB_CTRL                        0x2c0
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_DEBUG                    BIT(4)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_L1SUB_TIMEOUT            BIT(9)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_DBI_BASE_ADDR_HI                 0x354
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_ATU_BASE_ADDR                    0x634
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_SLV_ADDR_SPACE_SIZE_HI           0x35c
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_LTR                      BIT(5)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_DBI_BASE_ADDR                    0x350
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_SRIS_MODE                                0x644
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_MMIO_WRITE                       BIT(10)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_PLS_ERR                  BIT(15)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_AER_LEGACY                       BIT(14)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_CFG_WRITE                        BIT(11)
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_ATU_BASE_ADDR_HI                 0x638
->   drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_PME_LEGACY                       BIT(16)
-> 
-> Are these needed, or would it be fine to drop these?
-> 
-> 	Krzysztof

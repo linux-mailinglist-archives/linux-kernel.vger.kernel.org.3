@@ -2,68 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A889C46304C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9C6463057
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 10:55:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240532AbhK3Jz6 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 Nov 2021 04:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235524AbhK3Jz5 (ORCPT
+        id S235759AbhK3J6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 04:58:18 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:58146 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235755AbhK3J6N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 04:55:57 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4C8C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:52:38 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mrzoB-0003kK-0n; Tue, 30 Nov 2021 10:52:19 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1mrzo9-0003oR-5R; Tue, 30 Nov 2021 10:52:17 +0100
-Message-ID: <e28a5d5de9b940717e6444f019eab63ab1bb0b75.camel@pengutronix.de>
-Subject: Re: [v13 2/2] pwm: Add Aspeed ast2600 PWM support
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
-        linux@roeck-us.net, robh+dt@kernel.org, joel@jms.id.au,
-        andrew@aj.id.au, lee.jones@linaro.org, thierry.reding@gmail.com,
-        u.kleine-koenig@pengutronix.de, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org
-Cc:     BMC-SW@aspeedtech.com
-Date:   Tue, 30 Nov 2021 10:52:17 +0100
-In-Reply-To: <20211129064329.27006-3-billy_tsai@aspeedtech.com>
-References: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
-         <20211129064329.27006-3-billy_tsai@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        Tue, 30 Nov 2021 04:58:13 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3Hd92kZsz9vBtN
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:54:53 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 1Z5ZRafUUG4w for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 03:54:53 -0600 (CST)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3Hd90fkVz9vBtK
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 03:54:53 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3Hd90fkVz9vBtK
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3Hd90fkVz9vBtK
+Received: by mail-pj1-f71.google.com with SMTP id o4-20020a17090a3d4400b001a66f10df6cso6656232pjf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 01:54:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8j2IMMmZh3mhChTW+5ogwreaS6weI3fhZ/Z5pd7AGBg=;
+        b=FMhc1rlTm/IViESaAtBZ+npF0jJTpxJuTw7HU8LxFn9REZlDSCmqb+hvzeR0mxjL0G
+         7+SfrvvS7eEee3J66f0CyIl14d4u15dSFqRcUDUJ05n5EQQl1Fx5XUhbsH5Ep2LPv+yH
+         yHkDmV138czSFtjMnPcZgiozuAIskHN5Ht+UH1mG55785eqtYbrhT/mtkUEWagePtEzS
+         ZU0o5nF8SXaHItSL1bBcqZH3Iot6FHBfcKqael2maPR/HXcJ58RxLNVstlI1QI+hapxr
+         7sUXow5z01JfeVCFLinwrrl+leW1+Y1KbBUu2izTp0jUyjvGnyef6mgJxRI6Vv6wD0rd
+         eaTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8j2IMMmZh3mhChTW+5ogwreaS6weI3fhZ/Z5pd7AGBg=;
+        b=P2LKwCJWHwpmVhf232h+6F1IWAoA1Z6xmL/qx2B2fviPSe1i/9E9vuJY3DRFIjZ1Q2
+         WH+fgmBaClfnPTs6UM6XsmEsHna0QE0pQONcGmoOpDc4UT79hmjpVVEJZmJ8lB1lfuEb
+         VK3fPMNSrbWcSbRotox8rx8EKg3FGp9hIB0HYwKxHGsH/RL+fEecqyOzqaRkblq6RtrR
+         iJjMFHLjZXpUe/tlYVVXKA4urP3XR/wjo35JYQV0s2psLuqdz0i0lxHquN2jfYdihLLv
+         Zke4IjCv7AnvTyBTho5w5aorpkcC/VkTpwf0W2qD/lyrXu4DTQhUhIX428jBa3F22KsW
+         WVQQ==
+X-Gm-Message-State: AOAM5332utIq6oP8CXUf4ScQDDZjCzuTZH4/smpI6CglV7b3P/6pCfFp
+        0S7pzQoNQDOXQgnXTVe2b6RXqI3lcrxxd5d8d0BIFq7/T44pit9jWvv25osPdl9Wq834EWwMIT9
+        ye6f4PrDxoVFPYyC/OCrNv1l0OfL0
+X-Received: by 2002:a17:90a:df96:: with SMTP id p22mr4731675pjv.129.1638266092404;
+        Tue, 30 Nov 2021 01:54:52 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzD2Ed1coxhmeojB7a08fyyA3nzo3B45XUiYIE5WseZnbq6NvpuCZVBmmjco4vlGCpgh83KdA==
+X-Received: by 2002:a17:90a:df96:: with SMTP id p22mr4731651pjv.129.1638266092206;
+        Tue, 30 Nov 2021 01:54:52 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id d19sm20459573pfv.199.2021.11.30.01.54.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 01:54:51 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        Henry Chen <henryc.chen@mediatek.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] clk: mediatek: mt8135: Fix a NULL pointer dereference in mtk_infrasys_init()
+Date:   Tue, 30 Nov 2021 17:54:44 +0800
+Message-Id: <20211130095446.97423-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2021-11-29 at 14:43 +0800, Billy Tsai wrote:
-[...]
-> +	ret = clk_prepare_enable(priv->clk);
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Couldn't enable clock\n");
-> +
-> +	ret = reset_control_deassert(priv->reset);
-> +	if (ret) {
-> +		dev_err_probe(dev, ret, "Couldn't deassert reset control\n");
-> +		goto err_disable_clk;
-> +	}
+In mtk_infrasys_init(), the return value of mtk_alloc_clk_data() is
+assigned to clk_data, and there is a dereference of it in the parameter
+of clk_prepare_enable(), which could lead to a NULL pointer dereference
+on failure of mtk_alloc_clk_data().
 
-Is there any reason to keep the clocks running and the controller out of
-reset while the PWM outputs are disabled?
+Fix this bug by adding a check of clk_data.
 
-regards
-Philipp
+Another way to fix this bug is to add a check of clk_data in
+clk_prepare_enable(), which may solve many similar bugs but could
+cause potential problems to previously correct cases as the API is changed.
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_COMMON_CLK_MT8135=y show no new warnings, and our
+static analyzer no longer warns about this code.
+
+Fixes: a8aede794843 ("clk: mediatek: Add basic clocks for Mediatek MT8135.")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/clk/mediatek/clk-mt8135.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/clk/mediatek/clk-mt8135.c b/drivers/clk/mediatek/clk-mt8135.c
+index 9b4b645aea99..b4e20bd7680e 100644
+--- a/drivers/clk/mediatek/clk-mt8135.c
++++ b/drivers/clk/mediatek/clk-mt8135.c
+@@ -547,7 +547,11 @@ static void __init mtk_infrasys_init(struct device_node *node)
+ 	int r;
+ 
+ 	clk_data = mtk_alloc_clk_data(CLK_INFRA_NR_CLK);
+-
++	if (!clk_data) {
++		pr_err("%s(): could not register clock provider: %d\n",
++			__func__, -ENOMEM);
++		return;
++	}
+ 	mtk_clk_register_gates(node, infra_clks, ARRAY_SIZE(infra_clks),
+ 						clk_data);
+ 
+-- 
+2.25.1
+

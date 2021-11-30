@@ -2,227 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC0046345C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:34:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F21F463464
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbhK3Mha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:37:30 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:52670 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbhK3Mh0 (ORCPT
+        id S241604AbhK3MiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:38:07 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:33880 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229638AbhK3MiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:37:26 -0500
-Received: from [IPv6:2a01:e0a:120:3210:b422:9841:4afb:11b5] (unknown [IPv6:2a01:e0a:120:3210:b422:9841:4afb:11b5])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Tue, 30 Nov 2021 07:38:02 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id F38FA1F4500C;
-        Tue, 30 Nov 2021 12:34:02 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638275643; bh=QqCRwQ2875SMqv/AolhMllnqBqyumXGxkjHr+hKDVS4=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=SZv1pYFCv6I+Dv3ozDVt5uFZcr7IZWZ4XeRoUyUMIu/ya8qzbMH+OqsGwWlocMyer
-         M7/Hrb1A/4u6vSeEBrdlsCP/7G+yUagSHtd3jRIlMf6kSiEEPFBadpWQrLKrbzyi8p
-         YXNRs9cz+fF3JWny8VN6FeLwlXvlEe3xgdEnClYQeUat17GBZpZV6nUteVZGmJZA+f
-         /K6CMe0H8I7epGn2tNPJC5U583cLPxILjslPRTHwuF7CwFf63mRzp47ZSzbhVZ0pOP
-         3Itfn5ShA2oXAjcuNcYpDQ59v30KaQCErVpQrqWZIErawQcftI6/f9O7YHL1y4ljwZ
-         EDQZOosbH/Ovw==
-Subject: Re: [PATCH v9 02/13] dt-bindings: media: nxp, imx8mq-vpu: Update the
- bindings for G2 support
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Ezequiel Garcia <ezequiel@collabora.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        mripard@kernel.org, paul.kocialkowski@bootlin.com,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@siol.net>,
-        hverkuil-cisco@xs4all.nl, emil.l.velikov@gmail.com,
-        Sascha Hauer <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devel@driverdev.osuosl.org, kernel@collabora.com,
-        Chris Healy <cphealy@gmail.com>, Rob Herring <robh@kernel.org>
-References: <20210407073534.376722-1-benjamin.gaignard@collabora.com>
- <20210407073534.376722-3-benjamin.gaignard@collabora.com>
- <CAHCN7x+HOMoVNq-swqA2p3ddGKft_8QkB2qm00-CN8Dujaw52Q@mail.gmail.com>
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Message-ID: <f6754878-50bf-8873-ac4b-ea54a5074e23@collabora.com>
-Date:   Tue, 30 Nov 2021 13:34:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5E19F1FD59;
+        Tue, 30 Nov 2021 12:34:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1638275682; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fpzJzpUtUcBoti6u4Vx5MyjLRfI5xfFsHhW6Dr3Lcnw=;
+        b=DpHiyHM2XViEBM4KfBrpR8vi43+dHuXUoqUN4Rz/0PdviP2Nz0MoV67Nf4aTOu1QB3ejlj
+        noNin37l/OCjegAPe8Y+ovsl+Qrdulwj8QCMsSubl1mVOV1P5779H/HGe6/tzwbM/tiIvv
+        KTv+1aYyn8zp9qe6VkgTMGEnQrbB7Ko=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1638275682;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fpzJzpUtUcBoti6u4Vx5MyjLRfI5xfFsHhW6Dr3Lcnw=;
+        b=tIuNx6Tqh3yW0Dk8rpvwsrucH0KSqz7uF1jKvl52jXl6zJybsDC1GYMxlonxhSkman64bb
+        4zfb9pA7l6tRziBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1C1D613D04;
+        Tue, 30 Nov 2021 12:34:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 6qowBmIapmGXeQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 30 Nov 2021 12:34:42 +0000
+Message-ID: <37053057-1aa0-6ed3-7c84-c3eeb26cbcf1@suse.cz>
+Date:   Tue, 30 Nov 2021 13:34:41 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAHCN7x+HOMoVNq-swqA2p3ddGKft_8QkB2qm00-CN8Dujaw52Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] lib/stackdepot: always do filter_irq_stacks() in
+ stack_depot_save()
 Content-Language: en-US
+To:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vijayanand Jitta <vjitta@codeaurora.org>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Imran Khan <imran.f.khan@oracle.com>,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org, Chris Wilson <chris@chris-wilson.co.uk>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Mika Kuoppala <mika.kuoppala@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org
+References: <20211130095727.2378739-1-elver@google.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20211130095727.2378739-1-elver@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/30/21 10:57, Marco Elver wrote:
+> The non-interrupt portion of interrupt stack traces before interrupt
+> entry is usually arbitrary. Therefore, saving stack traces of interrupts
+> (that include entries before interrupt entry) to stack depot leads to
+> unbounded stackdepot growth.
+> 
+> As such, use of filter_irq_stacks() is a requirement to ensure
+> stackdepot can efficiently deduplicate interrupt stacks.
+> 
+> Looking through all current users of stack_depot_save(), none (except
+> KASAN) pass the stack trace through filter_irq_stacks() before passing
+> it on to stack_depot_save().
+> 
+> Rather than adding filter_irq_stacks() to all current users of
+> stack_depot_save(), it became clear that stack_depot_save() should
+> simply do filter_irq_stacks().
 
-Le 29/11/2021 à 21:13, Adam Ford a écrit :
-> On Wed, Apr 7, 2021 at 2:37 AM Benjamin Gaignard
-> <benjamin.gaignard@collabora.com> wrote:
->> Introducing the G2 hevc video decoder requires modifications of the bindings to allow
->> one node per VPU.
->>
->> VPUs share one hardware control block which is provided as a phandle on
->> a syscon.
->> Each node has now one reg and one interrupt.
->> Add a compatible for G2 hardware block: nxp,imx8mq-vpu-g2.
->>
->> To be compatible with older DT the driver is still capable to use the 'ctrl'
->> reg-name even if it is deprecated now.
->>
->> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-> I need to edit the yaml file to add support the imx8mm, but it doesn't
-> appear that this series has gone anywhere.  I know there is still some
-> waiting on the vpu-blk-ctrl driver, but it seems like the 8mq could
-> split the codecs out using syscon in place of the blk-ctrl until that
-> driver is available.  If that doesn't work, I might have to introduce
-> a separate yaml file for mini which could be somehow merged with the
-> 8mq in the future.  I am just not sure which way to go right now.
+Agree.
 
-To summarize Lucas a have a branch here: https://git.pengutronix.de/cgit/lst/linux/log/?h=imx8mq-vpu-blk-ctrl
-where he try to enable blk-ctrl for imx6mq, it is working for G1 but not for G2.
+> Signed-off-by: Marco Elver <elver@google.com>
 
-You can find the thread about that here:
-https://www.spinics.net/lists/devicetree/msg450831.html
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-Regards,
-Benjamin
+Thanks.
 
->
-> adam
->> ---
->> version 9:
->>   - Corrections in commit message
->>
->> version 7:
->>   - Add Rob and Philipp reviewed-by tag
->>   - Change syscon phandle name to nxp,imx8m-vpu-ctrl (remove 'q' to be
->>     usable for iMX8MM too)
->>
->> version 5:
->> - This version doesn't break the backward compatibilty between kernel
->>    and DT.
->>
->>   .../bindings/media/nxp,imx8mq-vpu.yaml        | 53 ++++++++++++-------
->>   1 file changed, 34 insertions(+), 19 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
->> index 762be3f96ce9..18e7d40a5f24 100644
->> --- a/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
->> +++ b/Documentation/devicetree/bindings/media/nxp,imx8mq-vpu.yaml
->> @@ -15,22 +15,18 @@ description:
->>
->>   properties:
->>     compatible:
->> -    const: nxp,imx8mq-vpu
->> +    oneOf:
->> +      - const: nxp,imx8mq-vpu
->> +      - const: nxp,imx8mq-vpu-g2
->>
->>     reg:
->> -    maxItems: 3
->> -
->> -  reg-names:
->> -    items:
->> -      - const: g1
->> -      - const: g2
->> -      - const: ctrl
->> +    maxItems: 1
->>
->>     interrupts:
->> -    maxItems: 2
->> +    maxItems: 1
->>
->>     interrupt-names:
->> -    items:
->> +    oneOf:
->>         - const: g1
->>         - const: g2
->>
->> @@ -46,14 +42,18 @@ properties:
->>     power-domains:
->>       maxItems: 1
->>
->> +  nxp,imx8m-vpu-ctrl:
->> +    description: Specifies a phandle to syscon VPU hardware control block
->> +    $ref: "/schemas/types.yaml#/definitions/phandle"
->> +
->>   required:
->>     - compatible
->>     - reg
->> -  - reg-names
->>     - interrupts
->>     - interrupt-names
->>     - clocks
->>     - clock-names
->> +  - nxp,imx8m-vpu-ctrl
->>
->>   additionalProperties: false
->>
->> @@ -62,18 +62,33 @@ examples:
->>           #include <dt-bindings/clock/imx8mq-clock.h>
->>           #include <dt-bindings/interrupt-controller/arm-gic.h>
->>
->> -        vpu: video-codec@38300000 {
->> +        vpu_ctrl: syscon@38320000 {
->> +                 compatible = "nxp,imx8mq-vpu-ctrl", "syscon";
->> +                 reg = <0x38320000 0x10000>;
->> +        };
->> +
->> +        vpu_g1: video-codec@38300000 {
->>                   compatible = "nxp,imx8mq-vpu";
->> -                reg = <0x38300000 0x10000>,
->> -                      <0x38310000 0x10000>,
->> -                      <0x38320000 0x10000>;
->> -                reg-names = "g1", "g2", "ctrl";
->> -                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
->> -                             <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
->> -                interrupt-names = "g1", "g2";
->> +                reg = <0x38300000 0x10000>;
->> +                interrupts = <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>;
->> +                interrupt-names = "g1";
->> +                clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
->> +                         <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
->> +                         <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
->> +                clock-names = "g1", "g2", "bus";
->> +                power-domains = <&pgc_vpu>;
->> +                nxp,imx8m-vpu-ctrl = <&vpu_ctrl>;
->> +        };
->> +
->> +        vpu_g2: video-codec@38310000 {
->> +                compatible = "nxp,imx8mq-vpu-g2";
->> +                reg = <0x38300000 0x10000>;
->> +                interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>;
->> +                interrupt-names = "g2";
->>                   clocks = <&clk IMX8MQ_CLK_VPU_G1_ROOT>,
->>                            <&clk IMX8MQ_CLK_VPU_G2_ROOT>,
->>                            <&clk IMX8MQ_CLK_VPU_DEC_ROOT>;
->>                   clock-names = "g1", "g2", "bus";
->>                   power-domains = <&pgc_vpu>;
->> +                nxp,imx8m-vpu-ctrl = <&vpu_ctrl>;
->>           };
->> --
->> 2.25.1
->>
->>
->> _______________________________________________
->> linux-arm-kernel mailing list
->> linux-arm-kernel@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+> ---
+>  lib/stackdepot.c  | 13 +++++++++++++
+>  mm/kasan/common.c |  1 -
+>  2 files changed, 13 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+> index b437ae79aca1..519c7898c7f2 100644
+> --- a/lib/stackdepot.c
+> +++ b/lib/stackdepot.c
+> @@ -305,6 +305,9 @@ EXPORT_SYMBOL_GPL(stack_depot_fetch);
+>   * (allocates using GFP flags of @alloc_flags). If @can_alloc is %false, avoids
+>   * any allocations and will fail if no space is left to store the stack trace.
+>   *
+> + * If the stack trace in @entries is from an interrupt, only the portion up to
+> + * interrupt entry is saved.
+> + *
+>   * Context: Any context, but setting @can_alloc to %false is required if
+>   *          alloc_pages() cannot be used from the current context. Currently
+>   *          this is the case from contexts where neither %GFP_ATOMIC nor
+> @@ -323,6 +326,16 @@ depot_stack_handle_t __stack_depot_save(unsigned long *entries,
+>  	unsigned long flags;
+>  	u32 hash;
+>  
+> +	/*
+> +	 * If this stack trace is from an interrupt, including anything before
+> +	 * interrupt entry usually leads to unbounded stackdepot growth.
+> +	 *
+> +	 * Because use of filter_irq_stacks() is a requirement to ensure
+> +	 * stackdepot can efficiently deduplicate interrupt stacks, always
+> +	 * filter_irq_stacks() to simplify all callers' use of stackdepot.
+> +	 */
+> +	nr_entries = filter_irq_stacks(entries, nr_entries);
+> +
+>  	if (unlikely(nr_entries == 0) || stack_depot_disable)
+>  		goto fast_exit;
+>  
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index 8428da2aaf17..efaa836e5132 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -36,7 +36,6 @@ depot_stack_handle_t kasan_save_stack(gfp_t flags, bool can_alloc)
+>  	unsigned int nr_entries;
+>  
+>  	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 0);
+> -	nr_entries = filter_irq_stacks(entries, nr_entries);
+>  	return __stack_depot_save(entries, nr_entries, flags, can_alloc);
+>  }
+>  
+> 
+

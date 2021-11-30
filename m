@@ -2,96 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C89D462F0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:55:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B930462F0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 09:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239926AbhK3I6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 03:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbhK3I61 (ORCPT
+        id S234959AbhK3I6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 03:58:36 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:46060 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239962AbhK3I60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 03:58:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E948FC06175C;
-        Tue, 30 Nov 2021 00:54:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 Nov 2021 03:58:26 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3GJ733mPz9vBtK
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:55:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2-kfnICuxTEn for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 02:55:03 -0600 (CST)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 424FACE1831;
-        Tue, 30 Nov 2021 08:54:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6232C53FC7;
-        Tue, 30 Nov 2021 08:54:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1638262493;
-        bh=sBEt2AcVvLG8naQtZ3mlupqMlj28fXP2+3gyUGu24Xg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oduWQoYcqGFquvR4hBjel7rXYgrsK8MVlWSHDD0Zb2ovAwSrPeYbftNHlZc6ItwRK
-         mhHcgzE9XMr9Lhjy6jhjyhXAEEZPhC8CBx8gzhfpJvHjaFd9BP302EeNJTi+HP3wtN
-         J0irjiPzgXTim7+9R6UbQnGRjA976lqXl+AGs12I=
-Date:   Tue, 30 Nov 2021 09:54:51 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        f.fainelli@gmail.com, stable@vger.kernel.org,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.15 000/179] 5.15.6-rc1 review
-Message-ID: <YaXm25djaWxAerRm@kroah.com>
-References: <20211129181718.913038547@linuxfoundation.org>
- <3210f340-f3a0-2cf1-8b3b-59db6e58e65e@nvidia.com>
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3GJ70zKZz9vBtN
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:55:03 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3GJ70zKZz9vBtN
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3GJ70zKZz9vBtN
+Received: by mail-pj1-f71.google.com with SMTP id h15-20020a17090a648f00b001a96c2c97abso6586353pjj.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 00:55:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JwkYqyhX5smeL+L/r125AuKqmjcCfxTAw1WF1G/WgUo=;
+        b=qStNVhS9s5xxEQjiT7/N1C0yco9IimARTtUel0RW79VmbmaqIDeUZxIOZ4qRbiCLzp
+         JTjLuzCVsb9gCo20eVWkSin+Hykeec6Wl/yzLiv251iBuMwsOZdw3dcCSVKVtPdQzdRN
+         a7z1Akh3RsfthmSHhC6WelA+HwY5p28vGLrzIw98rvHrQbAPQj24oEy5EZWcHOo21dOz
+         hRTAm8nc/oUI7BTQ5QQMuLokd8GpE+c2xvjrRtmXLDB6CxpsYA3BA4AMj9kn4Lq8hXr7
+         HYzPPuKArjH809WyANHlez0j0WfpAYI/8zJwNrTXIhvwS1Xdug8TXkmvVyLD2kiFcFzY
+         z0sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JwkYqyhX5smeL+L/r125AuKqmjcCfxTAw1WF1G/WgUo=;
+        b=YkjIUol6FODCrNkA1sdlsnqfN976mz11I7V7a4cvEqCNWih5QMGF4NoeSZ6Bk4BLsx
+         ohm8IVtROcBQ3qICb+LwUyhk0r9B8p9KWSTddtTlaTBjO7Vx6bE5fitEOnnHcBlovmcf
+         uYyfwqwmOniOCSvPjVZ8Hso2R5JdOZbmQzD/T6UlnXWKKEhTZ20F2inNWMWrFFZHs4Qb
+         UE3NnGCGywLdfqWH1+EcIQcHxcyStyv24eZwldQtSq9GdK2ZZla/9cde+3NqZOetEmls
+         RThiUEIlDviS1a1a7TtEU5jvfIThsEosSSjIj2oC1REKAg2VYTJbJB5Ci4LGPhAwQU5d
+         i09g==
+X-Gm-Message-State: AOAM531vASa6aM/ejanmx4hVj+rzKV2eMxXth5yaipdTecO3906jaToq
+        oadQj2p+Xj6BXbMIe7a52kyE2SVrYExSx7QHa6QCADRvpM5O7m+YMepX+NyHJ5GBwZoMyl7qGQ7
+        wHRdOp3/Fx1Njp9J9BhXDSJTWDOvo
+X-Received: by 2002:a17:902:aa43:b0:142:6919:73da with SMTP id c3-20020a170902aa4300b00142691973damr65882694plr.39.1638262501524;
+        Tue, 30 Nov 2021 00:55:01 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxt84MXmo7Ca8vyZxDhDjFTkMtVX+MNijU4eYMPkHKjS5V/seglj6amrRunpcPVSJcRS2e72A==
+X-Received: by 2002:a17:902:aa43:b0:142:6919:73da with SMTP id c3-20020a170902aa4300b00142691973damr65882664plr.39.1638262501288;
+        Tue, 30 Nov 2021 00:55:01 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id l6sm1934745pfu.129.2021.11.30.00.54.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 00:55:00 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Shunli Wang <shunli.wang@mediatek.com>,
+        Erin Lo <erin.lo@mediatek.com>,
+        James Liao <jamesjj.liao@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] clk: mediatek: mt2701: Fix a NULL pointer dereference in mtk_infrasys_init_early()
+Date:   Tue, 30 Nov 2021 16:54:54 +0800
+Message-Id: <20211130085455.75537-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3210f340-f3a0-2cf1-8b3b-59db6e58e65e@nvidia.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 08:48:00AM +0000, Jon Hunter wrote:
-> 
-> On 29/11/2021 18:16, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.15.6 release.
-> > There are 179 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Wed, 01 Dec 2021 18:16:51 +0000.
-> > Anything received after that time might be too late.
-> > 
-> > The whole patch series can be found in one patch at:
-> > 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.6-rc1.gz
-> > or in the git tree and branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> > and the diffstat can be found below.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> No new regressions.
-> 
-> Test results for stable-v5.15:
->     10 builds:	10 pass, 0 fail
->     28 boots:	28 pass, 0 fail
->     114 tests:	108 pass, 6 fail
-> 
-> Linux version:	5.15.6-rc1-ga6dab1fb6f7d
-> Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
->                 tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
->                 tegra20-ventana, tegra210-p2371-2180,
->                 tegra210-p3450-0000, tegra30-cardhu-a04
-> 
-> Test failures:	tegra194-p2972-0000: boot.py
->                 tegra194-p2972-0000: tegra-audio-boot-sanity.sh
->                 tegra194-p2972-0000: tegra-audio-hda-playback.sh
->                 tegra194-p3509-0000+p3668-0000: devices
->                 tegra194-p3509-0000+p3668-0000: tegra-audio-boot-sanity.sh
->                 tegra194-p3509-0000+p3668-0000: tegra-audio-hda-playback.sh
+In mtk_infrasys_init_early(), the return value of mtk_alloc_clk_data()
+is assigned to infra_clk_data and there is a dereference of it in
+mtk_infrasys_init_early(), which could lead to a NULL pointer
+dereference on failure of mtk_alloc_clk_data().
 
-Any word on fixes for these failures?
+Fix this bug by adding a check of infra_clk_data.
 
-thanks,
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-greg k-h
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_COMMON_CLK_MT2701=y show no new warnings, and our
+static analyzer no longer warns about this code.
+
+Fixes: e9862118272a ("clk: mediatek: Add MT2701 clock support")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/clk/mediatek/clk-mt2701.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/clk/mediatek/clk-mt2701.c b/drivers/clk/mediatek/clk-mt2701.c
+index 695be0f77427..9ba30089cb9a 100644
+--- a/drivers/clk/mediatek/clk-mt2701.c
++++ b/drivers/clk/mediatek/clk-mt2701.c
+@@ -742,6 +742,11 @@ static void __init mtk_infrasys_init_early(struct device_node *node)
+ 
+ 	if (!infra_clk_data) {
+ 		infra_clk_data = mtk_alloc_clk_data(CLK_INFRA_NR);
++		if (!infra_clk_data) {
++			pr_err("%s(): could not register clock provider: %d\n",
++					__func__, -ENOMEM);
++			return;
++		}
+ 
+ 		for (i = 0; i < CLK_INFRA_NR; i++)
+ 			infra_clk_data->clks[i] = ERR_PTR(-EPROBE_DEFER);
+-- 
+2.25.1
+

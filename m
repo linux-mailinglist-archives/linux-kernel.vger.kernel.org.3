@@ -2,147 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 823BA463ABC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:56:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB0C463ABF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243154AbhK3QAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:00:15 -0500
-Received: from mga07.intel.com ([134.134.136.100]:35902 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243120AbhK3QAA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:00:00 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="299636567"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="299636567"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:56:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="540454492"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga001.jf.intel.com with ESMTP; 30 Nov 2021 07:56:30 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1AUFuRh0006481;
-        Tue, 30 Nov 2021 15:56:27 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 00/26] net: introduce and use generic XDP stats
-Date:   Tue, 30 Nov 2021 16:56:12 +0100
-Message-Id: <20211130155612.594688-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211123163955.154512-1-alexandr.lobakin@intel.com>
-References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+        id S243124AbhK3QBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:01:23 -0500
+Received: from mta-p5.oit.umn.edu ([134.84.196.205]:45690 "EHLO
+        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234815AbhK3QBX (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 11:01:23 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3RhC5DMjz9vsr2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 15:58:03 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p5.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id LsO_Bto9rJqO for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 09:58:03 -0600 (CST)
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3RhC3699z9vsr4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:58:03 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3RhC3699z9vsr4
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3RhC3699z9vsr4
+Received: by mail-pj1-f72.google.com with SMTP id mn13-20020a17090b188d00b001a64f277c1eso11736244pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:58:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=bTXkxPkhvwkgKe3CfQ7oKNFqLLxsibJM72YviuHICJY=;
+        b=JXLhE+gLz8807ShPZSZBtudJocl+w6stUALlj11N7rM24NN8HXfOXGqMUBWF6f9IYK
+         4tmgYEOcRw/QvKTRyOwZfpfmnqzsmA/hrkVGyp6sbzvGR8IJz7Eae2Db2itgWd2hJh6k
+         FT1Vps8hTXW4OuK7IkVnGNU0EFN25oMFBeZjJitk2c1IzzpIMqSUG5KjCLIMngKJB51T
+         HcFCQRDcSgoh8/UcsiseRNjQjbruj0ErYBwux3J8lLI8E7l6flcIPzCSVOLUG4dkdZht
+         E9+2I7o3/hGSbZgptPnE/cbwb19FsDWZBKItWc6DAfFm7RLgXAx61vNw3OOnvPFJ+uBV
+         iYYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=bTXkxPkhvwkgKe3CfQ7oKNFqLLxsibJM72YviuHICJY=;
+        b=rcq8lQLXYI02QgNKCgLdEfTUxIq+rH1qzJ/SMoCc0AyNvTtKqfAnYitr2r7j1dvB74
+         +YpLSkl5VCEWWwU2rTTry/CcA3ylHgG3HnQwepTGGz+FF4JY0Q4b8sI/7V6wSKB/J6oL
+         iICc60OoC1GThDdOdUii7L4Af+2949iz4c+XYeyHycR/lUDUIHQrmw2wltjm5yPoBUsX
+         Ku4lduYMMLVRG0cc84HQQ2Dp6aPzRM1EwMHgE7p3jASCsQSRG6sPXWUWPQTjMK4rDDfz
+         L8fN2OMwtRtPFsDl9jAqn9IRNvwrmZ16EFiCurpjRtymH+bHo9ttrfZ+3krCFgWaK+gn
+         f7pQ==
+X-Gm-Message-State: AOAM533dwIuk2OpFOOWciCcwFV/sviBhNctinruLx12OPM86nxKPxM3j
+        gCc6boN+WI5bYsdrEv05sXCteGdPDS1SSBwyoN2dXTYh/IG9rBmLbi9k1ii0dFeZ92e1CH4PhAX
+        A7TSfHGjjkrfWsnT5ibuGmbUMaTJc
+X-Received: by 2002:a63:155d:: with SMTP id 29mr21857pgv.302.1638287882663;
+        Tue, 30 Nov 2021 07:58:02 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyIaxwNEDzH7cmq7l7LiRaYXMObjxXyqF8evR41ZnOQZpK9G2rDCI1/FqCk8Jv+9cm2uvYXJw==
+X-Received: by 2002:a63:155d:: with SMTP id 29mr21828pgv.302.1638287882411;
+        Tue, 30 Nov 2021 07:58:02 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id h13sm15230838pgg.16.2021.11.30.07.57.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 07:58:02 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] drm/radeon/radeon_kms: Fix a NULL pointer dereference in  radeon_driver_open_kms()
+Date:   Tue, 30 Nov 2021 23:57:19 +0800
+Message-Id: <20211130155720.178214-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <f776cb6f-d599-a543-9177-dac7d08cf7d4@amd.com>
+References: <f776cb6f-d599-a543-9177-dac7d08cf7d4@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-Date: Tue, 23 Nov 2021 17:39:29 +0100
+In radeon_driver_open_kms(), radeon_vm_bo_add() is assigned to
+vm->ib_bo_va and passes and used in radeon_vm_bo_set_addr(). In
+radeon_vm_bo_set_addr(), there is a dereference of vm->ib_bo_va,
+which could lead to a NULL pointer dereference on failure of
+radeon_vm_bo_add().
 
-Ok, open questions:
+Fix this bug by adding a check of vm->ib_bo_va.
 
-1. Channels vs queues vs global.
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Jakub: no per-channel.
-David (Ahern): it's worth it to separate as Rx/Tx.
-Toke is fine with globals at the end I think?
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-My point was that for most of the systems we have 1:1 Rx:Tx
-(usually num_online_cpus()), so asking drivers separately for
-the number of RQs and then SQs would end up asking for the same
-number twice.
-But the main reason TBH was that most of the drivers store stats
-on a per-channel basis and I didn't want them to regress in
-functionality. I'm fine with reporting only netdev-wide if
-everyone are.
+Builds with CONFIG_DRM_RADEON=m show no new warnings,
+and our static analyzer no longer warns about this code.
 
-In case if we keep per-channel: report per-channel only by request
-and cumulative globals by default to not flood the output?
+Fixes: cc9e67e3d700 ("drm/radeon: fix VM IB handling")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+Changes in v3:
+  -  Fix the bug that good case will also be freed
+  -  Improve code style
 
-2. Count all errors as "drops" vs separately.
+Changes in v2:
+  -  Improve the error handling into goto style
 
-Daniel: account everything as drops, plus errors should be
-reported as exceptions for tracing sub.
-Jesper: we shouldn't mix drops and errors.
+ drivers/gpu/drm/radeon/radeon_kms.c | 35 ++++++++++++++++-------------
+ 1 file changed, 19 insertions(+), 16 deletions(-)
 
-My point: we shouldn't, that's why there are patches for 2 drivers
-to give errors a separate counter.
-I provided an option either to report all errors together ('errors'
-in stats structure) or to provide individual counters for each of
-them (sonamed ctrs), but personally prefer detailed errors. However,
-they might "go detailed" under trace_xdp_exception() only, sound
-fine (OTOH in RTNL stats we have both "general" errors and detailed
-error counters).
+diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/radeon/radeon_kms.c
+index 482fb0ae6cb5..439f4d1fdd65 100644
+--- a/drivers/gpu/drm/radeon/radeon_kms.c
++++ b/drivers/gpu/drm/radeon/radeon_kms.c
+@@ -648,6 +648,8 @@ void radeon_driver_lastclose_kms(struct drm_device *dev)
+ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+ {
+ 	struct radeon_device *rdev = dev->dev_private;
++	struct radeon_fpriv *fpriv;
++	struct radeon_vm *vm;
+ 	int r;
+ 
+ 	file_priv->driver_priv = NULL;
+@@ -660,8 +662,6 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+ 
+ 	/* new gpu have virtual address space support */
+ 	if (rdev->family >= CHIP_CAYMAN) {
+-		struct radeon_fpriv *fpriv;
+-		struct radeon_vm *vm;
+ 
+ 		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
+ 		if (unlikely(!fpriv)) {
+@@ -672,35 +672,38 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+ 		if (rdev->accel_working) {
+ 			vm = &fpriv->vm;
+ 			r = radeon_vm_init(rdev, vm);
+-			if (r) {
+-				kfree(fpriv);
+-				goto out_suspend;
+-			}
++			if (r)
++				goto out_fpriv;
+ 
+ 			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
+-			if (r) {
+-				radeon_vm_fini(rdev, vm);
+-				kfree(fpriv);
+-				goto out_suspend;
+-			}
++			if (r)
++				goto out_vm_fini;
+ 
+ 			/* map the ib pool buffer read only into
+ 			 * virtual address space */
+ 			vm->ib_bo_va = radeon_vm_bo_add(rdev, vm,
+ 							rdev->ring_tmp_bo.bo);
++			if (!vm->ib_bo_va) {
++				r = -ENOMEM;
++				goto out_vm_fini;
++			}
++
+ 			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
+ 						  RADEON_VA_IB_OFFSET,
+ 						  RADEON_VM_PAGE_READABLE |
+ 						  RADEON_VM_PAGE_SNOOPED);
+-			if (r) {
+-				radeon_vm_fini(rdev, vm);
+-				kfree(fpriv);
+-				goto out_suspend;
+-			}
++			if (r)
++				goto out_vm_fini;
+ 		}
+ 		file_priv->driver_priv = fpriv;
+ 	}
+ 
++out_vm_fini:
++	if (r)
++		radeon_vm_fini(rdev, vm);
++out_fpriv:
++	if (r)
++		kfree(fpriv);
+ out_suspend:
+ 	pm_runtime_mark_last_busy(dev->dev);
+ 	pm_runtime_put_autosuspend(dev->dev);
+-- 
+2.25.1
 
-3. XDP and XSK ctrs separately or not.
-
-My PoV is that those are two quite different worlds.
-However, stats for actions on XSK really make a little sense since
-99% of time we have xskmap redirect. So I think it'd be fine to just
-expand stats structure with xsk_{rx,tx}_{packets,bytes} and count
-the rest (actions, errors) together with XDP.
-
-
-Rest:
- - don't create a separate `ip` command and report under `-s`;
- - save some RTNL skb space by skipping zeroed counters.
-
-Also, regarding that I count all on the stack and then add to the
-storage once in a polling cycle -- most drivers don't do that and
-just increment the values in the storage directly, but this can be
-less performant for frequently updated stats (or it's just my
-embedded past).
-Re u64 vs u64_stats_t -- the latter is more universal and
-architecture-friendly, the former is used directly in most of the
-drivers primarily because those drivers and the corresponding HW
-are being run on 64-bit systems in the vast majority of cases, and
-Ethtools stats themselves are not so critical to guard them with
-anti-tearing. Anyways, local64_t is cheap on ARM64/x86_64 I guess?
-
-Thanks,
-Al

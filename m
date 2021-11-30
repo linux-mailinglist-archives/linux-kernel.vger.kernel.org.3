@@ -2,81 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 44044462A2B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE13462A2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237292AbhK3CI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 21:08:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbhK3CI6 (ORCPT
+        id S237308AbhK3CJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 21:09:13 -0500
+Received: from mail-ot1-f48.google.com ([209.85.210.48]:33498 "EHLO
+        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231473AbhK3CJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 21:08:58 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07E5C061574;
-        Mon, 29 Nov 2021 18:05:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3FCCDCE16EA;
-        Tue, 30 Nov 2021 02:05:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52D0FC53FC7;
-        Tue, 30 Nov 2021 02:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638237936;
-        bh=MjWwVT64eoyCbc1/O2psCx9reohaUCeSTRbK/whaPFE=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=NYrBBQhpMMwiGnPokNzFZCGoDmDnHwv+FYxImN45IzOuDdZsBvwlKblFIoz2rvmcs
-         C5togcT5j0Try0e6ySJyYrAOmfCYLZMQ2lCNQup9d/NSAd/tEDlRh9BEplyvTB/y8/
-         K+GCFEwrvkBh81WqK/H/eQZZhOpSryQkKQuM1QUCJY9gxzqY113wHZoZV7ooukQnZX
-         kJpY45Bd2C4Fub0PtXeOd/0zruuGn+bPzHKX28VIXN7ND1Itiko/P9MfFiGECzH3qU
-         RWJvklvamIp+LzM5EOqrL35nhLoEWBU1Qzv2DGHqpSTZG+86qCIQwpRKyX/Lw93cC/
-         5adJmRhGlRSTg==
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20211114012755.112226-4-konrad.dybcio@somainline.org>
-References: <20211114012755.112226-1-konrad.dybcio@somainline.org> <20211114012755.112226-4-konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 04/16] arm64: dts: qcom: sm8350: Specify clock-frequency for arch timer
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Andy Gross <agross@kernel.org>,
+        Mon, 29 Nov 2021 21:09:12 -0500
+Received: by mail-ot1-f48.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso28278842otf.0;
+        Mon, 29 Nov 2021 18:05:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=PhAgexOmZMDDxfzkKgbtUTePe6rrT5DljeoNkZtD8IE=;
+        b=V9MIUZiv6WebLVJFZZTuBVU/qnSx2YmdvJNRH46T/FxvFCQxF32AXwDuudM0Pe0BY7
+         lpf+gccUGyPx5t53bUAObFwTIx8XrG2I11oEBT7iB992E8mi+PrYdFobpTq0GVcK1xC4
+         5J9DJNfHK+uGqx4lhuoaPBidvG9iejIjz/2RXgP5ifBdIXEStkCaydzZAZim5bXAooE6
+         4wYOdVCijnh+hllKs/aCAilq9s849DkYNlROUztkmWNKUOk0M65Zp0QtsoRxmo0R5cSf
+         Z9HdRXqITfAkmlQYbIkjmAkuTVUCC5yZZBFoL0VyGMwLB0ZZt7/GPF2HfyYX8BUfq0zr
+         +xNA==
+X-Gm-Message-State: AOAM531PgxI7LbhuGL4vLZoYXbRHhR083f/4iwPt/dEofrXKqhXrUgyZ
+        RV7AJKq0nt7KOOL4nlJLpQ==
+X-Google-Smtp-Source: ABdhPJzjK0J0CuEyOvQA7bsdS2+lN+Mm7FUS431r2AY8xZwSG33aoMLzfJCIAec8v3V8JsjOH/L6XQ==
+X-Received: by 2002:a9d:f04:: with SMTP id 4mr47936802ott.326.1638237953515;
+        Mon, 29 Nov 2021 18:05:53 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u136sm3333317oie.13.2021.11.29.18.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Nov 2021 18:05:52 -0800 (PST)
+Received: (nullmailer pid 1028193 invoked by uid 1000);
+        Tue, 30 Nov 2021 02:05:51 -0000
+Date:   Mon, 29 Nov 2021 20:05:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
+        jamipkettunen@somainline.org,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, martin.botka@somainline.org,
+        Stephen Boyd <swboyd@chromium.org>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Date:   Mon, 29 Nov 2021 18:05:34 -0800
-User-Agent: alot/0.9.1
-Message-Id: <20211130020536.52D0FC53FC7@smtp.kernel.org>
+        angelogioacchino.delregno@somainline.org,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        marijn.suijten@somainline.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: soc: qcom: llcc-qcom: Add SM8350
+ compatible
+Message-ID: <YaWG/6mreCruTuMG@robh.at.kernel.org>
+References: <20211121002050.36977-1-konrad.dybcio@somainline.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211121002050.36977-1-konrad.dybcio@somainline.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Konrad Dybcio (2021-11-13 17:27:43)
-> Arch timer runs at 19.2 MHz. Specify the rate in the timer node.
->=20
+On Sun, 21 Nov 2021 01:20:45 +0100, Konrad Dybcio wrote:
+> Document the compatible string for SM8350.
+> 
 > Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 > ---
->  arch/arm64/boot/dts/qcom/sm8350.dtsi | 1 +
+> Changes since v1:
+> - Move the .h defines to the second patch
+> 
+>  Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml | 1 +
 >  1 file changed, 1 insertion(+)
->=20
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/q=
-com/sm8350.dtsi
-> index a30ba3193d84..60866a20a55c 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> @@ -2484,5 +2484,6 @@ timer {
->                              <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TY=
-PE_LEVEL_LOW)>,
->                              <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TY=
-PE_LEVEL_LOW)>,
->                              <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TY=
-PE_LEVEL_LOW)>;
-> +               clock-frequency =3D <19200000>;
+> 
 
-Does the firmware not set the frequency properly?
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 726A146404A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD0EB464051
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:36:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344190AbhK3Vh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:37:59 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:50168 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235087AbhK3Vh5 (ORCPT
+        id S1344201AbhK3Vju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:39:50 -0500
+Received: from gandalf.ozlabs.org ([150.107.74.76]:51711 "EHLO
+        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235087AbhK3Vjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:37:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 Nov 2021 16:39:48 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA754B81CDD;
-        Tue, 30 Nov 2021 21:34:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B35EBC53FC7;
-        Tue, 30 Nov 2021 21:34:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638308075;
-        bh=EjqY+xao/N0w4YyL0AFwlOKFCQVzfzBGrREPqscN2vc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eVPWPgwJ64rE1LnwjUgKXvBrW9ZePstPxr97gBiFBJLA5EXFTb6cNKsBmvip7Z8yU
-         yUf/stVVw0w2eUsO9BV2mNYjRkC19SbGkwdjj2+UYNLReVRKyxKFl4TnUFFN0BbUAT
-         Wyi8ggRBO5uz/loFwHKB1wbdVSRrxoczvNHKxYn+41+kX5prA9sOMhrapFz94EuIWk
-         r6O+b2xxy3mH1hDUNYHWXZaB/YPnsPUPDIuLg9fsc7m419JSDNRFVa6tSzbLlgDsyY
-         k5g8pChYiftnKKpP46CFxER3UAouD6wGyAn+RyqxlDlzWX0L+OonCuwnYWY8/vZWHF
-         UuCsuRSGwiehQ==
-Date:   Tue, 30 Nov 2021 22:34:24 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     lakshmi.sowjanya.d@intel.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        bala.senthil@intel.com, pandith.n@intel.com
-Subject: Re: [PATCH v1 2/2] i2c: designware-pci: Set ideal timing parameters
- for Elkhart Lake PSE
-Message-ID: <YaaY4EEzSzvxYb39@kunai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        lakshmi.sowjanya.d@intel.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jarkko.nikula@linux.intel.com,
-        bala.senthil@intel.com, pandith.n@intel.com
-References: <20211109103552.18677-1-lakshmi.sowjanya.d@intel.com>
- <20211109103552.18677-2-lakshmi.sowjanya.d@intel.com>
- <YaUGX27+jHwQxg48@kunai>
- <YaXrkJbsktXFAgFJ@smile.fi.intel.com>
- <YaZIFTHCGb5dLM2f@smile.fi.intel.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3bBg2N3Cz4xR9;
+        Wed,  1 Dec 2021 08:36:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638308187;
+        bh=KVcjZKAh2Vz9OxmAtKoRcpH+t6oxbtKVS+0AmdcvdBs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MwpLysB7J1IqOJT0gpXjaEQHFJw+LzO0UCm+RetqCoPRWeAVsw2Bt4HrATdC7Ltun
+         laqy2VdT2Af/Jto/ukZOpIp10PIcc3QPLyIctz+rGmuRbYKn0LQeyoACmn1IX95m2R
+         SNAXbIyaKsJKoh6hjToKwm46N7ECaU9PyNKjaGDSvDRYlrHfQNJaQGEri5wmE+i45d
+         rteTBIh3C8iGwYMlO/2kpjHnsBckJ7ZZRXkS/sGlaz09/fLrxAHCgUUBxiU7/ZKmfi
+         nepklqCzC03F1zgKjRSGRUjE8TrxzFleeqXupe5tzkNd9SJzmrtKzuJTOdNuoHKfsR
+         7MyYKlzrYpR5g==
+Date:   Wed, 1 Dec 2021 08:36:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the fscache tree with Linus' tree
+Message-ID: <20211201083625.74dec92b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZmDvLBOUWEJZfX8g"
-Content-Disposition: inline
-In-Reply-To: <YaZIFTHCGb5dLM2f@smile.fi.intel.com>
+Content-Type: multipart/signed; boundary="Sig_/hExX9xm0F19YMLGWdVrtPyj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---ZmDvLBOUWEJZfX8g
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+--Sig_/hExX9xm0F19YMLGWdVrtPyj
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-> > > Applied to for-next, thanks!
-> >=20
-> > Oh l=C3=A0 l=C3=A0! Can we revert these, please?
+Today's linux-next merge of the fscache tree got a conflict in:
 
-Okay, both reverted. Thanks for the heads up!
+  Documentation/filesystems/netfs_library.rst
 
-> I rather add a comment there that these tables in the driver shouldn't
-> be spread and expanded anymore (at least by Intel).
+between commit:
 
-Please do.
+  ddca5b0eba4e ("netfs: Adjust docs after foliation")
 
+from Linus' tree and commit:
 
---ZmDvLBOUWEJZfX8g
-Content-Type: application/pgp-signature; name="signature.asc"
+  b3c088faf78b ("fscache: Rewrite documentation")
+
+from the fscache tree.
+
+I fixed it up (I just used the latter version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/hExX9xm0F19YMLGWdVrtPyj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmGmmN0ACgkQFA3kzBSg
-KbY1ow/+Nn93X7WRQ1pDjeUMFwJKYeU+6DpQTEsQLaGK0KrRws/iFlH/UhMGYFBh
-kXpbOooblKCagQImhIdZnrBJZkqn8jqQYYhFhaH6tyuEr54bQpiQYreBBcC5LXvv
-1M3BWUvIhoxXYZ5KBTLEj9BAAME+bQwojTTKqIncnB1Oz8Rq9psabooYAbC3cyxP
-eoffXBzG0Y5VkXFEFHPyU+hzFuEI+rRuJIYCZTcSbgO5la3D9UJVW8qhAHmXlzZL
-BJWmLOAvucYJekOifT9kGyw5HzWCOOxbx7XrsYdWT2b6HP3C6hQ2VB23h+YM6AZQ
-g1J15mgdE56L/LgyYsFWqSYj1gT4Q30Azqx9+SaSgD5/8Xk7qCy08OFvxPEI0EX9
-q6k9nva0OMDFF3M6trrA02gLPOOdu+wg8LuWg9QELNd9S+TBCnxMz8Pb89sZODMd
-DAQcCSgtKbKCzXNeQLs6jrDjqd/S3t0kL2eEm8jbekHGTXY6ewSH+SBNd4Hy63o6
-unCDtDK2sD3IiSLG6QhfqEGL2xClD6XMlQTVZgoHWJ2mCOHOyOq1h71OlXgC5yg3
-nMkKfOOVw5t212ZPqKDIxtAlMLGSuFq0MD9rinxGrokj7WTol5Cy2dqDp8zelrof
-KimPDt1+BB80gxnPEKUf1dn+LTjzsvBXwbv4SATX7xWaSTbvYzQ=
-=/Iq2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGmmVkACgkQAVBC80lX
+0GzVSgf/Z/hhV/MmnG7MV48wX+LDpIVyW43KqO40KAdgmVpIIh+klwRtIJrpZE/m
+vrikspfzBTYV/3BOwKusYCTGDCMnsuDaIvB4VsaKpdpx5H/F2aQyzliWvqiw2GLk
+tOyFTjG0QvzxlhVuhTtnIHFFwdiT46t/QrXQY9rApDlJJn36+4d4WnVsBndY+I2+
+o5UVGTcveGq+0peOYZJ+f0hSaoDgztucbpE0cihRw0peJPD4Mb2T6RFjBeADRe4G
+bs3QkuBbtARHTokGrEvaaibVpjo5HKAMunGNmqnpFIMuNiGtCBAoFLKtZp8qoWH6
++YMmaEfZC3mc67CHAE35PZKJ+thS2g==
+=Hxih
 -----END PGP SIGNATURE-----
 
---ZmDvLBOUWEJZfX8g--
+--Sig_/hExX9xm0F19YMLGWdVrtPyj--

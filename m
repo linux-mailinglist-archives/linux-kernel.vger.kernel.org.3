@@ -2,95 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 324C64635D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10BBE4635D2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:50:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241755AbhK3Nx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46196 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240008AbhK3Nxt (ORCPT
+        id S241780AbhK3NyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:54:02 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:61894 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241761AbhK3NyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:53:49 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F493C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:50:30 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id n8so14992740plf.4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:50:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xmm+qnNre9RCCUNMLh0oisBpzWW72+UVqMfsZCWkkvk=;
-        b=JwEoHDCS7McWDh59e+41QLHoBblGaZQar8L/KpMc19mb9Yr0kLCTaKxfAwHR48EkPY
-         2Zw3t5E/0LqsqC3nQIVoGDT6p7W+iQMkQzK2i6rGJfq+C3SyBKyW44fJ+ZlOFyTCGoS2
-         nvUTf5Kw5xJgouGm1Ggm4irhZRtQCDnxhDa02eepTSX/HbtClF00yfA5e7GD9xaOQRPc
-         3Ay73XeXIpNZxGFJ2JyPdgCLm/Qt3uv55KlMWIno1hyf9/xGsAQnTTSAHs8zj7UKi9Am
-         nQY0miRHH2G1Kc/qY+fxnnmZ/2nSmeQbJewuiT9NS0U9OaYktxRGvv50uuhXDT6O90YX
-         Ej7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xmm+qnNre9RCCUNMLh0oisBpzWW72+UVqMfsZCWkkvk=;
-        b=tefAPMMEeBZ6LVbmfRNlAzLRMlaYQceAY9AQH2MUsAvQybZhr1QucViu7ARjLkJjdz
-         AYWkKJFh7YhvvOQpkqSPfwY2dS9gkOzlnktIWqaJ31/LSLPZnq1yqlEnK23vJElr07Dx
-         QJVF01mMD3Hipv3bS7z+J6wXQtLdkflhRYSqALqh9nWuzqutpCPR0Q4PE4MfwpBRhpCD
-         gxEZmcN5COUk6Wx5cjfxrgMmjPRuae3Y58tlhB0/743DHiZ1duwpua4FpegMbyAch2Wj
-         zX33UzcLw+UYUHv4uaUfxAxInHHSHSDeBu6KBwRUZbmHIfgYYBD0q4tXZHkYOYdazkU+
-         km6A==
-X-Gm-Message-State: AOAM531GD+yeJPBNo8WJ1JtpJCGUVaYhZC6JmpFdZavbrBZkb/xCBZeD
-        Ly4gXrI4k0TtjFxydgrhcpJjMCAygWLB/A==
-X-Google-Smtp-Source: ABdhPJx1rjxkJUxTUQRvDwmfb/HBlnFEuxSFucy6W/13/FspMgq3VNTYJCFfuZT6XZNaDVP+V6FQ+g==
-X-Received: by 2002:a17:90b:4f4c:: with SMTP id pj12mr6246540pjb.218.1638280229735;
-        Tue, 30 Nov 2021 05:50:29 -0800 (PST)
-Received: from localhost.localdomain ([94.177.118.4])
-        by smtp.gmail.com with ESMTPSA id v25sm20992925pfg.175.2021.11.30.05.50.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 05:50:29 -0800 (PST)
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] driver: nvme: fix missing error code
-Date:   Tue, 30 Nov 2021 21:50:14 +0800
-Message-Id: <20211130135015.1818325-1-mudongliangabcd@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Nov 2021 08:54:01 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1AUBvm3O018641;
+        Tue, 30 Nov 2021 07:50:40 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type;
+ s=PODMain02222019; bh=Ax6ssAcwQRjsy8iTK9gvd5o/h7aKkUSTKjNwBGy0ji4=;
+ b=jJaqiwVO+BE6RgUx7iOiGE7qAlyn+dPZ7EFqMsRmlcAiOq3MZBdVh9Wja6vPtimwWQ/4
+ 83S1RvV51T47xfAh8uFD4ysnAIOJsYfHjNPPHtgzHd4wiOJO7Nxz8zKQiqk7Q5Ld341m
+ eT3NwLHTKv1yvtzM3PbmjYgLf0VoDeSKO4tJ1253OjuQlRtbdua8UZyw+uWO/lHPeNnD
+ 1cGNwoH1n/uMQ1ZvkydQzPqaCqXinZDFduP/CHVoOcvN9972prz9jDpHKtlxRJ7m1CoC
+ s8f1GZu+ROaO9UbIOdBQLX93pWQGGKTtErdj1/q70d5dQBzoA/QsxpB8eBFWrPU6sPR/ Aw== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3cmv5u1m5e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 30 Nov 2021 07:50:40 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Tue, 30 Nov
+ 2021 13:50:39 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Tue, 30 Nov 2021 13:50:39 +0000
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 360312AA;
+        Tue, 30 Nov 2021 13:50:39 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <dmitry.torokhov@gmail.com>
+CC:     <linux-input@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] Input: ff-core - Correct magnitude setting for rumble compatibility
+Date:   Tue, 30 Nov 2021 13:50:39 +0000
+Message-ID: <20211130135039.13726-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.11.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: qtUNgmsBJJXBzABks0jeBI2ARI7Hmk3G
+X-Proofpoint-ORIG-GUID: qtUNgmsBJJXBzABks0jeBI2ARI7Hmk3G
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports:
+When converting a rumble into a periodic effect, for compatibility,
+the magnitude is effectively calculated using:
 
-drivers/nvme/host/multipath.c:865
-nvme_mpath_init_identify() warn: missing error code 'error'
+magnitude = max(strong_rubble / 3 + weak_rubble / 6, 0x7fff);
 
-In one error handling path of nvme_mpath_init_identify(Line 865), error
-is not initialized as an errno.
+The rumble magnitudes are both u16 and the resulting magnitude is
+s16. The max is presumably an attempt to limit the result of the
+calculation to the maximum possible magnitude for the s16 result,
+and thus should be a min.
 
-Fix this by assigning error to -EINVAL.
+However in the case of strong = weak = 0xffff, the result of the first
+part of the calculation is 0x7fff, meaning that the min would be
+redundant anyway, so simply remove the current max.
 
-Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- drivers/nvme/host/multipath.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/input/ff-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvme/host/multipath.c b/drivers/nvme/host/multipath.c
-index 7f2071f2460c..2cbeb6d6b064 100644
---- a/drivers/nvme/host/multipath.c
-+++ b/drivers/nvme/host/multipath.c
-@@ -862,6 +862,7 @@ int nvme_mpath_init_identify(struct nvme_ctrl *ctrl, struct nvme_id_ctrl *id)
- 			"ANA log page size (%zd) larger than MDTS (%zd).\n",
- 			ana_log_size, max_transfer_size);
- 		dev_err(ctrl->device, "disabling ANA support.\n");
-+		error = -EINVAL;
- 		goto out_uninit;
- 	}
- 	if (ana_log_size > ctrl->ana_log_size) {
+diff --git a/drivers/input/ff-core.c b/drivers/input/ff-core.c
+index 1cf5deda06e19..fa8d1a4660142 100644
+--- a/drivers/input/ff-core.c
++++ b/drivers/input/ff-core.c
+@@ -67,7 +67,7 @@ static int compat_effect(struct ff_device *ff, struct ff_effect *effect)
+ 		effect->type = FF_PERIODIC;
+ 		effect->u.periodic.waveform = FF_SINE;
+ 		effect->u.periodic.period = 50;
+-		effect->u.periodic.magnitude = max(magnitude, 0x7fff);
++		effect->u.periodic.magnitude = magnitude;
+ 		effect->u.periodic.offset = 0;
+ 		effect->u.periodic.phase = 0;
+ 		effect->u.periodic.envelope.attack_length = 0;
 -- 
-2.25.1
+2.11.0
 

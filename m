@@ -2,93 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D62463CA4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A060463CA6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244726AbhK3RWL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 12:22:11 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57460 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241963AbhK3RWI (ORCPT
+        id S244746AbhK3RWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244730AbhK3RWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 12:22:08 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8A82AB81A96
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:18:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D05EC53FC1;
-        Tue, 30 Nov 2021 17:18:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638292727;
-        bh=G1WVbS81//21rP0WUcWlWVTfe9CPWo90pxb2Kd7mrbE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Gy8zqf6BsOoJjGqi3hwrr2n88e862LPIphxiHrpjalScBIMiv++BFm9G/5D36fqyn
-         fub9n5mfs7eZRxBJAXFV5JTzRnHCFzGbBmxEPfVSiVNMMdt2kwYgnRcz94Dz3XSvbT
-         IzFwmvn/33uokqML+TmF6nlg+QseZuBTdve9VL19HiJtzm+UNgXbhO6ku7eJUN49Wk
-         IJ7pQKv2a40SW7c12gA/P1ATJgzbE/HHomL1vHwDj57OMuzQJvbq0MfWygvxlJUw2L
-         bNSSnd8edofbgPTD4RCweb88iHglCJBouQBOb5sTvCQsZj9KxqjDI/KSQRcqpHVrBT
-         LKp29LskcQ9gA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1ms6ls-0000Ip-OV; Tue, 30 Nov 2021 18:18:25 +0100
-Date:   Tue, 30 Nov 2021 18:18:24 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@redhat.com>
-Cc:     Miaoqian Lin <linmq006@gmail.com>, Qiushi Wu <wu000273@umn.edu>,
-        qemu-devel@nongnu.org, linux-kernel@vger.kernel.org,
-        Gabriel Somlo <somlo@cmu.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-Subject: Re: [PATCH] fw_cfg: Fix memory leak in fw_cfg_register_file
-Message-ID: <YaZc4LbX5hrJDnec@hovoldconsulting.com>
-References: <20211116114233.29462-1-linmq006@gmail.com>
- <2ced2fae-2ffd-3a70-f02c-175662baf7bc@redhat.com>
+        Tue, 30 Nov 2021 12:22:19 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81450C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:19:00 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id i12so21288348pfd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 09:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=vP1gOxpWYPAIQlMTwhoxIT14ZcEJgFWWlGVkqAobYg8=;
+        b=Y37uRRP6o5MgMyQkqD8PiX/6xflfPptaSOoyAyqy3Lfk2a5P/z7mGFluDx4VVWa7Jh
+         BnE+fEbZc12cpwUlbwjg0Au2pJyCvopQscefnR2glrX1+Xietw2AEtyiiQxrjJeUOZJg
+         9cjNHfsNmtfIewzx6a89icdLEvynVHHy447Iv3YZ6zSxKKcpQRGgcHrm/hLyqJWZ+JDx
+         mi92gUoptO/NICpuQsiy25PIkfOGf23mvVewgyObhm+RZ0hJ1PQfXVH7vmze3+xuktI3
+         ricyOMbMarDy8ltTqLqZXKRd9NAT/+LcoyNKYjEqve6DojhMykVJzSjrYNYXcCLOmSP6
+         EM5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=vP1gOxpWYPAIQlMTwhoxIT14ZcEJgFWWlGVkqAobYg8=;
+        b=rj1utDX0te8SOZ2v8vN/EgB205nlxAXXR66FSmmER93posEGZw8yf+oWDqbT2OZ4/i
+         K4b7z/a/pCznz6objfqw/DsYv2P9D3YlmNusVcF1aWlq3ftRvfnY6qLVDbEtQubBeXk2
+         il8eipnYBV0tWlAS8QNOW2NYiStLiYGuMbvYex9yaOHJUItWdJtdwvH6XMYvaLUmug4s
+         tdFYNii11YElG32ibLI+N5iTq7jggDunVM0y+JgHOKMQY1XOd12EV+HvaeZiBIoYio9P
+         m+iuKLR/90nMfGfyYMmGWxaj7fZdIeLcEjuKGcPlrBrorCBMFGK0Md/UsZ2sX7UzMTQC
+         J3Rg==
+X-Gm-Message-State: AOAM5300H8Nm+5IMT6lrZYv0n8DVjyJMqe4NHc2FArMnEPYFVnk7xSkR
+        iGZ9NXwPHuRNAs8Du++Th6s=
+X-Google-Smtp-Source: ABdhPJy9Yxr+6bmNEhtjihDtbK4VluzB9Hi4XbxmPxyhDIcAapDKFGM9GnicxQgxuAJYtDpfqnG7Ww==
+X-Received: by 2002:aa7:9a4e:0:b0:4a2:71f9:21e0 with SMTP id x14-20020aa79a4e000000b004a271f921e0mr272066pfj.77.1638292740085;
+        Tue, 30 Nov 2021 09:19:00 -0800 (PST)
+Received: from localhost.localdomain ([47.242.44.139])
+        by smtp.gmail.com with ESMTPSA id il7sm3446332pjb.54.2021.11.30.09.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 09:18:59 -0800 (PST)
+From:   youling257 <youling257@gmail.com>
+To:     brent.lu@intel.com
+Cc:     alsa-devel@alsa-project.org, bard.liao@intel.com,
+        broonie@kernel.org, cezary.rojewski@intel.com,
+        christophe.jaillet@wanadoo.fr, ckeepax@opensource.cirrus.com,
+        cujomalainey@chromium.org, gongjun.song@intel.com,
+        guennadi.liakhovetski@linux.intel.com, hdegoede@redhat.com,
+        kai.vehmanen@linux.intel.com, lgirdwood@gmail.com,
+        liam.r.girdwood@linux.intel.com, libin.yang@intel.com,
+        linux-kernel@vger.kernel.org, mac.chiang@intel.com,
+        malik_hsu@wistron.corp-partner.google.com, paul.olaru@oss.nxp.com,
+        perex@perex.cz, pierre-louis.bossart@linux.intel.com,
+        rander.wang@intel.com, rander.wang@linux.intel.com, tiwai@suse.com,
+        vamshi.krishna.gopal@intel.com, yang.jie@linux.intel.com,
+        yong.zhi@intel.com, yung-chuan.liao@linux.intel.com
+Subject: Re: [PATCH v5 4/6] ASoC: Intel: soc-acpi-byt: shrink tables using compatible IDs
+Date:   Wed,  1 Dec 2021 01:18:41 +0800
+Message-Id: <20211130171841.17277-1-youling257@gmail.com>
+X-Mailer: git-send-email 2.33.1
+In-Reply-To: <20211029171409.611600-5-brent.lu@intel.com>
+References: <20211029171409.611600-5-brent.lu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2ced2fae-2ffd-3a70-f02c-175662baf7bc@redhat.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 16, 2021 at 04:28:34PM +0100, Philippe Mathieu-Daudé wrote:
-> On 11/16/21 12:42, Miaoqian Lin wrote:
-> > When kobject_init_and_add() fails, entry should be freed just like
-> > when sysfs_create_bin_file() fails.
-> > 
-> 
-> Fixes: fe3c60684377 ("firmware: Fix a reference count leak.")
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@redhat.com>
-
-No, no. This patch is completely bogus and would introduce a double
-free.
-
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> > ---
-> >  drivers/firmware/qemu_fw_cfg.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/drivers/firmware/qemu_fw_cfg.c b/drivers/firmware/qemu_fw_cfg.c
-> > index 172c751a4f6c..0f404777f016 100644
-> > --- a/drivers/firmware/qemu_fw_cfg.c
-> > +++ b/drivers/firmware/qemu_fw_cfg.c
-> > @@ -608,6 +608,7 @@ static int fw_cfg_register_file(const struct fw_cfg_file *f)
-> >  				   fw_cfg_sel_ko, "%d", entry->select);
-> >  	if (err) {
-> >  		kobject_put(&entry->kobj);
-> > +		kfree(entry);
-
-entry would already have been freed by kobject_put() and
-fw_cfg_sysfs_release_entry() here.
-
-> >  		return err;
-> >  	}
-> >  
-> > 
-
-Doesn't look like this patch has been picked up yet, so:
-
-	NAK.
-
-Johan
+This patch cause Bay trail-CR z3735f tablet rt5640 no sound, bytcr_rt5640 bytcr_rt5640: Error cannot find '' dev.

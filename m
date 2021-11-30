@@ -2,76 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 307E24636CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:34:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9684636D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:35:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242243AbhK3OiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:38:14 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:35070 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235562AbhK3OiL (ORCPT
+        id S242260AbhK3Oin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:38:43 -0500
+Received: from mta-p5.oit.umn.edu ([134.84.196.205]:49388 "EHLO
+        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242258AbhK3Oi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:38:11 -0500
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id BE348212B9;
-        Tue, 30 Nov 2021 14:34:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1638282891;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ymYlkEdRzRThXsgytUcx26oQejHHqu8lMp4Vpricss=;
-        b=rpjgtKDprWUYFEH6QxuZiJPo3tGyYRZBR5e3IC1LXhBp+MhgVqHESFbj95O58qzWSNIMrR
-        bJyzhXkphGR3B2uVgVE2c6M4Tx9xngnJRUcnPa0pomf0fnfhxbPs5gd+JK4YR/xw801tpn
-        ay8BESGodrAR4h/mTy3bW0PLmNDftA4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1638282891;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ymYlkEdRzRThXsgytUcx26oQejHHqu8lMp4Vpricss=;
-        b=cv07tFte49l+LaGSc2uw8A1nLMoMLLRaSv7hWRtLHzuPhN8hn1EkVzpDs8TMKXR9+wUVIN
-        d/nFzTmkpnvpQ9CQ==
-Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
-        by relay2.suse.de (Postfix) with ESMTP id 8A2D4A3B83;
-        Tue, 30 Nov 2021 14:34:51 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 8ADB0DA7A3; Tue, 30 Nov 2021 15:34:40 +0100 (CET)
-Date:   Tue, 30 Nov 2021 15:34:40 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] btrfs: Use generic Kconfig option for 256kB page
- size limit
-Message-ID: <20211130143440.GI28560@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-Mail-Followup-To: dsterba@suse.cz, Nathan Chancellor <nathan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211129230141.228085-1-nathan@kernel.org>
- <20211129230141.228085-3-nathan@kernel.org>
+        Tue, 30 Nov 2021 09:38:26 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3PrP5bsQz9yT9d
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 14:35:01 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p5.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id fd_-OsgqjF97 for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 08:35:01 -0600 (CST)
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3PrP3WSCz9yT9T
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:35:01 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3PrP3WSCz9yT9T
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3PrP3WSCz9yT9T
+Received: by mail-pj1-f69.google.com with SMTP id x3-20020a17090a1f8300b001a285b9f2cbso6873299pja.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 06:35:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v45QaW2rM4Je/A8eu9T3JFXlWztdvqd9VNNeErMwc18=;
+        b=ZoJ7bm62EGw7ET4F1X20dpTU7jOwszuY9Bf8pk2ZQQylLCvULZZChhV65/9zTL8s3f
+         hNlp0ysjfaFVeSzUpTo+vjdJQlYwrEVHbbqCYmvLUn4A7lpiHK/SVIoJeqvFCBJANZCw
+         6I/83GucUnXu7bRLNHWKTqrWxdVNTlH05T8nHO76x6idj5YKgCSOnkg1XtOhAK4mXkq6
+         +1oYirp7q5sbg7cLxLAWPWzZXSS76mWWWHbZF9DneEeDnTx2Eqm+3Y/IICIODVT/HDqi
+         HZ9pOp3tfkqltDdRs7fS0JlVHLh48MwjjzjjOCpVfGt44YJcYlqOEfTpUcKHaQUplA4H
+         uM/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v45QaW2rM4Je/A8eu9T3JFXlWztdvqd9VNNeErMwc18=;
+        b=ImOngtkSTd203dlBaf53sSDpGSceMS84ebO4xYf0LwHq5nZiIWqDm7JdcpKj9m75gT
+         I1nrmBAd5JpHx7u6EQkAMYJsLq1NE9iuC55simIncSGzwhY6gWqhh1NQdVUkgbQUzcQn
+         aPYwIpyyvV5cu4ariIvslTQpLuPIsyYAAyCC/kY566iwSYvCQClnPuYslIpGbapQ1bK4
+         TI7H4weeDT2n9PMaU6U5vxt8hq5E0rUP2ZkslSfoVG6kTDYdFKQ4tFs/uB244byC6Jji
+         hqPXbXgPLWkdGS9hqxlY3sN8FR84Pe2r44cGHTTSHUMQADSnT82jiKAvDW/NGx+EYF1X
+         pyPw==
+X-Gm-Message-State: AOAM531DI4Us6WhIC0gvmrsphTtHP4xlFHz5lLmqUl89/c/GemeNsBaj
+        Lc5QxUbfR7QeCdtfHdP2sVLXyeoLHv0frposCFvrPkT+vKufBqlaOFT12TOil4I4psurBtdXZkJ
+        G6lrIzdDtPC90K4AqjR/YJ8j61GKy
+X-Received: by 2002:a17:90b:4a89:: with SMTP id lp9mr6673745pjb.6.1638282900692;
+        Tue, 30 Nov 2021 06:35:00 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwCRXgemJPjRW9A0gvP1wh5yNn/WdhCWBlFTQZi+PCntn4wzo5i7noyETqEeeoY0emTtll64g==
+X-Received: by 2002:a17:90b:4a89:: with SMTP id lp9mr6673719pjb.6.1638282900508;
+        Tue, 30 Nov 2021 06:35:00 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id s28sm22292818pfg.147.2021.11.30.06.34.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 06:35:00 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dave Airlie <airlied@redhat.com>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/nouveau/dispnv04: Fix a NULL pointer dereference in nv17_tv_get_hd_modes()
+Date:   Tue, 30 Nov 2021 22:34:53 +0800
+Message-Id: <20211130143454.159221-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129230141.228085-3-nathan@kernel.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 04:01:40PM -0700, Nathan Chancellor wrote:
-> Use the newly introduced CONFIG_PAGE_SIZE_LESS_THAN_256KB to describe
-> the dependency introduced by commit b05fbcc36be1 ("btrfs: disable build
-> on platforms having page size 256K").
-> 
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+In nv17_tv_get_hd_modes(), the return value of drm_mode_duplicate() is
+assigned to mode and there is a dereference of it in
+nv17_tv_get_hd_modes(), which could lead to a NULL pointer dereference
+on failure of drm_mode_duplicate().
 
-Acked-by: David Sterba <dsterba@suse.com>
+Fix this bug add a check of mode.
+
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
+
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_DRM_NOUVEAU=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 6ee738610f41 ("drm/nouveau: Add DRM driver for NVIDIA GPUs")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/gpu/drm/nouveau/dispnv04/tvnv17.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/gpu/drm/nouveau/dispnv04/tvnv17.c b/drivers/gpu/drm/nouveau/dispnv04/tvnv17.c
+index be28e7bd7490..6fe103fd60e9 100644
+--- a/drivers/gpu/drm/nouveau/dispnv04/tvnv17.c
++++ b/drivers/gpu/drm/nouveau/dispnv04/tvnv17.c
+@@ -257,6 +257,9 @@ static int nv17_tv_get_hd_modes(struct drm_encoder *encoder,
+ 		if (modes[i].hdisplay == output_mode->hdisplay &&
+ 		    modes[i].vdisplay == output_mode->vdisplay) {
+ 			mode = drm_mode_duplicate(encoder->dev, output_mode);
++			if (!mode)
++				return -ENOMEM;
++
+ 			mode->type |= DRM_MODE_TYPE_PREFERRED;
+ 
+ 		} else {
+-- 
+2.25.1
+

@@ -2,163 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6342246353D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB11E463542
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 14:20:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239614AbhK3NVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 08:21:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38638 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239661AbhK3NVD (ORCPT
+        id S239731AbhK3NXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 08:23:20 -0500
+Received: from mta-p8.oit.umn.edu ([134.84.196.208]:53560 "EHLO
+        mta-p8.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230253AbhK3NXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 08:21:03 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CAB0C06174A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:17:44 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id u1so44314806wru.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:17:44 -0800 (PST)
+        Tue, 30 Nov 2021 08:23:18 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p8.oit.umn.edu (Postfix) with ESMTP id 4J3N9q0xhFz9vKMQ
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 13:19:59 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p8.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p8.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XjQWYHh8ExMU for <linux-kernel@vger.kernel.org>;
+        Tue, 30 Nov 2021 07:19:59 -0600 (CST)
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p8.oit.umn.edu (Postfix) with ESMTPS id 4J3N9p6Brjz9vKMP
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 07:19:58 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p8.oit.umn.edu 4J3N9p6Brjz9vKMP
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p8.oit.umn.edu 4J3N9p6Brjz9vKMP
+Received: by mail-pl1-f199.google.com with SMTP id e10-20020a17090301ca00b00141fbe2569dso8194706plh.14
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 05:19:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jrtc27.com; s=gmail.jrtc27.user;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=VEsUwdxPY7Uj9kvn4cA/oDWG3LVG7CgUzhJ5udUVC/0=;
-        b=JohDjlcVYhMurxBZlQ2EByjTX4OrXyZsMstLrb17g3YmRDC6ZdroIJEfnCEWD82YaK
-         piHQOv6At3x+X54Dp43fIb5pSL40ADU6ouR6rKlG4c80Q99Ny58zHkM4VjSTYjg826ox
-         P8Hp5Cn8fYkx8slDoOMccwuy2T5Bm1FzuiAIamo2F6rETxx4sKlqMLeRYAhacdEpksA8
-         KpGPsfp+w5PiddKf0OQIRfsAzgjEdwa6VpVqPBNjdTgY/5w4zCioEwXKlVcGsLHDDjlJ
-         0+s6JfPKb8OLpqvT/nCCfX7YkCz41WRK/B4fZF1L1G/dkwUs5LHzHZXiGK/GL8xqzWdQ
-         RIZg==
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9giINlR+BSpEr7zhBf6fuBq1XcC7WnNkJGxwTieVCFQ=;
+        b=mbHNzOpxzuTTFSShX9vTuvlmR/XgchvH5bqJff9kswR3aO+taZYihdcpOWBUUcHiJC
+         4i/BLeveoAjoLv4NWluQuE089j1cGcc8CDdhWTXMqu4RcIkIrQnF5P7d6Be4oAfgN3dA
+         Xl0cyxQFJaiNN4ZHXlt5GRg0OzHYT+XaBRt+knm41feUQ0zN1nF9+pMPt+kQF39gk6KA
+         KmjNnkLb9KinMwttErKiU8xK+erTVdxi1vzZ2ZcOaikWYJAPpRkX17YIxl6cNEUmwnQI
+         8c+pL8ySmD6J/Ud84LTj2EhGG5W+mbNPddR2t7N9GblSCFa+71Vm/ey9n4rpWYywO94W
+         Q2iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=VEsUwdxPY7Uj9kvn4cA/oDWG3LVG7CgUzhJ5udUVC/0=;
-        b=5UtuVBqj7So8TRyZHOciCJ5Lgd1uNg8MC1CH5Y/kKug765ToF9AdN+ldnEcq8So6yp
-         bgUVy+V5FwHfHZd8gcZbHIR2UkGn/zj1xovUqvsI2Zc05uugj8kqfkEZBooRlqAWeaEC
-         XAU7aT1c8zJNTXhk0xzqfh9XItcEh7Yopd7629mT3R/UOYw4rfRQXvHqSjtNZEHSmtCE
-         1gXgkVF/KmYIGnV0Hwt6xqkKiwzatHf4IIvpEDbg4oY/k0HGpZSeMbF++3+t1/OID9cP
-         dA+jwKxPvrsn1N4shxGFdf2BfFYyRIFdaPzzC6rFk8zPIAY1kWfCMQb19sfzcohrghpt
-         xdWQ==
-X-Gm-Message-State: AOAM533dMDF9PdJTViF30epbQqh4987l4i2M+bfY8sN9BzuI965/6CRL
-        qjYtENmVIP2GRlxeHDqkZjliPA==
-X-Google-Smtp-Source: ABdhPJyo9i5da+tky2D1vAoae1D7XArRcImXxlP40qx29nfDOYfYi3oVmlZKywKwzRrwz27OcOtQeQ==
-X-Received: by 2002:a5d:64cd:: with SMTP id f13mr39488975wri.382.1638278263044;
-        Tue, 30 Nov 2021 05:17:43 -0800 (PST)
-Received: from smtpclient.apple (global-5-141.nat-2.net.cam.ac.uk. [131.111.5.141])
-        by smtp.gmail.com with ESMTPSA id g5sm21775978wri.45.2021.11.30.05.17.42
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Nov 2021 05:17:42 -0800 (PST)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions
- support for Svpbmt
-From:   Jessica Clarke <jrtc27@jrtc27.com>
-In-Reply-To: <1909580.k68io2XIxi@diego>
-Date:   Tue, 30 Nov 2021 13:17:41 +0000
-Cc:     Wei Fu <wefu@redhat.com>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        taiten.peng@canonical.com, aniket.ponkshe@canonical.com,
-        gordan.markus@canonical.com, Guo Ren <guoren@linux.alibaba.com>,
-        arnd@arndb.de, wens@csie.org, maxime@cerno.tech,
-        Dan Lustig <dlustig@nvidia.com>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        andrea.mondelli@huawei.com, behrensj@mit.edu, xinhaoqu@huawei.com,
-        huffman@cadence.com, Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        jscheid@ventanamicro.com, rtrauben@gmail.com,
-        Anup Patel <anup@brainfault.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Anup Patel <anup.patel@wdc.com>, atishp04@gmail.com,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Guo Ren <guoren@kernel.org>,
-        =?utf-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>, hch@lst.de,
-        liush@allwinnertech.com, Wei Wu <lazyparser@gmail.com>,
-        drew@beagleboard.org,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D7F256F9-F31F-4663-AADD-A535E159F87C@jrtc27.com>
-References: <20211129014007.286478-1-wefu@redhat.com>
- <97431cab-d67d-4bc7-e181-d64534791f03@canonical.com>
- <9930802.MB9u6SvQ6m@diego> <1909580.k68io2XIxi@diego>
-To:     =?utf-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9giINlR+BSpEr7zhBf6fuBq1XcC7WnNkJGxwTieVCFQ=;
+        b=MEaxCQJV6LROyL4N1xUFXnxNzkIQFVgvaE/0F8xxefH9rk/s0llgMFxUOqgVFuJd8O
+         tHCqh+Q5mv2pN4DiFZtBYCtuU9Mt0MxSQJSb+RrxNqUdODVEt7pullylqlt+fFp1y/cv
+         By8kmlcoJS2TRahHNV1yagtJXrPVluDydy1NDRc3EKKwWm7d6+mIafbXH/7ro1IjsavB
+         /0CYPTJqUdSuyQ8/PhFJnrHKb/uD1+TnczKzyJEBHZlfS2+DQT2LsYXNTiajb06Jh+Rm
+         rIiDOEX5JPGL01xo7qkjyLawQU3uvfP4fgs+gNGkm6+GErpNVmMjEW5Qum6QOzkx1b1b
+         SIYQ==
+X-Gm-Message-State: AOAM5335uT62JXhcJAEHpEEH82KcrpnINYfsqdmla2IinR/JbWzttwXB
+        2gh8kZ9h0YS8kZaiiDXDKWVhUV4hsQjn2YXAz9YROxpubLeBd+LvGjEZgkRqahBsiWZP4jCFFTe
+        Haxi1B97gePydFIi3yHIFq9cK97SX
+X-Received: by 2002:a17:90b:3447:: with SMTP id lj7mr5978397pjb.112.1638278397893;
+        Tue, 30 Nov 2021 05:19:57 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzQUuDVaf1z7tmlheKJGKSEuBfRA5pRLyuHo6Xi3d8PJ3AzMI6GWMe56NIODcYFd58IYrRvRg==
+X-Received: by 2002:a17:90b:3447:: with SMTP id lj7mr5978362pjb.112.1638278397658;
+        Tue, 30 Nov 2021 05:19:57 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.7.42.137])
+        by smtp.gmail.com with ESMTPSA id rm10sm3104834pjb.29.2021.11.30.05.19.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 05:19:57 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        Dave Airlie <airlied@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/ch7006: Fix a wild pointer dereference in ch7006_encoder_get_modes()
+Date:   Tue, 30 Nov 2021 21:19:15 +0800
+Message-Id: <20211130131917.127897-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30 Nov 2021, at 12:07, Heiko St=C3=BCbner <heiko@sntech.de> wrote:
->=20
-> Am Montag, 29. November 2021, 13:06:23 CET schrieb Heiko St=C3=BCbner:
->> Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich =
-Schuchardt:
->>> On 11/29/21 02:40, wefu@redhat.com wrote:
->>>> From: Wei Fu <wefu@redhat.com>
->>>>=20
->>>> Previous patch has added svpbmt in arch/riscv and add =
-"riscv,svpmbt"
->>>> in the DT mmu node. Update dt-bindings related property here.
->>>>=20
->>>> Signed-off-by: Wei Fu <wefu@redhat.com>
->>>> Co-developed-by: Guo Ren <guoren@kernel.org>
->>>> Signed-off-by: Guo Ren <guoren@kernel.org>
->>>> Cc: Anup Patel <anup@brainfault.org>
->>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
->>>> Cc: Rob Herring <robh+dt@kernel.org>
->>>> ---
->>>>  Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
->>>>  1 file changed, 10 insertions(+)
->>>>=20
->>>> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml =
-b/Documentation/devicetree/bindings/riscv/cpus.yaml
->>>> index aa5fb64d57eb..9ff9cbdd8a85 100644
->>>> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
->>>> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
->>>> @@ -63,6 +63,16 @@ properties:
->>>>        - riscv,sv48
->>>>        - riscv,none
->>>>=20
->>>> +  mmu:
->>>=20
->>> Shouldn't we keep the items be in alphabetic order, i.e. mmu before=20=
+In ch7006_encoder_get_modes(), the return value of drm_mode_duplicate()
+is directly used in drm_mode_probed_add(). drm_mode_probed_add() will
+pass &mode->head to list_add_tail(). list_add_tail() will further
+call __list_add() and there is a dereference of mode->head in
+__list_add(), which could case a wild pointer dereference on failure
+of drm_mode_duplicate().
 
->>> mmu-type?
->>>=20
->>>> +    description:
->>>> +      Describes the CPU's MMU Standard Extensions support.
->>>> +      These values originate from the RISC-V Privileged
->>>> +      Specification document, available from
->>>> +      https://riscv.org/specifications/
->>>> +    $ref: '/schemas/types.yaml#/definitions/string'
->>>> +    enum:
->>>> +      - riscv,svpmbt
->>>=20
->>> The privileged specification has multiple MMU related extensions:=20
->>> Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enum?
->>=20
->> I remember in some earlier version some way back there was the
->> suggestion of using a sub-node instead and then adding boolean
->> properties for the supported extensions.
->>=20
->> Aka something like
->> 	mmu {
->> 		riscv,svpbmt;=09
->> 	};
->=20
-> For the record, I'm talking about the mail from september
-> =
-https://lore.kernel.org/linux-riscv/CAAeLtUChjjzG+P8yg45GLZMJy5UR2K5RRBoLF=
-VZhtOaZ5pPtEA@mail.gmail.com/
->=20
-> So having a sub-node would make adding future extensions
-> way nicer.
+Fix this bug by separating drm_mode_duplicate() from
+drm_mode_probed_add() and adding a check of it.
 
-Svpbmt is just an ISA extension, and should be treated like any other.
-Let=E2=80=99s not invent two different ways of representing that in the =
-device
-tree.
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Jess
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
+
+Builds with CONFIG_DRM_I2C_CH7006=m show no new warnings,
+and our static analyzer no longer warns about this code.
+
+Fixes: 6ee738610f41 ("drm/nouveau: Add DRM driver for NVIDIA GPUs")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+ drivers/gpu/drm/i2c/ch7006_drv.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/i2c/ch7006_drv.c b/drivers/gpu/drm/i2c/ch7006_drv.c
+index b91e48d2190d..1207646562eb 100644
+--- a/drivers/gpu/drm/i2c/ch7006_drv.c
++++ b/drivers/gpu/drm/i2c/ch7006_drv.c
+@@ -227,6 +227,7 @@ static int ch7006_encoder_get_modes(struct drm_encoder *encoder,
+ {
+ 	struct ch7006_priv *priv = to_ch7006_priv(encoder);
+ 	const struct ch7006_mode *mode;
++	struct drm_display_mode *dup_mode;
+ 	int n = 0;
+ 
+ 	for (mode = ch7006_modes; mode->mode.clock; mode++) {
+@@ -234,8 +235,11 @@ static int ch7006_encoder_get_modes(struct drm_encoder *encoder,
+ 		    ~mode->valid_norms & 1<<priv->norm)
+ 			continue;
+ 
+-		drm_mode_probed_add(connector,
+-				drm_mode_duplicate(encoder->dev, &mode->mode));
++		dup_mode = drm_mode_duplicate(encoder->dev, &mode->mode);
++		if (!dup_mode)
++			return -ENOMEM;
++
++		drm_mode_probed_add(connector, dup_mode);
+ 
+ 		n++;
+ 	}
+-- 
+2.25.1
 

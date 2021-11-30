@@ -2,123 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A95462D78
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6558462D7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 08:28:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234514AbhK3Hbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 02:31:40 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54968 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S229655AbhK3Hbj (ORCPT
+        id S239033AbhK3HcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 02:32:02 -0500
+Received: from mail-pj1-f44.google.com ([209.85.216.44]:43966 "EHLO
+        mail-pj1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233413AbhK3HcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 02:31:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638257300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QYG0xlXta5uqZ69e7PNkPe7Wbsl/KNZHtSSSmrsdMFw=;
-        b=GEnlTLecSZrZ3rxz6nVnqRJZF4AhJWzb0cpnCEfLPTmHmkVcV/g7kpjOe5SbVfdB54Entg
-        CW5/N+pocDbZW+sQ7rKUk3If2zl5hy2hW2bfkwYHJ4F+1x+ypU5MtTHgEy8XDczLITHJKY
-        d8peAfl95oMwe2sh22zIlNfOnbLqdYw=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-536-KybUpzijOkmekNOzJUUaVw-1; Tue, 30 Nov 2021 02:28:18 -0500
-X-MC-Unique: KybUpzijOkmekNOzJUUaVw-1
-Received: by mail-wr1-f71.google.com with SMTP id f3-20020a5d50c3000000b00183ce1379feso3331599wrt.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 23:28:18 -0800 (PST)
+        Tue, 30 Nov 2021 02:32:01 -0500
+Received: by mail-pj1-f44.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso16405897pjb.2;
+        Mon, 29 Nov 2021 23:28:43 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=QYG0xlXta5uqZ69e7PNkPe7Wbsl/KNZHtSSSmrsdMFw=;
-        b=nDzqloE0qwJYPwHuwKDuYw8TAiRRHXW1GD6Z/be1mjWy/lhS2uvQ295VQUR1Jj6SuS
-         ariQmXan7YQ0eG0MkO/dGu2JaWm6VxVYbIgEPJLhJ2nkH43JkZAQ2iP6AAOGw5D0sAzN
-         SonYBhV1fG/XMM5pUxpiLG05yw936L5FUQBB+GXepES11tGOcashhnBsts75NvsVtjxA
-         PDbydHV2Z7gm/DalxsyGdPmNZluBgf61MeDJRJt7b3zBJn7WkK8E1HQKHtHsoYjS28AJ
-         Ww0nsDfJdP3xZlXrcwszsFRoQ8StSaFUWxzEgN4Bsog7qG7p/L8Q4Lp9dte5ISFkV2tc
-         tNnA==
-X-Gm-Message-State: AOAM532VtDY9wQxJdnQ1CBBG8iRCb2Dg6Ao0YmYky7RLuIF3tPfpBV8/
-        k8PRVT2INb85v3pe2HW+x+UBm1QHJHw4VtG029BZcLGsK/etrK0yLjqdNY0qsf3PvXp2wkuWo9x
-        pnObg9MB2HfLXWcccdHE30s6C
-X-Received: by 2002:a7b:ce16:: with SMTP id m22mr2979804wmc.39.1638257297502;
-        Mon, 29 Nov 2021 23:28:17 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJxK2rwcIrtv4RtfQ983prRIkRD0ZG7sfC5n89ECduXultLEnEEQ2+nrWzvlBkIc4L2PPkSzQA==
-X-Received: by 2002:a7b:ce16:: with SMTP id m22mr2979769wmc.39.1638257297217;
-        Mon, 29 Nov 2021 23:28:17 -0800 (PST)
-Received: from xz-m1.local ([85.203.46.194])
-        by smtp.gmail.com with ESMTPSA id g198sm1574235wme.23.2021.11.29.23.28.10
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=iz5wEeRsS04GwX3xBqETJnARTyHG1Ba5oDn/u/+myP8=;
+        b=XKId3QStNQkGrTpbR593Z6uBke4qDjLBgsTFPidtDloIiQGRyHWNSJOa95nY1CcunO
+         Ef6JyTmICE+BBGqcii2iO7aTK5Zbw+eAb1WhEcgbtq7srwZ2nvitOLSpzpCCtY1ihtkh
+         BResbo/zPZBZH4nbp8waAgkxF4LrNIhONv1ryc35wCN8cTeIyN8Csfhgn+vqMKoJdalm
+         hI9ZDPybP7YVxFa9F7qE/WazG7SMVhh1+QOABsiZAh5zpGdeLXmE8FLO6hI70LAquPxh
+         hDa9zNNUeLNtkjII8LQTRBCTdmayfq47Y5jVx0+ii1LjXCyH7Z5ZsPACq8XgOYpC0vIg
+         8L7w==
+X-Gm-Message-State: AOAM5338cqBe66Fv1MwFko8kQlkZR8W3cYsweUgDHfkApFs6q4IZsAaq
+        DQ7UAEDLcMZKMuOHNON6YqQ=
+X-Google-Smtp-Source: ABdhPJwBFzSLckRpxVwWDl/mHPiHMQEZD61fOwq8WhCy6SEBFljPTruH+oE41JFx+FFafXHr2ulzPw==
+X-Received: by 2002:a17:90b:3b43:: with SMTP id ot3mr4017318pjb.205.1638257322820;
+        Mon, 29 Nov 2021 23:28:42 -0800 (PST)
+Received: from rocinante ([95.155.85.46])
+        by smtp.gmail.com with ESMTPSA id v18sm5375354pgo.11.2021.11.29.23.28.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Nov 2021 23:28:16 -0800 (PST)
-Date:   Tue, 30 Nov 2021 15:28:07 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Shier <pshier@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Yulei Zhang <yulei.kernel@gmail.com>,
-        Wanpeng Li <kernellwp@gmail.com>,
-        Xiao Guangrong <xiaoguangrong.eric@gmail.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH 15/15] KVM: x86/mmu: Promote pages in-place when
- disabling dirty logging
-Message-ID: <YaXSh6RUOH7NHG8G@xz-m1.local>
-References: <20211115234603.2908381-1-bgardon@google.com>
- <20211115234603.2908381-16-bgardon@google.com>
- <YZ8OpQmB/8k3/Maj@xz-m1.local>
- <CANgfPd9pK83S+yoRokLg7wiroE6-OkieATTqgGn3yCCzwNFi4A@mail.gmail.com>
+        Mon, 29 Nov 2021 23:28:42 -0800 (PST)
+Date:   Tue, 30 Nov 2021 08:28:32 +0100
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     lorenzo.pieralisi@arm.com, bhelgaas@google.com,
+        svarbanov@mm-sol.com, bjorn.andersson@linaro.org, robh@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] PCI: qcom: Use __be16 for catching cpu_to_be16()
+ return instead of u16
+Message-ID: <YaXSoLpIfrTh81/+@rocinante>
+References: <20211130064215.207393-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CANgfPd9pK83S+yoRokLg7wiroE6-OkieATTqgGn3yCCzwNFi4A@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211130064215.207393-1-manivannan.sadhasivam@linaro.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 10:31:14AM -0800, Ben Gardon wrote:
-> > As comment above handle_removed_tdp_mmu_page() showed, at this point IIUC
-> > current thread should have exclusive ownership of this orphaned and abandoned
-> > pgtable page, then why in handle_removed_tdp_mmu_page() we still need all the
-> > atomic operations and REMOVED_SPTE tricks to protect from concurrent access?
-> > Since that's cmpxchg-ed out of the old pgtable, what can be accessing it
-> > besides the current thread?
-> 
-> The cmpxchg does nothing to guarantee that other threads can't have a
-> pointer to the page table, only that this thread knows it's the one
-> that removed it from the page table. Other threads could still have
-> pointers to it in two ways:
-> 1. A kernel thread could be in the process of modifying an SPTE in the
-> page table, under the MMU lock in read mode. In that case, there's no
-> guarantee that there's not another kernel thread with a pointer to the
-> SPTE until the end of an RCU grace period.
+Hi Manivannan,
 
-Right, I definitely missed that whole picture of the RCU usage.  Thanks.
+Thank you for sending the patch over!  Much appreciated!
 
-> 2. There could be a pointer to the page table in a vCPU's paging
-> structure caches, which are similar to the TLB but cache partial
-> translations. These are also cleared out on TLB flush.
+A small nitpick, thus feel free to ignore it, of course: if I may, I would
+suggest the following subject:
 
-Could you elaborate what's the structure cache that you mentioned?  I thought
-the processor page walker will just use the data cache (L1-L3) as pgtable
-caches, in which case IIUC the invalidation happens when we do WRITE_ONCE()
-that'll invalidate all the rest data cache besides the writter core.  But I
-could be completely missing something..
+  PCI: qcom: Use __be16 type to store return value from cpu_to_be16()
 
-> Sean's recent series linked the RCU grace period and TLB flush in a
-> clever way so that we can ensure that the end of a grace period
-> implies that the necessary flushes have happened already, but we still
-> need to clear out the disconnected page table with atomic operations.
-> We need to clear it out mostly to collect dirty / accessed bits and
-> update page size stats.
+Or something along the lines.
 
-Yes, this sounds reasonable too.
+> cpu_to_be16() returns __be16 value but the driver uses u16 and that's
+> incorrect. Fix it by using __be16 as the datatype of bdf_be variable.
 
--- 
-Peter Xu
+It would be "data type" in the above.
 
+Not really a requirement to do so, but you could include the actual
+warning, as sometimes this is useful for reference later, as per:
+
+  drivers/pci/controller/dwc/pcie-qcom.c:1346:30: warning: incorrect type in initializer (different base types)
+  drivers/pci/controller/dwc/pcie-qcom.c:1346:30:    expected unsigned short [usertype] bdf_be
+  drivers/pci/controller/dwc/pcie-qcom.c:1346:30:    got restricted __be16 [usertype]
+
+> @@ -1343,7 +1343,7 @@ static int qcom_pcie_config_sid_sm8250(struct qcom_pcie *pcie)
+>  
+>  	/* Look for an available entry to hold the mapping */
+>  	for (i = 0; i < nr_map; i++) {
+> -		u16 bdf_be = cpu_to_be16(map[i].bdf);
+> +		__be16 bdf_be = cpu_to_be16(map[i].bdf);
+>  		u32 val;
+>  		u8 hash;
+
+Thank you!
+
+Reviewed-by: Krzysztof Wilczyński <kw@linux.com>
+
+Also, since I have your attention, it seems we have a number of unused
+macros in the qcom driver, as per:
+
+  drivers/pci/controller/dwc/pcie-qcom.c:#define PCIE20_PARF_BDF_TRANSLATE_CFG            0x24C
+  drivers/pci/controller/dwc/pcie-qcom.c:#define PCIE20_PARF_SID_OFFSET                   0x234
+  drivers/pci/controller/dwc/pcie-qcom.c:#define PCIE20_PARF_SLV_ADDR_SPACE_SIZE          0x16C
+
+And also in the qcom-ep driver, as per:
+
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_BRIDGE_FLUSH_N           BIT(12)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_MHI_A7                   BIT(7)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_MHI_Q6                   BIT(6)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_SLV_ADDR_SPACE_SIZE              0x358
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_PLS_PME                  BIT(17)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_SLV_ADDR_MSB_CTRL                        0x2c0
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_DEBUG                    BIT(4)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_L1SUB_TIMEOUT            BIT(9)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_DBI_BASE_ADDR_HI                 0x354
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_ATU_BASE_ADDR                    0x634
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_SLV_ADDR_SPACE_SIZE_HI           0x35c
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_LTR                      BIT(5)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_DBI_BASE_ADDR                    0x350
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_SRIS_MODE                                0x644
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_MMIO_WRITE                       BIT(10)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_PLS_ERR                  BIT(15)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_AER_LEGACY                       BIT(14)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_CFG_WRITE                        BIT(11)
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_ATU_BASE_ADDR_HI                 0x638
+  drivers/pci/controller/dwc/pcie-qcom-ep.c:#define PARF_INT_ALL_PME_LEGACY                       BIT(16)
+
+Are these needed, or would it be fine to drop these?
+
+	Krzysztof

@@ -2,73 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 257094628F9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:16:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15ED8462905
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 01:18:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233106AbhK3ATm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 19:19:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
+        id S233223AbhK3AWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 19:22:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbhK3ATl (ORCPT
+        with ESMTP id S230195AbhK3AWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 19:19:41 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70D9CC061574
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:16:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-        :In-Reply-To:From:References:To:Subject:MIME-Version:Date:Message-ID:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=EwykYvWN8YnSwIQ3myJ9bi7OawmTY6LVqM+iZEWeJyc=; b=XJyTzv6r1kx7GDO6l7yL0zRDln
-        qElcXINvJUV2XxthstweAzGugncG+qT95TG+M6a9TdvKXXQCf/dWyIcm4HRnFNfpEgH8h7v2U2Mpm
-        PrxTsqd90MG+zwcXGahdfKuNkoeeyIxbKI8vUimDu1gFlwj7iml0os79QmXaAbfgxVrgGIZDRKchN
-        B+F7T8MQUHEZabM4F8NdJyx4v5yrKZePXmVpSjJRnrFR3CFUXXCXu0PL8QDlfHTAHZyaaNJs90rLg
-        aP4v+WPNft3B3gKBqfB0myXYBMzd+2ztBumIkjeG42DP4+VMcHQq/QxvY58WFq5eBB6+FfN0P099R
-        UImnW5Tw==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1mrqom-001LJE-Pk; Tue, 30 Nov 2021 00:16:21 +0000
-Message-ID: <e6de22e4-93ae-1dd8-7589-df75d395c920@infradead.org>
-Date:   Mon, 29 Nov 2021 16:16:18 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: =?UTF-8?Q?Re=3a_Kernel_driver=3a_W1_DALLAS=e2=80=99S_1-WIRE_BUS_inv?=
- =?UTF-8?Q?alid_calculation?=
-Content-Language: en-US
-To:     linux-kernel@miltschek.de, linux-kernel@vger.kernel.org,
-        Evgeniy Polyakov <zbr@ioremap.net>
-References: <5be0e863-cb9b-c448-9089-6a95f59b8f74@miltschek.de>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <5be0e863-cb9b-c448-9089-6a95f59b8f74@miltschek.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Mon, 29 Nov 2021 19:22:04 -0500
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BA4C061714
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:18:46 -0800 (PST)
+Received: by mail-pg1-x54a.google.com with SMTP id h2-20020a632102000000b003210bade52bso9363941pgh.9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Nov 2021 16:18:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=fqiIppSe7u1NnW3cvLakhtzd+THR0eb6aNRG1jCvBe4=;
+        b=o+uUnHGtT31rOsMLzjD2lzn032LEfjUdq3Sw0top7vsPbr4ClyZZiDG2r3dG12KXzc
+         ddIZgBMBZsAwPqGqU9bjdpTiJedG/w6RUN80tOam1c+EwmoIYC84qpPWyo8DAKaNg+Xe
+         qKhuATpmTHS09T9YDJNAm/NsPa21R9JwQXsuOso97HZMAiyP9szju2Py5OZ5H/hUb8+W
+         nflBKNoZQb5tWpdGPVogs9yATn5g4oB0Iw5Gwd5rp5xu11/6WiycWSVaSih4Q1UCEAU+
+         E705eoE4QC+r0p2RBxl+EnRs2fLyWaxChEttYE3iTo2Zq4GvTfiVnVe2ZUX2eS5YTnAL
+         rrjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=fqiIppSe7u1NnW3cvLakhtzd+THR0eb6aNRG1jCvBe4=;
+        b=ShGBS5jWJmEuilh95xqCQs90vQFm6BgZomQz9lf0Mp/2b1IjQFJUuLEoadK7CiaHK4
+         szVJzMlEglJxtfY6K9KjihKPXC4eUFRHYjgfObYKyzDiw2WRsc65UWFa4OdJnyxKLV66
+         4GyPanojQRxq/WO3IXQU6VJXfUjtmFuUXiTSGe72VUZX4Ec8zzZCCY/gkm4dTDWR73PH
+         i/HcyLkuIRnxnfVf+vzb+BJs4rhHd+izh0h0mkhd4HczrITCzNIWjPnkBtXTGWr9F8IU
+         LBU1yRCXfMmJEbfvLQgVmfXwqbVPkCCoRQDk2YoEWCLm4096ME5pWtCypU/7JAkyqkz1
+         /zJw==
+X-Gm-Message-State: AOAM5301hyvHIdmAxOMVxDEmSq17Pi8nDDSL2aJMS8WAUAe+sCQsVF0p
+        TF/wvwUcn1P+Vu5EZV5GcR3Qr1glhek=
+X-Google-Smtp-Source: ABdhPJy2g0UQKNf/QdSpzVdCY6bn6T4kSInxTQJ9sAF7rPJyaI+QNeOmoyBpD2Y/QM542UalnyZLBrNmIig=
+X-Received: from badhri.mtv.corp.google.com ([2620:15c:211:201:ee3f:d2a:7fda:5c6])
+ (user=badhri job=sendgmr) by 2002:a05:6a00:8cc:b0:4a8:262:49e1 with SMTP id
+ s12-20020a056a0008cc00b004a8026249e1mr27639423pfu.28.1638231525981; Mon, 29
+ Nov 2021 16:18:45 -0800 (PST)
+Date:   Mon, 29 Nov 2021 16:18:25 -0800
+Message-Id: <20211130001825.3142830-1-badhri@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
+Subject: [PATCH v2] usb: typec: tcpm: Wait in SNK_DEBOUNCED until disconnect
+From:   Badhri Jagan Sridharan <badhri@google.com>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kyle Tso <kyletso@google.com>, stable@vger.kernel.org,
+        Badhri Jagan Sridharan <badhri@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Stub from the spec:
+"4.5.2.2.4.2 Exiting from AttachWait.SNK State
+A Sink shall transition to Unattached.SNK when the state of both
+the CC1 and CC2 pins is SNK.Open for at least tPDDebounce.
+A DRP shall transition to Unattached.SRC when the state of both
+the CC1 and CC2 pins is SNK.Open for at least tPDDebounce."
 
-On 11/29/21 11:26, K. wrote:
-> Dear kernel-driver developers,
-> 
-> I believe there is a mistake in calculation of the fine part of the temperature value as received from 1-Wire DS18x20-family sensors.
-> 
-> The current implementation does indeed follow the official datasheet, but exactly the datasheet seems to be incorrect in this place.
-> 
-> Datasheet: https://datasheets.maximintegrated.com/en/ds/DS18S20.pdf
-> says two different things on Page 6:
-> 
+This change makes TCPM to wait in SNK_DEBOUNCED state until
+CC1 and CC2 pins is SNK.Open for at least tPDDebounce. Previously,
+TCPM resets the port if vbus is not present in PD_T_PS_SOURCE_ON.
+This causes TCPM to loop continuously when connected to a
+faulty power source that does not present vbus. Waiting in
+SNK_DEBOUNCED also ensures that TCPM is adherant to
+"4.5.2.2.4.2 Exiting from AttachWait.SNK State" requirements.
 
-[snip]
+[ 6169.280751] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[ 6169.280759] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+[ 6169.280771] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+[ 6169.282427] CC1: 0 -> 0, CC2: 5 -> 5 [state SNK_ATTACH_WAIT, polarity 0, connected]
+[ 6169.450825] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+[ 6169.450834] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+[ 6169.930892] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+[ 6169.931296] disable vbus discharge ret:0
+[ 6169.931301] Setting usb_comm capable false
+[ 6169.932783] Setting voltage/current limit 0 mV 0 mA
+[ 6169.932802] polarity 0
+[ 6169.933706] Requesting mux state 0, usb-role 0, orientation 0
+[ 6169.936689] cc:=0
+[ 6169.936812] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+[ 6169.937157] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
+[ 6170.036880] state change PORT_RESET -> PORT_RESET_WAIT_OFF [delayed 100 ms]
+[ 6170.036890] state change PORT_RESET_WAIT_OFF -> SNK_UNATTACHED [rev2 NONE_AMS]
+[ 6170.036896] Start toggling
+[ 6170.041412] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
+[ 6170.042973] CC1: 0 -> 0, CC2: 0 -> 5 [state TOGGLING, polarity 0, connected]
+[ 6170.042976] state change TOGGLING -> SNK_ATTACH_WAIT [rev2 NONE_AMS]
+[ 6170.042981] pending state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED @ 170 ms [rev2 NONE_AMS]
+[ 6170.213014] state change SNK_ATTACH_WAIT -> SNK_DEBOUNCED [delayed 170 ms]
+[ 6170.213019] pending state change SNK_DEBOUNCED -> PORT_RESET @ 480 ms [rev2 NONE_AMS]
+[ 6170.693068] state change SNK_DEBOUNCED -> PORT_RESET [delayed 480 ms]
+[ 6170.693304] disable vbus discharge ret:0
+[ 6170.693308] Setting usb_comm capable false
+[ 6170.695193] Setting voltage/current limit 0 mV 0 mA
+[ 6170.695210] polarity 0
+[ 6170.695990] Requesting mux state 0, usb-role 0, orientation 0
+[ 6170.701896] cc:=0
+[ 6170.702181] pending state change PORT_RESET -> PORT_RESET_WAIT_OFF @ 100 ms [rev2 NONE_AMS]
+[ 6170.703343] CC1: 0 -> 0, CC2: 5 -> 0 [state PORT_RESET, polarity 0, disconnected]
 
-> For your info: I have contacted Evgeniy P. as an author of the driver, but according to the response, he is not maintaining the driver anymore. That's why a question to all of you, if anyone could take a look at this please.
+Cc: stable@vger.kernel.org
+Fixes: f0690a25a140b8 ("staging: typec: USB Type-C Port Manager (tcpm)")
+Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+---
+ drivers/usb/typec/tcpm/tcpm.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-Evgeniy, if this is correct, please send a patch to update the W1 entry in the MAINTAINERS file
-to Orphan status.  (or at a minimum, reply and ask someone else to do that [e.g., me])
-
-I don't have any idea who could take over as being the W1 maintainer.
-
-Thanks.
-
+diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+index 7f2f3ff1b391..6010b9901126 100644
+--- a/drivers/usb/typec/tcpm/tcpm.c
++++ b/drivers/usb/typec/tcpm/tcpm.c
+@@ -4110,11 +4110,7 @@ static void run_state_machine(struct tcpm_port *port)
+ 				       tcpm_try_src(port) ? SRC_TRY
+ 							  : SNK_ATTACHED,
+ 				       0);
+-		else
+-			/* Wait for VBUS, but not forever */
+-			tcpm_set_state(port, PORT_RESET, PD_T_PS_SOURCE_ON);
+ 		break;
+-
+ 	case SRC_TRY:
+ 		port->try_src_count++;
+ 		tcpm_set_cc(port, tcpm_rp_cc(port));
 -- 
-~Randy
+2.34.0.rc2.393.gf8c9666880-goog
+

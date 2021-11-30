@@ -2,126 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FC84636DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E99234636E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 15:39:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbhK3OkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 09:40:03 -0500
-Received: from mta-p5.oit.umn.edu ([134.84.196.205]:55316 "EHLO
-        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231570AbhK3OkC (ORCPT
+        id S242292AbhK3Omb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 09:42:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57734 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242282AbhK3Om3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 09:40:02 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J3PtL6lgYz9yT9h
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 14:36:42 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p5.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pmOUE4rOVXF6 for <linux-kernel@vger.kernel.org>;
-        Tue, 30 Nov 2021 08:36:42 -0600 (CST)
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J3PtL4gbLz9yT9X
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:36:42 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J3PtL4gbLz9yT9X
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J3PtL4gbLz9yT9X
-Received: by mail-pj1-f69.google.com with SMTP id h15-20020a17090a648f00b001a96c2c97abso6876180pjj.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 06:36:42 -0800 (PST)
+        Tue, 30 Nov 2021 09:42:29 -0500
+Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ADAC06174A;
+        Tue, 30 Nov 2021 06:39:09 -0800 (PST)
+Received: by mail-ed1-x541.google.com with SMTP id l25so87454181eda.11;
+        Tue, 30 Nov 2021 06:39:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bYCNT3kO7HfP/FKczPCMqhEA+GzsNhj1SS1NjAYBh+E=;
-        b=NJKuEDH9aFfVM044j6gAjxuULJ4lkl4JYrb2jNz+y9mFasatcBqPILuTaPBBVHA6My
-         j1jaQW0108Alax3nT58iUAwNZjS/p04DnRc92xeKvi35NEluJoPbU1SrQGlO4xGsAU/y
-         kFHkPArX8MTkkFd0DHiRXSVroeMI0IV6Ss8x9jpvkRbZHGe410x3PQWxN8uRJiXCTgRj
-         dy5ZOdG14QhW0/nqiDLxNmupTZW/DnluL2Z/Z1uAdueMWOoZvZDm4KxypqFrmBH1KT5r
-         qfFfvXQV3l/WF/3ymzsQiruxTXyEwJH82HPBFH4cMXBLKtihoFSiHLxO15Bboz2htlVB
-         OYqQ==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=M6DtkT7yqdJnxtyLICuawnpZM7p79Wj4fCV0rOvuorc=;
+        b=kWQKHzgCw0nBmZ3KPMcZlngLgy0R3fADL9T6FpN+8T6f0/8Q340Bfe6WTP8fxqMC6B
+         xilA11oYDQ8S8ZRy+cQ9XoC/TRc7a1/pvGKh2ktPlJQ2u8WgaT9APjwT7BNnmwQOwLbn
+         fZmuQ4+gOxaun276AtofMqTN84jvrtBr1fIBOkxT8KcU6Zhw2SI3NL8o7wSxeS9gYukJ
+         WVUGuD2E1fzYGZYrtaLMhk1b2mH+ej3sRDRqMkGnUfXcFiK/MLYFs6i7JvbQXcJ42oef
+         15LDy8T8X1g51OZW/RgDpW0upS3LxWgtcJ3X8bK7+QAbw28vLj3N8gozCfvCsk14nWxG
+         hlJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=bYCNT3kO7HfP/FKczPCMqhEA+GzsNhj1SS1NjAYBh+E=;
-        b=3dVy6ydtVyIxeeuhsd/JkDr0JLxl8zEmgMSEeUvoQPp+dWq1eBcMn+6LH+mgiIH0mr
-         6RSY7MOgn3PihtHEndossJ9VxVZGHQEPgS6HhYg360zjfES7XilXvWUFp4kYv88yKxmu
-         /AB4EFNdj0ZNWQH9vlgxo1vU9X7y9PdTJtn1aKg8+hMfgj9GwxfyFu2AplUBrPg8fnDq
-         +eS9lV5f8FEt7KnnzC/caiBgwfXpusHMNrLGl+7gXAO1MT2xaHlAiVtr3TaawUgwx1Lo
-         F6zymkvgJhAMO7ky+Lp0HM9dINesM8Jev0Q+zsGy2qQJROh2RLF8Zghmt/4+nAWQazxr
-         8dxg==
-X-Gm-Message-State: AOAM531btxPsR9F05mngwq0TBgr95zyoPxEbqe/G6jNXtGexlruR37eM
-        q2SIbKkh80o/BXjldUQ34rv1o/BghJNnX/X0BiuA+I+NtcyovmGsF3YJsG+gQDaiE386HfxWbOh
-        /eeux4s8hnkzapkJFbot+GrTbE3xY
-X-Received: by 2002:a63:1f0e:: with SMTP id f14mr40052881pgf.242.1638283001948;
-        Tue, 30 Nov 2021 06:36:41 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJyBqar7smd0w2cVXcze+DnRqaj/Gm5ZSZ66JCEvvEpV8Pf+L9IE/rqGBer8vT+8b6zPimz/xQ==
-X-Received: by 2002:a63:1f0e:: with SMTP id f14mr40052863pgf.242.1638283001761;
-        Tue, 30 Nov 2021 06:36:41 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.7.42.137])
-        by smtp.gmail.com with ESMTPSA id o129sm21447892pfg.44.2021.11.30.06.36.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 06:36:41 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/panel: Fix a NULL pointer dereference in versatile_panel_get_modes()
-Date:   Tue, 30 Nov 2021 22:36:35 +0800
-Message-Id: <20211130143635.160440-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=M6DtkT7yqdJnxtyLICuawnpZM7p79Wj4fCV0rOvuorc=;
+        b=g5B3vMP4bclXs/vOOSPNtqSb+axnQY3VdTWhs6FxcHVZJYLjWe1TcKh/aoWZH9yQLx
+         +lvimaFekO9sMHnAG+2q9nHh+zGcGLycKUZ6D18XMn6CCOVAjf221NbP5Q2gWeayc4ps
+         Gciy5niVM626LDy5ALG4vLJKpSXRAZGhmB6cS6PD+YAD5ZbFuR0YqpkClAmnfD1sJnGx
+         wgu7oVA0r8f25FQymIYD3YUBYW4552y3FVfAXKL+9qkE5f2rD0crbKkza8J49iUg/W3m
+         GmNgQzH1TUoyh3ifqQSTLilTr06D6QJ8qE8Hj+I/7a/YEAmHhi9WxJi7BHarGDGvQOma
+         mKUA==
+X-Gm-Message-State: AOAM532eF6FTkZnJSQPIQsgLHbCLy+pN3Lj7nDLOP7n1ExDtikS9QHfd
+        CGeDiHhQxKN9205rdodiLrirLPOARJaqL/jTFCk=
+X-Google-Smtp-Source: ABdhPJweaAObaI0URjNLnhUOKtwKK07rAqckNLWdRLVytqGybnD74/eNpXw48zCymxAK4tp2IHkO4NsDn6iMaBNby20=
+X-Received: by 2002:a05:6402:2692:: with SMTP id w18mr83091835edd.220.1638283148308;
+ Tue, 30 Nov 2021 06:39:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211128060102.6504-1-imagedong@tencent.com> <20211129075707.47ab0ffe@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211129075707.47ab0ffe@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Tue, 30 Nov 2021 22:36:59 +0800
+Message-ID: <CADxym3YJwgs1-hYZURUf+K56zTtQmWHbwAvEG27s_w8FwQrkQQ@mail.gmail.com>
+Subject: Re: [PATCH v2 net-next] net: snmp: add statistics for tcp small queue check
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        dsahern@kernel.org, Eric Dumazet <edumazet@google.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Yuchung Cheng <ycheng@google.com>, kuniyu@amazon.co.jp,
+        LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In versatile_panel_get_modes(), the return value of drm_mode_duplicate()
-is assigned to mode and there is a dereference of it in
-versatile_panel_get_modes(), which could lead to a NULL pointer
-dereference on failure of drm_mode_duplicate().
+On Mon, Nov 29, 2021 at 11:57 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Sun, 28 Nov 2021 14:01:02 +0800 menglong8.dong@gmail.com wrote:
+> > Once tcp small queue check failed in tcp_small_queue_check(), the
+> > throughput of tcp will be limited, and it's hard to distinguish
+> > whether it is out of tcp congestion control.
+> >
+> > Add statistics of LINUX_MIB_TCPSMALLQUEUEFAILURE for this scene.
+>
+> Isn't this going to trigger all the time and alarm users because of the
+> "Failure" in the TCPSmallQueueFailure name?  Isn't it perfectly fine
+> for TCP to bake full TSQ amount of data and have it paced out onto the
+> wire? What's your link speed?
 
-Fix this bug by adding a check of mode.
+Well, it's a little complex. In my case, there is a guest in kvm, and virti=
+o_net
+is used with napi_tx enabled.
 
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
+With napi_tx enabled, skb won't be orphaned after it is passed to virtio_ne=
+t,
+until it is released. The point is that the sending interrupt of
+virtio_net will be
+turned off and the skb can't be released until the next net_rx interrupt co=
+mes.
+So, wmem_alloc can't decrease on time, and the bandwidth is limited. When
+this happens, the bandwidth can decrease from 500M to 10M.
 
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
+In fact, this issue of uapi_tx is fixed in this commit:
+https://lore.kernel.org/lkml/20210719144949.935298466@linuxfoundation.org/
 
-Builds with CONFIG_DRM_PANEL_ARM_VERSATILE=m show no new warnings,
-and our static analyzer no longer warns about this code.
+I added this statistics to monitor the sending failure (may be called
+sending delay)
+caused by qdisc and net_device. When something happen, maybe users can
+raise =E2=80=98/proc/sys/net/ipv4/tcp_pacing_ss_ratio=E2=80=99 to get bette=
+r bandwidth.
 
-Fixes: aa6c43644bc5 ("drm/panel: drop drm_device from drm_panel")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
- drivers/gpu/drm/panel/panel-arm-versatile.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/gpu/drm/panel/panel-arm-versatile.c b/drivers/gpu/drm/panel/panel-arm-versatile.c
-index abb0788843c6..5e73083c09a2 100644
---- a/drivers/gpu/drm/panel/panel-arm-versatile.c
-+++ b/drivers/gpu/drm/panel/panel-arm-versatile.c
-@@ -267,6 +267,9 @@ static int versatile_panel_get_modes(struct drm_panel *panel,
- 	connector->display_info.bus_flags = vpanel->panel_type->bus_flags;
- 
- 	mode = drm_mode_duplicate(connector->dev, &vpanel->panel_type->mode);
-+	if (!mode)
-+		return -ENOMEM;
-+
- 	drm_mode_set_name(mode);
- 	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
- 
--- 
-2.25.1
-
+Thanks!
+Menglong Dong

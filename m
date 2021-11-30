@@ -2,91 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD0EB464051
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:36:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E45464054
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 22:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344201AbhK3Vju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 16:39:50 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:51711 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235087AbhK3Vjs (ORCPT
+        id S1344224AbhK3VkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 16:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235087AbhK3VkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 16:39:48 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J3bBg2N3Cz4xR9;
-        Wed,  1 Dec 2021 08:36:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638308187;
-        bh=KVcjZKAh2Vz9OxmAtKoRcpH+t6oxbtKVS+0AmdcvdBs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MwpLysB7J1IqOJT0gpXjaEQHFJw+LzO0UCm+RetqCoPRWeAVsw2Bt4HrATdC7Ltun
-         laqy2VdT2Af/Jto/ukZOpIp10PIcc3QPLyIctz+rGmuRbYKn0LQeyoACmn1IX95m2R
-         SNAXbIyaKsJKoh6hjToKwm46N7ECaU9PyNKjaGDSvDRYlrHfQNJaQGEri5wmE+i45d
-         rteTBIh3C8iGwYMlO/2kpjHnsBckJ7ZZRXkS/sGlaz09/fLrxAHCgUUBxiU7/ZKmfi
-         nepklqCzC03F1zgKjRSGRUjE8TrxzFleeqXupe5tzkNd9SJzmrtKzuJTOdNuoHKfsR
-         7MyYKlzrYpR5g==
-Date:   Wed, 1 Dec 2021 08:36:25 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the fscache tree with Linus' tree
-Message-ID: <20211201083625.74dec92b@canb.auug.org.au>
+        Tue, 30 Nov 2021 16:40:07 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1288C061574;
+        Tue, 30 Nov 2021 13:36:47 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638308204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XB+2u5uEBJEn4Qm0c+1ERye9sFiy1dxB5m1DCsCRIdU=;
+        b=lYKsjQggunBjL//xtzE/JaYSyEicoLfIP7C2ag+SfIKg5zJT3qSryEVhpm6FQhZJf+ZWFX
+        04tDjFlnWaBo5DT60Gloq90FMqmyhV5nmMj7vlxoexKqrCF9yMFc7vzG2L9xEizsdepbk+
+        My6/gRPMT2ahdUIASrk2Vsm9DxgaElpRwffWh4SNIJ3qiQ0UF2nHIF2HMWTr0dUiy4jSFg
+        Vy8Ir48C56SdrMw/QLtQLlwNJCZRQFeCZIeq4rJQ9wGdlcZOsi1U4XbI+PlUI6/tPsWT2d
+        XuqXU8fy/DX+ICv7l1uEaXHWVvGqt2EOYoV4+srchMwFgoCMmY8edqhCjA4wKw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638308204;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XB+2u5uEBJEn4Qm0c+1ERye9sFiy1dxB5m1DCsCRIdU=;
+        b=EtGNw3/2HkClYokrjpc8z7ivJxVQb0a6HsEsOkaPJ8e55RcS5bFYLxZVpJRg2KuyTC48R5
+        0mTpLkYGI80NZWCA==
+To:     zhenwei pi <pizhenwei@bytedance.com>, pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 1/2] x86/cpu: introduce x86_get_freq
+In-Reply-To: <20211129052038.43758-1-pizhenwei@bytedance.com>
+References: <20211129052038.43758-1-pizhenwei@bytedance.com>
+Date:   Tue, 30 Nov 2021 22:36:43 +0100
+Message-ID: <87lf15ba1g.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hExX9xm0F19YMLGWdVrtPyj";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/hExX9xm0F19YMLGWdVrtPyj
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Nov 29 2021 at 13:20, zhenwei pi wrote:
 
-Hi all,
+> Wrapper function x86_get_freq to get freq on a x86 platform, hide
+> detailed implementation for proc routine.
 
-Today's linux-next merge of the fscache tree got a conflict in:
+Please rename this to x86_get_cpufreq_khz() simply because
+x86_get_freq() is way too unspecific.
 
-  Documentation/filesystems/netfs_library.rst
+Please mention function names with 'function()' which makes it obvious
+what it is. Here and in the Subject.
 
-between commit:
+Also spell out frequency all over the place in the change log. There is
+no reason for using abbreviations in text.
 
-  ddca5b0eba4e ("netfs: Adjust docs after foliation")
+> +
+> +unsigned int x86_get_freq(unsigned int cpu)
+> +{
+> +	unsigned int freq = 0;
+> +
+> +	if (cpu_has(&cpu_data(cpu), X86_FEATURE_TSC)) {
 
-from Linus' tree and commit:
+Please use cpu_feature_enabled(X86....) and make this condition
+negated:
 
-  b3c088faf78b ("fscache: Rewrite documentation")
+     if (!cpu_feature_enabled(X86_FEATURE_TSC))
+            return 0;
 
-from the fscache tree.
+which spares an indentation level and the 0 initialization of the variable.
 
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+Thanks,
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/hExX9xm0F19YMLGWdVrtPyj
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGmmVkACgkQAVBC80lX
-0GzVSgf/Z/hhV/MmnG7MV48wX+LDpIVyW43KqO40KAdgmVpIIh+klwRtIJrpZE/m
-vrikspfzBTYV/3BOwKusYCTGDCMnsuDaIvB4VsaKpdpx5H/F2aQyzliWvqiw2GLk
-tOyFTjG0QvzxlhVuhTtnIHFFwdiT46t/QrXQY9rApDlJJn36+4d4WnVsBndY+I2+
-o5UVGTcveGq+0peOYZJ+f0hSaoDgztucbpE0cihRw0peJPD4Mb2T6RFjBeADRe4G
-bs3QkuBbtARHTokGrEvaaibVpjo5HKAMunGNmqnpFIMuNiGtCBAoFLKtZp8qoWH6
-+YMmaEfZC3mc67CHAE35PZKJ+thS2g==
-=Hxih
------END PGP SIGNATURE-----
-
---Sig_/hExX9xm0F19YMLGWdVrtPyj--
+        tglx

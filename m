@@ -2,126 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B5904633C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1D624633D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 13:08:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241227AbhK3MIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 07:08:16 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34340 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241212AbhK3MIO (ORCPT
+        id S241378AbhK3MLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 07:11:41 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16324 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241321AbhK3MLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 07:08:14 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3BF64CE18FE;
-        Tue, 30 Nov 2021 12:04:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66BB0C53FC7;
-        Tue, 30 Nov 2021 12:04:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638273891;
-        bh=XZV+A03r+U14NNevxoQ+VNb6roKLqHnitP/KB5VE1bU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ZlVLLcdQtjmMpvoqZ3crREGG4Tx9/cX7mlIGiOZd6h9BzUwUxvGRirVIKaUOaxjYT
-         j5gtsnHmy3Pom8gpoKBLdTa9+zq0ksimfkkU+GFV8UpMhBa78nezSi2q5jNEQwAhWJ
-         xq4G0RHYn2hCaCVVjpP6TiYxrQmuhlZ9TN3UAYwPmlw/EHu8tPf53sycoGgXFr8+3e
-         p50fi7NH3GxciImqpxsMc5nV7QmRHXLcBYfxtqsN348RGG9ktb9N6rfUlFESziCNeM
-         iyjgvu0+fxThDkF7ypznoZv3ZG7ohR4/74jaqNLB+4LCg4pB1MEHTAlZtTjNGF/jPM
-         yrr//SJISMS0w==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1ms1sP-008rkT-FI; Tue, 30 Nov 2021 12:04:49 +0000
+        Tue, 30 Nov 2021 07:11:13 -0500
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J3LZ02S3yz91NF;
+        Tue, 30 Nov 2021 20:07:20 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 20:07:52 +0800
+Received: from localhost.localdomain (10.67.165.103) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Tue, 30 Nov 2021 20:07:51 +0800
+From:   Qi Liu <liuqi115@huawei.com>
+To:     <will@kernel.org>, <mark.rutland@arm.com>, <bhelgaas@google.com>
+CC:     <linux-pci@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <zhangshaokun@hisilicon.com>
+Subject: [PATCH v12 1/2] docs: perf: Add description for HiSilicon PCIe PMU driver
+Date:   Tue, 30 Nov 2021 20:04:49 +0800
+Message-ID: <20211130120450.2747-2-liuqi115@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211130120450.2747-1-liuqi115@huawei.com>
+References: <20211130120450.2747-1-liuqi115@huawei.com>
 MIME-Version: 1.0
-Date:   Tue, 30 Nov 2021 12:04:49 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>
-Subject: Re: [PATCH v2 10/43] KVM: arm64: Move vGIC v4 handling for WFI out
- arch callback hook
-In-Reply-To: <3490c50e-50d2-f906-3383-b87e14b14fab@redhat.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-11-seanjc@google.com>
- <9236e715-c471-e1c8-6117-6f37b908a6bd@redhat.com>
- <875ytjbxpq.wl-maz@kernel.org>
- <be1cf8c7-ed87-b8eb-1bca-0a6c7505d7f8@redhat.com>
- <3490c50e-50d2-f906-3383-b87e14b14fab@redhat.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <4826a7e2dbecc5d57323d18d725d6d69@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: pbonzini@redhat.com, seanjc@google.com, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, paulus@ozlabs.org, anup.patel@wdc.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, borntraeger@de.ibm.com, frankja@linux.ibm.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, atish.patra@wdc.com, david@redhat.com, cohuck@redhat.com, imbrenda@linux.ibm.com, vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com, joro@8bytes.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org, kvm@vger.kernel.org, kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, dmatlack@google.com, oupton@google.com, jingzhangos@google.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.103]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-11-30 11:39, Paolo Bonzini wrote:
-> On 10/26/21 18:12, Paolo Bonzini wrote:
->> On 26/10/21 17:41, Marc Zyngier wrote:
->>>> This needs a word on why kvm_psci_vcpu_suspend does not need the
->>>> hooks.  Or it needs to be changed to also use kvm_vcpu_wfi in the 
->>>> PSCI
->>>> code, I don't know.
->>>> 
->>>> Marc, can you review and/or advise?
->>> I was looking at that over the weekend, and that's a pre-existing
->>> bug. I would have addressed it independently, but it looks like you
->>> already have queued the patch.
->> 
->> I have "queued" it, but that's just my queue - it's not on kernel.org 
->> and it's not going to be in 5.16, at least not in the first batch.
->> 
->> There's plenty of time for me to rebase on top of a fix, if you want 
->> to send the fix through your kvm-arm pull request.  Just Cc me so that 
->> I understand what's going on.
-> 
-> Since a month has passed and I didn't see anything related in the
-> KVM-ARM pull requests, I am going to queue this patch.  Any conflicts
-> can be resolved through a kvmarm->kvm merge of either a topic branch
-> or a tag that is destined to 5.16.
+PCIe PMU Root Complex Integrated End Point(RCiEP) device is supported on
+HiSilicon HIP09 platform. Document it to provide guidance on how to
+use it.
 
-Can you at least spell out *when* this will land?
+Reviewed-by: John Garry <john.garry@huawei.com>
+Signed-off-by: Qi Liu <liuqi115@huawei.com>
+---
+ .../admin-guide/perf/hisi-pcie-pmu.rst        | 106 ++++++++++++++++++
+ 1 file changed, 106 insertions(+)
+ create mode 100644 Documentation/admin-guide/perf/hisi-pcie-pmu.rst
 
-There is, in general, a certain lack of clarity about what you are 
-queuing,
-where you are queuing it, and what release it targets.
-
-Thanks,
-
-         M.
+diff --git a/Documentation/admin-guide/perf/hisi-pcie-pmu.rst b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+new file mode 100644
+index 000000000000..294ebbdb22af
+--- /dev/null
++++ b/Documentation/admin-guide/perf/hisi-pcie-pmu.rst
+@@ -0,0 +1,106 @@
++================================================
++HiSilicon PCIe Performance Monitoring Unit (PMU)
++================================================
++
++On Hip09, HiSilicon PCIe Performance Monitoring Unit (PMU) could monitor
++bandwidth, latency, bus utilization and buffer occupancy data of PCIe.
++
++Each PCIe Core has a PMU to monitor multi Root Ports of this PCIe Core and
++all Endpoints downstream these Root Ports.
++
++
++HiSilicon PCIe PMU driver
++=========================
++
++The PCIe PMU driver registers a perf PMU with the name of its sicl-id and PCIe
++Core id.::
++
++  /sys/bus/event_source/hisi_pcie<sicl>_<core>
++
++PMU driver provides description of available events and filter options in sysfs,
++see /sys/bus/event_source/devices/hisi_pcie<sicl>_<core>.
++
++The "format" directory describes all formats of the config (events) and config1
++(filter options) fields of the perf_event_attr structure. The "events" directory
++describes all documented events shown in perf list.
++
++The "identifier" sysfs file allows users to identify the version of the
++PMU hardware device.
++
++The "bus" sysfs file allows users to get the bus number of Root Ports
++monitored by PMU.
++
++Example usage of perf::
++
++  $# perf list
++  hisi_pcie0_0/rx_mwr_latency/ [kernel PMU event]
++  hisi_pcie0_0/rx_mwr_cnt/ [kernel PMU event]
++  ------------------------------------------
++
++  $# perf stat -e hisi_pcie0_0/rx_mwr_latency/
++  $# perf stat -e hisi_pcie0_0/rx_mwr_cnt/
++  $# perf stat -g -e hisi_pcie0_0/rx_mwr_latency/ -e hisi_pcie0_0/rx_mwr_cnt/
++
++The current driver does not support sampling. So "perf record" is unsupported.
++Also attach to a task is unsupported for PCIe PMU.
++
++Filter options
++--------------
++
++1. Target filter
++PMU could only monitor the performance of traffic downstream target Root Ports
++or downstream target Endpoint. PCIe PMU driver support "port" and "bdf"
++interfaces for users, and these two interfaces aren't supported at the same
++time.
++
++-port
++"port" filter can be used in all PCIe PMU events, target Root Port can be
++selected by configuring the 16-bits-bitmap "port". Multi ports can be selected
++for AP-layer-events, and only one port can be selected for TL/DL-layer-events.
++
++For example, if target Root Port is 0000:00:00.0 (x8 lanes), bit0 of bitmap
++should be set, port=0x1; if target Root Port is 0000:00:04.0 (x4 lanes),
++bit8 is set, port=0x100; if these two Root Ports are both monitored, port=0x101.
++
++Example usage of perf::
++
++  $# perf stat -e hisi_pcie0_0/rx_mwr_latency,port=0x1/ sleep 5
++
++-bdf
++
++"bdf" filter can only be used in bandwidth events, target Endpoint is selected
++by configuring BDF to "bdf". Counter only counts the bandwidth of message
++requested by target Endpoint.
++
++For example, "bdf=0x3900" means BDF of target Endpoint is 0000:39:00.0.
++
++Example usage of perf::
++
++  $# perf stat -e hisi_pcie0_0/rx_mrd_flux,bdf=0x3900/ sleep 5
++
++2. Trigger filter
++Event statistics start when the first time TLP length is greater/smaller
++than trigger condition. You can set the trigger condition by writing "trig_len",
++and set the trigger mode by writing "trig_mode". This filter can only be used
++in bandwidth events.
++
++For example, "trig_len=4" means trigger condition is 2^4 DW, "trig_mode=0"
++means statistics start when TLP length > trigger condition, "trig_mode=1"
++means start when TLP length < condition.
++
++Example usage of perf::
++
++  $# perf stat -e hisi_pcie0_0/rx_mrd_flux,trig_len=0x4,trig_mode=1/ sleep 5
++
++3. Threshold filter
++Counter counts when TLP length within the specified range. You can set the
++threshold by writing "thr_len", and set the threshold mode by writing
++"thr_mode". This filter can only be used in bandwidth events.
++
++For example, "thr_len=4" means threshold is 2^4 DW, "thr_mode=0" means
++counter counts when TLP length >= threshold, and "thr_mode=1" means counts
++when TLP length < threshold.
++
++Example usage of perf::
++
++  $# perf stat -e hisi_pcie0_0/rx_mrd_flux,thr_len=0x4,thr_mode=1/ sleep 5
 -- 
-Jazz is not dead. It just smells funny...
+2.33.0
+

@@ -2,83 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13227462A9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:37:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8F5462AA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 03:39:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbhK3CkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Nov 2021 21:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S231825AbhK3Cm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Nov 2021 21:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237657AbhK3CkS (ORCPT
+        with ESMTP id S229505AbhK3Cm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Nov 2021 21:40:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 027BAC061574;
-        Mon, 29 Nov 2021 18:36:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A365EB80D1E;
-        Tue, 30 Nov 2021 02:36:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21AE5C53FAD;
-        Tue, 30 Nov 2021 02:36:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638239817;
-        bh=HeQc/9NihZ7cBBi42KaXPDogv19hU3v73HAJN/cZTSc=;
+        Mon, 29 Nov 2021 21:42:57 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BF2C061574;
+        Mon, 29 Nov 2021 18:39:39 -0800 (PST)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4126C2FD;
+        Tue, 30 Nov 2021 03:39:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1638239977;
+        bh=D6c5QdmEOPbcUcWv/45z7zVdzObV1vuKlP/0f9FHf54=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OucQndYxihrnoGB8UuFkyVfSlw+qCcbsgUV1hFo2NR0p3FSag1Orw2LQ3HtT3rccx
-         Aiz919dkGGbHD89tFspPtN6zSQ+YG8PFI7B5O4+cRDtZ4GRWRAPOwVdXoNHtjGmxu6
-         g3zeRuL13ny0uxSPpS5h0yzXL+4IT8daBLBnfNiau3Xb9O7l2VsWggnybWl2jACwBH
-         YLRvqk5JWkibkWV8REUfGC351Lo+X4sV/nmM+ua6sloWGL+AbMqk4F+Oocmi694LO+
-         Olk7JW2raKX5KwdHTQyQ+qwufMzZOTwh+kbOC55/qRE04xrRFBkb3IxY4lP4EANReM
-         4TlUg90wmcCtQ==
-Date:   Mon, 29 Nov 2021 18:36:55 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] ima: support fs-verity signatures stored as
-Message-ID: <YaWOR+Bav6PBgHHq@sol.localdomain>
-References: <20211129170057.243127-1-zohar@linux.ibm.com>
+        b=L1ElRcoeeQXJSn0aDfgfttYjApGk3N9AekQZzH41b+TsHekB6RGm6RoYbSAGM4xYt
+         xCFaOt+FHlYGWOswcjDbL4GseCtkCNOg0hbH1XThkb2kYUNMmkHjcClGLOvG407ykG
+         ucxnxXkRZLfM6xKSChCWLNoA8FrDsw28f8/pJEUw=
+Date:   Tue, 30 Nov 2021 04:39:12 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm: rcar-du: Add DSI support to rcar_du_output_name
+Message-ID: <YaWO0MjIDAa30cSM@pendragon.ideasonboard.com>
+References: <20211129170845.2269532-1-kieran.bingham+renesas@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20211129170057.243127-1-zohar@linux.ibm.com>
+In-Reply-To: <20211129170845.2269532-1-kieran.bingham+renesas@ideasonboard.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:00:53PM -0500, Mimi Zohar wrote:
-> Support for fs-verity file digests in IMA was discussed from the beginning,
-> prior to fs-verity being upstreamed[1,2].  This patch set adds signature
-> verification support based on the fs-verity file digest.  Both the
-> file digest and the signature must be included in the IMA measurement list
-> in order to disambiguate the type of file digest.
-> 
-> [1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
-> [2] Documentation/filesystems/fsverity.rst
-> 
-> Mimi Zohar (4):
->   fs-verity: define a function to return the integrity protected file
->     digest
->   ima: define a new signature type named IMA_VERITY_DIGSIG
->   ima: limit including fs-verity's file digest in measurement list
->   ima: support fs-verity file digest based signatures
-> 
->  fs/verity/fsverity_private.h              |  6 ---
->  fs/verity/measure.c                       | 49 +++++++++++++++++++++++
->  include/linux/fsverity.h                  | 17 ++++++++
->  security/integrity/ima/ima.h              |  3 +-
->  security/integrity/ima/ima_api.c          | 23 ++++++++++-
->  security/integrity/ima/ima_appraise.c     |  9 ++++-
->  security/integrity/ima/ima_main.c         |  7 +++-
->  security/integrity/ima/ima_template_lib.c |  3 +-
->  security/integrity/integrity.h            |  1 +
->  9 files changed, 107 insertions(+), 11 deletions(-)
+Hi Kieran,
 
-I left some comments, but this generally looks like the right approach.
-However, I'm not an expert in IMA, so it's hard for me to review the IMA parts.
+Thank you for the patch.
 
-Can you add documentation for this feature?
+On Mon, Nov 29, 2021 at 05:08:45PM +0000, Kieran Bingham wrote:
+> The DSI output names were not added when the DSI pipeline support was
+> introduced.
+> 
+> Add the correct labels for these outputs, and fix the sort order to
+> match 'enum rcar_du_output' while we are here.
+> 
+> Fixes: b291fdcf5114 ("drm: rcar-du: Add r8a779a0 device support")
+> Suggested-by: Biju Das <biju.das.jz@bp.renesas.com>
+> Signed-off-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
 
-- Eric
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+> ---
+>  drivers/gpu/drm/rcar-du/rcar_du_drv.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rcar-du/rcar_du_drv.c b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> index 5612a9e7a905..5a8131ef81d5 100644
+> --- a/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> +++ b/drivers/gpu/drm/rcar-du/rcar_du_drv.c
+> @@ -544,10 +544,12 @@ const char *rcar_du_output_name(enum rcar_du_output output)
+>  	static const char * const names[] = {
+>  		[RCAR_DU_OUTPUT_DPAD0] = "DPAD0",
+>  		[RCAR_DU_OUTPUT_DPAD1] = "DPAD1",
+> -		[RCAR_DU_OUTPUT_LVDS0] = "LVDS0",
+> -		[RCAR_DU_OUTPUT_LVDS1] = "LVDS1",
+> +		[RCAR_DU_OUTPUT_DSI0] = "DSI0",
+> +		[RCAR_DU_OUTPUT_DSI1] = "DSI1",
+>  		[RCAR_DU_OUTPUT_HDMI0] = "HDMI0",
+>  		[RCAR_DU_OUTPUT_HDMI1] = "HDMI1",
+> +		[RCAR_DU_OUTPUT_LVDS0] = "LVDS0",
+> +		[RCAR_DU_OUTPUT_LVDS1] = "LVDS1",
+>  		[RCAR_DU_OUTPUT_TCON] = "TCON",
+>  	};
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart

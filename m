@@ -2,199 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F0746313A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC7E46313D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 11:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234672AbhK3Kmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 05:42:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57790 "EHLO
+        id S234745AbhK3Knm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 05:43:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234553AbhK3Kmq (ORCPT
+        with ESMTP id S234617AbhK3Knl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 05:42:46 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFADC061574;
-        Tue, 30 Nov 2021 02:39:27 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: andrzej.p)
-        with ESMTPSA id DCCEB1F44F18
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638268765; bh=1km00PSkhoaXgOQeLq++0nilbR4fWVerb1bawqQEQb0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=JyqMgo7uzB4M6kSMJ0Pw+3aHFxmxQFslMe3uhJaqEHgb+ur/1XV9ShSmGwOHHvjd2
-         z9iXnA0yZZkImCokRx7ONjoNUWy3wr09V91pSrrOjPgG+G6MdPl1VEynHxKZR/jrWc
-         OWZg+pJMPLAMdtGFoMjTCuR6s8dAipvcVAcRBBxtWVGvunOsxD0WJkG9LrXQfC4jct
-         wc0jzUPuLVNXw9J7a1xI+09g+PYxFtPHaNH48bziSKnAFRNrujj/NxAMmAPzLUlUfl
-         bV2fSqIFxYi7LCFE0jCnOyYpJToBweFJEEnnaDraojxl4qHEwLcV2atGEgCM2/IXJR
-         p2pRGzirju6lQ==
-Subject: Re: [PATCH 1/7] media: hantro: add support for reset lines
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        =?UTF-8?Q?Jernej_=c5=a0krabec?= <jernej.skrabec@gmail.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tue, 30 Nov 2021 05:43:41 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BBD5C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:40:22 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id r9-20020a7bc089000000b00332f4abf43fso12452503wmh.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 02:40:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=KuuIZB6GSfIhq8d/S1rOlrCT876l8ZYGmC+dyBOaWSM=;
+        b=gG8bbXR1gjo/GWKLcJD/G1WmgLEN7P8cvntZS8OXh1AIOwY2VvPPaNVcK07RUAZ7Nx
+         jbTouJBphatTHAJQKICUG2INC1UoX3aunpbdPiw5JxJ27H8qHDpAh3yY1jAPfr2F7AGf
+         J90MWh2DzsWlIykshXJS2Hlw8c6j42ENadg/2ztszoOkkljiyMV69EhQwtSnPMSyDKqd
+         5Ez4FXccp0ydSgDRDQp8/tccgsYoOXOGOJanT5O+LklE9n4MWktQXzGAhv4p06cQNh6e
+         v3Nb6CEW8jH9iXHbKr2Hds99BUPyByZL0HzVBr651E93pMT1ePXpEbnshBpH/thEr4fA
+         ESvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=KuuIZB6GSfIhq8d/S1rOlrCT876l8ZYGmC+dyBOaWSM=;
+        b=1N5siqTz0yr95ykuUeBkmufIVn/34kyx6xpzG2XwvWPErnllWuFE8Id7q73sz+pAiE
+         voMXG9GAV1msIL3/lEO5ypYzPCbveXOivXMpVVXasBFplkwypVQTgPTe51RFc2nSx4cu
+         fbFDqj3ZSuaz1RC8GzyzAOJf6yeKHOn7qprZrs+5kpaeKjbd1wpPSgp4d25NLNtwPtpB
+         loSzvRd5EfjGSYGhgs31qPVSmS8S6ZK5y3dINgMHvudTDtMlsHtMDWApiRuQ4VCROHr4
+         gPqcMPJEo1gEHK6MsezGAIFlIyYPXpM20zDEvKN8Dky4L94dr+jKzSv+/S5m0FfeEnbM
+         iSvA==
+X-Gm-Message-State: AOAM5304mQzJLEHfsWaTmS/KPfsHa4N5qHZ1GAiEEliB67uFgyBpWSee
+        gkJEZ/jqkI/wkk4Qgeonn17kUsPlxhjjQk5n
+X-Google-Smtp-Source: ABdhPJzESvA8YknWbL6MSpRi5ucQJGO7g/kGd+X6Z3Q9PVMe+l/veR2GB86m8EV5sxWuy54Jd5hvPA==
+X-Received: by 2002:a05:600c:4f55:: with SMTP id m21mr4009020wmq.68.1638268820980;
+        Tue, 30 Nov 2021 02:40:20 -0800 (PST)
+Received: from ?IPv6:2001:861:44c0:66c0:f80b:b9bd:4d6e:b61a? ([2001:861:44c0:66c0:f80b:b9bd:4d6e:b61a])
+        by smtp.gmail.com with ESMTPSA id y7sm15868082wrw.55.2021.11.30.02.40.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 02:40:20 -0800 (PST)
+Subject: Re: [RFC PATCH 0/9] arm64: dts: meson: add support for aac2xx devices
+To:     Christian Hewitt <christianshewitt@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Robert Beckett <bob.beckett@collabora.com>
-References: <20211122184702.768341-1-jernej.skrabec@gmail.com>
- <20211123145933.GD6514@kadam>
- <c474e2b5-8900-a7ca-620d-e03a284cf0fb@collabora.com>
- <9986998.nUPlyArG6x@kista>
- <CAAEAJfD3d4zjwvbv967+oe6awnAkZiGNKroYF5jvoTy=0sn+Pw@mail.gmail.com>
-From:   Andrzej Pietrasiewicz <andrzej.p@collabora.com>
-Message-ID: <272ca19e-749e-92fb-bcfa-ca695b3b9ed6@collabora.com>
-Date:   Tue, 30 Nov 2021 11:39:22 +0100
+        Mark Rutland <mark.rutland@arm.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Benoit Masson <yahoo@perenite.com>
+References: <20211130060523.19161-1-christianshewitt@gmail.com>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <51fb0be9-9186-3d79-38fa-b8a5151ccba9@baylibre.com>
+Date:   Tue, 30 Nov 2021 11:40:20 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <CAAEAJfD3d4zjwvbv967+oe6awnAkZiGNKroYF5jvoTy=0sn+Pw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+In-Reply-To: <20211130060523.19161-1-christianshewitt@gmail.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ezequiel,
+Hi,
 
-W dniu 23.11.2021 o 19:07, Ezequiel Garcia pisze:
-> Hi all,
+On 30/11/2021 07:05, Christian Hewitt wrote:
+> This series adds support for several popular Amlogic S905X3 (SM1) Android
+> Set-Top Box devices. Like most Android box devices, they ship in variants
+> with multiple RAM, eMMC, WiFi and BT configurations. RAM and eMMC are not
+> something we need to consider to get a working boot, but we do need to get
+> the correct connectivity spec. Broadly speaking we see boxes with Higher
+> and Lower spec connectivity; High spec is Gigabit Ethernet and Faster dual
+> antennna WiFi, and Lower spec is Megabit Ethernet and a single antenna. In
+> some low-end boxes BT is ommitted.
 > 
-> Reset logic tends to be highly integration-specific, so it  could be more robust 
-> to deal  with this in  the machine specific file. I have some vague recollection 
-> of our experience here when we  integrated vc8000 last year, but I cannot recall 
-> the outcome.
-> 
+> The main reason for the RFC tag is to solicit feedback on the choice of
+> the -100 and -1000 suffixes which are used to distinguish between devices
+> with 10/100 Mbit (Internal PHY) or 10/100/1000 Gbit (External PHY) NIC
+> configurations; which is important to get correct else the box will have
+> no connectivity. I'm not a big fan of the suffixes, but earlier versions
+> where I used -int/-ext and -mbit/-gbit resulted in users having no idea
+> what the difference was. I'd like to informally establish a convention for
+> this naming before doing similar things with some S905X2 devices.
 
-Do you mean vpu->variant->init()?
+I have no opinion for -100/-1000, -int/-ext, -mbit/-gbit or <nothing>/-gigabit or whatever.
 
-That is the very first thing we do after the devm_*() calls. So any subsequent
-initialization that fails would want vpu->variant->deinit(). Maybe at this
-moment handling the resets at the common level is simpler? Existing drivers
-will get NULL anyway from devm_reset_control_array_get().
+I'll wait for further comments from other reviewers here !
 
-Regards,
+Neil
 
-Andrzej
-
-> I'm Ccing Bob who might remember better.
 > 
-> Thanks,
-> Ezequiel
+> NB: At the current time the Realtek 8822CS and MT7668 WiFi/BT chips we
+> have seen on 'AIR' devices are not supported in the kernel so these are
+> deliberately ommitted. The H96-Max uses a conventional Broadcom module
+> so has more complete support. I'm also still exploring / learning about
+> alsa userspace configuration so for now the boxes have simple HDMI audio
+> support; wiring up the Headphone socket will be done at a later date.
 > 
+> Christian Hewitt (9):
+>   arm64: dts: meson: add common SM1 ac2xx dtsi
+>   dt-bindings: arm: amlogic: add X96-AIR bindings
+>   arm64: dts: meson: add initial device-trees for X96-AIR
+>   dt-bindings: vendor-prefixes: add cyx prefix
+>   dt-bindings: arm: amlogic: add A95XF3-AIR bindings
+>   arm64: dts: meson: add initial device-trees for A95XF3-AIR
+>   dt-bindings: vendor-prefixes: add haochuangyi prefix
+>   dt-bindings: arm: amlogic: add H96-Max bindings
+>   arm64: dts: meson: add initial device-tree for H96-Max
 > 
-> 
-> El mar., nov. 23, 2021 1:46 PM, Jernej Škrabec <jernej.skrabec@gmail.com 
-> <mailto:jernej.skrabec@gmail.com>> escribió:
-> 
->     Hi all,
-> 
->     Dne torek, 23. november 2021 ob 17:36:57 CET je Andrzej Pietrasiewicz
->     napisal(a):
->      > Hi Dan, hi Jernej,
->      >
->      > W dniu 23.11.2021 o 15:59, Dan Carpenter pisze:
->      > > On Tue, Nov 23, 2021 at 12:09:03PM +0100, Andrzej Pietrasiewicz wrote:
->      > >>> diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/
->     media/hantro/hantro_drv.c
->      > >>> index ab2467998d29..8c3de31f51b3 100644
->      > >>> --- a/drivers/staging/media/hantro/hantro_drv.c
->      > >>> +++ b/drivers/staging/media/hantro/hantro_drv.c
->      > >>> @@ -905,6 +905,10 @@ static int hantro_probe(struct platform_device
->     *pdev)
->      > >>>                           return PTR_ERR(vpu->clocks[0].clk);
->      > >>>           }
->      > >>> + vpu->resets = devm_reset_control_array_get(&pdev->dev, false,
->     true);
->      > >>> + if (IS_ERR(vpu->resets))
->      > >>> +         return PTR_ERR(vpu->resets);
->      > >>> +
->      > >>>           num_bases = vpu->variant->num_regs ?: 1;
->      > >>>           vpu->reg_bases = devm_kcalloc(&pdev->dev, num_bases,
->      > >>>                                         sizeof(*vpu->reg_bases),
->     GFP_KERNEL);
->      > >>> @@ -978,10 +982,16 @@ static int hantro_probe(struct platform_device
->     *pdev)
->      > >>>           pm_runtime_use_autosuspend(vpu->dev);
->      > >>>           pm_runtime_enable(vpu->dev);
->      > >          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
->      > > It looks like this is the pm stuff that we have to unwind on error
->      > >
->      > >>> + ret = reset_control_deassert(vpu->resets);
->      > >>> + if (ret) {
->      > >>> +         dev_err(&pdev->dev, "Failed to deassert resets\n");
->      > >>> +         return ret;
->      > >                  ^^^^^^^^^^
->      > > So this return should be a goto undo_pm_stuff
->      > >
->      > >
->      > >>> + }
->      > >>> +
->      > >>>           ret = clk_bulk_prepare(vpu->variant->num_clocks, vpu->clocks);
->      > >>>           if (ret) {
->      > >>>                   dev_err(&pdev->dev, "Failed to prepare clocks\n");
->      > >>> -         return ret;
->      > >
->      > > And this return should also have been a goto so it's a bug in the
->      > > original code.
->      >
->      > So we probably want a separate patch addressing that first, and then
->      > the series proper on top of that.
-> 
->     I was just about to suggest that.
-> 
->     Other drivers usually enable PM last, so they don't have PM calls in unwind
->     code. However, I think current approach is just as valid (with a fix).
-> 
->     Best regards,
->     Jernej
-> 
->      >
->      > Regards,
->      >
->      > Andrzej
->      >
->      > >
->      > >>> +         goto err_rst_assert;
->      > >>
->      > >> Before your patch is applied if clk_bulk_prepare() fails, we
->      > >> simply return on the spot. After the patch is applied not only
->      > >> do you...
->      > >>
->      > >>>           }
->      > >>>           ret = v4l2_device_register(&pdev->dev, &vpu->v4l2_dev);
->      > >>> @@ -1037,6 +1047,8 @@ static int hantro_probe(struct platform_device
->     *pdev)
->      > >>>           v4l2_device_unregister(&vpu->v4l2_dev);
->      > >>>    err_clk_unprepare:
->      > >>>           clk_bulk_unprepare(vpu->variant->num_clocks, vpu->clocks);
->      > >>> +err_rst_assert:
->      > >>> + reset_control_assert(vpu->resets);
->      > >>
->      > >> ...revert the effect of reset_control_deassert(), you also...
->      > >>
->      > >>>           pm_runtime_dont_use_autosuspend(vpu->dev);
->      > >>>           pm_runtime_disable(vpu->dev);
->      > >>
->      > >> ... do pm_*() stuff. Is there any reason why this is needed?
->      > >
->      > > So, yes, it's needed, but you're correct to spot that it's not
->      > > consistent.
->      > >
->      > > regards,
->      > > dan carpenter
->      > >
->      >
->      >
-> 
+>  .../devicetree/bindings/arm/amlogic.yaml      |   5 +
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+>  arch/arm64/boot/dts/amlogic/Makefile          |   5 +
+>  .../dts/amlogic/meson-sm1-a95xf3-air-100.dts  | 108 +++++++
+>  .../dts/amlogic/meson-sm1-a95xf3-air-1000.dts | 129 ++++++++
+>  .../boot/dts/amlogic/meson-sm1-ac2xx.dtsi     | 300 ++++++++++++++++++
+>  .../boot/dts/amlogic/meson-sm1-h96-max.dts    | 145 +++++++++
+>  .../dts/amlogic/meson-sm1-x96-air-100.dts     | 112 +++++++
+>  .../dts/amlogic/meson-sm1-x96-air-1000.dts    | 133 ++++++++
+>  9 files changed, 941 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-100.dts
+>  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-a95xf3-air-1000.dts
+>  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi
+>  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-h96-max.dts
+>  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-100.dts
+>  create mode 100644 arch/arm64/boot/dts/amlogic/meson-sm1-x96-air-1000.dts
 > 
 

@@ -2,220 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EEE6F4639A8
+	by mail.lfdr.de (Postfix) with ESMTP id A60E34639A7
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 16:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244748AbhK3PSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 10:18:51 -0500
-Received: from mga18.intel.com ([134.134.136.126]:52124 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S244054AbhK3PPW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 10:15:22 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="223111392"
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="223111392"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 07:03:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,276,1631602800"; 
-   d="scan'208";a="595454520"
-Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Nov 2021 07:02:57 -0800
-Date:   Tue, 30 Nov 2021 23:02:56 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
-        andi.kleen@intel.com, len.brown@intel.com, tim.c.chen@intel.com
-Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for qualified
- platforms
-Message-ID: <20211130150256.GA19477@shbuild999.sh.intel.com>
-References: <20211117023751.24190-1-feng.tang@intel.com>
- <20211117023751.24190-2-feng.tang@intel.com>
- <20211130064623.GB96474@shbuild999.sh.intel.com>
- <20211130144048.GQ641268@paulmck-ThinkPad-P17-Gen-1>
+        id S243438AbhK3PRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 10:17:11 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59664 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242890AbhK3PIH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 10:08:07 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 691D7B81A24;
+        Tue, 30 Nov 2021 15:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B12C53FC1;
+        Tue, 30 Nov 2021 15:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638284684;
+        bh=Alrkq2tkKKKGG2UExFARuPj7sJr48gbzjpZP81Br49U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ffrK8N4jIIT0Z+rrBunGxwfgMjwYMw9MBA2p0u/8x1d+4i4Ol+FTed1CxMtQ1+O1f
+         06/up2+crEZrvHmtuVvtJWIWesOPMH3HcuFYL6andIpGYnCAQ1pDnoHm4ggeKGzFUD
+         9uNX4xgQlGHn2tRoJDrEn8iBTAEprXqxXM+jxiXfnp2qOGF2vZUjwKOAWjHpzxnmDX
+         IdUwM8YOpR9n0kMkQN8SLBkqlI4W1OfBCGcnptOmIJKpu0kb23bKZZpa+zJX624SX7
+         Behsay8yPdIISUkXFqqtBVsu290eoCuxWoQ0/lVivsaabKPiJvZ0sFsGbNTB0oe6GP
+         gXf6lTnyBEMTQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 011BB40002; Tue, 30 Nov 2021 12:04:41 -0300 (-03)
+Date:   Tue, 30 Nov 2021 12:04:41 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        "Paul A . Clarke" <pc@us.ibm.com>,
+        Riccardo Mancini <rickyman7@gmail.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vineet Singh <vineet.singh@intel.com>, eranian@google.com
+Subject: Re: [PATCH v2 1/2] perf evlist: Allow setting arbitrary leader
+Message-ID: <YaY9ifnlJCryEP4O@kernel.org>
+References: <20211118220647.2355999-1-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211130144048.GQ641268@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20211118220647.2355999-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-Thanks for the review!
-
-On Tue, Nov 30, 2021 at 06:40:48AM -0800, Paul E. McKenney wrote:
-> On Tue, Nov 30, 2021 at 02:46:23PM +0800, Feng Tang wrote:
-> > On Wed, Nov 17, 2021 at 10:37:51AM +0800, Feng Tang wrote:
-> > > There are cases that tsc clocksources are wrongly judged as unstable by
-> > > clocksource watchdogs like hpet, acpi_pm or 'refined-jiffies'. While
-> > > there is hardly a general reliable way to check the validity of a
-> > > watchdog, and to protect the innocent tsc, Thomas Gleixner proposed [1]:
-> > 
-> > Hi All,
-> > 
-> > Some more update, last week we got report from validation team that
-> > the "tsc judged as unstable" happened on latest desktop platform,
-> > which has serial earlyprintk enabled, and the watchdog here is
-> > 'refined-jiffies' while hpet is disabled during the PC10 check. I
-> > tried severy other client platforms I can find: Kabylake, Icelake
-> > and Alderlake, and the mis-judging can be easily reproduced on
-> > Icelake and Alderlake (not on Kabylake). Which could be cued by
-> > this 2/2 patch.
-> > 
-> > Also, today we got same report on a 2-sockets Icelake Server with
-> > 5.5 kernel, while the watchdog is 'hpet', and the system is running
-> > stressful big-data workload.
+Em Thu, Nov 18, 2021 at 02:06:46PM -0800, Ian Rogers escreveu:
+> The leader of a group is the first, but allow it to be an arbitrary
+> list member so that for Intel topdown events slots may always be the
+> group leader.
 > 
-> Were these tests run with Waiman's latest patch series?  The first
-> two of them are on RCU's "dev" branch.
- 
-No, I haven't tried Waiman's patches, which are more about refining
-cs_watchdog_read() check, while these 2 cases are about the really
-big gap between watchog and cur_clocksource
-
-The error log of first client platform (5.15 kernel) is: 
-
-[    2.994266] clocksource:                       'refined-jiffies' wd_nsec: 516032250 wd_now: fffedc09 wd_last: fffedb88 mask: ffffffff
-[    2.998352] initcall irq_sysfs_init+0x0/0x97 returned 0 after 0 usecs
-[    3.002266] clocksource:                       'tsc-early' cs_nsec: 767553349 cs_now: 71a87fd2f cs_last: 6db4968ff mask: ffffffffffffffff
-[    3.006266] calling  dma_atomic_pool_init+0x0/0x152 @ 1
-[    3.010266] clocksource:                       No current clocksource.
-[    3.010267] tsc: Marking TSC unstable due to clocksource watchdog
-
-We can see the gap is 516 ms vs 767 ms, and the delta is 267 ms. 
-And the root cause is with earlyprintk serial console enabled,
-the periodic timer interrupt is severely affected to be not
-accurate.
-
-And similar big gap between 'tsc' and 'hpet' is seen for the server
-case (5.5 kernel which doesn't have the cs_watchdog_read() patchset). 
-
-[1196945.314929] clocksource: timekeeping watchdog on CPU67: Marking clocksource 'tsc' as unstable because the skew is too large:
-[1196945.314935] clocksource:                       'hpet' wd_now: 25272026 wd_last: 2e9ce418 mask: ffffffff
-[1196945.314938] clocksource:                       'tsc' cs_now: 95b400003fdf1 cs_last: 95ae7ed7c33f7 mask: ffffffffffffffff
-[1196945.314948] tsc: Marking TSC unstable due to clocksource watchdog
-[1196945.314977] TSC found unstable after boot, most likely due to broken BIOS. Use 'tsc=unstable'.
-[1196945.314981] sched_clock: Marking unstable (1196945264804527, 50153181)<-(1196945399926576, -84962703)
-[1196945.316255] clocksource: Switched to clocksource hpet
-
-For this case, I don't have access to the HW and only have the
-dmesg log, from which it seems the watchdog timer has been postponed
-a very long time from running.
-
-
-Thanks,
-Feng
-
-
-> 							Thanx, Paul
+> Reviewed-by: Kajol Jain<kjain@linux.ibm.com>
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/lib/perf/evlist.c                  | 15 +++++++++------
+>  tools/lib/perf/include/internal/evlist.h |  2 +-
+>  tools/perf/util/parse-events.c           |  2 +-
+>  3 files changed, 11 insertions(+), 8 deletions(-)
 > 
-> > Thanks,
-> > Feng
-> > 
-> > 
-> > > "I'm inclined to lift that requirement when the CPU has:
-> > > 
-> > >     1) X86_FEATURE_CONSTANT_TSC
-> > >     2) X86_FEATURE_NONSTOP_TSC
-> > >     3) X86_FEATURE_NONSTOP_TSC_S3
-> > >     4) X86_FEATURE_TSC_ADJUST
-> > >     5) At max. 4 sockets
-> > > 
-> > >  After two decades of horrors we're finally at a point where TSC seems
-> > >  to be halfway reliable and less abused by BIOS tinkerers. TSC_ADJUST
-> > >  was really key as we can now detect even small modifications reliably
-> > >  and the important point is that we can cure them as well (not pretty
-> > >  but better than all other options)."
-> > > 
-> > > As feature #3 X86_FEATURE_NONSTOP_TSC_S3 only exists on several generations
-> > > of Atom processor, and is always coupled with X86_FEATURE_CONSTANT_TSC
-> > > and X86_FEATURE_NONSTOP_TSC, skip checking it, and also be more defensive
-> > > to use maxim of 2 sockets.
-> > > 
-> > > The check is done inside tsc_init() before registering 'tsc-early' and
-> > > 'tsc' clocksources, as there were cases that both of them had been
-> > > wrongly judged as unreliable.
-> > > 
-> > > For more background of tsc/watchdog, there is a good summary in [2]
-> > > 
-> > > [1]. https://lore.kernel.org/lkml/87eekfk8bd.fsf@nanos.tec.linutronix.de/
-> > > [2]. https://lore.kernel.org/lkml/87a6pimt1f.ffs@nanos.tec.linutronix.de/
-> > > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> > > Signed-off-by: Feng Tang <feng.tang@intel.com>
-> > > ---
-> > > Change log:
-> > > 
-> > >   v3:
-> > >     * rebased against 5.16-rc1
-> > >     * refine commit log
-> > > 
-> > >   v2:
-> > >     * Directly skip watchdog check without messing flag
-> > >       'tsc_clocksource_reliable' (Thomas)
-> > > 
-> > >  arch/x86/kernel/tsc.c | 22 ++++++++++++++++++----
-> > >  1 file changed, 18 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-> > > index 2e076a459a0c..389511f59101 100644
-> > > --- a/arch/x86/kernel/tsc.c
-> > > +++ b/arch/x86/kernel/tsc.c
-> > > @@ -1180,6 +1180,12 @@ void mark_tsc_unstable(char *reason)
-> > >  
-> > >  EXPORT_SYMBOL_GPL(mark_tsc_unstable);
-> > >  
-> > > +static void __init tsc_skip_watchdog_verify(void)
-> > > +{
-> > > +	clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> > > +	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> > > +}
-> > > +
-> > >  static void __init check_system_tsc_reliable(void)
-> > >  {
-> > >  #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
-> > > @@ -1196,6 +1202,17 @@ static void __init check_system_tsc_reliable(void)
-> > >  #endif
-> > >  	if (boot_cpu_has(X86_FEATURE_TSC_RELIABLE))
-> > >  		tsc_clocksource_reliable = 1;
-> > > +
-> > > +	/*
-> > > +	 * Ideally the socket number should be checked, but this is called
-> > > +	 * by tsc_init() which is in early boot phase and the socket numbers
-> > > +	 * may not be available. Use 'nr_online_nodes' as a fallback solution
-> > > +	 */
-> > > +	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
-> > > +	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
-> > > +	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
-> > > +	    nr_online_nodes <= 2)
-> > > +		tsc_skip_watchdog_verify();
-> > >  }
-> > >  
-> > >  /*
-> > > @@ -1387,9 +1404,6 @@ static int __init init_tsc_clocksource(void)
-> > >  	if (tsc_unstable)
-> > >  		goto unreg;
-> > >  
-> > > -	if (tsc_clocksource_reliable || no_tsc_watchdog)
-> > > -		clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> > > -
-> > >  	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
-> > >  		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
-> > >  
-> > > @@ -1527,7 +1541,7 @@ void __init tsc_init(void)
-> > >  	}
-> > >  
-> > >  	if (tsc_clocksource_reliable || no_tsc_watchdog)
-> > > -		clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
-> > > +		tsc_skip_watchdog_verify();
-> > >  
-> > >  	clocksource_register_khz(&clocksource_tsc_early, tsc_khz);
-> > >  	detect_art();
-> > > -- 
-> > > 2.27.0
+> diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+> index e37dfad31383..974da341b8b0 100644
+> --- a/tools/lib/perf/evlist.c
+> +++ b/tools/lib/perf/evlist.c
+> @@ -643,14 +643,14 @@ perf_evlist__next_mmap(struct perf_evlist *evlist, struct perf_mmap *map,
+>  	return overwrite ? evlist->mmap_ovw_first : evlist->mmap_first;
+>  }
+>  
+> -void __perf_evlist__set_leader(struct list_head *list)
+> +void __perf_evlist__set_leader(struct list_head *list, struct perf_evsel *leader)
+>  {
+> -	struct perf_evsel *evsel, *leader;
+> +	struct perf_evsel *first, *last, *evsel;
+>  
+> -	leader = list_entry(list->next, struct perf_evsel, node);
+> -	evsel = list_entry(list->prev, struct perf_evsel, node);
+> +	first = list_entry(list->next, struct perf_evsel, node);
+> +	last = list_entry(list->prev, struct perf_evsel, node);
+
+We have list_first_entry() and list_last_entry():
+
+For instance:
+
+tools/perf/util/parse-events.c:	leader = list_first_entry(list, struct evsel, core.node);
+
+Can we use it here?
+  
+> -	leader->nr_members = evsel->idx - leader->idx + 1;
+> +	leader->nr_members = last->idx - first->idx + 1;
+>  
+>  	__perf_evlist__for_each_entry(list, evsel)
+>  		evsel->leader = leader;
+> @@ -659,7 +659,10 @@ void __perf_evlist__set_leader(struct list_head *list)
+>  void perf_evlist__set_leader(struct perf_evlist *evlist)
+>  {
+>  	if (evlist->nr_entries) {
+> +		struct perf_evsel *first = list_entry(evlist->entries.next,
+> +						struct perf_evsel, node);
+> +
+>  		evlist->nr_groups = evlist->nr_entries > 1 ? 1 : 0;
+> -		__perf_evlist__set_leader(&evlist->entries);
+> +		__perf_evlist__set_leader(&evlist->entries, first);
+>  	}
+>  }
+> diff --git a/tools/lib/perf/include/internal/evlist.h b/tools/lib/perf/include/internal/evlist.h
+> index f366dbad6a88..6f74269a3ad4 100644
+> --- a/tools/lib/perf/include/internal/evlist.h
+> +++ b/tools/lib/perf/include/internal/evlist.h
+> @@ -127,5 +127,5 @@ int perf_evlist__id_add_fd(struct perf_evlist *evlist,
+>  
+>  void perf_evlist__reset_id_hash(struct perf_evlist *evlist);
+>  
+> -void __perf_evlist__set_leader(struct list_head *list);
+> +void __perf_evlist__set_leader(struct list_head *list, struct perf_evsel *leader);
+>  #endif /* __LIBPERF_INTERNAL_EVLIST_H */
+> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+> index 5bfb6f892489..6308ba739d19 100644
+> --- a/tools/perf/util/parse-events.c
+> +++ b/tools/perf/util/parse-events.c
+> @@ -1834,8 +1834,8 @@ void parse_events__set_leader(char *name, struct list_head *list,
+>  	if (parse_events__set_leader_for_uncore_aliase(name, list, parse_state))
+>  		return;
+>  
+> -	__perf_evlist__set_leader(list);
+>  	leader = list_entry(list->next, struct evsel, core.node);
+> +	__perf_evlist__set_leader(list, &leader->core);
+>  	leader->group_name = name ? strdup(name) : NULL;
+
+Ditto
+
+>  }
+>  
+> -- 
+> 2.34.0.rc2.393.gf8c9666880-goog
+
+-- 
+
+- Arnaldo

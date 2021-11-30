@@ -2,68 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B184462BE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B632B462BEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 06:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232526AbhK3FIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 00:08:17 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:45403 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231882AbhK3FIQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 00:08:16 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=zhangliguang@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0UyqOnfv_1638248693;
-Received: from 30.225.24.15(mailfrom:zhangliguang@linux.alibaba.com fp:SMTPD_---0UyqOnfv_1638248693)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 30 Nov 2021 13:04:54 +0800
-Message-ID: <5f1be6d6-fa0d-8084-ccf1-7a3af6506046@linux.alibaba.com>
-Date:   Tue, 30 Nov 2021 13:04:55 +0800
+        id S233776AbhK3FN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 00:13:29 -0500
+Received: from mga07.intel.com ([134.134.136.100]:45905 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233404AbhK3FN2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 00:13:28 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10183"; a="299540189"
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="299540189"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2021 21:09:54 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,275,1631602800"; 
+   d="scan'208";a="609003517"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by orsmga004.jf.intel.com with ESMTP; 29 Nov 2021 21:09:51 -0800
+Date:   Tue, 30 Nov 2021 13:09:51 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com,
+        akpm@linux-foundation.org, siglesias@igalia.com,
+        kernel@gpiccoli.net
+Subject: Re: [PATCH 1/3] docs: sysctl/kernel: Add missing bit to panic_print
+Message-ID: <20211130050951.GA89318@shbuild999.sh.intel.com>
+References: <20211109202848.610874-1-gpiccoli@igalia.com>
+ <20211109202848.610874-2-gpiccoli@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH] nvme: duplicate NQNs check if devices needed
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     Jens Axboe <axboe@fb.com>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20211129111854.44006-1-zhangliguang@linux.alibaba.com>
- <20211129163406.GA3582042@dhcp-10-100-145-180.wdc.com>
-From:   luanshi <zhangliguang@linux.alibaba.com>
-In-Reply-To: <20211129163406.GA3582042@dhcp-10-100-145-180.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211109202848.610874-2-gpiccoli@igalia.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Keith,
+On Tue, Nov 09, 2021 at 05:28:46PM -0300, Guilherme G. Piccoli wrote:
+> Commit de6da1e8bcf0 ("panic: add an option to replay all the printk message in buffer")
+> added a new bit to the sysctl/kernel parameter "panic_print", but the
+> documentation was added only in kernel-parameters.txt, not in the sysctl guide.
+> 
+> Fix it here by adding bit 5 to sysctl admin-guide documentation.
+ 
+Thanks for the fix!
 
-在 2021/11/30 0:34, Keith Busch 写道:
-> On Mon, Nov 29, 2021 at 07:18:54PM +0800, Liguang Zhang wrote:
->> @@ -2587,6 +2587,9 @@ static struct nvme_subsystem *__nvme_find_get_subsystem(const char *subsysnqn)
->>   
->>   	lockdep_assert_held(&nvme_subsystems_lock);
->>   
->> +	if (strncmp(subsysnqn, "nqn.", 4))
->> +		return NULL;
-> This seems like an arbitrary way to decide not to check for duplicates.
-> Shouldn't we just add the NVME_QUIRK_IGNORE_DEV_SUBNQN quirk for the
-> broken controllers?
+Reviewed-by: Feng Tang <feng.tang@intel.com>
 
-Yeah, add the NVME_QUIRK_IGNORE_DEV_SUBNQN quirk is a way to resolve the 
-problem. I do not
+- Feng
 
-have enough controller in my hand, I don't make sure all the controller 
-are covered. And there are some
-
-Weird devices from partners are not registered in pci id table:
-
-https://pci-ids.ucw.cz/
-
-"nqn." prefix is a required naming, so i used this way.
-
-
-Thanks,
-
-Liguang
-
+> Cc: Feng Tang <feng.tang@intel.com>
+> Fixes: de6da1e8bcf0 ("panic: add an option to replay all the printk message in buffer")
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> ---
+>  Documentation/admin-guide/sysctl/kernel.rst | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
+> index 426162009ce9..70b7df9b081a 100644
+> --- a/Documentation/admin-guide/sysctl/kernel.rst
+> +++ b/Documentation/admin-guide/sysctl/kernel.rst
+> @@ -795,6 +795,7 @@ bit 1  print system memory info
+>  bit 2  print timer info
+>  bit 3  print locks info if ``CONFIG_LOCKDEP`` is on
+>  bit 4  print ftrace buffer
+> +bit 5: print all printk messages in buffer
+>  =====  ============================================
+>  
+>  So for example to print tasks and memory info on panic, user can::
+> -- 
+> 2.33.1

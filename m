@@ -2,195 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5A2463B86
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53E0F463B87
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 17:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242462AbhK3QVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 11:21:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:27875 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S243814AbhK3QUy (ORCPT
+        id S240240AbhK3QVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 11:21:34 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:48722 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243932AbhK3QVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 11:20:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638289048;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bh2xH2WYNc1n+eZ6WtfnZ4QpRuO9aH5y18ufnjGl1cA=;
-        b=GBWcHfhpS67gEUf93+S6rjRTkgkM5f2sKkj517nqt16H3VD4qsNAwZ7i6lky9R38YfTKys
-        EeiaFutopoUUMbqFodwt4Dj1HRVx5/t+azFZbqthl8SQBPttgqRRpNrSp7Ues8oUAMwGOt
-        9BcZSrsi3uyO6e2ZIwipAZXr/vNbk/Q=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-358-ixtKk2j_Nf6_DmfBe8hGRw-1; Tue, 30 Nov 2021 11:17:27 -0500
-X-MC-Unique: ixtKk2j_Nf6_DmfBe8hGRw-1
-Received: by mail-ed1-f72.google.com with SMTP id v22-20020a50a456000000b003e7cbfe3dfeso17387682edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 08:17:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=Bh2xH2WYNc1n+eZ6WtfnZ4QpRuO9aH5y18ufnjGl1cA=;
-        b=jCwHG+XslHHfeJssKqItZzPPZrYNVUfJ6SO3CXzm+kgiJKnFaPGI1Zgfff+FX6vvPF
-         pUZuwgcxTEOwQ3ftcKc6CGqQjlvL4ufDKD9xROP2Y/dwje2LAhisPxh8cc0xkygJDFXa
-         37eubUnOY2eshF2usgTT9PbjUIInNhzS5XI5oZnHqzLnHQAahOhbrNs+Bt8r+WVHgnmu
-         uRzd27QHiWFOqjtF/tADJDbWfn3gh2QpkZMtTkUyMMn7YUJWB100ZqcKcjG9jK5lPqLL
-         B8lu12iiNf1tsolxcD5zayKeBefGuJpxkcWOrd8I4tdmmHGcl184Q6WTjlQi2QO1juqi
-         IRVA==
-X-Gm-Message-State: AOAM530cYyYwaI55EEjQ6lMa0hPWts1Jw1b1jmXt+6+ehAFgLmA2kEal
-        TU2ckGLYHg1/PP3oZxtZhLA4IClpR6UU5bCKPSvzKNmzHoSYiRr9xnOcYcUE/zY1OZN2yvEGEGr
-        SULJOnU//3mA8FYjUwe01RWGn
-X-Received: by 2002:a17:906:d54d:: with SMTP id cr13mr22657ejc.409.1638289045894;
-        Tue, 30 Nov 2021 08:17:25 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzm7jXoK2TvSroiJ5tHiLFjrswRyG0q/IaZ6d4NOHuATUVkXigtSnHPZVM/QNjl22FRlNuJYA==
-X-Received: by 2002:a17:906:d54d:: with SMTP id cr13mr22591ejc.409.1638289045383;
-        Tue, 30 Nov 2021 08:17:25 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id u23sm11967828edi.88.2021.11.30.08.17.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 08:17:24 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 39B381802A0; Tue, 30 Nov 2021 17:17:24 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shay Agroskin <shayagr@amazon.com>,
-        Arthur Kiyanovski <akiyano@amazon.com>,
-        David Arinzon <darinzon@amazon.com>,
-        Noam Dagan <ndagan@amazon.com>,
-        Saeed Bishara <saeedb@amazon.com>,
-        Ioana Ciornei <ioana.ciornei@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2 net-next 00/26] net: introduce and use generic XDP stats
-In-Reply-To: <20211130155612.594688-1-alexandr.lobakin@intel.com>
-References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
- <20211130155612.594688-1-alexandr.lobakin@intel.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 30 Nov 2021 17:17:24 +0100
-Message-ID: <871r2x8vor.fsf@toke.dk>
+        Tue, 30 Nov 2021 11:21:03 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24F7BB81A56
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:17:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40918C53FC7;
+        Tue, 30 Nov 2021 16:17:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638289057;
+        bh=MZnl0m0UlSGNeDrL9sapE0g2YD1NMkMtPnbDj8SAK+0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gg3STzay0QZRm3E9SW2UXSNlJlPrWOia6C2DHwbH1gviANhFaHenZJqyzTQYr1+Vz
+         AejGr4duQzTULR+N9JM1fw3I3ymCYe0u6flainBkcRjTfvx7y22R+se3M9eODLib9l
+         rwlp+udvw6zUlE9MnUY2JRgCxQhEtXPkJv3CS/nY9/OU2g8YoRlI5+nGsZjr5AU072
+         5B7xQbXWt51P5fvjmRt/dZ8QE83Y2cOyMO5d27dlgsrZ1jGFDciQsV32pboynjoQuD
+         eoxJuNN9GFXLU6/A3Sbv0v65I6T6Lm6H24uJxMLd9JUkEC/vHpKjCK3r77fMjQ0nwD
+         LbE0nOayjqZFQ==
+Date:   Tue, 30 Nov 2021 16:17:32 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: qdsp6: q6routing: Fix return value from
+ msm_routing_put_audio_mixer
+Message-ID: <YaZOnJIrl2bO98mL@sirena.org.uk>
+References: <20211130160414.21616-1-srinivas.kandagatla@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="reGMIgm/lItL/shk"
+Content-Disposition: inline
+In-Reply-To: <20211130160414.21616-1-srinivas.kandagatla@linaro.org>
+X-Cookie: Check your local listings.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alexander Lobakin <alexandr.lobakin@intel.com> writes:
 
-> From: Alexander Lobakin <alexandr.lobakin@intel.com>
-> Date: Tue, 23 Nov 2021 17:39:29 +0100
->
-> Ok, open questions:
->
-> 1. Channels vs queues vs global.
->
-> Jakub: no per-channel.
-> David (Ahern): it's worth it to separate as Rx/Tx.
-> Toke is fine with globals at the end I think?
+--reGMIgm/lItL/shk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Well, I don't like throwing data away, so in that sense I do like
-per-queue stats, but it's not a very strong preference (i.e., I can live
-with either)...
+On Tue, Nov 30, 2021 at 04:04:14PM +0000, Srinivas Kandagatla wrote:
+> msm_routing_put_audio_mixer() can return incorrect value in various scenarios.
+> Fix this, so that change notifications are sent correctly.
 
-> My point was that for most of the systems we have 1:1 Rx:Tx
-> (usually num_online_cpus()), so asking drivers separately for
-> the number of RQs and then SQs would end up asking for the same
-> number twice.
-> But the main reason TBH was that most of the drivers store stats
-> on a per-channel basis and I didn't want them to regress in
-> functionality. I'm fine with reporting only netdev-wide if
-> everyone are.
->
-> In case if we keep per-channel: report per-channel only by request
-> and cumulative globals by default to not flood the output?
+This really isn't a good commit message - I can't tell what the change
+is supposed to fix or how it fixes it.  Which values in which scenarios
+are incorrect in what way?
 
-... however if we do go with per-channel stats I do agree that they
-shouldn't be in the default output. I guess netlink could still split
-them out and iproute2 could just sum them before display?
+--reGMIgm/lItL/shk
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 2. Count all errors as "drops" vs separately.
->
-> Daniel: account everything as drops, plus errors should be
-> reported as exceptions for tracing sub.
-> Jesper: we shouldn't mix drops and errors.
->
-> My point: we shouldn't, that's why there are patches for 2 drivers
-> to give errors a separate counter.
-> I provided an option either to report all errors together ('errors'
-> in stats structure) or to provide individual counters for each of
-> them (sonamed ctrs), but personally prefer detailed errors. However,
-> they might "go detailed" under trace_xdp_exception() only, sound
-> fine (OTOH in RTNL stats we have both "general" errors and detailed
-> error counters).
+-----BEGIN PGP SIGNATURE-----
 
-I agree it would be nice to have a separate error counter, but a single
-counter is enough when combined with the tracepoints.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGmTpwACgkQJNaLcl1U
+h9DZWQgAhJmvaqN0eGrzB9U7ieeGabIcljlgUyilqA/VqDFY67InjYGqepeftVTD
+Ku5SexhDIBYUC4VyY3aLpdmezxPMV5K7FOpnQoqrHMmyB9HT0EOWariE5DML5Dyj
+C5vnHJklRawGk8pTUQWVRi0PW9thM4Bh1XyFqaP4JTutrpQbjv4cP5s+KNwlVKnO
+o7zc+f3aD8QhgidTIHSgN3DRaD7/w8VcxhpoKINuHyTcPz8bjA+qeTiGCmqSbuqe
+3uVpANXD1JboUIKXfgErBeQJWKCRBOHxYI3FZaeTdO1XlwLK+VpTfXM7TZv6g7uP
+ZjntZxXtF6ytmDCYvP1rytMj5KLzfA==
+=2i4Y
+-----END PGP SIGNATURE-----
 
-> 3. XDP and XSK ctrs separately or not.
->
-> My PoV is that those are two quite different worlds.
-> However, stats for actions on XSK really make a little sense since
-> 99% of time we have xskmap redirect. So I think it'd be fine to just
-> expand stats structure with xsk_{rx,tx}_{packets,bytes} and count
-> the rest (actions, errors) together with XDP.
-
-A whole set of separate counters for XSK is certainly overkill. No
-strong preference as to whether they need a separate counter at all...
-
-> Rest:
->  - don't create a separate `ip` command and report under `-s`;
->  - save some RTNL skb space by skipping zeroed counters.
->
-> Also, regarding that I count all on the stack and then add to the
-> storage once in a polling cycle -- most drivers don't do that and
-> just increment the values in the storage directly, but this can be
-> less performant for frequently updated stats (or it's just my
-> embedded past).
-> Re u64 vs u64_stats_t -- the latter is more universal and
-> architecture-friendly, the former is used directly in most of the
-> drivers primarily because those drivers and the corresponding HW
-> are being run on 64-bit systems in the vast majority of cases, and
-> Ethtools stats themselves are not so critical to guard them with
-> anti-tearing. Anyways, local64_t is cheap on ARM64/x86_64 I guess?
-
-I'm generally a fan of correctness first, so since you're touching all
-the drivers anyway why I'd say go for u64_stats_t :)
-
--Toke
-
+--reGMIgm/lItL/shk--

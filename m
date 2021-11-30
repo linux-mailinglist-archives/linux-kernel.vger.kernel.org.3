@@ -2,160 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59489463DBC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 19:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 851BB463D1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 18:44:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245430AbhK3SZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 13:25:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239436AbhK3SZG (ORCPT
+        id S244972AbhK3Rrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 12:47:33 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:36626 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229655AbhK3Rrc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 13:25:06 -0500
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1380C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:21:46 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id 14so27210427ioe.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BEltFXULxNYFVsP4eGm3kbct7+jVmIitoqiNJzsq4Rw=;
-        b=oVveweJbpqMfac0CI2tRpgA9ovwMDwKpWz4+/sBGm+Eai0m1BWi+FfOOTRJFpUtc9J
-         t9/kUK4q/4YG6sWCu+eBdY6AMOT0bbjzCt2gqAvQLmV/gyZhuzh1m/+feYuXSJTiaLb0
-         21JBxcCiv8zL/Vb5pjTbJSCCMnH7+ZEG5IcbY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BEltFXULxNYFVsP4eGm3kbct7+jVmIitoqiNJzsq4Rw=;
-        b=zVOyjX2Cq9us9BsJkMxFvm2hPpzyB3d+n/CVh0YbsX4/A9QRj/RVSydBPqUJhLVf0b
-         cNyIjKdkbROtjNjXV5MfRJdgea/KKLgsSd41Ws12CeOWADpHjejvNveEEsThInqVItbx
-         bdaadYzIopAOI+Rsfda5x3kIfI/uyRzgY6YVqz3ZRqbkvWjS7x1ofc59FG/XLhdIyFC0
-         YVnvGDy0hd0x1qi9i4tUoBTPdIfqFD5z94AtnQH95v0fj8ZP7EHmarbdcvjP8RwmTqUO
-         iMobFxKoOw/OzxxUj1tJqRHVLC4E7aLorf3gCFUGCqS0JSC31LaGQG4jtssPsDWlLbLY
-         J37Q==
-X-Gm-Message-State: AOAM530NzsrTvKg2zFwVvnPVINC6EGBdgnu955nJVjYnOmREMayzuHuf
-        XEEJRbk7D0PpdsrLTW9vLy4rX1QJXuCZUA==
-X-Google-Smtp-Source: ABdhPJz+LVs8tyA9H7fMAdCwKguCzGtHTsqxQsDDLH15eYirdXRE1VF0butP3RJjdflZQQOZoB0OBw==
-X-Received: by 2002:a05:6638:140d:: with SMTP id k13mr1419938jad.37.1638296506076;
-        Tue, 30 Nov 2021 10:21:46 -0800 (PST)
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
-        by smtp.gmail.com with ESMTPSA id c15sm9815491ilq.50.2021.11.30.10.21.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Nov 2021 10:21:45 -0800 (PST)
-Received: by mail-io1-f45.google.com with SMTP id c3so27345706iob.6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 10:21:45 -0800 (PST)
-X-Received: by 2002:a6b:d904:: with SMTP id r4mr1204199ioc.52.1638296505145;
- Tue, 30 Nov 2021 10:21:45 -0800 (PST)
+        Tue, 30 Nov 2021 12:47:32 -0500
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8C4F020DED70;
+        Tue, 30 Nov 2021 09:44:12 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8C4F020DED70
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1638294252;
+        bh=EAfl+8ZtWcOr7MGbBjK12p6Zs4Xgqan1DBcDEBeNGnM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PVCqwbrC42Rctjz/oCpjE/+qfi10+tb44cz1rY8RbAY38zDia0+kOb2v9DpH0RspM
+         7/QeFddVmlCumensX99JkbMURgZkHs+zeHVwD0wwJOwmbGqNZlICiY1FoYdHHyQOMH
+         waJpJtmqcw+AOflqAgICWUEGPijV4fajkxCCUnC8=
+Date:   Tue, 30 Nov 2021 09:44:11 -0800
+From:   Katherine Perez <kaperez@linux.microsoft.com>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] arm64: dts: add minimal DTS for Microsoft Surface
+ Duo2
+Message-ID: <20211130174411.GA18994@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <20211122190552.74073-1-kaperez@linux.microsoft.com>
+ <20211122190552.74073-2-kaperez@linux.microsoft.com>
+ <YZxnQfB6V7GOlygq@matsya>
 MIME-Version: 1.0
-References: <20211029122359.1.I1e23f382fbd8beb19fe1c06d70798b292012c57a@changeid>
- <CAE=gft4MRvq-VCBW4EX4dGfPi4s7Lco8h6Z_ejRH5A1e-K2-yA@mail.gmail.com>
- <CAJZ5v0hsGFHxcTb8PUkGSm9oas1wdquB=euofS19zriRc1CXYw@mail.gmail.com>
- <CAE=gft6CjUhkcrmcjVEOp5S+rgqN1_ZGTKbK0DierTanu0d16A@mail.gmail.com>
- <CAJZ5v0gamixc4dkBEXJjjw5zQynuz8BkQ9xv8YpbjkTkdMb2TQ@mail.gmail.com>
- <CAE=gft6o0JxhDgazPA5DVbL6hQ+36D_GkzgN-AuR3YA43NSqaw@mail.gmail.com> <CAJZ5v0ixOCnT_JyQ1gpvc9rdH_zK7gLrke0wJSLUagd=-qf0sA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0ixOCnT_JyQ1gpvc9rdH_zK7gLrke0wJSLUagd=-qf0sA@mail.gmail.com>
-From:   Evan Green <evgreen@chromium.org>
-Date:   Tue, 30 Nov 2021 09:44:02 -0800
-X-Gmail-Original-Message-ID: <CAE=gft7WjMJb1NUUrusoaP4YRiz5Sbsb898Yi_ekJTFCBFz_ng@mail.gmail.com>
-Message-ID: <CAE=gft7WjMJb1NUUrusoaP4YRiz5Sbsb898Yi_ekJTFCBFz_ng@mail.gmail.com>
-Subject: Re: [PATCH] PM / hibernate: Fix snapshot partial write lengths
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YZxnQfB6V7GOlygq@matsya>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 3:46 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Nov 29, 2021 at 5:50 PM Evan Green <evgreen@chromium.org> wrote:
-> >
-> > On Wed, Nov 24, 2021 at 4:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > >
-> > > On Tue, Nov 16, 2021 at 9:22 PM Evan Green <evgreen@chromium.org> wrote:
-> > > >
-> > > > On Tue, Nov 16, 2021 at 9:54 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> > > > >
-> > > > > On Mon, Nov 15, 2021 at 6:13 PM Evan Green <evgreen@chromium.org> wrote:
-> > > > > >
-> > > > > > Gentle bump.
-> > > > > >
-> > > > > >
-> > > > > > On Fri, Oct 29, 2021 at 12:24 PM Evan Green <evgreen@chromium.org> wrote:
-> > > > > > >
-> > > > > > > snapshot_write() is inappropriately limiting the amount of data that can
-> > > > > > > be written in cases where a partial page has already been written. For
-> > > > > > > example, one would expect to be able to write 1 byte, then 4095 bytes to
-> > > > > > > the snapshot device, and have both of those complete fully (since now
-> > > > > > > we're aligned to a page again). But what ends up happening is we write 1
-> > > > > > > byte, then 4094/4095 bytes complete successfully.
-> > > > > > >
-> > > > > > > The reason is that simple_write_to_buffer()'s second argument is the
-> > > > > > > total size of the buffer, not the size of the buffer minus the offset.
-> > > > > > > Since simple_write_to_buffer() accounts for the offset in its
-> > > > > > > implementation, snapshot_write() can just pass the full page size
-> > > > > > > directly down.
-> > > > > > >
-> > > > > > > Signed-off-by: Evan Green <evgreen@chromium.org>
-> > > > > > > ---
-> > > > > > >
-> > > > > > >  kernel/power/user.c | 2 +-
-> > > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > > >
-> > > > > > > diff --git a/kernel/power/user.c b/kernel/power/user.c
-> > > > > > > index 740723bb388524..ad241b4ff64c58 100644
-> > > > > > > --- a/kernel/power/user.c
-> > > > > > > +++ b/kernel/power/user.c
-> > > > > > > @@ -177,7 +177,7 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
-> > > > > > >                 if (res <= 0)
-> > > > > > >                         goto unlock;
-> > > > > > >         } else {
-> > > > > > > -               res = PAGE_SIZE - pg_offp;
-> > > > > > > +               res = PAGE_SIZE;
-> > > > > > >         }
-> > > > > > >
-> > > > > > >         if (!data_of(data->handle)) {
-> > > > > > > --
-> > > > >
-> > > > > Do you actually see this problem in practice?
-> > > >
-> > > > Yes. I may fire up another thread to explain why I'm stuck doing a
-> > > > partial page write, and how I might be able to stop doing that in the
-> > > > future with some kernel help. But either way, this is a bug.
-> > >
-> > > OK, patch applied as 5.16-rc material.
-> > >
-> > > I guess it should go into -stable kernels too?
-> >
-> > Yes, putting it into -stable would make sense also. I should have CCed
-> > them originally, doing that now.
->
-> Well, you need to point them to the upstream commit to backport.
->
-> In this particular case it would be
->
-> commit 88a5045f176b78c33a269a30a7b146e99c550bd9 (pm-sleep)
-> Author: Evan Green <evgreen@chromium.org>
-> Date:   Fri Oct 29 12:24:22 2021 -0700
->
->    PM: hibernate: Fix snapshot partial write lengths
->
-> I'll send an inclusion request for this.  I guess it should go into
-> all of the applicable -stable series, right?
+On Tue, Nov 23, 2021 at 09:30:01AM +0530, Vinod Koul wrote:
+> On 22-11-21, 11:05, Katherine Perez wrote:
+> > This is a minimal devicetree for Microsoft Surface Duo 2 with SM8350
+> > Chipset
+> > 
+> > Signed-off-by: Katherine Perez <kaperez@linux.microsoft.com>
+> > ---
+> > 
+> > Changes since v1:
+> > - Change remoteprocs firmware-naming scheme to qcom/sm8350/microsft/*
+> > - Add chassis-type
+> > 
+> >  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+> >  .../qcom/sm8350-microsoft-surface-duo2.dts    | 369 ++++++++++++++++++
+> >  2 files changed, 370 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
+> > 
+> > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> > index 6b816eb33309..a8cc6bd3c423 100644
+> > --- a/arch/arm64/boot/dts/qcom/Makefile
+> > +++ b/arch/arm64/boot/dts/qcom/Makefile
+> > @@ -106,4 +106,5 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-mtp.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-hdk.dtb
+> > +dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-microsoft-surface-duo2.dtb
+> >  dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
+> > new file mode 100644
+> > index 000000000000..d4963c9015cb
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/qcom/sm8350-microsoft-surface-duo2.dts
+> > @@ -0,0 +1,369 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (C) 2021, Microsoft Corporation
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include <dt-bindings/gpio/gpio.h>
+> > +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> > +#include "sm8350.dtsi"
+> > +#include "pm8350.dtsi"
+> > +#include "pm8350b.dtsi"
+> > +#include "pm8350c.dtsi"
+> > +#include "pmk8350.dtsi"
+> > +#include "pmr735a.dtsi"
+> > +#include "pmr735b.dtsi"
+> > +
+> > +/ {
+> > +	model = "Microsoft Surface Duo 2";
+> > +	compatible = "microsoft,surface-duo2", "qcom,sm8350";
+> > +	chassis-type = "handset";
+> 
+> This is interesting, I see it used at lot of place, unfortunately, it
+> does not seem to be documented :(
+> 
+> -- 
+> ~Vinod
 
-Correct. From what I can tell this code and simple_write_to_buffer()
-haven't changed since its introduction in 2010, so my patch should
-have had a fixes tag like:
+Hi Vinod,
 
-Fixes: d3c1b24c50e8 ("PM / Hibernate: Snapshot cleanup")
+Looks like "chassis-type" is documented in the Devicetree Specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter3-devicenodes.html.
 
-Thanks for doing that Rafael, sorry for flubbing the stable aspect.
-
--Evan
+-Katherine

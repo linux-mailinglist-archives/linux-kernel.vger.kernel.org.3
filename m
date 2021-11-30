@@ -2,30 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E151B464110
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C42E6464117
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Nov 2021 23:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344598AbhK3WNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 17:13:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344532AbhK3WL0 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 17:11:26 -0500
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED93EC06175A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 14:08:04 -0800 (PST)
+        id S1344786AbhK3WNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 17:13:21 -0500
+Received: from out1.migadu.com ([91.121.223.63]:58349 "EHLO out1.migadu.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1344608AbhK3WLb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 17:11:31 -0500
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638310083;
+        t=1638310090;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=CceoAuXc8ztt6c/41GK5sR1YQRKzgrFVIEpBFl753js=;
-        b=xp8MsUnB5BFCaXQy2k5xnv/wQY4pHXZcBNpppZ/1PrYh0SQUDDYlmoRG/NNRkZXmK0UAWE
-        SvLikYAEayl69lqn5gywYTPR07bS5gG61K2RRPu5/WdY2Ce9Jp5cCo9TM8TEEHoFL9kdpf
-        s5K1oextKKqxI6p/G02TWr5VgVOiiiw=
+        bh=/6qJwit6ITW8lPGUAdTPjRxCn0EQ40SKku7cvq8gPsA=;
+        b=Z4Yuz3BRckT0pZZtivLkslb47vrrWnkskR/i1AYmyXGZ6nnU6ad48vgnRdp4m8E/f+7DE4
+        n+d0qMciv/EuNLT+EhFYzdNjD6DuBFLdl0jdnhHG21fKR2Qdhlfm19buPMrJZXcdD3vdUI
+        vDWH8ymk4nMxlLZUsj4ZdoJikhsjO2g=
 From:   andrey.konovalov@linux.dev
 To:     Marco Elver <elver@google.com>,
         Alexander Potapenko <glider@google.com>,
@@ -42,9 +38,9 @@ Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
         Evgenii Stepanov <eugenis@google.com>,
         linux-kernel@vger.kernel.org,
         Andrey Konovalov <andreyknvl@google.com>
-Subject: [PATCH 25/31] kasan, vmalloc: don't unpoison VM_ALLOC pages before mapping
-Date:   Tue, 30 Nov 2021 23:08:01 +0100
-Message-Id: <0b79da9e534bfa35d11154b940095df23ee68a16.1638308023.git.andreyknvl@google.com>
+Subject: [PATCH 26/31] kasan, page_alloc: allow skipping unpoisoning for HW_TAGS
+Date:   Tue, 30 Nov 2021 23:08:08 +0100
+Message-Id: <e60cbad6f4f8ee08137671c008c83ab26255e9bf.1638308023.git.andreyknvl@google.com>
 In-Reply-To: <cover.1638308023.git.andreyknvl@google.com>
 References: <cover.1638308023.git.andreyknvl@google.com>
 MIME-Version: 1.0
@@ -57,86 +53,107 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrey Konovalov <andreyknvl@google.com>
 
-This patch makes KASAN unpoison vmalloc mappings after that have been
-mapped in when it's possible: for vmalloc() (indentified via VM_ALLOC)
-and vm_map_ram().
+This patch add a new GFP flag __GFP_SKIP_KASAN_UNPOISON that allows
+skipping KASAN poisoning for page_alloc allocations. The flag is only
+effective with HW_TAGS KASAN.
 
-The reasons for this are:
-
-- For vmalloc() and vm_map_ram(): pages don't get unpoisoned in case
-  mapping them fails.
-- For vmalloc(): HW_TAGS KASAN needs pages to be mapped to set tags via
-  kasan_unpoison_vmalloc().
+This flag will be used by vmalloc code for page_alloc allocations
+backing vmalloc() mappings in the following patch. The reason to skip
+KASAN poisoning for these pages in page_alloc is because vmalloc code
+will be poisoning them instead.
 
 Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- mm/vmalloc.c | 26 ++++++++++++++++++++++----
- 1 file changed, 22 insertions(+), 4 deletions(-)
+ include/linux/gfp.h | 13 +++++++++----
+ mm/page_alloc.c     | 24 +++++++++++++++++-------
+ 2 files changed, 26 insertions(+), 11 deletions(-)
 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index f37d0ed99bf9..82ef1e27e2e4 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -2208,14 +2208,15 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
- 		mem = (void *)addr;
- 	}
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index dddd7597689f..a4c8ff3fbed1 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -54,9 +54,10 @@ struct vm_area_struct;
+ #define ___GFP_THISNODE		0x200000u
+ #define ___GFP_ACCOUNT		0x400000u
+ #define ___GFP_ZEROTAGS		0x800000u
+-#define ___GFP_SKIP_KASAN_POISON	0x1000000u
++#define ___GFP_SKIP_KASAN_UNPOISON	0x1000000u
++#define ___GFP_SKIP_KASAN_POISON	0x2000000u
+ #ifdef CONFIG_LOCKDEP
+-#define ___GFP_NOLOCKDEP	0x2000000u
++#define ___GFP_NOLOCKDEP	0x4000000u
+ #else
+ #define ___GFP_NOLOCKDEP	0
+ #endif
+@@ -235,6 +236,9 @@ struct vm_area_struct;
+  * %__GFP_ZEROTAGS zeroes memory tags at allocation time if the memory itself
+  * is being zeroed (either via __GFP_ZERO or via init_on_alloc).
+  *
++ * %__GFP_SKIP_KASAN_UNPOISON skips KASAN unpoisoning on page allocation.
++ * Currently only has an effect in HW tags mode.
++ *
+  * %__GFP_SKIP_KASAN_POISON returns a page which does not need to be poisoned
+  * on deallocation. Typically used for userspace pages. Currently only has an
+  * effect in HW tags mode.
+@@ -243,13 +247,14 @@ struct vm_area_struct;
+ #define __GFP_COMP	((__force gfp_t)___GFP_COMP)
+ #define __GFP_ZERO	((__force gfp_t)___GFP_ZERO)
+ #define __GFP_ZEROTAGS	((__force gfp_t)___GFP_ZEROTAGS)
+-#define __GFP_SKIP_KASAN_POISON	((__force gfp_t)___GFP_SKIP_KASAN_POISON)
++#define __GFP_SKIP_KASAN_UNPOISON ((__force gfp_t)___GFP_SKIP_KASAN_UNPOISON)
++#define __GFP_SKIP_KASAN_POISON   ((__force gfp_t)___GFP_SKIP_KASAN_POISON)
  
--	mem = kasan_unpoison_vmalloc(mem, size);
--
- 	if (vmap_pages_range(addr, addr + size, PAGE_KERNEL,
- 				pages, PAGE_SHIFT) < 0) {
- 		vm_unmap_ram(mem, count);
- 		return NULL;
- 	}
+ /* Disable lockdep for GFP context tracking */
+ #define __GFP_NOLOCKDEP ((__force gfp_t)___GFP_NOLOCKDEP)
  
-+	/* Mark the pages as accessible after they were mapped in. */
-+	mem = kasan_unpoison_vmalloc(mem, size);
-+
- 	return mem;
+ /* Room for N __GFP_FOO bits */
+-#define __GFP_BITS_SHIFT (25 + IS_ENABLED(CONFIG_LOCKDEP))
++#define __GFP_BITS_SHIFT (26 + IS_ENABLED(CONFIG_LOCKDEP))
+ #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
+ 
+ /**
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 4eb341351124..3afebc037fcd 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -2381,6 +2381,21 @@ static bool check_new_pages(struct page *page, unsigned int order)
+ 	return false;
  }
- EXPORT_SYMBOL(vm_map_ram);
-@@ -2443,7 +2444,14 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
  
- 	setup_vmalloc_vm(area, va, flags, caller);
- 
--	area->addr = kasan_unpoison_vmalloc(area->addr, requested_size);
-+	/*
-+	 * For VM_ALLOC mappings, __vmalloc_node_range() mark the pages as
-+	 * accessible after they are mapped in.
-+	 * Otherwise, as the pages can be mapped outside of vmalloc code,
-+	 * mark them now as a best-effort approach.
-+	 */
-+	if (!(flags & VM_ALLOC))
-+		area->addr = kasan_unpoison_vmalloc(area->addr, requested_size);
- 
- 	return area;
- }
-@@ -3072,6 +3080,12 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
- 	if (!addr)
- 		goto fail;
- 
-+	/*
-+	 * Mark the pages for VM_ALLOC mappings as accessible after they were
-+	 * mapped in.
-+	 */
-+	addr = kasan_unpoison_vmalloc(addr, real_size);
++static inline bool should_skip_kasan_unpoison(gfp_t flags, bool init_tags)
++{
++	/* Don't skip if a software KASAN mode is enabled. */
++	if (!IS_ENABLED(CONFIG_KASAN_HW_TAGS))
++		return false;
 +
- 	/*
- 	 * In this function, newly allocated vm_struct has VM_UNINITIALIZED
- 	 * flag. It means that vm_struct is not fully initialized.
-@@ -3766,7 +3780,11 @@ struct vm_struct **pcpu_get_vm_areas(const unsigned long *offsets,
- 	}
- 	spin_unlock(&vmap_area_lock);
- 
--	/* mark allocated areas as accessible */
 +	/*
-+	 * Mark allocated areas as accessible.
-+	 * As the pages are mapped outside of vmalloc code,
-+	 * mark them now as a best-effort approach.
++	 * For hardware tag-based KASAN, skip if either:
++	 *
++	 * 1. Memory tags have already been cleared via tag_clear_highpage().
++	 * 2. Skipping has been requested via __GFP_SKIP_KASAN_UNPOISON.
 +	 */
- 	for (area = 0; area < nr_vms; area++)
- 		vms[area]->addr = kasan_unpoison_vmalloc(vms[area]->addr,
- 							 vms[area]->size);
++	return init_tags || (flags & __GFP_SKIP_KASAN_UNPOISON);
++}
++
+ inline void post_alloc_hook(struct page *page, unsigned int order,
+ 				gfp_t gfp_flags)
+ {
+@@ -2420,13 +2435,8 @@ inline void post_alloc_hook(struct page *page, unsigned int order,
+ 		/* Note that memory is already initialized by the loop above. */
+ 		init = false;
+ 	}
+-	/*
+-	 * If either a software KASAN mode is enabled, or,
+-	 * in the case of hardware tag-based KASAN,
+-	 * if memory tags have not been cleared via tag_clear_highpage().
+-	 */
+-	if (!IS_ENABLED(CONFIG_KASAN_HW_TAGS) || !init_tags) {
+-		/* Mark shadow memory or set memory tags. */
++	if (!should_skip_kasan_unpoison(gfp_flags, init_tags)) {
++		/* Unpoison shadow memory or set memory tags. */
+ 		kasan_unpoison_pages(page, order, init);
+ 
+ 		/* Note that memory is already initialized by KASAN. */
 -- 
 2.25.1
 

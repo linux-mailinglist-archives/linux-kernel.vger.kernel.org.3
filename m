@@ -2,145 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D9AF54645FC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 05:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F20B464601
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 05:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241954AbhLAEgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 23:36:13 -0500
-Received: from lelv0143.ext.ti.com ([198.47.23.248]:35140 "EHLO
-        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbhLAEgM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 23:36:12 -0500
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B14WeWP115419;
-        Tue, 30 Nov 2021 22:32:40 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1638333160;
-        bh=rZPqJytt32wU6cmUQOi71craqET7VqU3GbUSl7qQQyA=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=YJKaB21+Jcr+EUnnOKEwM2H59V3+3uiPme/eAIy1El3FEObw1WYl4flXBp7g/T7Mb
-         KhzuJXA3YAfqyL+fRaSuTU+XPVb1aijRBVuCxsY3D1MF9U0ydscrhKTdFet14OTXf7
-         ZXcO4Qhl6bDI2WHdOkSpfn3L9pVggi8p74FLoqEE=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B14WeML087916
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Nov 2021 22:32:40 -0600
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 30
- Nov 2021 22:32:39 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 30 Nov 2021 22:32:39 -0600
-Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B14WbKE119719;
-        Tue, 30 Nov 2021 22:32:37 -0600
-Subject: Re: [PATCH 1/2] dt-bindings: mux: Document mux-states property
-To:     Peter Rosin <peda@axentia.se>, Rob Herring <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
-References: <20211130121847.11112-1-a-govindraju@ti.com>
- <20211130121847.11112-2-a-govindraju@ti.com>
- <YaaGMtE6n0yZNpAI@robh.at.kernel.org>
- <6e1474bc-038c-43ec-4814-63ad3eca888c@axentia.se>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-Message-ID: <247912b5-e68a-1e97-60c7-0ba21448d3b4@ti.com>
-Date:   Wed, 1 Dec 2021 10:02:36 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1346593AbhLAEh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 23:37:28 -0500
+Received: from mga17.intel.com ([192.55.52.151]:7226 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230301AbhLAEhZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 23:37:25 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="217074614"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="217074614"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 20:34:05 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="477400349"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 30 Nov 2021 20:34:03 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msHJi-000EFn-HA; Wed, 01 Dec 2021 04:34:02 +0000
+Date:   Wed, 1 Dec 2021 12:33:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Eli Cohen <elic@nvidia.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: drivers/vhost/vringh.c:586:18: sparse: sparse: restricted __virtio16
+ degrades to integer
+Message-ID: <202112011211.B9QiemfX-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <6e1474bc-038c-43ec-4814-63ad3eca888c@axentia.se>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Hi Eli,
 
-On 01/12/21 2:18 am, Peter Rosin wrote:
-> 
-> 
-> On 2021-11-30 21:14, Rob Herring wrote:
->> On Tue, Nov 30, 2021 at 05:48:46PM +0530, Aswath Govindraju wrote:
->>> In some cases, it is required to provide the state to which the mux
->>> controller has be set to, from the consumer device tree node. Document the
->>> property mux-states that can be used for adding this support.
->>
->> I having a hard time understanding why you need this. One consumer 
->> configures a mux one way and another consumer another way? How do you 
->> arbitrate that? Please elaborate on what 'some cases' are and why it's 
->> required.
->>
->> Can't you just add a cell for the 'state' allowing for 1-2 cells 
->> instead of 0-1?
-> 
-> A mux controller can control several muxes. That happens e.g. when the
-> same gpio lines are connected to several mux chips in parallel. When
-> you operate one mux, the other parallel muxes just follow along. If
-> these muxes are then used orthogonally, coordination is needed. The real
-> world case I had was I2C and an analog signal connected to an ADC that
-> went through parallel/dependent muxes like this. It is simply not
-> possible to freely mux the I2C bus and the analog signal, they are tied
-> together and dependent and must coordinate their accesses.
-> 
-> The addition now is that Aswath wants a mux control client to "point
-> at" a single state instead of the whole mux control, and I see that as
-> a usable addition. It seems like a natural place to specify a single mux
-> state that some driver needs in some circumstance.
-> 
-> But, since a mux control is inherently a shared resource (see above),
-> one consumer might need a specific state and some other consumer might
-> need the whole mux control and manage the states as e.g. the existing
-> i2c-mux-gpmux binding is doing. So, you need to be able to specify both
-> ways to point at muxes; either to a single mux state, or to the whole mux
-> control.
-> 
-> While you could make the extra cell optional, that does not work for
-> the mux/adi,adg792a binding, since it is using the #mux-control-cells
-> property to determine which mode it should operate its three muxes in.
-> Either with one common/parallel mux control, or with three independent
-> mux controls.
-> 
-> So, that binding is already in the 0-1 territory, and adding an optional
-> extra cell makes it 0-1-2 with no way to determine what is intended when
-> the cell count is 1 (three independent mux controls OR one mux control
-> and a state). I see no way to add the extra state to that binding, short
-> of adding an extra property somewhere for that driver, but I simply did
-> not want to go that path because it would get inconsistent when trying
-> to add that in a backwards compatible way. Or rather, that was my
-> conclusion.
-> 
-> Suggestions welcome...
-> 
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
+commit: 5262912ef3cfc5e518892c3d67fb36412cb813e2 vdpa/mlx5: Add support for control VQ and MAC setting
+date:   3 months ago
+config: riscv-randconfig-s031-20211201 (https://download.01.org/0day-ci/archive/20211201/202112011211.B9QiemfX-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5262912ef3cfc5e518892c3d67fb36412cb813e2
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5262912ef3cfc5e518892c3d67fb36412cb813e2
+        # save the config file to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash drivers/vhost/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
 
-In addition to what Peter has mentioned, I would like to elaborate on my
-use case for adding this feature. I am trying to implement this feature
-in the TCAN104x transceiver driver, for selecting the mux state to route
-the signals from CAN controller to transceivers on the board. The state
-of the mux line to be set, can change based on the design and this is
-needs to be provided from the device tree. Hence, I am trying to add
-this support for providing the state to be set to the driver from the
-device tree node.
+sparse warnings: (new ones prefixed by >>)
+>> drivers/vhost/vringh.c:586:18: sparse: sparse: restricted __virtio16 degrades to integer
+>> drivers/vhost/vringh.c:586:18: sparse: sparse: restricted __virtio16 degrades to integer
+>> drivers/vhost/vringh.c:586:18: sparse: sparse: cast to restricted __virtio16
+   drivers/vhost/vringh.c:594:16: sparse: sparse: restricted __virtio16 degrades to integer
+   drivers/vhost/vringh.c:594:16: sparse: sparse: restricted __virtio16 degrades to integer
+>> drivers/vhost/vringh.c:594:16: sparse: sparse: cast from restricted __virtio16
 
+vim +586 drivers/vhost/vringh.c
 
-Also, one more question on regarding DT check errors, may I know what
-should be the order in which the patches need to be posted in order to
-not get the error? This is because mux-states would be a new property to
-be added in the TCAN104x bindings and I thought that it would need to be
-posted after the patch for the changes in mux-controller are merged.
+f87d0fbb579818 Rusty Russell      2013-03-20  581  
+f87d0fbb579818 Rusty Russell      2013-03-20  582  /* Userspace access helpers: in this case, addresses are really userspace. */
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  583  static inline int getu16_user(const struct vringh *vrh, u16 *val, const __virtio16 *p)
+f87d0fbb579818 Rusty Russell      2013-03-20  584  {
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  585  	__virtio16 v = 0;
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12 @586  	int rc = get_user(v, (__force __virtio16 __user *)p);
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  587  	*val = vringh16_to_cpu(vrh, v);
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  588  	return rc;
+f87d0fbb579818 Rusty Russell      2013-03-20  589  }
+f87d0fbb579818 Rusty Russell      2013-03-20  590  
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  591  static inline int putu16_user(const struct vringh *vrh, __virtio16 *p, u16 val)
+f87d0fbb579818 Rusty Russell      2013-03-20  592  {
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12  593  	__virtio16 v = cpu_to_vringh16(vrh, val);
+b9f7ac8c72894c Michael S. Tsirkin 2014-12-12 @594  	return put_user(v, (__force __virtio16 __user *)p);
+f87d0fbb579818 Rusty Russell      2013-03-20  595  }
+f87d0fbb579818 Rusty Russell      2013-03-20  596  
 
-Thanks,
-Aswath
+:::::: The code at line 586 was first introduced by commit
+:::::: b9f7ac8c72894c19bf258a54ecaa708df4ffbe80 vringh: update for virtio 1.0 APIs
 
-> Cheers,
-> Peter
-> 
+:::::: TO: Michael S. Tsirkin <mst@redhat.com>
+:::::: CC: Michael S. Tsirkin <mst@redhat.com>
 
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

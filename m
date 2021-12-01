@@ -2,144 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAF446446B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 02:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF7046446E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 02:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241105AbhLABK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 20:10:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33988 "EHLO
+        id S1345965AbhLABLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 20:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231445AbhLABKV (ORCPT
+        with ESMTP id S241106AbhLABLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 20:10:21 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D840C061748
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:07:01 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id x15so94206511edv.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:07:01 -0800 (PST)
+        Tue, 30 Nov 2021 20:11:20 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6109C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:08:00 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id r138so21689199pgr.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:08:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=dDTZQO1s0l0nQ4okwAIdEoHQ0YiyLaeFzWFpDGXURhI=;
-        b=aKNAM/hTD2iyToIfqhdvNElGlNz9s4c/KoEOloKnsDnBEqXyqyhwYtC2k4V2Z29Ggn
-         +lCXAtuOpk0iQ5eDzn4kskDCc8OBWFvZ9JqVFA5JLxu1TSSG/YxssrYsCO8FWCfa6qcM
-         +z4U//Z4fsc3N5DwKeNMvUZdr2y6nHv+6d8iEYXb8tGncg6XmtgLZVXqK39wY3N63duR
-         HCle84xmK41sYwEp0AQj2ovjVB2X/++iufFILpVt1GA9iC5em/e6g1rjyY9bf2VgSG5T
-         vWocu4b0nzqES5H+XLSYywAOR/GNZYkfeYyv13c2VG30g6TdJDNddeC+wgPeuRcm45/o
-         PBSQ==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=vbRT8aXA3F1xt3PU8F3O8agTqIaZlbDpUx5b8CZCQKY=;
+        b=fT5iWAGZX+tpuhGkx/az1x5XGClubCRCkpS/kkCJTV1/53Yx3PUbOe9L1df2WtXSt+
+         AKZKjPqXgpiF2ya71hO4+ewV37JU7xx461fYNP5jIyMNyADtvVLswuURNf5mFl+xUagL
+         CN0eMhGMZo9pv7hYyCr/dOc8QKCASC00WIXlKcr0bW0ET7iatUb7Ohd7QylxEPJHtjLq
+         TbQZiZndthKKq7i+qvfI0urd1fUyR6xgl0YDaybr0kL7I7LCuE1jnIGOOj5+IADI5hy1
+         v2D0EnTLgVmNjW1SkQczO1tTXivxHClJnpgKUHiPqwN+0SWyEGRjNJWP0btYog4LBEUN
+         KZxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=dDTZQO1s0l0nQ4okwAIdEoHQ0YiyLaeFzWFpDGXURhI=;
-        b=uD5GPv6GQGez2OMOX33iEHsgD1KF20GAo7iVM1eYQS8YVcV/DSConIg6Ty15Wx5f7U
-         VbJhJBZWMXPzX9vmKQQ0vP/D0A/3cj05uewNok8F0ZKX0HenNF9L5qtfmJMF7SnC+gFf
-         yn5eVkz2SBujpVNl88VyUY+reJQlfvhe8QRgBuEqhoRRoSVyP78zEem5H6mT8iq13O15
-         7sMb32jsbSas3fLqARgpWmAC/E81P5oTHCWl+Ypu0VX5yG6bFps7jI3ZWbwn6qXwP1Tf
-         GvieL6BlcVxfytUuGCeQz/xjB9mN5fgxBeukjXn9i5RsNoUWJyRKKP2nnwGtE2PROBgK
-         wO/A==
-X-Gm-Message-State: AOAM530vC941PCZqLkxWvXbxo+e6jR/T2W+e/lOygJbe4Yr45HY4KAhf
-        GI8h9WD06/uocHoI8KQvl1bkTaArYCZwFkgkgPNT
-X-Google-Smtp-Source: ABdhPJxty9SzAkb0v8cwbtS2kkFtq94PrIqZjihhoj6I/Aj1LVnCBLmzhnBqErP0r0YUKFdEbazwCMhiZXkezaGEjsU=
-X-Received: by 2002:a17:906:d96e:: with SMTP id rp14mr3105756ejb.104.1638320819895;
- Tue, 30 Nov 2021 17:06:59 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=vbRT8aXA3F1xt3PU8F3O8agTqIaZlbDpUx5b8CZCQKY=;
+        b=eyio/fNYhmOfYfOp0qPe2IhbWF67cpUdJZ3DCQoB+2VZp8jU1MGldhc9ilDW4clB4t
+         Jla0zKeQpOo6mjjfWn886lkOOMTEfQihsjxPfGO0+OQ+hciMxqOpcogILQDTcJTYFXvc
+         gNkY8Y2vrCINK2nOQohyR+j/21XN0vQRA1l7vDG1SPioRasQ+svlq1ehmlum0uRqsCCg
+         JrwDaaN5ZgprbcnGChfQAx8LX/2CBzb36iJZz74x5tLAG6LYN/J/N7bgS76oOVj/9UXK
+         Et/zYP4gYIpa1EsuCYuUo0LxtcPCcMlg6Ymgudn8Qqu6rhmElQgS1Pm7UaF1kbrLqTTB
+         5HSw==
+X-Gm-Message-State: AOAM532zMdWgQi74cdBILxer/xArVVtf8zQ8C1BhDkahqcU4Px47pNEx
+        rw+99eEMIuTGi2ZUMdvVZDSNQw==
+X-Google-Smtp-Source: ABdhPJzC1qeyr70CZme3ye39kJgvSth76594RljQ4Bv+NT1siBBapSHrb4rL7Ge5ghX0RunE32HUpw==
+X-Received: by 2002:a05:6a00:2349:b0:4a8:d87:e8ad with SMTP id j9-20020a056a00234900b004a80d87e8admr2962268pfj.15.1638320880128;
+        Tue, 30 Nov 2021 17:08:00 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id m24sm15869121pgk.39.2021.11.30.17.07.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 17:07:59 -0800 (PST)
+Date:   Wed, 1 Dec 2021 01:07:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 03/29] KVM: Resync only arch fields when
+ slots_arch_lock gets reacquired
+Message-ID: <YabK7IOM74ag2CcS@google.com>
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+ <a47c93c2fe40e7ed27eb0ff6ac2b173254058b6c.1638304315.git.maciej.szmigiero@oracle.com>
 MIME-Version: 1.0
-References: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
-In-Reply-To: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 30 Nov 2021 20:06:49 -0500
-Message-ID: <CAHC9VhTJG24iG=U0geO-ZhC6OogxOu4icBrNY22+qRNpWd5PBQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/14] x86: Trenchboot secure dynamic launch Linux
- kernel support
-To:     Ross Philipson <ross.philipson@oracle.com>,
-        trenchboot-devel@googlegroups.com
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
-        linux-doc@vger.kernel.org, dpsmith@apertussolutions.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
-        luto@amacapital.net, kanth.ghatraju@oracle.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a47c93c2fe40e7ed27eb0ff6ac2b173254058b6c.1638304315.git.maciej.szmigiero@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 27, 2021 at 9:20 AM Ross Philipson
-<ross.philipson@oracle.com> wrote:
->
-> The larger focus of the Trechboot project (https://github.com/TrenchBoot) is to
-> enhance the boot security and integrity in a unified manner. The first area of
-> focus has been on the Trusted Computing Group's Dynamic Launch for establishing
-> a hardware Root of Trust for Measurement, also know as DRTM (Dynamic Root of
-> Trust for Measurement).
+On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> 
+> There is no need to copy the whole memslot data after releasing
+> slots_arch_lock for a moment to install temporary memslots copy in
+> kvm_set_memslot() since this lock only protects the arch field of each
+> memslot.
+> 
+> Just resync this particular field after reacquiring slots_arch_lock.
+> 
+> Note, this also eliminates the need to manually clear the INVALID flag
+> when restoring memslots; the "setting" of the INVALID flag was an
+> unwanted side effect of copying the entire memslots.
+> 
+> Since kvm_copy_memslots() has just one caller remaining now
+> open-code it instead.
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> [sean: tweak shortlog, note INVALID flag in changelog, revert comment]
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-My apologies for such a late reply, but I'm just getting around to
-looking at this and I have a few questions on the basic design/flow
-(below) ...
+Heh, I think you can drop my SoB?  This is new territory for me, I don't know the
+rules for this particular situation.
 
-> The basic flow is:
->
->  - Entry from the dynamic launch jumps to the SL stub
-
-So I'm clear, at this point the combined stub+kernel+initramfs+cmdline
-image has already been loaded into memory and the SL stub is
-executing, yes?
-
-As TrenchBoot seems to be focused on boot measurement and not
-enforcing policy, I'm guessing this is considered out-of-scope (not to
-mention that the combined stub+kernel image makes this less
-interesting), but has any thought been given to leveraging the TXT
-launch control policy, or is it simply an empty run-everything policy?
-
->  - SL stub fixes up the world on the BSP
->  - For TXT, SL stub wakes the APs, fixes up their worlds
->  - For TXT, APs are left halted waiting for an NMI to wake them
->  - SL stub jumps to startup_32
->  - SL main locates the TPM event log and writes the measurements of
->    configuration and module information into it.
-
-Since the stub+kernel image are combined it looks like the kernel
-measurement comes from the ACM via the MLE measurement into PCR 18,
-while the stub generated measurements are extended into PCR 19 or 20
-depending on the configuration, yes?
-
-I realize that moving the TXT code into the kernel makes this
-difficult (not possible?), but one of the things that was nice about
-the tboot based approach (dynamic, early launch) was that it could be
-extended to do different types of measurements, e.g. a signing
-authority measurement similar to UEFI Secure Boot and PCR 7.  If that
-is possible, I think it is something worth including in the design,
-even if it isn't initially implemented.  The only thing that
-immediately comes to mind would be a section/region based approach
-similar to systemd-boot/gummiboot where the (signed) kernel is kept in
-a well known region and verified/measured by the stub prior to jumping
-into its start point.
-
->  - Kernel boot proceeds normally from this point.
->  - During early setup, slaunch_setup() runs to finish some validation
->    and setup tasks.
->  - The SMP bringup code is modified to wake the waiting APs. APs vector
->    to rmpiggy and start up normally from that point.
->  - SL platform module is registered as a late initcall module. It reads
->    the TPM event log and extends the measurements taken into the TPM PCRs.
-
-I'm sure there is some issue with passing data across boundaries, but
-is there any reason why the TPM event log needs to be updated
-out-of-sync with the TPM PCRs?  Is is possible to pass the
-measurements to the SL platform module which would both extend the
-PCRs and update the TPM event log at the same time?
-
->  - SL platform module initializes the securityfs interface to allow
->    asccess to the TPM event log and TXT public registers.
->  - Kernel boot finishes booting normally
->  - SEXIT support to leave SMX mode is present on the kexec path and
->    the various reboot paths (poweroff, reset, halt).
-
-It doesn't look like it's currently implemented, but it looks like
-eventually you plan to support doing a new DRTM measurement on kexec,
-is that correct?  I'm sure that is something a *lot* of people
-(including myself) would like to see happen.
-
--- 
-paul moore
-www.paul-moore.com
+Reviewed-by: Sean Christopherson <seanjc@google.com>

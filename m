@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5FE465612
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:05:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 217E3465615
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:05:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352322AbhLATIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S1352643AbhLATIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:08:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352400AbhLATIV (ORCPT
+        with ESMTP id S1352437AbhLATIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:08:21 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474CDC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:05:00 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id k37so65495775lfv.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:05:00 -0800 (PST)
+        Wed, 1 Dec 2021 14:08:22 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E76C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:05:01 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id z7so31134078lfi.11
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:05:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=AQDun0CJwvM7UQvnluW9dd4LbyUPdKYwbZE5uoVdvOU=;
-        b=QOk2jhLZBSZEjsNg2ZX1HZj7ZbL+gPrU3uTZXF+74C1Ft+LZaIX1QFe6IJAx5gnOgA
-         paxpTFYYkNdavEuXOkFJ0ZIdc5CoYLme8f6QRac/t2rnhsOatPMKm32BkvILVocK5Hk1
-         6RJRTCzL2qpF4gPlfwrZM3w2v1/o0iW0+WfDOF+aJ0zyj7ym8KGnFenEjcku1pTbKsXh
-         qob0S81qBKydaiMxE9p3+SVbmd2nWI9vPBgmjIki+eDYUAYkYAG0btWmVeJ4LYINwHT/
-         3dXghxZoWDQh0Jc8CF1pEvjL1g2fEiAApP2X1/6mJKD98YguTIr+EaI+6aexxCj/G0ap
-         tZcw==
+        bh=B59ufmsrpetzrryOxTGflLKDbB0Sxf7ZYCipjPGD1eM=;
+        b=l4PxZ0qxUWAdi1BGpU14w3Y1eKPueJzM61nR71M4hvCyBWp5qyggMByjbBnYeVUmIm
+         4P2xc8pMOpk3HuxA/FmTj5jLjqIefz2zM/xuC6bTUHC1Kfk2WCMMQGyUX7Apj0536mvs
+         BgND9HlDNvs+HS+iIGx1W7SaoqlxODocr5710jmXCFj8OgO/s/HPdimWyOFQyRIsCY9b
+         VXksr3gwPiwVb2kTrzwXwLKASl9mmeYtEMKPE4IlbOjV1oc7YjwyIzRE7IM1aNp37kJU
+         hEvZReTpTuzNrr7d4gCd9puiaAA6WyjlR7JV/YH5+5dHzGcQqnI/j11IEPXExPRJztvI
+         mgsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=AQDun0CJwvM7UQvnluW9dd4LbyUPdKYwbZE5uoVdvOU=;
-        b=WUz5TxUYXHkC39w3gAnaLDlG4LHn8PRENai6pwdFI84CT66YgU6srvltqAD9RIIcKV
-         6oCs85ULXNd+prFDelSOb+hBSEKjSzM2hzgqRPMsw0oqqT1kQT0ClI6hA/H+VZU3+S2L
-         wuAwKlQONwY6Srb2+HcDvE5USRKm4vE89xE4EFLk9WJAzLqg4WQNCnUB+dVY4YMq7//R
-         0+FJWSTb6Y+Us2+3JPSedz3Omb03BCAUCDppJL3jU4XM4Qne5LdtSHgkbEywumQ3myqh
-         SflRMQDIHYlbXRVWBRf8zvaDO2UaMNNL1ketIKrofg5I1Jfgw4hEzVW71BCLwpdGUirN
-         mB+w==
-X-Gm-Message-State: AOAM531w27E4ipd3YMN+xhOllMpJQ3PdmBjEfXT+mU2OhgAxvAZobc32
-        TRGwhlTGVbwFpxkLvlSVM7qGHA==
-X-Google-Smtp-Source: ABdhPJyinqe77utFYvpWzDgZHKPTgwSqv6ZB2SE7iZkufbtEZi8kvrFdCnQkRYOITN+HkdDtvYDHMA==
-X-Received: by 2002:a05:6512:36c9:: with SMTP id e9mr7617984lfs.87.1638385498478;
-        Wed, 01 Dec 2021 11:04:58 -0800 (PST)
+        bh=B59ufmsrpetzrryOxTGflLKDbB0Sxf7ZYCipjPGD1eM=;
+        b=z/nQxO7CGib9cNhJo+d51Oe+4rzfGpOEzxgvsRq30ahj/0XX5ynrLKbcJ2vMubGEpW
+         LQOeWPSBFdHyii8GQRr7yHlimBall5/ApPJInenubQ0kA7bEBYJoQi6V54b6uhbg7geF
+         BBHBh9R91dY/RXb5vEWke9uD8ab7G+jn/BT8UhJqUCrqldU+Y7PMfmFkBvYgtnHEzF/+
+         1CSb7v12g+XpS92226+Z6yolZJXhaZnwcAUdQ6eb06PPYYHkrehhqc7xAD90NWEMKcqQ
+         KhnuQyEgDShJ6ikB+rbT5nzKqyWH7xyslfaS1I/82zTun1Vt2yxWqXXBUY9quMcpsZ1W
+         OCcg==
+X-Gm-Message-State: AOAM533ZtHmC0/MGSeDPOMN0VjQI2vQZ76ZpcA/UIPmULtEEjdkFWKpc
+        m3E71QXgYFGvz6XocKgqqYy9ng==
+X-Google-Smtp-Source: ABdhPJwYmOC/AgyAZDvE8TeHFpvtm2tQg4UjMnVF8iz8/nBgV2qS64s67Aopur9Vk6oPMQgYw2YZ1g==
+X-Received: by 2002:a05:6512:3988:: with SMTP id j8mr7597661lfu.599.1638385499863;
+        Wed, 01 Dec 2021 11:04:59 -0800 (PST)
 Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id m9sm72412ljg.80.2021.12.01.11.04.57
+        by smtp.gmail.com with ESMTPSA id v185sm72425lfa.54.2021.12.01.11.04.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 11:04:58 -0800 (PST)
+        Wed, 01 Dec 2021 11:04:59 -0800 (PST)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Rob Herring <robh+dt@kernel.org>
@@ -59,9 +59,9 @@ Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
         linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 1/6] dt-bindings: i2c: exynos5: Convert to dtschema
-Date:   Wed,  1 Dec 2021 21:04:50 +0200
-Message-Id: <20211201190455.31646-2-semen.protsenko@linaro.org>
+Subject: [PATCH 2/6] dt-bindings: i2c: exynos5: Add exynosautov9-hsi2c compatible
+Date:   Wed,  1 Dec 2021 21:04:51 +0200
+Message-Id: <20211201190455.31646-3-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20211201190455.31646-1-semen.protsenko@linaro.org>
 References: <20211201190455.31646-1-semen.protsenko@linaro.org>
@@ -71,170 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert Samsung Exynos High Speed I2C bindings doc to DT schema format.
+From: Jaewon Kim <jaewon02.kim@samsung.com>
 
-Changes during bindings conversion:
-1. Added missing required clock properties (driver fails when it's
-   unable to get the clock)
-2. Removed properties and descriptions that can be found in
-   schemas/i2c/i2c-controller.yaml [1]
-3. Fixed the example so it can be validated by dtschema
+This patch adds new "samsung,exynosautov9-hsi2c" compatible.
+It is for i2c compatible with HSI2C available on Exynos SoC with USI.
 
-[1] https://github.com/robherring/dt-schema/blob/master/schemas/i2c/i2c-controller.yaml
-
+Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
 Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 ---
- .../devicetree/bindings/i2c/i2c-exynos5.txt   | 53 ------------
- .../devicetree/bindings/i2c/i2c-exynos5.yaml  | 80 +++++++++++++++++++
- 2 files changed, 80 insertions(+), 53 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
+ Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt b/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
-deleted file mode 100644
-index 2dbc0b62daa6..000000000000
---- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
-+++ /dev/null
-@@ -1,53 +0,0 @@
--* Samsung's High Speed I2C controller
--
--The Samsung's High Speed I2C controller is used to interface with I2C devices
--at various speeds ranging from 100khz to 3.4Mhz.
--
--Required properties:
--  - compatible: value should be.
--	-> "samsung,exynos5-hsi2c", (DEPRECATED)
--				for i2c compatible with HSI2C available
--				on Exynos5250 and Exynos5420 SoCs.
--	-> "samsung,exynos5250-hsi2c", for i2c compatible with HSI2C available
--				on Exynos5250 and Exynos5420 SoCs.
--	-> "samsung,exynos5260-hsi2c", for i2c compatible with HSI2C available
--				on Exynos5260 SoCs.
--	-> "samsung,exynos7-hsi2c", for i2c compatible with HSI2C available
--				on Exynos7 SoCs.
--
--  - reg: physical base address of the controller and length of memory mapped
--    region.
--  - interrupts: interrupt number to the cpu.
--  - #address-cells: always 1 (for i2c addresses)
--  - #size-cells: always 0
--
--  - Pinctrl:
--    - pinctrl-0: Pin control group to be used for this controller.
--    - pinctrl-names: Should contain only one value - "default".
--
--Optional properties:
--  - clock-frequency: Desired operating frequency in Hz of the bus.
--    -> If not specified, the bus operates in fast-speed mode at
--       at 100khz.
--    -> If specified, the bus operates in high-speed mode only if the
--       clock-frequency is >= 1Mhz.
--
--Example:
--
--hsi2c@12ca0000 {
--	compatible = "samsung,exynos5250-hsi2c";
--	reg = <0x12ca0000 0x100>;
--	interrupts = <56>;
--	clock-frequency = <100000>;
--
--	pinctrl-0 = <&i2c4_bus>;
--	pinctrl-names = "default";
--
--	#address-cells = <1>;
--	#size-cells = <0>;
--
--	s2mps11_pmic@66 {
--		compatible = "samsung,s2mps11-pmic";
--		reg = <0x66>;
--	};
--};
 diff --git a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-new file mode 100644
-index 000000000000..53df1571eff1
---- /dev/null
+index 53df1571eff1..db20e703dea0 100644
+--- a/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
 +++ b/Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/i2c-exynos5.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+@@ -13,6 +13,11 @@ description: |
+   The Samsung's High Speed I2C controller is used to interface with I2C devices
+   at various speeds ranging from 100kHz to 3.4MHz.
+ 
++  In case the HSI2C controller is encapsulated within USI block (it's the case
++  e.g. for Exynos850 and Exynos Auto V9 SoCs), it might be also necessary to
++  define USI node in device tree file, choosing "i2c" configuration. Please see
++  Documentation/devicetree/bindings/soc/samsung/exynos-usi.yaml for details.
 +
-+title: Samsung's High Speed I2C controller
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-+
-+description: |
-+  The Samsung's High Speed I2C controller is used to interface with I2C devices
-+  at various speeds ranging from 100kHz to 3.4MHz.
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - "samsung,exynos5250-hsi2c"    # Exynos5250 and Exynos5420
-+          - "samsung,exynos5260-hsi2c"    # Exynos5260
-+          - "samsung,exynos7-hsi2c"       # Exynos7
-+      - const: "samsung,exynos5-hsi2c"    # Exynos5250 and Exynos5420
-+        deprecated: true
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    default: 100000
-+    description:
-+      Desired operating frequency in Hz of the bus.
-+
-+      If not specified, the bus operates in fast-speed mode at 100kHz.
-+
-+      If specified, the bus operates in high-speed mode only if the
-+      clock-frequency is >= 1MHz.
-+
-+  clocks:
-+    maxItems: 1
-+    description: I2C operating clock
-+
-+  clock-names:
-+    const: hsi2c
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/exynos5420.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    hsi2c_8: i2c@12e00000 {
-+        compatible = "samsung,exynos5250-hsi2c";
-+        reg = <0x12e00000 0x1000>;
-+        interrupts = <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>;
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        clock-frequency = <100000>;
-+        clocks = <&clock CLK_USI4>;
-+        clock-names = "hsi2c";
-+
-+        pmic@66 {
-+            /* compatible = "samsung,s2mps11-pmic"; */
-+            reg = <0x66>;
-+        };
-+    };
+ allOf:
+   - $ref: /schemas/i2c/i2c-controller.yaml#
+ 
+@@ -23,6 +28,7 @@ properties:
+           - "samsung,exynos5250-hsi2c"    # Exynos5250 and Exynos5420
+           - "samsung,exynos5260-hsi2c"    # Exynos5260
+           - "samsung,exynos7-hsi2c"       # Exynos7
++          - "samsung,exynosautov9-hsi2c"  # ExynosAutoV9
+       - const: "samsung,exynos5-hsi2c"    # Exynos5250 and Exynos5420
+         deprecated: true
+ 
 -- 
 2.30.2
 

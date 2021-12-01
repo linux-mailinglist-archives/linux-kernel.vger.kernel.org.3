@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F266046489F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4BA4648D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347825AbhLAHe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:34:59 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:43868 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347871AbhLAHeV (ORCPT
+        id S1347778AbhLAHhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:37:02 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33820 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347928AbhLAHfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:34:21 -0500
+        Wed, 1 Dec 2021 02:35:11 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6BC601FD34;
-        Wed,  1 Dec 2021 07:30:59 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 71C6B212BE;
+        Wed,  1 Dec 2021 07:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638343859; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1638343909; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=a1xhFQfIiWxh3xMg/S/ml88VGtVEqWibfFdmSOqVFtU=;
-        b=vxR+AXG4+ceQebwgk++Hoe6mPt2Nz8xBn5pGLAaAoSIg/Ie5KUUCwXnK6gi74Qi7KoDvvb
-        aFACyk6/k/f8U+hGvqKcEPR68qxjHlRY4OzeuUvTl+A5rhYkLiHxgnSQ4JNCaFZBvegH5N
-        lEH35oSs1Db8pYZfXHGBulBqy7zGImI=
+        bh=XkzVst0CeRLi4PN5VFMhw1lrXrKmtfeuvslxONhsuxM=;
+        b=KDIYxXv9cvRQWuEbAoxyieahFcrny08DtawQqQtqSePXkXmTf+8plm0XQanksJGTC9EPZo
+        CF9EIjI2/KehLiLxeAGi3FIkHImE7hYjB15hP5PhLwmoaWJyLu0iD4PpgJleI+7QXk75cE
+        pb/e+JuFuxEQoCUvYZMEepdhAPvT4+g=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638343859;
+        s=susede2_ed25519; t=1638343909;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=a1xhFQfIiWxh3xMg/S/ml88VGtVEqWibfFdmSOqVFtU=;
-        b=tQuKrElVsYllUs6PGLOKR19Icd72uvbHZJ6KUhTGjdalQej7VYO8KrXlxSU06xr+TaUI2W
-        PWzqbkE8c/HeYXAQ==
+        bh=XkzVst0CeRLi4PN5VFMhw1lrXrKmtfeuvslxONhsuxM=;
+        b=IFb2DEbzV2CK7tg/UlYVRzyjTTbo/sjAW+cZEgo2m0bq82tW/D8cQiLRNyfbWTBIkjTpiP
+        O/UfmmCTHM2hPBCQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 286F313AE2;
-        Wed,  1 Dec 2021 07:30:59 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 15FC513AE2;
+        Wed,  1 Dec 2021 07:31:49 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id NS6GCLMkp2GbFgAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:30:59 +0000
-Subject: Re: [PATCH 12/18] crypto: dh - introduce support for ephemeral key
- generation to qat driver
+        id oIayBOUkp2HbFgAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:31:49 +0000
+Subject: Re: [PATCH 13/18] crypto: testmgr - add DH test vectors for key
+ generation
 To:     Nicolai Stange <nstange@suse.de>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>
@@ -59,14 +59,14 @@ Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         qat-linux@intel.com, keyrings@vger.kernel.org
 References: <20211201004858.19831-1-nstange@suse.de>
- <20211201004858.19831-13-nstange@suse.de>
+ <20211201004858.19831-14-nstange@suse.de>
 From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <6acc828d-0a37-50ef-e7e6-fd9b14a0e9f3@suse.de>
-Date:   Wed, 1 Dec 2021 08:30:58 +0100
+Message-ID: <84bf73e5-1a4a-1c4e-8ee3-c5ba10324b05@suse.de>
+Date:   Wed, 1 Dec 2021 08:31:48 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <20211201004858.19831-13-nstange@suse.de>
+In-Reply-To: <20211201004858.19831-14-nstange@suse.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
@@ -75,19 +75,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 12/1/21 1:48 AM, Nicolai Stange wrote:
-> A previous patch made the dh-generic implementation's ->set_secret() to
-> generate an ephemeral key in case the input ->key_size is zero, just in
-> analogy with ecdh. Make the qat crypto driver's DH implementation to
-> behave consistently by doing the same.
+> Now that all DH implementations support ephemeral key generation triggered
+> by passing a ->key_size of zero to ->set_secret(), it's certainly
+> worthwhile to build upon the testmgr's do_test_kpp() ->genkey facility to
+> test it.
 > 
-> Signed-off-by: Nicolai Stange <nstange@suse.de>
-> ---
->   drivers/crypto/qat/qat_common/qat_asym_algs.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
+> Add two ->genkey DH test vectors to the testmgr, one for the RFC 7919
+> ffdhe2048 group and another one for the RFC 3526 modp2048 group.
 > 
-Similar here.
-
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+As noted previously, maybe you can consider switching to ffdhe3072 here.
 
 Cheers,
 

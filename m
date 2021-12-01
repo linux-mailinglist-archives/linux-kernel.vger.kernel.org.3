@@ -2,73 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 677F9465A08
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB809465A0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:55:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353892AbhLAXyY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 18:54:24 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:42649 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353910AbhLAXyU (ORCPT
+        id S1353895AbhLAX6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 18:58:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344023AbhLAX6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 18:54:20 -0500
-Received: by mail-ot1-f45.google.com with SMTP id 47-20020a9d0332000000b005798ac20d72so37535749otv.9;
-        Wed, 01 Dec 2021 15:50:58 -0800 (PST)
+        Wed, 1 Dec 2021 18:58:48 -0500
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AFEC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:55:26 -0800 (PST)
+Received: by mail-qk1-x72d.google.com with SMTP id b67so32920899qkg.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 15:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=GVZ70Dywr625UyFi302s6LjnjHklxJb/tfvnMbwjLaM=;
+        b=jCkXdMKskBUT2OYx7Iaa2BLRafUdDejK8djqWKix9T6swIAuLZxsGqdR4LzM5/sE3G
+         JDmzjvBHFhnRgl47r/VjZFASHCgHpTdLo1VGBGxbbWxVmTPdWgGsuRfuzt8akpS21HLg
+         OTBZNZBgwEoYUu53vs0qkpJYiVPEorqa7Ri40=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=janDAtSPhWlePGFNQ++EVF7JDjqdKemONodqemusei8=;
-        b=gzz3QZnAZ4YCGaLdJZIpZfpD2muanEz5DsbMltVuohKv9U8PHO9MDa1XlITAkN2oC0
-         qApf0sbjIitK40xz26R9FdkDlEufV6U6TErwDVej/aQHcVtBbEH8vNUogLrf9FuF+u/S
-         6GxJBBDB4ruVmYhOWHiyeLBcIqSkl/CGgDLyBLuNCwNMPt5zFU0AOsLOSnEm0TxRsutY
-         Kr/UViC+s40KY2mpk7M5JA5p/NAP3rYvOnCLZ6v5dIAGtNvC1F/fmp5kIFKnjqX+yKyU
-         1eGJE+3dZCFM5Zd4DOojWy4nyk8o5zfQ5vqTcCDx+iRS6gDL+7zJ1Y/mSCk/QDNcbvUH
-         oHmA==
-X-Gm-Message-State: AOAM532/Jcb5E66UxzJ4S0s/iHP7Dby/MliLK7FMkKF1XhiGRxkMMxSB
-        TQFJ9daj/MzKCoNY4hD0ag==
-X-Google-Smtp-Source: ABdhPJx5TFH68EuJ9T0gpn/g1grXRTeXYFnflCit2PV7CCMx8U7wAVQns9O50JdQkJLNhGx8FpK1Rg==
-X-Received: by 2002:a9d:868:: with SMTP id 95mr8732322oty.211.1638402658107;
-        Wed, 01 Dec 2021 15:50:58 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id e28sm624819oiy.10.2021.12.01.15.50.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 15:50:57 -0800 (PST)
-Received: (nullmailer pid 3243259 invoked by uid 1000);
-        Wed, 01 Dec 2021 23:50:56 -0000
-Date:   Wed, 1 Dec 2021 17:50:56 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Dmitry Osipenko <digetx@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Agneli <poczt@protonmail.ch>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>, dri-devel@lists.freedesktop.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 04/20] dt-bindings: host1x: Document optional HDMI
- sound-dai-cells
-Message-ID: <YagKYCbHw5BHAcdI@robh.at.kernel.org>
-References: <20211126161807.15776-1-digetx@gmail.com>
- <20211126161807.15776-5-digetx@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=GVZ70Dywr625UyFi302s6LjnjHklxJb/tfvnMbwjLaM=;
+        b=5FKQsG8oAZrOMJ/6QE5X95XjqHNYWkoiMMIuBdvp3iIYiv2AmCssKxzDgEwUptIIWv
+         FYaT2956QM7YT5e4FcX/mfb6mdGnG1WTwcbK688nlLbLFgcF6/TYIqeLRj8VzWIUqMYu
+         7EfKjY59uzQ6Qeqj+uaZRiPWUl9kuQ1FeYygxMaV5whaFbMWoauURXG2fY6dJ4YkHMmD
+         amTnyFZwtmCS7e73VJtfeIimhxpjhaxMcF75T+DwASVHHFoMI7qFkJR80mTnDTWbFMCk
+         bkm6r7hkKWNls17TMf77g5LFQ5tKWyddj8I9DrV+fKKiXY0GpoHbavkI2DmycXrtw9Kr
+         GofQ==
+X-Gm-Message-State: AOAM531m93i72g8MBU9wtIwJzoROwUzH3aLl/Sz5deEZ16ipEjKFf15Y
+        pv/vLVhhQ41B4Y+oGc6FM3BBh58UIfXmTtngdyikcg==
+X-Google-Smtp-Source: ABdhPJwDrESPOFAKGV76+3Yd4DHuNO5qwOKr/plQ6gy9TgikmfsgmMo5D/ZY+B7br+XAoX3AcL0s/vToKivqbssMv5Q=
+X-Received: by 2002:a37:8805:: with SMTP id k5mr9678214qkd.426.1638402926057;
+ Wed, 01 Dec 2021 15:55:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211126161807.15776-5-digetx@gmail.com>
+References: <20211129034201.5767-1-yunfei.dong@mediatek.com> <20211129034201.5767-3-yunfei.dong@mediatek.com>
+In-Reply-To: <20211129034201.5767-3-yunfei.dong@mediatek.com>
+From:   Steve Cho <stevecho@chromium.org>
+Date:   Wed, 1 Dec 2021 15:55:15 -0800
+Message-ID: <CAC-pXoPXc=q8KPUcSfY6XZ=sLt71vDZbJV=f4SZx55Gc6VbRQw@mail.gmail.com>
+Subject: Re: [PATCH v11, 02/19] media: mtk-vcodec: Align vcodec wake up
+ interrupt interface
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     Alexandre Courbot <acourbot@chromium.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tomasz Figa <tfiga@google.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Irui Wang <irui.wang@mediatek.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 26 Nov 2021 19:17:51 +0300, Dmitry Osipenko wrote:
-> Document new optional sound-dai-cells property of HDMI node. This node will
-> be used as endpoint of HDMI sound DAI graph.
-> 
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-> ---
->  .../devicetree/bindings/display/tegra/nvidia,tegra20-host1x.txt  | 1 +
->  1 file changed, 1 insertion(+)
-> 
+LGTM.
 
-Acked-by: Rob Herring <robh@kernel.org>
+On Sun, Nov 28, 2021 at 7:44 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
+>
+> Vdec and venc can use the same function to wake up interrupt event.
+>
+> Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+>  drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 9 +--------
+>  drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 8 ++++++++
+>  drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 8 --------
+>  3 files changed, 9 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> index 59caf2163349..055d50e52720 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
+> @@ -31,13 +31,6 @@
+>  module_param(mtk_v4l2_dbg_level, int, 0644);
+>  module_param(mtk_vcodec_dbg, bool, 0644);
+>
+> -/* Wake up context wait_queue */
+> -static void wake_up_ctx(struct mtk_vcodec_ctx *ctx)
+> -{
+> -       ctx->int_cond = 1;
+> -       wake_up_interruptible(&ctx->queue);
+> -}
+> -
+>  static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
+>  {
+>         struct mtk_vcodec_dev *dev = priv;
+> @@ -69,7 +62,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
+>         writel((readl(vdec_misc_addr) & ~VDEC_IRQ_CLR),
+>                 dev->reg_base[VDEC_MISC] + VDEC_IRQ_CFG_REG);
+>
+> -       wake_up_ctx(ctx);
+> +       wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED);
+
+Assuming setting up reason doesn't change functionality.
+
+>
+>         mtk_v4l2_debug(3,
+>                         "mtk_vcodec_dec_irq_handler :wake up ctx %d, dec_done_status=%x",
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> index 581522177308..1d2370608d0d 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
+> @@ -473,4 +473,12 @@ static inline struct mtk_vcodec_ctx *ctrl_to_ctx(struct v4l2_ctrl *ctrl)
+>         return container_of(ctrl->handler, struct mtk_vcodec_ctx, ctrl_hdl);
+>  }
+>
+> +/* Wake up context wait_queue */
+> +static inline void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
+> +{
+> +       ctx->int_cond = 1;
+> +       ctx->int_type = reason;
+> +       wake_up_interruptible(&ctx->queue);
+> +}
+> +
+>  #endif /* _MTK_VCODEC_DRV_H_ */
+> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
+> index eed67394cf46..7c3487fb3498 100644
+> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
+> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
+> @@ -65,14 +65,6 @@ static const struct mtk_video_fmt mtk_video_formats_capture_vp8[] =  {
+>         },
+>  };
+>
+> -/* Wake up context wait_queue */
+> -static void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
+> -{
+> -       ctx->int_cond = 1;
+> -       ctx->int_type = reason;
+> -       wake_up_interruptible(&ctx->queue);
+> -}
+> -
+>  static void clean_irq_status(unsigned int irq_status, void __iomem *addr)
+>  {
+>         if (irq_status & MTK_VENC_IRQ_STATUS_PAUSE)
+> --
+> 2.25.1
+>

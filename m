@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ADC34647E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C61994647E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347214AbhLAH0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:26:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347168AbhLAH02 (ORCPT
+        id S1347236AbhLAH0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:26:49 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:52500 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347168AbhLAH0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:26:28 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061BDC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:23:07 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id cq22-20020a17090af99600b001a9550a17a5so20323043pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:23:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=OuGAO91bT9scHZ+M1kNZF+Tb/U4vNWoZYvfq/f3IMVg=;
-        b=csvqKVfNLrfpigEcYFqMdY40Jpcx70IZ0qYiYOa1GiG0JGDYuA4/WlFbwiL0jTitTP
-         qR8fo1vLRKYA7+ms8tK/GAlIIg71gwGM8fLDmugtv2VW9gSv0sMj8ShqBOELViSJtgf3
-         t+x0l9P1vOLuaWlWwrmbMV822saINCsdEq1cyKRJPYU+yEDKkBsqwDa7lA6TBwyIERul
-         Td4r9LzQY/Q6AsaYTscpziYjzlqdf3Fd/C03fjveNTg5iOX3eEgl5Sxm1PGhetTXBVFj
-         OXQtGXosvFS/7OQVRXVFxdIJ4CSPuxV7SN0IhE29KpHyVtWWQfDE8CF99RqQh2RdDdW2
-         IZag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=OuGAO91bT9scHZ+M1kNZF+Tb/U4vNWoZYvfq/f3IMVg=;
-        b=QnGXCawu7qZlZNBgFB15ntQM2Izv/Ig4GO4sXuyCpse8pG9JjjDvlml5qhaoPb5jVV
-         TQDiVURAzXiV2AG20VqkYl4WbPxstKi9c0rqonUZ1gBMEtRwMOdf7Nlz1KJ/IgP8C4Ew
-         1gaHwBCH9C5nCsrUcBR1RDVUeLzKX024U3KVGD3tNKgiixfwozUzwkXG7isUdrOJZ+9k
-         Q/4pxEDcAmrukb53WBW2GyImwnBe4HuSHk3i9xTO2hdmyKo6HMpfs340irKFy7BYTBjL
-         JRAn9iSoSBGUr81mmV3MfV9rWX6Rz0GYr+rhexa0cyxWSu//6LSVtpATsIRYrU8xKZf+
-         PmOA==
-X-Gm-Message-State: AOAM531NEf7DtzdUCwZOGMs7GPxMFlkb61fN2W+uI9heQMoW+g+emQt/
-        AoQO10gdwMhyD9IABN4y9Q2peQ==
-X-Google-Smtp-Source: ABdhPJx4ah0Y5CvPRiW/0gUYuUy2sHW9L897sSnRS1Y/3bO9F/06gcH0kLH9ziEC4SS+Sm+C5n4+dg==
-X-Received: by 2002:a17:90b:3ecd:: with SMTP id rm13mr5227188pjb.157.1638343387412;
-        Tue, 30 Nov 2021 23:23:07 -0800 (PST)
-Received: from localhost ([122.171.9.64])
-        by smtp.gmail.com with ESMTPSA id f21sm24843516pfe.69.2021.11.30.23.23.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 23:23:06 -0800 (PST)
-Date:   Wed, 1 Dec 2021 12:53:04 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Xiongfeng Wang <wangxiongfeng2@huawei.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hanjun Guo <guohanjun@huawei.com>
-Subject: Re: [PATCH] cpufreq: Fix get_cpu_device() failed in
- add_cpu_dev_symlink()
-Message-ID: <20211201072304.5j44qi6bbgdx3hhv@vireshk-i7>
-References: <20211129080248.46240-1-wangxiongfeng2@huawei.com>
- <20211129091039.s7bqq43o4ktuub6t@vireshk-i7>
- <CAJZ5v0hYskLTjSGOJgRRXD0cE0a5DMHh5qTvmgCmJh8bMicLzA@mail.gmail.com>
+        Wed, 1 Dec 2021 02:26:47 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 44566CE1D68;
+        Wed,  1 Dec 2021 07:23:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14985C53FAD;
+        Wed,  1 Dec 2021 07:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638343403;
+        bh=QkDYnqLkhpOqGOf8REtEmrkoUi08AcwqoUU69C4hG64=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CLNLhW2/CHpgb9eszwtFYwrlvYor2KX4jPLFowSflbgOCRT9M5Rdi7lC9zIkoIRVd
+         T+j/zrpm/Y45tKRIF8d6YgyZ8gvxcgJ6YtqaUXIqSubs51Mo9sb6/1WZrl9SDAXbdc
+         oepD7jw2ejaHlyY+NAUjiEMKqzLU64eOryHYEV3EuRP+/QuML+lsSyeYizvbtJ/eow
+         3jCNu0EfyiGY5QXMCs8m5x6g4pT+J1R288neGYvCgFaqXi8y3EJEfP1/N3buRN0gFr
+         K8vX4DGsR6CPFn6cOzuUUnKj95oRO2gRIU75EGymTpgZkXx8TGYbiTERD7rlnZ8QjN
+         b/WUVn+FqumpQ==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] clk: qcom: Add clocks for SM8450 SoC
+Date:   Wed,  1 Dec 2021 12:53:06 +0530
+Message-Id: <20211201072310.3968679-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hYskLTjSGOJgRRXD0cE0a5DMHh5qTvmgCmJh8bMicLzA@mail.gmail.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30-11-21, 12:42, Rafael J. Wysocki wrote:
-> This is the real hot-add path which isn't tested on a regular basis.
+This series adds the GCC and RPMH clock support required for SM8450 SoC
+along with devicetree binding for these clocks.
 
-Ahh, I thought this is a simple offline/online thing. Makes sense now.
+Please note that the GCC driver patch depends on new alpha LUCID_EVO
+introduced by Vamsi in [1]. That would be required to be picked before this
+patch can be applied.
 
-> > Anyway the patch is okay,
-> 
-> It would be good to add a Fixes: tag to it, though.  Any idea about
-> the commit this should point to?
+[1]: https://lore.kernel.org/all/a0b04869a20a0afef99dd457ebb6474f50591210.1637302009.git.quic_vamslank@quicinc.com/
 
-This is broken since a very long time then, we need to get this into all stable
-kernels we care about.
+Vinod Koul (4):
+  dt-bindings: clock: Add SM8450 GCC clock bindings
+  dt-bindings: clock: Add RPMHCC bindings for SM8450
+  clk: qcom: Add clock driver for SM8450
+  clk: qcom: rpmh: add support for SM8450 rpmh clocks
 
-As Xiongfeng pointed out, 2f0ba790df51 ("cpufreq: Fix creation of symbolic links
-to policy directories") looks to be a good candidate.
+ .../bindings/clock/qcom,gcc-sm8450.yaml       |   85 +
+ .../bindings/clock/qcom,rpmhcc.yaml           |    1 +
+ drivers/clk/qcom/Kconfig                      |    8 +
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/clk-rpmh.c                   |   27 +
+ drivers/clk/qcom/gcc-sm8450.c                 | 3314 +++++++++++++++++
+ include/dt-bindings/clock/qcom,gcc-sm8450.h   |  244 ++
+ 7 files changed, 3680 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml
+ create mode 100644 drivers/clk/qcom/gcc-sm8450.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-sm8450.h
 
 -- 
-viresh
+2.31.1
+

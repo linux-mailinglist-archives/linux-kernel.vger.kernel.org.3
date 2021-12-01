@@ -2,366 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EE54650E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB26F4650DC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350606AbhLAPJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:09:20 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:52774 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350365AbhLAPIb (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:08:31 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 74F5ECE1F4E;
-        Wed,  1 Dec 2021 15:05:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1776BC53FD2;
-        Wed,  1 Dec 2021 15:05:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638371107;
-        bh=12Gg2gHRZzGJmTMNLn1vki+uItnZBSKL2VYrvKMNfGM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZTgr4ULb6pFVZFpgxoQEHrShkKMnZQGR46jEYJ9kb+BHip2uED09gDT/gdaVoAtZ1
-         hSOraBh03SCjQBb64aGanRGXBbKfoommXFDkwVThNIfpVWbUQxMiaGMm89launsYHq
-         PxoNEdbqLWQS58HwgTON2691Q0bj68zt2E0x2PsdupxmkKrWlB0uNUjhzhxjjkVTV9
-         m/4btsLCFQYtiruLsCSuSy7pSXKz7jisUzZ99VEB+n9TRvMNAOH3So63ZAsEb1ubg6
-         JgO0biZL6HIT6jhisQA2SkOLVfRFgnuLi9LoXCNJxaIWkIegJPeLMgfdlS1tprB9m9
-         iGFXCjijHE0Xg==
-From:   SeongJae Park <sj@kernel.org>
-To:     akpm@linux-foundation.org
-Cc:     shuah@kernel.org, brendanhiggins@google.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        SeongJae Park <sj@kernel.org>
-Subject: [PATCH 11/11] selftests/damon: Split test cases
-Date:   Wed,  1 Dec 2021 15:04:40 +0000
-Message-Id: <20211201150440.1088-12-sj@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211201150440.1088-1-sj@kernel.org>
-References: <20211201150440.1088-1-sj@kernel.org>
+        id S1350520AbhLAPIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:08:44 -0500
+Received: from foss.arm.com ([217.140.110.172]:39198 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350271AbhLAPI0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:08:26 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C496C143B;
+        Wed,  1 Dec 2021 07:05:05 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.65.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 935EA3F766;
+        Wed,  1 Dec 2021 07:05:04 -0800 (PST)
+Date:   Wed, 1 Dec 2021 15:05:01 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        joey.gouly@arm.com
+Subject: Re: [PATCH v2] arm64: Enable KCSAN
+Message-ID: <YaePHV30QNTyav1P@FVFF77S0Q05N>
+References: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
+ <YadiUPpJ0gADbiHQ@FVFF77S0Q05N>
+ <YadpsjyfdozccsOT@elver.google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YadpsjyfdozccsOT@elver.google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the single test program, debugfs.sh, contains all test cases
-for DAMON.  When one of the cases is failed, finding which case is
-failed from the test log is not so easy, and all remaining test will be
-skipped.  To improve the situation, this commit splits the single
-program into small test programs having their own names.
+On Wed, Dec 01, 2021 at 01:25:22PM +0100, Marco Elver wrote:
+> On Wed, Dec 01, 2021 at 11:53AM +0000, Mark Rutland wrote:
+> [...]
+> > * In the past clang did not have an attribute to suppress tsan instrumenation
+> >   and would instrument noinstr regions. I'm not sure when clang gained the
+> >   relevant attribute to supress this, but we will need to depend on this
+> >   existing, either based on the clang version or with a test for the attribute.
+> > 
+> >   (If we're lucky, clang 12.0.0 is sufficient, and we solve BTI and this in one
+> >   go).
+> > 
+> >   I *think* GCC always had an attribute, but I'm not certain.
+> > 
+> >   Marco, is there an existing dependency somewhere for this to work on x86? I
+> >   thought there was an objtool pass to NOP this out, but I couldn't find it in
+> >   mainline. If x86 is implicitly depending on a sufficiently recent version of
+> >   clang, we add something to the common KCSAN Kconfig for ARCH_WANTS_NO_INSTR?
+> 
+> Apologies for the confusion w.r.t. attributes and which sanitizers on
+> which compilers respect which attributes. I think you may be confusing
+> things with KCOV (see 540540d06e9d9). I think the various 'select
+> ARCH_HAS_KCOV' may need adjusting, that is true.
+> 
+> But KCOV != KCSAN, and for KCSAN the story is different. Since the first
+> version of KCSAN in 5.8, we've had a working __no_kcsan (aka
+> __no_sanitize_thread) with all versions of Clang and GCC that support
+> KCSAN (see HAVE_KCSAN_COMPILER).
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/Makefile        |   5 +-
- .../selftests/damon/_debugfs_common.sh        |  52 ++++++++
- .../testing/selftests/damon/debugfs_attrs.sh  | 111 +-----------------
- .../selftests/damon/debugfs_empty_targets.sh  |  13 ++
- .../damon/debugfs_huge_count_read_write.sh    |  22 ++++
- .../selftests/damon/debugfs_schemes.sh        |  19 +++
- .../selftests/damon/debugfs_target_ids.sh     |  19 +++
- 7 files changed, 129 insertions(+), 112 deletions(-)
- create mode 100644 tools/testing/selftests/damon/_debugfs_common.sh
- create mode 100644 tools/testing/selftests/damon/debugfs_empty_targets.sh
- create mode 100644 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
- create mode 100644 tools/testing/selftests/damon/debugfs_schemes.sh
- create mode 100644 tools/testing/selftests/damon/debugfs_target_ids.sh
+My memory was hazy; I recalled that KCOV was broken in that way, and thought
+KCSAN was similarly affected because of the objtool patches.
 
-diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-index f0aa954b5d13..937d36ae9a69 100644
---- a/tools/testing/selftests/damon/Makefile
-+++ b/tools/testing/selftests/damon/Makefile
-@@ -3,7 +3,8 @@
- 
- TEST_GEN_FILES += huge_count_read_write
- 
--TEST_FILES = _chk_dependency.sh
--TEST_PROGS = debugfs_attrs.sh
-+TEST_FILES = _chk_dependency.sh _debugfs_common.sh
-+TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
-+TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/damon/_debugfs_common.sh b/tools/testing/selftests/damon/_debugfs_common.sh
-new file mode 100644
-index 000000000000..48989d4813ae
---- /dev/null
-+++ b/tools/testing/selftests/damon/_debugfs_common.sh
-@@ -0,0 +1,52 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+test_write_result() {
-+	file=$1
-+	content=$2
-+	orig_content=$3
-+	expect_reason=$4
-+	expected=$5
-+
-+	echo "$content" > "$file"
-+	if [ $? -ne "$expected" ]
-+	then
-+		echo "writing $content to $file doesn't return $expected"
-+		echo "expected because: $expect_reason"
-+		echo "$orig_content" > "$file"
-+		exit 1
-+	fi
-+}
-+
-+test_write_succ() {
-+	test_write_result "$1" "$2" "$3" "$4" 0
-+}
-+
-+test_write_fail() {
-+	test_write_result "$1" "$2" "$3" "$4" 1
-+}
-+
-+test_content() {
-+	file=$1
-+	orig_content=$2
-+	expected=$3
-+	expect_reason=$4
-+
-+	content=$(cat "$file")
-+	if [ "$content" != "$expected" ]
-+	then
-+		echo "reading $file expected $expected but $content"
-+		echo "expected because: $expect_reason"
-+		echo "$orig_content" > "$file"
-+		exit 1
-+	fi
-+}
-+
-+source ./_chk_dependency.sh
-+
-+damon_onoff="$DBGFS/monitor_on"
-+if [ $(cat "$damon_onoff") = "on" ]
-+then
-+	echo "monitoring is on"
-+	exit $ksft_skip
-+fi
-diff --git a/tools/testing/selftests/damon/debugfs_attrs.sh b/tools/testing/selftests/damon/debugfs_attrs.sh
-index 23a7b48ca7d3..902e312bca89 100644
---- a/tools/testing/selftests/damon/debugfs_attrs.sh
-+++ b/tools/testing/selftests/damon/debugfs_attrs.sh
-@@ -1,57 +1,7 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--test_write_result() {
--	file=$1
--	content=$2
--	orig_content=$3
--	expect_reason=$4
--	expected=$5
--
--	echo "$content" > "$file"
--	if [ $? -ne "$expected" ]
--	then
--		echo "writing $content to $file doesn't return $expected"
--		echo "expected because: $expect_reason"
--		echo "$orig_content" > "$file"
--		exit 1
--	fi
--}
--
--test_write_succ() {
--	test_write_result "$1" "$2" "$3" "$4" 0
--}
--
--test_write_fail() {
--	test_write_result "$1" "$2" "$3" "$4" 1
--}
--
--test_content() {
--	file=$1
--	orig_content=$2
--	expected=$3
--	expect_reason=$4
--
--	content=$(cat "$file")
--	if [ "$content" != "$expected" ]
--	then
--		echo "reading $file expected $expected but $content"
--		echo "expected because: $expect_reason"
--		echo "$orig_content" > "$file"
--		exit 1
--	fi
--}
--
--source ./_chk_dependency.sh
--
--ksft_skip=4
--
--damon_onoff="$DBGFS/monitor_on"
--if [ $(cat "$damon_onoff") = "on" ]
--then
--	echo "monitoring is on"
--	exit $ksft_skip
--fi
-+source _debugfs_common.sh
- 
- # Test attrs file
- # ===============
-@@ -65,62 +15,3 @@ test_write_fail "$file" "1 2 3 5 4" "$orig_content" \
- 	"min_nr_regions > max_nr_regions"
- test_content "$file" "$orig_content" "1 2 3 4 5" "successfully written"
- echo "$orig_content" > "$file"
--
--# Test schemes file
--# =================
--
--file="$DBGFS/schemes"
--orig_content=$(cat "$file")
--
--test_write_succ "$file" "1 2 3 4 5 6 4 0 0 0 1 2 3 1 100 3 2 1" \
--	"$orig_content" "valid input"
--test_write_fail "$file" "1 2
--3 4 5 6 3 0 0 0 1 2 3 1 100 3 2 1" "$orig_content" "multi lines"
--test_write_succ "$file" "" "$orig_content" "disabling"
--test_write_fail "$file" "2 1 2 1 10 1 3 10 1 1 1 1 1 1 1 1 2 3" \
--	"$orig_content" "wrong condition ranges"
--echo "$orig_content" > "$file"
--
--# Test target_ids file
--# ====================
--
--file="$DBGFS/target_ids"
--orig_content=$(cat "$file")
--
--test_write_succ "$file" "1 2 3 4" "$orig_content" "valid input"
--test_write_succ "$file" "1 2 abc 4" "$orig_content" "still valid input"
--test_content "$file" "$orig_content" "1 2" "non-integer was there"
--test_write_succ "$file" "abc 2 3" "$orig_content" "the file allows wrong input"
--test_content "$file" "$orig_content" "" "wrong input written"
--test_write_succ "$file" "" "$orig_content" "empty input"
--test_content "$file" "$orig_content" "" "empty input written"
--echo "$orig_content" > "$file"
--
--# Test empty targets case
--# =======================
--
--orig_target_ids=$(cat "$DBGFS/target_ids")
--echo "" > "$DBGFS/target_ids"
--orig_monitor_on=$(cat "$DBGFS/monitor_on")
--test_write_fail "$DBGFS/monitor_on" "on" "orig_monitor_on" "empty target ids"
--echo "$orig_target_ids" > "$DBGFS/target_ids"
--
--# Test huge count read write
--# ==========================
--
--dmesg -C
--
--for file in "$DBGFS/"*
--do
--	./huge_count_read_write "$file"
--done
--
--if dmesg | grep -q WARNING
--then
--	dmesg
--	exit 1
--else
--	exit 0
--fi
--
--echo "PASS"
-diff --git a/tools/testing/selftests/damon/debugfs_empty_targets.sh b/tools/testing/selftests/damon/debugfs_empty_targets.sh
-new file mode 100644
-index 000000000000..87aff8083822
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_empty_targets.sh
-@@ -0,0 +1,13 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test empty targets case
-+# =======================
-+
-+orig_target_ids=$(cat "$DBGFS/target_ids")
-+echo "" > "$DBGFS/target_ids"
-+orig_monitor_on=$(cat "$DBGFS/monitor_on")
-+test_write_fail "$DBGFS/monitor_on" "on" "orig_monitor_on" "empty target ids"
-+echo "$orig_target_ids" > "$DBGFS/target_ids"
-diff --git a/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
-new file mode 100644
-index 000000000000..922cadac2950
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
-@@ -0,0 +1,22 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test huge count read write
-+# ==========================
-+
-+dmesg -C
-+
-+for file in "$DBGFS/"*
-+do
-+	./huge_count_read_write "$file"
-+done
-+
-+if dmesg | grep -q WARNING
-+then
-+	dmesg
-+	exit 1
-+else
-+	exit 0
-+fi
-diff --git a/tools/testing/selftests/damon/debugfs_schemes.sh b/tools/testing/selftests/damon/debugfs_schemes.sh
-new file mode 100644
-index 000000000000..5b39ab44731c
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_schemes.sh
-@@ -0,0 +1,19 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test schemes file
-+# =================
-+
-+file="$DBGFS/schemes"
-+orig_content=$(cat "$file")
-+
-+test_write_succ "$file" "1 2 3 4 5 6 4 0 0 0 1 2 3 1 100 3 2 1" \
-+	"$orig_content" "valid input"
-+test_write_fail "$file" "1 2
-+3 4 5 6 3 0 0 0 1 2 3 1 100 3 2 1" "$orig_content" "multi lines"
-+test_write_succ "$file" "" "$orig_content" "disabling"
-+test_write_fail "$file" "2 1 2 1 10 1 3 10 1 1 1 1 1 1 1 1 2 3" \
-+	"$orig_content" "wrong condition ranges"
-+echo "$orig_content" > "$file"
-diff --git a/tools/testing/selftests/damon/debugfs_target_ids.sh b/tools/testing/selftests/damon/debugfs_target_ids.sh
-new file mode 100644
-index 000000000000..49aeabdb0aae
---- /dev/null
-+++ b/tools/testing/selftests/damon/debugfs_target_ids.sh
-@@ -0,0 +1,19 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+source _debugfs_common.sh
-+
-+# Test target_ids file
-+# ====================
-+
-+file="$DBGFS/target_ids"
-+orig_content=$(cat "$file")
-+
-+test_write_succ "$file" "1 2 3 4" "$orig_content" "valid input"
-+test_write_succ "$file" "1 2 abc 4" "$orig_content" "still valid input"
-+test_content "$file" "$orig_content" "1 2" "non-integer was there"
-+test_write_succ "$file" "abc 2 3" "$orig_content" "the file allows wrong input"
-+test_content "$file" "$orig_content" "" "wrong input written"
-+test_write_succ "$file" "" "$orig_content" "empty input"
-+test_content "$file" "$orig_content" "" "empty input written"
-+echo "$orig_content" > "$file"
--- 
-2.17.1
+I'm glad to hear that's not the case!
 
+Since I'm a bit paranoid about this, I'd still like to check that the supported
+version (clang 12+, and whatever GCC versions are relevant), but that should
+just be a matter of eyeballing the object code, and I'm happy to go do that as
+a review step.
+
+> The recent discussion was for CONFIG_KCSAN_WEAK_MEMORY [1], because
+> Clang's no_sanitize("thread") would still instrument builtin atomics and
+> __tsan_func_{entry,exit}, which only that mode would start inserting
+> instrumentation for. That's not in mainline yet.
+> 
+> [1] https://lkml.kernel.org/r/20211130114433.2580590-1-elver@google.com
+> 
+> It is true that v1 and v2 of that series would have caused issues on
+> arm64, but after our discussion last week and tried a little harder and
+> v3 does the right thing for all architectures now and __no_kcsan will
+> disable all instrumentation (even for barriers).
+
+Nice; thanks for attacking that! :)
+
+> So the attribute and noinstr story should not need anything else, and
+> the new KCSAN_WEAK_MEMORY has all right Kconfig dependencies in place
+> when it lands in mainline.
+> 
+> > * There are some latent issues with some code (e.g. alternatives, patching, insn)
+> >   code being instrumentable even though this is unsound, and depending on
+> >   compiler choices this can happen to be fine or can result in boot-time
+> >   failures (I saw lockups when I started trying to add KCSAN for arm64).
+> > 
+> >   While this isn't just a KCSAN problem, fixing that requires some fairly
+> >   significant rework to a bunch of code, and until that's done we're on very
+> >   shaky ground. So I'd like to make KCSAN depend on EXPERT for now.
+> 
+> I take it you mean arm64 should do 'select HAVE_ARCH_KCSAN if EXPERT'. I
+> certainly don't mind, but usually folks interested in running debug
+> tools won't be stopped by a dependency on EXPERT. You could do 'select
+> HAVE_ARCH_KCSAN if BROKEN' which is more likely to prevent usage while
+> things are still likely to be broken on arm64.
+
+TBH, I've gone back-and-forth on this and I'm also happy to go without if
+people don't like it.
+
+I had wanted this because I had previously hit issues, but the problem is
+admittedly not unique to KCSAN. If we do encounter boot time failures in
+practice we can mark it as BROKEN and go from there.
+
+Maybe it would be sufficient to have some Kconfig text noting there are
+currently some potential soundness issues with instrumentation, just to give
+people a heads-up. The EXPERT dependency was just a way to make people think
+twice.
+
+Thanks,
+Mark

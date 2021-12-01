@@ -2,112 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E35914659A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7CB4659AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:16:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353769AbhLAXMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 18:12:15 -0500
-Received: from vps-vb.mhejs.net ([37.28.154.113]:37386 "EHLO vps-vb.mhejs.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1353740AbhLAXMJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 18:12:09 -0500
-Received: from MUA
-        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <mail@maciej.szmigiero.name>)
-        id 1msYiL-0000vW-5F; Thu, 02 Dec 2021 00:08:37 +0100
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
- <a39db04edcacfe955c660e2f139f948cf29362f5.1638304316.git.maciej.szmigiero@oracle.com>
- <YabvBW90COsfdoYx@google.com>
- <7119b08c-e82a-8b81-7f9e-2e79f8276d51@maciej.szmigiero.name>
- <Yaekjrr1OVrgwUic@google.com>
-From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Subject: Re: [PATCH v6 26/29] KVM: Optimize gfn lookup in kvm_zap_gfn_range()
-Message-ID: <ea99b9ba-ea30-f0fc-8c08-34d0aabf57a1@maciej.szmigiero.name>
-Date:   Thu, 2 Dec 2021 00:08:31 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        id S245568AbhLAXUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 18:20:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55312 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244913AbhLAXUN (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 18:20:13 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32DE4C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:16:52 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso998158pji.0
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 15:16:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=wHlHQToZmiO0i6u4i1bLeLSpUgaElXvkCKc4R2mhwPc=;
+        b=DR2I6jE6isjgr4bNcGZ8zelIELuYF/LTwcQv+GUbpoEbR88UMi834W1X5itXxSSmuS
+         elJLqXgRNWARmFwZw3D5wRDMdZOnn4UyL9jPKBB+pKHGiStvWUDzG6j9TnLhrZPZoCMX
+         CFz2heQ3iNfrkQ8BFoRravuVywYwoePQNPY6i8GyXNgHpnKF4Y8TVMkFsHPFverUiNI3
+         bQfGYqNdSpTrZ/s+6UV3mC1E/Ak8dWZAWhC2bSOKfGv3CZQ3I6WE6FExBykREh8I4v/7
+         1BYnbYYkrYBrqtGQaEnEwmx1lkmApb9MRcV9ZuX/Pq7omXaXbAXl4LiaXIvNsg/Q7L17
+         wZnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=wHlHQToZmiO0i6u4i1bLeLSpUgaElXvkCKc4R2mhwPc=;
+        b=PbeVEajcjt1WDAfgiZ98ETdbD27PQ7rB9jGV9UcpB5nfRCpP5GNvq+n6Oed2TgzLw+
+         mdoVY2+zaHUoa0TbsqNiT6+1DSMTgZswHqOBp0ErNJ5/k3iSahQn9bl0hNDLTOtDcwoQ
+         f32EK6wm6QbUVF3dff01XCzFGGkt9LqZnmsA+77BtP6eCPtmFxXxzj2ntXFH9rxzhn1u
+         oxdxj4V9KOiXIJaiErtYnG8MazZPFahdtcpgj2HnzzWIC9p0HH3lLLNoG1Kjq29eZF7q
+         H3c/5vsyFu5Glw0VIWW2Hm92LJ/J6hnutBSwkMqV+0dZN4ZrwS2SyQAGUJAnB/6SO5rs
+         zzIQ==
+X-Gm-Message-State: AOAM5320f3syLZ6s9XaT5WWyTMXQYwkdxmZKM6QaIIXCiz12lV2q6FEX
+        njTxIYXahkqpJtL6woDoD2fVVtm6TKQ=
+X-Google-Smtp-Source: ABdhPJxI83+sq/El9LyAOT67n8MtHfBQnNOfq2n88kZcyf+vKB9Q9vcSr5ombR+QmZfmyx5B6AdeeA==
+X-Received: by 2002:a17:90a:e00f:: with SMTP id u15mr1544811pjy.123.1638400611603;
+        Wed, 01 Dec 2021 15:16:51 -0800 (PST)
+Received: from bbox-1.mtv.corp.google.com ([2620:15c:211:201:e4a9:945b:9a3c:8231])
+        by smtp.gmail.com with ESMTPSA id k6sm338021pjt.14.2021.12.01.15.16.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 15:16:51 -0800 (PST)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+From:   Minchan Kim <minchan@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: [PATCH] kernfs: prevent early freeing of root node
+Date:   Wed,  1 Dec 2021 15:16:48 -0800
+Message-Id: <20211201231648.1027165-1-minchan@kernel.org>
+X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
 MIME-Version: 1.0
-In-Reply-To: <Yaekjrr1OVrgwUic@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.12.2021 17:36, Sean Christopherson wrote:
-> On Wed, Dec 01, 2021, Maciej S. Szmigiero wrote:
->> On 01.12.2021 04:41, Sean Christopherson wrote:
->>> On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
->>>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
->>>> index 41efe53cf150..6fce6eb797a7 100644
->>>> --- a/include/linux/kvm_host.h
->>>> +++ b/include/linux/kvm_host.h
->>>> @@ -848,6 +848,105 @@ struct kvm_memory_slot *id_to_memslot(struct kvm_memslots *slots, int id)
->>>>    	return NULL;
->>>>    }
->>>> +/* Iterator used for walking memslots that overlap a gfn range. */
->>>> +struct kvm_memslot_iter {
->>>> +	struct kvm_memslots *slots;
->>>> +	gfn_t end;
->>>> +	struct rb_node *node;
->>>> +};
->>>
->>> ...
->>>
->>>> +static inline struct kvm_memory_slot *kvm_memslot_iter_slot(struct kvm_memslot_iter *iter)
->>>> +{
->>>> +	return container_of(iter->node, struct kvm_memory_slot, gfn_node[iter->slots->node_idx]);
->>>
->>> Having to use a helper in callers of kvm_for_each_memslot_in_gfn_range() is a bit
->>> ugly, any reason not to grab @slot as well?  Then the callers just do iter.slot,
->>> which IMO is much more readable.
->>
->> "slot" can be easily calculated from "node" together with either "slots" or
->> "node_idx" (the code above just adjusts a pointer) so storing it in the
->> iterator makes little sense if the later are already stored there.
-> 
-> I don't want the callers to have to calculate the slot.  It's mostly syntatic
-> sugar, but I really do think it improves readability.  And since the first thing
-> every caller will do is retrieve the slot, I see no benefit in forcing the caller
-> to do the work.
-> 
-> E.g. in the simple kvm_check_memslot_overlap() usage, iter.slot->id is intuitive
-> and easy to parse, whereas kvm_memslot_iter_slot(&iter)->id is slightly more
-> difficult to parse and raises questions about why a function call is necessary
-> and what the function might be doing.
+Marek reported the warning below.
 
-Personally, I don't think it's that much less readable, but I will change
-the code to store "slots" instead (as you wish) since it's the last remaining
-change - other than Paolo's call whether we should keep or drop the
-kvm_arch_flush_shadow_memslot()-related patch 25.
+  =========================
+  WARNING: held lock freed!
+  5.16.0-rc2+ #10984 Not tainted
+  -------------------------
+  kworker/1:0/18 is freeing memory ffff00004034e200-ffff00004034e3ff,
+with a lock still held there!
+  ffff00004034e348 (&root->kernfs_rwsem){++++}-{3:3}, at:
+__kernfs_remove+0x310/0x37c
+  3 locks held by kworker/1:0/18:
+   #0: ffff000040107938 ((wq_completion)cgroup_destroy){+.+.}-{0:0}, at:
+process_one_work+0x1f0/0x6f0
+   #1: ffff80000b55bdc0
+((work_completion)(&(&css->destroy_rwork)->work)){+.+.}-{0:0}, at:
+process_one_work+0x1f0/0x6f0
+   #2: ffff00004034e348 (&root->kernfs_rwsem){++++}-{3:3}, at:
+__kernfs_remove+0x310/0x37c
 
-Thanks,
-Maciej
+  stack backtrace:
+  CPU: 1 PID: 18 Comm: kworker/1:0 Not tainted 5.16.0-rc2+ #10984
+  Hardware name: Raspberry Pi 4 Model B (DT)
+  Workqueue: cgroup_destroy css_free_rwork_fn
+  Call trace:
+   dump_backtrace+0x0/0x1ac
+   show_stack+0x18/0x24
+   dump_stack_lvl+0x8c/0xb8
+   dump_stack+0x18/0x34
+   debug_check_no_locks_freed+0x124/0x140
+   kfree+0xf0/0x3a4
+   kernfs_put+0x1f8/0x224
+   __kernfs_remove+0x1b8/0x37c
+   kernfs_destroy_root+0x38/0x50
+   css_free_rwork_fn+0x288/0x3d4
+   process_one_work+0x288/0x6f0
+   worker_thread+0x74/0x470
+   kthread+0x188/0x194
+   ret_from_fork+0x10/0x20
+
+Since kernfs moves the kernfs_rwsem lock into root, it couldn't hold
+the lock when the root node is tearing down. Thus, get the refcount
+of root node.
+
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Signed-off-by: Minchan Kim <minchan@kernel.org>
+---
+ fs/kernfs/dir.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/fs/kernfs/dir.c b/fs/kernfs/dir.c
+index 13cae0ccce74..e6d9772ddb4c 100644
+--- a/fs/kernfs/dir.c
++++ b/fs/kernfs/dir.c
+@@ -961,7 +961,13 @@ struct kernfs_root *kernfs_create_root(struct kernfs_syscall_ops *scops,
+  */
+ void kernfs_destroy_root(struct kernfs_root *root)
+ {
+-	kernfs_remove(root->kn);	/* will also free @root */
++	/*
++	 *  kernfs_remove holds kernfs_rwsem from the root so the root
++	 *  shouldn't be freed during the operation.
++	 */
++	kernfs_get(root->kn);
++	kernfs_remove(root->kn);
++	kernfs_put(root->kn); /* will also free @root */
+ }
+ 
+ /**
+-- 
+2.34.0.384.gca35af8252-goog
+

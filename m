@@ -2,182 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B50F464B78
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:18:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3047464B7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:19:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348592AbhLAKVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:21:46 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:34212 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbhLAKVo (ORCPT
+        id S1348607AbhLAKWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:22:36 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59530 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232177AbhLAKWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:21:44 -0500
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 39E9B1F457CA
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638353901; bh=kEAk8XF0frwBFhSJkgeTipfqBQU8xnh/gkL1Zh/TtHQ=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=PFIyyxcjqCPX5k8bM2OnskKnFA2y4ejJZeYAHovd3mnLPyhxianlnMKeJ0ylhwpNj
-         5di9a4/njbq0aZWO7WLGKXfXPTYGKu2aCXOK6GvUsUlGUL7wJ4eq18lXFS0urNcpa/
-         Lc61U6z6aRUocOBf92IOnPUL6hXamvDZCLaOq5cxFBCYOtCrwdShUCxmqp6L53sYMB
-         SzaDTDl2TKKby9n0mhns0eVet2vTh/9UHyDEGvAd5x21g2z7aC+F9EqR1rTokSh480
-         cuFhylTuVyug1LAvFge5c3Dh2SGNFScm4g6u3e2S1yd8obabDKTWtJZNMCI9bzufw0
-         C/Xbvx3jays/w==
-Subject: Re: [PATCH v9 0/7] media: mediatek: support mdp3 on mt8183 platform
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jernej Skrabec <jernej.skrabec@siol.net>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Rob Landley <rob@landley.net>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Alexandre Courbot <acourbot@chromium.org>, tfiga@chromium.org,
-        drinkcat@chromium.org, pihsun@chromium.org, hsinyi@google.com,
-        Maoguang Meng <maoguang.meng@mediatek.com>,
-        daoyuan huang <daoyuan.huang@mediatek.com>,
-        Ping-Hsun Wu <ping-hsun.wu@mediatek.com>,
-        menghui.lin@mediatek.com, sj.huang@mediatek.com,
-        allen-kh.cheng@mediatek.com, randy.wu@mediatek.com,
-        jason-jh.lin@mediatek.com, roy-cw.yeh@mediatek.com,
-        river.cheng@mediatek.com, srv_heupstream@mediatek.com
-References: <20211201095031.31606-1-moudy.ho@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Message-ID: <9a969056-7acc-92a6-a0a8-30d7044cea01@collabora.com>
-Date:   Wed, 1 Dec 2021 11:18:17 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Wed, 1 Dec 2021 05:22:34 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B08AB81E17;
+        Wed,  1 Dec 2021 10:19:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 387F8C53FCC;
+        Wed,  1 Dec 2021 10:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638353951;
+        bh=1DD6yb8AndnxLz2+3Nk3lf/qwuXp3fDEiH6kGOpOszU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Tlzh7bhavcuJL1JqvmDk1Pm+IxQe6SWnZS0YSsrgT245Kv02NKGibqzXW+dF0KFef
+         EroXPB0P923FZ4+JNasEbAzQV8X3YHuNN1Bse4uKZiylQlDC/krndQMHr8N+nF4yHf
+         SWEmU24CovYm7TBosS6Fl9pXUR4FeXRvg2IPbrwhaKl3MW5Z2IMTa6ONG0HsdTRImU
+         T+f5GcwZ/FZ2Itdc9JhMSYPhnRIEYWnsNfTPU3NPY7yMR6M1LOhI5Jl7PyU7jvZdH9
+         tPetaLPCgDyhV8wkvirXtXDRx/fWpEgMlAK0Vmt2QxS1t0H3bgWSXLbJvCIM21K065
+         cgBC+oTl0H+zw==
+Date:   Wed, 1 Dec 2021 12:19:09 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Stefan Berger <stefanb@linux.ibm.com>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+Subject: Re: [PATCH v4 2/2] selftests: tpm2: Reset the dictionary attack lock
+Message-ID: <YadMHU0scgKvCTMV@iki.fi>
+References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
+ <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
+ <YaVljk1vLRZ/TDJ/@iki.fi>
+ <e569444c-e0cd-52bc-308f-7fa457dbf086@linux.ibm.com>
+ <YadLaHB0oJZYTMbh@iki.fi>
 MIME-Version: 1.0
-In-Reply-To: <20211201095031.31606-1-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YadLaHB0oJZYTMbh@iki.fi>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/12/21 10:50, Moudy Ho ha scritto:
-> Change since v8:
-> - Rebase on v5.16-rc2.
-> - Refer to Angelo's suggestion, adjust the register writing format to increase
->    readability and significance.
-> - Refer to Angelo's suggestion, adjust or reduce inappropriate debugging
->    messages.
-> - Refer to Rob Herring's suggestion to correct the the binding file
->    to make it with the specification.
-> - Fix compile warning reported by kernel test robot.
+On Wed, Dec 01, 2021 at 12:16:11PM +0200, Jarkko Sakkinen wrote:
+> On Mon, Nov 29, 2021 at 07:26:12PM -0500, Stefan Berger wrote:
+> > 
+> > On 11/29/21 18:43, Jarkko Sakkinen wrote:
+> > > On Sat, Nov 27, 2021 at 11:10:52PM -0500, Stefan Berger wrote:
+> > > > From: Stefan Berger <stefanb@linux.ibm.com>
+> > > > 
+> > > > Reset the dictionary attack lock to avoid the following types of test
+> > > > failures after running the test 2 times:
+> > > > 
+> > > > ======================================================================
+> > > > ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
+> > > > ----------------------------------------------------------------------
+> > > > Traceback (most recent call last):
+> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2_tests.py", line 105, in test_unseal_with_wrong_policy
+> > > >      blob = self.client.seal(self.root_key, data, auth, policy_dig)
+> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 620, in seal
+> > > >      rsp = self.send_cmd(cmd)
+> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 397, in send_cmd
+> > > >      raise ProtocolError(cc, rc)
+> > > > tpm2.ProtocolError: TPM_RC_LOCKOUT: cc=0x00000153, rc=0x00000921
+> > > > 
+> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> > > > ---
+> > > >   tools/testing/selftests/tpm2/tpm2_tests.py | 2 ++
+> > > >   1 file changed, 2 insertions(+)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+> > > > index e63a37819978..ad6f54c01adf 100644
+> > > > --- a/tools/testing/selftests/tpm2/tpm2_tests.py
+> > > > +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+> > > > @@ -139,6 +139,8 @@ class SmokeTest(unittest.TestCase):
+> > > >           except:
+> > > >               self.client.flush_context(handle)
+> > > >               raise
+> > > > +        finally:
+> > > > +            self.client.reset_da_lock()
+> > > >           self.assertEqual(rc, tpm2.TPM2_RC_POLICY_FAIL)
+> > > > -- 
+> > > > 2.31.1
+> > > > 
+> > > I don't agree with this as a DA lock has legit use. This would be adequate
+> > > for systems dedicated for kernel testing only.
+> > 
+> > The problem is this particular test case I am patching here causes the above
+> > test failures upon rerun. We are testing the driver here presumably and not
+> > the TPM2, so I think we should leave the TPM2 as cleaned up as possible,
+> > thus my suggestion is to reset the DA lock and we won't hear any complaints
+> > after that.
 > 
-> Change since v7:
-> - Rebase on v5.15-rc6.
-> - Revise several V4L2 M2M settings to pass v4l2-compliance test.
-> - Integrate those same component dt-binding documents of DRM and MDP, and
->    move them under the MMSYS domain.
-> - Split MMSYS and MUTEX into two different files according to
->    their functional properties.
+> Ok.
 > 
-> Changes since v6:
-> - Refactor GCE event to corresponding node.
-> - Fix dt_binding_check fail.
-> - Fix compilation errors.
+> > > We could make this available in the folder where TPM2 tests are:
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-scripts.git/tree/tpm2-reset-da-lock
+> > 
+> > 
+> > The tss packages also have command line tools to reset the DA lock, but it
+> > shouldn't be necessary to use them after running a **driver** test case.
 > 
-> Changes since v5:
-> - Rebase on v5.14-rc6.
-> - Move MMSYS/Mutex settings to corresponding driver.
-> - Revise the software license description and copyright.
-> - Remove unnecessary enum. or definitions.
-> - Optimize platform/chip definition conditions.
-> - Use general printing functions instead of MDP3 private ones.
-> - Fix compile warning.
+> If you speak about TSS, please alway say which one :-)
 > 
-> Changes since v4:
-> - Rebase on v5.13-rc1.
-> - Remove the CMDQ flush flow to match the CMDQ API change.
-> - Integrate four of MDP's direct-link subcomponents into MDP controller node
->    from syscon node to avoid illegal clock usage.
-> - Rewrite dt-binding in a JSON compatible subset of YAML
-> - Fix a bit of macro argument precedence.
-> 
-> Changes since v3:
-> - Rebase on v5.9-rc1.
-> - modify code for review comment from Rob Herring, cancel multiple nodes using
->    same register base situation.
-> - control IOMMU port through pm runtime get/put to DMA components' device.
-> - SCP(VPU) driver revision.
-> - stop queuing jobs(remove flush_workqueue()) after mdp_m2m_release().
-> - add computation of plane address with data_offset.
-> - fix scale ratio check issue.
-> - add default v4l2_format setting.
-> 
-> Changes since v2:
-> - modify code for review comment from Tomasz Figa & Alexandre Courbot
-> - review comment from Rob Herring will offer code revision in v4, due to
->    it's related to device node modification, will need to modify code
->    architecture
-> 
-> Changes since v1:
-> - modify code for CMDQ v3 API support
-> - EC ipi cmd migration
-> - fix compliance test fail item (m2m cmd with -f) due to there is two problem in runing all format(-f) cmd:
-> 1. out of memory before test complete
->          Due to capture buffer mmap (refcount + 1) after reqbuf but seems
->          no corresponding munmap called before device close.
->          There are total 12XX items(formats) in format test and each format
->          alloc 8 capture/output buffers.
-> 2. unceasingly captureBufs() (randomly)
->          Seems the break statement didn't catch the count == 0 situation:
->          In v4l2-test-buffers.cpp, function: captureBufs()
->                          ...
->                          count--;
->                          if (!node->is_m2m && !count)
->                                  break;
->          Log is as attachment
-> 
-> I will paste the test result with problem part in another e-mail
-> 
-> Hi,
-> 
-> This is the first version of RFC patch for Media Data Path 3 (MDP3),
-> MDP3 is used for scaling and color format conversion.
-> support using GCE to write register in critical time limitation.
-> support V4L2 m2m device control.
-> 
-> 
-> Moudy Ho (7):
->    soc: mediatek: mmsys: add support for MDP
->    soc: mediatek: mmsys: add support for ISP control
->    soc: mediatek: mutex: add support for MDP
->    soc: mediatek: mutex: add functions that operate registers by CMDQ
->    dt-binding: mt8183: add Mediatek MDP3 dt-bindings
->    dts: arm64: mt8183: add Mediatek MDP3 nodes
->    media: platform: mtk-mdp3: add Mediatek MDP3 driver
-> 
+> Adding non-volatile state changes explicitly is to a test case is both
 
-Hello Moudy,
+A typo, should be:
 
-I agree with your vision of mmsys and mutex patches being somewhat tied to the
-MDP3 driver being present but, still, can you please split this series?
+"Adding non-volatile state changes explicitly to a test case is both"
 
-The reason for this is that the four patches related to mmsys and mutex are ok,
-ready to be merged, and unlikely to get any other change during the development
-of the MDP3 driver specifically.
-Like that, we could at least start getting all the required base support upstream
-and reduce the strain on you (and on reviewers) when releasing/rebasing any new
-version of this series; this will consequently help raising the quality of this
-work.
-
-Regards,
-- Angelo
-
-
-
-
-
-
-
+/Jarkko

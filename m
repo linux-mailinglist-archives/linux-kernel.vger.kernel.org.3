@@ -2,102 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA8646594F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:32:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A429465955
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353705AbhLAWfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:35:24 -0500
-Received: from gandalf.ozlabs.org ([150.107.74.76]:38947 "EHLO
-        gandalf.ozlabs.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353660AbhLAWfV (ORCPT
+        id S1343789AbhLAWiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:38:18 -0500
+Received: from mail-oi1-f177.google.com ([209.85.167.177]:42620 "EHLO
+        mail-oi1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234078AbhLAWiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:35:21 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4DNG2r4bz4xbC;
-        Thu,  2 Dec 2021 09:31:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1638397919;
-        bh=iRuwDkNdeN13qpkG5g/zOreQsdlthg7UtRfcCdHvVNI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=RjzdCkVHbUwmYBBE9QOCGUgFn7qjI7rNgOoOTqazl/ZdHm0pftntrGPaepBiKVhSd
-         pxrHxKK2uSyeudL0yfX8/txvzOGcqCyy9QL1/BFDajJs9odv8AwWLF+aMCydussyUm
-         ckkZW9TEzcSrRTbAdhzymnuEsrKlCWtYaXxAtUOMiTeVX/a9aQ3HSm6pXTzOId8gTh
-         jrHsk51uxCJ+ZwcN9tIlBERUBkOqZrsz0YZAOpEbdLgrNFo5OPSx0k4gVVKA98yF6f
-         acmSHuTrOtsgb4FN2jDsacxFcKNfx0Rr4CGmwB/Cm9rkEVLcK9MRvVPSJprEpc4NDx
-         6URp9Omm+pXbQ==
-Date:   Thu, 2 Dec 2021 09:31:57 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20211202093157.0d49044d@canb.auug.org.au>
-In-Reply-To: <87wnko6k8z.ffs@tglx>
-References: <20211126145201.5aefa68c@canb.auug.org.au>
-        <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
-        <20211202090540.1f22fa39@canb.auug.org.au>
-        <87zgpk6kcz.ffs@tglx>
-        <87wnko6k8z.ffs@tglx>
+        Wed, 1 Dec 2021 17:38:17 -0500
+Received: by mail-oi1-f177.google.com with SMTP id n66so51646977oia.9;
+        Wed, 01 Dec 2021 14:34:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1cxGpGuXFYT7z9IMgpvEZhppfpCtenqGacj+Q88IAEE=;
+        b=sUypr9TB0Jp8sc1pFUgFpcZtMJ69f7wAJhexT8hRcgtf3WE1gYSeADvko0OMx8PFIP
+         aaD6d4xB/tuFzjKziBVJBKSTYuhpYUUb02y7XJJs+f+OEujNhLEPg2sV5HHwuybnMaDb
+         fUubQIJJAlX4fofA3JgWKbCbC8Rv43RTExAAoIZ5o5MJg93MDbjodAv2w7trc8HA4L41
+         tLgwTmYinZDBievkockb0bK8r6QVGW3hfGurDVR0mazAGYY0F82UFnT/vKs3RVd7jXJ5
+         09FNaxQb9Q5rNzKin5mg8yft2OdeZR1V6o77HgChLXy8FSgbQ0VkjO0A0yiiYe+Hkkud
+         VCXQ==
+X-Gm-Message-State: AOAM532hpl0kHWF+q0fAwiuQdCIy9lyb9LrKdRcxTfsx9UHWOd4ndI1Z
+        e1Wn0cLsndJ3HFnsPJQ2bjdOt9YV8g==
+X-Google-Smtp-Source: ABdhPJzYVbv04PWEmrUTCr7W5O/7iNRMV3i5k8Bm9QEVICIoEC+6CgArt/iFDuAT12MH7ix6AtarcQ==
+X-Received: by 2002:aca:d608:: with SMTP id n8mr1145835oig.89.1638398095643;
+        Wed, 01 Dec 2021 14:34:55 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bf17sm655019oib.27.2021.12.01.14.34.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 14:34:55 -0800 (PST)
+Received: (nullmailer pid 2914345 invoked by uid 1000);
+        Wed, 01 Dec 2021 22:34:54 -0000
+Date:   Wed, 1 Dec 2021 16:34:54 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Olivier MOYSAN <olivier.moysan@foss.st.com>
+Cc:     linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Olivier Moysan <olivier.moysan@st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        fabrice.gasnier@foss.st.com, alain.volmat@foss.st.com,
+        alsa-devel@alsa-project.org, amelie.delaunay@foss.st.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        devicetree@vger.kernel.org, arnaud.pouliquen@foss.st.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v2 1/4] ASoC: dt-bindings: stm32: i2s: add
+ audio-graph-card port
+Message-ID: <Yaf4jiZIp8+ndaXs@robh.at.kernel.org>
+References: <20211125144053.774-1-olivier.moysan@foss.st.com>
+ <20211125144053.774-2-olivier.moysan@foss.st.com>
+ <1637875562.357461.2858318.nullmailer@robh.at.kernel.org>
+ <237f56b3-0597-2526-a182-f1fbdd327338@foss.st.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GTQDfa2LPoVjoK_tEx9N22Q";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <237f56b3-0597-2526-a182-f1fbdd327338@foss.st.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/GTQDfa2LPoVjoK_tEx9N22Q
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Nov 26, 2021 at 11:25:27AM +0100, Olivier MOYSAN wrote:
+> Hi Rob,
+> 
+> On 11/25/21 10:26 PM, Rob Herring wrote:
+> > On Thu, 25 Nov 2021 15:40:50 +0100, Olivier Moysan wrote:
+> > > The STM2 I2S DAI can be connected via the audio-graph-card.
+> > > Add port entry into the bindings.
+> > > 
+> > > Signed-off-by: Olivier Moysan <olivier.moysan@foss.st.com>
+> > > ---
+> > >   Documentation/devicetree/bindings/sound/st,stm32-i2s.yaml | 5 +++++
+> > >   1 file changed, 5 insertions(+)
+> > > 
+> > 
+> > Running 'make dtbs_check' with the schema in this patch gives the
+> > following warnings. Consider if they are expected or the schema is
+> > incorrect. These may not be new warnings.
+> > 
+> > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> > This will change in the future.
+> > 
+> > Full log is available here: https://patchwork.ozlabs.org/patch/1559750
+> > 
+> > 
+> > audio-controller@4000b000: 'port' does not match any of the regexes: '^port@[0-9]', 'pinctrl-[0-9]+'
+> > 	arch/arm/boot/dts/stm32mp157a-dk1.dt.yaml
+> > 	arch/arm/boot/dts/stm32mp157c-dk2.dt.yaml
+> > 
+> 
+> This warning is not a new one.
+> 
+> The i2s2 node in stm32mp15xx-dkx.dtsi would require the following binding:
+> port:
+> 	$ref: audio-graph-port.yaml#
+> 	unevaluatedProperties: false
+> 
+> However the spi binding requires to introduce a unit address:
+> patternProperties:
+>   '^port@[0-9]':
+>     $ref: audio-graph-port.yaml#
+>     unevaluatedProperties: false
+> 
+> The warning can be removed by re-ordering the bindings patches in the serie,
+> as "additionalProperties: true" makes the check more tolerant on extra
+> properties.
 
-Hi Thomas,
+That's never right.
 
-On Wed, 01 Dec 2021 23:19:40 +0100 Thomas Gleixner <tglx@linutronix.de> wro=
-te:
->
-> On Wed, Dec 01 2021 at 23:17, Thomas Gleixner wrote:
->=20
-> > On Thu, Dec 02 2021 at 09:05, Stephen Rothwell wrote: =20
-> >> On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote=
-: =20
-> >>>=20
-> >>> Thanks a lot for the report, I sent a fix now:
-> >>>=20
-> >>> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org =
-=20
-> >>
-> >> I am still getting this failure (Arnd's fix has not been applied). =20
-> >
-> > It got applied, but due to tip maintainer confusion the next branch was
-> > not updated. Will be fixed tomorrow. =20
->=20
-> Actually now. So still today here :)
+> The patch "ASoC: dt-bindings: stm32: i2s: add audio-graph-card port" can
+> even be merely dropped.
+> So, I suggest to resend the serie without audio-graph-card patch.
 
-Thanks, I have that now, so it will go into today's linux-next.
+Only if you aren't using audio-graph-card.
 
---=20
-Cheers,
-Stephen Rothwell
+> 
+> Does it sound too permissive to you ?
 
---Sig_/GTQDfa2LPoVjoK_tEx9N22Q
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+I think perhaps you need to combine the schemas into 1. Or you need to 
+restructure your dtsi files such that you only add spi specific 
+properties when spi mode is enabled and only add i2s specific properties 
+when i2s mode is enabled. Or use the /delete-property/ directive.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGn990ACgkQAVBC80lX
-0GyeyAf/Y7U4lyRORTzVooMypQbcEvT1tKQTS8ME8x38AmDuy0X4q+3Atld6bWxG
-vve03VaImP/CRKk2rri1tKN8+SSUT0fzqbc29wdAYJcc+MY8/HT1e+XVja0or+92
-hiezfeDNAvAUnwqS4vFzppPw7T0pcMAzhltwWCUosvmTY1+NFq5PQeykpZP3vbg0
-m9Q21oS0k1Fp9ynicTQ1QarcmZd4LzcA2f0KRSdAx9ax4VgdFM8LqHUMpRxadiVx
-xaJWuI437cg3q5mvbZpkN1i4J2n1zalzcmhtoxVe98XyIONjxuwmsnI2NZDr2R0t
-do8wzZ7ragg1EucIA2A4ElIUlg7Dhw==
-=YpfX
------END PGP SIGNATURE-----
-
---Sig_/GTQDfa2LPoVjoK_tEx9N22Q--
+Rob

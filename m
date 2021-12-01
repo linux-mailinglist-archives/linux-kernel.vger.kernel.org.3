@@ -2,113 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 740694644D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C254644DD
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346051AbhLACZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:25:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345996AbhLACZF (ORCPT
+        id S1346140AbhLAC2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:28:48 -0500
+Received: from out30-130.freemail.mail.aliyun.com ([115.124.30.130]:54218 "EHLO
+        out30-130.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S241292AbhLAC22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:25:05 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAC3C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:21:45 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id gb13-20020a17090b060d00b001a674e2c4a8so45629pjb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:21:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gie1EwZxonCzFvugUYBX8WOXYkfnwgMVP4++lOOlv+c=;
-        b=BHHWYuF18555l0y3u6rGa+kEPLUpRnTak219rl+ifA1BegpvG+NBgLb0it0I4y1PBo
-         opX2RyrCSzAxdaDMxLHZgYuQBb3UVPD2vfYENDpOiOvKud4gngvK2ESBdq2wzO7bvYFs
-         Uom+60iWQDBpxbmPU70HUiBcp58Q+IzMSy+kvlJ0vEJ1p8v4tuSDuU8pkpbNTFB618qG
-         GRyKbd/AR+lkFA4jCgEvLeAjD26ZWOnk3TJw1kKRu0Qd77in9KBkimE5/N26zN4jm81l
-         dcBG7UIm2ufF53HRCOZW7kupF9U+VKWo5L41OJTTQxhPRxp8ZLBeqKPhTwxyhB0gaVmZ
-         Kypw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gie1EwZxonCzFvugUYBX8WOXYkfnwgMVP4++lOOlv+c=;
-        b=jnI27pFbNT2czGq+QDVOQq3x/eyy4atcLCcVMoDIzEdh0QewsgzM/C5FenTu6utUla
-         P/fKDz7r9r5vXp94wsJ2XMe59d5tcQ6VozZQM3HA+3FlmS7CKOVxK4BsTUI+W+uJcekD
-         5bnC50i2Hph/OtBNg4HZ85nxY8aXOBrN81t5Wwas4F8Kxk2LXnB+ravoyYzAknXJ9qIP
-         cGcSAf9y/JhHpmkMtxQvG+/Juz2RLEKLGYSfl5v+9ZY7A4HUssghdo8d+rzYJKFJNQU/
-         uAP1UwnDoWCFh+pVIWodgQtxDWg2hSneVVy2uaeq/3QkLMbTrBvKmLIRHvKU4AmIZ1ai
-         aMTw==
-X-Gm-Message-State: AOAM532hNwxzwKoyUGn0lXZbypmviLQITd420H7vzkHmwvqv4Lc2xpcG
-        w1hYiD5pvvy9Ea+jHljdTCEO1w==
-X-Google-Smtp-Source: ABdhPJx7ckMHu0ZBbHoG3wVdN35yNz+jTnr/6AkXoHITLna8yQnOkJAuMipyrJqERvLCPmT0P99eUg==
-X-Received: by 2002:a17:902:748c:b0:141:c45e:c612 with SMTP id h12-20020a170902748c00b00141c45ec612mr3544713pll.73.1638325305343;
-        Tue, 30 Nov 2021 18:21:45 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j13sm21251711pfc.151.2021.11.30.18.21.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 18:21:44 -0800 (PST)
-Date:   Wed, 1 Dec 2021 02:21:41 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 18/29] KVM: x86: Use nr_memslot_pages to avoid
- traversing the memslots array
-Message-ID: <YabcNaCb88s/CTop@google.com>
-References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
- <74663af27fd6e25b7846da343f7013b1e9885a4b.1638304316.git.maciej.szmigiero@oracle.com>
+        Tue, 30 Nov 2021 21:28:28 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R261e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=10;SR=0;TI=SMTPD_---0UywMFvQ_1638325498;
+Received: from 30.225.24.35(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0UywMFvQ_1638325498)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 01 Dec 2021 10:24:59 +0800
+Message-ID: <92d4d393-9734-9f7e-4440-20429bdac14f@linux.alibaba.com>
+Date:   Wed, 1 Dec 2021 10:24:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74663af27fd6e25b7846da343f7013b1e9885a4b.1638304316.git.maciej.szmigiero@oracle.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.0
+Subject: Re: [PATCH] ocfs2: fix uninitialized variable in
+ ocfs2_dio_wr_get_block()
+Content-Language: en-US
+To:     Dan Carpenter <dan.carpenter@oracle.com>,
+        Wengang Wang <wen.gang.wang@oracle.com>, ryan.ding@oracle.com,
+        Junxiao Bi <junxiao.bi@oracle.com>
+Cc:     Joel Becker <jlbec@evilplan.org>,
+        Sunil Mushran <sunil.mushran@oracle.com>,
+        ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Mark Fasheh <mark@fasheh.com>
+References: <20211130104043.GB5827@kili>
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20211130104043.GB5827@kili>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> There is no point in recalculating from scratch the total number of pages
-> in all memslots each time a memslot is created or deleted.  Use KVM's
-> cached nr_memslot_pages to compute the default max number of MMU pages.
-> 
-> Note that even with nr_memslot_pages capped at ULONG_MAX we can't safely
-> multiply it by KVM_PERMILLE_MMU_PAGES (20) since this operation can
-> possibly overflow an unsigned long variable.
-> 
-> Write this "* 20 / 1000" operation as "/ 50" instead to avoid such
-> overflow.
-> 
-> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> [sean: use common KVM field and rework changelog accordingly]
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-My SoB can definitely be dropped for this one, just consider it review feedback
-that happened to have an SoB attached.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com> 
+On 11/30/21 6:40 PM, Dan Carpenter wrote:
+> The callers assume that "*fsdata" is set on the success path, but
+> that's not necessarily true on this path.
+> 
+
+In ocfs2_page_mkwrite(), since in this case no target page locked, it
+will finally return VM_FAULT_NOPAGE (better VM_FAULT_RETRY?) and throw 
+to handle_mm_fault(). So no problem as comments described.
+
+But things seems changed since append direct io path started to use
+write_[begin/end]. In this path, the target page is expected as NULL.
+This needs more discussion.
+
+Thanks,
+Joseph
+
+> Fixes: 5cffff9e2986 ("ocfs2: Fix ocfs2_page_mkwrite()")
+> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+> ---
+> Please review this one EXTRA CAREFULLY.  It's from static analysis and
+> the truth is I'm not 100% sure it's correct.  I'm also not sure that
+> it's a complete fix.
+> 
+> Especially, please review how this is called from ocfs2_write_begin()
+> to make sure that this doesn't break anything.
+> 
+> 
+>  fs/ocfs2/aops.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/fs/ocfs2/aops.c b/fs/ocfs2/aops.c
+> index 68d11c295dd3..a74a370f16f0 100644
+> --- a/fs/ocfs2/aops.c
+> +++ b/fs/ocfs2/aops.c
+> @@ -1813,6 +1813,7 @@ int ocfs2_write_begin_nolock(struct address_space *mapping,
+>  	if (ret == -EAGAIN) {
+>  		BUG_ON(wc->w_target_page);
+>  		ret = 0;
+> +		*fsdata = wc;
+>  		goto out_quota;
+>  	}
+>  
+> 

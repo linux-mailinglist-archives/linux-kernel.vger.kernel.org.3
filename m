@@ -2,356 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2DE464962
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C05ED464970
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:16:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347882AbhLAISw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 03:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
+        id S1347864AbhLAITk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 03:19:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235464AbhLAISu (ORCPT
+        with ESMTP id S235464AbhLAITf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 03:18:50 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 891D3C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 00:15:30 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id 131so60941260ybc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 00:15:30 -0800 (PST)
+        Wed, 1 Dec 2021 03:19:35 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683E6C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 00:16:14 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id w1so98393861edc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 00:16:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=S57qk9mhuZ/g9C5aLfnY7NgUAbFruX4cbQRxWnSY0Qo=;
-        b=XKaXoRWEyNhdWcptCHCbe1Spt26+vDVf1FRuDp6eCHOdfmu+9NfsdK19MZysgHysat
-         FuoQsKIVoJu5/71JQz1zAbE3LZ171iidsMuZ143uv15CMWnSzmhQSEuKwtumvWAnPzGT
-         EQCnziTHV4t1dWnhAfScQXbrXgydtQ595KkeA=
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=V6zQR0fGtot8Y0hr0EL8eBOomgUYse/RC/KrmAqMq4c=;
+        b=N3Jv//xt4KCpN2hwq3/lUeQmNMzmpXDcMhFnL/mORbGNyheFXxAcmxcjZIhUBxwhaX
+         o/YmqiqOI+AaXwMbzZfzLlBXLh8OC+R79N52vzOrY2jsd6rKIfK9hZBc+Ac4S91Cvq96
+         8iW0LBMuy52nNLmNYSL/zT9xYIF9AXvK46T7zmSyizmjfuRdDMMysNFgcd0/ObTk4/57
+         MpsRx02bRwMDEEP0gRoKs4lhdk275wr6RLzUR0JVKAK3USDVeFKy2eZ4ig7I/srmHUQK
+         GKt1sZWFcpan5JoDXhY0gEAK45fPgYC1udTV9J2B7BeNT+7dBsqau0EsmNUv7Kd00ypw
+         tNDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=S57qk9mhuZ/g9C5aLfnY7NgUAbFruX4cbQRxWnSY0Qo=;
-        b=qCPVdWaYvwmeFpVjSumOZSYgfVqhwTbRc9hdO7IQrBbPgUjLr1XgIqp7Ee4SH44lJC
-         cO4d9A+/zVJuFTaqllSTXazgxndoDwbMDoXTrMncxQVkMaLJc2udhGnlVx6mhNy68jZd
-         D5lUjtZ9h8Rt+6CXhXWCkDvNdi/t+9qbGNFY4WltFC3ACg9lbVdU3/TmHxvgSnblJiPX
-         IpGbAHYpcu+bVWd39U1ySNIm/SYortLFmNTMRiMZaVCVYDHkoqfIscrCB0EFdKBdMsZ/
-         kPVvkseY5S5p0SC7Z6KTSK1M2NtvM18wOb3GrLIGvGUG03bBUwjOewNQU4q35/D6WJnD
-         rrDQ==
-X-Gm-Message-State: AOAM530/jljAcl745Td6nKDlgf1KENQ/K0q9ne0wz5JMIF/YxINgp7ci
-        n/4sWTM6sHgSCpGxoT4foC9nPiPJIGJaJRzhnhZijY0oewjYe4s=
-X-Google-Smtp-Source: ABdhPJz0cVhVudhWNrU98JYmr+mF04YoMJevZYn10+Y2LsG+oJ4QsaHVeibE2VrPporEVQwWPzEoFn1u2qQhqFG8Trw=
-X-Received: by 2002:a25:4d8:: with SMTP id 207mr5311533ybe.320.1638346529662;
- Wed, 01 Dec 2021 00:15:29 -0800 (PST)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=V6zQR0fGtot8Y0hr0EL8eBOomgUYse/RC/KrmAqMq4c=;
+        b=NsoStL9mOjwmn5iYCnnme2hgcAbkrUJGheMeUsQyNYqauyT21T7OJazl2u977hz+6p
+         Rfi3EJ/Bso4KR1mzEYYbT7uur4Ig/31lQtiUJJWErliOfQLi24hmjyM3izQtKIibbOn+
+         bpKyJQwqlehox2T9cQ7Je5Y/W66QdHy4yBwo4Q+9K/AfVdmhvPQtzPFoW3sXu7AxIZG1
+         XG2qJo0Yn8OYQRpoAC4b9n0vso64haYSYpaoTkeSI/ssFAw5LODQJu+K+EjzGSU8iZvE
+         /NIi072jE5lArTr4l1LFgZSyr6CE3benlPV9FB52vvcKAel6DH/gjZtRU2gUrALUm6Wj
+         4GhA==
+X-Gm-Message-State: AOAM532gJx0MQxpPcdrJS5vWSgmMaHiGNThOfWVi8z0x8hn+uOpVQZfO
+        RAvwRdQGSpvANEP2CymL+wAo4g==
+X-Google-Smtp-Source: ABdhPJw2TIwxrsYqtYN6BP9l9K2r8DpCSdz3W6t0gaidwFtoXgWxuCKj5Yk5vxSQdBMhC85ZX3lSVQ==
+X-Received: by 2002:a05:6402:42d4:: with SMTP id i20mr6507147edc.372.1638346572931;
+        Wed, 01 Dec 2021 00:16:12 -0800 (PST)
+Received: from ?IPV6:2a02:768:2307:40d6::e05? ([2a02:768:2307:40d6::e05])
+        by smtp.gmail.com with ESMTPSA id hq37sm11047185ejc.116.2021.12.01.00.16.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 00:16:12 -0800 (PST)
+Message-ID: <734dfe79-6e3f-1e68-c167-bab3ae9e8d52@monstr.eu>
+Date:   Wed, 1 Dec 2021 09:16:11 +0100
 MIME-Version: 1.0
-References: <20211129014007.286478-1-wefu@redhat.com> <1909580.k68io2XIxi@diego>
- <D7F256F9-F31F-4663-AADD-A535E159F87C@jrtc27.com> <2728314.U2HhIfhhqV@diego>
- <C19C85E6-821B-4A87-B764-56CF4D53E7FA@jrtc27.com> <CAAeLtUC0Qc6ysf31sh0dkvfJD-JsREZbyFFk=Ko0vQeBRzyjaw@mail.gmail.com>
- <03B8F784-4AF3-425D-99B6-F753F7970273@jrtc27.com> <CAOnJCUKmP6dsrV9xWC52uEaM0=fZh-FNDYyFg1VxQybpQZABMA@mail.gmail.com>
- <1d035613-390c-32c2-aa92-cc0f7797488d@irq.a4lg.com>
-In-Reply-To: <1d035613-390c-32c2-aa92-cc0f7797488d@irq.a4lg.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Wed, 1 Dec 2021 00:15:18 -0800
-Message-ID: <CAOnJCULQNz2WtrzAe7--66pMt+0oR9Z2aEwGXffbCi=Y9f=3yQ@mail.gmail.com>
-Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions
- support for Svpbmt
-To:     Tsukasa OI <research_trasio@irq.a4lg.com>
-Cc:     Jessica Clarke <jrtc27@jrtc27.com>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Wei Fu <wefu@redhat.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        taiten.peng@canonical.com,
-        Aniket Ponkshe <aniket.ponkshe@canonical.com>,
-        Gordan Markus <gordan.markus@canonical.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Dan Lustig <dlustig@nvidia.com>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Anup Patel <Anup.Patel@wdc.com>, atishp04@gmail.com,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Guo Ren <guoren@kernel.org>,
-        =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
-        Christoph Hellwig <hch@lst.de>,
-        liush <liush@allwinnertech.com>, Wei Wu <lazyparser@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] mtd: rawnand: arasan: Fix clock rate in NV-DDR
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Olga Kitaina <okitain@gmail.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Cc:     linux-mtd@lists.infradead.org, nagasure@xilinx.com, richard@nod.at,
+        vigneshr@ti.com, linux-kernel@vger.kernel.org
+References: <20211127180758.30884-1-okitain@gmail.com>
+ <20211129095559.01aa63a6@xps13>
+ <3da5dff5-53d4-15db-075d-9b195f2f75dd@gmail.com>
+ <20211130082017.1400f24b@xps13>
+ <fb6a4b49-7c10-4ed1-7054-5dd8ce2d8073@gmail.com>
+ <20211201090941.73e67f65@xps13>
+From:   Michal Simek <monstr@monstr.eu>
+In-Reply-To: <20211201090941.73e67f65@xps13>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 7:06 PM Tsukasa OI <research_trasio@irq.a4lg.com> w=
-rote:
->
-> On 2021/12/01 10:21, Atish Patra wrote:
-> > On Tue, Nov 30, 2021 at 8:13 AM Jessica Clarke <jrtc27@jrtc27.com> wrot=
-e:
-> >>
-> >> On 30 Nov 2021, at 15:01, Philipp Tomsich <philipp.tomsich@vrull.eu> w=
-rote:
-> >>>
-> >>> We did touch on this in our coordination call a few weeks ago: the
-> >>> grouping under mmu and the bool-entries were chosen because of their
-> >>> similarity to other extensions (i.e. for Zb[abcs] there could/should
-> >>> be a bool-entry under each cpu-node =E2=80=94 for some Zv* entries a =
-subnode
-> >>> might be needed with further parameters).
-> >>>
-> >>> The string-based approach (as in the originally proposed "mmu-type=3D=
-")
-> >>> would like not scale with the proliferation of small & modular
-> >>> extensions.
-> >>
-> >> I don=E2=80=99t see why the Sv* extensions need to be under an mmu nod=
-e then,
-> >> unless the intent is that every extension be grouped under a sub-node
-> >> (which doesn=E2=80=99t seem viable due to extensions like Zbk*, unless=
- you
-> >> group by Ss, Sv and Z)?
-> >>
-> >
-> > It shouldn't be. All the ISA extensions (i.e. standard, supervisor & hy=
-pervisor)
-> > with prefix S,Z,H should be kept separate in a separate node for easy
-> > parsing.
->
-> "Easy parsing" is not quite convincing.
-
-The device tree need to carry a very long "riscv,isa" string. The
-parser need to parse
-that string in memory as well.
-
->
-> There's a reason other than that I made RFC PATCH to parse
-> multi-letter extensions:
->
-> v1: <http://lists.infradead.org/pipermail/linux-riscv/2021-November/01025=
-2.html>
-> v2: <http://lists.infradead.org/pipermail/linux-riscv/2021-November/01035=
-0.html>
->
-
-It's on my todo list to review the series. I think we can work
-together to propose a better framework for riscv isa extensions.
-
-> (note: those patches will break RISC-V KVM because of possible ISA
->        Manual inconsistency and discussion/resolution needed)
->
-> (...continued below...)
->
-> >
-> > "riscv,isa" dt property will not scale at all. Just look at the few
-> > extensions that were ratified this year
-> > and Linux kernel needs to support them.
-> >
-> > "Sscofpmf", "Svpbmt", "Zicbom"
-> >
-> >> Also, what is going to happen to the current riscv,isa? Will that
-> >> continue to exist and duplicate the info, or will kernels be required
-> >> to reconstruct the string themselves if they want to display it to
-> >> users?
-> >>
-
-Sorry. I missed this question earlier. See my answer below.
-
-> >
-> > This is my personal preference:
-> > riscv,isa will continue to base Standard ISA extensions that have
-> > single letter extensions.
-> >
-> > This new DT node will encode all the non-single letter extensions.
-> > I am not sure if it should include some provisions for custom
-> > extensions starting with X because
-> > that will be platform specific.
-> >
-> > Again, this is just my personal preference. I will try to send a patch
-> > soon so that we can initiate a broader
-> > discussion of the scheme and agree/disagree on something.
->
-> For supervisor-only extensions like "Svpbmt", new DT node would be a
-> reasonable solution (and I would not directly object about that node).
->
-> However, there's many multi-letter extensions that are useful for
-> user mode.  Because "riscv,isa" is exposed via sysfs and procfs
-> (/proc/cpuinfo), it can be really helpful to have multi-letter
-
-Irrespective of the method chosen to parse the device tree in kernel,
-we need to provide the extension information to the userspace.
-
-This is what I have in mind. An individual row with comma separated
-extension names for each type of extensions (Ss, Sv, Sh)
-after the base extension (rv64imafdc) in /proc/cpuinfo output. I am
-open to other ideas as well.
-
-isa   rv64imafdc
-isa-ext-Sv Svpbmt
-isa-ext-Ss Sscofpmf
-isa-ext-Sh <hypervisor related extensions>
-isa-ext-Z   Zicbom
-
-We can even explicitly name the extensions after isa-ext. However, it
-may be necessary and too long.
-
-I guess you prefer to directly print the entire "riscv,isa" string in
-"isa" row in /proc/cpuinfo output.
-It is probably okay with the current number of extensions available
-today. However, it will become so long string
-in the future that it has to be broken into multiple lines.
-
-> extensions.  Also, current version of Spike, a RISC-V ISA Simulator
-> puts all multi-letter extensions in "riscv,isa" and I thought this is
-> intended.
->
-> My preference:
-> (1) Allow having multi-letter extensions and versions in "riscv,isa"
-> (2) Adding new DT node for supervisor-related extensions would be
->     reasonable (but I don't strongly agree/disagree).
->
-> Thanks,
-> Tsukasa
->
-> >
-> >
-> >
-> >> As a FreeBSD developer I=E2=80=99m obviously not a part of many of the=
-se
-> >> discussions, but what the Linux community imposes as the device tree
-> >> bindings has a real impact on us.
-> >>
-> >> Jess
-> >>
-> >>> On Tue, 30 Nov 2021 at 14:59, Jessica Clarke <jrtc27@jrtc27.com> wrot=
-e:
-> >>>>
-> >>>> On 30 Nov 2021, at 13:27, Heiko St=C3=BCbner <heiko@sntech.de> wrote=
-:
-> >>>>>
-> >>>>> Hi,
-> >>>>>
-> >>>>> Am Dienstag, 30. November 2021, 14:17:41 CET schrieb Jessica Clarke=
-:
-> >>>>>> On 30 Nov 2021, at 12:07, Heiko St=C3=BCbner <heiko@sntech.de> wro=
-te:
-> >>>>>>>
-> >>>>>>> Am Montag, 29. November 2021, 13:06:23 CET schrieb Heiko St=C3=BC=
-bner:
-> >>>>>>>> Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich Schu=
-chardt:
-> >>>>>>>>> On 11/29/21 02:40, wefu@redhat.com wrote:
-> >>>>>>>>>> From: Wei Fu <wefu@redhat.com>
-> >>>>>>>>>>
-> >>>>>>>>>> Previous patch has added svpbmt in arch/riscv and add "riscv,s=
-vpmbt"
-> >>>>>>>>>> in the DT mmu node. Update dt-bindings related property here.
-> >>>>>>>>>>
-> >>>>>>>>>> Signed-off-by: Wei Fu <wefu@redhat.com>
-> >>>>>>>>>> Co-developed-by: Guo Ren <guoren@kernel.org>
-> >>>>>>>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
-> >>>>>>>>>> Cc: Anup Patel <anup@brainfault.org>
-> >>>>>>>>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> >>>>>>>>>> Cc: Rob Herring <robh+dt@kernel.org>
-> >>>>>>>>>> ---
-> >>>>>>>>>> Documentation/devicetree/bindings/riscv/cpus.yaml | 10 +++++++=
-+++
-> >>>>>>>>>> 1 file changed, 10 insertions(+)
-> >>>>>>>>>>
-> >>>>>>>>>> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml=
- b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> >>>>>>>>>> index aa5fb64d57eb..9ff9cbdd8a85 100644
-> >>>>>>>>>> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-> >>>>>>>>>> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-> >>>>>>>>>> @@ -63,6 +63,16 @@ properties:
-> >>>>>>>>>>      - riscv,sv48
-> >>>>>>>>>>      - riscv,none
-> >>>>>>>>>>
-> >>>>>>>>>> +  mmu:
-> >>>>>>>>>
-> >>>>>>>>> Shouldn't we keep the items be in alphabetic order, i.e. mmu be=
-fore
-> >>>>>>>>> mmu-type?
-> >>>>>>>>>
-> >>>>>>>>>> +    description:
-> >>>>>>>>>> +      Describes the CPU's MMU Standard Extensions support.
-> >>>>>>>>>> +      These values originate from the RISC-V Privileged
-> >>>>>>>>>> +      Specification document, available from
-> >>>>>>>>>> +      https://riscv.org/specifications/
-> >>>>>>>>>> +    $ref: '/schemas/types.yaml#/definitions/string'
-> >>>>>>>>>> +    enum:
-> >>>>>>>>>> +      - riscv,svpmbt
-> >>>>>>>>>
-> >>>>>>>>> The privileged specification has multiple MMU related extension=
-s:
-> >>>>>>>>> Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enu=
-m?
-> >>>>>>>>
-> >>>>>>>> I remember in some earlier version some way back there was the
-> >>>>>>>> suggestion of using a sub-node instead and then adding boolean
-> >>>>>>>> properties for the supported extensions.
-> >>>>>>>>
-> >>>>>>>> Aka something like
-> >>>>>>>>   mmu {
-> >>>>>>>>           riscv,svpbmt;
-> >>>>>>>>   };
-> >>>>>>>
-> >>>>>>> For the record, I'm talking about the mail from september
-> >>>>>>> https://lore.kernel.org/linux-riscv/CAAeLtUChjjzG+P8yg45GLZMJy5UR=
-2K5RRBoLFVZhtOaZ5pPtEA@mail.gmail.com/
-> >>>>>>>
-> >>>>>>> So having a sub-node would make adding future extensions
-> >>>>>>> way nicer.
-> >>>>>>
-> >>>>>> Svpbmt is just an ISA extension, and should be treated like any ot=
-her.
-> >>>>>> Let=E2=80=99s not invent two different ways of representing that i=
-n the device
-> >>>>>> tree.
-> >>>>>
-> >>>>> Heinrich asked how the other extensions should be handled
-> >>>>> (Svnapot, Svpbmt, Svinval), so what do you suggest to do with these=
-?
-> >>>>
-> >>>> Whatever is done for Zb[abcs], Zk*, Zv*, Zicbo*, etc. There may not =
-be
-> >>>> a concrete plan for that yet, but that means you should speak with t=
-he
-> >>>> people involved with such extensions and come up with something
-> >>>> appropriate together.
-> >>>>
-> >>>> Jess
-> >>>>
-> >>
-> >>
-> >> _______________________________________________
-> >> linux-riscv mailing list
-> >> linux-riscv@lists.infradead.org
-> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
-> >
-> >
-> > --
-> > Regards,
-> > Atish
-> >
-> > _______________________________________________
-> > linux-riscv mailing list
-> > linux-riscv@lists.infradead.org
-> > http://lists.infradead.org/mailman/listinfo/linux-riscv
-> >
+Hi,
 
 
+On 12/1/21 09:09, Miquel Raynal wrote:
+> Hi Olga,
+> 
+> + Michal (please add him in Cc of your next iteration)
+> 
+> okitain@gmail.com wrote on Tue, 30 Nov 2021 23:08:20 +0300:
+> 
+>> Hi Miquel,
+>>
+>> On 30.11.2021 10:20, Miquel Raynal wrote:
+>>> Hi Olga,
+>>>
+>>> okitain@gmail.com wrote on Mon, 29 Nov 2021 21:06:05 +0300:
+>>>    
+>>>> Hi Miquel,
+>>>>
+>>>> On 29.11.2021 11:55, Miquel Raynal wrote:
+>>>>> Hi Olga,
+>>>>>
+>>>>> Please add all the MTD maintainers in copy, as requested by
+>>>>> get_maintainers.pl.
+>>>>>
+>>>>> okitain@gmail.com wrote on Sat, 27 Nov 2021 21:07:58
+>>>>> +0300:
+>>>>>      
+>>>>>> According to the Arasan NAND controller spec,
+>>>>>> the flash clock rate for SDR must be <= 100 MHz,
+>>>>>> while for NV-DDR it must be the same as the rate
+>>>>>> of the CLK line for the mode.
+>>>>>
+>>>>> I completely missed that, where did you get the information?
+>>>>
+>>>> The "Data Interface Transitions" chapter of the spec contains timings for flash clock setup in NV-DDR
+>>>> and NV-DDR2 modes. The "time period" of those clocks is equal to tCK in NV-DDR and tRC in NV-DDR2.
+>>>>
+>>>> The same chapter should have information about necessary steps to switch from NV-DDR to SDR,
+>>>> which includes setting the flash clock to 100 MHz.
+>>>>
+>>>>
+>>>> Just to make sure i'm not shooting myself in the foot: am I changing the right clock?
+>>>> The documentation points out that we have to change flash_clk, which i thought was
+>>>> nfc->controller_clk and set up by anand->clk, but it seems like it might actually be nfc->bus_clk.
+>>>
+>>> I believe I made a serious mistake, re-reading the code it feels like
+>>> I'm changing the system's clock (which basically changes nothing in our
+>>> case) instead of changing the NAND bus clock.
+>>>    
+>>>> In that case, does setting nfc->controller_clk to 100 MHz by default make sense?
+>>>> There isn't a hard limit on what the system clock might be (beyond a specific SoC),
+>>>> but there are timing requirements for the flash clock, and so setting a specific
+>>>> system clock frequency seems unnecessary for most devices.
+>>>>   
+>>>
+>>> Please create a two-patch series:
+>>> 1- Setting the right clock in the current code base (inverting bus_clk
+>>> and controller_clk where relevant, setting one to 100MHz and letting
+>>> the other as it is)
+>>> 2- Changing the default NV-DDR rate based on tCK (below patch).
+>>>
+>>> Do you have the necessary hardware for testing?
+>>
+>> I'm sorry to say - I do not. The SoC this problem was initially noticed on can't run latest Linux,
+>> and even if it did I have no way of acquiring an NV-DDR-capable flash.
+>>
+>> Since Bootlin merged in NV-DDR support into the kernel, is it possible for you to test
+>> the next iteration of this patch series on NV-DDR hardware as well?
+>> Say, by purposefully preventing NV-DDR mode 5 from being chosen in anfc_setup_interface()?
+> 
+> I don't have the hardware anymore.
+> 
+> Please send a v2 with the necessary changes, then we will ask Naga (or
+> somebody else from the same team) with access to the board to test it.
 
---=20
-Regards,
-Atish
+Keep Amit in loop. He has access to HW and able to test.
+
+Thanks,
+Michal
+
+-- 
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
+

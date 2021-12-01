@@ -2,240 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D47D8465155
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC04465157
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350736AbhLAPWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:22:42 -0500
-Received: from outbound-smtp31.blacknight.com ([81.17.249.62]:46865 "EHLO
-        outbound-smtp31.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1350601AbhLAPWh (ORCPT
+        id S1350623AbhLAPXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243585AbhLAPXQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:22:37 -0500
-Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
-        by outbound-smtp31.blacknight.com (Postfix) with ESMTPS id 79534C111E
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:19:15 +0000 (GMT)
-Received: (qmail 10919 invoked from network); 1 Dec 2021 15:19:15 -0000
-Received: from unknown (HELO stampy.112glenside.lan) (mgorman@techsingularity.net@[84.203.17.29])
-  by 81.17.254.9 with ESMTPA; 1 Dec 2021 15:19:15 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Barry Song <song.bao.hua@hisilicon.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 2/2] sched/fair: Adjust the allowed NUMA imbalance when SD_NUMA spans multiple LLCs
-Date:   Wed,  1 Dec 2021 15:18:44 +0000
-Message-Id: <20211201151844.20488-3-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211201151844.20488-1-mgorman@techsingularity.net>
-References: <20211201151844.20488-1-mgorman@techsingularity.net>
+        Wed, 1 Dec 2021 10:23:16 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F71C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:19:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 5313DCE1F4E
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:19:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D44C1C53FAD;
+        Wed,  1 Dec 2021 15:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638371992;
+        bh=Sp/4MbnOzapqd7bSQ1CRruSSxVAhqFvmXGbFziA9YIs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ApWCgjRRzKu1L1tolWUxs3YFxb7viMBH6N18MXE3ftswPpp6CklE5zODupUBl8KAA
+         OUDyiQya42CZWphAIEQ5WWBLLpbfRxKOLmBqyEAvRCIN3PZpCnLGUkbZLADeSUFmpv
+         BKDCoIIxAoOA5s9OebgKD2uXFFV1zZ64nck+Hu2kddvCM3WM6ZTKX5P2I8wA40UU/W
+         z/+s+xTdKp6vuJu8y/gWzkD9KoNr2vjb0t8Fwo5c/eriU9my8mGI6mY/1bHMJOksUT
+         tYaZ4mT2W+KM9Sk+E8WAL7+vxDYd43PexA1+KRLSEjjSaTVg3vCbUNCa3GM5XBdJLU
+         G01bHv0Ds7xQw==
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: [PATCH 0/2] workqueue: Fix hotplug/scheduler races
+Date:   Wed,  1 Dec 2021 16:19:43 +0100
+Message-Id: <20211201151945.632214-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7d2b5dd0bcc4 ("sched/numa: Allow a floating imbalance between NUMA
-nodes") allowed an imbalance between NUMA nodes such that communicating
-tasks would not be pulled apart by the load balancer. This works fine when
-there is a 1:1 relationship between LLC and node but can be suboptimal
-for multiple LLCs if independent tasks prematurely use CPUs sharing cache.
+It's a resend of "[RFC PATCH 0/2] workqueue: Fix hotplug races", with
+appropriate tags added and scheduler people Cc'ed.
 
-Zen* has multiple LLCs per node with local memory channels and due to
-the allowed imbalance, it's far harder to tune some workloads to run
-optimally than it is on hardware that has 1 LLC per node. This patch
-adjusts the imbalance on multi-LLC machines to allow an imbalance up to
-the point where LLCs should be balanced between nodes.
+Thanks.
 
-On a Zen3 machine running STREAM parallelised with OMP to have on instance
-per LLC the results and without binding, the results are
 
-                            5.16.0-rc1             5.16.0-rc1
-                               vanilla     sched-numaimb-v3r1
-MB/sec copy-16    166712.18 (   0.00%)   587662.60 ( 252.50%)
-MB/sec scale-16   140109.66 (   0.00%)   393528.14 ( 180.87%)
-MB/sec add-16     160791.18 (   0.00%)   618622.00 ( 284.74%)
-MB/sec triad-16   160043.84 (   0.00%)   589188.40 ( 268.14%)
+Frederic Weisbecker (2):
+  workqueue: Fix unbind_workers() VS wq_worker_running() race
+  workqueue: Fix unbind_workers() VS wq_worker_sleeping() race
 
-STREAM can use directives to force the spread if the OpenMP is new
-enough but that doesn't help if an application uses threads and
-it's not known in advance how many threads will be created.
+ kernel/workqueue.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-Coremark is a CPU and cache intensive benchmark parallelised with
-threads. When running with 1 thread per instance, the vanilla kernel
-allows threads to contend on cache. With the patch;
-
-                               5.16.0-rc1             5.16.0-rc1
-                                  vanilla     sched-numaimb-v3r1
-Min       Score-16   367816.09 (   0.00%)   403429.15 (   9.68%)
-Hmean     Score-16   389627.78 (   0.00%)   451015.49 *  15.76%*
-Max       Score-16   416178.96 (   0.00%)   480012.00 (  15.34%)
-Stddev    Score-16    17361.82 (   0.00%)    32378.08 ( -86.49%)
-CoeffVar  Score-16        4.45 (   0.00%)        7.14 ( -60.57%)
-
-It can also make a big difference for semi-realistic workloads
-like specjbb which can execute arbitrary numbers of threads without
-advance knowledge of how they should be placed
-
-                               5.16.0-rc1             5.16.0-rc1
-                                  vanilla     sched-numaimb-v3r1
-Hmean     tput-1      73743.05 (   0.00%)    70258.27 *  -4.73%*
-Hmean     tput-8     563036.51 (   0.00%)   591187.39 (   5.00%)
-Hmean     tput-16   1016590.61 (   0.00%)  1032311.78 (   1.55%)
-Hmean     tput-24   1418558.41 (   0.00%)  1424005.80 (   0.38%)
-Hmean     tput-32   1608794.22 (   0.00%)  1907855.80 *  18.59%*
-Hmean     tput-40   1761338.13 (   0.00%)  2108162.23 *  19.69%*
-Hmean     tput-48   2290646.54 (   0.00%)  2214383.47 (  -3.33%)
-Hmean     tput-56   2463345.12 (   0.00%)  2780216.58 *  12.86%*
-Hmean     tput-64   2650213.53 (   0.00%)  2598196.66 (  -1.96%)
-Hmean     tput-72   2497253.28 (   0.00%)  2998882.47 *  20.09%*
-Hmean     tput-80   2820786.72 (   0.00%)  2951655.27 (   4.64%)
-Hmean     tput-88   2813541.68 (   0.00%)  3045450.86 *   8.24%*
-Hmean     tput-96   2604158.67 (   0.00%)  3035311.91 *  16.56%*
-Hmean     tput-104  2713810.62 (   0.00%)  2984270.04 (   9.97%)
-Hmean     tput-112  2558425.37 (   0.00%)  2894737.46 *  13.15%*
-Hmean     tput-120  2611434.93 (   0.00%)  2781661.01 (   6.52%)
-Hmean     tput-128  2706103.22 (   0.00%)  2811447.85 (   3.89%)
-
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- include/linux/sched/topology.h |  1 +
- kernel/sched/fair.c            | 26 +++++++++++++++-----------
- kernel/sched/topology.c        | 20 ++++++++++++++++++++
- 3 files changed, 36 insertions(+), 11 deletions(-)
-
-diff --git a/include/linux/sched/topology.h b/include/linux/sched/topology.h
-index c07bfa2d80f2..54f5207154d3 100644
---- a/include/linux/sched/topology.h
-+++ b/include/linux/sched/topology.h
-@@ -93,6 +93,7 @@ struct sched_domain {
- 	unsigned int busy_factor;	/* less balancing by factor if busy */
- 	unsigned int imbalance_pct;	/* No balance until over watermark */
- 	unsigned int cache_nice_tries;	/* Leave cache hot tasks for # tries */
-+	unsigned int imb_numa_nr;	/* Nr imbalanced tasks allowed between nodes */
- 
- 	int nohz_idle;			/* NOHZ IDLE status */
- 	int flags;			/* See SD_* */
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 0a969affca76..64f211879e43 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1489,6 +1489,7 @@ struct task_numa_env {
- 
- 	int src_cpu, src_nid;
- 	int dst_cpu, dst_nid;
-+	int imb_numa_nr;
- 
- 	struct numa_stats src_stats, dst_stats;
- 
-@@ -1885,7 +1886,7 @@ static void task_numa_find_cpu(struct task_numa_env *env,
- 		dst_running = env->dst_stats.nr_running + 1;
- 		imbalance = max(0, dst_running - src_running);
- 		imbalance = adjust_numa_imbalance(imbalance, dst_running,
--							env->dst_stats.weight);
-+						  env->imb_numa_nr);
- 
- 		/* Use idle CPU if there is no imbalance */
- 		if (!imbalance) {
-@@ -1950,8 +1951,10 @@ static int task_numa_migrate(struct task_struct *p)
- 	 */
- 	rcu_read_lock();
- 	sd = rcu_dereference(per_cpu(sd_numa, env.src_cpu));
--	if (sd)
-+	if (sd) {
- 		env.imbalance_pct = 100 + (sd->imbalance_pct - 100) / 2;
-+		env.imb_numa_nr = sd->imb_numa_nr;
-+	}
- 	rcu_read_unlock();
- 
- 	/*
-@@ -9046,13 +9049,14 @@ static bool update_pick_idlest(struct sched_group *idlest,
- }
- 
- /*
-- * Allow a NUMA imbalance if busy CPUs is less than 25% of the domain.
-- * This is an approximation as the number of running tasks may not be
-- * related to the number of busy CPUs due to sched_setaffinity.
-+ * Allow a NUMA imbalance if busy CPUs is less than the allowed
-+ * imbalance. This is an approximation as the number of running
-+ * tasks may not be related to the number of busy CPUs due to
-+ * sched_setaffinity.
-  */
--static inline bool allow_numa_imbalance(int dst_running, int dst_weight)
-+static inline bool allow_numa_imbalance(int dst_running, int imb_numa_nr)
- {
--	return (dst_running < (dst_weight >> 2));
-+	return dst_running < imb_numa_nr;
- }
- 
- /*
-@@ -9191,7 +9195,7 @@ find_idlest_group(struct sched_domain *sd, struct task_struct *p, int this_cpu)
- 			 * a real need of migration, periodic load balance will
- 			 * take care of it.
- 			 */
--			if (allow_numa_imbalance(local_sgs.sum_nr_running, sd->span_weight))
-+			if (allow_numa_imbalance(local_sgs.sum_nr_running, sd->imb_numa_nr))
- 				return NULL;
- 		}
- 
-@@ -9283,9 +9287,9 @@ static inline void update_sd_lb_stats(struct lb_env *env, struct sd_lb_stats *sd
- #define NUMA_IMBALANCE_MIN 2
- 
- static inline long adjust_numa_imbalance(int imbalance,
--				int dst_running, int dst_weight)
-+				int dst_running, int imb_numa_nr)
- {
--	if (!allow_numa_imbalance(dst_running, dst_weight))
-+	if (!allow_numa_imbalance(dst_running, imb_numa_nr))
- 		return imbalance;
- 
- 	/*
-@@ -9397,7 +9401,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
- 		/* Consider allowing a small imbalance between NUMA groups */
- 		if (env->sd->flags & SD_NUMA) {
- 			env->imbalance = adjust_numa_imbalance(env->imbalance,
--				busiest->sum_nr_running, env->sd->span_weight);
-+				busiest->sum_nr_running, env->sd->imb_numa_nr);
- 		}
- 
- 		return;
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index d201a7052a29..fee2930745ab 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -2242,6 +2242,26 @@ build_sched_domains(const struct cpumask *cpu_map, struct sched_domain_attr *att
- 		}
- 	}
- 
-+	/* Calculate allowed NUMA imbalance */
-+	for_each_cpu(i, cpu_map) {
-+		int imb_numa_nr = 0;
-+
-+		for (sd = *per_cpu_ptr(d.sd, i); sd; sd = sd->parent) {
-+			struct sched_domain *child = sd->child;
-+
-+			if (!(sd->flags & SD_SHARE_PKG_RESOURCES) && child &&
-+			    (child->flags & SD_SHARE_PKG_RESOURCES)) {
-+				int nr_groups;
-+
-+				nr_groups = sd->span_weight / child->span_weight;
-+				imb_numa_nr = max(1U, ((child->span_weight) >> 1) /
-+						(nr_groups * num_online_nodes()));
-+			}
-+
-+			sd->imb_numa_nr = imb_numa_nr;
-+		}
-+	}
-+
- 	/* Calculate CPU capacity for physical packages and nodes */
- 	for (i = nr_cpumask_bits-1; i >= 0; i--) {
- 		if (!cpumask_test_cpu(i, cpu_map))
 -- 
-2.31.1
+2.25.1
 

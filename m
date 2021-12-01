@@ -2,89 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF40465569
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBAD46556F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233912AbhLASbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:31:45 -0500
-Received: from mailgw01.mediatek.com ([60.244.123.138]:50190 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S242067AbhLASbk (ORCPT
+        id S244287AbhLASce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:32:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232750AbhLAScc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:31:40 -0500
-X-UUID: eab11d5b99fc43f0bf5a6f0754d8432e-20211202
-X-UUID: eab11d5b99fc43f0bf5a6f0754d8432e-20211202
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1400254163; Thu, 02 Dec 2021 02:28:15 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 2 Dec 2021 02:28:13 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 2 Dec 2021 02:28:13 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
-CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
-        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
-        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
-        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
-        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
-        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
-        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <jemele@google.com>,
-        <abhishekpandit@google.com>, <michaelfsun@google.com>,
-        <mcchou@chromium.org>, <shawnku@google.com>,
-        <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Mark-yw Chen <mark-yw.chen@mediatek.com>
-Subject: [PATCH v3 2/2] Bluetooth: btmtksdio: fix resume failure
-Date:   Thu, 2 Dec 2021 02:28:09 +0800
-Message-ID: <6c659099972f1d3ab76087140ddb3c8e13eea923.1638383119.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
-In-Reply-To: <5c34f6c5529b6a8f8df893cd1fc1b0e628edf8a4.1638383119.git.objelf@gmail.com>
-References: <5c34f6c5529b6a8f8df893cd1fc1b0e628edf8a4.1638383119.git.objelf@gmail.com>
+        Wed, 1 Dec 2021 13:32:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B190BC061574;
+        Wed,  1 Dec 2021 10:29:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 77886B820F7;
+        Wed,  1 Dec 2021 18:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B7C9C53FD4;
+        Wed,  1 Dec 2021 18:29:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638383349;
+        bh=Gn4s0yYJcCdTZW0pUo1N9BUlN3v2wBrSWSlLzly3FV0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=MYEGIxeR5R3F9QL3vNUxbtHHPEvJvx04hOpkkTqCIWElDJU5uLRDez/Z1Hk7Bvp48
+         uAGACV5GlVSIzsuLqvqJJgYPNTPk4CEtiz5+8pAk1k2J2hSIm2FGVDiprtZWqCE2nh
+         uzLMX9kuL0H89YhF7OAubvcP39ByEeHo0Tcnk2M+tg42IV+3Q7UuTSjBD9D3OxZTWf
+         hJSIe3NY6O8IDL0h4NNP60kgOlMaLbsJOiyum0M5Ki/JCqQlV7gH5RTgJA3frhJiWX
+         0T5xaBlVY/89GS1q030MBl/icIVjSx18ySg1rJ7Q1JOTYIxeVdmh20YM1h6XpxECcW
+         WR6HsnQrkSRbQ==
+Received: by mail-ed1-f49.google.com with SMTP id x6so105254680edr.5;
+        Wed, 01 Dec 2021 10:29:09 -0800 (PST)
+X-Gm-Message-State: AOAM531b0XGNBDS+1LIdMVuBMgDmdqridyF7eIiDlKz1RxK1XOPhuPZ+
+        lEO6XCNBjCy6G5SymbvzVFUNe08VRnEJKEEKPg==
+X-Google-Smtp-Source: ABdhPJz0M9hONwYhapDgbKr1pBiOAqlDdueW1VKpz+27eyVJ9lUcLA/6diG99b9tulXoZY4rO5Q4CZ5Bn5+5Pw2c3HI=
+X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr9044894ejc.390.1638383347204;
+ Wed, 01 Dec 2021 10:29:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+References: <20211201041228.32444-1-f.fainelli@gmail.com> <20211201041228.32444-4-f.fainelli@gmail.com>
+ <1638369202.233948.1684354.nullmailer@robh.at.kernel.org> <52926c88-a51d-d4e8-a6ab-7cf92e35c7ba@gmail.com>
+In-Reply-To: <52926c88-a51d-d4e8-a6ab-7cf92e35c7ba@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 1 Dec 2021 12:28:55 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJeO9eL-ygU-dEoV0DGOKwbM_i+PWaBTk2QCP6Wc69S5g@mail.gmail.com>
+Message-ID: <CAL_JsqJeO9eL-ygU-dEoV0DGOKwbM_i+PWaBTk2QCP6Wc69S5g@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/7] dt-bindings: net: Document moca PHY interface
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+        Doug Berger <opendmb@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+On Wed, Dec 1, 2021 at 11:15 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
+>
+> On 12/1/21 6:33 AM, Rob Herring wrote:
+> > On Tue, 30 Nov 2021 20:12:24 -0800, Florian Fainelli wrote:
+> >> MoCA (Multimedia over Coaxial) is used by the internal GENET/MOCA cores
+> >> and will be needed in order to convert GENET to YAML in subsequent
+> >> changes.
+> >>
+> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> >> ---
+> >>  Documentation/devicetree/bindings/net/ethernet-controller.yaml | 1 +
+> >>  1 file changed, 1 insertion(+)
+> >>
+> >
+> > Running 'make dtbs_check' with the schema in this patch gives the
+> > following warnings. Consider if they are expected or the schema is
+> > incorrect. These may not be new warnings.
+> >
+> > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+> > This will change in the future.
+> >
+> > Full log is available here: https://patchwork.ozlabs.org/patch/1561996
+> >
+> >
+> > ethernet@0,2: fixed-link:speed:0:0: 2500 is not one of [10, 100, 1000]
+> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dt.yaml
+> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dt.yaml
+> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dt.yaml
+> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dt.yaml
+> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dt.yaml
+> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dt.yaml
+> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dt.yaml
+> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dt.yaml
+> >
+> > ethernet@17020000: phy-handle: [[36], [37]] is too long
+> >       arch/arm64/boot/dts/apm/apm-mustang.dt.yaml
+> >
+> > ethernet@30000: fixed-link:speed:0:0: 2500 is not one of [10, 100, 1000]
+> >       arch/arm/boot/dts/armada-385-clearfog-gtr-l8.dt.yaml
+> >       arch/arm/boot/dts/armada-385-clearfog-gtr-s4.dt.yaml
+>
+> These are all pre-existing warnings, but we should be documenting speed
+> 2500 in ethernet-controller.yaml, so I will add a patch towards that end.
 
-btmtksdio have to rely on MMC_PM_KEEP_POWER in pm_flags to avoid that
-SDIO power is being shut off during the device is in suspend. That fixes
-the SDIO command fails to access the bus after the device is resumed.
+Thanks.
 
-Fixes: 7f3c563c575e7 ("Bluetooth: btmtksdio: Add runtime PM support to SDIO based Bluetooth")
-Co-developed-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
-Signed-off-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
----
-v2: rebase and resend
-v3: no change
----
- drivers/bluetooth/btmtksdio.c | 2 ++
- 1 file changed, 2 insertions(+)
+> The one for apm-mustand.dts however I am not sure how to best resolve
+> since it looks like there was an intention to provide two Ethernet PHYs
+> and presumably have the firmware prune the one that is not in use. I
+> don't even know if that platform is supported mainline anymore.
 
-diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
-index fc6317e519e9..143404745240 100644
---- a/drivers/bluetooth/btmtksdio.c
-+++ b/drivers/bluetooth/btmtksdio.c
-@@ -1065,6 +1065,8 @@ static int btmtksdio_runtime_suspend(struct device *dev)
- 	if (!test_bit(BTMTKSDIO_FUNC_ENABLED, &bdev->tx_state))
- 		return 0;
- 
-+	sdio_set_host_pm_flags(func, MMC_PM_KEEP_POWER);
-+
- 	sdio_claim_host(bdev->func);
- 
- 	sdio_writel(bdev->func, C_FW_OWN_REQ_SET, MTK_REG_CHLPCR, &err);
--- 
-2.25.1
+Unfortunately it is, barely. I just fixed a breakage I caused 2 years
+ago and just now noticed. I would not worry about it for now.
 
+Rob

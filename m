@@ -2,62 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0714465922
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E88465828
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:09:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353601AbhLAW3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:29:21 -0500
-Received: from 7.mo550.mail-out.ovh.net ([87.98.158.110]:60085 "EHLO
-        7.mo550.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353583AbhLAW3S (ORCPT
+        id S243610AbhLAVNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 16:13:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233009AbhLAVM7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:29:18 -0500
-X-Greylist: delayed 3600 seconds by postgrey-1.27 at vger.kernel.org; Wed, 01 Dec 2021 17:29:18 EST
-Received: from player796.ha.ovh.net (unknown [10.110.115.246])
-        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 40B3A23E13
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 21:08:25 +0000 (UTC)
-Received: from milecki.pl (ip-194-187-74-233.konfederacka.maverick.com.pl [194.187.74.233])
-        (Authenticated sender: rafal@milecki.pl)
-        by player796.ha.ovh.net (Postfix) with ESMTPSA id 5317F24DA5558;
-        Wed,  1 Dec 2021 21:08:17 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-106R0067f55729a-1a8a-45c6-a52a-f5ace8f2f974,
-                    738FF6B34265B71E218B6744B181DC2F08F41F15) smtp.auth=rafal@milecki.pl
-X-OVh-ClientIp: 194.187.74.233
-Message-ID: <aeb874ed-179e-5ede-6339-ea4b80b7806f@milecki.pl>
-Date:   Wed, 1 Dec 2021 22:08:16 +0100
+        Wed, 1 Dec 2021 16:12:59 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3E5C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 13:09:38 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id y16so32684416ioc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 13:09:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=SDcnRnl8WP6Hhxu22CYqrzttmdFEJ6bFnF0IuQOZgnM=;
+        b=HIo8SsAV/jdz9Ezru0XkiaGCYNseoT0H9XCbHbUEUQxxnhdW+xPryVmgZIs8RchCVS
+         iVjIkQfiWSh3hFCK3p5QzB243IfIiojauSMYHCnbtSyBlDlAOxTbjKOkl4xk0dvFGjNb
+         +S8xtG82gzw4TCMF/rs/NDRUeqgrwF5zbweeA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=SDcnRnl8WP6Hhxu22CYqrzttmdFEJ6bFnF0IuQOZgnM=;
+        b=QHPVmGervRB4d2bpLYPZPhYQQhZek11W66tCv/GigFmlAE6BiNojlOa6+bismo7aYe
+         jRIa2heN9neCazAfhoOLQjYkJ5iFtox3Dxl77Gy6yzJ8C71JVBgDcFvZFxtEAFPosaWQ
+         bM4rdSLXblfvHoFPvC74LMLVzzDIPkW2m4M63Pplx89XFoEhFJpkaME6xtsBFwfLHyQE
+         nH1nxgRzCZcmaSuz3Joh1TK8pY5iDwYpWTSj+j3O3Q8LSe6Hk43ah5H/4WNqPJnkQeVO
+         DNjSbev+k6t/FG2aO/8ajMTyb75+loeksJavQJ5v87ec+rqGWI6dTW7JELwo+NDfgEQe
+         oWmQ==
+X-Gm-Message-State: AOAM5335D6vvOV3oRO1/kzCIDsOr+rAXbHzJcMSPc7ALcDH0jcq0763Q
+        tmNkxDFjl/Uam3hR1D9gKCgpWjQWYVulEQ==
+X-Google-Smtp-Source: ABdhPJyI9NVGwb44cUTtII9x4AQR24+xui/cOVRgrKaaPqiKnJzyAtq2IaCQcCOg+2S7Hm1m0S4IRA==
+X-Received: by 2002:a5e:8d12:: with SMTP id m18mr10005893ioj.116.1638392977848;
+        Wed, 01 Dec 2021 13:09:37 -0800 (PST)
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com. [209.85.166.175])
+        by smtp.gmail.com with ESMTPSA id z12sm656266ilu.27.2021.12.01.13.09.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 13:09:36 -0800 (PST)
+Received: by mail-il1-f175.google.com with SMTP id i9so26880820ilu.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 13:09:36 -0800 (PST)
+X-Received: by 2002:a92:ca0e:: with SMTP id j14mr10532883ils.27.1638392976093;
+ Wed, 01 Dec 2021 13:09:36 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:95.0) Gecko/20100101
- Thunderbird/95.0
-Subject: Re: [PATCH 3/3] phy: broadcom: Kconfig: Fix PHY_BRCM_USB config
- option
-To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-phy@lists.infradead.org, Vinod Koul <vkoul@kernel.org>
-References: <20211201180653.35097-1-alcooperx@gmail.com>
- <20211201180653.35097-4-alcooperx@gmail.com>
-From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-In-Reply-To: <20211201180653.35097-4-alcooperx@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 16449679117486041945
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddrieefgddugeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfesthekredttdefjeenucfhrhhomheptfgrfhgrlhcuofhilhgvtghkihcuoehrrghfrghlsehmihhlvggtkhhirdhplheqnecuggftrfgrthhtvghrnhepjeetledugeejtdevheetieduhefgtedvgefftddvfedvieevjeegleffleegtdeunecukfhppedtrddtrddtrddtpdduleegrddukeejrdejgedrvdeffeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepphhlrgihvghrjeeliedrhhgrrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehrrghfrghlsehmihhlvggtkhhirdhplhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+References: <0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com> <YaV0pllJ5p/EuUat@google.com>
+In-Reply-To: <YaV0pllJ5p/EuUat@google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 1 Dec 2021 13:09:24 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UEA8JG8=tNWMdv2p9jgEm6KCGUeMCi1O4T7eVVnefZjg@mail.gmail.com>
+Message-ID: <CAD=FV=UEA8JG8=tNWMdv2p9jgEm6KCGUeMCi1O4T7eVVnefZjg@mail.gmail.com>
+Subject: Re: [PATCH] mwifiex: Fix possible ABBA deadlock
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>, amitkarwar@gmail.com,
+        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
+        huxinming820@gmail.com, kvalo@codeaurora.org,
+        David Miller <davem@davemloft.net>, kuba@kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.12.2021 19:06, Al Cooper wrote:
-> The previous commit 4b402fa8e0b7 ("phy: phy-brcm-usb: support PHY on
-> the BCM4908") added a second "default" line for ARCH_BCM_4908 above
-> the original "default" line for ARCH_BRCMSTB. When two "default"
-> lines are used, only the first is used and this change stopped
-> the PHY_BRCM_USB option for being enabled for ARCH_BRCMSTB.
-> The fix is to use one "default line with "||".
-> 
-> Fixes: 4b402fa8e0b7 ("phy: phy-brcm-usb: support PHY on the BCM4908")
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
+Hi,
 
-Acked-by: Rafał Miłecki <rafal@milecki.pl>
+On Mon, Nov 29, 2021 at 4:47 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> Quoting Jia-Ju Bai <baijiaju1990@gmail.com>:
+>
+>   mwifiex_dequeue_tx_packet()
+>      spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 1432 (Lock A)
+>      mwifiex_send_addba()
+>        spin_lock_bh(&priv->sta_list_spinlock); --> Line 608 (Lock B)
+>
+>   mwifiex_process_sta_tx_pause()
+>      spin_lock_bh(&priv->sta_list_spinlock); --> Line 398 (Lock B)
+>      mwifiex_update_ralist_tx_pause()
+>        spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 941 (Lock A)
+>
+> Similar report for mwifiex_process_uap_tx_pause().
+>
+> While the locking expectations in this driver are a bit unclear, the
+> Fixed commit only intended to protect the sta_ptr, so we can drop the
+> lock as soon as we're done with it.
+>
+> IIUC, this deadlock cannot actually happen, because command event
+> processing (which calls mwifiex_process_sta_tx_pause()) is
+> sequentialized with TX packet processing (e.g.,
+> mwifiex_dequeue_tx_packet()) via the main loop (mwifiex_main_process()).
+> But it's good not to leave this potential issue lurking.
+>
+> Fixes: ("f0f7c2275fb9 mwifiex: minor cleanups w/ sta_list_spinlock in cfg80211.c")
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+> Link: https://lore.kernel.org/linux-wireless/0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com/
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+>
+> On Tue, Nov 23, 2021 at 11:31:34AM +0800, Jia-Ju Bai wrote:
+> > I am not quite sure whether these possible deadlocks are real and how to fix
+> > them if they are real.
+> > Any feedback would be appreciated, thanks :)
+>
+> I think these are at least theoretically real, and so we should take
+> something like the $subject patch probably. But I don't believe we can
+> actually hit this due to the main-loop structure of this driver.
+>
+> Anyway, see the surrounding patch.
+>
+> Thanks,
+> Brian
+>
+>
+>  drivers/net/wireless/marvell/mwifiex/sta_event.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+
+Though I'm by no means an expert on this code and I wrote the patch in
+question a long time ago, this seems reasonable to me. Thanks for
+fixing.
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

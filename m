@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58458464855
+	by mail.lfdr.de (Postfix) with ESMTP id A17B2464856
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347520AbhLAHcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:32:01 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:54734 "EHLO
+        id S1347512AbhLAHcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:32:05 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:54766 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347470AbhLAHbt (ORCPT
+        with ESMTP id S1347489AbhLAHbw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:31:49 -0500
+        Wed, 1 Dec 2021 02:31:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2B56CCE1D74;
-        Wed,  1 Dec 2021 07:28:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D03C53FCE;
-        Wed,  1 Dec 2021 07:28:22 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 189B0CE1D7A;
+        Wed,  1 Dec 2021 07:28:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3354C53FAD;
+        Wed,  1 Dec 2021 07:28:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638343705;
-        bh=pFW9LLeGFw6OFl+VdNxQE9t4wzrVcZdf1yS0WSs+cFg=;
+        s=k20201202; t=1638343708;
+        bh=LwGeNInHF6Y97r5bRNYu6aqtEmm6rAjEZbygOJHjtXs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pkzyv2vCJiDoN6dJJEQevuSWnKvXajRjtI5o//ZGegx3kwlVUX2Ztywep+/FO3rt+
-         Rz5AR0+fkzI2bv+7zaKLnEZASqvg/pWZLVv5qwCyQrjRIaytSt8OFrg5XWX1qYYJnr
-         lkeF/kkZDny/MJ+9JamZAKRTVufUGbcg8KcuwtmeQbbt9Vcpz40vNY9D3nl/eQ9lBo
-         Krb/iPcLxqSWvu1vzmYrsNLPhkJaWnpcAcbZcWoSeWp0fE1TsT9/jpe6h5fNf1sU6a
-         Qf1kqbozHgelxGjnis5iQHbyPsPqmdPXTbuHaDZXfV7P8DupvS3yI9ha8YbbTDt5sm
-         sHlHsC51SMjLw==
+        b=DY8mwrxUEULE/bu9yYHNaQfBR3MGpAK0UKvFvbs+KF6TZ5awyJkJyH1l1kWUTJSI9
+         t+B59feX/Z5yxHbkbm0IQ+PPdIiaqFLj9Qhs7iYOojElbrRFNiAkbPI7m0pxx7mvkl
+         vNbC+jYsDY0CXZwJRL9cPw7eoqMpKVResDTpvVOUu9x4pp7rJBcSHDGUwpPUpcftpa
+         cZANCt+X1qIMQ+0J1sfVssTXK5d7iUwu0sdIPilC3mBmMhgS4BJUlMjEzbKlAgL9pL
+         8eE76v8GW4uZEVKuq3BC8AXoEr3b2eFrGgaGSGIV8VrSGIwu0S7KV9vhdTGW4Lyu2+
+         dOx4KdvT5etUg==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Rob Herring <robh+dt@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>
@@ -36,9 +36,9 @@ Cc:     linux-arm-msm@vger.kernel.org,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 6/7] soc: qcom: rpmhpd: Add SM8450 power domains
-Date:   Wed,  1 Dec 2021 12:57:44 +0530
-Message-Id: <20211201072745.3969077-7-vkoul@kernel.org>
+Subject: [PATCH 7/7] soc: qcom: socinfo: add SM8450 ID
+Date:   Wed,  1 Dec 2021 12:57:45 +0530
+Message-Id: <20211201072745.3969077-8-vkoul@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211201072745.3969077-1-vkoul@kernel.org>
 References: <20211201072745.3969077-1-vkoul@kernel.org>
@@ -50,85 +50,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Add the power domains exposed by RPMH in the Qualcomm SM8450 platform.
-Unlike previous generations CX domain is not a child of MX domain.
+Add the ID for the Qualcomm SM8450 SoC.
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- drivers/soc/qcom/rpmhpd.c | 52 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ drivers/soc/qcom/socinfo.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/soc/qcom/rpmhpd.c b/drivers/soc/qcom/rpmhpd.c
-index 1118345d8824..e7e150ce1b1a 100644
---- a/drivers/soc/qcom/rpmhpd.c
-+++ b/drivers/soc/qcom/rpmhpd.c
-@@ -253,6 +253,57 @@ static const struct rpmhpd_desc sm8350_desc = {
- 	.num_pds = ARRAY_SIZE(sm8350_rpmhpds),
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index 9a0eb59405e8..113dc57b74c3 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -315,6 +315,7 @@ static const struct soc_id soc_id[] = {
+ 	{ 425, "SC7180" },
+ 	{ 453, "IPQ6005" },
+ 	{ 455, "QRB5165" },
++	{ 457, "SM8450" },
  };
  
-+/* SM8450 RPMH powerdomains */
-+static struct rpmhpd sm8450_cx_ao;
-+static struct rpmhpd sm8450_cx = {
-+	.pd = { .name = "cx", },
-+	.peer = &sm8450_cx_ao,
-+	.res_name = "cx.lvl",
-+};
-+
-+static struct rpmhpd sm8450_cx_ao = {
-+	.pd = { .name = "cx_ao", },
-+	.active_only = true,
-+	.res_name = "cx.lvl",
-+};
-+
-+static struct rpmhpd sm8450_mmcx_ao;
-+static struct rpmhpd sm8450_mmcx = {
-+	.pd = { .name = "mmcx", },
-+	.peer = &sm8450_mmcx_ao,
-+	.parent = &sm8450_cx.pd,
-+	.res_name = "mmcx.lvl",
-+};
-+
-+static struct rpmhpd sm8450_mmcx_ao = {
-+	.pd = { .name = "mmcx_ao", },
-+	.active_only = true,
-+	.peer = &sm8450_mmcx,
-+	.parent = &sm8450_cx_ao.pd,
-+	.res_name = "mmcx.lvl",
-+};
-+
-+static struct rpmhpd *sm8450_rpmhpds[] = {
-+	[SM8450_CX] = &sm8450_cx,
-+	[SM8450_CX_AO] = &sm8450_cx_ao,
-+	[SM8450_EBI] = &sdm845_ebi,
-+	[SM8450_GFX] = &sdm845_gfx,
-+	[SM8450_LCX] = &sdm845_lcx,
-+	[SM8450_LMX] = &sdm845_lmx,
-+	[SM8450_MMCX] = &sm8450_mmcx,
-+	[SM8450_MMCX_AO] = &sm8450_mmcx_ao,
-+	[SM8450_MX] = &sdm845_mx,
-+	[SM8450_MX_AO] = &sdm845_mx_ao,
-+	[SM8450_MXC] = &sm8350_mxc,
-+	[SM8450_MXC_AO] = &sm8350_mxc_ao,
-+	[SM8450_MSS] = &sdm845_mss,
-+};
-+
-+static const struct rpmhpd_desc sm8450_desc = {
-+	.rpmhpds = sm8450_rpmhpds,
-+	.num_pds = ARRAY_SIZE(sm8450_rpmhpds),
-+};
-+
- /* SC7180 RPMH powerdomains */
- static struct rpmhpd *sc7180_rpmhpds[] = {
- 	[SC7180_CX] = &sdm845_cx,
-@@ -318,6 +369,7 @@ static const struct of_device_id rpmhpd_match_table[] = {
- 	{ .compatible = "qcom,sm8150-rpmhpd", .data = &sm8150_desc },
- 	{ .compatible = "qcom,sm8250-rpmhpd", .data = &sm8250_desc },
- 	{ .compatible = "qcom,sm8350-rpmhpd", .data = &sm8350_desc },
-+	{ .compatible = "qcom,sm8450-rpmhpd", .data = &sm8450_desc },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, rpmhpd_match_table);
+ static const char *socinfo_machine(struct device *dev, unsigned int id)
 -- 
 2.31.1
 

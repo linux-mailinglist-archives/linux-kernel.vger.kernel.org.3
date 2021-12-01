@@ -2,209 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FB0465160
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:21:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC08F46516A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350774AbhLAPY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57678 "EHLO
+        id S243694AbhLAPYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:24:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243694AbhLAPYW (ORCPT
+        with ESMTP id S243412AbhLAPYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:24:22 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF49DC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:21:01 -0800 (PST)
-Received: from [192.168.1.101] (83.6.166.111.neoplus.adsl.tpnet.pl [83.6.166.111])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 02E913F6D0;
-        Wed,  1 Dec 2021 16:20:59 +0100 (CET)
-Message-ID: <99e88947-177c-2f39-7f88-de16c24c3e42@somainline.org>
-Date:   Wed, 1 Dec 2021 16:20:59 +0100
+        Wed, 1 Dec 2021 10:24:46 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7284C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:21:25 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id z18so31293812iof.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:21:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MLUZwUEBzklOGib2Zk3PFAvxb+CbG+R1DuoQKaGE8gw=;
+        b=ZuxaIRAQw9xvNctBz60Nfj9NhxbsQHjyNOETRPbMvYnh6f1pkkzEwYLKASKsQkDBsX
+         cLxgvj4lcCVQwhetojQ9xZKtNbfvIHUUHXRXIUaDp7jCRfr9SAOQc+gyl9xFKXCnPeGQ
+         H9NZep0ZvpgVihUy0KR8fIAAvJ1Mqn+ZN01E17kxyRlAXR/wrc5tVVh2RqcsrvC7lTt0
+         TiyuS7VCsRmAr544lvRG/0BJNv1hD5xuPcyVZDknUo4F2sG8YNDlIhFfNWDQLJymasS6
+         +009TxLuUtj/Vy51v2ws2aP4nFTf0va4FAhv8hFG4z4HZq3b5/zTF8SFjy9h4JUhyXM/
+         l+wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MLUZwUEBzklOGib2Zk3PFAvxb+CbG+R1DuoQKaGE8gw=;
+        b=wxSZ4Ui762+iy4MggNTYaVJ/s7B4w+K4HqYkgaOrpZ+VbgK1XNk7VuoNzMU3+P90MR
+         IIEjA5jgbHJ2iPYnasyCoNozI24NAiS0Uu2XkSWRUmd67te2wiIJbw5AsME8ploI2UO+
+         u+lYVKcQrhwLpyR3KME9FxdUAPceWe/QzfojrkSYu7nZv0dAo+qLQ1TctmZsZ9P3G0PN
+         5taS+uTgCv6rECywwa+W1M9DJtfFeBZ2PiaFpNmP+ZkKHXfPq5ql8Em8l0oHNe1PBiFG
+         CFr9XUxLLZXyOjugx9PGSbGDwfJfxne87LGyhxce8hIHcaupsPDD3mqsR39ROUt8lDuc
+         yI4g==
+X-Gm-Message-State: AOAM530kbjFZiNQxBsql0b/FpffOec/zQoZK0CX5bikhg+VVcvAO0/RG
+        w/DCZR72P7gnJLzCa2qrH5k9Iw==
+X-Google-Smtp-Source: ABdhPJxtrTLI1AMMf1O0aIqny9q8Vj3DCKNibLPnD2qvc7DdypU9Rl593ilbA+ms0w9jlf6eGN7WkA==
+X-Received: by 2002:a05:6638:3711:: with SMTP id k17mr10967372jav.72.1638372085289;
+        Wed, 01 Dec 2021 07:21:25 -0800 (PST)
+Received: from [192.168.1.173] (bras-base-kntaon1617w-grc-33-142-112-185-132.dsl.bell.ca. [142.112.185.132])
+        by smtp.googlemail.com with ESMTPSA id y15sm117996iow.44.2021.12.01.07.21.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 07:21:24 -0800 (PST)
+Message-ID: <8f9faf42-8a78-f383-3b93-a17fab4ed79b@mojatatu.com>
+Date:   Wed, 1 Dec 2021 10:21:21 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 10/15] arm64: dts: qcom: sm8450: add interconnect nodes
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v2 net-next 00/26] net: introduce and use generic XDP
+ stats
 Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211201072915.3969178-1-vkoul@kernel.org>
- <20211201072915.3969178-11-vkoul@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20211201072915.3969178-11-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     David Ahern <dsahern@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shay Agroskin <shayagr@amazon.com>,
+        Arthur Kiyanovski <akiyano@amazon.com>,
+        David Arinzon <darinzon@amazon.com>,
+        Noam Dagan <ndagan@amazon.com>,
+        Saeed Bishara <saeedb@amazon.com>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Edward Cree <ecree.xilinx@gmail.com>,
+        Martin Habets <habetsm.xilinx@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Cong Wang <cong.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, bpf@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+References: <20211123163955.154512-1-alexandr.lobakin@intel.com>
+ <20211130155612.594688-1-alexandr.lobakin@intel.com>
+ <20211130081207.228f42ba@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <20211130163454.595897-1-alexandr.lobakin@intel.com>
+ <20211130090449.58a8327d@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+ <18655462-c72e-1d26-5b59-d03eb993d832@gmail.com>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+In-Reply-To: <18655462-c72e-1d26-5b59-d03eb993d832@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2021-11-30 12:38, David Ahern wrote:
+> Today, stats are sent as a struct so skipping stats whose value is 0 is
+> not an option. When using individual attributes for the counters this
+> becomes an option. Given there is no value in sending '0' why do it?
+> 
+> Is your pushback that there should be a uapi to opt-in to this behavior?
 
-On 01.12.2021 08:29, Vinod Koul wrote:
-> And the various interconnect nodes found in SM8450 SoC and use it for
-> UFS controller.
->
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 80 ++++++++++++++++++++++++++++
->  1 file changed, 80 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> index 75827bbfb3ad..4c7cdcea33fa 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -6,6 +6,7 @@
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
->  #include <dt-bindings/clock/qcom,gcc-sm8450.h>
->  #include <dt-bindings/clock/qcom,rpmh.h>
-> +#include <dt-bindings/interconnect/qcom,sm8450.h>
->  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
->  
->  / {
-> @@ -573,6 +574,61 @@ uart7: serial@99c000 {
->  			};
->  		};
->  
-> +		config_noc: interconnect@1500000 {
-> +			compatible = "qcom,sm8450-config-noc";
-> +			reg = <0 0x01500000 0 0x1c000>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		mc_virt: interconnect@1580000 {
-> +			compatible = "qcom,sm8450-mc-virt";
-> +			reg = <0 0x01580000 0 0x1000>;
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		system_noc: interconnect@1680000 {
-> +			reg = <0 0x01680000 0 0x1e200>;
-> +			compatible = "qcom,sm8450-system-noc";
+A filter in the netlink request should help pick what is user-preferred.
+You can default to not sending zeros.
 
-Compatible first, please
-
-
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		pcie_noc: interconnect@16c0000 {
-> +			reg = <0 0x016c0000 0 0xe280>;
-> +			compatible = "qcom,sm8450-pcie-anoc";
-
-Ditto
-
-
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		aggre1_noc: interconnect@16e0000 {
-> +			reg = <0 0x016e0000 0 0x1c080>;
-> +			compatible = "qcom,sm8450-aggre1-noc";
-
-Ditto
-
-
-> +			#interconnect-cells = <1>;
-> +			clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		aggre2_noc: interconnect@1700000 {
-> +			reg = <0 0x01700000 0 0x31080>;
-> +			compatible = "qcom,sm8450-aggre2-noc";
-
-Ditto
-
-
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +			clocks = <&gcc GCC_AGGRE_NOC_PCIE_0_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>,
-> +				 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> +				 <&rpmhcc RPMH_IPA_CLK>;
-> +		};
-> +
-> +		mmss_noc: interconnect@1740000 {
-> +			reg = <0 0x01740000 0 0x1f080>;
-> +			compatible = "qcom,sm8450-mmss-noc";
-
-Ditto
-
-
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
->  		tcsr_mutex: hwlock@1f40000 {
->  			compatible = "qcom,tcsr-mutex";
->  			reg = <0x0 0x01f40000 0x0 0x40000>;
-> @@ -817,6 +873,13 @@ rpmhcc: clock-controller {
->  			};
->  		};
->  
-> +		gem_noc: interconnect@19100000 {
-> +			reg = <0 0x19100000 0 0xbb800>;
-> +			compatible = "qcom,sm8450-gem-noc";
-
-Ditto
-
-
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
->  		ufs_mem_hc: ufshc@1d84000 {
->  			compatible = "qcom,sm8450-ufshc", "qcom,ufshc",
->  				     "jedec,ufs-2.0";
-> @@ -833,6 +896,9 @@ ufs_mem_hc: ufshc@1d84000 {
->  
->  			iommus = <&apps_smmu 0xe0 0x0>;
->  
-> +			interconnects = <&aggre1_noc MASTER_UFS_MEM &mc_virt SLAVE_EBI1>,
-> +					<&gem_noc MASTER_APPSS_PROC &config_noc SLAVE_UFS_MEM_CFG>;
-> +			interconnect-names = "ufs-ddr", "cpu-ufs";
->  			clock-names =
->  				"core_clk",
->  				"bus_aggr_clk",
-> @@ -888,6 +954,20 @@ ufs_mem_phy_lanes: lanes@1d87400 {
->  				#clock-cells = <0>;
->  			};
->  		};
-> +
-> +		nsp_noc: interconnect@320c0000 {
-> +			reg = <0 0x320c0000 0 0x10000>;
-> +			compatible = "qcom,sm8450-nsp-noc";
-
-Ditto
-
-
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
-> +
-> +		lpass_ag_noc: interconnect@3c40000 {
-> +			reg = <0 0x3c40000 0 0x17200>;
-> +			compatible = "qcom,sm8450-lpass-ag-noc";
-
-Ditto
-
-
-> +			#interconnect-cells = <1>;
-> +			qcom,bcm-voters = <&apps_bcm_voter>;
-> +		};
->  	};
->  
->  	timer {
->
-
-Konrad
-
+cheers,
+jamal

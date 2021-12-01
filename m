@@ -2,205 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F3E4651C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF494651C5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:33:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351020AbhLAPgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:36:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243063AbhLAPgN (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:36:13 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C192DC061574;
-        Wed,  1 Dec 2021 07:32:52 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so22595274wmj.5;
-        Wed, 01 Dec 2021 07:32:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=z1V9o3659iPfdup74dALWjx0yYdBSgLCQ5oAR/ZzaQs=;
-        b=lxnQ4umUeWipBDpN2gZjlZykRF7m4hJaKOyzlcQG8U3t9Fw/WO7NcDRNDXeSKfGpDZ
-         YxZRsb2aUWRzriDHbIJ0hUF7/lLzAZUtzCDflJ/1yetTeFeVGGkprCAatokvV0ZrnI/C
-         g90RwDZllj8JYXmQuQnnxDqzxhJs8+jAETm5kH9QXNHcJdYcvSKB+sRvsY3xvnYQ1zLS
-         L1XBVfkhJv9PreUQSwtH+Tu38ibBugfdo0wSFP2xxo8/NeJsDxkKmNA874o7WemBj3kN
-         ZMJ0twfQH9MM49I0uLOZgwM7iXWAsNNs63qofSIHV+5sna9MlfJp4izI085AKE8M5nc7
-         0mTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=z1V9o3659iPfdup74dALWjx0yYdBSgLCQ5oAR/ZzaQs=;
-        b=JDExmbHexqtSDwK5xoRJebaljHs2z5yhWf3gJdbcG/h0QixbW7Tv0OaRvSmf3pHXwc
-         XoTx1ysy/VYcyEL6s5Y/vqm+TRXbBr/eiVw7BZTTI61TXrzKE+RP1/WvtwZWWkBYXVnF
-         mD6HVuBwzH2ptVrdT4WixaDXhhjkvRT5bRB0eWTiBIisnCibgJuvmEelYtg062DI3EXN
-         BqXnIgW5WjHH+r1Csr5obPDqt6Banv4xru9AS4VSUxvZ01ZlH9G7kvBw44EGRvbQ4F34
-         fJ5s217YxbCJUW0d3MYHAEy5kmkWrNNL/bMoW6qCB5Kd1Uw2TjVfnZmlURSRQC43bASz
-         e2gg==
-X-Gm-Message-State: AOAM530GY7Gc//e4AMCW8eA/pMTL+AfOdLB27ukvSpMO/CmDn4XvklW/
-        LO97kBBc4HveQ9Uv1e2RQSw=
-X-Google-Smtp-Source: ABdhPJz6yQt0JgWoTo72Vz2EXFyUjMRkcWx6iGLk1uOrjm+1+3VsgHwSOnOE3hC4TysnhQVPwi71Hg==
-X-Received: by 2002:a05:600c:1c1a:: with SMTP id j26mr8109049wms.28.1638372771338;
-        Wed, 01 Dec 2021 07:32:51 -0800 (PST)
-Received: from [192.168.43.77] (82-132-228-4.dab.02.net. [82.132.228.4])
-        by smtp.gmail.com with ESMTPSA id r11sm140905wrw.5.2021.12.01.07.32.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 07:32:50 -0800 (PST)
-Message-ID: <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
-Date:   Wed, 1 Dec 2021 15:32:36 +0000
+        id S1351032AbhLAPg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:36:56 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:27270 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S234031AbhLAPgw (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:36:52 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638372811; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=Q6HUfZt5oXc1duwzRmR4q+p0TcjKzuDlkMig1w3ztew=; b=h8Z66wQKT0C7N7uedH+hbkkXyuRHwxXYQSElshDKdPb4B+mXEiMl1hMMKjxiIBkntGgESIeD
+ 89ZDNdytmKIwYeB7D3m6ep7m1temDqyaGQAOrE7axBjaWIMFT9uLSXHqUCG9l1HpKHOMxBJ7
+ s7vM2THR+39nh2jB3y5/LsJx5Zs=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
+ 61a795cbe7d68470afbdae2b (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 01 Dec 2021 15:33:31
+ GMT
+Sender: srivasam=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id E26A2C4361A; Wed,  1 Dec 2021 15:33:28 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.0
+Received: from [10.242.143.72] (unknown [202.46.23.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: srivasam)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 9A681C4338F;
+        Wed,  1 Dec 2021 15:33:22 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 9A681C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v6 10/10] ASoC: qcom: SC7280: Update config for building
+ codec dma drivers
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, plai@codeaurora.org,
+        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org
+Cc:     Venkata Prasad Potturu <potturu@codeaurora.org>
+References: <1637928282-2819-1-git-send-email-srivasam@codeaurora.org>
+ <1637928282-2819-11-git-send-email-srivasam@codeaurora.org>
+ <0d51b0fd-61a9-e68f-6ab8-27708667d787@linaro.org>
+From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+Organization: Qualcomm India Private Limited.
+Message-ID: <a3663a8d-5a05-3bbe-4d5d-2b5b4a55d0d4@codeaurora.org>
+Date:   Wed, 1 Dec 2021 21:03:20 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [RFC 00/12] io_uring zerocopy send
-Content-Language: en-US
-To:     David Ahern <dsahern@gmail.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1638282789.git.asml.silence@gmail.com>
- <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <0d51b0fd-61a9-e68f-6ab8-27708667d787@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 03:10, David Ahern wrote:
-> On 11/30/21 8:18 AM, Pavel Begunkov wrote:
->> Early proof of concept for zerocopy send via io_uring. This is just
->> an RFC, there are details yet to be figured out, but hope to gather
->> some feedback.
+
+On 12/1/2021 4:20 PM, Srinivas Kandagatla wrote:
+Thanks for Your time Srini!!!
+>
+> On 26/11/2021 12:04, Srinivasa Rao Mandadapu wrote:
+>> Add configuration for building SC7280 audio codec dma drivers.
 >>
->> Benchmarking udp (65435 bytes) with a dummy net device (mtu=0xffff):
->> The best case io_uring=116079 MB/s vs msg_zerocopy=47421 MB/s,
->> or 2.44 times faster.
+>> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+>> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
+>> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
+>> ---
+>> This patch set depends on:
+>>      -- 
+>> https://patchwork.kernel.org/project/alsa-devel/list/?series=582321
 >>
->> № | test:                                | BW (MB/s)  | speedup
->> 1 | msg_zerocopy (non-zc)                |  18281     | 0.38
->> 2 | msg_zerocopy -z (baseline)           |  47421     | 1
->> 3 | io_uring (@flush=false, nr_reqs=1)   |  96534     | 2.03
->> 4 | io_uring (@flush=true,  nr_reqs=1)   |  89310     | 1.88
->> 5 | io_uring (@flush=false, nr_reqs=8)   | 116079     | 2.44
->> 6 | io_uring (@flush=true,  nr_reqs=8)   | 109722     | 2.31
+>>   sound/soc/qcom/Kconfig  | 13 +++++++++++++
+>>   sound/soc/qcom/Makefile |  4 ++++
+>>   2 files changed, 17 insertions(+)
 >>
->> Based on selftests/.../msg_zerocopy but more limited. You can use
->> msg_zerocopy -r as usual for receive side.
+>> diff --git a/sound/soc/qcom/Kconfig b/sound/soc/qcom/Kconfig
+>> index 530d01f..b46a2e7 100644
+>> --- a/sound/soc/qcom/Kconfig
+>> +++ b/sound/soc/qcom/Kconfig
+>> @@ -20,6 +20,10 @@ config SND_SOC_LPASS_PLATFORM
+>>       tristate
+>>       select REGMAP_MMIO
+>>   +config SND_SOC_LPASS_CDC_DMA
+>> +    tristate
+>> +    select REGMAP_MMIO
+>> +
+>>   config SND_SOC_LPASS_IPQ806X
+>>       tristate
+>>       select SND_SOC_LPASS_CPU
+>> @@ -36,6 +40,13 @@ config SND_SOC_LPASS_SC7180
+>>       select SND_SOC_LPASS_PLATFORM
+>>       select SND_SOC_LPASS_HDMI
+>>   +config SND_SOC_LPASS_SC7280
+>> +    tristate
+>> +    select SND_SOC_LPASS_CPU
+>> +    select SND_SOC_LPASS_PLATFORM
+>> +    select SND_SOC_LPASS_HDMI
+>> +    select SND_SOC_LPASS_CDC_DMA
+>> +
+>>   config SND_SOC_STORM
+>>       tristate "ASoC I2S support for Storm boards"
+>>       select SND_SOC_LPASS_IPQ806X
+>> @@ -156,7 +167,9 @@ config SND_SOC_SC7280
+>>       tristate "SoC Machine driver for SC7280 boards"
+>>       depends on I2C && SOUNDWIRE || COMPILE_TEST
+>>       select SND_SOC_QCOM_COMMON
+>> +    select SND_SOC_LPASS_SC7280
+>>       select SND_SOC_MAX98357A
+>> +    select SND_SOC_WCD938X
+>
+> Why are we updating machine Kconfigs in this patch, should that be not 
+> in your machine driver patch series?
+
+Actually, SND_SOC_LPASS_SC7280 is of lpass-sc7280 platform driver.  
+SND_SOC_WCD938X is for wcd codec driver.
+
+Will add WCD Kconfig as separate patch.
+
+>
+> I think I did point this out in previous versions too.
+>
+>
+> --srini
+>
+>
+>>       select SND_SOC_LPASS_RX_MACRO
+>>       select SND_SOC_LPASS_TX_MACRO
+>>       help
+>> diff --git a/sound/soc/qcom/Makefile b/sound/soc/qcom/Makefile
+>> index 625aec6..8b7b876 100644
+>> --- a/sound/soc/qcom/Makefile
+>> +++ b/sound/soc/qcom/Makefile
+>> @@ -1,18 +1,22 @@
+>>   # SPDX-License-Identifier: GPL-2.0
+>>   # Platform
+>>   snd-soc-lpass-cpu-objs := lpass-cpu.o
+>> +snd-soc-lpass-cdc-dma-objs := lpass-cdc-dma.o
+>>   snd-soc-lpass-hdmi-objs := lpass-hdmi.o
+>>   snd-soc-lpass-platform-objs := lpass-platform.o
+>>   snd-soc-lpass-ipq806x-objs := lpass-ipq806x.o
+>>   snd-soc-lpass-apq8016-objs := lpass-apq8016.o
+>>   snd-soc-lpass-sc7180-objs := lpass-sc7180.o
+>> +snd-soc-lpass-sc7280-objs := lpass-sc7280.o
+>>     obj-$(CONFIG_SND_SOC_LPASS_CPU) += snd-soc-lpass-cpu.o
+>> +obj-$(CONFIG_SND_SOC_LPASS_CDC_DMA) += snd-soc-lpass-cdc-dma.o
+>>   obj-$(CONFIG_SND_SOC_LPASS_HDMI) += snd-soc-lpass-hdmi.o
+>>   obj-$(CONFIG_SND_SOC_LPASS_PLATFORM) += snd-soc-lpass-platform.o
+>>   obj-$(CONFIG_SND_SOC_LPASS_IPQ806X) += snd-soc-lpass-ipq806x.o
+>>   obj-$(CONFIG_SND_SOC_LPASS_APQ8016) += snd-soc-lpass-apq8016.o
+>>   obj-$(CONFIG_SND_SOC_LPASS_SC7180) += snd-soc-lpass-sc7180.o
+>> +obj-$(CONFIG_SND_SOC_LPASS_SC7280) += snd-soc-lpass-sc7280.o
+>>     # Machine
+>>   snd-soc-storm-objs := storm.o
 >>
-> ...
-> 
-> Can you state the exact command lines you are running for all of the
-> commands? I tried this set (and commands referenced below) and my
-
-Sure. First, for dummy I set mtu by hand, not sure can do it from
-the userspace, can I? Without it __ip_append_data() falls into
-non-zerocopy path.
-
-diff --git a/drivers/net/dummy.c b/drivers/net/dummy.c
-index f82ad7419508..5c5aeacdabd5 100644
---- a/drivers/net/dummy.c
-+++ b/drivers/net/dummy.c
-@@ -132,7 +132,8 @@ static void dummy_setup(struct net_device *dev)
-  	eth_hw_addr_random(dev);
-  
-  	dev->min_mtu = 0;
--	dev->max_mtu = 0;
-+	dev->mtu = 0xffff;
-+	dev->max_mtu = 0xffff;
-  }
-
-# dummy configuration
-
-modprobe dummy numdummies=1
-ip link set dummy0 up
-# force requests to <dummy_ip_addr> go through the dummy device
-ip route add <dummy_ip_addr> dev dummy0
-
-
-With dummy I was just sinking the traffic to the dummy device,
-was good enough for me. Omitting "taskset" and "nice":
-
-send-zc -4 -D <dummy_ip_addr> -t 10 udp
-
-Similarly with msg_zerocopy:
-
-<kernel>/tools/testing/selftests/net/msg_zerocopy -4 -p 6666 -D <dummy_ip_addr> -t 10 -z udp
-
-
-For loopback testing, as zerocopy is not allowed for it as Willem explained in
-the original MSG_ZEROCOPY cover-letter, I used a hack to bypass it:
-
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index ebb12a7d386d..42df33b175ce 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -2854,9 +2854,7 @@ static inline int skb_orphan_frags(struct sk_buff *skb, gfp_t gfp_mask)
-  /* Frags must be orphaned, even if refcounted, if skb might loop to rx path */
-  static inline int skb_orphan_frags_rx(struct sk_buff *skb, gfp_t gfp_mask)
-  {
--	if (likely(!skb_zcopy(skb)))
--		return 0;
--	return skb_copy_ubufs(skb, gfp_mask);
-+	return skb_orphan_frags(skb, gfp_mask);
-  }
-  
-  /**
-
-Then running those two lines below in parallel and looking for the numbers
-send shows. It was in favor of io_uring for me, but don't remember
-exactly. perf shows that "send-zc" spends lot of time receiving, so
-wasn't testing performance of it after some point.
-
-msg_zerocopy -r -v -4 -t 20 udp
-send-zc -4 -D 127.0.0.1 -t 10 udp
-
-
-> mileage varies quite a bit.
-
-Interesting, any brief notes on the setup and the results? Dummy
-or something real? io_uring doesn't show if it was really zerocopied
-or not, but I assume you checked it (e.g. with perf/bpftrace).
-
-I expected that @flush=true might be worse with real devices,
-there is one spot to be patched, but apart from that and
-cycles spend in a real LLD offseting the overhead, didn't
-anticipate any problems. I'll see once I try a real device.
-
-
-> Also, have you run this proposed change (and with TCP) across nodes
-> (ie., not just local process to local process via dummy interface)?
-
-Not yet, I tried dummy, and localhost UDP as per above and similarly
-TCP. Just need to grab a server with a proper NIC, will try it out
-soon.
-
->> Benchmark:
->> https://github.com/isilence/liburing.git zc_v1
->>
->> or this file in particular:
->> https://github.com/isilence/liburing/blob/zc_v1/test/send-zc.c
->>
->> To run the benchmark:
->> ```
->> cd <liburing_dir> && make && cd test
->> # ./send-zc -4 [-p <port>] [-s <payload_size>] -D <destination> udp
->> ./send-zc -4 -D 127.0.0.1 udp
->> ```
->>
->> msg_zerocopy can be used for the server side, e.g.
->> ```
->> cd <linux-kernel>/tools/testing/selftests/net && make
->> ./msg_zerocopy -4 -r [-p <port>] [-t <sec>] udp
->> ```
-
 -- 
-Pavel Begunkov
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
+

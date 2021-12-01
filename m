@@ -2,271 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2C3464E6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:03:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A737464E73
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245389AbhLANG2 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 08:06:28 -0500
-Received: from aposti.net ([89.234.176.197]:38406 "EHLO aposti.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S233645AbhLANGY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:06:24 -0500
-Date:   Wed, 01 Dec 2021 13:02:45 +0000
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v10 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Message-Id: <LKTF3R.YREPOCHOSMQN2@crapouillou.net>
-In-Reply-To: <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
-References: <cover.1638307601.git.hns@goldelico.com>
-        <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
+        id S245416AbhLANIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:08:30 -0500
+Received: from mail-vk1-f177.google.com ([209.85.221.177]:39659 "EHLO
+        mail-vk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233645AbhLANI0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 08:08:26 -0500
+Received: by mail-vk1-f177.google.com with SMTP id 84so16032419vkc.6;
+        Wed, 01 Dec 2021 05:05:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=pSCANc5akMVyARPAGU2DAriDgbQMxgmWTdFVSgsUOA4=;
+        b=TiDmxyrjuuJUZ6U815+QoUFbOixl8UJt/4YlSu0alkhZ8CbaS9FPZjMvIJF29CRqA/
+         u3UtRVxxDOMAu4zeWMEqI5lmsl8JLln2Q6Mjv0FbvqsZiqFYd4O3elIlDXYTRwjzvfHN
+         51nlrValFNAHsnHY9tngyE97II3hhg4qiQbuYcX5zWlaDDVZnpAW6GSunf3jxxXPKm4l
+         13lpEaPNbpXrUDcp8X/y3lAuDmi7LkwRCLiCmmZFzVWHTIr9eU9zitKTt/VYJxx8iDd/
+         R/KlFSovnNSi0dIIMcAPO/8tjotBP+1RiWDHIHS5IH7+Ccl0uKx2tLNdMjg/57URuEpr
+         22eA==
+X-Gm-Message-State: AOAM531oESAG0RbRgWbsfa59hgsAfh/gNU0M7gQxJGubIZ2zlHJsW3Yh
+        A+j6MNrP60cRLE33esnlrgdN7lwDvzvl1Q==
+X-Google-Smtp-Source: ABdhPJzPxPmlSSLGPOF1dc/lppCsx+DKKnHvZO4roiWaVzoXO60uk3/UVUpfzekAdXeKV7ems1E1Fw==
+X-Received: by 2002:a1f:c9c2:: with SMTP id z185mr7880917vkf.26.1638363904846;
+        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
+        by smtp.gmail.com with ESMTPSA id g16sm11970987vsp.18.2021.12.01.05.05.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
+Received: by mail-ua1-f41.google.com with SMTP id p2so48691436uad.11;
+        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
+X-Received: by 2002:a05:6102:e10:: with SMTP id o16mr6795674vst.5.1638363904281;
+ Wed, 01 Dec 2021 05:05:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: 8BIT
+References: <20211130164558.85584-1-tsbogend@alpha.franken.de> <20211130164558.85584-2-tsbogend@alpha.franken.de>
+In-Reply-To: <20211130164558.85584-2-tsbogend@alpha.franken.de>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 1 Dec 2021 14:04:53 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUO-99bQPdLoLSPzDZ1KzT1_rS6eXEejEH4tf+XAtCgvw@mail.gmail.com>
+Message-ID: <CAMuHMdUO-99bQPdLoLSPzDZ1KzT1_rS6eXEejEH4tf+XAtCgvw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] MIPS: TXX9: Remove rbtx4939 board support
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        MTD Maling List <linux-mtd@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nikolaus,
+On Tue, Nov 30, 2021 at 5:46 PM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+> No active MIPS user own this board, so let's remove it.
+>
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Le mar., nov. 30 2021 at 22:26:37 +0100, H. Nikolaus Schaller 
-<hns@goldelico.com> a écrit :
-> From: Paul Boddie <paul@boddie.org.uk>
-> 
-> A specialisation of the generic Synopsys HDMI driver is employed for
-> JZ4780 HDMI support. This requires a new driver, plus device tree and
-> configuration modifications.
-> 
-> Here we add Kconfig DRM_INGENIC_DW_HDMI, Makefile and driver code.
-> 
-> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
-> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
->  drivers/gpu/drm/ingenic/Kconfig           |   9 ++
->  drivers/gpu/drm/ingenic/Makefile          |   1 +
->  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 138 
-> ++++++++++++++++++++++
->  3 files changed, 148 insertions(+)
->  create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> 
-> diff --git a/drivers/gpu/drm/ingenic/Kconfig 
-> b/drivers/gpu/drm/ingenic/Kconfig
-> index 3b57f8be007c4..4efc709d77b0a 100644
-> --- a/drivers/gpu/drm/ingenic/Kconfig
-> +++ b/drivers/gpu/drm/ingenic/Kconfig
-> @@ -25,4 +25,13 @@ config DRM_INGENIC_IPU
-> 
->  	  The Image Processing Unit (IPU) will appear as a second primary 
-> plane.
-> 
-> +config DRM_INGENIC_DW_HDMI
-> +	tristate "Ingenic specific support for Synopsys DW HDMI"
-> +	depends on MACH_JZ4780
-> +	select DRM_DW_HDMI
-> +	help
-> +	  Choose this option to enable Synopsys DesignWare HDMI based 
-> driver.
-> +	  If you want to enable HDMI on Ingenic JZ4780 based SoC, you should
-> +	  select this option..
-> +
->  endif
-> diff --git a/drivers/gpu/drm/ingenic/Makefile 
-> b/drivers/gpu/drm/ingenic/Makefile
-> index d313326bdddbb..f10cc1c5a5f22 100644
-> --- a/drivers/gpu/drm/ingenic/Makefile
-> +++ b/drivers/gpu/drm/ingenic/Makefile
-> @@ -1,3 +1,4 @@
->  obj-$(CONFIG_DRM_INGENIC) += ingenic-drm.o
->  ingenic-drm-y = ingenic-drm-drv.o
->  ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) += ingenic-ipu.o
-> +obj-$(CONFIG_DRM_INGENIC_DW_HDMI) += ingenic-dw-hdmi.o
-> diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c 
-> b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> new file mode 100644
-> index 0000000000000..199e39c227d29
-> --- /dev/null
-> +++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
-> @@ -0,0 +1,138 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
-> + * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
-> + *
-> + * Derived from dw_hdmi-imx.c with i.MX portions removed.
-> + * Probe and remove operations derived from rcar_dw_hdmi.c.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <drm/bridge/dw_hdmi.h>
-> +#include <drm/drm_of.h>
-> +#include <drm/drm_print.h>
-> +
-> +static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] = {
-> +	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2, 
-> 0x0000 } } },
-> +	{ 92500000,  { { 0x0140, 0x0005 }, { 0x2141, 0x0005 }, { 0x4142, 
-> 0x0005 } } },
-> +	{ 148500000, { { 0x00a0, 0x000a }, { 0x20a1, 0x000a }, { 0x40a2, 
-> 0x000a } } },
-> +	{ 216000000, { { 0x00a0, 0x000a }, { 0x2001, 0x000f }, { 0x4002, 
-> 0x000f } } },
-> +	{ ~0UL,      { { 0x0000, 0x0000 }, { 0x0000, 0x0000 }, { 0x0000, 
-> 0x0000 } } }
-> +};
-> +
-> +static const struct dw_hdmi_curr_ctrl ingenic_cur_ctr[] = {
-> +	/*pixelclk     bpp8    bpp10   bpp12 */
-> +	{ 54000000,  { 0x091c, 0x091c, 0x06dc } },
-> +	{ 58400000,  { 0x091c, 0x06dc, 0x06dc } },
-> +	{ 72000000,  { 0x06dc, 0x06dc, 0x091c } },
-> +	{ 74250000,  { 0x06dc, 0x0b5c, 0x091c } },
-> +	{ 118800000, { 0x091c, 0x091c, 0x06dc } },
-> +	{ 216000000, { 0x06dc, 0x0b5c, 0x091c } },
-> +	{ ~0UL,      { 0x0000, 0x0000, 0x0000 } },
-> +};
-> +
-> +/*
-> + * Resistance term 133Ohm Cfg
-> + * PREEMP config 0.00
-> + * TX/CK level 10
-> + */
-> +static const struct dw_hdmi_phy_config ingenic_phy_config[] = {
-> +	/*pixelclk   symbol   term   vlev */
-> +	{ 216000000, 0x800d, 0x0005, 0x01ad},
-> +	{ ~0UL,      0x0000, 0x0000, 0x0000}
-> +};
-> +
-> +static enum drm_mode_status
-> +ingenic_dw_hdmi_mode_valid(struct dw_hdmi *hdmi, void *data,
-> +			   const struct drm_display_info *info,
-> +			   const struct drm_display_mode *mode)
-> +{
-> +	if (mode->clock < 13500)
-> +		return MODE_CLOCK_LOW;
-> +	/* FIXME: Hardware is capable of 270MHz, but setup data is missing. 
-> */
-> +	if (mode->clock > 216000)
-> +		return MODE_CLOCK_HIGH;
-> +
-> +	return MODE_OK;
-> +}
-> +
-> +static struct dw_hdmi_plat_data ingenic_dw_hdmi_plat_data = {
-> +	.mpll_cfg   = ingenic_mpll_cfg,
-> +	.cur_ctr    = ingenic_cur_ctr,
-> +	.phy_config = ingenic_phy_config,
-> +	.mode_valid = ingenic_dw_hdmi_mode_valid,
-> +	.output_port	= 1,
-> +};
-> +
-> +static const struct of_device_id ingenic_dw_hdmi_dt_ids[] = {
-> +	{ .compatible = "ingenic,jz4780-dw-hdmi" },
-> +	{ /* Sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
-> +
-> +static void ingenic_dw_hdmi_cleanup(void *data)
-> +{
-> +	struct dw_hdmi *hdmi = (struct dw_hdmi *)data;
-> +
-> +	dw_hdmi_remove(hdmi);
-> +}
-> +
-> +static void ingenic_dw_hdmi_disable_regulator(void *data)
-> +{
-> +	struct regulator *regulator = (struct regulator *)data;
-> +
-> +	regulator_disable(regulator);
-> +}
-> +
-> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
-> +{
-> +	struct dw_hdmi *hdmi;
-> +	struct regulator *regulator;
-> +	int ret;
-> +
-> +	hdmi = dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
-> +	if (IS_ERR(hdmi))
-> +		return PTR_ERR(hdmi);
-> +
-> +	ret = devm_add_action_or_reset(&pdev->dev, ingenic_dw_hdmi_cleanup, 
-> hdmi);
-> +	if (ret)
-> +		return ret;
-> +
-> +	regulator = devm_regulator_get_optional(&pdev->dev, "hdmi-5v");
-> +	if (IS_ERR(regulator)) {
-> +		ret = PTR_ERR(regulator);
-> +
-> +		DRM_DEV_ERROR(&pdev->dev, "failed to get hpd regulator: %s (%d)\n",
-> +			      "hdmi-5v", ret);
-> +
-> +		return ret;
-> +	}
-> +
-> +	if (!regulator)
-> +		return 0;
+Thanks for your patch!
 
-Blank line here.
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-But I can add it myself when applying. I'll just wait for Rob's ack 
-first.
+My rbtx4927 still works fine afterwards, so
+Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
--Paul
+Gr{oetje,eeting}s,
 
-> +	ret = regulator_enable(regulator);
-> +	if (ret) {
-> +		DRM_DEV_ERROR(&pdev->dev, "Failed to enable hpd regulator: %d\n",
-> +			      ret);
-> +
-> +		return ret;
-> +	}
-> +
-> +	return devm_add_action_or_reset(&pdev->dev, 
-> ingenic_dw_hdmi_disable_regulator,
-> +				       regulator);
-> +}
-> +
-> +static struct platform_driver ingenic_dw_hdmi_driver = {
-> +	.probe  = ingenic_dw_hdmi_probe,
-> +	.driver = {
-> +		.name = "dw-hdmi-ingenic",
-> +		.of_match_table = ingenic_dw_hdmi_dt_ids,
-> +	},
-> +};
-> +module_platform_driver(ingenic_dw_hdmi_driver);
-> +
-> +MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
-> +MODULE_LICENSE("GPL v2");
-> +MODULE_ALIAS("platform:dwhdmi-ingenic");
-> --
-> 2.33.0
-> 
+                        Geert
 
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

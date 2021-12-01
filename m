@@ -2,113 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAFDC465622
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B16C6465623
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242462AbhLATJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:09:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245127AbhLATIz (ORCPT
+        id S238952AbhLATKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:10:19 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18360 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S234008AbhLATKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:08:55 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86BFC06175A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:05:33 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id r25so40131619edq.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:05:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OHWyLuDVNYW2X/b78nVff/N/XbPJ3JSMzpXHjlHZtEg=;
-        b=gEkrjsuvKlLoHFhgN2IZj6W9OqpFebRbaMyfwEQuhW6NH+CJHaydku3lOr58CarCW5
-         bDpmpksK2xN9lgyM0h54Glt9DbgEiLz6o1eXhLyS4eF0/zMBCkWLz+3OWY3p8m5zH4Td
-         C9GF3WsqospldedOXbfxY19ZvtITA1D0Mn/ek=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OHWyLuDVNYW2X/b78nVff/N/XbPJ3JSMzpXHjlHZtEg=;
-        b=JAXrM9WeaEuIC18HYvg5iTiLVTJKa6oIGvbV8l8hyQMMLwo2Ppg7Idn2P4s5Nv8vdK
-         v5T9ccSXwG/FNwQQx3B3u/MVsMTG049PBvnhPCx8z0CKLp5APNilYAA338F1JJKvpL9H
-         g9GzDuokmavgN6a2H6L5nrsizJQ2gubjEmslNv4adem1DMmBbABUxRo/UQ/ONVh9FESc
-         43d5SpY+T19wTveenMTaMUm8zFxH27PCS8vmMDB8qWRfsbfhvuI/Il4my6jCwXSinAy9
-         dULyONXIBodC+kFVkFoR9FzE4PWYh45KstGbbWwHnfrzkIaE5TFMPr7QpvJUDdMb0R3C
-         WNPw==
-X-Gm-Message-State: AOAM53053hpooK9x/yqO4CEKpuS4lQwfK0JQIx1/xs9LjNGHPVdssDnQ
-        0cOjkw4RsDhJG/UTGLDywsETJkp7Ulm08yLv
-X-Google-Smtp-Source: ABdhPJzwUEIywvNNlbHVa6Eh3kjE1+huvkE/fi9XuyeO/VvRKBtL7M1U9iLpSCTbiLXnKrq2gNNHoA==
-X-Received: by 2002:a05:6402:2790:: with SMTP id b16mr11382079ede.24.1638385526563;
-        Wed, 01 Dec 2021 11:05:26 -0800 (PST)
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com. [209.85.128.49])
-        by smtp.gmail.com with ESMTPSA id ar2sm325611ejc.20.2021.12.01.11.05.25
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 11:05:25 -0800 (PST)
-Received: by mail-wm1-f49.google.com with SMTP id g191-20020a1c9dc8000000b0032fbf912885so1898891wme.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:05:25 -0800 (PST)
-X-Received: by 2002:a1c:7405:: with SMTP id p5mr82787wmc.152.1638385525107;
- Wed, 01 Dec 2021 11:05:25 -0800 (PST)
+        Wed, 1 Dec 2021 14:10:15 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1IHNw0001048;
+        Wed, 1 Dec 2021 19:06:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=qX2wfw0M06LVvuZl5qfJjkfTCvWNE8LjAca34Yw8j+0=;
+ b=JX4HgIoqUTDXshxFskX1nk5yKWckOu2xl422L6Cl5RlaON5nQmKn40fAkrjuAD3dvHAv
+ gCmCp5Wd2OzRfEbBLZFwQZZEYMgVj5gsP53wy9dKa2nonZU8rivuaq1D9AwKNNrDYzP9
+ 8jfqK2jKMt596e/2x/bJPyvdfx93+NysfgfSrUdyLs+ax6pM5cwK0EUUUbM+Zvf4LqdA
+ l/pUrRThqAnBLr9lrtsyPzR2lXQQgOG095wXr2/fSaIqfute7IjLZYUD2Ljn7ZNsri2E
+ Hqr5AQlUKEiaWsROJvvIntEfOhD/T5ucdoZ0Tz0c0oW3dW+o1cEBmZvWCHIZQFPMlNHs lw== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpe6s8yk8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 19:06:49 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1J3PsF025405;
+        Wed, 1 Dec 2021 19:06:47 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma04fra.de.ibm.com with ESMTP id 3cncgmj0a5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 19:06:47 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1J6ivD29819316
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Dec 2021 19:06:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F2950A4054;
+        Wed,  1 Dec 2021 19:06:43 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B4789A4062;
+        Wed,  1 Dec 2021 19:06:43 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.145.175.48])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Dec 2021 19:06:43 +0000 (GMT)
+From:   Laurent Dufour <ldufour@linux.ibm.com>
+To:     linuxppc-dev@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, Nathan Lynch <nathanl@linux.ibm.com>
+Subject: [PATCH v2] powerpc/pseries: read the lpar name from the firmware
+Date:   Wed,  1 Dec 2021 20:06:42 +0100
+Message-Id: <20211201190642.49897-1-ldufour@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20211116144937.19035-1-fmdefrancesco@gmail.com>
- <1825634.Qa45DEmgBM@localhost.localdomain> <44d83e9c-d8c9-38bf-501c-019b8c2f7b5e@i-love.sakura.ne.jp>
- <1701119.OD4kndUEs1@localhost.localdomain> <1d05e95c-556a-a34c-99fd-8c542311e2dd@i-love.sakura.ne.jp>
- <3add7ade-9c9b-2839-5a0c-0a38c4be0e34@i-love.sakura.ne.jp>
-In-Reply-To: <3add7ade-9c9b-2839-5a0c-0a38c4be0e34@i-love.sakura.ne.jp>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 1 Dec 2021 11:05:09 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wjVL_CLm-+=7qf2obF6f8D+ujysmqp5dKdAb7UEyo1cZg@mail.gmail.com>
-Message-ID: <CAHk-=wjVL_CLm-+=7qf2obF6f8D+ujysmqp5dKdAb7UEyo1cZg@mail.gmail.com>
-Subject: Re: [PATCH] tty: vt: make do_con_write() no-op if IRQ is disabled
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Hurley <peter@hurleysoftware.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: orZY7vxqrOnrp6yuC8Og36RUH1hy330J
+X-Proofpoint-ORIG-GUID: orZY7vxqrOnrp6yuC8Og36RUH1hy330J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 mlxlogscore=999
+ malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 clxscore=1015
+ adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112010102
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 5:41 AM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> What do you think? Can we apply this?
+The LPAR name may be changed after the LPAR has been started in the HMC.
+In that case lparstat command is not reporting the updated value because it
+reads it from the device tree which is read at boot time.
 
-I think this patch is only papering over the problem, and the issue goes deeper.
+However this value could be read from RTAS.
 
-It may be that "papering over the issue" successfully hides it
-completely, but it's still a horribly bad approach.
+Adding this value in the /proc/powerpc/lparcfg output allows to read the
+updated value.
 
-> > -     if (in_interrupt())
-> > +     if (in_interrupt() || irqs_disabled())
-> >               return count;
+Cc: Nathan Lynch <nathanl@linux.ibm.com>
+Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
+---
+v2:
+ address Nathan's comments.
+ change title to partition_name aligning with existing partition_id
+---
+ arch/powerpc/platforms/pseries/lparcfg.c | 53 ++++++++++++++++++++++++
+ 1 file changed, 53 insertions(+)
 
-This kind of stuff is broken. Pretty much always.
+diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
+index f71eac74ea92..0deca7b4cd81 100644
+--- a/arch/powerpc/platforms/pseries/lparcfg.c
++++ b/arch/powerpc/platforms/pseries/lparcfg.c
+@@ -311,6 +311,58 @@ static void parse_mpp_x_data(struct seq_file *m)
+ 		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
+ }
+ 
++/*
++ * PAPR defines no maximum for the LPAR name, and defines that the maximum
++ * length of the get-system-parameter's output buffer is 4000 plus 2 bytes for
++ * the length. Limit LPAR's name size to 1024
++ */
++#define SPLPAR_LPAR_NAME_MAXLEN	1026
++#define SPLPAR_LPAR_NAME_TOKEN	55
++static void parse_lpar_name(struct seq_file *m)
++{
++	int rc, len, token;
++	unsigned char *local_buffer;
++
++	token = rtas_token("ibm,get-system-parameter");
++	if (token == RTAS_UNKNOWN_SERVICE)
++		return;
++
++	local_buffer = kmalloc(SPLPAR_LPAR_NAME_MAXLEN, GFP_KERNEL);
++	if (!local_buffer)
++		return;
++
++	do {
++		spin_lock(&rtas_data_buf_lock);
++
++		memset(rtas_data_buf, 0, RTAS_DATA_BUF_SIZE);
++		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
++			       __pa(rtas_data_buf), RTAS_DATA_BUF_SIZE);
++		memcpy(local_buffer, rtas_data_buf, SPLPAR_LPAR_NAME_MAXLEN);
++
++		spin_unlock(&rtas_data_buf_lock);
++	} while (rtas_busy_delay(rc));
++
++	if (rc != 0) {
++		pr_err_once(
++			"%s %s Error calling get-system-parameter (0x%x)\n",
++			__FILE__, __func__, rc);
++	} else {
++		local_buffer[SPLPAR_LPAR_NAME_MAXLEN - 1] = '\0';
++		len = local_buffer[0] * 256 + local_buffer[1];
++
++		/*
++		 * Forces an empty string in the weird case fw reports no data.
++		 */
++		if (!len)
++			local_buffer[2] = '\0';
++
++		seq_printf(m, "partition_name=%s\n", local_buffer + 2);
++	}
++
++	kfree(local_buffer);
++}
++
++
+ #define SPLPAR_CHARACTERISTICS_TOKEN 20
+ #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
+ 
+@@ -496,6 +548,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
+ 
+ 	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
+ 		/* this call handles the ibm,get-system-parameter contents */
++		parse_lpar_name(m);
+ 		parse_system_parameter_string(m);
+ 		parse_ppp_data(m);
+ 		parse_mpp_data(m);
+-- 
+2.34.1
 
-And in this case, it's still broken, because things like "called under
-a non-irq spinlock" would still not show up.
-
-And no, I do *not* mean that the code should try to figure that out. I
-mean that the problem goes further up, and that the fact that we get
-to do_con_write() in the first place when we're in an invalid context
-is wrong, wrong, wrong.
-
-How the heck do we get here from just an ioctl?
-
-Looking at the backtrace, I see
-
-   n_hdlc_send_frames+0x24b/0x490 drivers/tty/n_hdlc.c:290
-   tty_wakeup+0xe1/0x120 drivers/tty/tty_io.c:534
-   __start_tty drivers/tty/tty_io.c:806 [inline]
-   __start_tty+0xfb/0x130 drivers/tty/tty_io.c:799
-
-and apparently it's that hdlc line discipline (and
-n_hdlc_send_frames() in particular) that is the problem here.
-
-I think that's where the fix should be.
-
-                Linus

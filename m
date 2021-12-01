@@ -2,165 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B16C6465623
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:07:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA00465626
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:07:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238952AbhLATKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:10:19 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18360 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S234008AbhLATKP (ORCPT
+        id S244852AbhLATK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:10:29 -0500
+Received: from mail-ot1-f51.google.com ([209.85.210.51]:37604 "EHLO
+        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239347AbhLATK0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:10:15 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1IHNw0001048;
-        Wed, 1 Dec 2021 19:06:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=qX2wfw0M06LVvuZl5qfJjkfTCvWNE8LjAca34Yw8j+0=;
- b=JX4HgIoqUTDXshxFskX1nk5yKWckOu2xl422L6Cl5RlaON5nQmKn40fAkrjuAD3dvHAv
- gCmCp5Wd2OzRfEbBLZFwQZZEYMgVj5gsP53wy9dKa2nonZU8rivuaq1D9AwKNNrDYzP9
- 8jfqK2jKMt596e/2x/bJPyvdfx93+NysfgfSrUdyLs+ax6pM5cwK0EUUUbM+Zvf4LqdA
- l/pUrRThqAnBLr9lrtsyPzR2lXQQgOG095wXr2/fSaIqfute7IjLZYUD2Ljn7ZNsri2E
- Hqr5AQlUKEiaWsROJvvIntEfOhD/T5ucdoZ0Tz0c0oW3dW+o1cEBmZvWCHIZQFPMlNHs lw== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpe6s8yk8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 19:06:49 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1J3PsF025405;
-        Wed, 1 Dec 2021 19:06:47 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma04fra.de.ibm.com with ESMTP id 3cncgmj0a5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 19:06:47 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1J6ivD29819316
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Dec 2021 19:06:44 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F2950A4054;
-        Wed,  1 Dec 2021 19:06:43 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B4789A4062;
-        Wed,  1 Dec 2021 19:06:43 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.145.175.48])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Dec 2021 19:06:43 +0000 (GMT)
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, Nathan Lynch <nathanl@linux.ibm.com>
-Subject: [PATCH v2] powerpc/pseries: read the lpar name from the firmware
-Date:   Wed,  1 Dec 2021 20:06:42 +0100
-Message-Id: <20211201190642.49897-1-ldufour@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 1 Dec 2021 14:10:26 -0500
+Received: by mail-ot1-f51.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so36611328otg.4;
+        Wed, 01 Dec 2021 11:07:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Ns1VGFmIcxV8dyTDHSaaXTsKQnH3/DvAnnTtMRYBS+Q=;
+        b=ERHEm+eSieZOplMSofp1XjojM34V/fNPDhjBawGpNSfUez5ls4INXm3s4gaGwV6aIk
+         Od0843fwnxmu3igurGD6OOoTXq6Rr3jNxmSJe//cnxDsUelIiLSgpXl5JE+RbdK8chBj
+         5Wv5jKk+h2SuCLtJ+YbVcyh+vYnrSSD+Q1iA5HoUCqDOFEykjBEGHG09kaFlvfCnvPAW
+         XYjWnk5PTQ9WhiPl7Twsk630A1N6yBv7TuQQZR+8bDYe9s7y+1CFEiIANKWd8aDrVixU
+         SD7kv9PIP5K7Jx/yIPkyd7JcXRj7KGKwL8MLvRnY9Oj4rpXT6IXwaDmVjmMV0TaOSe1X
+         06pQ==
+X-Gm-Message-State: AOAM5304O65amjDcPA7i4OF1KJ+2pB/W7kh9QTxtiaxntnrUsadCnj9P
+        pD36GE3Qj5spA5qEdUi65g==
+X-Google-Smtp-Source: ABdhPJyuR82qEd6pOKlVcbGE8T/SQxfzOcBBPB6zaklRvnXx6zarsyFBDAGE0kbYD4LuWHhdyxwljg==
+X-Received: by 2002:a05:6830:195:: with SMTP id q21mr7238076ota.355.1638385620493;
+        Wed, 01 Dec 2021 11:07:00 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id n26sm201220ooq.36.2021.12.01.11.06.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 11:06:59 -0800 (PST)
+Received: (nullmailer pid 2270663 invoked by uid 1000);
+        Wed, 01 Dec 2021 19:06:58 -0000
+Date:   Wed, 1 Dec 2021 13:06:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        "maintainer:BROADCOM IPROC GBIT ETHERNET DRIVER" 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Doug Berger <opendmb@gmail.com>, Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:BROADCOM IPROC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next 7/7] dt-bindings: net: Convert iProc MDIO mux to
+ YAML
+Message-ID: <YafH0nADqO7DTU4A@robh.at.kernel.org>
+References: <20211201041228.32444-1-f.fainelli@gmail.com>
+ <20211201041228.32444-8-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: orZY7vxqrOnrp6yuC8Og36RUH1hy330J
-X-Proofpoint-ORIG-GUID: orZY7vxqrOnrp6yuC8Og36RUH1hy330J
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 mlxlogscore=999
- malwarescore=0 spamscore=0 suspectscore=0 bulkscore=0 clxscore=1015
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112010102
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201041228.32444-8-f.fainelli@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LPAR name may be changed after the LPAR has been started in the HMC.
-In that case lparstat command is not reporting the updated value because it
-reads it from the device tree which is read at boot time.
+On Tue, Nov 30, 2021 at 08:12:28PM -0800, Florian Fainelli wrote:
+> Conver the Broadcom iProc MDIO mux Device Tree binding to YAML.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../bindings/net/brcm,mdio-mux-iproc.txt      | 62 --------------
+>  .../bindings/net/brcm,mdio-mux-iproc.yaml     | 80 +++++++++++++++++++
+>  2 files changed, 80 insertions(+), 62 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
+> deleted file mode 100644
+> index deb9e852ea27..000000000000
+> --- a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
+> +++ /dev/null
+> @@ -1,62 +0,0 @@
+> -Properties for an MDIO bus multiplexer found in Broadcom iProc based SoCs.
+> -
+> -This MDIO bus multiplexer defines buses that could be internal as well as
+> -external to SoCs and could accept MDIO transaction compatible to C-22 or
+> -C-45 Clause. When child bus is selected, one needs to select these two
+> -properties as well to generate desired MDIO transaction on appropriate bus.
+> -
+> -Required properties in addition to the generic multiplexer properties:
+> -
+> -MDIO multiplexer node:
+> -- compatible: brcm,mdio-mux-iproc.
+> -
+> -Every non-ethernet PHY requires a compatible so that it could be probed based
+> -on this compatible string.
+> -
+> -Optional properties:
+> -- clocks: phandle of the core clock which drives the mdio block.
+> -
+> -Additional information regarding generic multiplexer properties can be found
+> -at- Documentation/devicetree/bindings/net/mdio-mux.yaml
+> -
+> -
+> -for example:
+> -		mdio_mux_iproc: mdio-mux@66020000 {
+> -			compatible = "brcm,mdio-mux-iproc";
+> -			reg = <0x66020000 0x250>;
+> -			#address-cells = <1>;
+> -			#size-cells = <0>;
+> -
+> -			mdio@0 {
+> -				reg = <0x0>;
+> -				#address-cells = <1>;
+> -				#size-cells = <0>;
+> -
+> -				pci_phy0: pci-phy@0 {
+> -					compatible = "brcm,ns2-pcie-phy";
+> -					reg = <0x0>;
+> -					#phy-cells = <0>;
+> -				};
+> -			};
+> -
+> -			mdio@7 {
+> -				reg = <0x7>;
+> -				#address-cells = <1>;
+> -				#size-cells = <0>;
+> -
+> -				pci_phy1: pci-phy@0 {
+> -					compatible = "brcm,ns2-pcie-phy";
+> -					reg = <0x0>;
+> -					#phy-cells = <0>;
+> -				};
+> -			};
+> -			mdio@10 {
+> -				reg = <0x10>;
+> -				#address-cells = <1>;
+> -				#size-cells = <0>;
+> -
+> -				gphy0: eth-phy@10 {
+> -					reg = <0x10>;
+> -				};
+> -			};
+> -		};
+> diff --git a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
+> new file mode 100644
+> index 000000000000..a576fb87bfc8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
+> @@ -0,0 +1,80 @@
+> +# SPDX-License-Identifier: GPL-2.0
 
-However this value could be read from RTAS.
+All Broadcom authors on the original. Please add BSD-2-Clause.
 
-Adding this value in the /proc/powerpc/lparcfg output allows to read the
-updated value.
-
-Cc: Nathan Lynch <nathanl@linux.ibm.com>
-Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
----
-v2:
- address Nathan's comments.
- change title to partition_name aligning with existing partition_id
----
- arch/powerpc/platforms/pseries/lparcfg.c | 53 ++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
-
-diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
-index f71eac74ea92..0deca7b4cd81 100644
---- a/arch/powerpc/platforms/pseries/lparcfg.c
-+++ b/arch/powerpc/platforms/pseries/lparcfg.c
-@@ -311,6 +311,58 @@ static void parse_mpp_x_data(struct seq_file *m)
- 		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
- }
- 
-+/*
-+ * PAPR defines no maximum for the LPAR name, and defines that the maximum
-+ * length of the get-system-parameter's output buffer is 4000 plus 2 bytes for
-+ * the length. Limit LPAR's name size to 1024
-+ */
-+#define SPLPAR_LPAR_NAME_MAXLEN	1026
-+#define SPLPAR_LPAR_NAME_TOKEN	55
-+static void parse_lpar_name(struct seq_file *m)
-+{
-+	int rc, len, token;
-+	unsigned char *local_buffer;
-+
-+	token = rtas_token("ibm,get-system-parameter");
-+	if (token == RTAS_UNKNOWN_SERVICE)
-+		return;
-+
-+	local_buffer = kmalloc(SPLPAR_LPAR_NAME_MAXLEN, GFP_KERNEL);
-+	if (!local_buffer)
-+		return;
-+
-+	do {
-+		spin_lock(&rtas_data_buf_lock);
-+
-+		memset(rtas_data_buf, 0, RTAS_DATA_BUF_SIZE);
-+		rc = rtas_call(token, 3, 1, NULL, SPLPAR_LPAR_NAME_TOKEN,
-+			       __pa(rtas_data_buf), RTAS_DATA_BUF_SIZE);
-+		memcpy(local_buffer, rtas_data_buf, SPLPAR_LPAR_NAME_MAXLEN);
-+
-+		spin_unlock(&rtas_data_buf_lock);
-+	} while (rtas_busy_delay(rc));
-+
-+	if (rc != 0) {
-+		pr_err_once(
-+			"%s %s Error calling get-system-parameter (0x%x)\n",
-+			__FILE__, __func__, rc);
-+	} else {
-+		local_buffer[SPLPAR_LPAR_NAME_MAXLEN - 1] = '\0';
-+		len = local_buffer[0] * 256 + local_buffer[1];
-+
-+		/*
-+		 * Forces an empty string in the weird case fw reports no data.
-+		 */
-+		if (!len)
-+			local_buffer[2] = '\0';
-+
-+		seq_printf(m, "partition_name=%s\n", local_buffer + 2);
-+	}
-+
-+	kfree(local_buffer);
-+}
-+
-+
- #define SPLPAR_CHARACTERISTICS_TOKEN 20
- #define SPLPAR_MAXLENGTH 1026*(sizeof(char))
- 
-@@ -496,6 +548,7 @@ static int pseries_lparcfg_data(struct seq_file *m, void *v)
- 
- 	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
- 		/* this call handles the ibm,get-system-parameter contents */
-+		parse_lpar_name(m);
- 		parse_system_parameter_string(m);
- 		parse_ppp_data(m);
- 		parse_mpp_data(m);
--- 
-2.34.1
-
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/brcm,mdio-mux-iproc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MDIO bus multiplexer found in Broadcom iProc based SoCs.
+> +
+> +maintainers:
+> +  - Florian Fainelli <f.fainelli@gmail.com>
+> +
+> +description:
+> +  This MDIO bus multiplexer defines buses that could be internal as well as
+> +  external to SoCs and could accept MDIO transaction compatible to C-22 or
+> +  C-45 Clause. When child bus is selected, one needs to select these two
+> +  properties as well to generate desired MDIO transaction on appropriate bus.
+> +
+> +allOf:
+> +  - $ref: /schemas/net/mdio-mux.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: brcm,mdio-mux-iproc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description: core clock driving the MDIO block
+> +
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    mdio_mux_iproc: mdio-mux@66020000 {
+> +        compatible = "brcm,mdio-mux-iproc";
+> +        reg = <0x66020000 0x250>;
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        mdio@0 {
+> +           reg = <0x0>;
+> +           #address-cells = <1>;
+> +           #size-cells = <0>;
+> +
+> +           pci_phy0: pci-phy@0 {
+> +              compatible = "brcm,ns2-pcie-phy";
+> +              reg = <0x0>;
+> +              #phy-cells = <0>;
+> +           };
+> +        };
+> +
+> +        mdio@7 {
+> +           reg = <0x7>;
+> +           #address-cells = <1>;
+> +           #size-cells = <0>;
+> +
+> +           pci_phy1: pci-phy@0 {
+> +              compatible = "brcm,ns2-pcie-phy";
+> +              reg = <0x0>;
+> +              #phy-cells = <0>;
+> +           };
+> +        };
+> +
+> +        mdio@10 {
+> +           reg = <0x10>;
+> +           #address-cells = <1>;
+> +           #size-cells = <0>;
+> +
+> +           gphy0: eth-phy@10 {
+> +              reg = <0x10>;
+> +           };
+> +        };
+> +    };
+> -- 
+> 2.25.1
+> 
+> 

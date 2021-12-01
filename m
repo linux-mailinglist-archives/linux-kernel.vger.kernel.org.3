@@ -2,66 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D5E46450B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F080F464525
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346248AbhLACtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:49:21 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16328 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346231AbhLACtU (ORCPT
+        id S1346313AbhLAC6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241503AbhLAC5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:49:20 -0500
-Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J3k39633xz91Lh;
-        Wed,  1 Dec 2021 10:45:25 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 10:45:58 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 1 Dec
- 2021 10:45:57 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-scsi@vger.kernel.org>
-CC:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
-Subject: [PATCH -next] scsi: csiostor: fix invalid use of sizeof in csio_mb_isr_handler()
-Date:   Wed, 1 Dec 2021 10:52:40 +0800
-Message-ID: <20211201025240.1373665-1-yangyingliang@huawei.com>
+        Tue, 30 Nov 2021 21:57:50 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA3FC061748;
+        Tue, 30 Nov 2021 18:54:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CB51B8164C;
+        Wed,  1 Dec 2021 02:54:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3786AC53FCB;
+        Wed,  1 Dec 2021 02:54:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638327265;
+        bh=bLoI2u1zhgXsRynXZI+d7PsJZN0AP7jMWKDX+qn0CQo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=plMU7TyDEyojfbdt2+C+FKRjElwHXfUPE3a0n3tTBZKJ9tzcRmhS8DW9LGehQe+GY
+         yvwgrbfI+JctbnSvSlgmugH+S/iK43HFVvfZE2+Db/niqtsEzzpcwn54x1Oo+v9RXT
+         m7ZLru5eDGRLtyicXPmrPZNafIQwM+7BRK8OoLydQt1fJDobDfZwKuq/c0BbugivYz
+         AbsY8gU4bC413t29yCFb0FozBXJ1c+IE5+eLO1vCH2vu22jNvx1zt36F/KDtOR5RHl
+         pJraNNiAsb6PitY1x0fTW7IUfGxFHdf32D2hp2a/w4iC4eEdbPDwXd/nV+e8EcLl00
+         xNfWcg9+Mh6xA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     David Airlie <airlied@linux.ie>
+Cc:     Vaibhav Gupta <vaibhav.varodek@gmail.com>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v2 RESEND 0/3] agp: convert to generic power management
+Date:   Tue, 30 Nov 2021 20:54:16 -0600
+Message-Id: <20211201025419.2797624-1-helgaas@kernel.org>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-sizeof() when applied to a pointer typed expression gives the
-size of the pointer, not that of the pointed data.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/scsi/csiostor/csio_mb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This is a repost of patches from Vaibhav to convert from legacy PCI power
+management to generic power management.  The most recent posting is here:
 
-diff --git a/drivers/scsi/csiostor/csio_mb.c b/drivers/scsi/csiostor/csio_mb.c
-index 94810b19e747..4df8a4df4408 100644
---- a/drivers/scsi/csiostor/csio_mb.c
-+++ b/drivers/scsi/csiostor/csio_mb.c
-@@ -1551,7 +1551,7 @@ csio_mb_isr_handler(struct csio_hw *hw)
- 		 * Enqueue event to EventQ. Events processing happens
- 		 * in Event worker thread context
- 		 */
--		if (csio_enqueue_evt(hw, CSIO_EVT_MBX, mbp, sizeof(mbp)))
-+		if (csio_enqueue_evt(hw, CSIO_EVT_MBX, mbp, sizeof(*mbp)))
- 			CSIO_INC_STATS(hw, n_evt_drop);
- 
- 		return 0;
+  https://lore.kernel.org/all/20210112080924.1038907-1-vaibhavgupta40@gmail.com/
+
+Vaibhav has converted around 180 drivers to generic power management, and
+over 100 of those conversions have made it upstream.  If we can finish off
+the remaining ones, we'll be able to remove quite a bit of ugly legacy code
+from the PCI core.
+
+I updated the commit logs to try to make it easier to verify these.  The
+patches themselves are unchanged other than being rebased to v5.16-rc1.
+
+Vaibhav Gupta (3):
+  amd64-agp: convert to generic power management
+  sis-agp: convert to generic power management
+  via-agp: convert to generic power management
+
+ drivers/char/agp/amd64-agp.c | 24 ++++++------------------
+ drivers/char/agp/sis-agp.c   | 25 ++++++-------------------
+ drivers/char/agp/via-agp.c   | 25 +++++--------------------
+ 3 files changed, 17 insertions(+), 57 deletions(-)
+
 -- 
 2.25.1
 

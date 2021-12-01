@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BC84657EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:55:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 551F34657A6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:53:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353202AbhLAU4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50608 "EHLO
+        id S1353277AbhLAU43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:56:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353129AbhLAUzA (ORCPT
+        with ESMTP id S1353126AbhLAUzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:55:00 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3C9C06175B;
-        Wed,  1 Dec 2021 12:51:38 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so1726089pjj.0;
-        Wed, 01 Dec 2021 12:51:38 -0800 (PST)
+        Wed, 1 Dec 2021 15:55:04 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A84C06175D;
+        Wed,  1 Dec 2021 12:51:40 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id v23so18898366pjr.5;
+        Wed, 01 Dec 2021 12:51:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oF513HL59Lq2r+t8IJTJGHwJx0tkD87dfhsL+nC0qZs=;
-        b=Gu38bNP42GQE4Q0wImmTZ533tndkyxXvDUIKcsJTjIxxjFfJCiJYD9Wz33X+jnoBhc
-         +jpr+NiaprWjfgXcTDZ9Piw5b3gkZRsZ8kqvNPn1pGzodSq8kqlKhVMpKc87WCBJ2Y/I
-         B3eTDOSzJJXQ4kk5ObP0xNTTU1El/AczBrET8obTDAOH0sOqp1OaudYSr3pUN0LZ38oW
-         ow+aon7mUPajiUVfOWv1VBvPmDE3wYZOjFQCd/zyI4oBp5nyoqkaHatYjiQxdIz3nE5I
-         i6m2D5Ww/igRWPSNkR9m5fH59vNqQLgTp6v/FhNUWC8WT2sWU5PL4aEICwr3YJJhWv/V
-         /uVw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=fzt07ce1bSe7/IbkVLZBOEgGkOAfA/4NDEECalTgWJE=;
+        b=FYVCsy5HygTaGGtShSbQsAvYPLc2w/7ZTB05srpm2LzZB+wkiJ3Nn7QpEsaeSgGmPj
+         +vlE2ycGHLkd75e6jWOeU4FWp5YeNgsARj6l/ebhbmShWQsscKJ7D6dGpZtrNVZ4uoT0
+         2gFV4sKsvprstsU7xJo1Q5k5iY9sBZWIP/Sx9TroQ1DQWCCJtxhnRdQhyyDi+wL13mm2
+         5zev9SmX32IFmEtoXcmvojmTqQ3GA9zyT9vU+jHTi9A1Z0w18XogRJxm3LvgSmBmK9pL
+         94EtXueZpBvGqlNJt7aC6lTyoaq7fHryURIDHeu5J08zxFBQ7xvQi0JohXd7takxVJVh
+         7wjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=oF513HL59Lq2r+t8IJTJGHwJx0tkD87dfhsL+nC0qZs=;
-        b=ipHcxlMfPLSaYUVt2wAI8lcoN1NOnsSj4JjVk5Vp23kZQ+exK67PDjlMOR/yts4O5G
-         aFXCt/stVDB7TWNowWhUaiKdc8CtG1Nl8SmXnn6GsPzGNSUUN6RrsPQJq6hDykRurFZn
-         fxcx31PzH7u+51s3Pga2GmnytGUfm1erCJKRMV6VB6VKR28OpkL1ZVjGYZlm76KtEomb
-         F0C923tyktNJjXQykNr5WDbOI1BvgXI8x+qmxzF/SKgnRDGCJ/VyH1KqJKI2R8eQZE7E
-         kjDOoK8qmC/5WvyAlYFEkKL1enmfCL45z5UO6Rl3wNbJah6Y79DRczlpX7dqN6L//eA7
-         8xKQ==
-X-Gm-Message-State: AOAM530x26KVKYLi4OT8YCbQT1KzOxRE8e7HSZMeR+ns4CdeFnb4ramB
-        UsE0Hi5uBj+CZ9zW76uJwGJzkwAA8s8=
-X-Google-Smtp-Source: ABdhPJy1qEUa/nopWxDTuz1Ua9yO5XGnE1dzsGDNJjYVNCnS9wBraDlcVnsGOkzNzSpxgmK+2E8yGg==
-X-Received: by 2002:a17:902:e294:b0:143:86a8:c56d with SMTP id o20-20020a170902e29400b0014386a8c56dmr10082966plc.22.1638391897408;
-        Wed, 01 Dec 2021 12:51:37 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=fzt07ce1bSe7/IbkVLZBOEgGkOAfA/4NDEECalTgWJE=;
+        b=TR2Zl6eGASepNFgE99od9tCqqBVDRqSOawx0s9GQH1nehp0bVgvUei9NpyA/FHQAc2
+         2lRgZwLFJ7/Q/C6fIJfebsySOeDJ38FZBpSVbTO4HgP7Om2qAELs6JkvVbQjzxnCM4fA
+         EvqRwELuvD8FU8a48OO8NHbh1muCBdGspyQyZJ0mBUIihfbevLEBt8Jh1DAi79j1l+pb
+         bj7vw10nKEhajHH2gltBBzH/q7IQfwJd7Yo+meJLRshLGEofKiOb419rlXcOwcwEYwE3
+         Et1yqwJxqa07fF8Qmwsx0K5j1aGpyREo+RNe8mtT/sC3itYJZnewZ+oA3MKAbxzRWDp7
+         Ynbw==
+X-Gm-Message-State: AOAM531fICaUOU/IOGTwDFF9XPGPGxXSY6jMs6OdxQRv4yP+YzHdz3H2
+        O2Lf9KTrf1c3LrwkB8YKaiFu0hzjKc8=
+X-Google-Smtp-Source: ABdhPJwHzRvEaBbpXXFrDBpnfhlkM8jTyvUa66WT//nOJrVwU/fUe+YFZfhL4JjqAiXTwn+wP3jIJw==
+X-Received: by 2002:a17:902:7fc5:b0:143:6d84:88eb with SMTP id t5-20020a1709027fc500b001436d8488ebmr10066145plb.61.1638391899426;
+        Wed, 01 Dec 2021 12:51:39 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p20sm729117pfw.96.2021.12.01.12.51.35
+        by smtp.gmail.com with ESMTPSA id p20sm729117pfw.96.2021.12.01.12.51.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 12:51:36 -0800 (PST)
+        Wed, 01 Dec 2021 12:51:38 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -91,99 +91,193 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH 00/14] Broadcom DT bindings updates to YAML
-Date:   Wed,  1 Dec 2021 12:50:56 -0800
-Message-Id: <20211201205110.41656-1-f.fainelli@gmail.com>
+Subject: [PATCH 01/14] dt-bindings: mmc: Convert Broadcom STB SDHCI binding to YAML
+Date:   Wed,  1 Dec 2021 12:50:57 -0800
+Message-Id: <20211201205110.41656-2-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211201205110.41656-1-f.fainelli@gmail.com>
+References: <20211201205110.41656-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+Convert the Broadcom STB SDHCI controller Device Tree binding to YAML.
 
-This patch series contains a number of device tree bindings being
-converted to YAML to help with validation.
-
-There will be second, and possibly third rounds later on after those
-land in.
-
-Thanks!
-
-Florian Fainelli (14):
-  dt-bindings: mmc: Convert Broadcom STB SDHCI binding to YAML
-  dt-bindings: reset: Convert Broadcom STB reset to YAML
-  dt-bindings: pwm: Convert BCM7038 PWM binding to YAML
-  dt-bindings: rtc: Convert Broadcom STB waketimer to YAML
-  dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
-  dt-binding: interrupt-controller: Convert BCM7038 L1 intc to YAML
-  dt-bindings: interrupt-controller: Convert BCM7120 L2 to YAML
-  dt-bindings: interrupt-controller: Merge BCM3380 with BCM7120
-  dt-bindings: interrupt-controller: Convert Broadcom STB L2 to YAML
-  dt-bindings: rng: Convert iProc RNG200 to YAML
-  dt-bindings: thermal: Convert Broadcom TMON to YAML
-  dt-bindings: ata: Convert Broadcom SATA to YAML
-  dt-bindings: bus: Convert GISB arbiter to YAML
-  dt-bindings: usb: Convert BDC to YAML
-
- .../bindings/ata/brcm,sata-brcm.txt           |  45 ------
- .../bindings/ata/brcm,sata-brcm.yaml          |  91 +++++++++++
- .../devicetree/bindings/bus/brcm,gisb-arb.txt |  34 ----
- .../bindings/bus/brcm,gisb-arb.yaml           |  66 ++++++++
- .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 ----------
- .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 104 ++++++++++++
- .../brcm,bcm3380-l2-intc.txt                  |  39 -----
- .../brcm,bcm7038-l1-intc.txt                  |  61 -------
- .../brcm,bcm7038-l1-intc.yaml                 |  91 +++++++++++
- .../brcm,bcm7120-l2-intc.txt                  |  88 -----------
- .../brcm,bcm7120-l2-intc.yaml                 | 149 ++++++++++++++++++
- .../interrupt-controller/brcm,l2-intc.txt     |  31 ----
- .../interrupt-controller/brcm,l2-intc.yaml    |  64 ++++++++
- .../bindings/mmc/brcm,sdhci-brcmstb.txt       |  53 -------
- .../bindings/mmc/brcm,sdhci-brcmstb.yaml      | 100 ++++++++++++
- .../bindings/pwm/brcm,bcm7038-pwm.txt         |  20 ---
- .../bindings/pwm/brcm,bcm7038-pwm.yaml        |  43 +++++
- .../bindings/reset/brcm,brcmstb-reset.txt     |  27 ----
- .../bindings/reset/brcm,brcmstb-reset.yaml    |  48 ++++++
- .../bindings/rng/brcm,iproc-rng200.txt        |  16 --
- .../bindings/rng/brcm,iproc-rng200.yaml       |  29 ++++
- .../bindings/rtc/brcm,brcmstb-waketimer.txt   |  20 ---
- .../bindings/rtc/brcm,brcmstb-waketimer.yaml  |  44 ++++++
- .../bindings/thermal/brcm,avs-tmon.txt        |  23 ---
- .../bindings/thermal/brcm,avs-tmon.yaml       |  57 +++++++
- .../devicetree/bindings/usb/brcm,bdc.txt      |  29 ----
- .../devicetree/bindings/usb/brcm,bdc.yaml     |  46 ++++++
- MAINTAINERS                                   |   6 +-
- 28 files changed, 935 insertions(+), 572 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.txt
- create mode 100644 Documentation/devicetree/bindings/ata/brcm,sata-brcm.yaml
- delete mode 100644 Documentation/devicetree/bindings/bus/brcm,gisb-arb.txt
- create mode 100644 Documentation/devicetree/bindings/bus/brcm,gisb-arb.yaml
- delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
- create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm3380-l2-intc.txt
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.txt
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7038-l1-intc.yaml
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.txt
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,bcm7120-l2-intc.yaml
- delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.txt
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/brcm,l2-intc.yaml
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+---
+ .../bindings/mmc/brcm,sdhci-brcmstb.txt       |  53 ----------
+ .../bindings/mmc/brcm,sdhci-brcmstb.yaml      | 100 ++++++++++++++++++
+ 2 files changed, 100 insertions(+), 53 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
  create mode 100644 Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
- delete mode 100644 Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.txt
- create mode 100644 Documentation/devicetree/bindings/pwm/brcm,bcm7038-pwm.yaml
- delete mode 100644 Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.txt
- create mode 100644 Documentation/devicetree/bindings/reset/brcm,brcmstb-reset.yaml
- delete mode 100644 Documentation/devicetree/bindings/rng/brcm,iproc-rng200.txt
- create mode 100644 Documentation/devicetree/bindings/rng/brcm,iproc-rng200.yaml
- delete mode 100644 Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
- delete mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-tmon.txt
- create mode 100644 Documentation/devicetree/bindings/thermal/brcm,avs-tmon.yaml
- delete mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.txt
- create mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.yaml
 
+diff --git a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
+deleted file mode 100644
+index ae2074184528..000000000000
+--- a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.txt
++++ /dev/null
+@@ -1,53 +0,0 @@
+-* BROADCOM BRCMSTB/BMIPS SDHCI Controller
+-
+-This file documents differences between the core properties in mmc.txt
+-and the properties used by the sdhci-brcmstb driver.
+-
+-NOTE: The driver disables all UHS speed modes by default and depends
+-on Device Tree properties to enable them for SoC/Board combinations
+-that support them.
+-
+-Required properties:
+-- compatible: should be one of the following
+-  - "brcm,bcm7425-sdhci"
+-  - "brcm,bcm7445-sdhci"
+-  - "brcm,bcm7216-sdhci"
+-
+-Refer to clocks/clock-bindings.txt for generic clock consumer properties.
+-
+-Example:
+-
+-	sdhci@84b0000 {
+-		sd-uhs-sdr50;
+-		sd-uhs-ddr50;
+-		sd-uhs-sdr104;
+-		sdhci,auto-cmd12;
+-		compatible = "brcm,bcm7216-sdhci",
+-			   "brcm,bcm7445-sdhci",
+-			   "brcm,sdhci-brcmstb";
+-		reg = <0x84b0000 0x260 0x84b0300 0x200>;
+-		reg-names = "host", "cfg";
+-		interrupts = <0x0 0x26 0x4>;
+-		interrupt-names = "sdio0_0";
+-		clocks = <&scmi_clk 245>;
+-		clock-names = "sw_sdio";
+-	};
+-
+-	sdhci@84b1000 {
+-		mmc-ddr-1_8v;
+-		mmc-hs200-1_8v;
+-		mmc-hs400-1_8v;
+-		mmc-hs400-enhanced-strobe;
+-		supports-cqe;
+-		non-removable;
+-		bus-width = <0x8>;
+-		compatible = "brcm,bcm7216-sdhci",
+-			   "brcm,bcm7445-sdhci",
+-			   "brcm,sdhci-brcmstb";
+-		reg = <0x84b1000 0x260 0x84b1300 0x200>;
+-		reg-names = "host", "cfg";
+-		interrupts = <0x0 0x27 0x4>;
+-		interrupt-names = "sdio1_0";
+-		clocks = <&scmi_clk 245>;
+-		clock-names = "sw_sdio";
+-	};
+diff --git a/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+new file mode 100644
+index 000000000000..dccd5ad96981
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mmc/brcm,sdhci-brcmstb.yaml
+@@ -0,0 +1,100 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mmc/brcm,sdhci-brcmstb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Broadcom BRCMSTB/BMIPS SDHCI Controller binding
++
++maintainers:
++  - Al Cooper <alcooperx@gmail.com>
++  - Florian Fainelli <f.fainelli@gmail.com>
++
++allOf:
++  - $ref: mmc-controller.yaml#
++
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - brcm,bcm7216-sdhci
++          - const: brcm,bcm7445-sdhci
++          - const: brcm,sdhci-brcmstb
++      - items:
++          - enum:
++              - brcm,bcm7445-sdhci
++          - const: brcm,sdhci-brcmstb
++      - items:
++          - enum:
++              - brcm,bcm7425-sdhci
++          - const: brcm,sdhci-brcmstb
++
++  reg:
++    minItems: 2
++
++  reg-names:
++    items:
++      - const: host
++      - const: cfg
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++    description:
++      handle to core clock for the sdhci controller.
++
++  clock-names:
++    items:
++      - const: sw_sdio
++
++  sdhci,auto-cmd12:
++    type: boolean
++    description: Specifies that controller should use auto CMD12
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    mmc@84b0000 {
++      sd-uhs-sdr50;
++      sd-uhs-ddr50;
++      sd-uhs-sdr104;
++      sdhci,auto-cmd12;
++      compatible = "brcm,bcm7216-sdhci",
++                   "brcm,bcm7445-sdhci",
++                   "brcm,sdhci-brcmstb";
++      reg = <0x84b0000 0x260>, <0x84b0300 0x200>;
++      reg-names = "host", "cfg";
++      interrupts = <0x0 0x26 0x4>;
++      interrupt-names = "sdio0_0";
++      clocks = <&scmi_clk 245>;
++      clock-names = "sw_sdio";
++    };
++
++    mmc@84b1000 {
++      mmc-ddr-1_8v;
++      mmc-hs200-1_8v;
++      mmc-hs400-1_8v;
++      mmc-hs400-enhanced-strobe;
++      supports-cqe;
++      non-removable;
++      bus-width = <0x8>;
++      compatible = "brcm,bcm7216-sdhci",
++           "brcm,bcm7445-sdhci",
++            "brcm,sdhci-brcmstb";
++      reg = <0x84b1000 0x260>, <0x84b1300 0x200>;
++      reg-names = "host", "cfg";
++      interrupts = <0x0 0x27 0x4>;
++      interrupt-names = "sdio1_0";
++      clocks = <&scmi_clk 245>;
++      clock-names = "sw_sdio";
++    };
 -- 
 2.25.1
 

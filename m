@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D40B04651F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB90D4651F9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351090AbhLAPr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:47:27 -0500
-Received: from foss.arm.com ([217.140.110.172]:40196 "EHLO foss.arm.com"
+        id S1351117AbhLAPt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:49:26 -0500
+Received: from vps-vb.mhejs.net ([37.28.154.113]:46336 "EHLO vps-vb.mhejs.net"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S236266AbhLAPr0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:47:26 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97AF0143B;
-        Wed,  1 Dec 2021 07:44:05 -0800 (PST)
-Received: from [10.57.0.188] (unknown [10.57.0.188])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 79A5C3F766;
-        Wed,  1 Dec 2021 07:44:04 -0800 (PST)
-Subject: Re: [PATCH] drm/komeda: Fix an undefined behavior bug in
- komeda_plane_add()
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     David Airlie <airlied@linux.ie>, kjlu@umn.edu,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        "James (Qian) Wang" <james.qian.wang@arm.com>,
-        Mihail Atanassov <mihail.atanassov@arm.com>
-References: <20211130142531.156863-1-zhou1615@umn.edu>
-From:   Steven Price <steven.price@arm.com>
-Message-ID: <fadc42da-bf13-4c18-653b-8d80fd486940@arm.com>
-Date:   Wed, 1 Dec 2021 15:44:03 +0000
+        id S1348015AbhLAPtC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:49:02 -0500
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1msRnE-0008GC-VT; Wed, 01 Dec 2021 16:45:12 +0100
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+ <a47c93c2fe40e7ed27eb0ff6ac2b173254058b6c.1638304315.git.maciej.szmigiero@oracle.com>
+ <YabK7IOM74ag2CcS@google.com>
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Subject: Re: [PATCH v6 03/29] KVM: Resync only arch fields when
+ slots_arch_lock gets reacquired
+Message-ID: <2154a0ce-7ec7-d9e6-d0e1-5806fba9123a@maciej.szmigiero.name>
+Date:   Wed, 1 Dec 2021 16:45:06 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <20211130142531.156863-1-zhou1615@umn.edu>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <YabK7IOM74ag2CcS@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2021 14:25, Zhou Qingyang wrote:
-> In komeda_plane_add(), komeda_get_layer_fourcc_list() is assigned to
-> formats and used in drm_universal_plane_init().
-> drm_universal_plane_init() passes formats to
-> __drm_universal_plane_init(). __drm_universal_plane_init() further
-> passes formats to memcpy() as src parameter, which could lead to an
-> undefined behavior bug on failure of komeda_get_layer_fourcc_list().
+On 01.12.2021 02:07, Sean Christopherson wrote:
+> On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
+>> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+>>
+>> There is no need to copy the whole memslot data after releasing
+>> slots_arch_lock for a moment to install temporary memslots copy in
+>> kvm_set_memslot() since this lock only protects the arch field of each
+>> memslot.
+>>
+>> Just resync this particular field after reacquiring slots_arch_lock.
+>>
+>> Note, this also eliminates the need to manually clear the INVALID flag
+>> when restoring memslots; the "setting" of the INVALID flag was an
+>> unwanted side effect of copying the entire memslots.
+>>
+>> Since kvm_copy_memslots() has just one caller remaining now
+>> open-code it instead.
+>>
+>> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+>> [sean: tweak shortlog, note INVALID flag in changelog, revert comment]
+>> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > 
-> Fix this bug by adding a check of formats.
+> Heh, I think you can drop my SoB?  This is new territory for me, I don't know the
+> rules for this particular situation.
 > 
-> This bug was found by a static analyzer. The analysis employs
-> differential checking to identify inconsistent security operations
-> (e.g., checks or kfrees) between two code paths and confirms that the
-> inconsistent operations are not recovered in the current function or
-> the callers, so they constitute bugs.
-> 
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
-> 
-> Builds with CONFIG_DRM_KOMEDA=m show no new warnings,
-> and our static analyzer no longer warns about this code.
-> 
-> Fixes: 61f1c4a8ab75 ("drm/komeda: Attach komeda_dev to DRM-KMS")
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> ---
->  drivers/gpu/drm/arm/display/komeda/komeda_plane.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-> index d63d83800a8a..dd3f17e970dd 100644
-> --- a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-> +++ b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-> @@ -265,6 +265,10 @@ static int komeda_plane_add(struct komeda_kms_dev *kms,
->  
->  	formats = komeda_get_layer_fourcc_list(&mdev->fmt_tbl,
->  					       layer->layer_type, &n_formats);
-> +	if (!formats) {
-> +		err = -ENOMEM;
-> +		goto cleanup;
-> +	}
-
-If this executes it will cause undefined behaviour...
-
-The cleanup code calls komeda_plane_destroy() which calls
-drm_plane_cleanup() which does (amongst other things) a
-list_del(&plane->head). But the plane hasn't been put on a list yet as
-that's done in drm_universal_plane_init().
-
-So in this case we simple want to do:
-
-if (!formats) {
-	kfree(kplane);
-	return -ENOMEM;
-}
-
-Note that without this 'fix' a NULL return from
-komeda_get_layer_fourcc_list() would leave n_formats==0, so while the
-NULL pointer is passed into memcpy() it is also passed a length of 0.
-Which I believe is safe.
-
-However while looking at this function...
-
->  
->  	err = drm_universal_plane_init(&kms->base, plane,
->  			get_possible_crtcs(kms, c->pipeline),
+> Reviewed-by: Sean Christopherson <seanjc@google.com>
 > 
 
-This call to drm_universal_plane_init() can fail early before
-plane->head has been initialised. In which case the following:
+Will replace your SoB with your R-b on this patch then.
 
-> 	komeda_put_fourcc_list(formats);
-> 
-> 	if (err)
-> 		goto cleanup;
-
-commits the exact same sin and would cause a similar NULL dereference in
-drm_plane_cleanup().
-
-Steve
+Thanks,
+Maciej

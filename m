@@ -2,115 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FFF465697
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 135FA46569C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245621AbhLATlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:41:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239157AbhLATlB (ORCPT
+        id S1352671AbhLATlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:41:22 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:34420 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S245594AbhLATlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:41:01 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4830FC061574;
-        Wed,  1 Dec 2021 11:37:39 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id 71so24691639pgb.4;
-        Wed, 01 Dec 2021 11:37:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2pQR4NmCSaxcgp6K9YVXVHlggEsM7Bp75xK/vJqmsa0=;
-        b=JGtt7aFtGVaGBNVoM5LP+n2i55DPMQv3JN/bKvjlOrjjtGEOzhdDHL7Pb8h9mu/7Cu
-         mkLhCxVGFlwTIc5DEvc9HpCIAuf8zIYygEuqrBz0RcD8bBViQeYNFQlqBaTdJCmBCJbN
-         o+74+3yf5GO3Xiu5EO/NLLu5bZdkWg+gnMVWC3pH+VfngCEA9d4A9qvfW1/fbWVgDBVs
-         7VF7aTuntdE0b3uiULHKWH3NN6m56r2r6dzdp8OjZGXtZrxveuDmuuRDMyYgXvm/iBB5
-         iDVdirUqPy1mzh8jgk+qK2Bfy8shbOZVULsvjG48jHLQqp3IP8Jagd9GwmFUEZAQajoe
-         w47A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2pQR4NmCSaxcgp6K9YVXVHlggEsM7Bp75xK/vJqmsa0=;
-        b=OKngJl7o7JG37ueuQ+JNn+L/QXVFwcIFQSOo9hmww9jFl1YlJBVSxCqzsKmWeAx9Go
-         1XDMcaqgMTkrY2CR9ier9tnM7ubumEZHbHZRQmkDbXniW5R2aLiaxnP2DOMm46wujlXt
-         S9ygratm21kyRu0dh21xliV7YUSK8WFrjmKFZ1twthWk/iYd7Ung90m1jDkOLRZL71et
-         277Q4Pi8KY3cmqB5rl8XkUwGZFLFHinPLA7O+QXMVTqP2ZFGbECNyiy4QCk1FmeIZn7X
-         NcTcRkYuJHLbnSpMf3t2hdZdN8UIhaIPbzUcnxhHYCce1cLgWMz6Kk7hkdGNi5ierfOA
-         8+2w==
-X-Gm-Message-State: AOAM533k0LKMGTXnys8PlHdpdDuSyNcG5LMSoIzkM5Dvhi0EFgD8C9PW
-        OzJ2+/aU6mlNCi5TwcQtKrA=
-X-Google-Smtp-Source: ABdhPJxHXcCwmQKA5iVtujrmdj750ZdrGnnPFT9YbWf3XHCcFPS3qqtpS5+jKg2Bip0m4SVWlJOXEA==
-X-Received: by 2002:a63:904a:: with SMTP id a71mr6278803pge.528.1638387458755;
-        Wed, 01 Dec 2021 11:37:38 -0800 (PST)
-Received: from localhost ([2601:647:4600:a5:6f71:8916:71a8:8af8])
-        by smtp.gmail.com with ESMTPSA id e4sm418588pgi.21.2021.12.01.11.37.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 11:37:38 -0800 (PST)
-Date:   Wed, 1 Dec 2021 11:37:37 -0800
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, isaku.yamahata@intel.com,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, isaku.yamahata@gmail.com,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: Re: [RFC PATCH v3 14/59] KVM: x86: Add vm_type to differentiate
- legacy VMs from protected VMs
-Message-ID: <20211201193737.GB1166703@private.email.ne.jp>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
- <60a163e818b9101dce94973a2b44662ba3d53f97.1637799475.git.isaku.yamahata@intel.com>
- <87tug0jbno.ffs@tglx>
- <YaUPZj4ja5FY7Fvh@google.com>
+        Wed, 1 Dec 2021 14:41:18 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 088DFB8211B;
+        Wed,  1 Dec 2021 19:37:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84EDEC53FAD;
+        Wed,  1 Dec 2021 19:37:52 +0000 (UTC)
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andreas Gruenbacher <agruenba@redhat.com>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-btrfs@vger.kernel.org
+Subject: [PATCH v2 0/4] Avoid live-lock in fault-in+uaccess loops with sub-page faults
+Date:   Wed,  1 Dec 2021 19:37:46 +0000
+Message-Id: <20211201193750.2097885-1-catalin.marinas@arm.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaUPZj4ja5FY7Fvh@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 05:35:34PM +0000,
-Sean Christopherson <seanjc@google.com> wrote:
+Hi,
 
-> On Thu, Nov 25, 2021, Thomas Gleixner wrote:
-> > On Wed, Nov 24 2021 at 16:19, isaku yamahata wrote:
-> > > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > >
-> > > Add a capability to effectively allow userspace to query what VM types
-> > > are supported by KVM.
-> > 
-> > I really don't see why this has to be named legacy. There are enough
-> > reasonable use cases which are perfectly fine using the non-encrypted
-> > muck. Just because there is a new hyped feature does not make anything
-> > else legacy.
-> 
-> Yeah, this was brought up in the past.  The current proposal is to use
-> KVM_X86_DEFAULT_VM[1], though at one point the plan was to use a generic
-> KVM_VM_TYPE_DEFAULT for all architectures[2], not sure what happened to that idea.
-> 
-> [1] https://lore.kernel.org/all/YY6aqVkHNEfEp990@google.com/
-> [2] https://lore.kernel.org/all/YQsjQ5aJokV1HZ8N@google.com/
+Following the discussions on the first series,
 
-Currently <feature>_{unsupported, disallowed} are added and the check is
- sprinkled and warn in the corresponding low level tdx code.  It helped to
- detect dubious behavior of guest or qemu.
+https://lore.kernel.org/r/20211124192024.2408218-1-catalin.marinas@arm.com
 
-The other approach is to silently ignore them (SMI, INIT, IRQ etc) without
-such check.  The pros is, the code would be simpler and it's what SEV does today.
-the cons is, it would bes hard to track down such cases and the user would
-be confused.  For example, when user requests reset/SMI, it's silently ignored.
-The some check would still be needed.
-Any thoughts?
+this new patchset aims to generalise the sub-page probing and introduce
+a minimum size to the fault_in_*() functions. I called this 'v2' but I
+can rebase it on top of v1 and keep v1 as a btrfs live-lock
+back-portable fix. The fault_in_*() API improvements would be a new
+series. Anyway, I'd first like to know whether this is heading in the
+right direction and whether it's worth adding min_size to all
+fault_in_*() (more below).
 
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+v2 adds a 'min_size' argument to all fault_in_*() functions with current
+callers passing 0 (or we could make it 1). A probe_subpage_*() call is
+made for the min_size range, though with all 0 this wouldn't have any
+effect. The only difference is btrfs search_ioctl() in the last patch
+which passes a non-zero min_size to avoid the live-lock (functionally
+that's the same as the v1 series).
+
+In terms of sub-page probing, I don't think with the current kernel
+anything other than search_ioctl() matters. The buffered file I/O can
+already cope with current fault_in_*() + copy_*_user() loops (the
+uaccess makes progress). Direct I/O either goes via GUP + kernel mapping
+access (and memcpy() can't fault) or, if the user buffer is not PAGE
+aligned, it may fall back to buffered I/O. So we really only care about
+fault_in_writeable(), as in v1.
+
+Linus suggested that we could use the min_size to request a minimum
+guaranteed probed size (in most cases this would be 1) and put a cap on
+the faulted-in size, say two pages. All the fault_in_iov_iter_*()
+callers will need to check the actual quantity returned by fault_in_*()
+rather than bail out on non-zero but Andreas has a patch already (though
+I think there are a few cases in btrfs etc.):
+
+https://lore.kernel.org/r/20211123151812.361624-1-agruenba@redhat.com
+
+With these callers fixed, we could add something like the diff below.
+But, again, min_size doesn't actually have any current use in the kernel
+other than fault_in_writeable() and search_ioctl().
+
+Thanks for having a look. Suggestions welcomed.
+
+------------------8<-------------------------------
+diff --git a/mm/gup.c b/mm/gup.c
+index 7fa69b0fb859..3aa88aa8ce9d 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -1658,6 +1658,8 @@ static long __get_user_pages_locked(struct mm_struct *mm, unsigned long start,
+ }
+ #endif /* !CONFIG_MMU */
+ 
++#define MAX_FAULT_IN_SIZE	(2 * PAGE_SIZE)
++
+ /**
+  * fault_in_writeable - fault in userspace address range for writing
+  * @uaddr: start of address range
+@@ -1671,6 +1673,7 @@ size_t fault_in_writeable(char __user *uaddr, size_t size, size_t min_size)
+ {
+ 	char __user *start = uaddr, *end;
+ 	size_t faulted_in = size;
++	size_t max_size = max_t(size_t, MAX_FAULT_IN_SIZE, min_size);
+ 
+ 	if (unlikely(size == 0))
+ 		return 0;
+@@ -1679,7 +1682,7 @@ size_t fault_in_writeable(char __user *uaddr, size_t size, size_t min_size)
+ 			return size;
+ 		uaddr = (char __user *)PAGE_ALIGN((unsigned long)uaddr);
+ 	}
+-	end = (char __user *)PAGE_ALIGN((unsigned long)start + size);
++	end = (char __user *)PAGE_ALIGN((unsigned long)start + max_size);
+ 	if (unlikely(end < start))
+ 		end = NULL;
+ 	while (uaddr != end) {
+@@ -1726,9 +1729,10 @@ size_t fault_in_safe_writeable(const char __user *uaddr, size_t size,
+ 	struct vm_area_struct *vma = NULL;
+ 	int locked = 0;
+ 	size_t faulted_in = size;
++	size_t max_size = max_t(size_t, MAX_FAULT_IN_SIZE, min_size);
+ 
+ 	nstart = start & PAGE_MASK;
+-	end = PAGE_ALIGN(start + size);
++	end = PAGE_ALIGN(start + max_size);
+ 	if (end < nstart)
+ 		end = 0;
+ 	for (; nstart != end; nstart = nend) {
+@@ -1759,7 +1763,7 @@ size_t fault_in_safe_writeable(const char __user *uaddr, size_t size,
+ 	if (locked)
+ 		mmap_read_unlock(mm);
+ 	if (nstart != end)
+-		faulted_in = min_t(size_t, nstart - start, size);
++		faulted_in = min_t(size_t, nstart - start, max_size);
+ 	if (faulted_in < min_size ||
+ 	    (min_size && probe_subpage_safe_writeable(uaddr, min_size)))
+ 		return size;
+@@ -1782,6 +1786,7 @@ size_t fault_in_readable(const char __user *uaddr, size_t size,
+ 	const char __user *start = uaddr, *end;
+ 	volatile char c;
+ 	size_t faulted_in = size;
++	size_t max_size = max_t(size_t, MAX_FAULT_IN_SIZE, min_size);
+ 
+ 	if (unlikely(size == 0))
+ 		return 0;
+@@ -1790,7 +1795,7 @@ size_t fault_in_readable(const char __user *uaddr, size_t size,
+ 			return size;
+ 		uaddr = (const char __user *)PAGE_ALIGN((unsigned long)uaddr);
+ 	}
+-	end = (const char __user *)PAGE_ALIGN((unsigned long)start + size);
++	end = (const char __user *)PAGE_ALIGN((unsigned long)start + max_size);
+ 	if (unlikely(end < start))
+ 		end = NULL;
+ 	while (uaddr != end) {
+------------------8<-------------------------------
+
+Catalin Marinas (4):
+  mm: Introduce a 'min_size' argument to fault_in_*()
+  mm: Probe for sub-page faults in fault_in_*()
+  arm64: Add support for user sub-page fault probing
+  btrfs: Avoid live-lock in search_ioctl() on hardware with sub-page
+    faults
+
+ arch/Kconfig                        |  7 ++++
+ arch/arm64/Kconfig                  |  1 +
+ arch/arm64/include/asm/uaccess.h    | 59 +++++++++++++++++++++++++++++
+ arch/powerpc/kernel/kvm.c           |  2 +-
+ arch/powerpc/kernel/signal_32.c     |  4 +-
+ arch/powerpc/kernel/signal_64.c     |  2 +-
+ arch/x86/kernel/fpu/signal.c        |  2 +-
+ drivers/gpu/drm/armada/armada_gem.c |  2 +-
+ fs/btrfs/file.c                     |  6 +--
+ fs/btrfs/ioctl.c                    |  7 +++-
+ fs/f2fs/file.c                      |  2 +-
+ fs/fuse/file.c                      |  2 +-
+ fs/gfs2/file.c                      |  8 ++--
+ fs/iomap/buffered-io.c              |  2 +-
+ fs/ntfs/file.c                      |  2 +-
+ fs/ntfs3/file.c                     |  2 +-
+ include/linux/pagemap.h             |  8 ++--
+ include/linux/uaccess.h             | 53 ++++++++++++++++++++++++++
+ include/linux/uio.h                 |  6 ++-
+ lib/iov_iter.c                      | 28 +++++++++++---
+ mm/filemap.c                        |  2 +-
+ mm/gup.c                            | 37 +++++++++++++-----
+ 22 files changed, 203 insertions(+), 41 deletions(-)
+

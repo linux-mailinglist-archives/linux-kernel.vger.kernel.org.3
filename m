@@ -2,249 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D59A34651BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F3E4651C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:32:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351001AbhLAPfV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:35:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
+        id S1351020AbhLAPgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350252AbhLAPfU (ORCPT
+        with ESMTP id S243063AbhLAPgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:35:20 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA2AC061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:31:59 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id s139so49192646oie.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:31:59 -0800 (PST)
+        Wed, 1 Dec 2021 10:36:13 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C192DC061574;
+        Wed,  1 Dec 2021 07:32:52 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id j140-20020a1c2392000000b003399ae48f58so22595274wmj.5;
+        Wed, 01 Dec 2021 07:32:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=uFMUhbGSve6XOXG4hT9U3q9GImUbsSFy9Vah1OZisDI=;
-        b=VEqQ4qm73WYGNDTAMVaJv66zUxxEcw1I76eSBm6a3yxe4VglM1A8bd3AWGyIbSITsG
-         L15cql+Aqb1LKY7WuUgdhnqVjOUvVvUYgw+iOUVzlqdv6g9JpLdLgFZJrdGc/qfem8Ic
-         SmD6x7TfGe+WVqdeR9eLomzxti3j9u6g8H2Q+TruWVTvhxgGH/EbFn2BmHIKE77dcYPQ
-         AVdAk4ha5MiNJ/fABaqxzubfxrrIAJ9KPPFfBnbxEAcMPPf7nSif221xhhqJDC0ethkY
-         AdCVXauvs3kwFIM18EZC0A7yrJt/3j+OBqkcd047bVeqxiwyuaUmU+7dmprGUqcue6tA
-         Pcfw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=z1V9o3659iPfdup74dALWjx0yYdBSgLCQ5oAR/ZzaQs=;
+        b=lxnQ4umUeWipBDpN2gZjlZykRF7m4hJaKOyzlcQG8U3t9Fw/WO7NcDRNDXeSKfGpDZ
+         YxZRsb2aUWRzriDHbIJ0hUF7/lLzAZUtzCDflJ/1yetTeFeVGGkprCAatokvV0ZrnI/C
+         g90RwDZllj8JYXmQuQnnxDqzxhJs8+jAETm5kH9QXNHcJdYcvSKB+sRvsY3xvnYQ1zLS
+         L1XBVfkhJv9PreUQSwtH+Tu38ibBugfdo0wSFP2xxo8/NeJsDxkKmNA874o7WemBj3kN
+         ZMJ0twfQH9MM49I0uLOZgwM7iXWAsNNs63qofSIHV+5sna9MlfJp4izI085AKE8M5nc7
+         0mTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=uFMUhbGSve6XOXG4hT9U3q9GImUbsSFy9Vah1OZisDI=;
-        b=itvj56jnnCokIle7pCvzgLLYSkJLM44eI86OstjMA3vSHjkGXgswLhanuJOU3cHjAd
-         U0ZgMgV+eiARrwyddb/Ufoy7QPxp3AUZS6jb6++u43348dj5wztgi0/IiT4kNSNy+wfO
-         gt5nBctbntG+PUQYtLWvrtgovHLW7HIQ+PfdUyLLd/uV115bLvFOmj8gpsoY47yFFuAV
-         TDHJ9JwsZEMIX8jidz9dKRN//RdqW+HEL1J7iZJYSqMgiI16XxhU21gJidTgZHBTGiXG
-         ERaQ9xFrIpUQ1//7en7CNQ5FG81TMXfoc9IugclgxthapZWiaM0uOkFYmdLTE58l/J/S
-         CDwQ==
-X-Gm-Message-State: AOAM5337EGHfF8LI4yPWBd3pEGmPVswZWGvPaey8FZ14hgdPk8tNRxGi
-        PfbHqM6JI+CSeb5SiYdoOtycug==
-X-Google-Smtp-Source: ABdhPJwnqbKqj2jV7StOM44pZVUXOOt1pFckEfKefaxTyLXR8Nzec8O4l7stJ4JSVQj5U2bon04vgw==
-X-Received: by 2002:aca:1204:: with SMTP id 4mr6800261ois.136.1638372718608;
-        Wed, 01 Dec 2021 07:31:58 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id m2sm7954oop.12.2021.12.01.07.31.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 07:31:58 -0800 (PST)
-Date:   Wed, 1 Dec 2021 09:31:53 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org, robh+dt@kernel.org,
-        robdclark@gmail.com, seanpaul@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
-        dianders@chromium.org, quic_khsieh@quicinc.com,
-        quic_mkrishn@quicinc.com
-Subject: Re: [PATCH v4 3/4] arm64: dts: qcom: sc7280: add edp display dt nodes
-Message-ID: <YaeVaTtP4g6mchDr@builder.lan>
-References: <1637580369-876-1-git-send-email-quic_sbillaka@quicinc.com>
- <1637580369-876-3-git-send-email-quic_sbillaka@quicinc.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=z1V9o3659iPfdup74dALWjx0yYdBSgLCQ5oAR/ZzaQs=;
+        b=JDExmbHexqtSDwK5xoRJebaljHs2z5yhWf3gJdbcG/h0QixbW7Tv0OaRvSmf3pHXwc
+         XoTx1ysy/VYcyEL6s5Y/vqm+TRXbBr/eiVw7BZTTI61TXrzKE+RP1/WvtwZWWkBYXVnF
+         mD6HVuBwzH2ptVrdT4WixaDXhhjkvRT5bRB0eWTiBIisnCibgJuvmEelYtg062DI3EXN
+         BqXnIgW5WjHH+r1Csr5obPDqt6Banv4xru9AS4VSUxvZ01ZlH9G7kvBw44EGRvbQ4F34
+         fJ5s217YxbCJUW0d3MYHAEy5kmkWrNNL/bMoW6qCB5Kd1Uw2TjVfnZmlURSRQC43bASz
+         e2gg==
+X-Gm-Message-State: AOAM530GY7Gc//e4AMCW8eA/pMTL+AfOdLB27ukvSpMO/CmDn4XvklW/
+        LO97kBBc4HveQ9Uv1e2RQSw=
+X-Google-Smtp-Source: ABdhPJz6yQt0JgWoTo72Vz2EXFyUjMRkcWx6iGLk1uOrjm+1+3VsgHwSOnOE3hC4TysnhQVPwi71Hg==
+X-Received: by 2002:a05:600c:1c1a:: with SMTP id j26mr8109049wms.28.1638372771338;
+        Wed, 01 Dec 2021 07:32:51 -0800 (PST)
+Received: from [192.168.43.77] (82-132-228-4.dab.02.net. [82.132.228.4])
+        by smtp.gmail.com with ESMTPSA id r11sm140905wrw.5.2021.12.01.07.32.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 07:32:50 -0800 (PST)
+Message-ID: <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
+Date:   Wed, 1 Dec 2021 15:32:36 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1637580369-876-3-git-send-email-quic_sbillaka@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [RFC 00/12] io_uring zerocopy send
+Content-Language: en-US
+To:     David Ahern <dsahern@gmail.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
+References: <cover.1638282789.git.asml.silence@gmail.com>
+ <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 22 Nov 05:26 CST 2021, Sankeerth Billakanti wrote:
-
-> Add edp controller and phy DT nodes for sc7280.
+On 12/1/21 03:10, David Ahern wrote:
+> On 11/30/21 8:18 AM, Pavel Begunkov wrote:
+>> Early proof of concept for zerocopy send via io_uring. This is just
+>> an RFC, there are details yet to be figured out, but hope to gather
+>> some feedback.
+>>
+>> Benchmarking udp (65435 bytes) with a dummy net device (mtu=0xffff):
+>> The best case io_uring=116079 MB/s vs msg_zerocopy=47421 MB/s,
+>> or 2.44 times faster.
+>>
+>> № | test:                                | BW (MB/s)  | speedup
+>> 1 | msg_zerocopy (non-zc)                |  18281     | 0.38
+>> 2 | msg_zerocopy -z (baseline)           |  47421     | 1
+>> 3 | io_uring (@flush=false, nr_reqs=1)   |  96534     | 2.03
+>> 4 | io_uring (@flush=true,  nr_reqs=1)   |  89310     | 1.88
+>> 5 | io_uring (@flush=false, nr_reqs=8)   | 116079     | 2.44
+>> 6 | io_uring (@flush=true,  nr_reqs=8)   | 109722     | 2.31
+>>
+>> Based on selftests/.../msg_zerocopy but more limited. You can use
+>> msg_zerocopy -r as usual for receive side.
+>>
+> ...
 > 
-> Signed-off-by: Krishna Manikandan <quic_mkrishn@quicinc.com>
+> Can you state the exact command lines you are running for all of the
+> commands? I tried this set (and commands referenced below) and my
 
-If Krishna authored the patch (he certified its origin first), then he
-should be From: as well.
+Sure. First, for dummy I set mtu by hand, not sure can do it from
+the userspace, can I? Without it __ip_append_data() falls into
+non-zerocopy path.
 
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> ---
-> 
-> Changes in v4:
->     None
-> 
-> Changes in v3:
->     - Add one clock cell per line (Stephen Boyd)
->     - Unit address should match first reg property (Stephen Boyd)
->     - Remove new line (Stephen Boyd)
->     - Add the dsi_phy clocks in dispcc (Kuogee Hsieh)
-> 
-> Changes in v2:
->     - Move regulator definitions to board file (Matthias Kaehlcke)
->     - Move the gpio definitions to board file (Matthias Kaehlcke)
->     - Move the pinconf to board file (Matthias Kaehlcke)
->     - Move status property (Stephen Boyd)
->     - Drop flags from interrupts (Stephen Boyd)
->     - Add clock names one per line for readability (Stephen Boyd)
->     - Rename edp-opp-table (Stephen Boyd)
-> 
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 107 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 105 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 12c4d32..5ad500e 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -2695,8 +2695,8 @@
->  				 <&dsi_phy 1>,
->  				 <0>,
->  				 <0>,
-> -				 <0>,
-> -				 <0>;
-> +				 <&edp_phy 0>,
-> +				 <&edp_phy 1>;
->  			clock-names = "bi_tcxo",
->  				      "gcc_disp_gpll0_clk",
->  				      "dsi0_phy_pll_out_byteclk",
-> @@ -2784,6 +2784,13 @@
->  							remote-endpoint = <&dsi0_in>;
->  						};
->  					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						dpu_intf5_out: endpoint {
-> +							remote-endpoint = <&edp_in>;
-> +						};
-> +					};
->  				};
->  
->  				mdp_opp_table: opp-table {
-> @@ -2899,6 +2906,102 @@
->  
->  				status = "disabled";
->  			};
-> +
-> +			msm_edp: edp@aea0000 {
+diff --git a/drivers/net/dummy.c b/drivers/net/dummy.c
+index f82ad7419508..5c5aeacdabd5 100644
+--- a/drivers/net/dummy.c
++++ b/drivers/net/dummy.c
+@@ -132,7 +132,8 @@ static void dummy_setup(struct net_device *dev)
+  	eth_hw_addr_random(dev);
+  
+  	dev->min_mtu = 0;
+-	dev->max_mtu = 0;
++	dev->mtu = 0xffff;
++	dev->max_mtu = 0xffff;
+  }
 
-mdss_edp:
+# dummy configuration
 
-> +				compatible = "qcom,sc7280-edp";
-> +
-> +				reg = <0 0xaea0000 0 0x200>,
-> +				      <0 0xaea0200 0 0x200>,
-> +				      <0 0xaea0400 0 0xc00>,
-> +				      <0 0xaea1000 0 0x400>;
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <14>;
-> +
-> +				clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +					 <&gcc GCC_EDP_CLKREF_EN>,
-> +					 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_EDP_AUX_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_EDP_LINK_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_EDP_LINK_INTF_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_EDP_PIXEL_CLK>;
-> +				clock-names = "core_xo",
-> +					      "core_ref",
-> +					      "core_iface",
-> +					      "core_aux",
-> +					      "ctrl_link",
-> +					      "ctrl_link_iface",
-> +					      "stream_pixel";
-> +				#clock-cells = <1>;
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_EDP_LINK_CLK_SRC>,
-> +						  <&dispcc DISP_CC_MDSS_EDP_PIXEL_CLK_SRC>;
-> +				assigned-clock-parents = <&edp_phy 0>, <&edp_phy 1>;
-> +
-> +				phys = <&edp_phy>;
-> +				phy-names = "dp";
-> +
-> +				operating-points-v2 = <&edp_opp_table>;
-> +				power-domains = <&rpmhpd SC7280_CX>;
-> +
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				status = "disabled";
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					port@0 {
-> +						reg = <0>;
-> +						edp_in: endpoint {
-> +							remote-endpoint = <&dpu_intf5_out>;
-> +						};
-> +					};
-> +				};
-> +
-> +				edp_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-160000000 {
-> +						opp-hz = /bits/ 64 <160000000>;
-> +						required-opps = <&rpmhpd_opp_low_svs>;
-> +					};
-> +
-> +					opp-270000000 {
-> +						opp-hz = /bits/ 64 <270000000>;
-> +						required-opps = <&rpmhpd_opp_svs>;
-> +					};
-> +
-> +					opp-540000000 {
-> +						opp-hz = /bits/ 64 <540000000>;
-> +						required-opps = <&rpmhpd_opp_nom>;
-> +					};
-> +
-> +					opp-810000000 {
-> +						opp-hz = /bits/ 64 <810000000>;
-> +						required-opps = <&rpmhpd_opp_nom>;
-> +					};
-> +				};
-> +			};
-> +
-> +			edp_phy: phy@aec2a00 {
+modprobe dummy numdummies=1
+ip link set dummy0 up
+# force requests to <dummy_ip_addr> go through the dummy device
+ip route add <dummy_ip_addr> dev dummy0
 
-mdss_edp_phy
 
-Thanks,
-Bjorn
+With dummy I was just sinking the traffic to the dummy device,
+was good enough for me. Omitting "taskset" and "nice":
 
-> +				compatible = "qcom,sc7280-edp-phy";
-> +
-> +				reg = <0 0xaec2a00 0 0x19c>,
-> +				      <0 0xaec2200 0 0xa0>,
-> +				      <0 0xaec2600 0 0xa0>,
-> +				      <0 0xaec2000 0 0x1c0>;
-> +
-> +				clocks = <&rpmhcc RPMH_CXO_CLK>,
-> +					 <&gcc GCC_EDP_CLKREF_EN>;
-> +				clock-names = "aux",
-> +					      "cfg_ahb";
-> +
-> +				#clock-cells = <1>;
-> +				#phy-cells = <0>;
-> +
-> +				status = "disabled";
-> +			};
->  		};
->  
->  		pdc: interrupt-controller@b220000 {
-> -- 
-> 2.7.4
-> 
+send-zc -4 -D <dummy_ip_addr> -t 10 udp
+
+Similarly with msg_zerocopy:
+
+<kernel>/tools/testing/selftests/net/msg_zerocopy -4 -p 6666 -D <dummy_ip_addr> -t 10 -z udp
+
+
+For loopback testing, as zerocopy is not allowed for it as Willem explained in
+the original MSG_ZEROCOPY cover-letter, I used a hack to bypass it:
+
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index ebb12a7d386d..42df33b175ce 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -2854,9 +2854,7 @@ static inline int skb_orphan_frags(struct sk_buff *skb, gfp_t gfp_mask)
+  /* Frags must be orphaned, even if refcounted, if skb might loop to rx path */
+  static inline int skb_orphan_frags_rx(struct sk_buff *skb, gfp_t gfp_mask)
+  {
+-	if (likely(!skb_zcopy(skb)))
+-		return 0;
+-	return skb_copy_ubufs(skb, gfp_mask);
++	return skb_orphan_frags(skb, gfp_mask);
+  }
+  
+  /**
+
+Then running those two lines below in parallel and looking for the numbers
+send shows. It was in favor of io_uring for me, but don't remember
+exactly. perf shows that "send-zc" spends lot of time receiving, so
+wasn't testing performance of it after some point.
+
+msg_zerocopy -r -v -4 -t 20 udp
+send-zc -4 -D 127.0.0.1 -t 10 udp
+
+
+> mileage varies quite a bit.
+
+Interesting, any brief notes on the setup and the results? Dummy
+or something real? io_uring doesn't show if it was really zerocopied
+or not, but I assume you checked it (e.g. with perf/bpftrace).
+
+I expected that @flush=true might be worse with real devices,
+there is one spot to be patched, but apart from that and
+cycles spend in a real LLD offseting the overhead, didn't
+anticipate any problems. I'll see once I try a real device.
+
+
+> Also, have you run this proposed change (and with TCP) across nodes
+> (ie., not just local process to local process via dummy interface)?
+
+Not yet, I tried dummy, and localhost UDP as per above and similarly
+TCP. Just need to grab a server with a proper NIC, will try it out
+soon.
+
+>> Benchmark:
+>> https://github.com/isilence/liburing.git zc_v1
+>>
+>> or this file in particular:
+>> https://github.com/isilence/liburing/blob/zc_v1/test/send-zc.c
+>>
+>> To run the benchmark:
+>> ```
+>> cd <liburing_dir> && make && cd test
+>> # ./send-zc -4 [-p <port>] [-s <payload_size>] -D <destination> udp
+>> ./send-zc -4 -D 127.0.0.1 udp
+>> ```
+>>
+>> msg_zerocopy can be used for the server side, e.g.
+>> ```
+>> cd <linux-kernel>/tools/testing/selftests/net && make
+>> ./msg_zerocopy -4 -r [-p <port>] [-t <sec>] udp
+>> ```
+
+-- 
+Pavel Begunkov

@@ -2,178 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B368464E4B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 13:58:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15713464E58
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 13:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349439AbhLANB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:01:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52694 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244869AbhLANBv (ORCPT
+        id S1349437AbhLANDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:03:07 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:37874 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231522AbhLANDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:01:51 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9189C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 04:58:30 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id z5so36175655edd.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 04:58:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vanguardiasur-com-ar.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=D5PW8BhdAuu4oqSswIsrh+4cgg8Ko16BHPb2BC0DyDc=;
-        b=ShtUvDfW5PyLg35gKksvBhAIF13Qdlo2k1kJ5nf9ddtcN2IWargq9oK9uH9Mj7mOlM
-         yrZ5ncJ7wlQ3v3gaY2hNqU4iayvlI7vavUCnibRCmaVdQk34nmuQKcpVe0PohmHbMvqP
-         Nx1ViR1M93mzRFKRGh73XszDpowN3KMR+Opzfq2PvivLIH0YhKXdc+DMIXTeShsMgFxl
-         9/rGywoLb97EPLIPX0ys7IEZFihb9iHe1IeX3ailUU8luIz9EXUyP9Qn6V0BocL4t0CC
-         j9BgxuSZEW7jn2HQAkvAuK6mVu7ghUJOjDX/Fe7XXV7vRQ/AHlnQE8pbKWqG8SpIt0l0
-         Nf9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D5PW8BhdAuu4oqSswIsrh+4cgg8Ko16BHPb2BC0DyDc=;
-        b=3sdfJuQ24YG53nAdL/c/Zq3ZTNoP4NnNd/FOQvKrqSd9VmyEVCSDvKCqg5JawI2aRn
-         81OUWTeZEPFj0Hh8lm6rN5V7kA40ch5JtEWYnOgSi/2dvLtrDc6Qc9BBj+1WdoR1QpSm
-         FbSJRzrWZGfItCJn+Hj7MJ0eBIw4J60W1n5wGk4eIENAVU72NLqeEkPrTXST6Pm+Atnc
-         jhWqKk4iip/ZIFdsOK71q2GgHC+jSYx9c+QUOf6e51tjMXSUW+YTzL49qmyxBojesCxs
-         ev0DSxCoTIWr+L5BfLSCMNBKOAbn/vK9jMTshOeDZJMJCh0By6d1o4x9tfUwzlw/qiRU
-         BH1A==
-X-Gm-Message-State: AOAM531RJyOkLIlg+B+WBp0jLaG15sYf+SC/kGOFA+RScV80bRzc83db
-        STLvzAiV6pq3B8Oth8p4wFoVrC4we7V9dPfRCh6Spw==
-X-Google-Smtp-Source: ABdhPJz9iOdDKNgMdJzD0gqeRB73Q1A4iiFR0FxNxz9fFpszk+uTamQrvcRyI5fCgzr/AcT0r10edZjMU7/6TzU7sCE=
-X-Received: by 2002:aa7:c946:: with SMTP id h6mr8446283edt.190.1638363509446;
- Wed, 01 Dec 2021 04:58:29 -0800 (PST)
+        Wed, 1 Dec 2021 08:03:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638363585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sg8l2MRrVgwVYF/kylOGA8bx10bbph5Fc99GNmoeU0E=;
+        b=I81yP3Wf2NgcZLy+J1JAiMeATjtgPLDtLGi+8kVDF42UmPI373qPH4Vh2iXgo5AVlcSzgt
+        8ipC5bec+qDZnUg4sMuGc/3QgY0xedQ+uOvnAxPUsQ0McIm5E4YzTEgfwbCI1OaeEKZgRO
+        rIPX1KpR4gt2s6JSAFAhir7VPTUHn6Q=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-346-BTzpM1ctP6maZHaVhwnGmg-1; Wed, 01 Dec 2021 07:59:40 -0500
+X-MC-Unique: BTzpM1ctP6maZHaVhwnGmg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E5CC681EE82;
+        Wed,  1 Dec 2021 12:59:37 +0000 (UTC)
+Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D3BAA45D66;
+        Wed,  1 Dec 2021 12:59:05 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 20:59:03 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com,
+        akpm@linux-foundation.org
+Subject: Re: [RFC v1 0/8] RFC v1: Kernel handling of CPU and memory hot
+ un/plug for crash
+Message-ID: <20211201125903.GQ21646@MiWiFi-R3L-srv>
+References: <20211118174948.37435-1-eric.devolder@oracle.com>
+ <20211124090227.GA8026@MiWiFi-R3L-srv>
+ <200f923a-d196-7475-99e3-63ff3e73b28e@oracle.com>
 MIME-Version: 1.0
-References: <20211201013329.15875-1-aford173@gmail.com> <20211201013329.15875-2-aford173@gmail.com>
- <CAAEAJfBBFhRtW2wmoA6T+yyM-nurUbtPqYHKPHjeRdKzA34PcQ@mail.gmail.com> <CAHCN7xLGTadbr+=-j2yJHFn233dgHic28njej8LHS2M0WwtqYQ@mail.gmail.com>
-In-Reply-To: <CAHCN7xLGTadbr+=-j2yJHFn233dgHic28njej8LHS2M0WwtqYQ@mail.gmail.com>
-From:   Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Date:   Wed, 1 Dec 2021 09:58:17 -0300
-Message-ID: <CAAEAJfDqBezv1_ZsF3vjAFprZYuaE7krkSXa4vzAfMZp5_z+sA@mail.gmail.com>
-Subject: Re: [RFC V2 1/2] media: hantro: Add support for i.MX8M Mini
-To:     Adam Ford <aford173@gmail.com>
-Cc:     linux-media <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <200f923a-d196-7475-99e3-63ff3e73b28e@oracle.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Dec 2021 at 09:36, Adam Ford <aford173@gmail.com> wrote:
->
-> On Wed, Dec 1, 2021 at 6:25 AM Ezequiel Garcia
-> <ezequiel@vanguardiasur.com.ar> wrote:
-> >
-> > Hi Adam,
-> >
-> > On Tue, 30 Nov 2021 at 22:33, Adam Ford <aford173@gmail.com> wrote:
-> > >
-> > > The i.MX8M Mini has a similar implementation of the Hantro G1 and
-> > > h decoders, but the Mini uses the vpu-blk-ctrl for handling the
-> > > VPU resets through the power domain system.  As such, there are
-> > > functions present in the 8MQ that are not applicable to the Mini
-> > > which requires the driver to have a different compatible flags.
-> > >
-> > > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > >
-> > > diff --git a/drivers/staging/media/hantro/hantro_drv.c b/drivers/staging/media/hantro/hantro_drv.c
-> > > index fb82b9297a2b..2aa1c520be50 100644
-> > > --- a/drivers/staging/media/hantro/hantro_drv.c
-> > > +++ b/drivers/staging/media/hantro/hantro_drv.c
-> > > @@ -592,6 +592,8 @@ static const struct of_device_id of_hantro_match[] = {
-> > >         { .compatible = "rockchip,rk3399-vpu", .data = &rk3399_vpu_variant, },
-> > >  #endif
-> > >  #ifdef CONFIG_VIDEO_HANTRO_IMX8M
-> > > +       { .compatible = "nxp,imx8mm-vpu", .data = &imx8mm_vpu_variant, },
-> > > +       { .compatible = "nxp,imx8mm-vpu-g2", .data = &imx8mm_vpu_g2_variant },
-> > >         { .compatible = "nxp,imx8mq-vpu", .data = &imx8mq_vpu_variant, },
-> > >         { .compatible = "nxp,imx8mq-vpu-g2", .data = &imx8mq_vpu_g2_variant },
-> > >  #endif
-> > > diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
-> > > index 267a6d33a47b..ae7c3fff760c 100644
-> > > --- a/drivers/staging/media/hantro/hantro_hw.h
-> > > +++ b/drivers/staging/media/hantro/hantro_hw.h
-> > > @@ -211,6 +211,8 @@ enum hantro_enc_fmt {
-> > >         ROCKCHIP_VPU_ENC_FMT_UYVY422 = 3,
-> > >  };
-> > >
-> > > +extern const struct hantro_variant imx8mm_vpu_g2_variant;
-> > > +extern const struct hantro_variant imx8mm_vpu_variant;
-> > >  extern const struct hantro_variant imx8mq_vpu_g2_variant;
-> > >  extern const struct hantro_variant imx8mq_vpu_variant;
-> > >  extern const struct hantro_variant px30_vpu_variant;
-> > > diff --git a/drivers/staging/media/hantro/imx8m_vpu_hw.c b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> > > index ea919bfb9891..c68516c00c6d 100644
-> > > --- a/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> > > +++ b/drivers/staging/media/hantro/imx8m_vpu_hw.c
-> > > @@ -242,6 +242,32 @@ static const struct hantro_codec_ops imx8mq_vpu_g2_codec_ops[] = {
-> > >         },
-> > >  };
-> > >
-> > > +static const struct hantro_codec_ops imx8mm_vpu_codec_ops[] = {
-> > > +       [HANTRO_MODE_MPEG2_DEC] = {
-> > > +               .run = hantro_g1_mpeg2_dec_run,
-> > > +               .init = hantro_mpeg2_dec_init,
-> > > +               .exit = hantro_mpeg2_dec_exit,
-> > > +       },
-> > > +       [HANTRO_MODE_VP8_DEC] = {
-> > > +               .run = hantro_g1_vp8_dec_run,
-> > > +               .init = hantro_vp8_dec_init,
-> > > +               .exit = hantro_vp8_dec_exit,
-> > > +       },
-> > > +       [HANTRO_MODE_H264_DEC] = {
-> > > +               .run = hantro_g1_h264_dec_run,
-> > > +               .init = hantro_h264_dec_init,
-> > > +               .exit = hantro_h264_dec_exit,
-> > > +       },
-> > > +};
-> > > +
-> > > +static const struct hantro_codec_ops imx8mm_vpu_g2_codec_ops[] = {
-> > > +       [HANTRO_MODE_HEVC_DEC] = {
-> > > +               .run = hantro_g2_hevc_dec_run,
-> > > +               .init = hantro_hevc_dec_init,
-> > > +               .exit = hantro_hevc_dec_exit,
-> > > +       },
-> > > +};
-> > > +
-> >
-> > I believe you are missing VP9, which explains why you get
-> > a zero fluster score.
->
-> That's what I was thinking too and that's why I was wondering if I
-> should wait on G2 until more of those G2 patches have been finalized
-> and accepted.  Is there a way to test the HEVC?  I didn't see one in
-> the fluster list.
->
++ akpm
 
-VP9 is on its way to be merged. There is a pull request from Hans
-already: see https://www.spinics.net/lists/linux-media/msg202448.html
-which includes the git repository and tag you can merge/rebase to test
-it.
+On 11/29/21 at 01:42pm, Eric DeVolder wrote:
+> Hi, see below.
+> eric
+> 
+> On 11/24/21 03:02, Baoquan He wrote:
+> > Hi,
+> > 
+> > On 11/18/21 at 12:49pm, Eric DeVolder wrote:
+> > ......
+> > > This patchset introduces a generic crash hot un/plug handler that
+> > > registers with the CPU and memory notifiers. Upon CPU or memory
+> > > changes, this generic handler is invoked and performs important
+> > > housekeeping, for example obtaining the appropriate lock, and then
+> > > invokes an architecture specific handler to do the appropriate
+> > > updates.
+> > > 
+> > > In the case of x86_64, the arch specific handler generates a new
+> > > elfcorehdr, which reflects the current CPUs and memory regions, into a
+> > > buffer. Since purgatory also does an integrity check via hash digests
+> > > of the loaded segments, purgatory must also be updated with the new
+> > 
+> > When I tried to address this with a draft patch, I started with a
+> > different way in which udev rule triggers reloading and only elfcorehdr
+> > segment is updated. The update should be less time consuming. Seems
+> > internal notifier is better in your way. But I didn't update purgatory
+> > since I just skipped the elfcorehdr part when calculate the digest of
+> > segments. The reason from my mind is kernel text, initrd must contribute
+> > most part of the digest, elfcorehdr is much less, and it will simplify
+> > code change more. Doing so let us have no need to touch purgatory at
+> > all. What do you think?
+> 
+> Well certainly if purgatory did not need to be updated, then that simplifies
+> matters quite a bit!
+> 
+> I do not have any context on the history of including elfcorehdr in the purgatory
+> integrity check. I do agree with you that checking kernel, initrd, boot_params
+> is most important. Perhaps allowing the elfcorehdr data structure to change
+> isn't too bad without including in the integrity check is ok as there is some
+> sanity checking of it by the capture kernel as it reads it for /proc/vmcore setup.
 
-It would be great if you can test G2 on top of that, but it's also fine
-if you want to just submit G1 for now. Up to you.
+Well, I think the check has included elfcorehdr since user space
+kexec-tools added the check. We can do the skipping in kexec_file load
+in kernel for the time being, see if anyone has concern about the
+safety or security. Since agreement has been reached, can you split out
+the purgatory update and repost a new patchset with the current
+frame work to only update elfcorehdr?
 
-Regarding HEVC, currently Benjamin is who knows best how to test it.
-Thinking about it, perhaps we should document this somewhere?
+Any by the way, I think you have written a very great cover letter which
+tells almost all details about the change. However, pity that they are
+not put in patch log. In your patch log, you just tell what change is
+made in the patch, but the why we need it which is the most important part
+is not seen. Most of time, we can get what change has been made from the
+code, surely it's very helpful if patch log has told it and can save
+reviewers much time, but it's not easy to get why it's needed or
+introduced if not being involved in earlier discussion or any context.
+And as you know, cover letter will be stripped away whem maintainers
+merge patch, only patch log is kept.
 
-Regards,
-Ezequiel
+Thanks
+Baoquan
+
+> 
+> > 
+> > Still reviewing.
+> 
+> Thank you!
+> 
+> > 
+> > > digests. The arch handler also generates a new purgatory into a
+> > > buffer, performs the hash digests of the new memory segments, and then
+> > > patches purgatory with the new digests.  If all succeeds, then the
+> > > elfcorehdr and purgatory buffers over write the existing buffers and
+> > > the new kdump image is live and ready to go. No involvement with
+> > > userspace at all.
+> > 
+> 
+

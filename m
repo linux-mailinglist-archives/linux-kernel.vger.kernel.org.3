@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E3046535D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAD5C46535E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:50:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243867AbhLAQxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:53:25 -0500
-Received: from mga12.intel.com ([192.55.52.136]:26944 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242868AbhLAQxW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1351535AbhLAQxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:53:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243126AbhLAQxW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 11:53:22 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="216513901"
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="216513901"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 08:50:00 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="677324335"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2021 08:49:55 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B1GnsGV021198;
-        Wed, 1 Dec 2021 16:49:54 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] samples: bpf: fix conflicting types in fds_example
-Date:   Wed,  1 Dec 2021 17:49:31 +0100
-Message-Id: <20211201164931.47357-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.33.1
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27397C061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:50:01 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id l25so104250044eda.11
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:50:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uPI4oBIFvzmq/cxN+qXkO+3Ol0C4+ldQTQcUlZ5uzyY=;
+        b=h4o6oUseuHo+R7dQBFWuONeo+u8cAJjURUSVX39YEE3unvYkpN1IS7sVHlHv8mY8mz
+         KLrkVp1OcpoxPLysxnDx9bkM79bIlm94quw+8jcR8CsxzfKV6vFpysUOQCcME++qfuAg
+         jdBOfc4BtkyLGUVDimyd3zyM4dFYwZ1/LiJWQhc9p7m3w+lyxb2P73BWMB8B8ynB6Lts
+         XHlIog3DzxyUzGhmnNSccQp95KZy1Y3YUNqoKMN549Ji9FAsc/gIDUdb6oqmtUMk7mKH
+         Cua+y/piRYzRNfpc+BTmxOLhmNmEZfsRNklJRprW4fFFROTmbwfV71T75cinyIPAYdH2
+         s2HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uPI4oBIFvzmq/cxN+qXkO+3Ol0C4+ldQTQcUlZ5uzyY=;
+        b=RCcKILw367QvcwP/LfEiu3bnEQL8mBG8v8JU2eOdfs4MJG4sQpLuG2m36W0y8otqYM
+         Ng/s26qjtNwCvdAGcxtrdLRDMfRQrp9JPTHcWWbl75oYQxWOkIAskXjsa8Sg/S5zT3no
+         hG6wKsGjqS3xNqisn9gcgf1/WANXYOfkNz0+3QyaQlTBsOPK7nN48p7hcZ/5dmbNhm5S
+         SSpdH6RsnUjIsHWuYczI3G1DfuRZsM0PAE6dJ5cSGj/sZjpZFVgZ38JkjcTHEOgqDc9z
+         FwEP8q5j+YXyzuUGFc4IgOdKvJbwLFEbPu/g8jdTWmxahX7r8okuaWr3Mg4fx8afkXR3
+         BDmA==
+X-Gm-Message-State: AOAM530+pftcQHcCIiVkezp3Im9xaF0MQTxOl5e4j8CWdEk9cMlRbPqJ
+        YK6yHvngp2N72nnH9W146WdiJIxfR8h61Kn+THqOMQ==
+X-Google-Smtp-Source: ABdhPJzilbO4wo997n2KLZ16KakyutryIaX6yq69R5OPEaN1MxAcCu+/t2m3sY3mODn08j1cGyYIIg/otYi3XTlLIDY=
+X-Received: by 2002:a17:907:75f0:: with SMTP id jz16mr8619925ejc.77.1638377399579;
+ Wed, 01 Dec 2021 08:49:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211130195817.2911086-1-robh@kernel.org> <CAMRc=Mc-8--9+N2uGWhY6whwuJKCg1jtnnTYyQJifdSS2Um+qA@mail.gmail.com>
+ <CAL_Jsq+4a3FTW1yrM_PjX3_eDwb=Y6GV7PgpxyFiDVARTg5_Ug@mail.gmail.com>
+In-Reply-To: <CAL_Jsq+4a3FTW1yrM_PjX3_eDwb=Y6GV7PgpxyFiDVARTg5_Ug@mail.gmail.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 1 Dec 2021 17:49:49 +0100
+Message-ID: <CAMRc=MeK-q6sb093Jz8mtVrAQfe6G_NXry+tq86GQ1CVGRvyng@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio: xlp: Remove Netlogic XLP variants
+To:     Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following samples/bpf build error appeared after the
-introduction of bpf_map_create() in libbpf:
+On Wed, Dec 1, 2021 at 4:01 PM Rob Herring <robh@kernel.org> wrote:
+>
+> On Wed, Dec 1, 2021 at 2:25 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> >
+> > On Tue, Nov 30, 2021 at 8:58 PM Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > Netlogic XLP was removed in commit 95b8a5e0111a ("MIPS: Remove NETLOGIC
+> > > support"). With those gone, the single platform left to support is
+> > > Cavium ThunderX2. Remove all the Netlogic variants and DT support.
+> > >
+> > > For simplicity, the existing kconfig name is retained.
+> > >
+> > > Cc: Linus Walleij <linus.walleij@linaro.org>
+> > > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> > > Cc: linux-gpio@vger.kernel.org
+> > > Signed-off-by: Rob Herring <robh@kernel.org>
+> > > ---
+> > > v2:
+> > >  - Fix !OF and ACPI build errors
+> > >
+> >
+> > Rob,
+> >
+> > This doesn't apply on top of v5.16-rc1. Anything I'm missing?
+>
+> It should, that's exactly what it is based on. You dropped v1 that you
+> already applied?
+>
+> Rob
 
-  CC  samples/bpf/fds_example.o
-samples/bpf/fds_example.c:49:12: error: static declaration of 'bpf_map_create' follows non-static declaration
-static int bpf_map_create(void)
-           ^
-samples/bpf/libbpf/include/bpf/bpf.h:55:16: note: previous declaration is here
-LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
-               ^
-samples/bpf/fds_example.c:82:23: error: too few arguments to function call, expected 6, have 0
-                fd = bpf_map_create();
-                     ~~~~~~~~~~~~~~ ^
-samples/bpf/libbpf/include/bpf/bpf.h:55:16: note: 'bpf_map_create' declared here
-LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
-               ^
-2 errors generated.
+Ah right, didn't see that. Can you send a follow-up that applies on
+top of my for-next branch?
 
-fds_example by accident has a static function with the same name.
-It's not worth it to separate a single call into its own function,
-so just embed it.
-
-Fixes: 992c4225419a ("libbpf: Unify low-level map creation APIs w/ new bpf_map_create()")
-Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
----
- samples/bpf/fds_example.c | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
-
-diff --git a/samples/bpf/fds_example.c b/samples/bpf/fds_example.c
-index 59f45fef5110..9a7c1fd7a4a8 100644
---- a/samples/bpf/fds_example.c
-+++ b/samples/bpf/fds_example.c
-@@ -46,12 +46,6 @@ static void usage(void)
- 	printf("       -h          Display this help.\n");
- }
- 
--static int bpf_map_create(void)
--{
--	return bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(uint32_t),
--			      sizeof(uint32_t), 1024, 0);
--}
--
- static int bpf_prog_create(const char *object)
- {
- 	static struct bpf_insn insns[] = {
-@@ -79,7 +73,8 @@ static int bpf_do_map(const char *file, uint32_t flags, uint32_t key,
- 	int fd, ret;
- 
- 	if (flags & BPF_F_PIN) {
--		fd = bpf_map_create();
-+		fd = bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(uint32_t),
-+				    sizeof(uint32_t), 1024, 0);
- 		printf("bpf: map fd:%d (%s)\n", fd, strerror(errno));
- 		assert(fd > 0);
- 
--- 
-2.33.1
-
+Bart

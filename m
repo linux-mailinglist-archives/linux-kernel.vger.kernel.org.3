@@ -2,149 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A1D464613
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 05:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D8A1464631
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 05:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346642AbhLAEwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 23:52:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S230021AbhLAFBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 00:01:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbhLAEwj (ORCPT
+        with ESMTP id S229487AbhLAFB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 23:52:39 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 224AEC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 20:49:19 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id e11so45448487ljo.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 20:49:19 -0800 (PST)
+        Wed, 1 Dec 2021 00:01:29 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE336C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 20:58:09 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id s137so22323374pgs.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 20:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=pSuFVsq72hPtsLKMPEQ8DAcqHMPcbxuH5KA1VU6GhFs=;
-        b=WygDa/xjukSsfZ3t/wUdmzO12DGsKJzy7Z52zlGIGju7QuGsOoySE2lsHy4njUCoj4
-         JQ5Mew/AzuBan0+5nwppPJPvzOn02B0Pw9o7p36wdus2VssT0BVE5ijjuTVgziWx0xtf
-         ubDuYqWlEuQyVtGAYfaQuntUwqAKQT0qkN0dxvtUofbT25sFEo6AWvINVvib6W+U26fj
-         9yrHjXhLd1IT4k3s7H2zmDqvNbOToyutXVGHrG/sBHBbxn2F8PnFvEob49OFBxIEtqmT
-         u6C8c3WqkoRuOXTgrqznEIzjrQY1QoY3i+wVoBKcpWMdpugUHVxRKYV2nTX/F5iIlGgz
-         Y39w==
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=5BizBr/A581O9n/gIvtU8qTlKDXl55iiKCB6Dy84QDA=;
+        b=clU7i/camFVJZzsS3CjXXn1hk/Of4pS9COTdBwKNHs0F7FIj+sEB5F/xvu/C343KBu
+         ywALuc8zZMMHW1CAaX4jj7fkRAsFM71PFUv27QKVRsMYX8Ebbi6BipnfCM8BOEZ2mAPY
+         sQnOt6JLy4y+ggGIxgsFykLPW43TNpz5oWEr1BRVT7AHYr9LVkTxLqNNuH+udMw70y+R
+         lgJWc9m2dAI3Qt3ZlNL9tYRIGRoNHxqbnBcH3LYne22d//Gaav+t/wo/ZTP9Lc9tylbT
+         yZBkugj0ennmTR60eq+5GaF7KUtkwe/Jb9NnwR9H/rzgq8nUFEZOVAx0rWsfOp1ibWE6
+         KtKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pSuFVsq72hPtsLKMPEQ8DAcqHMPcbxuH5KA1VU6GhFs=;
-        b=ZOpb1Rt6LefdIA2jQjbbGvjD26KIGTPLlGKerWEM/udq6If8YJ+p3rnqqEm2xzMdZR
-         BHcJuHo1kDUTsGySzPN2Qz+adGHPbX+xV0B/2zoO3r7AjiJ4mVNTKRpeBIQCM6IYgyB3
-         wJd+c0IKHlz6Y4ZFwZKI6EjHshiYxxnNbegWpTwkTU2bS5ArGQfOVeQ560m3PFk0WO5k
-         9axka0RrBNF+vTLpV7YMuelIxaWuxOAT2oBwt01l2BiByfa+/JjsF7sknBmB9kPYMTx+
-         SBZLisMM6CofZQRYgQOj1YqqJzdpgQEqsboCsFoCIhGx8BJX+VMcy49EGOO1vBbtQn7d
-         kNXQ==
-X-Gm-Message-State: AOAM532QbKtCV7BWCXEZVTizfC4QcJxhSlNEoBvacGrVfdCKy53p/bL5
-        VgdS/t7vpvyUNeBuh771f9Uki6ho3Cc8vtvkTIHGyA==
-X-Google-Smtp-Source: ABdhPJyYGpWJxGsf/XYVUyOuiOOdY4Uh8JZPBGRQpLk6LZ3/Q5QFwe8+nOPGsLiudEOkhvZOG7NtSRYKY8E27+Jnyn0=
-X-Received: by 2002:a2e:984f:: with SMTP id e15mr3265777ljj.427.1638334157424;
- Tue, 30 Nov 2021 20:49:17 -0800 (PST)
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=5BizBr/A581O9n/gIvtU8qTlKDXl55iiKCB6Dy84QDA=;
+        b=L2cQrjU/d/IHa2swCMjev1PNYBw8i1fIrem0xfkuXMpMqSfj/vRZPQS0cPB/XYxKcc
+         c8mUQs1kSjow5FmF3oG4uJnDK8pKalJdDoXa1VXZRK9OqztnWVOK0xG2zkns2DRN76yS
+         4xhOTYkeg0Z84Gux08wsBq2McIj4uwngO2vu7oJ0WwdrajdTrcll249Zt5Oun4fpCCfc
+         mf/zh4mNmQiD1jub2GsZzwL+L+0yJmHlp6sfM4nW3Xn/AyC9ShodlnOjEXc345nKSqQz
+         uAqjKzjK+YjPI/5A/6D90Tj6NIOU5a9tWSa0C4TMpd0ZACSqZLIhCiRDh7SQaBNTWnZk
+         rtgA==
+X-Gm-Message-State: AOAM532R+kRArJjHqZuduJKOwK6t7NJmVDEe17yvPt4eQGy1XPjjXC5s
+        9XOGVIyA84jmzgfkmFj0KKg=
+X-Google-Smtp-Source: ABdhPJzZJ1fOzSTlrMo/+B45snIi6kCz9QbXZ2CpFudop6MHKbnEkvB9bIesBmuaG6CcEI3lr3byuw==
+X-Received: by 2002:a65:4785:: with SMTP id e5mr2994406pgs.405.1638334689167;
+        Tue, 30 Nov 2021 20:58:09 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:5800:b4dd:60ee:5575:5214])
+        by smtp.gmail.com with ESMTPSA id g22sm23931487pfj.29.2021.11.30.20.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 20:58:08 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Namhyung Kim <namhyung@google.com>,
+        Song Liu <songliubraving@fb.com>
+Subject: [PATCH v2] perf/core: Set event shadow time for inactive events too
+Date:   Tue, 30 Nov 2021 20:58:07 -0800
+Message-Id: <20211201045807.1223200-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
 MIME-Version: 1.0
-References: <20211029214833.2615274-1-tadeusz.struk@linaro.org> <YZ2x+xuvnHC48MHg@ripper>
-In-Reply-To: <YZ2x+xuvnHC48MHg@ripper>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 30 Nov 2021 20:49:06 -0800
-Message-ID: <CALAqxLV7YzuHLzNFSWawjpoJGb3WwO4bgnMN_5mWoHmB582kZw@mail.gmail.com>
-Subject: Re: [PATCH v2] media: venus: Synchronize probe() between venus_core
- and enc/dec
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Stanimir Varbanov <stanimir.varbanov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 23, 2021 at 7:29 PM Bjorn Andersson
-<bjorn.andersson@linaro.org> wrote:
->
-> On Fri 29 Oct 14:48 PDT 2021, Tadeusz Struk wrote:
->
-> > Venus video encode/decode hardware driver consists of three modules.
-> > The parent module venus-core, and two sub modules venus-enc and venus-dec.
-> > The venus-core module allocates a common structure that is used by the
-> > enc/dec modules, loads the firmware, and performs some common hardware
-> > initialization. Since the three modules are loaded one after the other,
-> > and their probe functions can run in parallel it is possible that
-> > the venc_probe and vdec_probe functions can finish before the core
-> > venus_probe function, which then can fail when, for example it
-> > fails to load the firmware. In this case the subsequent call to venc_open
-> > causes an Oops as it tries to dereference already uninitialized structures
-> > through dev->parent and the system crashes in __pm_runtime_resume() as in
-> > the trace below:
-> >
-> > [   26.064835][  T485] Internal error: Oops: 96000006 [#1] PREEMPT SMP
-> > [   26.270914][  T485] Hardware name: Thundercomm Dragonboard 845c (DT)
-> > [   26.285019][  T485] pc : __pm_runtime_resume+0x34/0x178
-> > [   26.286374][  T213] lt9611 10-003b: hdmi cable connected
-> > [   26.290285][  T485] lr : venc_open+0xc0/0x278 [venus_enc]
-> > [   26.290326][  T485] Call trace:
-> > [   26.290328][  T485]  __pm_runtime_resume+0x34/0x178
-> > [   26.290330][  T485]  venc_open+0xc0/0x278 [venus_enc]
-> > [   26.290335][  T485]  v4l2_open+0x184/0x294
-> > [   26.290340][  T485]  chrdev_open+0x468/0x5c8
-> > [   26.290344][  T485]  do_dentry_open+0x260/0x54c
-> > [   26.290349][  T485]  path_openat+0xbe8/0xd5c
-> > [   26.290352][  T485]  do_filp_open+0xb8/0x168
-> > [   26.290354][  T485]  do_sys_openat2+0xa4/0x1e8
-> > [   26.290357][  T485]  __arm64_compat_sys_openat+0x70/0x9c
-> > [   26.290359][  T485]  invoke_syscall+0x60/0x170
-> > [   26.290363][  T485]  el0_svc_common+0xb8/0xf8
-> > [   26.290365][  T485]  do_el0_svc_compat+0x20/0x30
-> > [   26.290367][  T485]  el0_svc_compat+0x24/0x84
-> > [   26.290372][  T485]  el0t_32_sync_handler+0x7c/0xbc
-> > [   26.290374][  T485]  el0t_32_sync+0x1b8/0x1bc
-> > [   26.290381][  T485] ---[ end trace 04ca7c088b4c1a9c ]---
-> > [   26.290383][  T485] Kernel panic - not syncing: Oops: Fatal exception
-> >
-> > This can be fixed by synchronizing the three probe functions and
-> > only allowing the venc_probe() and vdec_probe() to pass when venus_probe()
-> > returns success.
-> >
-> > Changes in v2:
-> > - Change locking from mutex_lock to mutex_trylock
-> >   in venc_probe and vdec_probe to avoid potential deadlock.
-> >
->
-> Rather than trying to synchronize away the side effects of
-> of_platform_populate() I think we should stop using it.
->
-> I had the very same problem in the qcom_wcnss remoteproc driver and
-> in below change I got rid of that by manually initializing a struct
-> device for the child node. In the event that the child probe defer I
-> would just probe defer the parent as well.
->
-> 1fcef985c8bd ("remoteproc: qcom: wcnss: Fix race with iris probe")
->
-> The change might look a little bit messy, but the end result it much
-> cleaner than relying on various locks etc.
->
->
-> But in the qcom_wcnss case I have a child _device_ because I need
-> something to do e.g. regulator_get() on. I fail to see why venc and vdec
-> are devices in the first place.
+From: Namhyung Kim <namhyung@google.com>
 
-I definitely agree with Bjorn that all this asynchronous component
-probing feels overly complicated, and a rework is probably the better
-solution.
+While f79256532682 ("perf/core: fix userpage->time_enabled of inactive
+events") fixed this problem for user rdpmc usage, bperf (perf stat
+with BPF) still has the same problem that accessing inactive perf
+events from BPF using bpf_perf_event_read_value().
 
-Though my only question is:  is someone planning to do this rework?
+You can reproduce this problem easily.  As this is about a small
+window with multiplexing, we need a large number of events and short
+duration like below:
 
-In the meantime, Tadeusz' patch does resolve a *very* frequent boot
-crash seen when the venus driver is enabled.
-So Stanimir, should we consider merging this as a stop gap until the
-larger probe rework is done?
+  # perf stat -a -v --bpf-counters -e instructions,branches,branch-misses \
+    -e cache-references,cache-misses,bus-cycles,ref-cycles,cycles sleep 0.1
 
-thanks
--john
+  Control descriptor is not initialized
+  instructions: 19616489 431324015 360374366
+  branches: 3685346 417640114 344175443
+  branch-misses: 75714 404089360 336145421
+  cache-references: 438667 390474289 327444074
+  cache-misses: 49279 349333164 272835067
+  bus-cycles: 631887 283423953 165164214
+  ref-cycles: 2578771111104847872 18446744069443110306 182116355
+  cycles: 1785221016051271680 18446744071682768912 115821694
+
+   Performance counter stats for 'system wide':
+
+          19,616,489      instructions              #    0.00  insn per cycle           ( 83.55%)
+           3,685,346      branches                                                      ( 82.41%)
+              75,714      branch-misses             #    2.05% of all branches          ( 83.19%)
+             438,667      cache-references                                              ( 83.86%)
+              49,279      cache-misses              #   11.234 % of all cache refs      ( 78.10%)
+             631,887      bus-cycles                                                    ( 58.27%)
+  2,578,771,111,104,847,872      ref-cycles                                                     (0.00%)
+  1,785,221,016,051,271,680      cycles                                                         (0.00%)
+
+       0.010824702 seconds time elapsed
+
+As you can see, it shows invalid values for the last two events.
+The -v option shows that the enabled time is way bigger than the
+running time.  So it scaled the counter values using the ratio
+between the two and resulted in that.  This problem can get worse
+if users want no-aggregation or cgroup aggregation with a small
+interval.
+
+Actually 18446744069443110306 is 0xffffffff01b345a2 so it seems to
+have a negative enabled time.  In fact, bperf keeps values returned by
+bpf_perf_event_read_value() which calls perf_event_read_local(), and
+accumulates delta between two calls.  When event->shadow_ctx_time is
+not set, it'd return invalid enabled time which is bigger than normal.
+Later, the shadow time is set and the function starts to return a
+valid time.  At the moment, the recent value is smaller than before so
+the delta in the bperf can be negative.
+
+I think we need to set the shadow time even the events are inactive so
+that BPF programs (or other potential users) can see valid time values
+anytime.
+
+Cc: Song Liu <songliubraving@fb.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+v2) rebased to tip/perf/core
+
+ kernel/events/core.c | 29 ++++++++++++++---------------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 3b3297a57228..be37f830f51c 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -3707,27 +3707,26 @@ static noinline int visit_groups_merge(struct perf_cpu_context *cpuctx,
+ 	return 0;
+ }
+ 
+-static inline bool event_update_userpage(struct perf_event *event)
++static inline void group_update_event_time(struct perf_event *group_event)
+ {
+-	if (likely(!atomic_read(&event->mmap_count)))
+-		return false;
+-
+-	perf_event_update_time(event);
+-	perf_set_shadow_time(event, event->ctx);
+-	perf_event_update_userpage(event);
++	struct perf_event *event;
++	struct perf_event_context *ctx = group_event->ctx;
+ 
+-	return true;
+-}
++	perf_event_update_time(group_event);
++	perf_set_shadow_time(group_event, ctx);
+ 
+-static inline void group_update_userpage(struct perf_event *group_event)
+-{
+-	struct perf_event *event;
++	for_each_sibling_event(event, group_event) {
++		perf_event_update_time(event);
++		perf_set_shadow_time(event, ctx);
++	}
+ 
+-	if (!event_update_userpage(group_event))
++	if (likely(!atomic_read(&group_event->mmap_count)))
+ 		return;
+ 
++	perf_event_update_userpage(group_event);
++
+ 	for_each_sibling_event(event, group_event)
+-		event_update_userpage(event);
++		perf_event_update_userpage(event);
+ }
+ 
+ static int merge_sched_in(struct perf_event *event, void *data)
+@@ -3755,7 +3754,7 @@ static int merge_sched_in(struct perf_event *event, void *data)
+ 		} else {
+ 			ctx->rotate_necessary = 1;
+ 			perf_mux_hrtimer_restart(cpuctx);
+-			group_update_userpage(event);
++			group_update_event_time(event);
+ 		}
+ 	}
+ 
+-- 
+2.34.0.rc2.393.gf8c9666880-goog
+

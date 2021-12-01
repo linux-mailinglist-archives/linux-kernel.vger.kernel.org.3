@@ -2,435 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC7E464576
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:30:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36BEF464580
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:37:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346468AbhLADdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:33:53 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:60854 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346457AbhLADdv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:33:51 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=GNwsx/ftSm60AbNlPVu5nGzjW/JWKbSzeBUqa2jTAq8=; b=HNOve7z3JUTdWNpk8OhN2XzS2/
-        8JhwiA0HnZ2cHZjKjyV7/p+R6FniMWRxbKedltpDdRa7N49XFMPmg2T19nH8bXd8EbSejfp/pb9tq
-        XMa/gA/2Ohy89fFSTSLm5BrKrJKdS/8r9aI+ej6hFABAGSL+tZEFnviXiXMMmeIDk7yo=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1msGK7-00FATs-Uy; Wed, 01 Dec 2021 04:30:23 +0100
-Date:   Wed, 1 Dec 2021 04:30:23 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wells Lu <wellslutw@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, robh+dt@kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, p.zabel@pengutronix.de,
-        wells.lu@sunplus.com, vincent.shih@sunplus.com
-Subject: Re: [PATCH net-next v3 2/2] net: ethernet: Add driver for Sunplus
- SP7021
-Message-ID: <YabsT0/dASvYUH2p@lunn.ch>
-References: <1638266572-5831-1-git-send-email-wellslutw@gmail.com>
- <1638266572-5831-3-git-send-email-wellslutw@gmail.com>
+        id S1346468AbhLADkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:40:25 -0500
+Received: from mail-sgaapc01on2114.outbound.protection.outlook.com ([40.107.215.114]:45505
+        "EHLO APC01-SG2-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S233370AbhLADkW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 22:40:22 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kNSte6NqoajXhaNw5kQgXcxNfg8eZjjX7JT+ISl1dCySMhwl1eqiHjQ2RNPkk7iUMs+MTyjotcmYSennKh/gHCOdIVu/NZDt6p1uEK5Q2/4U2gsPnW8vbcomLLwuiufWzP9vIhCM69j9XE5bNtN4vYreadRYTc0WIx/rbjQ7tDeGZFhyhmLawqpaNwsaI48FSAUcHWIPSqeOzMxAKLcZsIb6kyTARbaBadG6jQvh9+UIxd0Afh+4CJf/4Ps0eeXG7wAmriAPUBKh7OmHxN9FLXSPySWMZvNCdaXUutfYyA9Xys2uTjk4XNyYCts4OG/EqqywPCfhKmjwJ4wG/uThRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Np5uG3zpqJGku1nFMKUUlFyd/o2EsDIjHK4smnzI968=;
+ b=O1Q/ILvqmpacHQ022aCamLp7vmU3WWm1Qd5I4akpOiYkgQ+V5OOr7i/09MK2pbbTNO0xI+BLUndzr7NTUCPkyYouG6jMEJiku6gFbgvq+IBONDcwyTv/3ErLYeW6nu1HACXzb/1F6FGGIMQ5nmVX3TKPGS4zellGegwptyzHrwCmnGH1IFK0PMC1TyQ4YO31AV4xG1nDx0jegSScAgKTaCFpk66Xx7nr78fG6UZRL2nocG7VVR8nsXmF5uRnb30z+F0VaJU3nnMo7KsJRoys5eVkH5kRC4LRVg3IdcxzJwLI69jG/K89FOuvpXWXd7WdjgbRi47o/0ZCaHBDmi0hWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Np5uG3zpqJGku1nFMKUUlFyd/o2EsDIjHK4smnzI968=;
+ b=cIwvX3tWLctqIJCgKjVNuFSz82TtrvlfqdGy9gM7iG0mygWxb7ofooapPqe5fchdmq3EHLYsZ1vxflVTz/LYuFkxmDkaQMsnLEv4DXpmUobT1by1rPPKx9APmjeY2VRWLr2d1ZhPF+FKUIlv0z+QJ5M8hqxz6XhEASW+5+VuxCxmtfPzVsWX3xdp+pN273A+ZoH0+mQOWmqK2IV9gAoBZaE70bvlRQwh9Jps+Fi2aGkrcjX5TTBETWRqLbYGR/JLUDEy7Hfbc7UpKrhnHQY/iGUlTzr/q4U/dwaQA2BiSBwZQACOPbMNEDb3eNzIJYiyzn0nUO6NG4JiCwKvFbMOyg==
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com (2603:1096:203:87::17)
+ by HK0PR06MB3651.apcprd06.prod.outlook.com (2603:1096:203:b5::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Wed, 1 Dec
+ 2021 03:36:59 +0000
+Received: from HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::70c4:b471:2d05:1209]) by HK0PR06MB3202.apcprd06.prod.outlook.com
+ ([fe80::70c4:b471:2d05:1209%6]) with mapi id 15.20.4734.024; Wed, 1 Dec 2021
+ 03:36:59 +0000
+From:   Neal Liu <neal_liu@aspeedtech.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Cai Huoqing <caihuoqing@baidu.com>,
+        Tao Ren <rentao.bupt@gmail.com>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        kernel test robot <lkp@intel.com>,
+        Sasha Levin <sashal@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        BMC-SW <BMC-SW@aspeedtech.com>
+Subject: RE: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
+Thread-Topic: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
+Thread-Index: AQHX5dcRQVG/ybLU/0ajWaHwY+/uR6wb9E4AgAEJVjA=
+Date:   Wed, 1 Dec 2021 03:36:58 +0000
+Message-ID: <HK0PR06MB3202B6ED02866DFDC2037B6280689@HK0PR06MB3202.apcprd06.prod.outlook.com>
+References: <20211130104256.3106797-1-neal_liu@aspeedtech.com>
+ <20211130104256.3106797-5-neal_liu@aspeedtech.com>
+ <YaYPOAB3Anfhh5AA@kroah.com>
+In-Reply-To: <YaYPOAB3Anfhh5AA@kroah.com>
+Accept-Language: en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: aa33ac2e-faa6-4bfd-5c2b-08d9b47bd4a8
+x-ms-traffictypediagnostic: HK0PR06MB3651:
+x-microsoft-antispam-prvs: <HK0PR06MB3651108E73FA058DF23B2B8980689@HK0PR06MB3651.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:576;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ixoHSfpgI6jb3ksNHv2xXusVKBYuNRrmuossftj5xXjgbrXgj2KClYnX7fb6yCg1axis140UJoLycE7w6V3FYYbrGrlDzehU9ekAB4hCGWkc9/er4sd2u6TrrxllCEz+YYR8BytX/Y7e1wLoY+wxjfnZKUk4aRqcdyzlIXSlaj6X4qP+m+LSQrBYxQ8DdcFNP3+ZiIyaqngkifZOGT/41n/AeJIkxf9skF9u3CDTI3JtlNG1c7VvGSZzDyNUcOsF4VucIF10OQZdGowqfrAOsn1hMTRDe2Rn3RnHxX65NSnNZsmhsJfAWH4lzYO+aWUP07ZNsUhFGCUrFy4FvkCeZ7NpIhmRggT2rcxwVzoijSisnb8zvXb+nsfqLyf1uYGonKl/74xyk2Lff43upKhNMIzdtlMWY6EAMoNpa/PclHnhfBqBEvypsOePNiAOZKfpa/9ggKFNsHJkCEPEYINkEGUrwRUnr2J+uqrdO1ToN2WC0ObC4jtbayyfEMqYRK2WZUT8Qi77ePdXVPYIVaNqDvvhGnf6MNTQViusITLLQRc+2a3LYeSs9mb1VFPugQw2Um6lHMZgB2BmogGXk5lGXld/CwLV4GuE6qUNlB/yObIvNL+aW6mfkZeZdLFqjjSzIyqOve5gGPBxVU+LqC/4xQ9N+QeZH3oPGxOgXfAfXKWRFC6OpVufy+ViPGK4CuZnRVW5NBHv8cbhGpi/ZVfMhA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3202.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(396003)(39850400004)(136003)(366004)(376002)(346002)(9686003)(76116006)(66946007)(54906003)(7416002)(71200400001)(2906002)(86362001)(6506007)(4326008)(38100700002)(53546011)(33656002)(83380400001)(186003)(508600001)(26005)(8676002)(38070700005)(52536014)(55016003)(316002)(66446008)(6916009)(8936002)(66476007)(64756008)(66556008)(122000001)(7696005)(5660300002)(107886003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?d/PoTZ22pqHpaHTKdnlVmS7WB/gFvpMak3p+3WDUeiFWPShZEyAPzamwZrxB?=
+ =?us-ascii?Q?6PUpr+SdHCrX8QLsIG68roDGB33/7TBrzbJH8XhAUll1phy0JmbJ3zzS1XEO?=
+ =?us-ascii?Q?wYOrobmfqnPz80jojUpsf9kEQFlzY3kLCSQCLlo29yMvbb9vfmQHPDUjJU0u?=
+ =?us-ascii?Q?1sJIErvJBMOGvIjApn53ZxAnpuFojLCv/hZwZIAhS1qF9Hnogb14I3BF61BI?=
+ =?us-ascii?Q?/OfB/eqURK0943KA5nvYq0cSbRjM9gocfQDyCwJcbAfElZKpzZhM+A6KUks+?=
+ =?us-ascii?Q?aQnYTBnFEKvFNsFXrw5NQC/8VMtw33oXG3+Nb6kmE+X2ZIArHH+eS6SUaCDW?=
+ =?us-ascii?Q?mFY7kpSnn/k78oc3aDvxHtFe/mBCNjvx2GHYeifLYtWcyrpy8QqZfPrM1nKc?=
+ =?us-ascii?Q?8ZocaHAhpP9ZBw0/X3Tp55BzBleDwmw6r3DVmlZ5imM/YtOIQflWIJ+wSv3Q?=
+ =?us-ascii?Q?OxWbJkNRTxx0TJiRnX2KgEEimppX1T+v9G3PfL2nYkZ4sW+DLqW4yVJgpjKp?=
+ =?us-ascii?Q?P7ffHzy3+63pVfI5Lc/kcoz39RXIqssoini1HufQw5w8t3JcOaj7nj4Gt+ol?=
+ =?us-ascii?Q?K9D8UG9TrQSc4FrzD88Mmd/WogAY9E9IvAjzkwY/CukhiP+juDrFKG/fiTWB?=
+ =?us-ascii?Q?2HEdWWBKF0xZU821IfdqueZsvSsOkbRP70DC+wUTYtkJnQyNAQ3bpxFsCo5F?=
+ =?us-ascii?Q?t9WcVPWc113MQNL9CDO68cq7jYoyGUQj2jYS6Tso6jhqbKj5422IkX3oIyFV?=
+ =?us-ascii?Q?F+L4MBZxG1a05XLkNiyZvhyUp+uinhZMzd5lsTrz0FLdVcQ3gN4YLZqysMrG?=
+ =?us-ascii?Q?vwqghu3xFXVL7y30tAj+bpnMlloFmUgUboq0gZkY8xcO8DqQZAsNKFTQCk8k?=
+ =?us-ascii?Q?lBSI8KdCcXDvOEUHsJvgO8zJyCzqnUwdlveOLPodkqC2iGjlafM8gkIoc0YQ?=
+ =?us-ascii?Q?DBWP/ms/dD45+S0Y4S70wx0VrP8tnn/h7srAN6r/pLll6H/vBXqw9Q6Ia3jj?=
+ =?us-ascii?Q?s/b6YBlnovvoppVLpiz/YqJOQwjDrHJnzMZeYXKYebF4W2ntblhSJVgJgMlY?=
+ =?us-ascii?Q?GvsljohJu2dZx+kW7XurzQG0gsMI6no9CwxS8dc4dT35TGMdrioFb8RjFWRp?=
+ =?us-ascii?Q?XzAzpgi9/OFErCP9I0VioNmCM1lfiVB8S7sMRmgCu0MKAYXDaBxRq/z2iaDk?=
+ =?us-ascii?Q?gG/dBfrPmpIOJQamczr4EyO8M9q5bSlsLwkaKxnAZ3YPp59EeXEA7Tiawd6Y?=
+ =?us-ascii?Q?cQ7Rgah13twLP2iqG6T/t45S3G2WbcBXsABe0rKcuR+kCywL1B6llGDTFLeN?=
+ =?us-ascii?Q?TOZ+XwNjRtwkrjYa1j1kWdsFB1iCsudX4TQzQz2mPlOtbIXsiF9m73agX6Fr?=
+ =?us-ascii?Q?t4swZBODnzIf7eVX1ECHjL8lz/52fLQhiCAGX0b8INN2ltFvos00fTcdcIdd?=
+ =?us-ascii?Q?FeODr5GHuK+tsk4JOTS8z3+vKZddaEsKaVab91x7QMI5TEULVQHP5j8PSCow?=
+ =?us-ascii?Q?XzE5y2kVPrxR4pA1DsvBb+TDAyjc2Nsz9VmuWfpn5qtCbVe0nqGZ0OduF2Y0?=
+ =?us-ascii?Q?AVOHxjUp6o+8nbgG/JMvNGx0Ev1FabDo5KZ5MYQI69gwcZSlo46K/0sW6QWk?=
+ =?us-ascii?Q?ETzRZLoTxwLY5dk4Tz34Uxc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638266572-5831-3-git-send-email-wellslutw@gmail.com>
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3202.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa33ac2e-faa6-4bfd-5c2b-08d9b47bd4a8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2021 03:36:58.9687
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: /BHDQW32TvWpNo/4RUQP3Tdk0abrDRl6pRwmBmyiYpquXSRclyu/Vhb9mNgVTXH5K5yZy3K/5uVmr2ZDk3TeDg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB3651
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +++ b/drivers/net/ethernet/sunplus/spl2sw_define.h
-> @@ -0,0 +1,301 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/* Copyright Sunplus Technology Co., Ltd.
-> + *       All rights reserved.
-> + */
-> +
-> +#ifndef __SPL2SW_DEFINE_H__
-> +#define __SPL2SW_DEFINE_H__
-> +
-> +#include <linux/module.h>
-> +#include <linux/errno.h>
-> +#include <linux/types.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/netdevice.h>
-> +#include <linux/etherdevice.h>
-> +#include <linux/skbuff.h>
-> +#include <linux/ethtool.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/phy.h>
-> +#include <linux/mii.h>
-> +#include <linux/io.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_mdio.h>
-> +#include <linux/bitfield.h>
+> -----Original Message-----
+> From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Sent: Tuesday, November 30, 2021 7:47 PM
+> To: Neal Liu <neal_liu@aspeedtech.com>
+> Cc: Felipe Balbi <balbi@kernel.org>; Joel Stanley <joel@jms.id.au>; Andre=
+w
+> Jeffery <andrew@aj.id.au>; Cai Huoqing <caihuoqing@baidu.com>; Tao Ren
+> <rentao.bupt@gmail.com>; Julia Lawall <julia.lawall@inria.fr>; kernel tes=
+t
+> robot <lkp@intel.com>; Sasha Levin <sashal@kernel.org>;
+> linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org;
+> linux-arm-kernel@lists.infradead.org; linux-aspeed@lists.ozlabs.org; BMC-=
+SW
+> <BMC-SW@aspeedtech.com>
+> Subject: Re: [PATCH v2 4/4] usb: aspeed-vhub: support test mode feature
+>=20
+> On Tue, Nov 30, 2021 at 06:42:56PM +0800, Neal Liu wrote:
+> > Support aspeed usb vhub set feature to test mode.
+> >
+> > Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
+> > ---
+> >  drivers/usb/gadget/udc/aspeed-vhub/dev.c | 18 ++++++++++++++----
+> > drivers/usb/gadget/udc/aspeed-vhub/hub.c | 22 ++++++++++++++++------
+> >  2 files changed, 30 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> > b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> > index d918e8b2af3c..4462f4b73b04 100644
+> > --- a/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/dev.c
+> > @@ -110,15 +110,25 @@ static int ast_vhub_dev_feature(struct
+> ast_vhub_dev *d,
+> >  				u16 wIndex, u16 wValue,
+> >  				bool is_set)
+> >  {
+> > +	u32 val;
+> > +
+> >  	DDBG(d, "%s_FEATURE(dev val=3D%02x)\n",
+> >  	     is_set ? "SET" : "CLEAR", wValue);
+> >
+> > -	if (wValue !=3D USB_DEVICE_REMOTE_WAKEUP)
+> > -		return std_req_driver;
+> > +	if (wValue =3D=3D USB_DEVICE_REMOTE_WAKEUP) {
+> > +		d->wakeup_en =3D is_set;
+> > +		return std_req_complete;
+> >
+> > -	d->wakeup_en =3D is_set;
+> > +	} else if (wValue =3D=3D USB_DEVICE_TEST_MODE) {
+>=20
+> If you return, no need for an else statement, right?
+>=20
+>=20
+> > +		val =3D readl(d->vhub->regs + AST_VHUB_CTRL);
+> > +		val &=3D ~GENMASK(10, 8);
+> > +		val |=3D VHUB_CTRL_SET_TEST_MODE((wIndex >> 8) & 0x7);
+> > +		writel(val, d->vhub->regs + AST_VHUB_CTRL);
+> >
+> > -	return std_req_complete;
+> > +		return std_req_complete;
+> > +	}
+> > +
+> > +	return std_req_driver;
+> >  }
+> >
+> >  static int ast_vhub_ep_feature(struct ast_vhub_dev *d, diff --git
+> > a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > index 93f27a745760..e52805fbdebd 100644
+> > --- a/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > +++ b/drivers/usb/gadget/udc/aspeed-vhub/hub.c
+> > @@ -212,17 +212,27 @@ static int ast_vhub_hub_dev_feature(struct
+> ast_vhub_ep *ep,
+> >  				    u16 wIndex, u16 wValue,
+> >  				    bool is_set)
+> >  {
+> > +	u32 val;
+> > +
+> >  	EPDBG(ep, "%s_FEATURE(dev val=3D%02x)\n",
+> >  	      is_set ? "SET" : "CLEAR", wValue);
+> >
+> > -	if (wValue !=3D USB_DEVICE_REMOTE_WAKEUP)
+> > -		return std_req_stall;
+> > +	if (wValue =3D=3D USB_DEVICE_REMOTE_WAKEUP) {
+> > +		ep->vhub->wakeup_en =3D is_set;
+> > +		EPDBG(ep, "Hub remote wakeup %s\n",
+> > +		      is_set ? "enabled" : "disabled");
+> > +		return std_req_complete;
+> >
+> > -	ep->vhub->wakeup_en =3D is_set;
+> > -	EPDBG(ep, "Hub remote wakeup %s\n",
+> > -	      is_set ? "enabled" : "disabled");
+> > +	} else if (wValue =3D=3D USB_DEVICE_TEST_MODE) {
+>=20
+> Same here, no need for else.
+>=20
+> thanks,
+>=20
+> greg k-h
 
-Please put these in the .c file, and only include those that are
-needed in each .c file.
+Okay, I'll fix it in next patch. Thanks
 
-> +int spl2sw_rx_descs_init(struct spl2sw_common *comm)
-> +{
-> +	struct spl2sw_skb_info *rx_skbinfo;
-> +	struct spl2sw_mac_desc *rx_desc;
-> +	struct sk_buff *skb;
-> +	u32 i, j;
-> +
-> +	for (i = 0; i < RX_DESC_QUEUE_NUM; i++) {
-> +		comm->rx_skb_info[i] = kcalloc(comm->rx_desc_num[i], sizeof(*rx_skbinfo),
-> +					       GFP_KERNEL | GFP_DMA);
-> +		if (!comm->rx_skb_info[i])
-> +			goto mem_alloc_fail;
-> +
-> +		rx_skbinfo = comm->rx_skb_info[i];
-> +		rx_desc = comm->rx_desc[i];
-> +		for (j = 0; j < comm->rx_desc_num[i]; j++) {
-> +			skb = __dev_alloc_skb(comm->rx_desc_buff_size, GFP_KERNEL | GFP_DMA);
-
-I generally don't look to closely at buffer handling in drivers. But
-the __ caught my eye. There is a comment:
-
-/* legacy helper around __netdev_alloc_skb() */
-
-Since this is legacy, you probably should not be using it. I don't
-know what you should be using though.
-
-> +static u32 spl2sw_init_netdev(struct platform_device *pdev, int eth_no,
-> +			      struct net_device **r_ndev)
-> +{
-> +	struct net_device *ndev;
-> +	struct spl2sw_mac *mac;
-> +	char *m_addr_name;
-> +	ssize_t otp_l = 0;
-> +	char *otp_v;
-> +	int ret;
-> +
-> +	m_addr_name = (eth_no == 0) ? "mac_addr0" : "mac_addr1";
-> +
-> +	/* Allocate the devices, and also allocate spl2sw_mac,
-> +	 * we can get it by netdev_priv().
-> +	 */
-> +	ndev = devm_alloc_etherdev(&pdev->dev, sizeof(*mac));
-> +	if (!ndev) {
-> +		*r_ndev = NULL;
-> +		return -ENOMEM;
-> +	}
-> +	SET_NETDEV_DEV(ndev, &pdev->dev);
-> +	ndev->netdev_ops = &netdev_ops;
-> +
-> +	mac = netdev_priv(ndev);
-> +	mac->ndev = ndev;
-> +
-> +	/* Get property 'mac-addr0' or 'mac-addr1' from dts. */
-> +	otp_v = spl2sw_otp_read_mac(&pdev->dev, &otp_l, m_addr_name);
-> +	if (otp_l < ETH_ALEN || IS_ERR_OR_NULL(otp_v)) {
-> +		dev_err(&pdev->dev, "OTP mac %s (len = %zd) is invalid, using default!\n",
-> +			m_addr_name, otp_l);
-> +		otp_l = 0;
-
-This is not actually an error, in that you keep going and use the
-default. So dev_info() would be better, here and the other calls in
-this function.
-
-> +	} else {
-> +		/* Check if MAC address is valid or not. If not, copy from default. */
-> +		ether_addr_copy(mac->mac_addr, otp_v);
-> +
-> +		/* Byte order of Some samples are reversed. Convert byte order here. */
-> +		spl2sw_check_mac_vendor_id_and_convert(mac->mac_addr);
-> +
-> +		if (!is_valid_ether_addr(mac->mac_addr)) {
-> +			dev_err(&pdev->dev, "Invalid mac in OTP[%s] = %pM, use default!\n",
-> +				m_addr_name, mac->mac_addr);
-> +			otp_l = 0;
-> +		}
-> +	}
-> +	if (otp_l != 6) {
-> +		/* MAC address is invalid. Generate one using random number. */
-> +		ether_addr_copy(mac->mac_addr, spl2sw_def_mac_addr);
-> +		mac->mac_addr[3] = get_random_int() % 256;
-> +		mac->mac_addr[4] = get_random_int() % 256;
-> +		mac->mac_addr[5] = get_random_int() % 256;
-> +	}
-> +
-> +	eth_hw_addr_set(ndev, mac->mac_addr);
-> +	dev_info(&pdev->dev, "HW Addr = %pM\n", mac->mac_addr);
-> +
-> +	ret = register_netdev(ndev);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Failed to register net device \"%s\"!\n",
-> +			ndev->name);
-> +		free_netdev(ndev);
-> +		*r_ndev = NULL;
-> +		return ret;
-> +	}
-> +	netdev_info(ndev, "Registered net device \"%s\" successfully.\n", ndev->name);
-
-netdev_dbg().
-
-> +	*r_ndev = ndev;
-> +	return 0;
-> +}
-
-> +
-> +static int spl2sw_probe(struct platform_device *pdev)
-> +{
-> +	struct device_node *eth_ports_np;
-> +	struct device_node *port_np;
-> +	struct spl2sw_common *comm;
-> +	struct device_node *phy_np;
-> +	phy_interface_t phy_mode;
-> +	struct net_device *ndev;
-> +	struct spl2sw_mac *mac;
-> +	struct resource *rc;
-> +	int irq, i;
-> +	int ret;
-> +
-> +	if (platform_get_drvdata(pdev))
-> +		return -ENODEV;
-> +
-> +	/* Allocate memory for 'spl2sw_common' area. */
-> +	comm = devm_kzalloc(&pdev->dev, sizeof(*comm), GFP_KERNEL);
-> +	if (!comm)
-> +		return -ENOMEM;
-> +	comm->pdev = pdev;
-> +
-> +	spin_lock_init(&comm->rx_lock);
-> +	spin_lock_init(&comm->tx_lock);
-> +	spin_lock_init(&comm->mdio_lock);
-> +
-> +	/* Get memory resoruce "emac" from dts. */
-
-resource
-
-> +	/* Enable clock. */
-> +	clk_prepare_enable(comm->clk);
-> +	udelay(1);
-> +
-> +	reset_control_assert(comm->rstc);
-> +	udelay(1);
-> +	reset_control_deassert(comm->rstc);
-> +	udelay(1);
-> +
-> +	/* Get child node ethernet-ports. */
-> +	eth_ports_np = of_get_child_by_name(pdev->dev.of_node, "ethernet-ports");
-> +	if (!eth_ports_np) {
-> +		dev_err(&pdev->dev, "No ethernet-ports child node found!\n");
-
-You should disable the clock before returning.
-
-> +		return -ENODEV;
-> +	}
-> +
-> +	for (i = 0; i < MAX_NETDEV_NUM; i++) {
-> +		/* Get port@i of node ethernet-ports. */
-> +		port_np = spl2sw_get_eth_child_node(eth_ports_np, i);
-> +		if (!port_np)
-> +			continue;
-> +
-> +		/* Get phy-mode. */
-> +		if (of_get_phy_mode(port_np, &phy_mode)) {
-> +			dev_err(&pdev->dev, "Failed to get phy-mode property of port@%d!\n",
-> +				i);
-> +			continue;
-> +		}
-> +
-> +		/* Get phy-handle. */
-> +		phy_np = of_parse_phandle(port_np, "phy-handle", 0);
-> +		if (!phy_np) {
-> +			dev_err(&pdev->dev, "Failed to get phy-handle property of port@%d!\n",
-> +				i);
-> +			continue;
-> +		}
-> +
-> +		/* Get address of phy. */
-> +		if (of_property_read_u32(phy_np, "reg", &comm->phy_addr[i])) {
-
-This does not appear to be used.
-
-> +			dev_err(&pdev->dev, "Failed to get reg property of phy node!\n");
-> +			continue;
-> +		}
-> +
-> +		if (comm->phy_addr[i] >= PHY_MAX_ADDR - 1) {
-> +			dev_err(&pdev->dev, "Invalid phy address (reg = <%d>)!\n",
-> +				comm->phy_addr[i]);
-> +			continue;
-> +		}
-
-phylib should validate this.
-
-> +
-> +		if (!comm->mdio_node) {
-> +			comm->mdio_node = of_get_parent(phy_np);
-> +			if (!comm->mdio_node) {
-> +				dev_err(&pdev->dev, "Failed to get mdio_node!\n");
-> +				return -ENODATA;
-> +			}
-> +		}
-
-This does not look correct. The PHY could be on any MDIO bus. It does
-not have to be the bus of this device. There should not be any need to
-follow the pointer. 
-
-> +static int spl2sw_bit_pos_to_port_num(int n)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < MAX_NETDEV_NUM; i++) {
-> +		if (n & 1)
-> +			break;
-> +		n >>= 1;
-> +	}
-> +	return i;
-
-Look at the ffs() helper. But since MAX_NETDEV_NUM is two, the
-compiler might be smart enough to unroll the loop and just use simple
-logic operations which could be faster.
-
-> +void spl2sw_mac_addr_add(struct spl2sw_mac *mac)
-> +{
-> +	struct spl2sw_common *comm = mac->comm;
-> +	u32 reg;
-> +
-> +	/* Write 6-octet MAC address. */
-> +	writel((mac->mac_addr[0] << 0) + (mac->mac_addr[1] << 8),
-> +	       comm->l2sw_reg_base + L2SW_W_MAC_15_0);
-> +	writel((mac->mac_addr[2] << 0) + (mac->mac_addr[3] << 8) +
-> +	       (mac->mac_addr[4] << 16) + (mac->mac_addr[5] << 24),
-> +	       comm->l2sw_reg_base + L2SW_W_MAC_47_16);
-> +
-> +	/* Set learn port = cpu_port, aging = 1 */
-> +	reg = MAC_W_CPU_PORT_0 | FIELD_PREP(MAC_W_VID, mac->vlan_id) |
-> +	      FIELD_PREP(MAC_W_AGE, 1) | MAC_W_MAC_CMD;
-> +	writel(reg, comm->l2sw_reg_base + L2SW_WT_MAC_AD0);
-> +
-> +	/* Wait for completing. */
-> +	do {
-> +		reg = readl(comm->l2sw_reg_base + L2SW_WT_MAC_AD0);
-> +		ndelay(10);
-> +		netdev_dbg(mac->ndev, "wt_mac_ad0 = %08x\n", reg);
-> +	} while (!(reg & MAC_W_MAC_DONE));
-
-linux/iopoll.h 
-
-
-> +
-> +	netdev_dbg(mac->ndev, "mac_ad0 = %08x, mac_ad = %08x%04x\n",
-> +		   readl(comm->l2sw_reg_base + L2SW_WT_MAC_AD0),
-> +		   (u32)FIELD_GET(MAC_W_MAC_47_16,
-> +		   readl(comm->l2sw_reg_base + L2SW_W_MAC_47_16)),
-> +		   (u32)FIELD_GET(MAC_W_MAC_15_0,
-> +		   readl(comm->l2sw_reg_base + L2SW_W_MAC_15_0)));
-> +}
-> +
-> +void spl2sw_mac_addr_del(struct spl2sw_mac *mac)
-> +{
-> +	struct spl2sw_common *comm = mac->comm;
-> +	u32 reg;
-> +
-> +	/* Write 6-octet MAC address. */
-> +	writel((mac->mac_addr[0] << 0) + (mac->mac_addr[1] << 8),
-> +	       comm->l2sw_reg_base + L2SW_W_MAC_15_0);
-> +	writel((mac->mac_addr[2] << 0) + (mac->mac_addr[3] << 8) +
-> +	       (mac->mac_addr[4] << 16) + (mac->mac_addr[5] << 24),
-> +	       comm->l2sw_reg_base + L2SW_W_MAC_47_16);
-> +
-> +	/* Set learn port = lan_port0 and aging = 0
-> +	 * to wipe (age) out the entry.
-> +	 */
-> +	reg = MAC_W_LAN_PORT_0 | FIELD_PREP(MAC_W_VID, mac->vlan_id) | MAC_W_MAC_CMD;
-> +	writel(reg, comm->l2sw_reg_base + L2SW_WT_MAC_AD0);
-> +
-> +	/* Wait for completing. */
-> +	do {
-> +		reg = readl(comm->l2sw_reg_base + L2SW_WT_MAC_AD0);
-> +		ndelay(10);
-> +		netdev_dbg(mac->ndev, "wt_mac_ad0 = %08x\n", reg);
-> +	} while (!(reg & MAC_W_MAC_DONE));
-
-Here as well. Any where you need to wait for some sort of completion,
-it is best you use these helpers. They will also do a timeout, just in
-case the hardware dies.
-
-> +static int spl2sw_mii_read(struct mii_bus *bus, int addr, int regnum)
-> +{
-> +	struct spl2sw_common *comm = bus->priv;
-> +	int ret;
-> +
-> +	if (regnum & MII_ADDR_C45)
-> +		return -EOPNOTSUPP;
-> +
-> +	ret = spl2sw_mdio_access(comm, SPL2SW_MDIO_READ_CMD, addr, regnum, 0);
-> +	if (ret < 0)
-> +		return -EOPNOTSUPP;
-
-spl2sw_mdio_access() returns an error code, -ETIMEDOUT. So us it.
-
-> +u32 spl2sw_mdio_init(struct spl2sw_common *comm)
-> +{
-> +	struct mii_bus *mii_bus;
-> +	int ret;
-> +
-> +	mii_bus = devm_mdiobus_alloc(&comm->pdev->dev);
-> +	if (!mii_bus)
-> +		return -ENOMEM;
-> +
-> +	mii_bus->name = "sunplus_mii_bus";
-> +	mii_bus->parent = &comm->pdev->dev;
-> +	mii_bus->priv = comm;
-> +	mii_bus->read = spl2sw_mii_read;
-> +	mii_bus->write = spl2sw_mii_write;
-> +	snprintf(mii_bus->id, MII_BUS_ID_SIZE, "%s-mii", dev_name(&comm->pdev->dev));
-> +
-> +	ret = of_mdiobus_register(mii_bus, comm->mdio_node);
-
-Here you should be looking into the device tree to find the mdio node
-and passing it.
-
-> +	if (ret) {
-> +		dev_err(&comm->pdev->dev, "Failed to register mdiobus!\n");
-> +		return ret;
-> +	}
-> +
-> +	comm->mii_bus = mii_bus;
-> +	return ret;
-> +}
-
-> +int spl2sw_phy_connect(struct spl2sw_common *comm)
-> +{
-> +	struct phy_device *phydev;
-> +	struct net_device *ndev;
-> +	struct spl2sw_mac *mac;
-> +	int i;
-> +
-> +	for (i = 0; i < MAX_NETDEV_NUM; i++)
-> +		if (comm->ndev[i]) {
-> +			ndev = comm->ndev[i];
-> +			mac = netdev_priv(ndev);
-> +			phydev = of_phy_connect(ndev, mac->phy_node, spl2sw_mii_link_change,
-> +						0, mac->phy_mode);
-> +			if (!phydev)
-> +				return -ENODEV;
-> +
-> +			linkmode_copy(phydev->advertising, phydev->supported);
-
-There should not be any need to do this.
-
-> +
-> +			/* Enable polling mode */
-> +			phydev->irq = PHY_POLL;
-
-And that should be the default, so no need to set it.
-
-> +		}
-> +
-> +	return 0;
-> +}
-
-This is looking a lot better.
-
-     Andrew
+-Neal

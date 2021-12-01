@@ -2,414 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE724651CD
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A2C4651CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:37:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351058AbhLAPke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:40:34 -0500
-Received: from mx0a-001ae601.pphosted.com ([67.231.149.25]:33876 "EHLO
-        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1351041AbhLAPk3 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S1351040AbhLAPk3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 1 Dec 2021 10:40:29 -0500
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B19N0TT027321;
-        Wed, 1 Dec 2021 09:36:54 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=S5BGIM+yEr7E/4o2p9g8HzUl42grKlCEoF6DI4iSlUs=;
- b=Uh1ybMhFPiaDyADWRN8BTDmgDpIdCjXFzoIGfYzSPdzQdTIBqNKQNJ7v7XV56moFQVLA
- Hg7GCkAHrm12lpQsaQL9WI3a/lFtWjCOJJ1DA4AEYFU7BdL6krfO4HU+1JbMgFhFSlqo
- uwSRCiMeV1GW3zwsuIldTbY29Bh0z6oPMMFC6L0+mEEMwqJp5aNfHoW+w/SV4/UFJW3X
- Dn4JTrTL29/84C2EMhOG7a71GI0rjiON22tKEESmg4SGErknOKyWmo8Be/Wjx9n/hwh5
- 3Pt3lruTEjMvtU9b7YDW8mCobZxmUXa8Ib+NElhD9f8iB+vpDFlgWoq01CQKHDA0GPmB iA== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3cp6c88cwc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-        Wed, 01 Dec 2021 09:36:54 -0600
-Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 1 Dec
- 2021 15:36:52 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
- Transport; Wed, 1 Dec 2021 15:36:52 +0000
-Received: from AUSNPC0LSNW1-debian.cirrus.com (AUSNPC0LSNW1.ad.cirrus.com [198.61.65.14])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8019E2A9;
-        Wed,  1 Dec 2021 15:36:51 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <broonie@kernel.org>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>
-Subject: [PATCH] ASoC: cs42l42: Implement system suspend
-Date:   Wed, 1 Dec 2021 15:36:48 +0000
-Message-ID: <20211201153648.17259-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234031AbhLAPk2 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:40:28 -0500
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8154BC061748;
+        Wed,  1 Dec 2021 07:37:06 -0800 (PST)
+Received: from [192.168.1.101] (83.6.166.111.neoplus.adsl.tpnet.pl [83.6.166.111])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 576393F767;
+        Wed,  1 Dec 2021 16:37:03 +0100 (CET)
+Message-ID: <2649eada-3e80-cec3-5dca-bded67fa5f80@somainline.org>
+Date:   Wed, 1 Dec 2021 16:37:02 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: kImvmVbT5XJUOxDMtcbsrPVNm9RuAs7b
-X-Proofpoint-GUID: kImvmVbT5XJUOxDMtcbsrPVNm9RuAs7b
-X-Proofpoint-Spam-Reason: safe
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 3/4] clk: qcom: Add clock driver for SM8450
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211201072310.3968679-1-vkoul@kernel.org>
+ <20211201072310.3968679-4-vkoul@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20211201072310.3968679-4-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add system suspend functions to handle clean power-down on suspend and
-restoring state on resume.
 
-The jack state could change during suspend. Plug->unplug and unplug->plug
-are straightforward because this looks no different from any other plug
-state change. However, the jack could be unplugged and a different type
-of jack plugged, and on resume the plug state would not have changed.
-Some code changes are needed to the jack handling so that on resume a
-plugged state will be re-evaluated instead of filtered out. In this case
-there would not have been a previous unplug event to clear the reported
-jack state so the full state of all jack type and button flags must be
-reported.
+On 01.12.2021 08:23, Vinod Koul wrote:
+> This adds Global Clock controller (GCC) driver for SM8450 SoC including
+> the gcc resets and gdsc.
+>
+> This patch is based on initial code downstream by Vivek Aknurwar
+> <viveka@codeaurora.org>
+>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  drivers/clk/qcom/Kconfig      |    8 +
+>  drivers/clk/qcom/Makefile     |    1 +
+>  drivers/clk/qcom/gcc-sm8450.c | 3314 +++++++++++++++++++++++++++++++++
+>  3 files changed, 3323 insertions(+)
+>  create mode 100644 drivers/clk/qcom/gcc-sm8450.c
+>
+> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
+> index 74efc82127e1..3a568e7ad886 100644
+> --- a/drivers/clk/qcom/Kconfig
+> +++ b/drivers/clk/qcom/Kconfig
+> @@ -618,6 +618,14 @@ config SM_GCC_8350
+>  	  Say Y if you want to use peripheral devices such as UART,
+>  	  SPI, I2C, USB, SD/UFS, PCIe etc.
+>  
+> +config SM_GCC_8450
+> +	tristate "SM8450 Global Clock Controller"
+> +	select QCOM_GDSC
+> +	help
+> +	  Support for the global clock controller on SM8450 devices.
+> +	  Say Y if you want to use peripheral devices such as UART,
+> +	  SPI, I2C, USB, SD/UFS, PCIe etc.
+> +
+>  config SM_GPUCC_8150
+>  	tristate "SM8150 Graphics Clock Controller"
+>  	select SM_GCC_8150
+> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
+> index 1718c34d3551..efb0837ea199 100644
+> --- a/drivers/clk/qcom/Makefile
+> +++ b/drivers/clk/qcom/Makefile
+> @@ -90,6 +90,7 @@ obj-$(CONFIG_SM_GCC_6350) += gcc-sm6350.o
+>  obj-$(CONFIG_SM_GCC_8150) += gcc-sm8150.o
+>  obj-$(CONFIG_SM_GCC_8250) += gcc-sm8250.o
+>  obj-$(CONFIG_SM_GCC_8350) += gcc-sm8350.o
+> +obj-$(CONFIG_SM_GCC_8450) += gcc-sm8450.o
+>  obj-$(CONFIG_SM_GPUCC_8150) += gpucc-sm8150.o
+>  obj-$(CONFIG_SM_GPUCC_8250) += gpucc-sm8250.o
+>  obj-$(CONFIG_SM_VIDEOCC_8150) += videocc-sm8150.o
+> diff --git a/drivers/clk/qcom/gcc-sm8450.c b/drivers/clk/qcom/gcc-sm8450.c
+> new file mode 100644
+> index 000000000000..175c18a1cdbe
+> --- /dev/null
+> +++ b/drivers/clk/qcom/gcc-sm8450.c
+> @@ -0,0 +1,3314 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2021, Linaro Limited
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <dt-bindings/clock/qcom,gcc-sm8450.h>
+> +
+> +#include "clk-alpha-pll.h"
+> +#include "clk-branch.h"
+> +#include "clk-rcg.h"
+> +#include "clk-regmap.h"
+> +#include "clk-regmap-divider.h"
+> +#include "clk-regmap-mux.h"
+> +#include "gdsc.h"
+> +#include "reset.h"
+> +
+> +enum {
+> +	P_BI_TCXO,
+> +	P_GCC_GPLL0_OUT_EVEN,
+> +	P_GCC_GPLL0_OUT_MAIN,
+> +	P_GCC_GPLL4_OUT_MAIN,
+> +	P_GCC_GPLL9_OUT_MAIN,
+> +	P_PCIE_0_PIPE_CLK,
+> +	P_PCIE_1_PHY_AUX_CLK,
+> +	P_PCIE_1_PIPE_CLK,
+> +	P_SLEEP_CLK,
+> +	P_UFS_PHY_RX_SYMBOL_0_CLK,
+> +	P_UFS_PHY_RX_SYMBOL_1_CLK,
+> +	P_UFS_PHY_TX_SYMBOL_0_CLK,
+> +	P_USB3_PHY_WRAPPER_GCC_USB30_PIPE_CLK,
+> +};
+> +
+> +static struct clk_alpha_pll gcc_gpll0 = {
+> +	.offset = 0x0,
+> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID_EVO],
+> +	.clkr = {
+> +		.enable_reg = 0x62018,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gcc_gpll0",
+> +			.parent_data = &(const struct clk_parent_data){
+> +				.fw_name = "bi_tcxo",
+> +				.name = "bi_tcxo",
 
-Note that during system suspend any jack plug/unplug and button events
-will not be reported or generate a system wakeup. If the plug state or
-headset type has changed it will be reported after resume.
+I don't think we want .name for new drivers, as we do things cleanly
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
----
- sound/soc/codecs/cs42l42.c | 212 ++++++++++++++++++++++++++++++++++++++++++---
- sound/soc/codecs/cs42l42.h |   8 +-
- 2 files changed, 209 insertions(+), 11 deletions(-)
+from the start and don't have DT incompatibility problems.
 
-diff --git a/sound/soc/codecs/cs42l42.c b/sound/soc/codecs/cs42l42.c
-index 43d98bdb5b5b..5abac0dc8e8b 100644
---- a/sound/soc/codecs/cs42l42.c
-+++ b/sound/soc/codecs/cs42l42.c
-@@ -47,7 +47,6 @@ static const struct reg_default cs42l42_reg_defaults[] = {
- 	{ CS42L42_I2C_STRETCH,			0x03 },
- 	{ CS42L42_I2C_TIMEOUT,			0xB7 },
- 	{ CS42L42_PWR_CTL1,			0xFF },
--	{ CS42L42_PWR_CTL2,			0x84 },
- 	{ CS42L42_PWR_CTL3,			0x20 },
- 	{ CS42L42_RSENSE_CTL1,			0x40 },
- 	{ CS42L42_RSENSE_CTL2,			0x00 },
-@@ -331,6 +330,11 @@ static bool cs42l42_volatile_register(struct device *dev, unsigned int reg)
- 	case CS42L42_DEVID_CD:
- 	case CS42L42_DEVID_E:
- 	case CS42L42_MCLK_STATUS:
-+	/*
-+	 * PWR_CTL2 must be volatile so it can be used as a canary bit to
-+	 * detect a reset during system suspend.
-+	 */
-+	case CS42L42_PWR_CTL2:
- 	case CS42L42_OSC_SWITCH_STATUS:
- 	case CS42L42_TRSENSE_STATUS:
- 	case CS42L42_HS_DET_STATUS:
-@@ -550,7 +554,7 @@ static int cs42l42_set_jack(struct snd_soc_component *component, struct snd_soc_
- 	struct cs42l42_private *cs42l42 = snd_soc_component_get_drvdata(component);
- 
- 	/* Prevent race with interrupt handler */
--	mutex_lock(&cs42l42->jack_detect_mutex);
-+	mutex_lock(&cs42l42->irq_lock);
- 	cs42l42->jack = jk;
- 
- 	if (jk) {
-@@ -566,7 +570,7 @@ static int cs42l42_set_jack(struct snd_soc_component *component, struct snd_soc_
- 			break;
- 		}
- 	}
--	mutex_unlock(&cs42l42->jack_detect_mutex);
-+	mutex_unlock(&cs42l42->irq_lock);
- 
- 	return 0;
- }
-@@ -1613,6 +1617,12 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
- 	unsigned int i;
- 	int report = 0;
- 
-+	mutex_lock(&cs42l42->irq_lock);
-+
-+	if (cs42l42->suspended) {
-+		mutex_unlock(&cs42l42->irq_lock);
-+		return IRQ_NONE;
-+	}
- 
- 	/* Read sticky registers to clear interurpt */
- 	for (i = 0; i < ARRAY_SIZE(stickies); i++) {
-@@ -1635,9 +1645,12 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
- 		CS42L42_M_DETECT_FT_MASK |
- 		CS42L42_M_HSBIAS_HIZ_MASK);
- 
--	mutex_lock(&cs42l42->jack_detect_mutex);
--
--	/* Check auto-detect status */
-+	/*
-+	 * Check auto-detect status. During system suspend the jack could be
-+	 * unplugged and a different type plugged. On resume there will not
-+	 * have been a previous unplug event to clear the reported flags, so
-+	 * here the full state of all flags must be reported.
-+	 */
- 	if ((~masks[5]) & irq_params_table[5].mask) {
- 		if (stickies[5] & CS42L42_HSDET_AUTO_DONE_MASK) {
- 			cs42l42_process_hs_type_detect(cs42l42);
-@@ -1645,11 +1658,15 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
- 			case CS42L42_PLUG_CTIA:
- 			case CS42L42_PLUG_OMTP:
- 				snd_soc_jack_report(cs42l42->jack, SND_JACK_HEADSET,
--						    SND_JACK_HEADSET);
-+						    SND_JACK_HEADSET |
-+						    SND_JACK_BTN_0 | SND_JACK_BTN_1 |
-+						    SND_JACK_BTN_2 | SND_JACK_BTN_3);
- 				break;
- 			case CS42L42_PLUG_HEADPHONE:
- 				snd_soc_jack_report(cs42l42->jack, SND_JACK_HEADPHONE,
--						    SND_JACK_HEADPHONE);
-+						    SND_JACK_HEADSET |
-+						    SND_JACK_BTN_0 | SND_JACK_BTN_1 |
-+						    SND_JACK_BTN_2 | SND_JACK_BTN_3);
- 				break;
- 			default:
- 				break;
-@@ -1705,7 +1722,7 @@ static irqreturn_t cs42l42_irq_thread(int irq, void *data)
- 		}
- 	}
- 
--	mutex_unlock(&cs42l42->jack_detect_mutex);
-+	mutex_unlock(&cs42l42->irq_lock);
- 
- 	return IRQ_HANDLED;
- }
-@@ -2053,8 +2070,9 @@ static int cs42l42_i2c_probe(struct i2c_client *i2c_client,
- 		return -ENOMEM;
- 
- 	cs42l42->dev = &i2c_client->dev;
-+	cs42l42->irq = i2c_client->irq;
- 	i2c_set_clientdata(i2c_client, cs42l42);
--	mutex_init(&cs42l42->jack_detect_mutex);
-+	mutex_init(&cs42l42->irq_lock);
- 
- 	cs42l42->regmap = devm_regmap_init_i2c(i2c_client, &cs42l42_regmap);
- 	if (IS_ERR(cs42l42->regmap)) {
-@@ -2210,6 +2228,179 @@ static int cs42l42_i2c_remove(struct i2c_client *i2c_client)
- 	return 0;
- }
- 
-+/* Suspend sequence from datasheet */
-+static const struct reg_sequence __maybe_unused cs42l42_suspend_seq[] = {
-+	REG_SEQ0(CS42L42_MIC_DET_CTL1,		0x9f),
-+	REG_SEQ0(CS42L42_ADC_OVFL_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_MIXER_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_SRC_INT_MASK,		0x0F),
-+	REG_SEQ0(CS42L42_ASP_RX_INT_MASK,	0x1F),
-+	REG_SEQ0(CS42L42_ASP_TX_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_CODEC_INT_MASK,	0x03),
-+	REG_SEQ0(CS42L42_SRCPL_INT_MASK,	0x7F),
-+	REG_SEQ0(CS42L42_VPMON_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_PLL_LOCK_INT_MASK,	0x01),
-+	REG_SEQ0(CS42L42_TSRS_PLUG_INT_MASK,	0x0F),
-+	REG_SEQ0(CS42L42_WAKE_CTL,		0xE1),
-+	REG_SEQ0(CS42L42_DET_INT1_MASK,		0xE0),
-+	REG_SEQ0(CS42L42_DET_INT2_MASK,		0xFF),
-+	REG_SEQ0(CS42L42_MIXER_CHA_VOL,		0x3f),
-+	REG_SEQ0(CS42L42_MIXER_ADC_VOL,		0x3f),
-+	REG_SEQ0(CS42L42_MIXER_CHB_VOL,		0x3f),
-+	REG_SEQ0(CS42L42_HP_CTL,		0x0f),
-+	REG_SEQ0(CS42L42_ASP_RX_DAI0_EN,	0x00),
-+	REG_SEQ0(CS42L42_ASP_CLK_CFG,		0x00),
-+	REG_SEQ0(CS42L42_HSDET_CTL2,		0x00),
-+	REG_SEQ0(CS42L42_PWR_CTL1,		0xfe),
-+	REG_SEQ0(CS42L42_PWR_CTL2,		0x8c),
-+	REG_SEQ0(CS42L42_DAC_CTL2,		0x02),
-+	REG_SEQ0(CS42L42_HS_CLAMP_DISABLE,	0x00),
-+	REG_SEQ0(CS42L42_MISC_DET_CTL,		0x03),
-+	REG_SEQ0(CS42L42_TIPSENSE_CTL,		0x02),
-+	REG_SEQ0(CS42L42_HSBIAS_SC_AUTOCTL,	0x03),
-+	REG_SEQ0(CS42L42_PWR_CTL1,		0xff),
-+};
-+
-+static const struct reg_sequence __maybe_unused cs42l42_suspend_post_seq[] = {
-+	REG_SEQ0(CS42L42_PWR_CTL2,		0x9c),
-+};
-+
-+static int __maybe_unused cs42l42_suspend(struct device *dev)
-+{
-+	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
-+	unsigned int reg;
-+	int ret;
-+
-+	if (cs42l42->irq >= 0)
-+		disable_irq(cs42l42->irq);
-+
-+	/*
-+	 * Wait for threaded irq handler to be idle and stop it processing
-+	 * future interrupts. This ensures a safe disable if the interrupt
-+	 * is shared.
-+	 */
-+	mutex_lock(&cs42l42->irq_lock);
-+	cs42l42->suspended = true;
-+
-+	/* Clear any previous PDN_DONE */
-+	regmap_read(cs42l42->regmap, CS42L42_CODEC_STATUS, &reg);
-+
-+	/* Preserve cached values so they can be restored. */
-+	regmap_multi_reg_write_bypassed(cs42l42->regmap,
-+					cs42l42_suspend_seq,
-+					ARRAY_SIZE(cs42l42_suspend_seq));
-+
-+	/* The cached address page register value is now stale */
-+	regcache_drop_region(cs42l42->regmap, CS42L42_PAGE_REGISTER, CS42L42_PAGE_REGISTER);
-+
-+	/* Wait for power-down complete */
-+	msleep(CS42L42_PDN_DONE_TIME_MS);
-+	ret = regmap_read_poll_timeout(cs42l42->regmap, CS42L42_CODEC_STATUS, reg,
-+				       (reg & CS42L42_PDN_DONE_MASK),
-+				       CS42L42_PDN_DONE_POLL_US,
-+				       CS42L42_PDN_DONE_TIMEOUT_US);
-+	if (ret)
-+		dev_warn(dev, "Failed to get PDN_DONE: %d\n", ret);
-+
-+	regmap_multi_reg_write_bypassed(cs42l42->regmap,
-+					cs42l42_suspend_post_seq,
-+					ARRAY_SIZE(cs42l42_suspend_post_seq));
-+	msleep(CS42L42_FILT_DISCHARGE_TIME_MS);
-+
-+	/* The cached address page register value is now stale */
-+	regcache_drop_region(cs42l42->regmap, CS42L42_PAGE_REGISTER, CS42L42_PAGE_REGISTER);
-+
-+	regcache_cache_only(cs42l42->regmap, true);
-+
-+	gpiod_set_value_cansleep(cs42l42->reset_gpio, 0);
-+	regulator_bulk_disable(ARRAY_SIZE(cs42l42->supplies), cs42l42->supplies);
-+
-+	mutex_unlock(&cs42l42->irq_lock);
-+
-+	dev_dbg(dev, "System suspended\n");
-+
-+	return 0;
-+}
-+
-+static int __maybe_unused cs42l42_resume(struct device *dev)
-+{
-+	struct cs42l42_private *cs42l42 = dev_get_drvdata(dev);
-+	unsigned int val;
-+	int ret;
-+
-+	mutex_lock(&cs42l42->irq_lock);
-+
-+	/*
-+	 * If jack was unplugged and re-plugged during suspend it could have
-+	 * changed type but the tip-sense state hasn't changed. Force a
-+	 * plugged state to be re-evaluated if it is still plugged.
-+	 */
-+	if (cs42l42->plug_state != CS42L42_TS_UNPLUG)
-+		cs42l42->plug_state = CS42L42_TS_TRANS;
-+
-+	ret = regulator_bulk_enable(ARRAY_SIZE(cs42l42->supplies), cs42l42->supplies);
-+	if (ret != 0) {
-+		dev_err(dev, "Failed to enable supplies: %d\n", ret);
-+		return ret;
-+	}
-+
-+	gpiod_set_value_cansleep(cs42l42->reset_gpio, 1);
-+	usleep_range(CS42L42_BOOT_TIME_US, CS42L42_BOOT_TIME_US * 2);
-+
-+	regcache_cache_only(cs42l42->regmap, false);
-+
-+	if (cs42l42->reset_gpio) {
-+		/* Registers have reset to defaults */
-+		regcache_mark_dirty(cs42l42->regmap);
-+	} else {
-+		/*
-+		 * Only call regcache_mark_dirty() if cs42l42 reset, so
-+		 * regcache_sync() writes all non-default cached values.
-+		 * If it didn't reset we don't want to filter out syncing
-+		 * dirty cache entries that have default value.
-+		 * DISCHARGE_FILT==1 after suspend. If the cs42l42 reset
-+		 * it will now be 0.
-+		 */
-+		ret = regmap_read(cs42l42->regmap, CS42L42_PWR_CTL2, &val);
-+		if (ret) {
-+			dev_err(dev, "failed to read PWR_CTL2: %d\n", ret);
-+			goto err;
-+		}
-+
-+		if ((val & CS42L42_DISCHARGE_FILT_MASK) == 0) {
-+			dev_dbg(dev, "Has reset in suspend\n");
-+			regcache_mark_dirty(cs42l42->regmap);
-+		} else {
-+			dev_dbg(dev, "Did not reset in suspend\n");
-+		}
-+	}
-+
-+	/* Sync LATCH_TO_VP first so the VP domain registers sync correctly */
-+	regcache_sync_region(cs42l42->regmap, CS42L42_MIC_DET_CTL1, CS42L42_MIC_DET_CTL1);
-+	regcache_sync(cs42l42->regmap);
-+
-+	cs42l42->suspended = false;
-+	mutex_unlock(&cs42l42->irq_lock);
-+
-+	if (cs42l42->irq >= 0)
-+		enable_irq(cs42l42->irq);
-+
-+	dev_dbg(dev, "System resumed\n");
-+
-+	return 0;
-+err:
-+	gpiod_set_value_cansleep(cs42l42->reset_gpio, 0);
-+	regulator_bulk_disable(ARRAY_SIZE(cs42l42->supplies), cs42l42->supplies);
-+
-+	mutex_unlock(&cs42l42->irq_lock);
-+
-+	return ret;
-+}
-+
-+static const struct dev_pm_ops cs42l42_pm_ops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(cs42l42_suspend, cs42l42_resume)
-+};
-+
- #ifdef CONFIG_OF
- static const struct of_device_id cs42l42_of_match[] = {
- 	{ .compatible = "cirrus,cs42l42", },
-@@ -2236,6 +2427,7 @@ MODULE_DEVICE_TABLE(i2c, cs42l42_id);
- static struct i2c_driver cs42l42_i2c_driver = {
- 	.driver = {
- 		.name = "cs42l42",
-+		.pm = &cs42l42_pm_ops,
- 		.of_match_table = of_match_ptr(cs42l42_of_match),
- 		.acpi_match_table = ACPI_PTR(cs42l42_acpi_match),
- 		},
-diff --git a/sound/soc/codecs/cs42l42.h b/sound/soc/codecs/cs42l42.h
-index 9fff183dce8e..b497ca1618c2 100644
---- a/sound/soc/codecs/cs42l42.h
-+++ b/sound/soc/codecs/cs42l42.h
-@@ -826,6 +826,10 @@
- #define CS42L42_PLL_LOCK_POLL_US	250
- #define CS42L42_PLL_LOCK_TIMEOUT_US	1250
- #define CS42L42_HP_ADC_EN_TIME_US	20000
-+#define CS42L42_PDN_DONE_POLL_US	1000
-+#define CS42L42_PDN_DONE_TIMEOUT_US	200000
-+#define CS42L42_PDN_DONE_TIME_MS	100
-+#define CS42L42_FILT_DISCHARGE_TIME_MS	46
- 
- static const char *const cs42l42_supply_names[CS42L42_NUM_SUPPLIES] = {
- 	"VA",
-@@ -842,7 +846,8 @@ struct  cs42l42_private {
- 	struct gpio_desc *reset_gpio;
- 	struct completion pdn_done;
- 	struct snd_soc_jack *jack;
--	struct mutex jack_detect_mutex;
-+	int irq;
-+	struct mutex irq_lock;
- 	int pll_config;
- 	int bclk;
- 	u32 sclk;
-@@ -860,6 +865,7 @@ struct  cs42l42_private {
- 	u8 hs_bias_sense_en;
- 	u8 stream_use;
- 	bool hp_adc_up_pending;
-+	bool suspended;
- };
- 
- #endif /* __CS42L42_H__ */
--- 
-2.11.0
+[...]
+
+
+> +
+> +static int gcc_sm8450_probe(struct platform_device *pdev)
+> +{
+> +	struct regmap *regmap;
+> +	int ret;
+> +
+> +	regmap = qcom_cc_map(pdev, &gcc_sm8450_desc);
+> +	if (IS_ERR(regmap))
+> +		return PTR_ERR(regmap);
+> +
+> +	ret = qcom_cc_register_rcg_dfs(regmap, gcc_dfs_clocks,
+> +				       ARRAY_SIZE(gcc_dfs_clocks));
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* FORCE_MEM_CORE_ON for ufs phy ice core clocks */
+> +	regmap_update_bits(regmap, gcc_ufs_phy_ice_core_clk.halt_reg, BIT(14), BIT(14));
+> +
+> +	/* Keep the critical clock always-On
+
+I think the general style for multiline comments is to start with /* and then add a newline
+
+
+
+> +	 * gcc_camera_ahb_clk, gcc_camera_xo_clk, gcc_disp_ahb_clk,
+> +	 * gcc_disp_xo_clk, gcc_gpu_cfg_ahb_clk, gcc_video_ahb_clk,
+> +	 * gcc_video_xo_clk
+> +	 */
+> +	regmap_update_bits(regmap, 0x36004, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x36020, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x37004, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x3701c, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x81004, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x42004, BIT(0), BIT(0));
+> +	regmap_update_bits(regmap, 0x42028, BIT(0), BIT(0));
+> +
+> +	ret = qcom_cc_really_probe(pdev, &gcc_sm8450_desc, regmap);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Failed to register GCC clocks\n");
+
+That's a bad downstream leftover that we don't want..
+
+
+
+> +		return ret;
+> +	}
+> +
+> +	dev_info(&pdev->dev, "Registered GCC clocks\n");
+
+And so is this.
+
+
+
+> +
+> +	return ret;
+
+You can simply return qcom_cc_really_probe(pdev, &gcc_sm8450_desc, regmap);
+
+
+Konrad
 

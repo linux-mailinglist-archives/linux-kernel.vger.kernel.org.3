@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E58E4643FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F73446444F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345820AbhLAAjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 19:39:20 -0500
-Received: from inva021.nxp.com ([92.121.34.21]:42720 "EHLO inva021.nxp.com"
+        id S230044AbhLAA7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 19:59:02 -0500
+Received: from mga05.intel.com ([192.55.52.43]:58641 "EHLO mga05.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345797AbhLAAjS (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 19:39:18 -0500
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 1444A20118C;
-        Wed,  1 Dec 2021 01:35:57 +0100 (CET)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CC0D920118A;
-        Wed,  1 Dec 2021 01:35:56 +0100 (CET)
-Received: from localhost.localdomain (mega.ap.freescale.net [10.192.208.232])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 72AF7183AC4E;
-        Wed,  1 Dec 2021 08:35:54 +0800 (+08)
-From:   Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
-To:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kuba@kernel.org, qiangqing.zhang@nxp.com, Anson.Huang@nxp.com,
-        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
-        joabreu@synopsys.com, yannick.vignon@nxp.com,
-        boon.leong.ong@intel.com, Jose.Abreu@synopsys.com, mst@redhat.com,
-        Joao.Pinto@synopsys.com, mingkai.hu@nxp.com, leoyang.li@nxp.com,
-        xiaoliang.yang_1@nxp.com
-Subject: [PATCH 2/2] net: stmmac: make stmmac-tx-timeout configurable in Kconfig
-Date:   Wed,  1 Dec 2021 08:47:50 +0800
-Message-Id: <20211201004750.49010-2-xiaoliang.yang_1@nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211201004750.49010-1-xiaoliang.yang_1@nxp.com>
-References: <20211201004750.49010-1-xiaoliang.yang_1@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
+        id S229450AbhLAA7B (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 19:59:01 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="322596855"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="322596855"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 16:55:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="601749336"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.68])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Nov 2021 16:55:38 -0800
+Date:   Wed, 1 Dec 2021 08:48:24 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Russ Weight <russell.h.weight@intel.com>,
+        Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH v2] fpga: stratix10-soc: Do not use ret uninitialized in
+ s10_probe()
+Message-ID: <20211201004824.GA336280@yilunxu-OptiPlex-7050>
+References: <20211130221123.3800420-1-nathan@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130221123.3800420-1-nathan@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-stmmac_tx_timeout() function is called when a queue transmission
-timeout. When Strict Priority is used as scheduling algorithms, the
-lower priority queue may be blocked by a higher prority queue, which
-will lead to tx timeout. We don't want to enable the tx watchdog timeout
-in this case. Therefore, this patch make stmmac-tx-timeout configurable.
+On Tue, Nov 30, 2021 at 03:11:24PM -0700, Nathan Chancellor wrote:
+> Clang warns:
+> 
+> drivers/fpga/stratix10-soc.c:431:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+>         return ret;
+>                ^~~
+> 
+> ret is only assigned in an error path now so just return 0 directly.
+> 
+> Fixes: 4ba0b2c294fe ("fpga: mgr: Use standard dev_release for class driver")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1517
+> Reviewed-by: Russ Weight <russell.h.weight@intel.com>
+> Reviewed-by: Tom Rix <trix@redhat.com>
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-This patch set the CONFIG_STMMAC_TX_TIMEOUT by default when STMMAC_ETH
-is selected. If anyone want to disable the tx watchdog timeout of
-stmmac, he can unset the CONFIG_STMMAC_TX_TIMEOUT in menuconfig.
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
----
- drivers/net/ethernet/stmicro/stmmac/Kconfig       | 12 ++++++++++++
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |  4 ++++
- 2 files changed, 16 insertions(+)
+Thanks,
+Yilun
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-index 929cfc22cd0c..856c7d056b61 100644
---- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
-+++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
-@@ -271,4 +271,16 @@ config STMMAC_PCI
- 	  If you have a controller with this interface, say Y or M here.
- 
- 	  If unsure, say N.
-+
-+config STMMAC_TX_TIMEOUT
-+	bool "STMMAC TX timeout support"
-+	default STMMAC_ETH
-+	depends on STMMAC_ETH
-+	help
-+	  Support for TX timeout enable on stmmac.
-+
-+	  This selects the TX watchdog timeout support for stmmac driver. The
-+	  feature is enabled by default when STMMAC_ETH is selected. If you
-+	  want to disable the TX watchdog timeout feature, say N here.
-+
- endif
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 89a6c35e2546..0a712b5d0715 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -5421,6 +5421,7 @@ static int stmmac_napi_poll_rxtx(struct napi_struct *napi, int budget)
- 	return min(rxtx_done, budget - 1);
- }
- 
-+#ifdef CONFIG_STMMAC_TX_TIMEOUT
- /**
-  *  stmmac_tx_timeout
-  *  @dev : Pointer to net device structure
-@@ -5436,6 +5437,7 @@ static void stmmac_tx_timeout(struct net_device *dev, unsigned int txqueue)
- 
- 	stmmac_global_err(priv);
- }
-+#endif
- 
- /**
-  *  stmmac_set_rx_mode - entry point for multicast addressing
-@@ -6632,7 +6634,9 @@ static const struct net_device_ops stmmac_netdev_ops = {
- 	.ndo_fix_features = stmmac_fix_features,
- 	.ndo_set_features = stmmac_set_features,
- 	.ndo_set_rx_mode = stmmac_set_rx_mode,
-+#ifdef CONFIG_STMMAC_TX_TIMEOUT
- 	.ndo_tx_timeout = stmmac_tx_timeout,
-+#endif
- 	.ndo_eth_ioctl = stmmac_ioctl,
- 	.ndo_setup_tc = stmmac_setup_tc,
- 	.ndo_select_queue = stmmac_select_queue,
--- 
-2.17.1
-
+> ---
+> 
+> v1 -> v2: https://lore.kernel.org/r/20211129161009.3625548-1-nathan@kernel.org/
+> 
+> * Drop clang's suggestion text (Tom).
+> 
+> * Pick up Russ and Tom's review tags.
+> 
+>  drivers/fpga/stratix10-soc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/fpga/stratix10-soc.c b/drivers/fpga/stratix10-soc.c
+> index 737d14c6e0de..357cea58ec98 100644
+> --- a/drivers/fpga/stratix10-soc.c
+> +++ b/drivers/fpga/stratix10-soc.c
+> @@ -428,7 +428,7 @@ static int s10_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	platform_set_drvdata(pdev, mgr);
+> -	return ret;
+> +	return 0;
+>  
+>  probe_err:
+>  	stratix10_svc_free_channel(priv->chan);
+> 
+> base-commit: 8886a579744fbfa53e69aa453ed10ae3b1f9abac
+> -- 
+> 2.34.1

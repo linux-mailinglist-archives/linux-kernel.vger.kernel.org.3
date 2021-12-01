@@ -2,106 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 507EA465740
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:40:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE3A465743
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:41:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352987AbhLAUnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:43:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47526 "EHLO
+        id S1353031AbhLAUpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:45:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353035AbhLAUlv (ORCPT
+        with ESMTP id S1352976AbhLAUm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:41:51 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A924FC061574;
-        Wed,  1 Dec 2021 12:38:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7C4F7CE20EC;
-        Wed,  1 Dec 2021 20:38:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F7B2C53FCC;
-        Wed,  1 Dec 2021 20:38:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638391103;
-        bh=gu9nDUmfDpbMdGEv2OTv73D0U4RfRGX9YyAm0A5H0aY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UJougrOWE7+QtJggnqQtzQijIg4xu/qoKkGCMiuSeAiwXKUqijFzNfOt9mgXd2Zxu
-         9qXboha1IOER6nFyx+dZZZQduu5UKi+GAJIVnVNoL+S5b1ynzKcrXjpTtewG4WN+gj
-         O8TQIEGzkcTE5A+hipOH1LkMEXBiAJ56DpbKnoWRM/4yEht84vcJNXSBazafpVLPvO
-         cbdZFn+9HwSMp56m1dbH2Th18Fmc6QoXBGEaaObYJ0egOVjmXohuA7q98PVfqnRRNP
-         I/Sn8AyX5gd3bxO/o7yUskVJ/T3vdIUC6rYdx3wzZ1KMMFhMgzCPkm7Xp/TCTD448t
-         0iueON+Z+wu2Q==
-Date:   Wed, 1 Dec 2021 14:38:22 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Subject: Re: Linux 5.16-rc3
-Message-ID: <20211201203822.GA2840039@bhelgaas>
+        Wed, 1 Dec 2021 15:42:59 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C725C061756;
+        Wed,  1 Dec 2021 12:39:33 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id z6so25749951pfe.7;
+        Wed, 01 Dec 2021 12:39:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=mCS7DhZJVCTwjtJYd4FYNKX3PCW+VVYxovDq0WixHo4=;
+        b=cNF4mXIpVXWzwhC/EoG9eUp3RHxUuadKqD6/vD95CgIlrj3pqDrfoil4g0BnozBFH0
+         ZvzH5RHhm0zVgzdxA6JYY531g8iMgd0z0ARv0ecAjMdllt/f1GBZlS79DOp11LtJJdMJ
+         uwcLHN3uS8BLRBXPrBucuqFJCO25m1/vucJcqzWvifM375jRMncJoNJL4o4RfoIgZDxS
+         Jc++SxPu0wgYp2sdIisowMBGqU7EaQsEERxAtfWuGJ42WFLJXSmf2NN8Hj7swKd53FeL
+         5lIeNEMZ+0pqi7n2ZO5uWdyq6EOZ6BMPE6UzY/Glh8WBr2G58joMwDSPJA4cRSc+5wNx
+         L3sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=mCS7DhZJVCTwjtJYd4FYNKX3PCW+VVYxovDq0WixHo4=;
+        b=X3BoenHle/H7ww4Jb0I0tIbcnx+NCFK7RDNq8mrhuEe2iahLitbG3hTFQOkLGBBxWe
+         jp7iG2cOwwZphgf/PrwxYhOTdEr2N0BNqrnmF9OiMalPAgy3x8yHTxhYlwaRIK1GKfGj
+         In3KjvrmdXy5Uoea5tpESfcG0TtzKxmxBLx1i9T4clPz7lg/mJo6ytkfOnQC0yoG7v9H
+         ka/72KAzqgcKd4cqprc2Iqg6M6rkfWOWqdXQr+P13PPnRvGHd99lVv3G03zw/Ozaq6+J
+         kuR9vl24t7lTe6LSGDS2niTyqX3xDAYpQ2s8lNegwaOvNO+di7H4pNAo5T7T2g7NOC0k
+         NBvg==
+X-Gm-Message-State: AOAM532a9my/5hGUKrPbOiz3gXIM+eRC0kPyuIWXeDmGk79iavAZH7DN
+        4HNfT6FdGvF9whtdtTFxSb69adl0W7M=
+X-Google-Smtp-Source: ABdhPJxgP8XbXSYplVdFYpxH8S6f4JuuJ6c0U105XPRj4j86VvEmcg4CgXNt+blV3CEcQeT7Mg4ZlA==
+X-Received: by 2002:a05:6a00:a23:b0:4a4:e9f5:d890 with SMTP id p35-20020a056a000a2300b004a4e9f5d890mr8725695pfh.82.1638391172653;
+        Wed, 01 Dec 2021 12:39:32 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id z4sm684027pfg.101.2021.12.01.12.39.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 12:39:32 -0800 (PST)
+Subject: Re: [PATCH] serial: 8250_bcm7271: UART errors after resuming from S2
+To:     Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
+References: <20211201201402.47446-1-alcooperx@gmail.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Message-ID: <847997ca-1a24-485e-010b-9cba35ff2b0c@gmail.com>
+Date:   Wed, 1 Dec 2021 12:39:31 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMhs-H-nm1-B8tZejcZPN3jxF_HGr2tWMWmYJUJnz0jau=QcfQ@mail.gmail.com>
+In-Reply-To: <20211201201402.47446-1-alcooperx@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc linux-pci]
+On 12/1/21 12:14 PM, Al Cooper wrote:
+> There is a small window in time during resume where the hardware
+> flow control signal RTS can be asserted (which allows a sender to
+> resume sending data to the UART) but the baud rate has not yet
+> been restored. This will cause corrupted data and FRAMING, OVERRUN
+> and BREAK errors. This is happening because the MCTRL register is
+> shadowed in uart_port struct and is later used during resume to set
+> the MCTRL register during both serial8250_do_startup() and
+> uart_resume_port(). Unfortunately, serial8250_do_startup()
+> happens before the UART baud rate is restored. The fix is to clear
+> the shadowed mctrl value at the end of suspend and restore it at the
+> end of resume.
+> 
+> Fixes: 41a469482de2 ("serial: 8250: Add new 8250-core based Broadcom STB driver")
+> Signed-off-by: Al Cooper <alcooperx@gmail.com>
 
-On Mon, Nov 29, 2021 at 01:18:12PM +0100, Sergio Paracuellos wrote:
-> On Mon, Nov 29, 2021 at 5:17 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> > On 11/28/21 7:07 PM, Randy Dunlap wrote:
-> > > On 11/28/21 17:59, Guenter Roeck wrote:
-> > >> ...
-> > >> Build results:
-> > >>     total: 153 pass: 152 fail: 1
-> > >> Failed builds:
-> > >>     mips:allmodconfig
-> > >> Qemu test results:
-> > >>     total: 482 pass: 482 fail: 0
-> > >>
-> > >> Building mips:allmodconfig ... failed
-> > >> --------------
-> > >> Error log:
-> > >> ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
-> > >> ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > >> ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > >> ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > >> ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > >> ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
-> > >>
-> > >> There is still no fix for the mips:allmodconfig build problem as far
-> > >> as I can see. It is a bit odd, because the fix would be as simple as
-> > >>
-> > >>   config PCIE_MT7621
-> > >> -    tristate "MediaTek MT7621 PCIe Controller"
-> > >> -    depends on (RALINK && SOC_MT7621) || (MIPS && COMPILE_TEST)
-> > >> +    bool "MediaTek MT7621 PCIe Controller"
-> > >> +    depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
-> > >>       select PHY_MT7621_PCI
-> > >>       default SOC_MT7621
-> > >>       help
-> > >>
-> > >> Context: tristate doesn't make sense here because both RALINK and
-> > >> SOC_MT7621 are bool. Also, RALINK is redundant because SOC_MT7621
-> > >> already depends on it. The compile failure is due to missing exported
-> > >> symbols, and it is only seen if PCIE_MT7621=m - which is only possible
-> > >> if COMPILE_TEST=y. In other words, the dependencies above are set such
-> > >> that test builds, and only test builds, fail.
-> > >>
-> > >> The problem was introduced with commit 2bdd5238e756 ("PCI: mt7621:
-> > >> Add MediaTek MT7621 PCIe host controller driver"). Copying some of
-> > >> those responsible to see if we can expect a solution sometime soon.
-
-Can we do a minimal patch along the lines of the above for v5.16?
-
-We can do the more extensive work as in 
-https://lore.kernel.org/r/20211115070809.15529-1-sergio.paracuellos@gmail.com
-but that would be material for v5.17.
-
-Bjorn
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

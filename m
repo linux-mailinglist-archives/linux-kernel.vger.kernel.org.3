@@ -2,66 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4731C4652D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:34:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 960864652DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:36:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351143AbhLAQiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:38:01 -0500
-Received: from mga14.intel.com ([192.55.52.115]:24635 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S237826AbhLAQhv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:37:51 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236720789"
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="236720789"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 08:34:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="654838648"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Dec 2021 08:34:25 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1000)
-        id 01D8F1C4; Wed,  1 Dec 2021 18:34:30 +0200 (EET)
-Date:   Wed, 1 Dec 2021 19:34:30 +0300
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Tony Luck <tony.luck@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan <knsathya@kernel.org>,
+        id S1350966AbhLAQj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:39:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347953AbhLAQjz (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 11:39:55 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4E3C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:36:34 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so161565pjc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:36:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EiMDtLNrGzJyovNSfRSKzNjZUh/JBd0OTj1NBbeJOIA=;
+        b=gQ+sHNwyXuk+ngRvoZWSHSv+XoLd1iFnyuM2zig9WPgwh5g/b5z7bjBlPGpWkpbiHX
+         ZttyQZH5FjnAvIAd6VmLGWH4RJ7TrMdzUOcsLRz8gKlSzgwy9JjEKF34hKuYtXDq0FEI
+         m79wMJeehwC9hIYqEeDjGe93aQaYSlGFqM/+Q/agRWHRnnRraCpleNNKQemqArpWQkwt
+         VjOuHgP55gDHO+l56yNuoy1MWp/BGISJ1ikIGAutjhv5vMwFYIgOTMTlEC/epClr7ZPa
+         T2Ns7SVYDAJ+dLWLOyFqfK4bkSl3ZcvRXW2kqqz1T95b3nr+rb3Y/Ws2PaUW2qGDIYfA
+         M/BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EiMDtLNrGzJyovNSfRSKzNjZUh/JBd0OTj1NBbeJOIA=;
+        b=tbvXMb+/5li8Q8o3/AqHI2OrDA3hGPMRtXASwNAH5x2RKybI0zp4LFMrt0uTUgPgst
+         T5Mh4LkJhVhY6QBovspfa/5k/jtsTy3/+QMokio6ej/ieh7NNGPbvw/BF6utf8PRkjIa
+         wZZVyEzp8VVU8N57ntbJgz/wHre4LPdWo12nRN9zw2Fv3/42fwtcR2bDfdj6GahTFz7t
+         ICQ6E/3qo9dUVZsBVIvNJ4IGFzyQc6xdoJZ2YfUpgVrauCUn1tRwyehLROHx0lnwR2nt
+         uUWEuabr8bsvpryP4y3hk2g8u6apiOkmOv33kjmlrYvwEdeTxdTMkwlSgzmIuwzU79Hj
+         zQlw==
+X-Gm-Message-State: AOAM53244iMGvipfLcJId3Smqx/buIxg3CAyX5uGgqvCP5JDhKLLX0Gt
+        wM8wzw8PNeemArwq5C/Isi61OQ==
+X-Google-Smtp-Source: ABdhPJyXahGJrKzfZIR9Y1jdJrFNOuLMrxo1SOVUWSixC1tSgjjgeI2P0Bp76BO4Dm7yII3lTv2YlA==
+X-Received: by 2002:a17:90a:9bc1:: with SMTP id b1mr8785996pjw.49.1638376594129;
+        Wed, 01 Dec 2021 08:36:34 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id z10sm334283pfh.106.2021.12.01.08.36.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 08:36:33 -0800 (PST)
+Date:   Wed, 1 Dec 2021 16:36:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 0/4] Share common features between AMD SEV / TDX guest
-Message-ID: <20211201163430.2ncgynzns5t6gvof@black.fi.intel.com>
-References: <20211116004528.2928887-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: Re: [PATCH v6 26/29] KVM: Optimize gfn lookup in kvm_zap_gfn_range()
+Message-ID: <Yaekjrr1OVrgwUic@google.com>
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+ <a39db04edcacfe955c660e2f139f948cf29362f5.1638304316.git.maciej.szmigiero@oracle.com>
+ <YabvBW90COsfdoYx@google.com>
+ <7119b08c-e82a-8b81-7f9e-2e79f8276d51@maciej.szmigiero.name>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211116004528.2928887-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <7119b08c-e82a-8b81-7f9e-2e79f8276d51@maciej.szmigiero.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 04:45:24PM -0800, Kuppuswamy Sathyanarayanan wrote:
-> Hi All,
+On Wed, Dec 01, 2021, Maciej S. Szmigiero wrote:
+> On 01.12.2021 04:41, Sean Christopherson wrote:
+> > On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
+> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > > index 41efe53cf150..6fce6eb797a7 100644
+> > > --- a/include/linux/kvm_host.h
+> > > +++ b/include/linux/kvm_host.h
+> > > @@ -848,6 +848,105 @@ struct kvm_memory_slot *id_to_memslot(struct kvm_memslots *slots, int id)
+> > >   	return NULL;
+> > >   }
+> > > +/* Iterator used for walking memslots that overlap a gfn range. */
+> > > +struct kvm_memslot_iter {
+> > > +	struct kvm_memslots *slots;
+> > > +	gfn_t end;
+> > > +	struct rb_node *node;
+> > > +};
+> > 
+> > ...
+> > 
+> > > +static inline struct kvm_memory_slot *kvm_memslot_iter_slot(struct kvm_memslot_iter *iter)
+> > > +{
+> > > +	return container_of(iter->node, struct kvm_memory_slot, gfn_node[iter->slots->node_idx]);
+> > 
+> > Having to use a helper in callers of kvm_for_each_memslot_in_gfn_range() is a bit
+> > ugly, any reason not to grab @slot as well?  Then the callers just do iter.slot,
+> > which IMO is much more readable.
 > 
-> Intel's Trust Domain Extensions (TDX) protect guest VMs from malicious
-> hosts and some physical attacks. TDX has a lot of similarities to AMD SEV.
-> Features like encryption/decryption and string I/O unroll support can
-> be shared between these two technologies.
-> 
-> This patch set adds infrastructure changes required to share the code
-> between AMD SEV and TDX.
+> "slot" can be easily calculated from "node" together with either "slots" or
+> "node_idx" (the code above just adjusts a pointer) so storing it in the
+> iterator makes little sense if the later are already stored there.
 
-Tom, Joerg, could you folks look at this? Your Ack would be very helpful.
+I don't want the callers to have to calculate the slot.  It's mostly syntatic
+sugar, but I really do think it improves readability.  And since the first thing
+every caller will do is retrieve the slot, I see no benefit in forcing the caller
+to do the work.
 
--- 
- Kirill A. Shutemov
+E.g. in the simple kvm_check_memslot_overlap() usage, iter.slot->id is intuitive
+and easy to parse, whereas kvm_memslot_iter_slot(&iter)->id is slightly more
+difficult to parse and raises questions about why a function call is necessary
+and what the function might be doing.
+
+static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+				      gfn_t start, gfn_t end)
+{
+	struct kvm_memslot_iter iter;
+
+	kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
+		if (iter.slot->id != id)
+			return true;
+	}
+
+	return false;
+}
+
+vs.
+
+static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+				      gfn_t start, gfn_t end)
+{
+	struct kvm_memslot_iter iter;
+
+	kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
+		if (kvm_memslot_iter_slot(&iter)->id != id)
+			return true;
+	}
+
+	return false;
+}
+

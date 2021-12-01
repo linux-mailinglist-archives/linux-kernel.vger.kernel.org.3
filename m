@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4174654A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:00:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539EA46549F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:00:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352165AbhLASEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:04:02 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33938 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244531AbhLASD5 (ORCPT
+        id S1352049AbhLASD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:03:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244442AbhLASDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:03:57 -0500
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1HpWn8020607;
-        Wed, 1 Dec 2021 18:00:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=nwD9avsZXP7FfMNDkd8I8lKzbanJXEMPgMen/x+dDLk=;
- b=ayoZMMvqKaZMwr/y4JmLJqRVJ2IOSj/br1JolRjJ7qu+q9s/4CXvq46Mep95cEdBzcYC
- Lix3W7G0qlbZmRIAwYRaN21flXG8NYfEMyAMtBxDzZndftv2CESeSEbKMkWrZ8svPo+W
- /5iikFATcd1R9bRVl8kWaaM5I4lO2QVOZiX6UnVv9ENesW2UZvG9rab8dNBMMF7B3ljv
- llf7nYorx5Tq4DBdwlOhBjfNkgSHbcHGUf0MhtVWqhMlJ2az5KqA8gz8MIG69wf7c+H+
- 9T+eAydwEDnl3VMnDOXKHVbSgApOul/4tmGFZ82FYxepwabG1xz4LUAQKwLdUuLJ1YAQ Eg== 
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpdtrg5h9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 18:00:30 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1HrIFK020578;
-        Wed, 1 Dec 2021 18:00:28 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3ckca9thrm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 18:00:28 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1I0PAO21954956
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Dec 2021 18:00:25 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5E40DA405D;
-        Wed,  1 Dec 2021 18:00:25 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 35A95A4053;
-        Wed,  1 Dec 2021 18:00:25 +0000 (GMT)
-Received: from [9.145.175.48] (unknown [9.145.175.48])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Dec 2021 18:00:25 +0000 (GMT)
-Message-ID: <8027ed39-3e71-a560-10c2-0ca70962ffa7@linux.ibm.com>
-Date:   Wed, 1 Dec 2021 19:00:24 +0100
+        Wed, 1 Dec 2021 13:03:54 -0500
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0C6C06175A;
+        Wed,  1 Dec 2021 10:00:28 -0800 (PST)
+Received: by mail-ot1-x332.google.com with SMTP id a23-20020a9d4717000000b0056c15d6d0caso36330463otf.12;
+        Wed, 01 Dec 2021 10:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=nNVvEOq93JWamao+YcMq3xOX4iABQzAW3EEbbTihUNM=;
+        b=VH7t2cbohM97lC3HGUQUJ817xIGaAfG2iELCzfbTbuOqaz/TmthSdNbW4quNai1twf
+         w7m+dj7tn2ct3BM3wBi84n3EnKJoxy67iFmsfLE2nHRs+FHPBpa2rpQd0btc759YeglG
+         J9FAkCoiQgSOIyFU5tGV7Qh68U4KcLsseGxCG3XBpN31Stj/J9i7OTgMTfmVzEqUdqHR
+         MI4SzLH18Ad+QAZuYwup5gNIlorvUK4rjfT+m8ipl2igcJ+yN6iJ3mbLcgvXnDu9iD5u
+         +61xMmkN9dSjqzdpXjOSErGIDURdGldKNcV12ZU6OppNYVGXOHtINTHmaPMl4+4e5gei
+         BEFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=nNVvEOq93JWamao+YcMq3xOX4iABQzAW3EEbbTihUNM=;
+        b=P5A+weGNE4Y6cXY5i2pflWoYyuCxzyjdwBNG5MXArnzA7k61BhFN+b131Qrrgcodqx
+         j9J0SZQ0y3Ov/VIKEcBCi10VMrKRl3yNTNEJNQAgjBpqkYvUE7pMrjpuiXY1In5QM/JJ
+         ZefDcim02yJVN8rOp8WiN8bS4NuOdwkM8hVTfmkwR6kf7FAFKT6gFHkYHFaeH0BYnAQn
+         35nT4Q/a+uAAH0+cDWwb62c+N6O0geFHHmDA5DP6YguOiHcY0W39nBSCN/dIv2DNCva+
+         x2nHbeFM7BX8cBECVAQ7lGL/8avlC5LjJ3/mLnKwP2qx78XDO1iCz0FYjBd1w2XjEdIv
+         Ro/w==
+X-Gm-Message-State: AOAM533b689KbneUw89CfsR7UJPT8raG4KSgvrmvMWtnAeib8iw93MsR
+        nalfN7tVtSLLqXo9G+KZYL0=
+X-Google-Smtp-Source: ABdhPJz9EYrKK0WLxoTC42FdvhUK7xBT4nj/WMOlpSca1NcyLdWBMq2Qi93lN43PUxYRX2w7EER9cg==
+X-Received: by 2002:a9d:2243:: with SMTP id o61mr7032643ota.126.1638381628140;
+        Wed, 01 Dec 2021 10:00:28 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id j10sm139420ooq.5.2021.12.01.10.00.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 10:00:27 -0800 (PST)
+Message-ID: <42b5ebde-2a36-3956-d6dd-bd50e18ff6dc@gmail.com>
+Date:   Wed, 1 Dec 2021 11:00:26 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH] powerpc/pseries: read the lpar name from the firmware
+ Gecko/20100101 Thunderbird/91.3.1
+Subject: Re: [PATCH net v3] selftests/fib_tests: Rework fib_rp_filter_test()
 Content-Language: en-US
-From:   Laurent Dufour <ldufour@linux.ibm.com>
-To:     Nathan Lynch <nathanl@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20211201144826.45342-1-ldufour@linux.ibm.com>
- <87h7bsny0a.fsf@linux.ibm.com>
- <60df1f67-dc37-f891-3c83-aba5a15bdddc@linux.ibm.com>
-In-Reply-To: <60df1f67-dc37-f891-3c83-aba5a15bdddc@linux.ibm.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211130004905.4146-1-yepeilin.cs@gmail.com>
+ <20211201004720.6357-1-yepeilin.cs@gmail.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211201004720.6357-1-yepeilin.cs@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zaIEnE8R_g8iy40fKx6-AJxdNtdfmmPd
-X-Proofpoint-GUID: zaIEnE8R_g8iy40fKx6-AJxdNtdfmmPd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 priorityscore=1501 phishscore=0
- malwarescore=0 mlxlogscore=999 clxscore=1015 impostorscore=0 adultscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112010094
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2021, 16:57:06, Laurent Dufour wrote:
-> On 01/12/2021, 16:30:29, Nathan Lynch wrote:
->> Laurent Dufour <ldufour@linux.ibm.com> writes:
->>> The LPAR name may be changed after the LPAR has been started in the HMC.
->>> In that case lparstat command is not reporting the updated value because it
->>> reads it from the device tree which is read at boot time.
->> Could lparstat be changed to make the appropriate get-system-parameter
->> call via librtas, avoiding a kernel change?
+On 11/30/21 5:47 PM, Peilin Ye wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
 > 
-> You're right, I could do that directly in lparstat without changes in the
-> kernel.
+> Currently rp_filter tests in fib_tests.sh:fib_rp_filter_test() are
+> failing.  ping sockets are bound to dummy1 using the "-I" option
+> (SO_BINDTODEVICE), but socket lookup is failing when receiving ping
+> replies, since the routing table thinks they belong to dummy0.
+> 
+> For example, suppose ping is using a SOCK_RAW socket for ICMP messages.
+> When receiving ping replies, in __raw_v4_lookup(), sk->sk_bound_dev_if
+> is 3 (dummy1), but dif (skb_rtable(skb)->rt_iif) says 2 (dummy0), so the
+> raw_sk_bound_dev_eq() check fails.  Similar things happen in
+> ping_lookup() for SOCK_DGRAM sockets.
+> 
+> These tests used to pass due to a bug [1] in iputils, where "ping -I"
+> actually did not bind ICMP message sockets to device.  The bug has been
+> fixed by iputils commit f455fee41c07 ("ping: also bind the ICMP socket
+> to the specific device") in 2016, which is why our rp_filter tests
+> started to fail.  See [2] .
+> 
+> Fixing the tests while keeping everything in one netns turns out to be
+> nontrivial.  Rework the tests and build the following topology:
+> 
+>  ┌─────────────────────────────┐    ┌─────────────────────────────┐
+>  │  network namespace 1 (ns1)  │    │  network namespace 2 (ns2)  │
+>  │                             │    │                             │
+>  │  ┌────┐     ┌─────┐         │    │  ┌─────┐            ┌────┐  │
+>  │  │ lo │<───>│veth1│<────────┼────┼─>│veth2│<──────────>│ lo │  │
+>  │  └────┘     ├─────┴──────┐  │    │  ├─────┴──────┐     └────┘  │
+>  │             │192.0.2.1/24│  │    │  │192.0.2.1/24│             │
+>  │             └────────────┘  │    │  └────────────┘             │
+>  └─────────────────────────────┘    └─────────────────────────────┘
+> 
 
-Indeed, that's not so easy because the RTAS syscall can only be called by
-privileged users, even to read some parameters.
-
-So to have the lparstat command reporting the updated LPAR name, the only
-way is to report that value in /proc/powerpc/lparcfg.
-
-Furthermore, this would make sense to have this value reported in this file.
-
-That's being said, I'll send a v2 to align the property title to the
-existing "partition_id", naming it "partition_name".
+if the intention of the tests is to validate that rp_filter = 1 works as
+designed, then I suggest a simpler test. 2 namespaces, 2 veth pairs.
+Request goes through one interface, and the response comes in the other
+via routing in ns2. ns1 would see the response coming in the 'wrong'
+interface and drops it.

@@ -2,95 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4743B465294
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:15:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B299E46529C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:16:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351577AbhLAQSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:18:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351484AbhLAQQJ (ORCPT
+        id S1351495AbhLAQT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:19:27 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:48856 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351596AbhLAQS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:16:09 -0500
-X-Greylist: delayed 289 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Dec 2021 08:12:46 PST
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109FBC061574;
-        Wed,  1 Dec 2021 08:12:42 -0800 (PST)
-Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Wed, 1 Dec 2021 11:18:26 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 4DFC1200D9;
-        Wed,  1 Dec 2021 17:12:40 +0100 (CET)
-Subject: Re: [PATCH 3/3] arm64: dt: qcom: sm6125.dtsi: Add dispcc
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Martin Botka <martin.botka@somainline.org>
-Cc:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
-        konrad.dybcio@somainline.org, jamipkettunen@somainline.org,
-        paul.bouchara@somainline.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20211130212137.25303-1-martin.botka@somainline.org>
- <20211130212137.25303-3-martin.botka@somainline.org>
- <20211201155128.sasoiv3awjcfrjhw@SoMainline.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>
-Message-ID: <cf1d5ff7-ece9-2348-0862-e23c6486f66e@somainline.org>
-Date:   Wed, 1 Dec 2021 17:12:39 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3AD0DCE1F99
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 16:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D8E9C53FCC;
+        Wed,  1 Dec 2021 16:15:01 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 11:14:59 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     William Kucharski <william.kucharski@oracle.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Tejun Heo <tj@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2] cgroup: Trace event cgroup id fields should be u64
+Message-ID: <20211201111459.4ac7f84c@gandalf.local.home>
+In-Reply-To: <20211201160746.726158-1-william.kucharski@oracle.com>
+References: <20211201160746.726158-1-william.kucharski@oracle.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20211201155128.sasoiv3awjcfrjhw@SoMainline.org>
-Content-Type: text/plain; charset=iso-8859-15; format=flowed
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/12/21 16:51, Marijn Suijten ha scritto:
-> On 2021-11-30 22:21:34, Martin Botka wrote:
->> Add the dispcc node from the newly added DISPCC
->> driver for Qualcomm Technology Inc's SM6125 SoC.
->>
->> Signed-off-by: Martin Botka <martin.botka@somainline.org>
->> ---
->>   arch/arm64/boot/dts/qcom/sm6125.dtsi | 12 ++++++++++++
->>   1 file changed, 12 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
->> index 51286ddbdb10..78f4705e4117 100644
->> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
->> @@ -3,6 +3,7 @@
->>    * Copyright (c) 2021, Martin Botka <martin.botka@somainline.org>
->>    */
->>   
->> +#include <dt-bindings/clock/qcom,dispcc-sm6125.h>
->>   #include <dt-bindings/clock/qcom,gcc-sm6125.h>
->>   #include <dt-bindings/clock/qcom,rpmcc.h>
->>   #include <dt-bindings/gpio/gpio.h>
->> @@ -317,6 +318,17 @@ soc {
->>   		ranges = <0x00 0x00 0x00 0xffffffff>;
->>   		compatible = "simple-bus";
->>   
->> +		dispcc: clock-controller@5f00000 {
->> +			#address-cells = <1>;
->> +			#size-cells = <1>;
->> +			compatible = "qcom,dispcc-sm6125";
->> +			reg = <0x5f00000 0x20000>;
->> +			clocks = <&gcc GCC_DISP_AHB_CLK>;
->> +			clock-names = "cfg_ahb_clk";
-> 
-> It looks like this lacks all the clocks that are supposedly required as
-> per the yaml DT bindings provided in patch 1/3 - should those be added
-> and set to `<0>` where unavailable, otherwise dtbs_check may not pass?
-> 
+On Wed,  1 Dec 2021 09:07:46 -0700
+William Kucharski <william.kucharski@oracle.com> wrote:
 
-Yes, Marijn. They should.
+> Various trace event fields that store cgroup IDs were declared as
+> ints, but cgroup_id(() returns a u64 and the structures and associated
+> TP_printk() calls were not updated to reflect this.
+> 
+> Fixes: 743210386c03 ("cgroup: use cgrp->kn->id as the cgroup ID")
+> Signed-off-by: William Kucharski <william.kucharski@oracle.com>
+> ---
+> V2: Do not remove spaces from macro arguments
+> 
+>  include/trace/events/cgroup.h | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/include/trace/events/cgroup.h b/include/trace/events/cgroup.h
+> index 7f42a3de59e6..1b68c842ac46 100644
+> --- a/include/trace/events/cgroup.h
+> +++ b/include/trace/events/cgroup.h
+> @@ -59,7 +59,7 @@ DECLARE_EVENT_CLASS(cgroup,
+>  
+>  	TP_STRUCT__entry(
+>  		__field(	int,		root			)
+> -		__field(	int,		id			)
+> +		__field(	u64,		id			)
+>  		__field(	int,		level			)
 
-Please Martin, add the missing clocks for v2.
+It's best to move them around to prevent holes. This is not a packed
+structure, and the above will create a structure on the ring buffer that
+looks like:
+
+	int		root;
+	u64		id;
+	int		level;
+	short		path_offset;
+	short		path_size;
+
+(the string() macro is a 4 byte word where the half is the offset of the
+actual string and the other half is the size of the string).
+
+Having a 8 byte word between two 4 byte words, will add a 4 byte padding
+after the first 4 byte word (before the 8 byte word), and waste space on
+the ring buffer.
+
+Better to move it around to be:
+
+  	TP_STRUCT__entry(
+  		__field(	int,		root			)
+  		__field(	int,		level			)
+		__field(	u64,		id			)
+
+That way the two 4 byte words will be together followed directly by the 8
+byte word.
+
+>  		__string(	path,		path			)
+>  	),
+> @@ -71,7 +71,7 @@ DECLARE_EVENT_CLASS(cgroup,
+>  		__assign_str(path, path);
+>  	),
+>  
+> -	TP_printk("root=%d id=%d level=%d path=%s",
+> +	TP_printk("root=%d id=%llu level=%d path=%s",
+>  		  __entry->root, __entry->id, __entry->level, __get_str(path))
+>  );
+>  
+> @@ -126,7 +126,7 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
+>  
+>  	TP_STRUCT__entry(
+>  		__field(	int,		dst_root		)
+> -		__field(	int,		dst_id			)
+> +		__field(	u64,		dst_id			)
+
+Same here. Just move dst_level above dst_id.
+
+>  		__field(	int,		dst_level		)
+>  		__field(	int,		pid			)
+>  		__string(	dst_path,	path			)
+> @@ -142,7 +142,7 @@ DECLARE_EVENT_CLASS(cgroup_migrate,
+>  		__assign_str(comm, task->comm);
+>  	),
+>  
+> -	TP_printk("dst_root=%d dst_id=%d dst_level=%d dst_path=%s pid=%d comm=%s",
+> +	TP_printk("dst_root=%d dst_id=%llu dst_level=%d dst_path=%s pid=%d comm=%s",
+>  		  __entry->dst_root, __entry->dst_id, __entry->dst_level,
+>  		  __get_str(dst_path), __entry->pid, __get_str(comm))
+>  );
+> @@ -171,7 +171,7 @@ DECLARE_EVENT_CLASS(cgroup_event,
+>  
+>  	TP_STRUCT__entry(
+>  		__field(	int,		root			)
+> -		__field(	int,		id			)
+> +		__field(	u64,		id			)
+
+And here.
+
+>  		__field(	int,		level			)
+>  		__string(	path,		path			)
+>  		__field(	int,		val			)
+> @@ -185,7 +185,7 @@ DECLARE_EVENT_CLASS(cgroup_event,
+>  		__entry->val = val;
+>  	),
+>  
+> -	TP_printk("root=%d id=%d level=%d path=%s val=%d",
+> +	TP_printk("root=%d id=%llu level=%d path=%s val=%d",
+>  		  __entry->root, __entry->id, __entry->level, __get_str(path),
+>  		  __entry->val)
+>  );
+
+
+
+-- Steve

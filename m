@@ -2,167 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A994465659
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3FF465669
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352706AbhLAT1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:27:46 -0500
-Received: from mga05.intel.com ([192.55.52.43]:21705 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S245134AbhLAT1G (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:27:06 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="322784118"
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="322784118"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 11:23:44 -0800
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="500380512"
-Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 11:23:43 -0800
-From:   Reinette Chatre <reinette.chatre@intel.com>
-To:     dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
-        linux-sgx@vger.kernel.org, x86@kernel.org
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 25/25] selftests/sgx: Page removal stress test
-Date:   Wed,  1 Dec 2021 11:23:23 -0800
-Message-Id: <a0d326877f202b837e68a935289dc50aede4e9e9.1638381245.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1638381245.git.reinette.chatre@intel.com>
-References: <cover.1638381245.git.reinette.chatre@intel.com>
+        id S1352849AbhLAT2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:28:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352723AbhLAT16 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 14:27:58 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542C4C06174A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:24:37 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so509975pjc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:24:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9Qy0B/I9VMxoVA8/E+ZvO4RymVFXP/tOxtvlq632/LU=;
+        b=iEjOLTh4MkN/yo3UpQc7/+JIdLqX74uhzS8IjUnmxBijQjNYZJYSY3MyxcadijNtJe
+         SixtSC9+Jt0bXEN5OS+JN2+VExrakKP01aHz9RIiwxTU14XMBgNbVpY6zGJzFth4JDz2
+         3yGFnGQhoXJiohbolqWK9qzRCJUoEFSoX7qnk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9Qy0B/I9VMxoVA8/E+ZvO4RymVFXP/tOxtvlq632/LU=;
+        b=CBNS7Qoyfa/BGIUsVI1eI3uLdirHiys8zm5iKsdL9Wry1GuWTJjC/1hPISsnRW0qwi
+         Q2UOE2wzytL13tVBJUkmXrO+2/6cMvNGmY3Yhao7xNh4oFjunXfvAvkuRD8CAng8tKc1
+         6O7afwKlxZXnnyqleEFqManaWLFke8iIFAzwzIz9iFCGgTBpHaGDd9nKyF3tnABXoMyT
+         CvU4owlqSkO5gFcuzbK2dW/H4IPlepnsPvdAZ94W8kl/0ETZAxBolcbbha1OGcAooSUA
+         G5SFZI3JpDsDQ9YhIp2UfTgCzThjuHhE5/A8L2wwQ/hLbL988uyjwXSYhd+if67dOh1X
+         Bs+g==
+X-Gm-Message-State: AOAM533tiMEDkXZit8BnGxNxSCoSHrqMQ+E8/ztFEh/mJ9zKY/CwhqfX
+        F1muaMu/ewq23qmhDk9DVX72ZA==
+X-Google-Smtp-Source: ABdhPJwjNUfQa9zE5mvEopHiUn6DwKZ0A3G84q7L+9KKXfjVNHgz21YJ+w4OqsknJDtWIFOKVQQPGg==
+X-Received: by 2002:a17:902:f092:b0:141:ccb6:897 with SMTP id p18-20020a170902f09200b00141ccb60897mr9802520pla.89.1638386676775;
+        Wed, 01 Dec 2021 11:24:36 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id j13sm599415pfc.151.2021.12.01.11.24.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 11:24:36 -0800 (PST)
+Date:   Wed, 1 Dec 2021 11:24:35 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH] module: add in-kernel support for decompressing
+Message-ID: <202112011112.83416FCA2C@keescook>
+References: <YaMYJv539OEBz5B/@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaMYJv539OEBz5B/@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create enclave with additional heap that consumes all physical SGX memory
-and then remove it.
+On Sat, Nov 27, 2021 at 09:48:22PM -0800, Dmitry Torokhov wrote:
+> Current scheme of having userspace decompress kernel modules before
+> loading them into the kernel runs afoul of LoadPin security policy, as
+> it loses link between the source of kernel module on the disk and binary
+> blob that is being loaded into the kernel. To solve this issue let's
+> implement decompression in kernel, so that we can pass a file descriptor
+> of compressed module file into finit_module() which will keep LoadPin
+> happy.
 
-Depending on the available SGX memory this test could take a significant
-time to run (several minutes) as it (1) creates the enclave, (2)
-changes the type of every page to be trimmed, (3) enters the enclave
-once per page to run EACCEPT, before (4) the pages are finally removed.
+Yeah, adding module signing for this case seems like needless overhead
+when there is an existing fd association back down to a dm-verity
+device, etc.
 
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
- tools/testing/selftests/sgx/main.c | 98 ++++++++++++++++++++++++++++++
- 1 file changed, 98 insertions(+)
+> To let userspace know what compression/decompression scheme kernel
+> supports it will create /sys/module/compression attribute. kmod can read
+> this attribute and decide if it can pass compressed file to
+> finit_module(). New MODULE_INIT_COMPRESSED_DATA flag indicates that the
+> kernel should attempt to decompress the data read from file descriptor
+> prior to trying load the module.
 
-diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-index 618f5ff0601b..c1495eaafe79 100644
---- a/tools/testing/selftests/sgx/main.c
-+++ b/tools/testing/selftests/sgx/main.c
-@@ -393,7 +393,105 @@ TEST_F(enclave, unclobbered_vdso_oversubscribed)
- 	EXPECT_EQ(get_op.value, MAGIC);
- 	EXPECT_EEXIT(&self->run);
- 	EXPECT_EQ(self->run.user_data, 0);
-+}
-+
-+TEST_F_TIMEOUT(enclave, unclobbered_vdso_oversubscribed_remove, 900)
-+{
-+	struct encl_op_get_from_buf get_op;
-+	struct encl_op_put_to_buf put_op;
-+	struct sgx_page_modt modt_ioc;
-+	struct encl_segment *heap;
-+	unsigned long total_mem;
-+	int ret, errno_save;
-+	unsigned long addr;
-+	struct encl_op_eaccept eaccept_op;
-+	struct sgx_page_remove remove_ioc;
-+	unsigned long i;
-+
-+	/*
-+	 * Create enclave with additional heap that is as big as all
-+	 * available physical SGX memory.
-+	 */
-+	total_mem = get_total_epc_mem();
-+	ASSERT_NE(total_mem, 0);
-+	TH_LOG("Creating an enclave with %lu bytes heap may take a while ...",
-+	       total_mem);
-+	ASSERT_TRUE(setup_test_encl(total_mem, &self->encl, _metadata));
-+
-+	memset(&self->run, 0, sizeof(self->run));
-+	self->run.tcs = self->encl.encl_base;
-+
-+	heap = &self->encl.segment_tbl[self->encl.nr_segments - 1];
-+
-+	put_op.header.type = ENCL_OP_PUT_TO_BUFFER;
-+	put_op.value = MAGIC;
-+
-+	EXPECT_EQ(ENCL_CALL(&put_op, &self->run, false), 0);
-+
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+	get_op.header.type = ENCL_OP_GET_FROM_BUFFER;
-+	get_op.value = 0;
-+
-+	EXPECT_EQ(ENCL_CALL(&get_op, &self->run, false), 0);
-+
-+	EXPECT_EQ(get_op.value, MAGIC);
-+	EXPECT_EEXIT(&self->run);
-+	EXPECT_EQ(self->run.user_data, 0);
-+
-+	/* Trim  entire heap */
-+	memset(&modt_ioc, 0, sizeof(modt_ioc));
-+
-+	modt_ioc.offset = heap->offset;
-+	modt_ioc.length = heap->size;
-+	modt_ioc.type = SGX_PAGE_TYPE_TRIM;
-+
-+	TH_LOG("Changing type of %zd bytes to trimmed may take a while ...",
-+	       heap->size);
-+	ret = ioctl(self->encl.fd, SGX_IOC_PAGE_MODT, &modt_ioc);
-+	errno_save = ret == -1 ? errno : 0;
-+
-+	EXPECT_EQ(ret, 0);
-+	EXPECT_EQ(errno_save, 0);
-+	EXPECT_EQ(modt_ioc.result, 0);
-+	EXPECT_EQ(modt_ioc.count, heap->size);
- 
-+	/* EACCEPT all removed pages */
-+	addr = self->encl.encl_base + heap->offset;
-+
-+	eaccept_op.flags = SGX_SECINFO_TRIM | SGX_SECINFO_MODIFIED;
-+	eaccept_op.header.type = ENCL_OP_EACCEPT;
-+
-+	TH_LOG("Entering enclave to run EACCEPT for each page of %zd bytes may take a while ...",
-+	       heap->size);
-+	for (i = 0; i < heap->size; i += 4096) {
-+		eaccept_op.epc_addr = addr + i;
-+		eaccept_op.ret = 0;
-+
-+		EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
-+
-+		EXPECT_EEXIT(&self->run);
-+		EXPECT_EQ(self->run.exception_vector, 0);
-+		EXPECT_EQ(self->run.exception_error_code, 0);
-+		EXPECT_EQ(self->run.exception_addr, 0);
-+		EXPECT_EQ(eaccept_op.ret, 0);
-+	}
-+
-+	/* Complete page removal */
-+	memset(&remove_ioc, 0, sizeof(remove_ioc));
-+
-+	remove_ioc.offset = heap->offset;
-+	remove_ioc.length = heap->size;
-+
-+	TH_LOG("Removing %zd bytes from enclave may take a while ...",
-+	       heap->size);
-+	ret = ioctl(self->encl.fd, SGX_IOC_PAGE_REMOVE, &remove_ioc);
-+	errno_save = ret == -1 ? errno : 0;
-+
-+	EXPECT_EQ(ret, 0);
-+	EXPECT_EQ(errno_save, 0);
-+	EXPECT_EQ(remove_ioc.count, heap->size);
- }
- 
- TEST_F(enclave, clobbered_vdso)
+Cool; this seems reasonable.
+
+> To simplify things kernel will only implement single decompression
+> method matching compression method selected when generating modules.
+> This patch implements gzip and xz; more can be added later,
+> 
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+> 
+> I am also attaching a patch to kmod to make use of this new facility.
+> 
+> Thanks!
+> 
+>  include/uapi/linux/module.h |   1 +
+>  init/Kconfig                |  12 ++
+>  kernel/Makefile             |   1 +
+>  kernel/module-internal.h    |  18 +++
+>  kernel/module.c             |  35 +++--
+>  kernel/module_decompress.c  | 271 ++++++++++++++++++++++++++++++++++++
+>  6 files changed, 327 insertions(+), 11 deletions(-)
+> 
+> diff --git a/include/uapi/linux/module.h b/include/uapi/linux/module.h
+> index 50d98ec5e866..becab4a1c5db 100644
+> --- a/include/uapi/linux/module.h
+> +++ b/include/uapi/linux/module.h
+> @@ -5,5 +5,6 @@
+>  /* Flags for sys_finit_module: */
+>  #define MODULE_INIT_IGNORE_MODVERSIONS	1
+>  #define MODULE_INIT_IGNORE_VERMAGIC	2
+> +#define MODULE_INIT_COMPRESSED_DATA	4
+
+bikeshedding: adding "_DATA" seems redundant/misleading? The entire
+module is compressed, so maybe call it just MODULE_INIT_COMPRESSED ?
+
+>  
+>  #endif /* _UAPI_LINUX_MODULE_H */
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 03d3c21e28a3..a3f37ae7436d 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -2309,6 +2309,18 @@ config MODULE_COMPRESS_ZSTD
+>  
+>  endchoice
+>  
+> +config MODULE_DECOMPRESS
+> +	bool "Support in-kernel module decompression"
+> +	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
+> +	select XZ_DEC if MODULE_COMPRESS_XZ
+> +	help
+> +
+> +	  Support for decompressing kernel modules by the kernel itself
+> +	  instead of relying on userspace to perform this task. Useful when
+> +	  load pinning security policy is enabled.
+> +
+> +	  If unsure, say N.
+> +
+>  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
+>  	bool "Allow loading of modules with missing namespace imports"
+>  	help
+> diff --git a/kernel/Makefile b/kernel/Makefile
+> index 186c49582f45..56f4ee97f328 100644
+> --- a/kernel/Makefile
+> +++ b/kernel/Makefile
+> @@ -67,6 +67,7 @@ obj-y += up.o
+>  endif
+>  obj-$(CONFIG_UID16) += uid16.o
+>  obj-$(CONFIG_MODULES) += module.o
+> +obj-$(CONFIG_MODULE_DECOMPRESS) += module_decompress.o
+>  obj-$(CONFIG_MODULE_SIG) += module_signing.o
+>  obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
+>  obj-$(CONFIG_KALLSYMS) += kallsyms.o
+> diff --git a/kernel/module-internal.h b/kernel/module-internal.h
+> index 33783abc377b..3c1143d2c8c7 100644
+> --- a/kernel/module-internal.h
+> +++ b/kernel/module-internal.h
+> @@ -22,6 +22,11 @@ struct load_info {
+>  	bool sig_ok;
+>  #ifdef CONFIG_KALLSYMS
+>  	unsigned long mod_kallsyms_init_off;
+> +#endif
+> +#ifdef CONFIG_MODULE_DECOMPRESS
+> +	struct page **pages;
+> +	unsigned int max_pages;
+> +	unsigned int used_pages;
+>  #endif
+>  	struct {
+>  		unsigned int sym, str, mod, vers, info, pcpu;
+> @@ -29,3 +34,16 @@ struct load_info {
+>  };
+>  
+>  extern int mod_verify_sig(const void *mod, struct load_info *info);
+> +
+> +#ifdef CONFIG_MODULE_DECOMPRESS
+> +int module_decompress(struct load_info *info, const void *buf, size_t size);
+> +void module_decompress_cleanup(struct load_info *info);
+> +#else
+> +int module_decompress(struct load_info *info, const void *buf, size_t size)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +void module_decompress_cleanup(struct load_info *info)
+> +{
+> +}
+> +#endif
+> diff --git a/kernel/module.c b/kernel/module.c
+> index 84a9141a5e15..eeab85ea1627 100644
+> --- a/kernel/module.c
+> +++ b/kernel/module.c
+> @@ -3174,9 +3174,12 @@ static int copy_module_from_user(const void __user *umod, unsigned long len,
+>  	return err;
+>  }
+>  
+> -static void free_copy(struct load_info *info)
+> +static void free_copy(struct load_info *info, int flags)
+
+Since struct load_info is already being modified, how about adding flags
+there instead, then it doesn't need to be plumbed down into each of
+these functions?
+
+>  {
+> -	vfree(info->hdr);
+> +	if (flags & MODULE_INIT_COMPRESSED_DATA)
+> +		module_decompress_cleanup(info);
+> +	else
+> +		vfree(info->hdr);
+>  }
+>  
+>  static int rewrite_section_headers(struct load_info *info, int flags)
+> @@ -4125,7 +4128,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>  	}
+>  
+>  	/* Get rid of temporary copy. */
+> -	free_copy(info);
+> +	free_copy(info, flags);
+>  
+>  	/* Done! */
+>  	trace_module_load(mod);
+> @@ -4174,7 +4177,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
+>  
+>  	module_deallocate(mod, info);
+>   free_copy:
+> -	free_copy(info);
+> +	free_copy(info, flags);
+>  	return err;
+>  }
+>  
+> @@ -4201,7 +4204,8 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
+>  SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+>  {
+>  	struct load_info info = { };
+> -	void *hdr = NULL;
+> +	void *buf = NULL;
+> +	int len;
+>  	int err;
+>  
+>  	err = may_init_module();
+> @@ -4211,15 +4215,24 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
+>  	pr_debug("finit_module: fd=%d, uargs=%p, flags=%i\n", fd, uargs, flags);
+>  
+>  	if (flags & ~(MODULE_INIT_IGNORE_MODVERSIONS
+> -		      |MODULE_INIT_IGNORE_VERMAGIC))
+> +		      |MODULE_INIT_IGNORE_VERMAGIC
+> +		      |MODULE_INIT_COMPRESSED_DATA))
+>  		return -EINVAL;
+>  
+> -	err = kernel_read_file_from_fd(fd, 0, &hdr, INT_MAX, NULL,
+> +	len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
+>  				       READING_MODULE);
+> -	if (err < 0)
+> -		return err;
+> -	info.hdr = hdr;
+> -	info.len = err;
+> +	if (len < 0)
+> +		return len;
+> +
+> +	if (flags & MODULE_INIT_COMPRESSED_DATA) {
+> +		err = module_decompress(&info, buf, len);
+> +		vfree(buf); /* compressed data is no longer needed */
+> +		if (err)
+> +			return err;
+> +	} else {
+> +		info.hdr = buf;
+> +		info.len = len;
+> +	}
+>  
+>  	return load_module(&info, uargs, flags);
+>  }
+> diff --git a/kernel/module_decompress.c b/kernel/module_decompress.c
+> new file mode 100644
+> index 000000000000..590ca00aa098
+> --- /dev/null
+> +++ b/kernel/module_decompress.c
+
+I think most of this can be dropped. I think using
+crypto_comp_decompress() would make much more sense.
+
 -- 
-2.25.1
-
+Kees Cook

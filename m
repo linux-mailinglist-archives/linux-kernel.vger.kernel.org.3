@@ -2,199 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1794B464D55
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:54:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3214A464D5F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349078AbhLAL5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:57:18 -0500
-Received: from foss.arm.com ([217.140.110.172]:34954 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242696AbhLAL5R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:57:17 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 529781476;
-        Wed,  1 Dec 2021 03:53:56 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.65.205])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B0853F694;
-        Wed,  1 Dec 2021 03:53:55 -0800 (PST)
-Date:   Wed, 1 Dec 2021 11:53:52 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     Marco Elver <elver@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        joey.gouly@arm.com
-Subject: Re: [PATCH v2] arm64: Enable KCSAN
-Message-ID: <YadiUPpJ0gADbiHQ@FVFF77S0Q05N>
-References: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
+        id S1347322AbhLAMCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 07:02:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233033AbhLAMCl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 07:02:41 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9C3C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 03:59:20 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6593FCE1DE3
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:59:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E82FC53FCC;
+        Wed,  1 Dec 2021 11:59:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638359956;
+        bh=aiTCkk0TikyuBdLvGGGBmK+UpBVpXvaHV0+Zl+wcJl0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q54XZdZzjgqdhkfHAFxrPRY3LaKQNXRFEeNkVkD8sIVPSm+ZdBuxIR06yqmhRBoVB
+         20l3n0nV+6+1beDqbE8XM/cqZZmdKzSIhvH2nGZAD1cUWcCPJlppfheJLY5Plb49Bw
+         nprmyg+ioViJmQJvGecOKl4Wf5KFxBwg9KY1CPqU/UJmUCmnWrxxVxUpR0IwA1n/aD
+         f8/DayFSkiquPbMBhQ6qCfhZS6UicPHjbuhEOGrxdsWlH/BkZsRcmbmiQGNu/MEADo
+         AB++CHYCM0jheWBlLHKU3wV1OOgKeFgx3DNhL2QExN7c1pN9i0EMBIDVmSHX4O43Es
+         8JiY8tmbNGgrQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 1F99E40002; Wed,  1 Dec 2021 08:59:13 -0300 (-03)
+Date:   Wed, 1 Dec 2021 08:59:13 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Stephane Eranian <eranian@google.com>
+Cc:     Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@redhat.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>,
+        Changbin Du <changbin.du@gmail.com>
+Subject: Re: [RFC/PATCHSET 0/5] perf ftrace: Implement function latency
+ histogram (v1)
+Message-ID: <YadjkVG14zgymjrh@kernel.org>
+References: <20211129231830.1117781-1-namhyung@kernel.org>
+ <YaY3JqOQ2XE22VId@kernel.org>
+ <CAM9d7cjXncRRsH1Zf_yVrLeaYiHXLFM29sx0MYPAZ8HAsZaggw@mail.gmail.com>
+ <CABPqkBQgr3ck_jnFbdLOKgpzrz4RhE3svTvkiOLY9KgvjQjU9w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <CABPqkBQgr3ck_jnFbdLOKgpzrz4RhE3svTvkiOLY9KgvjQjU9w@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kefeng,
+Em Tue, Nov 30, 2021 at 04:36:49PM -0800, Stephane Eranian escreveu:
+> On Tue, Nov 30, 2021 at 2:58 PM Namhyung Kim <namhyung@kernel.org> wrote:
+> > On Tue, Nov 30, 2021 at 6:37 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
 
-On Mon, Nov 29, 2021 at 10:57:32PM +0800, Kefeng Wang wrote:
-> This patch enables KCSAN for arm64, with updates to build rules
-> to not use KCSAN for several incompatible compilation units.
-> 
-> Resent GCC version(at least GCC10) made outline-atomics as the
-> default option(unlike Clang), which will cause linker errors
-> for kernel/kcsan/core.o.
-> 
-> Disables the out-of-line atomics by no-outline-atomics to fix
-> the linker errors.
-> 
-> Tested selftest and kcsan_test(built with GCC11 and Clang 13),
-> and all passed.
+> > > Em Mon, Nov 29, 2021 at 03:18:25PM -0800, Namhyung Kim escreveu:
+> > > > I've implemented 'latency' subcommand in the perf ftrace command to
+> > > > show a histogram of function latency.
 
-Nice!
+> > > > To handle new subcommands, the existing functionality is moved to
+> > > > 'trace' subcommand while preserving backward compatibility of not
+> > > > having a subcommand at all (defaults to 'trace').
 
-I think there are a few additional bits and pieces we'll need:
+> > > > The latency subcommand accepts a target (kernel, for now) function
+> > > > with -T option and shows a histogram like below:
 
-* Prior to clang 12.0.0, KCSAN would produce warnings with BTI, as I found in:
+> > > Humm, wouldn't be interesting to shorten this by having a new 'perf
+> > > flat' (function latency) tool, on the same level as 'perf ftrace' and
+> > > leave 'perf ftrace' to just being a convenient perf interface to what
+> > > ftrace provides?
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=2d67c39ae4f619ca94d9790e09186e77922fa826
+> > That would be fine.  I also think 'perf ftrace latency' is
+> > bit too long.  But if we would add a new feature
+> > like argdist (in BCC) later, I thought it'd be nice being
+> > a subcommand in the perf ftrace together.
 
-  Since BTI is in defconfig, I think arm64's Kconfig should require a minimum
-  of clang 12.0.0 to enable KCSAN.
+> > But it's up to you.  I'll make a change if you prefer
+> > 'flat' (or how about 'fnlat' instead?).
 
-* In the past clang did not have an attribute to suppress tsan instrumenation
-  and would instrument noinstr regions. I'm not sure when clang gained the
-  relevant attribute to supress this, but we will need to depend on this
-  existing, either based on the clang version or with a test for the attribute.
+fnlat would be ok, flat was just funny to avoid suggesting it :-)
 
-  (If we're lucky, clang 12.0.0 is sufficient, and we solve BTI and this in one
-  go).
+> I am not too fond of the flat option because as we had more bpf tools
+> like function latency, then we keep extending the list of commands
+> each with a small span which is different
+> from what we have right now.
 
-  I *think* GCC always had an attribute, but I'm not certain.
+I think we should focus on the tool end result, not on how it is
+implemented, i.e. in this specific "function latency" tool ftrace is
+used with BPF, but we could perhaps have used some other mechanism.
 
-  Marco, is there an existing dependency somewhere for this to work on x86? I
-  thought there was an objtool pass to NOP this out, but I couldn't find it in
-  mainline. If x86 is implicitly depending on a sufficiently recent version of
-  clang, we add something to the common KCSAN Kconfig for ARCH_WANTS_NO_INSTR?
+I think all these tools should have as much as possible a common set of
+options, like the targets (cpu, cgroup, pid, tid, etc) so that one can
+go from different views for those targets by just changing the name of
+the tool.
 
-* There are some latent issues with some code (e.g. alternatives, patching, insn)
-  code being instrumentable even though this is unsound, and depending on
-  compiler choices this can happen to be fine or can result in boot-time
-  failures (I saw lockups when I started trying to add KCSAN for arm64).
+We have things like:
 
-  While this isn't just a KCSAN problem, fixing that requires some fairly
-  significant rework to a bunch of code, and until that's done we're on very
-  shaky ground. So I'd like to make KCSAN depend on EXPERT for now.
+$ perf sched
 
-  I had an initial stab at fixing some of that, e.g.
+ Usage: perf sched [<options>] {record|latency|map|replay|script|timehist}
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/patching/rework
-  
-  Joey has started looking into this too.
+    -D, --dump-raw-trace  dump raw trace in ASCII
+    -f, --force           don't complain, do it
+    -i, --input <file>    input file name
+    -v, --verbose         be more verbose (show symbol address, etc)
 
-* When I last tested, for simple boots I would get frequent KCSAN splats for a
-  few common issues, and those drowned out all other reports.
+With different 3rd level subcommads, but in the 'perf sched' case is the
+component being observed, not the mechanism being used to obtain/present
+the observation data.
 
-  One case was manipulation of thread_info::flags, which Thomas Gleixner has
-  queued some fixes at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=core/entry
- 
-  There were some other common failures, e.g. accesses to task_struct::on_cpu,
-  and I hadn't had the chance to investigate/fix those, beyond a (likely
-  unsound) hack:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=4fe9d6c2ef85257d80291086e4514eaaebd3504e
-
-  It would be good if we could identify the most frequent problems (e.g. those
-  that will occur when just booting) before we enable this generally, to avoid
-  everyone racing to report/fix those as soon as we enable the feature.
-
-  When you tested, did KCSAN flag anything beyond the selftests?
-
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
-> Tested on Qemu with clang 13 / gcc 11, based on 5.16-rc3.
-> 
-> [    0.221518] kcsan: enabled early
-> [    0.222422] kcsan: strict mode configured
-> ...
-> [    5.839223] kcsan: selftest: 3/3 tests passed
-> ...
-> [  517.895102] # kcsan: pass:24 fail:0 skip:0 total:24
-> [  517.896393] # Totals: pass:168 fail:0 skip:0 total:168
-> [  517.897502] ok 1 - kcsan
-> 
-> v2:
-> - tested on GCC11 and disable outline-atomics for kernel/kcsan/core.c
->   suggested by Marco Elver
-> 
->  arch/arm64/Kconfig               | 1 +
->  arch/arm64/kernel/vdso/Makefile  | 1 +
->  arch/arm64/kvm/hyp/nvhe/Makefile | 1 +
->  kernel/kcsan/Makefile            | 1 +
->  4 files changed, 4 insertions(+)
-
-Aside from the `-mno-outline-atomics` portion, this looks basically the same as what I had in:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=2d67c39ae4f619ca94d9790e09186e77922fa826
-
-... so this looks good to me modulo the comments above.
-
-Thanks,
-Mark.
-
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 4ff73299f8a9..0ac90875f71d 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -150,6 +150,7 @@ config ARM64
->  	select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
->  	select HAVE_ARCH_KASAN_SW_TAGS if HAVE_ARCH_KASAN
->  	select HAVE_ARCH_KASAN_HW_TAGS if (HAVE_ARCH_KASAN && ARM64_MTE)
-> +	select HAVE_ARCH_KCSAN
->  	select HAVE_ARCH_KFENCE
->  	select HAVE_ARCH_KGDB
->  	select HAVE_ARCH_MMAP_RND_BITS
-> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-> index 700767dfd221..60813497a381 100644
-> --- a/arch/arm64/kernel/vdso/Makefile
-> +++ b/arch/arm64/kernel/vdso/Makefile
-> @@ -32,6 +32,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
->  CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) $(GCC_PLUGINS_CFLAGS) \
->  				$(CC_FLAGS_LTO)
->  KASAN_SANITIZE			:= n
-> +KCSAN_SANITIZE			:= n
->  UBSAN_SANITIZE			:= n
->  OBJECT_FILES_NON_STANDARD	:= y
->  KCOV_INSTRUMENT			:= n
-> diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-> index c3c11974fa3b..24b2c2425b38 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
-> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-> @@ -89,6 +89,7 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI)
->  # cause crashes. Just disable it.
->  GCOV_PROFILE	:= n
->  KASAN_SANITIZE	:= n
-> +KCSAN_SANITIZE	:= n
->  UBSAN_SANITIZE	:= n
->  KCOV_INSTRUMENT	:= n
->  
-> diff --git a/kernel/kcsan/Makefile b/kernel/kcsan/Makefile
-> index c2bb07f5bcc7..e893b0e1d62a 100644
-> --- a/kernel/kcsan/Makefile
-> +++ b/kernel/kcsan/Makefile
-> @@ -8,6 +8,7 @@ CFLAGS_REMOVE_debugfs.o = $(CC_FLAGS_FTRACE)
->  CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
->  
->  CFLAGS_core.o := $(call cc-option,-fno-conserve-stack) \
-> +	$(call cc-option,-mno-outline-atomics) \
->  	-fno-stack-protector -DDISABLE_BRANCH_PROFILING
->  
->  obj-y := core.o debugfs.o report.o
-> -- 
-> 2.26.2
-> 
+- Arnaldo

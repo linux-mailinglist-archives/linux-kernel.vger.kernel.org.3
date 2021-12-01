@@ -2,98 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 347254658E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:06:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 033A54658E0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343697AbhLAWJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:09:30 -0500
-Received: from smtp07.smtpout.orange.fr ([80.12.242.129]:51734 "EHLO
-        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353548AbhLAWIl (ORCPT
+        id S235460AbhLAWJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:09:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39254 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353484AbhLAWJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:08:41 -0500
-Received: from pop-os.home ([86.243.171.122])
-        by smtp.orange.fr with ESMTPA
-        id sXj2ml4As65jHsXj3mTVw0; Wed, 01 Dec 2021 23:05:17 +0100
-X-ME-Helo: pop-os.home
-X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
-X-ME-Date: Wed, 01 Dec 2021 23:05:17 +0100
-X-ME-IP: 86.243.171.122
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     chunkeey@googlemail.com, kvalo@codeaurora.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH] carl9170: Use the bitmap API when applicable
-Date:   Wed,  1 Dec 2021 23:05:15 +0100
-Message-Id: <1fe18fb73f71d855043c40c83865ad539f326478.1638396221.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.30.2
+        Wed, 1 Dec 2021 17:09:07 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [IPv6:2404:9400:2:0:216:3eff:fee2:21ea])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554DBC0613E1;
+        Wed,  1 Dec 2021 14:05:43 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4J4Cnx2BJ6z4xPv;
+        Thu,  2 Dec 2021 09:05:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1638396342;
+        bh=3qyA6EPZ/k+73zUURyjTLztuFtvmpskxuyB/RgDSpXY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ABVWzP1Bcs4FrSIc81Sv5dcAwTqfbT3oz64tf+VWZKVB/YpUseaawjSX4wA7qvdAT
+         cHqICEMZoayXnqjba0/iaQ5L4dqE6O3jnj4a4j4KXTOMdCMNDZzOu1SEzXlDrKELma
+         p753NqILH9p5JIOmvSsai8x4ezknC7u6rDyVyckOlxTrcP0QOKLLnQAeZrYKQfu5uO
+         y3lNcYEOad+RPRopXjXNWJ9hBg/chNFT3SKWpeJmBx9Rrc/hgxe1o9nS1Bcn3fbmCp
+         v9hrMRvfQ0dBT29mbXJT00qqW+irWHK6rwF+Jx+iIY+nEJ0ztx1aKUvwpUjORwSF6R
+         rmrZTXkHln+Yg==
+Date:   Thu, 2 Dec 2021 09:05:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20211202090540.1f22fa39@canb.auug.org.au>
+In-Reply-To: <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
+References: <20211126145201.5aefa68c@canb.auug.org.au>
+        <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/uaPmmuwOfy6QSXmSWCUZ8uw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid some
-open-coded arithmetic in allocator arguments.
+--Sig_/uaPmmuwOfy6QSXmSWCUZ8uw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Note, that this 'bitmap_zalloc()' divides by BITS_PER_LONG the amount of
-memory allocated.
-The 'roundup()' used to computed the number of needed long should have
-been a DIV_ROUND_UP.
+Hi all,
 
+On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Fri, Nov 26, 2021 at 4:52 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+> >
+> > After merging the tip tree, today's linux-next build (sparc defconfig)
+> > failed like this:
+> >
+> > In file included from arch/sparc/include/asm/futex_32.h:4:0,
+> >                  from arch/sparc/include/asm/futex.h:7,
+> >                  from kernel/futex/futex.h:12,
+> >                  from kernel/futex/core.c:41:
+> > kernel/futex/core.c: In function 'futex_cmpxchg_value_locked':
+> > include/asm-generic/futex.h:17:2: error: implicit declaration of functi=
+on 'futex_atomic_cmpxchg_inatomic_local_generic'; did you mean 'futex_atomi=
+c_cmpxchg_inatomic_local'? [-Werror=3Dimplicit-function-declaration]
+> >   futex_atomic_cmpxchg_inatomic_local_generic(uval, uaddr, oldval, newv=
+al)
+> >   ^
+> > include/asm-generic/futex.h:17:2: note: in definition of macro 'futex_a=
+tomic_cmpxchg_inatomic'
+> >   futex_atomic_cmpxchg_inatomic_local_generic(uval, uaddr, oldval, newv=
+al)
+> >   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ =20
+>=20
+> Thanks a lot for the report, I sent a fix now:
+>=20
+> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org
 
-Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
-consistency.
+I am still getting this failure (Arnd's fix has not been applied).
 
-Use 'bitmap_zero()' to avoid hand writing it.
+--=20
+Cheers,
+Stephen Rothwell
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
-All uses of 'mem_bitmap' in 'carl9170/debug.c', 'carl9170/main.c' and
-'carl9170/tx.c' are consistent with a 'ar->fw.mem_blocks' bits long bitmap.
+--Sig_/uaPmmuwOfy6QSXmSWCUZ8uw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-So the smaller memory allocation of this patch looks correct to me.
-... but review with care :)
----
- drivers/net/wireless/ath/carl9170/main.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/net/wireless/ath/carl9170/main.c b/drivers/net/wireless/ath/carl9170/main.c
-index cca3b086aa70..49f7ee1c912b 100644
---- a/drivers/net/wireless/ath/carl9170/main.c
-+++ b/drivers/net/wireless/ath/carl9170/main.c
-@@ -307,8 +307,7 @@ static void carl9170_zap_queues(struct ar9170 *ar)
- 	for (i = 0; i < ar->hw->queues; i++)
- 		ar->tx_stats[i].limit = CARL9170_NUM_TX_LIMIT_HARD;
- 
--	for (i = 0; i < DIV_ROUND_UP(ar->fw.mem_blocks, BITS_PER_LONG); i++)
--		ar->mem_bitmap[i] = 0;
-+	bitmap_zero(ar->mem_bitmap, ar->fw.mem_blocks);
- 
- 	rcu_read_lock();
- 	list_for_each_entry_rcu(cvif, &ar->vif_list, list) {
-@@ -1968,9 +1967,7 @@ int carl9170_register(struct ar9170 *ar)
- 	if (WARN_ON(ar->mem_bitmap))
- 		return -EINVAL;
- 
--	ar->mem_bitmap = kcalloc(roundup(ar->fw.mem_blocks, BITS_PER_LONG),
--				 sizeof(unsigned long),
--				 GFP_KERNEL);
-+	ar->mem_bitmap = bitmap_zalloc(ar->fw.mem_blocks, GFP_KERNEL);
- 
- 	if (!ar->mem_bitmap)
- 		return -ENOMEM;
-@@ -2085,7 +2082,7 @@ void carl9170_free(struct ar9170 *ar)
- 	kfree_skb(ar->rx_failover);
- 	ar->rx_failover = NULL;
- 
--	kfree(ar->mem_bitmap);
-+	bitmap_free(ar->mem_bitmap);
- 	ar->mem_bitmap = NULL;
- 
- 	kfree(ar->survey);
--- 
-2.30.2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmGn8bQACgkQAVBC80lX
+0Gzpnwf/TQuQ9cTH3hYjEeSGoPCK8aIZc4kiXWuyeI7FcrDXd7TUskdj+B30F1kH
+aZj24qY4d1fogfThm47r4t24lMhpCoY4pvDIU9clYPFPxkuIUeW5ysZHvIRw2AAq
+dcVGBkeQJ3uhlIzy6aUqCPDHwp8BPne5QVuq+/DXpmyQU/LUPte0xTjRuvjNtkVo
+InO1dRMvfOT+pjwoEky1mW2N4oqKQOvM06FCzP1LnGvCmuqjELoRjOxCe2oEcAia
+45CDQBN6rYRInwg7+pgX74IMw4V9cknRTTFZ9DTpuLF6RhC7TBQToKWPyZFJBGVa
+ohvcZs9oBK15i2N7BPlG42FZVULmiA==
+=2Y0+
+-----END PGP SIGNATURE-----
 
+--Sig_/uaPmmuwOfy6QSXmSWCUZ8uw--

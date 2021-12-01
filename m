@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 462E8464433
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB6346443D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241076AbhLAAx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 19:53:58 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:58078 "EHLO
+        id S1346025AbhLAAyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 19:54:21 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58100 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345899AbhLAAwu (ORCPT
+        with ESMTP id S1345904AbhLAAwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Nov 2021 19:52:50 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 0F0C21FD5B;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BC4C11FD5C;
         Wed,  1 Dec 2021 00:49:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1638319769; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WJQIMgGr+2iaNMZGhg/DkNOufZqvfYu+jgJQLoGKDfU=;
-        b=CrVhH/gDuZj5P1OsdcoWziDuelAmGT+tqeqte/1MkyTjFBP53OuBx6QIyji8433sC/rC95
-        nrqcummZjzlQ31ej1eApw5I8SbdBOgpcoLo48+u+AfBne8vwwOmstlonlVHg9JjWETukWV
-        SafM8FHVcHISpWP9yNPMHVxDnfDn2/A=
+        bh=/f42g4TvD+woxv+Oq7dfGuZGHJnzlWVrLnH1uItsoJM=;
+        b=jaQP4pTI5Gc89hYoqCroIErYQldJD6Qvgn0GIMbtm6gVXxHzbV22b3VQ0NezZ1Bbf1Fugi
+        5tIeArU2aQEub+NCVAwEd9424mDKssww9PnjYI5zyz6XZIme1pHXT+nG/+cj++OOBz2Qfd
+        wtzSXrdRVohJjMZN0D01skmr10Mchps=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1638319769;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=WJQIMgGr+2iaNMZGhg/DkNOufZqvfYu+jgJQLoGKDfU=;
-        b=Ugy6e8rK+47yAqu9derh+0Sie5GuV7mzReuauGSB+MKkGfig+MuJC/1/XiqXHDcYhaLyWp
-        /HcyJcrZ9T3kKnCA==
+        bh=/f42g4TvD+woxv+Oq7dfGuZGHJnzlWVrLnH1uItsoJM=;
+        b=j0pgj78shvZF1E5cQFElb6tF+voPf67iR/UA7pdbFavV7I2DSlugSCGJULAoVydiB6xve8
+        Cm94+RbEVv/hZpCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ECFDC13C10;
-        Wed,  1 Dec 2021 00:49:28 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9E45513C10;
+        Wed,  1 Dec 2021 00:49:29 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id ht1uOJjGpmHyKAAAMHmgww
-        (envelope-from <nstange@suse.de>); Wed, 01 Dec 2021 00:49:28 +0000
+        id bwwWJZnGpmH0KAAAMHmgww
+        (envelope-from <nstange@suse.de>); Wed, 01 Dec 2021 00:49:29 +0000
 From:   Nicolai Stange <nstange@suse.de>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>
@@ -58,9 +58,9 @@ Cc:     =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         qat-linux@intel.com, keyrings@vger.kernel.org,
         Nicolai Stange <nstange@suse.de>
-Subject: [PATCH 07/18] crypto: testmgr - add DH RFC 3526 modp2048 test vector
-Date:   Wed,  1 Dec 2021 01:48:47 +0100
-Message-Id: <20211201004858.19831-8-nstange@suse.de>
+Subject: [PATCH 08/18] crypto: testmgr - run only subset of DH vectors based on config
+Date:   Wed,  1 Dec 2021 01:48:48 +0100
+Message-Id: <20211201004858.19831-9-nstange@suse.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20211201004858.19831-1-nstange@suse.de>
 References: <20211201004858.19831-1-nstange@suse.de>
@@ -70,129 +70,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The previous patch introduced support for the safe-prime groups specified
-by RFC 3526. In order to test this functionality, add a corresponding test
-vector to testmgr. The test data has been generated with OpenSSL.
+With the previous patches, the testmgr now has up to four test vectors for
+DH which all test more or less the same thing:
+- the two vectors from before this series,
+- the vector for the ffdhe2048 group, enabled if
+  CONFIG_CRYPTO_DH_GROUPS_RFC7919 is set and
+- the vector for the modp2048 group, similarly enabled if
+  CONFIG_CRYPTO_DH_GROUPS_RFC3526 is set.
 
-Note that this new entry provides test coverage for the recent change to
-crypto_dh_encode_key(), which made it to skip the serialization of domain
-parameters for known groups, i.e. those with
-->group_id != dh_group_id_unknown.
+In order to avoid too much redundancy during DH testing, enable only a
+subset of these depending on the kernel config:
+- if CONFIG_CRYPTO_DH_GROUPS_RFC7919 is set, enable only the ffdhe2048
+  vector,
+- otherwise, if CONFIG_CRYPTO_DH_GROUPS_RFC3526 is set, enable only
+  the modp2048 vector and
+- only enable the original two vectors if neither of these options
+  has been selected.
 
-Moreover, a future patch will make the DH implementation to reject domain
-parameters not corresponding to some safe-prime group approved by
-SP800-56Arev3 in FIPS mode and the existing DH test vectors don't qualify.
-So this patch here will ensure that there's still some suitable test vector
-available.
+Note that an upcoming patch will make the DH implementation to reject any
+domain parameters not corresponding to some safe-prime group approved by
+SP800-56Arev3 in FIPS mode. Thus, having CONFIG_FIPS enabled, but
+both of CONFIG_CRYPTO_DH_GROUPS_RFC7919 and
+CONFIG_CRYPTO_DH_GROUPS_RFC3526 unset wouldn't make much sense as it would
+render the DH implementation unusable in FIPS mode. Conversely, any
+reasonable configuration would ensure that the original, non-conforming
+test vectors would not get to run in FIPS mode.
 
 Signed-off-by: Nicolai Stange <nstange@suse.de>
 ---
- crypto/testmgr.h | 92 ++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 92 insertions(+)
+ crypto/testmgr.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index ad1450c8e1e3..d18844c7499e 100644
+index d18844c7499e..b295512c8f22 100644
 --- a/crypto/testmgr.h
 +++ b/crypto/testmgr.h
-@@ -1332,6 +1332,98 @@ static const struct kpp_testvec dh_tv_template[] = {
+@@ -1331,8 +1331,7 @@ static const struct kpp_testvec dh_tv_template[] = {
+ 	.expected_a_public_size = 256,
  	.expected_ss_size = 256,
  	},
- #endif /* IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC7919) */
-+#if IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC3526)
-+	{
-+	.secret =
-+#ifdef __LITTLE_ENDIAN
-+	"\x01\x00" /* type */
-+	"\x14\x01" /* len */
-+	"\x06\x00\x00\x00" /* group_id == dh_group_id_rfc3526_modp2048 */
-+	"\x00\x01\x00\x00" /* key_size */
-+	"\x00\x00\x00\x00" /* p_size */
-+	"\x00\x00\x00\x00" /* g_size */
-+#else
-+	"\x00\x01" /* type */
-+	"\x01\x14" /* len */
-+	"\x00\x00\x00\x06" /* group_id == dh_group_id_rfc3526_modp2048 */
-+	"\x00\x00\x01\x00" /* key_size */
-+	"\x00\x00\x00\x00" /* p_size */
-+	"\x00\x00\x00\x00" /* g_size */
-+#endif
-+	/* xa */
-+	"\x38\x77\xec\x02\xc5\xae\xc2\x1c\x4c\x5e\xf5\xa2\xfb\x7e\x06\xf2"
-+	"\xa0\x32\x0f\x3d\xf5\xcb\x75\xd0\xd7\x47\x12\x06\xca\x11\x55\xe4"
-+	"\x16\xff\x35\xd3\xda\x36\x69\x04\xc4\xd8\x63\x96\xd4\x1d\x92\x6d"
-+	"\xd6\x1f\x4b\x22\x7f\xa8\x68\xae\x53\x46\x49\x5a\x06\xfd\x33\xb9"
-+	"\x47\x7b\x2c\xaf\x5f\x52\x76\x2d\xe5\x46\x44\xd7\xf1\x5e\xdf\xaa"
-+	"\x17\xb5\x3c\x86\x5e\x69\xf9\xf5\x4a\x86\xc6\x58\x77\x81\x88\x78"
-+	"\x7d\x5b\xf6\xe3\xd7\x46\x4c\xaf\x75\xf8\x53\x76\xf6\xcc\x6d\xd2"
-+	"\x8e\xb7\x0f\x4c\xea\x3e\x82\x55\x82\x34\x5c\x99\x32\x7c\x22\x4b"
-+	"\xcc\xd7\xfd\x39\x72\x64\x27\xc6\x5a\x10\xc2\x97\x38\x20\x51\xd2"
-+	"\xf3\xf0\x95\xe7\xe4\xfb\x5a\x1e\xb6\x08\x81\xda\xac\x7e\xdf\x85"
-+	"\xad\xa5\xdb\xd1\x96\xc6\xab\x9c\x9b\x8e\xa5\x80\x0a\xf0\xce\xf6"
-+	"\x60\xb2\x88\xc1\x3a\x77\xb3\x87\xd1\x39\x68\x56\x7b\x8c\x8a\xb4"
-+	"\xb5\x35\xd6\x93\xdf\x8e\x43\x3c\x41\xb5\xb5\x5d\xdd\xd2\x36\x93"
-+	"\xa3\x09\xeb\x9f\x6c\x13\xac\xcb\xa0\x50\x4e\x7c\x49\x20\xcf\xf7"
-+	"\xa6\xfc\xd1\x1d\x50\x72\xdf\x76\x24\xc5\xb9\xb3\x68\x1d\xe2\xdd"
-+	"\xd1\xcb\x1b\x53\x2c\xed\x75\xfc\xeb\x36\x20\x9d\x82\xca\xe5\xa7",
-+	.b_public =
-+	"\x75\x98\x23\x19\xc9\xc2\xe1\x59\x73\xc2\x1d\xc5\x2c\xad\x22\x90"
-+	"\xa8\xa4\xb4\xfa\xd7\x67\x5b\xe9\xa1\x0e\x15\x3b\x5d\xae\xd3\x25"
-+	"\x29\xfc\x26\x79\xd6\x86\xf2\x21\x20\x86\xd7\x17\xce\xe7\x6a\x74"
-+	"\x3e\x2e\x8b\x62\x87\x62\xe9\x27\xc0\x57\xca\x5b\xaf\x86\x22\xd6"
-+	"\xdd\xf6\x88\xd2\x86\x21\xf7\x39\x6a\x3f\x52\x17\x03\xdc\xb9\x44"
-+	"\x03\xdf\xb5\x6e\x5d\x15\x50\x6f\xf8\x9a\x3c\xee\x9f\xc5\x01\x23"
-+	"\xd8\x2d\xb8\x18\x37\xc8\xed\x7d\x46\x27\x03\xc9\xae\x3b\xbf\x9e"
-+	"\x4e\x98\x91\x30\x56\xcb\x09\x6b\x8e\xd3\xe5\x87\xfe\x82\x66\x36"
-+	"\x2c\xee\x88\x74\x00\x8a\x2d\x36\x39\x2b\xe7\xbd\x18\x21\x36\xd0"
-+	"\x98\x34\x6c\xb1\x4f\xbf\xd0\x0c\xd3\x6c\x64\x2e\x04\xfa\x68\x13"
-+	"\x51\xaf\x1b\xc8\xc3\xbd\x13\x44\x72\x89\xd5\xa3\xd8\x83\x22\xf1"
-+	"\x92\xeb\x5a\x70\x5e\x91\x1e\x86\xb9\x2f\x18\x44\x8c\x5a\xe0\x18"
-+	"\x6c\x7a\xc6\x20\x27\x27\xae\x6a\x9e\x1b\x9b\xae\x13\xc9\x73\x22"
-+	"\x0c\x0d\xdf\x97\x9c\x87\x06\x48\xdc\xe0\x8d\x83\xe1\x32\x8a\x8f"
-+	"\x80\x60\x70\x7c\x7e\x10\x10\xf0\xd7\x49\x09\xfc\xf0\x0e\x11\x3f"
-+	"\xb4\x5a\x9e\x3d\x38\x28\x3d\x46\x5a\x63\x6c\x9e\x14\xe3\x7c\x13",
-+	.expected_a_public =
-+	"\xca\x88\x57\x90\x69\x2d\x30\x40\xbc\x97\xd0\x79\x4b\x9e\x8c\x3c"
-+	"\x55\x78\x01\x81\x0c\x62\xa3\x51\x80\xcb\x83\x56\x70\x50\xe8\x41"
-+	"\x2d\x72\x0c\x7a\x1d\x9b\xf7\x0d\xe6\x81\x2b\x51\xca\xf7\x6c\xf0"
-+	"\x45\x92\x9d\x7e\x3c\xe3\x22\xbc\x16\x5a\x2f\x92\x79\xbe\xea\xbe"
-+	"\xa5\x73\xf7\xfa\xbf\x86\x71\x9b\x28\x4f\x32\x86\x44\xdb\xc4\x0f"
-+	"\xb6\x30\xdd\x95\xa5\xcb\xa8\x16\x96\x76\x51\x27\xfb\x6e\xc1\x06"
-+	"\x19\x28\x8a\xf0\x3d\x92\xe8\x6b\x57\x2a\xfc\x63\x96\xea\xf0\x9b"
-+	"\x4e\xbe\xeb\x42\x38\x66\x0d\x47\x6b\xc6\x2b\xb1\xe6\x49\xe4\x82"
-+	"\xcf\x74\xb4\x5a\x13\x7b\xaf\x22\x53\x34\x5b\xf2\x6f\xda\x5e\x51"
-+	"\x00\xd1\x37\x9d\x9c\x8b\x3e\xe9\x05\x37\x8d\x01\xb9\x64\x06\xdd"
-+	"\xee\x10\xa2\x96\xa1\x18\xbf\xb8\xb5\x77\x24\xda\xb0\x7f\x07\x7e"
-+	"\x98\xf4\xeb\x0e\x80\x39\x54\x1e\x7e\xf6\x5c\x6b\x02\xf5\x91\x5e"
-+	"\x3e\xb2\xa5\xe0\x13\x25\x9b\x04\xf9\xb3\x42\x82\xfe\x6a\x11\x94"
-+	"\x4b\x01\x35\x43\xb5\x32\x20\x6e\xc0\x91\xad\x1e\xbe\xdf\xb6\x11"
-+	"\x5c\x91\x83\x66\xa0\xe5\x27\x82\x7d\x45\xa8\x70\xa1\x37\xcd\x24"
-+	"\xab\xb3\xb5\x13\x97\x61\x72\x7b\x03\x58\x06\xd9\x90\x78\x3c\xd1",
-+	.expected_ss =
-+	"\xba\x1e\x8c\x44\x39\x9e\xab\xe4\xe2\x75\xae\x54\xe3\xa9\xde\xb8"
-+	"\x21\x3f\x46\x54\xb8\xea\xe7\xe3\xd6\x1e\xd0\xf3\x33\x2c\xb9\xb7"
-+	"\xbd\x76\x63\xf1\xec\x2e\xf9\xe7\x3b\xa4\xa8\x94\xba\x9b\x34\x1b"
-+	"\xfc\xa8\xbd\x89\xd2\x11\xb1\xa0\x02\x76\xe1\xb3\xe9\x89\x63\xc0"
-+	"\xc2\xda\x77\x53\xc5\x53\x2d\x1d\x0e\xa5\x14\xac\xf1\x91\xfa\x5b"
-+	"\x52\x8e\xeb\x73\x54\x7f\x99\xa6\x39\x17\x32\xcc\x4d\x59\x3a\x4c"
-+	"\xd7\xea\xb3\x70\x84\xb4\x04\xb8\xb2\xcd\x77\x6e\x2b\xa1\xc6\xeb"
-+	"\xa1\x2e\x0c\x8f\xaa\xd1\x83\xe5\x66\x12\x2c\x99\x72\x52\x2a\xfd"
-+	"\x67\x0d\x14\xd7\x11\xd3\xf1\x77\x5f\x86\x06\x21\xcb\x7a\x14\x78"
-+	"\x94\x6f\x42\xe9\xa9\xf4\x22\x8e\x94\x6a\x74\xfb\x13\x30\xd3\x41"
-+	"\xde\xd3\xac\x36\x88\xc9\x24\xe6\x55\x20\x79\xfb\xd7\x81\x6a\xac"
-+	"\x3b\x91\xcb\x34\x33\xb8\x61\x86\xf6\x2c\x88\x14\xe7\x64\x23\xaf"
-+	"\x05\x34\x31\x9a\x56\x1e\xe5\xd5\xb6\xe6\x79\xd0\x2d\xcf\x4c\x41"
-+	"\x95\x16\x08\xa8\x2c\xdd\x7a\xde\xe0\x77\x10\x71\x9b\x98\xfc\xc1"
-+	"\x2c\x48\xd4\xfa\x54\x45\x44\xed\x7f\x42\x92\x63\x9c\xf6\x81\x7f"
-+	"\xe0\x66\x55\x6e\x69\xa5\x52\x0b\x4d\x86\x06\x85\xb2\xb0\x7e\x47",
-+	.secret_size = 276,
-+	.b_public_size = 256,
-+	.expected_a_public_size = 256,
-+	.expected_ss_size = 256,
-+	},
-+#endif /* IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC3526) */
+-#endif /* IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC7919) */
+-#if IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC3526)
++#elif IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC3526)
  	{
  	.secret =
  #ifdef __LITTLE_ENDIAN
+@@ -1423,7 +1422,7 @@ static const struct kpp_testvec dh_tv_template[] = {
+ 	.expected_a_public_size = 256,
+ 	.expected_ss_size = 256,
+ 	},
+-#endif /* IS_ENABLED(CONFIG_CRYPTO_DH_GROUPS_RFC3526) */
++#else
+ 	{
+ 	.secret =
+ #ifdef __LITTLE_ENDIAN
+@@ -1642,6 +1641,7 @@ static const struct kpp_testvec dh_tv_template[] = {
+ 	.expected_a_public_size = 256,
+ 	.expected_ss_size = 256,
+ 	},
++#endif
+ };
+ 
+ static const struct kpp_testvec curve25519_tv_template[] = {
 -- 
 2.26.2
 

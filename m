@@ -2,89 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 48375465723
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE85465726
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:29:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245633AbhLAUcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:32:07 -0500
-Received: from mga17.intel.com ([192.55.52.151]:48255 "EHLO mga17.intel.com"
+        id S245560AbhLAUdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:33:00 -0500
+Received: from foss.arm.com ([217.140.110.172]:46690 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S239841AbhLAUcB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:32:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="217242266"
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="217242266"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 12:28:35 -0800
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="460171745"
-Received: from pkumar17-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.62.247])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 12:28:31 -0800
-Date:   Thu, 2 Dec 2021 09:28:29 +1300
-From:   Kai Huang <kai.huang@intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        isaku.yamahata@intel.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [RFC PATCH v3 00/59] KVM: X86: TDX support
-Message-Id: <20211202092829.9c06c89ea375c9d9790e36b2@intel.com>
-In-Reply-To: <YafNwoPumWQ/77Q6@google.com>
-References: <cover.1637799475.git.isaku.yamahata@intel.com>
-        <YaZyyNMY80uVi5YA@google.com>
-        <20211202022227.acc0b613e6c483be4736c196@intel.com>
-        <20211201190856.GA1166703@private.email.ne.jp>
-        <YafNwoPumWQ/77Q6@google.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S239617AbhLAUcg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 15:32:36 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BCA9013D5;
+        Wed,  1 Dec 2021 12:29:14 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.65.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AFC133F5A1;
+        Wed,  1 Dec 2021 12:29:12 -0800 (PST)
+Date:   Wed, 1 Dec 2021 20:29:06 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Will Deacon <will@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-btrfs@vger.kernel.org
+Subject: Re: [PATCH v2 3/4] arm64: Add support for user sub-page fault probing
+Message-ID: <YafbEpoiFB4emaPW@FVFF77S0Q05N>
+References: <20211201193750.2097885-1-catalin.marinas@arm.com>
+ <20211201193750.2097885-4-catalin.marinas@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201193750.2097885-4-catalin.marinas@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Catalin,
 
+On Wed, Dec 01, 2021 at 07:37:49PM +0000, Catalin Marinas wrote:
+> With MTE, even if the pte allows an access, a mismatched tag somewhere
+> within a page can still cause a fault. Select ARCH_HAS_SUBPAGE_FAULTS if
+> MTE is enabled and implement the probe_subpage_*() functions. Note that
+> get_user() is sufficient for the writeable checks since the same tag
+> mismatch fault would be triggered by a read.
 > 
-> > Anyway The plan is what Kai said.  The code will reside in the x86 common
-> > directory instead of kvm.
+> Signed-off-by: Catalin Marinas <catalin.marinas@arm.com>
+> ---
+>  arch/arm64/Kconfig               |  1 +
+>  arch/arm64/include/asm/uaccess.h | 59 ++++++++++++++++++++++++++++++++
+>  2 files changed, 60 insertions(+)
 > 
-> But what's the plan at a higher level?  Will the kernel load the ACM or is that
-> done by firmware?  If it's done by firmware, which entity is responsibile for
-> loading the TDX module?  If firmware loads the module, what's the plan for
-> upgrading the module without a reboot?  When will the kernel initialize the
-> module, regardless of who loads it?
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index c4207cf9bb17..dff89fd0d817 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -1777,6 +1777,7 @@ config ARM64_MTE
+>  	depends on AS_HAS_LSE_ATOMICS
+>  	# Required for tag checking in the uaccess routines
+>  	depends on ARM64_PAN
+> +	select ARCH_HAS_SUBPAGE_FAULTS
+>  	select ARCH_USES_HIGH_VMA_FLAGS
+>  	help
+>  	  Memory Tagging (part of the ARMv8.5 Extensions) provides
+> diff --git a/arch/arm64/include/asm/uaccess.h b/arch/arm64/include/asm/uaccess.h
+> index 6e2e0b7031ab..bcbd24b97917 100644
+> --- a/arch/arm64/include/asm/uaccess.h
+> +++ b/arch/arm64/include/asm/uaccess.h
+> @@ -445,4 +445,63 @@ static inline int __copy_from_user_flushcache(void *dst, const void __user *src,
+>  }
+>  #endif
+>  
+> +#ifdef CONFIG_ARCH_HAS_SUBPAGE_FAULTS
+> +
+> +/*
+> + * Return 0 on success, the number of bytes not accessed otherwise.
+> + */
+> +static inline size_t __mte_probe_user_range(const char __user *uaddr,
+> +					    size_t size, bool skip_first)
+> +{
+> +	const char __user *end = uaddr + size;
+> +	int err = 0;
+> +	char val;
+> +
+> +	uaddr = PTR_ALIGN_DOWN(uaddr, MTE_GRANULE_SIZE);
+> +	if (skip_first)
+> +		uaddr += MTE_GRANULE_SIZE;
 
-The UEFI loads both ACM and TDX module before booting into kernel by using UEFI
-tool.  The runtime update is pushed out for future support.  One goal of
-this is to reduce the code size so that it can be reviewed more easily and
-quickly.
+Do we need the skipping for a functional reason, or is that an optimization?
 
-And yes kernel will initialize the TDX module.  The direction we are heading is
-to allow to defer TDX module initialization when TDX is truly needed, i.e.
-When KVM is loaded with TDX support, or first TD is created.  The code will
-basically still reside in host kernel, provided as functions, etc.  And at first
-stage, KVM will call those functions to initialize TDX when needed.
+From the comments in probe_subpage_writeable() and
+probe_subpage_safe_writeable() I wasn't sure if the skipping was because we
+*don't need to* check the first granule, or because we *must not* check the
+first granule.
 
-The advantage of this approach is it provides more flexibility: the TDX module
-initialization code can be reused by future TDX runtime update, etc.  And with
-only initializing TDX in KVM, the host kernel doesn't need to handle entering
-VMX operation, etc.  It can be introduced later when needed.
+> +	while (uaddr < end) {
+> +		/*
+> +		 * A read is sufficient for MTE, the caller should have probed
+> +		 * for the pte write permission if required.
+> +		 */
+> +		__raw_get_user(val, uaddr, err);
+> +		if (err)
+> +			return end - uaddr;
+> +		uaddr += MTE_GRANULE_SIZE;
+> +	}
 
-> 
-> All of those unanswered questions make it nigh impossible to review the KVM
-> support because the code organization and APIs provided will differ based on how
-> the kernel handles loading and initializing the TDX module.
+I think we may need to account for the residue from PTR_ALIGN_DOWN(), or we can
+report more bytes not copied than was passed in `size` in the first place,
+which I think might confused some callers.
 
-I think theoretically loading/initializing module should be quite independent
-from KVM series, but yes in practice the APIs matter, but I also don't expect
-this will reduce the ability to review KVM series a lot as RFC.
+Consider MTE_GRANULE_SIZE is 16, uaddr is 31, and size is 1 (so end is 32). We
+align uaddr down to 16, and if we fail the first access we return (32 - 16),
+i.e. 16.
 
-Anyway sending out host kernel patches is our top priority now and we are
-trying to do asap.
+Thanks,
+Mark.
+
+> +	(void)val;
+> +
+> +	return 0;
+> +}
+> +
+> +static inline size_t probe_subpage_writeable(const void __user *uaddr,
+> +					     size_t size)
+> +{
+> +	if (!system_supports_mte())
+> +		return 0;
+> +	/* first put_user() done in the caller */
+> +	return __mte_probe_user_range(uaddr, size, true);
+> +}
+> +
+> +static inline size_t probe_subpage_safe_writeable(const void __user *uaddr,
+> +						  size_t size)
+> +{
+> +	if (!system_supports_mte())
+> +		return 0;
+> +	/* the caller used GUP, don't skip the first granule */
+> +	return __mte_probe_user_range(uaddr, size, false);
+> +}
+> +
+> +static inline size_t probe_subpage_readable(const void __user *uaddr,
+> +					    size_t size)
+> +{
+> +	if (!system_supports_mte())
+> +		return 0;
+> +	/* first get_user() done in the caller */
+> +	return __mte_probe_user_range(uaddr, size, true);
+> +}
+> +
+> +#endif /* CONFIG_ARCH_HAS_SUBPAGE_FAULTS */
+> +
+>  #endif /* __ASM_UACCESS_H */

@@ -2,129 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 32E88465828
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4C446582C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:09:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243610AbhLAVNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 16:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54812 "EHLO
+        id S1343917AbhLAVNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 16:13:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233009AbhLAVM7 (ORCPT
+        with ESMTP id S245319AbhLAVND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 16:12:59 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3E5C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 13:09:38 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id y16so32684416ioc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 13:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=SDcnRnl8WP6Hhxu22CYqrzttmdFEJ6bFnF0IuQOZgnM=;
-        b=HIo8SsAV/jdz9Ezru0XkiaGCYNseoT0H9XCbHbUEUQxxnhdW+xPryVmgZIs8RchCVS
-         iVjIkQfiWSh3hFCK3p5QzB243IfIiojauSMYHCnbtSyBlDlAOxTbjKOkl4xk0dvFGjNb
-         +S8xtG82gzw4TCMF/rs/NDRUeqgrwF5zbweeA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=SDcnRnl8WP6Hhxu22CYqrzttmdFEJ6bFnF0IuQOZgnM=;
-        b=QHPVmGervRB4d2bpLYPZPhYQQhZek11W66tCv/GigFmlAE6BiNojlOa6+bismo7aYe
-         jRIa2heN9neCazAfhoOLQjYkJ5iFtox3Dxl77Gy6yzJ8C71JVBgDcFvZFxtEAFPosaWQ
-         bM4rdSLXblfvHoFPvC74LMLVzzDIPkW2m4M63Pplx89XFoEhFJpkaME6xtsBFwfLHyQE
-         nH1nxgRzCZcmaSuz3Joh1TK8pY5iDwYpWTSj+j3O3Q8LSe6Hk43ah5H/4WNqPJnkQeVO
-         DNjSbev+k6t/FG2aO/8ajMTyb75+loeksJavQJ5v87ec+rqGWI6dTW7JELwo+NDfgEQe
-         oWmQ==
-X-Gm-Message-State: AOAM5335D6vvOV3oRO1/kzCIDsOr+rAXbHzJcMSPc7ALcDH0jcq0763Q
-        tmNkxDFjl/Uam3hR1D9gKCgpWjQWYVulEQ==
-X-Google-Smtp-Source: ABdhPJyI9NVGwb44cUTtII9x4AQR24+xui/cOVRgrKaaPqiKnJzyAtq2IaCQcCOg+2S7Hm1m0S4IRA==
-X-Received: by 2002:a5e:8d12:: with SMTP id m18mr10005893ioj.116.1638392977848;
-        Wed, 01 Dec 2021 13:09:37 -0800 (PST)
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com. [209.85.166.175])
-        by smtp.gmail.com with ESMTPSA id z12sm656266ilu.27.2021.12.01.13.09.36
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 13:09:36 -0800 (PST)
-Received: by mail-il1-f175.google.com with SMTP id i9so26880820ilu.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 13:09:36 -0800 (PST)
-X-Received: by 2002:a92:ca0e:: with SMTP id j14mr10532883ils.27.1638392976093;
- Wed, 01 Dec 2021 13:09:36 -0800 (PST)
+        Wed, 1 Dec 2021 16:13:03 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635F3C061748;
+        Wed,  1 Dec 2021 13:09:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id ADAC8CE20EC;
+        Wed,  1 Dec 2021 21:09:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5625C53FCD;
+        Wed,  1 Dec 2021 21:09:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638392978;
+        bh=16Nfdd8O1UZIPT+mMKwLqE1crTPMbdMUdXr+0/0h0fU=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=O3ylG/108bQIwvBrXqecGHm8DjYoBBRtWM14LWqRYpLrmF+vvD2DyNiurWSpFb0t2
+         oWe0QD5EnDi0q/Gh8pWlaPEMUTvxA+yUZQ39spr9FqPA1iV2oq0WOBVA9MMWYYws3E
+         LpUTQp1jRacpFywVHrW4aaC6uE8xo8ld2jK8zlHX2B9mE7OLR5QEBxd3siKTVFUSeZ
+         4OWPNRTBHEtznbuTUCy0BEQRtwtRhB7UcKo6+/rkzWCSLH2Wy9WSE1N0ImEC9BXpbQ
+         42NApEttKJ+P9isVpNxjPbORbXHts6bqvZhUClJG76TXb4tSXqElF/I+XWqG1QjNHs
+         26EQNz2B0toSg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 90C405C1107; Wed,  1 Dec 2021 13:09:38 -0800 (PST)
+Date:   Wed, 1 Dec 2021 13:09:38 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     syzbot <syzbot+fe9d8c955bd1d0f02dc1@syzkaller.appspotmail.com>
+Cc:     bigeasy@linutronix.de, jgross@suse.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        mingo@kernel.org, namit@vmware.com, netdev@vger.kernel.org,
+        peterz@infradead.org, rcu@vger.kernel.org, rdunlap@infradead.org,
+        rostedt@goodmis.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] WARNING in trc_read_check_handler
+Message-ID: <20211201210938.GL641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <00000000000069924b05c8cc3b84@google.com>
+ <000000000000b7e3ee05d21bd19d@google.com>
 MIME-Version: 1.0
-References: <0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com> <YaV0pllJ5p/EuUat@google.com>
-In-Reply-To: <YaV0pllJ5p/EuUat@google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 1 Dec 2021 13:09:24 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=UEA8JG8=tNWMdv2p9jgEm6KCGUeMCi1O4T7eVVnefZjg@mail.gmail.com>
-Message-ID: <CAD=FV=UEA8JG8=tNWMdv2p9jgEm6KCGUeMCi1O4T7eVVnefZjg@mail.gmail.com>
-Subject: Re: [PATCH] mwifiex: Fix possible ABBA deadlock
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Jia-Ju Bai <baijiaju1990@gmail.com>, amitkarwar@gmail.com,
-        ganapathi017@gmail.com, sharvari.harisangam@nxp.com,
-        huxinming820@gmail.com, kvalo@codeaurora.org,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000b7e3ee05d21bd19d@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Dec 01, 2021 at 12:50:07PM -0800, syzbot wrote:
+> syzbot suspects this issue was fixed by commit:
+> 
+> commit 96017bf9039763a2e02dcc6adaa18592cd73a39d
+> Author: Paul E. McKenney <paulmck@kernel.org>
+> Date:   Wed Jul 28 17:53:41 2021 +0000
+> 
+>     rcu-tasks: Simplify trc_read_check_handler() atomic operations
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1281d89db00000
+> start commit:   5319255b8df9 selftests/bpf: Skip verifier tests that fail ..
+> git tree:       bpf-next
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=9290a409049988d4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=fe9d8c955bd1d0f02dc1
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14990477300000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105ebd84b00000
+> 
+> If the result looks correct, please mark the issue as fixed by replying with:
 
-On Mon, Nov 29, 2021 at 4:47 PM Brian Norris <briannorris@chromium.org> wrote:
->
-> Quoting Jia-Ju Bai <baijiaju1990@gmail.com>:
->
->   mwifiex_dequeue_tx_packet()
->      spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 1432 (Lock A)
->      mwifiex_send_addba()
->        spin_lock_bh(&priv->sta_list_spinlock); --> Line 608 (Lock B)
->
->   mwifiex_process_sta_tx_pause()
->      spin_lock_bh(&priv->sta_list_spinlock); --> Line 398 (Lock B)
->      mwifiex_update_ralist_tx_pause()
->        spin_lock_bh(&priv->wmm.ra_list_spinlock); --> Line 941 (Lock A)
->
-> Similar report for mwifiex_process_uap_tx_pause().
->
-> While the locking expectations in this driver are a bit unclear, the
-> Fixed commit only intended to protect the sta_ptr, so we can drop the
-> lock as soon as we're done with it.
->
-> IIUC, this deadlock cannot actually happen, because command event
-> processing (which calls mwifiex_process_sta_tx_pause()) is
-> sequentialized with TX packet processing (e.g.,
-> mwifiex_dequeue_tx_packet()) via the main loop (mwifiex_main_process()).
-> But it's good not to leave this potential issue lurking.
->
-> Fixes: ("f0f7c2275fb9 mwifiex: minor cleanups w/ sta_list_spinlock in cfg80211.c")
-> Cc: Douglas Anderson <dianders@chromium.org>
-> Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-> Link: https://lore.kernel.org/linux-wireless/0e495b14-efbb-e0da-37bd-af6bd677ee2c@gmail.com/
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
-> ---
->
-> On Tue, Nov 23, 2021 at 11:31:34AM +0800, Jia-Ju Bai wrote:
-> > I am not quite sure whether these possible deadlocks are real and how to fix
-> > them if they are real.
-> > Any feedback would be appreciated, thanks :)
->
-> I think these are at least theoretically real, and so we should take
-> something like the $subject patch probably. But I don't believe we can
-> actually hit this due to the main-loop structure of this driver.
->
-> Anyway, see the surrounding patch.
->
-> Thanks,
-> Brian
->
->
->  drivers/net/wireless/marvell/mwifiex/sta_event.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
+#syz fix: rcu-tasks: Simplify trc_read_check_handler() atomic operations
 
-Though I'm by no means an expert on this code and I wrote the patch in
-question a long time ago, this seems reasonable to me. Thanks for
-fixing.
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Give or take.  There were quite a few related bugs, so some or all of
+the following commits might also have helped:
+
+cbe0d8d91415c rcu-tasks: Wait for trc_read_check_handler() IPIs
+18f08e758f34e rcu-tasks: Add trc_inspect_reader() checks for exiting critical section
+46aa886c483f5 rcu-tasks: Fix IPI failure handling in trc_wait_for_one_reader
+
+Quibbles aside, it is nice to get an automated email about having fixed
+a bug as opposed to having added one.  ;-)
+
+							Thanx, Paul

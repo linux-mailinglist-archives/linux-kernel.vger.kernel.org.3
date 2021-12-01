@@ -2,99 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3783A464485
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 02:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E35464488
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 02:33:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240806AbhLABgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 20:36:51 -0500
-Received: from out30-132.freemail.mail.aliyun.com ([115.124.30.132]:51031 "EHLO
-        out30-132.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230044AbhLABgt (ORCPT
+        id S241159AbhLABhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 20:37:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241111AbhLABg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 20:36:49 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=cuibixuan@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0UyvGYGl_1638322402;
-Received: from VM20210331-25.tbsite.net(mailfrom:cuibixuan@linux.alibaba.com fp:SMTPD_---0UyvGYGl_1638322402)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 01 Dec 2021 09:33:26 +0800
-From:   Bixuan Cui <cuibixuan@linux.alibaba.com>
-To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, andrii.nakryiko@gmail.com
-Cc:     cuibixuan@linux.alibaba.com, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Subject: [PATCH -next v2] bpf: Add oversize check before call kvmalloc()
-Date:   Wed,  1 Dec 2021 09:33:22 +0800
-Message-Id: <1638322402-54754-1-git-send-email-cuibixuan@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Tue, 30 Nov 2021 20:36:59 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA176C061746;
+        Tue, 30 Nov 2021 17:33:39 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id x6so28476402iol.13;
+        Tue, 30 Nov 2021 17:33:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z6+Hsl2E7Fnoefi4agcFRg7vLMjgK5Iu6TjBvSeyeqU=;
+        b=i+kUWaVqqQZG9C824ctJ3vKTiwSiGEPuzWPmD6nxB1isjgMBq9ueQVb2J7WGfUoOsP
+         dAokJBh1JXTjMUA107+TkDuGzB7CfvcQkFrZiGrOVchE9y4N2Tu7JXfjuNqCRrmFnEM4
+         /R+zMMiycEZBYYqbQzW+hPEIUvCVcmnwGlRLsuDjU6+s0rNjIZSWYlD+rARVK5XDDADQ
+         MAY7uj621/0AaiL1xZg8GyVdhpLD3CyrqiGBBC4xlT5w9b+TwkYPgRsP9/GIY52vUP3I
+         biMS4DaVlzka/KAJ3UeGvDjmSDp4FeFxiFGkHEbLhRDVAA6oz8Cc5CJzImWZga6sEkLD
+         s1Ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=z6+Hsl2E7Fnoefi4agcFRg7vLMjgK5Iu6TjBvSeyeqU=;
+        b=kW9gKhWisogNtn2K3+02auZqWhll+9JFLLkFPIeJLLd/7j2MMG+yXnl2EUCMmhL+jt
+         4NpzW0FB9TRqGbEFdMAZyp64+ce3W+uR66vwlN05PgjrFyD4rzOuIj6ms79Db3XOQSmO
+         VHGwJkC/WEovG3aa8ATAv/BI03Q9YqiHM1hfpN2AGkvnjXRGxWfTOnIg67hlgGT9+/FI
+         ltkg28BqpWartsz5s5XYqgDRYckfZcwo658S4qMio4JWRTk5cQIYM+iTouFG/bNLCwWD
+         61/EQUI1pgFPTcPwLk7IZRlFfD0fDAma5URiJO7iQ6idWFFRRisIttdL1xwS2TtI0frj
+         /JOA==
+X-Gm-Message-State: AOAM5332I/Ho9nMT4LB8HVbT0GSNFsldK/xkw7/eAYI0sOcwgHlkPI3R
+        Bsh85J0/AvTwUCieQ2j3+ZfUjwWCMWUBRJpt
+X-Google-Smtp-Source: ABdhPJyW+HrcS0ZmOpkgFwvWGKGW6/Hwc9Osh0IEW7UhpCwjn64FvGv3Cn9B4lISIyqF86IIatHz8w==
+X-Received: by 2002:a05:6602:2e81:: with SMTP id m1mr4265751iow.55.1638322418535;
+        Tue, 30 Nov 2021 17:33:38 -0800 (PST)
+Received: from aford-IdeaCentre-A730.lan ([2601:448:8400:9e8:b7ee:f768:f33c:c028])
+        by smtp.gmail.com with ESMTPSA id u24sm11856737ior.20.2021.11.30.17.33.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 17:33:38 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-media@vger.kernel.org
+Cc:     ezequiel@vanguardiasur.com.ar, hverkuil@xs4all.nl,
+        tharvey@gateworks.com, nicolas@ndufresne.ca,
+        aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev
+Subject: [RFC V2 0/2] arm64: imx8mm: Enable Hantro VPUs
+Date:   Tue, 30 Nov 2021 19:33:27 -0600
+Message-Id: <20211201013329.15875-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.32.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 7661809d493b ("mm: don't allow oversized kvmalloc() calls") add
-the oversize check. When the allocation is larger than what kvmalloc()
-supports, the following warning triggered:
+The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
+to be related to the video decoders used on the i.MX8MQ, but because of
+how the Mini handles the power domains, the VPU driver does not need to
+handle all the functions, nor does it support the post-processor,
+so a new compatible flag is required.
 
-WARNING: CPU: 1 PID: 372 at mm/util.c:597 kvmalloc_node+0x111/0x120
-mm/util.c:597
-Modules linked in:
-CPU: 1 PID: 372 Comm: syz-executor.4 Not tainted 5.15.0-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-Google 01/01/2011
-RIP: 0010:kvmalloc_node+0x111/0x120 mm/util.c:597
-Code: 01 00 00 00 4c 89 e7 e8 7d f7 0c 00 49 89 c5 e9 69 ff ff ff e8 60
-20 d1 ff 41 89 ed 41 81 cd 00 20 01 00 eb 95 e8 4f 20 d1 ff <0f> 0b e9
-4c ff ff ff 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 36
-RSP: 0018:ffffc90002bf7c98 EFLAGS: 00010216
-RAX: 00000000000000ec RBX: 1ffff9200057ef9f RCX: ffffc9000ac63000
-RDX: 0000000000040000 RSI: ffffffff81a6a621 RDI: 0000000000000003
-RBP: 0000000000102cc0 R08: 000000007fffffff R09: 00000000ffffffff
-R10: ffffffff81a6a5de R11: 0000000000000000 R12: 00000000ffff9aaa
-R13: 0000000000000000 R14: 00000000ffffffff R15: 0000000000000000
-FS:  00007f05f2573700(0000) GS:ffff8880b9d00000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2f424000 CR3: 0000000027d2c000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kvmalloc include/linux/slab.h:741 [inline]
- map_lookup_elem kernel/bpf/syscall.c:1090 [inline]
- __sys_bpf+0x3a5b/0x5f00 kernel/bpf/syscall.c:4603
- __do_sys_bpf kernel/bpf/syscall.c:4722 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:4720 [inline]
- __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4720
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
+With the suggestion from Hans Verkuil, I was able to get the G2 splat to go away
+with changes to FORCE_MAX_ZONEORDER, but I found I could also set cma=512M, however
+it's unclear to me if that's an acceptable alternative.
 
-The type of 'value_size' is u32, its value may exceed INT_MAX.
+At the suggestion of Ezequiel Garcia and Nicolas Dufresne I have some
+results from Fluster. However, the G2 VPU appears to fail most tests.
 
-Reported-by: syzbot+cecf5b7071a0dfb76530@syzkaller.appspotmail.com
-Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
----
-Changes in v2:
-* Change the err from -EINVAL to -E2BIG;
-* Change "goto err_put" to "goto free_key";
+./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
+Ran 90/135 tests successfully               in 76.431 secs
 
- kernel/bpf/syscall.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
+Ran 55/61 tests successfully               in 21.454 secs
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 1033ee8..30aabdd 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1094,6 +1094,10 @@ static int map_lookup_elem(union bpf_attr *attr)
- 	}
- 
- 	value_size = bpf_map_value_size(map);
-+	if (value_size > INT_MAX) {
-+		err = -E2BIG;
-+		goto free_key;
-+	}
- 
- 	err = -ENOMEM;
- 	value = kvmalloc(value_size, GFP_USER | __GFP_NOWARN);
+./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
+Ran 0/303 tests successfully               in 20.016 secs
+
+Each day seems to show more and more G2 submissions, and gstreamer seems to be 
+still working on the VP9, so I am not sure if I should drop G2 as well.
+
+
+Adam Ford (2):
+  media: hantro: Add support for i.MX8M Mini
+  arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
+
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi   | 41 +++++++++++++++
+ drivers/staging/media/hantro/hantro_drv.c   |  2 +
+ drivers/staging/media/hantro/hantro_hw.h    |  2 +
+ drivers/staging/media/hantro/imx8m_vpu_hw.c | 57 +++++++++++++++++++++
+ 4 files changed, 102 insertions(+)
+
 -- 
-1.8.3.1
+2.32.0
 

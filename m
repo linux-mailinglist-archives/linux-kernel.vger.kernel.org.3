@@ -2,126 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A408C466611
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:01:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFCC46683C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357768AbhLBPEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:04:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347390AbhLBPEs (ORCPT
+        id S1359617AbhLBQbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:31:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:54302 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347878AbhLBQaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:04:48 -0500
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C734C061757
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 07:01:26 -0800 (PST)
-Received: by mail-yb1-xb34.google.com with SMTP id d10so531617ybn.0
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 07:01:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VTobswxlLE4YejykxhV8zQJTLNxk0g77t+kXOsxPmSs=;
-        b=dhagCgKIjVqCtJ/HmkKDllriSJHfF9F/NZDjIOCTilwFjJ1zD8mgWDnyjoVYTCzxRh
-         Fp/Wng8+N8qqaoR7W/YCoWmf3kmcv4ds76TGrz9Zd8xzJRo2vBQroztKCz1pWjdNOqcg
-         n/Vc+aiT1CTO/ZXZM6cA65h+OEB061lekMyX177rM+BJ92aGFjJWivUvwuDne8PNeNaT
-         OZ6m1oxNJ3KlBSrB7tCHBMCQmCGZEE5GKf0g/+F4tyN9wAnfjoabKVoD0v8JcPyJT1dS
-         sCfYfAV8iEuxR1Dx6ynPLPqaFgDnKU1l77hhOVXs3Qr8BDXayT56k6bdTY11estUNQuk
-         XB8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VTobswxlLE4YejykxhV8zQJTLNxk0g77t+kXOsxPmSs=;
-        b=AMQwwXewSH7usF42SpdkvG4atQ37Rx0p2p395O958e9LQSHmj3IQc5PAow6RDzMLz7
-         itJgk0S8HRDrn2/qbFDaqgDBMl9lcr9t1nOsbKNTo1LjuqgrWpWwPW0r3Omvd9VSkKBe
-         jPFdLJAuCPztnXmDrN4K/cdj0QvCzO9r2SVxAbTTWnF8LOXDbQvwv96pD7U3ZthdWrhY
-         SMH7pvKQhwviqs8JCmQfRe25UvBYqIp8NYSUPZ+mipVZ3MMYZwONKu95cBiIiJYlFPXy
-         xEEetVoWtE5l3940Gv6lVw170LG8HdBjGtTnxxPLOl4Z7TDa/W6R4Soi26/mhK1MWR1v
-         zaJA==
-X-Gm-Message-State: AOAM533hxvGbilayq0gxfRe5t0656rwdagxMg5bVOVS/ds/M7wjJ/VFc
-        q0vtfxy4exshQQmbFshtu+6ld1a4ThV/gzf3vTXpCuly2mzhiw==
-X-Google-Smtp-Source: ABdhPJy0EPYw/QrnIPBWnWcPSjiwL6Gw0AaYK3evS7TveIVfxAUCNgXk+f7PZhTcCBqiCnn2wSKsd4F90v3JD7HYKCU=
-X-Received: by 2002:a25:760d:: with SMTP id r13mr17012907ybc.296.1638457284795;
- Thu, 02 Dec 2021 07:01:24 -0800 (PST)
+        Thu, 2 Dec 2021 11:30:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638462418;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NYCh2dhHffxrJlRcZGBoZYUArmtQ7dENpgOfY14c6PY=;
+        b=FajmVESk7sxNlez5Q5y8dFCubK2BMUX7wkUc2APl775QUB81lR7F/CFolXyey9Vw1DtkYL
+        T0q1Qw+uonfm7fj7W0+HXAkBoAKB9WBaXYiyslVl7ySM5GHq0tk2zymdDg+E2Xodws408V
+        s9gt4M3lVYythyQPjqDVnVDLNpxugnk=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-384-mXFpOi1mOk-kiYIYOoKZ4Q-1; Thu, 02 Dec 2021 11:26:53 -0500
+X-MC-Unique: mXFpOi1mOk-kiYIYOoKZ4Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6A8AC10151E6;
+        Thu,  2 Dec 2021 16:26:51 +0000 (UTC)
+Received: from fuller.cnet (ovpn-112-3.gru2.redhat.com [10.97.112.3])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id EC27819C46;
+        Thu,  2 Dec 2021 16:26:50 +0000 (UTC)
+Received: by fuller.cnet (Postfix, from userid 1000)
+        id 89AD5416CE5D; Wed,  1 Dec 2021 11:01:50 -0300 (-03)
+Date:   Wed, 1 Dec 2021 11:01:50 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Nicolas Saenz Julienne <nsaenzju@redhat.com>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        frederic@kernel.org, tglx@linutronix.de, peterz@infradead.org,
+        nilal@redhat.com, mgorman@suse.de, linux-rt-users@vger.kernel.org,
+        cl@linux.com, ppandit@redhat.com
+Subject: Re: [PATCH v2 0/3] mm/page_alloc: Remote per-cpu page list drain
+ support
+Message-ID: <20211201140149.GA12861@fuller.cnet>
+References: <20211103170512.2745765-1-nsaenzju@redhat.com>
+ <7549db15-5149-160f-86e3-55136fe482ce@suse.cz>
+ <43462fe11258395f4e885c3d594a3ed1b604b858.camel@redhat.com>
 MIME-Version: 1.0
-References: <20211125193852.3617-1-goldstein.w.n@gmail.com>
- <CANn89iLnH5B11CtzZ14nMFP7b--7aOfnQqgmsER+NYNzvnVurQ@mail.gmail.com>
- <CAFUsyfK-znRWJN7FTMdJaDTd45DgtBQ9ckKGyh8qYqn0eFMMFA@mail.gmail.com>
- <CAFUsyfLKqonuKAh4k2qdBa24H1wQtR5FkAmmtXQGBpyizi6xvQ@mail.gmail.com>
- <CAFUsyfJ619Jx_BS515Se0V_zRdypOg3_2YzbKUk5zDBNaixhaQ@mail.gmail.com>
- <8e4961ae0cf04a5ca4dffdec7da2e57b@AcuMS.aculab.com> <CAFUsyfLoEckBrnYKUgqWC7AJPTBDfarjBOgBvtK7eGVZj9muYQ@mail.gmail.com>
- <29cf408370b749069f3b395781fe434c@AcuMS.aculab.com>
-In-Reply-To: <29cf408370b749069f3b395781fe434c@AcuMS.aculab.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 2 Dec 2021 07:01:13 -0800
-Message-ID: <CANn89iJgNie40sGqAyJ8CM3yKNqRXGGPkMtTPwXQ4S_9jVspgw@mail.gmail.com>
-Subject: Re: [PATCH v1] x86/lib: Optimize 8x loop and memory clobbers in csum_partial.c
-To:     David Laight <David.Laight@aculab.com>
-Cc:     Noah Goldstein <goldstein.w.n@gmail.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "alexanderduyck@fb.com" <alexanderduyck@fb.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <43462fe11258395f4e885c3d594a3ed1b604b858.camel@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 6:24 AM David Laight <David.Laight@aculab.com> wrote:
->
-> I've dug out my test program and measured the performance of
-> various copied of the inner loop - usually 64 bytes/iteration.
-> Code is below.
->
-> It uses the hardware performance counter to get the number of
-> clocks the inner loop takes.
-> This is reasonable stable once the branch predictor has settled down.
-> So the different in clocks between a 64 byte buffer and a 128 byte
-> buffer is the number of clocks for 64 bytes.
-> (Unlike the TSC the pmc count doesn't depend on the cpu frequency.)
->
-> What is interesting is that even some of the trivial loops appear
-> to be doing 16 bytes per clock for short buffers - which is impossible.
-> Checksum 1k bytes and you get an entirely different answer.
-> The only loop that really exceeds 8 bytes/clock for long buffers
-> is the adxc/adoc one.
->
-> What is almost certainly happening is that all the memory reads and
-> the dependant add/adc instructions are all queued up in the 'out of
-> order' execution unit.
-> Since 'rdpmc' isn't a serialising instruction they can still be
-> outstanding when the function returns.
-> Uncomment the 'rdtsc' and you get much slower values for short buffers.
->
-> When testing the full checksum function the queued up memory
-> reads and adc are probably running in parallel with the logic
-> that is handling lengths that aren't multiples of 64.
->
-> I also found nothing consistently different for misaligned reads.
->
-> These were all tested on my i7-7700 cpu.
->
+On Tue, Nov 30, 2021 at 07:09:23PM +0100, Nicolas Saenz Julienne wrote:
+> Hi Vlastimil, sorry for the late reply and thanks for your feedback. :)
+> 
+> On Tue, 2021-11-23 at 15:58 +0100, Vlastimil Babka wrote:
+> > > [1] Other approaches can be found here:
+> > > 
+> > >   - Static branch conditional on nohz_full, no performance loss, the extra
+> > >     config option makes is painful to maintain (v1):
+> > >     https://lore.kernel.org/linux-mm/20210921161323.607817-5-nsaenzju@redhat.com/
+> > > 
+> > >   - RCU based approach, complex, yet a bit less taxing performance wise
+> > >     (RFC):
+> > >     https://lore.kernel.org/linux-mm/20211008161922.942459-4-nsaenzju@redhat.com/
+> > 
+> > Hm I wonder if there might still be another alternative possible. IIRC I did
+> > propose at some point a local drain on the NOHZ cpu before returning to
+> > userspace, and then avoiding that cpu in remote drains, but tglx didn't like
+> > the idea of making entering the NOHZ full mode more expensive [1].
+> > 
+> > But what if we instead set pcp->high = 0 for these cpus so they would avoid
+> > populating the pcplists in the first place? Then there wouldn't have to be a
+> > drain at all. On the other hand page allocator operations would not benefit
+> > from zone lock batching on those cpus. But perhaps that would be acceptable
+> > tradeoff, as a nohz cpu is expected to run in userspace most of the time,
+> > and page allocator operations are rare except maybe some initial page
+> > faults? (I assume those kind of workloads pre-populate and/or mlock their
+> > address space anyway).
+> 
+> I've looked a bit into this and it seems straightforward. Our workloads
+> pre-populate everything, and a slight statup performance hit is not that tragic
+> (I'll measure it nonetheless). The per-cpu nohz_full state at some point will
+> be dynamic, but the feature seems simple to disable/enable. I'll have to teach
+> __drain_all_pages(zone, force_all_cpus=true) to bypass this special case
+> but that's all. I might have a go at this.
+> 
+> Thanks!
+> 
+> -- 
+> Nicolás Sáenz
 
-I usually do not bother timing each call.
-I instead time a loop of 1,000,000,000 calls.
-Yes, this includes loop cost, but this is the same cost for all variants.
-   for (i = 0; i < 100*1000*1000; i++) {
-        res += csum_partial((void *)frame + 14 + 64*0, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*1, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*2, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*3, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*4, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*5, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*6, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*7, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*8, 40, 0);
-        res += csum_partial((void *)frame + 14 + 64*9, 40, 0);
-    }
+True, but a nohz cpu does not necessarily have to run in userspace most
+of the time. For example, an application can enter nohz full mode, 
+go back to userspace, idle, return from idle all without leaving
+nohz_full mode.
 
-Then use " perf stat ./bench"   or similar.
+So its not clear that nohz_full is an appropriate trigger for setting
+pcp->high = 0. Perhaps a task isolation feature would be an appropriate
+location.
+
+
+

@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 721924643F4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:33:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A494643FB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:37:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345790AbhLAAgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 19:36:37 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:37018 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345744AbhLAAgZ (ORCPT
+        id S1345829AbhLAAkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 19:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345797AbhLAAkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 19:36:25 -0500
-Date:   Wed, 01 Dec 2021 00:33:02 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638318783;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rezJIXcD/bfCi74XzQZQj0U0qRybCQo491/BBzNqnj8=;
-        b=2QXb9qOlyp4NEMi8Y1O6UjLAijytKz18H159rubRJK5bcTR1flsOoQnqBGf2L6UsokOace
-        jAt2+i0yVs/dm2sFW9YJj9egXUOtzGRYsNgHkz3iKMtYRlK25ma01hG+gZ6Um0wrr40rAu
-        tUhrNe7JcS3YMI5wmXsKlvMppsF4j+PmMl/nFkkFLII1+n013xnIRHHSIDc5aEh8/3oNpi
-        98A4RNrhocXzRjIAYcTVTxPhYu+mzhZecO8vxpBdBLo42cA6DOzDRYKzRm+RbzB5rZ4rd8
-        RG0x2Kjw23MNWzaSIyI3f3EgDJeTjp/ba7bda/GyapWImABJr7MwtUGALPYVOA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638318783;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=rezJIXcD/bfCi74XzQZQj0U0qRybCQo491/BBzNqnj8=;
-        b=JxywvDMW2JTOBct2r3p6eHiDE1jMHbRDaner2GTJmNE/vMpPwkVZdydrxLMBbhXUPLPQP/
-        eWeuJiAL2mlCzVAg==
-From:   "tip-bot2 for Eric Dumazet" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/csum: Fix initial seed for odd buffers
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Noah Goldstein <goldstein.w.n@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20211125141817.3541501-1-eric.dumazet@gmail.com>
-References: <20211125141817.3541501-1-eric.dumazet@gmail.com>
+        Tue, 30 Nov 2021 19:40:21 -0500
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5563AC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:37:01 -0800 (PST)
+Received: by mail-io1-xd31.google.com with SMTP id x6so28342884iol.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:37:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6KT7YyaxqjVs5mSuQwjMampQZClAeRv4K4OAPJNJd20=;
+        b=ZSeoFG71k5erKk/MKPfg36Ze35fwc7Cua8svHc9JAorrJC+frFECdyJzDHIzZKGRce
+         wYUG3w6YTmcSVnoOmf3s5zPBgrqTHph+DcndRt3PAClRXL+NnbMT+bW9nd8VwWkMWH8U
+         aGhALR3nY0eGcGQCmuuxO199U29F0+oFV8xSwDq55/+z17KERuy3l7FSBdhZ+mbqpw9A
+         isN+7VlTAQf9JRT63HkP7fcl4h1A07jZ2jhFy6V0+j3olZkT8vpL9Vk8LNKylPHf6+FJ
+         x6da5lqrPnBq16RL+m1Ig0BVHuCWFgMJhsON6MtHwUM/x1mKWbLAaBOELMGr1hYQML5h
+         eUpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6KT7YyaxqjVs5mSuQwjMampQZClAeRv4K4OAPJNJd20=;
+        b=hmVoGkQfiKetCOPUHjElGJRwjDwWSHYdwiWZGd7OsXPqIRfFiSCUQAp0+zESJOySfv
+         S6MfyBIBZcM6/qSauHzcCqQEpgN7eGM83MRocYU/I7z5pEkX/p/5PuxzisKBjWaiBVoe
+         2PnV6jjYFU+RcQGY6wcQLuxMxD6UTsxbkigmpzNRn6W7HZckXvAHZQr+5a76ImjuE7zA
+         TYV8jUZVF+csnFZCZkEG43AUXAu/cDtFoGdI09ePndeq7M9XLbbN3NLO0ymdNhXcjSDj
+         GCD2xwfyfnxC7Berci3HVLvjFzPqiaP32HXI0keDGjI15wFzzzHrszUtZnEr5Vxj6nVO
+         ghIQ==
+X-Gm-Message-State: AOAM5310K9d0hjMmrVUAxCmFY5gEACJMuZLXOOChfDTNQyy7Pz9Dpm8G
+        ZjiVtmiGzf0J5QZkbkfIih0iavgt8ptlpBhP4wBM4w==
+X-Google-Smtp-Source: ABdhPJxEWWGRI9CkNjtOLdkRHCbCAy0RCyi3Yn1qBz5cJ/XJJEFadsnDmkChbvW9Dh+395dbt1IVilO9VUKyXyTDpTo=
+X-Received: by 2002:a5d:9492:: with SMTP id v18mr3969213ioj.158.1638319020517;
+ Tue, 30 Nov 2021 16:37:00 -0800 (PST)
 MIME-Version: 1.0
-Message-ID: <163831878239.11128.3793034988701149763.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+References: <20211129231830.1117781-1-namhyung@kernel.org> <YaY3JqOQ2XE22VId@kernel.org>
+ <CAM9d7cjXncRRsH1Zf_yVrLeaYiHXLFM29sx0MYPAZ8HAsZaggw@mail.gmail.com>
+In-Reply-To: <CAM9d7cjXncRRsH1Zf_yVrLeaYiHXLFM29sx0MYPAZ8HAsZaggw@mail.gmail.com>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Tue, 30 Nov 2021 16:36:49 -0800
+Message-ID: <CABPqkBQgr3ck_jnFbdLOKgpzrz4RhE3svTvkiOLY9KgvjQjU9w@mail.gmail.com>
+Subject: Re: [RFC/PATCHSET 0/5] perf ftrace: Implement function latency
+ histogram (v1)
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Song Liu <songliubraving@fb.com>,
+        Changbin Du <changbin.du@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/core branch of tip:
-
-Commit-ID:     2a144bcd661c4f0a503e03f9280e88854ac0bb37
-Gitweb:        https://git.kernel.org/tip/2a144bcd661c4f0a503e03f9280e88854ac0bb37
-Author:        Eric Dumazet <edumazet@google.com>
-AuthorDate:    Thu, 25 Nov 2021 06:18:17 -08:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 30 Nov 2021 16:26:03 -08:00
-
-x86/csum: Fix initial seed for odd buffers
-
-When I folded do_csum() into csum_partial(), I missed that we
-had to swap odd/even bytes from @sum argument.
-
-This is because this swap will happen again at the end of the function.
-
-[A, B, C, D] -> [B, A, D, C]
-
-As far as Internet checksums (rfc 1071) are concerned, we can instead
-rotate the whole 32bit value by 8 (or 24)
-
--> [D, A, B, C]
-
-Note that I played with the idea of replacing this final swapping:
-
-    result = from32to16(result);
-    result = ((result >> 8) & 0xff) | ((result & 0xff) << 8);
-
-With:
-
-    result = ror32(result, 8);
-
-But while the generated code was definitely better for the odd case,
-run time cost for the more likely even case was not better for gcc.
-
-gcc is replacing a well predicted conditional branch
-with a cmov instruction after a ror instruction which adds
-a cost canceling the cmov gain.
-
-Many thanks to Noah Goldstein for reporting this issue.
-
-[ dhansen: * spelling: swaping => swapping
-	   * updated Fixes commit  ]
-
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Fixes: d31c3c683ee6 ("x86/csum: Rewrite/optimize csum_partial()")
-Reported-by: Noah Goldstein <goldstein.w.n@gmail.com>
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20211125141817.3541501-1-eric.dumazet@gmail.com
----
- arch/x86/lib/csum-partial_64.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/x86/lib/csum-partial_64.c b/arch/x86/lib/csum-partial_64.c
-index 1eb8f2d..40b527b 100644
---- a/arch/x86/lib/csum-partial_64.c
-+++ b/arch/x86/lib/csum-partial_64.c
-@@ -41,6 +41,7 @@ __wsum csum_partial(const void *buff, int len, __wsum sum)
- 	if (unlikely(odd)) {
- 		if (unlikely(len == 0))
- 			return sum;
-+		temp64 = ror32((__force u32)sum, 8);
- 		temp64 += (*(unsigned char *)buff << 8);
- 		len--;
- 		buff++;
+On Tue, Nov 30, 2021 at 2:58 PM Namhyung Kim <namhyung@kernel.org> wrote:
+>
+> Hi Arnaldo,
+>
+> On Tue, Nov 30, 2021 at 6:37 AM Arnaldo Carvalho de Melo
+> <acme@kernel.org> wrote:
+> >
+> > Em Mon, Nov 29, 2021 at 03:18:25PM -0800, Namhyung Kim escreveu:
+> > > Hello,
+> > >
+> > > I've implemented 'latency' subcommand in the perf ftrace command to
+> > > show a histogram of function latency.
+> > >
+> > > To handle new subcommands, the existing functionality is moved to
+> > > 'trace' subcommand while preserving backward compatibility of not
+> > > having a subcommand at all (defaults to 'trace').
+> > >
+> > > The latency subcommand accepts a target (kernel, for now) function
+> > > with -T option and shows a histogram like below:
+> >
+> > Humm, wouldn't be interesting to shorten this by having a new 'perf
+> > flat' (function latency) tool, on the same level as 'perf ftrace' and
+> > leave 'perf ftrace' to just being a convenient perf interface to what
+> > ftrace provides?
+>
+> That would be fine.  I also think 'perf ftrace latency' is
+> bit too long.  But if we would add a new feature
+> like argdist (in BCC) later, I thought it'd be nice being
+> a subcommand in the perf ftrace together.
+>
+> But it's up to you.  I'll make a change if you prefer
+> 'flat' (or how about 'fnlat' instead?).
+>
+I am not too fond of the flat option because as we had more bpf tools
+like function latency, then we keep extending the list of commands
+each with a small span which is different
+from what we have right now.

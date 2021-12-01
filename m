@@ -2,577 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 089EA464569
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDF23464573
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346440AbhLADax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:30:53 -0500
-Received: from mail-mw2nam10on2088.outbound.protection.outlook.com ([40.107.94.88]:27873
-        "EHLO NAM10-MW2-obe.outbound.protection.outlook.com"
+        id S1346455AbhLADd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:33:28 -0500
+Received: from mail-eopbgr1300121.outbound.protection.outlook.com ([40.107.130.121]:48733
+        "EHLO APC01-HK2-obe.outbound.protection.outlook.com"
         rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S231315AbhLADat (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:30:49 -0500
+        id S245220AbhLADd1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 22:33:27 -0500
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eGtCRoN+6wF9WcI4jpaCJP7vQJwIwdZYirUNmKN1G/jEqL3qZHu5c2QY/4tSzAbGP0OHGQgqzXC+KBIBjrMExz1YO2k8CAJZgFQeNzwZToA7+ZFfNOCUWbq6LAM7OVysXw1dHSdmlsanQokOm9TSigGLdAzEtkxjZDtPOFy/zzOJknWFluGiGsPK6V/wWNocaogC3KnIGCfWz7Kcc90d5MZ9iTJd6NLNvnoVFZmUJ/PiCbNipasWdTJpLDfGII3DHXUo1eG7nLZrMR1yn8sIpo/WgAlOQBfbXwUzYorWVm/N+86S2t89pRyaWcyW8ZIv9apaP0BGEjtBzvbRDEh2dg==
+ b=e6oBVPmHj5yC/x4BeKZhWMzBjzIoUwT6BHuiJIE+4qWvrNHg3IbjhQnmb9t+T2ZI24J1ZK151Q4+Zb1PuM5Yu24B9Iy9Bv6XPFxUEaTzDEvtlM1inPvMQJ9hp4tHXqMuvc7wUrmWaWr6J/nlhsaIanu3QAjkeUbyUdv194O1IFK3ImGQ64WPqQKyx5oKvh+1UudZZa1YAUrO+lyO6zIHKkVY4Q4QH+Bkn2oL+7qDA36WihtQ0kaOV0wY9MHFXxB9wDizFeBqg/GLEbbFOHOsDRQbvLauPJXaNSaUo4Kp6gLCGd9785RbzEGpam9e0UnQVfSqlZ+8Ri+MLeBum4LLOQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9FIVR9wjSUL/ueHECeLQJPYGzGLsxM7us8lSWniboCc=;
- b=Yano5R4/7fToKCFmDLbQ0lFgF/l5zbTnpyHFsXbCrYf2IR8IIxZnzcljre/z6iNUTshp0BH3rfiv9ptxZCUNq3QVAv/XPT5TEEpp/lsAiLhmFlY1lbKRixq1pH2b7jWMIJZfRO6QFWQlERRtLtjDzOdbTToIAa6QeoZcweyOsm0WlcdSgty9LsgQTZIRjT7ibrZOqXRmyWCJ4h+ZZx4ajyOj40eDL3oV/RIlCg7AAVp6gjg6ghF2vrqYCcQjYsyDiWoWLHJNvoofsTeYSJJG15SqHyiFJQ4qmU3KcBPucUJJgrGw7Byn0sPN+T3XyxhMJ6Lx9SMJlUQz5eWftBV5lA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.36) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=zhn2E5zgNPWe4iBn3QbiHL+sH7qU2oR6LAD0dCxSK0I=;
+ b=U+zCo3kW2MGY8eF5ZiEgt9dkNrCiyCmyR3RgHElmjfhzKpNj2lpAXzUNVR+xhISfne7bWcXr5aFoo8adN+CwH/dUDPALXaYHpPuiKEdKRpLJWazeunC80wMKp0yiIEypMrVyil6mWwhS96yDfh30I36UIGIBK8HBsQNW0CxMxpFB93t/9Ry324DufjMomAcWAuMgamU0KKVp+K1Xst7OMscPVjnyZX7sDm+Fk7xsv6MAdwY8V4OlABb6F+Om7A1RvBrAVZr4ptRnLbNp3o83KwK47nkP4ch/5bFkPgyS2AN6cxveN/fhwdR6h9hoIHFNMhxPeSBnbWSAWidrjrFT7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=aspeedtech.com; dmarc=pass action=none
+ header.from=aspeedtech.com; dkim=pass header.d=aspeedtech.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aspeedtech.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9FIVR9wjSUL/ueHECeLQJPYGzGLsxM7us8lSWniboCc=;
- b=Wvth/Tga+QPQt6iCMlPINE5g40p0JM3Hj08srtvEcrA1R0hISYxWv0CeEMBDXfWYz5ulnXPXJrU9ReEcFgeOpurxBjbydNabPdEngVWnRv9PowC5pDvpkoTcsn02WmHiK4qtlhb7yKPLwJBuCKAtDALPIaIDrsoydH1dxlkFGhooX4Iab8AoNHEDL99Ov4hVPg+fOth1uoGBD4Gu87bN3LNZGuKF0fIHTwa5hnTMtx2+cDQ+jEfjyQoAFMSR63LcXyj7pr3NJGYTpNtZNlUG5C3agWTNGjc1cWHtdX8iYbyEyyKjxuOeV/rRGFPRVtxccx0fHVizfdPHkSkHqtaFSg==
-Received: from MW4PR04CA0363.namprd04.prod.outlook.com (2603:10b6:303:81::8)
- by CY4PR1201MB0038.namprd12.prod.outlook.com (2603:10b6:910:19::9) with
+ bh=zhn2E5zgNPWe4iBn3QbiHL+sH7qU2oR6LAD0dCxSK0I=;
+ b=HxqemZoAuK2sAcn0bttcgvdXYMZmrvvb8UYtORV0UIfNBA4Q41L94K4S4Owrkfxl3c9XzbzNaF275XiICyvk/ZtnSG0IhD2U/3rmFs5T9O0chks0fflYL4Rdhr4hx5YGzG1J7rvFi+2eF+4VxTmJmBncHQTXTGgdyR2GDmkSVhsoWraWVSz6SFLE8MI6mXqICUbX0azVywfAUvMo42TL7eejmGr/8tnv15NjrZgWQJ48RAapQdx89hhKxaFihkCzmn5Gd+GILYk1ntBL1t9xF8QG+2ba1pGcE1fMZhImz/sgr8/7wGkH2cfdxwlTVXlamIj670+zIDKrKjmCDmoh5w==
+Received: from HK0PR06MB3362.apcprd06.prod.outlook.com (2603:1096:203:8b::10)
+ by HK0PR06MB2674.apcprd06.prod.outlook.com (2603:1096:203:54::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Wed, 1 Dec
- 2021 03:27:27 +0000
-Received: from CO1NAM11FT005.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:81:cafe::ea) by MW4PR04CA0363.outlook.office365.com
- (2603:10b6:303:81::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend
- Transport; Wed, 1 Dec 2021 03:27:26 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.36)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.36 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.36; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.36) by
- CO1NAM11FT005.mail.protection.outlook.com (10.13.174.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4734.22 via Frontend Transport; Wed, 1 Dec 2021 03:27:26 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by HQMAIL101.nvidia.com
- (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 1 Dec
- 2021 03:27:26 +0000
-Received: from [172.17.173.69] (172.20.187.5) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.5; Tue, 30 Nov 2021
- 19:27:25 -0800
-Subject: Re: [RFC v3 09/12] gpiolib: cdev: Add hardware timestamp clock type
-To:     Kent Gibson <warthog618@gmail.com>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <brgl@bgdev.pl>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <robh+dt@kernel.org>
-References: <20211123193039.25154-1-dipenp@nvidia.com>
- <20211123193039.25154-10-dipenp@nvidia.com> <20211126013137.GC10380@sol>
-X-Nvconfidentiality: public
-From:   Dipen Patel <dipenp@nvidia.com>
-Message-ID: <9ad666ec-eedd-8075-73e6-1e47a1eb228b@nvidia.com>
-Date:   Tue, 30 Nov 2021 19:29:20 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20211126013137.GC10380@sol>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+ 2021 03:30:01 +0000
+Received: from HK0PR06MB3362.apcprd06.prod.outlook.com
+ ([fe80::7941:2fad:3c82:52eb]) by HK0PR06MB3362.apcprd06.prod.outlook.com
+ ([fe80::7941:2fad:3c82:52eb%3]) with mapi id 15.20.4734.024; Wed, 1 Dec 2021
+ 03:30:00 +0000
+From:   Billy Tsai <billy_tsai@aspeedtech.com>
+To:     Philipp Zabel <p.zabel@pengutronix.de>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>
+CC:     BMC-SW <BMC-SW@aspeedtech.com>
+Subject: Re: [v13 2/2] pwm: Add Aspeed ast2600 PWM support
+Thread-Topic: [v13 2/2] pwm: Add Aspeed ast2600 PWM support
+Thread-Index: AQHX5Ow7hsOaCLIIMEe2C8jlARJZF6wb1hKAgAGtoYA=
+Date:   Wed, 1 Dec 2021 03:30:00 +0000
+Message-ID: <CDB0374F-3835-4501-964E-DB771588114D@aspeedtech.com>
+References: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
+ <20211129064329.27006-3-billy_tsai@aspeedtech.com>
+ <e28a5d5de9b940717e6444f019eab63ab1bb0b75.camel@pengutronix.de>
+In-Reply-To: <e28a5d5de9b940717e6444f019eab63ab1bb0b75.camel@pengutronix.de>
+Accept-Language: zh-TW, en-US
 Content-Language: en-US
-X-Originating-IP: [172.20.187.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d48c227d-4ff9-43d4-df67-08d9b47a7f87
-X-MS-TrafficTypeDiagnostic: CY4PR1201MB0038:
-X-Microsoft-Antispam-PRVS: <CY4PR1201MB0038B5FD38B1A211C4F198C4AE689@CY4PR1201MB0038.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:873;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n9ayYBXONZ5Q0fc5eQB0rIhdhOKfA/5Ri9ijhrQmbRvqiXhnpU54fOYFCUePyPmODRjntCCyCJg4iwrgnurf8HsvpFH8N6JPDvFA2bCNu88THnPMvqcq7EMhxXBuhBbZv31iIxsQ6mVKlcn6grzVen6/6mA2ZtzDTbfIyDya1KkRBCs/1Qu1woHc7vwAOV1BNjhQN7WVHj5qUPRYLI5AzLDTuq1YnoRW4/zoPX9ka1mjwH1Zxe6D5uGzcYTbHhyPzSW4CS8b5mB1Hp+NCfrLfRw5sket4xnj3t1ItQClTiGSpAva8jd4DLvMJGYHCD4eGllC4Zf8YvG9OgSU8dJ4pTFWj7ZUN2NKGZgD/1SOpVphLJSCEvaR3kapKC3TTWekwhFrKNkpWZPZgQe1b1jME9eweealf91jjgNwiIx0hFgRiszBDdwna6uss4IubZpV/7HkYMOIIRPSJsWvYI5Bgd6d+DXHdq81Wn6CKtcdzvxXbErHHSuieQO3+9ozLMthUlYWtT3S/RBCcweq85cQ/+CVW24Hs7p1aa6CvO9IN4NX5Sn833L6s1emYPN+3nNF4bHnvysKOsVBR4yqd6jlvJ2TGq45Lc79Rh9bYJv8EJmMkLB2OoT5e0vwCei8Niu/vzsBymEFHngkWIgBrYSxjM1d0vyNfytIuAJ+a4zti5z1VNvUJNRZdNkyRIgvtMdzuBTUzxtIeyctMJzh8OmdWOSpNhc8v8bHp0I4ZJsIf1mJg92SRYoZXy1n/yiJeEA036LpVa4GpKGQ4Lxnl9BRgtGFMIT5+Doib7qvbiwNF94=
-X-Forefront-Antispam-Report: CIP:216.228.112.36;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid05.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(2906002)(7416002)(186003)(16526019)(31696002)(54906003)(4326008)(336012)(8676002)(426003)(5660300002)(31686004)(53546011)(82310400004)(508600001)(36756003)(86362001)(36860700001)(2616005)(70206006)(6916009)(7636003)(356005)(47076005)(8936002)(30864003)(6666004)(70586007)(40460700001)(316002)(26005)(83380400001)(16576012)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2021 03:27:26.6807
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=aspeedtech.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 716d7ee7-be5b-48a7-d1cc-08d9b47adb41
+x-ms-traffictypediagnostic: HK0PR06MB2674:
+x-microsoft-antispam-prvs: <HK0PR06MB2674FC1B7BFEB588050E3BFD8B689@HK0PR06MB2674.apcprd06.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 3GmQEam52uFzkH1XGT+4nBXj/cA51Bk7Kj0+F097da+V043y+KXVZDvzkyp3UBWVjKlD2SeHi83hQHx2V9wuV7G5SpYYCwI7FtDy9qEIjxYTBR9newuxgpumFGT/W5KpBzuDMYQ+yaW8WfkksB5al+ZzYCYp8JTKLbqP+zZ/mdBhVTnU1F/6oPK8Fomn0/C9qDqehkw4Ddrkkablp0el+LoVH76Y9LKKkwxU6asVBzOXcQ+Y84u6q8E5+WmxCDFRIbOiC1mMhqh5IwSS+wHg6Ppqhx9QBhUwSog5OC0pSq7Gopy3343Mu8K1og+OEWRCd0ByliE0Z4uekX7eJfdRXimCTODNgpN/IP0aOHvVIX/LhorzhHQkYHHN5SW2Dx9J1t5kjYuXLtrxTwxr1PQPK41USciYFS/6f/Lc+q0uNHjy6XJqA3mqLEzPwRoF16Ed19dhYtVzEepyxvVLVZoF3cby6Kxz26rTRQ3PW2Cd6PJSTh0w8sBHo++7NzJTj6Zp4peIPW3uRlMRMe2P8F/YNIUXevLsKRYeLKXBr+NCGdnkyS918EXUastJJlUDfuhc7d2AVfHsr9Ut9WkX5+Livmd+UA/P8mWMLv8KF90JGmi/qrTrPxmjz7dYGAGILLtIjPws4oz6k9mec7HVBhM8XMvi7TDdckhZ3IINdz3dwmh/C3hl8Z8qDdkSfL6G6RybPDYbh5fGiyrbm0UAsgi5VtrG3xax9qnCxFTxoqlMBEb6caL4agIKs0VjZ5Yhavdp
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HK0PR06MB3362.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(376002)(346002)(396003)(39850400004)(136003)(4326008)(36756003)(316002)(7416002)(66946007)(186003)(71200400001)(33656002)(107886003)(2616005)(8936002)(6512007)(38070700005)(110136005)(921005)(508600001)(6486002)(76116006)(86362001)(2906002)(83380400001)(6506007)(38100700002)(5660300002)(66446008)(66476007)(122000001)(8676002)(4001150100001)(53546011)(26005)(66556008)(64756008)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?enU5R2h2MkFiaGZ6T01sVmhYMFNHb2ZWT2RuZ3RIbnBCQjIwVHk5enJ4ZGNv?=
+ =?utf-8?B?TkdZR1NLSWZBbXd1QWNnYWZZVkgyUlhtNWkwdnYvNzAvYzhRLzdwc3ZBVU9w?=
+ =?utf-8?B?alhCN3J2YVZMck53UjdiUnBkMS9RSUtJMmk3S01rSEF1Q1FOVHBpWFphVEFp?=
+ =?utf-8?B?elNDU1NkYkFab0c0amRROE14U3NoRThvNkg3UTQzZlBHQk5mMFJhNUZlaDFJ?=
+ =?utf-8?B?VEp6TzdORlVCSWpDaTUrdnpDMFE4SDQ4UFV3Ymc0ckpib3RvbzVxNnpOS1lN?=
+ =?utf-8?B?a0RwUlJ5SU0rUGliRTZFbVowVXFwUWZsTFplaGZPRFhJQ3FNRFFHNXcwNjV3?=
+ =?utf-8?B?dlI0UHBic1lMdnEwYkpoZkE2bC8yZWZxUmlHb2I4RkFZbE1FYkRqc2RPeUly?=
+ =?utf-8?B?b01QOXMwdWJUT052ejdQZjB2aUFUWFpBUGREVHFJOXQ4RnhUZ1ZkLzAvZ2Zq?=
+ =?utf-8?B?dXpIUmE4L3BkbHhJSFlBQXljNHZXSDRHcUJuMm10NURTUkJzYXg3YkpjTjFK?=
+ =?utf-8?B?blR4dW5LKzgzS2hrZ2FtZ1EvL3dYQzJyTU8vMUlmZTNNNlppak1ydWUwNkpG?=
+ =?utf-8?B?cnAyQjFCVXhtRkJVdjJTM01GTnpLZmxZUEpiNHJHNC82UFc1dXhSb1BxS3JN?=
+ =?utf-8?B?RFRzUUZzVmdUTFJtcWJNTDR0Z1JTcE54azlGTWs1L0VSS0xyb2RnWUt5SzZm?=
+ =?utf-8?B?YzZBMEluTDQ4VHpkdldscFVpTU40eGlKYkg2T2RLNFQxRS8wL3E5bFQ5emdv?=
+ =?utf-8?B?T2MyREdvdmRvdWVkTFVvb1A3b1hIMzQ0dGI1MXlXd1hYVFFYdVlPUFRvYXNp?=
+ =?utf-8?B?S3RKNWxobU53S0lPZmRkS1VTWDVRQ1RScmJYMGlneWt1YmRhQ3l6WTc3RmVK?=
+ =?utf-8?B?YjZFRzJkMmVNTkovYjZjQXU5eXN0K3kxV0J0Z3hZY1dUcEVueU9yOSt4M3VK?=
+ =?utf-8?B?RHpZbEJUYmVOc1M1UFFLU1d2M0FEUUVkTk5QSUE5N0lUeGU0V0g4QzNqNjh0?=
+ =?utf-8?B?eG5mQmhDeENOY2FRd2pZcFNDSmxkVkhocmlMYlR5VGhiY2JNQ3paTXorWFFB?=
+ =?utf-8?B?NjBBU2s1MW4yMGNUMGFUeU9LeERrMDI0dmgyUjdYR3VPYVhnOEVsaXJWNmNH?=
+ =?utf-8?B?UWVHcW1zM2RwK1lYckxIZWtQMWt5TmF5M0ZuK3lsYXc5eHhpUG1Gd01uQW15?=
+ =?utf-8?B?TXorZ1dUaU9PN25SalM1U1Y4YXQxRFZsT1IxTUJUaXVFUUlRU29UV2Exdnpr?=
+ =?utf-8?B?QVdkVlR4Zk54aFdVNkJEVkMyT2lJNFgzUmVlYmR4V0Q4aVRQTHdHRGdFS25K?=
+ =?utf-8?B?T3BsK3NNUTBSdkZlTE9uQTUweVFZaTl6bHVUMDk0Zjg5Z2JXRVhMc3JmbVBs?=
+ =?utf-8?B?WEw3NkduSC9NSWRJRzRNM3EzS05kdTdCc0l4cVhmdXUxZjZBK2d0YUFUU1BK?=
+ =?utf-8?B?dUw5TWtLRHNPK0VOT2xwUUpPekU5MXlUbjdwS1dqdDZ2Z2RFeVRoYktqQjFh?=
+ =?utf-8?B?L3N5QzJNVzJMei9aY0Vlay9yOWNXZEFJSUVUUkVCSGFmS1dGT24yZmMyRXZS?=
+ =?utf-8?B?TDkwKzdsM21SNzZER1l5aHEwdlpHL3pWdXJoUXJwNm1GeXFIUktrSndwT3dV?=
+ =?utf-8?B?QWVDU1huMnhqVjNwK0RZaldYcXJDRExHWlVUVitla1ZoQ2Yrd2NQck9GSDVX?=
+ =?utf-8?B?Q0lBTG5lZS9IV1lkeTd1VmowSlBZZTFtWnhnY2gvM0NlV0FhMTVuRm5VeDE4?=
+ =?utf-8?B?cWlKZzI5cU1qRlRHdlBvYXRYblpOWThIb1BpWXdZemwrOVZyTVJsYm84R2ht?=
+ =?utf-8?B?eHpjdUhqakpCN2hET0NCbUNqS2pKbjkrTUtwUy9iVldXbUZpaW5rMGpDVkhr?=
+ =?utf-8?B?UWw1NHFlZllaUU5DYnFVUjhsd2xOVWp1M2ZYZk8vQ0l5MHRvbUIvRnRCRXdl?=
+ =?utf-8?B?NUJVMitCVVpGQmNQN1JkSW9TUldOeW8zRjkwZlRQeUxpUG5zREt2RWRCcERp?=
+ =?utf-8?B?b2kvMzZMVW5KNXpHVUtKOUVCTTFmVGM0RWxZWHc1c0pzaEU4V2Qvem93RUNF?=
+ =?utf-8?B?eEtzdWRJTkhsNEFqN29YZndpcVdIM0dGNjd4NWpXYVkxZXBvVURpWWZITVNr?=
+ =?utf-8?B?b1hFb3F2VzdRNVMwZ3lrZndzVHl5RmlJWjdJTGFUSlEwMGhsSlZKYWwzUDZ1?=
+ =?utf-8?B?NkFLT3ZwYUpGQTBKbTUremNEYU1ETkVUVzRPdTVvdDB2Z2xkV1ZsTVNISXZx?=
+ =?utf-8?Q?apwWM7G7ETah81Vw8Xqbwy1E9UcB5fScq+2j9rJoxs=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0F9F6FCBB3AF334D9135C86EA5702445@apcprd06.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: aspeedtech.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HK0PR06MB3362.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 716d7ee7-be5b-48a7-d1cc-08d9b47adb41
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2021 03:30:00.5130
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d48c227d-4ff9-43d4-df67-08d9b47a7f87
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.36];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT005.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1201MB0038
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 43d4aa98-e35b-4575-8939-080e90d5a249
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +1ZjTOxBDsFrGpPmBYXziXEDb1/7tU8co1fD4SxfiZRFZrFnOsSmxeRie8fvP7zAkTrkSk9CZOG6jCrkSzZRy9b8KkVwsX57vW3iHeeQgIQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HK0PR06MB2674
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 11/25/21 5:31 PM, Kent Gibson wrote:
-> On Tue, Nov 23, 2021 at 11:30:36AM -0800, Dipen Patel wrote:
->> This patch adds new clock type for the GPIO controller which can
->> timestamp gpio lines in realtime using hardware means. To expose such
->> functionalities to the userspace, code has been added in this patch
->> where during line create call, it checks for new clock type and if
->> requested, calls hardware timestamp related API from gpiolib.c.
->> During line change event, the HTE subsystem pushes timestamp data
->> through callbacks.
->>
->> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
->> Acked-by: Linus Walleij <linus.walleij@linaro.org>
->> ---
->> Changes in v2:
->> - Added hte_dir and static structure hte_ts_desc.
->> - Added callbacks which get invoked by HTE when new data is available.
->> - Better use of hte_dir and seq from hte_ts_desc.
->> - Modified sw debounce function to accommodate hardware timestamping.
->>
->>  drivers/gpio/gpiolib-cdev.c | 161 ++++++++++++++++++++++++++++++++++--
->>  include/uapi/linux/gpio.h   |   1 +
->>  2 files changed, 153 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
->> index c7b5446d01fd..1736ad54e3ec 100644
->> --- a/drivers/gpio/gpiolib-cdev.c
->> +++ b/drivers/gpio/gpiolib-cdev.c
->> @@ -464,6 +464,12 @@ struct line {
->>  	 * stale value.
->>  	 */
->>  	unsigned int level;
->> +	/*
->> +	 * dir will be touched in HTE callbacks hte_ts_cb_t and
->> +	 * hte_ts_threaded_cb_t and they are mutually exclusive. This will be
->> +	 * unused when HTE is not supported/disabled.
->> +	 */
->> +	enum hte_dir dir;
->>  };
->>  
-> Documentation should be in present tense, so 
->
-> s/will be/is/g
->
-> Same applies to other patches.
->
-> Also
->
-> s/touched/accessed/
->
-> dir is a poor name for the field.  It is the hte edge direction and
-> effectively the line level, so call it hte_edge_dirn or
-> hte_edge_direction or hte_level.
->
-> And it is placed in a section of the struct documented as "debouncer specific
-> fields", but it is not specfic to the debouncer.  Add a "hte specific
-> fields" section if nothing else is suitable.
->
->>  /**
->> @@ -518,6 +524,7 @@ struct linereq {
->>  	 GPIO_V2_LINE_DRIVE_FLAGS | \
->>  	 GPIO_V2_LINE_EDGE_FLAGS | \
->>  	 GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME | \
->> +	 GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE | \
->>  	 GPIO_V2_LINE_BIAS_FLAGS)
->>  
->>  static void linereq_put_event(struct linereq *lr,
->> @@ -546,6 +553,94 @@ static u64 line_event_timestamp(struct line *line)
->>  	return ktime_get_ns();
->>  }
->>  
->> +static hte_return_t process_hw_ts_thread(void *p)
->> +{
->> +	struct line *line = p;
->> +	struct linereq *lr = line->req;
->> +	struct gpio_v2_line_event le;
->> +	u64 eflags;
->> +
->> +	memset(&le, 0, sizeof(le));
->> +
->> +	le.timestamp_ns = line->timestamp_ns;
->> +	line->timestamp_ns = 0;
->> +
-> What is the purpose of this zeroing?
->
->> +	if (line->dir >= HTE_DIR_NOSUPP) {
->> +		eflags = READ_ONCE(line->eflags);
->> +		if (eflags == GPIO_V2_LINE_FLAG_EDGE_BOTH) {
->> +			int level = gpiod_get_value_cansleep(line->desc);
->> +
->> +			if (level)
->> +				/* Emit low-to-high event */
->> +				le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
->> +			else
->> +				/* Emit high-to-low event */
->> +				le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
->> +		} else if (eflags == GPIO_V2_LINE_FLAG_EDGE_RISING) {
->> +			/* Emit low-to-high event */
->> +			le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
->> +		} else if (eflags == GPIO_V2_LINE_FLAG_EDGE_FALLING) {
->> +			/* Emit high-to-low event */
->> +			le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
->> +		} else {
->> +			return HTE_CB_ERROR;
->> +		}
->> +	} else {
->> +		if (line->dir == HTE_RISING_EDGE_TS)
->> +			le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
->> +		else
->> +			le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
->> +	}
-> The mapping from line->dir to le.id needs to take into account the active
-> low setting for the line.
->
-> And it might be simpler if the hte_ts_data provided the level, equivalent
-> to gpiod_get_raw_value_cansleep(), rather than an edge direction, so you
-> can provide a common helper to determine the edge given the raw level.
-
-(So from the level determine the edge?) that sound right specially when
-
-HTE provider has capability to record the edge in that case why bother
-
-getting the level and determine edge?
-
-Calculating the edge from the level makes sense when hte provider does not
-
-have that feature and that is what if (line->dir >= HTE_DIR_NOSUPP) does.
-
->
->> +
->> +	le.line_seqno = line->line_seqno;
->> +	le.seqno = (lr->num_lines == 1) ? le.line_seqno : line->req_seqno;
->> +	le.offset = gpio_chip_hwgpio(line->desc);
->> +
->> +	linereq_put_event(lr, &le);
->> +
->> +	return HTE_CB_HANDLED;
->> +}
->> +
->> +static hte_return_t process_hw_ts(struct hte_ts_data *ts, void *p)
->> +{
->> +	struct line *line = p;
->> +	struct linereq *lr = line->req;
->> +
->> +	if (!ts)
->> +		return HTE_CB_ERROR;
->> +
->> +	line->timestamp_ns = ts->tsc;
->> +	line->dir = ts->dir;
->> +
-> The doc for timestamp_ns states:
->
-> 	 * timestamp_ns and req_seqno are accessed only by
-> 	 * edge_irq_handler() and edge_irq_thread(), which are themselves
-> 	 * mutually exclusive, so no additional protection is necessary.
->
-> That no longer holds.  It is now also accessed here, and in
-> process_hw_ts_thread(), which wont run concurrently with each other or
-> the edge_irq_* handlers, but also in debounce_work_func() which may run
-> concurrently with the others.
-> So timestamp_ns now requires protection from concurrent access.
->
->> +	/*
->> +	 * It is possible that HTE engine detects spurious edges for the
->> +	 * lines where software debounce is enabled. This primary callback
->> +	 * will be called multiple times in that case. It will be better to
->> +	 * let debounce_work_func handle instead of process_hw_ts_thread.
->> +	 * The timestamp_ns will be overwritten here which is fine as we are
->> +	 * interested in the last value anyway. The debounce_work_func will
->> +	 * then just read whatever last line->timestamp_ns is stored. Because
->> +	 * this callback can be called multiple times, we are not really
->> +	 * interested in ts->seq.
->> +	 */
-> Not sure what this is trying to say.
-> Is this the primary callback? Or debounce_irq_handler()?
-
-This is primary callback called from HTE when it pushes new TS data per line, it
-
-also says so in the second line.
-
-> You say you really aren't interested in ts->seq, but the code immediately
-> uses it.
-
-That is when sw_debounced is not set and whole paragraph is about when
-
-sw_debounced is set.
-
->
-> Reword to clarify.
-> And add braces after function names to highlight them, so
-> debounce_work_func().
-Will do.
->
->> +	if (!READ_ONCE(line->sw_debounced)) {
->> +		line->line_seqno = ts->seq;
->> +
->> +		/*
->> +		 * Increment in this callback incase all the lines in linereq
->> +		 * are enabled for hw timestamping. This will work even if
->> +		 * subset of lines are enabled for hw timestamping as
->> +		 * edge_irq_* callbacks will proceed as usual for them.
->> +		 */
-> s/incase/in case/
->
-> Not sure what the comment is trying to say. There is no check here that
-> the other lines have HTE enabled.  And that is not relevant anyway.
-> The edge_irq_* handlers will proceed as usual for those lines NOT
-> enabled for hw timestamping.
->
-> To clarify, the line_seqno indicates where this event lies in the
-> sequence of events for the line.
-> The request seqno indicates where this event lines in the sequence of
-> events for the request.
-> For a single line request these are the same, hence the minor
-> optimisation of not updating lr->seqno below.
->
->> +		if (lr->num_lines != 1)
->> +			line->req_seqno = atomic_inc_return(&lr->seqno);
->> +
-> The req_seqno should be updated corresponding to the change in the
-> line_reqno.  That always used to be 1, but no longer if hte can discard
-> events, i.e. skip over line_seqnos.
-
-HTE does not discard any events, it pushes to clients as soon as its
-
-available through primary callback.
-
-> To be consistent, i.e. if events were lost for this line then they were
-> also lost for the requested lines, the lr->seqno should be incremented by
-> the change in line_seqno.  Probably with some sanity checks.
->
->> +		return HTE_RUN_THREADED_CB;
->> +	}
->> +
->> +	return HTE_CB_HANDLED;
->> +}
->> +
->>  static irqreturn_t edge_irq_thread(int irq, void *p)
->>  {
->>  	struct line *line = p;
->> @@ -553,6 +648,10 @@ static irqreturn_t edge_irq_thread(int irq, void *p)
->>  	struct gpio_v2_line_event le;
->>  	u64 eflags;
->>  
->> +	/* Let process_hw_ts_thread handle */
->> +	if (test_bit(FLAG_EVENT_CLOCK_HARDWARE, &line->desc->flags))
->> +		return IRQ_HANDLED;
->> +
-> This adds pointless runtime overhead, and for everyone not just hte users.
-> Don't stub out a handler in the handler - stub it out where it is
-> registered by registering a stub handler.  Or don't request it at all.
->
-> So why would gpiolib-cdev be requesting the irq, only to stub out
-> the handlers?
-> If that has a side-effect that hte requires then hte should be taking
-> care of it - it is not gpiolib-cdev's problem.
-
-- Why stop at moving irq and debounce related stuff to hte then?
-
-I mean if there is hte provider which can TS GPIO output/input
-
-does it mean hte is responsible for parsing the GPIO line configs, setting them up
-
-(i.e. input or output) as well? Are we not duplicating logic instead of
-
-leveraging gpio-cdev? Does it make sense for the HTE subsystem which not
-
-only TS the GPIOs but other SoC lines?
-
-- What happens to in kernel GPIO HTE client (for example, hte-tegra194-gpio-test.c)?
-
-some clients do more in their IRQ handler than what edge_irq_handler does in which
-
-case it would make sense to have them request irq in their code than through HTE.
-
->
-> And speaking as to how the whole hte/gpiolib-cdev interface should work,
-> hte should be an edge event generator alternative to irq.  So lines with
-> hte enabled should work without any irq calls from gpiolib-cdev.
-> That includes the sw debouncer - more on that below.
->
->>  	/* Do not leak kernel stack to userspace */
->>  	memset(&le, 0, sizeof(le));
->>  
->> @@ -604,6 +703,10 @@ static irqreturn_t edge_irq_handler(int irq, void *p)
->>  	struct line *line = p;
->>  	struct linereq *lr = line->req;
->>  
->> +	/* Let HTE supplied callbacks handle */
->> +	if (test_bit(FLAG_EVENT_CLOCK_HARDWARE, &line->desc->flags))
->> +		return IRQ_HANDLED;
->> +
->>  	/*
->>  	 * Just store the timestamp in hardirq context so we get it as
->>  	 * close in time as possible to the actual event.
->> @@ -682,14 +785,6 @@ static void debounce_work_func(struct work_struct *work)
->>  	/* Do not leak kernel stack to userspace */
->>  	memset(&le, 0, sizeof(le));
->>  
->> -	lr = line->req;
->> -	le.timestamp_ns = line_event_timestamp(line);
->> -	le.offset = gpio_chip_hwgpio(line->desc);
->> -	line->line_seqno++;
->> -	le.line_seqno = line->line_seqno;
->> -	le.seqno = (lr->num_lines == 1) ?
->> -		le.line_seqno : atomic_inc_return(&lr->seqno);
->> -
->>  	if (level)
->>  		/* Emit low-to-high event */
->>  		le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
->> @@ -697,6 +792,23 @@ static void debounce_work_func(struct work_struct *work)
->>  		/* Emit high-to-low event */
->>  		le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
->>  
->> +	if (test_bit(FLAG_EVENT_CLOCK_HARDWARE, &line->desc->flags)) {
->> +		le.timestamp_ns = line->timestamp_ns;
->> +		if (line->dir < HTE_DIR_NOSUPP)
->> +			le.id = (line->dir == HTE_RISING_EDGE_TS) ?
->> +				 GPIO_V2_LINE_EVENT_RISING_EDGE :
->> +				 GPIO_V2_LINE_EVENT_FALLING_EDGE;
->> +	} else {
->> +		le.timestamp_ns = line_event_timestamp(line);
->> +	}
->> +
-> Move the FLAG_EVENT_CLOCK_HARDWARE check into line_event_timestamp().
->
-> And the id fudging is necessary because the level returned by
-> gpiod_get_raw_value_cansleep() can disagree with the level from hte?
-
-> So you are still trying to synchronise events from two streams.
-> And that is still broken.
-> If a hte event occurs between the level being sampled by
-> gpiod_get_raw_value_cansleep() and the line->dir being read then the line
-> will have toggled and you will be reporting the opposite state than the
-> one the debouncer determined was stable.  And maybe the wrong timestamp as
-> well.
->
-> For lines where hte is enabled, the hte should be the source of level for
-> the debouncer, not the raw value.  And the mod_delayed_work() that
-> drives the debouncer should be called by a hte handler, not an irq handler.
->
-> There is also a race on reading the hte timestamp (line->timestamp_ns) and
-> the hte level (line->dir), such that you can get the level from one event
-> the timestamp from another.
->
->> +	lr = line->req;
->> +	le.offset = gpio_chip_hwgpio(line->desc);
->> +	line->line_seqno++;
->> +	le.line_seqno = line->line_seqno;
->> +	le.seqno = (lr->num_lines == 1) ?
->> +		le.line_seqno : atomic_inc_return(&lr->seqno);
->> +
-> What is the purpose of moving this block of code moved from before the
-> if (level)?
->
->
->>  	linereq_put_event(lr, &le);
->>  }
->>  
->> @@ -891,7 +1003,6 @@ static int gpio_v2_line_flags_validate(u64 flags)
->>  	/* Return an error if an unknown flag is set */
->>  	if (flags & ~GPIO_V2_LINE_VALID_FLAGS)
->>  		return -EINVAL;
->> -
-> Gratuitous whitespace change.
->
->>  	/*
->>  	 * Do not allow both INPUT and OUTPUT flags to be set as they are
->>  	 * contradictory.
->> @@ -900,6 +1011,11 @@ static int gpio_v2_line_flags_validate(u64 flags)
->>  	    (flags & GPIO_V2_LINE_FLAG_OUTPUT))
->>  		return -EINVAL;
->>  
->> +	/* Only allow one event clock source */
->> +	if ((flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME) &&
->> +	    (flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE))
->> +		return -EINVAL;
->> +
->>  	/* Edge detection requires explicit input. */
->>  	if ((flags & GPIO_V2_LINE_EDGE_FLAGS) &&
->>  	    !(flags & GPIO_V2_LINE_FLAG_INPUT))
->> @@ -992,6 +1108,8 @@ static void gpio_v2_line_config_flags_to_desc_flags(u64 flags,
->>  
->>  	assign_bit(FLAG_EVENT_CLOCK_REALTIME, flagsp,
->>  		   flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME);
->> +	assign_bit(FLAG_EVENT_CLOCK_HARDWARE, flagsp,
->> +		   flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE);
->>  }
->>  
->>  static long linereq_get_values(struct linereq *lr, void __user *ip)
->> @@ -1154,6 +1272,21 @@ static long linereq_set_config_unlocked(struct linereq *lr,
->>  				return ret;
->>  		}
->>  
->> +		/* Check if new config sets hardware assisted clock */
->> +		if (flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE) {
->> +			ret = gpiod_req_hw_timestamp_ns(desc, process_hw_ts,
->> +							process_hw_ts_thread,
->> +							&lr->lines[i]);
->> +			if (ret)
->> +				return ret;
-> Note that the line config is the complete line config, not a delta.
->
-> What happens when a line that already has hte enabled is reconfigured
-> and still has hte enabled?  i.e. what happens when
-> gpiod_req_hw_timestamp_ns() is called for the second time?
-
-HTE will return without doing anything with error code.
-
->
-> You provide a comment for the release case below, what of the request
-> case?
->
-> If you need to check for change then compare the old and new flags, as
-> the polarity_change check does (not visible in the diff here).
->
->> +		} else {
->> +			/*
->> +			 * HTE subsys will do nothing if there is nothing to
->> +			 * release.
->> +			 */
->> +			gpiod_rel_hw_timestamp_ns(desc);
->> +		}
->> +
-> Comment will fit on one line.
->
-> And it would be better to document that the function is idempotent in the
-> function documentation, not everywhere it is used.
->
->>  		blocking_notifier_call_chain(&desc->gdev->notifier,
->>  					     GPIO_V2_LINE_CHANGED_CONFIG,
->>  					     desc);
->> @@ -1409,6 +1542,14 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
->>  					flags & GPIO_V2_LINE_EDGE_FLAGS);
->>  			if (ret)
->>  				goto out_free_linereq;
->> +
->> +			if (flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE) {
->> +				ret = gpiod_req_hw_timestamp_ns(desc, process_hw_ts,
->> +							process_hw_ts_thread,
->> +							&lr->lines[i]);
->> +				if (ret)
->> +					goto out_free_linereq;
->> +			}
->>  		}
->>  
->>  		blocking_notifier_call_chain(&desc->gdev->notifier,
->> @@ -1959,6 +2100,8 @@ static void gpio_desc_to_lineinfo(struct gpio_desc *desc,
->>  
->>  	if (test_bit(FLAG_EVENT_CLOCK_REALTIME, &desc->flags))
->>  		info->flags |= GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME;
->> +	else if (test_bit(FLAG_EVENT_CLOCK_HARDWARE, &desc->flags))
->> +		info->flags |= GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE;
->>  
->>  	debounce_period_us = READ_ONCE(desc->debounce_period_us);
->>  	if (debounce_period_us) {
->> diff --git a/include/uapi/linux/gpio.h b/include/uapi/linux/gpio.h
->> index eaaea3d8e6b4..d360545b4c21 100644
->> --- a/include/uapi/linux/gpio.h
->> +++ b/include/uapi/linux/gpio.h
->> @@ -80,6 +80,7 @@ enum gpio_v2_line_flag {
->>  	GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN	= _BITULL(9),
->>  	GPIO_V2_LINE_FLAG_BIAS_DISABLED		= _BITULL(10),
->>  	GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME	= _BITULL(11),
->> +	GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE	= _BITULL(12),
->>  };
->>  
-> I'm now thinking this name, "HARDWARE" is too vague, in case other
-> timestamp source alternatives join the fray, and so should be "HTE".
->
-> Cheers,
-> Kent.
+SGkgUGhpbGlwcCwNCg0KT24gMjAyMS8xMS8zMCwgNTo1MiBQTSwgIlBoaWxpcHAgWmFiZWwiIDxw
+LnphYmVsQHBlbmd1dHJvbml4LmRlPiB3cm90ZToNCg0KICAgIE9uIE1vbiwgMjAyMS0xMS0yOSBh
+dCAxNDo0MyArMDgwMCwgQmlsbHkgVHNhaSB3cm90ZToNCiAgICBbLi4uXQ0KICAgID4gICA+ICsJ
+cmV0ID0gY2xrX3ByZXBhcmVfZW5hYmxlKHByaXYtPmNsayk7DQogICAgPiAgID4gKwlpZiAocmV0
+KQ0KICAgID4gICA+ICsJCXJldHVybiBkZXZfZXJyX3Byb2JlKGRldiwgcmV0LCAiQ291bGRuJ3Qg
+ZW5hYmxlIGNsb2NrXG4iKTsNCiAgICA+ICAgPiArDQogICAgPiAgID4gKwlyZXQgPSByZXNldF9j
+b250cm9sX2RlYXNzZXJ0KHByaXYtPnJlc2V0KTsNCiAgICA+ICAgPiArCWlmIChyZXQpIHsNCiAg
+ICA+ICAgPiArCQlkZXZfZXJyX3Byb2JlKGRldiwgcmV0LCAiQ291bGRuJ3QgZGVhc3NlcnQgcmVz
+ZXQgY29udHJvbFxuIik7DQogICAgPiAgID4gKwkJZ290byBlcnJfZGlzYWJsZV9jbGs7DQogICAg
+PiAgID4gKwl9DQoNCiAgICA+ICAgSXMgdGhlcmUgYW55IHJlYXNvbiB0byBrZWVwIHRoZSBjbG9j
+a3MgcnVubmluZyBhbmQgdGhlIGNvbnRyb2xsZXIgb3V0IG9mDQogICAgPiAgIHJlc2V0IHdoaWxl
+IHRoZSBQV00gb3V0cHV0cyBhcmUgZGlzYWJsZWQ/DQoNCkNhbiB5b3UgdGVsbCBtZSBhYm91dCB5
+b3VyIGNvbmNlcm5zIHdpdGggdGhpcyBwcm9jZXNzPw0KSW4gbXkgb3BpbmlvbiwgdGhleSBhcmUg
+dXNlZCB0byBwcm92aWRlIHRoZSBjbG9jayBhbmQgZGUtYXNzZXJ0IHRoZSByZXNldCBvZiB0aGUg
+UFdNIGVuZ2luZS4gSWYgd2UgZGlkbid0IHJlbGVhc2UNCnRoZW0gaW4gcHJvYmUgc3RhZ2UgdGhl
+IENQVSBjYW4ndCBhbmQgc2hvdWxkbid0IHJlYWQgdGhlIHJlZ2lzdGVyIG9mIHRoZSBQV00gZW5n
+aW5lIHdoZW4gY2FsbCB0aGUgZ2V0X3N0YXRlLg0KQXNzdW1lIHRoYXQgd2Ugd2FudCB0byBhZGp1
+c3QgdGhlbSBkeW5hbWljYWxseSwgdGhlIGRyaXZlciBuZWVkcyB0byBhZGQgbW9yZSBjb25kaXRp
+b25zIHRvIGNoZWNrIGFuZCBrZWVwIHRoZSBzdGF0dXMNCm9mIGVhY2ggUFdNIGNoYW5uZWwsIHdo
+aWNoIGlzIG5vdCBhIGdvb2QgZGVhbCBmb3IgdGhlIHNlcnZlciBwbGF0Zm9ybS4NCg0KVGhhbmtz
+DQoNCkJlc3QgUmVnYXJkcywNCkJpbGx5IFRzYWkNCg0KDQo=

@@ -2,182 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E0796464A35
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:55:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCC6464A3B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242346AbhLAI63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 03:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53932 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242281AbhLAI62 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 03:58:28 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFFB5C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 00:55:07 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id z6so23678511pfe.7
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 00:55:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:to:cc:references
-         :from:in-reply-to:content-transfer-encoding;
-        bh=mt/YlklWkFfS0yF9ibH5y9vze0Bq+Suaib2gnljcJYo=;
-        b=3YYZed+piS7K/gTSgnfvhD1SRxp2O7IBmLBWqi60Usump9lWTzvjKGhBpyRaYIJGMT
-         8WI0WRn1SntqS58r3pdn4TqHnedXJ4RYNxfOS34FM37un+RAtR5RWpvVFEkiX7KMoOSd
-         lJIdnUmny0O2GOtHJHIJ6i8z+u2whdfEdPFGrlosfRXerPzQfxOzgbxi7sHtui5sV5hk
-         U7dpxP56xs4y2Je+2pq50IOzkwE8QWKc7TqA8CyBx7tgjORnrdA+4UH4MFXGCK1sb4z/
-         hhwc9oJCn90yTp78hdeuhbPnxUsFrBTEphnswentIxkAwOOvFXIP1GJevkMY8PnRd8SR
-         MuiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :to:cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=mt/YlklWkFfS0yF9ibH5y9vze0Bq+Suaib2gnljcJYo=;
-        b=4/rzbBxz8HnkjiOo+kLO+r6t49trILu+YItVQeF6P80az1KPxAWn+aeL5HRkMJPuOT
-         KT7cWyfI/NPsn3gWG773DSOGZ/cOI0WGIp7ug3RqmIQgMShi9XWm77fiMFcT973FbhQ1
-         Ww9WJ9M628ijTiLpvjLQ1W7aUC76DROb18ZcV14unC7qZ0az8NpwthHJq0AzC8+l4NS9
-         DxmKMGWEgsDvoY9+MjMu1afMbBd/MU0vHhOY81ceqLqIKOPoKgjvcalYVTbsa3ZPRqQd
-         QyJ/oh1QSzAXlx6plGYYWeSgRybEmumIZYTLOZ0qOkgEPadzffqZqQQt3xr/2T9ZzQCF
-         XVxQ==
-X-Gm-Message-State: AOAM531q0d20YB0RVjPKMxt2IeP2BgBnVke5JD5Ys4RqcXl6ItAArMly
-        BDVLFUsPd391HNjZpr5hvu/QoA==
-X-Google-Smtp-Source: ABdhPJyxyU1omAYWJhDtt9f1AO8aXE21k8E+M9SeJXuvKEvtelwSGmLKAIaotW2gqLUqGcAzMvNRKQ==
-X-Received: by 2002:a63:5f8d:: with SMTP id t135mr3615084pgb.610.1638348907287;
-        Wed, 01 Dec 2021 00:55:07 -0800 (PST)
-Received: from [10.86.117.166] ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id i185sm23314189pfg.80.2021.12.01.00.54.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 00:55:06 -0800 (PST)
-Message-ID: <e18fb59e-040f-7edf-bb15-37c75bbd28a8@bytedance.com>
-Date:   Wed, 1 Dec 2021 16:54:56 +0800
+        id S242325AbhLAJBb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 04:01:31 -0500
+Received: from mga14.intel.com ([192.55.52.115]:24798 "EHLO mga14.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237533AbhLAJBa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 04:01:30 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236646950"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="236646950"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 00:58:09 -0800
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="459948084"
+Received: from pwedlarx-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.26.43])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 00:58:03 -0800
+From:   Jani Nikula <jani.nikula@intel.com>
+To:     Lyude Paul <lyude@redhat.com>, intel-gfx@lists.freedesktop.org
+Cc:     Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        stable@vger.kernel.org,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Imre Deak <imre.deak@intel.com>,
+        =?utf-8?Q?Jos=C3=A9?= Roberto de Souza <jose.souza@intel.com>,
+        Uma Shankar <uma.shankar@intel.com>,
+        Anshuman Gupta <anshuman.gupta@intel.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Manasi Navare <manasi.d.navare@intel.com>,
+        Ankit Nautiyal <ankit.k.nautiyal@intel.com>,
+        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] drm/i915/dp: Perform 30ms delay after source OUI write
+In-Reply-To: <20211130212912.212044-1-lyude@redhat.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20211129233354.101347-1-lyude@redhat.com>
+ <20211130212912.212044-1-lyude@redhat.com>
+Date:   Wed, 01 Dec 2021 10:58:00 +0200
+Message-ID: <87k0goitwn.fsf@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [External] Re: [PATCH bpf-next] libbpf: Let any two INT/UNION
- compatible if their names and sizes match
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, Martin Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        john fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        duanxiongchun@bytedance.com,
-        Muchun Song <songmuchun@bytedance.com>,
-        zhouchengming@bytedance.com
-References: <20211201035450.31083-1-zhoufeng.zf@bytedance.com>
- <CAEf4BzZ5Q9QkRGsT2kW+3AW4s7=qixJYO84heeu64TLG9DP3+A@mail.gmail.com>
-From:   Feng Zhou <zhoufeng.zf@bytedance.com>
-In-Reply-To: <CAEf4BzZ5Q9QkRGsT2kW+3AW4s7=qixJYO84heeu64TLG9DP3+A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2021/12/1 下午12:17, Andrii Nakryiko 写道:
-> On Tue, Nov 30, 2021 at 7:55 PM Feng zhou <zhoufeng.zf@bytedance.com> wrote:
->> From: Feng Zhou <zhoufeng.zf@bytedance.com>
->>
->> commit:67c0496e87d193b8356d2af49ab95e8a1b954b3c(kernfs: convert
->> kernfs_node->id from union kernfs_node_id to u64).
->>
->> The bpf program compiles on the kernel version after this commit and
->> then tries to run on the kernel before this commit, libbpf will report
->> an error. The reverse is also same.
->>
->> libbpf: prog 'tcp_retransmit_synack_tp': relo #4: kind <byte_off> (0),
->> spec is [342] struct kernfs_node.id (0:9 @ offset 104)
->> libbpf: prog 'tcp_retransmit_synack_tp': relo #4: non-matching candidate
->> libbpf: prog 'tcp_retransmit_synack_tp': relo #4: non-matching candidate
->> libbpf: prog 'tcp_retransmit_synack_tp': relo #4: no matching targets
->> found
->>
->> The type before this commit:
->>          union kernfs_node_id    id;
->>          union kernfs_node_id {
->>                  struct {
->>                          u32             ino;
->>                          u32             generation;
->>                  };
->>                  u64                     id;
->>          };
->>
->> The type after this commit:
->>          u64 id;
->>
->> We can find that the variable name and size have not changed except for
->> the type change.
->> So I added some judgment to let any two INT/UNION are compatible, if
->> their names and sizes match.
->>
->> Reported-by: Chengming Zhou <zhouchengming@bytedance.com>
->> Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
->> Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
->> ---
-> This should be handled by application, not by hacking libbpf's CO-RE
-> relocation logic. See [0] for how this should be done with existing
-> BPF CO-RE mechanisms.
+On Tue, 30 Nov 2021, Lyude Paul <lyude@redhat.com> wrote:
+> While working on supporting the Intel HDR backlight interface, I noticed
+> that there's a couple of laptops that will very rarely manage to boot up
+> without detecting Intel HDR backlight support - even though it's supported
+> on the system. One example of such a laptop is the Lenovo P17 1st
+> generation.
 >
->    [0] https://nakryiko.com/posts/bpf-core-reference-guide/#handling-incompatible-field-and-type-changes
+> Following some investigation Ville Syrjälä did through the docs they have
+> available to them, they discovered that there's actually supposed to be a
+> 30ms wait after writing the source OUI before we begin setting up the rest
+> of the backlight interface.
+>
+> This seems to be correct, as adding this 30ms delay seems to have
+> completely fixed the probing issues I was previously seeing. So - let's
+> start performing a 30ms wait after writing the OUI, which we do in a manner
+> similar to how we keep track of PPS delays (e.g. record the timestamp of
+> the OUI write, and then wait for however many ms are left since that
+> timestamp right before we interact with the backlight) in order to avoid
+> waiting any longer then we need to. As well, this also avoids us performing
+> this delay on systems where we don't end up using the HDR backlight
+> interface.
+>
+> V3:
+> * Move last_oui_write into intel_dp
+> V2:
+> * Move panel delays into intel_pps
+>
+> Signed-off-by: Lyude Paul <lyude@redhat.com>
+> Reviewed-by: Jani Nikula <jani.nikula@intel.com>
+> Fixes: 4a8d79901d5b ("drm/i915/dp: Enable Intel's HDR backlight interface (only SDR for now)")
+> Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> Cc: <stable@vger.kernel.org> # v5.12+
 
-This is very useful to me, thank you very much.
+Thanks, pushed to drm-intel-next.
 
->>   tools/lib/bpf/relo_core.c | 21 +++++++++++++++++----
->>   1 file changed, 17 insertions(+), 4 deletions(-)
->>
->> diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
->> index b5b8956a1be8..ff7f4e97bafb 100644
->> --- a/tools/lib/bpf/relo_core.c
->> +++ b/tools/lib/bpf/relo_core.c
->> @@ -294,6 +294,7 @@ static int bpf_core_parse_spec(const struct btf *btf,
->>    *   - any two FLOATs are always compatible;
->>    *   - for ARRAY, dimensionality is ignored, element types are checked for
->>    *     compatibility recursively;
->> + *   - any two INT/UNION are compatible, if their names and sizes match;
->>    *   - everything else shouldn't be ever a target of relocation.
->>    * These rules are not set in stone and probably will be adjusted as we get
->>    * more experience with using BPF CO-RE relocations.
->> @@ -313,8 +314,14 @@ static int bpf_core_fields_are_compat(const struct btf *local_btf,
->>
->>          if (btf_is_composite(local_type) && btf_is_composite(targ_type))
->>                  return 1;
->> -       if (btf_kind(local_type) != btf_kind(targ_type))
->> -               return 0;
->> +       if (btf_kind(local_type) != btf_kind(targ_type)) {
->> +               if (local_type->size == targ_type->size &&
->> +                   (btf_is_union(local_type) || btf_is_union(targ_type)) &&
->> +                   (btf_is_int(local_type) || btf_is_int(targ_type)))
->> +                       return 1;
->> +               else
->> +                       return 0;
->> +       }
->>
->>          switch (btf_kind(local_type)) {
->>          case BTF_KIND_PTR:
->> @@ -384,11 +391,17 @@ static int bpf_core_match_member(const struct btf *local_btf,
->>          targ_type = skip_mods_and_typedefs(targ_btf, targ_id, &targ_id);
->>          if (!targ_type)
->>                  return -EINVAL;
->> -       if (!btf_is_composite(targ_type))
->> -               return 0;
->>
->>          local_id = local_acc->type_id;
->>          local_type = btf__type_by_id(local_btf, local_id);
->> +       if (!btf_is_composite(targ_type)) {
->> +               if (local_type->size == targ_type->size &&
->> +                   btf_is_union(local_type) && btf_is_int(targ_type))
->> +                       return 1;
->> +               else
->> +                       return 0;
->> +       }
->> +
->>          local_member = btf_members(local_type) + local_acc->idx;
->>          local_name = btf__name_by_offset(local_btf, local_member->name_off);
->>
->> --
->> 2.11.0
->>
+BR,
+Jani.
 
+> ---
+>  drivers/gpu/drm/i915/display/intel_display_types.h    |  3 +++
+>  drivers/gpu/drm/i915/display/intel_dp.c               | 11 +++++++++++
+>  drivers/gpu/drm/i915/display/intel_dp.h               |  2 ++
+>  drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c |  5 +++++
+>  4 files changed, 21 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/i915/display/intel_display_types.h b/drivers/gpu/drm/i915/display/intel_display_types.h
+> index ea1e8a6e10b0..b9c967837872 100644
+> --- a/drivers/gpu/drm/i915/display/intel_display_types.h
+> +++ b/drivers/gpu/drm/i915/display/intel_display_types.h
+> @@ -1653,6 +1653,9 @@ struct intel_dp {
+>  	struct intel_dp_pcon_frl frl;
+>  
+>  	struct intel_psr psr;
+> +
+> +	/* When we last wrote the OUI for eDP */
+> +	unsigned long last_oui_write;
+>  };
+>  
+>  enum lspcon_vendor {
+> diff --git a/drivers/gpu/drm/i915/display/intel_dp.c b/drivers/gpu/drm/i915/display/intel_dp.c
+> index 0a424bf69396..5a8206298691 100644
+> --- a/drivers/gpu/drm/i915/display/intel_dp.c
+> +++ b/drivers/gpu/drm/i915/display/intel_dp.c
+> @@ -29,6 +29,7 @@
+>  #include <linux/i2c.h>
+>  #include <linux/notifier.h>
+>  #include <linux/slab.h>
+> +#include <linux/timekeeping.h>
+>  #include <linux/types.h>
+>  
+>  #include <asm/byteorder.h>
+> @@ -2010,6 +2011,16 @@ intel_edp_init_source_oui(struct intel_dp *intel_dp, bool careful)
+>  
+>  	if (drm_dp_dpcd_write(&intel_dp->aux, DP_SOURCE_OUI, oui, sizeof(oui)) < 0)
+>  		drm_err(&i915->drm, "Failed to write source OUI\n");
+> +
+> +	intel_dp->last_oui_write = jiffies;
+> +}
+> +
+> +void intel_dp_wait_source_oui(struct intel_dp *intel_dp)
+> +{
+> +	struct drm_i915_private *i915 = dp_to_i915(intel_dp);
+> +
+> +	drm_dbg_kms(&i915->drm, "Performing OUI wait\n");
+> +	wait_remaining_ms_from_jiffies(intel_dp->last_oui_write, 30);
+>  }
+>  
+>  /* If the device supports it, try to set the power state appropriately */
+> diff --git a/drivers/gpu/drm/i915/display/intel_dp.h b/drivers/gpu/drm/i915/display/intel_dp.h
+> index ce229026dc91..b64145a3869a 100644
+> --- a/drivers/gpu/drm/i915/display/intel_dp.h
+> +++ b/drivers/gpu/drm/i915/display/intel_dp.h
+> @@ -119,4 +119,6 @@ void intel_dp_pcon_dsc_configure(struct intel_dp *intel_dp,
+>  				 const struct intel_crtc_state *crtc_state);
+>  void intel_dp_phy_test(struct intel_encoder *encoder);
+>  
+> +void intel_dp_wait_source_oui(struct intel_dp *intel_dp);
+> +
+>  #endif /* __INTEL_DP_H__ */
+> diff --git a/drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c b/drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c
+> index 8b9c925c4c16..62c112daacf2 100644
+> --- a/drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c
+> +++ b/drivers/gpu/drm/i915/display/intel_dp_aux_backlight.c
+> @@ -36,6 +36,7 @@
+>  
+>  #include "intel_backlight.h"
+>  #include "intel_display_types.h"
+> +#include "intel_dp.h"
+>  #include "intel_dp_aux_backlight.h"
+>  
+>  /* TODO:
+> @@ -106,6 +107,8 @@ intel_dp_aux_supports_hdr_backlight(struct intel_connector *connector)
+>  	int ret;
+>  	u8 tcon_cap[4];
+>  
+> +	intel_dp_wait_source_oui(intel_dp);
+> +
+>  	ret = drm_dp_dpcd_read(aux, INTEL_EDP_HDR_TCON_CAP0, tcon_cap, sizeof(tcon_cap));
+>  	if (ret != sizeof(tcon_cap))
+>  		return false;
+> @@ -204,6 +207,8 @@ intel_dp_aux_hdr_enable_backlight(const struct intel_crtc_state *crtc_state,
+>  	int ret;
+>  	u8 old_ctrl, ctrl;
+>  
+> +	intel_dp_wait_source_oui(intel_dp);
+> +
+>  	ret = drm_dp_dpcd_readb(&intel_dp->aux, INTEL_EDP_HDR_GETSET_CTRL_PARAMS, &old_ctrl);
+>  	if (ret != 1) {
+>  		drm_err(&i915->drm, "Failed to read current backlight control mode: %d\n", ret);
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

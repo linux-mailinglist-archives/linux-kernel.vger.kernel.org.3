@@ -2,72 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1402D46576A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99E3A46576F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:51:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245666AbhLAUx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:53:56 -0500
-Received: from mail-il1-f200.google.com ([209.85.166.200]:38729 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239840AbhLAUx3 (ORCPT
+        id S245703AbhLAUyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:54:54 -0500
+Received: from mout.kundenserver.de ([212.227.17.13]:58811 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353181AbhLAUyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:53:29 -0500
-Received: by mail-il1-f200.google.com with SMTP id b4-20020a92c564000000b002a252da46e2so18625369ilj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 12:50:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=X/WRQR8STDSXJRhWuJ7l+MpIYKViU5igfD9Z/w6cwnE=;
-        b=j9wgHTapoh45rzjCUdSPfb3T1/M5VtA0Ni5dUBzzxJG6tI06Ct+9Ee3+NGeU6NYqtZ
-         0qm9bw+iqn1M7dUA4W7LqaPHvdPCaXlcuM5QO7dKw+hGCH6K7JROD56edC7DYp6RuUYH
-         Q69sin7vmjZBUDuJOxtpZhs8nLL2x/kS5/M56JBPfHMaPhlBXbTl0nFmOA4Bu4JDWeYQ
-         hUM61w3VR4MOjFhuyJ3Y/l5gXUatdWmbUhm36+V1skUx88c7o4zFuRqSpQISnvZzukVF
-         G6+CF2aeXxU5gGmKe67Itgo83CD8L0xmBKOTOrLgytl8LgL9CzLOv2/bD1s40H3Sb7Pq
-         6Irg==
-X-Gm-Message-State: AOAM5317QpDc4idW2Tb8O8pxRSW96XzdxA9xfQLbn4TMiztgLG9hpSCT
-        2v0WHRTh+YGEQMnZErKlCUP33i1Uvl0myPo1piWwSjdKj1AY
-X-Google-Smtp-Source: ABdhPJxwnTjayukxQsPm7f3vzoFuy8C1JldbQMohbfblKSqInY3rP+nF24H24uBktfOukSFRQgYKFbRtf7c4JSZgMRbBhRziF+lR
+        Wed, 1 Dec 2021 15:54:13 -0500
+Received: from mail-wr1-f45.google.com ([209.85.221.45]) by
+ mrelayeu.kundenserver.de (mreue108 [213.165.67.113]) with ESMTPSA (Nemesis)
+ id 1MqJyX-1mDx0r3N5v-00nQBL; Wed, 01 Dec 2021 21:50:50 +0100
+Received: by mail-wr1-f45.google.com with SMTP id j3so55077007wrp.1;
+        Wed, 01 Dec 2021 12:50:50 -0800 (PST)
+X-Gm-Message-State: AOAM531V/fVa8/1nkSatwozvcTdofCkRVRUD585XjA1jI4mb9LQawBj/
+        UiebZzinoxNFKqqaCZqodAdMQfPeZqz4hTFgVrk=
+X-Google-Smtp-Source: ABdhPJy3odhEkjPswm8W3FP+Lv8hzUHatDu8HWlNNQ5COgwGd0PgGAudbvzHJNrhdkYewPzVy1QacKwcJDH93MqqvzA=
+X-Received: by 2002:a5d:64ea:: with SMTP id g10mr9552455wri.137.1638391850399;
+ Wed, 01 Dec 2021 12:50:50 -0800 (PST)
 MIME-Version: 1.0
-X-Received: by 2002:a92:d291:: with SMTP id p17mr1253204ilp.154.1638391807990;
- Wed, 01 Dec 2021 12:50:07 -0800 (PST)
-Date:   Wed, 01 Dec 2021 12:50:07 -0800
-In-Reply-To: <00000000000069924b05c8cc3b84@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b7e3ee05d21bd19d@google.com>
-Subject: Re: [syzbot] WARNING in trc_read_check_handler
-From:   syzbot <syzbot+fe9d8c955bd1d0f02dc1@syzkaller.appspotmail.com>
-To:     bigeasy@linutronix.de, jgross@suse.com, jiangshanlai@gmail.com,
-        joel@joelfernandes.org, josh@joshtriplett.org,
-        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
-        mingo@kernel.org, namit@vmware.com, netdev@vger.kernel.org,
-        paulmck@kernel.org, peterz@infradead.org, rcu@vger.kernel.org,
-        rdunlap@infradead.org, rostedt@goodmis.org,
-        syzkaller-bugs@googlegroups.com
+References: <20211119232017.GA1981034@bhelgaas> <20211201202433.GA2837547@bhelgaas>
+In-Reply-To: <20211201202433.GA2837547@bhelgaas>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Wed, 1 Dec 2021 21:50:34 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a2bb3w+6G4W0OAv1ASmfeOr0NTHMPpJ2An-ms2Vk7VnhQ@mail.gmail.com>
+Message-ID: <CAK8P3a2bb3w+6G4W0OAv1ASmfeOr0NTHMPpJ2An-ms2Vk7VnhQ@mail.gmail.com>
+Subject: Re: [PATCH 1/5] PCI: let 'pcibios_root_bridge_prepare()' access to 'bridge->windows'
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:Tukz/1HhzPO7mRE/8y4rnl2v5Bts7hpYkSys506DXl0FxQK1kGl
+ bnFMIy36D31ArSmLPrkyCq9wcUMu2kaABrF+BAQxsrmbmMrdoZQk7ZXDhDAyO6XilrZ5Eoz
+ DMPMxQozUEFg4gVonqqCrlxAtOLE0Gx2QACyX1kpL/HthY1de2SdHAzavRtrrf88krJjmm8
+ YR6k6tfGuctsfpmiYbtSQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:1NQTz62PwxE=:3uWKsgT3bi2/vSfJRH9qg+
+ eCE45pX9jpvlWqOrbWVDxkFM7II8Vve2v2BEezD0MgfGWEGleC2fKTF++y8zDpkkWmA67PFg2
+ ANhSxlm+zIAk+3zMLkUmGT3ZH7+nQu9IUHP9/VfRA1VR/EVfd3rFY3mohdWaaYVeMX34JO8/x
+ x5w1TppSvuSY+K1PjQJymh2ruHccl8WGm+Rum8/oSgN3gaysydgq7hVw3VP8gqkTGdRnztHoQ
+ BTHgwhu1WXfaGD6DcE9wY7wR3arhfVPRtqMauO0uDUoub4LF35a9nZi+fvafkN47ACdv3a+XF
+ ig+S59SsqJE4dr7OaOSKw4FkL+SWRIt6cD9XkzwUbpoDNRcvMbdpZZ/8Muj+KglgkJfG5oWbV
+ ud/y7RGTmnoHLph7y/DZ1yFCHfK6P1t+h+13QrTQxP59I1OyN3zGvfHry8TmiwVsuyc7eF+28
+ J4GtOMOHyN7F2zFm6+wJLVEqhhWYUlJXASlNb5mmF+aYMeGz+kcww7FhAof4/QHum79wtzV8Q
+ 8/yydwQE1emF+CA4p5C8ALSXHiX4Cvu9FTI1V4G6gtcHV1Md+HFtCpHlNaEFZrQwyZkp8d455
+ /SByYDTXq9J5T8ZkzYTvd0HQC0TVsgR2lEsStPIUbkbM7dhjfloyT6Gomd5i36sDJZ1cxrlIR
+ xGD9GEpTE/VerseKEzJXQyfQ/xLfyzZWRuSfxb4v12ezoo1P3ZRQF2McP75U18JpfOHg=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Wed, Dec 1, 2021 at 9:24 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> On Fri, Nov 19, 2021 at 05:20:17PM -0600, Bjorn Helgaas wrote:
+> >
+> > Arnd added this with 37d6a0a6f470 ("PCI: Add
+> > pci_register_host_bridge() interface") [1].
+> >
+> > I can't remember why this was done, but we did go to some trouble to
+> > move things around, so there must have been a good reason.
+> >
+> > Arnd or Thierry, do you remember?
+>
+> Nobody seems to remember, so I think we should go ahead and make this
+> change after the usual due diligence (audit the code between the old
+> site and the new site to look for any uses of bridge->windows).
+>
+> I think this would be material for v5.17.
 
-commit 96017bf9039763a2e02dcc6adaa18592cd73a39d
-Author: Paul E. McKenney <paulmck@kernel.org>
-Date:   Wed Jul 28 17:53:41 2021 +0000
+Sorry I forgot to reply to your earlier mail. I think this is fine, as far as I
+remember, the only reason the bridge windows are moved from the list
+and added back one at a time was to preserve the exact orderorks.
 
-    rcu-tasks: Simplify trc_read_check_handler() atomic operations
+We could probably even skip that step entirely and iterate throughing
+that was there originally, to keep the behavior after a series of reworks.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1281d89db00000
-start commit:   5319255b8df9 selftests/bpf: Skip verifier tests that fail ..
-git tree:       bpf-next
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9290a409049988d4
-dashboard link: https://syzkaller.appspot.com/bug?extid=fe9d8c955bd1d0f02dc1
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14990477300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105ebd84b00000
+We could probably even skip that step entirely and iterate through
+bridge->windows instead of the local list to simplify this.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+For Sergio's patch:
 
-#syz fix: rcu-tasks: Simplify trc_read_check_handler() atomic operations
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Acked-by: Arnd Bergmann <arnd@arndb.de>

@@ -2,106 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E68C464D4C
+	by mail.lfdr.de (Postfix) with ESMTP id E072B464D4E
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:49:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349067AbhLALwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:52:04 -0500
-Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48626 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S243039AbhLALvz (ORCPT
+        id S1349118AbhLALwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:52:07 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:42012 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348563AbhLALwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:51:55 -0500
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B18J5Zw005489;
-        Wed, 1 Dec 2021 12:48:12 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=selector1;
- bh=f9hOVrZF5B8620y7OV+t9H0owKISOojaDC6v2r59cwA=;
- b=vhRtUQ2TpEANL5LgLRDHhSLfmUb8DM/s2KEPPF8jNBJiqBL38mSU7fHf+Zo84N+Grci9
- JEgeyUqIXjYzvUN7UczKeRPMBjTod4WBi21yPs43cofxq59NzregRvDGAM0jksyJlvyb
- lk2drtqUK+8NXCF6AZr3eDpG1NiZ20TYYA1X4xP4HrPqGgb9W0O2vGUpOpVZBFss2FTD
- UhnT/EGnS+FO48DORLNR5n4QAB+zMQLzMwVEpoP0LXgoOEGjMoOUDybs8zhZscTBA203
- HZ5uTsK/cHjkYKpUKtbv9sZWv/WJQvlPkjAZJ/08evw+K94ug5/hMkT/VUtIC2pm9MSz fA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cnx6ckdb4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 12:48:12 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A821910003A;
-        Wed,  1 Dec 2021 12:48:11 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A0C1D2194D5;
-        Wed,  1 Dec 2021 12:48:11 +0100 (CET)
-Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
- with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 1 Dec 2021 12:48:11
- +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <wsa@kernel.org>, <pierre-yves.mordret@foss.st.com>
-CC:     <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <amelie.delaunay@foss.st.com>, <alain.volmat@foss.st.com>
-Subject: [PATCH v2 2/2] i2c: stm32f7: remove noisy and imprecise log messages
-Date:   Wed, 1 Dec 2021 12:47:51 +0100
-Message-ID: <20211201114751.828474-3-alain.volmat@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211201114751.828474-1-alain.volmat@foss.st.com>
-References: <20211201114751.828474-1-alain.volmat@foss.st.com>
+        Wed, 1 Dec 2021 06:52:02 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id E8C3D212C2;
+        Wed,  1 Dec 2021 11:48:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638359319; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WrpXoBK/4LwwvZ609Va7mvqZYMz7+OB0m9N/bzmDziw=;
+        b=HoFAEUtdm1wIBQkZ8wytWV68qtGZn5Zx5grFcSya42VQirGgSCl6A+DC2vIcZ5TdyxdbTr
+        W2NAmwDLCRrnNBybHxojCOdjDjD70hWsiQ6QiXdF+k7JVvpls0tm3Ngx0XWYwG/B7neevV
+        w/0YAfAcfrGr1j1OEHqZd2YRZeXZFvw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638359319;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WrpXoBK/4LwwvZ609Va7mvqZYMz7+OB0m9N/bzmDziw=;
+        b=lFf3wqoLPgzv6s+15hy2N/O1nDrvid9mKt3tQRAPUvx23YZo+486dPM+tI4vMosa0+voxm
+        ihq/i/mlKzqbKOBA==
+Received: from kunlun.suse.cz (unknown [10.100.128.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 3A7ECA3B81;
+        Wed,  1 Dec 2021 11:48:37 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 12:48:36 +0100
+From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Nayna <nayna@linux.vnet.ibm.com>, Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+        Paul Mackerras <paulus@samba.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Rob Herring <robh@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        James Morris <jmorris@namei.org>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        linux-crypto@vger.kernel.org,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>,
+        Philipp Rudo <prudo@redhat.com>,
+        Frank van der Linden <fllinden@amazon.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-security-module@vger.kernel.org,
+        Jessica Yu <jeyu@kernel.org>, linux-integrity@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        buendgen@de.ibm.com
+Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
+Message-ID: <20211201114836.GD117207@kunlun.suse.cz>
+References: <cover.1637862358.git.msuchanek@suse.de>
+ <20211201023747.GN21646@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.75.127.51]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201023747.GN21646@MiWiFi-R3L-srv>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wolfram Sang <wsa@kernel.org>
+Hello,
 
-The log messages talk about 'bus recovery' while it is not a bus
-recovery with 9 pulses but merely a controller reset. Controller resets
-are not worth log messages. The 'bus busy' message should be emitted by
-upper layers, a busy bus may be expected in some cases.
+On Wed, Dec 01, 2021 at 10:37:47AM +0800, Baoquan He wrote:
+> Hi,
+> 
+> On 11/25/21 at 07:02pm, Michal Suchanek wrote:
+> > Hello,
+> > 
+> > This is resend of the KEXEC_SIG patchset.
+> > 
+> > The first patch is new because it'a a cleanup that does not require any
+> > change to the module verification code.
+> > 
+> > The second patch is the only one that is intended to change any
+> > functionality.
+> > 
+> > The rest only deduplicates code but I did not receive any review on that
+> > part so I don't know if it's desirable as implemented.
+> 
+> Do you have the link of your 1st version?
 
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Reviewed-by: Alain Volmat <alain.volmat@foss.st.com>
----
-v2: s/expectected/expected
-    reworked on top of patch making stm32f7_i2c_release_bus a void
-function
+This is the previous version:
+https://lore.kernel.org/lkml/cover.1635948742.git.msuchanek@suse.de/
 
- drivers/i2c/busses/i2c-stm32f7.c | 4 ----
- 1 file changed, 4 deletions(-)
+Thanks
 
-diff --git a/drivers/i2c/busses/i2c-stm32f7.c b/drivers/i2c/busses/i2c-stm32f7.c
-index fcf43b3ac64f..6d4aa64b195d 100644
---- a/drivers/i2c/busses/i2c-stm32f7.c
-+++ b/drivers/i2c/busses/i2c-stm32f7.c
-@@ -832,8 +832,6 @@ static void stm32f7_i2c_release_bus(struct i2c_adapter *i2c_adap)
- {
- 	struct stm32f7_i2c_dev *i2c_dev = i2c_get_adapdata(i2c_adap);
- 
--	dev_info(i2c_dev->dev, "Trying to recover bus\n");
--
- 	stm32f7_i2c_clr_bits(i2c_dev->base + STM32F7_I2C_CR1,
- 			     STM32F7_I2C_CR1_PE);
- 
-@@ -852,8 +850,6 @@ static int stm32f7_i2c_wait_free_bus(struct stm32f7_i2c_dev *i2c_dev)
- 	if (!ret)
- 		return 0;
- 
--	dev_info(i2c_dev->dev, "bus busy\n");
--
- 	stm32f7_i2c_release_bus(&i2c_dev->adap);
- 
- 	return -EBUSY;
--- 
-2.25.1
+Michal
 
+> And after going through the whole series, it doesn't tell what this
+> patch series intends to do in cover-letter or patch log.
+> 
+> Thanks
+> Baoquan
+> 
+> > 
+> > The first two patches can be applied separately without the rest.
+> > 
+> > Thanks
+> > 
+> > Michal
+> > 
+> > Michal Suchanek (6):
+> >   s390/kexec_file: Don't opencode appended signature check.
+> >   powerpc/kexec_file: Add KEXEC_SIG support.
+> >   kexec_file: Don't opencode appended signature verification.
+> >   module: strip the signature marker in the verification function.
+> >   module: Use key_being_used_for for log messages in
+> >     verify_appended_signature
+> >   module: Move duplicate mod_check_sig users code to mod_parse_sig
+> > 
+> >  arch/powerpc/Kconfig                     | 11 +++++
+> >  arch/powerpc/kexec/elf_64.c              | 14 ++++++
+> >  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
+> >  crypto/asymmetric_keys/asymmetric_type.c |  1 +
+> >  include/linux/module_signature.h         |  1 +
+> >  include/linux/verification.h             |  4 ++
+> >  kernel/module-internal.h                 |  2 -
+> >  kernel/module.c                          | 12 +++--
+> >  kernel/module_signature.c                | 56 +++++++++++++++++++++++-
+> >  kernel/module_signing.c                  | 33 +++++++-------
+> >  security/integrity/ima/ima_modsig.c      | 22 ++--------
+> >  11 files changed, 113 insertions(+), 85 deletions(-)
+> > 
+> > -- 
+> > 2.31.1
+> > 
+> > 
+> > _______________________________________________
+> > kexec mailing list
+> > kexec@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/kexec
+> > 
+> 

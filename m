@@ -2,214 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1957D465403
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A24146540C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351913AbhLARgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 12:36:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351896AbhLARgE (ORCPT
+        id S243744AbhLARhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 12:37:21 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:42054 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351941AbhLARgl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:36:04 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8712C06175D
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 09:32:42 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id g19so25223077pfb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 09:32:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=FzyE9HFngcWzXGJ+JVnIrmxG1xx/EuzgUUTbOa+7gYU=;
-        b=lQRoGsMb8BnKx/YWkYkML4540gVv9fz6kmXXHWXRgVHR1T7lPDpydrc52ygvnu27cw
-         Nf8oTR/7J0J3QoAKEH+NZZS7HfZqcW3ypo72iyn7g2Ye/tjnp9xEGdmMfZogcpq5E5f5
-         DNSRmv5MdgAV+Jc6cAWNQgtYpHYX789vOupvc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=FzyE9HFngcWzXGJ+JVnIrmxG1xx/EuzgUUTbOa+7gYU=;
-        b=KEaSdF+1tuSsKvZRwg9EcEDN0im8t2JvYaUzkSJ6N/iGENvTHMaH7pbzFKF79COgGx
-         yiZwap26QkvfO+SbXs44G7J7gsm+ImyNv+veDJZ65QYmQaC8n0LKCtKa8NNb1DCRuZui
-         BWtV5fUm3dkokIEotFU1LIgXSgeciF0dOZfTPwlTaz/VOj1qX36JHnlPVgnOHeT8a6dN
-         4Ro8zBkCAg/YZ/QM04H4uNXo+855J+vPD4HSTm1M4iQSZjAMuyQLrzXabwGunkFofgF9
-         KF3X3m4OLzb5aeMqjjdML6co69mafCpMmVwG9LUhYtGBag97+/IXbFwyhJ4/1kwjOtLi
-         9VKA==
-X-Gm-Message-State: AOAM532NH6ShzKQv5N++1w/WEsHgsMR7r9FNvcidCjtLcMdwrXN6KrCG
-        eUopdnEQmz8a8mn+poIUK+uOBA==
-X-Google-Smtp-Source: ABdhPJz4A7LJfnLMUj+4iQ5zPOYMTFU15+euUd/GNHT0BiCxqBmAqWC7rBjUyX3tUTSrXDeVa46wbw==
-X-Received: by 2002:aa7:8883:0:b0:49f:f87a:95de with SMTP id z3-20020aa78883000000b0049ff87a95demr7319034pfe.53.1638379962272;
-        Wed, 01 Dec 2021 09:32:42 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id ml24sm191408pjb.16.2021.12.01.09.32.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 09:32:41 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     Kalle Valo <kvalo@codeaurora.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        kernel test robot <lkp@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Wan Jiabing <wanjiabing@vivo.com>,
-        "John W. Linville" <linville@tuxdriver.com>,
-        Luis Carlos Cobo <luisca@cozybit.com>,
-        linux-kernel@vger.kernel.org, libertas-dev@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 2/2] libertas_tf: Add missing __packed annotations
-Date:   Wed,  1 Dec 2021 09:32:34 -0800
-Message-Id: <20211201173234.578124-3-keescook@chromium.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211201173234.578124-1-keescook@chromium.org>
-References: <20211201173234.578124-1-keescook@chromium.org>
+        Wed, 1 Dec 2021 12:36:41 -0500
+Date:   Wed, 1 Dec 2021 18:33:16 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638379997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=h8UNBLiSkPlhvyZ4mn8yJQzaXY1b8kMQFH4oNN45s+E=;
+        b=H4VTIjikZvnImdeUKXgGKHAWU2ksWjnAhdJpnXC/3WVQLLApGMNOdqED7cVyvSX7dRBoq3
+        hS0wJs3G8O2+eRjr5ofid8n8yiitoK0wdrpKVRWSd6gKaK/oNeDvhte+Zq9wOFmXKLE48w
+        AUTwGoPhLuxN3tWRCkyUgafF+Y9iyrVgn1WfVUxwiBnMoVZy4/E4fEz4jfSUsryG275mUI
+        /rN2SMmdthIzoa2Un2xXWklyYWj/AIeZQ8EFogxb5wEa9RvF808pXINg9Jyj6hROOSMaXG
+        AK7FxyGcJ7274QkpT8/F+9nsA/HbjqfvGl+o1N7CLpeXfP4VMn2faEza215MwQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638379997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=h8UNBLiSkPlhvyZ4mn8yJQzaXY1b8kMQFH4oNN45s+E=;
+        b=7nR/OSrof3g7Lepe/dQhkdj4vK4mbpa7dzfH6Grsp7Xp5JK0kJFDhVeOFkqRQtcMVnefOR
+        PDV+SH8+iO5rJpAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v5.16-rc3-rt7
+Message-ID: <20211201173316.rm6o67qapqsx2n47@linutronix.de>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3543; h=from:subject; bh=2tGVFx8Insnm3c0UY7JXrxmXYfUn1BDPwA2uzEQkk94=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBhp7Gy5qOMgVEOvMQuG8T64wdYryY5VwpNynjJn43H kbDhSn6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYaexsgAKCRCJcvTf3G3AJsHwD/ 990Bey9pUtkfjcJomJzp7SfME2jkcVLPDwof+Fbu4OLxOC7pAz2sbGTNpVHkwA/cxz9lwMtPi0akGt QUtMW6QlZJAkiIijvHETej7YIAXMK7XEg5TefmjCUWypw5qVJBrY1BxcL6rlpTUAs8hVfTGHqLGxTq 4BNpysfs5kgjAt4v16mRj42S6SMU11tzNUVVPKVy1iv8LzV02nXfAyIIfHUpjgnQRUGUMJKSi95QPN W/3v0W4vL/95UQA9OPtTkMpXx/5ZGsQ4SJCB4EGPiYMX0aZCdyNM7OWCQnHNKnypP1VrAmHuiYdJze M7I7Q+VQD+rVVaj9DVlL/V/lJdI456tCcVj4ejFEm4LsybKoBtGFMPJo9YOFOu+Mfz8yjmUhYB07+/ xoDAwiQrrsezUhMy+ccbCI6LxlkX3PF9Nfl5xAFW8HAW0YZ3l5HrOg2dnn6+gJskYsHm5Ztd6b/bYy kU5Gl4eJDn9sq1KX3R4U04szWwKlQVqXzaSPP4T4gBaxrtNDsrYLXefofk7E40KJ990RxiThbr4eqx XllVocubnCL1WvKVS4AHGxmQOlK77yqLqJq9ZqdXYtC4biuL5J0v7QYNBzx7VgiSuTth2M+0RZCgK4 J2uUY2bpEPIe45yBdmyhKNG5ZeuN4bdiDPPNTAW0AVji1AWuH83q2Dp2Z5DA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The earlier __packed annotations added in commit d71038c05970 ("libertas:
-Fix alignment issues in libertas core") were not duplicated when
-libertas_af was added in commit 7670e62c7ed6 ("libertas_tf: header file"),
-even though they share several structure definitions. Add the missing
-annotations which commit 642a57475b30 ("libertas_tf: Use struct_group()
-for memcpy() region") exposed. Quoting the prior libertas fix: "Data
-structures that come over the wire from the WLAN firmware must be
-packed."
+Dear RT folks!
 
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/linux-mm/202111302102.apaePz2J-lkp@intel.com
-Fixes: 642a57475b30 ("libertas_tf: Use struct_group() for memcpy() region")
-Fixes: 7670e62c7ed6 ("libertas_tf: header file")
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- .../marvell/libertas_tf/libertas_tf.h         | 28 +++++++++----------
- 1 file changed, 14 insertions(+), 14 deletions(-)
+I'm pleased to announce the v5.16-rc3-rt7 patch set. 
 
-diff --git a/drivers/net/wireless/marvell/libertas_tf/libertas_tf.h b/drivers/net/wireless/marvell/libertas_tf/libertas_tf.h
-index b2af2ddb6bc4..631b5da09f86 100644
---- a/drivers/net/wireless/marvell/libertas_tf/libertas_tf.h
-+++ b/drivers/net/wireless/marvell/libertas_tf/libertas_tf.h
-@@ -268,7 +268,7 @@ struct txpd {
- 	__le32 tx_packet_location;
- 	/* Tx packet length */
- 	__le16 tx_packet_length;
--	struct_group(tx_dest_addr,
-+	struct_group_attr(tx_dest_addr, __packed,
- 		/* First 2 byte of destination MAC address */
- 		u8 tx_dest_addr_high[2];
- 		/* Last 4 byte of destination MAC address */
-@@ -282,7 +282,7 @@ struct txpd {
- 	u8 pktdelay_2ms;
- 	/* reserved */
- 	u8 reserved1;
--};
-+} __packed;
- 
- /* RxPD Descriptor */
- struct rxpd {
-@@ -313,7 +313,7 @@ struct rxpd {
- 	/* Pkt Priority */
- 	u8 priority;
- 	u8 reserved[3];
--};
-+} __packed;
- 
- struct cmd_header {
- 	__le16 command;
-@@ -379,14 +379,14 @@ struct cmd_ds_mac_control {
- 	struct cmd_header hdr;
- 	__le16 action;
- 	u16 reserved;
--};
-+} __packed;
- 
- struct cmd_ds_802_11_mac_address {
- 	struct cmd_header hdr;
- 
- 	__le16 action;
- 	uint8_t macadd[ETH_ALEN];
--};
-+} __packed;
- 
- struct cmd_ds_mac_multicast_addr {
- 	struct cmd_header hdr;
-@@ -394,27 +394,27 @@ struct cmd_ds_mac_multicast_addr {
- 	__le16 action;
- 	__le16 nr_of_adrs;
- 	u8 maclist[ETH_ALEN * MRVDRV_MAX_MULTICAST_LIST_SIZE];
--};
-+} __packed;
- 
- struct cmd_ds_set_mode {
- 	struct cmd_header hdr;
- 
- 	__le16 mode;
--};
-+} __packed;
- 
- struct cmd_ds_set_bssid {
- 	struct cmd_header hdr;
- 
- 	u8 bssid[6];
- 	u8 activate;
--};
-+} __packed;
- 
- struct cmd_ds_802_11_radio_control {
- 	struct cmd_header hdr;
- 
- 	__le16 action;
- 	__le16 control;
--};
-+} __packed;
- 
- 
- struct cmd_ds_802_11_rf_channel {
-@@ -425,20 +425,20 @@ struct cmd_ds_802_11_rf_channel {
- 	__le16 rftype;      /* unused */
- 	__le16 reserved;    /* unused */
- 	u8 channellist[32]; /* unused */
--};
-+} __packed;
- 
- struct cmd_ds_set_boot2_ver {
- 	struct cmd_header hdr;
- 
- 	__le16 action;
- 	__le16 version;
--};
-+} __packed;
- 
- struct cmd_ds_802_11_reset {
- 	struct cmd_header hdr;
- 
- 	__le16 action;
--};
-+} __packed;
- 
- struct cmd_ds_802_11_beacon_control {
- 	struct cmd_header hdr;
-@@ -446,14 +446,14 @@ struct cmd_ds_802_11_beacon_control {
- 	__le16 action;
- 	__le16 beacon_enable;
- 	__le16 beacon_period;
--};
-+} __packed;
- 
- struct cmd_ds_802_11_beacon_set {
- 	struct cmd_header hdr;
- 
- 	__le16 len;
- 	u8 beacon[MRVL_MAX_BCN_SIZE];
--};
-+} __packed;
- 
- struct cmd_ctrl_node;
- 
--- 
-2.30.2
+Changes since v5.16-rc3-rt6:
 
+  - Drop the workaround for the initialisation of the stack canary on
+    x86. It is no longer needed.
+
+  - Introduce the `ktimers' thread which handles the softirq work of
+    HRTIMER_SOFTIRQ and TIMER_SOFTIRQ. This avoids the wake up of
+    ksoftirqd which then collects all softirqs.
+
+Known issues
+     - netconsole triggers WARN.
+
+     - The "Memory controller" (CONFIG_MEMCG) has been disabled.
+
+     - Valentin Schneider reported a few splats on ARM64, see
+          https://lkml.kernel.org/r/20210810134127.1394269-1-valentin.schneider@arm.com
+
+The delta patch against v5.16-rc3-rt6 is appended below and can be found here:
+ 
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/incr/patch-5.16-rc3-rt6-rt7.patch.xz
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v5.16-rc3-rt7
+
+The RT patch against v5.16-rc3 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/older/patch-5.16-rc3-rt7.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/5.16/older/patches-5.16-rc3-rt7.tar.xz
+
+Sebastian
+
+diff --git a/arch/x86/include/asm/stackprotector.h b/arch/x86/include/asm/stackprotector.h
+index 2fc22c27df183..24a8d6c4fb185 100644
+--- a/arch/x86/include/asm/stackprotector.h
++++ b/arch/x86/include/asm/stackprotector.h
+@@ -50,7 +50,7 @@
+  */
+ static __always_inline void boot_init_stack_canary(void)
+ {
+-	u64 canary = 0;
++	u64 canary;
+ 	u64 tsc;
+ 
+ #ifdef CONFIG_X86_64
+@@ -61,14 +61,8 @@ static __always_inline void boot_init_stack_canary(void)
+ 	 * of randomness. The TSC only matters for very early init,
+ 	 * there it already has some randomness on most systems. Later
+ 	 * on during the bootup the random pool has true entropy too.
+-	 * For preempt-rt we need to weaken the randomness a bit, as
+-	 * we can't call into the random generator from atomic context
+-	 * due to locking constraints. We just leave canary
+-	 * uninitialized and use the TSC based randomness on top of it.
+ 	 */
+-#ifndef CONFIG_PREEMPT_RT
+ 	get_random_bytes(&canary, sizeof(canary));
+-#endif
+ 	tsc = rdtsc();
+ 	canary += tsc + (tsc << 32UL);
+ 	canary &= CANARY_MASK;
+diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
+index 1f22a30c09637..9c35024be9422 100644
+--- a/include/linux/interrupt.h
++++ b/include/linux/interrupt.h
+@@ -554,6 +554,22 @@ extern void __raise_softirq_irqoff(unsigned int nr);
+ extern void raise_softirq_irqoff(unsigned int nr);
+ extern void raise_softirq(unsigned int nr);
+ 
++#ifdef CONFIG_PREEMPT_RT
++extern void raise_timer_softirq(void);
++extern void raise_hrtimer_softirq(void);
++
++#else
++static inline void raise_timer_softirq(void)
++{
++	raise_softirq(TIMER_SOFTIRQ);
++}
++
++static inline void raise_hrtimer_softirq(void)
++{
++	raise_softirq_irqoff(HRTIMER_SOFTIRQ);
++}
++#endif
++
+ DECLARE_PER_CPU(struct task_struct *, ksoftirqd);
+ 
+ static inline struct task_struct *this_cpu_ksoftirqd(void)
+diff --git a/kernel/softirq.c b/kernel/softirq.c
+index 322b65d456767..e49fcdea145d8 100644
+--- a/kernel/softirq.c
++++ b/kernel/softirq.c
+@@ -623,6 +623,22 @@ static inline void tick_irq_exit(void)
+ #endif
+ }
+ 
++static DEFINE_PER_CPU(struct task_struct *, timersd);
++static DEFINE_PER_CPU(unsigned long, pending_timer_softirq);
++
++static unsigned int local_pending_timers(void)
++{
++        return __this_cpu_read(pending_timer_softirq);
++}
++
++static void wake_timersd(void)
++{
++        struct task_struct *tsk = __this_cpu_read(timersd);
++
++        if (tsk)
++                wake_up_process(tsk);
++}
++
+ static inline void __irq_exit_rcu(void)
+ {
+ #ifndef __ARCH_IRQ_EXIT_IRQS_DISABLED
+@@ -634,6 +650,8 @@ static inline void __irq_exit_rcu(void)
+ 	preempt_count_sub(HARDIRQ_OFFSET);
+ 	if (!in_interrupt() && local_softirq_pending())
+ 		invoke_softirq();
++	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !in_interrupt() && local_pending_timers())
++		wake_timersd();
+ 
+ 	tick_irq_exit();
+ }
+@@ -962,11 +980,69 @@ static struct smp_hotplug_thread softirq_threads = {
+ 	.thread_comm		= "ksoftirqd/%u",
+ };
+ 
++static void timersd_setup(unsigned int cpu)
++{
++        sched_set_fifo_low(current);
++}
++
++static int timersd_should_run(unsigned int cpu)
++{
++        return local_pending_timers();
++}
++
++static void run_timersd(unsigned int cpu)
++{
++	unsigned int timer_si;
++
++	ksoftirqd_run_begin();
++
++	timer_si = local_pending_timers();
++	__this_cpu_write(pending_timer_softirq, 0);
++	or_softirq_pending(timer_si);
++
++	__do_softirq();
++
++	ksoftirqd_run_end();
++}
++
++#ifdef CONFIG_PREEMPT_RT
++static void raise_ktimers_thread(unsigned int nr)
++{
++	trace_softirq_raise(nr);
++	__this_cpu_or(pending_timer_softirq, 1 << nr);
++}
++
++void raise_hrtimer_softirq(void)
++{
++	raise_ktimers_thread(HRTIMER_SOFTIRQ);
++}
++
++void raise_timer_softirq(void)
++{
++	unsigned long flags;
++
++	local_irq_save(flags);
++	raise_ktimers_thread(TIMER_SOFTIRQ);
++	wake_timersd();
++	local_irq_restore(flags);
++}
++#endif
++
++struct smp_hotplug_thread timer_threads = {
++        .store                  = &timersd,
++        .setup                  = timersd_setup,
++        .thread_should_run      = timersd_should_run,
++        .thread_fn              = run_timersd,
++        .thread_comm            = "ktimers/%u",
++};
++
+ static __init int spawn_ksoftirqd(void)
+ {
+ 	cpuhp_setup_state_nocalls(CPUHP_SOFTIRQ_DEAD, "softirq:dead", NULL,
+ 				  takeover_tasklets);
+ 	BUG_ON(smpboot_register_percpu_thread(&softirq_threads));
++	if (IS_ENABLED(CONFIG_PREEMPT_RT))
++		BUG_ON(smpboot_register_percpu_thread(&timer_threads));
+ 
+ 	return 0;
+ }
+diff --git a/kernel/time/hrtimer.c b/kernel/time/hrtimer.c
+index 0ea8702eb5163..dead5e738ecf1 100644
+--- a/kernel/time/hrtimer.c
++++ b/kernel/time/hrtimer.c
+@@ -1805,7 +1805,7 @@ void hrtimer_interrupt(struct clock_event_device *dev)
+ 	if (!ktime_before(now, cpu_base->softirq_expires_next)) {
+ 		cpu_base->softirq_expires_next = KTIME_MAX;
+ 		cpu_base->softirq_activated = 1;
+-		raise_softirq_irqoff(HRTIMER_SOFTIRQ);
++		raise_hrtimer_softirq();
+ 	}
+ 
+ 	__hrtimer_run_queues(cpu_base, now, flags, HRTIMER_ACTIVE_HARD);
+@@ -1918,7 +1918,7 @@ void hrtimer_run_queues(void)
+ 	if (!ktime_before(now, cpu_base->softirq_expires_next)) {
+ 		cpu_base->softirq_expires_next = KTIME_MAX;
+ 		cpu_base->softirq_activated = 1;
+-		raise_softirq_irqoff(HRTIMER_SOFTIRQ);
++		raise_hrtimer_softirq();
+ 	}
+ 
+ 	__hrtimer_run_queues(cpu_base, now, flags, HRTIMER_ACTIVE_HARD);
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index e3d2c23c413d4..b276c34690fa2 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1766,7 +1766,7 @@ static void run_local_timers(void)
+ 		if (time_before(jiffies, base->next_expiry))
+ 			return;
+ 	}
+-	raise_softirq(TIMER_SOFTIRQ);
++	raise_timer_softirq();
+ }
+ 
+ /*
+diff --git a/localversion-rt b/localversion-rt
+index 8fc605d806670..045478966e9f1 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt6
++-rt7

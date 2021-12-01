@@ -2,167 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 245C7464AAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38758464AAD
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:30:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242416AbhLAJdL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 04:33:11 -0500
-Received: from relay5-d.mail.gandi.net ([217.70.183.197]:47979 "EHLO
-        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235806AbhLAJdI (ORCPT
+        id S1348197AbhLAJeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 04:34:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33766 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242448AbhLAJeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:33:08 -0500
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id D017E1C0008;
-        Wed,  1 Dec 2021 09:29:42 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 10:29:26 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Denis Kirjanov <dkirjanov@suse.de>,
-        Julian Wiedmann <jwi@linux.ibm.com>
-Subject: Re: [PATCH net-next v3 4/4] net: ocelot: add FDMA support
-Message-ID: <20211201102926.3eacd95e@fixe.home>
-In-Reply-To: <20211129174038.gptbivgmbqzrrgtz@skbuf>
-References: <20211126172739.329098-1-clement.leger@bootlin.com>
- <20211126172739.329098-5-clement.leger@bootlin.com>
- <20211127145805.75qh2vim7c5m5hjd@skbuf>
- <20211129091902.0112eb17@fixe.home>
- <20211129174038.gptbivgmbqzrrgtz@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 1 Dec 2021 04:34:02 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 116CCC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 01:30:42 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id l16so50695942wrp.11
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 01:30:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+lQcO8ppUE7hejt9YaL1vY0mu8mVlWjuLxDwwyoQ/Tc=;
+        b=TPS/DB745w+9fVWD0DQRKtMppF7KlB0l87RE7pzidy+9/mbqUxL8vX/M1184NjUfBe
+         7YKDQ/M05Q46ZnY6vkb3QRJh2vZUKNrYP3bM/2ThfnMDlyrLwZNc5P2Q9aHNk4vYTM0V
+         oCIqL0dvLybIN/uvq4qAPNJ+rn8HhMviIVvKD1RD1+FXCZGLDM2UJKhK8IUjezXV2BzX
+         3q9758XE5U8vE3PwAUk+SdCqO4fIKydjYpG9cuAuaAEK15bwoJdJB/+cqk8v+zQ9b925
+         wfp2+YwMqEKTVv1a0yP9JUcyNSMEsEU/fiTfhvRxLvAO+5mgL9QUgvbrbq5uzgBZWF57
+         4j2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+lQcO8ppUE7hejt9YaL1vY0mu8mVlWjuLxDwwyoQ/Tc=;
+        b=2tIGc8MKYp5EXSPSwifoivqezF5FuAI4+Z5x+p9xfrS0vwEET/vsRuzjZxJp7TQ4jw
+         ApbNrncqtCbRZTdo7luS3/tY/fTj4OE8VWWVtw1AAFKmL/IURhJVqWV01gn6lOyqbhFu
+         fsGGjoCkpyA3xsEtsBWnT1Dw0XCmBM6A61hpwep8wHmNuwio/lmZEfKkFADJ1Aa0QqTY
+         Ty2VqPLKLkvF2eNTsuEYlH5UmETaAYiNuxcNFOAj4mywR4UquNQkZgztMSB+/Hro4erw
+         1Bdeu0/ZiiECoLPO82k0dIltRP+6xmqKMY42eIolRypY8zPfeMfTMMYRnoJhrJUUtx2g
+         9+2Q==
+X-Gm-Message-State: AOAM531O+eFmhyN9SwUH7fcmEAut0Pm/g3T/+vyz3TCgwIywn8uAsmg5
+        aulrcKAPhmbcKZtdbKn/9R/fOQ==
+X-Google-Smtp-Source: ABdhPJzT1IuhrS2TGDdSq4UiTp/L1srB/g3ytBrh3irQ8SUHGP9eItEtK+ItCJezZ8CSKR403NLT+g==
+X-Received: by 2002:adf:eac8:: with SMTP id o8mr5345728wrn.337.1638351040539;
+        Wed, 01 Dec 2021 01:30:40 -0800 (PST)
+Received: from bojack.baylibre.local (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id h16sm20066480wrm.27.2021.12.01.01.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 01:30:40 -0800 (PST)
+From:   Neil Armstrong <narmstrong@baylibre.com>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: Re: [PATCH] arm64: meson: remove COMMON_CLK
+Date:   Wed,  1 Dec 2021 10:30:38 +0100
+Message-Id: <163835101636.1348067.15879754302967719702.b4-ty@baylibre.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20210609202009.1424879-1-jbrunet@baylibre.com>
+References: <20210609202009.1424879-1-jbrunet@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, 29 Nov 2021 17:40:39 +0000,
-Vladimir Oltean <vladimir.oltean@nxp.com> a écrit :
+Hi,
 
-> On Mon, Nov 29, 2021 at 09:19:02AM +0100, Clément Léger wrote:
-> > > I'm not sure why you're letting the hardware grind to a halt first,
-> > > before refilling? I think since the CPU is the bottleneck anyway, you
-> > > can stop the extraction channel at any time you want to refill.
-> > > A constant stream of less data might be better than a bursty one.
-> > > Or maybe I'm misunderstanding some of the details of the hardware.  
-> > 
-> > Indeed, I can stop the extraction channel but that does not seems a
-> > good idea to stop the channel in a steady state. At least that's what I
-> > thought since it will make the receive "window" non predictable. Not
-> > sure how well it will play with various protocol but I will try
-> > implementing the refill we talked previously (ie when there an
-> > available threshold is reached).  
-> (...)
-> > > I don't understand why you restart the injection channel from the TX
-> > > confirmation interrupt. It raised the interrupt to tell you that it hit
-> > > a NULL LLP because there's nothing left to send. If you restart it now and
-> > > no other transmission has happened in the meantime, won't it stop again?  
-> > 
-> > Actually, it is only restarted if there is some pending packets to
-> > send. With this hardware, packets can't be added while the FDMA is
-> > running and it must be stopped everytime we want to add a packet to the
-> > list. To avoid that, in the TX path, if the FDMA is stopped, we set the
-> > llp of the packet to NULL and start the chan. However, if the FDMA TX
-> > channel is running, we don't stop it, we simply add the next packets to
-> > the ring. However, the FDMA will stop on the previous NULL LLP. So when
-> > we hit a LLP, we might not be at the end of the list. This is why the
-> > next check verifies if we hit a NULL LLP and if there is still some
-> > packet to send.   
+On Wed, 9 Jun 2021 22:20:09 +0200, Jerome Brunet wrote:
+> This reverts commit aea7a80ad5effd48f44a7a08c3903168be038a43.
+> Selecting COMMON_CLK is not necessary, it is already selected by
+> CONFIG_ARM64
 > 
-> Oh, is that so? That would be pretty odd if the hardware is so dumb that
-> it doesn't detect changes made to an LLP on the go.
 > 
-> The manual has this to say, and I'm not sure how to interpret it:
-> 
-> | It is possible to update an active channels LLP pointer and pointers in
-> | the DCB chains. Before changing pointers software must schedule the
-> | channel for disabling (by writing FDMA_CH_DISABLE.CH_DISABLE[ch]) and
-> | then wait for the channel to set FDMA_CH_SAFE.CH_SAFE[ch]. When the
-> | pointer update is complete, soft must re-activate the channel by setting
-> | FDMA_CH_ACTIVATE.CH_ACTIVATE[ch]. Setting activate will cancel the
-> | deactivate-request, or if the channel has disabled itself in the
-> | meantime, it will re activate the channel.
-> 
-> So it is possible to update an active channel's LLP pointer, but not
-> while it's active? Thank you very much!
 
-In the manual, this is also stated that:
+Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.16/fixes)
 
-| The FDMA does not reload the current DCB when re- activated,
-| so if the LLP-field of the current DCB is modified, then software must
-| also modify FDMA_DCB_LLP[ch].
-
-The FDMA present on the next generation (sparx5) is *almost* the same
-but a new RELOAD register has been added and allows adding a DCB at the
-end of the linked list without stopping the FDMA, and then simply hit
-the RELOAD register to restart it if needed. Unfortunately, this is not
-the case for the ocelot one. 
-
-> 
-> If true, this will severely limit the termination performance one is
-> able to obtain with this switch, even with a faster CPU and PCIe.
-> 
-> > > > +void ocelot_fdma_netdev_init(struct ocelot_fdma *fdma, struct net_device *dev)
-> > > > +{
-> > > > +	dev->needed_headroom = OCELOT_TAG_LEN;
-> > > > +	dev->needed_tailroom = ETH_FCS_LEN;    
-> > > 
-> > > The needed_headroom is in no way specific to FDMA, right? Why aren't you
-> > > doing it for manual register-based injection too? (in a separate patch ofc)  
-> > 
-> > Actually, If I switch to page based ring, This won't be useful anymore
-> > because the header will be written directly in the page and not anymore
-> > directly in the skb header.  
-> 
-> I don't understand this comment. You set up the needed headroom and
-> tailroom netdev variables to avoid reallocation on TX, not for RX.
-> And you use half page buffers for RX, not for TX.
-
-Ok, so indeed, I don't think it is needed for the register-based
-injection since the IFH is computed on the stack and pushed word by
-word into the fifo separately from the skb data. In the case of the
-FDMA, it is read from the start of the DCB DATAL adress so this is why
-this is needed. I could also put the IFH in a separate DCB and then
-split the data in a next DCB using SOF/EOF flags but I'm not sure it
-will be beneficial from a performance point of view. I could try that
-since the CPU is slow, it might be better in some case to let the FDMA
-handle this instead of usign the CPU to increase the SKB size and
-linearize it.
-
-> 
-> > > I can't help but think how painful it is that with a CPU as slow as
-> > > yours, insult over injury, you also need to check for each packet
-> > > whether the device tree had defined the "fdma" region or not, because
-> > > you practically keep two traffic I/O implementations due to that sole
-> > > reason. I think for the ocelot switchdev driver, which is strictly for
-> > > MIPS CPUs embedded within the device, it should be fine to introduce a
-> > > static key here (search for static_branch_likely in the kernel).  
-> > 
-> > I thinked about it *but* did not wanted to add a key since it would be
-> > global. However, we could consider that there is always only one
-> > instance of the driver and indeed a static key is an option.
-> > Unfortunately, I'm not sure this will yield any noticeable performance
-> > improvement.  
-> 
-> What is the concern with a static key in this driver, exactly?
-
-Only that the static key will be global but this driver does not have
-anything global. If you have no concern about that, I'm ok to add one.
-
+[1/1] arm64: meson: remove COMMON_CLK
+      https://git.kernel.org/amlogic/c/5ad77b1272fce36604779efe6e2036c500e6fe7a
 
 -- 
-Clément Léger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+Neil

@@ -2,144 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 982D1464A0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:46:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC18464A2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242045AbhLAItU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 03:49:20 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:42000 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231397AbhLAItS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 03:49:18 -0500
-Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B18ICQd013840;
-        Wed, 1 Dec 2021 08:45:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=I+sGg/VdPgJ7aMEo6GW8MJglfDFgVcm6SN2xhuLvAj4=;
- b=kxR+VrQyrJl2iKfJ11/B0msDV9O6VkzofLa2BjFkaEGC97Cl5iQnLxEDJvSP0EdzZAj+
- Cxk7ea9Y3NtSUh8abQzH5IRvBjch9QAO7sxOvGUu3JH6cH3M34gSgATlu7gzASDO+GWN
- oEHXcw8wdvEOFcZWEBg3WstwmFfIIUoM1uj2ljMKs4bQW5vj5BG7vZv4kXHrVjwVAVYJ
- RGfUeyGqhT82YYh0tq8RWsvwLHcFbZQuBppdGSIuNl5fy1E4EMkjRpYebVOx0fWebbGX
- oL5P/NzKwjOCpuJG4QfeRUIWn8hLJUE/8pcFXUTmPZjZm4t4xeCuXqbFR3tBF7woviVL pQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cp5dqgkkt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 08:45:55 +0000
-Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B18jtE6017131;
-        Wed, 1 Dec 2021 08:45:55 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cp5dqgkjk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 08:45:55 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B18fhSh008040;
-        Wed, 1 Dec 2021 08:45:53 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ckbxk7h97-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 08:45:53 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B18cNlR23134716
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Dec 2021 08:38:23 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8AF81A4068;
-        Wed,  1 Dec 2021 08:45:49 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 322F4A405F;
-        Wed,  1 Dec 2021 08:45:49 +0000 (GMT)
-Received: from [9.145.42.85] (unknown [9.145.42.85])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Dec 2021 08:45:49 +0000 (GMT)
-Message-ID: <6b781b76-28a9-c375-30cb-ee6764ecd7c8@linux.ibm.com>
-Date:   Wed, 1 Dec 2021 09:45:48 +0100
+        id S236345AbhLAIwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 03:52:51 -0500
+Received: from smtp2.axis.com ([195.60.68.18]:61352 "EHLO smtp2.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231397AbhLAIwu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 03:52:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1638348570;
+  x=1669884570;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f0gShEKXjzX9AdLiLP+/IR19sas2R14bBFUPZdaEFTw=;
+  b=K5dXPbbNsE+zJS4yzEVNThT5Si1JyphTahSc1x5IDydgEqW/HdFrINV3
+   o/gs7GPpu9lkB61pqmlSEhg7EG1/ztT85t6ezAKU1/MTW5ZjMHCZOns62
+   4WKDrNc+lTKw3VkzeNmn+UqWzdn9mJ8NAK/tjWoW8DItya6OQXRoqfFxX
+   fwdsVBwN+zcAHZdw575jfafPnRku5bGKBYmeXsdE0WLJJaBg1H4MEtbgN
+   kTFqIpX8WqAFvzri6Kql4gmnL44TyOu1dYsGJnF+A4xhB/bV6PHKvWUhg
+   agywyNq59DAVU1ABeG5erL0vB90nTG5NtErepKhxpqyUB3mdk/z13Mldf
+   Q==;
+Date:   Wed, 1 Dec 2021 09:49:27 +0100
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+CC:     Alessandro Zummo <a.zummo@towertech.it>, kernel <kernel@axis.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rtc: pcf8523: fix alarm interrupt disabling
+Message-ID: <20211201084927.GB26222@axis.com>
+References: <20211103152253.22844-1-vincent.whitchurch@axis.com>
+ <YaaxcFn/di3wCnO1@piout.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH] KVM: s390: Fix names of skey constants in api
- documentation
-Content-Language: en-US
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211118102522.569660-1-scgl@linux.ibm.com>
-From:   Janosch Frank <frankja@linux.ibm.com>
-In-Reply-To: <20211118102522.569660-1-scgl@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Ca5KCzTII-m_H1mWHoHJJpJ2rAEemIsK
-X-Proofpoint-ORIG-GUID: 7YdmZGa1hZsUCd0VZoCfFqUoefehnIPv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-11-28_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- clxscore=1011 priorityscore=1501 impostorscore=0 phishscore=0
- mlxlogscore=999 lowpriorityscore=0 spamscore=0 suspectscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112010049
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <YaaxcFn/di3wCnO1@piout.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/18/21 11:25, Janis Schoetterl-Glausch wrote:
-> The are defined in include/uapi/linux/kvm.h as
-
-s/The/They/
-
-I can fix that up when picking if you want.
-
-> KVM_S390_GET_SKEYS_NONE and KVM_S390_SKEYS_MAX, but the
-> api documetation talks of KVM_S390_GET_KEYS_NONE and
-> KVM_S390_SKEYS_ALLOC_MAX respectively.
+On Wed, Dec 01, 2021 at 12:19:12AM +0100, Alexandre Belloni wrote:
+> On 03/11/2021 16:22:52+0100, Vincent Whitchurch wrote:
+> > Fix the driver to actually disable the IRQ and not overwrite other bits
+> > in the CONTROL_1 register when it is asked to disable the alarm
+> > interrupt.
+> > 
+> > Compile-tested only.
+> > 
+> > Fixes: 13e37b7fb75dfaeb4 ("rtc: pcf8523: add alarm support")
+> > Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> > ---
+> >  drivers/rtc/rtc-pcf8523.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/rtc/rtc-pcf8523.c b/drivers/rtc/rtc-pcf8523.c
+> > index 8b6fb20774bf..e26477267451 100644
+> > --- a/drivers/rtc/rtc-pcf8523.c
+> > +++ b/drivers/rtc/rtc-pcf8523.c
+> > @@ -347,7 +347,7 @@ static int pcf8523_irq_enable(struct device *dev, unsigned int enabled)
+> >  	if (err < 0)
+> >  		return err;
+> >  
+> > -	value &= PCF8523_CONTROL1_AIE;
+> > +	value &= ~PCF8523_CONTROL1_AIE;
+> >  
 > 
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
+> I was going to apply that but it seems this was fixed by:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit?id=91f3849d956d58073ef55e01f2e8871dc30847a5
 
-Thanks for fixing this up.
-
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
-
-> ---
->   Documentation/virt/kvm/api.rst | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index aeeb071c7688..b86c7edae888 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -3701,7 +3701,7 @@ KVM with the currently defined set of flags.
->   :Architectures: s390
->   :Type: vm ioctl
->   :Parameters: struct kvm_s390_skeys
-> -:Returns: 0 on success, KVM_S390_GET_KEYS_NONE if guest is not using storage
-> +:Returns: 0 on success, KVM_S390_GET_SKEYS_NONE if guest is not using storage
->             keys, negative value on error
->   
->   This ioctl is used to get guest storage key values on the s390
-> @@ -3720,7 +3720,7 @@ you want to get.
->   
->   The count field is the number of consecutive frames (starting from start_gfn)
->   whose storage keys to get. The count field must be at least 1 and the maximum
-> -allowed value is defined as KVM_S390_SKEYS_ALLOC_MAX. Values outside this range
-> +allowed value is defined as KVM_S390_SKEYS_MAX. Values outside this range
->   will cause the ioctl to return -EINVAL.
->   
->   The skeydata_addr field is the address to a buffer large enough to hold count
-> @@ -3744,7 +3744,7 @@ you want to set.
->   
->   The count field is the number of consecutive frames (starting from start_gfn)
->   whose storage keys to get. The count field must be at least 1 and the maximum
-> -allowed value is defined as KVM_S390_SKEYS_ALLOC_MAX. Values outside this range
-> +allowed value is defined as KVM_S390_SKEYS_MAX. Values outside this range
->   will cause the ioctl to return -EINVAL.
->   
->   The skeydata_addr field is the address to a buffer containing count bytes of
-> 
-
+Yes, you're right, sorry.  I had only checked mainline at the time I
+wrote the patch and not what was queued up in linux-next.

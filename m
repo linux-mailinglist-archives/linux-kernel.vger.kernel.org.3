@@ -2,75 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 005354644D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3DE4644D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345936AbhLACXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:23:33 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:49730 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbhLACXb (ORCPT
+        id S1345986AbhLACYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:24:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345957AbhLACY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:23:31 -0500
+        Tue, 30 Nov 2021 21:24:28 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DA6C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:21:08 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 72AF8B81C0F;
-        Wed,  1 Dec 2021 02:20:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 25E5CC53FC7;
-        Wed,  1 Dec 2021 02:20:09 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6B3A1CE1C91
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 02:21:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E4AC53FC7;
+        Wed,  1 Dec 2021 02:21:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638325209;
-        bh=NsrkI24hix3RptPZuZ71vjwQOEYKri4EMggY7An9M6U=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sAGx29hvH+xkMzOQWtp5v2Die9qU1BN6CCNeMpEGnBVKREsljq/WZ0X1qijFtwMl9
-         zTG1RkrwDTkMZv5tr5/LU6OdQ+oOWGFlRQ3z1OMGQhUnZPxaaXLXYM7nKPCFfvejIX
-         I+yCRWwgHQrvcI2oZhTrjjNR7N4wer1okY+b1kNv/AxPbA+A8GsnVf2SOMcl995Kp2
-         40+XOO4odY+y41w1tDNldBQdz8elmfPc8IxYvQfAv0pSWP62nzGGzv077FPGpHAXa8
-         TjoakFcldckXEMcCBtBqkW+9K/V+uU3X3S+oIlby2cuHmu6UGxVSs3A89DVP7Y6zXF
-         7wEWTSICMt4Cw==
-Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 0C33B60A38;
-        Wed,  1 Dec 2021 02:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH -next] mctp: remove unnecessary check before calling
- kfree_skb()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <163832520904.6106.12847821764543488258.git-patchwork-notify@kernel.org>
-Date:   Wed, 01 Dec 2021 02:20:09 +0000
-References: <20211130031243.768823-1-yangyingliang@huawei.com>
-In-Reply-To: <20211130031243.768823-1-yangyingliang@huawei.com>
-To:     Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        jk@codeconstruct.com.au, davem@davemloft.net, kuba@kernel.org
+        s=k20201202; t=1638325264;
+        bh=mFH6sIyHA75mLSDgtt90j3Sz8X0d1OlU5XUa9IzV+5c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=k5vZxltVEwUvVG4hc6utquWGrrGdE0JT4PmQMG+ch78C3tDSuzQDiNjJs3kYcYHaU
+         DVDqlgYSNWy2zmVYHt+60G+tEbGLhuMfJ7YDX0tlL/HSoFkaIuy0Oe/N47xLPtKyr2
+         On088TNYyeZT7xHTdpynZzTzfn4vrlnEty/7rYBpmbbDz0Z3EwMU985Ob4TIFtTJ7X
+         q5ae/4jtgFNuEqMK8jUBXkGXuVoSn1ubauPn/wpEjCWNN0P6qIT0ohRoMlmIAF8czi
+         l9em36GrPDFkh+i9UkmtDdHeaGJaSNEDOOtk9+kMDt4d10ElAFB49UOREbOjGzucDv
+         12e7EMJXg0fEA==
+Date:   Wed, 1 Dec 2021 11:21:00 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH] tracing/histograms: String compares should not care
+ about signed values
+Message-Id: <20211201112100.23d4caafd8319e15073a41ed@kernel.org>
+In-Reply-To: <20211130123736.7c3cab27@gandalf.local.home>
+References: <20211130123736.7c3cab27@gandalf.local.home>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Tue, 30 Nov 2021 12:37:36 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 30 Nov 2021 11:12:43 +0800 you wrote:
-> The skb will be checked inside kfree_skb(), so remove the
-> outside check.
+> From 95f7262b44dc54fed8007cc3db8b39cbd16999c6 Mon Sep 17 00:00:00 2001
+> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
+> Date: Tue, 30 Nov 2021 12:31:23 -0500
+> Subject: [PATCH] tracing/histograms: String compares should not care about
+>  signed values
 > 
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> When comparing two strings for the "onmatch" histogram trigger, fields
+> that are strings use string comparisons, which do not care about being
+> signed or not.
+> 
+> Do not fail to match two string fields if one is unsigned char array and
+> the other is a signed char array.
+> 
+> Link: https://lore.kernel.org/all/20211129123043.5cfd687a@gandalf.local.home/
+
+Looks good to me.
+
+Review-by: Masami Hiramatsu <mhiramatsu@kernel.org>
+
+Thank you,
+
+> 
+> Cc: stable@vgerk.kernel.org
+> Cc: Tom Zanussi <zanussi@kernel.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Yafang Shao <laoar.shao@gmail.com>
+> Fixes: b05e89ae7cf3b ("tracing: Accept different type for synthetic event fields")
+> Reported-by: Sven Schnelle <svens@linux.ibm.com>
+> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
 > ---
->  net/mctp/af_mctp.c | 3 +--
->  net/mctp/route.c   | 4 +---
->  2 files changed, 2 insertions(+), 5 deletions(-)
+>  kernel/trace/trace_events_hist.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+> index 9555b8e1d1e3..319f9c8ca7e7 100644
+> --- a/kernel/trace/trace_events_hist.c
+> +++ b/kernel/trace/trace_events_hist.c
+> @@ -3757,7 +3757,7 @@ static int check_synth_field(struct synth_event *event,
+>  
+>  	if (strcmp(field->type, hist_field->type) != 0) {
+>  		if (field->size != hist_field->size ||
+> -		    field->is_signed != hist_field->is_signed)
+> +		    (!field->is_string && field->is_signed != hist_field->is_signed))
+>  			return -EINVAL;
+>  	}
+>  
+> -- 
+> 2.31.1
+> 
 
-Here is the summary with links:
-  - [-next] mctp: remove unnecessary check before calling kfree_skb()
-    https://git.kernel.org/netdev/net-next/c/5cfe53cfeb1c
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Masami Hiramatsu <mhiramat@kernel.org>

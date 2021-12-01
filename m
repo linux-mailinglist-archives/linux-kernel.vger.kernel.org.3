@@ -2,270 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D52D464547
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:09:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF35464540
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346424AbhLADNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:13:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S1346380AbhLADL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346415AbhLADNE (ORCPT
+        with ESMTP id S1346357AbhLADLz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:13:04 -0500
-X-Greylist: delayed 164 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Nov 2021 19:09:43 PST
-Received: from mail-sender-0.a4lg.com (mail-sender-0.a4lg.com [IPv6:2401:2500:203:30b:4000:6bfe:4757:0])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E040AC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:09:43 -0800 (PST)
-Received: by mail-sender-0.a4lg.com (Postfix) with ESMTPSA id 62C92300089;
-        Wed,  1 Dec 2021 03:06:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=irq.a4lg.com;
-        s=2017s01; t=1638328016;
-        bh=jCn23iMIrHBoRtWjcFw98/gYkwF92XfZiHhfmSCjOoI=;
-        h=Message-ID:Date:Mime-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        b=Q4C3aVpjzLvUhcQZ0lsBqlScwT4xWJD5JPZfXmOEtqw95aLEXZhLT54jSOSxqajxK
-         XrcUmoHUNPqB8zy+nMvPcaPpUbV1zU9lCab2Xwqvvj5pIiBKXoUl7yzBSm4wIP/URQ
-         8w8+niE3DSM0hJaa+cbWdVOL6oSBjwgd4YY/fREE=
-Message-ID: <1d035613-390c-32c2-aa92-cc0f7797488d@irq.a4lg.com>
-Date:   Wed, 1 Dec 2021 12:06:53 +0900
-Mime-Version: 1.0
-Subject: Re: [PATCH V4 1/2] dt-bindings: riscv: add MMU Standard Extensions
- support for Svpbmt
-Content-Language: en-US
-To:     Atish Patra <atishp@atishpatra.org>,
-        Jessica Clarke <jrtc27@jrtc27.com>
-Cc:     Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Wei Fu <wefu@redhat.com>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        taiten.peng@canonical.com,
-        Aniket Ponkshe <aniket.ponkshe@canonical.com>,
-        Gordan Markus <gordan.markus@canonical.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Dan Lustig <dlustig@nvidia.com>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Anup Patel <Anup.Patel@wdc.com>, atishp04@gmail.com,
+        Tue, 30 Nov 2021 22:11:55 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEBDC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:08:34 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id o14so16562313plg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:08:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=g/5TnmO0gT6CKLi6q8niA4Xjnk2B+JAa0dgcq+oWmgE=;
+        b=sz8OfTfEdVypCCUplqFm68nLLrB713ifamjo9FNgw6fxytJB7suIkv97dVHhFtHvIp
+         r6xFOTe4ZOtSS6J0BMNf6RUu1F9nxEFmEkOKMeCch/lUeka+ZiZQ94fK7jCzhehNKebD
+         ziGr/lC86orMOySYprMqDlPfD+mdiOcfY1SjLYh599iN7kbsQhMOdf6Y7+zFQIzXU2jg
+         wbdDB+yuWURoVlOjBXma2j4fnxAsm3Za+OU4j8Qz7+WkaPSh8MMq4zGkvx6QgzT0lreJ
+         y23v9KJ76HIwXxCySpNCdkf7NnZ+WMR7ZPgAzissxHyl2iU1M+h98WahNHybCIgmNG5B
+         pPqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=g/5TnmO0gT6CKLi6q8niA4Xjnk2B+JAa0dgcq+oWmgE=;
+        b=XWcGoAGurAosuIoSVdtjoAReqpdXby9jMzqzlVdp2bv/5SbWjiBhej33ML/jAmWRW2
+         UTc0P/qzDleiwYt6IpMSddy6lDuzxYhT9lzQTPdrxw2PhQ7xiZE2KUfNBTNNW/j//PUF
+         ZQO7YqRpa1cBWpMPq9VUbau6u91yvyvzL14myoHCyLBnTYV8pf6reC/SvM3o/6gpC4t3
+         +nqIrj6m28q6tXZMYsIKNUbzMs75V876BqG616slxhrj+Nm7jWo1F0oUi6/dGs7EAboO
+         WIgoIzuRSOIF4ZjtCOL82mZBnN/NfaML3HlM8UIRJHvhYvDlu/lPulyP32KORn+7oMd4
+         eXYQ==
+X-Gm-Message-State: AOAM533bPxZ2MKCUazBNyrWY62l5b/bbOQHH5Vf0KdvrJgEIs3Xn7ObU
+        Dvdyciik85PD8q/LtsmOA/bRvA==
+X-Google-Smtp-Source: ABdhPJygWMG8G7zSDce5b011s1X4Xdp56pbQ1mwLc1IlSvA0PgBz9ATqm9E4pHlqKImvPGB6/ds8zA==
+X-Received: by 2002:a17:90b:3908:: with SMTP id ob8mr3988513pjb.57.1638328114039;
+        Tue, 30 Nov 2021 19:08:34 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id b15sm23525916pfl.118.2021.11.30.19.08.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 19:08:33 -0800 (PST)
+Date:   Wed, 1 Dec 2021 03:08:29 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Guo Ren <guoren@kernel.org>,
-        =?UTF-8?Q?Christoph_M=c3=bcllner?= <christoph.muellner@vrull.eu>,
-        Christoph Hellwig <hch@lst.de>,
-        liush <liush@allwinnertech.com>, Wei Wu <lazyparser@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-References: <20211129014007.286478-1-wefu@redhat.com>
- <1909580.k68io2XIxi@diego> <D7F256F9-F31F-4663-AADD-A535E159F87C@jrtc27.com>
- <2728314.U2HhIfhhqV@diego> <C19C85E6-821B-4A87-B764-56CF4D53E7FA@jrtc27.com>
- <CAAeLtUC0Qc6ysf31sh0dkvfJD-JsREZbyFFk=Ko0vQeBRzyjaw@mail.gmail.com>
- <03B8F784-4AF3-425D-99B6-F753F7970273@jrtc27.com>
- <CAOnJCUKmP6dsrV9xWC52uEaM0=fZh-FNDYyFg1VxQybpQZABMA@mail.gmail.com>
-From:   Tsukasa OI <research_trasio@irq.a4lg.com>
-In-Reply-To: <CAOnJCUKmP6dsrV9xWC52uEaM0=fZh-FNDYyFg1VxQybpQZABMA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 27/29] KVM: Optimize overlapping memslots check
+Message-ID: <YabnLaz3QBbsxLl0@google.com>
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+ <9698a99ccd1938a36dd0c7399262f888dcdf01ac.1638304316.git.maciej.szmigiero@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9698a99ccd1938a36dd0c7399262f888dcdf01ac.1638304316.git.maciej.szmigiero@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021/12/01 10:21, Atish Patra wrote:
-> On Tue, Nov 30, 2021 at 8:13 AM Jessica Clarke <jrtc27@jrtc27.com> wrote:
->>
->> On 30 Nov 2021, at 15:01, Philipp Tomsich <philipp.tomsich@vrull.eu> wrote:
->>>
->>> We did touch on this in our coordination call a few weeks ago: the
->>> grouping under mmu and the bool-entries were chosen because of their
->>> similarity to other extensions (i.e. for Zb[abcs] there could/should
->>> be a bool-entry under each cpu-node — for some Zv* entries a subnode
->>> might be needed with further parameters).
->>>
->>> The string-based approach (as in the originally proposed "mmu-type=")
->>> would like not scale with the proliferation of small & modular
->>> extensions.
->>
->> I don’t see why the Sv* extensions need to be under an mmu node then,
->> unless the intent is that every extension be grouped under a sub-node
->> (which doesn’t seem viable due to extensions like Zbk*, unless you
->> group by Ss, Sv and Z)?
->>
+On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 > 
-> It shouldn't be. All the ISA extensions (i.e. standard, supervisor & hypervisor)
-> with prefix S,Z,H should be kept separate in a separate node for easy
-> parsing.
+> Do a quick lookup for possibly overlapping gfns when creating or moving
+> a memslot instead of performing a linear scan of the whole memslot set.
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> [sean: tweaked params to avoid churn in future cleanup]
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  virt/kvm/kvm_main.c | 35 +++++++++++++++++++++--------------
+>  1 file changed, 21 insertions(+), 14 deletions(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 086f18969bc3..52117f65bc5b 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -1817,6 +1817,18 @@ static int kvm_set_memslot(struct kvm *kvm,
+>  	return 0;
+>  }
+>  
+> +static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
+> +				      gfn_t start, gfn_t end)
+> +{
+> +	struct kvm_memslot_iter iter;
+> +
+> +	kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end)
 
-"Easy parsing" is not quite convincing.
+The for loop needs curly braces, per coding-style.rst:
 
-There's a reason other than that I made RFC PATCH to parse
-multi-letter extensions:
+Also, use braces when a loop contains more than a single simple statement:
 
-v1: <http://lists.infradead.org/pipermail/linux-riscv/2021-November/010252.html>
-v2: <http://lists.infradead.org/pipermail/linux-riscv/2021-November/010350.html>
+.. code-block:: c
 
-(note: those patches will break RISC-V KVM because of possible ISA
-       Manual inconsistency and discussion/resolution needed)
+        while (condition) {
+                if (test)
+                        do_something();
+        }
 
-(...continued below...)
+With that,
 
-> 
-> "riscv,isa" dt property will not scale at all. Just look at the few
-> extensions that were ratified this year
-> and Linux kernel needs to support them.
-> 
-> "Sscofpmf", "Svpbmt", "Zicbom"
-> 
->> Also, what is going to happen to the current riscv,isa? Will that
->> continue to exist and duplicate the info, or will kernels be required
->> to reconstruct the string themselves if they want to display it to
->> users?
->>
-> 
-> This is my personal preference:
-> riscv,isa will continue to base Standard ISA extensions that have
-> single letter extensions.
-> 
-> This new DT node will encode all the non-single letter extensions.
-> I am not sure if it should include some provisions for custom
-> extensions starting with X because
-> that will be platform specific.
-> 
-> Again, this is just my personal preference. I will try to send a patch
-> soon so that we can initiate a broader
-> discussion of the scheme and agree/disagree on something.
-
-For supervisor-only extensions like "Svpbmt", new DT node would be a
-reasonable solution (and I would not directly object about that node).
-
-However, there's many multi-letter extensions that are useful for
-user mode.  Because "riscv,isa" is exposed via sysfs and procfs
-(/proc/cpuinfo), it can be really helpful to have multi-letter
-extensions.  Also, current version of Spike, a RISC-V ISA Simulator
-puts all multi-letter extensions in "riscv,isa" and I thought this is
-intended.
-
-My preference:
-(1) Allow having multi-letter extensions and versions in "riscv,isa"
-(2) Adding new DT node for supervisor-related extensions would be
-    reasonable (but I don't strongly agree/disagree).
-
-Thanks,
-Tsukasa
-
-> 
-> 
-> 
->> As a FreeBSD developer I’m obviously not a part of many of these
->> discussions, but what the Linux community imposes as the device tree
->> bindings has a real impact on us.
->>
->> Jess
->>
->>> On Tue, 30 Nov 2021 at 14:59, Jessica Clarke <jrtc27@jrtc27.com> wrote:
->>>>
->>>> On 30 Nov 2021, at 13:27, Heiko Stübner <heiko@sntech.de> wrote:
->>>>>
->>>>> Hi,
->>>>>
->>>>> Am Dienstag, 30. November 2021, 14:17:41 CET schrieb Jessica Clarke:
->>>>>> On 30 Nov 2021, at 12:07, Heiko Stübner <heiko@sntech.de> wrote:
->>>>>>>
->>>>>>> Am Montag, 29. November 2021, 13:06:23 CET schrieb Heiko Stübner:
->>>>>>>> Am Montag, 29. November 2021, 09:54:39 CET schrieb Heinrich Schuchardt:
->>>>>>>>> On 11/29/21 02:40, wefu@redhat.com wrote:
->>>>>>>>>> From: Wei Fu <wefu@redhat.com>
->>>>>>>>>>
->>>>>>>>>> Previous patch has added svpbmt in arch/riscv and add "riscv,svpmbt"
->>>>>>>>>> in the DT mmu node. Update dt-bindings related property here.
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Wei Fu <wefu@redhat.com>
->>>>>>>>>> Co-developed-by: Guo Ren <guoren@kernel.org>
->>>>>>>>>> Signed-off-by: Guo Ren <guoren@kernel.org>
->>>>>>>>>> Cc: Anup Patel <anup@brainfault.org>
->>>>>>>>>> Cc: Palmer Dabbelt <palmer@dabbelt.com>
->>>>>>>>>> Cc: Rob Herring <robh+dt@kernel.org>
->>>>>>>>>> ---
->>>>>>>>>> Documentation/devicetree/bindings/riscv/cpus.yaml | 10 ++++++++++
->>>>>>>>>> 1 file changed, 10 insertions(+)
->>>>>>>>>>
->>>>>>>>>> diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
->>>>>>>>>> index aa5fb64d57eb..9ff9cbdd8a85 100644
->>>>>>>>>> --- a/Documentation/devicetree/bindings/riscv/cpus.yaml
->>>>>>>>>> +++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
->>>>>>>>>> @@ -63,6 +63,16 @@ properties:
->>>>>>>>>>      - riscv,sv48
->>>>>>>>>>      - riscv,none
->>>>>>>>>>
->>>>>>>>>> +  mmu:
->>>>>>>>>
->>>>>>>>> Shouldn't we keep the items be in alphabetic order, i.e. mmu before
->>>>>>>>> mmu-type?
->>>>>>>>>
->>>>>>>>>> +    description:
->>>>>>>>>> +      Describes the CPU's MMU Standard Extensions support.
->>>>>>>>>> +      These values originate from the RISC-V Privileged
->>>>>>>>>> +      Specification document, available from
->>>>>>>>>> +      https://riscv.org/specifications/
->>>>>>>>>> +    $ref: '/schemas/types.yaml#/definitions/string'
->>>>>>>>>> +    enum:
->>>>>>>>>> +      - riscv,svpmbt
->>>>>>>>>
->>>>>>>>> The privileged specification has multiple MMU related extensions:
->>>>>>>>> Svnapot, Svpbmt, Svinval. Shall they all be modeled in this enum?
->>>>>>>>
->>>>>>>> I remember in some earlier version some way back there was the
->>>>>>>> suggestion of using a sub-node instead and then adding boolean
->>>>>>>> properties for the supported extensions.
->>>>>>>>
->>>>>>>> Aka something like
->>>>>>>>   mmu {
->>>>>>>>           riscv,svpbmt;
->>>>>>>>   };
->>>>>>>
->>>>>>> For the record, I'm talking about the mail from september
->>>>>>> https://lore.kernel.org/linux-riscv/CAAeLtUChjjzG+P8yg45GLZMJy5UR2K5RRBoLFVZhtOaZ5pPtEA@mail.gmail.com/
->>>>>>>
->>>>>>> So having a sub-node would make adding future extensions
->>>>>>> way nicer.
->>>>>>
->>>>>> Svpbmt is just an ISA extension, and should be treated like any other.
->>>>>> Let’s not invent two different ways of representing that in the device
->>>>>> tree.
->>>>>
->>>>> Heinrich asked how the other extensions should be handled
->>>>> (Svnapot, Svpbmt, Svinval), so what do you suggest to do with these?
->>>>
->>>> Whatever is done for Zb[abcs], Zk*, Zv*, Zicbo*, etc. There may not be
->>>> a concrete plan for that yet, but that means you should speak with the
->>>> people involved with such extensions and come up with something
->>>> appropriate together.
->>>>
->>>> Jess
->>>>
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
-> 
-> 
-> --
-> Regards,
-> Atish
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
-> 
+Reviewed-by: Sean Christopherson <seanjc@google.com>

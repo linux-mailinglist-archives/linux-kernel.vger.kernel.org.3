@@ -2,95 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2AF465022
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB07246502A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350442AbhLAOnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:43:31 -0500
-Received: from mail-oi1-f179.google.com ([209.85.167.179]:38551 "EHLO
-        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243839AbhLAOgw (ORCPT
+        id S1350587AbhLAOoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:44:07 -0500
+Received: from mo4-p02-ob.smtp.rzone.de ([85.215.255.80]:22728 "EHLO
+        mo4-p02-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350163AbhLAOhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:36:52 -0500
-Received: by mail-oi1-f179.google.com with SMTP id r26so48833304oiw.5;
-        Wed, 01 Dec 2021 06:33:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=5fVGwlF4XI4uZVCUusLE8Z4mnkW9gp/8l+SisQ75zHc=;
-        b=YzlBdy2J4LnVeQUIiCfhrFHC7HYPdqJid8HpSq3qIrhs86qjUI0zH0+RQu3O+cfr8f
-         AjjzipL9Wh3u0kq/8RDz+x39IQOXeG1+IrKdKLtY0gybEv06BGILOSa0HsFDZ8wzM4BF
-         OIfbvKHayqJOVp9T2dEgcXoMFEP44mB8QaAqminIk+BK6QQcCj7D6BCJYl43JTdt+obz
-         rQ/u51NMxoytqLxfjNYaTlfOvRRaKvisye2rUqzu6Sw8Q8W3gJpU5EQvKpkiJcdh2Vr7
-         btCroIwC+oeZgB2nSWws0unCtCqbBvw1eNUxXAUaPrKq5ARDTnHScrCEKqJHv2YF9kgh
-         LT+w==
-X-Gm-Message-State: AOAM533qnbIrB201Nq/ddvJcAVkWHsd0wA661nX1VyrlTiTx8arE17Us
-        4ZTwORrYDzGhEKc7cz8PqA==
-X-Google-Smtp-Source: ABdhPJxwjiVMzMNb9BCilS0QJ051dI8LxsS3oZu3csQ+DJh5CIcJ66oIimU3M7fRpnBeFuI5uMlEuQ==
-X-Received: by 2002:a05:6808:1408:: with SMTP id w8mr6502351oiv.54.1638369209303;
-        Wed, 01 Dec 2021 06:33:29 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id w5sm3529054otk.70.2021.12.01.06.33.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 06:33:28 -0800 (PST)
-Received: (nullmailer pid 1684355 invoked by uid 1000);
-        Wed, 01 Dec 2021 14:33:22 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Doug Berger <opendmb@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        bcm-kernel-feedback-list@broadcom.com
-In-Reply-To: <20211201041228.32444-4-f.fainelli@gmail.com>
-References: <20211201041228.32444-1-f.fainelli@gmail.com> <20211201041228.32444-4-f.fainelli@gmail.com>
-Subject: Re: [PATCH net-next 3/7] dt-bindings: net: Document moca PHY interface
-Date:   Wed, 01 Dec 2021 08:33:22 -0600
-Message-Id: <1638369202.233948.1684354.nullmailer@robh.at.kernel.org>
+        Wed, 1 Dec 2021 09:37:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638369206;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=gDqNSwOY4krNXyZJKC9cA8DBCihhfe+kQxeeBXbUBDM=;
+    b=TfZuFK7agOXamEYkB331yuxjVMDwyGsNTY8R0Li9/tuv7nXqulBYXsJv2tlVUyYlQM
+    W94ccGIt4GcPDz3A4IwNOafPlCVGhQ54ZJ6wIda3FkhtRXdVm0H3fnWVg8MGYYwGT9MZ
+    dsJj76pnYPTAsaJu8BQkOkWVvOqJxhn78qiRhP654LUjf7b8PpGx+EnCXYQlMOCtspMv
+    2xLfEVo5igd9WxRUFZopnEwq3s0bZJ4Xc6VplGnA41Cuc15OCNX+35dtZ9kOzKQmO003
+    IPpM5rMjgYvOHLFugSaLRZY0+4mtgMrFhHE8HgwuZ0W6gLG5OcL3JPnrm2fKuIM/59dH
+    wwWA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj4Qpw9iZeHWElw43u22M="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 47.34.10 SBL|AUTH)
+    with ESMTPSA id e05ed8xB1EXPXiK
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Wed, 1 Dec 2021 15:33:25 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH v10 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <EDWF3R.CMVWMJL42OH9@crapouillou.net>
+Date:   Wed, 1 Dec 2021 15:33:24 +0100
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <58C550A4-A21E-47BA-8BAE-00B927DC7A2E@goldelico.com>
+References: <cover.1638307601.git.hns@goldelico.com>
+ <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
+ <LKTF3R.YREPOCHOSMQN2@crapouillou.net> <Yad69aTXcGixXvy3@sirena.org.uk>
+ <46070A95-0FA9-43F9-A9A9-52A7B58B88F5@goldelico.com>
+ <EDWF3R.CMVWMJL42OH9@crapouillou.net>
+To:     Paul Cercueil <paul@crapouillou.net>
+X-Mailer: Apple Mail (2.3445.104.21)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 20:12:24 -0800, Florian Fainelli wrote:
-> MoCA (Multimedia over Coaxial) is used by the internal GENET/MOCA cores
-> and will be needed in order to convert GENET to YAML in subsequent
-> changes.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  Documentation/devicetree/bindings/net/ethernet-controller.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+Hi Paul,
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+> Am 01.12.2021 um 15:03 schrieb Paul Cercueil <paul@crapouillou.net>:
+>=20
+> Hi Nikolaus, Mark,
+>=20
+> Le mer., d=C3=A9c. 1 2021 at 14:51:51 +0100, H. Nikolaus Schaller =
+<hns@goldelico.com> a =C3=A9crit :
+>> Hi,
+>>> Am 01.12.2021 um 14:39 schrieb Mark Brown <broonie@kernel.org>:
+>>> On Wed, Dec 01, 2021 at 01:02:45PM +0000, Paul Cercueil wrote:
+>>>> Le mar., nov. 30 2021 at 22:26:37 +0100, H. Nikolaus Schaller
+>>>>> +	regulator =3D devm_regulator_get_optional(&pdev->dev, =
+"hdmi-5v");
+>>>>> +	if (IS_ERR(regulator)) {
+>>>>> +		ret =3D PTR_ERR(regulator);
+>>> Why is this using _optional()?  This should only be done when the =
+supply
+>>> can be physically absent
+>> There can be +5V for HDMI but without a regulator that is visible to =
+or controllable
+>> by the driver.
+>=20
+> There is always a power supply though. Either a controllable one =
+(through e.g. a GPIO), or it's just connected to the mains +5V; the pin =
+is never left floating. In the second case, in DTS the "hdmi-5v" would =
+be connected to some 5v regulator, even if it's just a dummy VCC-5V =
+regulator. So Mark has a point.
+>=20
+>> So hdmi-5v can be simply missing in DTS in which case the driver does =
+not need to
+>> care about. The driver just can't turn it on or off.
+>=20
+> Please make it mandatory in DTS then, and use devm_regulator_get() in =
+the driver.
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+Well, I just wonder why the elegant devm_regulator_get_optional() exists =
+at all
+and seems to be used in ca. 80 places.
 
-Full log is available here: https://patchwork.ozlabs.org/patch/1561996
+And if it is not allowed, why some DTS should be forced to add not =
+physically existing dummy-regulators.
+AFAIR drivers should implement functionality defined by DTS but not the =
+other way round: enforce DTS style.
+BTW: there is no +5 mains dummy regulator defined in ci20.dts.
 
+What I fear is that if we always have to define the mains +5V (which is =
+for example not
+defined in ci20.dts), which rules stops us from asking to add a =
+dummy-regulator from 110/230V to +5V as well.
+In last consequence, it seems as if we have to describe all dummy =
+regulators from the power plant to our hdmi-5v :)
 
-ethernet@0,2: fixed-link:speed:0:0: 2500 is not one of [10, 100, 1000]
-	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dt.yaml
-	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dt.yaml
-	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dt.yaml
-	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dt.yaml
-	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dt.yaml
-	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dt.yaml
-	arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dt.yaml
-	arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dt.yaml
+Since I always follow the KISS principle I tend to leave out what is not =
+relevant...
 
-ethernet@17020000: phy-handle: [[36], [37]] is too long
-	arch/arm64/boot/dts/apm/apm-mustang.dt.yaml
+Of course adding a dummy regulator to the DTS allows to avoid the NULL =
+pointer test
+in the driver code.
 
-ethernet@30000: fixed-link:speed:0:0: 2500 is not one of [10, 100, 1000]
-	arch/arm/boot/dts/armada-385-clearfog-gtr-l8.dt.yaml
-	arch/arm/boot/dts/armada-385-clearfog-gtr-s4.dt.yaml
+Anyways, you are maintainers :)
+
+So should I spin a v11 for the series or just this patch or how should =
+we do it?
+
+BR and thanks,
+Nikolaus
+
+>=20
+> Cheers,
+> -Paul
+>=20
+>>> (in which case I'd expect to see special
+>>> handling).
+>> The special case is to not enable/disable the regulator if it does =
+not exist
+>> and assume that there is hardware providing it otherwise (the driver =
+can't know
+>> that except by using get_optional). This is done by the code below
+>>>>> +	if (IS_ERR(regulator)) {
+>> ...
+>>> +	if (!regulator)
+>>> +		return 0;
+>>> +	ret =3D regulator_enable(regulator);
+>> ...
+>> BR and thanks,
+>> Nikolaus
+>=20
+>=20
 

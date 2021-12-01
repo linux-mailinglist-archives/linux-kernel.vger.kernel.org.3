@@ -2,85 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7974646F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 07:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FFAA464700
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 07:05:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346819AbhLAGE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 01:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42442 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbhLAGEZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 01:04:25 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48F12C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 22:01:05 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id nh10-20020a17090b364a00b001a69adad5ebso460273pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 22:01:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:subject:to:cc:references:in-reply-to:mime-version
-         :message-id:content-transfer-encoding;
-        bh=p+h1Ci/5eM23w48d10JZjE3E1+seAEm4EAViYXAETPQ=;
-        b=EMHBw0e/vGvcPCdRzYL0MfE/37rgfduTDk9qLZ0R3VsAFToDzsY/A2ZyZ55i+ws7OC
-         0NL1oAJDxinVH4PZ9cqcxaQji1byUi4VBBM5seBz+tqYgz/yhelWO7a1trjSCybQ3lcc
-         pYciQPv0k6n7Hwx2dgGPY2QSQxnkTHGPCPmxujPrXi76r1YIneRk3+Dos1ye+XfYOd2i
-         VvBSarZjbLT9XBYH2mkWnOmV0bD/AoTKSuoMmLv+z7Tqnq4tqUwJ+nlHapIl9iQR9Sfq
-         cQMSM+DZl4T0/eKs/Idrs599QBFIKXg03quXFFHV1VsZovNYt23a2gDS0ak+hDJvHwwB
-         28QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:subject:to:cc:references:in-reply-to
-         :mime-version:message-id:content-transfer-encoding;
-        bh=p+h1Ci/5eM23w48d10JZjE3E1+seAEm4EAViYXAETPQ=;
-        b=LBTbIw3wCaqmSHB9fm1FTzHkiC5UAoIMk1t89bxy0py2N+6ZbU28bAmah7N+INwKUU
-         hPYDITWvEd18VIRje+R/jug6ZW8f9XP3wZuQFU36H7+X2+EcFxSzIbPNJKrjjPSJ2dIN
-         noxD8IB7EmB5yH2n8lPoj1/cIdRnWWjUTfPhrMINNI2/7HCfKZW+XCSPb22L6U/tQoc8
-         OvsV1Ja2HiDBzo50KS8JmguR8lxw8yuyb5rd6oh8lAM3kesi1338hkl2n0FuzWSkEBI4
-         046i2smgmTGKRoFfTX8TbOeyzc9z6aEffI/ot1Mv/xdeEVJOvU/sp+bKQqG3C2mIkzQ8
-         yJnA==
-X-Gm-Message-State: AOAM531/StCthpNlDydJ+dT0g3sF+dWa+6PpvhmcXrmIFs0H1qmBDAHX
-        u63uThbCrDTnQ/f416gQgOA=
-X-Google-Smtp-Source: ABdhPJyVjW0vwT2dzIxQQRiiYKpz/cJyyLjekGgJiHEOZGOEmsuBfOcYzGxu/rMy5VtmahhvpyRyHA==
-X-Received: by 2002:a17:902:c202:b0:142:2441:aa25 with SMTP id 2-20020a170902c20200b001422441aa25mr4897937pll.68.1638338464453;
-        Tue, 30 Nov 2021 22:01:04 -0800 (PST)
-Received: from localhost (115-64-213-93.static.tpgi.com.au. [115.64.213.93])
-        by smtp.gmail.com with ESMTPSA id p10sm22499478pff.173.2021.11.30.22.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 22:01:03 -0800 (PST)
-Date:   Wed, 01 Dec 2021 16:00:58 +1000
-From:   Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2 rebased 5/9] powerpc/mm: Call
- radix__arch_get_unmapped_area() from arch_get_unmapped_area()
-To:     alex@ghiti.fr, Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linuxppc-dev@lists.ozlabs.org
-References: <cover.1637862579.git.christophe.leroy@csgroup.eu>
-        <6ba86b0ef347c04a6c4e475c059f486b0db170ec.1637862579.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <6ba86b0ef347c04a6c4e475c059f486b0db170ec.1637862579.git.christophe.leroy@csgroup.eu>
+        id S1346758AbhLAGIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 01:08:36 -0500
+Received: from mga06.intel.com ([134.134.136.31]:38598 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229652AbhLAGIa (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 01:08:30 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="297194708"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="297194708"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 22:05:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="459130103"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 30 Nov 2021 22:05:07 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msIjq-000EL8-J5; Wed, 01 Dec 2021 06:05:06 +0000
+Date:   Wed, 1 Dec 2021 14:04:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, robdclark@gmail.com
+Cc:     kbuild-all@lists.01.org, dmitry.baryshkov@linaro.org,
+        sean@poorly.run, airlied@linux.ie, daniel@ffwll.ch,
+        maxime@cerno.tech, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] drm/msm: Allocate msm_drm_private early and pass
+ it as driver data
+Message-ID: <202112011405.Wn79h7q3-lkp@intel.com>
+References: <20211130141048.294246-2-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-Message-Id: <1638338152.00yryi8b39.astroid@bobo.none>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211130141048.294246-2-angelogioacchino.delregno@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Excerpts from Christophe Leroy's message of November 26, 2021 3:52 am:
-> Instead of setting mm->get_unmapped_area() to either
-> arch_get_unmapped_area() or radix__arch_get_unmapped_area(),
-> always set it to arch_get_unmapped_area() and call
-> radix__arch_get_unmapped_area() from there when radix is enabled.
->=20
-> To keep radix__arch_get_unmapped_area() static, move it to slice.c
->=20
-> Do the same with radix__arch_get_unmapped_area_topdown()
+Hi AngeloGioacchino,
 
-Same comment with this one really. It would be better if we can
-reuse generic code.
+Thank you for the patch! Perhaps something to improve:
 
-Thanks,
-Nick
+[auto build test WARNING on drm/drm-next]
+[also build test WARNING on next-20211130]
+[cannot apply to v5.16-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/AngeloGioacchino-Del-Regno/drm-msm-Fix-dsi-bridge-probe/20211130-221304
+base:   git://anongit.freedesktop.org/drm/drm drm-next
+config: csky-randconfig-c004-20211128 (https://download.01.org/0day-ci/archive/20211201/202112011405.Wn79h7q3-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 11.2.0
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+cocci warnings: (new ones prefixed by >>)
+>> drivers/gpu/drm/msm/msm_drv.c:412:1-6: WARNING: invalid free of devm_ allocated data
+
+vim +412 drivers/gpu/drm/msm/msm_drv.c
+
+2aa31767259722 Sean Paul           2019-05-24  384  
+98659487b845c0 Abhinav Kumar       2021-04-16  385  	msm_disp_snapshot_destroy(ddev);
+98659487b845c0 Abhinav Kumar       2021-04-16  386  
+2b669875332fbd Archit Taneja       2016-05-02  387  	drm_mode_config_cleanup(ddev);
+c8afe684c95cd1 Rob Clark           2013-06-26  388  
+2b669875332fbd Archit Taneja       2016-05-02  389  	pm_runtime_get_sync(dev);
+f026e431cf8611 Thomas Zimmermann   2021-08-03  390  	msm_irq_uninstall(ddev);
+2b669875332fbd Archit Taneja       2016-05-02  391  	pm_runtime_put_sync(dev);
+c8afe684c95cd1 Rob Clark           2013-06-26  392  
+16976085a114ae Archit Taneja       2016-11-03  393  	if (kms && kms->funcs)
+c8afe684c95cd1 Rob Clark           2013-06-26  394  		kms->funcs->destroy(kms);
+c8afe684c95cd1 Rob Clark           2013-06-26  395  
+871d812aa43e63 Rob Clark           2013-11-16  396  	if (priv->vram.paddr) {
+00085f1efa387a Krzysztof Kozlowski 2016-08-03  397  		unsigned long attrs = DMA_ATTR_NO_KERNEL_MAPPING;
+871d812aa43e63 Rob Clark           2013-11-16  398  		drm_mm_takedown(&priv->vram.mm);
+2b669875332fbd Archit Taneja       2016-05-02  399  		dma_free_attrs(dev, priv->vram.size, NULL,
+00085f1efa387a Krzysztof Kozlowski 2016-08-03  400  			       priv->vram.paddr, attrs);
+871d812aa43e63 Rob Clark           2013-11-16  401  	}
+871d812aa43e63 Rob Clark           2013-11-16  402  
+2b669875332fbd Archit Taneja       2016-05-02  403  	component_unbind_all(dev, ddev);
+060530f1ea6740 Rob Clark           2014-03-03  404  
+bc3220be22577e Rajesh Yadav        2018-06-21  405  	if (mdss && mdss->funcs)
+bc3220be22577e Rajesh Yadav        2018-06-21  406  		mdss->funcs->destroy(ddev);
+0a6030d224d3a4 Archit Taneja       2016-05-08  407  
+2b669875332fbd Archit Taneja       2016-05-02  408  	ddev->dev_private = NULL;
+4d8dc2dfae2c48 Thomas Zimmermann   2018-09-26  409  	drm_dev_put(ddev);
+c8afe684c95cd1 Rob Clark           2013-06-26  410  
+2aa31767259722 Sean Paul           2019-05-24  411  	destroy_workqueue(priv->wq);
+c8afe684c95cd1 Rob Clark           2013-06-26 @412  	kfree(priv);
+c8afe684c95cd1 Rob Clark           2013-06-26  413  
+c8afe684c95cd1 Rob Clark           2013-06-26  414  	return 0;
+c8afe684c95cd1 Rob Clark           2013-06-26  415  }
+c8afe684c95cd1 Rob Clark           2013-06-26  416  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

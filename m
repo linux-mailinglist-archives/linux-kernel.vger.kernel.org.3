@@ -2,75 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 225CA464B92
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:25:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF49F464B9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348637AbhLAK3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:29:10 -0500
-Received: from mail.pr-group.ru ([178.18.215.3]:61660 "EHLO mail.pr-group.ru"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242715AbhLAK3I (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:29:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-type:in-reply-to:
-         references;
-        bh=vXS+J9Nh+wEUQHCt1sy4EBGBrQ1eqDW2ciFrAcJFNew=;
-        b=tIzlvSsrlT9k8/GgYR2rCZNwyiQrS/2AimjdDGlB4gi8pksv8+2AnyqxvH3jyCvjVipPe40jTRJX0
-         hbvPFjJC7pcAT/ElTGEmxr3OxBqGZ+4dcj5CplAP5vMgD0X3+0+OES0jabn5r6dh23sBy276guYU1v
-         LU9reYPzTPQRd3GEeqhkSjXDrnPkwKYFS060hBVk/Z6fGHERksMcWOB+SXR2tvecLgebeAbYWk/Eyf
-         97jVLjOsMMGoOyPr5NEhICY5wnOdy0v1P1RrW5RxtgAIn23CXPtdrWAN0blrg41eyQ9HWEeKXc2KLZ
-         8IoicSZt1kwoISOYvWMpq11sh6UV1Uw==
-X-Spam-Status: No, hits=0.0 required=3.4
-        tests=BAYES_00: -1.665, CUSTOM_RULE_FROM: ALLOW, TOTAL_SCORE: -1.665,autolearn=ham
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from dhcp-179.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Wed, 1 Dec 2021 13:25:30 +0300
-Date:   Wed, 1 Dec 2021 13:25:19 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     i.bornyakov@metrotek.ru
-Cc:     system@metrotek.ru, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] bus: imx-weim: optionally enable continuous burst
- clock
-Message-ID: <20211201102518.sxjctvnizsrint2r@dhcp-179.ddg>
-References: <20211124175542.2772-1-i.bornyakov@metrotek.ru>
+        id S1348649AbhLAKb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:31:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348628AbhLAKb0 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 05:31:26 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38551C061574;
+        Wed,  1 Dec 2021 02:28:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 389FDCE1DB2;
+        Wed,  1 Dec 2021 10:28:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D209AC53FCC;
+        Wed,  1 Dec 2021 10:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638354481;
+        bh=m6mcqbYuHeMeS8hGqq/RnBLl6KXb9FndE6k43W6VWWo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VA3AxZbGfIiJSQyqUMMErcKvc7GlztLuXaxI6MfnvTIi8GJd0KlUku7RdXKYYc7DD
+         QwFn+fCa08o6c1SaDDMV5GXaCBra2i5oKaNn3+iKK/iwpdDtKbvIV/A4IA7LWVqgu+
+         WOppeNg/PZbQ/feuQw1y19GjoYIrNW4CqJ4c5ePkH8TfxeS8Zcf9nFdpW1r99vCTVr
+         BLrWzLjILbGWwljOpKUAk32T20jSEGE/vViTW/0pyufacOkXi0Swu6y7ED3Lkq0xX8
+         HOifikPZyAZpkbveo7+dDfD8BepfUhyK/68Gy1Bvi9xeZNTcTyLr/tBWDioq2cRSGo
+         wS9Zq0FPdRzdQ==
+Date:   Wed, 1 Dec 2021 12:27:58 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "weiyongjun1@huawei.com" <weiyongjun1@huawei.com>,
+        "nayna@linux.ibm.com" <nayna@linux.ibm.com>,
+        "ebiggers@google.com" <ebiggers@google.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "nramas@linux.microsoft.com" <nramas@linux.microsoft.com>,
+        "lszubowi@redhat.com" <lszubowi@redhat.com>,
+        "jason@zx2c4.com" <jason@zx2c4.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-efi@vger.kernel.org" <linux-efi@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "James.Bottomley@hansenpartnership.com" 
+        <James.Bottomley@hansenpartnership.com>,
+        "pjones@redhat.com" <pjones@redhat.com>,
+        Konrad Wilk <konrad.wilk@oracle.com>
+Subject: Re: [PATCH v8 09/17] KEYS: Rename
+ get_builtin_and_secondary_restriction
+Message-ID: <YadOLrHb14MEfphi@iki.fi>
+References: <20211124044124.998170-1-eric.snowberg@oracle.com>
+ <20211124044124.998170-10-eric.snowberg@oracle.com>
+ <fb1d583f588e3f46fdadbe3cf6288bb098ff45f8.camel@kernel.org>
+ <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211124175542.2772-1-i.bornyakov@metrotek.ru>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <8906F8A4-313F-45E5-8ABD-A1A2D07BFD93@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 08:55:40PM +0300, Ivan Bornyakov wrote:
-> Introduce option to enable continuous burst clock, if burst clock itself
-> is enabled.
+On Tue, Nov 30, 2021 at 05:21:45PM +0000, Eric Snowberg wrote:
 > 
-> Changelog:
->   v1 -> v2:
->     * documentation about this option added to
->       Documentation/devicetree/bindings/bus/imx-weim.txt
 > 
-> Ivan Bornyakov (2):
->   bus: imx-weim: optionally enable continuous burst clock
->   dt-bindings: bus: imx-weim: add words about continuous bclk
+> > On Nov 26, 2021, at 5:49 PM, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > 
+> > On Tue, 2021-11-23 at 23:41 -0500, Eric Snowberg wrote:
+> >> In preparation for returning either the existing
+> >> restrict_link_by_builtin_and_secondary_trusted or the upcoming
+> >> restriction that includes the trusted builtin, secondary and
+> >> machine keys, to improve clarity, rename
+> >> get_builtin_and_secondary_restriction to get_secondary_restriction.
+> >> 
+> >> Suggested-by: Mimi Zohar <zohar@linux.ibm.com>
+> >> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> >> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> >> ---
+> >> v6: Initial version
+> >> v7: Unmodified from v7
+> >> v8: Code unmodified from v7, added Mimi's Reviewed-by
+> >> ---
+> >>  certs/system_keyring.c | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >> 
+> >> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
+> >> index 692365dee2bd..8f1f87579819 100644
+> >> --- a/certs/system_keyring.c
+> >> +++ b/certs/system_keyring.c
+> >> @@ -77,7 +77,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
+> >>   * Allocate a struct key_restriction for the "builtin and secondary trust"
+> >>   * keyring. Only for use in system_trusted_keyring_init().
+> >>   */
+> >> -static __init struct key_restriction *get_builtin_and_secondary_restriction(void)
+> >> +static __init struct key_restriction *get_secondary_restriction(void)
+> >>  {
+> >>         struct key_restriction *restriction;
+> >>  
+> >> @@ -117,7 +117,7 @@ static __init int system_trusted_keyring_init(void)
+> >>                                KEY_USR_VIEW | KEY_USR_READ | KEY_USR_SEARCH |
+> >>                                KEY_USR_WRITE),
+> >>                               KEY_ALLOC_NOT_IN_QUOTA,
+> >> -                             get_builtin_and_secondary_restriction(),
+> >> +                             get_secondary_restriction(),
+> >>                               NULL);
+> >>         if (IS_ERR(secondary_trusted_keys))
+> >>                 panic("Can't allocate secondary trusted keyring\n");
+> > 
+> > This is wrong order.
+> > 
+> > You should first do the changes that make the old name
+> > obsolete and only after that have a patch that does the
+> > rename. Unfortunately, this patch cannot possibly acked
+> > with the current order.
 > 
->  .../devicetree/bindings/bus/imx-weim.txt       |  5 +++++
->  drivers/bus/imx-weim.c                         | 18 ++++++++++++++++--
->  2 files changed, 21 insertions(+), 2 deletions(-)
-> 
-> -- 
-> 2.32.0
-> 
+> I can change the order, but I'm confused how this would work for a git bisect. 
+> If the rename happens afterwards, now two patches will always need to be 
+> reverted instead of the possibility of one.  Is this your expectation?
 
-Friendly ping.
-Any feedback?
+I'd drop this patch altogether. Old name is a bit ugly but does it matter
+all that much?
 
+You already 16 patches without this.
+
+/Jarkko

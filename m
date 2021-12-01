@@ -2,92 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB430465721
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:28:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48375465723
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240424AbhLAUcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:32:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45256 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236513AbhLAUbr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:31:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B597DC061574;
-        Wed,  1 Dec 2021 12:28:25 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638390504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mzoa4SjOrSQOzqlo1a2N+ZukxmXwU7KZxGAKMT8FbgE=;
-        b=I2e/pBUR0fuTD9daRGJ1lf5K+XG9PmkRmKBiXw376G/5tn0eDiDy/mq9+lO1psD5mWw+kK
-        aa+Gp10puanw6W6XXhTpcYj539K3nbUuF1g9xObrWblmvjGNvXAiYnLoHVcnRSa2L64g2y
-        999jRiPhzhKCyECi6GgGcqmZil7PcypbAD4i3quOmut1kJ7d++29Rze6/Wc8Z5Hej7U1ls
-        rsx6PKm90AlBMsRo4CBoL6psJo46EjI+5bTBqWKQrr3zme9mrW03ZjM1CYH4AVeh7tJ6ws
-        Mym+0FAWnQN3UIAjXK9E9u8e4hrcxM8uSz/my8en+YherRLTd+6oMUp2nn6xzQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638390504;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mzoa4SjOrSQOzqlo1a2N+ZukxmXwU7KZxGAKMT8FbgE=;
-        b=PkMOcLS5r/3YdUOnNBa06XuRyPSVCMxuqVrgi2C8dLqLbO/JevC7TctPKGbT3o6tFurB4o
-        J8C5q9Fntwkrb4Ag==
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        paulmck@kernel.org, mtosatti <mtosatti@redhat.com>,
-        frederic <frederic@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] Documentation: Fill the gaps about entry/noinstr
- constraints
-In-Reply-To: <Yae9tbtZW5mjcBVt@FVFF77S0Q05N>
-References: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
- <875ys9dacq.ffs@tglx> <20211130091356.7336e277@gandalf.local.home>
- <878rx5b7i5.ffs@tglx> <YadU1aSE6/0yGWny@FVFF77S0Q05N>
- <87v9088a5q.ffs@tglx> <Yae9tbtZW5mjcBVt@FVFF77S0Q05N>
-Date:   Wed, 01 Dec 2021 21:28:23 +0100
-Message-ID: <87ee6w83yw.ffs@tglx>
-MIME-Version: 1.0
-Content-Type: text/plain
+        id S245633AbhLAUcH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:32:07 -0500
+Received: from mga17.intel.com ([192.55.52.151]:48255 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239841AbhLAUcB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 15:32:01 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="217242266"
+X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
+   d="scan'208";a="217242266"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 12:28:35 -0800
+X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
+   d="scan'208";a="460171745"
+Received: from pkumar17-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.62.247])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 12:28:31 -0800
+Date:   Thu, 2 Dec 2021 09:28:29 +1300
+From:   Kai Huang <kai.huang@intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        isaku.yamahata@intel.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [RFC PATCH v3 00/59] KVM: X86: TDX support
+Message-Id: <20211202092829.9c06c89ea375c9d9790e36b2@intel.com>
+In-Reply-To: <YafNwoPumWQ/77Q6@google.com>
+References: <cover.1637799475.git.isaku.yamahata@intel.com>
+        <YaZyyNMY80uVi5YA@google.com>
+        <20211202022227.acc0b613e6c483be4736c196@intel.com>
+        <20211201190856.GA1166703@private.email.ne.jp>
+        <YafNwoPumWQ/77Q6@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01 2021 at 18:23, Mark Rutland wrote:
-> On Wed, Dec 01, 2021 at 07:14:41PM +0100, Thomas Gleixner wrote:
->> Mark,
->> 
->> On Wed, Dec 01 2021 at 10:56, Mark Rutland wrote:
->> > On Tue, Nov 30, 2021 at 11:31:30PM +0100, Thomas Gleixner wrote:
->> >> ---
->> >>  Documentation/core-api/entry.rst |  268 +++++++++++++++++++++++++++++++++++++++
->> >>  Documentation/core-api/index.rst |    8 +
->> >>  kernel/entry/common.c            |    1 
->> >
->> > I think the change to kernel/entry/common.c got included by accident?
->> 
->> That's what I get from doing such things 30 minutes before midnight...
->
-> Ah, I had debugged it down to:
->
-> nobikeshed void do_rst(struct tglx *tglx);
-> {
-> 	aargh_rst_enter(tglx);
->
-> 	documentation_begin();
-> 	invoke_editor(tglx);
->  	documentation_end();
-> }
->
-> ... where I think we forgot the:
->
-> 	enter_from_sleep_mode(tglx);
-> 	...
-> 	exit_to_sleep_mode(tglx);
 
-ROTFL. You made my day!
+> 
+> > Anyway The plan is what Kai said.  The code will reside in the x86 common
+> > directory instead of kvm.
+> 
+> But what's the plan at a higher level?  Will the kernel load the ACM or is that
+> done by firmware?  If it's done by firmware, which entity is responsibile for
+> loading the TDX module?  If firmware loads the module, what's the plan for
+> upgrading the module without a reboot?  When will the kernel initialize the
+> module, regardless of who loads it?
+
+The UEFI loads both ACM and TDX module before booting into kernel by using UEFI
+tool.  The runtime update is pushed out for future support.  One goal of
+this is to reduce the code size so that it can be reviewed more easily and
+quickly.
+
+And yes kernel will initialize the TDX module.  The direction we are heading is
+to allow to defer TDX module initialization when TDX is truly needed, i.e.
+When KVM is loaded with TDX support, or first TD is created.  The code will
+basically still reside in host kernel, provided as functions, etc.  And at first
+stage, KVM will call those functions to initialize TDX when needed.
+
+The advantage of this approach is it provides more flexibility: the TDX module
+initialization code can be reused by future TDX runtime update, etc.  And with
+only initializing TDX in KVM, the host kernel doesn't need to handle entering
+VMX operation, etc.  It can be introduced later when needed.
+
+> 
+> All of those unanswered questions make it nigh impossible to review the KVM
+> support because the code organization and APIs provided will differ based on how
+> the kernel handles loading and initializing the TDX module.
+
+I think theoretically loading/initializing module should be quite independent
+from KVM series, but yes in practice the APIs matter, but I also don't expect
+this will reduce the ability to review KVM series a lot as RFC.
+
+Anyway sending out host kernel patches is our top priority now and we are
+trying to do asap.

@@ -2,102 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D684648E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C03DC4648E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347645AbhLAHhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:37:39 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:44342 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235915AbhLAHhi (ORCPT
+        id S1347706AbhLAHiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35822 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347643AbhLAHiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:37:38 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 1 Dec 2021 02:38:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091D0C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:34:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 30FCA1FD58;
-        Wed,  1 Dec 2021 07:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638344057; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PTRhn7spL+A6iOFdvCr6/zYqdNZ0WXCKV1uGUL3ndn8=;
-        b=SJZnqLD5Rx+rpwvkaCwarGNzUeNCedvdhX3UmRPc2rmcdNXJTOng5W7tLByHUl4bwFKnKf
-        LFf7lYS0NdbeCRF4wTGjOUi5SQFlj1U38/L8Pf5y9orJ414TSkrbSsCB0e0X4rRxxBMu4d
-        ovGokeVaN/F4Ap8aa5ebkBLXW7Uft7k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638344057;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PTRhn7spL+A6iOFdvCr6/zYqdNZ0WXCKV1uGUL3ndn8=;
-        b=pXtxzsXTXM/qSn4JtIGeZyrOKDa/aH9zZP4A/nhf7eporYmp26VNr/32p3l07m3UlhWVD5
-        IMFLdnLMR9/SAEAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D44A313AE2;
-        Wed,  1 Dec 2021 07:34:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id VXL2Mnglp2GxFwAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:34:16 +0000
-Subject: Re: [PATCH 17/18] crypto: dh - try to match domain parameters to a
- known safe-prime group
-To:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
-        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org
-References: <20211201004858.19831-1-nstange@suse.de>
- <20211201004858.19831-18-nstange@suse.de>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <1d8eb859-1d41-32e1-98b8-3ddd60e2e0ab@suse.de>
-Date:   Wed, 1 Dec 2021 08:34:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3A16B81BBE
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:34:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A731AC53FAD;
+        Wed,  1 Dec 2021 07:34:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638344081;
+        bh=Gi1ryJPlruKkzmqv9Lpvb04zMwMOMhA8gauwZ1U0qco=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M3jmGlQkw3cuMDCtnSx2NRJ+5s2o3+wSwJG1pBoHQNwxWEkEmFnLWbymFsMxqssrf
+         OTwKGZTgTVsMrR87tMXCK+FaiDulMgV3bN1uW0MM/NQGC6i7bmBdRlds8L+iQvi+0N
+         LF0416nr9VP8GdK9aqJWzmTw1yyWRSt6fK+cTYa0=
+Date:   Wed, 1 Dec 2021 08:34:36 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, riel@redhat.com,
+        mchehab+huawei@kernel.org, will@kernel.org,
+        catalin.marinas@arm.com, corbet@lwn.net, ionela.voinescu@arm.com,
+        pcc@google.com, bilbao@vt.edu, matorola@gmail.com,
+        rafael@kernel.org
+Subject: Re: [PATCH] docs: document the sysfs ABI for "nohz_full" and
+ "isolated"
+Message-ID: <YacljAVpgcjkayCg@kroah.com>
+References: <20211201071852.3568489-1-tarumizu.kohei@fujitsu.com>
 MIME-Version: 1.0
-In-Reply-To: <20211201004858.19831-18-nstange@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201071852.3568489-1-tarumizu.kohei@fujitsu.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 1:48 AM, Nicolai Stange wrote:
-> A subsequent patch will make the DH implementation to reject any input
-> domain parameter set with ->group_id == dh_group_id_unknown in FIPS mode.
-> However, as the keyctl(KEYCTL_DH_COMPUTE) implementation simply passes
-> forward keys from userspace, it does not (and cannot) set ->group_id to
-> anything else than dh_group_id_unknown.
+On Wed, Dec 01, 2021 at 04:18:52PM +0900, Kohei Tarumizu wrote:
+> Add missing documentation of sysfs ABI for "nohz_full" and "isolated".
+> "nohz_full" was added by commit 6570a9a1ce3a("show nohz_full cpus in
+> sysfs") and "isolated" was added by commit 59f30abe94bf("show isolated
+> cpus in sysfs"). However, there is no documentation for these
+> interface.
 > 
-> In order to still allow for keyctl(KEYCTL_DH_COMPUTE) to work on approved
-> domain parameters passed in from userspace in FIPS mode, make
-> crypto_dh_decode_key() to compare them against any of the known groups and
-> set ->group_id upon having found a match, if any.
-> 
-> Signed-off-by: Nicolai Stange <nstange@suse.de>
+> Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
 > ---
->   crypto/dh_helper.c | 33 +++++++++++++++++++++++++++++++++
->   1 file changed, 33 insertions(+)
+>  Documentation/ABI/testing/sysfs-devices-system-cpu | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
 > 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> index 69c65da16dff..a9d5d87b6a41 100644
+> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+> @@ -666,3 +666,16 @@ Description:	Preferred MTE tag checking mode
+>  		================  ==============================================
+>  
+>  		See also: Documentation/arm64/memory-tagging-extension.rst
+> +
+> +What:		/sys/devices/system/cpu/nohz_full
+> +		/sys/devices/system/cpu/isolated
+> +Date:		Apr 2015
+> +Contact:	Linux kernel mailing list <linux-kernel@vger.kernel.org>
+> +Description:	information about CPU isolation.
+> +
+> +		nohz_full: (RO) the list of CPUs that are in nohz_full mode.
+> +			   These CPUs are set by boot parameter "nohz_full=".
+> +
+> +		isolated: (RO) the list of CPUs that are isolated and don't
+> +			  participate in load balancing. These CPUs are set by
+> +			  boot parameter "isolcpus=".
 
-Cheers,
+These should be two different entries, not one please.
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+thanks,
+
+greg k-h

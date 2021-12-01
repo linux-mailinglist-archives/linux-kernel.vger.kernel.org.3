@@ -2,164 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D81E465486
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:58:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F9346548F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:59:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352294AbhLASBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352006AbhLASAp (ORCPT
+        id S1352156AbhLASDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:03:05 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:38476 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244500AbhLASCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:00:45 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BEE7C0613DD;
-        Wed,  1 Dec 2021 09:57:11 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id m6so50207332oim.2;
-        Wed, 01 Dec 2021 09:57:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=ZLy6Jb+6Ty24fX68SpNaQHHxD3uEqTcLfyiSOpS1cog=;
-        b=GiV7gMzj+3aRKlq31wAPB3RVY+mEmhyhz0l3S43ArUwJV5I5ALh6N+eNs0DO0OCMAj
-         ll0RBwEiQmQ+3n+VxHbtKCVoJCM8OaCENU0Ffl0Iq9y+tmt2qUwZtoU/JwfaBO2dZZeo
-         0tVGBqcsLIgXVNBEwg30A8mwQUV18n89uta5H3IcEnz+583zmHMrY6Rs6xFstVCF/aUP
-         PmRC6wNTz+7P+ArnCy1Rq++sHLB92JbVXDnvMQfyUJVbjN7md/5eugFy1monZ7Pet7SU
-         em+a4oMQroZG1OUtFf5qfbpw/e4h5VBHACaZuE3tajOGS71FdkTmIk7WGhLyfPvSYpov
-         fNVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=ZLy6Jb+6Ty24fX68SpNaQHHxD3uEqTcLfyiSOpS1cog=;
-        b=P9oMUXfzMZbDtAp5ipe51M4WkegBvYGjr2VIYnih7Tz/VGD07hSHccan6/nmJCHoJY
-         pGi5j8LJi3eGFkWpcTznE5UtClZCeUNBdqOsFodtonB0onEq85elifQLQzG273X9+MzC
-         3uHc0x+hGQ/QtiGRHPlshe3kzhv7mu9txtAL2Jt/SsGeEkBn6ovOykOjDwU+ylDRZzMg
-         UqHMPll2hRQDsga2Xvd4CqZMccSOe8lt0sv67J5k96Snr40ZjwBkzq8Bb+pXg3eNHGdg
-         UHvlo9LgmtvQSSsBrrrV3yYG7VH6VlfdOuk5FKaL8MILSOpPQxpDdnVdT7AYix+yo1SM
-         m/nQ==
-X-Gm-Message-State: AOAM531WU6RagYLme7YtmJefZmhW7Jk7TSzf5l14xf3ij770TPBns1Nf
-        Yqzfr52oWBofY4FKY7QXXyA=
-X-Google-Smtp-Source: ABdhPJxfBuWPwGbgqA8NaLP/Hxr10UC/stVPUmZU5tFkPgYG/wFW+cRClTJPbiQ+XHQUm5JY+P4/5A==
-X-Received: by 2002:aca:de07:: with SMTP id v7mr7367492oig.28.1638381431002;
-        Wed, 01 Dec 2021 09:57:11 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id d3sm158953otc.0.2021.12.01.09.57.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 09:57:10 -0800 (PST)
-Message-ID: <c4424a7a-2ef1-6524-9b10-1e7d1f1e1fe4@gmail.com>
-Date:   Wed, 1 Dec 2021 10:57:09 -0700
+        Wed, 1 Dec 2021 13:02:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD6AFB8206B;
+        Wed,  1 Dec 2021 17:59:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F652C53FCF;
+        Wed,  1 Dec 2021 17:59:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638381551;
+        bh=pyTtgt77BWW0zJYMdiBNfZhN445Jrn3OiB1TvEnvV40=;
+        h=From:To:Cc:Subject:Date:From;
+        b=l5GxVJZo7T1TE0IiFejhV5bRzNDhGczB8I53VCoNcycFCviE+i/FkMwK7PLkSQ/MN
+         tTwUEVvsS2b67geCITyzJcl+p2PHZLOVvhrezeUrFXlQLv4jFp42ZHgqvJTm/cT0d6
+         HCTou5BvrBk1WXY8tmze8NuaRQRV878YP5JL1uiuVJ/sMY3zCgjpnLEQQKi4mfPXmj
+         jDLsmVmiN6S4nUXF4dUwyioteijrOqTCWt/mSFRQIC/PTbPA4FZcVyJ1Zt4BNQ9vM0
+         H+GIdFEQPPWltzJt70I8+EGoMH7FIg3yAXPYWFLTIPCEaWl3ulCKxjRhkG40xVictM
+         oYd/eAASLMCfA==
+Received: from mchehab by mail.kernel.org with local (Exim 4.94.2)
+        (envelope-from <mchehab@kernel.org>)
+        id 1msTsr-004I6f-B4; Wed, 01 Dec 2021 18:59:09 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@protonmail.com>, Alex Shi <alexs@kernel.org>,
+        Andrew Klychkov <andrew.a.klychkov@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+Subject: [PATCH v3 0/4] docs: add better support for Sphinx themes and CSS
+Date:   Wed,  1 Dec 2021 18:59:04 +0100
+Message-Id: <cover.1638369365.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.1
-Subject: Re: [RFC 00/12] io_uring zerocopy send
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1638282789.git.asml.silence@gmail.com>
- <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
- <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 8:32 AM, Pavel Begunkov wrote:
-> 
-> Sure. First, for dummy I set mtu by hand, not sure can do it from
-> the userspace, can I? Without it __ip_append_data() falls into
-> non-zerocopy path.
-> 
-> diff --git a/drivers/net/dummy.c b/drivers/net/dummy.c
-> index f82ad7419508..5c5aeacdabd5 100644
-> --- a/drivers/net/dummy.c
-> +++ b/drivers/net/dummy.c
-> @@ -132,7 +132,8 @@ static void dummy_setup(struct net_device *dev)
->      eth_hw_addr_random(dev);
->  
->      dev->min_mtu = 0;
-> -    dev->max_mtu = 0;
-> +    dev->mtu = 0xffff;
-> +    dev->max_mtu = 0xffff;
->  }
-> 
-> # dummy configuration
-> 
-> modprobe dummy numdummies=1
-> ip link set dummy0 up
+Hi Jon,
 
+This series comes after my patch fixing Sphinx support for RTD 1.0.0:
 
-No change is needed to the dummy driver:
-  ip li add dummy0 type dummy
-  ip li set dummy0 up mtu 65536
+   https://lore.kernel.org/lkml/80009f0d17ea0840d81e7e16fff6e7677919fdfc.1638004294.git.mchehab+huawei@kernel.org/
 
+It provides, IMHO, a nice improvement on themes selection. This series
+is a v2 of the other theme-related patches I sent today.
 
-> # force requests to <dummy_ip_addr> go through the dummy device
-> ip route add <dummy_ip_addr> dev dummy0
+-
 
-that command is not necessary.
+Sphinx allows using different output templates for HTML (and e-pub).
 
-> 
-> 
-> With dummy I was just sinking the traffic to the dummy device,
-> was good enough for me. Omitting "taskset" and "nice":
-> 
-> send-zc -4 -D <dummy_ip_addr> -t 10 udp
-> 
-> Similarly with msg_zerocopy:
-> 
-> <kernel>/tools/testing/selftests/net/msg_zerocopy -4 -p 6666 -D
-> <dummy_ip_addr> -t 10 -z udp
+Right now, the Kernel was hardcoded to use the Read the Docs theme,
+falling back to whatever default is setup on a given Sphinx version.
 
-I get -ENOBUFS with '-z' and any local address.
+Well, themes and templates are actually an user preference.
 
-> 
-> 
-> For loopback testing, as zerocopy is not allowed for it as Willem
-> explained in
-> the original MSG_ZEROCOPY cover-letter, I used a hack to bypass it:
-> 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index ebb12a7d386d..42df33b175ce 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -2854,9 +2854,7 @@ static inline int skb_orphan_frags(struct sk_buff
-> *skb, gfp_t gfp_mask)
->  /* Frags must be orphaned, even if refcounted, if skb might loop to rx
-> path */
->  static inline int skb_orphan_frags_rx(struct sk_buff *skb, gfp_t gfp_mask)
->  {
-> -    if (likely(!skb_zcopy(skb)))
-> -        return 0;
-> -    return skb_copy_ubufs(skb, gfp_mask);
-> +    return skb_orphan_frags(skb, gfp_mask);
->  }
->  
+This patch set allows selecting different themes and even provide
+extra CSS override files.
 
-that is the key change that is missing in your repo. All local traffic
-(traffic to the address on a dummy device falls into this comment) goes
-through loopback. That's just the way Linux works. If you look at the
-dummy driver, it's xmit function just drops packets if any actually make
-it there.
+With that, one could, for instance, do things like:
 
+$ echo "body { color: darkgreen; } div.body { color: darkgreen; } " >my_css.css && make SPHINXDIRS=input CSS=my_css.css THEME=nature htmldocs
 
->> mileage varies quite a bit.
-> 
-> Interesting, any brief notes on the setup and the results? Dummy
+In order to use the Sphinx nature theme with the normal font in green.
 
-VM on Chromebook. I just cloned your repos, built, install and test. As
-mentioned above, the skb_orphan_frags_rx change is missing from your
-repo and that is the key to your reported performance gains.
+patch 1 adds a theme selection make variable (THEME);
+patch 2 adds a css selection variable (CSS);
+patch 3 sets the classic theme to look a little better;
+patch 4 adds support for the RTD dark mode theme.
+
+It should be noticed that the RTD dark mode currently has some issues,
+as it is actually an override on the top of the original RTD theme.
+I suspect it needs to be updated to properly support Sphinx 4.3.0 and
+RTD 1.0.0 theme. Yet, it seems useful, as one can always switch to daylight
+mode in runtime, if something looks odd with it enabled.
+
+---
+
+v3:
+   - Fixed an issue at the logic which copies the extra CSS files on patch 2.
+
+Mauro Carvalho Chehab (4):
+  docs: allow selecting a Sphinx theme
+  docs: allow to pass extra CSS themes via make
+  docs: set format for the classic mode
+  docs: add support for RTD dark mode
+
+ Documentation/Makefile                        |  11 +-
+ Documentation/conf.py                         | 102 ++++++++++++++----
+ Documentation/doc-guide/sphinx.rst            |  11 ++
+ .../sphinx-static/theme_overrides.css         |  16 +--
+ .../sphinx-static/theme_rtd_colors.css        |  37 +++++++
+ 5 files changed, 140 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/sphinx-static/theme_rtd_colors.css
+
+-- 
+2.33.1
+
 

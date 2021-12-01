@@ -2,77 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A592C4659EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A9A4659F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:47:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353844AbhLAXuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 18:50:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353824AbhLAXuD (ORCPT
+        id S1353864AbhLAXub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 18:50:31 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:44084 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353823AbhLAXu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 18:50:03 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C759FC061574;
-        Wed,  1 Dec 2021 15:46:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 52463CE2135;
-        Wed,  1 Dec 2021 23:46:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE57C53FCD;
-        Wed,  1 Dec 2021 23:46:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638402397;
-        bh=/68xd18Co11QfmVypZO2/D4sRtZrh0SGI3U3HFs+5qk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DfrFHeVWwRBLggy/MOUDPL+ISR+Olbd2DxRG+9WvSD/l0tOUa6XN4hKvN/TuL6EsK
-         VDnzj/mPeyuhDi80gG+wQCQaQKkHLUKpv/gky8NiHZKvwC03ceJD3ZD1SDsarhNxz1
-         3JCUW1yl94eMRKaScYPvaRKhEQa9qeHH5YEyN+JPqgr2DDCdbtAF9yQAGtCKC6OtUg
-         LIHJtjWue4EGeDyIj656kU+HuL8GNYZuh/LLhsMpfRl56IcE8LYqPP0mm32sHvegGq
-         9yWTt62Jlmn+4cydvDBJTzZqvOwQUH/gfauTF1duEKY3TBYjpDNfJfdEHcyxaF+RGI
-         N+GJ3P7bwa1Aw==
-Received: by mail-ed1-f47.google.com with SMTP id w1so108851433edc.6;
-        Wed, 01 Dec 2021 15:46:37 -0800 (PST)
-X-Gm-Message-State: AOAM530rhU5KUt6eDaPY91Xu9egQ2boNiy2qDmV6Hmh/9auhfBVWN7z/
-        IRX0jrA0VddT9PIYCnZnYqk0un/aL9xnQnDsEw==
-X-Google-Smtp-Source: ABdhPJwH8vC1+yopFdWmDlNaVi6P5l4oebYOJsnF/jPuWJG9o5yrO05W9yRto7M0QiXayPPOx25tmr10rvMmhSAFlKg=
-X-Received: by 2002:aa7:dc07:: with SMTP id b7mr12390931edu.327.1638402395645;
- Wed, 01 Dec 2021 15:46:35 -0800 (PST)
+        Wed, 1 Dec 2021 18:50:28 -0500
+Date:   Wed, 01 Dec 2021 23:47:03 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638402425;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s59PtGQGPD2YRyZrbVk1TXoitco8b8rZhZ3+gHWGsqo=;
+        b=R7FM6oweFSDPD4+wcBd2I8YecZZ0bmCgiV5+l8nfno5ONgilLItrUyasfdusa7HEBkG1cV
+        hVpuKVggrTq6xBeUdDTs60+u6FIjCCy5tAyoVPcIqMXW+jxgeBzxwETVRKha7exOYVD5Iq
+        icstY4PYqbNVsgIHi7W1RO9rdS3ibUqKIHdhlHJaNvBNE5qfZWRMwgwxSXg1Qdpk0KFFYZ
+        1842eP9kr3CsA66vIbfXf6aoxPfQ36+tvNYW7s5BhosTQUnQCQpbh+v42DT9IuTVTmUTmB
+        b+7/rQbdkEE+SvcpO2wil8MVHWIScAK8MBXpz2wISzXDD7ahHEJXWknlS1+tGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638402425;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s59PtGQGPD2YRyZrbVk1TXoitco8b8rZhZ3+gHWGsqo=;
+        b=Esk/omZLuT1/MG7r0zzjbiQye4XjD/PQutCW9M+BLqeFOWYF8KuQ0FYZ64l86rvyfTwr7p
+        4j5D/ckHQbkLwXBQ==
+From:   "tip-bot2 for Feng Tang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/tsc: Disable clocksource watchdog for TSC on
+ qualified platorms
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Feng Tang <feng.tang@intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20211117023751.24190-2-feng.tang@intel.com>
+References: <20211117023751.24190-2-feng.tang@intel.com>
 MIME-Version: 1.0
-References: <20211101180243.23761-1-tharvey@gateworks.com>
-In-Reply-To: <20211101180243.23761-1-tharvey@gateworks.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 1 Dec 2021 17:46:24 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+n9B7k3tLsgsNg=cLykQk-6ZDH3znsKeUEabvKwUiUQQ@mail.gmail.com>
-Message-ID: <CAL_Jsq+n9B7k3tLsgsNg=cLykQk-6ZDH3znsKeUEabvKwUiUQQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: imx: do not remap invalid res
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Richard Zhu <hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <163840242372.11128.2601584703913368347.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 1, 2021 at 1:37 PM Tim Harvey <tharvey@gateworks.com> wrote:
->
-> On imx6 and perhaps others when pcie probes you get a:
-> imx6q-pcie 33800000.pcie: invalid resource
->
-> This occurs because the atu is not specified in the DT and as such it
-> should not be remapped.
->
+The following commit has been merged into the x86/urgent branch of tip:
 
-Fixes: 281f1f99cf3a ("PCI: dwc: Detect number of iATU windows")
-Reviewed-by: Rob Herring <robh@kernel.org>
+Commit-ID:     b50db7095fe002fa3e16605546cba66bf1b68a3e
+Gitweb:        https://git.kernel.org/tip/b50db7095fe002fa3e16605546cba66bf1b68a3e
+Author:        Feng Tang <feng.tang@intel.com>
+AuthorDate:    Wed, 17 Nov 2021 10:37:51 +08:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 02 Dec 2021 00:40:36 +01:00
 
-> Cc: Richard Zhu <hongxing.zhu@nxp.com>
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> ---
->  drivers/pci/controller/dwc/pcie-designware.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+x86/tsc: Disable clocksource watchdog for TSC on qualified platorms
+
+There are cases that the TSC clocksource is wrongly judged as unstable by
+the clocksource watchdog mechanism which tries to validate the TSC against
+HPET, PM_TIMER or jiffies. While there is hardly a general reliable way to
+check the validity of a watchdog, Thomas Gleixner proposed [1]:
+
+"I'm inclined to lift that requirement when the CPU has:
+
+    1) X86_FEATURE_CONSTANT_TSC
+    2) X86_FEATURE_NONSTOP_TSC
+    3) X86_FEATURE_NONSTOP_TSC_S3
+    4) X86_FEATURE_TSC_ADJUST
+    5) At max. 4 sockets
+
+ After two decades of horrors we're finally at a point where TSC seems
+ to be halfway reliable and less abused by BIOS tinkerers. TSC_ADJUST
+ was really key as we can now detect even small modifications reliably
+ and the important point is that we can cure them as well (not pretty
+ but better than all other options)."
+
+As feature #3 X86_FEATURE_NONSTOP_TSC_S3 only exists on several generations
+of Atom processorz, and is always coupled with X86_FEATURE_CONSTANT_TSC
+and X86_FEATURE_NONSTOP_TSC, skip checking it, and also be more defensive
+to use maximal 2 sockets.
+
+The check is done inside tsc_init() before registering 'tsc-early' and
+'tsc' clocksources, as there were cases that both of them had been
+wrongly judged as unreliable.
+
+For more background of tsc/watchdog, there is a good summary in [2]
+
+[tglx} Update vs. jiffies:
+
+  On systems where the only remaining clocksource aside of TSC is jiffies
+  there is no way to make this work because that creates a circular
+  dependency. Jiffies accuracy depends on not missing a periodic timer
+  interrupt, which is not guaranteed. That could be detected by TSC, but as
+  TSC is not trusted this cannot be compensated. The consequence is a
+  circulus vitiosus which results in shutting down TSC and falling back to
+  the jiffies clocksource which is even more unreliable.
+
+[1]. https://lore.kernel.org/lkml/87eekfk8bd.fsf@nanos.tec.linutronix.de/
+[2]. https://lore.kernel.org/lkml/87a6pimt1f.ffs@nanos.tec.linutronix.de/
+
+[ tglx: Refine comment and amend changelog ]
+
+Fixes: 6e3cd95234dc ("x86/hpet: Use another crystalball to evaluate HPET usability")
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Feng Tang <feng.tang@intel.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20211117023751.24190-2-feng.tang@intel.com
+
+---
+ arch/x86/kernel/tsc.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
+
+diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
+index 2e076a4..a698196 100644
+--- a/arch/x86/kernel/tsc.c
++++ b/arch/x86/kernel/tsc.c
+@@ -1180,6 +1180,12 @@ void mark_tsc_unstable(char *reason)
+ 
+ EXPORT_SYMBOL_GPL(mark_tsc_unstable);
+ 
++static void __init tsc_disable_clocksource_watchdog(void)
++{
++	clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
++	clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
++}
++
+ static void __init check_system_tsc_reliable(void)
+ {
+ #if defined(CONFIG_MGEODEGX1) || defined(CONFIG_MGEODE_LX) || defined(CONFIG_X86_GENERIC)
+@@ -1196,6 +1202,23 @@ static void __init check_system_tsc_reliable(void)
+ #endif
+ 	if (boot_cpu_has(X86_FEATURE_TSC_RELIABLE))
+ 		tsc_clocksource_reliable = 1;
++
++	/*
++	 * Disable the clocksource watchdog when the system has:
++	 *  - TSC running at constant frequency
++	 *  - TSC which does not stop in C-States
++	 *  - the TSC_ADJUST register which allows to detect even minimal
++	 *    modifications
++	 *  - not more than two sockets. As the number of sockets cannot be
++	 *    evaluated at the early boot stage where this has to be
++	 *    invoked, check the number of online memory nodes as a
++	 *    fallback solution which is an reasonable estimate.
++	 */
++	if (boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
++	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
++	    boot_cpu_has(X86_FEATURE_TSC_ADJUST) &&
++	    nr_online_nodes <= 2)
++		tsc_disable_clocksource_watchdog();
+ }
+ 
+ /*
+@@ -1387,9 +1410,6 @@ static int __init init_tsc_clocksource(void)
+ 	if (tsc_unstable)
+ 		goto unreg;
+ 
+-	if (tsc_clocksource_reliable || no_tsc_watchdog)
+-		clocksource_tsc.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
+-
+ 	if (boot_cpu_has(X86_FEATURE_NONSTOP_TSC_S3))
+ 		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
+ 
+@@ -1527,7 +1547,7 @@ void __init tsc_init(void)
+ 	}
+ 
+ 	if (tsc_clocksource_reliable || no_tsc_watchdog)
+-		clocksource_tsc_early.flags &= ~CLOCK_SOURCE_MUST_VERIFY;
++		tsc_disable_clocksource_watchdog();
+ 
+ 	clocksource_register_khz(&clocksource_tsc_early, tsc_khz);
+ 	detect_art();

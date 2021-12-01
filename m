@@ -2,104 +2,305 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C20D2465030
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:41:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED20F465046
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351003AbhLAOof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:44:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350689AbhLAOmT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:42:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05F8C061396;
-        Wed,  1 Dec 2021 06:37:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B35A9B81FE1;
-        Wed,  1 Dec 2021 14:37:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B47FC53FCC;
-        Wed,  1 Dec 2021 14:37:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638369455;
-        bh=8tI1ueqtoUGBHxIn0DIOwwe7EpQvXK0zlIGQBD3fb9c=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=PHiMNFYCwyGnWE8n56PQo0IO8rkI2Bu88RWUIVQb//+aCZsL/0KgrQbx7U4r9XKsN
-         GqkTbMLWZIX2poQ0ZDJEPiqZe9W/c587gEv9gA3syh0FIZnB6kgVIbz4t3RHWvgt8V
-         Foadylp3qypcQOaP89z97ZUrux1OouGmigGTUs3CrYnWJ+zShY0IpES7m2g0iVN9xm
-         Bt9eZ63w4Q7bB2RSvHJ+DFRNlYEj69dvx0hmtIFilwKpvUlT7dKkAvdpoUg7J/ZVhF
-         gv1w5S3kq/Wwdbs1FHX1A5ywYI8WeBpOGxJsNBp42sphx6yhmyj2s1SX0dpMYD85+D
-         6E/xQFPSCaHHg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3508C5C0668; Wed,  1 Dec 2021 06:37:35 -0800 (PST)
-Date:   Wed, 1 Dec 2021 06:37:35 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Axtens <dja@axtens.net>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraju@codeaurora.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Theodore Y . Ts'o" <tytso@mit.edu>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sonymobile.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v2] rcu: Fix description of kvfree_rcu()
-Message-ID: <20211201143735.GE641268@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20211201092053.2000-1-urezki@gmail.com>
+        id S1351345AbhLAOsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:48:06 -0500
+Received: from mga12.intel.com ([192.55.52.136]:14949 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350542AbhLAOrO (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 09:47:14 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216486570"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="216486570"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 06:39:34 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="596343507"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 01 Dec 2021 06:39:32 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msQlf-000F1s-A7; Wed, 01 Dec 2021 14:39:31 +0000
+Date:   Wed, 01 Dec 2021 22:39:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2021.11.30b] BUILD SUCCESS
+ a1f5859d3cf6dee7647d39ec926774f05c8d5593
+Message-ID: <61a78909.zoCRc+B71vXkH3An%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201092053.2000-1-urezki@gmail.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 10:20:53AM +0100, Uladzislau Rezki (Sony) wrote:
-> The passed "ptr" parameter might be wrongly interpreted
-> therefore rephrase it to prevent people from being confused.
-> 
-> Reported-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2021.11.30b
+branch HEAD: a1f5859d3cf6dee7647d39ec926774f05c8d5593  torture: Properly redirect kvm-remote.sh "echo" commands
 
-Thank you both!  Queued with wordsmithed commit log as shown below,
-so please check to see if I messed anything up.
+elapsed time: 726m
 
-							Thanx, Paul
+configs tested: 243
+configs skipped: 4
 
-------------------------------------------------------------------------
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-commit 59ef229194204b023bb7bde95ce769d4e94a4b62
-Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
-Date:   Wed Dec 1 10:20:53 2021 +0100
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211128
+i386                 randconfig-c001-20211201
+sh                           se7750_defconfig
+powerpc                      pasemi_defconfig
+sh                               alldefconfig
+arm                       imx_v6_v7_defconfig
+powerpc                      acadia_defconfig
+m68k                        m5272c3_defconfig
+powerpc                       maple_defconfig
+sh                           se7722_defconfig
+sh                            titan_defconfig
+mips                    maltaup_xpa_defconfig
+arm                  colibri_pxa270_defconfig
+mips                           rs90_defconfig
+arm                       netwinder_defconfig
+arm                       versatile_defconfig
+arm                        magician_defconfig
+powerpc                   currituck_defconfig
+m68k                          hp300_defconfig
+riscv                            allyesconfig
+sh                           se7206_defconfig
+sh                         apsh4a3a_defconfig
+parisc                generic-32bit_defconfig
+arm                         s3c2410_defconfig
+powerpc                      ep88xc_defconfig
+nios2                         10m50_defconfig
+sparc                               defconfig
+mips                       lemote2f_defconfig
+x86_64                              defconfig
+arm                           corgi_defconfig
+s390                             alldefconfig
+arm                       multi_v4t_defconfig
+mips                  cavium_octeon_defconfig
+openrisc                            defconfig
+arm                            dove_defconfig
+arm                          lpd270_defconfig
+arm                     eseries_pxa_defconfig
+sparc64                             defconfig
+sh                            shmin_defconfig
+powerpc                 mpc837x_mds_defconfig
+powerpc                          g5_defconfig
+powerpc64                        alldefconfig
+openrisc                    or1ksim_defconfig
+powerpc                  iss476-smp_defconfig
+powerpc                     akebono_defconfig
+arm                          pxa3xx_defconfig
+xtensa                          iss_defconfig
+powerpc                mpc7448_hpc2_defconfig
+um                               alldefconfig
+arm                          simpad_defconfig
+sh                          polaris_defconfig
+sh                          landisk_defconfig
+ia64                         bigsur_defconfig
+powerpc                     stx_gp3_defconfig
+m68k                                defconfig
+arm                    vt8500_v6_v7_defconfig
+mips                         rt305x_defconfig
+m68k                        mvme16x_defconfig
+arm                            xcep_defconfig
+powerpc                      ppc6xx_defconfig
+powerpc                        warp_defconfig
+arc                        vdk_hs38_defconfig
+arm                         bcm2835_defconfig
+s390                             allyesconfig
+mips                        workpad_defconfig
+nios2                            alldefconfig
+arm                         socfpga_defconfig
+mips                     decstation_defconfig
+arm                         vf610m4_defconfig
+arm                             pxa_defconfig
+powerpc                 mpc8540_ads_defconfig
+m68k                       m5208evb_defconfig
+sparc                            alldefconfig
+powerpc                      katmai_defconfig
+mips                           ip27_defconfig
+m68k                        m5407c3_defconfig
+arm                       aspeed_g5_defconfig
+powerpc                 mpc8560_ads_defconfig
+arm                        cerfcube_defconfig
+sh                        edosk7760_defconfig
+arm                             mxs_defconfig
+powerpc                      makalu_defconfig
+powerpc                      ppc44x_defconfig
+arm                       mainstone_defconfig
+powerpc                     pq2fads_defconfig
+alpha                            alldefconfig
+powerpc                 mpc8313_rdb_defconfig
+mips                          rm200_defconfig
+powerpc                    amigaone_defconfig
+powerpc64                           defconfig
+powerpc                      cm5200_defconfig
+arm                        vexpress_defconfig
+arm                  randconfig-c002-20211128
+arm                  randconfig-c002-20211201
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a001-20211130
+x86_64               randconfig-a006-20211130
+x86_64               randconfig-a003-20211130
+x86_64               randconfig-a004-20211130
+x86_64               randconfig-a005-20211130
+x86_64               randconfig-a002-20211130
+i386                 randconfig-a005-20211130
+i386                 randconfig-a002-20211130
+i386                 randconfig-a006-20211130
+i386                 randconfig-a004-20211130
+i386                 randconfig-a003-20211130
+i386                 randconfig-a001-20211130
+i386                 randconfig-a001-20211129
+i386                 randconfig-a002-20211129
+i386                 randconfig-a006-20211129
+i386                 randconfig-a005-20211129
+i386                 randconfig-a004-20211129
+i386                 randconfig-a003-20211129
+i386                 randconfig-a001-20211201
+i386                 randconfig-a005-20211201
+i386                 randconfig-a003-20211201
+i386                 randconfig-a002-20211201
+i386                 randconfig-a006-20211201
+i386                 randconfig-a004-20211201
+x86_64               randconfig-a011-20211128
+x86_64               randconfig-a014-20211128
+x86_64               randconfig-a012-20211128
+x86_64               randconfig-a016-20211128
+x86_64               randconfig-a013-20211128
+x86_64               randconfig-a015-20211128
+i386                 randconfig-a015-20211128
+i386                 randconfig-a016-20211128
+i386                 randconfig-a013-20211128
+i386                 randconfig-a012-20211128
+i386                 randconfig-a014-20211128
+i386                 randconfig-a011-20211128
+x86_64               randconfig-a006-20211201
+x86_64               randconfig-a005-20211201
+x86_64               randconfig-a001-20211201
+x86_64               randconfig-a002-20211201
+x86_64               randconfig-a004-20211201
+x86_64               randconfig-a003-20211201
+arc                  randconfig-r043-20211128
+s390                 randconfig-r044-20211128
+riscv                randconfig-r042-20211128
+riscv                    nommu_k210_defconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
 
-    rcu: Fix description of kvfree_rcu()
-    
-    The kvfree_rcu() header comment's description of the "ptr" parameter
-    is unclear, therefore rephrase it to make it clear that it is a pointer
-    to the memory to eventually be passed to kvfree().
-    
-    Reported-by: Steven Rostedt <rostedt@goodmis.org>
-    Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+clang tested configs:
+s390                 randconfig-c005-20211128
+i386                 randconfig-c001-20211128
+riscv                randconfig-c006-20211128
+arm                  randconfig-c002-20211128
+powerpc              randconfig-c003-20211128
+x86_64               randconfig-c007-20211128
+mips                 randconfig-c004-20211128
+arm                  randconfig-c002-20211201
+x86_64               randconfig-c007-20211201
+riscv                randconfig-c006-20211201
+i386                 randconfig-c001-20211201
+powerpc              randconfig-c003-20211201
+s390                 randconfig-c005-20211201
+x86_64               randconfig-a001-20211128
+x86_64               randconfig-a006-20211128
+x86_64               randconfig-a003-20211128
+x86_64               randconfig-a005-20211128
+x86_64               randconfig-a004-20211128
+x86_64               randconfig-a002-20211128
+i386                 randconfig-a001-20211128
+i386                 randconfig-a002-20211128
+i386                 randconfig-a006-20211128
+i386                 randconfig-a005-20211128
+i386                 randconfig-a004-20211128
+i386                 randconfig-a003-20211128
+x86_64               randconfig-a016-20211201
+x86_64               randconfig-a011-20211201
+x86_64               randconfig-a013-20211201
+x86_64               randconfig-a015-20211201
+x86_64               randconfig-a012-20211201
+x86_64               randconfig-a014-20211201
+x86_64               randconfig-a014-20211130
+x86_64               randconfig-a016-20211130
+x86_64               randconfig-a013-20211130
+x86_64               randconfig-a012-20211130
+x86_64               randconfig-a015-20211130
+x86_64               randconfig-a011-20211130
+i386                 randconfig-a011-20211130
+i386                 randconfig-a015-20211130
+i386                 randconfig-a012-20211130
+i386                 randconfig-a013-20211130
+i386                 randconfig-a014-20211130
+i386                 randconfig-a016-20211130
+i386                 randconfig-a013-20211201
+i386                 randconfig-a016-20211201
+i386                 randconfig-a011-20211201
+i386                 randconfig-a014-20211201
+i386                 randconfig-a012-20211201
+i386                 randconfig-a015-20211201
+i386                 randconfig-a015-20211129
+i386                 randconfig-a016-20211129
+i386                 randconfig-a013-20211129
+i386                 randconfig-a012-20211129
+i386                 randconfig-a014-20211129
+i386                 randconfig-a011-20211129
+hexagon              randconfig-r045-20211129
+hexagon              randconfig-r041-20211129
+s390                 randconfig-r044-20211129
+riscv                randconfig-r042-20211129
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 88b42eb464068..9d7df8d36af07 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -924,7 +924,7 @@ static inline notrace void rcu_read_unlock_sched_notrace(void)
-  *
-  *     kvfree_rcu(ptr);
-  *
-- * where @ptr is a pointer to kvfree().
-+ * where @ptr is the pointer to be freed by kvfree().
-  *
-  * Please note, head-less way of freeing is permitted to
-  * use from a context that has to follow might_sleep()
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB51464B6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:16:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBFA464B70
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242970AbhLAKTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:19:35 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57942 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbhLAKTe (ORCPT
+        id S1348540AbhLAKUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:20:14 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:47334 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348501AbhLAKUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:19:34 -0500
+        Wed, 1 Dec 2021 05:20:13 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAD46B81E17;
-        Wed,  1 Dec 2021 10:16:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030D4C53FCC;
-        Wed,  1 Dec 2021 10:16:10 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7717CCE1D91;
+        Wed,  1 Dec 2021 10:16:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92ECDC53FCC;
+        Wed,  1 Dec 2021 10:16:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638353771;
-        bh=/yfw6ulS/WNzVaJXtZ1Z8GK06B1i2tECnv9TGqJzLSU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T3aQDVwB7xpAZbfBe6QwqRcl2SwHGe/ABvt7SbPABG3WT9lTHc1gyEnx3fUpZdjUp
-         GIDS1HVIHUnhfc3693GM6BvnRNKsYc2pDYRi8fca5tP0bErjbPdoYzZhNTDHwXX0/f
-         TfH5WQrjB0XZWhqw0MgL9Hr6/+O5YC5lsdjw66A9+VbJGFC0HBpQoTTFJVvjqq97OR
-         j9GdkGpnS2c+Njf/m+sNY2k2uqzjPR8ZgDKMMJYC+IwiXdqmEHqn2HFYgMaleJkXGM
-         SnG+YBi9YkvNHn/xYCd4F+cR6mEpWDNfLUs+2oiVMMGeh+vd7FjnfSl2fcDmLHfv7M
-         szAH1dQN6QAVQ==
-Date:   Wed, 1 Dec 2021 12:16:08 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH v4 2/2] selftests: tpm2: Reset the dictionary attack lock
-Message-ID: <YadLaHB0oJZYTMbh@iki.fi>
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
- <YaVljk1vLRZ/TDJ/@iki.fi>
- <e569444c-e0cd-52bc-308f-7fa457dbf086@linux.ibm.com>
+        s=k20201202; t=1638353809;
+        bh=XzomCRP9HPlFxXOWu7bb++tXZ9myJAhOlLcfqQbpG+4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CZA5FA1HX2UPH43QHdlVh+5ONMbpWWHw+lcnTkpQKHudSQbwEM2U6Bo8e2cM9jWaF
+         pPmBmfQuQfvI2Rr7fOAxSIP1OqJTPFwE7DDkoiaJtak1+yAWn1HN7u23s1f5F8RraF
+         prK7Q3qh3nP8E+4/iX58bJWqUAsXhtg0z101WJsAkffzwT2T1rTNQUrMm4rcpApmTE
+         17OMKHjP4SrnrxocQE0QFvIuzfd0TI7PkKzwuIYHBJSKxzv6DY5DuHPkCVg1zPGzKS
+         EI5XEnzFCnsEBAGqDvvzPQ9KMteNdZ/9Z7Go6cib94jir4yb52sTaGl38NjO/YytB7
+         Ihf15/SOmo6sg==
+Date:   Wed, 1 Dec 2021 11:16:44 +0100
+From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH] docs: conf.py: fix support for Readthedocs v 1.0.0
+Message-ID: <20211201111644.218b510a@coco.lan>
+In-Reply-To: <4c6fe1f6-1a81-1181-f23a-df3f1b538cdf@infradead.org>
+References: <f0660b1d24bc9bc07b13fe9a25ccb69ca14e916d.1637923850.git.mchehab+huawei@kernel.org>
+        <13c40ed9-a51f-7496-7224-03b563bb6695@gmail.com>
+        <59f64802-c3dc-74cd-8f35-878e3fac64e2@infradead.org>
+        <87sfvik21z.fsf@intel.com>
+        <20211127102518.6e715036@coco.lan>
+        <4c6fe1f6-1a81-1181-f23a-df3f1b538cdf@infradead.org>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e569444c-e0cd-52bc-308f-7fa457dbf086@linux.ibm.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 07:26:12PM -0500, Stefan Berger wrote:
-> 
-> On 11/29/21 18:43, Jarkko Sakkinen wrote:
-> > On Sat, Nov 27, 2021 at 11:10:52PM -0500, Stefan Berger wrote:
-> > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > 
-> > > Reset the dictionary attack lock to avoid the following types of test
-> > > failures after running the test 2 times:
-> > > 
-> > > ======================================================================
-> > > ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
-> > > ----------------------------------------------------------------------
-> > > Traceback (most recent call last):
-> > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2_tests.py", line 105, in test_unseal_with_wrong_policy
-> > >      blob = self.client.seal(self.root_key, data, auth, policy_dig)
-> > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 620, in seal
-> > >      rsp = self.send_cmd(cmd)
-> > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 397, in send_cmd
-> > >      raise ProtocolError(cc, rc)
-> > > tpm2.ProtocolError: TPM_RC_LOCKOUT: cc=0x00000153, rc=0x00000921
-> > > 
-> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > ---
-> > >   tools/testing/selftests/tpm2/tpm2_tests.py | 2 ++
-> > >   1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > index e63a37819978..ad6f54c01adf 100644
-> > > --- a/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > @@ -139,6 +139,8 @@ class SmokeTest(unittest.TestCase):
-> > >           except:
-> > >               self.client.flush_context(handle)
-> > >               raise
-> > > +        finally:
-> > > +            self.client.reset_da_lock()
-> > >           self.assertEqual(rc, tpm2.TPM2_RC_POLICY_FAIL)
-> > > -- 
-> > > 2.31.1
-> > > 
-> > I don't agree with this as a DA lock has legit use. This would be adequate
-> > for systems dedicated for kernel testing only.
-> 
-> The problem is this particular test case I am patching here causes the above
-> test failures upon rerun. We are testing the driver here presumably and not
-> the TPM2, so I think we should leave the TPM2 as cleaned up as possible,
-> thus my suggestion is to reset the DA lock and we won't hear any complaints
-> after that.
+Em Sat, 27 Nov 2021 07:59:13 -0800
+Randy Dunlap <rdunlap@infradead.org> escreveu:
 
-Ok.
-
-> > We could make this available in the folder where TPM2 tests are:
+> > Perhaps one alternative to help with themes maintenance would be to
+> > select one of the builtin themes from:
 > > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-scripts.git/tree/tpm2-reset-da-lock
+> > 	https://sphinx-themes.org/  
 > 
+> Looks to me like those are external to sphinx-doc.org. It says that
+> they are maintained by @pradyunsg and @shirou. (don't know who they are)
+> There are over 40 themes shown there.
 > 
-> The tss packages also have command line tools to reset the DA lock, but it
-> shouldn't be necessary to use them after running a **driver** test case.
+> OTOH, there is https://www.sphinx-doc.org/en/master/usage/theming.html#builtin-themes,
+> which shows about 12 builtin themes to choose from. Pretty much like the
+> list the you show just below here...
+> 
+> > 
+> > if they're good enough and are present at the minimal Sphinx version
+> > supported by Kernel documentation. The ones available on 1.7.9 are:
+> > 
+> > 	$ ls sphinx_1.7.9/lib/python3.10/site-packages/sphinx/themes
+> > 	agogo  bizstyle  default  haiku   nonav    scrolls    traditional
+> > 	basic  classic   epub     nature  pyramid  sphinxdoc
+> > 
+> > They all are also the same themes available at the latest version.
+> > 
+> > If we're willing to do so, I did a quick test here. Those seems to
+> > produce a reasonable output:
+> > 
+> > 	- bizstyle
+> > 	- nature
+> > 	- classic  
+> 
+> Thanks for checking.
+> 
+> > If something would still be needed to change, the css override file could
+> > still be used, but keeping it minimal helps to avoid the need of too
+> > drastic changes.  
+> 
+> I'll take a look...
 
-If you speak about TSS, please alway say which one :-)
+Just sent a patch to help testing/using a different theme:
 
-Adding non-volatile state changes explicitly is to a test case is both
-intrusive and wrong. These type of choices are not to be done in the
-test case implementation for sure.
+	https://lore.kernel.org/lkml/8a33f4516c937556b9a38157e236b2f55ef67540.1638353179.git.mchehab+huawei@kernel.org/T/#u
 
-An improvement that does not add extra side-effect, would be to read the
-TPM_PT_LOCKOUT_COUNTER and roll back with a proper error message for the
-lockout condition.
+After such patch, you could easily select a different theme during
+documentation build, like:
 
-You can also configure the maximum number of tries up to (2 << 31) - 1
-= 4294967295 with TPM2_DictionaryAttackParameters.
+	$ make cleandocs
+        $ make SPHINXDIRS=input THEME=classic htmldocs
+	$ make SPHINXDIRS=i2c THEME=nature htmldocs
 
-/Jarkko
+The patch disables the CSS overrides when a theme different than RTD
+is used, as the CSS changes there may not be the best with other
+themes. It probably make sense to split the contents of the
+CSS override to a generic theme, which contains only things that
+would apply to all themes (like font selection) from other things
+that are theme-dependent, like colors.
+
+Thanks,
+Mauro

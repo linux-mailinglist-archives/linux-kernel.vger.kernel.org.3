@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A494643FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:37:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93D65464401
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345829AbhLAAkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 19:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345797AbhLAAkV (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 19:40:21 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5563AC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:37:01 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id x6so28342884iol.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:37:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6KT7YyaxqjVs5mSuQwjMampQZClAeRv4K4OAPJNJd20=;
-        b=ZSeoFG71k5erKk/MKPfg36Ze35fwc7Cua8svHc9JAorrJC+frFECdyJzDHIzZKGRce
-         wYUG3w6YTmcSVnoOmf3s5zPBgrqTHph+DcndRt3PAClRXL+NnbMT+bW9nd8VwWkMWH8U
-         aGhALR3nY0eGcGQCmuuxO199U29F0+oFV8xSwDq55/+z17KERuy3l7FSBdhZ+mbqpw9A
-         isN+7VlTAQf9JRT63HkP7fcl4h1A07jZ2jhFy6V0+j3olZkT8vpL9Vk8LNKylPHf6+FJ
-         x6da5lqrPnBq16RL+m1Ig0BVHuCWFgMJhsON6MtHwUM/x1mKWbLAaBOELMGr1hYQML5h
-         eUpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6KT7YyaxqjVs5mSuQwjMampQZClAeRv4K4OAPJNJd20=;
-        b=hmVoGkQfiKetCOPUHjElGJRwjDwWSHYdwiWZGd7OsXPqIRfFiSCUQAp0+zESJOySfv
-         S6MfyBIBZcM6/qSauHzcCqQEpgN7eGM83MRocYU/I7z5pEkX/p/5PuxzisKBjWaiBVoe
-         2PnV6jjYFU+RcQGY6wcQLuxMxD6UTsxbkigmpzNRn6W7HZckXvAHZQr+5a76ImjuE7zA
-         TYV8jUZVF+csnFZCZkEG43AUXAu/cDtFoGdI09ePndeq7M9XLbbN3NLO0ymdNhXcjSDj
-         GCD2xwfyfnxC7Berci3HVLvjFzPqiaP32HXI0keDGjI15wFzzzHrszUtZnEr5Vxj6nVO
-         ghIQ==
-X-Gm-Message-State: AOAM5310K9d0hjMmrVUAxCmFY5gEACJMuZLXOOChfDTNQyy7Pz9Dpm8G
-        ZjiVtmiGzf0J5QZkbkfIih0iavgt8ptlpBhP4wBM4w==
-X-Google-Smtp-Source: ABdhPJxEWWGRI9CkNjtOLdkRHCbCAy0RCyi3Yn1qBz5cJ/XJJEFadsnDmkChbvW9Dh+395dbt1IVilO9VUKyXyTDpTo=
-X-Received: by 2002:a5d:9492:: with SMTP id v18mr3969213ioj.158.1638319020517;
- Tue, 30 Nov 2021 16:37:00 -0800 (PST)
+        id S1345843AbhLAAmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 19:42:44 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:60636 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345842AbhLAAmj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 19:42:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=608yLKex6XYgV+g/m4R7ht8LzMMA5ClHN0ihJzPay4E=; b=eqc1n/z0ERx0FVdWXF0KvBKBOj
+        QIncAsAjaXMecwZ1XG9uOlMGD3QQQCDEth1cFK/EbqEstavyoICzJUAi0acnU9GR9sobW4rIxID9y
+        gydq3iHrW0GFWDRRc+gra468Dz2AvKi4pBXB/8hc9VSxjtpqFFEteI1cJGc2a3ocp0X4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1msDe9-00F9tw-0y; Wed, 01 Dec 2021 01:38:53 +0100
+Date:   Wed, 1 Dec 2021 01:38:53 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] modpost: file2alias: fixup mdio alias garbled
+ code in modules.alias
+Message-ID: <YabEHd+Z5SPAhAT5@lunn.ch>
+References: <1637919957-21635-1-git-send-email-zhuyinbo@loongson.cn>
+ <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
+ <YaYPMOJ/+OXIWcnj@shell.armlinux.org.uk>
 MIME-Version: 1.0
-References: <20211129231830.1117781-1-namhyung@kernel.org> <YaY3JqOQ2XE22VId@kernel.org>
- <CAM9d7cjXncRRsH1Zf_yVrLeaYiHXLFM29sx0MYPAZ8HAsZaggw@mail.gmail.com>
-In-Reply-To: <CAM9d7cjXncRRsH1Zf_yVrLeaYiHXLFM29sx0MYPAZ8HAsZaggw@mail.gmail.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Tue, 30 Nov 2021 16:36:49 -0800
-Message-ID: <CABPqkBQgr3ck_jnFbdLOKgpzrz4RhE3svTvkiOLY9KgvjQjU9w@mail.gmail.com>
-Subject: Re: [RFC/PATCHSET 0/5] perf ftrace: Implement function latency
- histogram (v1)
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Song Liu <songliubraving@fb.com>,
-        Changbin Du <changbin.du@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaYPMOJ/+OXIWcnj@shell.armlinux.org.uk>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 2:58 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hi Arnaldo,
->
-> On Tue, Nov 30, 2021 at 6:37 AM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Mon, Nov 29, 2021 at 03:18:25PM -0800, Namhyung Kim escreveu:
-> > > Hello,
-> > >
-> > > I've implemented 'latency' subcommand in the perf ftrace command to
-> > > show a histogram of function latency.
-> > >
-> > > To handle new subcommands, the existing functionality is moved to
-> > > 'trace' subcommand while preserving backward compatibility of not
-> > > having a subcommand at all (defaults to 'trace').
-> > >
-> > > The latency subcommand accepts a target (kernel, for now) function
-> > > with -T option and shows a histogram like below:
-> >
-> > Humm, wouldn't be interesting to shorten this by having a new 'perf
-> > flat' (function latency) tool, on the same level as 'perf ftrace' and
-> > leave 'perf ftrace' to just being a convenient perf interface to what
-> > ftrace provides?
->
-> That would be fine.  I also think 'perf ftrace latency' is
-> bit too long.  But if we would add a new feature
-> like argdist (in BCC) later, I thought it'd be nice being
-> a subcommand in the perf ftrace together.
->
-> But it's up to you.  I'll make a change if you prefer
-> 'flat' (or how about 'fnlat' instead?).
->
-I am not too fond of the flat option because as we had more bpf tools
-like function latency, then we keep extending the list of commands
-each with a small span which is different
-from what we have right now.
+> However, this won't work for PHY devices created _before_ the kernel
+> has mounted the rootfs, whether or not they end up being used. So,
+> every PHY mentioned in DT will be created before the rootfs is mounted,
+> and none of these PHYs will have their modules loaded.
+
+Hi Russell
+
+I think what you are saying here is, if the MAC or MDIO bus driver is
+built in, the PHY driver also needs to be built in?
+
+If the MAC or MDIO bus driver is a module, it means the rootfs has
+already been mounted in order to get these modules. And so the PHY
+driver as a module will also work.
+
+> I believe this is the root cause of Yinbo Zhu's issue.
+
+You are speculating that in Yinbo Zhu case, the MAC driver is built
+in, the PHY is a module. The initial request for the firmware fails.
+Yinbo Zhu would like udev to try again later when the modules are
+available.
+
+> What we _could_ do is review all device trees and PHY drivers to see
+> whether DT modaliases are ever used for module loading. If they aren't,
+> then we _could_ make the modalias published by the kernel conditional
+> on the type of mdio device - continue with the DT approach for non-PHY
+> devices, and switch to the mdio: scheme for PHY devices. I repeat, this
+> can only happen if no PHY drivers match using the DT scheme, otherwise
+> making this change _will_ cause a regression.
+
+Take a look at
+drivers/net/mdio/of_mdio.c:whitelist_phys[] and the comment above it.
+
+So there are some DT blobs out there with compatible strings for
+PHYs. I've no idea if they actually load that way, or the standard PHY
+mechanism is used.
+
+	Andrew

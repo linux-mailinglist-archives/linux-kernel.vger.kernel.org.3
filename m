@@ -2,156 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D961F4650FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:10:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF6C46510A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235581AbhLAPNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:13:52 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34856 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbhLAPNu (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:13:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S242383AbhLAPOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:14:53 -0500
+Received: from m43-7.mailgun.net ([69.72.43.7]:29514 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S239651AbhLAPOq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:14:46 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1638371485; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=hzfR5Iy/ZH4JZgmh+ej8VUvwQgSQ07CnUGKU2GOo0f0=; b=DarWwyXS721nLyZZZGYfkCVLJ/s6aWB7ZYEvQ1p5Qjx24aquaZU1Jb72u4aEArYEXWPsymX7
+ VL7mWqoHZ58Qg/C2Q/RexvruMvIqJapz8KQAmbcSfkeoT5Agg/p9BtFABlqeEkdoaQ0H1G2A
+ vU833ygsCSQw2L5p4mWbuOWfcx0=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n01.prod.us-east-1.postgun.com with SMTP id
+ 61a7909d86d0e4d88862b845 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 01 Dec 2021 15:11:25
+ GMT
+Sender: srivasam=codeaurora.org@mg.codeaurora.org
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 9327FC43638; Wed,  1 Dec 2021 15:11:23 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
+        NICE_REPLY_A,SPF_FAIL autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [10.242.143.72] (unknown [202.46.23.19])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 04BEAB81F6E;
-        Wed,  1 Dec 2021 15:10:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445F5C53FAD;
-        Wed,  1 Dec 2021 15:10:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638371427;
-        bh=FCqeRLXF2VMVm3yt6gJHFdWgv9xL0KxQlSQpzBtnUxI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qdEk9dF+fvXqeKr+VVHH5Au1zNimX1ep8FxHJ1E1JMAXY2xRds2J25uXy0ENwvMpp
-         0RAF6YJqUNx62zt/pqgvGssVjewJdtSaganLOg/zrjch7AGAWZovWZMcOCSVF4/g6P
-         +YF6PKux0eA0DYuWRFeKi6dAb350HthWM8LOMeu5aUV28FMdn7UVcyg2nS7JE6HGZu
-         uWgmjgUzJjQafFy9xG9u2euT8VCMnq3f72xtcowDFosOnJGvAozVAhtYS+/+TFBUSb
-         Vn4wcmKCM+kySmw2KS8miSxmadTNv4V+/+5hX9aPcjXfevjbmT+qvYd4T/AlGFELNg
-         cU4hrX00KPkWA==
-Date:   Wed, 1 Dec 2021 15:10:19 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: Re: [PATCH v10 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
-Message-ID: <YaeQW/akoLE6SpEi@sirena.org.uk>
-Mail-Followup-To: "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Kees Cook <keescook@chromium.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Sam Ravnborg <sam@ravnborg.org>, Maxime Ripard <maxime@cerno.tech>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-References: <cover.1638307601.git.hns@goldelico.com>
- <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
- <LKTF3R.YREPOCHOSMQN2@crapouillou.net>
- <Yad69aTXcGixXvy3@sirena.org.uk>
- <46070A95-0FA9-43F9-A9A9-52A7B58B88F5@goldelico.com>
- <EDWF3R.CMVWMJL42OH9@crapouillou.net>
- <58C550A4-A21E-47BA-8BAE-00B927DC7A2E@goldelico.com>
+        (Authenticated sender: srivasam)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 44557C4338F;
+        Wed,  1 Dec 2021 15:11:16 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 44557C4338F
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
+Subject: Re: [PATCH v3 3/5] pinctrl: qcom: Move chip specific functions to
+ right files
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, plai@codeaurora.org,
+        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
+        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, swboyd@chromium.org,
+        judyhsiao@chromium.org, Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org
+Cc:     Venkata Prasad Potturu <potturu@codeaurora.org>
+References: <1638179932-3353-1-git-send-email-srivasam@codeaurora.org>
+ <1638179932-3353-4-git-send-email-srivasam@codeaurora.org>
+ <bb08af7e-3b90-2d64-3bb1-f82cc6686184@linaro.org>
+ <342898d1-59ef-9104-658d-d992c0126361@codeaurora.org>
+ <a9e561cc-67f7-450b-fc08-61ece48e9070@linaro.org>
+From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
+Organization: Qualcomm India Private Limited.
+Message-ID: <c05aee0c-9cd7-38e0-61cf-eaf138185b00@codeaurora.org>
+Date:   Wed, 1 Dec 2021 20:41:14 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uxl0m5XHgmPX4QRQ"
-Content-Disposition: inline
-In-Reply-To: <58C550A4-A21E-47BA-8BAE-00B927DC7A2E@goldelico.com>
-X-Cookie: All true wisdom is found on T-shirts.
+In-Reply-To: <a9e561cc-67f7-450b-fc08-61ece48e9070@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---uxl0m5XHgmPX4QRQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 12/1/2021 8:37 PM, Srinivas Kandagatla wrote:
+Thanks for clarification Srini!!
+>
+> On 01/12/2021 14:33, Srinivasa Rao Mandadapu wrote:
+>>>
+>>>
+>>>> +enum lpass_lpi_functions {
+>>>> +    LPI_MUX_dmic1_clk,
+>>>> +    LPI_MUX_dmic1_data,
+>>>> +    LPI_MUX_dmic2_clk,
+>>>> +    LPI_MUX_dmic2_data,
+>>>> +    LPI_MUX_dmic3_clk,
+>>>> +    LPI_MUX_dmic3_data,
+>>>> +    LPI_MUX_i2s1_clk,
+>>>> +    LPI_MUX_i2s1_data,
+>>>> +    LPI_MUX_i2s1_ws,
+>>>> +    LPI_MUX_i2s2_clk,
+>>>> +    LPI_MUX_i2s2_data,
+>>>> +    LPI_MUX_i2s2_ws,
+>>>> +    LPI_MUX_qua_mi2s_data,
+>>>> +    LPI_MUX_qua_mi2s_sclk,
+>>>> +    LPI_MUX_qua_mi2s_ws,
+>>>> +    LPI_MUX_swr_rx_clk,
+>>>> +    LPI_MUX_swr_rx_data,
+>>>> +    LPI_MUX_swr_tx_clk,
+>>>> +    LPI_MUX_swr_tx_data,
+>>>> +    LPI_MUX_wsa_swr_clk,
+>>>> +    LPI_MUX_wsa_swr_data,
+>>>> +    LPI_MUX_gpio,
+>>>> +    LPI_MUX__,
+>>>> +};
+>>>> +
+>>>> +static const unsigned int gpio0_pins[] = { 0 };
+>>>> +static const unsigned int gpio1_pins[] = { 1 };
+>>>> +static const unsigned int gpio2_pins[] = { 2 };
+>>>> +static const unsigned int gpio3_pins[] = { 3 };
+>>>> +static const unsigned int gpio4_pins[] = { 4 };
+>>>> +static const unsigned int gpio5_pins[] = { 5 };
+>>>> +static const unsigned int gpio6_pins[] = { 6 };
+>>>> +static const unsigned int gpio7_pins[] = { 7 };
+>>>> +static const unsigned int gpio8_pins[] = { 8 };
+>>>> +static const unsigned int gpio9_pins[] = { 9 };
+>>>> +static const unsigned int gpio10_pins[] = { 10 };
+>>>> +static const unsigned int gpio11_pins[] = { 11 };
+>>>> +static const unsigned int gpio12_pins[] = { 12 };
+>>>> +static const unsigned int gpio13_pins[] = { 13 };
+>>> >>>
+>>> to here are specific to sm8250, so it should not be in header file 
+>>> to start with.
+>>
+>> As these are common to all lpass variants.. I feel it's better to 
+>> keep in Header file.
+>
+> You realize that every include of this file will add these static 
+> variables to file, in this case to pinctrl-lpass-lpi.c, 
+> pinctrl-sm8250-lpass-lpi.c and pinctrl-sc7280-lpass-lpi.c
+> so in first file(pinctrl-lpass-lpi.c) you never use those variables in 
+> second file (pinctrl-sm8250-lpass-lpi.c)you only use up to gpio13 and 
+> in third file pinctrl-sc7280-lpass-lpi.c you could use them.
+>
+> so its really bad idea to add static variables in header files.
+>
+Okay. Understood. will move it SoC specific files.
+> --srini
+>
+>>
+>> And if new pins comes in later variants, we can add them 
+>> incrementally, and they will not impact existing pin numbers.
+>>
+>> I think in upcoming variants number of pins will not decrease.
+>>
+-- 
+Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
+is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
 
-On Wed, Dec 01, 2021 at 03:33:24PM +0100, H. Nikolaus Schaller wrote:
-> > Am 01.12.2021 um 15:03 schrieb Paul Cercueil <paul@crapouillou.net>:
-
-> > Please make it mandatory in DTS then, and use devm_regulator_get() in the driver.
-
-> Well, I just wonder why the elegant devm_regulator_get_optional() exists at all
-> and seems to be used in ca. 80 places.
-
-Frankly because half of them are broken usages like this since people
-seem determined to have the most fragile error handling they can :/
-There are valid use cases for it, with things like SD cards where some
-supplies are genuinely optional and simply constrain what features are
-available if they're omitted from the design.  You also see some devices
-with the ability to replace internal regulators with external ones.
-
-> And if it is not allowed, why some DTS should be forced to add not physically existing dummy-regulators.
-
-Again, if the supply can be physically absent that is a sensible use
-case but that means completely absent, not just not software
-controllable.  We can represent fixed voltage regulators just fine.
-
-> AFAIR drivers should implement functionality defined by DTS but not the other way round: enforce DTS style.
-> BTW: there is no +5 mains dummy regulator defined in ci20.dts.
-
-It wouldn't be the first time a DTS were incomplete, and I'm sure it
-won't be the last.
-
-> What I fear is that if we always have to define the mains +5V (which is for example not
-> defined in ci20.dts), which rules stops us from asking to add a dummy-regulator from 110/230V to +5V as well.
-
-It is good practice to specify the full tree of supplies all the way to
-the main supply rail of the board, this ensures that if we need the
-information for something we've got it (even if that thing is just that
-we've got to the root of the tree).  There's potential applications in
-battery supplied devices for managing very low power situations.
-
---uxl0m5XHgmPX4QRQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGnkFoACgkQJNaLcl1U
-h9A32gf/ZYHl/RIiCZDvdUvGhhXUQ5m3dke8DEbkuGwIbHOYqQDdVOpbI+NpTIMu
-vmWcV7LpARb1R1Mst3T9J8O7p5STJUJulPLzFGsARuhjMeLE2z9+oyaocNmgXEfQ
-54NPwbUWho0pcNd+GCtvoPzRiAMMkCxBrH2exwosdTPDYpF0gIOdpuSZ3YJXRsWU
-eeni01wlGuXgswuy3SiXBc2nkmb0cNAPZlfxtdDvBoiDuR2zkIkSumfBuEeDvSvq
-1rg+fYGi6vrNgTsbEnrfLaDB1GS5xzqdQryJizNS48arBhTalMrKXP0CVmfEYOc8
-Edqu+7QgOTmmsAHtTGtymBAt2WnBUg==
-=ZCY4
------END PGP SIGNATURE-----
-
---uxl0m5XHgmPX4QRQ--

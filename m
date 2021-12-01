@@ -2,214 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C4546541F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:35:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCDCB465422
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:36:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243864AbhLARjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 12:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233404AbhLARjA (ORCPT
+        id S243972AbhLARjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 12:39:48 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:22908 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S241521AbhLARjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:39:00 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D199C061574;
-        Wed,  1 Dec 2021 09:35:38 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638380135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wl46BdwZ1KGmv50G3jfsI0iPOejQIWMQSjLutgaOqHk=;
-        b=Pt+06zaIN+XpTYcehYRys4HS6+cE2m00/PDyN9TVIqeywPk9TTKPncOzAFiuKRSxOoNPqI
-        AIVc5kWzV7DZUepaLnecpQSpeilOo7HLcvABG0FHIM99zFsj6YzMuKoxBIMB2mIDHDvWPF
-        WXoI8orNajSMfj/abMIouU/kReMZpmDjvA+dmGmp8L9lqueEILj0Y0HXBPxUo5O8RSP88C
-        yr/AToa8X9keo82ZrPu4y700gVV5afLfh3oCl/0OThPa+UJI1XHydF4PfhiY5m57ipzz6W
-        L1I8Kt9UNYWk+vEoTJzmxbnGYdcT0Zq7nFWc9XJ2N4OWIbexFvFzd88vDoSGrA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638380135;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Wl46BdwZ1KGmv50G3jfsI0iPOejQIWMQSjLutgaOqHk=;
-        b=MnhqyMiRcxE0SVcEGB/228XRCWh7TIQj1mDZaA2bSHkC/rEWlG373NhsYy4dvo0s23asR9
-        YhsM2tmL5EKUQkBw==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
-        Joerg Roedel <jroedel@suse.de>,
-        iommu@lists.linux-foundation.org
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-In-Reply-To: <20211201130023.GH4670@nvidia.com>
-References: <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com>
- <874k7ueldt.ffs@tglx> <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com>
- <87ilwacwp8.ffs@tglx> <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com>
- <87v909bf2k.ffs@tglx> <20211130202800.GE4670@nvidia.com>
- <87o861banv.ffs@tglx> <20211201001748.GF4670@nvidia.com>
- <87mtlkaauo.ffs@tglx> <20211201130023.GH4670@nvidia.com>
-Date:   Wed, 01 Dec 2021 18:35:35 +0100
-Message-ID: <87y2548byw.ffs@tglx>
+        Wed, 1 Dec 2021 12:39:46 -0500
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1FN4uv007781;
+        Wed, 1 Dec 2021 17:36:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=kD37SXOY+QMYrgd+aXqsCcHyPQL/S5ffpT7+1+JtUPs=;
+ b=A+l3pqSt3aUUDkXl9wYgLjxkPgVl2JqAtVaJsvkCMktiC23w0IaiumlUvsseKkxdNX3V
+ f6h6VRkFfnpgee9lNKLCDyxtK402mY+h+0j1fLpPW9vfSZ9d2EtiOjdqU8+z+qiC2Z95
+ jF3jzMcu7uWzS92GAP7CxwT1lNNukV9EW4o2Y3hHbukO9ilsLPefBGRawoTqyyRFx9LY
+ JSCLC9SBJc3AygiYZFvBVs6JSqqeObdqhZCD+HQJompxPDY3WUMKzl/YgehswfbOE696
+ zWIN5SPa6QH0ZMdEadF4UltvBAw5cwI+PvpaXuuuarORrP3eOnOxHhw6bXs1AZshf+u+ xA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpbn32xju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 17:36:00 +0000
+Received: from m0098414.ppops.net (m0098414.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B1Gj4hO008320;
+        Wed, 1 Dec 2021 17:36:00 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpbn32xj8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 17:35:59 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1HLKIY009345;
+        Wed, 1 Dec 2021 17:35:58 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04dal.us.ibm.com with ESMTP id 3cnne2baya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 17:35:58 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1HZu5s59245030
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Dec 2021 17:35:56 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2EA64136053;
+        Wed,  1 Dec 2021 17:35:56 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E51DB13606A;
+        Wed,  1 Dec 2021 17:35:52 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Dec 2021 17:35:52 +0000 (GMT)
+Message-ID: <34085058-ff5f-c28e-c716-6f4fa71747a3@linux.ibm.com>
+Date:   Wed, 1 Dec 2021 12:35:52 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [RFC 17/20] ima: Use integrity_admin_ns_capable() to check
+ corresponding capability
+Content-Language: en-US
+To:     jejb@linux.ibm.com, linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        Denis Semakin <denis.semakin@huawei.com>
+References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
+ <20211130160654.1418231-18-stefanb@linux.ibm.com>
+ <7c751783b28766412f158e5ca074748ed18070bd.camel@linux.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <7c751783b28766412f158e5ca074748ed18070bd.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: zyjazCBWbjknxzEUzdBa2lqledxsz3rc
+X-Proofpoint-GUID: ECjQQxNaT_J0q-jcqUVwfvVlwejvOUls
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=999 impostorscore=0 adultscore=0 lowpriorityscore=0
+ suspectscore=0 phishscore=0 spamscore=0 bulkscore=0 clxscore=1015
+ mlxscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112010094
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01 2021 at 09:00, Jason Gunthorpe wrote:
-> On Wed, Dec 01, 2021 at 11:16:47AM +0100, Thomas Gleixner wrote:
->> Looking at the device slices as subdevices with their own struct device
->> makes a lot of sense from the conceptual level.
+
+On 12/1/21 11:58, James Bottomley wrote:
+> On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
+>> From: Denis Semakin <denis.semakin@huawei.com>
+>>
+>> Use integrity_admin_ns_capable() to check corresponding capability to
+>> allow read/write IMA policy without CAP_SYS_ADMIN but with
+>> CAP_INTEGRITY_ADMIN.
+>>
+>> Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
+>> ---
+>>   security/integrity/ima/ima_fs.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/security/integrity/ima/ima_fs.c
+>> b/security/integrity/ima/ima_fs.c
+>> index fd2798f2d224..6766bb8262f2 100644
+>> --- a/security/integrity/ima/ima_fs.c
+>> +++ b/security/integrity/ima/ima_fs.c
+>> @@ -393,7 +393,7 @@ static int ima_open_policy(struct inode *inode,
+>> struct file *filp)
+>>   #else
+>>   		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
+>>   			return -EACCES;
+>> -		if (!ns_capable(ns->user_ns, CAP_SYS_ADMIN))
+>> +		if (!integrity_admin_ns_capable(ns->user_ns))
+> so this one is basically replacing what you did in RFC 16/20, which
+> seems a little redundant.
 >
-> Except IMS is not just for subdevices, it should be usable for any
-> driver in any case as a general interrupt mechiansm, as you alluded to
-> below about ethernet queues. ntb seems to be the current example of
-> this need..
+> The question I'd like to ask is: is there still a reason for needing
+> CAP_INTEGRITY_ADMIN?  My thinking is that now IMA is pretty much tied
+> to requiring a user (and a mount, because of securityfs_ns) namespace,
+> there might not be a pressing need for an admin capability separated
+> from CAP_SYS_ADMIN because the owner of the user namespace passes the
+> ns_capable(..., CAP_SYS_ADMIN) check.  The rationale in
 
-But NTB is operating through an abstraction layer and is not a direct
-PCIe device driver.
+Casey suggested using CAP_MAC_ADMIN, which I think would also work.
 
-> IDXD is not so much making device "slices", but virtualizing and
-> sharing a PCI device. The IDXD hardware is multi-queue like the NIC I
-> described and the VFIO driver is simply allocating queues from a PCI
-> device for specific usages and assigning them interrupts.
+     CAP_MAC_ADMIN (since Linux 2.6.25)
+               Allow MAC configuration or state changes. Implemented for
+               the Smack Linux Security Module (LSM).
 
-Right.
 
-But what is the representation for that resulting device? Some VFIO
-specific homebrewn muck or something which is based on struct device?
+Down the road I think we should cover setting file extended attributes 
+with the same capability as well for when a user signs files or installs 
+packages with file signatures.  A container runtime could hold 
+CAP_SYS_ADMIN while setting up a container and mounting filesystems and 
+drop it for the first process started there. Since we are using the user 
+namespace to spawn an IMA namespace, we would then require 
+CAP_SYSTEM_ADMIN to be left available so that the user can do IMA 
+related stuff in the container (set or append to the policy, write file 
+signatures). I am not sure whether that should be the case or rather 
+give the user something finer grained, such as CAP_MAC_ADMIN. So, it's 
+about granularity...
 
-Right now with VF passthrough, I can see the interrupts which are
-associated to the device.
 
-How is that going to be with something which is just made up? Does that
-expose it's own msi properties then somewhere hidden in the VFIO layer?
-
-See below.
-
-> There is already a char dev interface that equally allocates queues
-> from the same IDXD device, why shouldn't it be able to access IMS
-> interrupt pools too?
-
-Why wouldn't it be able to do so?
-
-> IMHO a well designed IDXD driver should put all the PCI MMIO, queue
-> mangement, interrupts, etc in the PCI driver layer, and the VFIO
-> driver layer should only deal with the MMIO trapping and VFIO
-> interfacing.
 >
-> From this view it is conceptually wrong to have the VFIO driver
-> directly talking to MMIO registers in the PCI device or owning the
-> irq_chip.
-
-The VFIO driver does not own the irq chip ever. The irq chip is of
-course part of the underlying infrastructure. I never asked for that.
-
-PCIe driver
-     Owns the PCI/MSI[x] interrupts for the control block
-
-     Has a control mechanism which handles queues or whatever the
-     device is partitioned into, that's what I called slice.
-
-     The irqdomain is part of that control mechanism and the irqchip
-     implementation belongs to that as well. It has to because the
-     message store is device specific.
-
-     Whether the doamin and chip implementation is in a separate
-     drivers/irqchip/foo.c file for sharing or directly built into the
-     PCIe driver itself does not matter.
-
-     When it allocates a slice for whatever usage then it also
-     allocates the IMS interrupts (though the VFIO people want to
-     have only one and do the allocations later on demand).
-
-     That allocation cannot be part of the PCI/MSIx interrupt
-     domain as we already agreed on.
-
-We have several problems to solve. Let me look at it from both point of
-views:
-
-    1) Storage
-
-       A) Having "subdevices" solves the storage problem nicely and
-          makes everything just fall in place. Even for a purely
-          physical multiqueue device one can argue that each queue is a
-          "subdevice" of the physical device. The fact that we lump them
-          all together today is not an argument against that.
-
-       B) Requires extra storage in the PCIe device and extra storage
-          per subdevice, queue to keep track of the interrupts which
-          are associated to it.
-
-    2) Exposure of VFIO interrupts via sysfs
-
-       A) Just works
-
-       B) Requires extra mechanisms to expose it
-
-    3) On demand expansion of the vectors for VFIO
-
-       A) Just works because the device has an irqdomain assigned.
-
-       B) Requires extra indirections to do that
-
-    4) IOMMU msi_desc::dev
-
-       A) I think that's reasonably simple to address by having the
-          relationship to the underlying PCIe device stored in struct
-          device, which is not really adding any complexity to the IOMMU
-          code.
-
-          Quite the contrary it could be used to make the DMA aliasing a
-          problem of device setup time and not a lookup per interrupt
-          allocation in the IOMMU code.
-
-       B) No change required.
-
-    4) PASID
-
-       While an Intel IDXD specific issue, it want's to be solved
-       without any nasty hacks.
-
-       A) Having a "subdevice" allows to associate the PASID with the
-          underlying struct device which makes IOMMU integration trivial
-
-       B) Needs some other custom hackery to get that solved
-
-So both variants come with their ups and downs.
-
-IMO A) is the right thing to do when looking at all the involved moving
-pieces.
-
-> It would be very odd for the PCI driver to allocate interrupts from
-> some random external struct device when it is creating queues on the
-> PCI device.
-
-No. That's not what I want.
-
->> and then have a store index for each allocation domain. With the
->> proposed encapsulation of the xarray handling that's definitely
->> feasible. Whether that buys much is a different question. Let me think
->> about it some more.
+> https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
 >
-> Any possibility that the 'IMS' xarray could be outside the struct
-> device?
+> Is effectively "because CAP_SYS_ADMIN is too powerful" but that's no
+> longer true of the user namespace owner.  It only passes the ns_capable
+> () check not the capable() one, so while it does get CAP_SYS_ADMIN, it
+> can only use it in a few situations which represent quite a power
+> reduction already.
 
-We could, but we really want to keep things tied to devices which is the
-right thing to do.
+At least docker containers drop CAP_SYS_ADMIN. I am not sure what the 
+decision was based on but probably they don't want to give the user what 
+is not absolutely necessary, but usage of user namespaces (with IMA 
+namespaces) would kind of force it to be available then to do 
+IMA-related stuff ...
 
-Thanks,
+Following this man page here 
+https://man7.org/linux/man-pages/man7/user_namespaces.7.html
 
-        tglx
+CAP_SYS_ADMIN in a user namespace is about
+
+- bind-mounting filesystems
+
+- mounting /proc filesystems
+
+- creating nested user namespaces
+
+- configuring UTS namespace
+
+- configuring whether setgroups() can be used
+
+- usage of setns()
+
+
+Do we want to add '- only way of *setting up* IMA related stuff' to this 
+list?
+
+   Stefan
+
+
+>
+> James
+>
+>

@@ -2,99 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B88E846486C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:29:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2500C464891
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:30:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347565AbhLAHdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:33:03 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:33312 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347508AbhLAHc5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:32:57 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        id S237099AbhLAHeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:34:01 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:24263 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1347654AbhLAHdZ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 02:33:25 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638343805; x=1669879805;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iMAVgNFJrRkMzoxIES2g+e2qL15Hbp1w1JuJqWBXSKs=;
+  b=WGGBkZtTmyiwV0D0X7D2jVN0lzqUjjdz+Viajgjqohp3Q9ZK+ECtfxcA
+   qQC/XujB0B6twI9NGp8ELkGNuGYKsx/AusXk16BxIHPiD2+zo/J3oJOlh
+   fY44aCQf8SmAVUBc8S6hAtYmGLI/kfZgodkBv2I4Wgr4VoEyNl0wEfK2v
+   8YYe2LQj5H5AXKLyZFkdCmCoPhVtgFdWtNwg5Xp/0FLmOO29UPf0J8W/q
+   vs4gBG1RmI4HbmZLfzHRvXhJB/tnBNS7CA3m9kuIxy9XM6SuwKnYpXicr
+   hZYGbeA6DVAhdrkQONA9ks8Iy7fBG5MrPHdy2wF6OLmSV5ktuZ5vrT/cE
+   A==;
+X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
+   d="scan'208";a="20773221"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 01 Dec 2021 08:30:03 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Wed, 01 Dec 2021 08:30:03 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Wed, 01 Dec 2021 08:30:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638343803; x=1669879803;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iMAVgNFJrRkMzoxIES2g+e2qL15Hbp1w1JuJqWBXSKs=;
+  b=W8dFFVix2sVBhlPCf6GtNIS042Z2hPm50VvfHs7mzitfiiAixP7sSw3q
+   XGXdRMhxYJ5C2HSvrbAjOiFpu3GQXP/1u4YniEUVEyJcyaJ5ouFNo51n5
+   WDEIYH/33HSxUfoK89NWYemdqgP1xSgjgB/t3s7KhU9r9x8MrUDrMqHm+
+   Sh9X04e+JEN66DucxqmIekxVMYabQQmuSpyDfpNwlRUmX2lXNUcZbA38f
+   Cs4pB+XF7Q/FlwqUfYtrpceBGo/526pmC7OsIYxABR2a0LmMnE6koXELv
+   H7Lge9CCCwklLzWe4GPEKuMMc4JMUViuzDfG4+uAySgQXG88W8gBdLFFc
+   w==;
+X-IronPort-AV: E=Sophos;i="5.87,278,1631570400"; 
+   d="scan'208";a="20773220"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 01 Dec 2021 08:30:02 +0100
+Received: from steina-w.tq-net.de (unknown [10.123.49.12])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 268C2212CC;
-        Wed,  1 Dec 2021 07:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638343775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mNwa1yBOCr/IbPm2xGwMXFwnRld7AY6KZo0SxKpDWOc=;
-        b=XEGX+OA+fF3UKJ+uTkzSerTtPkO12vtJjX5/GQ39zptAh/H5+4tGPEJUkIWJlVtQx1aFIw
-        Go4w1T9+Bmjm5YplIigI9ifpmLVqgXZqWLOCf+AGl3VPmVBc7i35hAYjx20JwuqrREqNPJ
-        F4gT2mwGkWip/smXaN4+jIqIUFBOFPM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638343775;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mNwa1yBOCr/IbPm2xGwMXFwnRld7AY6KZo0SxKpDWOc=;
-        b=gGWTlyFnFaPiuPIER8CvwV2ADeKxJOSx0A81eB5AArBH7cL3eyG52yceLKCeFg6agSb8nh
-        Z9yQbE+umtaLXbAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA53313AE2;
-        Wed,  1 Dec 2021 07:29:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RmVmOF4kp2HrFQAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:29:34 +0000
-Subject: Re: [PATCH 10/18] crypto: dh - introduce support for ephemeral key
- generation to dh-generic
-To:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
-        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org
-References: <20211201004858.19831-1-nstange@suse.de>
- <20211201004858.19831-11-nstange@suse.de>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <70e1c5fc-aaf5-1366-561d-178cd3688eea@suse.de>
-Date:   Wed, 1 Dec 2021 08:29:34 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id A8071280065;
+        Wed,  1 Dec 2021 08:30:02 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/7] Support for some TQMa8M* boards
+Date:   Wed,  1 Dec 2021 08:29:41 +0100
+Message-Id: <20211201072949.53947-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20211201004858.19831-11-nstange@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 1:48 AM, Nicolai Stange wrote:
-> The support for NVME in-band authentication currently in the works ([1])
-> needs to generate ephemeral DH keys. Make dh-generic's ->set_secret()
-> to generate an ephemeral key via the recently added crypto_dh_gen_privkey()
-> in case the input ->key_size is zero. Note that this behaviour is in
-> analogy to ecdh's ->set_secret().
-> 
-> [1] https://lkml.kernel.org/r/20211122074727.25988-4-hare@suse.de
-> 
-> Signed-off-by: Nicolai Stange <nstange@suse.de>
-> ---
->   crypto/dh.c | 24 ++++++++++++++++++++----
->   1 file changed, 20 insertions(+), 4 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Thanks for the review on v2!
 
-Cheers,
+Changes in v3:
+* Rebased to next-20211129
+* Adjusted commit subjects (tree -> device tree)
+* Use hyphen in node names instead of underscore
+* Removed bootargs from DT
+* Fixed audio-codec node name and handle name
+* Property 'enet-phy-lane-no-swap' was already documented, but got accidently
+  removed during YAML conversion. Fix is pending at at [2]
+* Use matrix instead of array for 'fsl,pins' as required by pinctrl bindings.
+  This reduces the lines in stderr from dtbs_check for these DT files from 475
+  down to 191
+* Removed TODO regarding unsupported USB over-current polarity
 
-Hannes
+Changes in v2:
+* Rebased to next-20211101
+* Added Rob's Acked-By on Patch for DT bindings
+* for other changes please refer to individual patches
+
+Note on TQMa8Mx:
+Due to CPU errata cpuidle is broken and needs to be disabled, see [1] for
+pending patch.
+
+This patch set adds support for the following modules:
+* TQMa8Mx
+* TQMa8MxML
+* TQMa8MxNL
+
+Each of the modules is available with different i.MX8M variants, the
+bootloader modifies the device tree and disabled paripherals which
+are not available on the actual hardware.
+
+All of them can be attached to the same mainboard MBa8Mx, although
+TQMa8MxML & TQMa8MxNL need an adapter. For that reason there is a single
+mainboard .dtsi file named mba8mx.dtsi.
+
+There is a .dtsi file for each module named imx8m?-tmqa8m*.dts.
+
+Finally there is the final .dts file which includes the mainboard and
+the attached module and contains the missing connection, prominently clk
+and pinctrl defines.
+
+[1] https://patchwork.kernel.org/project/linux-arm-kernel/patch/20211105095535.3920998-1-alexander.stein@ew.tq-group.com/
+[2] https://www.spinics.net/lists/devicetree/msg460023.html
+
+Alexander Stein (7):
+  dt-bindings: arm: fsl: add TQMa8MxML boards
+  arm64: dts: freescale: add initial device tree for TQMa8MQML with
+    i.MX8MM
+  arm64: defconfig: enable drivers for TQ TQMa8MxML-MBa8Mx
+  dt-bindings: arm: fsl: add TQMa8MxNL boards
+  arm64: dts: freescale: add initial device tree for TQMa8MQNL with
+    i.MX8MN
+  dt-bindings: arm: fsl: add TQMa8Mx boards
+  arm64: dts: freescale: add initial device tree for TQMa8Mx with i.MX8M
+
+ .../devicetree/bindings/arm/fsl.yaml          |  31 ++
+ arch/arm64/boot/dts/freescale/Makefile        |   3 +
+ .../dts/freescale/imx8mm-tqma8mqml-mba8mx.dts | 253 ++++++++++++
+ .../boot/dts/freescale/imx8mm-tqma8mqml.dtsi  | 335 ++++++++++++++++
+ .../dts/freescale/imx8mn-tqma8mqnl-mba8mx.dts | 237 ++++++++++++
+ .../boot/dts/freescale/imx8mn-tqma8mqnl.dtsi  | 322 ++++++++++++++++
+ .../dts/freescale/imx8mq-tqma8mq-mba8mx.dts   | 349 +++++++++++++++++
+ .../boot/dts/freescale/imx8mq-tqma8mq.dtsi    | 360 ++++++++++++++++++
+ arch/arm64/boot/dts/freescale/mba8mx.dtsi     | 282 ++++++++++++++
+ arch/arm64/configs/defconfig                  |   7 +
+ 10 files changed, 2179 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml-mba8mx.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-tqma8mqml.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-tqma8mqnl-mba8mx.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mn-tqma8mqnl.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mq-tqma8mq-mba8mx.dts
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mq-tqma8mq.dtsi
+ create mode 100644 arch/arm64/boot/dts/freescale/mba8mx.dtsi
+
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+2.25.1
+

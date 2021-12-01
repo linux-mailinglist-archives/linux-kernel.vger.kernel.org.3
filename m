@@ -2,148 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 208C9465979
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:47:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C676465991
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353710AbhLAWvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:51:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234878AbhLAWu7 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:50:59 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3220C061574;
-        Wed,  1 Dec 2021 14:47:37 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id b187so21892013iof.11;
-        Wed, 01 Dec 2021 14:47:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=qDz1YkpinHk/4tHAysAlqU34+YOb+JwtrMjPi8YGQN8=;
-        b=ReCWQGCvqXvrHllStogrYsdGQYrg9/lsDbBobMx4go9J55lhhkeAz29YeB/7MaZody
-         EYX5q0kycHsPZ6sPUaaa8xdOaRV2kD/VH69I8exSL1m20W7kcv8J8aWC0qX6sO/maYwS
-         7JEOxdaTqimFnK5uK19mGCw0VTZpKSZ6ZWcSnmQVYr5Va1YReM/KfVLwc7l9CZEjD2qt
-         nEOLTkREy/Xlz0fVTQ225Was3TyPnIitrddWKJZ15FqHJZyCUGtBS4pOzqfDPI2Wj0Xl
-         zdIq1bTw+DVaSrC0Sn6cLLZmsIbky/PvJK7AnMNPNpg08kwgaLC+f2/dpLPjyq9W8dlM
-         wYIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=qDz1YkpinHk/4tHAysAlqU34+YOb+JwtrMjPi8YGQN8=;
-        b=EPTMOYQruyvyescRA09a67/ctDGL4zVvIeaa4Z4aZF/Kb9hCNc86Kz13UXvSKUxC5X
-         Id+5dK78AecYEsePDa7mLvDEN+YOWThHhjzFDbvu0qeQBfQzIlxkx6YD0BTyGKaTVV4b
-         RHMOIDXc+0c3Gbi232Oudyy4RB+RNq3VMXTF9TURTv22+ItTphKcXDzZaTES6Kf5FLA2
-         oalMB0/mAZYWGaylKXOCZBY52v4ssB63ScrlXAl4cPrmlrRqAVxb2bmcYsmhl/JkM4ta
-         o85+YxrhmTyGDawIDFBxz7jF10h0em6oj44GUfZzTMb/u6f27/fDq96TpGbteVhwgGQq
-         J3UQ==
-X-Gm-Message-State: AOAM5332escqmHq7vqVVuxAqJAxiw79iW2l8XJ1jZTbIf19GzIYpPaAc
-        /bisW36TFvyzwo9wg/NwZDe2+o59JHXX452WqVE=
-X-Google-Smtp-Source: ABdhPJzlCHoS2lUMFs4aCOQf/OxdrbyCrV2DcI7KEjtyF00RhtQQLuoMQwUhekdbPqPgvGPcQiLMnyIbjTYppafEDeA=
-X-Received: by 2002:a05:6602:29c2:: with SMTP id z2mr11632027ioq.196.1638398857258;
- Wed, 01 Dec 2021 14:47:37 -0800 (PST)
+        id S1353720AbhLAW5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:57:11 -0500
+Received: from mga09.intel.com ([134.134.136.24]:51076 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1343872AbhLAW5K (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 17:57:10 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236389778"
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="236389778"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 14:53:48 -0800
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="602370697"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.64.69]) ([10.212.64.69])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 14:53:47 -0800
+Message-ID: <0eab4c0e-c672-1138-2d95-3c9bee9ecdb1@intel.com>
+Date:   Wed, 1 Dec 2021 15:53:46 -0700
 MIME-Version: 1.0
-References: <20211118112315.GD13047@quack2.suse.cz> <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
- <20211118164349.GB8267@quack2.suse.cz> <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net>
- <20211130112206.GE7174@quack2.suse.cz> <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
- <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
- <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
- <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
- <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com>
- <20211201134610.GA1815@quack2.suse.cz> <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
-In-Reply-To: <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 2 Dec 2021 00:47:25 +0200
-Message-ID: <CAOQ4uxiEjGms-sKhrVDtDHSEk97Wku5oPxnmy4vVB=6yRE_Hdg@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 06/10] ovl: implement overlayfs' ->write_inode operation
-To:     Chengguang Xu <cgxu519@mykernel.net>
-Cc:     Jan Kara <jack@suse.cz>, Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        ronyjin <ronyjin@tencent.com>,
-        charliecgxu <charliecgxu@tencent.com>,
-        Vivek Goyal <vgoyal@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
+        Joerg Roedel <jroedel@suse.de>,
+        iommu@lists.linux-foundation.org
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
+ <20211130202800.GE4670@nvidia.com> <87o861banv.ffs@tglx>
+ <20211201001748.GF4670@nvidia.com> <87mtlkaauo.ffs@tglx>
+ <8c2262ba-173e-0007-bc4c-94ec54b2847d@intel.com> <87pmqg88xq.ffs@tglx>
+ <df00b87e-00dc-d998-8b64-46b16dba46eb@intel.com> <87k0go8432.ffs@tglx>
+ <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com> <878rx480fk.ffs@tglx>
+ <45302c9d-f7a0-5a47-d0be-127d0dea45fb@intel.com> <875ys87zl5.ffs@tglx>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <875ys87zl5.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 6:24 PM Chengguang Xu <cgxu519@mykernel.net> wrote:
+
+On 12/1/2021 3:03 PM, Thomas Gleixner wrote:
+> On Wed, Dec 01 2021 at 14:49, Dave Jiang wrote:
+>> On 12/1/2021 2:44 PM, Thomas Gleixner wrote:
+>>> How that is backed on the host does not really matter. You can expose
+>>> MSI-X to the guest with a INTx backing as well.
+>>>
+>>> I'm still failing to see the connection between the 9 MSIX vectors and
+>>> the 2048 IMS vectors which I assume that this is the limitation of the
+>>> physical device, right?
+>> I think I was confused with what you were asking and was thinking you
+>> are saying why can't we just have MSIX on guest backed by the MSIX on
+>> the physical device and thought there would not be enough vectors to
+>> service the many guests. I think I understand what your position is now
+>> with the clarification above.
+> This still depends on how this overall discussion about representation
+> of all of this stuff is resolved.
 >
->  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=89, 2021-12-01 21:46:10 Jan Kara=
- <jack@suse.cz> =E6=92=B0=E5=86=99 ----
->  > On Wed 01-12-21 09:19:17, Amir Goldstein wrote:
->  > > On Wed, Dec 1, 2021 at 8:31 AM Chengguang Xu <cgxu519@mykernel.net> =
-wrote:
->  > > > So the final solution to handle all the concerns looks like accura=
-tely
->  > > > mark overlay inode diry on modification and re-mark dirty only for
->  > > > mmaped file in ->write_inode().
->  > > >
->  > > > Hi Miklos, Jan
->  > > >
->  > > > Will you agree with new proposal above?
->  > > >
->  > >
->  > > Maybe you can still pull off a simpler version by remarking dirty on=
-ly
->  > > writably mmapped upper AND inode_is_open_for_write(upper)?
->  >
->  > Well, if inode is writeably mapped, it must be also open for write, do=
-esn't
->  > it? The VMA of the mapping will hold file open. So remarking overlay i=
-node
->  > dirty during writeback while inode_is_open_for_write(upper) looks like
->  > reasonably easy and presumably there won't be that many inodes open fo=
-r
->  > writing for this to become big overhead?
+>>> What needs a subdevice to expose?
+> Can you answer that too please?
 
-I think it should be ok and a good tradeoff of complexity vs. performance.
+Sorry. So initial version of the IDXD sub-device is represented with a 
+single queue. It needs a command irq (emulated) and a completion irq 
+that is backed by a device vector (currently IMS).
 
->  >
->  > > If I am not mistaken, if you always mark overlay inode dirty on ovl_=
-flush()
->  > > of FMODE_WRITE file, there is nothing that can make upper inode dirt=
-y
->  > > after last close (if upper is not mmaped), so one more inode sync sh=
-ould
->  > > be enough. No?
->  >
->  > But we still need to catch other dirtying events like timestamp update=
-s,
->  > truncate(2) etc. to mark overlay inode dirty. Not sure how reliably th=
-at
->  > can be done...
->  >
-
-Oh yeh, we have those as well :)
-All those cases should be covered by ovl_copyattr() that updates the
-ovl inode ctime/mtime, so always dirty in ovl_copyattr() should be good.
-I *think* the only case of ovl_copyattr() that should not dirty is in
-ovl_inode_init(), so need some special helper there.
 
 >
-> To be honest I even don't fully understand what's the ->flush() logic in =
-overlayfs.
-> Why should we open new underlying file when calling ->flush()?
-> Is it still correct in the case of opening lower layer first then copy-up=
-ed case?
+> Thanks,
 >
-
-The semantics of flush() are far from being uniform across filesystems.
-most local filesystems do nothing on close.
-most network fs only flush dirty data when a writer closes a file
-but not when a reader closes a file.
-It is hard to imagine that applications rely on flush-on-close of
-rdonly fd behavior and I agree that flushing only if original fd was upper
-makes more sense, so I am not sure if it is really essential for
-overlayfs to open an upper rdonly fd just to do whatever the upper fs
-would have done on close of rdonly fd, but maybe there is no good
-reason to change this behavior either.
-
-Thanks,
-Amir.
+>          tglx

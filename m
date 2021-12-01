@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 190C9465A1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:58:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78545465A22
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353925AbhLBACG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:02:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S1353931AbhLBAD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353916AbhLBACD (ORCPT
+        with ESMTP id S240628AbhLBAD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:02:03 -0500
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC6C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:58:42 -0800 (PST)
-Received: by mail-qt1-x830.google.com with SMTP id l8so25888509qtk.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 15:58:42 -0800 (PST)
+        Wed, 1 Dec 2021 19:03:27 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107D3C061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 16:00:06 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id a2so25826047qtx.11
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 16:00:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mKAVFtfRZpn9mek6iPysBIxAT9sFeNDh1PJVk69vAok=;
-        b=UiQtL7PYDLYrQNpaKD6zuScFDLJgXtjIiVUSuenai/weJwHaNZGd50drPKnS644xJI
-         FsIUoEA38p0/+CgS2GnR18T3SWsehh9cfFdQhsGcYNw83eEXy2yN0V551YDlQed1a5ia
-         suumy0/x42VakjEbn2dWsY6UEt7ktkLXMzUVY=
+        bh=YzFMI5oWE2o+jFyOP5vbILw8vGd41FKbBUY66oRdEQk=;
+        b=HVyEG20SBKF/jqmTGVh7Dh/M0D4FVk1nCzH++iKpmlf4sjOzLgIFju63Hl9Ed9BGhp
+         m/HR14Jg/zzhVH6f8hsABaAUF0TrZGvGQ7qOxJWv1GPxlYKLiMTwAiS1Ujvt8ReOCeBW
+         Zk0Wf82z+4aMUjNuedm8E4Rft/118UNq0bX0w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mKAVFtfRZpn9mek6iPysBIxAT9sFeNDh1PJVk69vAok=;
-        b=H5lWUmdidmeBnc5rpa5qVQLOV99muwbjdqy+ZaZgd+1YLAJFYUB3mux909P93B9TWf
-         CKNbVXuKNuLMJbHlJHol/UpTlfhfXkTO52cxCAah39bKYVzSEhwZrEE/aiXFGTQXz9T1
-         LJlg3R/dOhIHJFyeGaftDStZnCSeYX0a0SIpM5oEv90OL2KYkj/VTRttszdg0EDcIVYC
-         /xGbaESnG82Z0hMskStmGSOoBhWt4P7ldkwJ9cuD/SUJaaSh3O3KiCYLcbXm4T1zapiJ
-         XEkC08QsS+xuJll1tVP/vhesU0f71BC6PiG8JlGkAYeF1vY3RcWg+Cv81D/tFnSEW9bJ
-         mVjg==
-X-Gm-Message-State: AOAM532iQfhSL4qETE2A6n9pmJQCJTCUvXWfdclltkJA/iMSvCZQ3/PC
-        2Oo4GSxW1viA5rjdrXRK3yimqp7A5LWXZm+o6Hevaw==
-X-Google-Smtp-Source: ABdhPJxjAowIZNevtYxc/JYBCkiAIs98qYglgiULGYpJOCGmpv/QaOf2gRWJM912xU3UVIlhW8QOcnJt6ZYIil4W+Lg=
-X-Received: by 2002:a05:622a:130e:: with SMTP id v14mr10542855qtk.458.1638403121278;
- Wed, 01 Dec 2021 15:58:41 -0800 (PST)
+        bh=YzFMI5oWE2o+jFyOP5vbILw8vGd41FKbBUY66oRdEQk=;
+        b=Xf46ojrry3qTq/m4qxlUpsErQ/HYZogwLgFTfDy0gPisEK/vZg7e0S1KsJyFRnb3In
+         ppeTv4OuVQvNCO5V4YQVV43LLxVfu79y6GAgZSVmqi+LSTDQMbQtL3L+RrzkMxs/Klzo
+         mJj0jT9s3wPY0j+IJven6V09WaUvjrddG97RBj5DteLx2LmcHMOHJWgTOqsLxqivZRUh
+         f9Rvkw0FyNryq8KewMptgG+Xj19sSDtHtRcsw7f2IlKS6Y6ko27Pqn1+rG1yh9ZEdepj
+         7txaxaScH5tzbWM1PEypA2xxic67XfsaYU4D+ooPLuShEOvGXkFpynWryVG8Ufyaz0NQ
+         SIRA==
+X-Gm-Message-State: AOAM532RKX6cXjZOx2IVyQFeI1JYNfsp//eVdy0aDZYx4eTqZYvG9qI8
+        D2osDGyLlCX/LbK82YC3hFGhwtM1oulCfafEN8ie5Q==
+X-Google-Smtp-Source: ABdhPJwuwORHr25rSusAmz6Rw8B8e2m0YmLSJeSuvEmJ4pbHkBNQlMFlJSCM9HXMUs06MfzXrMPJl/3J77nepYoci9c=
+X-Received: by 2002:ac8:5a10:: with SMTP id n16mr10785131qta.278.1638403205087;
+ Wed, 01 Dec 2021 16:00:05 -0800 (PST)
 MIME-Version: 1.0
 References: <20211129034201.5767-1-yunfei.dong@mediatek.com>
- <20211129034201.5767-3-yunfei.dong@mediatek.com> <CAC-pXoPXc=q8KPUcSfY6XZ=sLt71vDZbJV=f4SZx55Gc6VbRQw@mail.gmail.com>
-In-Reply-To: <CAC-pXoPXc=q8KPUcSfY6XZ=sLt71vDZbJV=f4SZx55Gc6VbRQw@mail.gmail.com>
+ <20211129034201.5767-5-yunfei.dong@mediatek.com> <8a5afa81-71b7-ba42-d1ce-2bbf82a7e557@collabora.com>
+In-Reply-To: <8a5afa81-71b7-ba42-d1ce-2bbf82a7e557@collabora.com>
 From:   Steve Cho <stevecho@chromium.org>
-Date:   Wed, 1 Dec 2021 15:58:30 -0800
-Message-ID: <CAC-pXoPtPb1y8c5FovXJ_T-689t_RRdyGu=54yr9BufDK+zmkw@mail.gmail.com>
-Subject: Re: [PATCH v11, 02/19] media: mtk-vcodec: Align vcodec wake up
- interrupt interface
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
+Date:   Wed, 1 Dec 2021 15:59:54 -0800
+Message-ID: <CAC-pXoP2nn-DdSJTWDES19UdMp9A5unj9u7Bs=Qw+ex9=HvyVw@mail.gmail.com>
+Subject: Re: [PATCH v11, 04/19] media: mtk-vcodec: export decoder pm functions
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Alexandre Courbot <acourbot@chromium.org>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Tzung-Bi Shih <tzungbi@chromium.org>,
         Tiffany Lin <tiffany.lin@mediatek.com>,
@@ -78,89 +79,16 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Reviewed-by: Steve Cho <stevecho@chromium.org>
 
-On Wed, Dec 1, 2021 at 3:55 PM Steve Cho <stevecho@chromium.org> wrote:
+On Wed, Dec 1, 2021 at 4:09 AM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
 >
-> LGTM.
->
-> On Sun, Nov 28, 2021 at 7:44 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
+> Il 29/11/21 04:41, Yunfei Dong ha scritto:
+> > Register each hardware as platform device, need to call pm functions
+> > to open/close power and clock from module mtk-vcodec-dec, export these
+> > functions.
 > >
-> > Vdec and venc can use the same function to wake up interrupt event.
-> >
-> > Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> > ---
-> >  drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 9 +--------
-> >  drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 8 ++++++++
-> >  drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 8 --------
-> >  3 files changed, 9 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-> > index 59caf2163349..055d50e52720 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-> > @@ -31,13 +31,6 @@
-> >  module_param(mtk_v4l2_dbg_level, int, 0644);
-> >  module_param(mtk_vcodec_dbg, bool, 0644);
-> >
-> > -/* Wake up context wait_queue */
-> > -static void wake_up_ctx(struct mtk_vcodec_ctx *ctx)
-> > -{
-> > -       ctx->int_cond = 1;
-> > -       wake_up_interruptible(&ctx->queue);
-> > -}
-> > -
-> >  static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
-> >  {
-> >         struct mtk_vcodec_dev *dev = priv;
-> > @@ -69,7 +62,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
-> >         writel((readl(vdec_misc_addr) & ~VDEC_IRQ_CLR),
-> >                 dev->reg_base[VDEC_MISC] + VDEC_IRQ_CFG_REG);
-> >
-> > -       wake_up_ctx(ctx);
-> > +       wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED);
+> > Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 >
-> Assuming setting up reason doesn't change functionality.
 >
-> >
-> >         mtk_v4l2_debug(3,
-> >                         "mtk_vcodec_dec_irq_handler :wake up ctx %d, dec_done_status=%x",
-> > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > index 581522177308..1d2370608d0d 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> > @@ -473,4 +473,12 @@ static inline struct mtk_vcodec_ctx *ctrl_to_ctx(struct v4l2_ctrl *ctrl)
-> >         return container_of(ctrl->handler, struct mtk_vcodec_ctx, ctrl_hdl);
-> >  }
-> >
-> > +/* Wake up context wait_queue */
-> > +static inline void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
-> > +{
-> > +       ctx->int_cond = 1;
-> > +       ctx->int_type = reason;
-> > +       wake_up_interruptible(&ctx->queue);
-> > +}
-> > +
-> >  #endif /* _MTK_VCODEC_DRV_H_ */
-> > diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> > index eed67394cf46..7c3487fb3498 100644
-> > --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> > +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> > @@ -65,14 +65,6 @@ static const struct mtk_video_fmt mtk_video_formats_capture_vp8[] =  {
-> >         },
-> >  };
-> >
-> > -/* Wake up context wait_queue */
-> > -static void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
-> > -{
-> > -       ctx->int_cond = 1;
-> > -       ctx->int_type = reason;
-> > -       wake_up_interruptible(&ctx->queue);
-> > -}
-> > -
-> >  static void clean_irq_status(unsigned int irq_status, void __iomem *addr)
-> >  {
-> >         if (irq_status & MTK_VENC_IRQ_STATUS_PAUSE)
-> > --
-> > 2.25.1
-> >
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

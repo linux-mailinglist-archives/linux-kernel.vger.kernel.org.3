@@ -2,215 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 080FA46518E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D24465196
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:26:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350936AbhLAP32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        id S1350943AbhLAP3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:29:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350924AbhLAP31 (ORCPT
+        with ESMTP id S1350961AbhLAP3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:29:27 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA88BC061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:26:06 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id 7so49137407oip.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:26:06 -0800 (PST)
+        Wed, 1 Dec 2021 10:29:34 -0500
+Received: from mail-wm1-x34a.google.com (mail-wm1-x34a.google.com [IPv6:2a00:1450:4864:20::34a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5256FC061757
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:26:13 -0800 (PST)
+Received: by mail-wm1-x34a.google.com with SMTP id 69-20020a1c0148000000b0033214e5b021so12433348wmb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:26:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=ho6rCo9lvPlr61eCFjwRCuPn4r4Kk8E194rQWiIz0bI=;
-        b=YXF59qJSiaiKjxgLQe1GtDIWTcG43VO5iCCkRI2et4LcvkcKPMebyz92zURex8nzXK
-         Q0/aKVyWDM1lJ6t9Tue0/s3t4Y5ONXFCBUBZXUtU42+D6EMCS7ym15Ce9GfaYnfwgtj7
-         6CzxVWF/lVMGUR/kZYFErFRNs3zUB6EuctgjqljXgo/Jxeg+1EoyGmB/Hhr6YrpL9V7Z
-         oaQW4yNQWj65D4YRq1o22wKY0GgSoRo2BL/iHVHIDmIQrQqVpstVh9YoWLxBlUUlDZgU
-         6N6L7GBW+dzUu/DUl+LeZuphGH4L5oCVMMEQB0x7ICqnJlxyVkTj1F4MM/N2kCiIzZfn
-         MiFw==
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=KwI6f4Z+SG6OLZ2CA76lIDj1HnRQns/gAAi6BnRl9xE=;
+        b=L4KrD9fytPCqFfJpm7zKkhS2HO4DerOuUVaA/yqVFNpq2ISBqnspeoM40Yvr0t7k/D
+         4iB0lDCoqTijStxCKHlbhOx3O3Fb0tJSEgpfnH1GHPJCe22BpkW/34cppuOiFTLUDlrZ
+         Uu+CYeg9YBIKTbm3GXdkp6NOX0szTlGc0WMN48DnnO+9nMyi+2B1TItUDNBJ+/2MXbQV
+         fNEHRtFwwkwbIsIGUvfWP1+nXooOpGx5aOorerAL3HND0JkqkWNwn4I40B2Rmcy9psXH
+         Dix19JTyCsztwltZECYBTFMqarDF4ghypj1oTqoWDDT11ruXegfBl22e6Zos/ackfENo
+         bwGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=ho6rCo9lvPlr61eCFjwRCuPn4r4Kk8E194rQWiIz0bI=;
-        b=0rjEE5FdAGS5nQrWkLk5r8SAcQZZd0Vj4kQvyQnSMOYXZ50z5TjdRzX2Ny37lhbpeN
-         uivhMJ/zQtCtY3u3VdzUhIFkwx3W8Xgrc9cr/KmKXOogZRDUKB33lfzLZNoAqjrjtYgQ
-         RjFA14XJMAP6wrnCz221OEZIWrAnfDiM37Uy8JDp0WbtyWdeNRgDpAZ3ms8Jn8+aBsfG
-         VInyl3/TL7Ph4dgSy0L0S+p3Xz9vuRGpxQim19TFVN4SkhFvAg8txaE3dVpLHXOiBgtv
-         yNSLfksd6AfaPbHdE8dOR9e0vyAyf8kpMjo6iREK8lkkZ4xrwkzaH9Z+0J/DEMTLbBti
-         mNRQ==
-X-Gm-Message-State: AOAM533hu2eBKEzFb+546x/1bpQo3bQf0X+UJPeOKknc9oLap9IapKH9
-        3/ivOlKU0Xknq9JhN8wD0SkxYA==
-X-Google-Smtp-Source: ABdhPJymuEP6wWTINOd5J43jZF/j9auHYUXRrHHj1cpGkUtoyw/CVMO7oF9UFb725mHlHPWTb/UEgQ==
-X-Received: by 2002:a05:6808:1a02:: with SMTP id bk2mr6718132oib.52.1638372366039;
-        Wed, 01 Dec 2021 07:26:06 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id e14sm8491oow.3.2021.12.01.07.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 07:26:05 -0800 (PST)
-Date:   Wed, 1 Dec 2021 09:26:00 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org, robh+dt@kernel.org,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        robdclark@gmail.com, seanpaul@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
-        dianders@chromium.org, quic_khsieh@quicinc.com
-Subject: Re: [PATCH v4 1/4] arm64: dts: qcom: sc7280: add display dt nodes
-Message-ID: <YaeUCK5+P8DrEM41@builder.lan>
-References: <1637580369-876-1-git-send-email-quic_sbillaka@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1637580369-876-1-git-send-email-quic_sbillaka@quicinc.com>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=KwI6f4Z+SG6OLZ2CA76lIDj1HnRQns/gAAi6BnRl9xE=;
+        b=NTtYjSP83xFbeQvpO6fV84wAqpOptVPyHHfFlTR5zpPGNEP/7rWVIkxc0Xwc/K9fnD
+         3XptjUD1eHUz1Cuz/+dKatm8oYHXQdtoJJxQxD4x4Lttxc+i74dSNxsfdrmBxOaO8ysG
+         MXa9bP8YL/sWgsEt+4ZQeTeLnPeak5PiKQz+1/b4vTmKV0uaIpaDByPF75zYds5ctn1J
+         ho68zkk8eJo+tC9FtvWUldqQ4608Waos66WLD8jz7b4RaKmOiiV59m57esiVR0dBIRNa
+         ypXSbNU3U8q1SO2tfSQ4Pr1WY980zcITWAVu6unij/eUUjIYYcN6YjF/cl0/1ZEaKMmL
+         hxAw==
+X-Gm-Message-State: AOAM533M2t8rE2HuoDovczpvLx7udv12w6DYMIlAuemkoxN2sXoR42K8
+        ZIpW3tL2LzgK5FUx9CLPqBw9Y9u6Lw==
+X-Google-Smtp-Source: ABdhPJzH7BSHdEv19rN0wDFTHkoKh/DPf7zIINrpO+Z1PL0DO5khj8ogwlSq8tOln6a56ZQ+PVk6VSMzSw==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:95ad:1401:cf07:6d1a])
+ (user=elver job=sendgmr) by 2002:a05:600c:4f0b:: with SMTP id
+ l11mr21247wmq.0.1638372371145; Wed, 01 Dec 2021 07:26:11 -0800 (PST)
+Date:   Wed,  1 Dec 2021 16:26:04 +0100
+Message-Id: <20211201152604.3984495-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
+Subject: [PATCH] kcov: fix generic Kconfig dependencies if ARCH_WANTS_NO_INSTR
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, Andrew Morton <akpm@linux-foundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 22 Nov 05:26 CST 2021, Sankeerth Billakanti wrote:
+Until recent versions of GCC and Clang, it was not possible to disable
+KCOV instrumentation via a function attribute. The relevant function
+attribute was introduced in 540540d06e9d9 ("kcov: add
+__no_sanitize_coverage to fix noinstr for all architectures").
 
-> From: Krishna Manikandan <quic_mkrishn@quicinc.com>
-> 
-> Add mdss and mdp DT nodes for sc7280.
-> 
-> Signed-off-by: Krishna Manikandan <quic_mkrishn@quicinc.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> ---
-> 
-> Changes in v4:
->     None
-> 
-> Changes in v3:
->     None
-> 
-> Changes in v2:
->     - Rename display dt nodes (Stephen Boyd)
->     - Add clock names one per line for readability (Stephen Boyd)
-> 
-> 
->  arch/arm64/boot/dts/qcom/sc7280.dtsi | 90 ++++++++++++++++++++++++++++++++++++
->  1 file changed, 90 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> index 365a2e0..a4536b6 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-> @@ -2704,6 +2704,96 @@
->  			#power-domain-cells = <1>;
->  		};
->  
-> +		mdss: display-subsystem@ae00000 {
-> +			compatible = "qcom,sc7280-mdss";
-> +			reg = <0 0x0ae00000 0 0x1000>;
-> +			reg-names = "mdss";
-> +
-> +			power-domains = <&dispcc DISP_CC_MDSS_CORE_GDSC>;
-> +
-> +			clocks = <&gcc GCC_DISP_AHB_CLK>,
-> +				 <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +				<&dispcc DISP_CC_MDSS_MDP_CLK>;
-> +			clock-names = "iface",
-> +				      "ahb",
-> +				      "core";
-> +
-> +			assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
-> +			assigned-clock-rates = <300000000>;
-> +
-> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
-> +
-> +			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>;
-> +			interconnect-names = "mdp0-mem";
-> +
-> +			iommus = <&apps_smmu 0x900 0x402>;
-> +
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			status = "disabled";
-> +
-> +			mdp: display-controller@ae01000 {
+x86 was the first architecture to want a working noinstr, and at the
+time no compiler support for the attribute existed yet. Therefore,
+0f1441b44e823 ("objtool: Fix noinstr vs KCOV") introduced the ability to
+NOP __sanitizer_cov_*() calls in .noinstr.text.
 
-I believe the only reason to give this a label is so that you can enable
-it in the dts. But I don't see the point of having it status disabled,
-given that it should always follow the mdss node's status.
+However, this doesn't work for other architectures like arm64 and s390
+that want a working noinstr per ARCH_WANTS_NO_INSTR.
 
-> +				compatible = "qcom,sc7280-dpu";
-> +				reg = <0 0x0ae01000 0 0x8f030>,
-> +					<0 0x0aeb0000 0 0x2008>;
-> +				reg-names = "mdp", "vbif";
-> +
-> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
-> +					<&gcc GCC_DISP_SF_AXI_CLK>,
-> +					<&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					<&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
-> +					<&dispcc DISP_CC_MDSS_MDP_CLK>,
-> +					<&dispcc DISP_CC_MDSS_VSYNC_CLK>;
-> +				clock-names = "bus",
-> +					      "nrt_bus",
-> +					      "iface",
-> +					      "lut",
-> +					      "core",
-> +					      "vsync";
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
-> +						<&dispcc DISP_CC_MDSS_VSYNC_CLK>,
-> +						<&dispcc DISP_CC_MDSS_AHB_CLK>;
-> +				assigned-clock-rates = <300000000>,
-> +							<19200000>,
-> +							<19200000>;
-> +				operating-points-v2 = <&mdp_opp_table>;
-> +				power-domains = <&rpmhpd SC7280_CX>;
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <0>;
-> +
-> +				status = "disabled";
+At the time of 0f1441b44e823, we didn't yet have ARCH_WANTS_NO_INSTR,
+but now we can move the Kconfig dependency checks to the generic KCOV
+option. KCOV will be available if:
 
-So my suggestion is to drop this and drop the label.
+	- architecture does not care about noinstr, OR
+	- we have objtool support (like on x86), OR
+	- GCC is 12.0 or newer, OR
+	- Clang is 13.0 or newer.
 
-If not, please change the label of this node to mdss_mdp, for sorting
-purposes.
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ arch/x86/Kconfig  | 2 +-
+ lib/Kconfig.debug | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Thanks,
-Bjorn
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 95dd1ee01546..c030b2ee93b3 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -78,7 +78,7 @@ config X86
+ 	select ARCH_HAS_FILTER_PGPROT
+ 	select ARCH_HAS_FORTIFY_SOURCE
+ 	select ARCH_HAS_GCOV_PROFILE_ALL
+-	select ARCH_HAS_KCOV			if X86_64 && STACK_VALIDATION
++	select ARCH_HAS_KCOV			if X86_64
+ 	select ARCH_HAS_MEM_ENCRYPT
+ 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+ 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 9ef7ce18b4f5..589c8aaa2d5b 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -1977,6 +1977,8 @@ config KCOV
+ 	bool "Code coverage for fuzzing"
+ 	depends on ARCH_HAS_KCOV
+ 	depends on CC_HAS_SANCOV_TRACE_PC || GCC_PLUGINS
++	depends on !ARCH_WANTS_NO_INSTR || STACK_VALIDATION || \
++		   GCC_VERSION >= 120000 || CLANG_VERSION >= 130000
+ 	select DEBUG_FS
+ 	select GCC_PLUGIN_SANCOV if !CC_HAS_SANCOV_TRACE_PC
+ 	help
+-- 
+2.34.0.rc2.393.gf8c9666880-goog
 
-> +
-> +				mdp_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-200000000 {
-> +						opp-hz = /bits/ 64 <200000000>;
-> +						required-opps = <&rpmhpd_opp_low_svs>;
-> +					};
-> +
-> +					opp-300000000 {
-> +						opp-hz = /bits/ 64 <300000000>;
-> +						required-opps = <&rpmhpd_opp_svs>;
-> +					};
-> +
-> +					opp-380000000 {
-> +						opp-hz = /bits/ 64 <380000000>;
-> +						required-opps = <&rpmhpd_opp_svs_l1>;
-> +					};
-> +
-> +					opp-506666667 {
-> +						opp-hz = /bits/ 64 <506666667>;
-> +						required-opps = <&rpmhpd_opp_nom>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		pdc: interrupt-controller@b220000 {
->  			compatible = "qcom,sc7280-pdc", "qcom,pdc";
->  			reg = <0 0x0b220000 0 0x30000>;
-> -- 
-> 2.7.4
-> 

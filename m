@@ -2,120 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E88B465044
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5690465047
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350958AbhLAOr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:47:59 -0500
-Received: from mail-ot1-f48.google.com ([209.85.210.48]:46954 "EHLO
-        mail-ot1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350719AbhLAOoV (ORCPT
+        id S1351406AbhLAOsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:48:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350576AbhLAOrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:44:21 -0500
-Received: by mail-ot1-f48.google.com with SMTP id x3-20020a05683000c300b0057a5318c517so5199462oto.13;
-        Wed, 01 Dec 2021 06:41:00 -0800 (PST)
+        Wed, 1 Dec 2021 09:47:15 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB77C061757
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 06:43:51 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id k37so63522105lfv.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 06:43:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=gxTGNH4RjZnXC09mFHvXZGKvlJs0ViDxwUF13VP4Qnc=;
+        b=j1sE7JdBShi/drRIhEhZBO6Hp8GoxIqTZ6X76Z4WdL4ClkjzJQawZwwxSyHJvThbkQ
+         ZkA05uk98Wr8NHK3d8DBM0PVbPx1pa1hg5zXgKJEo+k1LSud82VtG94R67OuXuXZEkcw
+         A+IOdOXLToG3/WZ0yYJHn0q8H1NuD5Uiuhzi7J87S9U3rIVekTdWElUcXELCpas/s3PR
+         TOT7jsRHpS6bMNxCKwv6t3IyPcuYn+A3U3trC4B9K1XlFN+eQHd2jfXkOzEBxb5npEln
+         ZPgC6y1dYfkjYJABVbOhiPiFn3SlidHHhD05wboAlT29k+UajlBI0t13iz9+wcaNsSfO
+         DspA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=ed/ZcCSR+4sJXjgWKobu/vSzvVTBSgkCNvP/E+sGc34=;
-        b=ZnxK66YcosTZ/M3SlJj1J1dxXuRAVnk0feQapOk/6XuQGvtPLomMcEf/Lw7Z8SLdpE
-         kQ1Y1gydrFRpAOwPUP/pFAXZYI59W5fP8AI8ccR/10+QTAMu4r6gtaTudxntpYb5LNS/
-         n4R2R+FCDGpzAPXd7wFARYWlIWhWr8uTtoCNQiPLAQ4DXRIKq2Ydg+3op7fuhhZ5RcLz
-         LgOu3JeS+idC9nTSLXYEU2rCOSHMxtDVjwA/6UsD1EdgczdVrZxDnFdqIf8f6EE+jvgV
-         fjXuFsCvTKFLX0yxDX0KAxrAIakJHytm8MeA7CTbj3JeNs5N8flRrPWmtG0nBAtiD2L5
-         Gkfw==
-X-Gm-Message-State: AOAM531NiUeqEczO0fOcjncJhFf/7LJsCEphvcUrR4CIUhPwiImfsYSr
-        t7jfbA0Cyl60z6eGXzLm0lAvfdpG7ZbomcaTLjo=
-X-Google-Smtp-Source: ABdhPJxp6TilHl0+OEDr77mPSoLcvUkS0xfcqLlnOeV8gwqQPAQ7V3osdNMQRxGpaXfwgjoTqV06EsoMdJQnFolzgaM=
-X-Received: by 2002:a05:6830:348f:: with SMTP id c15mr6239258otu.254.1638369660021;
- Wed, 01 Dec 2021 06:41:00 -0800 (PST)
+        bh=gxTGNH4RjZnXC09mFHvXZGKvlJs0ViDxwUF13VP4Qnc=;
+        b=r9GSacvh8HLUmPvp9dch2Bq94aaEzhh80KhBUBWaRRaT6HO26ho1OQMWggkt6NaLX1
+         o37sE1wWbt3E4AaR3iwT7Bb5DlL9YN6WkGPEcvNcYI6NEZUygBc34HOplWFWrbp3ryY8
+         DNLRWv+feIm6cdNejayJwRugpVEIIDRElTQGjnUhOBF5CFBm+SrEDQXdoqCE7L/x78x4
+         P7i61RZVGx8fyz33LN6E1zLWZL6lubPKHHs2TUoA0Q6ZI5sF/1HNlocLyeVDF5vTkPi2
+         VDoKpscbbO+ai0lnnsIN7ykySMoWCcoXFTCmzM3V8W0g5MI9jDqJPD4mtwNFYZZzMZPo
+         UIBw==
+X-Gm-Message-State: AOAM532fc40kt5YRrZPxJ8mCwusDy+O0QRKtgP25ec+eFwGIjbItQiy4
+        xzfosmK9uIGEU6dR3izQBkaGJHwMbEPEMEuYBljzaA==
+X-Google-Smtp-Source: ABdhPJxVYx2b3NkGS8YC0h/FYV805PvlFm04JQsMyVC9RHmRfwgvzlv9TZ9QEWvSvv5Kz90my11HVJhsXcHlNDrWXa4=
+X-Received: by 2002:ac2:4bc1:: with SMTP id o1mr6344492lfq.254.1638369829729;
+ Wed, 01 Dec 2021 06:43:49 -0800 (PST)
 MIME-Version: 1.0
-References: <20211201062423.1313114-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20211201062423.1313114-1-kai.heng.feng@canonical.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 1 Dec 2021 15:40:49 +0100
-Message-ID: <CAJZ5v0jQUc8NyNYiGpx0ayEPXJR-TS4fy832+2fBGgKLmdWjtg@mail.gmail.com>
-Subject: Re: [PATCH] PCI: vmd: Honor ACPI _OSC on PCIe features
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Nirmal Patel <nirmal.patel@linux.intel.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20211126181500.3404129-1-daniel.lezcano@linaro.org> <CAPDyKFoZo4p93JZUm4CUqO4DfrL8_YbyomqBzC59C0eTwa60CA@mail.gmail.com>
+In-Reply-To: <CAPDyKFoZo4p93JZUm4CUqO4DfrL8_YbyomqBzC59C0eTwa60CA@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 1 Dec 2021 15:43:13 +0100
+Message-ID: <CAPDyKFoY3b=sbFffDRTAwnXc7OJ9w_B8t337BPbnU66SB-xQjg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: Powerzone new bindings
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     robh@kernel.org, arnd@linaro.org, heiko@sntech.de,
+        rjw@rjwysocki.net, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, Arnd Bergmann <arnd@arndb.de>,
+        Rob Herring <robh+dt@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 7:25 AM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
+On Wed, 1 Dec 2021 at 10:23, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
-> combination causes AER message flood and drags the system performance
-> down.
+> On Fri, 26 Nov 2021 at 19:15, Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+> >
+> > The proposed bindings are describing a set of powerzones.
+> >
+> > A power zone is the logical name for a component which is capable of
+> > power capping and where we can measure the power consumption.
+> >
+> > A power zone can aggregate several power zones in terms of power
+> > measurement and power limitations. That allows to apply power
+> > constraint to a group of components and let the system balance the
+> > allocated power in order to comply with the constraint.
+> >
+> > The ARM System Control and Management Interface (SCMI) can provide a
+> > power zone description.
+> >
+> > The powerzone semantic is also found on the Intel platform with the
+> > RAPL register.
+> >
+> > The Linux kernel powercap framework deals with the powerzones:
+> >
+> > https://www.kernel.org/doc/html/latest/power/powercap/powercap.html
+> >
+> > The powerzone can also represent a group of children powerzones, hence
+> > the description can result on a hierarchy. Such hierarchy already
+> > exists with the hardware or can be represented an computed from the
+> > kernel.
+> >
+> > The hierarchical description was initially proposed but not desired
+> > given there are other descriptions like the power domain proposing
+> > almost the same description.
+> >
+> > https://lore.kernel.org/all/CAL_JsqLuLcHj7525tTUmh7pLqe7T2j6UcznyhV7joS8ipyb_VQ@mail.gmail.com/
+> >
+> > The description gives the power constraint dependencies to apply on a
+> > specific group of logically or physically aggregated devices. They do
+> > not represent the physical location or the power domains of the SoC
+> > even if the description could be similar.
+> >
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Cc: Rob Herring <robh+dt@kernel.org>
+> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> > ---
+> >    V1: Initial post
+> >    V2:
+> >      - Added pattern properties and stick to powerzone-*
+> >      - Added required property compatible and powerzone-cells
+> >      - Added additionnal property
+> >      - Added compatible
+> >      - Renamed to 'powerzones'
+> >      - Added missing powerzone-cells to the topmost node
+> >      - Fixed errors reported by 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > ---
+> >  .../devicetree/bindings/power/powerzones.yaml | 109 ++++++++++++++++++
+> >  1 file changed, 109 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/power/powerzones.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/power/powerzones.yaml b/Documentation/devicetree/bindings/power/powerzones.yaml
+> > new file mode 100644
+> > index 000000000000..6e63bbc750c6
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/powerzones.yaml
+> > @@ -0,0 +1,109 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/powerzones.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Power zones description
+> > +
+> > +maintainers:
+> > +  - Daniel Lezcano <daniel.lezcano@linaro.org>
+> > +
+> > +description: |+
+> > +
+> > +  A System on Chip contains a multitude of active components and each
+> > +  of them is a source of heat. Even if a temperature sensor is not
+> > +  present, a source of heat can be controlled by acting on the
+> > +  consumed power via different techniques.
+> > +
+> > +  A powerzone describes a component or a group of components where we
+> > +  can control the maximum power consumption. For instance, a group of
+> > +  CPUs via the performance domain, a LCD screen via the brightness,
+> > +  etc ...
+> > +
+> > +  Different components when they are used together can significantly
+> > +  increase the overall temperature, so the description needs to
+> > +  reflect this dependency in order to assign a power budget for a
+> > +  group of powerzones.
+> > +
+> > +  This description is done via a hierarchy and the DT reflects it. It
+> > +  does not represent the physical location or a topology, eg. on a
+> > +  big.Little system, the little CPUs may not be represented as they do
+> > +  not contribute significantly to the heat, however the GPU can be
+> > +  tied with the big CPUs as they usually have a connection for
+> > +  multimedia or game workloads.
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    const: powerzones
+> > +
+> > +  compatible:
+> > +    const: powerzones
 >
-> The issue doesn't happen when VMD mode is disabled in BIOS, since AER
-> isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
-> is enabled regardless of _OSC:
-> [    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
-> ...
-> [    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
->
-> Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
-> disable PCIe features accordingly to resolve the issue.
->
-> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215027
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> ---
->  drivers/pci/controller/vmd.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-> index a45e8e59d3d48..8298862417e84 100644
-> --- a/drivers/pci/controller/vmd.c
-> +++ b/drivers/pci/controller/vmd.c
-> @@ -670,7 +670,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->         LIST_HEAD(resources);
->         resource_size_t offset[2] = {0};
->         resource_size_t membar2_offset = 0x2000;
-> -       struct pci_bus *child;
-> +       struct pci_bus *child, *bus;
-> +       struct pci_host_bridge *root_bridge, *vmd_bridge;
->         int ret;
->
->         /*
-> @@ -798,6 +799,21 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
->                 return -ENODEV;
->         }
->
-> +       vmd_bridge = to_pci_host_bridge(vmd->bus->bridge);
-> +
-> +       bus = vmd->dev->bus;
-> +       while (bus->parent)
-> +               bus = bus->parent;
+> This looks odd. Why do we need const compatible string? Shouldn't this
+> be allowed to be an SoC-powerzone specific compatible?
 
-What about using pci_fimd_host_bridge() here?
+Alright, after our recent discussions offlist, I believe the
+compatible property should be entirely removed.
 
-LGTM otherwise.
-
-> +
-> +       root_bridge = to_pci_host_bridge(bus->bridge);
-> +
-> +       vmd_bridge->native_pcie_hotplug = root_bridge->native_pcie_hotplug;
-> +       vmd_bridge->native_shpc_hotplug = root_bridge->native_shpc_hotplug;
-> +       vmd_bridge->native_aer = root_bridge->native_aer;
-> +       vmd_bridge->native_pme = root_bridge->native_pme;
-> +       vmd_bridge->native_ltr = root_bridge->native_ltr;
-> +       vmd_bridge->native_dpc = root_bridge->native_dpc;
-> +
->         vmd_attach_resources(vmd);
->         if (vmd->irq_domain)
->                 dev_set_msi_domain(&vmd->bus->dev, vmd->irq_domain);
-> --
-> 2.32.0
 >
+> > +
+> > +patternProperties:
+> > +  "^(powerzone)([@-].*)?$":
+> > +    type: object
+> > +    description:
+> > +      A node representing a powerzone acting as an aggregator for all
+> > +      its children powerzones.
+> > +
+> > +    properties:
+> > +      "#powerzone-cells":
+> > +        description:
+> > +          Number of cells in powerzone specifier. Typically 0 for nodes
+> > +          representing but it can be any number in the future to
+> > +          describe parameters of the powerzone.
+> > +
+> > +      powerzones:
+> > +        description:
+> > +          A phandle to a parent powerzone. If no powerzone attribute is
+> > +          set, the described powerzone is the topmost in the hierarchy.
+> > +
+> > +    required:
+> > +      - "#powerzone-cells"
+> > +
+> > +required:
+> > +  - compatible
+
+This should be removed too, of course.
+
+> > +
+> > +additionalProperties: true
+
+This should be set to "false", I think. There is no need for any
+additional properties besides those that are being part of the binding
+above.
+
+> > +
+> > +examples:
+> > +  - |
+> > +    powerzones {
+> > +
+> > +      compatible = "powerzones";
+> > +
+> > +      #powerzone-cells = <0>;
+
+This toplevel "powerzones" node, should neither contain a compatible
+nor a #powerzone-cells. Please drop this.
+
+Instead we only need to describe the topology by using child nodes, as
+in the example below.
+
+> > +
+> > +      SOC_PZ: powerzone-soc {
+> > +        #powerzone-cells = <0>;
+> > +      };
+> > +
+> > +      PKG_PZ: powerzone-pkg {
+> > +        #powerzone-cells = <0>;
+> > +        powerzones = <&SOC_PZ>;
+> > +      };
+> > +
+> > +      GPU_PZ: powerzone-gpu {
+> > +        #powerzone-cells = <0>;
+> > +        powerzones = <&PKG_PZ>;
+> > +      };
+> > +    };
+> > +
+> > +  - |
+> > +    A57_0: big@0 {
+> > +      compatible = "arm,cortex-a57";
+> > +      reg = <0x0 0x0>;
+> > +      device_type = "cpu";
+> > +      #powerzone-cells = <0>;
+> > +      powerzones = <&PKG_PZ>;
+> > +    };
+>
+> I think we discussed this in the earlier version too...
+>
+> The above example describes a powerzone provider, but it doesn't
+> really conform to the binding. That's because the binding states that
+> powerzone providers should be inside a top-level "powerzone {" node.
+
+From our offlist discussion, it seems like the cpu nodes should not
+have a #powerzone-cells. Instead, the powerzones property should be
+sufficient, as it allows you to describe what powerzone(s) the cpu
+belongs to, which is exactly what you need.
+
+This also means that we need to extend the DT bindings for CPUs
+(Documentation/devicetree/bindings/arm/cpus.yaml), to allow cpu nodes
+to have a "powerzones" property. I believe we can do that separately,
+on top of $subject patch, as cpus.yaml has "additionalProperties:
+true".
+
+>
+> I am wondering if we really need the toplevel "powerzone" node.
+
+Please ignore this comment. It has become clear to me that the
+toplevel node serves a purpose.
+
+>
+> > +
+> > +    A57_1: big@1 {
+> > +      compatible = "arm,cortex-a57";
+> > +      reg = <0x0 0x0>;
+> > +      device_type = "cpu";
+> > +      #powerzone-cells = <0>;
+
+Ditto.
+
+> > +      powerzones = <&PKG_PZ>;
+> > +    };
+> > +...
+> > --
+> > 2.25.1
+> >
+>
+
+Kind regards
+Uffe

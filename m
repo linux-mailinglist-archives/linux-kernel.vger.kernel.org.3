@@ -2,177 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A22C464D59
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:55:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1794B464D55
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349103AbhLAL7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:59:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243082AbhLAL7D (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:59:03 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 826C8C061574;
-        Wed,  1 Dec 2021 03:55:42 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id s37so13656784pga.9;
-        Wed, 01 Dec 2021 03:55:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nAxdzonf+786j6Tm6BUZ1QfXIqaLTEogVLBffouzA18=;
-        b=BKsNRqf4PouAuuBbNTdr3C/1usdTCgD92/NGKlhe6J/+a0SRyMlFDKCokXLThs7JFf
-         xC0zzqye23vcQB8gR2LXtDjAAudYq/Z2TcrE2sGlFSsj9Spg7bxrMCzmwds/Hhcl1bo4
-         9q2g5TA7yz03R/tJiKFNqVpMCV0iv6ivSmEcIc85hjOpUVjDoQj/3MWknXiomxPRpBjB
-         iniaLGcqZGHC0VBMNmqYINz4cp2/NXKqZdaNGOYNVWdPYWLPE81tyNTTO02fXcWUK6i9
-         nvtPwUwSqx5+m+wFh1pgmFQlkkUpgGuZoCjd6/H6zC9OoSPv7GPS1F4uxfgoh72AF0y1
-         S+PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=nAxdzonf+786j6Tm6BUZ1QfXIqaLTEogVLBffouzA18=;
-        b=uUkP7wJ3H4SzQj2oSRClaGG8qxydB8t04RkQDu0m1asle9PmytwPQuDp6tfaW9dXif
-         mtL9zsjICbxlb1UOwZvbO4jKcFGctZrf2lTYtl+mWnzGB+Eax26VFllARucREjgZAu8g
-         qqjlTDEQ7jwTVGVqzwR6N+tVu1Rq20MTRzvBLoQmRD6Kowk4gOe3A+dODIIm+nXpJr5v
-         W1AWOlW/yxRiZ6+fZKk55aVmvLXb1AcyTmDW4roMS8P7QbK3+w5DD87O2pOvVYrdpVwl
-         RsG7+h6ZqSu0aNEOGE/SadaqPPx31ZY1uzwZtvFG8WnMikoGCCsZ9cOpkPQ1t3WDB7mI
-         Uv0g==
-X-Gm-Message-State: AOAM531gqZQ4iDsB23eQRnlariNwNr4ZzeiJax56BdE9t4rcnVWxEmjT
-        C/UbA1bHw1soix1I77wNILo=
-X-Google-Smtp-Source: ABdhPJzQTg2s7Eey0l8i7taTv00NMdQFxltJ7EuGTrJV1INYJHetXkXdH97E/6HqtOA2V//dNm6nsQ==
-X-Received: by 2002:a63:8448:: with SMTP id k69mr4311455pgd.509.1638359742027;
-        Wed, 01 Dec 2021 03:55:42 -0800 (PST)
-Received: from keqing-virtualbox.mshome.net ([92.119.178.3])
-        by smtp.gmail.com with ESMTPSA id w20sm27657906pfu.146.2021.12.01.03.55.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 03:55:41 -0800 (PST)
-From:   Desmond Lim <peckishrine@gmail.com>
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        peckishrine@gmail.com, kinglongmee@gmail.com
-Subject: [PATCH] HID: sigmamicro: Fix modifier keys for SiGma Micro based keyboards
-Date:   Wed,  1 Dec 2021 19:51:17 +0800
-Message-Id: <20211201115117.3002-1-peckishrine@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        id S1349078AbhLAL5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:57:18 -0500
+Received: from foss.arm.com ([217.140.110.172]:34954 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242696AbhLAL5R (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 06:57:17 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 529781476;
+        Wed,  1 Dec 2021 03:53:56 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.65.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3B0853F694;
+        Wed,  1 Dec 2021 03:53:55 -0800 (PST)
+Date:   Wed, 1 Dec 2021 11:53:52 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     Marco Elver <elver@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        joey.gouly@arm.com
+Subject: Re: [PATCH v2] arm64: Enable KCSAN
+Message-ID: <YadiUPpJ0gADbiHQ@FVFF77S0Q05N>
+References: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the report descriptor from SIGMACHIP USB Keyboard (1c4f:0059)
-to make modifier keys work.
+Hi Kefeng,
 
-Signed-off-by: Desmond Lim <peckishrine@gmail.com>
-Signed-off-by: Kinglong Mee <kinglongmee@gmail.com>
----
- drivers/hid/Kconfig          | 10 ++++++++
- drivers/hid/Makefile         |  1 +
- drivers/hid/hid-ids.h        |  1 +
- drivers/hid/hid-sigmamicro.c | 45 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 57 insertions(+)
- create mode 100644 drivers/hid/hid-sigmamicro.c
+On Mon, Nov 29, 2021 at 10:57:32PM +0800, Kefeng Wang wrote:
+> This patch enables KCSAN for arm64, with updates to build rules
+> to not use KCSAN for several incompatible compilation units.
+> 
+> Resent GCC version(at least GCC10) made outline-atomics as the
+> default option(unlike Clang), which will cause linker errors
+> for kernel/kcsan/core.o.
+> 
+> Disables the out-of-line atomics by no-outline-atomics to fix
+> the linker errors.
+> 
+> Tested selftest and kcsan_test(built with GCC11 and Clang 13),
+> and all passed.
 
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 9f5435b55949..724dd0f35d3c 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -970,6 +970,16 @@ config HID_SEMITEK
- 	- Woo-dy
- 	- X-Bows Nature/Knight
+Nice!
+
+I think there are a few additional bits and pieces we'll need:
+
+* Prior to clang 12.0.0, KCSAN would produce warnings with BTI, as I found in:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=2d67c39ae4f619ca94d9790e09186e77922fa826
+
+  Since BTI is in defconfig, I think arm64's Kconfig should require a minimum
+  of clang 12.0.0 to enable KCSAN.
+
+* In the past clang did not have an attribute to suppress tsan instrumenation
+  and would instrument noinstr regions. I'm not sure when clang gained the
+  relevant attribute to supress this, but we will need to depend on this
+  existing, either based on the clang version or with a test for the attribute.
+
+  (If we're lucky, clang 12.0.0 is sufficient, and we solve BTI and this in one
+  go).
+
+  I *think* GCC always had an attribute, but I'm not certain.
+
+  Marco, is there an existing dependency somewhere for this to work on x86? I
+  thought there was an objtool pass to NOP this out, but I couldn't find it in
+  mainline. If x86 is implicitly depending on a sufficiently recent version of
+  clang, we add something to the common KCSAN Kconfig for ARCH_WANTS_NO_INSTR?
+
+* There are some latent issues with some code (e.g. alternatives, patching, insn)
+  code being instrumentable even though this is unsound, and depending on
+  compiler choices this can happen to be fine or can result in boot-time
+  failures (I saw lockups when I started trying to add KCSAN for arm64).
+
+  While this isn't just a KCSAN problem, fixing that requires some fairly
+  significant rework to a bunch of code, and until that's done we're on very
+  shaky ground. So I'd like to make KCSAN depend on EXPERT for now.
+
+  I had an initial stab at fixing some of that, e.g.
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/patching/rework
+  
+  Joey has started looking into this too.
+
+* When I last tested, for simple boots I would get frequent KCSAN splats for a
+  few common issues, and those drowned out all other reports.
+
+  One case was manipulation of thread_info::flags, which Thomas Gleixner has
+  queued some fixes at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=core/entry
  
-+config HID_SIGMAMICRO
-+	tristate "SiGma Micro based keyboards"
-+	depends on HID
-+	help
-+	  Support for keyboards that use the SiGma Micro (a.k.a SigmaChip) IC.
-+
-+	  Supported devices:
-+	  - Landslides KR-700
-+	  - Rapoo V500
-+
- config HID_SONY
- 	tristate "Sony PS2/3/4 accessories"
- 	depends on USB_HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 55a6fa3eca5a..89ea7fafb66b 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -108,6 +108,7 @@ obj-$(CONFIG_HID_RMI)		+= hid-rmi.o
- obj-$(CONFIG_HID_SAITEK)	+= hid-saitek.o
- obj-$(CONFIG_HID_SAMSUNG)	+= hid-samsung.o
- obj-$(CONFIG_HID_SEMITEK)	+= hid-semitek.o
-+obj-$(CONFIG_HID_SIGMAMICRO)	+= hid-sigmamicro.o
- obj-$(CONFIG_HID_SMARTJOYPLUS)	+= hid-sjoy.o
- obj-$(CONFIG_HID_SONY)		+= hid-sony.o
- obj-$(CONFIG_HID_SPEEDLINK)	+= hid-speedlink.o
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 96a455921c67..279410bc8fce 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -1083,6 +1083,7 @@
- 
- #define USB_VENDOR_ID_SIGMA_MICRO	0x1c4f
- #define USB_DEVICE_ID_SIGMA_MICRO_KEYBOARD	0x0002
-+#define USB_DEVICE_ID_SIGMA_MICRO_KEYBOARD2	0x0059
- 
- #define USB_VENDOR_ID_SIGMATEL		0x066F
- #define USB_DEVICE_ID_SIGMATEL_STMP3780	0x3780
-diff --git a/drivers/hid/hid-sigmamicro.c b/drivers/hid/hid-sigmamicro.c
-new file mode 100644
-index 000000000000..eb34d6198083
---- /dev/null
-+++ b/drivers/hid/hid-sigmamicro.c
-@@ -0,0 +1,45 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * HID driver for SiGma Micro based keyboards
-+ *
-+ * Copyright (c) 2016 Kinglong Mee
-+ * Copyright (c) 2021 Desmond Lim
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/hid.h>
-+#include <linux/module.h>
-+
-+#include "hid-ids.h"
-+
-+static __u8 *sm_report_fixup(struct hid_device *hdev, __u8 *rdesc,
-+			     unsigned int *rsize)
-+{
-+	switch (hdev->product) {
-+	case USB_DEVICE_ID_SIGMA_MICRO_KEYBOARD2:
-+		if (*rsize == 167 && rdesc[98] == 0x81 && rdesc[99] == 0x00) {
-+			hid_info(hdev, "Fixing up SiGma Micro report descriptor\n");
-+			rdesc[99] = 0x02;
-+		}
-+		break;
-+	}
-+	return rdesc;
-+}
-+
-+static const struct hid_device_id sm_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_SIGMA_MICRO, USB_DEVICE_ID_SIGMA_MICRO_KEYBOARD2) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, sm_devices);
-+
-+static struct hid_driver sm_driver = {
-+	.name = "sigmamicro",
-+	.id_table = sm_devices,
-+	.report_fixup = sm_report_fixup,
-+};
-+module_hid_driver(sm_driver);
-+
-+MODULE_AUTHOR("Kinglong Mee <kinglongmee@gmail.com>");
-+MODULE_AUTHOR("Desmond Lim <peckishrine@gmail.com>");
-+MODULE_DESCRIPTION("SiGma Micro HID driver");
-+MODULE_LICENSE("GPL");
+  There were some other common failures, e.g. accesses to task_struct::on_cpu,
+  and I hadn't had the chance to investigate/fix those, beyond a (likely
+  unsound) hack:
 
-base-commit: 740bebf42104d2f082514b1545a14056f3b1b56c
--- 
-2.30.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=4fe9d6c2ef85257d80291086e4514eaaebd3504e
 
+  It would be good if we could identify the most frequent problems (e.g. those
+  that will occur when just booting) before we enable this generally, to avoid
+  everyone racing to report/fix those as soon as we enable the feature.
+
+  When you tested, did KCSAN flag anything beyond the selftests?
+
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+> Tested on Qemu with clang 13 / gcc 11, based on 5.16-rc3.
+> 
+> [    0.221518] kcsan: enabled early
+> [    0.222422] kcsan: strict mode configured
+> ...
+> [    5.839223] kcsan: selftest: 3/3 tests passed
+> ...
+> [  517.895102] # kcsan: pass:24 fail:0 skip:0 total:24
+> [  517.896393] # Totals: pass:168 fail:0 skip:0 total:168
+> [  517.897502] ok 1 - kcsan
+> 
+> v2:
+> - tested on GCC11 and disable outline-atomics for kernel/kcsan/core.c
+>   suggested by Marco Elver
+> 
+>  arch/arm64/Kconfig               | 1 +
+>  arch/arm64/kernel/vdso/Makefile  | 1 +
+>  arch/arm64/kvm/hyp/nvhe/Makefile | 1 +
+>  kernel/kcsan/Makefile            | 1 +
+>  4 files changed, 4 insertions(+)
+
+Aside from the `-mno-outline-atomics` portion, this looks basically the same as what I had in:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=2d67c39ae4f619ca94d9790e09186e77922fa826
+
+... so this looks good to me modulo the comments above.
+
+Thanks,
+Mark.
+
+> 
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index 4ff73299f8a9..0ac90875f71d 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -150,6 +150,7 @@ config ARM64
+>  	select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
+>  	select HAVE_ARCH_KASAN_SW_TAGS if HAVE_ARCH_KASAN
+>  	select HAVE_ARCH_KASAN_HW_TAGS if (HAVE_ARCH_KASAN && ARM64_MTE)
+> +	select HAVE_ARCH_KCSAN
+>  	select HAVE_ARCH_KFENCE
+>  	select HAVE_ARCH_KGDB
+>  	select HAVE_ARCH_MMAP_RND_BITS
+> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+> index 700767dfd221..60813497a381 100644
+> --- a/arch/arm64/kernel/vdso/Makefile
+> +++ b/arch/arm64/kernel/vdso/Makefile
+> @@ -32,6 +32,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
+>  CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) $(GCC_PLUGINS_CFLAGS) \
+>  				$(CC_FLAGS_LTO)
+>  KASAN_SANITIZE			:= n
+> +KCSAN_SANITIZE			:= n
+>  UBSAN_SANITIZE			:= n
+>  OBJECT_FILES_NON_STANDARD	:= y
+>  KCOV_INSTRUMENT			:= n
+> diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
+> index c3c11974fa3b..24b2c2425b38 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/Makefile
+> +++ b/arch/arm64/kvm/hyp/nvhe/Makefile
+> @@ -89,6 +89,7 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI)
+>  # cause crashes. Just disable it.
+>  GCOV_PROFILE	:= n
+>  KASAN_SANITIZE	:= n
+> +KCSAN_SANITIZE	:= n
+>  UBSAN_SANITIZE	:= n
+>  KCOV_INSTRUMENT	:= n
+>  
+> diff --git a/kernel/kcsan/Makefile b/kernel/kcsan/Makefile
+> index c2bb07f5bcc7..e893b0e1d62a 100644
+> --- a/kernel/kcsan/Makefile
+> +++ b/kernel/kcsan/Makefile
+> @@ -8,6 +8,7 @@ CFLAGS_REMOVE_debugfs.o = $(CC_FLAGS_FTRACE)
+>  CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
+>  
+>  CFLAGS_core.o := $(call cc-option,-fno-conserve-stack) \
+> +	$(call cc-option,-mno-outline-atomics) \
+>  	-fno-stack-protector -DDISABLE_BRANCH_PROFILING
+>  
+>  obj-y := core.o debugfs.o report.o
+> -- 
+> 2.26.2
+> 

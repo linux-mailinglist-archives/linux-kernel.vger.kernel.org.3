@@ -2,84 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF294650C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:04:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 418194650C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350233AbhLAPHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:07:53 -0500
-Received: from foss.arm.com ([217.140.110.172]:39154 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1350294AbhLAPHl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:07:41 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BB3B143B;
-        Wed,  1 Dec 2021 07:04:20 -0800 (PST)
-Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5522C3F766;
-        Wed,  1 Dec 2021 07:04:18 -0800 (PST)
-Date:   Wed, 1 Dec 2021 15:04:12 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, kishon@ti.com
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Xiaowei Bao <xiaowei.bao@nxp.com>,
-        Om Prakash Singh <omp@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] PCI: endpoint: Fix core_init_notifier feature
-Message-ID: <20211201150412.GA13833@lpieralisi>
-References: <1630473361-27198-1-git-send-email-hayashi.kunihiko@socionext.com>
- <74df1b92-60e8-34da-2d39-236bdeea3fc6@socionext.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <74df1b92-60e8-34da-2d39-236bdeea3fc6@socionext.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S1350177AbhLAPIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:08:23 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59458 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234320AbhLAPIW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:08:22 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5B8B8B81DE4;
+        Wed,  1 Dec 2021 15:05:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6986AC53FAD;
+        Wed,  1 Dec 2021 15:04:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638371099;
+        bh=2rXA7LdErl+8+nyOvssms5c1pTevqPeS6Aq7VNyiOuA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Xl8JHR/JDs0hMe0Yt/ylVbk9eT6Kf3yMJYObm3aMd8nUYNf3h97ncCVa2wdy6uLcs
+         ilvMOAC6FDYXMUz7T3fdvXb1wzfZzD1+J1avMuEFEkLGVUbVEIsL+XJTinq1NIrgxH
+         Ha9qGclJZHoBIVbsjHp2gHhxfqDKtJk+3TFyf+tuHob8dj+FffPd8N3mLEX0gJ6zxJ
+         MnlSyF/A3oxbJR0bL+971fH0ceWQzdQDG1hAddWE4YNLqPrgaiOimUNQNSYeyyckjQ
+         8kV5Db2jYY6IRYHCF1vytpFVHFebuG5CDCqiMSUeGAhM6bMZs0UiZj2RNsOZN3TS/J
+         ZZsPYQ5fBFUEw==
+From:   SeongJae Park <sj@kernel.org>
+To:     akpm@linux-foundation.org
+Cc:     shuah@kernel.org, brendanhiggins@google.com, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>
+Subject: [PATCH 00/11] mm/damon: Trivial fixups and improvements
+Date:   Wed,  1 Dec 2021 15:04:29 +0000
+Message-Id: <20211201150440.1088-1-sj@kernel.org>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 16, 2021 at 08:30:35PM +0900, Kunihiko Hayashi wrote:
-> Gentle ping, are there any comments about this series?
+This patchset contains trivial fixups and improvements for DAMON and its
+kunit/kselftest tests.
 
-Kishon,
+SeongJae Park (11):
+  mm/damon/core: Use better timer mechanisms selection threshold
+  mm/damon/dbgfs: Remove an unnecessary error message
+  mm/damon/core: Remove unnecessary error messages
+  mm/damon/vaddr: Remove an unnecessary warning message
+  mm/damon/vaddr-test: Split a test function having >1024 bytes frame
+    size
+  mm/damon/vaddr-test: Remove unnecessary variables
+  selftests/damon: Skip test if DAMON is running
+  selftests/damon: Test DAMON enabling with empty target_ids case
+  selftests/damon: Test wrong DAMOS condition ranges input
+  selftests/damon: Test debugfs file reads/writes with huge count
+  selftests/damon: Split test cases
 
-can you have a look please ?
+ mm/damon/core.c                               | 14 +---
+ mm/damon/dbgfs.c                              |  4 +-
+ mm/damon/vaddr-test.h                         | 79 +++++++++----------
+ mm/damon/vaddr.c                              |  1 -
+ tools/testing/selftests/damon/.gitignore      |  2 +
+ tools/testing/selftests/damon/Makefile        |  7 +-
+ .../selftests/damon/_debugfs_common.sh        | 52 ++++++++++++
+ .../testing/selftests/damon/debugfs_attrs.sh  | 73 +----------------
+ .../selftests/damon/debugfs_empty_targets.sh  | 13 +++
+ .../damon/debugfs_huge_count_read_write.sh    | 22 ++++++
+ .../selftests/damon/debugfs_schemes.sh        | 19 +++++
+ .../selftests/damon/debugfs_target_ids.sh     | 19 +++++
+ .../selftests/damon/huge_count_read_write.c   | 39 +++++++++
+ 13 files changed, 214 insertions(+), 130 deletions(-)
+ create mode 100644 tools/testing/selftests/damon/.gitignore
+ create mode 100644 tools/testing/selftests/damon/_debugfs_common.sh
+ create mode 100644 tools/testing/selftests/damon/debugfs_empty_targets.sh
+ create mode 100644 tools/testing/selftests/damon/debugfs_huge_count_read_write.sh
+ create mode 100644 tools/testing/selftests/damon/debugfs_schemes.sh
+ create mode 100644 tools/testing/selftests/damon/debugfs_target_ids.sh
+ create mode 100644 tools/testing/selftests/damon/huge_count_read_write.c
 
-Thanks,
-Lorenzo
+-- 
+2.17.1
 
-> Thank you,
-> 
-> On 2021/09/01 14:15, Kunihiko Hayashi wrote:
-> > This series has two fixes for core_init_notifier feature.
-> > 
-> > Fix the bug that the driver can't register its notifier function
-> > if core_init_notifier == true and linkup_notifier == false.
-> > 
-> > If enabling the controller is delayed due to core_init_notifier,
-> > accesses to the controller register should be avoided rather than
-> > enabling the controller.
-> > 
-> > Changes since v1:
-> > - Add Acked-by and Reviewed-by lines
-> > 
-> > Kunihiko Hayashi (2):
-> >    PCI: endpoint: pci-epf-test: register notifier if only
-> >      core_init_notifier is enabled
-> >    PCI: designware-ep: Fix the access to DBI/iATU registers before
-> >      enabling controller
-> > 
-> >   drivers/pci/controller/dwc/pcie-designware-ep.c | 81 +++++++++++++------------
-> >   drivers/pci/endpoint/functions/pci-epf-test.c   |  2 +-
-> >   2 files changed, 42 insertions(+), 41 deletions(-)
-> > 
-> 
-> -- 
-> ---
-> Best Regards
-> Kunihiko Hayashi

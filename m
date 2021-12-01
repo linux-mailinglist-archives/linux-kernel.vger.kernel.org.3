@@ -2,169 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE747464EB3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62473464EA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:16:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245446AbhLANVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:21:51 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:58864 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S234027AbhLANVt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:21:49 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1CmnDu017582;
-        Wed, 1 Dec 2021 13:15:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=o7MU5ZEW3BlvRrPu95u+FYlzxn/o3dCRZhGlSHuRGvs=;
- b=EQbqU93mjERx4tytUgOTiHfb/lGWvW4J+OdQxiFYvTJWsC9Vey7ux6eqqUnHWQJ9Ai9O
- g/wRbQgnAFsSFPnc/XoUuIDZj3ekriraPETjJ4J/tSi9r8nwllxlrbPqJ8zVxHppZBDL
- AjKLO5zZgQy3InnVnUXy7CNWjK2EBI0vc0oKVOLOBTOwzzJZXQ9coo5EZlDugBy5CfTj
- OdpSsG5IWScTeMLAZdSB/JScFrGrYBr3uDP6LU/V48PKwScFi+wmMEIFqjX1lHcEGhIB
- YgRfaMkqpNiilRRfjr/frM0L9e4sThP4RLpWDxEZqzygsR49fInvTUDAOPZIUyOf1U3I aw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cp9cqrhvt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 13:15:08 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B1CsDlt010900;
-        Wed, 1 Dec 2021 13:15:07 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cp9cqrhu4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 13:15:06 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1DD03i022753;
-        Wed, 1 Dec 2021 13:15:03 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma06fra.de.ibm.com with ESMTP id 3ckbxk04ak-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 13:15:03 +0000
-Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1DF0xY23789982
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Dec 2021 13:15:00 GMT
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3D8BF11C050;
-        Wed,  1 Dec 2021 13:15:00 +0000 (GMT)
-Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E98D511C05B;
-        Wed,  1 Dec 2021 13:14:54 +0000 (GMT)
-Received: from sig-9-65-78-183.ibm.com (unknown [9.65.78.183])
-        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Dec 2021 13:14:54 +0000 (GMT)
-Message-ID: <e91d238422f8df139acf84cc2df6ddb4fd300b87.camel@linux.ibm.com>
-Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Florian Weimer <fweimer@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?ISO-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Date:   Wed, 01 Dec 2021 08:14:54 -0500
-In-Reply-To: <4a88f95b-d54d-ad70-fb49-e3c3f1d097f2@digikod.net>
-References: <20211115185304.198460-1-mic@digikod.net>
-         <87sfvd8k4c.fsf@oldenburg.str.redhat.com>
-         <4a88f95b-d54d-ad70-fb49-e3c3f1d097f2@digikod.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4_DbnL0LEYui2lYeqbE8yT4i3z_a1Jb2
-X-Proofpoint-GUID: 9Log-g6aWaMUBg8JjxhDYCR2BbjEsiMa
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        id S244355AbhLANTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:19:46 -0500
+Received: from mail-dm6nam08on2076.outbound.protection.outlook.com ([40.107.102.76]:45281
+        "EHLO NAM04-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234027AbhLANTo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 08:19:44 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jS2H3KN0PXU+brqmtrZbDv/ohxYoHMAhjJ86Y6ddPTqbFNyF6OSXNtR+bQmfL/hk6YGE7E8gDA8iRX3CZJTu5JYsMyfdQiKsQ3uufbfzYrDZqru4DIftZf02wXqlyhaDFeuv5CSJFxyHLxny+Fi/HOx38Eo4R9Xs8EJchTLz/crKj9LEDb4hV9p6LPA6/k2HBtZeGqLTsb190GXW0GqR6QGi4fy77JYcVLHzO89KVC1mlDLDWyqEodNUHbcL+QFc0FWVqxcOJylonporrQozDjqs4yCp+yjVQBxNsf07rflSV3sLMX1rulTSx870xESDDci4+N0ePggHJJfia0/oPA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kpGwY6icSbm3PKsB/DHf9RGJ2BwdUH/zsCShU5aqGok=;
+ b=H+o2Zlh92fcMsLIaGe48kqcFzHSo5qsZe0SK92mCuNrqQf1ewqsNyt3uv5c0y9HBwg7bCkoeVjNWbWfFiXV4e8l9ukpjbjn8Z2nGzkk/yPyEdYFsqGAIFIkyB37w8kqYsrh7g01q1OQvqCyfQImER3YDyL19KYrl5o/Gl3xlyfCByoHRJDWHWlC3hJckxG4/zUtykNfRGLX0sXpNvwbpoMCMW48iIE3ZoDbgNcNHyh0KmI3G8SHaE5DYVarujTLsRhaqnjSRv8hFXlIGg/XtKkjIPWe4bo2U3TLt9QHago6QFOw7Gl0fPUjcWDh/lH3+qAVPJJi0EgiiEgM2GcRXew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kpGwY6icSbm3PKsB/DHf9RGJ2BwdUH/zsCShU5aqGok=;
+ b=GohPwRrqUZHT8e0q+hX8xq67ELUYqmk7dNr7+3tpW1LOsWd2QLFNm7967riJ8eoeizoZh56ddcnXpqztwI2vaBN/BFDayQ7cfBhS5X6rDqfHplzMKNRiMBxNUuOXJkM8XCqhhOcnjjpqyeSiiAvwYWklzTgVyLRFrE6FSvhJs2lgtDS/hy02KFA69zFc6CrJrl1dNLzhcP1Iow9PmoNGGeMt+8dZy5EnYPFZ7zTaSvGL9L4X7T67nZBQcoDCUATtP/TmANWPDyLxRuoYiIYAxL7oyJofSXNx2/WUrohMQR8mc3QbjaKRbFncS+iOjFuotbf6u6qBXghMcKfT5p+xBg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ CO6PR12MB5409.namprd12.prod.outlook.com (2603:10b6:5:357::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4734.23; Wed, 1 Dec 2021 13:16:22 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::ecac:528f:e36c:39d0]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::ecac:528f:e36c:39d0%4]) with mapi id 15.20.4734.024; Wed, 1 Dec 2021
+ 13:16:22 +0000
+Subject: Re: [PATCH v13 4/4] arm64: tegra: Add GPCDMA node for tegra186 and
+ tegra194
+To:     Akhil R <akhilrajeev@nvidia.com>, dan.j.williams@intel.com,
+        devicetree@vger.kernel.org, dmaengine@vger.kernel.org,
+        kyarlagadda@nvidia.com, ldewangan@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        p.zabel@pengutronix.de, rgumasta@nvidia.com, robh+dt@kernel.org,
+        thierry.reding@gmail.com, vkoul@kernel.org
+References: <1637573292-13214-1-git-send-email-akhilrajeev@nvidia.com>
+ <1637573292-13214-5-git-send-email-akhilrajeev@nvidia.com>
+From:   Jon Hunter <jonathanh@nvidia.com>
+Message-ID: <088fbb31-71f7-6e8d-ae33-a56d98f2403b@nvidia.com>
+Date:   Wed, 1 Dec 2021 13:16:13 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <1637573292-13214-5-git-send-email-akhilrajeev@nvidia.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: AM4PR0501CA0064.eurprd05.prod.outlook.com
+ (2603:10a6:200:68::32) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- adultscore=0 lowpriorityscore=0 mlxscore=0 priorityscore=1501
- mlxlogscore=999 impostorscore=0 bulkscore=0 phishscore=0 clxscore=1011
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112010076
+Received: from [10.26.49.14] (195.110.77.193) by AM4PR0501CA0064.eurprd05.prod.outlook.com (2603:10a6:200:68::32) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend Transport; Wed, 1 Dec 2021 13:16:18 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8e373ef2-840e-4010-128e-08d9b4ccc443
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5409:
+X-Microsoft-Antispam-PRVS: <CO6PR12MB54099A60B5BB70C737334B58D9689@CO6PR12MB5409.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: JhEl2EfoQgUzjcCLmZ95A++hWl1H6LPzi7c3e/f0Ch120bQGeNwzS+CgU5+GiXHE4JIcZ1knVLZikVC8X7No+hM115+bDi6lkr2EmL3EaQSxz6vltf7JXMSKB1oiMQtm9+WmwT99O7dvy517DQKZcZ/SYVHLm8QbHiRiRDcyr/+eu/B2z5p0xg81kTfmoUEW5yBnGuxFE7YJO0CklHaBxvzxlkD3O6hb5+gd5Zkrw+yPCAMnC6/FZeCBnV9CdlDtF3OZn0TKfqa/97pzOc680A1+NxaOWzQMVmB88V9dViiipBum2g/w9/HcT7pjRacIdJEXlhydvKEA0RoxZGcTkSUe6hYXewWkZJYyeO9/mtSiVokGAdyIQEWnpQPrBxcILYg4Df3eKZRP8z3A73CRZkLRHtFDoEdJHbyJebJet4Nuhoq5vujB1kWPaOVhn7a3ksD8wLte9OnhLlEKZ2ihy4/9tjXg4aW54EZFNxHQnN5gh3oXbnFQ9DzfIz6wf5GERUZKs8pChbpAYFAqxUTyNChBfmajPm3Rf8kFof85f/q1+xmiQ6eUH1+3uwePQf0NdXxv3//xbHNvWD1ot2HKnNgqmHxYB4Pz4jxhUgIVB2NcejINAQi3xT7NadvNQH4t/NygJ7hVGs57c9vU16s2NatVsnsjSZcrWMFLp4w36vB+FoX1wyITzI8Qz/d5j3gXdns0aMI8DpMyhzU3j4HBUexTOoBP0hDNxfeCQ06eqGgnMtXdZWcmhzIAvyfZMtqUjn6uXaeOjS6HBp4r9VufmA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(86362001)(66946007)(53546011)(8676002)(36756003)(31686004)(83380400001)(6666004)(66476007)(66556008)(8936002)(26005)(38100700002)(316002)(2616005)(921005)(16576012)(186003)(31696002)(5660300002)(55236004)(2906002)(6486002)(508600001)(956004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Q1NKOWtQSXJJZmxjcTRrUzZVQkNURFVVQlBkRzNEUGhqMGJFa2dVNS9peUNq?=
+ =?utf-8?B?L1ZrUGZ2VHg0eCtWWklxSmlJZUlNUFBYWU41bzVaTEtscXl4ZVpaUUg0Umli?=
+ =?utf-8?B?WTdsTzdHUDMrWC9zSlp2WkhKaldWUk1rdkxhMy9GNVY3TjlMV3pwU0pZc2xR?=
+ =?utf-8?B?VWI1dnBGaVVTU0l6SEN3eWZUQXB0Y3ROTWY2djNLa01VL3dmZGN4dDcrbzNi?=
+ =?utf-8?B?V2hITEdXdTNNTklPV0w2SEVwcVpuTTAzUndXa25VbnpaK2VzOFRQZmtoQ3E3?=
+ =?utf-8?B?anR4Y2RKaUQ0YlRST3VkNEZmcm5WWGNCRWpPcnY3UFdPcE81TVpZeGlhZFRH?=
+ =?utf-8?B?SGtkTCtGQkkwbktGVTM3LzVPTTNnaU5YTGFlOEU4ZzR2cExmcVd3SjRVZzNl?=
+ =?utf-8?B?ZkprL05KeE94RXFRNElCSW5CL3pKWVpqWHU1Tm4yRDAyRGVJSnhSNGFYZUhX?=
+ =?utf-8?B?ZE9wVy9COVFVanB6VTZGdldubzZSRGZXWng5MGQzdFBJa09Xb3JPRGI4MWFC?=
+ =?utf-8?B?NEltR3dlUWVua3RWay9yM3pBME0rRzRJOS9TaVVBTStVNUJuZWQ3K0pIWmp6?=
+ =?utf-8?B?dHBBSmlZYmtBQjlkRFVWaEtVZ1FRMGoySWgwRWRtdUllTVdoN2xtTFA5cHBi?=
+ =?utf-8?B?cllTcHpyQTJiNGZoRnlicWpnalV3M1I0S2svVi9CSVh2ZGs5c2tIZzZoT2Iy?=
+ =?utf-8?B?ZEZxcTdOT2NNMURhZHpLa2FaOWdyTmxvR0hHYnZlRmc1ZEFhV2syMSt4SnhB?=
+ =?utf-8?B?OFlaOWhFalFsWjVBMzE1MTlqcXZCd00xUGJDYW04K3V5cHJLejUxR1ZmVjZE?=
+ =?utf-8?B?VnVHR2t6c1dMMDg3K08zbGFiaCtTTVJCZ3oyUFh0dkZWQWZwRURTNERjenhW?=
+ =?utf-8?B?Rm1hMy96eWorWGpGQnNoaTJhTzdHREdMbFhsZTlTVnVzM3V0a0VBaUVSeTAx?=
+ =?utf-8?B?RjBzT2kyUmZ5dTZYREJ4NkJ6M2ZJRFFieWZsanZ3aUduWU5HNFdyT1BGQnBI?=
+ =?utf-8?B?cDBZSUY4blcxRHI0U1YvTFhNYmhWREVVN2NBeVBCNkxPZEpsODBHVjMreUdn?=
+ =?utf-8?B?UjAwVHR4QW05R0NSMWhFRmQvYjl0S1YwVUo5cWdSc1ZKTEpvMW5jRWVxaE5j?=
+ =?utf-8?B?c1ZKbnl4YnFra2NpVTQvVWZvaHpUNlJxL09DeFdOMFROZ2VZaTUxME5Ddlh4?=
+ =?utf-8?B?RHJEM2xvcS9sRi84aU5ER0VPU1A0WndIMWJjd0VUcUxudHFFemVsK2pUd1Nr?=
+ =?utf-8?B?NjdGdVZyV0RxVXY1T1NkZklFaEl3eklFc0t2M2Rxb2ZPUVVDM1pXUFpwYkdE?=
+ =?utf-8?B?SEFrUjBpSHRVbW4rQkwzc2x6YTJLaXh0TUpmRDFDSktTenlaS3FqSUdDVmsz?=
+ =?utf-8?B?enRpQWlzVkdaZXZyMVk5YUgrRkZUWWpGK2Z1ZiszK1ZCdUpGWTcvdGg4UE5y?=
+ =?utf-8?B?dlA0aXYrZC9sOHVqU3QvS0NiRDM4bytoRXVjM1Z6RGpDY3ZBUEhMc2NEUmxF?=
+ =?utf-8?B?RXVGdnl3aHZWREE5TzhLT21RTkxhQktQWHF2Vk15WjBiQSsySEVnakkzZDFZ?=
+ =?utf-8?B?NTUybzlTbW5qMy9lV3hIa3dWMVdpVDYzR3ZCcVZESHJudkR3bnd6RGViZE14?=
+ =?utf-8?B?Z2RiN242M3ZQWlljVHlvRHorUzREa0dVZExqaHVqcUFDWFptcGtQYWpXWG13?=
+ =?utf-8?B?cHQ4em1EbEoxd0JLZ3lqQmtacU9ualdSK2lYOFphem52NXN6Rlloa3dPNDhC?=
+ =?utf-8?B?dlFCNzNzU3VZOFZnSmljbzZBSmZJaGNWbHdmZklnTzZscWtPZWphMlRlMFF6?=
+ =?utf-8?B?SE94aEpvVnJNUkFoaGo0QjBHSmFxTTgyV2ZaeUtjYmRJNWlmUmhOeTdUbmhz?=
+ =?utf-8?B?NENaWlZlUkIyajlSbDdDSTdNKzUzU29jVmdINTMwcXFYMzN4eFEzUEt5bUww?=
+ =?utf-8?B?QVR3QjI2MlN6N2xldEs3ZGZHOHMzNmd0d0R6VGxPa0FlczR1TmEzOENYTmRt?=
+ =?utf-8?B?U1pzTU1RNHZvdTRVa21DR2hJenJvOWljYmpna0tMWHVQUkdER0Q0eUEranlU?=
+ =?utf-8?B?cVA1djlkVXR2VjlUZ1U3K0p6bHNZMW1MVDh0OU5OKzBkV0ErRFgzRitTRVl5?=
+ =?utf-8?B?WWVJMU93WDEvZDhmOEVsMGd0MjJLNTJoOXVvdDFhb1Q3VE5USk9VSXMyWFBX?=
+ =?utf-8?Q?rRcUt7wstSjtAc/yRQpUKOk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e373ef2-840e-4010-128e-08d9b4ccc443
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2021 13:16:21.9894
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: e4tSiuDplKRUjcud6LYfx/U0ssNM5Zrkl5811MMEyh8Jkcqa4JvK99g++8kBdoQk8XrQWISmXnIkxg+TiIjqPg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5409
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-01 at 10:23 +0100, Mickaël Salaün wrote:
-> On 30/11/2021 21:27, Florian Weimer wrote:
-> > * Mickaël Salaün:
-> > 
-> >> Primary goal of trusted_for(2)
-> >> ==============================
-> >>
-> >> This new syscall enables user space to ask the kernel: is this file
-> >> descriptor's content trusted to be used for this purpose?  The set of
-> >> usage currently only contains execution, but other may follow (e.g.
-> >> configuration, sensitive data).  If the kernel identifies the file
-> >> descriptor as trustworthy for this usage, user space should then take
-> >> this information into account.  The "execution" usage means that the
-> >> content of the file descriptor is trusted according to the system policy
-> >> to be executed by user space, which means that it interprets the content
-> >> or (try to) maps it as executable memory.
-> > 
-> > I sketched my ideas about “IMA gadgets” here:
-> > 
-> >    IMA gadgets
-> >    <https://www.openwall.com/lists/oss-security/2021/11/30/1>
-> > 
-> > I still don't think the proposed trusted_for interface is sufficient.
-> > The example I gave is a Perl module that does nothing (on its own) when
-> > loaded as a Perl module (although you probably don't want to sign it
-> > anyway, given what it implements), but triggers an unwanted action when
-> > sourced (using .) as a shell script.
+
+On 22/11/2021 09:28, Akhil R wrote:
+> Add device tree node for GPCDMA controller on Tegra186 target
+> and Tegra194 target.
 > 
-> The fact that IMA doesn't cover all metadata, file names nor the file 
-> hierarchies is well known and the solution can be implemented with 
-> dm-verity (which has its own drawbacks).
-
-Thanks, Mickaël, for responding.  I'll go even farther and say that IMA
-wasn't ever meant to protect file metadata.  Another option is EVM,
-which addresses some, but not all of the issues.
-
-thanks,
-
-Mimi
-
+> Signed-off-by: Rajesh Gumasta <rgumasta@nvidia.com>
+> Signed-off-by: Akhil R <akhilrajeev@nvidia.com>
+> Reviewed-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+>   arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi |  4 +++
+>   arch/arm64/boot/dts/nvidia/tegra186.dtsi       | 44 ++++++++++++++++++++++++++
+>   arch/arm64/boot/dts/nvidia/tegra194-p2888.dtsi |  4 +++
+>   arch/arm64/boot/dts/nvidia/tegra194.dtsi       | 44 ++++++++++++++++++++++++++
+>   4 files changed, 96 insertions(+)
 > 
-> trusted_for is a tool for interpreters to enforce a security policy 
-> centralized by the kernel. The kind of file confusion attacks you are 
-> talking about should be addressed by a system policy. If the mount point 
-> options are not enough to express such policy, then we need to rely on 
-> IMA, SELinux or IPE to reduce the scope of legitimate mapping between 
-> scripts and interpreters.
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi b/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
+> index fcd71bf..f5ef04d3 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra186-p3310.dtsi
+> @@ -56,6 +56,10 @@
+>   		};
+>   	};
+>   
+> +	dma-controller@2600000 {
+> +		status = "okay";
+> +	};
+> +
 
+I am wondering if we don't bother with the above and ...
+
+>   	memory-controller@2c00000 {
+>   		status = "okay";
+>   	};
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra186.dtsi b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+> index e94f8ad..355d53c 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra186.dtsi
+> @@ -73,6 +73,50 @@
+>   		snps,rxpbl = <8>;
+>   	};
+>   
+> +	dma-controller@2600000 {
+> +		compatible = "nvidia,tegra186-gpcdma";
+> +		reg = <0x2600000 0x210000>;
+> +		resets = <&bpmp TEGRA186_RESET_GPCDMA>;
+> +		reset-names = "gpcdma";
+> +		interrupts = <GIC_SPI 75 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 77 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 82 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 87 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 92 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 93 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 97 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 99 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 103 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 104 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH>,
+> +			     <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH>;
+> +		#dma-cells = <1>;
+> +		iommus = <&smmu TEGRA186_SID_GPCDMA_0>;
+> +		dma-coherent;
+> +		status = "disabled";
+
+  ... just enable here. This is available for all Tegra186 SoCs and I 
+don't see why we don't enable it here. That way, when new platforms are 
+added for a given SoC it is present by default. For example, for 
+Tegra194, you have enabled for Jetson AGX Xavier, but we also have 
+support now for the Jetson Xavier NX platforms and so we would need to 
+enable for each platform we have.
+
+Cheers
+Jon
+
+-- 
+nvpublic

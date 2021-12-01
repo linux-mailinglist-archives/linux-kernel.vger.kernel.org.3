@@ -2,82 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A737464E73
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E17464E76
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:06:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245416AbhLANIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:08:30 -0500
-Received: from mail-vk1-f177.google.com ([209.85.221.177]:39659 "EHLO
-        mail-vk1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbhLANI0 (ORCPT
+        id S1349463AbhLANJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:09:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233645AbhLANJk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:08:26 -0500
-Received: by mail-vk1-f177.google.com with SMTP id 84so16032419vkc.6;
-        Wed, 01 Dec 2021 05:05:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=pSCANc5akMVyARPAGU2DAriDgbQMxgmWTdFVSgsUOA4=;
-        b=TiDmxyrjuuJUZ6U815+QoUFbOixl8UJt/4YlSu0alkhZ8CbaS9FPZjMvIJF29CRqA/
-         u3UtRVxxDOMAu4zeWMEqI5lmsl8JLln2Q6Mjv0FbvqsZiqFYd4O3elIlDXYTRwjzvfHN
-         51nlrValFNAHsnHY9tngyE97II3hhg4qiQbuYcX5zWlaDDVZnpAW6GSunf3jxxXPKm4l
-         13lpEaPNbpXrUDcp8X/y3lAuDmi7LkwRCLiCmmZFzVWHTIr9eU9zitKTt/VYJxx8iDd/
-         R/KlFSovnNSi0dIIMcAPO/8tjotBP+1RiWDHIHS5IH7+Ccl0uKx2tLNdMjg/57URuEpr
-         22eA==
-X-Gm-Message-State: AOAM531oESAG0RbRgWbsfa59hgsAfh/gNU0M7gQxJGubIZ2zlHJsW3Yh
-        A+j6MNrP60cRLE33esnlrgdN7lwDvzvl1Q==
-X-Google-Smtp-Source: ABdhPJzPxPmlSSLGPOF1dc/lppCsx+DKKnHvZO4roiWaVzoXO60uk3/UVUpfzekAdXeKV7ems1E1Fw==
-X-Received: by 2002:a1f:c9c2:: with SMTP id z185mr7880917vkf.26.1638363904846;
-        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id g16sm11970987vsp.18.2021.12.01.05.05.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
-Received: by mail-ua1-f41.google.com with SMTP id p2so48691436uad.11;
-        Wed, 01 Dec 2021 05:05:04 -0800 (PST)
-X-Received: by 2002:a05:6102:e10:: with SMTP id o16mr6795674vst.5.1638363904281;
- Wed, 01 Dec 2021 05:05:04 -0800 (PST)
-MIME-Version: 1.0
-References: <20211130164558.85584-1-tsbogend@alpha.franken.de> <20211130164558.85584-2-tsbogend@alpha.franken.de>
-In-Reply-To: <20211130164558.85584-2-tsbogend@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 1 Dec 2021 14:04:53 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUO-99bQPdLoLSPzDZ1KzT1_rS6eXEejEH4tf+XAtCgvw@mail.gmail.com>
-Message-ID: <CAMuHMdUO-99bQPdLoLSPzDZ1KzT1_rS6eXEejEH4tf+XAtCgvw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] MIPS: TXX9: Remove rbtx4939 board support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        MTD Maling List <linux-mtd@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 1 Dec 2021 08:09:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9A2C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 05:06:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 24980B81ED4
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 13:06:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBAA8C53FCD;
+        Wed,  1 Dec 2021 13:06:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638363975;
+        bh=S/SeL2BP7pfPep5JW0KX485zyZmOdZHTLxpgPAxrIMw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tUgRuwVVlg3F6ujjVxyYXcOFGbkqXHMkS79DEOhnn0NFYLSEB1FlobnjtX29Ie4Oj
+         gofIgRPHjGG/iqcpvXSgElH5rehk7rRnOuOr5dK/5ht/kYV3FaUAn5pmClxELV2UFO
+         QG3LGpdpVnXY/aAvpBk8JzW6/nPrpmCg3yziiegpEzQ8kA4NkxFtwhTpJ1nRu1DMwJ
+         gLnuF1RWfbm7/V3+/tgWfIi3HHykZUK2MslfH7krqs4FfgGITNVxws4rk6pWkIZS/7
+         THXOsg3sHr7jQZYN/mpxs4z+9MUvIcdX2bv2c1UY9LEXhN4rs4PlGOrKO9ZfmMEns7
+         ye2d4Y+HeCKQQ==
+Date:   Wed, 1 Dec 2021 22:06:11 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     zhangyue <zhangyue1@kylinos.cn>
+Cc:     naveen.n.rao@linux.ibm.com, anil.s.keshavamurthy@intel.com,
+        davem@davemloft.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kprobes: fix out-of-bounds in register_kretprobe
+Message-Id: <20211201220611.656ec911478bbf0f342ea7f1@kernel.org>
+In-Reply-To: <20211201054855.5449-1-zhangyue1@kylinos.cn>
+References: <20211201054855.5449-1-zhangyue1@kylinos.cn>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 5:46 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> No active MIPS user own this board, so let's remove it.
->
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+On Wed,  1 Dec 2021 13:48:55 +0800
+zhangyue <zhangyue1@kylinos.cn> wrote:
 
-Thanks for your patch!
+> When the data 'rp->data_size' is negative, the code
+> 'sizeof(struct kretprobe_instance)+rp->data_size'
+> is less than 'sizeof(struct kretprobe_instance)'
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Hmm, rp->data_size is size_t, which is unsigned value.
+Of course we still need some kind of maximum limitation
+because if we pass enough bigger size, the 
+sizeof(struct kretprobe_instance) + rp->data_size
+can be negative or smaller than sizeof(struct kretprobe_instance).
 
-My rbtx4927 still works fine afterwards, so
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Thank you,
 
-Gr{oetje,eeting}s,
+> 
+> At this time, the pointer 'inst' may be out of
+> bound when it is in use.
+> 
+> Signed-off-by: zhangyue <zhangyue1@kylinos.cn>
+> ---
+>  kernel/kprobes.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> index 1cf8bca1ea86..71cf6bde299f 100644
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+> @@ -1983,7 +1983,7 @@ int kprobe_on_func_entry(kprobe_opcode_t *addr, const char *sym, unsigned long o
+>  int register_kretprobe(struct kretprobe *rp)
+>  {
+>  	int ret;
+> -	struct kretprobe_instance *inst;
+> +	struct kretprobe_instance *inst = NULL;
+>  	int i;
+>  	void *addr;
+>  
+> @@ -2024,7 +2024,8 @@ int register_kretprobe(struct kretprobe *rp)
+>  
+>  	rp->rph->rp = rp;
+>  	for (i = 0; i < rp->maxactive; i++) {
+> -		inst = kzalloc(sizeof(struct kretprobe_instance) +
+> +		if (rp->data_size >= 0)
+> +			inst = kzalloc(sizeof(struct kretprobe_instance) +
+>  			       rp->data_size, GFP_KERNEL);
+>  		if (inst == NULL) {
+>  			refcount_set(&rp->rph->ref, i);
+> -- 
+> 2.30.0
+> 
 
-                        Geert
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

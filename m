@@ -2,237 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BFA00465626
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:07:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF3646562B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244852AbhLATK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:10:29 -0500
-Received: from mail-ot1-f51.google.com ([209.85.210.51]:37604 "EHLO
-        mail-ot1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239347AbhLATK0 (ORCPT
+        id S239347AbhLATMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233213AbhLATMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:10:26 -0500
-Received: by mail-ot1-f51.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so36611328otg.4;
-        Wed, 01 Dec 2021 11:07:00 -0800 (PST)
+        Wed, 1 Dec 2021 14:12:19 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10917C061574;
+        Wed,  1 Dec 2021 11:08:58 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id v23so18703851pjr.5;
+        Wed, 01 Dec 2021 11:08:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2/WVLfYcChaB2Rlq2I7dJboJflLwswX4QDTcSp5qFhY=;
+        b=qZoTGUwlti1juWWDDvQW7vnkl3pfhZwTY+5yZBqD9WjHnZxgKQtSx6jHICyI7kB4fR
+         1tV5XUO750umrXc8cHiF+uw9Bu7uhWGVuU6DPXU5x8znPsyoQb4XL7xiPvZKDobA7AwO
+         e+lnvnW9cUb6iO0uKLy7chny6FncoLftYHedFWapYTZCp6Is/m2Hu2gyPaJDr6MIFTAI
+         KqmjlBU2SLZO18vU9IDVueR47UIXKT7aXgml9SExt2UIsDqGkitZ8tnTK+p/4Z6CxFOJ
+         n3WWUEaFRcX12bpcA0WCT4nqUWHdmCLkhgoEAiD09FD8ur7oXlOswtqMX1tIAIDz3d1Z
+         6ufA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Ns1VGFmIcxV8dyTDHSaaXTsKQnH3/DvAnnTtMRYBS+Q=;
-        b=ERHEm+eSieZOplMSofp1XjojM34V/fNPDhjBawGpNSfUez5ls4INXm3s4gaGwV6aIk
-         Od0843fwnxmu3igurGD6OOoTXq6Rr3jNxmSJe//cnxDsUelIiLSgpXl5JE+RbdK8chBj
-         5Wv5jKk+h2SuCLtJ+YbVcyh+vYnrSSD+Q1iA5HoUCqDOFEykjBEGHG09kaFlvfCnvPAW
-         XYjWnk5PTQ9WhiPl7Twsk630A1N6yBv7TuQQZR+8bDYe9s7y+1CFEiIANKWd8aDrVixU
-         SD7kv9PIP5K7Jx/yIPkyd7JcXRj7KGKwL8MLvRnY9Oj4rpXT6IXwaDmVjmMV0TaOSe1X
-         06pQ==
-X-Gm-Message-State: AOAM5304O65amjDcPA7i4OF1KJ+2pB/W7kh9QTxtiaxntnrUsadCnj9P
-        pD36GE3Qj5spA5qEdUi65g==
-X-Google-Smtp-Source: ABdhPJyuR82qEd6pOKlVcbGE8T/SQxfzOcBBPB6zaklRvnXx6zarsyFBDAGE0kbYD4LuWHhdyxwljg==
-X-Received: by 2002:a05:6830:195:: with SMTP id q21mr7238076ota.355.1638385620493;
-        Wed, 01 Dec 2021 11:07:00 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id n26sm201220ooq.36.2021.12.01.11.06.59
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2/WVLfYcChaB2Rlq2I7dJboJflLwswX4QDTcSp5qFhY=;
+        b=MlyEUYd6nNQh3FMAuIIQZHYym5RbsihTwPe4yMgGMIro3c5h+oYaHHn3vEI4G4W9aS
+         qbY0/d+m+bGpGqEXTQJVQBCJz8OJSkFUGqPNo3OVZJy+lqFZ9fBOvgTYiTWpDIY5Mj84
+         gfJNnV+SRYYUM2b10zvAqAWOJXSPZiVFHJOdVJmU1mSNmj12MmhugPU/KqlPMH5TB3EA
+         FbRTGPpPIPZ6IUrUHPafj+7vfKnxnpX1nO7N5LOVEfy3D1qvsEK2+jwSzROjCqmkagtz
+         08XQ7iNsmzTKRhD9Hc1CQHyvNt/sXMmoNUqNIR068V/AufQBR1NFSi9Lyj9BQgomBAEA
+         FbNw==
+X-Gm-Message-State: AOAM533ak9rAmvmDsf76ZL27DeB9OgiD8OiaX2zSF2rILRZgQLrXMH5r
+        mvz0Q+uZt4RU8hqZJN+vIvg=
+X-Google-Smtp-Source: ABdhPJzDMJUFjG0ZkBA3xh74soV8Bi0OgekzKYefEeS+YpbkRevj7OOXF14YioKaFqky+wkb03TBfg==
+X-Received: by 2002:a17:902:6a8a:b0:143:905f:aec7 with SMTP id n10-20020a1709026a8a00b00143905faec7mr10009094plk.8.1638385737508;
+        Wed, 01 Dec 2021 11:08:57 -0800 (PST)
+Received: from localhost ([2601:647:4600:a5:6f71:8916:71a8:8af8])
+        by smtp.gmail.com with ESMTPSA id s19sm557279pfu.137.2021.12.01.11.08.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 11:06:59 -0800 (PST)
-Received: (nullmailer pid 2270663 invoked by uid 1000);
-        Wed, 01 Dec 2021 19:06:58 -0000
-Date:   Wed, 1 Dec 2021 13:06:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "maintainer:BROADCOM IPROC GBIT ETHERNET DRIVER" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Doug Berger <opendmb@gmail.com>, Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:BROADCOM IPROC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next 7/7] dt-bindings: net: Convert iProc MDIO mux to
- YAML
-Message-ID: <YafH0nADqO7DTU4A@robh.at.kernel.org>
-References: <20211201041228.32444-1-f.fainelli@gmail.com>
- <20211201041228.32444-8-f.fainelli@gmail.com>
+        Wed, 01 Dec 2021 11:08:57 -0800 (PST)
+Date:   Wed, 1 Dec 2021 11:08:56 -0800
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     Sean Christopherson <seanjc@google.com>, isaku.yamahata@intel.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, isaku.yamahata@gmail.com
+Subject: Re: [RFC PATCH v3 00/59] KVM: X86: TDX support
+Message-ID: <20211201190856.GA1166703@private.email.ne.jp>
+References: <cover.1637799475.git.isaku.yamahata@intel.com>
+ <YaZyyNMY80uVi5YA@google.com>
+ <20211202022227.acc0b613e6c483be4736c196@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211201041228.32444-8-f.fainelli@gmail.com>
+In-Reply-To: <20211202022227.acc0b613e6c483be4736c196@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 08:12:28PM -0800, Florian Fainelli wrote:
-> Conver the Broadcom iProc MDIO mux Device Tree binding to YAML.
-> 
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../bindings/net/brcm,mdio-mux-iproc.txt      | 62 --------------
->  .../bindings/net/brcm,mdio-mux-iproc.yaml     | 80 +++++++++++++++++++
->  2 files changed, 80 insertions(+), 62 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
->  create mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
-> deleted file mode 100644
-> index deb9e852ea27..000000000000
-> --- a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
-> +++ /dev/null
-> @@ -1,62 +0,0 @@
-> -Properties for an MDIO bus multiplexer found in Broadcom iProc based SoCs.
-> -
-> -This MDIO bus multiplexer defines buses that could be internal as well as
-> -external to SoCs and could accept MDIO transaction compatible to C-22 or
-> -C-45 Clause. When child bus is selected, one needs to select these two
-> -properties as well to generate desired MDIO transaction on appropriate bus.
-> -
-> -Required properties in addition to the generic multiplexer properties:
-> -
-> -MDIO multiplexer node:
-> -- compatible: brcm,mdio-mux-iproc.
-> -
-> -Every non-ethernet PHY requires a compatible so that it could be probed based
-> -on this compatible string.
-> -
-> -Optional properties:
-> -- clocks: phandle of the core clock which drives the mdio block.
-> -
-> -Additional information regarding generic multiplexer properties can be found
-> -at- Documentation/devicetree/bindings/net/mdio-mux.yaml
-> -
-> -
-> -for example:
-> -		mdio_mux_iproc: mdio-mux@66020000 {
-> -			compatible = "brcm,mdio-mux-iproc";
-> -			reg = <0x66020000 0x250>;
-> -			#address-cells = <1>;
-> -			#size-cells = <0>;
-> -
-> -			mdio@0 {
-> -				reg = <0x0>;
-> -				#address-cells = <1>;
-> -				#size-cells = <0>;
-> -
-> -				pci_phy0: pci-phy@0 {
-> -					compatible = "brcm,ns2-pcie-phy";
-> -					reg = <0x0>;
-> -					#phy-cells = <0>;
-> -				};
-> -			};
-> -
-> -			mdio@7 {
-> -				reg = <0x7>;
-> -				#address-cells = <1>;
-> -				#size-cells = <0>;
-> -
-> -				pci_phy1: pci-phy@0 {
-> -					compatible = "brcm,ns2-pcie-phy";
-> -					reg = <0x0>;
-> -					#phy-cells = <0>;
-> -				};
-> -			};
-> -			mdio@10 {
-> -				reg = <0x10>;
-> -				#address-cells = <1>;
-> -				#size-cells = <0>;
-> -
-> -				gphy0: eth-phy@10 {
-> -					reg = <0x10>;
-> -				};
-> -			};
-> -		};
-> diff --git a/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
-> new file mode 100644
-> index 000000000000..a576fb87bfc8
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
-> @@ -0,0 +1,80 @@
-> +# SPDX-License-Identifier: GPL-2.0
+On Thu, Dec 02, 2021 at 02:22:27AM +1300,
+Kai Huang <kai.huang@intel.com> wrote:
 
-All Broadcom authors on the original. Please add BSD-2-Clause.
+> On Tue, 30 Nov 2021 18:51:52 +0000 Sean Christopherson wrote:
+> > On Wed, Nov 24, 2021, isaku.yamahata@intel.com wrote:
+> > > - drop load/initialization of TDX module
+> > 
+> > So what's the plan for loading and initializing TDX modules?
+> 
+> Although I don't quite understand what does Isaku mean here (I thought
+> loading/initializing TDX module was never part of TDX KVM series), for this part
+> we are working internally to improve the quality and finalize the code, but
+> currently I don't have ETA of being able to send patches out, but we are trying
+> to send out asap.  Sorry this is what I can say for now : (
 
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/brcm,mdio-mux-iproc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: MDIO bus multiplexer found in Broadcom iProc based SoCs.
-> +
-> +maintainers:
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +
-> +description:
-> +  This MDIO bus multiplexer defines buses that could be internal as well as
-> +  external to SoCs and could accept MDIO transaction compatible to C-22 or
-> +  C-45 Clause. When child bus is selected, one needs to select these two
-> +  properties as well to generate desired MDIO transaction on appropriate bus.
-> +
-> +allOf:
-> +  - $ref: /schemas/net/mdio-mux.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: brcm,mdio-mux-iproc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: core clock driving the MDIO block
-> +
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    mdio_mux_iproc: mdio-mux@66020000 {
-> +        compatible = "brcm,mdio-mux-iproc";
-> +        reg = <0x66020000 0x250>;
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        mdio@0 {
-> +           reg = <0x0>;
-> +           #address-cells = <1>;
-> +           #size-cells = <0>;
-> +
-> +           pci_phy0: pci-phy@0 {
-> +              compatible = "brcm,ns2-pcie-phy";
-> +              reg = <0x0>;
-> +              #phy-cells = <0>;
-> +           };
-> +        };
-> +
-> +        mdio@7 {
-> +           reg = <0x7>;
-> +           #address-cells = <1>;
-> +           #size-cells = <0>;
-> +
-> +           pci_phy1: pci-phy@0 {
-> +              compatible = "brcm,ns2-pcie-phy";
-> +              reg = <0x0>;
-> +              #phy-cells = <0>;
-> +           };
-> +        };
-> +
-> +        mdio@10 {
-> +           reg = <0x10>;
-> +           #address-cells = <1>;
-> +           #size-cells = <0>;
-> +
-> +           gphy0: eth-phy@10 {
-> +              reg = <0x10>;
-> +           };
-> +        };
-> +    };
-> -- 
-> 2.25.1
-> 
-> 
+v1/v2 has it. Anyway The plan is what Kai said.  The code will reside in the x86
+common directory instead of kvm.
+
+The only dependency between the part of loading/initializing TDX module and
+TDX KVM is only single function to get the info about the TDX module.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

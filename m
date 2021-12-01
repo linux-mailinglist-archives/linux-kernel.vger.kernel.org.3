@@ -2,309 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9FC465565
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7575465567
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:28:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244798AbhLAS3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:29:55 -0500
-Received: from linux.microsoft.com ([13.77.154.182]:48048 "EHLO
-        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352396AbhLAS2n (ORCPT
+        id S241454AbhLASbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:31:39 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:58436 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S233912AbhLASbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:28:43 -0500
-Received: from localhost.localdomain (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id D8D5B20E61D0;
-        Wed,  1 Dec 2021 10:25:21 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com D8D5B20E61D0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1638383122;
-        bh=SqyYnQcvf7MyDNXcqWgsiVSGlLtQbs0OIC1cy+Yas/U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iDLveKwqx1vtd0bk1dyZrwHbsTNakGFaNMM39ZZhCSOTNQcPUvn2Hrc0NOETPxwGN
-         YWxVAa3nA+hto2owKG32wVJGA7jtfp6qjC/f5/lUruLaWxo1nx/NNC+tJ+u3pJMSip
-         lNY6TWu5rpESz4tI3L3RhDKFG0qtEa8pRxJ2CtuE=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        beaub@linux.microsoft.com
-Subject: [PATCH v6 13/13] user_events: Use __get_rel_str for relative string fields
-Date:   Wed,  1 Dec 2021 10:25:15 -0800
-Message-Id: <20211201182515.2446-14-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20211201182515.2446-1-beaub@linux.microsoft.com>
-References: <20211201182515.2446-1-beaub@linux.microsoft.com>
+        Wed, 1 Dec 2021 13:31:37 -0500
+X-UUID: 059f3091e9cc431492de5e88eb0234a2-20211202
+X-UUID: 059f3091e9cc431492de5e88eb0234a2-20211202
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <sean.wang@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 2122000294; Thu, 02 Dec 2021 02:28:12 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Thu, 2 Dec 2021 02:28:11 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 2 Dec
+ 2021 02:28:10 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 2 Dec 2021 02:28:10 +0800
+From:   <sean.wang@mediatek.com>
+To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>
+CC:     <Mark-YW.Chen@mediatek.com>, <sean.wang@mediatek.com>,
+        <Soul.Huang@mediatek.com>, <YN.Chen@mediatek.com>,
+        <Leon.Yen@mediatek.com>, <Eric-SY.Chang@mediatek.com>,
+        <Deren.Wu@mediatek.com>, <km.lin@mediatek.com>,
+        <robin.chiu@mediatek.com>, <Eddie.Chen@mediatek.com>,
+        <ch.yeh@mediatek.com>, <posh.sun@mediatek.com>,
+        <ted.huang@mediatek.com>, <Eric.Liang@mediatek.com>,
+        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
+        <steve.lee@mediatek.com>, <jsiuda@google.com>,
+        <frankgor@google.com>, <jemele@google.com>,
+        <abhishekpandit@google.com>, <michaelfsun@google.com>,
+        <mcchou@chromium.org>, <shawnku@google.com>,
+        <linux-bluetooth@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Mark-yw Chen <mark-yw.chen@mediatek.com>
+Subject: [PATCH v3 1/2] Bluetooth: btmtksdio: handle runtime pm only when sdio_func is available
+Date:   Thu, 2 Dec 2021 02:28:08 +0800
+Message-ID: <5c34f6c5529b6a8f8df893cd1fc1b0e628edf8a4.1638383119.git.objelf@gmail.com>
+X-Mailer: git-send-email 1.7.9.5
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch between __get_str and __get_rel_str within the print_fmt of
-user_events. Add unit test to ensure print_fmt is correct on known
-types.
+From: Sean Wang <sean.wang@mediatek.com>
 
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+Runtime pm ops is not aware the sdio_func status that is probably
+being disabled by btmtksdio_close. Thus, we are only able to access the
+sdio_func for the runtime pm operations only when the sdio_func is
+available.
+
+Fixes: 7f3c563c575e7 ("Bluetooth: btmtksdio: Add runtime PM support to SDIO based Bluetooth")
+Co-developed-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
+Signed-off-by: Mark-yw Chen <mark-yw.chen@mediatek.com>
+Signed-off-by: Sean Wang <sean.wang@mediatek.com>
 ---
- kernel/trace/trace_events_user.c              |  24 ++-
- .../selftests/user_events/ftrace_test.c       | 166 ++++++++++++++++++
- 2 files changed, 182 insertions(+), 8 deletions(-)
+v2: not check HCI_RUNNING from a driver, use an internal flag instead
+v3: fix the title
+---
+ drivers/bluetooth/btmtksdio.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index b487d02acedf..2b47e7b11c3d 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -257,7 +257,7 @@ static int user_event_add_field(struct user_event *user, const char *type,
- 	goto add_field;
+diff --git a/drivers/bluetooth/btmtksdio.c b/drivers/bluetooth/btmtksdio.c
+index d9cf0c492e29..fc6317e519e9 100644
+--- a/drivers/bluetooth/btmtksdio.c
++++ b/drivers/bluetooth/btmtksdio.c
+@@ -99,6 +99,7 @@ MODULE_DEVICE_TABLE(sdio, btmtksdio_table);
  
- add_validator:
--	if (strstr(type, "char[") != 0)
-+	if (strstr(type, "char") != 0)
- 		validator_flags |= VALIDATOR_ENSURE_NULL;
+ #define BTMTKSDIO_TX_WAIT_VND_EVT	1
+ #define BTMTKSDIO_HW_TX_READY		2
++#define BTMTKSDIO_FUNC_ENABLED		3
  
- 	validator = kmalloc(sizeof(*validator), GFP_KERNEL);
-@@ -456,14 +456,21 @@ static const char *user_field_format(const char *type)
- 	return "%llu";
- }
+ struct mtkbtsdio_hdr {
+ 	__le16	len;
+@@ -539,6 +540,8 @@ static int btmtksdio_open(struct hci_dev *hdev)
+ 	if (err < 0)
+ 		goto err_release_host;
  
--static bool user_field_is_dyn_string(const char *type)
-+static bool user_field_is_dyn_string(const char *type, const char **str_func)
- {
--	if (str_has_prefix(type, "__data_loc ") ||
--	    str_has_prefix(type, "__rel_loc "))
--		if (strstr(type, "char[") != 0)
--			return true;
-+	if (str_has_prefix(type, "__data_loc ")) {
-+		*str_func = "__get_str";
-+		goto check;
-+	}
++	set_bit(BTMTKSDIO_FUNC_ENABLED, &bdev->tx_state);
 +
-+	if (str_has_prefix(type, "__rel_loc ")) {
-+		*str_func = "__get_rel_str";
-+		goto check;
-+	}
+ 	/* Get ownership from the device */
+ 	sdio_writel(bdev->func, C_FW_OWN_REQ_CLR, MTK_REG_CHLPCR, &err);
+ 	if (err < 0)
+@@ -640,6 +643,7 @@ static int btmtksdio_close(struct hci_dev *hdev)
+ 	if (err < 0)
+ 		bt_dev_err(bdev->hdev, "Cannot return ownership to device");
  
- 	return false;
-+check:
-+	return strstr(type, "char") != 0;
- }
++	clear_bit(BTMTKSDIO_FUNC_ENABLED, &bdev->tx_state);
+ 	sdio_disable_func(bdev->func);
  
- #define LEN_OR_ZERO (len ? len - pos : 0)
-@@ -472,6 +479,7 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
- 	struct ftrace_event_field *field, *next;
- 	struct list_head *head = &user->fields;
- 	int pos = 0, depth = 0;
-+	const char *str_func;
+ 	sdio_release_host(bdev->func);
+@@ -1058,6 +1062,9 @@ static int btmtksdio_runtime_suspend(struct device *dev)
+ 	if (!bdev)
+ 		return 0;
  
- 	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
++	if (!test_bit(BTMTKSDIO_FUNC_ENABLED, &bdev->tx_state))
++		return 0;
++
+ 	sdio_claim_host(bdev->func);
  
-@@ -488,9 +496,9 @@ static int user_event_set_print_fmt(struct user_event *user, char *buf, int len)
- 	pos += snprintf(buf + pos, LEN_OR_ZERO, "\"");
+ 	sdio_writel(bdev->func, C_FW_OWN_REQ_SET, MTK_REG_CHLPCR, &err);
+@@ -1085,6 +1092,9 @@ static int btmtksdio_runtime_resume(struct device *dev)
+ 	if (!bdev)
+ 		return 0;
  
- 	list_for_each_entry_safe_reverse(field, next, head, link) {
--		if (user_field_is_dyn_string(field->type))
-+		if (user_field_is_dyn_string(field->type, &str_func))
- 			pos += snprintf(buf + pos, LEN_OR_ZERO,
--					", __get_str(%s)", field->name);
-+					", %s(%s)", str_func, field->name);
- 		else
- 			pos += snprintf(buf + pos, LEN_OR_ZERO,
- 					", REC->%s", field->name);
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index 16aff1fb295a..b2e5c0765a68 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -20,6 +20,7 @@ const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
- const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
- const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/enable";
- const char *trace_file = "/sys/kernel/debug/tracing/trace";
-+const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
++	if (!test_bit(BTMTKSDIO_FUNC_ENABLED, &bdev->tx_state))
++		return 0;
++
+ 	sdio_claim_host(bdev->func);
  
- static int trace_bytes(void)
- {
-@@ -47,6 +48,61 @@ static int trace_bytes(void)
- 	return bytes;
- }
- 
-+static int get_print_fmt(char *buffer, int len)
-+{
-+	FILE *fp = fopen(fmt_file, "r");
-+	int c, index = 0, last = 0;
-+
-+	if (!fp)
-+		return -1;
-+
-+	/* Read until empty line (Skip Common) */
-+	while (true) {
-+		c = getc(fp);
-+
-+		if (c == EOF)
-+			break;
-+
-+		if (last == '\n' && c == '\n')
-+			break;
-+
-+		last = c;
-+	}
-+
-+	last = 0;
-+
-+	/* Read until empty line (Skip Properties) */
-+	while (true) {
-+		c = getc(fp);
-+
-+		if (c == EOF)
-+			break;
-+
-+		if (last == '\n' && c == '\n')
-+			break;
-+
-+		last = c;
-+	}
-+
-+	/* Read in print_fmt: */
-+	while (len > 1) {
-+		c = getc(fp);
-+
-+		if (c == EOF || c == '\n')
-+			break;
-+
-+		buffer[index++] = c;
-+
-+		len--;
-+	}
-+
-+	buffer[index] = 0;
-+
-+	fclose(fp);
-+
-+	return 0;
-+}
-+
- static int clear(void)
- {
- 	int fd = open(data_file, O_RDWR);
-@@ -63,6 +119,44 @@ static int clear(void)
- 	return 0;
- }
- 
-+static int check_print_fmt(const char *event, const char *expected)
-+{
-+	struct user_reg reg = {0};
-+	char print_fmt[256];
-+	int ret;
-+	int fd;
-+
-+	/* Ensure cleared */
-+	ret = clear();
-+
-+	if (ret != 0)
-+		return ret;
-+
-+	fd = open(data_file, O_RDWR);
-+
-+	if (fd == -1)
-+		return fd;
-+
-+	reg.size = sizeof(reg);
-+	reg.name_args = (__u64)event;
-+
-+	/* Register should work */
-+	ret = ioctl(fd, DIAG_IOCSREG, &reg);
-+
-+	close(fd);
-+
-+	if (ret != 0)
-+		return ret;
-+
-+	/* Ensure correct print_fmt */
-+	ret = get_print_fmt(print_fmt, sizeof(print_fmt));
-+
-+	if (ret != 0)
-+		return ret;
-+
-+	return strcmp(print_fmt, expected);
-+}
-+
- FIXTURE(user) {
- 	int status_fd;
- 	int data_fd;
-@@ -282,6 +376,78 @@ TEST_F(user, write_validator) {
- 	ASSERT_EQ(EFAULT, errno);
- }
- 
-+TEST_F(user, print_fmt) {
-+	int ret;
-+
-+	ret = check_print_fmt("__test_event __rel_loc char[] data",
-+			      "print fmt: \"data=%s\", __get_rel_str(data)");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event __data_loc char[] data",
-+			      "print fmt: \"data=%s\", __get_str(data)");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event s64 data",
-+			      "print fmt: \"data=%lld\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event u64 data",
-+			      "print fmt: \"data=%llu\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event s32 data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event u32 data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event int data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event unsigned int data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event s16 data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event u16 data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event short data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event unsigned short data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event s8 data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event u8 data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event char data",
-+			      "print fmt: \"data=%d\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event unsigned char data",
-+			      "print fmt: \"data=%u\", REC->data");
-+	ASSERT_EQ(0, ret);
-+
-+	ret = check_print_fmt("__test_event char[4] data",
-+			      "print fmt: \"data=%s\", REC->data");
-+	ASSERT_EQ(0, ret);
-+}
-+
- int main(int argc, char **argv)
- {
- 	return test_harness_run(argc, argv);
+ 	sdio_writel(bdev->func, C_FW_OWN_REQ_CLR, MTK_REG_CHLPCR, &err);
 -- 
-2.17.1
+2.25.1
 

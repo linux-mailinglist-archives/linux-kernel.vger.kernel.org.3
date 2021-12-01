@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F3DE4644D7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 740694644D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:21:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345986AbhLACYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:24:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50276 "EHLO
+        id S1346051AbhLACZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:25:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345957AbhLACY2 (ORCPT
+        with ESMTP id S1345996AbhLACZF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:24:28 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DA6C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:21:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 6B3A1CE1C91
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 02:21:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97E4AC53FC7;
-        Wed,  1 Dec 2021 02:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638325264;
-        bh=mFH6sIyHA75mLSDgtt90j3Sz8X0d1OlU5XUa9IzV+5c=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=k5vZxltVEwUvVG4hc6utquWGrrGdE0JT4PmQMG+ch78C3tDSuzQDiNjJs3kYcYHaU
-         DVDqlgYSNWy2zmVYHt+60G+tEbGLhuMfJ7YDX0tlL/HSoFkaIuy0Oe/N47xLPtKyr2
-         On088TNYyeZT7xHTdpynZzTzfn4vrlnEty/7rYBpmbbDz0Z3EwMU985Ob4TIFtTJ7X
-         q5ae/4jtgFNuEqMK8jUBXkGXuVoSn1ubauPn/wpEjCWNN0P6qIT0ohRoMlmIAF8czi
-         l9em36GrPDFkh+i9UkmtDdHeaGJaSNEDOOtk9+kMDt4d10ElAFB49UOREbOjGzucDv
-         12e7EMJXg0fEA==
-Date:   Wed, 1 Dec 2021 11:21:00 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Sven Schnelle <svens@linux.ibm.com>
-Subject: Re: [PATCH] tracing/histograms: String compares should not care
- about signed values
-Message-Id: <20211201112100.23d4caafd8319e15073a41ed@kernel.org>
-In-Reply-To: <20211130123736.7c3cab27@gandalf.local.home>
-References: <20211130123736.7c3cab27@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Tue, 30 Nov 2021 21:25:05 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBAC3C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:21:45 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id gb13-20020a17090b060d00b001a674e2c4a8so45629pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:21:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=gie1EwZxonCzFvugUYBX8WOXYkfnwgMVP4++lOOlv+c=;
+        b=BHHWYuF18555l0y3u6rGa+kEPLUpRnTak219rl+ifA1BegpvG+NBgLb0it0I4y1PBo
+         opX2RyrCSzAxdaDMxLHZgYuQBb3UVPD2vfYENDpOiOvKud4gngvK2ESBdq2wzO7bvYFs
+         Uom+60iWQDBpxbmPU70HUiBcp58Q+IzMSy+kvlJ0vEJ1p8v4tuSDuU8pkpbNTFB618qG
+         GRyKbd/AR+lkFA4jCgEvLeAjD26ZWOnk3TJw1kKRu0Qd77in9KBkimE5/N26zN4jm81l
+         dcBG7UIm2ufF53HRCOZW7kupF9U+VKWo5L41OJTTQxhPRxp8ZLBeqKPhTwxyhB0gaVmZ
+         Kypw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=gie1EwZxonCzFvugUYBX8WOXYkfnwgMVP4++lOOlv+c=;
+        b=jnI27pFbNT2czGq+QDVOQq3x/eyy4atcLCcVMoDIzEdh0QewsgzM/C5FenTu6utUla
+         P/fKDz7r9r5vXp94wsJ2XMe59d5tcQ6VozZQM3HA+3FlmS7CKOVxK4BsTUI+W+uJcekD
+         5bnC50i2Hph/OtBNg4HZ85nxY8aXOBrN81t5Wwas4F8Kxk2LXnB+ravoyYzAknXJ9qIP
+         cGcSAf9y/JhHpmkMtxQvG+/Juz2RLEKLGYSfl5v+9ZY7A4HUssghdo8d+rzYJKFJNQU/
+         uAP1UwnDoWCFh+pVIWodgQtxDWg2hSneVVy2uaeq/3QkLMbTrBvKmLIRHvKU4AmIZ1ai
+         aMTw==
+X-Gm-Message-State: AOAM532hNwxzwKoyUGn0lXZbypmviLQITd420H7vzkHmwvqv4Lc2xpcG
+        w1hYiD5pvvy9Ea+jHljdTCEO1w==
+X-Google-Smtp-Source: ABdhPJx7ckMHu0ZBbHoG3wVdN35yNz+jTnr/6AkXoHITLna8yQnOkJAuMipyrJqERvLCPmT0P99eUg==
+X-Received: by 2002:a17:902:748c:b0:141:c45e:c612 with SMTP id h12-20020a170902748c00b00141c45ec612mr3544713pll.73.1638325305343;
+        Tue, 30 Nov 2021 18:21:45 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j13sm21251711pfc.151.2021.11.30.18.21.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 18:21:44 -0800 (PST)
+Date:   Wed, 1 Dec 2021 02:21:41 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 18/29] KVM: x86: Use nr_memslot_pages to avoid
+ traversing the memslots array
+Message-ID: <YabcNaCb88s/CTop@google.com>
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+ <74663af27fd6e25b7846da343f7013b1e9885a4b.1638304316.git.maciej.szmigiero@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74663af27fd6e25b7846da343f7013b1e9885a4b.1638304316.git.maciej.szmigiero@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 12:37:36 -0500
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> From 95f7262b44dc54fed8007cc3db8b39cbd16999c6 Mon Sep 17 00:00:00 2001
-> From: "Steven Rostedt (VMware)" <rostedt@goodmis.org>
-> Date: Tue, 30 Nov 2021 12:31:23 -0500
-> Subject: [PATCH] tracing/histograms: String compares should not care about
->  signed values
+On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 > 
-> When comparing two strings for the "onmatch" histogram trigger, fields
-> that are strings use string comparisons, which do not care about being
-> signed or not.
+> There is no point in recalculating from scratch the total number of pages
+> in all memslots each time a memslot is created or deleted.  Use KVM's
+> cached nr_memslot_pages to compute the default max number of MMU pages.
 > 
-> Do not fail to match two string fields if one is unsigned char array and
-> the other is a signed char array.
+> Note that even with nr_memslot_pages capped at ULONG_MAX we can't safely
+> multiply it by KVM_PERMILLE_MMU_PAGES (20) since this operation can
+> possibly overflow an unsigned long variable.
 > 
-> Link: https://lore.kernel.org/all/20211129123043.5cfd687a@gandalf.local.home/
-
-Looks good to me.
-
-Review-by: Masami Hiramatsu <mhiramatsu@kernel.org>
-
-Thank you,
-
+> Write this "* 20 / 1000" operation as "/ 50" instead to avoid such
+> overflow.
 > 
-> Cc: stable@vgerk.kernel.org
-> Cc: Tom Zanussi <zanussi@kernel.org>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Yafang Shao <laoar.shao@gmail.com>
-> Fixes: b05e89ae7cf3b ("tracing: Accept different type for synthetic event fields")
-> Reported-by: Sven Schnelle <svens@linux.ibm.com>
-> Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
-> ---
->  kernel/trace/trace_events_hist.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-> index 9555b8e1d1e3..319f9c8ca7e7 100644
-> --- a/kernel/trace/trace_events_hist.c
-> +++ b/kernel/trace/trace_events_hist.c
-> @@ -3757,7 +3757,7 @@ static int check_synth_field(struct synth_event *event,
->  
->  	if (strcmp(field->type, hist_field->type) != 0) {
->  		if (field->size != hist_field->size ||
-> -		    field->is_signed != hist_field->is_signed)
-> +		    (!field->is_string && field->is_signed != hist_field->is_signed))
->  			return -EINVAL;
->  	}
->  
-> -- 
-> 2.31.1
-> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> [sean: use common KVM field and rework changelog accordingly]
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
+My SoB can definitely be dropped for this one, just consider it review feedback
+that happened to have an SoB attached.
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+Reviewed-by: Sean Christopherson <seanjc@google.com> 

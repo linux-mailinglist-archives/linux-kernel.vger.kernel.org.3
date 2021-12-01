@@ -2,115 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6BF46556B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFAD465571
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239776AbhLAScZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:32:25 -0500
-Received: from foss.arm.com ([217.140.110.172]:44372 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232750AbhLAScY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:32:24 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4AAE01477;
-        Wed,  1 Dec 2021 10:29:03 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.65.205])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6AFB73F766;
-        Wed,  1 Dec 2021 10:29:00 -0800 (PST)
-Date:   Wed, 1 Dec 2021 18:28:57 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, kasan-dev@googlegroups.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] kcov: fix generic Kconfig dependencies if
- ARCH_WANTS_NO_INSTR
-Message-ID: <Yae+6clmwHox7CHN@FVFF77S0Q05N>
-References: <20211201152604.3984495-1-elver@google.com>
- <YaebeW5uYWFsDD8W@FVFF77S0Q05N>
- <CANpmjNO9f2SD6PAz_pF3Rg_XOmBtqEB_DNsoUY1ycwiFjoP88Q@mail.gmail.com>
- <Yae08MUQn5SxPwZ/@FVFF77S0Q05N>
- <CANpmjNMW_BFnVj2Eaai76PQZqOoABLw+oYm8iGy6Vp9r_ru_iQ@mail.gmail.com>
+        id S244890AbhLASc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:32:56 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:56630 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244805AbhLAScp (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 13:32:45 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 24A9CCE206F;
+        Wed,  1 Dec 2021 18:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F10C0C53FCC;
+        Wed,  1 Dec 2021 18:29:20 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="PCSpO+RW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1638383356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hfa3NlfCdsYdxGFH80CwGI0Vu8ELsod+Z2I76aPC3tY=;
+        b=PCSpO+RWCY1yAULHSHBN4H8UeXWCz+hhlQ4mA0jmalquWo3Eqg+G5AUGJRMC3WEgm96iuL
+        wu6vZ+YRk2o6lDcnMCRqqghE0uv73eZJbmY5P60YH3M6AWZ5vqqKA+1hpntnuEGOTuf+/C
+        CRCSC/hUMdK0UZg+vHaZ79JlkbFui50=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e75226bb (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Wed, 1 Dec 2021 18:29:16 +0000 (UTC)
+Received: by mail-yb1-f181.google.com with SMTP id d10so66152687ybe.3;
+        Wed, 01 Dec 2021 10:29:14 -0800 (PST)
+X-Gm-Message-State: AOAM533MYg13xgIp/ogNDanQFF1dek5banrKrjFlJHVmL0vPqcwj2Ftv
+        Tc6TAImVE4kaPkbbLQjap3oiVurk9XXAE18BK8Q=
+X-Google-Smtp-Source: ABdhPJzm64appqzjA4aYAH5eWAoxWSsIlQMIYaA4A4gxImaaHPmVuTevg1qUdzUUZ3LSV64gI9xYizxTSbGMR8WlHKU=
+X-Received: by 2002:a25:1e83:: with SMTP id e125mr8854584ybe.32.1638383353056;
+ Wed, 01 Dec 2021 10:29:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNMW_BFnVj2Eaai76PQZqOoABLw+oYm8iGy6Vp9r_ru_iQ@mail.gmail.com>
+References: <2036923.9o76ZdvQCi@positron.chronox.de> <22137816.pfsBpAd9cS@tauon.chronox.de>
+ <YaEJtv4A6SoDFYjc@kroah.com> <9311513.S0ZZtNTvxh@tauon.chronox.de>
+ <YaT+9MueQIa5p8xr@kroah.com> <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
+ <YaYvYdnSaAvS8MAk@kroah.com> <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
+ <YaZHKHjomEivul6U@kroah.com> <YaZqVxI1C8RByq+w@gmail.com> <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
+ <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
+ <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com> <49d6091e571e24efff7bc4dc70c4c62628eb0782.camel@redhat.com>
+In-Reply-To: <49d6091e571e24efff7bc4dc70c4c62628eb0782.camel@redhat.com>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 1 Dec 2021 13:29:01 -0500
+X-Gmail-Original-Message-ID: <CAHmME9rTT+V0X1hv1=DiVnQFomLRcPRkymmTGjDY7+EDEuw9UQ@mail.gmail.com>
+Message-ID: <CAHmME9rTT+V0X1hv1=DiVnQFomLRcPRkymmTGjDY7+EDEuw9UQ@mail.gmail.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+To:     Simo Sorce <simo@redhat.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>, Tso Ted <tytso@mit.edu>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 07:16:25PM +0100, Marco Elver wrote:
-> On Wed, 1 Dec 2021 at 18:46, Mark Rutland <mark.rutland@arm.com> wrote:
-> [...]
-> > > > Currently we mostly get away with disabling KCOV for while compilation units,
-> > > > so maybe it's worth waiting for the GCC 12.0 release, and restricting things
-> > > > once that's out?
-> > >
-> > > An alternative would be to express 'select ARCH_WANTS_NO_INSTR' more
-> > > precisely, say with an override or something. Because as-is,
-> > > ARCH_WANTS_NO_INSTR then doesn't quite reflect reality on arm64
-> > > (yet?).
-> >
-> > It's more of a pragmatic thing -- ARCH_WANTS_NO_INSTR does reflect reality, and
-> > we do *want* to enforce that strictly, it's just that we're just struck between
-> > a rock and a hard place where until GCC 12 is released we either:
-> >
-> > a) Strictly enforce noinstr, and be sure there aren't any bugs from unexpected
-> >    instrumentation, but we can't test GCC-built kernels under Syzkaller due to
-> >    the lack of KCOV.
-> >
-> > b) Don't strictly enforce noinstr, and have the same latent bugs as today (of
-> >    unknown severity), but we can test GCC-built kernels under Syzkaller.
-> >
-> > ... and since this (currently only affects KCOV, which people only practically
-> > enable for Syzkaller, I think it's ok to wait until GCC 12 is out, so that we
-> > can have the benefit of Sykaller in the mean time, and subsequrntly got for
-> > option (a) and say those people need to use GCC 12+ (and clang 13+).
-> >
-> > > But it does look simpler to wait, so I'm fine with that. I leave it to you.
-> >
-> > FWIW, for my purposes I'm happy to take this immediately and to have to apply a
-> > local patch to my fuzzing branches until GCC 12 is out, but I assume we'd want
-> > the upstream testing to work in the mean time without requiring additional
-> > patches.
-> 
-> Agree, it's not an ideal situation. :-/
-> 
-> syzkaller would still work, just not as efficiently. Not sure what's
-> worse, less efficient fuzzing, or chance of random crashes. In fact,
-> on syzbot we already had to disable it:
-> https://github.com/google/syzkaller/blob/61f862782082c777ba335aa4b4b08d4f74d7d86e/dashboard/config/linux/bits/base.yml#L110
-> https://lore.kernel.org/linux-arm-kernel/20210119130010.GA2338@C02TD0UTHF1T.local/T/#m78fdfcc41ae831f91c93ad5dabe63f7ccfb482f0
-> 
-> So if we ran into issues with KCOV on syzbot for arm64, I'm sure it's
-> not just us. I can't quite see what the reasons for the crashes are,
-> but ruling out noinstr vs. KCOV would be a first step.
-> 
-> So I'm inclined to suggest we take this patch now and not wait for GCC
-> 12, given we're already crashing with KCOV and therefore have KCOV
-> disabled on arm64 syzbot.
-> 
-> I'm still fine waiting, but just wanted to point out you can fuzz
-> without KCOV. Preferences?
+On Wed, Dec 1, 2021 at 12:19 PM Simo Sorce <simo@redhat.com> wrote:
+> Unfortunately userspace is not an option for kernel's own cryptography.
 
-If it's not used by Syzbot, that's good enough for me -- I can apply local
-hacks to run with KCOV if I want to in the mean time, and I can debug my own
-mess if I have to.
-
-So FWIW, for taking that now:
-
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-
-Thanks,
-Mark.
+I'm actually sort of curious to learn which specific uses of
+get_random_bytes you're concerned about. ECC keygen? What else?

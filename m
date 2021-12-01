@@ -2,144 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB1046583B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C14465849
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344033AbhLAVTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 16:19:07 -0500
-Received: from foss.arm.com ([217.140.110.172]:47694 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232919AbhLAVTD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 16:19:03 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2164F13D5;
-        Wed,  1 Dec 2021 13:15:42 -0800 (PST)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 00EF33F5A1;
-        Wed,  1 Dec 2021 13:15:42 -0800 (PST)
-Received: by e110455-lin.cambridge.arm.com (Postfix, from userid 1000)
-        id A119B68527A; Wed,  1 Dec 2021 21:15:40 +0000 (GMT)
-Date:   Wed, 1 Dec 2021 21:15:40 +0000
-From:   Liviu Dudau <liviu.dudau@arm.com>
-To:     Steven Price <steven.price@arm.com>
-Cc:     Zhou Qingyang <zhou1615@umn.edu>, David Airlie <airlied@linux.ie>,
-        kjlu@umn.edu, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        "James (Qian) Wang" <james.qian.wang@arm.com>,
-        Mihail Atanassov <mihail.atanassov@arm.com>
-Subject: Re: [PATCH] drm/komeda: Fix an undefined behavior bug in
- komeda_plane_add()
-Message-ID: <Yafl/A/dId/z+88j@e110455-lin.cambridge.arm.com>
-References: <20211130142531.156863-1-zhou1615@umn.edu>
- <fadc42da-bf13-4c18-653b-8d80fd486940@arm.com>
+        id S1344086AbhLAVXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 16:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1344010AbhLAVXJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 16:23:09 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD32C061574;
+        Wed,  1 Dec 2021 13:19:47 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id z7so31964028lfi.11;
+        Wed, 01 Dec 2021 13:19:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VqCD5X4z3E22KUCM7brtm+WLf2cLZsABPfgU1nbqQJg=;
+        b=KsH1TFr8dZTTKCqVTATfd3Js5wW27OGo7XYxghwnkcOty1s6RtZWFJDUAbIAlji2p6
+         ovw5RTDgW/JbejsqHOMCWj/BtRs8hkjxm7HIQlXcdXT1AH7m9B9r0IY8jLx41AWEUOR9
+         TEW2G7fZzVqamry/5cAxMbeQ73HIvjarnekhgaxwIjSpFqJq9jwdpqF6XLzn34BSEJ+e
+         tEzJLB4L0/yaq8KzMQA6+J/wOV2p5egwBfnjabV7xUUpPTbkETk4UU0CKT4uu/SIk5MS
+         tt8EGSCFBgNYu9rrOM/msKzR+jDsORRzZU5ZPNSBbmrQ0rB8IXclPl1hQSyxgldwwjzg
+         4+JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=VqCD5X4z3E22KUCM7brtm+WLf2cLZsABPfgU1nbqQJg=;
+        b=hYXdfiBd3p8g0JXGlvnDzqj78LtZgW/+ZoKr1wnvm7NPdjwwjpTJQhwH7WEBgmioZp
+         es8GtLDqldE54C/809DkqWWf2277sIN9eOAm5SGiuK2sfYO4Ee2xm2ygvWXaeYaOXFYn
+         q0458ujx+73IKeou3I9artAs3P37VSYPPEV0vOV3hv/QrY22gx7jyTH1VWN6ESXGCkYV
+         rrryccZW/7RdUjEdLvNJ4xB3Dp2VgEiOz/4F4ALIVvBSY0iTfMq9Ij9ff4fxRbt3GJnO
+         slcNg3+xz+CFiBEtLK62s/YKOZZ6+uibpk9K7HX7WCR3W0/YJZmaFG6VE0BIoya6VPOS
+         hoBg==
+X-Gm-Message-State: AOAM532PHwJRQDQJFpsjnk6nEHzBkriTLrWhrfRWHP3pMr2ji5bDrd8W
+        zYFyELzriKWizbNBBNNpEJDVL2jRLoc=
+X-Google-Smtp-Source: ABdhPJxJxGPIHET353HJdTwalA7snVPtLPN9+bzzmDfTbkAApY8KnLkPmUVSh1GGetO0oMpitP9MNA==
+X-Received: by 2002:ac2:51b0:: with SMTP id f16mr8228337lfk.20.1638393586169;
+        Wed, 01 Dec 2021 13:19:46 -0800 (PST)
+Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
+        by smtp.gmail.com with ESMTPSA id o8sm104919lfk.2.2021.12.01.13.19.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 13:19:45 -0800 (PST)
+From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Subject: [PATCH] MAINTAINERS: Add Florian as BCM5301X and BCM53573 maintainer
+Date:   Wed,  1 Dec 2021 22:19:39 +0100
+Message-Id: <20211201211939.13087-1-zajec5@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <fadc42da-bf13-4c18-653b-8d80fd486940@arm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 03:44:03PM +0000, Steven Price wrote:
-> On 30/11/2021 14:25, Zhou Qingyang wrote:
-> > In komeda_plane_add(), komeda_get_layer_fourcc_list() is assigned to
-> > formats and used in drm_universal_plane_init().
-> > drm_universal_plane_init() passes formats to
-> > __drm_universal_plane_init(). __drm_universal_plane_init() further
-> > passes formats to memcpy() as src parameter, which could lead to an
-> > undefined behavior bug on failure of komeda_get_layer_fourcc_list().
-> > 
-> > Fix this bug by adding a check of formats.
-> > 
-> > This bug was found by a static analyzer. The analysis employs
-> > differential checking to identify inconsistent security operations
-> > (e.g., checks or kfrees) between two code paths and confirms that the
-> > inconsistent operations are not recovered in the current function or
-> > the callers, so they constitute bugs.
-> > 
-> > Note that, as a bug found by static analysis, it can be a false
-> > positive or hard to trigger. Multiple researchers have cross-reviewed
-> > the bug.
-> > 
-> > Builds with CONFIG_DRM_KOMEDA=m show no new warnings,
-> > and our static analyzer no longer warns about this code.
-> > 
-> > Fixes: 61f1c4a8ab75 ("drm/komeda: Attach komeda_dev to DRM-KMS")
-> > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
-> > ---
-> >  drivers/gpu/drm/arm/display/komeda/komeda_plane.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-> > index d63d83800a8a..dd3f17e970dd 100644
-> > --- a/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-> > +++ b/drivers/gpu/drm/arm/display/komeda/komeda_plane.c
-> > @@ -265,6 +265,10 @@ static int komeda_plane_add(struct komeda_kms_dev *kms,
-> >  
-> >  	formats = komeda_get_layer_fourcc_list(&mdev->fmt_tbl,
-> >  					       layer->layer_type, &n_formats);
-> > +	if (!formats) {
-> > +		err = -ENOMEM;
-> > +		goto cleanup;
-> > +	}
-> 
-> If this executes it will cause undefined behaviour...
-> 
-> The cleanup code calls komeda_plane_destroy() which calls
-> drm_plane_cleanup() which does (amongst other things) a
-> list_del(&plane->head). But the plane hasn't been put on a list yet as
-> that's done in drm_universal_plane_init().
-> 
-> So in this case we simple want to do:
-> 
-> if (!formats) {
-> 	kfree(kplane);
-> 	return -ENOMEM;
-> }
+From: Rafał Miłecki <rafal@milecki.pl>
 
-Zhou has already posted v2 that contains this fix.
+BCM5301X and BCM53573 commits go through Florian's stblinux.git so add
+him as maintainer to make sure people e-mail him when sending patches.
 
-> 
-> Note that without this 'fix' a NULL return from
-> komeda_get_layer_fourcc_list() would leave n_formats==0, so while the
-> NULL pointer is passed into memcpy() it is also passed a length of 0.
-> Which I believe is safe.
-> 
-> However while looking at this function...
-> 
-> >  
-> >  	err = drm_universal_plane_init(&kms->base, plane,
-> >  			get_possible_crtcs(kms, c->pipeline),
-> > 
-> 
-> This call to drm_universal_plane_init() can fail early before
-> plane->head has been initialised. In which case the following:
-> 
-> > 	komeda_put_fourcc_list(formats);
-> > 
-> > 	if (err)
-> > 		goto cleanup;
-> 
-> commits the exact same sin and would cause a similar NULL dereference in
-> drm_plane_cleanup().
+Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+---
+ MAINTAINERS | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I will come up with a patch for this case and post it to the list tomorrow.
-
-Best regards,
-Liviu
-
-
-
-> 
-> Steve
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index b53fc85c5238..d60e3d7670eb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3626,6 +3626,7 @@ F:	drivers/net/ethernet/broadcom/bcm4908_enet.*
+ F:	drivers/net/ethernet/broadcom/unimac.h
+ 
+ BROADCOM BCM5301X ARM ARCHITECTURE
++M:	Florian Fainelli <f.fainelli@gmail.com>
+ M:	Hauke Mehrtens <hauke@hauke-m.de>
+ M:	Rafał Miłecki <zajec5@gmail.com>
+ M:	bcm-kernel-feedback-list@broadcom.com
+@@ -3637,6 +3638,7 @@ F:	arch/arm/boot/dts/bcm953012*
+ F:	arch/arm/mach-bcm/bcm_5301x.c
+ 
+ BROADCOM BCM53573 ARM ARCHITECTURE
++M:	Florian Fainelli <f.fainelli@gmail.com>
+ M:	Rafał Miłecki <rafal@milecki.pl>
+ L:	bcm-kernel-feedback-list@broadcom.com
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
 -- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+2.31.1
+

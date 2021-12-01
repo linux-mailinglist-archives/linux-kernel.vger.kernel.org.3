@@ -2,492 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF6F46471C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 07:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24CF8464725
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 07:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346906AbhLAGW0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 01:22:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346855AbhLAGWS (ORCPT
+        id S1346915AbhLAG2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 01:28:37 -0500
+Received: from smtp-relay-canonical-0.canonical.com ([185.125.188.120]:58114
+        "EHLO smtp-relay-canonical-0.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231871AbhLAG2g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 01:22:18 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B71C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 22:18:57 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id c4so49672689wrd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 22:18:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4OYuK2JmGmy6+n6LQviV3xFjxw4k3kzL0FbQ0M/l21Q=;
-        b=l82el+yjkJLnnOGVLyXmQqAAGejuhfDgJtUyssc6iHBP08bjVbiqyQKW+VAp3FIQ9H
-         I9e++TyqUI7FNkEiliEjnbcWrwaNzd+0CgmiZ437XCsUaim6dKMrxdsU2Ufp3bhcITNP
-         EcgAZLqHmc1/3JYdsXU0iYVDwNDgGpyfvqWoA7I5E/6vTcfqa78xWrTK2UqbnKF/X135
-         VlHaRtJLdO9sG1rmwvZqNFfX6kAFhbGQ+oXWnPJCH/tIOJjwGztf1V1u/ZIXtHoAeNjl
-         C9NZoW/tarn7j0jCpka8BtxYnROqkQFwQg8YbASjVKNm/Ww8L3X3mgiF0cs9DcqYZOO5
-         PTgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4OYuK2JmGmy6+n6LQviV3xFjxw4k3kzL0FbQ0M/l21Q=;
-        b=7Dj9B0Q/IhiTFKHXH/JtJdifX1NlwJhKtd3JkPFDEP8Cw0+ap8BqVzWD8IMsqOLA3C
-         9JX45VZG0ObLcR7Ylm7AOEWtQHWmF/VgzrBGwaKLyRRmgd48iiUWCll3oVi4PB+Ik4GO
-         PKMaHF4nieDb2QA498M3g7nWkVwndxPPdZeqe3d1R25OHfU5Cgw9f87HHtkX2vN4Om/5
-         ecPVJeaf6tf4+ajR1grM3kpscZys+EUjiVShYRLUkiuifq7vJ1gM3sybAOanrWUDafSQ
-         q6QdbnQ7Nf6nQvGpC2LRRhRC2rvytlYR/RcjL5+7qNqSMFGivPeJf9hJ+Fur3EiuMIQc
-         eCXw==
-X-Gm-Message-State: AOAM533ciw9OhEKbhAngzpq0soI65YOL03tUIInYKJWkTk7n26yswhc4
-        gbi7j5Vy3TrJz/AvWEzMYJOiZJkI6E98/0eSRi57UQ==
-X-Google-Smtp-Source: ABdhPJx45oTTbPzP7jycqR1ggy/gjxFQSVgtQMVt1tQjTaGNh/iKbyueivi8w9zJA85OlTZT9HCsJufobtaJguU4oo4=
-X-Received: by 2002:adf:e848:: with SMTP id d8mr4433119wrn.3.1638339535705;
- Tue, 30 Nov 2021 22:18:55 -0800 (PST)
+        Wed, 1 Dec 2021 01:28:36 -0500
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 4BAB03FFDF;
+        Wed,  1 Dec 2021 06:25:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638339911;
+        bh=ZuTbVzRuXq+1BXK11qhbZ9L2S3ttVt8+EAIqTiNSJ7M=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=aFyflSTQHTTxruerqZG6VEZvaphkDHFxHvaH5Qt0dXnFfDV5TRrSKSSiKNMWhVfeG
+         81dnrkmodHI91oVeoJ/Gmo5paY3BV2Cu7HngFmfR/hns1uY06kyB41U5OZMBnjZdDv
+         fz2lD4Ej0wOrMC2smTPsjvnVCwpTVQ3elYL/ygzCTD4zdVlQGPnLQtYhpDtdoUywGq
+         +7kWyltzhyk48GwcQh7JRb62Tuv0g1SiXnvDHRG5nTufwdsnV3/Np+nsB8x7/fnWEB
+         L7xLqcumvodDi98D4h4bMFaglWelfwIo/ieaqkUL/xv5vR0+bD0PF1bMiKCFMW6SVA
+         3GEOWHiqKp2kQ==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     bhelgaas@google.com
+Cc:     linux-pm@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Nirmal Patel <nirmal.patel@linux.intel.com>,
+        Jonathan Derrick <jonathan.derrick@linux.dev>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: vmd: Honor ACPI _OSC on PCIe features
+Date:   Wed,  1 Dec 2021 14:24:22 +0800
+Message-Id: <20211201062423.1313114-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20211129014007.286478-1-wefu@redhat.com> <20211129014007.286478-3-wefu@redhat.com>
- <20211129213634.1fe31b10@xhacker> <CA+YCwKkSuvbZtCzuZvA_FaFrA9qDFTLJAdQO7K_gbP_Xs7QY3A@mail.gmail.com>
-In-Reply-To: <CA+YCwKkSuvbZtCzuZvA_FaFrA9qDFTLJAdQO7K_gbP_Xs7QY3A@mail.gmail.com>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 1 Dec 2021 11:48:44 +0530
-Message-ID: <CAAhSdy1LF4Km8ax00NdT3sUYqJRaW-nwXFCpviahpcDj2LLUAw@mail.gmail.com>
-Subject: Re: [PATCH V4 2/2] riscv: add RISC-V Svpbmt extension supports
-To:     Wei Fu <wefu@redhat.com>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        atish patra <atishp04@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Guo Ren <guoren@kernel.org>,
-        =?UTF-8?Q?Christoph_M=C3=BCllner?= <christoph.muellner@vrull.eu>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Christoph Hellwig <hch@lst.de>,
-        Liu Shaohua <liush@allwinnertech.com>,
-        =?UTF-8?B?V2VpIFd1ICjlkLTkvJ8p?= <lazyparser@gmail.com>,
-        Drew Fustini <drew@beagleboard.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        taiten.peng@canonical.com,
-        Aniket Ponkshe <aniket.ponkshe@canonical.com>,
-        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>,
-        Gordan Markus <gordan.markus@canonical.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Arnd Bergmann <arnd@arndb.de>, Chen-Yu Tsai <wens@csie.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        Greg Favor <gfavor@ventanamicro.com>,
-        Andrea Mondelli <andrea.mondelli@huawei.com>,
-        Jonathan Behrens <behrensj@mit.edu>,
-        Xinhaoqu <xinhaoqu@huawei.com>,
-        Bill Huffman <huffman@cadence.com>,
-        Nick Kossifidis <mick@ics.forth.gr>,
-        Allen Baum <allen.baum@esperantotech.com>,
-        Josh Scheid <jscheid@ventanamicro.com>,
-        Richard Trauben <rtrauben@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 10:35 AM Wei Fu <wefu@redhat.com> wrote:
->
-> Hi, Jisheng Zhang,
->
-> On Mon, Nov 29, 2021 at 9:44 PM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > On Mon, 29 Nov 2021 09:40:07 +0800
-> > wefu@redhat.com wrote:
-> >
-> > > From: Wei Fu <wefu@redhat.com>
-> > >
-> > > This patch follows the standard pure RISC-V Svpbmt extension in
-> > > privilege spec to solve the non-coherent SOC dma synchronization
-> > > issues.
-> > >
-> > > Here is the svpbmt PTE format:
-> > > | 63 | 62-61 | 60-8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> > >   N     MT     RSW    D   A   G   U   X   W   R   V
-> > >         ^
-> > >
-> > > Of the Reserved bits [63:54] in a leaf PTE, the high bit is already
-> > > allocated (as the N bit), so bits [62:61] are used as the MT (aka
-> > > MemType) field. This field specifies one of three memory types that
-> > > are close equivalents (or equivalent in effect) to the three main x86
-> > > and ARMv8 memory types - as shown in the following table.
-> > >
-> > > RISC-V
-> > > Encoding &
-> > > MemType     RISC-V Description
-> > > ----------  ------------------------------------------------
-> > > 00 - PMA    Normal Cacheable, No change to implied PMA memory type
-> > > 01 - NC     Non-cacheable, idempotent, weakly-ordered Main Memory
-> > > 10 - IO     Non-cacheable, non-idempotent, strongly-ordered I/O memory
-> > > 11 - Rsvd   Reserved for future standard use
-> > >
-> > > The standard protection_map[] needn't be modified because the "PMA"
-> > > type keeps the highest bits zero. And the whole modification is
-> > > limited in the arch/riscv/* and using a global variable
-> > > (__svpbmt) as _PAGE_MASK/IO/NOCACHE for pgprot_noncached
-> > > (&writecombine) in pgtable.h. We also add _PAGE_CHG_MASK to filter
-> > > PFN than before.
-> > >
-> > > Enable it in devicetree - (Add "riscv,svpbmt" in the mmu of cpu node)
-> > >  - mmu:
-> > >      riscv,svpmbt
-> > >
-> > > Signed-off-by: Wei Fu <wefu@redhat.com>
-> > > Co-developed-by: Liu Shaohua <liush@allwinnertech.com>
-> > > Signed-off-by: Liu Shaohua <liush@allwinnertech.com>
-> > > Co-developed-by: Guo Ren <guoren@kernel.org>
-> > > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > > Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-> > > Cc: Christoph Hellwig <hch@lst.de>
-> > > Cc: Anup Patel <anup.patel@wdc.com>
-> > > Cc: Arnd Bergmann <arnd@arndb.de>
-> > > Cc: Atish Patra <atish.patra@wdc.com>
-> > > Cc: Drew Fustini <drew@beagleboard.org>
-> > > Cc: Wei Fu <wefu@redhat.com>
-> > > Cc: Wei Wu <lazyparser@gmail.com>
-> > > Cc: Chen-Yu Tsai <wens@csie.org>
-> > > Cc: Maxime Ripard <maxime@cerno.tech>
-> > > Cc: Daniel Lustig <dlustig@nvidia.com>
-> > > Cc: Greg Favor <gfavor@ventanamicro.com>
-> > > Cc: Andrea Mondelli <andrea.mondelli@huawei.com>
-> > > Cc: Jonathan Behrens <behrensj@mit.edu>
-> > > Cc: Xinhaoqu (Freddie) <xinhaoqu@huawei.com>
-> > > Cc: Bill Huffman <huffman@cadence.com>
-> > > Cc: Nick Kossifidis <mick@ics.forth.gr>
-> > > Cc: Allen Baum <allen.baum@esperantotech.com>
-> > > Cc: Josh Scheid <jscheid@ventanamicro.com>
-> > > Cc: Richard Trauben <rtrauben@gmail.com>
-> > > ---
-> > >  arch/riscv/include/asm/fixmap.h       |  2 +-
-> > >  arch/riscv/include/asm/pgtable-64.h   | 21 ++++++++++++---
-> > >  arch/riscv/include/asm/pgtable-bits.h | 39 +++++++++++++++++++++++++--
-> > >  arch/riscv/include/asm/pgtable.h      | 39 ++++++++++++++++++++-------
-> > >  arch/riscv/kernel/cpufeature.c        | 35 ++++++++++++++++++++++++
-> > >  arch/riscv/mm/init.c                  |  5 ++++
-> > >  6 files changed, 126 insertions(+), 15 deletions(-)
-> > >
-> > > diff --git a/arch/riscv/include/asm/fixmap.h b/arch/riscv/include/asm/fixmap.h
-> > > index 54cbf07fb4e9..5acd99d08e74 100644
-> > > --- a/arch/riscv/include/asm/fixmap.h
-> > > +++ b/arch/riscv/include/asm/fixmap.h
-> > > @@ -43,7 +43,7 @@ enum fixed_addresses {
-> > >       __end_of_fixed_addresses
-> > >  };
-> > >
-> > > -#define FIXMAP_PAGE_IO               PAGE_KERNEL
-> > > +#define FIXMAP_PAGE_IO               PAGE_IOREMAP
-> > >
-> > >  #define __early_set_fixmap   __set_fixmap
-> > >
-> > > diff --git a/arch/riscv/include/asm/pgtable-64.h b/arch/riscv/include/asm/pgtable-64.h
-> > > index 228261aa9628..16d251282b1d 100644
-> > > --- a/arch/riscv/include/asm/pgtable-64.h
-> > > +++ b/arch/riscv/include/asm/pgtable-64.h
-> > > @@ -59,14 +59,29 @@ static inline void pud_clear(pud_t *pudp)
-> > >       set_pud(pudp, __pud(0));
-> > >  }
-> > >
-> > > +static inline unsigned long _chg_of_pmd(pmd_t pmd)
-> > > +{
-> > > +     return (pmd_val(pmd) & _PAGE_CHG_MASK);
-> > > +}
-> > > +
-> > > +static inline unsigned long _chg_of_pud(pud_t pud)
-> > > +{
-> > > +     return (pud_val(pud) & _PAGE_CHG_MASK);
-> > > +}
-> > > +
-> > > +static inline unsigned long _chg_of_pte(pte_t pte)
-> > > +{
-> > > +     return (pte_val(pte) & _PAGE_CHG_MASK);
-> > > +}
-> > > +
-> > >  static inline pmd_t *pud_pgtable(pud_t pud)
-> > >  {
-> > > -     return (pmd_t *)pfn_to_virt(pud_val(pud) >> _PAGE_PFN_SHIFT);
-> > > +     return (pmd_t *)pfn_to_virt(_chg_of_pud(pud) >> _PAGE_PFN_SHIFT);
-> > >  }
-> > >
-> > >  static inline struct page *pud_page(pud_t pud)
-> > >  {
-> > > -     return pfn_to_page(pud_val(pud) >> _PAGE_PFN_SHIFT);
-> > > +     return pfn_to_page(_chg_of_pud(pud) >> _PAGE_PFN_SHIFT);
-> > >  }
-> > >
-> > >  static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
-> > > @@ -76,7 +91,7 @@ static inline pmd_t pfn_pmd(unsigned long pfn, pgprot_t prot)
-> > >
-> > >  static inline unsigned long _pmd_pfn(pmd_t pmd)
-> > >  {
-> > > -     return pmd_val(pmd) >> _PAGE_PFN_SHIFT;
-> > > +     return _chg_of_pmd(pmd) >> _PAGE_PFN_SHIFT;
-> > >  }
-> > >
-> > >  #define mk_pmd(page, prot)    pfn_pmd(page_to_pfn(page), prot)
-> > > diff --git a/arch/riscv/include/asm/pgtable-bits.h b/arch/riscv/include/asm/pgtable-bits.h
-> > > index 2ee413912926..e5b0fce4ddc5 100644
-> > > --- a/arch/riscv/include/asm/pgtable-bits.h
-> > > +++ b/arch/riscv/include/asm/pgtable-bits.h
-> > > @@ -7,7 +7,7 @@
-> > >  #define _ASM_RISCV_PGTABLE_BITS_H
-> > >
-> > >  /*
-> > > - * PTE format:
-> > > + * rv32 PTE format:
-> > >   * | XLEN-1  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> > >   *       PFN      reserved for SW   D   A   G   U   X   W   R   V
-> > >   */
-> > > @@ -24,6 +24,40 @@
-> > >  #define _PAGE_DIRTY     (1 << 7)    /* Set by hardware on any write */
-> > >  #define _PAGE_SOFT      (1 << 8)    /* Reserved for software */
-> > >
-> > > +#if !defined(__ASSEMBLY__) && defined(CONFIG_64BIT)
-> > > +/*
-> > > + * rv64 PTE format:
-> > > + * | 63 | 62 61 | 60 54 | 53  10 | 9             8 | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0
-> > > + *   N      MT     RSV    PFN      reserved for SW   D   A   G   U   X   W   R   V
-> > > + * [62:61] Memory Type definitions:
-> > > + *  00 - PMA    Normal Cacheable, No change to implied PMA memory type
-> > > + *  01 - NC     Non-cacheable, idempotent, weakly-ordered Main Memory
-> > > + *  10 - IO     Non-cacheable, non-idempotent, strongly-ordered I/O memory
-> > > + *  11 - Rsvd   Reserved for future standard use
-> > > + */
-> > > +#define _SVPBMT_PMA          0UL
-> > > +#define _SVPBMT_NC           (1UL << 61)
-> > > +#define _SVPBMT_IO           (1UL << 62)
-> > > +#define _SVPBMT_MASK         (_SVPBMT_NC | _SVPBMT_IO)
-> > > +
-> > > +extern struct __svpbmt_struct {
-> > > +     unsigned long mask;
-> > > +     unsigned long pma;
-> > > +     unsigned long nocache;
-> > > +     unsigned long io;
-> > > +} __svpbmt __cacheline_aligned;
-> > > +
-> > > +#define _PAGE_MASK           __svpbmt.mask
-> > > +#define _PAGE_PMA            __svpbmt.pma
-> > > +#define _PAGE_NOCACHE                __svpbmt.nocache
-> > > +#define _PAGE_IO             __svpbmt.io
-> > > +#else
-> > > +#define _PAGE_MASK           0
-> > > +#define _PAGE_PMA            0
-> > > +#define _PAGE_NOCACHE                0
-> > > +#define _PAGE_IO             0
-> > > +#endif /* !__ASSEMBLY__ && CONFIG_64BIT */
-> > > +
-> > >  #define _PAGE_SPECIAL   _PAGE_SOFT
-> > >  #define _PAGE_TABLE     _PAGE_PRESENT
-> > >
-> > > @@ -38,7 +72,8 @@
-> > >  /* Set of bits to preserve across pte_modify() */
-> > >  #define _PAGE_CHG_MASK  (~(unsigned long)(_PAGE_PRESENT | _PAGE_READ |       \
-> > >                                         _PAGE_WRITE | _PAGE_EXEC |    \
-> > > -                                       _PAGE_USER | _PAGE_GLOBAL))
-> > > +                                       _PAGE_USER | _PAGE_GLOBAL |   \
-> > > +                                       _PAGE_MASK))
-> > >  /*
-> > >   * when all of R/W/X are zero, the PTE is a pointer to the next level
-> > >   * of the page table; otherwise, it is a leaf PTE.
-> > > diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
-> > > index bf204e7c1f74..0f7a6541015f 100644
-> > > --- a/arch/riscv/include/asm/pgtable.h
-> > > +++ b/arch/riscv/include/asm/pgtable.h
-> > > @@ -138,7 +138,8 @@
-> > >                               | _PAGE_PRESENT \
-> > >                               | _PAGE_ACCESSED \
-> > >                               | _PAGE_DIRTY \
-> > > -                             | _PAGE_GLOBAL)
-> > > +                             | _PAGE_GLOBAL \
-> > > +                             | _PAGE_PMA)
-> > >
-> > >  #define PAGE_KERNEL          __pgprot(_PAGE_KERNEL)
-> > >  #define PAGE_KERNEL_READ     __pgprot(_PAGE_KERNEL & ~_PAGE_WRITE)
-> > > @@ -148,11 +149,9 @@
-> > >
-> > >  #define PAGE_TABLE           __pgprot(_PAGE_TABLE)
-> > >
-> > > -/*
-> > > - * The RISC-V ISA doesn't yet specify how to query or modify PMAs, so we can't
-> > > - * change the properties of memory regions.
-> > > - */
-> > > -#define _PAGE_IOREMAP _PAGE_KERNEL
-> > > +#define _PAGE_IOREMAP        ((_PAGE_KERNEL & ~_PAGE_MASK) | _PAGE_IO)
-> > > +
-> > > +#define PAGE_IOREMAP         __pgprot(_PAGE_IOREMAP)
-> > >
-> > >  extern pgd_t swapper_pg_dir[];
-> > >
-> > > @@ -232,12 +231,12 @@ static inline unsigned long _pgd_pfn(pgd_t pgd)
-> > >
-> > >  static inline struct page *pmd_page(pmd_t pmd)
-> > >  {
-> > > -     return pfn_to_page(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
-> > > +     return pfn_to_page(_chg_of_pmd(pmd) >> _PAGE_PFN_SHIFT);
-> > >  }
-> > >
-> > >  static inline unsigned long pmd_page_vaddr(pmd_t pmd)
-> > >  {
-> > > -     return (unsigned long)pfn_to_virt(pmd_val(pmd) >> _PAGE_PFN_SHIFT);
-> > > +     return (unsigned long)pfn_to_virt(_chg_of_pmd(pmd) >> _PAGE_PFN_SHIFT);
-> > >  }
-> > >
-> > >  static inline pte_t pmd_pte(pmd_t pmd)
-> > > @@ -253,7 +252,7 @@ static inline pte_t pud_pte(pud_t pud)
-> > >  /* Yields the page frame number (PFN) of a page table entry */
-> > >  static inline unsigned long pte_pfn(pte_t pte)
-> > >  {
-> > > -     return (pte_val(pte) >> _PAGE_PFN_SHIFT);
-> > > +     return (_chg_of_pte(pte) >> _PAGE_PFN_SHIFT);
-> > >  }
-> > >
-> > >  #define pte_page(x)     pfn_to_page(pte_pfn(x))
-> > > @@ -492,6 +491,28 @@ static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
-> > >       return ptep_test_and_clear_young(vma, address, ptep);
-> > >  }
-> > >
-> > > +#define pgprot_noncached pgprot_noncached
-> > > +static inline pgprot_t pgprot_noncached(pgprot_t _prot)
-> > > +{
-> > > +     unsigned long prot = pgprot_val(_prot);
-> > > +
-> > > +     prot &= ~_PAGE_MASK;
-> > > +     prot |= _PAGE_IO;
-> > > +
-> > > +     return __pgprot(prot);
-> > > +}
-> > > +
-> > > +#define pgprot_writecombine pgprot_writecombine
-> > > +static inline pgprot_t pgprot_writecombine(pgprot_t _prot)
-> > > +{
-> > > +     unsigned long prot = pgprot_val(_prot);
-> > > +
-> > > +     prot &= ~_PAGE_MASK;
-> > > +     prot |= _PAGE_NOCACHE;
-> > > +
-> > > +     return __pgprot(prot);
-> > > +}
-> > > +
-> > >  /*
-> > >   * THP functions
-> > >   */
-> > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > > index d959d207a40d..fa7480cb8b87 100644
-> > > --- a/arch/riscv/kernel/cpufeature.c
-> > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > @@ -8,6 +8,7 @@
-> > >
-> > >  #include <linux/bitmap.h>
-> > >  #include <linux/of.h>
-> > > +#include <linux/pgtable.h>
-> > >  #include <asm/processor.h>
-> > >  #include <asm/hwcap.h>
-> > >  #include <asm/smp.h>
-> > > @@ -59,6 +60,38 @@ bool __riscv_isa_extension_available(const unsigned long *isa_bitmap, int bit)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(__riscv_isa_extension_available);
-> > >
-> > > +static void __init mmu_supports_svpbmt(void)
-> > > +{
-> > > +#if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
-> >
-> > IIRC, Christoph suggested a CONFIG_RISCV_SVPBMT when reviewing v3. What
-> > about that idea?
->
-> Yes, sorry for missing it, yes, I think we can have something like this
->
-> config ARCH_HAS_RISCV_SVPBMT
-> bool
-> default n
->
-> any platform which needs this support, can just
->
-> select ARCH_HAS_RISCV_SVPBMT
->
-> and which is the best name? ARCH_HAS_RISCV_SVPBMT or just ARCH_HAS_SVPBMT ?
->
-> >
-> > > +     struct device_node *node;
-> > > +     const char *str;
-> > > +
-> > > +     for_each_of_cpu_node(node) {
-> > > +             if (of_property_read_string(node, "mmu-type", &str))
-> > > +                     continue;
-> > > +
-> > > +             if (!strncmp(str + 6, "none", 4))
-> > > +                     continue;
-> > > +
-> > > +             if (of_property_read_string(node, "mmu", &str))
-> > > +                     continue;
-> > > +
-> > > +             if (strncmp(str + 6, "svpmbt", 6))
-> > > +                     continue;
-> > > +     }
-> > > +
-> > > +     __svpbmt.pma            = _SVPBMT_PMA;
-> > > +     __svpbmt.nocache        = _SVPBMT_NC;
-> > > +     __svpbmt.io             = _SVPBMT_IO;
-> > > +     __svpbmt.mask           = _SVPBMT_MASK;
-> > > +#endif
-> > > +}
-> > > +
-> > > +static void __init mmu_supports(void)
-> >
-> > can we remove this function currently? Instead, directly call
-> > mmu_supports_svpbmt()?
-> >
-> > > +{
-> > > +     mmu_supports_svpbmt();
-> > > +}
-> > > +
-> > >  void __init riscv_fill_hwcap(void)
-> > >  {
-> > >       struct device_node *node;
-> > > @@ -67,6 +100,8 @@ void __init riscv_fill_hwcap(void)
-> > >       size_t i, j, isa_len;
-> > >       static unsigned long isa2hwcap[256] = {0};
-> > >
-> > > +     mmu_supports();
-> > > +
-> > >       isa2hwcap['i'] = isa2hwcap['I'] = COMPAT_HWCAP_ISA_I;
-> > >       isa2hwcap['m'] = isa2hwcap['M'] = COMPAT_HWCAP_ISA_M;
-> > >       isa2hwcap['a'] = isa2hwcap['A'] = COMPAT_HWCAP_ISA_A;
-> > > diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> > > index 24b2b8044602..e4e658165ee1 100644
-> > > --- a/arch/riscv/mm/init.c
-> > > +++ b/arch/riscv/mm/init.c
-> > > @@ -854,3 +854,8 @@ int __meminit vmemmap_populate(unsigned long start, unsigned long end, int node,
-> > >       return vmemmap_populate_basepages(start, end, node, NULL);
-> > >  }
-> > >  #endif
-> > > +
-> > > +#if defined(CONFIG_64BIT)
-> > > +struct __svpbmt_struct __svpbmt __ro_after_init;
-> >
-> > Added the structure for all RV64 including NOMMU case and those platforms
-> > which doen't want SVPBMT at all, I believe Christoph's CONFIG_RISCV_SVPBMT
-> > suggestion can solve this problem.
->
-> see ARCH_HAS_RISCV_SVPBMT above . :-)
+When Samsung PCIe Gen4 NVMe is connected to Intel ADL VMD, the
+combination causes AER message flood and drags the system performance
+down.
 
-This config option will not align with the goal of having a unified
-kernel image which works on HW with/without Svpmbt.
+The issue doesn't happen when VMD mode is disabled in BIOS, since AER
+isn't enabled by acpi_pci_root_create() . When VMD mode is enabled, AER
+is enabled regardless of _OSC:
+[    0.410076] acpi PNP0A08:00: _OSC: platform does not support [AER]
+...
+[    1.486704] pcieport 10000:e0:06.0: AER: enabled with IRQ 146
 
-Better to explore code patching approaches which have zero
-overhead.
+Since VMD is an aperture to regular PCIe root ports, honor ACPI _OSC to
+disable PCIe features accordingly to resolve the issue.
 
-Regards,
-Anup
+Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215027
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+---
+ drivers/pci/controller/vmd.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
->
-> >
-> > > +EXPORT_SYMBOL(__svpbmt);
-> > > +#endif
-> >
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
+index a45e8e59d3d48..8298862417e84 100644
+--- a/drivers/pci/controller/vmd.c
++++ b/drivers/pci/controller/vmd.c
+@@ -670,7 +670,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ 	LIST_HEAD(resources);
+ 	resource_size_t offset[2] = {0};
+ 	resource_size_t membar2_offset = 0x2000;
+-	struct pci_bus *child;
++	struct pci_bus *child, *bus;
++	struct pci_host_bridge *root_bridge, *vmd_bridge;
+ 	int ret;
+ 
+ 	/*
+@@ -798,6 +799,21 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
+ 		return -ENODEV;
+ 	}
+ 
++	vmd_bridge = to_pci_host_bridge(vmd->bus->bridge);
++
++	bus = vmd->dev->bus;
++	while (bus->parent)
++		bus = bus->parent;
++
++	root_bridge = to_pci_host_bridge(bus->bridge);
++
++	vmd_bridge->native_pcie_hotplug = root_bridge->native_pcie_hotplug;
++	vmd_bridge->native_shpc_hotplug = root_bridge->native_shpc_hotplug;
++	vmd_bridge->native_aer = root_bridge->native_aer;
++	vmd_bridge->native_pme = root_bridge->native_pme;
++	vmd_bridge->native_ltr = root_bridge->native_ltr;
++	vmd_bridge->native_dpc = root_bridge->native_dpc;
++
+ 	vmd_attach_resources(vmd);
+ 	if (vmd->irq_domain)
+ 		dev_set_msi_domain(&vmd->bus->dev, vmd->irq_domain);
+-- 
+2.32.0
+

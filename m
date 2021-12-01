@@ -2,132 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF35464540
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3274464542
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:09:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346380AbhLADL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:11:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
+        id S1346401AbhLADMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346357AbhLADLz (ORCPT
+        with ESMTP id S1346357AbhLADMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:11:55 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEBDC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:08:34 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id o14so16562313plg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:08:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=g/5TnmO0gT6CKLi6q8niA4Xjnk2B+JAa0dgcq+oWmgE=;
-        b=sz8OfTfEdVypCCUplqFm68nLLrB713ifamjo9FNgw6fxytJB7suIkv97dVHhFtHvIp
-         r6xFOTe4ZOtSS6J0BMNf6RUu1F9nxEFmEkOKMeCch/lUeka+ZiZQ94fK7jCzhehNKebD
-         ziGr/lC86orMOySYprMqDlPfD+mdiOcfY1SjLYh599iN7kbsQhMOdf6Y7+zFQIzXU2jg
-         wbdDB+yuWURoVlOjBXma2j4fnxAsm3Za+OU4j8Qz7+WkaPSh8MMq4zGkvx6QgzT0lreJ
-         y23v9KJ76HIwXxCySpNCdkf7NnZ+WMR7ZPgAzissxHyl2iU1M+h98WahNHybCIgmNG5B
-         pPqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=g/5TnmO0gT6CKLi6q8niA4Xjnk2B+JAa0dgcq+oWmgE=;
-        b=XWcGoAGurAosuIoSVdtjoAReqpdXby9jMzqzlVdp2bv/5SbWjiBhej33ML/jAmWRW2
-         UTc0P/qzDleiwYt6IpMSddy6lDuzxYhT9lzQTPdrxw2PhQ7xiZE2KUfNBTNNW/j//PUF
-         ZQO7YqRpa1cBWpMPq9VUbau6u91yvyvzL14myoHCyLBnTYV8pf6reC/SvM3o/6gpC4t3
-         +nqIrj6m28q6tXZMYsIKNUbzMs75V876BqG616slxhrj+Nm7jWo1F0oUi6/dGs7EAboO
-         WIgoIzuRSOIF4ZjtCOL82mZBnN/NfaML3HlM8UIRJHvhYvDlu/lPulyP32KORn+7oMd4
-         eXYQ==
-X-Gm-Message-State: AOAM533bPxZ2MKCUazBNyrWY62l5b/bbOQHH5Vf0KdvrJgEIs3Xn7ObU
-        Dvdyciik85PD8q/LtsmOA/bRvA==
-X-Google-Smtp-Source: ABdhPJygWMG8G7zSDce5b011s1X4Xdp56pbQ1mwLc1IlSvA0PgBz9ATqm9E4pHlqKImvPGB6/ds8zA==
-X-Received: by 2002:a17:90b:3908:: with SMTP id ob8mr3988513pjb.57.1638328114039;
-        Tue, 30 Nov 2021 19:08:34 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id b15sm23525916pfl.118.2021.11.30.19.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 19:08:33 -0800 (PST)
-Date:   Wed, 1 Dec 2021 03:08:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 27/29] KVM: Optimize overlapping memslots check
-Message-ID: <YabnLaz3QBbsxLl0@google.com>
-References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
- <9698a99ccd1938a36dd0c7399262f888dcdf01ac.1638304316.git.maciej.szmigiero@oracle.com>
+        Tue, 30 Nov 2021 22:12:37 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD801C061574;
+        Tue, 30 Nov 2021 19:09:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=8Y/Yf1DFpXZ40Q8rAYKo+hnEhIQdPQLV0bx1iRLRFLc=; b=F0LCgZGB1f7DpUjH25+8gVSMmU
+        Hf2KWDLiLXV1tL9G0mL/dpsYnOOqwpB6qMM14uxqFNekVI/FLjXxYqAXUP5eAGDdeUES/p7G6+btR
+        z1gO/FAF0Fuv6W4DVQ9zocr9tDndDfRrF7GaVpp7FkXoRRYFTszYgtp1WPtKNQD9eMbfDefDebg+/
+        rOdQuaEGMmBYM4MtZYvUl+f0pU205LluHLvriwvb3gG3ymW8Z51/zYQzwL2dGYEeIulT2A09y38OA
+        lSZqhiBRUMk/u2kPbdnTR/xl2IaS8tFfT8p96+M5xjRf0MEZkwUrUfoCMMJsJbpSkjVASjj8w4r4c
+        H8M1ln0g==;
+Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1msFzg-007MLx-K5; Wed, 01 Dec 2021 03:09:16 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Palmer Dabbelt <palmerdabbelt@google.com>,
+        Yash Shah <yash.shah@sifive.com>, linux-edac@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>
+Subject: [PATCH] EDAC/sifive: fix non-kernel-doc comment
+Date:   Tue, 30 Nov 2021 19:09:13 -0800
+Message-Id: <20211201030913.10283-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9698a99ccd1938a36dd0c7399262f888dcdf01ac.1638304316.git.maciej.szmigiero@oracle.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> Do a quick lookup for possibly overlapping gfns when creating or moving
-> a memslot instead of performing a linear scan of the whole memslot set.
-> 
-> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> [sean: tweaked params to avoid churn in future cleanup]
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  virt/kvm/kvm_main.c | 35 +++++++++++++++++++++--------------
->  1 file changed, 21 insertions(+), 14 deletions(-)
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 086f18969bc3..52117f65bc5b 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1817,6 +1817,18 @@ static int kvm_set_memslot(struct kvm *kvm,
->  	return 0;
->  }
->  
-> +static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
-> +				      gfn_t start, gfn_t end)
-> +{
-> +	struct kvm_memslot_iter iter;
-> +
-> +	kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end)
+scripts/kernel-doc complains about a comment that begins with "/**"
+but is not in kernel-doc format, so correct it.
 
-The for loop needs curly braces, per coding-style.rst:
+Prevents this warning:
 
-Also, use braces when a loop contains more than a single simple statement:
+drivers/edac/sifive_edac.c:23: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * EDAC error callback
 
-.. code-block:: c
+Fixes: 91abaeaaff35 ("EDAC/sifive: Add EDAC platform driver for SiFive SoCs")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: Palmer Dabbelt <palmerdabbelt@google.com>
+Cc: Yash Shah <yash.shah@sifive.com>
+Cc: linux-edac@vger.kernel.org
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Tony Luck <tony.luck@intel.com>
+---
+ drivers/edac/sifive_edac.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-        while (condition) {
-                if (test)
-                        do_something();
-        }
-
-With that,
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+--- linux-next-20211130.orig/drivers/edac/sifive_edac.c
++++ linux-next-20211130/drivers/edac/sifive_edac.c
+@@ -19,7 +19,7 @@ struct sifive_edac_priv {
+ 	struct edac_device_ctl_info *dci;
+ };
+ 
+-/**
++/*
+  * EDAC error callback
+  *
+  * @event: non-zero if unrecoverable.

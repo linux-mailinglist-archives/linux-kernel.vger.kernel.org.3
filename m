@@ -2,183 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E67465252
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 787BF46524A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351320AbhLAQGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:06:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S1351285AbhLAQG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:06:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbhLAQG0 (ORCPT
+        with ESMTP id S231144AbhLAQGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:06:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E21C061574;
+        Wed, 1 Dec 2021 11:06:25 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB6F2C061748;
         Wed,  1 Dec 2021 08:03:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 83D51CE1F9D;
-        Wed,  1 Dec 2021 16:03:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 614E8C53FAD;
-        Wed,  1 Dec 2021 16:02:59 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="caygapzK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1638374574;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jrQW1Ely4/h7sdqog63OvLrVR5CU4XIcDh4k7AzyitM=;
-        b=caygapzKMF2crhxdniY8JBztPaOyeNdUyzPc2rQCK4nXv7FLhKxBD8sIgH6nwCwa3NfxwJ
-        szjj2K93w52W64ylCKwMst8IyT5CHSZTH4STl/Uxs38MM0/XgQsc4WNP2oj3BCIX0u+bOf
-        7jBFBxN28TmpEYfHfZCZwWn4w46vv58=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 556139f9 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Wed, 1 Dec 2021 16:02:54 +0000 (UTC)
-Received: by mail-yb1-f177.google.com with SMTP id y68so64888748ybe.1;
-        Wed, 01 Dec 2021 08:02:54 -0800 (PST)
-X-Gm-Message-State: AOAM530S43CBu/bioC0WGfYbUR3jOFf9WQLRNDgkQciMEQRekSZ9wRsk
-        KYJ8xcd6Rh+tiYZDEUnxcukrImPSZNPH2JIWoJw=
-X-Google-Smtp-Source: ABdhPJwv0iqr6pRuHAQ9lWIf29SaadZRhdHa+fhNagQmLZwlE/EieNlFkp7LPf6JaQxZsAWYG37MceqIo/8VOMgxI6w=
-X-Received: by 2002:a25:a427:: with SMTP id f36mr8389055ybi.245.1638374569471;
- Wed, 01 Dec 2021 08:02:49 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id gb13-20020a17090b060d00b001a674e2c4a8so1985980pjb.4;
+        Wed, 01 Dec 2021 08:03:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rlwCB8WctxDfzc6GjE9sqD8LeMvFTR6Cy4YHzp8XozM=;
+        b=g65nlico0J7bcL2aCYAvGlzhTnCKVbRduh36LX8XvjEFFN6wHfS2L0u8BDmelEHEXY
+         Wv2DKXAKifhTQ2TpjjT56A67ntJ/hLaAeFO4OjbN4Ti7m1iEE1qu9F65fiYof7/4PEPV
+         ZCP/wMs4XoUk93Q/OO68b2EbvB6PER51u6kuhgNSK6ZzO9ZORgPO6UIUg5xjG8sFLdGd
+         ls4FlMeHyYU9uABxxpZWR+w8CK7IGHVPGRX+JHnBOypkPhIhIwhSSMvJYvCaN/oA8IVr
+         9XQqbYS4GRZB8sJJVE4lMBsN5HiN6zBTtQSYbnnf3R6OllAQ6RujK5AFIFhuwjrdXs5b
+         YyRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=rlwCB8WctxDfzc6GjE9sqD8LeMvFTR6Cy4YHzp8XozM=;
+        b=fqxa5CQqKOb7q61+/d4GAu86b+/Qugy6aURxejSFEaafWpd4fFRgwVxYeHGrHOE+x4
+         SvdIrYq/W7nFn8+Vfu76FEkOkMCe+3HnldHHOHVbUO0vmjS3p17rSOSX5Eo6v3K+OiWq
+         a/vjg3GF5qnaJ76rsPTMvDuVPYeY4lgLxe05w16OdTkCKwNK+zkjpItuJpRCigWFi056
+         /tUPRsJ/xkADUv87HBAMkySJ1GJzgpDEX2mpJsHsOs9QB/S9HuMRBXDc/lBBASC9V+WN
+         Bbi70q+FAaoYqy0DycsqRuB8AGQeiIeMCkyeVICxBpROlyV+cF8ZfNXUrAp4226p1Brf
+         cbOA==
+X-Gm-Message-State: AOAM530/HsjRYcJMMap3abBmCwTjD1xGYuG1wckHBkHG9YljnFjYYVO2
+        pPNo1k4iWU4z9xdrN76bC1M=
+X-Google-Smtp-Source: ABdhPJzx8p2vypCygtN2v0ahrkMP7/JwVPIEscHdxdl4qbo3ST4qz0+r/UT4/nSDoAKM/Jt7Mpx/+Q==
+X-Received: by 2002:a17:902:748c:b0:141:c45e:c612 with SMTP id h12-20020a170902748c00b00141c45ec612mr8329728pll.73.1638374584178;
+        Wed, 01 Dec 2021 08:03:04 -0800 (PST)
+Received: from ubuntu-Virtual-Machine.corp.microsoft.com ([2001:4898:80e8:f:7fe9:3f1e:749e:5d26])
+        by smtp.gmail.com with ESMTPSA id i193sm260316pfe.87.2021.12.01.08.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 08:03:03 -0800 (PST)
+From:   Tianyu Lan <ltykernel@gmail.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, jgross@suse.com,
+        sstabellini@kernel.org, boris.ostrovsky@oracle.com,
+        joro@8bytes.org, will@kernel.org, davem@davemloft.net,
+        kuba@kernel.org, jejb@linux.ibm.com, martin.petersen@oracle.com,
+        arnd@arndb.de, hch@infradead.org, m.szyprowski@samsung.com,
+        robin.murphy@arm.com, Tianyu.Lan@microsoft.com,
+        thomas.lendacky@amd.com, xen-devel@lists.xenproject.org,
+        michael.h.kelley@microsoft.com
+Cc:     iommu@lists.linux-foundation.org, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org, netdev@vger.kernel.org,
+        vkuznets@redhat.com, brijesh.singh@amd.com, konrad.wilk@oracle.com,
+        hch@lst.de, parri.andrea@gmail.com, dave.hansen@intel.com
+Subject: [PATCH V3 0/5] x86/Hyper-V: Add Hyper-V Isolation VM support(Second part)
+Date:   Wed,  1 Dec 2021 11:02:51 -0500
+Message-Id: <20211201160257.1003912-1-ltykernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <2036923.9o76ZdvQCi@positron.chronox.de> <22137816.pfsBpAd9cS@tauon.chronox.de>
- <YaEJtv4A6SoDFYjc@kroah.com> <9311513.S0ZZtNTvxh@tauon.chronox.de>
- <YaT+9MueQIa5p8xr@kroah.com> <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
- <YaYvYdnSaAvS8MAk@kroah.com> <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
- <YaZHKHjomEivul6U@kroah.com> <YaZqVxI1C8RByq+w@gmail.com> <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
- <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
-In-Reply-To: <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 1 Dec 2021 11:02:38 -0500
-X-Gmail-Original-Message-ID: <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
-Message-ID: <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-To:     Simo Sorce <simo@redhat.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jeffrey Walton <noloader@gmail.com>,
-        Stephan Mueller <smueller@chronox.de>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        John Haxby <john.haxby@oracle.com>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simo,
+From: Tianyu Lan <Tianyu.Lan@microsoft.com>
 
-I think various folks have said this during the various discussions on this
-topic over the years, in addition to myself, but I suppose I'll reiterate my
-general views on FIPS in this context.
+Hyper-V provides two kinds of Isolation VMs. VBS(Virtualization-based
+security) and AMD SEV-SNP unenlightened Isolation VMs. This patchset
+is to add support for these Isolation VM support in Linux.
 
-FIPS is about compliance and certification. From a cryptographic point of
-view, there might be some good ideas, some dated ideas, some superfluous but
-harmless ideas, and so forth. But the reason that you want it for your
-customers is because you think your product will become more valuable or
-useful to customers if it checks that green compliance checkbox. I don't think
-we disagree about this being the motivation.
+The memory of these vms are encrypted and host can't access guest
+memory directly. Hyper-V provides new host visibility hvcall and
+the guest needs to call new hvcall to mark memory visible to host
+before sharing memory with host. For security, all network/storage
+stack memory should not be shared with host and so there is bounce
+buffer requests.
 
-Now typically the kernel interoperates with lots of things and implements many
-different specifications. It supports scores of network protocols, IPsec
-cipher suites, USB quirks, SCSI hacks, you name it. The implementation of
-these drivers is always up to the author and hopefully kernel developers at
-large do the best job they can with the implementation, but the hardware or
-protocol they're interfacing with is not up to the author, by virtue of it
-being external to the kernel. It's not like instantiating IPsec with single
-DES and MD4, or SM3 and SM4, etc. is so great, and it's not like the
-compendium of brilliant hacks in drivers/usb/host/pci-quirks.c is so great
-either. But these things all exist to talk to something *outside* of the
-kernel, and so we grit our teeth, and as I said, do the best we can to
-implement it well.
+Vmbus channel ring buffer already plays bounce buffer role because
+all data from/to host needs to copy from/to between the ring buffer
+and IO stack memory. So mark vmbus channel ring buffer visible.
 
-But the RNG isn't like that. In fact, the RNG is logically *required* to be
-not anything like that: it returns random bytes, and they must not have any
-distinguishing quality with other random bytes; otherwise we have a serious
-problem that needs fixing. And so, we carry things out according to the usual
-kernel developer mindset: we implement it as best as we can, using the best
-algorithms we can find, in a way most suitable for the kernel.
+For SNP isolation VM, guest needs to access the shared memory via
+extra address space which is specified by Hyper-V CPUID HYPERV_CPUID_
+ISOLATION_CONFIG. The access physical address of the shared memory
+should be bounce buffer memory GPA plus with shared_gpa_boundary
+reported by CPUID.
 
-Then FIPS comes along and starts dictating things about *how* we implement it,
-and those things it dictates might not be exactly the same as what we would
-would be doing when doing best that we can, using the best algorithms we can
-find, and in the most suitable way for the kernel. And so it would seem that
-the goal of implementing the RNG as best as we can might potentially be at
-odds with the goal of getting that green compliance checkbox, because that
-checkbox oversteps its bounds a bit.
+This patchset is to enable swiotlb bounce buffer for netvsc/storvsc
+in Isolation VM.
 
-That's not to say, of course, that we shouldn't accept input on how we
-implement our algorithms from elsewhere. On the contrary, I think random.c has
-a *lot* to gain from incorporating newer ideas, and that the formalism and
-guidance from academic cryptographers is less "academic" than it once was and
-much more real world, implementable, and suitable for our uses. But, again,
-incorporating new ideas and accepting input on how to improve our code is very
-much not the same thing as following the FIPS laundry list for that green
-compliance checkbox. Maybe some parts do overlap -- and I'd love patches that
-improve the code alongside compelling cryptographic arguments -- but, again,
-we're talking about compliance here, and not a more welcome, "hey check out
-this document I found with a bunch of great ideas we should implement."
+This version follows Michael Kelley suggestion in the following link.
+https://lkml.org/lkml/2021/11/24/2044
 
-I would like the kernel to have an excellent CSPRNG, from a cryptographic
-point of view, from a performance point of view, from an API point of view. I
-think these motivations are consistent with how the kernel is generally
-developed. And I think front loading the motivations with an external
-compliance goal greatly deviates and even detracts from the way the kernel is
-generally developed.
+Change since v2:
+     * Remove Hyper-V dma ops and dma_alloc/free_noncontiguous. Add
+       hv_map/unmap_memory() to map/umap netvsc rx/tx ring into extra
+       address space.
+     * Leave mem->vaddr in swiotlb code with phys_to_virt(mem->start)
+       when fail to remap swiotlb memory.
 
-Now the above is somewhat negative on FIPS, but the question can still be
-posed: does FIPS have a path forward in the RNG in the kernel? It's obviously
-not a resounding "yes", but I don't think it's a totally certain "no" either.
-It might be possible to find some wiggle room. I'm not saying that it is
-certainly possible to do that, but it might be.
+Change since v1:
+     * Add Hyper-V Isolation support check in the cc_platform_has()
+       and return true for guest memory encrypt attr.
+     * Remove hv isolation check in the sev_setup_arch()
 
-Specifically, I think that if you change your perspective from, "how can we
-change the algorithms of the RNG to be FIPS" to "how can we bend FIPS within
-its limits so that having what customers want would minimally impact the
-quality of the RNG implementation or introduce undue maintenance burdens."
-This means: not refactoring the RNG into some large abstraction layer that's
-pluggable and supports multiple different implementations, not rewriting the
-world in a massive patchset, not adding clutter. Instead, perhaps there's a
-very, very minimal set of things that can be done that would be considerably
-less controversial. That will probably require from you and other FIPS
-enthusiasts some study and discussion at what the truly most minimal set of
-things required are to get you that green compliance checkbox. And hey --
-maybe it's still way too much and it doesn't work out here. But maybe it's not
-that much, or, as Greg suggested, maybe it winds up that your needs are
-actually satisfied just fine by something in userspace or userspace-adjacent.
+Tianyu Lan (5):
+  Swiotlb: Add Swiotlb bounce buffer remap function for HV IVM
+  x86/hyper-v: Add hyperv Isolation VM check in the cc_platform_has()
+  hyperv/IOMMU: Enable swiotlb bounce buffer for Isolation VM
+  scsi: storvsc: Add Isolation VM support for storvsc driver
+  hv_netvsc: Add Isolation VM support for netvsc driver
 
-So I don't know whether the FIPS has a path forward here, but if it does, I
-think the above is the general shape it would take. And in the mean time, I'm
-of course open to reviewing patches that improve the RNG in a cryptographic or
-algorithmic sense, rather than a purely compliance one.
+ arch/x86/hyperv/ivm.c             |  28 ++++++
+ arch/x86/kernel/cc_platform.c     |  15 ++++
+ arch/x86/xen/pci-swiotlb-xen.c    |   3 +-
+ drivers/hv/hv_common.c            |  11 +++
+ drivers/hv/vmbus_drv.c            |   4 +
+ drivers/iommu/hyperv-iommu.c      |  56 ++++++++++++
+ drivers/net/hyperv/hyperv_net.h   |   5 ++
+ drivers/net/hyperv/netvsc.c       | 136 +++++++++++++++++++++++++++++-
+ drivers/net/hyperv/netvsc_drv.c   |   1 +
+ drivers/net/hyperv/rndis_filter.c |   2 +
+ drivers/scsi/storvsc_drv.c        |  37 ++++----
+ include/asm-generic/mshyperv.h    |   2 +
+ include/linux/hyperv.h            |  14 +++
+ include/linux/swiotlb.h           |   6 ++
+ kernel/dma/swiotlb.c              |  47 +++++++++--
+ 15 files changed, 342 insertions(+), 25 deletions(-)
 
-Hopefully that helps you understand more about where we're coming from.
+-- 
+2.25.1
 
-Regards,
-Jason

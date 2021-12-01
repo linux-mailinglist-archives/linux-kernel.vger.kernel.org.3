@@ -2,122 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BE56C4645FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 05:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AF54645FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 05:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346581AbhLAEgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 23:36:17 -0500
-Received: from mout.gmx.net ([212.227.17.20]:57965 "EHLO mout.gmx.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S230301AbhLAEgQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 23:36:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1638333153;
-        bh=AKqwOapI/P1+DWQeKxnW+oEXUCmtI8Mg9I4HQaXQU7Y=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=UqkvJd2ahQIAuyl9j1YzgMG50sqR/5OpomlZmypMwqGiTP85NDvoqaNiUiBXWvMcP
-         oOxyFJEodjklEnh1Tgmq10Z9aT9tc1LZty2e/w+RPyobq6RF6StEhz1pJuxeSE8RpQ
-         43zKm1jPIRLT7y3elFCvFlUel/o2H98g3R4Zv1H4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from homer.fritz.box ([185.221.151.67]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MzQgC-1mer331C6q-00vNDD; Wed, 01
- Dec 2021 05:32:33 +0100
-Message-ID: <b76e36115d202d5cb30dc29496bf5ecddc185fe8.camel@gmx.de>
-Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-From:   Mike Galbraith <efault@gmx.de>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Alexey Avramov <hakavlad@inbox.lv>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Wed, 01 Dec 2021 05:32:31 +0100
-In-Reply-To: <20211130130935.GR3366@techsingularity.net>
-References: <20211125151853.8540-1-mgorman@techsingularity.net>
-         <20211127011246.7a8ac7b8@mail.inbox.lv>
-         <20211129150117.GO3366@techsingularity.net>
-         <a20f17c4b1b5fdfade3f48375d148e97bd162dd6.camel@gmx.de>
-         <20211130112244.GQ3366@techsingularity.net>
-         <b8f607c771a4f698fcb651379ca30d3bb6a83ccd.camel@gmx.de>
-         <b966ccc578ac60d3684cff0c88c1b9046b408ea3.camel@gmx.de>
-         <20211130130935.GR3366@techsingularity.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.1 
+        id S241954AbhLAEgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 23:36:13 -0500
+Received: from lelv0143.ext.ti.com ([198.47.23.248]:35140 "EHLO
+        lelv0143.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230301AbhLAEgM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 23:36:12 -0500
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 1B14WeWP115419;
+        Tue, 30 Nov 2021 22:32:40 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1638333160;
+        bh=rZPqJytt32wU6cmUQOi71craqET7VqU3GbUSl7qQQyA=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=YJKaB21+Jcr+EUnnOKEwM2H59V3+3uiPme/eAIy1El3FEObw1WYl4flXBp7g/T7Mb
+         KhzuJXA3YAfqyL+fRaSuTU+XPVb1aijRBVuCxsY3D1MF9U0ydscrhKTdFet14OTXf7
+         ZXcO4Qhl6bDI2WHdOkSpfn3L9pVggi8p74FLoqEE=
+Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 1B14WeML087916
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 Nov 2021 22:32:40 -0600
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 30
+ Nov 2021 22:32:39 -0600
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Tue, 30 Nov 2021 22:32:39 -0600
+Received: from [10.250.232.185] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 1B14WbKE119719;
+        Tue, 30 Nov 2021 22:32:37 -0600
+Subject: Re: [PATCH 1/2] dt-bindings: mux: Document mux-states property
+To:     Peter Rosin <peda@axentia.se>, Rob Herring <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+References: <20211130121847.11112-1-a-govindraju@ti.com>
+ <20211130121847.11112-2-a-govindraju@ti.com>
+ <YaaGMtE6n0yZNpAI@robh.at.kernel.org>
+ <6e1474bc-038c-43ec-4814-63ad3eca888c@axentia.se>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+Message-ID: <247912b5-e68a-1e97-60c7-0ba21448d3b4@ti.com>
+Date:   Wed, 1 Dec 2021 10:02:36 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:P3WByZj5IDN7qpCbMRUdgA/WTK8GizMAVsIN61yMDHaJW9Aq2Vz
- VhFrMz9er39O0JZqazAdxSygFPMsoyMR3PTvUx9VypiXulAqCVgzb9J7H7Htx8D1Etg3sLa
- bK3XbFZHps/IPIfH7yrllKNJF60EYe1nKInrlk3smXjFEiVCJ7yTDaoHjFHEEOBxIOkJoUn
- a1Eaa8x/hEaL9TpLNKabQ==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:chVfPrHgdZ4=:MJ0T8ADoYCth8LEO+meIi+
- ZN8JysXyiMCqpzeOVqZYC6dfK0v4Y891gd6DUwgcTwx0olADHGZALa8eEmEi95fON0vt+yjQ3
- LSq6PhdpcMCKIvhunYKWk4e7Fy1KmPGXrQ40FlqoiAHXT+udHMTRjSqciLG5mwcONHRJ4VKO7
- EIZfB63BSWr2LK8YpEWQ8VHRenUBhmMGg+nuVUsrys4qBBqFZGnCofltdmacE869mX6QSElnn
- 7XalJKsfY7MK0f+ySzPfiJ04PFDQT3IRnIS2qsauYYOo2Hf7YemUQFrRc9sfHtKsX/cWrQvZh
- Y3U+iHBl05NThO93Ey2JeNJNkYnH/pNv/7K0ADDPr0eG1+2bmliwKEvda6eUL/uDj1HNcwm8W
- CbwVE4j/DBEX0bpfcVAS10TDpL6g3BN2Mn5trwne16XRjL81fPp7M67mp+SdZ/9NcuKJU7wMA
- +O1jKm8X+Tjb21uz9Jgp/586nnYQrCmLpy6Dckuqruda/j1oEWYOUysRs1pGxR5YX09SL38Q8
- vprLFMCvlpHcIpd1MdTCgC6/8oDwzFEokbzgubfphTKq2/QjPMD1i4C6IqVk3QqD6zme7eCLu
- JVOZEv8aIopvtBnpB9EiaWqFE/Pgof6HmuN7To/jowyL9gNBk0nwa/iOL0POhqTmEFb3L6oBO
- 6qcX4UHLYjrzK/W7/WNJaDbeXn6YLUlDrzmQzEENH0nFNlP1H3c35TWGvCL2rxVYZ5mXY0Juf
- Su7p9LUtlZAxB9Hmh/tVzY+7cxbAWDGcaAaUd8XVRVY6FkxBM8FFp1OrKTo4c3EWcrh+FZBQx
- dOOtdj64MLAlrTMngMCyTQlNWqiHWEKk734q98lZdpsxQccVh+w+demR2enRbBEpUEWGqZXeS
- 9jGfp7zV+zNPi6KFhFjGIdgBuYTi9EEXTizId2XOd7CMYYifcyC+4vlwligURhfl+hbGSnm2/
- RZ/f44sIas5T+dR9SItkN3hexqvATpuHAlWffhBVuBRAA+WDJacPekOCgDsnAkiNPKWLEpnKd
- XgX9mBD++xoOneEVMfrBlog7ijKOVRWPUyCh74MHvkYogPLM4jLKZjaekxsXFDpFY8HoGGokU
- aupIRr3fRJdugk=
+In-Reply-To: <6e1474bc-038c-43ec-4814-63ad3eca888c@axentia.se>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-11-30 at 13:09 +0000, Mel Gorman wrote:
-> On Tue, Nov 30, 2021 at 01:51:10PM +0100, Mike Galbraith wrote:
-> > On Tue, 2021-11-30 at 13:00 +0100, Mike Galbraith wrote:
-> > > On Tue, 2021-11-30 at 11:22 +0000, Mel Gorman wrote:
-> > > > On Tue, Nov 30, 2021 at 11:14:32AM +0100, Mike Galbraith wrote:
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (2 * write_pendi=
-ng <=3D reclaimable)
-> > > > >
-> > > > > That is always true here...
-> > > > >
-> > > >
-> > > > Always true for you or always true in general?
-> > >
-> > > "Here" as in the boxen located at my GPS coordinates :)
-> > >
-> > > > The intent of the check is "are a majority of reclaimable pages
-> > > > marked WRITE_PENDING?". It's similar to the check that existed pri=
-or
-> > > > to 132b0d21d21f ("mm/page_alloc: remove the throttling logic from =
-the
-> > > > page allocator").
-> > >
-> > > I'll put my trace_printk() back and see if I can't bend-adjust it.
-> >
-> > As it sits, write_pending is always 0 with tail /dev/zero.
-> >
->
-> That is not a surprise for the test in question as it doesn't trigger
-> a case where there are lots of page cache being marked dirty and write
-> pending.
+Hi Rob,
 
-I found a way to make it go false, around 80% of the time on the way to
-the first oom-kill in fact. Starting 2 memcg stress instances and a
-memory sized bonnie did the trick.  'course getting those started was
-the last thing my desktop did before taking up residence on spinning
-rust and staying there for the 10 minute test duration, mouse pointer
-didn't even manage to twitch :)
+On 01/12/21 2:18 am, Peter Rosin wrote:
+> 
+> 
+> On 2021-11-30 21:14, Rob Herring wrote:
+>> On Tue, Nov 30, 2021 at 05:48:46PM +0530, Aswath Govindraju wrote:
+>>> In some cases, it is required to provide the state to which the mux
+>>> controller has be set to, from the consumer device tree node. Document the
+>>> property mux-states that can be used for adding this support.
+>>
+>> I having a hard time understanding why you need this. One consumer 
+>> configures a mux one way and another consumer another way? How do you 
+>> arbitrate that? Please elaborate on what 'some cases' are and why it's 
+>> required.
+>>
+>> Can't you just add a cell for the 'state' allowing for 1-2 cells 
+>> instead of 0-1?
+> 
+> A mux controller can control several muxes. That happens e.g. when the
+> same gpio lines are connected to several mux chips in parallel. When
+> you operate one mux, the other parallel muxes just follow along. If
+> these muxes are then used orthogonally, coordination is needed. The real
+> world case I had was I2C and an analog signal connected to an ADC that
+> went through parallel/dependent muxes like this. It is simply not
+> possible to freely mux the I2C bus and the analog signal, they are tied
+> together and dependent and must coordinate their accesses.
+> 
+> The addition now is that Aswath wants a mux control client to "point
+> at" a single state instead of the whole mux control, and I see that as
+> a usable addition. It seems like a natural place to specify a single mux
+> state that some driver needs in some circumstance.
+> 
+> But, since a mux control is inherently a shared resource (see above),
+> one consumer might need a specific state and some other consumer might
+> need the whole mux control and manage the states as e.g. the existing
+> i2c-mux-gpmux binding is doing. So, you need to be able to specify both
+> ways to point at muxes; either to a single mux state, or to the whole mux
+> control.
+> 
+> While you could make the extra cell optional, that does not work for
+> the mux/adi,adg792a binding, since it is using the #mux-control-cells
+> property to determine which mode it should operate its three muxes in.
+> Either with one common/parallel mux control, or with three independent
+> mux controls.
+> 
+> So, that binding is already in the 0-1 territory, and adding an optional
+> extra cell makes it 0-1-2 with no way to determine what is intended when
+> the cell count is 1 (three independent mux controls OR one mux control
+> and a state). I see no way to add the extra state to that binding, short
+> of adding an extra property somewhere for that driver, but I simply did
+> not want to go that path because it would get inconsistent when trying
+> to add that in a backwards compatible way. Or rather, that was my
+> conclusion.
+> 
+> Suggestions welcome...
+> 
 
-That's way worse than having box try to swallow /dev/zero, that gets
-killed pretty quickly with your latest patch.  The grim reaper tried to
-help with nutty overcommit, but two kills in 10 minutes wasn't enough.
 
-	-Mike
+In addition to what Peter has mentioned, I would like to elaborate on my
+use case for adding this feature. I am trying to implement this feature
+in the TCAN104x transceiver driver, for selecting the mux state to route
+the signals from CAN controller to transceivers on the board. The state
+of the mux line to be set, can change based on the design and this is
+needs to be provided from the device tree. Hence, I am trying to add
+this support for providing the state to be set to the driver from the
+device tree node.
+
+
+Also, one more question on regarding DT check errors, may I know what
+should be the order in which the patches need to be posted in order to
+not get the error? This is because mux-states would be a new property to
+be added in the TCAN104x bindings and I thought that it would need to be
+posted after the patch for the changes in mux-controller are merged.
+
+Thanks,
+Aswath
+
+> Cheers,
+> Peter
+> 
 

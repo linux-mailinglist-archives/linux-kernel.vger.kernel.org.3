@@ -2,31 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 493E346546A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3177846546E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352042AbhLASAq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:00:46 -0500
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:38948 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351962AbhLAR75 (ORCPT
+        id S1352051AbhLASAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:00:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351970AbhLAR77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:59:57 -0500
+        Wed, 1 Dec 2021 12:59:59 -0500
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F240BC061574;
+        Wed,  1 Dec 2021 09:56:37 -0800 (PST)
 Received: from localhost.localdomain (unknown [IPv6:2a00:c281:1409:4a00:c103:6980:2c3:d021])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: dafna)
-        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 58B021F45E52;
-        Wed,  1 Dec 2021 17:56:33 +0000 (GMT)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 407D11F45E51;
+        Wed,  1 Dec 2021 17:56:35 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638381395; bh=ow44BvauWgN6xeT1ROfRm872Tq++DA6pO8UtnuloLWg=;
+        t=1638381396; bh=drd7pjo9KNm9SXbJqSjRnoiOHd+JUDMpVHIVQiFuY6Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VV91yZYCM+MDhLTArM3PW79WuNNST1jlggwIcmRXhJ204k81QqsahWoF6b072abZ5
-         0LYW3MkN0hcFRAsDhqjnJvO+L9YOQfxrBqPrv3FRXUvjpKEY/hcMQs2h5fM6XhQ7AT
-         /vDQX3Y46sig2EILJiffN9qCSZ/eCB2ThkJ6GcNESbylgRv0Y5VwnmftBGK5qSiv0m
-         mitP7QhSgneVkLWtPJBAIp4O7aoef0rx1ahm4GV2Lfl+4zRyQkr4E0WLHNjQTl8lwz
-         ruIMQDKlYJzC+7qcqaH4F2iuUdX/sGUbKxQNw6Nrs4PoO8BzV6sB2zyffFC3rg/9hU
-         2Dgq/2wBOoNiQ==
+        b=Rs9dTCspvK0yN9odNIzBxH9LzxiAYb8KWZgWm905fImZ9rf4Jbs1OLFmJIUaxGInS
+         8Bh2FuxfkxPGkgJveQFiU1IrpTafTjNwIzEoiQpCrFfhKmk1YpqCTlrIya++0sirPC
+         EnwAxQb44JywZakm2uLDaiNJ4/cLH20ZnKyq3Nd6Imi71ZzdCztxNqsXdROguRKmbM
+         0yL7AN+X7MICrr7L9jUJU7qEH+xevfMrrJQ2fpIivTfIr9cOpwR3LEA71VhipVnWjT
+         FbbPHYM3NyxxxY/WJJcj+vmMwteOTKBbYBo0wcvRZHSrTCUK9327VwK7NmMfIIMG2Y
+         s/zl5pUGAFM7A==
 From:   Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 To:     linux-media@vger.kernel.org
 Cc:     Robert Beckett <bob.beckett@collabora.com>,
@@ -42,9 +45,9 @@ Cc:     Robert Beckett <bob.beckett@collabora.com>,
         lafley.kim@chipsnmedia.com, scott.woo@chipsnmedia.com,
         olivier.crete@collabora.com, dan.carpenter@oracle.com,
         rdunlap@infradead.org, daniel@0x0f.com
-Subject: [PATCH v4 5/6] dt-bindings: media: staging: wave5: add yaml devicetree bindings
-Date:   Wed,  1 Dec 2021 19:56:12 +0200
-Message-Id: <20211201175613.13710-6-dafna.hirschfeld@collabora.com>
+Subject: [PATCH v4 6/6] media: wave5: Add wave5 driver to maintainers file
+Date:   Wed,  1 Dec 2021 19:56:13 +0200
+Message-Id: <20211201175613.13710-7-dafna.hirschfeld@collabora.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211201175613.13710-1-dafna.hirschfeld@collabora.com>
 References: <20211201175613.13710-1-dafna.hirschfeld@collabora.com>
@@ -54,94 +57,35 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Robert Beckett <bob.beckett@collabora.com>
 
-Add bindings for the wave5 chips&media codec driver
+Add the Chips&Media wave5 encoder/decoder driver
+to the maintainers file
 
 Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
 ---
- .../bindings/staging/media/cnm,wave.yaml      | 73 +++++++++++++++++++
- 1 file changed, 73 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/staging/media/cnm,wave.yaml
+ MAINTAINERS | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/staging/media/cnm,wave.yaml b/Documentation/devicetree/bindings/staging/media/cnm,wave.yaml
-new file mode 100644
-index 000000000000..e18978cbba16
---- /dev/null
-+++ b/Documentation/devicetree/bindings/staging/media/cnm,wave.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/staging/media/cnm,wave.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0e6594a4ad8f..5704b8c17f72 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -19962,6 +19962,15 @@ F:	drivers/watchdog/
+ F:	include/linux/watchdog.h
+ F:	include/uapi/linux/watchdog.h
+ 
++WAVE5 VPU CODEC DRIVER
++M:	Nas Chung <nas.chung@chipsnmedia.com>
++M:	Robert Beckett <bob.beckett@collabora.com>
++M:	Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
++L:	linux-media@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/staging/media/cnm,wave.yaml
++F:	drivers/staging/media/wave5/
 +
-+title: Chips&Media Wave 5 Series multi-standard codec IP
-+
-+maintainers:
-+  - Nas Chung <nas.chung@chipsnmedia.com>
-+  - Robert Beckett <bob.beckett@collabora.com>
-+  - Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-+
-+description: |-
-+  The Chips&Media WAVE codec IP is a multi format video encoder/decoder
-+
-+properties:
-+  compatible:
-+    anyOf:
-+      - items:
-+        - enum:
-+            - cnm,cm511-vpu
-+            - cnm,cm517-vpu
-+            - cnm,cm521-vpu
-+            - cnm,cm521c-vpu
-+            - cnm,cm521c-dual-vpu
-+            - cnm,cm521e1-vpu
-+            - cnm,cm537-vpu
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 4
-+
-+  clock-names:
-+    minItems: 1
-+    maxItems: 4
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  power-domains:
-+    maxItems: 1
-+
-+  resets:
-+    maxItems: 1
-+
-+  sram:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle pointing to the SRAM device node
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    vpu: video-codec@12345678 {
-+        compatible = "cnm,cm521-vpu";
-+        reg = <0x12345678 0x1000>;
-+        interrupts = <42>;
-+        clocks = <&clks 42>;
-+        clock-names = "vcodec";
-+        sram = <&sram>;
-+    };
-+
+ WHISKEYCOVE PMIC GPIO DRIVER
+ M:	Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+ L:	linux-gpio@vger.kernel.org
 -- 
 2.17.1
 

@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6C74653A0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:06:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 108234653A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:07:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233404AbhLARJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 12:09:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S1351823AbhLARJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 12:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351698AbhLARIe (ORCPT
+        with ESMTP id S1351707AbhLARIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:08:34 -0500
-Received: from mail-wm1-x349.google.com (mail-wm1-x349.google.com [IPv6:2a00:1450:4864:20::349])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D99C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 09:04:59 -0800 (PST)
-Received: by mail-wm1-x349.google.com with SMTP id 138-20020a1c0090000000b00338bb803204so12579390wma.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 09:04:59 -0800 (PST)
+        Wed, 1 Dec 2021 12:08:35 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EECDC06174A
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 09:05:03 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id c4-20020adfed84000000b00185ca4eba36so4465079wro.21
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 09:05:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=cppIKzBLivpZhTWcdBQA9iBtJc2y/Q/PH/HIg10Qqik=;
-        b=jue7MMjEyJR/NSAOBXbh6RRCgkAT7LIskDpH3d6p1qSg1N6dZmSISrPvzzp3P6S4OX
-         C7Fuy9mt2Oi7OQRJX6Vmn14Sd1ALG7bsYYAHqoQg1jHu8JWsWafrMiwGijIQ4hfFXrX3
-         nFhudB62JkYGJ7ujHx2cvdyxgNJ0Z8nxeLhdSdLRJo4WTk/25O7z/CxGwycteeoLXVsk
-         hqf0RVLMjRKzw4PWvg/3lhj4DDOLvJBijKv5opZgLbYKdpw+eKwrLZuGeHDCTdi6YRzB
-         Ep/X/H0s/L6cBle+o/sHThsBB8nlEnjkfiO3hOKxVCHjDGeUyxnZU/uKQ0XdziEg99xu
-         12oQ==
+        bh=5wiVz7SPfRWryEm8NS78CviZAnf1vSptd9MDigwGN/4=;
+        b=dCzRG28Wf9Hc1Tp8I8w9ve3Vw14cFJY4sy6ylndkDIvYcMBINBhYfEJQuT0z5jDNv1
+         tGtQIA4ScW62n9Y8NpIUEIAJPgcSiROzIIIoCmndHzXPxCyEyLTWbrESkPqQWrUF0K3p
+         9QOXgt39AuSkMUAbxmR0DvTI8l7eczc4wPKt+PgNh5XCms6IJXMamETMAzof/W4pXV0T
+         wnKviJ2j0cYtPfs9cxEqyXVW4TErhwlx3FItlrJ0wzbTGP5qUqcJTqBUJ9hz1JfBV9P4
+         ym+hRGvYhdZTese4GXjjv7hVrbAqdUmjbu/PvO4zHWFnvI9MLZYIxoYlqL/MNIHhDMLB
+         fBTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=cppIKzBLivpZhTWcdBQA9iBtJc2y/Q/PH/HIg10Qqik=;
-        b=H7891OLBBc2NwXyhqBEHPReCo/cZEzprK6scucFlQj/gAt6ADzNTuRWSWbvidG4e1+
-         cuEZXzlpgT70xDIClE3B92pVLdI8s9Tvf9wErIxK6V5OuD2vqJSIIQw+0ZGLIrOWW6QX
-         DkECpuJVqvinbz5Lt/a2E3x3k7fiqmOOZXzjV51UTPj/hrAS0JjVvI0A1X5g1FsN9521
-         suvY4Eb/2u+ML9wvjherLFQUAvN6djMd7Z7yaQy9kSisbIOt8sOcvjkbx0qQVsdxYmfi
-         6IL2bi2Sfr4TBEdffzgY8cPB3mQ2auaDorpztphu2lDd1UdcF9yeVLUMvmxan6kwgH3f
-         jyZQ==
-X-Gm-Message-State: AOAM531ibfq6u7Pl72JISE0vBflapD6oSvjFa3E0cEU/IMYPwx1Em5NQ
-        WFUOOhuU8pEGMOSruEZ1Yp6WAZUrcvIe
-X-Google-Smtp-Source: ABdhPJz2JxagZOtuzHEfphfl/KUPvg8AaYMdPF6mH04O7NOiowXuH0F1OwswHFbG+B3odTGAwzouRDQlOmSe
+        bh=5wiVz7SPfRWryEm8NS78CviZAnf1vSptd9MDigwGN/4=;
+        b=MEDg2GQbtX61ahWvIF18K3jjtZV20SSb3z/2P1D6YCuFY84Ql1vN20M/zh9m8tiqLw
+         aBGtDvp+FQok2qHtKm8XXQoSoRhqfiIrP7/hS2NrJ5JOtVy5pvz+ssspR2vK4AOz44hU
+         Jnh9tu3rQOhcem8AjXYbxk8ZLv6r0rsj5ptmwS2/hF6Nsyfh1p2Bhxw1ImUyR2ZL12j5
+         +D0bra1JI9/v5jtO7l9XwMCMO9FpEpMlEM0Oh7Z6I9RAlxBsAyMlL/0uEJ9NjMyXH5Xp
+         yuVLnc5gk6kO2G65clM4CyIWlxj6b9AXlR1xoTJbDg1f4D0sx0bvN8srJK0tb4Xrdlf0
+         W3Sw==
+X-Gm-Message-State: AOAM533zMZ0gVNY21ZGLGWKbqI4ijOEpzomvmbUJSxQDP4LO37lH+DyK
+        OGmKQyVqod1KYevK6Ac2gMNbljuIRxKO
+X-Google-Smtp-Source: ABdhPJwwAeEl/fBZkORhX4MxHC0CwsUHrjrNI+Tq88kiP5Hx0+90GQIUxvIJUedAX1Syxs87ImOEfCacsfMj
 X-Received: from luke.lon.corp.google.com ([2a00:79e0:d:210:1cab:1a20:2ef1:ddde])
- (user=qperret job=sendgmr) by 2002:adf:f589:: with SMTP id
- f9mr8004315wro.505.1638378297567; Wed, 01 Dec 2021 09:04:57 -0800 (PST)
-Date:   Wed,  1 Dec 2021 17:04:05 +0000
+ (user=qperret job=sendgmr) by 2002:adf:ee04:: with SMTP id
+ y4mr8657629wrn.0.1638378301567; Wed, 01 Dec 2021 09:05:01 -0800 (PST)
+Date:   Wed,  1 Dec 2021 17:04:06 +0000
 In-Reply-To: <20211201170411.1561936-1-qperret@google.com>
-Message-Id: <20211201170411.1561936-12-qperret@google.com>
+Message-Id: <20211201170411.1561936-13-qperret@google.com>
 Mime-Version: 1.0
 References: <20211201170411.1561936-1-qperret@google.com>
 X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v3 11/15] KVM: arm64: Implement do_share() helper for sharing memory
+Subject: [PATCH v3 12/15] KVM: arm64: Implement __pkvm_host_share_hyp() using do_share()
 From:   Quentin Perret <qperret@google.com>
 To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -67,268 +67,155 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Will Deacon <will@kernel.org>
 
-By default, protected KVM isolates memory pages so that they are
-accessible only to their owner: be it the host kernel, the hypervisor
-at EL2 or (in future) the guest. Establishing shared-memory regions
-between these components therefore involves a transition for each page
-so that the owner can share memory with a borrower under a certain set
-of permissions.
+__pkvm_host_share_hyp() shares memory between the host and the
+hypervisor so implement it as an invocation of the new do_share()
+mechanism.
 
-Introduce a do_share() helper for safely sharing a memory region between
-two components. Currently, only host-to-hyp sharing is implemented, but
-the code is easily extended to handle other combinations and the
-permission checks for each component are reusable.
+Note that double-sharing is no longer permitted (as this allows us to
+reduce the number of page-table walks significantly), but is thankfully
+no longer relied upon by the host.
 
 Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Quentin Perret <qperret@google.com>
 ---
- arch/arm64/kvm/hyp/nvhe/mem_protect.c | 237 ++++++++++++++++++++++++++
- 1 file changed, 237 insertions(+)
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c | 121 +++++++-------------------
+ 1 file changed, 33 insertions(+), 88 deletions(-)
 
 diff --git a/arch/arm64/kvm/hyp/nvhe/mem_protect.c b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
-index 757dfefe3aeb..74ca4043b08a 100644
+index 74ca4043b08a..1282cbd6b9b3 100644
 --- a/arch/arm64/kvm/hyp/nvhe/mem_protect.c
 +++ b/arch/arm64/kvm/hyp/nvhe/mem_protect.c
-@@ -471,3 +471,240 @@ void handle_host_mem_abort(struct kvm_cpu_context *host_ctxt)
- 	ret = host_stage2_idmap(addr);
- 	BUG_ON(ret && ret != -EAGAIN);
+@@ -370,94 +370,6 @@ static int host_stage2_idmap(u64 addr)
+ 	return ret;
+ }
+ 
+-static inline bool check_prot(enum kvm_pgtable_prot prot,
+-			      enum kvm_pgtable_prot required,
+-			      enum kvm_pgtable_prot denied)
+-{
+-	return (prot & (required | denied)) == required;
+-}
+-
+-int __pkvm_host_share_hyp(u64 pfn)
+-{
+-	phys_addr_t addr = hyp_pfn_to_phys(pfn);
+-	enum kvm_pgtable_prot prot, cur;
+-	void *virt = __hyp_va(addr);
+-	enum pkvm_page_state state;
+-	kvm_pte_t pte;
+-	int ret;
+-
+-	if (!addr_is_memory(addr))
+-		return -EINVAL;
+-
+-	host_lock_component();
+-	hyp_lock_component();
+-
+-	ret = kvm_pgtable_get_leaf(&host_kvm.pgt, addr, &pte, NULL);
+-	if (ret)
+-		goto unlock;
+-	if (!pte)
+-		goto map_shared;
+-
+-	/*
+-	 * Check attributes in the host stage-2 PTE. We need the page to be:
+-	 *  - mapped RWX as we're sharing memory;
+-	 *  - not borrowed, as that implies absence of ownership.
+-	 * Otherwise, we can't let it got through
+-	 */
+-	cur = kvm_pgtable_stage2_pte_prot(pte);
+-	prot = pkvm_mkstate(0, PKVM_PAGE_SHARED_BORROWED);
+-	if (!check_prot(cur, PKVM_HOST_MEM_PROT, prot)) {
+-		ret = -EPERM;
+-		goto unlock;
+-	}
+-
+-	state = pkvm_getstate(cur);
+-	if (state == PKVM_PAGE_OWNED)
+-		goto map_shared;
+-
+-	/*
+-	 * Tolerate double-sharing the same page, but this requires
+-	 * cross-checking the hypervisor stage-1.
+-	 */
+-	if (state != PKVM_PAGE_SHARED_OWNED) {
+-		ret = -EPERM;
+-		goto unlock;
+-	}
+-
+-	ret = kvm_pgtable_get_leaf(&pkvm_pgtable, (u64)virt, &pte, NULL);
+-	if (ret)
+-		goto unlock;
+-
+-	/*
+-	 * If the page has been shared with the hypervisor, it must be
+-	 * already mapped as SHARED_BORROWED in its stage-1.
+-	 */
+-	cur = kvm_pgtable_hyp_pte_prot(pte);
+-	prot = pkvm_mkstate(PAGE_HYP, PKVM_PAGE_SHARED_BORROWED);
+-	if (!check_prot(cur, prot, ~prot))
+-		ret = -EPERM;
+-	goto unlock;
+-
+-map_shared:
+-	/*
+-	 * If the page is not yet shared, adjust mappings in both page-tables
+-	 * while both locks are held.
+-	 */
+-	prot = pkvm_mkstate(PAGE_HYP, PKVM_PAGE_SHARED_BORROWED);
+-	ret = pkvm_create_mappings_locked(virt, virt + PAGE_SIZE, prot);
+-	BUG_ON(ret);
+-
+-	prot = pkvm_mkstate(PKVM_HOST_MEM_PROT, PKVM_PAGE_SHARED_OWNED);
+-	ret = host_stage2_idmap_locked(addr, PAGE_SIZE, prot);
+-	BUG_ON(ret);
+-
+-unlock:
+-	hyp_unlock_component();
+-	host_unlock_component();
+-
+-	return ret;
+-}
+-
+ void handle_host_mem_abort(struct kvm_cpu_context *host_ctxt)
+ {
+ 	struct kvm_vcpu_fault_info fault;
+@@ -708,3 +620,36 @@ static int do_share(struct pkvm_mem_share *share)
+ 
+ 	return WARN_ON(__do_share(share));
  }
 +
-+/* This corresponds to locking order */
-+enum pkvm_component_id {
-+	PKVM_ID_HOST,
-+	PKVM_ID_HYP,
-+};
-+
-+struct pkvm_mem_transition {
-+	u64				nr_pages;
-+
-+	struct {
-+		enum pkvm_component_id	id;
-+		/* Address in the initiator's address space */
-+		u64			addr;
-+
-+		union {
-+			struct {
-+				/* Address in the completer's address space */
-+				u64	completer_addr;
-+			} host;
-+		};
-+	} initiator;
-+
-+	struct {
-+		enum pkvm_component_id	id;
-+	} completer;
-+};
-+
-+struct pkvm_mem_share {
-+	const struct pkvm_mem_transition	tx;
-+	const enum kvm_pgtable_prot		prot;
-+};
-+
-+struct check_walk_data {
-+	enum pkvm_page_state	desired;
-+	enum pkvm_page_state	(*get_page_state)(kvm_pte_t pte);
-+};
-+
-+static int __check_page_state_visitor(u64 addr, u64 end, u32 level,
-+				      kvm_pte_t *ptep,
-+				      enum kvm_pgtable_walk_flags flag,
-+				      void * const arg)
++int __pkvm_host_share_hyp(u64 pfn)
 +{
-+	struct check_walk_data *d = arg;
-+	kvm_pte_t pte = *ptep;
-+
-+	if (kvm_pte_valid(pte) && !addr_is_memory(kvm_pte_to_phys(pte)))
-+		return -EINVAL;
-+
-+	return d->get_page_state(pte) == d->desired ? 0 : -EPERM;
-+}
-+
-+static int check_page_state_range(struct kvm_pgtable *pgt, u64 addr, u64 size,
-+				  struct check_walk_data *data)
-+{
-+	struct kvm_pgtable_walker walker = {
-+		.cb	= __check_page_state_visitor,
-+		.arg	= data,
-+		.flags	= KVM_PGTABLE_WALK_LEAF,
-+	};
-+
-+	return kvm_pgtable_walk(pgt, addr, size, &walker);
-+}
-+
-+static enum pkvm_page_state host_get_page_state(kvm_pte_t pte)
-+{
-+	if (!kvm_pte_valid(pte) && pte)
-+		return PKVM_NOPAGE;
-+
-+	return pkvm_getstate(kvm_pgtable_stage2_pte_prot(pte));
-+}
-+
-+static int __host_check_page_state_range(u64 addr, u64 size,
-+					 enum pkvm_page_state state)
-+{
-+	struct check_walk_data d = {
-+		.desired	= state,
-+		.get_page_state	= host_get_page_state,
-+	};
-+
-+	hyp_assert_lock_held(&host_kvm.lock);
-+	return check_page_state_range(&host_kvm.pgt, addr, size, &d);
-+}
-+
-+static int __host_set_page_state_range(u64 addr, u64 size,
-+				       enum pkvm_page_state state)
-+{
-+	enum kvm_pgtable_prot prot = pkvm_mkstate(PKVM_HOST_MEM_PROT, state);
-+
-+	return host_stage2_idmap_locked(addr, size, prot);
-+}
-+
-+static int host_request_owned_transition(u64 *completer_addr,
-+					 const struct pkvm_mem_transition *tx)
-+{
-+	u64 size = tx->nr_pages * PAGE_SIZE;
-+	u64 addr = tx->initiator.addr;
-+
-+	*completer_addr = tx->initiator.host.completer_addr;
-+	return __host_check_page_state_range(addr, size, PKVM_PAGE_OWNED);
-+}
-+
-+static int host_initiate_share(u64 *completer_addr,
-+			       const struct pkvm_mem_transition *tx)
-+{
-+	u64 size = tx->nr_pages * PAGE_SIZE;
-+	u64 addr = tx->initiator.addr;
-+
-+	*completer_addr = tx->initiator.host.completer_addr;
-+	return __host_set_page_state_range(addr, size, PKVM_PAGE_SHARED_OWNED);
-+}
-+
-+static enum pkvm_page_state hyp_get_page_state(kvm_pte_t pte)
-+{
-+	if (!kvm_pte_valid(pte))
-+		return PKVM_NOPAGE;
-+
-+	return pkvm_getstate(kvm_pgtable_stage2_pte_prot(pte));
-+}
-+
-+static int __hyp_check_page_state_range(u64 addr, u64 size,
-+					enum pkvm_page_state state)
-+{
-+	struct check_walk_data d = {
-+		.desired	= state,
-+		.get_page_state	= hyp_get_page_state,
-+	};
-+
-+	hyp_assert_lock_held(&pkvm_pgd_lock);
-+	return check_page_state_range(&pkvm_pgtable, addr, size, &d);
-+}
-+
-+static bool __hyp_ack_skip_pgtable_check(const struct pkvm_mem_transition *tx)
-+{
-+	return !(IS_ENABLED(CONFIG_NVHE_EL2_DEBUG) ||
-+		 tx->initiator.id != PKVM_ID_HOST);
-+}
-+
-+static int hyp_ack_share(u64 addr, const struct pkvm_mem_transition *tx,
-+			 enum kvm_pgtable_prot perms)
-+{
-+	u64 size = tx->nr_pages * PAGE_SIZE;
-+
-+	if (perms != PAGE_HYP)
-+		return -EPERM;
-+
-+	if (__hyp_ack_skip_pgtable_check(tx))
-+		return 0;
-+
-+	return __hyp_check_page_state_range(addr, size, PKVM_NOPAGE);
-+}
-+
-+static int hyp_complete_share(u64 addr, const struct pkvm_mem_transition *tx,
-+			      enum kvm_pgtable_prot perms)
-+{
-+	void *start = (void *)addr, *end = start + (tx->nr_pages * PAGE_SIZE);
-+	enum kvm_pgtable_prot prot;
-+
-+	prot = pkvm_mkstate(perms, PKVM_PAGE_SHARED_BORROWED);
-+	return pkvm_create_mappings_locked(start, end, prot);
-+}
-+
-+static int check_share(struct pkvm_mem_share *share)
-+{
-+	const struct pkvm_mem_transition *tx = &share->tx;
-+	u64 completer_addr;
 +	int ret;
++	u64 host_addr = hyp_pfn_to_phys(pfn);
++	u64 hyp_addr = (u64)__hyp_va(host_addr);
++	struct pkvm_mem_share share = {
++		.tx	= {
++			.nr_pages	= 1,
++			.initiator	= {
++				.id	= PKVM_ID_HOST,
++				.addr	= host_addr,
++				.host	= {
++					.completer_addr = hyp_addr,
++				},
++			},
++			.completer	= {
++				.id	= PKVM_ID_HYP,
++			},
++		},
++		.prot	= PAGE_HYP,
++	};
 +
-+	switch (tx->initiator.id) {
-+	case PKVM_ID_HOST:
-+		ret = host_request_owned_transition(&completer_addr, tx);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
++	host_lock_component();
++	hyp_lock_component();
 +
-+	if (ret)
-+		return ret;
++	ret = do_share(&share);
 +
-+	switch (tx->completer.id) {
-+	case PKVM_ID_HYP:
-+		ret = hyp_ack_share(completer_addr, tx, share->prot);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
++	hyp_unlock_component();
++	host_unlock_component();
 +
 +	return ret;
-+}
-+
-+static int __do_share(struct pkvm_mem_share *share)
-+{
-+	const struct pkvm_mem_transition *tx = &share->tx;
-+	u64 completer_addr;
-+	int ret;
-+
-+	switch (tx->initiator.id) {
-+	case PKVM_ID_HOST:
-+		ret = host_initiate_share(&completer_addr, tx);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	if (ret)
-+		return ret;
-+
-+	switch (tx->completer.id) {
-+	case PKVM_ID_HYP:
-+		ret = hyp_complete_share(completer_addr, tx, share->prot);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+/*
-+ * do_share():
-+ *
-+ * The page owner grants access to another component with a given set
-+ * of permissions.
-+ *
-+ * Initiator: OWNED	=> SHARED_OWNED
-+ * Completer: NOPAGE	=> SHARED_BORROWED
-+ */
-+static int do_share(struct pkvm_mem_share *share)
-+{
-+	int ret;
-+
-+	ret = check_share(share);
-+	if (ret)
-+		return ret;
-+
-+	return WARN_ON(__do_share(share));
 +}
 -- 
 2.34.0.rc2.393.gf8c9666880-goog

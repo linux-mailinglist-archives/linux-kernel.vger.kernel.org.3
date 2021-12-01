@@ -2,364 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3DD465027
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EEB5465029
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242296AbhLAOnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:43:52 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:47184 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244148AbhLAOhB (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:37:01 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638369220; h=Content-Transfer-Encoding: Content-Type:
- In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
- Subject: Sender; bh=L+mYpUaBMwz6/WrW+QGdFZ9jT0Yut5tWwzVuyzc8mRI=; b=P2dCbxye2HG4RdOkTQ2+5oDMMehan5hdjmZxAIioZa225U98YXAqnakvqAYRknhQJ+zGnKIO
- ZzWa5ma1EArFu8IpvGGxl5cdlCYhhKw/FuFI4LEsfQzxm53IRxgaPeHYTROTk+82nQ/vNBQq
- e/yXN7fGGEwj23h1rNW9+AAmy6c=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n09.prod.us-east-1.postgun.com with SMTP id
- 61a787c3135a8a9d0e444571 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Wed, 01 Dec 2021 14:33:38
- GMT
-Sender: srivasam=codeaurora.org@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 0C205C43619; Wed,  1 Dec 2021 14:33:38 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-5.1 required=2.0 tests=ALL_TRUSTED,BAYES_00,
-        NICE_REPLY_A,SPF_FAIL,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.0
-Received: from [10.242.143.72] (unknown [202.46.23.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: srivasam)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id AB82BC4338F;
-        Wed,  1 Dec 2021 14:33:30 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org AB82BC4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=codeaurora.org
-Subject: Re: [PATCH v3 3/5] pinctrl: qcom: Move chip specific functions to
- right files
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, plai@codeaurora.org,
-        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
-        rohitkr@codeaurora.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, swboyd@chromium.org,
-        judyhsiao@chromium.org, Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org
-Cc:     Venkata Prasad Potturu <potturu@codeaurora.org>
-References: <1638179932-3353-1-git-send-email-srivasam@codeaurora.org>
- <1638179932-3353-4-git-send-email-srivasam@codeaurora.org>
- <bb08af7e-3b90-2d64-3bb1-f82cc6686184@linaro.org>
-From:   Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
-Organization: Qualcomm India Private Limited.
-Message-ID: <342898d1-59ef-9104-658d-d992c0126361@codeaurora.org>
-Date:   Wed, 1 Dec 2021 20:03:28 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+        id S1350558AbhLAOoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:44:03 -0500
+Received: from mail-dm6nam11on2065.outbound.protection.outlook.com ([40.107.223.65]:18913
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1350175AbhLAOhE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 09:37:04 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Llo+atfo/HEdJv3ri84wmHXmc/oAnaCAqEx1iYDvn3Wvv6VpdTH20gZNotpJofh9BqXpuuFLW/QTP8Qw3IMtCQNKfYtIy1GlQ67BI4LrO6lnfja4yiRLCxgk9Ond/QRAEONVEVXaSQkz/5i5JtS3UvUyAuHyUqGEDEGu1kxdohPiBWWsYLT/tJb2v2evlbHMaLMObH7iWs22B4geEpx5KFqtf52hZAu0rwYLdzKVtuobKdUtdSo8tselpQD2RM1mLc59AwNvkAalEjDGMxma5FOG0/GUX/vKmhr6fBA8iETGrnVdA9rnji0dJh7G3iZm+vyxMQa77f8EAHCXqCWggg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P2cfqhSRthtpsRi4Y9dvGSC2VlMrz8APW1MOwFvC96E=;
+ b=I1sUR6m8JLdjxfK4X9lWi0x7PsuuJIHUJEjaYUJFw923ynEjU5AxCTQZpn69iEASJjJyLry1aQz43QngVzlBEQeHGEBx/RHav/gk6EtWt36xSQEPMrJK2E0uTnnW6aTqDD06XCH7rckMgRAr5pNDgojZgdoXBqSRyhjKduAbIfBUrXWBnALgLy1ez5s+lrQsZ3K/s0l45VWZOVkkRzOg9eLr6i1ltDCzzOYWRNV7QewyMT84yF154hqNAuTu5XQLlGla9m086IVKQSPBdbLg1W/3yXono5ZmOhCYHnKDHsNRY9+1Udy5MdovT/WKGoHdyW8sNpOAMrjiCjGpN+ovqw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P2cfqhSRthtpsRi4Y9dvGSC2VlMrz8APW1MOwFvC96E=;
+ b=EtChK5BJ674Bu8HTrFjBqABYZ3KDn42gj/T3G55yp3Roc0zy6gpFStW0ANuHm2UyG6dJwPgEWgrm5C4C7rCZrX2tmMcRqcUiKVGw6jmS5lUzkDa53vpqc5x3GcyNXvL+F0gPWqT5mTOUp8jR6SFIZ1DmV9ff2USZjiPJMldjg31UZBx+2mfNt/KplumnsbvQxo78lVo1VQ/Y8XpuU/Zd7NXzHGU5198VbyOTRZwf9JM5MON3Pj+WXuqo3etvn/3OE0mV6oVZvkbSWx4iWt5Y/hbvS6JmRdqNVBC54VN6Pcal692TXqiEdW/KDQRupVQNOlIwSpkIfrANcc9oOlgc8A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com (2603:10b6:5:35e::8) by
+ CO6PR12MB5427.namprd12.prod.outlook.com (2603:10b6:5:358::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.4734.23; Wed, 1 Dec 2021 14:33:41 +0000
+Received: from CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::ecac:528f:e36c:39d0]) by CO6PR12MB5444.namprd12.prod.outlook.com
+ ([fe80::ecac:528f:e36c:39d0%4]) with mapi id 15.20.4734.024; Wed, 1 Dec 2021
+ 14:33:41 +0000
+Subject: Re: [PATCH v13 1/4] dt-bindings: dmaengine: Add doc for tegra gpcdma
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Akhil R <akhilrajeev@nvidia.com>, Rob Herring <robh@kernel.org>
+Cc:     "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        Krishna Yarlagadda <kyarlagadda@nvidia.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Rajesh Gumasta <rgumasta@nvidia.com>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "vkoul@kernel.org" <vkoul@kernel.org>
+References: <1637573292-13214-1-git-send-email-akhilrajeev@nvidia.com>
+ <1637573292-13214-2-git-send-email-akhilrajeev@nvidia.com>
+ <YaOo/FHKQBAa93hd@robh.at.kernel.org>
+ <BN9PR12MB527335B55F187C2A1864FDCEC0669@BN9PR12MB5273.namprd12.prod.outlook.com>
+ <c9379e5f-232f-7d9e-68c4-1aa5cc15b74a@nvidia.com>
+Message-ID: <ad8e88ba-f105-adb5-007e-2458440b9717@nvidia.com>
+Date:   Wed, 1 Dec 2021 14:33:31 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <bb08af7e-3b90-2d64-3bb1-f82cc6686184@linaro.org>
+In-Reply-To: <c9379e5f-232f-7d9e-68c4-1aa5cc15b74a@nvidia.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: VI1P194CA0054.EURP194.PROD.OUTLOOK.COM
+ (2603:10a6:803:3c::43) To CO6PR12MB5444.namprd12.prod.outlook.com
+ (2603:10b6:5:35e::8)
+MIME-Version: 1.0
+Received: from [10.26.49.14] (195.110.77.193) by VI1P194CA0054.EURP194.PROD.OUTLOOK.COM (2603:10a6:803:3c::43) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend Transport; Wed, 1 Dec 2021 14:33:37 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 698d57ff-5b69-413c-2f97-08d9b4d791e9
+X-MS-TrafficTypeDiagnostic: CO6PR12MB5427:
+X-Microsoft-Antispam-PRVS: <CO6PR12MB5427AB0F05FAD458F08AB4ADD9689@CO6PR12MB5427.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RQc51JUtvJvyOdt8uI1+TZYi2PARJD3DyZwi2HUW++rO0sb63HlSb8sSaaq/+uoaeQu8q13YT2XUySrOc/b0ebAM3HZdEm5mf0blR41Nv/oaHMC5hPITqDaFUJa6OEr23Rfxuehr1QFvhrcz9RHhqZYxsXEf0fD7JifIZxPUE/0ApmOh1UrV805iRC7nIvrsdXQr/UA9TPBJh7TSHDbchW+sjKYdLKszfYPVYBH7Ao9BDYpFEqdFpVE73SXCaYnsc1aPJbRKGi1oFibO9e6fZI3tFVh/38te2leSx6cAstxyNVjVTXMu0xc/lC9rWIK6gOFxGByrVLJXa/JpuRTHa2OmA0hICZHsB4c3Xta51p2VvrVaHnlVoJlDnh3SIGRWVwHqWxJ+vijBmJ2Z+6JXJWYOsMe5+XT0wUUaUwkpcCPYmymCFmxcmK/XmDfC19y+Iv4zLoFyEAcxiKk+fF5PQgK02oXf8dQGwNaXoFUlLrZQ7kXbdIM9MQPGomAYEYe3cCl/8L5JGykuv/REohUWcKCModaSUMI/iCTXrQtcwPOX16MrrwWjTmAE1+nP2HETE6qd17sr5ZEx0ngY2DyxRa2r1Rdg5ui1iWoNRF+RoqrTyG8Y8BYgVB0FXGV27pd4ogeCp8pI0ppQUjNLFC2RVDFTX3TFX78JimA76TlDIQM0BGiNFVjdSJVcM2Sas/+p2lMpCd/+NsUrcFBOzjpqfVCsZdKumNS41cxQZep4h8SXUDKmMka6IeU37sG3fPSm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR12MB5444.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(31686004)(316002)(36756003)(31696002)(66946007)(16576012)(53546011)(55236004)(6486002)(4326008)(66556008)(86362001)(66476007)(2616005)(5660300002)(8676002)(83380400001)(956004)(26005)(38100700002)(2906002)(8936002)(508600001)(110136005)(186003)(6666004)(54906003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVEwMHpuU3FQcHkxVnVuTHFSREUzREQvb1RMWXdhQnVVZGJWU2lvczZFZVhO?=
+ =?utf-8?B?U0xZanp6UG9hWVlHaEdvVk5rUlQrLzJCUXl6Q0QyNkludXR5MG1wSG8yQXls?=
+ =?utf-8?B?ckxObkIrTWNDNmJUS1U4YUcydGVCZS9rTllOYTBqa2dLTUw4U1FSaWFqR1ZQ?=
+ =?utf-8?B?ckRZeldORHFIMlhwSmdKN3R4SWNzZDJkRUd5YTlHdVJrbGVwbGJkQnVDaWV4?=
+ =?utf-8?B?MlVuUWRabkpDdk9aQlA2VXNQbWd3N25CVWtOdkZnd0VuLzMrWGZiNHdnYmVS?=
+ =?utf-8?B?YVJsdXkrMWd0RXZEVEdlK2h4VzgyT3pHQlRQaHYyaHcwZlJFeFpxbWpkYVlB?=
+ =?utf-8?B?QjIvV2RwUlFSQmFoR1NuWm1lSDBFSHRpamVpZDh2M0tQNlh6RXcwVzVJUitw?=
+ =?utf-8?B?UEpkblpHZndYV1ovMGpaYlhsSVRROVA0MFFzRXduTHpCNnYyZ043akZrOFNY?=
+ =?utf-8?B?N1ZrLzZmRU5Gc2E3Mm9LRHFPMk0wTlp5QzJNcUY1Z1RRM2l0N0JvajgrM1JW?=
+ =?utf-8?B?T0N6TkR1SUxiNmkzd0dBQzZlZGd6aWJ3cDN0c2dweUtsWkdhQzRDVzJVaFlY?=
+ =?utf-8?B?aEJ6NkVxL3ZBbTZ4NHZrR3ZsVUVsN2dPN3QvNjAyclR3Q1VoQkJxQjBXQ2VN?=
+ =?utf-8?B?YTdCS2Mrc25hT3hoNGhlV3V2ZkoyNG9yWUh0WGhnMFJNZHE0ZzBHWHdRWGVL?=
+ =?utf-8?B?ckVVWGIwT3k2YVZmYzFFNmxvOHZLMkhublFMb2hnTGsyTFJGekFYUkVlSnJB?=
+ =?utf-8?B?cmtjdWRKMzZSUkp5aEJESzVVYmhZSWduRzRDRGlVbGJLcVRNVkw3QVpZOE0x?=
+ =?utf-8?B?eStUMkZxWGdPUWs1eXVtdFlJMThPeGhCVG5mZDQ5bDFrd05xK2EybVNSNlI1?=
+ =?utf-8?B?WUxTd2tLeEMyTlFDcndiN2J2bWorZ24zNTlqY05VRkZXeHdUWS9HL0k3c1g4?=
+ =?utf-8?B?ZHZKWXlhaXJaSFhNK05PcWJHWEVhRzdLRkRuSUVYaFhkeWVtc1oxanhPN3dj?=
+ =?utf-8?B?YjdCdXErWGhIbERRcGZtWUMvNTJWeXdoVU5HWm9ldVdXT1ZFOUxNL205UHB6?=
+ =?utf-8?B?UzhXWFU0ZVRGR3p5bWZDVjdCR2tNR09kNzNxdGxsNTZlRERUYzMzZmNuUFNT?=
+ =?utf-8?B?Qk95RUVuZEtPcWRXNnRQWkoxd3ozNXlNcDEvNGJtMklkbXQwVS92cEYrY3FH?=
+ =?utf-8?B?ejZqaitFWUdEblhkYjdRTzZhVkJNcWFPclBobkFHV01CR2tzdFZDNkZGbzBM?=
+ =?utf-8?B?Tml2K0FqTDlzQUVFbWxUNGxwakFzVjRCOTlacExBZHpDbWRYT1BIMDJuNjRq?=
+ =?utf-8?B?Um1SSjlpSVBqRU1RUExoWTRZaFZYNmdJNjVraXlKZDh3RlBVZEc5aklURElX?=
+ =?utf-8?B?SEhLeXd6S2lRZlFWMHczejVsWS9yVHlhZnV1Z242cWhIc2NUSVdDOGtTNHhN?=
+ =?utf-8?B?b25sYmsrRkNLOUhUOEJZSWIxN25YbWdNR0lyZG1wWjZtbnZ2TVBFR0w0cGRK?=
+ =?utf-8?B?OFB6ekRTRTZYRG9BeVhoMytvM0FkcEswS2FORmtuQVZqQ0FES0VCZmZ5U29R?=
+ =?utf-8?B?T09xV1VVd25DMHVpc3lhczNBMlZyMThFVUxhVmhBL294d3FSejg1SEk1TVha?=
+ =?utf-8?B?RXBsa1VENjVDRjhGcDJVeVBmWVdGM2I4Zjdmay94Szl2dGRFOU1lMUZmWnBV?=
+ =?utf-8?B?N1oyWW45MERqYmpNUTZ3QzZTN2tmZDE5UzFSMHVjR2hzdjdFZkRrYWRHWnVH?=
+ =?utf-8?B?T1RuRTFiTU9iNDVnZGdZbC9BZTlaZW0rVVB5K2FqMXlrZmF6SlBaU3dzSXdR?=
+ =?utf-8?B?a3VHSXI2R3poU0ExTnQxc3QrWG1EQmZOcHFxZ3Qxa09VRGtuQS83UXRZOWdR?=
+ =?utf-8?B?cnZQY2lURHNEaEhTOGkra3grK0FHMWMzMjlmbnMrMFRyci9ZWnR6NFJJM2hS?=
+ =?utf-8?B?NDNwQWRuMFBUR0dndlNmYUVNK3dqa3Nid1FHYUdiYzlGZjlnL2x6eDU0dUVT?=
+ =?utf-8?B?dmV6U0JmVDBiOWVHaXFzQUN3SWd2QVErRG1CM2JxMkhBcFdjRlEzQmZQRFpG?=
+ =?utf-8?B?Vk1Db09pcXR0eVF1YVc1L1VVQ2pYTDhWbnV3SFg2TlNvNVNSVFIvdzdzV1hq?=
+ =?utf-8?B?T0VUM3JZM2ZVMm1QUW12NTJyUnRyRWoxaGNObFZFM3lQaUdvTndINCtRQkdV?=
+ =?utf-8?Q?XZWPK2BIqeel4xzeKbQHrek=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 698d57ff-5b69-413c-2f97-08d9b4d791e9
+X-MS-Exchange-CrossTenant-AuthSource: CO6PR12MB5444.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2021 14:33:41.6607
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ibu+uaYPisUVpi3DZtoHg5zvOc6pGvUeeJzXwoV2BS8n11tqmoTxCzNuzSx1/EdvV1vSWUL8tCXF9viunB+eyA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5427
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 12/1/2021 4:11 PM, Srinivas Kandagatla wrote:
-Thanks for your time Srini!!!
->
-> On 29/11/2021 09:58, Srinivasa Rao Mandadapu wrote:
->> Update lpass lpi pin control driver to accommodate new lpass variant
->> SoC specific drivers.
->> Move sm8250 SoC specific functions to pinctrl-sm8250-lpass-lpi.c file
->> and common declarations to pinctrl-lpass-lpi.h header file.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <srivasam@codeaurora.org>
->> Co-developed-by: Venkata Prasad Potturu <potturu@codeaurora.org>
->> Signed-off-by: Venkata Prasad Potturu <potturu@codeaurora.org>
->> ---
->>   drivers/pinctrl/qcom/Makefile                   |   1 +
->>   drivers/pinctrl/qcom/pinctrl-lpass-lpi.c        | 251 
->> +-----------------------
->>   drivers/pinctrl/qcom/pinctrl-lpass-lpi.h        | 139 +++++++++++++
->>   drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c | 125 ++++++++++++
->>   4 files changed, 271 insertions(+), 245 deletions(-)
->>   create mode 100644 drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
->>   create mode 100644 drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
->>
->> diff --git a/drivers/pinctrl/qcom/Makefile 
->> b/drivers/pinctrl/qcom/Makefile
->> index 7a12e8c..74568cf 100644
->> --- a/drivers/pinctrl/qcom/Makefile
->> +++ b/drivers/pinctrl/qcom/Makefile
->> @@ -37,3 +37,4 @@ obj-$(CONFIG_PINCTRL_SM8150) += pinctrl-sm8150.o
->>   obj-$(CONFIG_PINCTRL_SM8250) += pinctrl-sm8250.o
->>   obj-$(CONFIG_PINCTRL_SM8350) += pinctrl-sm8350.o
->>   obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-lpass-lpi.o
->> +obj-$(CONFIG_PINCTRL_LPASS_LPI) += pinctrl-sm8250-lpass-lpi.o
->
-> This is confusing, either we make new
-> CONFIG_PINCTRL_SM8250_LPASS_LPI here and use it for 
-> pinctrl-sm8250-lpass-lpi.o
-Okay. Will add new config macro. Thought of changing it, but worried 
-that existing platforms may get disturbed.
->
->> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c 
->> b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> index 2f19ab4..2641489 100644
->> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
->> @@ -4,237 +4,16 @@
->>    * Copyright (c) 2020 Linaro Ltd.
->>    */
->>   -#include <linux/bitops.h>
->> -#include <linux/bitfield.h>
->
-> Looks like some of these are removed without a reason.
->
-Actually, as functions distributed to different files, moved few of them 
-to corresponding files,
+On 30/11/2021 09:34, Jon Hunter wrote:
 
-and observed few of them are not required. could you please suggest on this?
+...
 
->
->>   #include <linux/clk.h>
->>   #include <linux/gpio/driver.h>
->> -#include <linux/io.h>
->> -#include <linux/module.h>
->>   #include <linux/of_device.h>
->> -#include <linux/of.h>
->>   #include <linux/pinctrl/pinconf-generic.h>
->>   #include <linux/pinctrl/pinconf.h>
->>   #include <linux/pinctrl/pinmux.h>
->> -#include <linux/platform_device.h>
->> -#include <linux/slab.h>
->> -#include <linux/types.h>
->>   #include "../core.h"
->>   #include "../pinctrl-utils.h"
->> +#include "pinctrl-lpass-lpi.h"
->
-> ...
->
->
->> -
->> -module_platform_driver(lpi_pinctrl_driver);
->> -MODULE_DESCRIPTION("QTI LPI GPIO pin control driver");
->> -MODULE_LICENSE("GPL");
->
-> if you build this as Modules your build would fail without 
-> MODULE_LICENSE().
-Okay. Will change accordingly.
->
->
->> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h 
->> b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
->> new file mode 100644
->> index 0000000..b0afb40
->> --- /dev/null
->> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.h
->> @@ -0,0 +1,139 @@
->> +/* SPDX-License-Identifier: GPL-2.0-only */
->> +/*
->> + * Copyright (c) 2016-2019, The Linux Foundation. All rights reserved.
->> + * Copyright (c) 2020 Linaro Ltd.
->> + */
->> +#ifndef __PINCTRL_LPASS_LPI_H__
->> +#define __PINCTRL_LPASS_LPI_H__
->> +
->> +#define LPI_SLEW_RATE_CTL_REG    0xa000
->> +#define LPI_TLMM_REG_OFFSET        0x1000
->> +#define LPI_SLEW_RATE_MAX        0x03
->> +#define LPI_SLEW_BITS_SIZE        0x02
->> +#define LPI_SLEW_RATE_MASK        GENMASK(1, 0)
->> +#define LPI_GPIO_CFG_REG        0x00
->> +#define LPI_GPIO_PULL_MASK        GENMASK(1, 0)
->> +#define LPI_GPIO_FUNCTION_MASK        GENMASK(5, 2)
->> +#define LPI_GPIO_OUT_STRENGTH_MASK    GENMASK(8, 6)
->> +#define LPI_GPIO_OE_MASK        BIT(9)
->> +#define LPI_GPIO_VALUE_REG        0x04
->> +#define LPI_GPIO_VALUE_IN_MASK        BIT(0)
->> +#define LPI_GPIO_VALUE_OUT_MASK        BIT(1)
->> +
->> +#define LPI_GPIO_BIAS_DISABLE        0x0
->> +#define LPI_GPIO_PULL_DOWN        0x1
->> +#define LPI_GPIO_KEEPER            0x2
->> +#define LPI_GPIO_PULL_UP        0x3
->> +#define LPI_GPIO_DS_TO_VAL(v)        (v / 2 - 1)
->> +#define NO_SLEW                -1
->> +
->> +#define LPI_FUNCTION(fname)                            \
->> +    [LPI_MUX_##fname] = {                        \
->> +        .name = #fname,                \
->> +        .groups = fname##_groups,               \
->> +        .ngroups = ARRAY_SIZE(fname##_groups),    \
->> +    }
->> +
->> +#define LPI_PINGROUP(id, soff, f1, f2, f3, f4)        \
->> +    {                        \
->> +        .name = "gpio" #id,            \
->> +        .pins = gpio##id##_pins,        \
->> +        .pin = id,                \
->> +        .slew_offset = soff,            \
->> +        .npins = ARRAY_SIZE(gpio##id##_pins),    \
->> +        .funcs = (int[]){            \
->> +            LPI_MUX_gpio,            \
->> +            LPI_MUX_##f1,            \
->> +            LPI_MUX_##f2,            \
->> +            LPI_MUX_##f3,            \
->> +            LPI_MUX_##f4,            \
->> +        },                    \
->> +        .nfuncs = 5,                \
->> +    }
->> +
->> +struct lpi_pingroup {
->> +    const char *name;
->> +    const unsigned int *pins;
->> +    unsigned int npins;
->> +    unsigned int pin;
->> +    /* Bit offset in slew register for SoundWire pins only */
->> +    int slew_offset;
->> +    unsigned int *funcs;
->> +    unsigned int nfuncs;
->> +};
->> +
->> +struct lpi_function {
->> +    const char *name;
->> +    const char * const *groups;
->> +    unsigned int ngroups;
->> +};
->> +
->> +struct lpi_pinctrl_variant_data {
->> +    const struct pinctrl_pin_desc *pins;
->> +    int npins;
->> +    const struct lpi_pingroup *groups;
->> +    int ngroups;
->> +    const struct lpi_function *functions;
->> +    int nfunctions;
->> +};
->> +
->> +#define MAX_LPI_NUM_CLKS    2
->> +
->> +struct lpi_pinctrl {
->> +    struct device *dev;
->> +    struct pinctrl_dev *ctrl;
->> +    struct gpio_chip chip;
->> +    struct pinctrl_desc desc;
->> +    char __iomem *tlmm_base;
->> +    char __iomem *slew_base;
->> +    struct clk_bulk_data clks[MAX_LPI_NUM_CLKS];
->> +    struct mutex slew_access_lock;
->> +    const struct lpi_pinctrl_variant_data *data;
->> +};
->> +
->
-> From here
-> <<<
->
->> +enum lpass_lpi_functions {
->> +    LPI_MUX_dmic1_clk,
->> +    LPI_MUX_dmic1_data,
->> +    LPI_MUX_dmic2_clk,
->> +    LPI_MUX_dmic2_data,
->> +    LPI_MUX_dmic3_clk,
->> +    LPI_MUX_dmic3_data,
->> +    LPI_MUX_i2s1_clk,
->> +    LPI_MUX_i2s1_data,
->> +    LPI_MUX_i2s1_ws,
->> +    LPI_MUX_i2s2_clk,
->> +    LPI_MUX_i2s2_data,
->> +    LPI_MUX_i2s2_ws,
->> +    LPI_MUX_qua_mi2s_data,
->> +    LPI_MUX_qua_mi2s_sclk,
->> +    LPI_MUX_qua_mi2s_ws,
->> +    LPI_MUX_swr_rx_clk,
->> +    LPI_MUX_swr_rx_data,
->> +    LPI_MUX_swr_tx_clk,
->> +    LPI_MUX_swr_tx_data,
->> +    LPI_MUX_wsa_swr_clk,
->> +    LPI_MUX_wsa_swr_data,
->> +    LPI_MUX_gpio,
->> +    LPI_MUX__,
->> +};
->> +
->> +static const unsigned int gpio0_pins[] = { 0 };
->> +static const unsigned int gpio1_pins[] = { 1 };
->> +static const unsigned int gpio2_pins[] = { 2 };
->> +static const unsigned int gpio3_pins[] = { 3 };
->> +static const unsigned int gpio4_pins[] = { 4 };
->> +static const unsigned int gpio5_pins[] = { 5 };
->> +static const unsigned int gpio6_pins[] = { 6 };
->> +static const unsigned int gpio7_pins[] = { 7 };
->> +static const unsigned int gpio8_pins[] = { 8 };
->> +static const unsigned int gpio9_pins[] = { 9 };
->> +static const unsigned int gpio10_pins[] = { 10 };
->> +static const unsigned int gpio11_pins[] = { 11 };
->> +static const unsigned int gpio12_pins[] = { 12 };
->> +static const unsigned int gpio13_pins[] = { 13 };
-> >>>
-> to here are specific to sm8250, so it should not be in header file to 
-> start with.
+>>>> +title: NVIDIA Tegra GPC DMA Controller Device Tree Bindings
+>>>> +
+>>>> +description: |
+>>>> +  The Tegra General Purpose Central (GPC) DMA controller is used for
+>>>> +faster
+>>>> +  data transfers between memory to memory, memory to device and
+>>>> +device to
+>>>> +  memory.
+>>>> +
+>>>> +maintainers:
+>>>> +  - Jon Hunter <jonathanh@nvidia.com>
+>>>> +  - Rajesh Gumasta <rgumasta@nvidia.com>
+>>>> +
+>>>> +allOf:
+>>>> +  - $ref: "dma-controller.yaml#"
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    oneOf:
+>>>> +      - const: nvidia,tegra186-gpcdma
+>>>> +      - items:
+>>>> +         - const: nvidia,tegra186-gpcdma
+>>>> +         - const: nvidia,tegra194-gpcdma
+>>>
+>>> Still not how 'compatible' works nor what I wrote out for you.
+>> I thought '186' and '194' got interchanged in your previous comment 
+>> because it is 194
+>> which is the superset of 186 and have got more features than 186.
+>> Or probably I did not understand the idea correctly yet. 
+> 
+> Hi Rob, this is the way around that we want it. Tegra194 is backward 
+> compatible with Tegra186. The above does align with what you mentioned 
+> before, so I am also not clear what the issue is with the above?
 
-As these are common to all lpass variants.. I feel it's better to keep 
-in Header file.
 
-And if new pins comes in later variants, we can add them incrementally, 
-and they will not impact existing pin numbers.
+Now I think I understand. It is the order of the 'items' here that is 
+key. So what we want is ...
 
-I think in upcoming variants number of pins will not decrease.
+   compatible:
+     oneOf:
+       - const: nvidia,tegra186-gpcdma
+       - items:
+          - const: nvidia,tegra194-gpcdma
+          - const: nvidia,tegra186-gpcdma
 
->
->
->> +
->> +int lpi_pinctrl_probe(struct platform_device *pdev);
->> +int lpi_pinctrl_remove(struct platform_device *pdev);
->> +
->> +#endif /*__PINCTRL_LPASS_LPI_H__*/
->> +
->> diff --git a/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c 
->> b/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
->> new file mode 100644
->> index 0000000..3eba8b3
->> --- /dev/null
->> +++ b/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
->> @@ -0,0 +1,125 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->
-> ...
->
->> +
->> +static struct platform_driver lpi_pinctrl_driver = {
->> +    .driver = {
->> +           .name = "qcom-sm8250-lpass-lpi-pinctrl",
->> +           .of_match_table = lpi_pinctrl_of_match,
->> +    },
->> +    .probe = lpi_pinctrl_probe,
->> +    .remove = lpi_pinctrl_remove,
->> +};
->> +
->> +module_platform_driver(lpi_pinctrl_driver);
->> +MODULE_DESCRIPTION("QTI LPI GPIO pin control driver");
->
-> may be :
-> "SM8250 LPI GPIO pin control driver"
-Okay.. will change accordingly.
->
-> --srini
->> +MODULE_LICENSE("GPL");
->> +
->>
+At least this makes the dt_binding_check happy :-)
+
+Jon
+
 -- 
-Qualcomm India Private Limited, on behalf of Qualcomm Innovation Center, Inc.,
-is a member of Code Aurora Forum, a Linux Foundation Collaborative Project.
-
+nvpublic

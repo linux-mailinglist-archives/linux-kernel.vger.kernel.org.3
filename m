@@ -2,141 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C316146529E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:16:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CEF44652A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347953AbhLAQUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:20:09 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:49208 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351506AbhLAQTi (ORCPT
+        id S243554AbhLAQUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235581AbhLAQUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:19:38 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id F3307CE1EEF;
-        Wed,  1 Dec 2021 16:16:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29F6DC53FCC;
-        Wed,  1 Dec 2021 16:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638375374;
-        bh=ZaZdlBz0Xsjdgk3pyvSsIwdaF4Sv0rsJNE1v08eUN6o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=eiriunlJ491shFz7LOviZlqtOEVJY7jXdOIZgEqhb6DMJ0abY+Iod1rwDlclJMME5
-         ews3skWjf90TGy4bV1ddWrxfP1hK7sDf1BWbhlGwNshdOUAe3Wfv03SZ0N5AQ+2ca8
-         CaVM5RuJwGRlwkEcxruAUTnbC4TxbjwXYwh7AoziGyC4avbgA9O29jfbrrwmLL0IIL
-         WsksML3bv4MJv3MmHgQAkKXrNc2HN1pPOCV4hkR4ZKQ8dL/XtGiEjPp+luSzfmRfpV
-         ZgUaV5yJayFphWILf9dfvcCLwNNUV/izRBZ5GW/a8MchP/8WKeuzmVSCS1Rr8kfvt2
-         VBVmVdx/ChBTw==
-Received: by mail-ed1-f51.google.com with SMTP id o20so103287978eds.10;
-        Wed, 01 Dec 2021 08:16:14 -0800 (PST)
-X-Gm-Message-State: AOAM533hDQ7f6uYGpTYZ83rtv6GYDlUF1r+kAFcnovLlfij94CBnJIES
-        n5yy6nCiXpDFwEm/liF6O0B+syikszbzKUPlLQ==
-X-Google-Smtp-Source: ABdhPJyp2RtLBEgnS5SuIgFKI/toxLct1YuIUSu3+c1jVNCnnv3ACnOqSAaQYMDF8oMAYqmMFLER8cAPPrhiGdxD6v0=
-X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr8202073ejc.390.1638375371905;
- Wed, 01 Dec 2021 08:16:11 -0800 (PST)
+        Wed, 1 Dec 2021 11:20:22 -0500
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C460C061574;
+        Wed,  1 Dec 2021 08:17:01 -0800 (PST)
+Received: by mail-yb1-xb2b.google.com with SMTP id y68so65024708ybe.1;
+        Wed, 01 Dec 2021 08:17:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Y/j/4kzdVSsi+Ey14lyCQ+1fGLJg4yl6XNTlVQdu/Hg=;
+        b=YDOF8iaHP6AUnAhVQmQbUL8n9azuDZqZwt7N+GR3FK1cJCPspEhT/HVK83PvslMNNS
+         oOF2NjIJBlyT5uCNR7Krh9zCajLeXMUzOO8HTRXPnwvkUHHDEJSiYXIEhtQLgsB1ltI8
+         pKvba6rPJOWhofJHEnlh68J2jhWBHlU8HV8+eKEIMq0XUxGjSPX9wvPYq5PbWnf/bA54
+         Klo/UiT7k7OVATkDnBGbUhQSUHhnJdidWL4SI162gzMuxMQhVNW2eeTRb8hMDwkmBXyf
+         W/CghjJLUFkWR/fTxgLpuY1Ae5bltJnQUbUjfMLYv/zkJMQLJ0IRFOL/i4gtzuejviBZ
+         2Wsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Y/j/4kzdVSsi+Ey14lyCQ+1fGLJg4yl6XNTlVQdu/Hg=;
+        b=CAHvggNY2XhMPDmW4ldjmBjlsDX7Q6ExOT21vVvhGNEk6JlH9XjF85IMXBF5iTvF70
+         r0Zq4heFGLAu/Kp5QGQC4TOUufY/pXNtIHc/whniS5jHkVcWp76yQvFDdoWgaVACz8ch
+         s68VudVFl8pPPemdWIE/vMzUUltrZBkwmAicG1U/okWgk82hP8v3zUaZpO/lpvzPcHhM
+         +P88NNRY5VMbcw5BwJEFBWWdmIAR88+t0iMx8GYGEoPkZsI8OabiTfrPL/3y5UYvqLXr
+         Aegqouq3Km6/C4zvcvdPR3RZRjNuCFXwszYFGIw468q/2O8Njm21LYoVPdRVbFQmzUtk
+         IVvQ==
+X-Gm-Message-State: AOAM530KZV90PfSlrslCMhNi5KZGE6uJJVgBy5V0JCOVcVl7rR7of36S
+        VGyxQ5IHUSs8YqAPbzR7LV/BTwMYrUGQ93M48Jg=
+X-Google-Smtp-Source: ABdhPJxb/qKig+DPAlpoa8x6qMGnltEyZ3Piw2ercDxIrGYP/8SuBJi98N/Cm/MLMIGq8nsCd0gRnjIE9Bz5p6BbzFc=
+X-Received: by 2002:a25:bc44:: with SMTP id d4mr8506968ybk.613.1638375420452;
+ Wed, 01 Dec 2021 08:17:00 -0800 (PST)
 MIME-Version: 1.0
-References: <20211130121847.11112-1-a-govindraju@ti.com> <20211130121847.11112-2-a-govindraju@ti.com>
- <YaaGMtE6n0yZNpAI@robh.at.kernel.org> <6e1474bc-038c-43ec-4814-63ad3eca888c@axentia.se>
- <247912b5-e68a-1e97-60c7-0ba21448d3b4@ti.com>
-In-Reply-To: <247912b5-e68a-1e97-60c7-0ba21448d3b4@ti.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 1 Dec 2021 10:16:00 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKA-_svfKyeWqoGZUGbhTGmX_4BgNisURUiam7tcmGbBQ@mail.gmail.com>
-Message-ID: <CAL_JsqKA-_svfKyeWqoGZUGbhTGmX_4BgNisURUiam7tcmGbBQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: mux: Document mux-states property
-To:     Aswath Govindraju <a-govindraju@ti.com>
-Cc:     Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>
+References: <20211122103032.517923-1-maz@kernel.org> <CAMuHMdX2ZRvDYA3idmw3nBcP6CO=2od6ZU-UeJo9vYsuB=fQNQ@mail.gmail.com>
+ <8735no70tt.wl-maz@kernel.org> <CAMuHMdVS67BLP2XEdD6ZvVBVE2x11gKnQa1TqG659HXPM5scqQ@mail.gmail.com>
+ <CAMuHMdWJhnXabKGpW7k944dzQHtwQtxw-yb2bRBsoaMw6N6nuA@mail.gmail.com>
+ <87tug3clvc.wl-maz@kernel.org> <CAMuHMdWGb2xik+94RVwtq8E6+9eN=HfQLX3a4sTjKQXR96Udkw@mail.gmail.com>
+ <87r1b7ck40.wl-maz@kernel.org> <OSZPR01MB7019E7DD7119EFF9C994AA62AA649@OSZPR01MB7019.jpnprd01.prod.outlook.com>
+ <87tufvmes9.wl-maz@kernel.org> <CA+V-a8siHRjF+bJu88QFwz0a_MZ+kiJEwmER58_feyr8O+WNGA@mail.gmail.com>
+ <CAL_JsqK+GcnChx3i9fsYnw+FzZgON4PtKB=CzYLUj6sXtxX6fQ@mail.gmail.com>
+ <CA+V-a8sVS_1hUWJ3uM+VffGyMtdnctBOJTyHTQAoJZGOh0a1Tw@mail.gmail.com>
+ <87bl21mqwk.wl-maz@kernel.org> <CA+V-a8vA0P-yhm2SHJmVh+cuUw7qodQLQBqzNPTz31x5q18xaA@mail.gmail.com>
+ <CAL_JsqJ1Dw9C_GQjto-E2ch7fdN=3f4Qz9qYuf2iYwMRLkdroA@mail.gmail.com>
+In-Reply-To: <CAL_JsqJ1Dw9C_GQjto-E2ch7fdN=3f4Qz9qYuf2iYwMRLkdroA@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 1 Dec 2021 16:16:34 +0000
+Message-ID: <CA+V-a8uOkkG8_mz-PjL2q22hfSXuKSpwuQ-E2_pvCc1sKCJ+zw@mail.gmail.com>
+Subject: Re: [PATCH] of/irq: Add a quirk for controllers with their own
+ definition of interrupt-map
+To:     Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
+        Chris Brandt <Chris.Brandt@renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:32 PM Aswath Govindraju <a-govindraju@ti.com> wrote:
+On Wed, Dec 1, 2021 at 2:36 PM Rob Herring <robh@kernel.org> wrote:
 >
-> Hi Rob,
+> On Wed, Dec 1, 2021 at 7:37 AM Lad, Prabhakar
+> <prabhakar.csengg@gmail.com> wrote:
+> >
+> > Hi Marc/Rob,
+> >
+> > On Tue, Nov 30, 2021 at 6:37 PM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On Tue, 30 Nov 2021 12:52:21 +0000,
+> > > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> > > >
+> > > > On Mon, Nov 29, 2021 at 6:33 PM Rob Herring <robh@kernel.org> wrote:
+> > > > >
+> > > > > interrupts would work just fine here:
+> > > > >
+> > > > > interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> > > > >   <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> > > > >   <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> > > > >   <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> > > > >   <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> > > > >   <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
+> > > > >   <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
+> > > > >   <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> > > > >
+> > > > > We don't need a different solution for N:1 interrupts from N:M. Sure,
+> > > > > that could become unweldy if there are a lot of interrupts (just like
+> > > > > interrupt-map), but is that an immediate problem?
+> > > > >
+> > > > It's just that with this approach the driver will have to index the
+> > > > interrupts instead of reading from DT.
+> > > >
+> > > > Marc - is it OK with the above approach?
+> > >
+> > > Anything that uses standard properties in a standard way works for me.
+> > >
+> > I added interrupts property now instead of interrupt-map as below:
+> >
+> > irqc: interrupt-controller@110a0000 {
+> >       compatible = "renesas,r9a07g044-irqc", "renesas,rzg2l-irqc";
+> >        #address-cells = <0>;
+> >        interrupt-parent = <&gic>;
+> >        interrupt-controller;
+> >        reg = <0 0x110a0000 0 0x10000>;
+> >        interrupts =
+> >                       <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>,
+> >                       <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>,
+> >                      <GIC_SPI 475 IRQ_TYPE_LEVEL_HIGH>;
+> >          clocks = <&cpg CPG_MOD R9A07G044_IA55_CLK>,
+> >                        <&cpg CPG_MOD R9A07G044_IA55_PCLK>;
+> >           clock-names = "clk", "pclk";
+> >           power-domains = <&cpg>;
+> >           resets = <&cpg R9A07G044_IA55_RESETN>;
+> > };
+> >
+> >
+> > In the hierarchal interrupt code its parsed as below:
+> > on probe fetch the details:
+> > range = of_get_property(np, "interrupts", &len);
+> > if (!range)
+> >       return -EINVAL;
+> >
+> > for (len /= sizeof(*range), j = 0; len >= 3; len -= 3) {
+> >       if (j >= IRQC_NUM_IRQ)
+> >             return -EINVAL;
+> >
+> >       priv->map[j].args[0] = be32_to_cpu(*range++);
+> >       priv->map[j].args[1] = be32_to_cpu(*range++);
+> >       priv->map[j].args[2] = be32_to_cpu(*range++);
+> >       priv->map[j].args_count = 3;
+> >       j++;
 >
-> On 01/12/21 2:18 am, Peter Rosin wrote:
-> >
-> >
-> > On 2021-11-30 21:14, Rob Herring wrote:
-> >> On Tue, Nov 30, 2021 at 05:48:46PM +0530, Aswath Govindraju wrote:
-> >>> In some cases, it is required to provide the state to which the mux
-> >>> controller has be set to, from the consumer device tree node. Document the
-> >>> property mux-states that can be used for adding this support.
-> >>
-> >> I having a hard time understanding why you need this. One consumer
-> >> configures a mux one way and another consumer another way? How do you
-> >> arbitrate that? Please elaborate on what 'some cases' are and why it's
-> >> required.
-> >>
-> >> Can't you just add a cell for the 'state' allowing for 1-2 cells
-> >> instead of 0-1?
-> >
-> > A mux controller can control several muxes. That happens e.g. when the
-> > same gpio lines are connected to several mux chips in parallel. When
-> > you operate one mux, the other parallel muxes just follow along. If
-> > these muxes are then used orthogonally, coordination is needed. The real
-> > world case I had was I2C and an analog signal connected to an ADC that
-> > went through parallel/dependent muxes like this. It is simply not
-> > possible to freely mux the I2C bus and the analog signal, they are tied
-> > together and dependent and must coordinate their accesses.
-> >
-> > The addition now is that Aswath wants a mux control client to "point
-> > at" a single state instead of the whole mux control, and I see that as
-> > a usable addition. It seems like a natural place to specify a single mux
-> > state that some driver needs in some circumstance.
-> >
-> > But, since a mux control is inherently a shared resource (see above),
-> > one consumer might need a specific state and some other consumer might
-> > need the whole mux control and manage the states as e.g. the existing
-> > i2c-mux-gpmux binding is doing. So, you need to be able to specify both
-> > ways to point at muxes; either to a single mux state, or to the whole mux
-> > control.
-> >
-> > While you could make the extra cell optional, that does not work for
-> > the mux/adi,adg792a binding, since it is using the #mux-control-cells
-> > property to determine which mode it should operate its three muxes in.
-> > Either with one common/parallel mux control, or with three independent
-> > mux controls.
-> >
-> > So, that binding is already in the 0-1 territory, and adding an optional
-> > extra cell makes it 0-1-2 with no way to determine what is intended when
-> > the cell count is 1 (three independent mux controls OR one mux control
-> > and a state). I see no way to add the extra state to that binding, short
-> > of adding an extra property somewhere for that driver, but I simply did
-> > not want to go that path because it would get inconsistent when trying
-> > to add that in a backwards compatible way. Or rather, that was my
-> > conclusion.
-> >
-> > Suggestions welcome...
-> >
+> Not sure what's wrong, but you shouldn't be doing your own parsing.
+> The setup shouldn't look much different than a GPIO controller
+> interrupts except you have multiple parent interrupts.
 >
->
-> In addition to what Peter has mentioned, I would like to elaborate on my
-> use case for adding this feature. I am trying to implement this feature
-> in the TCAN104x transceiver driver, for selecting the mux state to route
-> the signals from CAN controller to transceivers on the board. The state
-> of the mux line to be set, can change based on the design and this is
-> needs to be provided from the device tree. Hence, I am trying to add
-> this support for providing the state to be set to the driver from the
-> device tree node.
+Sorry does that mean the IRQ domain should be chained handler and not
+hierarchical? Or is it I have miss-understood.
 
-Okay, please add something along the lines of what Peter said for when
-you use which binding.
+If the IRQ domain has to be hierarchical how do we map to the parent?
+(based on the previous reviews Marc had suggested to implement as
+hierarchical  [1])
 
-> Also, one more question on regarding DT check errors, may I know what
-> should be the order in which the patches need to be posted in order to
-> not get the error? This is because mux-states would be a new property to
-> be added in the TCAN104x bindings and I thought that it would need to be
-> posted after the patch for the changes in mux-controller are merged.
+[1] https://lore.kernel.org/lkml/20211110225808.16388-1-prabhakar.mahadev-lad.rj@bp.renesas.com/T/
 
-Looks like a circular dependency. Assuming you ran dt_binding_check on
-the series, just add a note about the dependency and I won't send the
-report.
-
-Rob
+Cheers,
+Prabhakar

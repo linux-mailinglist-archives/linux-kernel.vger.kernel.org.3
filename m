@@ -2,94 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F47465023
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2AF465022
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350439AbhLAOnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:43:37 -0500
-Received: from mail-oi1-f169.google.com ([209.85.167.169]:41504 "EHLO
-        mail-oi1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350334AbhLAOgw (ORCPT
+        id S1350442AbhLAOnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:43:31 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:38551 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S243839AbhLAOgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 09:36:52 -0500
-Received: by mail-oi1-f169.google.com with SMTP id u74so48879766oie.8;
-        Wed, 01 Dec 2021 06:33:27 -0800 (PST)
+Received: by mail-oi1-f179.google.com with SMTP id r26so48833304oiw.5;
+        Wed, 01 Dec 2021 06:33:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
          :message-id;
-        bh=4mVcnYqOvWqu8VcZ1MXpxqRjFIUZ505WaFehSXIj24Y=;
-        b=e1oqoSquESnCRAju+77JedTCUEIUd8vJK/JdqnrFwLryTaD/lf2F5gzf8SkE84i/c0
-         BOa7W9RN78B7jx1GbI4p556k1TD2VmjtfSTwuQWLLSWmv8ZPWJ2ZJ4+LBW4bzHzO788y
-         Nan3eLTDWXucS4dMJx9SmL82bE20prN9zhCr/jThZQvDk9ip/V7IxcRVbZn6iweEu+bv
-         8FXH2ZRi3rrFFd7edoX4OyilzROqAsk/bpuL/WDdeNfKifG9YDGeczOA5MtOMPfD9Q73
-         i7uRPd/J8H837e6CECaid7KPm3+v15zrgH0BD7TtYqIEe8aVTKRZkLFQugmYvHajR7vP
-         aP5g==
-X-Gm-Message-State: AOAM5317Kro2adwELrSIBZnbu+klQ+xASH3XB7MdXi4+OnOl/JvuoXnB
-        eqQGuM/P7EHCHYPRwcE27g==
-X-Google-Smtp-Source: ABdhPJxjc985MIwhTdWCLcKMo32v7Tkz/if0R9oT3CwPoOgJQIdms4+/SKc/nMyXQkRrhPelOLqrPQ==
-X-Received: by 2002:aca:3642:: with SMTP id d63mr6168003oia.95.1638369206746;
-        Wed, 01 Dec 2021 06:33:26 -0800 (PST)
+        bh=5fVGwlF4XI4uZVCUusLE8Z4mnkW9gp/8l+SisQ75zHc=;
+        b=YzlBdy2J4LnVeQUIiCfhrFHC7HYPdqJid8HpSq3qIrhs86qjUI0zH0+RQu3O+cfr8f
+         AjjzipL9Wh3u0kq/8RDz+x39IQOXeG1+IrKdKLtY0gybEv06BGILOSa0HsFDZ8wzM4BF
+         OIfbvKHayqJOVp9T2dEgcXoMFEP44mB8QaAqminIk+BK6QQcCj7D6BCJYl43JTdt+obz
+         rQ/u51NMxoytqLxfjNYaTlfOvRRaKvisye2rUqzu6Sw8Q8W3gJpU5EQvKpkiJcdh2Vr7
+         btCroIwC+oeZgB2nSWws0unCtCqbBvw1eNUxXAUaPrKq5ARDTnHScrCEKqJHv2YF9kgh
+         LT+w==
+X-Gm-Message-State: AOAM533qnbIrB201Nq/ddvJcAVkWHsd0wA661nX1VyrlTiTx8arE17Us
+        4ZTwORrYDzGhEKc7cz8PqA==
+X-Google-Smtp-Source: ABdhPJxwjiVMzMNb9BCilS0QJ051dI8LxsS3oZu3csQ+DJh5CIcJ66oIimU3M7fRpnBeFuI5uMlEuQ==
+X-Received: by 2002:a05:6808:1408:: with SMTP id w8mr6502351oiv.54.1638369209303;
+        Wed, 01 Dec 2021 06:33:29 -0800 (PST)
 Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id r26sm217otn.15.2021.12.01.06.33.25
+        by smtp.gmail.com with ESMTPSA id w5sm3529054otk.70.2021.12.01.06.33.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 06:33:25 -0800 (PST)
-Received: (nullmailer pid 1684352 invoked by uid 1000);
+        Wed, 01 Dec 2021 06:33:28 -0800 (PST)
+Received: (nullmailer pid 1684355 invoked by uid 1000);
         Wed, 01 Dec 2021 14:33:22 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com, devicetree@vger.kernel.org,
-        Scott Branden <sbranden@broadcom.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+Cc:     =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
         Doug Berger <opendmb@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Ray Jui <rjui@broadcom.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-In-Reply-To: <20211201041228.32444-8-f.fainelli@gmail.com>
-References: <20211201041228.32444-1-f.fainelli@gmail.com> <20211201041228.32444-8-f.fainelli@gmail.com>
-Subject: Re: [PATCH net-next 7/7] dt-bindings: net: Convert iProc MDIO mux to YAML
+        "David S. Miller" <davem@davemloft.net>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        bcm-kernel-feedback-list@broadcom.com
+In-Reply-To: <20211201041228.32444-4-f.fainelli@gmail.com>
+References: <20211201041228.32444-1-f.fainelli@gmail.com> <20211201041228.32444-4-f.fainelli@gmail.com>
+Subject: Re: [PATCH net-next 3/7] dt-bindings: net: Document moca PHY interface
 Date:   Wed, 01 Dec 2021 08:33:22 -0600
-Message-Id: <1638369202.222306.1684348.nullmailer@robh.at.kernel.org>
+Message-Id: <1638369202.233948.1684354.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Nov 2021 20:12:28 -0800, Florian Fainelli wrote:
-> Conver the Broadcom iProc MDIO mux Device Tree binding to YAML.
+On Tue, 30 Nov 2021 20:12:24 -0800, Florian Fainelli wrote:
+> MoCA (Multimedia over Coaxial) is used by the internal GENET/MOCA cores
+> and will be needed in order to convert GENET to YAML in subsequent
+> changes.
 > 
 > Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 > ---
->  .../bindings/net/brcm,mdio-mux-iproc.txt      | 62 --------------
->  .../bindings/net/brcm,mdio-mux-iproc.yaml     | 80 +++++++++++++++++++
->  2 files changed, 80 insertions(+), 62 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
->  create mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
+>  Documentation/devicetree/bindings/net/ethernet-controller.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Running 'make dtbs_check' with the schema in this patch gives the
+following warnings. Consider if they are expected or the schema is
+incorrect. These may not be new warnings.
 
-yamllint warnings/errors:
+Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+This will change in the future.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.example.dt.yaml:0:0: /example-0/mdio-mux@66020000/mdio@0/pci-phy@0: failed to match any schema with compatible: ['brcm,ns2-pcie-phy']
-Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.example.dt.yaml:0:0: /example-0/mdio-mux@66020000/mdio@7/pci-phy@0: failed to match any schema with compatible: ['brcm,ns2-pcie-phy']
+Full log is available here: https://patchwork.ozlabs.org/patch/1561996
 
-doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/patch/1562000
+ethernet@0,2: fixed-link:speed:0:0: 2500 is not one of [10, 100, 1000]
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dt.yaml
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dt.yaml
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dt.yaml
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dt.yaml
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dt.yaml
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dt.yaml
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dt.yaml
+	arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dt.yaml
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+ethernet@17020000: phy-handle: [[36], [37]] is too long
+	arch/arm64/boot/dts/apm/apm-mustang.dt.yaml
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+ethernet@30000: fixed-link:speed:0:0: 2500 is not one of [10, 100, 1000]
+	arch/arm/boot/dts/armada-385-clearfog-gtr-l8.dt.yaml
+	arch/arm/boot/dts/armada-385-clearfog-gtr-s4.dt.yaml
 

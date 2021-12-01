@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ACD4657EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCFF4657F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353055AbhLAU6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:58:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50640 "EHLO
+        id S1353240AbhLAU6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353177AbhLAUzH (ORCPT
+        with ESMTP id S1353187AbhLAUzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:55:07 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577F0C061757;
-        Wed,  1 Dec 2021 12:51:46 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id z6so18649197plk.6;
-        Wed, 01 Dec 2021 12:51:46 -0800 (PST)
+        Wed, 1 Dec 2021 15:55:09 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED07C061574;
+        Wed,  1 Dec 2021 12:51:48 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 71so24859541pgb.4;
+        Wed, 01 Dec 2021 12:51:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=v2A5xiMCMD01rja8VsVDsIJrjuLJ0aPnQc2VQht4HL0=;
-        b=dkbhlmv1QoiDwCfIHWa9eyyy8BH/yNOh/+bNgglFZ3KVr/GuQVoGtYs5ZR1Euv/p66
-         rcLzNtHYK1W0MWeZgrzM/DpF/VMOddlSZiF+vd6qUm+hXQoTWZR9w7hQM9Ky8ZVqOTfI
-         A11n0gNrDcJ1snSiOGNg5xdNbL37VJrEhEgk64I42gsxkgRH/qTZ0Ph1B1pzRuR/8QrD
-         50tlTdyQ/fXOrvGd+tUqpbGQ1DqIdXQiDrk59nWIwfCxxelWuW/F1fcrW8V38xJWPxb3
-         yu1YLDCRWSzQ0fIABpReqssYthz5G/UfSsg1uIO1SIm++cW0iSVijixklRNqB+HsUZ4y
-         68ew==
+        bh=OZn9A+mFzA0aHToeDPBq9NgT/WPHcILFOviR6M5ho8M=;
+        b=dJ3GPmR5MzyMtGoe3pDcBa8ddSr0qSWOqiSlhgbqtp9iIK7uYoSq8L08k2nQoZ5tJL
+         ggFA1FVZIbJ3+AdX9clEv59qQhaz/xiK/t3Yuo1VkB3a14slnJ7MikNIgXmJ20y6CAmJ
+         vyHytWLX5u3fyMQfmmDxryy9VErzoDcgubfQRorvV6kiglK50YWeVFWicjAAHn6vZcu6
+         B/ELTz2Z/YMLjQf6h9tVng6YPClAi84OC5mu/jwiNC7kTg/xmbdZBNz0Vj47ErcC5mh8
+         K4OezIrk6VmRWcxwf7iRwrmoWIVgU/Ch86jhwsKdOAq5WER5LqdubpgesTqiX21NagsU
+         6RBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=v2A5xiMCMD01rja8VsVDsIJrjuLJ0aPnQc2VQht4HL0=;
-        b=EL/a04IfOomB4nWY1VOVGIINWmKUb3jtrJcCXRXxS1YlFtbkJuEVKwRzzcKEnBMwpE
-         S4JLXT4RCNYsE1M0r6vjLmPUiklgHGJ0Vhl+6o1i94nPWv1ZT8NZS3XyhYviSmhG+d2d
-         d+ziC1wcLcQjKJ+w/F2gekHXbrpmN2ohq3g/AywJAF+Og2ZLVwKGvteleIdxt+XR9v0n
-         HDm95EvYq6piVD8wwIR8v+HG7p1BG3xzlxkBGBvksXusX9XdB/DWdKK36X1LHjEbWXvJ
-         kuYLwFZSBav+V3X0eILrH3WCsNspVvbtc4z6TRRkQUPZgvptK+soHmy3s6U/sjuOkBg7
-         /lCw==
-X-Gm-Message-State: AOAM5302zcGJvOiu6r2JgfTnC7IftXo53J/LAomTdVnrIvx3Luj8v3WJ
-        xKRBrxspj2zvMtH7oofaYgrS8PEWv54=
-X-Google-Smtp-Source: ABdhPJxuZNFW3NvsbL7fKjrMHRPi1FeCRP3Q14olDON/29y4ghN7ZfkpPEt1PMqazqGOCHSLQ1cBrQ==
-X-Received: by 2002:a17:90b:1a88:: with SMTP id ng8mr714991pjb.180.1638391905488;
-        Wed, 01 Dec 2021 12:51:45 -0800 (PST)
+        bh=OZn9A+mFzA0aHToeDPBq9NgT/WPHcILFOviR6M5ho8M=;
+        b=OHXUzlt6ntZiGDGJBWnd83m7uCH0pGaNFPcd/xykGiKPpA3GypzvewHAJ9CdRVva2e
+         7/3r6QL3BDLwZOFdevl6RwIosfK7C7MqNxiNw4B57jiO2ueTJKtBoVvfgBMzLSW5L7H/
+         Ycyod9WeX3C8lWNKoMlfxJV1K+j09EN+AEHkQLxRykCyXljB9gYw/+KCqR+pm8bsPI2N
+         OWyPhitCI1EaHtzVmRhQ9ZNZdp4ZkEqOPCkvC4SGYUnMQplOZfUHBZNQ3me5lgAgIzo3
+         hUKvBobiD6jmG9z3fwoktdk6fM9lDrHSxRABWyfbCmYc20U0iNfQJL2ACMl6KYV2LuKx
+         rpUg==
+X-Gm-Message-State: AOAM530I3k4Rr5Z+ZYexynok04LZFIc9xeR0QiJQR0ouFD0Iri28nwsx
+        o61SVBqgrJb9vfgQJqReMLpPVbQ/xU4=
+X-Google-Smtp-Source: ABdhPJyi1H3tsULbf/kwFgbvTFC664FjwcMHKvWPNMt7TdkJ17Vxa9d0cdU2Y3CrRk9dlsdCSsBOVA==
+X-Received: by 2002:aa7:93c4:0:b0:49f:a7f5:7f5a with SMTP id y4-20020aa793c4000000b0049fa7f57f5amr8539889pff.8.1638391907671;
+        Wed, 01 Dec 2021 12:51:47 -0800 (PST)
 Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p20sm729117pfw.96.2021.12.01.12.51.43
+        by smtp.gmail.com with ESMTPSA id p20sm729117pfw.96.2021.12.01.12.51.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 12:51:45 -0800 (PST)
+        Wed, 01 Dec 2021 12:51:47 -0800 (PST)
 From:   Florian Fainelli <f.fainelli@gmail.com>
 To:     devicetree@vger.kernel.org
 Cc:     Florian Fainelli <f.fainelli@gmail.com>,
@@ -91,9 +91,9 @@ Cc:     Florian Fainelli <f.fainelli@gmail.com>,
         linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
         linux-pm@vger.kernel.org (open list:THERMAL),
         linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH 04/14] dt-bindings: rtc: Convert Broadcom STB waketimer to YAML
-Date:   Wed,  1 Dec 2021 12:51:00 -0800
-Message-Id: <20211201205110.41656-5-f.fainelli@gmail.com>
+Subject: [PATCH 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
+Date:   Wed,  1 Dec 2021 12:51:01 -0800
+Message-Id: <20211201205110.41656-6-f.fainelli@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211201205110.41656-1-f.fainelli@gmail.com>
 References: <20211201205110.41656-1-f.fainelli@gmail.com>
@@ -103,93 +103,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom STB waketimer Device Tree binding to YAML to help
-with validation.
+Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
+validation.
 
 Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 ---
- .../bindings/rtc/brcm,brcmstb-waketimer.txt   | 20 ---------
- .../bindings/rtc/brcm,brcmstb-waketimer.yaml  | 44 +++++++++++++++++++
- 2 files changed, 44 insertions(+), 20 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
+ .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 --------------
+ .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 104 ++++++++++++++++++
+ MAINTAINERS                                   |   2 +-
+ 3 files changed, 105 insertions(+), 84 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
+ create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
 
-diff --git a/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.txt b/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.txt
+diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
 deleted file mode 100644
-index d946f28502b3..000000000000
---- a/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.txt
+index 5d468ecd1809..000000000000
+--- a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
 +++ /dev/null
-@@ -1,20 +0,0 @@
--Broadcom STB wake-up Timer
+@@ -1,83 +0,0 @@
+-Broadcom STB "UPG GIO" GPIO controller
 -
--The Broadcom STB wake-up timer provides a 27Mhz resolution timer, with the
--ability to wake up the system from low-power suspend/standby modes.
+-The controller's registers are organized as sets of eight 32-bit
+-registers with each set controlling a bank of up to 32 pins.  A single
+-interrupt is shared for all of the banks handled by the controller.
 -
 -Required properties:
--- compatible     : should contain "brcm,brcmstb-waketimer"
--- reg            : the register start and length for the WKTMR block
--- interrupts     : The TIMER interrupt
--- clocks	 : The phandle to the UPG fixed clock (27Mhz domain)
+-
+-- compatible:
+-    Must be "brcm,brcmstb-gpio"
+-
+-- reg:
+-    Define the base and range of the I/O address space containing
+-    the brcmstb GPIO controller registers
+-
+-- #gpio-cells:
+-    Should be <2>.  The first cell is the pin number (within the controller's
+-    pin space), and the second is used for the following:
+-    bit[0]: polarity (0 for active-high, 1 for active-low)
+-
+-- gpio-controller:
+-    Specifies that the node is a GPIO controller.
+-
+-- brcm,gpio-bank-widths:
+-    Number of GPIO lines for each bank.  Number of elements must
+-    correspond to number of banks suggested by the 'reg' property.
+-
+-Optional properties:
+-
+-- interrupts:
+-    The interrupt shared by all GPIO lines for this controller.
+-
+-- interrupts-extended:
+-    Alternate form of specifying interrupts and parents that allows for
+-    multiple parents.  This takes precedence over 'interrupts' and
+-    'interrupt-parent'.  Wakeup-capable GPIO controllers often route their
+-    wakeup interrupt lines through a different interrupt controller than the
+-    primary interrupt line, making this property necessary.
+-
+-- #interrupt-cells:
+-    Should be <2>.  The first cell is the GPIO number, the second should specify
+-    flags.  The following subset of flags is supported:
+-    - bits[3:0] trigger type and level flags
+-        1 = low-to-high edge triggered
+-        2 = high-to-low edge triggered
+-        4 = active high level-sensitive
+-        8 = active low level-sensitive
+-      Valid combinations are 1, 2, 3, 4, 8.
+-    See also Documentation/devicetree/bindings/interrupt-controller/interrupts.txt
+-
+-- interrupt-controller:
+-    Marks the device node as an interrupt controller
+-
+-- wakeup-source:
+-    GPIOs for this controller can be used as a wakeup source
 -
 -Example:
+-	upg_gio: gpio@f040a700 {
+-		#gpio-cells = <2>;
+-		#interrupt-cells = <2>;
+-		compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
+-		gpio-controller;
+-		interrupt-controller;
+-		reg = <0xf040a700 0x80>;
+-		interrupt-parent = <&irq0_intc>;
+-		interrupts = <0x6>;
+-		brcm,gpio-bank-widths = <32 32 32 24>;
+-	};
 -
--waketimer@f0411580 {
--	compatible = "brcm,brcmstb-waketimer";
--	reg = <0xf0411580 0x14>;
--	interrupts = <0x3>;
--	interrupt-parent = <&aon_pm_l2_intc>;
--	clocks = <&upg_fixed>;
--};
-diff --git a/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml b/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
+-	upg_gio_aon: gpio@f04172c0 {
+-		#gpio-cells = <2>;
+-		#interrupt-cells = <2>;
+-		compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
+-		gpio-controller;
+-		interrupt-controller;
+-		reg = <0xf04172c0 0x40>;
+-		interrupt-parent = <&irq0_aon_intc>;
+-		interrupts = <0x6>;
+-		interrupts-extended = <&irq0_aon_intc 0x6>,
+-			<&aon_pm_l2_intc 0x5>;
+-		wakeup-source;
+-		brcm,gpio-bank-widths = <18 4>;
+-	};
+diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
 new file mode 100644
-index 000000000000..9fe079917a98
+index 000000000000..4b7309dc74dc
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/rtc/brcm,brcmstb-waketimer.yaml
-@@ -0,0 +1,44 @@
++++ b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+@@ -0,0 +1,104 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/rtc/brcm,brcmstb-waketimer.yaml#
++$id: http://devicetree.org/schemas/gpio/brcm,brcmstb-gpio.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Broadcom STB wake-up Timer
++title: Broadcom STB "UPG GIO" GPIO controller
++
++description: >
++  The controller's registers are organized as sets of eight 32-bit
++  registers with each set controlling a bank of up to 32 pins.  A single
++  interrupt is shared for all of the banks handled by the controller.
 +
 +maintainers:
++  - Doug Berger <opendmb@gmail.com>
 +  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+description:
-+  The Broadcom STB wake-up timer provides a 27Mhz resolution timer, with the
-+  ability to wake up the system from low-power suspend/standby modes.
-+
-+allOf:
-+  - $ref: "rtc.yaml#"
 +
 +properties:
 +  compatible:
-+    const: brcm,brcmstb-waketimer
++    oneOf:
++      - items:
++          - enum:
++              - brcm,bcm7445-gpio
++          - const: brcm,brcmstb-gpio
 +
 +  reg:
 +    maxItems: 1
++    description:
++      Define the base and range of the I/O address space containing
++      the brcmstb GPIO controller registers
++
++  "#gpio-cells":
++    const: 2
++    description: >
++      The first cell is the pin number (within the controller's
++      pin space), and the second is used for the following:
++      bit[0]: polarity (0 for active-high, 1 for active-low)
++
++  gpio-controller: true
++
++  "brcm,gpio-bank-widths":
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description:
++      Number of GPIO lines for each bank.  Number of elements must
++      correspond to number of banks suggested by the 'reg' property.
 +
 +  interrupts:
-+    description: the TIMER interrupt
 +    maxItems: 1
++    description:
++      The interrupt shared by all GPIO lines for this controller.
 +
-+  clocks:
-+    description: clock reference in the 27MHz domain
-+    maxItems: 1
++  "#interrupt-cells":
++    const: 2
++    description: >
++      The first cell is the GPIO number, the second should specify
++      flags.  The following subset of flags is supported:
++      - bits[3:0] trigger type and level flags
++        1 = low-to-high edge triggered
++        2 = high-to-low edge triggered
++        4 = active high level-sensitive
++        8 = active low level-sensitive
++      Valid combinations are 1, 2, 3, 4, 8.
++
++  interrupt-controller: true
++
++  wakeup-source:
++    type: boolean
++    description: >
++      GPIOs for this controller can be used as a wakeup source
++
++required:
++  - compatible
++  - reg
++  - gpio-controller
++  - "#gpio-cells"
 +
 +additionalProperties: false
 +
 +examples:
 +  - |
-+    rtc@f0411580 {
-+        compatible = "brcm,brcmstb-waketimer";
-+        reg = <0xf0411580 0x14>;
-+        interrupts = <0x3>;
-+        interrupt-parent = <&aon_pm_l2_intc>;
-+        clocks = <&upg_fixed>;
++    upg_gio: gpio@f040a700 {
++        #gpio-cells = <2>;
++        #interrupt-cells = <2>;
++        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
++        gpio-controller;
++        interrupt-controller;
++        reg = <0xf040a700 0x80>;
++        interrupt-parent = <&irq0_intc>;
++        interrupts = <0x6>;
++        brcm,gpio-bank-widths = <32 32 32 24>;
 +    };
++
++    upg_gio_aon: gpio@f04172c0 {
++        #gpio-cells = <2>;
++        #interrupt-cells = <2>;
++        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
++        gpio-controller;
++        interrupt-controller;
++        reg = <0xf04172c0 0x40>;
++        interrupt-parent = <&irq0_aon_intc>;
++        interrupts = <0x6>;
++        wakeup-source;
++        brcm,gpio-bank-widths = <18 4>;
++    };
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 913856599623..78161abc384f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3772,7 +3772,7 @@ BROADCOM BRCMSTB GPIO DRIVER
+ M:	Gregory Fong <gregory.0xf0@gmail.com>
+ L:	bcm-kernel-feedback-list@broadcom.com
+ S:	Supported
+-F:	Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
++F:	Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
+ F:	drivers/gpio/gpio-brcmstb.c
+ 
+ BROADCOM BRCMSTB I2C DRIVER
 -- 
 2.25.1
 

@@ -2,136 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8751E464A4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1195464A61
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:12:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348132AbhLAJFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 04:05:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55564 "EHLO
+        id S242150AbhLAJPb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 04:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbhLAJFm (ORCPT
+        with ESMTP id S237277AbhLAJP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:05:42 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C21C061574;
-        Wed,  1 Dec 2021 01:02:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=4zsv56du9WrDnNkABuKCURrUGUFAX77zWaFiEC1rNsc=; b=lgPsvb1WOVk2xcPXEnNGCe8Ydz
-        2aM74xPuH9Mlq8qbhWO5yOtWXd3xT1Qtbjnd12qLzoRzESoW+6LdP08m8CmTnC/A5iC5jy9omZXNV
-        Cq9QP1nT2eI5jPgJXhfw2NNQpgtI0Sfq+XQ2j/eoohNiOTf8L2/vPS2kpVkCPlR5R49NIAtZ5GX5a
-        9Uq+5sOCHReHkHMF845bt/NYIIN+Nt61uitjtFmg/8Yf/0txdq3hMPvVoDYvwMEDYqtgL/p0Estnm
-        XFAQnybA5YHTqtjq5o3vhcOgpQ1O6UA5rB4P5pFbuoDhSulqpEwzFDYtdMpvLVBohW2M/CmTCXD2X
-        Y8H+LMTA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:56000)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1msLVB-0007ks-2a; Wed, 01 Dec 2021 09:02:09 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1msLV7-0007ry-1T; Wed, 01 Dec 2021 09:02:05 +0000
-Date:   Wed, 1 Dec 2021 09:02:05 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] modpost: file2alias: fixup mdio alias garbled
- code in modules.alias
-Message-ID: <Yac6DakLxBxFgfZk@shell.armlinux.org.uk>
-References: <1637919957-21635-1-git-send-email-zhuyinbo@loongson.cn>
- <c6d37ae0-9ccb-a527-4f55-e96972813a53@gmail.com>
- <YaYPMOJ/+OXIWcnj@shell.armlinux.org.uk>
- <YabEHd+Z5SPAhAT5@lunn.ch>
+        Wed, 1 Dec 2021 04:15:28 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D829C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 01:12:08 -0800 (PST)
+Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1msLeW-0003Y6-1e; Wed, 01 Dec 2021 10:11:48 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1msLeQ-0003CH-IM; Wed, 01 Dec 2021 10:11:42 +0100
+Message-ID: <3b80b2a52362cbadb26052685566e2c1f75a0b68.camel@pengutronix.de>
+Subject: Re: [v13 2/2] pwm: Add Aspeed ast2600 PWM support
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>,
+        "jdelvare@suse.com" <jdelvare@suse.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "joel@jms.id.au" <joel@jms.id.au>,
+        "andrew@aj.id.au" <andrew@aj.id.au>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
+        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
+        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>
+Cc:     BMC-SW <BMC-SW@aspeedtech.com>
+Date:   Wed, 01 Dec 2021 10:11:42 +0100
+In-Reply-To: <CDB0374F-3835-4501-964E-DB771588114D@aspeedtech.com>
+References: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
+         <20211129064329.27006-3-billy_tsai@aspeedtech.com>
+         <e28a5d5de9b940717e6444f019eab63ab1bb0b75.camel@pengutronix.de>
+         <CDB0374F-3835-4501-964E-DB771588114D@aspeedtech.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YabEHd+Z5SPAhAT5@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 01:38:53AM +0100, Andrew Lunn wrote:
-> > However, this won't work for PHY devices created _before_ the kernel
-> > has mounted the rootfs, whether or not they end up being used. So,
-> > every PHY mentioned in DT will be created before the rootfs is mounted,
-> > and none of these PHYs will have their modules loaded.
+Hi Billy,
+
+On Wed, 2021-12-01 at 03:30 +0000, Billy Tsai wrote:
+> Hi Philipp,
 > 
-> Hi Russell
+> On 2021/11/30, 5:52 PM, "Philipp Zabel" <p.zabel@pengutronix.de> wrote:
 > 
-> I think what you are saying here is, if the MAC or MDIO bus driver is
-> built in, the PHY driver also needs to be built in?
+>     On Mon, 2021-11-29 at 14:43 +0800, Billy Tsai wrote:
+>     [...]
+>     >   > +	ret = clk_prepare_enable(priv->clk);
+>     >   > +	if (ret)
+>     >   > +		return dev_err_probe(dev, ret, "Couldn't enable clock\n");
+>     >   > +
+>     >   > +	ret = reset_control_deassert(priv->reset);
+>     >   > +	if (ret) {
+>     >   > +		dev_err_probe(dev, ret, "Couldn't deassert reset control\n");
+>     >   > +		goto err_disable_clk;
+>     >   > +	}
 > 
-> If the MAC or MDIO bus driver is a module, it means the rootfs has
-> already been mounted in order to get these modules. And so the PHY
-> driver as a module will also work.
-
-Yes, because the module loading is performed by phy_device_create() when
-it calls phy_request_driver_module(), which will happen when either the
-MDIO bus is scanned or the DT is parsed for the PHY nodes.
-
-> > I believe this is the root cause of Yinbo Zhu's issue.
+>     >   Is there any reason to keep the clocks running and the controller out of
+>     >   reset while the PWM outputs are disabled?
 > 
-> You are speculating that in Yinbo Zhu case, the MAC driver is built
-> in, the PHY is a module. The initial request for the firmware fails.
+> Can you tell me about your concerns with this process?
 
-s/firmware/module/ and it could also be the MDIO bus driver that is
-built in.
+No particular concerns, just curiosity.
 
-> Yinbo Zhu would like udev to try again later when the modules are
-> available.
+> In my opinion, they are used to provide the clock and de-assert the reset of the PWM engine. If we didn't release
+> them in probe stage the CPU can't and shouldn't read the register of the PWM engine when call the get_state.
+> Assume that we want to adjust them dynamically, the driver needs to add more conditions to check and keep the status
+> of each PWM channel, which is not a good deal for the server platform.
 
-I think so - it's speculation because it seems quite difficult to find
-out detailed information.
+Thanks. I don't know the hardware, so I have no idea whether disabling
+the clocks would even save a measurable (let alone appreciable) amount
+of power.
 
-> > What we _could_ do is review all device trees and PHY drivers to see
-> > whether DT modaliases are ever used for module loading. If they aren't,
-> > then we _could_ make the modalias published by the kernel conditional
-> > on the type of mdio device - continue with the DT approach for non-PHY
-> > devices, and switch to the mdio: scheme for PHY devices. I repeat, this
-> > can only happen if no PHY drivers match using the DT scheme, otherwise
-> > making this change _will_ cause a regression.
-> 
-> Take a look at
-> drivers/net/mdio/of_mdio.c:whitelist_phys[] and the comment above it.
-> 
-> So there are some DT blobs out there with compatible strings for
-> PHYs. I've no idea if they actually load that way, or the standard PHY
-> mechanism is used.
+I've just seen other PWM drivers use runtime PM or enable/disable clocks
+dynamically, and wondered why this one doesn't.
 
-Well, this suggests we have no instances - if none of our modules
-contain a DT table to match a PHY-driver, then we should be pretty
-safe.
-
-$ grep phy_driver drivers/net -rl | xargs grep 'MODULE_ALIAS\|MODULE_DEVICE.*of'
-drivers/net/phy/xilinx_gmii2rgmii.c:MODULE_DEVICE_TABLE(of, xgmiitorgmii_of_match);
-drivers/net/mdio/mdio-moxart.c:MODULE_DEVICE_TABLE(of, moxart_mdio_dt_ids);
-drivers/net/dsa/mt7530.c:MODULE_DEVICE_TABLE(of, mt7530_of_match);
-
-All three look to be false hits - none are phy drivers themselves, they
-just reference "phy_driver". So, I think we can say that we have no
-instances of PHY driver being matched using DT in net-next in
-drivers/net. Hopefully, there aren't any PHY drivers elsewhere in the
-kernel tree.
-
-That is not true universally for all MDIO though - as
-xilinx_gmii2rgmii.c clearly shows. That is a MDIO driver which uses DT
-the compatible string to do the module load. So, we have proof there
-that Yinbo Zhu's change will definitely cause a regression which we
-can not allow.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+regards
+Philipp

@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A1446595A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCD1465960
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353644AbhLAWjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S1353697AbhLAWj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353606AbhLAWjP (ORCPT
+        with ESMTP id S1353647AbhLAWje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:39:15 -0500
-Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515B6C061574;
-        Wed,  1 Dec 2021 14:35:54 -0800 (PST)
-Received: by mail-oo1-xc34.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso8274583ood.13;
-        Wed, 01 Dec 2021 14:35:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=aR6nqdM/vydgq6qDfEEr9BeTcrpq85WJhoLFzTKF01M=;
-        b=RcUbS1boQiYqSykhzAsqltKp+aHjFfaKdIydgFxEoyskq29KoB0wm4pEkUFgLp5Wwh
-         /PbHfQpjwZesa2NPKMLdKjtLAnoqmfXKFsB77s4ybwBuBaR78NeoAxj+DZ+57ygp1Yt6
-         TABoebiwraKNfoTRK30+j8sXLA/uVeQzm6pi0VKDWRpFE2urbEoZT71XMWJ98oYk50Ae
-         pn13DQKE32SGrUHscqux1h7x8siLb59MS7wdwCOIdFb71feMyG0CjCvG+sspJzffrKGP
-         xWmyf7gcaAZNMvslj3zxJxPwV7zfxb1+dZuGxZmRGSNE8QUpLfruClQKqZ3cHo+mQwmF
-         QSwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=aR6nqdM/vydgq6qDfEEr9BeTcrpq85WJhoLFzTKF01M=;
-        b=YEY8QPFZmTp4lb4lgi6E/3GZeBe/9qfu84t49m7UtzlZ3GP7d7lkVL9JSsC4Yrs4jf
-         kSbjACl7qmXfVAw165nTye7FnwK8RH/Hj4nClEpA1MNMa9wZqxkDEQex7psc5QXlPVdg
-         UEkL2F8TmXtW/UsZO47OPYM07ppcA5mSIfqhPQwQTFAr+NK1VJh65wc3Qf7kODNjkrl1
-         F6b49b/LDEYQWNefSGdv7tPcccGg9qKYX5Z887J9AnnKTykA+1Dvv1NArL3I6Wt+KBEx
-         G/qieV6/FpUkhPeR+7mV04RiwQj5JesIHyzDJkSJkzH6mbgzr9Xcv+sW0Ck3p8a7qzvh
-         PajA==
-X-Gm-Message-State: AOAM532SNTdDqE7z0qhx9pa8OLy2apUEYnSZl3RtHJFPWrcnq9huA/Jm
-        Ba69tJOcvcUNcYb1bg6QIi0=
-X-Google-Smtp-Source: ABdhPJxZz2rIE36CCv540gJdfz2xnJhbK3KScVA2690elpnzWMQmFM2+1TF0I9dSWDib52/BRbkjFA==
-X-Received: by 2002:a4a:c890:: with SMTP id t16mr6186170ooq.95.1638398153705;
-        Wed, 01 Dec 2021 14:35:53 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id l27sm439576ota.26.2021.12.01.14.35.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 14:35:53 -0800 (PST)
-Message-ID: <66dc5bcb-633d-efe8-0ccc-dcb97d08769c@gmail.com>
-Date:   Wed, 1 Dec 2021 15:35:49 -0700
+        Wed, 1 Dec 2021 17:39:34 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79649C061757;
+        Wed,  1 Dec 2021 14:36:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=S8wvWAQX439S3fpNTLU5TR3BBnKBwJG32nxaxrKWcXg=; b=ni3JerVhYsVluiXVTfNTBGrEpX
+        fNfQMfk/UEva13D2Vi4y+OkTKhCV2y26uTm+F9fVPTpRrHh4zykali3ZQBkxCUA/QUQT+vlXa0UT9
+        n0c35/hHOXbIC568TSdA80Ll+Ip6ebVh7EryvDAe9+zsOCGaG4ezHzfNDWs7VnlhqQLw=;
+Received: from p200300ccff1410001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff14:1000:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1msYCm-0004iY-AZ; Wed, 01 Dec 2021 23:36:00 +0100
+Date:   Wed, 1 Dec 2021 23:35:59 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Alistair Francis <alistair23@gmail.com>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Sascha Hauer <kernel@pengutronix.de>, lgirdwood@gmail.com,
+        Rob Herring <robh+dt@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        rui.zhang@intel.com, devicetree <devicetree@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-hwmon@vger.kernel.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, dl-linux-imx <linux-imx@nxp.com>,
+        Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v15 1/8] dt-bindings: mfd: Initial commit of
+ silergy,sy7636a.yaml
+Message-ID: <20211201233559.3bc64f8b@aktux>
+In-Reply-To: <CAKmqyKO-KUhfeeOTFtMzLrZ5MUiL2-5qov-g+VYZxC_8du=ksA@mail.gmail.com>
+References: <20211110122948.188683-1-alistair@alistair23.me>
+        <20211110122948.188683-2-alistair@alistair23.me>
+        <20211117223950.3a7eaf7a@aktux>
+        <CAKmqyKP_gQ1qSADMPwmyf-V0TqGOYf2GitzpDXsmBUO6_iqK7Q@mail.gmail.com>
+        <20211125235935.5a1b7d33@aktux>
+        <CAKmqyKO-KUhfeeOTFtMzLrZ5MUiL2-5qov-g+VYZxC_8du=ksA@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.1
-Subject: Re: [RFC 00/12] io_uring zerocopy send
-Content-Language: en-US
-To:     Martin KaFai Lau <kafai@fb.com>,
-        Pavel Begunkov <asml.silence@gmail.com>
-Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1638282789.git.asml.silence@gmail.com>
- <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
- <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
- <c4424a7a-2ef1-6524-9b10-1e7d1f1e1fe4@gmail.com>
- <889c0306-afed-62cd-d95b-a20b8e798979@gmail.com>
- <0b92f046-5ac3-7138-2775-59fadee6e17a@gmail.com>
- <974b266e-d224-97da-708f-c4a7e7050190@gmail.com>
- <20211201215157.kgqd5attj3dytfgs@kafai-mbp.dhcp.thefacebook.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <20211201215157.kgqd5attj3dytfgs@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 2:51 PM, Martin KaFai Lau wrote:
+Hi,
+
+[...]
+> > > This is a vcom in the sense of voltage for compensation. We just
+> > > currently don't support setting the vcom.
+> > >
+> > > I had a look at the Kobo code and this is similar to
+> > > https://github.com/akemnade/linux/blob/kobo/epdc-pmic-5.15/drivers/regulator/sy7636-regulator.c#L614
+> > >
+> > > So I think that vcom is still the appropriate name for this.
+> > >  
+> > seems that you did not get me. If I understand the code behind it
+> > correctly, it turns on all power rails (the +-15V stuff, VEE and so on)
+> > with the defined delays, not just vcom because it sets
+> > SY7636A_OPERATION_MODE_CRL_ONOFF. Controlling VCOM separately is possible
+> > by using SY7636A_OPERATION_MODE_CRL_VCOMCTL in combintion with a
+> > vcom_en gpio.
+> >
+> > I do not see a reason to turn on vcom only without the other higher
+> > voltage rails, so the behaviour is not necessarily wrong but if I read
+> > the binding documentation I would expect that just vcom is turned on.
+> > That is the mismatch I am talking about.  
 > 
-> To tx out dummy, I did:
-> #> ip a add 10.0.0.1/24 dev dummy0
-              ^^^^^^^^
+> Ah! Ok I understand. I'll rename it to vdd then.
 > 
-> #> ip -4 r
-> 10.0.0.0/24 dev dummy0 proto kernel scope link src 10.0.0.1
-> 
-> #> ./send-zc -4 -D 10.0.0.(2) -t 10 udp
-                     ^^^^^^^^^^
+Most important is IMHO some human-readable description in the bindings
+document.
 
-Pavel's commands have: 'send-zc -4 -D <dummy_ip_addr> -t 10 udp'
+I am also just wondering whether this kind of logical
+regulator which turns on several other regulators is actually accepted
+or just slipped through review. I have no strong opinion here. I just
+want to be able to clean up the tps65185 driver in the same way and not
+having two similar pmics with different bindings and then a mess at the
+consumer side. 
 
-I read dummy_ip_addr as the address assigned to dummy0; that's an
-important detail. You are sending to an address on that network, not the
-address assigned to the device, in which case packets are created and
-then dropped by the dummy driver - nothing actually makes it to the server.
-
-
-> ip -s link show dev dummy0
-> 2: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
->    link/ether 82:0f:e0:dc:f7:e6 brd ff:ff:ff:ff:ff:ff
->    RX:    bytes packets errors dropped  missed   mcast
->               0       0      0       0       0       0
->    TX:    bytes packets errors dropped carrier collsns
->    140800890299 2150397      0       0       0       0
-> 
-
+Regards,
+Andreas

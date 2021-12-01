@@ -2,105 +2,318 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8CAB4659C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82E794659C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240513AbhLAX0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 18:26:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56802 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhLAX0u (ORCPT
+        id S1343942AbhLAX25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 18:28:57 -0500
+Received: from mail-oi1-f170.google.com ([209.85.167.170]:41593 "EHLO
+        mail-oi1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232038AbhLAX2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 18:26:50 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB842C061574;
-        Wed,  1 Dec 2021 15:23:28 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id s11so19965880ilv.3;
-        Wed, 01 Dec 2021 15:23:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Af3RlAsLkBfp1bcElgEIL/uV/0nmFtZn2QzPrICGZJc=;
-        b=KTF5cCZkcyKB8kh4XpQbQwXfGXimMLisrHNjl73Lc21ru4fUBu8Zy8O6dZQD6GT1Zj
-         +G9Hqk7mmNnS8jKGSbdiN0H9dIZa7u3cQuTsePDq9TbgQ64uUn75+NZqIGA6bkDhckdk
-         g9rHEfkp9H1Go0/hhVRryCZt+fVVmSHCgj74H5DGpQpM+oStsgMWIPMWu+Abti0pAxPK
-         62ocDpeb8rZvFhpIxhgsyqkxQjFnQyfx7w4qxf/ZZoXy2ZetH1n12RbnB3p1ZcmHtnQ3
-         +Q92UdUomWOK8TMs5b6VhuYV643jMH4E3XQrvXENqlK0pEWRLe8chFZWu9GkHd4kV4OP
-         zWsA==
+        Wed, 1 Dec 2021 18:28:53 -0500
+Received: by mail-oi1-f170.google.com with SMTP id u74so51904400oie.8;
+        Wed, 01 Dec 2021 15:25:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Af3RlAsLkBfp1bcElgEIL/uV/0nmFtZn2QzPrICGZJc=;
-        b=BINApKAA63FTVqPBPWLMulN/X3nuO98O7N58uznFYGRN1HQ/ozeZuIX8D8KZJnrTFY
-         pibUcxL6oR2U7eR3Q0HrbS3yP5BTOmBjrWx2Y8va1ckHR5cfiR9091+E0eljqfGiqtfY
-         RrJllWPXNE86lA+oMi0bQ5n7EAyrgaxo7tobuiaEonuP1mkRTF38qqTu+7PdIOJr2a8D
-         C87U5J0fv3ccaxA0XJHxTY3ZjPH7JmHZgsb31H/eHr2BUYPGiuy1serGSOUqhhr1bJmL
-         UEkHK//csxI2f5m6DHfdmWVAGTxLwTASa/in4k4DLZfzOIhoMSL9VN3Jmz166mZ1nLLC
-         kz+g==
-X-Gm-Message-State: AOAM530PcS4rfZj8JynS4kjsPzK+fyQl+/uIuYUyriHIlDu0XFKH1v4Y
-        NKJs6TdTrMbMDSYP3DCfHGaDGO4PfylxhMiE3MQ=
-X-Google-Smtp-Source: ABdhPJzXU3YvqHPX90w9ejT7eu7mqKFglskeupNE5LeOcrNMt3JV9VU9GfMbF9oO3F+ly0PBAiW/fQZfXXCC1vfjpw4=
-X-Received: by 2002:a05:6e02:f81:: with SMTP id v1mr14402482ilo.107.1638401008111;
- Wed, 01 Dec 2021 15:23:28 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WTjMPCDcvihuyQh1uMy5fkLE4TiLB9ELZo1Z/fdtOEw=;
+        b=WTVFkVslcTWA49+QYlHt62STpwRIzrvjFztO1+AefJx4gqAV6+y0V7gWkIStg8ajw5
+         HAwzYvYJSSDjl2kfvRtsF4J177BaNt6+UNf2i+rnvjKvrTjRDCGiBfREN4BnkG2V5CFR
+         tDfW4N/uFjmvlhCtjZN06xfahCKQdyk4iqBUyFHBUUpzIBlV+7S5NjO2MEYd2qmHfh2+
+         mc0AMYmE8EK3WhaRKIl85/TXATrUzRDKRvPfr1RnBYVtkPyjKww8aACsBt3wXW0xA3di
+         uup2GrZP6izEr3G8mYrzZrE3/Ma34wTAw1sq5EI5DV8uraiJaIREYXzdDzdtzF5412gR
+         Xthw==
+X-Gm-Message-State: AOAM531FcFuhk/UXU2SyjUfHCHpjCY/7ZKTIJT+e8ZyU30MrpjRBlcNa
+        HDopsKz6Fo21SbhLp5YD63i2ZvGttw==
+X-Google-Smtp-Source: ABdhPJztTIjtw8p6wfPDDYXpZSzufRDbtyNTF/8BLndTPrdzJ33MB5cgnYIg8K+nbzlsmt/oPcwitA==
+X-Received: by 2002:aca:2b0f:: with SMTP id i15mr1457619oik.114.1638401131619;
+        Wed, 01 Dec 2021 15:25:31 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id f20sm686814oiw.48.2021.12.01.15.25.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 15:25:31 -0800 (PST)
+Received: (nullmailer pid 3176562 invoked by uid 1000);
+        Wed, 01 Dec 2021 23:25:30 -0000
+Date:   Wed, 1 Dec 2021 17:25:30 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: net: cdns,macb: Convert to json-schema
+Message-ID: <YagEai+VPAnjAq4X@robh.at.kernel.org>
+References: <104dcbfd22f95fc77de9fe15e8abd83869603ea5.1637927673.git.geert@linux-m68k.org>
 MIME-Version: 1.0
-References: <20211118112315.GD13047@quack2.suse.cz> <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
- <20211118164349.GB8267@quack2.suse.cz> <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net>
- <20211130112206.GE7174@quack2.suse.cz> <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
- <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
- <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
- <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
- <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com>
- <20211201134610.GA1815@quack2.suse.cz> <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
- <CAOQ4uxiEjGms-sKhrVDtDHSEk97Wku5oPxnmy4vVB=6yRE_Hdg@mail.gmail.com>
-In-Reply-To: <CAOQ4uxiEjGms-sKhrVDtDHSEk97Wku5oPxnmy4vVB=6yRE_Hdg@mail.gmail.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Thu, 2 Dec 2021 01:23:17 +0200
-Message-ID: <CAOQ4uxg6FATciQhzRifOft4gMZj15G=UA6MUiPX2n9-NR5+1Pg@mail.gmail.com>
-Subject: Re: ovl_flush() behavior
-To:     Chengguang Xu <cgxu519@mykernel.net>
-Cc:     Jan Kara <jack@suse.cz>, Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        ronyjin <ronyjin@tencent.com>,
-        charliecgxu <charliecgxu@tencent.com>,
-        Vivek Goyal <vgoyal@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <104dcbfd22f95fc77de9fe15e8abd83869603ea5.1637927673.git.geert@linux-m68k.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >
-> > To be honest I even don't fully understand what's the ->flush() logic in overlayfs.
-> > Why should we open new underlying file when calling ->flush()?
-> > Is it still correct in the case of opening lower layer first then copy-uped case?
-> >
->
-> The semantics of flush() are far from being uniform across filesystems.
-> most local filesystems do nothing on close.
-> most network fs only flush dirty data when a writer closes a file
-> but not when a reader closes a file.
-> It is hard to imagine that applications rely on flush-on-close of
-> rdonly fd behavior and I agree that flushing only if original fd was upper
-> makes more sense, so I am not sure if it is really essential for
-> overlayfs to open an upper rdonly fd just to do whatever the upper fs
-> would have done on close of rdonly fd, but maybe there is no good
-> reason to change this behavior either.
->
+On Fri, Nov 26, 2021 at 12:57:00PM +0100, Geert Uytterhoeven wrote:
+> Convert the Cadence MACB/GEM Ethernet controller Device Tree binding
+> documentation to json-schema.
+> 
+> Re-add "cdns,gem" (removed in commit a217d8711da5c87f ("dt-bindings:
+> Remove PicoXcell bindings")) as there are active users on non-PicoXcell
+> platforms.
+> Add missing "ether_clk" clock.
+> Add missing properties.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  .../devicetree/bindings/net/cdns,macb.yaml    | 162 ++++++++++++++++++
+>  .../devicetree/bindings/net/macb.txt          |  60 -------
+>  2 files changed, 162 insertions(+), 60 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/cdns,macb.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/macb.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+> new file mode 100644
+> index 0000000000000000..c7d00350430aa503
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+> @@ -0,0 +1,162 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/cdns,macb.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence MACB/GEM Ethernet controller
+> +
+> +maintainers:
+> +  - Nicolas Ferre <nicolas.ferre@microchip.com>
+> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - cdns,at91rm9200-emac  # Atmel at91rm9200 SoC
+> +          - const: cdns,emac          # Generic
+> +
+> +      - items:
+> +          - enum:
+> +              - cdns,zynq-gem         # Xilinx Zynq-7xxx SoC
+> +              - cdns,zynqmp-gem       # Xilinx Zynq Ultrascale+ MPSoC
+> +          - const: cdns,gem           # Generic
+> +
+> +      - items:
+> +          - enum:
+> +              - cdns,at91sam9260-macb # Atmel at91sam9 SoCs
+> +              - cdns,sam9x60-macb     # Microchip sam9x60 SoC
+> +          - const: cdns,macb          # Generic
+> +
+> +      - items:
+> +          - enum:
+> +              - atmel,sama5d3-macb    # 10/100Mbit IP on Atmel sama5d3 SoCs
+> +          - enum:
+> +              - cdns,at91sam9260-macb # Atmel at91sam9 SoCs.
+> +          - const: cdns,macb          # Generic
+> +
+> +      - enum:
+> +          - atmel,sama5d29-gem        # GEM XL IP (10/100) on Atmel sama5d29 SoCs
+> +          - atmel,sama5d2-gem         # GEM IP (10/100) on Atmel sama5d2 SoCs
+> +          - atmel,sama5d3-gem         # Gigabit IP on Atmel sama5d3 SoCs
+> +          - atmel,sama5d4-gem         # GEM IP (10/100) on Atmel sama5d4 SoCs
+> +          - cdns,at32ap7000-macb      # Other 10/100 usage or use the generic form
+> +          - cdns,np4-macb             # NP4 SoC devices
+> +          - microchip,sama7g5-emac    # Microchip SAMA7G5 ethernet interface
+> +          - microchip,sama7g5-gem     # Microchip SAMA7G5 gigabit ethernet interface
+> +          - sifive,fu540-c000-gem     # SiFive FU540-C000 SoC
+> +          - cdns,emac                 # Generic
+> +          - cdns,gem                  # Generic
+> +          - cdns,macb                 # Generic
+> +
+> +  reg:
+> +    minItems: 1
+> +    items:
+> +      - description: Basic register set
+> +      - description: GEMGXL Management block registers on SiFive FU540-C000 SoC
+> +
+> +  interrupts:
+> +    minItems: 1
+> +    maxItems: 8
+> +    description: One interrupt per available hardware queue
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 5
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    items:
+> +      - enum: [ ether_clk, hclk, pclk ]
+> +      - enum: [ hclk, pclk ]
+> +      - const: tx_clk
+> +      - enum: [ rx_clk, tsu_clk ]
+> +      - const: tsu_clk
+> +
+> +  local-mac-address: true
+> +
+> +  phy-mode: true
+> +
+> +  phy-handle: true
+> +
+> +  fixed-link: true
+> +
+> +  iommus:
+> +    maxItems: 1
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +  '#stream-id-cells':
+> +    const: 1
 
-On second thought, I think there may be a good reason to change
-ovl_flush() otherwise I wouldn't have submitted commit
-a390ccb316be ("fuse: add FOPEN_NOFLUSH") - I did observe
-applications that frequently open short lived rdonly fds and suffered
-undesired latencies on close().
+I can't figure out why you have this here. I'll drop it while applying.
 
-As for "changing existing behavior", I think that most fs used as
-upper do not implement flush at all.
-Using fuse/virtiofs as overlayfs upper is quite new, so maybe that
-is not a problem and maybe the new behavior would be preferred
-for those users?
-
-Thanks,
-Amir.
+> +
+> +  mdio:
+> +    type: object
+> +    description:
+> +      Node containing PHY children. If this node is not present, then PHYs will
+> +      be direct children.
+> +
+> +patternProperties:
+> +  "^ethernet-phy@[0-9a-f]$":
+> +    type: object
+> +    $ref: ethernet-phy.yaml#
+> +
+> +    properties:
+> +      reset-gpios: true
+> +
+> +      magic-packet:
+> +        description:
+> +          Indicates that the hardware supports waking up via magic packet.
+> +
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - phy-mode
+> +
+> +allOf:
+> +  - $ref: ethernet-controller.yaml#
+> +
+> +  - if:
+> +      not:
+> +        properties:
+> +          compatible:
+> +            contains:
+> +              const: sifive,fu540-c000-gem
+> +    then:
+> +      properties:
+> +        reg:
+> +          maxItems: 1
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    macb0: ethernet@fffc4000 {
+> +            compatible = "cdns,at32ap7000-macb";
+> +            reg = <0xfffc4000 0x4000>;
+> +            interrupts = <21>;
+> +            phy-mode = "rmii";
+> +            local-mac-address = [3a 0e 03 04 05 06];
+> +            clock-names = "pclk", "hclk", "tx_clk";
+> +            clocks = <&clkc 30>, <&clkc 30>, <&clkc 13>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            ethernet-phy@1 {
+> +                    reg = <0x1>;
+> +                    reset-gpios = <&pioE 6 1>;
+> +            };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/net/macb.txt b/Documentation/devicetree/bindings/net/macb.txt
+> deleted file mode 100644
+> index a1b06fd1962e4d93..0000000000000000
+> --- a/Documentation/devicetree/bindings/net/macb.txt
+> +++ /dev/null
+> @@ -1,60 +0,0 @@
+> -* Cadence MACB/GEM Ethernet controller
+> -
+> -Required properties:
+> -- compatible: Should be "cdns,[<chip>-]{macb|gem}"
+> -  Use "cdns,at91rm9200-emac" Atmel at91rm9200 SoC.
+> -  Use "cdns,at91sam9260-macb" for Atmel at91sam9 SoCs.
+> -  Use "cdns,sam9x60-macb" for Microchip sam9x60 SoC.
+> -  Use "cdns,np4-macb" for NP4 SoC devices.
+> -  Use "cdns,at32ap7000-macb" for other 10/100 usage or use the generic form: "cdns,macb".
+> -  Use "atmel,sama5d2-gem" for the GEM IP (10/100) available on Atmel sama5d2 SoCs.
+> -  Use "atmel,sama5d29-gem" for GEM XL IP (10/100) available on Atmel sama5d29 SoCs.
+> -  Use "atmel,sama5d3-macb" for the 10/100Mbit IP available on Atmel sama5d3 SoCs.
+> -  Use "atmel,sama5d3-gem" for the Gigabit IP available on Atmel sama5d3 SoCs.
+> -  Use "atmel,sama5d4-gem" for the GEM IP (10/100) available on Atmel sama5d4 SoCs.
+> -  Use "cdns,zynq-gem" Xilinx Zynq-7xxx SoC.
+> -  Use "cdns,zynqmp-gem" for Zynq Ultrascale+ MPSoC.
+> -  Use "sifive,fu540-c000-gem" for SiFive FU540-C000 SoC.
+> -  Use "microchip,sama7g5-emac" for Microchip SAMA7G5 ethernet interface.
+> -  Use "microchip,sama7g5-gem" for Microchip SAMA7G5 gigabit ethernet interface.
+> -  Or the generic form: "cdns,emac".
+> -- reg: Address and length of the register set for the device
+> -	For "sifive,fu540-c000-gem", second range is required to specify the
+> -	address and length of the registers for GEMGXL Management block.
+> -- interrupts: Should contain macb interrupt
+> -- phy-mode: See ethernet.txt file in the same directory.
+> -- clock-names: Tuple listing input clock names.
+> -	Required elements: 'pclk', 'hclk'
+> -	Optional elements: 'tx_clk'
+> -	Optional elements: 'rx_clk' applies to cdns,zynqmp-gem
+> -	Optional elements: 'tsu_clk'
+> -- clocks: Phandles to input clocks.
+> -
+> -Optional properties:
+> -- mdio: node containing PHY children. If this node is not present, then PHYs
+> -        will be direct children.
+> -
+> -The MAC address will be determined using the optional properties
+> -defined in ethernet.txt.
+> -
+> -Optional properties for PHY child node:
+> -- reset-gpios : Should specify the gpio for phy reset
+> -- magic-packet : If present, indicates that the hardware supports waking
+> -  up via magic packet.
+> -- phy-handle : see ethernet.txt file in the same directory
+> -
+> -Examples:
+> -
+> -	macb0: ethernet@fffc4000 {
+> -		compatible = "cdns,at32ap7000-macb";
+> -		reg = <0xfffc4000 0x4000>;
+> -		interrupts = <21>;
+> -		phy-mode = "rmii";
+> -		local-mac-address = [3a 0e 03 04 05 06];
+> -		clock-names = "pclk", "hclk", "tx_clk";
+> -		clocks = <&clkc 30>, <&clkc 30>, <&clkc 13>;
+> -		ethernet-phy@1 {
+> -			reg = <0x1>;
+> -			reset-gpios = <&pioE 6 1>;
+> -		};
+> -	};
+> -- 
+> 2.25.1
+> 
+> 

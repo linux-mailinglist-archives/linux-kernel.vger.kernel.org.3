@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1195464A61
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C38D464A75
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242150AbhLAJPb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 04:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57708 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237277AbhLAJP2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:15:28 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D829C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 01:12:08 -0800 (PST)
-Received: from lupine.hi.pengutronix.de ([2001:67c:670:100:3ad5:47ff:feaf:1a17] helo=lupine)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1msLeW-0003Y6-1e; Wed, 01 Dec 2021 10:11:48 +0100
-Received: from pza by lupine with local (Exim 4.94.2)
-        (envelope-from <p.zabel@pengutronix.de>)
-        id 1msLeQ-0003CH-IM; Wed, 01 Dec 2021 10:11:42 +0100
-Message-ID: <3b80b2a52362cbadb26052685566e2c1f75a0b68.camel@pengutronix.de>
-Subject: Re: [v13 2/2] pwm: Add Aspeed ast2600 PWM support
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>,
-        "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>
-Cc:     BMC-SW <BMC-SW@aspeedtech.com>
-Date:   Wed, 01 Dec 2021 10:11:42 +0100
-In-Reply-To: <CDB0374F-3835-4501-964E-DB771588114D@aspeedtech.com>
-References: <20211129064329.27006-1-billy_tsai@aspeedtech.com>
-         <20211129064329.27006-3-billy_tsai@aspeedtech.com>
-         <e28a5d5de9b940717e6444f019eab63ab1bb0b75.camel@pengutronix.de>
-         <CDB0374F-3835-4501-964E-DB771588114D@aspeedtech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.38.3-1 
+        id S1348123AbhLAJX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 04:23:57 -0500
+Received: from foss.arm.com ([217.140.110.172]:60236 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1345941AbhLAJXz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 04:23:55 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1C5C1063;
+        Wed,  1 Dec 2021 01:20:34 -0800 (PST)
+Received: from [192.168.178.2] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C8DF53F766;
+        Wed,  1 Dec 2021 01:20:33 -0800 (PST)
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH] sched/uclamp: Fix rq->uclamp_max not set on first enqueue
+To:     Qais Yousef <qais.yousef@arm.com>,
+        Valentin Schneider <valentin.schneider@arm.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20211125165233.1425633-1-qais.yousef@arm.com>
+ <87wnkvb35n.mognet@arm.com>
+ <20211130112356.25bm5s66sywtdgw4@e107158-lin.cambridge.arm.com>
+ <875ys9bzcz.mognet@arm.com>
+ <20211130154116.w5wjtbc4shpwcoku@e107158-lin.cambridge.arm.com>
+Message-ID: <296f08f4-f229-ec83-5dae-b8b499b81d49@arm.com>
+Date:   Wed, 1 Dec 2021 10:20:24 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2001:67c:670:100:3ad5:47ff:feaf:1a17
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+In-Reply-To: <20211130154116.w5wjtbc4shpwcoku@e107158-lin.cambridge.arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Billy,
+On 30.11.21 16:41, Qais Yousef wrote:
+> On 11/30/21 12:29, Valentin Schneider wrote:
+>> On 30/11/21 11:23, Qais Yousef wrote:
+>>> Hi Valentin
+>>>
+>>> On 11/26/21 10:51, Valentin Schneider wrote:
+>>>> On 25/11/21 16:52, Qais Yousef wrote:
+>>>>> Commit d81ae8aac85c ("sched/uclamp: Fix initialization of struct
+>>>>> uclamp_rq") introduced a bug where uclamp_max of the rq is not reset to
+>>>>> match the woken up task's uclamp_max when the rq is idle. This only
+>>>>> impacts the first wake up after enabling the static key. And it only
 
-On Wed, 2021-12-01 at 03:30 +0000, Billy Tsai wrote:
-> Hi Philipp,
-> 
-> On 2021/11/30, 5:52 PM, "Philipp Zabel" <p.zabel@pengutronix.de> wrote:
-> 
->     On Mon, 2021-11-29 at 14:43 +0800, Billy Tsai wrote:
->     [...]
->     >   > +	ret = clk_prepare_enable(priv->clk);
->     >   > +	if (ret)
->     >   > +		return dev_err_probe(dev, ret, "Couldn't enable clock\n");
->     >   > +
->     >   > +	ret = reset_control_deassert(priv->reset);
->     >   > +	if (ret) {
->     >   > +		dev_err_probe(dev, ret, "Couldn't deassert reset control\n");
->     >   > +		goto err_disable_clk;
->     >   > +	}
-> 
->     >   Is there any reason to keep the clocks running and the controller out of
->     >   reset while the PWM outputs are disabled?
-> 
-> Can you tell me about your concerns with this process?
+LGTM.
 
-No particular concerns, just curiosity.
+Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 
-> In my opinion, they are used to provide the clock and de-assert the reset of the PWM engine. If we didn't release
-> them in probe stage the CPU can't and shouldn't read the register of the PWM engine when call the get_state.
-> Assume that we want to adjust them dynamically, the driver needs to add more conditions to check and keep the status
-> of each PWM channel, which is not a good deal for the server platform.
+Tested with rt-app:
 
-Thanks. I don't know the hardware, so I have no idea whether disabling
-the clocks would even save a measurable (let alone appreciable) amount
-of power.
+   "tasks": {
+        "task_n1": {
+            "util_min": 0,
+            "util_max": 369,
+            "loop": 1,
+            "phases": {
+                "p000001": {                     
+                    "loop": 5,
+                    "run": 800,
+                    "timer": {
+                        "period": 16000,
+                        "ref": "task_n1"
+                    }
+                }
+            },
+            "policy": "SCHED_OTHER"
+        }
+    }
 
-I've just seen other PWM drivers use runtime PM or enable/disable clocks
-dynamically, and wondered why this one doesn't.
+w/o patch:
 
-regards
-Philipp
+/*  missing (1) since rq->uclamp_flags = UCLAMP_FLAG_IDLE is not set initially */
+[75.002086] (3) uclamp_rq_inc_id() CPU5 p=[task_n1-0 1693] uc_se->value=369 uc_rq->value=1024
+/* first dequeue to _uclamp_ idle set UCLAMP_FLAG_IDLE */
+[75.013851] (2) uclamp_idle_value() CPU5 p=[task_n1-0 1693] clamp_id=1 value=369
+[75.017972] (1) uclamp_idle_reset() CPU5 p=[task_n1-0 1693] clamp_id=0 value=0
+/* UCLAMP_FLAG_IDLE is set -> set rq->uclamp[UCLAMP_MAX].value to *369* */
+[75.017984] (1) uclamp_idle_reset() CPU5 p=[task_n1-0 1693] clamp_id=1 value=369
+[75.017995] (3) uclamp_rq_inc_id() CPU5 p=[task_n1-0 1693] uc_se->value=369 uc_rq->value=*369*
+
+w/ patch:
+
+[63.393974] (1) uclamp_idle_reset() CPU5 p=[task_n1-0 1700] clamp_id=0 value=0
+/* UCLAMP_FLAG_IDLE is set -> set rq->uclamp[UCLAMP_MAX].value to *369* */
+[63.401269] (1) uclamp_idle_reset() CPU5 p=[task_n1-0 1700] clamp_id=1 value=369
+[63.415513] (3) uclamp_rq_inc_id() CPU5 p=[task_n1-0 1700] uc_se->value=369 uc_rq->value=*369*
+/* first dequeue to _uclamp_ idle set UCLAMP_FLAG_IDLE (again) */
+[63.434781] (2) uclamp_idle_value() CPU5 p=[task_n1-0 1700] clamp_id=1 value=369
+[63.449681] (1) uclamp_idle_reset() CPU5 p=[task_n1-0 1700] clamp_id=0 value=0
+[63.449691] (1) uclamp_idle_reset() CPU5 p=[task_n1-0 1700] clamp_id=1 value=369
+[63.449699] (3) uclamp_rq_inc_id() CPU5 p=[task_n1-0 1700] uc_se->value=369 uc_rq->value=369
+
+[...]

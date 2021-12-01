@@ -2,104 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B494645A8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 05:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9FB4645AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 05:12:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346498AbhLAEGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 23:06:25 -0500
-Received: from mga03.intel.com ([134.134.136.65]:42445 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241642AbhLAEGY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 23:06:24 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236321034"
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="236321034"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 20:03:04 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="459106456"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Nov 2021 20:03:01 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msGph-000EBl-6x; Wed, 01 Dec 2021 04:03:01 +0000
-Date:   Wed, 1 Dec 2021 12:02:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stephane Eranian <eranian@google.com>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, kim.phillips@amd.com, acme@redhat.com,
-        jolsa@redhat.com, songliubraving@fb.com, mpe@ellerman.id.au,
-        maddy@linux.ibm.com
-Subject: Re: [PATCH v3 03/13] perf/x86/amd: add AMD Fam19h Branch Sampling
- support
-Message-ID: <202112011125.Yf5fkhH3-lkp@intel.com>
-References: <20211201010217.886919-4-eranian@google.com>
+        id S1346526AbhLAEPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 23:15:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346507AbhLAEPy (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 23:15:54 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F6BC061574;
+        Tue, 30 Nov 2021 20:12:33 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id m15so22196715pgu.11;
+        Tue, 30 Nov 2021 20:12:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hB7RjF5Zqk06UnaHimAPbZGbA5Zgh9K2pcqrGIW9790=;
+        b=ZwUKltzt7wcl/6iFt6MsHDF3Vx4lJdbMtyYJeis4PMKzSbi2RDu0XYcGuYyj48SRLM
+         fHn2l7ClAgB9WOEYpI2w0a/tKy1JAgCWnxa2M/Vz08Z4y/H7G0qG3t5sVmTM9pZQ/ucW
+         jMogKF0Md4Mu2y7QZUhVTeSndDB5lAFrjJBUb2wHkN3qCO+NU+UNW1P7afYA15n9IoI4
+         IO3yS0xzG50JsfzogbmeK+FkcIUs2+YcBdB3t0L9MHtbr6IP3rpjgPdc5EGDWdUSizw+
+         T7ZK/VPFEddQltqRQtWz5LoHf5D+vJC+ps8rQrbouc4ltcfdW8g6srBLh4gT8v1NshD7
+         Ve8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=hB7RjF5Zqk06UnaHimAPbZGbA5Zgh9K2pcqrGIW9790=;
+        b=edtfxQLjDIW4YbdLba+NXTOdMdX8aHtsQk6XUjKqTbCVK7Cwfhc8aGujlac0aYXR9d
+         bSJd1OWnaF1Dx4b5XNyD7MdFVR0XJopP4Lma6gPOUtrxGmGvlx1TCN2KtVLLv9eEJgNl
+         JQqhRJsoZt3Bq7ioHG2mWGleEe6Rk240mly2i2n+oWz3CYPbGl+nGj+b7CZeW9rHScDe
+         q4XMSE77z0jCzJv466qaWIvXA6yNTb3TUYIpm7mIv+g+e0tynKiyVt6zN7Ka3x+SUoB+
+         SS25+o+mITVKW15hDRSAF7XRDS31INs9ebZG92emtmhXIKB1Xw5ss/pIh4HCWqG+BbaM
+         QTsw==
+X-Gm-Message-State: AOAM530DGPi9FsYfUuhOzmjZatFsLg0hBLYwfK6TeGV02nOKwrziDwbl
+        fdDwkAQXgA+KB3cZxcrAq0lRpoicgY4=
+X-Google-Smtp-Source: ABdhPJx/PeM2SREJeHchU7DrZ2FlQra+UUx52NbkGXe4DJSKCmxVkSQ4KkgX7Aof4ZUOMeZ4htqU9g==
+X-Received: by 2002:a65:6251:: with SMTP id q17mr2963493pgv.403.1638331952671;
+        Tue, 30 Nov 2021 20:12:32 -0800 (PST)
+Received: from 7YHHR73.igp.broadcom.net ([192.19.161.250])
+        by smtp.gmail.com with ESMTPSA id s8sm4296451pfe.196.2021.11.30.20.12.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 20:12:31 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     netdev@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
+        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM IPROC GBIT
+        ETHERNET DRIVER), Doug Berger <opendmb@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list),
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM IPROC ARM
+        ARCHITECTURE)
+Subject: [PATCH net-next 0/7] Broadcom DT bindings conversion to YAML
+Date:   Tue, 30 Nov 2021 20:12:21 -0800
+Message-Id: <20211201041228.32444-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201010217.886919-4-eranian@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephane,
+Hi all,
 
-Thank you for the patch! Perhaps something to improve:
+This patch series converts 3 Broadcom Ethernet controller Device Tree
+bindings to YAML and the iProc MDIO mux. Please wait for a review from
+Rob before applying, thank you!
 
-[auto build test WARNING on tip/perf/core]
-[also build test WARNING on tip/x86/core rafael-pm/linux-next v5.16-rc3 next-20211130]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+Florian Fainelli (7):
+  dt-bindings: net: brcm,unimac-mdio: reg-names is optional
+  dt-bindings: net: brcm,unimac-mdio: Update maintainers for binding
+  dt-bindings: net: Document moca PHY interface
+  dt-bindings: net: Convert GENET binding to YAML
+  dt-bindings: net: Convert AMAC to YAML
+  dt-bindings: net: Convert SYSTEMPORT to YAML
+  dt-bindings: net: Convert iProc MDIO mux to YAML
 
-url:    https://github.com/0day-ci/linux/commits/Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20211201-090506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a9f4a6e92b3b319296fb078da2615f618f6cd80c
-config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20211201/202112011125.Yf5fkhH3-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/0day-ci/linux/commit/c6b0817d81501a8bc31ddd7067697dba4408d75f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20211201-090506
-        git checkout c6b0817d81501a8bc31ddd7067697dba4408d75f
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/events/amd/
+ .../devicetree/bindings/net/brcm,amac.txt     |  30 ----
+ .../devicetree/bindings/net/brcm,amac.yaml    |  88 +++++++++++
+ .../devicetree/bindings/net/brcm,bcmgenet.txt | 125 ---------------
+ .../bindings/net/brcm,bcmgenet.yaml           | 146 ++++++++++++++++++
+ .../bindings/net/brcm,mdio-mux-iproc.txt      |  62 --------
+ .../bindings/net/brcm,mdio-mux-iproc.yaml     |  80 ++++++++++
+ .../bindings/net/brcm,systemport.txt          |  38 -----
+ .../bindings/net/brcm,systemport.yaml         |  83 ++++++++++
+ .../bindings/net/brcm,unimac-mdio.yaml        |   3 +-
+ .../bindings/net/ethernet-controller.yaml     |   1 +
+ MAINTAINERS                                   |   5 +-
+ 11 files changed, 403 insertions(+), 258 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/brcm,amac.txt
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,amac.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/brcm,bcmgenet.txt
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.txt
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,mdio-mux-iproc.yaml
+ delete mode 100644 Documentation/devicetree/bindings/net/brcm,systemport.txt
+ create mode 100644 Documentation/devicetree/bindings/net/brcm,systemport.yaml
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+-- 
+2.25.1
 
-All warnings (new ones prefixed by >>):
-
-   arch/x86/events/amd/core.c: In function 'amd_pmu_enable_all':
->> arch/x86/events/amd/core.c:676:24: warning: variable 'hwc' set but not used [-Wunused-but-set-variable]
-     676 |  struct hw_perf_event *hwc;
-         |                        ^~~
-
-
-vim +/hwc +676 arch/x86/events/amd/core.c
-
-   672	
-   673	static void amd_pmu_enable_all(int added)
-   674	{
-   675		struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- > 676		struct hw_perf_event *hwc;
-   677		int idx;
-   678	
-   679		amd_brs_enable_all();
-   680	
-   681		for (idx = 0; idx < x86_pmu.num_counters; idx++) {
-   682			hwc = &cpuc->events[idx]->hw;
-   683	
-   684			/* only activate events which are marked as active */
-   685			if (!test_bit(idx, cpuc->active_mask))
-   686				continue;
-   687	
-   688			amd_pmu_enable_event(cpuc->events[idx]);
-   689		}
-   690	}
-   691	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

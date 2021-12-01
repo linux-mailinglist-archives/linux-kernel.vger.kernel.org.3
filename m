@@ -2,83 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B96F464AF9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F728464B07
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348399AbhLAJye convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 04:54:34 -0500
-Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:25796 "EHLO
-        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348355AbhLAJyZ (ORCPT
+        id S1348504AbhLAJzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 04:55:03 -0500
+Received: from out4436.biz.mail.alibaba.com ([47.88.44.36]:51511 "EHLO
+        out4436.biz.mail.alibaba.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348392AbhLAJyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:54:25 -0500
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-198-iJW5aXLlMaKceM3orNHR2w-1; Wed, 01 Dec 2021 09:50:58 +0000
-X-MC-Unique: iJW5aXLlMaKceM3orNHR2w-1
-Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
- AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
- Server (TLS) id 15.0.1497.26; Wed, 1 Dec 2021 09:50:57 +0000
-Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
- AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
- 15.00.1497.026; Wed, 1 Dec 2021 09:50:57 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Brian Gerst' <brgerst@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-CC:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra" <peterz@infradead.org>
-Subject: RE: [PATCH v2 2/6] x86-64: Convert stack protector to normal percpu
- variable
-Thread-Topic: [PATCH v2 2/6] x86-64: Convert stack protector to normal percpu
- variable
-Thread-Index: AQHX5i01pws/jQEaYE+x2M5p3Mzw46wdZTkg
-Date:   Wed, 1 Dec 2021 09:50:57 +0000
-Message-ID: <2c23335e98bc4a66b1fd779a78ddd821@AcuMS.aculab.com>
-References: <20211130205549.116673-1-brgerst@gmail.com>
- <20211130205549.116673-3-brgerst@gmail.com>
-In-Reply-To: <20211130205549.116673-3-brgerst@gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 1 Dec 2021 04:54:50 -0500
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Uz1Lkdd_1638352275;
+Received: from 30.240.100.124(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Uz1Lkdd_1638352275)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Wed, 01 Dec 2021 17:51:17 +0800
+Message-ID: <23eec1ac-4fee-7386-e75d-ca9bf6cd1c88@linux.alibaba.com>
+Date:   Wed, 1 Dec 2021 17:51:07 +0800
 MIME-Version: 1.0
-Authentication-Results: relay.mimecast.com;
-        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+Subject: Re: [PATCH] fs: Eliminate compilation warnings for misc
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211116080611.31199-1-tianjia.zhang@linux.alibaba.com>
+ <941c9239-3b73-c2ae-83aa-f83d4e587fc8@infradead.org>
+ <e06a86b2-1624-986c-9e97-ffac121dc240@linux.alibaba.com>
+ <YaTTXSTiOpL1/ymL@casper.infradead.org>
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+In-Reply-To: <YaTTXSTiOpL1/ymL@casper.infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Brian Gerst
-> Sent: 30 November 2021 20:56
+Hi Matthew,
+
+On 11/29/21 9:19 PM, Matthew Wilcox wrote:
+> On Mon, Nov 29, 2021 at 09:06:09PM +0800, Tianjia Zhang wrote:
+>> Hi Randy,
+>>
+>> On 11/17/21 7:00 AM, Randy Dunlap wrote:
+>>> On 11/16/21 12:06 AM, Tianjia Zhang wrote:
+>>>> Eliminate the following clang compilation warnings by adding or
+>>>> fixing function comment:
+>>>
+>>> These are from clang?  They all appear to be from scripts/kernel-doc.
+>>>
+>>> Can someone please clarify?
+>>>
+>>> thanks.
+>>
+>> Yes, compile with W=1, clang will report this warning.
 > 
-> Older versions of GCC fixed the location of the stack protector canary
-> at %gs:40.  This constraint forced the percpu section to be linked at
-> virtual address 0 so that the canary could be the first data object in
-> the percpu section.  Supporting the zero-based percpu section requires
-> additional code to handle relocations for RIP-relative references to
-> percpu data, extra complexity to kallsyms, and workarounds for linker
-> bugs due to the use of absolute symbols.
+> No, clang has nothing to do with it.  The warnings are from kernel-doc,
+> not clang.  Nor gcc.
 > 
-> Since version 8.1, GCC has options to configure the location of the
-> canary value.  This allows the canary to be turned into a normal
-> percpu variable and removes the constraint that the percpu section
-> be zero-based.
 
-I didn't think the minimum gcc version has been raised as far as 8.1?
+I was negligent, you are right. Thanks for pointing it out.
 
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+Best regards,
+Tianjia

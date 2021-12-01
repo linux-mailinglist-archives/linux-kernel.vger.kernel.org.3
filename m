@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4F2464AD9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B96F464AF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348329AbhLAJrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 04:47:21 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15002 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348306AbhLAJrR (ORCPT
+        id S1348399AbhLAJye convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 04:54:34 -0500
+Received: from eu-smtp-delivery-151.mimecast.com ([185.58.85.151]:25796 "EHLO
+        eu-smtp-delivery-151.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348355AbhLAJyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:47:17 -0500
-Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J3vGy2cGPzZdHh;
-        Wed,  1 Dec 2021 17:41:14 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 17:43:55 +0800
-Received: from huawei.com (10.175.103.91) by dggpeml500017.china.huawei.com
- (7.185.36.243) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 1 Dec
- 2021 17:43:55 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>
-CC:     <gregkh@linuxfoundation.org>, <paskripkin@gmail.com>,
-        <dan.carpenter@oracle.com>
-Subject: [PATCH -next 3/3] staging: rtl8192e: rtllib_module: remove unnecessary assignment
-Date:   Wed, 1 Dec 2021 17:50:36 +0800
-Message-ID: <20211201095036.1763163-4-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211201095036.1763163-1-yangyingliang@huawei.com>
-References: <20211201095036.1763163-1-yangyingliang@huawei.com>
+        Wed, 1 Dec 2021 04:54:25 -0500
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-198-iJW5aXLlMaKceM3orNHR2w-1; Wed, 01 Dec 2021 09:50:58 +0000
+X-MC-Unique: iJW5aXLlMaKceM3orNHR2w-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.26; Wed, 1 Dec 2021 09:50:57 +0000
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.026; Wed, 1 Dec 2021 09:50:57 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Brian Gerst' <brgerst@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>
+CC:     Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Peter Zijlstra" <peterz@infradead.org>
+Subject: RE: [PATCH v2 2/6] x86-64: Convert stack protector to normal percpu
+ variable
+Thread-Topic: [PATCH v2 2/6] x86-64: Convert stack protector to normal percpu
+ variable
+Thread-Index: AQHX5i01pws/jQEaYE+x2M5p3Mzw46wdZTkg
+Date:   Wed, 1 Dec 2021 09:50:57 +0000
+Message-ID: <2c23335e98bc4a66b1fd779a78ddd821@AcuMS.aculab.com>
+References: <20211130205549.116673-1-brgerst@gmail.com>
+ <20211130205549.116673-3-brgerst@gmail.com>
+In-Reply-To: <20211130205549.116673-3-brgerst@gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the null pointer assignment after freeing 'ieee->pHTInfo'.
+From: Brian Gerst
+> Sent: 30 November 2021 20:56
+> 
+> Older versions of GCC fixed the location of the stack protector canary
+> at %gs:40.  This constraint forced the percpu section to be linked at
+> virtual address 0 so that the canary could be the first data object in
+> the percpu section.  Supporting the zero-based percpu section requires
+> additional code to handle relocations for RIP-relative references to
+> percpu data, extra complexity to kallsyms, and workarounds for linker
+> bugs due to the use of absolute symbols.
+> 
+> Since version 8.1, GCC has options to configure the location of the
+> canary value.  This allows the canary to be turned into a normal
+> percpu variable and removes the constraint that the percpu section
+> be zero-based.
 
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
- drivers/staging/rtl8192e/rtllib_module.c | 1 -
- 1 file changed, 1 deletion(-)
+I didn't think the minimum gcc version has been raised as far as 8.1?
 
-diff --git a/drivers/staging/rtl8192e/rtllib_module.c b/drivers/staging/rtl8192e/rtllib_module.c
-index a3c74fa25cfa..52d1c3f5f3aa 100644
---- a/drivers/staging/rtl8192e/rtllib_module.c
-+++ b/drivers/staging/rtl8192e/rtllib_module.c
-@@ -161,7 +161,6 @@ void free_rtllib(struct net_device *dev)
- 				      netdev_priv_rsl(dev);
- 
- 	kfree(ieee->pHTInfo);
--	ieee->pHTInfo = NULL;
- 	rtllib_softmac_free(ieee);
- 
- 	lib80211_crypt_info_free(&ieee->crypt_info);
--- 
-2.25.1
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 

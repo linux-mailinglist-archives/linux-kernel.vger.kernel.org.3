@@ -2,87 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ECB8464E66
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA2C3464E6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:03:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349463AbhLANFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:05:20 -0500
-Received: from outbound-smtp15.blacknight.com ([46.22.139.232]:53079 "EHLO
-        outbound-smtp15.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S244537AbhLANFT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:05:19 -0500
-Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
-        by outbound-smtp15.blacknight.com (Postfix) with ESMTPS id A6C481C46DE
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 13:01:57 +0000 (GMT)
-Received: (qmail 12057 invoked from network); 1 Dec 2021 13:01:57 -0000
-Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
-  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 1 Dec 2021 13:01:57 -0000
-Date:   Wed, 1 Dec 2021 13:01:55 +0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Mike Galbraith <efault@gmx.de>
-Cc:     Alexey Avramov <hakavlad@inbox.lv>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-Message-ID: <20211201130155.GT3366@techsingularity.net>
-References: <20211125151853.8540-1-mgorman@techsingularity.net>
- <20211127011246.7a8ac7b8@mail.inbox.lv>
- <20211129150117.GO3366@techsingularity.net>
- <20211201010348.31e99637@mail.inbox.lv>
- <20211130172754.GS3366@techsingularity.net>
- <c2aee7e6b9096556aab9b47156e91082c9345a90.camel@gmx.de>
+        id S245389AbhLANG2 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 08:06:28 -0500
+Received: from aposti.net ([89.234.176.197]:38406 "EHLO aposti.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233645AbhLANGY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 08:06:24 -0500
+Date:   Wed, 01 Dec 2021 13:02:45 +0000
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH v10 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
+To:     "H. Nikolaus Schaller" <hns@goldelico.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Message-Id: <LKTF3R.YREPOCHOSMQN2@crapouillou.net>
+In-Reply-To: <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
+References: <cover.1638307601.git.hns@goldelico.com>
+        <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <c2aee7e6b9096556aab9b47156e91082c9345a90.camel@gmx.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 06:59:58PM +0100, Mike Galbraith wrote:
-> On Tue, 2021-11-30 at 17:27 +0000, Mel Gorman wrote:
-> >
-> > Obviously a fairly different experience and most likely due to the
-> > underlying storage.
+Hi Nikolaus,
+
+Le mar., nov. 30 2021 at 22:26:37 +0100, H. Nikolaus Schaller 
+<hns@goldelico.com> a écrit :
+> From: Paul Boddie <paul@boddie.org.uk>
 > 
-> I bet a virtual nickle this is the sore spot.
+> A specialisation of the generic Synopsys HDMI driver is employed for
+> JZ4780 HDMI support. This requires a new driver, plus device tree and
+> configuration modifications.
+> 
+> Here we add Kconfig DRM_INGENIC_DW_HDMI, Makefile and driver code.
+> 
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+>  drivers/gpu/drm/ingenic/Kconfig           |   9 ++
+>  drivers/gpu/drm/ingenic/Makefile          |   1 +
+>  drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c | 138 
+> ++++++++++++++++++++++
+>  3 files changed, 148 insertions(+)
+>  create mode 100644 drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> 
+> diff --git a/drivers/gpu/drm/ingenic/Kconfig 
+> b/drivers/gpu/drm/ingenic/Kconfig
+> index 3b57f8be007c4..4efc709d77b0a 100644
+> --- a/drivers/gpu/drm/ingenic/Kconfig
+> +++ b/drivers/gpu/drm/ingenic/Kconfig
+> @@ -25,4 +25,13 @@ config DRM_INGENIC_IPU
+> 
+>  	  The Image Processing Unit (IPU) will appear as a second primary 
+> plane.
+> 
+> +config DRM_INGENIC_DW_HDMI
+> +	tristate "Ingenic specific support for Synopsys DW HDMI"
+> +	depends on MACH_JZ4780
+> +	select DRM_DW_HDMI
+> +	help
+> +	  Choose this option to enable Synopsys DesignWare HDMI based 
+> driver.
+> +	  If you want to enable HDMI on Ingenic JZ4780 based SoC, you should
+> +	  select this option..
+> +
+>  endif
+> diff --git a/drivers/gpu/drm/ingenic/Makefile 
+> b/drivers/gpu/drm/ingenic/Makefile
+> index d313326bdddbb..f10cc1c5a5f22 100644
+> --- a/drivers/gpu/drm/ingenic/Makefile
+> +++ b/drivers/gpu/drm/ingenic/Makefile
+> @@ -1,3 +1,4 @@
+>  obj-$(CONFIG_DRM_INGENIC) += ingenic-drm.o
+>  ingenic-drm-y = ingenic-drm-drv.o
+>  ingenic-drm-$(CONFIG_DRM_INGENIC_IPU) += ingenic-ipu.o
+> +obj-$(CONFIG_DRM_INGENIC_DW_HDMI) += ingenic-dw-hdmi.o
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c 
+> b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> new file mode 100644
+> index 0000000000000..199e39c227d29
+> --- /dev/null
+> +++ b/drivers/gpu/drm/ingenic/ingenic-dw-hdmi.c
+> @@ -0,0 +1,138 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright (C) 2011-2013 Freescale Semiconductor, Inc.
+> + * Copyright (C) 2019, 2020 Paul Boddie <paul@boddie.org.uk>
+> + *
+> + * Derived from dw_hdmi-imx.c with i.MX portions removed.
+> + * Probe and remove operations derived from rcar_dw_hdmi.c.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +#include <drm/bridge/dw_hdmi.h>
+> +#include <drm/drm_of.h>
+> +#include <drm/drm_print.h>
+> +
+> +static const struct dw_hdmi_mpll_config ingenic_mpll_cfg[] = {
+> +	{ 45250000,  { { 0x01e0, 0x0000 }, { 0x21e1, 0x0000 }, { 0x41e2, 
+> 0x0000 } } },
+> +	{ 92500000,  { { 0x0140, 0x0005 }, { 0x2141, 0x0005 }, { 0x4142, 
+> 0x0005 } } },
+> +	{ 148500000, { { 0x00a0, 0x000a }, { 0x20a1, 0x000a }, { 0x40a2, 
+> 0x000a } } },
+> +	{ 216000000, { { 0x00a0, 0x000a }, { 0x2001, 0x000f }, { 0x4002, 
+> 0x000f } } },
+> +	{ ~0UL,      { { 0x0000, 0x0000 }, { 0x0000, 0x0000 }, { 0x0000, 
+> 0x0000 } } }
+> +};
+> +
+> +static const struct dw_hdmi_curr_ctrl ingenic_cur_ctr[] = {
+> +	/*pixelclk     bpp8    bpp10   bpp12 */
+> +	{ 54000000,  { 0x091c, 0x091c, 0x06dc } },
+> +	{ 58400000,  { 0x091c, 0x06dc, 0x06dc } },
+> +	{ 72000000,  { 0x06dc, 0x06dc, 0x091c } },
+> +	{ 74250000,  { 0x06dc, 0x0b5c, 0x091c } },
+> +	{ 118800000, { 0x091c, 0x091c, 0x06dc } },
+> +	{ 216000000, { 0x06dc, 0x0b5c, 0x091c } },
+> +	{ ~0UL,      { 0x0000, 0x0000, 0x0000 } },
+> +};
+> +
+> +/*
+> + * Resistance term 133Ohm Cfg
+> + * PREEMP config 0.00
+> + * TX/CK level 10
+> + */
+> +static const struct dw_hdmi_phy_config ingenic_phy_config[] = {
+> +	/*pixelclk   symbol   term   vlev */
+> +	{ 216000000, 0x800d, 0x0005, 0x01ad},
+> +	{ ~0UL,      0x0000, 0x0000, 0x0000}
+> +};
+> +
+> +static enum drm_mode_status
+> +ingenic_dw_hdmi_mode_valid(struct dw_hdmi *hdmi, void *data,
+> +			   const struct drm_display_info *info,
+> +			   const struct drm_display_mode *mode)
+> +{
+> +	if (mode->clock < 13500)
+> +		return MODE_CLOCK_LOW;
+> +	/* FIXME: Hardware is capable of 270MHz, but setup data is missing. 
+> */
+> +	if (mode->clock > 216000)
+> +		return MODE_CLOCK_HIGH;
+> +
+> +	return MODE_OK;
+> +}
+> +
+> +static struct dw_hdmi_plat_data ingenic_dw_hdmi_plat_data = {
+> +	.mpll_cfg   = ingenic_mpll_cfg,
+> +	.cur_ctr    = ingenic_cur_ctr,
+> +	.phy_config = ingenic_phy_config,
+> +	.mode_valid = ingenic_dw_hdmi_mode_valid,
+> +	.output_port	= 1,
+> +};
+> +
+> +static const struct of_device_id ingenic_dw_hdmi_dt_ids[] = {
+> +	{ .compatible = "ingenic,jz4780-dw-hdmi" },
+> +	{ /* Sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, ingenic_dw_hdmi_dt_ids);
+> +
+> +static void ingenic_dw_hdmi_cleanup(void *data)
+> +{
+> +	struct dw_hdmi *hdmi = (struct dw_hdmi *)data;
+> +
+> +	dw_hdmi_remove(hdmi);
+> +}
+> +
+> +static void ingenic_dw_hdmi_disable_regulator(void *data)
+> +{
+> +	struct regulator *regulator = (struct regulator *)data;
+> +
+> +	regulator_disable(regulator);
+> +}
+> +
+> +static int ingenic_dw_hdmi_probe(struct platform_device *pdev)
+> +{
+> +	struct dw_hdmi *hdmi;
+> +	struct regulator *regulator;
+> +	int ret;
+> +
+> +	hdmi = dw_hdmi_probe(pdev, &ingenic_dw_hdmi_plat_data);
+> +	if (IS_ERR(hdmi))
+> +		return PTR_ERR(hdmi);
+> +
+> +	ret = devm_add_action_or_reset(&pdev->dev, ingenic_dw_hdmi_cleanup, 
+> hdmi);
+> +	if (ret)
+> +		return ret;
+> +
+> +	regulator = devm_regulator_get_optional(&pdev->dev, "hdmi-5v");
+> +	if (IS_ERR(regulator)) {
+> +		ret = PTR_ERR(regulator);
+> +
+> +		DRM_DEV_ERROR(&pdev->dev, "failed to get hpd regulator: %s (%d)\n",
+> +			      "hdmi-5v", ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	if (!regulator)
+> +		return 0;
+
+Blank line here.
+
+But I can add it myself when applying. I'll just wait for Rob's ack 
+first.
+
+-Paul
+
+> +	ret = regulator_enable(regulator);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(&pdev->dev, "Failed to enable hpd regulator: %d\n",
+> +			      ret);
+> +
+> +		return ret;
+> +	}
+> +
+> +	return devm_add_action_or_reset(&pdev->dev, 
+> ingenic_dw_hdmi_disable_regulator,
+> +				       regulator);
+> +}
+> +
+> +static struct platform_driver ingenic_dw_hdmi_driver = {
+> +	.probe  = ingenic_dw_hdmi_probe,
+> +	.driver = {
+> +		.name = "dw-hdmi-ingenic",
+> +		.of_match_table = ingenic_dw_hdmi_dt_ids,
+> +	},
+> +};
+> +module_platform_driver(ingenic_dw_hdmi_driver);
+> +
+> +MODULE_DESCRIPTION("JZ4780 Specific DW-HDMI Driver Extension");
+> +MODULE_LICENSE("GPL v2");
+> +MODULE_ALIAS("platform:dwhdmi-ingenic");
+> --
+> 2.33.0
 > 
 
-You win a virtual nickle!
 
-Using an older laptop with slower storage and less memory a frequency
-analysis of the stall reasons and source showed the top triggering event
-was
-
-Event count:                6210
- mm_vmscan_throttled: nid=0 usec_timeout=100000 usect_delayed=xxx reason=VMSCAN_THROTTLE_WRITEBACK
-
- => trace_event_raw_event_mm_vmscan_throttled <ffffffff9987224a>
- => reclaim_throttle <ffffffff99873df2>
- => shrink_node <ffffffff99875bd5>
- => do_try_to_free_pages <ffffffff99875cf8>
- => try_to_free_pages <ffffffff998772e3>
- => __alloc_pages_slowpath.constprop.114 <ffffffff998c2ad9>
- => __alloc_pages <ffffffff998c366b>
- => folio_alloc <ffffffff998e4107>
- => page_cache_ra_unbounded <ffffffff99868fab>
- => filemap_fault <ffffffff9985cb13>
- => __do_fault <ffffffff99899361>
- => __handle_mm_fault <ffffffff998a1470>
- => handle_mm_fault <ffffffff998a19ba>
- => do_user_addr_fault <ffffffff99688734>
- => exc_page_fault <ffffffff9a07bcd7>
- => asm_exc_page_fault <ffffffff9a200ace>
-
--- 
-Mel Gorman
-SUSE Labs

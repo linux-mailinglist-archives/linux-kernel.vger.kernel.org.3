@@ -2,160 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BB809465A0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:55:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC96465A13
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353895AbhLAX6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 18:58:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        id S1353902AbhLBAAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344023AbhLAX6s (ORCPT
+        with ESMTP id S236154AbhLBAAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 18:58:48 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1AFEC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:55:26 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id b67so32920899qkg.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 15:55:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=GVZ70Dywr625UyFi302s6LjnjHklxJb/tfvnMbwjLaM=;
-        b=jCkXdMKskBUT2OYx7Iaa2BLRafUdDejK8djqWKix9T6swIAuLZxsGqdR4LzM5/sE3G
-         JDmzjvBHFhnRgl47r/VjZFASHCgHpTdLo1VGBGxbbWxVmTPdWgGsuRfuzt8akpS21HLg
-         OTBZNZBgwEoYUu53vs0qkpJYiVPEorqa7Ri40=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=GVZ70Dywr625UyFi302s6LjnjHklxJb/tfvnMbwjLaM=;
-        b=5FKQsG8oAZrOMJ/6QE5X95XjqHNYWkoiMMIuBdvp3iIYiv2AmCssKxzDgEwUptIIWv
-         FYaT2956QM7YT5e4FcX/mfb6mdGnG1WTwcbK688nlLbLFgcF6/TYIqeLRj8VzWIUqMYu
-         7EfKjY59uzQ6Qeqj+uaZRiPWUl9kuQ1FeYygxMaV5whaFbMWoauURXG2fY6dJ4YkHMmD
-         amTnyFZwtmCS7e73VJtfeIimhxpjhaxMcF75T+DwASVHHFoMI7qFkJR80mTnDTWbFMCk
-         bkm6r7hkKWNls17TMf77g5LFQ5tKWyddj8I9DrV+fKKiXY0GpoHbavkI2DmycXrtw9Kr
-         GofQ==
-X-Gm-Message-State: AOAM531m93i72g8MBU9wtIwJzoROwUzH3aLl/Sz5deEZ16ipEjKFf15Y
-        pv/vLVhhQ41B4Y+oGc6FM3BBh58UIfXmTtngdyikcg==
-X-Google-Smtp-Source: ABdhPJwDrESPOFAKGV76+3Yd4DHuNO5qwOKr/plQ6gy9TgikmfsgmMo5D/ZY+B7br+XAoX3AcL0s/vToKivqbssMv5Q=
-X-Received: by 2002:a37:8805:: with SMTP id k5mr9678214qkd.426.1638402926057;
- Wed, 01 Dec 2021 15:55:26 -0800 (PST)
+        Wed, 1 Dec 2021 19:00:35 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB201C061574;
+        Wed,  1 Dec 2021 15:57:13 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638403030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HeJ90O/nT9kyUM6cIwdOXyo+g8KJsD3Gi26lD2bQV58=;
+        b=Ex/oTvgGSoTBWF6LWMPCNMEGr46k2oN2F5UHorWtjjvkWSu7tsz6+w4i8IXmcqyJPAfmxK
+        7kWjv35aCk2BqYGE0UWyrmuYmLHrFfy2mvM7JuVYBqTRPbBVnrM6bsu8mJDOKrKhNuhPB7
+        7t300i+5cxb2ynpJ5K/jbvMJSxKCqgqRa5bPQokztvP+YFXFcYakoMnBpm68dU7XDDnQFf
+        KWvotsFEbiycrbQ5kxoObIrOClr+QRfLlqLOTJ0KjSxEi7b8s6Fog4Z9ZgIJfOhkXhbEKa
+        o8p7WT2KrTGcz1442sRcJOM+e957Zv2YaLRU40F7tirG7e0lB5j+nBkuEMd8dg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638403030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=HeJ90O/nT9kyUM6cIwdOXyo+g8KJsD3Gi26lD2bQV58=;
+        b=WYMlfyx42u3s1VqqWnoMyiwtxeJvKCZe3SZ7PJ3oPJJ9lUEj9H1OOPXNXVtxOKdZQd+58m
+        4sDuhQwyKK6iy0Dg==
+To:     Dave Jiang <dave.jiang@intel.com>, Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
+        Joerg Roedel <jroedel@suse.de>,
+        iommu@lists.linux-foundation.org
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+In-Reply-To: <0eab4c0e-c672-1138-2d95-3c9bee9ecdb1@intel.com>
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
+ <20211130202800.GE4670@nvidia.com> <87o861banv.ffs@tglx>
+ <20211201001748.GF4670@nvidia.com> <87mtlkaauo.ffs@tglx>
+ <8c2262ba-173e-0007-bc4c-94ec54b2847d@intel.com> <87pmqg88xq.ffs@tglx>
+ <df00b87e-00dc-d998-8b64-46b16dba46eb@intel.com> <87k0go8432.ffs@tglx>
+ <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com> <878rx480fk.ffs@tglx>
+ <45302c9d-f7a0-5a47-d0be-127d0dea45fb@intel.com> <875ys87zl5.ffs@tglx>
+ <0eab4c0e-c672-1138-2d95-3c9bee9ecdb1@intel.com>
+Date:   Thu, 02 Dec 2021 00:57:10 +0100
+Message-ID: <87tufr7uax.ffs@tglx>
 MIME-Version: 1.0
-References: <20211129034201.5767-1-yunfei.dong@mediatek.com> <20211129034201.5767-3-yunfei.dong@mediatek.com>
-In-Reply-To: <20211129034201.5767-3-yunfei.dong@mediatek.com>
-From:   Steve Cho <stevecho@chromium.org>
-Date:   Wed, 1 Dec 2021 15:55:15 -0800
-Message-ID: <CAC-pXoPXc=q8KPUcSfY6XZ=sLt71vDZbJV=f4SZx55Gc6VbRQw@mail.gmail.com>
-Subject: Re: [PATCH v11, 02/19] media: mtk-vcodec: Align vcodec wake up
- interrupt interface
-To:     Yunfei Dong <yunfei.dong@mediatek.com>
-Cc:     Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LGTM.
+dave,
 
-On Sun, Nov 28, 2021 at 7:44 PM Yunfei Dong <yunfei.dong@mediatek.com> wrote:
+On Wed, Dec 01 2021 at 15:53, Dave Jiang wrote:
+> On 12/1/2021 3:03 PM, Thomas Gleixner wrote:
+>> This still depends on how this overall discussion about representation
+>> of all of this stuff is resolved.
+>>
+>>>> What needs a subdevice to expose?
+>> Can you answer that too please?
 >
-> Vdec and venc can use the same function to wake up interrupt event.
->
-> Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> ---
->  drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c | 9 +--------
->  drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h     | 8 ++++++++
->  drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c | 8 --------
->  3 files changed, 9 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-> index 59caf2163349..055d50e52720 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_dec_drv.c
-> @@ -31,13 +31,6 @@
->  module_param(mtk_v4l2_dbg_level, int, 0644);
->  module_param(mtk_vcodec_dbg, bool, 0644);
->
-> -/* Wake up context wait_queue */
-> -static void wake_up_ctx(struct mtk_vcodec_ctx *ctx)
-> -{
-> -       ctx->int_cond = 1;
-> -       wake_up_interruptible(&ctx->queue);
-> -}
-> -
->  static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
->  {
->         struct mtk_vcodec_dev *dev = priv;
-> @@ -69,7 +62,7 @@ static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
->         writel((readl(vdec_misc_addr) & ~VDEC_IRQ_CLR),
->                 dev->reg_base[VDEC_MISC] + VDEC_IRQ_CFG_REG);
->
-> -       wake_up_ctx(ctx);
-> +       wake_up_ctx(ctx, MTK_INST_IRQ_RECEIVED);
+> Sorry. So initial version of the IDXD sub-device is represented with a 
+> single queue. It needs a command irq (emulated) and a completion irq 
+> that is backed by a device vector (currently IMS).
 
-Assuming setting up reason doesn't change functionality.
+thanks for clarification! Let me think about it some more.
 
->
->         mtk_v4l2_debug(3,
->                         "mtk_vcodec_dec_irq_handler :wake up ctx %d, dec_done_status=%x",
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> index 581522177308..1d2370608d0d 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_drv.h
-> @@ -473,4 +473,12 @@ static inline struct mtk_vcodec_ctx *ctrl_to_ctx(struct v4l2_ctrl *ctrl)
->         return container_of(ctrl->handler, struct mtk_vcodec_ctx, ctrl_hdl);
->  }
->
-> +/* Wake up context wait_queue */
-> +static inline void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
-> +{
-> +       ctx->int_cond = 1;
-> +       ctx->int_type = reason;
-> +       wake_up_interruptible(&ctx->queue);
-> +}
-> +
->  #endif /* _MTK_VCODEC_DRV_H_ */
-> diff --git a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> index eed67394cf46..7c3487fb3498 100644
-> --- a/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> +++ b/drivers/media/platform/mtk-vcodec/mtk_vcodec_enc_drv.c
-> @@ -65,14 +65,6 @@ static const struct mtk_video_fmt mtk_video_formats_capture_vp8[] =  {
->         },
->  };
->
-> -/* Wake up context wait_queue */
-> -static void wake_up_ctx(struct mtk_vcodec_ctx *ctx, unsigned int reason)
-> -{
-> -       ctx->int_cond = 1;
-> -       ctx->int_type = reason;
-> -       wake_up_interruptible(&ctx->queue);
-> -}
-> -
->  static void clean_irq_status(unsigned int irq_status, void __iomem *addr)
->  {
->         if (irq_status & MTK_VENC_IRQ_STATUS_PAUSE)
-> --
-> 2.25.1
->
+       tglx

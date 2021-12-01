@@ -2,163 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADDE46477B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 07:55:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70A4464780
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 07:57:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347087AbhLAG7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 01:59:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54526 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347043AbhLAG64 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 01:58:56 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE76BC061574;
-        Tue, 30 Nov 2021 22:55:35 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id d10so27501753ybn.0;
-        Tue, 30 Nov 2021 22:55:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ODGiWTQjsUXsYV6BLYMhLS5+XJpaRd+uTjnO8c+76tU=;
-        b=DvroZLxf73AdNDsf5bqPoN/OHoAuos8KZvoFsEs11StTcauIYvpqh9XJ/4Lbdf5qvf
-         zwjkQVg8hk7V+fq4jMP0Ysxk7DnUCVVZB6TxVEPus1WPhDzXbU0fP0o1jjD97lj+1Nyy
-         ozAfnnN8mHAd+/qtesCT+gdTlXaeYAosODsBInGh9QwZVEzsKreVAtmu49yzbM3fn3d3
-         M5zGOKqQm7+LakQKi0vjP8Kmy/w2bXJfB4CRUli0uOGO4Eo84h+HA8WpXJyoA70m0ZO3
-         X/m/hDIrD9jIDyLgUak97xN4oImkn/NReUGdlru3ZmYeurP/yYoK5vBL8cLMCOnxgaAp
-         vp0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ODGiWTQjsUXsYV6BLYMhLS5+XJpaRd+uTjnO8c+76tU=;
-        b=2Zo2ZcqTIy4eKPoApgp+VogkqaSI07BcW0jND6q2EM2/PL5n7P7G1hWUzsU9jFmlnd
-         v78yB5KLii69gDzj4Sh0pG3phonXXFxi0O82rtXSioXPFnawd+EC/w3hZwXusVetNp/W
-         hItXG5yNBtfgiHiZF1Zziw2tBqwTNmK/yNVVO0aq2yV7rV24mebYE8bNCBBFW+HIRZeR
-         /XeNS8c+5t4JR0rqNBsKQvjMrpvX/5yacsOn9J9OC/FdVaf9mZaxQln8sl19eB4v/Me/
-         6Y6RE7Dd5WBlNGYj/6fExroxkzZcp240l8tJpK5wp+MTum4/xz5rm7q+lA4CcRAPTqhq
-         2zkw==
-X-Gm-Message-State: AOAM530eQ2hLSpko/ery7D0UOsPeYjwk2wXj0TEQIQrzKVp2zwckxTLz
-        WN9Zs8TNKR3ylHdEqungJVMQ7lN2ZSiohCKc8tE=
-X-Google-Smtp-Source: ABdhPJx41RsYCtAjJhZAU7Q6tVDvHQ9fpCHFmCRhDIrSzR/w0D3V7kELw2dXLqbW8hUphat7z0BpKsRcGdbVRkPFXQs=
-X-Received: by 2002:a25:84c1:: with SMTP id x1mr5336161ybm.690.1638341735081;
- Tue, 30 Nov 2021 22:55:35 -0800 (PST)
+        id S239960AbhLAHAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:00:53 -0500
+Received: from mail-bn8nam11on2076.outbound.protection.outlook.com ([40.107.236.76]:47712
+        "EHLO NAM11-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S232336AbhLAHAv (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 02:00:51 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mpCBaRsDOUmMa3QsGPqi6sRrMNAkD1kZM75veHQjzdHa1tlB7kjocWSvT7t+ybjOH+Vo8X9I5uQh7ksn78mKtF6QpOYxdQy8903QbFirFGxxt131IqMYcI63jB3DXAbwCrYICf9kzkbLHbLtaokDZsWXRMFJwDWnmibYoSGklubnqsPZAGisMjqYdve7k6m3Zg7OO2HWo4z8Y9lQKaD2+kew/SQ8srJuZOIavUXfkif+4HA0eqp2//E7eu3sjxZJaXsrfe+XNDaEbXgtJAZY1gi2vY8wmxbtvq4piXCIMa9M3nbs32QfeYv8Z3MXFLqOkQqDNiXx5/74qIVEU4N9ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MIij64IrAbFNRuxPLyaxIwFazgNUlGd17V4wq+NGJmU=;
+ b=ZVbwCgEcXREuu3RE4KNhWx1oDtd8tU3T65zff7P3Gt4MPVUH/Ff00RNgwWt8PLNuAsJkO47ATtxZk67vIXG+OGz3aiCvgiwAWkbAuKQNSgCKzrm8h4U4rMdewVOrnabBJfPQYQNFVQZ+w1z/4GHXtIR5wzUv4RNt/2pGrw3j9Fq9uXrapgsoIdJz2HV2ERXg0skQrFyiF9VMkFMSmKmG9CTIHCe1utyeXVVxYVz5pEyWcpLdjlF9d1KlCRFJ+L2+4Y4Gf2o+RAkgGbyHsXqhzmb4SalNPPZkcj1e9VsKCCVf7BTIeYA6pQ05FK1inGSUYtu2SBf7o9JgVb47Y2bBOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MIij64IrAbFNRuxPLyaxIwFazgNUlGd17V4wq+NGJmU=;
+ b=Uwj0RpFVTRJ8E5LFSJDEv6IYWUd3VystUmlzteiqQaUzqYi6yQE9Lu9wPOV5M3+k0Ojv+yVz14uxszk90mZWART7OnesbUFyVQas02U27H4TqZEdm/cwihaR2bgq0MjNJEbG2yeVH199946VQaRyeFmkRR3GIAy/edXr9yRwbAM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
+ (2603:10b6:301:5a::14) by MWHPR1201MB0080.namprd12.prod.outlook.com
+ (2603:10b6:301:54::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Wed, 1 Dec
+ 2021 06:57:28 +0000
+Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
+ ([fe80::2d02:26e7:a2d0:3769]) by MWHPR1201MB0192.namprd12.prod.outlook.com
+ ([fe80::2d02:26e7:a2d0:3769%5]) with mapi id 15.20.4713.027; Wed, 1 Dec 2021
+ 06:57:28 +0000
+Subject: Re: [PATCH v3] drm/radeon/radeon_kms: Fix a NULL pointer dereference
+ in radeon_driver_open_kms()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <f776cb6f-d599-a543-9177-dac7d08cf7d4@amd.com>
+ <20211130155720.178214-1-zhou1615@umn.edu>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <5cbf735f-e672-556a-f8b3-9abe3c2018cf@amd.com>
+Date:   Wed, 1 Dec 2021 07:57:20 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <20211130155720.178214-1-zhou1615@umn.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-ClientProxiedBy: AM6PR01CA0042.eurprd01.prod.exchangelabs.com
+ (2603:10a6:20b:e0::19) To MWHPR1201MB0192.namprd12.prod.outlook.com
+ (2603:10b6:301:5a::14)
 MIME-Version: 1.0
-References: <20211124084119.260239-1-jolsa@kernel.org> <20211124084119.260239-2-jolsa@kernel.org>
- <CAEf4Bzb5wyW=62fr-BzQsuFL+mt5s=+jGcdxKwZK0+AW18uD_Q@mail.gmail.com>
-In-Reply-To: <CAEf4Bzb5wyW=62fr-BzQsuFL+mt5s=+jGcdxKwZK0+AW18uD_Q@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Tue, 30 Nov 2021 22:55:24 -0800
-Message-ID: <CAEf4BzaWkTXaVQ9nnrPc+8izE=XJuN0WBrizCAAivQbS1fzRxw@mail.gmail.com>
-Subject: Re: [PATCH 1/8] perf/kprobe: Add support to create multiple probes
-To:     Jiri Olsa <jolsa@redhat.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Received: from [192.168.178.21] (87.176.183.123) by AM6PR01CA0042.eurprd01.prod.exchangelabs.com (2603:10a6:20b:e0::19) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend Transport; Wed, 1 Dec 2021 06:57:25 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 594bb628-cd0b-4fbf-a424-08d9b497d666
+X-MS-TrafficTypeDiagnostic: MWHPR1201MB0080:
+X-Microsoft-Antispam-PRVS: <MWHPR1201MB0080086A81D6E8E04ABA012A83689@MWHPR1201MB0080.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:9508;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oEVvWBuz3ZazbMrEfU7LNstxVXPptJ31vvc2hNjSCUBCUUG7TnHNst5WKsaqftqgHo39qAEfluL3w6CpJwV/eAUVjmW0z5rVQKwHYYsBBv+5pA4Cry4no7fwPPrXzQ0Vlr5aYj6sQMV3m0LGJbgzi5RUpVJBaHiRTLsDczmBhXb28mKwh6iC8Lmqfv50JO6OVu8Wx/8g9XNpVsPm8EfmI3MRrNo8N2NXQH44hVHoOMSyO3IAIB8TLc+pGYYxurqlN/nIZIr7araFlrI5LyBMjSCPBjCfRytmwSzD5pXfYx27gB6qA9bzD1v2vvVCr4Y/ldaaYy59wzOZbn3ddhkGbauJ8guOxErSCyaBbR3KB4R6Zg3AlGt53D7VS/LjfciICKVZ7VX4AN85GLHFBaP/PSiat2bQyiqV+xHM2B8czi5ycsLyOPwao8en92sWoy2C7b+Uj7iDk0Vtbj+/PmbKio2jw9sF0JBc/et3EJi+8lfrPwv9uYBCsbUKtZXgGDhz8hRVttQLddMi3QoE3apNNKFhl6L9BFJ5idS54YeXLpse/P0yC5dEXUNYCbfvkiH3vF3sjfvGAPshPk1ksa4bL6J6nQyHTXvG+XQFv4QbaZFoo3Bv+eWwB99dx3GFLtrUNCE9jYp+3v+aeX/z9c6H/EXa4YNMPVPfrHAUemp9PJ5r78JIrINKW5xmQosvCugkF/BE0aXeZXl3hgHXwwoXVg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1201MB0192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(186003)(54906003)(508600001)(2616005)(83380400001)(26005)(86362001)(36756003)(956004)(6486002)(8936002)(4326008)(31696002)(2906002)(66556008)(66476007)(6666004)(6916009)(8676002)(66574015)(316002)(66946007)(31686004)(16576012)(38100700002)(5660300002)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YWR1WXUwQUh6VkRJYnhjQWhkUmlQTDRlaWF3d0lINnBBU3lqR0xzS0NvME5Q?=
+ =?utf-8?B?LzVwM3Yxc1JaT0dkVmZrS3lXU210c0wyV21wRXNjL09uOUVrY2cxY1YydkVi?=
+ =?utf-8?B?bkdXTVZ3TTk4azlZcWRUb3dQQW5LTm0vakZMdnpLTDV6V0JONjZKU1NkQTNX?=
+ =?utf-8?B?SFI5dVRGQjZxM0xNNGZJYkVDeWNjaFlWWUo3UzcrVysxN2MwaVJna3BqT1p1?=
+ =?utf-8?B?cHZNSHpaaGpUWFBOcS9NcXFwYlAyZDU1ckxkK1lWT0lSdFVkNDFWY0ZwdGVx?=
+ =?utf-8?B?cGNRNXFMZTh1UHdidTF4d1ZpS0Y1Vm5uMmUrVndHVWI2em9aVG9hQkRURis5?=
+ =?utf-8?B?M0JpLzg5bnh0MnNyK1YybjNKQlZBRWFveU1wbzFTQkhNUU5jWVh0UnFmRysw?=
+ =?utf-8?B?UTJNVlBoWnJobWxNUlNQdmNJTzVNTEdWMmI3aW0xL016NDhjL2pUVXpxYmNQ?=
+ =?utf-8?B?MXVFZjJrN1QwNVljQ2xZUGxTbHhPNytCTE5TUmxTZ2NSdGdBbWdaWElGQjJo?=
+ =?utf-8?B?cDNZQUdEc1ltWloxNkRpWlJqYnIyZDZYQWxZYnZtck9GaTNDMkZvV2pYT1ZI?=
+ =?utf-8?B?Y00rWGlhUVU0L0dWMUhHVlUzcHpRQjl3L2ZFcFM1eEhXN0I5N29XN3NNN1U5?=
+ =?utf-8?B?cU82UTlLV0lCdmxBWW1yZzN2UFF6Wll4REd1YkZ5YjREcVNWY0Z0alRPNGoy?=
+ =?utf-8?B?OUgzeW1aK1BENG53aVBXallNUzA2VGV1Ukt2Q2FZejIvTUQxditoMDBzZTZN?=
+ =?utf-8?B?Qy9idDJSenlIbFRqWS92enVSL0NEYVEydVAxZnhYSjNtVHFjUnhpclVzZ2ls?=
+ =?utf-8?B?dWxDUDh3SVM2dkJqUUhPMWFiVUw0R25yRzAxNXo3Q3NLRDFtdG5kOUtNUXR6?=
+ =?utf-8?B?QTVxOVdxVU1DM25sMHN6UHl2enlLdW56VjJuTTFjYytieW9yUFV1aFRZL3FK?=
+ =?utf-8?B?WGRlclYwamtreHlrZDZlSGJYc1hnVUo3UTFiK0s1cnlNVitxUThHT0gwM1Ux?=
+ =?utf-8?B?L0F2SHhMSStLcDg5QUtJRE5OWkhHc2dHUW01TVdBZmY0Z0VLbmdGWng0Q01O?=
+ =?utf-8?B?UWIyUnNrcWtpR3Y4bmMwbEZOcU1ybHVDeHh3WHpMcS80cmozU29VRk5WNVkr?=
+ =?utf-8?B?M0FXVEs0cjhDRWtiaG15TmhZTkF6TlV4MWpVQkNSVXMrbW40bHZuSHNPSVA0?=
+ =?utf-8?B?c3dkMTZNV1JHaDhMMTZaNVRGQ3F1TTNtUGdublB0RGVDUjBqYmp4V1NndE4z?=
+ =?utf-8?B?bk9FR1dKMFluQzl1cUJhLzFIUlhlbzRTOUpnOGFoZFFqS0N2bUNUSVFOSk4v?=
+ =?utf-8?B?U2wrdzRzZ1BtOStPa2J4UHJ0cUd4STlXdDlpd1laeGlzZkZzRXJvMldZR0FI?=
+ =?utf-8?B?RVV5MkxiSjNUUm1tc3JuMEdRSWVYMTZ6SG84aDNPQ1prdEhibm54dDZZSWlC?=
+ =?utf-8?B?Zm5SM3lVckxHWUlUbzgweEF6T0NCSDFTUTJHM24wVFU5MzBmTWs1MWxzanF3?=
+ =?utf-8?B?WWVOQ1dEcjFDMStKWklaTkwvUkJMSEN5NVNZZWJZWGhUYmd6YUx1M0lRL25p?=
+ =?utf-8?B?SG5Cc1FlNTZ5a2FGRHNHZ1BKV2tnM0NvY3JlUVVhd0s4YVVJYzF0OVQzTFd5?=
+ =?utf-8?B?K0FOOFNNU0xFU3BXckRjWDUyWHpobkZyUTR1NzZzeWMyVUcweDJudklJT2lP?=
+ =?utf-8?B?TE1OZThSTWUzbzRRRU53VGVaSTZ2UzN3RmVoVk8rSFBQWERZWUFzRWx1QURq?=
+ =?utf-8?B?QTl1aXl4dG9jbHpHcDJQeWlQbWlkMkNFeloyZGhlclk1T1dCM0swRlprNlhl?=
+ =?utf-8?B?ZU95UFQ1ekVJbkFzZUc2aUtXR2d5UVVIRVRjakRtV3EwMHdRakRLb3JjWkoz?=
+ =?utf-8?B?T1VuejY2eUtHN0NJMHU5SW5kMktTYmV0emordUErMDVDYnlIRHZ1WFdYRjlj?=
+ =?utf-8?B?SFhsdXZOM0U1OXFWMFlSclhHcmxtcEtzUFRKVGVCWHl5Y1NqV21vVlpUSWh1?=
+ =?utf-8?B?U0J5b2dUVE16YVdhdmx4M2lLL3FRRlhmVE1vd2crUitGZk84SUlod2NUZ2VW?=
+ =?utf-8?B?TlRQcUROV0dXRWdMRENNNnNmOGNkMndObDBXTDJxV1FKMDJxUWRQeVVtR0Y3?=
+ =?utf-8?Q?kZXI=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 594bb628-cd0b-4fbf-a424-08d9b497d666
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2021 06:57:28.1867
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3FTR9LfTfjDRF7ZfEeXafXrfX+ozMm/BOLg/wNKJHkkK7XGZIcYxv7BIUrZTa+bT
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0080
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:53 PM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+Am 30.11.21 um 16:57 schrieb Zhou Qingyang:
+> In radeon_driver_open_kms(), radeon_vm_bo_add() is assigned to
+> vm->ib_bo_va and passes and used in radeon_vm_bo_set_addr(). In
+> radeon_vm_bo_set_addr(), there is a dereference of vm->ib_bo_va,
+> which could lead to a NULL pointer dereference on failure of
+> radeon_vm_bo_add().
 >
-> On Wed, Nov 24, 2021 at 12:41 AM Jiri Olsa <jolsa@redhat.com> wrote:
-> >
-> > Adding support to create multiple probes within single perf event.
-> > This way we can associate single bpf program with multiple kprobes,
-> > because bpf program gets associated with the perf event.
-> >
-> > The perf_event_attr is not extended, current fields for kprobe
-> > attachment are used for multi attachment.
+> Fix this bug by adding a check of vm->ib_bo_va.
 >
-> I'm a bit concerned with complicating perf_event_attr further to
-> support this multi-attach. For BPF, at least, we now have
-> bpf_perf_link and corresponding BPF_LINK_CREATE command in bpf()
-> syscall which allows much simpler and cleaner API to do this. Libbpf
-> will actually pick bpf_link-based attachment if kernel supports it. I
-> think we should better do bpf_link-based approach from the get go.
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
 >
-> Another thing I'd like you to keep in mind and think about is BPF
-> cookie. Currently kprobe/uprobe/tracepoint allow to associate
-> arbitrary user-provided u64 value which will be accessible from BPF
-> program with bpf_get_attach_cookie(). With multi-attach kprobes this
-> because extremely crucial feature to support, otherwise it's both
-> expensive, inconvenient and complicated to be able to distinguish
-> between different instances of the same multi-attach kprobe
-> invocation. So with that, what would be the interface to specify these
-> BPF cookies for this multi-attach kprobe, if we are going through
-> perf_event_attr. Probably picking yet another unused field and
-> union-izing it with a pointer. It will work, but makes the interface
-> even more overloaded. While for LINK_CREATE we can just add another
-> pointer to a u64[] with the same size as number of kfunc names and
-> offsets.
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+>
+> Builds with CONFIG_DRM_RADEON=m show no new warnings,
+> and our static analyzer no longer warns about this code.
+>
+> Fixes: cc9e67e3d700 ("drm/radeon: fix VM IB handling")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 
-Oh, and to be clear, I'm not proposing to bypass underlying perf
-infra. Rather use it directly as an internal API, not through
-perf_event_open syscall.
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
+> ---
+> Changes in v3:
+>    -  Fix the bug that good case will also be freed
+>    -  Improve code style
 >
-> But other than that, I'm super happy that you are working on these
-> complicated multi-attach capabilities! It would be great to benchmark
-> one-by-one attachment vs multi-attach to the same set of kprobes once
-> you arrive at the final implementation.
+> Changes in v2:
+>    -  Improve the error handling into goto style
 >
-> >
-> > For current kprobe atachment we use either:
-> >
-> >    kprobe_func (in config1) + probe_offset (in config2)
-> >
-> > to define kprobe by function name with offset, or:
-> >
-> >    kprobe_addr (in config2)
-> >
-> > to define kprobe with direct address value.
-> >
-> > For multi probe attach the same fields point to array of values
-> > with the same semantic. Each probe is defined as set of values
-> > with the same array index (idx) as:
-> >
-> >    kprobe_func[idx]  + probe_offset[idx]
-> >
-> > to define kprobe by function name with offset, or:
-> >
-> >    kprobe_addr[idx]
-> >
-> > to define kprobe with direct address value.
-> >
-> > The number of probes is passed in probe_cnt value, which shares
-> > the union with wakeup_events/wakeup_watermark values which are
-> > not used for kprobes.
-> >
-> > Since [1] it's possible to stack multiple probes events under
-> > one head event. Using the same code to allow that for probes
-> > defined under perf kprobe interface.
-> >
-> > [1] https://lore.kernel.org/lkml/156095682948.28024.14190188071338900568.stgit@devnote2/
-> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > ---
-> >  include/uapi/linux/perf_event.h |   1 +
-> >  kernel/trace/trace_event_perf.c | 106 ++++++++++++++++++++++++++++----
-> >  kernel/trace/trace_kprobe.c     |  47 ++++++++++++--
-> >  kernel/trace/trace_probe.c      |   2 +-
-> >  kernel/trace/trace_probe.h      |   3 +-
-> >  5 files changed, 138 insertions(+), 21 deletions(-)
-> >
+>   drivers/gpu/drm/radeon/radeon_kms.c | 35 ++++++++++++++++-------------
+>   1 file changed, 19 insertions(+), 16 deletions(-)
 >
-> [...]
+> diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/radeon/radeon_kms.c
+> index 482fb0ae6cb5..439f4d1fdd65 100644
+> --- a/drivers/gpu/drm/radeon/radeon_kms.c
+> +++ b/drivers/gpu/drm/radeon/radeon_kms.c
+> @@ -648,6 +648,8 @@ void radeon_driver_lastclose_kms(struct drm_device *dev)
+>   int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+>   {
+>   	struct radeon_device *rdev = dev->dev_private;
+> +	struct radeon_fpriv *fpriv;
+> +	struct radeon_vm *vm;
+>   	int r;
+>   
+>   	file_priv->driver_priv = NULL;
+> @@ -660,8 +662,6 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+>   
+>   	/* new gpu have virtual address space support */
+>   	if (rdev->family >= CHIP_CAYMAN) {
+> -		struct radeon_fpriv *fpriv;
+> -		struct radeon_vm *vm;
+>   
+>   		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
+>   		if (unlikely(!fpriv)) {
+> @@ -672,35 +672,38 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+>   		if (rdev->accel_working) {
+>   			vm = &fpriv->vm;
+>   			r = radeon_vm_init(rdev, vm);
+> -			if (r) {
+> -				kfree(fpriv);
+> -				goto out_suspend;
+> -			}
+> +			if (r)
+> +				goto out_fpriv;
+>   
+>   			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
+> -			if (r) {
+> -				radeon_vm_fini(rdev, vm);
+> -				kfree(fpriv);
+> -				goto out_suspend;
+> -			}
+> +			if (r)
+> +				goto out_vm_fini;
+>   
+>   			/* map the ib pool buffer read only into
+>   			 * virtual address space */
+>   			vm->ib_bo_va = radeon_vm_bo_add(rdev, vm,
+>   							rdev->ring_tmp_bo.bo);
+> +			if (!vm->ib_bo_va) {
+> +				r = -ENOMEM;
+> +				goto out_vm_fini;
+> +			}
+> +
+>   			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
+>   						  RADEON_VA_IB_OFFSET,
+>   						  RADEON_VM_PAGE_READABLE |
+>   						  RADEON_VM_PAGE_SNOOPED);
+> -			if (r) {
+> -				radeon_vm_fini(rdev, vm);
+> -				kfree(fpriv);
+> -				goto out_suspend;
+> -			}
+> +			if (r)
+> +				goto out_vm_fini;
+>   		}
+>   		file_priv->driver_priv = fpriv;
+>   	}
+>   
+> +out_vm_fini:
+> +	if (r)
+> +		radeon_vm_fini(rdev, vm);
+> +out_fpriv:
+> +	if (r)
+> +		kfree(fpriv);
+>   out_suspend:
+>   	pm_runtime_mark_last_busy(dev->dev);
+>   	pm_runtime_put_autosuspend(dev->dev);
+

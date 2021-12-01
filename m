@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 964BB46513B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E765465139
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238164AbhLAPTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55710 "EHLO
+        id S1350846AbhLAPSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:18:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350738AbhLAPQg (ORCPT
+        with ESMTP id S1344328AbhLAPQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:16:36 -0500
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7088DC06175A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:13:15 -0800 (PST)
-Received: by mail-ot1-x32c.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso35693744otf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:13:15 -0800 (PST)
+        Wed, 1 Dec 2021 10:16:37 -0500
+Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD05C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:13:16 -0800 (PST)
+Received: by mail-ot1-x32b.google.com with SMTP id r10-20020a056830080a00b0055c8fd2cebdso35537420ots.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:13:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=v1bAQqZw2j6DbljrAtjNx2+gnKBHA5IQTB4CHYspsho=;
-        b=PRKfGnJp6XEKBBypQcOXwVWpwuHkXUPx73cRbBTXN6gduKkhHK4SN8sqMeKLY7hR2f
-         sp4srosoKWXkWiR3jjtlWqAh39zzBKbS78QBw7bYx/Ut8zQ9pPv+3EY4ZYrf+KT6FuwT
-         JT7tr7qmdl5ZE353cIBSl49GkNYWXGAarymTNOQrriZXi9YZPEJ+iMWjjTAfu8Km9eL3
-         3XooWDTkuwpiIHKmG/1PIgcNiz6rFtsZ5Fu6DU2N0VayoP5rvWhf6GIaxDK9rlEegBTW
-         2pSe9Yf8a8g1d1zhKyKVyUT2yJVWIYQIC3whj2GXGciQJtdmT7VZ5QOurEqWXRBc4TTl
-         emdg==
+        bh=zHnyn0V4D1cDh530N0PDN6SxecckzjKWiElhDEIypxc=;
+        b=eS5bLwRe01fg0ZrcHBic15idl3vRr5TaSzVk+R7q2FO8U/Ut8YWpN8HNTb/7daHq1z
+         DegJAHrRJFJ5DvdIg5We/MpVCdYKlA50BH1FL4vpeNxXlN/FyHUoW9hogQWbGyFX7ZW+
+         UKpoTUj96gyLsw8ToAl+9DzJY1AzW/QV5lKo2kiU5H13o00Yeh9s4mADfhJv6rthPMps
+         GV3LFrHTt2YvGtmCbvoKm7WtfwAtT1I+EoEAzba6LkGOntmV38Mhu63VO1SLhMHcuq4B
+         jnva00nTZnhCAD0n8A2VdE6nnhuXTKekmXjbuH/8j9jBnxyE6uKN3O3FA7qYXT85U5Nh
+         UF4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=v1bAQqZw2j6DbljrAtjNx2+gnKBHA5IQTB4CHYspsho=;
-        b=UmB75lHZRfSz3yfVwqAzyu/Z07R1f+7+mgggC/yW4uxo5jd668b6+j6ZKajeVHt+7Z
-         SHc/9DGpxiiNyEwezAdWcnuSTbwa0oj1tp24K0EszvvDMkjdDT2R8x9TwGwxsRvn1W3J
-         dBv4VuPVCiAhitr0IW6XFAsfrDWyMOY9NGIpEmWEqXb04Ue2dRGs8wivRXghyOdqs/nA
-         hPz8NF8cDxe8sF9DEjq4tFUKl236P4EdyL7n96c4C58KCj4dZIjN8p9Oj+Jj8iVPB2Uv
-         F/mPWzlszWyeKGwfG3vNVKTnk48T6b6d02UEJA35MmKPbLpxs2n3OKwCXpzUzmwReVi1
-         GRnQ==
-X-Gm-Message-State: AOAM530Ye8HNxYU3v1BxOfA3tX/T9s7VzzJLFA7M4eJI7etJcHT42wpJ
-        omxvef2PBh9+1da+KBRamuZeIg==
-X-Google-Smtp-Source: ABdhPJxsVfA7xx1bfNc8w8inMDhwGDZqdL7Sb9QgoewtU8pT/Fk8uicsfKUNkv7LDP/dZU3nBBhdvw==
-X-Received: by 2002:a05:6830:1397:: with SMTP id d23mr6231017otq.68.1638371594799;
-        Wed, 01 Dec 2021 07:13:14 -0800 (PST)
+        bh=zHnyn0V4D1cDh530N0PDN6SxecckzjKWiElhDEIypxc=;
+        b=RuObbvW9zMKbILwfqXSY1ug426zd8oaAB3qOQlvE7/tvNpyjAEe89t+cH3e2pAmdwG
+         BSRYeRUlsVBFsjzm8c1ItMyDxMwj7K5P0pBBS07NJsqBPFwKnfy4B+DzEN10rlioRPdF
+         C8hRqSispJjSoSLCrqBwfhBhbhj7R9gpR5HKtSN0y0eBkmfgJVOiYIVdvtNHKXsvZxnM
+         /ImnIvem87Li6KIfYSjNKVLnflZjDPoX1eGjIU19QXMCMTuLtSDs+YMsf/aWwM2Nf0BP
+         yNpaKJQHAX2eTacFZ799Re7fN75G3BuMRpouUc1vnLzXJxA0ECwj4qBmeUYwzGFqyMON
+         nyJg==
+X-Gm-Message-State: AOAM532MthsHuaZ6BxjLdYdmo/vuQFKBdH6HP3Yj8xcTNmvl80J0JtKz
+        H2sZqvckjw45DmTtz8+o+MI4uQ==
+X-Google-Smtp-Source: ABdhPJy7hptbKYqcIM1z69aEtHiMKTqkYVcs56AAUIiUTpc+AEu9/T7j9qv/iQZMtM8X/j+/vzm3Ig==
+X-Received: by 2002:a9d:74cd:: with SMTP id a13mr6512786otl.71.1638371595672;
+        Wed, 01 Dec 2021 07:13:15 -0800 (PST)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id be12sm33933oib.50.2021.12.01.07.13.13
+        by smtp.gmail.com with ESMTPSA id be12sm33933oib.50.2021.12.01.07.13.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 07:13:14 -0800 (PST)
+        Wed, 01 Dec 2021 07:13:15 -0800 (PST)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     robh+dt@kernel.org, agross@kernel.org,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, kgodara@codeaurora.org,
-        mka@chromium.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dianders@chromium.org
-Subject: Re: [PATCH v2 0/4] arm64: dts: qcom: Add support for the sc7280 CRD board
-Date:   Wed,  1 Dec 2021 09:13:01 -0600
-Message-Id: <163837153033.1905338.2350146670308724583.b4-ty@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH] soc: qcom: aoss: constify static struct thermal_cooling_device_ops
+Date:   Wed,  1 Dec 2021 09:13:02 -0600
+Message-Id: <163837153033.1905338.15967895794638876580.b4-ty@linaro.org>
 X-Mailer: git-send-email 2.32.0
-In-Reply-To: <1638185497-26477-1-git-send-email-quic_rjendra@quicinc.com>
-References: <1638185497-26477-1-git-send-email-quic_rjendra@quicinc.com>
+In-Reply-To: <20211128210317.25504-1-rikard.falkeborn@gmail.com>
+References: <20211128210317.25504-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -67,29 +65,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Nov 2021 17:01:33 +0530, Rajendra Nayak wrote:
-> Add support for sc7280 CRD (Compute Reference Design) Board.
-> It shares the same EC and H1 as the IDP2 boards, comes with an eDP
-> display and supports both touch and trackpad.
-> Since the EC and H1 nodes are identical across CRD and IDP2 this
-> series also adds support for EC/H1 on IDP2 devices.
+On Sun, 28 Nov 2021 22:03:17 +0100, Rikard Falkeborn wrote:
+> The only usage of qmp_cooling_device_ops is to pass its address to
+> devm_thermal_of_cooling_device_register() which takes a pointer to const
+> struct thermal_cooling_device_ops as argument. Make it const to allow
+> the compiler to put it in read-only memory.
 > 
-> Kshitiz Godara (2):
->   arm64: dts: qcom: sc7280: Define EC and H1 nodes for IDP/CRD
->   arm64: dts: qcom: sc7280-crd: Add Touchscreen and touchpad support
 > 
-> [...]
 
 Applied, thanks!
 
-[1/4] dt-bindings: arm: qcom: Document qcom,sc7280-crd board
-      commit: 7a21328bb3ade238e35c4de81da3ad8d76437b72
-[2/4] arm64: dts: qcom: sc7280-crd: Add device tree files for CRD
-      commit: 427b249504ea48e9af2014df4b22fe8b31ddb563
-[3/4] arm64: dts: qcom: sc7280: Define EC and H1 nodes for IDP/CRD
-      commit: 248da168fbae5ab7294a37428256acc570ed552a
-[4/4] arm64: dts: qcom: sc7280-crd: Add Touchscreen and touchpad support
-      commit: 3ebf11fa4a355116eb2a69a46114ec92f245dbcc
+[1/1] soc: qcom: aoss: constify static struct thermal_cooling_device_ops
+      commit: f5c3902d854744b42604359f68b42426185ed7a5
 
 Best regards,
 -- 

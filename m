@@ -2,82 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EB1D4650B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0192A4650C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:04:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350241AbhLAPFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:05:02 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:57966 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235927AbhLAPE5 (ORCPT
+        id S1350283AbhLAPHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244238AbhLAPHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:04:57 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Dec 2021 10:07:11 -0500
+Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5734EC061574;
+        Wed,  1 Dec 2021 07:03:50 -0800 (PST)
+Received: from [192.168.1.101] (83.6.166.111.neoplus.adsl.tpnet.pl [83.6.166.111])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EB70B81F6E;
-        Wed,  1 Dec 2021 15:01:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A827C53FCD;
-        Wed,  1 Dec 2021 15:01:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638370886;
-        bh=hWa/AW8P+Nj1BqQSyzZbAAuCJg4NstfAxPTZFQ/kMZM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VmSkMNMEuePziWmXmHamk+6licL6VT605ek7EsKigJPOhvT3MMQ5PvkBpfJGMtt/0
-         qsgWscPOX5WC2fLR5xMsWfiMVqLGBqIZDjCpx7hCrOE9BajbH2PpiIn9xFN1Q4IsJg
-         wCulxeHSi3wE/a3hxoScWNmlRlx+hoZTuMh0WHrjetmyyxq8HWiD6QD1c5ugUdRtDr
-         QsmALzYPr99JaVjeLVRF5i6W4TqiI9yJ8264RQqBWpzkIMiimSvUbQ0q2YQ6ghDL7G
-         tqcFrsNRJGvVBSQryDYZvhRSL/5IgyfuOUYwcr1ZzgNN1pF67lZdoknqMPE/nxFRo/
-         isMlV0IOvQoEw==
-Received: by mail-ed1-f41.google.com with SMTP id r25so37566584edq.7;
-        Wed, 01 Dec 2021 07:01:26 -0800 (PST)
-X-Gm-Message-State: AOAM532taSI/rwOe5Ygx2JCkOSVUmdZdu6Uy56J8W4wYbhMYXRZvyINW
-        eiN4naW+g3iBuok9NfFPZUtS4K9/H2aqPRU15g==
-X-Google-Smtp-Source: ABdhPJwwe0WMA1uFxfldNVhbQY/uprpaVrFLr+TUWgLN3K+H2vTtY43V8ew2D3T7TdJkzyqwsVH51D/sG3cYG6iZCO0=
-X-Received: by 2002:aa7:dc07:: with SMTP id b7mr8923590edu.327.1638370880548;
- Wed, 01 Dec 2021 07:01:20 -0800 (PST)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 291C13F76F;
+        Wed,  1 Dec 2021 16:03:48 +0100 (CET)
+Message-ID: <3fe36e35-8c4b-f772-be43-8e8c49e97f63@somainline.org>
+Date:   Wed, 1 Dec 2021 16:03:47 +0100
 MIME-Version: 1.0
-References: <20211130195817.2911086-1-robh@kernel.org> <CAMRc=Mc-8--9+N2uGWhY6whwuJKCg1jtnnTYyQJifdSS2Um+qA@mail.gmail.com>
-In-Reply-To: <CAMRc=Mc-8--9+N2uGWhY6whwuJKCg1jtnnTYyQJifdSS2Um+qA@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 1 Dec 2021 09:01:08 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+4a3FTW1yrM_PjX3_eDwb=Y6GV7PgpxyFiDVARTg5_Ug@mail.gmail.com>
-Message-ID: <CAL_Jsq+4a3FTW1yrM_PjX3_eDwb=Y6GV7PgpxyFiDVARTg5_Ug@mail.gmail.com>
-Subject: Re: [PATCH v2] gpio: xlp: Remove Netlogic XLP variants
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH 01/15] arm64: dts: qcom: Add base SM8450 DTSI
+Content-Language: en-US
+To:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20211201072915.3969178-1-vkoul@kernel.org>
+ <20211201072915.3969178-2-vkoul@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20211201072915.3969178-2-vkoul@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 2:25 AM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
->
-> On Tue, Nov 30, 2021 at 8:58 PM Rob Herring <robh@kernel.org> wrote:
-> >
-> > Netlogic XLP was removed in commit 95b8a5e0111a ("MIPS: Remove NETLOGIC
-> > support"). With those gone, the single platform left to support is
-> > Cavium ThunderX2. Remove all the Netlogic variants and DT support.
-> >
-> > For simplicity, the existing kconfig name is retained.
-> >
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> > Cc: linux-gpio@vger.kernel.org
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> > v2:
-> >  - Fix !OF and ACPI build errors
-> >
->
-> Rob,
->
-> This doesn't apply on top of v5.16-rc1. Anything I'm missing?
 
-It should, that's exactly what it is based on. You dropped v1 that you
-already applied?
+On 01.12.2021 08:29, Vinod Koul wrote:
+> This add based DTSI for SM8450 SoC and includes base description of
+> CPUs, GCC, RPMHCC, UART, interuupt-controller which helps to boot to
+> shell with console on boards with this SoC
+>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi | 476 +++++++++++++++++++++++++++
+>  1 file changed, 476 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/sm8450.dtsi
+>
+> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> new file mode 100644
+> index 000000000000..d838283bde4b
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+> @@ -0,0 +1,476 @@
+> +// SPDX-License-Identifier: BSD-3-Clause
+> +/*
+> + * Copyright (c) 2021, Linaro Limited
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/clock/qcom,gcc-sm8450.h>
+> +#include <dt-bindings/clock/qcom,rpmh.h>
+> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
+> +
+> +/ {
+> +	interrupt-parent = <&intc>;
+> +
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	chosen { };
+> +
+> +	clocks {
+> +		xo_board: xo-board {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <76800000>;
+> +			clock-output-names = "xo_board";
+> +		};
+> +
+> +		sleep_clk: sleep-clk {
+> +			compatible = "fixed-clock";
+> +			clock-frequency = <32000>;
+> +			#clock-cells = <0>;
+> +		};
 
-Rob
+No clock-output-names for this one?
+
+
+Other than that:
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+
+Konrad
+

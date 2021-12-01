@@ -2,105 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAA5464937
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:56:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4992D46493F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347687AbhLAH74 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:59:56 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:46988 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241918AbhLAH7y (ORCPT
+        id S1347320AbhLAIDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 03:03:25 -0500
+Received: from mail-wm1-f49.google.com ([209.85.128.49]:38827 "EHLO
+        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239283AbhLAIDY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:59:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D3ADB81DBF
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:56:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06FBC53FCC;
-        Wed,  1 Dec 2021 07:56:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638345392;
-        bh=YIpWN6VqxtRIuZ9JFyJq6g5vNEOScuV8zlmA+SfEbN4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=lMfpFSEzRswgHGsN/VkIaisQ94bJ4xf5q6bictbEL3dUy6uMAlJuWB5lM7fhoGQCr
-         08Knp8RekYjwfG53l80qMqL+Azz4hP1RRlluJJbjlxy3QF2e8VDQ8ls2q4BAtrXrQT
-         SHCP69GZgwd3L6KC2BKzt1tQv8eCEINxw2clIPBeWW2ejYQSnrrFSoa3ez9AzH8BF7
-         gzNmHdM7LTBYKtdHRNUvDJQ6zsGQ1fHPBz1LnlhHCqII9fBM704y0dH2F6MTzmMIU5
-         MZQxSQaN+ox7FIcU4mgwODaVulEByk90nL9hb960nQyntxJDU5KD3qrfCzsG8oBGEi
-         h9t/t0x6iU/rw==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1msKTe-0094ry-2D; Wed, 01 Dec 2021 07:56:30 +0000
+        Wed, 1 Dec 2021 03:03:24 -0500
+Received: by mail-wm1-f49.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso21511083wms.3;
+        Wed, 01 Dec 2021 00:00:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=COLb+tD9tUlJqRA3EmYnXbmZWIsvi9bMrsPhaY8Ollw=;
+        b=LluDtRd07NuiAjJZ3UbhbX+vIP+Q78RTo4DVuUcqR6ReJ/oTeEAKIFCMhVgPrVxl1Q
+         Vpd+v/RMQj+z+hIT1NyIR+dT7ueDEk4/voECmaNwGirJvXcTtF1qmgduF5hykwRd/TG4
+         FMM3v1JjP3kOCp0wmSKuvzbuUVfk/AIAH8/A2es1xaPZQQ7S4zFPntfdDbRQfUWDTJJT
+         RK4qhNqcDzyEP0+tY1Dtl13Rb6CpCsew8jlL96aDWANb5+3YYIh1vKg+tHsSjDcO978d
+         t+c8N/NprDCVDVxH6G2loUaMVchbrXI+l0ue9AadkYGKxurViBBYTvE2SAn6B0gryUS+
+         ZjoQ==
+X-Gm-Message-State: AOAM533zKCQZb2LkC1kZFSLynncOcpOW2gxpYLvWBwjusyvpPwmL+26V
+        ksQUAhOzAf0Ecj8xS3s3ouA=
+X-Google-Smtp-Source: ABdhPJwBjqG8PuzEUvkS7dzMT3rCTtsKUVlZt7OW5M1KGohXkvSn2n6pp59uMUojrWGFTBFe+CTyRw==
+X-Received: by 2002:a05:600c:4f4b:: with SMTP id m11mr4829671wmq.151.1638345602659;
+        Wed, 01 Dec 2021 00:00:02 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id m17sm18035071wrz.22.2021.12.01.00.00.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 00:00:02 -0800 (PST)
+Message-ID: <f81a6434-9f38-947e-02a8-9a9191285e52@kernel.org>
+Date:   Wed, 1 Dec 2021 09:00:00 +0100
 MIME-Version: 1.0
-Date:   Wed, 01 Dec 2021 07:56:29 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     Vladimir Murzin <vladimir.murzin@arm.com>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-        aou@eecs.berkeley.edu, catalin.marinas@arm.com,
-        deanbo422@gmail.com, green.hu@gmail.com, guoren@kernel.org,
-        jonas@southpole.se, kernelfans@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk,
-        nickhu@andestech.com, palmer@dabbelt.com, paulmck@kernel.org,
-        paul.walmsley@sifive.com, peterz@infradead.org, shorne@gmail.com,
-        stefan.kristiansson@saunalahti.fi, tglx@linutronix.de,
-        torvalds@linux-foundation.org, tsbogend@alpha.franken.de,
-        vgupta@kernel.org, will@kernel.org
-Subject: Re: [PATCH 09/15] irq: arm: perform irqentry in entry code
-In-Reply-To: <59cb8da0-7dbd-6e70-56be-a40615fd694b@arm.com>
-References: <20211021180236.37428-1-mark.rutland@arm.com>
- <20211021180236.37428-10-mark.rutland@arm.com>
- <0efc4465-12b5-a568-0228-c744ec0509a3@arm.com>
- <20211022153602.GE86184@C02TD0UTHF1T.local>
- <1dc39ac9-1a05-cf8d-2aef-633903a6338d@arm.com>
- <20211022175854.GK86184@C02TD0UTHF1T.local> <87tuh8uchn.wl-maz@kernel.org>
- <cada0034-7427-f4ae-0f88-7bbb1be2b1a5@arm.com>
- <87ilxnc21r.wl-maz@kernel.org>
- <c43c8c0e-946e-93c6-00d0-f015f948833a@arm.com>
- <59cb8da0-7dbd-6e70-56be-a40615fd694b@arm.com>
-User-Agent: Roundcube Webmail/1.4.11
-Message-ID: <78cc83d10cb6d251e53f5947ddc52735@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 3/3] x86: mm: add x86_64 support for page table check
+Content-Language: en-US
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-doc@vger.kernel.org, akpm@linux-foundation.org,
+        rientjes@google.com, pjt@google.com, weixugc@google.com,
+        gthelen@google.com, mingo@redhat.com, corbet@lwn.net,
+        will@kernel.org, rppt@kernel.org, keescook@chromium.org,
+        tglx@linutronix.de, peterz@infradead.org, masahiroy@kernel.org,
+        samitolvanen@google.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, frederic@kernel.org, hpa@zytor.com,
+        aneesh.kumar@linux.ibm.com
+References: <20211123214814.3756047-1-pasha.tatashin@soleen.com>
+ <20211123214814.3756047-4-pasha.tatashin@soleen.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20211123214814.3756047-4-pasha.tatashin@soleen.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: vladimir.murzin@arm.com, mark.rutland@arm.com, linux-kernel@vger.kernel.org, aou@eecs.berkeley.edu, catalin.marinas@arm.com, deanbo422@gmail.com, green.hu@gmail.com, guoren@kernel.org, jonas@southpole.se, kernelfans@gmail.com, linux-arm-kernel@lists.infradead.org, linux@armlinux.org.uk, nickhu@andestech.com, palmer@dabbelt.com, paulmck@kernel.org, paul.walmsley@sifive.com, peterz@infradead.org, shorne@gmail.com, stefan.kristiansson@saunalahti.fi, tglx@linutronix.de, torvalds@linux-foundation.org, tsbogend@alpha.franken.de, vgupta@kernel.org, will@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-11-30 08:49, Vladimir Murzin wrote:
+On 23. 11. 21, 22:48, Pasha Tatashin wrote:
+> Add page table check hooks into routines that modify user page tables.
 
-> One month and a week later...
-> 
-> I observe that in terms of performance
-> 
->    MRS       r0, ipsr
-> 
-> is equivalent to readl_relaxed(BASEADDR_V7M_SCB + V7M_SCB_ICSR)
-> 
->    MOV.W   r3, #3758153728
->    LDR.W   r0, [r3, #3332]
-> 
-> Old compilers can produce less performant sequence like
-> 
->    LDR      r3,0xbcc0
->    ADD.W    r3,r3,#0xaf00
->    LDR      r0,[r3,#0]
-> 
-> So, what would be your preference?
+Hi,
 
-If there is no significant overhead to reading the MMIO register
-and that you see a benefit in enabling COMPILE_TEST, then this
-probably is the way to go.
+I bisected to this as this causes crashes during modules load:
+#PF: supervisor write access in kernel mode
+#PF: error_code(0x0003) - permissions violation
+PGD 6d615067 P4D 6d615067 PUD 6d616063 PMD 800000006d2001e1
+Oops: 0003 [#1] PREEMPT SMP PTI
+CPU: 0 PID: 6189 Comm: modprobe Kdump: loaded Tainted: G          I E 
+   5.16.0-rc2-next-20211129-vanilla #3 
+83846a405f0e3937f5c8dfbc7d449622b8f46369
+Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./To be 
+filled by O.E.M., BIOS SDBLI944.86P 05/08/2007
+RIP: 0010:jump_label_module_notify (kernel/jump_label.c:370 
+kernel/jump_label.c:670 kernel/jump_label.c:748)
+Code: 00 48 8b 43 08 a8 02 0f 85 e9 00 00 00 48 83 e0 fc 48 c7 02 00 00 
+00 00 48 89 42 08 48 8b 43 08 83 e0 03 48 09 c2 48 83 ca 02 <48> 89 53 
+08 4d 89 66 10 49 89 6e 08 48 8b 43 08 a8 02 0f 84 98 00
+All code
+========
+    0:	00 48 8b             	add    %cl,-0x75(%rax)
+    3:	43 08 a8 02 0f 85 e9 	rex.XB or %bpl,-0x167af0fe(%r8)
+    a:	00 00                	add    %al,(%rax)
+    c:	00 48 83             	add    %cl,-0x7d(%rax)
+    f:	e0 fc                	loopne 0xd
+   11:	48 c7 02 00 00 00 00 	movq   $0x0,(%rdx)
+   18:	48 89 42 08          	mov    %rax,0x8(%rdx)
+   1c:	48 8b 43 08          	mov    0x8(%rbx),%rax
+   20:	83 e0 03             	and    $0x3,%eax
+   23:	48 09 c2             	or     %rax,%rdx
+   26:	48 83 ca 02          	or     $0x2,%rdx
+   2a:*	48 89 53 08          	mov    %rdx,0x8(%rbx)		<-- trapping 
+instruction
+   2e:	4d 89 66 10          	mov    %r12,0x10(%r14)
+   32:	49 89 6e 08          	mov    %rbp,0x8(%r14)
+   36:	48 8b 43 08          	mov    0x8(%rbx),%rax
+   3a:	a8 02                	test   $0x2,%al
+   3c:	0f                   	.byte 0xf
+   3d:	84                   	.byte 0x84
+   3e:	98                   	cwtl
+	...
 
-Thanks,
+Code starting with the faulting instruction
+===========================================
+    0:	48 89 53 08          	mov    %rdx,0x8(%rbx)
+    4:	4d 89 66 10          	mov    %r12,0x10(%r14)
+    8:	49 89 6e 08          	mov    %rbp,0x8(%r14)
+    c:	48 8b 43 08          	mov    0x8(%rbx),%rax
+   10:	a8 02                	test   $0x2,%al
+   12:	0f                   	.byte 0xf
+   13:	84                   	.byte 0x84
+   14:	98                   	cwtl
+	...
+RSP: 0018:ffffaf4dc051fbe8 EFLAGS: 00010282
+RAX: 0000000000000001 RBX: ffffffff931ee760 RCX: 0000000000000001
+RDX: ffff9d1aa7d43883 RSI: ffffffff91c50aa0 RDI: ffffffff931ee760
+RBP: ffffffffc0782000 R08: 0000000000000020 R09: 0000000000000000
+R10: ffff9d1aa7d43880 R11: 0000000000000000 R12: ffffffffc079a980
+R13: ffffffffc0784080 R14: ffff9d1aa7d43ca0 R15: ffffffffc0782008
+FS:  00007f87104b8740(0000) GS:ffff9d1b45c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffffff931ee768 CR3: 000000010fdce000 CR4: 00000000000006f0
+Call Trace:
+  <TASK>
+blocking_notifier_call_chain_robust (kernel/notifier.c:83 
+kernel/notifier.c:118 kernel/notifier.c:283 kernel/notifier.c:271)
+load_module (./include/linux/notifier.h:198 kernel/module.c:3923 
+kernel/module.c:4100)
+__do_sys_finit_module (kernel/module.c:4224)
+do_syscall_64 (arch/x86/entry/common.c:50 arch/x86/entry/common.c:80)
+entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:113)
 
-         M.
+> Signed-off-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+> ---
+>   arch/x86/Kconfig               |  1 +
+>   arch/x86/include/asm/pgtable.h | 29 +++++++++++++++++++++++++++--
+>   2 files changed, 28 insertions(+), 2 deletions(-)
+> 
+
+regards,
 -- 
-Jazz is not dead. It just smells funny...
+js
+suse labs

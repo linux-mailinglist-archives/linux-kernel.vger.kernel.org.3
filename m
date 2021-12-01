@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EFCD464E79
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5B0464E7B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:06:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349473AbhLANKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:10:09 -0500
-Received: from mail-ua1-f54.google.com ([209.85.222.54]:47090 "EHLO
-        mail-ua1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349470AbhLANKC (ORCPT
+        id S1349489AbhLANKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:10:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349469AbhLANKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:10:02 -0500
-Received: by mail-ua1-f54.google.com with SMTP id az37so48764900uab.13;
-        Wed, 01 Dec 2021 05:06:41 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AgwbFm5gkjwOtodlhi0zJJvcgS/i7V2fCpFuxG8kd94=;
-        b=Jyvtm+6VZ1RGnb/UF5Vm2HvEcmFtsdfMZ5s5FZuwhPAzmzps3fGeV6/BftmLs8sXHV
-         s71tVkjgsFI4KTQJ/aqj9HiPbS3UNdPmEBViSTgCGx/BHPdUGkywaSbrUThizp07XUpS
-         FkHGwSaUj7YmL3DX9shMazC+URsI488X6vW7p1nOw5MDWr3vLdB/MK4egkaap+kjSQqL
-         LmAsGMoSG7VFgjN90qy9AyiSdiwGdoxjfBLXe47doiU6OA4TO6fXn+YFzu0oE5NbJq8e
-         DUGF4orm2PJCcltkYMeDiltd3h2HdMed3W8UCocM3HTv18220QBKFfMUtTs3+DSSjFGs
-         n6Rg==
-X-Gm-Message-State: AOAM533oN2GyOETqR8O6IEJF/qy5pqkmZe7W6uOaG2wiZ8fPXU9RHXd0
-        tBPwlTEgMseey0amVJNGlokDFNcsxguS1w==
-X-Google-Smtp-Source: ABdhPJzq0/vFLXekmqPdt2QkRJrW/G+np5DNNGqURV3YxjfADxXe/vodZVtnBIWxOE6mWhETKhsm6w==
-X-Received: by 2002:a67:bb11:: with SMTP id m17mr6696201vsn.5.1638364000316;
-        Wed, 01 Dec 2021 05:06:40 -0800 (PST)
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
-        by smtp.gmail.com with ESMTPSA id 15sm11833419vkj.49.2021.12.01.05.06.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 05:06:40 -0800 (PST)
-Received: by mail-ua1-f46.google.com with SMTP id r15so48823383uao.3;
-        Wed, 01 Dec 2021 05:06:39 -0800 (PST)
-X-Received: by 2002:a05:6102:c89:: with SMTP id f9mr7151505vst.68.1638363999694;
- Wed, 01 Dec 2021 05:06:39 -0800 (PST)
+        Wed, 1 Dec 2021 08:10:09 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436C9C061574;
+        Wed,  1 Dec 2021 05:06:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8EA2BCE1C56;
+        Wed,  1 Dec 2021 13:06:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD2DC53FAD;
+        Wed,  1 Dec 2021 13:06:40 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 14:06:37 +0100
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
+        christian@brauner.io, nathan@kernel.org, ndesaulniers@google.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [PATCH 1/2] selftests: cgroup: build error multiple outpt files
+Message-ID: <20211201130637.phskqu7rkl5ty2xq@wittgenstein>
+References: <20211105162530.3307666-1-anders.roxell@linaro.org>
+ <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
+ <20211123142600.r5d52iwhbqhujiux@wittgenstein>
+ <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
 MIME-Version: 1.0
-References: <20211130164558.85584-1-tsbogend@alpha.franken.de> <20211130164558.85584-3-tsbogend@alpha.franken.de>
-In-Reply-To: <20211130164558.85584-3-tsbogend@alpha.franken.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 1 Dec 2021 14:06:28 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXr1bT3U_XKvHKowfQwaW6-4XevYngoNzQFu-bYwdMP_A@mail.gmail.com>
-Message-ID: <CAMuHMdXr1bT3U_XKvHKowfQwaW6-4XevYngoNzQFu-bYwdMP_A@mail.gmail.com>
-Subject: Re: [PATCH 3/3] MIPS: TXX9: Remove TX4939 SoC support
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        MTD Maling List <linux-mtd@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
+On Tue, Nov 30, 2021 at 09:41:49AM -0700, Shuah Khan wrote:
+> On 11/23/21 7:26 AM, Christian Brauner wrote:
+> > On Fri, Nov 19, 2021 at 05:22:20PM -0700, Shuah Khan wrote:
+> > > On 11/5/21 10:25 AM, Anders Roxell wrote:
+> > > > When building selftests/cgroup: with clang the following error are seen:
+> > > > 
+> > > > clang -Wall -pthread    test_memcontrol.c cgroup_util.c ../clone3/clone3_selftests.h  -o /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol
+> > > > clang: error: cannot specify -o when generating multiple output files
+> > > > make[3]: *** [../lib.mk:146: /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol] Error 1
+> > > > 
+> > > > Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
+> > > > since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
+> > > > file lib.mk.
+> > > > 
+> > > > Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> > > > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> > > > ---
+> > > >    tools/testing/selftests/cgroup/Makefile | 12 +++++++-----
+> > > >    tools/testing/selftests/lib.mk          |  2 +-
+> > > >    2 files changed, 8 insertions(+), 6 deletions(-)
+> > > > 
+> > > > diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+> > > > index 59e222460581..745fe25fa0b9 100644
+> > > > --- a/tools/testing/selftests/cgroup/Makefile
+> > > > +++ b/tools/testing/selftests/cgroup/Makefile
+> > > > @@ -11,10 +11,12 @@ TEST_GEN_PROGS += test_core
+> > > >    TEST_GEN_PROGS += test_freezer
+> > > >    TEST_GEN_PROGS += test_kill
+> > > > +LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+> > > > +
+> > > 
+> > > This looks odd to me. Why are we introducing dependencies between tests?
+> > > clone3 includes in cgroup? Looks odd to me.
+> > 
+> > The cgroup tests need access to clone3() functionality in order to test
+> > CLONE_INTO_CGROUP which is more suited to be placed alongside the cgroup
+> > tests. There are a few other tests that include the clone3 header.
+> > 
+> 
+> If other tests are also including this header, we could move it up under
+> selftests level. Might have to add include directory.
 
-On Tue, Nov 30, 2021 at 5:46 PM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
-> After removal of RBTX4939 board support remove code for the TX4939 SoC.
->
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+No objection from me if that's useful. I won't have time for that in the
+near future. (This might be of interest for one of the LF programs that
+help get new folks interested in kernel development started.)
 
-Thanks for your patch!
-
-> ---
->  arch/mips/pci/Makefile                |   1 -
->  arch/mips/pci/pci-tx4939.c            | 107 -----
->  arch/mips/txx9/Kconfig                |   8 -
->  arch/mips/txx9/generic/Makefile       |   1 -
->  arch/mips/txx9/generic/irq_tx4939.c   | 216 ----------
->  arch/mips/txx9/generic/setup_tx4939.c | 568 --------------------------
->  drivers/char/hw_random/Kconfig        |  13 -
->  drivers/char/hw_random/Makefile       |   1 -
->  drivers/char/hw_random/tx4939-rng.c   | 157 -------
->  drivers/mtd/nand/raw/Kconfig          |   2 +-
->  10 files changed, 1 insertion(+), 1073 deletions(-)
->  delete mode 100644 arch/mips/pci/pci-tx4939.c
->  delete mode 100644 arch/mips/txx9/generic/irq_tx4939.c
->  delete mode 100644 arch/mips/txx9/generic/setup_tx4939.c
->  delete mode 100644 drivers/char/hw_random/tx4939-rng.c
-
-You forgot to remove arch/mips/include/asm/txx9/tx4939.h.
-
-My rbtx4927 still works fine afterwards, so
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Christian

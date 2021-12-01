@@ -2,98 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD4864647B7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326E34647BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347142AbhLAHRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:17:45 -0500
-Received: from 4.mo552.mail-out.ovh.net ([178.33.43.201]:56351 "EHLO
-        4.mo552.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347139AbhLAHRm (ORCPT
+        id S1347137AbhLAHSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:18:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58826 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233908AbhLAHSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:17:42 -0500
-Received: from mxplan5.mail.ovh.net (unknown [10.108.1.125])
-        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id B6B2D217F7;
-        Wed,  1 Dec 2021 07:14:07 +0000 (UTC)
-Received: from kaod.org (37.59.142.105) by DAG4EX1.mxp5.local (172.16.2.31)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 1 Dec
- 2021 08:14:05 +0100
-Authentication-Results: garm.ovh; auth=pass (GARM-105G00686e3cafe-0521-4f42-aedc-fcaeb2775d24,
-                    A214034E9EDAB49BEA2160BF49F8C38F118F2259) smtp.auth=clg@kaod.org
-X-OVh-ClientIp: 90.11.56.15
-Message-ID: <39556bdc-f48c-68b2-6bec-5975b92e02e2@kaod.org>
-Date:   Wed, 1 Dec 2021 08:14:05 +0100
+        Wed, 1 Dec 2021 02:18:13 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A60C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:14:52 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id x7so17310952pjn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:14:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:from:to:cc:subject:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1uk8AY7N4MyV3vrrUtytqYnsAZsCNDVB9MP5ky8h6A8=;
+        b=RXdXhI+CvCxSdPUTuKENnUmX4XHZq16mtkPYQvPHgW9jqxhOqg1ozrPR/9YBPNAGmu
+         IBSgWopcck53DtnwZJEi86cf24CM2kbSQqMol5oi10QFxFjktWohXHDQjaxYmmhELrSY
+         6SFVby0hgIQQ8w4jU5uC/6aJiPa3wQIZSS0hlljbV/teu600S04In2aF5Cr6hRy+loUD
+         8Fky0Hdmnp7HeWSci/0/QXLKyNPqV3KPb67pYeWXpryX5GTejKy7fCLe+VrFZDDeZndz
+         6n0gh18wbTawpZUg0fKFaswU4HtrZBXMtyWwB4XADIBWX0dzo6+gr+logh8yEfPYAwyy
+         i1zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:from:to:cc:subject:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1uk8AY7N4MyV3vrrUtytqYnsAZsCNDVB9MP5ky8h6A8=;
+        b=4+Jjk56NxjPxO8uVwCSgO0G6GTnLnGIG+LX+xnCdd1apNwzFPtS+d1N0kddlxKKZ3U
+         wzSMTfzP1t4ERemqmz9tuBZn+2JY7TFO2OWliUYnKS5Q0O42pNWKuOAxhM53pB+aCR8q
+         Pfpj5lhBwfBYzN6MhJPPpAXhzyq9Ml2g/9GEYEN01WZIVEekBBUEW7tDkdwMumFqhtTW
+         sRAo6wzp5QyAlF5wfh2cP4iCZc+dI1MOOu0Qh5QamogBm1h/v5HxZaoasFyVFFqttq8p
+         Q7H5XDphNxKvoKvFs948PPyTKHySbi2kaFfPcuUjPQbdcB8M/rfCmJzqZ7mfVzmJqOVj
+         t4Uw==
+X-Gm-Message-State: AOAM532V7j4cniAy8lst5+zTY3ds/tzVFOQ0HKoPvtxEFivLk1nM0tY0
+        VvtSeEI3HOR54jhshcerp3c=
+X-Google-Smtp-Source: ABdhPJziC1xL2lk1pMDy78fJ8PMONfyQIQXcj7mXhNpJJunHKIUUjZaZa7g6LJ4WyWe54/XFM+XY6Q==
+X-Received: by 2002:a17:90b:1185:: with SMTP id gk5mr5291791pjb.113.1638342892541;
+        Tue, 30 Nov 2021 23:14:52 -0800 (PST)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id pf15sm116019pjb.40.2021.11.30.23.14.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 23:14:51 -0800 (PST)
+Message-ID: <61a720eb.1c69fb81.80210.02b6@mx.google.com>
+X-Google-Original-Message-ID: <20211201071450.GA323284@cgel.zte@gmail.com>
+Date:   Wed, 1 Dec 2021 07:14:50 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Christian Brauner <christian.brauner@ubuntu.com>
+Cc:     dbueso@suse.de, jamorris@linux.microsoft.com,
+        keescook@chromium.org, ktkhai@virtuozzo.com, legion@kernel.org,
+        linux-kernel@vger.kernel.org, ran.xiaokai@zte.com.cn,
+        varad.gautam@suse.com
+Subject: Re: [PATCH V2] ipc: add set_ownership() and permissions() callbacks
+ for posix mqueue sysctl
+References: <20210824120523.s5qnzt643yvgugpv@wittgenstein>
+ <20210827101206.5810-1-ran.xiaokai@zte.com.cn>
+ <20210913144047.4v5jquhyysnnlfvh@wittgenstein>
+ <6142a2ac.1c69fb81.6dcc6.61f8@mx.google.com>
+ <20211004105313.k55766idkyoo6jvt@wittgenstein>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [patch 05/22] genirq/msi: Fixup includes
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>
-CC:     <linux-hyperv@vger.kernel.org>, Paul Mackerras <paulus@samba.org>,
-        <sparclinux@vger.kernel.org>, Wei Liu <wei.liu@kernel.org>,
-        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
-        <x86@kernel.org>, Christian Borntraeger <borntraeger@de.ibm.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>, <linux-pci@vger.kernel.org>,
-        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
-References: <20211126222700.862407977@linutronix.de>
- <20211126223824.382273262@linutronix.de>
- <b1a6d267-c7b4-c4b9-ab0e-f5cc32bfe9bf@kaod.org> <87tufud4m3.ffs@tglx>
- <524d9b84-caa8-dd6f-bb5e-9fc906d279c0@kaod.org> <87czmhb8gq.ffs@tglx>
- <875ys9b71j.ffs@tglx>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
-In-Reply-To: <875ys9b71j.ffs@tglx>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [37.59.142.105]
-X-ClientProxiedBy: DAG1EX2.mxp5.local (172.16.2.2) To DAG4EX1.mxp5.local
- (172.16.2.31)
-X-Ovh-Tracer-GUID: e52f034b-6a74-4e80-b1cd-9a54c9a992a9
-X-Ovh-Tracer-Id: 2359604732828158876
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddriedvgddutdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepjeekvdfgudevkeefkeeltdejteekvdegffegudetgeettdffjeefheekfeelffdtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211004105313.k55766idkyoo6jvt@wittgenstein>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/21 23:41, Thomas Gleixner wrote:
-> On Tue, Nov 30 2021 at 23:10, Thomas Gleixner wrote:
+On Mon, Oct 04, 2021 at 12:53:13PM +0200, Christian Brauner wrote:
+> On Thu, Sep 16, 2021 at 01:49:31AM +0000, CGEL wrote:
+> > esOn Mon, Sep 13, 2021 at 04:40:47PM +0200, Christian Brauner wrote:
+> > > On Fri, Aug 27, 2021 at 03:12:06AM -0700, CGEL wrote:
+> > > > From: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+> > > > 
+> > > > When a non-root user process creates a user namespace and ipc namespace
+> > > > with command "unshare -Ur -i", and map the root user inside
+> > > > the user namesapce to the global owner of user namespace.
+> > > > The newly created user namespace OWNS the ipc namespace,
+> > > > So the root user inside the user namespace should have full access
+> > > > rights to the ipc namespace resources and should be writable to
+> > > > the ipc mqueue sysctls.
+> > > > 
+> > > > v2:
+> > > >   - update commit msg.
+> > > >   - fix the coding style issue.
+> > > > Signed-off-by: Ran Xiaokai <ran.xiaokai@zte.com.cn>
+> > > > ---
+> > > 
+> > > David,
+> > > 
+> > > are you happy with this too? If so I'd pick this up.
+> > > 
+> > 
+> > Hi Christian,
+> > 
+> > Is there a xx-next branch for this kind patch?
+> > We will try to fixes other issues like this, so we could tag the follow-up
+> > patches with the branch name.
 > 
->> On Tue, Nov 30 2021 at 22:48, Cédric Le Goater wrote:
->>> On 11/29/21 22:38, Thomas Gleixner wrote:
->>>> On Mon, Nov 29 2021 at 08:33, Cédric Le Goater wrote:
->>>> thanks for having a look. I fixed up this and other fallout and pushed out an
->>>> updated series (all 4 parts) to:
->>>>
->>>>           git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel msi
->>>
->>> pSeries fails to allocate MSIs starting with this patch :
->>>
->>>    [PATCH 049/101] powerpc/pseries/msi: Let core code check for contiguous ...
->>>
->>> I will dig in later on.
->>
->> Let me stare at the core function..
+> Hm, sorry that message slipped through the pre-mid-and post-conference
+> cracks.  I'll added the patches now for testing. See:
 > 
-> It's not the core function. It's the patch above and I'm a moron.
+> https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git/log/?h=kernel.fixes
+> 
+> Christian
 
-All good now. Ship it !
+Hi Christian,
 
-Thanks,
-
-C.
-
-
-
-
+How the the testing goes on? 

@@ -2,148 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B6C464F71
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:15:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6929D464F74
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349828AbhLAOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:18:19 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:38026 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbhLAOSG (ORCPT
+        id S1349829AbhLAOSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:18:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S244131AbhLAOSn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:18:06 -0500
+        Wed, 1 Dec 2021 09:18:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C5CC061574;
+        Wed,  1 Dec 2021 06:15:22 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C9B18CE1EC9;
-        Wed,  1 Dec 2021 14:14:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF55C53FAD;
-        Wed,  1 Dec 2021 14:14:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638368082;
-        bh=OJsUf98doJbSBg4evWGl0/HDR+em1QuDx1eRkOgFszY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I9ZRVA9t237CqkdYExXdsSX0Xzbbh6AV58VFicu5KbdQ/wey4wdmSG0TPaMIgtGW4
-         I41ZUhRubg2CfRMT9wy+Evd4h7Xrbtsp6yp6JzevnVkWi/as07Tt4Y66d+y9DUtP93
-         zAvLjooxlYG4dLAd52aAxAKZIs7P/7Og65u+7TiKQShs6Y0QaIVXaj3Af4VdFJ1ppc
-         JCGtKGJBe9E+qI5hvmVGv1F8VwuCELdIiL0NtdA/uQB0Qm0I6UOpU8vAsOPr/0BU79
-         7s+HI0EUJSQIVorX+XvnOCaUZB5DWEWdWf5tomV8GiOoySyQdiopN/YsYxI+aK+ki7
-         phdx8hApMxjWQ==
-Date:   Wed, 1 Dec 2021 22:14:30 +0800
-From:   Peter Chen <peter.chen@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     pawell@cadence.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lznuaa@gmail.com
-Subject: Re: [PATCH v2  1/1] usb: cdns3: gadget: fix new urb never complete
- if ep cancel previous requests
-Message-ID: <20211201141430.GB3720@Peter>
-References: <20211130154239.8029-1-Frank.Li@nxp.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF455B81F67;
+        Wed,  1 Dec 2021 14:15:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 298A8C53FAD;
+        Wed,  1 Dec 2021 14:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1638368119;
+        bh=5lEKBrAqWYDVDPI48NTaAzGceeJLybzefEspNmqYIAw=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JDjKZiBmsu8UPCMI+4a32ZrvP+k7Oinrl8eP7ZggMCvucBqSVoXBKnAoT9nC42qmw
+         hMau4JLa2HlPWgHd01sYBJiQ1VXolsdekzORYz4lX8idmDMDryFbDwmD8OwBJbHadv
+         8oKJiXNX9aBYwW72wM719xzTLGeHo+A0gDMmklXg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     linux-input@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] HID: add hid_is_usb() function to make it simpler for USB detection
+Date:   Wed,  1 Dec 2021 15:15:12 +0100
+Message-Id: <20211201141513.2107815-1-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211130154239.8029-1-Frank.Li@nxp.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4658; h=from:subject; bh=5lEKBrAqWYDVDPI48NTaAzGceeJLybzefEspNmqYIAw=; b=owGbwMvMwCRo6H6F97bub03G02pJDInLm/NXxobf3/pRVsvr3NwvkuFfu2e1bJfv2yhSNKd7R47h qu8zOmJZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAiy4sZFvS+WdD1ZkeyhpN16NO+Y5 39LmfLtzIsmHb7ySqDhMyopVrSt+runnh1UvjJNAA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-11-30 09:42:39, Frank Li wrote:
-> This issue was found at android12 MTP.
-> 1. MTP submit many out urb request.
-> 2. Cancel left requests (>20) when enough data get from host
-> 3. Send ACK by IN endpoint.
-> 4. MTP submit new out urb request.
-> 5. 4's urb never complete.
-> 
-> TRACE LOG:
-> 
-> MtpServer-2157    [000] d..3  1287.150391: cdns3_ep_dequeue: ep1out: req: 00000000299e6836, req buff 000000009df42287, length: 0/16384 zsi, status: -115, trb: [start:87, end:87: virt addr 0x80004000ffd50420], flags:1 SID: 0
-> MtpServer-2157    [000] d..3  1287.150410: cdns3_gadget_giveback: ep1out: req: 00000000299e6836, req buff 000000009df42287, length: 0/16384 zsi, status: -104, trb: [start:87, end:87: virt addr 0x80004000ffd50420], flags:0 SID: 0
-> MtpServer-2157    [000] d..3  1287.150433: cdns3_ep_dequeue: ep1out: req: 0000000080b7bde6, req buff 000000009ed5c556, length: 0/16384 zsi, status: -115, trb: [start:88, end:88: virt addr 0x80004000ffd5042c], flags:1 SID: 0
-> MtpServer-2157    [000] d..3  1287.150446: cdns3_gadget_giveback: ep1out: req: 0000000080b7bde6, req buff 000000009ed5c556, length: 0/16384 zsi, status: -104, trb: [start:88, end:88: virt addr 0x80004000ffd5042c], flags:0 SID: 0
-> 	....
-> MtpServer-2157    [000] d..1  1293.630410: cdns3_alloc_request: ep1out: req: 00000000afbccb7d, req buff 0000000000000000, length: 0/0 zsi, status: 0, trb: [start:0, end:0: virt addr (null)], flags:0 SID: 0
-> MtpServer-2157    [000] d..2  1293.630421: cdns3_ep_queue: ep1out: req: 00000000afbccb7d, req buff 00000000871caf90, length: 0/512 zsi, status: -115, trb: [start:0, end:0: virt addr (null)], flags:0 SID: 0
-> MtpServer-2157    [000] d..2  1293.630445: cdns3_wa1: WA1: ep1out set guard
-> MtpServer-2157    [000] d..2  1293.630450: cdns3_wa1: WA1: ep1out restore cycle bit
-> MtpServer-2157    [000] d..2  1293.630453: cdns3_prepare_trb: ep1out: trb 000000007317b3ee, dma buf: 0xffd5bc00, size: 512, burst: 128 ctrl: 0x00000424 (C=0, T=0, ISP, IOC, Normal) SID:0 LAST_SID:0
-> MtpServer-2157    [000] d..2  1293.630460: cdns3_doorbell_epx: ep1out, ep_trbaddr ffd50414
-> 	....
-> irq/241-5b13000-2154    [000] d..1  1293.680849: cdns3_epx_irq: IRQ for ep1out: 01000408 ISP , ep_traddr: ffd508ac ep_last_sid: 00000000 use_streams: 0
-> irq/241-5b13000-2154    [000] d..1  1293.680858: cdns3_complete_trb: ep1out: trb 0000000021a11b54, dma buf: 0xffd50420, size: 16384, burst: 128 ctrl: 0x00001810 (C=0, T=0, CHAIN, LINK) SID:0 LAST_SID:0
-> irq/241-5b13000-2154    [000] d..1  1293.680865: cdns3_request_handled: Req: 00000000afbccb7d not handled, DMA pos: 185, ep deq: 88, ep enq: 185, start trb: 184, end trb: 184
-> 
-> Actually DMA pos already bigger than previous submit request afbccb7d's TRB (184-184). The reason of (not handled) is that deq position is wrong.
-> 
-> The TRB link is below when irq happen.
-> 
-> 	DEQ LINK LINK LINK LINK LINK .... TRB(afbccb7d):START  DMA(EP_TRADDR).
-> 
-> Original code check LINK TRB, but DEQ just move one step.
-> 
-> 	LINK DEQ LINK LINK LINK LINK .... TRB(afbccb7d):START  DMA(EP_TRADDR).
-> 
-> This patch skip all LINK TRB and sync DEQ to trb's start.
-> 
-> 	LINK LINK LINK LINK LINK .... DEQ = TRB(afbccb7d):START  DMA(EP_TRADDR).
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> Signed-off-by: Jun Li <jun.li@nxp.com>
+A number of HID drivers already call hid_is_using_ll_driver() but only
+for the detection of if this is a USB device or not.  Make this more
+obvious by creating hid_is_usb() and calling the function that way.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+Also converts the existing hid_is_using_ll_driver() functions to use the
+new call.
 
-> ---
-> 
-> Change from v1 to v2:
->  * using peter suggest's fix
-> 
->  drivers/usb/cdns3/cdns3-gadget.c | 20 ++++----------------
->  1 file changed, 4 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index 1f3b4a1422126..f9af7ebe003d7 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -337,19 +337,6 @@ static void cdns3_ep_inc_deq(struct cdns3_endpoint *priv_ep)
->  	cdns3_ep_inc_trb(&priv_ep->dequeue, &priv_ep->ccs, priv_ep->num_trbs);
->  }
->  
-> -static void cdns3_move_deq_to_next_trb(struct cdns3_request *priv_req)
-> -{
-> -	struct cdns3_endpoint *priv_ep = priv_req->priv_ep;
-> -	int current_trb = priv_req->start_trb;
-> -
-> -	while (current_trb != priv_req->end_trb) {
-> -		cdns3_ep_inc_deq(priv_ep);
-> -		current_trb = priv_ep->dequeue;
-> -	}
-> -
-> -	cdns3_ep_inc_deq(priv_ep);
-> -}
-> -
->  /**
->   * cdns3_allow_enable_l1 - enable/disable permits to transition to L1.
->   * @priv_dev: Extended gadget object
-> @@ -1517,10 +1504,11 @@ static void cdns3_transfer_completed(struct cdns3_device *priv_dev,
->  
->  		trb = priv_ep->trb_pool + priv_ep->dequeue;
->  
-> -		/* Request was dequeued and TRB was changed to TRB_LINK. */
-> -		if (TRB_FIELD_TO_TYPE(le32_to_cpu(trb->control)) == TRB_LINK) {
-> +		/* The TRB was changed as link TRB, and the request was handled at ep_dequeue */
-> +		while (TRB_FIELD_TO_TYPE(le32_to_cpu(trb->control)) == TRB_LINK) {
->  			trace_cdns3_complete_trb(priv_ep, trb);
-> -			cdns3_move_deq_to_next_trb(priv_req);
-> +			cdns3_ep_inc_deq(priv_ep);
-> +			trb = priv_ep->trb_pool + priv_ep->dequeue;
->  		}
->  
->  		if (!request->stream_id) {
-> -- 
-> 2.24.0.rc1
-> 
+Cc: Jiri Kosina <jikos@kernel.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: linux-input@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/hid/hid-asus.c           | 6 ++----
+ drivers/hid/hid-logitech-dj.c    | 2 +-
+ drivers/hid/hid-u2fzero.c        | 2 +-
+ drivers/hid/hid-uclogic-params.c | 3 +--
+ drivers/hid/wacom_sys.c          | 2 +-
+ include/linux/hid.h              | 5 +++++
+ 6 files changed, 11 insertions(+), 9 deletions(-)
 
+diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
+index 5d57214d8dee..c5968fd21d09 100644
+--- a/drivers/hid/hid-asus.c
++++ b/drivers/hid/hid-asus.c
+@@ -1028,8 +1028,7 @@ static int asus_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	if (drvdata->quirks & QUIRK_IS_MULTITOUCH)
+ 		drvdata->tp = &asus_i2c_tp;
+ 
+-	if ((drvdata->quirks & QUIRK_T100_KEYBOARD) &&
+-	    hid_is_using_ll_driver(hdev, &usb_hid_driver)) {
++	if ((drvdata->quirks & QUIRK_T100_KEYBOARD) && hid_is_usb(hdev)) {
+ 		struct usb_interface *intf = to_usb_interface(hdev->dev.parent);
+ 
+ 		if (intf->altsetting->desc.bInterfaceNumber == T100_TPAD_INTF) {
+@@ -1057,8 +1056,7 @@ static int asus_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 		drvdata->tp = &asus_t100chi_tp;
+ 	}
+ 
+-	if ((drvdata->quirks & QUIRK_MEDION_E1239T) &&
+-	    hid_is_using_ll_driver(hdev, &usb_hid_driver)) {
++	if ((drvdata->quirks & QUIRK_MEDION_E1239T) && hid_is_usb(hdev)) {
+ 		struct usb_host_interface *alt =
+ 			to_usb_interface(hdev->dev.parent)->altsetting;
+ 
+diff --git a/drivers/hid/hid-logitech-dj.c b/drivers/hid/hid-logitech-dj.c
+index a0017b010c34..7106b921b53c 100644
+--- a/drivers/hid/hid-logitech-dj.c
++++ b/drivers/hid/hid-logitech-dj.c
+@@ -1777,7 +1777,7 @@ static int logi_dj_probe(struct hid_device *hdev,
+ 	case recvr_type_bluetooth:	no_dj_interfaces = 2; break;
+ 	case recvr_type_dinovo:		no_dj_interfaces = 2; break;
+ 	}
+-	if (hid_is_using_ll_driver(hdev, &usb_hid_driver)) {
++	if (hid_is_usb(hdev)) {
+ 		intf = to_usb_interface(hdev->dev.parent);
+ 		if (intf && intf->altsetting->desc.bInterfaceNumber >=
+ 							no_dj_interfaces) {
+diff --git a/drivers/hid/hid-u2fzero.c b/drivers/hid/hid-u2fzero.c
+index 31ea7fc69916..ad489caf53ad 100644
+--- a/drivers/hid/hid-u2fzero.c
++++ b/drivers/hid/hid-u2fzero.c
+@@ -311,7 +311,7 @@ static int u2fzero_probe(struct hid_device *hdev,
+ 	unsigned int minor;
+ 	int ret;
+ 
+-	if (!hid_is_using_ll_driver(hdev, &usb_hid_driver))
++	if (!hid_is_usb(hdev))
+ 		return -EINVAL;
+ 
+ 	dev = devm_kzalloc(&hdev->dev, sizeof(*dev), GFP_KERNEL);
+diff --git a/drivers/hid/hid-uclogic-params.c b/drivers/hid/hid-uclogic-params.c
+index 3d67b748a3b9..adff1bd68d9f 100644
+--- a/drivers/hid/hid-uclogic-params.c
++++ b/drivers/hid/hid-uclogic-params.c
+@@ -843,8 +843,7 @@ int uclogic_params_init(struct uclogic_params *params,
+ 	struct uclogic_params p = {0, };
+ 
+ 	/* Check arguments */
+-	if (params == NULL || hdev == NULL ||
+-	    !hid_is_using_ll_driver(hdev, &usb_hid_driver)) {
++	if (params == NULL || hdev == NULL || !hid_is_usb(hdev)) {
+ 		rc = -EINVAL;
+ 		goto cleanup;
+ 	}
+diff --git a/drivers/hid/wacom_sys.c b/drivers/hid/wacom_sys.c
+index 2717d39600b4..22d73772fbc5 100644
+--- a/drivers/hid/wacom_sys.c
++++ b/drivers/hid/wacom_sys.c
+@@ -2214,7 +2214,7 @@ static void wacom_update_name(struct wacom *wacom, const char *suffix)
+ 	if ((features->type == HID_GENERIC) && !strcmp("Wacom HID", features->name)) {
+ 		char *product_name = wacom->hdev->name;
+ 
+-		if (hid_is_using_ll_driver(wacom->hdev, &usb_hid_driver)) {
++		if (hid_is_usb(wacom->hdev)) {
+ 			struct usb_interface *intf = to_usb_interface(wacom->hdev->dev.parent);
+ 			struct usb_device *dev = interface_to_usbdev(intf);
+ 			product_name = dev->product;
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index 9e067f937dbc..f453be385bd4 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -840,6 +840,11 @@ static inline bool hid_is_using_ll_driver(struct hid_device *hdev,
+ 	return hdev->ll_driver == driver;
+ }
+ 
++static inline bool hid_is_usb(struct hid_device *hdev)
++{
++	return hid_is_using_ll_driver(hdev, &usb_hid_driver);
++}
++
+ #define	PM_HINT_FULLON	1<<5
+ #define PM_HINT_NORMAL	1<<1
+ 
 -- 
-
-Thanks,
-Peter Chen
+2.34.1
 

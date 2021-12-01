@@ -2,66 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D25465921
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:25:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646F2465942
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353535AbhLAW3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:29:18 -0500
-Received: from mail-ot1-f45.google.com ([209.85.210.45]:40817 "EHLO
-        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353573AbhLAW3I (ORCPT
+        id S1353606AbhLAWa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:30:29 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:17042 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353610AbhLAWaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:29:08 -0500
-Received: by mail-ot1-f45.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so37342777otj.7;
-        Wed, 01 Dec 2021 14:25:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=TVRItOUf45Hmpy2bGhqmZEEE26i5Yr+YcGE9jV7vzDg=;
-        b=wVieFDHackwojg0o8EdZM9AN6tEmXc8kmCfTOCXir6j/gSoYnZnAgOrft0iTYbGfJz
-         kyc0t+G0THfLa59BLLHx1Cx7USBfg1x/wdlQkVPIRsguyiz0AhtWiKfRrYW+DK51XuU2
-         YxZDyU4ZwrziKlqfSAlG4m8dycXfN7RIfON9gievCRRLl9xojeDbx+s+p0m+q3PO8BpE
-         PaUNfyGKjmuSU0yY73KlRQYr0E8yJOyoc0sPGXygQlLIlrfkYjZWNN5IZ6ej8WfISG4F
-         FBD18Y4bAUZqXY5/EUHVeZ8rHrYKKTGd/Aj8+jAmaOV5mDfrsCNyVcdh1/cVME2uj9FO
-         0TLA==
-X-Gm-Message-State: AOAM53026QGGkJvIFYLpIDpGZL5Yq93VR0XUlEuiAH2aBqgzRGhzEalq
-        XkuAon/F9rP1Js0RolWKVDqvnLEhUA==
-X-Google-Smtp-Source: ABdhPJwFVxZ9U1ssjI3w/4LIeqTVI0fgaNk0MnikGSWabqkj170XvzUfDhF5pL/SAPk3VYftAU+Ogg==
-X-Received: by 2002:a9d:5c04:: with SMTP id o4mr8319657otk.339.1638397546473;
-        Wed, 01 Dec 2021 14:25:46 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id u13sm378176oop.28.2021.12.01.14.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 14:25:45 -0800 (PST)
-Received: (nullmailer pid 2869357 invoked by uid 1000);
-        Wed, 01 Dec 2021 22:25:45 -0000
-Date:   Wed, 1 Dec 2021 16:25:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Nikita Travkin <nikita@trvn.ru>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lars@metafoo.de, jic23@kernel.org,
-        robh+dt@kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: iio: light: ltr501: Add
- proximity-near-level
-Message-ID: <Yaf2aV6GCOaswsDH@robh.at.kernel.org>
-References: <20211125125646.54831-1-nikita@trvn.ru>
+        Wed, 1 Dec 2021 17:30:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638397624; x=1669933624;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AMYlyWRGk0rGyJ8aOEHYyVAkZ0ZG0osDorr4K/cqWvQ=;
+  b=ULQTbgZz1z3aOzvCR1XCX92sxQQKOTE2+O4FVLjlsXX7CBHPOv3hkc9V
+   UyA42k15SXtlXXghHCtl4r5A8tZbz+547HOxgCSrXlAWyIs9sc64HFZqv
+   CwbLg6iU+t/Ol/+WtCFavOXFneExMP/9YZjcYIghTz0ZZLUYxdDgPYHz9
+   E=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 01 Dec 2021 14:27:03 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 14:27:01 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 14:26:40 -0800
+Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 1 Dec 2021
+ 14:26:40 -0800
+Date:   Wed, 1 Dec 2021 14:26:38 -0800
+From:   Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+CC:     <agross@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <tglx@linutronix.de>, <maz@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <manivannan.sadhasivam@linaro.org>, Rob Herring <robh@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: Re: [PATCH v5 6/6] dt-bindings: clock: Introduce pdc bindings for
+ SDX65
+Message-ID: <20211201222638.GB586@quicinc.com>
+References: <cover.1637302009.git.quic_vamslank@quicinc.com>
+ <538438f41153587043741747db5218e9f575c0f5.1637302009.git.quic_vamslank@quicinc.com>
+ <YaF2eBKMkIvGapCY@ripper>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20211125125646.54831-1-nikita@trvn.ru>
+In-Reply-To: <YaF2eBKMkIvGapCY@ripper>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Nov 2021 17:56:45 +0500, Nikita Travkin wrote:
-> This value inidcates the proximity level that should be considered
-> "close".
+On Fri, Nov 26, 2021 at 04:06:16PM -0800, Bjorn Andersson wrote:
+> On Thu 18 Nov 22:11 PST 2021, quic_vamslank@quicinc.com wrote:
 > 
-> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
-> ---
->  .../devicetree/bindings/iio/light/liteon,ltr501.yaml       | 7 +++++++
->  1 file changed, 7 insertions(+)
+> > From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+> > 
+> > Add compatible for SDX65 pdc.
+> > 
+> > Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Acked-by: Rob Herring <robh@kernel.org>
+> > Reviewed-by: Vinod Koul <vkoul@kernel.org>
 > 
+> Sorry for not spotting this before, but as you can tell from the path of
+> the file you're changing, this has nothing to do with "clocks".
+> 
+> git log on qcom,pdc.txt shows that $subject should be:
+> 
+>   dt-bindings: qcom,pdc: Add compatible for SDX65
+> 
+> Also, as this is unrelated to clocks, Stephen is not going to merge this
+> patch. You will have to repost it, with Marc Zyngier as recipient to get
+> it merged; per get_maintainer.
+> 
+> 
+> I think it's fine to keep the reviews and acks while adjusting $subject
+> and reposting this patch  - separate from the other 5 patches.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Thank you for the review. Will repost this as a new patch.
+
+Thanks,
+Vamsi
+> 
+> Thanks,
+> Bjorn
+> 
+> > ---
+> >  .../devicetree/bindings/interrupt-controller/qcom,pdc.txt        | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
+> > index 98d89e53013d..ce631d853db4 100644
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
+> > @@ -23,6 +23,7 @@ Properties:
+> >  		    - "qcom,sdm845-pdc": For SDM845
+> >  		    - "qcom,sdm8250-pdc": For SM8250
+> >  		    - "qcom,sdm8350-pdc": For SM8350
+> > +		    - "qcom,sdx65-pdc": For SDX65
+> >  
+> >  - reg:
+> >  	Usage: required
+> > -- 
+> > 2.33.1
+> > 

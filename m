@@ -2,573 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E714653C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 631164653CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:19:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351786AbhLART7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 12:19:59 -0500
-Received: from mail-dm6nam11on2045.outbound.protection.outlook.com ([40.107.223.45]:65249
-        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1351657AbhLARTz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:19:55 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tf9AxnBj69dTlPWEfw7TT+I3aZ7IMtSO0/HHwAakTdlZ5rwJmv0PdxXvd7baSj29Ldn3UKiulqKM9zEA/Usm0CJ1bEZrB3KANP4nza9JZuVMMXoQxX0QiTm0CECjsWXk06fTJgX0QHqpyzE83e58edxM31qSqv5+FjUbhAhK7xrXrcmBUIljwCW9b5ya53ZXAk0+B3N0fLqPuQ8TgBdVV3c6xFtzvVJoRqw7wAS5EQU7rQ/jlfOpnQd38GNLVEDQYp2kbWNBw9ptB8pOUixdc/tOGVNrhjFgyVCLxbvGCE5hDGhqbOAe5xUJHMPU8ir3dJCp3mMRGsB8x4F0AdIrzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pt/pCyMQRK2JVMa0P0Vi111ifmrxa4W6aoobuVgN7Fg=;
- b=CThirsAL6iP4lACslFWMgrq98QDzVrdgnmRgFEYx4qX7vSBXRRYqW6F0rKO6OB086moeneT5xSfVMeER9TbTFy8dPJdUrZipJeXsWpxxNAr9khkJEdRTnO71D9HLiJ9EtWKnk7sNjzYShuQiYdJcYyz3Hz8C33S46IkmmHDeYQyFzgHNgkvOq4nZkVVhI1uLNnLP+/YNbY2LpdWToOvOj2zmlbx45abyuI9rmN3Nfhp8/D7mYSnzWXnV84S6ckvUiCVv9I718yzXOnHGWhBryM/zCAL08Cpcoh63bVXjyOz6CFvAGnQe0FNAvYAid3QznNJhQ5lHV4aDlfTr4m8bvw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.112.32) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pt/pCyMQRK2JVMa0P0Vi111ifmrxa4W6aoobuVgN7Fg=;
- b=lDjKRK8EAKGzWq+BAXJDcV6WgFoAol2DAwOwxVaOsxG6XfC6J2YqSebgZRqJVz3pPTZ4Wicaqc7IhtZlEfXa811J7Nfr1NGvF2gTjatc0VVmWmz5fK6aPXH3ODAx2UCCEj24hwOKkqpWwd7FBZrKOOwz3vsdBo4UUgp51Jet7fllizU5FxpgNNoEISiwHmD9N1ruuU8+SRRmsBN7+vRBr9wkF+tf9dkNbCrkfXc83pspRu/ADw8M72mY/WemYaEx6olEX0OBgf5D6+7YbYpJuLR6ofZMsVpSG87Hl5lsJXW510H2whjDldhjeU/N0M8q33Ng4OYxZh67otNYJadqPA==
-Received: from DM6PR08CA0036.namprd08.prod.outlook.com (2603:10b6:5:80::49) by
- BN9PR12MB5356.namprd12.prod.outlook.com (2603:10b6:408:105::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Wed, 1 Dec
- 2021 17:16:31 +0000
-Received: from DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:80:cafe::a8) by DM6PR08CA0036.outlook.office365.com
- (2603:10b6:5:80::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23 via Frontend
- Transport; Wed, 1 Dec 2021 17:16:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.112.32)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.112.32 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.112.32; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (216.228.112.32) by
- DM6NAM11FT064.mail.protection.outlook.com (10.13.172.234) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.4755.13 via Frontend Transport; Wed, 1 Dec 2021 17:16:31 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by HQMAIL109.nvidia.com
- (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 1 Dec
- 2021 09:16:13 -0800
-Received: from [172.17.173.69] (172.20.187.6) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.9; Wed, 1 Dec 2021
- 09:16:12 -0800
-Subject: Re: [RFC v3 09/12] gpiolib: cdev: Add hardware timestamp clock type
-From:   Dipen Patel <dipenp@nvidia.com>
-To:     Kent Gibson <warthog618@gmail.com>
-CC:     <thierry.reding@gmail.com>, <jonathanh@nvidia.com>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linus.walleij@linaro.org>,
-        <brgl@bgdev.pl>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <robh+dt@kernel.org>
-References: <20211123193039.25154-1-dipenp@nvidia.com>
- <20211123193039.25154-10-dipenp@nvidia.com> <20211126013137.GC10380@sol>
- <9ad666ec-eedd-8075-73e6-1e47a1eb228b@nvidia.com>
-X-Nvconfidentiality: public
-Message-ID: <a958cb60-5086-9ced-e992-09d69942c1fb@nvidia.com>
-Date:   Wed, 1 Dec 2021 09:18:09 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1351844AbhLARXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 12:23:01 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:60412 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1351795AbhLARW7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 12:22:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638379177;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jiZDyXKdIjoC0F4y1/21wnzR7Rkw3wQsneZ+xHv3bB8=;
+        b=R9UYrYscQG+0/NMeeUbxJui0vpQC237hEwSa+P9V/mN69iOrmee+AdDyhqT4MLfg1gDnAj
+        JMPImlTk50jOnCHYivfggyhMuGvmpEI0GDHKp+E5F4OMtBYIQu4RItio0EZHgZquIQ1iT9
+        zZPbNZ3zxiTT2zVeLwsOsNLawCUMVZM=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-563-Y2QyVT9ePw29dZ-pQzYdXg-1; Wed, 01 Dec 2021 12:19:36 -0500
+X-MC-Unique: Y2QyVT9ePw29dZ-pQzYdXg-1
+Received: by mail-qt1-f198.google.com with SMTP id c19-20020ac81e93000000b002a71180fd3dso33023821qtm.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 09:19:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:organization:user-agent:mime-version
+         :content-transfer-encoding;
+        bh=jiZDyXKdIjoC0F4y1/21wnzR7Rkw3wQsneZ+xHv3bB8=;
+        b=j0RbeeoYZ6cn5sl6C9d2eQj+Eq0roaU8v0J1qC7IzG9kM0I3wimvEboXALbgULjBh2
+         u0yvQHN/IbiEpMSlZT6j8Un6bmFNxONGjPVIZ/+49/OiWaSRIU1dV/mV7y24lMi+3N6N
+         nv+WYyLMZFUDfXiwupl4KaHhPG2VjqBjvgamOOCq3YljnAO63pIaoX1x1p+pHuDxOzhF
+         wQuy7zM6FEilSDkuBXst4xozkdzeMx4HSDKwL/8pHF+5UpgrZpmKckdS0T3khkxdKkAW
+         SBT7a0CQkIA0PzJV2nZTABFh4y2QPxltfcT1Xx5/op4ZiO8yVLCZAt7g0QL+NIaeGCAR
+         bVsg==
+X-Gm-Message-State: AOAM533KMNu41Fb45DVH8kXp7pBDhZSjNKMeCQJSRIDVcqG7HA2HaHim
+        Zeb9ly/q3OEaHO5JnNvFwuTXtwRFdPghX23SUvTsc0iV23aGvg+jyzWfc3KejXFACJgp1g+JcSl
+        ILbHURsIq3imbsx+KEhVI6Lsa
+X-Received: by 2002:a37:4554:: with SMTP id s81mr7371886qka.762.1638379175786;
+        Wed, 01 Dec 2021 09:19:35 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJyWqbuKAE1JfEcn1281HvxQmQCWVq237w2PgHxATmpqKqtM2LHfLb7RFBY3h4huYaJu+j2h5A==
+X-Received: by 2002:a37:4554:: with SMTP id s81mr7371851qka.762.1638379175509;
+        Wed, 01 Dec 2021 09:19:35 -0800 (PST)
+Received: from m8.users.ipa.redhat.com (cpe-158-222-141-151.nyc.res.rr.com. [158.222.141.151])
+        by smtp.gmail.com with ESMTPSA id p10sm198805qtw.97.2021.12.01.09.19.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 09:19:34 -0800 (PST)
+Message-ID: <49d6091e571e24efff7bc4dc70c4c62628eb0782.camel@redhat.com>
+Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
+From:   Simo Sorce <simo@redhat.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeffrey Walton <noloader@gmail.com>,
+        Stephan Mueller <smueller@chronox.de>, Tso Ted <tytso@mit.edu>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Alexander E. Patrakov" <patrakov@gmail.com>,
+        "Ahmed S. Darwish" <darwish.07@gmail.com>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Vito Caputo <vcaputo@pengaru.com>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
+        William Jon McCann <mccann@jhu.edu>,
+        zhangjs <zachary@baishancloud.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Peter Matthias <matthias.peter@bsi.bund.de>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        Neil Horman <nhorman@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Andy Lavr <andy.lavr@gmail.com>,
+        Petr Tesarik <ptesarik@suse.cz>,
+        John Haxby <john.haxby@oracle.com>,
+        Alexander Lobakin <alobakin@mailbox.org>,
+        Jirka Hladky <jhladky@redhat.com>
+Date:   Wed, 01 Dec 2021 12:19:33 -0500
+In-Reply-To: <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
+References: <2036923.9o76ZdvQCi@positron.chronox.de>
+         <22137816.pfsBpAd9cS@tauon.chronox.de> <YaEJtv4A6SoDFYjc@kroah.com>
+         <9311513.S0ZZtNTvxh@tauon.chronox.de> <YaT+9MueQIa5p8xr@kroah.com>
+         <CAH8yC8nokDTGs8H6nGDkvDxRHN_qoFROAfWnTv-q6UqzYvoSWA@mail.gmail.com>
+         <YaYvYdnSaAvS8MAk@kroah.com>
+         <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
+         <YaZHKHjomEivul6U@kroah.com> <YaZqVxI1C8RByq+w@gmail.com>
+         <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
+         <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
+         <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
+Organization: Red Hat
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-2.fc34) 
 MIME-Version: 1.0
-In-Reply-To: <9ad666ec-eedd-8075-73e6-1e47a1eb228b@nvidia.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [172.20.187.6]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3a6f5d79-ccc6-42e8-11df-08d9b4ee51a6
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5356:
-X-Microsoft-Antispam-PRVS: <BN9PR12MB53562C23B371193758D0333BAE689@BN9PR12MB5356.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:873;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZDWLtfW14oDE9i1KgtQ+Csy/pounbUntmNA5Xjrkx630pFW5CjNeuAodK/IWU3Ee/NxGacP5hYJE1KoybcvzRW/4uwjdc3iXUI43zP5i1ziT0z/uG3rfpLnczeNPRZiiOp98KYB/kuh9HkTd5Dn/htQpoweTAO+raUW+juoMESrCIuiDmeZgo2LAwM04G7ihfpKV2w/H6q0t+aPgZxUJ2hAV831dn9litHgbG9ub3YmmqnRDpSBkqjMk/X8PSVHDYCiIPNB3UhEHUsCeqYP9n8UfmABePoDMAhHiVMVRT3irUeNhzywuHWLOzgE8mVVUuNG87KF4aUevV9oNgdqpD0fEfvgTso3Hi9FFNCuxREnokCo0HhsZCIu0MWvSHJECzzr/PZOH5hCl+65qiuXpWO/RpjVDoOMwsmKHt0injI/cSghwm/LCkM4AioHC3C+2mfLXbpzLTX9PyDRwoVlh4rVjYaw1pFCYo9TCmVOgB+pIEdmHYBWJzmRe7TpezLHpXCQ0w24KRAkLGprGUbpzwWW2UuLAthbqw1GPKe2Ao+KCBLllO0q9WJALhZgWdzgiQuOwTH2vmUePQBOxArCX0SMdWWGKGF3Wtta48Q/XLaBipEOdCHWrPLYWkJR7Z+VYKp/g2DWStykgQaPsPYLtTpfy3PgLGnW1qUccv1bdDo11ny6eOiaE9pGXNTu3MyjPpP2a84nLa3zonv49CRHhCrUyPRI05FAixVE4OA2DWAFPvJsOiwx0NsBpm2k55ahTm8QlLh+mTJyCHOuwqGkvRIATeCWiCstSM/O8mDvIdsU=
-X-Forefront-Antispam-Report: CIP:216.228.112.32;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:schybrid01.nvidia.com;CAT:NONE;SFS:(4636009)(46966006)(36840700001)(40470700001)(7416002)(47076005)(8676002)(70586007)(54906003)(16526019)(36860700001)(5660300002)(36756003)(316002)(6666004)(8936002)(82310400004)(2906002)(31686004)(6916009)(31696002)(83380400001)(508600001)(336012)(53546011)(26005)(86362001)(426003)(186003)(356005)(30864003)(7636003)(4326008)(2616005)(16576012)(70206006)(40460700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2021 17:16:31.3127
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a6f5d79-ccc6-42e8-11df-08d9b4ee51a6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.112.32];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT064.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5356
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Jason,
+thanks for your reply, I appreciate when there is a clear exchange of
+ideas.
 
-On 11/30/21 7:29 PM, Dipen Patel wrote:
-> Hi,
->
-> On 11/25/21 5:31 PM, Kent Gibson wrote:
->> On Tue, Nov 23, 2021 at 11:30:36AM -0800, Dipen Patel wrote:
->>> This patch adds new clock type for the GPIO controller which can
->>> timestamp gpio lines in realtime using hardware means. To expose such
->>> functionalities to the userspace, code has been added in this patch
->>> where during line create call, it checks for new clock type and if
->>> requested, calls hardware timestamp related API from gpiolib.c.
->>> During line change event, the HTE subsystem pushes timestamp data
->>> through callbacks.
->>>
->>> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
->>> Acked-by: Linus Walleij <linus.walleij@linaro.org>
->>> ---
->>> Changes in v2:
->>> - Added hte_dir and static structure hte_ts_desc.
->>> - Added callbacks which get invoked by HTE when new data is available.
->>> - Better use of hte_dir and seq from hte_ts_desc.
->>> - Modified sw debounce function to accommodate hardware timestamping.
->>>
->>>  drivers/gpio/gpiolib-cdev.c | 161 ++++++++++++++++++++++++++++++++++--
->>>  include/uapi/linux/gpio.h   |   1 +
->>>  2 files changed, 153 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/gpio/gpiolib-cdev.c b/drivers/gpio/gpiolib-cdev.c
->>> index c7b5446d01fd..1736ad54e3ec 100644
->>> --- a/drivers/gpio/gpiolib-cdev.c
->>> +++ b/drivers/gpio/gpiolib-cdev.c
->>> @@ -464,6 +464,12 @@ struct line {
->>>  	 * stale value.
->>>  	 */
->>>  	unsigned int level;
->>> +	/*
->>> +	 * dir will be touched in HTE callbacks hte_ts_cb_t and
->>> +	 * hte_ts_threaded_cb_t and they are mutually exclusive. This will be
->>> +	 * unused when HTE is not supported/disabled.
->>> +	 */
->>> +	enum hte_dir dir;
->>>  };
->>>  
->> Documentation should be in present tense, so 
->>
->> s/will be/is/g
->>
->> Same applies to other patches.
->>
->> Also
->>
->> s/touched/accessed/
->>
->> dir is a poor name for the field.  It is the hte edge direction and
->> effectively the line level, so call it hte_edge_dirn or
->> hte_edge_direction or hte_level.
->>
->> And it is placed in a section of the struct documented as "debouncer specific
->> fields", but it is not specfic to the debouncer.  Add a "hte specific
->> fields" section if nothing else is suitable.
->>
->>>  /**
->>> @@ -518,6 +524,7 @@ struct linereq {
->>>  	 GPIO_V2_LINE_DRIVE_FLAGS | \
->>>  	 GPIO_V2_LINE_EDGE_FLAGS | \
->>>  	 GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME | \
->>> +	 GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE | \
->>>  	 GPIO_V2_LINE_BIAS_FLAGS)
->>>  
->>>  static void linereq_put_event(struct linereq *lr,
->>> @@ -546,6 +553,94 @@ static u64 line_event_timestamp(struct line *line)
->>>  	return ktime_get_ns();
->>>  }
->>>  
->>> +static hte_return_t process_hw_ts_thread(void *p)
->>> +{
->>> +	struct line *line = p;
->>> +	struct linereq *lr = line->req;
->>> +	struct gpio_v2_line_event le;
->>> +	u64 eflags;
->>> +
->>> +	memset(&le, 0, sizeof(le));
->>> +
->>> +	le.timestamp_ns = line->timestamp_ns;
->>> +	line->timestamp_ns = 0;
->>> +
->> What is the purpose of this zeroing?
->>
->>> +	if (line->dir >= HTE_DIR_NOSUPP) {
->>> +		eflags = READ_ONCE(line->eflags);
->>> +		if (eflags == GPIO_V2_LINE_FLAG_EDGE_BOTH) {
->>> +			int level = gpiod_get_value_cansleep(line->desc);
->>> +
->>> +			if (level)
->>> +				/* Emit low-to-high event */
->>> +				le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
->>> +			else
->>> +				/* Emit high-to-low event */
->>> +				le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
->>> +		} else if (eflags == GPIO_V2_LINE_FLAG_EDGE_RISING) {
->>> +			/* Emit low-to-high event */
->>> +			le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
->>> +		} else if (eflags == GPIO_V2_LINE_FLAG_EDGE_FALLING) {
->>> +			/* Emit high-to-low event */
->>> +			le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
->>> +		} else {
->>> +			return HTE_CB_ERROR;
->>> +		}
->>> +	} else {
->>> +		if (line->dir == HTE_RISING_EDGE_TS)
->>> +			le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
->>> +		else
->>> +			le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
->>> +	}
->> The mapping from line->dir to le.id needs to take into account the active
->> low setting for the line.
->>
->> And it might be simpler if the hte_ts_data provided the level, equivalent
->> to gpiod_get_raw_value_cansleep(), rather than an edge direction, so you
->> can provide a common helper to determine the edge given the raw level.
-> (So from the level determine the edge?) that sound right specially when
+Comment inline.
 
-                                                                ^^^
+On Wed, 2021-12-01 at 11:02 -0500, Jason A. Donenfeld wrote:
+> Hi Simo,
+> 
+> I think various folks have said this during the various discussions on this
+> topic over the years, in addition to myself, but I suppose I'll reiterate my
+> general views on FIPS in this context.
+> 
+> FIPS is about compliance and certification. From a cryptographic point of
+> view, there might be some good ideas, some dated ideas, some superfluous but
+> harmless ideas, and so forth. But the reason that you want it for your
+> customers is because you think your product will become more valuable or
+> useful to customers if it checks that green compliance checkbox. I don't think
+> we disagree about this being the motivation.
 
-                                                                does not*
+I have to say that although there is clearly a great deal of "because
+we need the certification" I do not fully agree that FIPS is just a
+checkbox to be ticked for me. Of course for customers that do not care
+that much it is, and it is a required one. However having worked a lot
+on this I can tell you there is actually real cryptographic value in
+the requirements FIPS introduced over the years. If anything my
+complaint is that the list of accepted constructs is restrictive, but
+other than that most of the requirements have real world sense, and the
+certification process do uncover issue that otherwise would linger as
+the testing is rather thorough.
 
->
-> HTE provider has capability to record the edge in that case why bother
->
-> getting the level and determine edge?
->
-> Calculating the edge from the level makes sense when hte provider does not
->
-> have that feature and that is what if (line->dir >= HTE_DIR_NOSUPP) does.
->
->>> +
->>> +	le.line_seqno = line->line_seqno;
->>> +	le.seqno = (lr->num_lines == 1) ? le.line_seqno : line->req_seqno;
->>> +	le.offset = gpio_chip_hwgpio(line->desc);
->>> +
->>> +	linereq_put_event(lr, &le);
->>> +
->>> +	return HTE_CB_HANDLED;
->>> +}
->>> +
->>> +static hte_return_t process_hw_ts(struct hte_ts_data *ts, void *p)
->>> +{
->>> +	struct line *line = p;
->>> +	struct linereq *lr = line->req;
->>> +
->>> +	if (!ts)
->>> +		return HTE_CB_ERROR;
->>> +
->>> +	line->timestamp_ns = ts->tsc;
->>> +	line->dir = ts->dir;
->>> +
->> The doc for timestamp_ns states:
->>
->> 	 * timestamp_ns and req_seqno are accessed only by
->> 	 * edge_irq_handler() and edge_irq_thread(), which are themselves
->> 	 * mutually exclusive, so no additional protection is necessary.
->>
->> That no longer holds.  It is now also accessed here, and in
->> process_hw_ts_thread(), which wont run concurrently with each other or
->> the edge_irq_* handlers, but also in debounce_work_func() which may run
->> concurrently with the others.
->> So timestamp_ns now requires protection from concurrent access.
->>
->>> +	/*
->>> +	 * It is possible that HTE engine detects spurious edges for the
->>> +	 * lines where software debounce is enabled. This primary callback
->>> +	 * will be called multiple times in that case. It will be better to
->>> +	 * let debounce_work_func handle instead of process_hw_ts_thread.
->>> +	 * The timestamp_ns will be overwritten here which is fine as we are
->>> +	 * interested in the last value anyway. The debounce_work_func will
->>> +	 * then just read whatever last line->timestamp_ns is stored. Because
->>> +	 * this callback can be called multiple times, we are not really
->>> +	 * interested in ts->seq.
->>> +	 */
->> Not sure what this is trying to say.
->> Is this the primary callback? Or debounce_irq_handler()?
-> This is primary callback called from HTE when it pushes new TS data per line, it
->
-> also says so in the second line.
->
->> You say you really aren't interested in ts->seq, but the code immediately
->> uses it.
-> That is when sw_debounced is not set and whole paragraph is about when
->
-> sw_debounced is set.
->
->> Reword to clarify.
->> And add braces after function names to highlight them, so
->> debounce_work_func().
-> Will do.
->>> +	if (!READ_ONCE(line->sw_debounced)) {
->>> +		line->line_seqno = ts->seq;
->>> +
->>> +		/*
->>> +		 * Increment in this callback incase all the lines in linereq
->>> +		 * are enabled for hw timestamping. This will work even if
->>> +		 * subset of lines are enabled for hw timestamping as
->>> +		 * edge_irq_* callbacks will proceed as usual for them.
->>> +		 */
->> s/incase/in case/
->>
->> Not sure what the comment is trying to say. There is no check here that
->> the other lines have HTE enabled.  And that is not relevant anyway.
->> The edge_irq_* handlers will proceed as usual for those lines NOT
->> enabled for hw timestamping.
->>
->> To clarify, the line_seqno indicates where this event lies in the
->> sequence of events for the line.
->> The request seqno indicates where this event lines in the sequence of
->> events for the request.
->> For a single line request these are the same, hence the minor
->> optimisation of not updating lr->seqno below.
->>
->>> +		if (lr->num_lines != 1)
->>> +			line->req_seqno = atomic_inc_return(&lr->seqno);
->>> +
->> The req_seqno should be updated corresponding to the change in the
->> line_reqno.  That always used to be 1, but no longer if hte can discard
->> events, i.e. skip over line_seqnos.
-> HTE does not discard any events, it pushes to clients as soon as its
->
-> available through primary callback.
->
->> To be consistent, i.e. if events were lost for this line then they were
->> also lost for the requested lines, the lr->seqno should be incremented by
->> the change in line_seqno.  Probably with some sanity checks.
->>
->>> +		return HTE_RUN_THREADED_CB;
->>> +	}
->>> +
->>> +	return HTE_CB_HANDLED;
->>> +}
->>> +
->>>  static irqreturn_t edge_irq_thread(int irq, void *p)
->>>  {
->>>  	struct line *line = p;
->>> @@ -553,6 +648,10 @@ static irqreturn_t edge_irq_thread(int irq, void *p)
->>>  	struct gpio_v2_line_event le;
->>>  	u64 eflags;
->>>  
->>> +	/* Let process_hw_ts_thread handle */
->>> +	if (test_bit(FLAG_EVENT_CLOCK_HARDWARE, &line->desc->flags))
->>> +		return IRQ_HANDLED;
->>> +
->> This adds pointless runtime overhead, and for everyone not just hte users.
->> Don't stub out a handler in the handler - stub it out where it is
->> registered by registering a stub handler.  Or don't request it at all.
->>
->> So why would gpiolib-cdev be requesting the irq, only to stub out
->> the handlers?
->> If that has a side-effect that hte requires then hte should be taking
->> care of it - it is not gpiolib-cdev's problem.
-> - Why stop at moving irq and debounce related stuff to hte then?
->
-> I mean if there is hte provider which can TS GPIO output/input
->
-> does it mean hte is responsible for parsing the GPIO line configs, setting them up
->
-> (i.e. input or output) as well? Are we not duplicating logic instead of
->
-> leveraging gpio-cdev? Does it make sense for the HTE subsystem which not
->
-> only TS the GPIOs but other SoC lines?
->
-> - What happens to in kernel GPIO HTE client (for example, hte-tegra194-gpio-test.c)?
->
-> some clients do more in their IRQ handler than what edge_irq_handler does in which
->
-> case it would make sense to have them request irq in their code than through HTE.
->
->> And speaking as to how the whole hte/gpiolib-cdev interface should work,
->> hte should be an edge event generator alternative to irq.  So lines with
->> hte enabled should work without any irq calls from gpiolib-cdev.
->> That includes the sw debouncer - more on that below.
->>
->>>  	/* Do not leak kernel stack to userspace */
->>>  	memset(&le, 0, sizeof(le));
->>>  
->>> @@ -604,6 +703,10 @@ static irqreturn_t edge_irq_handler(int irq, void *p)
->>>  	struct line *line = p;
->>>  	struct linereq *lr = line->req;
->>>  
->>> +	/* Let HTE supplied callbacks handle */
->>> +	if (test_bit(FLAG_EVENT_CLOCK_HARDWARE, &line->desc->flags))
->>> +		return IRQ_HANDLED;
->>> +
->>>  	/*
->>>  	 * Just store the timestamp in hardirq context so we get it as
->>>  	 * close in time as possible to the actual event.
->>> @@ -682,14 +785,6 @@ static void debounce_work_func(struct work_struct *work)
->>>  	/* Do not leak kernel stack to userspace */
->>>  	memset(&le, 0, sizeof(le));
->>>  
->>> -	lr = line->req;
->>> -	le.timestamp_ns = line_event_timestamp(line);
->>> -	le.offset = gpio_chip_hwgpio(line->desc);
->>> -	line->line_seqno++;
->>> -	le.line_seqno = line->line_seqno;
->>> -	le.seqno = (lr->num_lines == 1) ?
->>> -		le.line_seqno : atomic_inc_return(&lr->seqno);
->>> -
->>>  	if (level)
->>>  		/* Emit low-to-high event */
->>>  		le.id = GPIO_V2_LINE_EVENT_RISING_EDGE;
->>> @@ -697,6 +792,23 @@ static void debounce_work_func(struct work_struct *work)
->>>  		/* Emit high-to-low event */
->>>  		le.id = GPIO_V2_LINE_EVENT_FALLING_EDGE;
->>>  
->>> +	if (test_bit(FLAG_EVENT_CLOCK_HARDWARE, &line->desc->flags)) {
->>> +		le.timestamp_ns = line->timestamp_ns;
->>> +		if (line->dir < HTE_DIR_NOSUPP)
->>> +			le.id = (line->dir == HTE_RISING_EDGE_TS) ?
->>> +				 GPIO_V2_LINE_EVENT_RISING_EDGE :
->>> +				 GPIO_V2_LINE_EVENT_FALLING_EDGE;
->>> +	} else {
->>> +		le.timestamp_ns = line_event_timestamp(line);
->>> +	}
->>> +
->> Move the FLAG_EVENT_CLOCK_HARDWARE check into line_event_timestamp().
->>
->> And the id fudging is necessary because the level returned by
->> gpiod_get_raw_value_cansleep() can disagree with the level from hte?
->> So you are still trying to synchronise events from two streams.
->> And that is still broken.
->> If a hte event occurs between the level being sampled by
->> gpiod_get_raw_value_cansleep() and the line->dir being read then the line
->> will have toggled and you will be reporting the opposite state than the
->> one the debouncer determined was stable.  And maybe the wrong timestamp as
->> well.
->>
->> For lines where hte is enabled, the hte should be the source of level for
->> the debouncer, not the raw value.  And the mod_delayed_work() that
->> drives the debouncer should be called by a hte handler, not an irq handler.
->>
->> There is also a race on reading the hte timestamp (line->timestamp_ns) and
->> the hte level (line->dir), such that you can get the level from one event
->> the timestamp from another.
->>
->>> +	lr = line->req;
->>> +	le.offset = gpio_chip_hwgpio(line->desc);
->>> +	line->line_seqno++;
->>> +	le.line_seqno = line->line_seqno;
->>> +	le.seqno = (lr->num_lines == 1) ?
->>> +		le.line_seqno : atomic_inc_return(&lr->seqno);
->>> +
->> What is the purpose of moving this block of code moved from before the
->> if (level)?
->>
->>
->>>  	linereq_put_event(lr, &le);
->>>  }
->>>  
->>> @@ -891,7 +1003,6 @@ static int gpio_v2_line_flags_validate(u64 flags)
->>>  	/* Return an error if an unknown flag is set */
->>>  	if (flags & ~GPIO_V2_LINE_VALID_FLAGS)
->>>  		return -EINVAL;
->>> -
->> Gratuitous whitespace change.
->>
->>>  	/*
->>>  	 * Do not allow both INPUT and OUTPUT flags to be set as they are
->>>  	 * contradictory.
->>> @@ -900,6 +1011,11 @@ static int gpio_v2_line_flags_validate(u64 flags)
->>>  	    (flags & GPIO_V2_LINE_FLAG_OUTPUT))
->>>  		return -EINVAL;
->>>  
->>> +	/* Only allow one event clock source */
->>> +	if ((flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME) &&
->>> +	    (flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE))
->>> +		return -EINVAL;
->>> +
->>>  	/* Edge detection requires explicit input. */
->>>  	if ((flags & GPIO_V2_LINE_EDGE_FLAGS) &&
->>>  	    !(flags & GPIO_V2_LINE_FLAG_INPUT))
->>> @@ -992,6 +1108,8 @@ static void gpio_v2_line_config_flags_to_desc_flags(u64 flags,
->>>  
->>>  	assign_bit(FLAG_EVENT_CLOCK_REALTIME, flagsp,
->>>  		   flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME);
->>> +	assign_bit(FLAG_EVENT_CLOCK_HARDWARE, flagsp,
->>> +		   flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE);
->>>  }
->>>  
->>>  static long linereq_get_values(struct linereq *lr, void __user *ip)
->>> @@ -1154,6 +1272,21 @@ static long linereq_set_config_unlocked(struct linereq *lr,
->>>  				return ret;
->>>  		}
->>>  
->>> +		/* Check if new config sets hardware assisted clock */
->>> +		if (flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE) {
->>> +			ret = gpiod_req_hw_timestamp_ns(desc, process_hw_ts,
->>> +							process_hw_ts_thread,
->>> +							&lr->lines[i]);
->>> +			if (ret)
->>> +				return ret;
->> Note that the line config is the complete line config, not a delta.
->>
->> What happens when a line that already has hte enabled is reconfigured
->> and still has hte enabled?  i.e. what happens when
->> gpiod_req_hw_timestamp_ns() is called for the second time?
-> HTE will return without doing anything with error code.
->
->> You provide a comment for the release case below, what of the request
->> case?
->>
->> If you need to check for change then compare the old and new flags, as
->> the polarity_change check does (not visible in the diff here).
->>
->>> +		} else {
->>> +			/*
->>> +			 * HTE subsys will do nothing if there is nothing to
->>> +			 * release.
->>> +			 */
->>> +			gpiod_rel_hw_timestamp_ns(desc);
->>> +		}
->>> +
->> Comment will fit on one line.
->>
->> And it would be better to document that the function is idempotent in the
->> function documentation, not everywhere it is used.
->>
->>>  		blocking_notifier_call_chain(&desc->gdev->notifier,
->>>  					     GPIO_V2_LINE_CHANGED_CONFIG,
->>>  					     desc);
->>> @@ -1409,6 +1542,14 @@ static int linereq_create(struct gpio_device *gdev, void __user *ip)
->>>  					flags & GPIO_V2_LINE_EDGE_FLAGS);
->>>  			if (ret)
->>>  				goto out_free_linereq;
->>> +
->>> +			if (flags & GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE) {
->>> +				ret = gpiod_req_hw_timestamp_ns(desc, process_hw_ts,
->>> +							process_hw_ts_thread,
->>> +							&lr->lines[i]);
->>> +				if (ret)
->>> +					goto out_free_linereq;
->>> +			}
->>>  		}
->>>  
->>>  		blocking_notifier_call_chain(&desc->gdev->notifier,
->>> @@ -1959,6 +2100,8 @@ static void gpio_desc_to_lineinfo(struct gpio_desc *desc,
->>>  
->>>  	if (test_bit(FLAG_EVENT_CLOCK_REALTIME, &desc->flags))
->>>  		info->flags |= GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME;
->>> +	else if (test_bit(FLAG_EVENT_CLOCK_HARDWARE, &desc->flags))
->>> +		info->flags |= GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE;
->>>  
->>>  	debounce_period_us = READ_ONCE(desc->debounce_period_us);
->>>  	if (debounce_period_us) {
->>> diff --git a/include/uapi/linux/gpio.h b/include/uapi/linux/gpio.h
->>> index eaaea3d8e6b4..d360545b4c21 100644
->>> --- a/include/uapi/linux/gpio.h
->>> +++ b/include/uapi/linux/gpio.h
->>> @@ -80,6 +80,7 @@ enum gpio_v2_line_flag {
->>>  	GPIO_V2_LINE_FLAG_BIAS_PULL_DOWN	= _BITULL(9),
->>>  	GPIO_V2_LINE_FLAG_BIAS_DISABLED		= _BITULL(10),
->>>  	GPIO_V2_LINE_FLAG_EVENT_CLOCK_REALTIME	= _BITULL(11),
->>> +	GPIO_V2_LINE_FLAG_EVENT_CLOCK_HARDWARE	= _BITULL(12),
->>>  };
->>>  
->> I'm now thinking this name, "HARDWARE" is too vague, in case other
->> timestamp source alternatives join the fray, and so should be "HTE".
->>
->> Cheers,
->> Kent.
+> Now typically the kernel interoperates with lots of things and implements many
+> different specifications. It supports scores of network protocols, IPsec
+> cipher suites, USB quirks, SCSI hacks, you name it. The implementation of
+> these drivers is always up to the author and hopefully kernel developers at
+> large do the best job they can with the implementation, but the hardware or
+> protocol they're interfacing with is not up to the author, by virtue of it
+> being external to the kernel. It's not like instantiating IPsec with single
+> DES and MD4, or SM3 and SM4, etc. is so great, and it's not like the
+> compendium of brilliant hacks in drivers/usb/host/pci-quirks.c is so great
+> either. But these things all exist to talk to something *outside* of the
+> kernel, and so we grit our teeth, and as I said, do the best we can to
+> implement it well.
+> 
+> But the RNG isn't like that. In fact, the RNG is logically *required* to be
+> not anything like that: it returns random bytes, and they must not have any
+> distinguishing quality with other random bytes; otherwise we have a serious
+> problem that needs fixing. And so, we carry things out according to the usual
+> kernel developer mindset: we implement it as best as we can, using the best
+> algorithms we can find, in a way most suitable for the kernel.
+> 
+> Then FIPS comes along and starts dictating things about *how* we implement it,
+> and those things it dictates might not be exactly the same as what we would
+> would be doing when doing best that we can, using the best algorithms we can
+> find, and in the most suitable way for the kernel. And so it would seem that
+> the goal of implementing the RNG as best as we can might potentially be at
+> odds with the goal of getting that green compliance checkbox, because that
+> checkbox oversteps its bounds a bit.
+
+Well I think most of the requirements are sane practices, hopefully
+controversial stuff will be minimal. I fully believe we can work to
+have the best we can as well as having it FIPS compliant, because the
+intent of FIPS requirements here is exactly to have the best guarantees
+for randomness.
+
+> That's not to say, of course, that we shouldn't accept input on how we
+> implement our algorithms from elsewhere. On the contrary, I think random.c has
+> a *lot* to gain from incorporating newer ideas, and that the formalism and
+> guidance from academic cryptographers is less "academic" than it once was and
+> much more real world, implementable, and suitable for our uses. But, again,
+> incorporating new ideas and accepting input on how to improve our code is very
+> much not the same thing as following the FIPS laundry list for that green
+> compliance checkbox. Maybe some parts do overlap -- and I'd love patches that
+> improve the code alongside compelling cryptographic arguments -- but, again,
+> we're talking about compliance here, and not a more welcome, "hey check out
+> this document I found with a bunch of great ideas we should implement."
+
+I happen to think quite a few of the requirements are actually good
+ideas to implement to improve the guarantees of randomness, but there
+may definitely be contentious ideas of what is "good" and what is an 
+"arbitrary request".
+
+> I would like the kernel to have an excellent CSPRNG, from a cryptographic
+> point of view, from a performance point of view, from an API point of view. I
+> think these motivations are consistent with how the kernel is generally
+> developed. And I think front loading the motivations with an external
+> compliance goal greatly deviates and even detracts from the way the kernel is
+> generally developed.
+
+I would agree is compliance meant arbitrary/capricious requirements.
+Hopefully most of the requirements are reasonable and we can find a
+reasonable way to fulfill them.
+
+> Now the above is somewhat negative on FIPS, but the question can still be
+> posed: does FIPS have a path forward in the RNG in the kernel? It's obviously
+> not a resounding "yes", but I don't think it's a totally certain "no" either.
+> It might be possible to find some wiggle room. I'm not saying that it is
+> certainly possible to do that, but it might be.
+> 
+> Specifically, I think that if you change your perspective from, "how can we
+> change the algorithms of the RNG to be FIPS" to "how can we bend FIPS within
+> its limits so that having what customers want would minimally impact the
+> quality of the RNG implementation or introduce undue maintenance burdens."
+
+We always operate with this mindset to be quite frank. The kernel is
+just one of many crypto modules we certify, and we always try to find
+the least invasive options in all the crypto modules we certify. We
+also normally try to get all changes upstream because we think they are
+a benefit to everyone.
+
+> This means: not refactoring the RNG into some large abstraction layer that's
+> pluggable and supports multiple different implementations, not rewriting the
+> world in a massive patchset, not adding clutter.
+
+I think the reason to propose this is to deal with cases where the
+kernel community and the FIPS requirement diverge. A pluggable system
+allows to provide a downstream module and in general will provide clear
+entry-points where to apply downstream patches that minimally deviate
+from the general structure.
+
+Unfortunately, regardless of what the kernel community find of its
+liking we have a business need to provide FIPS certifications to our
+customers. So for us it is also a matter of pragmatically reducing to
+the maximum extent possible any necessary deviation from upstream
+kernels.
+
+>  Instead, perhaps there's a
+> very, very minimal set of things that can be done that would be considerably
+> less controversial. That will probably require from you and other FIPS
+> enthusiasts some study and discussion at what the truly most minimal set of
+> things required are to get you that green compliance checkbox.
+
+As long as there is actual feedback and a willingness to reach a
+compromise on both sides when a change does not materially cause
+issues, I think this is certainly reasonable.
+
+>  And hey --
+> maybe it's still way too much and it doesn't work out here. But maybe it's not
+> that much, or, as Greg suggested, maybe it winds up that your needs are
+> actually satisfied just fine by something in userspace or userspace-adjacent.
+
+Unfortunately userspace is not an option for kernel's own cryptography.
+
+> So I don't know whether the FIPS has a path forward here, but if it does, I
+> think the above is the general shape it would take. And in the mean time, I'm
+> of course open to reviewing patches that improve the RNG in a cryptographic or
+> algorithmic sense, rather than a purely compliance one.
+
+Hopefully we can take both into account.
+
+> Hopefully that helps you understand more about where we're coming from.
+
+It does,
+thanks.
+
+Simo.
+
+-- 
+Simo Sorce
+RHEL Crypto Team
+Red Hat, Inc
+
+
+
+

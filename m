@@ -2,71 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DC7524658FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:18:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CDE465901
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353548AbhLAWVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:21:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353498AbhLAWUm (ORCPT
+        id S1353536AbhLAWWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:22:01 -0500
+Received: from mail-ot1-f43.google.com ([209.85.210.43]:34401 "EHLO
+        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353541AbhLAWVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:20:42 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080E8C061574;
-        Wed,  1 Dec 2021 14:17:18 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638397036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JEntfi+R1B0LdGVSzyc+PZLj+JC9XJ08L6abd7hjSZI=;
-        b=gjlu2BnSyIsdoFUY93w/MS/G44ArV1VpPX9nPvKuVsKJkXsdZe0D5NrSVMlp/s8yWc3qA/
-        Xn6LLYM96/sekiGyS8/WcL/R/jO7vAo8Pon5Aotq4vqO8l2TnmMNNx8i6/LmD8NrQXMTvx
-        FKK6GwdeSbpeG/FtFS7np72Zi8mqQKuo4BBhjM/GgluNZ+oveio/6KeWab1wk831B1RDvt
-        2Eu6X9iqCJ3yX76iN4DSPe2LeY2BE5qmPccGjcvbixjeN24iBHNAFPTAqpmGAG0EMd9sFs
-        025hRKxOg8+pP7D2RJZb5dXpku3kr+eLtO2dgn944UkVGCbrhtvlcZl9n6AxQQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638397036;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JEntfi+R1B0LdGVSzyc+PZLj+JC9XJ08L6abd7hjSZI=;
-        b=z3NRdTjrWa4gKapXO/e5RBnmEjy75iPzjHnOv78hif7BdRkrBb7XwnFJadjU57et3rUi2r
-        vV4vOwWaiQ+aQlCQ==
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-In-Reply-To: <20211202090540.1f22fa39@canb.auug.org.au>
-References: <20211126145201.5aefa68c@canb.auug.org.au>
- <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
- <20211202090540.1f22fa39@canb.auug.org.au>
-Date:   Wed, 01 Dec 2021 23:17:16 +0100
-Message-ID: <87zgpk6kcz.ffs@tglx>
+        Wed, 1 Dec 2021 17:21:22 -0500
+Received: by mail-ot1-f43.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso37327217otj.1;
+        Wed, 01 Dec 2021 14:18:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kXwYki9C7SCtlqO4/jeETUKBsjz0PzUf21ILjNiLQyw=;
+        b=gYWhosJqV7aqLqlJv9eGzMA8bs+ZcYrwTpCNCA6kTE2/6z3awWWNcjGG/Rr5+Ghhal
+         +gbUTUuwFrEJhyNELlgy4M49KzPUsLm9RIvddHy9LZaX2IAQEmsNWqVNaHrwrt+aOp6K
+         +HmCQRX+5SKyfiX/8krIyK2jZVkH1h5mfTGYxSMOMjKiTfRcKDdKIqJrJSP/Kp3MNd42
+         DpqYLbORrgA4eDs2A+8Rul+JmW8/3JzQNKL3Z2o54EnJpj5nww+tvcnG0TlXOgxfYVQ8
+         sXJSs6/0GgodyF6F9F/olD0iXocAFMiWSlkYw1xbPwJKcQrEYLQM6Bv95DKQpZN1HEAr
+         jMOA==
+X-Gm-Message-State: AOAM533cedSEpKEf4vDZDo4U2tPafwA2cS6Y6xNfqOkNcQNgfaYuDurs
+        2aPBewLGrv2+hGzTcg0AmDqYGKODnw==
+X-Google-Smtp-Source: ABdhPJxQpKy6n45A0momIwrGcdNliZN06piz12sLj7hj8nwCyjvva9k8SOh7LE9u/aPRWKEU86CANQ==
+X-Received: by 2002:a9d:4702:: with SMTP id a2mr8286254otf.262.1638397080344;
+        Wed, 01 Dec 2021 14:18:00 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id bq5sm601787oib.55.2021.12.01.14.17.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 14:17:59 -0800 (PST)
+Received: (nullmailer pid 2829751 invoked by uid 1000);
+        Wed, 01 Dec 2021 22:17:58 -0000
+Date:   Wed, 1 Dec 2021 16:17:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
+Cc:     system@metrotek.ru, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] dt-bindings: bus: imx-weim: add words about
+ continuous bclk
+Message-ID: <Yaf0lvD3H5ylZY8d@robh.at.kernel.org>
+References: <20211124175542.2772-1-i.bornyakov@metrotek.ru>
+ <20211124175542.2772-3-i.bornyakov@metrotek.ru>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211124175542.2772-3-i.bornyakov@metrotek.ru>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02 2021 at 09:05, Stephen Rothwell wrote:
-> On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
->> 
->> Thanks a lot for the report, I sent a fix now:
->> 
->> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org
->
-> I am still getting this failure (Arnd's fix has not been applied).
+On Wed, Nov 24, 2021 at 08:55:42PM +0300, Ivan Bornyakov wrote:
+> Document continuous Burst Clock option. With this option Burst Clock, if
+> enabled, will output continuous clock, otherwise Burst Clock will output
+> clock only when necessary.
 
-It got applied, but due to tip maintainer confusion the next branch was
-not updated. Will be fixed tomorrow.
+Missing S-o-b. checkpatch.pl will tell you this.
 
-Thanks,
-
-        tglx
+> ---
+>  Documentation/devicetree/bindings/bus/imx-weim.txt | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/bus/imx-weim.txt b/Documentation/devicetree/bindings/bus/imx-weim.txt
+> index 1b1d1c5c21ea..e7f502070d77 100644
+> --- a/Documentation/devicetree/bindings/bus/imx-weim.txt
+> +++ b/Documentation/devicetree/bindings/bus/imx-weim.txt
+> @@ -48,6 +48,11 @@ Optional properties:
+>  			devices, the presence of this property indicates that
+>  			the weim bus should operate in Burst Clock Mode.
+>  
+> + - fsl,continuous-burst-clk	Make Burst Clock to output continuous clock.
+> +			Without this option Burst Clock will output clock
+> +			only when necessary. This takes effect only if
+> +			"fsl,burst-clk-enable" is set.
+> +
+>  Timing property for child nodes. It is mandatory, not optional.
+>  
+>   - fsl,weim-cs-timing:	The timing array, contains timing values for the
+> -- 
+> 2.32.0
+> 
+> 
+> 

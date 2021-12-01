@@ -2,78 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C63E4649E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:41:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAE0464A08
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:43:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241952AbhLAIpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 03:45:17 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41774 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236352AbhLAIou (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 03:44:50 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E04AB81E04;
-        Wed,  1 Dec 2021 08:41:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B864C53FAD;
-        Wed,  1 Dec 2021 08:41:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638348087;
-        bh=dqdvLjyoOUa1sngUFu49cqxJu8V+OCGrT79b+MUdVIM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n6Yc0wgn7PMYwpmhoqox6qEZK/4Z8AbMv1EAVzPCMDleSlypRwU5C4sJQTOYFufUZ
-         zW+mji2cNR2rWrNqeVML0GnL5uJaEzUEDK/VXGdq0CSq05l+ez9SboCCPuKBZuysq3
-         1j1lS85MbUHuWa+qinezYxUNPlS2/GIBITGeuSmgaSjbMZpszsVfc/U3BDlrZKKpn/
-         D0Tl2X+t0oXJUMZ9pmMf5/hQVS7/Z0Ys8N83Q096xQVn+59qzpvPJ6Q/TK5fcu5dbV
-         ulzl/yy9w90W98oCiWy1y61EA/oYSU7SZ73N9ir3O7fGpk+bgEk54ZhSlC6ItaWXBW
-         pM9DPnoueZVjg==
-Date:   Wed, 1 Dec 2021 09:41:22 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-kernel@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH 0/1] Docs: use RTD dark mode if available
-Message-ID: <20211201094122.1c6fd83d@coco.lan>
-In-Reply-To: <cover.1638346585.git.mchehab+huawei@kernel.org>
-References: <cover.1638346585.git.mchehab+huawei@kernel.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        id S237533AbhLAIqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 03:46:25 -0500
+Received: from smtp1.axis.com ([195.60.68.17]:24189 "EHLO smtp1.axis.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232256AbhLAIqY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 03:46:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1638348184;
+  x=1669884184;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=LAK/bVC4aHlcgnP06p+vpyCO35Fk8GtaJt7UyHkSZTM=;
+  b=SxV6O3teBg+1q4ml30bk9O4DsIuSTzI5D5O5HtdDRqsQQM9CngCcvKiJ
+   s6vJCz6L8MXNo00QG/pFuOgkSASVhQIvjRzkDsaky2xmh0reosw3QHxIa
+   jlDvkLXD7/xfAF4xAl04lh1FxhUL4CQcXKZKhQx9613RKbNUL1fLkQurw
+   wAqBp+meLGGI6SZSDaPdwBDtE3RL4886GjhRgfagI654mRbiBy+xIKDbc
+   +SidkUSC52IfvyQ9Xa5VFo0rlkEcLKxQaHt9st+dqUDEswqXSffMV05Iz
+   Jl/oVpD6DBW7yOiTYpNKqUFajd0qBn+3FQZvqdsCPSR1TebXcoOR+Ypln
+   w==;
+Date:   Wed, 1 Dec 2021 09:43:02 +0100
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Camel Guo <Camel.Guo@axis.com>
+CC:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "linux-rtc@vger.kernel.org" <linux-rtc@vger.kernel.org>,
+        kernel <kernel@axis.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] rtc: rs5c372: add offset correction support
+Message-ID: <20211201084302.GA26222@axis.com>
+References: <20211130095004.22777-1-camel.guo@axis.com>
+ <f0e2eb3c-8e50-f6db-4c52-810da9c83b7a@axis.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f0e2eb3c-8e50-f6db-4c52-810da9c83b7a@axis.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed,  1 Dec 2021 09:22:02 +0100
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
+On Tue, Nov 30, 2021 at 03:55:43PM +0100, Camel Guo wrote:
+> Just realize that the oscillation adjustment registers of r2*, rs5c* are 
+> not totally same and all of these differences need to be handled in 
+> different way. Hence this patch needs to be updated to cover all cases.
 
-> Hi Jon,
-> 
-> As we're analyzing some theme alternatives, one of the things that annoys
-> me more at our theme is that it doesn't come with a dark mode.
-> 
-> At least here, I strongly prefer dark themes, as it seems to be a lot more
-> comfortable to my eyes, specially in the morning.
-> 
-> There's an extension to the RTD theme that allows building the docs with a
-> dark theme, with a button to select normal mode.
-> 
-> As this comes almost for free, optionally enable the dark mode extension if
-> such theme is installed at the machine.
-
-Too good to be true... It won't work properly, as:
-
-1. Some of the css custom configs at sphinx-static define colors;
-2. It sounds that this overlay to RTD theme is missing some classes,
-   as, at least here, function prototypes from driver-api/media/v4l2-async.html
-   are written with a black color over a dark gray background.
-
-I'll do more tests. If I find a solution, I'll submit another version.
-
-Thanks,
-Mauro
+Unless you have the hardware to actually test the other variants,
+perhaps it would be safer to just reject them in ->set_offset /
+->get_offset for now?  Returning -EINVAL for unsupported types should
+make rtc_set_offset() and rtc_get_offset() have the same behaviour as
+not implementing the callbacks for these variants.

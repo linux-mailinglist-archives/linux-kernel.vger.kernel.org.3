@@ -2,129 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F24764659E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B43504659ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353820AbhLAXmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 18:42:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353810AbhLAXm3 (ORCPT
+        id S1353834AbhLAXtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 18:49:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32616 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353824AbhLAXtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 18:42:29 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34F0C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:39:07 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id w33-20020a17090a6ba400b001a722a06212so1946659pjj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 15:39:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=UawCFas+5bZ9exexPy9lvfbEbmZL7VR3eGOrgATJsH8=;
-        b=A8eNGOFu0vIOMaHT4l7C4EoIimLChbTvJpK/SjbKL+cGy7flSP2NYafcB63LvueIup
-         71/cJtJUgSz+4eibG0/SOn2Xm1bVGwsersyiW63GCH1NxiMc5tlcHFN34TbR6YtloFcN
-         USJwViJRknUN91ndNZl/fKfQRnFt7j8LvKk2Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UawCFas+5bZ9exexPy9lvfbEbmZL7VR3eGOrgATJsH8=;
-        b=fh/lkAcyYWHM7eUg9BnB1Do/XQ0chbw7n7XevbbWjPFpGCwNM8MxGZQVjSiZyBezY6
-         dIoLfRrMbO0EO0WHNzcqbY9DDHJI0X/rPJqRONAs8erax+nL0OhiReuGy+NBWONXIFgY
-         LfE7NxKqNKaZNs6E5AQ0DmLKxU7qOnuKHfZ5SytSWatAFSzBLiKouehmJROsVhKdh4Ep
-         EPZgvoiDm1A+Mpqr9TrErpHyaIxJCFXa+PnYCYDtOKVT9DuJBTDehff3pt2KK4Bczu0l
-         aWvLZrbHHDhEyY0oYSYd4eiVptA0BGpcEo1P5VULFjqXbLjIOFrLwGjLSGfByz3UIOVB
-         sv4Q==
-X-Gm-Message-State: AOAM531ThJcXDcN+VcJJMHeaDdH8lPBguQDYaJlFZtb5z1GgnMKj3WZx
-        2zfYwMvT/ykMSDp5CIeRoX5GsA==
-X-Google-Smtp-Source: ABdhPJyxw1qs9NtdzCmDjuuVZNqmvVXK2zwTG8U0NkrN5jw/rru6EDAv7ww9fqfBoloYaFmt+iz8qQ==
-X-Received: by 2002:a17:90b:4a0f:: with SMTP id kk15mr1639024pjb.223.1638401947451;
-        Wed, 01 Dec 2021 15:39:07 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q17sm1024190pfu.117.2021.12.01.15.39.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 15:39:06 -0800 (PST)
-Date:   Wed, 1 Dec 2021 15:39:06 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Geliang Tang <geliangtang@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>, Haren Myneni <haren@us.ibm.com>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        linux-crypto <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH 1/9] crypto: add zbufsize() interface
-Message-ID: <202112011529.699092F@keescook>
-References: <20180802215118.17752-1-keescook@chromium.org>
- <20180802215118.17752-2-keescook@chromium.org>
- <20180807094513.vstt5dhbb7n6kvds@gondor.apana.org.au>
- <CAGXu5j+dPqpJZbO_AuGsNqJzq7XGcB2deXA5RELWv1-Ywi5QOA@mail.gmail.com>
- <20180808025319.32d57wtjpyyapwo5@gondor.apana.org.au>
+        Wed, 1 Dec 2021 18:49:12 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638402350;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=snCVb5fbZV6vUruHANKIGvnBOyU9q8ZLGqcF9z3ztd4=;
+        b=gB9Vwmr756cFeeOTTlEny6KEDrH2CH9b+/z4GJq/ToO2aYAUpj0hKnMe14cWIjqrJgg9aC
+        E1nC9v3jgBo46sUxghxgcSaHKqNcFkaJ78mZ7R0sDP6sls/6yfyfgD2xuWeGQB9Woj4BdE
+        K9NRtPXr045/h2wQ4I7/nAuOAMqCZjs=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-350-dCV-kQihNemiLgjPHwW1tg-1; Wed, 01 Dec 2021 18:45:47 -0500
+X-MC-Unique: dCV-kQihNemiLgjPHwW1tg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C423E180830C;
+        Wed,  1 Dec 2021 23:45:46 +0000 (UTC)
+Received: from [172.30.41.16] (unknown [10.2.17.225])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C814960843;
+        Wed,  1 Dec 2021 23:45:41 +0000 (UTC)
+Subject: [PATCH] vfio/pci: Resolve sparse endian warnings in IGD support
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     alex.williamson@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 01 Dec 2021 16:45:41 -0700
+Message-ID: <163840226123.138003.7668320168896210328.stgit@omen>
+User-Agent: StGit/1.0-8-g6af9-dirty
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20180808025319.32d57wtjpyyapwo5@gondor.apana.org.au>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 08, 2018 at 10:53:19AM +0800, Herbert Xu wrote:
-> On Tue, Aug 07, 2018 at 11:10:10AM -0700, Kees Cook wrote:
-> >
-> > > Please don't add new features to the old compress interface.  Any
-> > > new improvements should be added to scomp/acomp only.  Users who
-> > > need new features should be converted.
-> > 
-> > So, keep crypto_scomp_zbufsize() and drop crypto_comp_zbufsize() and
-> > crypto_zbufsize()? Should I add crypto_acomp_zbufsize()?
-> 
-> Yes and yes.  acomp is the primary interface and should support
-> all the features in scomp.
+Sparse warns:
 
-*thread necromancy*
+sparse warnings: (new ones prefixed by >>)
+>> drivers/vfio/pci/vfio_pci_igd.c:146:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [addressable] [usertype] val @@     got restricted __le16 [usertype] @@
+   drivers/vfio/pci/vfio_pci_igd.c:146:21: sparse:     expected unsigned short [addressable] [usertype] val
+   drivers/vfio/pci/vfio_pci_igd.c:146:21: sparse:     got restricted __le16 [usertype]
+>> drivers/vfio/pci/vfio_pci_igd.c:161:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [addressable] [usertype] val @@     got restricted __le32 [usertype] @@
+   drivers/vfio/pci/vfio_pci_igd.c:161:21: sparse:     expected unsigned int [addressable] [usertype] val
+   drivers/vfio/pci/vfio_pci_igd.c:161:21: sparse:     got restricted __le32 [usertype]
+   drivers/vfio/pci/vfio_pci_igd.c:176:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [addressable] [usertype] val @@     got restricted __le16 [usertype] @@
+   drivers/vfio/pci/vfio_pci_igd.c:176:21: sparse:     expected unsigned short [addressable] [usertype] val
+   drivers/vfio/pci/vfio_pci_igd.c:176:21: sparse:     got restricted __le16 [usertype]
 
-Okay, I'm looking at this again because of the need in the module loader
-to know "worst case decompression size"[1]. I am at a loss for how (or
-why) the acomp interface is the "primary interface".
+These are due to trying to use an unsigned to store the result of
+a cpu_to_leXX() conversion.  These are small variables, so pointer
+tricks are wasteful and casting just generates different sparse
+warnings.  Store to and copy results from a separate little endian
+variable.
 
-For modules, all that would be wanted is this, where the buffer size can
-be allocated on demand:
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/r/202111290026.O3vehj03-lkp@intel.com/
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+---
+ drivers/vfio/pci/vfio_pci_igd.c |   15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
 
-u8 *decompressed = NULL;
-size_t decompressed_size = 0;
+diff --git a/drivers/vfio/pci/vfio_pci_igd.c b/drivers/vfio/pci/vfio_pci_igd.c
+index 362f91ec8845..352c725ccf18 100644
+--- a/drivers/vfio/pci/vfio_pci_igd.c
++++ b/drivers/vfio/pci/vfio_pci_igd.c
+@@ -309,13 +309,14 @@ static ssize_t vfio_pci_igd_cfg_rw(struct vfio_pci_core_device *vdev,
+ 
+ 	if ((pos & 3) && size > 2) {
+ 		u16 val;
++		__le16 lval;
+ 
+ 		ret = pci_user_read_config_word(pdev, pos, &val);
+ 		if (ret)
+ 			return ret;
+ 
+-		val = cpu_to_le16(val);
+-		if (copy_to_user(buf + count - size, &val, 2))
++		lval = cpu_to_le16(val);
++		if (copy_to_user(buf + count - size, &lval, 2))
+ 			return -EFAULT;
+ 
+ 		pos += 2;
+@@ -324,13 +325,14 @@ static ssize_t vfio_pci_igd_cfg_rw(struct vfio_pci_core_device *vdev,
+ 
+ 	while (size > 3) {
+ 		u32 val;
++		__le32 lval;
+ 
+ 		ret = pci_user_read_config_dword(pdev, pos, &val);
+ 		if (ret)
+ 			return ret;
+ 
+-		val = cpu_to_le32(val);
+-		if (copy_to_user(buf + count - size, &val, 4))
++		lval = cpu_to_le32(val);
++		if (copy_to_user(buf + count - size, &lval, 4))
+ 			return -EFAULT;
+ 
+ 		pos += 4;
+@@ -339,13 +341,14 @@ static ssize_t vfio_pci_igd_cfg_rw(struct vfio_pci_core_device *vdev,
+ 
+ 	while (size >= 2) {
+ 		u16 val;
++		__le16 lval;
+ 
+ 		ret = pci_user_read_config_word(pdev, pos, &val);
+ 		if (ret)
+ 			return ret;
+ 
+-		val = cpu_to_le16(val);
+-		if (copy_to_user(buf + count - size, &val, 2))
++		lval = cpu_to_le16(val);
++		if (copy_to_user(buf + count - size, &lval, 2))
+ 			return -EFAULT;
+ 
+ 		pos += 2;
 
-decompressed = decompress(decompressed, compressed, compressed_size, &decompressed_size);
 
-For pstore, the compressed_size is fixed and the decompression buffer
-must be preallocated (for catching panic dumps), so the worst-case size
-needs to be known in advance:
-
-u8 *decompressed = NULL;
-size_t decompressed_worst_size = 0;
-size_t decompressed_size = 0;
-
-worst_case(&decompressed_worst_size, compressed_size);
-
-decompressed = kmalloc(decompressed_worst_size, GFP_KERNEL);
-...
-decompressed_size = decompressed_worst_size;
-decompress(decompressed, compressed, compressed_size, &decompressed_size);
-
-
-I don't see anything like this in the kernel for handling a simple
-buffer-to-buffer decompression besides crypto_comp_decompress(). The
-acomp interface is wildly over-complex for this. What the right
-way to do this? (I can't find any documentation that discusses
-compress/decompress[2].)
-
--Kees
-
-[1] https://lore.kernel.org/linux-modules/YaMYJv539OEBz5B%2F@google.com/
-[2] https://www.kernel.org/doc/html/latest/crypto/api-samples.html
-
--- 
-Kees Cook

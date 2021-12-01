@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E06046514F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B33465153
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350495AbhLAPV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:21:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57046 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243665AbhLAPV6 (ORCPT
+        id S1350545AbhLAPWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:22:35 -0500
+Received: from outbound-smtp55.blacknight.com ([46.22.136.239]:54805 "EHLO
+        outbound-smtp55.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S243175AbhLAPWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:21:58 -0500
-Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2EFC061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:18:37 -0800 (PST)
-Received: from [192.168.1.101] (83.6.166.111.neoplus.adsl.tpnet.pl [83.6.166.111])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 5A2743F733;
-        Wed,  1 Dec 2021 16:18:35 +0100 (CET)
-Message-ID: <bef7e4bf-6d4d-c665-b96a-84b28ed19a33@somainline.org>
-Date:   Wed, 1 Dec 2021 16:18:34 +0100
+        Wed, 1 Dec 2021 10:22:17 -0500
+Received: from mail.blacknight.com (pemlinmail01.blacknight.ie [81.17.254.10])
+        by outbound-smtp55.blacknight.com (Postfix) with ESMTPS id 9D813FAE97
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:18:54 +0000 (GMT)
+Received: (qmail 9647 invoked from network); 1 Dec 2021 15:18:54 -0000
+Received: from unknown (HELO stampy.112glenside.lan) (mgorman@techsingularity.net@[84.203.17.29])
+  by 81.17.254.9 with ESMTPA; 1 Dec 2021 15:18:54 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH v3 0/2] Adjust NUMA imbalance for multiple LLCs
+Date:   Wed,  1 Dec 2021 15:18:42 +0000
+Message-Id: <20211201151844.20488-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 09/15] arm64: dts: qcom: sm8450-qrd: enable ufs nodes
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211201072915.3969178-1-vkoul@kernel.org>
- <20211201072915.3969178-10-vkoul@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20211201072915.3969178-10-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 7d2b5dd0bcc4 ("sched/numa: Allow a floating imbalance between NUMA
+nodes") allowed an imbalance between NUMA nodes such that communicating
+tasks would not be pulled apart by the load balancer. This works fine when
+there is a 1:1 relationship between LLC and node but can be suboptimal
+for multiple LLCs if independent tasks prematurely use CPUs sharing cache.
 
-On 01.12.2021 08:29, Vinod Koul wrote:
-> Enable the UFS and phy node and add the regulators used by them.
->
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm8450-qrd.dts | 21 +++++++++++++++++++++
->  1 file changed, 21 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-> index 218eb3ce1ee5..3e65d662ab8c 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
-> @@ -5,6 +5,7 @@
->  
->  /dts-v1/;
->  
-> +#include <dt-bindings/gpio/gpio.h>
+The series addresses two problems -- inconsistent use of scheduler domain
+weights and sub-optimal performance when there are many LLCs per NUMA node.
 
-This should probably go to the SoC DTSI, as it's generally used
-
-in every DT if you have anything more than serial console working..
-
-
-Konrad
+-- 
+2.31.1
 

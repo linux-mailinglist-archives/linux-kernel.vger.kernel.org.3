@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD5646481E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:25:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833E1464815
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347320AbhLAH3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:29:03 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:56406 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347371AbhLAH2y (ORCPT
+        id S1347305AbhLAH2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:28:46 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:43386 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232272AbhLAH2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:28:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Dec 2021 02:28:45 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F3D0B81DE0;
-        Wed,  1 Dec 2021 07:25:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27070C53FCE;
-        Wed,  1 Dec 2021 07:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638343532;
-        bh=wnueZpn2aeaR5LqTiYSRzkTKFKIfl2LLkOyYv758vV4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PpKhpsq/+B5M0mRb+ObB/3/hI+tm+xCkWG24r96jMb1g+kM0h26otvv9g8Ex06Gza
-         4FFOfmZtKPnp1z8DQ/FZ9ZoSoaXgRjrhvOPhHmW6tqv8tHj2daQHoxBGN9i+dDGuFt
-         BotpD16yZscREOxz3pxqWHRWY2MZczE+eZZWinpHr0n3V86DpdK/WHhC0fz1VDrE89
-         l9vR74PBYSj2S06YdDdfHLUIupe/5PDSdQIAxVQQF5BjAk+GqBYXHkW6/n5aeNnBK/
-         7y4MmnQeNZKpNKR7zYM0+fXjVCN8WWc5YVGZOQzSa1W/TyE3YCEOdQnmnwAkfiiitE
-         hXbTqNLLbYg+A==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        David Collins <collinsd@codeaurora.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 2/2] regulator: qcom-rpmh: Add support for PM8450 regulators
-Date:   Wed,  1 Dec 2021 12:55:15 +0530
-Message-Id: <20211201072515.3968843-3-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211201072515.3968843-1-vkoul@kernel.org>
-References: <20211201072515.3968843-1-vkoul@kernel.org>
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AB16E1FD34;
+        Wed,  1 Dec 2021 07:25:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638343523; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nLj01s8GQdZv5zoUcchVQ9uvHRTc8OShs3IViAEaL5I=;
+        b=ZlCNcwuBrk6O808pOqY0NNjzvp3ngZ6lrAolmNVwwHFuxbddzs+YqxFaw/Jx8SBp/wMNhc
+        7RX7oQFQt4uDisg+dBj0VfugWCDtn78nIaY8he5wD+Ffo4IIlYLbLKry9eGYUmY4RhSlGO
+        IhZJnf/o4c6FVhvYN0YOCA2WMvOezZk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638343523;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nLj01s8GQdZv5zoUcchVQ9uvHRTc8OShs3IViAEaL5I=;
+        b=8jklU5phSbarTO74ckJxt3OB2djWnaMALAMimxpIIRDUt/ljQZwhVad7yqNUc+pHXzwrom
+        Smrc+1P1OjS8WQBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 692BA13AE2;
+        Wed,  1 Dec 2021 07:25:23 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id f0cYGGMjp2GpFAAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:25:23 +0000
+Subject: Re: [PATCH 07/18] crypto: testmgr - add DH RFC 3526 modp2048 test
+ vector
+To:     Nicolai Stange <nstange@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
+        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org
+References: <20211201004858.19831-1-nstange@suse.de>
+ <20211201004858.19831-8-nstange@suse.de>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <9b87b348-1e4d-d7f0-2780-c428556c8204@suse.de>
+Date:   Wed, 1 Dec 2021 08:25:22 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <20211201004858.19831-8-nstange@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the rpmh regulators found in PM8450 PMIC
+On 12/1/21 1:48 AM, Nicolai Stange wrote:
+> The previous patch introduced support for the safe-prime groups specified
+> by RFC 3526. In order to test this functionality, add a corresponding test
+> vector to testmgr. The test data has been generated with OpenSSL.
+> 
+> Note that this new entry provides test coverage for the recent change to
+> crypto_dh_encode_key(), which made it to skip the serialization of domain
+> parameters for known groups, i.e. those with
+> ->group_id != dh_group_id_unknown.
+> 
+> Moreover, a future patch will make the DH implementation to reject domain
+> parameters not corresponding to some safe-prime group approved by
+> SP800-56Arev3 in FIPS mode and the existing DH test vectors don't qualify.
+> So this patch here will ensure that there's still some suitable test vector
+> available.
+> 
+> Signed-off-by: Nicolai Stange <nstange@suse.de>
+> ---
+>   crypto/testmgr.h | 92 ++++++++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 92 insertions(+)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/regulator/qcom-rpmh-regulator.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Cheers,
 
-diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
-index 12425f667c00..cea6d7413864 100644
---- a/drivers/regulator/qcom-rpmh-regulator.c
-+++ b/drivers/regulator/qcom-rpmh-regulator.c
-@@ -969,6 +969,20 @@ static const struct rpmh_vreg_init_data pm8350c_vreg_data[] = {
- 	{}
- };
- 
-+static const struct rpmh_vreg_init_data pm8450_vreg_data[] = {
-+	RPMH_VREG("smps1",  "smp%s1",  &pmic5_ftsmps520, "vdd-s1"),
-+	RPMH_VREG("smps2",  "smp%s2",  &pmic5_ftsmps520, "vdd-s2"),
-+	RPMH_VREG("smps3",  "smp%s3",  &pmic5_ftsmps520, "vdd-s3"),
-+	RPMH_VREG("smps4",  "smp%s4",  &pmic5_ftsmps520, "vdd-s4"),
-+	RPMH_VREG("smps5",  "smp%s5",  &pmic5_ftsmps520, "vdd-s5"),
-+	RPMH_VREG("smps6",  "smp%s6",  &pmic5_ftsmps520, "vdd-s6"),
-+	RPMH_VREG("ldo1",   "ldo%s1",  &pmic5_nldo,      "vdd-l1"),
-+	RPMH_VREG("ldo2",   "ldo%s2",  &pmic5_nldo,      "vdd-l2"),
-+	RPMH_VREG("ldo3",   "ldo%s3",  &pmic5_nldo,      "vdd-l3"),
-+	RPMH_VREG("ldo4",   "ldo%s4",  &pmic5_pldo_lv,   "vdd-l4"),
-+	{}
-+};
-+
- static const struct rpmh_vreg_init_data pm8009_vreg_data[] = {
- 	RPMH_VREG("smps1",  "smp%s1",  &pmic5_hfsmps510, "vdd-s1"),
- 	RPMH_VREG("smps2",  "smp%s2",  &pmic5_hfsmps515, "vdd-s2"),
-@@ -1213,6 +1227,10 @@ static const struct of_device_id __maybe_unused rpmh_regulator_match_table[] = {
- 		.compatible = "qcom,pm8350c-rpmh-regulators",
- 		.data = pm8350c_vreg_data,
- 	},
-+	{
-+		.compatible = "qcom,pm8450-rpmh-regulators",
-+		.data = pm8450_vreg_data,
-+	},
- 	{
- 		.compatible = "qcom,pm8998-rpmh-regulators",
- 		.data = pm8998_vreg_data,
+Hannes
 -- 
-2.31.1
-
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer

@@ -2,207 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE52A46588B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:46:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D70465892
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353197AbhLAVtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 16:49:46 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:34826 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245737AbhLAVtW (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 16:49:22 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AAB73CE1DC7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 21:45:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F22AC53FCC;
-        Wed,  1 Dec 2021 21:45:54 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 16:45:52 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Yinan Liu <yinan@linux.alibaba.com>
-Cc:     peterz@infradead.org, mark-pk.tsai@mediatek.com, mingo@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 1/2] scripts: ftrace - move the sort-processing in
- ftrace_init to compile time
-Message-ID: <20211201164552.5a933d23@gandalf.local.home>
-In-Reply-To: <20211201053207.32339-2-yinan@linux.alibaba.com>
-References: <20210911135043.16014-1-yinan@linux.alibaba.com>
-        <20211201053207.32339-1-yinan@linux.alibaba.com>
-        <20211201053207.32339-2-yinan@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        id S1353182AbhLAVxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 16:53:10 -0500
+Received: from mga04.intel.com ([192.55.52.120]:61089 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353136AbhLAVxE (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 16:53:04 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="235299285"
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="235299285"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 13:49:21 -0800
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="602315926"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.64.69]) ([10.212.64.69])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 13:49:19 -0800
+Message-ID: <45302c9d-f7a0-5a47-d0be-127d0dea45fb@intel.com>
+Date:   Wed, 1 Dec 2021 14:49:18 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
+        Joerg Roedel <jroedel@suse.de>,
+        iommu@lists.linux-foundation.org
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
+ <20211130202800.GE4670@nvidia.com> <87o861banv.ffs@tglx>
+ <20211201001748.GF4670@nvidia.com> <87mtlkaauo.ffs@tglx>
+ <8c2262ba-173e-0007-bc4c-94ec54b2847d@intel.com> <87pmqg88xq.ffs@tglx>
+ <df00b87e-00dc-d998-8b64-46b16dba46eb@intel.com> <87k0go8432.ffs@tglx>
+ <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com> <878rx480fk.ffs@tglx>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <878rx480fk.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  1 Dec 2021 13:32:06 +0800
-Yinan Liu <yinan@linux.alibaba.com> wrote:
 
->  
->  #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
->  /* ORC unwinder only support X86_64 */
-> -#include <errno.h>
-> -#include <pthread.h>
->  #include <asm/orc_types.h>
->  
->  #define ERRSTR_MAXSZ	256
-> @@ -191,7 +198,64 @@ static int compare_extable(const void *a, const void *b)
->  		return 1;
->  	return 0;
->  }
-> +#if defined CONFIG_FUNCTION_TRACER
+On 12/1/2021 2:44 PM, Thomas Gleixner wrote:
+> On Wed, Dec 01 2021 at 14:21, Dave Jiang wrote:
+>> On 12/1/2021 1:25 PM, Thomas Gleixner wrote:
+>>>> The hardware implementation does not have enough MSIX vectors for
+>>>> guests. There are only 9 MSIX vectors total (8 for queues) and 2048 IMS
+>>>> vectors. So if we are to do MSI-X for all of them, then we need to do
+>>>> the IMS backed MSIX scheme rather than passthrough IMS to guests.
+>>> Confused. Are you talking about passing a full IDXD device to the guest
+>>> or about passing a carved out subdevice, aka. queue?
+>> I'm talking about carving out a subdevice. I had the impression of you
+>> wanting IMS passed through for all variations. But it sounds like for a
+>> sub-device, you are ok with the implementation of MSIX backed by IMS?
+> I don't see anything wrong with that. A subdevice is it's own entity and
+> VFIO can chose the most conveniant representation of it to the guest
+> obviously.
+>
+> How that is backed on the host does not really matter. You can expose
+> MSI-X to the guest with a INTx backing as well.
+>
+> I'm still failing to see the connection between the 9 MSIX vectors and
+> the 2048 IMS vectors which I assume that this is the limitation of the
+> physical device, right?
 
-Note, "defined" is best used with parenthesis, but if it's for only a
-single define, we usually just use:
-
-#ifdef CONFIG_FUNCTION_TRACER
-
-Same for all he below.
-
--- Steve
+I think I was confused with what you were asking and was thinking you 
+are saying why can't we just have MSIX on guest backed by the MSIX on 
+the physical device and thought there would not be enough vectors to 
+service the many guests. I think I understand what your position is now 
+with the clarification above.
 
 
-> +struct elf_mcount_loc {
-> +	Elf_Ehdr *ehdr;
-> +	Elf_Shdr *init_data_sec;
-> +	uint_t start_mcount_loc;
-> +	uint_t stop_mcount_loc;
-> +};
-> +
-> +/* Sort the addresses stored between __start_mcount_loc to __stop_mcount_loc in vmlinux */
-> +static void *sort_mcount_loc(void *arg)
-> +{
-> +	struct elf_mcount_loc *emloc = (struct elf_mcount_loc *)arg;
-> +	uint_t offset = emloc->start_mcount_loc - _r(&(emloc->init_data_sec)->sh_addr)
-> +					+ _r(&(emloc->init_data_sec)->sh_offset);
-> +	uint_t count = emloc->stop_mcount_loc - emloc->start_mcount_loc;
-> +	unsigned char *start_loc = (void *)emloc->ehdr + offset;
-> +
-> +	qsort(start_loc, count/sizeof(uint_t), sizeof(uint_t), compare_extable);
-> +	return NULL;
-> +}
-> +
-> +/* Get the address of __start_mcount_loc and __stop_mcount_loc in System.map */
-> +static void get_mcount_loc(uint_t *_start, uint_t *_stop)
-> +{
-> +	FILE *file_start, *file_stop;
-> +	char start_buff[20];
-> +	char stop_buff[20];
-> +	int len = 0;
-> +
-> +	file_start = popen(" grep start_mcount System.map | awk '{print $1}' ", "r");
-> +	if (!file_start) {
-> +		fprintf(stderr, "get start_mcount_loc error!");
-> +		return;
-> +	}
-> +
-> +	file_stop = popen(" grep stop_mcount System.map | awk '{print $1}' ", "r");
-> +	if (!file_stop) {
-> +		fprintf(stderr, "get stop_mcount_loc error!");
-> +		pclose(file_start);
-> +		return;
-> +	}
-> +
-> +	while (fgets(start_buff, sizeof(start_buff), file_start) != NULL) {
-> +		len = strlen(start_buff);
-> +		start_buff[len - 1] = '\0';
-> +	}
-> +	*_start = strtoul(start_buff, NULL, 16);
-> +
-> +	while (fgets(stop_buff, sizeof(stop_buff), file_stop) != NULL) {
-> +		len = strlen(stop_buff);
-> +		stop_buff[len - 1] = '\0';
-> +	}
-> +	*_stop = strtoul(stop_buff, NULL, 16);
->  
-> +	pclose(file_start);
-> +	pclose(file_stop);
-> +}
-> +#endif
->  static int do_sort(Elf_Ehdr *ehdr,
->  		   char const *const fname,
->  		   table_sort_t custom_sort)
-> @@ -217,6 +281,12 @@ static int do_sort(Elf_Ehdr *ehdr,
->  	int idx;
->  	unsigned int shnum;
->  	unsigned int shstrndx;
-> +#if defined CONFIG_FUNCTION_TRACER
-> +	struct elf_mcount_loc mstruct;
-> +	uint_t _start_mcount_loc = 0;
-> +	uint_t _stop_mcount_loc = 0;
-> +	pthread_t mcount_sort_thread;
-> +#endif
->  #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
->  	unsigned int orc_ip_size = 0;
->  	unsigned int orc_size = 0;
-> @@ -253,6 +323,17 @@ static int do_sort(Elf_Ehdr *ehdr,
->  			symtab_shndx = (Elf32_Word *)((const char *)ehdr +
->  						      _r(&s->sh_offset));
->  
-> +#if defined CONFIG_FUNCTION_TRACER
-> +		/* locate the .init.data section in vmlinux */
-> +		if (!strcmp(secstrings + idx, ".init.data")) {
-> +			get_mcount_loc(&_start_mcount_loc, &_stop_mcount_loc);
-> +			mstruct.ehdr = ehdr;
-> +			mstruct.init_data_sec = s;
-> +			mstruct.start_mcount_loc = _start_mcount_loc;
-> +			mstruct.stop_mcount_loc = _stop_mcount_loc;
-> +		}
-> +#endif
-> +
->  #if defined(SORTTABLE_64) && defined(UNWINDER_ORC_ENABLED)
->  		/* locate the ORC unwind tables */
->  		if (!strcmp(secstrings + idx, ".orc_unwind_ip")) {
-> @@ -294,6 +375,23 @@ static int do_sort(Elf_Ehdr *ehdr,
->  		goto out;
->  	}
->  #endif
-> +
-> +#if defined CONFIG_FUNCTION_TRACER
-> +	if (!mstruct.init_data_sec || !_start_mcount_loc || !_stop_mcount_loc) {
-> +		fprintf(stderr,
-> +			"incomplete mcount's sort in file: %s\n",
-> +			fname);
-> +		goto out;
-> +	}
-> +
-> +	/* create thread to sort mcount_loc concurrently */
-> +	if (pthread_create(&mcount_sort_thread, NULL, &sort_mcount_loc, &mstruct)) {
-> +		fprintf(stderr,
-> +			"pthread_create mcount_sort_thread failed '%s': %s\n",
-> +			strerror(errno), fname);
-> +		goto out;
-> +	}
-> +#endif
->  	if (!extab_sec) {
->  		fprintf(stderr,	"no __ex_table in file: %s\n", fname);
->  		goto out;
-> @@ -376,5 +474,23 @@ static int do_sort(Elf_Ehdr *ehdr,
->  		}
->  	}
->  #endif
-> +
-> +#if defined CONFIG_FUNCTION_TRACER
-> +	if (mcount_sort_thread) {
-> +		void *retval = NULL;
-> +		/* wait for mcount sort done */
-> +		rc = pthread_join(mcount_sort_thread, &retval);
-> +		if (rc) {
-> +			fprintf(stderr,
-> +				"pthread_join failed '%s': %s\n",
-> +				strerror(errno), fname);
-> +		} else if (retval) {
-> +			rc = -1;
-> +			fprintf(stderr,
-> +				"failed to sort mcount '%s': %s\n",
-> +				(char *)retval, fname);
-> +		}
-> +	}
-> +#endif
->  	return rc;
->  }
-
+>
+> What needs a subdevice to expose?
+>
+> Thanks,
+>
+>          tglx
+>
+>
+>

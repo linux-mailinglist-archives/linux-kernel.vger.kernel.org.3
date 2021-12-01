@@ -2,175 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8230E46494B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4141F46494E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347456AbhLAINI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 03:13:08 -0500
-Received: from relay4-d.mail.gandi.net ([217.70.183.196]:56733 "EHLO
-        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345308AbhLAINH (ORCPT
+        id S1347618AbhLAIQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 03:16:25 -0500
+Received: from mx0b-0016f401.pphosted.com ([67.231.156.173]:11676 "EHLO
+        mx0b-0016f401.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344139AbhLAIQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 03:13:07 -0500
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 0AD3BE0012;
-        Wed,  1 Dec 2021 08:09:42 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 09:09:41 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Olga Kitaina <okitain@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, nagasure@xilinx.com, richard@nod.at,
-        vigneshr@ti.com, linux-kernel@vger.kernel.org,
-        Michal Simek <monstr@monstr.eu>
-Subject: Re: [PATCH] mtd: rawnand: arasan: Fix clock rate in NV-DDR
-Message-ID: <20211201090941.73e67f65@xps13>
-In-Reply-To: <fb6a4b49-7c10-4ed1-7054-5dd8ce2d8073@gmail.com>
-References: <20211127180758.30884-1-okitain@gmail.com>
-        <20211129095559.01aa63a6@xps13>
-        <3da5dff5-53d4-15db-075d-9b195f2f75dd@gmail.com>
-        <20211130082017.1400f24b@xps13>
-        <fb6a4b49-7c10-4ed1-7054-5dd8ce2d8073@gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 1 Dec 2021 03:16:25 -0500
+Received: from pps.filterd (m0045851.ppops.net [127.0.0.1])
+        by mx0b-0016f401.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B115qVp028997;
+        Wed, 1 Dec 2021 00:12:45 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pfpt0220;
+ bh=WhCLxsMRAXSy53BKrsEq6OYi0hOtJqSnn0cAr40cKXs=;
+ b=TthB8jddzXO8GyK5g/BsPqFIt/rX1wt3HZ8tyITi2XEgJgp6Ck1NHhJsVSeNWlz+ZLqC
+ cbac19UtXyb3782dfHiUUoox1r/C3ozma9V0Os8Oc6t2rWl2mFSYQ7WtrCDiqmP+R3e8
+ YK5NGuA4RKWbGB6160+3IyW07S9eYgq5duL7FIjHj6Cc3h/DKwiwwRKBir3y5gnBe8pf
+ JQH7l5wo5SF+YHxdBtvRcitN5P7NUgNNIkGJLe/hiGEr2VM0AeKcAau+e/2fyKpJriKF
+ +LsOCjPXu5bjoE2H76yXUf0EJvx/UmMtQtEAl67ssJt3ufCpxmeszwIneVSYrAbZpofc DQ== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0b-0016f401.pphosted.com (PPS) with ESMTPS id 3cnqvyua6t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 00:12:45 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 1 Dec
+ 2021 00:12:42 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Wed, 1 Dec 2021 00:12:42 -0800
+Received: from [10.193.32.68] (unknown [10.193.32.68])
+        by maili.marvell.com (Postfix) with ESMTP id 1C6C05B6932;
+        Wed,  1 Dec 2021 00:12:28 -0800 (PST)
+Message-ID: <374a236a-4fd1-b21a-5dc2-c123204eb593@marvell.com>
+Date:   Wed, 1 Dec 2021 09:12:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101
+ Thunderbird/95.0
+Subject: Re: [EXT] [PATCHv3] ethernet: aquantia: Try MAC address from device
+ tree
+Content-Language: en-US
+To:     Tianhao Chai <cth451@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Julian Wiedmann <jwi@linux.ibm.com>
+CC:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+References: <20211201025706.GA2181732@cth-desktop-dorm.mad.wi.cth451.me>
+From:   Igor Russkikh <irusskikh@marvell.com>
+In-Reply-To: <20211201025706.GA2181732@cth-desktop-dorm.mad.wi.cth451.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: Ewz3MH2fbNbzbib1YDS5gfWbYTcXMEoA
+X-Proofpoint-GUID: Ewz3MH2fbNbzbib1YDS5gfWbYTcXMEoA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-11-28_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olga,
+Hi Tianhao,
 
-+ Michal (please add him in Cc of your next iteration)
-
-okitain@gmail.com wrote on Tue, 30 Nov 2021 23:08:20 +0300:
-
-> Hi Miquel,
+> Apple M1 Mac minis (2020) with 10GE NICs do not have MAC address in the
+> card, but instead need to obtain MAC addresses from the device tree. In
+> this case the hardware will report an invalid MAC.
 > 
-> On 30.11.2021 10:20, Miquel Raynal wrote:
-> > Hi Olga,
-> > 
-> > okitain@gmail.com wrote on Mon, 29 Nov 2021 21:06:05 +0300:
-> >   
-> >> Hi Miquel,
-> >>
-> >> On 29.11.2021 11:55, Miquel Raynal wrote:  
-> >>> Hi Olga,
-> >>>
-> >>> Please add all the MTD maintainers in copy, as requested by
-> >>> get_maintainers.pl.
-> >>>
-> >>> okitain@gmail.com wrote on Sat, 27 Nov 2021 21:07:58
-> >>> +0300:
-> >>>     
-> >>>> According to the Arasan NAND controller spec,
-> >>>> the flash clock rate for SDR must be <= 100 MHz,
-> >>>> while for NV-DDR it must be the same as the rate
-> >>>> of the CLK line for the mode.    
-> >>>
-> >>> I completely missed that, where did you get the information?    
-> >>
-> >> The "Data Interface Transitions" chapter of the spec contains timings for flash clock setup in NV-DDR
-> >> and NV-DDR2 modes. The "time period" of those clocks is equal to tCK in NV-DDR and tRC in NV-DDR2.
-> >>
-> >> The same chapter should have information about necessary steps to switch from NV-DDR to SDR,
-> >> which includes setting the flash clock to 100 MHz.
-> >>
-> >>
-> >> Just to make sure i'm not shooting myself in the foot: am I changing the right clock?
-> >> The documentation points out that we have to change flash_clk, which i thought was
-> >> nfc->controller_clk and set up by anand->clk, but it seems like it might actually be nfc->bus_clk.  
-> > 
-> > I believe I made a serious mistake, re-reading the code it feels like
-> > I'm changing the system's clock (which basically changes nothing in our
-> > case) instead of changing the NAND bus clock.
-> >   
-> >> In that case, does setting nfc->controller_clk to 100 MHz by default make sense?
-> >> There isn't a hard limit on what the system clock might be (beyond a specific SoC),
-> >> but there are timing requirements for the flash clock, and so setting a specific 
-> >> system clock frequency seems unnecessary for most devices.
-> >>  
-> > 
-> > Please create a two-patch series:
-> > 1- Setting the right clock in the current code base (inverting bus_clk
-> > and controller_clk where relevant, setting one to 100MHz and letting
-> > the other as it is)
-> > 2- Changing the default NV-DDR rate based on tCK (below patch).
-> > 
-> > Do you have the necessary hardware for testing?  
+> Currently atlantic driver does not query the DT for MAC address and will
+> randomly assign a MAC if the NIC doesn't have a permanent MAC burnt in.
+> This patch causes the driver to perfer a valid MAC address from OF (if
+> present) over HW self-reported MAC and only fall back to a random MAC
+> address when neither of them is valid.
 > 
-> I'm sorry to say - I do not. The SoC this problem was initially noticed on can't run latest Linux,
-> and even if it did I have no way of acquiring an NV-DDR-capable flash.
-> 
-> Since Bootlin merged in NV-DDR support into the kernel, is it possible for you to test 
-> the next iteration of this patch series on NV-DDR hardware as well?
-> Say, by purposefully preventing NV-DDR mode 5 from being chosen in anfc_setup_interface()?
+> Signed-off-by: Tianhao Chai <cth451@gmail.com>
+Reviewed-by: Igor Russkikh <irusskikh@marvell.com>
 
-I don't have the hardware anymore.
-
-Please send a v2 with the necessary changes, then we will ask Naga (or
-somebody else from the same team) with access to the board to test it.
-
-> >>>> The driver previously always set 100 MHz for NV-DDR, which
-> >>>> would result in incorrect behavior for NV-DDR modes 0-4.
-> >>>>
-> >>>> The appropriate clock rate can be calculated
-> >>>> from the NV-DDR timing parameters as 1/tCK, or for rates
-> >>>> measured in picoseconds, 10^12 / nand_nvddr_timings->tCK_min.
-> >>>>    
-> >>>
-> >>> You need a couple of Fixes + Cc: stable tags here, otherwise the
-> >>> patch looks good to me.
-> >>>     
-> >>
-> >> Will include in the next iteration of the patch, thank you.
-> >>  
-> >>>> Signed-off-by: Olga Kitaina <okitain@gmail.com>
-> >>>> ---
-> >>>>  drivers/mtd/nand/raw/arasan-nand-controller.c | 8 +++++++-
-> >>>>  1 file changed, 7 insertions(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/mtd/nand/raw/arasan-nand-controller.c b/drivers/mtd/nand/raw/arasan-nand-controller.c
-> >>>> index 53bd10738418..ed4ee9942441 100644
-> >>>> --- a/drivers/mtd/nand/raw/arasan-nand-controller.c
-> >>>> +++ b/drivers/mtd/nand/raw/arasan-nand-controller.c
-> >>>> @@ -18,6 +18,7 @@
-> >>>>  #include <linux/gpio/consumer.h>
-> >>>>  #include <linux/interrupt.h>
-> >>>>  #include <linux/iopoll.h>
-> >>>> +#include <linux/math64.h>
-> >>>>  #include <linux/module.h>
-> >>>>  #include <linux/mtd/mtd.h>
-> >>>>  #include <linux/mtd/partitions.h>
-> >>>> @@ -1043,7 +1044,12 @@ static int anfc_setup_interface(struct nand_chip *chip, int target,
-> >>>>  				 DQS_BUFF_SEL_OUT(dqs_mode);
-> >>>>  	}
-> >>>>  
-> >>>> -	anand->clk = ANFC_XLNX_SDR_DFLT_CORE_CLK;
-> >>>> +	if (nand_interface_is_sdr)
-> >>>> +		anand->clk = ANFC_XLNX_SDR_DFLT_CORE_CLK;
-> >>>> +	else
-> >>>> +		/* ONFI timings are defined in picoseconds */
-> >>>> +		anand->clk = div_u64((u64)NSEC_PER_SEC * 1000,
-> >>>> +				     conf->timings.nvddr.tCK_min);
-> >>>>  
-> >>>>  	/*
-> >>>>  	 * Due to a hardware bug in the ZynqMP SoC, SDR timing modes 0-1 work
-> >>>>
-> >>>> base-commit: f53d4c109a666bf1a4883b45d546fba079258717    
-> >>>
-> >>>
-> >>> Thanks,
-> >>> Miquèl
-> >>>     
-> > 
-> > 
-> > Thanks,
-> > Miquèl
-> >   
-> 
-> Thanks,
-> Olga.
-
-
-Thanks,
-Miquèl
+Regards,
+  Igor

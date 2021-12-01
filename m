@@ -2,98 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3288D4656D4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:00:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E944656D9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352753AbhLAUDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:03:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38904 "EHLO
+        id S245499AbhLAUHJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:07:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbhLAUDZ (ORCPT
+        with ESMTP id S245437AbhLAUHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:03:25 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A708EC061574;
-        Wed,  1 Dec 2021 12:00:03 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id t9so37825102wrx.7;
-        Wed, 01 Dec 2021 12:00:03 -0800 (PST)
+        Wed, 1 Dec 2021 15:07:04 -0500
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B14C061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 12:03:42 -0800 (PST)
+Received: by mail-oi1-x236.google.com with SMTP id u74so50904677oie.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 12:03:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Vt+OcMY2R/jF1z+M9gOwwL9VOFGJf09UHYeezsdqi70=;
-        b=gn8U7lCPTHHd1UixZQINYzwt6etsT47Gn4SrC+8juSJ6OoI07j67cotK1qYYrmUewX
-         LipC8ulYkDfYPhQuEEHzxWVXPoEf3XbEHB4esp7hHydnFGguI8MDhEoX3siBNAvQUzcF
-         kVpVbStYwvgN6ft+l22tPnvia9lDPU0Q6qeiIN8l3GNZe3gEd2hDCp63gWrEWSH48tuq
-         FmgCVmqbwWNNBEfKgYn1igMyqFuY4xAbp56UBv/agjvO20L3DJ2Z9woj/JO/DzmPgpmh
-         VpWf30agsfQysuvzbruLAutlkmvCG8ehaWuyXIsuOepvqCyXMv6ZapIaQqMz6dQAoSmP
-         Ar/Q==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4CnRqfpgLADDNTZxnQeaARyw+MQVCOBB9/QLoFKFTaY=;
+        b=k8Tpb/goSn4OxnTRzZPdleRpfdsgEkWSn37q6iTGm5UHHRM3JadzgamYa9jcntWMNF
+         U85NVBPFdEn8Tg4YD3IPsS1sz0+vguYM96laTil7SLw//CaHG0iy0XqJx+1iuXEnZitW
+         0V+qwMTHj7p7aVL9RQJKBw0lVdwvU3OI583jsrwOIASQTLGxiaFPwWVJZ1heXflzvidj
+         DitIoVnI43kS0L1FmWU8LDpQn1PiOWYGe8ANsZP4oBYiC6yLVPKuX0/j29wLv4lMFEVw
+         PsU6tGIhtpCU7qC1SlI/nyQCDVZLV0qnsq9uybzf8nUY5LMPLQGcJNgfxQhqFvK91qhe
+         xiaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Vt+OcMY2R/jF1z+M9gOwwL9VOFGJf09UHYeezsdqi70=;
-        b=dPNeNp/27vWayt1dn4wbnOn97m/RIVZHhS4VEvANZezcbrdF+WFHau3CidfRCTk2Qa
-         Xox4ynMHJSnt0gEYqvZdsLdZgP+fLEyGAAEe7LH5qSOyt3Jl/HrlA0JCLmIoJN6XWus2
-         3BKZ8vEvJGgMm4tXVThjr2f/ooMQS66XuWZ9HVGh/4S9BLfyJXyE/vwaQScD/x7rO63Y
-         +IP2rHVinoMtsVYxGt6hiPSK/9mBAGeieXz6IkEGpWE90zfNIRdoD7Y9CS1n1QRC/KGZ
-         5sZjCckp/SxHPQ0xP7pDI6zjklyBXO7rIBwegkxTy3w3UdiVEVHbTZnVoqbEfQr6RkwR
-         GSKg==
-X-Gm-Message-State: AOAM5335td9RyuzBG3zrZYBboXBYn+ImO2BVpNir0/ofqoFaTwFEboFn
-        XnjmgQMOiEUS09Z/FWuyEsY=
-X-Google-Smtp-Source: ABdhPJy1l9L3ZH8uahJZMf/734rIewzeh/+l47lBDFm6L8ZIDbZDeD+qZQcXMLnTp5gzDWWFASQMRQ==
-X-Received: by 2002:a5d:40cf:: with SMTP id b15mr9366547wrq.161.1638388802346;
-        Wed, 01 Dec 2021 12:00:02 -0800 (PST)
-Received: from [192.168.8.198] ([185.69.144.129])
-        by smtp.gmail.com with ESMTPSA id b6sm233654wmq.45.2021.12.01.12.00.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 12:00:01 -0800 (PST)
-Message-ID: <1281a755-bef4-d2c8-4416-e4b5734118af@gmail.com>
-Date:   Wed, 1 Dec 2021 19:59:58 +0000
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4CnRqfpgLADDNTZxnQeaARyw+MQVCOBB9/QLoFKFTaY=;
+        b=sK/QidUIUJHhmaJ/7pyVgJyk3921rsky7hh9VHTQV9lOwEYhhWzwVD7esNYWxra+Qz
+         2AWlRQZiYr1oszCc4csOxNJbnGq1YeouSg7tUznSUI1Db7CZk33GOimFRtOJABetPB5e
+         bu5eRxa32fNWALCVl/Jtg/iHmOnoVumqH1OavL3imp8+o+05xX4HwBGBYrO0cWRWkHB/
+         3qOhDfq55Lj2+GYbDunvjq13Avqzkw/vbh8oHejVX3y+L46KYu9O9Sy6itXbJ2U7qM4/
+         AQeWNsKc3DVHZafUYFGh4i7e8S1I0IASQ06NYpaQpOpMTywG1iGI6+Ec+K8duy5QelPt
+         E5jA==
+X-Gm-Message-State: AOAM530AN3aru8J/Bmb7l1iVWhruM+UajUfyr4R/ENqQVbCLLtGA3mne
+        ojZtfNLji3gwBh/kueqoEGlRcLk0BzG2F15tPDQ=
+X-Google-Smtp-Source: ABdhPJy6k0qxdww8PmNgmuAWz7XREQWa9kFFYwHBgKQzTv8HOIt56/td3z4oxlejLCTGzNVhqOWT869k8DCUt6suX10=
+X-Received: by 2002:a05:6808:68f:: with SMTP id k15mr357371oig.5.1638389022328;
+ Wed, 01 Dec 2021 12:03:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [RFC 00/12] io_uring zerocopy send
-Content-Language: en-US
-To:     David Ahern <dsahern@gmail.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1638282789.git.asml.silence@gmail.com>
- <4c0170fa-5b6f-ff76-0eff-a83ffec9864d@gmail.com>
- <2c8bf94e-1265-2f3c-98ae-dfc73598f8f2@gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <2c8bf94e-1265-2f3c-98ae-dfc73598f8f2@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211130111832.113821-1-zhou1615@umn.edu>
+In-Reply-To: <20211130111832.113821-1-zhou1615@umn.edu>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 1 Dec 2021 15:03:31 -0500
+Message-ID: <CADnq5_P8amQK60zD-2tkVWBneZCoLENe5KY_S6eqoAAyOieatg@mail.gmail.com>
+Subject: Re: [PATCH] fix a NULL pointer dereference in amdgpu_connector_lcd_native_mode()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     Jammy Zhou <Jammy.Zhou@amd.com>, David Airlie <airlied@linux.ie>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Kangjie Lu <kjlu@umn.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        hongao <hongao@uniontech.com>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 17:49, David Ahern wrote:
-> On 12/1/21 7:31 AM, Pavel Begunkov wrote:
->>
->> Also, as was asked, attaching a standalone .c version of the
->> benchmark. Requires any relatively up-to-date liburing installed.
->>
-> attached command differs from the version mentioned in the cover letter:
+On Tue, Nov 30, 2021 at 6:24 AM Zhou Qingyang <zhou1615@umn.edu> wrote:
+>
+> In amdgpu_connector_lcd_native_mode(), the return value of
+> drm_mode_duplicate() is assigned to mode, and there is a dereference
+> of it in amdgpu_connector_lcd_native_mode(), which will lead to a NULL
+> pointer dereference on failure of drm_mode_duplicate().
+>
+> Fix this bug add a check of mode.
+>
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
+>
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+>
+> Builds with CONFIG_DRM_AMDGPU=m show no new warnings, and
+> our static analyzer no longer warns about this code.
+>
+> Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+> index 0de66f59adb8..0170aa84c5e6 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+> @@ -387,6 +387,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
+>             native_mode->vdisplay != 0 &&
+>             native_mode->clock != 0) {
+>                 mode = drm_mode_duplicate(dev, native_mode);
+> +               if (!mode)
+> +                       return NULL;
+> +
 
-I guess you mean the new options mentioned in the message that
-were added to that standalone script. They look useful, will
-update the repo with a similar change later.
+The else if clause needs a similar check.  Care to fix that up as well?
 
+Alex
 
-> https://github.com/isilence/liburing.git zc_v1
-> 
-> copying this version into that branch, removing the duplicate
-> definitions and it works.
-> 
-
--- 
-Pavel Begunkov
+>                 mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
+>                 drm_mode_set_name(mode);
+>
+> --
+> 2.25.1
+>

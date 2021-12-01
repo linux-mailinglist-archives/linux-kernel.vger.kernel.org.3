@@ -2,140 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FA1464C87
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3987C464C99
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:31:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348912AbhLAL0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:26:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
+        id S1348274AbhLALej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:34:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237895AbhLAL0y (ORCPT
+        with ESMTP id S233238AbhLALd6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:26:54 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D2C7C061574;
-        Wed,  1 Dec 2021 03:23:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 38DEACE1DD0;
-        Wed,  1 Dec 2021 11:23:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964ADC53FCC;
-        Wed,  1 Dec 2021 11:23:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638357809;
-        bh=xhWa9kYaaIqXYR6S1IYSxmMPz5H4LcVfM2CN5iPCnHY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=g09M9yxJvo7hsHf5vy4qcxtPlW45DNqrZR05xtb5tqEpEJwS7wuI4yI4QFfdfwQiY
-         rMNtEoGQ5QwOTZ2ksIkHJ+VOvpCuIanml8dwZFX8ZeS1Etpc8kagCpplVTPyGVZHLs
-         egrthvul+ut+zt6Pli9iGntqyAFxdqraT1h7UmkWr+kD0rCmn5U6rTeQKe2SNvNZSb
-         MXWy8vU+OP8VmrBtf49sFgAFLpckkoBujLj7/7pMOQZ5W3tsS3zQXJlR+AJdOWshqS
-         NNPQzZX/rTlC9YmEiTTaWD7/ee2cKyJsicGz675FXZBlXZy/rgAS6ttSmaSPVvf58E
-         +j+nsu+9+1oRw==
-Date:   Wed, 1 Dec 2021 13:23:24 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Bixuan Cui <cuibixuan@linux.alibaba.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, andrii.nakryiko@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org
-Subject: Re: [PATCH -next v2] bpf: Add oversize check before call kvmalloc()
-Message-ID: <YadbLDfAG95RWDgz@unreal>
-References: <1638322402-54754-1-git-send-email-cuibixuan@linux.alibaba.com>
+        Wed, 1 Dec 2021 06:33:58 -0500
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64F9C061574;
+        Wed,  1 Dec 2021 03:30:32 -0800 (PST)
+Received: by mail-pg1-x536.google.com with SMTP id l190so23273078pge.7;
+        Wed, 01 Dec 2021 03:30:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=dL2z4oREQdf8pZHNdec+/B6oXD8rfZzVKjnWJlVoW7U=;
+        b=Hnf789KxSxQqKdQmI5TCb23Bq9Lxa/dECuDLWVrOCBa6ng00E9ywwuShEvbkiwuaES
+         AAKwJHCtXLLvf/mCUceoSiRG+ojlU2Y249nhJJv9l1NfFqS+sgEH9GoCxyuLrG6s5Qa6
+         J965EHu5DTMsB2oO3eawNc2TRiX0RHAOMwdKxLdi7fjV51qBuDCtodygj8PG+Cazl7sZ
+         PlhQp+NeiUq8bhgDAlLFFsw1XFWIOKmBm8tryixeWFyCajYJ7NhpnorkvYu4k+O4KlCd
+         w7VHK8osgSsRtD1R955ylLBSIVtqqFH1BLr/OD7cIRSVB2FE+wGsBTmEm/caI+KarJIh
+         HV9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=dL2z4oREQdf8pZHNdec+/B6oXD8rfZzVKjnWJlVoW7U=;
+        b=79txRsYBk+j49j8RgHs/x5EqjBKvJJWlREjjo2QbNzqEFxsLsDx+eYg4wzr1DT1RA+
+         peC+jsS/pXPgWTP77+l4NZbXOBvNTjxZg3X8CRGDdqeTfFX6rt+jxl/lD3VJw8Fa2fMw
+         mWPQvW9AJVNLOIH7kVioge7VxW7HEoj1Oj+Bne2moHJMP53T0nEB70dK7KqleB6gbm6I
+         VfBGzUslQUGQfCozPq+qGZa55ZvFTeHQJrp4Z1zA90JcBPTUjVajGey2btG/r0wmx+ds
+         s9kRg+gJ2q3lCBr1d7wu+7etlD7evQRjtCmvnOgBAM7bBzpFhMNCNn0ioZbreBaFpP9V
+         5TPA==
+X-Gm-Message-State: AOAM532GCiTXwWomBPihUuALtwYYbnPLenMrN/49gPFJq0oErWWbiruV
+        AzZTemOY0B12TTeUKhz32Ic=
+X-Google-Smtp-Source: ABdhPJwQ7C8eETxrUo+aWzjU7i5NGQdVt5o0edNs09T3PWyu9EnCcp/yGqBevaaYecftWeK4ZjmY3Q==
+X-Received: by 2002:a62:a108:0:b0:4a7:8982:4a48 with SMTP id b8-20020a62a108000000b004a789824a48mr5517227pff.44.1638358231749;
+        Wed, 01 Dec 2021 03:30:31 -0800 (PST)
+Received: from ?IPv6:2400:4052:6980:3800:dba7:2b1f:3f26:a5ec? ([2400:4052:6980:3800:dba7:2b1f:3f26:a5ec])
+        by smtp.gmail.com with ESMTPSA id i10sm1159010pjd.3.2021.12.01.03.30.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 03:30:31 -0800 (PST)
+Message-ID: <02a92b97134db5a01f4231acdd38dcf12a4619b4.camel@gmail.com>
+Subject: Re: [PATCH 04/17] media: atomisp: pci: do not use err var when
+ checking port validity for ISP2400
+From:   Tsuchiya Yuto <kitakar@gmail.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Nable <nable.maininbox@googlemail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Fabio Aiuto <fabioaiuto83@gmail.com>,
+        "andrey.i.trufanov" <andrey.i.trufanov@gmail.com>,
+        Patrik Gfeller <patrik.gfeller@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Date:   Wed, 01 Dec 2021 20:30:27 +0900
+In-Reply-To: <20211117222443.3d050caa@sal.lan>
+References: <20211017161958.44351-1-kitakar@gmail.com>
+         <20211017161958.44351-5-kitakar@gmail.com>
+         <20211026092637.196447aa@sal.lan>
+         <1a295721fd1f1e512cd54a659a250aef162bfb6f.camel@gmail.com>
+         <20211028123944.66c212c1@sal.lan>
+         <af7cdf9de020171567c2e75b713deb2ed073e4e3.camel@gmail.com>
+         <20211101141058.36ea2c8e@sal.lan>
+         <ab48bd8c69273e8b18ff652f3615b2698a777092.camel@gmail.com>
+         <20211111183812.0f33fdaa@sal.lan> <20211117222443.3d050caa@sal.lan>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1638322402-54754-1-git-send-email-cuibixuan@linux.alibaba.com>
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 09:33:22AM +0800, Bixuan Cui wrote:
-> Commit 7661809d493b ("mm: don't allow oversized kvmalloc() calls") add
-> the oversize check. When the allocation is larger than what kvmalloc()
-> supports, the following warning triggered:
-> 
-> WARNING: CPU: 1 PID: 372 at mm/util.c:597 kvmalloc_node+0x111/0x120
-> mm/util.c:597
-> Modules linked in:
-> CPU: 1 PID: 372 Comm: syz-executor.4 Not tainted 5.15.0-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-> Google 01/01/2011
-> RIP: 0010:kvmalloc_node+0x111/0x120 mm/util.c:597
-> Code: 01 00 00 00 4c 89 e7 e8 7d f7 0c 00 49 89 c5 e9 69 ff ff ff e8 60
-> 20 d1 ff 41 89 ed 41 81 cd 00 20 01 00 eb 95 e8 4f 20 d1 ff <0f> 0b e9
-> 4c ff ff ff 0f 1f 84 00 00 00 00 00 55 48 89 fd 53 e8 36
-> RSP: 0018:ffffc90002bf7c98 EFLAGS: 00010216
-> RAX: 00000000000000ec RBX: 1ffff9200057ef9f RCX: ffffc9000ac63000
-> RDX: 0000000000040000 RSI: ffffffff81a6a621 RDI: 0000000000000003
-> RBP: 0000000000102cc0 R08: 000000007fffffff R09: 00000000ffffffff
-> R10: ffffffff81a6a5de R11: 0000000000000000 R12: 00000000ffff9aaa
-> R13: 0000000000000000 R14: 00000000ffffffff R15: 0000000000000000
-> FS:  00007f05f2573700(0000) GS:ffff8880b9d00000(0000)
-> knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000001b2f424000 CR3: 0000000027d2c000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  kvmalloc include/linux/slab.h:741 [inline]
->  map_lookup_elem kernel/bpf/syscall.c:1090 [inline]
->  __sys_bpf+0x3a5b/0x5f00 kernel/bpf/syscall.c:4603
->  __do_sys_bpf kernel/bpf/syscall.c:4722 [inline]
->  __se_sys_bpf kernel/bpf/syscall.c:4720 [inline]
->  __x64_sys_bpf+0x75/0xb0 kernel/bpf/syscall.c:4720
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> The type of 'value_size' is u32, its value may exceed INT_MAX.
-> 
-> Reported-by: syzbot+cecf5b7071a0dfb76530@syzkaller.appspotmail.com
-> Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
-> ---
-> Changes in v2:
-> * Change the err from -EINVAL to -E2BIG;
-> * Change "goto err_put" to "goto free_key";
+I'm really sorry about this delay recently. I can't spare much time now...
 
-Please fix kvmalloc instead.
-https://lore.kernel.org/all/YadOjJXMTjP85MQx@unreal
-
-diff --git a/mm/util.c b/mm/util.c
-index 741ba32a43ac..3749f4a16ab9 100644
---- a/mm/util.c
-+++ b/mm/util.c
-@@ -594,7 +594,7 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
-                return ret;
-
-        /* Don't even allow crazy sizes */
--       if (WARN_ON_ONCE(size > INT_MAX))
-+       if (size > INT_MAX)
-                return NULL;
-
-        return __vmalloc_node(size, 1, flags, node,
-
-
+On Wed, 2021-11-17 at 22:24 +0000, Mauro Carvalho Chehab wrote:
+> Hi 
+> Em Thu, 11 Nov 2021 18:38:12 +0000
+> Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
 > 
->  kernel/bpf/syscall.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> > > The `ifdef ISP2401` was the result of merging two different version of
+> > > driver, added on the initial commit of upstreamed atomisp. And for the
+> > > `ifdef ISP2401`, I confirmed I can remove (almost [1]) all of them against
+> > > the initial commit of atomisp [2][3]
+> > > 
+> > > [1] here are the three exceptions:
+> > >     ("NOTE: ifdef ISP2400/ISP2401 usage in aero-atomisp")
+> > >     https://github.com/kitakar5525/linux-kernel/commit/1a8488cdd31ad38a3805824700b29d1e5213d3f2
+> > > 
+> > > [2] ("atomisp: pci: css2400: remove ISP2401 ifdefs")
+> > >     https://github.com/kitakar5525/linux-kernel/commit/dd6723fc5b9fe040e33b227b509a7e004243edce
+> > > [3] ("atomisp: pci: remove ISP2401 ifdefs for main pci driver")
+> > >     https://github.com/kitakar5525/linux-kernel/commit/1734341f84a96945af7635f6fff061db910f746f  
+> > 
+> > Ok, if there are more if/ifdef ISP2401 that, if reverted will keep the
+> > driver running with the firmware we're using, I'm all for it. Just send
+> > the patches ;-)
 > 
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 1033ee8..30aabdd 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -1094,6 +1094,10 @@ static int map_lookup_elem(union bpf_attr *attr)
->  	}
->  
->  	value_size = bpf_map_value_size(map);
-> +	if (value_size > INT_MAX) {
-> +		err = -E2BIG;
-> +		goto free_key;
-> +	}
->  
->  	err = -ENOMEM;
->  	value = kvmalloc(value_size, GFP_USER | __GFP_NOWARN);
-> -- 
-> 1.8.3.1
+> I went ahead and solved several INPUT_SYSTEM related ifdefs on a way
+> that it is compatible with Intel Aero firmware for the sh_css* files.
+> Except if I made any mistake, the ifdefs that are related to the
+> input system were already addressed.
 > 
+> I didn't notice any changes when running camorama on the PREVIEW
+> node. 
+> 
+> Please test. Feel free to submit fixup patches if needed.
+
+Thank you for your work. Just tried now and I also don't notice any
+issues so far with the latest media_stage tree.
+
+Regards,
+Tsuchiya Yuto

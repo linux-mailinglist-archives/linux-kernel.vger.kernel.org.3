@@ -2,142 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C0F164652C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1C14652C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:31:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350783AbhLAQcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:32:25 -0500
-Received: from mga07.intel.com ([134.134.136.100]:31192 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243240AbhLAQcY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:32:24 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="299880560"
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="299880560"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 08:28:59 -0800
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="602213420"
-Received: from cjlee1-mobl1.amr.corp.intel.com (HELO [10.212.64.69]) ([10.212.64.69])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 08:28:54 -0800
-Message-ID: <8c2262ba-173e-0007-bc4c-94ec54b2847d@intel.com>
-Date:   Wed, 1 Dec 2021 09:28:52 -0700
+        id S243262AbhLAQfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:35:17 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:52774 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232972AbhLAQfO (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 11:35:14 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7B1B5CE1F9C;
+        Wed,  1 Dec 2021 16:31:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F197C53FCC;
+        Wed,  1 Dec 2021 16:31:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638376310;
+        bh=Nl8xsA63Pl3JE4OwnDZ/uydP5Lv+ULSoJu3HOWozOuo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hnDZwCUUVaAyCAlb/7R8LygL3rozgv27yOHEsIhcb/+RH/cznUJ4kZdxahpkxKFsk
+         4O2POZHg9xSlhA4RsePcl3wcqrRLfUErENZUjr7g0Btl/S+AIqOYdsPZ7mQVHmT9Ca
+         lKgdsyPFCHsPXoDevsfqbEa+smKKfoc1YtJm/7WM3XEptTUmEgcuccCTXIXdTF+ODb
+         Ei/f56ejxc7dt/FBmDPILjaoCjdSzvhz0zN2GvApqFV+qNauAtt+60XOfcdi2idfj3
+         fYFaug4bgTQ5hOR38bNXjy5LhcAKm0fAX2Q9TMMhU9jYZgTu3l4rjbDL0dwK9Ai8T0
+         iNTZysG/XHHEQ==
+Received: by mail-ed1-f45.google.com with SMTP id t5so104504051edd.0;
+        Wed, 01 Dec 2021 08:31:50 -0800 (PST)
+X-Gm-Message-State: AOAM530WDS4UGocReVmplloY/E4ViaqMmksQjGh0LVGgA3JSM0L6VsCt
+        FmUmzy8RNuhAqaB0PaZ960dsJySH4BgAfnOONQ==
+X-Google-Smtp-Source: ABdhPJxs7mmflqrjPUTnrKBdlpa9sZ//JWvcOO4xlGckVQ14oEjFAFvEgThWSczrpUb+3WW96Ge7GzChNdODP7NIr4I=
+X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr8303951ejc.390.1638376305005;
+ Wed, 01 Dec 2021 08:31:45 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-Content-Language: en-US
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
-        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
-        Joerg Roedel <jroedel@suse.de>,
-        iommu@lists.linux-foundation.org
-References: <20211126230957.239391799@linutronix.de>
- <20211126232735.547996838@linutronix.de>
- <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
- <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
- <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
- <20211130202800.GE4670@nvidia.com> <87o861banv.ffs@tglx>
- <20211201001748.GF4670@nvidia.com> <87mtlkaauo.ffs@tglx>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <87mtlkaauo.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211123134425.3875656-1-michael@walle.cc> <YaZ5JNCFeKcdIfu8@robh.at.kernel.org>
+ <bc05fb3483cef4869ae390096bb95985@walle.cc>
+In-Reply-To: <bc05fb3483cef4869ae390096bb95985@walle.cc>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 1 Dec 2021 10:31:32 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL55mZJ6jUyQACer2pKMNDV08-FgwBREsJVgitnuF18Cg@mail.gmail.com>
+Message-ID: <CAL_JsqL55mZJ6jUyQACer2pKMNDV08-FgwBREsJVgitnuF18Cg@mail.gmail.com>
+Subject: Re: [RFC PATCH] dt-bindings: nvmem: add transformation support
+To:     Michael Walle <michael@walle.cc>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Ansuel Smith <ansuelsmth@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 1, 2021 at 8:30 AM Michael Walle <michael@walle.cc> wrote:
+>
+> Hi Rob,
+>
+> Am 2021-11-30 20:19, schrieb Rob Herring:
+> > On Tue, Nov 23, 2021 at 02:44:25PM +0100, Michael Walle wrote:
+> ..
+>
+> >> Introduce a transformation property. This is intended to be just an
+> >> enumeration of operations. If there will be a new operation, support
+> >> for
+> >> it has to be added to the nvmem core.
+> >>
+> >> A transformation might have multiple output values, like in the base
+> >> mac
+> >> address case. It reads the mac address from the nvmem storage and
+> >> generates multiple individual addresses, i.e. on our board we reserve
+> >> 8
+> >> consecutive addresses. These addresses then can be assigned to
+> >> different
+> >> network interfaces. To make it possible to reference different values
+> >> we
+> >> need to introduce an argument to the phandle. This additional argument
+> >> is then an index into a list of values.
+> >
+> > I still don't think trying to encode transformations of data into the
+> > DT
+> > is right approach.
+> >
+> >>
+> >> Example:
+> >>   mac_addresses: base-mac-address@10 {
+> >>     #nvmem-cell-cells = <1>;
+> >>     reg = <10 6>;
+> >>     transformation = <NVMEM_T_ETH_OFFSET 0 1 7>;
+> >>   }
+> >>
+> >>   &eth0 {
+> >>     nvmem-cells = <&mac_addresses 0>;
+> >>     nvmem-cell-names = "mac-address";
+> >>   };
+> >>
+> >>   &eth1 {
+> >>     nvmem-cells = <&mac_addresses 2>;
+> >>     nvmem-cell-names = "mac-address";
+> >>   };
+> >>
+> >> The NVMEM_T_ETH_OFFSET transformation takes N additional (dt) cells
+> >> and
+> >> will generate N values. In this example BASE_MAC+0, BASE_MAC+1,
+> >> BASE_MAC+7.
+> >> An nvmem consumer can then reference the nvmem cell with an index. So
+> >> eth0
+> >> will get BASE_MAC+0 and eth1 will get BASE_MAC+7.
+> >>
+> >> This should be sufficient flexible for many different transformations
+> >> without having to touch the bindings except for adding documentation
+> >> and
+> >> checks for new transformations.
+> >
+> > The content and number of cells is supposed to be opaque to the client
+> > and interpreted by the provider. That's sort of true here, but not
+> > really because the interpretation is tied to 'transformation'. So I'm
+> > okay with adding cells, but not fixing the interpretation of them. A
+> > compatible should determine how the cells are interpreted.
+>
+> What do you mean by "adding cells"? The additional argument to the
+> phandle?
 
-On 12/1/2021 3:16 AM, Thomas Gleixner wrote:
-> Jason,
->
-> CC+ IOMMU folks
->
-> On Tue, Nov 30 2021 at 20:17, Jason Gunthorpe wrote:
->> On Tue, Nov 30, 2021 at 10:23:16PM +0100, Thomas Gleixner wrote:
->>> The real problem is where to store the MSI descriptors because the PCI
->>> device has its own real PCI/MSI-X interrupts which means it still shares
->>> the storage space.
->> Er.. I never realized that just looking at the patches :|
->>
->> That is relevant to all real "IMS" users. IDXD escaped this because
->> it, IMHO, wrongly used the mdev with the IRQ layer. The mdev is purely
->> a messy artifact of VFIO, it should not be required to make the IRQ
->> layers work.
->> I don't think it makes sense that the msi_desc would point to a mdev,
->> the iommu layer consumes the msi_desc_to_dev(), it really should point
->> to the physical device that originates the message with a proper
->> iommu ops/data/etc.
-> Looking at the device slices as subdevices with their own struct device
-> makes a lot of sense from the conceptual level. That makes is pretty
-> much obvious to manage the MSIs of those devices at this level like we
-> do for any other device.
->
-> Whether mdev is the right encapsulation for these subdevices is an
-> orthogonal problem.
->
-> I surely agree that msi_desc::dev is an interesting question, but we
-> already have this disconnect of msi_desc::dev and DMA today due to DMA
-> aliasing. I haven't looked at that in detail yet, but of course the
-> alias handling is substantially different accross the various IOMMU
-> implementations.
->
-> Though I fear there is also a use case for MSI-X and IMS tied to the
-> same device. That network card you are talking about might end up using
-> MSI-X for a control block and then IMS for the actual network queues
-> when it is used as physical function device as a whole, but that's
-> conceptually a different case.
-
-Hi Thomas. This is actually the IDXD usage for a mediated device passed 
-to a guest kernel when we plumb the pass through of IMS to the guest 
-rather than doing previous implementation of having a MSIX vector on 
-guest backed by IMS. The control block for the mediated device is 
-emulated and therefore an emulated MSIX vector will be surfaced as 
-vector 0. However the queues will backed by IMS vectors. So we end up 
-needing MSIX and IMS coexist running on the guest kernel for the same 
-device.
-
-DJ
+Yes.
 
 >
->>> I'm currently tending to partition the index space in the xarray:
->>>
->>>   0x00000000 - 0x0000ffff          PCI/MSI-X
->>>   0x00010000 - 0x0001ffff          NTB
->> It is OK, with some xarray work it can be range allocating & reserving
->> so that the msi_domain_alloc_irqs() flows can carve out chunks of the
->> number space..
->>
->> Another view is the msi_domain_alloc_irqs() flows should have their
->> own xarrays..
-> Yes, I was thinking about that as well. The trivial way would be:
+> So an example would be:
 >
->      struct xarray     store[MSI_MAX_STORES];
+> ethernet_base_mac: base-mac-address@100 {
+>      #nvmem-cell-cells = <1>;
+>      compatible = "nvmem-ethernet-address";
+>      reg = <0x100 0x6>;
+> };
 >
-> and then have a store index for each allocation domain. With the
-> proposed encapsulation of the xarray handling that's definitely
-> feasible. Whether that buys much is a different question. Let me think
-> about it some more.
+> &eth0 {
+>      nvmem-cells = <&ethernet_base_mac 0>;
+>      nvmem-cell-names = "mac-address";
+> };
 >
->>> which is feasible now with the range modifications and way simpler to do
->>> with xarray than with the linked list.
->> Indeed!
-> I'm glad you like the approach.
+> &eth1 {
+>      nvmem-cells = <&ethernet_base_mac 7>;
+>      nvmem-cell-names = "mac-address";
+> };
 >
-> Thanks,
->
->          tglx
->
->
+> Right? Any suggestions for a better compatible name?
+
+I think the compatible should be something platform specific (or
+specific to whatever entity defined the format (SoC vendor, OEM, s/w
+platform (e.g. OpenWRT, u-boot, etc.)) and perhaps up a level defining
+the whole nvmem region. Then the handler for that compatible can
+select whatever 'generic' mac address transformation it wants or
+implement its own custom one. IOW, specific compatibles can use
+generic implementations rather than generic compatibles using a
+generic implementation.
+
+Rob

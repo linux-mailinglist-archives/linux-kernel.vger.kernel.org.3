@@ -2,97 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 162B046591D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:24:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23D25465921
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:25:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353551AbhLAW2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:28:13 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:60165 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353470AbhLAW2L (ORCPT
+        id S1353535AbhLAW3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:29:18 -0500
+Received: from mail-ot1-f45.google.com ([209.85.210.45]:40817 "EHLO
+        mail-ot1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353573AbhLAW3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:28:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638397491; x=1669933491;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=crTZ2a/2yB7/AUlebdFt1Mo2mkX4VhYfwG1XMxzOUb4=;
-  b=ZqpcNdEk4jCogH6yVGIXnE0D5Zm/tj0qe6ZUppEIKONIKMPDgST++Bl2
-   kwUEqHv+jyUIqx6Y7221pcFVXxvS0h1N43wML4lG3xivVypgc2FIUKLE7
-   TwnfXEHSPCMJvhveZdbB7OwyIb4Jrc7WrrxxeehMVfRNWkmUT/ZUQT3Za
-   U=;
-Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
-  by alexa-out.qualcomm.com with ESMTP; 01 Dec 2021 14:24:50 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 14:24:49 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 1 Dec 2021 14:24:49 -0800
-Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 1 Dec 2021
- 14:24:48 -0800
-Date:   Wed, 1 Dec 2021 14:24:47 -0800
-From:   Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     Rob Herring <robh@kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH v4 1/2] dt-bindings: pinctrl: qcom: Add SDX65 pinctrl
- bindings
-Message-ID: <20211201222447.GA586@quicinc.com>
-References: <cover.1637048107.git.quic_vamslank@quicinc.com>
- <06234768890dc7572226f23d432e5a69a4d5b305.1637048107.git.quic_vamslank@quicinc.com>
- <YaFZTxDcTMqeA/42@robh.at.kernel.org>
- <CACRpkdYpCmhXhJV1x42hu6QoncXX7eWcGPk22de19sSEC7B=oQ@mail.gmail.com>
+        Wed, 1 Dec 2021 17:29:08 -0500
+Received: by mail-ot1-f45.google.com with SMTP id v15-20020a9d604f000000b0056cdb373b82so37342777otj.7;
+        Wed, 01 Dec 2021 14:25:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=TVRItOUf45Hmpy2bGhqmZEEE26i5Yr+YcGE9jV7vzDg=;
+        b=wVieFDHackwojg0o8EdZM9AN6tEmXc8kmCfTOCXir6j/gSoYnZnAgOrft0iTYbGfJz
+         kyc0t+G0THfLa59BLLHx1Cx7USBfg1x/wdlQkVPIRsguyiz0AhtWiKfRrYW+DK51XuU2
+         YxZDyU4ZwrziKlqfSAlG4m8dycXfN7RIfON9gievCRRLl9xojeDbx+s+p0m+q3PO8BpE
+         PaUNfyGKjmuSU0yY73KlRQYr0E8yJOyoc0sPGXygQlLIlrfkYjZWNN5IZ6ej8WfISG4F
+         FBD18Y4bAUZqXY5/EUHVeZ8rHrYKKTGd/Aj8+jAmaOV5mDfrsCNyVcdh1/cVME2uj9FO
+         0TLA==
+X-Gm-Message-State: AOAM53026QGGkJvIFYLpIDpGZL5Yq93VR0XUlEuiAH2aBqgzRGhzEalq
+        XkuAon/F9rP1Js0RolWKVDqvnLEhUA==
+X-Google-Smtp-Source: ABdhPJwFVxZ9U1ssjI3w/4LIeqTVI0fgaNk0MnikGSWabqkj170XvzUfDhF5pL/SAPk3VYftAU+Ogg==
+X-Received: by 2002:a9d:5c04:: with SMTP id o4mr8319657otk.339.1638397546473;
+        Wed, 01 Dec 2021 14:25:46 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id u13sm378176oop.28.2021.12.01.14.25.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 14:25:45 -0800 (PST)
+Received: (nullmailer pid 2869357 invoked by uid 1000);
+        Wed, 01 Dec 2021 22:25:45 -0000
+Date:   Wed, 1 Dec 2021 16:25:45 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Nikita Travkin <nikita@trvn.ru>
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lars@metafoo.de, jic23@kernel.org,
+        robh+dt@kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: iio: light: ltr501: Add
+ proximity-near-level
+Message-ID: <Yaf2aV6GCOaswsDH@robh.at.kernel.org>
+References: <20211125125646.54831-1-nikita@trvn.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACRpkdYpCmhXhJV1x42hu6QoncXX7eWcGPk22de19sSEC7B=oQ@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+In-Reply-To: <20211125125646.54831-1-nikita@trvn.ru>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 01:07:16AM +0100, Linus Walleij wrote:
-> On Fri, Nov 26, 2021 at 11:01 PM Rob Herring <robh@kernel.org> wrote:
-> > On Mon, Nov 15, 2021 at 11:39:45PM -0800, quic_vamslank@quicinc.com wrote:
-> > > From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-> > >
-> > > Add device tree binding Documentation details for Qualcomm SDX65
-> > > pinctrl driver.
-> > >
-> > > Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-> > > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > > ---
-> > >  .../bindings/pinctrl/qcom,sdx65-pinctrl.yaml  | 195 ++++++++++++++++++
-> > >  1 file changed, 195 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
-> >
-> > This fails dt_binding_check:
-> >
-> > /builds/robherring/linux-dt/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.example.dt.yaml: pinctrl@f100000: 'serial-pins', 'uart-w-subnodes-state' do not match any of the regexes: '$-state', 'pinctrl-[0-9]+'
-> >         From schema: /builds/robherring/linux-dt/Documentation/devicetree/bindings/pinctrl/qcom,sdx65-pinctrl.yaml
-> >
-> > The DT list was not Cc'ed so checks never ran nor was this reviewed.
+On Thu, 25 Nov 2021 17:56:45 +0500, Nikita Travkin wrote:
+> This value inidcates the proximity level that should be considered
+> "close".
 > 
-> OK that's annoying, I didn't notice it wasn't posted to the DT list.
-> I reverted the patch, Vamsi can you please reiterate the patch
-> and include devicetree@vger.kernel.org on subsequent postings.
-> I have kept the kernel code in place, optimistically assuming the
-> bindings will be fixed soon-ish.
-
-I'm sorry for overlooking this. I will fix this and post a new patch soon.
-
-Thanks,
-Vamsi
+> Signed-off-by: Nikita Travkin <nikita@trvn.ru>
+> ---
+>  .../devicetree/bindings/iio/light/liteon,ltr501.yaml       | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> Yours,
-> Linus Walleij
+
+Reviewed-by: Rob Herring <robh@kernel.org>

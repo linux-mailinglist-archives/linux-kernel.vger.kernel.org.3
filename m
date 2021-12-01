@@ -2,118 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DBAD46556F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6BF46556B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244287AbhLASce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232750AbhLAScc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:32:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B190BC061574;
-        Wed,  1 Dec 2021 10:29:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 77886B820F7;
-        Wed,  1 Dec 2021 18:29:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B7C9C53FD4;
-        Wed,  1 Dec 2021 18:29:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638383349;
-        bh=Gn4s0yYJcCdTZW0pUo1N9BUlN3v2wBrSWSlLzly3FV0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MYEGIxeR5R3F9QL3vNUxbtHHPEvJvx04hOpkkTqCIWElDJU5uLRDez/Z1Hk7Bvp48
-         uAGACV5GlVSIzsuLqvqJJgYPNTPk4CEtiz5+8pAk1k2J2hSIm2FGVDiprtZWqCE2nh
-         uzLMX9kuL0H89YhF7OAubvcP39ByEeHo0Tcnk2M+tg42IV+3Q7UuTSjBD9D3OxZTWf
-         hJSIe3NY6O8IDL0h4NNP60kgOlMaLbsJOiyum0M5Ki/JCqQlV7gH5RTgJA3frhJiWX
-         0T5xaBlVY/89GS1q030MBl/icIVjSx18ySg1rJ7Q1JOTYIxeVdmh20YM1h6XpxECcW
-         WR6HsnQrkSRbQ==
-Received: by mail-ed1-f49.google.com with SMTP id x6so105254680edr.5;
-        Wed, 01 Dec 2021 10:29:09 -0800 (PST)
-X-Gm-Message-State: AOAM531b0XGNBDS+1LIdMVuBMgDmdqridyF7eIiDlKz1RxK1XOPhuPZ+
-        lEO6XCNBjCy6G5SymbvzVFUNe08VRnEJKEEKPg==
-X-Google-Smtp-Source: ABdhPJz0M9hONwYhapDgbKr1pBiOAqlDdueW1VKpz+27eyVJ9lUcLA/6diG99b9tulXoZY4rO5Q4CZ5Bn5+5Pw2c3HI=
-X-Received: by 2002:a17:907:3f24:: with SMTP id hq36mr9044894ejc.390.1638383347204;
- Wed, 01 Dec 2021 10:29:07 -0800 (PST)
+        id S239776AbhLAScZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:32:25 -0500
+Received: from foss.arm.com ([217.140.110.172]:44372 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232750AbhLAScY (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 13:32:24 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4AAE01477;
+        Wed,  1 Dec 2021 10:29:03 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.65.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6AFB73F766;
+        Wed,  1 Dec 2021 10:29:00 -0800 (PST)
+Date:   Wed, 1 Dec 2021 18:28:57 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] kcov: fix generic Kconfig dependencies if
+ ARCH_WANTS_NO_INSTR
+Message-ID: <Yae+6clmwHox7CHN@FVFF77S0Q05N>
+References: <20211201152604.3984495-1-elver@google.com>
+ <YaebeW5uYWFsDD8W@FVFF77S0Q05N>
+ <CANpmjNO9f2SD6PAz_pF3Rg_XOmBtqEB_DNsoUY1ycwiFjoP88Q@mail.gmail.com>
+ <Yae08MUQn5SxPwZ/@FVFF77S0Q05N>
+ <CANpmjNMW_BFnVj2Eaai76PQZqOoABLw+oYm8iGy6Vp9r_ru_iQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20211201041228.32444-1-f.fainelli@gmail.com> <20211201041228.32444-4-f.fainelli@gmail.com>
- <1638369202.233948.1684354.nullmailer@robh.at.kernel.org> <52926c88-a51d-d4e8-a6ab-7cf92e35c7ba@gmail.com>
-In-Reply-To: <52926c88-a51d-d4e8-a6ab-7cf92e35c7ba@gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 1 Dec 2021 12:28:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJeO9eL-ygU-dEoV0DGOKwbM_i+PWaBTk2QCP6Wc69S5g@mail.gmail.com>
-Message-ID: <CAL_JsqJeO9eL-ygU-dEoV0DGOKwbM_i+PWaBTk2QCP6Wc69S5g@mail.gmail.com>
-Subject: Re: [PATCH net-next 3/7] dt-bindings: net: Document moca PHY interface
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        Doug Berger <opendmb@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        devicetree@vger.kernel.org, bcm-kernel-feedback-list@broadcom.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNMW_BFnVj2Eaai76PQZqOoABLw+oYm8iGy6Vp9r_ru_iQ@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 11:15 AM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> On 12/1/21 6:33 AM, Rob Herring wrote:
-> > On Tue, 30 Nov 2021 20:12:24 -0800, Florian Fainelli wrote:
-> >> MoCA (Multimedia over Coaxial) is used by the internal GENET/MOCA cores
-> >> and will be needed in order to convert GENET to YAML in subsequent
-> >> changes.
-> >>
-> >> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> >> ---
-> >>  Documentation/devicetree/bindings/net/ethernet-controller.yaml | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
+On Wed, Dec 01, 2021 at 07:16:25PM +0100, Marco Elver wrote:
+> On Wed, 1 Dec 2021 at 18:46, Mark Rutland <mark.rutland@arm.com> wrote:
+> [...]
+> > > > Currently we mostly get away with disabling KCOV for while compilation units,
+> > > > so maybe it's worth waiting for the GCC 12.0 release, and restricting things
+> > > > once that's out?
+> > >
+> > > An alternative would be to express 'select ARCH_WANTS_NO_INSTR' more
+> > > precisely, say with an override or something. Because as-is,
+> > > ARCH_WANTS_NO_INSTR then doesn't quite reflect reality on arm64
+> > > (yet?).
 > >
-> > Running 'make dtbs_check' with the schema in this patch gives the
-> > following warnings. Consider if they are expected or the schema is
-> > incorrect. These may not be new warnings.
+> > It's more of a pragmatic thing -- ARCH_WANTS_NO_INSTR does reflect reality, and
+> > we do *want* to enforce that strictly, it's just that we're just struck between
+> > a rock and a hard place where until GCC 12 is released we either:
 > >
-> > Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> > This will change in the future.
+> > a) Strictly enforce noinstr, and be sure there aren't any bugs from unexpected
+> >    instrumentation, but we can't test GCC-built kernels under Syzkaller due to
+> >    the lack of KCOV.
 > >
-> > Full log is available here: https://patchwork.ozlabs.org/patch/1561996
+> > b) Don't strictly enforce noinstr, and have the same latent bugs as today (of
+> >    unknown severity), but we can test GCC-built kernels under Syzkaller.
 > >
+> > ... and since this (currently only affects KCOV, which people only practically
+> > enable for Syzkaller, I think it's ok to wait until GCC 12 is out, so that we
+> > can have the benefit of Sykaller in the mean time, and subsequrntly got for
+> > option (a) and say those people need to use GCC 12+ (and clang 13+).
 > >
-> > ethernet@0,2: fixed-link:speed:0:0: 2500 is not one of [10, 100, 1000]
-> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-kbox-a-230-ls.dt.yaml
-> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28.dt.yaml
-> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var1.dt.yaml
-> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var2.dt.yaml
-> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var3-ads2.dt.yaml
-> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-kontron-sl28-var4.dt.yaml
-> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-qds.dt.yaml
-> >       arch/arm64/boot/dts/freescale/fsl-ls1028a-rdb.dt.yaml
+> > > But it does look simpler to wait, so I'm fine with that. I leave it to you.
 > >
-> > ethernet@17020000: phy-handle: [[36], [37]] is too long
-> >       arch/arm64/boot/dts/apm/apm-mustang.dt.yaml
-> >
-> > ethernet@30000: fixed-link:speed:0:0: 2500 is not one of [10, 100, 1000]
-> >       arch/arm/boot/dts/armada-385-clearfog-gtr-l8.dt.yaml
-> >       arch/arm/boot/dts/armada-385-clearfog-gtr-s4.dt.yaml
->
-> These are all pre-existing warnings, but we should be documenting speed
-> 2500 in ethernet-controller.yaml, so I will add a patch towards that end.
+> > FWIW, for my purposes I'm happy to take this immediately and to have to apply a
+> > local patch to my fuzzing branches until GCC 12 is out, but I assume we'd want
+> > the upstream testing to work in the mean time without requiring additional
+> > patches.
+> 
+> Agree, it's not an ideal situation. :-/
+> 
+> syzkaller would still work, just not as efficiently. Not sure what's
+> worse, less efficient fuzzing, or chance of random crashes. In fact,
+> on syzbot we already had to disable it:
+> https://github.com/google/syzkaller/blob/61f862782082c777ba335aa4b4b08d4f74d7d86e/dashboard/config/linux/bits/base.yml#L110
+> https://lore.kernel.org/linux-arm-kernel/20210119130010.GA2338@C02TD0UTHF1T.local/T/#m78fdfcc41ae831f91c93ad5dabe63f7ccfb482f0
+> 
+> So if we ran into issues with KCOV on syzbot for arm64, I'm sure it's
+> not just us. I can't quite see what the reasons for the crashes are,
+> but ruling out noinstr vs. KCOV would be a first step.
+> 
+> So I'm inclined to suggest we take this patch now and not wait for GCC
+> 12, given we're already crashing with KCOV and therefore have KCOV
+> disabled on arm64 syzbot.
+> 
+> I'm still fine waiting, but just wanted to point out you can fuzz
+> without KCOV. Preferences?
 
-Thanks.
+If it's not used by Syzbot, that's good enough for me -- I can apply local
+hacks to run with KCOV if I want to in the mean time, and I can debug my own
+mess if I have to.
 
-> The one for apm-mustand.dts however I am not sure how to best resolve
-> since it looks like there was an intention to provide two Ethernet PHYs
-> and presumably have the firmware prune the one that is not in use. I
-> don't even know if that platform is supported mainline anymore.
+So FWIW, for taking that now:
 
-Unfortunately it is, barely. I just fixed a breakage I caused 2 years
-ago and just now noticed. I would not worry about it for now.
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-Rob
+Thanks,
+Mark.

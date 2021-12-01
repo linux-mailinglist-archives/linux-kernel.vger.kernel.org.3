@@ -2,190 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABE8464AA1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:28:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6108D464ADF
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:45:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348260AbhLAJbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 04:31:33 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:28208 "EHLO
+        id S1348332AbhLAJsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 04:48:42 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:28210 "EHLO
         szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242304AbhLAJbc (ORCPT
+        with ESMTP id S1346106AbhLAJsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:31:32 -0500
+        Wed, 1 Dec 2021 04:48:40 -0500
 Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J3txb4Nndz8vp2;
-        Wed,  1 Dec 2021 17:26:11 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J3vKN0Mmsz8vmm;
+        Wed,  1 Dec 2021 17:43:20 +0800 (CST)
+Received: from kwepemm600001.china.huawei.com (7.193.23.3) by
  dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 17:28:09 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ 15.1.2308.20; Wed, 1 Dec 2021 17:45:13 +0800
+Received: from [10.67.103.10] (10.67.103.10) by kwepemm600001.china.huawei.com
+ (7.193.23.3) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 1 Dec
- 2021 17:28:08 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <tj@kernel.org>, <hch@infradead.org>, <axboe@kernel.dk>
-CC:     <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
-        <yi.zhang@huawei.com>
-Subject: [PATCH v3 2/2] block: cancel all throttled bios in del_gendisk()
-Date:   Wed, 1 Dec 2021 17:40:14 +0800
-Message-ID: <20211201094014.330165-3-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211201094014.330165-1-yukuai3@huawei.com>
-References: <20211201094014.330165-1-yukuai3@huawei.com>
+ 2021 17:45:12 +0800
+To:     <Brice.Goglin@inria.fr>
+CC:     <hwloc-devel@lists.open-mpi.org>, <linux-kernel@vger.kernel.org>,
+        <song.bao.hua@hisilicon.com>, <linuxarm@huawei.com>,
+        "shenyang (M)" <shenyang39@huawei.com>,
+        Jonathan Cameron <jonathan.cameron@huawei.com>,
+        yangyicong <yangyicong@huawei.com>
+From:   Chengchang Tang <tangchengchang@huawei.com>
+Subject: [RFC] hwloc: Add support for exporting latency, bandwidth topology
+ through calibration
+Message-ID: <802b22da-199a-a724-972b-9bc0cabd43fb@huawei.com>
+Date:   Wed, 1 Dec 2021 17:45:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.103.10]
 X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600009.china.huawei.com (7.193.23.164)
+ kwepemm600001.china.huawei.com (7.193.23.3)
 X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Throttled bios can't be issued after del_gendisk() is done, thus
-it's better to cancel them immediately rather than waiting for
-throttle is done.
+Currently, hwloc can export hardware and network locality for 
+applications to obtain and set their affinity. However, in many 
+scenarios, the information provided by the topology is not enough, for 
+example, it cannot reflect the actual memory latency and bandwidth data 
+between different schedule domain. We hope to provide more detailed and 
+precise information of HW capabilities in hwloc by adding several new 
+calibration tools, so that application can achieve a more refined design 
+to achieve higher performance and fully tap the capabilities of the HW.
 
-For example, if user thread is throttled with low bps while it's
-issuing large io, and the device is deleted. The user thread will
-wait for a long time for io to return.
+We mainly focus on exposing memory/bus bandwidth, cache coherence/bus 
+communication latency etc to users. Those topology information has 
+neither standard ACPI nor dts interface to export, but they can be 
+beneficial of user applications. Some examples,
+1. the memory bandwidth while we spread tasks between multiple clusters 
+vs. gather them in one cluster
+2. the memory bandwidth while we spread tasks between multiple NUMA 
+nodes vs. gather them in one NUMA
+3. the cache synchronization latency while we spread tasks between 
+multiple clusters vs. gather them in one cluster
+4. the cache synchronization latency while we spread tasks between 
+multiple NUMA nodes vs. gather them in one NUMA node
+5. bus bandwidth and congestion in complex topology, for example, for 
+the below topology
+node 1 - node0 - node2 - node3
+the bus between node0 and node2 might become bottleneck as the 
+communications between node1 and node3 also depend on it.
+numa distance can't describe this kind of complex bus topology at all.
+6. I/O bandwidth and latency while we access I/O devices such as 
+accelerators, networks, storages from the NUMA node which devices belong 
+to vs. from different NUMA nodes.
+...
 
-Noted this patch is mainly from revertion of commit 32e3374304c7
-("blk-throttle: remove tg_drain_bios") and commit b77412372b68
-("blk-throttle: remove blk_throtl_drain").
+If possible, we also can export more such as IPC bandwidth and 
+latency(for example, pipe), spinlock/mutex latency etc. Calibration 
+tools will provide these data about different entities at some certain 
+topology levels so that application could select the spreading and 
+gathering strategy of threads according to this data.
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
- block/blk-throttle.c | 72 ++++++++++++++++++++++++++++++++++++++++++++
- block/blk-throttle.h |  2 ++
- block/genhd.c        |  2 ++
- 3 files changed, 76 insertions(+)
+The design of the calibration tool will be similar to netloc. Three 
+steps are required to use the calibration tool.
 
-diff --git a/block/blk-throttle.c b/block/blk-throttle.c
-index fdd57878e862..2d286c9c5651 100644
---- a/block/blk-throttle.c
-+++ b/block/blk-throttle.c
-@@ -2256,6 +2256,78 @@ void blk_throtl_bio_endio(struct bio *bio)
- }
- #endif
- 
-+/*
-+ * Dispatch all bios from all children tg's queued on @parent_sq.  On
-+ * return, @parent_sq is guaranteed to not have any active children tg's
-+ * and all bios from previously active tg's are on @parent_sq->bio_lists[].
-+ */
-+static void tg_drain_bios(struct throtl_service_queue *parent_sq)
-+{
-+	struct throtl_grp *tg;
-+
-+	while ((tg = throtl_rb_first(parent_sq))) {
-+		struct throtl_service_queue *sq = &tg->service_queue;
-+		struct bio *bio;
-+
-+		throtl_dequeue_tg(tg);
-+
-+		while ((bio = throtl_peek_queued(&sq->queued[READ])))
-+			tg_dispatch_one_bio(tg, bio_data_dir(bio));
-+		while ((bio = throtl_peek_queued(&sq->queued[WRITE])))
-+			tg_dispatch_one_bio(tg, bio_data_dir(bio));
-+	}
-+}
-+
-+/**
-+ * blk_throtl_cancel_bios - cancel throttled bios
-+ * @q: request_queue to cancel throttled bios for
-+ *
-+ * This function is called to error all currently throttled bios on @q.
-+ */
-+void blk_throtl_cancel_bios(struct request_queue *q)
-+{
-+	struct throtl_data *td = q->td;
-+	struct bio_list bio_list_on_stack;
-+	struct blkcg_gq *blkg;
-+	struct cgroup_subsys_state *pos_css;
-+	struct bio *bio;
-+	int rw;
-+
-+	bio_list_init(&bio_list_on_stack);
-+
-+	/*
-+	 * hold queue_lock to prevent concurrent with dispatching
-+	 * throttled bios by timer.
-+	 */
-+	spin_lock_irq(&q->queue_lock);
-+	rcu_read_lock();
-+
-+	/*
-+	 * Drain each tg while doing post-order walk on the blkg tree, so
-+	 * that all bios are propagated to td->service_queue.  It'd be
-+	 * better to walk service_queue tree directly but blkg walk is
-+	 * easier.
-+	 */
-+	blkg_for_each_descendant_post(blkg, pos_css, td->queue->root_blkg)
-+		tg_drain_bios(&blkg_to_tg(blkg)->service_queue);
-+
-+	/* finally, transfer bios from top-level tg's into the td */
-+	tg_drain_bios(&td->service_queue);
-+
-+	rcu_read_unlock();
-+
-+	/* all bios now should be in td->service_queue, cancel them */
-+	for (rw = READ; rw <= WRITE; rw++)
-+		while ((bio = throtl_pop_queued(&td->service_queue.queued[rw],
-+						NULL)))
-+			bio_list_add(&bio_list_on_stack, bio);
-+
-+	spin_unlock_irq(&q->queue_lock);
-+	if (!bio_list_empty(&bio_list_on_stack))
-+		while ((bio = bio_list_pop(&bio_list_on_stack)))
-+			bio_io_error(bio);
-+}
-+
- int blk_throtl_init(struct request_queue *q)
- {
- 	struct throtl_data *td;
-diff --git a/block/blk-throttle.h b/block/blk-throttle.h
-index 175f03abd9e4..9d67d5139954 100644
---- a/block/blk-throttle.h
-+++ b/block/blk-throttle.h
-@@ -160,12 +160,14 @@ static inline void blk_throtl_exit(struct request_queue *q) { }
- static inline void blk_throtl_register_queue(struct request_queue *q) { }
- static inline void blk_throtl_charge_bio_split(struct bio *bio) { }
- static inline bool blk_throtl_bio(struct bio *bio) { return false; }
-+#define blk_throtl_cancel_bios(q)  do { } while (0)
- #else /* CONFIG_BLK_DEV_THROTTLING */
- int blk_throtl_init(struct request_queue *q);
- void blk_throtl_exit(struct request_queue *q);
- void blk_throtl_register_queue(struct request_queue *q);
- void blk_throtl_charge_bio_split(struct bio *bio);
- bool __blk_throtl_bio(struct bio *bio);
-+void blk_throtl_cancel_bios(struct request_queue *q);
- static inline bool blk_throtl_bio(struct bio *bio)
- {
- 	struct throtl_grp *tg = blkg_to_tg(bio->bi_blkg);
-diff --git a/block/genhd.c b/block/genhd.c
-index 8e9cbf23c510..24fa3356d164 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -28,6 +28,7 @@
- 
- #include "blk.h"
- #include "blk-rq-qos.h"
-+#include "blk-throttle.h"
- 
- static struct kobject *block_depr;
- 
-@@ -619,6 +620,7 @@ void del_gendisk(struct gendisk *disk)
- 
- 	blk_mq_freeze_queue_wait(q);
- 
-+	blk_throtl_cancel_bios(q);
- 	rq_qos_exit(q);
- 	blk_sync_queue(q);
- 	blk_flush_integrity();
--- 
-2.31.1
+The first step is to get data about system bandwidth, latency, etc by 
+running some benchmark tests since the standard operating system does 
+not support providing this information. The raw data will be saved in 
+files. This step may need to be performed by a privilege user.
+
+The second step is to convert the original file generated in the 
+previous step into a file in a readable format by the calibration tool. 
+No privileges are required for this step.
+
+In the third step, the application could obtain the calibration 
+information of the system through a C APIs exposed by calibration tool 
+and hwloc commands can be also extended to show these new information. 
+The source of the calibration data is the readable file generated in the 
+second step. E.g. hwloc_get_mem_bandwidth(hwloc_topology_t topology, 
+unsigned idx1, unsigned idx2) could be used to get the memory bandwidth 
+ability between idx1 and idx2 in some topology type.
 

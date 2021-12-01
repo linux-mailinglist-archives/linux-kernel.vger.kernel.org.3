@@ -2,98 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D224653B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E80C4653B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:12:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351660AbhLARPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 12:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351666AbhLARPH (ORCPT
+        id S1351749AbhLARPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 12:15:46 -0500
+Received: from mail-lf1-f50.google.com ([209.85.167.50]:47072 "EHLO
+        mail-lf1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351542AbhLARPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:15:07 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B31C061574;
-        Wed,  1 Dec 2021 09:11:29 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 801B8CE1FEC;
-        Wed,  1 Dec 2021 17:11:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6923FC53FCC;
-        Wed,  1 Dec 2021 17:11:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638378685;
-        bh=r5GVbCBgif2BuWfiq6JB1Kofyuo38uEZhcFhxjQvCzY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=eLufa8MJOC9NEMeHrIORBnmDklja3BeeqFdl2OUEoL/sxgM75lQT5CpY+XW4RPyy/
-         4eSQe8VSw+9tMf1k9dCkH3PQUp/g/w5SiuPloDGnR6WmbSd6SdtA2lX2d0m8RJeiJ6
-         UBEZy3YVxwbfOktxbe2PN2G88/Rcm3WtgWCuSotdeDZFz462X4Xkq0zJUZnLBNCLKu
-         OZJ9LhS5hEljjKwIMwHsCHMitVRUcpe5pzzboXIhpmbuN7P0Ci5wJXjuxKPXqbhBgA
-         fDMK9PS8T0ziE/JgQTkTmG23Y8Jj6mfZ68CrRXNuumDpA1yWQmAUGH3LTD4N8HGsKT
-         NR+7qoYsIcTtA==
-Date:   Wed, 1 Dec 2021 11:11:24 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH 0/5] arm: ioremap: Remove pci_ioremap_io() and
- mvebu_pci_host_probe()
-Message-ID: <20211201171124.GA2824425@bhelgaas>
+        Wed, 1 Dec 2021 12:15:21 -0500
+Received: by mail-lf1-f50.google.com with SMTP id b1so64502350lfs.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 09:11:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=j6IfQaOcJ/fH2q47G9mTBeJcFONRdMwvYX52Dc3i4J4=;
+        b=vASwe1HXy5GmVzceffqVaG4is0vaxhDVILO8FUSeW0nI1RSYOECgmRWRWKkEyq6uS8
+         aRZxOJE+AcD1ZpweVvdvOVLLhnZw2FrWuOtqEstHRNLvp78rzfgJ/xl+L5wWrbIbse6/
+         QpW/fv8ve1L8Z/1QQyYqWSGCB+uIcZiVd2iC5lQZPFCTN6Iz6qnBlvi7/G9d8vuv7lz1
+         ejIRK/pEJ65sTIaKr/74jnbV9em3ZvQbUrZy1aohIpTzaEQhmmRSIdbXv3MDHEV9dyT5
+         tX93l4CL7U7Gfd/I0Q/LdW4TrKJDCi3X/Cv9KKR+QsRlaMRoqQ320YFR6IGCEQ5b0EAC
+         Gh8Q==
+X-Gm-Message-State: AOAM5329zWlcgqE6brdK26khHABSWz5mLkNJSmpyTtqw9JGU5t0JrE1u
+        ZM4auVhv4F+Vcm8FM4+QP3Q1CfU/QTIeROK1CZI=
+X-Google-Smtp-Source: ABdhPJx1fyBel2blhToDUW5M4pmOyPneY6AYGGEN7b8kKOvaaTF/2hWKHfCz2QZNpgd/9LrjtbJfNTkaTNENkRTi5XM=
+X-Received: by 2002:a05:6512:b8c:: with SMTP id b12mr6843885lfv.99.1638378718279;
+ Wed, 01 Dec 2021 09:11:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <163827065859.21977.786435593890374586.b4-ty@arm.com>
+References: <20211201003908.1200945-1-namhyung@kernel.org> <20211201050836.GB2678859@leoy-ThinkPad-X240s>
+In-Reply-To: <20211201050836.GB2678859@leoy-ThinkPad-X240s>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Wed, 1 Dec 2021 09:11:47 -0800
+Message-ID: <CAM9d7cgMdkApk_WO3LdNyM6+Z041bkj2B4DqN8PLXWMMpTawAw@mail.gmail.com>
+Subject: Re: [PATCH] perf tools: Add SPE total latency as PERF_SAMPLE_WEIGHT
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        German Gomez <german.gomez@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Clark <James.Clark@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 11:11:43AM +0000, Lorenzo Pieralisi wrote:
-> On Wed, 24 Nov 2021 16:41:11 +0100, Pali Rohár wrote:
-> > This patch series removes ARM specific functions pci_ioremap_io() and
-> > mvebu_pci_host_probe() functions.
-> > 
-> > pci_ioremap_io() is replaced by standard PCI core function pci_remap_iospace()
-> > and mvebu_pci_host_probe() by standard PCI core function pci_host_probe().
-> > 
-> > ARM needs custom implementation of pci_remap_iospace() because of
-> > pci_ioremap_set_mem_type() hook used by Marvell Armada 375, 38x and 39x
-> > platforms due to HW errata.
-> > 
-> > [...]
-> 
-> Applied to pci/mvebu, thanks!
-> 
-> [1/5] arm: ioremap: Implement standard PCI function pci_remap_iospace()
->       https://git.kernel.org/lpieralisi/pci/c/bc02973a06
-> [2/5] PCI: mvebu: Replace pci_ioremap_io() usage by devm_pci_remap_iospace()
->       https://git.kernel.org/lpieralisi/pci/c/c1aa4b55aa
-> [3/5] PCI: mvebu: Remove custom mvebu_pci_host_probe() function
->       https://git.kernel.org/lpieralisi/pci/c/de58d49470
-> [4/5] arm: ioremap: Replace pci_ioremap_io() usage by pci_remap_iospace()
->       https://git.kernel.org/lpieralisi/pci/c/9c8facde92
-> [5/5] arm: ioremap: Remove unused ARM-specific function pci_ioremap_io()
->       https://git.kernel.org/lpieralisi/pci/c/ea76d27fb3
+Hi Leo,
 
-Beautiful.  I love getting rid of mvebu_pci_host_probe(), thank you!
+On Tue, Nov 30, 2021 at 9:08 PM Leo Yan <leo.yan@linaro.org> wrote:
+>
+> Hi Namhyung,
+>
+> On Tue, Nov 30, 2021 at 04:39:08PM -0800, Namhyung Kim wrote:
+> > Use total latency info in the SPE counter packet as sample weight so
+> > that we can see it in local_weight and (global) weight sort keys.
+> >
+> > Maybe we can use PERF_SAMPLE_WEIGHT_STRUCT to support ins_lat as well
+> > but I'm not sure which latency it matches.  So just adding total
+> > latency first.
+> >
+> > Cc: German Gomez <german.gomez@arm.com>
+> > Cc: Leo Yan <leo.yan@linaro.org>
+> > Cc: Mark Rutland <mark.rutland@arm.com>
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> >  tools/perf/util/arm-spe-decoder/arm-spe-decoder.c | 2 ++
+> >  tools/perf/util/arm-spe-decoder/arm-spe-decoder.h | 1 +
+> >  tools/perf/util/arm-spe.c                         | 4 +++-
+> >  3 files changed, 6 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> > index 3fc528c9270c..5e390a1a79ab 100644
+> > --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> > +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+> > @@ -179,6 +179,8 @@ static int arm_spe_read_record(struct arm_spe_decoder *decoder)
+> >                               decoder->record.phys_addr = ip;
+> >                       break;
+> >               case ARM_SPE_COUNTER:
+> > +                     if (idx == SPE_CNT_PKT_HDR_INDEX_TOTAL_LAT)
+> > +                             decoder->record.latency = payload;
+> >                       break;
+> >               case ARM_SPE_CONTEXT:
+> >                       decoder->record.context_id = payload;
+> > diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> > index 46a8556a9e95..69b31084d6be 100644
+> > --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> > +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+> > @@ -33,6 +33,7 @@ struct arm_spe_record {
+> >       enum arm_spe_sample_type type;
+> >       int err;
+> >       u32 op;
+> > +     u32 latency;
+> >       u64 from_ip;
+> >       u64 to_ip;
+> >       u64 timestamp;
+> > diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+> > index 4748bcfe61de..a756325c72a7 100644
+> > --- a/tools/perf/util/arm-spe.c
+> > +++ b/tools/perf/util/arm-spe.c
+> > @@ -317,6 +317,7 @@ static int arm_spe__synth_mem_sample(struct arm_spe_queue *speq,
+> >       sample.addr = record->virt_addr;
+> >       sample.phys_addr = record->phys_addr;
+> >       sample.data_src = data_src;
+> > +     sample.weight = record->latency;
+>
+> The latency can be used for branch operations as well, it's good to
+> assign latency for branch samples in the function
+> arm_spe__synth_branch_sample().
 
-If there's any occasion to update this branch, typos in the commit
-logs:
+Yep, I'll update.
 
-[3/5]: s/functionn/function/
-[4/5]: s/arm march code/ARM mach code/
+>
+> With adding latency for branch sample, the change would be good for me:
+>
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
+
+Thanks for your review!
+Namhyung
+
+
+>
+> >       return arm_spe_deliver_synth_event(spe, speq, event, &sample);
+> >  }
+> > @@ -980,7 +981,8 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
+> >       attr.type = PERF_TYPE_HARDWARE;
+> >       attr.sample_type = evsel->core.attr.sample_type & PERF_SAMPLE_MASK;
+> >       attr.sample_type |= PERF_SAMPLE_IP | PERF_SAMPLE_TID |
+> > -                         PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC;
+> > +                         PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC |
+> > +                         PERF_SAMPLE_WEIGHT;
+> >       if (spe->timeless_decoding)
+> >               attr.sample_type &= ~(u64)PERF_SAMPLE_TIME;
+> >       else
+> > --
+> > 2.34.0.rc2.393.gf8c9666880-goog
+> >

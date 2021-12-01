@@ -2,317 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C31E4654A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D7B4654A4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbhLASEL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:04:11 -0500
-Received: from mga11.intel.com ([192.55.52.93]:16241 "EHLO mga11.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229975AbhLASEF (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:04:05 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="234017992"
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="234017992"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 10:00:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
-   d="scan'208";a="609649301"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 01 Dec 2021 10:00:41 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msTuK-000FFx-JI; Wed, 01 Dec 2021 18:00:40 +0000
-Date:   Thu, 02 Dec 2021 01:59:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 4ed01fd08c86f4ff2508162b109d14b691699455
-Message-ID: <61a7b80d.+ewYoT2GC01PAtXi%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        id S236570AbhLASEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:04:37 -0500
+Received: from mx0b-001ae601.pphosted.com ([67.231.152.168]:39392 "EHLO
+        mx0b-001ae601.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233650AbhLASEW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 13:04:22 -0500
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B150FOq020440;
+        Wed, 1 Dec 2021 12:00:08 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=zvuDB81jMVYurNmZDyITgoCw52lNavBJMeVaz+gA898=;
+ b=Ejv2gTYdRmu5lhj5yJisIj2rkHWMpnFqoIdTE4lSQc6vwPALdJc0/6md1cqZifAIOQet
+ c1q9bJz6k7jBnlUde/oHrgv3HpoiZ+AmtaX9byDO6JtlpA35kG1OTz0M+s2tZNkHhVlf
+ l6GDXSIxZoTvo82HGHdctZWfBn6HzPI5RN+r3lVEk7v9jAVZRO/FM/FzlgTmxcTYFyjn
+ upcVenYm/Sig69HqF/Q4Fr8XWT0rdQqYvMRXfFNjumnbTdwV77C/ks5J0b0uSC8/ZBof
+ wLvTleyPm7cePy6/6BRPweMK68Te22sB3SuEfuD8npV5nbiRAlxv6S8C3ssGE6weRYS+ iw== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3cp1x10txm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+        Wed, 01 Dec 2021 12:00:08 -0600
+Received: from EDIEX01.ad.cirrus.com (198.61.84.80) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17; Wed, 1 Dec
+ 2021 18:00:06 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by EDIEX01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Wed, 1 Dec 2021 18:00:06 +0000
+Received: from aryzen.ad.cirrus.com (unknown [198.61.64.238])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2831A2A9;
+        Wed,  1 Dec 2021 18:00:06 +0000 (UTC)
+From:   Lucas Tanure <tanureal@opensource.cirrus.com>
+To:     Len Brown <lenb@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        kernel test robot <lkp@intel.com>
+Subject: [PATCH v2 1/2] ASoC: amd: Fix dependency for SPI master
+Date:   Wed, 1 Dec 2021 18:00:03 +0000
+Message-ID: <20211201180004.1402156-1-tanureal@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: OpJqvcrtiV-HFQpB1iRBmDess_psbXKa
+X-Proofpoint-ORIG-GUID: OpJqvcrtiV-HFQpB1iRBmDess_psbXKa
+X-Proofpoint-Spam-Reason: safe
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 4ed01fd08c86f4ff2508162b109d14b691699455  EXP workqueue: Fix unbind_workers() VS wq_worker_sleeping() race
+Set SPI_MASTER as dependency as is using CS35L41 SPI driver
 
-elapsed time: 731m
+Fixes: 96792fdd77cd1 ("ASoC: amd: enable vangogh platform machine driver build")
 
-configs tested: 255
-configs skipped: 4
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm                                 defconfig
-arm64                            allyesconfig
-arm64                               defconfig
-arm                              allyesconfig
-arm                              allmodconfig
-i386                 randconfig-c001-20211128
-i386                 randconfig-c001-20211201
-sh                           se7750_defconfig
-powerpc                      pasemi_defconfig
-sh                               alldefconfig
-arm                       imx_v6_v7_defconfig
-powerpc                      acadia_defconfig
-m68k                        m5272c3_defconfig
-powerpc                    adder875_defconfig
-sh                        edosk7760_defconfig
-powerpc                       holly_defconfig
-arm                      footbridge_defconfig
-xtensa                  cadence_csp_defconfig
-powerpc                       maple_defconfig
-sh                           se7722_defconfig
-sh                            titan_defconfig
-mips                    maltaup_xpa_defconfig
-arm                  colibri_pxa270_defconfig
-mips                           rs90_defconfig
-arm                       netwinder_defconfig
-arm                       versatile_defconfig
-arm                        magician_defconfig
-powerpc                   currituck_defconfig
-arc                         haps_hs_defconfig
-arm                          exynos_defconfig
-arm                          ixp4xx_defconfig
-xtensa                              defconfig
-m68k                          hp300_defconfig
-riscv                            allyesconfig
-sh                           se7206_defconfig
-sh                         apsh4a3a_defconfig
-parisc                generic-32bit_defconfig
-arm                         s3c2410_defconfig
-powerpc                      ep88xc_defconfig
-nios2                         10m50_defconfig
-x86_64                              defconfig
-mips                       lemote2f_defconfig
-sparc                               defconfig
-arm                           corgi_defconfig
-s390                             alldefconfig
-arm                       multi_v4t_defconfig
-mips                  cavium_octeon_defconfig
-openrisc                            defconfig
-arm                            dove_defconfig
-arm                          lpd270_defconfig
-arm                     eseries_pxa_defconfig
-sparc64                             defconfig
-sh                            shmin_defconfig
-powerpc                 mpc837x_mds_defconfig
-powerpc                          g5_defconfig
-powerpc64                        alldefconfig
-openrisc                    or1ksim_defconfig
-powerpc                  iss476-smp_defconfig
-powerpc                     akebono_defconfig
-arm                          pxa3xx_defconfig
-xtensa                          iss_defconfig
-powerpc                mpc7448_hpc2_defconfig
-um                               alldefconfig
-arm                          simpad_defconfig
-sh                          polaris_defconfig
-sh                          landisk_defconfig
-ia64                         bigsur_defconfig
-powerpc                     stx_gp3_defconfig
-m68k                                defconfig
-arm                    vt8500_v6_v7_defconfig
-mips                         rt305x_defconfig
-m68k                        mvme16x_defconfig
-arm                            xcep_defconfig
-powerpc                      ppc6xx_defconfig
-powerpc                        warp_defconfig
-arm                            qcom_defconfig
-sh                           se7712_defconfig
-powerpc                      bamboo_defconfig
-arc                              alldefconfig
-arc                        vdk_hs38_defconfig
-arm                         bcm2835_defconfig
-s390                             allyesconfig
-mips                        workpad_defconfig
-nios2                            alldefconfig
-arm                         socfpga_defconfig
-mips                     decstation_defconfig
-arm                         vf610m4_defconfig
-arm                       cns3420vb_defconfig
-mips                        vocore2_defconfig
-sh                           se7721_defconfig
-arm                       mainstone_defconfig
-sh                        sh7763rdp_defconfig
-powerpc                 canyonlands_defconfig
-arm                             pxa_defconfig
-powerpc                 mpc8540_ads_defconfig
-m68k                       m5208evb_defconfig
-sparc                            alldefconfig
-powerpc                      katmai_defconfig
-mips                           ip27_defconfig
-m68k                        m5407c3_defconfig
-arm                       aspeed_g5_defconfig
-powerpc                 mpc8560_ads_defconfig
-arm                        cerfcube_defconfig
-arm                             mxs_defconfig
-powerpc                      makalu_defconfig
-powerpc                      ppc44x_defconfig
-mips                           mtx1_defconfig
-arm                  randconfig-c002-20211128
-arm                  randconfig-c002-20211201
-ia64                             allmodconfig
-ia64                                defconfig
-ia64                             allyesconfig
-m68k                             allmodconfig
-m68k                             allyesconfig
-nios2                               defconfig
-arc                              allyesconfig
-nds32                             allnoconfig
-nds32                               defconfig
-nios2                            allyesconfig
-csky                                defconfig
-alpha                               defconfig
-alpha                            allyesconfig
-xtensa                           allyesconfig
-h8300                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-parisc                              defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64               randconfig-a001-20211130
-x86_64               randconfig-a006-20211130
-x86_64               randconfig-a003-20211130
-x86_64               randconfig-a004-20211130
-x86_64               randconfig-a005-20211130
-x86_64               randconfig-a002-20211130
-i386                 randconfig-a005-20211130
-i386                 randconfig-a002-20211130
-i386                 randconfig-a006-20211130
-i386                 randconfig-a004-20211130
-i386                 randconfig-a003-20211130
-i386                 randconfig-a001-20211130
-i386                 randconfig-a001-20211201
-i386                 randconfig-a005-20211201
-i386                 randconfig-a003-20211201
-i386                 randconfig-a002-20211201
-i386                 randconfig-a006-20211201
-i386                 randconfig-a004-20211201
-i386                 randconfig-a001-20211129
-i386                 randconfig-a002-20211129
-i386                 randconfig-a006-20211129
-i386                 randconfig-a005-20211129
-i386                 randconfig-a004-20211129
-i386                 randconfig-a003-20211129
-x86_64               randconfig-a006-20211201
-x86_64               randconfig-a005-20211201
-x86_64               randconfig-a001-20211201
-x86_64               randconfig-a002-20211201
-x86_64               randconfig-a004-20211201
-x86_64               randconfig-a003-20211201
-x86_64               randconfig-a011-20211128
-x86_64               randconfig-a014-20211128
-x86_64               randconfig-a012-20211128
-x86_64               randconfig-a016-20211128
-x86_64               randconfig-a013-20211128
-x86_64               randconfig-a015-20211128
-i386                 randconfig-a015-20211128
-i386                 randconfig-a016-20211128
-i386                 randconfig-a013-20211128
-i386                 randconfig-a012-20211128
-i386                 randconfig-a014-20211128
-i386                 randconfig-a011-20211128
-arc                  randconfig-r043-20211129
-arc                  randconfig-r043-20211128
-s390                 randconfig-r044-20211128
-riscv                randconfig-r042-20211128
-riscv                    nommu_k210_defconfig
-riscv                    nommu_virt_defconfig
-riscv                             allnoconfig
-riscv                               defconfig
-riscv                          rv32_defconfig
-riscv                            allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-
-clang tested configs:
-s390                 randconfig-c005-20211128
-i386                 randconfig-c001-20211128
-riscv                randconfig-c006-20211128
-arm                  randconfig-c002-20211128
-powerpc              randconfig-c003-20211128
-x86_64               randconfig-c007-20211128
-mips                 randconfig-c004-20211128
-arm                  randconfig-c002-20211201
-x86_64               randconfig-c007-20211201
-riscv                randconfig-c006-20211201
-mips                 randconfig-c004-20211201
-i386                 randconfig-c001-20211201
-powerpc              randconfig-c003-20211201
-s390                 randconfig-c005-20211201
-x86_64               randconfig-a001-20211128
-x86_64               randconfig-a006-20211128
-x86_64               randconfig-a003-20211128
-x86_64               randconfig-a005-20211128
-x86_64               randconfig-a004-20211128
-x86_64               randconfig-a002-20211128
-i386                 randconfig-a001-20211128
-i386                 randconfig-a002-20211128
-i386                 randconfig-a006-20211128
-i386                 randconfig-a005-20211128
-i386                 randconfig-a004-20211128
-i386                 randconfig-a003-20211128
-x86_64               randconfig-a016-20211201
-x86_64               randconfig-a011-20211201
-x86_64               randconfig-a013-20211201
-x86_64               randconfig-a015-20211201
-x86_64               randconfig-a012-20211201
-x86_64               randconfig-a014-20211201
-x86_64               randconfig-a014-20211130
-x86_64               randconfig-a016-20211130
-x86_64               randconfig-a013-20211130
-x86_64               randconfig-a012-20211130
-x86_64               randconfig-a015-20211130
-x86_64               randconfig-a011-20211130
-i386                 randconfig-a011-20211130
-i386                 randconfig-a015-20211130
-i386                 randconfig-a012-20211130
-i386                 randconfig-a013-20211130
-i386                 randconfig-a014-20211130
-i386                 randconfig-a016-20211130
-i386                 randconfig-a013-20211201
-i386                 randconfig-a016-20211201
-i386                 randconfig-a011-20211201
-i386                 randconfig-a014-20211201
-i386                 randconfig-a012-20211201
-i386                 randconfig-a015-20211201
-i386                 randconfig-a015-20211129
-i386                 randconfig-a016-20211129
-i386                 randconfig-a013-20211129
-i386                 randconfig-a012-20211129
-i386                 randconfig-a014-20211129
-i386                 randconfig-a011-20211129
-hexagon              randconfig-r045-20211129
-hexagon              randconfig-r041-20211129
-s390                 randconfig-r044-20211129
-riscv                randconfig-r042-20211129
-
+Signed-off-by: Lucas Tanure <tanureal@opensource.cirrus.com>
+Reported-by: kernel test robot <lkp@intel.com>
 ---
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+v2 -> Fix patch description
+
+ sound/soc/amd/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
+index 092966ff5ea7..8961b8fd23eb 100644
+--- a/sound/soc/amd/Kconfig
++++ b/sound/soc/amd/Kconfig
+@@ -68,7 +68,7 @@ config SND_SOC_AMD_VANGOGH_MACH
+ 	tristate "AMD Vangogh support for NAU8821 CS35L41"
+ 	select SND_SOC_NAU8821
+ 	select SND_SOC_CS35L41_SPI
+-	depends on SND_SOC_AMD_ACP5x && I2C
++	depends on SND_SOC_AMD_ACP5x && I2C && SPI_MASTER
+ 	help
+ 	  This option enables machine driver for Vangogh platform
+ 	  using NAU8821 and CS35L41 codecs.
+-- 
+2.34.1
+

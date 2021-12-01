@@ -2,129 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17ADE46576C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1402D46576A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353117AbhLAUyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:54:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236004AbhLAUx2 (ORCPT
+        id S245666AbhLAUx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:53:56 -0500
+Received: from mail-il1-f200.google.com ([209.85.166.200]:38729 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239840AbhLAUx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:53:28 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A3F8C061756;
-        Wed,  1 Dec 2021 12:50:06 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id t23so51167718oiw.3;
-        Wed, 01 Dec 2021 12:50:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=3lAtleqfk79RizN4Xfz/dv/nqBhWl4vDwc0f8SGgsxY=;
-        b=KKYTA5Ku21eIUzrkOUBNprVJhnXu6Wu+pkGI21cKM8rtadKU9es1ODKMn0ZVPmHcDr
-         Zo/ASlBWBgg0rv4KKzfFL5eoXrRtXPYtIUeT4V0QcsUh2ejUR9L4IOwbSThxczRPCegA
-         F3QiDUtjWeS+iExMM0X3csJQG7Li1L5IPTvsvbNifEo9f0QFuBrYF420Uec875KmlHr7
-         xb51HeL4U+B8g6EMZzqcmLh6iNpuFbDc7rWRNXq1N1QBfzhg8MicQ+r/gSjS7luUrNde
-         CFwgoVp5ltRayrxzn0otRSHWhHDrc71ADzySTp1UqF1YBdZLQ6bdpjLMj1dXiOSaC6TY
-         xV5Q==
+        Wed, 1 Dec 2021 15:53:29 -0500
+Received: by mail-il1-f200.google.com with SMTP id b4-20020a92c564000000b002a252da46e2so18625369ilj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 12:50:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=3lAtleqfk79RizN4Xfz/dv/nqBhWl4vDwc0f8SGgsxY=;
-        b=phoH202eJhiBWlVhBWl7M+5/In7iShbUj4/1/tJo8FYIefjdyHoaIiyGjfQCW/hWlv
-         3MnREwsx1M93AggyaRdnc0KyqJeOk2V1FUuQQDcpbvW3fp2Kx87VZJqLD3v5E+JwAZsY
-         Nxk4KXhQj52jh/R+5motjggZPNFoGkmgsGqNJTYn/Hlibnjb+cvROs3PTEuoF9tUIoV9
-         OoVXxLyS99nllEiUeOg9M+FxyTWXH3ho8KbIFZ6XKG/+PleLe4GG5Np/uiNUa5zhrHSu
-         2xVu1k7itwKJB+2RVUjeI6gtE4UXKWtnr7ZdbCeHDdE5WIdhPuwY5JcX7pOJOJjtCGJX
-         oNmA==
-X-Gm-Message-State: AOAM531DUedQRhaGC0JGiTk7inV5BVnxM79TYcRUHs9kMsVrd8MmSokU
-        ht5aDPmsM/o0HFzGnIQA55JcjgwU0aY=
-X-Google-Smtp-Source: ABdhPJwViydUn1I4EprG4LndgvL2P0TFnWLOe1G91Z/AZbNE7DUadF5hsCCyosozj/NwiFTwxImxKA==
-X-Received: by 2002:a05:6808:150c:: with SMTP id u12mr681911oiw.6.1638391805132;
-        Wed, 01 Dec 2021 12:50:05 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a5sm328523otd.74.2021.12.01.12.50.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 12:50:04 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: Linux 5.16-rc3
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-References: <20211201203822.GA2840039@bhelgaas>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <542e38c7-afed-ebf5-5254-8aa6ee22b01a@roeck-us.net>
-Date:   Wed, 1 Dec 2021 12:50:02 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=X/WRQR8STDSXJRhWuJ7l+MpIYKViU5igfD9Z/w6cwnE=;
+        b=j9wgHTapoh45rzjCUdSPfb3T1/M5VtA0Ni5dUBzzxJG6tI06Ct+9Ee3+NGeU6NYqtZ
+         0qm9bw+iqn1M7dUA4W7LqaPHvdPCaXlcuM5QO7dKw+hGCH6K7JROD56edC7DYp6RuUYH
+         Q69sin7vmjZBUDuJOxtpZhs8nLL2x/kS5/M56JBPfHMaPhlBXbTl0nFmOA4Bu4JDWeYQ
+         hUM61w3VR4MOjFhuyJ3Y/l5gXUatdWmbUhm36+V1skUx88c7o4zFuRqSpQISnvZzukVF
+         G6+CF2aeXxU5gGmKe67Itgo83CD8L0xmBKOTOrLgytl8LgL9CzLOv2/bD1s40H3Sb7Pq
+         6Irg==
+X-Gm-Message-State: AOAM5317QpDc4idW2Tb8O8pxRSW96XzdxA9xfQLbn4TMiztgLG9hpSCT
+        2v0WHRTh+YGEQMnZErKlCUP33i1Uvl0myPo1piWwSjdKj1AY
+X-Google-Smtp-Source: ABdhPJxwnTjayukxQsPm7f3vzoFuy8C1JldbQMohbfblKSqInY3rP+nF24H24uBktfOukSFRQgYKFbRtf7c4JSZgMRbBhRziF+lR
 MIME-Version: 1.0
-In-Reply-To: <20211201203822.GA2840039@bhelgaas>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a92:d291:: with SMTP id p17mr1253204ilp.154.1638391807990;
+ Wed, 01 Dec 2021 12:50:07 -0800 (PST)
+Date:   Wed, 01 Dec 2021 12:50:07 -0800
+In-Reply-To: <00000000000069924b05c8cc3b84@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b7e3ee05d21bd19d@google.com>
+Subject: Re: [syzbot] WARNING in trc_read_check_handler
+From:   syzbot <syzbot+fe9d8c955bd1d0f02dc1@syzkaller.appspotmail.com>
+To:     bigeasy@linutronix.de, jgross@suse.com, jiangshanlai@gmail.com,
+        joel@joelfernandes.org, josh@joshtriplett.org,
+        linux-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+        mingo@kernel.org, namit@vmware.com, netdev@vger.kernel.org,
+        paulmck@kernel.org, peterz@infradead.org, rcu@vger.kernel.org,
+        rdunlap@infradead.org, rostedt@goodmis.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 12:38 PM, Bjorn Helgaas wrote:
-> [+cc linux-pci]
-> 
-> On Mon, Nov 29, 2021 at 01:18:12PM +0100, Sergio Paracuellos wrote:
->> On Mon, Nov 29, 2021 at 5:17 AM Guenter Roeck <linux@roeck-us.net> wrote:
->>> On 11/28/21 7:07 PM, Randy Dunlap wrote:
->>>> On 11/28/21 17:59, Guenter Roeck wrote:
->>>>> ...
->>>>> Build results:
->>>>>      total: 153 pass: 152 fail: 1
->>>>> Failed builds:
->>>>>      mips:allmodconfig
->>>>> Qemu test results:
->>>>>      total: 482 pass: 482 fail: 0
->>>>>
->>>>> Building mips:allmodconfig ... failed
->>>>> --------------
->>>>> Error log:
->>>>> ERROR: modpost: missing MODULE_LICENSE() in drivers/pci/controller/pcie-mt7621.o
->>>>> ERROR: modpost: "mips_cm_unlock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
->>>>> ERROR: modpost: "mips_cpc_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
->>>>> ERROR: modpost: "mips_cm_lock_other" [drivers/pci/controller/pcie-mt7621.ko] undefined!
->>>>> ERROR: modpost: "mips_cm_is64" [drivers/pci/controller/pcie-mt7621.ko] undefined!
->>>>> ERROR: modpost: "mips_gcr_base" [drivers/pci/controller/pcie-mt7621.ko] undefined!
->>>>>
->>>>> There is still no fix for the mips:allmodconfig build problem as far
->>>>> as I can see. It is a bit odd, because the fix would be as simple as
->>>>>
->>>>>    config PCIE_MT7621
->>>>> -    tristate "MediaTek MT7621 PCIe Controller"
->>>>> -    depends on (RALINK && SOC_MT7621) || (MIPS && COMPILE_TEST)
->>>>> +    bool "MediaTek MT7621 PCIe Controller"
->>>>> +    depends on SOC_MT7621 || (MIPS && COMPILE_TEST)
->>>>>        select PHY_MT7621_PCI
->>>>>        default SOC_MT7621
->>>>>        help
->>>>>
->>>>> Context: tristate doesn't make sense here because both RALINK and
->>>>> SOC_MT7621 are bool. Also, RALINK is redundant because SOC_MT7621
->>>>> already depends on it. The compile failure is due to missing exported
->>>>> symbols, and it is only seen if PCIE_MT7621=m - which is only possible
->>>>> if COMPILE_TEST=y. In other words, the dependencies above are set such
->>>>> that test builds, and only test builds, fail.
->>>>>
->>>>> The problem was introduced with commit 2bdd5238e756 ("PCI: mt7621:
->>>>> Add MediaTek MT7621 PCIe host controller driver"). Copying some of
->>>>> those responsible to see if we can expect a solution sometime soon.
-> 
-> Can we do a minimal patch along the lines of the above for v5.16?
-> 
+syzbot suspects this issue was fixed by commit:
 
-I would suggest to either do that or, if module support is mandatory,
-revert the patch and re-apply it if and when it can be built as module.
+commit 96017bf9039763a2e02dcc6adaa18592cd73a39d
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Wed Jul 28 17:53:41 2021 +0000
 
-Guenter
+    rcu-tasks: Simplify trc_read_check_handler() atomic operations
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1281d89db00000
+start commit:   5319255b8df9 selftests/bpf: Skip verifier tests that fail ..
+git tree:       bpf-next
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9290a409049988d4
+dashboard link: https://syzkaller.appspot.com/bug?extid=fe9d8c955bd1d0f02dc1
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14990477300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105ebd84b00000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: rcu-tasks: Simplify trc_read_check_handler() atomic operations
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

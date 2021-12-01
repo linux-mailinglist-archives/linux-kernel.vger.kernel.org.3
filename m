@@ -2,151 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8552C464641
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 06:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4856F464673
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 06:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346650AbhLAFMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 00:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234811AbhLAFMC (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 00:12:02 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0E5C061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 21:08:42 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id y8so16753972plg.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 21:08:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jRW4qABXyX4vH6Ha6BJJsmxFUkRbOvvDZkeTVBPDye0=;
-        b=C62DPLuUiX2Wl1g8HeM3bB7wBEULtP5eq9y9SuEyLHr4euacCL3aYwA7MBtpYI5us+
-         QOuYHfMXTIbaw8RROVLTmXThdhdW0YaXmJLHS/GvMC1m05dSwPI4piELY9o12bKtCwcQ
-         hdmLA3RdlbRnwu39s3o2D/cl0UpRwWEo/5K/i6OeRwJaqEcs9zxlZRqKxgCFG6NDWOfn
-         G+3B+vIMKPodZQSxuHVcS2iSeowLweHNi7VAoO7H4D5/TbZnvVHgGQzMUHhFl4qzxrPw
-         N7+e1TOneugk0GD5DrT0cpQcSqHYttR7kjeyyfjvaMshCdCBB2ObsEkhpo1UKl9pIJGE
-         bnuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jRW4qABXyX4vH6Ha6BJJsmxFUkRbOvvDZkeTVBPDye0=;
-        b=xc/uv4FCjmwxiWwBKTJce9GWTMfPpg/R3UOkyB6PGBxJh71fr17qLC9eRrjAAjTcnq
-         e0CosWtL91s/BnrIvL9zXoF3dmdqqsGKF40SKz6E+FRXCeNCP5xEW+UXFodfDKQ7jprW
-         28iFo3jHo86T3qa2O0wBXauJeyWSOWWrF7D5Savg5tXLn91LTEKMiEOEG2BWzFYM9W5b
-         3NEdlwXJljGVR0AYvx5lR1n376rfZaVzoX8q13A9BSHiDFktIicpWIIsFLneGwzCwWid
-         Cjq1slhJlolrDCx3breZJTW5uQqzmzYejgKqCE6+HKfhi/Ip0teVRlxbtgdz/U/i5Qxv
-         jfKw==
-X-Gm-Message-State: AOAM533dxvMSqZWsWU0s9h08+8pmSiO48aAK6TZ6bO0w9+2jKmGkztPE
-        3etUv6w2twjwSS0Ra7Gid+FjQw==
-X-Google-Smtp-Source: ABdhPJzb3Rm6yxF1rG/twFVbSU3/FJ8wr2sFXl/8g7eL9Pu7Cb1LTf8FDTdI78jJ6dJKOrlR8RoQ3Q==
-X-Received: by 2002:a17:90a:880a:: with SMTP id s10mr4594906pjn.214.1638335322025;
-        Tue, 30 Nov 2021 21:08:42 -0800 (PST)
-Received: from leoy-ThinkPad-X240s ([66.23.193.248])
-        by smtp.gmail.com with ESMTPSA id n71sm23087146pfd.50.2021.11.30.21.08.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 21:08:41 -0800 (PST)
-Date:   Wed, 1 Dec 2021 13:08:36 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, Ingo Molnar <mingo@kernel.org>,
+        id S231269AbhLAFXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 00:23:06 -0500
+Received: from mga02.intel.com ([134.134.136.20]:61075 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S230492AbhLAFXD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 00:23:03 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="223615533"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="223615533"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 21:19:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="512536566"
+Received: from shbuild999.sh.intel.com (HELO localhost) ([10.239.146.189])
+  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2021 21:19:36 -0800
+Date:   Wed, 1 Dec 2021 13:19:35 +0800
+From:   Feng Tang <feng.tang@intel.com>
+To:     Luming Yu <luming.yu@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ian Rogers <irogers@google.com>,
-        Stephane Eranian <eranian@google.com>,
-        German Gomez <german.gomez@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        James Clark <James.Clark@arm.com>
-Subject: Re: [PATCH] perf tools: Add SPE total latency as PERF_SAMPLE_WEIGHT
-Message-ID: <20211201050836.GB2678859@leoy-ThinkPad-X240s>
-References: <20211201003908.1200945-1-namhyung@kernel.org>
+        the arch/x86 maintainers <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, paulmck@kernel.org,
+        rui.zhang@intel.com, andi.kleen@intel.com,
+        Len Brown <len.brown@intel.com>, tim.c.chen@intel.com
+Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for qualified
+ platforms
+Message-ID: <20211201051935.GA14778@shbuild999.sh.intel.com>
+References: <20211117023751.24190-1-feng.tang@intel.com>
+ <20211117023751.24190-2-feng.tang@intel.com>
+ <CAJRGBZxdtRgENVonpfJn-zFoQx_LB0ms=aS3wAJhRJO+_OqYFw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211201003908.1200945-1-namhyung@kernel.org>
+In-Reply-To: <CAJRGBZxdtRgENVonpfJn-zFoQx_LB0ms=aS3wAJhRJO+_OqYFw@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Namhyung,
-
-On Tue, Nov 30, 2021 at 04:39:08PM -0800, Namhyung Kim wrote:
-> Use total latency info in the SPE counter packet as sample weight so
-> that we can see it in local_weight and (global) weight sort keys.
+On Tue, Nov 30, 2021 at 11:45:32PM -0500, Luming Yu wrote:
+> On Tue, Nov 16, 2021 at 11:18 PM Feng Tang <feng.tang@intel.com> wrote:
+> >
+> > There are cases that tsc clocksources are wrongly judged as unstable by
+> > clocksource watchdogs like hpet, acpi_pm or 'refined-jiffies'. While
+> > there is hardly a general reliable way to check the validity of a
+> > watchdog, and to protect the innocent tsc, Thomas Gleixner proposed [1]:
+> >
+> > "I'm inclined to lift that requirement when the CPU has:
+> >
+> >     1) X86_FEATURE_CONSTANT_TSC
+> >     2) X86_FEATURE_NONSTOP_TSC
+> >     3) X86_FEATURE_NONSTOP_TSC_S3
+> >     4) X86_FEATURE_TSC_ADJUST
+> >     5) At max. 4 sockets
+> >
 > 
-> Maybe we can use PERF_SAMPLE_WEIGHT_STRUCT to support ins_lat as well
-> but I'm not sure which latency it matches.  So just adding total
-> latency first.
+> Hi Feng,
 > 
-> Cc: German Gomez <german.gomez@arm.com>
-> Cc: Leo Yan <leo.yan@linaro.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> ---
->  tools/perf/util/arm-spe-decoder/arm-spe-decoder.c | 2 ++
->  tools/perf/util/arm-spe-decoder/arm-spe-decoder.h | 1 +
->  tools/perf/util/arm-spe.c                         | 4 +++-
->  3 files changed, 6 insertions(+), 1 deletion(-)
+> We do  need to decouple  tsc from HPET as the current HPET as a
+> clocksource watchdog for tsc
+> is only useful to find HPET read skews in some circumstances and the
+> variations of HPET read come from many different sources. But
+> none of which really came from the tsc quality, AFAICT.
 > 
-> diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-> index 3fc528c9270c..5e390a1a79ab 100644
-> --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-> +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
-> @@ -179,6 +179,8 @@ static int arm_spe_read_record(struct arm_spe_decoder *decoder)
->  				decoder->record.phys_addr = ip;
->  			break;
->  		case ARM_SPE_COUNTER:
-> +			if (idx == SPE_CNT_PKT_HDR_INDEX_TOTAL_LAT)
-> +				decoder->record.latency = payload;
->  			break;
->  		case ARM_SPE_CONTEXT:
->  			decoder->record.context_id = payload;
-> diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
-> index 46a8556a9e95..69b31084d6be 100644
-> --- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
-> +++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
-> @@ -33,6 +33,7 @@ struct arm_spe_record {
->  	enum arm_spe_sample_type type;
->  	int err;
->  	u32 op;
-> +	u32 latency;
->  	u64 from_ip;
->  	u64 to_ip;
->  	u64 timestamp;
-> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
-> index 4748bcfe61de..a756325c72a7 100644
-> --- a/tools/perf/util/arm-spe.c
-> +++ b/tools/perf/util/arm-spe.c
-> @@ -317,6 +317,7 @@ static int arm_spe__synth_mem_sample(struct arm_spe_queue *speq,
->  	sample.addr = record->virt_addr;
->  	sample.phys_addr = record->phys_addr;
->  	sample.data_src = data_src;
-> +	sample.weight = record->latency;
+> so this patch is in line with my understanding of the problem.
+> So , please use  reviewed-by :  luming.yu@intel.com , if it can help
+> the merge of the patch. : -)
 
-The latency can be used for branch operations as well, it's good to
-assign latency for branch samples in the function
-arm_spe__synth_branch_sample().
+Thanks for the review and sharing the real world cases you've met!
 
-With adding latency for branch sample, the change would be good for me:
-
-Reviewed-by: Leo Yan <leo.yan@linaro.org>
-
->  	return arm_spe_deliver_synth_event(spe, speq, event, &sample);
->  }
-> @@ -980,7 +981,8 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
->  	attr.type = PERF_TYPE_HARDWARE;
->  	attr.sample_type = evsel->core.attr.sample_type & PERF_SAMPLE_MASK;
->  	attr.sample_type |= PERF_SAMPLE_IP | PERF_SAMPLE_TID |
-> -			    PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC;
-> +			    PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC |
-> +			    PERF_SAMPLE_WEIGHT;
->  	if (spe->timeless_decoding)
->  		attr.sample_type &= ~(u64)PERF_SAMPLE_TIME;
->  	else
-> -- 
-> 2.34.0.rc2.393.gf8c9666880-goog
-> 
+- Feng

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE19464860
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345A1464865
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347470AbhLAHcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:32:51 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:55172 "EHLO
+        id S1347518AbhLAHc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:32:58 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:55196 "EHLO
         sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbhLAHcu (ORCPT
+        with ESMTP id S1347483AbhLAHcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:32:50 -0500
+        Wed, 1 Dec 2021 02:32:52 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 28B4DCE1D73;
-        Wed,  1 Dec 2021 07:29:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ABE2C53FCE;
-        Wed,  1 Dec 2021 07:29:23 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 17319CE1D75;
+        Wed,  1 Dec 2021 07:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE44BC53FAD;
+        Wed,  1 Dec 2021 07:29:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638343766;
-        bh=V1TJkX0Mv8NmFefTXv3/JgtPii8IaGT4gjWuDhvPxKU=;
+        s=k20201202; t=1638343769;
+        bh=qUBCqTkVk67waMd2M9a6Vqzm6ZXAqVe1PfEqjwIDh4M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tv7Qm6wOHTEUl+NSpe+lsUEhrzpRsMGwCs/Mg1yu0/Zg/uorByVb1x/7L6rtwYrOx
-         cE7Z5ljXqpGzZv4yvJCAS9mfPAXC0H2miEdvgPOGciNl4dnYZ0d+aXCZMlsqCMGJMv
-         0vmovXJEBoOUzUaRVqHwwUK4SCkbrdqWJ5+9rCXO3H5Vow9gywW8y3E6higmVwGlZF
-         doqkhJFAEuRtYqx6NiVqXTbRwW2/djnpsS2UPe9qu/RNAQzVqxkru9jpNs1DV1payz
-         gJwHkq92oVwpbwC+eYnrlhD48RInZ0ZBPDw6FNwEDLFRx0viwCFQLX9PftEGsTJl/L
-         EslH/rJnAJ69A==
+        b=CkYFN9R/d1jtPIkncUI0kUQv0o6XdO7QEo0FaWdkk3lbTcjTUH+TB2ZAmMpq1twQK
+         EXfYLv8RYj3HKljky8DtxwWH6GHBmh1KjNpebZy9LaQoyeVD0I9b3KFFd/etl4Vuec
+         K6CE8u/r94ywTNCLLP1X8pBRd3wWNoodL0Ok9OBsavixctqQnRmtey3h3/Cp0w16e8
+         6EGfNHgh6HUym+IJnvC65kJbJWvOXt9ZcgdFw2RK8YbYsxghD5QVx6lNREKhjKsqBD
+         jIbTGXjOsY5llRg0FuwoOvcCc9KRzeQxWzJCFwTm7XDlIHtTLcHyyGDY/MEVf2ttXf
+         I0u4gnXr42AMA==
 From:   Vinod Koul <vkoul@kernel.org>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
         Andy Gross <agross@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 01/15] arm64: dts: qcom: Add base SM8450 DTSI
-Date:   Wed,  1 Dec 2021 12:59:01 +0530
-Message-Id: <20211201072915.3969178-2-vkoul@kernel.org>
+Subject: [PATCH 02/15] arm64: dts: qcom: Add base SM8450 QRD DTS
+Date:   Wed,  1 Dec 2021 12:59:02 +0530
+Message-Id: <20211201072915.3969178-3-vkoul@kernel.org>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20211201072915.3969178-1-vkoul@kernel.org>
 References: <20211201072915.3969178-1-vkoul@kernel.org>
@@ -47,497 +47,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This add based DTSI for SM8450 SoC and includes base description of
-CPUs, GCC, RPMHCC, UART, interuupt-controller which helps to boot to
-shell with console on boards with this SoC
+Add DTS for Qualcomm QRD platform which uses SM8450 SoC
 
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 ---
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 476 +++++++++++++++++++++++++++
- 1 file changed, 476 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sm8450.dtsi
+ arch/arm64/boot/dts/qcom/Makefile       |  1 +
+ arch/arm64/boot/dts/qcom/sm8450-qrd.dts | 29 +++++++++++++++++++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8450-qrd.dts
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 6b816eb33309..9b37261484cf 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -107,3 +107,4 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx203.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8250-sony-xperia-edo-pdx206.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-hdk.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sm8350-mtp.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sm8450-qrd.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sm8450-qrd.dts b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
 new file mode 100644
-index 000000000000..d838283bde4b
+index 000000000000..127d32502555
 --- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -0,0 +1,476 @@
++++ b/arch/arm64/boot/dts/qcom/sm8450-qrd.dts
+@@ -0,0 +1,29 @@
 +// SPDX-License-Identifier: BSD-3-Clause
 +/*
 + * Copyright (c) 2021, Linaro Limited
 + */
 +
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/clock/qcom,gcc-sm8450.h>
-+#include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/soc/qcom,rpmh-rsc.h>
++/dts-v1/;
++
++#include "sm8450.dtsi"
 +
 +/ {
-+	interrupt-parent = <&intc>;
++	model = "Qualcomm Technologies, Inc. SM8450 QRD";
++	compatible = "qcom,sm8450-qrd", "qcom,sm8450";
 +
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	chosen { };
-+
-+	clocks {
-+		xo_board: xo-board {
-+			compatible = "fixed-clock";
-+			#clock-cells = <0>;
-+			clock-frequency = <76800000>;
-+			clock-output-names = "xo_board";
-+		};
-+
-+		sleep_clk: sleep-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <32000>;
-+			#clock-cells = <0>;
-+		};
++	aliases {
++		serial0 = &uart7;
 +	};
 +
-+	cpus {
-+		#address-cells = <2>;
-+		#size-cells = <0>;
-+
-+		CPU0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "qcom,kryo780";
-+			reg = <0x0 0x0>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_0>;
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
-+			L2_0: l2-cache {
-+			      compatible = "cache";
-+			      next-level-cache = <&L3_0>;
-+				L3_0: l3-cache {
-+				      compatible = "cache";
-+				};
-+			};
-+		};
-+
-+		CPU1: cpu@100 {
-+			device_type = "cpu";
-+			compatible = "qcom,kryo780";
-+			reg = <0x0 0x100>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_100>;
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
-+			L2_100: l2-cache {
-+			      compatible = "cache";
-+			      next-level-cache = <&L3_0>;
-+			};
-+		};
-+
-+		CPU2: cpu@200 {
-+			device_type = "cpu";
-+			compatible = "qcom,kryo780";
-+			reg = <0x0 0x200>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_200>;
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
-+			L2_200: l2-cache {
-+			      compatible = "cache";
-+			      next-level-cache = <&L3_0>;
-+			};
-+		};
-+
-+		CPU3: cpu@300 {
-+			device_type = "cpu";
-+			compatible = "qcom,kryo780";
-+			reg = <0x0 0x300>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_300>;
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
-+			L2_300: l2-cache {
-+			      compatible = "cache";
-+			      next-level-cache = <&L3_0>;
-+			};
-+		};
-+
-+		CPU4: cpu@400 {
-+			device_type = "cpu";
-+			compatible = "qcom,kryo780";
-+			reg = <0x0 0x400>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_400>;
-+			power-domains = <&CPU_PD4>;
-+			power-domain-names = "psci";
-+			L2_400: l2-cache {
-+			      compatible = "cache";
-+			      next-level-cache = <&L3_0>;
-+			};
-+		};
-+
-+		CPU5: cpu@500 {
-+			device_type = "cpu";
-+			compatible = "qcom,kryo780";
-+			reg = <0x0 0x500>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_500>;
-+			power-domains = <&CPU_PD5>;
-+			power-domain-names = "psci";
-+			L2_500: l2-cache {
-+			      compatible = "cache";
-+			      next-level-cache = <&L3_0>;
-+			};
-+
-+		};
-+
-+		CPU6: cpu@600 {
-+			device_type = "cpu";
-+			compatible = "qcom,kryo780";
-+			reg = <0x0 0x600>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_600>;
-+			power-domains = <&CPU_PD6>;
-+			power-domain-names = "psci";
-+			L2_600: l2-cache {
-+			      compatible = "cache";
-+			      next-level-cache = <&L3_0>;
-+			};
-+		};
-+
-+		CPU7: cpu@700 {
-+			device_type = "cpu";
-+			compatible = "qcom,kryo780";
-+			reg = <0x0 0x700>;
-+			enable-method = "psci";
-+			next-level-cache = <&L2_700>;
-+			power-domains = <&CPU_PD7>;
-+			power-domain-names = "psci";
-+			L2_700: l2-cache {
-+			      compatible = "cache";
-+			      next-level-cache = <&L3_0>;
-+			};
-+		};
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&CPU0>;
-+				};
-+
-+				core1 {
-+					cpu = <&CPU1>;
-+				};
-+
-+				core2 {
-+					cpu = <&CPU2>;
-+				};
-+
-+				core3 {
-+					cpu = <&CPU3>;
-+				};
-+
-+				core4 {
-+					cpu = <&CPU4>;
-+				};
-+
-+				core5 {
-+					cpu = <&CPU5>;
-+				};
-+
-+				core6 {
-+					cpu = <&CPU6>;
-+				};
-+
-+				core7 {
-+					cpu = <&CPU7>;
-+				};
-+			};
-+		};
-+
-+		idle-states {
-+			entry-method = "psci";
-+
-+			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "silver-rail-power-collapse";
-+				arm,psci-suspend-param = <0x40000004>;
-+				entry-latency-us = <274>;
-+				exit-latency-us = <480>;
-+				min-residency-us = <3934>;
-+				local-timer-stop;
-+			};
-+
-+			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "gold-rail-power-collapse";
-+				arm,psci-suspend-param = <0x40000004>;
-+				entry-latency-us = <327>;
-+				exit-latency-us = <1502>;
-+				min-residency-us = <4488>;
-+				local-timer-stop;
-+			};
-+		};
-+
-+		domain-idle-states {
-+			CLUSTER_SLEEP_0: cluster-sleep-0 {
-+				compatible = "domain-idle-state";
-+				idle-state-name = "cluster-l3-off";
-+				arm,psci-suspend-param = <0x4100c344>;
-+				entry-latency-us = <584>;
-+				exit-latency-us = <2332>;
-+				min-residency-us = <6118>;
-+				local-timer-stop;
-+			};
-+
-+			CLUSTER_SLEEP_1: cluster-sleep-1 {
-+				compatible = "domain-idle-state";
-+				idle-state-name = "cluster-power-collapse";
-+				arm,psci-suspend-param = <0x4100c344>;
-+				entry-latency-us = <2893>;
-+				exit-latency-us = <4023>;
-+				min-residency-us = <9987>;
-+				local-timer-stop;
-+			};
-+		};
++	chosen {
++		stdout-path = "serial0:115200n8";
 +	};
++};
 +
-+	firmware {
-+		scm: scm {
-+			compatible = "qcom,scm-sm8450", "qcom,scm";
-+			#reset-cells = <1>;
-+		};
-+	};
++&qupv3_id_0 {
++	status = "okay";
++};
 +
-+	memory@a0000000 {
-+		device_type = "memory";
-+		/* We expect the bootloader to fill in the size */
-+		reg = <0x0 0xa0000000 0x0 0x0>;
-+	};
-+
-+	pmu {
-+		compatible = "arm,armv8-pmuv3";
-+		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+
-+		CPU_PD0: cpu0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD1: cpu1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD2: cpu2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD3: cpu3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD4: cpu4 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD5: cpu5 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD6: cpu6 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD7: cpu7 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CLUSTER_PD: cpu-cluster0 {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_SLEEP_0>;
-+		};
-+	};
-+
-+	soc: soc@0 {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges = <0 0 0 0 0x10 0>;
-+		dma-ranges = <0 0 0 0 0x10 0>;
-+		compatible = "simple-bus";
-+
-+		gcc: clock-controller@100000 {
-+			compatible = "qcom,gcc-sm8450";
-+			reg = <0x0 0x00100000 0x0 0x1f4200>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+			clock-names = "bi_tcxo", "sleep_clk";
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&sleep_clk>;
-+		};
-+
-+		qupv3_id_0: geniqup@9c0000 {
-+			compatible = "qcom,geni-se-qup";
-+			reg = <0x0 0x009c0000 0x0 0x2000>;
-+			clock-names = "m-ahb", "s-ahb";
-+			clocks = <&gcc GCC_QUPV3_WRAP_0_M_AHB_CLK>,
-+				 <&gcc GCC_QUPV3_WRAP_0_S_AHB_CLK>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			status = "disabled";
-+
-+			uart7: serial@99c000 {
-+				compatible = "qcom,geni-debug-uart";
-+				reg = <0 0x0099c000 0 0x4000>;
-+				clock-names = "se";
-+				clocks = <&gcc GCC_QUPV3_WRAP0_S7_CLK>;
-+				interrupts = <GIC_SPI 608 IRQ_TYPE_LEVEL_HIGH>;
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		tcsr_mutex: hwlock@1f40000 {
-+			compatible = "qcom,tcsr-mutex";
-+			reg = <0x0 0x01f40000 0x0 0x40000>;
-+			#hwlock-cells = <1>;
-+		};
-+
-+		pdc: interrupt-controller@b220000 {
-+			compatible = "qcom,sm8450-pdc", "qcom,pdc";
-+			reg = <0 0x0b220000 0 0x30000>, <0 0x174000f0 0 0x64>;
-+			qcom,pdc-ranges = <0 480 12>, <14 494 24>, <40 520 54>,
-+					  <94 609 31>, <125 63 1>, <126 716 12>;
-+			#interrupt-cells = <2>;
-+			interrupt-parent = <&intc>;
-+			interrupt-controller;
-+		};
-+
-+		intc: interrupt-controller@17100000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <3>;
-+			interrupt-controller;
-+			#redistributor-regions = <1>;
-+			redistributor-stride = <0x0 0x40000>;
-+			reg = <0x0 0x17100000 0x0 0x10000>,     /* GICD */
-+			      <0x0 0x17180000 0x0 0x200000>;    /* GICR * 8 */
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+
-+		timer@17420000 {
-+			compatible = "arm,armv7-timer-mem";
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			reg = <0x0 0x17420000 0x0 0x1000>;
-+			clock-frequency = <19200000>;
-+
-+			frame@17421000 {
-+				frame-number = <0>;
-+				interrupts = <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
-+				reg = <0x0 0x17421000 0x0 0x1000>,
-+				      <0x0 0x17422000 0x0 0x1000>;
-+			};
-+
-+			frame@17423000 {
-+				frame-number = <1>;
-+				interrupts = <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>;
-+				reg = <0x0 0x17423000 0x0 0x1000>;
-+				status = "disabled";
-+			};
-+
-+			frame@17425000 {
-+				frame-number = <2>;
-+				interrupts = <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>;
-+				reg = <0x0 0x17425000 0x0 0x1000>;
-+				status = "disabled";
-+			};
-+
-+			frame@17427000 {
-+				frame-number = <3>;
-+				interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-+				reg = <0x0 0x17427000 0x0 0x1000>;
-+				status = "disabled";
-+			};
-+
-+			frame@17429000 {
-+				frame-number = <4>;
-+				interrupts = <GIC_SPI 12 IRQ_TYPE_LEVEL_HIGH>;
-+				reg = <0x0 0x17429000 0x0 0x1000>;
-+				status = "disabled";
-+			};
-+
-+			frame@1742b000 {
-+				frame-number = <5>;
-+				interrupts = <GIC_SPI 13 IRQ_TYPE_LEVEL_HIGH>;
-+				reg = <0x0 0x1742b000 0x0 0x1000>;
-+				status = "disabled";
-+			};
-+
-+			frame@1742d000 {
-+				frame-number = <6>;
-+				interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
-+				reg = <0x0 0x1742d000 0x0 0x1000>;
-+				status = "disabled";
-+			};
-+		};
-+
-+		apps_rsc: rsc@17a00000 {
-+			label = "apps_rsc";
-+			compatible = "qcom,rpmh-rsc";
-+			reg = <0x0 0x17a00000 0x0 0x10000>,
-+			      <0x0 0x17a10000 0x0 0x10000>,
-+			      <0x0 0x17a20000 0x0 0x10000>,
-+			      <0x0 0x17a30000 0x0 0x10000>;
-+			reg-names = "drv-0", "drv-1", "drv-2", "drv-3";
-+			interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
-+			qcom,tcs-offset = <0xd00>;
-+			qcom,drv-id = <2>;
-+			qcom,tcs-config = <ACTIVE_TCS  3>, <SLEEP_TCS   2>,
-+					  <WAKE_TCS    2>, <CONTROL_TCS 0>;
-+
-+			apps_bcm_voter: bcm-voter {
-+				compatible = "qcom,bcm-voter";
-+			};
-+
-+			rpmhcc: clock-controller {
-+				compatible = "qcom,sm8450-rpmh-clk";
-+				#clock-cells = <1>;
-+				clock-names = "xo";
-+				clocks = <&xo_board>;
-+			};
-+		};
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(8) | IRQ_TYPE_LEVEL_LOW)>;
-+		clock-frequency = <19200000>;
-+	};
++&uart7 {
++	status = "okay";
 +};
 -- 
 2.31.1

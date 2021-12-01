@@ -2,147 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E60464C69
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:12:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B9B4464C6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:13:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237895AbhLALQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:16:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232250AbhLALQM (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:16:12 -0500
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1A3C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 03:12:52 -0800 (PST)
-Received: by mail-qt1-x82e.google.com with SMTP id t11so23555273qtw.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 03:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=/qgvOkZEM3lx0/khvl/WvVYYCH02Irf7u8oy1QcHGIE=;
-        b=EYmBbkrozaG+4zbQmrjhWfYmeMvdxlC1bDluI0d39uYp+28ROCyJu36iJYDVVKubPI
-         Z7ss7yiWziOwwDdyl+PwO2yTeRMSqpUwI7Gg0WgZviYnY7JZKXBUMcliL2qfhg+zNQ/Y
-         w3pbS6KQkGJJLtJEAirAlXnBsa8mJaC3sjmu6vvrdZHjT6UekYvEan5W6H1yCiORRG8E
-         3q8c5zihpOF1jG/9ifEMj+QU9r/Bhdhnuv+ghHSmBLlWyq0qrHUUS1AlKy0X/oPWZ5WI
-         7DvCD4WDX3j9uw444fm/rt00ri9nVCfWGQhiy8Tso6n6Ua9PKgwoi9V8f81xm0eQib6P
-         9WIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=/qgvOkZEM3lx0/khvl/WvVYYCH02Irf7u8oy1QcHGIE=;
-        b=Ic6yVICGXtcNa0QsWGSJf8XsBufw1XMml8zFdJUEz0Z6D8KaA/rCmaCUGiMvtbJwlW
-         WnCwj433MdM/0SsQLTBc6Bq5GCzf8EjuIYrnexcYC/fzh9+A2whisdhgDVs1WUgDsGc9
-         0aR2+DA78wuWBLhXkm5m2vu+Psc/SdddHWf7y8u3mNKC77H8QkSVfm+71ZvYHqBcQsmh
-         poMZMtgBwZn4PQTn+gpMM2PVyPD46nUS3kDhON5F9xKmQmhMZJ2clmy1a8oG5T7M4DfA
-         LFIbWz0MHx2e0ONKMcgI9Zq5BBNa2Cl1bLlG68hIeuKIK35i8+v13r9HXGCoAw86mdLM
-         Q63Q==
-X-Gm-Message-State: AOAM5306GciY1lXbC1hGZGCDHXcnC8B4joXiqBIgmaQpKqZvIGLCeNyd
-        aP/AlCF/CnFZa/K2UihTROw9ZXJj0SOelq2er9mCuq0oY74=
-X-Google-Smtp-Source: ABdhPJwR/AYvVCQcFST+kZTP3V4IqZzbHGaDrE3Sk9aJtrHbw61EoQG1md2Sz9BGUrm31gbXyKTw8PKmw0unAQSnQAc=
-X-Received: by 2002:a05:622a:1004:: with SMTP id d4mr5942284qte.95.1638357171215;
- Wed, 01 Dec 2021 03:12:51 -0800 (PST)
+        id S1348890AbhLALQs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:16:48 -0500
+Received: from mga05.intel.com ([192.55.52.43]:41868 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232968AbhLALQr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 06:16:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="322682220"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="322682220"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 03:13:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="747511791"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Dec 2021 03:13:25 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msNYC-000EoM-SW; Wed, 01 Dec 2021 11:13:24 +0000
+Date:   Wed, 1 Dec 2021 19:12:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Luo bin <luobin9@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/huawei/hinic/hinic_main.c:796:25: sparse:
+ sparse: cast to restricted __be16
+Message-ID: <202112011907.Q6F2ZYJU-lkp@intel.com>
 MIME-Version: 1.0
-References: <1638356341-17014-1-git-send-email-huangzhaoyang@gmail.com>
-In-Reply-To: <1638356341-17014-1-git-send-email-huangzhaoyang@gmail.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Wed, 1 Dec 2021 19:12:30 +0800
-Message-ID: <CAGWkznHq15QN5Dn6_QfbAm7jS9OPCV4TVqn2_9RxUBx0V9v78w@mail.gmail.com>
-Subject: Re: [RFC PATCH] mm: count zram read/write into PSI_IO_WAIT
-To:     Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no chance for zram reading/writing to be counted in
-PSI_IO_WAIT so far as zram will deal with the request just in current
-context without invoking submit_bio and io_schedule.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
+commit: 1f62cfa19a619f82c098468660b7950477101d45 hinic: add net_device_ops associated with vf
+date:   1 year, 7 months ago
+config: x86_64-randconfig-s022-20211124 (https://download.01.org/0day-ci/archive/20211201/202112011907.Q6F2ZYJU-lkp@intel.com/config)
+compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1f62cfa19a619f82c098468660b7950477101d45
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 1f62cfa19a619f82c098468660b7950477101d45
+        # save the config file to linux build tree
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-On Wed, Dec 1, 2021 at 6:59 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
->
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
->
-> Have zram reading/writing be counted in PSI_IO_WAIT.
->
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> ---
->  drivers/block/zram/zram_drv.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-> index fcaf275..b0e4766 100644
-> --- a/drivers/block/zram/zram_drv.c
-> +++ b/drivers/block/zram/zram_drv.c
-> @@ -34,6 +34,7 @@
->  #include <linux/debugfs.h>
->  #include <linux/cpuhotplug.h>
->  #include <linux/part_stat.h>
-> +#include <linux/psi.h>
->
->  #include "zram_drv.h"
->
-> @@ -1246,7 +1247,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
->                                 zram_get_element(zram, index),
->                                 bio, partial_io);
->         }
-> -
-> +#ifdef CONFIG_PSI
-> +       psi_task_change(current, 0, TSK_IOWAIT);
-> +#endif
->         handle = zram_get_handle(zram, index);
->         if (!handle || zram_test_flag(zram, index, ZRAM_SAME)) {
->                 unsigned long value;
-> @@ -1257,6 +1260,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
->                 zram_fill_page(mem, PAGE_SIZE, value);
->                 kunmap_atomic(mem);
->                 zram_slot_unlock(zram, index);
-> +#ifdef CONFIG_PSI
-> +               psi_task_change(current, TSK_IOWAIT, 0);
-> +#endif
->                 return 0;
->         }
->
-> @@ -1284,6 +1290,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
->         if (WARN_ON(ret))
->                 pr_err("Decompression failed! err=%d, page=%u\n", ret, index);
->
-> +#ifdef CONFIG_PSI
-> +       psi_task_change(current, TSK_IOWAIT, 0);
-> +#endif
->         return ret;
->  }
->
-> @@ -1471,7 +1480,13 @@ static int zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
->                 vec.bv_offset = 0;
->         }
->
-> +#ifdef CONFIG_PSI
-> +       psi_task_change(current, 0, TSK_IOWAIT);
-> +#endif
->         ret = __zram_bvec_write(zram, &vec, index, bio);
-> +#ifdef CONFIG_PSI
-> +       psi_task_change(current, TSK_IOWAIT, 0);
-> +#endif
->  out:
->         if (is_partial_io(bvec))
->                 __free_page(page);
-> @@ -1607,7 +1622,6 @@ static blk_qc_t zram_submit_bio(struct bio *bio)
->                 atomic64_inc(&zram->stats.invalid_io);
->                 goto error;
->         }
-> -
->         __zram_make_request(zram, bio);
->         return BLK_QC_T_NONE;
->
-> --
-> 1.9.1
->
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/net/ethernet/huawei/hinic/hinic_main.c:796:25: sparse: sparse: cast to restricted __be16
+>> drivers/net/ethernet/huawei/hinic/hinic_main.c:796:25: sparse: sparse: cast to restricted __be16
+>> drivers/net/ethernet/huawei/hinic/hinic_main.c:796:25: sparse: sparse: cast to restricted __be16
+>> drivers/net/ethernet/huawei/hinic/hinic_main.c:796:25: sparse: sparse: cast to restricted __be16
+
+vim +796 drivers/net/ethernet/huawei/hinic/hinic_main.c
+
+   778	
+   779	static void hinic_tx_timeout(struct net_device *netdev, unsigned int txqueue)
+   780	{
+   781		struct hinic_dev *nic_dev = netdev_priv(netdev);
+   782		u16 sw_pi, hw_ci, sw_ci;
+   783		struct hinic_sq *sq;
+   784		u16 num_sqs, q_id;
+   785	
+   786		num_sqs = hinic_hwdev_num_qps(nic_dev->hwdev);
+   787	
+   788		netif_err(nic_dev, drv, netdev, "Tx timeout\n");
+   789	
+   790		for (q_id = 0; q_id < num_sqs; q_id++) {
+   791			if (!netif_xmit_stopped(netdev_get_tx_queue(netdev, q_id)))
+   792				continue;
+   793	
+   794			sq = hinic_hwdev_get_sq(nic_dev->hwdev, q_id);
+   795			sw_pi = atomic_read(&sq->wq->prod_idx) & sq->wq->mask;
+ > 796			hw_ci = be16_to_cpu(*(u16 *)(sq->hw_ci_addr)) & sq->wq->mask;
+   797			sw_ci = atomic_read(&sq->wq->cons_idx) & sq->wq->mask;
+   798			netif_err(nic_dev, drv, netdev, "Txq%d: sw_pi: %d, hw_ci: %d, sw_ci: %d, napi->state: 0x%lx\n",
+   799				  q_id, sw_pi, hw_ci, sw_ci,
+   800				  nic_dev->txqs[q_id].napi.state);
+   801		}
+   802	}
+   803	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

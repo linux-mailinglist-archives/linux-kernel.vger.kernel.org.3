@@ -2,78 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F687464904
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BD4F4647AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347893AbhLAHnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:43:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37118 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347853AbhLAHn0 (ORCPT
+        id S1347128AbhLAHQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:16:04 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:28203 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347106AbhLAHQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:43:26 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69D88C061574;
-        Tue, 30 Nov 2021 23:40:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 5767ECE1D49;
-        Wed,  1 Dec 2021 07:40:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF780C53FD0;
-        Wed,  1 Dec 2021 07:39:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638344402;
-        bh=rd1g/Mg+d9q8eRsVNqe7GRL0cp3tKq24b0vxwmqSUco=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F6oBf04UDEjljSy3K4IoRij8DRgqgaPN7pu8QAHzXBy9o2Jz805NI7NBGItU3Y8bs
-         C7oIKxidj3F0X/dVGCcdcLA5ukRAs+r1qiANANpgBHurSzX40X9DS0bpT+AvVPt4OH
-         RwjLZGYVFV9WEMcRxSh2JZ+I2rdHzVV5kMqJgMEpOxwIPwqxWZFwJbIbdfV3d7Kufb
-         aCi+WbisGz5ZX+8YogLI5xx3OsECBcH4gTB8QTxoNjmmMSTm6yqCVnViKopFSO/5eg
-         5iTGy6nuFBRK99d7hMcmq0tUP+1r4JLc2y1CblLNNUWsPUYOKKpAOZdNPrMo5V3XmG
-         j9Rp6ZKDKiUVg==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Joerg Roedel <joro@8bytes.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] iommu: arm-smmu-impl: Add SM8450 qcom iommu implementation
-Date:   Wed,  1 Dec 2021 13:09:43 +0530
-Message-Id: <20211201073943.3969549-3-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211201073943.3969549-1-vkoul@kernel.org>
-References: <20211201073943.3969549-1-vkoul@kernel.org>
+        Wed, 1 Dec 2021 02:16:03 -0500
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J3qxH3Qnyz8vnB;
+        Wed,  1 Dec 2021 15:10:43 +0800 (CST)
+Received: from dggpeml500006.china.huawei.com (7.185.36.76) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 1 Dec 2021 15:12:41 +0800
+Received: from huawei.com (10.175.100.227) by dggpeml500006.china.huawei.com
+ (7.185.36.76) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 1 Dec
+ 2021 15:12:41 +0800
+From:   Tang Yizhou <tangyizhou@huawei.com>
+To:     <viresh.kumar@linaro.org>, <rafael.j.wysocki@intel.com>,
+        <rafael@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhengbin13@huawei.com>, Tang Yizhou <tangyizhou@huawei.com>
+Subject: [PATCH v3 0/2] cpufreq: Update function comment and document
+Date:   Wed, 1 Dec 2021 15:40:19 +0800
+Message-ID: <20211201074021.18097-1-tangyizhou@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.175.100.227]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500006.china.huawei.com (7.185.36.76)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SM8450 qcom iommu implementation to the table of
-qcom_smmu_impl_of_match table which brings in iommu support for
-SM8450 SoC
+v3:
+Take viresh's advice and update the comments in cpufreq.c
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
+v2:
+1. Take viresh's advice and update the comments in cpufreq.c
+2. Add an Acked-by tag in Patch 2.
 
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index ca736b065dd0..4aee83330629 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -415,6 +415,7 @@ static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
- 	{ .compatible = "qcom,sm8150-smmu-500" },
- 	{ .compatible = "qcom,sm8250-smmu-500" },
- 	{ .compatible = "qcom,sm8350-smmu-500" },
-+	{ .compatible = "qcom,sm8450-smmu-500" },
- 	{ }
- };
- 
+Tang Yizhou (2):
+  cpufreq: Fix a comment in cpufreq_policy_free
+  doc/cpufreq: Update core.rst
+
+ Documentation/cpu-freq/core.rst | 6 +++---
+ drivers/cpufreq/cpufreq.c       | 5 +++--
+ 2 files changed, 6 insertions(+), 5 deletions(-)
+
 -- 
-2.31.1
+2.17.1
 

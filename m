@@ -2,98 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D074647D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38CB4647DA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:20:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347205AbhLAHXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:23:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347164AbhLAHXA (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:23:00 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0079AC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:19:39 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so20323712pja.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:19:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=1B2ct62NazJMbAXHxh400qw9MwmW02j5UQGS1Hs0m4A=;
-        b=IUHgkIdQuK7nrhV0XqmC6Bd5ppQxTxTnAKDeS6OLAzQL/Qj051LcjQTCG+IDhECMN6
-         XLLxuPXcgSZAXKGj27RGc1kv4BCs4wYWTnXQflmhx5KTIWEbcex0Sbnl20dcwM+eeL/C
-         4HDpSRRBbth0WgC9B9ghevbNo3i78wMvHgyCeCfCO6TDAZ8hA0iHtN3WnzvDVW15xFFG
-         YRqFHThy7xvKPosDowpOnD7fy1Po9AjhzD33ns0p1lZAkkBE7mpveDoSbpDIpDTBmSow
-         qflwWY6n7dzMB66DXkezF0Wty5Ad57/+yUtnbWt1aeUQ5FNkbhwUebmxUZiW1XJYBwSx
-         3i7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=1B2ct62NazJMbAXHxh400qw9MwmW02j5UQGS1Hs0m4A=;
-        b=5r7AqPLtGnNvm1SpX2R2OzZ0fZfbLkCWG1OhxOgK3FFMxEiCwvLvtxupFuyaPFjW/o
-         +m2K42LsPwUJze1iMjiActFkXfzLX5Uk8jyGmhTJO7fiQdcTqqSvP3pRsSH5OswaOzaI
-         rBn7yXpZ37dDbAGPRVjobYhOXltae4XtwyTF2fva+juJhOurjh2rxFl4Ym735JCS4Toc
-         lBaBZU3SUMwovcKIVsSy/ChW4prI0TfgJug1nGVfsUQDC4I4oN5TyKsabP2fxfe9rmmd
-         OE/G8RYSpqavn5DnLMR6vc9wMkcQECUu+hZEcXP9T5ixzrqO+tuisWn0MgliCdK6YSMg
-         GKVQ==
-X-Gm-Message-State: AOAM531MALWs5FCRBrfMZXNuNUUmyQR6OKGff9NOVUZDHGUuDyRQH/4p
-        ZiteLG15gt6+4VjMc40SEj8v9Q==
-X-Google-Smtp-Source: ABdhPJxKihGgZWgRgZzW1cJ5ymXPwndt5ax5EBlxemirEF7kLkKXcFjKs8aor0ysefg64QKD8Kaxgw==
-X-Received: by 2002:a17:902:aa89:b0:144:ea8e:1bd7 with SMTP id d9-20020a170902aa8900b00144ea8e1bd7mr5388942plr.65.1638343179555;
-        Tue, 30 Nov 2021 23:19:39 -0800 (PST)
-Received: from localhost ([122.171.9.64])
-        by smtp.gmail.com with ESMTPSA id s21sm23322991pfk.3.2021.11.30.23.19.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 23:19:39 -0800 (PST)
-Date:   Wed, 1 Dec 2021 12:49:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Tang Yizhou <tangyizhou@huawei.com>
-Cc:     rafael.j.wysocki@intel.com, rafael@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zhengbin13@huawei.com
-Subject: Re: [PATCH v3 1/2] cpufreq: Fix a comment in cpufreq_policy_free
-Message-ID: <20211201071937.e6uso2qwzgtbfest@vireshk-i7>
-References: <20211201074021.18097-1-tangyizhou@huawei.com>
- <20211201074021.18097-2-tangyizhou@huawei.com>
+        id S1347193AbhLAHYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:24:01 -0500
+Received: from mail-bn8nam12on2077.outbound.protection.outlook.com ([40.107.237.77]:7207
+        "EHLO NAM12-BN8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240342AbhLAHXq (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 02:23:46 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UsJbP19Z07DHKSoOmKmLLhKjIGy5AUm86at1ijHbO9bApEfzZzn0uTRjl+VTbonvogjSnUVJntbOoKP6mfGRBkFPnMMfZrvnclX8IH/XMIdK+ZvYguXMdirRFyzg7LzMxcwx/8R+Uu6hJGp9iQRmqulZuEHG4GiYde8OTlP0b1imDYMZTUHeB8moLV3c3eldpCcpM5UTt3JkqKyFUs2u3ftU1+V9ynvKMxk6USYzZRcXYBKHgxzVtteR2IGseTR6uyMP9V8wd5fx47KS81OIeQUKD6xeKBCWFDbVphwAwCMrYKVQkv4IrQ3zdKtevvXoCwbJBOyNxtmwLT74z4m1ww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0S4wT9qpfvLJvAsZAOzgS+t5wwhBKzQp7OX2AqbuNnA=;
+ b=ns3P6Be46OY+ZovcduILJv9XbPelSOCL61LS5R/z2vNqEfjjXIQdGbJWxacDK1VbiPf7mAtnt9cBUt+kfvA0GD/J9qeaoh8eAzPmkSwftDW0EhRoP0iZj+pQOQ7ZoQiVRFGXwI75dbUKJ25jSYI8g0dhon7IF78vqm8yhwjRzyd8DMkMTcjmxE/BJUpSn3qNPdwhTrGZ5hYx3enKPo4pYc9lKAVpKPP837pPrOKho60Z51JqFCnU/qFcFXOEAAmy9Yoq9ONjF5y6tRyqE6gqWiB0ajBTL+DdcFo8FAQmOcW2rYsm7eV0ynJnGqIcl5x1ES5RH9ADcyDVdMP+GniFdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0S4wT9qpfvLJvAsZAOzgS+t5wwhBKzQp7OX2AqbuNnA=;
+ b=mqkT5PFPG+VNMioSjH4eLYkkWuas/sCBtLep1TRtUsfJTbXzpp0tXzEjIXiP0cFuuJfRFQep2sK647iFiE7N8AL27AbtY6dqZB4urICNIgp7CsnADMReEsP4W4zKPgaicdh0qZkLCRiZM9l40BqrNHDe/l3jW4XN5DN2NsJX6KA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
+ (2603:10b6:301:5a::14) by MWHPR12MB1151.namprd12.prod.outlook.com
+ (2603:10b6:300:e::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Wed, 1 Dec
+ 2021 07:20:24 +0000
+Received: from MWHPR1201MB0192.namprd12.prod.outlook.com
+ ([fe80::2d02:26e7:a2d0:3769]) by MWHPR1201MB0192.namprd12.prod.outlook.com
+ ([fe80::2d02:26e7:a2d0:3769%5]) with mapi id 15.20.4713.027; Wed, 1 Dec 2021
+ 07:20:18 +0000
+Subject: Re: [PATCH v4] drm/radeon/radeon_kms: Fix a NULL pointer dereference
+ in radeon_driver_open_kms()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, kernel test robot <lkp@intel.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20211130155720.178214-1-zhou1615@umn.edu>
+ <20211201032214.26889-1-zhou1615@umn.edu>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Message-ID: <d7c890d8-9535-b349-0c28-b08e5074f714@amd.com>
+Date:   Wed, 1 Dec 2021 08:20:11 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+In-Reply-To: <20211201032214.26889-1-zhou1615@umn.edu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-ClientProxiedBy: AS9PR06CA0230.eurprd06.prod.outlook.com
+ (2603:10a6:20b:45e::26) To MWHPR1201MB0192.namprd12.prod.outlook.com
+ (2603:10b6:301:5a::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201074021.18097-2-tangyizhou@huawei.com>
-User-Agent: NeoMutt/20180716-391-311a52
+Received: from [192.168.178.21] (87.176.183.123) by AS9PR06CA0230.eurprd06.prod.outlook.com (2603:10a6:20b:45e::26) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22 via Frontend Transport; Wed, 1 Dec 2021 07:20:15 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: dfddd46b-2e54-48ea-8311-08d9b49b074b
+X-MS-TrafficTypeDiagnostic: MWHPR12MB1151:
+X-Microsoft-Antispam-PRVS: <MWHPR12MB115172CC7393B8A720A9BD7A83689@MWHPR12MB1151.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: a7lkaqt3mLzm3ZSZNyg7xQghfFUqtA97fxbVv1qtLmoNc2uGozCTG1sa4pdoFu6itjYKDCGZntZ1rumnsz8DLMnhQEX2znemmKxsvJSOWb2W8OxremttMZPHA8gvDraa7xKFxFSIMbZpq3tEK0Q3B1NtIPqP27iI18wm9MWbI8+/mlZ1uPPxvfQ8NgfPum9TsgFGHjadVcmdDcPd2pxjtRqNK6xbz1mHb30cV5wclzIw3CjE7C/rcJ99J+3b1PPY/IWrgK17jMQdDHp3TxKVyce1rJ/DKgf5GAFR/tcnrxwi3CdlPbZiv0c+lV2D7cjaQRProPw2ODF0KK8g1dGIgj+pAUk5wYO5H5vlwohLgATt5+pbgMtRgmKaLmVyTHDgeUW1Zeoe0MvWWLiA68G+IHQZQS7j/rRTp5uEA8s+F5ML8Z3rPqwkj/F9yWZLf4T8FnjzjV+yuZNq4JLXEx73EBfkE5C/n11GZq2pItcOcPnzEyAj4Ie0LtTJrUNBcgAeMGnuSiRd4svgBf3nORO57zwFYBNWuZRDvAPopzB/THQJjHGmRJsuFyleU0KMgwVyrYOHKl8ndChNci7inkTMS5OlPLlXm14FXMbevsR+pGlPkjyEvj2gq/Z9VFuwqcgNRwHj04uGWVF9tDSMvZMU9PONMSSMwnr6qrJhnouGX69I/EcIg5f8u75ffT6jIKevSdKdU7BimvQen8/SKDBEUfWQzxLuLAgO/xb9Yy7JybtGt7h0Tm94E4v9O1gC0zgO
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1201MB0192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(6486002)(86362001)(66476007)(31696002)(31686004)(8676002)(83380400001)(36756003)(38100700002)(4326008)(66946007)(6916009)(8936002)(16576012)(508600001)(2906002)(26005)(2616005)(316002)(6666004)(186003)(956004)(54906003)(66556008)(5660300002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T2swc1dsTDBQQ3lIRXRYYUFhbTdadjg2SXV0K001aG9WY29BR09LOTNCeWtN?=
+ =?utf-8?B?Y2NMcktlNGs4QzhzelRCUGdYTGw2NElWWWFhUWZrYmhNY0NndHNWTklEd2Rw?=
+ =?utf-8?B?SEN5NjBUNDFwdzlMRm5kYzErM0JsL1djcVlwWDYzcmhQQ09FR1pPdkdEanVz?=
+ =?utf-8?B?ZExReGlsdnlTVHNUOXpSbHFydDRrWXhCUHZKMjJtRWtweEcyKzh5VXdqdDRS?=
+ =?utf-8?B?QkRhNzB0V2lqdkZjSGRjdklzUmV4TVdESURCN0lXZTJSV1RhSUYxdjJXWmZF?=
+ =?utf-8?B?T2pkWEhNVjhiQVJUN1QrV0FydENKcUw1ZXdESjBKY2JFMGVkUHVPd3I1VE1n?=
+ =?utf-8?B?Q01oOExYYms1MkFOdFQ0K2k3OVIxcThDWjU4RC9ZTEZJcDFqQVU5Z2grcjFP?=
+ =?utf-8?B?Sk5wUkY3NWJmeGZGazNzV1lPOHdOaDNRR2hSdDlWTm5GYVNna2QxWmlrWWxG?=
+ =?utf-8?B?bXlYWWR1eTNhOVl6QzR5bStxR3F1Z1gxOHkyUzRnaU9qcEthTUwwKzlEdjRZ?=
+ =?utf-8?B?M2Nib2M3WlorNjNWbDFCWUpReWJEaTZreTlhL1AzZTlhQ3hML3RHTlhTNEdE?=
+ =?utf-8?B?ay83WXpvQ1pSbDNVcERlUllURWhYMTZ1VXdHWTR2blo5LzY0bDgwSGxwZmtH?=
+ =?utf-8?B?NVhKbFgwaWJkbUQzSjJ0MGJlY1hMclpGNm1kWCtJNVlnS244azhEeGtpS3JK?=
+ =?utf-8?B?Z1o5eWxWWmlBNzlJa3RTQjg1Mm5EdGJPMXRnODJLTzAxQlI4Zjc3WURSZmNB?=
+ =?utf-8?B?ZitDRzVkZW1MRktwNVkwZmZXRTFJM0pSeEd4WWlxZEtudkhjU0VjRmQ5Y3lE?=
+ =?utf-8?B?RnY5RFB5Ny90MVNRcERwMERmQ09KbkZ6TEQvVlVpampKS1JrdXRiUlVUMkpM?=
+ =?utf-8?B?VWlBdEJCSzFONTRaNUFQNDVLcWwyVzkyeFN0UVBHYmZiYUdHOUh4MStWZndw?=
+ =?utf-8?B?a1EwQmJZaWszakdLNER0R2wvaGZ2ZEhlL3JCcG9QdGROS3R6eEJBendiaS9m?=
+ =?utf-8?B?a2ZJZkFaN2huSmxmdUJoeXVHemlma2E5Y0s0TEp1ZDQvTUNJcWhHOVltaTZx?=
+ =?utf-8?B?N21zWXUxTndpdTVTTkR0Y1JlU21jaldjNzUvZUZxSTBTVml4SkpUU05ZNnFn?=
+ =?utf-8?B?UFp3YmtQcFdVclJUa2wwd2I1OXhFTitMSmtZLzZNVXVvR3puWEhGNm1xUlZt?=
+ =?utf-8?B?clBUNG9tSk52T1FSdzBVWnlwbmZQTGNVZlFweWl0c1hjSlIya1JwTFZFZzB0?=
+ =?utf-8?B?QkJrSDg5d0JNWDlIT3hUQjg3OGhUck9hdFdtWHJ6RUhBWmdBekR5QVNDcVpr?=
+ =?utf-8?B?Nk91MEF2U1dKc2pFQy92UzlrSEc4a0xuaVZJaTgrSERhUlExS29PUTlkUHZ3?=
+ =?utf-8?B?UjhidU1sM0JpQUFtRlBNcFVjOXFLZ21MSTg3bHE0N2dyL2RpSGJ6THFyRytr?=
+ =?utf-8?B?NXJRYkUrd3RBQjFic2QzWmJjRFhOTW9ETy9rbzNNdXIwVlh2S2xZN1JhQkpp?=
+ =?utf-8?B?YTFPWk5NZXZ0cEx1UURtTXZWZUVNbGFtbDNSZk0zYjJMV1luaG0xS3c1Sng5?=
+ =?utf-8?B?cEhRYkZrU3NqRkRLSDhNTXh0MEI1SUZiRXlDd1JaL01HWFRiVDdZWXNIMGt0?=
+ =?utf-8?B?amMyUUpIY2pWdndaZVBUSDdDcmJDajZiRnNhRUEyYnJnM3ZWVGM1dGtuWmFv?=
+ =?utf-8?B?MzhzeWgyYmpwZVpLRkRLWGJ3a0xVNHNYb2F3RTgxQ2k4dnZ5Y2ZLZWRYMmNM?=
+ =?utf-8?B?MEpOaTJDOU14NlNrb1h0ZjVlR1dQTVM2ZGV5akpVaUd4SkQ0OCsrYTJjaEFl?=
+ =?utf-8?B?S2ZtSmxUbFp6YnAwTHhPL1M4R3crblN4dEdncThNeHA3WkRsUWtzWnBnUjJo?=
+ =?utf-8?B?RUR6UkZSODJCeW1IOTNPQWFDVkhEWTJndUtCZ3N0VGh5SmxPYlJTcFMzZ2RC?=
+ =?utf-8?B?WnNxOSt3QXN3d2Z2NDFIS3ZsQzg4ZWVweHhGcVZnR3g2UEV5WlR4WVFHM0Jz?=
+ =?utf-8?B?dXhzOENQdVgzWnMrRFhqK2hPYXFEZkJzVmVTdENpRjgzRFppVnp4TzJzQ2Iv?=
+ =?utf-8?B?a2ZDSDVyWTBJTjFNdWtwbGhnOEZLV3hoNkZUdVI5NEN6ZTVxTndGNHQvemZo?=
+ =?utf-8?Q?AbMU=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfddd46b-2e54-48ea-8311-08d9b49b074b
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1201MB0192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2021 07:20:18.7484
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kgYtTihy+12YUJO/4zz4Lwz3Lgi80qlhJZ82zFayxhbS+IhEpqbEROmnez0TqU3i
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1151
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-12-21, 15:40, Tang Yizhou wrote:
-> Make the comment of blocking_notifier_call_chain() easier to
-> understand.
-> 
-> Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
+Am 01.12.21 um 04:22 schrieb Zhou Qingyang:
+> In radeon_driver_open_kms(), radeon_vm_bo_add() is assigned to
+> vm->ib_bo_va and passes and used in radeon_vm_bo_set_addr(). In
+> radeon_vm_bo_set_addr(), there is a dereference of vm->ib_bo_va,
+> which could lead to a NULL pointer dereference on failure of
+> radeon_vm_bo_add().
+>
+> Fix this bug by adding a check of vm->ib_bo_va.
+>
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
+>
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
+>
+> Builds with CONFIG_DRM_RADEON=m show no new warnings,
+> and our static analyzer no longer warns about this code.
+>
+> Fixes: cc9e67e3d700 ("drm/radeon: fix VM IB handling")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
 > ---
->  drivers/cpufreq/cpufreq.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index e338d2f010fe..db0b4b4258d5 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1296,8 +1296,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
->  
->  	if (policy->max_freq_req) {
->  		/*
-> -		 * CPUFREQ_CREATE_POLICY notification is sent only after
-> -		 * successfully adding max_freq_req request.
-> +		 * Remove max_freq_req after sending CPUFREQ_REMOVE_POLICY
-> +		 * notification, since CPUFREQ_CREATE_POLICY notification was
-> +		 * sent after adding max_freq_req earlier.
->  		 */
->  		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
->  					     CPUFREQ_REMOVE_POLICY, policy);
+> Changes in v2:
+>    -  Initialize the variables to silence warning
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+What warning do you get? Double checking the code that shouldn't be 
+necessary and is usually rather frowned upon.
 
--- 
-viresh
+Thanks,
+Christian.
+
+>
+> Changes in v3:
+>    -  Fix the bug that good case will also be freed
+>    -  Improve code style
+>
+> Changes in v2:
+>    -  Improve the error handling into goto style
+>
+>   drivers/gpu/drm/radeon/radeon_kms.c | 37 ++++++++++++++++-------------
+>   1 file changed, 20 insertions(+), 17 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/radeon/radeon_kms.c
+> index 482fb0ae6cb5..9d0f840286a1 100644
+> --- a/drivers/gpu/drm/radeon/radeon_kms.c
+> +++ b/drivers/gpu/drm/radeon/radeon_kms.c
+> @@ -648,7 +648,9 @@ void radeon_driver_lastclose_kms(struct drm_device *dev)
+>   int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+>   {
+>   	struct radeon_device *rdev = dev->dev_private;
+> -	int r;
+> +	struct radeon_fpriv *fpriv = NULL;
+> +	struct radeon_vm *vm = NULL;
+> +	int r = 0;
+>
+>   	file_priv->driver_priv = NULL;
+>
+> @@ -660,8 +662,6 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+>   
+>   	/* new gpu have virtual address space support */
+>   	if (rdev->family >= CHIP_CAYMAN) {
+> -		struct radeon_fpriv *fpriv;
+> -		struct radeon_vm *vm;
+>   
+>   		fpriv = kzalloc(sizeof(*fpriv), GFP_KERNEL);
+>   		if (unlikely(!fpriv)) {
+> @@ -672,35 +672,38 @@ int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *file_priv)
+>   		if (rdev->accel_working) {
+>   			vm = &fpriv->vm;
+>   			r = radeon_vm_init(rdev, vm);
+> -			if (r) {
+> -				kfree(fpriv);
+> -				goto out_suspend;
+> -			}
+> +			if (r)
+> +				goto out_fpriv;
+>   
+>   			r = radeon_bo_reserve(rdev->ring_tmp_bo.bo, false);
+> -			if (r) {
+> -				radeon_vm_fini(rdev, vm);
+> -				kfree(fpriv);
+> -				goto out_suspend;
+> -			}
+> +			if (r)
+> +				goto out_vm_fini;
+>   
+>   			/* map the ib pool buffer read only into
+>   			 * virtual address space */
+>   			vm->ib_bo_va = radeon_vm_bo_add(rdev, vm,
+>   							rdev->ring_tmp_bo.bo);
+> +			if (!vm->ib_bo_va) {
+> +				r = -ENOMEM;
+> +				goto out_vm_fini;
+> +			}
+> +
+>   			r = radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
+>   						  RADEON_VA_IB_OFFSET,
+>   						  RADEON_VM_PAGE_READABLE |
+>   						  RADEON_VM_PAGE_SNOOPED);
+> -			if (r) {
+> -				radeon_vm_fini(rdev, vm);
+> -				kfree(fpriv);
+> -				goto out_suspend;
+> -			}
+> +			if (r)
+> +				goto out_vm_fini;
+>   		}
+>   		file_priv->driver_priv = fpriv;
+>   	}
+>   
+> +out_vm_fini:
+> +	if (r)
+> +		radeon_vm_fini(rdev, vm);
+> +out_fpriv:
+> +	if (r)
+> +		kfree(fpriv);
+>   out_suspend:
+>   	pm_runtime_mark_last_busy(dev->dev);
+>   	pm_runtime_put_autosuspend(dev->dev);
+

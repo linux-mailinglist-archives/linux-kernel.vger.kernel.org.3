@@ -2,80 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 683F1464F9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F2A7464FA2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349911AbhLAO3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:29:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44396 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349900AbhLAO3i (ORCPT
+        id S1349914AbhLAObc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:31:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:40799 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1349918AbhLAOae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:29:38 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D704C061574;
-        Wed,  1 Dec 2021 06:26:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=x7ZhiAQMW7HzLfSI2FX07G540SUWchnOtaaE+4hrTgA=; b=S3NnGzuqjzeMcqo6+7imcJ9T2L
-        1H8L3nmxWtpmg/t2ORnauRi7zEvy94Aep7F9T89L/lM61e+d+s2yNa8aZafGg31+uBMntYrT5JhOw
-        tzFs+Jd6T4NkXX6bP783HF5bweUQhROPjpakP8viGW9TjeMyKkcOJl6GoEtk6makcG/Mbj6KLkDLr
-        /7KGoB4cLC/C+onO8DrXHHUgY9dtR2d5r4Lh6SIFqvDwvFVLSLSrRUJ06ADeWmxFUdRJMZmbu1yVc
-        QgP2pEHSkfxqF1znNjZw+ZKhzv1bkdNbt+k0b4bpSxPjq2qWdGzSdHPwgGgbdPXoMBPIeCG5RL+y9
-        3hiMHIPQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1msQYI-009193-NO; Wed, 01 Dec 2021 14:25:42 +0000
-Date:   Wed, 1 Dec 2021 06:25:42 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     akpm@linux-foundation.org, keescook@chromium.org,
-        yzaikin@google.com, nixiaoming@huawei.com, ebiederm@xmission.com,
-        steve@sk2.org, rafael@kernel.org, tytso@mit.edu,
-        viro@zeniv.linux.org.uk, pmladek@suse.com,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, dgilbert@interlog.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linux-scsi@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH] firmware_loader: export sysctl registration
-Message-ID: <YaeF5tgWA3TDX1+M@bombadil.infradead.org>
-References: <20211130164525.1478009-1-mcgrof@kernel.org>
- <YacfULGI1mhE/0iv@kroah.com>
- <Yad9Iu8K9k/NvKJj@bombadil.infradead.org>
- <YaeErF5h+SQkxBXC@kroah.com>
+        Wed, 1 Dec 2021 09:30:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638368828;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=aXrqNOrDvSgD387N15SkHeYtKspYajLx2tWsnOoBWmw=;
+        b=XjGjNQ+g707ZSwLlj0ofiSwPPaC4pxvuKO+KjC7G4ZCf/QMa3FqgdzIuRr8pfPgMw2hwle
+        +vrJwR7Hmv23m1cv7/3x8H7pVDA7Pb8wpHsV7FMMUCmgiFvLd7v9tAkMjP48nPwwdD9s/E
+        uhXupBkxTd6f7bi30d0l/Ap4exaf/mI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-228--osOsuLxOqizeWeuns8tUA-1; Wed, 01 Dec 2021 09:27:04 -0500
+X-MC-Unique: -osOsuLxOqizeWeuns8tUA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C18801023F4F;
+        Wed,  1 Dec 2021 14:27:01 +0000 (UTC)
+Received: from [10.22.10.179] (unknown [10.22.10.179])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4A63910016F7;
+        Wed,  1 Dec 2021 14:26:44 +0000 (UTC)
+Message-ID: <0bdfb7f2-61ee-7b2a-fdb2-3c41f6d6ade0@redhat.com>
+Date:   Wed, 1 Dec 2021 09:26:43 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaeErF5h+SQkxBXC@kroah.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211018143619.205065-6-longman@redhat.com>
+ <20211115193122.GA16798@blackbody.suse.cz>
+ <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
+ <20211116175411.GA50019@blackbody.suse.cz>
+ <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
+ <YaZbXArNIMNvwJD/@slm.duckdns.org>
+ <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
+In-Reply-To: <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 03:20:28PM +0100, Greg KH wrote:
-> On Wed, Dec 01, 2021 at 05:48:18AM -0800, Luis Chamberlain wrote:
-> > On Wed, Dec 01, 2021 at 08:08:00AM +0100, Greg KH wrote:
-> > > On Tue, Nov 30, 2021 at 08:45:25AM -0800, Luis Chamberlain wrote:
-> > > > The firmware loader fallback sysctl table is always built-in,
-> > > > but when FW_LOADER=m the build will fail. We need to export
-> > > > the sysctl registration and de-registration. Use the private
-> > > > symbol namespace so that only the firmware loader uses these
-> > > > calls.
-> > > > 
-> > > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > > Fixes: firmware_loader: move firmware sysctl to its own files
-> > > 
-> > > Have a git id for this?
-> > 
-> > I thought it would be ephemeral at this point since it was on
-> > linux-next, so had not provided one. If it is a static commit
-> > then I suppose this is 5cc0fea09ee52c9bcb6c41456bea03ca1b49602d
-> 
-> Depends on where it came from.  If -mm then yes, it's not a valid id.
-> If someone else, it might be a real id.
+On 11/30/21 22:56, Waiman Long wrote:
+> On 11/30/21 12:11, Tejun Heo wrote:
+>
+>
+>>>      Once becoming a partition root, the following two rules restrict
+>>>      what changes can be made to "cpuset.cpus".
+>>>
+>>>      1) The value must be exclusive.
+>>>      2) If child cpusets exist, the value must be a superset of what
+>>>         are defined in the child cpusets.
+>>>
+>>>      The second rule applies even for "member". Other changes to
+>>>      "cpuset.cpus" that do not violate the above rules are always
+>>>      allowed.
+>> While it isn't necessarily tied to this series, it's a big no-no to 
+>> restrict
+>> what a parent can do depending on what its descendants are doing. A 
+>> cgroup
+>> higher up in the hierarchy should be able to change configuration 
+>> however it
+>> sees fit as deligation breaks down otherwise.
+>>
+>> Maybe you can argue that cpuset is special and shouldn't be subject 
+>> to such
+>> convention but I can't see strong enough justifications especially given
+>> that most of these restrictions can be broken by hotplug operations 
+>> anyway
+>> and thus need code to handle those situations.
+>
+> These are all pre-existing restrictions before the introduction of 
+> partition. These are checks done in validate_change(). I am just 
+> saying out loud the existing behavior. If you think that needs to be 
+> changed, I am fine with that. However, it will be a separate patch as 
+> it is not a behavior that is introduced by this series.
 
-It came in through -mm.
+Of the 2 restrictions listed above, the exclusivity rule is due to the 
+use of CS_CPU_EXCLUSIVE flag. I think it is reasonable as it affects 
+only siblings, not the parent.
 
-  Luis
+The second restriction was found during my testing. It is caused by the 
+following code in validate_change():
+
+         /* Each of our child cpusets must be a subset of us */
+         ret = -EBUSY;
+         cpuset_for_each_child(c, css, cur)
+                 if (!is_cpuset_subset(c, trial))
+                         goto out;
+
+It seems that this code was there since v2.6.12 (the beginning of the 
+git era). Later in function, we have
+
+         /* On legacy hierarchy, we must be a subset of our parent 
+cpuset. */
+         ret = -EACCES;
+         if (!is_in_v2_mode() && !is_cpuset_subset(trial, par))
+                 goto out;
+
+This is actually a duplicate in the case of legacy hierarchy.
+
+I can add a patch to take out the first code block above which I think 
+is where most of your objections are. Then I can remove the 2nd 
+restriction in my documentation. I would like to emphasize that this is 
+a pre-existing behavior which I just happen to document.
+
+Cheers,
+Longman
+

@@ -2,87 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 707B6465443
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF26746544A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:53:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239254AbhLARww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 12:52:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S1351787AbhLAR4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 12:56:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238520AbhLARwt (ORCPT
+        with ESMTP id S237013AbhLAR4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:52:49 -0500
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71167C06174A;
-        Wed,  1 Dec 2021 09:49:27 -0800 (PST)
-Received: by mail-oo1-xc2e.google.com with SMTP id b1-20020a4a8101000000b002c659ab1342so8081452oog.1;
-        Wed, 01 Dec 2021 09:49:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=1XDu06P04Pjz8/ikLvnu1Vrhi/zfmVsztNfuvwqajak=;
-        b=LFK2JqBm/fBD40FqHMEn41tfqpj88fxmZxE0oNbwbsJi9rLMH8VIE/wYChNvNOzCVd
-         Q/sPhM4knLso3/jHx/DeW/CGe7VeLyA+/7OWHfv0QuFB2qOTttShqADX/mV1LNW/544v
-         MHjeZJVGsj4a0N0X+keTmesDK/9ZdOOID/HAHRrACObd1+CPix8xOerNWJUGK+0UcjcU
-         PF5lhq3tmbuSAatkCLaoopfDh0iSMu+UyrevTgvb36UfX5Lq6NjrBTQJPg0Hiw2wNycN
-         XCyp0l3vpcaG3uoSEe+AQwEA7G2F2MMaB+g2jpCUjPauHFPMk5Kzcima8JifhkNnTTTw
-         8YOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=1XDu06P04Pjz8/ikLvnu1Vrhi/zfmVsztNfuvwqajak=;
-        b=nlqKdasUnQa1OONejuUi6lDVhPncWKw2KVzIoL7RdoX0HTTLzKMRML5MsHbXeJO0FW
-         IlYNjyjrCSFX1qFQ5uGpr4dAu6e+2heV7NMKazwW20YETd9vAXLYg+4mbnz7VBBI28u8
-         ja114hCOuVEiFkNyzM7diEfB5II1T2NHZUJlmANGNhpWCpQuBsvgTENRtg260oDqLjsP
-         gKO4imTuywXdatNw8OaNq8OUOJ5HAOPEYrZHmk8+7KlulscaydXLJOeq/5/M8JAUn3n1
-         7jR3biveYxPVF0MGIL/pYHnwz7Y57rHnn/UrYfeU7Ut+b/BquWWa8kU7GNAbLa5hqM4i
-         iF1A==
-X-Gm-Message-State: AOAM531xXQvR9icBGJ+9eozJU9XA6XNa+thfSBVhPZOU8zSGdYZL6ymD
-        wRyWgXY0vjdMK+58va16XCgjbOutUvbE/A==
-X-Google-Smtp-Source: ABdhPJys07tIqMlr8hwT3qISM9EXA2JC7AHZrq2a4Y/0c29uQKU7jCi/EdAzeac5JUzAG0+iYUAD2w==
-X-Received: by 2002:a05:6820:30b:: with SMTP id l11mr5316875ooe.32.1638380966836;
-        Wed, 01 Dec 2021 09:49:26 -0800 (PST)
-Received: from [172.16.0.2] ([8.48.134.30])
-        by smtp.googlemail.com with ESMTPSA id a3sm147030oti.29.2021.12.01.09.49.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 09:49:26 -0800 (PST)
-Message-ID: <2c8bf94e-1265-2f3c-98ae-dfc73598f8f2@gmail.com>
-Date:   Wed, 1 Dec 2021 10:49:25 -0700
+        Wed, 1 Dec 2021 12:56:18 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E0FC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 09:52:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 1B836CE2021
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 17:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A75C53FCC;
+        Wed,  1 Dec 2021 17:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638381173;
+        bh=jNxvjxMIuskzFMYi8OzajdDm/hsNb3YSqkmXmlvTq2M=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=sNnpgYK4DCVEE1KJ9EJBj1lUOTGBR9XUCP4KIoBXo7v7DU/HZWwGXfJomqIiqjJLB
+         moaiDpNKh55gB7XLScl2orIpdtwhiOmYQvPPgcilfAQTooxcvoHKGVcBzXsSHvXSqz
+         o+3kUy1uftKeVXbKrE9MDtEFAsCmA1I4vUUFDPpt+KtW89EgvnrVcTh+ko9W6Bs6GK
+         CwZtIwBQvKa0fZt67XseOp2w5Eysj6YpplbzwLtYo+MaF39eqaborRzFnaUA7KvWKr
+         xMXFXSEnBX6wgZSbrNhNJVAbfTEmDVUtCRSsqLdRecjV+fPfM9MXwK9dn/zq1a2tW3
+         SHF1VXBtt6eTw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 050335C0FCC; Wed,  1 Dec 2021 09:52:53 -0800 (PST)
+Date:   Wed, 1 Dec 2021 09:52:52 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        andi.kleen@intel.com, len.brown@intel.com, tim.c.chen@intel.com
+Subject: Re: [PATCH v3 2/2] x86/tsc: skip tsc watchdog checking for qualified
+ platforms
+Message-ID: <20211201175252.GK641268@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20211130144048.GQ641268@paulmck-ThinkPad-P17-Gen-1>
+ <20211130150256.GA19477@shbuild999.sh.intel.com>
+ <20211130162815.GU641268@paulmck-ThinkPad-P17-Gen-1>
+ <87r1axbcor.ffs@tglx>
+ <20211130204721.GZ641268@paulmck-ThinkPad-P17-Gen-1>
+ <87ilw9b95q.ffs@tglx>
+ <20211130224825.GA641268@paulmck-ThinkPad-P17-Gen-1>
+ <87tuft9qpc.ffs@tglx>
+ <20211130233726.GD641268@paulmck-ThinkPad-P17-Gen-1>
+ <20211201012655.GA20240@shbuild999.sh.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.1
-Subject: Re: [RFC 00/12] io_uring zerocopy send
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1638282789.git.asml.silence@gmail.com>
- <4c0170fa-5b6f-ff76-0eff-a83ffec9864d@gmail.com>
-From:   David Ahern <dsahern@gmail.com>
-In-Reply-To: <4c0170fa-5b6f-ff76-0eff-a83ffec9864d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201012655.GA20240@shbuild999.sh.intel.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 7:31 AM, Pavel Begunkov wrote:
+On Wed, Dec 01, 2021 at 09:26:55AM +0800, Feng Tang wrote:
+> On Tue, Nov 30, 2021 at 03:37:26PM -0800, Paul E. McKenney wrote:
+> > On Wed, Dec 01, 2021 at 12:19:43AM +0100, Thomas Gleixner wrote:
+> > > On Tue, Nov 30 2021 at 14:48, Paul E. McKenney wrote:
+> > > > On Tue, Nov 30, 2021 at 10:55:45PM +0100, Thomas Gleixner wrote:
+> > > >> > OK, HPET or nothing, then.
+> > > >> 
+> > > >> Older machines also have pm_timer. But those beasts seem to have lost
+> > > >> that too.
+> > > >
+> > > > I suppose that one way of avoiding clock-skew messages is to have only
+> > > > one clock.
+> > > 
+> > > Indeed. It's a complete mystery why it takes ages to implement reliable
+> > > clocks in hardware.
+> > 
+> > That one is easy.  It is because the previous clocksource watchdog was
+> > too lenient.  ;-)
+> > 
+> > (Sorry, couldn't resist...)
+> > 
+> > > >> >> We really need to remove the watchdog requirement for modern hardware.
+> > > >> >> Let me stare at those patches and get them merged.
+> > > >> >
+> > > >> > You are more trusting of modern hardware than I am, but for all I know,
+> > > >> > maybe rightfully so.  ;-)
+> > > >> 
+> > > >> Well, I rather put a bet on the hardware, which has become reasonable
+> > > >> over the last decade, than on trying to solve a circular dependency
+> > > >> problem with tons of heuristics which won't ever work correctly.
+> > > >
+> > > > Use of HPET to check the interval length would not be circular, right?
+> > > 
+> > > As long as the HPET works reliably :)
+> > 
+> > Is it also a complete mystery why clocksources previously deemed
+> > reliable no longer work reliably?  ;-)
 > 
-> Also, as was asked, attaching a standalone .c version of the
-> benchmark. Requires any relatively up-to-date liburing installed.
-> 
-attached command differs from the version mentioned in the cover letter:
+> For HPET, it's a long story :) Back in 2012 or so, the HPET on Baytrail
+> platform has a new feature that it will stop counting in PC10 (a cpuidle
+> state), which prevent it to be a clocksource, and we have to disable
+> HPET explicitly for that platform. Since then, some new platforms also
+> have the same feature, and their HPET got disabled too. 
 
-https://github.com/isilence/liburing.git zc_v1
+I must confess that I have been involved in similar things more times
+than I care to admit.  ;-)
 
-copying this version into that branch, removing the duplicate
-definitions and it works.
+So the upshot is that if HPET does not work, it should be disabled,
+in which case the clocksource watchdog will be ignoring it.  In cases
+where HPET can stop counting and is not disabled in the Linux kernel,
+that is a bug that needs to be fixed by disabing HPET for those cases.
+
+If TSC is the only clocksource, then the clocksource watchdog won't be
+checking it.
+
+All of this points to using the presumed-good clocksource to measure the
+time between clocksource-watchdog checks, but excluding any silly cases.
+For example, as Thomas Gleixner suggested, if the jiffies counter is
+trying to be the presumed-good clocksource.
+
+							Thanx, Paul

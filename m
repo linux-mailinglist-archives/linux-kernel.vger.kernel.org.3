@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E260465399
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEE5746539A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:05:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351758AbhLARIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 12:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S232085AbhLARI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 12:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351743AbhLARIU (ORCPT
+        with ESMTP id S1351705AbhLARIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 12:08:20 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE76BC06175C
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 09:04:38 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id h7-20020adfaa87000000b001885269a937so4483595wrc.17
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 09:04:38 -0800 (PST)
+Received: from mail-wr1-x449.google.com (mail-wr1-x449.google.com [IPv6:2a00:1450:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F5EC061763
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 09:04:43 -0800 (PST)
+Received: by mail-wr1-x449.google.com with SMTP id b1-20020a5d6341000000b001901ddd352eso4489690wrw.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 09:04:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=3c2dJ4eKewKUxW9OPMDLajs9hR1P2X0mGpCHqHvqVFY=;
-        b=bTlclf9xBTOAAuzZZJMyWEcfwP/C9oNdfGpG6mOtQuG9DYEudsF4CZsBALV4mKD9OQ
-         tm/+AnZCNgyyfyWjfX3UBQmxCpc8ey7ulsU/5UowNt5+l4+NDSaCNXlsQbs+swv6jO22
-         sXQPKUzDX1/Q9of6po7MiBEZQqbr41FP1RjZPiiJz/s+/QpJiQGWOQico2yMAS7FpstP
-         wPHbU9oYik16ZQEZj0XMi4J8Ws6a0pndJ2SNbXKM7Bjr1gw/d4MDyYcgXhN4mobC8WgB
-         4+kWCXhwKgoYsubsQQk/BD2yL1G/AbyOgLPmOwahvq2X6xHNjRBPDk8RxR0nvHzeDQRr
-         dpkw==
+        bh=NJuegLyFty4h+k4BvUryfHfsyVJ26LHh21kFNoYVPms=;
+        b=pjEZYfEFH2f9DZZLkJPc+DJKonqmGOFU+/IndvDwaAD0Mc38KaGhN+e2+ThY9Xkoie
+         LyXXIL01+VTsQKZGzSG7BqPQx8sGPd7M0yPwve2btEpLEMaXtEoXnnm461+DFbQ1JuSF
+         hVKeslduzUKxJvDgBe+SxkbHjOmG/IPTUQcWOBwoZm9RXnnQTefZq8EKI/qpAGZte/ig
+         lFFXkNlytDGtJUhJPWkYUsGKCHLOFSLpEsdcuwsG6GsTNDLC1cXDgdJHgOrcZKjbIFVC
+         5UvpJAycHv+RaqfhaI2HTgGTD/ahlaWvkRYDC9DdisOszJzGcDRE3EN9f/dfRsXCxmde
+         DbRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=3c2dJ4eKewKUxW9OPMDLajs9hR1P2X0mGpCHqHvqVFY=;
-        b=6vQsJ83SX1hcxjfr0Gvv1AjqjW0CdBdnFPBbqYjYhDeJ7x5t4WUhsw+/Citvksq9/4
-         V5iB38gZvTHDyfaWLWLnbJhD/eu5+aFJ/84HZrHpDht48jGWiBCLnH6WKAq/KNnctZCw
-         zbIr3+aiMhSgW1Pephq09rOC/RxXEM2HL/vf5whCymSE8tG8hhEZqefH+J19G6mtEtiN
-         FJNStEH8rjwrRZ0auOS9I2Gh8bhHnPC5sDa/+ItC9Eftp0DAiW+1GDQRrdj16cns31gf
-         haX6vrv8j3wHRBkS0XIy2FWX5uaRFi/FB0B5yJY2bqPG5WsyWVvMCnQFGfoF9GkzRMRd
-         7AXA==
-X-Gm-Message-State: AOAM532teeGceIeJiMcOc+uRqjf8UANbtso8b/3KUDDtPoPlRf2obRDZ
-        LkbkR6X46MF5NE0mbnTs59QasYGF1tuG
-X-Google-Smtp-Source: ABdhPJxYpvAHsdmsXbB1y3zMWxiK1ZKFb+wxEi407hM/usX/+75gzO/p82iTF7zix/y32s/89ZoHtckD3SQL
+        bh=NJuegLyFty4h+k4BvUryfHfsyVJ26LHh21kFNoYVPms=;
+        b=MmAmadlwp0wDVKpfyjdU/kduMT+SWV1Snox6HpJ0Mf/dpY+OSxKVAT4O5VDa0vJcbm
+         mLUkBLWTtHJXxJgkYw5bzmxu32gHZhHidrhhGlz78PxaGyNbZr8t6el91fhMcL50xNGP
+         1btN5u5Og+bo96rzMh2AB0aiw89JMhKE8oLt5DwE9w9/LSrcEP9e/y7WSaN0igpnfly5
+         MRsh7V88dWYoRqZshNri1vtyloANQVHzBPsp7Hsnro7YV5LTBUBXuHXBfmJcBAGf4q4M
+         7na5MPpK49GR3OatCtbopFh9urWw7Fp8iAu4lI9K8LMVvfBlK3MwY5PbRI5Ztd0Z60Kg
+         Q+lw==
+X-Gm-Message-State: AOAM532EdzmpMX6dAtyw0qVfyWeMIG+WRXZQRAEqCMcVI+Cv/Rn0ZOM4
+        kzAJDnYN8j9WPvtS+it3QM2+YEaelfXS
+X-Google-Smtp-Source: ABdhPJxCJlvPNxfX1Vbthcz7eOfsb4kNC+DIdOG4XHH/CTzEgT2hYZqSk1komsbwuqasr1MGCR4/qh/O+mWH
 X-Received: from luke.lon.corp.google.com ([2a00:79e0:d:210:1cab:1a20:2ef1:ddde])
- (user=qperret job=sendgmr) by 2002:a05:600c:34c2:: with SMTP id
- d2mr8964734wmq.102.1638378277555; Wed, 01 Dec 2021 09:04:37 -0800 (PST)
-Date:   Wed,  1 Dec 2021 17:04:00 +0000
+ (user=qperret job=sendgmr) by 2002:a1c:a592:: with SMTP id
+ o140mr8609740wme.10.1638378281534; Wed, 01 Dec 2021 09:04:41 -0800 (PST)
+Date:   Wed,  1 Dec 2021 17:04:01 +0000
 In-Reply-To: <20211201170411.1561936-1-qperret@google.com>
-Message-Id: <20211201170411.1561936-7-qperret@google.com>
+Message-Id: <20211201170411.1561936-8-qperret@google.com>
 Mime-Version: 1.0
 References: <20211201170411.1561936-1-qperret@google.com>
 X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH v3 06/15] KVM: arm64: Implement kvm_pgtable_hyp_unmap() at EL2
+Subject: [PATCH v3 07/15] KVM: arm64: Introduce kvm_share_hyp()
 From:   Quentin Perret <qperret@google.com>
 To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
         Alexandru Elisei <alexandru.elisei@arm.com>,
@@ -65,124 +65,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Will Deacon <will@kernel.org>
+The create_hyp_mappings() function can currently be called at any point
+in time. However, its behaviour in protected mode changes widely
+depending on when it is being called. Prior to KVM init, it is used to
+create the temporary page-table used to bring-up the hypervisor, and
+later on it is transparently turned into a 'share' hypercall when the
+kernel has lost control over the hypervisor stage-1. In order to prepare
+the ground for also unsharing pages with the hypervisor during guest
+teardown, introduce a kvm_share_hyp() function to make it clear in which
+places a share hypercall should be expected, as we will soon need a
+matching unshare hypercall in all those places.
 
-Implement kvm_pgtable_hyp_unmap() which can be used to remove hypervisor
-stage-1 mappings at EL2.
-
-Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Quentin Perret <qperret@google.com>
 ---
- arch/arm64/include/asm/kvm_pgtable.h | 21 ++++++++++
- arch/arm64/kvm/hyp/pgtable.c         | 63 ++++++++++++++++++++++++++++
- 2 files changed, 84 insertions(+)
+ arch/arm64/include/asm/kvm_mmu.h |  1 +
+ arch/arm64/kvm/arm.c             |  4 ++--
+ arch/arm64/kvm/fpsimd.c          |  2 +-
+ arch/arm64/kvm/mmu.c             | 27 +++++++++++++++++++++------
+ arch/arm64/kvm/reset.c           |  2 +-
+ 5 files changed, 26 insertions(+), 10 deletions(-)
 
-diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
-index 027783829584..9d076f36401d 100644
---- a/arch/arm64/include/asm/kvm_pgtable.h
-+++ b/arch/arm64/include/asm/kvm_pgtable.h
-@@ -251,6 +251,27 @@ void kvm_pgtable_hyp_destroy(struct kvm_pgtable *pgt);
- int kvm_pgtable_hyp_map(struct kvm_pgtable *pgt, u64 addr, u64 size, u64 phys,
- 			enum kvm_pgtable_prot prot);
+diff --git a/arch/arm64/include/asm/kvm_mmu.h b/arch/arm64/include/asm/kvm_mmu.h
+index 02d378887743..185d0f62b724 100644
+--- a/arch/arm64/include/asm/kvm_mmu.h
++++ b/arch/arm64/include/asm/kvm_mmu.h
+@@ -150,6 +150,7 @@ static __always_inline unsigned long __kern_hyp_va(unsigned long v)
+ #include <asm/kvm_pgtable.h>
+ #include <asm/stage2_pgtable.h>
  
-+/**
-+ * kvm_pgtable_hyp_unmap() - Remove a mapping from a hypervisor stage-1 page-table.
-+ * @pgt:	Page-table structure initialised by kvm_pgtable_hyp_init().
-+ * @addr:	Virtual address from which to remove the mapping.
-+ * @size:	Size of the mapping.
-+ *
-+ * The offset of @addr within a page is ignored, @size is rounded-up to
-+ * the next page boundary and @phys is rounded-down to the previous page
-+ * boundary.
-+ *
-+ * TLB invalidation is performed for each page-table entry cleared during the
-+ * unmapping operation and the reference count for the page-table page
-+ * containing the cleared entry is decremented, with unreferenced pages being
-+ * freed. The unmapping operation will stop early if it encounters either an
-+ * invalid page-table entry or a valid block mapping which maps beyond the range
-+ * being unmapped.
-+ *
-+ * Return: Number of bytes unmapped, which may be 0.
-+ */
-+u64 kvm_pgtable_hyp_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size);
-+
- /**
-  * kvm_get_vtcr() - Helper to construct VTCR_EL2
-  * @mmfr0:	Sanitized value of SYS_ID_AA64MMFR0_EL1 register.
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 768a58835153..6ad4cb2d6947 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -463,6 +463,69 @@ int kvm_pgtable_hyp_map(struct kvm_pgtable *pgt, u64 addr, u64 size, u64 phys,
- 	return ret;
++int kvm_share_hyp(void *from, void *to);
+ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot);
+ int create_hyp_io_mappings(phys_addr_t phys_addr, size_t size,
+ 			   void __iomem **kaddr,
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 9b745d2bc89a..c202abb448b1 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -146,7 +146,7 @@ int kvm_arch_init_vm(struct kvm *kvm, unsigned long type)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = create_hyp_mappings(kvm, kvm + 1, PAGE_HYP);
++	ret = kvm_share_hyp(kvm, kvm + 1);
+ 	if (ret)
+ 		goto out_free_stage2_pgd;
+ 
+@@ -342,7 +342,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+ 	if (err)
+ 		return err;
+ 
+-	return create_hyp_mappings(vcpu, vcpu + 1, PAGE_HYP);
++	return kvm_share_hyp(vcpu, vcpu + 1);
  }
  
-+struct hyp_unmap_data {
-+	u64				unmapped;
-+	struct kvm_pgtable_mm_ops	*mm_ops;
-+};
-+
-+static int hyp_unmap_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
-+			    enum kvm_pgtable_walk_flags flag, void * const arg)
+ void kvm_arch_vcpu_postcreate(struct kvm_vcpu *vcpu)
+diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
+index 5526d79c7b47..86899d3aa9a9 100644
+--- a/arch/arm64/kvm/fpsimd.c
++++ b/arch/arm64/kvm/fpsimd.c
+@@ -30,7 +30,7 @@ int kvm_arch_vcpu_run_map_fp(struct kvm_vcpu *vcpu)
+ 	struct user_fpsimd_state *fpsimd = &current->thread.uw.fpsimd_state;
+ 
+ 	/* Make sure the host task fpsimd state is visible to hyp: */
+-	ret = create_hyp_mappings(fpsimd, fpsimd + 1, PAGE_HYP);
++	ret = kvm_share_hyp(fpsimd, fpsimd + 1);
+ 	if (!ret)
+ 		vcpu->arch.host_fpsimd_state = kern_hyp_va(fpsimd);
+ 
+diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+index f8f1096a297f..fd868fb9d922 100644
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@ -299,6 +299,25 @@ static int pkvm_share_hyp(phys_addr_t start, phys_addr_t end)
+ 	return 0;
+ }
+ 
++int kvm_share_hyp(void *from, void *to)
 +{
-+	kvm_pte_t pte = *ptep, *childp = NULL;
-+	u64 granule = kvm_granule_size(level);
-+	struct hyp_unmap_data *data = arg;
-+	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
-+
-+	if (!kvm_pte_valid(pte))
-+		return -EINVAL;
-+
-+	if (kvm_pte_table(pte, level)) {
-+		childp = kvm_pte_follow(pte, mm_ops);
-+
-+		if (mm_ops->page_count(childp) != 1)
-+			return 0;
-+
-+		kvm_clear_pte(ptep);
-+		dsb(ishst);
-+		__tlbi_level(vae2is, __TLBI_VADDR(addr, 0), level);
-+	} else {
-+		if (end - addr < granule)
-+			return -EINVAL;
-+
-+		kvm_clear_pte(ptep);
-+		dsb(ishst);
-+		__tlbi_level(vale2is, __TLBI_VADDR(addr, 0), level);
-+		data->unmapped += granule;
-+	}
-+
-+	dsb(ish);
-+	isb();
-+	mm_ops->put_page(ptep);
-+
-+	if (childp)
-+		mm_ops->put_page(childp);
-+
-+	return 0;
-+}
-+
-+u64 kvm_pgtable_hyp_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
-+{
-+	struct hyp_unmap_data unmap_data = {
-+		.mm_ops	= pgt->mm_ops,
-+	};
-+	struct kvm_pgtable_walker walker = {
-+		.cb	= hyp_unmap_walker,
-+		.arg	= &unmap_data,
-+		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
-+	};
-+
-+	if (!pgt->mm_ops->page_count)
++	if (is_kernel_in_hyp_mode())
 +		return 0;
 +
-+	kvm_pgtable_walk(pgt, addr, size, &walker);
-+	return unmap_data.unmapped;
++	/*
++	 * The share hcall maps things in the 'fixed-offset' region of the hyp
++	 * VA space, so we can only share physically contiguous data-structures
++	 * for now.
++	 */
++	if (is_vmalloc_addr(from) || is_vmalloc_addr(to))
++		return -EINVAL;
++
++	if (kvm_host_owns_hyp_mappings())
++		return create_hyp_mappings(from, to, PAGE_HYP);
++
++	return pkvm_share_hyp(__pa(from), __pa(to));
 +}
 +
- int kvm_pgtable_hyp_init(struct kvm_pgtable *pgt, u32 va_bits,
- 			 struct kvm_pgtable_mm_ops *mm_ops)
- {
+ /**
+  * create_hyp_mappings - duplicate a kernel virtual address range in Hyp mode
+  * @from:	The virtual kernel start address of the range
+@@ -319,12 +338,8 @@ int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
+ 	if (is_kernel_in_hyp_mode())
+ 		return 0;
+ 
+-	if (!kvm_host_owns_hyp_mappings()) {
+-		if (WARN_ON(prot != PAGE_HYP))
+-			return -EPERM;
+-		return pkvm_share_hyp(kvm_kaddr_to_phys(from),
+-				      kvm_kaddr_to_phys(to));
+-	}
++	if (!kvm_host_owns_hyp_mappings())
++		return -EPERM;
+ 
+ 	start = start & PAGE_MASK;
+ 	end = PAGE_ALIGN(end);
+diff --git a/arch/arm64/kvm/reset.c b/arch/arm64/kvm/reset.c
+index c7a0249df840..e3e2a79fbd75 100644
+--- a/arch/arm64/kvm/reset.c
++++ b/arch/arm64/kvm/reset.c
+@@ -113,7 +113,7 @@ static int kvm_vcpu_finalize_sve(struct kvm_vcpu *vcpu)
+ 	if (!buf)
+ 		return -ENOMEM;
+ 
+-	ret = create_hyp_mappings(buf, buf + reg_sz, PAGE_HYP);
++	ret = kvm_share_hyp(buf, buf + reg_sz);
+ 	if (ret) {
+ 		kfree(buf);
+ 		return ret;
 -- 
 2.34.0.rc2.393.gf8c9666880-goog
 

@@ -2,117 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DBFA464B70
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:16:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9D10464B72
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:16:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348540AbhLAKUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:20:14 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:47334 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348501AbhLAKUN (ORCPT
+        id S1348563AbhLAKUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:20:16 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:39622 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232413AbhLAKUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:20:13 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7717CCE1D91;
-        Wed,  1 Dec 2021 10:16:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92ECDC53FCC;
-        Wed,  1 Dec 2021 10:16:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638353809;
-        bh=XzomCRP9HPlFxXOWu7bb++tXZ9myJAhOlLcfqQbpG+4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CZA5FA1HX2UPH43QHdlVh+5ONMbpWWHw+lcnTkpQKHudSQbwEM2U6Bo8e2cM9jWaF
-         pPmBmfQuQfvI2Rr7fOAxSIP1OqJTPFwE7DDkoiaJtak1+yAWn1HN7u23s1f5F8RraF
-         prK7Q3qh3nP8E+4/iX58bJWqUAsXhtg0z101WJsAkffzwT2T1rTNQUrMm4rcpApmTE
-         17OMKHjP4SrnrxocQE0QFvIuzfd0TI7PkKzwuIYHBJSKxzv6DY5DuHPkCVg1zPGzKS
-         EI5XEnzFCnsEBAGqDvvzPQ9KMteNdZ/9Z7Go6cib94jir4yb52sTaGl38NjO/YytB7
-         Ihf15/SOmo6sg==
-Date:   Wed, 1 Dec 2021 11:16:44 +0100
-From:   Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hans Verkuil <hverkuil@xs4all.nl>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH] docs: conf.py: fix support for Readthedocs v 1.0.0
-Message-ID: <20211201111644.218b510a@coco.lan>
-In-Reply-To: <4c6fe1f6-1a81-1181-f23a-df3f1b538cdf@infradead.org>
-References: <f0660b1d24bc9bc07b13fe9a25ccb69ca14e916d.1637923850.git.mchehab+huawei@kernel.org>
-        <13c40ed9-a51f-7496-7224-03b563bb6695@gmail.com>
-        <59f64802-c3dc-74cd-8f35-878e3fac64e2@infradead.org>
-        <87sfvik21z.fsf@intel.com>
-        <20211127102518.6e715036@coco.lan>
-        <4c6fe1f6-1a81-1181-f23a-df3f1b538cdf@infradead.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
+        Wed, 1 Dec 2021 05:20:14 -0500
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638353809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wbiMD6K2khcbAApwZxiyDtRNkrqwDaQ0eoVHy6k+DAE=;
+        b=DQUYrHcJWTXltulp1feZwgRWzO09qEXPzvxuFWK/F/3vV+hE7s8CvVv6RqfJklXeAyAD0H
+        hXnqwh3YlJY3/KlsOG6lNhqsiSkRSaQo109zXU8Ncji5c2Mnmi+NDUCeV5vck2olRwXun2
+        HlwLphiG6uDz/ms4mXztbEY8g8Uq4diKY7gqfozy+jiG3TEWSq0lOlzMCzXfp/v3aU0NW2
+        tqKUStD1xTEwlY3c0rCYvZSspZ7m4XoWnyinjMBzlicvdmaWcHxr9zGGVseTAHlpQUJ/xS
+        nZaskQBDuO+Vx1r7kgboo6bwhFWWXtWR6Qt9J9qr/PFiXQk6HzJiXwtK5YvgUA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638353809;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wbiMD6K2khcbAApwZxiyDtRNkrqwDaQ0eoVHy6k+DAE=;
+        b=UinCQtLZesRyTqT4YgZIT5MQ5x/D3n9gdny+zdaLwIM15OXm6LTqjUB6YeI2mys6irMEFC
+        QZPVYEsXsxomKLCA==
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
+        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
+        Joerg Roedel <jroedel@suse.de>,
+        iommu@lists.linux-foundation.org
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+In-Reply-To: <20211201001748.GF4670@nvidia.com>
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
+ <20211130202800.GE4670@nvidia.com> <87o861banv.ffs@tglx>
+ <20211201001748.GF4670@nvidia.com>
+Date:   Wed, 01 Dec 2021 11:16:47 +0100
+Message-ID: <87mtlkaauo.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, 27 Nov 2021 07:59:13 -0800
-Randy Dunlap <rdunlap@infradead.org> escreveu:
+Jason,
 
-> > Perhaps one alternative to help with themes maintenance would be to
-> > select one of the builtin themes from:
-> > 
-> > 	https://sphinx-themes.org/  
-> 
-> Looks to me like those are external to sphinx-doc.org. It says that
-> they are maintained by @pradyunsg and @shirou. (don't know who they are)
-> There are over 40 themes shown there.
-> 
-> OTOH, there is https://www.sphinx-doc.org/en/master/usage/theming.html#builtin-themes,
-> which shows about 12 builtin themes to choose from. Pretty much like the
-> list the you show just below here...
-> 
-> > 
-> > if they're good enough and are present at the minimal Sphinx version
-> > supported by Kernel documentation. The ones available on 1.7.9 are:
-> > 
-> > 	$ ls sphinx_1.7.9/lib/python3.10/site-packages/sphinx/themes
-> > 	agogo  bizstyle  default  haiku   nonav    scrolls    traditional
-> > 	basic  classic   epub     nature  pyramid  sphinxdoc
-> > 
-> > They all are also the same themes available at the latest version.
-> > 
-> > If we're willing to do so, I did a quick test here. Those seems to
-> > produce a reasonable output:
-> > 
-> > 	- bizstyle
-> > 	- nature
-> > 	- classic  
-> 
-> Thanks for checking.
-> 
-> > If something would still be needed to change, the css override file could
-> > still be used, but keeping it minimal helps to avoid the need of too
-> > drastic changes.  
-> 
-> I'll take a look...
+CC+ IOMMU folks
 
-Just sent a patch to help testing/using a different theme:
+On Tue, Nov 30 2021 at 20:17, Jason Gunthorpe wrote:
+> On Tue, Nov 30, 2021 at 10:23:16PM +0100, Thomas Gleixner wrote:
+>> The real problem is where to store the MSI descriptors because the PCI
+>> device has its own real PCI/MSI-X interrupts which means it still shares
+>> the storage space.
+>
+> Er.. I never realized that just looking at the patches :|
+>
+> That is relevant to all real "IMS" users. IDXD escaped this because
+> it, IMHO, wrongly used the mdev with the IRQ layer. The mdev is purely
+> a messy artifact of VFIO, it should not be required to make the IRQ
+> layers work.
 
-	https://lore.kernel.org/lkml/8a33f4516c937556b9a38157e236b2f55ef67540.1638353179.git.mchehab+huawei@kernel.org/T/#u
+> I don't think it makes sense that the msi_desc would point to a mdev,
+> the iommu layer consumes the msi_desc_to_dev(), it really should point
+> to the physical device that originates the message with a proper
+> iommu ops/data/etc.
 
-After such patch, you could easily select a different theme during
-documentation build, like:
+Looking at the device slices as subdevices with their own struct device
+makes a lot of sense from the conceptual level. That makes is pretty
+much obvious to manage the MSIs of those devices at this level like we
+do for any other device.
 
-	$ make cleandocs
-        $ make SPHINXDIRS=input THEME=classic htmldocs
-	$ make SPHINXDIRS=i2c THEME=nature htmldocs
+Whether mdev is the right encapsulation for these subdevices is an
+orthogonal problem.
 
-The patch disables the CSS overrides when a theme different than RTD
-is used, as the CSS changes there may not be the best with other
-themes. It probably make sense to split the contents of the
-CSS override to a generic theme, which contains only things that
-would apply to all themes (like font selection) from other things
-that are theme-dependent, like colors.
+I surely agree that msi_desc::dev is an interesting question, but we
+already have this disconnect of msi_desc::dev and DMA today due to DMA
+aliasing. I haven't looked at that in detail yet, but of course the
+alias handling is substantially different accross the various IOMMU
+implementations.
+
+Though I fear there is also a use case for MSI-X and IMS tied to the
+same device. That network card you are talking about might end up using
+MSI-X for a control block and then IMS for the actual network queues
+when it is used as physical function device as a whole, but that's
+conceptually a different case.
+
+>> I'm currently tending to partition the index space in the xarray:
+>> 
+>>  0x00000000 - 0x0000ffff          PCI/MSI-X
+>>  0x00010000 - 0x0001ffff          NTB
+>
+> It is OK, with some xarray work it can be range allocating & reserving
+> so that the msi_domain_alloc_irqs() flows can carve out chunks of the
+> number space..
+>
+> Another view is the msi_domain_alloc_irqs() flows should have their
+> own xarrays..
+
+Yes, I was thinking about that as well. The trivial way would be:
+
+    struct xarray     store[MSI_MAX_STORES];
+
+and then have a store index for each allocation domain. With the
+proposed encapsulation of the xarray handling that's definitely
+feasible. Whether that buys much is a different question. Let me think
+about it some more.
+
+>> which is feasible now with the range modifications and way simpler to do
+>> with xarray than with the linked list.
+>
+> Indeed!
+
+I'm glad you like the approach.
 
 Thanks,
-Mauro
+
+        tglx
+
+

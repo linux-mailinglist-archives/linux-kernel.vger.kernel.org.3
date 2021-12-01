@@ -2,189 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3BD464E62
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:00:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E61E1464E82
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:08:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349461AbhLANDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:03:50 -0500
-Received: from mail-dm6nam10on2069.outbound.protection.outlook.com ([40.107.93.69]:34656
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1349457AbhLANDr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:03:47 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RjGRLPUoqy1wMYUIfkUT4vzgHcw/tjg19hnaap6ztzhjD7Qr5cgRZlnjvTFtk5odo6gmkkKyxZNw3u/7okGrsxSODGktIe2Sx9cas58v2cUc3zM3lWfHeuAemn4Lnfe4gbBVv/grVg/hsYzF0NCCJRdsbTb2Aj8fRmp7PN3DEDio0WHS6Jfq1kJxrYCu4tP8oCwH3NCiwuX3vo1QIXQ+mRRUNr7DHxJPHJ1mpt+xgHlW+7IZ2gHcblSaCoujBVCUhF0eH6my5oA2XSOMzMfFN2EuTSjE2DVkUZqEr6tAItt3PB+xEZTpOAcXSJlBoOzdd/w/sQTtDSa4sD9kSVXUSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aEkpm0Sgw4M7XdzD3IWiISuFzyKcEefF7Lhqwt6N4zs=;
- b=JLfTnY2y1+LZbmFeNynIhDRurg1SoJWGJOaz5KSkvPPteyaLdKB4LItEa3p21YR6KcYtpMEYdEkZh6TQnFHBZER3iddKRK4hzvziPabh3WMA1Uk1r+3NpAnWSYXUQXg7LDR8zn+pgOU99gW8EDh1aMaIIR35QwaIpOw8Ae1knYmmsd3ajiCwTjnJiqlXbqAX5nmUJiiFB7GW9nFkWk4bY3Aj3pqwa8xhdeEv74I00z0V1nFDHQfPTDzUCfXqj32f28z+GKUpKL8eYbky4VRgfK8WJRfAajeUZHion/N2/cEFRY30AriFyjDQpg2sqlHrLBPsR/jrKxfOOfGF6SuxHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aEkpm0Sgw4M7XdzD3IWiISuFzyKcEefF7Lhqwt6N4zs=;
- b=gggpSLqhMdQpMQ6ovl1i6w+T1iN+JaUWSqgfUE0wcamED49gwpXuIzqBfrHcGzh6LZ9Jf8GYqjztUXRtwGd5ozXB96b+iyXFDErZMI0NLNVeJk9A8ZIYHqCYtsPQbnd5datZDo6WEefbAIznBgtXgtH7fTAuqe9vHscAyrRbAKhdowjyt0fEoIXRtxbzZS8m//0RMA7ngfTZh/J/UttNL+9l/YJg1S2FeRSUoKRlsRJGmdanAZEt3rGSRzODWg1Ju24fmd8JIRwLLLG6pOwTRI7AuAE6grlWt4gM+47NagCdJK0FLVI+1k8qjkmtP8CpKLfzOudcSNSmeIbb11K4lw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DM6PR12MB5520.namprd12.prod.outlook.com (2603:10b6:5:208::9) by
- DM4PR12MB5280.namprd12.prod.outlook.com (2603:10b6:5:39d::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.4755.14; Wed, 1 Dec 2021 13:00:25 +0000
-Received: from DM6PR12MB5520.namprd12.prod.outlook.com
- ([fe80::1569:38dd:26fb:bf87]) by DM6PR12MB5520.namprd12.prod.outlook.com
- ([fe80::1569:38dd:26fb:bf87%8]) with mapi id 15.20.4734.024; Wed, 1 Dec 2021
- 13:00:25 +0000
-Date:   Wed, 1 Dec 2021 09:00:23 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
-        Joerg Roedel <jroedel@suse.de>,
-        iommu@lists.linux-foundation.org
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-Message-ID: <20211201130023.GH4670@nvidia.com>
-References: <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com>
- <874k7ueldt.ffs@tglx>
- <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com>
- <87ilwacwp8.ffs@tglx>
- <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com>
- <87v909bf2k.ffs@tglx>
- <20211130202800.GE4670@nvidia.com>
- <87o861banv.ffs@tglx>
- <20211201001748.GF4670@nvidia.com>
- <87mtlkaauo.ffs@tglx>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87mtlkaauo.ffs@tglx>
-X-ClientProxiedBy: MN2PR17CA0016.namprd17.prod.outlook.com
- (2603:10b6:208:15e::29) To DM6PR12MB5520.namprd12.prod.outlook.com
- (2603:10b6:5:208::9)
+        id S1349486AbhLANLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:11:51 -0500
+Received: from mx07-00178001.pphosted.com ([185.132.182.106]:36642 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231538AbhLANLq (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 08:11:46 -0500
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B1BXqVn026536;
+        Wed, 1 Dec 2021 12:41:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=selector1; bh=y+lWVTF7ChstYU55k0XJsQjtnrTGXQm1BJqRGO3NL6k=;
+ b=fAqFS9wDCZu+bDhm+hcsbf59KUJ8W9VyaQ7atI03nhsmoXaaZOeA2iavt3sMIq74FV0h
+ KU/Yo9+ZSNWZT/FQWs7zAVH5P+KzL1rGwBOZfLx6ojPnspETMREQJJepOOHPTryuLdcR
+ ghlcl+F7KYAPZ1k4v9C+A0TpVrfD632Q75Fk1Wa3iJaFGOGfbPJZBBNtzCOzvJmDhh8/
+ lPo/Oqp9/cJHqhaKAyh2l/deOmaB6fdoVS4UlIvBt9zoGmZY9czplaJm/ogLEFW0g+PM
+ Jk0tF8S2xwiO3Z0O2jJF1e66KjaZO937vYsaESRWV1boebWQaSkIKSpYkad77PLxyGJE eA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cnyy6jv26-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 12:41:57 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 618C6100034;
+        Wed,  1 Dec 2021 12:41:56 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5627A2190E8;
+        Wed,  1 Dec 2021 12:41:56 +0100 (CET)
+Received: from gnbcxd0016.gnb.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
+ (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 1 Dec
+ 2021 12:41:55 +0100
+Date:   Wed, 1 Dec 2021 12:41:48 +0100
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <wsa@kernel.org>
+CC:     <pierre-yves.mordret@foss.st.com>, <alexandre.torgue@foss.st.com>,
+        <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <amelie.delaunay@foss.st.com>
+Subject: Re: [PATCH 0/2] i2c: stm32: A few cleanups
+Message-ID: <20211201114148.GA828165@gnbcxd0016.gnb.st.com>
+Mail-Followup-To: wsa@kernel.org, pierre-yves.mordret@foss.st.com,
+        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
+References: <20211201110348.825901-1-alain.volmat@foss.st.com>
 MIME-Version: 1.0
-Received: from mlx.ziepe.ca (142.162.113.129) by MN2PR17CA0016.namprd17.prod.outlook.com (2603:10b6:208:15e::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11 via Frontend Transport; Wed, 1 Dec 2021 13:00:25 +0000
-Received: from jgg by mlx with local (Exim 4.94)        (envelope-from <jgg@nvidia.com>)        id 1msPDj-006DJF-JO; Wed, 01 Dec 2021 09:00:23 -0400
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 487759db-e66a-46f0-14fc-08d9b4ca8aa2
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5280:
-X-Microsoft-Antispam-PRVS: <DM4PR12MB52808A10798B9A9D3AD93B33C2689@DM4PR12MB5280.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:10000;
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XoLQ9hyIgQpeV/aqDJwSwbzcr5vR5KkELFdE+ZpHxiQlY6EgWIHalh68tUIip/IjPpS9fOEkMO6nygJ8PmbhzaYwFQv2jkII5Xsyz8XdsQQ4O3BWiBZnGmnK6kjC6EtYpSQOgpWzUo4yKxNd79u3BOXPVO5trh29qM49cPuiDpmKWm9MUmsuU90dvJf07/J/KEafa1Ua5mzXCGihlRUyAR/MYrMCtYMwrpG1IqexMtD9P1mCmb53E7Trfo6aAD2WdlljCVMtK2GYJTdT8Oi6aKRTPm3oFxtCbqmgUGdc4JrO3P2lHBDgnKoZINaybZ29K2mUgYCnfyP9XB+1JkRpSvJ1ktAvLiHRJWjPBIB5hwxak0Gog22fqiFtOHQcWVw/625GmkwwrdZNEHrJjdm48miCfvfJJxNvYji9sYUhL7B+MrshFLZCy9JOuWV92LoQFMvy8AqdnmV4wnZO/BFD0INYMWv+XZtvgO2ShRNoJSy6OafZOYx0eLcq4ToxV07mSJ7Obo0QZ7NTYNHVLbbNElzjuO9vgmKJxUHcB9JuR25TxJL69IcEviHQ4vk0bATqvXvTHZiuj8znOcfTBEV0nbZPL0sI+ySDO99v1Xw9kxNlVdlBdmEvGj9LgfRMTC5IfwD8LYmkvziEvzt2+GQHrw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB5520.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(86362001)(66476007)(66946007)(66556008)(54906003)(26005)(508600001)(186003)(9786002)(1076003)(5660300002)(6916009)(4326008)(33656002)(9746002)(36756003)(426003)(8936002)(8676002)(2616005)(2906002)(316002)(83380400001)(7416002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pgvKhu+a/eYwf7+IhB7N6CIc0pTi+2UhvedfbJJFHPYM3AtHrCyRubrOTYmg?=
- =?us-ascii?Q?IJPqPdB8OiLKZh9xqafxIO7dgwNQS+conE00g2gkTMczPZD60H0KDGyTshC5?=
- =?us-ascii?Q?0isKolia9Auu6ksorfxSRDLTDFgOQ72TC5tFumwTIDRUQ63K6XJ0OFaxP1DM?=
- =?us-ascii?Q?K9aNNTMJSDS3pNfoHPE/VBYqWPyew96v6hiGlMqqEY4qcVhiuCfbJqUBwiTH?=
- =?us-ascii?Q?DsYXvf32cOOY9d0ElfLAkED7z8D9FWG8Czjy0zmPYK7WKXUd8OGdKSGJQ51u?=
- =?us-ascii?Q?S5Mvn85Jb2H01CNqL/pV260oX6nlYFtDrZCYY3o6IfIVY3hX/88eqKGXhGI8?=
- =?us-ascii?Q?Gyo4nF3HT/f2q7WK5YFMtIGxJx/g7rKrBc8MFQQ8lltg4G1OK7Lw+NmxI8To?=
- =?us-ascii?Q?IArsgMcYs+R0kigDKAO5YdD0aS4COgzxshhYweFyUjvidz5vhxrk/NnQjdPF?=
- =?us-ascii?Q?pUEJuleVYCp0mnv8T7n4g6QgmL8tNpgOQ21bNuV/LpSS6X4kah59Wqp+LqSF?=
- =?us-ascii?Q?ThZFQUSJd+Z4vFxN2MH6VDioS0//tyr9AaWVuTm6lCCvzHwWMgzgCvie0jW8?=
- =?us-ascii?Q?35JMmNSw4WYzp4sjateNaEd1nJar7Xq7TiLgT2JAFgquIlQC7gwFdIj2L7G/?=
- =?us-ascii?Q?/RTFQpQTbHnKXeQx55GaYe2uIsFPKtnqCpDksFgXAWMY30GDho8lx2TcvTES?=
- =?us-ascii?Q?INUD/lqNNHwpHKwLrMugfKiPysGmaqyLioRsd4wIcak6g445YUi9T+zwvq6H?=
- =?us-ascii?Q?t5pMWaz24XqEBTV7FhH7U/gB6BkS3r7aI5Ye0DZCr0H05DK65RYk0+z6mD34?=
- =?us-ascii?Q?dMXU9tobufKcYaefcBi6ZjQuKEu/dv+P7P7rgn4QiAq5VIczbC73/rBFR5/L?=
- =?us-ascii?Q?QeIloAp65Q7UImyVOeNm3jjNv0KGtvlpDOj5Hk+9djCIs7I3CbA1P3VvNoJc?=
- =?us-ascii?Q?kMJiLw6m2OuR3jYcf82wsu1OQBZ4FVXyVhU62cwdbi96/YJktAC6G2dGJKCn?=
- =?us-ascii?Q?Z5T0UgX9w13r3S5Du+IWBhdhTySrxwkvr0e0HyLaojdtUV53ovOOgDCkTAA2?=
- =?us-ascii?Q?Dr2oOZi0mNhztx83Mg6D8VpWhnAmwOCRmp83QdXVvfnMDJrecQZmcm1qw9E5?=
- =?us-ascii?Q?jaArmlZ+UK9Xd8cy2wDaM0IqMKRhHJMnWEftqoKG1QejKclkO+U8Tc8aR3AV?=
- =?us-ascii?Q?4NAeN2EsJTrhLw5ehyNLdUsec13cDMGSy6s9Q3X/ZpzskqWOfTl8dRZaWFet?=
- =?us-ascii?Q?UKXjsG5bCrJA8x+Gou5/BqBe5IDIyOC15oKHyeqf6BhJh5fCgO9wORflAzZo?=
- =?us-ascii?Q?G5L5FpGDdBG8kzrF8FMP2znqz0Qq+plRoL6hRDWHE2E8Odwyb97uhU/n2Nbi?=
- =?us-ascii?Q?YFd5qZgrmcM9bQ4nFxd/SYqRM4317nP3T1kif3eAO+MPWfABqzhzj5HB1RbH?=
- =?us-ascii?Q?7Ws/M9VT0wNrn1DRSAYHJj0JkN93wqF6KfSgIKZJ4WQeHEseWGm35QdmZQMJ?=
- =?us-ascii?Q?PiyCr7jiDc8648FdS8RmwdpTCMQonm1n4fQRK7IlcvlChd7+ud9+ffGSd3d+?=
- =?us-ascii?Q?a0g3nNnWQHekoKB/hjg=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 487759db-e66a-46f0-14fc-08d9b4ca8aa2
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB5520.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2021 13:00:25.4127
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /66EnYJ0w0BVvhceh4ycx0bFFS9zwWYTKaqNgvDw1OArUQqCmYupqi+Y5UZLihVc
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5280
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20211201110348.825901-1-alain.volmat@foss.st.com>
+X-Disclaimer: ce message est personnel / this message is private
+X-Originating-IP: [10.75.127.50]
+X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 11:16:47AM +0100, Thomas Gleixner wrote:
+Sorry for the noise.  Issue with my mailer.  Will resend properly
+the same serie in a sec.
 
-> Looking at the device slices as subdevices with their own struct device
-> makes a lot of sense from the conceptual level.
-
-Except IMS is not just for subdevices, it should be usable for any
-driver in any case as a general interrupt mechiansm, as you alluded to
-below about ethernet queues. ntb seems to be the current example of
-this need..
-
-If it works properly on the physical PCI dev there is no reason to try
-to also make it work on the mdev and add complixity in iommu land.
-
-> Though I fear there is also a use case for MSI-X and IMS tied to the
-> same device. That network card you are talking about might end up using
-> MSI-X for a control block and then IMS for the actual network queues
-> when it is used as physical function device as a whole, but that's
-> conceptually a different case.
-
-Is it? Why?
-
-IDXD is not so much making device "slices", but virtualizing and
-sharing a PCI device. The IDXD hardware is multi-queue like the NIC I
-described and the VFIO driver is simply allocating queues from a PCI
-device for specific usages and assigning them interrupts.
-
-There is already a char dev interface that equally allocates queues
-from the same IDXD device, why shouldn't it be able to access IMS
-interrupt pools too?
-
-IMHO a well designed IDXD driver should put all the PCI MMIO, queue
-mangement, interrupts, etc in the PCI driver layer, and the VFIO
-driver layer should only deal with the MMIO trapping and VFIO
-interfacing.
-
-From this view it is conceptually wrong to have the VFIO driver
-directly talking to MMIO registers in the PCI device or owning the
-irq_chip. It would be very odd for the PCI driver to allocate
-interrupts from some random external struct device when it is creating
-queues on the PCI device.
-
-> > Another view is the msi_domain_alloc_irqs() flows should have their
-> > own xarrays..
+On Wed, Dec 01, 2021 at 12:03:46PM +0100, Alain VOLMAT wrote:
+> A few cleanup, removal of unnecessary messages regarding bus busy
+> and recovering bus.
+> Make the function stm32f7_i2c_release_bus void since it is never
+> returning any error message, allowing to get rid of the error handling
+> within the calling function.
 > 
-> Yes, I was thinking about that as well. The trivial way would be:
+> Alain Volmat (1):
+>   i2c: stm32: get rid of stm32f7_i2c_release_bus return value
 > 
->     struct xarray     store[MSI_MAX_STORES];
+> Wolfram Sang (1):
+>   i2c: stm32f7: remove noisy and imprecise log messages
 > 
-> and then have a store index for each allocation domain. With the
-> proposed encapsulation of the xarray handling that's definitely
-> feasible. Whether that buys much is a different question. Let me think
-> about it some more.
-
-Any possibility that the 'IMS' xarray could be outside the struct
-device?
-
-Thanks,
-Jason
+>  drivers/i2c/busses/i2c-stm32f7.c | 14 ++------------
+>  1 file changed, 2 insertions(+), 12 deletions(-)
+> 
+> -- 
+> 2.25.1
+> 

@@ -2,218 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65E89465684
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:32:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E562F465680
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245154AbhLATgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:36:12 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13110 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S235901AbhLATgL (ORCPT
+        id S239800AbhLATfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230370AbhLATfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:36:11 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1IllfG005551;
-        Wed, 1 Dec 2021 19:30:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : content-transfer-encoding : mime-version; s=pp1;
- bh=POtdW7uY2IXjlmDzjyE6A+wA6JkFPjeUkyXAytSTEtA=;
- b=Jed+NKcaMtzQE+MBW6bwMQirAXvQGWz9jiGAp3GogWFmCWqlq5VbsYLLnUIeYxbzgJAq
- UwgTzZB9bE90tyC6urom0crDSbI0wFnCXUm4/WeDRUX8uaHrhh8PzDVMF5rAfqKbAslX
- lEcAX3GXK3Al6CLDO4yUsJ6V8r1HQlrhb0SNHojgKlklcgHS9TKVqSU4iagr0SSicXna
- bERwqdf+UQ8UOiB+AsYPabGWWtPy5GH0PnlXD2qz+Dxc+4mth4KQhV4bqljbD/mRI4Wg
- D56NBYJDN3MpjymzIHw3gLO4NAJv+vvCOPm8TEfE4+F0yEi2Q7o+jNN79EOhdlJtPnew tw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpemu8t18-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 19:30:48 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B1Iq6ac024932;
-        Wed, 1 Dec 2021 19:30:47 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpemu8t0v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 19:30:47 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1JCjlT021469;
-        Wed, 1 Dec 2021 19:30:46 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma01dal.us.ibm.com with ESMTP id 3ckcacukbx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 19:30:46 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1JTDCJ51642848
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Dec 2021 19:29:13 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 26DFF78080;
-        Wed,  1 Dec 2021 19:29:13 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D963C7806D;
-        Wed,  1 Dec 2021 19:29:10 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Dec 2021 19:29:10 +0000 (GMT)
-Message-ID: <4b12309289c6a51991c5062fed0fde03e0a6f703.camel@linux.ibm.com>
-Subject: Re: [RFC 17/20] ima: Use integrity_admin_ns_capable() to check
- corresponding capability
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org,
-        Denis Semakin <denis.semakin@huawei.com>
-Date:   Wed, 01 Dec 2021 14:29:09 -0500
-In-Reply-To: <34085058-ff5f-c28e-c716-6f4fa71747a3@linux.ibm.com>
-References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
-         <20211130160654.1418231-18-stefanb@linux.ibm.com>
-         <7c751783b28766412f158e5ca074748ed18070bd.camel@linux.ibm.com>
-         <34085058-ff5f-c28e-c716-6f4fa71747a3@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: oJbTWEslJHYJ5CvzShU8-mBHcIs5z0iF
-X-Proofpoint-GUID: SldgQlkK4G2Ue0JLiaJ8Ls8VgJvxWQQB
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 1 Dec 2021 14:35:44 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D413AC061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:32:22 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id n26so25595046pff.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:32:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CZWjS73ddwqy1irW9SF57Z1/5+llpSsF/UlHdpLsf20=;
+        b=WwZ+uZal5LDSsVbb8ggDuyptB5vW613ix+E43x1vM8/MNv5RvFx3Htru6Jk08HPdr9
+         sFytDMsZIeJ4INkdxZK4lCDgEw5TsxrS4hCrWy+E4Omz0b+3kYmft/mrCOTvF1w52fZ4
+         zZq70NTZlSSQ0HJU6HEuB0N8HGNMhZtQS3XBIAwgf67jn48pYuc/7y2ArEsdp6B2u5hZ
+         UPpKiZW/hyb5fF3ZClfJFymNFQx65UfUYfJhSd0KSvpQk9gH8oTmlmCaq4/8wAX7Z3kW
+         owDEfZ0yhQiu0G7jniuk4JF7OK0B28kfzXM86z8IETzqAINVKMUZWqywQrC5Vw3a5Nji
+         pArw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CZWjS73ddwqy1irW9SF57Z1/5+llpSsF/UlHdpLsf20=;
+        b=NHiTS71YamBswQxx7Qx9mvpkoZpdACWaq05RzIq6fUJTOzsSajU/DBB+O/tb5nZq9d
+         WKiFpAD6mkODlBqgj0PfQ1fZty2MEY7TuzNvAlD/6t0VepLdez8DiDaoiw/XD3vD0BNx
+         sa7/i6qR+efTy/XJMuO87c269x0QdDgKrw2OQhTgyIIywfkD50nxYo7GeqGHwYqvbsem
+         lAjxY8KbwLAYoGsmBkupluA6zBYuWuJhTERlURXtjKdDfhch8Zp9VpaeYBhx1PQnEA8C
+         S3HhkoO8XKMDL/F/SpV87ecnCQBliPzez6Yds0DC0GvC+G9YcLqs5+HoqRZeQv7achq6
+         nChw==
+X-Gm-Message-State: AOAM533ZqV0io5MD4gHaStN4kurfDDy6SwtDL93qonV7kJUthj2Gufzi
+        afwPoGvtMiOCLYpojcRwXaVFVQ==
+X-Google-Smtp-Source: ABdhPJw/cQM94bmIq3e1bnf5ez0hbCDPrBfwYK8LB/d0cYiit7zFSsLheZVrRaVltfAEG650aNE5Bg==
+X-Received: by 2002:a62:5a02:0:b0:4a2:a6ee:4d8e with SMTP id o2-20020a625a02000000b004a2a6ee4d8emr7996251pfb.47.1638387142244;
+        Wed, 01 Dec 2021 11:32:22 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j1sm573948pfe.158.2021.12.01.11.32.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 11:32:21 -0800 (PST)
+Date:   Wed, 1 Dec 2021 19:32:18 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Kai Huang <kai.huang@intel.com>, isaku.yamahata@intel.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [RFC PATCH v3 00/59] KVM: X86: TDX support
+Message-ID: <YafNwoPumWQ/77Q6@google.com>
+References: <cover.1637799475.git.isaku.yamahata@intel.com>
+ <YaZyyNMY80uVi5YA@google.com>
+ <20211202022227.acc0b613e6c483be4736c196@intel.com>
+ <20211201190856.GA1166703@private.email.ne.jp>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- clxscore=1015 mlxscore=0 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 adultscore=0 malwarescore=0 phishscore=0 spamscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112010102
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201190856.GA1166703@private.email.ne.jp>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2021-12-01 at 12:35 -0500, Stefan Berger wrote:
-> On 12/1/21 11:58, James Bottomley wrote:
-> > On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
-> > > From: Denis Semakin <denis.semakin@huawei.com>
+On Wed, Dec 01, 2021, Isaku Yamahata wrote:
+> On Thu, Dec 02, 2021 at 02:22:27AM +1300,
+> Kai Huang <kai.huang@intel.com> wrote:
+> 
+> > On Tue, 30 Nov 2021 18:51:52 +0000 Sean Christopherson wrote:
+> > > On Wed, Nov 24, 2021, isaku.yamahata@intel.com wrote:
+> > > > - drop load/initialization of TDX module
 > > > 
-> > > Use integrity_admin_ns_capable() to check corresponding
-> > > capability to allow read/write IMA policy without CAP_SYS_ADMIN
-> > > but with CAP_INTEGRITY_ADMIN.
-> > > 
-> > > Signed-off-by: Denis Semakin <denis.semakin@huawei.com>
-> > > ---
-> > >   security/integrity/ima/ima_fs.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/security/integrity/ima/ima_fs.c
-> > > b/security/integrity/ima/ima_fs.c
-> > > index fd2798f2d224..6766bb8262f2 100644
-> > > --- a/security/integrity/ima/ima_fs.c
-> > > +++ b/security/integrity/ima/ima_fs.c
-> > > @@ -393,7 +393,7 @@ static int ima_open_policy(struct inode
-> > > *inode,
-> > > struct file *filp)
-> > >   #else
-> > >   		if ((filp->f_flags & O_ACCMODE) != O_RDONLY)
-> > >   			return -EACCES;
-> > > -		if (!ns_capable(ns->user_ns, CAP_SYS_ADMIN))
-> > > +		if (!integrity_admin_ns_capable(ns->user_ns))
-> > so this one is basically replacing what you did in RFC 16/20, which
-> > seems a little redundant.
+> > > So what's the plan for loading and initializing TDX modules?
 > > 
-> > The question I'd like to ask is: is there still a reason for
-> > needing CAP_INTEGRITY_ADMIN?  My thinking is that now IMA is pretty
-> > much tied to requiring a user (and a mount, because of
-> > securityfs_ns) namespace, there might not be a pressing need for an
-> > admin capability separated from CAP_SYS_ADMIN because the owner of
-> > the user namespace passes the ns_capable(..., CAP_SYS_ADMIN)
-> > check.  The rationale in
+> > Although I don't quite understand what does Isaku mean here (I thought
+> > loading/initializing TDX module was never part of TDX KVM series), for this part
+> > we are working internally to improve the quality and finalize the code, but
+> > currently I don't have ETA of being able to send patches out, but we are trying
+> > to send out asap.  Sorry this is what I can say for now : (
 > 
-> Casey suggested using CAP_MAC_ADMIN, which I think would also work.
-> 
->      CAP_MAC_ADMIN (since Linux 2.6.25)
->                Allow MAC configuration or state changes. Implemented
-> for
->                the Smack Linux Security Module (LSM).
-> 
-> 
-> Down the road I think we should cover setting file extended
-> attributes with the same capability as well for when a user signs
-> files or installs packages with file signatures.  A container runtime
-> could hold CAP_SYS_ADMIN while setting up a container and mounting
-> filesystems and drop it for the first process started there. Since we
-> are using the user namespace to spawn an IMA namespace, we would then
-> require CAP_SYSTEM_ADMIN to be left available so that the user can do
-> IMA related stuff in the container (set or append to the policy,
-> write file signatures). I am not sure whether that should be the case
-> or rather give the user something finer grained, such as
-> CAP_MAC_ADMIN. So, it's about granularity...
+> v1/v2 has it.
 
-It's possible ... any orchestration system that doesn't enter a user
-namespace has to strictly regulate capabilities.   I'm probably biased
-because I always use a user_ns so I never really had to mess with
-capabilities.
+No, v1 had support for the old architecture where SEAMLDR was a single ACM, it
+did not support the new split persistent/non-persistent architcture.  v2 didn't
+have support for either architecture.
 
-> > https://kernsec.org/wiki/index.php/IMA_Namespacing_design_considerations
-> > 
-> > Is effectively "because CAP_SYS_ADMIN is too powerful" but that's
-> > no longer true of the user namespace owner.  It only passes the
-> > ns_capable() check not the capable() one, so while it does get
-> > CAP_SYS_ADMIN, it can only use it in a few situations which
-> > represent quite a power reduction already.
-> 
-> At least docker containers drop CAP_SYS_ADMIN.
+> Anyway The plan is what Kai said.  The code will reside in the x86 common
+> directory instead of kvm.
 
-Well docker doesn't use the user_ns.  But even given that,
-CAP_SYS_ADMIN is always dropped for most container systems.  What
-happens when you enter a user namespace is the ns_capable( ...,
-CAP_SYS_ADMIN) check returns true if you're the owner of the user_ns,
-in the same way it would for root.  So effectively entering a user
-namespace without CAP_SYS_ADMIN but mapping the owner id to 0 (what
-unshare -r --user does) gives you back a form of CAP_SYS_ADMIN that
-responds only in the places in the kernel that have a ns_capable()
-check instead of a capable() one (most of the places you list below). 
-This is the principle of how unprivileged containers actually work ...
-and the source of some of our security problems if you get back an
-ability to do something you shouldn't be allowed to do as an
-unprivileged user.
+But what's the plan at a higher level?  Will the kernel load the ACM or is that
+done by firmware?  If it's done by firmware, which entity is responsibile for
+loading the TDX module?  If firmware loads the module, what's the plan for
+upgrading the module without a reboot?  When will the kernel initialize the
+module, regardless of who loads it?
 
->  I am not sure what the decision was based on but probably they don't
-> want to give the user what is not absolutely necessary, but usage of
-> user namespaces (with IMA namespaces) would kind of force it to be
-> available then to do IMA-related stuff ...
-> 
-> Following this man page here 
-> https://man7.org/linux/man-pages/man7/user_namespaces.7.html
-> 
-> CAP_SYS_ADMIN in a user namespace is about
-> 
-> - bind-mounting filesystems
-> 
-> - mounting /proc filesystems
-> 
-> - creating nested user namespaces
-> 
-> - configuring UTS namespace
-> 
-> - configuring whether setgroups() can be used
-> 
-> - usage of setns()
-> 
-> 
-> Do we want to add '- only way of *setting up* IMA related stuff' to
-> this list?
-
-I don't see why not, but other container people should weigh in
-because, as I said, I mostly use the user namespace and unprivileged
-containers and don't bother with capabilities.
-
-James
-
-
+All of those unanswered questions make it nigh impossible to review the KVM
+support because the code organization and APIs provided will differ based on how
+the kernel handles loading and initializing the TDX module.

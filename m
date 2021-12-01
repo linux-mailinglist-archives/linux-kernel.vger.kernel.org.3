@@ -2,156 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 86DA5464EF0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:40:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A65E464EF1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:41:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349603AbhLANoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:44:13 -0500
-Received: from mga07.intel.com ([134.134.136.100]:16329 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S232866AbhLANoM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:44:12 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="299847684"
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="299847684"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 05:40:51 -0800
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="477541904"
-Received: from smile.fi.intel.com ([10.237.72.184])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 05:40:49 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.95)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1msPpp-000zsJ-Q2;
-        Wed, 01 Dec 2021 15:39:45 +0200
-Date:   Wed, 1 Dec 2021 15:39:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Kent Gibson <warthog618@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
- struct gpio_chip
-Message-ID: <Yad7IQwXDc8gS2Ne@smile.fi.intel.com>
-References: <20211130154127.12272-1-brgl@bgdev.pl>
- <20211130154127.12272-3-brgl@bgdev.pl>
- <YaZNyMV5gX5cZpar@smile.fi.intel.com>
- <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
- <YaaQp2rq7N71dm1l@smile.fi.intel.com>
- <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
- <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
+        id S1349610AbhLANoX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:44:23 -0500
+Received: from www262.sakura.ne.jp ([202.181.97.72]:64123 "EHLO
+        www262.sakura.ne.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349605AbhLANoW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 08:44:22 -0500
+Received: from fsav115.sakura.ne.jp (fsav115.sakura.ne.jp [27.133.134.242])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 1B1Deeou049719;
+        Wed, 1 Dec 2021 22:40:40 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav115.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp);
+ Wed, 01 Dec 2021 22:40:40 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav115.sakura.ne.jp)
+Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 1B1Ded1i049715
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Wed, 1 Dec 2021 22:40:40 +0900 (JST)
+        (envelope-from penguin-kernel@i-love.sakura.ne.jp)
+Message-ID: <3add7ade-9c9b-2839-5a0c-0a38c4be0e34@i-love.sakura.ne.jp>
+Date:   Wed, 1 Dec 2021 22:40:38 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH] tty: vt: make do_con_write() no-op if IRQ is disabled
+Content-Language: en-US
+From:   Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Hurley <peter@hurleysoftware.com>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20211116144937.19035-1-fmdefrancesco@gmail.com>
+ <1825634.Qa45DEmgBM@localhost.localdomain>
+ <44d83e9c-d8c9-38bf-501c-019b8c2f7b5e@i-love.sakura.ne.jp>
+ <1701119.OD4kndUEs1@localhost.localdomain>
+ <1d05e95c-556a-a34c-99fd-8c542311e2dd@i-love.sakura.ne.jp>
+In-Reply-To: <1d05e95c-556a-a34c-99fd-8c542311e2dd@i-love.sakura.ne.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
-> On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> >
-> > On Tue, Nov 30, 2021 at 10:00 PM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > On Tue, Nov 30, 2021 at 09:25:35PM +0100, Bartosz Golaszewski wrote:
-> > > > On Tue, Nov 30, 2021 at 5:15 PM Andy Shevchenko
-> > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > >
-> > > > > On Tue, Nov 30, 2021 at 04:41:23PM +0100, Bartosz Golaszewski wrote:
-> > > > > > Software nodes allow us to represent hierarchies for device components
-> > > > > > that don't have their struct device representation yet - for instance:
-> > > > > > banks of GPIOs under a common GPIO expander. The core gpiolib core
-> > > > >
-> > > > > core .. core ?!
-> > > > >
-> > > > > > however doesn't offer any way of passing this information from the
-> > > > > > drivers.
-> > > > > >
-> > > > > > This extends struct gpio_chip with a pointer to fwnode that can be set
-> > > > > > by the driver and used to pass device properties for child nodes.
-> > > > > >
-> > > > > > This is similar to how we handle device-tree sub-nodes with
-> > > > > > CONFIG_OF_GPIO enabled.
-> > > > >
-> > > > > Not sure I understand the proposal. Can you provide couple of (simplest)
-> > > > > examples?
-> > > > >
-> > > > > And also it sounds like reinventing a wheel. What problem do you have that you
-> > > > > need to solve this way?
-> > > > >
-> > > > > ...
-> > > > >
-> > > > > > +#if IS_ENABLED(CONFIG_OF_GPIO)
-> > > > > > +     if (gc->of_node && gc->fwnode) {
-> > > > > > +             pr_err("%s: tried to set both the of_node and fwnode in gpio_chip\n",
-> > > > > > +                    __func__);
-> > > > > > +             return -EINVAL;
-> > > > > > +     }
-> > > > > > +#endif /* CONFIG_OF_GPIO */
-> > > > >
-> > > > > I don't like this. It seems like a hack right now.
-> > > > >
-> > > > > Is it possible to convert all GPIO controller drivers to provide an fwnode
-> > > > > rather than doing this? (I believe in most of the drivers we can drop
-> > > > > completely the of_node assignment).
-> > > > >
-> > > >
-> > > > Yes, it's definitely a good idea but I would be careful with just
-> > > > dropping the of_node assignments as callbacks may depend on them
-> > > > later.
-> > >
-> > > GPIO library does it for us among these lines:
-> > >
-> > >         struct fwnode_handle *fwnode = gc->parent ? dev_fwnode(gc->parent) : NULL;
-> > >
-> > >         of_gpio_dev_init(gc, gdev); <<< HERE!
-> > >         acpi_gpio_dev_init(gc, gdev);
-> > >
-> > >         /*
-> > >          * Assign fwnode depending on the result of the previous calls,
-> > >          * if none of them succeed, assign it to the parent's one.
-> > >          */
-> > >         gdev->dev.fwnode = dev_fwnode(&gdev->dev) ?: fwnode;
-> > >
-> >
-> > Except that it doesn't and I noticed that when working on the
-> > subsequent patch. The child gpiochipX devices all had the parent's
-> > fwnode assigned as their primary fwnode and no secondary fwnode.
-> >
-> > Note that this driver doesn't use neither OF nor ACPI in which case
-> > gdev->dev has no fwnode and the parent's one is used. This patch
-> > addresses it. If you have a better idea, let me know.
-> >
-> > Bart
+What do you think? Can we apply this?
+
+On 2021/11/19 23:55, Tetsuo Handa wrote:
+> syzbot is reporting that an unprivileged user who logged in from tty
+> console can crash the system using a reproducer shown below [1], for
+> commit f9e053dcfc02b0ad ("tty: Serialize tty flow control changes with
+> flow_lock") changed __start_tty() from schedulable context to atomic
+> context without realizing that drivers/tty/n_hdlc.c is calling
+> do_con_write() (which waits for console semaphore) from __start_tty().
 > 
-> Let me maybe rephrase the problem: currently, for GPIO devices
-> instantiating multiple banks created outside of the OF or ACPI
-> frameworks (e.g. instantiated manually and configured using a
-> hierarchy of software nodes with a single parent swnode and a number
-> of child swnodes representing the children), it is impossible to
-> assign firmware nodes other than the one representing the top GPIO
-> device to the gpiochip child devices.
+> ----------
+>   #include <sys/ioctl.h>
+>   #include <unistd.h>
 > 
-> In fact if we want to drop the OF APIs entirely from gpiolib - this
-> would be the right first step as for gpio-sim it actually replaces the
-> gc->of_node = some_of_node; assignment that OF-based drivers do for
-> sub-nodes defining banks and it does work with device-tree (I verified
-> that too) thanks to the fwnode abstraction layer.
-
-I still don't see how you set up hierarchy of primary/secondary fwnodes.
-
-And I don't like this change. It seems it band-aids some issue with fwnode
-usage. What the easiest way to reproduce the issue with your series applied
-(without this change)?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+>   int main(int argc, char *argv[])
+>   {
+>     const int disc = 0xd;
+> 
+>     ioctl(1, TIOCSETD, &disc);
+>     while (1) {
+>       ioctl(1, TCXONC, 0);
+>       write(1, "", 1);
+>       ioctl(1, TCXONC, 1); /* Kernel panic - not syncing: scheduling while atomic */
+>     }
+>   }
+> ----------
+> 
+> While we would need to bring __start_tty() back to schedulable context
+> in order to be able to call do_con_write() from ioctl(TCXONC, TCOON),
+> changes required might be complicated; an oversight will result in a
+> new sleep from atomic context bug or a new race window bug. Therefore,
+> firstly let's fix crash problem by protecting do_con_write() side.
+> 
+> Link: https://syzkaller.appspot.com/bug?extid=5f47a8cea6a12b77a876 [1]
+> Reported-by: syzbot <syzbot+5f47a8cea6a12b77a876@syzkaller.appspotmail.com>
+> Analyzed-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> Signed-off-by: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Fixes: f9e053dcfc02b0ad ("tty: Serialize tty flow control changes with flow_lock")
+> ---
+>  drivers/tty/vt/vt.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index 7359c3e80d63..efa16f51c978 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -2902,7 +2902,7 @@ static int do_con_write(struct tty_struct *tty, const unsigned char *buf, int co
+>  	struct vt_notifier_param param;
+>  	bool rescan;
+>  
+> -	if (in_interrupt())
+> +	if (in_interrupt() || irqs_disabled())
+>  		return count;
+>  
+>  	console_lock();
+> @@ -3358,7 +3358,7 @@ static void con_flush_chars(struct tty_struct *tty)
+>  {
+>  	struct vc_data *vc;
+>  
+> -	if (in_interrupt())	/* from flush_to_ldisc */
+> +	if (in_interrupt() || irqs_disabled())	/* from flush_to_ldisc */
+>  		return;
+>  
+>  	/* if we race with con_close(), vt may be null */
+> 
 

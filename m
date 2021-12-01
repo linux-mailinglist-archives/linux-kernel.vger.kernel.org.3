@@ -2,100 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF96B465758
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14C8A46575F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:47:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353286AbhLAUuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:50:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
+        id S1353094AbhLAUvL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353238AbhLAUrN (ORCPT
+        with ESMTP id S1353265AbhLAUsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:47:13 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B730C0613FC;
-        Wed,  1 Dec 2021 12:42:53 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q3so32167310wru.5;
-        Wed, 01 Dec 2021 12:42:53 -0800 (PST)
+        Wed, 1 Dec 2021 15:48:07 -0500
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDB0C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 12:44:12 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so36984505otl.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 12:44:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=KQ8NRxkzw4Ji5ApiKgE9S4/8PNP5ghov5RAcRfL/Sok=;
-        b=oQVD56VwAarF4NU478+1OhkWubWs/aFkN47kRjgEcxvVDtMHjgRzp+aRGjxeef2kld
-         2X2mAJqECjI/lOiuEgppvZstICetmaGBwnoH6hAxTANGnE4Dc3XXZ96PRqi3TbQUhQYe
-         vK4Efp+hpEovOwb/z4suwpbJgbilmLHz5xM0Arz9tNPPj3J1JwFdct+wOHbTzy+xcJWT
-         uD7LmtyV6SPOnHtqEQzZEaoC5sssrtXqykpZ++qTC/5vjIE+D6GWT+SWv61U5XiTz2HB
-         H7z5EgWRbEidcwnfAgDy9oae1TveinoSGC7uoght5LqLJlNkFON0A+ZzlGuA3TDIPKf4
-         6vbg==
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=vSYbfez9sMrWNW9h3VuOAA21Ecw2U6/iY7XbNqz02Nk=;
+        b=T6Bfw0WHodAjJ4sJoSiQCgAo/kLrJlrN6GWUKaGtYt4+5k5Olk0VzgU+NqTlym0Vez
+         vrGteX71CDNCP5XPjBy762sPp8mZbTEfFnetngYB8ls0GEOZ9rd/CbyjnZ9kMTRWe+DX
+         lmdyazfWm2HrXk3exsxNm3ByahD/2pRM4zAIU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KQ8NRxkzw4Ji5ApiKgE9S4/8PNP5ghov5RAcRfL/Sok=;
-        b=4YrYID1YC4feDwYo+0VU9QR/iTAple43VZa12JurwDo4V+s9nXEaPkhd7ZUyHtDeV9
-         qZAWRYVdH8/ljHlBjnnq93/2jKqxS5bEteX6yC23nyw+tOqPhqLFudoa5BtE9gFus9CE
-         dmdDjcDl04FF2Y3A2xaq68Ri/fghp+DT7XRwPAgZQtpEiXmpNHNpw0tmBRmF1M3J0uGj
-         zWUxneQoJEVXwBhhtd0lUnLcc87SQva4zT3wLQ2mr+zvTbyyjWv6U5SCOq9ToT7bQGNb
-         FXVaUeP3LQ4rRHNQY5iIYqatE2+nDkY5Y9Ik1s/UWSDzMG35HLZfMpznYDAij8n0xynw
-         tR2w==
-X-Gm-Message-State: AOAM532Xd4b3GbpQsIQ9kcy1znZPqhW8K+MfrlAPRFANeH9U346r7lUq
-        a3ZD0nc/3J8xjyFFtl2T1zc=
-X-Google-Smtp-Source: ABdhPJxuypQ0AA7s55SpcIUt9FKfoePxpPsC23iRiIqvXVRwi4o0FC6+6aBXpj7vSrg7628mjFtd/w==
-X-Received: by 2002:adf:fd4c:: with SMTP id h12mr9647806wrs.429.1638391371833;
-        Wed, 01 Dec 2021 12:42:51 -0800 (PST)
-Received: from [192.168.8.198] ([185.69.144.129])
-        by smtp.gmail.com with ESMTPSA id d188sm702045wmd.3.2021.12.01.12.42.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 12:42:51 -0800 (PST)
-Message-ID: <5f470c2e-eff9-41b0-ac7a-6cb6ddd5a89c@gmail.com>
-Date:   Wed, 1 Dec 2021 20:42:43 +0000
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=vSYbfez9sMrWNW9h3VuOAA21Ecw2U6/iY7XbNqz02Nk=;
+        b=LkAFcczYGuokQ89p8IJfDlH/cQALR7Aehu8M8GUOOsRSGCRHl3X+t/+WK+9kWrjjEL
+         pCsrLamLf/Bg09+dHLEpd9D69iWORlnudGtdCW5spNCoT4iT/9aiF+pPb0M3TEKpR4Pj
+         v/UDvkcUWVi0xfEGmvtb8/WSXK2FqwLKEhkIUDPUfcyDKLiPK6mJ9kBO+5JWCBom2u4d
+         ED1Gr0PYZU2/RRTBbzZHNaSCsPDu98sDMkc6jO30lDyiwtdQvvNIleWg33r87rULs6vu
+         ARsuw0Qs58siIiu61t81jYpoqXtbpFP6Qfce+B6UmUFmrKglYHCl0ikZbIoZ6k2E3OJz
+         rtOg==
+X-Gm-Message-State: AOAM530f4FLYsxkzp1Qbn7moU+lSw945sSpf2pqi90uLX/RTk1c8dY8e
+        rEDHs3cAR8wwxWzJBeH2d31NvwQaUXft0uDdx+fJn0uxqCg=
+X-Google-Smtp-Source: ABdhPJzMCiDjOvJFb8RJNO+Eynw/sVkqBb3RfG5pqD9m2EhRa9pizpV5X3javyefoKq8JHFV/UgfqLpph5fucQpcOWA=
+X-Received: by 2002:a9d:70ce:: with SMTP id w14mr7895696otj.77.1638391451845;
+ Wed, 01 Dec 2021 12:44:11 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 1 Dec 2021 12:44:11 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [RFC 00/12] io_uring zerocopy send
-Content-Language: en-US
-To:     David Ahern <dsahern@gmail.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1638282789.git.asml.silence@gmail.com>
- <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
- <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
- <c4424a7a-2ef1-6524-9b10-1e7d1f1e1fe4@gmail.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <c4424a7a-2ef1-6524-9b10-1e7d1f1e1fe4@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <1637040382-22987-1-git-send-email-rnayak@codeaurora.org>
+References: <1637040382-22987-1-git-send-email-rnayak@codeaurora.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.9.1
+Date:   Wed, 1 Dec 2021 12:44:11 -0800
+Message-ID: <CAE-0n50PT6j9zGQQyESp+VkokDo4805zU23rx1EA0eaqf4nMBQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] soc: qcom: rpmhpd: Rename rpmhpd struct names
+To:     Rajendra Nayak <rnayak@codeaurora.org>, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 17:57, David Ahern wrote:
-> On 12/1/21 8:32 AM, Pavel Begunkov wrote:
-[...]
->>> mileage varies quite a bit.
->>
->> Interesting, any brief notes on the setup and the results? Dummy
-> 
-> VM on Chromebook. I just cloned your repos, built, install and test. As
-> mentioned above, the skb_orphan_frags_rx change is missing from your
-> repo and that is the key to your reported performance gains.
+Quoting Rajendra Nayak (2021-11-15 21:26:21)
+> The rpmhpd structs were named with a SoC-name prefix, but then
+> they got reused across multiple SoC families making things confusing.
+> Rename all the struct names to remove SoC-name prefixes.
+> No other functional change as part of this patch.
+>
+> Signed-off-by: Rajendra Nayak <rnayak@codeaurora.org>
+> ---
 
-Just to clear misunderstandings if any, all the numbers in the
-cover-letter were measured on the same kernel and during the same
-boot, and it doesn't include the skb_orphan_frags_rx() change.
-All double checked by looking at the traces.
-
-When it's routed through the loopback paths (e.g. -D 127.0.0.1),
-it's indeed slow for both msg_zerocopy and send-zc, and both
-"benefit" in raw throughput from the hack.
-
--- 
-Pavel Begunkov
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

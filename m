@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D3BE2464C70
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA99464C7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:19:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348921AbhLALSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:18:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237786AbhLALS1 (ORCPT
+        id S242702AbhLALXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:23:13 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:20217 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S231332AbhLALXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:18:27 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0DAC061574;
-        Wed,  1 Dec 2021 03:15:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id E05DECE1DCA;
-        Wed,  1 Dec 2021 11:15:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB200C53FCC;
-        Wed,  1 Dec 2021 11:15:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638357303;
-        bh=ehVTzL9X6BysmNP85++ptIBdmSpHTbsCMyi3z2tu5D0=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=HjFzzYB/CE/19drSrda2JNv9tdyBGIIOGNr0il7/WmQa5vCF21CUBUS0bqKZAhtJS
-         1Y5T6A/VJuGdGKwjxK4C7YXojve9Ebi7/l6p9wXK/12GFeOAY/945ZeMm2h1+k8FD7
-         qYTXtZ6UV4jXuP85XZ0bVSeNZ8VUCtIufsHsPcWzwba5KOf27Y7DhN67pxKhflnmod
-         l86/bg4KTuPQQUQhI2TUphk1hutcOl2JpIb73VBnCQVRZt4Ugkp35EoJfjvdMwa7RA
-         jFA/kWHDls45bQUQYSCpF3EVrB4n7zfQRWJAsKFc56WMXcYl57CamD6qZDBI1L8lAG
-         ifEiSWROxQQCw==
-Subject: Re: [PATCH 1/4] dt-bindings: memory-controllers: ti,gpmc: Add
- compatible for AM64
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-Cc:     tony@atomide.com, kishon@ti.com, nm@ti.com, vigneshr@ti.com,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20211123102607.13002-1-rogerq@kernel.org>
- <20211123102607.13002-2-rogerq@kernel.org>
- <a28532b1-bfa0-031b-91cc-070cad557599@canonical.com>
- <YaafXKXfzBQaNSvq@robh.at.kernel.org>
-From:   Roger Quadros <rogerq@kernel.org>
-Message-ID: <acc05242-8d0a-093a-c076-af35a339333c@kernel.org>
-Date:   Wed, 1 Dec 2021 13:14:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 1 Dec 2021 06:23:12 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A8CazuqBuK2sqQxVW/4zhw5YqxClBgxIJ4g17XOL?=
+ =?us-ascii?q?fUAXqgDkj0WBTzzAYUGzVPvjfZGWjL9klPITl80MDvJGAx9UxeLYW3SszFioV8?=
+ =?us-ascii?q?6IpJjg4wn/YZnrUdouaJK5ex512huLocYZkERcwmj/3auK49CMkjPnRLlbBILW?=
+ =?us-ascii?q?s1h5ZFFYMpBgJ2UoLd94R2uaEsPDha++/kYqaT/73ZDdJ7wVJ3lc8sMpvnv/AU?=
+ =?us-ascii?q?MPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnREmLx9BFrBM6?=
+ =?us-ascii?q?nk6rgbwsBRbu60Qqm0yIQAvb9xEMZ4HFaPqUTbZLwbW9TiieJntJwwdNlu4GyS?=
+ =?us-ascii?q?BsyI+vHn+F1vxxwSnguZ/IYoeOdSZS4mYnJp6HcSFPgyutjCWk6NJMV/+JwD30?=
+ =?us-ascii?q?I8/EEQBgBdRmDiviw6L2+Q+howM8kKaHDP54Vs1ljwCvfAPJgRorMK43R5cJR3?=
+ =?us-ascii?q?B8zi9pIEPKYYNAWARJrbRLdc1hMN00RBZYWguilnD/8fidepVbTorA4i0DXzQp?=
+ =?us-ascii?q?swP3uK9fRdMCHXtl9gEmVvCTF8n7/DxVcM8aQoRKD/26gi/Hngyz2QsQRGae++?=
+ =?us-ascii?q?/osh0ecrlH/ojV+uUCT+KH/0xDhHYkEbRF8x8bnloBqnGTDczU3d0TQTKa4gyM?=
+ =?us-ascii?q?h?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Ak3v3zapLx5LivReFk/+A9x4aV5pOeYIsimQD?=
+ =?us-ascii?q?101hICG9E/b5qynAppkmPHPP4gr5O0tApTnjAsa9qBrnnPYf3WB4B8bAYOCMgg?=
+ =?us-ascii?q?eVxe9Zg7ff/w=3D=3D?=
+X-IronPort-AV: E=Sophos;i="5.87,278,1631548800"; 
+   d="scan'208";a="118276142"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 01 Dec 2021 19:19:48 +0800
+Received: from G08CNEXMBPEKD06.g08.fujitsu.local (unknown [10.167.33.206])
+        by cn.fujitsu.com (Postfix) with ESMTP id 057704D13A00;
+        Wed,  1 Dec 2021 19:19:44 +0800 (CST)
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXMBPEKD06.g08.fujitsu.local (10.167.33.206) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Wed, 1 Dec 2021 19:19:42 +0800
+Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Wed, 1 Dec 2021 19:19:43 +0800
+From:   Li Zhijian <lizhijian@cn.fujitsu.com>
+To:     <davem@davemloft.net>, <kuba@kernel.org>, <shuah@kernel.org>,
+        <dsahern@gmail.com>
+CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Li Zhijian <lizhijian@cn.fujitsu.com>
+Subject: [PATCH v2 2/3] selftests: add option to list all available tests
+Date:   Wed, 1 Dec 2021 19:17:59 +0800
+Message-ID: <20211201111759.14613-1-lizhijian@cn.fujitsu.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20211201111025.13834-2-lizhijian@cn.fujitsu.com>
+References: <20211201111025.13834-2-lizhijian@cn.fujitsu.com>
 MIME-Version: 1.0
-In-Reply-To: <YaafXKXfzBQaNSvq@robh.at.kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-yoursite-MailScanner-ID: 057704D13A00.AAD08
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+$ ./fcnal-test.sh -l
+Test names: ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter
+ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter
+use_cases
 
-On 01/12/2021 00:02, Rob Herring wrote:
-> On Tue, Nov 23, 2021 at 08:47:57PM +0100, Krzysztof Kozlowski wrote:
->> On 23/11/2021 11:26, Roger Quadros wrote:
->>> AM64 SoC contains the GPMC module. Add compatible for it.
->>>
->>> Newer SoCs don't necessarily map GPMC data region at the same place
->>> as legacy SoCs. Add reg-names "data", to provide this information to
->>> the device driver.
->>>
->>> Cc: Rob Herring <robh+dt@kernel.org>
->>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>> ---
->>>  .../bindings/memory-controllers/ti,gpmc.yaml         | 12 +++++++++++-
->>>  1 file changed, 11 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml b/Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml
->>> index 25b42d68f9b3..1869cc6f949b 100644
->>> --- a/Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml
->>> +++ b/Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml
->>> @@ -23,13 +23,20 @@ properties:
->>>      items:
->>>        - enum:
->>>            - ti,am3352-gpmc
->>> +          - ti,am64-gpmc
->>>            - ti,omap2420-gpmc
->>>            - ti,omap2430-gpmc
->>>            - ti,omap3430-gpmc
->>>            - ti,omap4430-gpmc
->>>  
->>>    reg:
->>> -    maxItems: 1
->>> +    minItems: 1
->>> +    maxItems: 2
->>> +
->>> +  reg-names:
->>> +    items:
->>> +      - const: cfg
->>> +      - const: data
->>
->> I see your driver handles cases with only one reg item, but I have other
->> question - is it correct to have older (ARMv7) platform with two reg
->> items? Or can am64-gpmc come with only one reg?
->> IOW, I am surprised there is no if-else case precising this minItems
->> requirement for different SocS.
-> 
-> I don't think that is needed here. If the assumption is 'reg-names' is 
-> only present when there are 2 entries, then it is fine. Maybe 
-> 'reg-names' should be required for ti,am64-gpmc though.
+Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+---
+ tools/testing/selftests/net/fcnal-test.sh | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Yes, I'll make 'reg-names' property required for ti,am64-gpmc.
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index 7f5b265fcb90..9111b8952ac8 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -3993,6 +3993,7 @@ usage: ${0##*/} OPTS
+ 	-4          IPv4 tests only
+ 	-6          IPv6 tests only
+ 	-t <test>   Test name/set to run
++	-l          List all available tests
+ 	-p          Pause on fail
+ 	-P          Pause after each test
+ 	-v          Be verbose
+@@ -4006,10 +4007,15 @@ TESTS_IPV4="ipv4_ping ipv4_tcp ipv4_udp ipv4_bind ipv4_runtime ipv4_netfilter"
+ TESTS_IPV6="ipv6_ping ipv6_tcp ipv6_udp ipv6_bind ipv6_runtime ipv6_netfilter"
+ TESTS_OTHER="use_cases"
+ 
++list()
++{
++	echo "Test names: $TESTS_IPV4 $TESTS_IPV6 $TESTS_OTHER"
++}
++
+ PAUSE_ON_FAIL=no
+ PAUSE=no
+ 
+-while getopts :46t:pPvh o
++while getopts :46lt:pPvh o
+ do
+ 	case $o in
+ 		4) TESTS=ipv4;;
+@@ -4018,6 +4024,7 @@ do
+ 		p) PAUSE_ON_FAIL=yes;;
+ 		P) PAUSE=yes;;
+ 		v) VERBOSE=1;;
++		l) list; exit 0;;
+ 		h) usage; exit 0;;
+ 		*) usage; exit 1;;
+ 	esac
+-- 
+2.32.0
 
-cheers,
--roger
+
+

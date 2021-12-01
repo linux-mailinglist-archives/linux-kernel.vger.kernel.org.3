@@ -2,57 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB81464A40
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:59:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18E3D464A46
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348102AbhLAJCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 04:02:37 -0500
-Received: from out30-133.freemail.mail.aliyun.com ([115.124.30.133]:59037 "EHLO
-        out30-133.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1348075AbhLAJCU (ORCPT
+        id S1348118AbhLAJDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 04:03:48 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:45492 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S236969AbhLAJDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:02:20 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R511e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=cuibixuan@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Uz-4zV2_1638349134;
-Received: from VM20210331-25.tbsite.net(mailfrom:cuibixuan@linux.alibaba.com fp:SMTPD_---0Uz-4zV2_1638349134)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Wed, 01 Dec 2021 16:58:58 +0800
-From:   Bixuan Cui <cuibixuan@linux.alibaba.com>
-To:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Cc:     cuibixuan@linux.alibaba.com, perex@perex.cz, tiwai@suse.com
-Subject: [PATCH -next] ALSA: oss: fix compile error when OSS_DEBUG is enabled
-Date:   Wed,  1 Dec 2021 16:58:54 +0800
-Message-Id: <1638349134-110369-1-git-send-email-cuibixuan@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
+        Wed, 1 Dec 2021 04:03:47 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 664D0212B8;
+        Wed,  1 Dec 2021 09:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638349225; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DvU9WOqQxuHtnAuEXjV4GD1n4RLlFIXDYVXvgUC7354=;
+        b=1o3oGHPAOuUL4G7Vy+shm75HBgD+KsWoecUT6MIOS7ieR9j6A56puG7phFrfrBDvgX/WLZ
+        JhnZNALK4+qhJrhc0D0K6Mklv9LiKQ09QCJcmddxInIWN9exXlyoWPWxu67JliT/J670co
+        V+eT8R35rjCi+ulkfXc2haMYdMQRd4U=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638349225;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DvU9WOqQxuHtnAuEXjV4GD1n4RLlFIXDYVXvgUC7354=;
+        b=ytoiF+w1Q5Bqi7iRUcq2kUzl4qToaIU1QEUc15cRA5pTr7AUJ2meaXtOp9g59HmhHli7tu
+        yHI4az2CbJ6VxLAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5819413BAA;
+        Wed,  1 Dec 2021 09:00:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sv5AFak5p2EYOwAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 09:00:25 +0000
+Subject: Re: [PATCH 0/7] docs: consolidate sysfs-block into Documentation/ABI/
+To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-doc@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+References: <20211201084524.25660-1-ebiggers@kernel.org>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <91d14cdc-643c-58a8-37b7-af9d20747d2b@suse.de>
+Date:   Wed, 1 Dec 2021 10:00:25 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
+MIME-Version: 1.0
+In-Reply-To: <20211201084524.25660-1-ebiggers@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix compile error when OSS_DEBUG is enabled:
-    sound/core/oss/pcm_oss.c: In function 'snd_pcm_oss_set_trigger':
-    sound/core/oss/pcm_oss.c:2055:10: error: 'substream' undeclared (first
-    use in this function); did you mean 'csubstream'?
-      pcm_dbg(substream->pcm, "pcm_oss: trigger = 0x%x\n", trigger);
-              ^
+On 12/1/21 9:45 AM, Eric Biggers wrote:
+> This series consolidates the documentation for /sys/block/<disk>/queue/
+> into Documentation/ABI/, where it is supposed to go (as per Greg KH:
+> https://lore.kernel.org/r/YaXXpEAwVGTLjp1e@kroah.com).
+> 
+> This series also updates MAINTAINERS to associate the block
+> documentation with the block layer.
+> 
+> This series applies to linux-block/for-next.
+> 
+> Eric Biggers (7):
+>   docs: sysfs-block: sort alphabetically
+>   docs: sysfs-block: add contact for nomerges
+>   docs: sysfs-block: fill in missing documentation from queue-sysfs.rst
+>   docs: sysfs-block: document stable_writes
+>   docs: sysfs-block: document virt_boundary_mask
+>   docs: block: remove queue-sysfs.rst
+>   MAINTAINERS: add entries for block layer documentation
+> 
+>  Documentation/ABI/testing/sysfs-block | 766 ++++++++++++++++++--------
+>  Documentation/block/index.rst         |   1 -
+>  Documentation/block/queue-sysfs.rst   | 321 -----------
+>  MAINTAINERS                           |   2 +
+>  4 files changed, 545 insertions(+), 545 deletions(-)
+>  delete mode 100644 Documentation/block/queue-sysfs.rst
+> 
+> 
+> base-commit: c2626d30f312afc341158e07bf088f5a23b4eeeb
+> 
+Yay.
 
-Fixes: 61efcee8608c ("ALSA: oss: Use standard printk helpers")
-Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
----
- sound/core/oss/pcm_oss.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-diff --git a/sound/core/oss/pcm_oss.c b/sound/core/oss/pcm_oss.c
-index 82a8187..bb37665 100644
---- a/sound/core/oss/pcm_oss.c
-+++ b/sound/core/oss/pcm_oss.c
-@@ -2052,7 +2052,7 @@ static int snd_pcm_oss_set_trigger(struct snd_pcm_oss_file *pcm_oss_file, int tr
- 	int err, cmd;
- 
- #ifdef OSS_DEBUG
--	pcm_dbg(substream->pcm, "pcm_oss: trigger = 0x%x\n", trigger);
-+	pr_debug("pcm_oss: trigger = 0x%x\n", trigger);
- #endif
- 	
- 	psubstream = pcm_oss_file->streams[SNDRV_PCM_STREAM_PLAYBACK];
+Cheers,
+
+Hannes
 -- 
-1.8.3.1
-
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer

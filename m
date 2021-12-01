@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D24C746574D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FC33465750
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353206AbhLAUqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:46:30 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:34032 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352973AbhLAUoh (ORCPT
+        id S239710AbhLAUrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:47:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1352975AbhLAUoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:44:37 -0500
+        Wed, 1 Dec 2021 15:44:38 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D90C06175A;
+        Wed,  1 Dec 2021 12:41:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B7A9B81F49;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 73FDFCE2105;
         Wed,  1 Dec 2021 20:41:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E94C2C53FCF;
-        Wed,  1 Dec 2021 20:41:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13EAFC53FD0;
+        Wed,  1 Dec 2021 20:41:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638391273;
-        bh=xhGJRz9BulQnvsOgFE2Mr1fKCRSkEYqt5PpRCrxkWL0=;
+        s=k20201202; t=1638391275;
+        bh=u7hDbDByWYfT0TX0W3OHC3WM8OBJ/lrCMsCnd08PHIU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:In-Reply-To:
          References:From;
-        b=CZ578Q3NDDUSWRMjBPndP9vGk/2xQTprej9Eb3FXs0gBkhHZG7AJTM4uEfAe7fMwC
-         kgk9J28qvfwMFgVLggUyDsRi4w7JfkpbGB6PDwQLaaH6F7oPc9CDMqg+vhbZSVRFqF
-         T1WVy24hJadazQdN6Z26JrhF/u+auYWPtBIVqUpYfi31p7/N3rU0ZkcfljGHM4E9GR
-         s2nOyySFP4aaUNTBsuxhG0QYcJhjdtuEHYJ5MjfQgUNAyqHphWJbubZBiIVSIFSJ5w
-         e9Y0qtjKupu0bGFUD+gUavf7Nj7mv2Mpok7YlYz4FL1aJdMO59aGJfDVN5d1LefsnS
-         JRrPQwS1j8Olg==
+        b=bzqexLznTw7eifiMaUbFNhSjDXnaFMdYCRsBnL94R0vJXvOy1JIvLIGzFe9J8FIKF
+         goDWWE5ZeTmV0sAMauilCwnZXxEAnFB1oOZZ4cb3ssIkD61QBwLNuH2FqxND2jv2WV
+         lIvoltR27E8bdy/IECR3/ezQBwHvB684iiiHfqgEawIcjaibMht6KAf+BBqwzDHKrz
+         2dx+k7s4a5KqxQlhPTY8al2uM0O3btosQ0Ovxd+h5HI2U+BK2pTZK6WCWkP2pYDABy
+         org2Owk/Fi5APfUyLfmjhU7II9nG9xbLM4SKijvuyspNqmdj6eewBiH4OFyLxHV73V
+         CDHMht83/Fu6w==
 From:   zanussi@kernel.org
 To:     LKML <linux-kernel@vger.kernel.org>,
         linux-rt-users <linux-rt-users@vger.kernel.org>,
@@ -42,10 +45,10 @@ To:     LKML <linux-kernel@vger.kernel.org>,
         Clark Williams <williams@redhat.com>,
         "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
         Tom Zanussi <zanussi@kernel.org>
-Cc:     stable-rt@vger.kernel.org
-Subject: [PATCH RT 3/8] preempt: Move preempt_enable_no_resched() to the RT block
-Date:   Wed,  1 Dec 2021 14:41:03 -0600
-Message-Id: <9d8babfb7cbd1d5639c50b352d32cf5ab6f83daf.1638391253.git.zanussi@kernel.org>
+Cc:     stable-rt@vger.kernel.org, Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH RT 4/8] mm: Disable NUMA_BALANCING_DEFAULT_ENABLED and TRANSPARENT_HUGEPAGE on PREEMPT_RT
+Date:   Wed,  1 Dec 2021 14:41:04 -0600
+Message-Id: <0421bbd936f2b617164726e47825ce243f0fa5ee.1638391253.git.zanussi@kernel.org>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <cover.1638391253.git.zanussi@kernel.org>
 References: <cover.1638391253.git.zanussi@kernel.org>
@@ -63,44 +66,49 @@ If anyone has any objections, please let me know.
 -----------
 
 
-[ Upstream commit 1a45b3551ef852193c3d338888132c4925d0690d ]
+[ Upstream commit aae93144898af113331668f53f80cb83f5a07360 ]
 
-preempt_enable_no_resched() should point to preempt_enable() on
-PREEMPT_RT so nobody is playing any preempt tricks and enables
-preemption without checking for the need-resched flag.
+TRANSPARENT_HUGEPAGE:
+There are potential non-deterministic delays to an RT thread if a critical
+memory region is not THP-aligned and a non-RT buffer is located in the same
+hugepage-aligned region. It's also possible for an unrelated thread to migrate
+pages belonging to an RT task incurring unexpected page faults due to memory
+defragmentation even if khugepaged is disabled.
 
-This was misplaced in v3.14.0-rt1 und remained unnoticed until now.
+Regular HUGEPAGEs are not affected by this can be used.
 
-Point preempt_enable_no_resched() and preempt_enable() on RT.
+NUMA_BALANCING:
+There is a non-deterministic delay to mark PTEs PROT_NONE to gather NUMA fault
+samples, increased page faults of regions even if mlocked and non-deterministic
+delays when migrating pages.
 
+[Mel Gorman worded 99% of the commit description].
+
+Link: https://lore.kernel.org/all/20200304091159.GN3818@techsingularity.net/
+Link: https://lore.kernel.org/all/20211026165100.ahz5bkx44lrrw5pt@linutronix.de/
 Cc: stable-rt@vger.kernel.org
+Cc: Mel Gorman <mgorman@techsingularity.net>
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+Acked-by: Mel Gorman <mgorman@techsingularity.net>
+Link: https://lore.kernel.org/r/20211028143327.hfbxjze7palrpfgp@linutronix.de
 Signed-off-by: Tom Zanussi <zanussi@kernel.org>
 ---
- include/linux/preempt.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ init/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/linux/preempt.h b/include/linux/preempt.h
-index adb085fe31e4..bbc3592b6f04 100644
---- a/include/linux/preempt.h
-+++ b/include/linux/preempt.h
-@@ -211,12 +211,12 @@ do { \
- 	preempt_count_dec(); \
- } while (0)
- 
--#ifdef CONFIG_PREEMPT_RT
-+#ifndef CONFIG_PREEMPT_RT
- # define preempt_enable_no_resched() sched_preempt_enable_no_resched()
--# define preempt_check_resched_rt() preempt_check_resched()
-+# define preempt_check_resched_rt() barrier();
- #else
- # define preempt_enable_no_resched() preempt_enable()
--# define preempt_check_resched_rt() barrier();
-+# define preempt_check_resched_rt() preempt_check_resched()
- #endif
- 
- #define preemptible()	(preempt_count() == 0 && !irqs_disabled())
+diff --git a/init/Kconfig b/init/Kconfig
+index 266802704c06..c733392fe237 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -769,7 +769,7 @@ config NUMA_BALANCING
+ 	bool "Memory placement aware NUMA scheduler"
+ 	depends on ARCH_SUPPORTS_NUMA_BALANCING
+ 	depends on !ARCH_WANT_NUMA_VARIABLE_LOCALITY
+-	depends on SMP && NUMA && MIGRATION
++	depends on SMP && NUMA && MIGRATION && !PREEMPT_RT
+ 	help
+ 	  This option adds support for automatic NUMA aware memory/task placement.
+ 	  The mechanism is quite primitive and is based on migrating memory when
 -- 
 2.17.1
 

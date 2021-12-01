@@ -2,140 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AA9874644FA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:38:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5CB4644FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346206AbhLAClS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:41:18 -0500
-Received: from sender2-pp-o92.zoho.com.cn ([163.53.93.251]:25310 "EHLO
-        sender2-pp-o92.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S241261AbhLAClR (ORCPT
+        id S1346229AbhLAClc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:41:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:22784 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1346215AbhLACl1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:41:17 -0500
-ARC-Seal: i=1; a=rsa-sha256; t=1638326237; cv=none; 
-        d=zoho.com.cn; s=zohoarc; 
-        b=HkED0vDVF5r5eNU/RMzPpFjgb+jLyK2S1yeTFcyZ39gw3hYBWKEXZ83D+rPND6be12eDjsDoQVcscYDnj0F62xWUOlYdzl8zWrPdNHDvZlVK9PZJ626upUvSi7C8C9WAGQfs9D2/bcr1y95QgZSu4SP3opizlw2A9+TvxjtJVwo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
-        t=1638326237; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
-        bh=7jJKWu1DhTE7fcd9TsgzGaE4zZchWQhQsli4rX59K3A=; 
-        b=IarhBYNzodBkcf75v9dxmbm8OaQksaem/6A0TKLYnFjGNgqn32lqdrOSyrqBmKTjNZKExTUbGklpk1d9jWzvCSaaVuZA3O3w39RPxBcLH48ryVF2I+OQQ/tyaqX9DScemUA01ncAKPDYOgeF8rfeNgOhmUTqVnbCSYfRSUP726U=
-ARC-Authentication-Results: i=1; mx.zoho.com.cn;
-        dkim=pass  header.i=mykernel.net;
-        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
-        dmarc=pass header.from=<cgxu519@mykernel.net>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1638326237;
-        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
-        h=Date:From:Reply-To:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
-        bh=7jJKWu1DhTE7fcd9TsgzGaE4zZchWQhQsli4rX59K3A=;
-        b=cFER/EAahkCmUSK2sjla2BeePezgHuw0YTrjd+nj6bpXuOVrDlcdqhe4jtJz+yBR
-        uXPDJs5c99jKsltJHI0HqzUyV7BdHJBVagiWjsJpwoYScbjhvlptHVd50+OYUDdmwNs
-        /7uoCRXKK10jkYiXECG/XBc8dKfAq4Oz2yzzsBmU=
-Received: from mail.baihui.com by mx.zoho.com.cn
-        with SMTP id 1638326235185468.52864776275817; Wed, 1 Dec 2021 10:37:15 +0800 (CST)
-Date:   Wed, 01 Dec 2021 10:37:15 +0800
-From:   Chengguang Xu <cgxu519@mykernel.net>
-Reply-To: cgxu519@mykernel.net
-To:     "Amir Goldstein" <amir73il@gmail.com>
-Cc:     "Jan Kara" <jack@suse.cz>, "Miklos Szeredi" <miklos@szeredi.hu>,
-        "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-        "overlayfs" <linux-unionfs@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "ronyjin" <ronyjin@tencent.com>,
-        "charliecgxu" <charliecgxu@tencent.com>,
-        "Vivek Goyal" <vgoyal@redhat.com>
-Message-ID: <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
-In-Reply-To: <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
-References: <17c5adfe5ea.12f1be94625921.4478415437452327206@mykernel.net>
- <CAJfpegt4jZpSCXGFk2ieqUXVm3m=ng7QtSzZp2bXVs07bfrbXg@mail.gmail.com>
- <17d268ba3ce.1199800543649.1713755891767595962@mykernel.net>
- <CAJfpegttQreuuD_jLgJmrYpsLKBBe2LmB5NSj6F5dHoTzqPArw@mail.gmail.com>
- <17d2c858d76.d8a27d876510.8802992623030721788@mykernel.net>
- <17d31bf3d62.1119ad4be10313.6832593367889908304@mykernel.net>
- <20211118112315.GD13047@quack2.suse.cz> <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
- <20211118164349.GB8267@quack2.suse.cz> <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net>
- <20211130112206.GE7174@quack2.suse.cz> <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net> <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 06/10] ovl: implement overlayfs' ->write_inode
- operation
+        Tue, 30 Nov 2021 21:41:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638326287;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=W0n5k4sl9AYBphe6cujkRUTAtSAAGA+Ca8Fn1jgb3kw=;
+        b=N3mzgk9UowmoT9bOELTegEg+modpoOEo2XRxoZTD2ZXoKI8rBY5ktzlsSp7cEDex0f4GM5
+        PbSWp/f4WI7VrjtC8cbiIG/PUy4NLouem1PL0surhgLCqlVQxmJtyJR33k858Un97cROcV
+        jgl/5eajJjl23AtbjXmW4lJNzUyD28c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-420-PtZgyoLZM6iWg_vjmPTmng-1; Tue, 30 Nov 2021 21:38:04 -0500
+X-MC-Unique: PtZgyoLZM6iWg_vjmPTmng-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 133C5102C7EB;
+        Wed,  1 Dec 2021 02:37:59 +0000 (UTC)
+Received: from localhost (ovpn-12-42.pek2.redhat.com [10.72.12.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3ADC560C13;
+        Wed,  1 Dec 2021 02:37:50 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 10:37:47 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Michal Suchanek <msuchanek@suse.de>
+Cc:     keyrings@vger.kernel.org, kexec@lists.infradead.org,
+        Philipp Rudo <prudo@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Nayna <nayna@linux.vnet.ibm.com>, Rob Herring <robh@kernel.org>,
+        linux-s390@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Jessica Yu <jeyu@kernel.org>, linux-kernel@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Hari Bathini <hbathini@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Frank van der Linden <fllinden@amazon.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Daniel Axtens <dja@axtens.net>, buendgen@de.ibm.com,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] KEXEC_SIG with appended signature
+Message-ID: <20211201023747.GN21646@MiWiFi-R3L-srv>
+References: <cover.1637862358.git.msuchanek@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Importance: Medium
-User-Agent: ZohoCN Mail
-X-Mailer: ZohoCN Mail
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1637862358.git.msuchanek@suse.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
- ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=89, 2021-12-01 03:04:59 Amir Golds=
-tein <amir73il@gmail.com> =E6=92=B0=E5=86=99 ----
- > >  > I was thinking about this a bit more and I don't think I buy this
- > >  > explanation. What I rather think is happening is that real work for=
- syncfs
- > >  > (writeback_inodes_sb() and sync_inodes_sb() calls) gets offloaded t=
-o a flush
- > >  > worker. E.g. writeback_inodes_sb() ends up calling
- > >  > __writeback_inodes_sb_nr() which does:
- > >  >
- > >  > bdi_split_work_to_wbs()
- > >  > wb_wait_for_completion()
- > >  >
- > >  > So you don't see the work done in the times accounted to your test
- > >  > program. But in practice the flush worker is indeed burning 1.3s wo=
-rth of
- > >  > CPU to scan the 1 million inode list and do nothing.
- > >  >
- > >
- > > That makes sense. However, in real container use case,  the upper dir =
-is always empty,
- > > so I don't think there is meaningful difference compare to accurately =
-marking overlay
- > > inode dirty.
- > >
- >=20
- > It's true the that is a very common case, but...
- >=20
- > > I'm not very familiar with other use cases of overlayfs except contain=
-er, should we consider
- > > other use cases? Maybe we can also ignore the cpu burden because those=
- use cases don't
- > > have density deployment like container.
- > >
- >=20
- > metacopy feature was developed for the use case of a container
- > that chowns all the files in the lower image.
- >=20
- > In that case, which is now also quite common, all the overlay inodes are
- > upper inodes.
- >=20
+On 11/25/21 at 07:02pm, Michal Suchanek wrote:
+> Hello,
+> 
+> This is resend of the KEXEC_SIG patchset.
+> 
+> The first patch is new because it'a a cleanup that does not require any
+> change to the module verification code.
+> 
+> The second patch is the only one that is intended to change any
+> functionality.
+> 
+> The rest only deduplicates code but I did not receive any review on that
+> part so I don't know if it's desirable as implemented.
 
-Regardless of metacopy or datacopy, that copy-up has already modified overl=
-ay inode
-so initialy marking dirty to all overlay inodes which have upper inode will=
- not be a serious
-problem in this case too, right?
+Do you have the link of your 1st version?
 
-I guess maybe you more concern about the re-mark dirtiness on above use cas=
-e.
+And after going through the whole series, it doesn't tell what this
+patch series intends to do in cover-letter or patch log.
 
+Thanks
+Baoquan
 
-
- > What about only re-mark overlay inode dirty if upper inode is dirty or i=
-s
- > writeably mmapped.
- > For other cases, it is easy to know when overlay inode becomes dirty?
- > Didn't you already try this?
- >=20
-
-Yes, I've tried that approach in previous version but as Miklos pointed out=
- in the
-feedback there are a few of racy conditions.
-
-
-
-Thanks,
-Chengguang
-
-
-
+> 
+> The first two patches can be applied separately without the rest.
+> 
+> Thanks
+> 
+> Michal
+> 
+> Michal Suchanek (6):
+>   s390/kexec_file: Don't opencode appended signature check.
+>   powerpc/kexec_file: Add KEXEC_SIG support.
+>   kexec_file: Don't opencode appended signature verification.
+>   module: strip the signature marker in the verification function.
+>   module: Use key_being_used_for for log messages in
+>     verify_appended_signature
+>   module: Move duplicate mod_check_sig users code to mod_parse_sig
+> 
+>  arch/powerpc/Kconfig                     | 11 +++++
+>  arch/powerpc/kexec/elf_64.c              | 14 ++++++
+>  arch/s390/kernel/machine_kexec_file.c    | 42 ++----------------
+>  crypto/asymmetric_keys/asymmetric_type.c |  1 +
+>  include/linux/module_signature.h         |  1 +
+>  include/linux/verification.h             |  4 ++
+>  kernel/module-internal.h                 |  2 -
+>  kernel/module.c                          | 12 +++--
+>  kernel/module_signature.c                | 56 +++++++++++++++++++++++-
+>  kernel/module_signing.c                  | 33 +++++++-------
+>  security/integrity/ima/ima_modsig.c      | 22 ++--------
+>  11 files changed, 113 insertions(+), 85 deletions(-)
+> 
+> -- 
+> 2.31.1
+> 
+> 
+> _______________________________________________
+> kexec mailing list
+> kexec@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kexec
+> 
 

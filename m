@@ -2,84 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E63F465357
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:49:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63E3046535D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242165AbhLAQwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:52:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50236 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239013AbhLAQwh (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:52:37 -0500
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C84C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:49:16 -0800 (PST)
-Received: by mail-pj1-x102c.google.com with SMTP id iq11so18448704pjb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=J9zLhnerl9/c5Kx9p+6qzaa+YyIwXDDfpjHgjaBHjcI=;
-        b=b9Lk3R00ZKhuNE14r6RJgickUjr+YD8Tr/yjQFtoYXpR0fg3jeRzSBYLAF80GXDXwx
-         9sADEbfBdJod6kZ2im1ICZTvDi4mX7hoajDn4IAipUS6H9MJ5P7Nq4scMO3mggzHg09a
-         TS393ZUWkX4qaWIui3fyx9zpS/G65RsFAgkabXx8GYEPbVaYEycmKdNL6+NXnNvc2w5i
-         kFLcEWaNDqpQygfkY4UwKlmdI5srruOwjRwVFZQll5qTR5ocayhKDRQvE1s4KqtTFPSX
-         HhICr9VzMOaKqquC4zbMu94wCX2PQQKC1IN7jhCzguatxsu54JekYbQrZrgtwlCzgAZ7
-         1dBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=J9zLhnerl9/c5Kx9p+6qzaa+YyIwXDDfpjHgjaBHjcI=;
-        b=y6fi8S7NZMOjrPH5JBVte7sCPvy7AcW9b8QYGNbqHhGKiGPVEi979m+uHePVPZURU7
-         kBNC8ueRif6wL3syjVybeFgYPaygVFCy7Td5UtvQS43W2q06KaCu+YNuZIgxdEBK979w
-         qsY5cn45EfakYvnmxdsDkBFSJPlY+g14nO2wfQ2uN8Fmd0KjzEgQP4/G5hkQR9cvBwZT
-         xNNPRVl3zBTnNsmjG4yX0OcDYpZrMUvl086n5tJPqmBKPpY7kfEl3e7lnt4ZozDC02QW
-         nZaF6GA5DXdqEVZBKb4fH5DwNDGvobsSSpFjo5u7rRoRuygeUzMi8nJSUQd58va0lK7y
-         pvJw==
-X-Gm-Message-State: AOAM533P9Je4aTrEKg3eBCcqTkcbLQ9rYvaX12J7RzKNiHro9Mg7yiU6
-        WYm6cWC1z+1kJoOVY6G/ymyDgtgVnyE=
-X-Google-Smtp-Source: ABdhPJzmyTMxFt5/ryOt435Ffm8uobfSQHC7wUdI0fT6IPkcIP2gF80XMqMfgHje/3Fba7o7t5NeOQ==
-X-Received: by 2002:a17:90a:657:: with SMTP id q23mr8758038pje.21.1638377356306;
-        Wed, 01 Dec 2021 08:49:16 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id b4sm379797pfl.60.2021.12.01.08.49.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 08:49:15 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 1 Dec 2021 06:49:14 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        frederic@kernel.org
-Subject: Re: [PATCH] workqueue: Upgrade queue_work_on() comment
-Message-ID: <YaenioAmp10YJLrm@slm.duckdns.org>
-References: <20211201010030.GA3071988@paulmck-ThinkPad-P17-Gen-1>
+        id S243867AbhLAQxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:53:25 -0500
+Received: from mga12.intel.com ([192.55.52.136]:26944 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242868AbhLAQxW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 11:53:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="216513901"
+X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
+   d="scan'208";a="216513901"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 08:50:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
+   d="scan'208";a="677324335"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2021 08:49:55 -0800
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 1B1GnsGV021198;
+        Wed, 1 Dec 2021 16:49:54 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] samples: bpf: fix conflicting types in fds_example
+Date:   Wed,  1 Dec 2021 17:49:31 +0100
+Message-Id: <20211201164931.47357-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201010030.GA3071988@paulmck-ThinkPad-P17-Gen-1>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 05:00:30PM -0800, Paul E. McKenney wrote:
-> The current queue_work_on() docbook comment says that the caller must
-> ensure that the specified CPU can't go away, but does not spell out the
-> consequences, which turn out to be quite mild.  Therefore expand this
-> comment to explicitly say that the penalty for failing to nail down the
-> specified CPU is that the workqueue handler might find itself executing
-> on some other CPU.
-> 
-> Cc: Tejun Heo <tj@kernel.org>
-> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Fix the following samples/bpf build error appeared after the
+introduction of bpf_map_create() in libbpf:
 
-Applied to wq/for-5.16-fixes.
+  CC  samples/bpf/fds_example.o
+samples/bpf/fds_example.c:49:12: error: static declaration of 'bpf_map_create' follows non-static declaration
+static int bpf_map_create(void)
+           ^
+samples/bpf/libbpf/include/bpf/bpf.h:55:16: note: previous declaration is here
+LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
+               ^
+samples/bpf/fds_example.c:82:23: error: too few arguments to function call, expected 6, have 0
+                fd = bpf_map_create();
+                     ~~~~~~~~~~~~~~ ^
+samples/bpf/libbpf/include/bpf/bpf.h:55:16: note: 'bpf_map_create' declared here
+LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
+               ^
+2 errors generated.
 
-Thanks.
+fds_example by accident has a static function with the same name.
+It's not worth it to separate a single call into its own function,
+so just embed it.
 
+Fixes: 992c4225419a ("libbpf: Unify low-level map creation APIs w/ new bpf_map_create()")
+Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+---
+ samples/bpf/fds_example.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
+
+diff --git a/samples/bpf/fds_example.c b/samples/bpf/fds_example.c
+index 59f45fef5110..9a7c1fd7a4a8 100644
+--- a/samples/bpf/fds_example.c
++++ b/samples/bpf/fds_example.c
+@@ -46,12 +46,6 @@ static void usage(void)
+ 	printf("       -h          Display this help.\n");
+ }
+ 
+-static int bpf_map_create(void)
+-{
+-	return bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(uint32_t),
+-			      sizeof(uint32_t), 1024, 0);
+-}
+-
+ static int bpf_prog_create(const char *object)
+ {
+ 	static struct bpf_insn insns[] = {
+@@ -79,7 +73,8 @@ static int bpf_do_map(const char *file, uint32_t flags, uint32_t key,
+ 	int fd, ret;
+ 
+ 	if (flags & BPF_F_PIN) {
+-		fd = bpf_map_create();
++		fd = bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(uint32_t),
++				    sizeof(uint32_t), 1024, 0);
+ 		printf("bpf: map fd:%d (%s)\n", fd, strerror(errno));
+ 		assert(fd > 0);
+ 
 -- 
-tejun
+2.33.1
+

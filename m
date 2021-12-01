@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 290FB4654C0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:07:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D394654C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352021AbhLASKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40010 "EHLO
+        id S1352071AbhLASKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:10:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351999AbhLASKV (ORCPT
+        with ESMTP id S1352006AbhLASKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:10:21 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FE5C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 10:07:00 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id h24so18618529pjq.2
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 10:07:00 -0800 (PST)
+        Wed, 1 Dec 2021 13:10:23 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18401C061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 10:07:02 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id z6so18339382plk.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 10:07:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=zWKI66hVWIsm1UjmNtmr6LT7Fi7B/zNN7cFHtvKJDKs=;
-        b=QENXn3UhkrxYHTUnnU/Qqlf3ke8S1612FM0FGyrmbHzRXQQC4yBY5pRGoGXpvisB0r
-         IyLRSpPBMkdL5uUIxdvfk2sZH5AH+WVnhMeYCZt1jF7qc5lWbRQXG8LW9yXfKm66WuV+
-         q4CQo6WRC2xMRyQuY0wh+6d+wxjwV+x+ffDXUhV87Fhng135sFSJnE7W63XZeMarMYOd
-         3g4hG/oA88/5pq0ABrsuQdb8GMLv6rBRSvXI+S/bWEkQh+E7BzFIHhOIpJRL0vfZEoA6
-         XulROLr2zFjxcdz/m112UiT3WMOSGghOG11hC/pNsHP92XpOjizXDyWy+u5JGT91gLjd
-         9Yew==
+        bh=c+NX3gtEouviDYYWwLITzdsLQeio17BWeB+ByMH2wiw=;
+        b=qJe9Y/WnG9v5EpWjsltHKjnV5SIP2/a3F5ANkxdXf1eIobVB18O7P9GWQKbQwMYKVH
+         dNIpBezf57Qs2miROrqg0f4S/PCmsAeffZ4pYL680rLj4TTkNfDOuWphYoOugCbL4Zzu
+         WvkNX7Y7tOCeGnkW2wSmoQl8LGsPUIT+aWaqCFRpUAEQ9s1dtyErWcl3wSzh0ecZIpbc
+         SOK6O1ttXbY15+4rCQKmKha+rbZF3lD7NrX3gEVFTWHgm+6qPYyyASSD1Zp4P4+k+jd9
+         w3z3XfmY6Ctd5eq29rKnuRkwzLc07ABxhCcK/53RijWHh9eblFU2lasBN+2r/B3JyF6r
+         iuVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references;
-        bh=zWKI66hVWIsm1UjmNtmr6LT7Fi7B/zNN7cFHtvKJDKs=;
-        b=HrgvRJzpnxArlLG2TMPU3AtqYlOj6axV+uEbNi/akdS1Xx7qnmlY5WAOyB17ip07OY
-         dnXuqkkFJSj0VE3gU9Cc5LxFPeDs0ma28MxgL1K1C1gUH9/VMSugkA7AaK+0/XT5RP3J
-         CmEMaJagHRe40DwYGugUAdMmj8WIRcyzYkfn40U6UK2HF4ZgxiPrjqPBbMMTCWVgy/xL
-         viF33t2O9NI3ieNEWUGHHB7AOePxOh2rTF40cwldb4eSTVcf8gizxBVQmKDAFkmSqK0q
-         6wJlGC3ilUCaP4cxWbGu8I8oLVDiqwV4XpibdJueXtl5+PWlF1CiNmr+rsPA4lBG/w52
-         78hQ==
-X-Gm-Message-State: AOAM530l0554ccjuKsOGEwEpJWsn6Z0ufHW5McXAnc/Yu5Wo5umQ9hNF
-        facDK8JUKnFCC5ffIJPhfiEA93GohPZMvQ==
-X-Google-Smtp-Source: ABdhPJxO8QODxk+y6B10Qtq3Y+cGUdOf8qcl/BPukwUHTst/HAy6gFol6DNjPAOP2G6YgYyGaoTiuQ==
-X-Received: by 2002:a17:902:d2cf:b0:141:b347:df9d with SMTP id n15-20020a170902d2cf00b00141b347df9dmr9249283plc.37.1638382020132;
-        Wed, 01 Dec 2021 10:07:00 -0800 (PST)
+        bh=c+NX3gtEouviDYYWwLITzdsLQeio17BWeB+ByMH2wiw=;
+        b=Ve32fL3IFRXtu1AZVpR0YHobHev9xzyjH5eTj7ahelmWacl9qEH3Jc8m8T2DbFcR2y
+         1R5F+2SmS8G5SSjIQrjuySVeu2Pj24DSXpdfqJU+tHyZrba5r0xSCS0CP46uY5BsMAIW
+         6R6ND7ajIuDIHAFJ4MDS9aFYnJw8g7/zG/w34ivimirOXuvMHincREljVRx5l2tXkT3n
+         b/wA57rjzMG6PGe7XyAjpgSUKtz3nfv+UoD5QTp/I7IEHVxR1irGTkw8qrSA4jH9rqs0
+         eVyvzMHvU7IGiAt77ByO7rthL7POI0R8mrPYS/hPzr4X3CC87BfqSkz+pTduXsDXjM+U
+         LrrA==
+X-Gm-Message-State: AOAM533dNQ1kKUiyVG+JoutzwhSe5oNbN6+TqbRK0nFZrqhVDMUmA3iF
+        HUcA0e1VwHNpjMHDpBMQnx5FX2ZPhgbe/Q==
+X-Google-Smtp-Source: ABdhPJwAyGKBpZQs/RfZUfOLIJT3k+ufQ/LA5o7NGwxT3nB+d62kJddvjVPtUrhbDB0EjKMmpEHmQw==
+X-Received: by 2002:a17:902:82c1:b0:141:e920:3b4c with SMTP id u1-20020a17090282c100b00141e9203b4cmr9361932plz.64.1638382021455;
+        Wed, 01 Dec 2021 10:07:01 -0800 (PST)
 Received: from stbsrv-and-01.and.broadcom.net ([192.19.11.250])
-        by smtp.gmail.com with ESMTPSA id w142sm462582pfc.115.2021.12.01.10.06.58
+        by smtp.gmail.com with ESMTPSA id w142sm462582pfc.115.2021.12.01.10.07.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 10:06:59 -0800 (PST)
+        Wed, 01 Dec 2021 10:07:01 -0800 (PST)
 From:   Al Cooper <alcooperx@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Al Cooper <alcooperx@gmail.com>,
@@ -56,9 +56,9 @@ Cc:     Al Cooper <alcooperx@gmail.com>,
         linux-phy@lists.infradead.org,
         =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
         Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 1/3] phy: usb: Leave some clocks running during suspend
-Date:   Wed,  1 Dec 2021 13:06:51 -0500
-Message-Id: <20211201180653.35097-2-alcooperx@gmail.com>
+Subject: [PATCH 2/3] usb: Add "wake on" functionality for newer Synopsis XHCI controllers
+Date:   Wed,  1 Dec 2021 13:06:52 -0500
+Message-Id: <20211201180653.35097-3-alcooperx@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20211201180653.35097-1-alcooperx@gmail.com>
 References: <20211201180653.35097-1-alcooperx@gmail.com>
@@ -66,125 +66,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PHY client driver does a phy_exit() call on suspend or rmmod and
-the PHY driver needs to know the difference because some clocks need
-to be kept running for suspend but can be shutdown on unbind/rmmod
-(or if there are no PHY clients at all).
-
-The fix is to use a PM notifier so the driver can tell if a PHY
-client is calling exit() because of a system suspend or a driver
-unbind/rmmod.
+Add "wake on" support for the newer Synopsis based XHCI only controller.
+This works on the 72165 and 72164 and newer chips and does not work
+on 7216 based systems. Also switch the USB sysclk to a slower clock
+on suspend to save additional power in S2. The clock switch will only
+save power on the 72165b0 and newer chips and is a nop on older chips.
 
 Signed-off-by: Al Cooper <alcooperx@gmail.com>
 ---
- drivers/phy/broadcom/phy-brcm-usb.c | 38 +++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ .../phy/broadcom/phy-brcm-usb-init-synopsys.c | 46 +++++++++++++++----
+ 1 file changed, 38 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
-index 116fb23aebd9..0f1deb6e0eab 100644
---- a/drivers/phy/broadcom/phy-brcm-usb.c
-+++ b/drivers/phy/broadcom/phy-brcm-usb.c
-@@ -18,6 +18,7 @@
- #include <linux/soc/brcmstb/brcmstb.h>
- #include <dt-bindings/phy/phy.h>
- #include <linux/mfd/syscon.h>
-+#include <linux/suspend.h>
+diff --git a/drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c b/drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c
+index e63457e145c7..d2524b70ea16 100644
+--- a/drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c
++++ b/drivers/phy/broadcom/phy-brcm-usb-init-synopsys.c
+@@ -47,6 +47,8 @@
+ #define   USB_CTRL_USB_PM_SOFT_RESET_MASK		0x40000000
+ #define   USB_CTRL_USB_PM_BDC_SOFT_RESETB_MASK		0x00800000
+ #define   USB_CTRL_USB_PM_XHC_SOFT_RESETB_MASK		0x00400000
++#define   USB_CTRL_USB_PM_XHC_PME_EN_MASK		0x00000010
++#define   USB_CTRL_USB_PM_XHC_S2_CLK_SWITCH_EN_MASK	0x00000008
+ #define USB_CTRL_USB_PM_STATUS		0x08
+ #define USB_CTRL_USB_DEVICE_CTL1	0x10
+ #define   USB_CTRL_USB_DEVICE_CTL1_PORT_MODE_MASK	0x00000003
+@@ -190,10 +192,6 @@ static void usb_init_common(struct brcm_usb_init_params *params)
  
- #include "phy-brcm-usb-init.h"
+ 	pr_debug("%s\n", __func__);
  
-@@ -70,12 +71,35 @@ struct brcm_usb_phy_data {
- 	int			init_count;
- 	int			wake_irq;
- 	struct brcm_usb_phy	phys[BRCM_USB_PHY_ID_MAX];
-+	struct notifier_block	pm_notifier;
-+	bool			pm_active;
- };
+-	USB_CTRL_UNSET(ctrl, USB_PM, USB_PWRDN);
+-	/* 1 millisecond - for USB clocks to settle down */
+-	usleep_range(1000, 2000);
+-
+ 	if (USB_CTRL_MASK(USB_DEVICE_CTL1, PORT_MODE)) {
+ 		reg = brcm_usb_readl(USB_CTRL_REG(ctrl, USB_DEVICE_CTL1));
+ 		reg &= ~USB_CTRL_MASK(USB_DEVICE_CTL1, PORT_MODE);
+@@ -222,6 +220,17 @@ static void usb_wake_enable_7211b0(struct brcm_usb_init_params *params,
+ 		USB_CTRL_UNSET(ctrl, CTLR_CSHCR, ctl_pme_en);
+ }
  
- static s8 *node_reg_names[BRCM_REGS_MAX] = {
- 	"crtl", "xhci_ec", "xhci_gbl", "usb_phy", "usb_mdio", "bdc_ec"
- };
- 
-+static int brcm_pm_notifier(struct notifier_block *notifier,
-+			    unsigned long pm_event,
-+			    void *unused)
++static void usb_wake_enable_7216(struct brcm_usb_init_params *params,
++				 bool enable)
 +{
-+	struct brcm_usb_phy_data *priv =
-+		container_of(notifier, struct brcm_usb_phy_data, pm_notifier);
++	void __iomem *ctrl = params->regs[BRCM_REGS_CTRL];
 +
-+	switch (pm_event) {
-+	case PM_HIBERNATION_PREPARE:
-+	case PM_SUSPEND_PREPARE:
-+		priv->pm_active = true;
-+		break;
-+	case PM_POST_RESTORE:
-+	case PM_POST_HIBERNATION:
-+	case PM_POST_SUSPEND:
-+		priv->pm_active = false;
-+		break;
-+	}
-+	return NOTIFY_DONE;
++	if (enable)
++		USB_CTRL_SET(ctrl, USB_PM, XHC_PME_EN);
++	else
++		USB_CTRL_UNSET(ctrl, USB_PM, XHC_PME_EN);
 +}
 +
- static irqreturn_t brcm_usb_phy_wake_isr(int irq, void *dev_id)
+ static void usb_init_common_7211b0(struct brcm_usb_init_params *params)
  {
- 	struct phy *gphy = dev_id;
-@@ -91,6 +115,9 @@ static int brcm_usb_phy_init(struct phy *gphy)
- 	struct brcm_usb_phy_data *priv =
- 		container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
- 
-+	if (priv->pm_active)
-+		return 0;
-+
- 	/*
- 	 * Use a lock to make sure a second caller waits until
- 	 * the base phy is inited before using it.
-@@ -120,6 +147,9 @@ static int brcm_usb_phy_exit(struct phy *gphy)
- 	struct brcm_usb_phy_data *priv =
- 		container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
- 
-+	if (priv->pm_active)
-+		return 0;
-+
- 	dev_dbg(&gphy->dev, "EXIT\n");
- 	if (phy->id == BRCM_USB_PHY_2_0)
- 		brcm_usb_uninit_eohci(&priv->ini);
-@@ -488,6 +518,9 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
- 	if (err)
- 		return err;
- 
-+	priv->pm_notifier.notifier_call = brcm_pm_notifier;
-+	register_pm_notifier(&priv->pm_notifier);
-+
- 	mutex_init(&priv->mutex);
- 
- 	/* make sure invert settings are correct */
-@@ -528,7 +561,10 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
- 
- static int brcm_usb_phy_remove(struct platform_device *pdev)
- {
-+	struct brcm_usb_phy_data *priv = dev_get_drvdata(&pdev->dev);
-+
- 	sysfs_remove_group(&pdev->dev.kobj, &brcm_usb_phy_group);
-+	unregister_pm_notifier(&priv->pm_notifier);
- 
- 	return 0;
+ 	void __iomem *ctrl = params->regs[BRCM_REGS_CTRL];
+@@ -295,6 +304,20 @@ static void usb_init_common_7211b0(struct brcm_usb_init_params *params)
+ 	usb2_eye_fix_7211b0(params);
  }
-@@ -539,6 +575,7 @@ static int brcm_usb_phy_suspend(struct device *dev)
- 	struct brcm_usb_phy_data *priv = dev_get_drvdata(dev);
  
- 	if (priv->init_count) {
-+		dev_dbg(dev, "SUSPEND\n");
- 		priv->ini.wake_enabled = device_may_wakeup(dev);
- 		if (priv->phys[BRCM_USB_PHY_3_0].inited)
- 			brcm_usb_uninit_xhci(&priv->ini);
-@@ -578,6 +615,7 @@ static int brcm_usb_phy_resume(struct device *dev)
- 	 * Uninitialize anything that wasn't previously initialized.
- 	 */
- 	if (priv->init_count) {
-+		dev_dbg(dev, "RESUME\n");
- 		if (priv->wake_irq >= 0)
- 			disable_irq_wake(priv->wake_irq);
- 		brcm_usb_init_common(&priv->ini);
++static void usb_init_common_7216(struct brcm_usb_init_params *params)
++{
++	void __iomem *ctrl = params->regs[BRCM_REGS_CTRL];
++
++	USB_CTRL_UNSET(ctrl, USB_PM, XHC_S2_CLK_SWITCH_EN);
++	USB_CTRL_UNSET(ctrl, USB_PM, USB_PWRDN);
++
++	/* 1 millisecond - for USB clocks to settle down */
++	usleep_range(1000, 2000);
++
++	usb_wake_enable_7216(params, false);
++	usb_init_common(params);
++}
++
+ static void usb_init_xhci(struct brcm_usb_init_params *params)
+ {
+ 	pr_debug("%s\n", __func__);
+@@ -302,14 +325,20 @@ static void usb_init_xhci(struct brcm_usb_init_params *params)
+ 	xhci_soft_reset(params, 0);
+ }
+ 
+-static void usb_uninit_common(struct brcm_usb_init_params *params)
++static void usb_uninit_common_7216(struct brcm_usb_init_params *params)
+ {
+ 	void __iomem *ctrl = params->regs[BRCM_REGS_CTRL];
+ 
+ 	pr_debug("%s\n", __func__);
+ 
+-	USB_CTRL_SET(ctrl, USB_PM, USB_PWRDN);
++	if (!params->wake_enabled) {
++		USB_CTRL_SET(ctrl, USB_PM, USB_PWRDN);
+ 
++		/* Switch to using slower clock during suspend to save power */
++		USB_CTRL_SET(ctrl, USB_PM, XHC_S2_CLK_SWITCH_EN);
++	} else {
++		usb_wake_enable_7216(params, true);
++	}
+ }
+ 
+ static void usb_uninit_common_7211b0(struct brcm_usb_init_params *params)
+@@ -371,9 +400,9 @@ static void usb_set_dual_select(struct brcm_usb_init_params *params, int mode)
+ 
+ static const struct brcm_usb_init_ops bcm7216_ops = {
+ 	.init_ipp = usb_init_ipp,
+-	.init_common = usb_init_common,
++	.init_common = usb_init_common_7216,
+ 	.init_xhci = usb_init_xhci,
+-	.uninit_common = usb_uninit_common,
++	.uninit_common = usb_uninit_common_7216,
+ 	.uninit_xhci = usb_uninit_xhci,
+ 	.get_dual_select = usb_get_dual_select,
+ 	.set_dual_select = usb_set_dual_select,
+@@ -396,6 +425,7 @@ void brcm_usb_dvr_init_7216(struct brcm_usb_init_params *params)
+ 
+ 	params->family_name = "7216";
+ 	params->ops = &bcm7216_ops;
++	params->suspend_with_clocks = true;
+ }
+ 
+ void brcm_usb_dvr_init_7211b0(struct brcm_usb_init_params *params)
 -- 
 2.17.1
 

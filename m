@@ -2,124 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76712464859
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:28:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32BF046485D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:29:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347517AbhLAHcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:32:12 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:43510 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347540AbhLAHcI (ORCPT
+        id S1347432AbhLAHcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:32:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34324 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232254AbhLAHcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:32:08 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 1 Dec 2021 02:32:47 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02FEC061574;
+        Tue, 30 Nov 2021 23:29:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3A3C61FD58;
-        Wed,  1 Dec 2021 07:28:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638343727; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=daENsoaCp97Bu9Tq80zHy5qetiTXSh4XFCCKPoNigBk=;
-        b=D+UWjBnWoLPYtKwkFkTdaO15M3QAX48NHQgLgjYuEq1uxMURyA+YmnH39pGSchTI914l5n
-        VarsRy5tIsUcrjTHb3rpNJypSmhjGb0CLATA6xMAAuz17p8O1Adv6HZ462Y+h022kZUy+F
-        0phfTCvEJTe6fKKXoLuKuz1LQ43Mesc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638343727;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=daENsoaCp97Bu9Tq80zHy5qetiTXSh4XFCCKPoNigBk=;
-        b=+lpIEvQkIoYZ0VpmXcVA+d4bSYBzIjJ3avxzc811+R9GlWNAoo4CTx0Hfsaw7lF8qAP0XI
-        h0FfSmGo25yKRVCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E781E13AE2;
-        Wed,  1 Dec 2021 07:28:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Xi+iNy4kp2GoFQAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:28:46 +0000
-Subject: Re: [PATCH 09/18] crypto: dh - implement private key generation
- primitive
-To:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
-        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org
-References: <20211201004858.19831-1-nstange@suse.de>
- <20211201004858.19831-10-nstange@suse.de>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <b0c981ed-2ba2-e884-d2b5-4d4b3fc8c04b@suse.de>
-Date:   Wed, 1 Dec 2021 08:28:46 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        by sin.source.kernel.org (Postfix) with ESMTPS id 39316CE1D73;
+        Wed,  1 Dec 2021 07:29:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A23BC53FAD;
+        Wed,  1 Dec 2021 07:29:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638343763;
+        bh=t3bNC3c6ZjeWZfOS3kzdCyceuti6Qo0imhU6iZf3EI0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=YHcdCC3v6Xon9aOaOScLhUCfqV12YrxQ9YPIehfS7xtGI3zltwLft9/PN1yhxY4HD
+         kdlD5JiXw5GWOMaH8OZxasOjFjczO1CBwsxC+y4EvDpZTPhIHUW6QzBAtMnJIpLhuf
+         WLHBekpHIZz9B7rs7J4UE6mmXmSL2J3ZHCJ6vB710Xy9LBa1neugW0zGkCyRx9xKLV
+         aqV6gJUn+tOuLYsi58l947AeVwMSY1/7b9Vdl2CggdvWrdlVzxfvazDtANTrmOVlwo
+         mH1rZgMMv4wGEUHhlnVDJFfubYDDAkcXAHPvH2Bd54BLDzvM1N9n151WEmE7MZJHwS
+         JQ+Rlalj22yDQ==
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, Vinod Koul <vkoul@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 00/15] arm64: dts: qcom: Add support for SM8450 SoC and QRD board
+Date:   Wed,  1 Dec 2021 12:59:00 +0530
+Message-Id: <20211201072915.3969178-1-vkoul@kernel.org>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <20211201004858.19831-10-nstange@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 1:48 AM, Nicolai Stange wrote:
-> The support for NVME in-band authentication currently in the works ([1])
-> needs to generate ephemeral DH keys.
-> 
-> Implement crypto_dh_gen_privkey() which is intended to be used from
-> the DH implementations just in analogy to how ecc_gen_privkey() is used
-> for ECDH.
-> 
-> Make the new crypto_dh_gen_privkey() to follow the approach specified
-> in SP800-56Arev3, sec. 5.6.1.1.3 ("Key-Pair Generation Using Extra Random
-> Bits").
-> 
-> SP800-56Arev3 specifies a lower as well as an upper bound on the generated
-> key's length:
-> - it must be >= two times the maximum supported security strength of
->    the group in question and
-> - it must be <= the length of the domain parameter Q.
-> Both of these are available only for the safe-prime groups from
-> RFC 3526 or RFC 7919, which had been introduced to the kernel with previous
-> patches: for any safe-prime group Q = (P - 1)/2 by definition and the
-> individual maximum supported security strength as specified by
-> SP800-56Arev3 has already been made available alongside the resp. domain
-> parameters with said previous patches. Restrict crypto_dh_gen_privkey() to
-> these safe-prime groups, i.e. to those groups with any group_id but
-> dh_group_id_unknown. Make it pick twice the maximum supported strength
-> rounded up to the next power of two for the output key size. This choice
-> respects both, the lower and upper bounds given by SP800-90Arev3 for
-> all safe-prime groups known to the kernel by now and is also in line with
-> the NVME base spec 2.0, which requires the key size to be >= 256bits.
-> 
-> [1] https://lkml.kernel.org/r/20211122074727.25988-4-hare@suse.de
-> 
-> Signed-off-by: Nicolai Stange <nstange@suse.de>
-> ---
->   crypto/Kconfig      |   1 +
->   crypto/dh_helper.c  | 128 ++++++++++++++++++++++++++++++++++++++++++++
->   include/crypto/dh.h |  22 ++++++++
->   3 files changed, 151 insertions(+)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Snapdragon 8 Gen 1 Mobile Platform [1] (SM8450) is the latest Qualcomm SoC
+announced today.
 
-Cheers,
+This series adds the DTS support including clocks, tlmm, smmu, regulators,
+ufs, interconnects, pmics and cpufreq found in the SM8450 QRD board.
 
-Hannes
+[1]: https://www.qualcomm.com/products/snapdragon-8-gen-1-mobile-platform
+
+Dmitry Baryshkov (2):
+  arm64: dts: qcom: sm8450: Add rpmhpd node
+  arm64: dts: qcom: sm8450: add i2c13 and i2c14 device nodes
+
+Vinod Koul (12):
+  arm64: dts: qcom: Add base SM8450 DTSI
+  arm64: dts: qcom: Add base SM8450 QRD DTS
+  arm64: dts: qcom: sm8450: Add tlmm nodes
+  arm64: dts: qcom: sm8450-qrd: Add reserved gpio range for QRD
+  arm64: dts: qcom: sm8450: Add reserved memory nodes
+  arm64: dts: qcom: sm8450: add smmu nodes
+  arm64: dts: qcom: sm8450-qrd: Add rpmh regulator nodes
+  arm64: dts: qcom: sm8450: add ufs nodes
+  arm64: dts: qcom: sm8450-qrd: enable ufs nodes
+  arm64: dts: qcom: sm8450: add interconnect nodes
+  arm64: dts: qcom: sm8450: add spmi node
+  arm64: dts: qcom: sm8450-qrd: include pmic files
+
+Vladimir Zapolskiy (1):
+  arm64: dts: qcom: sm8450: add cpufreq support
+
+ arch/arm64/boot/dts/qcom/Makefile       |    1 +
+ arch/arm64/boot/dts/qcom/sm8450-qrd.dts |  379 ++++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi    | 1142 +++++++++++++++++++++++
+ 3 files changed, 1522 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8450-qrd.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8450.dtsi
+
 -- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+2.31.1
+

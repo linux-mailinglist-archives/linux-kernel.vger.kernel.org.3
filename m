@@ -2,95 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B1324464CAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7766A464D00
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:34:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243019AbhLALgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:36:18 -0500
-Received: from ptr.189.cn ([183.61.185.103]:11452 "EHLO 189.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1348972AbhLALf6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:35:58 -0500
-HMM_SOURCE_IP: 10.64.8.43:55430.125480071
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id D3A031001C8;
-        Wed,  1 Dec 2021 19:32:17 +0800 (CST)
-Received: from  ([14.17.101.176])
-        by gateway-151646-dep-b7fbf7d79-vjdjk with ESMTP id 2f60f39930b8491c945ffa4904a28edc for l.stach@pengutronix.de;
-        Wed, 01 Dec 2021 19:32:19 CST
-X-Transaction-ID: 2f60f39930b8491c945ffa4904a28edc
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 14.17.101.176
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-From:   Sui Jingfeng <15330273260@189.cn>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andrey Zhizhikin <andrey.zhizhikin@leica-geosystems.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Xiaochuan Mao <maoxiaochuan@loongson.cn>,
-        zhaoxiao <zhaoxiao@uniontech.com>,
-        suijingfeng <suijingfeng@loongson.cn>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v2 1/3] dt-bindings: ls2k1000: add gpu device node
-Date:   Wed,  1 Dec 2021 19:32:13 +0800
-Message-Id: <20211201113215.3062-1-15330273260@189.cn>
-X-Mailer: git-send-email 2.20.1
+        id S1348986AbhLALiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349028AbhLALhl (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 06:37:41 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AC6BC0613A5
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 03:34:11 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id iq11so17763920pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 03:34:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=nKE9e+4jEQRb21OhoYPSbxPLfJ2IuSmNXU0U6wmcP4ykCacrWpdbtE0jjuz/hSLLGi
+         3CHjeG+lFmWzoULwCsmlhVFgDEk5dLFaYb51pw7bXGjZ9H8t0j91dP9aL17MRQYkMPZK
+         Snvty/Yp8/ZrWZr2EuFXHqBxUdbU8X39ik45viERJ1Dn7qW8BPCFp2vlafV2okU0kn5j
+         QPTIDY8QJSy8zAVbK10d6+AY0lky+mrQRAAg0uS1DacQStzD/dQtt/uBz/RlGIdZCai/
+         BHep24kmiLdl1nvBvHYMFonu8NoJvJlErv7lbZlg2+2c277BpkzmDA4WwPZoxzlIf0Mh
+         Af5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to;
+        bh=l4J9Z+m4hmgZbWtQHlC70w1zjUmiI7wjClCwm6dHAnY=;
+        b=CD5Qbjq5cNSxr8l7VyrbfMeNMTaDRP+G/y1X1tiwPSopaKhEn46dTcnyIRwWz26KYM
+         J5VAR1B57A+NF1Omgwz6sLetEFBcH/kyQfiaYXEyRlt4iU47j0nziZPgI6OGWX+YC73a
+         8qJzzlCXlPFGdBby0shVBAP90x9ufbwDcU0mwSFY8xXLgVAI1Qyzw2Uo0MRCgB7ZFimO
+         rAjLTy5NwNh/SpXquKEsgPGzYEfi2IKEZsvKs8/ZlnxIJMYHED8o4EykpuR4MSIbvz9k
+         nsrz8XlbYlSzCECOIM6AbZ3YfqkiZiqz+AGEtyuQr44I1PCtJqwV6ZLrjatx5QGzfPg7
+         wZYQ==
+X-Gm-Message-State: AOAM533u0JlkFeDDHpdvY790/Fqx2eqlrUuXt22gE3KwMIdblHZzrO1P
+        XgKWyFHA4ud3N1tmY258lY56GjhhRTqxGW8P49fSHiwG0mk=
+X-Google-Smtp-Source: ABdhPJwK+H50pzFgfv5CJPfAwBzUdMqIKHh+Ckkuju2lG2knVlJrzqINPiiwPjc/Uz6xuSJez7Fkn5YZPcfa5CPpvro=
+X-Received: by 2002:a67:ef4d:: with SMTP id k13mr6266305vsr.4.1638358439020;
+ Wed, 01 Dec 2021 03:33:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Sender: unitednationawardwinner@gmail.com
+Received: by 2002:ab0:6c55:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 03:33:58 -0800 (PST)
+From:   "Mrs. Orgil Baatar" <mrs.orgilbaatar21@gmail.com>
+Date:   Wed, 1 Dec 2021 03:33:58 -0800
+X-Google-Sender-Auth: uTQ_nfkzXaWGWaTWp1BSFqK3Ucs
+Message-ID: <CAJ4dHaSrD-X=xpfKNZV-hXSiMV6mNYrgy5vWCNkKm6iu5RQStg@mail.gmail.com>
+Subject: Your long awaited part payment of $2.5.000.00Usd
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: suijingfeng <suijingfeng@loongson.cn>
+Attention: Beneficiary, Your long awaited part payment of
+$2.5.000.00Usd (TWO MILLION FIVE Hundred Thousand United State
+Dollars) is ready for immediate release to you, and it was
+electronically credited into an ATM Visa Card for easy delivery.
 
-There is a vivante gpu (GC1000 V5037) in ls2k1000,
-but it is pci device not platform device.
+Your new Payment Reference No.- 6363836,
+Pin Code No: 1787
+Your Certificate of Merit Payment No: 05872,
 
-ls2k1000 is dual-core mips64 cpu made by loongson.
+Your Names: |
+Address: |
 
-Signed-off-by: suijingfeng <suijingfeng@loongson.cn>
-Signed-off-by: Sui Jingfeng <15330273260@189.cn>
----
- arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Person to Contact:MR KELLY HALL the Director of the International
+Audit unit ATM Payment Center,
 
-diff --git a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-index bfc3d3243ee7..f1feffac78a6 100644
---- a/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-+++ b/arch/mips/boot/dts/loongson/loongson64-2k1000.dtsi
-@@ -193,6 +193,17 @@
- 				interrupt-parent = <&liointc0>;
- 			};
- 
-+			gpu@5,0 {
-+				compatible = "pci0014,7a05.0",
-+						   "pci0014,7a05",
-+						   "pciclass030200",
-+						   "pciclass0302";
-+
-+				reg = <0x2800 0x0 0x0 0x0 0x0>;
-+				interrupts = <29 IRQ_TYPE_LEVEL_LOW>;
-+				interrupt-parent = <&liointc0>;
-+			};
-+
- 			pci_bridge@9,0 {
- 				compatible = "pci0014,7a19.0",
- 						   "pci0014,7a19",
--- 
-2.20.1
+Email: uba-bf@e-ubabf.com
+TELEPHONE: +226 64865611 You can whatsApp the bank
 
+Regards.
+Mrs ORGIL BAATAR

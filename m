@@ -2,77 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB9B465293
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4743B465294
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351549AbhLAQRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:17:46 -0500
-Received: from out0.migadu.com ([94.23.1.103]:60722 "EHLO out0.migadu.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1351472AbhLAQP5 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:15:57 -0500
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638375148;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lFszSLMJlckqMgj199+C+7TCwWXJukck64IGKpiISBg=;
-        b=i0yNjGxrUmQUBsNO+augWPsvo+7IopxwG1/mpq+SghSpQelceGeudz6JuXdcU/QG0wMqZX
-        2eKeQfajrnSMdmH1s4Lk4fhveabBMLB+lSMYU/78bGQFqk3amfU+ANqSVmlLCkFh3DVdn+
-        HEqEXjV2cwUpyWeFxXJDzfgA4IEJ5IU=
-From:   richard.leitner@linux.dev
-To:     richard.leitner@skidata.com
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: tegra: tamonten: Fix I2C3 pad setting
-Date:   Wed,  1 Dec 2021 17:11:48 +0100
-Message-Id: <20211201161148.238263-1-richard.leitner@linux.dev>
+        id S1351577AbhLAQSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:18:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351484AbhLAQQJ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 11:16:09 -0500
+X-Greylist: delayed 289 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 01 Dec 2021 08:12:46 PST
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109FBC061574;
+        Wed,  1 Dec 2021 08:12:42 -0800 (PST)
+Received: from IcarusMOD.eternityproject.eu (unknown [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 4DFC1200D9;
+        Wed,  1 Dec 2021 17:12:40 +0100 (CET)
+Subject: Re: [PATCH 3/3] arm64: dt: qcom: sm6125.dtsi: Add dispcc
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>
+Cc:     martin.botka1@gmail.com, ~postmarketos/upstreaming@lists.sr.ht,
+        konrad.dybcio@somainline.org, jamipkettunen@somainline.org,
+        paul.bouchara@somainline.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211130212137.25303-1-martin.botka@somainline.org>
+ <20211130212137.25303-3-martin.botka@somainline.org>
+ <20211201155128.sasoiv3awjcfrjhw@SoMainline.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>
+Message-ID: <cf1d5ff7-ece9-2348-0862-e23c6486f66e@somainline.org>
+Date:   Wed, 1 Dec 2021 17:12:39 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+In-Reply-To: <20211201155128.sasoiv3awjcfrjhw@SoMainline.org>
+Content-Type: text/plain; charset=iso-8859-15; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Leitner <richard.leitner@skidata.com>
+Il 01/12/21 16:51, Marijn Suijten ha scritto:
+> On 2021-11-30 22:21:34, Martin Botka wrote:
+>> Add the dispcc node from the newly added DISPCC
+>> driver for Qualcomm Technology Inc's SM6125 SoC.
+>>
+>> Signed-off-by: Martin Botka <martin.botka@somainline.org>
+>> ---
+>>   arch/arm64/boot/dts/qcom/sm6125.dtsi | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm6125.dtsi b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> index 51286ddbdb10..78f4705e4117 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm6125.dtsi
+>> @@ -3,6 +3,7 @@
+>>    * Copyright (c) 2021, Martin Botka <martin.botka@somainline.org>
+>>    */
+>>   
+>> +#include <dt-bindings/clock/qcom,dispcc-sm6125.h>
+>>   #include <dt-bindings/clock/qcom,gcc-sm6125.h>
+>>   #include <dt-bindings/clock/qcom,rpmcc.h>
+>>   #include <dt-bindings/gpio/gpio.h>
+>> @@ -317,6 +318,17 @@ soc {
+>>   		ranges = <0x00 0x00 0x00 0xffffffff>;
+>>   		compatible = "simple-bus";
+>>   
+>> +		dispcc: clock-controller@5f00000 {
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			compatible = "qcom,dispcc-sm6125";
+>> +			reg = <0x5f00000 0x20000>;
+>> +			clocks = <&gcc GCC_DISP_AHB_CLK>;
+>> +			clock-names = "cfg_ahb_clk";
+> 
+> It looks like this lacks all the clocks that are supposedly required as
+> per the yaml DT bindings provided in patch 1/3 - should those be added
+> and set to `<0>` where unavailable, otherwise dtbs_check may not pass?
+> 
 
-This patch fixes the tristate configuration for i2c3 function assigned
-to the dtf pins on the Tamonten Tegra20 SoM.
+Yes, Marijn. They should.
 
-Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
----
- arch/arm/boot/dts/tegra20-tamonten.dtsi | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/arm/boot/dts/tegra20-tamonten.dtsi b/arch/arm/boot/dts/tegra20-tamonten.dtsi
-index 02a1a4fa3a27..01e98605d5be 100644
---- a/arch/arm/boot/dts/tegra20-tamonten.dtsi
-+++ b/arch/arm/boot/dts/tegra20-tamonten.dtsi
-@@ -184,8 +184,8 @@ uca {
- 			};
- 			conf_ata {
- 				nvidia,pins = "ata", "atb", "atc", "atd", "ate",
--					"cdev1", "cdev2", "dap1", "dtb", "gma",
--					"gmb", "gmc", "gmd", "gme", "gpu7",
-+					"cdev1", "cdev2", "dap1", "dtb", "dtf",
-+					"gma", "gmb", "gmc", "gmd", "gme", "gpu7",
- 					"gpv", "i2cp", "irrx", "irtx", "pta",
- 					"rm", "slxa", "slxk", "spia", "spib",
- 					"uac";
-@@ -204,7 +204,7 @@ conf_csus {
- 			};
- 			conf_crtp {
- 				nvidia,pins = "crtp", "dap2", "dap3", "dap4",
--					"dtc", "dte", "dtf", "gpu", "sdio1",
-+					"dtc", "dte", "gpu", "sdio1",
- 					"slxc", "slxd", "spdi", "spdo", "spig",
- 					"uda";
- 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
--- 
-2.33.1
-
+Please Martin, add the missing clocks for v2.

@@ -2,213 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65014465944
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2764D465948
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353629AbhLAWee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:34:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
+        id S1353671AbhLAWfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353610AbhLAWeU (ORCPT
+        with ESMTP id S1353632AbhLAWef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:34:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAB2C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 14:30:59 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65EE0B82172
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 22:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53BCC53FCC;
-        Wed,  1 Dec 2021 22:30:55 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 17:30:54 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] [RFC] tracing: Read and write to ring buffers
- with custom sub buffer size
-Message-ID: <20211201173054.6e44d099@gandalf.local.home>
-In-Reply-To: <20211125175253.186422-6-tz.stoyanov@gmail.com>
-References: <20211125175253.186422-1-tz.stoyanov@gmail.com>
-        <20211125175253.186422-6-tz.stoyanov@gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 1 Dec 2021 17:34:35 -0500
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C49C061574;
+        Wed,  1 Dec 2021 14:31:12 -0800 (PST)
+Received: by mail-yb1-xb2a.google.com with SMTP id v138so67875177ybb.8;
+        Wed, 01 Dec 2021 14:31:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=E3jOCA6XzToDg8ZlfTZ3eGsABoN8CM2rnYNWMRgMrzk=;
+        b=HOEIgKwteYTFP0259sjPTjW8p3JbhVNRfhvh+9Jhz/m4rn3NohF0Rxd2g0///iXiLa
+         P3EepHhWvJXBTvu3u2hJ7I2l9C3sB+jlsiZjJZ8OyiSW65acN2XBzQazaf68imcacEGu
+         0g3LFqamnuNnE9i8bCnjtBnpgPSIe+qqsktBYF369wSb+yrOb8eN+QA6yhUkeL/SvHgH
+         SiLlASCg6zQgle/P8vcIbGG2ATNVxOih+RugcagCxY72oO/inXA0xzDFfZD4bTV4ueKf
+         6L+wH68R2ILAl08MxsRFBNhGMzPzwEKV6NElMVzeJ9AzYO9Cf3iw9srcVoB8S7W5AQ8o
+         yx+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=E3jOCA6XzToDg8ZlfTZ3eGsABoN8CM2rnYNWMRgMrzk=;
+        b=LV5y3nP7bGbiXicy/XSY77LtjSWylGJ2zt/IppsVxZaA3IDjbdG8QAYqSJFrrDFikj
+         eqJXbO8tWLQSyGd9DhxgrmjiQAjaIAxbDggjkT4rhzf5yvieGz5UFvPmfeej+bD1y8u/
+         LTi70w66LaCmyZHHj8GOEkWyi4ESjHu1K8AVF52VSyrFnF+gn8YHtfHhYeipOdjGVdYb
+         JoEZEilWKOxwlADWMxTLYTM0sYulIbemB57uREND4sTCiu35cSFBVa9TnB5Bcd17UxcA
+         /tvV0fmMmqD+5wXWYw98qyLa3pPZWcwr1iYbJFfuaEvuh9iJOKsUumxuN1wFL07IzqY7
+         +q0A==
+X-Gm-Message-State: AOAM532wD4qn96tliRxDFUENM/Dzr3/qFZkHROfLkT4vtJxYos3WPZAh
+        PM7xYFmeHDOJQPCINZXYc5KoeYdPuv4+RNRTabI=
+X-Google-Smtp-Source: ABdhPJxJMz1sH2AdahfAuGRURSdKD+QHhb6t8Pa4kk0Ha/CBh90gwUa6BzYqDYbqVgdZPtoY1JcwUdkRIksyDMggU7M=
+X-Received: by 2002:a25:84c1:: with SMTP id x1mr11376590ybm.690.1638397871960;
+ Wed, 01 Dec 2021 14:31:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <20211201164931.47357-1-alexandr.lobakin@intel.com>
+In-Reply-To: <20211201164931.47357-1-alexandr.lobakin@intel.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 1 Dec 2021 14:31:00 -0800
+Message-ID: <CAEf4BzZOTmmhmiNoHUCVB215t8c_AaCJJkYAkA930NLCzM_Otg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] samples: bpf: fix conflicting types in fds_example
+To:     Alexander Lobakin <alexandr.lobakin@intel.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Nov 2021 19:52:53 +0200
-"Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com> wrote:
-
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 867a220b4ef2..5fcf5e9cba76 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -2740,9 +2740,11 @@ trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,
->  {
->  	struct ring_buffer_event *entry;
->  	struct trace_array *tr = trace_file->tr;
-> +	int page_size;
->  	int val;
->  
->  	*current_rb = tr->array_buffer.buffer;
-> +	page_size = ring_buffer_subbuf_size_get(*current_rb);
->  
->  	if (!tr->no_filter_buffering_ref &&
->  	    (trace_file->flags & (EVENT_FILE_FL_SOFT_DISABLED | EVENT_FILE_FL_FILTERED)) &&
-> @@ -2764,7 +2766,7 @@ trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,
->  		 * is still quicker than no copy on match, but having
->  		 * to discard out of the ring buffer on a failed match.
->  		 */
-> -		int max_len = PAGE_SIZE - struct_size(entry, array, 1);
-> +		int max_len = page_size - struct_size(entry, array, 1);
-
-OK, so this is not part of the ring buffer, and is always going to be
-PAGE_SIZE.
-
-The temp buffer is allocated from trace_buffered_event_enable() which does:
-
-	for_each_tracing_cpu(cpu) {
-		page = alloc_pages_node(cpu_to_node(cpu),
-					GFP_KERNEL | __GFP_NORETRY, 0);
-		if (!page)
-			goto failed;
-
-		event = page_address(page);
-		memset(event, 0, sizeof(*event));
-
-		per_cpu(trace_buffered_event, cpu) = event;
-
-		preempt_disable();
-		if (cpu == smp_processor_id() &&
-		    __this_cpu_read(trace_buffered_event) !=
-		    per_cpu(trace_buffered_event, cpu))
-			WARN_ON_ONCE(1);
-		preempt_enable();
-	}
-
-That allocates one page per CPU to store as a temp buffer.
-
-This must always be PAGE_SIZE.
-
--- Steve
-
-
->  
->  		val = this_cpu_inc_return(trace_buffered_event_cnt);
->  
-> @@ -8004,6 +8006,8 @@ tracing_buffers_read(struct file *filp, char __user *ubuf,
->  {
->  	struct ftrace_buffer_info *info = filp->private_data;
->  	struct trace_iterator *iter = &info->iter;
-> +	void *trace_data;
-> +	int page_size;
->  	ssize_t ret = 0;
->  	ssize_t size;
->  
-> @@ -8015,6 +8019,8 @@ tracing_buffers_read(struct file *filp, char __user *ubuf,
->  		return -EBUSY;
->  #endif
->  
-> +	page_size = ring_buffer_subbuf_size_get(iter->array_buffer->buffer);
-> +
->  	if (!info->spare) {
->  		info->spare = ring_buffer_alloc_read_page(iter->array_buffer->buffer,
->  							  iter->cpu_file);
-> @@ -8029,13 +8035,13 @@ tracing_buffers_read(struct file *filp, char __user *ubuf,
->  		return ret;
->  
->  	/* Do we have previous read data to read? */
-> -	if (info->read < PAGE_SIZE)
-> +	if (info->read < page_size)
->  		goto read;
->  
->   again:
->  	trace_access_lock(iter->cpu_file);
->  	ret = ring_buffer_read_page(iter->array_buffer->buffer,
-> -				    &info->spare,
-> +				    info->spare,
->  				    count,
->  				    iter->cpu_file, 0);
->  	trace_access_unlock(iter->cpu_file);
-> @@ -8056,11 +8062,11 @@ tracing_buffers_read(struct file *filp, char __user *ubuf,
->  
->  	info->read = 0;
->   read:
-> -	size = PAGE_SIZE - info->read;
-> +	size = page_size - info->read;
->  	if (size > count)
->  		size = count;
+On Wed, Dec 1, 2021 at 8:50 AM Alexander Lobakin
+<alexandr.lobakin@intel.com> wrote:
+>
+> Fix the following samples/bpf build error appeared after the
+> introduction of bpf_map_create() in libbpf:
+>
+>   CC  samples/bpf/fds_example.o
+> samples/bpf/fds_example.c:49:12: error: static declaration of 'bpf_map_create' follows non-static declaration
+> static int bpf_map_create(void)
+>            ^
+> samples/bpf/libbpf/include/bpf/bpf.h:55:16: note: previous declaration is here
+> LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
+>                ^
+> samples/bpf/fds_example.c:82:23: error: too few arguments to function call, expected 6, have 0
+>                 fd = bpf_map_create();
+>                      ~~~~~~~~~~~~~~ ^
+> samples/bpf/libbpf/include/bpf/bpf.h:55:16: note: 'bpf_map_create' declared here
+> LIBBPF_API int bpf_map_create(enum bpf_map_type map_type,
+>                ^
+> 2 errors generated.
+>
+> fds_example by accident has a static function with the same name.
+> It's not worth it to separate a single call into its own function,
+> so just embed it.
+>
+> Fixes: 992c4225419a ("libbpf: Unify low-level map creation APIs w/ new bpf_map_create()")
+> Signed-off-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+> Reviewed-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+> ---
+>  samples/bpf/fds_example.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+>
+> diff --git a/samples/bpf/fds_example.c b/samples/bpf/fds_example.c
+> index 59f45fef5110..9a7c1fd7a4a8 100644
+> --- a/samples/bpf/fds_example.c
+> +++ b/samples/bpf/fds_example.c
+> @@ -46,12 +46,6 @@ static void usage(void)
+>         printf("       -h          Display this help.\n");
+>  }
+>
+> -static int bpf_map_create(void)
+> -{
+> -       return bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(uint32_t),
+> -                             sizeof(uint32_t), 1024, 0);
+> -}
 > -
-> -	ret = copy_to_user(ubuf, info->spare + info->read, size);
-> +	trace_data = ring_buffer_read_page_data(info->spare);
-> +	ret = copy_to_user(ubuf, trace_data + info->read, size);
->  	if (ret == size)
->  		return -EFAULT;
->  
-> @@ -8165,6 +8171,7 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
->  		.spd_release	= buffer_spd_release,
->  	};
->  	struct buffer_ref *ref;
-> +	int page_size;
->  	int entries, i;
->  	ssize_t ret = 0;
->  
-> @@ -8173,13 +8180,14 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
->  		return -EBUSY;
->  #endif
->  
-> -	if (*ppos & (PAGE_SIZE - 1))
-> +	page_size = ring_buffer_subbuf_size_get(iter->array_buffer->buffer);
-> +	if (*ppos & (page_size - 1))
->  		return -EINVAL;
->  
-> -	if (len & (PAGE_SIZE - 1)) {
-> -		if (len < PAGE_SIZE)
-> +	if (len & (page_size - 1)) {
-> +		if (len < page_size)
->  			return -EINVAL;
-> -		len &= PAGE_MASK;
-> +		len &= (~(page_size - 1));
->  	}
->  
->  	if (splice_grow_spd(pipe, &spd))
-> @@ -8189,7 +8197,7 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
->  	trace_access_lock(iter->cpu_file);
->  	entries = ring_buffer_entries_cpu(iter->array_buffer->buffer, iter->cpu_file);
->  
-> -	for (i = 0; i < spd.nr_pages_max && len && entries; i++, len -= PAGE_SIZE) {
-> +	for (i = 0; i < spd.nr_pages_max && len && entries; i++, len -= page_size) {
->  		struct page *page;
->  		int r;
->  
-> @@ -8210,7 +8218,7 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
->  		}
->  		ref->cpu = iter->cpu_file;
->  
-> -		r = ring_buffer_read_page(ref->buffer, &ref->page,
-> +		r = ring_buffer_read_page(ref->buffer, ref->page,
->  					  len, iter->cpu_file, 1);
->  		if (r < 0) {
->  			ring_buffer_free_read_page(ref->buffer, ref->cpu,
-> @@ -8219,14 +8227,14 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
->  			break;
->  		}
->  
-> -		page = virt_to_page(ref->page);
-> +		page = virt_to_page(ring_buffer_read_page_data(ref->page));
->  
->  		spd.pages[i] = page;
-> -		spd.partial[i].len = PAGE_SIZE;
-> +		spd.partial[i].len = page_size;
->  		spd.partial[i].offset = 0;
->  		spd.partial[i].private = (unsigned long)ref;
->  		spd.nr_pages++;
-> -		*ppos += PAGE_SIZE;
-> +		*ppos += page_size;
->  
->  		entries = ring_buffer_entries_cpu(iter->array_buffer->buffer, iter->cpu_file);
->  	}
+>  static int bpf_prog_create(const char *object)
+>  {
+>         static struct bpf_insn insns[] = {
+> @@ -79,7 +73,8 @@ static int bpf_do_map(const char *file, uint32_t flags, uint32_t key,
+>         int fd, ret;
+>
+>         if (flags & BPF_F_PIN) {
+> -               fd = bpf_map_create();
+> +               fd = bpf_create_map(BPF_MAP_TYPE_ARRAY, sizeof(uint32_t),
+> +                                   sizeof(uint32_t), 1024, 0);
+
+Would be even better to use bpf_map_create() API instead, but that's
+fine, I'm sending a big clean up patch for this and other uses of
+deprecated APIs in samples/bpf. Applied to bpf-next.
+
+>                 printf("bpf: map fd:%d (%s)\n", fd, strerror(errno));
+>                 assert(fd > 0);
+>
+> --
+> 2.33.1
+>

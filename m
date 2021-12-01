@@ -2,99 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59A084656AC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 317764656B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239265AbhLATov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:44:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S238177AbhLATpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:45:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbhLATok (ORCPT
+        with ESMTP id S232697AbhLATpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:44:40 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33724C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:41:19 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 137so17624187pgg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:41:19 -0800 (PST)
+        Wed, 1 Dec 2021 14:45:43 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77125C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:42:21 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id a24so22769338qvb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:42:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=N/c4XBzpAhfh2fxIk2nQwH9IJv2DHkpMOkPrtJqbaqM=;
-        b=dsiSvgd8t9Py/T3ZMYz6xVEjcpefT6ANJp1ZgG2dPTBQcClq6XSD22WnMaNmJ+3HSw
-         VL7WlY/6MsaGanSDA/J8kLW2Q6zo9mP3WubF9BCQb4xX/EJBjG7nsFuUDTQ8302491dR
-         8izBQ0e07WFR3Dkczk8Fqza/sytMMahJUbi0M=
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:reply-to:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l8qO7om+4nzmjVjsLMIjPrTYZn6f70uApjbAzAFnAII=;
+        b=WXUZqXTCL8KfwqinPOWIo0VazQNtMfkW6ZzGdxJJv5rt9/w8YZ2aOfLPn3ofIT+eta
+         /6bYu4nAMTND/1lOvYXyvq0W/rA/J8fSEQph0jN1BhUDkKCU18UK8vYuHuYrK+FNkgfs
+         TzVF/wkrzogBYmlJT5pApHunknHtH6H5/cpoWzi2/r9oUp4F8vrFTXb+t6oaCBMYGBHA
+         RbJ68/noDvr+IZhPTWpFRGRQP5tKUC5t5ZYj0DVJKddtd1Vrhr7/9mO+poeChLTgxhfV
+         znimU5VNCObWYB2NeaBxezk5qxa397FuwUxBB2VH6gtf+SF3L4m8Eaoy1qA40cJb0lHF
+         C3uQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=N/c4XBzpAhfh2fxIk2nQwH9IJv2DHkpMOkPrtJqbaqM=;
-        b=5/19JZWkbF597lpXnxD5QP2AYMa/xJqC1OgYsc1l8Fh6KMG7yxQXXvEb5XFqOvTBPt
-         flQjUh4c2zWlrkX8E/SY8K2Q1i3bGtPRoG2nWZrG+yPTLLvjDmpFmaf7RPiyGlcyzAkQ
-         Melbinh47fItpqaoiPBY703Fi/2fWFy8uEKyd5EdgaG4dn5n1AJLuIpgfDpU25ICn0wH
-         0rIupNppe8r6gr9Vtp7yy17/1ZRirhWI3K/KloB8zjx4BwnQhBKv2+TohDtN0aTVPLFS
-         UJqR2Cu+5tUN7SX35BBqIxAhBDXkiCi/UE95c9BZ922RfRU2omc7aPW67dbq9YUtNPUI
-         UlWg==
-X-Gm-Message-State: AOAM530u7XSrGFGiU9YBO8fseZEwKyziOt31Hn+ILsUmcEBvGv1QmgPB
-        Zs9Fsv5xY6OIPj44ohNT6V4Y+Q==
-X-Google-Smtp-Source: ABdhPJwnrkf5VV8lOR8ofvTy2eEtkrOUbvs6jU3Ueml81H0PE/585+9TxwtaKPip2KS4chmI1tUn0g==
-X-Received: by 2002:a05:6a00:2ab:b0:49f:997e:23e2 with SMTP id q11-20020a056a0002ab00b0049f997e23e2mr8130898pfs.22.1638387678756;
-        Wed, 01 Dec 2021 11:41:18 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d2sm647466pfj.42.2021.12.01.11.41.18
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :reply-to:references:mime-version:content-disposition:in-reply-to;
+        bh=l8qO7om+4nzmjVjsLMIjPrTYZn6f70uApjbAzAFnAII=;
+        b=E3Km+hewDT4Zalj3a/1UYG/RdrPhgyObuOzIDUF/PioUU5PIg9vtlWP8Qrc/tU5rlR
+         EeFmapBlsZ2IJ5WlAng22VYhvbqDgrWTlfnfYH4w7y8wYa8cHRs9ifmGzmuwZ/klSEul
+         cpppyz4ttxJOysQCwBv0zgu9e5mlbbvic9ZtjfXATDTE4/ncpWaZHGyOcQIqVqlLazyY
+         Y+KqfEF5KZcGHPnuxORj58hpOOLD42nXzaiGWYgmblF/CGi8pd74Ig0Fx8nYMHEU4d0E
+         c778mN07Go9O/7SPh+ALd0ADaRjAwjtk0odM1P4CB64azTaIWT8YpxBIP99APe19uYJY
+         ldlQ==
+X-Gm-Message-State: AOAM5326KrdQsYZnhp9uECi3mrtG6k4+eFPW/QLYtf6bg9+Zaz8A3+e1
+        tQuRtdD2amVG4+Vvpp2QOKRs8yiluw==
+X-Google-Smtp-Source: ABdhPJw0B5Dubc1lv639hbPOVNk7NjlHQE8JRIwKZNoWQhvu1ueaJjXoBP5afRGTBY71eqD9GZl2dQ==
+X-Received: by 2002:a05:6214:dc2:: with SMTP id 2mr8536953qvt.39.1638387740549;
+        Wed, 01 Dec 2021 11:42:20 -0800 (PST)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id x15sm379714qko.82.2021.12.01.11.42.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 11:41:18 -0800 (PST)
-Date:   Wed, 1 Dec 2021 11:41:17 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Tom Stellard <tstellar@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>, cki-project@redhat.com,
-        kernelci@groups.io, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH RFC 0/6] Bump minimum supported version of LLVM to 11.0.0
-Message-ID: <202112011140.DA93B3E@keescook>
-References: <20211129165803.470795-1-nathan@kernel.org>
+        Wed, 01 Dec 2021 11:42:20 -0800 (PST)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:b0fd:aad1:1fcc:32a6])
+        by serve.minyard.net (Postfix) with ESMTPSA id 0DF0C1800B9;
+        Wed,  1 Dec 2021 19:42:19 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 13:42:17 -0600
+From:   Corey Minyard <minyard@acm.org>
+To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
+Cc:     openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ipmi/watchdog: Constify ident
+Message-ID: <20211201194217.GI15676@minyard.net>
+Reply-To: minyard@acm.org
+References: <20211128220154.32927-1-rikard.falkeborn@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211129165803.470795-1-nathan@kernel.org>
+In-Reply-To: <20211128220154.32927-1-rikard.falkeborn@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 09:57:57AM -0700, Nathan Chancellor wrote:
-> This patch series raises the minimum supported version of LLVM to
-> 11.0.0.
-> 
-> Patch #1 outlines the issue, goes over the potential impact of the
-> change, and does the actual bump. Subsequent patches clean up the
-> various checks that are always true after the bump.
-> 
-> I have marked this revision as RFC to give various parties the option to
-> comment on this bump before it is done, namely KernelCI and Linaro's
-> LKFT, who are still testing clang-10. I have added some other folks to
-> CC that I know are testing with clang to see if this impacts them in any
-> way (as I would like to impact as few people as possible) but as far as
-> I am aware, most other CIs and developers are testing closer to tip of
-> tree. If that is not true, scream so that we can see what can be done
-> about that. If I missed anyone who is actively testing with clang,
-> please key them in and I will make sure to include them in future
-> revisions (if any are needed).
-> 
-> It probably makes sense for this series to live in -mm.
+On Sun, Nov 28, 2021 at 11:01:54PM +0100, Rikard Falkeborn wrote:
+> ident is not modified and can be made const to allow the compiler to put
+> it in read-only memory.
 
-Sounds good to me. Thanks!
+In my queue for next release.  Thanks.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+-corey
 
--- 
-Kees Cook
+> 
+> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+> ---
+>  drivers/char/ipmi/ipmi_watchdog.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
+> index 883b4a341012..0604abdd249a 100644
+> --- a/drivers/char/ipmi/ipmi_watchdog.c
+> +++ b/drivers/char/ipmi/ipmi_watchdog.c
+> @@ -668,7 +668,7 @@ static int ipmi_heartbeat(void)
+>  	return rv;
+>  }
+>  
+> -static struct watchdog_info ident = {
+> +static const struct watchdog_info ident = {
+>  	.options	= 0,	/* WDIOF_SETTIMEOUT, */
+>  	.firmware_version = 1,
+>  	.identity	= "IPMI"
+> -- 
+> 2.34.1
+> 

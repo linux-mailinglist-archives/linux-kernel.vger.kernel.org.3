@@ -2,107 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 460434652F0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADC6F4652F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351457AbhLAQm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47788 "EHLO
+        id S1351465AbhLAQnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238010AbhLAQm6 (ORCPT
+        with ESMTP id S238010AbhLAQnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:42:58 -0500
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8285FC061574;
-        Wed,  1 Dec 2021 08:39:37 -0800 (PST)
-Received: by mail-pj1-x1032.google.com with SMTP id iq11so18430509pjb.3;
-        Wed, 01 Dec 2021 08:39:37 -0800 (PST)
+        Wed, 1 Dec 2021 11:43:40 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF27C061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:40:19 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id n8so18150183plf.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:40:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=1EkC39adlEEsimMF8WAtkbLkh0JLAwJ99PUzWQZRq4M=;
-        b=S4K6E60fowwK12pVSXDSezUToCQTbvMryZ9jCQjZdt8YBwTBgNsYvIktXGYED/SMI3
-         VgJF3XTd8qW6MKe9OMmyat1BHCQiLqnkvcPtTavJrnjPTjO6h4yQ8goQdWB22s3zocqK
-         Wl5E8OgrGvetUa6XHhgvfrYB+vbkzprmjM4Gs6VW1+5q5391x/rHz6T8kzBfnj9MHpc8
-         hOVO7aI27QXPDn6ABgwCkknX8xtE+H4KWIbm9ae6e9+4ddYjSkRirXz6ZDYR+ylg0/9q
-         g9MJbO+Gy1BPaqtpOKsrNe9CzPYLfINyLm/U/Hayo9rNcrY1urCnq00+/Vl+Z/Sl93bS
-         nVvA==
+        bh=y8cmWY4Zar66oxROb9aCaWg+WHCdO5TorclDxazoih0=;
+        b=KMrgAdmxIQ8K3dFwdZP0KgMke/VWmOiwmkpwK8XtO5jg0bv+IwT6kwy5QeCS8cVmkG
+         iXva0YNAfh0jDs3F2vVeVDeeSEVNtLaDMU2jGFO9dRGbP5aXdL3iPH4S0TdEOsAPotsb
+         vAd3VHhwy3mFo4QwZrOfawXcT16vzNk/wWXh0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=1EkC39adlEEsimMF8WAtkbLkh0JLAwJ99PUzWQZRq4M=;
-        b=glrF1TPqxEh579FXLqgcuS1E5TXEUvgI8p/+EXqeBn4s+zy0Fwxz2/NowGle64ven6
-         fIblZaW/kvVZf3CMM1/+9WgWczSBFNoixPlsVBTAqwZTO5IWwU99KSpr29841GfJctUz
-         7GBaBHyQqNGe1ZoV0tJ5+QKobK8bd6BBw73SIeROeOpV4iqxfloDtOmqjq3BRmrLjifw
-         Z0VYbhHwUt2ezepVv8Au9YxfsAFsjemJ9NlFEe+eK+4n8xfBHZJLHETe24PgYBKJ9LH6
-         a3ivV8bPZvm1pV+3FmkVNo56Oyc7FgBPgetrkRm+nnNoJVxRnpHwLO7LhdZbpb1sWJhl
-         cHpA==
-X-Gm-Message-State: AOAM530r/OsftmAqLxoQt3Amy+dG8yoiv07L5FOXJUiLpQ2s9XPKA9sz
-        uFLBVVjSaLMDFFByykt653w=
-X-Google-Smtp-Source: ABdhPJyNOPfPh8zj6bnvNceMnYfdsseo9B1V0hecoqWUwEoaGEAx0BGKmSABKZNaOG9F+xme3mz4Uw==
-X-Received: by 2002:a17:903:4043:b0:142:4f21:6976 with SMTP id n3-20020a170903404300b001424f216976mr8767312pla.62.1638376776834;
-        Wed, 01 Dec 2021 08:39:36 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id g21sm358416pfc.95.2021.12.01.08.39.35
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=y8cmWY4Zar66oxROb9aCaWg+WHCdO5TorclDxazoih0=;
+        b=lm4CeYuP/2b9hzUvRac5Dox/Ou7bz6eoZ/qx+5RuQ4ouFadcaTOQUtgZYCacU6sZkI
+         LcocRc0oUFHWLMxg+1JBzlqup/STD7rHSff2buzT6Bps+rqXvTobXxM0vYctfabQhcri
+         jfhqxyrvKT5TpNQ6Y6ZTdCiSvs/KzGOPWMRI8Y06+TgOwV5/exK6p7N03LQf1p13etPs
+         D6vGIukFNxSlzsOB9VK6NtXnQHskNEtUVyGKEjdNePY9eXAvwyL/Sw+sYiGl32eUiEI/
+         W27vqXzv9lVfiDjgJ0cHNxdTADB3HGB3sukLevpkj7NXgjncy07b3giIYGD+CFXj99IZ
+         G8/w==
+X-Gm-Message-State: AOAM532+VJJq5zuOy4PKlvdCxw8D2CfQ0rAroGYw6Hy74PMQxcXe3ZKe
+        cPrNBK2HVTnHp4paptflNUFOWQ==
+X-Google-Smtp-Source: ABdhPJwJfw+rygwnhuiEpbRB+v+vZNeROz8C/SXUcdZBzJqV6OaozK2TnS2SEtEqIW0r9VUrX4HDWg==
+X-Received: by 2002:a17:90b:3ec2:: with SMTP id rm2mr9031549pjb.1.1638376818926;
+        Wed, 01 Dec 2021 08:40:18 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id t13sm322535pfl.98.2021.12.01.08.40.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 08:39:36 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 1 Dec 2021 06:39:34 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
- cpuset.cpus.partition in cgroup-v2.rst
-Message-ID: <YaelRiqWOIzT5uRs@slm.duckdns.org>
-References: <20211018143619.205065-1-longman@redhat.com>
- <20211018143619.205065-6-longman@redhat.com>
- <20211115193122.GA16798@blackbody.suse.cz>
- <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
- <20211116175411.GA50019@blackbody.suse.cz>
- <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
- <YaZbXArNIMNvwJD/@slm.duckdns.org>
- <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
- <20211201141350.GA54766@blackbody.suse.cz>
- <ec6e2b89-385a-fcc7-7cfa-7e9119fc34bc@redhat.com>
+        Wed, 01 Dec 2021 08:40:18 -0800 (PST)
+Date:   Wed, 1 Dec 2021 08:40:17 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Alejandro Colomar <alx.manpages@gmail.com>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>,
+        Christian Heimes <christian@python.org>,
+        Deven Bowers <deven.desai@linux.microsoft.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Eric Chiang <ericchiang@google.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
+        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Miklos Szeredi <mszeredi@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
+        <philippe.trebuchet@ssi.gouv.fr>,
+        Scott Shell <scottsh@microsoft.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steve Dower <steve.dower@python.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
+        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
+        Yin Fengwei <fengwei.yin@intel.com>,
+        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
+Message-ID: <202112010839.4362C7A70@keescook>
+References: <20211115185304.198460-1-mic@digikod.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <ec6e2b89-385a-fcc7-7cfa-7e9119fc34bc@redhat.com>
+In-Reply-To: <20211115185304.198460-1-mic@digikod.net>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 09:56:21AM -0500, Waiman Long wrote:
-> Right, I shouldn't say corner cases. Having task in an intermediate
-> partition is possible depending on event sequence. I am aware that there are
-> code in the cpuset code to prevent that, but it didn't block all cases.
-> > > A valid parent partition may distribute out all its CPUs to
-> > >   its child partitions as long as there is no task associated with it.
-> > Assuming there's always at least one kernel thread in the root cgroup
-> > that can't be migrated anyway.]
-> 
-> I am aware of that. That is why I said root cgroup must have at least one
-> cpu in its "cpuset.cpus.effective".
+On Mon, Nov 15, 2021 at 07:53:01PM +0100, Mickaël Salaün wrote:
+> Andrew, can you please consider to merge this into your tree?
 
-In that case, let's explicitly describe that condition.
+Friendly ping to akpm. :)
 
-Thanks.
+Can this start living in -mm, or would a different tree be better?
+
+Thanks!
+
+-Kees
 
 -- 
-tejun
+Kees Cook

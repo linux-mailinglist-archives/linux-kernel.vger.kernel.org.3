@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EF5F464BE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:46:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 465D1464BE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348775AbhLAKuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:50:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51026 "EHLO
+        id S1348781AbhLAKuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:50:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348765AbhLAKuI (ORCPT
+        with ESMTP id S1348777AbhLAKuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:50:08 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3606AC061574;
-        Wed,  1 Dec 2021 02:46:48 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id u11so17368637plf.3;
-        Wed, 01 Dec 2021 02:46:48 -0800 (PST)
+        Wed, 1 Dec 2021 05:50:10 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DDC5C061574;
+        Wed,  1 Dec 2021 02:46:50 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id g19so23957737pfb.8;
+        Wed, 01 Dec 2021 02:46:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=QgI8xfOKbtqJvm3pifM8iV6LJY7gb3a9XtF8BRLsjus=;
-        b=ix8S9kprhXYll66e5bza/ClsATBsMxTY00mtPqwtjQb69tlbPV/zss/b7p6jeGUEqX
-         GHuZAA/IxBu1qAIyYRC2aceIo3IqdLkSMeRl0huJjN/j1vN1NqVTqwJc/JI6Y38JS9Xh
-         pjXh8J8tnahIZRFb9snFsOhpljsnlT3J0bMeJCZ6d4EODmuXzOaIhTj5KaTTt0YFQ+O6
-         ee8Pk7ytgxybwgTA6eLIZtUXEVCVuwivedIopApbSEh6p/Cht0wcLgsbpB9ggIW5HI+O
-         NoR+d5WScTrrD3FJ8tw1dIaMJiFeZPz6V5GHUXkwibUuJRxqAKbQgLcra2+Tg5BCe9c9
-         yyCw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=2fzwCgHmFMX3NXd2jEfr7dnG6xVoYL9jcUVbqd5DMXM=;
+        b=FdoJfir+Uy/BLOwXb1hnHWoMAE97P1lA25O9XdtrZKJ6GLOY1xdTt6dxLEVoaD5DNS
+         0A5hX67P52IyZyEYY5ujo7LNinKwj7wG6WyjGHGaGsSwN90bUQ6ICVXco3mrVs7SSLjR
+         JrwJbC+YwTwUKi62XOjk16T4t9PptJyrH8UTqCr8Bm5qC82GSOh6sGMFV8V1JGJ8sRRu
+         vemk1iCA+3mJfCvAIOkSSdMjWDDzeQYkBNZO4W2FXRf3gVA4vFdt3powJnPfRNXaYMNW
+         HpP2yXLQrJVSCdPDqOW0sX6gCBDNyKKvaPDPzqIZF+y1nnCnperq5UZXnD7Zjnq/udQj
+         uwsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=QgI8xfOKbtqJvm3pifM8iV6LJY7gb3a9XtF8BRLsjus=;
-        b=4UvM6zC0FeU5JMHNlYsXkPfDhg/uuqpm6r0mbR1OJ0iiCIP9lqGRic82mZxerORSwb
-         2VRRZDcQedNN0UhndhZYSJsuVM7GORpi0Fus1mqeNV/d0lw9rSb6b4OdsN96f1CuB8J7
-         CcgEtXo1shz/iFOelikRqDKESJ5v8fkH4hsaEkEv+m1fjIQQF3+RktKmGPs/4Oxnlx6I
-         RfzVOv39s1EMMDePwQnLs3oqsY/mAT6DDq4hqhoe2u7rp6jkqKzxX5Q1+IUB1WkQy2CT
-         +Kvahzddk3hJL1zyrBwo0+MUg8O/vu9tGHxH8eXHkxb3USdd/bXbFxw7+mAGTuwpk6Ss
-         EqDw==
-X-Gm-Message-State: AOAM533rEqMMczOT1Cyf1U9foRbrNJh/juoTTjRQkt83OsZ+h9YKN9jp
-        5U4Odw9Qrm7JgX2Yni+rlwA=
-X-Google-Smtp-Source: ABdhPJwPfbK12znXFavPJ3yqk3Xt9XK8n+hr6qdOJR2JiO0LaP3Paje4qQq1UqINPE1Qtd1NOmBcsQ==
-X-Received: by 2002:a17:902:d505:b0:141:f5f7:848e with SMTP id b5-20020a170902d50500b00141f5f7848emr6454307plg.72.1638355607514;
-        Wed, 01 Dec 2021 02:46:47 -0800 (PST)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=2fzwCgHmFMX3NXd2jEfr7dnG6xVoYL9jcUVbqd5DMXM=;
+        b=LcGIv3yDjd6e40fEaLhKgOPAp2rdRI98GK34QhcPl8J2rxeptgBfcFGHU9TG9FCWEn
+         1iDw1Pm+m4ER7GTlO3E3bA1sGLSZzjkgy3X/HDNY6ZRKkIAKTgTe3UilGRuJG+jn2Otq
+         idsvogBg/f4rcEyg6I66snnmD1o5Hhv2H7mJuDBci7vWrQmzokeSZhWTT2533bWHyR1F
+         90QxGPy0OSJZpMvQLSedJ1XmxtrYtvZaMTs3w7F5O5rzg+Q8plcK2gCKCj7fa7VHZ0Xk
+         YLffCuJRN33vLhjTdDPcr02F0M3+ZuBwQTYm5rp+gYrT8NGp1p3Yu1XVqVnKek1O5CYx
+         ol2w==
+X-Gm-Message-State: AOAM531SFmyQHhmQcXohygxbb0RUgbzKcB8Xq1oR59SU0W72X863Pbgt
+        /e9hyBCCUnXXk/DoriGoaj4=
+X-Google-Smtp-Source: ABdhPJx7b7YAnMhCyB2Vn24x7k6jt6On+njkIxaxdThmZ7xp9llO9liTzGS3XHyWPv5ktPSJ2zdUzg==
+X-Received: by 2002:a05:6a00:21c4:b0:4a7:ec46:34b7 with SMTP id t4-20020a056a0021c400b004a7ec4634b7mr5216657pfj.15.1638355609810;
+        Wed, 01 Dec 2021 02:46:49 -0800 (PST)
 Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id f22sm26395318pfj.49.2021.12.01.02.46.45
+        by smtp.googlemail.com with ESMTPSA id f22sm26395318pfj.49.2021.12.01.02.46.47
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 01 Dec 2021 02:46:47 -0800 (PST)
+        Wed, 01 Dec 2021 02:46:49 -0800 (PST)
 From:   Hammer Hsieh <hammerh0314@gmail.com>
 X-Google-Original-From: Hammer Hsieh <hammer.hsieh@sunplus.com>
 To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
@@ -54,37 +55,110 @@ To:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
         p.zabel@pengutronix.de
 Cc:     tony.huang@sunplus.com, wells.lu@sunplus.com,
         Hammer Hsieh <hammer.hsieh@sunplus.com>
-Subject: [PATCH v4 0/2] Add UART driver for Suplus SP7021 SoC
-Date:   Wed,  1 Dec 2021 18:46:42 +0800
-Message-Id: <1638355604-24002-1-git-send-email-hammer.hsieh@sunplus.com>
+Subject: [PATCH v4 1/2] dt-bindings:serial:Add bindings doc for Sunplus SoC UART Driver
+Date:   Wed,  1 Dec 2021 18:46:43 +0800
+Message-Id: <1638355604-24002-2-git-send-email-hammer.hsieh@sunplus.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1638355604-24002-1-git-send-email-hammer.hsieh@sunplus.com>
+References: <1638355604-24002-1-git-send-email-hammer.hsieh@sunplus.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a patch series for UART driver for Suplus SP7021 SoC.
+Add bindings doc for Sunplus SoC UART Driver
 
-Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
-many peripherals (ex: UART. I2C, SPI, SDIO, eMMC, USB, SD card and
-etc.) into a single chip. It is designed for industrial control.
+Reviewed-by: Rob Herring <robh@kernel.org>
+Signed-off-by: Hammer Hsieh <hammer.hsieh@sunplus.com>
+---
+Changes in v4:
+ - no change.
+ - Reviewed-by : Rob Herring <robh@kernel.org> in v3.
 
-Refer to:
-https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
-https://tibbo.com/store/plus1.html
-
-Hammer Hsieh (2):
-  dt-bindings:serial:Add bindings doc for Sunplus SoC UART Driver
-  serial:sunplus-uart:Add Sunplus SoC UART Driver
-
- .../bindings/serial/sunplus,sp7021-uart.yaml       |  58 ++
- MAINTAINERS                                        |   6 +
- drivers/tty/serial/Kconfig                         |  23 +
- drivers/tty/serial/Makefile                        |   1 +
- drivers/tty/serial/sunplus-uart.c                  | 848 +++++++++++++++++++++
- 5 files changed, 936 insertions(+)
+ .../bindings/serial/sunplus,sp7021-uart.yaml       | 58 ++++++++++++++++++++++
+ MAINTAINERS                                        |  5 ++
+ 2 files changed, 63 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
- create mode 100644 drivers/tty/serial/sunplus-uart.c
 
+diff --git a/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+new file mode 100644
+index 0000000..df11074
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
+@@ -0,0 +1,58 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++# Copyright (C) Sunplus Co., Ltd. 2021
++%YAML 1.2
++---
++$id: "http://devicetree.org/schemas/serial/sunplus,sp7021-uart.yaml#"
++$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++
++title: Sunplus SoC SP7021 UART Controller Device Tree Bindings
++
++maintainers:
++  - Tony Huang <tony.huang@sunplus.com>
++  - Hammer Hsieh <hammer.hsieh@sunplus.com>
++  - Wells Lu <wells.lu@sunplus.com>
++
++allOf:
++  - $ref: serial.yaml#
++
++properties:
++  compatible:
++    const: sunplus,sp7021-uart
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  clocks:
++    maxItems: 1
++
++  resets:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - resets
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++    aliases {
++            serial0 = &uart0;
++    };
++
++    uart0: serial@9c000900 {
++        compatible = "sunplus,sp7021-uart";
++        reg = <0x9c000900 0x80>;
++        interrupt-parent = <&intc>;
++        interrupts = <53 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&clkc 0x28>;
++        resets = <&rstc 0x18>;
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3b79fd4..f2ee40c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17945,6 +17945,11 @@ L:	netdev@vger.kernel.org
+ S:	Maintained
+ F:	drivers/net/ethernet/dlink/sundance.c
+ 
++SUNPLUS UART DRIVER
++M:	Hammer Hsieh <hammer.hsieh@sunplus.com>
++S:	Maintained
++F:	Documentation/devicetree/bindings/serial/sunplus,sp7021-uart.yaml
++
+ SUPERH
+ M:	Yoshinori Sato <ysato@users.sourceforge.jp>
+ M:	Rich Felker <dalias@libc.org>
 -- 
 2.7.4
 

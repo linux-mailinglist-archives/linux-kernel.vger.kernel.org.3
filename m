@@ -2,100 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C14465849
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293FB465851
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 22:21:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344086AbhLAVXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 16:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344010AbhLAVXJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 16:23:09 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD32C061574;
-        Wed,  1 Dec 2021 13:19:47 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id z7so31964028lfi.11;
-        Wed, 01 Dec 2021 13:19:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VqCD5X4z3E22KUCM7brtm+WLf2cLZsABPfgU1nbqQJg=;
-        b=KsH1TFr8dZTTKCqVTATfd3Js5wW27OGo7XYxghwnkcOty1s6RtZWFJDUAbIAlji2p6
-         ovw5RTDgW/JbejsqHOMCWj/BtRs8hkjxm7HIQlXcdXT1AH7m9B9r0IY8jLx41AWEUOR9
-         TEW2G7fZzVqamry/5cAxMbeQ73HIvjarnekhgaxwIjSpFqJq9jwdpqF6XLzn34BSEJ+e
-         tEzJLB4L0/yaq8KzMQA6+J/wOV2p5egwBfnjabV7xUUpPTbkETk4UU0CKT4uu/SIk5MS
-         tt8EGSCFBgNYu9rrOM/msKzR+jDsORRzZU5ZPNSBbmrQ0rB8IXclPl1hQSyxgldwwjzg
-         4+JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=VqCD5X4z3E22KUCM7brtm+WLf2cLZsABPfgU1nbqQJg=;
-        b=hYXdfiBd3p8g0JXGlvnDzqj78LtZgW/+ZoKr1wnvm7NPdjwwjpTJQhwH7WEBgmioZp
-         es8GtLDqldE54C/809DkqWWf2277sIN9eOAm5SGiuK2sfYO4Ee2xm2ygvWXaeYaOXFYn
-         q0458ujx+73IKeou3I9artAs3P37VSYPPEV0vOV3hv/QrY22gx7jyTH1VWN6ESXGCkYV
-         rrryccZW/7RdUjEdLvNJ4xB3Dp2VgEiOz/4F4ALIVvBSY0iTfMq9Ij9ff4fxRbt3GJnO
-         slcNg3+xz+CFiBEtLK62s/YKOZZ6+uibpk9K7HX7WCR3W0/YJZmaFG6VE0BIoya6VPOS
-         hoBg==
-X-Gm-Message-State: AOAM532PHwJRQDQJFpsjnk6nEHzBkriTLrWhrfRWHP3pMr2ji5bDrd8W
-        zYFyELzriKWizbNBBNNpEJDVL2jRLoc=
-X-Google-Smtp-Source: ABdhPJxJxGPIHET353HJdTwalA7snVPtLPN9+bzzmDfTbkAApY8KnLkPmUVSh1GGetO0oMpitP9MNA==
-X-Received: by 2002:ac2:51b0:: with SMTP id f16mr8228337lfk.20.1638393586169;
-        Wed, 01 Dec 2021 13:19:46 -0800 (PST)
-Received: from localhost.lan (ip-194-187-74-233.konfederacka.maverick.com.pl. [194.187.74.233])
-        by smtp.gmail.com with ESMTPSA id o8sm104919lfk.2.2021.12.01.13.19.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 13:19:45 -0800 (PST)
-From:   =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <zajec5@gmail.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
-Subject: [PATCH] MAINTAINERS: Add Florian as BCM5301X and BCM53573 maintainer
-Date:   Wed,  1 Dec 2021 22:19:39 +0100
-Message-Id: <20211201211939.13087-1-zajec5@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        id S1344122AbhLAVYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 16:24:45 -0500
+Received: from mga06.intel.com ([134.134.136.31]:49413 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229660AbhLAVYk (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 16:24:40 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="297360609"
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="297360609"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 13:21:17 -0800
+X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
+   d="scan'208";a="602309136"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.212.64.69]) ([10.212.64.69])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 13:21:16 -0800
+Message-ID: <f4cc305b-a329-6d27-9fca-b74ebc9fa0c1@intel.com>
+Date:   Wed, 1 Dec 2021 14:21:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Logan Gunthorpe <logang@deltatee.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Marc Zygnier <maz@kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jon Mason <jdmason@kudzu.us>, Allen Hubbe <allenbh@gmail.com>,
+        linux-ntb@googlegroups.com, linux-s390@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org,
+        Joerg Roedel <jroedel@suse.de>,
+        iommu@lists.linux-foundation.org
+References: <20211126230957.239391799@linutronix.de>
+ <20211126232735.547996838@linutronix.de>
+ <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
+ <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
+ <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
+ <20211130202800.GE4670@nvidia.com> <87o861banv.ffs@tglx>
+ <20211201001748.GF4670@nvidia.com> <87mtlkaauo.ffs@tglx>
+ <8c2262ba-173e-0007-bc4c-94ec54b2847d@intel.com> <87pmqg88xq.ffs@tglx>
+ <df00b87e-00dc-d998-8b64-46b16dba46eb@intel.com> <87k0go8432.ffs@tglx>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <87k0go8432.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafał Miłecki <rafal@milecki.pl>
 
-BCM5301X and BCM53573 commits go through Florian's stblinux.git so add
-him as maintainer to make sure people e-mail him when sending patches.
+On 12/1/2021 1:25 PM, Thomas Gleixner wrote:
+> On Wed, Dec 01 2021 at 11:47, Dave Jiang wrote:
+>> On 12/1/2021 11:41 AM, Thomas Gleixner wrote:
+>>>> Hi Thomas. This is actually the IDXD usage for a mediated device passed
+>>>> to a guest kernel when we plumb the pass through of IMS to the guest
+>>>> rather than doing previous implementation of having a MSIX vector on
+>>>> guest backed by IMS.
+>>> Which makes a lot of sense.
+>>>
+>>>> The control block for the mediated device is emulated and therefore an
+>>>> emulated MSIX vector will be surfaced as vector 0. However the queues
+>>>> will backed by IMS vectors. So we end up needing MSIX and IMS coexist
+>>>> running on the guest kernel for the same device.
+>>> Why? What's wrong with using straight MSI-X for all of them?
+>> The hardware implementation does not have enough MSIX vectors for
+>> guests. There are only 9 MSIX vectors total (8 for queues) and 2048 IMS
+>> vectors. So if we are to do MSI-X for all of them, then we need to do
+>> the IMS backed MSIX scheme rather than passthrough IMS to guests.
+> Confused. Are you talking about passing a full IDXD device to the guest
+> or about passing a carved out subdevice, aka. queue?
 
-Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+I'm talking about carving out a subdevice. I had the impression of you 
+wanting IMS passed through for all variations. But it sounds like for a 
+sub-device, you are ok with the implementation of MSIX backed by IMS?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b53fc85c5238..d60e3d7670eb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3626,6 +3626,7 @@ F:	drivers/net/ethernet/broadcom/bcm4908_enet.*
- F:	drivers/net/ethernet/broadcom/unimac.h
- 
- BROADCOM BCM5301X ARM ARCHITECTURE
-+M:	Florian Fainelli <f.fainelli@gmail.com>
- M:	Hauke Mehrtens <hauke@hauke-m.de>
- M:	Rafał Miłecki <zajec5@gmail.com>
- M:	bcm-kernel-feedback-list@broadcom.com
-@@ -3637,6 +3638,7 @@ F:	arch/arm/boot/dts/bcm953012*
- F:	arch/arm/mach-bcm/bcm_5301x.c
- 
- BROADCOM BCM53573 ARM ARCHITECTURE
-+M:	Florian Fainelli <f.fainelli@gmail.com>
- M:	Rafał Miłecki <rafal@milecki.pl>
- L:	bcm-kernel-feedback-list@broadcom.com
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
--- 
-2.31.1
 
+>
+> Thanks,
+>
+>          tglx
+>

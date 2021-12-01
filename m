@@ -2,68 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 503644648F5
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:39:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971044648F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347809AbhLAHms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:42:48 -0500
-Received: from mout.kundenserver.de ([212.227.126.130]:41785 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347744AbhLAHmr (ORCPT
+        id S1347831AbhLAHnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:43:05 -0500
+Received: from szxga03-in.huawei.com ([45.249.212.189]:28206 "EHLO
+        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347744AbhLAHnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:42:47 -0500
-Received: from mail-wr1-f49.google.com ([209.85.221.49]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MPK73-1nFEwq37Hx-00PawJ for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021
- 08:39:25 +0100
-Received: by mail-wr1-f49.google.com with SMTP id v11so50097273wrw.10
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:39:25 -0800 (PST)
-X-Gm-Message-State: AOAM530TNBDgbgoNLpLACDnEoc8L/1TN9gbD8vqKIcpHwZ9Ln/EjRe15
-        WFmzlBvKGXM2fx3IVd2uVGxC0LBK/yjkKmfHkCI=
-X-Google-Smtp-Source: ABdhPJwvNRVCL/nM2dpSEG/anSd9Li4NuYP7RMZkVtAHnEbwsCl1N0uPe/rmQ6Ou9gQAQd5lqVHhjNQqzRJaTmxtW60=
-X-Received: by 2002:a5d:64ea:: with SMTP id g10mr4768401wri.137.1638344365444;
- Tue, 30 Nov 2021 23:39:25 -0800 (PST)
+        Wed, 1 Dec 2021 02:43:03 -0500
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J3rXQ6VYhz8vlL;
+        Wed,  1 Dec 2021 15:37:42 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 1 Dec 2021 15:39:40 +0800
+Subject: Re: [PATCH -next v5 0/3] Fix some issues about mmp
+To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>
+References: <20211020031802.2312022-1-yebin10@huawei.com>
+CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>
+From:   yebin <yebin10@huawei.com>
+Message-ID: <61A726BC.8090303@huawei.com>
+Date:   Wed, 1 Dec 2021 15:39:40 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-References: <202112011148.XrnWip5a-lkp@intel.com>
-In-Reply-To: <202112011148.XrnWip5a-lkp@intel.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 1 Dec 2021 08:39:09 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a0c+zE22ouZKF66gfoqNJuCZTv0r3nnDR+AjxgCLgE87A@mail.gmail.com>
-Message-ID: <CAK8P3a0c+zE22ouZKF66gfoqNJuCZTv0r3nnDR+AjxgCLgE87A@mail.gmail.com>
-Subject: Re: [ardb:for-kernelci 18/28] arch/arm/mach-footbridge/common.c:102:6:
- warning: no previous prototype for function 'dc21285_handle_irq'
-To:     kernel test robot <lkp@intel.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:NuMjmCrvqU7/zV+jfMK+wzCGfg03OmEBBJp5CX7IyNvu/X5S1xv
- pclQcnmhFC3SBA9UZ3SYXAvy1UuWoFkHbiD6/pJrmKXnY2iqD0lN96FPvK7x9vwTV5+G3US
- eY8EL9Wp3D5P4CfKWxC3sRd/pHunM8WZrgbnI99TEvCNJOuILVoiDN8jNW/8dIpqZHb8Joi
- mMbjkbPmGW1RHHOjA4Imw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:T+W2dBg9OJ4=:57HtRRMgV1HTNP+c2t3l6R
- NA22pWoHmUI1gFC4r7zUVkicWJGU2xtuyczGcC0UcexXqi8SbxQvQj4ZrhjfpOc9aoaMn8gre
- +5lBG0Zn7f1N8ZBxMWmZfuMCi0bF/pWKla7FI/a6kazVKt+VHX3JE/ciqbArKMX4lLwY5bfDG
- NST460+og0e5m09D/SIak/OQc713jGzcMIINH/i79SjXGum+T1B7wvw6Qqw1j2sk4wh9llKYw
- wmpyZDKtsLkPTdkgNe6VZlm9d4/rwLWpmHM1/yvhWSjXJIbhyw1z2zEwvv+1sNzDI1GZEI8La
- 0jZcCEG6mTmvpejCJ/DeGVDtIx/VjEObkExznO1rZ1EU2kqQtHMMBpAkXpg8k6g07N03s+Bjt
- pnmXUA7pgVoirArFgGXg4WUcCJadQg8SKibAwfdguQtQ6Ud8TE2fo24slK151JWRp/M/1xPoP
- LS7CMpjz4cwqqRsobZBerNucs4c4jjC9Hjc9rNqXMxPGv92KfeQL1KTS9EI50MidefTRLbrKw
- x2cIRSO/77niJMrkwDQUh/4XVgZI3IebWZv0DkFWooRLwT3j9JH+CIxSxgZ7HYKiOdsSKuesV
- szESngPOjkiY3LEWiYDPpFHFpl8INg8Dgy+o8bfdUywen6Mp1zHUJ81MvdVngkPE0yPdAz2Us
- j2RNs3II/ZPlVo7/WNy8ZjRvDXBNZcY5rF3oY2l+Mhoe6ESMtjgSlheOcky35Qu7Ev4U=
+In-Reply-To: <20211020031802.2312022-1-yebin10@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 4:42 AM kernel test robot <lkp@intel.com> wrote:
+
+
+On 2021/10/20 11:17, Ye Bin wrote:
+> I test mmp function as follow steps:
+> 1. Inject delay 5s in ext4_multi_mount_protect function after
+> "skip:" label.
+> 2. Share HostA block device(sda) with HostB(nbd0) by NBD.
+> 3. Enable mmp feature when mkfs.ext4 sda.
+> 4. Mount sda and nbd0 at the same time.
 >
->    arch/arm/mach-footbridge/common.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+> I found kmmpd never trigger detect multi-mount. Reason is as follow:
+> 1. Kmmpd init seq with 0, if two host have same nodename, will lead to
+> detect confliction very slow, even never detect confliction.
+> 2. When detect confliction in kmmpd, we get 'check_bh' is same with 'bh'.
+> so we compare data with itself.
+> 3. We only trigger detect when ”diff > mmp_check_interval * HZ“,
+> 'mmp_check_interval' is double of 'mmp_update_interval', 'diff' is
+> about 'mmp_update_interval'. So 'diff' is little than 'mmp_check_interval * HZ'
+> normaly. As Jan Kara explain as follows:
+> "I think the check is there only for the case where write_mmp_block() +
+> sleep took longer than mmp_check_interval. I agree that should rarely
+> happen but on a really busy system it is possible and in that case we would
+> miss updating mmp block for too long and so another node could have started
+> using the filesystem. "
+>
+> v1->v2:
+> Fix 'last_check_time' not initialized before checking.
+>
+> v2->v3:
+> 1. drop commit "ext4: introduce last_check_time record previous check time"
+> As Ted explain as follows:
+> "I'd like Andreas to comment here.  My understanding is that MMP
+> originally intended as a safety mechanism which would be used as part
+> of a primary/backup high availability system, but not as the *primary*
+> system where you might try to have two servers simultaneously try to
+> mount the file system and use MMP as the "election" mechanism to
+> decide which server is going to be the primary system, and which would
+> be the backup system.
+>
+> The cost of being able to handle this particular race is it would slow
+> down the mounts of cleanly unmounted systems.
+>
+> There *are* better systems to implement leader elections[1] than using
+> MMP.  Most of these more efficient leader elections assume that you
+> have a working IP network, and so if you have a separate storage
+> network (including a shared SCSI bus) from your standard IP network,
+> then MMP is a useful failsafe in the face of a network partition of
+> your IP network.  The question is whether MMP should be useful for
+> more than that.  And if it isn't, then we should probably document
+> what MMP is and isn't good for, and give advice in the form of an
+> application note for how MMP should be used in the context of a larger
+> system."
+> 2. drop commit "ext4: fix possible store wrong check interval value in disk when umount"
+> 3. simplify read_mmp_block fucntion to avoid UAF
+>
+> v3->v4:
+> 1. drop commit "ext4: init 'seq' with the value which set in 'ext4_multi_mount_protect'"
+> 2. merge "ext4: get buffer head before read_mmp_block" to
+> "ext4: simplify read_mmp_block fucntion"
+> 3. rename "ext4: avoid to re-read mmp check data get from page cache" to
+> "ext4: remove useless bh_check variable"
+> 4. reorder "ext4: remove useless bh_check variable" and
+> "ext4: simplify read_mmp_block fucntion"
+>
+> v4->v5:
+> 1. Fix follow warning:
+>>> fs/ext4/mmp.c:124:15: warning: variable 'mmp_block' set but not used [-Wunused-but-set-variable]
+>             ext4_fsblk_t mmp_block;
+> 2. Fix incorrect judgement in 'ext4_multi_mount_protect'.
+>
+> Ye Bin (3):
+>    ext4: compare to local seq and nodename when check conflict
+>    ext4: remove useless bh_check variable
+>    ext4: simplify read_mmp_block fucntion
+>
+>   fs/ext4/ext4.h |  5 +++-
+>   fs/ext4/mmp.c  | 66 +++++++++++++++++++++-----------------------------
+>   2 files changed, 31 insertions(+), 40 deletions(-)
+Hi, Ted
+I've tested this patch set. If there are no other questions, can it be 
+merged?
 
-Correct, thanks for the report!
-
-Ard, I assume you can fix this up in your tree.
-
-         Arnd

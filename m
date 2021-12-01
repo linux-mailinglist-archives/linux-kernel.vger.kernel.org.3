@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5B0464E7B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4559B464E8A
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349489AbhLANKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:10:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54556 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349469AbhLANKJ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:10:09 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436C9C061574;
-        Wed,  1 Dec 2021 05:06:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1349505AbhLANMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:12:18 -0500
+Received: from marcansoft.com ([212.63.210.85]:33352 "EHLO mail.marcansoft.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1349491AbhLANMR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 08:12:17 -0500
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8EA2BCE1C56;
-        Wed,  1 Dec 2021 13:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CD2DC53FAD;
-        Wed,  1 Dec 2021 13:06:40 +0000 (UTC)
-Date:   Wed, 1 Dec 2021 14:06:37 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>
-Cc:     Anders Roxell <anders.roxell@linaro.org>, shuah@kernel.org,
-        christian@brauner.io, nathan@kernel.org, ndesaulniers@google.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH 1/2] selftests: cgroup: build error multiple outpt files
-Message-ID: <20211201130637.phskqu7rkl5ty2xq@wittgenstein>
-References: <20211105162530.3307666-1-anders.roxell@linaro.org>
- <61b21c4b-fc26-5e41-3aed-22a7e56b04ba@linuxfoundation.org>
- <20211123142600.r5d52iwhbqhujiux@wittgenstein>
- <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 48A9C419B4;
+        Wed,  1 Dec 2021 13:08:52 +0000 (UTC)
+Subject: Re: [PATCHv3] ethernet: aquantia: Try MAC address from device tree
+To:     Tianhao Chai <cth451@gmail.com>,
+        Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Julian Wiedmann <jwi@linux.ibm.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+References: <20211201025706.GA2181732@cth-desktop-dorm.mad.wi.cth451.me>
+From:   Hector Martin <marcan@marcan.st>
+Message-ID: <4f496718-a6fb-95af-24e3-8061a0c381c4@marcan.st>
+Date:   Wed, 1 Dec 2021 22:08:49 +0900
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <815f4089-49e0-aada-aaf4-83fb079abef7@linuxfoundation.org>
+In-Reply-To: <20211201025706.GA2181732@cth-desktop-dorm.mad.wi.cth451.me>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: es-ES
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 09:41:49AM -0700, Shuah Khan wrote:
-> On 11/23/21 7:26 AM, Christian Brauner wrote:
-> > On Fri, Nov 19, 2021 at 05:22:20PM -0700, Shuah Khan wrote:
-> > > On 11/5/21 10:25 AM, Anders Roxell wrote:
-> > > > When building selftests/cgroup: with clang the following error are seen:
-> > > > 
-> > > > clang -Wall -pthread    test_memcontrol.c cgroup_util.c ../clone3/clone3_selftests.h  -o /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol
-> > > > clang: error: cannot specify -o when generating multiple output files
-> > > > make[3]: *** [../lib.mk:146: /home/anders/.cache/tuxmake/builds/current/kselftest/cgroup/test_memcontrol] Error 1
-> > > > 
-> > > > Rework to add the header files to LOCAL_HDRS before including ../lib.mk,
-> > > > since the dependency is evaluated in '$(OUTPUT)/%:%.c $(LOCAL_HDRS)' in
-> > > > file lib.mk.
-> > > > 
-> > > > Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> > > > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
-> > > > ---
-> > > >    tools/testing/selftests/cgroup/Makefile | 12 +++++++-----
-> > > >    tools/testing/selftests/lib.mk          |  2 +-
-> > > >    2 files changed, 8 insertions(+), 6 deletions(-)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-> > > > index 59e222460581..745fe25fa0b9 100644
-> > > > --- a/tools/testing/selftests/cgroup/Makefile
-> > > > +++ b/tools/testing/selftests/cgroup/Makefile
-> > > > @@ -11,10 +11,12 @@ TEST_GEN_PROGS += test_core
-> > > >    TEST_GEN_PROGS += test_freezer
-> > > >    TEST_GEN_PROGS += test_kill
-> > > > +LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
-> > > > +
-> > > 
-> > > This looks odd to me. Why are we introducing dependencies between tests?
-> > > clone3 includes in cgroup? Looks odd to me.
-> > 
-> > The cgroup tests need access to clone3() functionality in order to test
-> > CLONE_INTO_CGROUP which is more suited to be placed alongside the cgroup
-> > tests. There are a few other tests that include the clone3 header.
-> > 
+On 01/12/2021 11.57, Tianhao Chai wrote:
+> Apple M1 Mac minis (2020) with 10GE NICs do not have MAC address in the
+> card, but instead need to obtain MAC addresses from the device tree. In
+> this case the hardware will report an invalid MAC.
 > 
-> If other tests are also including this header, we could move it up under
-> selftests level. Might have to add include directory.
+> Currently atlantic driver does not query the DT for MAC address and will
+> randomly assign a MAC if the NIC doesn't have a permanent MAC burnt in.
+> This patch causes the driver to perfer a valid MAC address from OF (if
+> present) over HW self-reported MAC and only fall back to a random MAC
+> address when neither of them is valid.
+> 
+> Signed-off-by: Tianhao Chai <cth451@gmail.com>
+> ---
+>   .../net/ethernet/aquantia/atlantic/aq_nic.c   | 24 +++++++++++--------
+>   1 file changed, 14 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+> index 1acf544afeb4..2a1ab154f681 100644
+> --- a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+> +++ b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+> @@ -316,18 +316,22 @@ int aq_nic_ndev_register(struct aq_nic_s *self)
+>   	aq_macsec_init(self);
+>   #endif
+>   
+> -	mutex_lock(&self->fwreq_mutex);
+> -	err = self->aq_fw_ops->get_mac_permanent(self->aq_hw, addr);
+> -	mutex_unlock(&self->fwreq_mutex);
+> -	if (err)
+> -		goto err_exit;
+> +	if (platform_get_ethdev_address(&self->pdev->dev, self->ndev) != 0) {
+> +		// If DT has none or an invalid one, ask device for MAC address
+> +		mutex_lock(&self->fwreq_mutex);
+> +		err = self->aq_fw_ops->get_mac_permanent(self->aq_hw, addr);
+> +		mutex_unlock(&self->fwreq_mutex);
+>   
+> -	eth_hw_addr_set(self->ndev, addr);
+> +		if (err)
+> +			goto err_exit;
+>   
+> -	if (!is_valid_ether_addr(self->ndev->dev_addr) ||
+> -	    !aq_nic_is_valid_ether_addr(self->ndev->dev_addr)) {
+> -		netdev_warn(self->ndev, "MAC is invalid, will use random.");
+> -		eth_hw_addr_random(self->ndev);
+> +		if (is_valid_ether_addr(addr) &&
+> +		    aq_nic_is_valid_ether_addr(addr)) {
+> +			eth_hw_addr_set(self->ndev, addr);
+> +		} else {
+> +			netdev_warn(self->ndev, "MAC is invalid, will use random.");
+> +			eth_hw_addr_random(self->ndev);
+> +		}
+>   	}
+>   
+>   #if defined(AQ_CFG_MAC_ADDR_PERMANENT)
+> 
 
-No objection from me if that's useful. I won't have time for that in the
-near future. (This might be of interest for one of the LF programs that
-help get new folks interested in kernel development started.)
+Reviewed-by: Hector Martin <marcan@marcan.st>
 
-Christian
+-- 
+Hector Martin (marcan@marcan.st)
+Public Key: https://mrcn.st/pub

@@ -2,131 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D28B465233
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B9F5465238
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:57:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351235AbhLAQBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351266AbhLAQA5 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:00:57 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37902C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:57:36 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id gb13-20020a17090b060d00b001a674e2c4a8so1962758pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:57:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iMjb22+5HnYiWezXGd8BpfVqKH0j2HDeYCBfIiIkNVo=;
-        b=g0HO6kFkgvnmY+B3hcQqit8BWq8G7VNpEMqDmNa4m2h5ZTq4k3zbAfbyMIb8tNOqfF
-         yKRc66qz5WN5vu1fKZLMrCM/6zzq/0CRGHBxmgnDztpzKwMB2stVS8gKw6ZA1ea+/U0c
-         am5jLOAk+rgOqRqwVCKNN537M7oISzTotwKE2TiRWlR8wuNQaapsS+tMDe8nxYexKXYg
-         kYQh+3G+bmg5sBa/bMrkELsHYUBYEvfWHggjqOPHDuA0VZgq0lMUDQtnDy3VBD7yJNP/
-         5XHlk6hrPeim0G8j68rkAwKeTJBHnq/VQ2IY17cDHjAQ7cZ22IwOmpNyfttAvSGOTaVM
-         e75A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iMjb22+5HnYiWezXGd8BpfVqKH0j2HDeYCBfIiIkNVo=;
-        b=X8u/rgLwAOMk7+PXMbnLYATweDlw2Fu0+c86tD3bENlmxjwrKuVxYuJQdb3p5g+JFk
-         bC9H7bx9IBBy29KDAaOzm48RULK/KbImpIPCiC+JWT+6qAoSQd6bXUCbyoXCT+c8fqvT
-         P0kFN55xz5VZxBMZD2X/tGTO2YSouuxiVVyWZ+saXQmbHx6qBtNyX2gCvVVBsaESR0AY
-         +SHK1iStYzXv8fdk6ISjygddntjmqocefNGWkRK4TyAjsHbjdtaiGlrHweVupbwX4IPZ
-         coKqfkCuiBm+uhmZ1EMfWGkuUSh8ZrNRu8b/8vWvXivFGQIXcUrY1YPs7ZnuuNxV48Bu
-         8yxg==
-X-Gm-Message-State: AOAM530JYa/FC5WPSoYnE2E7nkv102s7g6281B1KWGbk9uRnMO65JpEZ
-        dme65mHgE3nsA4Ak/B642Uw2mnh6GTbKSRFGUiw=
-X-Google-Smtp-Source: ABdhPJxieeuL5+UhxVUkW3jolN2MUEXlreNEd7Kp4GrdkbFgQEVufS8lZ6H+pIBkHjXWdpFD+6FVSbAnMJWinHt2wd8=
-X-Received: by 2002:a17:90a:6487:: with SMTP id h7mr8554432pjj.40.1638374255666;
- Wed, 01 Dec 2021 07:57:35 -0800 (PST)
+        id S1351248AbhLAQBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:01:15 -0500
+Received: from foss.arm.com ([217.140.110.172]:40610 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1351244AbhLAQBM (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 11:01:12 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C397C143B;
+        Wed,  1 Dec 2021 07:57:50 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.65.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 254243F766;
+        Wed,  1 Dec 2021 07:57:48 -0800 (PST)
+Date:   Wed, 1 Dec 2021 15:57:45 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] kcov: fix generic Kconfig dependencies if
+ ARCH_WANTS_NO_INSTR
+Message-ID: <YaebeW5uYWFsDD8W@FVFF77S0Q05N>
+References: <20211201152604.3984495-1-elver@google.com>
 MIME-Version: 1.0
-References: <YaZP2HzTQw1QJxOK@intel.com> <20211201152904.182293-1-zhou1615@umn.edu>
-In-Reply-To: <20211201152904.182293-1-zhou1615@umn.edu>
-From:   Patrik Jakobsson <patrik.r.jakobsson@gmail.com>
-Date:   Wed, 1 Dec 2021 16:57:24 +0100
-Message-ID: <CAMeQTsY0RHJsJzNW-77gK_=WCetvhrUVbF4KA+Qu3uaV1CCR_w@mail.gmail.com>
-Subject: Re: [PATCH v2] drm/gma500/cdv: Fix a wild pointer dereference in cdv_intel_dp_get_modes()
-To:     Zhou Qingyang <zhou1615@umn.edu>
-Cc:     kjlu@umn.edu, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dave Airlie <airlied@redhat.com>,
-        Alan Cox <alan@linux.intel.com>,
-        Zhao Yakui <yakui.zhao@intel.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201152604.3984495-1-elver@google.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 4:29 PM Zhou Qingyang <zhou1615@umn.edu> wrote:
->
-> In cdv_intel_dp_get_modes(), the third return value of
-> drm_mode_duplicate() is assigned to mode and used in
-> drm_mode_probed_add(). drm_mode_probed_add() passes mode->head to
-> list_add_tail(). list_add_tail() will further call __list_add() and
-> there is a dereference of mode->head in __list_add(), which could lead
-> to a wild pointer dereference on failure of drm_mode_duplicate().
->
-> Fix this bug by adding a check of mode.
->
-> This bug was found by a static analyzer. The analysis employs
-> differential checking to identify inconsistent security operations
-> (e.g., checks or kfrees) between two code paths and confirms that the
-> inconsistent operations are not recovered in the current function or
-> the callers, so they constitute bugs.
->
-> Note that, as a bug found by static analysis, it can be a false
-> positive or hard to trigger. Multiple researchers have cross-reviewed
-> the bug.
->
+Hi Marco,
 
-Is it really necessary to explain what the static analyzer does and
-that it can be faulty in every single patch?
-"This bug was found by a static analyzer" is enough for me.
+On Wed, Dec 01, 2021 at 04:26:04PM +0100, Marco Elver wrote:
+> Until recent versions of GCC and Clang, it was not possible to disable
+> KCOV instrumentation via a function attribute. The relevant function
+> attribute was introduced in 540540d06e9d9 ("kcov: add
+> __no_sanitize_coverage to fix noinstr for all architectures").
+> 
+> x86 was the first architecture to want a working noinstr, and at the
+> time no compiler support for the attribute existed yet. Therefore,
+> 0f1441b44e823 ("objtool: Fix noinstr vs KCOV") introduced the ability to
+> NOP __sanitizer_cov_*() calls in .noinstr.text.
+> 
+> However, this doesn't work for other architectures like arm64 and s390
+> that want a working noinstr per ARCH_WANTS_NO_INSTR.
+> 
+> At the time of 0f1441b44e823, we didn't yet have ARCH_WANTS_NO_INSTR,
+> but now we can move the Kconfig dependency checks to the generic KCOV
+> option. KCOV will be available if:
+> 
+> 	- architecture does not care about noinstr, OR
+> 	- we have objtool support (like on x86), OR
+> 	- GCC is 12.0 or newer, OR
+> 	- Clang is 13.0 or newer.
 
-> Builds with CONFIG_DRM_GMA500=m show no new warnings,
-> and our static analyzer no longer warns about this code.
+I agree this is the right thing to do, but since GCC 12.0 isn't out yet (and
+only x86 has objtool atm) this will prevent using KCOV with a released GCC on
+arm64 and s390, which would be unfortunate for Syzkaller.
 
-I assume all patches to be at least compile tested before submitted,
-so if you didn't actually run this code on hardware it's better to
-replace the above with:
-"Only compile tested".
+AFAICT the relevant GCC commit is:
 
--Patrik
+   https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=cec4d4a6782c9bd8d071839c50a239c49caca689
 
->
-> Fixes: d112a8163f83 ("gma500/cdv: Add eDP support")
-> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+Currently we mostly get away with disabling KCOV for while compilation units,
+so maybe it's worth waiting for the GCC 12.0 release, and restricting things
+once that's out?
+
+Thanks,
+Mark.
+
+> 
+> Signed-off-by: Marco Elver <elver@google.com>
 > ---
-> Changes in V2:
->   -  Instead of returning -ENOMEM, this patch returns 0
->   -  Use DRM_DEBUG_KMS to report the failure of drm_mode_duplicate()
->
->  drivers/gpu/drm/gma500/cdv_intel_dp.c | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/drivers/gpu/drm/gma500/cdv_intel_dp.c b/drivers/gpu/drm/gma500/cdv_intel_dp.c
-> index ba6ad1466374..bf47db488b7b 100644
-> --- a/drivers/gpu/drm/gma500/cdv_intel_dp.c
-> +++ b/drivers/gpu/drm/gma500/cdv_intel_dp.c
-> @@ -1773,6 +1773,11 @@ static int cdv_intel_dp_get_modes(struct drm_connector *connector)
->                 if (intel_dp->panel_fixed_mode != NULL) {
->                         struct drm_display_mode *mode;
->                         mode = drm_mode_duplicate(dev, intel_dp->panel_fixed_mode);
-> +                       if (!mode) {
-> +                               DRM_DEBUG_KMS("Failure in drm_mode_duplicate()\n");
-> +                               return 0;
-> +                       }
-> +
->                         drm_mode_probed_add(connector, mode);
->                         return 1;
->                 }
-> --
-> 2.25.1
->
+>  arch/x86/Kconfig  | 2 +-
+>  lib/Kconfig.debug | 2 ++
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 95dd1ee01546..c030b2ee93b3 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -78,7 +78,7 @@ config X86
+>  	select ARCH_HAS_FILTER_PGPROT
+>  	select ARCH_HAS_FORTIFY_SOURCE
+>  	select ARCH_HAS_GCOV_PROFILE_ALL
+> -	select ARCH_HAS_KCOV			if X86_64 && STACK_VALIDATION
+> +	select ARCH_HAS_KCOV			if X86_64
+>  	select ARCH_HAS_MEM_ENCRYPT
+>  	select ARCH_HAS_MEMBARRIER_SYNC_CORE
+>  	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 9ef7ce18b4f5..589c8aaa2d5b 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -1977,6 +1977,8 @@ config KCOV
+>  	bool "Code coverage for fuzzing"
+>  	depends on ARCH_HAS_KCOV
+>  	depends on CC_HAS_SANCOV_TRACE_PC || GCC_PLUGINS
+> +	depends on !ARCH_WANTS_NO_INSTR || STACK_VALIDATION || \
+> +		   GCC_VERSION >= 120000 || CLANG_VERSION >= 130000
+>  	select DEBUG_FS
+>  	select GCC_PLUGIN_SANCOV if !CC_HAS_SANCOV_TRACE_PC
+>  	help
+> -- 
+> 2.34.0.rc2.393.gf8c9666880-goog
+> 

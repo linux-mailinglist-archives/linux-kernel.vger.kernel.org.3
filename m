@@ -2,138 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87A484658FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7524658FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353523AbhLAWVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
+        id S1353548AbhLAWVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:21:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242357AbhLAWUc (ORCPT
+        with ESMTP id S1353498AbhLAWUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:20:32 -0500
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8375CC061574;
-        Wed,  1 Dec 2021 14:17:10 -0800 (PST)
-Received: by mail-oi1-x229.google.com with SMTP id bk14so51601258oib.7;
-        Wed, 01 Dec 2021 14:17:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=UZD+wACY3SAuTXTUljVln3laEvcK5M7PHpyfxljx+Jk=;
-        b=AFp0DZrbg+kL+LwrvONlq6K9FDEB8l4aqulKDEq9wkZYI1E3lFkReWCc4n8My8QcOV
-         FK5pStCUOz5JLp7w22iP6i+uL/Ci4JMR0VjMeNKUlj7Lbb8k3ukrWMgpiUUVxdfTTEh3
-         4v0vwPCtSo8PzDZN+xvuS3AWguRN/2N5QUCoCf9ffXnO02Sb7bW4my+rFvzJRvVBOCnn
-         IxA/THxjH/ytSTKJPvX3pH+4GpYDri3PxrtG3M9qeID9eYn9a82SiLaT8jrLXp2bPJYU
-         ll6jVQjBIV4khOG/hQI4u01oXbo9HFh48Mwg4tSGWxHHf/nqzgwGD4WhcZN5CyGwObdT
-         UKGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=UZD+wACY3SAuTXTUljVln3laEvcK5M7PHpyfxljx+Jk=;
-        b=c0F+jup9q9/PC1Qxcm3Bw92EntGmylqwY2vUZhAfHPMasFIuntSyZBXG9mTWXVofDr
-         S6zjvh5D7ET8YmAN4MuxgVT9L2XEj6V2Q0EpepeVGtX2RSjQbBBMFNnjRmwKzGkDF3Qc
-         8+u1VqildEtGW+fWhdCmtXz3+6DFcFr08NfVcZLV6oF7p9e7lMTey/rSWjQG1bY7Qmw5
-         Y79Cje4kaFVAK6AuhLp1RnJIHCyUK7ZePQH6vPS2KVU0kK8AjGzWg8MawWbEU1NvrF4q
-         544ICB5FgUsCGcdh5+EiPhhTOZ6VnjQF4WjMFLhhmPNaHIzVYes2kRcgg2tLhKKstIpN
-         yi4g==
-X-Gm-Message-State: AOAM531uMk8dqXZXZb8PEsO7lG6vYLFkYLBEcAO5CH9ZiEqWUInsOlPu
-        VG7jmy8M6hcSZ+W47DlskeUz9dCmiz8=
-X-Google-Smtp-Source: ABdhPJy/Ko5RmZFfrSdHWpJGy3yrJjyfbKqIy4l3ek0avXdcJzN5Kt1mcKgyyxew4PMN97s50heykw==
-X-Received: by 2002:a05:6808:1403:: with SMTP id w3mr1054161oiv.80.1638397029652;
-        Wed, 01 Dec 2021 14:17:09 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id e3sm382044otk.71.2021.12.01.14.17.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 14:17:09 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 2/5] MIPS: ralink: implement
- 'pcibios_root_bridge_prepare()'
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-pci@vger.kernel.org
-Cc:     linux-mips@vger.kernel.org, tsbogend@alpha.franken.de,
-        lorenzo.pieralisi@arm.com, bhelgaas@google.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org
-References: <20211201215127.23550-1-sergio.paracuellos@gmail.com>
- <20211201215127.23550-3-sergio.paracuellos@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <d243a90d-25b2-a65f-b69d-af7497db8742@roeck-us.net>
-Date:   Wed, 1 Dec 2021 14:17:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 1 Dec 2021 17:20:42 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080E8C061574;
+        Wed,  1 Dec 2021 14:17:18 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638397036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JEntfi+R1B0LdGVSzyc+PZLj+JC9XJ08L6abd7hjSZI=;
+        b=gjlu2BnSyIsdoFUY93w/MS/G44ArV1VpPX9nPvKuVsKJkXsdZe0D5NrSVMlp/s8yWc3qA/
+        Xn6LLYM96/sekiGyS8/WcL/R/jO7vAo8Pon5Aotq4vqO8l2TnmMNNx8i6/LmD8NrQXMTvx
+        FKK6GwdeSbpeG/FtFS7np72Zi8mqQKuo4BBhjM/GgluNZ+oveio/6KeWab1wk831B1RDvt
+        2Eu6X9iqCJ3yX76iN4DSPe2LeY2BE5qmPccGjcvbixjeN24iBHNAFPTAqpmGAG0EMd9sFs
+        025hRKxOg8+pP7D2RJZb5dXpku3kr+eLtO2dgn944UkVGCbrhtvlcZl9n6AxQQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638397036;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JEntfi+R1B0LdGVSzyc+PZLj+JC9XJ08L6abd7hjSZI=;
+        b=z3NRdTjrWa4gKapXO/e5RBnmEjy75iPzjHnOv78hif7BdRkrBb7XwnFJadjU57et3rUi2r
+        vV4vOwWaiQ+aQlCQ==
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+In-Reply-To: <20211202090540.1f22fa39@canb.auug.org.au>
+References: <20211126145201.5aefa68c@canb.auug.org.au>
+ <CAK8P3a078LiivyzUiH+D--iRsQGTcQ_hy=-h7crynrbQ6ZYn6A@mail.gmail.com>
+ <20211202090540.1f22fa39@canb.auug.org.au>
+Date:   Wed, 01 Dec 2021 23:17:16 +0100
+Message-ID: <87zgpk6kcz.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <20211201215127.23550-3-sergio.paracuellos@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 1:51 PM, Sergio Paracuellos wrote:
-> PCI core code call 'pcibios_root_bridge_prepare()' function inside function
-> 'pci_register_host_bridge()'. This point is very good way to properly enter
-> into this MIPS ralink specific code to properly setup I/O coherency units
-> with PCI memory addresses.
-> 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> ---
->   arch/mips/ralink/mt7621.c | 30 ++++++++++++++++++++++++++++++
->   1 file changed, 30 insertions(+)
-> 
-> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-> index bd71f5b14238..7649416c1cd7 100644
-> --- a/arch/mips/ralink/mt7621.c
-> +++ b/arch/mips/ralink/mt7621.c
-> @@ -10,6 +10,7 @@
->   #include <linux/slab.h>
->   #include <linux/sys_soc.h>
->   #include <linux/memblock.h>
-> +#include <linux/pci.h>
->   
->   #include <asm/bootinfo.h>
->   #include <asm/mipsregs.h>
-> @@ -22,6 +23,35 @@
->   
->   static void *detect_magic __initdata = detect_memory_region;
->   
-> +int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
-> +{
-> +	struct resource_entry *entry;
-> +	resource_size_t mask;
-> +
-> +	entry = resource_list_first_type(&bridge->windows, IORESOURCE_MEM);
-> +	if (!entry) {
-> +		pr_err("Cannot get memory resource\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (mips_cps_numiocu(0)) {
-> +		/*
-> +		 * FIXME: hardware doesn't accept mask values with 1s after
-> +		 * 0s (e.g. 0xffef), so it would be great to warn if that's
-> +		 * about to happen
-> +		 */ > +		mask = ~(entry->res->end - entry->res->start);
-> +
+On Thu, Dec 02 2021 at 09:05, Stephen Rothwell wrote:
+> On Fri, 26 Nov 2021 11:01:52 +0100 Arnd Bergmann <arnd@arndb.de> wrote:
+>> 
+>> Thanks a lot for the report, I sent a fix now:
+>> 
+>> https://lore.kernel.org/lkml/20211126095852.455492-1-arnd@kernel.org
+>
+> I am still getting this failure (Arnd's fix has not been applied).
 
-Try something like this:
-		WARN_ON((mask != ~0UL && BIT(ffz(mask)) - 1 != mask);
+It got applied, but due to tip maintainer confusion the next branch was
+not updated. Will be fixed tomorrow.
 
-> +		write_gcr_reg1_base(entry->res->start);
-> +		write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
-> +		pr_info("PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
-> +			(unsigned long long)read_gcr_reg1_base(),
-> +			(unsigned long long)read_gcr_reg1_mask());
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   phys_addr_t mips_cpc_default_phys_base(void)
->   {
->   	panic("Cannot detect cpc address");
-> 
+Thanks,
 
+        tglx

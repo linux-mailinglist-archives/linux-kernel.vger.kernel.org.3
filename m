@@ -2,87 +2,432 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D1415464C2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05463464C32
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:56:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348840AbhLAK6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:58:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232093AbhLAK6R (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:58:17 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F93C061574;
-        Wed,  1 Dec 2021 02:54:56 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id t5so100233644edd.0;
-        Wed, 01 Dec 2021 02:54:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=OvJoAjsiwp/bIqgJqHb/Ct3NhVVdCidlBQIJ1jfhjxs=;
-        b=Ta5UwXQvxUApA7IqpY3NDy68+xmL0+wr28tsdHISkNUFTGtfo7ptrUvzPoouoG4Nx2
-         osPBXDez94IdJ/Ji8qVLfg69ULnlL2GEWjuFInCCKrQbi65AUPgw6NbEIRVdzbIEYR7c
-         x0Kx4WQK+IbDaVrUC13ojGgd4ckfNAl8tl3vooROqTe/KKn31IOCSbXfp8NcdnqCbwNZ
-         HhRk+c3bxQxbAaQ1j+L9xwtBKR1zEm0vc9H1nR8oDadA8hNUjk7SQDDuOCI+SFCINZda
-         zEvhNiVGZOXCBPwzExF5WQL8TDmt6z++I6hoKF3dxWZ9NbfFynMR8FEXS5ipoSL6ZrI0
-         vZCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=OvJoAjsiwp/bIqgJqHb/Ct3NhVVdCidlBQIJ1jfhjxs=;
-        b=yqd5SbaBrEzWwBTYSkqe+cZsDB/Xunii04SG5bulXfXrMS2nYz564EbCKjuaumqD6k
-         n6796NcGaKfKpnUVxsR2hsAgifMIcvl0jpdEqAkG5mWwn2a6GyNZ299xSZwDtD1FsBz3
-         SthpDFng+T66beaxVaqGNEK4aVOOxwi7WPzrcjGH3Z7DmzDWl4/vNyS7lvf+tjryGQTF
-         ZkQp9U9MNvX4CBYdvmeieW/qDP3vr84wCVDBopp0iQ41HxLN5uyfrTmISHvG3F/MvmYD
-         eBQt3d0S7EbPd3zCiRAwz5N7kZIqG60wycopw7yn+8bvmqa0INXr2IjQUtqaMU/OFJ/s
-         D1hg==
-X-Gm-Message-State: AOAM533zJeUFcbcLubPTxb5VDJt1v/84cyNf4gxYOQ7feuhFCylWUL2T
-        b8kMm92cdWlcZXAZYEi2NH+iTtKHd5y/FbioYc0=
-X-Google-Smtp-Source: ABdhPJyMWHVjrLETt3XzlgtJwBoFDiG2sOhLr7LzkkX2v2atvCCOmIF8fnH8GGIVBIfk+JoF72F7zcD7q9iN3fMwxgw=
-X-Received: by 2002:aa7:db8d:: with SMTP id u13mr7199099edt.111.1638356095305;
- Wed, 01 Dec 2021 02:54:55 -0800 (PST)
+        id S1348848AbhLAK7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:59:52 -0500
+Received: from foss.arm.com ([217.140.110.172]:33900 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232093AbhLAK7u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 05:59:50 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADA5611B3;
+        Wed,  1 Dec 2021 02:56:29 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.65.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E0FA03F694;
+        Wed,  1 Dec 2021 02:56:26 -0800 (PST)
+Date:   Wed, 1 Dec 2021 10:56:21 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        paulmck@kernel.org, mtosatti <mtosatti@redhat.com>,
+        frederic <frederic@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Subject: Re: [PATCH] Documentation: Fill the gaps about entry/noinstr
+ constraints
+Message-ID: <YadU1aSE6/0yGWny@FVFF77S0Q05N>
+References: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
+ <875ys9dacq.ffs@tglx>
+ <20211130091356.7336e277@gandalf.local.home>
+ <878rx5b7i5.ffs@tglx>
 MIME-Version: 1.0
-References: <20211130111325.29328-1-semen.protsenko@linaro.org> <20211130111325.29328-4-semen.protsenko@linaro.org>
-In-Reply-To: <20211130111325.29328-4-semen.protsenko@linaro.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 1 Dec 2021 12:54:19 +0200
-Message-ID: <CAHp75Vd8PFhs8_Ji5x1X2Ph5ey+8JrRuneWCrG=5a+52Lh-ptQ@mail.gmail.com>
-Subject: Re: [PATCH v2 RESEND 3/5] tty: serial: samsung: Remove USI initialization
-To:     Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <878rx5b7i5.ffs@tglx>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 12:42 AM Sam Protsenko
-<semen.protsenko@linaro.org> wrote:
->
-> USI control is now extracted to dedicated USI driver. Remove USI related
+Hi Thomas,
 
-the dedicated
+On Tue, Nov 30, 2021 at 11:31:30PM +0100, Thomas Gleixner wrote:
+> The entry/exit handling for exceptions, interrupts, syscalls and KVM is
+> not really documented except for some comments.
+> 
+> Fill the gaps.
 
-> code from serial driver to avoid conflicts and code duplication.
+Thanks for this! Now there's less chance I'll get this wrong. :)
 
-Would it break run-time bisectability?
-If so, why is it not a problem?
+I have a couple of minor comments below -- mostly typo/formatting junk.
 
+> 
+> Reported-by: Nicolas Saenz Julienne <nsaenzju@redhat.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  Documentation/core-api/entry.rst |  268 +++++++++++++++++++++++++++++++++++++++
+>  Documentation/core-api/index.rst |    8 +
+>  kernel/entry/common.c            |    1 
 
--- 
-With Best Regards,
-Andy Shevchenko
+I think the change to kernel/entry/common.c got included by accident?
+
+>  3 files changed, 276 insertions(+), 1 deletion(-)
+> 
+> --- /dev/null
+> +++ b/Documentation/core-api/entry.rst
+> @@ -0,0 +1,268 @@
+> +Entry/exit handling for exceptions, interrupts, syscalls and KVM
+> +================================================================
+> +
+> +For any transition from one execution domain into another the kernel
+> +requires update of various states. The state updates have strict rules
+> +versus ordering.
+> +
+> +The states which need to be updated are:
+> +
+> +  * Lockdep
+> +  * RCU
+> +  * Preemption counter
+> +  * Tracing
+> +  * Time accounting
+> +
+> +The update order depends on the transition type and is explained below in
+> +the transition type sections.
+> +
+> +Non-instrumentable code - noinstr
+> +---------------------------------
+> +
+> +Low level transition code cannot be instrumented before RCU is watching and
+> +after RCU went into a non watching state (NOHZ, NOHZ_FULL) as most
+> +instrumentation facilities depend on RCU.
+> +
+> +Aside of that many architectures have to save register state, e.g. debug or
+> +cause registers before another exception of the same type can happen. A
+> +breakpoint in the breakpoint entry code would overwrite the debug registers
+> +of the inital breakpoint.
+> +
+> +Such code has to be marked with the 'noinstr' attribute. That places the
+> +code into a special section which is taboo for instrumentation and debug
+> +facilities.
+> +
+> +In a function which is marked 'noinstr' it's only allowed to call into
+> +non-instrumentable code except when the invocation of instrumentable code
+> +is annotated with a instrumentation_begin()/instrumentation_end() pair::
+> +
+> +  noinstr void entry(void)
+> +  {
+> +  	handle_entry();     <-- must be 'noinstr' or '__always_inline'
+> +	...
+> +	instrumentation_begin();
+> +	handle_context();   <-- instrumentable code
+> +	instrumentation_end();
+> +	...
+> +	handle_exit();     <-- must be 'noinstr' or '__always_inline'
+> +  }
+> +
+> +This allows verification of the 'noinstr' restrictions via objtool on
+> +supported architectures.
+> +
+> +Invoking non-instrumentable functions from instrumentable context has no
+> +restrictions and is useful to protect e.g. state switching which would
+> +cause malfunction if instrumented.
+> +
+> +All non-instrumentable entry/exit code sections before and after the RCU
+> +state transitions must run with interrupts disabled.
+> +
+> +Syscalls
+> +--------
+> +
+> +Syscall entry exit code starts obviously in low level architecture specific
+
+As a small nit, can we remove the "obviously"? It's certainly obvious to you
+and me, but it doesn't meaningfully affect the sentence either way.
+
+> +assembly code and calls out into C-code after establishing low level
+> +architecture specific state and stack frames. This low level code must not
+> +be instrumented. A typical syscall handling function invoked from low level
+> +assembly code looks like this::
+> +
+> +  noinstr void do_syscall(struct pt_regs \*regs, int nr)
+                                            ^^
+
+Is `\*` necessary here? ... and/or should this be an explicit code block (which
+IIUC doesn't require this esacping), e.g.
+
+.. code-block:: c
+
+      noinstr void do_syscall(struct pt_regs *regs, int nr)
+	{
+		...
+	}
+
+Similar comment for the other code snippets in this patch.
+
+> +  {
+> +	arch_syscall_enter(regs);
+> +	nr = syscall_enter_from_user_mode(regs, nr);
+> +
+> +	instrumentation_begin();
+> +
+> +	if (!invoke_syscall(regs, nr) && nr != -1)
+> +	 	result_reg(regs) = __sys_ni_syscall(regs);
+> +
+> +	instrumentation_end();
+> +
+> +	syscall_exit_to_user_mode(regs);
+> +  }
+> +
+> +syscall_enter_from_user_mode() first invokes enter_from_user_mode() which
+> +establishes state in the following order:
+> +
+> +  * Lockdep
+> +  * RCU / Context tracking
+> +  * Tracing
+> +
+> +and then invokes the various entry work functions like ptrace, seccomp,
+> +audit, syscall tracing etc. After the function returns instrumentable code
+> +can be invoked. After returning from the syscall handler the instrumentable
+> +code section ends and syscall_exit_to_user_mode() is invoked.
+> +
+> +syscall_exit_to_user_mode() handles all work which needs to be done before
+> +returning to user space like tracing, audit, signals, task work etc. After
+> +that it invokes exit_to_user_mode() which again handles the state
+> +transition in the reverse order:
+> +
+> +  * Tracing
+> +  * RCU / Context tracking
+> +  * Lockdep
+> +
+> +syscall_enter_from_user_mode() and syscall_exit_to_user_mode() are also
+> +available as fine grained subfunctions in cases where the architecture code
+> +has to do extra work between the various steps. In such cases it has to
+> +ensure that enter_from_user_mode() is called first on entry and
+> +exit_to_user_mode() is called last on exit.
+> +
+> +
+> +KVM
+> +---
+> +
+> +Entering or exiting guest mode is very similar to syscalls. From the host
+> +kernel point of view the CPU goes off into user space when entering the
+> +guest and returns to the kernel on exit.
+> +
+> +kvm_guest_enter_irqoff() is a KVM specific variant of exit_to_user_mode()
+> +and kvm_guest_exit_irqoff() is the KVM variant of enter_from_user_mode().
+> +The state operations have the same ordering.
+> +
+> +Task work handling is done separately for guest at the boundary of the
+> +vcpu_run() loop via xfer_to_guest_mode_handle_work() which is a subset of
+> +the work handled on return to user space.
+> +
+> +Interrupts and regular exceptions
+> +---------------------------------
+> +
+> +Interrupts entry and exit handling is slightly more complex than syscalls
+> +and KVM transitions.
+> +
+> +If an interrupt is raised while the CPU executes in user space, the entry
+> +and exit handling is exactly the same as for syscalls.
+> +
+> +If the interrupt is raised while the CPU executes in kernel space the entry
+> +and exit handling is slightly different. RCU state is only updated when the
+> +interrupt was raised in context of the idle task because that's the only
+
+Since we have an idle task for each cpu, perhaps either:
+
+  s/the idle task/an idle task/
+  s/the idle task/the CPU's idle task/
+
+> +kernel context where RCU can be not watching on NOHZ enabled kernels.
+> +Lockdep and tracing have to be updated unconditionally.
+> +
+> +irqentry_enter() and irqentry_exit() provide the implementation for this.
+> +
+> +The architecture specific part looks similar to syscall handling::
+> +
+> +  noinstr void do_interrupt(struct pt_regs \*regs, int nr)
+> +  {
+> +	arch_interrupt_enter(regs);
+> +	state = irqentry_enter(regs);
+> +
+> +	instrumentation_begin();
+> +
+> +	irq_enter_rcu();
+> +	invoke_irq_handler(regs, nr);
+> +	irq_exit_rcu();
+> +
+> +	instrumentation_end();
+> +
+> +	irqentry_exit(regs, state);
+> +  }
+> +
+> +Note, that the invocation of the actual interrupt handler is within a
+> +irq_enter_rcu() and irq_exit_rcu() pair.
+> +
+> +irq_enter_rcu() updates the preemption count which makes in_hardirq()
+> +return true, handles NOHZ tick state and interrupt time accounting. This
+> +means that up to the point where irq_enter_rcu() is invoked in_hardirq()
+> +returns false.
+> +
+> +irq_exit_rcu() handles interrupt time accounting, undoes the preemption
+> +count update and eventually handles soft interrupts and NOHZ tick state.
+> +
+> +The preemption count could be established in irqentry_enter() already, but
+> +there is no real value to do so. This allows the preemption count to be
+> +traced and just puts a restriction on the early entry code up to
+> +irq_enter_rcu().
+> +
+> +This also keeps the handling vs. irq_exit_rcu() symmetric and
+> +irq_exit_rcu() must undo the preempt count elevation before handling soft
+> +interrupts and irqentry_exit() also requires that because it might
+> +schedule.
+> +
+> +
+> +NMI and NMI-like exceptions
+> +---------------------------
+> +
+> +NMIs and NMI like exceptions, e.g. Machine checks, double faults, debug
+> +interrupts etc. can hit any context and have to be extra careful vs. the
+> +state.
+> +
+> +Debug exceptions can handle user space breakpoints or watchpoints in the
+> +same way as an interrupt which was raised while executing in user space,
+> +but kernel mode debug exceptions have to be treated like NMIs as they can
+> +even happen in NMI context, e.g. due to code patching.
+> +
+> +Also Machine check exceptions can handle user mode exceptions like regular
+> +interrupts, but for kernel mode exceptions they have to be treated like
+> +NMIs.
+> +
+> +NMIs and the other NMI-like exceptions handle state transitions in the most
+> +straight forward way and do not differentiate between user and kernel mode
+> +origin.
+> +
+> +The state update on entry is handled in irqentry_nmi_enter() which updates
+> +state in the following order:
+> +
+> +  * Preemption counter
+> +  * Lockdep
+> +  * RCU
+> +  * Tracing
+> +
+> +The exit counterpart irqenttry_nmi_exit() does the reverse operation in the
+                        ^^^^^^^^^
+
+ s/irqenttry/irqentry/
+
+> +reverse order.
+> +
+> +Note, that the update of the preemption counter has to be the first
+> +operation on enter and the last operation on exit. The reason is that both
+> +lockdep and RCU rely on in_nmi() returning true in this case. The
+> +preemption count modification in the NMI entry/exit case can obviously not
+> +be traced.
+
+Could we say "must not" instead of "can not", e.g.
+
+  The preemption count modification in the NMI entry/exit must not be traced.
+
+That way it's clearly a requirement, rather than a limitation.
+
+> +Architecture specific code looks like this::
+> +
+> +  noinstr void do_nmi(struct pt_regs \*regs)
+> +  {
+> +	arch_nmi_enter(regs);
+> +	state = irqentry_nmi_enter(regs);
+> +
+> +	instrumentation_begin();
+> +
+> +	invoke_nmi_handler(regs);
+> +
+> +	instrumentation_end();
+> +	irqentry_nmi_exit(regs);
+> +  }
+
+To keep the begin/end and enter/exit calls visually balanced, should the
+instrumentation_end() call have trailing a line space, e.g.
+
+e.g.
+
+	arch_nmi_enter(regs);
+	state = irqentry_nmi_enter(regs);
+
+	instrumentation_begin();
+
+	invoke_nmi_handler(regs);
+
+	instrumentation_end();
+
+	irqentry_nmi_exit(regs);
+
+... or sandwiched around invoke_nmi_handler(), e.g.
+
+	arch_nmi_enter(regs);
+	state = irqentry_nmi_enter(regs);
+
+	instrumentation_begin();
+	invoke_nmi_handler(regs);
+	instrumentation_end();
+
+	irqentry_nmi_exit(regs);
+
+Since the examples in this file are fairly simple I'd suggest the latter.
+
+> +and for e.g. a debug exception it can look like this::
+> +
+> +  noinstr void do_debug(struct pt_regs \*regs)
+> +  {
+> +	arch_nmi_enter(regs);
+> +
+> +	debug_regs = save_debug_regs();
+> +
+> +	if (user_mode(regs)) {
+> +		state = irqentry_enter(regs);
+> +
+> +		instrumentation_begin();
+> +
+> +		user_mode_debug_handler(regs, debug_regs);
+> +
+> +		instrumentation_end();
+> +
+> +		irqentry_exit(regs, state);
+> +  	} else {
+> +  		state = irqentry_nmi_enter(regs);
+> +
+> +		instrumentation_begin();
+> +
+> +		kernel_mode_debug_handler(regs, debug_regs);
+> +
+> +		instrumentation_end();
+> +
+> +		irqentry_nmi_exit(regs, state);
+> +	}
+> +  }
+> +
+> +There is no combined irqentry_nmi_if_kernel() function available as the
+> +above cannot be handled in an exception agnostic way.
+> --- a/Documentation/core-api/index.rst
+> +++ b/Documentation/core-api/index.rst
+> @@ -44,6 +44,14 @@ Library functionality that is used throu
+>     timekeeping
+>     errseq
+>  
+> +Low level entry and exit
+> +========================
+> +
+> +.. toctree::
+> +   :maxdepth: 1
+> +
+> +   entry
+> +
+>  Concurrency primitives
+>  ======================
+>  
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -1,5 +1,4 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> -
+
+Unrelated whitespace change?
+
+Thanks,
+Mark.
+
+>  #include <linux/context_tracking.h>
+>  #include <linux/entry-common.h>
+>  #include <linux/highmem.h>

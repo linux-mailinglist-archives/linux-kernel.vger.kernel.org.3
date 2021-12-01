@@ -2,82 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A3274464542
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60711464544
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346401AbhLADMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:12:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
+        id S1346414AbhLADMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:12:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346357AbhLADMh (ORCPT
+        with ESMTP id S1346403AbhLADMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:12:37 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD801C061574;
-        Tue, 30 Nov 2021 19:09:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=8Y/Yf1DFpXZ40Q8rAYKo+hnEhIQdPQLV0bx1iRLRFLc=; b=F0LCgZGB1f7DpUjH25+8gVSMmU
-        Hf2KWDLiLXV1tL9G0mL/dpsYnOOqwpB6qMM14uxqFNekVI/FLjXxYqAXUP5eAGDdeUES/p7G6+btR
-        z1gO/FAF0Fuv6W4DVQ9zocr9tDndDfRrF7GaVpp7FkXoRRYFTszYgtp1WPtKNQD9eMbfDefDebg+/
-        rOdQuaEGMmBYM4MtZYvUl+f0pU205LluHLvriwvb3gG3ymW8Z51/zYQzwL2dGYEeIulT2A09y38OA
-        lSZqhiBRUMk/u2kPbdnTR/xl2IaS8tFfT8p96+M5xjRf0MEZkwUrUfoCMMJsJbpSkjVASjj8w4r4c
-        H8M1ln0g==;
-Received: from [2601:1c0:6280:3f0::aa0b] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1msFzg-007MLx-K5; Wed, 01 Dec 2021 03:09:16 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        kernel test robot <lkp@intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Yash Shah <yash.shah@sifive.com>, linux-edac@vger.kernel.org,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>
-Subject: [PATCH] EDAC/sifive: fix non-kernel-doc comment
-Date:   Tue, 30 Nov 2021 19:09:13 -0800
-Message-Id: <20211201030913.10283-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.31.1
+        Tue, 30 Nov 2021 22:12:44 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA79C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:09:24 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id x7so16907615pjn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:09:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:to:cc:references:subject
+         :content-language:from:reply-to:in-reply-to
+         :content-transfer-encoding;
+        bh=JCdsNFesDkuuM1VR2LPSkkTD1jlcMDvQK+ffmxURn+g=;
+        b=bgbM3XhbJAWBjpnSaRSKN5x9K9qNIxiC7vK0MluFkyVxwWpjK7InPC7X8JgtyS639t
+         VK4p76abakz/439mKRQ+KokCvszmbJUfuMmvAotKJPK/7IXCTlITTsqFMku+26CGhrJP
+         O5pany0S58DGuTfKl/h+Pxsvi3F14Cu9qVKSA6X2GbSIwACHTW+weykLsjJFwDN724Rc
+         aROBbBBkFWJ8fW5aFU7ubkDai+tcGRcmV2VwfFSKu4DJQtZ1A0g/p1YkxbF3KdJkKqWJ
+         LbRBPIxpzbjhEPo5Y9yzKivcrMPBK7w3uiZvx2r4tl9WLbeRQxFkwoRnYga4zZ52xx0a
+         tU1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:to:cc
+         :references:subject:content-language:from:reply-to:in-reply-to
+         :content-transfer-encoding;
+        bh=JCdsNFesDkuuM1VR2LPSkkTD1jlcMDvQK+ffmxURn+g=;
+        b=VBLMixZovohtgVfOV64pi+xOPYtYMvUNrbVw3l+scz3vpLlx8qnVbIO+HzsqHVUNJb
+         y1UPhGH5b1eWeUOA1kmxtkks5dIs2ckAnp5CMFxsvGb1B3naLqlhlEF6NVv4tJRDZcwH
+         zaN7OXaria9jGAYRG9aY9hRFk8yHpQrplyFRWwEJ0pyCoxBdxIKcuwlmn7JQOhyMt+VF
+         acyaF9eJ52i40jB2uLC1ttcpZxlIA7E8OYv4rA/mtZIH56y/XQTMuUN9t37cHaC7Ju5B
+         cCkAK4dJSqIUEkJqvvZ6AbMFYLVLatntoPGLwDIXzjshs78EIY1w4nh1W4GHsaPZD7FJ
+         473g==
+X-Gm-Message-State: AOAM530u0NcRt8pKtb76832YaeISLLtRghQuAuMqX4Rj0fuM8W16gayh
+        CfsQTrILoVPQBUJ5aylevPj9MspZajIOXndp
+X-Google-Smtp-Source: ABdhPJxiUGARIFqsFxUSlvAWP1A7uyuEjb9oPxtVgNSIB1NC1DI9nd/TbQZJc8nJEFO6CJEFgKtUhQ==
+X-Received: by 2002:a17:903:110c:b0:143:9edf:4985 with SMTP id n12-20020a170903110c00b001439edf4985mr655597plh.15.1638328163791;
+        Tue, 30 Nov 2021 19:09:23 -0800 (PST)
+Received: from [10.76.43.192] ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id 16sm9637367pgu.93.2021.11.30.19.09.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Nov 2021 19:09:23 -0800 (PST)
+Message-ID: <b0d1f682-6868-c5f6-631c-2da93ee2b479@bytedance.com>
+Date:   Wed, 1 Dec 2021 11:09:18 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.2
+To:     feng.tang@intel.com
+Cc:     linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+References: <1627970362-61305-1-git-send-email-feng.tang@intel.com>
+Subject: Re: [PATCH v7 0/5] Introduce multi-preference mempolicy
+Content-Language: en-US
+From:   Gang Li <ligang.bdlg@bytedance.com>
+Reply-To: 1627970362-61305-1-git-send-email-feng.tang@intel.com
+In-Reply-To: <1627970362-61305-1-git-send-email-feng.tang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-scripts/kernel-doc complains about a comment that begins with "/**"
-but is not in kernel-doc format, so correct it.
+Hi Feng:
 
-Prevents this warning:
+I am a little confused:
+We have `MPOL_PREFERRED`, why you introduce `MPOL_PREFERRED_MANY` 
+instead of making `MPOL_PREFERRED` support multiple preferred nodes?
 
-drivers/edac/sifive_edac.c:23: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
- * EDAC error callback
+-- 
+Thanks
+Gang Li
 
-Fixes: 91abaeaaff35 ("EDAC/sifive: Add EDAC platform driver for SiFive SoCs")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Cc: Palmer Dabbelt <palmerdabbelt@google.com>
-Cc: Yash Shah <yash.shah@sifive.com>
-Cc: linux-edac@vger.kernel.org
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: Tony Luck <tony.luck@intel.com>
----
- drivers/edac/sifive_edac.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
---- linux-next-20211130.orig/drivers/edac/sifive_edac.c
-+++ linux-next-20211130/drivers/edac/sifive_edac.c
-@@ -19,7 +19,7 @@ struct sifive_edac_priv {
- 	struct edac_device_ctl_info *dci;
- };
- 
--/**
-+/*
-  * EDAC error callback
-  *
-  * @event: non-zero if unrecoverable.

@@ -2,104 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0192A4650C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:04:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF294650C3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:04:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350283AbhLAPHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53332 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244238AbhLAPHL (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:07:11 -0500
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5734EC061574;
-        Wed,  1 Dec 2021 07:03:50 -0800 (PST)
-Received: from [192.168.1.101] (83.6.166.111.neoplus.adsl.tpnet.pl [83.6.166.111])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 291C13F76F;
-        Wed,  1 Dec 2021 16:03:48 +0100 (CET)
-Message-ID: <3fe36e35-8c4b-f772-be43-8e8c49e97f63@somainline.org>
-Date:   Wed, 1 Dec 2021 16:03:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 01/15] arm64: dts: qcom: Add base SM8450 DTSI
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        id S1350233AbhLAPHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:07:53 -0500
+Received: from foss.arm.com ([217.140.110.172]:39154 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1350294AbhLAPHl (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 10:07:41 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0BB3B143B;
+        Wed,  1 Dec 2021 07:04:20 -0800 (PST)
+Received: from lpieralisi (e121166-lin.cambridge.arm.com [10.1.196.255])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5522C3F766;
+        Wed,  1 Dec 2021 07:04:18 -0800 (PST)
+Date:   Wed, 1 Dec 2021 15:04:12 +0000
+From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, kishon@ti.com
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Xiaowei Bao <xiaowei.bao@nxp.com>,
+        Om Prakash Singh <omp@nvidia.com>,
+        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20211201072915.3969178-1-vkoul@kernel.org>
- <20211201072915.3969178-2-vkoul@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20211201072915.3969178-2-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v2 0/2] PCI: endpoint: Fix core_init_notifier feature
+Message-ID: <20211201150412.GA13833@lpieralisi>
+References: <1630473361-27198-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <74df1b92-60e8-34da-2d39-236bdeea3fc6@socionext.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74df1b92-60e8-34da-2d39-236bdeea3fc6@socionext.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 16, 2021 at 08:30:35PM +0900, Kunihiko Hayashi wrote:
+> Gentle ping, are there any comments about this series?
 
-On 01.12.2021 08:29, Vinod Koul wrote:
-> This add based DTSI for SM8450 SoC and includes base description of
-> CPUs, GCC, RPMHCC, UART, interuupt-controller which helps to boot to
-> shell with console on boards with this SoC
->
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Kishon,
+
+can you have a look please ?
+
+Thanks,
+Lorenzo
+
+> Thank you,
+> 
+> On 2021/09/01 14:15, Kunihiko Hayashi wrote:
+> > This series has two fixes for core_init_notifier feature.
+> > 
+> > Fix the bug that the driver can't register its notifier function
+> > if core_init_notifier == true and linkup_notifier == false.
+> > 
+> > If enabling the controller is delayed due to core_init_notifier,
+> > accesses to the controller register should be avoided rather than
+> > enabling the controller.
+> > 
+> > Changes since v1:
+> > - Add Acked-by and Reviewed-by lines
+> > 
+> > Kunihiko Hayashi (2):
+> >    PCI: endpoint: pci-epf-test: register notifier if only
+> >      core_init_notifier is enabled
+> >    PCI: designware-ep: Fix the access to DBI/iATU registers before
+> >      enabling controller
+> > 
+> >   drivers/pci/controller/dwc/pcie-designware-ep.c | 81 +++++++++++++------------
+> >   drivers/pci/endpoint/functions/pci-epf-test.c   |  2 +-
+> >   2 files changed, 42 insertions(+), 41 deletions(-)
+> > 
+> 
+> -- 
 > ---
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 476 +++++++++++++++++++++++++++
->  1 file changed, 476 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sm8450.dtsi
->
-> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> new file mode 100644
-> index 000000000000..d838283bde4b
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-> @@ -0,0 +1,476 @@
-> +// SPDX-License-Identifier: BSD-3-Clause
-> +/*
-> + * Copyright (c) 2021, Linaro Limited
-> + */
-> +
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/clock/qcom,gcc-sm8450.h>
-> +#include <dt-bindings/clock/qcom,rpmh.h>
-> +#include <dt-bindings/soc/qcom,rpmh-rsc.h>
-> +
-> +/ {
-> +	interrupt-parent = <&intc>;
-> +
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
-> +
-> +	chosen { };
-> +
-> +	clocks {
-> +		xo_board: xo-board {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <76800000>;
-> +			clock-output-names = "xo_board";
-> +		};
-> +
-> +		sleep_clk: sleep-clk {
-> +			compatible = "fixed-clock";
-> +			clock-frequency = <32000>;
-> +			#clock-cells = <0>;
-> +		};
-
-No clock-output-names for this one?
-
-
-Other than that:
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-
-
-Konrad
-
+> Best Regards
+> Kunihiko Hayashi

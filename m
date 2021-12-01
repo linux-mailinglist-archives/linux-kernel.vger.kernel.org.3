@@ -2,141 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8195B4654F2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E7B465502
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352032AbhLASTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:19:01 -0500
-Received: from Galois.linutronix.de ([193.142.43.55]:42310 "EHLO
-        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352178AbhLASSD (ORCPT
+        id S244464AbhLASTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:19:39 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:52802 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238055AbhLASTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:18:03 -0500
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638382481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JZSAb6/GFXzqpAkYaa0pvVxSQ5TTrlFnUbJk4nsZrsA=;
-        b=DvbCwi72msZcA00dJHqF3+3iW8LIiuY+HpMxUmh/hG36VK54nzgl3NHbhHgp0M1i+szj7n
-        GxfG8XYcOhYYlWBSVILducd6aXk3m1Q0btlSojo+RDo5iS5Axgj2bE+ezh8C5lz505ensb
-        bj1n1kW23SBs8jPxVvJo50UxMD/Blk5YVbf9pHVY4Or9jmcMn+ReWqXXEwqzfbaybN6ugr
-        SpSWfuuC+xz4jDknr4WLRRzKwBmuid9uUr8R2cjGQTSIzidPAgI6dxPEPeLZ804fn06PTJ
-        cNWzO1rMczXs1YBRiFfdvYS7LUm6R1JBti8Gz8UaImAbdu6tgQdFsJVzaboH6g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638382481;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JZSAb6/GFXzqpAkYaa0pvVxSQ5TTrlFnUbJk4nsZrsA=;
-        b=BU4nDLcVS+KX4XoXWPPEHhIV6eGmxMLyHXhp7cuQ7inHdhdJVp8fjqli2rFj4wvFCjxxJt
-        oiskv79DUnb8NzCA==
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        rcu@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
-        paulmck@kernel.org, mtosatti <mtosatti@redhat.com>,
-        frederic <frederic@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Subject: Re: [PATCH] Documentation: Fill the gaps about entry/noinstr
- constraints
-In-Reply-To: <YadU1aSE6/0yGWny@FVFF77S0Q05N>
-References: <8719ad46cc29a2c5d7baac3c35770e5460ab8d5c.camel@redhat.com>
- <875ys9dacq.ffs@tglx> <20211130091356.7336e277@gandalf.local.home>
- <878rx5b7i5.ffs@tglx> <YadU1aSE6/0yGWny@FVFF77S0Q05N>
-Date:   Wed, 01 Dec 2021 19:14:41 +0100
-Message-ID: <87v9088a5q.ffs@tglx>
+        Wed, 1 Dec 2021 13:19:36 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id F341FCE1FF7;
+        Wed,  1 Dec 2021 18:16:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA97CC53FAD;
+        Wed,  1 Dec 2021 18:16:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638382571;
+        bh=yOSDJMZjtWPYabp4viUFNlvsKGXcYL8j4zIuPOAf+nY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=lNi2ifO8yG9kYNWfcv8AiQr/J/nGS8Z81b4pAUyt9JuAsa+WmHYkfijTzWHJ/vxoX
+         8gFr4eLY6X+tMtyg71rr40oOVpqd/Q0HweveIGrpF0K86bq8oL1BMP2vehMM7HBD8B
+         mqYDaP6KesBBbqwbGX8lBjviNbQj04gYu8kaRt2T4nXhi8TU5sJa4E7RVh/Ev2Ffck
+         NJyCovBk4cEMMaeyBMpZ+mTIBNbBd9eHWb0aU5TX1lj+zinquNkYFj8tS7q1FtD3N8
+         jFhrr10ONkIbGWfgVTSrzIpI6j1kvQyDadd2c6/jFV4ISxcATIXppBc5dN5DpeXttk
+         go7bvWa+PYhSQ==
+Date:   Wed, 1 Dec 2021 12:16:09 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-mips@vger.kernel.org,
+        tsbogend@alpha.franken.de, john@phrozen.org,
+        lorenzo.pieralisi@arm.com, bhelgaas@google.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH 3/5] PCI: mt7621: avoid custom MIPS code in driver code
+Message-ID: <20211201181609.GA2831753@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211115070809.15529-4-sergio.paracuellos@gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mark,
+s/avoid custom/Avoid custom/ in subject.
 
-On Wed, Dec 01 2021 at 10:56, Mark Rutland wrote:
-> On Tue, Nov 30, 2021 at 11:31:30PM +0100, Thomas Gleixner wrote:
->> ---
->>  Documentation/core-api/entry.rst |  268 +++++++++++++++++++++++++++++++++++++++
->>  Documentation/core-api/index.rst |    8 +
->>  kernel/entry/common.c            |    1 
->
-> I think the change to kernel/entry/common.c got included by accident?
+On Mon, Nov 15, 2021 at 08:08:07AM +0100, Sergio Paracuellos wrote:
+> Driver code is setting up MIPS specific I/O coherency units addresses config.
+> This MIPS specific thing has been moved to be done when PCI code call the
+> 'pcibios_root_bridge_prepare()' function which has been implemented for MIPS
+> ralink mt7621 platform. Hence, remove MIPS specific code from driver code.
+> After this changes there is also no need to add any MIPS specific includes
+> to avoid some errors reported by Kernet Tets Robot with W=1 builds.
 
-That's what I get from doing such things 30 minutes before midnight...
+s/this changes/this change/
+s/Tets/Test/
 
->> +
->> +Syscall entry exit code starts obviously in low level architecture specific
->
-> As a small nit, can we remove the "obviously"? It's certainly obvious to you
-> and me, but it doesn't meaningfully affect the sentence either way.
+The patch doesn't touch any #include lines, so I'm not sure what the
+last sentence is telling us.
 
-Indeed.
-
->> +assembly code and calls out into C-code after establishing low level
->> +architecture specific state and stack frames. This low level code must not
->> +be instrumented. A typical syscall handling function invoked from low level
->> +assembly code looks like this::
->> +
->> +  noinstr void do_syscall(struct pt_regs \*regs, int nr)
->                                             ^^
->
-> Is `\*` necessary here? ... and/or should this be an explicit code block (which
-> IIUC doesn't require this esacping), e.g.
->
-> .. code-block:: c
-
-Right. Let me try that.
-
->       noinstr void do_syscall(struct pt_regs *regs, int nr)
->> +
->> +If the interrupt is raised while the CPU executes in kernel space the entry
->> +and exit handling is slightly different. RCU state is only updated when the
->> +interrupt was raised in context of the idle task because that's the only
->
-> Since we have an idle task for each cpu, perhaps either:
->
->   s/the idle task/an idle task/
->   s/the idle task/the CPU's idle task/
-
-Yes, that's more precise
-
->> +Note, that the update of the preemption counter has to be the first
->> +operation on enter and the last operation on exit. The reason is that both
->> +lockdep and RCU rely on in_nmi() returning true in this case. The
->> +preemption count modification in the NMI entry/exit case can obviously not
->> +be traced.
->
-> Could we say "must not" instead of "can not", e.g.
->
->   The preemption count modification in the NMI entry/exit must not be traced.
->
-> That way it's clearly a requirement, rather than a limitation.
-
-Yes.
-
->> +Architecture specific code looks like this::
->> +
->> +  noinstr void do_nmi(struct pt_regs \*regs)
->> +  {
->> +	arch_nmi_enter(regs);
->> +	state = irqentry_nmi_enter(regs);
->> +
->> +	instrumentation_begin();
->> +
->> +	invoke_nmi_handler(regs);
->> +
->> +	instrumentation_end();
->> +	irqentry_nmi_exit(regs);
->> +  }
->
-> To keep the begin/end and enter/exit calls visually balanced, should the
-> instrumentation_end() call have trailing a line space, e.g.
-
-Yup.
-
-Thanks,
-
-        tglx
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
+>  drivers/pci/controller/pcie-mt7621.c | 37 ----------------------------
+>  1 file changed, 37 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
+> index b60dfb45ef7b..9cf541f5de9c 100644
+> --- a/drivers/pci/controller/pcie-mt7621.c
+> +++ b/drivers/pci/controller/pcie-mt7621.c
+> @@ -208,37 +208,6 @@ static inline void mt7621_control_deassert(struct mt7621_pcie_port *port)
+>  		reset_control_assert(port->pcie_rst);
+>  }
+>  
+> -static int setup_cm_memory_region(struct pci_host_bridge *host)
+> -{
+> -	struct mt7621_pcie *pcie = pci_host_bridge_priv(host);
+> -	struct device *dev = pcie->dev;
+> -	struct resource_entry *entry;
+> -	resource_size_t mask;
+> -
+> -	entry = resource_list_first_type(&host->windows, IORESOURCE_MEM);
+> -	if (!entry) {
+> -		dev_err(dev, "cannot get memory resource\n");
+> -		return -EINVAL;
+> -	}
+> -
+> -	if (mips_cps_numiocu(0)) {
+> -		/*
+> -		 * FIXME: hardware doesn't accept mask values with 1s after
+> -		 * 0s (e.g. 0xffef), so it would be great to warn if that's
+> -		 * about to happen
+> -		 */
+> -		mask = ~(entry->res->end - entry->res->start);
+> -
+> -		write_gcr_reg1_base(entry->res->start);
+> -		write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
+> -		dev_info(dev, "PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
+> -			 (unsigned long long)read_gcr_reg1_base(),
+> -			 (unsigned long long)read_gcr_reg1_mask());
+> -	}
+> -
+> -	return 0;
+> -}
+> -
+>  static int mt7621_pcie_parse_port(struct mt7621_pcie *pcie,
+>  				  struct device_node *node,
+>  				  int slot)
+> @@ -557,12 +526,6 @@ static int mt7621_pci_probe(struct platform_device *pdev)
+>  		goto remove_resets;
+>  	}
+>  
+> -	err = setup_cm_memory_region(bridge);
+> -	if (err) {
+> -		dev_err(dev, "error setting up iocu mem regions\n");
+> -		goto remove_resets;
+> -	}
+> -
+>  	return mt7621_pcie_register_host(bridge);
+>  
+>  remove_resets:
+> -- 
+> 2.33.0
+> 

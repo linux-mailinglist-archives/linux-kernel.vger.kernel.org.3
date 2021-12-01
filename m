@@ -2,88 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 538BA464503
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:39:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF07464505
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:41:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346173AbhLACnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234077AbhLACnI (ORCPT
+        id S234763AbhLACpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:45:05 -0500
+Received: from szxga01-in.huawei.com ([45.249.212.187]:31929 "EHLO
+        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S241441AbhLACpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:43:08 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83DDFC061574;
-        Tue, 30 Nov 2021 18:39:48 -0800 (PST)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id ECEBC8AE;
-        Wed,  1 Dec 2021 03:39:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1638326386;
-        bh=qsjoq1gfHMdS+0EpXveSjAj2n4SHM2OuNH/XEIDYpIc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DUmgiZ9z4gZI4x/U8uDs3Rd37tb2fk+nE+5RgamMJSg44bTVA9ry4fCB/JERld0hC
-         RU/gl8uLb6BMsrhE7+O0pHynvxMc2yUIS8JeQJd4Zg8zJsPLPLg5TEUWzorxnuuPQw
-         SQ/uGaK/ziv01XJzo1s9cjclLzi7psTharKivSb0=
-Date:   Wed, 1 Dec 2021 04:39:20 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] media: uvcvideo: Avoid returning invalid controls
-Message-ID: <YabgWHPxxtFfkDqh@pendragon.ideasonboard.com>
-References: <20211130155026.1082594-1-ribalda@chromium.org>
- <20211130155026.1082594-2-ribalda@chromium.org>
+        Tue, 30 Nov 2021 21:45:03 -0500
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J3jyl1mkNzcbf0;
+        Wed,  1 Dec 2021 10:41:35 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 1 Dec 2021 10:41:41 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpeml500017.china.huawei.com (7.185.36.243) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 1 Dec 2021 10:41:41 +0800
+Subject: Re: [PATCH -next] staging: rtl8192e: rtllib_module: fix missing
+ free_netdev() on error in alloc_rtllib()
+To:     Pavel Skripkin <paskripkin@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>
+CC:     <gregkh@linuxfoundation.org>
+References: <20211130034007.779351-1-yangyingliang@huawei.com>
+ <851b57b9-79ac-e7a1-a61a-6f36a5d9d77a@gmail.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <8f1c4e5a-663f-e5f4-a98e-b72ee3a4f365@huawei.com>
+Date:   Wed, 1 Dec 2021 10:41:41 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20211130155026.1082594-2-ribalda@chromium.org>
+In-Reply-To: <851b57b9-79ac-e7a1-a61a-6f36a5d9d77a@gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+Hi,
 
-Thank you for the patch.
+On 2021/12/1 2:57, Pavel Skripkin wrote:
+> On 11/30/21 06:40, Yang Yingliang wrote:
+>> Add the missing free_netdev() before return from alloc_rtllib()
+>> in the error handling case.
+>>
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+>>   drivers/staging/rtl8192e/rtllib_module.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/staging/rtl8192e/rtllib_module.c 
+>> b/drivers/staging/rtl8192e/rtllib_module.c
+>> index 64d9feee1f39..18d898714c5c 100644
+>> --- a/drivers/staging/rtl8192e/rtllib_module.c
+>> +++ b/drivers/staging/rtl8192e/rtllib_module.c
+>> @@ -125,7 +125,7 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+>>         ieee->pHTInfo = kzalloc(sizeof(struct rt_hi_throughput), 
+>> GFP_KERNEL);
+>>       if (!ieee->pHTInfo)
+>> -        return NULL;
+>> +        goto failed;
+>>         HTUpdateDefaultSetting(ieee);
+>>       HTInitializeHTInfo(ieee);
+>>
+>
+> Good catch!
+>
+> There are 2 more possible leaks, tho. rtllib_networks_allocate() and 
+> rtllib_softmac_init() should be unwinded too.
+The error path of rtllib_networks_allocate()  won't leak the dev.
+>
+> For some odd reason rtllib_softmac_init() does not return an error in 
+> case of allocation failure, but it should be fixed. I think, it worth 
+> to fix whole error handling in one patch
+I will send a v2 to fix this.
 
-On Tue, Nov 30, 2021 at 03:50:26PM +0000, Ricardo Ribalda wrote:
-> If the memory where ctrl_found is places has the value of uvc_ctrl and
-
-s/places/placed/
-s/uvc_ctrl/uvc_control/
-
-> __uvc_find_control does not find the control we will return and invalid
-
-s/and invalid/an invalid/
-
-> index.
-
-The change of this happening is small, but it exists.
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> Fixes: 6350d6a4ed487 ("media: uvcvideo: Set error_idx during ctrl_commit errors")
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> ---
->  drivers/media/usb/uvc/uvc_ctrl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/usb/uvc/uvc_ctrl.c b/drivers/media/usb/uvc/uvc_ctrl.c
-> index f7b7add3cfa59..f1f6bb14fb0a6 100644
-> --- a/drivers/media/usb/uvc/uvc_ctrl.c
-> +++ b/drivers/media/usb/uvc/uvc_ctrl.c
-> @@ -1639,7 +1639,7 @@ static int uvc_ctrl_find_ctrl_idx(struct uvc_entity *entity,
->  				  struct uvc_control *uvc_control)
->  {
->  	struct uvc_control_mapping *mapping = NULL;
-> -	struct uvc_control *ctrl_found;
-> +	struct uvc_control *ctrl_found = NULL;
->  	unsigned int i;
->  
->  	if (!entity)
-
--- 
-Regards,
-
-Laurent Pinchart
+Thanks,
+Yang
+>
+>
+>
+>
+> With regards,
+> Pavel Skripkin
+> .

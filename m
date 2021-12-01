@@ -2,106 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C4F07464948
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8230E46494B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 09:09:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347367AbhLAILh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 03:11:37 -0500
-Received: from mga09.intel.com ([134.134.136.24]:41387 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1345609AbhLAILg (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 03:11:36 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236230719"
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="236230719"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 00:08:15 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="477454963"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 01 Dec 2021 00:08:13 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msKey-000EZU-Dy; Wed, 01 Dec 2021 08:08:12 +0000
-Date:   Wed, 1 Dec 2021 16:08:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Stephane Eranian <eranian@google.com>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        kim.phillips@amd.com, acme@redhat.com, jolsa@redhat.com,
-        songliubraving@fb.com, mpe@ellerman.id.au, maddy@linux.ibm.com
-Subject: Re: [PATCH v3 03/13] perf/x86/amd: add AMD Fam19h Branch Sampling
- support
-Message-ID: <202112011510.OtPtAkKQ-lkp@intel.com>
-References: <20211201010217.886919-4-eranian@google.com>
+        id S1347456AbhLAINI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 03:13:08 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:56733 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345308AbhLAINH (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 03:13:07 -0500
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id 0AD3BE0012;
+        Wed,  1 Dec 2021 08:09:42 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 09:09:41 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Olga Kitaina <okitain@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, nagasure@xilinx.com, richard@nod.at,
+        vigneshr@ti.com, linux-kernel@vger.kernel.org,
+        Michal Simek <monstr@monstr.eu>
+Subject: Re: [PATCH] mtd: rawnand: arasan: Fix clock rate in NV-DDR
+Message-ID: <20211201090941.73e67f65@xps13>
+In-Reply-To: <fb6a4b49-7c10-4ed1-7054-5dd8ce2d8073@gmail.com>
+References: <20211127180758.30884-1-okitain@gmail.com>
+        <20211129095559.01aa63a6@xps13>
+        <3da5dff5-53d4-15db-075d-9b195f2f75dd@gmail.com>
+        <20211130082017.1400f24b@xps13>
+        <fb6a4b49-7c10-4ed1-7054-5dd8ce2d8073@gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201010217.886919-4-eranian@google.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephane,
+Hi Olga,
 
-Thank you for the patch! Perhaps something to improve:
++ Michal (please add him in Cc of your next iteration)
 
-[auto build test WARNING on tip/perf/core]
-[also build test WARNING on tip/x86/core rafael-pm/linux-next v5.16-rc3 next-20211201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+okitain@gmail.com wrote on Tue, 30 Nov 2021 23:08:20 +0300:
 
-url:    https://github.com/0day-ci/linux/commits/Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20211201-090506
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git a9f4a6e92b3b319296fb078da2615f618f6cd80c
-config: i386-randconfig-a012-20211129 (https://download.01.org/0day-ci/archive/20211201/202112011510.OtPtAkKQ-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/0day-ci/linux/commit/c6b0817d81501a8bc31ddd7067697dba4408d75f
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review Stephane-Eranian/perf-x86-amd-Add-AMD-Fam19h-Branch-Sampling-support/20211201-090506
-        git checkout c6b0817d81501a8bc31ddd7067697dba4408d75f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/events/amd/
+> Hi Miquel,
+> 
+> On 30.11.2021 10:20, Miquel Raynal wrote:
+> > Hi Olga,
+> > 
+> > okitain@gmail.com wrote on Mon, 29 Nov 2021 21:06:05 +0300:
+> >   
+> >> Hi Miquel,
+> >>
+> >> On 29.11.2021 11:55, Miquel Raynal wrote:  
+> >>> Hi Olga,
+> >>>
+> >>> Please add all the MTD maintainers in copy, as requested by
+> >>> get_maintainers.pl.
+> >>>
+> >>> okitain@gmail.com wrote on Sat, 27 Nov 2021 21:07:58
+> >>> +0300:
+> >>>     
+> >>>> According to the Arasan NAND controller spec,
+> >>>> the flash clock rate for SDR must be <= 100 MHz,
+> >>>> while for NV-DDR it must be the same as the rate
+> >>>> of the CLK line for the mode.    
+> >>>
+> >>> I completely missed that, where did you get the information?    
+> >>
+> >> The "Data Interface Transitions" chapter of the spec contains timings for flash clock setup in NV-DDR
+> >> and NV-DDR2 modes. The "time period" of those clocks is equal to tCK in NV-DDR and tRC in NV-DDR2.
+> >>
+> >> The same chapter should have information about necessary steps to switch from NV-DDR to SDR,
+> >> which includes setting the flash clock to 100 MHz.
+> >>
+> >>
+> >> Just to make sure i'm not shooting myself in the foot: am I changing the right clock?
+> >> The documentation points out that we have to change flash_clk, which i thought was
+> >> nfc->controller_clk and set up by anand->clk, but it seems like it might actually be nfc->bus_clk.  
+> > 
+> > I believe I made a serious mistake, re-reading the code it feels like
+> > I'm changing the system's clock (which basically changes nothing in our
+> > case) instead of changing the NAND bus clock.
+> >   
+> >> In that case, does setting nfc->controller_clk to 100 MHz by default make sense?
+> >> There isn't a hard limit on what the system clock might be (beyond a specific SoC),
+> >> but there are timing requirements for the flash clock, and so setting a specific 
+> >> system clock frequency seems unnecessary for most devices.
+> >>  
+> > 
+> > Please create a two-patch series:
+> > 1- Setting the right clock in the current code base (inverting bus_clk
+> > and controller_clk where relevant, setting one to 100MHz and letting
+> > the other as it is)
+> > 2- Changing the default NV-DDR rate based on tCK (below patch).
+> > 
+> > Do you have the necessary hardware for testing?  
+> 
+> I'm sorry to say - I do not. The SoC this problem was initially noticed on can't run latest Linux,
+> and even if it did I have no way of acquiring an NV-DDR-capable flash.
+> 
+> Since Bootlin merged in NV-DDR support into the kernel, is it possible for you to test 
+> the next iteration of this patch series on NV-DDR hardware as well?
+> Say, by purposefully preventing NV-DDR mode 5 from being chosen in anfc_setup_interface()?
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I don't have the hardware anymore.
 
-All warnings (new ones prefixed by >>):
+Please send a v2 with the necessary changes, then we will ask Naga (or
+somebody else from the same team) with access to the board to test it.
 
->> arch/x86/events/amd/core.c:676:24: warning: variable 'hwc' set but not used [-Wunused-but-set-variable]
-           struct hw_perf_event *hwc;
-                                 ^
-   1 warning generated.
+> >>>> The driver previously always set 100 MHz for NV-DDR, which
+> >>>> would result in incorrect behavior for NV-DDR modes 0-4.
+> >>>>
+> >>>> The appropriate clock rate can be calculated
+> >>>> from the NV-DDR timing parameters as 1/tCK, or for rates
+> >>>> measured in picoseconds, 10^12 / nand_nvddr_timings->tCK_min.
+> >>>>    
+> >>>
+> >>> You need a couple of Fixes + Cc: stable tags here, otherwise the
+> >>> patch looks good to me.
+> >>>     
+> >>
+> >> Will include in the next iteration of the patch, thank you.
+> >>  
+> >>>> Signed-off-by: Olga Kitaina <okitain@gmail.com>
+> >>>> ---
+> >>>>  drivers/mtd/nand/raw/arasan-nand-controller.c | 8 +++++++-
+> >>>>  1 file changed, 7 insertions(+), 1 deletion(-)
+> >>>>
+> >>>> diff --git a/drivers/mtd/nand/raw/arasan-nand-controller.c b/drivers/mtd/nand/raw/arasan-nand-controller.c
+> >>>> index 53bd10738418..ed4ee9942441 100644
+> >>>> --- a/drivers/mtd/nand/raw/arasan-nand-controller.c
+> >>>> +++ b/drivers/mtd/nand/raw/arasan-nand-controller.c
+> >>>> @@ -18,6 +18,7 @@
+> >>>>  #include <linux/gpio/consumer.h>
+> >>>>  #include <linux/interrupt.h>
+> >>>>  #include <linux/iopoll.h>
+> >>>> +#include <linux/math64.h>
+> >>>>  #include <linux/module.h>
+> >>>>  #include <linux/mtd/mtd.h>
+> >>>>  #include <linux/mtd/partitions.h>
+> >>>> @@ -1043,7 +1044,12 @@ static int anfc_setup_interface(struct nand_chip *chip, int target,
+> >>>>  				 DQS_BUFF_SEL_OUT(dqs_mode);
+> >>>>  	}
+> >>>>  
+> >>>> -	anand->clk = ANFC_XLNX_SDR_DFLT_CORE_CLK;
+> >>>> +	if (nand_interface_is_sdr)
+> >>>> +		anand->clk = ANFC_XLNX_SDR_DFLT_CORE_CLK;
+> >>>> +	else
+> >>>> +		/* ONFI timings are defined in picoseconds */
+> >>>> +		anand->clk = div_u64((u64)NSEC_PER_SEC * 1000,
+> >>>> +				     conf->timings.nvddr.tCK_min);
+> >>>>  
+> >>>>  	/*
+> >>>>  	 * Due to a hardware bug in the ZynqMP SoC, SDR timing modes 0-1 work
+> >>>>
+> >>>> base-commit: f53d4c109a666bf1a4883b45d546fba079258717    
+> >>>
+> >>>
+> >>> Thanks,
+> >>> Miquèl
+> >>>     
+> > 
+> > 
+> > Thanks,
+> > Miquèl
+> >   
+> 
+> Thanks,
+> Olga.
 
 
-vim +/hwc +676 arch/x86/events/amd/core.c
-
-   672	
-   673	static void amd_pmu_enable_all(int added)
-   674	{
-   675		struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
- > 676		struct hw_perf_event *hwc;
-   677		int idx;
-   678	
-   679		amd_brs_enable_all();
-   680	
-   681		for (idx = 0; idx < x86_pmu.num_counters; idx++) {
-   682			hwc = &cpuc->events[idx]->hw;
-   683	
-   684			/* only activate events which are marked as active */
-   685			if (!test_bit(idx, cpuc->active_mask))
-   686				continue;
-   687	
-   688			amd_pmu_enable_event(cpuc->events[idx]);
-   689		}
-   690	}
-   691	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+Thanks,
+Miquèl

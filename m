@@ -2,125 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 783D54644B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 02:59:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0163A4644B3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345750AbhLACDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:03:00 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:48691 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1345727AbhLACC5 (ORCPT
+        id S1345767AbhLACDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:03:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345519AbhLACDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:02:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638323975;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZjQnk43BT/VD1oLUmaOofcdkEDVX+UP+GWGYl4tKu+A=;
-        b=enzhrFwRAVvFgMDxEvfV7Rp48c7PKV2gpPr6ZDHbLu0FgO4gq40KdSZXVPPd03DW/DVCUo
-        aU3Bb6QOfxyQQo38BkycZN2ViN4TNLW+kyjsxTWjSujVJSJznkgLXiUUXPCLM0q45qNx2W
-        tpWmw9diEHEpDGhyofXa01w+mMBKzH8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-239-x0CMgd0sP3Ctb9UnOJ-ggw-1; Tue, 30 Nov 2021 20:59:34 -0500
-X-MC-Unique: x0CMgd0sP3Ctb9UnOJ-ggw-1
-Received: by mail-wm1-f70.google.com with SMTP id 145-20020a1c0197000000b0032efc3eb9bcso14841537wmb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 17:59:34 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ZjQnk43BT/VD1oLUmaOofcdkEDVX+UP+GWGYl4tKu+A=;
-        b=4FPLfnqWx6GP5cTDjrvaNkEZTYCa/eKVgZ82MSXmsUgwNwK2tdP74fVHaM6zsexJ2V
-         bsoBAFe25RN5bABL8NbaL2Qo6HtRSWWBCGsgejAypMYf18zqMDj4zHzqTZAjNf/yVXnv
-         Daseqgm73ao40wivOpuECInesiCBNPD6yhDdLcsGD4ATy/Ncu1UaFRZ1zWie9WIGfKWg
-         /prM7Z7j768Cy8qI8+H12z4iHkml5zafKFITSdKRYD3H+sjzpNPXtYv4vLmU6UCQsMGL
-         8MCvBA1EbMFtfWnqlAuEkVKNCD1XkJ+aPB2CKMPwzYzAQ07KFR+NSgmWYyaIBiGt0+WJ
-         myqw==
-X-Gm-Message-State: AOAM533NAwxjR/HJL3NRLRS8ABuaALwtWAcjWwoDRVMasq4IUpSVidf5
-        FK3lWXaSksoJNk/p7ctdN0ZPYcjqGrPgvFeu5f6c7cbXSYuS/4X5rpcBmH4AntCRJE+GGNHk3KQ
-        AVCtSrEvGGIAMM89VG4WBJoRf
-X-Received: by 2002:a5d:548b:: with SMTP id h11mr3125539wrv.11.1638323973118;
-        Tue, 30 Nov 2021 17:59:33 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzuk71/wV2y9/bQ4LxtxPbfJ4SEHLcWQJW2cVRdxDpeqJqquGGrYI3PHv7TYazTBv5GLMio0Q==
-X-Received: by 2002:a5d:548b:: with SMTP id h11mr3125514wrv.11.1638323972906;
-        Tue, 30 Nov 2021 17:59:32 -0800 (PST)
-Received: from xz-m1.local ([64.64.123.10])
-        by smtp.gmail.com with ESMTPSA id u23sm3922459wmc.7.2021.11.30.17.59.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 17:59:32 -0800 (PST)
-Date:   Wed, 1 Dec 2021 09:59:23 +0800
-From:   Peter Xu <peterx@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Shier <pshier@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Yulei Zhang <yulei.kernel@gmail.com>,
-        Wanpeng Li <kernellwp@gmail.com>,
-        Xiao Guangrong <xiaoguangrong.eric@gmail.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Keqian Zhu <zhukeqian1@huawei.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH 15/15] KVM: x86/mmu: Promote pages in-place when
- disabling dirty logging
-Message-ID: <YabW+7Fp03JTQHSW@xz-m1.local>
-References: <20211115234603.2908381-1-bgardon@google.com>
- <20211115234603.2908381-16-bgardon@google.com>
- <YZ8OpQmB/8k3/Maj@xz-m1.local>
- <CANgfPd9pK83S+yoRokLg7wiroE6-OkieATTqgGn3yCCzwNFi4A@mail.gmail.com>
- <YaXSh6RUOH7NHG8G@xz-m1.local>
- <YaZK7lxaBMGfYIdz@google.com>
+        Tue, 30 Nov 2021 21:03:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF042C061574;
+        Tue, 30 Nov 2021 18:00:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B834CB81C48;
+        Wed,  1 Dec 2021 02:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E979C53FCB;
+        Wed,  1 Dec 2021 02:00:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638324009;
+        bh=687/kwpPzBHMaCE2+p5sffdjqQ2Gjf4AVcYUBOFeQ7g=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YD5aMPAWJ6+EdHU44yVxvg9ITWJzhwhmTzrB6uXknW05/udTznuioGUQNwjyu6o3d
+         5NdDU01rfxA5lr3cd3dqsUABTd6R1Obu5/rSEsG5NzyYYBGonVNLs2tBWN1FE8e3SA
+         68TH6MvEzZv4ALsfrfkhs7YWT0iTwHgYgXj3gkkb8zI56trsx2h6N28X9zJ2EqHJas
+         yqVALTShQJkzYJEHUIM0jUZ1Fv6uFfRhHRjZbI71GwKiRU4bChNkDLsP0fVP0bw70l
+         XcF5mrcwR4FwTmJpWljksSxlu7IuWg9f61DqBR8q9GsVPd/f8MSvHYkg9sKkIGVlaz
+         EK3BCsc2cJahg==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 38A5D60A38;
+        Wed,  1 Dec 2021 02:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <YaZK7lxaBMGfYIdz@google.com>
+Subject: Re: [PATCH v4] net: netlink: af_netlink: Prevent empty skb by adding a
+ check on len.
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <163832400922.30071.9931042552498689425.git-patchwork-notify@kernel.org>
+Date:   Wed, 01 Dec 2021 02:00:09 +0000
+References: <20211129175328.55339-1-harshit.m.mogalapalli@oracle.com>
+In-Reply-To: <20211129175328.55339-1-harshit.m.mogalapalli@oracle.com>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     ramanan.govindarajan@oracle.com, george.kennedy@oracle.com,
+        vijayendra.suman@oracle.com, stephen@networkplumber.org,
+        syzkaller@googlegroups.com, davem@davemloft.net, kuba@kernel.org,
+        yajun.deng@linux.dev, dsahern@kernel.org, fw@strlen.de,
+        marcelo.leitner@gmail.com, aahringo@redhat.com,
+        edumazet@google.com, johannes.berg@intel.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 04:01:50PM +0000, Sean Christopherson wrote:
-> On Tue, Nov 30, 2021, Peter Xu wrote:
-> > On Mon, Nov 29, 2021 at 10:31:14AM -0800, Ben Gardon wrote:
-> > > 2. There could be a pointer to the page table in a vCPU's paging
-> > > structure caches, which are similar to the TLB but cache partial
-> > > translations. These are also cleared out on TLB flush.
-> > 
-> > Could you elaborate what's the structure cache that you mentioned?  I thought
-> > the processor page walker will just use the data cache (L1-L3) as pgtable
-> > caches, in which case IIUC the invalidation happens when we do WRITE_ONCE()
-> > that'll invalidate all the rest data cache besides the writter core.  But I
-> > could be completely missing something..
-> 
-> Ben is referring to the Intel SDM's use of the term "paging-structure caches"
-> Intel CPUs, and I'm guessing other x86 CPUs, cache upper level entries, e.g. the
-> L4 PTE for a given address, to avoid having to do data cache lookups, reserved
-> bits checked, A/D assists, etc...   Like full VA=>PA TLB entries, these entries
-> are associated with the PCID, VPID, EPT4A, etc...
-> 
-> The data caches are still used when reading PTEs that aren't cached in the TLB,
-> the extra caching in the "TLB" is optimization on top.
-> 
->   28.3.1 Information That May Be Cached
->   Section 4.10, “Caching Translation Information” in Intel® 64 and IA-32 Architectures
->   Software Developer’s Manual, Volume 3A identifies two kinds of translation-related
->   information that may be cached by a logical processor: translations, which are mappings
->   from linear page numbers to physical page frames, and paging-structure caches, which
->   map the upper bits of a linear page number to information from the paging-structure
->   entries used to translate linear addresses matching those upper bits.
+Hello:
 
-Ah, I should have tried harder when reading the spec, where I just stopped at
-4.10.2... :) They're also described in general section of 4.10.3 and also on
-how TLB invalidations affect these caches in 4.10.4.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Thanks again to both!
+On Mon, 29 Nov 2021 09:53:27 -0800 you wrote:
+> Adding a check on len parameter to avoid empty skb. This prevents a
+> division error in netem_enqueue function which is caused when skb->len=0
+> and skb->data_len=0 in the randomized corruption step as shown below.
+> 
+> skb->data[prandom_u32() % skb_headlen(skb)] ^= 1<<(prandom_u32() % 8);
+> 
+> Crash Report:
+> [  343.170349] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family
+> 0 port 6081 - 0
+> [  343.216110] netem: version 1.3
+> [  343.235841] divide error: 0000 [#1] PREEMPT SMP KASAN NOPTI
+> [  343.236680] CPU: 3 PID: 4288 Comm: reproducer Not tainted 5.16.0-rc1+
+> [  343.237569] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+> BIOS 1.11.0-2.el7 04/01/2014
+> [  343.238707] RIP: 0010:netem_enqueue+0x1590/0x33c0 [sch_netem]
+> [  343.239499] Code: 89 85 58 ff ff ff e8 5f 5d e9 d3 48 8b b5 48 ff ff
+> ff 8b 8d 50 ff ff ff 8b 85 58 ff ff ff 48 8b bd 70 ff ff ff 31 d2 2b 4f
+> 74 <f7> f1 48 b8 00 00 00 00 00 fc ff df 49 01 d5 4c 89 e9 48 c1 e9 03
+> [  343.241883] RSP: 0018:ffff88800bcd7368 EFLAGS: 00010246
+> [  343.242589] RAX: 00000000ba7c0a9c RBX: 0000000000000001 RCX:
+> 0000000000000000
+> [  343.243542] RDX: 0000000000000000 RSI: ffff88800f8edb10 RDI:
+> ffff88800f8eda40
+> [  343.244474] RBP: ffff88800bcd7458 R08: 0000000000000000 R09:
+> ffffffff94fb8445
+> [  343.245403] R10: ffffffff94fb8336 R11: ffffffff94fb8445 R12:
+> 0000000000000000
+> [  343.246355] R13: ffff88800a5a7000 R14: ffff88800a5b5800 R15:
+> 0000000000000020
+> [  343.247291] FS:  00007fdde2bd7700(0000) GS:ffff888109780000(0000)
+> knlGS:0000000000000000
+> [  343.248350] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  343.249120] CR2: 00000000200000c0 CR3: 000000000ef4c000 CR4:
+> 00000000000006e0
+> [  343.250076] Call Trace:
+> [  343.250423]  <TASK>
+> [  343.250713]  ? memcpy+0x4d/0x60
+> [  343.251162]  ? netem_init+0xa0/0xa0 [sch_netem]
+> [  343.251795]  ? __sanitizer_cov_trace_pc+0x21/0x60
+> [  343.252443]  netem_enqueue+0xe28/0x33c0 [sch_netem]
+> [  343.253102]  ? stack_trace_save+0x87/0xb0
+> [  343.253655]  ? filter_irq_stacks+0xb0/0xb0
+> [  343.254220]  ? netem_init+0xa0/0xa0 [sch_netem]
+> [  343.254837]  ? __kasan_check_write+0x14/0x20
+> [  343.255418]  ? _raw_spin_lock+0x88/0xd6
+> [  343.255953]  dev_qdisc_enqueue+0x50/0x180
+> [  343.256508]  __dev_queue_xmit+0x1a7e/0x3090
+> [  343.257083]  ? netdev_core_pick_tx+0x300/0x300
+> [  343.257690]  ? check_kcov_mode+0x10/0x40
+> [  343.258219]  ? _raw_spin_unlock_irqrestore+0x29/0x40
+> [  343.258899]  ? __kasan_init_slab_obj+0x24/0x30
+> [  343.259529]  ? setup_object.isra.71+0x23/0x90
+> [  343.260121]  ? new_slab+0x26e/0x4b0
+> [  343.260609]  ? kasan_poison+0x3a/0x50
+> [  343.261118]  ? kasan_unpoison+0x28/0x50
+> [  343.261637]  ? __kasan_slab_alloc+0x71/0x90
+> [  343.262214]  ? memcpy+0x4d/0x60
+> [  343.262674]  ? write_comp_data+0x2f/0x90
+> [  343.263209]  ? __kasan_check_write+0x14/0x20
+> [  343.263802]  ? __skb_clone+0x5d6/0x840
+> [  343.264329]  ? __sanitizer_cov_trace_pc+0x21/0x60
+> [  343.264958]  dev_queue_xmit+0x1c/0x20
+> [  343.265470]  netlink_deliver_tap+0x652/0x9c0
+> [  343.266067]  netlink_unicast+0x5a0/0x7f0
+> [  343.266608]  ? netlink_attachskb+0x860/0x860
+> [  343.267183]  ? __sanitizer_cov_trace_pc+0x21/0x60
+> [  343.267820]  ? write_comp_data+0x2f/0x90
+> [  343.268367]  netlink_sendmsg+0x922/0xe80
+> [  343.268899]  ? netlink_unicast+0x7f0/0x7f0
+> [  343.269472]  ? __sanitizer_cov_trace_pc+0x21/0x60
+> [  343.270099]  ? write_comp_data+0x2f/0x90
+> [  343.270644]  ? netlink_unicast+0x7f0/0x7f0
+> [  343.271210]  sock_sendmsg+0x155/0x190
+> [  343.271721]  ____sys_sendmsg+0x75f/0x8f0
+> [  343.272262]  ? kernel_sendmsg+0x60/0x60
+> [  343.272788]  ? write_comp_data+0x2f/0x90
+> [  343.273332]  ? write_comp_data+0x2f/0x90
+> [  343.273869]  ___sys_sendmsg+0x10f/0x190
+> [  343.274405]  ? sendmsg_copy_msghdr+0x80/0x80
+> [  343.274984]  ? slab_post_alloc_hook+0x70/0x230
+> [  343.275597]  ? futex_wait_setup+0x240/0x240
+> [  343.276175]  ? security_file_alloc+0x3e/0x170
+> [  343.276779]  ? write_comp_data+0x2f/0x90
+> [  343.277313]  ? __sanitizer_cov_trace_pc+0x21/0x60
+> [  343.277969]  ? write_comp_data+0x2f/0x90
+> [  343.278515]  ? __fget_files+0x1ad/0x260
+> [  343.279048]  ? __sanitizer_cov_trace_pc+0x21/0x60
+> [  343.279685]  ? write_comp_data+0x2f/0x90
+> [  343.280234]  ? __sanitizer_cov_trace_pc+0x21/0x60
+> [  343.280874]  ? sockfd_lookup_light+0xd1/0x190
+> [  343.281481]  __sys_sendmsg+0x118/0x200
+> [  343.281998]  ? __sys_sendmsg_sock+0x40/0x40
+> [  343.282578]  ? alloc_fd+0x229/0x5e0
+> [  343.283070]  ? write_comp_data+0x2f/0x90
+> [  343.283610]  ? write_comp_data+0x2f/0x90
+> [  343.284135]  ? __sanitizer_cov_trace_pc+0x21/0x60
+> [  343.284776]  ? ktime_get_coarse_real_ts64+0xb8/0xf0
+> [  343.285450]  __x64_sys_sendmsg+0x7d/0xc0
+> [  343.285981]  ? syscall_enter_from_user_mode+0x4d/0x70
+> [  343.286664]  do_syscall_64+0x3a/0x80
+> [  343.287158]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+> [  343.287850] RIP: 0033:0x7fdde24cf289
+> [  343.288344] Code: 01 00 48 81 c4 80 00 00 00 e9 f1 fe ff ff 0f 1f 00
+> 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f
+> 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d b7 db 2c 00 f7 d8 64 89 01 48
+> [  343.290729] RSP: 002b:00007fdde2bd6d98 EFLAGS: 00000246 ORIG_RAX:
+> 000000000000002e
+> [  343.291730] RAX: ffffffffffffffda RBX: 0000000000000000 RCX:
+> 00007fdde24cf289
+> [  343.292673] RDX: 0000000000000000 RSI: 00000000200000c0 RDI:
+> 0000000000000004
+> [  343.293618] RBP: 00007fdde2bd6e20 R08: 0000000100000001 R09:
+> 0000000000000000
+> [  343.294557] R10: 0000000100000001 R11: 0000000000000246 R12:
+> 0000000000000000
+> [  343.295493] R13: 0000000000021000 R14: 0000000000000000 R15:
+> 00007fdde2bd7700
+> [  343.296432]  </TASK>
+> [  343.296735] Modules linked in: sch_netem ip6_vti ip_vti ip_gre ipip
+> sit ip_tunnel geneve macsec macvtap tap ipvlan macvlan 8021q garp mrp
+> hsr wireguard libchacha20poly1305 chacha_x86_64 poly1305_x86_64
+> ip6_udp_tunnel udp_tunnel libblake2s blake2s_x86_64 libblake2s_generic
+> curve25519_x86_64 libcurve25519_generic libchacha xfrm_interface
+> xfrm6_tunnel tunnel4 veth netdevsim psample batman_adv nlmon dummy team
+> bonding tls vcan ip6_gre ip6_tunnel tunnel6 gre tun ip6t_rpfilter
+> ipt_REJECT nf_reject_ipv4 ip6t_REJECT nf_reject_ipv6 xt_conntrack ip_set
+> ebtable_nat ebtable_broute ip6table_nat ip6table_mangle
+> ip6table_security ip6table_raw iptable_nat nf_nat nf_conntrack
+> nf_defrag_ipv6 nf_defrag_ipv4 iptable_mangle iptable_security
+> iptable_raw ebtable_filter ebtables rfkill ip6table_filter ip6_tables
+> iptable_filter ppdev bochs drm_vram_helper drm_ttm_helper ttm
+> drm_kms_helper cec parport_pc drm joydev floppy parport sg syscopyarea
+> sysfillrect sysimgblt i2c_piix4 qemu_fw_cfg fb_sys_fops pcspkr
+> [  343.297459]  ip_tables xfs virtio_net net_failover failover sd_mod
+> sr_mod cdrom t10_pi ata_generic pata_acpi ata_piix libata virtio_pci
+> virtio_pci_legacy_dev serio_raw virtio_pci_modern_dev dm_mirror
+> dm_region_hash dm_log dm_mod
+> [  343.311074] Dumping ftrace buffer:
+> [  343.311532]    (ftrace buffer empty)
+> [  343.312040] ---[ end trace a2e3db5a6ae05099 ]---
+> [  343.312691] RIP: 0010:netem_enqueue+0x1590/0x33c0 [sch_netem]
+> [  343.313481] Code: 89 85 58 ff ff ff e8 5f 5d e9 d3 48 8b b5 48 ff ff
+> ff 8b 8d 50 ff ff ff 8b 85 58 ff ff ff 48 8b bd 70 ff ff ff 31 d2 2b 4f
+> 74 <f7> f1 48 b8 00 00 00 00 00 fc ff df 49 01 d5 4c 89 e9 48 c1 e9 03
+> [  343.315893] RSP: 0018:ffff88800bcd7368 EFLAGS: 00010246
+> [  343.316622] RAX: 00000000ba7c0a9c RBX: 0000000000000001 RCX:
+> 0000000000000000
+> [  343.317585] RDX: 0000000000000000 RSI: ffff88800f8edb10 RDI:
+> ffff88800f8eda40
+> [  343.318549] RBP: ffff88800bcd7458 R08: 0000000000000000 R09:
+> ffffffff94fb8445
+> [  343.319503] R10: ffffffff94fb8336 R11: ffffffff94fb8445 R12:
+> 0000000000000000
+> [  343.320455] R13: ffff88800a5a7000 R14: ffff88800a5b5800 R15:
+> 0000000000000020
+> [  343.321414] FS:  00007fdde2bd7700(0000) GS:ffff888109780000(0000)
+> knlGS:0000000000000000
+> [  343.322489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  343.323283] CR2: 00000000200000c0 CR3: 000000000ef4c000 CR4:
+> 00000000000006e0
+> [  343.324264] Kernel panic - not syncing: Fatal exception in interrupt
+> [  343.333717] Dumping ftrace buffer:
+> [  343.334175]    (ftrace buffer empty)
+> [  343.334653] Kernel Offset: 0x13600000 from 0xffffffff81000000
+> (relocation range: 0xffffffff80000000-0xffffffffbfffffff)
+> [  343.336027] Rebooting in 86400 seconds..
+> 
+> [...]
 
+Here is the summary with links:
+  - [v4] net: netlink: af_netlink: Prevent empty skb by adding a check on len.
+    https://git.kernel.org/netdev/net/c/f123cffdd8fe
+
+You are awesome, thank you!
 -- 
-Peter Xu
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

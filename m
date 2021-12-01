@@ -2,96 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF07464505
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:41:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1395C464509
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:45:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbhLACpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:45:05 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:31929 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241441AbhLACpD (ORCPT
+        id S1346226AbhLACsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:48:47 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:59748 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S234763AbhLACsm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:45:03 -0500
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J3jyl1mkNzcbf0;
-        Wed,  1 Dec 2021 10:41:35 +0800 (CST)
-Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 10:41:41 +0800
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpeml500017.china.huawei.com (7.185.36.243) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 10:41:41 +0800
-Subject: Re: [PATCH -next] staging: rtl8192e: rtllib_module: fix missing
- free_netdev() on error in alloc_rtllib()
-To:     Pavel Skripkin <paskripkin@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>
-CC:     <gregkh@linuxfoundation.org>
-References: <20211130034007.779351-1-yangyingliang@huawei.com>
- <851b57b9-79ac-e7a1-a61a-6f36a5d9d77a@gmail.com>
-From:   Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <8f1c4e5a-663f-e5f4-a98e-b72ee3a4f365@huawei.com>
-Date:   Wed, 1 Dec 2021 10:41:41 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Tue, 30 Nov 2021 21:48:42 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E6ABDB81DD3;
+        Wed,  1 Dec 2021 02:45:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07DD5C53FC7;
+        Wed,  1 Dec 2021 02:45:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638326720;
+        bh=c7hJ9HIoELtKP6OKUj1vtcydNI3UfAgZbDNjwfxHPuY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Hpab0wjPbIMJ2G/7bv4j3z2vi7TEKBKl/jr5GrRPnYVuHUABVGtsaVbVj4qszg0ce
+         TsDGHcLgyUCgtRTeNM62KJbGLNzCGnFQd+oM/52xIS02IYusV5/tyL1mmaCgWhgIu7
+         PnR8LvAFOd5jq9YGYABmXlGZleVY82CQeQXH1Ex7d2wT1IX1Zt2LRbFlaKD+81Tmdv
+         Sz2Cbd1LqaAVjnmoatn2HmUYPE53Pq/6P+53lKPDbAmObTVYa2dq6whfa9Zaan1AXf
+         F3ZPxQo/LQAt2lZ65061cap4ga7V6NGWlujrqsWfoahb07AwZVQz6EpjWbh+y3a86T
+         KNVAJIV37ExiQ==
+Date:   Tue, 30 Nov 2021 18:45:18 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, qiangqing.zhang@nxp.com,
+        peppe.cavallaro@st.com, alexandre.torgue@foss.st.com,
+        joabreu@synopsys.com, yannick.vignon@nxp.com,
+        boon.leong.ong@intel.com, Jose.Abreu@synopsys.com, mst@redhat.com,
+        Joao.Pinto@synopsys.com, mingkai.hu@nxp.com, leoyang.li@nxp.com
+Subject: Re: [PATCH net-next 1/2] arm64: dts: imx8mp-evk: configure multiple
+ queues on eqos
+Message-ID: <20211130184518.5d221cdd@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+In-Reply-To: <20211201014705.6975-2-xiaoliang.yang_1@nxp.com>
+References: <20211201014705.6975-1-xiaoliang.yang_1@nxp.com>
+        <20211201014705.6975-2-xiaoliang.yang_1@nxp.com>
 MIME-Version: 1.0
-In-Reply-To: <851b57b9-79ac-e7a1-a61a-6f36a5d9d77a@gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml500017.china.huawei.com (7.185.36.243)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed,  1 Dec 2021 09:47:04 +0800 Xiaoliang Yang wrote:
+> Eqos ethernet support five queues on hardware, enable these queues and
+> configure the priority of each queue. Uses Strict Priority as scheduling
+> algorithms to ensure that the TSN function works.
 
-On 2021/12/1 2:57, Pavel Skripkin wrote:
-> On 11/30/21 06:40, Yang Yingliang wrote:
->> Add the missing free_netdev() before return from alloc_rtllib()
->> in the error handling case.
->>
->> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
->> ---
->>   drivers/staging/rtl8192e/rtllib_module.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/staging/rtl8192e/rtllib_module.c 
->> b/drivers/staging/rtl8192e/rtllib_module.c
->> index 64d9feee1f39..18d898714c5c 100644
->> --- a/drivers/staging/rtl8192e/rtllib_module.c
->> +++ b/drivers/staging/rtl8192e/rtllib_module.c
->> @@ -125,7 +125,7 @@ struct net_device *alloc_rtllib(int sizeof_priv)
->>         ieee->pHTInfo = kzalloc(sizeof(struct rt_hi_throughput), 
->> GFP_KERNEL);
->>       if (!ieee->pHTInfo)
->> -        return NULL;
->> +        goto failed;
->>         HTUpdateDefaultSetting(ieee);
->>       HTInitializeHTInfo(ieee);
->>
->
-> Good catch!
->
-> There are 2 more possible leaks, tho. rtllib_networks_allocate() and 
-> rtllib_softmac_init() should be unwinded too.
-The error path of rtllib_networks_allocate()  won't leak the dev.
->
-> For some odd reason rtllib_softmac_init() does not return an error in 
-> case of allocation failure, but it should be fixed. I think, it worth 
-> to fix whole error handling in one patch
-I will send a v2 to fix this.
-
-Thanks,
-Yang
->
->
->
->
-> With regards,
-> Pavel Skripkin
-> .
+I believe you need to CC Rob on DT changes?

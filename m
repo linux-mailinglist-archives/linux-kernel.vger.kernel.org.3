@@ -2,214 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 260164658E7
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405544658EB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:09:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353364AbhLAWL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:11:56 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:40898 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234903AbhLAWLy (ORCPT
+        id S1353398AbhLAWMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:12:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235489AbhLAWMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:11:54 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0B3BFCE20EC
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 22:08:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E526C53FAD;
-        Wed,  1 Dec 2021 22:08:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638396510;
-        bh=Nzk4xuBnLua+Ch7FNlliRtr6zY/RQhBET5UD098bDuQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mgLeqX22nSJ5as6n4hru6rcn5e/oaMcbN0AoDLM3lAi0iV4ao2zy5CU8OkntE3/7k
-         FKSgkTMmZJhs/md8BOuojPkdkq3GV8oflHmAcseebwPI3qTdKJSMWI7MtyeN40C+5m
-         Ff42FyiLxvrWJzS9sB9kQpmVPuXiUagRmxrwgXdPKuMIgFb8NuepqRtEDu5O0/sP2I
-         qtDo7QE+YVcMbpnFk9Y+PzdBbkg26Rjz3Ke8ppSGzFMXPyn2jTGPB8avsX+PgWTtRi
-         pvP5Ey0W+84MkHXQjO8IgLqf28/qeS6lkiHGvaUEQP9m4pw/9XnR17a/ScUJqHKK9p
-         zyJmowDyMMlzQ==
-Date:   Wed, 1 Dec 2021 22:08:26 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-Subject: Re: [PATCH] ASoC: cs42l42: Implement system suspend
-Message-ID: <YafyWnVA1J1rgCf1@sirena.org.uk>
-References: <20211201153648.17259-1-rf@opensource.cirrus.com>
- <YaejghraYE6lD7FD@sirena.org.uk>
- <87930df9-6220-807e-a655-1c7d7ec020ab@opensource.cirrus.com>
+        Wed, 1 Dec 2021 17:12:19 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F3BC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 14:08:57 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id gf14-20020a17090ac7ce00b001a7a2a0b5c3so834691pjb.5
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 14:08:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2t6UPLkpgLpFXNXvlINJ9j4Lw79kGG//UDCLbmlNlYQ=;
+        b=gCBm1qWZGM3jMPBSEakcrYdaIRaZ+1Vjbg7M64Pv6PCa9HjnAX1bDoVGGaKsETefs+
+         mIF5J64/uzIhyOKBmL+0lRzEQ4mCmh+BcfkPVqKoj94p0vZBacyCM3WynyQJRVwg60xy
+         aR86NWnfTVsLIcqbfTgmoBiGPW5fJVXcDKrJkSq9KWgcmv9MwsqvgIS+A3eyAUQpcSBQ
+         oObfJc4tqzQakaeJAfwMf+nGx2/V/opzBS+UYRAZaaoeNZdMyBb0+Wl3PB9POFgi+09x
+         taTVNHI/6nkR/EnUZb/uR2zyFQFtIUpPT6FzZbiTImMsmxIQ2/AmfMAT8WZ6c1ak4NZa
+         7oEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=2t6UPLkpgLpFXNXvlINJ9j4Lw79kGG//UDCLbmlNlYQ=;
+        b=DtfPpVaok0bXtIPGEqvkIoBGPzLqDKgClOjwisVEhCmx58kMRjDzwtuO5GeKRZalKJ
+         MxG/zGl6wWy2g2d1lpnXv/WfoS5eD4+xT4Tr+J2XFuNRtZRNavasEju4PRnCVp/89Wf4
+         3nPt1HJMiteED8w8RwedC6nmp3XePkQN+ZBftGM4VMxWURwOfPjDVYQU0WQaEFU9I7o0
+         ivKXNJh4rZqWkQVSiOLp6Yy9gPPDMlASB5QvhVY/2XGuzk3JySD7Z8b5M+EjL2r7aMqX
+         J+1+SDsaPxoLI5h5+UH/dB614F2LYVxFc9nB2cg96Ch1pDr3qFpsPnMo/ObhyXJKo5x/
+         eaVg==
+X-Gm-Message-State: AOAM531zyruQbuwTzRKB/fyoUSmz7toJuaYVT8LGvl1UYfrm3JHskaXi
+        lFF341xQEdTOSbNZ4nz/H4k=
+X-Google-Smtp-Source: ABdhPJwybaz/71PxVLBKZvm8VeRkuF2q8ouTJrg14ur5agT04jDnMaI/IGg/b8F8cHymlJGeiAiO8w==
+X-Received: by 2002:a17:902:ee95:b0:141:f28f:7296 with SMTP id a21-20020a170902ee9500b00141f28f7296mr10686163pld.50.1638396537354;
+        Wed, 01 Dec 2021 14:08:57 -0800 (PST)
+Received: from balhae.hsd1.ca.comcast.net ([2601:647:4800:5800:e6ea:3b3b:5788:f38f])
+        by smtp.gmail.com with ESMTPSA id n71sm823102pfd.50.2021.12.01.14.08.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 14:08:56 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        Stephane Eranian <eranian@google.com>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v2] perf tools: Add SPE total latency as PERF_SAMPLE_WEIGHT
+Date:   Wed,  1 Dec 2021 14:08:55 -0800
+Message-Id: <20211201220855.1260688-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.34.0.384.gca35af8252-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MZbxPQY3xGbOgcXr"
-Content-Disposition: inline
-In-Reply-To: <87930df9-6220-807e-a655-1c7d7ec020ab@opensource.cirrus.com>
-X-Cookie: This is now.  Later is later.
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use total latency info in the SPE counter packet as sample weight so
+that we can see it in local_weight and (global) weight sort keys.
 
---MZbxPQY3xGbOgcXr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Maybe we can use PERF_SAMPLE_WEIGHT_STRUCT to support ins_lat as well
+but I'm not sure which latency it matches.  So just adding total
+latency first.
 
-On Wed, Dec 01, 2021 at 06:04:00PM +0000, Richard Fitzgerald wrote:
-> On 01/12/2021 16:32, Mark Brown wrote:
-> > On Wed, Dec 01, 2021 at 03:36:48PM +0000, Richard Fitzgerald wrote:
+Cc: German Gomez <german.gomez@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/arm-spe-decoder/arm-spe-decoder.c | 2 ++
+ tools/perf/util/arm-spe-decoder/arm-spe-decoder.h | 1 +
+ tools/perf/util/arm-spe.c                         | 5 ++++-
+ 3 files changed, 7 insertions(+), 1 deletion(-)
 
-> > > +	/*
-> > > +	 * PWR_CTL2 must be volatile so it can be used as a canary bit to
-> > > +	 * detect a reset during system suspend.
-> > > +	 */
-> > > +	case CS42L42_PWR_CTL2:
+diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+index 3fc528c9270c..5e390a1a79ab 100644
+--- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
++++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.c
+@@ -179,6 +179,8 @@ static int arm_spe_read_record(struct arm_spe_decoder *decoder)
+ 				decoder->record.phys_addr = ip;
+ 			break;
+ 		case ARM_SPE_COUNTER:
++			if (idx == SPE_CNT_PKT_HDR_INDEX_TOTAL_LAT)
++				decoder->record.latency = payload;
+ 			break;
+ 		case ARM_SPE_CONTEXT:
+ 			decoder->record.context_id = payload;
+diff --git a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+index 46a8556a9e95..69b31084d6be 100644
+--- a/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
++++ b/tools/perf/util/arm-spe-decoder/arm-spe-decoder.h
+@@ -33,6 +33,7 @@ struct arm_spe_record {
+ 	enum arm_spe_sample_type type;
+ 	int err;
+ 	u32 op;
++	u32 latency;
+ 	u64 from_ip;
+ 	u64 to_ip;
+ 	u64 timestamp;
+diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+index 4748bcfe61de..82c08f2a60d0 100644
+--- a/tools/perf/util/arm-spe.c
++++ b/tools/perf/util/arm-spe.c
+@@ -317,6 +317,7 @@ static int arm_spe__synth_mem_sample(struct arm_spe_queue *speq,
+ 	sample.addr = record->virt_addr;
+ 	sample.phys_addr = record->phys_addr;
+ 	sample.data_src = data_src;
++	sample.weight = record->latency;
+ 
+ 	return arm_spe_deliver_synth_event(spe, speq, event, &sample);
+ }
+@@ -334,6 +335,7 @@ static int arm_spe__synth_branch_sample(struct arm_spe_queue *speq,
+ 	sample.id = spe_events_id;
+ 	sample.stream_id = spe_events_id;
+ 	sample.addr = record->to_ip;
++	sample.weight = record->latency;
+ 
+ 	return arm_spe_deliver_synth_event(spe, speq, event, &sample);
+ }
+@@ -980,7 +982,8 @@ arm_spe_synth_events(struct arm_spe *spe, struct perf_session *session)
+ 	attr.type = PERF_TYPE_HARDWARE;
+ 	attr.sample_type = evsel->core.attr.sample_type & PERF_SAMPLE_MASK;
+ 	attr.sample_type |= PERF_SAMPLE_IP | PERF_SAMPLE_TID |
+-			    PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC;
++			    PERF_SAMPLE_PERIOD | PERF_SAMPLE_DATA_SRC |
++			    PERF_SAMPLE_WEIGHT;
+ 	if (spe->timeless_decoding)
+ 		attr.sample_type &= ~(u64)PERF_SAMPLE_TIME;
+ 	else
+-- 
+2.34.0.384.gca35af8252-goog
 
-> > This feels a bit hackish
-
-> I can't think of a better way of detecting whether the chip reset. If
-> we don't have control of the reset GPIO we can't force a reset. So it
-> depends whether power turned off (also whether it dropped below the
-> Vmin voltage at which a reset is triggered). The regulator framework
-> can't tell us if it really turned off power and on ACPI systems the
-> power is all controlled magically.
-
-Right, hence the second part of the question - the general thing for
-drivers has just been to assume that the power might've gone out over
-suspend and behave as though it did unless we were using the device as a
-wake source.  We could if required extend the existing regulator API
-notification stuff to generate notifications, though they'd not work
-when it's compiled out.
-
-> >     - is the cost of doing the cache sync really so> expensive that it's
-> worth the effort of trying to skip it?
-
-> It's not cost, it's about getting the correct values in the registers.
-> If we call regcache_mark_dirty() it tells regmap that all the hardware
-> registers have reset to default. Then regcache_sync() will skip writing
-> cache values that are the register default value, assuming that the
-> register already has this value. If the chip didn't reset, the registers
-> could retain non-default values while the cache contains a dirty
-> default value, in that case the register needs updating to match the
-> cache.
-
-(note BTW that at the point I queried the performance thing I'd not got
-as far as the magic bypassed write sequences)
-
-So this is clearly a being done at the wrong level - it is needlessly
-complex, non-idiomatic and making fragile and non-obvious assumptions
-about how the cache code operates.  The issue you've got is that the
-cache code is presenting interfaces for the common case where you'd only
-want to resync the cache in cases where the device has been reset but
-you've added code which bypasses the cache and pulls the device out of
-sync with the cache.  You need to teach regmap about that, not try to
-hack around things in the driver code.  But...
-
-> I tried to persuade myself that a cache value couldn't possibly change
-> at any time from suspend() being called to resume disabling cache-only
-> so I could safely accept default values being skipped. But that
-> assumption made me very uncomfortable - I don't like leaving potential
-> bugs in when its simple enough to prevent them.
-
-=2E..that's based on the assumption that this is all about the magic write
-sequences you're using for shutdown potentially conflicting with default
-values you've got in the cache?  If it's not those then the assumption
-is that either the device was reset in which case it has reset values or
-the device was not reset and held it's previous value, in which case the
-cache sync is redundant.  If we don't trust the device to reset cleanly
-for some reason then it's probably a bad idea to tell regmap about
-default values in the first place since even on initial boot we might
-actually be doing a soft reboot and the device could be holding values
-=66rom whatever was running beforehand.
-
-This clearly isn't simple, and other than those shutdown sequences or
-potential issues with the device not resetting cleanly this should be
-done by extending regmap so it explicitly knows what's going on.  If it
-is those shutdown sequences then you're probably looking for something
-like doing a _sync_region() on the registers the sequences touch.
-Possibly a _sync_region() variant that writes everything requested, or
-just make sync_region() not skip defaults.  Or just remove all the
-defaults from the driver, the sync will be a bit more expensive but
-that's hopefully fine.  If it's not those shutdown sequences it should
-still be handled genericly but I'd really like to understand the
-scenario you're concerned about here, especially the fact that any issue
-will show up in this single register that the code is checking.
-
-> > > +	if (cs42l42->suspended) {
-> > > +		mutex_unlock(&cs42l42->irq_lock);
-> > > +		return IRQ_NONE;
-> > > +	}
-
-> > Given that you're using disable_irq() to force the interrupt off (which
-> > is a bit rude but often the best one can do) how might we be getting an
-> > interrupt while suspended?  This seems to indicate an error condition.
-
-> I may have misunderstood here, but the documentation says that
-> enables/disables are nested. The interrupt starts out enabled right
-> after calling request_threaded_irq(), so I expected that all users of
-> the shared interrupt would have to call disable_irq() for it to actually
-> get disabled (I put the call in on that basis that it does no harm). If
-> disable_irq() forces the irq off even if it's shared then I'll remove it
-> because as you say that would be rude.
-
-Hrm, that may have changed since I last looked - if that's the case then
-I guess it's best not to warn which was what I was thinking here.
-
-> > > +		/*
-> > > +		 * Only call regcache_mark_dirty() if cs42l42 reset, so
-> > > +		 * regcache_sync() writes all non-default cached values.
-> > > +		 * If it didn't reset we don't want to filter out syncing
-> > > +		 * dirty cache entries that have default value.
-> > > +		 * DISCHARGE_FILT=3D=3D1 after suspend. If the cs42l42 reset
-> > > +		 * it will now be 0.
-> > > +		 */
-
-> > Something needs to tell regmap that the cache is dirty otherwise it
-
-> Regmap knows if it has dirty values that it hasn't written out to the
-> hardware.
-
-Well, apparently it doesn't since otherwise we could just do a resync.
-
-> > won't sync anything, including the non-default register values?  There's
-
-> That's fine. If the registers have not been reset they still have the
-> value of every clean cache entry. Every dirty cache entry will be
-> written out by regcache_sync().
-
-What about the shutdown sequence - does that not touch cached registers?
-
-> > currently an assumption coded in there that the cache is dirty because
-> > the device was reset and everything has default values.
-
-> Regmap only assumes that if regcache_mark_dirty() is called.
-
-Right, but the point here is that coming out of suspend the driver is
-expected to be unconditionally marking the cache as dirty and doing a
-resync since we probably lost power.  The code is trying to avoid that
-for reasons that are not at all apparent but I *think* are due to the
-bypassed writes in shutdown(), especially if you say it's not a
-performance thing.  We shouldn't need to worry about there being non
-default states in the hardware.
-
-The whole thing is just really confusing as it stands.  Like I say I
-think this needs to express what it's trying to do clearly in both the
-regmap operations it's doing and the code in general, at the minute it's
-not clear looking at things what the goal is.
-
---MZbxPQY3xGbOgcXr
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGn8lkACgkQJNaLcl1U
-h9AY6wf+NO6Z2euXBl8DqEPROLW3ucXDLxPW1AQkm0HivSrPNUz4M+UP0QogAWIM
-DRQAAV7PBOc9HfjDGzOwsnY2qX7KmIE8NYW5H2Z67AD07neE/m8u5zVTQekQ2g/U
-2Wug+2Z42ssi+v5L02CzBs6v/XxeMPKHhzdFqkeoZB3XIAT08v4d0LkEZfxXYUG4
-ZOx5KDUmrsrdlVeZ7CsLBTeRU2HpBl2aLnuE+6a2ohAvdZzb8AWVAwLsqcfzWol7
-lq/8V1aERLytQkZssL5olF4wJUgSUhf/deFPp5xYEtWGWE0R2XGFuEdQav7kY6xt
-TWv+LT1HvO7vX+uKd1lszBv4V6GivQ==
-=vARI
------END PGP SIGNATURE-----
-
---MZbxPQY3xGbOgcXr--

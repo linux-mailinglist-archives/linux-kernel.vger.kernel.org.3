@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5951846441A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:50:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E3246441B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:50:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345993AbhLAAxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 19:53:17 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:58034 "EHLO
+        id S1346012AbhLAAxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 19:53:24 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:58062 "EHLO
         smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345879AbhLAAwr (ORCPT
+        with ESMTP id S1345887AbhLAAws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 19:52:47 -0500
+        Tue, 30 Nov 2021 19:52:48 -0500
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 32ED01FD58;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DD14E1FD5A;
         Wed,  1 Dec 2021 00:49:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1638319766; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/KiEss0AmLWu5PPQx8AEAQWrotOkaf1wCjMX21FLtVc=;
-        b=k8cWAyLnNBq4FL/4thDBWJ6RagBYzS0420QA65mWcS0NE6fajocRpAFjVmhIKt8SBidb5V
-        17+baEcFlhrjH72EfLJ6LIQDDoDkbuTsfi/3SKgwiT2a4Rlr1pS/EmJe0kL2J/GOTfUaft
-        djE6EPuTdPe6MG4KPwmfI3L7IQ5MdHo=
+        bh=+mOUIwOrDkYBWcA5/phmpXuHj/y2eJIC6EGBCfFXWuo=;
+        b=M09wInabs5qL4KLdHokMwNlNvGG0gq6HLvvMYvylrdzHQsykPZ/+asxbyCMEtq5ZiblMj8
+        k548Z/eYa/HNrth3m0RcXwiqCLcW+8iJLltiESWlsb9tbmiYcaBBMJB6GICpnm6M4IejRD
+        BFDBwzCUPlD67KBsP8cJzgb+cLELHPM=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1638319766;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/KiEss0AmLWu5PPQx8AEAQWrotOkaf1wCjMX21FLtVc=;
-        b=09D7l2vhxvCQCzs/Dn/kkCjzRfooKx78qtnxZec4+63giHjTkIZyE+f3rQ13BsAz1jG0Dx
-        f8c1GuBQqiP5b3Cw==
+        bh=+mOUIwOrDkYBWcA5/phmpXuHj/y2eJIC6EGBCfFXWuo=;
+        b=Tz5X1mLcatWQOmT61d0hUPxLgQps4x5eLFa2sUHj97ktL9eLn3zJZVKwuSyMur3tQvHG2U
+        B906s9tUMU+1wABQ==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1D49813C10;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C84F913C10;
         Wed,  1 Dec 2021 00:49:26 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id xZecBZbGpmHkKAAAMHmgww
+        id IYOkL5bGpmHnKAAAMHmgww
         (envelope-from <nstange@suse.de>); Wed, 01 Dec 2021 00:49:26 +0000
 From:   Nicolai Stange <nstange@suse.de>
 To:     Herbert Xu <herbert@gondor.apana.org.au>,
@@ -58,9 +58,9 @@ Cc:     =?UTF-8?q?Stephan=20M=C3=BCller?= <smueller@chronox.de>,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
         qat-linux@intel.com, keyrings@vger.kernel.org,
         Nicolai Stange <nstange@suse.de>
-Subject: [PATCH 03/18] crypto: dh - optimize domain parameter serialization for well-known groups
-Date:   Wed,  1 Dec 2021 01:48:43 +0100
-Message-Id: <20211201004858.19831-4-nstange@suse.de>
+Subject: [PATCH 04/18] crypto: dh - introduce RFC 7919 safe-prime groups
+Date:   Wed,  1 Dec 2021 01:48:44 +0100
+Message-Id: <20211201004858.19831-5-nstange@suse.de>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20211201004858.19831-1-nstange@suse.de>
 References: <20211201004858.19831-1-nstange@suse.de>
@@ -70,310 +70,305 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DH users are supposed to set a struct dh instance's ->p and ->g domain
-parameters (as well as the secret ->key), serialize the whole struct dh
-instance via the crypto_dh_encode_key() helper and pass the encoded blob
-on to the DH's ->set_secret(). All three currently available DH
-implementations (generic, drivers/crypto/hisilicon/hpre/ and
-drivers/crypto/qat/) would then proceed to call the crypto_dh_decode_key()
-helper for unwrapping the encoded struct dh instance again.
+The FFDHE groups specified by RFC 7919 are needed for the current work
+on NVME ([1]) and also among the safe-prime groups approved by
+SP800-56Arev3. Make them known to the kernel.
 
-Up to now, the only DH user has been the keyctl(KEYCTL_DH_COMPUTE) syscall
-and thus, all domain parameters have been coming from userspace. The domain
-parameter encoding scheme for DH's ->set_secret() has been a perfectly
-reasonable approach in this setting and the potential extra copy of ->p
-and ->g during the encoding phase didn't harm much.
+More specifically, introduce corresponding members to enum dh_group_id
+as well as entries with the resp. domain parameters to the
+safe_prime_groups[] array queried by crypto_dh_decode_key(). The resp.
+->max_strength value is set to the maximum supported security strength as
+specified in SP800-56Arev3.
 
-However, recently, the need for working with the well-known safe-prime
-groups' domain parameters from RFC 3526 and RFC 7919 resp. arose from two
-independent developments:
-- The NVME in-band authentication support currently being worked on ([1])
-  needs to install the RFC 7919 ffdhe groups' domain parameters for DH
-  tfms.
-- In FIPS mode, there's effectively no sensible way for the DH
-  implementation to conform to SP800-56Arev3 other than rejecting any
-  parameter set not corresponding to some approved safe-prime group
-  specified in either of these two RFCs.
-
-As the ->p arrays' lengths are in the range from 256 to 1024 bytes, it
-would be nice if that extra copy during the crypto_dh_encode_key() step
-from the NVME in-band authentication code could be avoided. Likewise, it
-would be great if the DH implementation's FIPS handling code could avoid
-attempting to match the input ->p and ->g against the individual approved
-groups' parameters via memcmp() if it's known in advance that the input
-corresponds to such one, as is the case for NVME.
-
-Introduce a enum dh_group_id for referring to any of the safe-prime groups
-known to the kernel. The introduction of actual such safe-prime groups
-alongside with their resp. P and G parameters will be deferred to later
-patches. As of now, the new enum contains only a single member,
-dh_group_id_unknown, which is meant to be associated with parameter sets
-not corresponding to any of the groups known to the kernel, as is needed
-to continue to support the current keyctl(KEYCTL_DH_COMPUTE) syscall
-semantics.
-
-Add a new 'group_id' member of type enum group_id to struct dh. Make
-crypto_dh_encode_key() include it in the serialization and to encode
-->p and ->g only if it equals dh_group_id_unknown. For all other possible
-values of the encoded ->group_id, the receiving decoding primitive,
-crypto_dh_decode_key(), is made to not decode ->p and ->g from the encoded
-data, but to look them up in a central registry instead.
-
-The intended usage pattern is that users like NVME wouldn't set any of
-the struct dh's ->p or ->g directly, but only the ->group_id for the group
-they're interested in. They'd then proceed as usual and call
-crypto_dh_encode_key() on the struct dh instance, pass the encoded result
-on to DH's ->set_secret() and the latter would then invoke
-crypto_dh_decode_key(), which would then in turn lookup the parameters
-associated with the passed ->group_id.
-
-Note that this will avoid the extra copy of the ->p and ->g for the groups
-(to be made) known to the kernel and also, that a future patch can easily
-introduce a validation of ->group_id if in FIPS mode.
-
-As mentioned above, the introduction of actual safe-prime groups will be
-deferred to later patches, so for now, only introduce an empty placeholder
-array safe_prime_groups[] to be queried by crypto_dh_decode_key() for
-domain parameters associated with a given ->group_id as outlined above.
-Make its elements to be of the new internal struct safe_prime_group type.
-Among the members ->group_id, ->p and ->p_size with obvious meaning, there
-will also be a ->max_strength member for storing the maximum security
-strength supported by the associated group -- its value will be needed for
-the upcoming private key generation support.
-
-Finally, update the encoded secrets provided by the testmgr's DH test
-vectors in order to account for the additional ->group_id field expected
-by crypto_dh_decode_key() now.
+As the domain parameters consume an substantial amount of space, make
+RFC 7919 safe-prime group support selectable by means of the new
+CRYPTO_DH_GROUPS_RFC7919 Kconfig option.
 
 [1] https://lkml.kernel.org/r/20211122074727.25988-4-hare@suse.de
 
 Signed-off-by: Nicolai Stange <nstange@suse.de>
 ---
- crypto/dh_helper.c  | 88 +++++++++++++++++++++++++++++++++++----------
- crypto/testmgr.h    | 16 +++++----
- include/crypto/dh.h |  6 ++++
- 3 files changed, 86 insertions(+), 24 deletions(-)
+ crypto/Kconfig      |  11 ++-
+ crypto/dh_helper.c  | 219 +++++++++++++++++++++++++++++++++++++++++++-
+ include/crypto/dh.h |   7 ++
+ 3 files changed, 235 insertions(+), 2 deletions(-)
 
+diff --git a/crypto/Kconfig b/crypto/Kconfig
+index 285f82647d2b..0f039bbf36e2 100644
+--- a/crypto/Kconfig
++++ b/crypto/Kconfig
+@@ -224,13 +224,22 @@ config CRYPTO_RSA
+ 	help
+ 	  Generic implementation of the RSA public key algorithm.
+ 
+-config CRYPTO_DH
++menuconfig CRYPTO_DH
+ 	tristate "Diffie-Hellman algorithm"
+ 	select CRYPTO_KPP
+ 	select MPILIB
+ 	help
+ 	  Generic implementation of the Diffie-Hellman algorithm.
+ 
++if CRYPTO_DH
++config CRYPTO_DH_GROUPS_RFC7919
++	bool "Support for RFC 7919 FFDHE group parameters"
++	help
++	  Enable to allow for the use of RFC 7919 DH parameters in FIPS mode,
++	  e.g. via keyctl(KEYCTL_DH_COMPUTE). Otherwise it's safe to say N.
++
++endif
++
+ config CRYPTO_ECC
+ 	tristate
+ 	select CRYPTO_RNG_DEFAULT
 diff --git a/crypto/dh_helper.c b/crypto/dh_helper.c
-index aabc91e4f63f..a6c9389d8219 100644
+index a6c9389d8219..83744c3bfc17 100644
 --- a/crypto/dh_helper.c
 +++ b/crypto/dh_helper.c
-@@ -10,7 +10,32 @@
- #include <crypto/dh.h>
- #include <crypto/kpp.h>
+@@ -19,7 +19,224 @@ static const struct safe_prime_group
+ 	unsigned int max_strength;
+ 	unsigned int p_size;
+ 	const char *p;
+-} safe_prime_groups[] = {};
++} safe_prime_groups[] = {
++#ifdef CONFIG_CRYPTO_DH_GROUPS_RFC7919
++	{
++	.group_id = dh_group_id_rfc7919_ffdhe2048,
++	.max_strength = 112,
++	.p_size = 256,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x28\x5c\x97\xff\xff\xff\xff\xff\xff\xff\xff",
++	},
++	{
++	.group_id = dh_group_id_rfc7919_ffdhe3072,
++	.max_strength = 128,
++	.p_size = 384,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x1f\xcf\xdc\xde\x35\x5b\x3b\x65\x19\x03\x5b"
++	"\xbc\x34\xf4\xde\xf9\x9c\x02\x38\x61\xb4\x6f\xc9\xd6\xe6\xc9\x07"
++	"\x7a\xd9\x1d\x26\x91\xf7\xf7\xee\x59\x8c\xb0\xfa\xc1\x86\xd9\x1c"
++	"\xae\xfe\x13\x09\x85\x13\x92\x70\xb4\x13\x0c\x93\xbc\x43\x79\x44"
++	"\xf4\xfd\x44\x52\xe2\xd7\x4d\xd3\x64\xf2\xe2\x1e\x71\xf5\x4b\xff"
++	"\x5c\xae\x82\xab\x9c\x9d\xf6\x9e\xe8\x6d\x2b\xc5\x22\x36\x3a\x0d"
++	"\xab\xc5\x21\x97\x9b\x0d\xea\xda\x1d\xbf\x9a\x42\xd5\xc4\x48\x4e"
++	"\x0a\xbc\xd0\x6b\xfa\x53\xdd\xef\x3c\x1b\x20\xee\x3f\xd5\x9d\x7c"
++	"\x25\xe4\x1d\x2b\x66\xc6\x2e\x37\xff\xff\xff\xff\xff\xff\xff\xff",
++	},
++	{
++	.group_id = dh_group_id_rfc7919_ffdhe4096,
++	.max_strength = 152,
++	.p_size = 512,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x1f\xcf\xdc\xde\x35\x5b\x3b\x65\x19\x03\x5b"
++	"\xbc\x34\xf4\xde\xf9\x9c\x02\x38\x61\xb4\x6f\xc9\xd6\xe6\xc9\x07"
++	"\x7a\xd9\x1d\x26\x91\xf7\xf7\xee\x59\x8c\xb0\xfa\xc1\x86\xd9\x1c"
++	"\xae\xfe\x13\x09\x85\x13\x92\x70\xb4\x13\x0c\x93\xbc\x43\x79\x44"
++	"\xf4\xfd\x44\x52\xe2\xd7\x4d\xd3\x64\xf2\xe2\x1e\x71\xf5\x4b\xff"
++	"\x5c\xae\x82\xab\x9c\x9d\xf6\x9e\xe8\x6d\x2b\xc5\x22\x36\x3a\x0d"
++	"\xab\xc5\x21\x97\x9b\x0d\xea\xda\x1d\xbf\x9a\x42\xd5\xc4\x48\x4e"
++	"\x0a\xbc\xd0\x6b\xfa\x53\xdd\xef\x3c\x1b\x20\xee\x3f\xd5\x9d\x7c"
++	"\x25\xe4\x1d\x2b\x66\x9e\x1e\xf1\x6e\x6f\x52\xc3\x16\x4d\xf4\xfb"
++	"\x79\x30\xe9\xe4\xe5\x88\x57\xb6\xac\x7d\x5f\x42\xd6\x9f\x6d\x18"
++	"\x77\x63\xcf\x1d\x55\x03\x40\x04\x87\xf5\x5b\xa5\x7e\x31\xcc\x7a"
++	"\x71\x35\xc8\x86\xef\xb4\x31\x8a\xed\x6a\x1e\x01\x2d\x9e\x68\x32"
++	"\xa9\x07\x60\x0a\x91\x81\x30\xc4\x6d\xc7\x78\xf9\x71\xad\x00\x38"
++	"\x09\x29\x99\xa3\x33\xcb\x8b\x7a\x1a\x1d\xb9\x3d\x71\x40\x00\x3c"
++	"\x2a\x4e\xce\xa9\xf9\x8d\x0a\xcc\x0a\x82\x91\xcd\xce\xc9\x7d\xcf"
++	"\x8e\xc9\xb5\x5a\x7f\x88\xa4\x6b\x4d\xb5\xa8\x51\xf4\x41\x82\xe1"
++	"\xc6\x8a\x00\x7e\x5e\x65\x5f\x6a\xff\xff\xff\xff\xff\xff\xff\xff",
++	},
++	{
++	.group_id = dh_group_id_rfc7919_ffdhe6144,
++	.max_strength = 176,
++	.p_size = 768,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x1f\xcf\xdc\xde\x35\x5b\x3b\x65\x19\x03\x5b"
++	"\xbc\x34\xf4\xde\xf9\x9c\x02\x38\x61\xb4\x6f\xc9\xd6\xe6\xc9\x07"
++	"\x7a\xd9\x1d\x26\x91\xf7\xf7\xee\x59\x8c\xb0\xfa\xc1\x86\xd9\x1c"
++	"\xae\xfe\x13\x09\x85\x13\x92\x70\xb4\x13\x0c\x93\xbc\x43\x79\x44"
++	"\xf4\xfd\x44\x52\xe2\xd7\x4d\xd3\x64\xf2\xe2\x1e\x71\xf5\x4b\xff"
++	"\x5c\xae\x82\xab\x9c\x9d\xf6\x9e\xe8\x6d\x2b\xc5\x22\x36\x3a\x0d"
++	"\xab\xc5\x21\x97\x9b\x0d\xea\xda\x1d\xbf\x9a\x42\xd5\xc4\x48\x4e"
++	"\x0a\xbc\xd0\x6b\xfa\x53\xdd\xef\x3c\x1b\x20\xee\x3f\xd5\x9d\x7c"
++	"\x25\xe4\x1d\x2b\x66\x9e\x1e\xf1\x6e\x6f\x52\xc3\x16\x4d\xf4\xfb"
++	"\x79\x30\xe9\xe4\xe5\x88\x57\xb6\xac\x7d\x5f\x42\xd6\x9f\x6d\x18"
++	"\x77\x63\xcf\x1d\x55\x03\x40\x04\x87\xf5\x5b\xa5\x7e\x31\xcc\x7a"
++	"\x71\x35\xc8\x86\xef\xb4\x31\x8a\xed\x6a\x1e\x01\x2d\x9e\x68\x32"
++	"\xa9\x07\x60\x0a\x91\x81\x30\xc4\x6d\xc7\x78\xf9\x71\xad\x00\x38"
++	"\x09\x29\x99\xa3\x33\xcb\x8b\x7a\x1a\x1d\xb9\x3d\x71\x40\x00\x3c"
++	"\x2a\x4e\xce\xa9\xf9\x8d\x0a\xcc\x0a\x82\x91\xcd\xce\xc9\x7d\xcf"
++	"\x8e\xc9\xb5\x5a\x7f\x88\xa4\x6b\x4d\xb5\xa8\x51\xf4\x41\x82\xe1"
++	"\xc6\x8a\x00\x7e\x5e\x0d\xd9\x02\x0b\xfd\x64\xb6\x45\x03\x6c\x7a"
++	"\x4e\x67\x7d\x2c\x38\x53\x2a\x3a\x23\xba\x44\x42\xca\xf5\x3e\xa6"
++	"\x3b\xb4\x54\x32\x9b\x76\x24\xc8\x91\x7b\xdd\x64\xb1\xc0\xfd\x4c"
++	"\xb3\x8e\x8c\x33\x4c\x70\x1c\x3a\xcd\xad\x06\x57\xfc\xcf\xec\x71"
++	"\x9b\x1f\x5c\x3e\x4e\x46\x04\x1f\x38\x81\x47\xfb\x4c\xfd\xb4\x77"
++	"\xa5\x24\x71\xf7\xa9\xa9\x69\x10\xb8\x55\x32\x2e\xdb\x63\x40\xd8"
++	"\xa0\x0e\xf0\x92\x35\x05\x11\xe3\x0a\xbe\xc1\xff\xf9\xe3\xa2\x6e"
++	"\x7f\xb2\x9f\x8c\x18\x30\x23\xc3\x58\x7e\x38\xda\x00\x77\xd9\xb4"
++	"\x76\x3e\x4e\x4b\x94\xb2\xbb\xc1\x94\xc6\x65\x1e\x77\xca\xf9\x92"
++	"\xee\xaa\xc0\x23\x2a\x28\x1b\xf6\xb3\xa7\x39\xc1\x22\x61\x16\x82"
++	"\x0a\xe8\xdb\x58\x47\xa6\x7c\xbe\xf9\xc9\x09\x1b\x46\x2d\x53\x8c"
++	"\xd7\x2b\x03\x74\x6a\xe7\x7f\x5e\x62\x29\x2c\x31\x15\x62\xa8\x46"
++	"\x50\x5d\xc8\x2d\xb8\x54\x33\x8a\xe4\x9f\x52\x35\xc9\x5b\x91\x17"
++	"\x8c\xcf\x2d\xd5\xca\xce\xf4\x03\xec\x9d\x18\x10\xc6\x27\x2b\x04"
++	"\x5b\x3b\x71\xf9\xdc\x6b\x80\xd6\x3f\xdd\x4a\x8e\x9a\xdb\x1e\x69"
++	"\x62\xa6\x95\x26\xd4\x31\x61\xc1\xa4\x1d\x57\x0d\x79\x38\xda\xd4"
++	"\xa4\x0e\x32\x9c\xd0\xe4\x0e\x65\xff\xff\xff\xff\xff\xff\xff\xff",
++	},
++	{
++	.group_id = dh_group_id_rfc7919_ffdhe8192,
++	.max_strength = 200,
++	.p_size = 1024,
++	.p =
++	"\xff\xff\xff\xff\xff\xff\xff\xff\xad\xf8\x54\x58\xa2\xbb\x4a\x9a"
++	"\xaf\xdc\x56\x20\x27\x3d\x3c\xf1\xd8\xb9\xc5\x83\xce\x2d\x36\x95"
++	"\xa9\xe1\x36\x41\x14\x64\x33\xfb\xcc\x93\x9d\xce\x24\x9b\x3e\xf9"
++	"\x7d\x2f\xe3\x63\x63\x0c\x75\xd8\xf6\x81\xb2\x02\xae\xc4\x61\x7a"
++	"\xd3\xdf\x1e\xd5\xd5\xfd\x65\x61\x24\x33\xf5\x1f\x5f\x06\x6e\xd0"
++	"\x85\x63\x65\x55\x3d\xed\x1a\xf3\xb5\x57\x13\x5e\x7f\x57\xc9\x35"
++	"\x98\x4f\x0c\x70\xe0\xe6\x8b\x77\xe2\xa6\x89\xda\xf3\xef\xe8\x72"
++	"\x1d\xf1\x58\xa1\x36\xad\xe7\x35\x30\xac\xca\x4f\x48\x3a\x79\x7a"
++	"\xbc\x0a\xb1\x82\xb3\x24\xfb\x61\xd1\x08\xa9\x4b\xb2\xc8\xe3\xfb"
++	"\xb9\x6a\xda\xb7\x60\xd7\xf4\x68\x1d\x4f\x42\xa3\xde\x39\x4d\xf4"
++	"\xae\x56\xed\xe7\x63\x72\xbb\x19\x0b\x07\xa7\xc8\xee\x0a\x6d\x70"
++	"\x9e\x02\xfc\xe1\xcd\xf7\xe2\xec\xc0\x34\x04\xcd\x28\x34\x2f\x61"
++	"\x91\x72\xfe\x9c\xe9\x85\x83\xff\x8e\x4f\x12\x32\xee\xf2\x81\x83"
++	"\xc3\xfe\x3b\x1b\x4c\x6f\xad\x73\x3b\xb5\xfc\xbc\x2e\xc2\x20\x05"
++	"\xc5\x8e\xf1\x83\x7d\x16\x83\xb2\xc6\xf3\x4a\x26\xc1\xb2\xef\xfa"
++	"\x88\x6b\x42\x38\x61\x1f\xcf\xdc\xde\x35\x5b\x3b\x65\x19\x03\x5b"
++	"\xbc\x34\xf4\xde\xf9\x9c\x02\x38\x61\xb4\x6f\xc9\xd6\xe6\xc9\x07"
++	"\x7a\xd9\x1d\x26\x91\xf7\xf7\xee\x59\x8c\xb0\xfa\xc1\x86\xd9\x1c"
++	"\xae\xfe\x13\x09\x85\x13\x92\x70\xb4\x13\x0c\x93\xbc\x43\x79\x44"
++	"\xf4\xfd\x44\x52\xe2\xd7\x4d\xd3\x64\xf2\xe2\x1e\x71\xf5\x4b\xff"
++	"\x5c\xae\x82\xab\x9c\x9d\xf6\x9e\xe8\x6d\x2b\xc5\x22\x36\x3a\x0d"
++	"\xab\xc5\x21\x97\x9b\x0d\xea\xda\x1d\xbf\x9a\x42\xd5\xc4\x48\x4e"
++	"\x0a\xbc\xd0\x6b\xfa\x53\xdd\xef\x3c\x1b\x20\xee\x3f\xd5\x9d\x7c"
++	"\x25\xe4\x1d\x2b\x66\x9e\x1e\xf1\x6e\x6f\x52\xc3\x16\x4d\xf4\xfb"
++	"\x79\x30\xe9\xe4\xe5\x88\x57\xb6\xac\x7d\x5f\x42\xd6\x9f\x6d\x18"
++	"\x77\x63\xcf\x1d\x55\x03\x40\x04\x87\xf5\x5b\xa5\x7e\x31\xcc\x7a"
++	"\x71\x35\xc8\x86\xef\xb4\x31\x8a\xed\x6a\x1e\x01\x2d\x9e\x68\x32"
++	"\xa9\x07\x60\x0a\x91\x81\x30\xc4\x6d\xc7\x78\xf9\x71\xad\x00\x38"
++	"\x09\x29\x99\xa3\x33\xcb\x8b\x7a\x1a\x1d\xb9\x3d\x71\x40\x00\x3c"
++	"\x2a\x4e\xce\xa9\xf9\x8d\x0a\xcc\x0a\x82\x91\xcd\xce\xc9\x7d\xcf"
++	"\x8e\xc9\xb5\x5a\x7f\x88\xa4\x6b\x4d\xb5\xa8\x51\xf4\x41\x82\xe1"
++	"\xc6\x8a\x00\x7e\x5e\x0d\xd9\x02\x0b\xfd\x64\xb6\x45\x03\x6c\x7a"
++	"\x4e\x67\x7d\x2c\x38\x53\x2a\x3a\x23\xba\x44\x42\xca\xf5\x3e\xa6"
++	"\x3b\xb4\x54\x32\x9b\x76\x24\xc8\x91\x7b\xdd\x64\xb1\xc0\xfd\x4c"
++	"\xb3\x8e\x8c\x33\x4c\x70\x1c\x3a\xcd\xad\x06\x57\xfc\xcf\xec\x71"
++	"\x9b\x1f\x5c\x3e\x4e\x46\x04\x1f\x38\x81\x47\xfb\x4c\xfd\xb4\x77"
++	"\xa5\x24\x71\xf7\xa9\xa9\x69\x10\xb8\x55\x32\x2e\xdb\x63\x40\xd8"
++	"\xa0\x0e\xf0\x92\x35\x05\x11\xe3\x0a\xbe\xc1\xff\xf9\xe3\xa2\x6e"
++	"\x7f\xb2\x9f\x8c\x18\x30\x23\xc3\x58\x7e\x38\xda\x00\x77\xd9\xb4"
++	"\x76\x3e\x4e\x4b\x94\xb2\xbb\xc1\x94\xc6\x65\x1e\x77\xca\xf9\x92"
++	"\xee\xaa\xc0\x23\x2a\x28\x1b\xf6\xb3\xa7\x39\xc1\x22\x61\x16\x82"
++	"\x0a\xe8\xdb\x58\x47\xa6\x7c\xbe\xf9\xc9\x09\x1b\x46\x2d\x53\x8c"
++	"\xd7\x2b\x03\x74\x6a\xe7\x7f\x5e\x62\x29\x2c\x31\x15\x62\xa8\x46"
++	"\x50\x5d\xc8\x2d\xb8\x54\x33\x8a\xe4\x9f\x52\x35\xc9\x5b\x91\x17"
++	"\x8c\xcf\x2d\xd5\xca\xce\xf4\x03\xec\x9d\x18\x10\xc6\x27\x2b\x04"
++	"\x5b\x3b\x71\xf9\xdc\x6b\x80\xd6\x3f\xdd\x4a\x8e\x9a\xdb\x1e\x69"
++	"\x62\xa6\x95\x26\xd4\x31\x61\xc1\xa4\x1d\x57\x0d\x79\x38\xda\xd4"
++	"\xa4\x0e\x32\x9c\xcf\xf4\x6a\xaa\x36\xad\x00\x4c\xf6\x00\xc8\x38"
++	"\x1e\x42\x5a\x31\xd9\x51\xae\x64\xfd\xb2\x3f\xce\xc9\x50\x9d\x43"
++	"\x68\x7f\xeb\x69\xed\xd1\xcc\x5e\x0b\x8c\xc3\xbd\xf6\x4b\x10\xef"
++	"\x86\xb6\x31\x42\xa3\xab\x88\x29\x55\x5b\x2f\x74\x7c\x93\x26\x65"
++	"\xcb\x2c\x0f\x1c\xc0\x1b\xd7\x02\x29\x38\x88\x39\xd2\xaf\x05\xe4"
++	"\x54\x50\x4a\xc7\x8b\x75\x82\x82\x28\x46\xc0\xba\x35\xc3\x5f\x5c"
++	"\x59\x16\x0c\xc0\x46\xfd\x82\x51\x54\x1f\xc6\x8c\x9c\x86\xb0\x22"
++	"\xbb\x70\x99\x87\x6a\x46\x0e\x74\x51\xa8\xa9\x31\x09\x70\x3f\xee"
++	"\x1c\x21\x7e\x6c\x38\x26\xe5\x2c\x51\xaa\x69\x1e\x0e\x42\x3c\xfc"
++	"\x99\xe9\xe3\x16\x50\xc1\x21\x7b\x62\x48\x16\xcd\xad\x9a\x95\xf9"
++	"\xd5\xb8\x01\x94\x88\xd9\xc0\xa0\xa1\xfe\x30\x75\xa5\x77\xe2\x31"
++	"\x83\xf8\x1d\x4a\x3f\x2f\xa4\x57\x1e\xfc\x8c\xe0\xba\x8a\x4f\xe8"
++	"\xb6\x85\x5d\xfe\x72\xb0\xa6\x6e\xde\xd2\xfb\xab\xfb\xe5\x8a\x30"
++	"\xfa\xfa\xbe\x1c\x5d\x71\xa8\x7e\x2f\x74\x1e\xf8\xc1\xfe\x86\xfe"
++	"\xa6\xbb\xfd\xe5\x30\x67\x7f\x0d\x97\xd1\x1d\x49\xf7\xa8\x44\x3d"
++	"\x08\x22\xe5\x06\xa9\xf4\x61\x4e\x01\x1e\x2a\x94\x83\x8f\xf8\x8c"
++	"\xd6\x8c\x8b\xb7\xc5\xc6\x42\x4c\xff\xff\xff\xff\xff\xff\xff\xff",
++	},
++#endif /* CONFIG_CRYPTO_DH_GROUPS_RFC7919 */
++};
  
--#define DH_KPP_SECRET_MIN_SIZE (sizeof(struct kpp_secret) + 3 * sizeof(int))
-+#define DH_KPP_SECRET_MIN_SIZE (sizeof(struct kpp_secret) + \
-+				sizeof(enum dh_group_id) + 3 * sizeof(int))
-+
-+static const struct safe_prime_group
-+{
-+	enum dh_group_id group_id;
-+	unsigned int max_strength;
-+	unsigned int p_size;
-+	const char *p;
-+} safe_prime_groups[] = {};
-+
-+/* 2 is used as a generator for all safe-prime groups. */
-+static const char safe_prime_group_g[]  = { 2 };
-+
-+static inline const struct safe_prime_group *
-+get_safe_prime_group(enum dh_group_id group_id)
-+{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(safe_prime_groups); ++i) {
-+		if (safe_prime_groups[i].group_id == group_id)
-+			return &safe_prime_groups[i];
-+	}
-+
-+	return NULL;
-+}
- 
- static inline u8 *dh_pack_data(u8 *dst, u8 *end, const void *src, size_t size)
- {
-@@ -28,7 +53,10 @@ static inline const u8 *dh_unpack_data(void *dst, const void *src, size_t size)
- 
- static inline unsigned int dh_data_size(const struct dh *p)
- {
--	return p->key_size + p->p_size + p->g_size;
-+	if (p->group_id == dh_group_id_unknown)
-+		return p->key_size + p->p_size + p->g_size;
-+	else
-+		return p->key_size;
- }
- 
- unsigned int crypto_dh_key_len(const struct dh *p)
-@@ -50,13 +78,18 @@ int crypto_dh_encode_key(char *buf, unsigned int len, const struct dh *params)
- 		return -EINVAL;
- 
- 	ptr = dh_pack_data(ptr, end, &secret, sizeof(secret));
-+	ptr = dh_pack_data(ptr, end, &params->group_id,
-+			   sizeof(params->group_id));
- 	ptr = dh_pack_data(ptr, end, &params->key_size,
- 			   sizeof(params->key_size));
- 	ptr = dh_pack_data(ptr, end, &params->p_size, sizeof(params->p_size));
- 	ptr = dh_pack_data(ptr, end, &params->g_size, sizeof(params->g_size));
- 	ptr = dh_pack_data(ptr, end, params->key, params->key_size);
--	ptr = dh_pack_data(ptr, end, params->p, params->p_size);
--	ptr = dh_pack_data(ptr, end, params->g, params->g_size);
-+	if (params->group_id == dh_group_id_unknown) {
-+		ptr = dh_pack_data(ptr, end, params->p, params->p_size);
-+		ptr = dh_pack_data(ptr, end, params->g, params->g_size);
-+	}
-+
- 	if (ptr != end)
- 		return -EINVAL;
- 	return 0;
-@@ -75,12 +108,45 @@ int crypto_dh_decode_key(const char *buf, unsigned int len, struct dh *params)
- 	if (secret.type != CRYPTO_KPP_SECRET_TYPE_DH)
- 		return -EINVAL;
- 
-+	ptr = dh_unpack_data(&params->group_id, ptr, sizeof(params->group_id));
- 	ptr = dh_unpack_data(&params->key_size, ptr, sizeof(params->key_size));
- 	ptr = dh_unpack_data(&params->p_size, ptr, sizeof(params->p_size));
- 	ptr = dh_unpack_data(&params->g_size, ptr, sizeof(params->g_size));
- 	if (secret.len != crypto_dh_key_len(params))
- 		return -EINVAL;
- 
-+	if (params->group_id == dh_group_id_unknown) {
-+		/* Don't allocate memory. Set pointers to data within
-+		 * the given buffer
-+		 */
-+		params->key = (void *)ptr;
-+		params->p = (void *)(ptr + params->key_size);
-+		params->g = (void *)(ptr + params->key_size + params->p_size);
-+
-+		/*
-+		 * Don't permit 'p' to be 0.  It's not a prime number,
-+		 * and it's subject to corner cases such as 'mod 0'
-+		 * being undefined or crypto_kpp_maxsize() returning
-+		 * 0.
-+		 */
-+		if (memchr_inv(params->p, 0, params->p_size) == NULL)
-+			return -EINVAL;
-+
-+	} else {
-+		const struct safe_prime_group *g;
-+
-+		g = get_safe_prime_group(params->group_id);
-+		if (!g)
-+			return -EINVAL;
-+
-+		params->key = (void *)ptr;
-+
-+		params->p = g->p;
-+		params->p_size = g->p_size;
-+		params->g = safe_prime_group_g;
-+		params->g_size = sizeof(safe_prime_group_g);
-+	}
-+
- 	/*
- 	 * Don't permit the buffer for 'key' or 'g' to be larger than 'p', since
- 	 * some drivers assume otherwise.
-@@ -89,20 +155,6 @@ int crypto_dh_decode_key(const char *buf, unsigned int len, struct dh *params)
- 	    params->g_size > params->p_size)
- 		return -EINVAL;
- 
--	/* Don't allocate memory. Set pointers to data within
--	 * the given buffer
--	 */
--	params->key = (void *)ptr;
--	params->p = (void *)(ptr + params->key_size);
--	params->g = (void *)(ptr + params->key_size + params->p_size);
--
--	/*
--	 * Don't permit 'p' to be 0.  It's not a prime number, and it's subject
--	 * to corner cases such as 'mod 0' being undefined or
--	 * crypto_kpp_maxsize() returning 0.
--	 */
--	if (memchr_inv(params->p, 0, params->p_size) == NULL)
--		return -EINVAL;
- 
- 	return 0;
- }
-diff --git a/crypto/testmgr.h b/crypto/testmgr.h
-index 7f7d5ae48721..a8983c8626fa 100644
---- a/crypto/testmgr.h
-+++ b/crypto/testmgr.h
-@@ -1244,13 +1244,15 @@ static const struct kpp_testvec dh_tv_template[] = {
- 	.secret =
- #ifdef __LITTLE_ENDIAN
- 	"\x01\x00" /* type */
--	"\x11\x02" /* len */
-+	"\x15\x02" /* len */
-+	"\x00\x00\x00\x00" /* group_id == dh_group_id_unknown */
- 	"\x00\x01\x00\x00" /* key_size */
- 	"\x00\x01\x00\x00" /* p_size */
- 	"\x01\x00\x00\x00" /* g_size */
- #else
- 	"\x00\x01" /* type */
--	"\x02\x11" /* len */
-+	"\x02\x15" /* len */
-+	"\x00\x00\x00\x00" /* group_id == dh_group_id_unknown */
- 	"\x00\x00\x01\x00" /* key_size */
- 	"\x00\x00\x01\x00" /* p_size */
- 	"\x00\x00\x00\x01" /* g_size */
-@@ -1342,7 +1344,7 @@ static const struct kpp_testvec dh_tv_template[] = {
- 	"\xd3\x34\x49\xad\x64\xa6\xb1\xc0\x59\x28\x75\x60\xa7\x8a\xb0\x11"
- 	"\x56\x89\x42\x74\x11\xf5\xf6\x5e\x6f\x16\x54\x6a\xb1\x76\x4d\x50"
- 	"\x8a\x68\xc1\x5b\x82\xb9\x0d\x00\x32\x50\xed\x88\x87\x48\x92\x17",
--	.secret_size = 529,
-+	.secret_size = 533,
- 	.b_public_size = 256,
- 	.expected_a_public_size = 256,
- 	.expected_ss_size = 256,
-@@ -1351,13 +1353,15 @@ static const struct kpp_testvec dh_tv_template[] = {
- 	.secret =
- #ifdef __LITTLE_ENDIAN
- 	"\x01\x00" /* type */
--	"\x11\x02" /* len */
-+	"\x15\x02" /* len */
-+	"\x00\x00\x00\x00" /* group_id == dh_group_id_unknown */
- 	"\x00\x01\x00\x00" /* key_size */
- 	"\x00\x01\x00\x00" /* p_size */
- 	"\x01\x00\x00\x00" /* g_size */
- #else
- 	"\x00\x01" /* type */
--	"\x02\x11" /* len */
-+	"\x02\x15" /* len */
-+	"\x00\x00\x00\x00" /* group_id == dh_group_id_unknown */
- 	"\x00\x00\x01\x00" /* key_size */
- 	"\x00\x00\x01\x00" /* p_size */
- 	"\x00\x00\x00\x01" /* g_size */
-@@ -1449,7 +1453,7 @@ static const struct kpp_testvec dh_tv_template[] = {
- 	"\x5e\x5a\x64\xbd\xf6\x85\x04\xe8\x28\x6a\xac\xef\xce\x19\x8e\x9a"
- 	"\xfe\x75\xc0\x27\x69\xe3\xb3\x7b\x21\xa7\xb1\x16\xa4\x85\x23\xee"
- 	"\xb0\x1b\x04\x6e\xbd\xab\x16\xde\xfd\x86\x6b\xa9\x95\xd7\x0b\xfd",
--	.secret_size = 529,
-+	.secret_size = 533,
- 	.b_public_size = 256,
- 	.expected_a_public_size = 256,
- 	.expected_ss_size = 256,
+ /* 2 is used as a generator for all safe-prime groups. */
+ static const char safe_prime_group_g[]  = { 2 };
 diff --git a/include/crypto/dh.h b/include/crypto/dh.h
-index 67f3f6bca527..15d8b2dfe4a2 100644
+index 15d8b2dfe4a2..59be1fe3a978 100644
 --- a/include/crypto/dh.h
 +++ b/include/crypto/dh.h
-@@ -19,6 +19,11 @@
-  * the KPP API function call of crypto_kpp_set_secret.
-  */
+@@ -22,6 +22,13 @@
+ /** enum dh_group_id - identify well-known domain parameter sets */
+ enum dh_group_id {
+ 	dh_group_id_unknown = 0,
++#ifdef CONFIG_CRYPTO_DH_GROUPS_RFC7919
++	dh_group_id_rfc7919_ffdhe2048 = 1, /* Constant used by test vector. */
++	dh_group_id_rfc7919_ffdhe3072,
++	dh_group_id_rfc7919_ffdhe4096,
++	dh_group_id_rfc7919_ffdhe6144,
++	dh_group_id_rfc7919_ffdhe8192,
++#endif
+ };
  
-+/** enum dh_group_id - identify well-known domain parameter sets */
-+enum dh_group_id {
-+	dh_group_id_unknown = 0,
-+};
-+
  /**
-  * struct dh - define a DH private key
-  *
-@@ -30,6 +35,7 @@
-  * @g_size:	Size of DH generator G
-  */
- struct dh {
-+	enum dh_group_id group_id;
- 	const void *key;
- 	const void *p;
- 	const void *g;
 -- 
 2.26.2
 

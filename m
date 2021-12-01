@@ -2,363 +2,474 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F9E464C0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE56A464C14
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348808AbhLAKzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:55:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52312 "EHLO
+        id S1348820AbhLAK4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:56:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242505AbhLAKzk (ORCPT
+        with ESMTP id S242505AbhLAK4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:55:40 -0500
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22F5C061574;
-        Wed,  1 Dec 2021 02:52:19 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: kholk11)
-        with ESMTPSA id 06D9D1F45630
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
-        t=1638355938; bh=rL9Yo0VP8rvWWbfN9374jnoFbEFvxR/1usMNsyxgNhg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GhOvmzRBH6ydmh3oDb3Ju4hTU4S7ptZWIgytadzTT3xEd1H438JXLGqOQVMRr5Lw6
-         NOHiJO9s7S1tI6fWuRt24Ue8mbPAuRCpmN6rVxu/znMNrG1rvrGoa8wAyl66Bi9eo+
-         lypT5RYbnoxyNjGG4a+ieSyBzCIu9GN76OtKWc3kt+LABz/ZnpuFpAHrifJoDgdE7z
-         s0NbFq373f6jwQ2+d3gNuYuAtHCgP4X5YyRC4re3w5Dnvt56RB7w7VNoXaFraXZB07
-         vMBa9KhYI2So5VKuY7pWzm0QOQGP1XCUb9JhYeJv/UdMEs+zU6H/9lh25JdsQAkS8J
-         CjHKA7xxSODAA==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     robdclark@gmail.com
-Cc:     dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@linux.ie,
-        daniel@ffwll.ch, maxime@cerno.tech, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        konrad.dybcio@somainline.org, marijn.suijten@somainline.org,
-        jami.kettunen@somainline.org, martin.botka@somainline.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH v3 2/2] drm/msm: Initialize MDSS irq domain at probe time
-Date:   Wed,  1 Dec 2021 11:52:10 +0100
-Message-Id: <20211201105210.24970-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211201105210.24970-1-angelogioacchino.delregno@collabora.com>
-References: <20211201105210.24970-1-angelogioacchino.delregno@collabora.com>
+        Wed, 1 Dec 2021 05:56:51 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CC5C061574;
+        Wed,  1 Dec 2021 02:53:30 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id v1so99710990edx.2;
+        Wed, 01 Dec 2021 02:53:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=njdmelRvCk+c4A0jl2+cstAddUR1eEr8TJPEY6E85O0=;
+        b=FGcJiKA4rLaZFQQgK2D94rL6MLj5xEWQf54W18/ZvZ54XLg1mVqo2ptXbE2fFHRgdg
+         e2iL8KzSh/Eln3uWcPKlV5UHlBAHnvSBdWR5MExjcp5CpcUJiniqnQPiwSwPNX9gw4WZ
+         FNFoAV0ryeDsHoJd1ArfYFW55+8BSyFwbTo1Zu8a7xGLx+CxBGJ12PseZnj9DgsB4KCm
+         qkyP7pVWnYkoTedxIdwITKmgLlDiJvD8wd+368iPXm+uK7XUPtqKXe13ENN8zsF0oulS
+         ODWrk/OI3rtLwy2SZg212zXicXiq1CYt6mNk3b1DpgIAvcBUIZVe5ABUsICSJf24PrRW
+         3cUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=njdmelRvCk+c4A0jl2+cstAddUR1eEr8TJPEY6E85O0=;
+        b=7JfWNpA2Df8BY+2XwoPKNFFtMMMDCDsbJMExqoYSzmQBPCfTM/eIYuY+lYOtDRQYRx
+         3Abb9wIZKvOy20C9I8Bu8qCxJn1pcHF6Crc4Eg1sJlg7f9FyY32EqJpcBxRO0w7dK6QD
+         oweTx2TB3gQBD2XZD2K3fdQBMea+m387cUvQ/aKCHAoaRjiS/HB7wlUTkdncMtAQ1hMt
+         fRyc0NI/WpdMxlOpcVxk3ea6UPh+LdQZ9SSAR3+zRVHuye/5nP0X5eRIIMqxhgX9jV6F
+         yRNOKBwenOJ4hl3wtrTydY5wAE3tc3lP1wGXPapStC4Y5bH3guFTCglx8prwDS8Q5/EM
+         i9BQ==
+X-Gm-Message-State: AOAM532mVodAR6yiO60J0Pxp4UhA9i8Q8MVkyCo1YgXoplSssNu1TBmd
+        mD/O8+AuVYs94TFztrO9rkE6wX0i2NVydWDU0bY=
+X-Google-Smtp-Source: ABdhPJxAlgMfSYNttB2rFlnB8h6tPe3Ml8h5UAk9iHJgK727Bd1eFlIrOriJdKhxZlRMk1oB7S0UtV+R0urL9fz4su4=
+X-Received: by 2002:a05:6402:4394:: with SMTP id o20mr7342907edc.342.1638356009079;
+ Wed, 01 Dec 2021 02:53:29 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211130111325.29328-1-semen.protsenko@linaro.org> <20211130111325.29328-3-semen.protsenko@linaro.org>
+In-Reply-To: <20211130111325.29328-3-semen.protsenko@linaro.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 1 Dec 2021 12:52:52 +0200
+Message-ID: <CAHp75Vet9avpGHey45JT9pQajrcX71OPizJ+eTGs6g08OAENQg@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND 2/5] soc: samsung: Add USI driver
+To:     Sam Protsenko <semen.protsenko@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        devicetree <devicetree@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 8f59ee9a570c ("drm/msm/dsi: Adjust probe order"), the
-DSI host gets initialized earlier, but this caused unability to probe
-the entire stack of components because they all depend on interrupts
-coming from the main `mdss` node (mdp5, or dpu1).
+On Wed, Dec 1, 2021 at 12:42 AM Sam Protsenko
+<semen.protsenko@linaro.org> wrote:
+>
+> USIv2 IP-core is found on modern ARM64 Exynos SoCs (like Exynos850) and
+> provides selectable serial protocol (one of: UART, SPI, I2C). USIv2
+> registers usually reside in the same register map as a particular
+> underlying protocol it implements, but have some particular offset. E.g.
+> on Exynos850 the USI_UART has 0x13820000 base address, where UART
+> registers have 0x00..0x40 offsets, and USI registers have 0xc0..0xdc
+> offsets. Desired protocol can be chosen via SW_CONF register from System
+> Register block of the same domain as USI.
+>
+> Before starting to use a particular protocol, USIv2 must be configured
+> properly:
+>   1. Select protocol to be used via System Register
+>   2. Clear "reset" flag in USI_CON
+>   3. Configure HWACG behavior (e.g. for UART Rx the HWACG must be
+>      disabled, so that the IP clock is not gated automatically); this is
+>      done using USI_OPTION register
+>   4. Keep both USI clocks (PCLK and IPCLK) running during USI registers
+>      modification
+>
+> This driver implements above behavior. Of course, USIv2 driver should be
 
-To fix this issue, anticipate registering the irq domain from mdp5/dpu1
-at msm_mdev_probe() time, as to make sure that the interrupt controller
-is available before dsi and/or other components try to initialize,
-finally satisfying the dependency.
+the above
 
-Moreover, to balance this operation while avoiding to always check if
-the irq domain is registered everytime we call bind() on msm_pdev, add
-a new *remove function pointer to msm_mdss_funcs, used to remove the
-irq domain only at msm_pdev_remove() time.
+> probed before UART/I2C/SPI drivers. It can be achived by embedding
 
-Fixes: 8f59ee9a570c ("drm/msm/dsi: Adjust probe order")
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c  | 50 ++++++++++++-------
- drivers/gpu/drm/msm/disp/mdp5/mdp5_mdss.c | 58 +++++++++++++++--------
- drivers/gpu/drm/msm/msm_drv.c             | 22 ++++++++-
- drivers/gpu/drm/msm/msm_kms.h             |  3 ++
- 4 files changed, 95 insertions(+), 38 deletions(-)
+achieved
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
-index b466784d9822..6c2569175633 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_mdss.c
-@@ -106,13 +106,10 @@ static const struct irq_domain_ops dpu_mdss_irqdomain_ops = {
- 	.xlate = irq_domain_xlate_onecell,
- };
- 
--static int _dpu_mdss_irq_domain_add(struct dpu_mdss *dpu_mdss)
-+static int _dpu_mdss_irq_domain_add(struct device *dev, struct dpu_mdss *dpu_mdss)
- {
--	struct device *dev;
- 	struct irq_domain *domain;
- 
--	dev = dpu_mdss->base.dev->dev;
--
- 	domain = irq_domain_add_linear(dev->of_node, 32,
- 			&dpu_mdss_irqdomain_ops, dpu_mdss);
- 	if (!domain) {
-@@ -194,7 +191,6 @@ static void dpu_mdss_destroy(struct drm_device *dev)
- 
- 	pm_runtime_suspend(dev->dev);
- 	pm_runtime_disable(dev->dev);
--	_dpu_mdss_irq_domain_fini(dpu_mdss);
- 	irq = platform_get_irq(pdev, 0);
- 	irq_set_chained_handler_and_data(irq, NULL, NULL);
- 	msm_dss_put_clk(mp->clk_config, mp->num_clk);
-@@ -203,15 +199,43 @@ static void dpu_mdss_destroy(struct drm_device *dev)
- 	if (dpu_mdss->mmio)
- 		devm_iounmap(&pdev->dev, dpu_mdss->mmio);
- 	dpu_mdss->mmio = NULL;
--	priv->mdss = NULL;
-+}
-+
-+static void dpu_mdss_remove(struct msm_mdss *mdss)
-+{
-+	_dpu_mdss_irq_domain_fini(to_dpu_mdss(mdss));
- }
- 
- static const struct msm_mdss_funcs mdss_funcs = {
- 	.enable	= dpu_mdss_enable,
- 	.disable = dpu_mdss_disable,
- 	.destroy = dpu_mdss_destroy,
-+	.remove = dpu_mdss_remove,
- };
- 
-+int dpu_mdss_early_init(struct device *dev, struct msm_drm_private *priv)
-+{
-+	struct dpu_mdss *dpu_mdss;
-+	int ret;
-+
-+	dpu_mdss = devm_kzalloc(dev, sizeof(*dpu_mdss), GFP_KERNEL);
-+	if (!dpu_mdss)
-+		return -ENOMEM;
-+
-+	ret = _dpu_mdss_irq_domain_add(dev, dpu_mdss);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Here we have no drm_device yet, but still do the assignment
-+	 * so that we can retrieve our struct dpu_mdss from the main
-+	 * init function, since we allocate it here.
-+	 */
-+	priv->mdss = &dpu_mdss->base;
-+
-+	return 0;
-+}
-+
- int dpu_mdss_init(struct drm_device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev->dev);
-@@ -221,9 +245,9 @@ int dpu_mdss_init(struct drm_device *dev)
- 	int ret;
- 	int irq;
- 
--	dpu_mdss = devm_kzalloc(dev->dev, sizeof(*dpu_mdss), GFP_KERNEL);
-+	dpu_mdss = to_dpu_mdss(priv->mdss);
- 	if (!dpu_mdss)
--		return -ENOMEM;
-+		return -ENODATA;
- 
- 	dpu_mdss->mmio = msm_ioremap(pdev, "mdss", "mdss");
- 	if (IS_ERR(dpu_mdss->mmio))
-@@ -241,10 +265,6 @@ int dpu_mdss_init(struct drm_device *dev)
- 	dpu_mdss->base.dev = dev;
- 	dpu_mdss->base.funcs = &mdss_funcs;
- 
--	ret = _dpu_mdss_irq_domain_add(dpu_mdss);
--	if (ret)
--		goto irq_domain_error;
--
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0) {
- 		ret = irq;
-@@ -253,16 +273,10 @@ int dpu_mdss_init(struct drm_device *dev)
- 
- 	irq_set_chained_handler_and_data(irq, dpu_mdss_irq,
- 					 dpu_mdss);
--
--	priv->mdss = &dpu_mdss->base;
--
- 	pm_runtime_enable(dev->dev);
--
- 	return 0;
- 
- irq_error:
--	_dpu_mdss_irq_domain_fini(dpu_mdss);
--irq_domain_error:
- 	msm_dss_put_clk(mp->clk_config, mp->num_clk);
- clk_parse_err:
- 	devm_kfree(&pdev->dev, mp->clk_config);
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_mdss.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_mdss.c
-index 0ea53420bc40..a99538ae4182 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_mdss.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_mdss.c
-@@ -112,9 +112,8 @@ static const struct irq_domain_ops mdss_hw_irqdomain_ops = {
- };
- 
- 
--static int mdss_irq_domain_init(struct mdp5_mdss *mdp5_mdss)
-+static int mdss_irq_domain_init(struct device *dev, struct mdp5_mdss *mdp5_mdss)
- {
--	struct device *dev = mdp5_mdss->base.dev->dev;
- 	struct irq_domain *d;
- 
- 	d = irq_domain_add_linear(dev->of_node, 32, &mdss_hw_irqdomain_ops,
-@@ -182,20 +181,52 @@ static void mdp5_mdss_destroy(struct drm_device *dev)
- 	if (!mdp5_mdss)
- 		return;
- 
--	irq_domain_remove(mdp5_mdss->irqcontroller.domain);
--	mdp5_mdss->irqcontroller.domain = NULL;
--
- 	regulator_disable(mdp5_mdss->vdd);
- 
- 	pm_runtime_disable(dev->dev);
- }
- 
-+static void mdp5_mdss_remove(struct msm_mdss *mdss)
-+{
-+	struct mdp5_mdss *mdp5_mdss = to_mdp5_mdss(mdss);
-+
-+	irq_domain_remove(mdp5_mdss->irqcontroller.domain);
-+	mdp5_mdss->irqcontroller.domain = NULL;
-+}
-+
- static const struct msm_mdss_funcs mdss_funcs = {
- 	.enable	= mdp5_mdss_enable,
- 	.disable = mdp5_mdss_disable,
- 	.destroy = mdp5_mdss_destroy,
-+	.remove = mdp5_mdss_remove,
- };
- 
-+int mdp5_mdss_early_init(struct device *dev, struct msm_drm_private *priv)
-+{
-+	struct mdp5_mdss *mdp5_mdss;
-+	int ret;
-+
-+	if (!of_device_is_compatible(dev->of_node, "qcom,mdss"))
-+		return 0;
-+
-+	mdp5_mdss = devm_kzalloc(dev, sizeof(*mdp5_mdss), GFP_KERNEL);
-+	if (!mdp5_mdss)
-+		return -ENOMEM;
-+
-+	ret = mdss_irq_domain_init(dev, mdp5_mdss);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Here we have no drm_device yet, but still do the assignment
-+	 * so that we can retrieve our struct mdp5_mdss from the main
-+	 * init function, since we allocate it here.
-+	 */
-+	priv->mdss = &mdp5_mdss->base;
-+
-+	return 0;
-+}
-+
- int mdp5_mdss_init(struct drm_device *dev)
- {
- 	struct platform_device *pdev = to_platform_device(dev->dev);
-@@ -208,11 +239,9 @@ int mdp5_mdss_init(struct drm_device *dev)
- 	if (!of_device_is_compatible(dev->dev->of_node, "qcom,mdss"))
- 		return 0;
- 
--	mdp5_mdss = devm_kzalloc(dev->dev, sizeof(*mdp5_mdss), GFP_KERNEL);
--	if (!mdp5_mdss) {
--		ret = -ENOMEM;
--		goto fail;
--	}
-+	mdp5_mdss = to_mdp5_mdss(priv->mdss);
-+	if (!mdp5_mdss)
-+		return -ENODATA;
- 
- 	mdp5_mdss->base.dev = dev;
- 
-@@ -255,17 +284,8 @@ int mdp5_mdss_init(struct drm_device *dev)
- 		goto fail_irq;
- 	}
- 
--	ret = mdss_irq_domain_init(mdp5_mdss);
--	if (ret) {
--		DRM_DEV_ERROR(dev->dev, "failed to init sub-block irqs: %d\n", ret);
--		goto fail_irq;
--	}
--
- 	mdp5_mdss->base.funcs = &mdss_funcs;
--	priv->mdss = &mdp5_mdss->base;
--
- 	pm_runtime_enable(dev->dev);
--
- 	return 0;
- fail_irq:
- 	regulator_disable(mdp5_mdss->vdd);
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 64230e473a34..ded4f4d6545f 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -1389,6 +1389,20 @@ static int msm_pdev_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
-+	switch (get_mdp_ver(pdev)) {
-+	case KMS_MDP5:
-+		ret = mdp5_mdss_early_init(&pdev->dev, priv);
-+		break;
-+	case KMS_DPU:
-+		ret = dpu_mdss_early_init(&pdev->dev, priv);
-+		break;
-+	default:
-+		ret = 0;
-+		break;
-+	}
-+	if (ret)
-+		return ret;
-+
- 	platform_set_drvdata(pdev, priv);
- 
- 	if (get_mdp_ver(pdev)) {
-@@ -1421,6 +1435,12 @@ static int msm_pdev_probe(struct platform_device *pdev)
- 
- static int msm_pdev_remove(struct platform_device *pdev)
- {
-+	struct msm_drm_private *priv = platform_get_drvdata(pdev);
-+
-+	if (priv->mdss && priv->mdss->funcs)
-+		priv->mdss->funcs->remove(priv->mdss);
-+
-+	priv->mdss = NULL;
- 	component_master_del(&pdev->dev, &msm_drm_ops);
- 	of_platform_depopulate(&pdev->dev);
- 
-@@ -1432,7 +1452,7 @@ static void msm_pdev_shutdown(struct platform_device *pdev)
- 	struct msm_drm_private *priv = platform_get_drvdata(pdev);
- 	struct drm_device *drm = priv ? priv->dev : NULL;
- 
--	if (!priv || !priv->kms)
-+	if (!priv || !priv->kms || !drm->mode_config.funcs)
- 		return;
- 
- 	drm_atomic_helper_shutdown(drm);
-diff --git a/drivers/gpu/drm/msm/msm_kms.h b/drivers/gpu/drm/msm/msm_kms.h
-index 6a42b819abc4..2c539a228156 100644
---- a/drivers/gpu/drm/msm/msm_kms.h
-+++ b/drivers/gpu/drm/msm/msm_kms.h
-@@ -202,6 +202,7 @@ struct msm_mdss_funcs {
- 	int (*enable)(struct msm_mdss *mdss);
- 	int (*disable)(struct msm_mdss *mdss);
- 	void (*destroy)(struct drm_device *dev);
-+	void (*remove)(struct msm_mdss *mdss);
- };
- 
- struct msm_mdss {
-@@ -209,7 +210,9 @@ struct msm_mdss {
- 	const struct msm_mdss_funcs *funcs;
- };
- 
-+int mdp5_mdss_early_init(struct device *dev, struct msm_drm_private *priv);
- int mdp5_mdss_init(struct drm_device *dev);
-+int dpu_mdss_early_init(struct device *dev, struct msm_drm_private *priv);
- int dpu_mdss_init(struct drm_device *dev);
- 
- #define for_each_crtc_mask(dev, crtc, crtc_mask) \
+> UART/I2C/SPI nodes inside of USI node (in Device Tree); driver then
+
+the USI node
+
+> walks underlying nodes and instantiates those. Driver also handles USI
+> configuration on PM resume, as register contents can be lost during CPU
+> suspend.
+>
+> This driver is designed with different USI versions in mind. So it
+> should be relatively easy to add new USI revisions to it later.
+>
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
+> ---
+> Changes in v2:
+>   - Replaced arch_initcall() with module_platform_driver()
+>   - Reworked the whole driver for the easy adoption of other USI
+>     revisions
+>   - Added "mode" validation right after reading it from device tree
+>   - Handled new USI_V2_NONE value
+>
+>  drivers/soc/samsung/Kconfig      |  14 ++
+>  drivers/soc/samsung/Makefile     |   2 +
+>  drivers/soc/samsung/exynos-usi.c | 274 +++++++++++++++++++++++++++++++
+>  3 files changed, 290 insertions(+)
+>  create mode 100644 drivers/soc/samsung/exynos-usi.c
+>
+> diff --git a/drivers/soc/samsung/Kconfig b/drivers/soc/samsung/Kconfig
+> index e2cedef1e8d1..a9f8b224322e 100644
+> --- a/drivers/soc/samsung/Kconfig
+> +++ b/drivers/soc/samsung/Kconfig
+> @@ -23,6 +23,20 @@ config EXYNOS_CHIPID
+>           Support for Samsung Exynos SoC ChipID and Adaptive Supply Voltage.
+>           This driver can also be built as module (exynos_chipid).
+>
+> +config EXYNOS_USI
+> +       tristate "Exynos USI (Universal Serial Interface) driver"
+> +       default ARCH_EXYNOS && ARM64
+> +       depends on ARCH_EXYNOS || COMPILE_TEST
+> +       select MFD_SYSCON
+> +       help
+> +         Enable support for USI block. USI (Universal Serial Interface) is an
+> +         IP-core found in modern Samsung Exynos SoCs, like Exynos850 and
+> +         ExynosAutoV0. USI block can be configured to provide one of the
+> +         following serial protocols: UART, SPI or High Speed I2C.
+> +
+> +         This driver allows one to configure USI for desired protocol, which
+> +         is usually done in USI node in Device Tree.
+> +
+>  config EXYNOS_PMU
+>         bool "Exynos PMU controller driver" if COMPILE_TEST
+>         depends on ARCH_EXYNOS || ((ARM || ARM64) && COMPILE_TEST)
+> diff --git a/drivers/soc/samsung/Makefile b/drivers/soc/samsung/Makefile
+> index 2ae4bea804cf..9f59d1905ab0 100644
+> --- a/drivers/soc/samsung/Makefile
+> +++ b/drivers/soc/samsung/Makefile
+> @@ -4,6 +4,8 @@ obj-$(CONFIG_EXYNOS_ASV_ARM)    += exynos5422-asv.o
+>  obj-$(CONFIG_EXYNOS_CHIPID)    += exynos_chipid.o
+>  exynos_chipid-y                        += exynos-chipid.o exynos-asv.o
+>
+> +obj-$(CONFIG_EXYNOS_USI)       += exynos-usi.o
+> +
+>  obj-$(CONFIG_EXYNOS_PMU)       += exynos-pmu.o
+>
+>  obj-$(CONFIG_EXYNOS_PMU_ARM_DRIVERS)   += exynos3250-pmu.o exynos4-pmu.o \
+> diff --git a/drivers/soc/samsung/exynos-usi.c b/drivers/soc/samsung/exynos-usi.c
+> new file mode 100644
+> index 000000000000..6e4112696f49
+> --- /dev/null
+> +++ b/drivers/soc/samsung/exynos-usi.c
+> @@ -0,0 +1,274 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2021 Linaro Ltd.
+> + * Author: Sam Protsenko <semen.protsenko@linaro.org>
+> + *
+> + * Samsung Exynos USI driver (Universal Serial Interface).
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/mfd/syscon.h>
+
+Sorted?
+
+> +#include <dt-bindings/soc/samsung,exynos-usi.h>
+> +
+> +/* USIv2: System Register: SW_CONF register bits */
+> +#define USI_V2_SW_CONF_NONE    0x0
+> +#define USI_V2_SW_CONF_UART    BIT(0)
+> +#define USI_V2_SW_CONF_SPI     BIT(1)
+> +#define USI_V2_SW_CONF_I2C     BIT(2)
+> +#define USI_V2_SW_CONF_MASK    (USI_V2_SW_CONF_UART | USI_V2_SW_CONF_SPI | \
+> +                                USI_V2_SW_CONF_I2C)
+> +
+> +/* USIv2: USI register offsets */
+> +#define USI_CON                        0x04
+> +#define USI_OPTION             0x08
+> +
+> +/* USIv2: USI register bits */
+> +#define USI_CON_RESET          BIT(0)
+> +#define USI_OPTION_CLKREQ_ON   BIT(1)
+> +#define USI_OPTION_CLKSTOP_ON  BIT(2)
+> +
+> +enum exynos_usi_ver {
+> +       USI_VER2 = 2,
+> +};
+> +
+> +struct exynos_usi_variant {
+> +       enum exynos_usi_ver ver;        /* USI IP-core version */
+> +       unsigned int sw_conf_mask;      /* SW_CONF mask for all protocols */
+> +       size_t min_mode;                /* first index in exynos_usi_modes[] */
+> +       size_t max_mode;                /* last index in exynos_usi_modes[] */
+> +};
+> +
+> +struct exynos_usi {
+> +       struct device *dev;
+> +       void __iomem *regs;             /* USI register map */
+> +       struct clk *pclk;               /* USI bus clock */
+> +       struct clk *ipclk;              /* USI operating clock */
+> +
+> +       size_t mode;                    /* current USI SW_CONF mode index */
+> +       bool clkreq_on;                 /* always provide clock to IP */
+> +
+> +       /* System Register */
+> +       struct regmap *sysreg;          /* System Register map */
+> +       unsigned int sw_conf;           /* SW_CONF register offset in sysreg */
+> +
+> +       const struct exynos_usi_variant *data;
+> +};
+> +
+> +struct exynos_usi_mode {
+> +       const char *name;               /* mode name */
+> +       unsigned int val;               /* mode register value */
+> +};
+> +
+> +static const struct exynos_usi_mode exynos_usi_modes[] = {
+> +       [USI_V2_NONE] = { .name = "none", .val = USI_V2_SW_CONF_NONE },
+> +       [USI_V2_UART] = { .name = "uart", .val = USI_V2_SW_CONF_UART },
+> +       [USI_V2_SPI] =  { .name = "spi",  .val = USI_V2_SW_CONF_SPI },
+> +       [USI_V2_I2C] =  { .name = "i2c",  .val = USI_V2_SW_CONF_I2C },
+> +};
+> +
+> +static const struct exynos_usi_variant exynos_usi_v2_data = {
+> +       .ver            = USI_VER2,
+> +       .sw_conf_mask   = USI_V2_SW_CONF_MASK,
+> +       .min_mode       = USI_V2_NONE,
+> +       .max_mode       = USI_V2_I2C,
+> +};
+> +
+> +static const struct of_device_id exynos_usi_dt_match[] = {
+> +       {
+> +               .compatible = "samsung,exynos-usi-v2",
+> +               .data = &exynos_usi_v2_data,
+> +       },
+
+> +       { }, /* sentinel */
+
+Comma is not needed.
+
+> +};
+> +MODULE_DEVICE_TABLE(of, exynos_usi_dt_match);
+> +
+> +/**
+> + * exynos_usi_set_sw_conf - Set USI block configuration mode
+> + * @usi: USI driver object
+> + * @mode: Mode index
+> + *
+> + * Select underlying serial protocol (UART/SPI/I2C) in USI IP-core.
+> + *
+> + * Return: 0 on success, or negative error code on failure.
+> + */
+> +static int exynos_usi_set_sw_conf(struct exynos_usi *usi, size_t mode)
+> +{
+> +       unsigned int val;
+> +       int ret;
+> +
+> +       if (mode < usi->data->min_mode || mode > usi->data->max_mode)
+> +               return -EINVAL;
+> +
+> +       val = exynos_usi_modes[mode].val;
+> +       ret = regmap_update_bits(usi->sysreg, usi->sw_conf,
+> +                                usi->data->sw_conf_mask, val);
+> +       if (ret)
+> +               return ret;
+> +
+> +       usi->mode = mode;
+> +       dev_dbg(usi->dev, "protocol: %s\n", exynos_usi_modes[usi->mode].name);
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * exynos_usi_enable - Initialize USI block
+> + * @usi: USI driver object
+> + *
+> + * USI IP-core start state is "reset" (on startup and after CPU resume). This
+> + * routine enables USI block by clearing the reset flag. It also configures
+
+the USI block
+
+> + * HWACG behavior (needed e.g. for UART Rx). It should be performed before
+> + * underlying protocol becomes functional.
+> + *
+> + * Return: 0 on success, or negative error code on failure.
+> + */
+> +static int exynos_usi_enable(const struct exynos_usi *usi)
+> +{
+> +       u32 val;
+> +       int ret;
+> +
+> +       ret = clk_prepare_enable(usi->pclk);
+> +       if (ret)
+> +               return ret;
+> +
+> +       ret = clk_prepare_enable(usi->ipclk);
+> +       if (ret)
+> +               goto err_pclk;
+
+Wondering if these clocks may be operated as a bulk.
+
+> +       /* Enable USI block */
+> +       val = readl(usi->regs + USI_CON);
+> +       val &= ~USI_CON_RESET;
+> +       writel(val, usi->regs + USI_CON);
+> +       udelay(1);
+> +
+> +       /* Continuously provide the clock to USI IP w/o gating */
+> +       if (usi->clkreq_on) {
+> +               val = readl(usi->regs + USI_OPTION);
+> +               val &= ~USI_OPTION_CLKSTOP_ON;
+> +               val |= USI_OPTION_CLKREQ_ON;
+> +               writel(val, usi->regs + USI_OPTION);
+> +       }
+> +
+> +       clk_disable_unprepare(usi->ipclk);
+> +err_pclk:
+> +       clk_disable_unprepare(usi->pclk);
+> +       return ret;
+> +}
+> +
+> +static int exynos_usi_configure(struct exynos_usi *usi)
+> +{
+> +       int ret;
+> +
+> +       ret = exynos_usi_set_sw_conf(usi, usi->mode);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (usi->data->ver == USI_VER2)
+> +               return exynos_usi_enable(usi);
+> +
+> +       return 0;
+> +}
+> +
+> +static int exynos_usi_parse_dt(struct device_node *np, struct exynos_usi *usi)
+> +{
+> +       int ret;
+> +       u32 mode;
+> +
+> +       ret = of_property_read_u32(np, "samsung,mode", &mode);
+> +       if (ret)
+> +               return ret;
+> +       if (mode < usi->data->min_mode || mode > usi->data->max_mode)
+> +               return -EINVAL;
+> +       usi->mode = mode;
+> +
+> +       usi->sysreg = syscon_regmap_lookup_by_phandle(np, "samsung,sysreg");
+> +       if (IS_ERR(usi->sysreg))
+> +               return PTR_ERR(usi->sysreg);
+> +
+> +       ret = of_property_read_u32_index(np, "samsung,sysreg", 1,
+> +                                        &usi->sw_conf);
+> +       if (ret)
+> +               return ret;
+> +
+> +       usi->clkreq_on = of_property_read_bool(np, "samsung,clkreq-on");
+> +
+> +       return 0;
+> +}
+> +
+> +static int exynos_usi_probe(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct device_node *np = dev->of_node;
+> +       struct exynos_usi *usi;
+> +       int ret;
+> +
+> +       usi = devm_kzalloc(dev, sizeof(*usi), GFP_KERNEL);
+> +       if (!usi)
+> +               return -ENOMEM;
+> +
+> +       usi->dev = dev;
+> +       platform_set_drvdata(pdev, usi);
+> +
+> +       usi->data = of_device_get_match_data(dev);
+> +       if (!usi->data)
+> +               return -EINVAL;
+> +
+> +       ret = exynos_usi_parse_dt(np, usi);
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (usi->data->ver == USI_VER2) {
+> +               usi->regs = devm_platform_ioremap_resource(pdev, 0);
+> +               if (IS_ERR(usi->regs))
+> +                       return PTR_ERR(usi->regs);
+> +
+> +               usi->pclk = devm_clk_get(dev, "pclk");
+> +               if (IS_ERR(usi->pclk))
+> +                       return PTR_ERR(usi->pclk);
+> +
+> +               usi->ipclk = devm_clk_get(dev, "ipclk");
+> +               if (IS_ERR(usi->ipclk))
+> +                       return PTR_ERR(usi->ipclk);
+
+Sounds like a bulk clock.
+
+> +       }
+> +
+> +       ret = exynos_usi_configure(usi);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /* Make it possible to embed protocol nodes into USI np */
+> +       return of_platform_populate(np, NULL, NULL, dev);
+> +}
+
+> +#ifdef CONFIG_PM_SLEEP
+
+__maybe_unused?
+
+> +static int exynos_usi_resume_noirq(struct device *dev)
+> +{
+> +       struct exynos_usi *usi = dev_get_drvdata(dev);
+> +
+> +       return exynos_usi_configure(usi);
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops exynos_usi_pm = {
+> +       SET_NOIRQ_SYSTEM_SLEEP_PM_OPS(NULL, exynos_usi_resume_noirq)
+> +};
+> +
+> +static struct platform_driver exynos_usi_driver = {
+> +       .driver = {
+> +               .name           = "exynos-usi",
+> +               .pm             = &exynos_usi_pm,
+> +               .of_match_table = exynos_usi_dt_match,
+> +       },
+> +       .probe = exynos_usi_probe,
+> +};
+
+> +
+
+No need for a blank line here.
+
+> +module_platform_driver(exynos_usi_driver);
+> +
+> +MODULE_DESCRIPTION("Samsung USI driver");
+> +MODULE_AUTHOR("Sam Protsenko <semen.protsenko@linaro.org>");
+> +MODULE_LICENSE("GPL");
+> --
+> 2.30.2
+>
+
+
 -- 
-2.33.1
-
+With Best Regards,
+Andy Shevchenko

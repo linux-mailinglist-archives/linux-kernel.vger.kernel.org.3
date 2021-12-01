@@ -2,359 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FEAE4656DF
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:05:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19AEA4656E4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352871AbhLAUIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:08:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352798AbhLAUH6 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:07:58 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF42C061757
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 12:04:36 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id g19so25652652pfb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 12:04:36 -0800 (PST)
+        id S238123AbhLAULC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:11:02 -0500
+Received: from mail-db8eur05on2046.outbound.protection.outlook.com ([40.107.20.46]:54499
+        "EHLO EUR05-DB8-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1352849AbhLAUIe (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 15:08:34 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=U96z27fIUIf3iQFaAf0K91BkZPpd65L1ZVK1B/c/mtSxgjZG9XAtgdosR7P8ThCbzNQJXBxJO/L75IzQD6SeU83lHhwkwF1BAyBLbxeuI68tG2HIt8MhiWCc21SY/S9J2Q9YSVVyRQXkxBVKNYNd7qYBhoWq7i7M+Jh/PtK0+MOn8fSz6ubUK/Pj17Q6ZxON5uYQEKJ8+ef2ZbYE6GkwssE6E+K3lBP2D/mNRwZifHWSe2UYD8WZV1Knfj8mNMuqHRLD/RijEdlcyDCY02CxZV6ep35w+eHxAZKs06WSGeblxc4fKmp4utlNEJcyntVVvvjvyh2O8Vg5VUgAXGzSmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wI7mGU6len4tqyLg6+ewLwvaYlqzono/ZUiOqqsOvYE=;
+ b=j+EegpQvLaAXQP+0tAUsyE9uO2iAJd1GEDHcL8Rfz7rYPM8WOyUfiqBux4qKYyRl1IXW/m8pFs66kMI4Z6dNu5b3gGIfDeA41Lk0RGoCD+MBLELxxUX2LzFEFNmkIXUr+pWDy5jE3IB0+fOmhubuJKgd+l6hOGtWs1Qtkg9tnvtr0E1oWkSUWc++SLwhn6ChMcPiFsmcOHC3mmU8XMb8SVl+bYfOoSS7GZcmHQ4pN6Vr0u4hxq2+bhq7g2MibSluOQsJVBiM0uPVjWL8buC6Ntc0y+hwg0Wsv3leiIP6IpYwy0Zvg1+WKP+FNqSc1DQndO5oqB+9BeMK7RkXXvKPxA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=diasemi.com; dmarc=pass action=none header.from=diasemi.com;
+ dkim=pass header.d=diasemi.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nsiTKNzeT17zlcGBPEflu0BoPiL6YOvxqxu/DTkED3c=;
-        b=p8SsnBedrs0pmpdP+PRCtrcFW88LibHugJKnafYAMXVev9lcICnPaVSkqTREFVdw3Z
-         pTx7W6JKls/ESN2H6v6TdkB2aHX8RDmMxhIDLKxP9huqGq+tHRFKHakhmJXNhY1shzzE
-         jJwyaEznLXvggJcqQYNbE/qEuXKY/fW6nz+que4qcDiDQ0hAoBUoSzTOQm37e2PXVF4f
-         Wc9fSNe3ItT+xrQ5cX+wfniWd4qN8DErB6P6JMuGXsL9XIzBNCuOGzXN/NQF912hpdnB
-         R7iDGGuVIrutad7jTVRwWTJghwCxygv3+aL8B8uFoTBKM8C0NEPYJBSJJxFza8WJxhN8
-         UUvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nsiTKNzeT17zlcGBPEflu0BoPiL6YOvxqxu/DTkED3c=;
-        b=HA/MiP1pRDPPCXEXSV8fzqNqH5SKjl8gHTCrLKngBn78/+1PdQY2zphvhJGW1IMyGK
-         +fu+SwTrV7tYp4IW6tQgiZCyWeYqhXFBFT2Y/DtNXADMiehdk44CNekdANXYHJu8i1pC
-         2lfZEGijFq6g4Iwq9liwkCcmUx0TpLw5E2Zs9xnjfoUlTtI7ES2oBKAFACY7ilQ5rE4u
-         F7A1MU2A6BaEvzz3UyUqIX65/kYqFSUuML2XL/j/9fAgRfzpg6VZKV7t414VKgWyhSPG
-         vQZqX5ZWYg+3/sPPcXcbeE21AjEIIUrOA0M2WEJzGeHK2Z7YlDwWCCAOaCu/saptAopG
-         WCXA==
-X-Gm-Message-State: AOAM530GMCGVtEwnu6uzEeBe6aQ9MpRiIva7402vZF4wIFnNqOB0hWXc
-        TedF38YZ1uXdiOvMLpFWP/IlFaBkuk2Alzs+qvwqRQ==
-X-Google-Smtp-Source: ABdhPJy+3CvqU/GPcenNmXENaMK9b6wwBTCbzk8227jknk4mSAb04PfrkSVC1bSF+DRQVYH5SMp0/0bSPgg4P7dEmIQ=
-X-Received: by 2002:a05:6a00:22c3:b0:4a0:605:6446 with SMTP id
- f3-20020a056a0022c300b004a006056446mr8526530pfj.27.1638389075912; Wed, 01 Dec
- 2021 12:04:35 -0800 (PST)
+ d=dialogsemiconductor.onmicrosoft.com;
+ s=selector1-dialogsemiconductor-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wI7mGU6len4tqyLg6+ewLwvaYlqzono/ZUiOqqsOvYE=;
+ b=vcWkhtAb1CvRipYIYN2U1eHiJcygMzAuLrEXm0/OFJmiqpT+jknIBD7uLO8q+v7zPIhR22DrmvXh1zgIl3EMQIGFjXWIBc571XdCW4ZWtRSMm6wtHDyLTHEQkHpr37qb3xjyMFJ1GIMK4lPLYR0yAMmrL0EBPCZvDYyMCy4to7s=
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:255::23)
+ by DB6PR1001MB1125.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:4:63::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.23; Wed, 1 Dec
+ 2021 20:05:08 +0000
+Received: from DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::852d:c54f:8414:3276]) by DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::852d:c54f:8414:3276%3]) with mapi id 15.20.4734.027; Wed, 1 Dec 2021
+ 20:05:08 +0000
+From:   Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+To:     Andrej Picej <andrej.picej@norik.com>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+CC:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v3 2/4] watchdog: da9062: reset board on watchdog timeout
+Thread-Topic: [PATCH v3 2/4] watchdog: da9062: reset board on watchdog timeout
+Thread-Index: AQHX5oucZnRw3eiBrEm6X8WjUQIv26weD2Qg
+Date:   Wed, 1 Dec 2021 20:05:08 +0000
+Message-ID: <DB9PR10MB4652EF562CD20FB72FDBD71880689@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+References: <20211201081512.3580837-1-andrej.picej@norik.com>
+ <20211201081512.3580837-2-andrej.picej@norik.com>
+In-Reply-To: <20211201081512.3580837-2-andrej.picej@norik.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=diasemi.com;
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 58f1996c-1a4e-48db-73ad-08d9b505dfc3
+x-ms-traffictypediagnostic: DB6PR1001MB1125:
+x-ms-exchange-sharedmailbox-routingagent-processed: True
+x-microsoft-antispam-prvs: <DB6PR1001MB1125B15E33A9ACDDDF2E46A2A7689@DB6PR1001MB1125.EURPRD10.PROD.OUTLOOK.COM>
+x-ms-oob-tlc-oobclassifiers: OLM:8882;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qEEnGyzT2PtfdghjIu9W6w9xQdsF960WE5hBO2JK1hfBgdZLozPjxM/NJVpAyJBiP+5EAzd4t4bXJyTlfV0ErEPyeoFuREA4KpnR3/7iUd/IKXDj3pmB2Hqwbr2AzwafBfemDFFrlIdWqR2G5VRNtb+MDBYDBbhoZHQbwl6QaKwD1KbnYoNmaAt6kvVo0Ls6kcuRc+fgfIpfIrCHMasiUSRKdvWzVDBxiV7sRK/W4xJBkgu0rsI1MbBZpc8BXJB/pupXPlzm5aY43/RHnopjVzgbZ03Fsk2qKw+nWTJaJGpBRn3eDr39Zf2aeZ/8umQe2LlkaDxvWDE7i99/59EM1Glc+GX6xDo6ZObZhN0dAr1u/SYRBZKSIBbHK/Vd5eNIJ5dXcEoioBVvXGpSMcn7ara2aHtcAKDpqObYFc01AWWV0DEnzNsjJ2/OLi/Vq9wp5fkr6yim3H78fLSDj9DpJHJMxzmJbdBzk+IjMHa/A25Qvaaj42mb6IB0nuOf+TbW2J9ivwOSGYfgC0FDse6rz33Gt3aL5X4SCKj9/NUR4FY9HExsAFFx9NwP3yarZ2Zwnbtzd68LSIFJxw3lzW8BT54u1NtFKDkv8gtKtvd8gTxB3n/bcW+5mGmlyKUxrswcELlRccJT41L4WpeM/UESDppV4XFpL+BA5EyNxgyNBMbW9i+ZWGiwxtAN7eaec5XV1tPkmudyoDELmwun+A0pEA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(4636009)(366004)(55236004)(7416002)(122000001)(498600001)(55016003)(86362001)(52536014)(33656002)(6506007)(5660300002)(38100700002)(53546011)(4326008)(66446008)(8936002)(66556008)(66476007)(7696005)(110136005)(54906003)(2906002)(186003)(9686003)(71200400001)(38070700005)(76116006)(64756008)(66946007)(83380400001)(26005)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VzDwZUqdw5sxuKvT7bkzL4wjLm6HEYRXvlAqSJvibEQrDeqpCFaePZYRQM21?=
+ =?us-ascii?Q?yNSnV1Th+XwWIJgf/Sd+iwuZogS8eXyfvyO1K06BjxkkAomU0/oU00u1uN0o?=
+ =?us-ascii?Q?8iqaBzRdcMnPZrYrCQ86C8v0f5JDIHKL5G2J+buqbfJj8tlPq6P4ilqW42UW?=
+ =?us-ascii?Q?TQEAF797bWOZbNb84ENaj1v2aXh38Jl0eib3LxnUj5fsfOuKw7vRoiS/Evw8?=
+ =?us-ascii?Q?+AeszdwR0EfbUY9bVh+2rTHGtNHBbktCQ5b1wSYnLNpnkqp6neK8A1YRWQF7?=
+ =?us-ascii?Q?+cHp6u4elgrvHlPJhSefmN9vrcsQc2Fp32jZSlElWDuAlBa65h7NbTtLqSpD?=
+ =?us-ascii?Q?e4pND63CBg4RROg8n/ObVhPWwDujRLR+j22ySsKFnpFtfvwfw525M5wt9+Yj?=
+ =?us-ascii?Q?QHadsbxdIv/MEdtv8BPqCTGiWvUP3IJiJdV06F4ljO87U0/OYmBDg7BNUq0b?=
+ =?us-ascii?Q?kRlwmp9DpuJ3RrMwmHHBBbq8y4VNaBK68gav1JyEhdeGOWFnyhrAFkRuhOFq?=
+ =?us-ascii?Q?ZgeHny8KPlktRoT10TTmuHgVASeQYc1Ct2/ow8LaHifGmnZp+Y42ZxqAtJcc?=
+ =?us-ascii?Q?uHHH2Qn8uIApp14Ee/5DK/9Stht52ENHfj5B8+VTXv4FRpX0HTeD1sD7v8Aa?=
+ =?us-ascii?Q?2VpUhg7ZYK0h8GPcmUvogghHw/SYBiWNLxB4r8gqY5c6Zfgap+xarXoQN//y?=
+ =?us-ascii?Q?Pzrtv6iyaZSPumOzeOhtVmuFoUv8P/X2xLd9NfGljEgCNKAL447a6C7GpAaV?=
+ =?us-ascii?Q?xAoVIlUdvQHDDvPcgpiiIph/k5/1k3kFpJWSNEF3yyHtMdnzzZVq54yhYTDw?=
+ =?us-ascii?Q?33ymmFQ5yz3q8JHr+/OfcEOmH28QZ/Wr5lAsvk4kBwBiNH7EG43ZfCuLVAgg?=
+ =?us-ascii?Q?bNn7H0ljW2zezhQifiCgfJFznLRZV/SEpoLa+DeZdXK3m1fyjfzHkfsTaYtP?=
+ =?us-ascii?Q?ZDboQxaEg8UQylYO7vJJTI3TKjIHHZLPLhe7v90SR5WFWV7XZRoochdj5l6s?=
+ =?us-ascii?Q?desR7HMt0ccaC3k0yDDKlkCvMalEWQTz5vowOpFwNHOgKgYRY65G7QwuNejz?=
+ =?us-ascii?Q?uiW+RueB8AdyTGpnPr4FtUZZTddNQyw/8fH7Hssv8STvovS2zidObe9H84br?=
+ =?us-ascii?Q?G74T23RYP0U3Tt7UgEgkU+ZnG7+0bUN94zC2dKxbS7ROAKuB91iW/SadYkfF?=
+ =?us-ascii?Q?wpbtD3C+9FntME02dRWpvvQGaCIzscK5MLSQQfsj+DkeqvBU5qBdNW7xIVRB?=
+ =?us-ascii?Q?QhoO72Z8tEhPhYkA4MEppHymqSAEqvQd0uokCYgNbai26AUSLNjj6X9pH8FR?=
+ =?us-ascii?Q?hw/J8I3qbAn2lgmY2WxC1bOt46QnyF/DNTun10Zpe9bCuEKZ5MLZH8veCIHG?=
+ =?us-ascii?Q?fT8N6XIehX9Sk6hMAE+oDAwAFheJJbXA/i3P4JHh/AOaeQnwvWCn1ADds7Ow?=
+ =?us-ascii?Q?shbEcG0nRi32Wa4jVFHMfXsFjCeevEeYjjGvBimFgMl6rBYCTW6ZdwsANMgK?=
+ =?us-ascii?Q?8cr0nohBp+8+Vh5jXqn4Tf9i5FGZ/AQOVWVQpwy5B72Zp5kZzfsARLD7Ikg5?=
+ =?us-ascii?Q?rqw5mi02cPcoKc5k5UcU9UEy4TDcP7ltiRKN2Kb+4MgbcOt9Dk/UeVd8Bat6?=
+ =?us-ascii?Q?Ni9YEP16Tde9NTK9+IPecxzFyC9rr66tJhR68KGNFrDWD51Hm6SBrb+6ki5s?=
+ =?us-ascii?Q?qv86nA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20211201013329.15875-1-aford173@gmail.com> <CAJ+vNU1jENmWAR_5E98Vgb53ctxjxSWJewPW0YC4Yp4DuYTn3g@mail.gmail.com>
- <7216bc863d89faa9fdc5cd8d44c319f7a6d88159.camel@pengutronix.de>
- <CAJ+vNU2PxgdN414Ufd4NAG5CJgnftNSAHDGpt9Nj+RfgkNmxaw@mail.gmail.com> <ccfc08bbb6ec0debd523bd106e7eff4a747aaa23.camel@pengutronix.de>
-In-Reply-To: <ccfc08bbb6ec0debd523bd106e7eff4a747aaa23.camel@pengutronix.de>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Wed, 1 Dec 2021 12:04:24 -0800
-Message-ID: <CAJ+vNU3GgwW02VCiqQJhpR_D_fFse42zyWHrB-ETj6V+c4KqtA@mail.gmail.com>
-Subject: Re: [RFC V2 0/2] arm64: imx8mm: Enable Hantro VPUs
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     Adam Ford <aford173@gmail.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: diasemi.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 58f1996c-1a4e-48db-73ad-08d9b505dfc3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Dec 2021 20:05:08.1973
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 511e3c0e-ee96-486e-a2ec-e272ffa37b7c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: sRzopcZYhdxFaD2R+sjpdYk2i5Js1xDrcq7BbVIDsRFWunxb/gfPCmBeSH73zy899XLchv1drYdYjuwrRyFL771vj68aU9lUC2b44mZrxVM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR1001MB1125
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 10:37 AM Lucas Stach <l.stach@pengutronix.de> wrote:
->
-> Am Mittwoch, dem 01.12.2021 um 10:16 -0800 schrieb Tim Harvey:
-> > On Wed, Dec 1, 2021 at 9:32 AM Lucas Stach <l.stach@pengutronix.de> wrote:
-> > >
-> > > Hi Tim,
-> > >
-> > > Am Mittwoch, dem 01.12.2021 um 09:23 -0800 schrieb Tim Harvey:
-> > > > On Tue, Nov 30, 2021 at 5:33 PM Adam Ford <aford173@gmail.com> wrote:
-> > > > >
-> > > > > The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
-> > > > > to be related to the video decoders used on the i.MX8MQ, but because of
-> > > > > how the Mini handles the power domains, the VPU driver does not need to
-> > > > > handle all the functions, nor does it support the post-processor,
-> > > > > so a new compatible flag is required.
-> > > > >
-> > > > > With the suggestion from Hans Verkuil, I was able to get the G2 splat to go away
-> > > > > with changes to FORCE_MAX_ZONEORDER, but I found I could also set cma=512M, however
-> > > > > it's unclear to me if that's an acceptable alternative.
-> > > > >
-> > > > > At the suggestion of Ezequiel Garcia and Nicolas Dufresne I have some
-> > > > > results from Fluster. However, the G2 VPU appears to fail most tests.
-> > > > >
-> > > > > ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
-> > > > > Ran 90/135 tests successfully               in 76.431 secs
-> > > > >
-> > > > >  ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
-> > > > > Ran 55/61 tests successfully               in 21.454 secs
-> > > > >
-> > > > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
-> > > > > Ran 0/303 tests successfully               in 20.016 secs
-> > > > >
-> > > > > Each day seems to show more and more G2 submissions, and gstreamer seems to be
-> > > > > still working on the VP9, so I am not sure if I should drop G2 as well.
-> > > > >
-> > > > >
-> > > > > Adam Ford (2):
-> > > > >   media: hantro: Add support for i.MX8M Mini
-> > > > >   arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-> > > > >
-> > > > >  arch/arm64/boot/dts/freescale/imx8mm.dtsi   | 41 +++++++++++++++
-> > > > >  drivers/staging/media/hantro/hantro_drv.c   |  2 +
-> > > > >  drivers/staging/media/hantro/hantro_hw.h    |  2 +
-> > > > >  drivers/staging/media/hantro/imx8m_vpu_hw.c | 57 +++++++++++++++++++++
-> > > > >  4 files changed, 102 insertions(+)
-> > > > >
-> > > >
-> > > > Adam,
-> > > >
-> > > > That's for the patches!
-> > > >
-> > > > I tested just this series on top of v5.16-rc3 on an
-> > > > imx8mm-venice-gw73xx-0x and found that if I loop fluster I can end up
-> > > > getting a hang within 10 to 15 mins or so when imx8m_blk_ctrl_power_on
-> > > > is called for VPUMIX pd :
-> > > > while [ 1 ]; do uptime; ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0; done
-> > > > ...
-> > > > [  618.838436] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > > > [  618.844407] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > > >
-> > > > I added prints in imx_pgc_power_{up,down} and
-> > > > imx8m_blk_ctrl_power_{on,off} to get some more context
-> > > > ...
-> > > > Ran 55/61 tests successfully               in 8.685 secs
-> > > >  17:16:34 up 17 min,  0 users,  load average: 3.97, 2.11, 0.93
-> > > > ********************************************************************************
-> > > > ********************
-> > > > Running test suite VP8-TEST-VECTORS with decoder GStreamer-VP8-V4L2SL-Gst1.0
-> > > > Using 4 parallel job(s)
-> > > > ********************************************************************************
-> > > > ********************
-> > > >
-> > > > [TEST SUITE      ] (DECODER                    ) TEST VECTOR               ... R
-> > > > ESULT
-> > > > ----------------------------------------------------------------------
-> > > > [ 1023.114806] imx8m_blk_ctrl_power_on vpublk-g1
-> > > > [ 1023.119669] imx_pgc_power_up vpumix
-> > > > [ 1023.124307] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > > > [ 1023.130006] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > > >
-> > > > While this wouldn't be an issue with this series it does indicate we
-> > > > still have something racy in blk-ctrl. Can you reproduce this (and if
-> > > > not what kernel are you based on)? Perhaps you or Lucas have some
-> > > > ideas?
-> > > >
-> > > Did you have "[PATCH] soc: imx: gpcv2: Synchronously suspend MIX
-> > > domains" applied when running those tests? It has only recently been
-> > > picked up by Shawn and may have an influence on the bus domain
-> > > behavior.
-> > >
-> >
-> > Lucas,
-> >
-> > Good point. I did have that originally before I started pruning down
-> > to the bare minimum to reproduce the issue.
-> >
-> > I added it back and now I have the following:
-> > arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-> > media: hantro: Add support for i.MX8M Mini
-> > soc: imx: gpcv2: keep i.MX8MM VPU-H1 bus clock active
-> > soc: imx: gpcv2: Synchronously suspend MIX domains
-> > Linux 5.16-rc3
-> >
-> > Here's the latest with that patch:
-> > ...
-> > [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
-> > vp80-00-comprehensive-007 ... Success
-> > [  316.632373] imx8m_blk_ctrl_power_off vpublk-g1
-> > [  316.636908] imx_pgc_power_down vpu-g1
-> > [  316.640983] imx_pgc_power_down vpumix
-> > [  316.756869] imx8m_blk_ctrl_power_on vpublk-g1
-> > [  316.761360] imx_pgc_power_up vpumix
-> > [  316.765985] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > [  316.772743] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > ^^^ hang
->
-> Hm, I wonder if there's some broken error handling here somewhere, as a
-> failure to power up a domain shouldn't lead to a hang.
->
-> However, that doesn't explain why the PGC isn't completing the request.
-> Can you try to extend the timeout some more. Even though I think that
-> 1msec should already be generous. Can you dump the content of the
-> GPC_PU_PGC_SW_PUP_REQ and GPC_A53_PU_PGC_PUP_STATUSn (all 3 of them)
-> registers, when the failure condition is hit?
->
+On 01 December 2021 08:15, Andrej Picej wrote:
 
-Adam,
+> Implement a method to change watchdog timeout configuration based on DT
+> binding ("dlg,wdt-sd"). There is a possibility to change the bahaviour
+> of watchdog reset. Setting WATCHDOG_SD bit enables SHUTDOWN mode, and
+> clearing it enables POWERDOWN mode on watchdog timeout.
+>=20
+> If no DT binding is specified the WATCHDOG_SD bit stays in default
+> configuration, not breaking behaviour of devices which might depend on
+> default fuse configuration.
+>=20
+> Note: This patch requires that the config register CONFIG_I is
+> configured as writable in the da9062 multi function device.
+>=20
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> ---
+> Changes in v3:
+>  - no changes
+>=20
+> Changes in v2:
+>  - don't force the "reset" for all da9062-watchdog users, instead add DT
+>    binding where the behavior can be selected
+> ---
+>  drivers/watchdog/da9062_wdt.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+>=20
+> diff --git a/drivers/watchdog/da9062_wdt.c b/drivers/watchdog/da9062_wdt.=
+c
+> index f02cbd530538..e342e9e50cb1 100644
+> --- a/drivers/watchdog/da9062_wdt.c
+> +++ b/drivers/watchdog/da9062_wdt.c
+> @@ -85,8 +85,33 @@ static int da9062_wdt_start(struct watchdog_device *wd=
+d)
+>  {
+>  	struct da9062_watchdog *wdt =3D watchdog_get_drvdata(wdd);
+>  	unsigned int selector;
+> +	unsigned int mask;
+> +	u32 val;
+>  	int ret;
+>=20
+> +	/* Configure what happens on watchdog timeout. Can be specified with
+> +	 * "dlg,wdt-sd" dt-binding (0 -> POWERDOWN, 1 -> SHUTDOWN).
+> +	 * If "dlg,wdt-sd" dt-binding is NOT set use the default.
+> +	 */
+> +	ret =3D device_property_read_u32(wdd->parent, "dlg,wdt-sd", &val);
+> +	if (!ret) {
+> +		if (val)
+> +			/* Use da9062's SHUTDOWN mode */
+> +			mask =3D DA9062AA_WATCHDOG_SD_MASK;
+> +		else
+> +			/* Use da9062's POWERDOWN mode. */
+> +			mask =3D 0x0;
+> +
+> +		ret =3D regmap_update_bits(wdt->hw->regmap,
+> +						DA9062AA_CONFIG_I,
+> +
+> 	DA9062AA_WATCHDOG_SD_MASK,
+> +						mask);
+> +
+> +		if (ret)
+> +			dev_err(wdt->hw->dev, "failed to set wdt reset mode:
+> %d\n",
+> +				ret);
+> +	}
+> +
 
-Adding keep_clocks=true to VPUG1/VPUG2 domains did not help
+Personally I'd stick this code in the probe(). The value won't change once =
+it's
+set, and that seems the more logical place for it in my opinion.
 
-Lucas,
-
-I bumped the regmap_read_poll_timeout timeouts from 1m to 100ms and
-still saw the same issue.
-
-Here's some added debugging to show the regs:
-[  648.037903] imx8m_blk_ctrl_power_on vpublk-g1
-[  648.042346] imx_pgc_power_up vpumix
-[  648.146178] imx-pgc imx-pgc-domain.6: imx_pgc_power_up: failed to command PGC
-[  648.153355] imx-pgc imx-pgc-domain.6: GPC_PU_PGC_SW_PUP_REQ(0x0f8)=0x00000100
-[  648.162339] imx-pgc imx-pgc-domain.6:
-GPC_A53_PU_PGC_PUP_STATUS0(0x14c)=0x00000000
-[  648.169988] imx-pgc imx-pgc-domain.6:
-GPC_A53_PU_PGC_PUP_STATUS1(0x150)=0x00000000
-[  648.177618] imx-pgc imx-pgc-domain.6:
-GPC_A53_PU_PGC_PUP_STATUS2(0x154)=0x00000000
-[  648.185281] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-
-diff --git a/drivers/soc/imx/gpcv2.c b/drivers/soc/imx/gpcv2.c
-index 8176380b02e6..8124a3434655 100644
---- a/drivers/soc/imx/gpcv2.c
-+++ b/drivers/soc/imx/gpcv2.c
-@@ -67,6 +67,9 @@
-
- #define GPC_PU_PGC_SW_PUP_REQ          0x0f8
- #define GPC_PU_PGC_SW_PDN_REQ          0x104
-+#define GPC_A53_PU_PGC_PUP_STATUS0     0x14c
-+#define GPC_A53_PU_PGC_PUP_STATUS1     0x150
-+#define GPC_A53_PU_PGC_PUP_STATUS2     0x154
-
- #define IMX7_USB_HSIC_PHY_SW_Pxx_REQ           BIT(4)
- #define IMX7_USB_OTG2_PHY_SW_Pxx_REQ           BIT(3)
-@@ -224,6 +227,7 @@ static int imx_pgc_power_up(struct generic_pm_domain *genpd)
-        u32 reg_val, pgc;
-        int ret;
-
-+printk("%s %s\n", __func__, genpd->name);
-        ret = pm_runtime_get_sync(domain->dev);
-        if (ret < 0) {
-                pm_runtime_put_noidle(domain->dev);
-@@ -258,9 +262,17 @@ static int imx_pgc_power_up(struct
-generic_pm_domain *genpd)
-                ret = regmap_read_poll_timeout(domain->regmap,
-                                               GPC_PU_PGC_SW_PUP_REQ, reg_val,
-                                               !(reg_val & domain->bits.pxx),
--                                              0, USEC_PER_MSEC);
-+                                              0, 100 * USEC_PER_MSEC);
-                if (ret) {
--                       dev_err(domain->dev, "failed to command PGC\n");
-+                       dev_err(domain->dev, "%s: failed to command
-PGC\n", __func__);
-+                       if (!regmap_read(domain->regmap,
-GPC_PU_PGC_SW_PUP_REQ, &reg_val))
-+                               dev_err(domain->dev,
-"GPC_PU_PGC_SW_PUP_REQ(0x%03x)=0x%08x\n", GPC_PU_PGC_SW_PUP_REQ,
-reg_val);
-+                       if (!regmap_read(domain->regmap,
-GPC_A53_PU_PGC_PUP_STATUS0, &reg_val))
-+                               dev_err(domain->dev,
-"GPC_A53_PU_PGC_PUP_STATUS0(0x%03x)=0x%08x\n",
-GPC_A53_PU_PGC_PUP_STATUS0, reg_val);
-+                       if (!regmap_read(domain->regmap,
-GPC_A53_PU_PGC_PUP_STATUS1, &reg_val))
-+                               dev_err(domain->dev,
-"GPC_A53_PU_PGC_PUP_STATUS1(0x%03x)=0x%08x\n",
-GPC_A53_PU_PGC_PUP_STATUS1, reg_val);
-+                       if (!regmap_read(domain->regmap,
-GPC_A53_PU_PGC_PUP_STATUS2, &reg_val))
-+                               dev_err(domain->dev,
-"GPC_A53_PU_PGC_PUP_STATUS2(0x%03x)=0x%08x\n",
-GPC_A53_PU_PGC_PUP_STATUS2, reg_val);
-                        goto out_clk_disable;
-                }
-
-@@ -318,6 +330,7 @@ static int imx_pgc_power_down(struct
-generic_pm_domain *genpd)
-        u32 reg_val, pgc;
-        int ret;
-
-+printk("%s %s\n", __func__, genpd->name);
-        /* Enable reset clocks for all devices in the domain */
-        if (!domain->keep_clocks) {
-                ret = clk_bulk_prepare_enable(domain->num_clks, domain->clks);
-@@ -335,7 +348,7 @@ static int imx_pgc_power_down(struct
-generic_pm_domain *genpd)
-                ret = regmap_read_poll_timeout(domain->regmap, GPC_PU_PWRHSK,
-                                               reg_val,
-                                               !(reg_val & domain->bits.hskack),
--                                              0, USEC_PER_MSEC);
-+                                              0, 100 * USEC_PER_MSEC);
-                if (ret) {
-                        dev_err(domain->dev, "failed to power down ADB400\n");
-                        goto out_clk_disable;
-@@ -359,9 +372,9 @@ static int imx_pgc_power_down(struct
-generic_pm_domain *genpd)
-                ret = regmap_read_poll_timeout(domain->regmap,
-                                               GPC_PU_PGC_SW_PDN_REQ, reg_val,
-                                               !(reg_val & domain->bits.pxx),
--                                              0, USEC_PER_MSEC);
-+                                              0, 100 * USEC_PER_MSEC);
-                if (ret) {
--                       dev_err(domain->dev, "failed to command PGC\n");
-+                       dev_err(domain->dev, "%s: failed to command
-PGC\n", __func__);
-                        goto out_clk_disable;
-                }
-        }
-@@ -712,6 +725,7 @@ static const struct imx_pgc_domain imx8mm_pgc_domains[] = {
-                        .map = IMX8MM_VPUG1_A53_DOMAIN,
-                },
-                .pgc   = BIT(IMX8MM_PGC_VPUG1),
-+               .keep_clocks = true,
-        },
-
-        [IMX8MM_POWER_DOMAIN_VPUG2] = {
-@@ -723,6 +737,7 @@ static const struct imx_pgc_domain imx8mm_pgc_domains[] = {
-                        .map = IMX8MM_VPUG2_A53_DOMAIN,
-                },
-                .pgc   = BIT(IMX8MM_PGC_VPUG2),
-+               .keep_clocks = true,
-        },
-
-        [IMX8MM_POWER_DOMAIN_VPUH1] = {
-diff --git a/drivers/soc/imx/imx8m-blk-ctrl.c b/drivers/soc/imx/imx8m-blk-ctrl.c
-index 519b3651d1d9..028f38d45892 100644
---- a/drivers/soc/imx/imx8m-blk-ctrl.c
-+++ b/drivers/soc/imx/imx8m-blk-ctrl.c
-@@ -68,6 +68,7 @@ static int imx8m_blk_ctrl_power_on(struct
-generic_pm_domain *genpd)
-        struct imx8m_blk_ctrl *bc = domain->bc;
-        int ret;
-
-+printk("%s %s\n", __func__, genpd->name);
-        /* make sure bus domain is awake */
-        ret = pm_runtime_get_sync(bc->bus_power_dev);
-        if (ret < 0) {
-@@ -119,6 +120,7 @@ static int imx8m_blk_ctrl_power_off(struct
-generic_pm_domain *genpd)
-        const struct imx8m_blk_ctrl_domain_data *data = domain->data;
-        struct imx8m_blk_ctrl *bc = domain->bc;
-
-+printk("%s %s\n", __func__, genpd->name);
-        /* put devices into reset and disable clocks */
-        regmap_clear_bits(bc->regmap, BLK_SFT_RSTN, data->rst_mask);
-        regmap_clear_bits(bc->regmap, BLK_CLK_EN, data->clk_mask);
-
-Tim
+>  	selector =3D da9062_wdt_timeout_to_sel(wdt->wdtdev.timeout);
+>  	ret =3D da9062_wdt_update_timeout_register(wdt, selector);
+>  	if (ret)
+> --
+> 2.25.1

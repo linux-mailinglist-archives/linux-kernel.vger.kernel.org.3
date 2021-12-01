@@ -2,108 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABAE34658E3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F0484658E5
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343689AbhLAWKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234903AbhLAWKS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:10:18 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF75EC061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 14:06:56 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id v23so19044468pjr.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 14:06:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=FYH0cQHUBYKj1N7VJLH/Jqp1Gh1NxCPdlsjxd1BzPQI=;
-        b=UAMmlBepsZa1x9sZVT3jt7tTpsIAKj+3//7rgWEBNtelLrpI2bQ+JLE4Eg4PG1eoTk
-         U9jYsWIEyy0j5e5WytI4Pg9ruLY8BghCHf4DvZwgrhTVBqvMUWWncOD8yDg4szkU1j5q
-         wKuf0YIAmwnLxPfO1+ZdUJ+0WH93brzZtW7RudAcxKAwy7EZJo07IvfGnZCAHdB0oWj+
-         UFhNEJT4qSa9KFOzljbfOaIEaplOaJTEe4brIlZyn6WQX7kCuS1BNF8eSgCgQEO8UoMf
-         RUsB+Y2r8tiJJiiNf5p8Rc8Ep2uwIv15WIw+FI/8eDO0m6JeFOmmS6RkQ1l3gEDS2xXm
-         qd/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FYH0cQHUBYKj1N7VJLH/Jqp1Gh1NxCPdlsjxd1BzPQI=;
-        b=zHGRNyBvzDjmpo5KaBYQlDnyGbduCb5ZNmuT6c/7aceuHF7itCpgwt8zmmAVGTObf8
-         g4p938oN7QgFaCsLhkCssgdDWAjutvxxMZczFZCg/s62AplWX72hEQrv9AfE8pLuvYld
-         wTq/LXsbOLidxBq5HEsxyOvKp7cv3SuaLsfYGhMPF7BRdOlS1TG/X7+jVdmBDoeMbnpE
-         lQ4yKIpYJg5Czl1omGDMqCC1obX6G3Ipjq8t1VAYSmvV6u4NKyaTfX9FTbb0YzSGWW/U
-         3YqirK4+IjcljD0I854wo2PalmGizTqWC+SiOBVjN4LP3qR2Ia0cgv1qaZFhwGwnoFNr
-         agmQ==
-X-Gm-Message-State: AOAM53377ekBt3LZ15xjiV8eiHE/tc2z2e3cXoD/G2V9Jy70MsIxObaG
-        pWlZkaUZHcdgaiEoDJWbh86J29Db4VmEwx157kFKjg==
-X-Google-Smtp-Source: ABdhPJxnodH/dwhX99BtM9rTIpTEvtmXLHSgJB+sp8bD8FSEPn8cozJRxYFi3df9F+TLbf/uX0X5IOnHOVH36WMWW0U=
-X-Received: by 2002:a17:902:7c8a:b0:143:bb4a:7bb3 with SMTP id
- y10-20020a1709027c8a00b00143bb4a7bb3mr10863184pll.46.1638396415751; Wed, 01
- Dec 2021 14:06:55 -0800 (PST)
+        id S1353289AbhLAWLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:11:12 -0500
+Received: from mx3.molgen.mpg.de ([141.14.17.11]:48409 "EHLO mx1.molgen.mpg.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S234903AbhLAWLK (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 17:11:10 -0500
+Received: from [192.168.0.2] (ip5f5aecd9.dynamic.kabel-deutschland.de [95.90.236.217])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 27F5161EA1921;
+        Wed,  1 Dec 2021 23:07:47 +0100 (CET)
+Message-ID: <cf71bdea-ec22-e4c9-016c-69e94a130607@molgen.mpg.de>
+Date:   Wed, 1 Dec 2021 23:07:46 +0100
 MIME-Version: 1.0
-References: <20211101180243.23761-1-tharvey@gateworks.com>
-In-Reply-To: <20211101180243.23761-1-tharvey@gateworks.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Wed, 1 Dec 2021 14:06:44 -0800
-Message-ID: <CAJ+vNU2Pfwz5e0Jj6c5npceOwuNTB_dTVuL4NMD2qxr0CGyeGQ@mail.gmail.com>
-Subject: Re: [PATCH] PCI: imx: do not remap invalid res
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Richard Zhu <hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: Unable to transfer big files to Nokia N9
+Content-Language: en-US
+To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        linux-bluetooth@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+References: <eb6d86eb-d156-d7ac-0965-181719023d51@molgen.mpg.de>
+ <CABBYNZLENxvXMCh6XbBSnu0jasV1F0QestEK5v2mnNUpJdw3Vw@mail.gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <CABBYNZLENxvXMCh6XbBSnu0jasV1F0QestEK5v2mnNUpJdw3Vw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 1, 2021 at 11:03 AM Tim Harvey <tharvey@gateworks.com> wrote:
->
-> On imx6 and perhaps others when pcie probes you get a:
-> imx6q-pcie 33800000.pcie: invalid resource
->
-> This occurs because the atu is not specified in the DT and as such it
-> should not be remapped.
->
-> Cc: Richard Zhu <hongxing.zhu@nxp.com>
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
-> ---
->  drivers/pci/controller/dwc/pcie-designware.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index a945f0c0e73d..3254f60d1713 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -671,10 +671,11 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
->                 if (!pci->atu_base) {
->                         struct resource *res =
->                                 platform_get_resource_byname(pdev, IORESOURCE_MEM, "atu");
-> -                       if (res)
-> +                       if (res) {
->                                 pci->atu_size = resource_size(res);
-> -                       pci->atu_base = devm_ioremap_resource(dev, res);
-> -                       if (IS_ERR(pci->atu_base))
-> +                               pci->atu_base = devm_ioremap_resource(dev, res);
-> +                       }
-> +                       if (!pci->atu_base || IS_ERR(pci->atu_base))
->                                 pci->atu_base = pci->dbi_base + DEFAULT_DBI_ATU_OFFSET;
->                 }
->
-> --
-> 2.17.1
->
+Dear Luiz,
 
-ping - any feedback on this?
 
-Best regards,
+Thank you for your quick reply.
 
-Tim
+Am 01.12.21 um 19:29 schrieb Luiz Augusto von Dentz:
+
+> On Wed, Dec 1, 2021 at 9:39 AM Paul Menzel <pmenzel@molgen.mpg.de> wrote:
+
+>> For the first time, I wanted to transfer a 2 MB PDF file from a Dell
+>> Latitude E7250 with Debian sid/unstable with Linux 5.16-rc1 to a Nokia
+>> N9 (MeeGo/Harmattan). Using the package *bluez-obexd* 5.61-1 and GNOME
+>> 41, the device was found, and paired fine. Then I selected to transfer
+>> the 2 MB file, and after starting for a second, it timed out after the
+>> progress bar moves forward ones and failed.
+>>
+>> The systemd journal contains:
+>>
+>>       obexd[21139]: Transfer(0x56243fe4f790) Error: Timed out waiting for response
+>>
+>> Testing with a a 5 byte test text file, worked fine. Also testing with a
+>> Galaly M32, both files were transferred without problems (though slowly
+>> with 32 KB/s.)
+>>
+>> Trying to connect to the device with bluetoothctl failed for me, and the
+>> journal contained, it failed.
+>>
+>>       $ bluetoothctl
+>>       Agent registered
+>>       [bluetooth]# connect 40:98:4E:5B:CE:XX
+>>       Attempting to connect to 40:98:4E:5B:CE:XX
+>>       Failed to connect: org.bluez.Error.Failed
+>>
+>>       bluetoothd[21104]: src/service.c:btd_service_connect() a2dp-source profile connect failed for 40:98:4E:5B:CE:B3: Protocol not available
+>>
+>> As the Nokia N9 was once pretty popular in the Linux community, I am
+>> pretty sure, it used to work fine in the past, and there is some
+>> regression. It’d be great, if you could give me some hints how to
+>> further debug the issue.
+> 
+> We will need some logs, obexd and btmon, if possible.
+
+I only managed to get the btmon trace [1]. I did `sudo modprobe -r 
+btusb` and `sudo btmon -w /dev/shm/trace.log`.
+
+Linux messages:
+
+     [29880.100381] calling  btusb_driver_init+0x0/0x1000 [btusb] @ 28716
+     [29880.239603] usbcore: registered new interface driver btusb
+     [29880.239608] initcall btusb_driver_init+0x0/0x1000 [btusb] 
+returned 0 after 135952 usecs
+     [29880.240706] Bluetooth: hci0: unexpected event for opcode 0x0500
+     [29880.241598] Bluetooth: hci0: Legacy ROM 2.5 revision 1.0 build 3 
+week 17 2014
+     [29880.241605] Bluetooth: hci0: Intel device is already patched. 
+patch num: 32
+
+ From the system journal:
+
+     Dez 01 22:52:19 ersatz obexd[21139]: Transfer(0x56243fe53dd0) 
+Error: Timed out waiting for response
+
+
+Kind regards,
+
+Paul
+
+
+[1]: https://owww.molgen.mpg.de/~pmenzel/trace.log.7z

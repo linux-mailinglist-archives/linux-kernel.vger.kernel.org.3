@@ -2,220 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 309FF464EE4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:37:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1265464EE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:39:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349559AbhLANkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:40:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33216 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239346AbhLANkl (ORCPT
+        id S1349591AbhLANmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:42:37 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:57554 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1349578AbhLANmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:40:41 -0500
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6840CC061574;
-        Wed,  1 Dec 2021 05:37:20 -0800 (PST)
-Received: by mail-yb1-xb2b.google.com with SMTP id x32so63432721ybi.12;
-        Wed, 01 Dec 2021 05:37:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=fJQwgAcn3m3gWE5P+/ZzPN9/7OfOm1vUbRkJxx4e0j8=;
-        b=TEaLkNsTM5R2G2hzecnDKfJVQfE4lPZuYkiffO/Pi8fuRQCqKA4zTZ2Kk4PFhqVYhJ
-         FpA/OYHeANU8BDNHZq7/VJdD6ADAFpiAb/VUfSBTkfi2bUIlxfvIeNABTY68xbzokAmS
-         CydYFIKccHYe4zwo81gDqg4Xhpz6YTKP3qjqeicHJVvgK2+3lRbLPRxXv0Zai0rZyoZV
-         Jn+8r1ALpTlpeTH0JJwKHz1TOZDRaebSJ3O0cIgpPqBUXc++l/Mo8KHwwO5Nsdh5J57V
-         gHA/MstmFVLJrTuhbeNl8au4kzmt5IgEHhd84g5ddPJySEfUBuTXPFDcrvrRu6b8peoz
-         nDCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=fJQwgAcn3m3gWE5P+/ZzPN9/7OfOm1vUbRkJxx4e0j8=;
-        b=qJCEbfNQGYFFKDEQDcBHPbEqEJc2aFU+HD2eMPEE21I6sx8L3JsPha5jTivRO1kXc+
-         6Eh50Ih63QEoVT5QyBPiFv3GtOc9qVoSg/39kkXMsGcJFpv+SU/br4YsAhaE60+9gQFi
-         Erfk6kKlou+cSLVS1lPl2yqq9In3c6axrVDyfzi3970FwwCOkSjI1Y1ev76A99ObhJmE
-         HC4CV7M2nu3nLDZGC4H2NyVy3ofbbUXevQ9gsOb0acrFII9rAkbWug7CDVYSnPLHQQab
-         VRiQLmCq2yeIyUI9GVm9YWCeKP6PaqsyCwIuXAExsyjxKe1N9j8AjJWYi5DziIhfXMSp
-         2jmQ==
-X-Gm-Message-State: AOAM533z5pOFNFP09pVBHLNZTmkJn2nS/ji8pJxsPfMGvZyrX/DC3NKF
-        vvz3K5OydQB/yrOH1QMcKRlCY0oBC2nUChbFYegQ0YwtHeOjvw==
-X-Google-Smtp-Source: ABdhPJyuLtjiZFz4i2ldW8v3MFG5mNquGjqnktLLVNQsky5FbQuHfCfTQXhSVxd+Gm/dhkk1ijm/KcESk/upnIYQqro=
-X-Received: by 2002:a25:dc4d:: with SMTP id y74mr7040527ybe.422.1638365839479;
- Wed, 01 Dec 2021 05:37:19 -0800 (PST)
+        Wed, 1 Dec 2021 08:42:37 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id A22B1CE1E6F;
+        Wed,  1 Dec 2021 13:39:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16209C53FAD;
+        Wed,  1 Dec 2021 13:39:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638365952;
+        bh=OkFkg4SRT3IbrSqIc6ZCbd/DtTHU30OPhfc04/lnNWs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U4wQkk/KPrKKZ6dQzs14gda4o1k/Qp0XOZRvnAiuaOzI/KzgMxXV3+DCjHQOiVaxi
+         vPkpktHNQqv9MuV40AULna1+NwRs40hRF9pA13avqwallmxNsoopM3k0HchlmzXODh
+         NNxdY1+Q71eKSQwPj28we0Y+kH+0VVwMuN4WBybMozx5R/VFVL+GMDjQ0f4rzYRl2x
+         2/KeywZQ/IlOdgSOU6KgqZfqbZ4r/bLfvKlP4TSQCMI6xYk3wpXre9FlnE+upmaLoF
+         k2E9kyAk1ohRRaGogNmApbN+I8KGg7d6Zw4rHlbIl3c5ztI5ixIvd1Ejyv9zLowN45
+         Dl+32xSgFjHRA==
+Date:   Wed, 1 Dec 2021 13:39:01 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+Subject: Re: [PATCH v10 4/8] drm/ingenic: Add dw-hdmi driver for jz4780
+Message-ID: <Yad69aTXcGixXvy3@sirena.org.uk>
+Mail-Followup-To: Paul Cercueil <paul@crapouillou.net>,
+        "H. Nikolaus Schaller" <hns@goldelico.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Kees Cook <keescook@chromium.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Sam Ravnborg <sam@ravnborg.org>, Maxime Ripard <maxime@cerno.tech>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Paul Boddie <paul@boddie.org.uk>, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        letux-kernel@openphoenux.org, Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org,
+        Ezequiel Garcia <ezequiel@collabora.com>
+References: <cover.1638307601.git.hns@goldelico.com>
+ <4daf0c5dbed2c47c97003ab8de0a7dbd2a335dc3.1638307601.git.hns@goldelico.com>
+ <LKTF3R.YREPOCHOSMQN2@crapouillou.net>
 MIME-Version: 1.0
-References: <20211122103032.517923-1-maz@kernel.org> <CAMuHMdX2ZRvDYA3idmw3nBcP6CO=2od6ZU-UeJo9vYsuB=fQNQ@mail.gmail.com>
- <8735no70tt.wl-maz@kernel.org> <CAMuHMdVS67BLP2XEdD6ZvVBVE2x11gKnQa1TqG659HXPM5scqQ@mail.gmail.com>
- <CAMuHMdWJhnXabKGpW7k944dzQHtwQtxw-yb2bRBsoaMw6N6nuA@mail.gmail.com>
- <87tug3clvc.wl-maz@kernel.org> <CAMuHMdWGb2xik+94RVwtq8E6+9eN=HfQLX3a4sTjKQXR96Udkw@mail.gmail.com>
- <87r1b7ck40.wl-maz@kernel.org> <OSZPR01MB7019E7DD7119EFF9C994AA62AA649@OSZPR01MB7019.jpnprd01.prod.outlook.com>
- <87tufvmes9.wl-maz@kernel.org> <CA+V-a8siHRjF+bJu88QFwz0a_MZ+kiJEwmER58_feyr8O+WNGA@mail.gmail.com>
- <CAL_JsqK+GcnChx3i9fsYnw+FzZgON4PtKB=CzYLUj6sXtxX6fQ@mail.gmail.com>
- <CA+V-a8sVS_1hUWJ3uM+VffGyMtdnctBOJTyHTQAoJZGOh0a1Tw@mail.gmail.com> <87bl21mqwk.wl-maz@kernel.org>
-In-Reply-To: <87bl21mqwk.wl-maz@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 1 Dec 2021 13:36:53 +0000
-Message-ID: <CA+V-a8vA0P-yhm2SHJmVh+cuUw7qodQLQBqzNPTz31x5q18xaA@mail.gmail.com>
-Subject: Re: [PATCH] of/irq: Add a quirk for controllers with their own
- definition of interrupt-map
-To:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh@kernel.org>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="urTHJbSJd+hEE4ly"
+Content-Disposition: inline
+In-Reply-To: <LKTF3R.YREPOCHOSMQN2@crapouillou.net>
+X-Cookie: All true wisdom is found on T-shirts.
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc/Rob,
 
-On Tue, Nov 30, 2021 at 6:37 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Tue, 30 Nov 2021 12:52:21 +0000,
-> "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
-> >
-> > On Mon, Nov 29, 2021 at 6:33 PM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > interrupts would work just fine here:
-> > >
-> > > interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> > >   <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> > >   <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> > >   <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> > >   <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> > >   <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-> > >   <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-> > >   <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-> > >
-> > > We don't need a different solution for N:1 interrupts from N:M. Sure,
-> > > that could become unweldy if there are a lot of interrupts (just like
-> > > interrupt-map), but is that an immediate problem?
-> > >
-> > It's just that with this approach the driver will have to index the
-> > interrupts instead of reading from DT.
-> >
-> > Marc - is it OK with the above approach?
->
-> Anything that uses standard properties in a standard way works for me.
->
-I added interrupts property now instead of interrupt-map as below:
+--urTHJbSJd+hEE4ly
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-irqc: interrupt-controller@110a0000 {
-      compatible = "renesas,r9a07g044-irqc", "renesas,rzg2l-irqc";
-       #address-cells = <0>;
-       interrupt-parent = <&gic>;
-       interrupt-controller;
-       reg = <0 0x110a0000 0 0x10000>;
-       interrupts =
-                      <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>,
-                      <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>,
-                     <GIC_SPI 475 IRQ_TYPE_LEVEL_HIGH>;
-         clocks = <&cpg CPG_MOD R9A07G044_IA55_CLK>,
-                       <&cpg CPG_MOD R9A07G044_IA55_PCLK>;
-          clock-names = "clk", "pclk";
-          power-domains = <&cpg>;
-          resets = <&cpg R9A07G044_IA55_RESETN>;
-};
+On Wed, Dec 01, 2021 at 01:02:45PM +0000, Paul Cercueil wrote:
+> Le mar., nov. 30 2021 at 22:26:37 +0100, H. Nikolaus Schaller
 
+> > +	regulator = devm_regulator_get_optional(&pdev->dev, "hdmi-5v");
+> > +	if (IS_ERR(regulator)) {
+> > +		ret = PTR_ERR(regulator);
 
-In the hierarchal interrupt code its parsed as below:
-on probe fetch the details:
-range = of_get_property(np, "interrupts", &len);
-if (!range)
-      return -EINVAL;
+Why is this using _optional()?  This should only be done when the supply
+can be physically absent (in which case I'd expect to see special
+handling).
 
-for (len /= sizeof(*range), j = 0; len >= 3; len -= 3) {
-      if (j >= IRQC_NUM_IRQ)
-            return -EINVAL;
+--urTHJbSJd+hEE4ly
+Content-Type: application/pgp-signature; name="signature.asc"
 
-      priv->map[j].args[0] = be32_to_cpu(*range++);
-      priv->map[j].args[1] = be32_to_cpu(*range++);
-      priv->map[j].args[2] = be32_to_cpu(*range++);
-      priv->map[j].args_count = 3;
-      j++;
-}
+-----BEGIN PGP SIGNATURE-----
 
-On alloc callback:
-     spec.fwnode = domain->parent->fwnode;
-     spec.param_count = priv->map[hwirq].args_count;
-     for (i = 0; i < spec.param_count; i++)
-          spec.param[i] = priv->map[hwirq].args[i];
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmGnevQACgkQJNaLcl1U
+h9Dsbwf/e+Vh4NXLEM4GwwLFBAyDYCgyZOJxrdbM4ruocDneNLXbljJTQhnP40/5
+NQY2reFsFCX2dDUeaLgmeBH1JgXmP4cstxeIifm7hVWPBtyzbiNEZ31mzoczVwXc
+CRLE93/Y4Vt0dBmK6/zPrlYri1QRUgmC8JEI9oGNgTmJPeUzJeRtrqTn6qgMCBIf
+FA99JndFSq6KpNBn3gb9EeC+fenFK2RWTSxbDlowTmhRAk0ADSvbbzEDRqiPVIHt
+V6xxybtHL0vYRibGYj2h8mqTqdYQ+38Lpwb0UU9GhyRCXvY6ofFSaycULe6a+uWU
+rTBMUeX7y57rdLq61ZW3XAr1G6y/KQ==
+=yrgX
+-----END PGP SIGNATURE-----
 
-     return irq_domain_alloc_irqs_parent(domain, virq, nr_irqs, &spec);
-
-In the board DTS (map interrupt 3 (index 3 is used as hwirq) to GIC):
-&eth0 {
-    pinctrl-0 = <&eth0_pins>;
-    ...
-    phy0: ethernet-phy@7 {
-        compatible = "ethernet-phy-id0022.1640", "ethernet-phy-ieee802.3-c22";
-        reg = <7>;
-        interrupt-parent = <&irqc>;
-        interrupts = <3  IRQ_TYPE_LEVEL_LOW>;
-        rxc-skew-psec = <2400>;
-       ....
-    };
-};
-
-With this approach I see the kernel hangs. It looks like using
-"interrupts" property makes the core to parse it and is used somewhere
-(I have not looked where exactly it's done or causes this issue) I say
-this because if I rename the "interrupts" property to something else I
-no longer see any kernel hangs.
-
-Is there something else I'm missing here?
-
-Cheers,
-Prabhakar
-
-
-
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+--urTHJbSJd+hEE4ly--

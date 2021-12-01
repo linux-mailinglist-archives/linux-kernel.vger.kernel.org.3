@@ -2,83 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E384659C9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:26:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A2B4659CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344113AbhLAX3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 18:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57362 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232038AbhLAX3Q (ORCPT
+        id S1353734AbhLAXaq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 18:30:46 -0500
+Received: from mail-oi1-f179.google.com ([209.85.167.179]:34396 "EHLO
+        mail-oi1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353785AbhLAXa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 18:29:16 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9558BC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 15:25:54 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id f125so11927647pgc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 15:25:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=xGeNM4jaBTTeV3zmlNIV+CZJ1AiY1aOgNT/zSQgiork=;
-        b=E1BtuqSmVhEAWDMgrxpMo9xQXVM+rWMdAoxUZJwj5O6sSM1L8gOwWhFcBtNwiF44Kd
-         ADZ89FIup/Ykv7effjaf9R237FbqZHchCtXHfwsrpvQu/TtROYmonM5MjZ+sWfix26/o
-         TsbjytDekzi9z/hQeTpegYZKw0iM7pbyggRBSIXUunHT/P4m85ZPTFEIUh35IW44cl2n
-         W3W7aL5aGDYJhSCb99D1rGtNYWUSD+z9qWk3VC/poQJGi9mNEoJ/RK03lDifE9/jDbS2
-         D5r0uaMmAZgLFpEA94q29lLbD+gepWX+DrQLi5MqdGbwCz8cqRXVS1Jqvap6jlig934Y
-         lMYA==
+        Wed, 1 Dec 2021 18:30:28 -0500
+Received: by mail-oi1-f179.google.com with SMTP id t19so51927134oij.1;
+        Wed, 01 Dec 2021 15:27:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=xGeNM4jaBTTeV3zmlNIV+CZJ1AiY1aOgNT/zSQgiork=;
-        b=v/0aQgJKouz/jOJxDI0jusSOgwTwuMn1JkoP2I6trUOpl0P8w5ZMwEVNx4uhAbXuBb
-         xeQHr56/wBnIhlrH5fZgrmM9ja86kVyOUGhH75WGN86AX7AOAi4kNeIjO+0Dcr2oyVtr
-         X0LGFhpi0zh/tiQ2UNvnJE8G5FKXOdbKPoTpOptTsMJBKxwzv9SVpSv0zcXZyhTJkgtW
-         GBxzagFAHhPZaXHfQR2oi9phQqOvw2EFMpcEk/yhOhAvLLQpf+/LkZkhZAhbsrTWM9IY
-         41llXz6yViyPAu82P85FKxnLzmrfE17QC44Hzzcirhk6YdBmRYEysxEq4i8HHsbNd7hG
-         aaAg==
-X-Gm-Message-State: AOAM532dgkPK5yeYKsDoqiXtnAYKGDaemsackBr6ZemEQuY/7LDrXwBN
-        v8R77v+S3LnDXgISv7fKFYQ=
-X-Google-Smtp-Source: ABdhPJzCTZPIsORiriUPh8uj5zCRka4hWr9hsp7FhP6ivmR2aOzFt0xKtcNaoAR+VkobnZ8EA5lD/w==
-X-Received: by 2002:a63:4458:: with SMTP id t24mr7014349pgk.236.1638401153887;
-        Wed, 01 Dec 2021 15:25:53 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id q11sm640849pgt.54.2021.12.01.15.25.53
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2XpzWSMwpfWYAEZjhebV2bsYQbm7/G+56K6lGyktFJ4=;
+        b=QVRZblBgDVd01O+lejwhgmyIf1EtTqN44JReUaqUiLVr1/KTcgLwum1lnwwswv1tTb
+         uNSc0b9mqTMcGP/G30iS9KYJmTvYNeclBfHVFnmaqkXxpVM+lhK3/VZf2xc0ZHU+yWcS
+         bcQc1kYaUUDiJH4BYDkIaxrjwpDjlS/v1dNhIYptWBLdAicpR5y5H7iypV+3CUgHN9NI
+         Beas2rHWUHRroA8hGaWslE4pT7jiZxp9Dxa8B9bDkBhGs1Va5Gb1Nd8Dbrxw3AtM/fLu
+         8dhrH2yl5Tgg3iwSdBhKyZAiqHjqn8JrgkDOn72xVtBkboIUBQDZIQNsye1OiYhGsvuW
+         Ekow==
+X-Gm-Message-State: AOAM530BT6817Cy62nyhmXNDwr3xISqpy57QgFpcN2QBWeVQduMBYAp5
+        y2u1v7/zm7/bgEi8KhCdnA==
+X-Google-Smtp-Source: ABdhPJw8iglqmrPXHFMZVORsqgGAa/Y7c4xYMqz1Mqf3yi17HeEEiDGeniBjjMnPhEFDTYPni2ns+w==
+X-Received: by 2002:a05:6808:1411:: with SMTP id w17mr1463263oiv.10.1638401226699;
+        Wed, 01 Dec 2021 15:27:06 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id s6sm696691ois.3.2021.12.01.15.27.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 15:25:53 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 1 Dec 2021 13:25:51 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: Re: [PATCH] kernfs: prevent early freeing of root node
-Message-ID: <YagEf//iqIAk/gEf@slm.duckdns.org>
-References: <20211201231648.1027165-1-minchan@kernel.org>
+        Wed, 01 Dec 2021 15:27:05 -0800 (PST)
+Received: (nullmailer pid 3185396 invoked by uid 1000);
+        Wed, 01 Dec 2021 23:27:05 -0000
+Date:   Wed, 1 Dec 2021 17:27:04 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     devicetree@vger.kernel.org,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        linux-kernel@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>, netdev@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>
+Subject: Re: [PATCH] dt-bindings: net: cdns,macb: Convert to json-schema
+Message-ID: <YagEyIjyxezA3PGS@robh.at.kernel.org>
+References: <104dcbfd22f95fc77de9fe15e8abd83869603ea5.1637927673.git.geert@linux-m68k.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211201231648.1027165-1-minchan@kernel.org>
+In-Reply-To: <104dcbfd22f95fc77de9fe15e8abd83869603ea5.1637927673.git.geert@linux-m68k.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 03:16:48PM -0800, Minchan Kim wrote:
-...
-> Since kernfs moves the kernfs_rwsem lock into root, it couldn't hold
-> the lock when the root node is tearing down. Thus, get the refcount
-> of root node.
+On Fri, 26 Nov 2021 12:57:00 +0100, Geert Uytterhoeven wrote:
+> Convert the Cadence MACB/GEM Ethernet controller Device Tree binding
+> documentation to json-schema.
 > 
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Signed-off-by: Minchan Kim <minchan@kernel.org>
+> Re-add "cdns,gem" (removed in commit a217d8711da5c87f ("dt-bindings:
+> Remove PicoXcell bindings")) as there are active users on non-PicoXcell
+> platforms.
+> Add missing "ether_clk" clock.
+> Add missing properties.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> ---
+>  .../devicetree/bindings/net/cdns,macb.yaml    | 162 ++++++++++++++++++
+>  .../devicetree/bindings/net/macb.txt          |  60 -------
+>  2 files changed, 162 insertions(+), 60 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/net/cdns,macb.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/net/macb.txt
+> 
 
-Acked-by: Tejun Heo <tj@kernel.org>
-
-Thanks.
-
--- 
-tejun
+Applied, thanks!

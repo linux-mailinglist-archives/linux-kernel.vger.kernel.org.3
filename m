@@ -2,65 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A7F4648DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:33:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D684648E3
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347714AbhLAHhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:37:06 -0500
-Received: from mga12.intel.com ([192.55.52.136]:43907 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1347829AbhLAHg6 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:36:58 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216421318"
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="216421318"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 23:33:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="512579936"
-Received: from mylly.fi.intel.com (HELO [10.237.72.148]) ([10.237.72.148])
-  by orsmga008.jf.intel.com with ESMTP; 30 Nov 2021 23:33:35 -0800
-Subject: Re: [PATCH v1 1/2] i2c: designware-pci: Add support for Fast Mode
- Plus and High Speed Mode
-To:     "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Senthil, Bala" <bala.senthil@intel.com>,
-        "N, Pandith" <pandith.n@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     "Saha, Tamal" <tamal.saha@intel.com>
-References: <20211109103552.18677-1-lakshmi.sowjanya.d@intel.com>
- <YaUGV3lEmW9qtP+3@kunai>
- <042d2c9f-4333-44b1-09c0-b0953a51c176@linux.intel.com>
- <DM6PR11MB36609A77B3F5D7730FA16A52C4689@DM6PR11MB3660.namprd11.prod.outlook.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Message-ID: <4a420cc0-d18a-32db-ed58-f611336c99ec@linux.intel.com>
-Date:   Wed, 1 Dec 2021 09:33:34 +0200
+        id S1347645AbhLAHhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:37:39 -0500
+Received: from smtp-out2.suse.de ([195.135.220.29]:44342 "EHLO
+        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235915AbhLAHhi (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 02:37:38 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 30FCA1FD58;
+        Wed,  1 Dec 2021 07:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638344057; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PTRhn7spL+A6iOFdvCr6/zYqdNZ0WXCKV1uGUL3ndn8=;
+        b=SJZnqLD5Rx+rpwvkaCwarGNzUeNCedvdhX3UmRPc2rmcdNXJTOng5W7tLByHUl4bwFKnKf
+        LFf7lYS0NdbeCRF4wTGjOUi5SQFlj1U38/L8Pf5y9orJ414TSkrbSsCB0e0X4rRxxBMu4d
+        ovGokeVaN/F4Ap8aa5ebkBLXW7Uft7k=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638344057;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=PTRhn7spL+A6iOFdvCr6/zYqdNZ0WXCKV1uGUL3ndn8=;
+        b=pXtxzsXTXM/qSn4JtIGeZyrOKDa/aH9zZP4A/nhf7eporYmp26VNr/32p3l07m3UlhWVD5
+        IMFLdnLMR9/SAEAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D44A313AE2;
+        Wed,  1 Dec 2021 07:34:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id VXL2Mnglp2GxFwAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:34:16 +0000
+Subject: Re: [PATCH 17/18] crypto: dh - try to match domain parameters to a
+ known safe-prime group
+To:     Nicolai Stange <nstange@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
+        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org
+References: <20211201004858.19831-1-nstange@suse.de>
+ <20211201004858.19831-18-nstange@suse.de>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <1d8eb859-1d41-32e1-98b8-3ddd60e2e0ab@suse.de>
+Date:   Wed, 1 Dec 2021 08:34:16 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <DM6PR11MB36609A77B3F5D7730FA16A52C4689@DM6PR11MB3660.namprd11.prod.outlook.com>
+In-Reply-To: <20211201004858.19831-18-nstange@suse.de>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 7:51 AM, D, Lakshmi Sowjanya wrote:
->> True, only sda_hold(_time) is u32 and other timing parameters are u16.
->>
->> Lakshmi: Would you like to send a patch fixing this and get more contributions
->> to the driver :-)
+On 12/1/21 1:48 AM, Nicolai Stange wrote:
+> A subsequent patch will make the DH implementation to reject any input
+> domain parameter set with ->group_id == dh_group_id_unknown in FIPS mode.
+> However, as the keyctl(KEYCTL_DH_COMPUTE) implementation simply passes
+> forward keys from userspace, it does not (and cannot) set ->group_id to
+> anything else than dh_group_id_unknown.
 > 
-> Thanks Wolfram and Jarkko,
+> In order to still allow for keyctl(KEYCTL_DH_COMPUTE) to work on approved
+> domain parameters passed in from userspace in FIPS mode, make
+> crypto_dh_decode_key() to compare them against any of the known groups and
+> set ->group_id upon having found a match, if any.
 > 
-> Sure. I will send a patch fixing it.
+> Signed-off-by: Nicolai Stange <nstange@suse.de>
+> ---
+>   crypto/dh_helper.c | 33 +++++++++++++++++++++++++++++++++
+>   1 file changed, 33 insertions(+)
 > 
-See the comments from Andy. Recent enough Elkhart Lake BIOS and his 
-patches from last year already provide the timing parameters. Feeling 
-embarrassed I forgot them :-(
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-Jarkko
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer

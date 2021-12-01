@@ -2,197 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C14465506
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B999465507
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 19:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352178AbhLASUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 13:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S244640AbhLASUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 13:20:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244383AbhLASTv (ORCPT
+        with ESMTP id S244654AbhLASUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 13:19:51 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA9EC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 10:16:30 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so2345548pjb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 10:16:30 -0800 (PST)
+        Wed, 1 Dec 2021 13:20:03 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43D3C061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 10:16:38 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id p2-20020a4adfc2000000b002c2676904fdso8073131ood.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 10:16:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=4Fjo/oLhM/GI33DECaidoRno6lOPTrQDXq4YeW1u3XI=;
-        b=Gy/mI/syDjgmJ/Dy5HSB0lekRFIu1fZjXrSHJRAyRpEjIvsMYeuD7jd9Gl+/dViRyQ
-         bX7H/U8ylCShghMTxCO2moMoFwVRephY825eJHoHYIsCBrCSTGr5lkGv0EVJCxBJCTjC
-         XKWTHHeI4L0kX6Cm8I0VJGnBecIMJN05ZjnxWJF4pIjeSiGX31iD106ZbDpbwRBH3ncL
-         GQspUzeaq+6ISOEZHY9XlWQRXZMBJvMLiLqaYwPf9HtglHgZUBhMgSXHJZwlcKZdu2JF
-         kvW6WGURB6KwscUjDn/Y5mtcbI6S1JQUSwK+OOMpZYnpnAwCy3Qgvhf8sAIwj+oy1ks2
-         C3Vw==
+        bh=wGrsaWNUagkaLBjhVNdr8PrYlBPFyk15DPESvwSI7wQ=;
+        b=Cg02J9Geyt/0G6GQQniw1BsOs9gOfoTQSZW1pIGvEqFbN2T6wIsOrcxh9jdgAH3JQB
+         WQs0TIrwaV0ZkZ153T+Of2tQWCWBHKbeDM0QI6xUWruL13LVQP6EHYu1FOlIEIq16w24
+         d8KQYtjL3fG1Xi2cGVJd7QkPUGDg3G2qwUvm2KOlHBwzUKrH3/MEYRs1Z0WK2NbP/HmD
+         efPf3paUmLIuSrP5DtZe+nZQnoRFW2Gveow525/meJlfsW6IMNPH3lmf9FzhoxsSju/z
+         GR5yXMvKakkJ0CZ9cWEslrU3+D9x1N7ZGbwaJW8oy8grROIWSRXdGIm08psNZyXhh6FL
+         wHTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=4Fjo/oLhM/GI33DECaidoRno6lOPTrQDXq4YeW1u3XI=;
-        b=gswiNoa9yPO2wNz+zMuL5C7EDUf15DgUUPt+l4kj9srR+hwxEY3H/Iemc0vecP2kwL
-         0yQJNHB9fcHLi/jhT3OKOdagdm7ipPF0w2cIsKsaOH7cIZrianKTNwMqaVs8pHZVGOPe
-         JSfH6qVkW50F2Gbye4sjbPt+ZmVev3ojJOuCBEkEdAMleOn/qhOGUfC0gYTtCVSDxj5s
-         0BSxxjNs10WMc5EWYVpFJ1Vat40tpC8r0+reeC6bSn8lzMS0OpvJY59x043esXiSnVP9
-         Y08XLCgYyR95/gEB+aXFVJo8ww1ky8u0qhcwH0S0Fm7wa5bo/dhaUgABOIfUcYdeN+IC
-         I1dA==
-X-Gm-Message-State: AOAM5313UrTmBFxiApYm7TulI/d8mAAzpkYgFO0JmWJ+il8/bIfdym2f
-        lvAuGdS474qfIO871VYvjpGOaoAYDv+y2R+N3Ldjbw==
-X-Google-Smtp-Source: ABdhPJwttCSPFnI/f0Y+73jbxauzbId1+8+EbhmZWwrFdssLOLUTnHuIDjdXa+sBopTO83KHL5/G+HdxFmuxHV6QOCE=
-X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr9513215pjb.66.1638382589692;
- Wed, 01 Dec 2021 10:16:29 -0800 (PST)
+        bh=wGrsaWNUagkaLBjhVNdr8PrYlBPFyk15DPESvwSI7wQ=;
+        b=gIoAHP/3idmXBfNMnpWpIXEfnVT9Gs6cIm0xRxdJ9Blell23OMu1DKnVpWysQZc84b
+         8+gQG4XBD0RL2dH/4A4xRPmRIa8ubYHndblsaaNrFgoLIqk2kBfSIXyQboZKg3lMvukP
+         t7SlISJbxpwtpv4ZGJWsigOlSsPpI6XILwNjeLCzEnlcGkoma5x8KhxdnDtF6vOtHOak
+         NInSrveeLeieHi3Q1MjHplLlogX1A/slr7kAJ41uL0aNz/Y7yG4ta5pOu/rvFoyD5T99
+         qfGd/rHv/bDMaZqrevg61D+GXRTGy248JCSDJgt+MXAeylWQnraBlLO0fDhc8lVsvfJ/
+         n8/A==
+X-Gm-Message-State: AOAM530Uv1uHiFQoXlPqtIBSEGOYVyPPXOYdgS0TAmgHvkMmNO4SpJHB
+        YPKSOBVw2Ym96DpFiuJfZGvKjxPAf4de4LCynh6CcQ==
+X-Google-Smtp-Source: ABdhPJza6pEs9eUV/J8DdSMu19nlAcyEidPBV3ZMA7X/V6SJg0BAsTfx5q0q7Ukk3RC6j651Z4jnhvPbAYFXX2+rIFw=
+X-Received: by 2002:a4a:cf12:: with SMTP id l18mr5335169oos.25.1638382597543;
+ Wed, 01 Dec 2021 10:16:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20211201013329.15875-1-aford173@gmail.com> <CAJ+vNU1jENmWAR_5E98Vgb53ctxjxSWJewPW0YC4Yp4DuYTn3g@mail.gmail.com>
- <7216bc863d89faa9fdc5cd8d44c319f7a6d88159.camel@pengutronix.de>
-In-Reply-To: <7216bc863d89faa9fdc5cd8d44c319f7a6d88159.camel@pengutronix.de>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Wed, 1 Dec 2021 10:16:18 -0800
-Message-ID: <CAJ+vNU2PxgdN414Ufd4NAG5CJgnftNSAHDGpt9Nj+RfgkNmxaw@mail.gmail.com>
-Subject: Re: [RFC V2 0/2] arm64: imx8mm: Enable Hantro VPUs
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     Adam Ford <aford173@gmail.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
+References: <20211201152604.3984495-1-elver@google.com> <YaebeW5uYWFsDD8W@FVFF77S0Q05N>
+ <CANpmjNO9f2SD6PAz_pF3Rg_XOmBtqEB_DNsoUY1ycwiFjoP88Q@mail.gmail.com> <Yae08MUQn5SxPwZ/@FVFF77S0Q05N>
+In-Reply-To: <Yae08MUQn5SxPwZ/@FVFF77S0Q05N>
+From:   Marco Elver <elver@google.com>
+Date:   Wed, 1 Dec 2021 19:16:25 +0100
+Message-ID: <CANpmjNMW_BFnVj2Eaai76PQZqOoABLw+oYm8iGy6Vp9r_ru_iQ@mail.gmail.com>
+Subject: Re: [PATCH] kcov: fix generic Kconfig dependencies if ARCH_WANTS_NO_INSTR
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 9:32 AM Lucas Stach <l.stach@pengutronix.de> wrote:
+On Wed, 1 Dec 2021 at 18:46, Mark Rutland <mark.rutland@arm.com> wrote:
+[...]
+> > > Currently we mostly get away with disabling KCOV for while compilation units,
+> > > so maybe it's worth waiting for the GCC 12.0 release, and restricting things
+> > > once that's out?
+> >
+> > An alternative would be to express 'select ARCH_WANTS_NO_INSTR' more
+> > precisely, say with an override or something. Because as-is,
+> > ARCH_WANTS_NO_INSTR then doesn't quite reflect reality on arm64
+> > (yet?).
 >
-> Hi Tim,
+> It's more of a pragmatic thing -- ARCH_WANTS_NO_INSTR does reflect reality, and
+> we do *want* to enforce that strictly, it's just that we're just struck between
+> a rock and a hard place where until GCC 12 is released we either:
 >
-> Am Mittwoch, dem 01.12.2021 um 09:23 -0800 schrieb Tim Harvey:
-> > On Tue, Nov 30, 2021 at 5:33 PM Adam Ford <aford173@gmail.com> wrote:
-> > >
-> > > The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
-> > > to be related to the video decoders used on the i.MX8MQ, but because of
-> > > how the Mini handles the power domains, the VPU driver does not need to
-> > > handle all the functions, nor does it support the post-processor,
-> > > so a new compatible flag is required.
-> > >
-> > > With the suggestion from Hans Verkuil, I was able to get the G2 splat to go away
-> > > with changes to FORCE_MAX_ZONEORDER, but I found I could also set cma=512M, however
-> > > it's unclear to me if that's an acceptable alternative.
-> > >
-> > > At the suggestion of Ezequiel Garcia and Nicolas Dufresne I have some
-> > > results from Fluster. However, the G2 VPU appears to fail most tests.
-> > >
-> > > ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
-> > > Ran 90/135 tests successfully               in 76.431 secs
-> > >
-> > >  ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
-> > > Ran 55/61 tests successfully               in 21.454 secs
-> > >
-> > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
-> > > Ran 0/303 tests successfully               in 20.016 secs
-> > >
-> > > Each day seems to show more and more G2 submissions, and gstreamer seems to be
-> > > still working on the VP9, so I am not sure if I should drop G2 as well.
-> > >
-> > >
-> > > Adam Ford (2):
-> > >   media: hantro: Add support for i.MX8M Mini
-> > >   arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-> > >
-> > >  arch/arm64/boot/dts/freescale/imx8mm.dtsi   | 41 +++++++++++++++
-> > >  drivers/staging/media/hantro/hantro_drv.c   |  2 +
-> > >  drivers/staging/media/hantro/hantro_hw.h    |  2 +
-> > >  drivers/staging/media/hantro/imx8m_vpu_hw.c | 57 +++++++++++++++++++++
-> > >  4 files changed, 102 insertions(+)
-> > >
-> >
-> > Adam,
-> >
-> > That's for the patches!
-> >
-> > I tested just this series on top of v5.16-rc3 on an
-> > imx8mm-venice-gw73xx-0x and found that if I loop fluster I can end up
-> > getting a hang within 10 to 15 mins or so when imx8m_blk_ctrl_power_on
-> > is called for VPUMIX pd :
-> > while [ 1 ]; do uptime; ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0; done
-> > ...
-> > [  618.838436] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > [  618.844407] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> >
-> > I added prints in imx_pgc_power_{up,down} and
-> > imx8m_blk_ctrl_power_{on,off} to get some more context
-> > ...
-> > Ran 55/61 tests successfully               in 8.685 secs
-> >  17:16:34 up 17 min,  0 users,  load average: 3.97, 2.11, 0.93
-> > ********************************************************************************
-> > ********************
-> > Running test suite VP8-TEST-VECTORS with decoder GStreamer-VP8-V4L2SL-Gst1.0
-> > Using 4 parallel job(s)
-> > ********************************************************************************
-> > ********************
-> >
-> > [TEST SUITE      ] (DECODER                    ) TEST VECTOR               ... R
-> > ESULT
-> > ----------------------------------------------------------------------
-> > [ 1023.114806] imx8m_blk_ctrl_power_on vpublk-g1
-> > [ 1023.119669] imx_pgc_power_up vpumix
-> > [ 1023.124307] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > [ 1023.130006] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> >
-> > While this wouldn't be an issue with this series it does indicate we
-> > still have something racy in blk-ctrl. Can you reproduce this (and if
-> > not what kernel are you based on)? Perhaps you or Lucas have some
-> > ideas?
-> >
-> Did you have "[PATCH] soc: imx: gpcv2: Synchronously suspend MIX
-> domains" applied when running those tests? It has only recently been
-> picked up by Shawn and may have an influence on the bus domain
-> behavior.
+> a) Strictly enforce noinstr, and be sure there aren't any bugs from unexpected
+>    instrumentation, but we can't test GCC-built kernels under Syzkaller due to
+>    the lack of KCOV.
 >
+> b) Don't strictly enforce noinstr, and have the same latent bugs as today (of
+>    unknown severity), but we can test GCC-built kernels under Syzkaller.
+>
+> ... and since this (currently only affects KCOV, which people only practically
+> enable for Syzkaller, I think it's ok to wait until GCC 12 is out, so that we
+> can have the benefit of Sykaller in the mean time, and subsequrntly got for
+> option (a) and say those people need to use GCC 12+ (and clang 13+).
+>
+> > But it does look simpler to wait, so I'm fine with that. I leave it to you.
+>
+> FWIW, for my purposes I'm happy to take this immediately and to have to apply a
+> local patch to my fuzzing branches until GCC 12 is out, but I assume we'd want
+> the upstream testing to work in the mean time without requiring additional
+> patches.
 
-Lucas,
+Agree, it's not an ideal situation. :-/
 
-Good point. I did have that originally before I started pruning down
-to the bare minimum to reproduce the issue.
+syzkaller would still work, just not as efficiently. Not sure what's
+worse, less efficient fuzzing, or chance of random crashes. In fact,
+on syzbot we already had to disable it:
+https://github.com/google/syzkaller/blob/61f862782082c777ba335aa4b4b08d4f74d7d86e/dashboard/config/linux/bits/base.yml#L110
+https://lore.kernel.org/linux-arm-kernel/20210119130010.GA2338@C02TD0UTHF1T.local/T/#m78fdfcc41ae831f91c93ad5dabe63f7ccfb482f0
 
-I added it back and now I have the following:
-arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-media: hantro: Add support for i.MX8M Mini
-soc: imx: gpcv2: keep i.MX8MM VPU-H1 bus clock active
-soc: imx: gpcv2: Synchronously suspend MIX domains
-Linux 5.16-rc3
+So if we ran into issues with KCOV on syzbot for arm64, I'm sure it's
+not just us. I can't quite see what the reasons for the crashes are,
+but ruling out noinstr vs. KCOV would be a first step.
 
-Here's the latest with that patch:
-...
-[VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
-vp80-00-comprehensive-007 ... Success
-[  316.632373] imx8m_blk_ctrl_power_off vpublk-g1
-[  316.636908] imx_pgc_power_down vpu-g1
-[  316.640983] imx_pgc_power_down vpumix
-[  316.756869] imx8m_blk_ctrl_power_on vpublk-g1
-[  316.761360] imx_pgc_power_up vpumix
-[  316.765985] imx-pgc imx-pgc-domain.6: failed to command PGC
-[  316.772743] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-^^^ hang
+So I'm inclined to suggest we take this patch now and not wait for GCC
+12, given we're already crashing with KCOV and therefore have KCOV
+disabled on arm64 syzbot.
 
-I believe there is some sort of simple test I can do to power the gpu
-up/down to test as well but not clear what that is.
+I'm still fine waiting, but just wanted to point out you can fuzz
+without KCOV. Preferences?
 
-Tim
+Thanks,
+-- Marco

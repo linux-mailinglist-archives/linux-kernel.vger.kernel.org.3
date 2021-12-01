@@ -2,215 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB2E46452C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:55:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 778C9464530
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241616AbhLAC7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:59:12 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:15000 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241503AbhLAC7K (ORCPT
+        id S1346280AbhLADAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230406AbhLADAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:59:10 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J3kD31TKCzZdDZ;
-        Wed,  1 Dec 2021 10:53:07 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 10:55:48 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 10:55:47 +0800
-Subject: Re: [PATCH v16 10/11] of: fdt: Add memory for devices by DT property
- "linux,usable-memory-range"
-To:     Rob Herring <robh@kernel.org>
-CC:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        <linux-kernel@vger.kernel.org>, Dave Young <dyoung@redhat.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        <kexec@lists.infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Frank Rowand" <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, "Jonathan Corbet" <corbet@lwn.net>,
-        <linux-doc@vger.kernel.org>, Randy Dunlap <rdunlap@infradead.org>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Chen Zhou <dingguo.cz@antgroup.com>
-References: <20211123124646.1995-1-thunder.leizhen@huawei.com>
- <20211123124646.1995-11-thunder.leizhen@huawei.com>
- <YaaitPTArUZEriob@robh.at.kernel.org>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <0dc664f7-65ae-767c-3fe6-d1bcf50d41e1@huawei.com>
-Date:   Wed, 1 Dec 2021 10:55:46 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 30 Nov 2021 22:00:31 -0500
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA4FC061746;
+        Tue, 30 Nov 2021 18:57:11 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id v23so28871876iom.12;
+        Tue, 30 Nov 2021 18:57:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=wiPYTcAHVwhA2rfc2hhHlD9xwe9XFPwcNmMOICFA7To=;
+        b=EqWzuWgHFKYe/ZKczz4kJDJc96hbbpE0lcICbU+CtZAoLV1Fsjxf/D+EHgd2pWfTZ7
+         91ndcPI8szo56Kk2hiokoJYWxYJx+XTpI1KLVxBV14ubqDKgRzLhLE64vFfwoi/JLloG
+         cfPOwTVpvs8XW3xIDHQ9kPw0hNGLeztmY1huszYrS7g6RAo/nMN/lnWRmXoLCaFwHF+T
+         ogo7iZ6nCGGAt4pDy8OyzxN731l44F5Y7FnZFNHK6C/53/ThOx1NqdAGXQLeWjqIZz+3
+         WyaQU0ON3aLSZyB7LtyRJGPtpbE69PCkBuJaRU/OHjReOyR0eydMx3QPh00tOwerE/IL
+         Ua7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=wiPYTcAHVwhA2rfc2hhHlD9xwe9XFPwcNmMOICFA7To=;
+        b=j+cfhkVoEXvXNu0FoIGWW6ncMn2Fj4wg6M7OY9AvoLcaCbxXTuOkh8VAs0kI0bYdLn
+         plMWRGTgXoY41mCFIg/DXgNKdcwnTEyFE7FcNUqGfsze+qzaJmKIXScq+9lrdVFW5c6C
+         Wio2TbKBwd0c5mJr9p+cxNMFSGcsZK+KBQNXzdF6YFp1rwJBENOsMjOR872oxmMHIiI5
+         t2T+zYcxVbf5ZfeeShjywq6yUIGGj/sNZchgMl3acfNV1JUgtJRnPlLooRwQXKR4WrZ7
+         QTroXRORpbtzTqGG0QuZzTtHvghmFGE5y562hMwKinzkw9UcCvsLSZBd6zIwNIv4i925
+         zF/g==
+X-Gm-Message-State: AOAM533cfxxaXr5Lyh3QaiSjfsESs+R4UN5aejTh2aMy/VkbhVLdcSa8
+        yFPx1KUVjk2Enm3TeVO38d6cGCoZnPK63g==
+X-Google-Smtp-Source: ABdhPJzF5T+B1XnrxQ+NMydVZTt6lbDQT6IGiz4ewIcx/Dcd5VbMf2lNHLtbhW2bn6f9dtxjEJgjLw==
+X-Received: by 2002:a05:6602:3c2:: with SMTP id g2mr5750281iov.65.1638327429577;
+        Tue, 30 Nov 2021 18:57:09 -0800 (PST)
+Received: from cth-desktop-dorm.mad.wi.cth451.me ([2600:6c44:113f:8901:6f66:c6f8:91db:cfda])
+        by smtp.gmail.com with ESMTPSA id j8sm8385799ilu.64.2021.11.30.18.57.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 18:57:09 -0800 (PST)
+Date:   Tue, 30 Nov 2021 20:57:06 -0600
+From:   Tianhao Chai <cth451@gmail.com>
+To:     Igor Russkikh <irusskikh@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Julian Wiedmann <jwi@linux.ibm.com>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>
+Subject: [PATCHv3] ethernet: aquantia: Try MAC address from device tree
+Message-ID: <20211201025706.GA2181732@cth-desktop-dorm.mad.wi.cth451.me>
 MIME-Version: 1.0
-In-Reply-To: <YaaitPTArUZEriob@robh.at.kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Apple M1 Mac minis (2020) with 10GE NICs do not have MAC address in the
+card, but instead need to obtain MAC addresses from the device tree. In
+this case the hardware will report an invalid MAC.
 
+Currently atlantic driver does not query the DT for MAC address and will
+randomly assign a MAC if the NIC doesn't have a permanent MAC burnt in.
+This patch causes the driver to perfer a valid MAC address from OF (if
+present) over HW self-reported MAC and only fall back to a random MAC
+address when neither of them is valid.
 
-On 2021/12/1 6:16, Rob Herring wrote:
-> On Tue, Nov 23, 2021 at 08:46:45PM +0800, Zhen Lei wrote:
->> From: Chen Zhou <chenzhou10@huawei.com>
->>
->> When reserving crashkernel in high memory, some low memory is reserved
->> for crash dump kernel devices and never mapped by the first kernel.
->> This memory range is advertised to crash dump kernel via DT property
->> under /chosen,
->>         linux,usable-memory-range = <BASE1 SIZE1 [BASE2 SIZE2]>
->>
->> We reused the DT property linux,usable-memory-range and made the low
->> memory region as the second range "BASE2 SIZE2", which keeps compatibility
->> with existing user-space and older kdump kernels.
->>
->> Crash dump kernel reads this property at boot time and call memblock_add()
->> to add the low memory region after memblock_cap_memory_range() has been
->> called.
->>
->> Signed-off-by: Chen Zhou <chenzhou10@huawei.com>
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->>  drivers/of/fdt.c | 36 ++++++++++++++++++++++++++----------
->>  1 file changed, 26 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
->> index 37b477a51175359..1ea2a0b1657e3a9 100644
->> --- a/drivers/of/fdt.c
->> +++ b/drivers/of/fdt.c
->> @@ -967,6 +967,15 @@ static void __init early_init_dt_check_for_elfcorehdr(unsigned long node)
->>  
->>  static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
->>  
->> +/*
->> + * The main usage of linux,usable-memory-range is for crash dump kernel.
->> + * Originally, the number of usable-memory regions is one. Now there may
->> + * be two regions, low region and high region.
->> + * To make compatibility with existing user-space and older kdump, the low
->> + * region is always the last range of linux,usable-memory-range if exist.
->> + */
->> +#define MAX_USABLE_RANGES		2
->> +
->>  /**
->>   * early_init_dt_check_for_usable_mem_range - Decode usable memory range
->>   * location from flat tree
->> @@ -974,10 +983,9 @@ static unsigned long chosen_node_offset = -FDT_ERR_NOTFOUND;
->>   */
->>  static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
->>  {
->> -	const __be32 *prop;
->> -	int len;
->> -	phys_addr_t cap_mem_addr;
->> -	phys_addr_t cap_mem_size;
->> +	struct memblock_region rgn[MAX_USABLE_RANGES] = {0};
->> +	const __be32 *prop, *endp;
->> +	int len, i = 0;
->>  
->>  	if ((long)node < 0)
->>  		return;
->> @@ -985,16 +993,24 @@ static void __init early_init_dt_check_for_usable_mem_range(unsigned long node)
->>  	pr_debug("Looking for usable-memory-range property... ");
->>  
->>  	prop = of_get_flat_dt_prop(node, "linux,usable-memory-range", &len);
->> -	if (!prop || (len < (dt_root_addr_cells + dt_root_size_cells)))
->> +	if (!prop)
-> 
-> if (!prop || (len % (dt_root_addr_cells + dt_root_size_cells)))
+Signed-off-by: Tianhao Chai <cth451@gmail.com>
+---
+ .../net/ethernet/aquantia/atlantic/aq_nic.c   | 24 +++++++++++--------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
-OK.
+diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+index 1acf544afeb4..2a1ab154f681 100644
+--- a/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
++++ b/drivers/net/ethernet/aquantia/atlantic/aq_nic.c
+@@ -316,18 +316,22 @@ int aq_nic_ndev_register(struct aq_nic_s *self)
+ 	aq_macsec_init(self);
+ #endif
+ 
+-	mutex_lock(&self->fwreq_mutex);
+-	err = self->aq_fw_ops->get_mac_permanent(self->aq_hw, addr);
+-	mutex_unlock(&self->fwreq_mutex);
+-	if (err)
+-		goto err_exit;
++	if (platform_get_ethdev_address(&self->pdev->dev, self->ndev) != 0) {
++		// If DT has none or an invalid one, ask device for MAC address
++		mutex_lock(&self->fwreq_mutex);
++		err = self->aq_fw_ops->get_mac_permanent(self->aq_hw, addr);
++		mutex_unlock(&self->fwreq_mutex);
+ 
+-	eth_hw_addr_set(self->ndev, addr);
++		if (err)
++			goto err_exit;
+ 
+-	if (!is_valid_ether_addr(self->ndev->dev_addr) ||
+-	    !aq_nic_is_valid_ether_addr(self->ndev->dev_addr)) {
+-		netdev_warn(self->ndev, "MAC is invalid, will use random.");
+-		eth_hw_addr_random(self->ndev);
++		if (is_valid_ether_addr(addr) &&
++		    aq_nic_is_valid_ether_addr(addr)) {
++			eth_hw_addr_set(self->ndev, addr);
++		} else {
++			netdev_warn(self->ndev, "MAC is invalid, will use random.");
++			eth_hw_addr_random(self->ndev);
++		}
+ 	}
+ 
+ #if defined(AQ_CFG_MAC_ADDR_PERMANENT)
+-- 
+2.30.2
 
-> 
->>  		return;
->>  
->> -	cap_mem_addr = dt_mem_next_cell(dt_root_addr_cells, &prop);
->> -	cap_mem_size = dt_mem_next_cell(dt_root_size_cells, &prop);
->> +	endp = prop + (len / sizeof(__be32));
->> +	while ((endp - prop) >= (dt_root_addr_cells + dt_root_size_cells)) {
-> 
-> for (i = 0; i < MAX_USABLE_RANGES, prop < endp; i++) {
-> 
->> +		rgn[i].base = dt_mem_next_cell(dt_root_addr_cells, &prop);
->> +		rgn[i].size = dt_mem_next_cell(dt_root_size_cells, &prop);
->> +
->> +		pr_debug("cap_mem_regions[%d]: base=%pa, size=%pa\n",
->> +			 i, &rgn[i].base, &rgn[i].size);
->>  
->> -	pr_debug("cap_mem_start=%pa cap_mem_size=%pa\n", &cap_mem_addr,
->> -		 &cap_mem_size);
->> +		if (++i >= MAX_USABLE_RANGES)
->> +			break;
-> 
-> And drop this if.
-
-OK.
-
-> 
->> +	}
->>  
->> -	memblock_cap_memory_range(cap_mem_addr, cap_mem_size);
->> +	memblock_cap_memory_range(rgn[0].base, rgn[0].size);
->> +	for (i = 1; i < MAX_USABLE_RANGES && rgn[i].size; i++)
-> 
-> s/ &&/,/
-
-Hi Rob:
-
-The comma operator may not be suitable for logical judgment. The logical judgment
-before commas (,) is ignored.
-
-Here's my test：
-
-C code：
-int main()
-{
-        int i, j;
-
-        printf("&&:\n");
-        for (i = 0, j = 0; i < 2 && j < 3; i++, j++)
-                printf("i=%d, j=%d\n", i, j);
-
-        printf("\ncomma:\n");
-        for (i = 0, j = 0; i < 2, j < 3; i++, j++)	//(i < 2） before comma is ignored
-                printf("i=%d, j=%d\n", i, j);
-
-        return 0;
-}
-
-Output：
-&&:
-i=0, j=0
-i=1, j=1
-
-comma:
-i=0, j=0
-i=1, j=1
-i=2, j=2
-
-
-> 
->> +		memblock_add(rgn[i].base, rgn[i].size);
->>  }
->>  
->>  #ifdef CONFIG_SERIAL_EARLYCON
->> -- 
->> 2.25.1
->>
->>
-> 
-> .
-> 

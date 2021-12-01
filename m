@@ -2,191 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64B654652AA
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 539654652B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350049AbhLAQXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S1350337AbhLAQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349767AbhLAQX1 (ORCPT
+        with ESMTP id S1350227AbhLAQ07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:23:27 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF64FC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:20:05 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id k23so49287835lje.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:20:05 -0800 (PST)
+        Wed, 1 Dec 2021 11:26:59 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EFAC061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:23:38 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id r130so25079063pfc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:23:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=p2q1HfzTuPjWepu3FmIaXLsmIUw6Xq5MhiDWZD8E7iY=;
-        b=zHZIxEbJ2iwKy3ysNmUivN0LO3uUzmEk253B3Aajmgbmt+tZt1MJV3r15kLP2pYX61
-         s3YZgCXZlDE9NzXxS6oLocvQir74JrjWjCpg4SoFbLNXpGzcyrSHdjnCY679v6w0kisA
-         jSpwsBzAkHkX1ZD/E4JMPU9SGTB2J7SPjlBVeLaRwbZDrZ2xKwqYFlHZ42f5TDFb9JyP
-         aSd7Lyqvmn56kimziAqSQlzkEA+rnT3moNtJJGKlZXI00Bmq1Uv2/983dAsBjFGeamFl
-         16JPkBCpyuAEzRovbL7f0VUyROXJDLnSP0OatJVhTjnHQ/h9ixJHaUqY42qslora8I2o
-         uXWg==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=KXlDbDHfm6MPpsIvUexZXkH+Oo9wCHRMsnEAQA6kjIo=;
+        b=lcqV50x1HrgXfVhXY5D5JKXgkYr1FUZYfbMRQflyIJQE6UrA7g56VucLgGn3xsZ7hO
+         1FClIo5U/3GH4H8hNd60p8EvXmi2onk+efUkewDJwg0oVb6VI7bUd/ls0K68IrZrvAIf
+         SOomzc9JPnD5ctRRIVkE78U1LmXDuNbHnb3c1uzg3EWgTnooY0r4GKeisD7TVl1gSDEF
+         TqOPrLHgUdUEpdF4f+7xpaQwjerOvCcODZDNMyc0kDjpa7k6i4Ne4MdxBxzBUGmJz77m
+         Jm0tC/jVtT3DTvfpP6i5nxQ9vim+iDOOCw/52v+uYK8TYwF/dY/jSV4wtXprG8PRm8nj
+         4uXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=p2q1HfzTuPjWepu3FmIaXLsmIUw6Xq5MhiDWZD8E7iY=;
-        b=PW1m3sWnptDPA8nb55Zy7tnBnnDgb6m5rg03DXZlr1HLkQJS5hTsJJmvSPbnd1rS7V
-         r1GJH8tKi4lgqvNqX8PcQZedI4kgLY+OwQO9/Z6CZTUlfRpjWFNzKck98ibDPJos/fNz
-         b3HkQFaiCHiJoqGSOoOU7fWrWQOR0lFzxSHaWIkxVksQ3vva5Nx0Flmn2F6q606+UoGh
-         oopLJrOj88dHTUP//2cR9huygvSyxPyelLEIV4QKeP2tC8vq3qWzpXnLOX+Dw95zNvSD
-         Yf4KD4njD9v95R9ll4k4iIipMgZSvZKObBQP4/vEWCbRCCQYVIfR2snmGigFWU3cQjBI
-         UtIw==
-X-Gm-Message-State: AOAM532lGSqQ8XV3Cp2MTYqHIHK9xWGNwJ81GHDWl2BhCt096+Ki05OX
-        4l3v73JPpB2bOhEOUTfTeJtnaS0i1y1BeYkaJfuTC6hXxGw=
-X-Google-Smtp-Source: ABdhPJzYk4YFYrsYR7NinJvzb1tAmj3n/cgGJVkkbXWmGxiI1t0ZQ3CLGGqSL5ATfTOQoIahOUbyLwcaGTutdbdQe3I=
-X-Received: by 2002:a05:651c:612:: with SMTP id k18mr6453734lje.383.1638375604074;
- Wed, 01 Dec 2021 08:20:04 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=KXlDbDHfm6MPpsIvUexZXkH+Oo9wCHRMsnEAQA6kjIo=;
+        b=oXWY8nX0HGu8xuV8Cigx6dWLSA7Qn58sb0Jt1zA3DgeDs4/HTwKHUJwF8lKToXjPaH
+         UeF+LRC41HQnLiutR8J1Hgy9UWvyWFOf98gtmRDqZkC9ODqZ7RaDDT+mL5V6w6J9+Lat
+         FUo6c2x+mlJcPnBduGT6kzhgs+KNVnrgzmp+OSOTwW+2ZuWQBtNJ3cwHZ2+xo5zFPUBc
+         zkHg1Vc/Zo64jlJhmG2Tra1pck3sZepulmJ8qcMnfxut22V5eExEi8N3vLISLpZdsKmv
+         X9O+dnVZ/7Vw9kIJmrxm4Ei2QcgOiOfVhkHYb6nQ8wjFLHyDPXGawn1e7P3L0dEGnthT
+         +xKQ==
+X-Gm-Message-State: AOAM533LVbZIbrAF1gNW/MEZcO1mDX/4w7E5ZT6e4FR0C4PDmKEZ4mgU
+        6YHeTXYHyPmy01hciG6q+ePMWg==
+X-Google-Smtp-Source: ABdhPJyBL07bl8kieStSK+Wj6FYYCzBo3wL7q1LXnaEGhsvYbQVXbGT/IEE+Can6YtJ9beFrHU6X0g==
+X-Received: by 2002:a05:6a00:84c:b0:494:6d40:ed76 with SMTP id q12-20020a056a00084c00b004946d40ed76mr6940144pfk.65.1638375817560;
+        Wed, 01 Dec 2021 08:23:37 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id a3sm192787pgj.2.2021.12.01.08.23.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 08:23:36 -0800 (PST)
+Date:   Wed, 1 Dec 2021 16:23:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 21/29] KVM: Resolve memslot ID via a hash table
+ instead of via a static array
+Message-ID: <YaehhRR75OB+qos8@google.com>
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+ <a6b62e0bdba2a82bbc31dcad3c8525ccc5ff0bff.1638304316.git.maciej.szmigiero@oracle.com>
+ <Yabj3Qr8e85qhSg3@google.com>
+ <c1dca71f-99d7-93b2-b4fe-d02526fefc81@maciej.szmigiero.name>
 MIME-Version: 1.0
-References: <CAKfTPtDPskVdEd-KQ_cwe-R_zVFPQOgdbk9x+3eD12pKs8fGFw@mail.gmail.com>
- <87zgpsb6de.mognet@arm.com> <CAKfTPtCnusWJXJLDEudQ_q8MWaZYbPJK-QjAbBYWFW8Nw-J+Ww@mail.gmail.com>
- <87sfvjavqk.mognet@arm.com> <CAKfTPtC4iXXaptm9+2bHvX2E3xAWU4M3xN0ZuwpFQ1RyXAyxyA@mail.gmail.com>
- <87pmqmc16f.mognet@arm.com> <20211126171817.GA3798214@ubiquitous>
- <CAKfTPtCGyp8JZq1EOgEhTeD+PBV2rMnTQ=uV-ZgsaN1RVmPk0w@mail.gmail.com>
- <20211129164545.GA3981328@ubiquitous> <CAKfTPtCU3TQC06j-nUgsv-7+Vn+XyKwJFv5EwCcTDrPObGttEw@mail.gmail.com>
- <20211201144005.GA479680@ubiquitous>
-In-Reply-To: <20211201144005.GA479680@ubiquitous>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 1 Dec 2021 17:19:52 +0100
-Message-ID: <CAKfTPtAXqVZvWynxazT+PYWptXm-ud7m64n2Zvd0XO4BrceMyQ@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Fix detection of per-CPU kthreads waking a task
-To:     Vincent Donnefort <Vincent.Donnefort@arm.com>
-Cc:     Valentin Schneider <Valentin.Schneider@arm.com>,
-        peterz@infradead.org, mingo@redhat.com,
-        linux-kernel@vger.kernel.org, mgorman@techsingularity.net,
-        dietmar.eggemann@arm.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c1dca71f-99d7-93b2-b4fe-d02526fefc81@maciej.szmigiero.name>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Dec 2021 at 15:40, Vincent Donnefort
-<vincent.donnefort@arm.com> wrote:
->
-> On Tue, Nov 30, 2021 at 04:42:03PM +0100, Vincent Guittot wrote:
-> > On Mon, 29 Nov 2021 at 17:54, Vincent Donnefort
-> > <vincent.donnefort@arm.com> wrote:
-> > >
-> > > [...]
-> > >
-> > > > > > >
-> > > > > > > still i don't see the need of !is_idle_task(current)
-> > > > > > >
-> > > > > >
-> > > > > > Admittedly, belts and braces. The existing condition checks rq->nr_running <= 1
-> > > > > > which can lead to coscheduling when the wakeup is issued by the idle task
-> > > > > > (or even if rq->nr_running == 0, you can have rq->ttwu_pending without
-> > > > > > having sent an IPI due to polling). Essentially this overrides the first
-> > > > > > check in sis() that uses idle_cpu(target) (prev == smp_processor_id() ==
-> > > > > > target).
-> > > > > >
-> > > > > > I couldn't prove such wakeups can happen right now, but if/when they do
-> > > > > > (AIUI it would just take someone to add a wake_up_process() down some
-> > > > > > smp_call_function() callback) then we'll need the above. If you're still
-> > > > > > not convinced by now, I won't push it further.
-> > > > >
-> > > > > From a quick experiment, even with the asym_fits_capacity(), I can trigger
-> > > > > the following:
-> > > > >
-> > > > > [    0.118855] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > > > [    0.128214] select_idle_sibling: wakee=rcu_gp:3 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > > > [    0.137327] select_idle_sibling: wakee=rcu_par_gp:4 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > > > [    0.147221] select_idle_sibling: wakee=kworker/u16:0:7 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > > > [    0.156994] select_idle_sibling: wakee=mm_percpu_wq:8 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > >
-> > > > Timestamp shows its booting phase and thread name above shows per cpu
-> > > > thread. Could it happen just while creating per cpu thread at boot and
-> > > > as a result not relevant ?
-> > >
-> > > I have more of those logs a bit later in the boot:
-> > >
-> > > [    0.484791] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > [    0.516495] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > [    0.525758] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > [    0.535078] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > [    0.547486] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > > [    0.579192] select_idle_sibling: wakee=kthreadd:2 nr_cpus_allowed=8 current=swapper/0:1 in_task=1
-> > >
-> > > The nr_cpus_allowed=8 suggest that none of the threads from the logs I
-> > > shared are per-CPU. Sorry if the format is confusing, I used:
-> > >
-> > >   wakee=<comm>:<pid> current=<comm>:<pid>.
-> > >
-> > > >
-> > > > Can you see similar things later after booting ?
-> > >
-> > > I tried few scenarios other than the boot time but none of them produced
-> > > "current=swapper/X:1 in_task=1"
-> > >
-> > > >
-> > > > I have tried to trigger the situation but failed to get wrong
-> > > > sequence. All are coming from interrupt while idle.
-> > > > After adding in_task() condition, I haven't been able to trigger the
-> > > > warn() that I added to catch the wrong situations on SMP, Heterogenous
-> > > > or NUMA system. Could you share more details on your setup ?
-> > > >
-> > >
-> > > This is just my Hikey960 with the asym_fits_capacity() fix [1] to make sure I
-> > > don't simply hit the other issue with asym platforms.
-> >
-> > I ran my previous tests on dragonboard 845c which is dynamiQ and I
-> > have tried on my hikey960 since  but without any success so far. This
-> > is what i use:
-> >
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -6397,9 +6397,12 @@ static int select_idle_sibling(struct
-> > task_struct *p, int prev, int target)
-> >          * essentially a sync wakeup. An obvious example of this
-> >          * pattern is IO completions.
-> >          */
-> > -       if (is_per_cpu_kthread(current) &&
-> > +       if (in_task() &&
-> > +           is_per_cpu_kthread(current) &&
-> >             prev == smp_processor_id() &&
-> >             this_rq()->nr_running <= 1) {
-> > +
-> > +               WARN(is_idle_task(current), "idle per cpu kthread: cpu
-> > %d task: %s", prev, p->comm);
-> >                 return prev;
-> >         }
-> >
-> >
-> > Without in_task() condition, i've got warnings from interrupt context
-> > but nothing else.
-> > Note that I don't even have the asym_fits_capacity() condition
->
-> I could not find a setup reproducing that issue outside of the boot time. So
-> following our conversation, I made a v2 that switch !is_idle_task() to in_task().
+On Wed, Dec 01, 2021, Maciej S. Szmigiero wrote:
+> On 01.12.2021 03:54, Sean Christopherson wrote:
+> > On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
+> > > From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> > > 
+> > > Memslot ID to the corresponding memslot mappings are currently kept as
+> > > indices in static id_to_index array.
+> > > The size of this array depends on the maximum allowed memslot count
+> > > (regardless of the number of memslots actually in use).
+> > > 
+> > > This has become especially problematic recently, when memslot count cap was
+> > > removed, so the maximum count is now full 32k memslots - the maximum
+> > > allowed by the current KVM API.
+> > > 
+> > > Keeping these IDs in a hash table (instead of an array) avoids this
+> > > problem.
+> > > 
+> > > Resolving a memslot ID to the actual memslot (instead of its index) will
+> > > also enable transitioning away from an array-based implementation of the
+> > > whole memslots structure in a later commit.
+> > > 
+> > > Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> > > Co-developed-by: Sean Christopherson <seanjc@google.com>
+> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > 
+> > Nit, your SoB should come last since you were the last person to handle the patch.
+> > 
+> 
+> Thought that my SoB should come first as coming from the author of this
+> patch.
+> 
+> Documentation/process/submitting-patches.rst says that:
+> > Any further SoBs (Signed-off-by:'s) following the author's SoB are from
+> > people handling and transporting the patch, but were not involved in its
+> > development. SoB chains should reflect the **real** route a patch took
+> > as it was propagated to the maintainers and ultimately to Linus, with
+> > the first SoB entry signalling primary authorship of a single author.
+> 
+> So "further SoBs follow[] the author's SoB" and "the first SoB entry
+> signal[s] primary authorship".
+> But at the same time "SoB chains should reflect the **real** route a
+> patch took" - these rules contradict each other in our case.
 
-Ok.
-Thanks
+Yeah, this is a unusual case.  If we wanted to be super strict, for patches written
+by you without a Co-developed-by, the SoB chain should be:
 
->
-> >
-> > >
-> > > Then I just added my log in the per-CPU kthread wakee stacking exit path
-> > >
-> > >     printk("%s: wakee=%s:%d nr_cpus_allowed=%d current=%s:%d in_task=%d\n",
-> > >             __func__, p->comm, p->pid, p->nr_cpus_allowed, current->comm, current->pid, in_task());
-> > >
-> > >
-> > > [1] https://lore.kernel.org/all/20211125101239.3248857-1-vincent.donnefort@arm.com/
-> > >
-> > >
-> > > From the same logs I also see:
-> > >
-> > >   wakee=xfsaild/mmcblk0:4855 nr_cpus_allowed=8 current=kworker/1:1:1070 in_task=0
-> > >
-> > > Doesn't that look like a genuine wakeup that would escape the per-CPU kthread
-> > > stacking exit path because of the in_task test?
->
-> My bad, I checked and this is not a genuine one...
->
+  Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+  Signed-off-by: Sean Christopherson <seanjc@google.com>
+  Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+
+but that's a bit ridiculous and probably unnecessary since my changes were little
+more than code review feedback, which is why I think it's ok to just drop my SoB
+for patches authored solely by you.
+
+Co-developed-by is a slightly different case.  Because patches with multiple
+authors are likely handed back and forth multiple times, as was the case here,
+and because each author needs a SoB anyways, the normal rules are tweaked slightly
+to require that the person submitting the patch is always last to capture that they
+were the person that did the actual submission.  
+
+There's another "When to use Acked-by:, Cc:, and Co-developed-by:" section in
+submitting-patches.rst that covers this:
+
+  Co-developed-by: states that the patch was co-created by multiple developers;
+  it is used to give attribution to co-authors (in addition to the author
+  attributed by the From: tag) when several people work on a single patch.  Since
+  Co-developed-by: denotes authorship, every Co-developed-by: must be immediately
+  followed by a Signed-off-by: of the associated co-author.  Standard sign-off
+  procedure applies, i.e. the ordering of Signed-off-by: tags should reflect the
+  chronological history of the patch insofar as possible, regardless of whether
+  the author is attributed via From: or Co-developed-by:.  Notably, the last
+  Signed-off-by: must always be that of the developer submitting the patch.
+  
+  Note, the From: tag is optional when the From: author is also the person (and
+  email) listed in the From: line of the email header.
+  
+  Example of a patch submitted by the From: author::
+  
+          <changelog>
+  
+          Co-developed-by: First Co-Author <first@coauthor.example.org>
+          Signed-off-by: First Co-Author <first@coauthor.example.org>
+          Co-developed-by: Second Co-Author <second@coauthor.example.org>
+          Signed-off-by: Second Co-Author <second@coauthor.example.org>
+          Signed-off-by: From Author <from@author.example.org>
+  
+  Example of a patch submitted by a Co-developed-by: author::
+  
+          From: From Author <from@author.example.org>
+  
+          <changelog>
+  
+          Co-developed-by: Random Co-Author <random@coauthor.example.org>
+          Signed-off-by: Random Co-Author <random@coauthor.example.org>
+          Signed-off-by: From Author <from@author.example.org>
+          Co-developed-by: Submitting Co-Author <sub@coauthor.example.org>
+          Signed-off-by: Submitting Co-Author <sub@coauthor.example.org>
+  

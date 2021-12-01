@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3047464B7C
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB514464B80
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:21:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348607AbhLAKWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:22:36 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:59530 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232177AbhLAKWe (ORCPT
+        id S1348610AbhLAKYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:24:20 -0500
+Received: from mail-ua1-f48.google.com ([209.85.222.48]:37813 "EHLO
+        mail-ua1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232177AbhLAKYR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 05:22:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B08AB81E17;
-        Wed,  1 Dec 2021 10:19:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 387F8C53FCC;
-        Wed,  1 Dec 2021 10:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638353951;
-        bh=1DD6yb8AndnxLz2+3Nk3lf/qwuXp3fDEiH6kGOpOszU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tlzh7bhavcuJL1JqvmDk1Pm+IxQe6SWnZS0YSsrgT245Kv02NKGibqzXW+dF0KFef
-         EroXPB0P923FZ4+JNasEbAzQV8X3YHuNN1Bse4uKZiylQlDC/krndQMHr8N+nF4yHf
-         SWEmU24CovYm7TBosS6Fl9pXUR4FeXRvg2IPbrwhaKl3MW5Z2IMTa6ONG0HsdTRImU
-         T+f5GcwZ/FZ2Itdc9JhMSYPhnRIEYWnsNfTPU3NPY7yMR6M1LOhI5Jl7PyU7jvZdH9
-         tPetaLPCgDyhV8wkvirXtXDRx/fWpEgMlAK0Vmt2QxS1t0H3bgWSXLbJvCIM21K065
-         cgBC+oTl0H+zw==
-Date:   Wed, 1 Dec 2021 12:19:09 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org
-Subject: Re: [PATCH v4 2/2] selftests: tpm2: Reset the dictionary attack lock
-Message-ID: <YadMHU0scgKvCTMV@iki.fi>
-References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
- <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
- <YaVljk1vLRZ/TDJ/@iki.fi>
- <e569444c-e0cd-52bc-308f-7fa457dbf086@linux.ibm.com>
- <YadLaHB0oJZYTMbh@iki.fi>
+        Wed, 1 Dec 2021 05:24:17 -0500
+Received: by mail-ua1-f48.google.com with SMTP id o1so47787069uap.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 02:20:57 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=urLNBsFGliR6FhvwlQWsAIf0ZWR7LeLf64IUUPE+zmE=;
+        b=1/l6fWX2V4FZ1HIMu9Se46py4R26Fye6dR5NuQPmXYBzj9j17lcrbOzYoZIM9nGg9Z
+         6vzNp2TiS4eB4OrvTjsSVJlzMU7JJzatyNdhMfcoEKrNypMaAdlR4WY/MVIMJG6eCI+p
+         A7o03+ZGxndsbrou47p7cxozejcKxSlw/xIEWRhZiHZBaIeX6Tf1doL6dxpWw0F5Q+SB
+         IVDbGjGhCmfhjWgbuqXSkz5UmfmLSEHMTdATR3xlKzdvQ4wRwMECkKJjK7cLJcWIcG49
+         7rk8kwmKQ26MwQY48dUZPDpIoyj+QGyju63Mz0tMlp7xL3YQaiFtyErmsU1MlpszgHzW
+         ix9g==
+X-Gm-Message-State: AOAM5333Dnpq7VVruBAy0t3xczPpjzeC7F+9035FMYsr8M/5fjmeF1gv
+        6EuGN4FvSsom85Y9+JUxdjg5zhrUqz21sg==
+X-Google-Smtp-Source: ABdhPJwebFZs7UTtgaEkCERZHKJYrQQV2TOJOnGlCWhbokECZRlNAZk1Xd5svuv7EE2eE+m+N7E+EQ==
+X-Received: by 2002:ab0:74c1:: with SMTP id f1mr5876017uaq.109.1638354056477;
+        Wed, 01 Dec 2021 02:20:56 -0800 (PST)
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
+        by smtp.gmail.com with ESMTPSA id 23sm11355787vkk.17.2021.12.01.02.20.55
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 02:20:55 -0800 (PST)
+Received: by mail-vk1-f182.google.com with SMTP id s1so7290887vks.9
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 02:20:55 -0800 (PST)
+X-Received: by 2002:a05:6122:2193:: with SMTP id j19mr5849899vkd.7.1638354055034;
+ Wed, 01 Dec 2021 02:20:55 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YadLaHB0oJZYTMbh@iki.fi>
+References: <20211117093734.17407-1-daniel.baluta@oss.nxp.com>
+ <20211117093734.17407-8-daniel.baluta@oss.nxp.com> <CAMuHMdVV6Os8Gzc9JVjD2CAtN38=7KFn9GqosnWvByQc-7uA=Q@mail.gmail.com>
+ <bdbea252-09e4-eb60-acf8-4ea8a1d924c4@linux.intel.com> <YaZZzSPQDz0vHRQY@sirena.org.uk>
+In-Reply-To: <YaZZzSPQDz0vHRQY@sirena.org.uk>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Wed, 1 Dec 2021 11:20:43 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU5Lc9x4mnoKn2xUPku1tT1XM=ALY-vPtos=NBjcrzAWQ@mail.gmail.com>
+Message-ID: <CAMuHMdU5Lc9x4mnoKn2xUPku1tT1XM=ALY-vPtos=NBjcrzAWQ@mail.gmail.com>
+Subject: Re: [PATCH 07/21] ASoC: amd: Add module to determine ACP configuration
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@oss.nxp.com>,
+        daniel.baluta@gmail.com,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        AjitKumar.Pandey@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        Julian.Schroeder@amd.com, linux-mediatek@lists.infradead.org,
+        Balakishore.pati@amd.com, yc.hung@mediatek.com,
+        vishnuvardhanrao.ravulapati@amd.com, vsreddy@amd.com,
+        daniel.baluta@nxp.com, Bard Liao <bard.liao@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 12:16:11PM +0200, Jarkko Sakkinen wrote:
-> On Mon, Nov 29, 2021 at 07:26:12PM -0500, Stefan Berger wrote:
-> > 
-> > On 11/29/21 18:43, Jarkko Sakkinen wrote:
-> > > On Sat, Nov 27, 2021 at 11:10:52PM -0500, Stefan Berger wrote:
-> > > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > > 
-> > > > Reset the dictionary attack lock to avoid the following types of test
-> > > > failures after running the test 2 times:
-> > > > 
-> > > > ======================================================================
-> > > > ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
-> > > > ----------------------------------------------------------------------
-> > > > Traceback (most recent call last):
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2_tests.py", line 105, in test_unseal_with_wrong_policy
-> > > >      blob = self.client.seal(self.root_key, data, auth, policy_dig)
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 620, in seal
-> > > >      rsp = self.send_cmd(cmd)
-> > > >    File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 397, in send_cmd
-> > > >      raise ProtocolError(cc, rc)
-> > > > tpm2.ProtocolError: TPM_RC_LOCKOUT: cc=0x00000153, rc=0x00000921
-> > > > 
-> > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > ---
-> > > >   tools/testing/selftests/tpm2/tpm2_tests.py | 2 ++
-> > > >   1 file changed, 2 insertions(+)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > index e63a37819978..ad6f54c01adf 100644
-> > > > --- a/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
-> > > > @@ -139,6 +139,8 @@ class SmokeTest(unittest.TestCase):
-> > > >           except:
-> > > >               self.client.flush_context(handle)
-> > > >               raise
-> > > > +        finally:
-> > > > +            self.client.reset_da_lock()
-> > > >           self.assertEqual(rc, tpm2.TPM2_RC_POLICY_FAIL)
-> > > > -- 
-> > > > 2.31.1
-> > > > 
-> > > I don't agree with this as a DA lock has legit use. This would be adequate
-> > > for systems dedicated for kernel testing only.
-> > 
-> > The problem is this particular test case I am patching here causes the above
-> > test failures upon rerun. We are testing the driver here presumably and not
-> > the TPM2, so I think we should leave the TPM2 as cleaned up as possible,
-> > thus my suggestion is to reset the DA lock and we won't hear any complaints
-> > after that.
-> 
-> Ok.
-> 
-> > > We could make this available in the folder where TPM2 tests are:
-> > > 
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/tpm2-scripts.git/tree/tpm2-reset-da-lock
-> > 
-> > 
-> > The tss packages also have command line tools to reset the DA lock, but it
-> > shouldn't be necessary to use them after running a **driver** test case.
-> 
-> If you speak about TSS, please alway say which one :-)
-> 
-> Adding non-volatile state changes explicitly is to a test case is both
+Hi Mark,
 
-A typo, should be:
+On Tue, Nov 30, 2021 at 6:05 PM Mark Brown <broonie@kernel.org> wrote:
+> On Tue, Nov 30, 2021 at 10:49:30AM -0600, Pierre-Louis Bossart wrote:
+> > To Geert's point, there may be an additional need to add a
+>
+> > depends on SND_SOC_AMD_ACP
+>
+> > There are also a set of
+>
+> > SND_SOC_AMD_ACPyx options, not sure if any applies as a dependency here?
+>
+> Or put them in an if block (IIRC I thought they were which was why the
+> dependency wasn't needed but I don't know what I was looking at if I did
+> check that).
 
-"Adding non-volatile state changes explicitly to a test case is both"
+Probably you were looking at sound/soc/amd/acp/Kconfig, where all the
+other ACP options live, and where you had applied my earlier patch
+to wrap everything in a big "if".
 
-/Jarkko
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

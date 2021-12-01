@@ -2,131 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B701464A8A
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D93A464A8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348197AbhLAJ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 04:29:16 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:10837 "EHLO
-        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S242016AbhLAJ3O (ORCPT
+        id S1348209AbhLAJ3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 04:29:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242016AbhLAJ3k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:29:14 -0500
+        Wed, 1 Dec 2021 04:29:40 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61EFC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 01:26:19 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id a18so50763489wrn.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 01:26:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638350753; x=1669886753;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RuZH4w90n5W5nJ9qxjET1aTW0ME4PBkPQ1uu/8hLefg=;
-  b=pfWFMYuUtp9rcZBTNMuhS0lKMCZlyvoXGnGyAZDxTX+4yDgz6yXAz6da
-   e3m7ssgKDLQWQ1yybSQEjyumLuFcevEFZfYTjIPL3GBfbKGtehb4XdDDF
-   LFPqjJCKrPnBDzp8G8XZFWSa9UcHp1yGwOPqGwV7uw0uLyQbVfPNmdtVA
-   4=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Dec 2021 01:25:53 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 01:25:52 -0800
-Received: from [10.216.8.32] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 1 Dec 2021
- 01:25:50 -0800
-Message-ID: <4b192489-ed1d-179b-ea35-cc9b23b8f389@quicinc.com>
-Date:   Wed, 1 Dec 2021 14:55:46 +0530
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=subject:to:cc:references:from:organization:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=h6vtMpd8C2OVSmV4kXIfdV5q7UU768pshmu8uo8Dncs=;
+        b=H9e7UsKFATLHgRApvxytRa6rR1qLReWi0Fxf21UaTOSFEH1zFudVH7ZXF4mDT9GTQ3
+         kA2tbpbUKRx9aDnwoHav7ZAvxnB8UjiNAiUnvh52wFA66O93qfcSZQOy9E/yeiSoTGvT
+         v1NALbM618jSQYef9DuNrDXoqFut0cugRzcdRTc3N+8ZqjmUAAQS76GKieX5V1x4dt5R
+         i3iHBe/P6STvHiwW8WYm24G0wHptnZb2gjdlBso+WZAHcuC2OQPHWl7tUoZLYFFDYNWB
+         91b3RX7VC16Jp0A+EkqANANqk1aKaokeO9i9YzMFyaEdTjcQOIZjO7dxx9v4ywBMnh79
+         FjGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:organization
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=h6vtMpd8C2OVSmV4kXIfdV5q7UU768pshmu8uo8Dncs=;
+        b=2CfpC6cnsXbkxckYnr1Q4bOrfaYsM2po/7wUXX4SMaU2G08jsl3+fuZ7z31YmSFyEo
+         ysRqfMFTyjBDSvPQis5wKnbkEd27P0U+jehUFXPnf3+ls7Wpyeklwv9kVAxYDxsLAFtT
+         Rqe3tMY+xEo/UMgXSla4daRE3KfAVM/a1mWlFsjiR6RZuqWGji2/sHLYUEfWaDKN6nq2
+         Rq3b0QV4VqLIO0h+wZRQ+CQh+dWj0f2zgiqpkmXdlcPtR7n2yM7Gyq8Jg77FZu5MG54w
+         OL0gh69SbJip/vE8srn83w492wT/m3doM9oYvCLC28I3DLHHlzbsZfLIU1dqTfHKJijV
+         YTHg==
+X-Gm-Message-State: AOAM530S742YLrkIjufqTuGqHksxqwNPmw/jjugNLZ3G9+qvObSd7w19
+        wjQLsAxTyKZKQjxju77aVGnt7JyoCcqgekGk
+X-Google-Smtp-Source: ABdhPJz5oJJMEyrhU9Df4sLOzl5l4NSa49qltp90IxNBFfQLiyMm6db7Ld4xZWuVzcGZO1xu+mhi+w==
+X-Received: by 2002:adf:eb42:: with SMTP id u2mr5440858wrn.521.1638350778216;
+        Wed, 01 Dec 2021 01:26:18 -0800 (PST)
+Received: from [10.1.3.24] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id b13sm15555246wrh.32.2021.12.01.01.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 01:26:17 -0800 (PST)
+Subject: Re: [PATCH] arm64: meson: fix dts for JetHub D1
+To:     Vyacheslav <adeep@lexina.in>, Kevin Hilman <khilman@baylibre.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+References: <20211125130246.1086627-1-adeep@lexina.in>
+ <163826896367.1309037.1000352899984422910.b4-ty@baylibre.com>
+ <2ee1dea9-df39-ee76-4079-0ded15ed43c7@lexina.in>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+Message-ID: <cb425c20-f699-7b24-2ef3-d798f417d09c@baylibre.com>
+Date:   Wed, 1 Dec 2021 10:26:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 2/6] rcu/nocb: Prepare nocb_cb_wait() to start with a
- non-offloaded rdp
+In-Reply-To: <2ee1dea9-df39-ee76-4079-0ded15ed43c7@lexina.in>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>
-References: <20211123003708.468409-1-frederic@kernel.org>
- <20211123003708.468409-3-frederic@kernel.org>
-From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
-In-Reply-To: <20211123003708.468409-3-frederic@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/23/2021 6:07 AM, Frederic Weisbecker wrote:
-> In order to be able to toggle the offloaded state from cpusets, a nocb
-> kthread will need to be created for all possible CPUs whenever the
-> "rcu_nocbs=" or "nohz_full=" parameters are passed.
+On 30/11/2021 19:48, Vyacheslav wrote:
 > 
-> Therefore nocb_cb_wait() kthread must prepare to start running on a
-> de-offloaded rdp. Simply move the sleeping condition in the beginning
-> of the kthread callback is enough to prevent from running callbacks
-> before the rdp ever becomes offloaded.
 > 
-> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Uladzislau Rezki <urezki@gmail.com>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> ---
-
-Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-
-
-Thanks
-Neeraj
-
->   kernel/rcu/tree_nocb.h | 23 ++++++++++++-----------
->   1 file changed, 12 insertions(+), 11 deletions(-)
+> 30.11.2021 13:43, Neil Armstrong пишет:
+>> Hi,
+>>
+>> On Thu, 25 Nov 2021 16:02:47 +0300, Vyacheslav Bocharov wrote:
+>>> Fix misplace of cpu_cooling_maps for JetHub D1, move it to right place.
+>>>
+>>>
+>>
+>> Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v5.17/dt64)
+> Thanks. Could the patch get into 5.16?
 > 
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index cc1165559177..e1cb06840454 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -797,6 +797,18 @@ static void nocb_cb_wait(struct rcu_data *rdp)
->   	bool can_sleep = true;
->   	struct rcu_node *rnp = rdp->mynode;
->   
-> +	do {
-> +		swait_event_interruptible_exclusive(rdp->nocb_cb_wq,
-> +						    nocb_cb_wait_cond(rdp));
-> +
-> +		// VVV Ensure CB invocation follows _sleep test.
-> +		if (smp_load_acquire(&rdp->nocb_cb_sleep)) { // ^^^
-> +			WARN_ON(signal_pending(current));
-> +			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("WokeEmpty"));
-> +		}
-> +	} while (!nocb_cb_can_run(rdp));
-> +
-> +
->   	local_irq_save(flags);
->   	rcu_momentary_dyntick_idle();
->   	local_irq_restore(flags);
-> @@ -849,17 +861,6 @@ static void nocb_cb_wait(struct rcu_data *rdp)
->   
->   	if (needwake_state)
->   		swake_up_one(&rdp->nocb_state_wq);
-> -
-> -	do {
-> -		swait_event_interruptible_exclusive(rdp->nocb_cb_wq,
-> -						    nocb_cb_wait_cond(rdp));
-> -
-> -		// VVV Ensure CB invocation follows _sleep test.
-> -		if (smp_load_acquire(&rdp->nocb_cb_sleep)) { // ^^^
-> -			WARN_ON(signal_pending(current));
-> -			trace_rcu_nocb_wake(rcu_state.name, rdp->cpu, TPS("WokeEmpty"));
-> -		}
-> -	} while (!nocb_cb_can_run(rdp));
->   }
->   
->   /*
-> 
+>>
+>> [1/1] arm64: meson: fix dts for JetHub D1
+>>        https://git.kernel.org/amlogic/c/03caf87822220b4e22c349d170881d122df0b349
+>>
+
+Moved to v5.16/fixes with fixes tag:
+Fixes: 8e279fb29039 ("arm64: dts: meson-axg: add support for JetHub D1")
+
+Neil

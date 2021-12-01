@@ -2,122 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F21464912
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA1246492E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:50:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347714AbhLAHss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:48:48 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:60844 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347769AbhLAHsl (ORCPT
+        id S1345609AbhLAHxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:53:48 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:36042 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230144AbhLAHxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:48:41 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9A053CE1D68;
-        Wed,  1 Dec 2021 07:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65D92C53FD0;
-        Wed,  1 Dec 2021 07:45:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638344717;
-        bh=OMSYCijhi9mHPXribUljpaln0YA/jwCKn5SpeihydXo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mGoLqgCvvCewfCJY2gtoPfQBSsed8M9+WrUxAUzeMT19V/UAVCTUUpoireJv5U6OY
-         G72PmqKIuxGxc+ypjKQwi179vUuSKzuGCgejL7kY5F/rrjMLXraNhMoWD1yDhKy05T
-         hwimgwyaTT4gwZJlE+LSrfCuOK4SJF+GQ3fD+4NtaAEZ8XxZR/nPfDFP5sQn2wUrPb
-         Auw1Q5V59AeFqqepsZS3NYHR5BlVkR8/xfxUzoet5P2OsN/g7+4itPuV4vKuGrfmJ5
-         8H/jdCuJLHSgyQOTYUeeKREBlywj4oRBQiNwNQTnziGD+4H29L9Yhz0gKi8GIh8eYr
-         YiiR4Cj9ArPtA==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Kishon Vijay Abraham I <kishon@ti.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Andy Gross <agross@kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH 3/3] phy: qcom-qmp: Add SM8450 UFS QMP Phy
-Date:   Wed,  1 Dec 2021 13:14:56 +0530
-Message-Id: <20211201074456.3969849-4-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211201074456.3969849-1-vkoul@kernel.org>
-References: <20211201074456.3969849-1-vkoul@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Wed, 1 Dec 2021 02:53:46 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id BD38B212CB;
+        Wed,  1 Dec 2021 07:50:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638345025; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=pmksJbEwTpOpjbvobYQ2ZOCj/GWcl64w+PXG0iMAhAk=;
+        b=1BLSGJK3krnTvawCg/zT5Rx0l3KgN+C5eZD6ktttHPj6BQ9xSK5VWqoZqvxWV+5pLxXyvM
+        NOuPIH8uDwYlETjHkSwN9UGFsxfB4HdCvQpIMH6Jp8T3wCmUg/x955W7zc9s7Sa+t0uSgv
+        0ZNjD0k5yNQPzdZyM/cwFN4eTACS4nA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638345025;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type;
+        bh=pmksJbEwTpOpjbvobYQ2ZOCj/GWcl64w+PXG0iMAhAk=;
+        b=zQIvuWoJN8mgQZTQweqOsK5kpywzzacDBwqneBT71fjjnbarABuQL9m1YKTTtwYlcsFymb
+        aWWHTTq6qjdMnICA==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id B19EFA3B83;
+        Wed,  1 Dec 2021 07:50:25 +0000 (UTC)
+Date:   Wed, 01 Dec 2021 08:50:25 +0100
+Message-ID: <s5hbl20zrum.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 5.16-rc4
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM8450 UFS seems to use same sequence as SM8350, so reuse the sequence
-from SM8450. Add the new clock list for this phy and the new compatible
+Linus,
 
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
-Co-developed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+please pull sound fixes for v5.16-rc4 from:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-5.16-rc4
+
+The topmost commit is 289047db1143c42c81820352f195a393ff639a52
+
+----------------------------------------------------------------
+
+sound fixes for 5.16-rc4
+
+A collection of small fixes.  A large series is found for ASoC
+tegra drivers to correct the control element handlings, while
+others are mostly for device-specific quirks and fix-ups.
+
+----------------------------------------------------------------
+
+Hans de Goede (1):
+      ASoC: soc-acpi: Set mach->id field on comp_ids matches
+
+Kai Vehmanen (2):
+      ALSA: hda: Add Intel DG2 PCI ID and HDMI codec vid
+      ALSA: hda/hdmi: fix HDA codec entry table order for ADL-P
+
+Lucas Tanure (1):
+      ASoC: cs35l41: Set the max SPI speed for the whole device
+
+Nicolas Frattaroli (1):
+      ASoC: rk817: Add module alias for rk817-codec
+
+Pierre-Louis Bossart (2):
+      ASoC: Intel: soc-acpi: add entry for ESSX8336 on CML
+      ALSA: intel-dsp-config: add quirk for CML devices based on ES8336 codec
+
+Ranjani Sridharan (1):
+      ASoC: SOF: hda: reset DAI widget before reconfiguring it
+
+Sameer Pujar (16):
+      ASoC: tegra: Fix wrong value type in ADMAIF
+      ASoC: tegra: Fix wrong value type in I2S
+      ASoC: tegra: Fix wrong value type in DMIC
+      ASoC: tegra: Fix wrong value type in DSPK
+      ASoC: tegra: Fix wrong value type in SFC
+      ASoC: tegra: Fix wrong value type in MVC
+      ASoC: tegra: Fix kcontrol put callback in ADMAIF
+      ASoC: tegra: Fix kcontrol put callback in I2S
+      ASoC: tegra: Fix kcontrol put callback in DMIC
+      ASoC: tegra: Fix kcontrol put callback in DSPK
+      ASoC: tegra: Fix kcontrol put callback in AHUB
+      ASoC: tegra: Fix kcontrol put callback in MVC
+      ASoC: tegra: Fix kcontrol put callback in SFC
+      ASoC: tegra: Fix kcontrol put callback in AMX
+      ASoC: tegra: Fix kcontrol put callback in ADX
+      ASoC: tegra: Fix kcontrol put callback in Mixer
+
+Stefan Binding (1):
+      ALSA: hda/cs8409: Set PMSG_ON earlier inside cs8409 driver
+
 ---
- drivers/phy/qualcomm/phy-qcom-qmp.c | 32 +++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp.c b/drivers/phy/qualcomm/phy-qcom-qmp.c
-index 456a59d8c7d0..a959c97a699f 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp.c
-@@ -3091,6 +3091,10 @@ static const char * const qmp_v4_sm8250_usbphy_clk_l[] = {
- 	"aux", "ref_clk_src", "com_aux"
- };
- 
-+static const char * const sm8450_ufs_phy_clk_l[] = {
-+	"qref", "ref", "ref_aux",
-+};
-+
- static const char * const sdm845_ufs_phy_clk_l[] = {
- 	"ref", "ref_aux",
- };
-@@ -4087,6 +4091,31 @@ static const struct qmp_phy_cfg sm8350_usb3_uniphy_cfg = {
- 	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
- };
- 
-+static const struct qmp_phy_cfg sm8450_ufsphy_cfg = {
-+	.type			= PHY_TYPE_UFS,
-+	.nlanes			= 2,
-+
-+	.serdes_tbl		= sm8350_ufsphy_serdes_tbl,
-+	.serdes_tbl_num		= ARRAY_SIZE(sm8350_ufsphy_serdes_tbl),
-+	.tx_tbl			= sm8350_ufsphy_tx_tbl,
-+	.tx_tbl_num		= ARRAY_SIZE(sm8350_ufsphy_tx_tbl),
-+	.rx_tbl			= sm8350_ufsphy_rx_tbl,
-+	.rx_tbl_num		= ARRAY_SIZE(sm8350_ufsphy_rx_tbl),
-+	.pcs_tbl		= sm8350_ufsphy_pcs_tbl,
-+	.pcs_tbl_num		= ARRAY_SIZE(sm8350_ufsphy_pcs_tbl),
-+	.clk_list		= sm8450_ufs_phy_clk_l,
-+	.num_clks		= ARRAY_SIZE(sm8450_ufs_phy_clk_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= sm8150_ufsphy_regs_layout,
-+
-+	.start_ctrl		= SERDES_START,
-+	.pwrdn_ctrl		= SW_PWRDN,
-+	.phy_status		= PHYSTATUS,
-+
-+	.is_dual_lane_phy	= true,
-+};
-+
- static const struct qmp_phy_cfg qcm2290_usb3phy_cfg = {
- 	.type			= PHY_TYPE_USB3,
- 	.nlanes			= 1,
-@@ -5745,6 +5774,9 @@ static const struct of_device_id qcom_qmp_phy_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,sm8350-qmp-usb3-uni-phy",
- 		.data = &sm8350_usb3_uniphy_cfg,
-+	}, {
-+		.compatible = "qcom,sm8450-qmp-ufs-phy",
-+		.data = &sm8450_ufsphy_cfg,
- 	}, {
- 		.compatible = "qcom,qcm2290-qmp-usb3-phy",
- 		.data = &qcm2290_usb3phy_cfg,
--- 
-2.31.1
+ include/sound/soc-acpi.h                          |   2 +-
+ sound/hda/intel-dsp-config.c                      |  10 +
+ sound/pci/hda/hda_intel.c                         |  12 +-
+ sound/pci/hda/hda_local.h                         |   9 +
+ sound/pci/hda/patch_cs8409.c                      |   5 +
+ sound/pci/hda/patch_hdmi.c                        |   3 +-
+ sound/soc/codecs/cs35l41-spi.c                    |  32 +--
+ sound/soc/codecs/cs35l41.c                        |   7 -
+ sound/soc/codecs/cs35l41.h                        |   4 +-
+ sound/soc/codecs/rk817_codec.c                    |   1 +
+ sound/soc/intel/common/soc-acpi-intel-cml-match.c |   6 +
+ sound/soc/soc-acpi.c                              |   4 +-
+ sound/soc/sof/intel/hda.c                         |   7 +
+ sound/soc/tegra/tegra186_dspk.c                   | 181 ++++++++++---
+ sound/soc/tegra/tegra210_admaif.c                 | 140 +++++++---
+ sound/soc/tegra/tegra210_adx.c                    |   3 +
+ sound/soc/tegra/tegra210_ahub.c                   |  11 +-
+ sound/soc/tegra/tegra210_amx.c                    |   3 +
+ sound/soc/tegra/tegra210_dmic.c                   | 184 +++++++++++---
+ sound/soc/tegra/tegra210_i2s.c                    | 296 +++++++++++++++++-----
+ sound/soc/tegra/tegra210_mixer.c                  |  26 +-
+ sound/soc/tegra/tegra210_mvc.c                    |  30 ++-
+ sound/soc/tegra/tegra210_sfc.c                    | 123 ++++++---
+ 23 files changed, 839 insertions(+), 260 deletions(-)
 

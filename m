@@ -2,133 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B43504659ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A592C4659EF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 00:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353834AbhLAXtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 18:49:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:32616 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1353824AbhLAXtM (ORCPT
+        id S1353844AbhLAXuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 18:50:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353824AbhLAXuD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 18:49:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638402350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=snCVb5fbZV6vUruHANKIGvnBOyU9q8ZLGqcF9z3ztd4=;
-        b=gB9Vwmr756cFeeOTTlEny6KEDrH2CH9b+/z4GJq/ToO2aYAUpj0hKnMe14cWIjqrJgg9aC
-        E1nC9v3jgBo46sUxghxgcSaHKqNcFkaJ78mZ7R0sDP6sls/6yfyfgD2xuWeGQB9Woj4BdE
-        K9NRtPXr045/h2wQ4I7/nAuOAMqCZjs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-350-dCV-kQihNemiLgjPHwW1tg-1; Wed, 01 Dec 2021 18:45:47 -0500
-X-MC-Unique: dCV-kQihNemiLgjPHwW1tg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 1 Dec 2021 18:50:03 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C759FC061574;
+        Wed,  1 Dec 2021 15:46:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C423E180830C;
-        Wed,  1 Dec 2021 23:45:46 +0000 (UTC)
-Received: from [172.30.41.16] (unknown [10.2.17.225])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C814960843;
-        Wed,  1 Dec 2021 23:45:41 +0000 (UTC)
-Subject: [PATCH] vfio/pci: Resolve sparse endian warnings in IGD support
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     alex.williamson@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 01 Dec 2021 16:45:41 -0700
-Message-ID: <163840226123.138003.7668320168896210328.stgit@omen>
-User-Agent: StGit/1.0-8-g6af9-dirty
+        by sin.source.kernel.org (Postfix) with ESMTPS id 52463CE2135;
+        Wed,  1 Dec 2021 23:46:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DE57C53FCD;
+        Wed,  1 Dec 2021 23:46:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638402397;
+        bh=/68xd18Co11QfmVypZO2/D4sRtZrh0SGI3U3HFs+5qk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DfrFHeVWwRBLggy/MOUDPL+ISR+Olbd2DxRG+9WvSD/l0tOUa6XN4hKvN/TuL6EsK
+         VDnzj/mPeyuhDi80gG+wQCQaQKkHLUKpv/gky8NiHZKvwC03ceJD3ZD1SDsarhNxz1
+         3JCUW1yl94eMRKaScYPvaRKhEQa9qeHH5YEyN+JPqgr2DDCdbtAF9yQAGtCKC6OtUg
+         LIHJtjWue4EGeDyIj656kU+HuL8GNYZuh/LLhsMpfRl56IcE8LYqPP0mm32sHvegGq
+         9yWTt62Jlmn+4cydvDBJTzZqvOwQUH/gfauTF1duEKY3TBYjpDNfJfdEHcyxaF+RGI
+         N+GJ3P7bwa1Aw==
+Received: by mail-ed1-f47.google.com with SMTP id w1so108851433edc.6;
+        Wed, 01 Dec 2021 15:46:37 -0800 (PST)
+X-Gm-Message-State: AOAM530rhU5KUt6eDaPY91Xu9egQ2boNiy2qDmV6Hmh/9auhfBVWN7z/
+        IRX0jrA0VddT9PIYCnZnYqk0un/aL9xnQnDsEw==
+X-Google-Smtp-Source: ABdhPJwH8vC1+yopFdWmDlNaVi6P5l4oebYOJsnF/jPuWJG9o5yrO05W9yRto7M0QiXayPPOx25tmr10rvMmhSAFlKg=
+X-Received: by 2002:aa7:dc07:: with SMTP id b7mr12390931edu.327.1638402395645;
+ Wed, 01 Dec 2021 15:46:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+References: <20211101180243.23761-1-tharvey@gateworks.com>
+In-Reply-To: <20211101180243.23761-1-tharvey@gateworks.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 1 Dec 2021 17:46:24 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+n9B7k3tLsgsNg=cLykQk-6ZDH3znsKeUEabvKwUiUQQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+n9B7k3tLsgsNg=cLykQk-6ZDH3znsKeUEabvKwUiUQQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: imx: do not remap invalid res
+To:     Tim Harvey <tharvey@gateworks.com>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Richard Zhu <hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sparse warns:
+On Mon, Nov 1, 2021 at 1:37 PM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> On imx6 and perhaps others when pcie probes you get a:
+> imx6q-pcie 33800000.pcie: invalid resource
+>
+> This occurs because the atu is not specified in the DT and as such it
+> should not be remapped.
+>
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/vfio/pci/vfio_pci_igd.c:146:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [addressable] [usertype] val @@     got restricted __le16 [usertype] @@
-   drivers/vfio/pci/vfio_pci_igd.c:146:21: sparse:     expected unsigned short [addressable] [usertype] val
-   drivers/vfio/pci/vfio_pci_igd.c:146:21: sparse:     got restricted __le16 [usertype]
->> drivers/vfio/pci/vfio_pci_igd.c:161:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [addressable] [usertype] val @@     got restricted __le32 [usertype] @@
-   drivers/vfio/pci/vfio_pci_igd.c:161:21: sparse:     expected unsigned int [addressable] [usertype] val
-   drivers/vfio/pci/vfio_pci_igd.c:161:21: sparse:     got restricted __le32 [usertype]
-   drivers/vfio/pci/vfio_pci_igd.c:176:21: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned short [addressable] [usertype] val @@     got restricted __le16 [usertype] @@
-   drivers/vfio/pci/vfio_pci_igd.c:176:21: sparse:     expected unsigned short [addressable] [usertype] val
-   drivers/vfio/pci/vfio_pci_igd.c:176:21: sparse:     got restricted __le16 [usertype]
+Fixes: 281f1f99cf3a ("PCI: dwc: Detect number of iATU windows")
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-These are due to trying to use an unsigned to store the result of
-a cpu_to_leXX() conversion.  These are small variables, so pointer
-tricks are wasteful and casting just generates different sparse
-warnings.  Store to and copy results from a separate little endian
-variable.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/r/202111290026.O3vehj03-lkp@intel.com/
-Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
----
- drivers/vfio/pci/vfio_pci_igd.c |   15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/vfio/pci/vfio_pci_igd.c b/drivers/vfio/pci/vfio_pci_igd.c
-index 362f91ec8845..352c725ccf18 100644
---- a/drivers/vfio/pci/vfio_pci_igd.c
-+++ b/drivers/vfio/pci/vfio_pci_igd.c
-@@ -309,13 +309,14 @@ static ssize_t vfio_pci_igd_cfg_rw(struct vfio_pci_core_device *vdev,
- 
- 	if ((pos & 3) && size > 2) {
- 		u16 val;
-+		__le16 lval;
- 
- 		ret = pci_user_read_config_word(pdev, pos, &val);
- 		if (ret)
- 			return ret;
- 
--		val = cpu_to_le16(val);
--		if (copy_to_user(buf + count - size, &val, 2))
-+		lval = cpu_to_le16(val);
-+		if (copy_to_user(buf + count - size, &lval, 2))
- 			return -EFAULT;
- 
- 		pos += 2;
-@@ -324,13 +325,14 @@ static ssize_t vfio_pci_igd_cfg_rw(struct vfio_pci_core_device *vdev,
- 
- 	while (size > 3) {
- 		u32 val;
-+		__le32 lval;
- 
- 		ret = pci_user_read_config_dword(pdev, pos, &val);
- 		if (ret)
- 			return ret;
- 
--		val = cpu_to_le32(val);
--		if (copy_to_user(buf + count - size, &val, 4))
-+		lval = cpu_to_le32(val);
-+		if (copy_to_user(buf + count - size, &lval, 4))
- 			return -EFAULT;
- 
- 		pos += 4;
-@@ -339,13 +341,14 @@ static ssize_t vfio_pci_igd_cfg_rw(struct vfio_pci_core_device *vdev,
- 
- 	while (size >= 2) {
- 		u16 val;
-+		__le16 lval;
- 
- 		ret = pci_user_read_config_word(pdev, pos, &val);
- 		if (ret)
- 			return ret;
- 
--		val = cpu_to_le16(val);
--		if (copy_to_user(buf + count - size, &val, 2))
-+		lval = cpu_to_le16(val);
-+		if (copy_to_user(buf + count - size, &lval, 2))
- 			return -EFAULT;
- 
- 		pos += 2;
-
-
+> Cc: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-designware.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)

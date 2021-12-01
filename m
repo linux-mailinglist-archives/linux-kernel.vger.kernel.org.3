@@ -2,167 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BCE9464AAC
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245C7464AAA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242500AbhLAJdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 04:33:54 -0500
-Received: from mga14.intel.com ([192.55.52.115]:26981 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S242448AbhLAJdx (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:33:53 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236651211"
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="236651211"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 01:30:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="500165981"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 01 Dec 2021 01:30:15 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msLwM-000EgO-Oo; Wed, 01 Dec 2021 09:30:14 +0000
-Date:   Wed, 1 Dec 2021 17:29:15 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ayala Beker <ayala.beker@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, 0day robot <lkp@intel.com>,
-        Luca Coelho <luciano.coelho@intel.com>
-Subject: net/wireless/scan.c:1801:6: error: use of undeclared identifier
- 'channel'
-Message-ID: <202112011713.xTG8PaIt-lkp@intel.com>
+        id S242416AbhLAJdL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 1 Dec 2021 04:33:11 -0500
+Received: from relay5-d.mail.gandi.net ([217.70.183.197]:47979 "EHLO
+        relay5-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235806AbhLAJdI (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 04:33:08 -0500
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by relay5-d.mail.gandi.net (Postfix) with ESMTPSA id D017E1C0008;
+        Wed,  1 Dec 2021 09:29:42 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 10:29:26 +0100
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Denis Kirjanov <dkirjanov@suse.de>,
+        Julian Wiedmann <jwi@linux.ibm.com>
+Subject: Re: [PATCH net-next v3 4/4] net: ocelot: add FDMA support
+Message-ID: <20211201102926.3eacd95e@fixe.home>
+In-Reply-To: <20211129174038.gptbivgmbqzrrgtz@skbuf>
+References: <20211126172739.329098-1-clement.leger@bootlin.com>
+ <20211126172739.329098-5-clement.leger@bootlin.com>
+ <20211127145805.75qh2vim7c5m5hjd@skbuf>
+ <20211129091902.0112eb17@fixe.home>
+ <20211129174038.gptbivgmbqzrrgtz@skbuf>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/0day-ci/linux/commits/UPDATE-20211130-192005/Luca-Coelho/cfg80211-mac80211-patches-from-our-internal-tree-2021-11-29/20211129-213704
-head:   f4120354927ddc6644f1356a4f0744c1cd2010d2
-commit: 7c19322131f8862f2827dc281b380e4d675740aa cfg80211: Use the HE operation IE to determine a 6GHz BSS channel
-date:   22 hours ago
-config: arm-randconfig-c002-20211201 (https://download.01.org/0day-ci/archive/20211201/202112011713.xTG8PaIt-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/0day-ci/linux/commit/7c19322131f8862f2827dc281b380e4d675740aa
-        git remote add linux-review https://github.com/0day-ci/linux
-        git fetch --no-tags linux-review UPDATE-20211130-192005/Luca-Coelho/cfg80211-mac80211-patches-from-our-internal-tree-2021-11-29/20211129-213704
-        git checkout 7c19322131f8862f2827dc281b380e4d675740aa
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash net/wireless/
+Le Mon, 29 Nov 2021 17:40:39 +0000,
+Vladimir Oltean <vladimir.oltean@nxp.com> a écrit :
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> On Mon, Nov 29, 2021 at 09:19:02AM +0100, Clément Léger wrote:
+> > > I'm not sure why you're letting the hardware grind to a halt first,
+> > > before refilling? I think since the CPU is the bottleneck anyway, you
+> > > can stop the extraction channel at any time you want to refill.
+> > > A constant stream of less data might be better than a bursty one.
+> > > Or maybe I'm misunderstanding some of the details of the hardware.  
+> > 
+> > Indeed, I can stop the extraction channel but that does not seems a
+> > good idea to stop the channel in a steady state. At least that's what I
+> > thought since it will make the receive "window" non predictable. Not
+> > sure how well it will play with various protocol but I will try
+> > implementing the refill we talked previously (ie when there an
+> > available threshold is reached).  
+> (...)
+> > > I don't understand why you restart the injection channel from the TX
+> > > confirmation interrupt. It raised the interrupt to tell you that it hit
+> > > a NULL LLP because there's nothing left to send. If you restart it now and
+> > > no other transmission has happened in the meantime, won't it stop again?  
+> > 
+> > Actually, it is only restarted if there is some pending packets to
+> > send. With this hardware, packets can't be added while the FDMA is
+> > running and it must be stopped everytime we want to add a packet to the
+> > list. To avoid that, in the TX path, if the FDMA is stopped, we set the
+> > llp of the packet to NULL and start the chan. However, if the FDMA TX
+> > channel is running, we don't stop it, we simply add the next packets to
+> > the ring. However, the FDMA will stop on the previous NULL LLP. So when
+> > we hit a LLP, we might not be at the end of the list. This is why the
+> > next check verifies if we hit a NULL LLP and if there is still some
+> > packet to send.   
+> 
+> Oh, is that so? That would be pretty odd if the hardware is so dumb that
+> it doesn't detect changes made to an LLP on the go.
+> 
+> The manual has this to say, and I'm not sure how to interpret it:
+> 
+> | It is possible to update an active channels LLP pointer and pointers in
+> | the DCB chains. Before changing pointers software must schedule the
+> | channel for disabling (by writing FDMA_CH_DISABLE.CH_DISABLE[ch]) and
+> | then wait for the channel to set FDMA_CH_SAFE.CH_SAFE[ch]. When the
+> | pointer update is complete, soft must re-activate the channel by setting
+> | FDMA_CH_ACTIVATE.CH_ACTIVATE[ch]. Setting activate will cancel the
+> | deactivate-request, or if the channel has disabled itself in the
+> | meantime, it will re activate the channel.
+> 
+> So it is possible to update an active channel's LLP pointer, but not
+> while it's active? Thank you very much!
 
-All errors (new ones prefixed by >>):
+In the manual, this is also stated that:
 
->> net/wireless/scan.c:1801:6: error: use of undeclared identifier 'channel'
-           if (channel->band == NL80211_BAND_6GHZ) {
-               ^
-   net/wireless/scan.c:1813:12: error: use of undeclared identifier 'channel'
-                                   return channel;
-                                          ^
->> net/wireless/scan.c:1815:4: error: use of undeclared identifier 'freq'
-                           freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
-                           ^
-   net/wireless/scan.c:1822:12: error: use of undeclared identifier 'freq'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                   ^
-   net/wireless/scan.c:1822:19: error: use of undeclared identifier 'channel'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                          ^
-   net/wireless/scan.c:1822:12: error: use of undeclared identifier 'freq'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                   ^
-   net/wireless/scan.c:1822:19: error: use of undeclared identifier 'channel'
-                               abs(freq - channel->center_freq) <= 80 &&
-                                          ^
-   net/wireless/scan.c:1821:8: error: use of undeclared identifier 'freq'
-                           if (freq != channel->center_freq &&
-                               ^
-   net/wireless/scan.c:1821:16: error: use of undeclared identifier 'channel'
-                           if (freq != channel->center_freq &&
-                                       ^
->> net/wireless/scan.c:1823:9: error: use of undeclared identifier 'ftype'; did you mean '_ctype'?
-                               (ftype != CFG80211_BSS_FTYPE_BEACON ||
-                                ^~~~~
-                                _ctype
-   include/linux/ctype.h:21:28: note: '_ctype' declared here
-   extern const unsigned char _ctype[];
-                              ^
-   10 errors generated.
+| The FDMA does not reload the current DCB when re- activated,
+| so if the LLP-field of the current DCB is modified, then software must
+| also modify FDMA_DCB_LLP[ch].
+
+The FDMA present on the next generation (sparx5) is *almost* the same
+but a new RELOAD register has been added and allows adding a DCB at the
+end of the linked list without stopping the FDMA, and then simply hit
+the RELOAD register to restart it if needed. Unfortunately, this is not
+the case for the ocelot one. 
+
+> 
+> If true, this will severely limit the termination performance one is
+> able to obtain with this switch, even with a faster CPU and PCIe.
+> 
+> > > > +void ocelot_fdma_netdev_init(struct ocelot_fdma *fdma, struct net_device *dev)
+> > > > +{
+> > > > +	dev->needed_headroom = OCELOT_TAG_LEN;
+> > > > +	dev->needed_tailroom = ETH_FCS_LEN;    
+> > > 
+> > > The needed_headroom is in no way specific to FDMA, right? Why aren't you
+> > > doing it for manual register-based injection too? (in a separate patch ofc)  
+> > 
+> > Actually, If I switch to page based ring, This won't be useful anymore
+> > because the header will be written directly in the page and not anymore
+> > directly in the skb header.  
+> 
+> I don't understand this comment. You set up the needed headroom and
+> tailroom netdev variables to avoid reallocation on TX, not for RX.
+> And you use half page buffers for RX, not for TX.
+
+Ok, so indeed, I don't think it is needed for the register-based
+injection since the IFH is computed on the stack and pushed word by
+word into the fifo separately from the skb data. In the case of the
+FDMA, it is read from the start of the DCB DATAL adress so this is why
+this is needed. I could also put the IFH in a separate DCB and then
+split the data in a next DCB using SOF/EOF flags but I'm not sure it
+will be beneficial from a performance point of view. I could try that
+since the CPU is slow, it might be better in some case to let the FDMA
+handle this instead of usign the CPU to increase the SKB size and
+linearize it.
+
+> 
+> > > I can't help but think how painful it is that with a CPU as slow as
+> > > yours, insult over injury, you also need to check for each packet
+> > > whether the device tree had defined the "fdma" region or not, because
+> > > you practically keep two traffic I/O implementations due to that sole
+> > > reason. I think for the ocelot switchdev driver, which is strictly for
+> > > MIPS CPUs embedded within the device, it should be fine to introduce a
+> > > static key here (search for static_branch_likely in the kernel).  
+> > 
+> > I thinked about it *but* did not wanted to add a key since it would be
+> > global. However, we could consider that there is always only one
+> > instance of the driver and indeed a static key is an option.
+> > Unfortunately, I'm not sure this will yield any noticeable performance
+> > improvement.  
+> 
+> What is the concern with a static key in this driver, exactly?
+
+Only that the static key will be global but this driver does not have
+anything global. If you have no concern about that, I'm ok to add one.
 
 
-vim +/channel +1801 net/wireless/scan.c
-
-  1794	
-  1795	int cfg80211_get_ies_channel_number(const u8 *ie, size_t ielen,
-  1796					    enum nl80211_band band)
-  1797	{
-  1798		const u8 *tmp;
-  1799		int channel_number = -1;
-  1800	
-> 1801		if (channel->band == NL80211_BAND_6GHZ) {
-  1802			const struct element *elem;
-  1803	
-  1804			elem = cfg80211_find_ext_elem(WLAN_EID_EXT_HE_OPERATION, ie,
-  1805						      ielen);
-  1806			if (elem && elem->datalen >= ieee80211_he_oper_size(&elem->data[1])) {
-  1807				struct ieee80211_he_operation *he_oper =
-  1808					(void *)(&elem->data[1]);
-  1809				const struct ieee80211_he_6ghz_oper *he_6ghz_oper;
-  1810	
-  1811				he_6ghz_oper = ieee80211_he_6ghz_oper(he_oper);
-  1812				if (!he_6ghz_oper)
-  1813					return channel;
-  1814	
-> 1815				freq = ieee80211_channel_to_frequency(he_6ghz_oper->primary,
-  1816								      NL80211_BAND_6GHZ);
-  1817	
-  1818				/* duplicated beacon indication is relevant for beacons
-  1819				 * only
-  1820				 */
-  1821				if (freq != channel->center_freq &&
-  1822				    abs(freq - channel->center_freq) <= 80 &&
-> 1823				    (ftype != CFG80211_BSS_FTYPE_BEACON ||
-  1824				     he_6ghz_oper->control & IEEE80211_HE_6GHZ_OPER_CTRL_DUP_BEACON))
-  1825					channel_number = he_6ghz_oper->primary;
-  1826			}
-  1827		} else if (band == NL80211_BAND_S1GHZ) {
-  1828			tmp = cfg80211_find_ie(WLAN_EID_S1G_OPERATION, ie, ielen);
-  1829			if (tmp && tmp[1] >= sizeof(struct ieee80211_s1g_oper_ie)) {
-  1830				struct ieee80211_s1g_oper_ie *s1gop = (void *)(tmp + 2);
-  1831	
-  1832				channel_number = s1gop->primary_ch;
-  1833			}
-  1834		} else {
-  1835			tmp = cfg80211_find_ie(WLAN_EID_DS_PARAMS, ie, ielen);
-  1836			if (tmp && tmp[1] == 1) {
-  1837				channel_number = tmp[2];
-  1838			} else {
-  1839				tmp = cfg80211_find_ie(WLAN_EID_HT_OPERATION, ie, ielen);
-  1840				if (tmp && tmp[1] >= sizeof(struct ieee80211_ht_operation)) {
-  1841					struct ieee80211_ht_operation *htop = (void *)(tmp + 2);
-  1842	
-  1843					channel_number = htop->primary_chan;
-  1844				}
-  1845			}
-  1846		}
-  1847	
-  1848		return channel_number;
-  1849	}
-  1850	EXPORT_SYMBOL(cfg80211_get_ies_channel_number);
-  1851	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+Clément Léger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

@@ -2,67 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D0C464C6D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3BE2464C70
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:15:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348921AbhLALRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:17:20 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:58230 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237790AbhLALRS (ORCPT
+        id S1348921AbhLALSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:18:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57410 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S237786AbhLALS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:17:18 -0500
+        Wed, 1 Dec 2021 06:18:27 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0DAC061574;
+        Wed,  1 Dec 2021 03:15:06 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B3778B81E17
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:13:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82998C53FCE
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:13:55 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E05DECE1DCA;
+        Wed,  1 Dec 2021 11:15:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB200C53FCC;
+        Wed,  1 Dec 2021 11:15:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638357235;
-        bh=Jr60S9vZYC2ZJCI60wGp7cQYwix34ekFyfnYWBWsHq0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=N5CqLbtH6LFj7p96idud+5drlCYN38cM+jiIeLfDhR7o0yRiz4c42KYOAe9zP47Vd
-         UO1VgUkJNO5MEZt0EbRiJMCy74cuBNgnBDSFHXAtsubmwrbL9rnoLcHMbRsYlqy0aQ
-         hEkeLc/l1/UnhD/PpfaNZKtEOeae1ERr0rsNIuRufpEFhAA6RtVbgaNo6OueaF9M7g
-         7igSgxYXENzNgIXXITf5dl7RMUX6bxn2QtwwdiK+K7RG4ar+7T+eG4tbv706dd4DkO
-         wds1603xmM5n+vecCrMAzyCvn4ErSvahhmjfyIvamB9aCvmiSwwiUHjojpHmzeetX6
-         vzmzfkXhmrXSw==
-Received: by mail-oo1-f52.google.com with SMTP id a11-20020a4ad1cb000000b002c2657270a0so7703181oos.8
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 03:13:55 -0800 (PST)
-X-Gm-Message-State: AOAM5335iX9kW+RIOno14oz3DtrsqBjnEPTIoJD00n5tUjJNYujpDoNL
-        7sLfbbh6tFrX3y7dnr0WILRrlKDyTQNMTpIp9bk=
-X-Google-Smtp-Source: ABdhPJx++xeDu/GpbLCf9BmWz9/ZnnDCw/xhIrMHPQCRmA4KUt9a9pqH9hymH73l9leyjchWXd9K9f3has7EJIEhXV8=
-X-Received: by 2002:a05:6820:30b:: with SMTP id l11mr3946229ooe.32.1638357234772;
- Wed, 01 Dec 2021 03:13:54 -0800 (PST)
+        s=k20201202; t=1638357303;
+        bh=ehVTzL9X6BysmNP85++ptIBdmSpHTbsCMyi3z2tu5D0=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=HjFzzYB/CE/19drSrda2JNv9tdyBGIIOGNr0il7/WmQa5vCF21CUBUS0bqKZAhtJS
+         1Y5T6A/VJuGdGKwjxK4C7YXojve9Ebi7/l6p9wXK/12GFeOAY/945ZeMm2h1+k8FD7
+         qYTXtZ6UV4jXuP85XZ0bVSeNZ8VUCtIufsHsPcWzwba5KOf27Y7DhN67pxKhflnmod
+         l86/bg4KTuPQQUQhI2TUphk1hutcOl2JpIb73VBnCQVRZt4Ugkp35EoJfjvdMwa7RA
+         jFA/kWHDls45bQUQYSCpF3EVrB4n7zfQRWJAsKFc56WMXcYl57CamD6qZDBI1L8lAG
+         ifEiSWROxQQCw==
+Subject: Re: [PATCH 1/4] dt-bindings: memory-controllers: ti,gpmc: Add
+ compatible for AM64
+To:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Cc:     tony@atomide.com, kishon@ti.com, nm@ti.com, vigneshr@ti.com,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20211123102607.13002-1-rogerq@kernel.org>
+ <20211123102607.13002-2-rogerq@kernel.org>
+ <a28532b1-bfa0-031b-91cc-070cad557599@canonical.com>
+ <YaafXKXfzBQaNSvq@robh.at.kernel.org>
+From:   Roger Quadros <rogerq@kernel.org>
+Message-ID: <acc05242-8d0a-093a-c076-af35a339333c@kernel.org>
+Date:   Wed, 1 Dec 2021 13:14:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <202112011148.XrnWip5a-lkp@intel.com> <CAK8P3a0c+zE22ouZKF66gfoqNJuCZTv0r3nnDR+AjxgCLgE87A@mail.gmail.com>
-In-Reply-To: <CAK8P3a0c+zE22ouZKF66gfoqNJuCZTv0r3nnDR+AjxgCLgE87A@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 1 Dec 2021 12:13:43 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHF7mCq1ijV7RLBrxBY43sREqCb8TQR5eh_4GnMmfDPRw@mail.gmail.com>
-Message-ID: <CAMj1kXHF7mCq1ijV7RLBrxBY43sREqCb8TQR5eh_4GnMmfDPRw@mail.gmail.com>
-Subject: Re: [ardb:for-kernelci 18/28] arch/arm/mach-footbridge/common.c:102:6:
- warning: no previous prototype for function 'dc21285_handle_irq'
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <YaafXKXfzBQaNSvq@robh.at.kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Dec 2021 at 08:44, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Wed, Dec 1, 2021 at 4:42 AM kernel test robot <lkp@intel.com> wrote:
-> >
-> >    arch/arm/mach-footbridge/common.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->
-> Correct, thanks for the report!
->
-> Ard, I assume you can fix this up in your tree.
->
 
-Sure.
+On 01/12/2021 00:02, Rob Herring wrote:
+> On Tue, Nov 23, 2021 at 08:47:57PM +0100, Krzysztof Kozlowski wrote:
+>> On 23/11/2021 11:26, Roger Quadros wrote:
+>>> AM64 SoC contains the GPMC module. Add compatible for it.
+>>>
+>>> Newer SoCs don't necessarily map GPMC data region at the same place
+>>> as legacy SoCs. Add reg-names "data", to provide this information to
+>>> the device driver.
+>>>
+>>> Cc: Rob Herring <robh+dt@kernel.org>
+>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>>> ---
+>>>  .../bindings/memory-controllers/ti,gpmc.yaml         | 12 +++++++++++-
+>>>  1 file changed, 11 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml b/Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml
+>>> index 25b42d68f9b3..1869cc6f949b 100644
+>>> --- a/Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml
+>>> +++ b/Documentation/devicetree/bindings/memory-controllers/ti,gpmc.yaml
+>>> @@ -23,13 +23,20 @@ properties:
+>>>      items:
+>>>        - enum:
+>>>            - ti,am3352-gpmc
+>>> +          - ti,am64-gpmc
+>>>            - ti,omap2420-gpmc
+>>>            - ti,omap2430-gpmc
+>>>            - ti,omap3430-gpmc
+>>>            - ti,omap4430-gpmc
+>>>  
+>>>    reg:
+>>> -    maxItems: 1
+>>> +    minItems: 1
+>>> +    maxItems: 2
+>>> +
+>>> +  reg-names:
+>>> +    items:
+>>> +      - const: cfg
+>>> +      - const: data
+>>
+>> I see your driver handles cases with only one reg item, but I have other
+>> question - is it correct to have older (ARMv7) platform with two reg
+>> items? Or can am64-gpmc come with only one reg?
+>> IOW, I am surprised there is no if-else case precising this minItems
+>> requirement for different SocS.
+> 
+> I don't think that is needed here. If the assumption is 'reg-names' is 
+> only present when there are 2 entries, then it is fine. Maybe 
+> 'reg-names' should be required for ti,am64-gpmc though.
+
+Yes, I'll make 'reg-names' property required for ti,am64-gpmc.
+
+cheers,
+-roger

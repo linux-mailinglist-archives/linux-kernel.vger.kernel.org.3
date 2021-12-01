@@ -2,149 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 186044651B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:30:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4204651BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350990AbhLAPeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:34:00 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:19906 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S230118AbhLAPd6 (ORCPT
+        id S1351010AbhLAPfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60428 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350252AbhLAPfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:33:58 -0500
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1FBgK8029904;
-        Wed, 1 Dec 2021 15:30:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=jM5LpDjzppsF3No21Wq3sZXITvd/HQ+u1JpXeEB1nZc=;
- b=PGArTp6TYAo4xsNke5hzMeq46ybQNohLO64fl0M6IjFHcrH69dejH97hlo907y24Xx/Y
- qf1yp5YDLGJLhDH/DzNFdSeDPl7afN3LYUS2sffbQWIW5u7rclu+wjWLVi6s8uCdNMIL
- BWtgwD3QN79b4ScD0wxl65/i3eXZ76ghBx0OOnYQcXwErZ3wrOipIHRB1a5FX0+ILyqe
- CTF5cJyDJbmzzn9AnZmoO+rEpB16Zq8r2CGycpJGiNHbAgFlW2v7T7vTwy9nP6AbtP3Q
- BvpJSqmM/QbffY/DfF6VrWFE7X4RGPbHqOAGUuCnXQvg5CHe8LDg5WC5Yi/hBOgXnnEk pA== 
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpapf9t7d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 15:30:32 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1FD9Ho028041;
-        Wed, 1 Dec 2021 15:30:32 GMT
-Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
-        by ppma04wdc.us.ibm.com with ESMTP id 3ckcac7b0y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 15:30:32 +0000
-Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
-        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1FUUkQ20513220
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Dec 2021 15:30:30 GMT
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AB51FAE071;
-        Wed,  1 Dec 2021 15:30:30 +0000 (GMT)
-Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4F060AE05F;
-        Wed,  1 Dec 2021 15:30:30 +0000 (GMT)
-Received: from localhost (unknown [9.211.92.203])
-        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Dec 2021 15:30:30 +0000 (GMT)
-From:   Nathan Lynch <nathanl@linux.ibm.com>
-To:     Laurent Dufour <ldufour@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc/pseries: read the lpar name from the firmware
-In-Reply-To: <20211201144826.45342-1-ldufour@linux.ibm.com>
-References: <20211201144826.45342-1-ldufour@linux.ibm.com>
-Date:   Wed, 01 Dec 2021 09:30:29 -0600
-Message-ID: <87h7bsny0a.fsf@linux.ibm.com>
+        Wed, 1 Dec 2021 10:35:45 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C172C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:32:24 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id 71so23991967pgb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:32:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KrT+feO4jnWB4qX0RGpa/8Soov2WZ3IzNfAVkfbdgTI=;
+        b=ma7EZbMwQXE247j/JhwHgzIWPyKJ5oPomd1r/MLnckKAUijBHl1U47v3UuecutrHMt
+         W0nwyvF/bJ6a4EFgA5UPV46nwRCdpjGp9tGL6AxZ7ZkxyqRzu57/Aye0GpbR1LfzUr1S
+         HHQr8ztVmTDrmA1fzNl//7Wc0YUDgKYU8kwKqN3H2Aj7DqqupLcUXCAH2ijFQ8FzRsmE
+         ERSy7WA43Y+FjEVWvA7IuuWtY+mSE7MoXmZnPB9SL4+dYvvli0WWzBkwUWLNfmoVyKiR
+         nyHuae0zz+fEGjvM7pqdM3zHSMSfltjq9i42beCRbfP+BFaPM+OZEd5J1kCgutpy0LS/
+         znSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=KrT+feO4jnWB4qX0RGpa/8Soov2WZ3IzNfAVkfbdgTI=;
+        b=8QtVp+LMiViYGscYRCHYOGbiDe+gO1vFMJeCaegqudPeA8fnMyKx02OescGapoHVxd
+         wdggRgPuQAQMms+mi8IKJhnuDz7a1UWW4C5Fqy3ZjZuCvKfvsYuUQlaaFMr90HLuSi7P
+         KFB+QzmoL/E5K+98gHD0WMTzf2PxhQR9AFiLDgu0xyB7cNT8KE8YgddMzqsNuJ2yeChi
+         +MxpOTlZB4VwXrOjVpBv2nYKujghyIrozDYbB5aQILoNlL0LBwec5Edw4HfQkwy0KqYJ
+         QtaFYBl5IYEszo63AZviyh+LR0AFG2NxXRB5JPh17/agtOQIBJ9zzvs25TOWfjYy7mhd
+         U+RQ==
+X-Gm-Message-State: AOAM530YJ6SN4gICm0Ob8DTYSjWiKcM9q1zWH4V3gE4wYMVxHlAANThU
+        uD8SA96qjgN4UspdsZzkd84=
+X-Google-Smtp-Source: ABdhPJw8c9dtJdcGzrZVMkPW265/TG0sEQX8PPXRYeFZXXK7s3uwXJjnPIV+4kEqAzn6KFTBpRQnUA==
+X-Received: by 2002:a62:7a54:0:b0:494:6e78:994b with SMTP id v81-20020a627a54000000b004946e78994bmr6745750pfc.5.1638372744031;
+        Wed, 01 Dec 2021 07:32:24 -0800 (PST)
+Received: from nlap2.localdomain ([106.198.84.234])
+        by smtp.googlemail.com with ESMTPSA id 7sm91772pgk.55.2021.12.01.07.32.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 07:32:23 -0800 (PST)
+From:   Abdun Nihaal <abdun.nihaal@gmail.com>
+To:     Larry.Finger@lwfinger.net
+Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
+        straube.linux@gmail.com, fmdefrancesco@gmail.com, martin@kaiser.cx,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Abdun Nihaal <abdun.nihaal@gmail.com>
+Subject: [PATCH] staging: r8188eu: Fix coding style error
+Date:   Wed,  1 Dec 2021 21:00:39 +0530
+Message-Id: <20211201153039.305245-1-abdun.nihaal@gmail.com>
+X-Mailer: git-send-email 2.33.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: H2Q0ljlBphBOUhz9dFQXfeaTsa6HOYP8
-X-Proofpoint-GUID: H2Q0ljlBphBOUhz9dFQXfeaTsa6HOYP8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 priorityscore=1501 mlxlogscore=999 mlxscore=0 impostorscore=0
- malwarescore=0 spamscore=0 phishscore=0 suspectscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112010086
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Laurent Dufour <ldufour@linux.ibm.com> writes:
-> The LPAR name may be changed after the LPAR has been started in the HMC.
-> In that case lparstat command is not reporting the updated value because it
-> reads it from the device tree which is read at boot time.
+Move opening brace to next line to conform to kernel coding style.
 
-Could lparstat be changed to make the appropriate get-system-parameter
-call via librtas, avoiding a kernel change?
+Fixes the following checkpatch error:
+ERROR: open brace '{' following function definitions go on the next line
 
+Signed-off-by: Abdun Nihaal <abdun.nihaal@gmail.com>
+---
+ drivers/staging/r8188eu/core/rtw_mlme_ext.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-> However this value could be read from RTAS.
->
-> Adding this value in the /proc/powerpc/lparcfg output allows to read the
-> updated value.
->
-> Signed-off-by: Laurent Dufour <ldufour@linux.ibm.com>
-> ---
->  arch/powerpc/platforms/pseries/lparcfg.c | 50 ++++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
->
-> diff --git a/arch/powerpc/platforms/pseries/lparcfg.c b/arch/powerpc/platforms/pseries/lparcfg.c
-> index f71eac74ea92..b597b132ce32 100644
-> --- a/arch/powerpc/platforms/pseries/lparcfg.c
-> +++ b/arch/powerpc/platforms/pseries/lparcfg.c
-> @@ -311,6 +311,55 @@ static void parse_mpp_x_data(struct seq_file *m)
->  		seq_printf(m, "coalesce_pool_spurr=%ld\n", mpp_x_data.pool_spurr_cycles);
->  }
->  
-> +/*
-> + * PAPR defines no maximum for the LPAR name, and defines that the maximum
-> + * length of the get-system-parameter's output buffer is 4000 plus 2 bytes for
-> + * the length. Limit LPAR's name size to 1024
-> + */
-> +#define SPLPAR_LPAR_NAME_MAXLEN	1026
-> +#define SPLPAR_LPAR_NAME_TOKEN	55
-> +static void parse_lpar_name(struct seq_file *m)
-> +{
-> +	int call_status, len;
-> +	unsigned char *local_buffer;
-> +
-> +	local_buffer = kmalloc(SPLPAR_LPAR_NAME_MAXLEN, GFP_KERNEL);
-> +	if (!local_buffer) {
-> +		pr_err("%s %s kmalloc failure at line %d\n",
-> +		       __FILE__, __func__, __LINE__);
-> +		return;
-> +	}
+diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+index b4820ad2cee7..627ecd45beca 100644
+--- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
++++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+@@ -252,7 +252,8 @@ static void init_mlme_ext_priv_value(struct adapter *padapter)
+ 
+ static int has_channel(struct rt_channel_info *channel_set,
+ 					   u8 chanset_size,
+-					   u8 chan) {
++					   u8 chan)
++{
+ 	int i;
+ 
+ 	for (i = 0; i < chanset_size; i++) {
+@@ -264,7 +265,8 @@ static int has_channel(struct rt_channel_info *channel_set,
+ 
+ static void init_channel_list(struct adapter *padapter, struct rt_channel_info *channel_set,
+ 							  u8 chanset_size,
+-							  struct p2p_channels *channel_list) {
++							  struct p2p_channels *channel_list)
++{
+ 	struct p2p_oper_class_map op_class[] = {
+ 		{ IEEE80211G,  81,   1,  13,  1, BW20 },
+ 		{ IEEE80211G,  82,  14,  14,  1, BW20 },
+-- 
+2.33.1
 
-No error prints on memory allocation failure, the mm code will do that.
-
-> +
-> +	spin_lock(&rtas_data_buf_lock);
-> +	memset(rtas_data_buf, 0, RTAS_DATA_BUF_SIZE);
-> +	call_status = rtas_call(rtas_token("ibm,get-system-parameter"), 3, 1,
-> +				NULL,
-> +				SPLPAR_LPAR_NAME_TOKEN,
-> +				__pa(rtas_data_buf),
-> +				RTAS_DATA_BUF_SIZE);
-> +	memcpy(local_buffer, rtas_data_buf, SPLPAR_LPAR_NAME_MAXLEN);
-> +	spin_unlock(&rtas_data_buf_lock);
-> +
-> +	if (call_status != 0) {
-> +		pr_err("%s %s Error calling get-system-parameter (0x%x)\n",
-> +		       __FILE__, __func__, call_status);
-
-If this yields an error then it should fall back to the device tree.
-
-ibm,get-system-parameter can return -2 or 990x, which are not errors.
-Callers of ibm,get-system-parameter must handle these statuses using
-rtas_busy_delay() or similar, which potentially involves sleeping.
-Granted this is inconvenient when dealing the rtas_data_buf and
-rtas_data_buf_lock - you can't call rtas_busy_delay() before you've
-released the buffer lock. See dlpar_configure_connector() for an example
-of how this can be structured.
-
-It looks like most existing users of ibm,get-system-parameter have this
-bug, unfortunately.

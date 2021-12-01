@@ -2,174 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D54984647CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:19:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D074647D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347198AbhLAHWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:22:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59870 "EHLO
+        id S1347205AbhLAHXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:23:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbhLAHWu (ORCPT
+        with ESMTP id S1347164AbhLAHXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:22:50 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B306FC061574;
-        Tue, 30 Nov 2021 23:19:29 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id c3so29523509iob.6;
-        Tue, 30 Nov 2021 23:19:29 -0800 (PST)
+        Wed, 1 Dec 2021 02:23:00 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0079AC061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:19:39 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id n15-20020a17090a160f00b001a75089daa3so20323712pja.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 23:19:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=W42RCJlEds63KYEFS5bNvHOTueCgejloTTAeKuH4dpI=;
-        b=XLi1t09ZX6lCYG1AT8qmEVfx0I+gy6ApvyyAj2wq6PKp1tY8NJ6+tJt2TvjoXfYpNJ
-         RIHnrIGKQaBJvSUROMIMlc/keLqMgrsXeRhWlFuPv3/DaSEVQmxSpzTdBKLgKQ7I7DGV
-         Ud6Varjw6l0mGxrs0KURFpkVaGj91koU1QVo/G0q/jz7yYmUZbmvGz4C6MZr8+D3Ws1o
-         q5O0H/1lEzIIZWn2nhBHmOhc62LSeJ4+XFvbujYNW6QZLUxwO1fv1KTiQV6H3LYeiDPz
-         AINJil2aea1e2Ec0LzuUaV3BTQFX8pQSe4wWwZXVKnB97P5UWXNjuhdPdR2lYZx/rOFM
-         Qe5w==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=1B2ct62NazJMbAXHxh400qw9MwmW02j5UQGS1Hs0m4A=;
+        b=IUHgkIdQuK7nrhV0XqmC6Bd5ppQxTxTnAKDeS6OLAzQL/Qj051LcjQTCG+IDhECMN6
+         XLLxuPXcgSZAXKGj27RGc1kv4BCs4wYWTnXQflmhx5KTIWEbcex0Sbnl20dcwM+eeL/C
+         4HDpSRRBbth0WgC9B9ghevbNo3i78wMvHgyCeCfCO6TDAZ8hA0iHtN3WnzvDVW15xFFG
+         YRqFHThy7xvKPosDowpOnD7fy1Po9AjhzD33ns0p1lZAkkBE7mpveDoSbpDIpDTBmSow
+         qflwWY6n7dzMB66DXkezF0Wty5Ad57/+yUtnbWt1aeUQ5FNkbhwUebmxUZiW1XJYBwSx
+         3i7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=W42RCJlEds63KYEFS5bNvHOTueCgejloTTAeKuH4dpI=;
-        b=nZlSQEnc5pdz/ryuXaPsEycjrI+Bh8YvN8W2B79k+QSzj8eVxTG/1p/y/r1yS+T+BK
-         9zjj5xrMkV7GFzZ43Mx/Ea1VFd97WAxIUcrCVsVyEfSlHtXd8pEzQ04N8lp/p11Xs1o4
-         EA9VXxNE3ctotT4BFU2eXQwiEubCGfYv/QdH9jbV7GuPK/z1Oia3IV8DMg4bDTbYTeYg
-         NAuTCKj4prbnL1gt7VkLY+AbjPTwU4zydTk1KKtZ5Qsef0bMxPOTzveDmMrtr/iCE6CT
-         kKG4jHaXnnq+2l5KyWOCH6j7IqltYLZGn6dFBf5Bv5lzU3Bnv4Qr0hloYcAc70i7xaDf
-         xdpA==
-X-Gm-Message-State: AOAM533c0TIncI5TlivgseFxcg90yqy1qcg9SP3sVW+6fv2rwSC+E+fa
-        dfPh/g348ues++Nikfk+ZKQsJrfc9Rgrk53DHXY=
-X-Google-Smtp-Source: ABdhPJzsk71aQ4hKPDW7OZPUk51D41MeTE8kUWEi0IC/aW28L8En/Gc6tkoZ+Rb5NrCuOifUXmpLuPcMyaIq2OvLiUw=
-X-Received: by 2002:a6b:d904:: with SMTP id r4mr6169415ioc.52.1638343169091;
- Tue, 30 Nov 2021 23:19:29 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=1B2ct62NazJMbAXHxh400qw9MwmW02j5UQGS1Hs0m4A=;
+        b=5r7AqPLtGnNvm1SpX2R2OzZ0fZfbLkCWG1OhxOgK3FFMxEiCwvLvtxupFuyaPFjW/o
+         +m2K42LsPwUJze1iMjiActFkXfzLX5Uk8jyGmhTJO7fiQdcTqqSvP3pRsSH5OswaOzaI
+         rBn7yXpZ37dDbAGPRVjobYhOXltae4XtwyTF2fva+juJhOurjh2rxFl4Ym735JCS4Toc
+         lBaBZU3SUMwovcKIVsSy/ChW4prI0TfgJug1nGVfsUQDC4I4oN5TyKsabP2fxfe9rmmd
+         OE/G8RYSpqavn5DnLMR6vc9wMkcQECUu+hZEcXP9T5ixzrqO+tuisWn0MgliCdK6YSMg
+         GKVQ==
+X-Gm-Message-State: AOAM531MALWs5FCRBrfMZXNuNUUmyQR6OKGff9NOVUZDHGUuDyRQH/4p
+        ZiteLG15gt6+4VjMc40SEj8v9Q==
+X-Google-Smtp-Source: ABdhPJxKihGgZWgRgZzW1cJ5ymXPwndt5ax5EBlxemirEF7kLkKXcFjKs8aor0ysefg64QKD8Kaxgw==
+X-Received: by 2002:a17:902:aa89:b0:144:ea8e:1bd7 with SMTP id d9-20020a170902aa8900b00144ea8e1bd7mr5388942plr.65.1638343179555;
+        Tue, 30 Nov 2021 23:19:39 -0800 (PST)
+Received: from localhost ([122.171.9.64])
+        by smtp.gmail.com with ESMTPSA id s21sm23322991pfk.3.2021.11.30.23.19.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 23:19:39 -0800 (PST)
+Date:   Wed, 1 Dec 2021 12:49:37 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Tang Yizhou <tangyizhou@huawei.com>
+Cc:     rafael.j.wysocki@intel.com, rafael@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhengbin13@huawei.com
+Subject: Re: [PATCH v3 1/2] cpufreq: Fix a comment in cpufreq_policy_free
+Message-ID: <20211201071937.e6uso2qwzgtbfest@vireshk-i7>
+References: <20211201074021.18097-1-tangyizhou@huawei.com>
+ <20211201074021.18097-2-tangyizhou@huawei.com>
 MIME-Version: 1.0
-References: <17c5adfe5ea.12f1be94625921.4478415437452327206@mykernel.net>
- <CAJfpegt4jZpSCXGFk2ieqUXVm3m=ng7QtSzZp2bXVs07bfrbXg@mail.gmail.com>
- <17d268ba3ce.1199800543649.1713755891767595962@mykernel.net>
- <CAJfpegttQreuuD_jLgJmrYpsLKBBe2LmB5NSj6F5dHoTzqPArw@mail.gmail.com>
- <17d2c858d76.d8a27d876510.8802992623030721788@mykernel.net>
- <17d31bf3d62.1119ad4be10313.6832593367889908304@mykernel.net>
- <20211118112315.GD13047@quack2.suse.cz> <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
- <20211118164349.GB8267@quack2.suse.cz> <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net>
- <20211130112206.GE7174@quack2.suse.cz> <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
- <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
- <17d73da701b.e571c37220081.6904057835107693340@mykernel.net> <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
-In-Reply-To: <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 1 Dec 2021 09:19:17 +0200
-Message-ID: <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 06/10] ovl: implement overlayfs' ->write_inode operation
-To:     Chengguang Xu <cgxu519@mykernel.net>
-Cc:     Jan Kara <jack@suse.cz>, Miklos Szeredi <miklos@szeredi.hu>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        ronyjin <ronyjin@tencent.com>,
-        charliecgxu <charliecgxu@tencent.com>,
-        Vivek Goyal <vgoyal@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201074021.18097-2-tangyizhou@huawei.com>
+User-Agent: NeoMutt/20180716-391-311a52
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 8:31 AM Chengguang Xu <cgxu519@mykernel.net> wrote:
->
->
->  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=89, 2021-12-01 10:37:15 Chenggua=
-ng Xu <cgxu519@mykernel.net> =E6=92=B0=E5=86=99 ----
->  >
->  >  ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=89, 2021-12-01 03:04:59 Amir =
-Goldstein <amir73il@gmail.com> =E6=92=B0=E5=86=99 ----
->  >  > >  > I was thinking about this a bit more and I don't think I buy t=
-his
->  >  > >  > explanation. What I rather think is happening is that real wor=
-k for syncfs
->  >  > >  > (writeback_inodes_sb() and sync_inodes_sb() calls) gets offloa=
-ded to a flush
->  >  > >  > worker. E.g. writeback_inodes_sb() ends up calling
->  >  > >  > __writeback_inodes_sb_nr() which does:
->  >  > >  >
->  >  > >  > bdi_split_work_to_wbs()
->  >  > >  > wb_wait_for_completion()
->  >  > >  >
->  >  > >  > So you don't see the work done in the times accounted to your =
-test
->  >  > >  > program. But in practice the flush worker is indeed burning 1.=
-3s worth of
->  >  > >  > CPU to scan the 1 million inode list and do nothing.
->  >  > >  >
->  >  > >
->  >  > > That makes sense. However, in real container use case,  the upper=
- dir is always empty,
->  >  > > so I don't think there is meaningful difference compare to accura=
-tely marking overlay
->  >  > > inode dirty.
->  >  > >
->  >  >
->  >  > It's true the that is a very common case, but...
->  >  >
->  >  > > I'm not very familiar with other use cases of overlayfs except co=
-ntainer, should we consider
->  >  > > other use cases? Maybe we can also ignore the cpu burden because =
-those use cases don't
->  >  > > have density deployment like container.
->  >  > >
->  >  >
->  >  > metacopy feature was developed for the use case of a container
->  >  > that chowns all the files in the lower image.
->  >  >
->  >  > In that case, which is now also quite common, all the overlay inode=
-s are
->  >  > upper inodes.
->  >  >
->  >
->  > Regardless of metacopy or datacopy, that copy-up has already modified =
-overlay inode
->  > so initialy marking dirty to all overlay inodes which have upper inode=
- will not be a serious
->  > problem in this case too, right?
->  >
->  > I guess maybe you more concern about the re-mark dirtiness on above us=
-e case.
->  >
->  >
->  >
->  >  > What about only re-mark overlay inode dirty if upper inode is dirty=
- or is
->  >  > writeably mmapped.
->  >  > For other cases, it is easy to know when overlay inode becomes dirt=
-y?
->  >  > Didn't you already try this?
->  >  >
->  >
->  > Yes, I've tried that approach in previous version but as Miklos pointe=
-d out in the
->  > feedback there are a few of racy conditions.
->  >
+On 01-12-21, 15:40, Tang Yizhou wrote:
+> Make the comment of blocking_notifier_call_chain() easier to
+> understand.
+> 
+> Signed-off-by: Tang Yizhou <tangyizhou@huawei.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index e338d2f010fe..db0b4b4258d5 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1296,8 +1296,9 @@ static void cpufreq_policy_free(struct cpufreq_policy *policy)
+>  
+>  	if (policy->max_freq_req) {
+>  		/*
+> -		 * CPUFREQ_CREATE_POLICY notification is sent only after
+> -		 * successfully adding max_freq_req request.
+> +		 * Remove max_freq_req after sending CPUFREQ_REMOVE_POLICY
+> +		 * notification, since CPUFREQ_CREATE_POLICY notification was
+> +		 * sent after adding max_freq_req earlier.
+>  		 */
+>  		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+>  					     CPUFREQ_REMOVE_POLICY, policy);
 
-Right..
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
->
-> So the final solution to handle all the concerns looks like accurately ma=
-rk overlay inode
-> diry on modification and re-mark dirty only for mmaped file in ->write_in=
-ode().
->
-> Hi Miklos, Jan
->
-> Will you agree with new proposal above?
->
-
-Maybe you can still pull off a simpler version by remarking dirty only
-writably mmapped upper AND inode_is_open_for_write(upper)?
-
-If I am not mistaken, if you always mark overlay inode dirty on ovl_flush()
-of FMODE_WRITE file, there is nothing that can make upper inode dirty
-after last close (if upper is not mmaped), so one more inode sync should
-be enough. No?
-
-Thanks,
-Amir.
+-- 
+viresh

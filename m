@@ -2,69 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE33C465025
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEAE465021
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350384AbhLAOno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:43:44 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41238 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350322AbhLAOgw (ORCPT
+        id S1350349AbhLAOn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:43:28 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:37663 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350332AbhLAOgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 09:36:52 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 201D5B81F6E;
-        Wed,  1 Dec 2021 14:33:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF7AAC53FCC;
-        Wed,  1 Dec 2021 14:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638369192;
-        bh=RCe2tlGvN+bkGO26pHizOcNSlJIEUA7XSM5qImqAqWg=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=Cl9MNk3gWlGrYSG5P0i7HX0BZJ1Nne4TnH2Zla6jIQ+cjTi7YIfWLJOdgEmoIiryW
-         yRZvs+GgwzmIt8agVE1HAa58aT5czMoivmAdXQVYo+xb5zJu+1z9d5MPrWaLgUS9SJ
-         /t0JyHI/gp8ZKpmjddPBZpPUFgWfLPODNdI/nuk2rjN+emtQNYhX4xSHwDYgw0mo2S
-         vPuE+KT8kH0Mz1dqtmQbzsB/xnS8mvAiw3U9yz0YBWI9j8CWwNG4MfjJhAHc02r9Ga
-         6zinuH9irkayr5/bjWa0SxcAKZXDZJSMlyxM61u5lXWUcwrJrHyCdQsn0f8A+d4D1W
-         anPrasr4ZbEaA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6EE9D5C0668; Wed,  1 Dec 2021 06:33:12 -0800 (PST)
-Date:   Wed, 1 Dec 2021 06:33:12 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     quic_neeraju@quicinc.com, frederic@kernel.org
-Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org
-Subject: [PATCH] MAINTAINERS:  Add Frederic and Neeraj to their RCU files
-Message-ID: <20211201143312.GA3103715@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Received: by mail-ot1-f53.google.com with SMTP id h19-20020a9d3e53000000b0056547b797b2so35407972otg.4;
+        Wed, 01 Dec 2021 06:33:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
+         :message-id;
+        bh=H6m7rkj8DPoqTZFqopgze2pKI1kgM/G/Mrby5ukjdGE=;
+        b=0kClOwpJ5hCDdaCKtdi8kJDr9xT9fknvp0kXF2l01J/JWJsUv7jaAKUrxivNddNhJ9
+         A3blMP8jwBDI96hfrYHkNzdJqgiSR/kwBC/+/ZlMDBB3hznJrGNCOlD/13BPIYGlYjx+
+         CAP5Sg4Jx/s08jU5DduokpOVr3Q8z0K/M6XrUMYJFxcITibI/Cc8GFJuXJgnyK9PgMpk
+         Oq5h8Tu6SKEtnRtn8o+RfjgvsjIrhAzMXd2lJ7rZReNRAYOGWJe1cJfHSRRW1hYlu7m3
+         AL+RpBcETFcpVNQU9g/An9sC/94QtJyfLJLBXy9nJ9tq24uzx5K3tptJ2ysYx0e//BsU
+         oNRg==
+X-Gm-Message-State: AOAM532ro/ziShjOdhqE+GGgrmOO2+p2S/z0yWHCbezPnmFBWAOLYbZb
+        rsYyPRDKxT/B31eqthVnnNHF1bxSgA==
+X-Google-Smtp-Source: ABdhPJzBwSLT8YLHWoK6yMQSNpniPp0mVIv+o85r1M9hWK0ych8mx/NRnEfsorSNB2DyXxIC0PryPg==
+X-Received: by 2002:a9d:709a:: with SMTP id l26mr6022358otj.287.1638369204591;
+        Wed, 01 Dec 2021 06:33:24 -0800 (PST)
+Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
+        by smtp.gmail.com with ESMTPSA id g61sm3685059otg.43.2021.12.01.06.33.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 06:33:23 -0800 (PST)
+Received: (nullmailer pid 1684342 invoked by uid 1000);
+        Wed, 01 Dec 2021 14:33:22 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        =?utf-8?b?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        Rob Herring <robh+dt@kernel.org>, netdev@vger.kernel.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Doug Berger <opendmb@gmail.com>, Ray Jui <rjui@broadcom.com>,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Scott Branden <sbranden@broadcom.com>,
+        devicetree@vger.kernel.org
+In-Reply-To: <20211201041228.32444-5-f.fainelli@gmail.com>
+References: <20211201041228.32444-1-f.fainelli@gmail.com> <20211201041228.32444-5-f.fainelli@gmail.com>
+Subject: Re: [PATCH net-next 4/7] dt-bindings: net: Convert GENET binding to YAML
+Date:   Wed, 01 Dec 2021 08:33:22 -0600
+Message-Id: <1638369202.185942.1684341.nullmailer@robh.at.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding Frederic as an RCU maintainer for kernel/rcu/tree_nocb.h given his
-work with offloading and de-offloading callbacks from CPUs.  Also adding
-Neeraj for kernel/rcu/tasks.h given his focused work on RCU Tasks Trace.
-As in I am reasonably certain that each understands the full contents
-of the corresponding file.
+On Tue, 30 Nov 2021 20:12:25 -0800, Florian Fainelli wrote:
+> Convert the GENET binding to YAML, leveraging brcm,unimac-mdio.yaml and
+> the standard ethernet-controller.yaml files.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+> ---
+>  .../devicetree/bindings/net/brcm,bcmgenet.txt | 125 ---------------
+>  .../bindings/net/brcm,bcmgenet.yaml           | 146 ++++++++++++++++++
+>  MAINTAINERS                                   |   2 +-
+>  3 files changed, 147 insertions(+), 126 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/brcm,bcmgenet.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml
+> 
 
-Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 7a2345ce85213..1f6b3dcb962c2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16084,6 +16084,8 @@ F:	tools/testing/selftests/resctrl/
- 
- READ-COPY UPDATE (RCU)
- M:	"Paul E. McKenney" <paulmck@kernel.org>
-+M:	Frederic Weisbecker <frederic@kernel.org> (kernel/rcu/tree_nocb.h)
-+M:	Neeraj Upadhyay <quic_neeraju@quicinc.com> (kernel/rcu/tasks.h)
- M:	Josh Triplett <josh@joshtriplett.org>
- R:	Steven Rostedt <rostedt@goodmis.org>
- R:	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml: properties:interrupts: {'minItems': 2, 'maxItems': 3, 'items': [{'description': 'general purpose interrupt line'}, {'description': 'RX and TX rings interrupt line'}, {'description': 'Wake-on-LAN interrupt line'}]} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml: properties:clocks: {'minItems': 1, 'maxItems': 3, 'items': [{'description': 'main clock'}, {'description': 'EEE clock'}, {'description': 'Wake-on-LAN clock'}]} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml: properties:clock-names: {'minItems': 1, 'maxItems': 3, 'items': [{'const': 'enet'}, {'const': 'enet-eee'}, {'const': 'enet-wol'}]} should not be valid under {'required': ['maxItems']}
+	hint: "maxItems" is not needed with an "items" list
+	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml: ignoring, error in schema: properties: interrupts
+warning: no schema found in file: ./Documentation/devicetree/bindings/net/brcm,bcmgenet.yaml
+Documentation/devicetree/bindings/net/brcm,bcmgenet.example.dt.yaml:0:0: /example-0/ethernet@f0b60000: failed to match any schema with compatible: ['brcm,genet-v4']
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,bcmgenet.example.dt.yaml: mdio@e14: 'reg-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
+Documentation/devicetree/bindings/net/brcm,bcmgenet.example.dt.yaml:0:0: /example-1/ethernet@f0b80000: failed to match any schema with compatible: ['brcm,genet-v4']
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,bcmgenet.example.dt.yaml: mdio@e14: 'reg-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
+Documentation/devicetree/bindings/net/brcm,bcmgenet.example.dt.yaml:0:0: /example-2/ethernet@f0ba0000: failed to match any schema with compatible: ['brcm,genet-v4']
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,bcmgenet.example.dt.yaml: mdio@e14: 'reg-names' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/net/brcm,unimac-mdio.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/1561997
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
+

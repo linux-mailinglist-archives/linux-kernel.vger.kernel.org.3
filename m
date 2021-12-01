@@ -2,96 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A6424464D3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 763FB464D46
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348428AbhLALum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:50:42 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:58360 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243442AbhLALuK (ORCPT
+        id S239541AbhLALwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:52:00 -0500
+Received: from mx08-00178001.pphosted.com ([91.207.212.93]:48614 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S242456AbhLALvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:50:10 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D0A101FD5C;
-        Wed,  1 Dec 2021 11:46:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638359208; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l5V1TuuOzTVTGLxNayG9sNVYdWy3FJ2Vhb6YIy9/N/g=;
-        b=Smf5G6udMqjS2J82AUZFq9nJrUtId2A5pGUhyC1X42mrapF7fRb+AQcyWwk//FV9snfrhX
-        3h/3bF93YcizUVC8Zlrwe5TTJXLnJ5hV2mM4BLML/cBTaUs5O1LiV/FIXAmhZ8nUQgZSIF
-        UkqE66vJR0up9iul8jNLqKVY9s+ZB9k=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638359208;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l5V1TuuOzTVTGLxNayG9sNVYdWy3FJ2Vhb6YIy9/N/g=;
-        b=HJX6p8RXI1/u2dlTMv1LmeyDjD7O6qmWF3yYNiq5udE++MtXzK1J7sWhpreOOVD+RGKFjZ
-        F8B8o/keSy1NbHBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9D7CF13FF6;
-        Wed,  1 Dec 2021 11:46:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wL2JJahgp2HbDgAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 01 Dec 2021 11:46:48 +0000
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-To:     airlied@linux.ie, daniel.vetter@ffwll.ch, arnd@arndb.de,
-        gregkh@linuxfoundation.org, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: [PATCH v2 7/7] agp/via: Remove unused variable 'current_size'
-Date:   Wed,  1 Dec 2021 12:46:45 +0100
-Message-Id: <20211201114645.15384-8-tzimmermann@suse.de>
-X-Mailer: git-send-email 2.34.0
-In-Reply-To: <20211201114645.15384-1-tzimmermann@suse.de>
-References: <20211201114645.15384-1-tzimmermann@suse.de>
+        Wed, 1 Dec 2021 06:51:52 -0500
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B18KtWG005616;
+        Wed, 1 Dec 2021 12:48:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=d5m1UFk/3Up92017AsNcahPFJca6ECq5hi/I0JYLI3w=;
+ b=3f8MgReHd4PIBLiCc6spSiM6XZJ4VCyXrSGC9eK5QohG81Tc9iZH+FFUlk2ORG4aM7Ca
+ YszvrlF0BKW02tiQyNZu7/EBEZF+RpMnfD/3rk4m/Smxne52Ct4eciH6A+sgLhpM9h7a
+ ItJ/dRoSshYdUObhrYGRibVGffEBwpRuE6yLknAlFI6WRKvL4ExPJrB6etKHwdkiizVt
+ OBHLUDjqXz0gpktZ3fVSbWxb9LzLbHQFbK8/WymjtX6eXAxCn5sqVRvbqGgZLWd7pf9b
+ X8PuYfTwJ2F3s59AEEXo0OU7c8USp9eULkbUI0pk8iGoOvJzQhLH4LJj8eQgzGgRgs8g OA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cnx6ckdb3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 12:48:12 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DA14F100034;
+        Wed,  1 Dec 2021 12:48:10 +0100 (CET)
+Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CDE742194D5;
+        Wed,  1 Dec 2021 12:48:10 +0100 (CET)
+Received: from localhost (10.75.127.51) by SFHDAG2NODE2.st.com (10.75.127.5)
+ with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 1 Dec 2021 12:48:10
+ +0100
+From:   Alain Volmat <alain.volmat@foss.st.com>
+To:     <wsa@kernel.org>, <pierre-yves.mordret@foss.st.com>
+CC:     <alexandre.torgue@foss.st.com>, <linux-i2c@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
+        <amelie.delaunay@foss.st.com>, <alain.volmat@foss.st.com>
+Subject: [PATCH 0/2] i2c: stm32: A few cleanups
+Date:   Wed, 1 Dec 2021 12:47:49 +0100
+Message-ID: <20211201114751.828474-1-alain.volmat@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.51]
+X-ClientProxiedBy: SFHDAG1NODE2.st.com (10.75.127.2) To SFHDAG2NODE2.st.com
+ (10.75.127.5)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the compiler warning
+A few cleanup, removal of unnecessary messages regarding bus busy
+and recovering bus.
+Make the function stm32f7_i2c_release_bus void since it is never
+returning any error message, allowing to get rid of the error handling
+within the calling function.
 
-  drivers/char/agp/via-agp.c: In function 'via_configure_agp3':
-  drivers/char/agp/via-agp.c:131:35: warning: variable 'current_size' set but not used [-Wunused-but-set-variable]
-    131 |         struct aper_size_info_16 *current_size;
+Alain Volmat (1):
+  i2c: stm32: get rid of stm32f7_i2c_release_bus return value
 
-by removing the variable.
+Wolfram Sang (1):
+  i2c: stm32f7: remove noisy and imprecise log messages
 
-Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-Acked-by: Helge Deller <deller@gmx.de>
----
- drivers/char/agp/via-agp.c | 3 ---
- 1 file changed, 3 deletions(-)
+ drivers/i2c/busses/i2c-stm32f7.c | 14 ++------------
+ 1 file changed, 2 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/char/agp/via-agp.c b/drivers/char/agp/via-agp.c
-index 87a92a044570..dc594f4eca38 100644
---- a/drivers/char/agp/via-agp.c
-+++ b/drivers/char/agp/via-agp.c
-@@ -128,9 +128,6 @@ static int via_fetch_size_agp3(void)
- static int via_configure_agp3(void)
- {
- 	u32 temp;
--	struct aper_size_info_16 *current_size;
--
--	current_size = A_SIZE_16(agp_bridge->current_size);
- 
- 	/* address to map to */
- 	agp_bridge->gart_bus_addr = pci_bus_address(agp_bridge->dev,
 -- 
-2.34.0
+2.25.1
 

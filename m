@@ -2,186 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB01A46502D
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:41:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C08F346502E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350657AbhLAOoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:44:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46590 "EHLO
+        id S1350962AbhLAOoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:44:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350796AbhLAOkk (ORCPT
+        with ESMTP id S1350486AbhLAOll (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:40:40 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F63C0619F0;
-        Wed,  1 Dec 2021 06:36:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 05BEECE1F45;
-        Wed,  1 Dec 2021 14:36:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36097C53FAD;
-        Wed,  1 Dec 2021 14:36:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638369372;
-        bh=fDcjDlre3zNps+euRe6r4MeUW9GiVltCf2FiglTDJMs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VLTlm+NlLTM0kPmYPSPC6h9zN18cLntfOTO5Rn7DcIIBiO4T9qMaNUwZ1ina5SVdq
-         jt1zBgCxUFCePozohANIKWOYgkFPdUcTnBHvEPTFxPiPTZnhvqLC3fkqAbJhzKl7ku
-         ajETGRMDZE4TosIOsFrRu+f/Bu6DfRfEdS50NobUXqz85xoSyADSd3HBC1PAl8zMH/
-         RMBRQ1NB71RPefklnKpWwJ0Dz/dBMCB5LyevsXePyz6jFbo5ns/S5wbAj0/GUVnMDf
-         LS4+28h5hukLa/smezZ2m/oUjjkmp5pSCduV6uLjSl+60PHzv34uapDF7VO+dNQZGU
-         AtTrjPEVMWVBg==
-Received: by mail-ed1-f47.google.com with SMTP id e3so102642682edu.4;
-        Wed, 01 Dec 2021 06:36:12 -0800 (PST)
-X-Gm-Message-State: AOAM530UTRbSU2ONP1cIj2Q6YYpQ70hLIuT2bsEDgfLTEZlpWAOPz1A7
-        UwhvrzNO7d2hYJaj36WLjZkKEQXlIXgKR7pTww==
-X-Google-Smtp-Source: ABdhPJycrMzjLRRzGghWaRYfmnXIZP4mbV7XJfZv7HiaQKS7jnZWOj0jW3iacRJ5wzExr310Lv3vHf2qBAx4QlVmRfI=
-X-Received: by 2002:a17:907:a411:: with SMTP id sg17mr7542058ejc.84.1638369370499;
- Wed, 01 Dec 2021 06:36:10 -0800 (PST)
+        Wed, 1 Dec 2021 09:41:41 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ECBBC061A31
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 06:36:41 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id w1so102845621edc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 06:36:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ChSebfqCj5wevOY8wZg+W9iuB4H9eQB3dOPbSDOcmPA=;
+        b=EanfV/bSpiu1gCOTcYKKTYSiCLzgoyOskJdrxQJqP9sheWREwa1fxafaUhFV+ww+Xz
+         TQ3g16zyAWG2ADnSpwVqyLuc/X9eXn8dus4RgPRsnTnezVD+1rU06eRH8CqTTjycpU6d
+         qdGFxlb++klnpgAQ2+EA3cM+W0ahw3elD13wd+LaHPnmF39+nsmaFzAlN2McrOvxFMK6
+         uUNkA6OQYAkDZSr0o0iBeSgpgktwep30ayJCf5L94OFMW5b7ZNNPcl1FgduvRDHe9KIq
+         R98BUUDubR+rQMuWr037huoees5fKNvXZQZLe2ovprtCJUOYwI9OORbgrU74R6LFX9fO
+         iTuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ChSebfqCj5wevOY8wZg+W9iuB4H9eQB3dOPbSDOcmPA=;
+        b=Vb5hAhB8R8762udxd1rZEGSOjfl292GZgeE3XvVc9rSTP4hmV+C1u+qdW0CzY5amvU
+         TPnkBlM1yKQWduGwjj8Nyk0jqgG0WYkkj+8h+hnD3L0/ZBAEGTkPqIhcjbjk40nCsr6j
+         BALuOPCaTkMGk2mX/lPFBTc4vJyTdBQRVUOpU2sryd9PL93xCcpDFEmrnPpEh8rTNPb6
+         EDDvWAt+Ad2d514BfbRUFozs1ueeIT/Hm1vWn5MUcK1tIM6gnMRoeWmKa3R0VuMdyoQn
+         oArc5hvLH9lZ7I9JjmU7BKbJWOZ4YmnUu0ckxHjifyTlv3bMa7QXZ/RyL0UdmI3SMC1A
+         fPTg==
+X-Gm-Message-State: AOAM531ei6tFfBtQ26uSZgYClXLxhkIv+MbCVBXxuQbmjq63MXKJ6SvJ
+        A/LHvqs3Uzi24WCRjHbEhp6KH4dISWMiuGQVjKkJdw==
+X-Google-Smtp-Source: ABdhPJwJmjDcpB9YHDENf4MntkqZ++v6jJAxzsj6jdE8tXSrKbb9kv8Ct01EthGBUvv8+gntL+vjD5cn4cuDLYUbki8=
+X-Received: by 2002:a05:6402:354e:: with SMTP id f14mr8934573edd.245.1638369399803;
+ Wed, 01 Dec 2021 06:36:39 -0800 (PST)
 MIME-Version: 1.0
-References: <20211122103032.517923-1-maz@kernel.org> <CAMuHMdX2ZRvDYA3idmw3nBcP6CO=2od6ZU-UeJo9vYsuB=fQNQ@mail.gmail.com>
- <8735no70tt.wl-maz@kernel.org> <CAMuHMdVS67BLP2XEdD6ZvVBVE2x11gKnQa1TqG659HXPM5scqQ@mail.gmail.com>
- <CAMuHMdWJhnXabKGpW7k944dzQHtwQtxw-yb2bRBsoaMw6N6nuA@mail.gmail.com>
- <87tug3clvc.wl-maz@kernel.org> <CAMuHMdWGb2xik+94RVwtq8E6+9eN=HfQLX3a4sTjKQXR96Udkw@mail.gmail.com>
- <87r1b7ck40.wl-maz@kernel.org> <OSZPR01MB7019E7DD7119EFF9C994AA62AA649@OSZPR01MB7019.jpnprd01.prod.outlook.com>
- <87tufvmes9.wl-maz@kernel.org> <CA+V-a8siHRjF+bJu88QFwz0a_MZ+kiJEwmER58_feyr8O+WNGA@mail.gmail.com>
- <CAL_JsqK+GcnChx3i9fsYnw+FzZgON4PtKB=CzYLUj6sXtxX6fQ@mail.gmail.com>
- <CA+V-a8sVS_1hUWJ3uM+VffGyMtdnctBOJTyHTQAoJZGOh0a1Tw@mail.gmail.com>
- <87bl21mqwk.wl-maz@kernel.org> <CA+V-a8vA0P-yhm2SHJmVh+cuUw7qodQLQBqzNPTz31x5q18xaA@mail.gmail.com>
-In-Reply-To: <CA+V-a8vA0P-yhm2SHJmVh+cuUw7qodQLQBqzNPTz31x5q18xaA@mail.gmail.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 1 Dec 2021 08:35:55 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJ1Dw9C_GQjto-E2ch7fdN=3f4Qz9qYuf2iYwMRLkdroA@mail.gmail.com>
-Message-ID: <CAL_JsqJ1Dw9C_GQjto-E2ch7fdN=3f4Qz9qYuf2iYwMRLkdroA@mail.gmail.com>
-Subject: Re: [PATCH] of/irq: Add a quirk for controllers with their own
- definition of interrupt-map
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
+References: <20211130154127.12272-1-brgl@bgdev.pl> <20211130154127.12272-3-brgl@bgdev.pl>
+ <YaZNyMV5gX5cZpar@smile.fi.intel.com> <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
+ <YaaQp2rq7N71dm1l@smile.fi.intel.com> <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
+ <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
+ <Yad7IQwXDc8gS2Ne@smile.fi.intel.com> <CAMRc=MeScPA=764xoi9Leu7LayEbhMCuA3u_g5NJjLyc8sJ-vg@mail.gmail.com>
+ <YaeGg34Log9dExYX@smile.fi.intel.com> <YaeHtzyqe3XwgWw/@smile.fi.intel.com>
+In-Reply-To: <YaeHtzyqe3XwgWw/@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 1 Dec 2021 15:36:29 +0100
+Message-ID: <CAMRc=McuGvUUPt9VMARqdNttbXyau5ib-MgR_EYskxqJtUxcsQ@mail.gmail.com>
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
-        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
-        Chris Brandt <Chris.Brandt@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 7:37 AM Lad, Prabhakar
-<prabhakar.csengg@gmail.com> wrote:
+On Wed, Dec 1, 2021 at 3:34 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
 >
-> Hi Marc/Rob,
->
-> On Tue, Nov 30, 2021 at 6:37 PM Marc Zyngier <maz@kernel.org> wrote:
+> On Wed, Dec 01, 2021 at 04:28:19PM +0200, Andy Shevchenko wrote:
+> > On Wed, Dec 01, 2021 at 02:53:42PM +0100, Bartosz Golaszewski wrote:
+> > > On Wed, Dec 1, 2021 at 2:40 PM Andy Shevchenko
+> > > <andriy.shevchenko@linux.intel.com> wrote:
+> > > > On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
+> > > > > On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 > >
-> > On Tue, 30 Nov 2021 12:52:21 +0000,
-> > "Lad, Prabhakar" <prabhakar.csengg@gmail.com> wrote:
+> > ...
+> >
+> > > > > Let me maybe rephrase the problem: currently, for GPIO devices
+> > > > > instantiating multiple banks created outside of the OF or ACPI
+> > > > > frameworks (e.g. instantiated manually and configured using a
+> > > > > hierarchy of software nodes with a single parent swnode and a number
+> > > > > of child swnodes representing the children), it is impossible to
+> > > > > assign firmware nodes other than the one representing the top GPIO
+> > > > > device to the gpiochip child devices.
+> > > > >
+> > > > > In fact if we want to drop the OF APIs entirely from gpiolib - this
+> > > > > would be the right first step as for gpio-sim it actually replaces the
+> > > > > gc->of_node = some_of_node; assignment that OF-based drivers do for
+> > > > > sub-nodes defining banks and it does work with device-tree (I verified
+> > > > > that too) thanks to the fwnode abstraction layer.
+> > > >
+> > > > I still don't see how you set up hierarchy of primary/secondary fwnodes.
+> > > >
+> > > > And I don't like this change. It seems it band-aids some issue with fwnode
+> > > > usage. What the easiest way to reproduce the issue with your series applied
+> > > > (without this change)?
 > > >
-> > > On Mon, Nov 29, 2021 at 6:33 PM Rob Herring <robh@kernel.org> wrote:
-> > > >
-> > > > interrupts would work just fine here:
-> > > >
-> > > > interrupts = <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
-> > > >   <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
-> > > >   <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
-> > > >   <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
-> > > >   <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
-> > > >   <GIC_SPI 9 IRQ_TYPE_LEVEL_HIGH>,
-> > > >   <GIC_SPI 10 IRQ_TYPE_LEVEL_HIGH>,
-> > > >   <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-> > > >
-> > > > We don't need a different solution for N:1 interrupts from N:M. Sure,
-> > > > that could become unweldy if there are a lot of interrupts (just like
-> > > > interrupt-map), but is that an immediate problem?
-> > > >
-> > > It's just that with this approach the driver will have to index the
-> > > interrupts instead of reading from DT.
-> > >
-> > > Marc - is it OK with the above approach?
+> > > Drop this patch and drop the line where the fwnode is assigned in
+> > > gpio-sim.c. Then probe the device and print the addresses of the
+> > > parent and child swnodes. See how they are the same and don't match
+> > > the swnode hierarchy we created. You can then apply this patch and see
+> > > how it becomes correct.
 > >
-> > Anything that uses standard properties in a standard way works for me.
+> > Thanks. I will give a spin.
 > >
-> I added interrupts property now instead of interrupt-map as below:
+> > Note, it seems I have to revert your older code first...
 >
-> irqc: interrupt-controller@110a0000 {
->       compatible = "renesas,r9a07g044-irqc", "renesas,rzg2l-irqc";
->        #address-cells = <0>;
->        interrupt-parent = <&gic>;
->        interrupt-controller;
->        reg = <0 0x110a0000 0 0x10000>;
->        interrupts =
->                       <GIC_SPI 0 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 1 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 4 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 7 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 8 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 444 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 445 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 446 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 447 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 448 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 449 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 450 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 451 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 452 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 453 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 454 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 455 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 456 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 457 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 458 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 459 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 460 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 461 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 462 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 463 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 464 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 465 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 466 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 467 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 468 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 469 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 470 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 471 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 472 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 473 IRQ_TYPE_LEVEL_HIGH>,
->                       <GIC_SPI 474 IRQ_TYPE_LEVEL_HIGH>,
->                      <GIC_SPI 475 IRQ_TYPE_LEVEL_HIGH>;
->          clocks = <&cpg CPG_MOD R9A07G044_IA55_CLK>,
->                        <&cpg CPG_MOD R9A07G044_IA55_PCLK>;
->           clock-names = "clk", "pclk";
->           power-domains = <&cpg>;
->           resets = <&cpg R9A07G044_IA55_RESETN>;
-> };
+> Okay, I have to postpone because simple revert doesn't work for me.
+> Can you clean up the next, please and I can use it starting from tomorrow?
 >
 >
-> In the hierarchal interrupt code its parsed as below:
-> on probe fetch the details:
-> range = of_get_property(np, "interrupts", &len);
-> if (!range)
->       return -EINVAL;
+> $ git tag --contains 5065e08e4ef3
+> DONT-USE-next-20211105
+> next-20211101
+> next-20211102
+> next-20211103
+> next-20211104
+> next-20211105
+> next-20211106
+> next-20211108
+> next-20211109
+> next-20211110
+> next-20211111
+> next-20211112
+> next-20211115
+> next-20211116
+> next-20211117
+> next-20211118
+> next-20211123
+> next-20211124
+> next-20211125
+> next-20211126
+> next-20211129
+> next-20211130
+> next-20211201
 >
-> for (len /= sizeof(*range), j = 0; len >= 3; len -= 3) {
->       if (j >= IRQC_NUM_IRQ)
->             return -EINVAL;
+> --
+> With Best Regards,
+> Andy Shevchenko
 >
->       priv->map[j].args[0] = be32_to_cpu(*range++);
->       priv->map[j].args[1] = be32_to_cpu(*range++);
->       priv->map[j].args[2] = be32_to_cpu(*range++);
->       priv->map[j].args_count = 3;
->       j++;
+>
 
-Not sure what's wrong, but you shouldn't be doing your own parsing.
-The setup shouldn't look much different than a GPIO controller
-interrupts except you have multiple parent interrupts.
+None of this is in next, please use:
+https://github.com/brgl/linux/tree/topic/gpio-sim-v12 if you want a
+branch.
 
-Rob
+I just thought you were going to simply apply these patches.
+
+Bart

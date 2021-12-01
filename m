@@ -2,78 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F0D465757
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF96B465758
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:46:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239718AbhLAUtN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:49:13 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:43888 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353020AbhLAUoo (ORCPT
+        id S1353286AbhLAUuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 15:50:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353238AbhLAUrN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:44:44 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8B87CCE1DED;
-        Wed,  1 Dec 2021 20:41:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB6DFC53FCF;
-        Wed,  1 Dec 2021 20:41:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638391279;
-        bh=ERuVyUB0Dw+gqopVgRcEFB6TKIIwtdk9P9zkGW2KS00=;
-        h=From:To:Subject:Date:In-Reply-To:References:In-Reply-To:
-         References:From;
-        b=RbC7f9f6jntVAOAYYbNmiv2bDBlvEGWZLbxEF/HU/UeAQRYZcQ4sY2ng9m7mYivkj
-         fdLhdTGQ8CmjmqWvlF40IjlI9zKpNHPSuSRO62+KR3L7QtUyh76aQwuM0L0TB4vKHz
-         c4xUXfU8ghdvIKFMvLJeJ52aDoOGG2oS6E/p5mrf3SLN6iwicXyehW1cNDWYK/OCmq
-         uMyvb5QPqELm+czj7JP8/rsNB5FjGQk2CgDc4dJNtS64NI+5Er+mA11hZ989G55U5X
-         cC3a6dlLnOE77a3M3hHybn2bBlX/TcmgfWVvWqDNlrK+r0f/gwxBvAbMpRvS9511rK
-         0Ce1JHLVMozXA==
-From:   zanussi@kernel.org
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <wagi@monom.org>,
-        Clark Williams <williams@redhat.com>,
-        "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>
-Subject: [PATCH RT 8/8] Linux 5.4.161-rt67-rc1
-Date:   Wed,  1 Dec 2021 14:41:08 -0600
-Message-Id: <fa1ec22578baf666ed5f1774e3e93a04c729cbc5.1638391253.git.zanussi@kernel.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <cover.1638391253.git.zanussi@kernel.org>
-References: <cover.1638391253.git.zanussi@kernel.org>
-In-Reply-To: <cover.1638391253.git.zanussi@kernel.org>
-References: <cover.1638391253.git.zanussi@kernel.org>
+        Wed, 1 Dec 2021 15:47:13 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B730C0613FC;
+        Wed,  1 Dec 2021 12:42:53 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id q3so32167310wru.5;
+        Wed, 01 Dec 2021 12:42:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KQ8NRxkzw4Ji5ApiKgE9S4/8PNP5ghov5RAcRfL/Sok=;
+        b=oQVD56VwAarF4NU478+1OhkWubWs/aFkN47kRjgEcxvVDtMHjgRzp+aRGjxeef2kld
+         2X2mAJqECjI/lOiuEgppvZstICetmaGBwnoH6hAxTANGnE4Dc3XXZ96PRqi3TbQUhQYe
+         vK4Efp+hpEovOwb/z4suwpbJgbilmLHz5xM0Arz9tNPPj3J1JwFdct+wOHbTzy+xcJWT
+         uD7LmtyV6SPOnHtqEQzZEaoC5sssrtXqykpZ++qTC/5vjIE+D6GWT+SWv61U5XiTz2HB
+         H7z5EgWRbEidcwnfAgDy9oae1TveinoSGC7uoght5LqLJlNkFON0A+ZzlGuA3TDIPKf4
+         6vbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KQ8NRxkzw4Ji5ApiKgE9S4/8PNP5ghov5RAcRfL/Sok=;
+        b=4YrYID1YC4feDwYo+0VU9QR/iTAple43VZa12JurwDo4V+s9nXEaPkhd7ZUyHtDeV9
+         qZAWRYVdH8/ljHlBjnnq93/2jKqxS5bEteX6yC23nyw+tOqPhqLFudoa5BtE9gFus9CE
+         dmdDjcDl04FF2Y3A2xaq68Ri/fghp+DT7XRwPAgZQtpEiXmpNHNpw0tmBRmF1M3J0uGj
+         zWUxneQoJEVXwBhhtd0lUnLcc87SQva4zT3wLQ2mr+zvTbyyjWv6U5SCOq9ToT7bQGNb
+         FXVaUeP3LQ4rRHNQY5iIYqatE2+nDkY5Y9Ik1s/UWSDzMG35HLZfMpznYDAij8n0xynw
+         tR2w==
+X-Gm-Message-State: AOAM532Xd4b3GbpQsIQ9kcy1znZPqhW8K+MfrlAPRFANeH9U346r7lUq
+        a3ZD0nc/3J8xjyFFtl2T1zc=
+X-Google-Smtp-Source: ABdhPJxuypQ0AA7s55SpcIUt9FKfoePxpPsC23iRiIqvXVRwi4o0FC6+6aBXpj7vSrg7628mjFtd/w==
+X-Received: by 2002:adf:fd4c:: with SMTP id h12mr9647806wrs.429.1638391371833;
+        Wed, 01 Dec 2021 12:42:51 -0800 (PST)
+Received: from [192.168.8.198] ([185.69.144.129])
+        by smtp.gmail.com with ESMTPSA id d188sm702045wmd.3.2021.12.01.12.42.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 12:42:51 -0800 (PST)
+Message-ID: <5f470c2e-eff9-41b0-ac7a-6cb6ddd5a89c@gmail.com>
+Date:   Wed, 1 Dec 2021 20:42:43 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [RFC 00/12] io_uring zerocopy send
+Content-Language: en-US
+To:     David Ahern <dsahern@gmail.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Willem de Bruijn <willemb@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
+References: <cover.1638282789.git.asml.silence@gmail.com>
+ <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
+ <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
+ <c4424a7a-2ef1-6524-9b10-1e7d1f1e1fe4@gmail.com>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <c4424a7a-2ef1-6524-9b10-1e7d1f1e1fe4@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tom Zanussi <zanussi@kernel.org>
+On 12/1/21 17:57, David Ahern wrote:
+> On 12/1/21 8:32 AM, Pavel Begunkov wrote:
+[...]
+>>> mileage varies quite a bit.
+>>
+>> Interesting, any brief notes on the setup and the results? Dummy
+> 
+> VM on Chromebook. I just cloned your repos, built, install and test. As
+> mentioned above, the skb_orphan_frags_rx change is missing from your
+> repo and that is the key to your reported performance gains.
 
-v5.4.161-rt67-rc1 stable review patch.
-If anyone has any objections, please let me know.
+Just to clear misunderstandings if any, all the numbers in the
+cover-letter were measured on the same kernel and during the same
+boot, and it doesn't include the skb_orphan_frags_rx() change.
+All double checked by looking at the traces.
 
------------
+When it's routed through the loopback paths (e.g. -D 127.0.0.1),
+it's indeed slow for both msg_zerocopy and send-zc, and both
+"benefit" in raw throughput from the hack.
 
-
-Signed-off-by: Tom Zanussi <zanussi@kernel.org>
----
- localversion-rt | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/localversion-rt b/localversion-rt
-index d42c0971b041..6f295236237c 100644
---- a/localversion-rt
-+++ b/localversion-rt
-@@ -1 +1 @@
---rt66
-+-rt67-rc1
 -- 
-2.17.1
-
+Pavel Begunkov

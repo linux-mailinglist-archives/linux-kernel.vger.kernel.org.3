@@ -2,191 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 539654652B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F804652BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350337AbhLAQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:27:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44142 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350227AbhLAQ07 (ORCPT
+        id S1350424AbhLAQap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:30:45 -0500
+Received: from sender2-pp-o92.zoho.com.cn ([163.53.93.251]:25359 "EHLO
+        sender2-pp-o92.zoho.com.cn" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S239044AbhLAQan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:26:59 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EFAC061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:23:38 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id r130so25079063pfc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:23:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=KXlDbDHfm6MPpsIvUexZXkH+Oo9wCHRMsnEAQA6kjIo=;
-        b=lcqV50x1HrgXfVhXY5D5JKXgkYr1FUZYfbMRQflyIJQE6UrA7g56VucLgGn3xsZ7hO
-         1FClIo5U/3GH4H8hNd60p8EvXmi2onk+efUkewDJwg0oVb6VI7bUd/ls0K68IrZrvAIf
-         SOomzc9JPnD5ctRRIVkE78U1LmXDuNbHnb3c1uzg3EWgTnooY0r4GKeisD7TVl1gSDEF
-         TqOPrLHgUdUEpdF4f+7xpaQwjerOvCcODZDNMyc0kDjpa7k6i4Ne4MdxBxzBUGmJz77m
-         Jm0tC/jVtT3DTvfpP6i5nxQ9vim+iDOOCw/52v+uYK8TYwF/dY/jSV4wtXprG8PRm8nj
-         4uXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=KXlDbDHfm6MPpsIvUexZXkH+Oo9wCHRMsnEAQA6kjIo=;
-        b=oXWY8nX0HGu8xuV8Cigx6dWLSA7Qn58sb0Jt1zA3DgeDs4/HTwKHUJwF8lKToXjPaH
-         UeF+LRC41HQnLiutR8J1Hgy9UWvyWFOf98gtmRDqZkC9ODqZ7RaDDT+mL5V6w6J9+Lat
-         FUo6c2x+mlJcPnBduGT6kzhgs+KNVnrgzmp+OSOTwW+2ZuWQBtNJ3cwHZ2+xo5zFPUBc
-         zkHg1Vc/Zo64jlJhmG2Tra1pck3sZepulmJ8qcMnfxut22V5eExEi8N3vLISLpZdsKmv
-         X9O+dnVZ/7Vw9kIJmrxm4Ei2QcgOiOfVhkHYb6nQ8wjFLHyDPXGawn1e7P3L0dEGnthT
-         +xKQ==
-X-Gm-Message-State: AOAM533LVbZIbrAF1gNW/MEZcO1mDX/4w7E5ZT6e4FR0C4PDmKEZ4mgU
-        6YHeTXYHyPmy01hciG6q+ePMWg==
-X-Google-Smtp-Source: ABdhPJyBL07bl8kieStSK+Wj6FYYCzBo3wL7q1LXnaEGhsvYbQVXbGT/IEE+Can6YtJ9beFrHU6X0g==
-X-Received: by 2002:a05:6a00:84c:b0:494:6d40:ed76 with SMTP id q12-20020a056a00084c00b004946d40ed76mr6940144pfk.65.1638375817560;
-        Wed, 01 Dec 2021 08:23:37 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a3sm192787pgj.2.2021.12.01.08.23.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 08:23:36 -0800 (PST)
-Date:   Wed, 1 Dec 2021 16:23:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 21/29] KVM: Resolve memslot ID via a hash table
- instead of via a static array
-Message-ID: <YaehhRR75OB+qos8@google.com>
-References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
- <a6b62e0bdba2a82bbc31dcad3c8525ccc5ff0bff.1638304316.git.maciej.szmigiero@oracle.com>
- <Yabj3Qr8e85qhSg3@google.com>
- <c1dca71f-99d7-93b2-b4fe-d02526fefc81@maciej.szmigiero.name>
+        Wed, 1 Dec 2021 11:30:43 -0500
+ARC-Seal: i=1; a=rsa-sha256; t=1638375842; cv=none; 
+        d=zoho.com.cn; s=zohoarc; 
+        b=bsu7LQ2PoeLY0foZtF4JFW0yFeQvxbFUluNQXk3az6/4qMWdVyL7zq5fqzSRty2/3rjbqKl/iZNyBCNhJr7X9O+jJuzOC/W/dSR0YSjTiM5xf681ScJA/gx3VYEGp6HvKXDqAYnTOw15b+S5bHVBrb2P4S4QL9CJyz7oYI2imTY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zoho.com.cn; s=zohoarc; 
+        t=1638375842; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:Reply-To:References:Subject:To; 
+        bh=rcScbATqE6loxaDgQyPaD/4ZwjFVIqn67jJGI+uVyDw=; 
+        b=kLVzGKVujfAPYvMR/1Aln8qXgt7I7DeIGLwEeDNcRIPuHOAKPPegdQDEvwjo/FdUnFxer/7EmAywcz/7eTABMuoNaA0a/hQln6vpLGIspCdm7ghgiS6Bh0wsBBANrAJKrzMCQ79xVb6bNNc5lZIFlRSB+jK9trn2YjiXaWuBSzQ=
+ARC-Authentication-Results: i=1; mx.zoho.com.cn;
+        dkim=pass  header.i=mykernel.net;
+        spf=pass  smtp.mailfrom=cgxu519@mykernel.net;
+        dmarc=pass header.from=<cgxu519@mykernel.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1638375842;
+        s=zohomail; d=mykernel.net; i=cgxu519@mykernel.net;
+        h=Date:From:Reply-To:To:Cc:Message-ID:In-Reply-To:References:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding;
+        bh=rcScbATqE6loxaDgQyPaD/4ZwjFVIqn67jJGI+uVyDw=;
+        b=dpjnOQbInxwEwa4T0nZRewxMfGWJLRZ28x+r7O48ol1Cf0DHFYU4LOvHSWV0fljR
+        pX1G/6KwExjNjQeBgIUmeJgEz68+nayqn5npFifiTYswd6bxaezzNc+QUZ9xY4Lzida
+        SUg7W/+5nn/FSPbsys3d/+Al3GXaDOU1HSR9Fx3M=
+Received: from mail.baihui.com by mx.zoho.com.cn
+        with SMTP id 1638375840259479.9473699389241; Thu, 2 Dec 2021 00:24:00 +0800 (CST)
+Date:   Thu, 02 Dec 2021 00:24:00 +0800
+From:   Chengguang Xu <cgxu519@mykernel.net>
+Reply-To: cgxu519@mykernel.net
+To:     "Jan Kara" <jack@suse.cz>, "Amir Goldstein" <amir73il@gmail.com>,
+        "Miklos Szeredi" <miklos@szeredi.hu>
+Cc:     "linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+        "overlayfs" <linux-unionfs@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "ronyjin" <ronyjin@tencent.com>,
+        "charliecgxu" <charliecgxu@tencent.com>,
+        "Vivek Goyal" <vgoyal@redhat.com>
+Message-ID: <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
+In-Reply-To: <20211201134610.GA1815@quack2.suse.cz>
+References: <20211118112315.GD13047@quack2.suse.cz>
+ <17d32ecf46e.124314f8f672.8832559275193368959@mykernel.net>
+ <20211118164349.GB8267@quack2.suse.cz>
+ <17d36d37022.1227b6f102736.1047689367927335302@mykernel.net>
+ <20211130112206.GE7174@quack2.suse.cz>
+ <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
+ <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
+ <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
+ <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
+ <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com> <20211201134610.GA1815@quack2.suse.cz>
+Subject: Re: [RFC PATCH v5 06/10] ovl: implement overlayfs' ->write_inode
+ operation
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1dca71f-99d7-93b2-b4fe-d02526fefc81@maciej.szmigiero.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Importance: Medium
+User-Agent: ZohoCN Mail
+X-Mailer: ZohoCN Mail
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021, Maciej S. Szmigiero wrote:
-> On 01.12.2021 03:54, Sean Christopherson wrote:
-> > On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
-> > > From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> > > 
-> > > Memslot ID to the corresponding memslot mappings are currently kept as
-> > > indices in static id_to_index array.
-> > > The size of this array depends on the maximum allowed memslot count
-> > > (regardless of the number of memslots actually in use).
-> > > 
-> > > This has become especially problematic recently, when memslot count cap was
-> > > removed, so the maximum count is now full 32k memslots - the maximum
-> > > allowed by the current KVM API.
-> > > 
-> > > Keeping these IDs in a hash table (instead of an array) avoids this
-> > > problem.
-> > > 
-> > > Resolving a memslot ID to the actual memslot (instead of its index) will
-> > > also enable transitioning away from an array-based implementation of the
-> > > whole memslots structure in a later commit.
-> > > 
-> > > Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-> > > Co-developed-by: Sean Christopherson <seanjc@google.com>
-> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > 
-> > Nit, your SoB should come last since you were the last person to handle the patch.
-> > 
-> 
-> Thought that my SoB should come first as coming from the author of this
-> patch.
-> 
-> Documentation/process/submitting-patches.rst says that:
-> > Any further SoBs (Signed-off-by:'s) following the author's SoB are from
-> > people handling and transporting the patch, but were not involved in its
-> > development. SoB chains should reflect the **real** route a patch took
-> > as it was propagated to the maintainers and ultimately to Linus, with
-> > the first SoB entry signalling primary authorship of a single author.
-> 
-> So "further SoBs follow[] the author's SoB" and "the first SoB entry
-> signal[s] primary authorship".
-> But at the same time "SoB chains should reflect the **real** route a
-> patch took" - these rules contradict each other in our case.
+ ---- =E5=9C=A8 =E6=98=9F=E6=9C=9F=E4=B8=89, 2021-12-01 21:46:10 Jan Kara <=
+jack@suse.cz> =E6=92=B0=E5=86=99 ----
+ > On Wed 01-12-21 09:19:17, Amir Goldstein wrote:
+ > > On Wed, Dec 1, 2021 at 8:31 AM Chengguang Xu <cgxu519@mykernel.net> wr=
+ote:
+ > > > So the final solution to handle all the concerns looks like accurate=
+ly
+ > > > mark overlay inode diry on modification and re-mark dirty only for
+ > > > mmaped file in ->write_inode().
+ > > >
+ > > > Hi Miklos, Jan
+ > > >
+ > > > Will you agree with new proposal above?
+ > > >
+ > >=20
+ > > Maybe you can still pull off a simpler version by remarking dirty only
+ > > writably mmapped upper AND inode_is_open_for_write(upper)?
+ >=20
+ > Well, if inode is writeably mapped, it must be also open for write, does=
+n't
+ > it? The VMA of the mapping will hold file open. So remarking overlay ino=
+de
+ > dirty during writeback while inode_is_open_for_write(upper) looks like
+ > reasonably easy and presumably there won't be that many inodes open for
+ > writing for this to become big overhead?
+ >=20
+ > > If I am not mistaken, if you always mark overlay inode dirty on ovl_fl=
+ush()
+ > > of FMODE_WRITE file, there is nothing that can make upper inode dirty
+ > > after last close (if upper is not mmaped), so one more inode sync shou=
+ld
+ > > be enough. No?
+ >=20
+ > But we still need to catch other dirtying events like timestamp updates,
+ > truncate(2) etc. to mark overlay inode dirty. Not sure how reliably that
+ > can be done...
+ >=20
 
-Yeah, this is a unusual case.  If we wanted to be super strict, for patches written
-by you without a Co-developed-by, the SoB chain should be:
+To be honest I even don't fully understand what's the ->flush() logic in ov=
+erlayfs.
+Why should we open new underlying file when calling ->flush()?
+Is it still correct in the case of opening lower layer first then copy-uped=
+ case?=20
 
-  Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
-  Signed-off-by: Sean Christopherson <seanjc@google.com>
-  Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
 
-but that's a bit ridiculous and probably unnecessary since my changes were little
-more than code review feedback, which is why I think it's ok to just drop my SoB
-for patches authored solely by you.
+Thanks,
+Chengguang
 
-Co-developed-by is a slightly different case.  Because patches with multiple
-authors are likely handed back and forth multiple times, as was the case here,
-and because each author needs a SoB anyways, the normal rules are tweaked slightly
-to require that the person submitting the patch is always last to capture that they
-were the person that did the actual submission.  
 
-There's another "When to use Acked-by:, Cc:, and Co-developed-by:" section in
-submitting-patches.rst that covers this:
 
-  Co-developed-by: states that the patch was co-created by multiple developers;
-  it is used to give attribution to co-authors (in addition to the author
-  attributed by the From: tag) when several people work on a single patch.  Since
-  Co-developed-by: denotes authorship, every Co-developed-by: must be immediately
-  followed by a Signed-off-by: of the associated co-author.  Standard sign-off
-  procedure applies, i.e. the ordering of Signed-off-by: tags should reflect the
-  chronological history of the patch insofar as possible, regardless of whether
-  the author is attributed via From: or Co-developed-by:.  Notably, the last
-  Signed-off-by: must always be that of the developer submitting the patch.
-  
-  Note, the From: tag is optional when the From: author is also the person (and
-  email) listed in the From: line of the email header.
-  
-  Example of a patch submitted by the From: author::
-  
-          <changelog>
-  
-          Co-developed-by: First Co-Author <first@coauthor.example.org>
-          Signed-off-by: First Co-Author <first@coauthor.example.org>
-          Co-developed-by: Second Co-Author <second@coauthor.example.org>
-          Signed-off-by: Second Co-Author <second@coauthor.example.org>
-          Signed-off-by: From Author <from@author.example.org>
-  
-  Example of a patch submitted by a Co-developed-by: author::
-  
-          From: From Author <from@author.example.org>
-  
-          <changelog>
-  
-          Co-developed-by: Random Co-Author <random@coauthor.example.org>
-          Signed-off-by: Random Co-Author <random@coauthor.example.org>
-          Signed-off-by: From Author <from@author.example.org>
-          Co-developed-by: Submitting Co-Author <sub@coauthor.example.org>
-          Signed-off-by: Submitting Co-Author <sub@coauthor.example.org>
-  
+
+
+
+ =20

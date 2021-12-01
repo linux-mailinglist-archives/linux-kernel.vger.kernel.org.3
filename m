@@ -2,136 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 92E96465084
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C90946508C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 15:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245277AbhLAOzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 09:55:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242347AbhLAOz0 (ORCPT
+        id S1349958AbhLAO4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 09:56:20 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:33476 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S231266AbhLAO4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 09:55:26 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C3FC061574;
-        Wed,  1 Dec 2021 06:52:05 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1638370323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BTbSr5Tnue7aLzSgJJm9awkXjJzR21QR4KzXcy3eBrc=;
-        b=GlbNwZ4D0pGu3V697epfgZEeLrmaD/2KCVk3PSbXS5CtHEz3XyQGYf3l84zFOWR7HO/+pR
-        qBnx6gA3eOMh2RzL39CN8JVZzGiRrRPmmHZ8CHTeYKkKvchcvLPNgXwCSxWmmCVofpEJmI
-        rNPgtI1cSC9SYw6MVXzLDp3UJpiKw4FJtUj11vYAeN7eL/AGYGWZhDsSSRaXE1YIbWZrai
-        cLe4esqu/0neHx/rJBCKGu6bLTWvO7fjlheOC27IDxnm5i1vf7PC1SeYQMizsLJ+TMtg07
-        Q9uOcE5s42RhwfPwZBCHsz8qCR5nL4M1v8HtPC4wO59T8QPyN9aVf98sja8qYw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1638370323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BTbSr5Tnue7aLzSgJJm9awkXjJzR21QR4KzXcy3eBrc=;
-        b=avo6A8LECbQFww8OTS/mru02KDfMYMzNo/d+exTLTa9qwAm7vhwLxgo3LL7UnS1TJSx9MP
-        9tN1Qpe5I0EOkJAA==
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Logan Gunthorpe <logang@deltatee.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Marc Zygnier <maz@kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Megha Dey <megha.dey@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, linux-pci@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jon Mason <jdmason@kudzu.us>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Allen Hubbe <allenbh@gmail.com>, linux-ntb@googlegroups.com,
-        linux-s390@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>, x86@kernel.org
-Subject: Re: [patch 21/32] NTB/msi: Convert to msi_on_each_desc()
-In-Reply-To: <87o861banv.ffs@tglx>
-References: <20211126230957.239391799@linutronix.de>
- <20211126232735.547996838@linutronix.de>
- <7daba0e2-73a3-4980-c3a5-a71f6b597b22@deltatee.com> <874k7ueldt.ffs@tglx>
- <6ba084d6-2b26-7c86-4526-8fcd3d921dfd@deltatee.com> <87ilwacwp8.ffs@tglx>
- <d6f13729-1b83-fa7d-3f0d-98d4e3f7a2aa@deltatee.com> <87v909bf2k.ffs@tglx>
- <20211130202800.GE4670@nvidia.com> <87o861banv.ffs@tglx>
-Date:   Wed, 01 Dec 2021 15:52:02 +0100
-Message-ID: <871r2w9y3x.ffs@tglx>
+        Wed, 1 Dec 2021 09:56:19 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B1Eq43n021925;
+        Wed, 1 Dec 2021 14:52:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ib4L4QWPQ+tGPMk+wtD8oXVjJUb80I/kHxdeE5v1kVQ=;
+ b=eqbTN4+hWCrEn1oaqdeuLz88+t4oNnf7gRDykKfzOcO0hERF2nmPwMUbCeXtR5zeYBYp
+ GYnKHqP6Kwzn3DoQjfbkoG6BasWyjFwRJOdh8BUQb3GXpeZKwJnpYOEy+AxflOk7nmlA
+ mAxIPv4ILxtnPRNLeRzYsR1UAEAZjFLK9wQkDAoc7Bd1jTjBj0pbYDfqdU6NA+C/uEam
+ OZJTpa/HIjQ8Dxy28DpI1ZFgN9DEDfXO29e0J7XIt2cMuHKGQNukLkuGgroTFu/5mhiQ
+ h0GAl9ehMADIWfH8gF0LCKlwwfVGiZzsY8uisu6kmydCSl7uQ2aTItr5+l1Wh00pDJCV Lw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpb6m00rc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 14:52:55 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B1EqFpI022886;
+        Wed, 1 Dec 2021 14:52:54 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cpb6m00r1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 14:52:54 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B1Emhs1001475;
+        Wed, 1 Dec 2021 14:52:23 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma01dal.us.ibm.com with ESMTP id 3ckcacm02y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 01 Dec 2021 14:52:22 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B1EqKwV17367910
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Dec 2021 14:52:20 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2564EAC06B;
+        Wed,  1 Dec 2021 14:52:20 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0BFD1AC078;
+        Wed,  1 Dec 2021 14:52:20 +0000 (GMT)
+Received: from [9.47.158.152] (unknown [9.47.158.152])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Dec 2021 14:52:19 +0000 (GMT)
+Message-ID: <72d566d3-d677-8d0a-612d-fe9c5f3c94cb@linux.ibm.com>
+Date:   Wed, 1 Dec 2021 09:52:19 -0500
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH v4 2/2] selftests: tpm2: Reset the dictionary attack lock
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        skhan@linuxfoundation.org
+References: <20211128041052.1395504-1-stefanb@linux.vnet.ibm.com>
+ <20211128041052.1395504-3-stefanb@linux.vnet.ibm.com>
+ <YaVljk1vLRZ/TDJ/@iki.fi>
+ <e569444c-e0cd-52bc-308f-7fa457dbf086@linux.ibm.com>
+ <YadLaHB0oJZYTMbh@iki.fi>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+In-Reply-To: <YadLaHB0oJZYTMbh@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: EnOcVd06013j5aR8fUhYPgJYjmqUU52n
+X-Proofpoint-GUID: 7wa_daydB5EQ9XANB_ef181c6ifHl_jf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
+ definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 phishscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0 impostorscore=0
+ adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112010082
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30 2021 at 22:23, Thomas Gleixner wrote:
-> On Tue, Nov 30 2021 at 16:28, Jason Gunthorpe wrote:
+On 12/1/21 05:16, Jarkko Sakkinen wrote:
+
+> On Mon, Nov 29, 2021 at 07:26:12PM -0500, Stefan Berger wrote:
+>> On 11/29/21 18:43, Jarkko Sakkinen wrote:
+>>> On Sat, Nov 27, 2021 at 11:10:52PM -0500, Stefan Berger wrote:
+>>>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>>>
+>>>> Reset the dictionary attack lock to avoid the following types of test
+>>>> failures after running the test 2 times:
+>>>>
+>>>> ======================================================================
+>>>> ERROR: test_unseal_with_wrong_policy (tpm2_tests.SmokeTest)
+>>>> ----------------------------------------------------------------------
+>>>> Traceback (most recent call last):
+>>>>     File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2_tests.py", line 105, in test_unseal_with_wrong_policy
+>>>>       blob = self.client.seal(self.root_key, data, auth, policy_dig)
+>>>>     File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 620, in seal
+>>>>       rsp = self.send_cmd(cmd)
+>>>>     File "/root/linux-ima-namespaces/tools/testing/selftests/tpm2/tpm2.py", line 397, in send_cmd
+>>>>       raise ProtocolError(cc, rc)
+>>>> tpm2.ProtocolError: TPM_RC_LOCKOUT: cc=0x00000153, rc=0x00000921
+>>>>
+>>>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>>>> ---
+>>>>    tools/testing/selftests/tpm2/tpm2_tests.py | 2 ++
+>>>>    1 file changed, 2 insertions(+)
+>>>>
+>>>> diff --git a/tools/testing/selftests/tpm2/tpm2_tests.py b/tools/testing/selftests/tpm2/tpm2_tests.py
+>>>> index e63a37819978..ad6f54c01adf 100644
+>>>> --- a/tools/testing/selftests/tpm2/tpm2_tests.py
+>>>> +++ b/tools/testing/selftests/tpm2/tpm2_tests.py
+>>>> @@ -139,6 +139,8 @@ class SmokeTest(unittest.TestCase):
+>>>>            except:
+>>>>                self.client.flush_context(handle)
+>>>>                raise
+>>>> +        finally:
+>>>> +            self.client.reset_da_lock()
+>>>>            self.assertEqual(rc, tpm2.TPM2_RC_POLICY_FAIL)
+>>>> -- 
+>>>> 2.31.1
+>>>>
+>>> I don't agree with this as a DA lock has legit use. This would be adequate
+>>> for systems dedicated for kernel testing only.
+>> The problem is this particular test case I am patching here causes the above
+>> test failures upon rerun. We are testing the driver here presumably and not
+>> the TPM2, so I think we should leave the TPM2 as cleaned up as possible,
+>> thus my suggestion is to reset the DA lock and we won't hear any complaints
+>> after that.
 >
-> The real problem is where to store the MSI descriptors because the PCI
-> device has its own real PCI/MSI-X interrupts which means it still shares
-> the storage space.
+>> The tss packages also have command line tools to reset the DA lock, but it
+>> shouldn't be necessary to use them after running a **driver** test case.
+> If you speak about TSS, please alway say which one :-)
 
-Bah. I confused myself by staring at the existing code instead of
-looking at how this NTB stuff actually works.
+packages : both
 
-So if I understand it correctly then the end result looks like this:
+tpm2_dictionarylockout -c [ -p password ]
 
-1) PCIe device (switchtec)
-
-   The device has 4 MSI[X] interrupts: event, dma_rpc, message,
-   doorbell. The event and dma_rpc interrupts are requested by the
-   switchtec PCI driver itself.
-
-2) Switchtec character device
-
-   The switchtec PCI driver creates a character device which is exposed
-   for device specific IOCTLs
-
-   The device belongs to the switchtec_class device class.
-
-3) Switchtec NTB device
-
-   The ntb_hw_switchtec driver registers the switchtec_class class
-   interface.
-
-   So when #2 is registered with the driver core the switchtec class
-   interface add_dev() function is invoked. That function creates a NTB
-   device, requests the message and the doorbell interrupts which have
-   been allocated by the underlying PCIe device driver (#1) and
-   registers the NTB device with the NTB core.
-
-4) The NTB core then tries to use the virtual MSI vectors which have
-   been allocated by the switchtec driver in #1 and requires the msg
-   write intercept to actually expose it to the peers.
-
-So we really can go and create a MSI irqdomain and stick the pointer
-into stdev->dev.irqdomain. The parent domain of this irqdomain is
-
-     stdev->pdev.dev.irqdomain->parent
-
-which is either the irq remapping domain or the vector domain. Which is
-pretty much what I proposed as general facility for IMS/IDXD. I need to
-go back and polish that up on top of the current pile.
-
-Along with that have an irq chip implementation which exposes:
-
-static struct irq_chip ntb_chip = {
-	.name			= "ntb",
-	.irq_ack		= irq_chip_ack_parent,
-	.irq_write_msi_msg	= ntb_msi_write_msg,
-#ifdef CONFIG_SMP
-	.irq_set_affinity	= irq_chip_set_affinity_parent,
-#endif
-};
-
-We just need some reasonable solution for the DMA/remap problem Jason
-mentioned vs. msi_desc::dev, but that wants to be cleaned up in any
-case for all the aliasing muck.
-
-Thanks,
-
-        tglx
+tssdictionaryattacklockreset [-pwd password]
 
 
+>
+> Adding non-volatile state changes explicitly is to a test case is both
+> intrusive and wrong. These type of choices are not to be done in the
+> test case implementation for sure.
+
+I drop this patch because if someone changed the password the lock reset 
+will not work as expected.
+
+One can also argue with having a test case that triggers a failure 
+condition in the TPM2 is both intrusive and wrong. That said, the 
+offending test cases should probably not even exist, especially since 
+they test a user's knowledge about the device afterwards...
+
+
+>
+> An improvement that does not add extra side-effect, would be to read the
+> TPM_PT_LOCKOUT_COUNTER and roll back with a proper error message for the
+> lockout condition.
+>
+> You can also configure the maximum number of tries up to (2 << 31) - 1
+> = 4294967295 with TPM2_DictionaryAttackParameters...
+
+... which I think the user of a device driver test should not have to do.
+
+
+   Stefan
+
+>
+> /Jarkko

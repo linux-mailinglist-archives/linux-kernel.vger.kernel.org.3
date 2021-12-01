@@ -2,280 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D3FF465669
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:25:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7CA246566E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352849AbhLAT2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:28:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58792 "EHLO
+        id S244138AbhLAT3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352723AbhLAT16 (ORCPT
+        with ESMTP id S1352998AbhLAT27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:27:58 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 542C4C06174A
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:24:37 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so509975pjc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:24:37 -0800 (PST)
+        Wed, 1 Dec 2021 14:28:59 -0500
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ADCEC0613FC;
+        Wed,  1 Dec 2021 11:25:38 -0800 (PST)
+Received: by mail-ua1-x932.google.com with SMTP id j14so51136378uan.10;
+        Wed, 01 Dec 2021 11:25:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9Qy0B/I9VMxoVA8/E+ZvO4RymVFXP/tOxtvlq632/LU=;
-        b=iEjOLTh4MkN/yo3UpQc7/+JIdLqX74uhzS8IjUnmxBijQjNYZJYSY3MyxcadijNtJe
-         SixtSC9+Jt0bXEN5OS+JN2+VExrakKP01aHz9RIiwxTU14XMBgNbVpY6zGJzFth4JDz2
-         3yGFnGQhoXJiohbolqWK9qzRCJUoEFSoX7qnk=
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=R/lFdTalLpoR7XoJO19/rmrZrA2nWCTKKIFYKXP72ZM=;
+        b=LQ7ozUqtFdB/n4fy/WWECNPTTBxEOevWyhOi8j/Ck1CrkuTjNI2pYz1Vr8y+nChALP
+         n7HJkWd+x+bfNJmsx0Nz7wEUYfh6kbY8MDoALIUXlTwsDvSF0sjG8xeBxcqzsbL0Nugf
+         3FinNpNTBCqXUy21wjI3dGl2HRwlOQkpTOK5HZ5UxpwiSmz6khToEm6NW0zALGH/zsbJ
+         AK7j4rvUe8bsk+aSBqhMKX1sitEA+hkLb9tDVA/hOEtve3xSHn4D+m9aAIkkgRMzcPX6
+         wo+SUq1Plq70bCvM7rcPBBEOuiROxG7sMkT5ycUXaP+vg3/W+CkVagDTmTN+IMmMhgLE
+         GIwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9Qy0B/I9VMxoVA8/E+ZvO4RymVFXP/tOxtvlq632/LU=;
-        b=CBNS7Qoyfa/BGIUsVI1eI3uLdirHiys8zm5iKsdL9Wry1GuWTJjC/1hPISsnRW0qwi
-         Q2UOE2wzytL13tVBJUkmXrO+2/6cMvNGmY3Yhao7xNh4oFjunXfvAvkuRD8CAng8tKc1
-         6O7afwKlxZXnnyqleEFqManaWLFke8iIFAzwzIz9iFCGgTBpHaGDd9nKyF3tnABXoMyT
-         CvU4owlqSkO5gFcuzbK2dW/H4IPlepnsPvdAZ94W8kl/0ETZAxBolcbbha1OGcAooSUA
-         G5SFZI3JpDsDQ9YhIp2UfTgCzThjuHhE5/A8L2wwQ/hLbL988uyjwXSYhd+if67dOh1X
-         Bs+g==
-X-Gm-Message-State: AOAM533tiMEDkXZit8BnGxNxSCoSHrqMQ+E8/ztFEh/mJ9zKY/CwhqfX
-        F1muaMu/ewq23qmhDk9DVX72ZA==
-X-Google-Smtp-Source: ABdhPJwjNUfQa9zE5mvEopHiUn6DwKZ0A3G84q7L+9KKXfjVNHgz21YJ+w4OqsknJDtWIFOKVQQPGg==
-X-Received: by 2002:a17:902:f092:b0:141:ccb6:897 with SMTP id p18-20020a170902f09200b00141ccb60897mr9802520pla.89.1638386676775;
-        Wed, 01 Dec 2021 11:24:36 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id j13sm599415pfc.151.2021.12.01.11.24.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 11:24:36 -0800 (PST)
-Date:   Wed, 1 Dec 2021 11:24:35 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>, Jessica Yu <jeyu@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH] module: add in-kernel support for decompressing
-Message-ID: <202112011112.83416FCA2C@keescook>
-References: <YaMYJv539OEBz5B/@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=R/lFdTalLpoR7XoJO19/rmrZrA2nWCTKKIFYKXP72ZM=;
+        b=04YwbVhcybXn2zVdvTbLHD+wFI+8TBF3RQj38FeQfki2c/iIZl4T/tV8V9DJA68dWA
+         X19BRU2wlnh8HA6So85BVUBuwKd5tiqN/AuoCXRPc9LxTjJOVovmIT3ZiC4gqQ38es/V
+         OCAo/D5iHFmvaGslAfxtfL7AKFeEJRzGR7orHan4CrSd/0UWUPW/N2eB+v8f+95/AY9q
+         NJ+8Sdw2UoQBWy20nUwHo33EdT5aP7t1mdjfz4creMDJ0S3CkB4PQxDOgNk75R43DpAg
+         91xWmTzFQ7Rb6Y0zLZMmLdzPwjbbdjPBE1+OI9xdRaGEo3vFGF8khE4Iyoh3BWPsGMJu
+         DeWQ==
+X-Gm-Message-State: AOAM532fl73nBf0+w58elgYADKeEDIodIQPxB7sNqacB/8PrZ0RPth+y
+        wlmcg+UOQptekJ7sN1Apwu/PzR/XfVwkFrWhBN8=
+X-Google-Smtp-Source: ABdhPJzYrWwPfyPmACGXWaVxXxzo/lgx5ssxK3IhAvPACkQJpZ3pMnDUdybQ0GFwW99Gc8xLnVGi4u3ELgfMP3xafA0=
+X-Received: by 2002:a67:de12:: with SMTP id q18mr5992904vsk.17.1638386737304;
+ Wed, 01 Dec 2021 11:25:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaMYJv539OEBz5B/@google.com>
+References: <20211115070809.15529-4-sergio.paracuellos@gmail.com> <20211201181609.GA2831753@bhelgaas>
+In-Reply-To: <20211201181609.GA2831753@bhelgaas>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Wed, 1 Dec 2021 20:25:26 +0100
+Message-ID: <CAMhs-H_68tW9jua+QCMO=7zVKCxAe862zKGp5JMrWmcVtbT7iA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] PCI: mt7621: avoid custom MIPS code in driver code
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John Crispin <john@phrozen.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Nov 27, 2021 at 09:48:22PM -0800, Dmitry Torokhov wrote:
-> Current scheme of having userspace decompress kernel modules before
-> loading them into the kernel runs afoul of LoadPin security policy, as
-> it loses link between the source of kernel module on the disk and binary
-> blob that is being loaded into the kernel. To solve this issue let's
-> implement decompression in kernel, so that we can pass a file descriptor
-> of compressed module file into finit_module() which will keep LoadPin
-> happy.
+Hi Bjorn,
 
-Yeah, adding module signing for this case seems like needless overhead
-when there is an existing fd association back down to a dm-verity
-device, etc.
+On Wed, Dec 1, 2021 at 7:16 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> s/avoid custom/Avoid custom/ in subject.
 
-> To let userspace know what compression/decompression scheme kernel
-> supports it will create /sys/module/compression attribute. kmod can read
-> this attribute and decide if it can pass compressed file to
-> finit_module(). New MODULE_INIT_COMPRESSED_DATA flag indicates that the
-> kernel should attempt to decompress the data read from file descriptor
-> prior to trying load the module.
+Ok, I will change this and send v2 of this series after the PATCH 1
+change in the series is clear and validated that it is an accepted way
+to go.
 
-Cool; this seems reasonable.
+>
+> On Mon, Nov 15, 2021 at 08:08:07AM +0100, Sergio Paracuellos wrote:
+> > Driver code is setting up MIPS specific I/O coherency units addresses config.
+> > This MIPS specific thing has been moved to be done when PCI code call the
+> > 'pcibios_root_bridge_prepare()' function which has been implemented for MIPS
+> > ralink mt7621 platform. Hence, remove MIPS specific code from driver code.
+> > After this changes there is also no need to add any MIPS specific includes
+> > to avoid some errors reported by Kernet Tets Robot with W=1 builds.
+>
+> s/this changes/this change/
+> s/Tets/Test/
 
-> To simplify things kernel will only implement single decompression
-> method matching compression method selected when generating modules.
-> This patch implements gzip and xz; more can be added later,
-> 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
-> 
-> I am also attaching a patch to kmod to make use of this new facility.
-> 
-> Thanks!
-> 
->  include/uapi/linux/module.h |   1 +
->  init/Kconfig                |  12 ++
->  kernel/Makefile             |   1 +
->  kernel/module-internal.h    |  18 +++
->  kernel/module.c             |  35 +++--
->  kernel/module_decompress.c  | 271 ++++++++++++++++++++++++++++++++++++
->  6 files changed, 327 insertions(+), 11 deletions(-)
-> 
-> diff --git a/include/uapi/linux/module.h b/include/uapi/linux/module.h
-> index 50d98ec5e866..becab4a1c5db 100644
-> --- a/include/uapi/linux/module.h
-> +++ b/include/uapi/linux/module.h
-> @@ -5,5 +5,6 @@
->  /* Flags for sys_finit_module: */
->  #define MODULE_INIT_IGNORE_MODVERSIONS	1
->  #define MODULE_INIT_IGNORE_VERMAGIC	2
-> +#define MODULE_INIT_COMPRESSED_DATA	4
+Ups, true. Thanks :).
 
-bikeshedding: adding "_DATA" seems redundant/misleading? The entire
-module is compressed, so maybe call it just MODULE_INIT_COMPRESSED ?
+>
+> The patch doesn't touch any #include lines, so I'm not sure what the
+> last sentence is telling us.
 
->  
->  #endif /* _UAPI_LINUX_MODULE_H */
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 03d3c21e28a3..a3f37ae7436d 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -2309,6 +2309,18 @@ config MODULE_COMPRESS_ZSTD
->  
->  endchoice
->  
-> +config MODULE_DECOMPRESS
-> +	bool "Support in-kernel module decompression"
-> +	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
-> +	select XZ_DEC if MODULE_COMPRESS_XZ
-> +	help
-> +
-> +	  Support for decompressing kernel modules by the kernel itself
-> +	  instead of relying on userspace to perform this task. Useful when
-> +	  load pinning security policy is enabled.
-> +
-> +	  If unsure, say N.
-> +
->  config MODULE_ALLOW_MISSING_NAMESPACE_IMPORTS
->  	bool "Allow loading of modules with missing namespace imports"
->  	help
-> diff --git a/kernel/Makefile b/kernel/Makefile
-> index 186c49582f45..56f4ee97f328 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-> @@ -67,6 +67,7 @@ obj-y += up.o
->  endif
->  obj-$(CONFIG_UID16) += uid16.o
->  obj-$(CONFIG_MODULES) += module.o
-> +obj-$(CONFIG_MODULE_DECOMPRESS) += module_decompress.o
->  obj-$(CONFIG_MODULE_SIG) += module_signing.o
->  obj-$(CONFIG_MODULE_SIG_FORMAT) += module_signature.o
->  obj-$(CONFIG_KALLSYMS) += kallsyms.o
-> diff --git a/kernel/module-internal.h b/kernel/module-internal.h
-> index 33783abc377b..3c1143d2c8c7 100644
-> --- a/kernel/module-internal.h
-> +++ b/kernel/module-internal.h
-> @@ -22,6 +22,11 @@ struct load_info {
->  	bool sig_ok;
->  #ifdef CONFIG_KALLSYMS
->  	unsigned long mod_kallsyms_init_off;
-> +#endif
-> +#ifdef CONFIG_MODULE_DECOMPRESS
-> +	struct page **pages;
-> +	unsigned int max_pages;
-> +	unsigned int used_pages;
->  #endif
->  	struct {
->  		unsigned int sym, str, mod, vers, info, pcpu;
-> @@ -29,3 +34,16 @@ struct load_info {
->  };
->  
->  extern int mod_verify_sig(const void *mod, struct load_info *info);
-> +
-> +#ifdef CONFIG_MODULE_DECOMPRESS
-> +int module_decompress(struct load_info *info, const void *buf, size_t size);
-> +void module_decompress_cleanup(struct load_info *info);
-> +#else
-> +int module_decompress(struct load_info *info, const void *buf, size_t size)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +void module_decompress_cleanup(struct load_info *info)
-> +{
-> +}
-> +#endif
-> diff --git a/kernel/module.c b/kernel/module.c
-> index 84a9141a5e15..eeab85ea1627 100644
-> --- a/kernel/module.c
-> +++ b/kernel/module.c
-> @@ -3174,9 +3174,12 @@ static int copy_module_from_user(const void __user *umod, unsigned long len,
->  	return err;
->  }
->  
-> -static void free_copy(struct load_info *info)
-> +static void free_copy(struct load_info *info, int flags)
+Kernel test robot reported implicit declarations because of the use of
+MIPS specific functions without explicit include added in driver code
+[0].
 
-Since struct load_info is already being modified, how about adding flags
-there instead, then it doesn't need to be plumbed down into each of
-these functions?
+After this change, this issue also disappears and that is why
+'Reported-by' tag is added and this sentence included in the commit
+message. Let me know the way you prefer me to write the commit message
+to take into account this fact.
 
->  {
-> -	vfree(info->hdr);
-> +	if (flags & MODULE_INIT_COMPRESSED_DATA)
-> +		module_decompress_cleanup(info);
-> +	else
-> +		vfree(info->hdr);
->  }
->  
->  static int rewrite_section_headers(struct load_info *info, int flags)
-> @@ -4125,7 +4128,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  	}
->  
->  	/* Get rid of temporary copy. */
-> -	free_copy(info);
-> +	free_copy(info, flags);
->  
->  	/* Done! */
->  	trace_module_load(mod);
-> @@ -4174,7 +4177,7 @@ static int load_module(struct load_info *info, const char __user *uargs,
->  
->  	module_deallocate(mod, info);
->   free_copy:
-> -	free_copy(info);
-> +	free_copy(info, flags);
->  	return err;
->  }
->  
-> @@ -4201,7 +4204,8 @@ SYSCALL_DEFINE3(init_module, void __user *, umod,
->  SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
->  {
->  	struct load_info info = { };
-> -	void *hdr = NULL;
-> +	void *buf = NULL;
-> +	int len;
->  	int err;
->  
->  	err = may_init_module();
-> @@ -4211,15 +4215,24 @@ SYSCALL_DEFINE3(finit_module, int, fd, const char __user *, uargs, int, flags)
->  	pr_debug("finit_module: fd=%d, uargs=%p, flags=%i\n", fd, uargs, flags);
->  
->  	if (flags & ~(MODULE_INIT_IGNORE_MODVERSIONS
-> -		      |MODULE_INIT_IGNORE_VERMAGIC))
-> +		      |MODULE_INIT_IGNORE_VERMAGIC
-> +		      |MODULE_INIT_COMPRESSED_DATA))
->  		return -EINVAL;
->  
-> -	err = kernel_read_file_from_fd(fd, 0, &hdr, INT_MAX, NULL,
-> +	len = kernel_read_file_from_fd(fd, 0, &buf, INT_MAX, NULL,
->  				       READING_MODULE);
-> -	if (err < 0)
-> -		return err;
-> -	info.hdr = hdr;
-> -	info.len = err;
-> +	if (len < 0)
-> +		return len;
-> +
-> +	if (flags & MODULE_INIT_COMPRESSED_DATA) {
-> +		err = module_decompress(&info, buf, len);
-> +		vfree(buf); /* compressed data is no longer needed */
-> +		if (err)
-> +			return err;
-> +	} else {
-> +		info.hdr = buf;
-> +		info.len = len;
-> +	}
->  
->  	return load_module(&info, uargs, flags);
->  }
-> diff --git a/kernel/module_decompress.c b/kernel/module_decompress.c
-> new file mode 100644
-> index 000000000000..590ca00aa098
-> --- /dev/null
-> +++ b/kernel/module_decompress.c
+Thanks,
+    Sergio Paracuellos
 
-I think most of this can be dropped. I think using
-crypto_comp_decompress() would make much more sense.
+[0]: https://lore.kernel.org/lkml/CAMhs-H_yugWd4v1OnBR8iqTVQS_T-S3pdrJbZq=MC646QSyb4Q@mail.gmail.com/T/
 
--- 
-Kees Cook
+>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >  drivers/pci/controller/pcie-mt7621.c | 37 ----------------------------
+> >  1 file changed, 37 deletions(-)
+> >
+> > diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
+> > index b60dfb45ef7b..9cf541f5de9c 100644
+> > --- a/drivers/pci/controller/pcie-mt7621.c
+> > +++ b/drivers/pci/controller/pcie-mt7621.c
+> > @@ -208,37 +208,6 @@ static inline void mt7621_control_deassert(struct mt7621_pcie_port *port)
+> >               reset_control_assert(port->pcie_rst);
+> >  }
+> >
+> > -static int setup_cm_memory_region(struct pci_host_bridge *host)
+> > -{
+> > -     struct mt7621_pcie *pcie = pci_host_bridge_priv(host);
+> > -     struct device *dev = pcie->dev;
+> > -     struct resource_entry *entry;
+> > -     resource_size_t mask;
+> > -
+> > -     entry = resource_list_first_type(&host->windows, IORESOURCE_MEM);
+> > -     if (!entry) {
+> > -             dev_err(dev, "cannot get memory resource\n");
+> > -             return -EINVAL;
+> > -     }
+> > -
+> > -     if (mips_cps_numiocu(0)) {
+> > -             /*
+> > -              * FIXME: hardware doesn't accept mask values with 1s after
+> > -              * 0s (e.g. 0xffef), so it would be great to warn if that's
+> > -              * about to happen
+> > -              */
+> > -             mask = ~(entry->res->end - entry->res->start);
+> > -
+> > -             write_gcr_reg1_base(entry->res->start);
+> > -             write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
+> > -             dev_info(dev, "PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
+> > -                      (unsigned long long)read_gcr_reg1_base(),
+> > -                      (unsigned long long)read_gcr_reg1_mask());
+> > -     }
+> > -
+> > -     return 0;
+> > -}
+> > -
+> >  static int mt7621_pcie_parse_port(struct mt7621_pcie *pcie,
+> >                                 struct device_node *node,
+> >                                 int slot)
+> > @@ -557,12 +526,6 @@ static int mt7621_pci_probe(struct platform_device *pdev)
+> >               goto remove_resets;
+> >       }
+> >
+> > -     err = setup_cm_memory_region(bridge);
+> > -     if (err) {
+> > -             dev_err(dev, "error setting up iocu mem regions\n");
+> > -             goto remove_resets;
+> > -     }
+> > -
+> >       return mt7621_pcie_register_host(bridge);
+> >
+> >  remove_resets:
+> > --
+> > 2.33.0
+> >

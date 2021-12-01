@@ -2,91 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E61E1464E82
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECB8464E66
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 14:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349486AbhLANLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 08:11:51 -0500
-Received: from mx07-00178001.pphosted.com ([185.132.182.106]:36642 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231538AbhLANLq (ORCPT
+        id S1349463AbhLANFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 08:05:20 -0500
+Received: from outbound-smtp15.blacknight.com ([46.22.139.232]:53079 "EHLO
+        outbound-smtp15.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S244537AbhLANFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 08:11:46 -0500
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 1B1BXqVn026536;
-        Wed, 1 Dec 2021 12:41:57 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=selector1; bh=y+lWVTF7ChstYU55k0XJsQjtnrTGXQm1BJqRGO3NL6k=;
- b=fAqFS9wDCZu+bDhm+hcsbf59KUJ8W9VyaQ7atI03nhsmoXaaZOeA2iavt3sMIq74FV0h
- KU/Yo9+ZSNWZT/FQWs7zAVH5P+KzL1rGwBOZfLx6ojPnspETMREQJJepOOHPTryuLdcR
- ghlcl+F7KYAPZ1k4v9C+A0TpVrfD632Q75Fk1Wa3iJaFGOGfbPJZBBNtzCOzvJmDhh8/
- lPo/Oqp9/cJHqhaKAyh2l/deOmaB6fdoVS4UlIvBt9zoGmZY9czplaJm/ogLEFW0g+PM
- Jk0tF8S2xwiO3Z0O2jJF1e66KjaZO937vYsaESRWV1boebWQaSkIKSpYkad77PLxyGJE eA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3cnyy6jv26-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 01 Dec 2021 12:41:57 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 618C6100034;
-        Wed,  1 Dec 2021 12:41:56 +0100 (CET)
-Received: from Webmail-eu.st.com (sfhdag2node2.st.com [10.75.127.5])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 5627A2190E8;
-        Wed,  1 Dec 2021 12:41:56 +0100 (CET)
-Received: from gnbcxd0016.gnb.st.com (10.75.127.50) by SFHDAG2NODE2.st.com
- (10.75.127.5) with Microsoft SMTP Server (TLS) id 15.0.1497.26; Wed, 1 Dec
- 2021 12:41:55 +0100
-Date:   Wed, 1 Dec 2021 12:41:48 +0100
-From:   Alain Volmat <alain.volmat@foss.st.com>
-To:     <wsa@kernel.org>
-CC:     <pierre-yves.mordret@foss.st.com>, <alexandre.torgue@foss.st.com>,
-        <linux-i2c@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <fabrice.gasnier@foss.st.com>,
-        <amelie.delaunay@foss.st.com>
-Subject: Re: [PATCH 0/2] i2c: stm32: A few cleanups
-Message-ID: <20211201114148.GA828165@gnbcxd0016.gnb.st.com>
-Mail-Followup-To: wsa@kernel.org, pierre-yves.mordret@foss.st.com,
-        alexandre.torgue@foss.st.com, linux-i2c@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        fabrice.gasnier@foss.st.com, amelie.delaunay@foss.st.com
-References: <20211201110348.825901-1-alain.volmat@foss.st.com>
+        Wed, 1 Dec 2021 08:05:19 -0500
+Received: from mail.blacknight.com (pemlinmail02.blacknight.ie [81.17.254.11])
+        by outbound-smtp15.blacknight.com (Postfix) with ESMTPS id A6C481C46DE
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 13:01:57 +0000 (GMT)
+Received: (qmail 12057 invoked from network); 1 Dec 2021 13:01:57 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.17.29])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 1 Dec 2021 13:01:57 -0000
+Date:   Wed, 1 Dec 2021 13:01:55 +0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Mike Galbraith <efault@gmx.de>
+Cc:     Alexey Avramov <hakavlad@inbox.lv>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+Message-ID: <20211201130155.GT3366@techsingularity.net>
+References: <20211125151853.8540-1-mgorman@techsingularity.net>
+ <20211127011246.7a8ac7b8@mail.inbox.lv>
+ <20211129150117.GO3366@techsingularity.net>
+ <20211201010348.31e99637@mail.inbox.lv>
+ <20211130172754.GS3366@techsingularity.net>
+ <c2aee7e6b9096556aab9b47156e91082c9345a90.camel@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-15
 Content-Disposition: inline
-In-Reply-To: <20211201110348.825901-1-alain.volmat@foss.st.com>
-X-Disclaimer: ce message est personnel / this message is private
-X-Originating-IP: [10.75.127.50]
-X-ClientProxiedBy: SFHDAG2NODE1.st.com (10.75.127.4) To SFHDAG2NODE2.st.com
- (10.75.127.5)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-11-30_10,2021-12-01_01,2020-04-07_01
+In-Reply-To: <c2aee7e6b9096556aab9b47156e91082c9345a90.camel@gmx.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry for the noise.  Issue with my mailer.  Will resend properly
-the same serie in a sec.
+On Tue, Nov 30, 2021 at 06:59:58PM +0100, Mike Galbraith wrote:
+> On Tue, 2021-11-30 at 17:27 +0000, Mel Gorman wrote:
+> >
+> > Obviously a fairly different experience and most likely due to the
+> > underlying storage.
+> 
+> I bet a virtual nickle this is the sore spot.
+> 
 
-On Wed, Dec 01, 2021 at 12:03:46PM +0100, Alain VOLMAT wrote:
-> A few cleanup, removal of unnecessary messages regarding bus busy
-> and recovering bus.
-> Make the function stm32f7_i2c_release_bus void since it is never
-> returning any error message, allowing to get rid of the error handling
-> within the calling function.
-> 
-> Alain Volmat (1):
->   i2c: stm32: get rid of stm32f7_i2c_release_bus return value
-> 
-> Wolfram Sang (1):
->   i2c: stm32f7: remove noisy and imprecise log messages
-> 
->  drivers/i2c/busses/i2c-stm32f7.c | 14 ++------------
->  1 file changed, 2 insertions(+), 12 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+You win a virtual nickle!
+
+Using an older laptop with slower storage and less memory a frequency
+analysis of the stall reasons and source showed the top triggering event
+was
+
+Event count:                6210
+ mm_vmscan_throttled: nid=0 usec_timeout=100000 usect_delayed=xxx reason=VMSCAN_THROTTLE_WRITEBACK
+
+ => trace_event_raw_event_mm_vmscan_throttled <ffffffff9987224a>
+ => reclaim_throttle <ffffffff99873df2>
+ => shrink_node <ffffffff99875bd5>
+ => do_try_to_free_pages <ffffffff99875cf8>
+ => try_to_free_pages <ffffffff998772e3>
+ => __alloc_pages_slowpath.constprop.114 <ffffffff998c2ad9>
+ => __alloc_pages <ffffffff998c366b>
+ => folio_alloc <ffffffff998e4107>
+ => page_cache_ra_unbounded <ffffffff99868fab>
+ => filemap_fault <ffffffff9985cb13>
+ => __do_fault <ffffffff99899361>
+ => __handle_mm_fault <ffffffff998a1470>
+ => handle_mm_fault <ffffffff998a19ba>
+ => do_user_addr_fault <ffffffff99688734>
+ => exc_page_fault <ffffffff9a07bcd7>
+ => asm_exc_page_fault <ffffffff9a200ace>
+
+-- 
+Mel Gorman
+SUSE Labs

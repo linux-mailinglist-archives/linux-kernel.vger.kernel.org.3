@@ -2,138 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D33464D26
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02080464D27
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243066AbhLALpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237407AbhLALoy (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:44:54 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557ACC061574;
-        Wed,  1 Dec 2021 03:41:33 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A1C6BCE1DCE;
-        Wed,  1 Dec 2021 11:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CCEC53FCC;
-        Wed,  1 Dec 2021 11:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638358889;
-        bh=wH45hyQlmJM24maz22UNQq+SE3Cp0npAZJ/TYl3zh8Q=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dhv5MG0GtQQK4AeuZIuluh9je1D2S0MtQgwZ2z+DUDoV7ftOZ3meYHM+8qYGi2KHB
-         rSB9JfxsUKWGnQDA/Dg0Fc1uqgrBB0Zh382SHMf0XX1RG/RPSFt5s9cZTwCNnOdqjn
-         er4y6Lh+ZHpZKJlUzZYn4TrFD+SnUjqR/hPXI65JP9uMslw2laifaNJm1rBRAkVWyc
-         m4uZYF4ZazfZN7bhHr/G7jPajr5hntDdFKKzRQmY1ReFFF0dZShEWl20wibFpK4QuE
-         aPFyYDoAldqjOm5ZdE3xJoFCSKu3CfaVaa5zBLT1AtIAKCAmlibwiQs7PijSb4t6j1
-         rzso3/JmO6+uw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=hot-poop.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1msNzL-0096wy-Cw; Wed, 01 Dec 2021 11:41:27 +0000
-From:   Marc Zyngier <maz@kernel.org>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     kernel-team@android.com, Rob Herring <robh@kernel.org>,
-        John Crispin <john@phrozen.org>, Biwen Li <biwen.li@nxp.com>,
-        Chris Brandt <chris.brandt@renesas.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH v2] of/irq: Add a quirk for controllers with their own definition of interrupt-map
-Date:   Wed,  1 Dec 2021 11:41:02 +0000
-Message-Id: <20211201114102.13446-1-maz@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S243747AbhLALpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:45:51 -0500
+Received: from mga12.intel.com ([192.55.52.136]:1072 "EHLO mga12.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S232547AbhLALpt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 06:45:49 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216458001"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="216458001"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 03:42:27 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="677233137"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 01 Dec 2021 03:42:26 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msO0H-000Eq3-Me; Wed, 01 Dec 2021 11:42:25 +0000
+Date:   Wed, 01 Dec 2021 19:41:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:core/entry] BUILD SUCCESS
+ 985faa78687de6e583cfd8b8094d87dcb80c33a6
+Message-ID: <61a75f7c.qNWuYBAh+LarRimq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, kernel-team@android.com, robh@kernel.org, john@phrozen.org, biwen.li@nxp.com, chris.brandt@renesas.com, geert+renesas@glider.be, sander@svanheule.net
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since 041284181226 ("of/irq: Allow matching of an interrupt-map local
-to an interrupt controller"), a handful of interrupt controllers have
-stopped working correctly. This is due to the DT exposing a non-sensical
-interrupt-map property, and their drivers relying on the kernel ignoring
-this property.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/entry
+branch HEAD: 985faa78687de6e583cfd8b8094d87dcb80c33a6  powerpc: Snapshot thread flags
 
-Since we cannot realistically fix this terrible behaviour, add a quirk
-for the limited set of devices that have implemented this monster,
-and document that this is a pretty bad practice.
+elapsed time: 731m
 
-Cc: Rob Herring <robh@kernel.org>
-Cc: John Crispin <john@phrozen.org>
-Cc: Biwen Li <biwen.li@nxp.com>
-Cc: Chris Brandt <chris.brandt@renesas.com>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Sander Vanheule <sander@svanheule.net>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
+configs tested: 174
+configs skipped: 4
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm                                 defconfig
+arm64                            allyesconfig
+arm64                               defconfig
+arm                              allyesconfig
+arm                              allmodconfig
+i386                 randconfig-c001-20211201
+i386                 randconfig-c001-20211128
+sh                           se7750_defconfig
+powerpc                      pasemi_defconfig
+sh                               alldefconfig
+arm                       imx_v6_v7_defconfig
+powerpc                      acadia_defconfig
+m68k                        m5272c3_defconfig
+sh                          polaris_defconfig
+powerpc                    adder875_defconfig
+sh                        edosk7760_defconfig
+powerpc                       holly_defconfig
+arm                      footbridge_defconfig
+xtensa                  cadence_csp_defconfig
+um                               alldefconfig
+mips                           ci20_defconfig
+sh                          rsk7201_defconfig
+mips                           rs90_defconfig
+arm                       netwinder_defconfig
+arm                       versatile_defconfig
+arm                        magician_defconfig
+powerpc                   currituck_defconfig
+m68k                            q40_defconfig
+sh                ecovec24-romimage_defconfig
+ia64                          tiger_defconfig
+powerpc                     sequoia_defconfig
+arm                     am200epdkit_defconfig
+powerpc                 mpc834x_mds_defconfig
+sh                          rsk7264_defconfig
+arm                            mmp2_defconfig
+arm                           tegra_defconfig
+arm                           corgi_defconfig
+s390                             alldefconfig
+arm                       multi_v4t_defconfig
+arm                     eseries_pxa_defconfig
+sparc64                             defconfig
+sh                            shmin_defconfig
+powerpc                 mpc837x_mds_defconfig
+mips                        workpad_defconfig
+nios2                            alldefconfig
+arm                         socfpga_defconfig
+mips                     decstation_defconfig
+arm                         vf610m4_defconfig
+sh                          landisk_defconfig
+arm                       cns3420vb_defconfig
+mips                        vocore2_defconfig
+sh                           se7721_defconfig
+arm                  randconfig-c002-20211128
+ia64                             allmodconfig
+ia64                                defconfig
+ia64                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+m68k                             allyesconfig
+nios2                               defconfig
+arc                              allyesconfig
+nds32                             allnoconfig
+nds32                               defconfig
+nios2                            allyesconfig
+csky                                defconfig
+alpha                               defconfig
+alpha                            allyesconfig
+xtensa                           allyesconfig
+h8300                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allyesconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+sparc                               defconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                          allmodconfig
+powerpc                           allnoconfig
+x86_64               randconfig-a006-20211201
+x86_64               randconfig-a005-20211201
+x86_64               randconfig-a001-20211201
+x86_64               randconfig-a002-20211201
+x86_64               randconfig-a004-20211201
+x86_64               randconfig-a003-20211201
+i386                 randconfig-a005-20211130
+i386                 randconfig-a002-20211130
+i386                 randconfig-a006-20211130
+i386                 randconfig-a004-20211130
+i386                 randconfig-a003-20211130
+i386                 randconfig-a001-20211130
+i386                 randconfig-a001-20211129
+i386                 randconfig-a002-20211129
+i386                 randconfig-a006-20211129
+i386                 randconfig-a005-20211129
+i386                 randconfig-a004-20211129
+i386                 randconfig-a003-20211129
+x86_64               randconfig-a011-20211128
+x86_64               randconfig-a014-20211128
+x86_64               randconfig-a012-20211128
+x86_64               randconfig-a016-20211128
+x86_64               randconfig-a013-20211128
+x86_64               randconfig-a015-20211128
+i386                 randconfig-a015-20211128
+i386                 randconfig-a016-20211128
+i386                 randconfig-a013-20211128
+i386                 randconfig-a012-20211128
+i386                 randconfig-a014-20211128
+i386                 randconfig-a011-20211128
+arc                  randconfig-r043-20211128
+s390                 randconfig-r044-20211128
+riscv                randconfig-r042-20211128
+riscv                    nommu_k210_defconfig
+riscv                            allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                             allnoconfig
+riscv                               defconfig
+riscv                          rv32_defconfig
+riscv                            allmodconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           allyesconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+
+clang tested configs:
+s390                 randconfig-c005-20211128
+i386                 randconfig-c001-20211128
+riscv                randconfig-c006-20211128
+arm                  randconfig-c002-20211128
+powerpc              randconfig-c003-20211128
+x86_64               randconfig-c007-20211128
+mips                 randconfig-c004-20211128
+x86_64               randconfig-a001-20211128
+x86_64               randconfig-a006-20211128
+x86_64               randconfig-a003-20211128
+x86_64               randconfig-a005-20211128
+x86_64               randconfig-a004-20211128
+x86_64               randconfig-a002-20211128
+i386                 randconfig-a001-20211128
+i386                 randconfig-a002-20211128
+i386                 randconfig-a006-20211128
+i386                 randconfig-a005-20211128
+i386                 randconfig-a004-20211128
+i386                 randconfig-a003-20211128
+x86_64               randconfig-a016-20211201
+x86_64               randconfig-a011-20211201
+x86_64               randconfig-a013-20211201
+x86_64               randconfig-a015-20211201
+x86_64               randconfig-a012-20211201
+x86_64               randconfig-a014-20211201
+i386                 randconfig-a011-20211130
+i386                 randconfig-a015-20211130
+i386                 randconfig-a012-20211130
+i386                 randconfig-a013-20211130
+i386                 randconfig-a014-20211130
+i386                 randconfig-a016-20211130
+i386                 randconfig-a015-20211129
+i386                 randconfig-a016-20211129
+i386                 randconfig-a013-20211129
+i386                 randconfig-a012-20211129
+i386                 randconfig-a014-20211129
+i386                 randconfig-a011-20211129
+hexagon              randconfig-r045-20211129
+hexagon              randconfig-r041-20211129
+s390                 randconfig-r044-20211129
+riscv                randconfig-r042-20211129
+
 ---
-
-Notes:
-    v2: Switched over to of_device_compatible_match() as per Rob's
-        request.
-
- drivers/of/irq.c | 28 ++++++++++++++++++++++++++--
- 1 file changed, 26 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/of/irq.c b/drivers/of/irq.c
-index b10f015b2e37..65a325aad984 100644
---- a/drivers/of/irq.c
-+++ b/drivers/of/irq.c
-@@ -76,6 +76,26 @@ struct device_node *of_irq_find_parent(struct device_node *child)
- }
- EXPORT_SYMBOL_GPL(of_irq_find_parent);
- 
-+/*
-+ * These interrupt controllers abuse interrupt-map for unspeakable
-+ * reasons and rely on the core code to *ignore* it (the drivers do
-+ * their own parsing of the property).
-+ *
-+ * If you think of adding to the list for something *new*, think
-+ * again. There is a high chance that you will be sent back to the
-+ * drawing board.
-+ */
-+static const char * const of_irq_imap_abusers[] = {
-+	"CBEA,platform-spider-pic",
-+	"sti,platform-spider-pic",
-+	"realtek,rtl-intc",
-+	"fsl,ls1021a-extirq",
-+	"fsl,ls1043a-extirq",
-+	"fsl,ls1088a-extirq",
-+	"renesas,rza1-irqc",
-+	NULL,
-+};
-+
- /**
-  * of_irq_parse_raw - Low level interrupt tree parsing
-  * @addr:	address specifier (start of "reg" property of the device) in be32 format
-@@ -159,12 +179,16 @@ int of_irq_parse_raw(const __be32 *addr, struct of_phandle_args *out_irq)
- 		/*
- 		 * Now check if cursor is an interrupt-controller and
- 		 * if it is then we are done, unless there is an
--		 * interrupt-map which takes precedence.
-+		 * interrupt-map which takes precedence if we're not
-+		 * in presence of once of these broken platform that
-+		 * want to parse interrupt-map themselves for $reason.
- 		 */
- 		bool intc = of_property_read_bool(ipar, "interrupt-controller");
-+		bool imap_abuse;
- 
- 		imap = of_get_property(ipar, "interrupt-map", &imaplen);
--		if (imap == NULL && intc) {
-+		imap_abuse = imap && of_device_compatible_match(ipar, of_irq_imap_abusers);
-+		if (intc && (imap == NULL || imap_abuse)) {
- 			pr_debug(" -> got it !\n");
- 			return 0;
- 		}
--- 
-2.30.2
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

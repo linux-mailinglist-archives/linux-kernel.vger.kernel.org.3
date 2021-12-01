@@ -2,109 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 18E3D464A46
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:00:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 613D5464A43
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348118AbhLAJDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 04:03:48 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:45492 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236969AbhLAJDr (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:03:47 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 664D0212B8;
-        Wed,  1 Dec 2021 09:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638349225; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DvU9WOqQxuHtnAuEXjV4GD1n4RLlFIXDYVXvgUC7354=;
-        b=1o3oGHPAOuUL4G7Vy+shm75HBgD+KsWoecUT6MIOS7ieR9j6A56puG7phFrfrBDvgX/WLZ
-        JhnZNALK4+qhJrhc0D0K6Mklv9LiKQ09QCJcmddxInIWN9exXlyoWPWxu67JliT/J670co
-        V+eT8R35rjCi+ulkfXc2haMYdMQRd4U=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638349225;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DvU9WOqQxuHtnAuEXjV4GD1n4RLlFIXDYVXvgUC7354=;
-        b=ytoiF+w1Q5Bqi7iRUcq2kUzl4qToaIU1QEUc15cRA5pTr7AUJ2meaXtOp9g59HmhHli7tu
-        yHI4az2CbJ6VxLAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5819413BAA;
-        Wed,  1 Dec 2021 09:00:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sv5AFak5p2EYOwAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 09:00:25 +0000
-Subject: Re: [PATCH 0/7] docs: consolidate sysfs-block into Documentation/ABI/
-To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-doc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20211201084524.25660-1-ebiggers@kernel.org>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <91d14cdc-643c-58a8-37b7-af9d20747d2b@suse.de>
-Date:   Wed, 1 Dec 2021 10:00:25 +0100
+        id S1348077AbhLAJD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 04:03:27 -0500
+Received: from mga03.intel.com ([134.134.136.65]:62925 "EHLO mga03.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242056AbhLAJDW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 04:03:22 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236361932"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="236361932"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 01:00:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="654693452"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmsmga001.fm.intel.com with ESMTP; 01 Dec 2021 00:59:58 -0800
+Subject: Re: [PATCH] xhci: Remove CONFIG_USB_DEFAULT_PERSIST to prevent xHCI
+ from runtime suspending
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        mathias.nyman@intel.com
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20211119092628.677935-1-kai.heng.feng@canonical.com>
+ <CAAd53p4CpEQR0Y5XDN5E7xZ-iw2GG=gGMSm2Vd=V_M1LLEuuCA@mail.gmail.com>
+From:   Mathias Nyman <mathias.nyman@linux.intel.com>
+Message-ID: <b7595524-1041-8b8b-dc61-9ee0acbc8307@linux.intel.com>
+Date:   Wed, 1 Dec 2021 11:01:33 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+ Firefox/78.0 Thunderbird/78.8.1
 MIME-Version: 1.0
-In-Reply-To: <20211201084524.25660-1-ebiggers@kernel.org>
+In-Reply-To: <CAAd53p4CpEQR0Y5XDN5E7xZ-iw2GG=gGMSm2Vd=V_M1LLEuuCA@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 9:45 AM, Eric Biggers wrote:
-> This series consolidates the documentation for /sys/block/<disk>/queue/
-> into Documentation/ABI/, where it is supposed to go (as per Greg KH:
-> https://lore.kernel.org/r/YaXXpEAwVGTLjp1e@kroah.com).
+On 1.12.2021 2.19, Kai-Heng Feng wrote:
+> On Fri, Nov 19, 2021 at 5:27 PM Kai-Heng Feng
+> <kai.heng.feng@canonical.com> wrote:
+>>
+>> When the xHCI is quirked with XHCI_RESET_ON_RESUME, runtime resume
+>> routine also resets the controller.
+>>
+>> This is bad for USB drivers without reset_resume callback, because
+>> there's no subsequent call of usb_dev_complete() ->
+>> usb_resume_complete() to force rebinding the driver to the device. For
+>> instance, btusb device stops working after xHCI controller is runtime
+>> resumed, if the controlled is quirked with XHCI_RESET_ON_RESUME.
+>>
+>> So always take XHCI_RESET_ON_RESUME into account to solve the issue.
+>>
+>> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 > 
-> This series also updates MAINTAINERS to associate the block
-> documentation with the block layer.
-> 
-> This series applies to linux-block/for-next.
-> 
-> Eric Biggers (7):
->   docs: sysfs-block: sort alphabetically
->   docs: sysfs-block: add contact for nomerges
->   docs: sysfs-block: fill in missing documentation from queue-sysfs.rst
->   docs: sysfs-block: document stable_writes
->   docs: sysfs-block: document virt_boundary_mask
->   docs: block: remove queue-sysfs.rst
->   MAINTAINERS: add entries for block layer documentation
-> 
->  Documentation/ABI/testing/sysfs-block | 766 ++++++++++++++++++--------
->  Documentation/block/index.rst         |   1 -
->  Documentation/block/queue-sysfs.rst   | 321 -----------
->  MAINTAINERS                           |   2 +
->  4 files changed, 545 insertions(+), 545 deletions(-)
->  delete mode 100644 Documentation/block/queue-sysfs.rst
-> 
-> 
-> base-commit: c2626d30f312afc341158e07bf088f5a23b4eeeb
-> 
-Yay.
+> A gentle ping...
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+Thanks
+Adding to queue
 
-Cheers,
-
-Hannes
--- 
-Dr. Hannes Reinecke		           Kernel Storage Architect
-hare@suse.de			                  +49 911 74053 688
-SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
+-Mathias

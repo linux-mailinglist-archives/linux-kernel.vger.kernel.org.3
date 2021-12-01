@@ -2,99 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 900A2464758
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 07:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 881FE46475B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 07:46:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240049AbhLAGsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 01:48:40 -0500
-Received: from smtp-out2.suse.de ([195.135.220.29]:40362 "EHLO
-        smtp-out2.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbhLAGsi (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 01:48:38 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 964151FD58;
-        Wed,  1 Dec 2021 06:45:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638341116; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tMhHLjMDal40aoJPgixW4AZWOZicKmK6zULWZcT34w0=;
-        b=bR1Haya9j6KKtmezsJOqIuJOv84iymar9dU0waJJV++gGLOprPsuiEZzQkfA/07SyDIk1G
-        NDmy8nfp5NJFHkrfbP6QNJiCptL9hEqNHH6/2pe+04PXFZryo15STKTPApf9hmB0j2LZfc
-        srNqY2A/nVCapYP/9l6IpXvmL6RucmI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638341116;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tMhHLjMDal40aoJPgixW4AZWOZicKmK6zULWZcT34w0=;
-        b=Zyy9lQ9v6ZSkldI9XKKBzbi46QYKGNM+XzDlCooLFbF0YzO2PDR/jOk88xwrCz67eyyV+L
-        gW5/wwlPC9nK4TDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6977113425;
-        Wed,  1 Dec 2021 06:45:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id dzxkGPwZp2F4CAAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 06:45:16 +0000
-Subject: Re: [PATCH v2 3/3] blk-crypto: show crypto capabilities in sysfs
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-mmc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bart Van Assche <bvanassche@acm.org>
-References: <20211130040306.148925-1-ebiggers@kernel.org>
- <20211130040306.148925-4-ebiggers@kernel.org>
- <8745aed7-d4b6-eb8d-60ad-f4d768d62a62@suse.de>
- <YaXVXU77yvKUyVwg@sol.localdomain>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <ea5db68e-8d2b-b242-bf81-9fce29cdde83@suse.de>
-Date:   Wed, 1 Dec 2021 07:45:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        id S240211AbhLAGtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 01:49:33 -0500
+Received: from mga04.intel.com ([192.55.52.120]:48646 "EHLO mga04.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229492AbhLAGtb (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 01:49:31 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="235125554"
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="235125554"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 22:46:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
+   d="scan'208";a="477433087"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 30 Nov 2021 22:46:08 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msJNY-000EOq-0m; Wed, 01 Dec 2021 06:46:08 +0000
+Date:   Wed, 1 Dec 2021 14:45:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] powerpc/inst: Optimise
+ copy_inst_from_kernel_nofault()
+Message-ID: <202112011435.ttoYYtbC-lkp@intel.com>
+References: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-In-Reply-To: <YaXVXU77yvKUyVwg@sol.localdomain>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d5b12183d5176dd702d29ad94c39c384e51c78f.1638208156.git.christophe.leroy@csgroup.eu>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30/21 8:40 AM, Eric Biggers wrote:
-> On Tue, Nov 30, 2021 at 07:49:54AM +0100, Hannes Reinecke wrote:
->>>     - "modes" is a sub-subdirectory, since there may be multiple supported
->>>       crypto modes, and sysfs is supposed to have one value per file.
->>>
->> Why do you have a sub-directory here?
->>  From what I can see, that subdirectory just contains the supported modes, so
->> wouldn't it be easier to create individual files like 'mode_<modename>'
->> instead of a subdirectory?
-> 
-> It is a group of attributes, so it makes sense to group them together rather
-> than put them all in the parent directory alongside other attributes.  It also
-> allows the use of proper names like "AES-256-XTS" rather than weird names like
-> "mode_AES-256-XTS" or "mode_aes_256_xts".
-> 
-Right.
+Hi Christophe,
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+I love your patch! Perhaps something to improve:
 
-Cheers,
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on v5.16-rc3 next-20211201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+url:    https://github.com/0day-ci/linux/commits/Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+config: powerpc64-randconfig-r021-20211201 (https://download.01.org/0day-ci/archive/20211201/202112011435.ttoYYtbC-lkp@intel.com/config)
+compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc64 cross compiling tool for clang build
+        # apt-get install binutils-powerpc64-linux-gnu
+        # https://github.com/0day-ci/linux/commit/fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Christophe-Leroy/powerpc-inst-Refactor-___get_user_instr/20211130-015346
+        git checkout fb7bff30cc0efc7e4df1b48bb69de1f325eee826
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:47:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(insl, (unsigned long p, void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:143:1: note: expanded from here
+   __do_insl
+   ^
+   arch/powerpc/include/asm/io.h:558:56: note: expanded from macro '__do_insl'
+   #define __do_insl(p, b, n)      readsl((PCI_IO_ADDR)_IO_BASE+(p), (b), (n))
+                                          ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:49:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsb, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:145:1: note: expanded from here
+   __do_outsb
+   ^
+   arch/powerpc/include/asm/io.h:559:58: note: expanded from macro '__do_outsb'
+   #define __do_outsb(p, b, n)     writesb((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:51:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsw, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:147:1: note: expanded from here
+   __do_outsw
+   ^
+   arch/powerpc/include/asm/io.h:560:58: note: expanded from macro '__do_outsw'
+   #define __do_outsw(p, b, n)     writesw((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:21:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/powerpc/include/asm/hardirq.h:6:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/powerpc/include/asm/io.h:619:
+   arch/powerpc/include/asm/io-defs.h:53:1: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+   DEF_PCI_AC_NORET(outsl, (unsigned long p, const void *b, unsigned long c),
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h:616:3: note: expanded from macro 'DEF_PCI_AC_NORET'
+                   __do_##name al;                                 \
+                   ^~~~~~~~~~~~~~
+   <scratch space>:149:1: note: expanded from here
+   __do_outsl
+   ^
+   arch/powerpc/include/asm/io.h:561:58: note: expanded from macro '__do_outsl'
+   #define __do_outsl(p, b, n)     writesl((PCI_IO_ADDR)_IO_BASE+(p),(b),(n))
+                                           ~~~~~~~~~~~~~~~~~~~~~^
+   In file included from arch/powerpc/kernel/asm-offsets.c:71:
+   In file included from arch/powerpc/kernel/../xmon/xmon_bpts.h:7:
+   arch/powerpc/include/asm/inst.h:161:41: warning: variable 'val' is uninitialized when used here [-Wuninitialized]
+           if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
+                                                  ^~~
+   arch/powerpc/include/asm/inst.h:155:18: note: initialize the variable 'val' to silence this warning
+           unsigned int val, suffix;
+                           ^
+                            = 0
+>> arch/powerpc/include/asm/inst.h:163:32: warning: variable 'suffix' is uninitialized when used here [-Wuninitialized]
+                   *inst = ppc_inst_prefix(val, suffix);
+                                                ^~~~~~
+   arch/powerpc/include/asm/inst.h:62:69: note: expanded from macro 'ppc_inst_prefix'
+   #define ppc_inst_prefix(x, y) ((ppc_inst_t){ .val = (x), .suffix = (y) })
+                                                                       ^
+   arch/powerpc/include/asm/inst.h:155:26: note: initialize the variable 'suffix' to silence this warning
+           unsigned int val, suffix;
+                                   ^
+                                    = 0
+   14 warnings generated.
+   <stdin>:1559:2: warning: syscall futex_waitv not implemented [-W#warnings]
+   #warning syscall futex_waitv not implemented
+    ^
+   1 warning generated.
+   /usr/bin/ld: unrecognised emulation mode: elf64ppc
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+   clang-14: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso64/Makefile:44: arch/powerpc/kernel/vdso64/vdso64.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso64-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:422: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/suffix +163 arch/powerpc/include/asm/inst.h
+
+   152	
+   153	static inline int copy_inst_from_kernel_nofault(ppc_inst_t *inst, u32 *src)
+   154	{
+   155		unsigned int val, suffix;
+   156	
+   157		if (unlikely(!is_kernel_addr((unsigned long)src)))
+   158			return -ERANGE;
+   159	
+   160		__get_kernel_nofault(&val, src, u32, Efault);
+   161		if (IS_ENABLED(CONFIG_PPC64) && get_op(val) == OP_PREFIX) {
+   162			__get_kernel_nofault(&suffix, src + 1, u32, Efault);
+ > 163			*inst = ppc_inst_prefix(val, suffix);
+   164		} else {
+   165			*inst = ppc_inst(val);
+   166		}
+   167		return 0;
+   168	Efault:
+   169		return -EFAULT;
+   170	}
+   171	
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

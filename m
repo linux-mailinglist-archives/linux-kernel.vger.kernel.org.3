@@ -2,89 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CDE465901
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:19:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A017F465903
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353536AbhLAWWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:22:01 -0500
-Received: from mail-ot1-f43.google.com ([209.85.210.43]:34401 "EHLO
-        mail-ot1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353541AbhLAWVW (ORCPT
+        id S1343568AbhLAWWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:22:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353542AbhLAWVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 17:21:22 -0500
-Received: by mail-ot1-f43.google.com with SMTP id x19-20020a9d7053000000b0055c8b39420bso37327217otj.1;
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E5FC061757;
+        Wed,  1 Dec 2021 14:18:01 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id j6-20020a17090a588600b001a78a5ce46aso906057pji.0;
         Wed, 01 Dec 2021 14:18:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=9GHGfbVb+zpYK3Me5+9au4jIqY/+rfyjn1Fy67PyxmM=;
+        b=jBvpHn8/Akn/Ir/RWScbDdUxaYS0kuEUQPE1gXMlI7jsjpb75nbYC7axau0ts0iMjf
+         1/vSH/w22TLb//arII2/ce7p7eCzG1CQGmlGST09jr3rL/kEG+CePeAOKIDH+4T0TMfN
+         qSmkTYidcuLgk0+XNOq/Bdqrpkm2aupeZ+SE1RCgsWA2IxaTGLm7B8jzoFlP2VnE1Bbo
+         AB50TZR/bo9tWoAlv0n+w7daYwH7ceUvNkEp/PZ1iWmqljXH1aOktRIccekekd9tI04g
+         QbDVa9l4SsiW8tFVUAl1xhnvIqXLu2DCdv6IaM1L1e5sGPkOR94BjjmdbcxCHl7EjEsN
+         6mpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kXwYki9C7SCtlqO4/jeETUKBsjz0PzUf21ILjNiLQyw=;
-        b=gYWhosJqV7aqLqlJv9eGzMA8bs+ZcYrwTpCNCA6kTE2/6z3awWWNcjGG/Rr5+Ghhal
-         +gbUTUuwFrEJhyNELlgy4M49KzPUsLm9RIvddHy9LZaX2IAQEmsNWqVNaHrwrt+aOp6K
-         +HmCQRX+5SKyfiX/8krIyK2jZVkH1h5mfTGYxSMOMjKiTfRcKDdKIqJrJSP/Kp3MNd42
-         DpqYLbORrgA4eDs2A+8Rul+JmW8/3JzQNKL3Z2o54EnJpj5nww+tvcnG0TlXOgxfYVQ8
-         sXJSs6/0GgodyF6F9F/olD0iXocAFMiWSlkYw1xbPwJKcQrEYLQM6Bv95DKQpZN1HEAr
-         jMOA==
-X-Gm-Message-State: AOAM533cedSEpKEf4vDZDo4U2tPafwA2cS6Y6xNfqOkNcQNgfaYuDurs
-        2aPBewLGrv2+hGzTcg0AmDqYGKODnw==
-X-Google-Smtp-Source: ABdhPJxQpKy6n45A0momIwrGcdNliZN06piz12sLj7hj8nwCyjvva9k8SOh7LE9u/aPRWKEU86CANQ==
-X-Received: by 2002:a9d:4702:: with SMTP id a2mr8286254otf.262.1638397080344;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=9GHGfbVb+zpYK3Me5+9au4jIqY/+rfyjn1Fy67PyxmM=;
+        b=g3j6F4LgTfefb9aCitAg/AljlopbAKNrZGExv5IkgwhW3g9I/gtl2FccPzGu+2Ylv1
+         /0jU/HBXksurSCLmGZ2Ez/FQtpAwcA8aGMlS0S6fehQ5O6MChBs0F4WhDujgIC6/OyUa
+         WoK/iEs74kTyy88mHyhjZTqhY64kS25ptB5YtUQmT4diRiNPCgQIOc1bTxsiYQaHPdRr
+         debo4BYqnDYwu4mcuwZOEUYxjtXMgy6UIzawN3drq2PfxXp+/Um4vaUXI2mPQyTJSatb
+         4z7JrQgd1PXzWD1FeAqxST4XncRWVEw9+jvRBLzBFjTyXfTsDg4MwacFDsroN+sQjm2K
+         fQuw==
+X-Gm-Message-State: AOAM530UJfsIwY+B0VuzI+Pq8Pg+/jYx9yF11y1+8fh3m27acFw74Yzz
+        tW5uk5ku9aoxKRyvU8iNR8o=
+X-Google-Smtp-Source: ABdhPJycufUPwH+Aburdlol0VWSDH6OER9iK5cmsjopZZ0d04CdDJYgumiued6cBwez/K1RqS0SVFQ==
+X-Received: by 2002:a17:90b:1d0e:: with SMTP id on14mr1236497pjb.3.1638397080890;
         Wed, 01 Dec 2021 14:18:00 -0800 (PST)
-Received: from robh.at.kernel.org (66-90-148-213.dyn.grandenetworks.net. [66.90.148.213])
-        by smtp.gmail.com with ESMTPSA id bq5sm601787oib.55.2021.12.01.14.17.58
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id t38sm787561pfg.218.2021.12.01.14.17.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 14:17:59 -0800 (PST)
-Received: (nullmailer pid 2829751 invoked by uid 1000);
-        Wed, 01 Dec 2021 22:17:58 -0000
-Date:   Wed, 1 Dec 2021 16:17:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Ivan Bornyakov <i.bornyakov@metrotek.ru>
-Cc:     system@metrotek.ru, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        Wed, 01 Dec 2021 14:18:00 -0800 (PST)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <zajec5@gmail.com>
+Cc:     Hauke Mehrtens <hauke@hauke-m.de>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] dt-bindings: bus: imx-weim: add words about
- continuous bclk
-Message-ID: <Yaf0lvD3H5ylZY8d@robh.at.kernel.org>
-References: <20211124175542.2772-1-i.bornyakov@metrotek.ru>
- <20211124175542.2772-3-i.bornyakov@metrotek.ru>
+        linux-doc@vger.kernel.org,
+        =?iso-8859-2?q?Rafa=B3_Mi=B3ecki?= <rafal@milecki.pl>
+Subject: Re: [PATCH] MAINTAINERS: Add Florian as BCM5301X and BCM53573 maintainer
+Date:   Wed,  1 Dec 2021 14:17:59 -0800
+Message-Id: <20211201221759.48731-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211201211939.13087-1-zajec5@gmail.com>
+References: <20211201211939.13087-1-zajec5@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211124175542.2772-3-i.bornyakov@metrotek.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 08:55:42PM +0300, Ivan Bornyakov wrote:
-> Document continuous Burst Clock option. With this option Burst Clock, if
-> enabled, will output continuous clock, otherwise Burst Clock will output
-> clock only when necessary.
-
-Missing S-o-b. checkpatch.pl will tell you this.
-
+On Wed,  1 Dec 2021 22:19:39 +0100, Rafał Miłecki <zajec5@gmail.com> wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> BCM5301X and BCM53573 commits go through Florian's stblinux.git so add
+> him as maintainer to make sure people e-mail him when sending patches.
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
 > ---
->  Documentation/devicetree/bindings/bus/imx-weim.txt | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/bus/imx-weim.txt b/Documentation/devicetree/bindings/bus/imx-weim.txt
-> index 1b1d1c5c21ea..e7f502070d77 100644
-> --- a/Documentation/devicetree/bindings/bus/imx-weim.txt
-> +++ b/Documentation/devicetree/bindings/bus/imx-weim.txt
-> @@ -48,6 +48,11 @@ Optional properties:
->  			devices, the presence of this property indicates that
->  			the weim bus should operate in Burst Clock Mode.
->  
-> + - fsl,continuous-burst-clk	Make Burst Clock to output continuous clock.
-> +			Without this option Burst Clock will output clock
-> +			only when necessary. This takes effect only if
-> +			"fsl,burst-clk-enable" is set.
-> +
->  Timing property for child nodes. It is mandatory, not optional.
->  
->   - fsl,weim-cs-timing:	The timing array, contains timing values for the
-> -- 
-> 2.32.0
-> 
-> 
-> 
+
+Applied to https://github.com/Broadcom/stblinux/commits/maintainers/next, thanks!
+--
+Florian

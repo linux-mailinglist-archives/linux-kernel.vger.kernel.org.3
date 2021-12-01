@@ -2,111 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC6F4652F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:40:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9D7465305
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351465AbhLAQnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:43:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S243645AbhLAQom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:44:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238010AbhLAQnk (ORCPT
+        with ESMTP id S238010AbhLAQoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:43:40 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF27C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:40:19 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id n8so18150183plf.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:40:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=y8cmWY4Zar66oxROb9aCaWg+WHCdO5TorclDxazoih0=;
-        b=KMrgAdmxIQ8K3dFwdZP0KgMke/VWmOiwmkpwK8XtO5jg0bv+IwT6kwy5QeCS8cVmkG
-         iXva0YNAfh0jDs3F2vVeVDeeSEVNtLaDMU2jGFO9dRGbP5aXdL3iPH4S0TdEOsAPotsb
-         vAd3VHhwy3mFo4QwZrOfawXcT16vzNk/wWXh0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=y8cmWY4Zar66oxROb9aCaWg+WHCdO5TorclDxazoih0=;
-        b=lm4CeYuP/2b9hzUvRac5Dox/Ou7bz6eoZ/qx+5RuQ4ouFadcaTOQUtgZYCacU6sZkI
-         LcocRc0oUFHWLMxg+1JBzlqup/STD7rHSff2buzT6Bps+rqXvTobXxM0vYctfabQhcri
-         jfhqxyrvKT5TpNQ6Y6ZTdCiSvs/KzGOPWMRI8Y06+TgOwV5/exK6p7N03LQf1p13etPs
-         D6vGIukFNxSlzsOB9VK6NtXnQHskNEtUVyGKEjdNePY9eXAvwyL/Sw+sYiGl32eUiEI/
-         W27vqXzv9lVfiDjgJ0cHNxdTADB3HGB3sukLevpkj7NXgjncy07b3giIYGD+CFXj99IZ
-         G8/w==
-X-Gm-Message-State: AOAM532+VJJq5zuOy4PKlvdCxw8D2CfQ0rAroGYw6Hy74PMQxcXe3ZKe
-        cPrNBK2HVTnHp4paptflNUFOWQ==
-X-Google-Smtp-Source: ABdhPJwJfw+rygwnhuiEpbRB+v+vZNeROz8C/SXUcdZBzJqV6OaozK2TnS2SEtEqIW0r9VUrX4HDWg==
-X-Received: by 2002:a17:90b:3ec2:: with SMTP id rm2mr9031549pjb.1.1638376818926;
-        Wed, 01 Dec 2021 08:40:18 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t13sm322535pfl.98.2021.12.01.08.40.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 08:40:18 -0800 (PST)
-Date:   Wed, 1 Dec 2021 08:40:17 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Alejandro Colomar <alx.manpages@gmail.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Christian Heimes <christian@python.org>,
-        Deven Bowers <deven.desai@linux.microsoft.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Eric Chiang <ericchiang@google.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        James Morris <jmorris@namei.org>, Jan Kara <jack@suse.cz>,
-        Jann Horn <jannh@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
-        "Madhavan T . Venkataraman" <madvenka@linux.microsoft.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Philippe =?iso-8859-1?Q?Tr=E9buchet?= 
-        <philippe.trebuchet@ssi.gouv.fr>,
-        Scott Shell <scottsh@microsoft.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steve Dower <steve.dower@python.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Thibaut Sautereau <thibaut.sautereau@ssi.gouv.fr>,
-        Vincent Strubel <vincent.strubel@ssi.gouv.fr>,
-        Yin Fengwei <fengwei.yin@intel.com>,
-        kernel-hardening@lists.openwall.com, linux-api@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v17 0/3] Add trusted_for(2) (was O_MAYEXEC)
-Message-ID: <202112010839.4362C7A70@keescook>
-References: <20211115185304.198460-1-mic@digikod.net>
+        Wed, 1 Dec 2021 11:44:39 -0500
+Received: from metanate.com (unknown [IPv6:2001:8b0:1628:5005::111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DBCDC061574;
+        Wed,  1 Dec 2021 08:41:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=metanate.com; s=stronger; h=In-Reply-To:Content-Type:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:Content-ID:
+        Content-Description; bh=UcsZNFJ29LeSfPD1DvV+HXT2vn7e0UO+Ekn6RYipnT8=; b=ooC8t
+        H6bSMSLw8D8WZF9q5yorIyTFuzcyqVttg7rVykgQmNQc35kxZHVhHvJGC5Awa5sVJwzZYLjAxty+e
+        CZHwFaxvs/v7SyyjGm5fLQvbjwb9jE0IwIvCvW6kPXlGek5xXZRcgNNHzTo0Qn+P32vtjVIQMb5Yw
+        Mz58OSqxYQe6HSe0CP/DbPqTEJuiP8pKyHvJKUFiaROP8r1lnmRAUv6iiuuKrUNKch3R2qO9L0x9X
+        j0DM11NlZF2iqsJV0CB6dgLjBpeZdz12iCjr5i4RPevWZOxHmnKq08iryo+YZM3Hq2FjheO5Pg2G+
+        9Wi5Nh8hITIw3/M08p4wuoigvjVaA==;
+Received: from [81.174.171.191] (helo=donbot)
+        by email.metanate.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <john@metanate.com>)
+        id 1msSfP-0000kl-F6; Wed, 01 Dec 2021 16:41:11 +0000
+Date:   Wed, 1 Dec 2021 16:41:10 +0000
+From:   John Keeping <john@metanate.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_jackp@quicinc.com
+Subject: Re: [PATCH] usb: gadget: f_fs: Wake up IO thread during disconnect
+Message-ID: <YaelpmsJXmhTY4A0@donbot>
+References: <20211201100205.25448-1-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211115185304.198460-1-mic@digikod.net>
+In-Reply-To: <20211201100205.25448-1-quic_wcheng@quicinc.com>
+X-Authenticated: YES
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 15, 2021 at 07:53:01PM +0100, Mickaël Salaün wrote:
-> Andrew, can you please consider to merge this into your tree?
+On Wed, Dec 01, 2021 at 02:02:05AM -0800, Wesley Cheng wrote:
+> During device disconnect or composition unbind, applications should be
+> notified that the endpoints are no longer enabled, so that it can take
+> the proper actions to handle its IO threads.  Otherwise, they can be
+> left waiting for endpoints until EPs are re-enabled.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  drivers/usb/gadget/function/f_fs.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index 3c584da9118c..0b0747d96378 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -957,10 +957,12 @@ static ssize_t ffs_epfile_io(struct file *file, struct ffs_io_data *io_data)
+>  		if (file->f_flags & O_NONBLOCK)
+>  			return -EAGAIN;
+>  
+> -		ret = wait_event_interruptible(
+> -				epfile->ffs->wait, (ep = epfile->ep));
+> +		ret = wait_event_interruptible(epfile->ffs->wait,
+> +				(ep = epfile->ep) || !epfile->ffs->func);
+>  		if (ret)
+>  			return -EINTR;
+> +		if (!epfile->ffs->func)
+> +			return -ENODEV;
 
-Friendly ping to akpm. :)
+This seems strange - we are inside the case where the endpoint is not
+initially enabled, if we're returning ENODEV here shouldn't that happen
+in all cases?
 
-Can this start living in -mm, or would a different tree be better?
+Beyond that, there is no locking for accessing ffs->func here;
+modification happens in gadget callbacks so it's guarded by the gadget
+core (the existing case in ffs_ep0_ioctl() looks suspicious as well).
 
-Thanks!
+But I can't see why this change is necessary - there are event
+notifications through ep0 when this happens, as can be seen in the hunk
+below from the ffs_event_add(ffs, FUNCTIONFS_DISABLE) line.  If
+userspace cares about this, then it can read the events from ep0.
 
--Kees
-
--- 
-Kees Cook
+>  	}
+>  
+>  	/* Do we halt? */
+> @@ -3292,6 +3294,7 @@ static int ffs_func_set_alt(struct usb_function *f,
+>  	if (alt == (unsigned)-1) {
+>  		ffs->func = NULL;
+>  		ffs_event_add(ffs, FUNCTIONFS_DISABLE);
+> +		wake_up_interruptible(&ffs->wait);
+>  		return 0;
+>  	}
+>  

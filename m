@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65436464B41
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3DCF464B3F
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 11:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348503AbhLAKMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 05:12:50 -0500
-Received: from mga11.intel.com ([192.55.52.93]:19086 "EHLO mga11.intel.com"
+        id S1348501AbhLAKMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 05:12:49 -0500
+Received: from mga18.intel.com ([134.134.136.126]:22831 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1348488AbhLAKMp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S1348487AbhLAKMp (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 05:12:45 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="233931049"
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="223306105"
 X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="233931049"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 02:09:24 -0800
+   d="scan'208";a="223306105"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 02:09:23 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="477491998"
+   d="scan'208";a="459970847"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 01 Dec 2021 02:09:21 -0800
+  by orsmga006.jf.intel.com with ESMTP; 01 Dec 2021 02:09:21 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1msMYC-000Ej7-OO; Wed, 01 Dec 2021 10:09:20 +0000
-Date:   Wed, 01 Dec 2021 18:08:19 +0800
+        id 1msMYC-000Ej1-MD; Wed, 01 Dec 2021 10:09:20 +0000
+Date:   Wed, 01 Dec 2021 18:08:31 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
+To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:kvm/next] BUILD SUCCESS
- 98a8470ffcf9029e7b5452c20afc2c8ae11086c1
-Message-ID: <61a74993.VxVZnii8s1kOqdFl%lkp@intel.com>
+Subject: [tip:x86/paravirt] BUILD SUCCESS
+ 6da5175dbe1c2f02f1301b6d987e3ce24742bfd4
+Message-ID: <61a7499f.ZzsFf8tCG7W0yuDG%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -39,13 +39,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git kvm/next
-branch HEAD: 98a8470ffcf9029e7b5452c20afc2c8ae11086c1  rcu/exp: Mark current CPU as exp-QS in IPI loop second pass
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/paravirt
+branch HEAD: 6da5175dbe1c2f02f1301b6d987e3ce24742bfd4  x86/paravirt: Fix build PARAVIRT_XXL=y without XEN_PV
 
-elapsed time: 728m
+elapsed time: 729m
 
-configs tested: 224
-configs skipped: 4
+configs tested: 217
+configs skipped: 69
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -58,12 +58,12 @@ arm                              allyesconfig
 arm                              allmodconfig
 i386                 randconfig-c001-20211128
 i386                 randconfig-c001-20211201
-sh                           se7750_defconfig
-powerpc                      pasemi_defconfig
-sh                               alldefconfig
-arm                       imx_v6_v7_defconfig
-powerpc                      acadia_defconfig
-m68k                        m5272c3_defconfig
+sh                          polaris_defconfig
+powerpc                    adder875_defconfig
+sh                        edosk7760_defconfig
+powerpc                       holly_defconfig
+arm                      footbridge_defconfig
+xtensa                  cadence_csp_defconfig
 um                               alldefconfig
 mips                           ci20_defconfig
 sh                          rsk7201_defconfig
@@ -86,12 +86,7 @@ powerpc                 mpc834x_mds_defconfig
 sh                          rsk7264_defconfig
 arm                            mmp2_defconfig
 arm                           tegra_defconfig
-sh                           se7206_defconfig
-sh                         apsh4a3a_defconfig
-parisc                generic-32bit_defconfig
-arm                         s3c2410_defconfig
 arm                             pxa_defconfig
-sh                          polaris_defconfig
 powerpc                     redwood_defconfig
 sparc                            allyesconfig
 powerpc                      arches_defconfig
@@ -115,14 +110,12 @@ arm                          pxa3xx_defconfig
 xtensa                          iss_defconfig
 powerpc                mpc7448_hpc2_defconfig
 arm                          simpad_defconfig
-sh                          landisk_defconfig
-ia64                         bigsur_defconfig
-powerpc                     stx_gp3_defconfig
 mips                        workpad_defconfig
 nios2                            alldefconfig
 arm                         socfpga_defconfig
 mips                     decstation_defconfig
 arm                         vf610m4_defconfig
+sh                          landisk_defconfig
 arm                       cns3420vb_defconfig
 mips                        vocore2_defconfig
 sh                           se7721_defconfig
@@ -182,18 +175,18 @@ i386                 randconfig-a006-20211130
 i386                 randconfig-a004-20211130
 i386                 randconfig-a003-20211130
 i386                 randconfig-a001-20211130
-i386                 randconfig-a001-20211201
-i386                 randconfig-a005-20211201
-i386                 randconfig-a003-20211201
-i386                 randconfig-a002-20211201
-i386                 randconfig-a006-20211201
-i386                 randconfig-a004-20211201
 i386                 randconfig-a001-20211129
 i386                 randconfig-a002-20211129
 i386                 randconfig-a006-20211129
 i386                 randconfig-a005-20211129
 i386                 randconfig-a004-20211129
 i386                 randconfig-a003-20211129
+i386                 randconfig-a001-20211201
+i386                 randconfig-a005-20211201
+i386                 randconfig-a003-20211201
+i386                 randconfig-a002-20211201
+i386                 randconfig-a006-20211201
+i386                 randconfig-a004-20211201
 x86_64               randconfig-a011-20211128
 x86_64               randconfig-a014-20211128
 x86_64               randconfig-a012-20211128

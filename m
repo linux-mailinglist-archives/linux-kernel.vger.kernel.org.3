@@ -2,83 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 15D1E465434
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04B60465438
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 18:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbhLARsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 12:48:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229896AbhLARsS (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 12:48:18 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DD2C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 09:44:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BBCF4CE1FFF
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 17:44:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5F3BC53FCD;
-        Wed,  1 Dec 2021 17:44:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638380693;
-        bh=U8NgDcFMNgk3nRoZQKP7hoYuWyPNJj+grolmtNGGkQs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=XWD902LgUML7XkZB3r1coG7lEzVgec4KHvQCxVCJNOiUOKGRxD9WDAIzh2ANv73pv
-         7akCz8lsqL4lnAxS2BTiaHTEcFun1TFGFaOkVg0qotjZFH2xJDKmQ/RQXk3Qi8kls/
-         cW95rN4iyyoiMQN+gOOn+Yn55jTD9hUCQGcmCTTkmme9zE8e9B7n5sK0kahHtc26XI
-         qhbBSl2qP94/MQxBZZPDahPhLARpXRvuntOOqaNh8FO+h02kXeZCpu055U+5GopNmX
-         67QXRJzMlHaIAEDNFl1Kl0tVwkBXlL1ngQRSRVy5up5qyCdCbaVVg1ZvurU9rTMyez
-         t/afQtRP0r2rQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     tytso@mit.edu, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Subject: [PATCH] random: Document add_hwgenerator_randomness() with other input functions
-Date:   Wed,  1 Dec 2021 17:44:49 +0000
-Message-Id: <20211201174449.1359595-1-broonie@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        id S237744AbhLARt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 12:49:57 -0500
+Received: from foss.arm.com ([217.140.110.172]:43298 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S229896AbhLARtu (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 12:49:50 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DB3C14BF;
+        Wed,  1 Dec 2021 09:46:29 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.65.205])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D9BAD3F766;
+        Wed,  1 Dec 2021 09:46:26 -0800 (PST)
+Date:   Wed, 1 Dec 2021 17:46:24 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, kasan-dev@googlegroups.com,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] kcov: fix generic Kconfig dependencies if
+ ARCH_WANTS_NO_INSTR
+Message-ID: <Yae08MUQn5SxPwZ/@FVFF77S0Q05N>
+References: <20211201152604.3984495-1-elver@google.com>
+ <YaebeW5uYWFsDD8W@FVFF77S0Q05N>
+ <CANpmjNO9f2SD6PAz_pF3Rg_XOmBtqEB_DNsoUY1ycwiFjoP88Q@mail.gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1207; h=from:subject; bh=U8NgDcFMNgk3nRoZQKP7hoYuWyPNJj+grolmtNGGkQs=; b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBhp7Jy6cjVbMdWyq6gsalVa9Nbr31PYvw6pmety30c 0EtWkRWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCYaeycgAKCRAk1otyXVSH0ANUB/ 0T4FAno8aK3OupWpDeOTDL1YvPOvB1JNQSnOub40L9B6ptlvCwJzgLGHdbBX8Y0Hmptb94J0sg9buQ ve9nqW0C2hNf4vCkBmzPHvHUoE4PaeKUZD6jrh5oQJZtsa4XMKYjGeUHGpTQ2G9XzIDF1pt1ue6+N9 0QtEA6ZtdvOJYDuPxd23YJEjPPtg0woiHXnbKXhr6MUHlLClp7DPvOJoreoGKTpJP3oZPch+ngUkcZ y8res9JPRiVy5hMy6ca7AxXS8G9HUg2xDUGiZ5rajlqEpTfTbEN1qNrK7BGeJrHDUXUyAkh9USBNK/ gpJRhXXNPbcLhUIT1DpXro4M0CyA+I
-X-Developer-Key: i=broonie@kernel.org; a=openpgp; fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNO9f2SD6PAz_pF3Rg_XOmBtqEB_DNsoUY1ycwiFjoP88Q@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The section at the top of random.c which documents the input functions
-available does not document add_hwgenerator_randomness() which might lead
-a reader to overlook it. Add a brief note about it.
+On Wed, Dec 01, 2021 at 05:10:39PM +0100, Marco Elver wrote:
+> On Wed, 1 Dec 2021 at 16:57, Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > Hi Marco,
+> >
+> > On Wed, Dec 01, 2021 at 04:26:04PM +0100, Marco Elver wrote:
+> > > Until recent versions of GCC and Clang, it was not possible to disable
+> > > KCOV instrumentation via a function attribute. The relevant function
+> > > attribute was introduced in 540540d06e9d9 ("kcov: add
+> > > __no_sanitize_coverage to fix noinstr for all architectures").
+> > >
+> > > x86 was the first architecture to want a working noinstr, and at the
+> > > time no compiler support for the attribute existed yet. Therefore,
+> > > 0f1441b44e823 ("objtool: Fix noinstr vs KCOV") introduced the ability to
+> > > NOP __sanitizer_cov_*() calls in .noinstr.text.
+> > >
+> > > However, this doesn't work for other architectures like arm64 and s390
+> > > that want a working noinstr per ARCH_WANTS_NO_INSTR.
+> > >
+> > > At the time of 0f1441b44e823, we didn't yet have ARCH_WANTS_NO_INSTR,
+> > > but now we can move the Kconfig dependency checks to the generic KCOV
+> > > option. KCOV will be available if:
+> > >
+> > >       - architecture does not care about noinstr, OR
+> > >       - we have objtool support (like on x86), OR
+> > >       - GCC is 12.0 or newer, OR
+> > >       - Clang is 13.0 or newer.
+> >
+> > I agree this is the right thing to do, but since GCC 12.0 isn't out yet (and
+> > only x86 has objtool atm) this will prevent using KCOV with a released GCC on
+> > arm64 and s390, which would be unfortunate for Syzkaller.
+> >
+> > AFAICT the relevant GCC commit is:
+> >
+> >    https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=cec4d4a6782c9bd8d071839c50a239c49caca689
+> >
+> > Currently we mostly get away with disabling KCOV for while compilation units,
+> > so maybe it's worth waiting for the GCC 12.0 release, and restricting things
+> > once that's out?
+> 
+> An alternative would be to express 'select ARCH_WANTS_NO_INSTR' more
+> precisely, say with an override or something. Because as-is,
+> ARCH_WANTS_NO_INSTR then doesn't quite reflect reality on arm64
+> (yet?).
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
+It's more of a pragmatic thing -- ARCH_WANTS_NO_INSTR does reflect reality, and
+we do *want* to enforce that strictly, it's just that we're just struck between
+a rock and a hard place where until GCC 12 is released we either:
 
-Ted, I've been sending this for almost two years at this point and
-you've not commented on it - if there's some issue please let me know.
+a) Strictly enforce noinstr, and be sure there aren't any bugs from unexpected
+   instrumentation, but we can't test GCC-built kernels under Syzkaller due to
+   the lack of KCOV.
 
- drivers/char/random.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+b) Don't strictly enforce noinstr, and have the same latent bugs as today (of
+   unknown severity), but we can test GCC-built kernels under Syzkaller.
 
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 35fcc09c0228..9192da308f87 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -228,6 +228,14 @@
-  * particular randomness source.  They do this by keeping track of the
-  * first and second order deltas of the event timings.
-  *
-+ * There is also an interface for true hardware RNGs:
-+ *
-+ *	void add_hwgenerator_randomness(const char *buffer, size_t count,
-+ *				size_t entropy);
-+ *
-+ * This will credit entropy as specified by the caller, if the entropy
-+ * pool is full it will block until more entropy is needed.
-+ *
-  * Ensuring unpredictability at system startup
-  * ============================================
-  *
--- 
-2.30.2
+... and since this (currently only affects KCOV, which people only practically
+enable for Syzkaller, I think it's ok to wait until GCC 12 is out, so that we
+can have the benefit of Sykaller in the mean time, and subsequrntly got for
+option (a) and say those people need to use GCC 12+ (and clang 13+).
 
+> But it does look simpler to wait, so I'm fine with that. I leave it to you.
+
+FWIW, for my purposes I'm happy to take this immediately and to have to apply a
+local patch to my fuzzing branches until GCC 12 is out, but I assume we'd want
+the upstream testing to work in the mean time without requiring additional
+patches.
+
+Thanks,
+Mark.

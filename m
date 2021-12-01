@@ -2,89 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B294B464C65
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E60464C69
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348885AbhLALOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:14:55 -0500
-Received: from mail.cn.fujitsu.com ([183.91.158.132]:13701 "EHLO
-        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S230003AbhLALOx (ORCPT
+        id S237895AbhLALQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:16:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56896 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232250AbhLALQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 06:14:53 -0500
-IronPort-Data: =?us-ascii?q?A9a23=3AWJZJqqCx+WFzfRVW/4zhw5YqxClBgxIJ4g17XOL?=
- =?us-ascii?q?fUAXt1Wt30jQEyDYbXjqEPq2LNmShfYx0bYuy8ExV6JWAx9UxeLYW3SszFioV8?=
- =?us-ascii?q?6IpJjg4wn/YZnrUdouaJK5ex512huLocYZkERcwmj/3auK49CMkjPnRLlbBILW?=
- =?us-ascii?q?s1h5ZFFYMpBgJ2UoLd94R2uaEsPDha++/kYqaT/73ZDdJ7wVJ3lc8sMpvnv/AU?=
- =?us-ascii?q?MPa41v0tnRmDRxCUcS3e3M9VPrzLonpR5f0rxU9IwK0ewrD5OnREmLx9BFrBM6?=
- =?us-ascii?q?nk6rgbwsBRbu60Qqm0yIQAvb9xEMZ4HFaPqUTbZLwbW9TiieJntJwwdNlu4GyS?=
- =?us-ascii?q?BsyI+vHn+F1vxxwSnguZ/IbqeWbSZS4mYnJp6HcSFPgyutjCWk6NJMV/+JwD30?=
- =?us-ascii?q?I8/EEQBgBdRmDiviw6L2+Q+howM8kKaHDP54Vs1ljwCvfAPJgRorMK43R5cJR3?=
- =?us-ascii?q?B8zi9pIEPKYYNAWARJrbRLdc1hMN00RBZYWguilnD/8fidepVbTorA4i0DXzQp?=
- =?us-ascii?q?swP3uK9fRdMCHXtl9gEmVvCTF8n7/DxVcM8aQoRKD/26gi/Hngyz2QsQRGae++?=
- =?us-ascii?q?/osh0ecrlH/ojV+uUCT+KH/0xDhHYkEbRF8x8bnloBqnGTDczU3d0fQTKa4gyM?=
- =?us-ascii?q?h?=
-IronPort-HdrOrdr: =?us-ascii?q?A9a23=3AjowFPa9AWfju6Xy+yi9uk+C2I+orL9Y04lQ7?=
- =?us-ascii?q?vn2ZKCY1TiX2rayTdZggviMc6wx+ZJhDo7+90cC7KBvhHPVOjLX5U43JYDXb?=
-X-IronPort-AV: E=Sophos;i="5.87,278,1631548800"; 
-   d="scan'208";a="118275924"
-Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
-  by heian.cn.fujitsu.com with ESMTP; 01 Dec 2021 19:11:29 +0800
-Received: from G08CNEXMBPEKD04.g08.fujitsu.local (unknown [10.167.33.201])
-        by cn.fujitsu.com (Postfix) with ESMTP id B6AEF4D13A00;
-        Wed,  1 Dec 2021 19:11:25 +0800 (CST)
-Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
- G08CNEXMBPEKD04.g08.fujitsu.local (10.167.33.201) with Microsoft SMTP Server
- (TLS) id 15.0.1497.23; Wed, 1 Dec 2021 19:11:26 +0800
-Received: from FNSTPC.g08.fujitsu.local (10.167.226.45) by
- G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
- id 15.0.1497.23 via Frontend Transport; Wed, 1 Dec 2021 19:11:25 +0800
-From:   Li Zhijian <lizhijian@cn.fujitsu.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>, <shuah@kernel.org>,
-        <dsahern@gmail.com>
-CC:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Li Zhijian <lizhijian@cn.fujitsu.com>
-Subject: [PATCH 3/3] selftest: net: remove meaningless help option
-Date:   Wed, 1 Dec 2021 19:10:25 +0800
-Message-ID: <20211201111025.13834-3-lizhijian@cn.fujitsu.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20211201111025.13834-1-lizhijian@cn.fujitsu.com>
-References: <20211201111025.13834-1-lizhijian@cn.fujitsu.com>
+        Wed, 1 Dec 2021 06:16:12 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1A3C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 03:12:52 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id t11so23555273qtw.3
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 03:12:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
+        bh=/qgvOkZEM3lx0/khvl/WvVYYCH02Irf7u8oy1QcHGIE=;
+        b=EYmBbkrozaG+4zbQmrjhWfYmeMvdxlC1bDluI0d39uYp+28ROCyJu36iJYDVVKubPI
+         Z7ss7yiWziOwwDdyl+PwO2yTeRMSqpUwI7Gg0WgZviYnY7JZKXBUMcliL2qfhg+zNQ/Y
+         w3pbS6KQkGJJLtJEAirAlXnBsa8mJaC3sjmu6vvrdZHjT6UekYvEan5W6H1yCiORRG8E
+         3q8c5zihpOF1jG/9ifEMj+QU9r/Bhdhnuv+ghHSmBLlWyq0qrHUUS1AlKy0X/oPWZ5WI
+         7DvCD4WDX3j9uw444fm/rt00ri9nVCfWGQhiy8Tso6n6Ua9PKgwoi9V8f81xm0eQib6P
+         9WIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to;
+        bh=/qgvOkZEM3lx0/khvl/WvVYYCH02Irf7u8oy1QcHGIE=;
+        b=Ic6yVICGXtcNa0QsWGSJf8XsBufw1XMml8zFdJUEz0Z6D8KaA/rCmaCUGiMvtbJwlW
+         WnCwj433MdM/0SsQLTBc6Bq5GCzf8EjuIYrnexcYC/fzh9+A2whisdhgDVs1WUgDsGc9
+         0aR2+DA78wuWBLhXkm5m2vu+Psc/SdddHWf7y8u3mNKC77H8QkSVfm+71ZvYHqBcQsmh
+         poMZMtgBwZn4PQTn+gpMM2PVyPD46nUS3kDhON5F9xKmQmhMZJ2clmy1a8oG5T7M4DfA
+         LFIbWz0MHx2e0ONKMcgI9Zq5BBNa2Cl1bLlG68hIeuKIK35i8+v13r9HXGCoAw86mdLM
+         Q63Q==
+X-Gm-Message-State: AOAM5306GciY1lXbC1hGZGCDHXcnC8B4joXiqBIgmaQpKqZvIGLCeNyd
+        aP/AlCF/CnFZa/K2UihTROw9ZXJj0SOelq2er9mCuq0oY74=
+X-Google-Smtp-Source: ABdhPJwR/AYvVCQcFST+kZTP3V4IqZzbHGaDrE3Sk9aJtrHbw61EoQG1md2Sz9BGUrm31gbXyKTw8PKmw0unAQSnQAc=
+X-Received: by 2002:a05:622a:1004:: with SMTP id d4mr5942284qte.95.1638357171215;
+ Wed, 01 Dec 2021 03:12:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-yoursite-MailScanner-ID: B6AEF4D13A00.AFDBA
-X-yoursite-MailScanner: Found to be clean
-X-yoursite-MailScanner-From: lizhijian@fujitsu.com
-X-Spam-Status: No
+References: <1638356341-17014-1-git-send-email-huangzhaoyang@gmail.com>
+In-Reply-To: <1638356341-17014-1-git-send-email-huangzhaoyang@gmail.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Wed, 1 Dec 2021 19:12:30 +0800
+Message-ID: <CAGWkznHq15QN5Dn6_QfbAm7jS9OPCV4TVqn2_9RxUBx0V9v78w@mail.gmail.com>
+Subject: Re: [RFC PATCH] mm: count zram read/write into PSI_IO_WAIT
+To:     Nitin Gupta <ngupta@vflare.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Zhaoyang Huang <zhaoyang.huang@unisoc.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-$ ./fcnal-test.sh -t help
-Test names: help
+There is no chance for zram reading/writing to be counted in
+PSI_IO_WAIT so far as zram will deal with the request just in current
+context without invoking submit_bio and io_schedule.
 
-Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
----
- tools/testing/selftests/net/fcnal-test.sh | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 9111b8952ac8..a4d86862764d 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -4075,8 +4075,6 @@ do
- 	# setup namespaces and config, but do not run any tests
- 	setup)		 setup; exit 0;;
- 	vrf_setup)	 setup "yes"; exit 0;;
--
--	help)            echo "Test names: $TESTS"; exit 0;;
- 	esac
- done
- 
--- 
-2.32.0
-
-
-
+On Wed, Dec 1, 2021 at 6:59 PM Huangzhaoyang <huangzhaoyang@gmail.com> wrote:
+>
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>
+> Have zram reading/writing be counted in PSI_IO_WAIT.
+>
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>  drivers/block/zram/zram_drv.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+> index fcaf275..b0e4766 100644
+> --- a/drivers/block/zram/zram_drv.c
+> +++ b/drivers/block/zram/zram_drv.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/debugfs.h>
+>  #include <linux/cpuhotplug.h>
+>  #include <linux/part_stat.h>
+> +#include <linux/psi.h>
+>
+>  #include "zram_drv.h"
+>
+> @@ -1246,7 +1247,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+>                                 zram_get_element(zram, index),
+>                                 bio, partial_io);
+>         }
+> -
+> +#ifdef CONFIG_PSI
+> +       psi_task_change(current, 0, TSK_IOWAIT);
+> +#endif
+>         handle = zram_get_handle(zram, index);
+>         if (!handle || zram_test_flag(zram, index, ZRAM_SAME)) {
+>                 unsigned long value;
+> @@ -1257,6 +1260,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+>                 zram_fill_page(mem, PAGE_SIZE, value);
+>                 kunmap_atomic(mem);
+>                 zram_slot_unlock(zram, index);
+> +#ifdef CONFIG_PSI
+> +               psi_task_change(current, TSK_IOWAIT, 0);
+> +#endif
+>                 return 0;
+>         }
+>
+> @@ -1284,6 +1290,9 @@ static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+>         if (WARN_ON(ret))
+>                 pr_err("Decompression failed! err=%d, page=%u\n", ret, index);
+>
+> +#ifdef CONFIG_PSI
+> +       psi_task_change(current, TSK_IOWAIT, 0);
+> +#endif
+>         return ret;
+>  }
+>
+> @@ -1471,7 +1480,13 @@ static int zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
+>                 vec.bv_offset = 0;
+>         }
+>
+> +#ifdef CONFIG_PSI
+> +       psi_task_change(current, 0, TSK_IOWAIT);
+> +#endif
+>         ret = __zram_bvec_write(zram, &vec, index, bio);
+> +#ifdef CONFIG_PSI
+> +       psi_task_change(current, TSK_IOWAIT, 0);
+> +#endif
+>  out:
+>         if (is_partial_io(bvec))
+>                 __free_page(page);
+> @@ -1607,7 +1622,6 @@ static blk_qc_t zram_submit_bio(struct bio *bio)
+>                 atomic64_inc(&zram->stats.invalid_io);
+>                 goto error;
+>         }
+> -
+>         __zram_make_request(zram, bio);
+>         return BLK_QC_T_NONE;
+>
+> --
+> 1.9.1
+>

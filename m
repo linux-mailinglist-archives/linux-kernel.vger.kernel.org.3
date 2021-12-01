@@ -2,93 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE1E46458F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BB8464592
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344928AbhLADrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:47:05 -0500
-Received: from mga01.intel.com ([192.55.52.88]:34543 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346500AbhLADq0 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:46:26 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="260346959"
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="260346959"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 19:43:03 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
-   d="scan'208";a="500061002"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 30 Nov 2021 19:43:01 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msGWK-000EA3-Oh; Wed, 01 Dec 2021 03:43:00 +0000
-Date:   Wed, 1 Dec 2021 11:42:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Subject: [ardb:for-kernelci 18/28] arch/arm/mach-footbridge/common.c:102:6:
- warning: no previous prototype for function 'dc21285_handle_irq'
-Message-ID: <202112011148.XrnWip5a-lkp@intel.com>
+        id S241585AbhLADs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230110AbhLADsv (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 22:48:51 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF3EC061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:45:31 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id g19so22884734pfb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:45:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=OguKkgibJx2pCTUQ2tCxqwka6Uxy76Xdi47x9CCBEn8=;
+        b=KPHLA9BhW5UhVpBxTUx98RG5YH9r8nNlfMM9Xy4vL9t2UReT7Z4NbvfFlBoNgJbc0Y
+         K3Nw/5fFV//+6H+loZJlSuHkH9zMdeVkHwlW8XJzCaEsgLa3GT/Gb/HrC7EpGXk6X2am
+         jn8xOs78y/PtkGGidPcI9KgTyPb0ok7Gg7oEHxPWaCZw6cCdtvC6RSyWlMcgQEomFuLR
+         PQtIFYywB2WK29OdoC+4r75fq1zSOn4Qaz4ICmEr67CT0kA8rwbQyhdbrB/VzJRqNhfa
+         6oeoUpeMAeq5Tm1xn7ZKZvXhtb/L/tER4zGWtEx5uHwAJ5jKCXv8nxjMni3MQxTjrgQq
+         eAKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=OguKkgibJx2pCTUQ2tCxqwka6Uxy76Xdi47x9CCBEn8=;
+        b=C/yNXYag24ImycGA8Zu9HiRG1byXGrIrezaSgyKD5JXFxndQm7XdGGWw6A+JmN26t2
+         LGQai3CFqjRmF1TUCXIR8dAAWPlK/twZ8F0nU/FoBzfXOs0/gzfpbyKBm0rjLfNcoJZP
+         CZiLeZpEYs6g+lhwuzpLnMbXj1v73D95EcZHw8eVBQyqh0mh5t8F0mJ1laSo5OddPKWE
+         qabJ4neMJ298MdLOXF7uHNSxetMo+deFncfw5BI2K1svBq1siKaeT+VnSbDNCiLVIi99
+         3T0xmMmBKjgLHGJqRvgHte2DTNxuS7UDI5rhc8O/9SXoKw8OT6/EGsBKghaR1ZnbA8t3
+         2Trg==
+X-Gm-Message-State: AOAM533A0XErrZfCvmjslyhLF9SgHqCaZI+feUoazPuRqQ4byMtT6Kvk
+        jMNZi9/9r3CuTdJ0Lxtb6rO0PQ==
+X-Google-Smtp-Source: ABdhPJzJ1yck47dY17+1HUakTMFxxWcRQpm2sFOZp9ygJXx4XlKeLbWCyS9f85yLP9dfdWUlgYJyNA==
+X-Received: by 2002:a63:86c7:: with SMTP id x190mr2712146pgd.230.1638330330627;
+        Tue, 30 Nov 2021 19:45:30 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id c5sm3835589pjm.52.2021.11.30.19.45.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 19:45:30 -0800 (PST)
+Date:   Wed, 1 Dec 2021 03:45:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/29] KVM: Scalable memslots implementation
+Message-ID: <Yabv1il1fAVcR0se@google.com>
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <cover.1638304315.git.maciej.szmigiero@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
-head:   6999340fcf7f37e2a82eb35452b08c5893a2872d
-commit: 9a2235df531e427be5777a894b3fa355ce127894 [18/28] ARM: footbridge: use GENERIC_IRQ_MULTI_HANDLER
-config: arm-randconfig-r001-20211130 (https://download.01.org/0day-ci/archive/20211201/202112011148.XrnWip5a-lkp@intel.com/config)
-compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 25eb7fa01d7ebbe67648ea03841cda55b4239ab2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=9a2235df531e427be5777a894b3fa355ce127894
-        git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
-        git fetch --no-tags ardb for-kernelci
-        git checkout 9a2235df531e427be5777a894b3fa355ce127894
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> 
+> This series contains the sixth iteration of the scalable memslots patch set.
+> It is based on Sean's version "5.5", but with integrated patches for issues
+> that arose during its review round.
+> 
+> In addition to that, the kvm_for_each_memslot_in_gfn_range() implementation
+> was reworked to return only strictly overlapping memslots and to use
+> iterators.
+> 
+> However, I've dropped a similar kvm_for_each_memslot_in_hva_range() rework
+> since the existing implementation was already returning only strictly
+> overlapping memslots and it was already based on interval tree iterators,
+> so wrapping them in another layer of iterators would only add unnecessary
+> complexity.
+> The code in this "for"-like macro is also self-contained and very simple,
+> so let's keep it this way.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-footbridge/common.c:102:6: warning: no previous prototype for function 'dc21285_handle_irq' [-Wmissing-prototypes]
-   void dc21285_handle_irq(struct pt_regs *regs)
-        ^
-   arch/arm/mach-footbridge/common.c:102:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void dc21285_handle_irq(struct pt_regs *regs)
-   ^
-   static 
-   1 warning generated.
-
-
-vim +/dc21285_handle_irq +102 arch/arm/mach-footbridge/common.c
-
-   101	
- > 102	void dc21285_handle_irq(struct pt_regs *regs)
-   103	{
-   104		int irq;
-   105		do {
-   106			irq = dc21285_get_irq();
-   107			if (!irq)
-   108				break;
-   109	
-   110			generic_handle_irq(irq);
-   111		} while (1);
-   112	}
-   113	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+If kvm_for_each_memslot_in_hva_range() ever gains a user outside of kvm_main.c
+it should definitely get an iterator container so that callers don't need to do
+the container_of() stuff.  I'd still prefer a container even now, but it's not a
+sticking point.

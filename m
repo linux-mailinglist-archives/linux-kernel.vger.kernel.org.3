@@ -2,219 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2119465809
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E78246580B
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 21:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353560AbhLAU7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 15:59:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353232AbhLAUz2 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 15:55:28 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3660C06174A;
-        Wed,  1 Dec 2021 12:52:07 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id z6so18649904plk.6;
-        Wed, 01 Dec 2021 12:52:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Z+SJkx7gZpNSKY4hP5L7YJpSZTXuOMEA5gcyCCsEvsg=;
-        b=HlQUEM8THquWt6x0dLOJGG/7ST0cRNjhD2RO0NxDe9QDgSRYzpjnChlTkF+gPXhz62
-         qVgHu+jifwqKySgi9hwWXucaQbivTi3wBwJEieRnadI95e+5Dzfjd4spx/f3E6IqpqwR
-         lpSQZy00/0SlBL4eK7QRcv0WUfW3zqgVt8QkZZ4J1ibQiZi36+bieo67cjUPwRDAwDIB
-         R5Jq3sfjH22mxgMpjYrqRm/mwO/ZJfGXda01W/4VRt2MREcIyfQBQraq40rIlrfsV825
-         6Vm5O3PqWnB00RDHSa+RE2CtLEJCLuX2Q1TVb91F/wl1g5qZk69eWgpneUfXRnExaumJ
-         zG1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Z+SJkx7gZpNSKY4hP5L7YJpSZTXuOMEA5gcyCCsEvsg=;
-        b=h1lVr1At93Gj6bXPHRuhpVmU00IYelLkhCvt0QPbG3kdErq9ypb3UtL3zGrWTMIY/L
-         MUkbUx5OKXfWt9uSD3XexvK94o8HrfVqQa7yrwJC3cigDSZQa5J2zOBJ1211mpE1g8hK
-         YTjV/vhtHUJCtHk9KzzTH3dr7cq2JUvd2MtoTEUZQH2YP12Ht8EpkRZ9748koikRPtgy
-         ON2+6+of5CAZtGzRUEOSlTY8z0wR+ivrj0zZevOmsNWosmcIurEGdp4ZguKt3AN0UvY0
-         X2YvyVU11Bsgd6SC1GYMegMA/lWBdRgA9kKSca00D16ZgpOhgWvP7qVcxFArmvH4j6Fb
-         sdhQ==
-X-Gm-Message-State: AOAM532mYqSlR60Gxf0MsbX9+Ithp8/F1LeHO4bftgRZ+9abgDctxRsm
-        ABpDKrtzhH2Xb6m7cecK3rObQ8JnG1Q=
-X-Google-Smtp-Source: ABdhPJycFkYcanZu711/X/cGVfD11g1lE+wluwV3VRtNHqKIZWwA+CdO5KEBLg047YADwpUvmJSe5Q==
-X-Received: by 2002:a17:90b:19c8:: with SMTP id nm8mr725245pjb.163.1638391926915;
-        Wed, 01 Dec 2021 12:52:06 -0800 (PST)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id p20sm729117pfw.96.2021.12.01.12.52.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 12:52:06 -0800 (PST)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     devicetree@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        bcm-kernel-feedback-list@broadcom.com (maintainer:BROADCOM BCM7XXX ARM
-        ARCHITECTURE), Gregory Fong <gregory.0xf0@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        linux-ide@vger.kernel.org (open list:LIBATA SUBSYSTEM (Serial and
-        Parallel ATA drivers)), linux-kernel@vger.kernel.org (open list),
-        linux-gpio@vger.kernel.org (open list:GPIO SUBSYSTEM),
-        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
-        ARM ARCHITECTURE),
-        linux-mmc@vger.kernel.org (open list:MULTIMEDIA CARD (MMC), SECURE
-        DIGITAL (SD) AND...),
-        linux-pwm@vger.kernel.org (open list:PWM SUBSYSTEM),
-        linux-crypto@vger.kernel.org (open list:HARDWARE RANDOM NUMBER
-        GENERATOR CORE),
-        linux-rtc@vger.kernel.org (open list:REAL TIME CLOCK (RTC) SUBSYSTEM),
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-Subject: [PATCH 14/14] dt-bindings: usb: Convert BDC to YAML
-Date:   Wed,  1 Dec 2021 12:51:10 -0800
-Message-Id: <20211201205110.41656-15-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211201205110.41656-1-f.fainelli@gmail.com>
-References: <20211201205110.41656-1-f.fainelli@gmail.com>
+        id S1353612AbhLAVAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 16:00:12 -0500
+Received: from mga18.intel.com ([134.134.136.126]:15605 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1353149AbhLAU4L (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 15:56:11 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223430763"
+X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
+   d="scan'208";a="223430763"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 12:52:47 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,279,1631602800"; 
+   d="scan'208";a="460179271"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Dec 2021 12:52:46 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msWar-000FNs-Ch; Wed, 01 Dec 2021 20:52:45 +0000
+Date:   Thu, 2 Dec 2021 04:51:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Loic Poulain <loic.poulain@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: drivers/net/wireless/ath/wcn36xx/smd.c:943:33: sparse: sparse: cast
+ truncates bits from constant value (780 becomes 80)
+Message-ID: <202112020449.FNKDxUVp-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Broadcom BDC device controller Device Tree binding to YAML
-to help with validation.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
+commit: d707f812bb0513ea0030d0c9fe2a456bae5a4583 wcn36xx: Channel list update before hardware scan
+date:   5 weeks ago
+config: riscv-randconfig-s031-20211201 (https://download.01.org/0day-ci/archive/20211202/202112020449.FNKDxUVp-lkp@intel.com/config)
+compiler: riscv32-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d707f812bb0513ea0030d0c9fe2a456bae5a4583
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d707f812bb0513ea0030d0c9fe2a456bae5a4583
+        # save the config file to linux build tree
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash drivers/net/wireless/ath/wcn36xx/
 
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/net/wireless/ath/wcn36xx/smd.c:943:33: sparse: sparse: cast truncates bits from constant value (780 becomes 80)
+
+vim +943 drivers/net/wireless/ath/wcn36xx/smd.c
+
+   931	
+   932	int wcn36xx_smd_update_channel_list(struct wcn36xx *wcn, struct cfg80211_scan_request *req)
+   933	{
+   934		struct wcn36xx_hal_update_channel_list_req_msg *msg_body;
+   935		int ret, i;
+   936	
+   937		msg_body = kzalloc(sizeof(*msg_body), GFP_KERNEL);
+   938		if (!msg_body)
+   939			return -ENOMEM;
+   940	
+   941		INIT_HAL_MSG((*msg_body), WCN36XX_HAL_UPDATE_CHANNEL_LIST_REQ);
+   942	
+ > 943		msg_body->num_channel = min_t(u8, req->n_channels, sizeof(msg_body->channels));
+   944		for (i = 0; i < msg_body->num_channel; i++) {
+   945			struct wcn36xx_hal_channel_param *param = &msg_body->channels[i];
+   946			u32 min_power = WCN36XX_HAL_DEFAULT_MIN_POWER;
+   947			u32 ant_gain = WCN36XX_HAL_DEFAULT_ANT_GAIN;
+   948	
+   949			param->mhz = req->channels[i]->center_freq;
+   950			param->band_center_freq1 = req->channels[i]->center_freq;
+   951			param->band_center_freq2 = 0;
+   952	
+   953			if (req->channels[i]->flags & IEEE80211_CHAN_NO_IR)
+   954				param->channel_info |= WCN36XX_HAL_CHAN_INFO_FLAG_PASSIVE;
+   955	
+   956			if (req->channels[i]->flags & IEEE80211_CHAN_RADAR)
+   957				param->channel_info |= WCN36XX_HAL_CHAN_INFO_FLAG_DFS;
+   958	
+   959			if (req->channels[i]->band == NL80211_BAND_5GHZ) {
+   960				param->channel_info |= WCN36XX_HAL_CHAN_INFO_FLAG_HT;
+   961				param->channel_info |= WCN36XX_HAL_CHAN_INFO_FLAG_VHT;
+   962				param->channel_info |= WCN36XX_HAL_CHAN_INFO_PHY_11A;
+   963			} else {
+   964				param->channel_info |= WCN36XX_HAL_CHAN_INFO_PHY_11BG;
+   965			}
+   966	
+   967			if (min_power > req->channels[i]->max_power)
+   968				min_power = req->channels[i]->max_power;
+   969	
+   970			if (req->channels[i]->max_antenna_gain)
+   971				ant_gain = req->channels[i]->max_antenna_gain;
+   972	
+   973			u32p_replace_bits(&param->reg_info_1, min_power,
+   974					  WCN36XX_HAL_CHAN_REG1_MIN_PWR_MASK);
+   975			u32p_replace_bits(&param->reg_info_1, req->channels[i]->max_power,
+   976					  WCN36XX_HAL_CHAN_REG1_MAX_PWR_MASK);
+   977			u32p_replace_bits(&param->reg_info_1, req->channels[i]->max_reg_power,
+   978					  WCN36XX_HAL_CHAN_REG1_REG_PWR_MASK);
+   979			u32p_replace_bits(&param->reg_info_1, 0,
+   980					  WCN36XX_HAL_CHAN_REG1_CLASS_ID_MASK);
+   981			u32p_replace_bits(&param->reg_info_2, ant_gain,
+   982					  WCN36XX_HAL_CHAN_REG2_ANT_GAIN_MASK);
+   983	
+   984			wcn36xx_dbg(WCN36XX_DBG_HAL,
+   985				    "%s: freq=%u, channel_info=%08x, reg_info1=%08x, reg_info2=%08x\n",
+   986				    __func__, param->mhz, param->channel_info, param->reg_info_1,
+   987				    param->reg_info_2);
+   988		}
+   989	
+   990		mutex_lock(&wcn->hal_mutex);
+   991	
+   992		PREPARE_HAL_BUF(wcn->hal_buf, (*msg_body));
+   993	
+   994		ret = wcn36xx_smd_send_and_wait(wcn, msg_body->header.len);
+   995		if (ret) {
+   996			wcn36xx_err("Sending hal_update_channel_list failed\n");
+   997			goto out;
+   998		}
+   999	
+  1000		ret = wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len);
+  1001		if (ret) {
+  1002			wcn36xx_err("hal_update_channel_list response failed err=%d\n", ret);
+  1003			goto out;
+  1004		}
+  1005	
+  1006	out:
+  1007		kfree(msg_body);
+  1008		mutex_unlock(&wcn->hal_mutex);
+  1009		return ret;
+  1010	}
+  1011	
+
 ---
- .../devicetree/bindings/usb/brcm,bdc.txt      | 29 ------------
- .../devicetree/bindings/usb/brcm,bdc.yaml     | 46 +++++++++++++++++++
- MAINTAINERS                                   |  2 +-
- 3 files changed, 47 insertions(+), 30 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.txt
- create mode 100644 Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-
-diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.txt b/Documentation/devicetree/bindings/usb/brcm,bdc.txt
-deleted file mode 100644
-index c9f52b97cef1..000000000000
---- a/Documentation/devicetree/bindings/usb/brcm,bdc.txt
-+++ /dev/null
-@@ -1,29 +0,0 @@
--Broadcom USB Device Controller (BDC)
--====================================
--
--Required properties:
--
--- compatible: must be one of:
--                "brcm,bdc-udc-v2"
--                "brcm,bdc"
--- reg: the base register address and length
--- interrupts: the interrupt line for this controller
--
--Optional properties:
--
--On Broadcom STB platforms, these properties are required:
--
--- phys: phandle to one or two USB PHY blocks
--        NOTE: Some SoC's have a single phy and some have
--        USB 2.0 and USB 3.0 phys
--- clocks: phandle to the functional clock of this block
--
--Example:
--
--        bdc@f0b02000 {
--                compatible = "brcm,bdc-udc-v2";
--                reg = <0xf0b02000 0xfc4>;
--                interrupts = <0x0 0x60 0x0>;
--                phys = <&usbphy_0 0x0>;
--                clocks = <&sw_usbd>;
--        };
-diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.yaml b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-new file mode 100644
-index 000000000000..48831b62ab31
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-@@ -0,0 +1,46 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/brcm,bdc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Broadcom USB Device Controller (BDC)
-+
-+maintainers:
-+  - Al Cooper <alcooperx@gmail.com>
-+  - Florian Fainelli <f.fainelli@gmail.com>
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - brcm,bdc-udc-v2
-+          - brcm,bdc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts: true
-+
-+  phys:
-+    $ref: "/schemas/types.yaml#/definitions/phandle-array"
-+
-+  clocks:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+        bdc@f0b02000 {
-+                compatible = "brcm,bdc-udc-v2";
-+                reg = <0xf0b02000 0xfc4>;
-+                interrupts = <0x0 0x60 0x0>;
-+                phys = <&usbphy_0 0x0>;
-+                clocks = <&sw_usbd>;
-+        };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 11808be8e128..2f657775eb59 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3690,7 +3690,7 @@ M:	Al Cooper <alcooperx@gmail.com>
- L:	linux-usb@vger.kernel.org
- L:	bcm-kernel-feedback-list@broadcom.com
- S:	Maintained
--F:	Documentation/devicetree/bindings/usb/brcm,bdc.txt
-+F:	Documentation/devicetree/bindings/usb/brcm,bdc.yaml
- F:	drivers/usb/gadget/udc/bdc/
- 
- BROADCOM BMIPS CPUFREQ DRIVER
--- 
-2.25.1
-
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

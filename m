@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB68464D29
+	by mail.lfdr.de (Postfix) with ESMTP id 12C39464D28
 	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 12:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348946AbhLALp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 06:45:58 -0500
-Received: from mga12.intel.com ([192.55.52.136]:1072 "EHLO mga12.intel.com"
+        id S1344742AbhLALp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 06:45:56 -0500
+Received: from mga12.intel.com ([192.55.52.136]:1075 "EHLO mga12.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S243281AbhLALpt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        id S243396AbhLALpt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 06:45:49 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216458003"
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="216458004"
 X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="216458003"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
+   d="scan'208";a="216458004"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 03:42:28 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,278,1631602800"; 
-   d="scan'208";a="609520207"
+   d="scan'208";a="500216917"
 Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 01 Dec 2021 03:42:26 -0800
+  by orsmga007.jf.intel.com with ESMTP; 01 Dec 2021 03:42:26 -0800
 Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
         (envelope-from <lkp@intel.com>)
-        id 1msO0H-000Eq6-NK; Wed, 01 Dec 2021 11:42:25 +0000
-Date:   Wed, 01 Dec 2021 19:41:55 +0800
+        id 1msO0H-000Eq1-Lw; Wed, 01 Dec 2021 11:42:25 +0000
+Date:   Wed, 01 Dec 2021 19:42:03 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     "x86-ml" <x86@kernel.org>
 Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/urgent] BUILD SUCCESS
- 52d0b8b18776f184c53632c5e0068201491cdb61
-Message-ID: <61a75f83.2ZBm/kgGnsIpJ2fB%lkp@intel.com>
+Subject: [tip:irq/core] BUILD SUCCESS
+ 4946f15e8c334840bf277a0bf924371eae120fcd
+Message-ID: <61a75f8b.BMGfIGf9X+KgkZY+%lkp@intel.com>
 User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -39,13 +39,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/urgent
-branch HEAD: 52d0b8b18776f184c53632c5e0068201491cdb61  x86/fpu/signal: Initialize sw_bytes in save_xstate_epilog()
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+branch HEAD: 4946f15e8c334840bf277a0bf924371eae120fcd  genirq/generic_chip: Constify irq_generic_chip_ops
 
-elapsed time: 730m
+elapsed time: 731m
 
-configs tested: 238
-configs skipped: 68
+configs tested: 244
+configs skipped: 4
 
 The following configs have been built successfully.
 More configs may be tested in the coming days.
@@ -70,6 +70,9 @@ sh                        edosk7760_defconfig
 powerpc                       holly_defconfig
 arm                      footbridge_defconfig
 xtensa                  cadence_csp_defconfig
+um                               alldefconfig
+mips                           ci20_defconfig
+sh                          rsk7201_defconfig
 powerpc                       maple_defconfig
 sh                           se7722_defconfig
 sh                            titan_defconfig
@@ -90,7 +93,6 @@ powerpc                 mpc834x_mds_defconfig
 sh                          rsk7264_defconfig
 arm                            mmp2_defconfig
 arm                           tegra_defconfig
-mips                           ci20_defconfig
 sh                           se7206_defconfig
 sh                         apsh4a3a_defconfig
 parisc                generic-32bit_defconfig
@@ -111,6 +113,10 @@ mips                  cavium_octeon_defconfig
 openrisc                            defconfig
 arm                            dove_defconfig
 arm                          lpd270_defconfig
+arm                     eseries_pxa_defconfig
+sparc64                             defconfig
+sh                            shmin_defconfig
+powerpc                 mpc837x_mds_defconfig
 powerpc                          g5_defconfig
 powerpc64                        alldefconfig
 openrisc                    or1ksim_defconfig
@@ -119,18 +125,19 @@ powerpc                     akebono_defconfig
 arm                          pxa3xx_defconfig
 xtensa                          iss_defconfig
 powerpc                mpc7448_hpc2_defconfig
-um                               alldefconfig
 arm                          simpad_defconfig
+sh                          landisk_defconfig
+ia64                         bigsur_defconfig
+powerpc                     stx_gp3_defconfig
+m68k                                defconfig
 arc                        vdk_hs38_defconfig
 arm                         bcm2835_defconfig
 s390                             allyesconfig
-sh                            shmin_defconfig
 mips                        workpad_defconfig
 nios2                            alldefconfig
 arm                         socfpga_defconfig
 mips                     decstation_defconfig
 arm                         vf610m4_defconfig
-sh                          landisk_defconfig
 arm                       cns3420vb_defconfig
 mips                        vocore2_defconfig
 sh                           se7721_defconfig
@@ -154,11 +161,10 @@ ia64                             allmodconfig
 ia64                                defconfig
 ia64                             allyesconfig
 m68k                             allmodconfig
-m68k                                defconfig
 m68k                             allyesconfig
+nds32                             allnoconfig
 nios2                               defconfig
 arc                              allyesconfig
-nds32                             allnoconfig
 nds32                               defconfig
 nios2                            allyesconfig
 csky                                defconfig

@@ -2,161 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 960864652DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:36:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 084BB4652E4
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 17:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350966AbhLAQj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 11:39:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47070 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347953AbhLAQjz (ORCPT
+        id S1351446AbhLAQlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 11:41:17 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4186 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1351287AbhLAQlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 11:39:55 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4E3C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 08:36:34 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so161565pjc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 08:36:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=EiMDtLNrGzJyovNSfRSKzNjZUh/JBd0OTj1NBbeJOIA=;
-        b=gQ+sHNwyXuk+ngRvoZWSHSv+XoLd1iFnyuM2zig9WPgwh5g/b5z7bjBlPGpWkpbiHX
-         ZttyQZH5FjnAvIAd6VmLGWH4RJ7TrMdzUOcsLRz8gKlSzgwy9JjEKF34hKuYtXDq0FEI
-         m79wMJeehwC9hIYqEeDjGe93aQaYSlGFqM/+Q/agRWHRnnRraCpleNNKQemqArpWQkwt
-         VjOuHgP55gDHO+l56yNuoy1MWp/BGISJ1ikIGAutjhv5vMwFYIgOTMTlEC/epClr7ZPa
-         T2Ns7SVYDAJ+dLWLOyFqfK4bkSl3ZcvRXW2kqqz1T95b3nr+rb3Y/Ws2PaUW2qGDIYfA
-         M/BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EiMDtLNrGzJyovNSfRSKzNjZUh/JBd0OTj1NBbeJOIA=;
-        b=tbvXMb+/5li8Q8o3/AqHI2OrDA3hGPMRtXASwNAH5x2RKybI0zp4LFMrt0uTUgPgst
-         T5Mh4LkJhVhY6QBovspfa/5k/jtsTy3/+QMokio6ej/ieh7NNGPbvw/BF6utf8PRkjIa
-         wZZVyEzp8VVU8N57ntbJgz/wHre4LPdWo12nRN9zw2Fv3/42fwtcR2bDfdj6GahTFz7t
-         ICQ6E/3qo9dUVZsBVIvNJ4IGFzyQc6xdoJZ2YfUpgVrauCUn1tRwyehLROHx0lnwR2nt
-         uUWEuabr8bsvpryP4y3hk2g8u6apiOkmOv33kjmlrYvwEdeTxdTMkwlSgzmIuwzU79Hj
-         zQlw==
-X-Gm-Message-State: AOAM53244iMGvipfLcJId3Smqx/buIxg3CAyX5uGgqvCP5JDhKLLX0Gt
-        wM8wzw8PNeemArwq5C/Isi61OQ==
-X-Google-Smtp-Source: ABdhPJyXahGJrKzfZIR9Y1jdJrFNOuLMrxo1SOVUWSixC1tSgjjgeI2P0Bp76BO4Dm7yII3lTv2YlA==
-X-Received: by 2002:a17:90a:9bc1:: with SMTP id b1mr8785996pjw.49.1638376594129;
-        Wed, 01 Dec 2021 08:36:34 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id z10sm334283pfh.106.2021.12.01.08.36.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 08:36:33 -0800 (PST)
-Date:   Wed, 1 Dec 2021 16:36:30 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 26/29] KVM: Optimize gfn lookup in kvm_zap_gfn_range()
-Message-ID: <Yaekjrr1OVrgwUic@google.com>
-References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
- <a39db04edcacfe955c660e2f139f948cf29362f5.1638304316.git.maciej.szmigiero@oracle.com>
- <YabvBW90COsfdoYx@google.com>
- <7119b08c-e82a-8b81-7f9e-2e79f8276d51@maciej.szmigiero.name>
+        Wed, 1 Dec 2021 11:41:16 -0500
+Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J44Vk07Fjz67ts3;
+        Thu,  2 Dec 2021 00:37:02 +0800 (CST)
+Received: from roberto-ThinkStation-P620.huawei.com (10.204.63.22) by
+ fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Wed, 1 Dec 2021 17:37:51 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     <deven.desai@linux.microsoft.com>, <corbet@lwn.net>,
+        <axboe@kernel.dk>, <agk@redhat.com>, <snitzer@redhat.com>,
+        <ebiggers@kernel.org>, <tytso@mit.edu>, <paul@paul-moore.com>,
+        <eparis@redhat.com>, <jmorris@namei.org>, <serge@hallyn.com>
+CC:     <jannh@google.com>, <dm-devel@redhat.com>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-block@vger.kernel.org>, <linux-fscrypt@vger.kernel.org>,
+        <linux-audit@redhat.com>, <linux-security-module@vger.kernel.org>,
+        <linux-integrity@vger.kernel.org>, <tusharsu@linux.microsoft.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Date:   Wed, 1 Dec 2021 17:37:08 +0100
+Message-ID: <20211201163708.3578176-1-roberto.sassu@huawei.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
+References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7119b08c-e82a-8b81-7f9e-2e79f8276d51@maciej.szmigiero.name>
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.204.63.22]
+X-ClientProxiedBy: lhreml751-chm.china.huawei.com (10.201.108.201) To
+ fraeml714-chm.china.huawei.com (10.206.15.33)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021, Maciej S. Szmigiero wrote:
-> On 01.12.2021 04:41, Sean Christopherson wrote:
-> > On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
-> > > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > > index 41efe53cf150..6fce6eb797a7 100644
-> > > --- a/include/linux/kvm_host.h
-> > > +++ b/include/linux/kvm_host.h
-> > > @@ -848,6 +848,105 @@ struct kvm_memory_slot *id_to_memslot(struct kvm_memslots *slots, int id)
-> > >   	return NULL;
-> > >   }
-> > > +/* Iterator used for walking memslots that overlap a gfn range. */
-> > > +struct kvm_memslot_iter {
-> > > +	struct kvm_memslots *slots;
-> > > +	gfn_t end;
-> > > +	struct rb_node *node;
-> > > +};
-> > 
-> > ...
-> > 
-> > > +static inline struct kvm_memory_slot *kvm_memslot_iter_slot(struct kvm_memslot_iter *iter)
-> > > +{
-> > > +	return container_of(iter->node, struct kvm_memory_slot, gfn_node[iter->slots->node_idx]);
-> > 
-> > Having to use a helper in callers of kvm_for_each_memslot_in_gfn_range() is a bit
-> > ugly, any reason not to grab @slot as well?  Then the callers just do iter.slot,
-> > which IMO is much more readable.
-> 
-> "slot" can be easily calculated from "node" together with either "slots" or
-> "node_idx" (the code above just adjusts a pointer) so storing it in the
-> iterator makes little sense if the later are already stored there.
+Users of the device mapper driver might want to obtain a device status,
+with status types defined in the status_type_t enumerator.
 
-I don't want the callers to have to calculate the slot.  It's mostly syntatic
-sugar, but I really do think it improves readability.  And since the first thing
-every caller will do is retrieve the slot, I see no benefit in forcing the caller
-to do the work.
+If a function to get the status is exported by the device mapper, when
+compiled as a module, it is not suitable to use by callers compiled builtin
+in the kernel.
 
-E.g. in the simple kvm_check_memslot_overlap() usage, iter.slot->id is intuitive
-and easy to parse, whereas kvm_memslot_iter_slot(&iter)->id is slightly more
-difficult to parse and raises questions about why a function call is necessary
-and what the function might be doing.
+Introduce the real function to get the status, _dm_get_status(), in the
+device mapper module, and add the stub dm_get_status() in dm-builtin.c, so
+that it can be invoked by builtin callers.
 
-static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
-				      gfn_t start, gfn_t end)
-{
-	struct kvm_memslot_iter iter;
+The stub calls the real function if the device mapper is compiled builtin
+or the module has been loaded. Calls to the real function are safely
+disabled if the module is unloaded. The race condition is avoided by
+incrementing the reference count of the module.
 
-	kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
-		if (iter.slot->id != id)
-			return true;
-	}
+_dm_get_status() invokes the status() method for each device mapper table,
+which writes a string to the supplied buffer as output. The buffer might
+contain multiple strings concatenated together. If there is not enough
+space available, the string is truncated and a termination character is put
+at the end.
 
-	return false;
-}
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ drivers/md/dm-builtin.c       | 13 +++++++
+ drivers/md/dm-core.h          |  5 +++
+ drivers/md/dm.c               | 71 +++++++++++++++++++++++++++++++++++
+ include/linux/device-mapper.h |  3 ++
+ 4 files changed, 92 insertions(+)
 
-vs.
-
-static bool kvm_check_memslot_overlap(struct kvm_memslots *slots, int id,
-				      gfn_t start, gfn_t end)
-{
-	struct kvm_memslot_iter iter;
-
-	kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
-		if (kvm_memslot_iter_slot(&iter)->id != id)
-			return true;
-	}
-
-	return false;
-}
+diff --git a/drivers/md/dm-builtin.c b/drivers/md/dm-builtin.c
+index 8eb52e425141..cc1e9c27ab41 100644
+--- a/drivers/md/dm-builtin.c
++++ b/drivers/md/dm-builtin.c
+@@ -47,3 +47,16 @@ void dm_kobject_release(struct kobject *kobj)
+ }
+ 
+ EXPORT_SYMBOL(dm_kobject_release);
++
++dm_get_status_fn status_fn;
++EXPORT_SYMBOL(status_fn);
++
++ssize_t dm_get_status(dev_t dev, status_type_t type, const char *target_name,
++		      u8 *buf, size_t buf_len)
++{
++	if (status_fn)
++		return status_fn(dev, type, target_name, buf, buf_len);
++
++	return -EOPNOTSUPP;
++}
++EXPORT_SYMBOL(dm_get_status);
+diff --git a/drivers/md/dm-core.h b/drivers/md/dm-core.h
+index b855fef4f38a..6600ec260558 100644
+--- a/drivers/md/dm-core.h
++++ b/drivers/md/dm-core.h
+@@ -259,4 +259,9 @@ extern atomic_t dm_global_event_nr;
+ extern wait_queue_head_t dm_global_eventq;
+ void dm_issue_global_event(void);
+ 
++typedef ssize_t (*dm_get_status_fn)(dev_t dev, status_type_t type,
++				    const char *target_name, u8 *buf,
++				    size_t buf_len);
++
++extern dm_get_status_fn status_fn;
+ #endif
+diff --git a/drivers/md/dm.c b/drivers/md/dm.c
+index 662742a310cb..55e59a4e3661 100644
+--- a/drivers/md/dm.c
++++ b/drivers/md/dm.c
+@@ -192,6 +192,74 @@ static unsigned dm_get_numa_node(void)
+ 					 DM_NUMA_NODE, num_online_nodes() - 1);
+ }
+ 
++static ssize_t _dm_get_status(dev_t dev, status_type_t type,
++			      const char *target_name, u8 *buf, size_t buf_len)
++{
++	struct mapped_device *md;
++	struct dm_table *table;
++	u8 *buf_ptr = buf;
++	ssize_t len, res = 0;
++	int srcu_idx, num_targets, i;
++
++	if (buf_len > INT_MAX)
++		return -EINVAL;
++
++	if (!buf_len)
++		return buf_len;
++
++	if (!try_module_get(THIS_MODULE))
++		return -EBUSY;
++
++	md = dm_get_md(dev);
++	if (!md) {
++		res = -ENOENT;
++		goto out_module;
++	}
++
++	table = dm_get_live_table(md, &srcu_idx);
++	if (!table) {
++		res = -ENOENT;
++		goto out_md;
++	}
++
++	memset(buf, 0, buf_len);
++
++	num_targets = dm_table_get_num_targets(table);
++
++	for (i = 0; i < num_targets; i++) {
++		struct dm_target *ti = dm_table_get_target(table, i);
++
++		if (!ti)
++			continue;
++
++		if (target_name && strcmp(ti->type->name, target_name))
++			continue;
++
++		if (!ti->type->status)
++			continue;
++
++		ti->type->status(ti, type, 0, buf_ptr, buf + buf_len - buf_ptr);
++
++		if (!*buf_ptr)
++			continue;
++
++		len = strlen(buf_ptr);
++		buf_ptr += len + 1;
++
++		if (buf_ptr == buf + buf_len)
++			break;
++
++		res += len + 1;
++	}
++
++	dm_put_live_table(md, srcu_idx);
++out_md:
++	dm_put(md);
++out_module:
++	module_put(THIS_MODULE);
++	return res;
++}
++
+ static int __init local_init(void)
+ {
+ 	int r;
+@@ -275,6 +343,7 @@ static int __init dm_init(void)
+ 			goto bad;
+ 	}
+ 
++	status_fn = _dm_get_status;
+ 	return 0;
+ bad:
+ 	while (i--)
+@@ -287,6 +356,8 @@ static void __exit dm_exit(void)
+ {
+ 	int i = ARRAY_SIZE(_exits);
+ 
++	status_fn = NULL;
++
+ 	while (i--)
+ 		_exits[i]();
+ 
+diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
+index a7df155ea49b..d97b296d3104 100644
+--- a/include/linux/device-mapper.h
++++ b/include/linux/device-mapper.h
+@@ -487,6 +487,9 @@ int dm_report_zones(struct block_device *bdev, sector_t start, sector_t sector,
+ 		    struct dm_report_zones_args *args, unsigned int nr_zones);
+ #endif /* CONFIG_BLK_DEV_ZONED */
+ 
++ssize_t dm_get_status(dev_t dev, status_type_t type, const char *target_name,
++		      u8 *buf, size_t buf_len);
++
+ /*
+  * Device mapper functions to parse and create devices specified by the
+  * parameter "dm-mod.create="
+-- 
+2.32.0
 

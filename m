@@ -2,128 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 414A64643E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:19:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 776C34643EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 01:24:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345692AbhLAAXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 19:23:08 -0500
-Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:50826
-        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S237423AbhLAAXG (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 19:23:06 -0500
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D568E3F1B7
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 00:19:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1638317983;
-        bh=01pw2XK9Km906IXwU+bmXOrKNJsVY6W8/67XHtM+5hg=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=efYXkEdh1nKDsXUpUjFbiVw3zKbZ2TAIp/J67qjg6sDQDVrhCQOQA12cMfRL/LJoE
-         6GDxTnwVRL9o+fUS/qJ798ItGvANv8oFeaCpqwVN2ft+IVlCm2ix+bP4Rb6Df9KY+7
-         yZwSSVVdlsVxXopVo7hDHMQsv53RIguhhsZMkOVS0l7ac+vuBCAOIafxtgqYF5gFUj
-         XBjZkxReq8cRPmZ3g12EI3sJ/YMfYl3X2Z9zvKX0bbtOBssBTS1GhX5iXpbX+Tty9Q
-         P97TQIxZZ+5myIvrco9NSb1oHRJOuDS2caUB+HKbizASZZLx8nW1Q4HeDUkgBFa/5t
-         a21CkMGKorSJQ==
-Received: by mail-oo1-f72.google.com with SMTP id j11-20020a056820022b00b002c6b134233fso11495066oob.6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 16:19:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=01pw2XK9Km906IXwU+bmXOrKNJsVY6W8/67XHtM+5hg=;
-        b=0wwoqXvXW5lTy0LL3yAUR/vTOszPoK0g0/pM55/HcsK5URsszHmCA7VTbM1FXVg5Mx
-         7APJ5tgvUsptE42Q8Dhs+YFpVab4caaJRqQbliVgkZ3zF2kMtC7rVVsYqERml5brfE+k
-         ZTdirAYapSpfyzltcILaJs9dlc9C7g6JqMuwlE3kD4IAiKV0uYeYgwlDkmpKigt5gTFM
-         sV6kVraUvlcXdBr8zfV0iAzbriVfzQxahnV8vTydFLOwrFsJ238Wh1CSqV7NAu0sv3HM
-         YtNwmFyCZUqg8QmI43L/zXrWfCpyik6zxCeEoUDzMOGyO8nxaFrhcw4Oj/9vBxvRdnwV
-         EvhQ==
-X-Gm-Message-State: AOAM530kxh6rc3Qe21cHr47weHUd2O7OAXRYgfEpK8/5pQ2aJGfnkzza
-        K0c5rd98QQMOt1OTshDbw6eJ9eZOweLjspJMSpryY2C3bUzyQSiAu/Rk/ujZCPzgTW3DFT9lVTu
-        ArSOePwsf1BvMmIWPlGQ63Az2afQh5OuT41SvLjod7Ts5BPM42MSjnLmctA==
-X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr2456765oti.269.1638317982821;
-        Tue, 30 Nov 2021 16:19:42 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzxPQ6CRshyoOaCaMBhQD/v7gSUzGCZdm4VmA5TtZCiYMZC/ZPvenHXjQ3iqrT8oFQPHC1KquzJl67OnvcNyYM=
-X-Received: by 2002:a05:6830:1d87:: with SMTP id y7mr2456736oti.269.1638317982543;
- Tue, 30 Nov 2021 16:19:42 -0800 (PST)
+        id S1345731AbhLAA16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 19:27:58 -0500
+Received: from mga09.intel.com ([134.134.136.24]:25024 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S237423AbhLAA15 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 19:27:57 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10184"; a="236169484"
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="236169484"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2021 16:23:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,277,1631602800"; 
+   d="scan'208";a="654581606"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Nov 2021 16:23:55 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msDPf-000Dws-6l; Wed, 01 Dec 2021 00:23:55 +0000
+Date:   Wed, 1 Dec 2021 08:22:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jeya R <jeyr@codeaurora.org>, linux-arm-msm@vger.kernel.org,
+        srinivas.kandagatla@linaro.org
+Cc:     kbuild-all@lists.01.org, Jeya R <jeyr@codeaurora.org>,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        fastrpc.upstream@qti.qualcomm.com, bkumar@qti.qualcomm.com,
+        ekangupt@qti.qualcomm.com, jeyr@qti.qualcomm.com
+Subject: Re: [PATCH 2/2] misc: fastrpc: Add dma handle implementation
+Message-ID: <202112010836.zEFVht0Q-lkp@intel.com>
+References: <1638277072-6459-4-git-send-email-jeyr@codeaurora.org>
 MIME-Version: 1.0
-References: <20211119092628.677935-1-kai.heng.feng@canonical.com>
-In-Reply-To: <20211119092628.677935-1-kai.heng.feng@canonical.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Wed, 1 Dec 2021 08:19:31 +0800
-Message-ID: <CAAd53p4CpEQR0Y5XDN5E7xZ-iw2GG=gGMSm2Vd=V_M1LLEuuCA@mail.gmail.com>
-Subject: Re: [PATCH] xhci: Remove CONFIG_USB_DEFAULT_PERSIST to prevent xHCI
- from runtime suspending
-To:     mathias.nyman@intel.com
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1638277072-6459-4-git-send-email-jeyr@codeaurora.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 19, 2021 at 5:27 PM Kai-Heng Feng
-<kai.heng.feng@canonical.com> wrote:
->
-> When the xHCI is quirked with XHCI_RESET_ON_RESUME, runtime resume
-> routine also resets the controller.
->
-> This is bad for USB drivers without reset_resume callback, because
-> there's no subsequent call of usb_dev_complete() ->
-> usb_resume_complete() to force rebinding the driver to the device. For
-> instance, btusb device stops working after xHCI controller is runtime
-> resumed, if the controlled is quirked with XHCI_RESET_ON_RESUME.
->
-> So always take XHCI_RESET_ON_RESUME into account to solve the issue.
->
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+Hi Jeya,
 
-A gentle ping...
+Thank you for the patch! Yet something to improve:
 
-> ---
->  drivers/usb/host/xhci.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 902f410874e8e..af92a9f8ed670 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -3934,7 +3934,6 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
->         struct xhci_slot_ctx *slot_ctx;
->         int i, ret;
->
-> -#ifndef CONFIG_USB_DEFAULT_PERSIST
->         /*
->          * We called pm_runtime_get_noresume when the device was attached.
->          * Decrement the counter here to allow controller to runtime suspend
-> @@ -3942,7 +3941,6 @@ static void xhci_free_dev(struct usb_hcd *hcd, struct usb_device *udev)
->          */
->         if (xhci->quirks & XHCI_RESET_ON_RESUME)
->                 pm_runtime_put_noidle(hcd->self.controller);
-> -#endif
->
->         ret = xhci_check_args(hcd, udev, NULL, 0, true, __func__);
->         /* If the host is halted due to driver unload, we still need to free the
-> @@ -4094,14 +4092,12 @@ int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
->
->         xhci_debugfs_create_slot(xhci, slot_id);
->
-> -#ifndef CONFIG_USB_DEFAULT_PERSIST
->         /*
->          * If resetting upon resume, we can't put the controller into runtime
->          * suspend if there is a device attached.
->          */
->         if (xhci->quirks & XHCI_RESET_ON_RESUME)
->                 pm_runtime_get_noresume(hcd->self.controller);
-> -#endif
->
->         /* Is this a LS or FS device under a HS hub? */
->         /* Hub or peripherial? */
-> --
-> 2.32.0
->
+[auto build test ERROR on char-misc/char-misc-testing]
+[also build test ERROR on v5.16-rc3 next-20211130]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
+
+url:    https://github.com/0day-ci/linux/commits/Jeya-R/misc-fastrpc-Add-fdlist-implementation/20211130-215833
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/char-misc.git 5d331b5922551637c586cdf5fdc1778910fc937f
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20211201/202112010836.zEFVht0Q-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/0day-ci/linux/commit/b29c5611eb2bd23a416730b8067a107bcc8594a7
+        git remote add linux-review https://github.com/0day-ci/linux
+        git fetch --no-tags linux-review Jeya-R/misc-fastrpc-Add-fdlist-implementation/20211130-215833
+        git checkout b29c5611eb2bd23a416730b8067a107bcc8594a7
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sh SHELL=/bin/bash drivers/misc/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   drivers/misc/fastrpc.c: In function 'fastrpc_get_meta_size':
+>> drivers/misc/fastrpc.c:721:31: error: 'fastrpc_remote_arg' defined as wrong kind of tag
+     721 |         size = (sizeof(struct fastrpc_remote_arg) +
+         |                               ^~~~~~~~~~~~~~~~~~
+>> drivers/misc/fastrpc.c:721:24: error: invalid application of 'sizeof' to incomplete type 'struct fastrpc_remote_arg'
+     721 |         size = (sizeof(struct fastrpc_remote_arg) +
+         |                        ^~~~~~
+   drivers/misc/fastrpc.c: In function 'fastrpc_put_args':
+   drivers/misc/fastrpc.c:925:16: error: 'fastrpc_remote_arg' defined as wrong kind of tag
+     925 |         struct fastrpc_remote_arg *rpra = ctx->rpra;
+         |                ^~~~~~~~~~~~~~~~~~
+>> drivers/misc/fastrpc.c:925:43: error: initialization of 'struct fastrpc_remote_arg *' from incompatible pointer type 'union fastrpc_remote_arg *' [-Werror=incompatible-pointer-types]
+     925 |         struct fastrpc_remote_arg *rpra = ctx->rpra;
+         |                                           ^~~
+   drivers/misc/fastrpc.c:935:55: error: invalid application of 'sizeof' to incomplete type 'struct fastrpc_remote_arg'
+     935 |         list = ctx->buf->virt + ctx->nscalars * sizeof(*rpra);
+         |                                                       ^
+   drivers/misc/fastrpc.c:937:23: error: invalid application of 'sizeof' to incomplete type 'struct fastrpc_remote_arg'
+     937 |                 sizeof(*rpra));
+         |                       ^
+>> drivers/misc/fastrpc.c:942:60: error: invalid use of undefined type 'struct fastrpc_remote_arg'
+     942 |                         void *src = (void *)(uintptr_t)rpra[i].pv;
+         |                                                            ^
+   drivers/misc/fastrpc.c:942:63: error: invalid use of undefined type 'struct fastrpc_remote_arg'
+     942 |                         void *src = (void *)(uintptr_t)rpra[i].pv;
+         |                                                               ^
+   drivers/misc/fastrpc.c:944:39: error: invalid use of undefined type 'struct fastrpc_remote_arg'
+     944 |                         u64 len = rpra[i].len;
+         |                                       ^
+   drivers/misc/fastrpc.c:944:42: error: invalid use of undefined type 'struct fastrpc_remote_arg'
+     944 |                         u64 len = rpra[i].len;
+         |                                          ^
+   drivers/misc/fastrpc.c:958:39: error: 'fl' undeclared (first use in this function); did you mean 'fd'?
+     958 |                 if (!fastrpc_map_find(fl, (int)fdlist[i], &mmap))
+         |                                       ^~
+         |                                       fd
+   drivers/misc/fastrpc.c:958:39: note: each undeclared identifier is reported only once for each function it appears in
+   At top level:
+   drivers/misc/fastrpc.c:717:12: warning: 'fastrpc_get_meta_size' defined but not used [-Wunused-function]
+     717 | static int fastrpc_get_meta_size(struct fastrpc_invoke_ctx *ctx)
+         |            ^~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/fastrpc_remote_arg +721 drivers/misc/fastrpc.c
+
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  689  
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  690  /*
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  691   * Fastrpc payload buffer with metadata looks like:
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  692   *
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  693   * >>>>>>  START of METADATA <<<<<<<<<
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  694   * +---------------------------------+
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  695   * |           Arguments             |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  696   * | type:(struct fastrpc_remote_arg)|
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  697   * |             (0 - N)             |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  698   * +---------------------------------+
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  699   * |         Invoke Buffer list      |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  700   * | type:(struct fastrpc_invoke_buf)|
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  701   * |           (0 - N)               |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  702   * +---------------------------------+
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  703   * |         Page info list          |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  704   * | type:(struct fastrpc_phy_page)  |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  705   * |             (0 - N)             |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  706   * +---------------------------------+
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  707   * |         Optional info           |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  708   * |(can be specific to SoC/Firmware)|
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  709   * +---------------------------------+
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  710   * >>>>>>>>  END of METADATA <<<<<<<<<
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  711   * +---------------------------------+
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  712   * |         Inline ARGS             |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  713   * |            (0-N)                |
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  714   * +---------------------------------+
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  715   */
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  716  
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  717  static int fastrpc_get_meta_size(struct fastrpc_invoke_ctx *ctx)
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  718  {
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  719  	int size = 0;
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  720  
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08 @721  	size = (sizeof(struct fastrpc_remote_arg) +
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  722  		sizeof(struct fastrpc_invoke_buf) +
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  723  		sizeof(struct fastrpc_phy_page)) * ctx->nscalars +
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  724  		sizeof(u64) * FASTRPC_MAX_FDLIST +
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  725  		sizeof(u32) * FASTRPC_MAX_CRCLIST;
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  726  
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  727  	return size;
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  728  }
+c68cfb718c8f97 Srinivas Kandagatla 2019-02-08  729  
+
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

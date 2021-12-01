@@ -2,78 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB3E464DE6
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 13:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5050D464DEA
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 13:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349318AbhLAMdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 07:33:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243419AbhLAMda (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 07:33:30 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0DACC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 04:30:09 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1msOkR-00015d-J2; Wed, 01 Dec 2021 13:30:07 +0100
-Message-ID: <40a8113ebb566f3c87648ffa86d39846fc63d8a4.camel@pengutronix.de>
-Subject: Re: [PATCH] drm/etnaviv: constify static struct cooling_ops
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        Russell King <linux+etnaviv@armlinux.org.uk>
-Date:   Wed, 01 Dec 2021 13:30:06 +0100
-In-Reply-To: <20211128201916.10230-1-rikard.falkeborn@gmail.com>
-References: <20211128201916.10230-1-rikard.falkeborn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        id S1349331AbhLAMhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 07:37:22 -0500
+Received: from foss.arm.com ([217.140.110.172]:35896 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S243419AbhLAMhV (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 07:37:21 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3E9971477;
+        Wed,  1 Dec 2021 04:34:00 -0800 (PST)
+Received: from e127744.cambridge.arm.com (e127744.cambridge.arm.com [10.1.32.151])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id EB1BC3F694;
+        Wed,  1 Dec 2021 04:33:56 -0800 (PST)
+From:   German Gomez <german.gomez@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Cc:     German Gomez <german.gomez@arm.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: [PATCH v1 0/4] Support register names from all architectures
+Date:   Wed,  1 Dec 2021 12:33:28 +0000
+Message-Id: <20211201123334.679131-1-german.gomez@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Sonntag, dem 28.11.2021 um 21:19 +0100 schrieb Rikard Falkeborn:
-> The only usage of cooling_ops is to pass its address to
-> thermal_of_cooling_device_register(), which takes a pointer to const
-> struct thermal_cooling_device_ops as input. Make it const to allow the
-> compiler to put it in read-only memory.
-> 
-> Signed-off-by: Rikard Falkeborn <rikard.falkeborn@gmail.com>
+The following changeset applies some corrections to the way system
+registers are processed and presented when reading perf.data files using
+the various perf tools.
 
-Applied to my etnaviv/next branch.
+The commit message from [4/4] shows how register names aren't correctly
+presented when performing x-arch analysis of perf.data files (i.e.
+recording in one arch, then reading the file from a different arch).
 
-Regards,
-Lucas
+Please let me know if there are any concerns with this approach, or if
+any improvements can be made for subsequent re-rolls of the changeset.
 
-> ---
->  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> index 06bde46df451..37018bc55810 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> @@ -1658,7 +1658,7 @@ etnaviv_gpu_cooling_set_cur_state(struct thermal_cooling_device *cdev,
->  	return 0;
->  }
->  
-> -static struct thermal_cooling_device_ops cooling_ops = {
-> +static const struct thermal_cooling_device_ops cooling_ops = {
->  	.get_max_state = etnaviv_gpu_cooling_get_max_state,
->  	.get_cur_state = etnaviv_gpu_cooling_get_cur_state,
->  	.set_cur_state = etnaviv_gpu_cooling_set_cur_state,
+  - [PATCH 1/4] Fixes a potential out-of-bounds access when reading the
+    values of the registers in the perf.data file.
+  - [PATCH 2/4] Modifies one of the callbacks in "struct scripting_ops"
+    so that the python version can obtain the correct register names.
+  - [PATCH 3/4] Adds header files with the register indices and names
+    from all architectures, which are used by the next patch.
+  - [PATCH 4/4] Refactors the function "perf_reg_name" so that it can
+    support registers from all architectures, not just the local one.
 
+Thanks,
+German
+
+German Gomez (4):
+  perf tools: Prevent out-of-bounds access to registers
+  perf script: Add "struct machine" parameter to process_event callback
+  perf tools: Crete header files with register names
+  perf tools: Support register names from all architectures
+
+ tools/perf/arch/arm/include/perf_regs.h       |  42 --------
+ tools/perf/arch/arm64/include/perf_regs.h     |  76 -------------
+ tools/perf/arch/csky/include/perf_regs.h      |  82 --------------
+ tools/perf/arch/mips/include/perf_regs.h      |  69 ------------
+ tools/perf/arch/powerpc/include/perf_regs.h   |  66 ------------
+ tools/perf/arch/riscv/include/perf_regs.h     |  74 -------------
+ tools/perf/arch/s390/include/perf_regs.h      |  78 --------------
+ tools/perf/arch/x86/include/perf_regs.h       |  82 --------------
+ tools/perf/builtin-script.c                   |  26 ++---
+ tools/perf/util/event.h                       |   5 +-
+ tools/perf/util/perf_regs.c                   |   3 +
+ tools/perf/util/perf_regs.h                   |  33 +++++-
+ tools/perf/util/perf_regs_arm.h               |  57 ++++++++++
+ tools/perf/util/perf_regs_arm64.h             |  83 ++++++++++++++
+ tools/perf/util/perf_regs_csky.h              | 101 ++++++++++++++++++
+ tools/perf/util/perf_regs_mips.h              |  76 +++++++++++++
+ tools/perf/util/perf_regs_powerpc.h           |  74 +++++++++++++
+ tools/perf/util/perf_regs_riscv.h             |  81 ++++++++++++++
+ tools/perf/util/perf_regs_s390.h              |  85 +++++++++++++++
+ tools/perf/util/perf_regs_x86.h               |  87 +++++++++++++++
+ .../util/scripting-engines/trace-event-perl.c |   3 +-
+ .../scripting-engines/trace-event-python.c    |  33 +++---
+ tools/perf/util/session.c                     |  25 ++---
+ tools/perf/util/trace-event-scripting.c       |   3 +-
+ tools/perf/util/trace-event.h                 |   3 +-
+ 25 files changed, 733 insertions(+), 614 deletions(-)
+ create mode 100644 tools/perf/util/perf_regs_arm.h
+ create mode 100644 tools/perf/util/perf_regs_arm64.h
+ create mode 100644 tools/perf/util/perf_regs_csky.h
+ create mode 100644 tools/perf/util/perf_regs_mips.h
+ create mode 100644 tools/perf/util/perf_regs_powerpc.h
+ create mode 100644 tools/perf/util/perf_regs_riscv.h
+ create mode 100644 tools/perf/util/perf_regs_s390.h
+ create mode 100644 tools/perf/util/perf_regs_x86.h
+
+-- 
+2.25.1
 

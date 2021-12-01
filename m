@@ -2,142 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54302464528
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:54:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B660D464523
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:54:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346382AbhLAC6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:58:14 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:35590 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346271AbhLAC5z (ORCPT
+        id S1346284AbhLAC54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 21:57:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57768 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233169AbhLAC5t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:57:55 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 54CA0B81DD4;
-        Wed,  1 Dec 2021 02:54:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1BBBC53FCB;
-        Wed,  1 Dec 2021 02:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638327273;
-        bh=HX8RCwdqu/46D2qyz9bpRkRtDZWJITkdfTUGokM+JjM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SXes2SJReN5hqMLFOqRQLM6srx44ZPKmw+xkKXEr1hjGrSpX1WFqZmvbqqrFdvY4J
-         02EQ/vSAu/ak1n0c+ebhnoMLoHV66nyg6NH4lDwI8n/YrcgTy7JcauC3UGMrTuKtcZ
-         JkZLGAaJGoC2d38+ORhuMfgrJTVM5kds3xV4hHoPbY7IuB4603DMke7jDvJOUBsLg6
-         ShsUGefIdP88a13c7d99iV91BJyXyoAB0mRVGG63rOaR5lAKasoFJbH596GLRIvy7Y
-         HrNTDfAC2zlQn+zGkAFFUliySqodcRKKDLMPgU1Q8uqWwnUYdtH7qpNVk6xpy2KHOY
-         XFXMx9IIC2VEQ==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     David Airlie <airlied@linux.ie>
-Cc:     Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v2 3/3] via-agp: convert to generic power management
-Date:   Tue, 30 Nov 2021 20:54:19 -0600
-Message-Id: <20211201025419.2797624-4-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211201025419.2797624-1-helgaas@kernel.org>
-References: <20211201025419.2797624-1-helgaas@kernel.org>
+        Tue, 30 Nov 2021 21:57:49 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13AC5C061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:54:26 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k4so16508420plx.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 18:54:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9A/2leLJbfX1szhJ25c58spVdgO6jJrp/elHwnh4vrE=;
+        b=VTbhgSBz76ZAXqAAU3pEKuxePf2WpS4uKDeng9BYo8lhswfDH4kfmy7bX/pAEFBujM
+         O3bTwxtcihymXSv4Ogqrl0wLYKcKkCSY/30PSat8Wq2AKNU8ZWZ0dxrxbAoBzfzG3RMp
+         x+2X3dZOHH9puPBDxLCLurBfrxvdMrsWSjYOVdAxIKySMasMSp89YARw6YAuYhS8GngA
+         kIDGR4Ar6tbQ3a8M/+z15YkDXuGxOlsfgS1hXOpXrfD8rH7EwM4nHX+CNBUNQhWozLtk
+         MGujAmwkd4p5SczfwQHoFIh4Ok+n5nx6U2qS22x2jiak/dbhwT0XOs9xmvv4Hj6Zi26Q
+         IpTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9A/2leLJbfX1szhJ25c58spVdgO6jJrp/elHwnh4vrE=;
+        b=kEinAWN2Bk8LzSADPKkMwI9yjfrOuNytnP3h5+AA1YaCPX8TIPzWKzU3UnEoSdvgj9
+         Pvh4noEgbLs+tIuxWNXX2Q0PhCuLfLeGBhfOWuevKceUwt2u7V9EWsvyHzIRXbDXtdhW
+         VFTJLSlRz1/tRf35IBk5n9nUVDZ8xwhmJTT6CjopyCAAovIwsO5qdk4ZxgnduX+CCoDm
+         I23LC+19wwvnS+y+TIHvVd3O70QzkVGgnkirGFeM7sLBrQ8YBBk2uUaKfBE/nmEk5GuZ
+         kY56pNLOqmfBQcuW815WSwZO6jY3Sv2IAG5fzQ5wwSvq9+6JA6Q00GFIsgvtjihrWoTA
+         a7vQ==
+X-Gm-Message-State: AOAM530dNdSYPqX9K8wPHkC8lNx2+dHjLZhG95yP5Ed5aFr6UXnXp0PL
+        R2mZ0ZER092+NNVgjAwYwmJPoA==
+X-Google-Smtp-Source: ABdhPJxOWDatsECgGBcAHEz6kwu67DVfRq3IjArlD9yguLiB64YzJv0E9qqzu0XJXLd6QlRALQ0Hrw==
+X-Received: by 2002:a17:90b:390c:: with SMTP id ob12mr3830664pjb.212.1638327265405;
+        Tue, 30 Nov 2021 18:54:25 -0800 (PST)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k8sm14530597pfc.197.2021.11.30.18.54.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 18:54:24 -0800 (PST)
+Date:   Wed, 1 Dec 2021 02:54:21 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Igor Mammedov <imammedo@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Julien Thierry <julien.thierry.kdev@gmail.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 21/29] KVM: Resolve memslot ID via a hash table
+ instead of via a static array
+Message-ID: <Yabj3Qr8e85qhSg3@google.com>
+References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+ <a6b62e0bdba2a82bbc31dcad3c8525ccc5ff0bff.1638304316.git.maciej.szmigiero@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a6b62e0bdba2a82bbc31dcad3c8525ccc5ff0bff.1638304316.git.maciej.szmigiero@oracle.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vaibhav Gupta <vaibhavgupta40@gmail.com>
+On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
+> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
+> 
+> Memslot ID to the corresponding memslot mappings are currently kept as
+> indices in static id_to_index array.
+> The size of this array depends on the maximum allowed memslot count
+> (regardless of the number of memslots actually in use).
+> 
+> This has become especially problematic recently, when memslot count cap was
+> removed, so the maximum count is now full 32k memslots - the maximum
+> allowed by the current KVM API.
+> 
+> Keeping these IDs in a hash table (instead of an array) avoids this
+> problem.
+> 
+> Resolving a memslot ID to the actual memslot (instead of its index) will
+> also enable transitioning away from an array-based implementation of the
+> whole memslots structure in a later commit.
+> 
+> Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Convert via-agp from legacy PCI power management to the generic power
-management framework.
-
-Previously, via-agp used legacy PCI power management.  agp_via_suspend()
-looked like this:
-
-  agp_via_suspend
-    pci_save_state(pdev)
-    pci_set_power_state(pdev, pci_choose_state(pdev, state))
-
-With generic power management, these are both done by the PCI core in
-pci_pm_runtime_suspend(), so drop agp_via_suspend() completely.
-
-agp_via_resume() looked like this:
-
-  agp_via_resume
-    pci_set_power_state(pdev, PCI_D0)
-    pci_restore_state(pdev)
-    ...
-
-With generic power management, the PCI parts are done by
-pci_pm_runtime_resume(), so drop those from agp_via_resume().
-
-[bhelgaas: commit log]
-Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- drivers/char/agp/via-agp.c | 25 +++++--------------------
- 1 file changed, 5 insertions(+), 20 deletions(-)
-
-diff --git a/drivers/char/agp/via-agp.c b/drivers/char/agp/via-agp.c
-index 87a92a044570..a460ae352772 100644
---- a/drivers/char/agp/via-agp.c
-+++ b/drivers/char/agp/via-agp.c
-@@ -492,22 +492,11 @@ static void agp_via_remove(struct pci_dev *pdev)
- 	agp_put_bridge(bridge);
- }
- 
--#ifdef CONFIG_PM
-+#define agp_via_suspend NULL
- 
--static int agp_via_suspend(struct pci_dev *pdev, pm_message_t state)
-+static int __maybe_unused agp_via_resume(struct device *dev)
- {
--	pci_save_state (pdev);
--	pci_set_power_state (pdev, PCI_D3hot);
--
--	return 0;
--}
--
--static int agp_via_resume(struct pci_dev *pdev)
--{
--	struct agp_bridge_data *bridge = pci_get_drvdata(pdev);
--
--	pci_set_power_state (pdev, PCI_D0);
--	pci_restore_state(pdev);
-+	struct agp_bridge_data *bridge = dev_get_drvdata(dev);
- 
- 	if (bridge->driver == &via_agp3_driver)
- 		return via_configure_agp3();
-@@ -517,8 +506,6 @@ static int agp_via_resume(struct pci_dev *pdev)
- 	return 0;
- }
- 
--#endif /* CONFIG_PM */
--
- /* must be the same order as name table above */
- static const struct pci_device_id agp_via_pci_table[] = {
- #define ID(x) \
-@@ -567,16 +554,14 @@ static const struct pci_device_id agp_via_pci_table[] = {
- 
- MODULE_DEVICE_TABLE(pci, agp_via_pci_table);
- 
-+static SIMPLE_DEV_PM_OPS(agp_via_pm_ops, agp_via_suspend, agp_via_resume);
- 
- static struct pci_driver agp_via_pci_driver = {
- 	.name		= "agpgart-via",
- 	.id_table	= agp_via_pci_table,
- 	.probe		= agp_via_probe,
- 	.remove		= agp_via_remove,
--#ifdef CONFIG_PM
--	.suspend	= agp_via_suspend,
--	.resume		= agp_via_resume,
--#endif
-+	.driver.pm      = &agp_via_pm_ops,
- };
- 
- 
--- 
-2.25.1
-
+Nit, your SoB should come last since you were the last person to handle the patch.

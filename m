@@ -2,60 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B44465181
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080FA46518E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350916AbhLAP1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:27:55 -0500
-Received: from relay08.th.seeweb.it ([5.144.164.169]:55085 "EHLO
-        relay08.th.seeweb.it" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234405AbhLAP1y (ORCPT
+        id S1350936AbhLAP32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58958 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350924AbhLAP31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:27:54 -0500
-Received: from [192.168.1.101] (83.6.166.111.neoplus.adsl.tpnet.pl [83.6.166.111])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 46A6F3F737;
-        Wed,  1 Dec 2021 16:24:32 +0100 (CET)
-Message-ID: <2256af7c-272a-b4ff-b1ad-d503a051fd64@somainline.org>
-Date:   Wed, 1 Dec 2021 16:24:31 +0100
+        Wed, 1 Dec 2021 10:29:27 -0500
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA88BC061748
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 07:26:06 -0800 (PST)
+Received: by mail-oi1-x229.google.com with SMTP id 7so49137407oip.12
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 07:26:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ho6rCo9lvPlr61eCFjwRCuPn4r4Kk8E194rQWiIz0bI=;
+        b=YXF59qJSiaiKjxgLQe1GtDIWTcG43VO5iCCkRI2et4LcvkcKPMebyz92zURex8nzXK
+         Q0/aKVyWDM1lJ6t9Tue0/s3t4Y5ONXFCBUBZXUtU42+D6EMCS7ym15Ce9GfaYnfwgtj7
+         6CzxVWF/lVMGUR/kZYFErFRNs3zUB6EuctgjqljXgo/Jxeg+1EoyGmB/Hhr6YrpL9V7Z
+         oaQW4yNQWj65D4YRq1o22wKY0GgSoRo2BL/iHVHIDmIQrQqVpstVh9YoWLxBlUUlDZgU
+         6N6L7GBW+dzUu/DUl+LeZuphGH4L5oCVMMEQB0x7ICqnJlxyVkTj1F4MM/N2kCiIzZfn
+         MiFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ho6rCo9lvPlr61eCFjwRCuPn4r4Kk8E194rQWiIz0bI=;
+        b=0rjEE5FdAGS5nQrWkLk5r8SAcQZZd0Vj4kQvyQnSMOYXZ50z5TjdRzX2Ny37lhbpeN
+         uivhMJ/zQtCtY3u3VdzUhIFkwx3W8Xgrc9cr/KmKXOogZRDUKB33lfzLZNoAqjrjtYgQ
+         RjFA14XJMAP6wrnCz221OEZIWrAnfDiM37Uy8JDp0WbtyWdeNRgDpAZ3ms8Jn8+aBsfG
+         VInyl3/TL7Ph4dgSy0L0S+p3Xz9vuRGpxQim19TFVN4SkhFvAg8txaE3dVpLHXOiBgtv
+         yNSLfksd6AfaPbHdE8dOR9e0vyAyf8kpMjo6iREK8lkkZ4xrwkzaH9Z+0J/DEMTLbBti
+         mNRQ==
+X-Gm-Message-State: AOAM533hu2eBKEzFb+546x/1bpQo3bQf0X+UJPeOKknc9oLap9IapKH9
+        3/ivOlKU0Xknq9JhN8wD0SkxYA==
+X-Google-Smtp-Source: ABdhPJymuEP6wWTINOd5J43jZF/j9auHYUXRrHHj1cpGkUtoyw/CVMO7oF9UFb725mHlHPWTb/UEgQ==
+X-Received: by 2002:a05:6808:1a02:: with SMTP id bk2mr6718132oib.52.1638372366039;
+        Wed, 01 Dec 2021 07:26:06 -0800 (PST)
+Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id e14sm8491oow.3.2021.12.01.07.26.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 07:26:05 -0800 (PST)
+Date:   Wed, 1 Dec 2021 09:26:00 -0600
+From:   Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, agross@kernel.org, robh+dt@kernel.org,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        robdclark@gmail.com, seanpaul@chromium.org, swboyd@chromium.org,
+        quic_kalyant@quicinc.com, quic_abhinavk@quicinc.com,
+        dianders@chromium.org, quic_khsieh@quicinc.com
+Subject: Re: [PATCH v4 1/4] arm64: dts: qcom: sc7280: add display dt nodes
+Message-ID: <YaeUCK5+P8DrEM41@builder.lan>
+References: <1637580369-876-1-git-send-email-quic_sbillaka@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 13/15] arm64: dts: qcom: sm8450: Add rpmhpd node
-Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211201072915.3969178-1-vkoul@kernel.org>
- <20211201072915.3969178-14-vkoul@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20211201072915.3969178-14-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1637580369-876-1-git-send-email-quic_sbillaka@quicinc.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon 22 Nov 05:26 CST 2021, Sankeerth Billakanti wrote:
 
-On 01.12.2021 08:29, Vinod Koul wrote:
-> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->
-> This adds RPMH power domain found in SM8450 SoC
->
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
+> From: Krishna Manikandan <quic_mkrishn@quicinc.com>
+> 
+> Add mdss and mdp DT nodes for sc7280.
+> 
+> Signed-off-by: Krishna Manikandan <quic_mkrishn@quicinc.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
 > ---
->  arch/arm64/boot/dts/qcom/sm8450.dtsi | 52 ++++++++++++++++++++++++++++
->  1 file changed, 52 insertions(+)
+> 
+> Changes in v4:
+>     None
+> 
+> Changes in v3:
+>     None
+> 
+> Changes in v2:
+>     - Rename display dt nodes (Stephen Boyd)
+>     - Add clock names one per line for readability (Stephen Boyd)
+> 
+> 
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi | 90 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> index 365a2e0..a4536b6 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+> @@ -2704,6 +2704,96 @@
+>  			#power-domain-cells = <1>;
+>  		};
+>  
+> +		mdss: display-subsystem@ae00000 {
+> +			compatible = "qcom,sc7280-mdss";
+> +			reg = <0 0x0ae00000 0 0x1000>;
+> +			reg-names = "mdss";
+> +
+> +			power-domains = <&dispcc DISP_CC_MDSS_CORE_GDSC>;
+> +
+> +			clocks = <&gcc GCC_DISP_AHB_CLK>,
+> +				 <&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +				<&dispcc DISP_CC_MDSS_MDP_CLK>;
+> +			clock-names = "iface",
+> +				      "ahb",
+> +				      "core";
+> +
+> +			assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>;
+> +			assigned-clock-rates = <300000000>;
+> +
+> +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <1>;
+> +
+> +			interconnects = <&mmss_noc MASTER_MDP0 0 &mc_virt SLAVE_EBI1 0>;
+> +			interconnect-names = "mdp0-mem";
+> +
+> +			iommus = <&apps_smmu 0x900 0x402>;
+> +
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			status = "disabled";
+> +
+> +			mdp: display-controller@ae01000 {
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+I believe the only reason to give this a label is so that you can enable
+it in the dts. But I don't see the point of having it status disabled,
+given that it should always follow the mdss node's status.
 
+> +				compatible = "qcom,sc7280-dpu";
+> +				reg = <0 0x0ae01000 0 0x8f030>,
+> +					<0 0x0aeb0000 0 0x2008>;
+> +				reg-names = "mdp", "vbif";
+> +
+> +				clocks = <&gcc GCC_DISP_HF_AXI_CLK>,
+> +					<&gcc GCC_DISP_SF_AXI_CLK>,
+> +					<&dispcc DISP_CC_MDSS_AHB_CLK>,
+> +					<&dispcc DISP_CC_MDSS_MDP_LUT_CLK>,
+> +					<&dispcc DISP_CC_MDSS_MDP_CLK>,
+> +					<&dispcc DISP_CC_MDSS_VSYNC_CLK>;
+> +				clock-names = "bus",
+> +					      "nrt_bus",
+> +					      "iface",
+> +					      "lut",
+> +					      "core",
+> +					      "vsync";
+> +				assigned-clocks = <&dispcc DISP_CC_MDSS_MDP_CLK>,
+> +						<&dispcc DISP_CC_MDSS_VSYNC_CLK>,
+> +						<&dispcc DISP_CC_MDSS_AHB_CLK>;
+> +				assigned-clock-rates = <300000000>,
+> +							<19200000>,
+> +							<19200000>;
+> +				operating-points-v2 = <&mdp_opp_table>;
+> +				power-domains = <&rpmhpd SC7280_CX>;
+> +
+> +				interrupt-parent = <&mdss>;
+> +				interrupts = <0>;
+> +
+> +				status = "disabled";
 
-Konrad
+So my suggestion is to drop this and drop the label.
 
+If not, please change the label of this node to mdss_mdp, for sorting
+purposes.
+
+Thanks,
+Bjorn
+
+> +
+> +				mdp_opp_table: opp-table {
+> +					compatible = "operating-points-v2";
+> +
+> +					opp-200000000 {
+> +						opp-hz = /bits/ 64 <200000000>;
+> +						required-opps = <&rpmhpd_opp_low_svs>;
+> +					};
+> +
+> +					opp-300000000 {
+> +						opp-hz = /bits/ 64 <300000000>;
+> +						required-opps = <&rpmhpd_opp_svs>;
+> +					};
+> +
+> +					opp-380000000 {
+> +						opp-hz = /bits/ 64 <380000000>;
+> +						required-opps = <&rpmhpd_opp_svs_l1>;
+> +					};
+> +
+> +					opp-506666667 {
+> +						opp-hz = /bits/ 64 <506666667>;
+> +						required-opps = <&rpmhpd_opp_nom>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +
+>  		pdc: interrupt-controller@b220000 {
+>  			compatible = "qcom,sc7280-pdc", "qcom,pdc";
+>  			reg = <0 0x0b220000 0 0x30000>;
+> -- 
+> 2.7.4
+> 

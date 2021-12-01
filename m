@@ -2,135 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4075846488F
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:30:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88E846486C
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347579AbhLAHeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:34:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34540 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347537AbhLAHdZ (ORCPT
+        id S1347565AbhLAHdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:33:03 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:33312 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347508AbhLAHc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:33:25 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5376FC06175C;
-        Tue, 30 Nov 2021 23:30:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 1 Dec 2021 02:32:57 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9FCE3CE1D67;
-        Wed,  1 Dec 2021 07:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33C7FC53FD2;
-        Wed,  1 Dec 2021 07:29:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638343800;
-        bh=O3yKs0vj19W5/BZ/Tdv8ra+JxyZYiCDB3WZbbopGoNc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CKfWPz/ywrjiFAqe+TH4KwsnbY7lON0wrCdS1J/EFEfmoC0Cmne5FJ5TvtKL4Rc4m
-         c6iQwTbR7vR/aY4mEsjiET5CG1mL18l75+jeaeRQEb6BQJPV7bcRCIWfShfmIIwZ3y
-         CMv0+llIQIKRndOZyJu+xGHHAXF04mx7Uo8t2RHmPbkHIz1/zGr2epAU//djG4lvpt
-         1ApFj5VtsbcpGvRZ32cFHXesb9KmVU2L5/ob9YQuTrSVSkqjDdcJ2598bW1Lvv/r/Z
-         j0knfwdviW7eGqVCaRI4GLI/BLj2AjtehOzeWD2vyAh5hhOBE1O2I9moGsk4kn2qcX
-         UfF9ib3Q8If2w==
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH 13/15] arm64: dts: qcom: sm8450: Add rpmhpd node
-Date:   Wed,  1 Dec 2021 12:59:13 +0530
-Message-Id: <20211201072915.3969178-14-vkoul@kernel.org>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20211201072915.3969178-1-vkoul@kernel.org>
-References: <20211201072915.3969178-1-vkoul@kernel.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 268C2212CC;
+        Wed,  1 Dec 2021 07:29:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638343775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mNwa1yBOCr/IbPm2xGwMXFwnRld7AY6KZo0SxKpDWOc=;
+        b=XEGX+OA+fF3UKJ+uTkzSerTtPkO12vtJjX5/GQ39zptAh/H5+4tGPEJUkIWJlVtQx1aFIw
+        Go4w1T9+Bmjm5YplIigI9ifpmLVqgXZqWLOCf+AGl3VPmVBc7i35hAYjx20JwuqrREqNPJ
+        F4gT2mwGkWip/smXaN4+jIqIUFBOFPM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638343775;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mNwa1yBOCr/IbPm2xGwMXFwnRld7AY6KZo0SxKpDWOc=;
+        b=gGWTlyFnFaPiuPIER8CvwV2ADeKxJOSx0A81eB5AArBH7cL3eyG52yceLKCeFg6agSb8nh
+        Z9yQbE+umtaLXbAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EA53313AE2;
+        Wed,  1 Dec 2021 07:29:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RmVmOF4kp2HrFQAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:29:34 +0000
+Subject: Re: [PATCH 10/18] crypto: dh - introduce support for ephemeral key
+ generation to dh-generic
+To:     Nicolai Stange <nstange@suse.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
+        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
+        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        qat-linux@intel.com, keyrings@vger.kernel.org
+References: <20211201004858.19831-1-nstange@suse.de>
+ <20211201004858.19831-11-nstange@suse.de>
+From:   Hannes Reinecke <hare@suse.de>
+Message-ID: <70e1c5fc-aaf5-1366-561d-178cd3688eea@suse.de>
+Date:   Wed, 1 Dec 2021 08:29:34 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
+In-Reply-To: <20211201004858.19831-11-nstange@suse.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+On 12/1/21 1:48 AM, Nicolai Stange wrote:
+> The support for NVME in-band authentication currently in the works ([1])
+> needs to generate ephemeral DH keys. Make dh-generic's ->set_secret()
+> to generate an ephemeral key via the recently added crypto_dh_gen_privkey()
+> in case the input ->key_size is zero. Note that this behaviour is in
+> analogy to ecdh's ->set_secret().
+> 
+> [1] https://lkml.kernel.org/r/20211122074727.25988-4-hare@suse.de
+> 
+> Signed-off-by: Nicolai Stange <nstange@suse.de>
+> ---
+>   crypto/dh.c | 24 ++++++++++++++++++++----
+>   1 file changed, 20 insertions(+), 4 deletions(-)
+> 
+Reviewed-by: Hannes Reinecke <hare@suse.de>
 
-This adds RPMH power domain found in SM8450 SoC
+Cheers,
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Vinod Koul <vkoul@kernel.org>
----
- arch/arm64/boot/dts/qcom/sm8450.dtsi | 52 ++++++++++++++++++++++++++++
- 1 file changed, 52 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-index 25d93a51ac19..8f0819df8039 100644
---- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/clock/qcom,gcc-sm8450.h>
- #include <dt-bindings/clock/qcom,rpmh.h>
- #include <dt-bindings/interconnect/qcom,sm8450.h>
-+#include <dt-bindings/power/qcom-rpmpd.h>
- #include <dt-bindings/soc/qcom,rpmh-rsc.h>
- 
- / {
-@@ -889,6 +890,57 @@ rpmhcc: clock-controller {
- 				clock-names = "xo";
- 				clocks = <&xo_board>;
- 			};
-+
-+			rpmhpd: power-controller {
-+				compatible = "qcom,sm8450-rpmhpd";
-+				#power-domain-cells = <1>;
-+				operating-points-v2 = <&rpmhpd_opp_table>;
-+
-+				rpmhpd_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					rpmhpd_opp_ret: opp1 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_RETENTION>;
-+					};
-+
-+					rpmhpd_opp_min_svs: opp2 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_MIN_SVS>;
-+					};
-+
-+					rpmhpd_opp_low_svs: opp3 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_LOW_SVS>;
-+					};
-+
-+					rpmhpd_opp_svs: opp4 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_SVS>;
-+					};
-+
-+					rpmhpd_opp_svs_l1: opp5 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_SVS_L1>;
-+					};
-+
-+					rpmhpd_opp_nom: opp6 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_NOM>;
-+					};
-+
-+					rpmhpd_opp_nom_l1: opp7 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_NOM_L1>;
-+					};
-+
-+					rpmhpd_opp_nom_l2: opp8 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_NOM_L2>;
-+					};
-+
-+					rpmhpd_opp_turbo: opp9 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_TURBO>;
-+					};
-+
-+					rpmhpd_opp_turbo_l1: opp10 {
-+						opp-level = <RPMH_REGULATOR_LEVEL_TURBO_L1>;
-+					};
-+				};
-+			};
-+
- 		};
- 
- 		gem_noc: interconnect@19100000 {
+Hannes
 -- 
-2.31.1
-
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer

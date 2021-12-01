@@ -2,117 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 646F2465942
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:27:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65014465944
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 23:31:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353606AbhLAWa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 17:30:29 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:17042 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353610AbhLAWaY (ORCPT
+        id S1353629AbhLAWee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 17:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1353610AbhLAWeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 17:30:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638397624; x=1669933624;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AMYlyWRGk0rGyJ8aOEHYyVAkZ0ZG0osDorr4K/cqWvQ=;
-  b=ULQTbgZz1z3aOzvCR1XCX92sxQQKOTE2+O4FVLjlsXX7CBHPOv3hkc9V
-   UyA42k15SXtlXXghHCtl4r5A8tZbz+547HOxgCSrXlAWyIs9sc64HFZqv
-   CwbLg6iU+t/Ol/+WtCFavOXFneExMP/9YZjcYIghTz0ZZLUYxdDgPYHz9
-   E=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 01 Dec 2021 14:27:03 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 14:27:01 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 1 Dec 2021 14:26:40 -0800
-Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 1 Dec 2021
- 14:26:40 -0800
-Date:   Wed, 1 Dec 2021 14:26:38 -0800
-From:   Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     <agross@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <tglx@linutronix.de>, <maz@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <manivannan.sadhasivam@linaro.org>, Rob Herring <robh@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>
-Subject: Re: [PATCH v5 6/6] dt-bindings: clock: Introduce pdc bindings for
- SDX65
-Message-ID: <20211201222638.GB586@quicinc.com>
-References: <cover.1637302009.git.quic_vamslank@quicinc.com>
- <538438f41153587043741747db5218e9f575c0f5.1637302009.git.quic_vamslank@quicinc.com>
- <YaF2eBKMkIvGapCY@ripper>
+        Wed, 1 Dec 2021 17:34:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAB2C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 14:30:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65EE0B82172
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 22:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A53BCC53FCC;
+        Wed,  1 Dec 2021 22:30:55 +0000 (UTC)
+Date:   Wed, 1 Dec 2021 17:30:54 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     "Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] [RFC] tracing: Read and write to ring buffers
+ with custom sub buffer size
+Message-ID: <20211201173054.6e44d099@gandalf.local.home>
+In-Reply-To: <20211125175253.186422-6-tz.stoyanov@gmail.com>
+References: <20211125175253.186422-1-tz.stoyanov@gmail.com>
+        <20211125175253.186422-6-tz.stoyanov@gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <YaF2eBKMkIvGapCY@ripper>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 26, 2021 at 04:06:16PM -0800, Bjorn Andersson wrote:
-> On Thu 18 Nov 22:11 PST 2021, quic_vamslank@quicinc.com wrote:
-> 
-> > From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-> > 
-> > Add compatible for SDX65 pdc.
-> > 
-> > Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-> > Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > Reviewed-by: Vinod Koul <vkoul@kernel.org>
-> 
-> Sorry for not spotting this before, but as you can tell from the path of
-> the file you're changing, this has nothing to do with "clocks".
-> 
-> git log on qcom,pdc.txt shows that $subject should be:
-> 
->   dt-bindings: qcom,pdc: Add compatible for SDX65
-> 
-> Also, as this is unrelated to clocks, Stephen is not going to merge this
-> patch. You will have to repost it, with Marc Zyngier as recipient to get
-> it merged; per get_maintainer.
-> 
-> 
-> I think it's fine to keep the reviews and acks while adjusting $subject
-> and reposting this patch  - separate from the other 5 patches.
+On Thu, 25 Nov 2021 19:52:53 +0200
+"Tzvetomir Stoyanov (VMware)" <tz.stoyanov@gmail.com> wrote:
 
-Thank you for the review. Will repost this as a new patch.
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index 867a220b4ef2..5fcf5e9cba76 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -2740,9 +2740,11 @@ trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,
+>  {
+>  	struct ring_buffer_event *entry;
+>  	struct trace_array *tr = trace_file->tr;
+> +	int page_size;
+>  	int val;
+>  
+>  	*current_rb = tr->array_buffer.buffer;
+> +	page_size = ring_buffer_subbuf_size_get(*current_rb);
+>  
+>  	if (!tr->no_filter_buffering_ref &&
+>  	    (trace_file->flags & (EVENT_FILE_FL_SOFT_DISABLED | EVENT_FILE_FL_FILTERED)) &&
+> @@ -2764,7 +2766,7 @@ trace_event_buffer_lock_reserve(struct trace_buffer **current_rb,
+>  		 * is still quicker than no copy on match, but having
+>  		 * to discard out of the ring buffer on a failed match.
+>  		 */
+> -		int max_len = PAGE_SIZE - struct_size(entry, array, 1);
+> +		int max_len = page_size - struct_size(entry, array, 1);
 
-Thanks,
-Vamsi
-> 
-> Thanks,
-> Bjorn
-> 
-> > ---
-> >  .../devicetree/bindings/interrupt-controller/qcom,pdc.txt        | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
-> > index 98d89e53013d..ce631d853db4 100644
-> > --- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
-> > +++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
-> > @@ -23,6 +23,7 @@ Properties:
-> >  		    - "qcom,sdm845-pdc": For SDM845
-> >  		    - "qcom,sdm8250-pdc": For SM8250
-> >  		    - "qcom,sdm8350-pdc": For SM8350
-> > +		    - "qcom,sdx65-pdc": For SDX65
-> >  
-> >  - reg:
-> >  	Usage: required
-> > -- 
-> > 2.33.1
-> > 
+OK, so this is not part of the ring buffer, and is always going to be
+PAGE_SIZE.
+
+The temp buffer is allocated from trace_buffered_event_enable() which does:
+
+	for_each_tracing_cpu(cpu) {
+		page = alloc_pages_node(cpu_to_node(cpu),
+					GFP_KERNEL | __GFP_NORETRY, 0);
+		if (!page)
+			goto failed;
+
+		event = page_address(page);
+		memset(event, 0, sizeof(*event));
+
+		per_cpu(trace_buffered_event, cpu) = event;
+
+		preempt_disable();
+		if (cpu == smp_processor_id() &&
+		    __this_cpu_read(trace_buffered_event) !=
+		    per_cpu(trace_buffered_event, cpu))
+			WARN_ON_ONCE(1);
+		preempt_enable();
+	}
+
+That allocates one page per CPU to store as a temp buffer.
+
+This must always be PAGE_SIZE.
+
+-- Steve
+
+
+>  
+>  		val = this_cpu_inc_return(trace_buffered_event_cnt);
+>  
+> @@ -8004,6 +8006,8 @@ tracing_buffers_read(struct file *filp, char __user *ubuf,
+>  {
+>  	struct ftrace_buffer_info *info = filp->private_data;
+>  	struct trace_iterator *iter = &info->iter;
+> +	void *trace_data;
+> +	int page_size;
+>  	ssize_t ret = 0;
+>  	ssize_t size;
+>  
+> @@ -8015,6 +8019,8 @@ tracing_buffers_read(struct file *filp, char __user *ubuf,
+>  		return -EBUSY;
+>  #endif
+>  
+> +	page_size = ring_buffer_subbuf_size_get(iter->array_buffer->buffer);
+> +
+>  	if (!info->spare) {
+>  		info->spare = ring_buffer_alloc_read_page(iter->array_buffer->buffer,
+>  							  iter->cpu_file);
+> @@ -8029,13 +8035,13 @@ tracing_buffers_read(struct file *filp, char __user *ubuf,
+>  		return ret;
+>  
+>  	/* Do we have previous read data to read? */
+> -	if (info->read < PAGE_SIZE)
+> +	if (info->read < page_size)
+>  		goto read;
+>  
+>   again:
+>  	trace_access_lock(iter->cpu_file);
+>  	ret = ring_buffer_read_page(iter->array_buffer->buffer,
+> -				    &info->spare,
+> +				    info->spare,
+>  				    count,
+>  				    iter->cpu_file, 0);
+>  	trace_access_unlock(iter->cpu_file);
+> @@ -8056,11 +8062,11 @@ tracing_buffers_read(struct file *filp, char __user *ubuf,
+>  
+>  	info->read = 0;
+>   read:
+> -	size = PAGE_SIZE - info->read;
+> +	size = page_size - info->read;
+>  	if (size > count)
+>  		size = count;
+> -
+> -	ret = copy_to_user(ubuf, info->spare + info->read, size);
+> +	trace_data = ring_buffer_read_page_data(info->spare);
+> +	ret = copy_to_user(ubuf, trace_data + info->read, size);
+>  	if (ret == size)
+>  		return -EFAULT;
+>  
+> @@ -8165,6 +8171,7 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
+>  		.spd_release	= buffer_spd_release,
+>  	};
+>  	struct buffer_ref *ref;
+> +	int page_size;
+>  	int entries, i;
+>  	ssize_t ret = 0;
+>  
+> @@ -8173,13 +8180,14 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
+>  		return -EBUSY;
+>  #endif
+>  
+> -	if (*ppos & (PAGE_SIZE - 1))
+> +	page_size = ring_buffer_subbuf_size_get(iter->array_buffer->buffer);
+> +	if (*ppos & (page_size - 1))
+>  		return -EINVAL;
+>  
+> -	if (len & (PAGE_SIZE - 1)) {
+> -		if (len < PAGE_SIZE)
+> +	if (len & (page_size - 1)) {
+> +		if (len < page_size)
+>  			return -EINVAL;
+> -		len &= PAGE_MASK;
+> +		len &= (~(page_size - 1));
+>  	}
+>  
+>  	if (splice_grow_spd(pipe, &spd))
+> @@ -8189,7 +8197,7 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
+>  	trace_access_lock(iter->cpu_file);
+>  	entries = ring_buffer_entries_cpu(iter->array_buffer->buffer, iter->cpu_file);
+>  
+> -	for (i = 0; i < spd.nr_pages_max && len && entries; i++, len -= PAGE_SIZE) {
+> +	for (i = 0; i < spd.nr_pages_max && len && entries; i++, len -= page_size) {
+>  		struct page *page;
+>  		int r;
+>  
+> @@ -8210,7 +8218,7 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
+>  		}
+>  		ref->cpu = iter->cpu_file;
+>  
+> -		r = ring_buffer_read_page(ref->buffer, &ref->page,
+> +		r = ring_buffer_read_page(ref->buffer, ref->page,
+>  					  len, iter->cpu_file, 1);
+>  		if (r < 0) {
+>  			ring_buffer_free_read_page(ref->buffer, ref->cpu,
+> @@ -8219,14 +8227,14 @@ tracing_buffers_splice_read(struct file *file, loff_t *ppos,
+>  			break;
+>  		}
+>  
+> -		page = virt_to_page(ref->page);
+> +		page = virt_to_page(ring_buffer_read_page_data(ref->page));
+>  
+>  		spd.pages[i] = page;
+> -		spd.partial[i].len = PAGE_SIZE;
+> +		spd.partial[i].len = page_size;
+>  		spd.partial[i].offset = 0;
+>  		spd.partial[i].private = (unsigned long)ref;
+>  		spd.nr_pages++;
+> -		*ppos += PAGE_SIZE;
+> +		*ppos += page_size;
+>  
+>  		entries = ring_buffer_entries_cpu(iter->array_buffer->buffer, iter->cpu_file);
+>  	}

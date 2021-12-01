@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E85F4647B3
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4864647B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 08:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbhLAHRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 02:17:12 -0500
-Received: from smtp-out1.suse.de ([195.135.220.28]:60698 "EHLO
-        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347166AbhLAHQ3 (ORCPT
+        id S1347142AbhLAHRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 02:17:45 -0500
+Received: from 4.mo552.mail-out.ovh.net ([178.33.43.201]:56351 "EHLO
+        4.mo552.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1347139AbhLAHRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 02:16:29 -0500
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 02501212CC;
-        Wed,  1 Dec 2021 07:13:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1638342788; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dqrp32hZrM+7oG23uaij5da1W3SNDTnXoLoM6S5HqRM=;
-        b=omETKKHi7FfweJqdbc2dh8vv2gaj1VXGsuqpAmqW+afT+W/4eZIWRTV44o3qPcsUCNj7pw
-        snBBAygEYKBm2KfWXhNx40kki7YuRbNR1MD0TieLPimnOtxrXxzF2LK1I43Qmmhcc82Y4P
-        TaiXFbdWuQ1PNNB89fqs6sbe3oclafY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1638342788;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Dqrp32hZrM+7oG23uaij5da1W3SNDTnXoLoM6S5HqRM=;
-        b=V5/hvK2MTfygHvXk147YudpxEdr2EpR6XcZxGLQJOVCBt47zmhX8Cfi1jY1kF7B8A1Tx6m
-        HPEzPK8rP5CyQBDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9D58913AE2;
-        Wed,  1 Dec 2021 07:13:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BztaJYMgp2G1EAAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 01 Dec 2021 07:13:07 +0000
-Subject: Re: [PATCH 02/18] crypto: dh - constify struct dh's pointer members
-To:     Nicolai Stange <nstange@suse.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     =?UTF-8?Q?Stephan_M=c3=bcller?= <smueller@chronox.de>,
-        Torsten Duwe <duwe@suse.de>, Zaibo Xu <xuzaibo@huawei.com>,
-        Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        qat-linux@intel.com, keyrings@vger.kernel.org
-References: <20211201004858.19831-1-nstange@suse.de>
- <20211201004858.19831-3-nstange@suse.de>
-From:   Hannes Reinecke <hare@suse.de>
-Message-ID: <70ff24ff-94ce-6391-df7b-76f06bb7b48f@suse.de>
-Date:   Wed, 1 Dec 2021 08:13:05 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Wed, 1 Dec 2021 02:17:42 -0500
+Received: from mxplan5.mail.ovh.net (unknown [10.108.1.125])
+        by mo552.mail-out.ovh.net (Postfix) with ESMTPS id B6B2D217F7;
+        Wed,  1 Dec 2021 07:14:07 +0000 (UTC)
+Received: from kaod.org (37.59.142.105) by DAG4EX1.mxp5.local (172.16.2.31)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.20; Wed, 1 Dec
+ 2021 08:14:05 +0100
+Authentication-Results: garm.ovh; auth=pass (GARM-105G00686e3cafe-0521-4f42-aedc-fcaeb2775d24,
+                    A214034E9EDAB49BEA2160BF49F8C38F118F2259) smtp.auth=clg@kaod.org
+X-OVh-ClientIp: 90.11.56.15
+Message-ID: <39556bdc-f48c-68b2-6bec-5975b92e02e2@kaod.org>
+Date:   Wed, 1 Dec 2021 08:14:05 +0100
 MIME-Version: 1.0
-In-Reply-To: <20211201004858.19831-3-nstange@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [patch 05/22] genirq/msi: Fixup includes
 Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     <linux-hyperv@vger.kernel.org>, Paul Mackerras <paulus@samba.org>,
+        <sparclinux@vger.kernel.org>, Wei Liu <wei.liu@kernel.org>,
+        Ashok Raj <ashok.raj@intel.com>, Marc Zygnier <maz@kernel.org>,
+        <x86@kernel.org>, Christian Borntraeger <borntraeger@de.ibm.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>, <linux-pci@vger.kernel.org>,
+        <xen-devel@lists.xenproject.org>, <ath11k@lists.infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Megha Dey <megha.dey@intel.com>,
+        Juergen Gross <jgross@suse.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>
+References: <20211126222700.862407977@linutronix.de>
+ <20211126223824.382273262@linutronix.de>
+ <b1a6d267-c7b4-c4b9-ab0e-f5cc32bfe9bf@kaod.org> <87tufud4m3.ffs@tglx>
+ <524d9b84-caa8-dd6f-bb5e-9fc906d279c0@kaod.org> <87czmhb8gq.ffs@tglx>
+ <875ys9b71j.ffs@tglx>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@kaod.org>
+In-Reply-To: <875ys9b71j.ffs@tglx>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [37.59.142.105]
+X-ClientProxiedBy: DAG1EX2.mxp5.local (172.16.2.2) To DAG4EX1.mxp5.local
+ (172.16.2.31)
+X-Ovh-Tracer-GUID: e52f034b-6a74-4e80-b1cd-9a54c9a992a9
+X-Ovh-Tracer-Id: 2359604732828158876
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvuddriedvgddutdeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkfffgggfuffvfhfhjggtgfhisehtkeertddtfeejnecuhfhrohhmpeevrogurhhitggpnfgvpgfiohgrthgvrhcuoegtlhhgsehkrghougdrohhrgheqnecuggftrfgrthhtvghrnhepjeekvdfgudevkeefkeeltdejteekvdegffegudetgeettdffjeefheekfeelffdtnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkpheptddrtddrtddrtddpfeejrdehledrudegvddruddtheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphhouhhtpdhhvghlohepmhigphhlrghnhedrmhgrihhlrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpegtlhhgsehkrghougdrohhrghdprhgtphhtthhopehlihhnuhigphhptgdquggvvheslhhishhtshdrohiilhgrsghsrdhorhhg
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 1:48 AM, Nicolai Stange wrote:
-> struct dh contains several pointer members corresponding to DH parameters:
-> ->key, ->p and ->g. A subsequent commit will make the struct dh
-> deserialization function, crypto_dh_decode_key(), to set these to
-> constant static storage arrays for some of the well-known safe-prime
-> groups.
+On 11/30/21 23:41, Thomas Gleixner wrote:
+> On Tue, Nov 30 2021 at 23:10, Thomas Gleixner wrote:
 > 
-> Turn the struct dh pointer members' types into "pointer to const" in
-> preparation for this.
+>> On Tue, Nov 30 2021 at 22:48, Cédric Le Goater wrote:
+>>> On 11/29/21 22:38, Thomas Gleixner wrote:
+>>>> On Mon, Nov 29 2021 at 08:33, Cédric Le Goater wrote:
+>>>> thanks for having a look. I fixed up this and other fallout and pushed out an
+>>>> updated series (all 4 parts) to:
+>>>>
+>>>>           git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel msi
+>>>
+>>> pSeries fails to allocate MSIs starting with this patch :
+>>>
+>>>    [PATCH 049/101] powerpc/pseries/msi: Let core code check for contiguous ...
+>>>
+>>> I will dig in later on.
+>>
+>> Let me stare at the core function..
 > 
-> Signed-off-by: Nicolai Stange <nstange@suse.de>
-> ---
->   include/crypto/dh.h | 6 +++---
->   security/keys/dh.c  | 2 +-
->   2 files changed, 4 insertions(+), 4 deletions(-)
-> 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
+> It's not the core function. It's the patch above and I'm a moron.
 
-Cheers,
+All good now. Ship it !
 
-Hannes
--- 
-Dr. Hannes Reinecke                Kernel Storage Architect
-hare@suse.de                              +49 911 74053 688
-SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
-HRB 36809 (AG Nürnberg), Geschäftsführer: Felix Imendörffer
+Thanks,
+
+C.
+
+
+
+

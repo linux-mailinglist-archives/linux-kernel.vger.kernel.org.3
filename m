@@ -2,118 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C31EB46452E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 03:56:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7AB464539
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346320AbhLAC72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 21:59:28 -0500
-Received: from szxga08-in.huawei.com ([45.249.212.255]:28134 "EHLO
-        szxga08-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241503AbhLAC7W (ORCPT
+        id S1346363AbhLADFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229731AbhLADFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 21:59:22 -0500
-Received: from canpemm500008.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4J3kDH6rP1z1DJ7J;
-        Wed,  1 Dec 2021 10:53:19 +0800 (CST)
-Received: from localhost.huawei.com (10.175.124.27) by
- canpemm500008.china.huawei.com (7.192.105.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 10:56:00 +0800
-From:   Li Jinlin <lijinlin3@huawei.com>
-To:     <song@kernel.org>, <axboe@kernel.dk>, <hare@suse.de>,
-        <jack@suse.cz>, <ming.lei@redhat.com>, <tj@kernel.org>,
-        <mcgrof@kernel.org>
-CC:     <linux-raid@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linfeilong@huawei.com>
-Subject: [PATCH] md: Fix unexpected behaviour in is_mddev_idle
-Date:   Wed, 1 Dec 2021 11:27:12 +0800
-Message-ID: <20211201032712.3684503-1-lijinlin3@huawei.com>
-X-Mailer: git-send-email 2.27.0
+        Tue, 30 Nov 2021 22:05:48 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE095C061574
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:02:28 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id s137so22036412pgs.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:02:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2m0lqCRByV7QOKjWy5hukU3vAIBzQsmd4tDT5LUKLO8=;
+        b=i25euUF1q0pJCiV+e/eplDPdimnyV8tDZO8BDKRyvgZTI112UYyud18aSSKFU3iNGF
+         zeaRABD5Qj7ccKAJ6lmuLsiYS1p9w1IDZlgUoJ57LaIOn6Zv5RZ3B+y8QD2Dv8RCxiPJ
+         k+vnQINPryBNSpndYVPdLBfpWASEqfcAfkrbX19Y1bXCrWFfNpRweC7L1VutOfJxb3cO
+         Ire+u/D1IIlsZOuhTcGcavCIGBIVOUpuZW1nesxaJTreOrWFzncQCrxggsMfhCvB2oX9
+         Jm58xBR0KWZb1Co8o/cHalbJg9I8tbSPF8oAzdjQth0ybSrF5CcYZEeXLcgnQdIDXLEZ
+         wXWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2m0lqCRByV7QOKjWy5hukU3vAIBzQsmd4tDT5LUKLO8=;
+        b=a5I2BDOKD32aL52Tanhk8X+MIPgMXV3ssymLE7iQjvX7f1vgHWh3aGsBFIIzPLUvi2
+         6O2wKsnfklAgpiiFepmCwP7t/RBQSSoQzkkWypAbCFlhOLxK3Oj8NmMml4KY3ytKZgj6
+         +YJMWvohgFnkv6zeToSNXxtB79crDgdrTbrSXHr82oG2kD7P5RQ6wkuCwuFktWWf+Ic8
+         JT6mW97LE6Gzu35gZ2b/95/p6hVzkO5FWnoDXr6an+PA+HzLxvGKfgmbYA7O3quR5429
+         0t1H30GZnVnUqZZpM9cjtaN5+q6fXDgfh+VCs0gmuyuL/cFcSPOCMhdi+c7WcQkx5zp4
+         nS3Q==
+X-Gm-Message-State: AOAM5329EjAO/R0sKq2yEIt8gcyrf6nRBIT7CCoNkelbeclBfK0HYKCb
+        5vPg2A6U0gNqghw7IT70OiEGbA==
+X-Google-Smtp-Source: ABdhPJyyozRFSjhFpMK1g9HKTg7Kvl2dqg6zGlaazmTmiVVt7jrqS25sTOqH8s60j+SqadUmSj/MHA==
+X-Received: by 2002:a65:51c1:: with SMTP id i1mr2619532pgq.600.1638327748409;
+        Tue, 30 Nov 2021 19:02:28 -0800 (PST)
+Received: from always-x1.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id 12sm1085248pjn.16.2021.11.30.19.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Nov 2021 19:02:28 -0800 (PST)
+From:   zhenwei pi <pizhenwei@bytedance.com>
+To:     tglx@linutronix.de, pbonzini@redhat.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+        zhenwei pi <pizhenwei@bytedance.com>
+Subject: [PATCH v2 2/2] KVM: x86: Use x86_get_cpufreq_khz to get frequency for kvmclock
+Date:   Wed,  1 Dec 2021 11:00:09 +0800
+Message-Id: <20211201030009.89740-1-pizhenwei@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500008.china.huawei.com (7.192.105.151)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The value of curr_events may be INT_MAX when mddev initializes IO event
-counters. Then, rdev->last_events will be set as INT_MAX. 
-If all the rdevs of mddev are in this case, 
-'curr_events - rdev->last_events > 64' will always false, and
-is_mddev_idle() will always return 1, which may cause non-sync IO very
-slow.
+# Ignore previous [PATCH v2 2/2] KVM: x86: use x86_get_freq to get freq for kvmclock, and remove this line
 
-Fix by using atomic64_t type for sync_io, and using long type for
-curr_events/last_events.
+If the host side supports APERF&MPERF feature, the guest side may get
+mismatched frequency.
 
-Signed-off-by: Li Jinlin <lijinlin3@huawei.com>
+KVM uses x86_get_cpufreq_khz() to get the same frequency for guest side.
+
+Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
 ---
- drivers/md/md.c       | 6 +++---
- drivers/md/md.h       | 4 ++--
- include/linux/genhd.h | 2 +-
- 3 files changed, 6 insertions(+), 6 deletions(-)
+ arch/x86/kvm/x86.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 5111ed966947..f47035838c43 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -8429,14 +8429,14 @@ static int is_mddev_idle(struct mddev *mddev, int init)
- {
- 	struct md_rdev *rdev;
- 	int idle;
--	int curr_events;
-+	long curr_events;
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 5a403d92833f..125ed3c8b21a 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -8305,10 +8305,8 @@ static void tsc_khz_changed(void *data)
  
- 	idle = 1;
- 	rcu_read_lock();
- 	rdev_for_each_rcu(rdev, mddev) {
- 		struct gendisk *disk = rdev->bdev->bd_disk;
--		curr_events = (int)part_stat_read_accum(disk->part0, sectors) -
--			      atomic_read(&disk->sync_io);
-+		curr_events = (long)part_stat_read_accum(disk->part0, sectors) -
-+			      atomic64_read(&disk->sync_io);
- 		/* sync IO will cause sync_io to increase before the disk_stats
- 		 * as sync_io is counted when a request starts, and
- 		 * disk_stats is counted when it completes.
-diff --git a/drivers/md/md.h b/drivers/md/md.h
-index 53ea7a6961de..3f8327c42b7b 100644
---- a/drivers/md/md.h
-+++ b/drivers/md/md.h
-@@ -50,7 +50,7 @@ struct md_rdev {
- 
- 	sector_t sectors;		/* Device size (in 512bytes sectors) */
- 	struct mddev *mddev;		/* RAID array if running */
--	int last_events;		/* IO event timestamp */
-+	long last_events;		/* IO event timestamp */
- sync_io
- 	/*
- 	 * If meta_bdev is non-NULL, it means that a separate device is
-@@ -551,7 +551,7 @@ extern void mddev_unlock(struct mddev *mddev);
- 
- static inline void md_sync_acct(struct block_device *bdev, unsigned long nr_sectors)
- {
--	atomic_add(nr_sectors, &bdev->bd_disk->sync_io);
-+	atomic64_add(nr_sectors, &bdev->bd_disk->sync_io);
+ 	if (data)
+ 		khz = freq->new;
+-	else if (!boot_cpu_has(X86_FEATURE_CONSTANT_TSC))
+-		khz = cpufreq_quick_get(raw_smp_processor_id());
+ 	if (!khz)
+-		khz = tsc_khz;
++		khz = x86_get_cpufreq_khz(raw_smp_processor_id());
+ 	__this_cpu_write(cpu_tsc_khz, khz);
  }
  
- static inline void md_sync_acct_bio(struct bio *bio, unsigned long nr_sectors)
-diff --git a/include/linux/genhd.h b/include/linux/genhd.h
-index 74c410263113..efa7884de11b 100644
---- a/include/linux/genhd.h
-+++ b/include/linux/genhd.h
-@@ -150,7 +150,7 @@ struct gendisk {
- 	struct list_head slave_bdevs;
- #endif
- 	struct timer_rand_state *random;
--	atomic_t sync_io;		/* RAID */
-+	atomic64_t sync_io;		/* RAID */
- 	struct disk_events *ev;
- #ifdef  CONFIG_BLK_DEV_INTEGRITY
- 	struct kobject integrity_kobj;
 -- 
-2.31.1
+2.25.1
 

@@ -2,238 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64630465675
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A8BD46567D
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236459AbhLATbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:31:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
+        id S235805AbhLATdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:33:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239436AbhLATal (ORCPT
+        with ESMTP id S245394AbhLATdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:30:41 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07C31C061574;
-        Wed,  1 Dec 2021 11:27:20 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id y13so106197106edd.13;
-        Wed, 01 Dec 2021 11:27:19 -0800 (PST)
+        Wed, 1 Dec 2021 14:33:09 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452A0C061756;
+        Wed,  1 Dec 2021 11:29:40 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id y12so106196982eda.12;
+        Wed, 01 Dec 2021 11:29:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JAv+a8iChUvwqOY5lIjki0ZUA4EpmPS1I3AqCsxWKaA=;
-        b=C4txjCwm3xDKfmaX5oVjU/e2fbmP3gKFWv2gYVGrXCne7LzW2nuJAuTe47lj3Xti3d
-         gF6/MTjUqynCFWLDuUyB1xDP5znJx/eqiiPkeYNs5ZIxOccOUX8HwuaDiFcXAStwHVEA
-         y61hNacUznJejZBJfHOrN+IYOMFMb6z1rv1C1+R2fS90bBBdXcnZDJ3eIwtKkFEVb/ma
-         eQ+WwCPN/grOWJ73ousVBalkFe0n8ov/Vk53Y1KTwtWmexQ5escN8yO5rnBmGtRiDaGz
-         D9TgTO1VKJQe23vyXcdTC2H+nKPg+OjcB4uQ4yXWHWKpEv7mUqEupjVZpcA0aPSllNAr
-         9WLA==
+         :cc:content-transfer-encoding;
+        bh=HSA+wpNkFVTgXTMQMK9Eo4CLbDnWx6QS1vWmLRNYZ2s=;
+        b=WDfqpi5ZYEY0azY9Z4QrgVLDsvTYCM+c4/TVNNFk9gXVSDiLKUTAB9CiLatc6eaD7g
+         C34gQ6t/CEctbaDc2UUqR9c2qpdqKLT1HELMG/Yy2ol3bYLH0wC7U3TJz8YLSLr8oACG
+         XZcOij1SLUwOWKyu/UcXyown+70dn+YaxClWxzp3p58QhRt39Cxa0XI5mS7ZzwpXQhzk
+         LQQx014YSy+VXq2mwqUgdHWlHM5nX+S1oNSIHAPEpd6prgWD5MGqGmJ11DUFhBscMmxb
+         qJ2cNzyQuLwsqbEG2iwp9dI9b/5XvLj1MGeWE6leu3kUpU7pbJhId+eAUO/jce582v+S
+         yyAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JAv+a8iChUvwqOY5lIjki0ZUA4EpmPS1I3AqCsxWKaA=;
-        b=DWiR2+vlxhIbV3jvMc1RiiVqETLPrfxyvCBo8BJuHwofpzjsAgnVJP+mkqyfgXH9jY
-         iW/skQtvBhZX265kqw9wCrMrpK9JnDMhoZ8Gm/Mu+6C8wdl09+BayHN051a64N8BtwTW
-         cgMaGQdd3ZLejIjEmfNkQBMZTjb5zxu8sT705XsgNpwV5IHMBnWXe3HDXBzBf3/R+XLR
-         1O1c4ud3FEF6OmMo1NXORgxON3n06g9YpbpY/rZNb99nCMEkSJ8dHJV1PoF3O63i4huN
-         NHcCsQH/tiTOy2SFV+Hw2S4x0trBcDvtTTDMxtNl6vDEm55a7dpZEGACrJTaJbRt4VdL
-         Uv4A==
-X-Gm-Message-State: AOAM530LT+1YCnwnQ/BMI/SPY5/uLhdQqUp4JPrzF9wDj2CSQB8rufVc
-        2uUZrAbOdoNQ3cAErLaKpbKBXSTKDGxnPyLZJX6zbHalHwwZLw==
-X-Google-Smtp-Source: ABdhPJzlutLYnRXY7oNgCBeUPmCoR5PdT2Y3yu0by3ZRURhZA7664xM0tbkih3XmSHR+97JmFdGGwKBZIt5MEzIs7t8=
-X-Received: by 2002:a17:906:79c3:: with SMTP id m3mr9108224ejo.332.1638386838377;
- Wed, 01 Dec 2021 11:27:18 -0800 (PST)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=HSA+wpNkFVTgXTMQMK9Eo4CLbDnWx6QS1vWmLRNYZ2s=;
+        b=Y0HR+VB92VpNQkFHmXU8/im9OgUQtExgPV/DmrN4UmMYc5sDEfzoU7M1fXgY65t/sz
+         eQ/lMfxF9FtB1G46ul9Ajb06rQtzzSSf6ovD/ab+ql8/YhZvMT3rB5ZANAE6nqV6c5VC
+         jQbo7PhLK03ZlxZr0KKsziTJ7IRsfU+07qtQEAJ+h//CNIWoG03wiUDoC9fCjpNwMWXt
+         +TB1cZf1sms14LDtaw6seTwriqFcn+3KY+K98zJjfTiPSQUZmDyGwuXH8brlulWxGiO9
+         FaOTX/NB2+L+MtwfaZxdJqo5BY1GwjWpAkG1PPCbG+dIXux/osB/E1+hwln+KIyUEXOU
+         M2lg==
+X-Gm-Message-State: AOAM530qIWgqKx2Pri+fXOxJiCRto78YIQh1UWt0VapGiTyuumAtjgce
+        8AwTKa/+FwYjXvJUgZKiiSkdWpp6jE2HARqZJKw=
+X-Google-Smtp-Source: ABdhPJwXKA5yyhQvQ3J79nSZqcS7ZG5U+cMz1A9BLSzFUJy0AWX6+XvPhzoGcS3fDgn3Pdf/CGbfjnrnX7mrxeV3PzA=
+X-Received: by 2002:a17:906:6a0a:: with SMTP id qw10mr9874209ejc.141.1638386978775;
+ Wed, 01 Dec 2021 11:29:38 -0800 (PST)
 MIME-Version: 1.0
-References: <20211201013329.15875-1-aford173@gmail.com> <CAJ+vNU1jENmWAR_5E98Vgb53ctxjxSWJewPW0YC4Yp4DuYTn3g@mail.gmail.com>
- <7216bc863d89faa9fdc5cd8d44c319f7a6d88159.camel@pengutronix.de>
- <CAJ+vNU2PxgdN414Ufd4NAG5CJgnftNSAHDGpt9Nj+RfgkNmxaw@mail.gmail.com>
- <ccfc08bbb6ec0debd523bd106e7eff4a747aaa23.camel@pengutronix.de>
- <CAHCN7xKfRj3f03kC5TuBv-Te1OyeWNRe2aaqJNaW9VdHgbWqbg@mail.gmail.com> <62d99a764d3a8071f061a0127cfba6d7df53fc19.camel@pengutronix.de>
-In-Reply-To: <62d99a764d3a8071f061a0127cfba6d7df53fc19.camel@pengutronix.de>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Wed, 1 Dec 2021 13:27:07 -0600
-Message-ID: <CAHCN7xKVPtjx+YpPQKeUOZYUb0W6NWacYdsB-HHe-3AUbSGAFw@mail.gmail.com>
-Subject: Re: [RFC V2 0/2] arm64: imx8mm: Enable Hantro VPUs
-To:     Lucas Stach <l.stach@pengutronix.de>
-Cc:     Tim Harvey <tharvey@gateworks.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+References: <1635747525-31243-1-git-send-email-lh.kuo@sunplus.com>
+ <cover.1637547799.git.lh.kuo@sunplus.com> <e5f2549224cf875d81306ef5f6e98db1cfd81c2e.1637547799.git.lh.kuo@sunplus.com>
+ <CAHp75Vd2=OHbrpGtsU8AMXdtNfvSPhpc7vhzkWnahaV48XbfUQ@mail.gmail.com>
+ <YZz0n6Mpjl3tKmMe@sirena.org.uk> <CAHp75Vf6+monqu4Hq-yoFSohD9tNFqZTuKjqDDKAJE3Om2BUYQ@mail.gmail.com>
+ <6eb68a8153ba46c48862d00f7aa6e0fe@sphcmbx02.sunplus.com.tw>
+ <CAHp75VftSORts5cbDxvfyHgqhxmb7K74BfPd=mST+75C+Ch9dQ@mail.gmail.com>
+ <33d50e94059b4734939db60b5c531bc9@sphcmbx02.sunplus.com.tw>
+ <63a467164c985cadce0e28e50508363a8d2f6622.camel@pengutronix.de>
+ <YaDbHe+COa3pke+s@sirena.org.uk> <d33a3a4f3b8248a78fae572a7f88050a@sphcmbx02.sunplus.com.tw>
+ <CAHp75VftWNHXG7k09qHtJNFaYe0hvSfNBnQht=D6O7UJH27a5w@mail.gmail.com> <3d792085d6fc4be19253f5200c181041@sphcmbx02.sunplus.com.tw>
+In-Reply-To: <3d792085d6fc4be19253f5200c181041@sphcmbx02.sunplus.com.tw>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 1 Dec 2021 21:28:02 +0200
+Message-ID: <CAHp75VfTqWy_J6SgTPsWOuav8uJrNVV3wDzxB+Ned7LXipaiwA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] SPI: Add SPI driver for Sunplus SP7021
+To:     =?UTF-8?B?TGggS3VvIOmDreWKm+ixqg==?= <lh.Kuo@sunplus.com>
+Cc:     Mark Brown <broonie@kernel.org>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Device Tree Mailing List <devicetree@vger.kernel.org>,
-        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
+        "LH.Kuo" <lhjeff911@gmail.com>, Rob Herring <robh+dt@kernel.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "dvorkin@tibbo.com" <dvorkin@tibbo.com>,
+        "qinjian@cqplus1.com" <qinjian@cqplus1.com>,
+        =?UTF-8?B?V2VsbHMgTHUg5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 1, 2021 at 1:04 PM Lucas Stach <l.stach@pengutronix.de> wrote:
->
-> Am Mittwoch, dem 01.12.2021 um 12:52 -0600 schrieb Adam Ford:
-> > On Wed, Dec 1, 2021 at 12:37 PM Lucas Stach <l.stach@pengutronix.de> wrote:
-> > >
-> > > Am Mittwoch, dem 01.12.2021 um 10:16 -0800 schrieb Tim Harvey:
-> > > > On Wed, Dec 1, 2021 at 9:32 AM Lucas Stach <l.stach@pengutronix.de> wrote:
-> > > > >
-> > > > > Hi Tim,
-> > > > >
-> > > > > Am Mittwoch, dem 01.12.2021 um 09:23 -0800 schrieb Tim Harvey:
-> > > > > > On Tue, Nov 30, 2021 at 5:33 PM Adam Ford <aford173@gmail.com> wrote:
-> > > > > > >
-> > > > > > > The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
-> > > > > > > to be related to the video decoders used on the i.MX8MQ, but because of
-> > > > > > > how the Mini handles the power domains, the VPU driver does not need to
-> > > > > > > handle all the functions, nor does it support the post-processor,
-> > > > > > > so a new compatible flag is required.
-> > > > > > >
-> > > > > > > With the suggestion from Hans Verkuil, I was able to get the G2 splat to go away
-> > > > > > > with changes to FORCE_MAX_ZONEORDER, but I found I could also set cma=512M, however
-> > > > > > > it's unclear to me if that's an acceptable alternative.
-> > > > > > >
-> > > > > > > At the suggestion of Ezequiel Garcia and Nicolas Dufresne I have some
-> > > > > > > results from Fluster. However, the G2 VPU appears to fail most tests.
-> > > > > > >
-> > > > > > > ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
-> > > > > > > Ran 90/135 tests successfully               in 76.431 secs
-> > > > > > >
-> > > > > > >  ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
-> > > > > > > Ran 55/61 tests successfully               in 21.454 secs
-> > > > > > >
-> > > > > > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
-> > > > > > > Ran 0/303 tests successfully               in 20.016 secs
-> > > > > > >
-> > > > > > > Each day seems to show more and more G2 submissions, and gstreamer seems to be
-> > > > > > > still working on the VP9, so I am not sure if I should drop G2 as well.
-> > > > > > >
-> > > > > > >
-> > > > > > > Adam Ford (2):
-> > > > > > >   media: hantro: Add support for i.MX8M Mini
-> > > > > > >   arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-> > > > > > >
-> > > > > > >  arch/arm64/boot/dts/freescale/imx8mm.dtsi   | 41 +++++++++++++++
-> > > > > > >  drivers/staging/media/hantro/hantro_drv.c   |  2 +
-> > > > > > >  drivers/staging/media/hantro/hantro_hw.h    |  2 +
-> > > > > > >  drivers/staging/media/hantro/imx8m_vpu_hw.c | 57 +++++++++++++++++++++
-> > > > > > >  4 files changed, 102 insertions(+)
-> > > > > > >
-> > > > > >
-> > > > > > Adam,
-> > > > > >
-> > > > > > That's for the patches!
-> > > > > >
-> > > > > > I tested just this series on top of v5.16-rc3 on an
-> > > > > > imx8mm-venice-gw73xx-0x and found that if I loop fluster I can end up
-> > > > > > getting a hang within 10 to 15 mins or so when imx8m_blk_ctrl_power_on
-> > > > > > is called for VPUMIX pd :
-> > > > > > while [ 1 ]; do uptime; ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0; done
-> > > > > > ...
-> > > > > > [  618.838436] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > > > > > [  618.844407] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > > > > >
-> > > > > > I added prints in imx_pgc_power_{up,down} and
-> > > > > > imx8m_blk_ctrl_power_{on,off} to get some more context
-> > > > > > ...
-> > > > > > Ran 55/61 tests successfully               in 8.685 secs
-> > > > > >  17:16:34 up 17 min,  0 users,  load average: 3.97, 2.11, 0.93
-> > > > > > ********************************************************************************
-> > > > > > ********************
-> > > > > > Running test suite VP8-TEST-VECTORS with decoder GStreamer-VP8-V4L2SL-Gst1.0
-> > > > > > Using 4 parallel job(s)
-> > > > > > ********************************************************************************
-> > > > > > ********************
-> > > > > >
-> > > > > > [TEST SUITE      ] (DECODER                    ) TEST VECTOR               ... R
-> > > > > > ESULT
-> > > > > > ----------------------------------------------------------------------
-> > > > > > [ 1023.114806] imx8m_blk_ctrl_power_on vpublk-g1
-> > > > > > [ 1023.119669] imx_pgc_power_up vpumix
-> > > > > > [ 1023.124307] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > > > > > [ 1023.130006] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > > > > >
-> > > > > > While this wouldn't be an issue with this series it does indicate we
-> > > > > > still have something racy in blk-ctrl. Can you reproduce this (and if
-> > > > > > not what kernel are you based on)? Perhaps you or Lucas have some
-> > > > > > ideas?
-> > > > > >
-> > > > > Did you have "[PATCH] soc: imx: gpcv2: Synchronously suspend MIX
-> > > > > domains" applied when running those tests? It has only recently been
-> > > > > picked up by Shawn and may have an influence on the bus domain
-> > > > > behavior.
-> > > > >
-> > > >
-> > > > Lucas,
-> > > >
-> > > > Good point. I did have that originally before I started pruning down
-> > > > to the bare minimum to reproduce the issue.
-> > > >
-> > > > I added it back and now I have the following:
-> > > > arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
-> > > > media: hantro: Add support for i.MX8M Mini
-> > > > soc: imx: gpcv2: keep i.MX8MM VPU-H1 bus clock active
-> > > > soc: imx: gpcv2: Synchronously suspend MIX domains
-> > > > Linux 5.16-rc3
-> > > >
-> > > > Here's the latest with that patch:
-> > > > ...
-> > > > [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
-> > > > vp80-00-comprehensive-007 ... Success
-> > > > [  316.632373] imx8m_blk_ctrl_power_off vpublk-g1
-> > > > [  316.636908] imx_pgc_power_down vpu-g1
-> > > > [  316.640983] imx_pgc_power_down vpumix
-> > > > [  316.756869] imx8m_blk_ctrl_power_on vpublk-g1
-> > > > [  316.761360] imx_pgc_power_up vpumix
-> > > > [  316.765985] imx-pgc imx-pgc-domain.6: failed to command PGC
-> > > > [  316.772743] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
-> > > > ^^^ hang
-> > >
-> > > Hm, I wonder if there's some broken error handling here somewhere, as a
-> > > failure to power up a domain shouldn't lead to a hang.
-> > >
-> > > However, that doesn't explain why the PGC isn't completing the request.
-> > > Can you try to extend the timeout some more. Even though I think that
-> > > 1msec should already be generous. Can you dump the content of the
-> > > GPC_PU_PGC_SW_PUP_REQ and GPC_A53_PU_PGC_PUP_STATUSn (all 3 of them)
-> > > registers, when the failure condition is hit?
-> >
-> > I submitted a patch [1]  to enable the commented-out if statement
-> > which waits for the handshake if the gpc domain was invoked by the
-> > blk-ctrl or we knew if the bus clock was operational.
-> >
-> > I am not 100% certain it can work as-is with the vpumix, but based on
-> > what I've seen from my testing, it's not hanging or causing errors.
-> >
-> > [1] - https://lore.kernel.org/linux-arm-kernel/20211120194900.1309914-1-aford173@gmail.com/T/
-> >
-> > I didn't have it applied to my latest RFC for the G1 and G2 because I
-> > had not noticed a change in behavior one way or the other with that
-> > patch.
->
-> That's not going to work with all the MIX domains. The handshake
-> requires some clocks to be enabled in the blk-ctrl (the secondary clock
-> gates in the blk-ctrl) to work properly. This is only done by the blk-
-> ctrl driver _after_ the GPC bus domain is powered up, so you can not
-> wait for the handshake to complete inside the GPC power up routine.
+On Tue, Nov 30, 2021 at 10:32 AM Lh Kuo =E9=83=AD=E5=8A=9B=E8=B1=AA <lh.Kuo=
+@sunplus.com> wrote:
 
-I wasn't exactly sure how the handshake worked.  What your saying makes sense.
-Will you NAK my patch so it doesn't accidentally get applied.
+> > >         ctlr->dev.of_node =3D pdev->dev.of_node;
+> >
+> > device_set_node()
+>
+> Is this funciton set as follows?
+>         device_set_node(&ctlr->dev, of_fwnode_handle(pdev->dev.fwnode));
 
-adam
+Can you please do something?
+For example, figuring out yourself (Elixir is a very good service for
+that): https://elixir.bootlin.com/linux/latest/A/ident/device_set_node
+
+...
+
+> > >         pspim->mas_base =3D devm_platform_ioremap_resource_byname(pde=
+v, "master");
+> > >         pspim->sla_base =3D devm_platform_ioremap_resource_byname(pde=
+v,
+> > > "slave");
+> >
+> > Where are the error checks?
+
+> The changes are as follows? is this correct?
+
+Almost, but not enough. Please run checkpatch.
+
+>         pspim->mas_base =3D devm_platform_ioremap_resource_byname(pdev, "=
+master");
+>         if (IS_ERR(pspim->mas_base)) {
+>                 return dev_err_probe(dev, PTR_ERR(pspim->mas_base), "mas_=
+base get fail\n");
+>         }
 >
-> Regards,
-> Lucas
+>         pspim->sla_base =3D devm_platform_ioremap_resource_byname(pdev, "=
+slave");
+>         if (IS_ERR(pspim->sla_base)) {
+>                 return dev_err_probe(dev, PTR_ERR(pspim->sla_base), "sla_=
+base get fail\n");
+>         }
+
+...
+
+> > >         if (ret) {
+> > >                 dev_err_probe(dev, ret, "failed to deassert reset\n")=
+;
+> > >                 goto err_free_reset;
+> > >         }
+> >
+> > These two need to be wrapped as I explained above.
 >
+> I think these changes are depend on remove-function.
+
+No, it's the other way around: ->remove() implementation depends on
+these changes.
+
+> These settings are as follows? is this correct?
+
+No.
+
+>         pspim->spi_clk =3D devm_clk_get(dev, NULL);
+>         if (IS_ERR(pspim->spi_clk))
+>                 return dev_err_probe(dev, PTR_ERR(pspim->spi_clk), "clk g=
+et fail\n");
+>
+>         pspim->rstc =3D devm_reset_control_get_exclusive(dev, NULL);
+>         if (IS_ERR(pspim->rstc))
+>                 return dev_err_probe(dev, PTR_ERR(pspim->rstc), "rst get =
+fail\n");
+>
+>         ret =3D clk_prepare_enable(pspim->spi_clk);
+>         if (ret)
+>                 return dev_err_probe(dev, ret, "failed to enable clk\n");
+>
+>         devm_add_action_or_reset(dev, (void(*)(void *))clk_disable_unprep=
+are,
+>                         pspim->spi_clk);
+
+Please, find other drivers as examples of how to do that and take care
+about possible errors.
+
+>         ret =3D reset_control_deassert(pspim->rstc);
+>         if (ret)
+>                 return dev_err_probe(dev, ret, "failed to deassert reset\=
+n");
+>
+>         devm_add_action_or_reset(dev, (void(*)(void *))reset_control_asse=
+rt,
+>                         pspim->rstc);
+
+Ditto.
+
+>         ret =3D spi_register_controller(ctlr);
+
+Read what Lukas said.
+
+>         pm_runtime_enable(dev);
+>         if (ret) {
+>                 pm_runtime_disable(dev);
+>                 return dev_err_probe(dev, ret, "spi_register_master fail\=
+n");
+>         }
+>
+>         return ret;
+>
+> }
+>
+> static int sp7021_spi_controller_remove(struct platform_device *pdev)
+> {
+>         struct spi_controller *ctlr =3D dev_get_drvdata(&pdev->dev);
+>
+>         pm_runtime_disable(&pdev->dev);
+>         pm_runtime_set_suspended(&pdev->dev);
+>
+>         return 0;
+> }
+
+--=20
+With Best Regards,
+Andy Shevchenko

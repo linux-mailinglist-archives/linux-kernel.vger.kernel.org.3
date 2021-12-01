@@ -2,160 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D66746459E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E824645A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:56:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244955AbhLAD6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231927AbhLAD6X (ORCPT
+        id S1346498AbhLAEAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 23:00:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:31962 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1344183AbhLAEAI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:58:23 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308DAC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:55:03 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id j11so12239563pgs.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:55:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YaeKFsX1KofNItzE7OLhurInohiFOUCQOEHbA1sAEqI=;
-        b=3onNIi9mMlCHbRc8pIiWSdbZzQ8bSTlCWcl/1Pm4RpVXT+eR3gK6MiBNvoUmicZO2k
-         66rFF1/d+vKp/9a9Vlk3Sjav/WR+tm1daMeX8nbKKigFNW/VF3lmTmf1PgO5hZFgW5vB
-         6Lfq0dK3eB7FxfowyvXCFp23SEu5gwBo4DPV1gHEXuHU+TpEZlc4Sn0JN6ZzCP95al6+
-         KcWn/hIPpo6OlXDiLD4YCDdAXX8Wyl9y3ayLxEP+Ve4NBmIgr90t4jhU5ddtMwOeuRCC
-         w9HNj4d7Bn8GaY1UN8YFOuChjhqYlyHHJDiJpS1iqCWoR9xzes6IN0xvbIUM536Y9P3/
-         JJ3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YaeKFsX1KofNItzE7OLhurInohiFOUCQOEHbA1sAEqI=;
-        b=IrMb6wnRVaGcWhKMmIQbIqDYhrBRzPZ3fGaiSxKI3zQqRfdQW2kX8AupMwiNOzL55d
-         HiwACr9Rg47hIcj/WD5NyowIyogX8Aww9hX0V9BvnNCIREtmKp65Ht45IwR6syiFQWfD
-         tKc27Se1bkh/E9eoHnWVqwlWIC6zvY0Ykt+NwSbgTOXwklobYXnZzezMARTva2gZeMpU
-         ePVUYnDsLWlb8nVojxftAvj2KU9340eU7/fgo6Tm946j+hY0+W3SF87pIb7oFONRRLi/
-         CI5eHybZpT5zzstJjI25UiTBu/UKUveZt0l/2DgibHCyjDvxZEh7g0OgaBi4C3XTuz+J
-         gZ3w==
-X-Gm-Message-State: AOAM530r7/dWSNyTS2Qnimdoe5T5jRS8ozn0oBN5L1hSdwJveVRuzM3t
-        JE4tLZgiT5SpF50mQycF9N9fvQ==
-X-Google-Smtp-Source: ABdhPJytno4BKM7xrhKQupoYZLnpjJGyxc7I60G48S15ovrjedr1oSfP6RAn6nfrdDL6eOljCajehg==
-X-Received: by 2002:a05:6a00:2387:b0:49f:af00:d5d0 with SMTP id f7-20020a056a00238700b0049faf00d5d0mr3721734pfc.1.1638330902605;
-        Tue, 30 Nov 2021 19:55:02 -0800 (PST)
-Received: from C02F52LSML85.bytedance.net ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id f3sm21679043pfg.167.2021.11.30.19.54.56
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Nov 2021 19:55:01 -0800 (PST)
-From:   Feng zhou <zhoufeng.zf@bytedance.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org
-Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
-        songmuchun@bytedance.com, zhouchengming@bytedance.com,
-        zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next] libbpf: Let any two INT/UNION compatible if their names and sizes match
-Date:   Wed,  1 Dec 2021 11:54:50 +0800
-Message-Id: <20211201035450.31083-1-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
+        Tue, 30 Nov 2021 23:00:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638331007;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MYPz1TwK62zcw/lQOKlOkIWpT4m/iI29fxtGFyZ0JI4=;
+        b=PWcBe0ibxSZnyaiE22dVSAagK8vmNu7iD0HjmNYV1XrP7dzoCrBigVmtQSsrFNEqP8wb5G
+        0tyYpO9DLxfy3YPjYuf7MhM2bVGmMyKD+SPDLtiZUsJDngo9RhpNJLkJ9dA8aorUCmTnyH
+        7rILDx7/QL3v5THNsw/sOkU4ua5Pb2s=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-CvQVTj-AP8Wl3lEo7wuR4A-1; Tue, 30 Nov 2021 22:56:44 -0500
+X-MC-Unique: CvQVTj-AP8Wl3lEo7wuR4A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id CDF3C104ECE6;
+        Wed,  1 Dec 2021 03:56:41 +0000 (UTC)
+Received: from [10.22.16.172] (unknown [10.22.16.172])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C52EC19EF9;
+        Wed,  1 Dec 2021 03:56:34 +0000 (UTC)
+Message-ID: <2347fe66-dc68-6d58-e63b-7ed2b8077b48@redhat.com>
+Date:   Tue, 30 Nov 2021 22:56:34 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v8 5/6] cgroup/cpuset: Update description of
+ cpuset.cpus.partition in cgroup-v2.rst
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>
+Cc:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+References: <20211018143619.205065-1-longman@redhat.com>
+ <20211018143619.205065-6-longman@redhat.com>
+ <20211115193122.GA16798@blackbody.suse.cz>
+ <8f68692b-bd8f-33fd-44ae-f6f83bf2dc00@redhat.com>
+ <20211116175411.GA50019@blackbody.suse.cz>
+ <293d7abf-aff6-fcd8-c999-b1dbda1cffb8@redhat.com>
+ <YaZbXArNIMNvwJD/@slm.duckdns.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <YaZbXArNIMNvwJD/@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On 11/30/21 12:11, Tejun Heo wrote:
+> Hello, Waiman.
+>
+> On Tue, Nov 30, 2021 at 10:35:19AM -0500, Waiman Long wrote:
+>>      On read, the "cpuset.cpus.partition" file can show the following
+>>      values.
+>>
+>>        ======================    ==============================
+>>        "member"            Non-root member of a partition
+>>        "root"            Partition root
+>>        "isolated"            Partition root without load balancing
+>>        "root invalid (<reason>)"    Invalid partition root
+>>        ======================    ==============================
+> What happens if an isolated domain becomes invalid and then valid again due
+> to cpu hotplug? Does it go "root invalid" and then back to "isolated"?
+Yes, the current code allow recovering from an invalid state. In this 
+particular case, the transition will be "isolated" --> "root invalid" 
+--> "isolated".
+> ...
+>>      Before the "member" to partition root transition can happen,
+>>      the following conditions must be met or the transition will
+>>      not be allowed.
+>>
+>>      1) The "cpuset.cpus" is non-empty and exclusive, i.e. they are
+>>         not shared by any of its siblings.
+>>      2) The parent cgroup is a valid partition root.
+>>      3) The "cpuset.cpus" is a subset of parent's "cpuset.cpus".
+>>      4) There is no child cgroups with cpuset enabled.  This avoids
+>>         cpu migrations of multiple cgroups simultaneously which can
+>>         be problematic.
+> So, I still have a hard time justifying the above restrictions. 1) can be
+> broken through hotplug anyway. 2) can be broken by the parent switching to
+> member. 3) would mean that we'd need to restrict parent's config changes
+> depending on what children are doing. 4) is more understandable but it's an
+> implementation detail that we can address in the future.
+>
+The initial transition to a partition root has a higher barrier. Once it 
+becomes a partition root. Some restrictions are relaxed.
 
-commit:67c0496e87d193b8356d2af49ab95e8a1b954b3c(kernfs: convert
-kernfs_node->id from union kernfs_node_id to u64).
+>>      Once becoming a partition root, the following two rules restrict
+>>      what changes can be made to "cpuset.cpus".
+>>
+>>      1) The value must be exclusive.
+>>      2) If child cpusets exist, the value must be a superset of what
+>>         are defined in the child cpusets.
+>>
+>>      The second rule applies even for "member". Other changes to
+>>      "cpuset.cpus" that do not violate the above rules are always
+>>      allowed.
+> While it isn't necessarily tied to this series, it's a big no-no to restrict
+> what a parent can do depending on what its descendants are doing. A cgroup
+> higher up in the hierarchy should be able to change configuration however it
+> sees fit as deligation breaks down otherwise.
+>
+> Maybe you can argue that cpuset is special and shouldn't be subject to such
+> convention but I can't see strong enough justifications especially given
+> that most of these restrictions can be broken by hotplug operations anyway
+> and thus need code to handle those situations.
 
-The bpf program compiles on the kernel version after this commit and
-then tries to run on the kernel before this commit, libbpf will report
-an error. The reverse is also same.
+These are all pre-existing restrictions before the introduction of 
+partition. These are checks done in validate_change(). I am just saying 
+out loud the existing behavior. If you think that needs to be changed, I 
+am fine with that. However, it will be a separate patch as it is not a 
+behavior that is introduced by this series.
 
-libbpf: prog 'tcp_retransmit_synack_tp': relo #4: kind <byte_off> (0),
-spec is [342] struct kernfs_node.id (0:9 @ offset 104)
-libbpf: prog 'tcp_retransmit_synack_tp': relo #4: non-matching candidate
-libbpf: prog 'tcp_retransmit_synack_tp': relo #4: non-matching candidate
-libbpf: prog 'tcp_retransmit_synack_tp': relo #4: no matching targets
-found
 
-The type before this commit:
-	union kernfs_node_id	id;
-	union kernfs_node_id {
-		struct {
-			u32		ino;
-			u32		generation;
-		};
-		u64			id;
-	};
+>>      Changing a partition root (valid or invalid) to "member" is
+>>      always allowed.  If there are child partition roots underneath
+>>      it, however, they will be forced to be switched back to "member"
+>>      too and lose their partitions. So care must be taken to double
+>>      check for this condition before disabling a partition root.
+> Wouldn't it make more sense for them to retain their configuration and turn
+> invalid? Why is this special?
 
-The type after this commit:
-	u64 id;
+Once an invalid partition is changed to "member", there is no way for a 
+child invalid partition root to recover and become valid again. There is 
+why I force them to become "member" also. I am OK if you believe it is 
+better to keep them in the invalid state forever until we explicitly 
+changed them to "member" eventually.
 
-We can find that the variable name and size have not changed except for
-the type change.
-So I added some judgment to let any two INT/UNION are compatible, if
-their names and sizes match.
 
-Reported-by: Chengming Zhou <zhouchengming@bytedance.com>
-Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- tools/lib/bpf/relo_core.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+>
+>>      A valid parent partition may distribute out all its CPUs to
+>>      its child partitions as long as it is not the root cgroup and
+>>      there is no task associated with it.
+> A valid parent partition which isn't root never has tasks in them to begin
+> with.
+I believe there is some corner cases where it is possible to put task in 
+an intermediate partition. That is why I put down this statement.
 
-diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
-index b5b8956a1be8..ff7f4e97bafb 100644
---- a/tools/lib/bpf/relo_core.c
-+++ b/tools/lib/bpf/relo_core.c
-@@ -294,6 +294,7 @@ static int bpf_core_parse_spec(const struct btf *btf,
-  *   - any two FLOATs are always compatible;
-  *   - for ARRAY, dimensionality is ignored, element types are checked for
-  *     compatibility recursively;
-+ *   - any two INT/UNION are compatible, if their names and sizes match;
-  *   - everything else shouldn't be ever a target of relocation.
-  * These rules are not set in stone and probably will be adjusted as we get
-  * more experience with using BPF CO-RE relocations.
-@@ -313,8 +314,14 @@ static int bpf_core_fields_are_compat(const struct btf *local_btf,
- 
- 	if (btf_is_composite(local_type) && btf_is_composite(targ_type))
- 		return 1;
--	if (btf_kind(local_type) != btf_kind(targ_type))
--		return 0;
-+	if (btf_kind(local_type) != btf_kind(targ_type)) {
-+		if (local_type->size == targ_type->size &&
-+		    (btf_is_union(local_type) || btf_is_union(targ_type)) &&
-+		    (btf_is_int(local_type) || btf_is_int(targ_type)))
-+			return 1;
-+		else
-+			return 0;
-+	}
- 
- 	switch (btf_kind(local_type)) {
- 	case BTF_KIND_PTR:
-@@ -384,11 +391,17 @@ static int bpf_core_match_member(const struct btf *local_btf,
- 	targ_type = skip_mods_and_typedefs(targ_btf, targ_id, &targ_id);
- 	if (!targ_type)
- 		return -EINVAL;
--	if (!btf_is_composite(targ_type))
--		return 0;
- 
- 	local_id = local_acc->type_id;
- 	local_type = btf__type_by_id(local_btf, local_id);
-+	if (!btf_is_composite(targ_type)) {
-+		if (local_type->size == targ_type->size &&
-+		    btf_is_union(local_type) && btf_is_int(targ_type))
-+			return 1;
-+		else
-+			return 0;
-+	}
-+
- 	local_member = btf_members(local_type) + local_acc->idx;
- 	local_name = btf__name_by_offset(local_btf, local_member->name_off);
- 
--- 
-2.11.0
+Cheers,
+Longman
 

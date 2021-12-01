@@ -2,60 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DBD4650E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CE6A4650E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 16:06:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350564AbhLAPJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 10:09:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53664 "EHLO
+        id S1350587AbhLAPJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 10:09:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350426AbhLAPIc (ORCPT
+        with ESMTP id S1350460AbhLAPJD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 10:08:32 -0500
-Received: from relay07.th.seeweb.it (relay07.th.seeweb.it [IPv6:2001:4b7a:2000:18::168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 998F6C061748;
-        Wed,  1 Dec 2021 07:05:11 -0800 (PST)
-Received: from [192.168.1.101] (83.6.166.111.neoplus.adsl.tpnet.pl [83.6.166.111])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id DB2E83F679;
-        Wed,  1 Dec 2021 16:05:09 +0100 (CET)
-Message-ID: <aa0652fc-fbaa-1515-b79f-d2da6d43eb23@somainline.org>
-Date:   Wed, 1 Dec 2021 16:05:09 +0100
+        Wed, 1 Dec 2021 10:09:03 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C6CC061756;
+        Wed,  1 Dec 2021 07:05:42 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id z5so37914529edd.3;
+        Wed, 01 Dec 2021 07:05:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MBT3RPen2M431MDKHFSMebGnut1XmD83aF6y4bnLBoE=;
+        b=aUUpW0y4Fl3KE6dPk2xZJLBZlss1B9u+yDHnRR+V+DiVzP7w03taRDeCXSZlk9Vilp
+         FpEoMBLzSC6g2YL/MlRPq1Fl40yqyW2DvFgH/y4wZaLUlgKGDiYG9H+ek45btPGd7a2R
+         pzVl1kZ3L+eJpAi3tw8+Kh2RO46Vg5RPZSYa/jXH3su9CjghT6puhs3LIbgCgiplZ7Mm
+         v47ko61h83oS2nx5bgYeJD5rXcCPwDDkREzQOl34lD/O8BA2Ej7bOowKW+orCt0wlt6M
+         VlQrugZLDi+ypK9xWxJLoY+tCLb/nu96rLuvIkVzNAyyEKBZFZ3pHBczVf9pKwTPcAk4
+         1jew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MBT3RPen2M431MDKHFSMebGnut1XmD83aF6y4bnLBoE=;
+        b=lUyYkkR46FGQXcxogh8lOgRMt+HR3BCbsvq1cfxUws/RM5QW/OQCvkfTgAWX/332Fo
+         IEGNZDJHfo8Srvv/3x4cOIrHUrhHhtdTErEwK0p7CW/Mq5SXOLzjzUFUHM7oWuJc72zz
+         riH+HC7bM+vAIFkX1TMdm2gY9ov0uFExnnrRChvmpBsnVwt88T2MshtZ0JdyDa2J4nXe
+         VglX94GIkiiqXu3K3KNKl6eNfoOTW8IyjMuMwj+I92Y/ZP56Q6l/eMAHdOpN8o2hIoxo
+         g8Ic3UzFq/W3GDQT+NIvtE9wEx2ibryvmuyZ5nMs85n5IR6jmah/uOSSTThxGC+Vf1KI
+         hLUw==
+X-Gm-Message-State: AOAM531BtAvWCKQE3Ym8bpxttZdASB1/BMtOCkBI+tHBZgR20WH1D59P
+        TH/uSceGzSj1GXvfzOsstRI=
+X-Google-Smtp-Source: ABdhPJxm4ZE4RV4M+RYm5RijIK5XPgqp/L+Smx4PqR/1o80Gf/aQZXxqwcMbNofC/qZjfZ4MccFfvQ==
+X-Received: by 2002:a17:907:764b:: with SMTP id kj11mr7550132ejc.307.1638371139141;
+        Wed, 01 Dec 2021 07:05:39 -0800 (PST)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id og38sm24863ejc.5.2021.12.01.07.05.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 07:05:38 -0800 (PST)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <bb6dd4eb-c713-f0e5-71fa-b0a514c4da6c@redhat.com>
+Date:   Wed, 1 Dec 2021 16:05:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH 02/15] arm64: dts: qcom: Add base SM8450 QRD DTS
+ Thunderbird/91.2.0
+Subject: Re: [RFC PATCH v3 00/59] KVM: X86: TDX support
 Content-Language: en-US
-To:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20211201072915.3969178-1-vkoul@kernel.org>
- <20211201072915.3969178-3-vkoul@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20211201072915.3969178-3-vkoul@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Sean Christopherson <seanjc@google.com>, isaku.yamahata@intel.com
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, erdemaktas@google.com,
+        Connor Kuehl <ckuehl@redhat.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, isaku.yamahata@gmail.com
+References: <cover.1637799475.git.isaku.yamahata@intel.com>
+ <YaZyyNMY80uVi5YA@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YaZyyNMY80uVi5YA@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/30/21 19:51, Sean Christopherson wrote:
+> On Wed, Nov 24, 2021,isaku.yamahata@intel.com  wrote:
+>> - drop load/initialization of TDX module
+> So what's the plan for loading and initializing TDX modules?
+> 
 
-On 01.12.2021 08:29, Vinod Koul wrote:
-> Add DTS for Qualcomm QRD platform which uses SM8450 SoC
->
-> Signed-off-by: Vinod Koul <vkoul@kernel.org>
-> ---
->  arch/arm64/boot/dts/qcom/Makefile       |  1 +
->  arch/arm64/boot/dts/qcom/sm8450-qrd.dts | 29 +++++++++++++++++++++++++
->  2 files changed, 30 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sm8450-qrd.dts
->
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+The latest news I got are that Intel has an EFI application that loads 
+it, so loading it from Linux and updating it at runtime can be punted to 
+later.
 
-
-Konrad
-
+Paolo

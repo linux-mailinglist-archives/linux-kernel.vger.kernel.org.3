@@ -2,74 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FCE464A90
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE1B464A91
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 10:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348217AbhLAJ3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 04:29:46 -0500
-Received: from szxga03-in.huawei.com ([45.249.212.189]:28207 "EHLO
-        szxga03-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348199AbhLAJ3m (ORCPT
+        id S1348226AbhLAJ3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 04:29:47 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:10975 "EHLO
+        alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1348203AbhLAJ3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 04:29:42 -0500
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4J3tvT1J3Mz8vnn;
-        Wed,  1 Dec 2021 17:24:21 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 17:26:19 +0800
-Received: from [10.174.176.73] (10.174.176.73) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Wed, 1 Dec 2021 17:26:18 +0800
-Subject: Re: [PATCH v2 2/2] block: cancel all throttled bios in del_gendisk()
-To:     Tejun Heo <tj@kernel.org>
-CC:     <hch@infradead.org>, <axboe@kernel.dk>, <cgroups@vger.kernel.org>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yi.zhang@huawei.com>
-References: <20211130011730.2584339-1-yukuai3@huawei.com>
- <20211130011730.2584339-3-yukuai3@huawei.com>
- <YaZQqjjygHGFEdbx@slm.duckdns.org>
-From:   "yukuai (C)" <yukuai3@huawei.com>
-Message-ID: <a30bfafa-82ed-0ac1-deac-afb83f29c805@huawei.com>
-Date:   Wed, 1 Dec 2021 17:26:17 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 1 Dec 2021 04:29:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638350784; x=1669886784;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=KGYZYTDg5dnuCQwKnhxYJTqdcyPScNChmwtnWbo6LOE=;
+  b=oPXjAG+66J8OsnwD0XwRk1Rlgj06RoV2QIuLCVwdVBEGdXwPg0coVN80
+   y5gFOrExnpBHff37obYq1qWqMg++miyluMkZuOrS48FJ6Te6r9LL0WBci
+   3X1GuQSSHdUXRHzbaLat6lKIOzf5UwrSskMdcOAFInYuwYlVG3aLSHc1C
+   I=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Dec 2021 01:26:24 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 01:26:23 -0800
+Received: from [10.216.8.32] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 1 Dec 2021
+ 01:26:21 -0800
+Message-ID: <1c74b167-eb1e-42d8-2c8d-e1740240ca2b@quicinc.com>
+Date:   Wed, 1 Dec 2021 14:56:18 +0530
 MIME-Version: 1.0
-In-Reply-To: <YaZQqjjygHGFEdbx@slm.duckdns.org>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.73]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 3/6] rcu/nocb: Optimize kthreads and rdp initialization
+Content-Language: en-US
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>
+References: <20211123003708.468409-1-frederic@kernel.org>
+ <20211123003708.468409-4-frederic@kernel.org>
+From:   Neeraj Upadhyay <quic_neeraju@quicinc.com>
+In-Reply-To: <20211123003708.468409-4-frederic@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ÔÚ 2021/12/01 0:26, Tejun Heo Ð´µÀ:
-> Hello,
-> 
-> On Tue, Nov 30, 2021 at 09:17:30AM +0800, Yu Kuai wrote:
->> +void blk_throtl_cancel_bios(struct request_queue *q)
->> +{
->> +	struct throtl_data *td = q->td;
->> +	struct blkcg_gq *blkg;
->> +	struct cgroup_subsys_state *pos_css;
->> +	struct bio *bio;
->> +	int rw;
->> +
->> +	rcu_read_lock();
-> 
-> So, all of the draining is being performed without holding the q lock, which
-> *might* be okay given that we're in the del_gendisk path but is likely risky
-> - ie. there can still be timers or whatever racing against it.
 
-I'll hold queue_lock to draining bios in next iteration,
 
-Thanks,
-Kuai
+On 11/23/2021 6:07 AM, Frederic Weisbecker wrote:
+> Currently cpumask_available() is used to prevent from unwanted
+> NOCB initialization. However if neither "rcu_nocbs=" nor "nohz_full="
+> parameters are passed but CONFIG_CPUMASK_OFFSTACK=n, the initialization
+> path is still taken, running through all sorts of needless operations
+> and iterations on an empty cpumask.
 > 
-> Thanks.
+> Fix this with relying on a real initialization state instead. This
+> also optimize kthreads creation, sparing iteration over all online CPUs
+> when nocb isn't initialized.
+> 
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Uladzislau Rezki <urezki@gmail.com>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> ---
+
+Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+
+>   kernel/rcu/tree_nocb.h | 24 +++++++++++++++++-------
+>   1 file changed, 17 insertions(+), 7 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index e1cb06840454..d8ed3ee47a67 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -60,6 +60,9 @@ static inline bool rcu_current_is_nocb_kthread(struct rcu_data *rdp)
+>    * Parse the boot-time rcu_nocb_mask CPU list from the kernel parameters.
+>    * If the list is invalid, a warning is emitted and all CPUs are offloaded.
+>    */
+> +
+> +static bool rcu_nocb_is_setup;
+> +
+>   static int __init rcu_nocb_setup(char *str)
+>   {
+>   	alloc_bootmem_cpumask_var(&rcu_nocb_mask);
+> @@ -67,6 +70,7 @@ static int __init rcu_nocb_setup(char *str)
+>   		pr_warn("rcu_nocbs= bad CPU range, all CPUs set\n");
+>   		cpumask_setall(rcu_nocb_mask);
+>   	}
+> +	rcu_nocb_is_setup = true;
+>   	return 1;
+>   }
+>   __setup("rcu_nocbs=", rcu_nocb_setup);
+> @@ -1159,13 +1163,17 @@ void __init rcu_init_nohz(void)
+>   		need_rcu_nocb_mask = true;
+>   #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+>   
+> -	if (!cpumask_available(rcu_nocb_mask) && need_rcu_nocb_mask) {
+> -		if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
+> -			pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
+> -			return;
+> +	if (need_rcu_nocb_mask) {
+> +		if (!cpumask_available(rcu_nocb_mask)) {
+> +			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
+> +				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
+> +				return;
+> +			}
+>   		}
+> +		rcu_nocb_is_setup = true;
+>   	}
+> -	if (!cpumask_available(rcu_nocb_mask))
+> +
+> +	if (!rcu_nocb_is_setup)
+>   		return;
+>   
+>   #if defined(CONFIG_NO_HZ_FULL)
+> @@ -1267,8 +1275,10 @@ static void __init rcu_spawn_nocb_kthreads(void)
+>   {
+>   	int cpu;
+>   
+> -	for_each_online_cpu(cpu)
+> -		rcu_spawn_cpu_nocb_kthread(cpu);
+> +	if (rcu_nocb_is_setup) {
+> +		for_each_online_cpu(cpu)
+> +			rcu_spawn_cpu_nocb_kthread(cpu);
+> +	}
+>   }
+>   
+>   /* How many CB CPU IDs per GP kthread?  Default of -1 for sqrt(nr_cpu_ids). */
 > 

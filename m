@@ -2,224 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC98046561E
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF89465620
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 20:06:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245096AbhLATJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 14:09:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54318 "EHLO
+        id S1352686AbhLATJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 14:09:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352616AbhLATI0 (ORCPT
+        with ESMTP id S1352653AbhLATIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 14:08:26 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32EFC061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:05:04 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id b1so65277600lfs.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 11:05:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=aAo5L8S04r7ipl+uXm9qNiK/iV6LQnGWXB0cFhZkmdM=;
-        b=rHqvSkrjyON28Or7auVY6T++aDwISh/E4oAAgovbxJ8YKWassoYx1nH9Wc8W5t2LIK
-         HpJh5rttDdFr4ReJ38i2CphfVYXPFEMq9biC78GRdUQjEjghLp02PoN+QxxnyTg86aoz
-         x3oFQmBnuM2hXssgFYik2THgZO2aH6mELyKuHxUhg4/VKKWS0Lv1QA/cNVhBzFuf90I/
-         Hx2822kzjmdOk5XD2WFYwpBgKUd4rwVSzo9vKUPMWdohJEqv+KzCFXqOlap+2WR+VWPC
-         pvPyBf368FB8oTBosJJYtbKCpTlu2rjQ8XG4qC2gwkRCCshNexVAI8DcQWGDEOU4vju1
-         70pQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=aAo5L8S04r7ipl+uXm9qNiK/iV6LQnGWXB0cFhZkmdM=;
-        b=mnlqwleMwLUCvJaUU5ej2cCKqV5feeT68ADNNee2SeX/CSk5LOKhTiIn5SQiYkBbI2
-         XFV7YByyNQdxKq8CxKwAUElP4T8U8uEoiwuzxDXQ26WkUHqtO8DnJTCDfYeUq4gcU+uh
-         r+So5Iy3f5kTlrTuoS1rCiIvvECGzrdWc7ldcysN82scFgiGvS+qnM1OteXwNZFfSrDz
-         E5+GB4HwqCRGSNsbnK6dIioZ6v/rZK3d/M8n5MIppzDWDp6UE++eKF5RuD4WbfnwmaY5
-         CrEzuddHrx8bSbVOtUS9WgN4U1Mj6XBxIcHtlam3x8OTHfQwubiTqd6n+g+wva6SnpBq
-         BiXA==
-X-Gm-Message-State: AOAM531In0oMn0+mG2qjy+nakdxzZiCDTkSLppcUn19MKoA+Uf0OUorG
-        4FlPelC1x9yGlCB9D9YrkDTrNw==
-X-Google-Smtp-Source: ABdhPJyYuXcZhjzewZlCgGHfjAN9uPoQI44hRzrim9QZljFWb/IJjkjq+16q4MdxUHqa29lzRPl4qQ==
-X-Received: by 2002:a05:6512:11c5:: with SMTP id h5mr7501361lfr.431.1638385503089;
-        Wed, 01 Dec 2021 11:05:03 -0800 (PST)
-Received: from localhost ([31.134.121.151])
-        by smtp.gmail.com with ESMTPSA id p26sm72178ljj.70.2021.12.01.11.05.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 11:05:02 -0800 (PST)
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Youngmin Nam <youngmin.nam@samsung.com>,
-        Wolfram Sang <wsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-Subject: [PATCH 4/6] i2c: exynos5: Add support for ExynosAutoV9 SoC
-Date:   Wed,  1 Dec 2021 21:04:53 +0200
-Message-Id: <20211201190455.31646-5-semen.protsenko@linaro.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20211201190455.31646-1-semen.protsenko@linaro.org>
-References: <20211201190455.31646-1-semen.protsenko@linaro.org>
+        Wed, 1 Dec 2021 14:08:32 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F05C0613E1
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 11:05:09 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1msUuW-00063k-J6; Wed, 01 Dec 2021 20:04:56 +0100
+Message-ID: <62d99a764d3a8071f061a0127cfba6d7df53fc19.camel@pengutronix.de>
+Subject: Re: [RFC V2 0/2] arm64: imx8mm: Enable Hantro VPUs
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     Tim Harvey <tharvey@gateworks.com>,
+        linux-media <linux-media@vger.kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Adam Ford-BE <aford@beaconembedded.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Device Tree Mailing List <devicetree@vger.kernel.org>,
+        Linux ARM Mailing List <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:HANTRO VPU CODEC DRIVER" 
+        <linux-rockchip@lists.infradead.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
+Date:   Wed, 01 Dec 2021 20:04:54 +0100
+In-Reply-To: <CAHCN7xKfRj3f03kC5TuBv-Te1OyeWNRe2aaqJNaW9VdHgbWqbg@mail.gmail.com>
+References: <20211201013329.15875-1-aford173@gmail.com>
+         <CAJ+vNU1jENmWAR_5E98Vgb53ctxjxSWJewPW0YC4Yp4DuYTn3g@mail.gmail.com>
+         <7216bc863d89faa9fdc5cd8d44c319f7a6d88159.camel@pengutronix.de>
+         <CAJ+vNU2PxgdN414Ufd4NAG5CJgnftNSAHDGpt9Nj+RfgkNmxaw@mail.gmail.com>
+         <ccfc08bbb6ec0debd523bd106e7eff4a747aaa23.camel@pengutronix.de>
+         <CAHCN7xKfRj3f03kC5TuBv-Te1OyeWNRe2aaqJNaW9VdHgbWqbg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jaewon Kim <jaewon02.kim@samsung.com>
+Am Mittwoch, dem 01.12.2021 um 12:52 -0600 schrieb Adam Ford:
+> On Wed, Dec 1, 2021 at 12:37 PM Lucas Stach <l.stach@pengutronix.de> wrote:
+> > 
+> > Am Mittwoch, dem 01.12.2021 um 10:16 -0800 schrieb Tim Harvey:
+> > > On Wed, Dec 1, 2021 at 9:32 AM Lucas Stach <l.stach@pengutronix.de> wrote:
+> > > > 
+> > > > Hi Tim,
+> > > > 
+> > > > Am Mittwoch, dem 01.12.2021 um 09:23 -0800 schrieb Tim Harvey:
+> > > > > On Tue, Nov 30, 2021 at 5:33 PM Adam Ford <aford173@gmail.com> wrote:
+> > > > > > 
+> > > > > > The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
+> > > > > > to be related to the video decoders used on the i.MX8MQ, but because of
+> > > > > > how the Mini handles the power domains, the VPU driver does not need to
+> > > > > > handle all the functions, nor does it support the post-processor,
+> > > > > > so a new compatible flag is required.
+> > > > > > 
+> > > > > > With the suggestion from Hans Verkuil, I was able to get the G2 splat to go away
+> > > > > > with changes to FORCE_MAX_ZONEORDER, but I found I could also set cma=512M, however
+> > > > > > it's unclear to me if that's an acceptable alternative.
+> > > > > > 
+> > > > > > At the suggestion of Ezequiel Garcia and Nicolas Dufresne I have some
+> > > > > > results from Fluster. However, the G2 VPU appears to fail most tests.
+> > > > > > 
+> > > > > > ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
+> > > > > > Ran 90/135 tests successfully               in 76.431 secs
+> > > > > > 
+> > > > > >  ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
+> > > > > > Ran 55/61 tests successfully               in 21.454 secs
+> > > > > > 
+> > > > > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
+> > > > > > Ran 0/303 tests successfully               in 20.016 secs
+> > > > > > 
+> > > > > > Each day seems to show more and more G2 submissions, and gstreamer seems to be
+> > > > > > still working on the VP9, so I am not sure if I should drop G2 as well.
+> > > > > > 
+> > > > > > 
+> > > > > > Adam Ford (2):
+> > > > > >   media: hantro: Add support for i.MX8M Mini
+> > > > > >   arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
+> > > > > > 
+> > > > > >  arch/arm64/boot/dts/freescale/imx8mm.dtsi   | 41 +++++++++++++++
+> > > > > >  drivers/staging/media/hantro/hantro_drv.c   |  2 +
+> > > > > >  drivers/staging/media/hantro/hantro_hw.h    |  2 +
+> > > > > >  drivers/staging/media/hantro/imx8m_vpu_hw.c | 57 +++++++++++++++++++++
+> > > > > >  4 files changed, 102 insertions(+)
+> > > > > > 
+> > > > > 
+> > > > > Adam,
+> > > > > 
+> > > > > That's for the patches!
+> > > > > 
+> > > > > I tested just this series on top of v5.16-rc3 on an
+> > > > > imx8mm-venice-gw73xx-0x and found that if I loop fluster I can end up
+> > > > > getting a hang within 10 to 15 mins or so when imx8m_blk_ctrl_power_on
+> > > > > is called for VPUMIX pd :
+> > > > > while [ 1 ]; do uptime; ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0; done
+> > > > > ...
+> > > > > [  618.838436] imx-pgc imx-pgc-domain.6: failed to command PGC
+> > > > > [  618.844407] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
+> > > > > 
+> > > > > I added prints in imx_pgc_power_{up,down} and
+> > > > > imx8m_blk_ctrl_power_{on,off} to get some more context
+> > > > > ...
+> > > > > Ran 55/61 tests successfully               in 8.685 secs
+> > > > >  17:16:34 up 17 min,  0 users,  load average: 3.97, 2.11, 0.93
+> > > > > ********************************************************************************
+> > > > > ********************
+> > > > > Running test suite VP8-TEST-VECTORS with decoder GStreamer-VP8-V4L2SL-Gst1.0
+> > > > > Using 4 parallel job(s)
+> > > > > ********************************************************************************
+> > > > > ********************
+> > > > > 
+> > > > > [TEST SUITE      ] (DECODER                    ) TEST VECTOR               ... R
+> > > > > ESULT
+> > > > > ----------------------------------------------------------------------
+> > > > > [ 1023.114806] imx8m_blk_ctrl_power_on vpublk-g1
+> > > > > [ 1023.119669] imx_pgc_power_up vpumix
+> > > > > [ 1023.124307] imx-pgc imx-pgc-domain.6: failed to command PGC
+> > > > > [ 1023.130006] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
+> > > > > 
+> > > > > While this wouldn't be an issue with this series it does indicate we
+> > > > > still have something racy in blk-ctrl. Can you reproduce this (and if
+> > > > > not what kernel are you based on)? Perhaps you or Lucas have some
+> > > > > ideas?
+> > > > > 
+> > > > Did you have "[PATCH] soc: imx: gpcv2: Synchronously suspend MIX
+> > > > domains" applied when running those tests? It has only recently been
+> > > > picked up by Shawn and may have an influence on the bus domain
+> > > > behavior.
+> > > > 
+> > > 
+> > > Lucas,
+> > > 
+> > > Good point. I did have that originally before I started pruning down
+> > > to the bare minimum to reproduce the issue.
+> > > 
+> > > I added it back and now I have the following:
+> > > arm64: dts: imx8mm: Enable VPU-G1 and VPU-G2
+> > > media: hantro: Add support for i.MX8M Mini
+> > > soc: imx: gpcv2: keep i.MX8MM VPU-H1 bus clock active
+> > > soc: imx: gpcv2: Synchronously suspend MIX domains
+> > > Linux 5.16-rc3
+> > > 
+> > > Here's the latest with that patch:
+> > > ...
+> > > [VP8-TEST-VECTORS] (GStreamer-VP8-V4L2SL-Gst1.0)
+> > > vp80-00-comprehensive-007 ... Success
+> > > [  316.632373] imx8m_blk_ctrl_power_off vpublk-g1
+> > > [  316.636908] imx_pgc_power_down vpu-g1
+> > > [  316.640983] imx_pgc_power_down vpumix
+> > > [  316.756869] imx8m_blk_ctrl_power_on vpublk-g1
+> > > [  316.761360] imx_pgc_power_up vpumix
+> > > [  316.765985] imx-pgc imx-pgc-domain.6: failed to command PGC
+> > > [  316.772743] imx8m-blk-ctrl 38330000.blk-ctrl: failed to power up bus domain
+> > > ^^^ hang
+> > 
+> > Hm, I wonder if there's some broken error handling here somewhere, as a
+> > failure to power up a domain shouldn't lead to a hang.
+> > 
+> > However, that doesn't explain why the PGC isn't completing the request.
+> > Can you try to extend the timeout some more. Even though I think that
+> > 1msec should already be generous. Can you dump the content of the
+> > GPC_PU_PGC_SW_PUP_REQ and GPC_A53_PU_PGC_PUP_STATUSn (all 3 of them)
+> > registers, when the failure condition is hit?
+> 
+> I submitted a patch [1]  to enable the commented-out if statement
+> which waits for the handshake if the gpc domain was invoked by the
+> blk-ctrl or we knew if the bus clock was operational.
+> 
+> I am not 100% certain it can work as-is with the vpumix, but based on
+> what I've seen from my testing, it's not hanging or causing errors.
+> 
+> [1] - https://lore.kernel.org/linux-arm-kernel/20211120194900.1309914-1-aford173@gmail.com/T/
+> 
+> I didn't have it applied to my latest RFC for the G1 and G2 because I
+> had not noticed a change in behavior one way or the other with that
+> patch.
 
-ExynosAutoV9 functioning logic mostly follows I2C_TYPE_EXYNOS7, but
-timing calculation and configuration procedure is changed: e.g. only
-timing_s3 has to be set now.
+That's not going to work with all the MIX domains. The handshake
+requires some clocks to be enabled in the blk-ctrl (the secondary clock
+gates in the blk-ctrl) to work properly. This is only done by the blk-
+ctrl driver _after_ the GPC bus domain is powered up, so you can not
+wait for the handshake to complete inside the GPC power up routine.
 
-Another change of HSI2C controller in ExynosAutoV9 SoC is that it's now
-a part of USIv2 IP-core. No changes is needed for I2C driver though, as
-all USI related configuration is done in USI driver.
-
-Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
----
- drivers/i2c/busses/i2c-exynos5.c | 62 +++++++++++++++++++++++++++-----
- 1 file changed, 53 insertions(+), 9 deletions(-)
-
-diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
-index c2e4bab11366..5198e71e8dab 100644
---- a/drivers/i2c/busses/i2c-exynos5.c
-+++ b/drivers/i2c/busses/i2c-exynos5.c
-@@ -169,6 +169,7 @@
- enum i2c_type_exynos {
- 	I2C_TYPE_EXYNOS5,
- 	I2C_TYPE_EXYNOS7,
-+	I2C_TYPE_EXYNOSAUTOV9,
- };
- 
- struct exynos5_i2c {
-@@ -230,6 +231,11 @@ static const struct exynos_hsi2c_variant exynos7_hsi2c_data = {
- 	.hw		= I2C_TYPE_EXYNOS7,
- };
- 
-+static const struct exynos_hsi2c_variant exynosautov9_hsi2c_data = {
-+	.fifo_depth	= 64,
-+	.hw		= I2C_TYPE_EXYNOSAUTOV9,
-+};
-+
- static const struct of_device_id exynos5_i2c_match[] = {
- 	{
- 		.compatible = "samsung,exynos5-hsi2c",
-@@ -243,6 +249,9 @@ static const struct of_device_id exynos5_i2c_match[] = {
- 	}, {
- 		.compatible = "samsung,exynos7-hsi2c",
- 		.data = &exynos7_hsi2c_data
-+	}, {
-+		.compatible = "samsung,exynosautov9-hsi2c",
-+		.data = &exynosautov9_hsi2c_data
- 	}, {},
- };
- MODULE_DEVICE_TABLE(of, exynos5_i2c_match);
-@@ -281,6 +290,31 @@ static int exynos5_i2c_set_timing(struct exynos5_i2c *i2c, bool hs_timings)
- 		i2c->op_clock;
- 	int div, clk_cycle, temp;
- 
-+	/*
-+	 * In case of HSI2C controllers in ExynosAutoV9:
-+	 *
-+	 * FSCL = IPCLK / ((CLK_DIV + 1) * 16)
-+	 * T_SCL_LOW = IPCLK * (CLK_DIV + 1) * (N + M)
-+	 *   [N : number of 0's in the TSCL_H_HS]
-+	 *   [M : number of 0's in the TSCL_L_HS]
-+	 * T_SCL_HIGH = IPCLK * (CLK_DIV + 1) * (N + M)
-+	 *   [N : number of 1's in the TSCL_H_HS]
-+	 *   [M : number of 1's in the TSCL_L_HS]
-+	 *
-+	 * Result of (N + M) is always 8.
-+	 * In general case, we don't need to control timing_s1 and timing_s2.
-+	 */
-+	if (i2c->variant->hw == I2C_TYPE_EXYNOSAUTOV9) {
-+		div = ((clkin / (16 * i2c->op_clock)) - 1);
-+		i2c_timing_s3 = div << 16;
-+		if (hs_timings)
-+			writel(i2c_timing_s3, i2c->regs + HSI2C_TIMING_HS3);
-+		else
-+			writel(i2c_timing_s3, i2c->regs + HSI2C_TIMING_FS3);
-+
-+		return 0;
-+	}
-+
- 	/*
- 	 * In case of HSI2C controller in Exynos5 series
- 	 * FPCLK / FI2C =
-@@ -422,7 +456,10 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
- 	writel(int_status, i2c->regs + HSI2C_INT_STATUS);
- 
- 	/* handle interrupt related to the transfer status */
--	if (i2c->variant->hw == I2C_TYPE_EXYNOS7) {
-+	switch (i2c->variant->hw) {
-+	case I2C_TYPE_EXYNOSAUTOV9:
-+		fallthrough;
-+	case I2C_TYPE_EXYNOS7:
- 		if (int_status & HSI2C_INT_TRANS_DONE) {
- 			i2c->trans_done = 1;
- 			i2c->state = 0;
-@@ -443,7 +480,12 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
- 			i2c->state = -ETIMEDOUT;
- 			goto stop;
- 		}
--	} else if (int_status & HSI2C_INT_I2C) {
-+
-+		break;
-+	case I2C_TYPE_EXYNOS5:
-+		if (!(int_status & HSI2C_INT_I2C))
-+			break;
-+
- 		trans_status = readl(i2c->regs + HSI2C_TRANS_STATUS);
- 		if (trans_status & HSI2C_NO_DEV_ACK) {
- 			dev_dbg(i2c->dev, "No ACK from device\n");
-@@ -465,6 +507,8 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
- 			i2c->trans_done = 1;
- 			i2c->state = 0;
- 		}
-+
-+		break;
- 	}
- 
- 	if ((i2c->msg->flags & I2C_M_RD) && (int_status &
-@@ -569,13 +613,13 @@ static void exynos5_i2c_bus_check(struct exynos5_i2c *i2c)
- {
- 	unsigned long timeout;
- 
--	if (i2c->variant->hw != I2C_TYPE_EXYNOS7)
-+	if (i2c->variant->hw == I2C_TYPE_EXYNOS5)
- 		return;
- 
- 	/*
--	 * HSI2C_MASTER_ST_LOSE state in EXYNOS7 variant before transaction
--	 * indicates that bus is stuck (SDA is low). In such case bus recovery
--	 * can be performed.
-+	 * HSI2C_MASTER_ST_LOSE state (in Exynos7 and ExynosAutoV9 variants)
-+	 * before transaction indicates that bus is stuck (SDA is low).
-+	 * In such case bus recovery can be performed.
- 	 */
- 	timeout = jiffies + msecs_to_jiffies(100);
- 	for (;;) {
-@@ -611,10 +655,10 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
- 	unsigned long flags;
- 	unsigned short trig_lvl;
- 
--	if (i2c->variant->hw == I2C_TYPE_EXYNOS7)
--		int_en |= HSI2C_INT_I2C_TRANS;
--	else
-+	if (i2c->variant->hw == I2C_TYPE_EXYNOS5)
- 		int_en |= HSI2C_INT_I2C;
-+	else
-+		int_en |= HSI2C_INT_I2C_TRANS;
- 
- 	i2c_ctl = readl(i2c->regs + HSI2C_CTL);
- 	i2c_ctl &= ~(HSI2C_TXCHON | HSI2C_RXCHON);
--- 
-2.30.2
+Regards,
+Lucas
 

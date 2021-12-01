@@ -2,112 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 08BB8464592
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D66746459E
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:55:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241585AbhLADs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:48:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S244955AbhLAD6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:58:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbhLADsv (ORCPT
+        with ESMTP id S231927AbhLAD6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:48:51 -0500
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF3EC061574
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:45:31 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id g19so22884734pfb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:45:31 -0800 (PST)
+        Tue, 30 Nov 2021 22:58:23 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308DAC061746
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:55:03 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id j11so12239563pgs.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:55:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=OguKkgibJx2pCTUQ2tCxqwka6Uxy76Xdi47x9CCBEn8=;
-        b=KPHLA9BhW5UhVpBxTUx98RG5YH9r8nNlfMM9Xy4vL9t2UReT7Z4NbvfFlBoNgJbc0Y
-         K3Nw/5fFV//+6H+loZJlSuHkH9zMdeVkHwlW8XJzCaEsgLa3GT/Gb/HrC7EpGXk6X2am
-         jn8xOs78y/PtkGGidPcI9KgTyPb0ok7Gg7oEHxPWaCZw6cCdtvC6RSyWlMcgQEomFuLR
-         PQtIFYywB2WK29OdoC+4r75fq1zSOn4Qaz4ICmEr67CT0kA8rwbQyhdbrB/VzJRqNhfa
-         6oeoUpeMAeq5Tm1xn7ZKZvXhtb/L/tER4zGWtEx5uHwAJ5jKCXv8nxjMni3MQxTjrgQq
-         eAKw==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YaeKFsX1KofNItzE7OLhurInohiFOUCQOEHbA1sAEqI=;
+        b=3onNIi9mMlCHbRc8pIiWSdbZzQ8bSTlCWcl/1Pm4RpVXT+eR3gK6MiBNvoUmicZO2k
+         66rFF1/d+vKp/9a9Vlk3Sjav/WR+tm1daMeX8nbKKigFNW/VF3lmTmf1PgO5hZFgW5vB
+         6Lfq0dK3eB7FxfowyvXCFp23SEu5gwBo4DPV1gHEXuHU+TpEZlc4Sn0JN6ZzCP95al6+
+         KcWn/hIPpo6OlXDiLD4YCDdAXX8Wyl9y3ayLxEP+Ve4NBmIgr90t4jhU5ddtMwOeuRCC
+         w9HNj4d7Bn8GaY1UN8YFOuChjhqYlyHHJDiJpS1iqCWoR9xzes6IN0xvbIUM536Y9P3/
+         JJ3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=OguKkgibJx2pCTUQ2tCxqwka6Uxy76Xdi47x9CCBEn8=;
-        b=C/yNXYag24ImycGA8Zu9HiRG1byXGrIrezaSgyKD5JXFxndQm7XdGGWw6A+JmN26t2
-         LGQai3CFqjRmF1TUCXIR8dAAWPlK/twZ8F0nU/FoBzfXOs0/gzfpbyKBm0rjLfNcoJZP
-         CZiLeZpEYs6g+lhwuzpLnMbXj1v73D95EcZHw8eVBQyqh0mh5t8F0mJ1laSo5OddPKWE
-         qabJ4neMJ298MdLOXF7uHNSxetMo+deFncfw5BI2K1svBq1siKaeT+VnSbDNCiLVIi99
-         3T0xmMmBKjgLHGJqRvgHte2DTNxuS7UDI5rhc8O/9SXoKw8OT6/EGsBKghaR1ZnbA8t3
-         2Trg==
-X-Gm-Message-State: AOAM533A0XErrZfCvmjslyhLF9SgHqCaZI+feUoazPuRqQ4byMtT6Kvk
-        jMNZi9/9r3CuTdJ0Lxtb6rO0PQ==
-X-Google-Smtp-Source: ABdhPJzJ1yck47dY17+1HUakTMFxxWcRQpm2sFOZp9ygJXx4XlKeLbWCyS9f85yLP9dfdWUlgYJyNA==
-X-Received: by 2002:a63:86c7:: with SMTP id x190mr2712146pgd.230.1638330330627;
-        Tue, 30 Nov 2021 19:45:30 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id c5sm3835589pjm.52.2021.11.30.19.45.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 19:45:30 -0800 (PST)
-Date:   Wed, 1 Dec 2021 03:45:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Igor Mammedov <imammedo@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Julien Thierry <julien.thierry.kdev@gmail.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        Ben Gardon <bgardon@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 00/29] KVM: Scalable memslots implementation
-Message-ID: <Yabv1il1fAVcR0se@google.com>
-References: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=YaeKFsX1KofNItzE7OLhurInohiFOUCQOEHbA1sAEqI=;
+        b=IrMb6wnRVaGcWhKMmIQbIqDYhrBRzPZ3fGaiSxKI3zQqRfdQW2kX8AupMwiNOzL55d
+         HiwACr9Rg47hIcj/WD5NyowIyogX8Aww9hX0V9BvnNCIREtmKp65Ht45IwR6syiFQWfD
+         tKc27Se1bkh/E9eoHnWVqwlWIC6zvY0Ykt+NwSbgTOXwklobYXnZzezMARTva2gZeMpU
+         ePVUYnDsLWlb8nVojxftAvj2KU9340eU7/fgo6Tm946j+hY0+W3SF87pIb7oFONRRLi/
+         CI5eHybZpT5zzstJjI25UiTBu/UKUveZt0l/2DgibHCyjDvxZEh7g0OgaBi4C3XTuz+J
+         gZ3w==
+X-Gm-Message-State: AOAM530r7/dWSNyTS2Qnimdoe5T5jRS8ozn0oBN5L1hSdwJveVRuzM3t
+        JE4tLZgiT5SpF50mQycF9N9fvQ==
+X-Google-Smtp-Source: ABdhPJytno4BKM7xrhKQupoYZLnpjJGyxc7I60G48S15ovrjedr1oSfP6RAn6nfrdDL6eOljCajehg==
+X-Received: by 2002:a05:6a00:2387:b0:49f:af00:d5d0 with SMTP id f7-20020a056a00238700b0049faf00d5d0mr3721734pfc.1.1638330902605;
+        Tue, 30 Nov 2021 19:55:02 -0800 (PST)
+Received: from C02F52LSML85.bytedance.net ([139.177.225.236])
+        by smtp.gmail.com with ESMTPSA id f3sm21679043pfg.167.2021.11.30.19.54.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Nov 2021 19:55:01 -0800 (PST)
+From:   Feng zhou <zhoufeng.zf@bytedance.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        kafai@fb.com, songliubraving@fb.com, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org
+Cc:     netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com, zhouchengming@bytedance.com,
+        zhoufeng.zf@bytedance.com
+Subject: [PATCH bpf-next] libbpf: Let any two INT/UNION compatible if their names and sizes match
+Date:   Wed,  1 Dec 2021 11:54:50 +0800
+Message-Id: <20211201035450.31083-1-zhoufeng.zf@bytedance.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1638304315.git.maciej.szmigiero@oracle.com>
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021, Maciej S. Szmigiero wrote:
-> From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
-> 
-> This series contains the sixth iteration of the scalable memslots patch set.
-> It is based on Sean's version "5.5", but with integrated patches for issues
-> that arose during its review round.
-> 
-> In addition to that, the kvm_for_each_memslot_in_gfn_range() implementation
-> was reworked to return only strictly overlapping memslots and to use
-> iterators.
-> 
-> However, I've dropped a similar kvm_for_each_memslot_in_hva_range() rework
-> since the existing implementation was already returning only strictly
-> overlapping memslots and it was already based on interval tree iterators,
-> so wrapping them in another layer of iterators would only add unnecessary
-> complexity.
-> The code in this "for"-like macro is also self-contained and very simple,
-> so let's keep it this way.
+From: Feng Zhou <zhoufeng.zf@bytedance.com>
 
-If kvm_for_each_memslot_in_hva_range() ever gains a user outside of kvm_main.c
-it should definitely get an iterator container so that callers don't need to do
-the container_of() stuff.  I'd still prefer a container even now, but it's not a
-sticking point.
+commit:67c0496e87d193b8356d2af49ab95e8a1b954b3c(kernfs: convert
+kernfs_node->id from union kernfs_node_id to u64).
+
+The bpf program compiles on the kernel version after this commit and
+then tries to run on the kernel before this commit, libbpf will report
+an error. The reverse is also same.
+
+libbpf: prog 'tcp_retransmit_synack_tp': relo #4: kind <byte_off> (0),
+spec is [342] struct kernfs_node.id (0:9 @ offset 104)
+libbpf: prog 'tcp_retransmit_synack_tp': relo #4: non-matching candidate
+libbpf: prog 'tcp_retransmit_synack_tp': relo #4: non-matching candidate
+libbpf: prog 'tcp_retransmit_synack_tp': relo #4: no matching targets
+found
+
+The type before this commit:
+	union kernfs_node_id	id;
+	union kernfs_node_id {
+		struct {
+			u32		ino;
+			u32		generation;
+		};
+		u64			id;
+	};
+
+The type after this commit:
+	u64 id;
+
+We can find that the variable name and size have not changed except for
+the type change.
+So I added some judgment to let any two INT/UNION are compatible, if
+their names and sizes match.
+
+Reported-by: Chengming Zhou <zhouchengming@bytedance.com>
+Tested-by: Chengming Zhou <zhouchengming@bytedance.com>
+Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
+---
+ tools/lib/bpf/relo_core.c | 21 +++++++++++++++++----
+ 1 file changed, 17 insertions(+), 4 deletions(-)
+
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index b5b8956a1be8..ff7f4e97bafb 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -294,6 +294,7 @@ static int bpf_core_parse_spec(const struct btf *btf,
+  *   - any two FLOATs are always compatible;
+  *   - for ARRAY, dimensionality is ignored, element types are checked for
+  *     compatibility recursively;
++ *   - any two INT/UNION are compatible, if their names and sizes match;
+  *   - everything else shouldn't be ever a target of relocation.
+  * These rules are not set in stone and probably will be adjusted as we get
+  * more experience with using BPF CO-RE relocations.
+@@ -313,8 +314,14 @@ static int bpf_core_fields_are_compat(const struct btf *local_btf,
+ 
+ 	if (btf_is_composite(local_type) && btf_is_composite(targ_type))
+ 		return 1;
+-	if (btf_kind(local_type) != btf_kind(targ_type))
+-		return 0;
++	if (btf_kind(local_type) != btf_kind(targ_type)) {
++		if (local_type->size == targ_type->size &&
++		    (btf_is_union(local_type) || btf_is_union(targ_type)) &&
++		    (btf_is_int(local_type) || btf_is_int(targ_type)))
++			return 1;
++		else
++			return 0;
++	}
+ 
+ 	switch (btf_kind(local_type)) {
+ 	case BTF_KIND_PTR:
+@@ -384,11 +391,17 @@ static int bpf_core_match_member(const struct btf *local_btf,
+ 	targ_type = skip_mods_and_typedefs(targ_btf, targ_id, &targ_id);
+ 	if (!targ_type)
+ 		return -EINVAL;
+-	if (!btf_is_composite(targ_type))
+-		return 0;
+ 
+ 	local_id = local_acc->type_id;
+ 	local_type = btf__type_by_id(local_btf, local_id);
++	if (!btf_is_composite(targ_type)) {
++		if (local_type->size == targ_type->size &&
++		    btf_is_union(local_type) && btf_is_int(targ_type))
++			return 1;
++		else
++			return 0;
++	}
++
+ 	local_member = btf_members(local_type) + local_acc->idx;
+ 	local_name = btf__name_by_offset(local_btf, local_member->name_off);
+ 
+-- 
+2.11.0
+

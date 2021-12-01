@@ -2,122 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F45464555
-	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:15:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8B5B464559
+	for <lists+linux-kernel@lfdr.de>; Wed,  1 Dec 2021 04:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241570AbhLADS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Nov 2021 22:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34338 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241375AbhLADSz (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Nov 2021 22:18:55 -0500
-Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B58EC061746
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:15:35 -0800 (PST)
-Received: by mail-oi1-x231.google.com with SMTP id t19so45613706oij.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Nov 2021 19:15:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=rfbZNyOXs7UYt/C8SkmVXDzLeccdUraAry8kNt9rMZA=;
-        b=qhCz1BA+Ld/I+a6hUZz6GSfV78ZB1+C79IXb383OdSPqeFCVEhXucliIAqQIYfb2RH
-         oDJWNmAWyb8xSfdx30TDI0BtGIQN8xHiz1mSHBJ4pPWdavVjJPu0NV9mpGjkPw4ZzZlu
-         fs4EYjDvCTad7QOeoj1m4sPkc8WJz62YBUeIGsuxnpbpz0Uo0Gcv1S7rImzTrrKzjLsv
-         hoNptFJ3CKWy/DWK1pX4e/5T5pRIETdrJnqRTcecI3lk/X/iTgox8Xfgw6M/gakVBNA3
-         Ps4FC1JualEzgrTB4DL02JhoOz/bRHWkY5TQmr9YfQxzYN2twPUOnZ4+GuwxpksYWCnG
-         N4tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=rfbZNyOXs7UYt/C8SkmVXDzLeccdUraAry8kNt9rMZA=;
-        b=Co3CbNy8NljvN79IzkNJ6kSAA005nmWsaMfad7+Cj12u8cZxYYaS/vYJOg1B9Ut62E
-         zf+42wf0ENvcJwhFDImFhvs71HRrUcGtVm/C2kNjHcpb3Wu8yGskKFHsw645VotAYSbV
-         IC6lShnMVIJpO+VdTB3WGYJrWcrshat237HyKumBWWvubjEvMtUjN4csHg9e0NrGj2c5
-         x464+DaJiwk6bSjJAgAneuzgWAjlwZtX53wQCSpMpIZlXO31rhd56PMnSiaCzS1kDbm5
-         pSU77FKNtX8lW18wDitb86kBL9Qm+sZ0nWCyNo1j/tBGh1Wx9ZsfiTASCaHCDtnopmy8
-         aDfA==
-X-Gm-Message-State: AOAM530dUFFcaKbKEZwjslCGQlKKkrCFZPDoYlkWmkWb9qgENzVv5esM
-        WEeZPuWCp/+bkaYMvK8dREzsGg==
-X-Google-Smtp-Source: ABdhPJwg6EqePcEwKHucsIyJya6VWBAF7FYeTcj8e1CJTYhg7dUqr13M8WjqUM3vCIK1ZVGKUj9BBg==
-X-Received: by 2002:a05:6808:1285:: with SMTP id a5mr3515158oiw.104.1638328534673;
-        Tue, 30 Nov 2021 19:15:34 -0800 (PST)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id s17sm3057269ooj.42.2021.11.30.19.15.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Nov 2021 19:15:34 -0800 (PST)
-Date:   Tue, 30 Nov 2021 21:15:29 -0600
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Katherine Perez <kaperez@linux.microsoft.com>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] arm64: dts: sm8350: fix tlmm base address
-Message-ID: <Yabo0fGXC1rITmsM@builder.lan>
-References: <20211122190552.74073-1-kaperez@linux.microsoft.com>
- <20211122190552.74073-3-kaperez@linux.microsoft.com>
- <YZxoGp33Seaa2WEG@matsya>
+        id S1346414AbhLADTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Nov 2021 22:19:12 -0500
+Received: from mx24.baidu.com ([111.206.215.185]:36474 "EHLO baidu.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1346377AbhLADTJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 30 Nov 2021 22:19:09 -0500
+Received: from BJHW-Mail-Ex11.internal.baidu.com (unknown [10.127.64.34])
+        by Forcepoint Email with ESMTPS id E60C8E10313B84848A20;
+        Wed,  1 Dec 2021 11:15:46 +0800 (CST)
+Received: from BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42) by
+ BJHW-Mail-Ex11.internal.baidu.com (10.127.64.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2308.20; Wed, 1 Dec 2021 11:15:46 +0800
+Received: from localhost (172.31.63.8) by BJHW-MAIL-EX27.internal.baidu.com
+ (10.127.64.42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.20; Wed, 1
+ Dec 2021 11:15:46 +0800
+Date:   Wed, 1 Dec 2021 11:15:54 +0800
+From:   Cai Huoqing <caihuoqing@baidu.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>
+Subject: Re: [PATCH v3 1/3] staging: zynpu: Add driver support for ARM(China)
+ ZHOUYI AI accelerator
+Message-ID: <20211201031554.GA865@LAPTOP-UKSR4ENP.internal.baidu.com>
+References: <20211126021904.32325-1-caihuoqing@baidu.com>
+ <20211126021904.32325-2-caihuoqing@baidu.com>
+ <YaCCFv2DLzeng+UE@kroah.com>
+ <20211126071444.GA32426@LAPTOP-UKSR4ENP.internal.baidu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <YZxoGp33Seaa2WEG@matsya>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20211126071444.GA32426@LAPTOP-UKSR4ENP.internal.baidu.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [172.31.63.8]
+X-ClientProxiedBy: BC-Mail-Ex09.internal.baidu.com (172.31.51.49) To
+ BJHW-MAIL-EX27.internal.baidu.com (10.127.64.42)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 22 Nov 22:03 CST 2021, Vinod Koul wrote:
-
-> On 22-11-21, 11:05, Katherine Perez wrote:
-> > TLMM controller base address is incorrect and will hang on some platforms.
-> > Fix by giving the correct address.
-> 
-> Thanks, recheck the spec this looks correct. We should have tlmm reg
-> space here and not tlmm base which also contains xpu region (thus hang)
-> 
-
-Aren't you reading the patch backwards?
-
-Afaict downstream the driver carries an offset of 0x100000, which we
-dropped as we upstreamed the driver. As such changing reg to 0x0f000000
-should cause most gpio register accesses to fall outside the actual
-register window.
-
-Or perhaps I'm missing something here?
-
-Regards,
-Bjorn
-
-> Reviewed-by: Vinod Koul <vkoul@kernel.org>
-> Fixes: b7e8f433a673 ("arm64: dts: qcom: Add basic devicetree support for SM8350 SoC")
-> 
+On 26 11月 21 15:14:44, Cai Huoqing wrote:
+> On 26 11月 21 07:43:34, Greg Kroah-Hartman wrote:
+> > On Fri, Nov 26, 2021 at 10:18:59AM +0800, Cai Huoqing wrote:
+> > > ZHOUYI NPU is an AI accelerator chip which is integrated into ARM SOC,
+> > > such as Allwinner R329 SOC.
+> > > Add driver support for this AI accelerator here.
+> > > 
+> > > This driver is not standard linux style, there are some clean up works,
+> > > fixing code style, refactorring.
+> > > And it only works with a closed source usermode driver, so need to
+> > > reverse the libraries, and impelement it, then open source
+> > > the usermode driver.
+> > > So add this driver to linux-staging
 > > 
-> > Signed-off-by: Katherine Perez <kaperez@linux.microsoft.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8350.dtsi | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > Sorry, but no, I can not take this driver into the kernel tree until
+> > there is an open source user of the new api that you are creating with
+> > this driver.  This was discussed many times on the linux-kernel mailing
+> > list and at the Linux kernel summit a few months ago (see the summary at
+> > lwn.net about it.)
 > > 
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> > index d134280e2939..624d294612d8 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-> > @@ -960,9 +960,9 @@ spmi_bus: spmi@c440000 {
-> >  			#interrupt-cells = <4>;
-> >  		};
-> >  
-> > -		tlmm: pinctrl@f100000 {
-> > +		tlmm: pinctrl@f000000 {
-> >  			compatible = "qcom,sm8350-tlmm";
-> > -			reg = <0 0x0f100000 0 0x300000>;
-> > +			reg = <0 0x0f000000 0 0x300000>;
-> >  			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
-> >  			gpio-controller;
-> >  			#gpio-cells = <2>;
-> > -- 
-> > 2.31.1
+> > So please work on that first, and then we will be glad to revisit taking
+> > this kernel driver into the tree.
+> OK, I will do that.
+> And after doing some clean up, try to take this code to the "real" linux tree.
 > 
-> -- 
-> ~Vinod
+> Thanks,
+> Cai
+Recently arm china contact me for some opensource issue. 
+
+Reply here -
+
+Hi arm-china folks, it's appropriate for you to submit this driver
+for GPL,
+be glad to revisit the opensource kernel mode and userspace driver:).
+
+If you have any questions, reply here directly.
+
+Thanks
+Cai
+
+> > 
+> > Also, it is much simpler just to take a few hours and clean up the
+> > coding style issues yourself rather than relying on the community to do
+> > it for you over a few months.
+> > 
+> > thanks,
+> > 
+> > greg k-h

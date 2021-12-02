@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 35892466489
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:32:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0561E4664AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:45:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357554AbhLBNf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 08:35:56 -0500
-Received: from out30-42.freemail.mail.aliyun.com ([115.124.30.42]:52426 "EHLO
-        out30-42.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230492AbhLBNfy (ORCPT
+        id S1346923AbhLBNsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 08:48:39 -0500
+Received: from ewsoutbound.kpnmail.nl ([195.121.94.167]:15950 "EHLO
+        ewsoutbound.kpnmail.nl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235240AbhLBNsf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:35:54 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=9;SR=0;TI=SMTPD_---0UzAdFCh_1638451948;
-Received: from 30.240.117.107(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0UzAdFCh_1638451948)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 02 Dec 2021 21:32:29 +0800
-Message-ID: <1c4594ad-7477-9597-a627-21217f66a4f9@linux.alibaba.com>
-Date:   Thu, 2 Dec 2021 21:32:27 +0800
+        Thu, 2 Dec 2021 08:48:35 -0500
+X-KPN-MessageId: 7a702b34-5374-11ec-9a2e-005056abbe64
+Received: from smtp.kpnmail.nl (unknown [10.31.155.39])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 7a702b34-5374-11ec-9a2e-005056abbe64;
+        Thu, 02 Dec 2021 14:33:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:mime-version:date:message-id:from:to:subject;
+        bh=K65nEOH5jY8KakqRM0oHkId8wuLz340TVgKfbNaHU6Q=;
+        b=UQ34l+CRkUF5uNCpSO0QVN5bl7RUZQt4nzkeoTnyCVv2upFjKnYUUzp+6B1BSeRZAz+Ecl2ObaRf7
+         xDg4EJ+ZV8H8XNR98NoWODeuH89wcXPwYr7CLYSch1+q6xpJUIJ+rEgqD0aKUmI/ry5IUgFKYFiJjt
+         8q0k7ODF7e9MG3ZJSaZw47xzIueR0WZVF+nzf8FfQjdE+M06+3G96VI7zEqbjMyBHpZJQF5q1/Ob0z
+         uJcU9yHK5TwjaVEdnuMt+X+C4ZiHzOsdc21/CXKiMQT28V7jyjzTaLs6PKvS2ZPjhiAhdUAzEUwo7s
+         6sF85ekxSMQoPFDlQHkUO3tOhGGcMXg==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|uTaTnKRySdqBsDx4+7xy/b8b6SOMtvAgR6ygjWz03ABwWWr06PSA47n1wqs82Bh
+ lzXm+q9ICtIhwNPF7IeCliQ==
+X-Originating-IP: 193.91.129.219
+Received: from [192.168.2.10] (cdb815bc1.dhcp.as2116.net [193.91.129.219])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id 87aabd9d-5374-11ec-81f5-005056ab7447;
+        Thu, 02 Dec 2021 14:34:10 +0100 (CET)
+Subject: Re: [PATCH] media: saa7146: hexium_gemini: Fix a NULL pointer
+ dereference in hexium_attach()
+To:     Zhou Qingyang <zhou1615@umn.edu>
+Cc:     kjlu@umn.edu, Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211130161538.182313-1-zhou1615@umn.edu>
+From:   Hans Verkuil <hverkuil@xs4all.nl>
+Message-ID: <b0f7ee6e-f6fc-955e-92eb-013cd96f1d1d@xs4all.nl>
+Date:   Thu, 2 Dec 2021 14:34:09 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH] edac,ghes,cper: Add device to Memory Error Record
+In-Reply-To: <20211130161538.182313-1-zhou1615@umn.edu>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     "Luck, Tony" <tony.luck@intel.com>
-Cc:     mchehab@kernel.org, bp@alien8.de, james.morse@arm.com,
-        rric@kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhangliguang@linux.alibaba.com,
-        zhuo.song@linux.alibaba.com
-References: <20211130131648.85860-1-xueshuai@linux.alibaba.com>
- <YaZ3yiIBRj6qIg2h@agluck-desk2.amr.corp.intel.com>
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <YaZ3yiIBRj6qIg2h@agluck-desk2.amr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Tony,
-
-> This looks OK (same as code in drivers/firmware/efi/cper.c in the
-> cper_mem_err_location() function. But that makes me wonder why there
-> is near duplication of code in ghes_edac.c?
-May it is a legacy issue.
-
-
-> The cper.c code seems to be written defensively using scnprintf()
-> instead of sprintf().  Could ghes_edac share the same code?
-I think so, ghes_edac_report_mem_error in ghes_edac.c is Long Method
-and have Duplicated Code with cper_mem_err_location,
-cper_dimm_err_location, and cper_mem_err_type_str in
-drivers/firmware/efi/cper.c.
-
-I will send a new patch to rework ghes_edac_report_mem_error.
-
-Cheers
-Shuai
-
-On 2021/12/1 AM3:13, Luck, Tony wrote:
-> On Tue, Nov 30, 2021 at 09:16:48PM +0800, Shuai Xue wrote:
->> If Bit 7 of Validation Bits is valid, the device number of the memory
->> associated with errors should be reported to Memory Error Record.
->>
->> Signed-off-by: Shuai Xue <xueshuai@linux.alibaba.com>
->> ---
->>  drivers/edac/ghes_edac.c | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/drivers/edac/ghes_edac.c b/drivers/edac/ghes_edac.c
->> index a918ca93e4f7..cf98b270d6f7 100644
->> --- a/drivers/edac/ghes_edac.c
->> +++ b/drivers/edac/ghes_edac.c
->> @@ -378,6 +378,8 @@ void ghes_edac_report_mem_error(int sev, struct cper_sec_mem_err *mem_err)
->>  	if (mem_err->validation_bits & CPER_MEM_VALID_BANK_ADDRESS)
->>  		p += sprintf(p, "bank_address:%d ",
->>  			     mem_err->bank & CPER_MEM_BANK_ADDRESS_MASK);
->> +	if (mem_err->validation_bits & CPER_MEM_VALID_DEVICE)
->> +		p += sprintf(p, "device:%d ", mem_err->device);
->>  	if (mem_err->validation_bits & (CPER_MEM_VALID_ROW | CPER_MEM_VALID_ROW_EXT)) {
->>  		u32 row = mem_err->row;
->>  
+On 30/11/2021 17:15, Zhou Qingyang wrote:
+> In hexium_attach(dev, info), saa7146_vv_init() is called to allocate
+> a new memory for dev->vv_data. saa7146_vv_release() will be called on
+> failure of saa7146_register_device(). There is a dereference of
+> dev->vv_data in saa7146_vv_release(), which could lead to a NULL
+> pointer dereference on failure of saa7146_vv_init().
 > 
-> This looks OK (same as code in drivers/firmware/efi/cper.c in the
-> cper_mem_err_location() function. But that makes me wonder why there
-> is near duplication of code in ghes_edac.c?
+> Fix this bug by adding a check of saa7146_vv_init().
 > 
-> The cper.c code seems to be written defensively using scnprintf()
-> instead of sprintf().  Could ghes_edac share the same code?
+> This bug was found by a static analyzer. The analysis employs
+> differential checking to identify inconsistent security operations
+> (e.g., checks or kfrees) between two code paths and confirms that the
+> inconsistent operations are not recovered in the current function or
+> the callers, so they constitute bugs.
 > 
-> -Tony
+> Note that, as a bug found by static analysis, it can be a false
+> positive or hard to trigger. Multiple researchers have cross-reviewed
+> the bug.
 > 
+> Builds with CONFIG_VIDEO_HEXIUM_GEMINI=m show no new warnings,
+> and our static analyzer no longer warns about this code.
+> 
+> Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> ---
+>  drivers/media/pci/saa7146/hexium_gemini.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/pci/saa7146/hexium_gemini.c b/drivers/media/pci/saa7146/hexium_gemini.c
+> index 2214c74bbbf1..549b1ddc59b5 100644
+> --- a/drivers/media/pci/saa7146/hexium_gemini.c
+> +++ b/drivers/media/pci/saa7146/hexium_gemini.c
+> @@ -284,7 +284,11 @@ static int hexium_attach(struct saa7146_dev *dev, struct saa7146_pci_extension_d
+>  	hexium_set_input(hexium, 0);
+>  	hexium->cur_input = 0;
+>  
+> -	saa7146_vv_init(dev, &vv_data);
+> +	ret = saa7146_vv_init(dev, &vv_data);
+> +	if (ret) {
+> +		kfree(hexium);
+
+You need to call i2c_del_adapter(&hexium->i2c_adapter); as well.
+
+Also, saa7146_vv_init() needs be fixed since it can return -1: that should
+be -ENOMEM. Otherwise a -1 error code could be returned here, that's not
+what you want.
+
+Regards,
+
+	Hans
+
+> +		return ret;
+> +	}
+>  
+>  	vv_data.vid_ops.vidioc_enum_input = vidioc_enum_input;
+>  	vv_data.vid_ops.vidioc_g_input = vidioc_g_input;
+> 
+

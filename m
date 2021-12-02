@@ -2,160 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7293E466405
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EC0146642B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358135AbhLBM4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:56:02 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:33166 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbhLBMz6 (ORCPT
+        id S240394AbhLBNCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 08:02:18 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:58826 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232890AbhLBNCQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:55:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638449556; x=1669985556;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kTXRHtxQamWKYX1ZcqOHF7I6lijmGW768TxL4cvXwAM=;
-  b=xrYAEM3q4Q2WlHeaONYjQEXrCaKr4HyRqQ0LRupFi9rwhbcpMbeWJdDZ
-   Xg2eFjSqy8iOWU5A6P4qksCYTKlNchEm9hFKYaPsPBCSYkOID4u84uaXa
-   BJ6uZ8DL+J+gko5+u4I66mrjiolDffukbENwuZhwd8TTZVbxTw0BEkWKn
-   c=;
-Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
-  by alexa-out.qualcomm.com with ESMTP; 02 Dec 2021 04:52:35 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 04:52:35 -0800
-Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 2 Dec 2021 04:52:34 -0800
-Received: from [10.231.205.174] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Thu, 2 Dec 2021
- 04:52:32 -0800
-Message-ID: <7fe2aa6a-0b3a-dd69-e8a5-5f2da3523d67@quicinc.com>
-Date:   Thu, 2 Dec 2021 20:52:30 +0800
+        Thu, 2 Dec 2021 08:02:16 -0500
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7E9B1212BB;
+        Thu,  2 Dec 2021 12:58:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638449933; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zQvel9xfGDXi68b4SGSpn8cd2opNTyw0m7K2jF1A4lo=;
+        b=koC87icvTiya3wDVp64lBv3oDCuLiyUphvyaGVd7XOETfwfzbwMqrRkyFImZBbXk2fU9Rl
+        8nZdZAmPgdNG0dhXPdBWtenhyxy4pMAunH6XAJdR1XgjfvTS406exMUw+PqVFyxfVM3AJB
+        W//V4N4NmRcOUQUyFRWsufJPuGwhyqo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638449933;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zQvel9xfGDXi68b4SGSpn8cd2opNTyw0m7K2jF1A4lo=;
+        b=+ZuiqaWF9bEuctCMSrjM91NFV8jZ+mbBJn1axYq0oQsEkoO/QVgxrZfzb8us9C3CsWGEnY
+        phi7KyR10zI8/tDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1B48D1330B;
+        Thu,  2 Dec 2021 12:58:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id jSIxBQ3DqGHkNAAAMHmgww
+        (envelope-from <jroedel@suse.de>); Thu, 02 Dec 2021 12:58:53 +0000
+Date:   Thu, 2 Dec 2021 13:58:51 +0100
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Joerg Roedel <joro@8bytes.org>, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, hpa@zytor.com,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 3/4] x86/mm: Flush global TLB when switching to
+ trampoline page-table
+Message-ID: <YajDC/tgx7qR/UcW@suse.de>
+References: <20211001154817.29225-1-joro@8bytes.org>
+ <20211001154817.29225-4-joro@8bytes.org>
+ <YXki1Zx4jCmikBuf@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [RESEND PATCH v3 02/10] spmi: pmic-arb: do not ack and clear
- peripheral interrupts in cleanup_irq
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sboyd@kernel.org>
-CC:     <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
-        <tglx@linutronix.de>, <maz@kernel.org>
-References: <1638403212-29265-1-git-send-email-quic_fenglinw@quicinc.com>
- <1638403212-29265-3-git-send-email-quic_fenglinw@quicinc.com>
- <09814d45-3f85-5611-5866-b33ae28cc2bb@linaro.org>
-From:   Fenglin Wu <quic_fenglinw@quicinc.com>
-In-Reply-To: <09814d45-3f85-5611-5866-b33ae28cc2bb@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
+In-Reply-To: <YXki1Zx4jCmikBuf@zn.tnic>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Oct 27, 2021 at 11:58:45AM +0200, Borislav Petkov wrote:
+> On Fri, Oct 01, 2021 at 05:48:16PM +0200, Joerg Roedel wrote:
+> > +void load_trampoline_pgtable(void)
+> > +{
+> > +#ifdef CONFIG_X86_32
+> > +	load_cr3(initial_page_table);
+> > +#else
+> > +	/* Exiting long mode will fail if CR4.PCIDE is set. */
+> 
+> So this comment is not valid anymore if this is a separate function - it
+> is valid only when that function is called in reboot.c so I guess you
+> should leave that comment there.
 
-On 2021/12/2 10:39, Bryan O'Donoghue wrote:
-> On 02/12/2021 00:00, Fenglin Wu wrote:
->> From: Subbaraman Narayanamurthy <subbaram@codeaurora.org>
->>
->> Currently, cleanup_irq() is invoked when a peripheral's interrupt
->> fires and there is no mapping present in the interrupt domain of
->> spmi interrupt controller.
->>
->> The cleanup_irq clears the arbiter bit, clears the pmic interrupt
->> and disables it at the pmic in that order. The last disable in
->> cleanup_irq races with request_irq() in that it stomps over the
->> enable issued by request_irq. Fix this by not writing to the pmic
->> in cleanup_irq. The latched bit will be left set in the pmic,
->> which will not send us more interrupts even if the enable bit
->> stays enabled.
->>
->> When a client wants to request an interrupt, use the activate
->> callback on the irq_domain to clear latched bit. This ensures
->> that the latched, if set due to the above changes in cleanup_irq
->> or when the bootloader leaves it set, gets cleaned up, paving way
->> for upcoming interrupts to trigger.
->>
->> With this, there is a possibility of unwanted triggering of
->> interrupt right after the latched bit is cleared - the interrupt
->> may be left enabled too. To avoid that, clear the enable first
->> followed by clearing the latched bit in the activate callback.
->>
->> Signed-off-by: Subbaraman Narayanamurthy <subbaram@codeaurora.org>
->> [collinsd@codeaurora.org: fix merge conflict]
->> Signed-off-by: David Collins <collinsd@codeaurora.org>
->> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
->> ---
->>   drivers/spmi/spmi-pmic-arb.c | 15 +++++----------
->>   1 file changed, 5 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
->> index da629cc..ce7ae99 100644
->> --- a/drivers/spmi/spmi-pmic-arb.c
->> +++ b/drivers/spmi/spmi-pmic-arb.c
->> @@ -492,16 +492,6 @@ static void cleanup_irq(struct spmi_pmic_arb 
->> *pmic_arb, u16 apid, int id)
->>       dev_err_ratelimited(&pmic_arb->spmic->dev, "%s apid=%d sid=0x%x 
->> per=0x%x irq=%d\n",
->>               __func__, apid, sid, per, id);
->>       writel_relaxed(irq_mask, pmic_arb->ver_ops->irq_clear(pmic_arb, 
->> apid));
->> -
->> -    if (pmic_arb_write_cmd(pmic_arb->spmic, SPMI_CMD_EXT_WRITEL, sid,
->> -            (per << 8) + QPNPINT_REG_LATCHED_CLR, &irq_mask, 1))
->> -        dev_err_ratelimited(&pmic_arb->spmic->dev, "failed to ack 
->> irq_mask = 0x%x for ppid = %x\n",
->> -                irq_mask, ppid);spmi: pmic-arb: cleanup unrequested 
->> irqs
->> -
->> -    if (pmic_arb_write_cmd(pmic_arb->spmic, SPMI_CMD_EXT_WRITEL, sid,
->> -                   (per << 8) + QPNPINT_REG_EN_CLR, &irq_mask, 1))
->> -        dev_err_ratelimited(&pmic_arb->spmic->dev, "failed to ack 
->> irq_mask = 0x%x for ppid = %x\n",
->> -                irq_mask, ppid);
->>   }
->>     static int periph_interrupt(struct spmi_pmic_arb *pmic_arb, u16 
->> apid)
->> @@ -674,6 +664,7 @@ static int qpnpint_irq_domain_activate(struct 
->> irq_domain *domain,
->>       u16 apid = hwirq_to_apid(d->hwirq);
->>       u16 sid = hwirq_to_sid(d->hwirq);
->>       u16 irq = hwirq_to_irq(d->hwirq);
->> +    u8 buf;
->>         if (pmic_arb->apid_data[apid].irq_ee != pmic_arb->ee) {
->>           dev_err(&pmic_arb->spmic->dev, "failed to xlate sid = %#x, 
->> periph = %#x, irq = %u: ee=%u but owner=%u\n",
->> @@ -682,6 +673,10 @@ static int qpnpint_irq_domain_activate(struct 
->> irq_domain *domain,
->>           return -ENODEV;
->>       }
->>   +    buf = BIT(irq);
->> +    qpnpint_spmi_write(d, QPNPINT_REG_EN_CLR, &buf, 1);
->> +    qpnpint_spmi_write(d, QPNPINT_REG_LATCHED_CLR, &buf, 1);
->> +
->>       return 0;
->>   }
->>
->
-> Shouldn't this have a
->
-> Fixes: 6bc546e71e50 ("spmi: pmic-arb: cleanup unrequested irqs")
-> Fixes: 02abec3616c1 ("spmi: pmic-arb: rename pa_xx to pmic_arb_xx and 
-> other cleanup")
->
-> so we know to backport as necessary
->
-Got it, I will add the Fixes tag and send it again.
+Okay, but in the caller it is not visible the CR4.PCID is disabled in
+this function. I'd rather update the comment to tell that the function
+is called before transitioning to real mode?
 
-> ---
-> bod
->
+> 
+> > +	if (boot_cpu_has(X86_FEATURE_PCID))
+> > +		cr4_clear_bits(X86_CR4_PCIDE);
+> > +
+> > +	write_cr3(real_mode_header->trampoline_pgd);
+> 
+> Is there any significance to the reordering of those calls here? The
+> commit message doesn't say...
+
+Yes, the call to cr4_clear_bits() is not safe anymore on the trampoline
+page-table, because the per-cpu areas are not fully mapped anymore.
+
+This changes with the next patch, but its nevertheless more robust to
+minimize the code running on the trampoline page-table.
+
+I will add that to the commit message.
+
+Regards,
+
+-- 
+J�rg R�del
+jroedel@suse.de
+
+SUSE Software Solutions Germany GmbH
+Maxfeldstr. 5
+90409 N�rnberg
+Germany
+ 
+(HRB 36809, AG N�rnberg)
+Gesch�ftsf�hrer: Ivo Totev
+

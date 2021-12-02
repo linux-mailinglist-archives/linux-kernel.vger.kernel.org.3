@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F640466A51
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE66466A50
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376864AbhLBTU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 14:20:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
+        id S1376760AbhLBTUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 14:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376361AbhLBTUB (ORCPT
+        with ESMTP id S1376698AbhLBTUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 14:20:01 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F117EC061757;
-        Thu,  2 Dec 2021 11:16:37 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id b11so392584pld.12;
-        Thu, 02 Dec 2021 11:16:37 -0800 (PST)
+        Thu, 2 Dec 2021 14:20:02 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D4CC06174A;
+        Thu,  2 Dec 2021 11:16:39 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id n8so426417plf.4;
+        Thu, 02 Dec 2021 11:16:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=qvLTgGZG4bYn9DGJF1rWTWzAv7yNl0un9HiwPetaqA0=;
-        b=B/JGkrFUJMSUx1kx85cCmBmGLIsRg96OK3u1/HQ3dxsaJHAauqjSWNOXI8XifhxH4Q
-         FXF4zXv2fGNFisz5MdTgVeInPg8DWz2FGDZBmGjnF57EPtHXeVCVv/IOV2Q+dTH+cwaj
-         J/0ZXty/WZLaO5NA6lxHAElfQPlvXZ7hqV/L1OuxALYNYj08uiehB9wovwNEQstm5kFL
-         zYZV1ysmbk4LxwzV+CgJRREdnQC9zTQMuPDVPS32+ONBEUwJXHDtzZc4wB5C9xuUrnOz
-         7eQTaQBKZt2dN5P+hrv2ZLg0VKpH9bSbqKcsPCQzx8oo0qo42a0ShJE0JqarvZOChjb8
-         tghA==
+        bh=DChq+runyuoKezCwzz3rPMHe9RvY3OViZ3BA2aHQIac=;
+        b=dOZJNunx6j1wi2vztGqXp6R79XSYNDor8ANbZ0074eyPeDOqgjjlcjL2/gI567SmKM
+         JfYva+/x1qMFiCSb4w4CGU7V2EfUhDFdPh6fnsdwV/ivp/uSF1H1oOD797NV9Aj0ewmb
+         yxlM/nu/Ed8omG2BaVdC5RHYqVzTkC24oOtGlQkpXEr4Ohy1p4S1cTRLlfkXAuKtijTD
+         6GdIO6vBjNRJi/X6Cf1OnX4VeO776tQrcpy6AUH2a8mjvC9AmEcPs9bCW3ue9+yeqXLS
+         1m9AvyVVlNV5W2+p01yymy8co6NqUXKs4OP/M9CPZ2EptN0sgwGD7tqmgL32SBBvJ/s5
+         kAyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=qvLTgGZG4bYn9DGJF1rWTWzAv7yNl0un9HiwPetaqA0=;
-        b=j41WiLOHftsHYYfpCX2oT7e2ur7ZuNxn0I9LoiLA2tdRwGjg6/dQAcNlDg+C2pgaDC
-         ILMNh/4KU9uN4iYCd6l2YZcDk88q4tDPsfBWhSNa7/1XU5fa79L0LBf2zrxS2asJoT/5
-         bSzTU83xO5/E6n8dP7vN3F8c5suLvTpwEdDcUQrIBADftUNPZyE5L8xA59ZRd2zCnjTM
-         OyuiY8QxCWw6eyopItZYcTSfio2DXbUj5Rs1EIWiWWLV/zn9kErF2IpVDjfMpy4itFRz
-         aRGJlAfTfG0dfnm0fqqqCRiJkQxXwajM9TlTbiT91md7anOtM9KIN2Gd+fjt1E1tzM8E
-         4hdg==
-X-Gm-Message-State: AOAM531vL1j4nD/6lDUE+k5XrB5RfvjOP2J+njsdx4Enjh0HgtC/HiqR
-        jz3fMfjpqF/cNBph1Q0KINU=
-X-Google-Smtp-Source: ABdhPJzpg/GFbT+i6QUzSUt93XI3COPH+h0B9GZHT3Kalaag/a4UNffRexF3QXgfCTDVXy3aN0iYvA==
-X-Received: by 2002:a17:90b:1bd1:: with SMTP id oa17mr8097403pjb.246.1638472597529;
-        Thu, 02 Dec 2021 11:16:37 -0800 (PST)
+        bh=DChq+runyuoKezCwzz3rPMHe9RvY3OViZ3BA2aHQIac=;
+        b=AT5GyllHtvaOcCuATN4X30M/y50+BhjaNpVJLyPBNiQ6wUUZcZ+ARHNFZ6n5dPMp6b
+         gANkle5dUdOJmiL3Z6xJnJyiCm8rv8RZHDuqysOXxZyjfuMOoU1B6ncbdkVusO40a3AI
+         feOqu5qHOfTx7hvNaxz5mi1KAnYPQ3R6LMUUuQS8WrDuS4IbE3mnvjsJZNL1vfzPZ8E8
+         lKPP5RwJkIPFBbdcB8h8X9IDe33tfnJ3+BeRwN5wMd5np0uPS2h8P0mC0hapCqMs3tKi
+         hBkOHJ+eVZQh4drkzvwIv4zx6Euu9DvoKj8bAzSHin9vTn8BrD4aOEyYXsOqzaCFOIFN
+         e2EA==
+X-Gm-Message-State: AOAM532/hpa4CL7F8BPraz0Is4zBP0Jz3okcSHWvfatlM92cve+Zh6m4
+        UqFOL4pJB0bb/RXvO5l5AHA=
+X-Google-Smtp-Source: ABdhPJzb01rz4pb86Ea1YkSIf0RE9x8VjRZJvk89mnC+Jrdvp+p9YOCk9q1mouPXf9WlKMxkKHYMrQ==
+X-Received: by 2002:a17:90b:128d:: with SMTP id fw13mr8077975pjb.50.1638472598419;
+        Thu, 02 Dec 2021 11:16:38 -0800 (PST)
 Received: from jaschultz-Thelio-Major.corp.microsoft.com ([2001:4898:80e8:37:517f:74c7:9fe9:b5e8])
-        by smtp.gmail.com with ESMTPSA id x14sm289897pjl.27.2021.12.02.11.16.36
+        by smtp.gmail.com with ESMTPSA id x14sm289897pjl.27.2021.12.02.11.16.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 11:16:36 -0800 (PST)
+        Thu, 02 Dec 2021 11:16:38 -0800 (PST)
 From:   Jarrett Schultz <jaschultzms@gmail.com>
 X-Google-Original-From: Jarrett Schultz <jaschultz@microsoft.com>
 To:     Rob Herring <robh+dt@kernel.org>, Andy Gross <agross@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Felipe Balbi <balbi@kernel.org>,
         Jarrett Schultz <jaschultz@microsoft.com>
-Subject: [PATCH 2/5] platform: surface: Propagate ACPI Dependency
-Date:   Thu,  2 Dec 2021 11:16:27 -0800
-Message-Id: <20211202191630.12450-3-jaschultz@microsoft.com>
+Subject: [PATCH 3/5] platform: surface: Add surface xbl
+Date:   Thu,  2 Dec 2021 11:16:28 -0800
+Message-Id: <20211202191630.12450-4-jaschultz@microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211202191630.12450-1-jaschultz@microsoft.com>
 References: <20211202191630.12450-1-jaschultz@microsoft.com>
@@ -71,98 +71,359 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the Surface XBL Driver does not depend on ACPI, the
-platform/surface directory as a whole no longer depends on ACPI. With
-respect to this, the ACPI dependency is moved into each config that depends
-on ACPI individually.
+Introduce support for the Extensible Boot Loader driver found on the
+Surface Duo. Makes device information available to users via sysfs.
 
 Signed-off-by: Jarrett Schultz <jaschultz@microsoft.com>
 
 ---
 
-Changes in v3:
- - Further propagated ACPI dependecy to SURFACE_AGGREGATOR
+Changed in v3:
+ - Updated several descriptions in the yaml to be more descriptive
+ - Renamed files to use an underscore instead of a dash
 
 ---
 
 Changes in v2:
- - Created to propagate ACPI dependency
+ - Added types.h inclusion and removed unused inclusions
+ - Minor updates to code and acronym style
+ - Remove __packed attribute on driver struct
+ - Use .dev_groups for sysfs
+ - Added more in-depth description of driver in Kconfig
+ - Changed target KernelVersion in sysfs documentation
 ---
- drivers/platform/surface/Kconfig            | 7 ++++++-
- drivers/platform/surface/aggregator/Kconfig | 1 +
- 2 files changed, 7 insertions(+), 1 deletion(-)
+ .../ABI/testing/sysfs-platform-surface-xbl    |  79 ++++++++
+ MAINTAINERS                                   |   2 +
+ drivers/platform/surface/Kconfig              |  12 ++
+ drivers/platform/surface/Makefile             |   1 +
+ drivers/platform/surface/surface_xbl.c        | 186 ++++++++++++++++++
+ 5 files changed, 280 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-surface-xbl
+ create mode 100644 drivers/platform/surface/surface_xbl.c
 
+diff --git a/Documentation/ABI/testing/sysfs-platform-surface-xbl b/Documentation/ABI/testing/sysfs-platform-surface-xbl
+new file mode 100644
+index 000000000000..505a662d8511
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-platform-surface-xbl
+@@ -0,0 +1,79 @@
++What:		/sys/devices/platform/146bfa94.xbl/battery_present
++Date:		October 2021
++KernelVersion:	5.16
++Contact:	jaschultz@microsoft.com
++Description:
++		Read only. It returns whether the battery is present. Valid
++		values are:
++			0 - battery absent
++			1 - battery present
++
++What:		/sys/devices/platform/146bfa94.xbl/board_id
++Date:		October 2021
++KernelVersion:	5.16
++Contact:	jaschultz@microsoft.com
++Description:
++		Read only. It returns a Microsoft specific board id.
++
++What:		/sys/devices/platform/146bfa94.xbl/hw_init_retries
++Date:		October 2021
++KernelVersion:	5.16
++Contact:	jaschultz@microsoft.com
++Description:
++		Read only. It returns a Microsoft specific value related to the
++		retries attempted to properly initialize the battery charging
++		subsystem.
++
++What:		/sys/devices/platform/146bfa94.xbl/is_act_mode
++Date:		October 2021
++KernelVersion:	5.16
++Contact:	jaschultz@microsoft.com
++Description:
++		Read only. It returns whether ACT mode is enabled. Valid values
++		are:
++			0 - ACT disabled
++			1 - ACT enabled
++
++		ACT mode is used to run checks and put the device to shipmode
++		at factory.
++
++What:		/sys/devices/platform/146bfa94.xbl/is_customer_mode
++Date:		October 2021
++KernelVersion:	5.16
++Contact:	jaschultz@microsoft.com
++Description:
++
++		mode. Valid values are:
++			0 - Not in manufacturing mode
++			1 - In manufacturing mode
++
++What:		/sys/devices/platform/146bfa94.xbl/ocp_error_location
++Date:		October 2021
++KernelVersion:	5.16
++Contact:	jaschultz@microsoft.com
++Description:
++		Read only. It returns 0 or the id of the power rail which has the
++		OCP error. Valid values are:
++			Bit(s)		Meaning
++			15		More than one OCP error occurred
++			14-12		PMIC
++			11-7		SMPS
++			6-2		LDO
++			1-0		BOB
++
++What:		/sys/devices/platform/146bfa94.xbl/pmic_reset_reason
++Date:		October 2021
++KernelVersion:	5.16
++Contact:	jaschultz@microsoft.com
++Description:
++		Read only. It returns the reason for the reset. Valid values
++		are:
++			0 - no reason lol
++			9 - Battery driver triggered
++
++What:		/sys/devices/platform/146bfa94.xbl/touch_fw_version
++Date:		October 2021
++KernelVersion:	5.16
++Contact:	jaschultz@microsoft.com
++Description:
++		Read only. It returns the version of the firmware.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0daa416a2aba..4f04f7afa3e1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12655,7 +12655,9 @@ M:	Jarrett Schultz <jaschultz@microsoft.com>
+ L:	linux-arm-msm@vger.kernel.org
+ L:	platform-driver-x86@vger.kernel.org
+ S:	Supported
++F:	Documentation/ABI/testing/sysfs-platform-surface-xbl
+ F:	Documentation/devicetree/bindings/platform/microsoft/surface-xbl.yaml
++F:	drivers/platform/surface/surface-xbl.c
+ 
+ MICROSOFT SURFACE GPE LID SUPPORT DRIVER
+ M:	Maximilian Luz <luzmaximilian@gmail.com>
 diff --git a/drivers/platform/surface/Kconfig b/drivers/platform/surface/Kconfig
-index 3105f651614f..5f0578e25f71 100644
+index 5f0578e25f71..96d6030d8d49 100644
 --- a/drivers/platform/surface/Kconfig
 +++ b/drivers/platform/surface/Kconfig
-@@ -5,7 +5,6 @@
- 
- menuconfig SURFACE_PLATFORMS
- 	bool "Microsoft Surface Platform-Specific Device Drivers"
--	depends on ACPI
- 	default y
- 	help
- 	  Say Y here to get to see options for platform-specific device drivers
-@@ -30,12 +29,14 @@ config SURFACE3_WMI
- 
- config SURFACE_3_BUTTON
- 	tristate "Power/home/volume buttons driver for Microsoft Surface 3 tablet"
-+	depends on ACPI
- 	depends on KEYBOARD_GPIO && I2C
- 	help
- 	  This driver handles the power/home/volume buttons on the Microsoft Surface 3 tablet.
- 
- config SURFACE_3_POWER_OPREGION
- 	tristate "Surface 3 battery platform operation region support"
-+	depends on ACPI
- 	depends on I2C
- 	help
- 	  This driver provides support for ACPI operation
-@@ -126,6 +127,7 @@ config SURFACE_DTX
- 
- config SURFACE_GPE
- 	tristate "Surface GPE/Lid Support Driver"
-+	depends on ACPI
- 	depends on DMI
- 	help
- 	  This driver marks the GPEs related to the ACPI lid device found on
-@@ -135,6 +137,7 @@ config SURFACE_GPE
- 
- config SURFACE_HOTPLUG
- 	tristate "Surface Hot-Plug Driver"
-+	depends on ACPI
- 	depends on GPIOLIB
- 	help
- 	  Driver for out-of-band hot-plug event signaling on Microsoft Surface
-@@ -154,6 +157,7 @@ config SURFACE_HOTPLUG
- 
- config SURFACE_PLATFORM_PROFILE
- 	tristate "Surface Platform Profile Driver"
-+	depends on ACPI
- 	depends on SURFACE_AGGREGATOR_REGISTRY
- 	select ACPI_PLATFORM_PROFILE
- 	help
-@@ -176,6 +180,7 @@ config SURFACE_PLATFORM_PROFILE
- 
- config SURFACE_PRO3_BUTTON
- 	tristate "Power/home/volume buttons driver for Microsoft Surface Pro 3/4 tablet"
-+	depends on ACPI
- 	depends on INPUT
+@@ -185,6 +185,18 @@ config SURFACE_PRO3_BUTTON
  	help
  	  This driver handles the power/home/volume buttons on the Microsoft Surface Pro 3/4 tablet.
-diff --git a/drivers/platform/surface/aggregator/Kconfig b/drivers/platform/surface/aggregator/Kconfig
-index fd6dc452f3e8..cab020324256 100644
---- a/drivers/platform/surface/aggregator/Kconfig
-+++ b/drivers/platform/surface/aggregator/Kconfig
-@@ -4,6 +4,7 @@
- menuconfig SURFACE_AGGREGATOR
- 	tristate "Microsoft Surface System Aggregator Module Subsystem and Drivers"
- 	depends on SERIAL_DEV_BUS
-+	depends on ACPI
- 	select CRC_CCITT
- 	help
- 	  The Surface System Aggregator Module (Surface SAM or SSAM) is an
+ 
++config SURFACE_XBL
++        tristate "Surface XBL Driver"
++        depends on ARM64 || COMPILE_TEST
++        depends on OF
++        help
++          If you say 'Y' to this option, support will be included for the
++          Surface Extensible Boot Loader (XBL) Driver. This driver exposes
++          information about the device through sysfs.
++
++          This driver can also be built as a module.  If so, the module
++          will be called surface-xbl.
++
+ source "drivers/platform/surface/aggregator/Kconfig"
+ 
+ endif # SURFACE_PLATFORMS
+diff --git a/drivers/platform/surface/Makefile b/drivers/platform/surface/Makefile
+index 32889482de55..eef05d247f75 100644
+--- a/drivers/platform/surface/Makefile
++++ b/drivers/platform/surface/Makefile
+@@ -16,3 +16,4 @@ obj-$(CONFIG_SURFACE_GPE)		+= surface_gpe.o
+ obj-$(CONFIG_SURFACE_HOTPLUG)		+= surface_hotplug.o
+ obj-$(CONFIG_SURFACE_PLATFORM_PROFILE)	+= surface_platform_profile.o
+ obj-$(CONFIG_SURFACE_PRO3_BUTTON)	+= surfacepro3_button.o
++obj-$(CONFIG_SURFACE_XBL)               += surface_xbl.o
+diff --git a/drivers/platform/surface/surface_xbl.c b/drivers/platform/surface/surface_xbl.c
+new file mode 100644
+index 000000000000..e6272b704526
+--- /dev/null
++++ b/drivers/platform/surface/surface_xbl.c
+@@ -0,0 +1,186 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Surface eXtensible Boot Loader (XBL)
++ *
++ * Copyright (C) 2021 Microsoft Corporation
++ * Author: Jarrett Schultz <jaschultz@microsoft.com>
++ */
++
++#include <linux/io.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/platform_device.h>
++#include <linux/types.h>
++
++#define SURFACE_XBL_MAX_VERSION_LEN	16
++#define SURFACE_XBL_BOARD_ID		0
++#define SURFACE_XBL_BATTERY_PRESENT	1
++#define SURFACE_XBL_HW_INIT_RETRIES	2
++#define SURFACE_XBL_IS_CUSTOMER_MODE	3
++#define SURFACE_XBL_IS_ACT_MODE		4
++#define SURFACE_XBL_PMIC_RESET_REASON	5
++#define SURFACE_XBL_TOUCH_FW_VERSION	6
++#define SURFACE_XBL_OCP_ERROR_LOCATION		\
++		(SURFACE_XBL_TOUCH_FW_VERSION +	\
++		SURFACE_XBL_MAX_VERSION_LEN)
++
++struct surface_xbl {
++	struct device	*dev;
++
++	u8		board_id;
++	u8		battery_present;
++	u8		hw_init_retries;
++	u8		is_customer_mode;
++	u8		is_act_mode;
++	u8		pmic_reset_reason;
++	char		touch_fw_version[SURFACE_XBL_MAX_VERSION_LEN];
++	u16		ocp_error_location;
++};
++
++static ssize_t
++board_id_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct surface_xbl	*sxbl = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", sxbl->board_id);
++}
++static DEVICE_ATTR_RO(board_id);
++
++static ssize_t
++battery_present_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct surface_xbl	*sxbl = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", sxbl->battery_present);
++}
++static DEVICE_ATTR_RO(battery_present);
++
++static ssize_t
++hw_init_retries_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct surface_xbl	*sxbl = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", sxbl->hw_init_retries);
++}
++static DEVICE_ATTR_RO(hw_init_retries);
++
++static ssize_t
++is_customer_mode_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct surface_xbl	*sxbl = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", sxbl->is_customer_mode);
++}
++static DEVICE_ATTR_RO(is_customer_mode);
++
++static ssize_t
++is_act_mode_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct surface_xbl	*sxbl = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", sxbl->is_act_mode);
++}
++static DEVICE_ATTR_RO(is_act_mode);
++
++static ssize_t
++pmic_reset_reason_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct surface_xbl	*sxbl = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", sxbl->pmic_reset_reason);
++}
++static DEVICE_ATTR_RO(pmic_reset_reason);
++
++static ssize_t
++touch_fw_version_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct surface_xbl	*sxbl = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "0x%s\n", sxbl->touch_fw_version);
++}
++static DEVICE_ATTR_RO(touch_fw_version);
++
++static ssize_t
++ocp_error_location_show(struct device *dev, struct device_attribute *attr, char *buf)
++{
++	struct surface_xbl	*sxbl = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", sxbl->ocp_error_location);
++}
++static DEVICE_ATTR_RO(ocp_error_location);
++
++static struct attribute *xbl_attrs[] = {
++	&dev_attr_board_id.attr,
++	&dev_attr_battery_present.attr,
++	&dev_attr_hw_init_retries.attr,
++	&dev_attr_is_customer_mode.attr,
++	&dev_attr_is_act_mode.attr,
++	&dev_attr_pmic_reset_reason.attr,
++	&dev_attr_touch_fw_version.attr,
++	&dev_attr_ocp_error_location.attr,
++	NULL
++};
++
++static const struct attribute_group xbl_attr_group = {
++	.attrs = xbl_attrs,
++};
++
++const struct attribute_group *xbl_sysfs_groups[] = {
++	&xbl_attr_group,
++	NULL
++};
++
++static int surface_xbl_probe(struct platform_device *pdev)
++{
++	struct surface_xbl	*sxbl;
++	void __iomem		*regs;
++	int			i;
++
++	sxbl = devm_kzalloc(&pdev->dev, sizeof(*sxbl), GFP_KERNEL);
++	if (!sxbl)
++		return -ENOMEM;
++
++	sxbl->dev = &pdev->dev;
++
++	regs = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(regs))
++		return PTR_ERR(regs);
++
++	platform_set_drvdata(pdev, sxbl);
++
++	sxbl->board_id = readb(regs + SURFACE_XBL_BOARD_ID);
++	sxbl->battery_present = readb(regs + SURFACE_XBL_BATTERY_PRESENT);
++	sxbl->hw_init_retries = readb(regs + SURFACE_XBL_HW_INIT_RETRIES);
++	sxbl->is_customer_mode = readb(regs + SURFACE_XBL_IS_CUSTOMER_MODE);
++	sxbl->is_act_mode = readb(regs + SURFACE_XBL_IS_ACT_MODE);
++	sxbl->pmic_reset_reason = readb(regs + SURFACE_XBL_PMIC_RESET_REASON);
++
++	for (i = 0; i < SURFACE_XBL_MAX_VERSION_LEN; i++)
++		sxbl->touch_fw_version[i] = readb(regs + SURFACE_XBL_TOUCH_FW_VERSION + i);
++
++	sxbl->ocp_error_location = readb(regs + SURFACE_XBL_OCP_ERROR_LOCATION);
++
++	return 0;
++}
++
++static const struct of_device_id surface_xbl_of_match[] = {
++	{
++		.compatible = "microsoft,sm8150-surface-duo-xbl"
++	},
++	{  }
++};
++MODULE_DEVICE_TABLE(of, surface_xbl_of_match);
++
++static struct platform_driver surface_xbl_driver = {
++	.driver	= {
++		.name		= "surface-xbl",
++		.of_match_table = surface_xbl_of_match,
++		.dev_groups	= xbl_sysfs_groups
++	},
++	.probe		= surface_xbl_probe,
++};
++module_platform_driver(surface_xbl_driver);
++
++MODULE_AUTHOR("Jarrett Schultz <jaschultz@microsoft.com>");
++MODULE_DESCRIPTION("Surface Extensible Bootloader");
++MODULE_LICENSE("GPL");
 -- 
 2.25.1
 

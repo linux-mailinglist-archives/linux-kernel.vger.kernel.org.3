@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 422FA4660AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:50:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E664660AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:51:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356624AbhLBJyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:54:06 -0500
+        id S1356647AbhLBJyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:54:16 -0500
 Received: from mga01.intel.com ([192.55.52.88]:56004 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356608AbhLBJyD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:54:03 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="260668441"
+        id S1356628AbhLBJyH (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 04:54:07 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="260668448"
 X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="260668441"
+   d="scan'208";a="260668448"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:50:41 -0800
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:50:44 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="677605146"
+   d="scan'208";a="677605170"
 Received: from ahunter-desktop.fi.intel.com ([10.237.72.76])
-  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2021 01:50:37 -0800
+  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2021 01:50:41 -0800
 From:   Adrian Hunter <adrian.hunter@intel.com>
 To:     Masami Hiramatsu <mhiramat@kernel.org>
 Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -29,9 +29,9 @@ Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         H Peter Anvin <hpa@zytor.com>, chang.seok.bae@intel.com
-Subject: [PATCH 2/6] x86/insn: Add AMX instructions to x86 instruction decoder
-Date:   Thu,  2 Dec 2021 11:50:25 +0200
-Message-Id: <20211202095029.2165714-3-adrian.hunter@intel.com>
+Subject: [PATCH 3/6] perf tests: Add misc instructions to x86 instruction decoder test
+Date:   Thu,  2 Dec 2021 11:50:26 +0200
+Message-Id: <20211202095029.2165714-4-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20211202095029.2165714-1-adrian.hunter@intel.com>
 References: <20211202095029.2165714-1-adrian.hunter@intel.com>
@@ -46,7 +46,30 @@ x86 instruction decoder is used for both kernel instructions and user space
 instructions (e.g. uprobes, perf tools Intel PT), so it is good to update
 it with new instructions.
 
-Add AMX instructions to x86 instruction decoder.
+Add instructions to x86 instruction decoder test:
+
+	User Interrupt
+
+		clui
+		senduipi
+		stui
+		testui
+		uiret
+
+	Prediction history reset
+
+		hreset
+
+	Serialize instruction execution
+
+		serialize
+
+	TSX suspend load address tracking
+
+		xresldtrk
+		xsusldtrk
+
+A subsequent patch adds the instructions to the instruction decoder.
 
 Reference:
 Intel Architecture Instruction Set Extensions and Future Features
@@ -54,93 +77,109 @@ Programming Reference
 May 2021
 Document Number: 319433-044
 
-Example using perf tools' x86 instruction decoder test:
+Example:
 
-  $ INSN='ldtilecfg\|sttilecfg\|tdpbf16ps\|tdpbssd\|'
-  $ INSN+='tdpbsud\|tdpbusd\|'tdpbuud\|tileloadd\|'
-  $ INSN+='tileloaddt1\|tilerelease\|tilestored\|tilezero'
-  $ perf test -v "x86 instruction decoder" |& grep -i $INSN
-  Decoded ok: c4 e2 78 49 04 c8    	ldtilecfg (%rax,%rcx,8)
-  Decoded ok: c4 c2 78 49 04 c8    	ldtilecfg (%r8,%rcx,8)
-  Decoded ok: c4 e2 79 49 04 c8    	sttilecfg (%rax,%rcx,8)
-  Decoded ok: c4 c2 79 49 04 c8    	sttilecfg (%r8,%rcx,8)
-  Decoded ok: c4 e2 7a 5c d1       	tdpbf16ps %tmm0,%tmm1,%tmm2
-  Decoded ok: c4 e2 7b 5e d1       	tdpbssd %tmm0,%tmm1,%tmm2
-  Decoded ok: c4 e2 7a 5e d1       	tdpbsud %tmm0,%tmm1,%tmm2
-  Decoded ok: c4 e2 79 5e d1       	tdpbusd %tmm0,%tmm1,%tmm2
-  Decoded ok: c4 e2 78 5e d1       	tdpbuud %tmm0,%tmm1,%tmm2
-  Decoded ok: c4 e2 7b 4b 0c c8    	tileloadd (%rax,%rcx,8),%tmm1
-  Decoded ok: c4 c2 7b 4b 14 c8    	tileloadd (%r8,%rcx,8),%tmm2
-  Decoded ok: c4 e2 79 4b 0c c8    	tileloaddt1 (%rax,%rcx,8),%tmm1
-  Decoded ok: c4 c2 79 4b 14 c8    	tileloaddt1 (%r8,%rcx,8),%tmm2
-  Decoded ok: c4 e2 78 49 c0       	tilerelease
-  Decoded ok: c4 e2 7a 4b 0c c8    	tilestored %tmm1,(%rax,%rcx,8)
-  Decoded ok: c4 c2 7a 4b 14 c8    	tilestored %tmm2,(%r8,%rcx,8)
-  Decoded ok: c4 e2 7b 49 c0       	tilezero %tmm0
-  Decoded ok: c4 e2 7b 49 f8       	tilezero %tmm7
+  $ perf test -v "x86 instruction decoder" |& grep -i hreset
+  Failed to decode length (4 vs expected 6): f3 0f 3a f0 c0 00    	hreset $0x0
+  Failed to decode length (4 vs expected 6): f3 0f 3a f0 c0 00    	hreset $0x0
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- arch/x86/lib/x86-opcode-map.txt       | 10 ++++++++--
- tools/arch/x86/lib/x86-opcode-map.txt | 10 ++++++++--
- 2 files changed, 16 insertions(+), 4 deletions(-)
+ tools/perf/arch/x86/tests/insn-x86-dat-32.c  |  8 +++++++
+ tools/perf/arch/x86/tests/insn-x86-dat-64.c  | 20 ++++++++++++++++++
+ tools/perf/arch/x86/tests/insn-x86-dat-src.c | 22 ++++++++++++++++++++
+ 3 files changed, 50 insertions(+)
 
-diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
-index ec31f5b60323..b2cc6c04cbfe 100644
---- a/arch/x86/lib/x86-opcode-map.txt
-+++ b/arch/x86/lib/x86-opcode-map.txt
-@@ -690,7 +690,10 @@ AVXcode: 2
- 45: vpsrlvd/q Vx,Hx,Wx (66),(v)
- 46: vpsravd Vx,Hx,Wx (66),(v) | vpsravd/q Vx,Hx,Wx (66),(evo)
- 47: vpsllvd/q Vx,Hx,Wx (66),(v)
--# Skip 0x48-0x4b
-+# Skip 0x48
-+49: TILERELEASE (v1),(000),(11B) | LDTILECFG Mtc (v1)(000) | STTILECFG Mtc (66),(v1),(000) | TILEZERO Vt (F2),(v1),(11B)
-+# Skip 0x4a
-+4b: TILELOADD Vt,Wsm (F2),(v1) | TILELOADDT1 Vt,Wsm (66),(v1) | TILESTORED Wsm,Vt (F3),(v)
- 4c: vrcp14ps/d Vpd,Wpd (66),(ev)
- 4d: vrcp14ss/d Vsd,Hpd,Wsd (66),(ev)
- 4e: vrsqrt14ps/d Vpd,Wpd (66),(ev)
-@@ -705,7 +708,10 @@ AVXcode: 2
- 59: vpbroadcastq Vx,Wx (66),(v) | vbroadcasti32x2 Vx,Wx (66),(evo)
- 5a: vbroadcasti128 Vqq,Mdq (66),(v) | vbroadcasti32x4/64x2 Vx,Wx (66),(evo)
- 5b: vbroadcasti32x8/64x4 Vqq,Mdq (66),(ev)
--# Skip 0x5c-0x61
-+5c: TDPBF16PS Vt,Wt,Ht (F3),(v1)
-+# Skip 0x5d
-+5e: TDPBSSD Vt,Wt,Ht (F2),(v1) | TDPBSUD Vt,Wt,Ht (F3),(v1) | TDPBUSD Vt,Wt,Ht (66),(v1) | TDPBUUD Vt,Wt,Ht (v1)
-+# Skip 0x5f-0x61
- 62: vpexpandb/w Vx,Wx (66),(ev)
- 63: vpcompressb/w Wx,Vx (66),(ev)
- 64: vpblendmd/q Vx,Hx,Wx (66),(ev)
-diff --git a/tools/arch/x86/lib/x86-opcode-map.txt b/tools/arch/x86/lib/x86-opcode-map.txt
-index ec31f5b60323..b2cc6c04cbfe 100644
---- a/tools/arch/x86/lib/x86-opcode-map.txt
-+++ b/tools/arch/x86/lib/x86-opcode-map.txt
-@@ -690,7 +690,10 @@ AVXcode: 2
- 45: vpsrlvd/q Vx,Hx,Wx (66),(v)
- 46: vpsravd Vx,Hx,Wx (66),(v) | vpsravd/q Vx,Hx,Wx (66),(evo)
- 47: vpsllvd/q Vx,Hx,Wx (66),(v)
--# Skip 0x48-0x4b
-+# Skip 0x48
-+49: TILERELEASE (v1),(000),(11B) | LDTILECFG Mtc (v1)(000) | STTILECFG Mtc (66),(v1),(000) | TILEZERO Vt (F2),(v1),(11B)
-+# Skip 0x4a
-+4b: TILELOADD Vt,Wsm (F2),(v1) | TILELOADDT1 Vt,Wsm (66),(v1) | TILESTORED Wsm,Vt (F3),(v)
- 4c: vrcp14ps/d Vpd,Wpd (66),(ev)
- 4d: vrcp14ss/d Vsd,Hpd,Wsd (66),(ev)
- 4e: vrsqrt14ps/d Vpd,Wpd (66),(ev)
-@@ -705,7 +708,10 @@ AVXcode: 2
- 59: vpbroadcastq Vx,Wx (66),(v) | vbroadcasti32x2 Vx,Wx (66),(evo)
- 5a: vbroadcasti128 Vqq,Mdq (66),(v) | vbroadcasti32x4/64x2 Vx,Wx (66),(evo)
- 5b: vbroadcasti32x8/64x4 Vqq,Mdq (66),(ev)
--# Skip 0x5c-0x61
-+5c: TDPBF16PS Vt,Wt,Ht (F3),(v1)
-+# Skip 0x5d
-+5e: TDPBSSD Vt,Wt,Ht (F2),(v1) | TDPBSUD Vt,Wt,Ht (F3),(v1) | TDPBUSD Vt,Wt,Ht (66),(v1) | TDPBUUD Vt,Wt,Ht (v1)
-+# Skip 0x5f-0x61
- 62: vpexpandb/w Vx,Wx (66),(ev)
- 63: vpcompressb/w Wx,Vx (66),(ev)
- 64: vpblendmd/q Vx,Hx,Wx (66),(ev)
+diff --git a/tools/perf/arch/x86/tests/insn-x86-dat-32.c b/tools/perf/arch/x86/tests/insn-x86-dat-32.c
+index 9708ae892061..79e2050cd1c2 100644
+--- a/tools/perf/arch/x86/tests/insn-x86-dat-32.c
++++ b/tools/perf/arch/x86/tests/insn-x86-dat-32.c
+@@ -2197,6 +2197,14 @@
+ "3e f2 ff 25 78 56 34 12 \tnotrack bnd jmp *0x12345678",},
+ {{0x3e, 0xf2, 0xff, 0xa4, 0xc8, 0x78, 0x56, 0x34, 0x12, }, 9, 0, "jmp", "indirect",
+ "3e f2 ff a4 c8 78 56 34 12 \tnotrack bnd jmp *0x12345678(%eax,%ecx,8)",},
++{{0xf3, 0x0f, 0x3a, 0xf0, 0xc0, 0x00, }, 6, 0, "", "",
++"f3 0f 3a f0 c0 00    \threset $0x0",},
++{{0x0f, 0x01, 0xe8, }, 3, 0, "", "",
++"0f 01 e8             \tserialize ",},
++{{0xf2, 0x0f, 0x01, 0xe9, }, 4, 0, "", "",
++"f2 0f 01 e9          \txresldtrk ",},
++{{0xf2, 0x0f, 0x01, 0xe8, }, 4, 0, "", "",
++"f2 0f 01 e8          \txsusldtrk ",},
+ {{0x0f, 0x01, 0xcf, }, 3, 0, "", "",
+ "0f 01 cf             \tencls  ",},
+ {{0x0f, 0x01, 0xd7, }, 3, 0, "", "",
+diff --git a/tools/perf/arch/x86/tests/insn-x86-dat-64.c b/tools/perf/arch/x86/tests/insn-x86-dat-64.c
+index 3548565a1cc5..b2d0ba45262b 100644
+--- a/tools/perf/arch/x86/tests/insn-x86-dat-64.c
++++ b/tools/perf/arch/x86/tests/insn-x86-dat-64.c
+@@ -2495,6 +2495,26 @@
+ "c4 e2 7b 49 c0       \ttilezero %tmm0",},
+ {{0xc4, 0xe2, 0x7b, 0x49, 0xf8, }, 5, 0, "", "",
+ "c4 e2 7b 49 f8       \ttilezero %tmm7",},
++{{0xf3, 0x0f, 0x01, 0xee, }, 4, 0, "", "",
++"f3 0f 01 ee          \tclui   ",},
++{{0xf3, 0x0f, 0xc7, 0xf0, }, 4, 0, "", "",
++"f3 0f c7 f0          \tsenduipi %rax",},
++{{0xf3, 0x41, 0x0f, 0xc7, 0xf0, }, 5, 0, "", "",
++"f3 41 0f c7 f0       \tsenduipi %r8",},
++{{0xf3, 0x0f, 0x01, 0xef, }, 4, 0, "", "",
++"f3 0f 01 ef          \tstui   ",},
++{{0xf3, 0x0f, 0x01, 0xed, }, 4, 0, "", "",
++"f3 0f 01 ed          \ttestui ",},
++{{0xf3, 0x0f, 0x01, 0xec, }, 4, 0, "", "",
++"f3 0f 01 ec          \tuiret  ",},
++{{0xf3, 0x0f, 0x3a, 0xf0, 0xc0, 0x00, }, 6, 0, "", "",
++"f3 0f 3a f0 c0 00    \threset $0x0",},
++{{0x0f, 0x01, 0xe8, }, 3, 0, "", "",
++"0f 01 e8             \tserialize ",},
++{{0xf2, 0x0f, 0x01, 0xe9, }, 4, 0, "", "",
++"f2 0f 01 e9          \txresldtrk ",},
++{{0xf2, 0x0f, 0x01, 0xe8, }, 4, 0, "", "",
++"f2 0f 01 e8          \txsusldtrk ",},
+ {{0x0f, 0x01, 0xcf, }, 3, 0, "", "",
+ "0f 01 cf             \tencls  ",},
+ {{0x0f, 0x01, 0xd7, }, 3, 0, "", "",
+diff --git a/tools/perf/arch/x86/tests/insn-x86-dat-src.c b/tools/perf/arch/x86/tests/insn-x86-dat-src.c
+index 7906f7b2ffeb..425db6a1b580 100644
+--- a/tools/perf/arch/x86/tests/insn-x86-dat-src.c
++++ b/tools/perf/arch/x86/tests/insn-x86-dat-src.c
+@@ -1931,6 +1931,15 @@ int main(void)
+ 	asm volatile("tilezero %tmm0");
+ 	asm volatile("tilezero %tmm7");
+ 
++	/* User Interrupt */
++
++	asm volatile("clui");
++	asm volatile("senduipi %rax");
++	asm volatile("senduipi %r8");
++	asm volatile("stui");
++	asm volatile("testui");
++	asm volatile("uiret");
++
+ #else  /* #ifdef __x86_64__ */
+ 
+ 	/* bound r32, mem (same op code as EVEX prefix) */
+@@ -3693,6 +3702,19 @@ int main(void)
+ 
+ #endif /* #ifndef __x86_64__ */
+ 
++	/* Prediction history reset */
++
++	asm volatile("hreset $0");
++
++	/* Serialize instruction execution */
++
++	asm volatile("serialize");
++
++	/* TSX suspend load address tracking */
++
++	asm volatile("xresldtrk");
++	asm volatile("xsusldtrk");
++
+ 	/* SGX */
+ 
+ 	asm volatile("encls");
 -- 
 2.25.1
 

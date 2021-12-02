@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6531E4669F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:40:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 791EA4669F7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376752AbhLBSoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 13:44:15 -0500
-Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.123]:16360 "EHLO
+        id S1376642AbhLBSoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 13:44:12 -0500
+Received: from mo4-p04-ob.smtp.rzone.de ([85.215.255.121]:10508 "EHLO
         mo4-p04-ob.smtp.rzone.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376640AbhLBSnl (ORCPT
+        with ESMTP id S1376631AbhLBSnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 13:43:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638470400;
+        Thu, 2 Dec 2021 13:43:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1638470401;
     s=strato-dkim-0002; d=goldelico.com;
     h=References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Cc:Date:
     From:Subject:Sender;
-    bh=mgm9FcGOkzWufyh28STSVM1vIR8mFSf+dMssEkkvORM=;
-    b=BfU4XnjSCXSy4LQlOSfUxUFLbul9KavDZayutyGkm0ZoAEgLFmLBPOFDEAo5BKuD2A
-    TozyfO3h/WE4W0xRXHZNHTvXPvtjQZe6Ms7cnty/GUeZlmtfykkiLKBDvQRcw2uDpigu
-    xXktbst1syFBlSk8OS8ydgOeTceCE6nVVPm/5yUACEh2YjpIBpKB2pMrViaiJv98ECu/
-    azYbSCNpytMQeqCFYsJBBdJDnd4sPNFR3F8FQeXln3hB2vu1tnST/KIBhCUQWmOkAquP
-    aBUqZYH/0jYr7yUk6Ic4CDs4lceMs2Zdzp+j+kTNCT+i7ani+Wm/oQCrmSDPZ5J0hofx
-    MMYg==
+    bh=15Nkk1H/19ZCPCTvtDzkEK7DIJe2pfI1c9+1syWWzcY=;
+    b=ILauYIFJ6sr3c8BHw3XzI0m9y94tfyMcrifeEyVTMdpXBtF2bZCzNiMPiu4fab44xt
+    dH9Iqr6vqfAnedbzOz/lBWqneg23OK6V1LSUbnZXFRelPs2vWIml0D+td3g8N1SYzU9X
+    7oV+wKnlmZgPqFQdVQoGaajgZvjJuK69cA2mkg6YA3IXcCWiIGC6mtSZWIaOsceVlumx
+    G3C59CrZsgfjDoZ/NtY0V5gqkN+tdNwySEk/nc0w98I2wF3pD2pMpgqkw+J8aNRnPHVS
+    99vHezbvYZhItKb99GVuDNAimjnp//USanM3QEr3gSNppV/Hllf0RISRFe1pfTOkbnGB
+    lWiw==
 Authentication-Results: strato.com;
     dkim=none
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lByOdcK1X0"
 X-RZG-CLASS-ID: mo00
 Received: from iMac.fritz.box
     by smtp.strato.de (RZmta 47.34.10 DYNA|AUTH)
-    with ESMTPSA id e05ed8xB2IdxeZK
+    with ESMTPSA id e05ed8xB2Ie0eZL
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
         (Client did not present a certificate);
-    Thu, 2 Dec 2021 19:39:59 +0100 (CET)
+    Thu, 2 Dec 2021 19:40:00 +0100 (CET)
 From:   "H. Nikolaus Schaller" <hns@goldelico.com>
 To:     Paul Cercueil <paul@crapouillou.net>,
         Rob Herring <robh+dt@kernel.org>,
@@ -59,11 +59,10 @@ To:     Paul Cercueil <paul@crapouillou.net>,
 Cc:     devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
         linux-kernel@vger.kernel.org, letux-kernel@openphoenux.org,
         Jonas Karlman <jonas@kwiboo.se>,
-        dri-devel@lists.freedesktop.org,
-        Ezequiel Garcia <ezequiel@collabora.com>
-Subject: [PATCH v11 7/8] MIPS: defconfig: CI20: configure for DRM_DW_HDMI_JZ4780
-Date:   Thu,  2 Dec 2021 19:39:52 +0100
-Message-Id: <ed598a97b46a72bdc4defa953570f208dfc1599d.1638470392.git.hns@goldelico.com>
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH v11 8/8] [RFC] MIPS: DTS: Ingenic: adjust register size to available registers
+Date:   Thu,  2 Dec 2021 19:39:53 +0100
+Message-Id: <76246213add58b5fbc041345083e1314de07b294.1638470392.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <cover.1638470392.git.hns@goldelico.com>
 References: <cover.1638470392.git.hns@goldelico.com>
@@ -73,32 +72,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable CONFIG options as modules.
+After getting the regmap size from the device tree we should
+reduce the ranges to the really available registers. This
+allows to read only existing registers from the debug fs
+and makes the regmap check out-of-bounds access.
 
-Signed-off-by: Ezequiel Garcia <ezequiel@collabora.com>
+For the jz4780 we have done this already.
+
+Suggested-for: Paul Cercueil <paul@crapouillou.net>
 Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
 ---
- arch/mips/configs/ci20_defconfig | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/mips/boot/dts/ingenic/jz4725b.dtsi | 2 +-
+ arch/mips/boot/dts/ingenic/jz4740.dtsi  | 2 +-
+ arch/mips/boot/dts/ingenic/jz4770.dtsi  | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
-index ab7ebb0668340..cc69b215854ea 100644
---- a/arch/mips/configs/ci20_defconfig
-+++ b/arch/mips/configs/ci20_defconfig
-@@ -98,7 +98,13 @@ CONFIG_RC_DEVICES=y
- CONFIG_IR_GPIO_CIR=m
- CONFIG_IR_GPIO_TX=m
- CONFIG_MEDIA_SUPPORT=m
-+CONFIG_DRM=m
-+CONFIG_DRM_INGENIC=m
-+CONFIG_DRM_INGENIC_DW_HDMI=m
-+CONFIG_DRM_DISPLAY_CONNECTOR=m
- # CONFIG_VGA_CONSOLE is not set
-+CONFIG_FB=y
-+CONFIG_FRAMEBUFFER_CONSOLE=y
- # CONFIG_HID is not set
- CONFIG_USB=y
- CONFIG_USB_STORAGE=y
+diff --git a/arch/mips/boot/dts/ingenic/jz4725b.dtsi b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
+index 0c6a5a4266f43..e9e48022f6316 100644
+--- a/arch/mips/boot/dts/ingenic/jz4725b.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4725b.dtsi
+@@ -321,7 +321,7 @@ udc: usb@13040000 {
+ 
+ 	lcd: lcd-controller@13050000 {
+ 		compatible = "ingenic,jz4725b-lcd";
+-		reg = <0x13050000 0x1000>;
++		reg = <0x13050000 0x130>; /* tbc */
+ 
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <31>;
+diff --git a/arch/mips/boot/dts/ingenic/jz4740.dtsi b/arch/mips/boot/dts/ingenic/jz4740.dtsi
+index 772542e1f266a..7f76cba03a089 100644
+--- a/arch/mips/boot/dts/ingenic/jz4740.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4740.dtsi
+@@ -323,7 +323,7 @@ udc: usb@13040000 {
+ 
+ 	lcd: lcd-controller@13050000 {
+ 		compatible = "ingenic,jz4740-lcd";
+-		reg = <0x13050000 0x1000>;
++		reg = <0x13050000 0x60>; /* LCDCMD1+4 */
+ 
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <30>;
+diff --git a/arch/mips/boot/dts/ingenic/jz4770.dtsi b/arch/mips/boot/dts/ingenic/jz4770.dtsi
+index dfe74328ae5dc..bda0a3a86ed5f 100644
+--- a/arch/mips/boot/dts/ingenic/jz4770.dtsi
++++ b/arch/mips/boot/dts/ingenic/jz4770.dtsi
+@@ -399,7 +399,7 @@ gpu: gpu@13040000 {
+ 
+ 	lcd: lcd-controller@13050000 {
+ 		compatible = "ingenic,jz4770-lcd";
+-		reg = <0x13050000 0x300>;
++		reg = <0x13050000 0x130>; /* tbc */
+ 
+ 		interrupt-parent = <&intc>;
+ 		interrupts = <31>;
 -- 
 2.33.0
 

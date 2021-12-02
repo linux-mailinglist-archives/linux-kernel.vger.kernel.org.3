@@ -2,105 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80103465D68
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C96B2465D6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:30:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355377AbhLBEce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:32:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344863AbhLBEcc (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:32:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DD81C061574;
-        Wed,  1 Dec 2021 20:29:10 -0800 (PST)
-Received: from mail.kernel.org (unknown [198.145.29.99])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 44E74B8214E;
-        Thu,  2 Dec 2021 04:29:09 +0000 (UTC)
-Received: by mail.kernel.org (Postfix) with ESMTPSA id 3531D60E0B;
-        Thu,  2 Dec 2021 04:29:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1638419347;
-        bh=/Avwtz+hyAMoKucKqNis+tKLK0MEdhOVdr1B0uiyAy0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Aea2wso8gFOcCnWcSUUXbz2cdA9ahhoAHGkCMgws6l3vbOedtiIRehS9E8VAcUAhZ
-         zJQ2WHZLwTKSR6G6dVSEgjv8d6yhjzJc9ZPHU58JYEVulTwO5eK9XY3C6qpHSBmZgP
-         ln3T9NVPm+VvUhKlhyvG6A0QWqhU734VXMGTKAME=
-Date:   Wed, 1 Dec 2021 20:29:05 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Bixuan Cui <cuibixuan@linux.alibaba.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, leon@kernel.org, w@1wt.eu,
-        keescook@chromium.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jakub Kicinski <kuba@kernel.org>, kvm@vger.kernel.org,
-        netfilter-devel@vger.kernel.org
-Subject: Re: [PATCH -next] mm: delete oversized WARN_ON() in kvmalloc()
- calls
-Message-Id: <20211201202905.b9892171e3f5b9a60f9da251@linux-foundation.org>
-In-Reply-To: <10cb0382-012b-5012-b664-c29461ce4de8@linux.alibaba.com>
-References: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
-        <20211201192643.ecb0586e0d53bf8454c93669@linux-foundation.org>
-        <10cb0382-012b-5012-b664-c29461ce4de8@linux.alibaba.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        id S1355421AbhLBEdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:33:31 -0500
+Received: from mga18.intel.com ([134.134.136.126]:33144 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1355407AbhLBEd3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 23:33:29 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223498985"
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="223498985"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 20:30:07 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="541075305"
+Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 01 Dec 2021 20:30:05 -0800
+Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
+        (envelope-from <lkp@intel.com>)
+        id 1msdjQ-000Fr7-Iw; Thu, 02 Dec 2021 04:30:04 +0000
+Date:   Thu, 2 Dec 2021 12:29:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     zhangyue <zhangyue1@kylinos.cn>, naveen.n.rao@linux.ibm.com,
+        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
+        mhiramat@kernel.org
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kprobes: fix out-of-bounds in register_kretprobe
+Message-ID: <202112021254.cDIRw2r6-lkp@intel.com>
+References: <20211201054855.5449-1-zhangyue1@kylinos.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211201054855.5449-1-zhangyue1@kylinos.cn>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2 Dec 2021 12:05:15 +0800 Bixuan Cui <cuibixuan@linux.alibaba.com> wrote:
+Hi zhangyue,
 
-> 
-> 在 2021/12/2 上午11:26, Andrew Morton 写道:
-> >> Delete the WARN_ON() and return NULL directly for oversized parameter
-> >> in kvmalloc() calls.
-> >> Also add unlikely().
-> >>
-> >> Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
-> >> Signed-off-by: Bixuan Cui<cuibixuan@linux.alibaba.com>
-> >> ---
-> >> There are a lot of oversize warnings and patches about kvmalloc() calls
-> >> recently. Maybe these warnings are not very necessary.
-> > Or maybe they are.  Please let's take a look at these warnings, one at
-> > a time.  If a large number of them are bogus then sure, let's disable
-> > the runtime test.  But perhaps it's the case that calling code has
-> > genuine issues and should be repaired.
-> Such as：
+Thank you for the patch! Perhaps something to improve:
 
-Thanks, that's helpful.
+[auto build test WARNING on rostedt-trace/for-next]
+[also build test WARNING on v5.16-rc3 next-20211201]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Let's bring all these to the attention of the relevant developers.
+url:    https://github.com/0day-ci/linux/commits/zhangyue/kprobes-fix-out-of-bounds-in-register_kretprobe/20211201-135046
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
+config: powerpc64-randconfig-m031-20211129 (https://download.01.org/0day-ci/archive/20211202/202112021254.cDIRw2r6-lkp@intel.com/config)
+compiler: powerpc64-linux-gcc (GCC) 11.2.0
 
-If the consensus is "the code's fine, the warning is bogus" then let's
-consider retiring the warning.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If the consensus is otherwise then hopefully they will fix their stuff!
+smatch warnings:
+kernel/kprobes.c:2107 register_kretprobe() warn: always true condition '(rp->data_size >= 0) => (0-u64max >= 0)'
 
+vim +2107 kernel/kprobes.c
 
+  2062	
+  2063	int register_kretprobe(struct kretprobe *rp)
+  2064	{
+  2065		int ret;
+  2066		struct kretprobe_instance *inst = NULL;
+  2067		int i;
+  2068		void *addr;
+  2069	
+  2070		ret = kprobe_on_func_entry(rp->kp.addr, rp->kp.symbol_name, rp->kp.offset);
+  2071		if (ret)
+  2072			return ret;
+  2073	
+  2074		/* If only 'rp->kp.addr' is specified, check reregistering kprobes */
+  2075		if (rp->kp.addr && warn_kprobe_rereg(&rp->kp))
+  2076			return -EINVAL;
+  2077	
+  2078		if (kretprobe_blacklist_size) {
+  2079			addr = kprobe_addr(&rp->kp);
+  2080			if (IS_ERR(addr))
+  2081				return PTR_ERR(addr);
+  2082	
+  2083			for (i = 0; kretprobe_blacklist[i].name != NULL; i++) {
+  2084				if (kretprobe_blacklist[i].addr == addr)
+  2085					return -EINVAL;
+  2086			}
+  2087		}
+  2088	
+  2089		rp->kp.pre_handler = pre_handler_kretprobe;
+  2090		rp->kp.post_handler = NULL;
+  2091	
+  2092		/* Pre-allocate memory for max kretprobe instances */
+  2093		if (rp->maxactive <= 0) {
+  2094	#ifdef CONFIG_PREEMPTION
+  2095			rp->maxactive = max_t(unsigned int, 10, 2*num_possible_cpus());
+  2096	#else
+  2097			rp->maxactive = num_possible_cpus();
+  2098	#endif
+  2099		}
+  2100		rp->freelist.head = NULL;
+  2101		rp->rph = kzalloc(sizeof(struct kretprobe_holder), GFP_KERNEL);
+  2102		if (!rp->rph)
+  2103			return -ENOMEM;
+  2104	
+  2105		rp->rph->rp = rp;
+  2106		for (i = 0; i < rp->maxactive; i++) {
+> 2107			if (rp->data_size >= 0)
+  2108				inst = kzalloc(sizeof(struct kretprobe_instance) +
+  2109				       rp->data_size, GFP_KERNEL);
+  2110			if (inst == NULL) {
+  2111				refcount_set(&rp->rph->ref, i);
+  2112				free_rp_inst(rp);
+  2113				return -ENOMEM;
+  2114			}
+  2115			inst->rph = rp->rph;
+  2116			freelist_add(&inst->freelist, &rp->freelist);
+  2117		}
+  2118		refcount_set(&rp->rph->ref, i);
+  2119	
+  2120		rp->nmissed = 0;
+  2121		/* Establish function entry probe point */
+  2122		ret = register_kprobe(&rp->kp);
+  2123		if (ret != 0)
+  2124			free_rp_inst(rp);
+  2125		return ret;
+  2126	}
+  2127	EXPORT_SYMBOL_GPL(register_kretprobe);
+  2128	
 
-> https://syzkaller.appspot.com/bug?id=24452f89446639c901ac07379ccc702808471e8e
-
-(cc bpf@vger.kernel.org)
-
-> https://syzkaller.appspot.com/bug?id=f7c5a86e747f9b7ce333e7295875cd4ede2c7a0d
-
-(cc netdev@vger.kernel.org, maintainers)
-
-> https://syzkaller.appspot.com/bug?id=8f306f3db150657a1f6bbe1927467084531602c7
-
-(cc kvm@vger.kernel.org)
-
-> https://syzkaller.appspot.com/bug?id=6f30adb592d476978777a1125d1f680edfc23e00
-
-(cc netfilter-devel@vger.kernel.org)
-
-> https://syzkaller.appspot.com/bug?id=4c9ab8c7d0f8b551950db06559dc9cde4119ac83
-
-(bpf again).
-
+---
+0-DAY CI Kernel Test Service, Intel Corporation
+https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org

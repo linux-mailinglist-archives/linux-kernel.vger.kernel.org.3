@@ -2,72 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF84B466B55
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:00:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5D49466B5A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232819AbhLBVEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 16:04:12 -0500
-Received: from mga12.intel.com ([192.55.52.136]:23858 "EHLO mga12.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229683AbhLBVEL (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 16:04:11 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="216854520"
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="216854520"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 13:00:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,282,1631602800"; 
-   d="scan'208";a="597312254"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by FMSMGA003.fm.intel.com with ESMTP; 02 Dec 2021 13:00:25 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 22E4D109; Thu,  2 Dec 2021 23:00:31 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] net: dsa: vsc73xxx: Get rid of duplicate of_node assignment
-Date:   Thu,  2 Dec 2021 23:00:29 +0200
-Message-Id: <20211202210029.77466-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.33.0
+        id S243377AbhLBVGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 16:06:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229683AbhLBVGM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 16:06:12 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD8BC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 13:02:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=nr75ugCDtn6FabMmV0djrs1/0hpK+Vc9tFjBmACeXU8=; b=pqeLtkrZPBoBwJ7ZvjCxHZxXE6
+        hJ/bszrPho6bqBICZZkwMomMrfpkukktS0Mz8a5TaPpUXO56syIXw1kIR53Iw9dg3tIigBJlacaZr
+        C4rO+L5EI7tqL8KPB33lhWATVzp2w5mOslrZVxLh+0G6k8lDrbxNO9dMbQwRNwUTBWKOL2jP+dEBI
+        e+kCcy/ye06LuhpE7QHNzMvD8gE9GFxN3rT9xlTgJqDTztb51aeEQWtpG5BzUZoKQGk0LMBHMmtby
+        wuGLPgA/+gtKUjIpc742qL7P1ce+2u78bIgGHjHiYfdhCwAJBnJTunqpcQ6LU90TLAyx9McoAxX+D
+        1NHiTqfg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1mstDi-001saj-T5; Thu, 02 Dec 2021 21:02:23 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E559A9810D4; Thu,  2 Dec 2021 22:02:21 +0100 (CET)
+Date:   Thu, 2 Dec 2021 22:02:21 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH 01/11] sched: Trigger warning if ->migration_disabled
+ counter underflows.
+Message-ID: <20211202210221.GB16608@worktop.programming.kicks-ass.net>
+References: <20211129174654.668506-1-bigeasy@linutronix.de>
+ <20211129174654.668506-2-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129174654.668506-2-bigeasy@linutronix.de>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-GPIO library does copy the of_node from the parent device of
-the GPIO chip, there is no need to repeat this in the individual
-drivers. Remove assignment here.
+On Mon, Nov 29, 2021 at 06:46:44PM +0100, Sebastian Andrzej Siewior wrote:
+> If migrate_enable() is used more often than its counter part then it
+> remains undetected and rq::nr_pinned will underflow, too.
+> 
+> Add a warning if migrate_enable() is attempted if without a matching a
+> migrate_disable().
+> 
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> ---
+>  kernel/sched/core.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 76f9deeaa9420..02be3f6144e97 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2171,6 +2171,8 @@ void migrate_enable(void)
+>  	if (p->migration_disabled > 1) {
+>  		p->migration_disabled--;
+>  		return;
 
-For the details one may look into the of_gpio_dev_init() implementation.
+Due to return there ^
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/net/dsa/vitesse-vsc73xx-core.c | 3 ---
- 1 file changed, 3 deletions(-)
+> +	} else if (WARN_ON_ONCE(p->migration_disabled == 0)) {
+> +		return;
+>  	}
 
-diff --git a/drivers/net/dsa/vitesse-vsc73xx-core.c b/drivers/net/dsa/vitesse-vsc73xx-core.c
-index 4c18f619ec02..ae55167ce0a6 100644
---- a/drivers/net/dsa/vitesse-vsc73xx-core.c
-+++ b/drivers/net/dsa/vitesse-vsc73xx-core.c
-@@ -1122,9 +1122,6 @@ static int vsc73xx_gpio_probe(struct vsc73xx *vsc)
- 	vsc->gc.ngpio = 4;
- 	vsc->gc.owner = THIS_MODULE;
- 	vsc->gc.parent = vsc->dev;
--#if IS_ENABLED(CONFIG_OF_GPIO)
--	vsc->gc.of_node = vsc->dev->of_node;
--#endif
- 	vsc->gc.base = -1;
- 	vsc->gc.get = vsc73xx_gpio_get;
- 	vsc->gc.set = vsc73xx_gpio_set;
--- 
-2.33.0
+we can do away with else and simply write:
 
+	if (WARN_ON_ONCE(!p->migration_disabled))
+		return;

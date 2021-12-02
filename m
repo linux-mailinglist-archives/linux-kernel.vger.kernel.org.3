@@ -2,94 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FCE3466994
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:03:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1002466995
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376566AbhLBSGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 13:06:54 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:36436 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376542AbhLBSGq (ORCPT
+        id S1376549AbhLBSG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 13:06:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376553AbhLBSGt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 13:06:46 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A0271B82457;
-        Thu,  2 Dec 2021 18:03:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBD41C00446;
-        Thu,  2 Dec 2021 18:03:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638468201;
-        bh=fLX8yTzi3C/MVxPPHtVZDC60kahx5AF+GQ/U6puoweo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oXUPjA1BPkcPaei7ZKfsPCzloH6n5iPQxgfZ/u7AIq4V8VFWBB7PZ6I8AQG8Nii/A
-         woMeQzLyG5FNCBXCKb7/kh1aVP14NlF0AO9H8o5jPxtl5Bbr/yx1mipIfaqMXhtoft
-         WuwmHbiTI5vCPhyUPEzkAK6+xtV09hmzyjRAlZXl8oYp5X5JcKPylc4nDB97XULByc
-         lDzwEa/ylvGMjkrv8TAN1EpgYsIudakWLbpQL5q6B7dkHYe80vLZFuTA/BfooS6r9G
-         +fBaoPF842UoIeMKBIp3dw0rXIZjZQrKEcP+Lfgl7OYlSLpTGAfk+/lBXBj0xDU/P1
-         5H5aeInfEKvTg==
-Date:   Thu, 2 Dec 2021 19:03:18 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc:     "Paul E . McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH 4/6] rcu/nocb: Create kthreads on all CPUs if "rcu_nocb="
- or "nohz_full=" are passed
-Message-ID: <20211202180318.GC648659@lothringen>
-References: <20211123003708.468409-1-frederic@kernel.org>
- <20211123003708.468409-5-frederic@kernel.org>
- <5010f7fa-faf4-1857-81d7-36cc08956f49@quicinc.com>
+        Thu, 2 Dec 2021 13:06:49 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BD8C061759
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 10:03:26 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id t34so574077qtc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 10:03:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=qmoIB/vQ7dx+ZL4hnVmzrtnHGIgx+ch6N5esWiBSYDs=;
+        b=AOAGUEjb5hU9Kvx0GZA0Qy0Ar4Yj7E+nzf9+3P1+MjIaseDKQdax/ZvyWLmelcI6K8
+         tuZPcOSxVxLcN/+jYJ3vRo4kMfH6fytp+/F4gGXAhcChaXHfQwOot0WmPqN/nVmrI9ZG
+         1Xw0hgj0rYT+2Kt9fejePHzNpBGDGRsWwGiMhMMP3aYaljcV2D9kQGPXsAYnzz3cXiqI
+         lpEGkJV3n5Dtv+KzF/V7Xc9y4KeuA5ryj7CLLQEy/fIaazywNhAvtwi5bBUXt9dAn4mf
+         1kAAXRvK/lVI6b69jlx/5sa2vuJF4phPHGfXZjErfh+9+uxjIIvqDklQ7Sa1djU8igUc
+         DQTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=qmoIB/vQ7dx+ZL4hnVmzrtnHGIgx+ch6N5esWiBSYDs=;
+        b=sCP2/bRT7RA71koxgAifSdWLnvGMw0Z9VjS+DUkq2qbjzEBZwOwMe57ZO+TWTvHiuS
+         0b76WGJfHDu6oQKBQE5tf6UpJL5NFc0d2R++GKDeJTvRMVp6v1dgvFa8HUtvp8D9Hza1
+         FbyDZ3pN8jwr5IYZOcaDKJ1MzrwfUZdgqimKl30GzR/ljxaaI06IFitXxdn4nXQeAQww
+         i4j5unvGs7TEyyhxPdee4svQ5025hgsog0EmPnLh92gaXAv8PatCU9QzNFfRelfrXxQv
+         MFMdQjN1A0+PHLZ/vtcldhqvzTIaLqAK9CVyd+snf1WJ1ZzanCiuMu/ep77Yumq1tbyN
+         LlxQ==
+X-Gm-Message-State: AOAM531+GA7YMCT3i5Rsd7YP3ZGQLaqeY4oxT6UZV0w5rorcxU+ztUKC
+        qQCWDmiKDkNehKttiAuUQ6ezdQ==
+X-Google-Smtp-Source: ABdhPJwTVH0Fg4NOTUEAB2C5SQuhYWc144pstV4EktapLHy7e6schsD7Rn0sPUUVcGqJwFNiB5sOqw==
+X-Received: by 2002:a05:622a:1828:: with SMTP id t40mr15691343qtc.0.1638468205569;
+        Thu, 02 Dec 2021 10:03:25 -0800 (PST)
+Received: from [192.168.1.173] (bras-base-kntaon1617w-grc-33-142-112-185-132.dsl.bell.ca. [142.112.185.132])
+        by smtp.googlemail.com with ESMTPSA id x13sm434042qkp.102.2021.12.02.10.03.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 10:03:24 -0800 (PST)
+Message-ID: <c8379f78-01da-cd2f-f4e2-99874a01f995@mojatatu.com>
+Date:   Thu, 2 Dec 2021 13:03:23 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5010f7fa-faf4-1857-81d7-36cc08956f49@quicinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH net-next] net: prestera: flower template support
+Content-Language: en-US
+To:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Cc:     Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Volodymyr Mytnyk <vmytnyk@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1638460259-12619-1-git-send-email-volodymyr.mytnyk@plvision.eu>
+ <1e86c2c7-eb84-4170-00f2-007bed67f93a@mojatatu.com>
+ <VI1P190MB0734C11D7BCDA57437264E698F699@VI1P190MB0734.EURP190.PROD.OUTLOOK.COM>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+In-Reply-To: <VI1P190MB0734C11D7BCDA57437264E698F699@VI1P190MB0734.EURP190.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 02:57:18PM +0530, Neeraj Upadhyay wrote:
+On 2021-12-02 12:39, Volodymyr Mytnyk wrote:
+> Hi Jamal,
 > 
+>>
+>>> From: Volodymyr Mytnyk<vmytnyk@marvell.com>
+>>>
+>>> Add user template explicit support. At this moment, max TCAM rule size
+>>> is utilized for all rules, doesn't matter which and how much flower
+>>> matches are provided by user. It means that some of TCAM space is
+>>> wasted, which impacts the number of filters that can be offloaded.
+>>>
+>>> Introducing the template, allows to have more HW offloaded filters.
+>>>
+>>> Example:
+>>>     tc qd add dev PORT clsact
+>>>     tc chain add dev PORT ingress protocol ip \
+>>>       flower dst_ip 0.0.0.0/16
+>>
+>> "chain" or "filter"?
 > 
-> On 11/23/2021 6:07 AM, Frederic Weisbecker wrote:
-> > In order to be able to (de-)offload any CPU using cpuset in the future,
-> > create a NOCB kthread for all possible CPUs. For now this is done only
-> > as long as the "rcu_nocb=" or "nohz_full=" kernel parameters are passed
-> > to avoid the unnecessary overhead for most users.
-> > 
-> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > Cc: Uladzislau Rezki <urezki@gmail.com>
-> > Cc: Josh Triplett <josh@joshtriplett.org>
-> > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > ---
+> tc chain add ... flower [tempalte] is the command to add explicitly chain with a given template
 > 
-> Reviewed-by: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> 
-> 
-> >   kernel/rcu/tree_nocb.h | 14 ++++++--------
-> >   1 file changed, 6 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > index d8ed3ee47a67..9d37916278d4 100644
-> > --- a/kernel/rcu/tree_nocb.h
-> > +++ b/kernel/rcu/tree_nocb.h
-> > @@ -1229,11 +1229,8 @@ static void rcu_spawn_one_nocb_kthread(int cpu)
-> >   	struct rcu_data *rdp_gp;
-> >   	struct task_struct *t;
-> > -	/*
-> > -	 * If this isn't a no-CBs CPU or if it already has an rcuo kthread,
-> > -	 * then nothing to do.
-> > -	 */
-> > -	if (!rcu_is_nocb_cpu(cpu) || rdp->nocb_cb_kthread)
-> 
-> As rcu_is_nocb_cpu() does not have a user, we can probably remove it?
 
-Ah nice, I'll check that.
+I guess you are enforcing the template on chain 0. My brain
+was  expecting chain id to be called out.
 
-Thanks!
+
+> tc filter ... is the command to add a filter itself in that chain
+> 
+
+Got it.
+
+
+>> You are not using tc priority? Above will result in two priorities (the 0.0.0.0 entry will be more important) and in classical flower approach two  different tables.
+>> I am wondering how you map the table to the TCAM.
+>> Is the priority sorting entirely based on masks in hardware?
+> 
+> Kernel tc filter priority is used as a priority for HW rule (see flower implementation).
+
+The TCAM however should be able to accept many masks - is the idea
+here to enforce some mask per chain and then have priority being the
+priorities handle conflict? What happens when you explicitly specify
+priority. If you dont specify it the kernel provides it and essentially
+resolution is based on the order in which the rules are entered..
+
+cheers,
+jamal
+
+
+

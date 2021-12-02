@@ -2,131 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45600466723
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D12C1466724
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:48:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359004AbhLBPv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:51:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S1359208AbhLBPwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:52:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242293AbhLBPvx (ORCPT
+        with ESMTP id S245536AbhLBPvz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:51:53 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD485C06174A;
-        Thu,  2 Dec 2021 07:48:30 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id l16so60532769wrp.11;
-        Thu, 02 Dec 2021 07:48:30 -0800 (PST)
+        Thu, 2 Dec 2021 10:51:55 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CA5C061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 07:48:32 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id w1so118336067edc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 07:48:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tGC3LpdEhf/azzucNhguXDxEcjakxGW5c1+cbDZrOzA=;
-        b=Cuw4refrkxRuzxjplWfBvXRstEa1sCgXRTrB9M6vZZZutwu5bGygklfwcZMz9fqdh6
-         brookoLg8n2YWE1FVC6QCBq7CNF2Ppwz9l/fbMpa2dz8XfJAgAUSbX+EuQ7epfRWIoQt
-         1FF8AxIwKVVMloGmPgKtv9p6eZp2BHl1sDLB8oKQFcLZHF3SWZVsuxjO90HnRxmyPhti
-         rAXK4AcQPan+6z066haa9Fbs2NutpEb+owuLl47tz8ZgzenuD65o/Kg7Wp1NcDTbwTs/
-         TGkAQDEEkuHEEpmH7y7xeTZkn8aEK+FeEgXbxflO5hmFeLeVR8Jmo7/slBpUPGePdS5Q
-         7dYA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iuPSYgzTIlMyDGzehdK7/z8w8X0z+If2BgHEIifEQvk=;
+        b=baNeOyif4KdMCTt9oisfwZJlQZghF+61kAW/QWSTXs5PndIZkJWD7GIiQET4/b2tir
+         zLeboJLCr72To9QovmfQFGoApNbnl+aETWO/h1w/F4aobZshIwLX7RRoiKM5LSNIQDkN
+         SR/OQ+vsBg5oREtxanSw9p76jAIOhAXQ/3PrsYlozBQ5ZyYHMwOAQUGXLRVPklSqNyXZ
+         WO8zg+vMepVbRyLfpTDuVGi1hSn8BzqwzWAzHGx2q7tFBoeIL3q5ecarz9SG7GwrWiut
+         moNFoZSF3uVuBz2D56yIrYyiRbw31A7i0Z7PyQ5/qt8IZVsZQMC2kcj4JQgsqxm/q0/3
+         cf7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tGC3LpdEhf/azzucNhguXDxEcjakxGW5c1+cbDZrOzA=;
-        b=VXH3hUnwUBdCWhwjtz2jgHTt1nOzWw918XSbkr1wbz6ysXagX6uG4FUL42wKEy2PwT
-         zfgcVwHEYAwGCm13tvIeT5mX0lreqeKz82OP4byyz7OqWBTKAITkBPBHbqxsLsYZKhwC
-         3PGHhYt2c3n9UTGtrE+9F8Ln8WT5Kz5afJw8yhDqyqO96wyP4Vm2NDv4bZtNSA8JoDJo
-         blaY0OS3rFuNRzg9vgjQEXLdrQRu30/z5bwVAjbp6C+vb4sqDTQ4yteIxgz3Uj3LCACl
-         UCDvajcFJok6ubM+5tnbv1DG9sfAFnCyzCtwZWlzhYA+f+0ws/kj70gbLF2yIx0dfSc4
-         9gDA==
-X-Gm-Message-State: AOAM531G1buqMcsVmbwE0RRgt8JWXStOMvehCi2eGikH9y7S4D+HdAK4
-        fjuHB8T1N+AUq4BctIah59s=
-X-Google-Smtp-Source: ABdhPJwNz5AmAptN2Wtm7R8RgB0gpQZvAJdTETPL6m07GjnXiWJS7juoQ03JqVsWEd/3n9Gm9uhRog==
-X-Received: by 2002:a5d:588b:: with SMTP id n11mr15125945wrf.344.1638460109405;
-        Thu, 02 Dec 2021 07:48:29 -0800 (PST)
-Received: from [192.168.8.198] ([185.69.144.137])
-        by smtp.gmail.com with ESMTPSA id d2sm41111wmb.31.2021.12.02.07.48.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 07:48:28 -0800 (PST)
-Message-ID: <ffd25188-aa92-2d69-a749-3058d1d33bc1@gmail.com>
-Date:   Thu, 2 Dec 2021 15:48:14 +0000
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iuPSYgzTIlMyDGzehdK7/z8w8X0z+If2BgHEIifEQvk=;
+        b=L0sXWBz8HTpZDEbEb3Na3E51+IvU12z3HK5KaNbg/4rbblRYCz1FZY38sMcWxZge4G
+         ZAQM2NeYsR9ErmATcuMqEDjXxN+JwQw9CUjN3Nsq0v3A37Z7e+TVA06CQTGJ66sceV3O
+         31dSv4uYTgiPK0MbtlSH7H8H4961m8MiubcMszg78D4XAkFKqzzb0006erh+uHJN7fcP
+         JhosGPoWy1LuOAo/ridKkb/J9kOQljALFbzwoZJovl80AoleOjyw6ig1OaTnILZVke56
+         7D6curPfMvmpdlZdlHl2On6g6DZf3s8njXTvOGgOSH7Tjv61NJSC0kStkLLzOo6qwKB0
+         yu1w==
+X-Gm-Message-State: AOAM532omk+EpEvl2CaDZyfT0AMmSSuZ3ccT4bMZOxODNB3A9ufOaJDn
+        iqjUQ8jDmVK+hJaaqfKGi1+usHmbCB5z6//1In0qoFQGJe/xCw==
+X-Google-Smtp-Source: ABdhPJwLfEGeZ4YffY55vkuPmk1iOWIK2zOfLaU7nlVHQ3/JmmtUDi1cN9GHgdn9ypgpYG37ohSk72uz+A+mKSzjLw0=
+X-Received: by 2002:a17:907:9847:: with SMTP id jj7mr15758583ejc.508.1638460110643;
+ Thu, 02 Dec 2021 07:48:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [RFC 00/12] io_uring zerocopy send
-Content-Language: en-US
-To:     Martin KaFai Lau <kafai@fb.com>
-Cc:     David Ahern <dsahern@gmail.com>, io-uring@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Willem de Bruijn <willemb@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
-References: <cover.1638282789.git.asml.silence@gmail.com>
- <ae2d2dab-6f42-403a-f167-1ba3db3fd07f@gmail.com>
- <994e315b-fdb7-1467-553e-290d4434d853@gmail.com>
- <c4424a7a-2ef1-6524-9b10-1e7d1f1e1fe4@gmail.com>
- <889c0306-afed-62cd-d95b-a20b8e798979@gmail.com>
- <0b92f046-5ac3-7138-2775-59fadee6e17a@gmail.com>
- <974b266e-d224-97da-708f-c4a7e7050190@gmail.com>
- <20211201215157.kgqd5attj3dytfgs@kafai-mbp.dhcp.thefacebook.com>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20211201215157.kgqd5attj3dytfgs@kafai-mbp.dhcp.thefacebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20211202134034.14048-1-brgl@bgdev.pl> <20211202134034.14048-2-brgl@bgdev.pl>
+ <YajoPEgfTvuvjqG/@smile.fi.intel.com>
+In-Reply-To: <YajoPEgfTvuvjqG/@smile.fi.intel.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 2 Dec 2021 16:48:20 +0100
+Message-ID: <CAMRc=MfYKscNMbGqwj6os_SmXhBBqUMWJCwu0K0xO+VZ0vvNfA@mail.gmail.com>
+Subject: Re: [PATCH v4 2/2] gpiolib: check the 'ngpios' property in core
+ gpiolib code
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Johan Hovold <johan@kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 21:51, Martin KaFai Lau wrote:
-> On Wed, Dec 01, 2021 at 08:15:28PM +0000, Pavel Begunkov wrote:
->> On 12/1/21 19:20, David Ahern wrote:
->>> On 12/1/21 12:11 PM, Pavel Begunkov wrote:
->>>> btw, why a dummy device would ever go through loopback? It doesn't
->>>> seem to make sense, though may be missing something.
->>>
->>> You are sending to a local ip address, so the fib_lookup returns
->>> RTN_LOCAL. The code makes dev_out the loopback:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/tree/net/ipv4/route.c#n2773
->>
->> I see, thanks. I still don't use the skb_orphan_frags_rx() hack
->> and it doesn't go through the loopback (for my dummy tests), just
->> dummy_xmit() and no mention of loopback in perf data, see the
->> flamegraph. Don't know what is the catch.
->>
->> I'm illiterate of the routing paths. Can it be related to
->> the "ip route add"? How do you get an ipv4 address for the device?
-> I also bumped into the udp-connect() => ECONNREFUSED (111) error from send-zc.
-> because I assumed no server is needed by using dummy.  Then realized
-> the cover letter mentioned msg_zerocopy is used as the server.
-> Mentioning just in case someone hits it also.
-> 
-> To tx out dummy, I did:
-> #> ip a add 10.0.0.1/24 dev dummy0
+On Thu, Dec 2, 2021 at 4:38 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Dec 02, 2021 at 02:40:34PM +0100, Bartosz Golaszewski wrote:
+> > Several drivers read the 'ngpios' device property on their own, but
+> > since it's defined as a standard GPIO property in the device tree bindings
+> > anyway, it's a good candidate for generalization. If the driver didn't
+> > set its gc->ngpio, try to read the 'ngpios' property from the GPIO
+> > device's firmware node before bailing out.
+>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> One nit-pick below (you may amend it when applying)
+>
+> > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > ---
+> > v1 -> v2:
+> > - use device_property_read_u32() instead of fwnode_property_read_u32()
+> > - reverse the error check logic
+> >
+> > v2 -> v3:
+> > - don't shadow errors other than -ENODATA in device_property_read_u32()
+> >
+> > v3 -> v4:
+> > - also make sure we return -EINVAL when the device 'ngpios' property is
+> >   set to 0 (thanks Andy!)
+> >
+> >  drivers/gpio/gpiolib.c | 21 +++++++++++++++++++++
+> >  1 file changed, 21 insertions(+)
+> >
+> > diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> > index ede8b8a7aa18..bd9b8cb53476 100644
+> > --- a/drivers/gpio/gpiolib.c
+> > +++ b/drivers/gpio/gpiolib.c
+> > @@ -599,6 +599,7 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+> >       int base = gc->base;
+> >       unsigned int i;
+> >       int ret = 0;
+> > +     u32 ngpios;
+> >
+> >       /*
+> >        * First: allocate and populate the internal stat container, and
+> > @@ -646,6 +647,26 @@ int gpiochip_add_data_with_key(struct gpio_chip *gc, void *data,
+> >               goto err_free_dev_name;
+> >       }
+> >
+> > +     /*
+> > +      * Try the device properties if the driver didn't supply the number
+> > +      * of GPIO lines.
+> > +      */
+> > +     if (gc->ngpio == 0) {
+> > +             ret = device_property_read_u32(&gdev->dev, "ngpios", &ngpios);
+> > +             if (ret == -ENODATA)
+> > +                     /*
+> > +                      * -ENODATA means that there is no property found and
+> > +                      * we want to issue the error message to the user.
+> > +                      * Besides that, we want to return different error code
+> > +                      * to state that supplied value is not valid.
+>
+> > +                      * */
+>
+> First '* ' is not needed.
+>
 
-Works well for me, IOW getting the same behaviour as with my
-ip route add <ip> dev dummy0
+I'll fix it when applying.
 
-I'm curious what is the difference bw them?
-
-
-> #> ip -4 r
-> 10.0.0.0/24 dev dummy0 proto kernel scope link src 10.0.0.1
-> 
-> #> ./send-zc -4 -D 10.0.0.(2) -t 10 udp
-> ip -s link show dev dummy0
-> 2: dummy0: <BROADCAST,NOARP,UP,LOWER_UP> mtu 65535 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
->     link/ether 82:0f:e0:dc:f7:e6 brd ff:ff:ff:ff:ff:ff
->     RX:    bytes packets errors dropped  missed   mcast
->                0       0      0       0       0       0
->     TX:    bytes packets errors dropped carrier collsns
->     140800890299 2150397      0       0       0       0
-> 
-
--- 
-Pavel Begunkov
+Bart

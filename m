@@ -2,245 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0321446646B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED251466471
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 14:20:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358201AbhLBNWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 08:22:21 -0500
-Received: from outbound-smtp34.blacknight.com ([46.22.139.253]:38629 "EHLO
-        outbound-smtp34.blacknight.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358170AbhLBNWQ (ORCPT
+        id S232554AbhLBNXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 08:23:51 -0500
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:47208 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358205AbhLBNX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 08:22:16 -0500
-Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
-        by outbound-smtp34.blacknight.com (Postfix) with ESMTPS id 333351BA0
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 13:18:53 +0000 (GMT)
-Received: (qmail 9568 invoked from network); 2 Dec 2021 13:18:52 -0000
-Received: from unknown (HELO stampy.112glenside.lan) (mgorman@techsingularity.net@[84.203.17.29])
-  by 81.17.254.9 with ESMTPA; 2 Dec 2021 13:18:52 -0000
-From:   Mel Gorman <mgorman@techsingularity.net>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
-        Alexey Avramov <hakavlad@inbox.lv>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to make progress
-Date:   Thu,  2 Dec 2021 13:18:42 +0000
-Message-Id: <20211202131842.9217-1-mgorman@techsingularity.net>
-X-Mailer: git-send-email 2.31.1
+        Thu, 2 Dec 2021 08:23:28 -0500
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 3D6ED1F46508;
+        Thu,  2 Dec 2021 13:20:02 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=collabora.com; s=mail;
+        t=1638451203; bh=wb6wZrB6CrdpvFdY2JMiuIUqjBwm6A1CO87QchUy4nY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VTlDz/Ax+F1uGBBpltQyoVCsgarU84mFF+UVCQ3Ukd1WYVMSYH24U2Ds10bXtejP/
+         oqeCyXLz8vWrZ6Mbqi/an1/lKblkS5KXhcCf83fmupll0eap/8+6jh4DIqrnrB/6f/
+         7tBhmcL8nwln0MGuK+0MXef6RxJcWkV3/FhC5qFyA1p4jdI5PS7IXfTVh3r7zMrV5C
+         HQWiP5uP8DAGLMzJ3BKM9AE+kGYXevP9Rm7hGQ/rhVZrnoMx8ySBGWsYC+GmjOfUq9
+         5d+75dS2Kqj6Ce22hJDIYkXlKO077WosM14tAZsvzC7o2NRZrKV58nEtdNl1EiSn7f
+         v0+jYgypeLofA==
+Date:   Thu, 2 Dec 2021 14:19:58 +0100
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Anders Roxell <anders.roxell@linaro.org>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        sean@geanix.com, Miquel Raynal <miquel.raynal@bootlin.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mtd@lists.infradead.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Boris Brezillon <bbrezillon@kernel.org>,
+        Daniel =?UTF-8?B?RMOtYXo=?= <daniel.diaz@linaro.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        linux-block <linux-block@vger.kernel.org>
+Subject: Re: [next] WARNING: CPU: 2 PID: 66 at kernel/locking/rwsem.c:1298
+ __up_read
+Message-ID: <20211202141958.638f224b@collabora.com>
+In-Reply-To: <CADYN=9KeKhZ-OSbx1QHKYfXu+p-nXVjubbay1sXd_g75LLSZRg@mail.gmail.com>
+References: <CA+G9fYuupqqemLbgoVL2kYL4d2AtZLBo1xcshWWae7gX5Ln-iA@mail.gmail.com>
+        <CADYN=9KeKhZ-OSbx1QHKYfXu+p-nXVjubbay1sXd_g75LLSZRg@mail.gmail.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.30; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Galbraith, Alexey Avramov and Darrick Wong all reported similar
-problems due to reclaim throttling for excessive lengths of time.
-In Alexey's case, a memory hog that should go OOM quickly stalls for
-several minutes before stalling. In Mike and Darrick's cases, a small
-memcg environment stalled excessively even though the system had enough
-memory overall.
+On Thu, 2 Dec 2021 13:28:46 +0100
+Anders Roxell <anders.roxell@linaro.org> wrote:
 
-Commit 69392a403f49 ("mm/vmscan: throttle reclaim when no progress is being
-made") introduced the problem although commit a19594ca4a8b ("mm/vmscan:
-increase the timeout if page reclaim is not making progress") made it
-worse. Systems at or near an OOM state that cannot be recovered must
-reach OOM quickly and memcg should kill tasks if a memcg is near OOM.
+> On Tue, 30 Nov 2021 at 18:01, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > [Please ignore this email if it is already reported]
+> >
+> > Regression found on qemu_arm64.
+> > Following kernel warnings reported on Linux next-20211130 while booting.  
+> 
+> I bisected down to 1ebe2e5f9d68 ("block: remove GENHD_FL_EXT_DEVT")
+> 
+> and when I reverted 1ebe2e5f9d68 ("block: remove GENHD_FL_EXT_DEVT") and the
+> 3 releated patches so patch 1ebe2e5f9d68 was reverted cleanly I
+> managed to boot without
+> a warning.
+> 
+> Related patches from next-20211130:
+> 9f18db572c97 ("block: don't set GENHD_FL_NO_PART for hidden gendisks")
+> 430cc5d3ab4d ("block: cleanup the GENHD_FL_* definitions")
+> a4561f9fccc5 ("sr: set GENHD_FL_REMOVABLE earlier")
+> 
+> With this said, if I revert 9d6abd489e70 ("mtd: core: protect access
+> to MTD devices while in suspend")
+> I didn't see the warning either.
 
-To address this, only stall for the first zone in the zonelist, reduce
-the timeout to 1 tick for VMSCAN_THROTTLE_NOPROGRESS and only stall if
-the scan control nr_reclaimed is 0, kswapd is still active and there were
-excessive pages pending for writeback. If kswapd has stopped reclaiming due
-to excessive failures, do not stall at all so that OOM triggers relatively
-quickly. Similarly, if an LRU is simply congested, only lightly throttle
-similar to NOPROGRESS.
+I think 9d6abd489e70 ("mtd: core: protect access to MTD devices while
+in suspend") is at fault here. Miquel, would you mind
+reverting/dropping the "mtd: core: protect access to mtd devices while
+in  suspend" series?
 
-Alexey's original case was the most straight forward
-
-	for i in {1..3}; do tail /dev/zero; done
-
-On vanilla 5.16-rc1, this test stalled heavily, after the patch the test
-completes in a few seconds similar to 5.15.
-
-Alexey's second test case added watching a youtube video while tail runs
-10 times. On 5.15, playback only jitters slightly, 5.16-rc1 stalls a lot
-with lots of frames missing and numerous audio glitches. With this patch
-applies, the video plays similarly to 5.15.
-
-Link: https://lore.kernel.org/r/99e779783d6c7fce96448a3402061b9dc1b3b602.camel@gmx.de
-Link: https://lore.kernel.org/r/20211124011954.7cab9bb4@mail.inbox.lv
-Link: https://lore.kernel.org/r/20211022144651.19914-1-mgorman@techsingularity.net
-
-Reported-and-tested-by: Alexey Avramov <hakavlad@inbox.lv>
-Reported-and-tested-by: Mike Galbraith <efault@gmx.de>
-Reported-and-tested-by: Darrick J. Wong <djwong@kernel.org>
-Fixes: 69392a403f49 ("mm/vmscan: throttle reclaim when no progress is being made")
-Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
----
- include/linux/mmzone.h        |  1 +
- include/trace/events/vmscan.h |  4 ++-
- mm/vmscan.c                   | 64 ++++++++++++++++++++++++++++++-----
- 3 files changed, 59 insertions(+), 10 deletions(-)
-
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 58e744b78c2c..936dc0b6c226 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -277,6 +277,7 @@ enum vmscan_throttle_state {
- 	VMSCAN_THROTTLE_WRITEBACK,
- 	VMSCAN_THROTTLE_ISOLATED,
- 	VMSCAN_THROTTLE_NOPROGRESS,
-+	VMSCAN_THROTTLE_CONGESTED,
- 	NR_VMSCAN_THROTTLE,
- };
- 
-diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
-index f25a6149d3ba..ca2e9009a651 100644
---- a/include/trace/events/vmscan.h
-+++ b/include/trace/events/vmscan.h
-@@ -30,12 +30,14 @@
- #define _VMSCAN_THROTTLE_WRITEBACK	(1 << VMSCAN_THROTTLE_WRITEBACK)
- #define _VMSCAN_THROTTLE_ISOLATED	(1 << VMSCAN_THROTTLE_ISOLATED)
- #define _VMSCAN_THROTTLE_NOPROGRESS	(1 << VMSCAN_THROTTLE_NOPROGRESS)
-+#define _VMSCAN_THROTTLE_CONGESTED	(1 << VMSCAN_THROTTLE_CONGESTED)
- 
- #define show_throttle_flags(flags)						\
- 	(flags) ? __print_flags(flags, "|",					\
- 		{_VMSCAN_THROTTLE_WRITEBACK,	"VMSCAN_THROTTLE_WRITEBACK"},	\
- 		{_VMSCAN_THROTTLE_ISOLATED,	"VMSCAN_THROTTLE_ISOLATED"},	\
--		{_VMSCAN_THROTTLE_NOPROGRESS,	"VMSCAN_THROTTLE_NOPROGRESS"}	\
-+		{_VMSCAN_THROTTLE_NOPROGRESS,	"VMSCAN_THROTTLE_NOPROGRESS"},	\
-+		{_VMSCAN_THROTTLE_CONGESTED,	"VMSCAN_THROTTLE_CONGESTED"}	\
- 		) : "VMSCAN_THROTTLE_NONE"
- 
- 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index fb9584641ac7..e3f2dd1e8cd9 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -1021,6 +1021,39 @@ static void handle_write_error(struct address_space *mapping,
- 	unlock_page(page);
- }
- 
-+bool skip_throttle_noprogress(pg_data_t *pgdat)
-+{
-+	int reclaimable = 0, write_pending = 0;
-+	int i;
-+
-+	/*
-+	 * If kswapd is disabled, reschedule if necessary but do not
-+	 * throttle as the system is likely near OOM.
-+	 */
-+	if (pgdat->kswapd_failures >= MAX_RECLAIM_RETRIES)
-+		return true;
-+
-+	/*
-+	 * If there are a lot of dirty/writeback pages then do not
-+	 * throttle as throttling will occur when the pages cycle
-+	 * towards the end of the LRU if still under writeback.
-+	 */
-+	for (i = 0; i < MAX_NR_ZONES; i++) {
-+		struct zone *zone = pgdat->node_zones + i;
-+
-+		if (!populated_zone(zone))
-+			continue;
-+
-+		reclaimable += zone_reclaimable_pages(zone);
-+		write_pending += zone_page_state_snapshot(zone,
-+						  NR_ZONE_WRITE_PENDING);
-+	}
-+	if (2 * write_pending <= reclaimable)
-+		return true;
-+
-+	return false;
-+}
-+
- void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason)
- {
- 	wait_queue_head_t *wqh = &pgdat->reclaim_wait[reason];
-@@ -1056,8 +1089,16 @@ void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason)
- 		}
- 
- 		break;
-+	case VMSCAN_THROTTLE_CONGESTED:
-+		fallthrough;
- 	case VMSCAN_THROTTLE_NOPROGRESS:
--		timeout = HZ/2;
-+		if (skip_throttle_noprogress(pgdat)) {
-+			cond_resched();
-+			return;
-+		}
-+
-+		timeout = 1;
-+
- 		break;
- 	case VMSCAN_THROTTLE_ISOLATED:
- 		timeout = HZ/50;
-@@ -3321,7 +3362,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
- 	if (!current_is_kswapd() && current_may_throttle() &&
- 	    !sc->hibernation_mode &&
- 	    test_bit(LRUVEC_CONGESTED, &target_lruvec->flags))
--		reclaim_throttle(pgdat, VMSCAN_THROTTLE_WRITEBACK);
-+		reclaim_throttle(pgdat, VMSCAN_THROTTLE_CONGESTED);
- 
- 	if (should_continue_reclaim(pgdat, sc->nr_reclaimed - nr_reclaimed,
- 				    sc))
-@@ -3386,16 +3427,16 @@ static void consider_reclaim_throttle(pg_data_t *pgdat, struct scan_control *sc)
- 	}
- 
- 	/*
--	 * Do not throttle kswapd on NOPROGRESS as it will throttle on
--	 * VMSCAN_THROTTLE_WRITEBACK if there are too many pages under
--	 * writeback and marked for immediate reclaim at the tail of
--	 * the LRU.
-+	 * Do not throttle kswapd or cgroup reclaim on NOPROGRESS as it will
-+	 * throttle on VMSCAN_THROTTLE_WRITEBACK if there are too many pages
-+	 * under writeback and marked for immediate reclaim at the tail of the
-+	 * LRU.
- 	 */
--	if (current_is_kswapd())
-+	if (current_is_kswapd() || cgroup_reclaim(sc))
- 		return;
- 
- 	/* Throttle if making no progress at high prioities. */
--	if (sc->priority < DEF_PRIORITY - 2)
-+	if (sc->priority == 1 && !sc->nr_reclaimed)
- 		reclaim_throttle(pgdat, VMSCAN_THROTTLE_NOPROGRESS);
- }
- 
-@@ -3415,6 +3456,7 @@ static void shrink_zones(struct zonelist *zonelist, struct scan_control *sc)
- 	unsigned long nr_soft_scanned;
- 	gfp_t orig_mask;
- 	pg_data_t *last_pgdat = NULL;
-+	pg_data_t *first_pgdat = NULL;
- 
- 	/*
- 	 * If the number of buffer_heads in the machine exceeds the maximum
-@@ -3478,14 +3520,18 @@ static void shrink_zones(struct zonelist *zonelist, struct scan_control *sc)
- 			/* need some check for avoid more shrink_zone() */
- 		}
- 
-+		if (!first_pgdat)
-+			first_pgdat = zone->zone_pgdat;
-+
- 		/* See comment about same check for global reclaim above */
- 		if (zone->zone_pgdat == last_pgdat)
- 			continue;
- 		last_pgdat = zone->zone_pgdat;
- 		shrink_node(zone->zone_pgdat, sc);
--		consider_reclaim_throttle(zone->zone_pgdat, sc);
- 	}
- 
-+	consider_reclaim_throttle(first_pgdat, sc);
-+
- 	/*
- 	 * Restore to original mask to avoid the impact on the caller if we
- 	 * promoted it to __GFP_HIGHMEM.
--- 
-2.31.1
+> 
+> Any idea what can be wrong here or what a fix could be?
+> 
+> Only apply this patch from Geert
+> https://lore.kernel.org/lkml/c26dfdf9ce56e92d23530a09db386b283e62845d.1638289204.git.geert+renesas@glider.be/
+> makes the warning go away too.
+> 
+> Cheers,
+> Anders
 

@@ -2,90 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3111C4660F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 881FF4660D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:53:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356843AbhLBJ6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:58:22 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:27019 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1356821AbhLBJ4y (ORCPT
+        id S1356810AbhLBJ4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:56:47 -0500
+Received: from relay10.mail.gandi.net ([217.70.178.230]:34717 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356758AbhLBJ42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:56:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638438812; x=1669974812;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=ApkT5CfALdPrbby3Mvv70S+36/G3OWU+coKJm3QqI+U=;
-  b=h9b+8iETBrnZC79hvjEVt2LCgGwVOuMWhYXcJTklez1982F2dz3SjF3G
-   cCoDr4n/W4mHZHctSDjO6m1u4ivFV3Muqrc4CERPufdy1vb8ZcTTVdjso
-   HC6XAByE6cf6kMzye8MibSy76Kw583Gvk0ntXTAdbA8L5OR20zRB/zCiT
-   s=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 02 Dec 2021 01:53:31 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:53:18 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 2 Dec 2021 01:53:14 -0800
-Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Thu, 2 Dec 2021 01:53:08 -0800
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
-        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
-        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
-        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
-        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
-        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-Subject: [PATCH V2 8/8] MAINTAINERS: Add maintainer entry for EUD
-Date:   Thu, 2 Dec 2021 15:21:27 +0530
-Message-ID: <7e5fbfa45746143fb0ee3235d9e00557cdfcac9a.1638430506.git.quic_schowdhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1638430506.git.quic_schowdhu@quicinc.com>
-References: <cover.1638430506.git.quic_schowdhu@quicinc.com>
+        Thu, 2 Dec 2021 04:56:28 -0500
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPA id F19DE240017;
+        Thu,  2 Dec 2021 09:53:01 +0000 (UTC)
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Viresh Kumar <vireshk@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: [PATCH 0/6] spear: Fix SPEAr3XX plgpio support
+Date:   Thu,  2 Dec 2021 10:52:49 +0100
+Message-Id: <20211202095255.165797-1-herve.codina@bootlin.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the entry for maintainer for EUD driver
-and other associated files.
+Hi,
 
-Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
----
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
+This patch series fixes the plgpio support on SPEAr3xx SOCs.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 0227e15..54f616a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7018,6 +7018,14 @@ F:	include/trace/events/mdio.h
- F:	include/uapi/linux/mdio.h
- F:	include/uapi/linux/mii.h
+The first four patches of this series fixes a ressources
+sharing issue between the plgpio driver and the pinmux
+driver.
+Indeed, these two drivers can use the same IO address range
+on some SPEAr3xx SOCs.
+To solve the issue, a regmap (syscon managed) is used in both
+drivers and the plgpio driver can reference the pinmux regmap
+to use it.
 
-+EUD-QCOM
-+M:	Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-+L:	linux-arm-msm@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/ABI/testing/sysfs-driver-eud
-+F:	Documentation/devicetree/bindings/arm/msm/qcom,eud.yaml
-+F:	drivers/usb/common/qcom_eud.c
-+
- EXFAT FILE SYSTEM
- M:	Namjae Jeon <linkinjeon@kernel.org>
- M:	Sungjong Seo <sj1557.seo@samsung.com>
---
-2.7.4
+The second part of this series is related to IRQs.
+The plgpio on SPEAr320s SOC uses an IRQ line in the reserve
+range (from SPEAr320 point of view).
+This issue is fixed enabling all the 'reserved' IRQs and
+adding a dtsi file for the SPEAr320s with the correct interrupt
+for the plgpio node.
+
+Best regards,
+Herve
+
+Herve Codina (6):
+  pinctrl: spear: spear: Convert to regmap
+  pinctrl: spear: plgpio: Convert to regmap
+  pinctrl: spear: plgpio: Introduce regmap phandle
+  ARM: dts: spear3xx: Use plgpio regmap in SPEAr310 and SPEAr320
+  irq: spear-shirq: Add support for IRQ 0..6
+  ARM: dts: spear3xx: Add spear320s dtsi
+
+ arch/arm/boot/dts/spear310.dtsi        |   1 +
+ arch/arm/boot/dts/spear320.dtsi        |   1 +
+ arch/arm/boot/dts/spear320s.dtsi       |  24 ++++
+ drivers/irqchip/spear-shirq.c          |   2 +
+ drivers/pinctrl/spear/pinctrl-plgpio.c | 148 +++++++++++++++----------
+ drivers/pinctrl/spear/pinctrl-spear.c  |  10 +-
+ drivers/pinctrl/spear/pinctrl-spear.h  |  12 +-
+ 7 files changed, 131 insertions(+), 67 deletions(-)
+ create mode 100644 arch/arm/boot/dts/spear320s.dtsi
+
+-- 
+2.31.1
 

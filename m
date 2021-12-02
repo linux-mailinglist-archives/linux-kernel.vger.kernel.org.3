@@ -2,40 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5DD465DAE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 06:11:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35AE465DB2
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 06:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235241AbhLBFOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 00:14:18 -0500
-Received: from marcansoft.com ([212.63.210.85]:47542 "EHLO mail.marcansoft.com"
+        id S1344972AbhLBFRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 00:17:51 -0500
+Received: from marcansoft.com ([212.63.210.85]:48452 "EHLO mail.marcansoft.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S229469AbhLBFOQ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 00:14:16 -0500
+        id S229469AbhLBFRt (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 00:17:49 -0500
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 3B5CE41F5F;
-        Thu,  2 Dec 2021 05:10:50 +0000 (UTC)
-Subject: Re: [PATCH] ethernet: aquantia: Try MAC address from device tree
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Tianhao Chai <cth451@gmail.com>,
-        Igor Russkikh <irusskikh@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-References: <20211128023733.GA466664@cth-desktop-dorm.mad.wi.cth451.me>
- <YaOvShya4kP4SRk7@lunn.ch> <37679b8b-7a81-5605-23af-e442f9e91816@marcan.st>
- <YaWNKiXwr/uHlNJD@lunn.ch>
+        by mail.marcansoft.com (Postfix) with ESMTPSA id BBE9241F5F;
+        Thu,  2 Dec 2021 05:14:23 +0000 (UTC)
+Subject: Re: [PATCH 2/2] watchdog: Add Apple SoC watchdog driver
+To:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20211113094732.73889-1-sven@svenpeter.dev>
+ <20211113094732.73889-2-sven@svenpeter.dev> <YY/YnlCxLqdw/zAo@sunset>
+ <95dea968-f452-4ba0-9b66-c9bc4269a52c@www.fastmail.com>
+ <YZEMmH49D+GZEewi@sunset>
 From:   Hector Martin <marcan@marcan.st>
-Message-ID: <80083aba-c906-f076-c887-910d3fe186f6@marcan.st>
-Date:   Thu, 2 Dec 2021 14:10:49 +0900
+Message-ID: <ca52e4ee-b5f3-b892-1ba5-7c5656e45fdd@marcan.st>
+Date:   Thu, 2 Dec 2021 14:14:21 +0900
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
  Thunderbird/78.13.0
 MIME-Version: 1.0
-In-Reply-To: <YaWNKiXwr/uHlNJD@lunn.ch>
+In-Reply-To: <YZEMmH49D+GZEewi@sunset>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: es-ES
 Content-Transfer-Encoding: 7bit
@@ -43,56 +46,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/11/2021 11.32, Andrew Lunn wrote:
-> On Mon, Nov 29, 2021 at 02:08:28AM +0900, Hector Martin wrote:
->> On 29/11/2021 01.33, Andrew Lunn wrote:
->>> On Sat, Nov 27, 2021 at 08:37:33PM -0600, Tianhao Chai wrote:
->>>> Apple M1 Mac minis (2020) with 10GE NICs do not have MAC address in the
->>>> card, but instead need to obtain MAC addresses from the device tree. In
->>>> this case the hardware will report an invalid MAC.
->>>>
->>>> Currently atlantic driver does not query the DT for MAC address and will
->>>> randomly assign a MAC if the NIC doesn't have a permanent MAC burnt in.
->>>> This patch causes the driver to perfer a valid MAC address from OF (if
->>>> present) over HW self-reported MAC and only fall back to a random MAC
->>>> address when neither of them is valid.
+On 14/11/2021 22.18, Alyssa Rosenzweig wrote:
+>>>> + * This HW block has three separate watchdogs. WD0 resets the machine
+>>>> + * to recovery mode and is not very useful for us. WD1 and WD2 trigger a normal
+>>>> + * machine reset. WD0 additionally supports a configurable interrupt.
 >>>
->>> This is a change in behaviour, and could cause regressions. It would
->>> be better to keep with the current flow. Call
->>> aq_fw_ops->get_mac_permanent() first. If that does not give a valid
->>> MAC address, then try DT, and lastly use a random MAC address.
+>>> Do we have any idea what the difference between WD1 and WD2 is?
 >>
->> On DT platforms, it is expected that the device tree MAC will override
->> whatever the device thinks is its MAC address.
+>> I've never seen macOS write to WD2 when running in our hypervisor and only
+>> found that one when I was looking at the rest of the MMIO region.
+>> >From what I can tell it works exactly like WD1.
 > 
-> Can you point to any documentation of that expectation?
-
-I don't think this is explicitly clarified anywhere, but the DT binding 
-says:
-
- > Specifies the MAC address that was assigned to the network device.
-
-It certainly doesn't say this should be a fallback only to be used if 
-the device doesn't have some idea of its MAC. Usually you'd expect 
-firmware information to override whatever the device's built-in defaults 
-are.
-
->> I would not expect any other existing platform to have a MAC assigned to the
->> device in this way using these cards; if any platforms do, chances are they
->> intended it for it to be used and this patch will fix a current bug. If some
->> platforms out there really have bogus MACs assigned in this way, that's a
->> firmware bug, and we'd have to find out and add explicit, targeted
->> workaround code. Are you aware of any such platforms? :)
+> Makes sense, thanks.
 > 
-> I'm not aware of any, because i try to avoid making behaviour changes.
-> 
-> Anyway, lets go with this, and if stuff breaks we can always change
-> the order to what i suggested in order to unbreak stuff. I'm assuming
-> for Apple M1 Mac minis the order does not actually matter?
 
-Correct, on these machines the burned-in MAC is invalid so it doesn't 
-matter.
-
+Are any of these watchdogs active when we boot, and are we leaving them 
+like that? I'm pretty sure at least some of the coprocessors have their 
+own watchdog (SMC...), which might be one of these. We should make sure 
+we don't clobber that.
 
 -- 
 Hector Martin (marcan@marcan.st)

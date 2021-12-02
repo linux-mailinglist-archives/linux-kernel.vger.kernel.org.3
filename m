@@ -2,276 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8437F46677E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:02:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2B346672F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:51:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359325AbhLBQFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:05:42 -0500
-Received: from mx0b-00069f02.pphosted.com ([205.220.177.32]:17768 "EHLO
-        mx0b-00069f02.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347781AbhLBQFg (ORCPT
+        id S1359218AbhLBPyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:54:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242293AbhLBPxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:05:36 -0500
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2FM0ZJ015774;
-        Thu, 2 Dec 2021 15:50:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- mime-version; s=corp-2021-07-09;
- bh=8b9j0CiIBpGm4ilMfyH2oQrNS1IkXaq553aNZWU3XbM=;
- b=HdNvFX6hD5rdqfDVyFzqPIwp9dGq+fDrgGzr67XmN8B+jvjy6k4qLJKA5G5pHdou5ajy
- r70CNSJJ2qPmQpPRPBeABpeWdFt/HKsA0HX+ZmGsOZeu7j+UPWzMzRH8mtXbXqmEr5yX
- jhv1ugl2JTGUxJZepA8tGVqYPSUKPhexNjYZPX5lxZLIE7OjKF+1DBsOc+UlvuEoF4dG
- /ykseHd0lewEhyT17APBdt7qaxFO9QogrQPzRrxcqDPvt7hu605OCT1qZNoVIv2ir9lZ
- Sylt42Kwx81VFTaFbZdZ6VWL4oHPOKXzv/Ah3730tVB/kUE/RqpzhLNBDlEfCaB4qF5n yg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3cp7t1rhnj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Dec 2021 15:50:16 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.1.2/8.16.1.2) with SMTP id 1B2FjqaK101168;
-        Thu, 2 Dec 2021 15:50:05 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2173.outbound.protection.outlook.com [104.47.57.173])
-        by aserp3020.oracle.com with ESMTP id 3cnhvgvr81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 02 Dec 2021 15:50:05 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GGsmcHu/+PmoNvUchhIJmP4rFe7cn5zTSGwjkBkeGgx3LYcOfq57di7+hsynFyeZj5aHeLW9rOrIgaZ6JzU+Dni3JFPBPimFH8ZIkPUTUQyVkxf43G6h86wqy9scI5z69U7Xps3ajMHBmXZ/MiITWa0hbc3p7DecQBy/Wuo3n1MnLuuUnqHiCtKOzN4ldVndeVfy2topI8eEN6TQRcpEbqz0WGtCaU9t3eav6nLCvhF2m6Mm8xwuG9em9qixyscDu8zjtAc9ZPyxPlhXMtw1qBgXVmvO8ypEgItgRFlRcoa1vJbXJPfUfwFpUSomG+g9GfL8JknY4mZCZXpbZ55V9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8b9j0CiIBpGm4ilMfyH2oQrNS1IkXaq553aNZWU3XbM=;
- b=TbpE+BB1rLbY0l/Ps4FMWLQn2iZFH6CAsnBr0ZrTu14tS2QOa3W3FWZmp1J1IEk3bGV2z32txgo5onSH3+Mfl7pw4D9pz7FtB470VUjYp4UkUvh+z5xXOOa2EBvr0Sz3+Qn5jLaewaWEnLHsfaouUgoa4wrV8hHiYM0lylK/k7Mya/4NphIXdXC3XtHvYk1ZPcGNBS3Qzko1lOI6vDi0hdntMPJbHUyrCsvspXszOm7WJ9evIqMVMiRut9MsYrZx5VfROl3xwQlVzXvxUIMa+pBEEfcRE1hhkC/hMahW6IcqRJ9HacN44VAmwT8l5n6BP0YZcmAST8/DzclI81So+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 2 Dec 2021 10:53:35 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC06BC06174A;
+        Thu,  2 Dec 2021 07:50:12 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id u74so56307381oie.8;
+        Thu, 02 Dec 2021 07:50:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8b9j0CiIBpGm4ilMfyH2oQrNS1IkXaq553aNZWU3XbM=;
- b=whqdsUp2TYK1q3QttYc2dBF+Etkk+DVNk+IU9crbL/7wW+cTofVk1fCAaTfxLzWMIkqlOp+w0w6+u0MVcflu6Ags9fKah2GTeRCMI7PWrIYpe2oA8woWVcLN+xLHFaHAq3j3w+qrpApkoM8t111ZXpVaXjrLoAx86535Yp8T2mY=
-Received: from PH0PR10MB5660.namprd10.prod.outlook.com (2603:10b6:510:ff::6)
- by PH0PR10MB5872.namprd10.prod.outlook.com (2603:10b6:510:146::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4734.22; Thu, 2 Dec
- 2021 15:50:02 +0000
-Received: from PH0PR10MB5660.namprd10.prod.outlook.com
- ([fe80::edf9:9b48:57b3:2a20]) by PH0PR10MB5660.namprd10.prod.outlook.com
- ([fe80::edf9:9b48:57b3:2a20%6]) with mapi id 15.20.4755.016; Thu, 2 Dec 2021
- 15:50:02 +0000
-From:   John Haxby <john.haxby@oracle.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Jeffrey Walton <noloader@gmail.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Simo Sorce <simo@redhat.com>,
-        Stephan Mueller <smueller@chronox.de>, Tso Ted <tytso@mit.edu>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Willy Tarreau <w@1wt.eu>, Nicolai Stange <nstange@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Alexander E. Patrakov" <patrakov@gmail.com>,
-        "Ahmed S. Darwish" <darwish.07@gmail.com>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Vito Caputo <vcaputo@pengaru.com>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jan Kara <jack@suse.cz>, Ray Strode <rstrode@redhat.com>,
-        William Jon McCann <mccann@jhu.edu>,
-        zhangjs <zachary@baishancloud.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Peter Matthias <matthias.peter@bsi.bund.de>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        Neil Horman <nhorman@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Andy Lavr <andy.lavr@gmail.com>,
-        Petr Tesarik <ptesarik@suse.cz>,
-        Alexander Lobakin <alobakin@mailbox.org>,
-        Jirka Hladky <jhladky@redhat.com>
-Subject: Re: [PATCH v43 01/15] Linux Random Number Generator
-Thread-Topic: [PATCH v43 01/15] Linux Random Number Generator
-Thread-Index: AQHX3vewWy39tI151EiqhdM1dyRTOqwOlDWAgAEQ04CABlX5gIAACNuAgAABvwCABKj0gIAADu0AgAFO9YCAABvzgIAAB4GAgAAU1wCAACnxgIAABo6AgAARSwCAAVVDAIAAFX6AgAASNgCAAGSUgIAAcfWAgACQkoA=
-Date:   Thu, 2 Dec 2021 15:50:02 +0000
-Message-ID: <B4344F73-2591-40F0-AD5D-3E3C86D2288F@oracle.com>
-References: <YaYvYdnSaAvS8MAk@kroah.com>
- <ac123d96b31f4a51b167b4e85a205f31a6c97876.camel@redhat.com>
- <YaZHKHjomEivul6U@kroah.com> <YaZqVxI1C8RByq+w@gmail.com>
- <CAHmME9p60Ve5XJTVcmGvSpUkg_hRp_i0rGG0R9VhuwLs0o_nXQ@mail.gmail.com>
- <f4a4c9a6a06b6ab00dde24721715abaeca184a0d.camel@redhat.com>
- <CAHmME9qP9eYfPH+8eRvpx_tW8iAtDc-byVMvh4tFL_cABdsiOA@mail.gmail.com>
- <49d6091e571e24efff7bc4dc70c4c62628eb0782.camel@redhat.com>
- <CAHmME9q-WUGQ7NUO7oafUBkGBNtWePGXHGfEd2rTmZMUA49+DQ@mail.gmail.com>
- <CAH8yC8k1WMwjoUXY_2nWjLMLVLPQsno3asyDEYVRJ4pg=OpLQA@mail.gmail.com>
- <Yahx41BRXW5E7yWQ@kroah.com>
-In-Reply-To: <Yahx41BRXW5E7yWQ@kroah.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: yes
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3693.20.0.1.32)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 8957c9a3-e21f-479a-772d-08d9b5ab6715
-x-ms-traffictypediagnostic: PH0PR10MB5872:
-x-microsoft-antispam-prvs: <PH0PR10MB58728A3F7A4DA7B445574141E4699@PH0PR10MB5872.namprd10.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:8273;
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4tkd/Pu9iYBHP4gpvm5k0ZIpUbKEoYa7yJC99oGJVcciWP7z99EGdebgrGIDJtLzw1aYkCc5CgGBEkYInbh1qStwFIrk3ex0HE1dLKpcGOaMgxsgp4IN4ZGvNqoYRmx/681bv0ktouS4io/zlWhU9uzydS+BdCBb2cobTINIlqItXv5pFpUg74qADtf6Q1ulKhfLuX8jfWnZqumVSS5GOXSFuBr67wfkS1+znH2GJClfA/0zdXOOOavgHqA144FynOX43zMWrNpoSWjzGPl3LrvKz0kfow4MPUTxrarw8GVr19T9mm0CsiRSAkEkGMbYHhPaQ1OelmOsTCGIuNnX9mO7hkM7niGJhuApW9d9660DFKhdiC9nH01WOGBNInZ93goE7K8CoQzvZyWQ7h/gjRLt9x+P0AkMmwS7lpGvGXPwarVxnCIYsCG4Zf+H9YCalNeF9VUp5l09jk5Tywjn4z+77KWXBZqvTwLGpsPIC9Yyjpv2EfdNfwvDQI7rHt5uOC92gb7sU0T3NPWFUiQUSbN5+tMyvjJQzhrYZST6rz5UTXHM1qVwTLAAd/PKNj2tjpMiQsQlh2Ql7Sq/Z+fNiF7l786JNDRJ8yQRvmjg71wSc6dlj8j2xnU/URbDUyDiPC3m/rRjHvF9a4949nzr9Xt3tDBClCI8AMSHo0olR27kOAX3weEL7r9h+qywmVLSPKGh7U+foOOx4HMMFWV/W7RHGMW9UeV5A87iboNx3Ze0Plsybc9wMjkCTQENWc9+
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5660.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(66946007)(91956017)(33656002)(38070700005)(53546011)(508600001)(7416002)(316002)(6916009)(2906002)(6506007)(186003)(66446008)(86362001)(38100700002)(66556008)(54906003)(5660300002)(7406005)(66476007)(122000001)(8936002)(83380400001)(44832011)(36756003)(6512007)(71200400001)(99936003)(6486002)(2616005)(76116006)(64756008)(8676002)(4326008)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?st0eJD+YTKciH0H/eXr340VdWXLD35XkhPoMCpA25z/1EWuDBYhWg5g1HLTF?=
- =?us-ascii?Q?d6EkdkZ0tsR/OD3JRS/yBosJ7+bZ0VwLP1rOoBKNgHlhqkMdP8w3kf7NN1/O?=
- =?us-ascii?Q?eIrQ0FNjhCqkgn0+dgimEmGP1bMCcWgs5Uxw2X+DIVDb1rQiTvER+F4c9n1W?=
- =?us-ascii?Q?fCQbO5OO8RgGfEqH5QVBsr+CpcwwOitdzW6xBIGs64fCf6snl4ItK/mbUcTP?=
- =?us-ascii?Q?uDGmjLEw7lOkcRwlczgVLq7diGV2mXeHkXyRY1gdcsyVZRRmubtgdkr1E+Z0?=
- =?us-ascii?Q?rqjnmjyG3BkQ7W+P2s+yQDPLDZGedxC0J2tlotRC7/jUnPI1t+6E4FP1Y/uR?=
- =?us-ascii?Q?2QRD+NvYzvybBQOQJRUlog4VwdieCuaxNOVsK22Ji0uV9bV5lVQ1kajjJAdt?=
- =?us-ascii?Q?/7bvvuO4zVIkKq4imOgSN26NZq54LUIFZD/4EHmb0iIoYACBc9qg3gkuT821?=
- =?us-ascii?Q?PpHFHATzMwx5LyBgogJm4fhk0PBqMp8RGhnJCBr6nBJnJHArvESMlNl388ey?=
- =?us-ascii?Q?8TMq5SZoCXOXz0cNuYEi1o5M25yXP7E1PdEeQchvD0kb7JL29Vr/JJwPFAqh?=
- =?us-ascii?Q?1z/J13LH0Ip0IGM6rAoDAydYFahLqsg8WVgpmlDxRCxupXhTup6lKdiGlTfK?=
- =?us-ascii?Q?Ik4pJUppGoUKRUliHcUZliscgPeMpFlQ/TQ7zBLztTAzG4g4knnH/y95MvGs?=
- =?us-ascii?Q?KkBE6AnaeiETpDn2lo9p9LZzMqXaPEJj/AGAx54t1CUSLP0PiAUQQ2f942+c?=
- =?us-ascii?Q?F7UiO6Y5C2plsaf2gcCFosVy7d7WoiZWoawX0I+EaC36Of4qL/QhFD7U21Sw?=
- =?us-ascii?Q?61WZ+DXE25VkRSHj5VgkUFBYLbQmZUIHctvrLdW7cMsgdJmPckyk0LDFKAqi?=
- =?us-ascii?Q?greH9Vz0KUow3x2OB+Dz67sRpI06Z6YU07GJ4SJ8F6KImWqSNtzRvv92anSd?=
- =?us-ascii?Q?r9VIr2/ysbcV7XHXd74u0U9RVNoM7/tcPAXJ2WwhbH5Ytz54fQ9HciupRLeW?=
- =?us-ascii?Q?f6FnrulIYN6Qn0tx2nujpiLU3x1sNMmHOKt4buJYrie23TuqxCQaFu26ixDV?=
- =?us-ascii?Q?9DBJj+vYKtYFU4qhEQIeTtnB3fzRjSnfYos8TcRqwT0cE2HhUXRDN0+L0Aqi?=
- =?us-ascii?Q?VEmlBqI41cK5gZiINmhigTUiMoWe3DTKnYEt5q/WNMFGrJm4pyoWlBaT8LQP?=
- =?us-ascii?Q?xqsYeCXacvpUMfA8acrfyW8FCh4GKQaOKLZtwtTxXwFOu0ysTAP+E7dYTHXL?=
- =?us-ascii?Q?+1x1GGiv+/wvVRyCpmb+zsrgO9Ro6/w4Aiunlxs6S9aoN7APdcnsd0I8kM7A?=
- =?us-ascii?Q?81ki2iEautzI44e/iv3CuST+xBaJriZAUlrWC4s1lN4gSwtNoKkMp/EIKnN3?=
- =?us-ascii?Q?OO3T5JmdXSoECIW+UN1iozj3gHf7ulWYJpd3k9m2b7VTRHvISdZAzbYFNw24?=
- =?us-ascii?Q?N52rdAd1fi3vLRVfASFSYFhB9m/ac1wSFkNgylk/F6qdYBCQSMiKzrpOB7Yo?=
- =?us-ascii?Q?DzX7bwTuc/h2hvDwprfV8OKSBswY7spkK/FTYC5WP3MBNZ3bNEJAOXwIB9Kq?=
- =?us-ascii?Q?FS4tAwfceLL7X8rznyzV9vL8XoCiRLZ9Ewcu9DgTAWVwGpbctMLo2vny3i/V?=
- =?us-ascii?Q?2gfYEYceNwxPHKvbsaod5BRYxTn89H52No9cXp9aGDFwe9ysTrPh6tiOeZb9?=
- =?us-ascii?Q?2Q8y2V1ixuOFjEw7hM+TLh0crFI=3D?=
-Content-Type: multipart/signed;
-        boundary="Apple-Mail=_142DB8CB-0477-40BA-BBFB-BCFA93F11EB6";
-        protocol="application/pgp-signature";
-        micalg=pgp-sha256
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=3pO6rrZ4xWq0xlykjpJhXxJ0izgGHgLu0jZ+DW2sNFw=;
+        b=Id9to7M5xU+zRQyD2qTsL2OTAoqPdLKDEs5wgxNgT87h6m9tJ4kNJUAnMStfpegZFe
+         cqBnVa5TOCAv/4Ek8dBlzuzt8rV+ODHfUTsOti8BNxi+Wj9ygDSgLXVpCt3THqaUhclQ
+         F9wF4gJ3yt2zIA2TKAa1YSK6GoiCzT2xVH/GNt5U9X0bjJqv5TT87To3aMRCGUdRjwiN
+         bisaWuwMFqAV2EE52BdxWtnBBc8YMi8b1Q9AMykluwluIMovEWIyfYPQPkeimalsPf05
+         6O7QQOGpYw48G0QPwkK5oavzJxt6NFLXPsabTIcCpIdd6nlUQZKZy3pbTii3u9EnY2tF
+         2C2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=3pO6rrZ4xWq0xlykjpJhXxJ0izgGHgLu0jZ+DW2sNFw=;
+        b=LwVYO5p/2sP56NVeB823Wams4EMP5lVXg6RxPGBGB9qZIAqawoOcrW1qaAyAuuGNCJ
+         KuWyvwFrFxvPdrg7O1lxNYJmBE8OeUyWic4vO69j1/FNkw3tezmxKOYkVBOWGb+7Qq6k
+         vqSRB7Az7wjPOabCCnDMiQT4Ob1Ns9Xjpg6PKKxT5hEa0BDnhGbrY21s5qbyGuBJ3r24
+         P9iPpVYhsVK1PLPlLZC+GMZy8pS0wj6a+UucLo3vWogeM4IwA9TqG9As7+URGWPZ0wFz
+         mniCOCgj9yWi6f+LPITUcQdOTC3XNLCYz1cB+c+mImegrXmqbVrsK8kfHpRjtAR1BrcX
+         IGVw==
+X-Gm-Message-State: AOAM533Onjs08NSG2jtWrnf2aO1pD/Y9IjTgO/uZMChz+xx9NVdp7Ltd
+        0+QZmLPJh6QEvYrTis3orYaj40iOqB4=
+X-Google-Smtp-Source: ABdhPJzUVc/7Gbil7GWkt5KyYfFmb9Sm7d0frPHadYko6vNzeNOKQUW34WJQfnArFz4LZ5WnSKH/YA==
+X-Received: by 2002:aca:ac8e:: with SMTP id v136mr4993090oie.19.1638460212277;
+        Thu, 02 Dec 2021 07:50:12 -0800 (PST)
+Received: from [172.16.0.2] ([8.48.134.30])
+        by smtp.googlemail.com with ESMTPSA id m3sm100752otp.6.2021.12.02.07.50.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 07:50:11 -0800 (PST)
+Message-ID: <45434eae-b598-df7d-d62a-711643305fca@gmail.com>
+Date:   Thu, 2 Dec 2021 08:50:10 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5660.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8957c9a3-e21f-479a-772d-08d9b5ab6715
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2021 15:50:02.2195
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 95O0Q3zHT42SHDJZJVx0rjWnEzgKmHnigmwM8Tbtt8mpiNv2qhryQO8mCu9dHvdWppJjb1ArLHuEutBHAiQixA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB5872
-X-Proofpoint-Virus-Version: vendor=nai engine=6300 definitions=10185 signatures=668683
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 spamscore=0 adultscore=0
- bulkscore=0 malwarescore=0 mlxlogscore=999 mlxscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2110150000
- definitions=main-2112020104
-X-Proofpoint-ORIG-GUID: CSPlcsGNHtVRaISRloy1gQtzrNYifpIs
-X-Proofpoint-GUID: CSPlcsGNHtVRaISRloy1gQtzrNYifpIs
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.3.1
+Subject: Re: [PATCH net v3] selftests/fib_tests: Rework fib_rp_filter_test()
+Content-Language: en-US
+To:     Peilin Ye <yepeilin.cs@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Hangbin Liu <liuhangbin@gmail.com>,
+        David Ahern <dsahern@gmail.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20211130004905.4146-1-yepeilin.cs@gmail.com>
+ <20211201004720.6357-1-yepeilin.cs@gmail.com>
+From:   David Ahern <dsahern@gmail.com>
+In-Reply-To: <20211201004720.6357-1-yepeilin.cs@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Apple-Mail=_142DB8CB-0477-40BA-BBFB-BCFA93F11EB6
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain;
-	charset=us-ascii
+On 11/30/21 5:47 PM, Peilin Ye wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> Currently rp_filter tests in fib_tests.sh:fib_rp_filter_test() are
+> failing.  ping sockets are bound to dummy1 using the "-I" option
+> (SO_BINDTODEVICE), but socket lookup is failing when receiving ping
+> replies, since the routing table thinks they belong to dummy0.
+> 
+> For example, suppose ping is using a SOCK_RAW socket for ICMP messages.
+> When receiving ping replies, in __raw_v4_lookup(), sk->sk_bound_dev_if
+> is 3 (dummy1), but dif (skb_rtable(skb)->rt_iif) says 2 (dummy0), so the
+> raw_sk_bound_dev_eq() check fails.  Similar things happen in
+> ping_lookup() for SOCK_DGRAM sockets.
+> 
+> These tests used to pass due to a bug [1] in iputils, where "ping -I"
+> actually did not bind ICMP message sockets to device.  The bug has been
+> fixed by iputils commit f455fee41c07 ("ping: also bind the ICMP socket
+> to the specific device") in 2016, which is why our rp_filter tests
+> started to fail.  See [2] .
+> 
+> Fixing the tests while keeping everything in one netns turns out to be
+> nontrivial.  Rework the tests and build the following topology:
+> 
+>  ┌─────────────────────────────┐    ┌─────────────────────────────┐
+>  │  network namespace 1 (ns1)  │    │  network namespace 2 (ns2)  │
+>  │                             │    │                             │
+>  │  ┌────┐     ┌─────┐         │    │  ┌─────┐            ┌────┐  │
+>  │  │ lo │<───>│veth1│<────────┼────┼─>│veth2│<──────────>│ lo │  │
+>  │  └────┘     ├─────┴──────┐  │    │  ├─────┴──────┐     └────┘  │
+>  │             │192.0.2.1/24│  │    │  │192.0.2.1/24│             │
+>  │             └────────────┘  │    │  └────────────┘             │
+>  └─────────────────────────────┘    └─────────────────────────────┘
+> 
+> Consider sending an ICMP_ECHO packet A in ns2.  Both source and
+> destination IP addresses are 192.0.2.1, and we use strict mode rp_filter
+> in both ns1 and ns2:
+> 
+>   1. A is routed to lo since its destination IP address is one of ns2's
+>      local addresses (veth2);
+>   2. A is redirected from lo's egress to veth2's egress using mirred;
+>   3. A arrives at veth1's ingress in ns1;
+>   4. A is redirected from veth1's ingress to lo's ingress, again, using
+>      mirred;
+>   5. In __fib_validate_source(), fib_info_nh_uses_dev() returns false,
+>      since A was received on lo, but reverse path lookup says veth1;
+>   6. However A is not dropped since we have relaxed this check for lo in
+>      commit 66f8209547cc ("fib: relax source validation check for loopback
+>      packets");
+> 
+> Making sure A is not dropped here in this corner case is the whole point
+> of having this test.
+> 
+>   7. As A reaches the ICMP layer, an ICMP_ECHOREPLY packet, B, is
+>      generated;
+>   8. Similarly, B is redirected from lo's egress to veth1's egress (in
+>      ns1), then redirected once again from veth2's ingress to lo's
+>      ingress (in ns2), using mirred.
+> 
+> Also test "ping 127.0.0.1" from ns2.  It does not trigger the relaxed
+> check in __fib_validate_source(), but just to make sure the topology
+> works with loopback addresses.
+> 
+> Tested with ping from iputils 20210722-41-gf9fb573:
+> 
+> $ ./fib_tests.sh -t rp_filter
+> 
+> IPv4 rp_filter tests
+>     TEST: rp_filter passes local packets		[ OK ]
+>     TEST: rp_filter passes loopback packets		[ OK ]
+> 
+> [1] https://github.com/iputils/iputils/issues/55
+> [2] https://github.com/iputils/iputils/commit/f455fee41c077d4b700a473b2f5b3487b8febc1d
+> 
+> Reported-by: Hangbin Liu <liuhangbin@gmail.com>
+> Fixes: adb701d6cfa4 ("selftests: add a test case for rp_filter")
+> Reviewed-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> ---
+> Change in v3:
+>     - "ping -I dummy0 198.51.100.1" always work (David Ahern
+>       <dsahern@gmail.com>); use a different approach instead
+> 
+> Change in v2:
+>     - s/SOCK_ICMP/SOCK_DGRAM/ in commit message
+> 
+>  tools/testing/selftests/net/fib_tests.sh | 59 ++++++++++++++++++++----
+>  1 file changed, 49 insertions(+), 10 deletions(-)
+> 
+
+Acked-by: David Ahern <dsahern@kernel.org>
 
 
-
-> On 2 Dec 2021, at 07:12, Greg Kroah-Hartman =
-<gregkh@linuxfoundation.org> wrote:
->=20
-> On Wed, Dec 01, 2021 at 07:24:43PM -0500, Jeffrey Walton wrote:
->> On Wed, Dec 1, 2021 at 1:25 PM Jason A. Donenfeld <Jason@zx2c4.com> =
-wrote:
->>>=20
->>> On Wed, Dec 1, 2021 at 12:19 PM Simo Sorce <simo@redhat.com> wrote:
->>>> that much it is, and it is a required one. However having worked a =
-lot
->>>> on this I can tell you there is actually real cryptographic value =
-in
->>>> the requirements FIPS introduced over the years
->>>> Well I think most of the requirements are sane practices, hopefully
->>>> controversial stuff will be minimal.
->>>> I happen to think quite a few of the requirements are actually good
->>>> ideas to implement to improve the guarantees of randomness
->>>=20
->>> If you think there are good ways to improve the RNG, of course send
->>> patches for this, justifying why, taking into account recent =
-research
->>> into the topic you wish to patch, etc. Don't write, "because FIPS";
->>> instead argue rationale for each patch. And if you _do_ feel the =
-need
->>> to appeal to authority, perhaps links to the various eprint papers =
-you
->>> consulted would be worthwhile. Preferably you're able to do this in =
-a
->>> small, incremental way, with small standalone patchsets, instead of
->>> gigantic series.
->>=20
->> I may be parsing things incorrectly, but you seem to be rejecting the
->> NIST requirements, and then positioning your personal opinion as
->> superior. It sounds like one authority is being replaced by another.
->> Perhaps I am missing something.
->>=20
->> I am also guessing you've never read the relevant NIST documents. The
->> documents state the security goals and provide the steps to achieve
->> them in an implementation.
->=20
-> Ok, I think this thread has gone on long enough without any real
-> patches.
->=20
-> Please, if you want to support NIST, or any other type of thing, =
-submit
-> patches that implement what you think will help achieve this.  Absent =
-of
-> that, we have no idea what NIST or any other random document aims to
-> require or wish.
-
-
-Part of the problem here is that NIST (and the concomitant fips =
-certification) is a moving target.   A couple of years ago, we were =
-fine. Today's requirements are different, tomorrow's will be different =
-again.  Today's requirements being different are what resulted in the =
-small patch I mentioned earlier.
-
-You suggested, Greg, that I submit that and see what happens.   I can =
-take a hint :) so I'm working on that as a possible way forward to =
-decouple things a bit without too much churn.
-
-jch
-
-
-
->=20
-> thanks,
->=20
-> greg k-h
-
-
---Apple-Mail=_142DB8CB-0477-40BA-BBFB-BCFA93F11EB6
-Content-Transfer-Encoding: 7bit
-Content-Disposition: attachment;
-	filename=signature.asc
-Content-Type: application/pgp-signature;
-	name=signature.asc
-Content-Description: Message signed with OpenPGP
-
------BEGIN PGP SIGNATURE-----
-
-iHUEAREIAB0WIQT+pxvb11CFWUkNSOVFC7t+lC+jyAUCYajrKQAKCRBFC7t+lC+j
-yLESAP9YvxlsPc4rSOfaHCEA3ni2teG5iztqEsknHDpm/67VyAEAhWogejRp+8KS
-jPNSPXQefnHSshWertNeARZR1a351jY=
-=IGXH
------END PGP SIGNATURE-----
-
---Apple-Mail=_142DB8CB-0477-40BA-BBFB-BCFA93F11EB6--

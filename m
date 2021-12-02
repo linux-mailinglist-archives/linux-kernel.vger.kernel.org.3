@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7AD465AC2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB45465AC3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354353AbhLBA1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:27:10 -0500
-Received: from alexa-out.qualcomm.com ([129.46.98.28]:28422 "EHLO
-        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354319AbhLBA1G (ORCPT
+        id S1354372AbhLBA1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:27:14 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:50968 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1354323AbhLBA1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:27:06 -0500
+        Wed, 1 Dec 2021 19:27:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638404624; x=1669940624;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vWCDUXgq39Y+w++hQeAm65dYH90e5lNEEWVNoFCl61Q=;
-  b=QEmXDtDo4R3seI6qCIdUsLqPi+O+T0pirRtljJWr8kM67KahvCs1uZ6U
-   45Hf0mtO7dkfT2cFMyHEaLsKBJxieGupUlqzQyn+Wi5palIcu0HIbXXuW
-   WoMsUVEDaXOzl/sMU8pXXXNyAC6hvB4/IIU8XkFFWvflYFDrFI2Hn9Uct
-   I=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 01 Dec 2021 16:23:44 -0800
+  t=1638404627; x=1669940627;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rVKxxW8escAWGjDvZ3PQTQoufKQ+9WSZXrY7pPexULU=;
+  b=UCcEhv09H9SiTAKxAywER9XOXKnBWUGel6CtEUcyTXqkl4i3eQFUl46N
+   DpZkmCihH20nprVk3EAUC/AuZNMn+qlAnWaxiEPKALX7OCfImWtV1V91t
+   BbPE/ulmp1pRXyYZNUPZ905fbtJHn5i2e9+fF5GoG96dvGVsx0HkyfwaQ
+   g=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Dec 2021 16:23:47 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:23:44 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:23:47 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 1 Dec 2021 16:23:43 -0800
+ 15.2.922.19; Wed, 1 Dec 2021 16:23:46 -0800
 Received: from hu-vamslank-sd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 1 Dec 2021 16:23:43 -0800
+ 15.2.922.19; Wed, 1 Dec 2021 16:23:46 -0800
 From:   <quic_vamslank@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <robh+dt@kernel.org>, <maz@kernel.org>, <tglx@linutronix.de>
 CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <devicetree@vger.kernel.org>,
-        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-Subject: [PATCH v6 0/1] Add Pdc bindings for SDX65 
-Date:   Wed, 1 Dec 2021 16:23:29 -0800
-Message-ID: <cover.1638403797.git.quic_vamslank@quicinc.com>
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH v6 1/1] dt-bindings: qcom,pdc: Add compatible for SDX65
+Date:   Wed, 1 Dec 2021 16:23:30 -0800
+Message-ID: <6cef8213e25582fd1f0ea5bf82661d726bf8830b.1638403797.git.quic_vamslank@quicinc.com>
 X-Mailer: git-send-email 2.33.1
+In-Reply-To: <cover.1638403797.git.quic_vamslank@quicinc.com>
+References: <cover.1638403797.git.quic_vamslank@quicinc.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -57,26 +60,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
 
-Hello,
+Add compatible for SDX65 pdc.
 
-Based on the comments from Bjorn, posting this patch separately
-to get this merged.
-Previously, it was sent as part of the patch series
-https://lore.kernel.org/linux-arm-msm/20211201222638.GB586@quicinc.com/
-
-Vamsi Krishna Lanka (1):
-  dt-bindings: qcom,pdc: Add compatible for SDX65
-
+Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Vinod Koul <vkoul@kernel.org>
+---
  .../devicetree/bindings/interrupt-controller/qcom,pdc.txt        | 1 +
  1 file changed, 1 insertion(+)
 
-
-base-commit: 58e1100fdc5990b0cc0d4beaf2562a92e621ac7d
-prerequisite-patch-id: 93a6639086d56aaaf0c5d0e108a7a7690d39967f
-prerequisite-patch-id: d68e4461d9794d7682f2d01561752f00377c7bb2
-prerequisite-patch-id: 3a57c470db8e8d3d8546374d1e76b38fcb0215a1
-prerequisite-patch-id: ba1594c6d524ae889dd4325d0912848f5542633b
-prerequisite-patch-id: 6efd062dc77400d108f3f4a0c66010c69759d64a
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
+index 98d89e53013d..ce631d853db4 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
++++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.txt
+@@ -23,6 +23,7 @@ Properties:
+ 		    - "qcom,sdm845-pdc": For SDM845
+ 		    - "qcom,sdm8250-pdc": For SM8250
+ 		    - "qcom,sdm8350-pdc": For SM8350
++		    - "qcom,sdx65-pdc": For SDX65
+ 
+ - reg:
+ 	Usage: required
 -- 
 2.33.1
 

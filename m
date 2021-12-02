@@ -2,289 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6B446676E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 182D0466786
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359329AbhLBQEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:04:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58128 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbhLBQER (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:04:17 -0500
-Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2AB3C06174A;
-        Thu,  2 Dec 2021 08:00:54 -0800 (PST)
-Received: by mail-ua1-x92b.google.com with SMTP id n6so56819328uak.1;
-        Thu, 02 Dec 2021 08:00:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U2sZPQd798weph9knxMPMeinCmRojfS8Pfapl2giXJM=;
-        b=jzpN2txMKcqDve7u5vuRi2+S6p2VzSDwNSmwgr2/5gAHntXTVsO8sG16S0sfqGyEUK
-         i5x27dvhK+nePQ8Yv1FdSGF/aNukodMSRBjErWtEoehmr5hBVhIJR+8fxfg19jP0VmLF
-         kDLyA3Rcf/hL1qOS1mxoSB8r7ot6uNKvV7zfnrN4auV/nXuMVm9ZJkxGibAMDmn/SoBe
-         ROrk7jYNBy4vRtneCuKrpYlAlXLqbg6VPDloVm3HCa7hmqiu7kasCokZzPej4vufQLcm
-         C103EOF/74+rSPWk4wyF6S+J+jQQ02uAbpL/QaSvdMcka5dyzJ3Tk3nenPYbgspH8T3x
-         7IvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U2sZPQd798weph9knxMPMeinCmRojfS8Pfapl2giXJM=;
-        b=HRZ3wB4So2gPSE9p3PGj91dZ32K3lvzrb4NYqR0D3dhitPorDeKlwtxAW7rQW0OMGn
-         aijsNxew002ftVOAutuVn3Z3FFYJAYFmUbZQinOWgZqHA7Ucwjb4DOl7WepV6FdPMsVd
-         2p+ZLCA+JoMVdY9jFkBwvrqCm/AG45qyX5PKTXmYqhzxTVJK8M/utfFs6iEpnIp1Jhoh
-         sjTrwkyU2bhK0o9slrhIt556uW4qUz1DgG36+tjrEwOb14Rd/ZEzvTVcwHKCzeJjotUU
-         yWw28KoWYqhGo4K+MN8+jH7A2MdSxIJL5c/Rf5OpcV0fpXNK0BSaQRZY2E7VIxo0ejTS
-         44RA==
-X-Gm-Message-State: AOAM530hese71zCkqrBBUAZbUNYt/GciqMDW2cJ22x9UMV2CGeebhavF
-        ktIsvDhUevpGeD0FvTfafVp21jofAmoM9laPd60=
-X-Google-Smtp-Source: ABdhPJybAreaEhSuo2y2Tbo1YdlgTaiMlhDNtXg5D8QWfVW6+flBljZULwo/BbqpU2HaLcu7I83aSoQSfdCygG1zQUs=
-X-Received: by 2002:ab0:45a8:: with SMTP id u37mr15834000uau.24.1638460853923;
- Thu, 02 Dec 2021 08:00:53 -0800 (PST)
+        id S1359173AbhLBQGB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:06:01 -0500
+Received: from mail-dm6nam11on2052.outbound.protection.outlook.com ([40.107.223.52]:50528
+        "EHLO NAM11-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1359229AbhLBQFh (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 11:05:37 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SSiUWeABNlASZ/IHua3QBR96pjlmLe1OO4bEzU83Wwg4zatGtJKTfKFvmsqw2Oc63b4P7zwfY1tb6cwb7w2UNbMTIJRk+g2OS5BfCWIA3d1Zec4JPJ6zB62MERbARGo/G3pO3vFEtF3EumTpKGiVY5nkvoR4VK+DpMxNM+AcJBU3pktF5bSIwzKTCGqT9Zk9E2/T9HOVPgjweSaNgPTBkdeHlUvpu2gVDqpuFqS4pUVNPKzGJfwHV2M1z9ZYWvgVcJ4qD8LDakXDgsl6HEdP3DZovziL1rKkAialCFb2GqoxnCV/LjBRh+cWXjlT3tR5lWqIE3/KqAvu6699yk1gdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wmx8x5K43g+AVe97S07thBdrz5IfgXqw48M8s/oUf+M=;
+ b=diMYNEi8yxMRfXdA+6ZOECDilGExkwMF8w3BovbB75M4jWShq0AFW1AHyShOFOUV+hPLczQiaCCwvzcGPBc/YjMxU5w/axsijuVO3SL3egeSSUukGmW4eRUoRA8MdS7VEdta/GNv4gkzEPEym/tj2wMUgmHutSgxQMPh01QW4g6qxrckmm55plD3XAGgSNBsIeSJpp2zqqtzj2MjNvLTByINlf/Dhm9jWSfHmF9f58GuwU7A4XtSkTkHgsiy5I7q/3ZBl/9zYxuttGpkbHknp2Uz8PlQmfyZtOvClR1zuhfsRHNq3EaBos+fscrkuyhf8884GWKJ8hVPkok07kZteQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wmx8x5K43g+AVe97S07thBdrz5IfgXqw48M8s/oUf+M=;
+ b=l12JPQqxdL8lqUNlBe5JxlZfSEsjdTnGyzRcGSnBpUwT/U3dDNJfHpwMjRWs6Au7cAm/oPtzBEKAFHDYuWbSI4EGOD79vB0cu5MgOkC3Jmekid54s51cFXV+AXnHmkxhg5DMs9T2AaNp+waWWuPnxLKlWYgy9qU91eFBVeWuIzM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com (2603:10b6:408:40::20)
+ by BN8PR12MB2978.namprd12.prod.outlook.com (2603:10b6:408:42::30) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Thu, 2 Dec
+ 2021 16:02:12 +0000
+Received: from BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::dca6:dd72:888a:9db6]) by BN8PR12MB3108.namprd12.prod.outlook.com
+ ([fe80::dca6:dd72:888a:9db6%5]) with mapi id 15.20.4755.016; Thu, 2 Dec 2021
+ 16:02:12 +0000
+Date:   Thu, 2 Dec 2021 16:01:59 +0000
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     Alexander Monakov <amonakov@ispras.ru>
+Cc:     linux-edac@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: Excessive delays from GHES polling on dual-socket AMD EPYC
+Message-ID: <Yajt9zml8Iyd/VVn@yaz-ubuntu>
+References: <878e4019-3a88-798e-4427-7efb5289a4e1@ispras.ru>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <878e4019-3a88-798e-4427-7efb5289a4e1@ispras.ru>
+X-ClientProxiedBy: BLAPR03CA0066.namprd03.prod.outlook.com
+ (2603:10b6:208:329::11) To BN8PR12MB3108.namprd12.prod.outlook.com
+ (2603:10b6:408:40::20)
 MIME-Version: 1.0
-References: <20211201205110.41656-1-f.fainelli@gmail.com> <20211201205110.41656-6-f.fainelli@gmail.com>
-In-Reply-To: <20211201205110.41656-6-f.fainelli@gmail.com>
-From:   Gregory Fong <gregory.0xf0@gmail.com>
-Date:   Thu, 2 Dec 2021 08:00:00 -0800
-Message-ID: <CADtm3G7wiNdDq2fagWeSDd_RV_dyfrNy+5e-VL9OKjwGAWzNtg@mail.gmail.com>
-Subject: Re: [PATCH 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to YAML
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Received: from yaz-ubuntu (165.204.84.11) by BLAPR03CA0066.namprd03.prod.outlook.com (2603:10b6:208:329::11) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.14 via Frontend Transport; Thu, 2 Dec 2021 16:02:09 +0000
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 64518a33-275e-43a1-5d9f-08d9b5ad1a16
+X-MS-TrafficTypeDiagnostic: BN8PR12MB2978:
+X-Microsoft-Antispam-PRVS: <BN8PR12MB2978C0F95F1E9A527B995551F8699@BN8PR12MB2978.namprd12.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:4502;
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gQhN9P85VOSscWAONGwIePIBiisg34EuA8rufc+wqK9vDC25imKy5Perg5FvrSJnGlC8gjghXp77YnVbQrAfuBekz8Ez01L8hR7kfmjhvNdU/qkNHPzq73OLjEO28rAxijf26Ll67mzlAGd7dh6dhbzVKmih7ZBJL3Gf/vlI/iwp00Ef3xB06fPLqGBy575QXjAAdmebJMVCpX3FXA5ymjrFTNF9kcvuc77n3S3jY5dWyaGdpcaFIZTtNnId52Mfu6eIi5vjAUluMbFSEIWNVv//FklaIqfaCt4QCPJWDoAwaNZqVwhSAl64wFdfYWPkN/yjQ0m89jf5vZx90aimYV1sopwtpTTDJxDerZAX2/tGpjgsrDxQNTM27s1PgwhIuYCdRM4Aqqp+hDyTDqaJVw0PwED7d9qxBo/sIoAaCn2Y5o5u57ugaV6BYOh8UeEE++YCMcahpIgNZNly1ETTNn2/0DS2Ch7pTUUJONbqBlnQkw6vF0wkrFIQ8QQRBYkMFJtrbH9js49gwtiYL3rFyIFyMB9Qs6SvARqdItbjoYC4d5gtbPzpi2oK3q3Mn0UUl+JOSiia2LmNgTE327KNcj9loXOG54L39J2yJwJhU/9WhvmyWo51vHkAh7/KU86SN8xEUE1H8GIeWnt42PpDJA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(4636009)(366004)(38100700002)(66556008)(66946007)(66476007)(6916009)(2906002)(55016003)(508600001)(4326008)(6496006)(9686003)(6666004)(8936002)(8676002)(316002)(83380400001)(956004)(186003)(5660300002)(33716001)(44832011)(86362001)(54906003)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XlBzTq5e19AaXEQAeT+edQDtTALQ7q0wGryc/IDIarKRyH7jFj7iwp1qedSw?=
+ =?us-ascii?Q?+3rgvD06u+Vg1shsFzeMAvHTrdqgPRoTYoUa1540ieIJpBDstHJP4WOGtlK1?=
+ =?us-ascii?Q?F9Ro3+YyqwTjN3nrk6UGDxC8RdtTcVk6VHJrqp/DxBnAF4U0qMUEKcDZhVd7?=
+ =?us-ascii?Q?kMGg2Py6JiMx0uFC91XA6gV7Zsr7aWp0kbP/7wA/IRW0mtPwAyTHUA6bKfTQ?=
+ =?us-ascii?Q?lWMk7L8IaFIvyZsgjfkVT1Mq8xEBysGHuE1npJwHNwpyQlZQNPdd89gdCi1I?=
+ =?us-ascii?Q?+qacZkuAjIs1sOLO29dYvw94jbSGY7GfLEzb/eJEpiLFc7flpa9Q+BXEWHja?=
+ =?us-ascii?Q?uA6OaUjCr4fHoq1Cf+ireVf3pAU1MsxtkOi4gkT1T8n6tqChAjNCIiXtQKXZ?=
+ =?us-ascii?Q?p9/q+y86xgQAiwVvdS9n+rU5O9pV5aad/gzWZAQmeG5pkuhqNsGhTADPmg+C?=
+ =?us-ascii?Q?ZCCBmchmlQFf/KkdsvhUZMXTCxGIlFQg+hEM1eCRFyMpEvdVyhHd/PDva6l1?=
+ =?us-ascii?Q?n4qkxKHpElhUTcXDh2nXx5PFOsTMi8A8BMkhwBQiclz5XyFxXUuRMU4G9Mch?=
+ =?us-ascii?Q?xWFZdW8Jb/V0TMaaHg+PAHIY1AadCQ44/VooaH6qzxRT5dX1n8BRpeI392pi?=
+ =?us-ascii?Q?y0GXyVy9nNZ12Bk+NSQ73S0MzKFE8fFWQIDWsZ3dUrm9kQC9GfgQgXm0ml8S?=
+ =?us-ascii?Q?45ha+B+p66UDivdmQ1jCSOB4Z7in5XcN4UCWrPxrrd3iR8MCaz6f+k+EMm7C?=
+ =?us-ascii?Q?NV7lY2+KWaxtfzqZSAyMLa59mzp3KR1z7Liyo8VH6vOeurEeQU94AI3OXqNa?=
+ =?us-ascii?Q?DhcljRHjYkYitWxC/JmHFlTmupgS6Zvz9R/nBL4o7tRw7aqYGdKvQF/MsySv?=
+ =?us-ascii?Q?z/L7aNwcgAlvdPMbYCkufE6SftW62mkywhDe3uupJLzIAY1xPYo5zKGLb0Rr?=
+ =?us-ascii?Q?d+TrbOda++04gvGT9s+0Rd744yMHJjnNFq5tgSnAVFszm89AHcfOqFWa25+u?=
+ =?us-ascii?Q?G8fUcaErgjOGFuEVOi4PZdp6H0mBdyWzJXkQVcNEj/YYzB9T3sBLFH4cnlGp?=
+ =?us-ascii?Q?s9NAi5uMxCrV6byCQ9uWdNdxx2xYcgHvdUISwQ9i82VJdIxvBDTVWxpZmwmD?=
+ =?us-ascii?Q?BfZPerHQbPSo+t4MfZ1X0mQvKRcAyY/cINoPsKoyMuHqa9k+IAPDbeKppTv+?=
+ =?us-ascii?Q?a3rK25ic9Vnt3vzskR43abYiGbm2BXy/KWlg1WdtHTcGuQRkw2XHfLYdJ2b8?=
+ =?us-ascii?Q?AtOVo6K3dx07RLArxD1dqJqrrUvt0xCU2pXoKn+eAu2Zf3XDsEXdCH+GEsqg?=
+ =?us-ascii?Q?h1spcx/8JgSHu+41lHi2srJgiNWY1Mb2mRTYYKRDMG6PZ9MwH2MnYnHz8mb3?=
+ =?us-ascii?Q?hKYEOq3vnAdE1C4L9PUCdItabWsqV+T6FbrvuW1L4dcc/w4ynrlWl9xBKGAS?=
+ =?us-ascii?Q?3RDlm8Gw3QE18ji76HDVm3dV4rSrHn5uQyZ0csp6fOgp0nG4Mc94gIFho35E?=
+ =?us-ascii?Q?qQzcd+ce56ZMFAfXQi4mfIwjKR0yFQXTW7AkMX6qImWKI8Y83ZXMptGMGA56?=
+ =?us-ascii?Q?ynck5OJbOfmzWJn7a0RNdvuSnnRUAT0hXsni3VMoYkaMwGU6VPLEGFfOhrWc?=
+ =?us-ascii?Q?JIlI3KwyAqW4ea29w7Nq2Ew=3D?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 64518a33-275e-43a1-5d9f-08d9b5ad1a16
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2021 16:02:12.2688
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zgQW9vFthHj2ZCS0UNexO5Te57mpzTbXEwQgJp4znsCldyMxjeiAu785tF1gsYc2HkCVDOVXpG1fkQ+jL6yubA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR12MB2978
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
-
-I haven't kept up with the new yaml format, so not entirely sure I
-know what I'm talking about yet, but here are a few comments:
-
-On Wed, Dec 1, 2021 at 12:51 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->
-> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
-> validation.
->
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
->  .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 --------------
->  .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 104 ++++++++++++++++++
->  MAINTAINERS                                   |   2 +-
->  3 files changed, 105 insertions(+), 84 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
->  create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
->
-> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
-> deleted file mode 100644
-> index 5d468ecd1809..000000000000
-> --- a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
-> +++ /dev/null
-> @@ -1,83 +0,0 @@
-> [snip]
-> -
-> -- interrupts-extended:
-> -    Alternate form of specifying interrupts and parents that allows for
-> -    multiple parents.  This takes precedence over 'interrupts' and
-> -    'interrupt-parent'.  Wakeup-capable GPIO controllers often route their
-> -    wakeup interrupt lines through a different interrupt controller than the
-> -    primary interrupt line, making this property necessary.
-
-It looks like interrupts-extended was removed from the new docs, I'm
-assuming that was intentional?
-
-> [snip]
-> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
-> new file mode 100644
-> index 000000000000..4b7309dc74dc
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
-> @@ -0,0 +1,104 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/brcm,brcmstb-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Broadcom STB "UPG GIO" GPIO controller
-> +
-> +description: >
-> +  The controller's registers are organized as sets of eight 32-bit
-> +  registers with each set controlling a bank of up to 32 pins.  A single
-> +  interrupt is shared for all of the banks handled by the controller.
-> +
-> +maintainers:
-> +  - Doug Berger <opendmb@gmail.com>
-> +  - Florian Fainelli <f.fainelli@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - brcm,bcm7445-gpio
-> +          - const: brcm,brcmstb-gpio
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description:
-
-Missing folded block scalar marker ('>') above
-
-> +      Define the base and range of the I/O address space containing
-> +      the brcmstb GPIO controller registers
-> +
-> +  "#gpio-cells":
-> +    const: 2
-> +    description: >
-> +      The first cell is the pin number (within the controller's
-> +      pin space), and the second is used for the following:
-> +      bit[0]: polarity (0 for active-high, 1 for active-low)
-> +
-> +  gpio-controller: true
-> +
-> +  "brcm,gpio-bank-widths":
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    description:
-
-Same here
-
-> +      Number of GPIO lines for each bank.  Number of elements must
-> +      correspond to number of banks suggested by the 'reg' property.
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description:
-
-While it's not necessary while this is only one line, consider adding
-'>' here too.
-
-> +      The interrupt shared by all GPIO lines for this controller.
-> +
-> +  "#interrupt-cells":
-> +    const: 2
-> +    description: >
-
-This next block could get formatted strangely with '>'; recommend
-using '|' instead
-
-> +      The first cell is the GPIO number, the second should specify
-> +      flags.  The following subset of flags is supported:
-> +      - bits[3:0] trigger type and level flags
-> +        1 = low-to-high edge triggered
-> +        2 = high-to-low edge triggered
-> +        4 = active high level-sensitive
-> +        8 = active low level-sensitive
-> +      Valid combinations are 1, 2, 3, 4, 8.
-> +
-> +  interrupt-controller: true
-> +
-> +  wakeup-source:
-> +    type: boolean
-> +    description: >
-> +      GPIOs for this controller can be used as a wakeup source
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - gpio-controller
-> +  - "#gpio-cells"
-
-Need to add required property "brcm,gpio-bank-widths"
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    upg_gio: gpio@f040a700 {
-> +        #gpio-cells = <2>;
-> +        #interrupt-cells = <2>;
-> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
-> +        gpio-controller;
-> +        interrupt-controller;
-> +        reg = <0xf040a700 0x80>;
-> +        interrupt-parent = <&irq0_intc>;
-> +        interrupts = <0x6>;
-> +        brcm,gpio-bank-widths = <32 32 32 24>;
-> +    };
-> +
-> +    upg_gio_aon: gpio@f04172c0 {
-> +        #gpio-cells = <2>;
-> +        #interrupt-cells = <2>;
-> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
-> +        gpio-controller;
-> +        interrupt-controller;
-> +        reg = <0xf04172c0 0x40>;
-> +        interrupt-parent = <&irq0_aon_intc>;
-> +        interrupts = <0x6>;
-> +        wakeup-source;
-> +        brcm,gpio-bank-widths = <18 4>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 913856599623..78161abc384f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3772,7 +3772,7 @@ BROADCOM BRCMSTB GPIO DRIVER
->  M:     Gregory Fong <gregory.0xf0@gmail.com>
-
-Not really related to this patch, but I should probably update this
-entry to reflect current reality. Should that be you and/or Doug?
-
->  L:     bcm-kernel-feedback-list@broadcom.com
->  S:     Supported
-> -F:     Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
-> +F:     Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
->  F:     drivers/gpio/gpio-brcmstb.c
->
->  BROADCOM BRCMSTB I2C DRIVER
-> --
-> 2.25.1
+On Sun, Nov 28, 2021 at 12:40:48AM +0300, Alexander Monakov wrote:
+> Hello world,
+> 
+> when lightly testing a dual-socket server with 64-core AMD processors I
+> noticed that workloads running on cpu #0 can exhibit significantly worse
+> latencies compared to cpu #1 ... cpu #255. Checking SSD response time,
+> on cpu #0 I got:
+> 
+> taskset -c 0 ioping -R /dev/sdf
+> 
+> --- /dev/sdf (block device 1.75 TiB) ioping statistics ---
+> 70.7 k requests completed in 2.97 s, 276.3 MiB read, 23.8 k iops, 93.1 MiB/s
+> generated 70.7 k requests in 3.00 s, 276.4 MiB, 23.6 k iops, 92.1 MiB/s
+> min/avg/max/mdev = 33.1 us / 41.9 us / 87.9 ms / 452.6 us
+> 
+> Notice 87.9 millisecond maximum response time, and compare with its
+> hyperthread sibing:
+> 
+> taskset -c 128 ioping -R /dev/sdf
+> 
+> --- /dev/sdf (block device 1.75 TiB) ioping statistics ---
+> 80.5 k requests completed in 2.96 s, 314.5 MiB read, 27.2 k iops, 106.2 MiB/s
+> generated 80.5 k requests in 3.00 s, 314.5 MiB, 26.8 k iops, 104.8 MiB/s
+> min/avg/max/mdev = 33.2 us / 36.8 us / 89.2 us / 2.00 us
+> 
+> Of course maximum times themselves vary from run to run, but the general
+> picture stays: on cpu #0 I get about three orders of magnitude
+> longer latencies. I think this is outside of "latency-sensitive
+> workloads might care" territory and closer to "hurts everyone" kind of
+> issue, hence I'm reporting it.
+> 
+> 
+> On this machine there's AMD HEST ACPI table that registers 14342 polled
+> "generic hardware error sources" (GHES) with poll interval 5 seconds.
+> (this seems misdesigned: it will cause cross-socket polling unless the
+> OS takes special care to divine which GHES to poll from where)
+> 
+> Linux setups a timer for each of those individually, so when the machine
+> is idle there's approximately 2800 timers per second invoked on cpu #0.
+> Plus, there's a secondary issue with timer migration:
+> get_nohz_timer_target will attempt to select a non-idle CPU out of 256
+> (visiting some CPUs repeatedly if they appear in nested domains), and
+> fail. If I help it along by running 'taskset -c 1 yes > /dev/null' or
+> disable kernel.timer_migration entirely, it drops maximum latency in the
+> above ioping test to 1..10ms range (down to two orders of magnitude from
+> three).
+> 
+> I guess the short answer is that if I don't like it I can boot that
+> server with 'ghes_disable=1', but is a proper solution possible? Like
+> requiring explicit opt-in to honor polled GHES entries?
 >
 
-Best regards,
-Gregory
+Hi Alexander,
+
+I believe the large number of GHES structures you have are intended to be used
+for the ACPI "GHES_ASSIST" feature. The GHES structures in this case are not
+to be used as independent sources. However, this feature is not implemented
+yet in Linux, so the kernel does set up these GHES structures as independent
+error sources.
+
+One way to avoid the issue is for the firmware to give a large polling
+interval in the GHES structures. The kernel will still set up timers for each
+structure, but there should be less interference from them. The ACPI spec
+seems to allow a polling interval up to 0xFFFFFFFF ms.
+
+Ultimately, I think we'd want the kernel to ignore the GHES structures used
+for GHES_ASSIST, and then GHES_ASSIST support can be implemented and used
+where appropriate.
+
+I can send a patchset for ignoring the structures. This would be setup for
+another set than can fully implement the GHES_ASSIST feature. Would you be
+willing to test out that first set to see if it resolves the issue?
+
+Thanks,
+Yazen

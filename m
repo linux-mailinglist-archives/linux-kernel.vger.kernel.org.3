@@ -2,114 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A89E4668C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E464668C8
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359835AbhLBRD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
+        id S1359842AbhLBRFY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:05:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359813AbhLBRD5 (ORCPT
+        with ESMTP id S1347861AbhLBRFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:03:57 -0500
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7155C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:00:34 -0800 (PST)
-Received: by mail-qv1-xf30.google.com with SMTP id m17so45443qvx.8
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 09:00:34 -0800 (PST)
+        Thu, 2 Dec 2021 12:05:23 -0500
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FDEC06174A;
+        Thu,  2 Dec 2021 09:02:01 -0800 (PST)
+Received: by mail-oi1-x235.google.com with SMTP id bj13so431386oib.4;
+        Thu, 02 Dec 2021 09:02:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kbxwA3sKQ3VoXVlinWMZnniVnpttzpOT0znWtoAppcQ=;
-        b=QcPmHVO5lAA/QTFeN3tFY0aYSNlJe0K3oiAx+Do8XqwGbTOeaZtSfwWnO+/gzfT7R7
-         uqhLZ92dKDZzytkEgVKaJSUU3YHoT/vjRYObGqLVSyM7yIs62wSQ8Pvmunpqu7PeNzX5
-         7PUJIOCrp7762zd/givR04oHd5nL5dQky1K2AUx3NCuRJWJotwBeNM45SeLtqbIjm9Kq
-         lTWRnirQSSdYOdKpmmoNqfL3WOJTga/kJEKCLj+KcjWYRkeZQ3aGyshIjyRq2dNE/FXu
-         fcqAj0/VFA05P+uKMNosQv/o3TdsHpzaTlpLTy67NqBZotIDtHtqEi/azkwgmAtwPRub
-         rSFQ==
+        d=gmail.com; s=20210112;
+        h=sender:to:cc:references:from:subject:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=00/E42FjoqEqAzMF9xc1DVwSebesIQL9IMmpKLjE84c=;
+        b=gfJVq4GwgkeDrP+HqL4heNSY666jU+P5mBcshHCGxHx2R+fyuHoLS/oy80rH2k/Nmp
+         s0kJZ5HT5WhWPZr5DzdDeUeMoJPCDtsD1fSFqVdXL0aLFilYWO4jzLxeFyzlY5XAvF1N
+         ZjBUpo9hcPPoRd0T5cHS6efYKTNpMn8t1D4C0iL6r9DEG1qX9QQfxds/J8diiqdpCYtU
+         KngHJD4eNLEBAsI5wW6ST7b0KBUFv3TRBwDlRl/2nLix7o52z/U3j2ElsNbjgq/Pr4Ee
+         67fadfazvHpHxjnAIHtcL0iIhn7fDCdd9+yqLdIG3dtrhwOuCUgZNIjmIIKL5iIaTyFQ
+         1sGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kbxwA3sKQ3VoXVlinWMZnniVnpttzpOT0znWtoAppcQ=;
-        b=3BD4OREPyAkz5esqbSlMdFidrvb7vEFyOQIS1rJqEb+1ph22A0AIEMCMDHN9qYZRNf
-         d3p8jY4xU3R0sQJNfI46MMnraKu53PkEQ/kEsZX8c+QOYo+jft3h6xGQjpQWfGLu4ECB
-         Tef3kii0WN/eYs+JWuiJB98DAjSI4/EOoOQ3S01b6E/5TTqPTpJgBzlH9sHPR57B7s9j
-         RGsMjkug9h7LTSiLwlqelTZD2HScni8h2jrWiukZY+aO45lQOaCF4yVbwk2UsqDP3dpL
-         vxFPLMxygSHmLWnWJKzfCxtbrwoUXZuEWT5s2wfUQEA4J1FP2QCAz4llZs+bCm2vYV51
-         DrAw==
-X-Gm-Message-State: AOAM530Pu5DLtlpSnjKhClRJdxyv1uplTf0YdCGq7/oNaCCnHH16iNT9
-        zmGdBg49rFlHQydBZ2dCeGwryw==
-X-Google-Smtp-Source: ABdhPJzO9oFxXAyQcrmDiRj9xkoyqtrbKrukesQ7GrY6BtK7F42G6UcjyCUO6WC60QJn/7zM+JX/Vg==
-X-Received: by 2002:a05:6214:1d03:: with SMTP id e3mr14469202qvd.61.1638464433983;
-        Thu, 02 Dec 2021 09:00:33 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id bp38sm264091qkb.66.2021.12.02.09.00.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 09:00:33 -0800 (PST)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1mspRg-0071lx-DU; Thu, 02 Dec 2021 13:00:32 -0400
-Date:   Thu, 2 Dec 2021 13:00:32 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bixuan Cui <cuibixuan@linux.alibaba.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        w@1wt.eu, keescook@chromium.org
-Subject: Re: [PATCH -next] mm: delete oversized WARN_ON() in kvmalloc() calls
-Message-ID: <20211202170032.GN5112@ziepe.ca>
-References: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
- <20211201192643.ecb0586e0d53bf8454c93669@linux-foundation.org>
- <Yajk/oVypyUFTtgd@unreal>
- <YajmawzehKqR+j0v@casper.infradead.org>
+        h=x-gm-message-state:sender:to:cc:references:from:subject:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=00/E42FjoqEqAzMF9xc1DVwSebesIQL9IMmpKLjE84c=;
+        b=DuWTiN62q2Y/Vou0GREpF33nuMrP0hZuII9e4Ar58AB4fFEmq8hXbLL7wLKIoaDLtO
+         PAQwbpGm9yTh5pAhctNqhqdQgtMsyMt6iwYxMdm4C7Gx+6F0PF8MDXQCkQYLXgEIPhMt
+         oWIbIK+gV6B2dQVpAOsS+xKePCDEzaG1L/qS4o6883cofS0zaA3LL3OrbPQZcZG5ZBop
+         6Q8AZZV+brsif9UvYBcFtKF26bz0/y/G/tyybbPqtPmIo7B3+aIj2A+yJ9u11j/3OE4O
+         +Wlz8Af9dGUVV/B5HD/GkXvlcOQqT3ERw2H0Cdy+U/tSSXd/qEWJVSdgD+UuTnzsTxeJ
+         pVFA==
+X-Gm-Message-State: AOAM531h31BfQjPM54BX4vfHNCmjHolze5Tjv2GANZ7CVcbPZd5zbG3S
+        PzbjW4v34NvUJSDg8aH0O112eVBxVTQ=
+X-Google-Smtp-Source: ABdhPJyhCaV/BceC8DU6uzkJq3wZ2XFPKuCodlaG1Y9Z0h1ebjhFspN3yW/iNgJwkBp4KrpUD+8nfQ==
+X-Received: by 2002:a05:6808:8c9:: with SMTP id k9mr5357601oij.147.1638464519988;
+        Thu, 02 Dec 2021 09:01:59 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i3sm92967ooq.39.2021.12.02.09.01.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 09:01:59 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     linux-pci <linux-pci@vger.kernel.org>,
+        "open list:MIPS" <linux-mips@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20211201215127.23550-1-sergio.paracuellos@gmail.com>
+ <20211201215127.23550-3-sergio.paracuellos@gmail.com>
+ <d243a90d-25b2-a65f-b69d-af7497db8742@roeck-us.net>
+ <CAMhs-H_i7aFeqf4EBtzdL0SKgKrseZGpVU-ytvangpeCMVTmFw@mail.gmail.com>
+ <9401e88b-de5a-dd2a-7e82-f3657ea86e8f@roeck-us.net>
+ <CAMhs-H8vw48RkpFz+rqvoPqDPpkaHdn60j6SdbDJHTNTTp7Fcg@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 2/5] MIPS: ralink: implement
+ 'pcibios_root_bridge_prepare()'
+Message-ID: <c70584d5-8efd-6b3e-aab5-c8161f39931b@roeck-us.net>
+Date:   Thu, 2 Dec 2021 09:01:56 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YajmawzehKqR+j0v@casper.infradead.org>
+In-Reply-To: <CAMhs-H8vw48RkpFz+rqvoPqDPpkaHdn60j6SdbDJHTNTTp7Fcg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 03:29:47PM +0000, Matthew Wilcox wrote:
-> On Thu, Dec 02, 2021 at 05:23:42PM +0200, Leon Romanovsky wrote:
-> > The problem is that this WARN_ON() is triggered by the users.
+On 12/2/21 7:50 AM, Sergio Paracuellos wrote:
+> Hi Guenter,
 > 
-> ... or the problem is that you don't do a sanity check between the user
-> and the MM system.  I mean, that's what this conversation is about --
-> is it a bug to be asking for this much memory in the first place?
->
-> > At least in the RDMA world, users can provide huge sizes and they expect
-> > to get plain -ENOMEM and not dump stack, because it happens indirectly
-> > to them.
-> > 
-> > In our case, these two kvcalloc() generates WARN_ON().
-> > 
-> > 		umem_odp->pfn_list = kvcalloc(
-> > 			npfns, sizeof(*umem_odp->pfn_list), GFP_KERNEL);
+> On Thu, Dec 2, 2021 at 4:06 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> On 12/2/21 12:29 AM, Sergio Paracuellos wrote:
+>>> Hi Guenter,
+>>>
+>>> On Wed, Dec 1, 2021 at 11:17 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>>>>
+>>>> On 12/1/21 1:51 PM, Sergio Paracuellos wrote:
+>>>>> PCI core code call 'pcibios_root_bridge_prepare()' function inside function
+>>>>> 'pci_register_host_bridge()'. This point is very good way to properly enter
+>>>>> into this MIPS ralink specific code to properly setup I/O coherency units
+>>>>> with PCI memory addresses.
+>>>>>
+>>>>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>>>> ---
+>>>>>     arch/mips/ralink/mt7621.c | 30 ++++++++++++++++++++++++++++++
+>>>>>     1 file changed, 30 insertions(+)
+>>>>>
+>>>>> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+>>>>> index bd71f5b14238..7649416c1cd7 100644
+>>>>> --- a/arch/mips/ralink/mt7621.c
+>>>>> +++ b/arch/mips/ralink/mt7621.c
+>>>>> @@ -10,6 +10,7 @@
+>>>>>     #include <linux/slab.h>
+>>>>>     #include <linux/sys_soc.h>
+>>>>>     #include <linux/memblock.h>
+>>>>> +#include <linux/pci.h>
+>>>>>
+>>>>>     #include <asm/bootinfo.h>
+>>>>>     #include <asm/mipsregs.h>
+>>>>> @@ -22,6 +23,35 @@
+>>>>>
+>>>>>     static void *detect_magic __initdata = detect_memory_region;
+>>>>>
+>>>>> +int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
+>>>>> +{
+>>>>> +     struct resource_entry *entry;
+>>>>> +     resource_size_t mask;
+>>>>> +
+>>>>> +     entry = resource_list_first_type(&bridge->windows, IORESOURCE_MEM);
+>>>>> +     if (!entry) {
+>>>>> +             pr_err("Cannot get memory resource\n");
+>>>>> +             return -EINVAL;
+>>>>> +     }
+>>>>> +
+>>>>> +     if (mips_cps_numiocu(0)) {
+>>>>> +             /*
+>>>>> +              * FIXME: hardware doesn't accept mask values with 1s after
+>>>>> +              * 0s (e.g. 0xffef), so it would be great to warn if that's
+>>>>> +              * about to happen
+>>>>> +              */ > +         mask = ~(entry->res->end - entry->res->start);
+>>>>> +
+>>>>
+>>>> Try something like this:
+>>>>                   WARN_ON((mask != ~0UL && BIT(ffz(mask)) - 1 != mask);
+>>>
+>>> Thanks for the tip. The following works for me:
+>>>
+>>>                     WARN_ON(mask != ~0UL && ~(BIT(__ffs(mask)) - 1) != mask);
+>>
+>> Are you sure ? __ffs() returns the first bit set, which isn't useful
+>> for this test.
 > 
-> Does it really make sense for the user to specify 2^31 PFNs in a single
-> call?  I mean, that's 8TB of memory.  Should RDMA put its own limit
-> in here, or should it rely on kvmalloc returning -ENOMEM?
+> My mask is calculated as follows:
+>   mask = ~(entry->res->end - entry->res->start);
+> 
+> Where for normal memory resource:
+>   - entry->res->end = 0x6fffffff;
+>   - entry->res->start = 0x60000000;
+> 
+> So I end up with a mask: 0xf0000000.
+> 
+> So applying ~(BIT(__ffs(mask)) - 1) I get a good '0xf0000000' for this
+> particular case which looks correct.
+> 
+> Suppose an invalid case with the mask being 0xffef0000.
+> 
+> Applying ~(BIT(__ffs(mask)) - 1) will be 0xffff0000 which will trigger
+> the WARN_ON since 0xffff0000 != 0xffef0000
+> 
+> So I think this is correct... Am I missing something?
+> 
 
-I wrote this - I don't think RDMA should put a limit here. What
-limit would it use anyhow?
+Your description says "hardware doesn't accept mask values with 1s after 0s
+(e.g. 0xffef)". 0xf0000000 has 1s after 0s.
 
-I'm pretty sure database people are already using low TB's here. It is
-not absurd when you have DAX and the biggest user of ODP is with DAX.
+Your version works (I think) as long as the upper mask bits are all 1s.
+It will fail, for example, if the mask value is 0xf000000 and
+sizeof(long) == 8. Your test is the equivalent of "no mask value
+with 0s after 1s", assuming that sizeof(resource_size_t) == sizeof(long).
+As far as I can see with test code, it fails if sizeof(resource_size_t)
+!= sizeof(long). Also, it returns an error if mask == 0. I guess that is
+a corner case, but it would be interesting to know if it is theoretically
+valid.
 
-If anything we might get to a point in a few years where the 2^31 is
-too small and this has to be a better datastructure :\
+I _think_ the following works even if sizeof(resource_size_t) != sizeof(long).
 
-Maybe an xarray and I should figure out how to use the multi-order
-stuff to optimize huge pages?
+	WARN_ON(mask && BIT(ffz(~mask)) - 1 != ~mask);
 
-I'd actually really like to get rid of it, just haven't figured out
-how. The only purpose is to call set_page_dirty() and in many cases
-the pfn should still be in the mm's page table. We also store another
-copy of the PFN in the NIC's mapping. Surely one of these two could do
-instead?
+or, alternatively, something like
 
-Jason
+	mask2 = entry->res->end - entry->res->start;
+	mask = ~mask2;
+	WARN_ON(mask && BIT(ffz(mask2)) - 1 != mask2);
+
+though that looks a bit weird.
+
+Thanks,
+Guenter
+
+> Thanks,
+>      Sergio Paracuellos
+>>
+>> Guenter
+>>
+>>>
+>>> I will send this as a different patch, though.
+>>>
+>>> Best regards,
+>>>       Sergio Paracuellos
+>>>
+>>>>
+>>>>> +             write_gcr_reg1_base(entry->res->start);
+>>>>> +             write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
+>>>>> +             pr_info("PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
+>>>>> +                     (unsigned long long)read_gcr_reg1_base(),
+>>>>> +                     (unsigned long long)read_gcr_reg1_mask());
+>>>>> +     }
+>>>>> +
+>>>>> +     return 0;
+>>>>> +}
+>>>>> +
+>>>>>     phys_addr_t mips_cpc_default_phys_base(void)
+>>>>>     {
+>>>>>         panic("Cannot detect cpc address");
+>>>>>
+>>>>
+>>
+

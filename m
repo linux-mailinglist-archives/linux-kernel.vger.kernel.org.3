@@ -2,101 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB76465B06
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:35:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A65465B0A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234828AbhLBAiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:38:23 -0500
-Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:27398 "EHLO
-        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S233847AbhLBAiW (ORCPT
+        id S1354643AbhLBAk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45948 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S233847AbhLBAkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:38:22 -0500
+        Wed, 1 Dec 2021 19:40:23 -0500
+Received: from mail-ua1-x935.google.com (mail-ua1-x935.google.com [IPv6:2607:f8b0:4864:20::935])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C141C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 16:37:01 -0800 (PST)
+Received: by mail-ua1-x935.google.com with SMTP id az37so52682476uab.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 16:37:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1638405300; x=1669941300;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tigB941sFJ2JS9XqW/Csq5Ad1Iz966W6LuwZoun7X4c=;
-  b=mEXkHIZ7bWojYKP56KlBO3VhAS+gfFjlUAo9AzLFmH4pIvrYZklTVTfL
-   uZV56ypgXts1x/kRZsGWdhwuYEgNx1Ne8EwXIgfBj7HEor3UQQfXOViil
-   v2YHf/xKCjOGcEsZIn8knNL5tCjpEZygE/IkG6h3bT7V82QIt8uEPTo6l
-   U=;
-Received: from unknown (HELO ironmsg-SD-alpha.qualcomm.com) ([10.53.140.30])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Dec 2021 16:35:00 -0800
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-SD-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:35:00 -0800
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 1 Dec 2021 16:35:00 -0800
-Received: from quicinc.com (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.922.19; Wed, 1 Dec 2021
- 16:34:59 -0800
-Date:   Wed, 1 Dec 2021 16:34:58 -0800
-From:   Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <olof@lixom.net>, <soc@kernel.org>, <linus.walleij@linaro.org>,
-        <sboyd@codeaurora.org>, <robh+dt@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH v3 0/3] Add devicetree support for SDX65 Modem and MTP
-Message-ID: <20211202003458.GA25288@quicinc.com>
-References: <1635552125-16407-1-git-send-email-quic_vamslank@quicinc.com>
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o514D1uhYEuhVflwqtCZuE/ZpMReL0NhA7xwmfYSlag=;
+        b=g+P9kPgV2HDyvGog5C8JdvOkx1/LJz+d7iJwKg7PWMfXLR9Z7bHpmRzY7OJMrXBenc
+         Vr2F24EkEgLGkEVm7aRxKWrJ8rPL1rIs/kFYEY5hYFJtUSMfVxXiqCUny+1WWQZI6ibt
+         +WgPNeEmWWelHagVXeI9196nciM57pA38C96o/6nWdzLrSFN2YmROMtzlYexPtto9wb9
+         1Ru9opswNpzj1Kxpl5/+qAew5CBARJzqdZpYVXuImRXTSa4Ds7gKUK7vBjS+K0z4L7H9
+         6QDCOKruK47OiMPvpyJ+HW/tLvPVRv5RNLFpOf/gXkSGIC+izuC69LKv2bkmaUG/AqIo
+         OgkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o514D1uhYEuhVflwqtCZuE/ZpMReL0NhA7xwmfYSlag=;
+        b=XkBxJSzGj48Pnu2YYucDAnCZnemohyVigKVdxGqpY6RYYlQrikRcQPc6ZM9gacDHiY
+         Vjr20FNvPTEflsZdLQ48MEM/6AccKxWtWYOE8sYY+LRPmV4fD2YMuHBl8zh9NUyACeCQ
+         SLoMsTw7D/J6RitZhvOXi2O8nnEN+XlrMPHVRtAoWGE0AygPUodKg8DvRp7azFxcinBo
+         dZopKfh8Xa2bJF/YQFIIOGBMYS/o57+kmQoSkKlr6Dsh9/PFSgwrI5mjoekSS1LC+ztF
+         9/Zu7/E9/lzrnYXTDTco8UhgtFcAbcDGYdp88L/PCR5as9vOwHI9UEsH3SVFn1ilPCW6
+         JMqA==
+X-Gm-Message-State: AOAM533+Uw0eR+Pjyek+NbBpTutXuBakueFVkoy/S6N+FGAHnW1oWOG/
+        y2mqqTy1oi3rpJPb8jS294ltdpPuAsXDmw==
+X-Google-Smtp-Source: ABdhPJxXNp2Rqr1zt0JzORqEO5eWQ8UUhSugn9nVoN+xjCaX3sJPWFVR0dxzga2DU21y1WzTmgVIFw==
+X-Received: by 2002:a05:6102:237a:: with SMTP id o26mr11417155vsa.79.1638405420778;
+        Wed, 01 Dec 2021 16:37:00 -0800 (PST)
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com. [209.85.222.47])
+        by smtp.gmail.com with ESMTPSA id w17sm466661uar.18.2021.12.01.16.37.00
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 01 Dec 2021 16:37:00 -0800 (PST)
+Received: by mail-ua1-f47.google.com with SMTP id i6so52608342uae.6
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 16:37:00 -0800 (PST)
+X-Received: by 2002:ab0:15a1:: with SMTP id i30mr12304408uae.122.1638405419938;
+ Wed, 01 Dec 2021 16:36:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1635552125-16407-1-git-send-email-quic_vamslank@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+References: <cover.1638282789.git.asml.silence@gmail.com> <CA+FuTSf-N08d6pcbie2=zFcQJf3_e2dBJRUZuop4pOhNfSANUA@mail.gmail.com>
+ <0d82f4e2-730f-4888-ec82-2354ffa9c2d8@gmail.com> <d5a07e01-7fc3-2f73-a406-21246a252876@gmail.com>
+In-Reply-To: <d5a07e01-7fc3-2f73-a406-21246a252876@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 1 Dec 2021 19:36:22 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSeP-W-ePV1EkWMmD4Ycsfq9viYdtyfDbUW3LXTc2q+BHQ@mail.gmail.com>
+Message-ID: <CA+FuTSeP-W-ePV1EkWMmD4Ycsfq9viYdtyfDbUW3LXTc2q+BHQ@mail.gmail.com>
+Subject: Re: [RFC 00/12] io_uring zerocopy send
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     io-uring@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 29, 2021 at 05:02:02PM -0700, quic_vamslank@quicinc.com wrote:
-> From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-> 
-> Hello,
-> 
-> Changes from v2:
->  - Added cmd-db node to the sdx65 dtsi file
-> 
-> Changes from v1:
->  - Addressed Bjorn's comments
-> 
-> This series adds devicetree support for Qualcomm SDX65 platform and MTP
-> board. This series functionally depends on Add Pdc, GCC and RPMh Clock support
-> series [1] and Add pinctrl support for SDX65 [2] which are under review.
-> 
-> With this current devicetree support, the MTP can boot into initramfs
-> shell.
-> 
-> Thanks,
-> Vamsi
+> >>> 1) we pass a bvec, so no page table walks.
+> >>> 2) zerocopy_sg_from_iter() is just slow, adding a bvec optimised version
+> >>>     still doing page get/put (see 4/12) slashed 4-5%.
+> >>> 3) avoiding get_page/put_page in 5/12
+> >>> 4) completion events are posted into io_uring's CQ, so no
+> >>>     extra recvmsg for getting events
+> >>> 5) no poll(2) in the code because of io_uring
+> >>> 6) lot of time is spent in sock_omalloc()/free allocating ubuf_info.
+> >>>     io_uring caches the structures reducing it to nearly zero-overhead.
+> >>
+> >> Nice set of complementary optimizations.
+> >>
+> >> We have looked at adding some of those as independent additions to
+> >> msg_zerocopy before, such as long-term pinned regions. One issue with
+> >> that is that the pages must remain until the request completes,
+> >> regardless of whether the calling process is alive. So it cannot rely
+> >> on a pinned range held by a process only.
+> >>
+> >> If feasible, it would be preferable if the optimizations can be added
+> >> to msg_zerocopy directly, rather than adding a dependency on io_uring
+> >> to make use of them. But not sure how feasible that is. For some, like
+> >> 4 and 5, the answer is clearly it isn't.  6, it probably is?
+>
+> Forgot about 6), io_uring uses the fact that submissions are
+> done under an per ring mutex, and completions are under a per
+> ring spinlock, so there are two lists for them and no extra
+> locking. Lists are spliced in a batched manner, so it's
+> 1 spinlock per N (e.g. 32) cached ubuf_info's allocations.
+>
+> Any similar guarantees for sockets?
 
-Can you please review this patch series. It's been pending since longtime now.
+For datagrams it might matter, not sure if it would show up in a
+profile. The current notification mechanism is quite a bit more
+heavyweight than any form of fixed ubuf pool.
 
-Thanks,
-Vamsi
-> 
-> Vamsi krishna Lanka (3):
->   dt-bindings: arm: qcom: Document SDX65 platform and boards
->   ARM: dts: qcom: Add SDX65 platform and MTP board support
->   ARM: dts: qcom: sdx65: Add pincontrol node
-> 
->  Documentation/devicetree/bindings/arm/qcom.yaml |   6 +
->  arch/arm/boot/dts/Makefile                      |   3 +-
->  arch/arm/boot/dts/qcom-sdx65-mtp.dts            |  25 +++
->  arch/arm/boot/dts/qcom-sdx65.dtsi               | 222 ++++++++++++++++++++++++
->  4 files changed, 255 insertions(+), 1 deletion(-)
->  create mode 100644 arch/arm/boot/dts/qcom-sdx65-mtp.dts
->  create mode 100644 arch/arm/boot/dts/qcom-sdx65.dtsi
-> 
-> -- 
-> 2.7.4
-> 
+For TCP this matters less, as multiple sends are not needed and
+completions are coalesced, because in order.

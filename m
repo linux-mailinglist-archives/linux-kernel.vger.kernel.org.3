@@ -2,63 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA5D465BCF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 02:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B80465BD3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 02:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348256AbhLBBwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 20:52:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S1349015AbhLBBxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 20:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347291AbhLBBvr (ORCPT
+        with ESMTP id S1348448AbhLBBxI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 20:51:47 -0500
+        Wed, 1 Dec 2021 20:53:08 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F26AC061574;
-        Wed,  1 Dec 2021 17:48:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78CEC061574;
+        Wed,  1 Dec 2021 17:49:45 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A141B821BB;
-        Thu,  2 Dec 2021 01:48:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A20E8C00446;
-        Thu,  2 Dec 2021 01:48:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5BF6FB82192;
+        Thu,  2 Dec 2021 01:49:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13494C00446;
+        Thu,  2 Dec 2021 01:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638409703;
-        bh=rX6Hzb6QHB/vShLCZQuiRt4vZUktSxPTk8iSZdxIzrY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=U1LTYfKULVcS40C1rBGuW/+sUUKw4ue2cnd0j0PRe9ZIUPbeYYrekO6RGNj9xd2Nw
-         exNofflc5oLklBSM0h1S4icPNvdd3X0ORciFOigMbBTd6fzW50vm5hg8uL3Dq/82yl
-         P0FizyUopCZsghMKm2lXrcSmQuDKkZeIUsjRhPmhapj+nyeWuCY+jts7JzvQhLpIEF
-         L9wpxnjJpWKi92xAtH2YQzEljLSdi4wxGPU/lTnh11TtqUmV5idlkYqxfon6tYINEs
-         Tb8joZPIIle6ovI/D6qzjvWIOrggSbiRCW6rEFGH+1ltfSr2ZihHVg8XXdaDR9kbSd
-         odztmsbStbooA==
-Date:   Wed, 1 Dec 2021 17:48:21 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-Cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "dsahern@gmail.com" <dsahern@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/3] selftests: add option to list all avaliable tests
-Message-ID: <20211201174821.2d40a3eb@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
-In-Reply-To: <f4ebc027-5f5d-1a4a-8a33-964cd7214af8@fujitsu.com>
-References: <20211201111025.13834-1-lizhijian@cn.fujitsu.com>
-        <20211201111025.13834-2-lizhijian@cn.fujitsu.com>
-        <f4ebc027-5f5d-1a4a-8a33-964cd7214af8@fujitsu.com>
+        s=k20201202; t=1638409783;
+        bh=/nOyWz9FD57Yc7ekcAIzmjiWYNDVCKOsggfbBTVN6EA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CUmf+GZlPXI21yYAs0MDsPMgA59CtWzchsX09RJ/ZRMeLy4fTzpKWz6wfMGlvQ3mI
+         VSCE+wgYSg1gAX81ligONH8m8F8fGtrzV2dks8+XRF4RPf8CGDz/R51FxNkBaAGCMc
+         zv0QZnO64QbzUT1590dNrFZchE1aZ/uhctFu9qDF1MQ0KMDR0nOkn4rxixf6VorqiH
+         QhXKocj56WxBPsdZnnthBEHrwpVSQ4IfPAAuNeuNW2IENYWfbmBWDq71BeRcsOovs1
+         y5cotxAI7U4wBeHn7hnd41VcnhBwrNShUf3rk++0RYe4JQpd/L+8Trr8bqkc2Bw+PT
+         vST6HrzyiMfpg==
+Date:   Wed, 1 Dec 2021 17:49:42 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     xfs <linux-xfs@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: iomap folio conversion for 5.17
+Message-ID: <20211202014942.GB8492@magnolia>
+References: <20211124183905.GE266024@magnolia>
+ <YZ/7O9Zb3PSsCbk9@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YZ/7O9Zb3PSsCbk9@casper.infradead.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 1 Dec 2021 11:22:03 +0000 lizhijian@fujitsu.com wrote:
-> sent V2 to fix a typo
+On Thu, Nov 25, 2021 at 09:08:11PM +0000, Matthew Wilcox wrote:
+> On Wed, Nov 24, 2021 at 10:39:05AM -0800, Darrick J. Wong wrote:
+> > Hi folks,
+> > 
+> > The iomap-for-next branch of the xfs-linux repository at:
+> > 
+> > 	git://git.kernel.org/pub/scm/fs/xfs/xfs-linux.git
+> > 
+> > has just been updated.
+> 
+> Hi Darrick,
+> 
+> Would you like to pull the folio changes from my git tree?
+> They are generally as posted previously, with minor tweaks to match
+> upstream changes.  They do not introduce any new xfstests problems
+> in my testing.
 
-You need to resend the entire series, patchwork does not understand
-updating single patches:
+Since you've rebased against 5.16-rc3, would you mind sending a fresh
+pull request (in a new thread), please?  Particularly since the tag
+commit id isn't the same anymore...
 
-https://patchwork.kernel.org/project/netdevbpf/list/?series=588501
-https://patchwork.kernel.org/project/netdevbpf/list/?series=588507
+--D
+
+> The following changes since commit b501b85957deb17f1fe0a861fee820255519d526:
+> 
+>   Merge tag 'asm-generic-5.16-2' of git://git.kernel.org/pub/scm/linux/kernel/git/arnd/asm-generic (2021-11-25 10:41:28 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.infradead.org/users/willy/linux.git tags/iomap-folio-5.17
+> 
+> for you to fetch changes up to 979fe192e8a935968fd739983217128b431f6268:
+> 
+>   xfs: Support large folios (2021-11-25 14:03:56 -0500)
+> 
+> ----------------------------------------------------------------
+> Convert fs/iomap to use folios
+> 
+> These patches prepare XFS to use large folios to cache files.
+> There are some preliminary patches to add folio interfaces to the
+> block layer & buffer layer, then all the iomap functions are
+> converted to use folios instead of pages.
+> 
+> ----------------------------------------------------------------
+> Matthew Wilcox (Oracle) (24):
+>       block: Add bio_add_folio()
+>       block: Add bio_for_each_folio_all()
+>       fs/buffer: Convert __block_write_begin_int() to take a folio
+>       iomap: Convert to_iomap_page to take a folio
+>       iomap: Convert iomap_page_create to take a folio
+>       iomap: Convert iomap_page_release to take a folio
+>       iomap: Convert iomap_releasepage to use a folio
+>       iomap: Add iomap_invalidate_folio
+>       iomap: Pass the iomap_page into iomap_set_range_uptodate
+>       iomap: Convert bio completions to use folios
+>       iomap: Use folio offsets instead of page offsets
+>       iomap: Convert iomap_read_inline_data to take a folio
+>       iomap: Convert readahead and readpage to use a folio
+>       iomap: Convert iomap_page_mkwrite to use a folio
+>       iomap: Convert __iomap_zero_iter to use a folio
+>       iomap: Convert iomap_write_begin() and iomap_write_end() to folios
+>       iomap: Convert iomap_write_end_inline to take a folio
+>       iomap,xfs: Convert ->discard_page to ->discard_folio
+>       iomap: Simplify iomap_writepage_map()
+>       iomap: Simplify iomap_do_writepage()
+>       iomap: Convert iomap_add_to_ioend() to take a folio
+>       iomap: Convert iomap_migrate_page() to use folios
+>       iomap: Support large folios in invalidatepage
+>       xfs: Support large folios
+> 
+>  Documentation/core-api/kernel-api.rst |   1 +
+>  block/bio.c                           |  22 ++
+>  fs/buffer.c                           |  23 +-
+>  fs/internal.h                         |   2 +-
+>  fs/iomap/buffered-io.c                | 506 +++++++++++++++++-----------------
+>  fs/xfs/xfs_aops.c                     |  24 +-
+>  fs/xfs/xfs_icache.c                   |   2 +
+>  include/linux/bio.h                   |  56 +++-
+>  include/linux/iomap.h                 |   3 +-
+>  9 files changed, 363 insertions(+), 276 deletions(-)
+> 

@@ -2,188 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CC4466953
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7FA466958
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:44:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355619AbhLBRrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:47:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347965AbhLBRrP (ORCPT
+        id S1355887AbhLBRsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:48:07 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36458 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1355721AbhLBRsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:47:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2648EC06174A;
-        Thu,  2 Dec 2021 09:43:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8B6BB823FB;
-        Thu,  2 Dec 2021 17:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 421BFC00446;
-        Thu,  2 Dec 2021 17:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638467030;
-        bh=Wvqr4QMgbo28VZ42PO+nadxc4Mne7hS7quuoqz8hLQ0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=TJ/suPL5zvfVulaERMDm+NFvtd0ok8UV2/0Tfli6lNEkk+SqJOCqzbs6WSce1U9r4
-         MWMtSUeLHsEmM3xyZKE9a58Rlb3r9YtEGXGMI4biKrOhmsscwh/tdOm4ZtOhpqoo1S
-         fp3LcFtur0YEh9MmVe5MioLXStoB0kGrf13lom4GIYfaXQclLva9xKTJw/Ib5jYjU3
-         +MfVND9jQcDxtefB7l+vdls/ikPzkq3YtcWRsdGttLlkAvpNpIS3QSmx2QbWs1dynB
-         qiy/jYhGI6fnU0R2K0MA5H3a9LJBn1C6+SqDxXGu3qNNR7V2+Bw/Hlg/gQY0ZTmUkv
-         qewE1tnAmWDBQ==
-Date:   Thu, 2 Dec 2021 11:43:48 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     David Airlie <airlied@linux.ie>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Vaibhav Gupta <vaibhav.varodek@gmail.com>,
-        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 1/3] amd64-agp: convert to generic power management
-Message-ID: <20211202174348.GA2899481@bhelgaas>
+        Thu, 2 Dec 2021 12:48:05 -0500
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2HMwQC026736;
+        Thu, 2 Dec 2021 17:44:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=VaeMHoFHFtcqpx2FX59D4loTdGMl+lmBz6JSTLtaUMQ=;
+ b=l0YnE21DEw1BcRcMXGc7XWQ+dxW64g5XN4ElKbzT6pU7NJ2K4NooDVMiT8CKMcRYoK1f
+ eJnkeTyBKrfIA1Kjth+HKR63x8ZaB4LoYgrWzJeSbZPLFMz/ok8sfzkpRyKfYflWeBnn
+ gCTufgIYzJtPL08PRJvak9U8agXOQxTRKmn5h3DNukQqzH1hkMUwNnxMGkHGiJjGNqS4
+ jmM1NtkpIh1obx1xTcDZitc+bB8eVolgqYwxJuIQR69VOdRkZQtz4SwKh6ir0Y4LPhmz
+ 9xGeJn0Qa2Nv71Fvo8gBL5+z7b9v8pHKzlihkoP1Re5fbU5ippJkpu1FMf/rvqCxBmnJ XA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq2ga0dyh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 17:44:30 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2Hf1aQ000778;
+        Thu, 2 Dec 2021 17:44:29 GMT
+Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq2ga0dy2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 17:44:29 +0000
+Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
+        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2HfABG029109;
+        Thu, 2 Dec 2021 17:44:28 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma02wdc.us.ibm.com with ESMTP id 3ckcacubmu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 17:44:28 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2HiQO245285672
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Dec 2021 17:44:26 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9BC127805C;
+        Thu,  2 Dec 2021 17:44:26 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6D5B878063;
+        Thu,  2 Dec 2021 17:44:24 +0000 (GMT)
+Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Dec 2021 17:44:24 +0000 (GMT)
+Message-ID: <39e43a4829b86b5a87bc082628cc6f45d4d8c899.camel@linux.ibm.com>
+Subject: Re: [RFC 08/20] ima: Move measurement list related variables into
+ ima_namespace
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Stefan Berger <stefanb@linux.ibm.com>,
+        linux-integrity@vger.kernel.org
+Cc:     zohar@linux.ibm.com, serge@hallyn.com,
+        christian.brauner@ubuntu.com, containers@lists.linux.dev,
+        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
+        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
+        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
+        puiterwi@redhat.com, jamjoom@us.ibm.com,
+        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
+        linux-security-module@vger.kernel.org, jmorris@namei.org
+Date:   Thu, 02 Dec 2021 12:44:23 -0500
+In-Reply-To: <05da6ebc-0cd4-753a-8589-4b1a06d198c6@linux.ibm.com>
+References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
+         <20211130160654.1418231-9-stefanb@linux.ibm.com>
+         <141ce433f026b47edb1d9a8f89e4581db253c579.camel@linux.ibm.com>
+         <c3b99439-1dd6-e204-ad41-5d8bacb54d48@linux.ibm.com>
+         <eeaadc76ca2da67d79c155497a73c6905b70e726.camel@linux.ibm.com>
+         <05da6ebc-0cd4-753a-8589-4b1a06d198c6@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201025419.2797624-2-helgaas@kernel.org>
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: D-gCaSim0Vj8QEuCcA8MkP0yyOBAx-r1
+X-Proofpoint-GUID: l2MaD6vzlpB1TnYWLq5AxdkLss78f0vT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-02_11,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 phishscore=0 impostorscore=0 suspectscore=0
+ adultscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 bulkscore=0
+ malwarescore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2110150000 definitions=main-2112020113
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[cc->to: Rafael: help :)]
+On Thu, 2021-12-02 at 11:45 -0500, Stefan Berger wrote:
+> On 12/2/21 11:29, James Bottomley wrote:
+> > On Thu, 2021-12-02 at 08:41 -0500, Stefan Berger wrote:
+> > > On 12/2/21 07:46, James Bottomley wrote:
+> > > > On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
+> > > > > Move measurement list related variables into the
+> > > > > ima_namespace.
+> > > > > This
+> > > > > way a
+> > > > > front-end like SecurityFS can show the measurement list
+> > > > > inside an
+> > > > > IMA
+> > > > > namespace.
+> > > > > 
+> > > > > Implement ima_free_measurements() to free a list of
+> > > > > measurements
+> > > > > and call it when an IMA namespace is deleted.
+> > > > This one worries me quite a lot.  What seems to be happening in
+> > > > this
+> > > > code:
+> > > > 
+> > > > > @@ -107,7 +100,7 @@ static int ima_add_digest_entry(struct
+> > > > > ima_namespace *ns,
+> > > > >           qe->entry = entry;
+> > > > >    
+> > > > >           INIT_LIST_HEAD(&qe->later);
+> > > > > -       list_add_tail_rcu(&qe->later, &ima_measurements);
+> > > > > +       list_add_tail_rcu(&qe->later, &ns->ima_measurements);
+> > > > >    
+> > > > >           atomic_long_inc(&ns->ima_htable.len);
+> > > > >           if (update_htable) {
+> > > > > 
+> > > > is that we now only add the measurements to the namespace list,
+> > > > but
+> > > > that list is freed when the namespace dies.  However, the
+> > > > measurement
+> > > > is still extended through the PCRs meaning we have incomplete
+> > > > information for a replay after the namespace dies?
+> > > *Not at all.* The measurement list of the namespace is
+> > > independent
+> > > of
+> > > the host.
+> > > 
+> > > The cover letter states:
+> > I get that the host can set up a policy to log everything in the
+> > namespace, but that wasn't my question.  My question is can the
+> > guest
+> > set up a policy to log something that doesn't go into the host log
+> > (because the host hasn't asked for it to be logged) but extends a
+> > PCR
+> > anyway, thus destroying the ability of the host to do log replay.
+> 
+> host log goes with host TPM and vice versa
+> 
+> guest log goes with (optional) vTPM and vice version
 
-On Tue, Nov 30, 2021 at 08:54:17PM -0600, Bjorn Helgaas wrote:
-> From: Vaibhav Gupta <vaibhavgupta40@gmail.com>
-> 
-> Convert amd64-agp from legacy PCI power management to the generic power
-> management framework.
-> 
-> Previously, amd64-agp used legacy PCI power management.
-> agp_amd64_suspend() looked like this:
-> 
->   agp_amd64_suspend
->     pci_save_state(pdev)
->     pci_set_power_state(pdev, pci_choose_state(pdev, state))
-> 
-> With generic power management, these are both done by the PCI core in
-> pci_pm_runtime_suspend(), so drop agp_amd64_suspend() completely.
+But that's what doesn't seem to happen ... ima_pcr_extend isn't
+virtualized and it's always called from ima_add_template_entry()
+meaning the physical TPM is always extended even for a namespace only
+entry.
 
-I think the *patch* is correct, but my explanation is wrong.  Would
-appreciate any corrections!
+> Extending the PCR of the host's TPM would require the data to be
+> logged in the host log as well. So, no, it's not possible.
 
-Prior to this patch, agp_amd64_suspend() is a pci_driver.suspend()
-method and is called in this path:
+Well, exactly: if you don't have or want a vTPM per container the only
+way to attest is via the physical TPM which means all entries in the
+namespace must be in the host log, so the host owner can quote and
+reply and they can split the attested log and give assurance to the
+namespaces that their entries are correct.
 
-  pci_pm_suspend
-    pci_legacy_suspend
-      drv->suspend
+James
 
-After this patch, agp_amd64_suspend() is not implemented at all, and
-we do the pci_save_state() and pci_set_power_state() in PCI generic
-code.
 
-But I think those actually happen in pci_pm_suspend_noirq(), not in
-pci_pm_runtime_suspend(), i.e., in this path:
-
-  suspend_devices_and_enter
-    dpm_suspend_start(PMSG_SUSPEND)
-      dpm_suspend(PMSG_SUSPEND)
-        device_suspend
-          __device_suspend
-            callback = pm_op(dev->bus->pm, state)
-            dpm_run_callback(callback)
-              pci_pm_suspend                            # PCI bus method
-                dev->driver->pm->suspend
-                  agp_amd64_suspend                     # <-- no longer needed
-    suspend_enter
-      dpm_suspend_noirq(PMSG_SUSPEND)
-        dpm_noirq_suspend_devices(PMSG_SUSPEND)
-          device_suspend_noirq
-            __device_suspend_noirq
-              callback = pm_noirq_op(dev->bus->pm, state)
-              dpm_run_callback(callback)
-                pci_pm_suspend_noirq                    # PCI bus method
-                  pci_save_state                        # <-- now done here
-                  pci_prepare_to_sleep
-                    pci_set_power_state                 # <-- and here
-                  
-I got confused because I couldn't find the call chain leading to
-pci_pm_suspend_noirq().  pm_op() and dpm_run_callback() essentially
-break the call chain, which makes it a little hard to follow.
-
-> agp_amd64_resume() looked like this:
-> 
->   agp_amd64_resume
->     pci_set_power_state(pdev, PCI_D0)
->     pci_restore_state(pdev)
->     ...
-> 
-> With generic power management, the PCI parts are done by
-> pci_pm_runtime_resume(), so drop those from agp_amd64_resume().
-> 
-> [bhelgaas: commit log]
-> Signed-off-by: Vaibhav Gupta <vaibhavgupta40@gmail.com>
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->  drivers/char/agp/amd64-agp.c | 24 ++++++------------------
->  1 file changed, 6 insertions(+), 18 deletions(-)
-> 
-> diff --git a/drivers/char/agp/amd64-agp.c b/drivers/char/agp/amd64-agp.c
-> index b40edae32817..dc78a4fb879e 100644
-> --- a/drivers/char/agp/amd64-agp.c
-> +++ b/drivers/char/agp/amd64-agp.c
-> @@ -588,20 +588,11 @@ static void agp_amd64_remove(struct pci_dev *pdev)
->  	agp_bridges_found--;
->  }
->  
-> -#ifdef CONFIG_PM
-> +#define agp_amd64_suspend NULL
->  
-> -static int agp_amd64_suspend(struct pci_dev *pdev, pm_message_t state)
-> +static int __maybe_unused agp_amd64_resume(struct device *dev)
->  {
-> -	pci_save_state(pdev);
-> -	pci_set_power_state(pdev, pci_choose_state(pdev, state));
-> -
-> -	return 0;
-> -}
-> -
-> -static int agp_amd64_resume(struct pci_dev *pdev)
-> -{
-> -	pci_set_power_state(pdev, PCI_D0);
-> -	pci_restore_state(pdev);
-> +	struct pci_dev *pdev = to_pci_dev(dev);
->  
->  	if (pdev->vendor == PCI_VENDOR_ID_NVIDIA)
->  		nforce3_agp_init(pdev);
-> @@ -609,8 +600,6 @@ static int agp_amd64_resume(struct pci_dev *pdev)
->  	return amd_8151_configure();
->  }
->  
-> -#endif /* CONFIG_PM */
-> -
->  static const struct pci_device_id agp_amd64_pci_table[] = {
->  	{
->  	.class		= (PCI_CLASS_BRIDGE_HOST << 8),
-> @@ -738,15 +727,14 @@ static const struct pci_device_id agp_amd64_pci_promisc_table[] = {
->  	{ }
->  };
->  
-> +static SIMPLE_DEV_PM_OPS(agp_amd64_pm_ops, agp_amd64_suspend, agp_amd64_resume);
-> +
->  static struct pci_driver agp_amd64_pci_driver = {
->  	.name		= "agpgart-amd64",
->  	.id_table	= agp_amd64_pci_table,
->  	.probe		= agp_amd64_probe,
->  	.remove		= agp_amd64_remove,
-> -#ifdef CONFIG_PM
-> -	.suspend	= agp_amd64_suspend,
-> -	.resume		= agp_amd64_resume,
-> -#endif
-> +	.driver.pm  = &agp_amd64_pm_ops,
->  };
->  
->  
-> -- 
-> 2.25.1
-> 

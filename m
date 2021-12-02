@@ -2,151 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D96F466262
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:35:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10631466269
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:37:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357393AbhLBLip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 06:38:45 -0500
-Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:41265 "EHLO
-        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1357354AbhLBLih (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 06:38:37 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 47DE23201EF4;
-        Thu,  2 Dec 2021 06:35:14 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 02 Dec 2021 06:35:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=fm3; bh=HYA2baR9g9uxh
-        0vIU8ekgamWzAVAwChaw229O58ZZJg=; b=LB0DMAE8Y2qCVUl1aYoFZx0OO1Oy6
-        BE6b6+iQgdTXh9sN7tsC+6tEhB7SDtMI3gIb3xgHms+qYrwzihtbKen6PtQjE1tc
-        zSSUi5vgh34vpY521sxfh0FL0SdUCs4/82sJUZNLWEiGfeGhzHe7plE/YkNhrzB6
-        NCWFXG7lT2c1LEf3unCoD7+tq/z03/kzUymvje1x0SyF43raJZ8gRlpWbPM9n2ta
-        lIFgl3PdsA5OmvYpxr0R0FGea/bGOruWHuHuLD37/OUybBlD6gfJUVh7PIJFGEU/
-        yXV9wubzM/XgzVxvsrg12awKy5Wom/RmciGMh+HmYpZtBTyXdg/XA55Hw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-transfer-encoding:date:from
-        :in-reply-to:message-id:mime-version:references:subject:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; bh=HYA2baR9g9uxh0vIU8ekgamWzAVAwChaw229O58ZZJg=; b=M/xSxlx7
-        63mVkOuO6JR7TLx7WnHEXdy+Tddn0t8rCibgySMiEQR5Mn5B+dqBMpY43XW9CT8F
-        OKMzUoHXdiZe4b1UtiJGolyyuTPw634wEg6a5ZO981eI9RSVMPCrYr53SyNHh0hu
-        43p4GawKvXM0NUcmOg2F/6bmmRK+Vg1JTkAKIo5DiAr542N/D68LSFwUSVVpxWox
-        Rzjz4cZuKKGq7YrUEJtoss0YZ7xUKJKSuD8mcorRWOB8GvJi/tjYY4ETAoPTENnr
-        Ka5dKUgg3zfsL3xB5dba9q8XPlNP1W4iKds7a7WG20J0kesxXaJg5efJMWJN3a/R
-        PHK5HkPNSleWig==
-X-ME-Sender: <xms:ca-oYaQoH-M39LTDHE3qjbnNTLOP5Ux-54AFK72KmIEyELPtVjfnFg>
-    <xme:ca-oYfzB7amdRsIFp6yBdg5QKlwn7Ramnu2TtFieDWKZ2j8rDO33gifsaZ6WLcZyr
-    MP7j1dGHjNhM7Q7Gvw>
-X-ME-Received: <xmr:ca-oYX1YNEqced0s9pHETmyw7T2-wo4uPmA_Il_mKPRCk3Tvec7m-u35uy6S8Nber4kQ89i21lWBKpUChFd5WHS6P0M0TUoypzje2Cm3RC2eDVbryCJk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieehgddvlecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhephffvufffkffojghfggfgsedtkeertd
-    ertddtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghs
-    hhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeevfefffeekte
-    fgveegfeelheffhfeujedtjeevtefhkeevkedtjeejvddtjefhjeenucevlhhushhtvghr
-    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehoqdhtrghkrghshhhisehsrg
-    hkrghmohgttghhihdrjhhp
-X-ME-Proxy: <xmx:ca-oYWBn6d2KdwS7HCxY4y4hyWOoxc3MIS5Jl2-0YUJfe7NGl-Qw-g>
-    <xmx:ca-oYTgIBfgRgdwSD2X3kQTc9CH07HTCW6mIpZJz-D2HJvkGEdv2bQ>
-    <xmx:ca-oYSpsDcT_YJNQSDuPatJmgw8avuzaH89Ylp7pqa4JtVJw3kSioQ>
-    <xmx:ca-oYTfvREdZGq9ULktFoqBIqNg5cGFSUHDZRdKAFk3123vzYsr6qw>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 2 Dec 2021 06:35:12 -0500 (EST)
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     stefanr@s5r6.in-berlin.de
-Cc:     linux1394-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, clemens@ladisch.de,
-        alsa-devel@alsa-project.org, marcan@marcan.st
-Subject: [PATCH 3/3] firewire: add kernel API to access packet structure in request structure for AR context
-Date:   Thu,  2 Dec 2021 20:34:57 +0900
-Message-Id: <20211202113457.24011-4-o-takashi@sakamocchi.jp>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20211202113457.24011-1-o-takashi@sakamocchi.jp>
-References: <20211202113457.24011-1-o-takashi@sakamocchi.jp>
+        id S1357377AbhLBLkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 06:40:23 -0500
+Received: from mga18.intel.com ([134.134.136.126]:53083 "EHLO mga18.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1357375AbhLBLjc (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 06:39:32 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223563519"
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="223563519"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 03:36:06 -0800
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="460428212"
+Received: from smile.fi.intel.com ([10.237.72.184])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 03:36:04 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.95)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1mskMf-001NKm-CY;
+        Thu, 02 Dec 2021 13:35:01 +0200
+Date:   Thu, 2 Dec 2021 13:35:01 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Kent Gibson <warthog618@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 2/6] gpiolib: allow to specify the firmware node in
+ struct gpio_chip
+Message-ID: <YaivZe6Qo9LMoywi@smile.fi.intel.com>
+References: <20211130154127.12272-1-brgl@bgdev.pl>
+ <20211130154127.12272-3-brgl@bgdev.pl>
+ <YaZNyMV5gX5cZpar@smile.fi.intel.com>
+ <CAMRc=Mf5d1i34eBez+pOYjjdyfRL9N_ha_==Cn1rANr=2CB9aQ@mail.gmail.com>
+ <YaaQp2rq7N71dm1l@smile.fi.intel.com>
+ <CAMRc=Me=Oq_V=+p-AFPcyDjBs-+4Ug3k0AWK9fdEEet2JD3eFw@mail.gmail.com>
+ <CAMRc=MdQ+a7UrE7csg3GsiLXYGkzti-wPUwPh5J=7WBj74OVZg@mail.gmail.com>
+ <YaimotqSgHzS2wdA@smile.fi.intel.com>
+ <CAMRc=Mew8xfPb9kgH-bf=t+yb1xGpRwv3Vn0+b-9pPbp3M3g5Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMRc=Mew8xfPb9kgH-bf=t+yb1xGpRwv3Vn0+b-9pPbp3M3g5Q@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In 1394 OHCI specification, descriptor of Asynchronous Receive DMA context
-has timeStamp field in its trailer quadlet. The field is written by
-the host controller for the time to receive asynchronous request
-subaction in isochronous cycle time.
+On Thu, Dec 02, 2021 at 12:24:06PM +0100, Bartosz Golaszewski wrote:
+> On Thu, Dec 2, 2021 at 11:58 AM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > On Wed, Dec 01, 2021 at 02:11:28PM +0100, Bartosz Golaszewski wrote:
+> > > On Tue, Nov 30, 2021 at 10:04 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
+> >
+> > ...
+> >
+> > > Let me maybe rephrase the problem: currently, for GPIO devices
+> > > instantiating multiple banks created outside of the OF or ACPI
+> > > frameworks (e.g. instantiated manually and configured using a
+> > > hierarchy of software nodes with a single parent swnode and a number
+> > > of child swnodes representing the children), it is impossible to
+> > > assign firmware nodes other than the one representing the top GPIO
+> > > device to the gpiochip child devices.
+> > >
+> > > In fact if we want to drop the OF APIs entirely from gpiolib - this
+> > > would be the right first step as for gpio-sim it actually replaces the
+> > > gc->of_node = some_of_node; assignment that OF-based drivers do for
+> > > sub-nodes defining banks and it does work with device-tree (I verified
+> > > that too) thanks to the fwnode abstraction layer.
+> >
+> > In exchange of acknowledgements I confirm that I understood the issue
+> > you are describing. What I still don't like is this band-aid:ish approach.
+> > What we really need is to replace of_node by fwnode in GPIO library once
+> > for all. But it can be done later after your simulation series (or before,
+> > i.o.w. independently), hence I propose to update TODO and do it separately.
+> >
+> 
+> But this is what we already do for OF. How would the core gpiolib know
+> how the firmware nodes represent the banks? It's the driver's job to
+> tell the framework which node corresponds with what. If anything, we
+> should start replacing of_nodes with fwnodes in drivers and eventually
+> we'd drop the of_node pointer from gpio_chip entirely, but we'd keep
+> the fwnode pointer I added as the driver still needs to assign it
+> itself.
+> 
+> Again: I may be missing something here but I've been going through
+> this on and on and can't figure out any other way. Looking at
+> gpiolib-acpi.c I don't see it correctly assigning fwnodes to
+> sub-devices either but I don't have any HW to test it.
+> 
+> As for this series: I can't really drop this patch as gpio-sim relies
+> on swnodes being correctly associated with gpio_chips to identify the
+> gpiodevs from configfs callbacks.
 
-In Linux FireWire subsystem, the value of field is stored to fw_packet
-structure and copied to fw_request structure as the part. The fw_request
-structure is hidden from unit driver and passed as opaque pointer when
-calling registered handler. It's inconvenient to the unit driver which
-needs timestamp of packet.
+Then we need to replace of_node by fwnode as a first step. I have looked
+briefly into the list of drivers that may have been cleaned up and it doesn't
+look too long.
 
-This commit adds kernel API to pick up timestamp from opaque pointer to
-fw_request structure.
-
-Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
----
- drivers/firewire/core-transaction.c | 18 ++++++++++++++++++
- include/linux/firewire.h            |  1 +
- 2 files changed, 19 insertions(+)
-
-diff --git a/drivers/firewire/core-transaction.c b/drivers/firewire/core-transaction.c
-index ac487c96bb71..e12a0a4c33f7 100644
---- a/drivers/firewire/core-transaction.c
-+++ b/drivers/firewire/core-transaction.c
-@@ -619,6 +619,7 @@ struct fw_request {
- 	struct fw_packet response;
- 	u32 request_header[4];
- 	int ack;
-+	u32 timestamp;
- 	u32 length;
- 	u32 data[];
- };
-@@ -788,6 +789,7 @@ static struct fw_request *allocate_request(struct fw_card *card,
- 	request->response.ack = 0;
- 	request->response.callback = free_response_callback;
- 	request->ack = p->ack;
-+	request->timestamp = p->timestamp;
- 	request->length = length;
- 	if (data)
- 		memcpy(request->data, data, length);
-@@ -832,6 +834,22 @@ int fw_get_request_speed(struct fw_request *request)
- }
- EXPORT_SYMBOL(fw_get_request_speed);
- 
-+/**
-+ * fw_request_get_timestamp: Get timestamp of the request.
-+ * @request: The opaque pointer to request structure.
-+ *
-+ * Get timestamp when 1394 OHCI controller receives the asynchronous request subaction. The
-+ * timestamp consists of the low order 3 bits of second field and the full 13 bits of count
-+ * field of isochronous cycle time register.
-+ *
-+ * Returns: timestamp of the request.
-+ */
-+u32 fw_request_get_timestamp(const struct fw_request *request)
-+{
-+	return request->timestamp;
-+}
-+EXPORT_SYMBOL_GPL(fw_request_get_timestamp);
-+
- static void handle_exclusive_region_request(struct fw_card *card,
- 					    struct fw_packet *p,
- 					    struct fw_request *request,
-diff --git a/include/linux/firewire.h b/include/linux/firewire.h
-index 2f467c52bdec..980019053e54 100644
---- a/include/linux/firewire.h
-+++ b/include/linux/firewire.h
-@@ -354,6 +354,7 @@ void fw_core_remove_address_handler(struct fw_address_handler *handler);
- void fw_send_response(struct fw_card *card,
- 		      struct fw_request *request, int rcode);
- int fw_get_request_speed(struct fw_request *request);
-+u32 fw_request_get_timestamp(const struct fw_request *request);
- void fw_send_request(struct fw_card *card, struct fw_transaction *t,
- 		     int tcode, int destination_id, int generation, int speed,
- 		     unsigned long long offset, void *payload, size_t length,
 -- 
-2.32.0
+With Best Regards,
+Andy Shevchenko
+
 

@@ -2,102 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FDF4664E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF4C4664EA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358403AbhLBOLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 09:11:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59894 "EHLO
+        id S1358412AbhLBON2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 09:13:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358402AbhLBOL2 (ORCPT
+        with ESMTP id S1358401AbhLBON0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:11:28 -0500
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0DE1C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 06:08:05 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1638454083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=gPirYehpBwpu5LgsC7IQsyd1iqeSQ6rbgeQ4CjpKlRA=;
-        b=t2yTj1Nxu0I+EOzRfxw+iLzuDZyNsTw2IL1GpCSM9IWPC2SJCVb1NvzA2BZzQ/eNCFKFv7
-        SGvjygnmghFH7P1+WEwzhq1m48/f2QrMIwWqM5AwQJ1LpA4PiSWuOTJnRe+7kqfZyYDqbo
-        9YYBxn+/VnbBgZFGexItXY3P6llxO+8=
-From:   Cai Huoqing <cai.huoqing@linux.dev>
-To:     cai.huoqing@linux.dev
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] tty: mips_ejtag_fdc: Make use of the helper function kthread_run_on_cpu()
-Date:   Thu,  2 Dec 2021 22:07:37 +0800
-Message-Id: <20211202140737.94832-1-cai.huoqing@linux.dev>
+        Thu, 2 Dec 2021 09:13:26 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E0EC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 06:10:04 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id n26so28042213pff.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 06:10:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=BFA2afkZEpuHmcIqjxQzel5hfmeEopb6eeZTOG3moAA=;
+        b=ES4JGD17/6lNVj7p7jfDYH2cfZYXXx/zp7eZnXimeWGA0tCGFiRs7Q6YQTkRP4VahQ
+         A1kE/LZ5YHrurGtWKVB4SoYZ4iD87Uujx6N8W/E+QOEsV3VwH1vEql7hB9MxfBNQfWHE
+         DKrO9RTjHV/3YYqwhGtPPC3iI1BayD0C5Ji0ty+FMUYuZWge3FZ2j4EEPk07ogxJJMM0
+         e/vdyTvtnWSOiKbm6sD63zCtAk8rlr2vlVieap8BVzovCT9kLvB6Z46CoAXog4zH82yt
+         R/sQez2v6bLpeELaf6OV0OTt9xRkd6NlMZPHJfZqNFY1qqUtO3XLwxTW6D88fw2L85vd
+         5Kng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=BFA2afkZEpuHmcIqjxQzel5hfmeEopb6eeZTOG3moAA=;
+        b=QPrxtTr+r0AMjYRoetggUWBOXV1ii0dLuYIfPnxhX/yU/3JLUcZtUkLgjlXCrSqq4+
+         gXxe1ijtbyx3kvHKvBwbDFmWKQ0UZy44rKxUgooHBEvXixvcpWJnP7Xgkt4YDmF8eCX0
+         UDgwNoluxgI+Y+8De0wp1AG5eNQPDb/2/N//AlSFetxrcYHvVjsSHghSZ3XG17MB4XKx
+         mwg8T+PzgoiVODyOwKgYdDfgGeyNwKjiBsRoo48B1aXAP5WMwEZpFMBHIm1cn0ZyP5TN
+         Awq+qmmnCqTCNtCqmVOiDUjHn7iXotS8k41R+hsO9qwBuzecrNE6NQ59/Fm+BH7en7pV
+         fiKg==
+X-Gm-Message-State: AOAM531sltept7tqz7NnCmbGTM4If9ZXD14WoyS6mNaoYeLE4L3NpaEm
+        91jeZYd9shlgHdg6+In7+hzVURjVB78gSFsFj5Q=
+X-Google-Smtp-Source: ABdhPJxpeUp2UOPHX1sPtiN15SJNp+k79gRDfTEXYDheJLehMdi1R4l7bRZsSLT/cvkXbH3VfEBV8m4/GXs9NcRyc8E=
+X-Received: by 2002:a05:6a00:2441:b0:4a0:ddb0:a6ff with SMTP id
+ d1-20020a056a00244100b004a0ddb0a6ffmr12967322pfj.74.1638454203704; Thu, 02
+ Dec 2021 06:10:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
+Received: by 2002:a17:90a:3844:0:0:0:0 with HTTP; Thu, 2 Dec 2021 06:10:03
+ -0800 (PST)
+Reply-To: mohammadahmed7760@gmail.com
+From:   Mohammad Ahmed <marryh2016@gmail.com>
+Date:   Thu, 2 Dec 2021 06:10:03 -0800
+Message-ID: <CAKtYdpy_vVp0zdwWsFybAfs+o6P5qbVfCAjY+mwhdiab1WMtDA@mail.gmail.com>
+Subject: GREETINGS FROM MR.MOHAMMAD AHMED / CAN I TRUST YOU?
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace kthread_create/kthread_bind/wake_up_process() with
-kthread_run_on_cpu() to simplify the code.
+My Dear Friend.
 
-Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
----
- drivers/tty/mips_ejtag_fdc.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+Greetings.
 
-diff --git a/drivers/tty/mips_ejtag_fdc.c b/drivers/tty/mips_ejtag_fdc.c
-index 02c10a968de1..31dceb5039b5 100644
---- a/drivers/tty/mips_ejtag_fdc.c
-+++ b/drivers/tty/mips_ejtag_fdc.c
-@@ -955,19 +955,18 @@ static int mips_ejtag_fdc_tty_probe(struct mips_cdmm_device *dev)
- 		mips_ejtag_fdc_con.tty_drv = driver;
- 
- 	init_waitqueue_head(&priv->waitqueue);
--	priv->thread = kthread_create(mips_ejtag_fdc_put, priv, priv->fdc_name);
--	if (IS_ERR(priv->thread)) {
--		ret = PTR_ERR(priv->thread);
--		dev_err(priv->dev, "Couldn't create kthread (%d)\n", ret);
--		goto err_destroy_ports;
--	}
- 	/*
- 	 * Bind the writer thread to the right CPU so it can't migrate.
- 	 * The channels are per-CPU and we want all channel I/O to be on a
- 	 * single predictable CPU.
- 	 */
--	kthread_bind(priv->thread, dev->cpu);
--	wake_up_process(priv->thread);
-+	priv->thread = kthread_run_on_cpu(mips_ejtag_fdc_put, priv,
-+					  dev->cpu, "ttyFDC/%u");
-+	if (IS_ERR(priv->thread)) {
-+		ret = PTR_ERR(priv->thread);
-+		dev_err(priv->dev, "Couldn't create kthread (%d)\n", ret);
-+		goto err_destroy_ports;
-+	}
- 
- 	/* Look for an FDC IRQ */
- 	priv->irq = get_c0_fdc_int();
-@@ -1095,15 +1094,14 @@ static int mips_ejtag_fdc_tty_cpu_up(struct mips_cdmm_device *dev)
- 	}
- 
- 	/* Restart the kthread */
--	priv->thread = kthread_create(mips_ejtag_fdc_put, priv, priv->fdc_name);
-+	/* Bind it back to the right CPU and set it off */
-+	priv->thread = kthread_run_on_cpu(mips_ejtag_fdc_put, priv,
-+					  dev->cpu, "ttyFDC/%u");
- 	if (IS_ERR(priv->thread)) {
- 		ret = PTR_ERR(priv->thread);
- 		dev_err(priv->dev, "Couldn't re-create kthread (%d)\n", ret);
- 		goto out;
- 	}
--	/* Bind it back to the right CPU and set it off */
--	kthread_bind(priv->thread, dev->cpu);
--	wake_up_process(priv->thread);
- out:
- 	return ret;
- }
--- 
-2.25.1
+I know this message will come to you as a surprise; my name is Mr.
+Mohammad Ahmed a banker working with Bank of Africa Burkina Faso West
+Africa, Please i need your kind assistance  to transfer an abandoned
+sum of  $13.5 Million United States Dollars into your account .
 
+My dear if my proposal interest you do not hesitate to get back to me
+for us to proceed with the business for I know the source of the fund
+very well, You will provide account for release and transfer of the
+fund into your account and once you confirm the fund transferred into
+your account 50% is for you and 50% for me.
+
+Do not entertain any atom for fear as you this message for the
+transaction will be handling under legal and official by the bank
+management without any problem.
+
+The transaction is risk free and there will be no harm, I will like
+you to respond back to me immediately after reading this message to
+enable us proceed ahead for mutual benefit.
+
+I know the source of the fund very well and I assure you of receiving
+it into your account without any problem, Read this message and if we
+have business urgently get back to me with your personal information
+as listed bellow for more trust and confident.
+
+I am ready to share with you 50% for you and 50% for me and by
+indicating your interest and capability to execute the business with
+me after reading message, I will send you more details on how the fund
+will be officially release and transfer in your account for the
+transaction will be execute in your favor without any problem for the
+only thing i want from you is to be honest with me during the
+transaction official process.
+
+I am looking forward to have your urgent response along with your
+personal information to enable me feed you with more details.
+
+1. Full name:.........
+2. Home Address:.........
+3. Phone.............
+4. Occupation:.............
+5. Age:............
+6. Country:........
+7. Sex........
+8. Your Passport or ID card or Driving License
+
+Thanks.
+
+Yours faithfully
+
+Mr. Mohammad Ahmed.

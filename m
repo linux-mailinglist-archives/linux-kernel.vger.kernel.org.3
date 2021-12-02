@@ -2,122 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DCB6466E00
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 589D7466E01
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:49:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377610AbhLBXuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 18:50:46 -0500
-Received: from mail-il1-f198.google.com ([209.85.166.198]:40795 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349681AbhLBXup (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 18:50:45 -0500
-Received: by mail-il1-f198.google.com with SMTP id u8-20020a056e021a4800b002a1ec0f08afso749463ilv.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 15:47:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ARLQXRQ3vGLI5tqgE5JCO+5Ssy6hqYcNjGBxU79YdC0=;
-        b=CAitF6PHczhPjf3xKVxkfLC9jvYt4UMe3FToR1I0Ul5e3RhFyYa29bmUHwfIrsKwoj
-         LRFPua2YMHFTrFILV93JA2sQgwIVXhR+F7XWJLUsCNNDYSOC316VP6SYKgToKpr+SGVd
-         mtk4XSXFZ92XaNhRB+rHC8R0q68jca/p+zemJEZ/krwTzHGyUIp9fVL4ZRGLLMW2asRC
-         1FMYSwZZupfVPuwbMEA3I/gWMLjXn1QNKO5EGg/c/JjD4CV93D0cfbZT32Gzp/obVbqQ
-         9ZhYoI1tNvalpmUkvn9/7jtNRYWVq4JmYmN8So5ZGJY8h1EJqkET4p1VpgVMFJgXzOdX
-         fMxQ==
-X-Gm-Message-State: AOAM532lXSSysQ/1rmaZGLkBIxYhAQkKsOPuOthbfdf2LSZSF3sIH0BR
-        Qoliy2cqOZGezxoK2cv9O3Jsa1ujnJzd7HqGrASMdBiFlWtd
-X-Google-Smtp-Source: ABdhPJyfueGHO8wx+XsXa2i6YsfNSgD5OYIf+nn4DzEx4Vj1Ba2fFuSDCGZniCHXxs3xeE68mbs2NZqiQaPAdTj2y3+9XdQ+Eog7
+        id S1377620AbhLBXvv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 18:51:51 -0500
+Received: from mga11.intel.com ([192.55.52.93]:46924 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1377612AbhLBXvr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 18:51:47 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10186"; a="234381638"
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="234381638"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 15:48:19 -0800
+X-IronPort-AV: E=Sophos;i="5.87,283,1631602800"; 
+   d="scan'208";a="513438312"
+Received: from msdenney-mobl.amr.corp.intel.com (HELO [10.209.114.233]) ([10.209.114.233])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 15:48:08 -0800
+Subject: Re: [PATCH 10/25] x86/sgx: Support enclave page permission changes
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org
+Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
+        cedric.xing@intel.com, haitao.huang@intel.com,
+        mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+References: <cover.1638381245.git.reinette.chatre@intel.com>
+ <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <24447a03-139a-c7e0-9ad5-34e2019c4df5@intel.com>
+Date:   Thu, 2 Dec 2021 15:48:06 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2c83:: with SMTP id i3mr18453619iow.54.1638488841849;
- Thu, 02 Dec 2021 15:47:21 -0800 (PST)
-Date:   Thu, 02 Dec 2021 15:47:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000630d8505d2326961@google.com>
-Subject: [syzbot] WARNING in rtl92cu_hw_init
-From:   syzbot <syzbot+cce1ee31614c171f5595@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, kuba@kernel.org, kvalo@codeaurora.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        pkshih@realtek.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <44fe170cfd855760857660b9f56cae8c4747cc15.1638381245.git.reinette.chatre@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 12/1/21 11:23 AM, Reinette Chatre wrote:
+> + * EPCM permissions can be extended anytime directly from the enclave with
+> + * no visibility from the OS. This is accomplished with ENCLU[EMODPE]
+> + * run from within enclave. Accessing pages with the new, extended,
+> + * permissions requires the OS to update the PTE to handle the subsequent
+> + * #PF correctly.
 
-syzbot found the following issue on:
+Hi Reinette,
 
-HEAD commit:    c4bc515d73b5 usb: dwc2: gadget: use existing helper
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=12c7d311b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1fa54650ce78e6dc
-dashboard link: https://syzkaller.appspot.com/bug?extid=cce1ee31614c171f5595
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+I really dislike the Intel nomenclature here.  I know the Intel docs are
+all written around permission "extension", but I find it ambiguous.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+I've been looking at these instructions literally for years now and
+permission extension to me can mean either:
+ 1. The set of things you can do is extended
+ 2. The set of things you can *NOT* do is extended
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cce1ee31614c171f5595@syzkaller.appspotmail.com
+I much rather prefer nomenclature like:
 
-------------[ cut here ]------------
-raw_local_irq_restore() called with IRQs enabled
-WARNING: CPU: 1 PID: 1206 at kernel/locking/irqflag-debug.c:10 warn_bogus_irq_restore+0x1d/0x20 kernel/locking/irqflag-debug.c:10
-Modules linked in:
-CPU: 1 PID: 1206 Comm: dhcpcd Not tainted 5.16.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:warn_bogus_irq_restore+0x1d/0x20 kernel/locking/irqflag-debug.c:10
-Code: d3 ff cc cc cc cc cc cc cc cc cc cc cc 80 3d e7 4e dc 02 00 74 01 c3 48 c7 c7 a0 85 27 86 c6 05 d6 4e dc 02 01 e8 fd 13 d3 ff <0f> 0b c3 44 8b 05 75 05 e7 02 55 53 65 48 8b 1c 25 80 6f 02 00 45
-RSP: 0018:ffffc90000f0f6a8 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
-RDX: ffff8881100f1c00 RSI: ffffffff812bae78 RDI: fffff520001e1ec7
-RBP: 0000000000000200 R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff812b4c4e R11: 0000000000000000 R12: ffff88814b2047c0
-R13: 0000000000000000 R14: 0000000000000000 R15: 00000000ffffffff
-FS:  00007f0d4252e740(0000) GS:ffff8881f6900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fd8c7ba7718 CR3: 0000000117bd2000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- rtl92cu_hw_init.cold+0x119f/0x34c5 drivers/net/wireless/realtek/rtlwifi/rtl8192cu/hw.c:1003
- rtl_usb_start+0xaf/0x740 drivers/net/wireless/realtek/rtlwifi/usb.c:743
- rtl_op_start+0x139/0x1b0 drivers/net/wireless/realtek/rtlwifi/core.c:140
- drv_start+0x168/0x440 net/mac80211/driver-ops.c:23
- ieee80211_do_open+0xae4/0x2430 net/mac80211/iface.c:1125
- ieee80211_open net/mac80211/iface.c:362 [inline]
- ieee80211_open+0x1a0/0x240 net/mac80211/iface.c:348
- __dev_open+0x2bc/0x4d0 net/core/dev.c:1490
- __dev_change_flags+0x583/0x750 net/core/dev.c:8793
- dev_change_flags+0x93/0x170 net/core/dev.c:8864
- devinet_ioctl+0x15d1/0x1ca0 net/ipv4/devinet.c:1144
- inet_ioctl+0x1e6/0x320 net/ipv4/af_inet.c:969
- sock_do_ioctl+0xcc/0x230 net/socket.c:1118
- sock_ioctl+0x2f1/0x640 net/socket.c:1235
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:874 [inline]
- __se_sys_ioctl fs/ioctl.c:860 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:860
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f0d4261c0e7
-Code: 3c 1c e8 1c ff ff ff 85 c0 79 87 49 c7 c4 ff ff ff ff 5b 5d 4c 89 e0 41 5c c3 66 0f 1f 84 00 00 00 00 00 b8 10 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 61 9d 0c 00 f7 d8 64 89 01 48
-RSP: 002b:00007ffcb59c0a08 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f0d4252e6c8 RCX: 00007f0d4261c0e7
-RDX: 00007ffcb59d0bf8 RSI: 0000000000008914 RDI: 0000000000000005
-RBP: 00007ffcb59e0da8 R08: 00007ffcb59d0bb8 R09: 00007ffcb59d0b68
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcb59d0bf8 R14: 0000000000000028 R15: 0000000000008914
- </TASK>
+	EPCM permissions can be relaxed anytime directly from the
+	enclave with no visibility from the OS. This is accomplished
+	with ENCLU[EMODPE] run from within enclave. Accessing pages with
+	the new, relaxed permissions requires the OS to update the PTE
+	to handle the subsequent correctly.
 
+"Relax" is less ambiguous.  Relaxing a restriction and relaxing
+permissions both mean doing things less strictly.  Extending
+restrictions and extending what is allowed are opposites.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Maybe it's just me and I need to get this through my thick skull at some
+point.  But, I do think it's OK to improve on the architecture names for
+things when they go into the kernel.  The XSAVE XSTATE_BV->xfeatures
+rename comes to mind.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Anyway, I'd appreciate if you could keep this in mind and consider
+changing it if a future revision is needed if you believe it is more clear.

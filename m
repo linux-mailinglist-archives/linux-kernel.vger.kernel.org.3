@@ -2,194 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BAE4668E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:13:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 387EB4668EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359852AbhLBRQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:16:50 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:50274 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235136AbhLBRQs (ORCPT
+        id S1359864AbhLBRRF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:17:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46636 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S235136AbhLBRRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:16:48 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 80045624DC
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 17:13:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36F70C00446;
-        Thu,  2 Dec 2021 17:13:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638465203;
-        bh=Awef3mKCRWGcmP5kp4/7vLwxKgLqgwZWcs7njqX9qx4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Qdwe4V2Q6awZk+6HXppX4p+6KdnCpFgW2NsBuTkG4r99MU1SG0HPeOgrTxG1ht5gD
-         mVXIo7jpCWfThANs9uQXNtPvfYr86b7dc5yOJflCKy/bw/niCvmG7Zm0NeGFFqK5Uw
-         DNYYJPd49NAipl6/kW1kOu79O91lkD8fBQ7h0CrWBVnuSZEYkrma9BEoDnjXxsOaD+
-         nErriHIqCgTxgpbezq/Izi4WXwSkiREMW7v/EF57fE761WSKMkM/oO1YtAqHQ7C819
-         k7W3rVQBn75boBSPMqGnz8iivgWp/7UeIR8YeZE5wB2CnI0B0o+jfK4fHRqdGGGQ/f
-         pjvOaiV3DIFUA==
-Date:   Thu, 2 Dec 2021 18:13:20 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Marcelo Tosatti <mtosatti@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
-        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
-        Christoph Lameter <cl@linux.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [patch v7 02/10] add prctl task isolation prctl docs and samples
-Message-ID: <20211202171320.GA648659@lothringen>
-References: <20211112123531.497831890@fuller.cnet>
- <20211112123750.692268849@fuller.cnet>
- <20211123123620.GB479935@lothringen>
- <20211129151325.GA135990@fuller.cnet>
+        Thu, 2 Dec 2021 12:17:03 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36ABBC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:13:41 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id 35-20020a9d08a6000000b00579cd5e605eso613656otf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 09:13:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=AajSOfABZmizcM6W0Pmxe8k6X7Mucgg0abkivyflOos=;
+        b=bIlQhALzsSpyrYW9oR4N0/2vKAB+viUUzyc3WxBGoTrY1n1CuWkJAJWPyk//ixBkqO
+         Q8mizzVUZP6eHGSldLFeptQbPnchOCZS0L5bdMOYKq7vmpUhSpYTE4rLByZvBCpx3rsd
+         GBJDhjxb9oB7frIH62viMTVgoO2uX1p/kugcDiQKEArIHIE1qeF9onCNFc1zKr2IkZdN
+         ExoRWlOlUChn5wzXFJ9s4M5Csp76CTawiysoyf2iZE7dhn1MuaNPTXvQRGAcvbS4gbdn
+         4WyAfbS8Y5LS7K7HFcqsUuIPo59XZp0ov4xEUuHTribO/RQRrpvWFsMIY7+ZG+PqfTTA
+         27tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=AajSOfABZmizcM6W0Pmxe8k6X7Mucgg0abkivyflOos=;
+        b=ewug5WkMQlM8p5oh8o0jhMMcuGu7xgV7wu3BiMMbkyMLAY/gTObpwYrVHAd3U+kv1/
+         UQWeE5BtGsxesmAkIwiI+9FYsDlJDqYHySIGzApo9XMJotY/smjT399TrCITHmGwStvG
+         sJvFnMOoN6FBz6VJ1UXDQtU+SkjHDk38gjOv7eNBdFTJ9sGvb7HTJX6Ad37o3Ezg6XSf
+         hDt3v4hR7AZ1zwBIptmlLjPo7JDbdUhjbM4aldAPJzc4MeYGzLHHzE3Ssuw+RWJGWXaB
+         /ZpR4vS8ntyoeoJ+sHyYlCFcgyv4ukdQ6eZgNPqkVIcIm1UlVO46JLyFU90O0Xq7FUHX
+         GtkA==
+X-Gm-Message-State: AOAM530flzfQMMbnEWq5FqLdnYFI1Styi1R2UoVmVz6bOcEfDYAdP0Bj
+        QBr/lJ3Nnu+h/arvYACHexnlmibXl5r7T3m0m6g=
+X-Google-Smtp-Source: ABdhPJyY0ZZWWmrlcECjWfIA9f9tGUxAjcFzMuc9v82NaipBZRDDsrY/MKV5w4zTGRjqkwjOCU8VNEXDZDW/t9WcfR0=
+X-Received: by 2002:a9d:67c1:: with SMTP id c1mr12467723otn.299.1638465220553;
+ Thu, 02 Dec 2021 09:13:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211129151325.GA135990@fuller.cnet>
+References: <e2685075-fbc5-6f36-907f-76b6f76a59ce@amd.com> <20211201151310.177671-1-zhou1615@umn.edu>
+ <77fca7d2-b1d8-fe11-322a-3d32f40f6f65@amd.com>
+In-Reply-To: <77fca7d2-b1d8-fe11-322a-3d32f40f6f65@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 2 Dec 2021 12:13:29 -0500
+Message-ID: <CADnq5_M61Ob29ftgNB7L1eEAb_St1WL1wLEF3C4wXSEFP+3BMw@mail.gmail.com>
+Subject: Re: [PATCH v5] drm/radeon/radeon_kms: Fix a NULL pointer dereference
+ in radeon_driver_open_kms()
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     Zhou Qingyang <zhou1615@umn.edu>, David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, Kangjie Lu <kjlu@umn.edu>,
+        LKML <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        Alex Deucher <alexander.deucher@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021 at 12:13:25PM -0300, Marcelo Tosatti wrote:
-> On Tue, Nov 23, 2021 at 01:36:20PM +0100, Frederic Weisbecker wrote:
-> > On Fri, Nov 12, 2021 at 09:35:33AM -0300, Marcelo Tosatti wrote:
-> > > +**PR_ISOL_CFG_SET**:
-> > > +
-> > > +        Set task isolation configuration.
-> > > +        The general format is::
-> > > +
-> > > +                prctl(PR_ISOL_CFG_SET, what, arg3, arg4, arg5);
-> > > +
-> > > +        The 'what' argument specifies what to configure. Possible values are:
-> > > +
-> > > +        - ``I_CFG_FEAT``:
-> > > +
-> > > +                Set configuration of task isolation features. 'arg3' specifies
-> > > +                the feature. Possible values are:
-> > > +
-> > > +                - ``ISOL_F_QUIESCE``:
-> > > +
-> > > +                        If arg4 is QUIESCE_CONTROL, set the control structure
-> > > +                        for quiescing of background kernel activities, from
-> > > +                        the location pointed to by ``(int *)arg5``::
-> > > +
-> > > +                         struct task_isol_quiesce_control {
-> > > +                                __u64 flags;
-> > > +                                __u64 quiesce_mask;
-> > > +                                __u64 quiesce_oneshot_mask;
-> > > +                                __u64 pad[5];
-> > > +                         };
-> > > +
-> > > +                        Where:
-> > > +
-> > > +                        *flags*: Additional flags (should be zero).
-> > > +
-> > > +                        *quiesce_mask*: A bitmask containing which kernel
-> > > +                        activities to quiesce.
-> > > +
-> > > +                        *quiesce_oneshot_mask*: A bitmask indicating which kernel
-> > > +                        activities should behave in oneshot mode, that is, quiescing
-> > > +                        will happen on return from prctl(PR_ISOL_ACTIVATE_SET), but not
-> > > +                        on return of subsequent system calls. The corresponding bit(s)
-> > > +                        must also be set at quiesce_mask.
-> > > +
-> > > +                        *pad*: Additional space for future enhancements.
-> > > +
-> > > +                        For quiesce_mask (and quiesce_oneshot_mask), possible bit sets are:
-> > > +
-> > > +                        - ``ISOL_F_QUIESCE_VMSTATS``
-> > > +
-> > > +                        VM statistics are maintained in per-CPU counters to
-> > > +                        improve performance. When a CPU modifies a VM statistic,
-> > > +                        this modification is kept in the per-CPU counter.
-> > > +                        Certain activities require a global count, which
-> > > +                        involves requesting each CPU to flush its local counters
-> > > +                        to the global VM counters.
-> > > +
-> > > +                        This flush is implemented via a workqueue item, which
-> > > +                        might schedule a workqueue on isolated CPUs.
-> > > +
-> > > +                        To avoid this interruption, task isolation can be
-> > > +                        configured to, upon return from system calls, synchronize
-> > > +                        the per-CPU counters to global counters, thus avoiding
-> > > +                        the interruption.
-> > 
-> > Sorry I know this is already v7 but we really don't want to screw up this interface.
-> 
-> No problem.
-> 
-> > What would be more simple and flexible for individual features to quiesce:
-> > 
-> >    arg3 = ISOL_F_QUIESCE
-> >    arg4 = which feature to quiesce (eg: ISOL_F_QUIESCE_VMSTATS)
-> 
-> arg4 is QUIESCE_CONTROL today so one can expand the interface
-> (by adding new commands).
-> 
-> >    arg5 =
-> > 
-> >        struct task_isol_quiesce_control {
-> >            __u64 flags; //with ONESHOT as the first and only possible flag for now
-> >            __u64 pad[5];
-> >        };
-> 
-> So your idea is to allow expansion at this level ? Say while adding
-> a new
-> 
-> ISOL_F_QUIESCE_NEWITEM
-> 
-> one can add
-> 
-> 	struct task_isol_quiesce_control_newitem {
-> 		__u64 flags;
-> 		__u64 pad[5];
-> 	};
-> 
-> And add new fields to "struct task_isol_quiesce_control_newitem".
-> 
-> One downside of this suggestion is that for use-cases of the task_isol_computation.c type,
-> (see patch 2 "add prctl task isolation prctl docs and samples"), this might need
-> multiple system calls for each enable/disable cycle. Is that OK?
-> 
-> See more below.
-> 
-> > This way we can really do a finegrained control over each feature to quiesce.
-> 
-> With the patchset above, one can add new values to arg4 
-> (at the same level of QUIESCE_CONTROL). Your suggestion does not save
-> room for that.
-> 
-> One could add new values to the same space of I_CFG_FEAT:
-> 
->           prctl(PR_ISOL_CFG_SET, I_CFG_FEAT_xxx, ...);
-> 
-> But that sounds awkward.
-> 
-> Or change the current ioctl to:
-> 
->           prctl(PR_ISOL_CFG, I_CFG_FEAT_CONTROL, ...);
-> 
-> Which makes it less awkward.
-> 
-> What do you say?
-> 
-> --- 
-> 
-> And then, what about keeping the bitmaps with enabled/one-shot mode
-> per feature per bit (to avoid multiple system calls)
-> but having (in the future) additional per-quiesce instance commands ?
+Applied.  Thanks!
 
-Ok got your points.
+Alex
 
-I guess we can then simply rename ISOL_F_QUIESCE to ISOL_F_QUIESCE_MULTIPLE
-for simple all-in-one configuration. Then if the need ever arise in the future,
-we can always add ISOL_F_QUIESCE (or ISOL_F_QUIESCE_ONE) to do finegrained
-control over a single quiescing feature.
-
-Does that sound ok?
-
-Thanks.
+On Wed, Dec 1, 2021 at 10:16 AM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 01.12.21 um 16:13 schrieb Zhou Qingyang:
+> > In radeon_driver_open_kms(), radeon_vm_bo_add() is assigned to
+> > vm->ib_bo_va and passes and used in radeon_vm_bo_set_addr(). In
+> > radeon_vm_bo_set_addr(), there is a dereference of vm->ib_bo_va,
+> > which could lead to a NULL pointer dereference on failure of
+> > radeon_vm_bo_add().
+> >
+> > Fix this bug by adding a check of vm->ib_bo_va.
+> >
+> > This bug was found by a static analyzer. The analysis employs
+> > differential checking to identify inconsistent security operations
+> > (e.g., checks or kfrees) between two code paths and confirms that the
+> > inconsistent operations are not recovered in the current function or
+> > the callers, so they constitute bugs.
+> >
+> > Note that, as a bug found by static analysis, it can be a false
+> > positive or hard to trigger. Multiple researchers have cross-reviewed
+> > the bug.
+> >
+> > Builds with CONFIG_DRM_RADEON=3Dm show no new warnings,
+> > and our static analyzer no longer warns about this code.
+> >
+> > Fixes: cc9e67e3d700 ("drm/radeon: fix VM IB handling")
+> > Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+> > ---
+> > Changes in v5:
+> >    -  Use conditions to avoid unnecessary initialization
+> >
+> > Changes in v4:
+> >    -  Initialize the variables to silence warning
+> >
+> > Changes in v3:
+> >    -  Fix the bug that good case will also be freed
+> >    -  Improve code style
+> >
+> > Changes in v2:
+> >    -  Improve the error handling into goto style
+> >
+> >   drivers/gpu/drm/radeon/radeon_kms.c | 36 ++++++++++++++++------------=
+-
+> >   1 file changed, 20 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/radeon/radeon_kms.c b/drivers/gpu/drm/rade=
+on/radeon_kms.c
+> > index 482fb0ae6cb5..66aee48fd09d 100644
+> > --- a/drivers/gpu/drm/radeon/radeon_kms.c
+> > +++ b/drivers/gpu/drm/radeon/radeon_kms.c
+> > @@ -648,6 +648,8 @@ void radeon_driver_lastclose_kms(struct drm_device =
+*dev)
+> >   int radeon_driver_open_kms(struct drm_device *dev, struct drm_file *f=
+ile_priv)
+> >   {
+> >       struct radeon_device *rdev =3D dev->dev_private;
+> > +     struct radeon_fpriv *fpriv;
+> > +     struct radeon_vm *vm;
+> >       int r;
+> >
+> >       file_priv->driver_priv =3D NULL;
+> > @@ -660,8 +662,6 @@ int radeon_driver_open_kms(struct drm_device *dev, =
+struct drm_file *file_priv)
+> >
+> >       /* new gpu have virtual address space support */
+> >       if (rdev->family >=3D CHIP_CAYMAN) {
+> > -             struct radeon_fpriv *fpriv;
+> > -             struct radeon_vm *vm;
+> >
+> >               fpriv =3D kzalloc(sizeof(*fpriv), GFP_KERNEL);
+> >               if (unlikely(!fpriv)) {
+> > @@ -672,35 +672,39 @@ int radeon_driver_open_kms(struct drm_device *dev=
+, struct drm_file *file_priv)
+> >               if (rdev->accel_working) {
+> >                       vm =3D &fpriv->vm;
+> >                       r =3D radeon_vm_init(rdev, vm);
+> > -                     if (r) {
+> > -                             kfree(fpriv);
+> > -                             goto out_suspend;
+> > -                     }
+> > +                     if (r)
+> > +                             goto out_fpriv;
+> >
+> >                       r =3D radeon_bo_reserve(rdev->ring_tmp_bo.bo, fal=
+se);
+> > -                     if (r) {
+> > -                             radeon_vm_fini(rdev, vm);
+> > -                             kfree(fpriv);
+> > -                             goto out_suspend;
+> > -                     }
+> > +                     if (r)
+> > +                             goto out_vm_fini;
+> >
+> >                       /* map the ib pool buffer read only into
+> >                        * virtual address space */
+> >                       vm->ib_bo_va =3D radeon_vm_bo_add(rdev, vm,
+> >                                                       rdev->ring_tmp_bo=
+.bo);
+> > +                     if (!vm->ib_bo_va) {
+> > +                             r =3D -ENOMEM;
+> > +                             goto out_vm_fini;
+> > +                     }
+> > +
+> >                       r =3D radeon_vm_bo_set_addr(rdev, vm->ib_bo_va,
+> >                                                 RADEON_VA_IB_OFFSET,
+> >                                                 RADEON_VM_PAGE_READABLE=
+ |
+> >                                                 RADEON_VM_PAGE_SNOOPED)=
+;
+> > -                     if (r) {
+> > -                             radeon_vm_fini(rdev, vm);
+> > -                             kfree(fpriv);
+> > -                             goto out_suspend;
+> > -                     }
+> > +                     if (r)
+> > +                             goto out_vm_fini;
+> >               }
+> >               file_priv->driver_priv =3D fpriv;
+> >       }
+> >
+> > +     if (!r)
+>
+> I think that test is unecessary now, maybe double check.
+>
+> Either way patch Reviewed-by: Christian K=C3=B6nig
+> <christian.koenig@amd.com>. Alex will probably pick it up now.
+>
+> Thanks for the help,
+> Christian.
+>
+> > +             goto out_suspend;
+> > +
+> > +out_vm_fini:
+> > +     radeon_vm_fini(rdev, vm);
+> > +out_fpriv:
+> > +     kfree(fpriv);
+> >   out_suspend:
+> >       pm_runtime_mark_last_busy(dev->dev);
+> >       pm_runtime_put_autosuspend(dev->dev);
+>

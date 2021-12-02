@@ -2,154 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EE5146601B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA754466026
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345812AbhLBJJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:09:27 -0500
-Received: from smtprelay0243.hostedemail.com ([216.40.44.243]:59954 "EHLO
-        smtprelay.hostedemail.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S231655AbhLBJJZ (ORCPT
+        id S1345950AbhLBJLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:11:55 -0500
+Received: from mail-io1-f71.google.com ([209.85.166.71]:57073 "EHLO
+        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345896AbhLBJLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:09:25 -0500
-Received: from omf01.hostedemail.com (clb03-v110.bra.tucows.net [216.40.38.60])
-        by smtprelay03.hostedemail.com (Postfix) with ESMTP id E08F0837F27E;
-        Thu,  2 Dec 2021 09:06:02 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 025C660009;
-        Thu,  2 Dec 2021 09:06:01 +0000 (UTC)
-Message-ID: <c6189daaac183ddf51da1444c597d8577c1ac416.camel@perches.com>
-Subject: [PATCH] media: i2c: ov8865: Neaten unnecessary indentation
-From:   Joe Perches <joe@perches.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        linux-media <linux-media@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Date:   Thu, 02 Dec 2021 01:06:01 -0800
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Thu, 2 Dec 2021 04:11:48 -0500
+Received: by mail-io1-f71.google.com with SMTP id r199-20020a6b2bd0000000b005e234972ddfso32061668ior.23
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 01:08:24 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=2nEPO550Rj0CJg8yzFP5f3pa89cCWBV9CiKJJK9J9Ac=;
+        b=sOrZAVlTp26c4Kse0f1OXK/+RT6I/uWB1RPct20VkeTUrWiYGjZiFFLkKEIaS1bIpN
+         C+r4yy4U9TBew/NplocK/iVd/Xs5g15bJCtPWn0QBcDUqNOKWX++Zt+CtMAcYdU3L76s
+         aZw/VwR7n9rYxTi93OHOcNPiJdKiNejfZWuQxA/2M4Eor7W9XMgQr5/qQSoC6lfPDDN5
+         TtJZECgjHw+lVgh/AzJVeUxVif5N33fu393CtXYJGBJrWCBJOl4J8+B9s0U4KYVKfy91
+         bhUoYKssfccfd62Licc986PrWv8PEPpcu6Y29zZIaVtXH7vbtBRu0SmMapiinkY6UlwY
+         aqfw==
+X-Gm-Message-State: AOAM533jJLOqt69k/+sBdsDYP7L3iQtQFZgtMtus2lXK/h8sFs/gdOiy
+        kJx8RDom3FXuefSrY6XBARRaP0S0JsYZn1kde9UpLrbs1rhO
+X-Google-Smtp-Source: ABdhPJwdIiqglfIfrBETAzYIY+rhwwS3wQVLPY4aL7a9eQGw6Sh6Athe+nzFhQbvf66S+B/MJoucChJZb6IAY85eDyrQWXmZKz/U
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: 025C660009
-X-Spam-Status: No, score=-4.89
-X-Stat-Signature: 8w1jacxyozb3txyx8m9rgwz38uirn6wz
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18YUlA6yDz9UyZcBrKA1TSWARTY71967yQ=
-X-HE-Tag: 1638435961-600384
+X-Received: by 2002:a6b:b2c1:: with SMTP id b184mr14946846iof.24.1638436103738;
+ Thu, 02 Dec 2021 01:08:23 -0800 (PST)
+Date:   Thu, 02 Dec 2021 01:08:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f35e3b05d22621ff@google.com>
+Subject: [syzbot] INFO: task hung in io_uring_try_cancel_iowq
+From:   syzbot <syzbot+97bcaa1dfa37e2512746@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jumping to the start of a labeled else block isn't typical.
+Hello,
 
-Unindent the code by reversing the test and using a goto instead.
+syzbot found the following issue on:
 
-Signed-off-by: Joe Perches <joe@perches.com>
+HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14b06cc5b00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
+dashboard link: https://syzkaller.appspot.com/bug?extid=97bcaa1dfa37e2512746
+compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+97bcaa1dfa37e2512746@syzkaller.appspotmail.com
+
+INFO: task kworker/u4:10:22176 blocked for more than 143 seconds.
+      Not tainted 5.16.0-rc3-syzkaller #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:kworker/u4:10   state:D stack:22352 pid:22176 ppid:     2 flags:0x00004000
+Workqueue: events_unbound io_ring_exit_work
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:4972 [inline]
+ __schedule+0xb72/0x1460 kernel/sched/core.c:6253
+ schedule+0x12b/0x1f0 kernel/sched/core.c:6326
+ schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
+ __mutex_lock_common+0xd1f/0x2590 kernel/locking/mutex.c:680
+ __mutex_lock kernel/locking/mutex.c:740 [inline]
+ mutex_lock_nested+0x1a/0x20 kernel/locking/mutex.c:792
+ io_uring_try_cancel_iowq+0x2e/0x17e fs/io_uring.c:9644
+ io_uring_try_cancel_requests+0x16f/0x42a fs/io_uring.c:9674
+ io_ring_exit_work+0x10b/0x6b7 fs/io_uring.c:9483
+ process_one_work+0x853/0x1140 kernel/workqueue.c:2298
+ worker_thread+0xac1/0x1320 kernel/workqueue.c:2445
+ kthread+0x468/0x490 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+ </TASK>
+
+Showing all locks held in the system:
+1 lock held by khungtaskd/27:
+ #0: ffffffff8cb1db40 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
+1 lock held by in:imklog/6218:
+ #0: ffff88801a8a9c70 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x24e/0x2f0 fs/file.c:990
+3 locks held by kworker/u4:10/22176:
+ #0: ffff888011469138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x7ca/0x1140
+ #1: ffffc9000f5a7d20 ((work_completion)(&ctx->exit_work)){+.+.}-{0:0}, at: process_one_work+0x808/0x1140 kernel/workqueue.c:2273
+ #2: ffff88807ca0c0a8 (&ctx->uring_lock){+.+.}-{3:3}, at: io_uring_try_cancel_iowq+0x2e/0x17e fs/io_uring.c:9644
+2 locks held by kworker/u4:7/4146:
+3 locks held by iou-sqp-5421/5424:
+
+=============================================
+
+NMI backtrace for cpu 1
+CPU: 1 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1dc/0x2d8 lib/dump_stack.c:106
+ nmi_cpu_backtrace+0x45f/0x490 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x16a/0x280 lib/nmi_backtrace.c:62
+ trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
+ check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
+ watchdog+0xc82/0xcd0 kernel/hung_task.c:295
+ kthread+0x468/0x490 kernel/kthread.c:327
+ ret_from_fork+0x1f/0x30
+ </TASK>
+Sending NMI from CPU 1 to CPUs 0:
+NMI backtrace for cpu 0
+CPU: 0 PID: 2950 Comm: systemd-journal Not tainted 5.16.0-rc3-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:check_kcov_mode kernel/kcov.c:177 [inline]
+RIP: 0010:write_comp_data kernel/kcov.c:221 [inline]
+RIP: 0010:__sanitizer_cov_trace_const_cmp4+0x31/0xa0 kernel/kcov.c:287
+Code: 14 25 c0 6f 02 00 65 8b 05 74 e3 7d 7e a9 00 01 ff 00 74 10 a9 00 01 00 00 74 6e 83 ba a4 15 00 00 00 74 65 8b 82 80 15 00 00 <83> f8 03 75 5a 48 8b 8a 88 15 00 00 44 8b 8a 84 15 00 00 49 c1 e1
+RSP: 0018:ffffc90001acf6d0 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: ffffc90001acfbc0 RCX: ffff88807d1bba00
+RDX: ffff88807d1bba00 RSI: 0000000000000040 RDI: 0000000000000000
+RBP: 0000000000000051 R08: ffffffff81df889b R09: ffffc90001acf660
+R10: fffff52000359ed5 R11: 0000000000000000 R12: 1ffff92000359f7f
+R13: dffffc0000000000 R14: ffffc90001acfbf8 R15: dffffc0000000000
+FS:  00007f46c1ca58c0(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f46bf1cd000 CR3: 000000001f549000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ try_to_unlazy+0x7b/0xce0 fs/namei.c:772
+ may_lookup fs/namei.c:1684 [inline]
+ link_path_walk+0x298/0xd00 fs/namei.c:2239
+ path_openat+0x25b/0x3660 fs/namei.c:3555
+ do_filp_open+0x277/0x4f0 fs/namei.c:3586
+ do_sys_openat2+0x13b/0x500 fs/open.c:1212
+ do_sys_open fs/open.c:1228 [inline]
+ __do_sys_open fs/open.c:1236 [inline]
+ __se_sys_open fs/open.c:1232 [inline]
+ __x64_sys_open+0x221/0x270 fs/open.c:1232
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f46c1234840
+Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
+RSP: 002b:00007fffe2dca4d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
+RAX: ffffffffffffffda RBX: 00007fffe2dca7e0 RCX: 00007f46c1234840
+RDX: 00000000000001a0 RSI: 0000000000080042 RDI: 0000563b4c24d640
+RBP: 000000000000000d R08: 000000000000c0c1 R09: 00000000ffffffff
+R10: 0000000000000069 R11: 0000000000000246 R12: 00000000ffffffff
+R13: 0000563b4c240040 R14: 00007fffe2dca7a0 R15: 0000563b4c24d690
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	14 25                	adc    $0x25,%al
+   2:	c0 6f 02 00          	shrb   $0x0,0x2(%rdi)
+   6:	65 8b 05 74 e3 7d 7e 	mov    %gs:0x7e7de374(%rip),%eax        # 0x7e7de381
+   d:	a9 00 01 ff 00       	test   $0xff0100,%eax
+  12:	74 10                	je     0x24
+  14:	a9 00 01 00 00       	test   $0x100,%eax
+  19:	74 6e                	je     0x89
+  1b:	83 ba a4 15 00 00 00 	cmpl   $0x0,0x15a4(%rdx)
+  22:	74 65                	je     0x89
+  24:	8b 82 80 15 00 00    	mov    0x1580(%rdx),%eax
+* 2a:	83 f8 03             	cmp    $0x3,%eax <-- trapping instruction
+  2d:	75 5a                	jne    0x89
+  2f:	48 8b 8a 88 15 00 00 	mov    0x1588(%rdx),%rcx
+  36:	44 8b 8a 84 15 00 00 	mov    0x1584(%rdx),%r9d
+  3d:	49                   	rex.WB
+  3e:	c1                   	.byte 0xc1
+  3f:	e1                   	.byte 0xe1
+
+
 ---
- drivers/media/i2c/ov8865.c | 81 +++++++++++++++++++++++-----------------------
- 1 file changed, 41 insertions(+), 40 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/media/i2c/ov8865.c b/drivers/media/i2c/ov8865.c
-index ebdb20d3fe9d8..7ef83a10f586f 100644
---- a/drivers/media/i2c/ov8865.c
-+++ b/drivers/media/i2c/ov8865.c
-@@ -2396,56 +2396,57 @@ static int ov8865_sensor_init(struct ov8865_sensor *sensor)
- 
- static int ov8865_sensor_power(struct ov8865_sensor *sensor, bool on)
- {
--	/* Keep initialized to zero for disable label. */
--	int ret = 0;
-+	int ret;
- 
--	if (on) {
--		gpiod_set_value_cansleep(sensor->reset, 1);
--		gpiod_set_value_cansleep(sensor->powerdown, 1);
-+	if (!on) {
-+		ret = 0;
-+		goto disable;
-+	}
- 
--		ret = regulator_enable(sensor->dovdd);
--		if (ret) {
--			dev_err(sensor->dev,
--				"failed to enable DOVDD regulator\n");
--			goto disable;
--		}
-+	gpiod_set_value_cansleep(sensor->reset, 1);
-+	gpiod_set_value_cansleep(sensor->powerdown, 1);
- 
--		ret = regulator_enable(sensor->avdd);
--		if (ret) {
--			dev_err(sensor->dev,
--				"failed to enable AVDD regulator\n");
--			goto disable;
--		}
-+	ret = regulator_enable(sensor->dovdd);
-+	if (ret) {
-+		dev_err(sensor->dev, "failed to enable DOVDD regulator\n");
-+		goto disable;
-+	}
- 
--		ret = regulator_enable(sensor->dvdd);
--		if (ret) {
--			dev_err(sensor->dev,
--				"failed to enable DVDD regulator\n");
--			goto disable;
--		}
-+	ret = regulator_enable(sensor->avdd);
-+	if (ret) {
-+		dev_err(sensor->dev, "failed to enable AVDD regulator\n");
-+		goto disable;
-+	}
- 
--		ret = clk_prepare_enable(sensor->extclk);
--		if (ret) {
--			dev_err(sensor->dev, "failed to enable EXTCLK clock\n");
--			goto disable;
--		}
-+	ret = regulator_enable(sensor->dvdd);
-+	if (ret) {
-+		dev_err(sensor->dev, "failed to enable DVDD regulator\n");
-+		goto disable;
-+	}
-+
-+	ret = clk_prepare_enable(sensor->extclk);
-+	if (ret) {
-+		dev_err(sensor->dev, "failed to enable EXTCLK clock\n");
-+		goto disable;
-+	}
- 
--		gpiod_set_value_cansleep(sensor->reset, 0);
--		gpiod_set_value_cansleep(sensor->powerdown, 0);
-+	gpiod_set_value_cansleep(sensor->reset, 0);
-+	gpiod_set_value_cansleep(sensor->powerdown, 0);
-+
-+	/* Time to enter streaming mode according to power timings. */
-+	usleep_range(10000, 12000);
-+
-+	return 0;
- 
--		/* Time to enter streaming mode according to power timings. */
--		usleep_range(10000, 12000);
--	} else {
- disable:
--		gpiod_set_value_cansleep(sensor->powerdown, 1);
--		gpiod_set_value_cansleep(sensor->reset, 1);
-+	gpiod_set_value_cansleep(sensor->powerdown, 1);
-+	gpiod_set_value_cansleep(sensor->reset, 1);
- 
--		clk_disable_unprepare(sensor->extclk);
-+	clk_disable_unprepare(sensor->extclk);
- 
--		regulator_disable(sensor->dvdd);
--		regulator_disable(sensor->avdd);
--		regulator_disable(sensor->dovdd);
--	}
-+	regulator_disable(sensor->dvdd);
-+	regulator_disable(sensor->avdd);
-+	regulator_disable(sensor->dovdd);
- 
- 	return ret;
- }
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

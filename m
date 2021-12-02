@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3640A465F0E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 08:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598E7465F6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:30:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355954AbhLBIDE convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Dec 2021 03:03:04 -0500
-Received: from frasgout.his.huawei.com ([185.176.79.56]:4189 "EHLO
-        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230274AbhLBIDD (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:03:03 -0500
-Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J4StZ1WDLz67x6V;
-        Thu,  2 Dec 2021 15:55:34 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 08:59:39 +0100
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
- Thu, 2 Dec 2021 08:59:39 +0100
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "agk@redhat.com" <agk@redhat.com>,
-        "snitzer@redhat.com" <snitzer@redhat.com>,
-        "ebiggers@kernel.org" <ebiggers@kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "eparis@redhat.com" <eparis@redhat.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
-        "linux-audit@redhat.com" <linux-audit@redhat.com>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
-Subject: RE: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
-Thread-Topic: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
-Thread-Index: AQHX5tHI6VSZDPA0J0GM0KIP7fuaeKweu+CAgAAaFvA=
-Date:   Thu, 2 Dec 2021 07:59:38 +0000
-Message-ID: <e57d2d23ec7845febb79ca4476c73fcb@huawei.com>
-References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
- <20211201163708.3578176-1-roberto.sassu@huawei.com>
- <Yahz1SYRG1CQIh0z@infradead.org>
-In-Reply-To: <Yahz1SYRG1CQIh0z@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.204.63.33]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
+        id S1356164AbhLBIeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 03:34:04 -0500
+Received: from inva021.nxp.com ([92.121.34.21]:52838 "EHLO inva021.nxp.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1356125AbhLBIdj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 03:33:39 -0500
+Received: from inva021.nxp.com (localhost [127.0.0.1])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id CA3ED201CD6;
+        Thu,  2 Dec 2021 09:30:15 +0100 (CET)
+Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
+        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 35F01200222;
+        Thu,  2 Dec 2021 09:30:15 +0100 (CET)
+Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
+        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 0CBC3183AC96;
+        Thu,  2 Dec 2021 16:30:12 +0800 (+08)
+From:   Richard Zhu <hongxing.zhu@nxp.com>
+To:     l.stach@pengutronix.de, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, marcel.ziswiler@toradex.com,
+        tharvey@gateworks.com, kishon@ti.com, vkoul@kernel.org,
+        robh@kernel.org, galak@kernel.crashing.org, shawnguo@kernel.org
+Cc:     hongxing.zhu@nxp.com, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, linux-imx@nxp.com
+Subject: [PATCH v7 0/8] Add the imx8m pcie phy driver and imx8mm pcie support
+Date:   Thu,  2 Dec 2021 16:02:30 +0800
+Message-Id: <1638432158-4119-1-git-send-email-hongxing.zhu@nxp.com>
+X-Mailer: git-send-email 2.7.4
+X-Virus-Scanned: ClamAV using ClamSMTP
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Christoph Hellwig [mailto:hch@infradead.org]
-> Sent: Thursday, December 2, 2021 8:21 AM
-> On Wed, Dec 01, 2021 at 05:37:08PM +0100, Roberto Sassu wrote:
-> > Users of the device mapper driver might want to obtain a device status,
-> > with status types defined in the status_type_t enumerator.
-> 
-> The patch looks really odd.  And without the corresponding user of your
-> new functionality it is entirely unreviewable anyway.
+Refer to the discussion [1] when try to enable i.MX8MM PCIe support,
+one standalone PCIe PHY driver should be seperated from i.MX PCIe
+driver when enable i.MX8MM PCIe support.
 
-Hi Christoph
+This patch-set adds the standalone PCIe PHY driver suport[1-5], and i.MX8MM
+PCIe support[6-8] to have whole view to review this patch-set.
 
-ok, I will send it together with a patch for a not yet accepted
-software, Integrity Policy Enforcement (IPE), that will be
-the primary user of the introduced functionality.
+The PCIe works on i.MX8MM EVK board based the the blkctrl power driver
+[2] and this patch-set. And tested by Tim and Marcel on the different
+reference clock modes boards.
 
-Regarding the patch itself, could you please provide a more
-detailed explanation?
+[1] https://patchwork.ozlabs.org/project/linux-pci/patch/20210510141509.929120-3-l.stach@pengutronix.de/
+[2] https://patchwork.kernel.org/project/linux-arm-kernel/cover/20210910202640.980366-1-l.stach@pengutronix.de/
 
-Thanks
+Main changes v6 --> v7:
+- Add "Reviewed-by: Rob Herring <robh@kernel.org>" into #2 patches.
+- Regarding Vinod's review comments do the following changes.
+  - Don't build in the PHY driver in default.
+  - Remove the extra blank line
+  - Correct the license tag.
 
-Roberto
+Main changes v5 --> v6:
+- Add "Reviewed-by: Rob Herring <robh@kernel.org>" into #1 and #3 patches.
+- Merge Rob's review comments to the #2 patch.
 
-HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
-Managing Director: Li Peng, Zhong Ronghua
+Main changes v4 --> v5:
+- Set the AUX_EN always 1b'1, thus it can fix the regression introduced in v4
+  series on Marcel's board.
+- Use the lower-case letter in the devicetreee refer to Marcel's comments.
+- Since the default value of the deemphasis parameters are zero, only set
+  the deemphasis registers when the input paramters are none zero.
+
+Main changes v3 --> v4:
+- Update the yaml to fix syntax error, add maxitems and drop description of phy
+- Correct the clock name in PHY DT node.
+- Squash the EVK board relalted dts changes into one patch, and drop the
+  useless dummy clock and gpio suffix in DT nodes.
+- Add board specific de-emphasis parameters as DT properties. Thus each board
+  can specify its actual de-emphasis values.
+- Update the commit log of PHY driver.
+- Remove the useless codes from PCIe driver, since they are moved to PHY driver
+- After the discussion and verification of the CLKREQ# configurations with Tim,
+  agree to add an optional boolean property "fsl,clkreq-unsupported", indicates
+  the CLKREQ# signal is hooked or not in HW designs.
+- Add "Tested-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>" tag, since
+  Marcel help to test the v3 patch-set.
+
+Main changes v2 --> v3:
+- Regarding Lucas' comments.
+ - to have a whole view to review the patches, send out the i.MX8MM PCIe support too.
+ - move the PHY related bits manipulations of the GPR/SRC to standalone PHY driver.
+ - split the dts changes to SOC and board DT, and use the enum instead of raw value.
+ - update the license of the dt-binding header file.
+
+Changes v1 --> v2:
+- Update the license of the dt-binding header file to make the license
+  compatible with dts files.
+- Fix the dt_binding_check errors.
+
+Documentation/devicetree/bindings/pci/fsl,imx6q-pcie.yaml    |   6 +++
+Documentation/devicetree/bindings/phy/fsl,imx8-pcie-phy.yaml |  92 +++++++++++++++++++++++++++++++
+arch/arm64/boot/dts/freescale/imx8mm-evk.dtsi                |  55 +++++++++++++++++++
+arch/arm64/boot/dts/freescale/imx8mm.dtsi                    |  46 +++++++++++++++-
+drivers/pci/controller/dwc/pci-imx6.c                        |  83 +++++++++++++++++++++++++---
+drivers/phy/freescale/Kconfig                                |   8 +++
+drivers/phy/freescale/Makefile                               |   1 +
+drivers/phy/freescale/phy-fsl-imx8m-pcie.c                   | 236 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+include/dt-bindings/phy/phy-imx8-pcie.h                      |  14 +++++
+9 files changed, 532 insertions(+), 9 deletions(-)
+
+[PATCH v7 1/8] dt-bindings: phy: phy-imx8-pcie: Add binding for the
+[PATCH v7 2/8] dt-bindings: phy: Add imx8 pcie phy driver support
+[PATCH v7 3/8] dt-bindings: imx6q-pcie: Add PHY phandles and name
+[PATCH v7 4/8] arm64: dts: imx8mm: Add the pcie phy support
+[PATCH v7 5/8] phy: freescale: pcie: Initialize the imx8 pcie
+[PATCH v7 6/8] arm64: dts: imx8mm: Add the pcie support
+[PATCH v7 7/8] arm64: dts: imx8mm-evk: Add the pcie support on imx8mm
+[PATCH v7 8/8] PCI: imx: Add the imx8mm pcie support

@@ -2,90 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC74F466A7C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 673BB466A80
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:34:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357563AbhLBTgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 14:36:11 -0500
-Received: from mail-pg1-f171.google.com ([209.85.215.171]:45927 "EHLO
-        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235481AbhLBTgK (ORCPT
+        id S1376778AbhLBThY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 14:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1357706AbhLBThV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 14:36:10 -0500
-Received: by mail-pg1-f171.google.com with SMTP id 133so719316pgc.12;
-        Thu, 02 Dec 2021 11:32:47 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=CuO9SlAMyySc2N7/ycy5VD46Nz+8cG+KHA0nnkbmkHc=;
-        b=T0Da/RnwA5q6xNMFJx73ePeDRsWsnmeCnH/DWkxxLz+MNDuGjZyU7piUq1KFZBRZaz
-         LJm7ENMiV1jwSey+BXuNAFFVrnFzs6qVgYYKPTNh0AbQd3PYmbkj1Qt1tSeA5apKfUmH
-         9LM41+zXybxG+JLYTWN6ZUcFehBcjOv05Sh3kFuabS1+V0H03/axWUZTs5r4K6ui2cW4
-         KsoSXfVvjfBlyl7XG8FL829L5hdDxjS/L9xFR8GVGmSst5g8F05qOdsTc8D/usT4rNoO
-         hlHh9h72qYa3SrL7a1Rzx+pnHZQNtHcPm4xHnvbbVynhE5oY+8WINX1A5RK6H87nDpY6
-         0lOg==
-X-Gm-Message-State: AOAM530dhG3QE6O2dubf6FX8ixrxCUe0v+v6gAXT8KNyz5LCtbwxDvh0
-        9tplpNDwvVSMhsUwjFzdIXWafRgTufo=
-X-Google-Smtp-Source: ABdhPJybkg0jKh/Q6ZJqyLfjyFgX8JgM9tzmXPG2O7rRG6t2vjJ5+cthEcId8+b+3rzJLlcKtHqafw==
-X-Received: by 2002:a63:5c05:: with SMTP id q5mr892811pgb.599.1638473566667;
-        Thu, 02 Dec 2021 11:32:46 -0800 (PST)
-Received: from bvanassche-linux.mtv.corp.google.com ([2620:15c:211:201:fac5:b2eb:ef0d:f30b])
-        by smtp.gmail.com with ESMTPSA id f15sm561950pfe.171.2021.12.02.11.32.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 11:32:45 -0800 (PST)
-Subject: Re: [PATCH 0/7] docs: consolidate sysfs-block into Documentation/ABI/
-To:     Eric Biggers <ebiggers@kernel.org>, linux-block@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-doc@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-References: <20211201084524.25660-1-ebiggers@kernel.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <0bf11301-4085-f4a1-eeed-c65d0e5563b4@acm.org>
-Date:   Thu, 2 Dec 2021 11:32:45 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <20211201084524.25660-1-ebiggers@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        Thu, 2 Dec 2021 14:37:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C38C061757;
+        Thu,  2 Dec 2021 11:33:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01CA1627E8;
+        Thu,  2 Dec 2021 19:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 59CCAC00446;
+        Thu,  2 Dec 2021 19:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638473637;
+        bh=aX5cHLwYJklM0jbjaAkX3L8eXFwLTVCGnqF7OxJBdcc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=eXGZCo+tfLE4CfYpkWkOWvIgC3v8eitiAMISLzxxSlmtrV8vPDwey3SlLaTWgPPF8
+         vXknfK1UPmkF/dGlrAOVI2D1faFFvrT2nT+TmOLOQ4zxMp2w+pzzr5/p0Ta3/+kTmI
+         cs5wF1i+bole0t/GQK/aYMFZ0T/2XXxu6pz7F6JX+x5p6ZceTNWTGOywy6QmolqNlV
+         Z6ONwpW41O0LTCg6wI5PywG5l7wS7iPtZCGcxYIU6g98zqkdJ+NCIxkqOtejsv9JI2
+         PBLRcci1o5li/CFv+MPD7/T8O/4zAkohWWWlCWJrKWK4+Ri13c0BcN0BGOC5BamLkQ
+         kjMgDs3oR8EvQ==
+Received: from pdx-korg-docbuild-2.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by pdx-korg-docbuild-2.ci.codeaurora.org (Postfix) with ESMTP id 35DFE609E7;
+        Thu,  2 Dec 2021 19:33:57 +0000 (UTC)
+Subject: Re: [GIT PULL] Networking for 5.16-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20211202155158.791350-1-kuba@kernel.org>
+References: <20211202155158.791350-1-kuba@kernel.org>
+X-PR-Tracked-List-Id: <netdev.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20211202155158.791350-1-kuba@kernel.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc4
+X-PR-Tracked-Commit-Id: 88362ebfd7fb569c78d5cb507aa9d3c8fc203839
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a51e3ac43ddbad891c2b1a4f3aa52371d6939570
+Message-Id: <163847363716.31731.16344662560558983887.pr-tracker-bot@kernel.org>
+Date:   Thu, 02 Dec 2021 19:33:57 +0000
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvalo@codeaurora.org
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/21 12:45 AM, Eric Biggers wrote:
-> This series consolidates the documentation for /sys/block/<disk>/queue/
-> into Documentation/ABI/, where it is supposed to go (as per Greg KH:
-> https://lore.kernel.org/r/YaXXpEAwVGTLjp1e@kroah.com).
-> 
-> This series also updates MAINTAINERS to associate the block
-> documentation with the block layer.
-> 
-> This series applies to linux-block/for-next.
-> 
-> Eric Biggers (7):
->    docs: sysfs-block: sort alphabetically
->    docs: sysfs-block: add contact for nomerges
->    docs: sysfs-block: fill in missing documentation from queue-sysfs.rst
->    docs: sysfs-block: document stable_writes
->    docs: sysfs-block: document virt_boundary_mask
->    docs: block: remove queue-sysfs.rst
->    MAINTAINERS: add entries for block layer documentation
-> 
->   Documentation/ABI/testing/sysfs-block | 766 ++++++++++++++++++--------
->   Documentation/block/index.rst         |   1 -
->   Documentation/block/queue-sysfs.rst   | 321 -----------
->   MAINTAINERS                           |   2 +
->   4 files changed, 545 insertions(+), 545 deletions(-)
->   delete mode 100644 Documentation/block/queue-sysfs.rst
+The pull request you sent on Thu,  2 Dec 2021 07:51:58 -0800:
 
-How about adding a patch that moves Documentation/ABI/testing/sysfs-block
-to Documentation/ABI/stable/sysfs-block? The block layer sysfs ABI is used
-widely by user space software and is considered stable.
+> git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-5.16-rc4
 
-Thanks,
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a51e3ac43ddbad891c2b1a4f3aa52371d6939570
 
-Bart.
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

@@ -2,112 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF4C4664EA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDFC4664EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358412AbhLBON2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 09:13:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358401AbhLBON0 (ORCPT
+        id S1358418AbhLBOQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 09:16:02 -0500
+Received: from Galois.linutronix.de ([193.142.43.55]:48618 "EHLO
+        galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S239448AbhLBOP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:13:26 -0500
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E0EC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 06:10:04 -0800 (PST)
-Received: by mail-pf1-x42f.google.com with SMTP id n26so28042213pff.3
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 06:10:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=BFA2afkZEpuHmcIqjxQzel5hfmeEopb6eeZTOG3moAA=;
-        b=ES4JGD17/6lNVj7p7jfDYH2cfZYXXx/zp7eZnXimeWGA0tCGFiRs7Q6YQTkRP4VahQ
-         A1kE/LZ5YHrurGtWKVB4SoYZ4iD87Uujx6N8W/E+QOEsV3VwH1vEql7hB9MxfBNQfWHE
-         DKrO9RTjHV/3YYqwhGtPPC3iI1BayD0C5Ji0ty+FMUYuZWge3FZ2j4EEPk07ogxJJMM0
-         e/vdyTvtnWSOiKbm6sD63zCtAk8rlr2vlVieap8BVzovCT9kLvB6Z46CoAXog4zH82yt
-         R/sQez2v6bLpeELaf6OV0OTt9xRkd6NlMZPHJfZqNFY1qqUtO3XLwxTW6D88fw2L85vd
-         5Kng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=BFA2afkZEpuHmcIqjxQzel5hfmeEopb6eeZTOG3moAA=;
-        b=QPrxtTr+r0AMjYRoetggUWBOXV1ii0dLuYIfPnxhX/yU/3JLUcZtUkLgjlXCrSqq4+
-         gXxe1ijtbyx3kvHKvBwbDFmWKQ0UZy44rKxUgooHBEvXixvcpWJnP7Xgkt4YDmF8eCX0
-         UDgwNoluxgI+Y+8De0wp1AG5eNQPDb/2/N//AlSFetxrcYHvVjsSHghSZ3XG17MB4XKx
-         mwg8T+PzgoiVODyOwKgYdDfgGeyNwKjiBsRoo48B1aXAP5WMwEZpFMBHIm1cn0ZyP5TN
-         Awq+qmmnCqTCNtCqmVOiDUjHn7iXotS8k41R+hsO9qwBuzecrNE6NQ59/Fm+BH7en7pV
-         fiKg==
-X-Gm-Message-State: AOAM531sltept7tqz7NnCmbGTM4If9ZXD14WoyS6mNaoYeLE4L3NpaEm
-        91jeZYd9shlgHdg6+In7+hzVURjVB78gSFsFj5Q=
-X-Google-Smtp-Source: ABdhPJxpeUp2UOPHX1sPtiN15SJNp+k79gRDfTEXYDheJLehMdi1R4l7bRZsSLT/cvkXbH3VfEBV8m4/GXs9NcRyc8E=
-X-Received: by 2002:a05:6a00:2441:b0:4a0:ddb0:a6ff with SMTP id
- d1-20020a056a00244100b004a0ddb0a6ffmr12967322pfj.74.1638454203704; Thu, 02
- Dec 2021 06:10:03 -0800 (PST)
+        Thu, 2 Dec 2021 09:15:59 -0500
+Date:   Thu, 02 Dec 2021 14:12:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638454355;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NuFwk2J9Qv7//sgGcuDGt+74MdZfbJfLkF7V7ZFfUj8=;
+        b=UONw5YVZquomqts/OANcejsap657H387QhVSJGh/5abTpG4+y8kTixsEwaDrGHaiJ6SMlC
+        L7rS04kml13r0ogWUc03FM/9gNo0ilMue75F7YJBkbYdLUjm9qZzgmMR1EVHTfLLwRMzMs
+        NDYjkBlQ5nktNEcZTFeYFlruKFwBFc9wORFOtW3mdvX/AFaeVfoFOaFQyAVGaUkvktPWpN
+        XgZgpx7CyYMEP8AuG90i1WsA8s22VWDZBNXSdQzwqIb1urvzwagxcPS3rt8L7QmiTclt3S
+        0dB91AYFjP/EGtWzr9YOYR9F4Mug07nhUFGueKcxLGestSpCFLFUVoipTzW9Fg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638454355;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NuFwk2J9Qv7//sgGcuDGt+74MdZfbJfLkF7V7ZFfUj8=;
+        b=JXQtZ9F9dz/vPCO+bY4GzO7xP+R0C4FvhcqEZnz6JOfhYX04woFE3chKqaJwSN9rH3MLlP
+        l0DTb/TNjRCizXAw==
+From:   "tip-bot2 for Frederic Weisbecker" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/urgent] sched/cputime: Fix getrusage(RUSAGE_THREAD) with
+ nohz_full
+Cc:     Hasegawa Hitomi <hasegawa-hitomi@fujitsu.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>,
+        Phil Auld <pauld@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211026141055.57358-3-frederic@kernel.org>
+References: <20211026141055.57358-3-frederic@kernel.org>
 MIME-Version: 1.0
-Received: by 2002:a17:90a:3844:0:0:0:0 with HTTP; Thu, 2 Dec 2021 06:10:03
- -0800 (PST)
-Reply-To: mohammadahmed7760@gmail.com
-From:   Mohammad Ahmed <marryh2016@gmail.com>
-Date:   Thu, 2 Dec 2021 06:10:03 -0800
-Message-ID: <CAKtYdpy_vVp0zdwWsFybAfs+o6P5qbVfCAjY+mwhdiab1WMtDA@mail.gmail.com>
-Subject: GREETINGS FROM MR.MOHAMMAD AHMED / CAN I TRUST YOU?
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Message-ID: <163845435389.11128.15096993127413247810.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My Dear Friend.
+The following commit has been merged into the sched/urgent branch of tip:
 
-Greetings.
+Commit-ID:     e7f2be115f0746b969c0df14c0d182f65f005ca5
+Gitweb:        https://git.kernel.org/tip/e7f2be115f0746b969c0df14c0d182f65f005ca5
+Author:        Frederic Weisbecker <frederic@kernel.org>
+AuthorDate:    Tue, 26 Oct 2021 16:10:55 +02:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Thu, 02 Dec 2021 15:08:22 +01:00
 
-I know this message will come to you as a surprise; my name is Mr.
-Mohammad Ahmed a banker working with Bank of Africa Burkina Faso West
-Africa, Please i need your kind assistance  to transfer an abandoned
-sum of  $13.5 Million United States Dollars into your account .
+sched/cputime: Fix getrusage(RUSAGE_THREAD) with nohz_full
 
-My dear if my proposal interest you do not hesitate to get back to me
-for us to proceed with the business for I know the source of the fund
-very well, You will provide account for release and transfer of the
-fund into your account and once you confirm the fund transferred into
-your account 50% is for you and 50% for me.
+getrusage(RUSAGE_THREAD) with nohz_full may return shorter utime/stime
+than the actual time.
 
-Do not entertain any atom for fear as you this message for the
-transaction will be handling under legal and official by the bank
-management without any problem.
+task_cputime_adjusted() snapshots utime and stime and then adjust their
+sum to match the scheduler maintained cputime.sum_exec_runtime.
+Unfortunately in nohz_full, sum_exec_runtime is only updated once per
+second in the worst case, causing a discrepancy against utime and stime
+that can be updated anytime by the reader using vtime.
 
-The transaction is risk free and there will be no harm, I will like
-you to respond back to me immediately after reading this message to
-enable us proceed ahead for mutual benefit.
+To fix this situation, perform an update of cputime.sum_exec_runtime
+when the cputime snapshot reports the task as actually running while
+the tick is disabled. The related overhead is then contained within the
+relevant situations.
 
-I know the source of the fund very well and I assure you of receiving
-it into your account without any problem, Read this message and if we
-have business urgently get back to me with your personal information
-as listed bellow for more trust and confident.
+Reported-by: Hasegawa Hitomi <hasegawa-hitomi@fujitsu.com>
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+Signed-off-by: Hasegawa Hitomi <hasegawa-hitomi@fujitsu.com>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Tested-by: Masayoshi Mizuma <m.mizuma@jp.fujitsu.com>
+Acked-by: Phil Auld <pauld@redhat.com>
+Link: https://lore.kernel.org/r/20211026141055.57358-3-frederic@kernel.org
 
-I am ready to share with you 50% for you and 50% for me and by
-indicating your interest and capability to execute the business with
-me after reading message, I will send you more details on how the fund
-will be officially release and transfer in your account for the
-transaction will be execute in your favor without any problem for the
-only thing i want from you is to be honest with me during the
-transaction official process.
+---
+ include/linux/sched/cputime.h |  5 +++--
+ kernel/sched/cputime.c        | 12 +++++++++---
+ 2 files changed, 12 insertions(+), 5 deletions(-)
 
-I am looking forward to have your urgent response along with your
-personal information to enable me feed you with more details.
-
-1. Full name:.........
-2. Home Address:.........
-3. Phone.............
-4. Occupation:.............
-5. Age:............
-6. Country:........
-7. Sex........
-8. Your Passport or ID card or Driving License
-
-Thanks.
-
-Yours faithfully
-
-Mr. Mohammad Ahmed.
+diff --git a/include/linux/sched/cputime.h b/include/linux/sched/cputime.h
+index 6c9f19a..ce3c582 100644
+--- a/include/linux/sched/cputime.h
++++ b/include/linux/sched/cputime.h
+@@ -18,15 +18,16 @@
+ #endif /* CONFIG_VIRT_CPU_ACCOUNTING_NATIVE */
+ 
+ #ifdef CONFIG_VIRT_CPU_ACCOUNTING_GEN
+-extern void task_cputime(struct task_struct *t,
++extern bool task_cputime(struct task_struct *t,
+ 			 u64 *utime, u64 *stime);
+ extern u64 task_gtime(struct task_struct *t);
+ #else
+-static inline void task_cputime(struct task_struct *t,
++static inline bool task_cputime(struct task_struct *t,
+ 				u64 *utime, u64 *stime)
+ {
+ 	*utime = t->utime;
+ 	*stime = t->stime;
++	return false;
+ }
+ 
+ static inline u64 task_gtime(struct task_struct *t)
+diff --git a/kernel/sched/cputime.c b/kernel/sched/cputime.c
+index 872e481..9392aea 100644
+--- a/kernel/sched/cputime.c
++++ b/kernel/sched/cputime.c
+@@ -615,7 +615,8 @@ void task_cputime_adjusted(struct task_struct *p, u64 *ut, u64 *st)
+ 		.sum_exec_runtime = p->se.sum_exec_runtime,
+ 	};
+ 
+-	task_cputime(p, &cputime.utime, &cputime.stime);
++	if (task_cputime(p, &cputime.utime, &cputime.stime))
++		cputime.sum_exec_runtime = task_sched_runtime(p);
+ 	cputime_adjust(&cputime, &p->prev_cputime, ut, st);
+ }
+ EXPORT_SYMBOL_GPL(task_cputime_adjusted);
+@@ -828,19 +829,21 @@ u64 task_gtime(struct task_struct *t)
+  * add up the pending nohz execution time since the last
+  * cputime snapshot.
+  */
+-void task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
++bool task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
+ {
+ 	struct vtime *vtime = &t->vtime;
+ 	unsigned int seq;
+ 	u64 delta;
++	int ret;
+ 
+ 	if (!vtime_accounting_enabled()) {
+ 		*utime = t->utime;
+ 		*stime = t->stime;
+-		return;
++		return false;
+ 	}
+ 
+ 	do {
++		ret = false;
+ 		seq = read_seqcount_begin(&vtime->seqcount);
+ 
+ 		*utime = t->utime;
+@@ -850,6 +853,7 @@ void task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
+ 		if (vtime->state < VTIME_SYS)
+ 			continue;
+ 
++		ret = true;
+ 		delta = vtime_delta(vtime);
+ 
+ 		/*
+@@ -861,6 +865,8 @@ void task_cputime(struct task_struct *t, u64 *utime, u64 *stime)
+ 		else
+ 			*utime += vtime->utime + delta;
+ 	} while (read_seqcount_retry(&vtime->seqcount, seq));
++
++	return ret;
+ }
+ 
+ static int vtime_state_fetch(struct vtime *vtime, int cpu)

@@ -2,103 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B90314665E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:55:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BC9646660D
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358830AbhLBO7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 09:59:12 -0500
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:44077 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1358808AbhLBO7H (ORCPT
+        id S1347008AbhLBPEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:04:20 -0500
+Received: from mxout1-ec2-va.apache.org ([3.227.148.255]:48470 "EHLO
+        mxout1-ec2-va.apache.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231256AbhLBPET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:59:07 -0500
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 526943201E78;
-        Thu,  2 Dec 2021 09:55:42 -0500 (EST)
-Received: from imap45 ([10.202.2.95])
-  by compute5.internal (MEProxy); Thu, 02 Dec 2021 09:55:43 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=owlfolio.org; h=
-        mime-version:message-id:in-reply-to:references:date:from:to:cc
-        :subject:content-type; s=fm2; bh=+NUeMvGno9VoUYgWj62BzbUCTMF03jM
-        8iOcYMnHe6Jo=; b=fXW8aaVpmBW0/bI+IK7QhkiXw/PwfyVTQvdrQUgpwb8rtxt
-        Bhj3LCCwa7h7WivXSanhF7lS3+yEHhQAPfAkkYHgounXWqC9/jjsYzyFbt6OkHXJ
-        MY+6HDtAplln7oTeDwS3Z5nnSpBXGTH/1I1ki1LKkcLHdFJ7oMNy+O1QkntaqCVu
-        I0e0wY0KtziawAx2fVgJnOfiPnawqPdhhg9A+EXR82D56bI5YQ5qwd2zjpeQAxgf
-        azmL84TDqhKIa6oCbgDc3jWKUOB+KvQx2Upd9UfjxdwU6xaQgakjg754Ckqky/lc
-        GnswU5ksKRovwMGoC28I22pNdNvhQdMJdG3v0uQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=+NUeMv
-        Gno9VoUYgWj62BzbUCTMF03jM8iOcYMnHe6Jo=; b=N1vMm3qGdST4hCH7kL3RNl
-        /GCF4UHXQUizEdUMjbVZhouOWFOooNfpT+sKg34sGMAm+npWbXBcnYpjEVmp11rZ
-        MXsCs5vmcvCpEdzqm2VbENyZwVCamSbugXGI+ujFR75dSnaRJCrqrwDwyjgb0+FC
-        OZXtbVcVRvqKngu/s5xe5plh6YHbXgqU16mumDwUmYCwHJnneMszqEsP2I/zFGLL
-        WDURx63NSU4j9w7GlDUZZSZNlAufvNqH7OKHPPvvLKAyvFfnTOy9gEY43s6x4hmr
-        +n5OKiWAUOS4N/uIh8tFV8cfSUEXoMUsu+A6gLHmp9lmRloVh7Hopr8ic3HXbSPA
-        ==
-X-ME-Sender: <xms:bd6oYTJIRs7SIavIDblVThWXtpVtILcxZaWGLjtG4V1ShjldXreNqw>
-    <xme:bd6oYXLF1yriDEudSSU78SL6SmCNDjygbBHIezocgYR1D3yII4Vma4wksrQYngoI_
-    Y7q2Gxr8Ua54ouaM1E>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvuddrieehgdeilecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvufgtsehttdertderredtnecuhfhrohhmpedfkggrtghk
-    ucghvghinhgsvghrghdfuceoiigrtghksehofihlfhholhhiohdrohhrgheqnecuggftrf
-    grthhtvghrnhephfeuhfevueffteffgfejtefgkeekheeftdeflefgheffffevheekleef
-    gfehffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epiigrtghksehofihlfhholhhiohdrohhrgh
-X-ME-Proxy: <xmx:bd6oYbvVu_Et3kkzuONhU23glxmXwesHDbn4RiGBk-QOAcNMIVMuvQ>
-    <xmx:bd6oYcZuRyYC_eXeJJMCbIL7JTc2-aBPFynrjafJO5y_IcIvtyZ95A>
-    <xmx:bd6oYabSu4i0RvdCrUTgNhJH4SeS9WZzBTty8aVM1k6OXFfG1ya-qQ>
-    <xmx:bd6oYfMdfg56CVuu2VY762Pef75SJbhFPFwUpW4anNknuL3vF7OiAQ>
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 13EC024A0074; Thu,  2 Dec 2021 09:55:41 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.5.0-alpha0-4458-g51a91c06b2-fm-20211130.004-g51a91c06
-Mime-Version: 1.0
-Message-Id: <b8d6f890-e5aa-44bf-8a55-5998efa05967@www.fastmail.com>
-In-Reply-To: <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
-References: <YZvIlz7J6vOEY+Xu@yuki>
- <1618289.1637686052@warthog.procyon.org.uk>
- <ff8fc4470c8f45678e546cafe9980eff@AcuMS.aculab.com> <YaTAffbvzxGGsVIv@yuki>
- <CAK8P3a1Rvf_+qmQ5pyDeKweVOFM_GoOKnG4HA3Ffs6LeVuoDhA@mail.gmail.com>
-Date:   Thu, 02 Dec 2021 09:55:20 -0500
-From:   "Zack Weinberg" <zack@owlfolio.org>
-To:     "Arnd Bergmann" <arnd@arndb.de>, "Cyril Hrubis" <chrubis@suse.cz>
-Cc:     "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        libc-alpha@sourceware.org,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "David Howells" <dhowells@redhat.com>,
-        "David Laight" <David.Laight@aculab.com>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>
-Subject: Re: [PATCH] uapi: Make __{u,s}64 match {u,}int64_t in userspace
-Content-Type: text/plain
+        Thu, 2 Dec 2021 10:04:19 -0500
+X-Greylist: delayed 310 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Dec 2021 10:04:19 EST
+Received: from mail.apache.org (mailroute1-lw-us.apache.org [207.244.88.153])
+        by mxout1-ec2-va.apache.org (ASF Mail Server at mxout1-ec2-va.apache.org) with SMTP id 233183EC00
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 14:55:46 +0000 (UTC)
+Received: (qmail 21146 invoked by uid 99); 2 Dec 2021 14:55:46 -0000
+Received: from mailrelay1-he-de.apache.org (HELO mailrelay1-he-de.apache.org) (116.203.21.61)
+    by apache.org (qpsmtpd/0.29) with ESMTP; Thu, 02 Dec 2021 14:55:46 +0000
+Received: from [10.23.2.106] (unknown [51.154.28.112])
+        by mailrelay1-he-de.apache.org (ASF Mail Server at mailrelay1-he-de.apache.org) with ESMTPSA id 3284E3E823;
+        Thu,  2 Dec 2021 14:55:45 +0000 (UTC)
+Message-ID: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
+Subject: Regression: plugging in USB scanner breaks all USB functionality
+From:   Robert Munteanu <rombert@apache.org>
+To:     Mathias Nyman <mathias.nyman@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     tiwai@suse.com, regressions@lists.linux.dev,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Thu, 02 Dec 2021 15:55:44 +0100
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 29, 2021, at 9:34 AM, Arnd Bergmann wrote:
-> On Mon, Nov 29, 2021 at 12:58 PM Cyril Hrubis <chrubis@suse.cz> wrote:
->>
->> What about guarding the change with __STDINT_COMPATIBLE_TYPES__
+Hi,
 
-In user space, I don't see a compelling need for backward compatibility?  User space's expectation is that the types are *already* the same and we (glibc) regularly get bug reports because they aren't.
+After updating from kernel 5.14.11 to 5.14.14 I am seeing the following
+problem:
 
-I could be persuaded otherwise with an example of a program for which changing
-__s64 from 'long long' to 'long' would break *binary* backward compatibility, or
-similarly for __u64.
+When plugging in an USB scanner ( Brother DSMobile DS-740D ) to my
+Lenovo P52 laptop I lose connection to all USB devices. Not only are
+the devices no longer available on the host, but no power is drawn by
+them. Only a reboot fixes the problem.
 
-> I don't think we can include stdint.h here, the entire point of the custom
-> kernel types is to ensure the other kernel headers can use these types
-> without relying on libc headers.
+The scanner is the only device that triggers the problem, even when it
+is the only device plugged in. I have a host of other devices,
+connected either directly or via a USB hub in my monitor:
 
-If __KERNEL__ is not defined, though, there should be no issue, right?
+- keyboard
+- mouse
+- logitech brio webcam
+- yubikey
+- stream deck
+- microphone
 
-From user space's perspective, it's an ongoing source of problems whenever __uN isn't exactly the same "underlying type" as uintN_t, same for __sN and intN_t.  We would really like it if the uapi headers, when included from user space, deferred to the C library for the definitions of these types.
+None of these cause any issues.
+I have tried the following kernels ( packaged for openSUSE Tumbleweed
+), and none of them fixed the issue:
 
-<stdint.h> does define a lot of things beyond just the fixed-width types, and it defines names in the application namespace (i.e. with no __ prefix).  Perhaps we could come to some agreement on a private header, provided by libcs, that *only* defined __{u,}int{8,16,32,64}_t.  glibc already has <bits/types.h> which promises
-to define only __-prefix names, but it defines a lot of other types as well (__dev_t, __uid_t, __pid_t, __time_t, etc etc etc).
+- 5.15.2
+- 5.15.5
+- 5.16~rc3-1.1.ge8ae228
 
-zw
+The problem does not appear if the scanner is connected when the laptop
+is shutdown. It seems to have an init phase of about 6-7 seconds
+(blinking green led) and then stays on. However, it is not detected via
+lsusb or scanimage -L.
+
+The problem does not appear on a desktop class machine ( ASUS Prime
+X470-PRO/Ryzen 3700x).
+
+The relevant parts of the kernel log seem to be:
+
+Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: Abort failed to stop command ring: -110
+Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
+Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: HC died; cleaning up
+
+I've initially reported this at
+https://bugzilla.opensuse.org/show_bug.cgi?id=1192569 and CC'ed the
+distribution's kernel maintainer.
+
+Please let me know if additional information is needed.
+
+Regards,
+Robert Munteanu

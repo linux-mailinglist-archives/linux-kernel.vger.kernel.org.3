@@ -2,94 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D10E466133
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58DE2466140
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:13:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356748AbhLBKMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:12:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S1354959AbhLBKQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:16:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356758AbhLBKMW (ORCPT
+        with ESMTP id S239518AbhLBKQo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:12:22 -0500
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109FEC061756
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:09:00 -0800 (PST)
-Received: by mail-vk1-xa2a.google.com with SMTP id 84so18048827vkc.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:09:00 -0800 (PST)
+        Thu, 2 Dec 2021 05:16:44 -0500
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07CFC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:13:21 -0800 (PST)
+Received: by mail-wr1-x44a.google.com with SMTP id r2-20020adfe682000000b00198af042b0dso4875307wrm.23
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:13:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=0x0f.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KxuN9XUUMW8gZ9VWagInIzYpVNdqq81IIENwDXx0fOY=;
-        b=sP1fiPXTUMJoNGskvKjjtSoGqquXQU21deizBbg70ItZf0gfJkisFdQOVvZ/ys7r4Q
-         SHHCCKR9T78NVKyuPYXBWEguESlSjfflJRWrKiIqfssQQFz7WdfyzP1jBZKgJ6DzfOch
-         NbaV8467W/9J4QvAsTBzPKCiQB4NxWBiSgJm4=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=8N5RdsPFCDQOOr5Z+B7VY5Dmo/Ijqkz2fn7CLWsbo/s=;
+        b=F3VmtU6AQKt4NMnuBp/weYOHYOaxN3ze5nfUY+yy5JW/8254HRTDEvIt1FD4xlo/Bn
+         4/iwSB+yX/eZwJiT1AUHRRBmt1oi11zKx/lM1+PeQbP72+aM5UvM5ZzzqWSO01Xj+1th
+         CU9PA7roV7oiT/pZv8YY8L2P7Jf2OxoCi8hTRZExrBNRI5Oc+V2yVF9pCLekQLxRUCK8
+         KRdDhJ3iMBCtIAtoWC2uVeJkoH7FKVNygm66KFs+AEXn+3Q14ZdENwzaiAljYjtEkHdg
+         qCFzj5eqO+0yYPNlou9kV0Nh4Y3GuhpLXGozBYv1oAKdb/cZ9mWIZbKKCGAg7uk6MQn3
+         aqRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KxuN9XUUMW8gZ9VWagInIzYpVNdqq81IIENwDXx0fOY=;
-        b=iwslW0wUACL6wLuomzXZTLDHBl1vRCzRafo7Mqp5NESlKe/qKCYUI5cRL+4bFeARuh
-         qZ6+2T6OaDz+dezAZoJVmZM5SA8TnTFRm5o1nkb4bMv4mvegMC8Oum/iBXmay+I7axZU
-         LHeCKlTgu82Gft4sqClMZYgbMSjbkfwgWH8TEqX80fBhOq5Hp/RzCa9a6g+Q5d7c0mem
-         +MaAZ8MujeF00cM7JwNpu9ktfJi3LDtHUBNEi7R+JgvlITx58Kxq4+Ac6gfgwUMvFHZM
-         2vbgD+Ax1jysoKmevQlXKEyLUGkSdK3/2+v22LA65fLylOHZ+ysrD6bSKNCpKOs6Ugsw
-         H2RQ==
-X-Gm-Message-State: AOAM530KAKm5gYyy38k9yThadqztCeW6ywWxBRJO59nMcCoPn6tLrqH9
-        K95h+W9eZQOAfaiMSSIcbvuTZXq+jCovhTd+eMCFSQ==
-X-Google-Smtp-Source: ABdhPJy0QfEolltcqqlYNbGRBgDMA/8lo3xhFobs++B2pW2+9lgHiRtlqmqQTR+L7HkU8xSlfezN+dEBQzfYY32Jfsk=
-X-Received: by 2002:ac5:cdad:: with SMTP id l13mr14112277vka.39.1638439739151;
- Thu, 02 Dec 2021 02:08:59 -0800 (PST)
-MIME-Version: 1.0
-References: <20211201175613.13710-1-dafna.hirschfeld@collabora.com>
-In-Reply-To: <20211201175613.13710-1-dafna.hirschfeld@collabora.com>
-From:   Daniel Palmer <daniel@0x0f.com>
-Date:   Thu, 2 Dec 2021 19:11:51 +0900
-Message-ID: <CAFr9PXnvbqtx-SpxjyO2uvoBR3ueNBD9vSFnbqjbAHz_7Lh8VA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] staging: media: wave5: add wave5 codec driver
-To:     Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Cc:     "open list:MEDIA INPUT INFRASTRUCTURE (V4L/DVB)" 
-        <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        hverkuil@xs4all.nl, kernel@collabora.com, dafna3@gmail.com,
-        Robert Beckett <bob.beckett@collabora.com>,
-        kiril.bicevski@collabora.com,
-        Nas Chung <nas.chung@chipsnmedia.com>,
-        lafley.kim@chipsnmedia.com, scott.woo@chipsnmedia.com,
-        olivier.crete@collabora.com, dan.carpenter@oracle.com,
-        Randy Dunlap <rdunlap@infradead.org>
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=8N5RdsPFCDQOOr5Z+B7VY5Dmo/Ijqkz2fn7CLWsbo/s=;
+        b=PseF+IEKYMSxy4dvzmIpIvXA+ZJUr2ObMSQXMjTNAyYMSC7WxhbwS6QMYXPKACp5xx
+         Ad+adOGR5hENofudgh03X0Cfw6iaUlANEWx1waHXeBkeJ9Ldz5rjujP2sSBM15Iu/mWC
+         v4wq4rbea7B3UsoitmpjkpFO6R0xIOs4+BQmip/mg+yuRMQ+t3WNYdjXL5tM82lmyQWB
+         qNYLic1SXWJVS7nXG+eRuMhUk1d9sKKvDYvZSYiOGYbPb66rRUCil4VPXW17Tij+SrCK
+         qpvUeMjyKmCAw0URm1oWlKxb7zV28uGz1Pr+VR7lC367/vIzrnbWGTkOkPF3CUu/7Gep
+         2pHQ==
+X-Gm-Message-State: AOAM533uu726rScqsiAXfp4Vvh2s7AKzPigGYa3UmeJDsBrsPWh5gg39
+        5w1vhaSZ3Da6EGUvIiJ9hcSiBzCHNg==
+X-Google-Smtp-Source: ABdhPJzWAXSrgLXPWbu8YK3Y8FIdNsUhvHZebQe9PrO9hqNDDxBD9Ytzzqel3TAvUdiXANuuUyRLAHlHKg==
+X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:ddd6:f3c9:b2f0:82f3])
+ (user=elver job=sendgmr) by 2002:a5d:4e0b:: with SMTP id p11mr13212204wrt.88.1638440000442;
+ Thu, 02 Dec 2021 02:13:20 -0800 (PST)
+Date:   Thu,  2 Dec 2021 11:12:38 +0100
+Message-Id: <20211202101238.33546-1-elver@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
+Subject: [PATCH] locking/mutex: Mark racy reads of owner->on_cpu
+From:   Marco Elver <elver@google.com>
+To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     kasan-dev@googlegroups.com, Thomas Gleixner <tglx@linutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dafna,
+One of the more frequent data races reported by KCSAN is the racy read
+in mutex_spin_on_owner(), which is usually reported as "race of unknown
+origin" without showing the writer. This is due to the racing write
+occurring in kernel/sched. Locally enabling KCSAN in kernel/sched shows:
 
-On Thu, 2 Dec 2021 at 02:56, Dafna Hirschfeld
-<dafna.hirschfeld@collabora.com> wrote:
-> Testing on BeagleV shows buffer corruption that is currently attributed to a
-> known silicon issue in the SoC that makes the cache coherent interconnect not
-> so coherent.
+ | write (marked) to 0xffff97f205079934 of 4 bytes by task 316 on cpu 6:
+ |  finish_task                kernel/sched/core.c:4632 [inline]
+ |  finish_task_switch         kernel/sched/core.c:4848
+ |  context_switch             kernel/sched/core.c:4975 [inline]
+ |  __schedule                 kernel/sched/core.c:6253
+ |  schedule                   kernel/sched/core.c:6326
+ |  schedule_preempt_disabled  kernel/sched/core.c:6385
+ |  __mutex_lock_common        kernel/locking/mutex.c:680
+ |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
+ |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
+ |  mutex_lock                 kernel/locking/mutex.c:283
+ |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
+ |  ...
+ |
+ | read to 0xffff97f205079934 of 4 bytes by task 322 on cpu 3:
+ |  mutex_spin_on_owner        kernel/locking/mutex.c:370
+ |  mutex_optimistic_spin      kernel/locking/mutex.c:480
+ |  __mutex_lock_common        kernel/locking/mutex.c:610
+ |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
+ |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
+ |  mutex_lock                 kernel/locking/mutex.c:283
+ |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
+ |  ...
+ |
+ | value changed: 0x00000001 -> 0x00000000
 
-Maybe it's mentioned somewhere else and I missed it but would it be
-possible to tell me which version of the IP is in the BeagleV chip?
-The reason I ask is I'm trying to get this going on the SigmaStar
-SSD202D which seems to have the "Wave 511".
-I can see the firmware binary get uploaded and it seems to do
-something as the register that exposes the vcpu program counter is
-doing something (and the addresses look the same as the addresses seem
-when the working vendor kernel + binary .ko are running so I think
-it's not just running garbage).
+This race is clearly intentional, and the potential for miscompilation
+is slim due to surrounding barrier() and cpu_relax(), and the value
+being used as a boolean.
 
-I'm wondering if the BeagleV is a different version and the driver
-just won't work as is on mine or maybe the firmware I have has hacks
-for the vendors version of the driver which I don't have source for.
+Nevertheless, marking this reader would more clearly denote intent and
+make it obvious that concurrency is expected. Use READ_ONCE() to avoid
+having to reason about compiler optimizations now and in future.
+
+Similarly, mark the read to owner->on_cpu in mutex_can_spin_on_owner(),
+which immediately precedes the loop executing mutex_spin_on_owner().
+
+Signed-off-by: Marco Elver <elver@google.com>
+---
+
+I decided to send this out now due to the discussion at [1], because it
+is one of the first things that people notice when enabling KCSAN.
+
+[1] https://lkml.kernel.org/r/811af0bc-0c99-37f6-a39a-095418b10661@huawei.com
+
+It had been reported before, but never with the 2nd stack trace -- so at
+the very least this patch can now serve as a reference.
 
 Thanks,
+-- Marco
 
-Daniel
+---
+ kernel/locking/mutex.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
+index db1913611192..50c03a3fa61e 100644
+--- a/kernel/locking/mutex.c
++++ b/kernel/locking/mutex.c
+@@ -367,7 +367,7 @@ bool mutex_spin_on_owner(struct mutex *lock, struct task_struct *owner,
+ 		/*
+ 		 * Use vcpu_is_preempted to detect lock holder preemption issue.
+ 		 */
+-		if (!owner->on_cpu || need_resched() ||
++		if (!READ_ONCE(owner->on_cpu) || need_resched() ||
+ 				vcpu_is_preempted(task_cpu(owner))) {
+ 			ret = false;
+ 			break;
+@@ -410,7 +410,7 @@ static inline int mutex_can_spin_on_owner(struct mutex *lock)
+ 	 */
+ 
+ 	if (owner)
+-		retval = owner->on_cpu && !vcpu_is_preempted(task_cpu(owner));
++		retval = READ_ONCE(owner->on_cpu) && !vcpu_is_preempted(task_cpu(owner));
+ 
+ 	/*
+ 	 * If lock->owner is not set, the mutex has been released. Return true
+-- 
+2.34.0.rc2.393.gf8c9666880-goog
+

@@ -2,182 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E73C465D74
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C9C5465D7B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355507AbhLBEja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:39:30 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:41114 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355360AbhLBEjP (ORCPT
+        id S1355543AbhLBEpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:45:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S238988AbhLBEpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:39:15 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CF902CE2152
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 04:35:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16425C00446;
-        Thu,  2 Dec 2021 04:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638419751;
-        bh=pWND3NJkhj9XePIxXtamGmmjwZ+5EXgv2TnFzY3Z7vY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mVXZ9Oxq+6dVSMMrlkH7EFJalBARdvWp2A1RThLkRhvArLttCwwoIVxVbE64Z42Sv
-         9tn0A2vj6Ycy4BKut0pNQdjbH+j2+Frk1cVf6FfYG/xgITwBqlZzTqX9uMGCf824et
-         JpQH2sjmeWfKAgTxVYkamcxYDg0HXbkLNt7EdRZ3v+gKwRLDFCqhwbji7LvjOSX79h
-         d4Gdlv4/0qtcALrPmUCKayRog9lGKnsBhCfe9uZ1/4FbRjkyitPzvspemsGJXhG2IJ
-         mFU8pp7JADsuP6tn8p7X/Pd6ewMFT800eTAEjiFWgNFgsjjagX3W+Ayu+dgc/TD0Ay
-         8rrAGNPA6/TZQ==
-Date:   Thu, 2 Dec 2021 10:05:46 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Al Cooper <alcooperx@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        linux-phy@lists.infradead.org,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH 1/3] phy: usb: Leave some clocks running during suspend
-Message-ID: <YahNIinbEwB569C1@matsya>
-References: <20211201180653.35097-1-alcooperx@gmail.com>
- <20211201180653.35097-2-alcooperx@gmail.com>
+        Wed, 1 Dec 2021 23:45:45 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9326C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 20:42:23 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id r138so25780533pgr.13
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 20:42:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=QPV306Cl1hLkT1aLm/ztTcGSxnCGdiyQM9JvOmh+VBI=;
+        b=E13BrctyEiJmk8QUej4+qBU++tdSGEmKsrgPFCfx4zr+AVn8a28NmmgnY75romMi89
+         U7ILmdqSDi4IqU1FQskq+DfQT48XCLWbZJLMOpXKWLcwy2RD/8q48vl9tFE+2fXPsZVR
+         +ZI+StjehXpNDVvQ5L0pIKJzXtyXOPfQ4mivaLwcwCFo1KCxzlZAizfhCRjTso+t4G+L
+         wJgw60wiDhYBTdWf9RshLHW31L2CmL6O4QuDIZMQeurga3UCgV1R1Yyffw6RafTgFsrC
+         Vo2cHqAgDqh1KK0SqqfwDrOZ9Uix5RsQYB+cLuVHGj1NDgJE3P7oVXFxcHf73VIjQ65p
+         T/ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=QPV306Cl1hLkT1aLm/ztTcGSxnCGdiyQM9JvOmh+VBI=;
+        b=nZuOWVlnK/WGOwPjcOu1oS14dHGcbWikeYVN0ZAGdJbyaL/eFM/acvYLqSve9OtgSs
+         b6QHUu7/4pZ7/lrOHTAUy7IOew+uqPYFf0K1k3hAdgjCtSYdFzH1Tnd2O1m4BZDBXxay
+         +Bhgh44iCVEDwlimqJgCPnOo8y4jE8DV1j6ZqtRCp7y/iu6Z7H7WW5wSmaH3U8E6vZVN
+         +22g6i+zcMgl7Mfih2dqQJhxU+O+PQVEcwrWW3pXbWTBM9ezPlNY5YFB5QAF5mDeIsQl
+         n7p9eCtv4PSnjL+iEge/f9vHoqL1DCp/+0CHKuP0g3QKpPk9DYZTfc21PFSLXZdYJJUH
+         3hVw==
+X-Gm-Message-State: AOAM532aysx3M1T0kRgwuT3AZ8+Gt6lwqkkxLHlFMpkTH0hD+SvJAR78
+        1yFN4NG3td09zeSAJzI+NyA6pw==
+X-Google-Smtp-Source: ABdhPJyChYJegnkY59sNvTlcAnuBxHuEZK8rD2ydV4fBqk/D+T3tW0FLAm3x803r/bwHx62jIBYF4g==
+X-Received: by 2002:a63:d17:: with SMTP id c23mr7912840pgl.207.1638420143063;
+        Wed, 01 Dec 2021 20:42:23 -0800 (PST)
+Received: from google.com ([2401:fa00:1:10:ce4d:ddd8:41f4:d987])
+        by smtp.gmail.com with ESMTPSA id p43sm1426664pfw.4.2021.12.01.20.42.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Dec 2021 20:42:22 -0800 (PST)
+Date:   Thu, 2 Dec 2021 12:42:18 +0800
+From:   Tzung-Bi Shih <tzungbi@google.com>
+To:     "allen-kh.cheng" <allen-kh.cheng@mediatek.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linux-ALSA <alsa-devel@alsa-project.org>,
+        cujomalainey@google.com,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        sound-open-firmware@alsa-project.org
+Subject: Re: [PATCH v9 3/3] mailbox: mediatek: add support for adsp mailbox
+ controller
+Message-ID: <YahOqtgkkj+HmlJ3@google.com>
+References: <20211201075604.27864-1-allen-kh.cheng@mediatek.com>
+ <20211201075604.27864-4-allen-kh.cheng@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211201180653.35097-2-alcooperx@gmail.com>
+In-Reply-To: <20211201075604.27864-4-allen-kh.cheng@mediatek.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-12-21, 13:06, Al Cooper wrote:
-> The PHY client driver does a phy_exit() call on suspend or rmmod and
-> the PHY driver needs to know the difference because some clocks need
-> to be kept running for suspend but can be shutdown on unbind/rmmod
-> (or if there are no PHY clients at all).
-> 
-> The fix is to use a PM notifier so the driver can tell if a PHY
-> client is calling exit() because of a system suspend or a driver
-> unbind/rmmod.
-> 
-> Signed-off-by: Al Cooper <alcooperx@gmail.com>
-> ---
->  drivers/phy/broadcom/phy-brcm-usb.c | 38 +++++++++++++++++++++++++++++
->  1 file changed, 38 insertions(+)
-> 
-> diff --git a/drivers/phy/broadcom/phy-brcm-usb.c b/drivers/phy/broadcom/phy-brcm-usb.c
-> index 116fb23aebd9..0f1deb6e0eab 100644
-> --- a/drivers/phy/broadcom/phy-brcm-usb.c
-> +++ b/drivers/phy/broadcom/phy-brcm-usb.c
-> @@ -18,6 +18,7 @@
->  #include <linux/soc/brcmstb/brcmstb.h>
->  #include <dt-bindings/phy/phy.h>
->  #include <linux/mfd/syscon.h>
-> +#include <linux/suspend.h>
->  
->  #include "phy-brcm-usb-init.h"
->  
-> @@ -70,12 +71,35 @@ struct brcm_usb_phy_data {
->  	int			init_count;
->  	int			wake_irq;
->  	struct brcm_usb_phy	phys[BRCM_USB_PHY_ID_MAX];
-> +	struct notifier_block	pm_notifier;
-> +	bool			pm_active;
->  };
->  
->  static s8 *node_reg_names[BRCM_REGS_MAX] = {
->  	"crtl", "xhci_ec", "xhci_gbl", "usb_phy", "usb_mdio", "bdc_ec"
->  };
->  
-> +static int brcm_pm_notifier(struct notifier_block *notifier,
-> +			    unsigned long pm_event,
-> +			    void *unused)
-> +{
-> +	struct brcm_usb_phy_data *priv =
-> +		container_of(notifier, struct brcm_usb_phy_data, pm_notifier);
-> +
-> +	switch (pm_event) {
-> +	case PM_HIBERNATION_PREPARE:
-> +	case PM_SUSPEND_PREPARE:
-> +		priv->pm_active = true;
-> +		break;
-> +	case PM_POST_RESTORE:
-> +	case PM_POST_HIBERNATION:
-> +	case PM_POST_SUSPEND:
-> +		priv->pm_active = false;
-> +		break;
-> +	}
-> +	return NOTIFY_DONE;
-> +}
-> +
->  static irqreturn_t brcm_usb_phy_wake_isr(int irq, void *dev_id)
->  {
->  	struct phy *gphy = dev_id;
-> @@ -91,6 +115,9 @@ static int brcm_usb_phy_init(struct phy *gphy)
->  	struct brcm_usb_phy_data *priv =
->  		container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
->  
-> +	if (priv->pm_active)
-> +		return 0;
-> +
->  	/*
->  	 * Use a lock to make sure a second caller waits until
->  	 * the base phy is inited before using it.
-> @@ -120,6 +147,9 @@ static int brcm_usb_phy_exit(struct phy *gphy)
->  	struct brcm_usb_phy_data *priv =
->  		container_of(phy, struct brcm_usb_phy_data, phys[phy->id]);
->  
-> +	if (priv->pm_active)
-> +		return 0;
-> +
->  	dev_dbg(&gphy->dev, "EXIT\n");
->  	if (phy->id == BRCM_USB_PHY_2_0)
->  		brcm_usb_uninit_eohci(&priv->ini);
-> @@ -488,6 +518,9 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
->  	if (err)
->  		return err;
->  
-> +	priv->pm_notifier.notifier_call = brcm_pm_notifier;
-> +	register_pm_notifier(&priv->pm_notifier);
-> +
->  	mutex_init(&priv->mutex);
->  
->  	/* make sure invert settings are correct */
-> @@ -528,7 +561,10 @@ static int brcm_usb_phy_probe(struct platform_device *pdev)
->  
->  static int brcm_usb_phy_remove(struct platform_device *pdev)
->  {
-> +	struct brcm_usb_phy_data *priv = dev_get_drvdata(&pdev->dev);
-> +
->  	sysfs_remove_group(&pdev->dev.kobj, &brcm_usb_phy_group);
-> +	unregister_pm_notifier(&priv->pm_notifier);
->  
->  	return 0;
->  }
-> @@ -539,6 +575,7 @@ static int brcm_usb_phy_suspend(struct device *dev)
->  	struct brcm_usb_phy_data *priv = dev_get_drvdata(dev);
->  
->  	if (priv->init_count) {
-> +		dev_dbg(dev, "SUSPEND\n");
+On Wed, Dec 01, 2021 at 03:56:04PM +0800, allen-kh.cheng wrote:
+> diff --git a/drivers/mailbox/mtk-adsp-mailbox.c b/drivers/mailbox/mtk-adsp-mailbox.c
+[...]
+> +static const struct mbox_chan_ops adsp_mbox_chan_ops = {
+> +	.send_data	= mtk_adsp_mbox_send_data,
+> +	.startup	= mtk_adsp_mbox_startup,
+> +	.shutdown	= mtk_adsp_mbox_shutdown,
+> +	.last_tx_done	= mtk_adsp_mbox_last_tx_done,
+> +};
 
-debug artifact?
+To be consistent, s/adsp_mbox_chan_ops/mtk_adsp_mbox_chan_ops/.
 
->  		priv->ini.wake_enabled = device_may_wakeup(dev);
->  		if (priv->phys[BRCM_USB_PHY_3_0].inited)
->  			brcm_usb_uninit_xhci(&priv->ini);
-> @@ -578,6 +615,7 @@ static int brcm_usb_phy_resume(struct device *dev)
->  	 * Uninitialize anything that wasn't previously initialized.
->  	 */
->  	if (priv->init_count) {
-> +		dev_dbg(dev, "RESUME\n");
-
-here too
-
->  		if (priv->wake_irq >= 0)
->  			disable_irq_wake(priv->wake_irq);
->  		brcm_usb_init_common(&priv->ini);
-> -- 
-> 2.17.1
-
--- 
-~Vinod
+With that,
+Reviewed-by: Tzung-Bi Shih <tzungbi@google.com>

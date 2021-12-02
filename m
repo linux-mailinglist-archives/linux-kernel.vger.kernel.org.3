@@ -2,140 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CB146652C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5535546654E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 15:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347284AbhLBO0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 09:26:25 -0500
-Received: from szxga01-in.huawei.com ([45.249.212.187]:32869 "EHLO
-        szxga01-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240661AbhLBO0W (ORCPT
+        id S1358570AbhLBOho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 09:37:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1358563AbhLBOhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 09:26:22 -0500
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4J4dTQ0nd5zcbmH;
-        Thu,  2 Dec 2021 22:22:50 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 22:22:57 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 22:22:57 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Marco Elver <elver@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <mark.rutland@arm.com>, Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v3] arm64: Enable KCSAN
-Date:   Thu, 2 Dec 2021 22:33:31 +0800
-Message-ID: <20211202143331.15259-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.26.2
+        Thu, 2 Dec 2021 09:37:42 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CA5C06174A;
+        Thu,  2 Dec 2021 06:34:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1921CB823A7;
+        Thu,  2 Dec 2021 14:34:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBEE1C00446;
+        Thu,  2 Dec 2021 14:34:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638455656;
+        bh=ZA74ApQWbIzE4Eo3zZiySRb5DlNCDS7i0zc47ylSO0I=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=k8JBoOtuii6iDf0XGj4N4mRmpQPaSG6G+Y/1dXPEPHt1WqxNpdslLfViki5JM2UAV
+         4geaeb7J79HZ5C+az1qBeSq9uyTpJgs9h/e69uTk74Laemz1DqkoIqTpN8tfAEFtnQ
+         D7fYMnSud47u7eoHtKFLxQKDCNYwcgJJGi96Kz5JiALLBw8NfxF1ArCs1sY+3Bg/aO
+         d18KPZEK2MrtD8Dgq8hSN8cwJvg7JlbFn/MVHZz08pXpd5oy0gKjkSLa3dcjd/ATOB
+         kheHM/mvNT33EmBvtM3gGbgK82zb8C0T0ItEoGK9vIysB36hQZZWrWt2AhaZ103l5N
+         b3eahaYcqvkrg==
+Received: by mail-ed1-f46.google.com with SMTP id l25so116713594eda.11;
+        Thu, 02 Dec 2021 06:34:16 -0800 (PST)
+X-Gm-Message-State: AOAM5321QnbA7CkfoILPAVsE7kfJnEVVyVaW14Puzm6uw+KplPvstrJn
+        0q9eVH1WxgWoAnhaq2UDe/L1A1r54778MLq6zw==
+X-Google-Smtp-Source: ABdhPJwgr61Fsh1QRDOL3UJvZdoyx00MsTV9B4WbP2bzYbUvrc7Vcm3WAnzOxOUgAdrMVFifmxkfr2n6oylUqQ1IkD8=
+X-Received: by 2002:aa7:cc82:: with SMTP id p2mr17672819edt.201.1638455647872;
+ Thu, 02 Dec 2021 06:34:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+References: <20211122111332.72264-1-marcan@marcan.st> <CAL_Jsq+vFbFN+WQhi3dRicW+kaP1Oi9JPSmnAFL7XAc0eCvgrA@mail.gmail.com>
+ <8e881b80-614c-dccf-ddaf-895d1acf26c7@marcan.st> <CAL_JsqLMgkTdbKNP=kAvwKFQp+m330ztTX8v_UFmj2zvzsB-KA@mail.gmail.com>
+ <7f6928fc-97fd-cbe8-f7e9-954945b4574b@marcan.st>
+In-Reply-To: <7f6928fc-97fd-cbe8-f7e9-954945b4574b@marcan.st>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 2 Dec 2021 08:33:56 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+2svQ+1GOw2HcxR88dHog7V=5dbCVgi37Dw6ariZsiqQ@mail.gmail.com>
+Message-ID: <CAL_Jsq+2svQ+1GOw2HcxR88dHog7V=5dbCVgi37Dw6ariZsiqQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI: apple: Configure link speeds properly
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        PCI <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables KCSAN for arm64, with updates to build rules
-to not use KCSAN for several incompatible compilation units.
+On Wed, Dec 1, 2021 at 10:55 PM Hector Martin <marcan@marcan.st> wrote:
+>
+> On 30/11/2021 00.02, Rob Herring wrote:
+> >> Sure, it just means I have to reinvent the PCI capability lookup wheel
+> >> again. I'd love to use the regular accessors, but the infrastructure
+> >> isn't up to the point where we can do that yet yere. DWC also reinvents
+> >> this wheel, but we can't reuse that code because it pokes these
+> >> registers through a separate reg range, not config space (even though it
+> >> seems like they should be the same thing? I'm not sure what's going on
+> >> in the DWC devices... for the Apple controller it's just the ECAM).
+> >
+> > Since it is just ECAM, can you use the regular config space accessors?
+>
+> The problem is this is before the PCI objects are created, so those
+> wouldn't work since they expect to be called on a pci_dev and such.
 
-Resent GCC version(at least GCC10) made outline-atomics as the
-default option(unlike Clang), which will cause linker errors
-for kernel/kcsan/core.o. Disables the out-of-line atomics by
-no-outline-atomics to fix the linker errors.
+Ah, right. That's something I want to fix because lots of drivers have
+2 sets of accessors for this reason.
 
-Meanwhile, as Mark said[1], there is a specific issue on arm64
-about ARM64_BTI with Clang 11 if KCSAN enabled, which is fixed
-by Clang 12, add CLANG_VERSION check. And also some latent issues
-are need to be fixed which isn't just a KCSAN problem, we make
-the KCSAN depends on EXPERT for now.
+> >>>> +       max_gen = of_pci_get_max_link_speed(port->np);
+> >>>> +       if (max_gen < 0) {
+> >>>> +               dev_err(port->pcie->dev, "max link speed not specified\n");
+> >>>
+> >>> Better to fail than limp along in gen1? Though you don't check the
+> >>> return value...
+> >>>
+> >>> Usually, the DT property is there to limit the speed when there's a
+> >>> board limitation.
+> >>
+> >> The default *setting* is actually Gen4, but without
+> >> PCIE_LINK_WIDTH_SPEED_CONTROL poked it always trains at Gen1. Might make
+> >> more sense to only set the LNKCTL field if max-link-speed is specified,
+> >> and unconditionally poke that bit. That'll get us Gen4 by default (or
+> >> even presumably Gen5 in future controllers, if everything else stays
+> >> compatible).
+> >
+> > You already do some setup in firmware for ECAM, right? I think it
+> > would be better if you can do any default setup there and then
+> > max-link-speed is only an override for the kernel.
+>
+> I thought the PCIE_LINK_WIDTH_SPEED_CONTROL thing had to be set later,
+> but trying it now I realized we were missing a bit of initialization
+> that was causing it not to work. Indeed it can be done there and we can
+> drop it from the kernel.
+>
+> We could even do the max-link-speed thing in m1n1 if we want. It has
+> access to the value from the ADT directly, which to be correct we'd have
+> to dynamically transplant to the DT, since there's at least one device
+> that has different PCIe devices on one port depending on hardware
+> variant, while sharing a devicetree. If we're okay with the kernel just
+> not implementing this feature for now, we can say it's the bootloader's job.
+>
+> Ultimately we ship the DTs along with m1n1, so there's an argument that
+> if some day we need to override the max-link-speed for whatever reason
+> over what the ADT says, well, we'd be shipping the updated DT along with
+> m1n1 anyway, so we might as well make m1n1 do it... if so, it might make
+> sense to drop those properties from the actual DTs we ship altogether,
+> at least for now.
+>
+> If we decide to make it m1n1's job entirely, we can drop this patch
+> altogether, at least for now (I can't say how this will interact with
+> suspend/resume and other power management, and hotplug... but we'll open
+> that can of worms when we get there).
 
-Tested selftest and kcsan_test(built with GCC11 and Clang 13),
-and all passed.
+Shouldn't you be setting PCI_EXP_LNKCAP_SLS and/or PCI_EXP_LNKCAP2 if
+you need to limit the max speed and then you can use that instead of
+max-link-speed? If that's lost in low power modes, the driver just has
+to save and restore it.
 
-[1] https://lkml.org/lkml/2021/12/1/354
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-Tested on Qemu with clang 13 / gcc 11, based on 5.16-rc3.
+All this link handling is also something we want to make common as
+much as possible. There's a lot of drivers poking these registers in
+different ways and it's not clear whether they really need to be
+different. So the less you do in the kernel the better.
 
-[    0.221518] kcsan: enabled early
-[    0.222422] kcsan: strict mode configured
-...
-[    5.839223] kcsan: selftest: 3/3 tests passed
-...
-[  517.895102] # kcsan: pass:24 fail:0 skip:0 total:24
-[  517.896393] # Totals: pass:168 fail:0 skip:0 total:168
-[  517.897502] ok 1 - kcsan
-
-v3:
-- add EXPERT and CLANG_VERSION depends suggested by Mark Rutland
-v2:
-- tested on GCC11 and disable outline-atomics for kernel/kcsan/core.c
-  suggested by Marco Elver
-
- arch/arm64/Kconfig               | 1 +
- arch/arm64/kernel/vdso/Makefile  | 1 +
- arch/arm64/kvm/hyp/nvhe/Makefile | 1 +
- kernel/kcsan/Makefile            | 1 +
- 4 files changed, 4 insertions(+)
-
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 4ff73299f8a9..3a7b17742cde 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -150,6 +150,7 @@ config ARM64
- 	select HAVE_ARCH_KASAN_VMALLOC if HAVE_ARCH_KASAN
- 	select HAVE_ARCH_KASAN_SW_TAGS if HAVE_ARCH_KASAN
- 	select HAVE_ARCH_KASAN_HW_TAGS if (HAVE_ARCH_KASAN && ARM64_MTE)
-+	select HAVE_ARCH_KCSAN if EXPERT && (CC_IS_GCC || CLANG_VERSION >= 120000)
- 	select HAVE_ARCH_KFENCE
- 	select HAVE_ARCH_KGDB
- 	select HAVE_ARCH_MMAP_RND_BITS
-diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-index 700767dfd221..60813497a381 100644
---- a/arch/arm64/kernel/vdso/Makefile
-+++ b/arch/arm64/kernel/vdso/Makefile
-@@ -32,6 +32,7 @@ ccflags-y += -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) $(GCC_PLUGINS_CFLAGS) \
- 				$(CC_FLAGS_LTO)
- KASAN_SANITIZE			:= n
-+KCSAN_SANITIZE			:= n
- UBSAN_SANITIZE			:= n
- OBJECT_FILES_NON_STANDARD	:= y
- KCOV_INSTRUMENT			:= n
-diff --git a/arch/arm64/kvm/hyp/nvhe/Makefile b/arch/arm64/kvm/hyp/nvhe/Makefile
-index c3c11974fa3b..24b2c2425b38 100644
---- a/arch/arm64/kvm/hyp/nvhe/Makefile
-+++ b/arch/arm64/kvm/hyp/nvhe/Makefile
-@@ -89,6 +89,7 @@ KBUILD_CFLAGS := $(filter-out $(CC_FLAGS_FTRACE) $(CC_FLAGS_SCS) $(CC_FLAGS_CFI)
- # cause crashes. Just disable it.
- GCOV_PROFILE	:= n
- KASAN_SANITIZE	:= n
-+KCSAN_SANITIZE	:= n
- UBSAN_SANITIZE	:= n
- KCOV_INSTRUMENT	:= n
- 
-diff --git a/kernel/kcsan/Makefile b/kernel/kcsan/Makefile
-index c2bb07f5bcc7..e893b0e1d62a 100644
---- a/kernel/kcsan/Makefile
-+++ b/kernel/kcsan/Makefile
-@@ -8,6 +8,7 @@ CFLAGS_REMOVE_debugfs.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_report.o = $(CC_FLAGS_FTRACE)
- 
- CFLAGS_core.o := $(call cc-option,-fno-conserve-stack) \
-+	$(call cc-option,-mno-outline-atomics) \
- 	-fno-stack-protector -DDISABLE_BRANCH_PROFILING
- 
- obj-y := core.o debugfs.o report.o
--- 
-2.26.2
-
+Rob

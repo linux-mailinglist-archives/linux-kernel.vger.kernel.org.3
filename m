@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DB74E466D69
-	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E74D466D6E
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349262AbhLBXFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 18:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233440AbhLBXFY (ORCPT
+        id S1349329AbhLBXJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 18:09:50 -0500
+Received: from dfw.source.kernel.org ([139.178.84.217]:48358 "EHLO
+        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240957AbhLBXJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 18:05:24 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2215BC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 15:02:01 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id u80so1013303pfc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 15:02:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=eOjlFoU5VQjL4pImZvQTpQdfwgTEDWhWTxRlxxmPIzc=;
-        b=S4hu07MGAbbwjXLuQQVsoaFOznFygKx8xBda9aSDxlAa5j6c6EaVNk9aGhTL/vFEzu
-         dB+diKUZI4jPjEfyux1UqKUA/nF5n/FxGxkkJ4t9yqFaGXQ/znUuVzbMZLq22c5/wfsw
-         dRuyWPO9covcyBdbDyZVEiQquseL6iSkHz2kmQZ2BEzhKW3byySzUzkWrGBJfiyxXmo1
-         iHL9PxO0T3cVEoaEB3KGJi2X+0X4wH08mnvnIgNEbPaP9Oaex00hTMj9ol/6fUeu4MNW
-         M23CFTbE7d9E3qKF336tR6yMaBo/JkPdhKc1hjansH7ASVwS7WpWXKgrfWl5ZPBAhjVU
-         8gFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=eOjlFoU5VQjL4pImZvQTpQdfwgTEDWhWTxRlxxmPIzc=;
-        b=EC2JtNaz7pwUqYjSsPqr0aE5uoucPUJuCW3kWuCufc9dKLX/WkCNiDlWdeEkUsXJtk
-         85aUvsOdLi69QgAkQ3KMu+nczjNM63DVqFcpy2xwEnd1VEc+L6AmPrW2GqR77HR90rHw
-         aQRDq2tNsvalj09DcCqUsjEyoa/vtl7WIfG6tu1IGfue7AmFescZYdDv1eSZNyq6IzZM
-         moKwAttV8P9wQSSj4BZ+aQzidMvoBKOnC7yKgSzHR3hNebi1UkIbg58SJ6fwJRi9K0bp
-         cNb/JBFybN8oMd8Ju8w8bHIc8MRrF0XpcPUGM1MeGuAJImXiV6iOcxN8oJX93dR2EbDp
-         dXsw==
-X-Gm-Message-State: AOAM530JhnOT7qhjvenDjRnKg3OcMreGsooGACljDyL8IXvkryTkv5s9
-        d0cRPLyGlTuGxoprWNNGYMVD112YpZ0=
-X-Google-Smtp-Source: ABdhPJyHjGYJ3CPwnPKqCPJePlpXY7MDr4T2xsnJk2tl7F/XwoQVRgrWW1vmJ+ubHb0L2cWrYyamsA==
-X-Received: by 2002:a63:d257:: with SMTP id t23mr1623182pgi.533.1638486120477;
-        Thu, 02 Dec 2021 15:02:00 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
-        by smtp.gmail.com with ESMTPSA id gv23sm3396448pjb.17.2021.12.02.15.01.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 15:01:59 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 2 Dec 2021 13:01:58 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [PATCH 0/2] workqueue: Fix hotplug/scheduler races
-Message-ID: <YalQZhFcLhtHnEby@slm.duckdns.org>
-References: <20211201151945.632214-1-frederic@kernel.org>
+        Thu, 2 Dec 2021 18:09:48 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E8726289E;
+        Thu,  2 Dec 2021 23:06:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05F3C00446;
+        Thu,  2 Dec 2021 23:06:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638486384;
+        bh=VUEYdAFJhKTrltiaV7nF0XjUQpLcjDDZsHHE3Cltt/A=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=CW89NRiawMbLw6uHQrUgjZYn15mnKjZoJvsqaO2xz6iWLk4iRz4NqNhvhUU2eLbis
+         iB8+R1EXrV18TlBa2LnW5YyC8eOLsq26WcWnw7mggeS0X9tt0xc2kPR2OB6L5JGvMu
+         76+znuCTFR4Leec9rMRg+6obnDm9R0ig85R/rFLxlXBLoO69bZ6dAv0FYgJWWu+NQL
+         0HJ7Ett3Ou7N6js6rOJp6SBAjrXOHLpn+R0gx+tfv3xuveqLN3WJQkUm5DfG7P9/XC
+         D+E9u5bNrTP188nhKcZ5QjwjuQxVkHAFHVuvCHkiaX0/imTpPt6+NbJAIwNvnTYtRp
+         FqOUlckDMzACQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20211201151945.632214-1-frederic@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20211201072718.3969011-1-vkoul@kernel.org>
+References: <20211201072718.3969011-1-vkoul@kernel.org>
+Subject: Re: [PATCH] spmi: pmic-arb: Add support for PMIC v7
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vinod Koul <vkoul@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
+Date:   Thu, 02 Dec 2021 15:06:23 -0800
+User-Agent: alot/0.9.1
+Message-Id: <20211202230624.C05F3C00446@smtp.kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 04:19:43PM +0100, Frederic Weisbecker wrote:
-> It's a resend of "[RFC PATCH 0/2] workqueue: Fix hotplug races", with
-> appropriate tags added and scheduler people Cc'ed.
-> 
-> Thanks.
-> 
-> 
-> Frederic Weisbecker (2):
->   workqueue: Fix unbind_workers() VS wq_worker_running() race
->   workqueue: Fix unbind_workers() VS wq_worker_sleeping() race
+Quoting Vinod Koul (2021-11-30 23:27:18)
+> @@ -1169,8 +1270,12 @@ static int spmi_pmic_arb_probe(struct platform_dev=
+ice *pdev)
+>         pmic_arb =3D spmi_controller_get_drvdata(ctrl);
+>         pmic_arb->spmic =3D ctrl;
+> =20
+> +       /*
+> +        * Don't use devm_ioremap_resource() as the resources are shared =
+in
+> +        * PMIC v7 onwards, so causing failure when mapping
+> +        */
+>         res =3D platform_get_resource_byname(pdev, IORESOURCE_MEM, "core"=
+);
+> -       core =3D devm_ioremap_resource(&ctrl->dev, res);
+> +       core =3D devm_ioremap(&ctrl->dev, res->start, resource_size(res));
 
-Applied to wq/for-5.16-fixes.
+What does this mean? We have two nodes in DT that have the same reg
+properties? How does that work?
 
-Thanks.
-
--- 
-tejun
+>         if (IS_ERR(core)) {
+>                 err =3D PTR_ERR(core);
+>                 goto err_put_ctrl;

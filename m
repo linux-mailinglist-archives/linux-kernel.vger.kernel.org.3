@@ -2,144 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0755465D6E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:30:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2268A465D73
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:34:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355450AbhLBEds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:33:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
+        id S1355485AbhLBEh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:37:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355426AbhLBEdn (ORCPT
+        with ESMTP id S1355360AbhLBEht (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:33:43 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082A5C061574;
-        Wed,  1 Dec 2021 20:30:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 53B9DCE21AD;
-        Thu,  2 Dec 2021 04:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFB4C53FCC;
-        Thu,  2 Dec 2021 04:30:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638419417;
-        bh=xOtsh6uB0JwyVP3cPswcBfduh5x3rcKpeZ3dUk4ARhw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TTjkRP+XzHN6asg+o1L5lUZNHiqz2zriD1fGUvY2Uk+HB0I5toXBuzyIWJNPCDR1W
-         xTs+fYr8lQMfWz5ra1ZHqcvt8YEhr/7Re0Rwz5Vr8jNTs4zSKoWh/cojqfxUSLOKKk
-         buTrtxijEZlyZKaki2UgM/Sgl9hfL10MWtMT6PQWWe/XH1dSpV7Rnt7Ivx2+vyRNjx
-         TsMh56AAmelDz4Cia+OjadKa3EqelggrB9LHDdNbYkc/kZLBVpywRXioi/4Dkm7X3E
-         NupVyBlAHRPAk3+OZgpKYehnjxuqJI+XfoMw4FJ8pc8vNyt77J8+8//u3JXtE3G97M
-         GhyA8iFtBsM+Q==
-Date:   Thu, 2 Dec 2021 10:00:13 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Richard Zhu <hongxing.zhu@nxp.com>
-Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, marcel.ziswiler@toradex.com,
-        tharvey@gateworks.com, kishon@ti.com, robh@kernel.org,
-        galak@kernel.crashing.org, shawnguo@kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Subject: Re: [PATCH v6 5/8] phy: freescale: pcie: Initialize the imx8 pcie
- standalone phy driver
-Message-ID: <YahL1TMkt8S0RNX5@matsya>
-References: <1637200489-11855-1-git-send-email-hongxing.zhu@nxp.com>
- <1637200489-11855-6-git-send-email-hongxing.zhu@nxp.com>
+        Wed, 1 Dec 2021 23:37:49 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD29DC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 20:34:25 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id u22so52419689lju.7
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 20:34:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KT4+ThzPToPwG8WHB54fTTopdp95Q9/t6ImLhzRoaVE=;
+        b=Q+n7hXy3FuOw/95x9CZ85UjLLYFb9+vIMsq49bqo0+kLhCv6zEKc3BX5Wr/g7Fq63I
+         Reaxon0EfvptNWPO+bqJMK2U+pKSAZklTP9uzJWF3JWyTRPaSSuX1d5F+vEvGnHUE9FZ
+         cqwqlOKmZtvoqt4JnCQVs7MhynwPyW8HWWDa+Ys0zxJ664At5joWfiwbX4uIizNzox4v
+         1LqtYUEUcL9ZvSWCXrGBQj8p/6I2Pg7jNBCXvdQCWjoT/7K0ucr4BVI68l8sOcqPO0R1
+         hWQZoUags1bTjaigc9QChIDzSLRUAxCM7qGlYJHp03/cM4iNtoIjlkNYMiBKqmU2gqua
+         2mag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KT4+ThzPToPwG8WHB54fTTopdp95Q9/t6ImLhzRoaVE=;
+        b=2NMA6iZINrB0kJUEsEo6HNehKwHKbLmg0TP5coLP3/S7zwDsB+aDqlg9VDWp+rY1AU
+         R7TinlnOeult3hVdkwkskl7a/OP6RCQXjyS9/lqUHw7jKDjrkt8lwX/dYoXIwZTMTHgS
+         2K8sFBbj/V4M9YrL+UlnidjjoCnevmaArfKsTxje4EdVHELHyp/BtdNp9uzeAXIAzhKy
+         TuxIMGfK8Gn3qVh9CtMqf9dPtzLfjwjT2Fbai9E9rFa86MSCEENNBJxyUzBiUwZE9ZpI
+         0/djK5AXmFHaFGH2oRG2AGzyllviZCmgFPI03/pLtX89DAbG8fMt09KRsE9mZRtzs/r2
+         kgvA==
+X-Gm-Message-State: AOAM5321dvDuh8b7kMemVmMuDFGtJO5TZ6c4GZGd1sLEaGrbfm++K3J3
+        nYQLF+GtSIuihUteSKoU+I+knYExip0y8dAv67tBoA==
+X-Google-Smtp-Source: ABdhPJxFsQTBROC0TdK8woZVFuKCiZHiiNEnW0O2qirGLrQJknz0//X0k9dM0v2xwX2cHpIWu2jT8nFBFBIQPkAeXqw=
+X-Received: by 2002:a2e:95d2:: with SMTP id y18mr9274159ljh.93.1638419662807;
+ Wed, 01 Dec 2021 20:34:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1637200489-11855-6-git-send-email-hongxing.zhu@nxp.com>
+References: <20211201231757.332199-1-willy@infradead.org> <CAG48ez3YNCNZB7AktmRoYLsBQjwBdwueRUXbkFgNVMsgjmCTGA@mail.gmail.com>
+ <YahHZOnT1Uh41XnP@casper.infradead.org>
+In-Reply-To: <YahHZOnT1Uh41XnP@casper.infradead.org>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 2 Dec 2021 05:33:56 +0100
+Message-ID: <CAG48ez39USd-eKf_vQ78vqHEcM89pTwDE5-_DG5891Zt1VTWUA@mail.gmail.com>
+Subject: Re: [5.4 PATCH] mm/gup: Do not force a COW break on file-backed memory
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Jan Kara <jack@suse.cz>,
+        Kirill Shutemov <kirill@shutemov.name>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Christoph Hellwig <hch@lst.de>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18-11-21, 09:54, Richard Zhu wrote:
-> Add the standalone i.MX8 PCIe PHY driver.
-> 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Tested-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
-> Reviewed-by: Tim Harvey <tharvey@gateworks.com>
-> Tested-by: Tim Harvey <tharvey@gateworks.com>
-> ---
->  drivers/phy/freescale/Kconfig              |   9 +
->  drivers/phy/freescale/Makefile             |   1 +
->  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 237 +++++++++++++++++++++
->  3 files changed, 247 insertions(+)
->  create mode 100644 drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> 
-> diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
-> index 320630ffe3cd..e821498b1f7f 100644
-> --- a/drivers/phy/freescale/Kconfig
-> +++ b/drivers/phy/freescale/Kconfig
-> @@ -14,3 +14,12 @@ config PHY_MIXEL_MIPI_DPHY
->  	help
->  	  Enable this to add support for the Mixel DSI PHY as found
->  	  on NXP's i.MX8 family of SOCs.
-> +
-> +config PHY_FSL_IMX8M_PCIE
-> +	tristate "Freescale i.MX8M PCIE PHY"
-> +	depends on OF && HAS_IOMEM
-> +	select GENERIC_PHY
-> +	default ARCH_MXC && ARM64
+On Thu, Dec 2, 2021 at 5:11 AM Matthew Wilcox <willy@infradead.org> wrote:
+> On Thu, Dec 02, 2021 at 04:51:47AM +0100, Jann Horn wrote:
+> > On Thu, Dec 2, 2021 at 12:18 AM Matthew Wilcox (Oracle)
+> > <willy@infradead.org> wrote:
+> > > Commit 17839856fd58 ("gup: document and work around "COW can break either
+> > > way" issue") forces a COW break, even for read-only GUP.  This interacts
+> > > badly with CONFIG_READ_ONLY_THP_FOR_FS as it tries to write to a read-only
+> > > PMD and follow_trans_huge_pmd() returns NULL which induces an endless
+> > > loop as __get_user_pages() interprets that as page-not-present, tries
+> > > to fault it in and retries the follow_page_mask().
+> > >
+> > > The issues fixed by 17839856fd58 don't apply to files.  We know which way
+> > > the COW breaks; the page cache keeps the original and any modifications
+> > > are private to that process.  There's no optimisation that allows a
+> > > process to reuse a file-backed MAP_PRIVATE page.  So we can skip the
+> > > breaking of the COW for file-backed mappings.
+> > >
+> > > This problem only exists in v5.4.y; other stable kernels either predate
+> > > CONFIG_READ_ONLY_THP_FOR_FS or they include commit a308c71bf1e6 ("mm/gup:
+> > > Remove enfornced COW mechanism").
+> > >
+> > > Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> > > ---
+> > >  mm/gup.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/mm/gup.c b/mm/gup.c
+> > > index 3ef769529548..d55e02411010 100644
+> > > --- a/mm/gup.c
+> > > +++ b/mm/gup.c
+> > > @@ -176,7 +176,8 @@ static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
+> > >   */
+> > >  static inline bool should_force_cow_break(struct vm_area_struct *vma, unsigned int flags)
+> > >  {
+> > > -       return is_cow_mapping(vma->vm_flags) && (flags & FOLL_GET);
+> > > +       return is_cow_mapping(vma->vm_flags) && vma_is_anonymous(vma) &&
+> > > +               (flags & FOLL_GET);
+> > >  }
+> >
+> > To be fully correct, the check would have to check for PageAnon(), not
+> > whether the mapping is anonymous, right? Since a private file mapping
+> > can still contain anonymous pages from a prior CoW?
+>
+> Oh, right.  So parent process maps a file with MAP_PRIVATE, writes to
+> it, gets an anon page, forks.  Child stuffs the page into a pipe,
+> unmaps page.  Parent writes to page again, now child can read() the
+> modification?
 
-Why should this be default ? We dont do that for new drivers.. You may
-add this to respective config file though...
+Yeah - in theory that could happen e.g. with an ELF's .data section?
+Those end up as writable private file mappings.
 
-> +static int imx8_pcie_phy_init(struct phy *phy)
-> +{
-> +	int ret;
-> +	u32 val, pad_mode;
-> +	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
-> +
-> +	reset_control_assert(imx8_phy->reset);
-> +
-> +	pad_mode = imx8_phy->refclk_pad_mode;
-> +	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
-> +			   imx8_phy->clkreq_unused ?
-> +			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_AUX_EN,
-> +			   IMX8MM_GPR_PCIE_AUX_EN);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_SSC_EN, 0);
-> +
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
-> +			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
-> +			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> +			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
-> +	usleep_range(100, 200);
-> +
-> +	/* Do the PHY common block reset */
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_CMN_RST,
-> +			   IMX8MM_GPR_PCIE_CMN_RST);
-> +	usleep_range(200, 500);
-> +
-> +
+(I don't know whether that actually has real-world relevance though,
+I'm just saying it's semantically off in theory.)
 
-No multi blank line please
+> The problem is that we don't even get to seeing the struct page with
+> the current code paths.  And we're looking for a fix for RO THP that's
+> less intrusive for v5.4 than backporting
+>
+> 09854ba94c6a ("mm: do_wp_page() simplification")
+> 1a0cf26323c8 ("mm/ksm: Remove reuse_ksm_page()")
+> a308c71bf1e6 ("mm/gup: Remove enfornced COW mechanism")
+>
+> The other patch we've been kicking around (and works) is:
+>
+>  static inline bool should_force_cow_break(struct vm_area_struct *vma, unsigned
+> int flags)
+>  {
+> -       return is_cow_mapping(vma->vm_flags) && (flags & FOLL_GET);
+> +       return is_cow_mapping(vma->vm_flags) &&
+> +               (!(vma->vm_flags & VM_DENYWRITE)) && (flags & FOLL_GET);
+>  }
+>
+> That limits the change to be only text pages.  Generally programs do
+> not write to their text pages, and they certainly don't write *secrets*
+> to their text pages; if somebody else can read it, that's probably not
+> a problem in the same way as writing to a page of heap.
 
-> +static struct platform_driver imx8_pcie_phy_driver = {
-> +	.probe	= imx8_pcie_phy_probe,
-> +	.driver = {
-> +		.name	= "imx8-pcie-phy",
-> +		.of_match_table	= imx8_pcie_phy_of_match,
-> +	}
-> +};
-> +module_platform_driver(imx8_pcie_phy_driver);
-> +
-> +MODULE_DESCRIPTION("FSL IMX8 PCIE PHY driver");
-> +MODULE_LICENSE("GPL");
+Hm, yeah. It's not exactly beautiful, but I guess it should do the job
+for fixing stable...
 
-This does not match the SPDX tag you have given
-
--- 
-~Vinod
+It's a good thing that VM_DENYWRITE still exists in the 5.4 branch. ^^

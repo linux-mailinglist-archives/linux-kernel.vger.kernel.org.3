@@ -2,14 +2,14 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 319C8465AB2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5534F465AAF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354367AbhLBAZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:25:34 -0500
-Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:4585 "EHLO
+        id S1354355AbhLBAZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:25:23 -0500
+Received: from alexa-out-sd-01.qualcomm.com ([199.106.114.38]:63476 "EHLO
         alexa-out-sd-01.qualcomm.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1354308AbhLBAZT (ORCPT
+        by vger.kernel.org with ESMTP id S1354312AbhLBAZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 19:25:19 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
@@ -17,24 +17,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   t=1638404518; x=1669940518;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=uwiJqMQfTck9TBs06kN6bpPU341kZ0aV2gh7wnNjbGo=;
-  b=gd7T7EubJYvXPwHyu65jlt+CsMGU9FtLuGgZjALke8kePD9FitCgprg9
-   RhfSoIrzZFs+dOlBElqAE9KM70zXMhu7FOE7jvoHree6ut5eVRs3PJ2ps
-   0kZa7UjTdgckvjDpSTtbarrMCUh4jTvBcyww2Q7D95hMav6FMwxzGDCEW
+  bh=9vhgz7xOqNcw0mOG2pqtZsqb8gR5GGwj+K4ByudHeSs=;
+  b=zEuiTCbWAgW3g3ogB3eh1DFOLkjwUN2ea+Th3p6iPwBW78sZZ1MBlsbi
+   0QfdCTkvgb6DzZ5aPYCLG0SwkwMVwgRp3cJevsaiPfKB0djBoq6q6Mvyj
+   sdujm8qKDVBoX3cL85X5IHt5Z0nZJVNhiCMnx1/OJTzMZlW5mlYmiHNnc
    c=;
-Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Dec 2021 16:21:56 -0800
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 01 Dec 2021 16:21:58 -0800
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:21:56 -0800
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:21:57 -0800
 Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 1 Dec 2021 16:21:56 -0800
+ 15.2.922.19; Wed, 1 Dec 2021 16:21:57 -0800
 Received: from hu-vamslank-sd.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.922.19; Wed, 1 Dec 2021 16:21:55 -0800
+ 15.2.922.19; Wed, 1 Dec 2021 16:21:56 -0800
 From:   <quic_vamslank@quicinc.com>
 To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
         <mturquette@baylibre.com>, <sboyd@kernel.org>,
@@ -42,11 +42,11 @@ To:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
 CC:     <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <manivannan.sadhasivam@linaro.org>,
-        Vamsi krishna Lanka <quic_vamslank@quicinc.com>,
-        Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>
-Subject: [PATCH v6 1/5] dt-bindings: clock: Add SDX65 GCC clock bindings
-Date:   Wed, 1 Dec 2021 16:21:31 -0800
-Message-ID: <e15509b2b7c9b600ab38c5269d4fac609c077b5b.1638402361.git.quic_vamslank@quicinc.com>
+        Vamsi Krishna Lanka <quic_vamslank@quicinc.com>,
+        Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH v6 2/5] clk: qcom: Add LUCID_EVO PLL type for SDX65
+Date:   Wed, 1 Dec 2021 16:21:32 -0800
+Message-ID: <7e1805ef3f7cddc1222906d8b8e5b79548b46f63.1638402361.git.quic_vamslank@quicinc.com>
 X-Mailer: git-send-email 2.33.1
 In-Reply-To: <cover.1638402361.git.quic_vamslank@quicinc.com>
 References: <cover.1638402361.git.quic_vamslank@quicinc.com>
@@ -60,234 +60,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vamsi krishna Lanka <quic_vamslank@quicinc.com>
+From: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
 
-Add device tree bindings for global clock controller on SDX65 SOCs.
+Add a LUCID_EVO PLL type for SDX65 SoC from Qualcomm.
 
 Signed-off-by: Vamsi Krishna Lanka <quic_vamslank@quicinc.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 Reviewed-by: Vinod Koul <vkoul@kernel.org>
 ---
- .../bindings/clock/qcom,gcc-sdx65.yaml        |  80 ++++++++++++
- include/dt-bindings/clock/qcom,gcc-sdx65.h    | 122 ++++++++++++++++++
- 2 files changed, 202 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
- create mode 100644 include/dt-bindings/clock/qcom,gcc-sdx65.h
+ drivers/clk/qcom/clk-alpha-pll.c | 204 +++++++++++++++++++++++++++----
+ drivers/clk/qcom/clk-alpha-pll.h |   3 +
+ 2 files changed, 181 insertions(+), 26 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
-new file mode 100644
-index 000000000000..16c4cdc7b4d6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
-@@ -0,0 +1,80 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/qcom,gcc-sdx65.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm Global Clock & Reset Controller Binding for SDX65
-+
-+maintainers:
-+  - Vamsi krishna Lanka <quic_vamslank@quicinc.com>
-+
-+description: |
-+  Qualcomm global clock control module which supports the clocks, resets and
-+  power domains on SDX65
-+
-+  See also:
-+  - dt-bindings/clock/qcom,gcc-sdx65.h
-+
-+properties:
-+  compatible:
-+    const: qcom,gcc-sdx65
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Board XO source
-+      - description: Board active XO source
-+      - description: Sleep clock source
-+      - description: PCIE Pipe clock source
-+      - description: USB3 phy wrapper pipe clock source
-+      - description: PLL test clock source (Optional clock)
-+    minItems: 5
-+
-+  clock-names:
-+    items:
-+      - const: bi_tcxo
-+      - const: bi_tcxo_ao
-+      - const: sleep_clk
-+      - const: pcie_pipe_clk
-+      - const: usb3_phy_wrapper_gcc_usb30_pipe_clk
-+      - const: core_bi_pll_test_se # Optional clock
-+    minItems: 5
-+
-+  '#clock-cells':
-+    const: 1
-+
-+  '#reset-cells':
-+    const: 1
-+
-+  '#power-domain-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - '#clock-cells'
-+  - '#reset-cells'
-+  - '#power-domain-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,rpmh.h>
-+    clock-controller@100000 {
-+      compatible = "qcom,gcc-sdx65";
-+      reg = <0x100000 0x1f7400>;
-+      clocks = <&rpmhcc RPMH_CXO_CLK>, <&rpmhcc RPMH_CXO_CLK_A>, <&sleep_clk>,
-+               <&pcie_pipe_clk>, <&usb3_phy_wrapper_gcc_usb30_pipe_clk>, <&pll_test_clk>;
-+      clock-names = "bi_tcxo", "bi_tcxo_ao", "sleep_clk",
-+                    "pcie_pipe_clk", "usb3_phy_wrapper_gcc_usb30_pipe_clk", "core_bi_pll_test_se";
-+      #clock-cells = <1>;
-+      #reset-cells = <1>;
-+      #power-domain-cells = <1>;
-+    };
-+...
-diff --git a/include/dt-bindings/clock/qcom,gcc-sdx65.h b/include/dt-bindings/clock/qcom,gcc-sdx65.h
-new file mode 100644
-index 000000000000..75ecc9237d8f
---- /dev/null
-+++ b/include/dt-bindings/clock/qcom,gcc-sdx65.h
-@@ -0,0 +1,122 @@
-+/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-+/*
+diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+index eaedcceb766f..e0c67b76d8ac 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.c
++++ b/drivers/clk/qcom/clk-alpha-pll.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /*
+  * Copyright (c) 2015, 2018, The Linux Foundation. All rights reserved.
 + * Copyright (c) 2021, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
+  */
+ 
+ #include <linux/kernel.h>
+@@ -139,6 +140,20 @@ const u8 clk_alpha_pll_regs[][PLL_OFF_MAX_REGS] = {
+ 		[PLL_OFF_OPMODE] = 0x28,
+ 		[PLL_OFF_STATUS] = 0x38,
+ 	},
++	[CLK_ALPHA_PLL_TYPE_LUCID_EVO] = {
++		[PLL_OFF_OPMODE] = 0x04,
++		[PLL_OFF_STATUS] = 0x0c,
++		[PLL_OFF_L_VAL] = 0x10,
++		[PLL_OFF_ALPHA_VAL] = 0x14,
++		[PLL_OFF_USER_CTL] = 0x18,
++		[PLL_OFF_USER_CTL_U] = 0x1c,
++		[PLL_OFF_CONFIG_CTL] = 0x20,
++		[PLL_OFF_CONFIG_CTL_U] = 0x24,
++		[PLL_OFF_CONFIG_CTL_U1] = 0x28,
++		[PLL_OFF_TEST_CTL] = 0x2c,
++		[PLL_OFF_TEST_CTL_U] = 0x30,
++		[PLL_OFF_TEST_CTL_U1] = 0x34,
++        },
+ };
+ EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
+ 
+@@ -175,6 +190,10 @@ EXPORT_SYMBOL_GPL(clk_alpha_pll_regs);
+ #define LUCID_5LPE_PLL_LATCH_INPUT	BIT(14)
+ #define LUCID_5LPE_ENABLE_VOTE_RUN	BIT(21)
+ 
++/* LUCID EVO PLL specific settings and offsets */
++#define LUCID_EVO_ENABLE_VOTE_RUN       BIT(25)
++#define LUCID_EVO_PLL_L_VAL_MASK        GENMASK(15, 0)
 +
-+#ifndef _DT_BINDINGS_CLK_QCOM_GCC_SDX65_H
-+#define _DT_BINDINGS_CLK_QCOM_GCC_SDX65_H
+ /* ZONDA PLL specific */
+ #define ZONDA_PLL_OUT_MASK	0xf
+ #define ZONDA_STAY_IN_CFA	BIT(16)
+@@ -1741,35 +1760,47 @@ static int alpha_pll_lucid_5lpe_set_rate(struct clk_hw *hw, unsigned long rate,
+ 					  LUCID_5LPE_ALPHA_PLL_ACK_LATCH);
+ }
+ 
++static int __clk_lucid_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
++                                            unsigned long parent_rate, unsigned long enable_vote_run)
++{
++        struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
++	struct regmap *regmap = pll->clkr.regmap;
++        int i, val = 0, div, ret;
++        u32 mask;
 +
-+/* GCC clocks */
-+#define GPLL0							0
-+#define GPLL0_OUT_EVEN						1
-+#define GCC_AHB_PCIE_LINK_CLK					2
-+#define GCC_BLSP1_AHB_CLK					3
-+#define GCC_BLSP1_QUP1_I2C_APPS_CLK				4
-+#define GCC_BLSP1_QUP1_I2C_APPS_CLK_SRC				5
-+#define GCC_BLSP1_QUP1_SPI_APPS_CLK				6
-+#define GCC_BLSP1_QUP1_SPI_APPS_CLK_SRC				7
-+#define GCC_BLSP1_QUP2_I2C_APPS_CLK				8
-+#define GCC_BLSP1_QUP2_I2C_APPS_CLK_SRC				9
-+#define GCC_BLSP1_QUP2_SPI_APPS_CLK				10
-+#define GCC_BLSP1_QUP2_SPI_APPS_CLK_SRC				11
-+#define GCC_BLSP1_QUP3_I2C_APPS_CLK				12
-+#define GCC_BLSP1_QUP3_I2C_APPS_CLK_SRC				13
-+#define GCC_BLSP1_QUP3_SPI_APPS_CLK				14
-+#define GCC_BLSP1_QUP3_SPI_APPS_CLK_SRC				15
-+#define GCC_BLSP1_QUP4_I2C_APPS_CLK				16
-+#define GCC_BLSP1_QUP4_I2C_APPS_CLK_SRC				17
-+#define GCC_BLSP1_QUP4_SPI_APPS_CLK				18
-+#define GCC_BLSP1_QUP4_SPI_APPS_CLK_SRC				19
-+#define GCC_BLSP1_SLEEP_CLK					20
-+#define GCC_BLSP1_UART1_APPS_CLK				21
-+#define GCC_BLSP1_UART1_APPS_CLK_SRC				22
-+#define GCC_BLSP1_UART2_APPS_CLK				23
-+#define GCC_BLSP1_UART2_APPS_CLK_SRC				24
-+#define GCC_BLSP1_UART3_APPS_CLK				25
-+#define GCC_BLSP1_UART3_APPS_CLK_SRC				26
-+#define GCC_BLSP1_UART4_APPS_CLK				27
-+#define GCC_BLSP1_UART4_APPS_CLK_SRC				28
-+#define GCC_BOOT_ROM_AHB_CLK					29
-+#define GCC_CPUSS_AHB_CLK					30
-+#define GCC_CPUSS_AHB_CLK_SRC					31
-+#define GCC_CPUSS_AHB_POSTDIV_CLK_SRC				32
-+#define GCC_CPUSS_GNOC_CLK					33
-+#define GCC_GP1_CLK						34
-+#define GCC_GP1_CLK_SRC						35
-+#define GCC_GP2_CLK						36
-+#define GCC_GP2_CLK_SRC						37
-+#define GCC_GP3_CLK						38
-+#define GCC_GP3_CLK_SRC						39
-+#define GCC_PCIE_0_CLKREF_EN					40
-+#define GCC_PCIE_AUX_CLK					41
-+#define GCC_PCIE_AUX_CLK_SRC					42
-+#define GCC_PCIE_AUX_PHY_CLK_SRC				43
-+#define GCC_PCIE_CFG_AHB_CLK					44
-+#define GCC_PCIE_MSTR_AXI_CLK					45
-+#define GCC_PCIE_PIPE_CLK					46
-+#define GCC_PCIE_PIPE_CLK_SRC					47
-+#define GCC_PCIE_RCHNG_PHY_CLK					48
-+#define GCC_PCIE_RCHNG_PHY_CLK_SRC				49
-+#define GCC_PCIE_SLEEP_CLK					50
-+#define GCC_PCIE_SLV_AXI_CLK					51
-+#define GCC_PCIE_SLV_Q2A_AXI_CLK				52
-+#define GCC_PDM2_CLK						53
-+#define GCC_PDM2_CLK_SRC					54
-+#define GCC_PDM_AHB_CLK						55
-+#define GCC_PDM_XO4_CLK						56
-+#define GCC_RX1_USB2_CLKREF_EN					57
-+#define GCC_SDCC1_AHB_CLK					58
-+#define GCC_SDCC1_APPS_CLK					59
-+#define GCC_SDCC1_APPS_CLK_SRC					60
-+#define GCC_SPMI_FETCHER_AHB_CLK				61
-+#define GCC_SPMI_FETCHER_CLK					62
-+#define GCC_SPMI_FETCHER_CLK_SRC				63
-+#define GCC_SYS_NOC_CPUSS_AHB_CLK				64
-+#define GCC_USB30_MASTER_CLK					65
-+#define GCC_USB30_MASTER_CLK_SRC				66
-+#define GCC_USB30_MOCK_UTMI_CLK					67
-+#define GCC_USB30_MOCK_UTMI_CLK_SRC				68
-+#define GCC_USB30_MOCK_UTMI_POSTDIV_CLK_SRC			69
-+#define GCC_USB30_MSTR_AXI_CLK					70
-+#define GCC_USB30_SLEEP_CLK					71
-+#define GCC_USB30_SLV_AHB_CLK					72
-+#define GCC_USB3_PHY_AUX_CLK					73
-+#define GCC_USB3_PHY_AUX_CLK_SRC				74
-+#define GCC_USB3_PHY_PIPE_CLK					75
-+#define GCC_USB3_PHY_PIPE_CLK_SRC				76
-+#define GCC_USB3_PRIM_CLKREF_EN					77
-+#define GCC_USB_PHY_CFG_AHB2PHY_CLK				78
-+#define GCC_XO_DIV4_CLK						79
-+#define GCC_XO_PCIE_LINK_CLK					80
++        /*
++         * If the PLL is in FSM mode, then treat set_rate callback as a
++         * no-operation.
++         */
++        ret = regmap_read(regmap, PLL_USER_CTL(pll), &val);
++        if (ret)
++                return ret;
 +
-+/* GCC resets */
-+#define GCC_BLSP1_QUP1_BCR					0
-+#define GCC_BLSP1_QUP2_BCR					1
-+#define GCC_BLSP1_QUP3_BCR					2
-+#define GCC_BLSP1_QUP4_BCR					3
-+#define GCC_BLSP1_UART1_BCR					4
-+#define GCC_BLSP1_UART2_BCR					5
-+#define GCC_BLSP1_UART3_BCR					6
-+#define GCC_BLSP1_UART4_BCR					7
-+#define GCC_PCIE_BCR						8
-+#define GCC_PCIE_LINK_DOWN_BCR					9
-+#define GCC_PCIE_NOCSR_COM_PHY_BCR				10
-+#define GCC_PCIE_PHY_BCR					11
-+#define GCC_PCIE_PHY_CFG_AHB_BCR				12
-+#define GCC_PCIE_PHY_COM_BCR					13
-+#define GCC_PCIE_PHY_NOCSR_COM_PHY_BCR				14
-+#define GCC_PDM_BCR						15
-+#define GCC_QUSB2PHY_BCR					16
-+#define GCC_SDCC1_BCR						17
-+#define GCC_SPMI_FETCHER_BCR					18
-+#define GCC_TCSR_PCIE_BCR					19
-+#define GCC_USB30_BCR						20
-+#define GCC_USB3_PHY_BCR					21
-+#define GCC_USB3PHY_PHY_BCR					22
-+#define GCC_USB_PHY_CFG_AHB2PHY_BCR				23
++        if (val & enable_vote_run)
++                return 0;
 +
-+/* GCC power domains */
-+#define USB30_GDSC                                              0
-+#define PCIE_GDSC                                               1
++        if (!pll->post_div_table) {
++                pr_err("Missing the post_div_table for the PLL\n");
++                return -EINVAL;
++        }
 +
-+#endif
++        div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
++        for (i = 0; i < pll->num_post_div; i++) {
++                if (pll->post_div_table[i].div == div) {
++                        val = pll->post_div_table[i].val;
++                        break;
++                }
++        }
++
++        mask = GENMASK(pll->width + pll->post_div_shift - 1, pll->post_div_shift);
++        return regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll),
++                                  mask, val << pll->post_div_shift);
++}
++
+ static int clk_lucid_5lpe_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
+ 					       unsigned long parent_rate)
+ {
+-	struct clk_alpha_pll_postdiv *pll = to_clk_alpha_pll_postdiv(hw);
+-	int i, val = 0, div, ret;
+-	u32 mask;
+-
+-	/*
+-	 * If the PLL is in FSM mode, then treat set_rate callback as a
+-	 * no-operation.
+-	 */
+-	ret = regmap_read(pll->clkr.regmap, PLL_USER_CTL(pll), &val);
+-	if (ret)
+-		return ret;
+-
+-	if (val & LUCID_5LPE_ENABLE_VOTE_RUN)
+-		return 0;
+-
+-	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+-	for (i = 0; i < pll->num_post_div; i++) {
+-		if (pll->post_div_table[i].div == div) {
+-			val = pll->post_div_table[i].val;
+-			break;
+-		}
+-	}
+-
+-	mask = GENMASK(pll->width + pll->post_div_shift - 1, pll->post_div_shift);
+-	return regmap_update_bits(pll->clkr.regmap, PLL_USER_CTL(pll),
+-				  mask, val << pll->post_div_shift);
++	return __clk_lucid_pll_postdiv_set_rate(hw, rate, parent_rate, LUCID_5LPE_ENABLE_VOTE_RUN);
+ }
+ 
+ const struct clk_ops clk_alpha_pll_lucid_5lpe_ops = {
+@@ -1951,3 +1982,124 @@ const struct clk_ops clk_alpha_pll_zonda_ops = {
+ 	.set_rate = clk_zonda_pll_set_rate,
+ };
+ EXPORT_SYMBOL(clk_alpha_pll_zonda_ops);
++
++static int alpha_pll_lucid_evo_enable(struct clk_hw *hw)
++{
++	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
++	struct regmap *regmap = pll->clkr.regmap;
++	u32 val;
++	int ret;
++
++	ret = regmap_read(regmap, PLL_USER_CTL(pll), &val);
++	if (ret)
++		return ret;
++
++	/* If in FSM mode, just vote for it */
++	if (val & LUCID_EVO_ENABLE_VOTE_RUN) {
++		ret = clk_enable_regmap(hw);
++		if (ret)
++			return ret;
++		return wait_for_pll_enable_lock(pll);
++	}
++
++	/* Check if PLL is already enabled */
++	ret = trion_pll_is_enabled(pll, regmap);
++	if (ret < 0)
++		return ret;
++	else if (ret) {
++		pr_warn("%s PLL is already enabled\n", clk_hw_get_name(&pll->clkr.hw));
++		return 0;
++	}
++
++	ret = regmap_update_bits(regmap, PLL_MODE(pll), PLL_RESET_N, PLL_RESET_N);
++	if (ret)
++		return ret;
++
++	/* Set operation mode to RUN */
++	regmap_write(regmap, PLL_OPMODE(pll), PLL_RUN);
++
++	ret = wait_for_pll_enable_lock(pll);
++	if (ret)
++		return ret;
++
++	/* Enable the PLL outputs */
++	ret = regmap_update_bits(regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, PLL_OUT_MASK);
++	if (ret)
++		return ret;
++
++	/* Enable the global PLL outputs */
++	ret = regmap_update_bits(regmap, PLL_MODE(pll), PLL_OUTCTRL, PLL_OUTCTRL);
++	if (ret)
++		return ret;
++
++	/* Ensure that the write above goes through before returning. */
++	mb();
++	return ret;
++}
++
++static void alpha_pll_lucid_evo_disable(struct clk_hw *hw)
++{
++	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
++	struct regmap *regmap = pll->clkr.regmap;
++	u32 val;
++	int ret;
++
++	ret = regmap_read(regmap, PLL_USER_CTL(pll), &val);
++	if (ret)
++		return;
++
++	/* If in FSM mode, just unvote it */
++	if (val & LUCID_EVO_ENABLE_VOTE_RUN) {
++		clk_disable_regmap(hw);
++		return;
++	}
++
++	/* Disable the global PLL output */
++	ret = regmap_update_bits(regmap, PLL_MODE(pll), PLL_OUTCTRL, 0);
++	if (ret)
++		return;
++
++	/* Disable the PLL outputs */
++	ret = regmap_update_bits(regmap, PLL_USER_CTL(pll), PLL_OUT_MASK, 0);
++	if (ret)
++		return;
++
++	/* Place the PLL mode in STANDBY */
++	regmap_write(regmap, PLL_OPMODE(pll), PLL_STANDBY);
++}
++
++static unsigned long alpha_pll_lucid_evo_recalc_rate(struct clk_hw *hw,
++						     unsigned long parent_rate)
++{
++	struct clk_alpha_pll *pll = to_clk_alpha_pll(hw);
++	struct regmap *regmap = pll->clkr.regmap;
++	u32 l, frac;
++
++	regmap_read(regmap, PLL_L_VAL(pll), &l);
++	l &= LUCID_EVO_PLL_L_VAL_MASK;
++	regmap_read(regmap, PLL_ALPHA_VAL(pll), &frac);
++
++	return alpha_pll_calc_rate(parent_rate, l, frac, pll_alpha_width(pll));
++}
++
++static int clk_lucid_evo_pll_postdiv_set_rate(struct clk_hw *hw, unsigned long rate,
++					      unsigned long parent_rate)
++{
++	return __clk_lucid_pll_postdiv_set_rate(hw, rate, parent_rate, LUCID_EVO_ENABLE_VOTE_RUN);
++}
++
++const struct clk_ops clk_alpha_pll_fixed_lucid_evo_ops = {
++	.enable = alpha_pll_lucid_evo_enable,
++	.disable = alpha_pll_lucid_evo_disable,
++	.is_enabled = clk_trion_pll_is_enabled,
++	.recalc_rate = alpha_pll_lucid_evo_recalc_rate,
++	.round_rate = clk_alpha_pll_round_rate,
++};
++EXPORT_SYMBOL_GPL(clk_alpha_pll_fixed_lucid_evo_ops);
++
++const struct clk_ops clk_alpha_pll_postdiv_lucid_evo_ops = {
++	.recalc_rate = clk_alpha_pll_postdiv_fabia_recalc_rate,
++	.round_rate = clk_alpha_pll_postdiv_fabia_round_rate,
++	.set_rate = clk_lucid_evo_pll_postdiv_set_rate,
++};
++EXPORT_SYMBOL_GPL(clk_alpha_pll_postdiv_lucid_evo_ops);
+diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+index 55e4fa47912f..6e9907deaf30 100644
+--- a/drivers/clk/qcom/clk-alpha-pll.h
++++ b/drivers/clk/qcom/clk-alpha-pll.h
+@@ -17,6 +17,7 @@ enum {
+ 	CLK_ALPHA_PLL_TYPE_LUCID = CLK_ALPHA_PLL_TYPE_TRION,
+ 	CLK_ALPHA_PLL_TYPE_AGERA,
+ 	CLK_ALPHA_PLL_TYPE_ZONDA,
++	CLK_ALPHA_PLL_TYPE_LUCID_EVO,
+ 	CLK_ALPHA_PLL_TYPE_MAX,
+ };
+ 
+@@ -151,6 +152,8 @@ extern const struct clk_ops clk_alpha_pll_postdiv_lucid_5lpe_ops;
+ 
+ extern const struct clk_ops clk_alpha_pll_zonda_ops;
+ #define clk_alpha_pll_postdiv_zonda_ops clk_alpha_pll_postdiv_fabia_ops
++extern const struct clk_ops clk_alpha_pll_fixed_lucid_evo_ops;
++extern const struct clk_ops clk_alpha_pll_postdiv_lucid_evo_ops;
+ 
+ void clk_alpha_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+ 			     const struct alpha_pll_config *config);
 -- 
 2.33.1
 

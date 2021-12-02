@@ -2,261 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EE10D4661AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFEE4661B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356607AbhLBKtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:49:14 -0500
-Received: from szxga02-in.huawei.com ([45.249.212.188]:16337 "EHLO
-        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbhLBKtK (ORCPT
+        id S1354862AbhLBKvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:51:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24966 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S231208AbhLBKvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:49:10 -0500
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J4XfJ4YSTz91PY;
-        Thu,  2 Dec 2021 18:45:12 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 18:45:46 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id
- 15.1.2308.20; Thu, 2 Dec 2021 18:45:45 +0800
-Message-ID: <b641f1ea-6def-0fe4-d273-03c35c4aa7d6@huawei.com>
-Date:   Thu, 2 Dec 2021 18:45:45 +0800
+        Thu, 2 Dec 2021 05:51:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638442068;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nxrXd/Qbnx5+10y2XOAHYVIM838eOX6RKqgatEyS3E0=;
+        b=EV7W0Q5fA4vo1Sb7pDbg++OSE/N4ukZXuJtMzCViGWFGklu+XMTsXr9AxQ8mwtQTQtufO4
+        OD6SxNFg7PxQwIhgirpu/UgOs2w9CCOzlH5+09cOeeS/xi/ZJWdyl+kFPS/0IkGJgZDgdC
+        goXieyRh7Zty5+iHNvVtwdl21oMZmyo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-400-CesdZHK2MK6LRTzbfbz1KQ-1; Thu, 02 Dec 2021 05:47:45 -0500
+X-MC-Unique: CesdZHK2MK6LRTzbfbz1KQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 6B70A81CCB7;
+        Thu,  2 Dec 2021 10:47:42 +0000 (UTC)
+Received: from starship (unknown [10.40.192.24])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 965E319D9F;
+        Thu,  2 Dec 2021 10:47:22 +0000 (UTC)
+Message-ID: <7c862212b92efea218ed542e0db7ddf7627c525c.camel@redhat.com>
+Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
+ successful
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Anup Patel <anup.patel@wdc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Atish Patra <atish.patra@wdc.com>,
+        David Hildenbrand <david@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        David Matlack <dmatlack@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Jing Zhang <jingzhangos@google.com>
+Date:   Thu, 02 Dec 2021 12:47:21 +0200
+In-Reply-To: <f55056c55892dd42592e5c242fa7a1561c6cee90.camel@redhat.com>
+References: <20211009021236.4122790-1-seanjc@google.com>
+         <20211009021236.4122790-12-seanjc@google.com>
+         <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
+         <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
+         <YaUNBfJh35WXMV0M@google.com>
+         <f55056c55892dd42592e5c242fa7a1561c6cee90.camel@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.2.0
-Subject: Re: [PATCH v2] arm64: Enable KCSAN
-Content-Language: en-US
-To:     Marco Elver <elver@google.com>
-CC:     Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <joey.gouly@arm.com>
-References: <20211129145732.27000-1-wangkefeng.wang@huawei.com>
- <YadiUPpJ0gADbiHQ@FVFF77S0Q05N>
- <811af0bc-0c99-37f6-a39a-095418b10661@huawei.com>
- <Yaic31SbYFJ4zAl0@elver.google.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <Yaic31SbYFJ4zAl0@elver.google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggeme701-chm.china.huawei.com (10.1.199.97) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 2021-12-02 at 12:20 +0200, Maxim Levitsky wrote:
+> On Mon, 2021-11-29 at 17:25 +0000, Sean Christopherson wrote:
+> > On Mon, Nov 29, 2021, Maxim Levitsky wrote:
+> > > (This thing is that when you tell the IOMMU that a vCPU is not running,
+> > > Another thing I discovered that this patch series totally breaks my VMs,
+> > > without cpu_pm=on The whole series (I didn't yet bisect it) makes even my
+> > > fedora32 VM be very laggy, almost unusable, and it only has one
+> > > passed-through device, a nic).
+> > 
+> > Grrrr, the complete lack of comments in the KVM code and the separate paths for
+> > VMX vs SVM when handling HLT with APICv make this all way for difficult to
+> > understand than it should be.
+> > 
+> > The hangs are likely due to:
+> > 
+> >   KVM: SVM: Unconditionally mark AVIC as running on vCPU load (with APICv)
+> > 
+> > If a posted interrupt arrives after KVM has done its final search through the vIRR,
+> > but before avic_update_iommu_vcpu_affinity() is called, the posted interrupt will
+> > be set in the vIRR without triggering a host IRQ to wake the vCPU via the GA log.
+> > 
+> > I.e. KVM is missing an equivalent to VMX's posted interrupt check for an outstanding
+> > notification after switching to the wakeup vector.
+> > 
+> > For now, the least awful approach is sadly to keep the vcpu_(un)blocking() hooks.
+> > Unlike VMX's PI support, there's no fast check for an interrupt being posted (KVM
+> > would have to rewalk the vIRR), no easy to signal the current CPU to do wakeup (I
+> > don't think KVM even has access to the IRQ used by the owning IOMMU), and there's
+> > no simplification of load/put code.
+> 
+> I have an idea.
+>  
+> Why do we even use/need the GA log?
+> Why not, just disable the 'guest mode' in the iommu and let it sent good old normal interrupt
+> when a vCPU is not running, just like we do when we inhibit the AVIC?
+>  
+> GA log makes all devices that share an iommu (there are 4 iommus per package these days,
+> some without useful devices) go through a single (!) msi like interrupt,
+> which is even for some reason implemented by a threaded IRQ in the linux kernel.
 
-On 2021/12/2 18:15, Marco Elver wrote:
-> On Thu, Dec 02, 2021 at 09:35AM +0800, Kefeng Wang wrote:
->> On 2021/12/1 19:53, Mark Rutland wrote:
->>> Hi Kefeng,
->>>
->>> On Mon, Nov 29, 2021 at 10:57:32PM +0800, Kefeng Wang wrote:
->>>> This patch enables KCSAN for arm64, with updates to build rules
->>>> to not use KCSAN for several incompatible compilation units.
->>>>
->>>> Resent GCC version(at least GCC10) made outline-atomics as the
->>>> default option(unlike Clang), which will cause linker errors
->>>> for kernel/kcsan/core.o.
->>>>
->>>> Disables the out-of-line atomics by no-outline-atomics to fix
->>>> the linker errors.
->>>>
->>>> Tested selftest and kcsan_test(built with GCC11 and Clang 13),
->>>> and all passed.
->>> Nice!
->>>
->>> I think there are a few additional bits and pieces we'll need:
->>>
->>> * Prior to clang 12.0.0, KCSAN would produce warnings with BTI, as I found in:
->>>
->>>     https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=2d67c39ae4f619ca94d9790e09186e77922fa826
->>>
->>>     Since BTI is in defconfig, I think arm64's Kconfig should require a minimum
->>>     of clang 12.0.0 to enable KCSAN.
->> I don't have different clang version to test,  when check KCSAN,
->>
->> commit eb32f9f990d9 ("kcsan: Improve some Kconfig comments") saids,
->>
->>
->>      The compiler instruments plain compound read-write operations
->>      differently (++, --, +=, -=, |=, &=, etc.), which allows KCSAN to
->>      distinguish them from other plain accesses. This is currently
->>      supported by Clang 12 or later.
->>
->> Should we add a  "depends on CLANG_VERSION >= 120000"
-> KCSAN works just fine with Clang 11. Clang 12 merely improves some
-> instrumentation, which is what this comment is about.
->
-> What Mark meant is that there's a specific issue with arm64 and BTI that
-> is fixed by Clang 12. Therefore, arm64's Kconfig will have to do
->
-> 	select HAVE_ARCH_KCSAN if CC_IS_GCC || CLANG_VERSION >= 120000
->
->>> * In the past clang did not have an attribute to suppress tsan instrumenation
->>>     and would instrument noinstr regions. I'm not sure when clang gained the
->>>     relevant attribute to supress this, but we will need to depend on this
->>>     existing, either based on the clang version or with a test for the attribute.
->>>
->>>     (If we're lucky, clang 12.0.0 is sufficient, and we solve BTI and this in one
->>>     go).
->>>
->>>     I *think* GCC always had an attribute, but I'm not certain.
->>>
->>>     Marco, is there an existing dependency somewhere for this to work on x86? I
->>>     thought there was an objtool pass to NOP this out, but I couldn't find it in
->>>     mainline. If x86 is implicitly depending on a sufficiently recent version of
->>>     clang, we add something to the common KCSAN Kconfig for ARCH_WANTS_NO_INSTR?
->>>
->>> * There are some latent issues with some code (e.g. alternatives, patching, insn)
->>>     code being instrumentable even though this is unsound, and depending on
->>>     compiler choices this can happen to be fine or can result in boot-time
->>>     failures (I saw lockups when I started trying to add KCSAN for arm64).
->>>
->>>     While this isn't just a KCSAN problem, fixing that requires some fairly
->>>     significant rework to a bunch of code, and until that's done we're on very
->>>     shaky ground. So I'd like to make KCSAN depend on EXPERT for now.
->>>
->>>     I had an initial stab at fixing some of that, e.g.
->>>
->>>     https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=arm64/patching/rework
->>>     Joey has started looking into this too.
->> Thanks for your information,  I don't know about this. As your say, we could
->> add a depend on EXPERT
->>
->> for now and more explanation into changlog.
-> So what I gather arm64's final select line may look like:
->
-> 	select HAVE_ARCH_KCSAN if EXPERT && (CC_IS_GCC || CLANG_VERSION >= 120000)
-Yes,  that's what we want now.
->
->>> * When I last tested, for simple boots I would get frequent KCSAN splats for a
->>>     few common issues, and those drowned out all other reports.
->>>
->>>     One case was manipulation of thread_info::flags, which Thomas Gleixner has
->>>     queued some fixes at:
->>>
->>>     https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/log/?h=core/entry
->>>     There were some other common failures, e.g. accesses to task_struct::on_cpu,
->>>     and I hadn't had the chance to investigate/fix those, beyond a (likely
->>>     unsound) hack:
->>>
->>>     https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?h=arm64/kcsan&id=4fe9d6c2ef85257d80291086e4514eaaebd3504e
->>>
->>>     It would be good if we could identify the most frequent problems (e.g. those
->>>     that will occur when just booting) before we enable this generally, to avoid
->>>     everyone racing to report/fix those as soon as we enable the feature.
->>>
->>>     When you tested, did KCSAN flag anything beyond the selftests?
->> Yes, there are some KCSAN reports, but this is not only exist on arm64, I
->> saw  owner->on_cpu warning
->>
->> on x86 too, eg, we also hack to disable it via data_race.
->>
->> Reported by Kernel Concurrency Sanitizer on:
->> CPU: 7 PID: 2530 Comm: syz-executor.11 Not tainted 5.10.0+ #113
->> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.104/01/2014
->> ==================================================================
->> BUG: KCSAN: data-race in rwsem_spin_on_owner+0xf4/0x180
->>
->> race at unknown origin, with read to 0xffff9767d3becfac of 4 bytes by task 18119 on cpu 0:
->>   rwsem_spin_on_owner+0xf4/0x180
->>   rwsem_optimistic_spin+0x48/0x480
->>   rwsem_down_read_slowpath+0x4a0/0x670
->>   down_read+0x69/0x190
->>   process_vm_rw+0x41e/0x840
->>   __x64_sys_process_vm_writev+0x76/0x90
->>   do_syscall_64+0x37/0x50
->>   entry_SYSCALL_64_after_hwframe+0x44/0xa9
-> I think fixing data races is not a pre-requisite for arch-enablement.
-> Some are slowly being addressed (and others aren't -- syzbot has a list
-> of >200 data races that I try to moderate and fix some or forward those
-> that I think will get fixed). I expect the most frequent issues will be
-> the same on arm64 as they are on x86.
->
-> I actually have a "fix" for the data race in rwsem_spin_on_owner, that
-> also shows where the other racing access comes from... which reminds me:
-> https://lkml.kernel.org/r/20211202101238.33546-1-elver@google.com
 
-There's a owner_on_cpu(),  we could reuse it,
+Yep, this gross hack works!
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index aae991f511c3..f2e99e8f75bd 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -2171,6 +2171,15 @@ static inline bool vcpu_is_preempted(int cpu)
-  }
-  #endif
 
-+static inline bool owner_on_cpu(struct task_struct *owner)
-+{
-+	/*
-+	 * As lock holder preemption issue, we both skip spinning if
-+	 * task is not on cpu or its cpu is preempted
-+	 */
-+	return READ_ONCE(owner->on_cpu) && !vcpu_is_preempted(task_cpu(owner));
-+}
+diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+index 958966276d00b8..6136b94f6b5f5e 100644
+--- a/arch/x86/kvm/svm/avic.c
++++ b/arch/x86/kvm/svm/avic.c
+@@ -987,8 +987,9 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+                entry |= AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
+ 
+        WRITE_ONCE(*(svm->avic_physical_id_cache), entry);
+-       avic_update_iommu_vcpu_affinity(vcpu, h_physical_id,
+-                                       svm->avic_is_running);
 +
-  extern long sched_setaffinity(pid_t pid, const struct cpumask *new_mask);
-  extern long sched_getaffinity(pid_t pid, struct cpumask *mask);
-  
-diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index 2fede72b6af5..29e0ac58259d 100644
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -361,11 +361,7 @@ bool mutex_spin_on_owner(struct mutex *lock, struct task_struct *owner,
-  		 */
-  		barrier();
-  
--		/*
--		 * Use vcpu_is_preempted to detect lock holder preemption issue.
--		 */
--		if (!owner->on_cpu || need_resched() ||
--				vcpu_is_preempted(task_cpu(owner))) {
-+		if (!owner_on_cpu(owner) || need_resched()) {
-  			ret = false;
-  			break;
-  		}
-@@ -396,12 +392,8 @@ static inline int mutex_can_spin_on_owner(struct mutex *lock)
-  	rcu_read_lock();
-  	owner = __mutex_owner(lock);
-  
--	/*
--	 * As lock holder preemption issue, we both skip spinning if task is not
--	 * on cpu or its cpu is preempted
--	 */
-  	if (owner)
--		retval = owner->on_cpu && !vcpu_is_preempted(task_cpu(owner));
-+		retval = owner_on_cpu(owner);
-  	rcu_read_unlock();
-  
-  	/*
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index 000e8d5a2884..30d95a6717d2 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -596,15 +596,6 @@ static inline bool rwsem_try_write_lock_unqueued(struct rw_semaphore *sem)
-  	return false;
-  }
-  
--static inline bool owner_on_cpu(struct task_struct *owner)
--{
--	/*
--	 * As lock holder preemption issue, we both skip spinning if
--	 * task is not on cpu or its cpu is preempted
--	 */
--	return owner->on_cpu && !vcpu_is_preempted(task_cpu(owner));
--}
--
++       svm_set_pi_irte_mode(vcpu, svm->avic_is_running);
++       avic_update_iommu_vcpu_affinity(vcpu, h_physical_id, true);
+ }
+ 
+ void avic_vcpu_put(struct kvm_vcpu *vcpu)
+@@ -997,8 +998,9 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
+        struct vcpu_svm *svm = to_svm(vcpu);
+ 
+        entry = READ_ONCE(*(svm->avic_physical_id_cache));
+-       if (entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK)
+-               avic_update_iommu_vcpu_affinity(vcpu, -1, 0);
++       if (entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK) {
++               svm_set_pi_irte_mode(vcpu, false);
++       }
+ 
+        entry &= ~AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK;
+        WRITE_ONCE(*(svm->avic_physical_id_cache), entry);
+> 
 
 
-> Thanks,
-> -- Marco
-> .
+GA log interrupts almost gone (there are still few because svm_set_pi_irte_mode sets is_running false)
+devices works as expected sending normal interrupts unless guest is loaded, then normal interrupts disappear,
+as expected.
+
+Best regards,
+	Maxim Levitsky
+
+>  
+> Best regards,
+> 	Maxim Levitsky
+> 
+> > If the scheduler were changed to support waking in the sched_out path, then I'd be
+> > more inclined to handle this in avic_vcpu_put() by rewalking the vIRR one final
+> > time, but for now it's not worth it.
+> > 
+> > > If I apply though only the patch series up to this patch, my fedora VM seems
+> > > to work fine, but my windows VM still locks up hard when I run 'LatencyTop'
+> > > in it, which doesn't happen without this patch.
+> > 
+> > Buy "run 'LatencyTop' in it", do you mean running something in the Windows guest?
+> > The only search results I can find for LatencyTop are Linux specific.
+> > 
+> > > So far the symptoms I see is that on VCPU 0, ISR has quite high interrupt
+> > > (0xe1 last time I seen it), TPR and PPR are 0xe0 (although I have seen TPR to
+> > > have different values), and IRR has plenty of interrupts with lower priority.
+> > > The VM seems to be stuck in this case. As if its EOI got lost or something is
+> > > preventing the IRQ handler from issuing EOI.
+> > >  
+> > > LatencyTop does install some form of a kernel driver which likely does meddle
+> > > with interrupts (maybe it sends lots of self IPIs?).
+> > >  
+> > > 100% reproducible as soon as I start monitoring with LatencyTop.
+> > >  
+> > > Without this patch it works (or if disabling halt polling),
+> > 
+> > Huh.  I assume everything works if you disable halt polling _without_ this patch
+> > applied?
+> > 
+> > If so, that implies that successful halt polling without mucking with vCPU IOMMU
+> > affinity is somehow problematic.  I can't think of any relevant side effects other
+> > than timing.
+> > 
+
+

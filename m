@@ -2,170 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E827465FFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:52:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59365466015
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346028AbhLBI4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 03:56:04 -0500
-Received: from mail-io1-f70.google.com ([209.85.166.70]:40489 "EHLO
-        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345926AbhLBIzt (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:55:49 -0500
-Received: by mail-io1-f70.google.com with SMTP id d12-20020a0566022d4c00b005ebda1035b1so32085110iow.7
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 00:52:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=h5GUjx7K4W3pjVm6GFnIxly30AOiLX+8f+fE40ITzv4=;
-        b=y7308uJ2GmWuSCPDLtSICyBRzbtsfcm9fVbBKij8GDmi1e3dAqmYR+LJgtmgQS8B7I
-         Jt+WEjW0zjfg+9XxVUozC5TrEokmSe6tD2V0I9HIqy0QzEzA4VU1CyMu14SEU1ftU7V1
-         33LNEUGsBIfuLIUHioI3rROyITOyCDmdF9u53F2PGYae2g4Vgc2YBl4ac5QYkoFxQ205
-         /CmyE+DLmhtzHDVNN45yig0seQEKLlw38bH5kk6X+h44o5/Gq1itShWAHpQD3vaWbcpJ
-         PqsIUqKO3R22AeUr+06VUTUe422N+eZDoCCpO8MqtK1DnZ1iItowekzP8JUGo2vR/aE/
-         wWww==
-X-Gm-Message-State: AOAM5302swzgvIE+WkbEQe0f4T5WOUr+zb0VQPPK/4wL1ig2KE7Qfi8Y
-        P4TTtWpJCGlxJ6bZK9dZIxws4Dp/aLNtSVihRglolZ2h/TVO
-X-Google-Smtp-Source: ABdhPJyhbMC5vR2O62dxIfhxllsHYJSAIDq+BoU+so5PyFFkQBen7t73GhzqItjXY9l1U0CG52ZNKA5QxaOF1OiD3mjha//xGtPv
-MIME-Version: 1.0
-X-Received: by 2002:a6b:b4cc:: with SMTP id d195mr14515035iof.0.1638435144315;
- Thu, 02 Dec 2021 00:52:24 -0800 (PST)
-Date:   Thu, 02 Dec 2021 00:52:24 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c3bac405d225e8ba@google.com>
-Subject: [syzbot] INFO: task hung in io_uring_register
-From:   syzbot <syzbot+7daefdd84ee7b8170aa6@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        id S1345222AbhLBJHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:07:05 -0500
+Received: from mx1.tq-group.com ([93.104.207.81]:5431 "EHLO mx1.tq-group.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S240807AbhLBJHD (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 04:07:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638435821; x=1669971821;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=os1qwHb0uqRnU8y0E2AVtQVizNfytwLJnbdqf6zS+ew=;
+  b=RWa2KQ1s8QqGJFBPM31jp5gXHekv6E3UogisM2bfASu19TICtUgLEipN
+   HhdjkY7TUBT60TgCeXukiF+v6+4VcK1SfK9STsOhhC/ahv3Y2Gf3CU4DZ
+   Dvw5AZlJ4W59xYNbHzTjeskmBSSG2ZRbBu3oXuTpkUoZfW1Vaaj8mfOrP
+   zsCTaRfaiiVvJiw+Pd7kt4IgVf9rhDW4UgRQRNXbNvtXHVcySuYMyv9OW
+   61MfzboxApGKb4uYZ04EFNxAonqI7TXg9DcT/GMXW4JoVcyOb0PZtB5wk
+   RTLUE3w8YrrTbTElH04P+rm9sM7zhpCsmNpG2pMKeiA3+zCpfzIrmgvf5
+   g==;
+X-IronPort-AV: E=Sophos;i="5.87,281,1631570400"; 
+   d="scan'208";a="20804426"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 02 Dec 2021 10:03:37 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Thu, 02 Dec 2021 10:03:37 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Thu, 02 Dec 2021 10:03:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1638435817; x=1669971817;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=os1qwHb0uqRnU8y0E2AVtQVizNfytwLJnbdqf6zS+ew=;
+  b=Xury+C6WPRqi/aNMi/USlC1x/sBhdojDwNQYy4RhKzpbQO6t1NjR61Gd
+   3iD7RU3Dbm0k0PE4LvX0EQRyMRTZbVkjB+0E9gqT1kYHwEVh7fpYAwn4t
+   RMtE5Wwj+bhfzU/+von+wHa9glfG0oD54NUUNGzxLKOhUvMyZFOFBfodo
+   MgOXsLJiJ5Pem0xxIh+7G/J6+Xf2dLsNeqLDeBV/1PptfkNZ1DyT95X9D
+   rgok8g3qdRQF1DpsC4wdnR7hNqDoMRSUt+Bjwbc8ZufWDQHZfH530xnIB
+   fj0fB4+XfQfzzw1RbNtgGoNcOiCm3mmU8GTTctkpVwi6a7Wr3xO2euCaL
+   A==;
+X-IronPort-AV: E=Sophos;i="5.87,281,1631570400"; 
+   d="scan'208";a="20804425"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 02 Dec 2021 10:03:36 +0100
+Received: from schifferm-ubuntu (unknown [192.168.66.22])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id D0343280065;
+        Thu,  2 Dec 2021 10:03:35 +0100 (CET)
+X-CheckPoint: {61A88BD4-1B-3C7FD1AA-EED18422}
+X-MAIL-CPID: 80B20F2BC484A7A2D458A5C7509C07E6_4
+X-Control-Analysis: str=0001.0A782F18.61A88BE8.00D9,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Message-ID: <1f870126804ce354803b3b274765a571b0a8440f.camel@ew.tq-group.com>
+Subject: Re: [PATCH v2] drm: fsl-dcu: enable PIXCLK on LS1021A
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Stefan Agner <stefan@agner.ch>, Alison Wang <alison.wang@nxp.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Date:   Thu, 02 Dec 2021 10:03:16 +0100
+In-Reply-To: <ab3c62c9b4fa8f4507050a4b329ea30d9c7dcddb.camel@ew.tq-group.com>
+References: <20211005141041.2988-1-matthias.schiffer@ew.tq-group.com>
+         <ab3c62c9b4fa8f4507050a4b329ea30d9c7dcddb.camel@ew.tq-group.com>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 2021-11-08 at 10:11 +0100, Matthias Schiffer wrote:
+> On Tue, 2021-10-05 at 16:10 +0200, Matthias Schiffer wrote:
+> > The PIXCLK needs to be enabled in SCFG before accessing the DCU on
+> > LS1021A,
+> > or the access will hang.
+> > 
+> > Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com
+> > >
+> 
+> Hi,
+> what is the status of this patch? I found it "archived" in the dri-
+> devel patchwork, should I be looking somewhere else?
 
-syzbot found the following issue on:
-
-HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1221a1adb00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5b0eee8ab3ea1839
-dashboard link: https://syzkaller.appspot.com/bug?extid=7daefdd84ee7b8170aa6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+7daefdd84ee7b8170aa6@syzkaller.appspotmail.com
-
-INFO: task syz-executor.5:3737 blocked for more than 143 seconds.
-      Not tainted 5.16.0-rc3-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor.5  state:D stack:29592 pid: 3737 ppid:  7406 flags:0x00000004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xa9a/0x4940 kernel/sched/core.c:6253
- schedule+0xd2/0x260 kernel/sched/core.c:6326
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
- __mutex_lock_common kernel/locking/mutex.c:680 [inline]
- __mutex_lock+0xa32/0x12f0 kernel/locking/mutex.c:740
- __do_sys_io_uring_register+0x2e0/0x15a0 fs/io_uring.c:11087
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f8f023f9ae9
-RSP: 002b:00007f8eff94e188 EFLAGS: 00000246 ORIG_RAX: 00000000000001ab
-RAX: ffffffffffffffda RBX: 00007f8f0250d020 RCX: 00007f8f023f9ae9
-RDX: 0000000000000000 RSI: 0000000000000009 RDI: 0000000000000003
-RBP: 00007f8f02453f6d R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f8f02a40b2f R14: 00007f8eff94e300 R15: 0000000000022000
- </TASK>
-
-Showing all locks held in the system:
-1 lock held by khungtaskd/26:
- #0: ffffffff8bb83b60 (rcu_read_lock){....}-{1:2}, at: debug_show_all_locks+0x53/0x260 kernel/locking/lockdep.c:6458
-4 locks held by kworker/1:1/35:
- #0: ffff8880b9c39a98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested kernel/sched/core.c:486 [inline]
- #0: ffff8880b9c39a98 (&rq->__lock){-.-.}-{2:2}, at: raw_spin_rq_lock_nested+0x8c/0x120 kernel/sched/core.c:471
- #1: ffff8880b9d279c8 (&per_cpu_ptr(group->pcpu, cpu)->seq){-.-.}-{0:0}, at: psi_task_switch+0x3a6/0x490 kernel/sched/psi.c:880
- #2: ffff8880b9d28298 (&base->lock){-.-.}-{2:2}, at: lock_timer_base+0x5a/0x1f0 kernel/time/timer.c:946
- #3: ffffffff9064b2c8 (&obj_hash[i].lock){-.-.}-{2:2}, at: debug_object_activate+0x12e/0x3e0 lib/debugobjects.c:661
-1 lock held by in:imklog/6232:
- #0: ffff88807b8334f0 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0xe9/0x100 fs/file.c:990
-2 locks held by kworker/u4:11/22134:
-1 lock held by syz-executor.5/3735:
-1 lock held by syz-executor.5/3737:
- #0: ffff888073e690a8 (&ctx->uring_lock){+.+.}-{3:3}, at: __do_sys_io_uring_register+0x2e0/0x15a0 fs/io_uring.c:11087
-1 lock held by syz-executor.5/3780:
- #0: ffff88807c96d0a8 (&ctx->uring_lock){+.+.}-{3:3}, at: io_uring_del_tctx_node+0x109/0x20a fs/io_uring.c:9777
-1 lock held by syz-executor.5/3782:
-
-=============================================
-
-NMI backtrace for cpu 0
-CPU: 0 PID: 26 Comm: khungtaskd Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x1b3/0x230 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
- watchdog+0xc1d/0xf50 kernel/hung_task.c:295
- kthread+0x405/0x4f0 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:295
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 6232 Comm: in:imklog Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__switch_to_asm+0x2a/0x40 arch/x86/entry/entry_64.S:259
-Code: 55 53 41 54 41 55 41 56 41 57 48 89 a7 98 17 00 00 48 8b a6 98 17 00 00 48 8b 9e d0 05 00 00 65 48 89 1c 25 28 00 00 00 41 5f <41> 5e 41 5d 41 5c 5b 5d e9 19 97 28 00 66 0f 1f 84 00 00 00 00 00
-RSP: 0018:ffffc90001adfa40 EFLAGS: 00000046
-RAX: dffffc0000000000 RBX: 38aea85631ad7d00 RCX: ffffc900081e7930
-RDX: 1ffff11017387352 RSI: ffff888017d13a00 RDI: ffff88807f371d00
-RBP: ffffc900081e7ac0 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 000000000000003f R12: ffff888017d13a00
-R13: ffff8880b9c39a80 R14: ffff88807f372218 R15: ffff88801a3abf10
-FS:  00007f1dbd29c700(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fe56da98000 CR3: 0000000018b09000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-----------------
-Code disassembly (best guess):
-   0:	55                   	push   %rbp
-   1:	53                   	push   %rbx
-   2:	41 54                	push   %r12
-   4:	41 55                	push   %r13
-   6:	41 56                	push   %r14
-   8:	41 57                	push   %r15
-   a:	48 89 a7 98 17 00 00 	mov    %rsp,0x1798(%rdi)
-  11:	48 8b a6 98 17 00 00 	mov    0x1798(%rsi),%rsp
-  18:	48 8b 9e d0 05 00 00 	mov    0x5d0(%rsi),%rbx
-  1f:	65 48 89 1c 25 28 00 	mov    %rbx,%gs:0x28
-  26:	00 00
-  28:	41 5f                	pop    %r15
-* 2a:	41 5e                	pop    %r14 <-- trapping instruction
-  2c:	41 5d                	pop    %r13
-  2e:	41 5c                	pop    %r12
-  30:	5b                   	pop    %rbx
-  31:	5d                   	pop    %rbp
-  32:	e9 19 97 28 00       	jmpq   0x289750
-  37:	66 0f 1f 84 00 00 00 	nopw   0x0(%rax,%rax,1)
-  3e:	00 00
+ping
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> 
+> 
+> 
+> > ---
+> > 
+> > v2:
+> > - rebase
+> > - remove unnecessary argument of fsl_dcu_scfg_config_ls1021a()
+> > 
+> > 
+> >  drivers/gpu/drm/fsl-dcu/Kconfig           |  1 +
+> >  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c | 25
+> > +++++++++++++++++++++++
+> >  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.h |  3 +++
+> >  3 files changed, 29 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/fsl-dcu/Kconfig b/drivers/gpu/drm/fsl-
+> > dcu/Kconfig
+> > index d7dd8ba90e3a..9e5a35e7c00c 100644
+> > --- a/drivers/gpu/drm/fsl-dcu/Kconfig
+> > +++ b/drivers/gpu/drm/fsl-dcu/Kconfig
+> > @@ -8,6 +8,7 @@ config DRM_FSL_DCU
+> >  	select DRM_PANEL
+> >  	select REGMAP_MMIO
+> >  	select VIDEOMODE_HELPERS
+> > +	select MFD_SYSCON if SOC_LS1021A
+> >  	help
+> >  	  Choose this option if you have an Freescale DCU chipset.
+> >  	  If M is selected the module will be called fsl-dcu-drm.
+> > diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+> > b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+> > index 660fe573db96..b6b1cb75fc41 100644
+> > --- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+> > +++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.c
+> > @@ -50,6 +50,23 @@ static const struct regmap_config
+> > fsl_dcu_regmap_config = {
+> >  	.volatile_reg = fsl_dcu_drm_is_volatile_reg,
+> >  };
+> >  
+> > +static int fsl_dcu_scfg_config_ls1021a(void)
+> > +{
+> > +	struct regmap *scfg;
+> > +
+> > +	scfg = syscon_regmap_lookup_by_compatible("fsl,ls1021a-scfg");
+> > +	if (IS_ERR(scfg))
+> > +		return PTR_ERR(scfg);
+> > +
+> > +	/*
+> > +	 * For simplicity, enable the PIXCLK unconditionally. It might
+> > +	 * be possible to disable the clock in PM or on unload as a
+> > future
+> > +	 * improvement.
+> > +	 */
+> > +	return regmap_update_bits(scfg, SCFG_PIXCLKCR,
+> > SCFG_PIXCLKCR_PXCEN,
+> > +				  SCFG_PIXCLKCR_PXCEN);
+> > +}
+> > +
+> >  static void fsl_dcu_irq_reset(struct drm_device *dev)
+> >  {
+> >  	struct fsl_dcu_drm_device *fsl_dev = dev->dev_private;
+> > @@ -108,6 +125,14 @@ static int fsl_dcu_load(struct drm_device
+> > *dev, unsigned long flags)
+> >  		return ret;
+> >  	}
+> >  
+> > +	if (of_device_is_compatible(fsl_dev->np, "fsl,ls1021a-dcu")) {
+> > +		ret = fsl_dcu_scfg_config_ls1021a();
+> > +		if (ret < 0) {
+> > +			dev_err(dev->dev, "failed to enable pixclk\n");
+> > +			goto done_vblank;
+> > +		}
+> > +	}
+> > +
+> >  	ret = drm_vblank_init(dev, dev->mode_config.num_crtc);
+> >  	if (ret < 0) {
+> >  		dev_err(dev->dev, "failed to initialize vblank\n");
+> > diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.h
+> > b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.h
+> > index e2049a0e8a92..566396013c04 100644
+> > --- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.h
+> > +++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_drv.h
+> > @@ -160,6 +160,9 @@
+> >  #define FSL_DCU_ARGB4444		12
+> >  #define FSL_DCU_YUV422			14
+> >  
+> > +#define SCFG_PIXCLKCR			0x28
+> > +#define SCFG_PIXCLKCR_PXCEN		BIT(31)
+> > +
+> >  #define VF610_LAYER_REG_NUM		9
+> >  #define LS1021A_LAYER_REG_NUM		10
+> >  
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

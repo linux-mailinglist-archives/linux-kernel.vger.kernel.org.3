@@ -2,76 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C94B466D5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:57:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB74E466D69
+	for <lists+linux-kernel@lfdr.de>; Fri,  3 Dec 2021 00:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349117AbhLBXAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 18:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S1349262AbhLBXFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 18:05:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236694AbhLBXAq (ORCPT
+        with ESMTP id S233440AbhLBXFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 18:00:46 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD7AC06174A;
-        Thu,  2 Dec 2021 14:57:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=jimhSqp4ui/rEJFWw/TifB3e5eXU06bdFyt7nU5nKTE=; b=mwh3+s7+fsAReiSF8tnvnUGhKG
-        ETaJwBnnXSeAic5naongGgL8r+yzXJhA8o3hyG1nXXLRieznY8KYWFc8w8yXbIuWUKW2RZWCF4jC2
-        Eu23Pct0FY/6OBTWcZabScASYr+SJwpc2hb4LFFMpvBA+FKFpXh19tukcjJj57UnQMXXP3ggCEMCK
-        NnXTLCwXsyaM77D1TF2UuYLnWFmdZYsQM0ZvJAJNToyl6YBoOhq8Ij/AW54DD+ZWSWinwmsdJj7L2
-        4eKHZ7yCNP06enGlESvgOAnmuZ5AEmqbTR8FxKdRGR7+f4h8tQfvaI2FoB5eEOJyOPSKeDDHxX4gB
-        1IPVNyQA==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1msv0q-005ygo-Pv; Thu, 02 Dec 2021 22:57:13 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CC23B9810D4; Thu,  2 Dec 2021 23:57:12 +0100 (CET)
-Date:   Thu, 2 Dec 2021 23:57:12 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Li Zhijian <zhijianx.li@intel.com>
-Cc:     mingo@redhat.com, will@kernel.org, longman@redhat.com,
-        boqun.feng@gmail.com, open list <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "lkp@lists.01.org" <lkp@lists.01.org>
-Subject: Re: ww_mutex.sh hangs since v5.16-rc1
-Message-ID: <20211202225712.GG16608@worktop.programming.kicks-ass.net>
-References: <895ef450-4fb3-5d29-a6ad-790657106a5a@intel.com>
+        Thu, 2 Dec 2021 18:05:24 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2215BC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 15:02:01 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id u80so1013303pfc.9
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 15:02:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=eOjlFoU5VQjL4pImZvQTpQdfwgTEDWhWTxRlxxmPIzc=;
+        b=S4hu07MGAbbwjXLuQQVsoaFOznFygKx8xBda9aSDxlAa5j6c6EaVNk9aGhTL/vFEzu
+         dB+diKUZI4jPjEfyux1UqKUA/nF5n/FxGxkkJ4t9yqFaGXQ/znUuVzbMZLq22c5/wfsw
+         dRuyWPO9covcyBdbDyZVEiQquseL6iSkHz2kmQZ2BEzhKW3byySzUzkWrGBJfiyxXmo1
+         iHL9PxO0T3cVEoaEB3KGJi2X+0X4wH08mnvnIgNEbPaP9Oaex00hTMj9ol/6fUeu4MNW
+         M23CFTbE7d9E3qKF336tR6yMaBo/JkPdhKc1hjansH7ASVwS7WpWXKgrfWl5ZPBAhjVU
+         8gFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=eOjlFoU5VQjL4pImZvQTpQdfwgTEDWhWTxRlxxmPIzc=;
+        b=EC2JtNaz7pwUqYjSsPqr0aE5uoucPUJuCW3kWuCufc9dKLX/WkCNiDlWdeEkUsXJtk
+         85aUvsOdLi69QgAkQ3KMu+nczjNM63DVqFcpy2xwEnd1VEc+L6AmPrW2GqR77HR90rHw
+         aQRDq2tNsvalj09DcCqUsjEyoa/vtl7WIfG6tu1IGfue7AmFescZYdDv1eSZNyq6IzZM
+         moKwAttV8P9wQSSj4BZ+aQzidMvoBKOnC7yKgSzHR3hNebi1UkIbg58SJ6fwJRi9K0bp
+         cNb/JBFybN8oMd8Ju8w8bHIc8MRrF0XpcPUGM1MeGuAJImXiV6iOcxN8oJX93dR2EbDp
+         dXsw==
+X-Gm-Message-State: AOAM530JhnOT7qhjvenDjRnKg3OcMreGsooGACljDyL8IXvkryTkv5s9
+        d0cRPLyGlTuGxoprWNNGYMVD112YpZ0=
+X-Google-Smtp-Source: ABdhPJyHjGYJ3CPwnPKqCPJePlpXY7MDr4T2xsnJk2tl7F/XwoQVRgrWW1vmJ+ubHb0L2cWrYyamsA==
+X-Received: by 2002:a63:d257:: with SMTP id t23mr1623182pgi.533.1638486120477;
+        Thu, 02 Dec 2021 15:02:00 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id gv23sm3396448pjb.17.2021.12.02.15.01.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 15:01:59 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 2 Dec 2021 13:01:58 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Frederic Weisbecker <frederic@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [PATCH 0/2] workqueue: Fix hotplug/scheduler races
+Message-ID: <YalQZhFcLhtHnEby@slm.duckdns.org>
+References: <20211201151945.632214-1-frederic@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <895ef450-4fb3-5d29-a6ad-790657106a5a@intel.com>
+In-Reply-To: <20211201151945.632214-1-frederic@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 01, 2021 at 09:26:18AM +0800, Li Zhijian wrote:
-> Hi Folks
+On Wed, Dec 01, 2021 at 04:19:43PM +0100, Frederic Weisbecker wrote:
+> It's a resend of "[RFC PATCH 0/2] workqueue: Fix hotplug races", with
+> appropriate tags added and scheduler people Cc'ed.
+> 
+> Thanks.
 > 
 > 
-> LKP/0Day found that ww_mutex.sh cannot complete since v5.16-rc1, but
-> I'm pretty sorry that we failed to bisect the FBC, instead, the bisection pointed
-> to a/below merge commit(91e1c99e17) finally.
-> 
-> Due to this hang, other tests in the same group are also blocked in 0Day, we
-> hope we can fix this hang ASAP.
-> 
-> So if you have any idea about this, or need more debug information, feel free to let me know :)
-> 
-> BTW, ww_mutex.sh was failed in v5.15 without hang, and looks it cannot reproduce on a vm.
+> Frederic Weisbecker (2):
+>   workqueue: Fix unbind_workers() VS wq_worker_running() race
+>   workqueue: Fix unbind_workers() VS wq_worker_sleeping() race
 
-On real hardware:
+Applied to wq/for-5.16-fixes.
 
-root@ivb-ep:/usr/src/linux-2.6/tools/testing/selftests/locking# uname -a
-Linux ivb-ep 5.16.0-rc3-00284-g68601c558556 #1 SMP PREEMPT Thu Dec 2 23:03:29 CET 2021 x86_64 GNU/Linux
-root@ivb-ep:/usr/src/linux-2.6/tools/testing/selftests/locking# ./ww_mutex.sh
-locking/ww_mutex: ok
+Thanks.
 
-[ 1907.907801] Beginning ww mutex selftests
-[ 1915.700077] All ww mutex selftests passed
-
-
-What else do I try?
+-- 
+tejun

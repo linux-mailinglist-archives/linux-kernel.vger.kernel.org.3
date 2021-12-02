@@ -2,98 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1E046699B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 340A946699E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:11:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376553AbhLBSOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 13:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242332AbhLBSOH (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 13:14:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF50DC06174A;
-        Thu,  2 Dec 2021 10:10:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CEB662775;
-        Thu,  2 Dec 2021 18:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DB81C00446;
-        Thu,  2 Dec 2021 18:10:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638468643;
-        bh=CkCfHiYoyPWJgpr/6rkRitpkFqNjSvuV+yEJkRwlAwM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uXoZFUbn3LP33RkEdVB9vNcTxzdb83ZUnPL14JSUUx5n8QE8cOtg6FB0aJj2HhmnB
-         DzMzedYV4DAcnadWLkRwcOqvL8jj/kJb/7ETLntynpPBI+sH2AZboU9WGN1hoq9BFZ
-         3am1W5yc11pO29PcpwfljNmegTPy5WImKDamTsQou6lfXqx2Ll6t9ws+qSwZ3qkg+H
-         UUGTFn9KrB4bajXhxA7h4bXQBFN29dFrDTR+djXI/bBKKscpS1HKHN61EuJUz7u9Gi
-         knL3/ZsQ0IuR6t3/THxlFrsmLfVzOO3n2sx28dfdsGiqx2k99iKG7Xf9iHB/gDzVyL
-         5BqIWTOO16M+Q==
-Date:   Thu, 2 Dec 2021 19:10:39 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org
-Subject: Re: [PATCH 3/6] rcu/nocb: Optimize kthreads and rdp initialization
-Message-ID: <20211202181039.GD648659@lothringen>
-References: <20211123003708.468409-1-frederic@kernel.org>
- <20211123003708.468409-4-frederic@kernel.org>
- <20211125003026.GT641268@paulmck-ThinkPad-P17-Gen-1>
+        id S1376568AbhLBSOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 13:14:40 -0500
+Received: from foss.arm.com ([217.140.110.172]:38962 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S242332AbhLBSOj (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 13:14:39 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BC341435;
+        Thu,  2 Dec 2021 10:11:16 -0800 (PST)
+Received: from arm.com (arrakis.cambridge.arm.com [10.1.196.175])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FEB23F766;
+        Thu,  2 Dec 2021 10:11:15 -0800 (PST)
+Date:   Thu, 2 Dec 2021 18:11:12 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Calvin Zhang <calvinzhang.cool@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, iommu@lists.linux-foundation.org
+Subject: Re: [PATCH] mm: kmemleak: Ignore kmemleak scanning on CMA regions
+Message-ID: <YakMQA1A75ZADeHi@arm.com>
+References: <20211126024711.54937-1-calvinzhang.cool@gmail.com>
+ <20211127160718.54e82aa93c977a367404a9e3@linux-foundation.org>
+ <YaLgfYzxFRVamvdI@debian>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211125003026.GT641268@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <YaLgfYzxFRVamvdI@debian>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 24, 2021 at 04:30:26PM -0800, Paul E. McKenney wrote:
-> On Tue, Nov 23, 2021 at 01:37:05AM +0100, Frederic Weisbecker wrote:
-> > Currently cpumask_available() is used to prevent from unwanted
-> > NOCB initialization. However if neither "rcu_nocbs=" nor "nohz_full="
-> > parameters are passed but CONFIG_CPUMASK_OFFSTACK=n, the initialization
-> > path is still taken, running through all sorts of needless operations
-> > and iterations on an empty cpumask.
-> > 
-> > Fix this with relying on a real initialization state instead. This
-> > also optimize kthreads creation, sparing iteration over all online CPUs
-> > when nocb isn't initialized.
-> > 
-> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-> > Cc: Boqun Feng <boqun.feng@gmail.com>
-> > Cc: Uladzislau Rezki <urezki@gmail.com>
-> > Cc: Josh Triplett <josh@joshtriplett.org>
-> > Cc: Joel Fernandes <joel@joelfernandes.org>
-> > ---
-> >  kernel/rcu/tree_nocb.h | 24 +++++++++++++++++-------
-> >  1 file changed, 17 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > index e1cb06840454..d8ed3ee47a67 100644
-> > --- a/kernel/rcu/tree_nocb.h
-> > +++ b/kernel/rcu/tree_nocb.h
-> > @@ -60,6 +60,9 @@ static inline bool rcu_current_is_nocb_kthread(struct rcu_data *rdp)
-> >   * Parse the boot-time rcu_nocb_mask CPU list from the kernel parameters.
-> >   * If the list is invalid, a warning is emitted and all CPUs are offloaded.
-> >   */
-> > +
-> > +static bool rcu_nocb_is_setup;
+On Sun, Nov 28, 2021 at 09:50:53AM +0800, Calvin Zhang wrote:
+> On Sat, Nov 27, 2021 at 04:07:18PM -0800, Andrew Morton wrote:
+> >On Fri, 26 Nov 2021 10:47:11 +0800 Calvin Zhang <calvinzhang.cool@gmail.com> wrote:
+> >> Just like this:
+> >> commit 620951e27457 ("mm/cma: make kmemleak ignore CMA regions").
+> >> 
+> >> Add kmemleak_ignore_phys() for CMA created from of reserved node.
+[...]
+> >The 620951e27457 changelog says "Without this, the kernel crashes...". 
+> >Does your patch also fix a crash?  If so under what circumstances and
+> >should we backport this fix into -stable kernels?
 > 
-> I am taking this as is for now (modulo wordsmithing), but should this
-> variable instead be in the rcu_state structure?  The advantage of putting
-> it there is keeping the state together.  The corresponding disadvantage
-> is that the state is globally visible within RCU.
-> 
-> Thoughts?
+> No crash occurred. 620951e27457 avoids crashes caused by accessing
+> highmem and it was fixed later. Now kmemleak_alloc_phys() and
+> kmemleak_ignore_phys() skip highmem. This patch is based on the
+> point that CMA regions don't contain pointers to other kmemleak
+> objects, and ignores CMA regions from reserved memory as what
+> 620951e27457 did.
 
-Yes good point, will do!
+Note that kmemleak_ignore() only works if there was a prior
+kmemleak_alloc() on that address range. With the previous commit we get
+this via the memblock_alloc_range() but I fail to see one on the
+rmem_cma_setup() path.
 
-Thanks!
+-- 
+Catalin

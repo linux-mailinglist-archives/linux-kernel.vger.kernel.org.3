@@ -2,149 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 56093466AC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:14:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82CBA466ACB
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:15:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348661AbhLBUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 15:17:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:33126 "EHLO
-        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S240256AbhLBURZ (ORCPT
+        id S1348690AbhLBUTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 15:19:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348637AbhLBUTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 15:17:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638476041;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=i6jVtc242assNgeIcVXtyTsx6VAj/wb+VdFS00POL5Q=;
-        b=Vt540Y/2Pky09Huun81RSGdjleywTVxvOJWEixMjycZgp0wYVbrt/GOniOF+jcWBoKcWPh
-        qacmPIDSMumic3jU87xFhHo7dPmlbtkjShgJ8TzFa7YJYNORRdNdybaPJp/PiUE16Qjk1+
-        pXJQ/lZPbmNkfon9Ji5qknLFX9v+BCI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-422-eWbc5XiMNui_Sd9be511Eg-1; Thu, 02 Dec 2021 15:13:56 -0500
-X-MC-Unique: eWbc5XiMNui_Sd9be511Eg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E8C27100C660;
-        Thu,  2 Dec 2021 20:13:54 +0000 (UTC)
-Received: from x1.localdomain (unknown [10.39.194.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0E9465F4E7;
-        Thu,  2 Dec 2021 20:13:52 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Lee Jones <lee.jones@linaro.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-kernel@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Dan Scally <djrscally@gmail.com>, Kate Hsuan <hpa@redhat.com>,
-        Maximilian Luz <luzmaximilian@gmail.com>
-Subject: [PATCH] mfd: intel-lpss: Fix I2C4 not being available on the Microsoft Surface Go & Go 2
-Date:   Thu,  2 Dec 2021 21:13:51 +0100
-Message-Id: <20211202201351.74419-1-hdegoede@redhat.com>
+        Thu, 2 Dec 2021 15:19:04 -0500
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE0DC061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 12:15:41 -0800 (PST)
+Received: by mail-io1-xd2b.google.com with SMTP id p65so1031200iof.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 12:15:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V7R8bkLb1Zxnf3hZTJ4/fqlgMy6cew/C4X8qZAFpH8s=;
+        b=FbKoFBEN4PM+jnnOrK0xur5WPWXWc5hwqV+D2wubfNFBQZMv+PsN0jHpNZzktLGJZC
+         oItmSlYo/yBVIHWJKrrrGCPRlOSskcck1odbgO/FUO2uemJ+NFobYZM8mgeI7JiHX3V/
+         h5WLvKTN3pZnrd/EsqkZGPrsAJCuJHhYvd0lNcfDhdGX/S6b62yY2gRmKweNJig292e2
+         FKBrZX6Pq/5QppzZ+8ir2sFPsDhEsNZwAc9K/RhMQz6HO0SwScBG1aul3iLungnGZBjy
+         N9c/uJOsfPNkbmtaBzkNjCVl9Ib934uDDN1yQqGVn77sEvUR2TCVsJOvdZRMAioHx+Dm
+         mVOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V7R8bkLb1Zxnf3hZTJ4/fqlgMy6cew/C4X8qZAFpH8s=;
+        b=jt2Bio8uZ9mV4AU2QnxoSvwEYif7FhdNVD8VsFpUGlFlbHgzrzDyTMUQlL9gu0KTeh
+         o0tUnnlqYZIDYl5z5gsDyzRvaSi91HyLTOx1ClNenFAS9FXEcJ+5jENklq/dePkqlQyZ
+         xk2dwUZY9A1Zo9WeDPag8T4csb9KayWXW9H1SxiI8Cv4n4FsbHcH9bJ3RRkLXL6nLCqk
+         m+arscjT5R9T3abZIaC6zwCAnOyU2wAvSRiG/tCRj4Gc3R/fFWQ02nOqWC4i5p3beoEi
+         7021DDgcgZsvFKdRJrurCkXO3QjsGt96DDas/M5MReyGeBShSA0BUBT22iq3K3kGv/TI
+         xWBQ==
+X-Gm-Message-State: AOAM530sUl01ZMYHwhs3cq4mPlAW2Xs5WGQ4jDZPOyxGgWBvNqktosXH
+        +CAn+SyaUuPrKsE9GgOPDIp0e1ctABxH6YtvE182j4jpFXSl1Q==
+X-Google-Smtp-Source: ABdhPJxI8h0TE07ZfTQPTwoGWufZt/udWHsIWCWca+3cpNXovoVd24/mfAa8g1QD//BIbgWX6WM9VBVefxOAUdAXIYI=
+X-Received: by 2002:a05:6602:1342:: with SMTP id i2mr17811277iov.153.1638476141046;
+ Thu, 02 Dec 2021 12:15:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+References: <20211009015406.1311319-1-dlatypov@google.com>
+In-Reply-To: <20211009015406.1311319-1-dlatypov@google.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Thu, 2 Dec 2021 12:15:27 -0800
+Message-ID: <CAGS_qxomrXQy0=kbeU6sqZu+c_Pu2=ZLZvOgn2mpaGg7C_A8oQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: use dataclass instead of collections.namedtuple
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many DSDTs for Kaby Lake and Kaby Lake Refresh models contain a
-_SB.PCI0.GEXP ACPI Device node describing an I2C attached GPIO expander.
+On Fri, Oct 8, 2021 at 6:54 PM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> namedtuple is a terse way of defining a collection of fields.
+> However, it does not allow us to annotate the type of these fields.
+> It also doesn't let us have any sort of inheritance between types.
+>
+> Since commit df4b0807ca1a ("kunit: tool: Assert the version
+> requirement"), kunit.py has asserted that it's running on python >=3.7.
+>
+> So in that case use a 3.7 feature, dataclasses, to replace these.
+>
+> Changes in detail:
+> * Make KunitExecRequest contain all the fields needed for exec_tests
+> * Use inheritance to dedupe fields
 
-This seems to be something which is copy and pasted from the DSDT
-from some reference design since this ACPI Device is present even on
-models where no such GPIO expander is used at all, such as on the
-Microsoft Surface Go & Go 2.
+Friendly ping.
+It's a moderately big delta, but it's just a refactor, there's no
+behavioral change.
 
-This ACPI Device is a problem because it contains a SystemMemory
-OperationRegion which covers the MMIO for the I2C4 I2C controller this
-causes the MFD cell for the I2C4 controller to not be instantiated due
-to a resource conflict, requiring the use of acpi_enforce_resources=lax
-to work around this.
+It makes the code more readable (no more long lists of unnamed
+params), more typesafe (typecheckers can validate fields), etc.
 
-I have done an extensive analysis of all the ACPI tables on the
-Microsoft Surface Go and the _SB.PCI0.GEXP ACPI Device's methods are
-not used by any code in the ACPI tables, neither are any of them
-directly called by any Linux kernel code. This is unsurprising since
-running i2cdetect on the I2C4 bus shows that there is no GPIO
-expander chip present on these devices at all.
-
-This commit adds a PCI subsystem vendor:device table listing PCI devices
-where it is known to be safe to ignore a resource-conflicts with ACPI
-declared SystemMemory regions.
-
-This makes the I2C4 bus work out of the box on the Microsoft Surface
-Go & Go 2, which is necessary for the cameras on these devices to work.
-
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Dan Scally <djrscally@gmail.com>
-Cc: Kate Hsuan <hpa@redhat.com>
-Cc: Maximilian Luz <luzmaximilian@gmail.com>
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/mfd/intel-lpss-pci.c | 12 ++++++++++++
- drivers/mfd/intel-lpss.c     |  1 +
- drivers/mfd/intel-lpss.h     |  1 +
- 3 files changed, 14 insertions(+)
-
-diff --git a/drivers/mfd/intel-lpss-pci.c b/drivers/mfd/intel-lpss-pci.c
-index a872b4485eac..593290ff08a6 100644
---- a/drivers/mfd/intel-lpss-pci.c
-+++ b/drivers/mfd/intel-lpss-pci.c
-@@ -17,6 +17,15 @@
- 
- #include "intel-lpss.h"
- 
-+/* Some DSDTs have an unused GEXP ACPI device conflicting with I2C4 resources */
-+static const struct pci_device_id ignore_resource_conflicts_ids[] = {
-+	/* Microsoft Surface Go (version 1) I2C4 */
-+	{ PCI_DEVICE_SUB(0x8086, 0x9d64, 0x152d, 0x1182), },
-+	/* Microsoft Surface Go 2 I2C4 */
-+	{ PCI_DEVICE_SUB(0x8086, 0x9d64, 0x152d, 0x1237), },
-+	{ }
-+};
-+
- static int intel_lpss_pci_probe(struct pci_dev *pdev,
- 				const struct pci_device_id *id)
- {
-@@ -35,6 +44,9 @@ static int intel_lpss_pci_probe(struct pci_dev *pdev,
- 	info->mem = &pdev->resource[0];
- 	info->irq = pdev->irq;
- 
-+	if (pci_match_id(ignore_resource_conflicts_ids, pdev))
-+		info->ignore_resource_conflicts = true;
-+
- 	pdev->d3cold_delay = 0;
- 
- 	/* Probably it is enough to set this for iDMA capable devices only */
-diff --git a/drivers/mfd/intel-lpss.c b/drivers/mfd/intel-lpss.c
-index 0e15afc39f54..cfbee2cfba6b 100644
---- a/drivers/mfd/intel-lpss.c
-+++ b/drivers/mfd/intel-lpss.c
-@@ -401,6 +401,7 @@ int intel_lpss_probe(struct device *dev,
- 		return ret;
- 
- 	lpss->cell->swnode = info->swnode;
-+	lpss->cell->ignore_resource_conflicts = info->ignore_resource_conflicts;
- 
- 	intel_lpss_init_dev(lpss);
- 
-diff --git a/drivers/mfd/intel-lpss.h b/drivers/mfd/intel-lpss.h
-index 22dbc4aed793..062ce95b68b9 100644
---- a/drivers/mfd/intel-lpss.h
-+++ b/drivers/mfd/intel-lpss.h
-@@ -19,6 +19,7 @@ struct software_node;
- 
- struct intel_lpss_platform_info {
- 	struct resource *mem;
-+	bool ignore_resource_conflicts;
- 	int irq;
- 	unsigned long clk_rate;
- 	const char *clk_con_id;
--- 
-2.33.1
-
+>   * also allows us to e.g. pass a KUnitRequest in as a KUnitParseRequest
+>   * this has changed around the order of some fields
+> * Use named arguments when constructing all request objects in kunit.py
+>   * This is to prevent accidentally mixing up fields, etc.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> ---
+>  tools/testing/kunit/kunit.py           | 139 +++++++++++++------------
+>  tools/testing/kunit/kunit_tool_test.py |   6 +-
+>  2 files changed, 75 insertions(+), 70 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+> index 9c9ed4071e9e..f879414a13c4 100755
+> --- a/tools/testing/kunit/kunit.py
+> +++ b/tools/testing/kunit/kunit.py
+> @@ -15,38 +15,57 @@ import time
+>
+>  assert sys.version_info >= (3, 7), "Python version is too old"
+>
+> -from collections import namedtuple
+> +from dataclasses import dataclass
+>  from enum import Enum, auto
+> -from typing import Iterable, List
+> +from typing import Any, Iterable, List, Optional
+>
+>  import kunit_json
+>  import kunit_kernel
+>  import kunit_parser
+>
+> -KunitResult = namedtuple('KunitResult', ['status','result','elapsed_time'])
+> -
+> -KunitConfigRequest = namedtuple('KunitConfigRequest',
+> -                               ['build_dir', 'make_options'])
+> -KunitBuildRequest = namedtuple('KunitBuildRequest',
+> -                              ['jobs', 'build_dir', 'alltests',
+> -                               'make_options'])
+> -KunitExecRequest = namedtuple('KunitExecRequest',
+> -                             ['timeout', 'build_dir', 'alltests',
+> -                              'filter_glob', 'kernel_args', 'run_isolated'])
+> -KunitParseRequest = namedtuple('KunitParseRequest',
+> -                              ['raw_output', 'build_dir', 'json'])
+> -KunitRequest = namedtuple('KunitRequest', ['raw_output','timeout', 'jobs',
+> -                                          'build_dir', 'alltests', 'filter_glob',
+> -                                          'kernel_args', 'run_isolated', 'json', 'make_options'])
+> -
+> -KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
+> -
+>  class KunitStatus(Enum):
+>         SUCCESS = auto()
+>         CONFIG_FAILURE = auto()
+>         BUILD_FAILURE = auto()
+>         TEST_FAILURE = auto()
+>
+> +@dataclass
+> +class KunitResult:
+> +       status: KunitStatus
+> +       result: Any
+> +       elapsed_time: float
+> +
+> +@dataclass
+> +class KunitConfigRequest:
+> +       build_dir: str
+> +       make_options: Optional[List[str]]
+> +
+> +@dataclass
+> +class KunitBuildRequest(KunitConfigRequest):
+> +       jobs: int
+> +       alltests: bool
+> +
+> +@dataclass
+> +class KunitParseRequest:
+> +       raw_output: Optional[str]
+> +       build_dir: str
+> +       json: Optional[str]
+> +
+> +@dataclass
+> +class KunitExecRequest(KunitParseRequest):
+> +       timeout: int
+> +       alltests: bool
+> +       filter_glob: str
+> +       kernel_args: Optional[List[str]]
+> +       run_isolated: Optional[str]
+> +
+> +@dataclass
+> +class KunitRequest(KunitExecRequest, KunitBuildRequest):
+> +       pass
+> +
+> +
+> +KernelDirectoryPath = sys.argv[0].split('tools/testing/kunit/')[0]
+> +
+>  def get_kernel_root_path() -> str:
+>         path = sys.argv[0] if not __file__ else __file__
+>         parts = os.path.realpath(path).split('tools/testing/kunit')
+> @@ -121,8 +140,7 @@ def _suites_from_test_list(tests: List[str]) -> List[str]:
+>
+>
+>
+> -def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest,
+> -              parse_request: KunitParseRequest) -> KunitResult:
+> +def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest) -> KunitResult:
+>         filter_globs = [request.filter_glob]
+>         if request.run_isolated:
+>                 tests = _list_tests(linux, request)
+> @@ -147,7 +165,7 @@ def exec_tests(linux: kunit_kernel.LinuxSourceTree, request: KunitExecRequest,
+>                         filter_glob=filter_glob,
+>                         build_dir=request.build_dir)
+>
+> -               result = parse_tests(parse_request, run_result)
+> +               result = parse_tests(request, run_result)
+>                 # run_kernel() doesn't block on the kernel exiting.
+>                 # That only happens after we get the last line of output from `run_result`.
+>                 # So exec_time here actually contains parsing + execution time, which is fine.
+> @@ -211,27 +229,15 @@ def run_tests(linux: kunit_kernel.LinuxSourceTree,
+>               request: KunitRequest) -> KunitResult:
+>         run_start = time.time()
+>
+> -       config_request = KunitConfigRequest(request.build_dir,
+> -                                           request.make_options)
+> -       config_result = config_tests(linux, config_request)
+> +       config_result = config_tests(linux, request)
+>         if config_result.status != KunitStatus.SUCCESS:
+>                 return config_result
+>
+> -       build_request = KunitBuildRequest(request.jobs, request.build_dir,
+> -                                         request.alltests,
+> -                                         request.make_options)
+> -       build_result = build_tests(linux, build_request)
+> +       build_result = build_tests(linux, request)
+>         if build_result.status != KunitStatus.SUCCESS:
+>                 return build_result
+>
+> -       exec_request = KunitExecRequest(request.timeout, request.build_dir,
+> -                                request.alltests, request.filter_glob,
+> -                                request.kernel_args, request.run_isolated)
+> -       parse_request = KunitParseRequest(request.raw_output,
+> -                                         request.build_dir,
+> -                                         request.json)
+> -
+> -       exec_result = exec_tests(linux, exec_request, parse_request)
+> +       exec_result = exec_tests(linux, request)
+>
+>         run_end = time.time()
+>
+> @@ -382,16 +388,16 @@ def main(argv, linux=None):
+>                                         cross_compile=cli_args.cross_compile,
+>                                         qemu_config_path=cli_args.qemu_config)
+>
+> -               request = KunitRequest(cli_args.raw_output,
+> -                                      cli_args.timeout,
+> -                                      cli_args.jobs,
+> -                                      cli_args.build_dir,
+> -                                      cli_args.alltests,
+> -                                      cli_args.filter_glob,
+> -                                      cli_args.kernel_args,
+> -                                      cli_args.run_isolated,
+> -                                      cli_args.json,
+> -                                      cli_args.make_options)
+> +               request = KunitRequest(build_dir=cli_args.build_dir,
+> +                                      make_options=cli_args.make_options,
+> +                                      jobs=cli_args.jobs,
+> +                                      alltests=cli_args.alltests,
+> +                                      raw_output=cli_args.raw_output,
+> +                                      json=cli_args.json,
+> +                                      timeout=cli_args.timeout,
+> +                                      filter_glob=cli_args.filter_glob,
+> +                                      kernel_args=cli_args.kernel_args,
+> +                                      run_isolated=cli_args.run_isolated)
+>                 result = run_tests(linux, request)
+>                 if result.status != KunitStatus.SUCCESS:
+>                         sys.exit(1)
+> @@ -407,8 +413,8 @@ def main(argv, linux=None):
+>                                         cross_compile=cli_args.cross_compile,
+>                                         qemu_config_path=cli_args.qemu_config)
+>
+> -               request = KunitConfigRequest(cli_args.build_dir,
+> -                                            cli_args.make_options)
+> +               request = KunitConfigRequest(build_dir=cli_args.build_dir,
+> +                                            make_options=cli_args.make_options)
+>                 result = config_tests(linux, request)
+>                 kunit_parser.print_with_timestamp((
+>                         'Elapsed time: %.3fs\n') % (
+> @@ -423,10 +429,10 @@ def main(argv, linux=None):
+>                                         cross_compile=cli_args.cross_compile,
+>                                         qemu_config_path=cli_args.qemu_config)
+>
+> -               request = KunitBuildRequest(cli_args.jobs,
+> -                                           cli_args.build_dir,
+> -                                           cli_args.alltests,
+> -                                           cli_args.make_options)
+> +               request = KunitBuildRequest(build_dir=cli_args.build_dir,
+> +                                           make_options=cli_args.make_options,
+> +                                           jobs=cli_args.jobs,
+> +                                           alltests=cli_args.alltests)
+>                 result = build_tests(linux, request)
+>                 kunit_parser.print_with_timestamp((
+>                         'Elapsed time: %.3fs\n') % (
+> @@ -441,16 +447,15 @@ def main(argv, linux=None):
+>                                         cross_compile=cli_args.cross_compile,
+>                                         qemu_config_path=cli_args.qemu_config)
+>
+> -               exec_request = KunitExecRequest(cli_args.timeout,
+> -                                               cli_args.build_dir,
+> -                                               cli_args.alltests,
+> -                                               cli_args.filter_glob,
+> -                                               cli_args.kernel_args,
+> -                                               cli_args.run_isolated)
+> -               parse_request = KunitParseRequest(cli_args.raw_output,
+> -                                                 cli_args.build_dir,
+> -                                                 cli_args.json)
+> -               result = exec_tests(linux, exec_request, parse_request)
+> +               exec_request = KunitExecRequest(raw_output=cli_args.raw_output,
+> +                                               build_dir=cli_args.build_dir,
+> +                                               json=cli_args.json,
+> +                                               timeout=cli_args.timeout,
+> +                                               alltests=cli_args.alltests,
+> +                                               filter_glob=cli_args.filter_glob,
+> +                                               kernel_args=cli_args.kernel_args,
+> +                                               run_isolated=cli_args.run_isolated)
+> +               result = exec_tests(linux, exec_request)
+>                 kunit_parser.print_with_timestamp((
+>                         'Elapsed time: %.3fs\n') % (result.elapsed_time))
+>                 if result.status != KunitStatus.SUCCESS:
+> @@ -461,9 +466,9 @@ def main(argv, linux=None):
+>                 else:
+>                         with open(cli_args.file, 'r') as f:
+>                                 kunit_output = f.read().splitlines()
+> -               request = KunitParseRequest(cli_args.raw_output,
+> -                                           None,
+> -                                           cli_args.json)
+> +               request = KunitParseRequest(raw_output=cli_args.raw_output,
+> +                                           build_dir='',
+> +                                           json=cli_args.json)
+>                 result = parse_tests(request, kunit_output)
+>                 if result.status != KunitStatus.SUCCESS:
+>                         sys.exit(1)
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 6648de1f9ceb..2540bb10b4e8 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -556,7 +556,7 @@ class KUnitMainTest(unittest.TestCase):
+>                 self.linux_source_mock.run_kernel.return_value = ['TAP version 14', 'init: random output'] + want
+>
+>                 got = kunit._list_tests(self.linux_source_mock,
+> -                                    kunit.KunitExecRequest(300, '.kunit', False, 'suite*', None, 'suite'))
+> +                                    kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*', None, 'suite'))
+>
+>                 self.assertEqual(got, want)
+>                 # Should respect the user's filter glob when listing tests.
+> @@ -571,7 +571,7 @@ class KUnitMainTest(unittest.TestCase):
+>
+>                 # Should respect the user's filter glob when listing tests.
+>                 mock_tests.assert_called_once_with(mock.ANY,
+> -                                    kunit.KunitExecRequest(300, '.kunit', False, 'suite*.test*', None, 'suite'))
+> +                                    kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*.test*', None, 'suite'))
+>                 self.linux_source_mock.run_kernel.assert_has_calls([
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test*', timeout=300),
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite2.test*', timeout=300),
+> @@ -584,7 +584,7 @@ class KUnitMainTest(unittest.TestCase):
+>
+>                 # Should respect the user's filter glob when listing tests.
+>                 mock_tests.assert_called_once_with(mock.ANY,
+> -                                    kunit.KunitExecRequest(300, '.kunit', False, 'suite*', None, 'test'))
+> +                                    kunit.KunitExecRequest(None, '.kunit', None, 300, False, 'suite*', None, 'test'))
+>                 self.linux_source_mock.run_kernel.assert_has_calls([
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test1', timeout=300),
+>                         mock.call(args=None, build_dir='.kunit', filter_glob='suite.test2', timeout=300),
+>
+> base-commit: e3c6457b588d83b7ecd40eb4bd6d95007020fbe4
+> --
+> 2.33.0.882.g93a45727a2-goog
+>

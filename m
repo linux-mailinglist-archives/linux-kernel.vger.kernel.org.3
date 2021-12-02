@@ -2,82 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B26D4668FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:18:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7F2B46690B
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:26:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376280AbhLBRWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:22:01 -0500
-Received: from srv6.fidu.org ([159.69.62.71]:55602 "EHLO srv6.fidu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376257AbhLBRWA (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:22:00 -0500
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by srv6.fidu.org (Postfix) with ESMTP id 5A770C80089;
-        Thu,  2 Dec 2021 18:18:36 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at srv6.fidu.org
-Received: from srv6.fidu.org ([127.0.0.1])
-        by localhost (srv6.fidu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id zgTVVGGim0y8; Thu,  2 Dec 2021 18:18:36 +0100 (CET)
-Received: from [192.168.178.21] (host-212-18-30-247.customer.m-online.net [212.18.30.247])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: wse@tuxedocomputers.com)
-        by srv6.fidu.org (Postfix) with ESMTPSA id F22C1C8006F;
-        Thu,  2 Dec 2021 18:18:35 +0100 (CET)
-Subject: Re: [PATCH] ALSA: hda/realtek: Fix quirk for TongFang PHxTxX1
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        tiwai@suse.com
-References: <20211202152843.818617-1-wse@tuxedocomputers.com>
- <s5ho85zt3xm.wl-tiwai@suse.de>
- <aceae41d-eeaa-9f13-2e37-9fce08e693c6@tuxedocomputers.com>
- <s5hbl1zt1wy.wl-tiwai@suse.de>
-From:   Werner Sembach <wse@tuxedocomputers.com>
-Message-ID: <285f691b-2c0c-d032-cb96-45e9e939eabb@tuxedocomputers.com>
-Date:   Thu, 2 Dec 2021 18:18:35 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        id S1376304AbhLBR32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:29:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242092AbhLBR32 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 12:29:28 -0500
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0F9C06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:26:05 -0800 (PST)
+Received: by mail-qv1-xf32.google.com with SMTP id gu12so140162qvb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 09:26:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=tPWb18pzdYP4gepUET+WlF/T7jKUlf4IkvWpJ/7uajs=;
+        b=HWU/YEOe7zB1KHKCkY+8Ou6+yhZt0XooYuPjbA55YiEU8E9Jh92ee8ugy9PBGvlp6/
+         wmEyJG2p3k4DveKEGgY9W+3D2HkSHyGxtOtIyPQDeXBnmxr52SEc30rAnSDnbfpB9wGH
+         zweXfJvbTchrWtOIdTNg+/on+15ZkEYeVKAOJeTujXX6Qo9u0eQPTWPlAP1VNhUXAtxq
+         /HKQ5okeVjvWRa/jCYOJshNXaqPcHdt4NoevKj4uYcc+PtMtEe5n7z2R/WxD+zMbw/2R
+         l4g6dZYJOi+GR9ooJU5NitWpPCB7xOjK5vlCObtVSyyb9cSafSOAtBvZMOcxiVMg96iI
+         yWRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=tPWb18pzdYP4gepUET+WlF/T7jKUlf4IkvWpJ/7uajs=;
+        b=Vf/qAGYLyIaNbB2lqlF3PMJhivp0keJknu4KPenvGt1u9hciD6tk03PpEkc+3LvoYr
+         VPtUokHDdFiaJ4wcl4A5eZn6tgQb+StL1spzwpzwtDDq0Nh9mJ2awmPHGzthCsMvlyGt
+         Npl4JiFwpLqI4HJt4y9wvOrmnZPTf0SkY7O+GodJqRKIBu/R+Yw4INn5ttC9QEfRVHcb
+         2FOjbYSMiBregxyKc9vCga4YqotwRxJeKFmkiQ1iIJeXr8cev0SWWsHyoQGs0BSGUezo
+         iWdSXLiEOhvYYZOIOB3dLnZxSiKknn+EyS6k9+ArIev2s+eN4mU9O03JOeqTou8uL1nt
+         HooA==
+X-Gm-Message-State: AOAM533mfzdYJGIqNjCSOBojVYaS0Jgce5x5/r919IhGmcY0GY2NxoRe
+        lPVwfgwX0FoW5HkFupFLJWvR7A==
+X-Google-Smtp-Source: ABdhPJwPi2N4tWTQDbGIqoIjqHoLgu/k7WNG6Bdr/7aD60T2LHSMCLBsTMn1/Myl0ewziNJJomShQg==
+X-Received: by 2002:a05:6214:29c3:: with SMTP id gh3mr14425707qvb.44.1638465964664;
+        Thu, 02 Dec 2021 09:26:04 -0800 (PST)
+Received: from [192.168.1.173] (bras-base-kntaon1617w-grc-33-142-112-185-132.dsl.bell.ca. [142.112.185.132])
+        by smtp.googlemail.com with ESMTPSA id 2sm266083qkr.126.2021.12.02.09.26.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 09:26:04 -0800 (PST)
+Message-ID: <1e86c2c7-eb84-4170-00f2-007bed67f93a@mojatatu.com>
+Date:   Thu, 2 Dec 2021 12:26:03 -0500
 MIME-Version: 1.0
-In-Reply-To: <s5hbl1zt1wy.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH net-next] net: prestera: flower template support
+Content-Language: en-US
+To:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
+        netdev@vger.kernel.org
+Cc:     Taras Chornyi <taras.chornyi@plvision.eu>,
+        Mickey Rachamim <mickeyr@marvell.com>,
+        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
+        Volodymyr Mytnyk <vmytnyk@marvell.com>,
+        Taras Chornyi <tchornyi@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
+References: <1638460259-12619-1-git-send-email-volodymyr.mytnyk@plvision.eu>
+From:   Jamal Hadi Salim <jhs@mojatatu.com>
+In-Reply-To: <1638460259-12619-1-git-send-email-volodymyr.mytnyk@plvision.eu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Content-Language: de-DE
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2021-12-02 10:50, Volodymyr Mytnyk wrote:
+> From: Volodymyr Mytnyk<vmytnyk@marvell.com>
+> 
+> Add user template explicit support. At this moment, max
+> TCAM rule size is utilized for all rules, doesn't matter
+> which and how much flower matches are provided by user. It
+> means that some of TCAM space is wasted, which impacts
+> the number of filters that can be offloaded.
+> 
+> Introducing the template, allows to have more HW offloaded
+> filters.
+> 
+> Example:
+>    tc qd add dev PORT clsact
+>    tc chain add dev PORT ingress protocol ip \
+>      flower dst_ip 0.0.0.0/16
 
-Am 02.12.21 um 17:19 schrieb Takashi Iwai:
-> On Thu, 02 Dec 2021 17:02:51 +0100,
-> Werner Sembach wrote:
->> Am 02.12.21 um 16:35 schrieb Takashi Iwai:
->>> On Thu, 02 Dec 2021 16:28:43 +0100,
->>> Werner Sembach wrote:
->>>> This fixes the SND_PCI_QUIRK(...) of the TongFang PHxTxX1 barebone. This
->>>> fixes the issue of sound not working after s3 suspend.
->>>>
->>>> When waking up from s3 suspend the Coef 0x10 is set to 0x0220 instead of
->>>> 0x0020. Setting the value manually makes the sound work again. This patch
->>>> does this automatically.
->>>>
->>>> While being on it, I also fixed the comment formatting of the quirk.
->>>>
->>>> Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
->>>> Cc: <stable@vger.kernel.org>
->>> Please try to put Fixes tag as this is a fix for the existing change.
->> Sorry, wasn't aware of this. I guess it's [PATCH Fixes] as the beginning of the subject line?
-> No, the Fixes tag is another line you add around your Signed-off-by
-> line for indicating that that the patch is for fixing the given
-> commit.  In your case, it'll be like
->
-> Fixes: dd6dd6e3c791 ("ALSA: hda/realtek: Add quirk for TongFang PHxTxX1")
->
->
-> HTH,
->
-> Takashi
+"chain" or "filter"?
 
-Thanks, that was indeed very helpful.
+>    tc filter add dev PORT ingress protocol ip \
+>      flower skip_sw dst_ip 1.2.3.4/16 action drop
 
-Sorry for still making noob mistakes.
+You are not using tc priority? Above will result in two priorities
+(the 0.0.0.0 entry will be more important) and in classical flower
+approach two  different tables.
+I am wondering how you map the table to the TCAM.
+Is the priority sorting entirely based on masks in hardware?
 
+cheers,
+jamal

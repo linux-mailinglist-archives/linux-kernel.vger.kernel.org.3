@@ -2,78 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E517846622F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2E6466233
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 12:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357270AbhLBLWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 06:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357256AbhLBLVl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 06:21:41 -0500
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7940BC06175B
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 03:18:17 -0800 (PST)
-Received: by mail-ua1-x936.google.com with SMTP id i6so54990791uae.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 03:18:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=rlMLedUP6ai+RLLMrsfsnbn8KA2hfHHQKD0cQsk8eao=;
-        b=V5ToWX8P9nKksCrmZlh4LMzKlTGv+m+alfyIbak4m6CVKbXddULFuwBbnd5ltu2QiG
-         I0F2V7cHdyjvQmf98Kb1NLmQ44a6w0cbq5hbGOIoUy5ADZsFhgSF3YOkMRNKE/YFrUC+
-         0j1mYQgoA3cF+6Ueuy52cgs9rukyXvOeeMifptUFMxOjcR6Mlg6Of87m/jRTrgHByWbS
-         EGrghf5P8G7BkVYkhViC8UKc2P4+g/VPFKm0gg14GboyQqCh9/Ln3A/ktuDNoTEpkWWd
-         dhVQNO/O1JStvfLeAe+OfJjPD4Mn05Tm0wERhK9tFai3LVSfuIWbFcrFjCWlhM4w/g+S
-         lpnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=rlMLedUP6ai+RLLMrsfsnbn8KA2hfHHQKD0cQsk8eao=;
-        b=dfrkJ+FgF/ka/q1K6Or2CL4wwdSuVHgaJvDF50QPYqt6GmdicZIPgnPurRhIMptWgA
-         V1MnhbHlEpMqm0Iz4JIgouUYTsg7DkmrR1RHT9rQQ47XQfnAgciXBI8z8b3MR6ZeZds5
-         bWMzFIzFdDqxL6SzJXCfhktObaJyKmOYmD14MKlexKTSVG2ZsSZTqnZvz2bosVxoQ5j1
-         jvtv8ACGuKxFJpR5boIjs8R7C+H072CE6eNWGw6ix7nZLuTAqOKH9DM2LNyoCd0m4/zf
-         p6DzwoyE/2ZZNswjtPzKAif/WcOBUnI/I1cxc0Own/Nt3PeKhbzuSjVY0Ex6y3xpQk4F
-         Fr3Q==
-X-Gm-Message-State: AOAM5332YRM/ggI5HTtMi4i1Jm7sM1dha8hsqosNggmhfVMSf0ZDKFJI
-        Awuclqw8RZweBlbbOaqaH395SQPzH/9txkUlSck=
-X-Google-Smtp-Source: ABdhPJy2NW0ENKPyxEa8EndvTzUG2MZ2jhte4rZP1+2Ud2VL9GSx3gqM4cxmAYOpG1KKElHDM0fz+RPznk/AEiCC0tg=
-X-Received: by 2002:a05:6102:358b:: with SMTP id h11mr14679228vsu.82.1638443896599;
- Thu, 02 Dec 2021 03:18:16 -0800 (PST)
+        id S1346270AbhLBLYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 06:24:12 -0500
+Received: from foss.arm.com ([217.140.110.172]:33786 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S233453AbhLBLYJ (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 06:24:09 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A530142F;
+        Thu,  2 Dec 2021 03:20:47 -0800 (PST)
+Received: from e107158-lin.cambridge.arm.com (e107158-lin.cambridge.arm.com [10.1.197.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3D1BC3F7D7;
+        Thu,  2 Dec 2021 03:20:46 -0800 (PST)
+From:   Qais Yousef <qais.yousef@arm.com>
+To:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Valentin Schneider <valentin.schneider@arm.com>,
+        linux-kernel@vger.kernel.org, Qais Yousef <qais.yousef@arm.com>,
+        Valentin Schneider <Valentin.Schneider@arm.com>
+Subject: [PATCH v2] sched/uclamp: Fix rq->uclamp_max not set on first enqueue
+Date:   Thu,  2 Dec 2021 11:20:33 +0000
+Message-Id: <20211202112033.1705279-1-qais.yousef@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Received: by 2002:ab0:20ae:0:0:0:0:0 with HTTP; Thu, 2 Dec 2021 03:18:16 -0800 (PST)
-Reply-To: bankdtb160@gmail.com
-From:   DTB Bank of Tanzania <homeland205@gmail.com>
-Date:   Thu, 2 Dec 2021 03:18:16 -0800
-Message-ID: <CAPf_TjU5mKxvcA3vVCco9w2XqU_=rHiebThd+p=P_vPHtBv0pg@mail.gmail.com>
-Subject: DTB Bank of Tanzania,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello
+Commit d81ae8aac85c ("sched/uclamp: Fix initialization of struct
+uclamp_rq") introduced a bug where uclamp_max of the rq is not reset to
+match the woken up task's uclamp_max when the rq is idle.
 
-We write to inform you regarding your inheritance award winning check
-of $2.8 million USD which was issued out from DTB Bank of Tanzania
-last
-week, although the check has been cashed & converted to ATM Visa card,
-reason, the check was cashed & loaded into a card is because the check
-may get expired before it gets to your possession, therefore we have
-to registered the ATM card with EMS SPEED POSTAL SERVICE company here.
-So you are advise to contact DTB Bank of Tanzania through
-E-mail;bankdtb160@gmail.com via their info below,
-please be sure you send your current home address where to deliver the
-ATM card to avoid mistake or misplacing.
+The code was relying on rq->uclamp_max initialized to zero, so on first
+enqueue
 
-Contact the Manager Mr. Abdul Samji the Executive Governor Of DTB Bank
-of Tanzania
-E-mail;bankdtb160@gmail.com
-Telephone:+255 8983 0023
+	static inline void uclamp_rq_inc_id(struct rq *rq, struct task_struct *p,
+					    enum uclamp_id clamp_id)
+	{
+		...
 
-Regards,
-Samuel Brida
+		if (uc_se->value > READ_ONCE(uc_rq->value))
+			WRITE_ONCE(uc_rq->value, uc_se->value);
+	}
+
+was actually resetting it. But since commit d81ae8aac85c changed the
+default to 1024, this no longer works. And since rq->uclamp_flags is
+also initialized to 0, neither above code path nor uclamp_idle_reset()
+update the rq->uclamp_max on first wake up from idle.
+
+This is only visible from first wake up(s) until the first dequeue to
+idle after enabling the static key. And it only matters if the
+uclamp_max of this task is < 1024 since only then its uclamp_max will be
+effectively ignored.
+
+Fix it by properly initializing rq->uclamp_flags = UCLAMP_FLAG_IDLE to
+ensure uclamp_idle_reset() is called which then will update the rq
+uclamp_max value as expected.
+
+Fixes: d81ae8aac85c ("sched/uclamp: Fix initialization of struct uclamp_rq")
+Signed-off-by: Qais Yousef <qais.yousef@arm.com>
+Reviewed-by: Valentin Schneider <Valentin.Schneider@arm.com>
+Tested-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+---
+
+Changes in v2:
+  - Update commit message to be more descriptive (Valentin).
+  - Added Reviewed-by and Tested-by from Valentin and Dietmar (Thanks!)
+
+ kernel/sched/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index beaa8be6241e..52b0c7513a32 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1929,7 +1929,7 @@ static void __init init_uclamp_rq(struct rq *rq)
+ 		};
+ 	}
+ 
+-	rq->uclamp_flags = 0;
++	rq->uclamp_flags = UCLAMP_FLAG_IDLE;
+ }
+ 
+ static void __init init_uclamp(void)
+-- 
+2.25.1
+

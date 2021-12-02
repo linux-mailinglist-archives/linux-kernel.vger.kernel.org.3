@@ -2,137 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C96B2465D6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:30:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0755465D6E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 05:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355421AbhLBEdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 23:33:31 -0500
-Received: from mga18.intel.com ([134.134.136.126]:33144 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1355407AbhLBEd3 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 23:33:29 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="223498985"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="223498985"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 20:30:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="541075305"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 01 Dec 2021 20:30:05 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msdjQ-000Fr7-Iw; Thu, 02 Dec 2021 04:30:04 +0000
-Date:   Thu, 2 Dec 2021 12:29:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     zhangyue <zhangyue1@kylinos.cn>, naveen.n.rao@linux.ibm.com,
-        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
-        mhiramat@kernel.org
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kprobes: fix out-of-bounds in register_kretprobe
-Message-ID: <202112021254.cDIRw2r6-lkp@intel.com>
-References: <20211201054855.5449-1-zhangyue1@kylinos.cn>
+        id S1355450AbhLBEds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 23:33:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355426AbhLBEdn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 23:33:43 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082A5C061574;
+        Wed,  1 Dec 2021 20:30:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 53B9DCE21AD;
+        Thu,  2 Dec 2021 04:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EFB4C53FCC;
+        Thu,  2 Dec 2021 04:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638419417;
+        bh=xOtsh6uB0JwyVP3cPswcBfduh5x3rcKpeZ3dUk4ARhw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TTjkRP+XzHN6asg+o1L5lUZNHiqz2zriD1fGUvY2Uk+HB0I5toXBuzyIWJNPCDR1W
+         xTs+fYr8lQMfWz5ra1ZHqcvt8YEhr/7Re0Rwz5Vr8jNTs4zSKoWh/cojqfxUSLOKKk
+         buTrtxijEZlyZKaki2UgM/Sgl9hfL10MWtMT6PQWWe/XH1dSpV7Rnt7Ivx2+vyRNjx
+         TsMh56AAmelDz4Cia+OjadKa3EqelggrB9LHDdNbYkc/kZLBVpywRXioi/4Dkm7X3E
+         NupVyBlAHRPAk3+OZgpKYehnjxuqJI+XfoMw4FJ8pc8vNyt77J8+8//u3JXtE3G97M
+         GhyA8iFtBsM+Q==
+Date:   Thu, 2 Dec 2021 10:00:13 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Richard Zhu <hongxing.zhu@nxp.com>
+Cc:     l.stach@pengutronix.de, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, marcel.ziswiler@toradex.com,
+        tharvey@gateworks.com, kishon@ti.com, robh@kernel.org,
+        galak@kernel.crashing.org, shawnguo@kernel.org,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH v6 5/8] phy: freescale: pcie: Initialize the imx8 pcie
+ standalone phy driver
+Message-ID: <YahL1TMkt8S0RNX5@matsya>
+References: <1637200489-11855-1-git-send-email-hongxing.zhu@nxp.com>
+ <1637200489-11855-6-git-send-email-hongxing.zhu@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20211201054855.5449-1-zhangyue1@kylinos.cn>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1637200489-11855-6-git-send-email-hongxing.zhu@nxp.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi zhangyue,
+On 18-11-21, 09:54, Richard Zhu wrote:
+> Add the standalone i.MX8 PCIe PHY driver.
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Tested-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> Reviewed-by: Tim Harvey <tharvey@gateworks.com>
+> Tested-by: Tim Harvey <tharvey@gateworks.com>
+> ---
+>  drivers/phy/freescale/Kconfig              |   9 +
+>  drivers/phy/freescale/Makefile             |   1 +
+>  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 237 +++++++++++++++++++++
+>  3 files changed, 247 insertions(+)
+>  create mode 100644 drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> 
+> diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
+> index 320630ffe3cd..e821498b1f7f 100644
+> --- a/drivers/phy/freescale/Kconfig
+> +++ b/drivers/phy/freescale/Kconfig
+> @@ -14,3 +14,12 @@ config PHY_MIXEL_MIPI_DPHY
+>  	help
+>  	  Enable this to add support for the Mixel DSI PHY as found
+>  	  on NXP's i.MX8 family of SOCs.
+> +
+> +config PHY_FSL_IMX8M_PCIE
+> +	tristate "Freescale i.MX8M PCIE PHY"
+> +	depends on OF && HAS_IOMEM
+> +	select GENERIC_PHY
+> +	default ARCH_MXC && ARM64
 
-Thank you for the patch! Perhaps something to improve:
+Why should this be default ? We dont do that for new drivers.. You may
+add this to respective config file though...
 
-[auto build test WARNING on rostedt-trace/for-next]
-[also build test WARNING on v5.16-rc3 next-20211201]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> +static int imx8_pcie_phy_init(struct phy *phy)
+> +{
+> +	int ret;
+> +	u32 val, pad_mode;
+> +	struct imx8_pcie_phy *imx8_phy = phy_get_drvdata(phy);
+> +
+> +	reset_control_assert(imx8_phy->reset);
+> +
+> +	pad_mode = imx8_phy->refclk_pad_mode;
+> +	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
+> +			   imx8_phy->clkreq_unused ?
+> +			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_AUX_EN,
+> +			   IMX8MM_GPR_PCIE_AUX_EN);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_SSC_EN, 0);
+> +
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
+> +			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
+> +			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
+> +			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
+> +	usleep_range(100, 200);
+> +
+> +	/* Do the PHY common block reset */
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_CMN_RST,
+> +			   IMX8MM_GPR_PCIE_CMN_RST);
+> +	usleep_range(200, 500);
+> +
+> +
 
-url:    https://github.com/0day-ci/linux/commits/zhangyue/kprobes-fix-out-of-bounds-in-register_kretprobe/20211201-135046
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git for-next
-config: powerpc64-randconfig-m031-20211129 (https://download.01.org/0day-ci/archive/20211202/202112021254.cDIRw2r6-lkp@intel.com/config)
-compiler: powerpc64-linux-gcc (GCC) 11.2.0
+No multi blank line please
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> +static struct platform_driver imx8_pcie_phy_driver = {
+> +	.probe	= imx8_pcie_phy_probe,
+> +	.driver = {
+> +		.name	= "imx8-pcie-phy",
+> +		.of_match_table	= imx8_pcie_phy_of_match,
+> +	}
+> +};
+> +module_platform_driver(imx8_pcie_phy_driver);
+> +
+> +MODULE_DESCRIPTION("FSL IMX8 PCIE PHY driver");
+> +MODULE_LICENSE("GPL");
 
-smatch warnings:
-kernel/kprobes.c:2107 register_kretprobe() warn: always true condition '(rp->data_size >= 0) => (0-u64max >= 0)'
+This does not match the SPDX tag you have given
 
-vim +2107 kernel/kprobes.c
-
-  2062	
-  2063	int register_kretprobe(struct kretprobe *rp)
-  2064	{
-  2065		int ret;
-  2066		struct kretprobe_instance *inst = NULL;
-  2067		int i;
-  2068		void *addr;
-  2069	
-  2070		ret = kprobe_on_func_entry(rp->kp.addr, rp->kp.symbol_name, rp->kp.offset);
-  2071		if (ret)
-  2072			return ret;
-  2073	
-  2074		/* If only 'rp->kp.addr' is specified, check reregistering kprobes */
-  2075		if (rp->kp.addr && warn_kprobe_rereg(&rp->kp))
-  2076			return -EINVAL;
-  2077	
-  2078		if (kretprobe_blacklist_size) {
-  2079			addr = kprobe_addr(&rp->kp);
-  2080			if (IS_ERR(addr))
-  2081				return PTR_ERR(addr);
-  2082	
-  2083			for (i = 0; kretprobe_blacklist[i].name != NULL; i++) {
-  2084				if (kretprobe_blacklist[i].addr == addr)
-  2085					return -EINVAL;
-  2086			}
-  2087		}
-  2088	
-  2089		rp->kp.pre_handler = pre_handler_kretprobe;
-  2090		rp->kp.post_handler = NULL;
-  2091	
-  2092		/* Pre-allocate memory for max kretprobe instances */
-  2093		if (rp->maxactive <= 0) {
-  2094	#ifdef CONFIG_PREEMPTION
-  2095			rp->maxactive = max_t(unsigned int, 10, 2*num_possible_cpus());
-  2096	#else
-  2097			rp->maxactive = num_possible_cpus();
-  2098	#endif
-  2099		}
-  2100		rp->freelist.head = NULL;
-  2101		rp->rph = kzalloc(sizeof(struct kretprobe_holder), GFP_KERNEL);
-  2102		if (!rp->rph)
-  2103			return -ENOMEM;
-  2104	
-  2105		rp->rph->rp = rp;
-  2106		for (i = 0; i < rp->maxactive; i++) {
-> 2107			if (rp->data_size >= 0)
-  2108				inst = kzalloc(sizeof(struct kretprobe_instance) +
-  2109				       rp->data_size, GFP_KERNEL);
-  2110			if (inst == NULL) {
-  2111				refcount_set(&rp->rph->ref, i);
-  2112				free_rp_inst(rp);
-  2113				return -ENOMEM;
-  2114			}
-  2115			inst->rph = rp->rph;
-  2116			freelist_add(&inst->freelist, &rp->freelist);
-  2117		}
-  2118		refcount_set(&rp->rph->ref, i);
-  2119	
-  2120		rp->nmissed = 0;
-  2121		/* Establish function entry probe point */
-  2122		ret = register_kprobe(&rp->kp);
-  2123		if (ret != 0)
-  2124			free_rp_inst(rp);
-  2125		return ret;
-  2126	}
-  2127	EXPORT_SYMBOL_GPL(register_kretprobe);
-  2128	
-
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+-- 
+~Vinod

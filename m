@@ -2,261 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C713465F38
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E34D1465F42
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:22:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356069AbhLBIUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 03:20:05 -0500
-Received: from mga03.intel.com ([134.134.136.65]:42611 "EHLO mga03.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356065AbhLBIUB (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:20:01 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236594211"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="236594211"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 00:16:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="602636502"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
-  by fmsmga002.fm.intel.com with ESMTP; 02 Dec 2021 00:16:33 -0800
-Subject: Re: [PATCH v16 22/40] mmc: sdhci-tegra: Add runtime PM and OPP
- support
-To:     Dmitry Osipenko <digetx@gmail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Nishanth Menon <nm@ti.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-clk@vger.kernel.org, David Heidelberg <david@ixit.cz>
-References: <20211130232347.950-1-digetx@gmail.com>
- <20211130232347.950-23-digetx@gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <fc60f593-cd74-558d-785f-5f0d2ba179cf@intel.com>
-Date:   Thu, 2 Dec 2021 10:16:32 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.13.0
+        id S241180AbhLBI0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 03:26:13 -0500
+Received: from smtp-relay-internal-1.canonical.com ([185.125.188.123]:46690
+        "EHLO smtp-relay-internal-1.canonical.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S233134AbhLBI0M (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 03:26:12 -0500
+Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com [209.85.167.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 39DD33F1D7
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 08:22:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1638433369;
+        bh=/yVgv1GOFqN+8AHHqsg9jJdYjVHA4XAnE27binztNiI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=BJiPfzlpXbRfIseygfeX/To3Nfk7McxUHtPVvnqswZZRovhFUA9nj/4UQtGHU7cp8
+         rBoDfLq5SnfRJ0g6ZtbP3WCCPEG9EOVOW4beCHr1W/kF82tZHii/WLRmpZAg2erQ3X
+         1AmI3f++VLJ8bfa4chAy2nwro8B0A7vw7Ti1PHvVg4qWwai2LTOwbkktaia5tSXHd9
+         7iJztlZFfXHAibjT57fQiEC2ebSNaQzKrisMc1ZrO6CGR61xAox4DAoh4FSqNqGhnf
+         doUcdlImq8wOcWuNXwG+ec103aMV9WS3qFjSbkwfU8PtwEUct2ez5cIqYapvnwYTtC
+         tHDQ0EwaLxWgQ==
+Received: by mail-lf1-f70.google.com with SMTP id j9-20020a05651231c900b004037efe9fddso10931217lfe.18
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 00:22:49 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=/yVgv1GOFqN+8AHHqsg9jJdYjVHA4XAnE27binztNiI=;
+        b=GBOVRrU26sIahlk61V18zso1Fvybfye+HnJM4xu0SZXkHgNswDOG7VcAj/xWxSP4d1
+         NverCE3UDM65UerC2ah9OTn0eGillsubDyTGwJ8GmgmJN+M/SoGfzxSlM+8cT2F8ioPs
+         qrWHfKXASrIkHpvZk62oivtqT8B0yacpxmxtPUZijL3gjo1/Wa5d/Nv84/aYSjpYW/uE
+         Z0r86jQ95w6gRwGPQX/lFAlJxb3bLrXn7omrR/SJW7eVxvt0rva00VE4AcSTFjLUdRlf
+         YPG+CSEwIq0Du3gqvcpu48rRsYjqxhgHZ8ZoiLMdMGUThoOLAeNmHVA/GXVTH8G7rA8G
+         Kd7g==
+X-Gm-Message-State: AOAM531EZgh4oXvsqo/ToCXDiczzPf4Iq7KebUzAVVKNT10V5DDiaerj
+        0i7dcPi0WVg3BoFB9v4p5JmsI0HB6N+tEwwDVl5MyT8L3B4bgH8UgT4ozn4gyYIINE/DYrYET9+
+        Kj3Lj1kkjicWI7VXpNeCGklG/l0pEhuWdMOfXPLuffw==
+X-Received: by 2002:a05:6512:ad5:: with SMTP id n21mr10799114lfu.460.1638433368332;
+        Thu, 02 Dec 2021 00:22:48 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJwP3ORFJiJfE5pvx7rMdaizQ6DgKbWsDyzXXT5JfQ1TAZJykEWZ1xtOgS/qz/7LRQhqd24CfQ==
+X-Received: by 2002:a05:6512:ad5:: with SMTP id n21mr10799089lfu.460.1638433367928;
+        Thu, 02 Dec 2021 00:22:47 -0800 (PST)
+Received: from [192.168.3.67] (89-77-68-124.dynamic.chello.pl. [89.77.68.124])
+        by smtp.gmail.com with ESMTPSA id s4sm255390lfp.198.2021.12.02.00.22.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 00:22:47 -0800 (PST)
+Message-ID: <95e19574-8b6b-491a-3997-e0a37748d9da@canonical.com>
+Date:   Thu, 2 Dec 2021 09:22:46 +0100
 MIME-Version: 1.0
-In-Reply-To: <20211130232347.950-23-digetx@gmail.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.1
+Subject: Re: [PATCH 1/6] dt-bindings: i2c: exynos5: Convert to dtschema
 Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Jaewon Kim <jaewon02.kim@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Youngmin Nam <youngmin.nam@samsung.com>,
+        Wolfram Sang <wsa@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20211201190455.31646-1-semen.protsenko@linaro.org>
+ <20211201190455.31646-2-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+In-Reply-To: <20211201190455.31646-2-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/2021 01:23, Dmitry Osipenko wrote:
-> The SDHCI on Tegra belongs to the core power domain and we're going to
-> enable GENPD support for the core domain. Now SDHCI must be resumed using
-> runtime PM API in order to initialize the SDHCI power state. The SDHCI
-> clock rate must be changed using OPP API that will reconfigure the power
-> domain performance state in accordance to the rate. Add runtime PM and OPP
-> support to the SDHCI driver.
+On 01/12/2021 20:04, Sam Protsenko wrote:
+> Convert Samsung Exynos High Speed I2C bindings doc to DT schema format.
 > 
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
-
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-
+> Changes during bindings conversion:
+> 1. Added missing required clock properties (driver fails when it's
+>    unable to get the clock)
+> 2. Removed properties and descriptions that can be found in
+>    schemas/i2c/i2c-controller.yaml [1]
+> 3. Fixed the example so it can be validated by dtschema
+> 
+> [1] https://github.com/robherring/dt-schema/blob/master/schemas/i2c/i2c-controller.yaml
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 > ---
->  drivers/mmc/host/sdhci-tegra.c | 81 +++++++++++++++++++++++++++-------
->  1 file changed, 65 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
-> index a5001875876b..6435a75142a6 100644
-> --- a/drivers/mmc/host/sdhci-tegra.c
-> +++ b/drivers/mmc/host/sdhci-tegra.c
-> @@ -15,6 +15,8 @@
->  #include <linux/of.h>
->  #include <linux/of_device.h>
->  #include <linux/pinctrl/consumer.h>
-> +#include <linux/pm_opp.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/regulator/consumer.h>
->  #include <linux/reset.h>
->  #include <linux/mmc/card.h>
-> @@ -24,6 +26,8 @@
->  #include <linux/gpio/consumer.h>
->  #include <linux/ktime.h>
->  
-> +#include <soc/tegra/common.h>
-> +
->  #include "sdhci-pltfm.h"
->  #include "cqhci.h"
->  
-> @@ -760,7 +764,9 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
->  {
->  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
->  	struct sdhci_tegra *tegra_host = sdhci_pltfm_priv(pltfm_host);
-> +	struct device *dev = mmc_dev(host->mmc);
->  	unsigned long host_clk;
-> +	int err;
->  
->  	if (!clock)
->  		return sdhci_set_clock(host, clock);
-> @@ -778,7 +784,12 @@ static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock)
->  	 * from clk_get_rate() is used.
->  	 */
->  	host_clk = tegra_host->ddr_signaling ? clock * 2 : clock;
-> -	clk_set_rate(pltfm_host->clk, host_clk);
-> +
-> +	err = dev_pm_opp_set_rate(dev, host_clk);
-> +	if (err)
-> +		dev_err(dev, "failed to set clk rate to %luHz: %d\n",
-> +			host_clk, err);
-> +
->  	tegra_host->curr_clk_rate = host_clk;
->  	if (tegra_host->ddr_signaling)
->  		host->max_clk = host_clk;
-> @@ -1705,7 +1716,6 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->  				   "failed to get clock\n");
->  		goto err_clk_get;
->  	}
-> -	clk_prepare_enable(clk);
->  	pltfm_host->clk = clk;
->  
->  	tegra_host->rst = devm_reset_control_get_exclusive(&pdev->dev,
-> @@ -1716,15 +1726,24 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->  		goto err_rst_get;
->  	}
->  
-> -	rc = reset_control_assert(tegra_host->rst);
-> +	rc = devm_tegra_core_dev_init_opp_table_common(&pdev->dev);
->  	if (rc)
->  		goto err_rst_get;
->  
-> +	pm_runtime_enable(&pdev->dev);
-> +	rc = pm_runtime_resume_and_get(&pdev->dev);
-> +	if (rc)
-> +		goto err_pm_get;
-> +
-> +	rc = reset_control_assert(tegra_host->rst);
-> +	if (rc)
-> +		goto err_rst_assert;
-> +
->  	usleep_range(2000, 4000);
->  
->  	rc = reset_control_deassert(tegra_host->rst);
->  	if (rc)
-> -		goto err_rst_get;
-> +		goto err_rst_assert;
->  
->  	usleep_range(2000, 4000);
->  
-> @@ -1736,8 +1755,11 @@ static int sdhci_tegra_probe(struct platform_device *pdev)
->  
->  err_add_host:
->  	reset_control_assert(tegra_host->rst);
-> +err_rst_assert:
-> +	pm_runtime_put_sync_suspend(&pdev->dev);
-> +err_pm_get:
-> +	pm_runtime_disable(&pdev->dev);
->  err_rst_get:
-> -	clk_disable_unprepare(pltfm_host->clk);
->  err_clk_get:
->  	clk_disable_unprepare(tegra_host->tmclk);
->  err_power_req:
-> @@ -1756,19 +1778,38 @@ static int sdhci_tegra_remove(struct platform_device *pdev)
->  
->  	reset_control_assert(tegra_host->rst);
->  	usleep_range(2000, 4000);
-> -	clk_disable_unprepare(pltfm_host->clk);
-> -	clk_disable_unprepare(tegra_host->tmclk);
->  
-> +	pm_runtime_put_sync_suspend(&pdev->dev);
-> +	pm_runtime_force_suspend(&pdev->dev);
-> +
-> +	clk_disable_unprepare(tegra_host->tmclk);
->  	sdhci_pltfm_free(pdev);
->  
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_PM_SLEEP
-> -static int __maybe_unused sdhci_tegra_suspend(struct device *dev)
-> +static int __maybe_unused sdhci_tegra_runtime_suspend(struct device *dev)
->  {
->  	struct sdhci_host *host = dev_get_drvdata(dev);
->  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +
-> +	clk_disable_unprepare(pltfm_host->clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused sdhci_tegra_runtime_resume(struct device *dev)
-> +{
-> +	struct sdhci_host *host = dev_get_drvdata(dev);
-> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> +
-> +	return clk_prepare_enable(pltfm_host->clk);
-> +}
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int sdhci_tegra_suspend(struct device *dev)
-> +{
-> +	struct sdhci_host *host = dev_get_drvdata(dev);
->  	int ret;
->  
->  	if (host->mmc->caps2 & MMC_CAP2_CQE) {
-> @@ -1783,17 +1824,22 @@ static int __maybe_unused sdhci_tegra_suspend(struct device *dev)
->  		return ret;
->  	}
->  
-> -	clk_disable_unprepare(pltfm_host->clk);
-> +	ret = pm_runtime_force_suspend(dev);
-> +	if (ret) {
-> +		sdhci_resume_host(host);
-> +		cqhci_resume(host->mmc);
-> +		return ret;
-> +	}
-> +
->  	return 0;
->  }
->  
-> -static int __maybe_unused sdhci_tegra_resume(struct device *dev)
-> +static int sdhci_tegra_resume(struct device *dev)
->  {
->  	struct sdhci_host *host = dev_get_drvdata(dev);
-> -	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
->  	int ret;
->  
-> -	ret = clk_prepare_enable(pltfm_host->clk);
-> +	ret = pm_runtime_force_resume(dev);
->  	if (ret)
->  		return ret;
->  
-> @@ -1812,13 +1858,16 @@ static int __maybe_unused sdhci_tegra_resume(struct device *dev)
->  suspend_host:
->  	sdhci_suspend_host(host);
->  disable_clk:
-> -	clk_disable_unprepare(pltfm_host->clk);
-> +	pm_runtime_force_suspend(dev);
->  	return ret;
->  }
->  #endif
->  
-> -static SIMPLE_DEV_PM_OPS(sdhci_tegra_dev_pm_ops, sdhci_tegra_suspend,
-> -			 sdhci_tegra_resume);
-> +static const struct dev_pm_ops sdhci_tegra_dev_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(sdhci_tegra_runtime_suspend, sdhci_tegra_runtime_resume,
-> +			   NULL)
-> +	SET_SYSTEM_SLEEP_PM_OPS(sdhci_tegra_suspend, sdhci_tegra_resume)
-> +};
->  
->  static struct platform_driver sdhci_tegra_driver = {
->  	.driver		= {
+>  .../devicetree/bindings/i2c/i2c-exynos5.txt   | 53 ------------
+>  .../devicetree/bindings/i2c/i2c-exynos5.yaml  | 80 +++++++++++++++++++
+>  2 files changed, 80 insertions(+), 53 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.txt
+>  create mode 100644 Documentation/devicetree/bindings/i2c/i2c-exynos5.yaml
 > 
 
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+
+
+Best regards,
+Krzysztof

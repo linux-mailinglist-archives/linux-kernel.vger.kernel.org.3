@@ -2,100 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B2DD466BEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:05:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CEDF466BEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233345AbhLBWI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 17:08:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:50324 "EHLO
+        id S234288AbhLBWJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 17:09:28 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:25699 "EHLO
         us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S231365AbhLBWIZ (ORCPT
+        by vger.kernel.org with ESMTP id S230017AbhLBWJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:08:25 -0500
+        Thu, 2 Dec 2021 17:09:27 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1638482701;
+        s=mimecast20190719; t=1638482764;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zPFqcEFuUD6RFSmQiRlOFobmywXdp7Z37Bs58rLmxbA=;
-        b=dCcr1URyola45UY7uK58dMNoGCeZ7loVB4QkxSrIv4njlHZF+/2QYNJvxsM+A4TqqZ9NKS
-        Chl6+aUEUyyu79XwaLDdylg3j9ea4S+8/L3wisGFGZZgKX+NZiBYf0Lre/9HqorWn5Q+8n
-        Sv2v5AqYFwRAksCRT2XDCgBv0b+7fdM=
+         to:to:cc:mime-version:mime-version:content-type:content-type;
+        bh=7k9NAT51bqzJ5YbHuv7Ujc3TJL0g+29BxG+D9YetdSU=;
+        b=hCSIuZV4mY58OVYn8VJfDaLw8Uc9zSwQvLTB1nLPrYZVZV9bZL7oEo/cCXZ5TWyocSD6sP
+        B7t5WQqiVfhqLrhdey49/grWQv7aW/sJxvNxmM/JV25B2J7Qzk9k1uznulnhb6SUGtSYJb
+        OgfEnAhxl99BRpdelcjMOx4XgOV4jmw=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-bUoJJ271O92-EaUScCYELA-1; Thu, 02 Dec 2021 17:05:00 -0500
-X-MC-Unique: bUoJJ271O92-EaUScCYELA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+ us-mta-497-GT2GT0iMMCaKwwGHuQOfsw-1; Thu, 02 Dec 2021 17:05:58 -0500
+X-MC-Unique: GT2GT0iMMCaKwwGHuQOfsw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 00D8E1006AA3;
-        Thu,  2 Dec 2021 22:04:59 +0000 (UTC)
-Received: from rh (vpn2-54-226.bne.redhat.com [10.64.54.226])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4C73D10023AA;
-        Thu,  2 Dec 2021 22:04:58 +0000 (UTC)
-Received: from [::1] (helo=rh)
-        by rh with esmtps (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <dchinner@redhat.com>)
-        id 1msuCE-0007m0-Iv; Fri, 03 Dec 2021 09:04:54 +1100
-Date:   Fri, 3 Dec 2021 09:04:51 +1100
-From:   Dave Chinner <dchinner@redhat.com>
-To:     Xing Zhengjun <zhengjun.xing@linux.intel.com>
-Cc:     kernel test robot <oliver.sang@intel.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Chandan Babu R <chandanrlinux@gmail.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Allison Henderson <allison.henderson@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        lkp@intel.com
-Subject: Re: [LKP] Re: [xfs] bad77c375e: stress-ng.fallocate.ops_per_sec
- -10.0% regression
-Message-ID: <20211202220451.GT2206@rh>
-References: <20210902072704.GC8267@xsang-OptiPlex-9020>
- <36dc5f38-f8ec-591a-8efa-b3bd607ac06e@linux.intel.com>
- <96fa41bb-7e9f-ae47-bf34-accef5c36fa8@linux.intel.com>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 21F7684B9A6;
+        Thu,  2 Dec 2021 22:05:56 +0000 (UTC)
+Received: from lclaudio.dyndns.org (unknown [10.22.32.148])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 534955DF37;
+        Thu,  2 Dec 2021 22:05:55 +0000 (UTC)
+Received: by lclaudio.dyndns.org (Postfix, from userid 1000)
+        id 898C63C023B; Thu,  2 Dec 2021 19:05:53 -0300 (-03)
+Date:   Thu, 2 Dec 2021 19:05:53 -0300
+From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        stable-rt@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Subject: [ANNOUNCE] 5.10.83-rt58
+Message-ID: <YalDQe/lyXqAxB0K@uudg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <96fa41bb-7e9f-ae47-bf34-accef5c36fa8@linux.intel.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 02:46:06PM +0800, Xing Zhengjun wrote:
-> Hi Dave,
-> 
->    Do you have time to look at this? It still existed in v5.16-rc3. Thanks
+Hello RT Folks!
 
-AFAIC, it's a "don't care" issue.
+I'm pleased to announce the 5.10.83-rt58 stable release.
 
-The series of commits around this one:
+This release is just an update to the new stable 5.10.83
+version and no RT specific changes have been made.
 
-> > > FYI, we noticed a -10.0% regression of
-> > > stress-ng.fallocate.ops_per_sec due to commit:
-> > > 
-> > > 
-> > > commit: bad77c375e8de6c776c848e443f7dc2d0d909be5 ("xfs: CIL
-> > > checkpoint flushes caches unconditionally")
-> > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+You can get this release via the git tree at:
 
-changed how we manage FUA/cache flushes for the journal changed
-performance across a wide range of workloads. Many went a lot
-faster, some (like this one) went slightly slower. Overall it was a
-net win, especially on storage stacks with really slow cache flushes
-(e.g. dm-thinp) and workloads that do a lot of concurrent metadata
-modification.
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Overall, fallocate is not a performance critical path - it's a
-slowpath because it serialises all IO to that file while the
-fallocate call runs. Hence performance characteristics for fallocate
-aren't really a major concern to begin with...
+  branch: v5.10-rt
+  Head SHA1: 63bd813e523a6e08bb4bb04b71903d252cbcae80
 
--Dave.
--- 
-Dave Chinner
-dchinner@redhat.com
+Or to build 5.10.83-rt58 directly, the following patches should be applied:
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/linux-5.10.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v5.x/patch-5.10.83.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/5.10/patch-5.10.83-rt58.patch.xz
+
+Enjoy!
+Luis
 

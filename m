@@ -2,77 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 26291465E50
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 07:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DC6465E54
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 07:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345293AbhLBGlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 01:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238610AbhLBGln (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 01:41:43 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B29C061574
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 22:38:18 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id m12so14714230ljj.6
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 22:38:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
-        b=IIDpSl63efnOXKar6bWTArDp7JpH231HBcoGNC1Md2h4Kp7JTJm/W5WljjjLa1SzLX
-         3klXAQI0XQNYR8fRW4XZtd7IVP/tK9tFK3h8sCkQOKcYoTMKYgb7hxO6qwy6/Uqg3c+6
-         UnAHacyeno+zbLoft7WCCe8CJmhJAJ+RRPE2eoKhHJ617FsEyKLakGskcP2RRhGPoxHg
-         vhbHhX0dpXRGXBykSKi01THmOTMOOrTZwPUOn8zQQbcm0/F7NBw1Y1e+ErbtkI9fQfAF
-         6CXqXT79XPotElLRW86jwVLEyupngRKr1jW39uZLgb9X9uXS3NGEylrhYKuEYfn8DIBb
-         O6aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=7Z4bIWUJcNwasnOvZT//wASf4/xDxe1Cc4BxfIfuhGs=;
-        b=0EtJnOmQEk7GTZgO8GEA9si1cjE+xgFnRMwOJLASh+kHg6mn1VJTsLovQAwqtEnRSM
-         xRhHZ3GZILztd1st+QxAdCFIKllnX4YhyigqPz9mCdxHte+o/8M1LI9Wl/xfmIZ0BwyU
-         6GHsTgI4Sahsc0lKnqXMJnyUdeZD/v0F32F5oKwnpclay56L03//APCStOVncKByKMln
-         xVLeLiNjPrfx20cwYQG+yAhpSuHTaLipvOSbiJH3fZ2hB/IIVvC0W9vlKiY8qf5gwDeN
-         9O9mH+yWD2DSIiLm2EY+L0eHgkLn0MjXgxECXAnevrdlNRaXqoO14pR00U8tgJYyjo8g
-         xh2Q==
-X-Gm-Message-State: AOAM533jPu1+Ka5BNGXpKThlOQs4Zbpb9wU6HF7vr6t+HvB7MlZftpmN
-        GJtqXyzge7Cue1BX0eR5JX2FYyYHXGtoPsGIxYo=
-X-Google-Smtp-Source: ABdhPJzKgWEzVnelfIb9Alry9aRSGWLt8OiGzSdF7dgK4XqbjdZaPTVMo4QiiNkW7+PAqkMwj8lUIiSlcrYRInKRXZ4=
-X-Received: by 2002:a2e:bc21:: with SMTP id b33mr10493973ljf.497.1638427097074;
- Wed, 01 Dec 2021 22:38:17 -0800 (PST)
+        id S1345361AbhLBGnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 01:43:04 -0500
+Received: from mga09.intel.com ([134.134.136.24]:4228 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S236674AbhLBGnC (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 01:43:02 -0500
+X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="236451673"
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="236451673"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 22:39:40 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
+   d="scan'208";a="459530687"
+Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.76]) ([10.237.72.76])
+  by orsmga003.jf.intel.com with ESMTP; 01 Dec 2021 22:39:37 -0800
+Subject: Re: [PATCH] mmc: sdhci-tegra: Add support to enumerate in HS400ES
+ mode
+To:     Prathamesh Shete <pshete@nvidia.com>, ulf.hansson@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     anrao@nvidia.com
+References: <20211129111047.5299-1-pshete@nvidia.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Message-ID: <0a8368f9-8ca2-f01b-2f9e-0c91e3b946f5@intel.com>
+Date:   Thu, 2 Dec 2021 08:39:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.13.0
 MIME-Version: 1.0
-Received: by 2002:ab3:7f47:0:0:0:0:0 with HTTP; Wed, 1 Dec 2021 22:38:16 -0800 (PST)
-Reply-To: mohammedshamekh24@gmail.com
-From:   Mr mohammed shamekh <nasserkhalilaljaidah90@gmail.com>
-Date:   Wed, 1 Dec 2021 22:38:16 -0800
-Message-ID: <CAERPTfEDUGrG6a+rK0ghU-=2f0r5UEpHUamfFNqp=Zix+ZwhiQ@mail.gmail.com>
-Subject: THE AMOUNT IS 27.5 MILLIOMS USD
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+In-Reply-To: <20211129111047.5299-1-pshete@nvidia.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhcsKgRnJpZW5kLA0KDQpHcmVldGluZ3MuDQoNCkhvd8KgYXJlwqB5b3XCoGRvaW5nwqB0b2Rh
-ecKgacKgaG9wZcKgZmluZT8NCg0KScKgY2FtZcKgYWNyb3NzwqB5b3VywqBlLW1haWzCoGNvbnRh
-Y3TCoHByaW9ywqBhwqBwcml2YXRlwqBzZWFyY2jCoHdoaWxlwqBpbsKgbmVlZA0Kb2bCoHlvdXLC
-oGFzc2lzdGFuY2UuwqBNecKgbmFtZcKgIE1yICBtb2hhbW1lZCAgIHNoYW1la2ggIOKAmcKgScKg
-d29ya8Kgd2l0aMKgdGhlDQpkZXBhcnRtZW50wqBvZsKgQXVkaXTCoGFuZMKgYWNjb3VudGluZ8Kg
-bWFuYWdlcsKgaGVyZcKgaW7CoFVCQcKgQmFua8Kgb2bCoEFmcmljYSwNClRoZXJlwqBpc8KgdGhp
-c8KgZnVuZMKgdGhhdMKgd2FzwqBrZWVwwqBpbsKgbXnCoGN1c3RvZHnCoHllYXJzwqBhZ2/CoGFu
-ZMKgScKgbmVlZA0KeW91csKgYXNzaXN0YW5jZcKgZm9ywqB0aGXCoHRyYW5zZmVycmluZ8Kgb2bC
-oHRoaXPCoGZ1bmTCoHRvwqB5b3VywqBiYW5rwqBhY2NvdW50DQpmb3LCoGJvdGjCoG9mwqB1c8Kg
-YmVuZWZpdMKgZm9ywqBsaWZlwqB0aW1lwqBpbnZlc3RtZW50wqBhbmTCoHRoZcKgYW1vdW50wqBp
-c8KgKFVTDQokMjcsNTAwLsKgTWlsbGlvbsKgRG9sbGFycykuDQoNCknCoGhhdmXCoGV2ZXJ5wqBp
-bnF1aXJ5wqBkZXRhaWxzwqB0b8KgbWFrZcKgdGhlwqBiYW5rwqBiZWxpZXZlwqB5b3XCoGFuZMKg
-cmVsZWFzZQ0KdGhlwqBmdW5kwqB0b8KgeW91csKgYmFua8KgYWNjb3VudMKgaW7CoHdpdGhpbsKg
-N8KgYmFua2luZ8Kgd29ya2luZ8KgZGF5c8Kgd2l0aA0KeW91csKgZnVsbMKgY28tb3BlcmF0aW9u
-wqB3aXRowqBtZcKgYWZ0ZXLCoHN1Y2Nlc3PCoE5vdGXCoDUwJcKgZm9ywqB5b3XCoHdoaWxlDQo1
-MCXCoGZvcsKgbWXCoGFmdGVywqBzdWNjZXNzwqBvZsKgdGhlwqB0cmFuc2ZlcsKgb2bCoHRoZcKg
-ZnVuZHPCoHRvwqB5b3VywqBiYW5rDQphY2NvdW50wqBva2F5Lg0KDQpXQUlUSU5HwqBUT8KgSEVB
-UsKgRlJPTcKgWU9VLg0KVEhBTktTLg0KDQogTXIgIG1vaGFtbWVkICAgc2hhbWVraCAsDQo=
+On 29/11/2021 13:10, Prathamesh Shete wrote:
+> When CMD13 is sent after switching to HS400 mode, the bus
+> is operating at either MMC_HIGH_26_MAX_DTR or MMC_HIGH_52_MAX_DTR.
+> To meet Tegra SDHCI requirement at HS400 mode, force SDHCI
+> interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
+> controller CAR clock and the interface clock are rate matched.
+
+This sounds like an issue with or without enhanced strobe?
+
+Also it seems more like a fix than "adding support".
+i.e. is this really "mmc: sdhci-tegra: Fix switch to HS400ES mode" ?
+
+> 
+> Signed-off-by: Prathamesh Shete <pshete@nvidia.com>
+> ---
+>  drivers/mmc/host/sdhci-tegra.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-tegra.c b/drivers/mmc/host/sdhci-tegra.c
+> index 387ce9cdbd7c..d800396d1112 100644
+> --- a/drivers/mmc/host/sdhci-tegra.c
+> +++ b/drivers/mmc/host/sdhci-tegra.c
+> @@ -123,6 +123,8 @@
+>  					 SDHCI_TRNS_BLK_CNT_EN | \
+>  					 SDHCI_TRNS_DMA)
+>  
+> +static void tegra_sdhci_set_clock(struct sdhci_host *host, unsigned int clock);
+
+Please move one of the functions so that the forward declaration is not necessary.
+
+> +
+>  struct sdhci_tegra_soc_data {
+>  	const struct sdhci_pltfm_data *pdata;
+>  	u64 dma_mask;
+> @@ -369,6 +371,16 @@ static void tegra_sdhci_hs400_enhanced_strobe(struct mmc_host *mmc,
+>  
+>  	sdhci_writel(host, val, SDHCI_TEGRA_VENDOR_SYS_SW_CTRL);
+>  
+> +	/*
+> +	 * When CMD13 is sent after switching to HS400 mode, the bus
+> +	 * is operating at either MMC_HIGH_26_MAX_DTR or
+> +	 * MMC_HIGH_52_MAX_DTR.
+> +	 * To meet Tegra SDHCI requirement at HS400 mode, force SDHCI
+> +	 * interface clock to MMC_HS200_MAX_DTR (200 MHz) so that host
+> +	 * controller CAR clock and the interface clock are rate matched.
+> +	 */
+> +	tegra_sdhci_set_clock(host, MMC_HS200_MAX_DTR);
+
+This being done irrespective of ios->enhanced_strobe, which doesn't seem
+right based on the comment?
+
+> +
+
+Please remove the blank line.
+
+>  }
+>  
+>  static void tegra_sdhci_reset(struct sdhci_host *host, u8 mask)
+> 
+

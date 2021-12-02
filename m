@@ -2,160 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BC7465C3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95605465C43
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:42:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352756AbhLBClQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:41:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44978 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350445AbhLBClM (ORCPT
+        id S1354832AbhLBCpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:45:25 -0500
+Received: from szxga02-in.huawei.com ([45.249.212.188]:16334 "EHLO
+        szxga02-in.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1350445AbhLBCoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:41:12 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06514C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 18:37:49 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id o13so56300558wrs.12
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 18:37:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=Wzqb8iWc4IA7cc3hO/Ueuzi7uxDq1v6KPhK8/gu3O2k=;
-        b=D/xc3sCLqDfcEE8dnlrbL/hY7h4ZHenQqbyY6By5miSkrrwWvGBof1kN6KrYTJR5Q8
-         u+qeK0Gfr8LoLSkVAxz3Ls5gTvVek+WQZwcRlkV9OvTf7u45kKzByd+n84JOwiAbGVuf
-         oYiIYa1vGcBPhjKzuhC3a74RN2UAMgTv+spG0OaU03/+6QPDFOXEnT1q1AdWtV9csBz3
-         zitkUkqDnfk//qZmpCa4bzR2DRhs3+ma61wurr4EG7mdZQ4neohlE4dPBlqdN7ERgr2E
-         3r+S7cGrx99jGd7eY7Gapu2ZQdVwK4WppYoPx42BoLzdRf/Is7FgzHSTbxr3TlRqKr6j
-         JkgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Wzqb8iWc4IA7cc3hO/Ueuzi7uxDq1v6KPhK8/gu3O2k=;
-        b=XRyjkCYvODnXfNrtXeMC1zWY5i5y39txmuNFUGcsRy/4LPefLxFDlVrNl2eAdw7+KA
-         g4mJ2DaGfRMqyAULPWRH6K69bQWUTws4IIgwd98whWxHy+krwUzqhZXtkZUARVoHx8VX
-         /bES6YVKrWIEV4feSP71H6Nln9m+zNyVOKpZLR+CzNoWjqIkoF1mDXtBVuugabwpDNfw
-         zjQ73la0Rjjjfqg0YN0p+hn6PE31CZmkCdCITIvuAGHk6NTxgqSCMd/+nPsE3jKJDG7r
-         T+dOLHGMqAGMT2bIDVWJgSZCha9mlObLjBjJHaoUXG2VHPkh94JVTVBzTKUMTiQFsQjD
-         bIPg==
-X-Gm-Message-State: AOAM531ZUUE6iPbuxZNaVS09jAGGYkBNHUvIWzrbqjNbNuTw9dIx/Rok
-        NTNmD2wI6MVuB2+h3qDt2pXJKA==
-X-Google-Smtp-Source: ABdhPJxB1qu52ApBFZjaO8eEs7Ko7RcYtljwQ1g/JPPllGD/lobv2GCjKW8HGGI2EGrnALCO+L5NZQ==
-X-Received: by 2002:adf:f042:: with SMTP id t2mr11312424wro.180.1638412668564;
-        Wed, 01 Dec 2021 18:37:48 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id b6sm891713wmq.45.2021.12.01.18.37.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 01 Dec 2021 18:37:48 -0800 (PST)
-Message-ID: <09814d45-3f85-5611-5866-b33ae28cc2bb@linaro.org>
-Date:   Thu, 2 Dec 2021 02:39:53 +0000
+        Wed, 1 Dec 2021 21:44:39 -0500
+Received: from dggpeml500020.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4J4Kv82KfJz91Mh;
+        Thu,  2 Dec 2021 10:40:36 +0800 (CST)
+Received: from dggpeml500017.china.huawei.com (7.185.36.243) by
+ dggpeml500020.china.huawei.com (7.185.36.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 2 Dec 2021 10:41:09 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpeml500017.china.huawei.com (7.185.36.243) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 2 Dec 2021 10:41:08 +0800
+Subject: Re: [PATCH -next 2/3] staging: rtl8192e: rtllib_module: fix error
+ handle case in alloc_rtllib()
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-staging@lists.linux.dev>,
+        <gregkh@linuxfoundation.org>, <paskripkin@gmail.com>
+References: <20211201095036.1763163-1-yangyingliang@huawei.com>
+ <20211201095036.1763163-3-yangyingliang@huawei.com>
+ <20211201095602.GB18178@kadam>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <31d8310f-edae-da8f-7ac4-e780db8a9973@huawei.com>
+Date:   Thu, 2 Dec 2021 10:41:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [RESEND PATCH v3 02/10] spmi: pmic-arb: do not ack and clear
- peripheral interrupts in cleanup_irq
-Content-Language: en-US
-To:     Fenglin Wu <quic_fenglinw@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sboyd@kernel.org
-Cc:     collinsd@codeaurora.org, subbaram@codeaurora.org,
-        tglx@linutronix.de, maz@kernel.org
-References: <1638403212-29265-1-git-send-email-quic_fenglinw@quicinc.com>
- <1638403212-29265-3-git-send-email-quic_fenglinw@quicinc.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <1638403212-29265-3-git-send-email-quic_fenglinw@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20211201095602.GB18178@kadam>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500017.china.huawei.com (7.185.36.243)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2021 00:00, Fenglin Wu wrote:
-> From: Subbaraman Narayanamurthy <subbaram@codeaurora.org>
-> 
-> Currently, cleanup_irq() is invoked when a peripheral's interrupt
-> fires and there is no mapping present in the interrupt domain of
-> spmi interrupt controller.
-> 
-> The cleanup_irq clears the arbiter bit, clears the pmic interrupt
-> and disables it at the pmic in that order. The last disable in
-> cleanup_irq races with request_irq() in that it stomps over the
-> enable issued by request_irq. Fix this by not writing to the pmic
-> in cleanup_irq. The latched bit will be left set in the pmic,
-> which will not send us more interrupts even if the enable bit
-> stays enabled.
-> 
-> When a client wants to request an interrupt, use the activate
-> callback on the irq_domain to clear latched bit. This ensures
-> that the latched, if set due to the above changes in cleanup_irq
-> or when the bootloader leaves it set, gets cleaned up, paving way
-> for upcoming interrupts to trigger.
-> 
-> With this, there is a possibility of unwanted triggering of
-> interrupt right after the latched bit is cleared - the interrupt
-> may be left enabled too. To avoid that, clear the enable first
-> followed by clearing the latched bit in the activate callback.
-> 
-> Signed-off-by: Subbaraman Narayanamurthy <subbaram@codeaurora.org>
-> [collinsd@codeaurora.org: fix merge conflict]
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
-> ---
->   drivers/spmi/spmi-pmic-arb.c | 15 +++++----------
->   1 file changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/spmi/spmi-pmic-arb.c b/drivers/spmi/spmi-pmic-arb.c
-> index da629cc..ce7ae99 100644
-> --- a/drivers/spmi/spmi-pmic-arb.c
-> +++ b/drivers/spmi/spmi-pmic-arb.c
-> @@ -492,16 +492,6 @@ static void cleanup_irq(struct spmi_pmic_arb *pmic_arb, u16 apid, int id)
->   	dev_err_ratelimited(&pmic_arb->spmic->dev, "%s apid=%d sid=0x%x per=0x%x irq=%d\n",
->   			__func__, apid, sid, per, id);
->   	writel_relaxed(irq_mask, pmic_arb->ver_ops->irq_clear(pmic_arb, apid));
-> -
-> -	if (pmic_arb_write_cmd(pmic_arb->spmic, SPMI_CMD_EXT_WRITEL, sid,
-> -			(per << 8) + QPNPINT_REG_LATCHED_CLR, &irq_mask, 1))
-> -		dev_err_ratelimited(&pmic_arb->spmic->dev, "failed to ack irq_mask = 0x%x for ppid = %x\n",
-> -				irq_mask, ppid);spmi: pmic-arb: cleanup unrequested irqs
-> -
-> -	if (pmic_arb_write_cmd(pmic_arb->spmic, SPMI_CMD_EXT_WRITEL, sid,
-> -			       (per << 8) + QPNPINT_REG_EN_CLR, &irq_mask, 1))
-> -		dev_err_ratelimited(&pmic_arb->spmic->dev, "failed to ack irq_mask = 0x%x for ppid = %x\n",
-> -				irq_mask, ppid);
->   }
->   
->   static int periph_interrupt(struct spmi_pmic_arb *pmic_arb, u16 apid)
-> @@ -674,6 +664,7 @@ static int qpnpint_irq_domain_activate(struct irq_domain *domain,
->   	u16 apid = hwirq_to_apid(d->hwirq);
->   	u16 sid = hwirq_to_sid(d->hwirq);
->   	u16 irq = hwirq_to_irq(d->hwirq);
-> +	u8 buf;
->   
->   	if (pmic_arb->apid_data[apid].irq_ee != pmic_arb->ee) {
->   		dev_err(&pmic_arb->spmic->dev, "failed to xlate sid = %#x, periph = %#x, irq = %u: ee=%u but owner=%u\n",
-> @@ -682,6 +673,10 @@ static int qpnpint_irq_domain_activate(struct irq_domain *domain,
->   		return -ENODEV;
->   	}
->   
-> +	buf = BIT(irq);
-> +	qpnpint_spmi_write(d, QPNPINT_REG_EN_CLR, &buf, 1);
-> +	qpnpint_spmi_write(d, QPNPINT_REG_LATCHED_CLR, &buf, 1);
-> +
->   	return 0;
->   }
->   
-> 
 
-Shouldn't this have a
+On 2021/12/1 17:56, Dan Carpenter wrote:
+> Almost perfect, but it needs one minor change.
+>
+> On Wed, Dec 01, 2021 at 05:50:35PM +0800, Yang Yingliang wrote:
+>> Some variables are leaked in the error handling in alloc_rtllib(), free
+>> the variables in the error path.
+>>
+>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>> ---
+> Please send this as a v4 patch with a little note here:
+>
+> v4: Fix crypt_info leak
+> v3: Fix more leaks.  Break it up into multple patches.
+> v2: Make rtllib_softmac_init() return error codes.
+>
+> You can probably put that in the 0/3 email.
+>
+>
+>>   drivers/staging/rtl8192e/rtllib_module.c | 16 ++++++++++++----
+>>   1 file changed, 12 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/staging/rtl8192e/rtllib_module.c b/drivers/staging/rtl8192e/rtllib_module.c
+>> index 64d9feee1f39..a3c74fa25cfa 100644
+>> --- a/drivers/staging/rtl8192e/rtllib_module.c
+>> +++ b/drivers/staging/rtl8192e/rtllib_module.c
+>> @@ -88,7 +88,7 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+>>   	err = rtllib_networks_allocate(ieee);
+>>   	if (err) {
+>>   		pr_err("Unable to allocate beacon storage: %d\n", err);
+>> -		goto failed;
+>> +		goto free_netdev;
+>>   	}
+>>   	rtllib_networks_initialize(ieee);
+>>   
+>> @@ -121,11 +121,13 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+>>   	ieee->hwsec_active = 0;
+>>   
+>>   	memset(ieee->swcamtable, 0, sizeof(struct sw_cam_table) * 32);
+>> -	rtllib_softmac_init(ieee);
+>> +	err = rtllib_softmac_init(ieee);
+>> +	if (err)
+>> +		goto free_networks;
+> This needs to free crypt_info;  This was my mistake in the email I sent
+> earlier.  Sorry!
+>
+>>   
+>>   	ieee->pHTInfo = kzalloc(sizeof(struct rt_hi_throughput), GFP_KERNEL);
+>>   	if (!ieee->pHTInfo)
+>> -		return NULL;
+>> +		goto free_softmac;
+>>   
+>>   	HTUpdateDefaultSetting(ieee);
+>>   	HTInitializeHTInfo(ieee);
+>> @@ -141,8 +143,14 @@ struct net_device *alloc_rtllib(int sizeof_priv)
+>>   
+>>   	return dev;
+>>   
+>> - failed:
+>> +free_softmac:
+>> +	rtllib_softmac_free(ieee);
+>> +	lib80211_crypt_info_free(&ieee->crypt_info);
+>> +free_networks:
+>> +	rtllib_networks_free(ieee);
+>> +free_netdev:
+>>   	free_netdev(dev);
+>> +
+>>   	return NULL;
+> Something like:
+>
+> free_softmac:
+> 	rtllib_softmac_free(ieee);
+> free_crypt_info:
+> 	lib80211_crypt_info_free(&ieee->crypt_info);
+> 	rtllib_networks_free(ieee);
+> free_netdev:
+>   	free_netdev(dev);
+Yes, you are right, I should find this mistake before I send the patch.
+I will send a v4 patch set with this fix.
 
-Fixes: 6bc546e71e50 ("spmi: pmic-arb: cleanup unrequested irqs")
-Fixes: 02abec3616c1 ("spmi: pmic-arb: rename pa_xx to pmic_arb_xx and 
-other cleanup")
-
-so we know to backport as necessary
-
----
-bod
-
+Thanks,
+Yang
+>
+> regards,
+> dan carpenter
+>
+> .

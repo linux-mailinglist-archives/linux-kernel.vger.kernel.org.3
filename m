@@ -2,223 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D1E1466D4F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FE29466D61
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345562AbhLBW6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 17:58:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38936 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232678AbhLBW6L (ORCPT
+        id S238951AbhLBXBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 18:01:34 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:12278 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S236694AbhLBXBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:58:11 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB6FC061757
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 14:54:48 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id np6-20020a17090b4c4600b001a90b011e06so935046pjb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 14:54:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Vfw913dxLQGDDDu3u0AH4o7CLm4UyARzu/jOwnTAzDg=;
-        b=zCVZOPDnH85lUefIRg9bWnj7MAId6D6aN+FVUw2OKz0F6YISk7zj6lYaztcaSCySD1
-         82ES1v/dJHv93WFEWnmV2/HDH0yJFGadeEkY0HnnRKRmtiSH6bQJTKDqx76mot+h083R
-         vStvRWP59Kco0YXYzeCtIBcfl2L3bdFA5uJjuTU1wUBn3tMeWiInOYQ1xr9EX5YpzzSi
-         P0HwqMDciy4NIVr0T/l5GOfP1lwGHosCkrgf2ciGZgcXkzp/4ZgtsX2p8QpWJSezbxSy
-         pTolQgF+pLwL/uPNEzHp0m7oRq3n+HDe4Wtf4rXBG5uEZVPFynN085c09LYe/oNLxOR5
-         vmLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Vfw913dxLQGDDDu3u0AH4o7CLm4UyARzu/jOwnTAzDg=;
-        b=15CAf8p+/BdbSxoUri6BHPHjDi8PhKezEjG4oaTuA+V33H/r3ueuq1Ctn8GChH3S62
-         eZPFNn4w44J5XvSan84oY/s/2oumyhiOQw4LrKpTeOVvMRKusUifpVoUubX/2Kp3qHCV
-         2rA8gVAa7R1dhTc3neSHzbfHI/YGfMOovTOqacDJC3/E6Ux4TEpXLU1Iv3UKU3nCSpMJ
-         uD4MrKJK3ybEQtdb8gDtHpXFMa7O/6L/lsI/40mrMiTrXM+cMZoEQ9APh/f/+GJWfQRp
-         II/zi4CG06wmkqiJIpyPBHS9VPmcyoBZAgBuNMnx3n8XVylQoUvpkNhuySZNyr5JNjf9
-         sW+g==
-X-Gm-Message-State: AOAM5337hlYZvy+YRXaZ7c1wB2yiJBn5XNySibv8Oxm++CO8KgxYvtvL
-        d52XGXuPxwwa8zH8ubYd2E+4/xWfZIDkaj8bQV2lBA==
-X-Google-Smtp-Source: ABdhPJwNWK1BZ6y85VRBKw2XnnhU2TW8bgHhFWv+lq+A4VRYCiBdHuU2rJQ1o76TWMR9SV0iQzkrAUpUSTIwVNHJ+Cg=
-X-Received: by 2002:a17:902:a717:b0:142:76bc:da69 with SMTP id
- w23-20020a170902a71700b0014276bcda69mr18556804plq.12.1638485687667; Thu, 02
- Dec 2021 14:54:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20211202041627.291625-1-aford173@gmail.com> <CAHCN7xJHuOFTQBQWk1yKsk3M0iDB7aKc0=L2DisUoSXVeO3xXQ@mail.gmail.com>
- <CAJ+vNU2t7Yp5OGtWj432Y-8hL62nQBbG58zM-gAj5YfuCO__sA@mail.gmail.com> <CAHCN7xJXMUHHBACuozY3nUdZ0QqHFLrmwrXnArtCKBG7+P4UZQ@mail.gmail.com>
-In-Reply-To: <CAHCN7xJXMUHHBACuozY3nUdZ0QqHFLrmwrXnArtCKBG7+P4UZQ@mail.gmail.com>
-From:   Tim Harvey <tharvey@gateworks.com>
-Date:   Thu, 2 Dec 2021 14:54:36 -0800
-Message-ID: <CAJ+vNU15MWx9t-KUJKZjwPbBZTU=KuRtGYzxgfhypENHKFJpiQ@mail.gmail.com>
-Subject: Re: [RFC V3 0/2] arm64: imx8mm: Enable Hantro VPUs
-To:     Adam Ford <aford173@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Nicolas Dufresne <nicolas@ndufresne.ca>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        linux-media <linux-media@vger.kernel.org>,
-        Adam Ford-BE <aford@beaconembedded.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-soc <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:HANTRO VPU CODEC DRIVER" 
-        <linux-rockchip@lists.infradead.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+        Thu, 2 Dec 2021 18:01:31 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2MGtXS029493;
+        Thu, 2 Dec 2021 22:58:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=kQ900pdpsfGN7oV8j0rCVyL20q9/KG0hJYA2IrvB/4E=;
+ b=kLGq8EeC0afJ71+AAyBQBvKGF/KqkaFEfSmNwGNIMRkodkKFEtveR1BRZ79sKjNh0Ctn
+ d6f1+G3/9blrO32OWA6Fo4fwyVVLbytPzhz5XfT8cNLwRnd1LvUEfwKyc8HaXabF4DVl
+ C1KpX+FSDIlMxfJdq7jQxAMil3VkkeAGC3TODqs7ZYoYAPS7HkxcLi3R3/4Jez+iqgFv
+ pru1lNr6Y+aWLmB5xcQLflX0mAFwHWKZfP7/Hy1mlH88liAQ6kdsO/TVL78/rOYafJwo
+ +itIT0Kfesaw5WmLvPlv8r+aTaqmLoASMBVGqG/OC79j4eOYI2as6VbHgVDIh/VgXGGv 8w== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cq6t5h1jx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 22:58:04 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2MYD7K031209;
+        Thu, 2 Dec 2021 22:56:03 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma06ams.nl.ibm.com with ESMTP id 3ckbxkrr0c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 22:56:03 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2MmUml29098286
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Dec 2021 22:48:30 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B6D10AE051;
+        Thu,  2 Dec 2021 22:56:00 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1D8C9AE045;
+        Thu,  2 Dec 2021 22:56:00 +0000 (GMT)
+Received: from sig-9-65-72-23.ibm.com (unknown [9.65.72.23])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  2 Dec 2021 22:55:59 +0000 (GMT)
+Message-ID: <0db4f4098e98b8feec7c28eca127bc450989d05a.camel@linux.ibm.com>
+Subject: Re: [PATCH v1 3/5] ima: limit including fs-verity's file digest in
+ measurement list
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 02 Dec 2021 17:55:59 -0500
+In-Reply-To: <YalHCz/FzQXKHx4u@sol.localdomain>
+References: <20211202215507.298415-1-zohar@linux.ibm.com>
+         <20211202215507.298415-4-zohar@linux.ibm.com>
+         <YalHCz/FzQXKHx4u@sol.localdomain>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-16.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: p4sWjcGLC2qOLDa9rORF1DOGsrnACCp-
+X-Proofpoint-GUID: p4sWjcGLC2qOLDa9rORF1DOGsrnACCp-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-02_15,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 priorityscore=1501
+ spamscore=0 adultscore=0 phishscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112020137
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 2, 2021 at 1:00 PM Adam Ford <aford173@gmail.com> wrote:
->
-> On Thu, Dec 2, 2021 at 12:54 PM Tim Harvey <tharvey@gateworks.com> wrote:
-> >
-> > On Thu, Dec 2, 2021 at 4:29 AM Adam Ford <aford173@gmail.com> wrote:
-> > >
-> > > On Wed, Dec 1, 2021 at 10:17 PM Adam Ford <aford173@gmail.com> wrote:
-> > > >
-> > > > The i.MX8M has two Hantro video decoders, called G1 and G2 which appear
-> > > > to be related to the video decoders used on the i.MX8MQ, but because of
-> > > > how the Mini handles the power domains, the VPU driver does not need to
-> > > > handle all the functions, so a new compatible flag is required.
-> > > >
-> > > > V3 is rebased from git://linuxtv.org/hverkuil/media_tree.git for-v5.17c
-> > > > This branch has support for VP9.
-> > > >
-> > > > I set cma=512M, but this may not be enough memory as some tests appeard to run out of memory
-> > > >
-> > > > V3 of this series has several changes:
-> > > >
-> > > > Update imx8m_vpu_hw to add missing 'reg' reference names for G2 and include references to VP9
-> > > > Update device tree to remove IMX8MQ_VPU_RESET, remove some duplicate vpu clock parenting
-> > > > Fix missing reg-names from vpu_g2 node.
-> > > > Apply patch [1] to manage the power domains powering down.
-> > > > [1] - https://lore.kernel.org/linux-arm-kernel/20211016210547.171717-1-marex@denx.de/t/
-> > > >
-> > > > With the above, the following Fluster scores are produced:
-> > > >
-> > > > G1:
-> > > > ./fluster.py run -dGStreamer-H.264-V4L2SL-Gst1.0
-> > > > Ran 90/135 tests successfully               in 74.406 secs
-> > > >
-> > > > ./fluster.py run -d GStreamer-VP8-V4L2SL-Gst1.0
-> > > > Ran 55/61 tests successfully               in 8.080 secs
-> > > >
-> > > > G2:
-> > > > ./fluster.py run -d GStreamer-VP9-V4L2SL-Gst1.0
-> > > > Ran 127/303 tests successfully               in 203.873 secs
-> > > >
-> > > > Fluster and G-Streamer were both built from their respective git repos using their respective master/main branches.
-> > > >
-> > >
-> > > I should note, that both interrupts appear to be triggering.
-> > >
-> > > # cat /proc/interrupts |grep codec
-> > >  57:      13442          0          0          0     GICv3  39 Level
-> > >   38300000.video-codec
-> > >  58:       7815          0          0          0     GICv3  40 Level
-> > >   38310000.video-codec
-> > >
-> >
-> > Adam,
-> >
-> > On another thread you had let me know that you also removed the reset
-> > from the pgc_vpumix power domain which does appear to resolve the
-> > hang:
-> >
-> > diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> > b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> > index eb9dcd9d1a31..31710af544dc 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> > @@ -681,7 +681,6 @@
-> >                                                 clocks = <&clk
-> > IMX8MM_CLK_VPU_DEC_ROOT>;
-> >                                                 assigned-clocks =
-> > <&clk IMX8MM_CLK_VPU_BUS>;
-> >                                                 assigned-clock-parents
-> > = <&clk IMX8MM_SYS_PLL1_800M>;
-> > -                                               resets = <&src
-> > IMX8MQ_RESET_VPU_RESET>;
-> >                                         };
-> >
-> >                                         pgc_vpu_g1: power-domain@7 {
-> >
-> > That would make such a patch have a 'Fixes commit d39d4bb15310
-> > ("arm64: dts: imx8mm: add GPC node")' but of course that vpu domain
-> > isn't active until your series so I'm not sure if we should send this
-> > separate or squash it with "arm64: dts: imx8mm: Enable VPU-G1 and
-> > VPU-G2". I'm also not clear if removing the reset requires some
-> > further discussion with Lucas.
->
-> Unless there is objection from Lucas, I'll likely make it the first
-> patch in the series marking it with a fixes tag so it gets backported,
-> then the rest of the series would be adding the bindings, update the
-> driver and adding the G1 and G2 nodes.
->
+On Thu, 2021-12-02 at 14:22 -0800, Eric Biggers wrote:
+> On Thu, Dec 02, 2021 at 04:55:05PM -0500, Mimi Zohar wrote:
+> > Without the file signature included in the IMA measurement list, the type
+> > of file digest is unclear.  Set up the plumbing to limit including
+> > fs-verity's file digest in the IMA measurement list based on whether the
+> > template name is ima-sig.  In the future, this could be relaxed to include
+> > any template format that includes the file signature.
+> > 
+> 
+> Does it make sense to tie IMA's fs-verity support to files having signatures?
+> What about IMA audit mode?  I thought that is just about collecting hashes, and
+> has nothing to do with signatures.
 
-Adam,
+There's IMA-measurement, IMA-audit, and IMA-appraisal.  IMA-audit
+refers to adding the file hash to the audit log record.  IMA-
+measurement stores the collected hash in the IMA measurement list and
+extends the TPM with the measurement, if there's a TPM.  Based on
+policy, determines whether the file is measured, audited, and/or
+appraised.  I actually do think it makes sense to require a signature,
+but not necessarily enforce signature verification, in order to
+differentiate the type of measurement being included in the measurement
+list.
 
-I've also gotten decode+display working for vp8/h264 using this series
-and gstreamer-1.19.3 (although I have to use software colorspace
-conversion)
+thanks,
 
-# source: vp8 software encode on x86
-gst-launch-1.0 -v videotestsrc ! vp8enc ! rtpvp8pay ! udpsink
-host=172.24.33.15 port=9001
-# sink: vp8 hardware decode on imx8mm
-gst-launch-1.0 udpsrc port=9001 caps = 'application/x-rtp,
-media=(string)video, clock-rate=(int)90000, encoding-name=(string)VP8,
-payload=(int)96, ssrc=(uint)3363940374,
-timestamp-offset=(uint)3739685909, seqnum-offset=(uint)28161,
-a-framerate=(string)30' ! rtpvp8depay ! v4l2slvp8dec ! videoconvert !
-kmssink
+Mimi
 
-# source: h264 software encode on x86
-gst-launch-1.0 -v videotestsrc ! video/x-raw,width=800,height=480 !
-x264enc ! rtph264pay ! udpsink host=172.24.33.15 port=9001
-# sink: h264 hardware decode on imx8mm
-gst-launch-1.0 udpsrc port=9001 caps = 'application/x-rtp,
-media=(string)video, clock-rate=(int)90000,
-encoding-name=(string)H264, packetization-mode=(string)1,
-profile-level-id=(string)64001f,
-sprop-parameter-sets=(string)"Z2QAH6zZQMg9sBagwCC0oAAAAwAgAAAHkeMGMsA\=\,aOvssiw\=",
-payload=(int)96, ssrc=(uint)2753453329,
-timestamp-offset=(uint)3593065282, seqnum-offset=(uint)12297,
-a-framerate=(string)30' ! rtph264depay ! v4l2slh264dec ! videoconvert
-! kmssink
-
-# source: vp9 software encode on x86
-gst-launch-1.0 -v videotestsrc ! video/x-raw,width=800,height=480 !
-vp9enc ! rtpvp9pay ! udpsink host=172.24.33.15 port=9001
-# sink: vp9 hardware decode on imx8mm
-gst-launch-1.0 udpsrc port=9001 caps = 'application/x-rtp,
-media=(string)video, clock-rate=(int)90000, encoding-name=(string)VP9,
-payload=(int)96, ssrc=(uint)2246741422,
-timestamp-offset=(uint)3441735424, seqnum-offset=(uint)30250,
-a-framerate=(string)30' ! rtpvp9depay ! v4l2slvp9dec ! fakesink
-^^^ this fails with no-negotiated
-
-Note I have to use videoconvert because v4l2slvp8dev src is
-NV12/YUY2/NV12_32L32 and from testing only BGRx appears compatible
-with kmssink (even though gst-inspect kmssink says it can sink
-NV12/YUY2). With the 800x480 resolution of my display the CPU overhead
-of software colorspcae conversion with videoconvert only about 9%
-
-I haven't yet gotten vp9 decode+display working yet as 'rtpvp9depay !
-v4l2slvp9dec ! fakesink' does not negotiate and it might be because my
-vp9enc source is on an old gstreamer 1.16.
-
-When you post the next series please add:
-Tested-By: Tim Harvey <tharvey@gateworks.com>

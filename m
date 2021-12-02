@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 64ABE465F08
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 08:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3640A465F0E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 08:59:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355925AbhLBIC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 03:02:26 -0500
-Received: from out30-56.freemail.mail.aliyun.com ([115.124.30.56]:52457 "EHLO
-        out30-56.freemail.mail.aliyun.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S230274AbhLBICY (ORCPT
+        id S1355954AbhLBIDE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Dec 2021 03:03:04 -0500
+Received: from frasgout.his.huawei.com ([185.176.79.56]:4189 "EHLO
+        frasgout.his.huawei.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230274AbhLBIDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:02:24 -0500
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Uz9BbE7_1638431940;
-Received: from localhost.localdomain(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0Uz9BbE7_1638431940)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Thu, 02 Dec 2021 15:59:01 +0800
-From:   Xin Hao <xhao@linux.alibaba.com>
-To:     sj@kernel.org
-Cc:     xhao@linux.alibaba.com, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND MERGE REQUEST] mm/damon: move damon_rand() definition into damon.h
-Date:   Thu,  2 Dec 2021 15:58:59 +0800
-Message-Id: <20211202075859.51341-1-xhao@linux.alibaba.com>
-X-Mailer: git-send-email 2.31.0
+        Thu, 2 Dec 2021 03:03:03 -0500
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4J4StZ1WDLz67x6V;
+        Thu,  2 Dec 2021 15:55:34 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.20; Thu, 2 Dec 2021 08:59:39 +0100
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2308.020;
+ Thu, 2 Dec 2021 08:59:39 +0100
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     "deven.desai@linux.microsoft.com" <deven.desai@linux.microsoft.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "agk@redhat.com" <agk@redhat.com>,
+        "snitzer@redhat.com" <snitzer@redhat.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "eparis@redhat.com" <eparis@redhat.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "dm-devel@redhat.com" <dm-devel@redhat.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fscrypt@vger.kernel.org" <linux-fscrypt@vger.kernel.org>,
+        "linux-audit@redhat.com" <linux-audit@redhat.com>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "tusharsu@linux.microsoft.com" <tusharsu@linux.microsoft.com>
+Subject: RE: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Thread-Topic: [RFC][PATCH] device mapper: Add builtin function dm_get_status()
+Thread-Index: AQHX5tHI6VSZDPA0J0GM0KIP7fuaeKweu+CAgAAaFvA=
+Date:   Thu, 2 Dec 2021 07:59:38 +0000
+Message-ID: <e57d2d23ec7845febb79ca4476c73fcb@huawei.com>
+References: <81d5e825-1ee2-8f6b-cd9d-07b0f8bd36d3@linux.microsoft.com>
+ <20211201163708.3578176-1-roberto.sassu@huawei.com>
+ <Yahz1SYRG1CQIh0z@infradead.org>
+In-Reply-To: <Yahz1SYRG1CQIh0z@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.204.63.33]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-damon_rand() is called in three files:damon/core.c, damon/
-paddr.c, damon/vaddr.c, i think there is no need to redefine
-this twice, So move it to damon.h will be a good choice.
+> From: Christoph Hellwig [mailto:hch@infradead.org]
+> Sent: Thursday, December 2, 2021 8:21 AM
+> On Wed, Dec 01, 2021 at 05:37:08PM +0100, Roberto Sassu wrote:
+> > Users of the device mapper driver might want to obtain a device status,
+> > with status types defined in the status_type_t enumerator.
+> 
+> The patch looks really odd.  And without the corresponding user of your
+> new functionality it is entirely unreviewable anyway.
 
-Signed-off-by: Xin Hao <xhao@linux.alibaba.com>
-Reviewed-by: SeongJae Park <sj@kernel.org>
----
- include/linux/damon.h   | 4 ++++
- mm/damon/core.c         | 4 ----
- mm/damon/prmtv-common.h | 4 ----
- 3 files changed, 4 insertions(+), 8 deletions(-)
+Hi Christoph
 
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index 00ad96f2ec10..c6df025d8704 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -11,12 +11,16 @@
- #include <linux/mutex.h>
- #include <linux/time64.h>
- #include <linux/types.h>
-+#include <linux/random.h>
+ok, I will send it together with a patch for a not yet accepted
+software, Integrity Policy Enforcement (IPE), that will be
+the primary user of the introduced functionality.
 
- /* Minimal region size.  Every damon_region is aligned by this. */
- #define DAMON_MIN_REGION	PAGE_SIZE
- /* Max priority score for DAMON-based operation schemes */
- #define DAMOS_MAX_SCORE		(99)
+Regarding the patch itself, could you please provide a more
+detailed explanation?
 
-+/* Get a random number in [l, r) */
-+#define damon_rand(l, r) (l + prandom_u32_max(r - l))
-+
- /**
-  * struct damon_addr_range - Represents an address region of [@start, @end).
-  * @start:	Start address of the region (inclusive).
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 4d2c3a0c7c8a..bdec32ef78c0 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -11,7 +11,6 @@
- #include <linux/delay.h>
- #include <linux/kthread.h>
- #include <linux/mm.h>
--#include <linux/random.h>
- #include <linux/slab.h>
- #include <linux/string.h>
+Thanks
 
-@@ -23,9 +22,6 @@
- #define DAMON_MIN_REGION 1
- #endif
+Roberto
 
--/* Get a random number in [l, r) */
--#define damon_rand(l, r) (l + prandom_u32_max(r - l))
--
- static DEFINE_MUTEX(damon_lock);
- static int nr_running_ctxs;
-
-diff --git a/mm/damon/prmtv-common.h b/mm/damon/prmtv-common.h
-index 61f27037603e..e790cb5f8fe0 100644
---- a/mm/damon/prmtv-common.h
-+++ b/mm/damon/prmtv-common.h
-@@ -6,10 +6,6 @@
-  */
-
- #include <linux/damon.h>
--#include <linux/random.h>
--
--/* Get a random number in [l, r) */
--#define damon_rand(l, r) (l + prandom_u32_max(r - l))
-
- struct page *damon_get_page(unsigned long pfn);
-
---
-2.31.0
+HUAWEI TECHNOLOGIES Duesseldorf GmbH, HRB 56063
+Managing Director: Li Peng, Zhong Ronghua

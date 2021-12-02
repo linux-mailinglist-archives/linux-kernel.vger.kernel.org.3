@@ -2,149 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F02465BF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58A5465BF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:00:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350100AbhLBCDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:03:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36602 "EHLO
+        id S1350403AbhLBCEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349422AbhLBCDa (ORCPT
+        with ESMTP id S1349422AbhLBCEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:03:30 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0146C061756
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 18:00:08 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id p18so19094630plf.13
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 18:00:08 -0800 (PST)
+        Wed, 1 Dec 2021 21:04:06 -0500
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5455CC061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 18:00:45 -0800 (PST)
+Received: by mail-ot1-x32a.google.com with SMTP id n17-20020a9d64d1000000b00579cf677301so37916092otl.8
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 18:00:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=ieez22Xn2l5HWg/32xD5LElmnAc6m+5OIzBSW88ykGA=;
-        b=G0z4qsx02gTJpOX+id+WDt87iiCC68/pLc8/RHTHy93ZaRCC/cpz/VtsZ5QLq6NhsC
-         pztYoE3cxmb1ab05i+mKIC8ML+IoYX2JvCedMYG/dA5g4rEg3w2gyuXKxfic5SWkfGb+
-         LTzmn0ERm4vLCwinV2Q7f64T7CvStCYLOXGIoBC/JED1+H3JdUB9Rafl3aySZq2PFK+D
-         j8FA4sR8WNSfp7GYg67MnxS2CunppQgmHJnEXulsOfQJjagvmDJOLOMmlhUfNCfaq2x+
-         Msm/OAxbLxPfZ954U2c9p631E4TYd+VGgfnvhf+iALAZ45wlstnB6aDZPFFAYACiiRYn
-         9c3w==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=2Vc3Qabf4OJ6DDpi6tStMrF6zk7jIEQOWBd5M271vBY=;
+        b=bABFGGIVEbx5sfldUGK4NBiPfHgzxWifNufpKAFs1l0E1qYqdsAlU/JhyMaEnhc+6K
+         Y6b5lJUlupOR+1BM5RRnglqibnnKS+t2tQZx/FXxW3FxlRieNNXWtYun+ks6koUSEg5J
+         WdnURQqaR+vq1/2JDv1+YYtL31SKlzj/Dmw+2p4K3Tw4Yph8Q91p6o6mfwL5toGKDWrW
+         wEu3JlpCWklxkPZJ1G8ZkSvNg5VcQ8fM5v+Fr4RkhZS05caCnmaGS/0L4Ly4XSAIDNHA
+         dyesF+2tyOLnfRPCxf9k93eyRuyTe1dXAyIq/8EhCBQCKWcxXDjmmlww5+Ogepgp9MLp
+         oFsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=ieez22Xn2l5HWg/32xD5LElmnAc6m+5OIzBSW88ykGA=;
-        b=4OaA2QLJSyRh7A2aJ4zeu41lTGVEL8zLvm1zLyfgao2U0H2EutbuQrhGFOwNGx6R20
-         kQ0x3Dz8U7DFLaxNqWQPTHIOOSvymzLTQ5QJ8RXN0H1o2apvM9F24UIgpAOaDn639o+F
-         PshacHNlvbMNvSXjU1qPvQ9AcPBS5Ti0iBjtAuPXdYJx48eksk716EEvIbUgP21i+sSM
-         MrgkiMVm1yr+OlKdM9K9Ehzuo4HkRFiraKVkvBpwfwJtO18TGmJrXdT33fGGLzXjzX3p
-         BPJygdLnTcEK8e7/aqWxiJjiDBFlteFxEmNwPRIfe5ixnFZ4LzGQ6PlyszFMxqDAuddc
-         67Eg==
-X-Gm-Message-State: AOAM533UwQSCeHeq55xtgG5gz80LBsfSy4KOLEbMOOqNWWwjfrHZ3eDg
-        ckOLkOfQ/054sIOMqal84SBsXQ==
-X-Google-Smtp-Source: ABdhPJxNBM72YGsKSZuE+5oJQdw89IebyEem9LDSzk1Pcg1GjafGCYFG2d6Z2Cymjn7sJ6Jwu52nlQ==
-X-Received: by 2002:a17:90b:3848:: with SMTP id nl8mr2408510pjb.221.1638410408016;
-        Wed, 01 Dec 2021 18:00:08 -0800 (PST)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id lr6sm550689pjb.0.2021.12.01.18.00.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 18:00:07 -0800 (PST)
-Date:   Thu, 2 Dec 2021 02:00:03 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Anup Patel <anup.patel@wdc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Atish Patra <atish.patra@wdc.com>,
-        David Hildenbrand <david@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        linux-mips@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-ppc@vger.kernel.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Wei Huang <wei.huang2@amd.com>
-Subject: Re: [PATCH v2 11/43] KVM: Don't block+unblock when halt-polling is
- successful
-Message-ID: <Yagoo7R8P5xVilsj@google.com>
-References: <20211009021236.4122790-1-seanjc@google.com>
- <20211009021236.4122790-12-seanjc@google.com>
- <cceb33be9e2a6ac504bb95a7b2b8cf5fe0b1ff26.camel@redhat.com>
- <4e883728e3e5201a94eb46b56315afca5e95ad9c.camel@redhat.com>
- <YaUNBfJh35WXMV0M@google.com>
- <496c2fc6-26b0-9b5d-32f4-2f9e9dd6a064@redhat.com>
- <YaUiEquKYi5eqWC0@google.com>
- <880a5727-69d1-72a1-b129-b053781625ad@redhat.com>
- <458c0819a578ba854f00089bc312c8faa177a81a.camel@redhat.com>
- <32eabe7d270e5a466ba2d9345b4270b8fe27700c.camel@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=2Vc3Qabf4OJ6DDpi6tStMrF6zk7jIEQOWBd5M271vBY=;
+        b=ilEdyigb4nsQjtzl5am4BZ5oXBeKA05qPYfA+zQseH180JgL7lL63xIUxc5jlP0aLl
+         HRgePGmLkeuvWAbyThL2w7mBUjIgVrheJCpQflqCN4QTsWmfk6H6rK8BxkhmRI/EXM0b
+         3lEjUbQgyGgk/tBmLJEJLuzgYLej0jwUxGteWdpiiWidjr45X541WhNmeX5jB9Ye/RCP
+         SoQRj9zoJqcczQb3I0Lk+rKV94Rv6T4VDG6pFM6lcBR6pM4Tg4qT+atGwzMYlawbEypz
+         ZjM9LS8w4lam9rDQXlaVyeCEE4ujCEylhwN21uI/q3naySCTV6Z8PE9xydDWqHmb6O1F
+         92fQ==
+X-Gm-Message-State: AOAM532bPWo31+X2bLQANDmA4fyWu/oc1qXKR4FfrEyh2AD8RZsSorkr
+        uSchyTWURNEfOBgKU9xnh5RIesIFRtfneCRV7B3jKw==
+X-Google-Smtp-Source: ABdhPJw8tTDONQzJQmG6nHE3AXUUTh7Sma4wvYXt/tgi5iHBWwjT1b2cetr3Ow9yWiJVbgrVCqBjocL5pcSyZdUhwiA=
+X-Received: by 2002:a9d:ed6:: with SMTP id 80mr9139384otj.35.1638410444735;
+ Wed, 01 Dec 2021 18:00:44 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <32eabe7d270e5a466ba2d9345b4270b8fe27700c.camel@redhat.com>
+References: <20211110165720.30242-1-zajec5@gmail.com>
+In-Reply-To: <20211110165720.30242-1-zajec5@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 2 Dec 2021 03:00:08 +0100
+Message-ID: <CACRpkdYcv92JrxJcSbxkH=AXZDDph2y18hew16yhC=PaL_jYsw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: convert controller description
+ to the json-schema
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021, Maxim Levitsky wrote:
-> On Tue, 2021-11-30 at 00:53 +0200, Maxim Levitsky wrote:
-> > On Mon, 2021-11-29 at 20:18 +0100, Paolo Bonzini wrote:
-> > Basically what I see that
-> >  
-> > 1. vCPU2 disables is_running in avic physical id cache
-> > 2. vCPU2 checks that IRR is empty and it is
-> > 3. vCPU2 does schedule();
-> >  
-> > and it keeps on sleeping forever. If I kick it via signal 
-> > (like just doing 'info registers' qemu hmp command
-> > or just stop/cont on the same hmp interface, the
-> > vCPU wakes up and notices that IRR suddenly is not empty,
-> > and the VM comes back to life (and then hangs after a while again
-> > with the same problem....).
-> >  
-> > As far as I see in the traces, the bit in IRR came from
-> > another VCPU who didn't respect the ir_running bit and didn't get 
-> > AVIC_INCOMPLETE_IPI VMexit.
-> > I can't 100% prove it yet, but everything in the trace shows this.
+On Wed, Nov 10, 2021 at 5:57 PM Rafa=C5=82 Mi=C5=82ecki <zajec5@gmail.com> =
+wrote:
 
-...
+> From: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
+>
+> This helps validating DTS and writing YAML files.
+>
+> Signed-off-by: Rafa=C5=82 Mi=C5=82ecki <rafal@milecki.pl>
 
-> I am now almost sure that this is errata #1235.
-> 
-> I had attached a kvm-unit-test I wrote (patch against master of
-> https://gitlab.com/kvm-unit-tests/kvm-unit-tests.git/) which is able to
-> reproduce the issue on stock 5.15.0 kernel (*no patches applied at all*)
-> after just few seconds.  If kvm is loaded without halt-polling (that is
-> halt_poll_ns=0 is used).
-> 
-> Halt polling and/or Sean's patch are not to blame, it just changes timeing.
-> With Sean's patch I don't need to disable half polling.
+Patch applied!
 
-Hmm, that suggests the bug/erratum is due to the CPU consuming stale data from #4
-for the IsRunning check in #5, or retiring uops for the IsRunning check before
-retiring the vIRR update.  It would be helpful if the erratum actually provided
-info on the "highly specific and detailed set of internal timing conditions". :-/
-
-  4. Lookup the vAPIC backing page address in the Physical APIC table using the
-     guest physical APIC ID as an index into the table.
-  5. For every valid destination:
-     - Atomically set the appropriate IRR bit in each of the destinations’ vAPIC
-       backing page.
-     - Check the IsRunning status of each destination.
+Yours,
+Linus Walleij

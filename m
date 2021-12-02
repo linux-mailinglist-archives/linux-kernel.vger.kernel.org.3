@@ -2,35 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCEF465B3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:45:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E614465B3E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:45:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354947AbhLBAs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:48:28 -0500
-Received: from sin.source.kernel.org ([145.40.73.55]:58712 "EHLO
-        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344514AbhLBArF (ORCPT
+        id S1344649AbhLBAsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:48:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47634 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1354714AbhLBArF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 1 Dec 2021 19:47:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E237C061574;
+        Wed,  1 Dec 2021 16:43:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id D97A2CE2142;
+        by sin.source.kernel.org (Postfix) with ESMTPS id DE565CE2144;
         Thu,  2 Dec 2021 00:43:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB0C8C58323;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF652C5831C;
         Thu,  2 Dec 2021 00:43:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638405818;
-        bh=H6iGr+5NaCUtqsPo+PjOMSuWeKaEvUsxZhFUGuls/5I=;
+        bh=eCkpJNKUZfbEDR24zCrJIaryfdNqV7jgxV8FdSPXU98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QBV8RDuLQxcindlYciRWcbBUw7/ESd+fkN/kImdGdfYMS2y1QclRsutKPSvxbuEov
-         vplKIeFY6yvl4OXKDThibtK7MCIQilB+GNgNGUbhR3VHfqo83LyBaa88x6RKH3jYmD
-         SR6heaklnbi7mx3kuQOpPAOnK90BXdwkM+/61hQWQq1GldbCkkbDz2fK6pnH8ZCJpT
-         XG2Ewr2oDahZ35G44FBwL0d/mnT5uc01PIxfyvmGI6/ouY7xFYOtbBb5Ogk6lfy/62
-         gu+/8p7Fd8Vf6ORoDEMTP1nPE9v9wb+2yHa5abCaSzaEFYGZSXNc3S3JoslJBBoz3U
-         /Bzts099EmdBg==
+        b=Vzsw6XcsvDqmIq6jwJiPcJ/vGzBjHp9GEfDhEGJTTgDL0++NSlEmLQ5mK6nwWb1fD
+         2Q7oNVVznESivHkHJFnWGi0dyqtUg41joPoKZcNxci/STDvsd3zDGOFkKjwDq5ix4e
+         VYfLGfYAykdhSore2rdLJ4kTGI1YkrqsHBwUjL6YNtOpVUH3Wp4Rc5vFhbGBcK1lRX
+         tUKRQ41KUKApDwonGqHMXveXKkWhyroRfFNvXCR0ywT08wFsApuM0hZpqa4OupiQaC
+         Az0f8sP9VILf3sd1Xh+r4gUvAAVlZkCtjhmg8Vw+MO8vnq/eSKv/RFiwmeEomSpuOq
+         E7CBehQoSmCww==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 593B95C12AF; Wed,  1 Dec 2021 16:43:38 -0800 (PST)
+        id 5AFCB5C12B3; Wed,  1 Dec 2021 16:43:38 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
@@ -42,9 +45,9 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
         Li Zhijian <zhijianx.li@intel.com>,
         Davidlohr Bueso <dbueso@suse.de>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 10/17] rcuscale: Always log error message
-Date:   Wed,  1 Dec 2021 16:43:29 -0800
-Message-Id: <20211202004337.3130175-10-paulmck@kernel.org>
+Subject: [PATCH rcu 11/17] scftorture: Always log error message
+Date:   Wed,  1 Dec 2021 16:43:30 -0800
+Message-Id: <20211202004337.3130175-11-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20211202004245.GA3129966@paulmck-ThinkPad-P17-Gen-1>
 References: <20211202004245.GA3129966@paulmck-ThinkPad-P17-Gen-1>
@@ -62,54 +65,46 @@ Acked-by: Davidlohr Bueso <dbueso@suse.de>
 Signed-off-by: Li Zhijian <zhijianx.li@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/rcuscale.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+ kernel/scftorture.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index 228f143bf935d..5e4f1f83d38e7 100644
---- a/kernel/rcu/rcuscale.c
-+++ b/kernel/rcu/rcuscale.c
-@@ -50,8 +50,8 @@ MODULE_AUTHOR("Paul E. McKenney <paulmck@linux.ibm.com>");
- 	pr_alert("%s" SCALE_FLAG " %s\n", scale_type, s)
- #define VERBOSE_SCALEOUT_STRING(s) \
- 	do { if (verbose) pr_alert("%s" SCALE_FLAG " %s\n", scale_type, s); } while (0)
--#define VERBOSE_SCALEOUT_ERRSTRING(s) \
--	do { if (verbose) pr_alert("%s" SCALE_FLAG "!!! %s\n", scale_type, s); } while (0)
-+#define SCALEOUT_ERRSTRING(s) \
-+	pr_alert("%s" SCALE_FLAG "!!! %s\n", scale_type, s)
+diff --git a/kernel/scftorture.c b/kernel/scftorture.c
+index a0df767897a1d..dcb0410950e45 100644
+--- a/kernel/scftorture.c
++++ b/kernel/scftorture.c
+@@ -41,8 +41,7 @@
+ #define VERBOSE_SCFTORTOUT(s, x...) \
+ 	do { if (verbose) pr_alert(SCFTORT_FLAG s "\n", ## x); } while (0)
  
- /*
-  * The intended use cases for the nreaders and nwriters module parameters
-@@ -514,11 +514,11 @@ rcu_scale_cleanup(void)
- 	 * during the mid-boot phase, so have to wait till the end.
- 	 */
- 	if (rcu_gp_is_expedited() && !rcu_gp_is_normal() && !gp_exp)
--		VERBOSE_SCALEOUT_ERRSTRING("All grace periods expedited, no normal ones to measure!");
-+		SCALEOUT_ERRSTRING("All grace periods expedited, no normal ones to measure!");
- 	if (rcu_gp_is_normal() && gp_exp)
--		VERBOSE_SCALEOUT_ERRSTRING("All grace periods normal, no expedited ones to measure!");
-+		SCALEOUT_ERRSTRING("All grace periods normal, no expedited ones to measure!");
- 	if (gp_exp && gp_async)
--		VERBOSE_SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
-+		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
+-#define VERBOSE_SCFTORTOUT_ERRSTRING(s, x...) \
+-	do { if (verbose) pr_alert(SCFTORT_FLAG "!!! " s "\n", ## x); } while (0)
++#define SCFTORTOUT_ERRSTRING(s, x...) pr_alert(SCFTORT_FLAG "!!! " s "\n", ## x)
  
- 	if (torture_cleanup_begin())
- 		return;
-@@ -845,7 +845,7 @@ rcu_scale_init(void)
- 	reader_tasks = kcalloc(nrealreaders, sizeof(reader_tasks[0]),
- 			       GFP_KERNEL);
- 	if (reader_tasks == NULL) {
--		VERBOSE_SCALEOUT_ERRSTRING("out of memory");
-+		SCALEOUT_ERRSTRING("out of memory");
- 		firsterr = -ENOMEM;
+ MODULE_LICENSE("GPL");
+ MODULE_AUTHOR("Paul E. McKenney <paulmck@kernel.org>");
+@@ -584,14 +583,14 @@ static int __init scf_torture_init(void)
+ 	if (weight_resched1 == 0 && weight_single1 == 0 && weight_single_rpc1 == 0 &&
+ 	    weight_single_wait1 == 0 && weight_many1 == 0 && weight_many_wait1 == 0 &&
+ 	    weight_all1 == 0 && weight_all_wait1 == 0) {
+-		VERBOSE_SCFTORTOUT_ERRSTRING("all zero weights makes no sense");
++		SCFTORTOUT_ERRSTRING("all zero weights makes no sense");
+ 		firsterr = -EINVAL;
  		goto unwind;
  	}
-@@ -865,7 +865,7 @@ rcu_scale_init(void)
- 		kcalloc(nrealwriters, sizeof(*writer_n_durations),
- 			GFP_KERNEL);
- 	if (!writer_tasks || !writer_durations || !writer_n_durations) {
--		VERBOSE_SCALEOUT_ERRSTRING("out of memory");
-+		SCALEOUT_ERRSTRING("out of memory");
+ 	if (IS_BUILTIN(CONFIG_SCF_TORTURE_TEST))
+ 		scf_sel_add(weight_resched1, SCF_PRIM_RESCHED, false);
+ 	else if (weight_resched1)
+-		VERBOSE_SCFTORTOUT_ERRSTRING("built as module, weight_resched ignored");
++		SCFTORTOUT_ERRSTRING("built as module, weight_resched ignored");
+ 	scf_sel_add(weight_single1, SCF_PRIM_SINGLE, false);
+ 	scf_sel_add(weight_single_rpc1, SCF_PRIM_SINGLE_RPC, true);
+ 	scf_sel_add(weight_single_wait1, SCF_PRIM_SINGLE, true);
+@@ -622,7 +621,7 @@ static int __init scf_torture_init(void)
+ 		nthreads = num_online_cpus();
+ 	scf_stats_p = kcalloc(nthreads, sizeof(scf_stats_p[0]), GFP_KERNEL);
+ 	if (!scf_stats_p) {
+-		VERBOSE_SCFTORTOUT_ERRSTRING("out of memory");
++		SCFTORTOUT_ERRSTRING("out of memory");
  		firsterr = -ENOMEM;
  		goto unwind;
  	}

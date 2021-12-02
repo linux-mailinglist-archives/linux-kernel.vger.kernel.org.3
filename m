@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C89374660B5
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF3374660BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:52:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356639AbhLBJzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:55:52 -0500
-Received: from msg-1.mailo.com ([213.182.54.11]:32868 "EHLO msg-1.mailo.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356695AbhLBJyo (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:54:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=net-c.es; s=mailo;
-        t=1638438675; bh=5f/DPkMqinmPlh73ZX8ZjV8oWSQFvI1Ht0rbZIgEoTU=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=m4xkznXL5BtxZv6snz0bnTbM6TebEMl35MrLAeN0vr4U8KdsbHHIgnEM2z1XXjU1Z
-         QK+o1teqMdATJD3pIZTXzYil+JM2TpIewjIV2WVfm7mpZD2bq/JZu6aoPLVYszWnGV
-         5HFI+BND1F4LyXz/rK4zwzYvoI5vp/ovZwneV0Uo=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via ip-206.mailobj.net [213.182.55.206]
-        Thu,  2 Dec 2021 10:51:15 +0100 (CET)
-X-EA-Auth: zwDcSDH3gM9QCabbJenKZLmeMYMU/i70KfPag2vOU2PNbUJjENWd7AGNzkzoEKBP35p9gN+5cDv02lWTEFT4Xto9e7cBiGo3
-Date:   Thu, 2 Dec 2021 10:51:12 +0100
-From:   Claudio Suarez <cssk@net-c.es>
-To:     dri-devel@lists.freedesktop.org, 0day robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>
-Subject: Re: [PATCH v2] drm: fix error found in some cases after the patch
- d1af5cd86997
-Message-ID: <YaiXEARd8z2C463h@gineta.localdomain>
-References: <YaC7zXW119tlzfVh@gineta.localdomain>
- <20211128142015.GB5295@xsang-OptiPlex-9020>
- <YaUpsaP7hng6zpFh@gineta.localdomain>
- <YaXi803g7iv9MxWR@phenom.ffwll.local>
- <YaiVfZWNyMkG8uED@gineta.localdomain>
+        id S1356654AbhLBJ4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:56:11 -0500
+Received: from alexa-out.qualcomm.com ([129.46.98.28]:41185 "EHLO
+        alexa-out.qualcomm.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1356667AbhLBJ4B (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 04:56:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638438760; x=1669974760;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=tC5LXKjUKwQxEKmuAm29KfJD1uoIp9cEC1FTYO6jNx0=;
+  b=cNaKUN5m3J5HsuNAUK8rmgObCal5up7QQ503RjG4LJRjnRODARJpPuDE
+   TJgTJ4hLPOLeno0s8E9Dz0F42PcZQ/jyU+fm7Gb56w1mkem8vshAbKOmK
+   1sRq95xkVnDBKUHP6A1Az9arP+8qDDhufiW5IXNTrKhv22gQ9MuRk09uW
+   g=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 02 Dec 2021 01:52:33 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:52:33 -0800
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 2 Dec 2021 01:52:32 -0800
+Received: from blr-ubuntu-525.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Thu, 2 Dec 2021 01:52:27 -0800
+From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <pure.logic@nexus-software.ie>,
+        <bjorn.andersson@linaro.org>, <greg@kroah.com>, <robh@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <quic_tsoni@quicinc.com>,
+        <quic_psodagud@quicinc.com>, <quic_satyap@quicinc.com>,
+        <quic_pheragu@quicinc.com>, <quic_rjendra@quicinc.com>,
+        <quic_sibis@quicinc.com>, <quic_saipraka@quicinc.com>,
+        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+Subject: [PATCH V2 0/8] Add Embedded USB Debugger (EUD) driver
+Date:   Thu, 2 Dec 2021 15:21:19 +0530
+Message-ID: <cover.1638430506.git.quic_schowdhu@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YaiVfZWNyMkG8uED@gineta.localdomain>
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log
-calls in drm core, files drm_a*.c") fails when the drm_device
-cannot be found in the parameter plane_state->crtc.
-Fix it using plane_state->plane.
+This is a series of patches that implements a driver for the control
+peripheral, EUD (Embedded USB Debugger). The EUD is a mini-USB hub
+implemented on chip to support the USB-based debug and trace capabilities.
+Apart from debug capabilities, EUD has a control peripheral. Control
+Peripheral is on when EUD is on and gets signals like USB attach, pet
+EUD etc. EUD driver listens to events like USB attach or detach and then
+informs the USB about these events via ROLE-SWITCH. At regular intervals,
+the EUD driver receives an interrupt to pet the driver indicating that
+the software is functional.
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Fixes: d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log calls in drm core, files drm_a*.c")
-Signed-off-by: Claudio Suarez <cssk@net-c.es>
----
- drivers/gpu/drm/drm_atomic_helper.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Changes in V2
 
-diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
-index aef2fbd676e5..a7a05e1e26bb 100644
---- a/drivers/gpu/drm/drm_atomic_helper.c
-+++ b/drivers/gpu/drm/drm_atomic_helper.c
-@@ -828,8 +828,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
- 	}
- 
- 	if (!crtc_state->enable && !can_update_disabled) {
--		drm_dbg_kms(plane_state->crtc->dev,
--			       "Cannot update plane of a disabled CRTC.\n");
-+		drm_dbg_kms(plane_state->plane->dev,
-+			    "Cannot update plane of a disabled CRTC.\n");
- 		return -EINVAL;
- 	}
- 
-@@ -839,8 +839,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
- 	hscale = drm_rect_calc_hscale(src, dst, min_scale, max_scale);
- 	vscale = drm_rect_calc_vscale(src, dst, min_scale, max_scale);
- 	if (hscale < 0 || vscale < 0) {
--		drm_dbg_kms(plane_state->crtc->dev,
--			       "Invalid scaling of plane\n");
-+		drm_dbg_kms(plane_state->plane->dev,
-+			    "Invalid scaling of plane\n");
- 		drm_rect_debug_print("src: ", &plane_state->src, true);
- 		drm_rect_debug_print("dst: ", &plane_state->dst, false);
- 		return -ERANGE;
-@@ -864,8 +864,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
- 		return 0;
- 
- 	if (!can_position && !drm_rect_equals(dst, &clip)) {
--		drm_dbg_kms(plane_state->crtc->dev,
--			       "Plane must cover entire CRTC\n");
-+		drm_dbg_kms(plane_state->plane->dev,
-+			    "Plane must cover entire CRTC\n");
- 		drm_rect_debug_print("dst: ", dst, false);
- 		drm_rect_debug_print("clip: ", &clip, false);
- 		return -EINVAL;
--- 
-2.33.0
+*Fixed the yaml issue and also implemeted comments on yaml in V1.
 
+Changes in V1
 
+* EUD has now been mapped as a separate DT node as it is an independent QCOM IP.
+
+* EUD is attached to the connector child of dwc3 via port end point since EUD
+  driver needs the connector for role-switching.
+
+* EUD driver has been moved now to drivers/soc/qcom/qcom_eud.c.
+
+* All the comments from version 0 of the patch has been implemented.
+
+Souradeep Chowdhury (8):
+  dt-bindings: Add the yaml bindings for EUD
+  dt-bindings: connector: Add property for EUD type-C connector
+  bindings: usb: dwc3: Update dwc3 properties for EUD connector
+  usb: dwc3: drd: Register the eud connector child node for dwc3
+  soc: qcom: eud: Add driver support for Embedded USB Debugger(EUD)
+  arm64: dts: qcom: sc7280: Add EUD dt node and dwc3 connector
+  arm64: dts: qcom: sc7280: Set the default dr_mode for usb2
+  MAINTAINERS: Add maintainer entry for EUD
+
+ Documentation/ABI/testing/sysfs-driver-eud         |   9 +
+ .../bindings/connector/usb-connector.yaml          |   4 +
+ .../devicetree/bindings/soc/qcom/qcom,eud.yaml     |  50 ++++
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |   6 +
+ MAINTAINERS                                        |   8 +
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts            |   4 +
+ arch/arm64/boot/dts/qcom/sc7280.dtsi               |  25 ++
+ drivers/soc/qcom/Kconfig                           |  10 +
+ drivers/soc/qcom/Makefile                          |   1 +
+ drivers/soc/qcom/qcom_eud.c                        | 268 +++++++++++++++++++++
+ drivers/usb/dwc3/drd.c                             |  26 ++
+ 11 files changed, 411 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-driver-eud
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
+ create mode 100644 drivers/soc/qcom/qcom_eud.c
+
+--
+2.7.4
 

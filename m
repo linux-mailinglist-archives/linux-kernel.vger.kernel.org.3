@@ -2,132 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEEA4663EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F06554663F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358035AbhLBMuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:50:23 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:15452 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1347388AbhLBMuW (ORCPT
+        id S1358056AbhLBMvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:51:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:32038 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347388AbhLBMvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:50:22 -0500
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2BNQWO031635;
-        Thu, 2 Dec 2021 12:46:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=3hXA/kZ8cttkItCz5wN6XJFfxji6OOhKwPo1uBwRm6c=;
- b=muqlrP491UAkDbILVryfZ9HgdpRTMu6rFDEae/Ef4INnxopZIow7PKnChMm2LbUcNxBm
- xecsWgMNtwhS8ycAkFSgl0NydWuZDkUB+mTDdlTmGq19emLMcGpMh+tZ3agOhCZA3sQg
- TUJv9UTdlTobODj3jq/3cy3K6lnJZboftPxAH8uit3ojh11kZfS92wWaGyTOlIQrw9Ir
- yfn5XAKD7Ig4oKbLhmBGk7uwWoF5df28XSCEPYV8VVT7UTbDfSyXBWDKeeJLeUfT/Cr9
- HM1JP15TnCxWxguLT1Na//B4E+Nx4yJavGTLi+qETO1+ynSLMJ6ixh4K0GXhRfjVHWIT jQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpw7t9kfv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 12:46:43 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2CUgnZ027850;
-        Thu, 2 Dec 2021 12:46:43 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cpw7t9kfh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 12:46:43 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2Cdi1I020986;
-        Thu, 2 Dec 2021 12:46:42 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma01wdc.us.ibm.com with ESMTP id 3ckcaccvws-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 12:46:42 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2CkeQS49611192
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 12:46:40 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE3FF7806E;
-        Thu,  2 Dec 2021 12:46:39 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C28FE78066;
-        Thu,  2 Dec 2021 12:46:37 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Dec 2021 12:46:37 +0000 (GMT)
-Message-ID: <141ce433f026b47edb1d9a8f89e4581db253c579.camel@linux.ibm.com>
-Subject: Re: [RFC 08/20] ima: Move measurement list related variables into
- ima_namespace
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Thu, 02 Dec 2021 07:46:36 -0500
-In-Reply-To: <20211130160654.1418231-9-stefanb@linux.ibm.com>
-References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
-         <20211130160654.1418231-9-stefanb@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Thu, 2 Dec 2021 07:51:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638449272;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/KE2G0AMF/4qelfuYaRJl7lFx9i78+mXpky9NUQaLvE=;
+        b=brEe10ASWTu+I1lTRIeXqDsskeTH8vgWob2NUijaoopIov0orOEn/rayrwQ7EAtXvZCU0F
+        zt615VD1RQlKVepHt4pXrCLiCXB7mwj2GFJOYlgcOfDaEY61kkFvmrqUQaLj1OHQb7j4Qy
+        MNlvJPLe51NFp4ralM5UX7B2CQRFCdE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-1-WA5f9MMNNrmPD-jPPd78ig-1; Thu, 02 Dec 2021 07:47:51 -0500
+X-MC-Unique: WA5f9MMNNrmPD-jPPd78ig-1
+Received: by mail-wm1-f72.google.com with SMTP id 201-20020a1c04d2000000b003335bf8075fso13970355wme.0
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 04:47:51 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=/KE2G0AMF/4qelfuYaRJl7lFx9i78+mXpky9NUQaLvE=;
+        b=cg8T8EGnNrv1p3vjniuBwUH082+3jLjClQ0BQ0RaS10VoL3qppUGScu0oH+GgnJ5qx
+         oCYA1lIWM2FE67ZCJGkqSB3R9myhZPWMH+P6uzB7YGhY0muyyB4nv/h5r30PlPkvLRt6
+         c+ahwsfkLN1kRlKYFOoaSo4zKSblKzUd/i5DkiFfyK/7fmYHSXYx+l6U/OPtb/6RBQkV
+         d0IozqISi/vCrYckUJ2upoeiBeY3R8USmytnHUOrObYMM8BUCDEeztzcze4tqs4FMleW
+         MGizb6lOdhUNA801z4xQs4uG0DnFwTBXnmRR375ff1sWIViHBOxhsd1L1iTCkhCZV3h0
+         LoHg==
+X-Gm-Message-State: AOAM530ZnRRN6NgYheiBguuimYNdO8iQSuoRdp/K2KM3uvbEF0LQW1Wz
+        INtiVxc0I7S3QkSCc9RTVh805rq/PkvLwG+gV1N1xvjvFcJ/mAMWEqxkUuVXLxNHbVKO6JaVFuK
+        5Xpcc7EhLZkGdO1mJEEKZDfqA
+X-Received: by 2002:a5d:4704:: with SMTP id y4mr14069717wrq.85.1638449270583;
+        Thu, 02 Dec 2021 04:47:50 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJxqhQFbTGgCi88qT+eGiKRbZJMiOQNTZSY0Ec9iA1YtsqGsT5YMm4zCKF/77tnNlZNp56fdSw==
+X-Received: by 2002:a5d:4704:: with SMTP id y4mr14069698wrq.85.1638449270341;
+        Thu, 02 Dec 2021 04:47:50 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f44:9200:3344:447e:353c:bf0b? (p200300d82f4492003344447e353cbf0b.dip0.t-ipconnect.de. [2003:d8:2f44:9200:3344:447e:353c:bf0b])
+        by smtp.gmail.com with ESMTPSA id m21sm2507081wrb.2.2021.12.02.04.47.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 04:47:49 -0800 (PST)
+Message-ID: <673c5628-da97-83d3-028f-46219f203caf@redhat.com>
+Date:   Thu, 2 Dec 2021 13:47:49 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: T09BanDLEgX0wX9EPjPKPhK2YZuaEPfi
-X-Proofpoint-GUID: 2K7t0JURPY-TD3zyVDNCAr7tDbuOCg4m
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.0.607.475
- definitions=2021-12-02_07,2021-12-02_01,2020-04-07_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxscore=0 phishscore=0 clxscore=1015 impostorscore=0
- adultscore=0 lowpriorityscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112020080
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Content-Language: en-US
+To:     fei luo <morphyluo@gmail.com>, akpm@linux-foundation.org,
+        mike.kravetz@oracle.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org
+References: <CAMgLiBskDz7XW9-0=azOgVJ00t8zFOXjdGaH7NLpKDfNH9wsGQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [RFD] clear virtual machine memory when virtual machine is turned
+ off
+In-Reply-To: <CAMgLiBskDz7XW9-0=azOgVJ00t8zFOXjdGaH7NLpKDfNH9wsGQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
-> Move measurement list related variables into the ima_namespace. This
-> way a
-> front-end like SecurityFS can show the measurement list inside an IMA
-> namespace.
+On 02.12.21 11:19, fei luo wrote:
+> Hi,
 > 
-> Implement ima_free_measurements() to free a list of measurements
-> and call it when an IMA namespace is deleted.
-
-This one worries me quite a lot.  What seems to be happening in this
-code:
-
-> @@ -107,7 +100,7 @@ static int ima_add_digest_entry(struct
-> ima_namespace *ns,
->         qe->entry = entry;
->  
->         INIT_LIST_HEAD(&qe->later);
-> -       list_add_tail_rcu(&qe->later, &ima_measurements);
-> +       list_add_tail_rcu(&qe->later, &ns->ima_measurements);
->  
->         atomic_long_inc(&ns->ima_htable.len);
->         if (update_htable) {
+> When running the kvm virtual machine in Linux, because the virtual
+> 
+> machine may contain sensitive data, the user may not want these
+> 
+> data to remain in the memory after the virtual machine is turned off.
 > 
 
-is that we now only add the measurements to the namespace list, but
-that list is freed when the namespace dies.  However, the measurement
-is still extended through the PCRs meaning we have incomplete
-information for a replay after the namespace dies?
+Hi,
 
-I tend to think the way this should work is that until we have a way of
-attesting inside the namespace, all measurements should go into the
-physical log, so that replay is always complete for the PCRs, so
-effectively the visible log of the namespace would always have to be a
-subset of the physical log.
+yes, just like if the VM is running.
 
-James
+> 
+> Although this part of memory will be cleared before being reused by
+> 
+> user-mode programs , But the sensitive data staying in the memory
+> 
+> for a long time will undoubtedly increase the risk of information leakage,
+> 
+> so I wonder whether it is possible to add a flag (like MAP_UNMAPZERO)
+> 
+> to the mmap(2) system call to indicate that the mapped memory needs
+> 
+> to be cleared zero when unmap called or when the program exits.
+> 
 
+it's not immediately clear to me why data of user space program #1
+should be more important than data of user space program #2 and why the
+program should make that decision.
+
+> 
+> Of course, the page clear operation not only occurs when unmap called
+> 
+> or program exits, but also need to consider scenes such as page migration,
+> 
+> swap, balloon etc.
+
+What about page migration (who clears the old memory location?),
+swapping (who clears the swap space, also considering zram?), writeback
+(who clears file storage)? Also, as you indicate, MADV_DONTNEED,
+MADV_FREE, FALLOC_FL_PUNCH_HOLE would need care ...
+
+To disable swapping you can use mlock(). To handle file storage ...
+don't use files. You'd still have to handle any cases where physical
+memory locations might be freed and land in the buddy, and for that we
+do have ...
+
+> 
+> 
+> When reusing the page that has been cleared, there is no need to clear it
+> 
+> again, which also speeds up the memory allocation of user-mode programs.
+> 
+> 
+> Is this feature feasible?
+
+"init_on_free=1" for the system as a whole, which might sounds like what
+might tackle part of your use case.
+
+-- 
+Thanks,
+
+David / dhildenb
 

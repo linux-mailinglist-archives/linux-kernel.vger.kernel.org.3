@@ -2,75 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C83465C11
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE755465C15
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 03:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354461AbhLBCVX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 21:21:23 -0500
-Received: from mga07.intel.com ([134.134.136.100]:20648 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1344989AbhLBCVW (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 21:21:22 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="299995880"
-X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="299995880"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 18:18:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,280,1631602800"; 
-   d="scan'208";a="500499377"
-Received: from lkp-server02.sh.intel.com (HELO 9e1e9f9b3bcb) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 01 Dec 2021 18:17:59 -0800
-Received: from kbuild by 9e1e9f9b3bcb with local (Exim 4.92)
-        (envelope-from <lkp@intel.com>)
-        id 1msbfb-000FgV-8M; Thu, 02 Dec 2021 02:17:59 +0000
-Date:   Thu, 2 Dec 2021 10:17:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kbuild-all@lists.01.org, devel@driverdev.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [driver-core:hid_is_usb 3/3] arc-elf-ld: hid-corsair.c:undefined
- reference to `usb_hid_driver'
-Message-ID: <202112021000.3GKuE8mS-lkp@intel.com>
+        id S1354590AbhLBCXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 21:23:21 -0500
+Received: from mail.cn.fujitsu.com ([183.91.158.132]:30581 "EHLO
+        heian.cn.fujitsu.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1354609AbhLBCXU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 1 Dec 2021 21:23:20 -0500
+IronPort-Data: =?us-ascii?q?A9a23=3A78o3M6OHihFxhhLvrR0AlcFynXyQoLVcMsFnjC/?=
+ =?us-ascii?q?WdQO6hTwh1mRUnGIeXmnVP6qCZzOne9B/a9i/90kFsZ/Vm99gGjLY11k3ESsS9?=
+ =?us-ascii?q?pCt6fd1j6vIF3rLaJWFFSqL1u1GAjX7BJ1yHiC0SiuFaOC79CAmjfjQHdIQNca?=
+ =?us-ascii?q?fUsxPbV49IMseoUI78wIJqtYAbemRW2thi/uryyHsEAPNNwpPD44hw/nrRCWDE?=
+ =?us-ascii?q?xjFkGhwUlQWPZintbJF/pUfJMp3yaqZdxMUTmTId9NWSdovzJnhlo/Y1xwrTN2?=
+ =?us-ascii?q?4kLfnaVBMSbnXVeSMoiMOHfH83V4Z/Wpvuko4HKN0hUN/jzSbn9FzydxLnZKtS?=
+ =?us-ascii?q?wY1JbCKk+MYO/VdO3gnbfYeou6XehBTtuTWlSUqaUDEz/xwAUQeMYQG9+NzBm9?=
+ =?us-ascii?q?Ss/oVNFglYguKh++sxpq0T+BtgoIoK8yDFIACsHhIzjzDC/siB5fZTM3i/t9F1?=
+ =?us-ascii?q?TcYhc1UG/vaIc0DZlJHaBXGfg0KOVoNDp86tPmni2O5cDBCrl+R460t7AD7yA1?=
+ =?us-ascii?q?3zaioM8HYftKWSN5JtliXq3iA/GnjBBwectuFxlKt9H+wiuLRtT30VZhUF7Ci8?=
+ =?us-ascii?q?PNuxlqJyQQu5Lc+PbegiaDhzBfgBJQEcApJkhfCZJMarCSDJuQRlTXhyJJcgiM?=
+ =?us-ascii?q?hZg=3D=3D?=
+IronPort-HdrOrdr: =?us-ascii?q?A9a23=3Aqb7+sau6hYAUpminyxjYX4Wa7skDE9V00zEX?=
+ =?us-ascii?q?/kB9WHVpm62j9/xG88536faZslwssRIb+OxoWpPufZq0z/ccirX5VY3SPzUO01?=
+ =?us-ascii?q?HFEGgN1+Xf/wE=3D?=
+X-IronPort-AV: E=Sophos;i="5.87,280,1631548800"; 
+   d="scan'208";a="118302983"
+Received: from unknown (HELO cn.fujitsu.com) ([10.167.33.5])
+  by heian.cn.fujitsu.com with ESMTP; 02 Dec 2021 10:19:52 +0800
+Received: from G08CNEXMBPEKD05.g08.fujitsu.local (unknown [10.167.33.204])
+        by cn.fujitsu.com (Postfix) with ESMTP id C47074D13A0B;
+        Thu,  2 Dec 2021 10:19:50 +0800 (CST)
+Received: from G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) by
+ G08CNEXMBPEKD05.g08.fujitsu.local (10.167.33.204) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.23; Thu, 2 Dec 2021 10:19:52 +0800
+Received: from [192.168.122.212] (10.167.226.45) by
+ G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.209) with Microsoft SMTP Server
+ id 15.0.1497.23 via Frontend Transport; Thu, 2 Dec 2021 10:19:50 +0800
+Subject: Re: [PATCH 1/3] selftest: net: Correct case name
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <davem@davemloft.net>, <shuah@kernel.org>, <dsahern@gmail.com>,
+        <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20211201111025.13834-1-lizhijian@cn.fujitsu.com>
+ <20211201175426.2e86322f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   "Li, Zhijian" <lizhijian@cn.fujitsu.com>
+Message-ID: <69dce621-55b7-fdb2-f8f1-57d8d6a43a35@cn.fujitsu.com>
+Date:   Thu, 2 Dec 2021 10:19:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20211201175426.2e86322f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-yoursite-MailScanner-ID: C47074D13A0B.ABB91
+X-yoursite-MailScanner: Found to be clean
+X-yoursite-MailScanner-From: lizhijian@fujitsu.com
+X-Spam-Status: No
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git hid_is_usb
-head:   0a6c579f381aa88f6e8f7cd5515056416e247a2b
-commit: 0a6c579f381aa88f6e8f7cd5515056416e247a2b [3/3] HID: check for valid USB device for many HID drivers
-config: arc-buildonly-randconfig-r001-20211128 (https://download.01.org/0day-ci/archive/20211202/202112021000.3GKuE8mS-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?id=0a6c579f381aa88f6e8f7cd5515056416e247a2b
-        git remote add driver-core https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git
-        git fetch --no-tags driver-core hid_is_usb
-        git checkout 0a6c579f381aa88f6e8f7cd5515056416e247a2b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+on 2021/12/2 9:54, Jakub Kicinski wrote:
+> On Wed, 1 Dec 2021 19:10:23 +0800 Li Zhijian wrote:
+>> ipv6_addr_bind/ipv4_addr_bind are function name.
+>>
+>> Fixes: 34d0302ab86 ("selftests: Add ipv6 address bind tests to fcnal-test")
+>> Fixes: 75b2b2b3db4 ("selftests: Add ipv4 address bind tests to fcnal-test")
+>> Signed-off-by: Li Zhijian <lizhijian@cn.fujitsu.com>
+> Please send this patch separately from patches 2 and 3. This one is
+> a fix (AFAIU) and needs to be applied to a different tree. Patches 2
+> and 3 look like improvements / cleanups.
+>
+Got it,  I will fix it ASAP
 
-All errors (new ones prefixed by >>):
+Thanks
 
-   arc-elf-ld: drivers/hid/hid-chicony.o: in function `ch_probe':
-   hid-chicony.c:(.text+0x16): undefined reference to `usb_hid_driver'
-   arc-elf-ld: hid-chicony.c:(.text+0x16): undefined reference to `usb_hid_driver'
-   arc-elf-ld: drivers/hid/hid-corsair.o: in function `corsair_probe':
-   hid-corsair.c:(.text+0x70e): undefined reference to `usb_hid_driver'
->> arc-elf-ld: hid-corsair.c:(.text+0x70e): undefined reference to `usb_hid_driver'
-   arc-elf-ld: drivers/hid/hid-lg.o: in function `lg_probe':
-   hid-lg.c:(.text+0x40c): undefined reference to `usb_hid_driver'
-   arc-elf-ld: drivers/hid/hid-lg.o:hid-lg.c:(.text+0x40c): more undefined references to `usb_hid_driver' follow
+Zhijian
 
----
-0-DAY CI Kernel Test Service, Intel Corporation
-https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org
+
+

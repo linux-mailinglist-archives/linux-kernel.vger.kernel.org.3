@@ -2,293 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF834661BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 772C84661BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356875AbhLBKyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:54:54 -0500
-Received: from so254-9.mailgun.net ([198.61.254.9]:17111 "EHLO
-        so254-9.mailgun.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbhLBKyw (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:54:52 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1638442290; h=Message-Id: Date: Subject: Cc: To: From:
- Sender; bh=HIGcD/jaqNClG+MM4DCw3sUIoBAVcod6MlDO/qs3diw=; b=m9K4o8LipaiMwzAqtKHnqauBclI51CSuMRGmBEfUzPEo3FSdPcgFzLQkrieyBiIsDUYynbCT
- ZPlNFM3xUvf5Cy9pJbHKA+sWtA1MP9/yLIGbcCenTFvlNTqllX1zqDXYDYYWZSB0aj5VEMO9
- jdAYA/nxjWfw9XCst0aTCQVmZ2E=
-X-Mailgun-Sending-Ip: 198.61.254.9
-X-Mailgun-Sid: WyI0MWYwYSIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWU0YSJd
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n04.prod.us-east-1.postgun.com with SMTP id
- 61a8a532135a8a9d0e2b8c56 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Thu, 02 Dec 2021 10:51:29
- GMT
-Sender: quic_charante=quicinc.com@mg.codeaurora.org
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 2E231C4360D; Thu,  2 Dec 2021 10:51:29 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.9 required=2.0 tests=ALL_TRUSTED,BAYES_00,SPF_FAIL
-        autolearn=no autolearn_force=no version=3.4.0
-Received: from hu-charante-hyd.qualcomm.com (unknown [202.46.22.19])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: charante)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 21A62C4338F;
-        Thu,  2 Dec 2021 10:51:23 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.1 smtp.codeaurora.org 21A62C4338F
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=fail smtp.mailfrom=quicinc.com
-From:   Charan Teja Reddy <quic_charante@quicinc.com>
-To:     hughd@google.com, akpm@linux-foundation.org, vbabka@suse.cz,
-        rientjes@google.com, david@redhat.com, mhocko@suse.com,
-        surenb@google.com, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Charan Teja Reddy <charante@codeaurora.org>
-Subject: [PATCH v2] mm: shmem: implement POSIX_FADV_[WILL|DONT]NEED for shmem
-Date:   Thu,  2 Dec 2021 16:20:53 +0530
-Message-Id: <1638442253-1591-1-git-send-email-quic_charante@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        id S1357017AbhLBKzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:55:42 -0500
+Received: from mout.gmx.net ([212.227.15.18]:58569 "EHLO mout.gmx.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S231208AbhLBKzi (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 05:55:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1638442314;
+        bh=ofsSqiOrT4mnNucwypB20efCyEpHBisJHJKtufIYncA=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=Fq5ibyRIv5OPI3M+KPb/iGlmsIp7IbhMVmHYlwODhMxGUtcDzV/BJvvAljct7T8mF
+         lYnBPR6YCP231zaZs01Ecs9Mqrw++9hGbTrUgMkrdtk/foMA4QjeibkLQCvOqcHvLe
+         SL6xrwVQkPrWOJKQXtvXbZn1nibmEBAipBIyUhn0=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from bart.fritz.box ([185.221.149.39]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MEm2D-1mmxD03AwV-00GL9F; Thu, 02
+ Dec 2021 11:51:53 +0100
+Message-ID: <fa80d97f2f73e405db52744edc7979f2dc30526e.camel@gmx.de>
+Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
+ make progress
+From:   Mike Galbraith <efault@gmx.de>
+To:     Mel Gorman <mgorman@techsingularity.net>
+Cc:     Alexey Avramov <hakavlad@inbox.lv>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rik van Riel <riel@surriel.com>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Date:   Thu, 02 Dec 2021 11:51:46 +0100
+In-Reply-To: <20211202101324.GX3366@techsingularity.net>
+References: <20211125151853.8540-1-mgorman@techsingularity.net>
+         <20211127011246.7a8ac7b8@mail.inbox.lv>
+         <20211129150117.GO3366@techsingularity.net>
+         <20211201010348.31e99637@mail.inbox.lv>
+         <20211130172754.GS3366@techsingularity.net>
+         <20211201033836.4382a474@mail.inbox.lv>
+         <20211201140005.GU3366@techsingularity.net>
+         <74248b525d5ee03bfd00aaa66cd08a4582998cd6.camel@gmx.de>
+         <20211202101324.GX3366@techsingularity.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.1 
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:rBScxEg19LUK2oQ5oTdCk8gedC+1+6vyrKBGYRZHSJanhgfLAOI
+ gAt3/BJMq3aRN6oQi3JO4NJblqO+AL3h+45/6Luh0zM02f6Xo1lnd5iPs1iEj37BbidHqAN
+ PdD9lD8bctyqKGrQ2BEpTTk/H3gxW7oci4r+fLoKRbFsST5dhrj7o/DbENH8Iu4oieCq0WV
+ /NGE+XqhjzyWDsi2z5jFQ==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:v8M7ACplhN8=:jB8z0rgnKJgclNlDpVncKF
+ pEdT5P9DDQATVGi6kMVJ6NR4MKiIqn+ABt/M1bXNIenB99KNROi8GVuI9zGCzFOiqnRqvuAyY
+ Hu6rUmiFCYgCxnF9XH27ymjaTyufxFyISyUznvRK40hAQkMd4PirPwg2PbWpOzNCNckQwhDbI
+ FIjQIHP8hJ5E8jjHWIrVdmARkR25oAyVOwY/ulizCSFelR3yLAjZyS/OA9WYnXXQDJZSqr5E8
+ SYOwMoxS2nJ3gn71oDGl4gDWZRNjxPH6Zrj7wzHymk/ZjWPIMKKvKOyg69LLVFEKSrGBF97EV
+ aBXteA32rSGCSXRRTuDweo3y+8KqTL5h4oPHLtf+P2nnAqyyTg8ED+mUI367fj0wg80H2kZ5o
+ mzIZiLwy0GhJoOubSWymulZEdyFxmU0hTGDjQrEem1lpXulOZK6YDpZEI81X+fCsTNVYsyDot
+ n0GCKJMea4Glp7o2nCjCLFhQIm3Fn2O7wNxKw+80aUvKYE0HYm7GsVVIiMJ6StuxVBzdQsDkV
+ avVSWSXJnqZPw46c3y1N1mJVOQm0boXKbmso5ythQ6npTj32k0cWfZMABdSof3lLXTfRPdcH7
+ A04MpEwZ7DJ0YGyTxvpH9XKqHgheuR3wYEnyH4A7y+o9D2ZzJu4OsaoN5wiTwtumDge6jjpgL
+ f8JTnvmN9b4xjy4YAf62wnVbc+m/M64TBHaNk2In/YMj3ctfRk6Gh1k3IIc1qDYmv6AMAN/6J
+ b7pIOjywN5Tlgkp6BYpp4L4iu5khQbJqZIbw5Yb+O2loImtDgWxBTpGTAZ/vJTlYgHuzy+OCR
+ aYpd9zzTpVh1p/wOCi+R6r2zs5b2uB9bwgLhd+R1E/I/UkejR8bZ/bOLWAo12AQUoOR2oBLkX
+ h6S7LEevWRirOnhbK68n55DE0ahoV4A0Fdcjle2Q2+DQXEsL9Cjd5tGEyrIb8ToPcugGuZgWN
+ Vv2/pTbrwKcEEElUe4ylZ/sT44eylSrcOanJPSHMhb+vw5QEKkb0rqqgjnV6dnebaeVMI3hFd
+ MKE9CxBunh6zo/q/v7SLnpiDVTlGIFzB1KlX0+fY8pyd0z8mPuxNK5EkkdBtxNQSQLG+rMOBt
+ OO02sewe7Nb0Ic=
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Charan Teja Reddy <charante@codeaurora.org>
+On Thu, 2021-12-02 at 10:13 +0000, Mel Gorman wrote:
+> On Thu, Dec 02, 2021 at 04:11:38AM +0100, Mike Galbraith wrote:
+> > On Wed, 2021-12-01 at 14:00 +0000, Mel Gorman wrote:
+> > >
+> > > I've included another patch below against 5.16-rc1 but it'll
+> > > apply to
+> > > 5.16-rc3. Using the same test I get
+> >
+> > LTP testcases that stalled my box no longer do, nor can I manually
+> > trigger any unexpected behavior.
+> >
+>
+> Excellent, can I add the following?
 
-Currently fadvise(2) is supported only for the files that doesn't
-associated with noop_backing_dev_info thus for the files, like shmem,
-fadvise results into NOP. But then there is file_operations->fadvise()
-that lets the file systems to implement their own fadvise
-implementation. Use this support to implement some of the POSIX_FADV_XXX
-functionality for shmem files.
+Sure.
 
-This patch aims to implement POSIX_FADV_WILLNEED and POSIX_FADV_DONTNEED
-advices to shmem files which can be helpful for the drivers who may want
-to manage the shmem pages of the files that are created through
-shmem_file_setup[_with_mnt]().  An example usecase may be like, driver
-can create the shmem file of the size equal to its requirements and
-map the pages for DMA and then pass the fd to user. The user who knows
-well about the usage of these pages can now decide when these pages are
-not required push them to swap through DONTNEED thus free up memory well
-in advance rather than relying on the reclaim and use WILLNEED when it
-decide that they are useful in the near future. IOW, it lets the clients
-to free up/read the memory when it wants to. Another usecase is that GEM
-objets which are currenlty allocated and managed through shmem files can
-use vfs_fadvise(DONT|WILLNEED) on shmem fd when the driver comes to
-know(like through some hints from user space) that GEM objects are not
-going to use/will need in the near future.
-
-Signed-off-by: Charan Teja Reddy <charante@codeaurora.org>
----
-
-Changes in V2:
-  -- Rearranged the code to not to sleep with rcu_lock while using xas_() functionality.
-  -- Addressed the comments from Suren.
-
-changes in V1:
-  -- Created the interface for fadvise(2) to work on shmem files.
-  -- https://patchwork.kernel.org/project/linux-mm/patch/1633701982-22302-1-git-send-email-charante@codeaurora.org/
-       
-
- mm/shmem.c | 167 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 167 insertions(+)
-
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 70d9ce2..4c4685f 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -38,6 +38,8 @@
- #include <linux/hugetlb.h>
- #include <linux/frontswap.h>
- #include <linux/fs_parser.h>
-+#include <linux/mm_inline.h>
-+#include <linux/fadvise.h>
- 
- #include <asm/tlbflush.h> /* for arch/microblaze update_mmu_cache() */
- 
-@@ -2792,6 +2794,170 @@ static long shmem_fallocate(struct file *file, int mode, loff_t offset,
- 	return error;
- }
- 
-+static void shmem_isolate_pages_range(struct address_space *mapping, loff_t start,
-+				loff_t end, struct list_head *list)
-+{
-+	XA_STATE(xas, &mapping->i_pages, start);
-+	struct page *page;
-+
-+	rcu_read_lock();
-+	xas_for_each(&xas, page, end) {
-+		if (xas_retry(&xas, page))
-+			continue;
-+		if (xa_is_value(page))
-+			continue;
-+		if (!get_page_unless_zero(page))
-+			continue;
-+		if (isolate_lru_page(page))
-+			continue;
-+
-+		list_add(&page->lru, list);
-+		inc_node_page_state(page, NR_ISOLATED_ANON +
-+						page_is_file_lru(page));
-+		put_page(page);
-+		if (need_resched()) {
-+			xas_pause(&xas);
-+			cond_resched_rcu();
-+		}
-+	}
-+	rcu_read_unlock();
-+}
-+
-+static int shmem_fadvise_dontneed(struct address_space *mapping, loff_t start,
-+				loff_t end)
-+{
-+	int ret;
-+	struct page *page;
-+	LIST_HEAD(list);
-+
-+	if (!shmem_mapping(mapping))
-+		return -EINVAL;
-+
-+	if (!total_swap_pages)
-+		return 0;
-+
-+	lru_add_drain();
-+	shmem_isolate_pages_range(mapping, start, end, &list);
-+
-+	while (!list_empty(&list)) {
-+		page = lru_to_page(&list);
-+		list_del(&page->lru);
-+		lock_page(page);
-+		if (clear_page_dirty_for_io(page)) {
-+			struct writeback_control wbc = {
-+				.sync_mode = WB_SYNC_NONE,
-+				.nr_to_write = LONG_MAX,
-+				.range_start = 0,
-+				.range_end = LLONG_MAX,
-+				.for_reclaim = 1,
-+			};
-+
-+			SetPageReclaim(page);
-+			ret = shmem_writepage(page, &wbc);
-+			if (ret || PageWriteback(page)) {
-+				if (ret)
-+					unlock_page(page);
-+				putback_lru_page(page);
-+				dec_node_page_state(page, NR_ISOLATED_ANON +
-+						page_is_file_lru(page));
-+				continue;
-+			}
-+		}
-+
-+		if (!PageWriteback(page))
-+			ClearPageReclaim(page);
-+
-+		/*
-+		 * shmem_writepage() place the page in the swapcache.
-+		 * Delete the page from the swapcache and release the
-+		 * page.
-+		 */
-+		dec_node_page_state(page, NR_ISOLATED_ANON +
-+						page_is_file_lru(page));
-+		lock_page(page);
-+		delete_from_swap_cache(page);
-+		unlock_page(page);
-+		put_page(page);
-+
-+	}
-+
-+	return 0;
-+}
-+
-+static int shmem_fadvise_willneed(struct address_space *mapping,
-+				 pgoff_t start, pgoff_t long end)
-+{
-+	XA_STATE(xas, &mapping->i_pages, start);
-+	struct page *page;
-+
-+	rcu_read_lock();
-+	page = xas_find(&xas, end);
-+	rcu_read_unlock();
-+
-+	while (page) {
-+		if (xa_is_value(page)) {
-+			page = shmem_read_mapping_page(mapping, xas.xa_index);
-+			if (!IS_ERR(page))
-+				put_page(page);
-+		}
-+
-+		if (need_resched()) {
-+			xas_pause(&xas);
-+			cond_resched();
-+		}
-+
-+		rcu_read_lock();
-+		page = xas_next_entry(&xas, end);
-+		rcu_read_unlock();
-+	}
-+
-+	return 0;
-+}
-+
-+static int shmem_fadvise(struct file *file, loff_t offset, loff_t len, int advice)
-+{
-+	loff_t endbyte;
-+	pgoff_t start_index;
-+	pgoff_t end_index;
-+	struct address_space *mapping;
-+	int ret = 0;
-+
-+	mapping = file->f_mapping;
-+	if (!mapping || len < 0)
-+		return -EINVAL;
-+
-+	endbyte = (u64)offset + (u64)len;
-+	if (!len || endbyte < len)
-+		endbyte = -1;
-+	else
-+		endbyte--;
-+
-+
-+	start_index = offset >> PAGE_SHIFT;
-+	end_index   = endbyte >> PAGE_SHIFT;
-+	switch (advice) {
-+	case POSIX_FADV_DONTNEED:
-+		ret = shmem_fadvise_dontneed(mapping, start_index, end_index);
-+		break;
-+	case POSIX_FADV_WILLNEED:
-+		ret = shmem_fadvise_willneed(mapping, start_index, end_index);
-+		break;
-+	case POSIX_FADV_NORMAL:
-+	case POSIX_FADV_RANDOM:
-+	case POSIX_FADV_SEQUENTIAL:
-+	case POSIX_FADV_NOREUSE:
-+		/*
-+		 * No bad return value, but ignore advice. May have to
-+		 * implement in future.
-+		 */
-+		break;
-+	default:
-+		return -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
- static int shmem_statfs(struct dentry *dentry, struct kstatfs *buf)
- {
- 	struct shmem_sb_info *sbinfo = SHMEM_SB(dentry->d_sb);
-@@ -3799,6 +3965,7 @@ static const struct file_operations shmem_file_operations = {
- 	.splice_write	= iter_file_splice_write,
- 	.fallocate	= shmem_fallocate,
- #endif
-+	.fadvise	= shmem_fadvise,
- };
- 
- static const struct inode_operations shmem_inode_operations = {
--- 
-QUALCOMM INDIA, on behalf of Qualcomm Innovation Center, Inc. is a
-member of the Code Aurora Forum, hosted by The Linux Foundation
+> Tested-by: Mike Galbraith <efault@gmx.de>
+>
 

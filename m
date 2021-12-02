@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AD67466894
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BF646689A
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359728AbhLBQtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238116AbhLBQtP (ORCPT
+        id S1359682AbhLBQvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:51:12 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:57212 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359624AbhLBQvK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:49:15 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B79CDC06174A;
-        Thu,  2 Dec 2021 08:45:52 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id n33-20020a05600c502100b0032fb900951eso2787151wmr.4;
-        Thu, 02 Dec 2021 08:45:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=d00HfC2LuL3eqH7QRBDblitkpEVvyUj0s9L0tyziXIU=;
-        b=Wm7lnVEoUEiY7Ss4nG9mMLaNx3/3ce06ypFZStI8wxwzMPnsb+fOwbovpTo+HK/WTq
-         CGp0H1cMuiFTzC+16c9LVHhAjLJ8fddwRmGlYbIsv7CW1S6JUOf/afsUR2lE1aRe/W2A
-         2K0WagPgIJPOKhJCMfAejAfnhfXlLvj3ToGe+0aM87HHBOgrVnsM7iEIx6naG1LeVmPw
-         FlRA8QAhnNnN+uniFIme0Wbdyp7spcdbVc3uyFDT81sIy0C4v/y26vl5R7efvXlpmU+g
-         ToWuGGKBm/zFGd3Y3r9/mRKzUNeIwW9ags3lzpeUhvQVJM+MC1xXt9kf9iuJsjm2qfxB
-         h+4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=d00HfC2LuL3eqH7QRBDblitkpEVvyUj0s9L0tyziXIU=;
-        b=Kc3iepValDL7H8OkDCRlcyzb7qkBE74kVKIgbMFsF+jJ3qZlExdnc2esbsVJVpYcB6
-         H79KHNdT6NPCKNLYek8CFGwxIgS4sWrKbQRTWuBPVR4tX7cjEl+OxrrBfeUHRL0unAcy
-         +knQ0u3oAxFlsDtudBqRxSGh3IXh2z2Ojy/Vnoz1u38ttF4/YLDHCUPCrNQ8HDASth4I
-         mPqzouF60AnzIj2pAWmqhFehTr1hKCYUJmWbOmAh9gm7D+L20vb51kHDgseOhC8/FmZH
-         s0r9fqIufarJG3B8MjB9CoLNPgztqLimqoiBpF+T+icBuZ4X5HxGZaWQfGlIkz5cEfcH
-         Z/kQ==
-X-Gm-Message-State: AOAM531y/APAGAN2e+qvCU3LyPulQHUVZmfT8IRlc4lqfqzjW6HLAcIh
-        AJPp64Ow0nXz/1gACasFLP6B+xNbtNI=
-X-Google-Smtp-Source: ABdhPJw549cjukoD5hOYyqCBWLw4SEvxL5SSsJaaSXbEOlQUUAGGfkpzh/u4BL/eTYmBUmx+Mc2Tmg==
-X-Received: by 2002:a1c:43c2:: with SMTP id q185mr7520904wma.30.1638463551408;
-        Thu, 02 Dec 2021 08:45:51 -0800 (PST)
-Received: from archbook.localnet (84-72-105-84.dclient.hispeed.ch. [84.72.105.84])
-        by smtp.gmail.com with ESMTPSA id q24sm2512096wmj.21.2021.12.02.08.45.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 08:45:50 -0800 (PST)
-From:   Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-To:     linux-gpio@vger.kernel.org, linux-rockchip@lists.infradead.org
-Cc:     John Keeping <john@metanate.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        John Keeping <john@metanate.com>
-Subject: Re: [PATCH] gpio/rockchip: lock GPIOs used as interrupts
-Date:   Thu, 02 Dec 2021 17:45:49 +0100
-Message-ID: <9812574.z3kqYUtTCC@archbook>
-In-Reply-To: <20211202155022.2972779-1-john@metanate.com>
-References: <20211202155022.2972779-1-john@metanate.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        Thu, 2 Dec 2021 11:51:10 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id D9BF42170C;
+        Thu,  2 Dec 2021 16:47:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638463666; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mxRcxXmxG76qGgTBaBeUpBFize7WnysyyQikOH1GeMQ=;
+        b=HUXDDvix0EhVysEIXBAAeRj4c+oJvzf2MgTIPIDWLWcEpDLwLDQKQIh4zbp2A8tc1Erm3T
+        O6e6QA/Oe5GH206Bfr/u+9ueXt0F4RL2EewIkSFgTkXayDasehTgy/j3OsgPGwNAv9uxB8
+        nexnS57PKndbNKcWaRt8W8yUfCT4Tjw=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638463666;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mxRcxXmxG76qGgTBaBeUpBFize7WnysyyQikOH1GeMQ=;
+        b=Bbllj+KgbrxrHyOjRGzVQ8mF0qCLSExZfVYOv6b8mDHyJBBRRltfYEXih5ItosZXsXiTPz
+        6zMdUMDMf187UXCQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id BFDC5A3B83;
+        Thu,  2 Dec 2021 16:47:46 +0000 (UTC)
+Date:   Thu, 02 Dec 2021 17:47:46 +0100
+Message-ID: <s5h7dcnt0lp.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Takashi Iwai <tiwai@suse.de>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Tedd Ho-Jeong An <tedd.an@intel.com>,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org
+Subject: Re: [PATCH] Bluetooth: Apply initial command workaround for more Intel chips
+In-Reply-To: <acc7b5b4-72cc-9f3b-90a6-6fbf6c3a71e7@molgen.mpg.de>
+References: <20211202162256.31837-1-tiwai@suse.de>
+        <acc7b5b4-72cc-9f3b-90a6-6fbf6c3a71e7@molgen.mpg.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Donnerstag, 2. Dezember 2021 16:50:21 CET John Keeping wrote:
-> Use the standard gpiochip request/release resource functions so that any
-> GPIOs used as interrupts are properly locked.  This allows libgpiod to
-> correctly show these GPIOs as in-use.
+On Thu, 02 Dec 2021 17:32:14 +0100,
+Paul Menzel wrote:
 > 
-> Signed-off-by: John Keeping <john@metanate.com>
+> Dear Takashi,
+> 
+> 
+> Am 02.12.21 um 17:22 schrieb Takashi Iwai:
+> > It seems that a few more Intel chips require the workaround for the
+> > broken initial command.  At least, per openSUSE Bugzilla reports,
+> > 8087:0a2a and 8087:0026 need BTUSB_INTEL_BROKEN_INITIAL_NCMD flag.
+> >
+> > Fixes: 83f2dafe2a62 ("Bluetooth: btintel: Refactoring setup routine for legacy ROM sku")
+> > Buglink: https://bugzilla.opensuse.org/show_bug.cgi?id=1193124
+> > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> >
+> 
+> […]
+> 
+> I have a Dell Latitude E7250 with
+> 
+>     Bus 001 Device 003: ID 8087:0a2a Intel Corp. Bluetooth wireless
+> interface
+> 
+> and Bluetooth seems to work fine minus some Linux warnings [1] and a
+> problem transferring greater than some bytes files with the Nokia N9
+> [2].
+> 
+> Linux 5.16-rc3, Dell Inc. Latitude E7250/0TVD2T, BIOS A19 01/23/2018:
+> 
+> ```
+> $ sudo dmesg | grep -i bluet
+> [    8.173417] calling  bt_init+0x0/0xb3 [bluetooth] @ 301
+> [    8.173439] Bluetooth: Core ver 2.22
+> [    8.173463] NET: Registered PF_BLUETOOTH protocol family
+> [    8.173464] Bluetooth: HCI device and connection manager initialized
+> [    8.173467] Bluetooth: HCI socket layer initialized
+> [    8.173470] Bluetooth: L2CAP socket layer initialized
+> [    8.173473] Bluetooth: SCO socket layer initialized
+> [    8.173475] initcall bt_init+0x0/0xb3 [bluetooth] returned 0 after
+> 35 usecs
+> [    8.216875] Bluetooth: hci0: Legacy ROM 2.5 revision 1.0 build 3
+> week 17 2014
+> [    8.233515] bluetooth hci0: firmware: direct-loading firmware
+> intel/ibt-hw-37.8.10-fw-1.10.3.11.e.bseq
+> [    8.233520] Bluetooth: hci0: Intel Bluetooth firmware file:
+> intel/ibt-hw-37.8.10-fw-1.10.3.11.e.bseq
+> [    8.540884] Bluetooth: hci0: unexpected event for opcode 0xfc2f
+> [    8.558942] Bluetooth: hci0: Intel BT fw patch 0x32 completed & activated
+> ```
 
-Tested-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
+Thanks, so this seems depending on the hardware, maybe a subtle
+difference matters.  As far as I read the code changes, the workaround
+was applied in the past unconditionally, so it must be fairly safe
+even if the chip works as is.
 
-Applied this on my Quartz64 Model A (RK3566) where I currently am
-having a play with some SPI devices. Now gpioinfo correctly shows
-the interrupt pin as being in use.
-
-Before:
-         line   3:      unnamed       unused   input  active-high 
-
-After:
-         line   3:      unnamed  "interrupt"   input  active-high [used]
-
-Regards,
-Nicolas Frattaroli
+Or, for avoiding the unnecessarily application of the workaround,
+should it be changed as a fallback after the failure at the first
+try...?
 
 
-
+Takashi

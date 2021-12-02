@@ -2,93 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78545465A22
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F936465A28
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:00:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353931AbhLBAD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:03:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240628AbhLBAD1 (ORCPT
+        id S1353952AbhLBAEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:04:13 -0500
+Received: from alexa-out-sd-02.qualcomm.com ([199.106.114.39]:53315 "EHLO
+        alexa-out-sd-02.qualcomm.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1353902AbhLBAEE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:03:27 -0500
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 107D3C061748
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 16:00:06 -0800 (PST)
-Received: by mail-qt1-x831.google.com with SMTP id a2so25826047qtx.11
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 16:00:06 -0800 (PST)
+        Wed, 1 Dec 2021 19:04:04 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YzFMI5oWE2o+jFyOP5vbILw8vGd41FKbBUY66oRdEQk=;
-        b=HVyEG20SBKF/jqmTGVh7Dh/M0D4FVk1nCzH++iKpmlf4sjOzLgIFju63Hl9Ed9BGhp
-         m/HR14Jg/zzhVH6f8hsABaAUF0TrZGvGQ7qOxJWv1GPxlYKLiMTwAiS1Ujvt8ReOCeBW
-         Zk0Wf82z+4aMUjNuedm8E4Rft/118UNq0bX0w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YzFMI5oWE2o+jFyOP5vbILw8vGd41FKbBUY66oRdEQk=;
-        b=Xf46ojrry3qTq/m4qxlUpsErQ/HYZogwLgFTfDy0gPisEK/vZg7e0S1KsJyFRnb3In
-         ppeTv4OuVQvNCO5V4YQVV43LLxVfu79y6GAgZSVmqi+LSTDQMbQtL3L+RrzkMxs/Klzo
-         mJj0jT9s3wPY0j+IJven6V09WaUvjrddG97RBj5DteLx2LmcHMOHJWgTOqsLxqivZRUh
-         f9Rvkw0FyNryq8KewMptgG+Xj19sSDtHtRcsw7f2IlKS6Y6ko27Pqn1+rG1yh9ZEdepj
-         7txaxaScH5tzbWM1PEypA2xxic67XfsaYU4D+ooPLuShEOvGXkFpynWryVG8Ufyaz0NQ
-         SIRA==
-X-Gm-Message-State: AOAM532RKX6cXjZOx2IVyQFeI1JYNfsp//eVdy0aDZYx4eTqZYvG9qI8
-        D2osDGyLlCX/LbK82YC3hFGhwtM1oulCfafEN8ie5Q==
-X-Google-Smtp-Source: ABdhPJwuwORHr25rSusAmz6Rw8B8e2m0YmLSJeSuvEmJ4pbHkBNQlMFlJSCM9HXMUs06MfzXrMPJl/3J77nepYoci9c=
-X-Received: by 2002:ac8:5a10:: with SMTP id n16mr10785131qta.278.1638403205087;
- Wed, 01 Dec 2021 16:00:05 -0800 (PST)
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1638403243; x=1669939243;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=T9wXr1cGD+ZTV92qLqbzIyRrhycRLxu645SkksvngmE=;
+  b=E7oJTSXM8w8S9idjuRvdrRpdP6E+gD0OrYWsyJoM9F91eR1K+HMd3iRX
+   JmrBBOVRNXA/xgVJ5Aagc7/tAZg7sz6iyy3+A1yaoJ1LHz4Y3Hs5zKPT4
+   5Qlj8/mSAtiBQ8Wn4wwFhmuG0mY+i7nIRVLxfODj0c5lZyAFZ50Pvkq/U
+   I=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 01 Dec 2021 16:00:42 -0800
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2021 16:00:42 -0800
+Received: from nalasex01c.na.qualcomm.com (10.47.97.35) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 16:00:42 -0800
+Received: from fenglinw-gv.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.922.19; Wed, 1 Dec 2021 16:00:39 -0800
+From:   Fenglin Wu <quic_fenglinw@quicinc.com>
+To:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <sboyd@kernel.org>
+CC:     <collinsd@codeaurora.org>, <subbaram@codeaurora.org>,
+        <quic_fenglinw@quicinc.com>, <tglx@linutronix.de>, <maz@kernel.org>
+Subject: [RESEND PATCH v3 00/10] A bunch of fix and optimization patches in spmi-pmic-arb.c
+Date:   Thu, 2 Dec 2021 08:00:02 +0800
+Message-ID: <1638403212-29265-1-git-send-email-quic_fenglinw@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20211129034201.5767-1-yunfei.dong@mediatek.com>
- <20211129034201.5767-5-yunfei.dong@mediatek.com> <8a5afa81-71b7-ba42-d1ce-2bbf82a7e557@collabora.com>
-In-Reply-To: <8a5afa81-71b7-ba42-d1ce-2bbf82a7e557@collabora.com>
-From:   Steve Cho <stevecho@chromium.org>
-Date:   Wed, 1 Dec 2021 15:59:54 -0800
-Message-ID: <CAC-pXoP2nn-DdSJTWDES19UdMp9A5unj9u7Bs=Qw+ex9=HvyVw@mail.gmail.com>
-Subject: Re: [PATCH v11, 04/19] media: mtk-vcodec: export decoder pm functions
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Yunfei Dong <yunfei.dong@mediatek.com>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Tzung-Bi Shih <tzungbi@chromium.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tomasz Figa <tfiga@google.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Fritz Koenig <frkoenig@chromium.org>,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Irui Wang <irui.wang@mediatek.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        srv_heupstream@mediatek.com, linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Steve Cho <stevecho@chromium.org>
+  Resend the series and cc irqchip maintainers.
 
-On Wed, Dec 1, 2021 at 4:09 AM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 29/11/21 04:41, Yunfei Dong ha scritto:
-> > Register each hardware as platform device, need to call pm functions
-> > to open/close power and clock from module mtk-vcodec-dec, export these
-> > functions.
-> >
-> > Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
-> > Reviewed-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
->
->
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+  Remove [v2 07/10], it's no longer needed after this change:
+	https://lore.kernel.org/all/20211118034719.28971-1-quic_collinsd@quicinc.com/T/#u
+  In [v3 07/10], update the author email to match with Signed-off-by.
+  In [v3 10/10], address issues in qcom,spmi-pmic-arb.yaml
+
+
+Abhijeet Dharmapurikar (1):
+  spmi: pmic-arb: handle spurious interrupt
+
+Ashay Jaiswal (1):
+  spmi: pmic-arb: add support to dispatch interrupt based on IRQ status
+
+David Collins (6):
+  spmi: pmic-arb: check apid against limits before calling irq handler
+  spmi: pmic-arb: correct duplicate APID to PPID mapping logic
+  spmi: pmic-arb: block access for invalid PMIC arbiter v5 SPMI writes
+  bindings: spmi: spmi-pmic-arb: mark interrupt properties as optional
+  spmi: pmic-arb: make interrupt support optional
+  spmi: pmic-arb: increase SPMI transaction timeout delay
+
+Fenglin Wu (1):
+  dt-bindings: convert qcom,spmi-pmic-arb binding to YAML format
+
+Subbaraman Narayanamurthy (1):
+  spmi: pmic-arb: do not ack and clear peripheral interrupts in
+    cleanup_irq
+
+ .../bindings/spmi/qcom,spmi-pmic-arb.txt           |  65 ----------
+ .../bindings/spmi/qcom,spmi-pmic-arb.yaml          | 128 +++++++++++++++++++
+ Documentation/devicetree/bindings/spmi/spmi.yaml   |   3 +-
+ drivers/spmi/spmi-pmic-arb.c                       | 137 +++++++++++++++------
+ 4 files changed, 226 insertions(+), 107 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.txt
+ create mode 100644 Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
+
+-- 
+2.7.4
+

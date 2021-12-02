@@ -2,145 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 734A04667B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AC14667AF
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:14:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359383AbhLBQSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359368AbhLBQRe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:17:34 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9949DC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 08:14:11 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id j9so25376320qvm.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 08:14:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=ufkuMHJENZAKBVIrvseO49pb4ZFToj5htqXCloJEnks=;
-        b=Crx2IVA+3FT3DarQIHnHUeky6f0sOi0uyQVyUV5jrn7dSPq4qJ6fXu1TKwVoYru9Mv
-         lXERzjbX5xXWNbnnILttG3dn193EsWXLZU+iwq8aed71iJ4kfDnZAs/kHkymZ/1awlNM
-         fLX7BBPZfZvUg+4KyrempOVuGI3KkIG5e7MJFZBCTU0owbK3Q3G4LQ028mXapsNvnrwW
-         UZnA7ljZEzwMbHaKdFEWf8nFiRXq1SbVyAwDYZSJraplDwo9euYtP0sbGVvq68Gu1BQv
-         hiWyGOYqTb7XSz2rF15AgUM8rQwFWgrv3qwj7y6R9FGxplJsVtxKxzUqkjfCNfAvLd6V
-         KWAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=ufkuMHJENZAKBVIrvseO49pb4ZFToj5htqXCloJEnks=;
-        b=lozg4XWx17P4r5NG1wfrgCpJw60NHySWYj77Im+hZR5qYXjtYmc3IlHwaPSQYjnSUi
-         KEojZzmNB+DyUC7z+F3QkyEgAIk+AAe4nEdv7/UbB4UnsBoZ5QEZW7XOAbb4ortAInX8
-         68jQrfJ2ml9NkZaI1LjTYlNVJXEmJK474Gd+pBssc2FeqKcUPjjVQfBTHNAaJ4R+dzK2
-         YLaLjXhmxbdY4+tOkf8jqJXTWo+X3Bwe4IMIdHz24Eb30z8SLlbN+75Qw0P/e/Ionv5/
-         eVyIjQHvZSVby3sWTas6oe75tbnK4/ibtqDdvJwVGTaU1GgX2PxM21QM9Mv9q+Xv7eOD
-         IHbQ==
-X-Gm-Message-State: AOAM533oDQpAsRmHj0DVXyaKfn4h41l9Qh66VDeYgJ6/7NDzmF5mD+9D
-        ujY3xuNcTZuvUsRwvzb+P17TLwIIr4rmCOYsyBfCwQ==
-X-Google-Smtp-Source: ABdhPJxjUOHGzUULmdGYRPeP5vFSn8K/NzY6SOtvNi1xDsFneFX5rAQN0TOn/uuP8WGVW+Aei30O7ewS4oTjFJjcah0=
-X-Received: by 2002:a0c:8031:: with SMTP id 46mr14089905qva.126.1638461650530;
- Thu, 02 Dec 2021 08:14:10 -0800 (PST)
+        id S1359356AbhLBQRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:17:30 -0500
+Received: from foss.arm.com ([217.140.110.172]:37252 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1359197AbhLBQR2 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 11:17:28 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A24C8142F;
+        Thu,  2 Dec 2021 08:14:05 -0800 (PST)
+Received: from lakrids (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1BE813F73B;
+        Thu,  2 Dec 2021 08:14:04 -0800 (PST)
+Date:   Thu, 2 Dec 2021 16:14:01 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Dougall <dougallj@gmail.com>, kernel-team@android.com
+Subject: Re: [PATCH v2 8/8] drivers/perf: Add Apple icestorm/firestorm CPU
+ PMU driver
+Message-ID: <Yajwydy37psEPaS2@lakrids>
+References: <20211201134909.390490-1-maz@kernel.org>
+ <20211201134909.390490-9-maz@kernel.org>
+ <YaepolizIKkzDQoV@FVFF77S0Q05N>
+ <877dcnm2wt.wl-maz@kernel.org>
 MIME-Version: 1.0
-References: <cover.1638308023.git.andreyknvl@google.com> <984104c118a451fc4afa2eadb7206065f13b7af2.1638308023.git.andreyknvl@google.com>
-In-Reply-To: <984104c118a451fc4afa2eadb7206065f13b7af2.1638308023.git.andreyknvl@google.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 2 Dec 2021 17:13:34 +0100
-Message-ID: <CAG_fn=U71Yn-qCGMBR=_uOt0QCEu9skGzhgRBJjpkQCjZ=dKiA@mail.gmail.com>
-Subject: Re: [PATCH 08/31] kasan, page_alloc: refactor init checks in post_alloc_hook
-To:     andrey.konovalov@linux.dev
-Cc:     Marco Elver <elver@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        kasan-dev@googlegroups.com,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Evgenii Stepanov <eugenis@google.com>,
-        linux-kernel@vger.kernel.org,
-        Andrey Konovalov <andreyknvl@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877dcnm2wt.wl-maz@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 30, 2021 at 10:41 PM <andrey.konovalov@linux.dev> wrote:
->
-> From: Andrey Konovalov <andreyknvl@google.com>
->
-> This patch separates code for zeroing memory from the code clearing tags
-> in post_alloc_hook().
->
-> This patch is not useful by itself but makes the simplifications in
-> the following patches easier to follow.
->
-> This patch does no functional changes.
->
-> Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
-> ---
->  mm/page_alloc.c | 18 ++++++++++--------
->  1 file changed, 10 insertions(+), 8 deletions(-)
->
-> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> index 2ada09a58e4b..0561cdafce36 100644
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -2406,19 +2406,21 @@ inline void post_alloc_hook(struct page *page, un=
-signed int order,
->                 kasan_alloc_pages(page, order, gfp_flags);
->         } else {
->                 bool init =3D !want_init_on_free() && want_init_on_alloc(=
-gfp_flags);
-> +               bool init_tags =3D init && (gfp_flags & __GFP_ZEROTAGS);
->
->                 kasan_unpoison_pages(page, order, init);
->
-> -               if (init) {
-> -                       if (gfp_flags & __GFP_ZEROTAGS) {
-> -                               int i;
-> +               if (init_tags) {
-> +                       int i;
->
-> -                               for (i =3D 0; i < 1 << order; i++)
-> -                                       tag_clear_highpage(page + i);
-> -                       } else {
-> -                               kernel_init_free_pages(page, 1 << order);
-> -                       }
-> +                       for (i =3D 0; i < 1 << order; i++)
-> +                               tag_clear_highpage(page + i);
-> +
-> +                       init =3D false;
+On Thu, Dec 02, 2021 at 03:39:46PM +0000, Marc Zyngier wrote:
+> On Wed, 01 Dec 2021 16:58:10 +0000,
+> Mark Rutland <mark.rutland@arm.com> wrote:
+> > 
+> > On Wed, Dec 01, 2021 at 01:49:09PM +0000, Marc Zyngier wrote:
+> > > Add a new, weird and wonderful driver for the equally weird Apple
+> > > PMU HW. Although the PMU itself is functional, we don't know much
+> > > about the events yet, so this can be considered as yet another
+> > > random number generator...
+> > 
+> > It's really frustrating that Apple built this rather than the
+> > architected PMU, because we've generally pushed back on
+> > IMPLEMENTATION DEFINED junk in this area, and supporting this makes
+> > it harder to push back on other vendors going the same route, which
+> > I'm not keen on. That, and the usual state of IMP-DEF stuff making
+> > this stupidly painful to reason about.
+> 
+> As much as I agree with you on the stinking aspect of an IMPDEF PMU,
+> this doesn't contradicts the architecture. To avoid the spread of this
+> madness, forbidding an IMPDEF implementation in the architecture would
+> be the right thing to do.
 
-I find this a bit twisted and prone to breakages.
-Maybe just check for (init && !init_tags) below?
->                 }
-> +
-> +               if (init)
-> +                       kernel_init_free_pages(page, 1 << order);
->         }
->
->         set_page_owner(page, order, gfp_flags);
-> --
-> 2.25.1
->
+Yeah; I'll see what I can do. ;)
 
+> > I can see that we can get this working bare-metal with DT, but I
+> > really don't want to try to support this in other cases (e.g. in a
+> > VM, potentially with ACPI), or this IMP-DEFness is going to spread
+> > more throughout the arm_pmu code.
+> 
+> Well, an alternative would be to sidestep the arm_pmu framework
+> altogether.  Which would probably suck even more.
+> 
+> > How does this interact with PMU emulation for a KVM guest?
+> 
+> It doesn't. No non-architected PMU will get exposed to a KVM guest,
+> and the usual "inject an UNDEF exception on IMPDEF access" applies. As
+> far as I am concerned, KVM is purely architectural and doesn't need to
+> be encumbered with this.
 
---=20
-Alexander Potapenko
-Software Engineer
+Cool; I think not exposing this into a VM rules out the other issues I
+was concerned with, so as long as we're ruling that out I think we're
+agreed (and I see no reason for us to try to force this platform to work
+with ACPI on bare-metal).
 
-Google Germany GmbH
-Erika-Mann-Stra=C3=9Fe, 33
-80636 M=C3=BCnchen
+> > > +static const u16 m1_pmu_event_affinity[M1_PMU_PERFCTR_LAST + 1] = {
+> > > +	[0 ... M1_PMU_PERFCTR_LAST]	= ANY_BUT_0_1,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_01]	= BIT(7),
+> > > +	[M1_PMU_PERFCTR_CPU_CYCLES]	= ANY_BUT_0_1 | BIT(0),
+> > > +	[M1_PMU_PERFCTR_INSTRUCTIONS]	= BIT(7) | BIT(1),
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_8d]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_8e]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_8f]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_90]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_93]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_94]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_95]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_96]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_97]	= BIT(7),
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_98]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_99]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_9a]	= BIT(7),
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_9b]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_9c]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_9f]	= BIT(7),
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_bf]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_c0]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_c1]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_c4]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_c5]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_c6]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_c8]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_ca]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_cb]	= ONLY_5_6_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_f5]	= ONLY_2_4_6,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_f6]	= ONLY_2_4_6,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_f7]	= ONLY_2_4_6,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_f8]	= ONLY_2_TO_7,
+> > > +	[M1_PMU_PERFCTR_UNKNOWN_fd]	= ONLY_2_4_6,
+> > > +};
+> > 
+> > I don't entirely follow what's going on here. Is this a matrix
+> > scheme like what QC had in their IMP-DEF Krait PMUs? See:
+> > 
+> >   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/kernel/perf_event_v7.c?h=v5.16-rc3#n1286
+> 
+> It is nowhere as complicated as that.
 
-Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Halimah DeLaine Prado
-Registergericht und -nummer: Hamburg, HRB 86891
-Sitz der Gesellschaft: Hamburg
+Good to hear!
+
+> > I'm a bit worried about this, since is this is of that shape, there
+> > are potential constraints on which counters and/or events you can
+> > use concurrently, and if you violate those they can conflict. If so,
+> > we need to be *very* careful about the abstraction we provide to
+> > userspace.
+> 
+> The HW does have placement constraints (this is what this per-event
+> bitmap is expressing), but the counting seems completely independent
+> as long as you find an ad-hoc counter to place the event. Which means
+> that if you try and count (for example) 4 events that would only fit
+> in {5,6,7}, we'll say NO to the fourth one.
+> 
+> As I say somewhere in a comment, we could do a better job if we had a
+> global view of the events to be counted, and split them in batches
+> that the core perf would then schedule.
+
+For better or worse I don't think there's a good way to do that due to
+the way the core perf event lists are managed. You basically have a
+choice between either stopping prematurely or iterating over *all* the
+events redundantly (which is potentially very expensive and
+deliberately avoided today).
+
+If (as I understand from the above) the constraints are independent then 
+I don't think there's anything we can do in the PMU driver.
+
+> If you think any of this somehow breaks the userspace ABI, please let
+> me know (my understand of perf is pretty limited...).
+
+As long as there are no cross-event or cross-counter constraints, then I
+don't think there's a userspace ABI problem here.
+
+[...]
+
+> > > +static void m1_pmu_configure_counter(unsigned int index, u8 event,
+> > > +				     bool user, bool kernel)
+> > > +{
+> > > +	u64 val, user_bit, kernel_bit;
+> > > +	int shift;
+> > > +
+> > > +	switch (index) {
+> > > +	case 0 ... 7:
+> > > +		user_bit = BIT(get_bit_offset(index, PMCR1_COUNT_A64_EL0_0_7));
+> > > +		kernel_bit = BIT(get_bit_offset(index, PMCR1_COUNT_A64_EL1_0_7));
+> > > +		break;
+> > > +	case 8 ... 9:
+> > > +		user_bit = BIT(get_bit_offset(index - 8, PMCR1_COUNT_A64_EL0_8_9));
+> > > +		kernel_bit = BIT(get_bit_offset(index - 8, PMCR1_COUNT_A64_EL1_8_9));
+> > > +		break;
+> > 
+> > When this says 'EL1', presuambly that's counting at EL2 in VHE?
+> 
+> It does.
+> 
+> > Are there separate EL1 / EL2 controls, or anythign of that sort we need to be
+> > aware of?
+> 
+> No, there is a single, per-counter control for EL0 and EL2. I couldn't
+> get the counters to report anything useful while a guest was running,
+> but that doesn't mean such control doesn't exist.
+
+Ok. We might need to require the exclude_guest flag for now, assuming
+the perf tool automatically sets that.
+
+[...]
+
+> > > +	state = read_sysreg_s(SYS_IMP_APL_PMCR0_EL1);
+> > > +	overflow = read_sysreg_s(SYS_IMP_APL_PMSR_EL1);
+> > 
+> > I assume the overflow behaviour is free-running rather than stopping?
+> 
+> Configurable, apparently. At the moment, I set it to stop on overflow.
+> Happy to change the behaviour though.
+
+The architected PMU continues counting upon overflow (which prevents
+losing counts around the overlflow occurring), so I'd prefer that.
+
+Is that behaviour per-counter, or for the PMU as a whole?
+
+[...]
+
+> > > +static int m1_pmu_device_probe(struct platform_device *pdev)
+> > > +{
+> > > +	int ret;
+> > > +
+> > > +	ret = arm_pmu_device_probe(pdev, m1_pmu_of_device_ids, NULL);
+> > > +	if (!ret) {
+> > > +		/*
+> > > +		 * If probe succeeds, taint the kernel as this is all
+> > > +		 * undocumented, implementation defined black magic.
+> > > +		 */
+> > > +		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
+> > > +	}
+> > > +
+> > > +	return ret;
+> > > +}
+> > 
+> > Hmmm... that means we're always going to TAINT on this HW with an appropriate
+> > DT, which could mask other reasons TAINT_CPU_OUT_OF_SPEC would be set, even
+> > where the user isn't using the PMU.
+> > 
+> > Maybe we should have a cmdline option to opt-in to using the IMP-DEF PMU (and
+> > only tainting in that case)?
+> 
+> I'd rather taint on first use. Requiring a command-line argument for
+> this seems a bit over the top...
+
+That does sound nicer.
+
+That said, if we've probed the thing, we're going to be poking it to
+reset it (including out of idle), even if the user hasn't tried to use
+it, so I'm not sure what's best after all...
+
+Thanks,
+Mark.

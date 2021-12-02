@@ -2,147 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 58DE2466140
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E16AD466145
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:13:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354959AbhLBKQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:16:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
+        id S1356895AbhLBKQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:16:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239518AbhLBKQo (ORCPT
+        with ESMTP id S1356828AbhLBKQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:16:44 -0500
-Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07CFC06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:13:21 -0800 (PST)
-Received: by mail-wr1-x44a.google.com with SMTP id r2-20020adfe682000000b00198af042b0dso4875307wrm.23
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:13:21 -0800 (PST)
+        Thu, 2 Dec 2021 05:16:53 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3584C06174A;
+        Thu,  2 Dec 2021 02:13:28 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id p3-20020a05600c1d8300b003334fab53afso1871007wms.3;
+        Thu, 02 Dec 2021 02:13:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=8N5RdsPFCDQOOr5Z+B7VY5Dmo/Ijqkz2fn7CLWsbo/s=;
-        b=F3VmtU6AQKt4NMnuBp/weYOHYOaxN3ze5nfUY+yy5JW/8254HRTDEvIt1FD4xlo/Bn
-         4/iwSB+yX/eZwJiT1AUHRRBmt1oi11zKx/lM1+PeQbP72+aM5UvM5ZzzqWSO01Xj+1th
-         CU9PA7roV7oiT/pZv8YY8L2P7Jf2OxoCi8hTRZExrBNRI5Oc+V2yVF9pCLekQLxRUCK8
-         KRdDhJ3iMBCtIAtoWC2uVeJkoH7FKVNygm66KFs+AEXn+3Q14ZdENwzaiAljYjtEkHdg
-         qCFzj5eqO+0yYPNlou9kV0Nh4Y3GuhpLXGozBYv1oAKdb/cZ9mWIZbKKCGAg7uk6MQn3
-         aqRw==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:content-language:to:cc
+         :references:from:subject:in-reply-to:content-transfer-encoding;
+        bh=qHtIrcLBdVwW76CkvNIwp3+IMpC3Sz6lgdbRRy5WGMo=;
+        b=VRsLcPfjhc6mTSTomtB1Xi+XHgG93sc5Fu9/4vW8YBuibzOjLW+23K1O4aJvkbk8iw
+         1iA77cbWKNIINYSWuIUReVJK6SAXVEBsZ1wPBN5aAdLKCfx+p7jnIFh2WmEQWwf8kPms
+         f69ffIWk1neL+ZCNC71P4kvPwQniHzyBlZGlTZs0n5JQBe7cYERl1uQ67LIcc1UWbgpe
+         90stHnT0W4nTqoh0FjmwyqgOtAKJkhmkKJzSFefJ95LBMBpPbGEWit6AIm0kyY7arNZf
+         NNaeEBeysNNd1Qb1hGQ6R4adHpOAc0IXoMWuY04Ew4tYvuT8HyvP6KBYeP0XJXyUP/oN
+         0Rug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=8N5RdsPFCDQOOr5Z+B7VY5Dmo/Ijqkz2fn7CLWsbo/s=;
-        b=PseF+IEKYMSxy4dvzmIpIvXA+ZJUr2ObMSQXMjTNAyYMSC7WxhbwS6QMYXPKACp5xx
-         Ad+adOGR5hENofudgh03X0Cfw6iaUlANEWx1waHXeBkeJ9Ldz5rjujP2sSBM15Iu/mWC
-         v4wq4rbea7B3UsoitmpjkpFO6R0xIOs4+BQmip/mg+yuRMQ+t3WNYdjXL5tM82lmyQWB
-         qNYLic1SXWJVS7nXG+eRuMhUk1d9sKKvDYvZSYiOGYbPb66rRUCil4VPXW17Tij+SrCK
-         qpvUeMjyKmCAw0URm1oWlKxb7zV28uGz1Pr+VR7lC367/vIzrnbWGTkOkPF3CUu/7Gep
-         2pHQ==
-X-Gm-Message-State: AOAM533uu726rScqsiAXfp4Vvh2s7AKzPigGYa3UmeJDsBrsPWh5gg39
-        5w1vhaSZ3Da6EGUvIiJ9hcSiBzCHNg==
-X-Google-Smtp-Source: ABdhPJzWAXSrgLXPWbu8YK3Y8FIdNsUhvHZebQe9PrO9hqNDDxBD9Ytzzqel3TAvUdiXANuuUyRLAHlHKg==
-X-Received: from elver.muc.corp.google.com ([2a00:79e0:15:13:ddd6:f3c9:b2f0:82f3])
- (user=elver job=sendgmr) by 2002:a5d:4e0b:: with SMTP id p11mr13212204wrt.88.1638440000442;
- Thu, 02 Dec 2021 02:13:20 -0800 (PST)
-Date:   Thu,  2 Dec 2021 11:12:38 +0100
-Message-Id: <20211202101238.33546-1-elver@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.34.0.rc2.393.gf8c9666880-goog
-Subject: [PATCH] locking/mutex: Mark racy reads of owner->on_cpu
-From:   Marco Elver <elver@google.com>
-To:     elver@google.com, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>, linux-kernel@vger.kernel.org
-Cc:     kasan-dev@googlegroups.com, Thomas Gleixner <tglx@linutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:subject:in-reply-to
+         :content-transfer-encoding;
+        bh=qHtIrcLBdVwW76CkvNIwp3+IMpC3Sz6lgdbRRy5WGMo=;
+        b=60KYQR36aRd2nNKU/4dYWYNJ56PNVtcjmddf2c1Y0C9/WTCuMeEbPaNJ/fGb3wvpQg
+         YnEqufY2GQyDteAkURpUZh//gwuAz3nkZ2wV3cKnQI5Ilc8OmAV6qAYe8Ny/bjbMME22
+         34A20ri7s5I9sFMviNFnQ5q6n4FR8EwayXc2WxkGjpPHoGHqIuRllOqTzH5OOLpQj7qF
+         1hJYhYPE4rFMtFSQJXD4gWsBeuZALOtmXHT4ztPYzJkpT1/34BScPqqxoDO0dbptuf++
+         irbetvMUC4ePFHHXxqaSvkYIvH3QrFvKchXVGJX52R8ABxttWYWE5IuIfx4GD5v2tu2u
+         xZ2g==
+X-Gm-Message-State: AOAM532tuRqBrHFcfwKMAkSXnwouCNTe32KU5WPLpjP858PFMcwhRc/4
+        uNzpPXgDiYH1YoFKHeg4hI4=
+X-Google-Smtp-Source: ABdhPJym4bvQmr7jCuoUsGpAjJ14bAaTdL8NbSsJWhNeZGKsS4HO6MCkzQYRhfSSbDHOhscGwDyFKw==
+X-Received: by 2002:a1c:8015:: with SMTP id b21mr5079991wmd.161.1638440007473;
+        Thu, 02 Dec 2021 02:13:27 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f1a:f00:6195:7c7f:1f45:58f4? (p200300ea8f1a0f0061957c7f1f4558f4.dip0.t-ipconnect.de. [2003:ea:8f1a:f00:6195:7c7f:1f45:58f4])
+        by smtp.googlemail.com with ESMTPSA id p27sm1661375wmi.28.2021.12.02.02.13.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 02 Dec 2021 02:13:27 -0800 (PST)
+Message-ID: <9116dadb-c3a3-1e69-164a-2cffa341b91b@gmail.com>
+Date:   Thu, 2 Dec 2021 11:13:16 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Content-Language: en-US
+To:     Xiaoliang Yang <xiaoliang.yang_1@nxp.com>, davem@davemloft.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kuba@kernel.org, qiangqing.zhang@nxp.com, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        yannick.vignon@nxp.com, boon.leong.ong@intel.com,
+        Jose.Abreu@synopsys.com, mst@redhat.com, Joao.Pinto@synopsys.com,
+        mingkai.hu@nxp.com, leoyang.li@nxp.com
+References: <20211201014705.6975-1-xiaoliang.yang_1@nxp.com>
+ <20211201014705.6975-3-xiaoliang.yang_1@nxp.com>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH net-next 2/2] net: stmmac: make stmmac-tx-timeout
+ configurable in Kconfig
+In-Reply-To: <20211201014705.6975-3-xiaoliang.yang_1@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One of the more frequent data races reported by KCSAN is the racy read
-in mutex_spin_on_owner(), which is usually reported as "race of unknown
-origin" without showing the writer. This is due to the racing write
-occurring in kernel/sched. Locally enabling KCSAN in kernel/sched shows:
+On 01.12.2021 02:47, Xiaoliang Yang wrote:
+> stmmac_tx_timeout() function is called when a queue transmission
+> timeout. When Strict Priority is used as scheduling algorithms, the
+> lower priority queue may be blocked by a higher prority queue, which
+> will lead to tx timeout. We don't want to enable the tx watchdog timeout
+> in this case. Therefore, this patch make stmmac-tx-timeout configurable.
+> 
+Your patch just disables the timeout handler, the WARN_ONCE() would
+still fire. And shouldn't this be a runtime setting rather than a
+compile-time setting?
 
- | write (marked) to 0xffff97f205079934 of 4 bytes by task 316 on cpu 6:
- |  finish_task                kernel/sched/core.c:4632 [inline]
- |  finish_task_switch         kernel/sched/core.c:4848
- |  context_switch             kernel/sched/core.c:4975 [inline]
- |  __schedule                 kernel/sched/core.c:6253
- |  schedule                   kernel/sched/core.c:6326
- |  schedule_preempt_disabled  kernel/sched/core.c:6385
- |  __mutex_lock_common        kernel/locking/mutex.c:680
- |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
- |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
- |  mutex_lock                 kernel/locking/mutex.c:283
- |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
- |  ...
- |
- | read to 0xffff97f205079934 of 4 bytes by task 322 on cpu 3:
- |  mutex_spin_on_owner        kernel/locking/mutex.c:370
- |  mutex_optimistic_spin      kernel/locking/mutex.c:480
- |  __mutex_lock_common        kernel/locking/mutex.c:610
- |  __mutex_lock               kernel/locking/mutex.c:740 [inline]
- |  __mutex_lock_slowpath      kernel/locking/mutex.c:1028
- |  mutex_lock                 kernel/locking/mutex.c:283
- |  tty_open_by_driver         drivers/tty/tty_io.c:2062 [inline]
- |  ...
- |
- | value changed: 0x00000001 -> 0x00000000
-
-This race is clearly intentional, and the potential for miscompilation
-is slim due to surrounding barrier() and cpu_relax(), and the value
-being used as a boolean.
-
-Nevertheless, marking this reader would more clearly denote intent and
-make it obvious that concurrency is expected. Use READ_ONCE() to avoid
-having to reason about compiler optimizations now and in future.
-
-Similarly, mark the read to owner->on_cpu in mutex_can_spin_on_owner(),
-which immediately precedes the loop executing mutex_spin_on_owner().
-
-Signed-off-by: Marco Elver <elver@google.com>
----
-
-I decided to send this out now due to the discussion at [1], because it
-is one of the first things that people notice when enabling KCSAN.
-
-[1] https://lkml.kernel.org/r/811af0bc-0c99-37f6-a39a-095418b10661@huawei.com
-
-It had been reported before, but never with the 2nd stack trace -- so at
-the very least this patch can now serve as a reference.
-
-Thanks,
--- Marco
-
----
- kernel/locking/mutex.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/locking/mutex.c b/kernel/locking/mutex.c
-index db1913611192..50c03a3fa61e 100644
---- a/kernel/locking/mutex.c
-+++ b/kernel/locking/mutex.c
-@@ -367,7 +367,7 @@ bool mutex_spin_on_owner(struct mutex *lock, struct task_struct *owner,
- 		/*
- 		 * Use vcpu_is_preempted to detect lock holder preemption issue.
- 		 */
--		if (!owner->on_cpu || need_resched() ||
-+		if (!READ_ONCE(owner->on_cpu) || need_resched() ||
- 				vcpu_is_preempted(task_cpu(owner))) {
- 			ret = false;
- 			break;
-@@ -410,7 +410,7 @@ static inline int mutex_can_spin_on_owner(struct mutex *lock)
- 	 */
- 
- 	if (owner)
--		retval = owner->on_cpu && !vcpu_is_preempted(task_cpu(owner));
-+		retval = READ_ONCE(owner->on_cpu) && !vcpu_is_preempted(task_cpu(owner));
- 
- 	/*
- 	 * If lock->owner is not set, the mutex has been released. Return true
--- 
-2.34.0.rc2.393.gf8c9666880-goog
+> This patch set the CONFIG_STMMAC_TX_TIMEOUT by default when STMMAC_ETH
+> is selected. If anyone want to disable the tx watchdog timeout of
+> stmmac, he can unset the CONFIG_STMMAC_TX_TIMEOUT in menuconfig.
+> 
+> Signed-off-by: Xiaoliang Yang <xiaoliang.yang_1@nxp.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/Kconfig       | 12 ++++++++++++
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c |  4 ++++
+>  2 files changed, 16 insertions(+)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> index 929cfc22cd0c..856c7d056b61 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+> @@ -271,4 +271,16 @@ config STMMAC_PCI
+>  	  If you have a controller with this interface, say Y or M here.
+>  
+>  	  If unsure, say N.
+> +
+> +config STMMAC_TX_TIMEOUT
+> +	bool "STMMAC TX timeout support"
+> +	default STMMAC_ETH
+> +	depends on STMMAC_ETH
+> +	help
+> +	  Support for TX timeout enable on stmmac.
+> +
+> +	  This selects the TX watchdog timeout support for stmmac driver. The
+> +	  feature is enabled by default when STMMAC_ETH is selected. If you
+> +	  want to disable the TX watchdog timeout feature, say N here.
+> +
+>  endif
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index 89a6c35e2546..0a712b5d0715 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5421,6 +5421,7 @@ static int stmmac_napi_poll_rxtx(struct napi_struct *napi, int budget)
+>  	return min(rxtx_done, budget - 1);
+>  }
+>  
+> +#ifdef CONFIG_STMMAC_TX_TIMEOUT
+>  /**
+>   *  stmmac_tx_timeout
+>   *  @dev : Pointer to net device structure
+> @@ -5436,6 +5437,7 @@ static void stmmac_tx_timeout(struct net_device *dev, unsigned int txqueue)
+>  
+>  	stmmac_global_err(priv);
+>  }
+> +#endif
+>  
+>  /**
+>   *  stmmac_set_rx_mode - entry point for multicast addressing
+> @@ -6632,7 +6634,9 @@ static const struct net_device_ops stmmac_netdev_ops = {
+>  	.ndo_fix_features = stmmac_fix_features,
+>  	.ndo_set_features = stmmac_set_features,
+>  	.ndo_set_rx_mode = stmmac_set_rx_mode,
+> +#ifdef CONFIG_STMMAC_TX_TIMEOUT
+>  	.ndo_tx_timeout = stmmac_tx_timeout,
+> +#endif
+>  	.ndo_eth_ioctl = stmmac_ioctl,
+>  	.ndo_setup_tc = stmmac_setup_tc,
+>  	.ndo_select_queue = stmmac_select_queue,
+> 
 

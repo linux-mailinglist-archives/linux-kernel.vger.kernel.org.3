@@ -2,38 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 417EE465AD8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0214E465ADE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 01:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354502AbhLBAeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 19:34:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43900 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354293AbhLBAcm (ORCPT
+        id S1354537AbhLBAes (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 19:34:48 -0500
+Received: from sin.source.kernel.org ([145.40.73.55]:51962 "EHLO
+        sin.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1345031AbhLBAcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 19:32:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6D5C061756;
-        Wed,  1 Dec 2021 16:29:20 -0800 (PST)
+        Wed, 1 Dec 2021 19:32:41 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8EDFFB8219F;
-        Thu,  2 Dec 2021 00:29:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06078C58329;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 00639CE213B;
+        Thu,  2 Dec 2021 00:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C3CC58332;
         Thu,  2 Dec 2021 00:29:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1638404955;
-        bh=cvMmzh8x8FsGsRIFTe3ax6oCakAAl4UmFBxDrqEqpgI=;
+        bh=GHgGsDCq17POu9DvYzdzZrkC23Mrj2IPIVzBqt/uUnE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pDXLWn/TYEKKFJV0PG0LWHPnbTXTREeho7jaONbiDA9+1gkAkESU7JaTHQ57UAhur
-         nnCK6QpQbfMfF3ZvQ9OuonDOUi7MvQOqFa9GARqcZZgm45NYUFuqFKehpmcm3XiaiH
-         k3y0+/vIkhMQN/kGZMeS7SLm8/8tHvyV5rqMTqCkcZmca4SXabL5G2sr6o5NOhEBLG
-         KRpr9549oluU3B1Eomf023ww+vZWjD74pHvsJl7wX0nftp1WfbejBwl8Ho9lKyyScr
-         HTEbodLDu5z1Pz3pXcK8FT/s9UWA1Ia8lJRcmvVU8p/TgJAIbksWonlYPQ7K8JChzk
-         MzM24LulWEtOg==
+        b=p27+L0n0+0Su0ARbygCsvpjseu9Gr8Ko+ylfJEr5ZAZDc+A11iUq+j6Im2HV9Gzep
+         KecqD6595+/NvwNC4ribBr75BobF+GttIU2ih57gc+GOzHYUdwBHD/x1djDojb/zUq
+         a41TeW/A1G1ZTqMP1v3M9SI7pplZQVNiI4pHAsO+IuxtSlkyAUFziIOqkmGpj59RW/
+         PcpgihlpDVlC2WUJEe8ekmv0FdgQ2aygKtNobBdXVKjtNAqVtInQg5nElaaMagOhDW
+         VlUxOj6z9QKszpnSPnfN3v/LwfX8fx6FR6whiLfLPiZbDy6UqM6cuJNwWFDgfwh1CR
+         oG9Bn1aEaScPA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 727A95C13F8; Wed,  1 Dec 2021 16:29:14 -0800 (PST)
+        id 7468A5C1411; Wed,  1 Dec 2021 16:29:14 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
@@ -49,9 +46,9 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com, mingo@kernel.org,
         Neeraj Upadhyay <neeraju@codeaurora.org>,
         Uladzislau Rezki <urezki@gmail.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 11/18] rcu: Apply callbacks processing time limit only on softirq
-Date:   Wed,  1 Dec 2021 16:29:05 -0800
-Message-Id: <20211202002912.3127710-11-paulmck@kernel.org>
+Subject: [PATCH rcu 12/18] rcu/nocb: Don't invoke local rcu core on callback overload from nocb kthread
+Date:   Wed,  1 Dec 2021 16:29:06 -0800
+Message-Id: <20211202002912.3127710-12-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20211202002848.GA3127439@paulmck-ThinkPad-P17-Gen-1>
 References: <20211202002848.GA3127439@paulmck-ThinkPad-P17-Gen-1>
@@ -63,19 +60,21 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Frederic Weisbecker <frederic@kernel.org>
 
-Time limit only makes sense when callbacks are serviced in softirq mode
-because:
+rcu_core() tries to ensure that its self-invocation in case of callbacks
+overload only happen in softirq/rcuc mode. Indeed it doesn't make sense
+to trigger local RCU core from nocb_cb kthread since it can execute
+on a CPU different from the target rdp. Also in case of overload, the
+nocb_cb kthread simply iterates a new loop of callbacks processing.
 
-_ In case we need to get back to the scheduler,
-  cond_resched_tasks_rcu_qs() is called after each callback.
+However the "offloaded" check that aims at preventing misplaced
+rcu_core() invocations is wrong. First of all that state is volatile
+and second: softirq/rcuc can execute while the target rdp is offloaded.
+As a result rcu_core() can be invoked on the wrong CPU while in the
+process of (de-)offloading.
 
-_ In case some other softirq vector needs the CPU, the call to
-  local_bh_enable() before cond_resched_tasks_rcu_qs() takes care about
-  them via a call to do_softirq().
+Fix that with moving the rcu_core() self-invocation to rcu_core() itself,
+irrespective of the rdp offloaded state.
 
-Therefore, make sure the time limit only applies to softirq mode.
-
-Reviewed-by: Valentin Schneider <valentin.schneider@arm.com>
 Tested-by: Valentin Schneider <valentin.schneider@arm.com>
 Tested-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
@@ -90,59 +89,45 @@ Cc: Uladzislau Rezki <urezki@gmail.com>
 Cc: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
+ kernel/rcu/tree.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 74e210ccfd382..1b31fad9f1a0a 100644
+index 1b31fad9f1a0a..03c038f324a09 100644
 --- a/kernel/rcu/tree.c
 +++ b/kernel/rcu/tree.c
-@@ -2488,7 +2488,7 @@ static void rcu_do_batch(struct rcu_data *rdp)
- 	div = READ_ONCE(rcu_divisor);
- 	div = div < 0 ? 7 : div > sizeof(long) * 8 - 2 ? sizeof(long) * 8 - 2 : div;
- 	bl = max(rdp->blimit, pending >> div);
--	if (unlikely(bl > 100)) {
-+	if (in_serving_softirq() && unlikely(bl > 100)) {
- 		long rrn = READ_ONCE(rcu_resched_ns);
+@@ -2460,7 +2460,6 @@ static void rcu_do_batch(struct rcu_data *rdp)
+ 	int div;
+ 	bool __maybe_unused empty;
+ 	unsigned long flags;
+-	const bool offloaded = rcu_rdp_is_offloaded(rdp);
+ 	struct rcu_head *rhp;
+ 	struct rcu_cblist rcl = RCU_CBLIST_INITIALIZER(rcl);
+ 	long bl, count = 0;
+@@ -2582,9 +2581,6 @@ static void rcu_do_batch(struct rcu_data *rdp)
  
- 		rrn = rrn < NSEC_PER_MSEC ? NSEC_PER_MSEC : rrn > NSEC_PER_SEC ? NSEC_PER_SEC : rrn;
-@@ -2528,6 +2528,17 @@ static void rcu_do_batch(struct rcu_data *rdp)
- 		if (in_serving_softirq()) {
- 			if (count >= bl && (need_resched() || !is_idle_task(current)))
- 				break;
-+			/*
-+			 * Make sure we don't spend too much time here and deprive other
-+			 * softirq vectors of CPU cycles.
-+			 */
-+			if (unlikely(tlimit)) {
-+				/* only call local_clock() every 32 callbacks */
-+				if (likely((count & 31) || local_clock() < tlimit))
-+					continue;
-+				/* Exceeded the time limit, so leave. */
-+				break;
-+			}
- 		} else {
- 			local_bh_enable();
- 			lockdep_assert_irqs_enabled();
-@@ -2535,18 +2546,6 @@ static void rcu_do_batch(struct rcu_data *rdp)
- 			lockdep_assert_irqs_enabled();
- 			local_bh_disable();
- 		}
--
--		/*
--		 * Make sure we don't spend too much time here and deprive other
--		 * softirq vectors of CPU cycles.
--		 */
--		if (unlikely(tlimit)) {
--			/* only call local_clock() every 32 callbacks */
--			if (likely((count & 31) || local_clock() < tlimit))
--				continue;
--			/* Exceeded the time limit, so leave. */
--			break;
--		}
- 	}
+ 	rcu_nocb_unlock_irqrestore(rdp, flags);
  
- 	rcu_nocb_lock_irqsave(rdp, flags);
+-	/* Re-invoke RCU core processing if there are callbacks remaining. */
+-	if (!offloaded && rcu_segcblist_ready_cbs(&rdp->cblist))
+-		invoke_rcu_core();
+ 	tick_dep_clear_task(current, TICK_DEP_BIT_RCU);
+ }
+ 
+@@ -2771,8 +2767,12 @@ static __latent_entropy void rcu_core(void)
+ 
+ 	/* If there are callbacks ready, invoke them. */
+ 	if (do_batch && rcu_segcblist_ready_cbs(&rdp->cblist) &&
+-	    likely(READ_ONCE(rcu_scheduler_fully_active)))
++	    likely(READ_ONCE(rcu_scheduler_fully_active))) {
+ 		rcu_do_batch(rdp);
++		/* Re-invoke RCU core processing if there are callbacks remaining. */
++		if (rcu_segcblist_ready_cbs(&rdp->cblist))
++			invoke_rcu_core();
++	}
+ 
+ 	/* Do any needed deferred wakeups of rcuo kthreads. */
+ 	do_nocb_deferred_wakeup(rdp);
 -- 
 2.31.1.189.g2e36527f23
 

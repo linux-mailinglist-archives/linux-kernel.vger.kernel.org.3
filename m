@@ -2,91 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 45703465F16
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB23E465F17
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 09:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355957AbhLBIG4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 03:06:56 -0500
-Received: from mga05.intel.com ([192.55.52.43]:65225 "EHLO mga05.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S241125AbhLBIGz (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 03:06:55 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="322899139"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="322899139"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 00:03:33 -0800
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="597059742"
-Received: from rongch2-desk.sh.intel.com (HELO [10.239.159.175]) ([10.239.159.175])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 00:03:29 -0800
-Message-ID: <1eba3a99-9861-084d-34d8-9da060b1e6b3@intel.com>
-Date:   Thu, 2 Dec 2021 16:03:27 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.1
-Subject: Re: [kbuild-all] Re: [ardb:for-kernelci 25/25]
- arch/arm/kernel/traps.c:865:17: warning: no previous prototype for function
- 'handle_bad_stack'
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <202111250918.ErFZktQF-lkp@intel.com>
- <CAMj1kXHrRYagSVniSetHdG15rkQS+fm4zVOtN=Zda3W0QaEoJA@mail.gmail.com>
- <a03e765d-c22a-3bd8-8d94-36966b91dc2c@intel.com>
- <CAMj1kXFKYX+XsojJGzYZryHht=CV-7-R+aNXaSO9zabunXYNqg@mail.gmail.com>
-From:   Rong Chen <rong.a.chen@intel.com>
-In-Reply-To: <CAMj1kXFKYX+XsojJGzYZryHht=CV-7-R+aNXaSO9zabunXYNqg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        id S1355982AbhLBIHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 03:07:02 -0500
+Received: from smtp-out1.suse.de ([195.135.220.28]:41840 "EHLO
+        smtp-out1.suse.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1355953AbhLBIHB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 03:07:01 -0500
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 797F7212BC;
+        Thu,  2 Dec 2021 08:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1638432217; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TujVUvJoaeUCCPsVGZJvtwjzBcFlTe3dbnnCUBuxlBQ=;
+        b=ni1E4tfjIaK/cM6kEJzXqMgQacQnnOuPd5wJgQYSh/V+nkaFQBNrQwbYKJp63SzKhM+93t
+        Be5R1Vpaumv0CNV5WILHB5QACgKmxOg4BOyRjuPjLzTm5Bew/pOT/Ut/BIDRAulgJVMMQ7
+        eTBT4DYuv0YjJZVRsoiTOCeALXKWNO8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1638432217;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TujVUvJoaeUCCPsVGZJvtwjzBcFlTe3dbnnCUBuxlBQ=;
+        b=GXjlgP2FsculuBjj+mgO1v9ciUKsluBuE8DCLle5JPtCfbwZdFkTjtuK4WkpsncSe4yMdE
+        63RtQoPfORh8fHCQ==
+Received: from alsa1.suse.de (alsa1.suse.de [10.160.4.42])
+        by relay2.suse.de (Postfix) with ESMTP id 5FF44A3C1A;
+        Thu,  2 Dec 2021 08:03:37 +0000 (UTC)
+Date:   Thu, 02 Dec 2021 09:03:37 +0100
+Message-ID: <s5hfsrbwi06.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     tiwai@suse.com, Jaroslav Kysela <perex@perex.cz>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Guennadi Liakhovetski <guennadi.liakhovetski@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Hui Wang <hui.wang@canonical.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/hdmi: Consider ELD is invalid when no SAD is present
+In-Reply-To: <20211202073338.1384768-1-kai.heng.feng@canonical.com>
+References: <20211202073338.1384768-1-kai.heng.feng@canonical.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI/1.14.6 (Maruoka)
+ FLIM/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL/10.8 Emacs/25.3
+ (x86_64-suse-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI 1.14.6 - "Maruoka")
+Content-Type: text/plain; charset=US-ASCII
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 02 Dec 2021 08:33:35 +0100,
+Kai-Heng Feng wrote:
+> 
+> There's a system that reports a bogus HDMI audio interface:
+> $ cat eld#2.0
+> monitor_present         1
+> eld_valid               1
+> monitor_name
+> connection_type         DisplayPort
+> eld_version             [0x2] CEA-861D or below
+> edid_version            [0x3] CEA-861-B, C or D
+> manufacture_id          0xe430
+> product_id              0x690
+> port_id                 0x0
+> support_hdcp            0
+> support_ai              0
+> audio_sync_delay        0
+> speakers                [0xffff] FL/FR LFE FC RL/RR RC FLC/FRC RLC/RRC FLW/FRW FLH/FRH TC FCH
+> sad_count               0
+> 
+> Since playing audio is not possible without SAD, also consider ELD is
+> invalid for this case.
+> 
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+
+Thanks, applied.
 
 
-On 12/2/21 15:53, Ard Biesheuvel wrote:
-> On Thu, 2 Dec 2021 at 08:34, Rong Chen <rong.a.chen@intel.com> wrote:
->>
->>
->> On 11/30/21 21:12, Ard Biesheuvel wrote:
->>> On Thu, 25 Nov 2021 at 02:35, kernel test robot <lkp@intel.com> wrote:
->>>> tree:   git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git for-kernelci
->>>> head:   5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
->>>> commit: 5da04a8b7050432b72f6551b6c95e4b5b5fd68d1 [25/25] ARM: implement THREAD_INFO_IN_TASK for uniprocessor systems
->>>> config: arm-randconfig-r024-20211124 (https://download.01.org/0day-ci/archive/20211125/202111250918.ErFZktQF-lkp@intel.com/config)
->>>> compiler: clang version 14.0.0 (https://github.com/llvm/llvm-project 67a1c45def8a75061203461ab0060c75c864df1c)
->>>> reproduce (this is a W=1 build):
->>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>>           chmod +x ~/bin/make.cross
->>>>           # install arm cross compiling tool for clang build
->>>>           # apt-get install binutils-arm-linux-gnueabi
->>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
->>>>           git remote add ardb git://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git
->>>>           git fetch --no-tags ardb for-kernelci
->>>>           git checkout 5da04a8b7050432b72f6551b6c95e4b5b5fd68d1
->>>>           # save the config file to linux build tree
->>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 ARCH=arm
->>>>
->>>> If you fix the issue, kindly add following tag as appropriate
->>>> Reported-by: kernel test robot <lkp@intel.com>
->>>>
->>>> All warnings (new ones prefixed by >>):
->>>>
->>> This is yet another false positive. asmlinkage routines don't need a
->>> prototype because they are called from assembler. This is not going to
->>> get fixed, so please don't report this error anymore.
->> Hi Ard,
->>
->> Sorry for the noise, we'll ignore the warnings in the future.
->>
-> Thanks! And if at all possible, please extend this to all routines
-> marked as asmlinkage?
->
-
-got it, thanks for your reminding.
-
-Best Regards,
-Rong Chen
+Takashi

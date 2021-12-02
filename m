@@ -2,165 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EAB8466626
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23CF0466629
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:07:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358819AbhLBPJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:09:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358364AbhLBPJ1 (ORCPT
+        id S1358867AbhLBPKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:10:42 -0500
+Received: from outbound-smtp02.blacknight.com ([81.17.249.8]:37486 "EHLO
+        outbound-smtp02.blacknight.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1358629AbhLBPJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:09:27 -0500
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF1CC06174A;
-        Thu,  2 Dec 2021 07:06:04 -0800 (PST)
-Received: by mail-oi1-x22e.google.com with SMTP id u74so56045741oie.8;
-        Thu, 02 Dec 2021 07:06:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=/KJOrDnCC+kHBjtq7zn+PftjJ5oCAHSVzOTKwMQDzxE=;
-        b=StRgm9w2iPF+Gld+9pF9bXGXu9cOdk1yegIi6JHUauEHS2cJx4O2A3fQY3mfBEYgpa
-         rV2UB8NLpWe1XohKnQqZp60aL3xkP1RSyDVhICi5OnRI5L0hi3Orfq6MWRrmpNSmZwHG
-         PrnkYa6tau0zxgG9blfy1nzKCofjfW2jmKHYzl4kDJcm8JON90E+tcXwPSM8TPieWTus
-         v/dg7orsdCSMBeJkWSav8YNLg7iFnv+wcVOPgREevM3hhTCkgry5xnMQDSB87zwagYXb
-         DG2PafZeRN3K8iFns7URFmOlqqnQmvA86rIqWb6VyUMw8Jo87gev3fz3XJ4VmfsuKdBC
-         3D7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
-         :date:user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=/KJOrDnCC+kHBjtq7zn+PftjJ5oCAHSVzOTKwMQDzxE=;
-        b=pCZJC9SHZU0qZMpnLwmheW7Tk8WMvXdLTsA8VercqrmDuNHN/wGVo70dbA8qLv0S4k
-         tvkjPSZmv55AzWhrXRUJZkH5LFsQuawZCJ+VDI9pyGhJhGeirfx5CVoSXBkg1g8izlsn
-         Y+u2K6PFzwHBwWqzTwrOGhcQfKtclAIXdF2qz9VUT16sil34ivxVAczKfsBFjRhAipZd
-         L2SKN3MGinc6XlE56pTXmVIQQBWFCy6CumlL97zqBIsEDynZjSLSSFBj841/X8DXjLZ8
-         q5lqbK1ANjzmOBM4Yph0Sc+U7GeHvOht5ARqNTPnXkbWl81LWDnwfA8awhj1kSklzXg2
-         LIjw==
-X-Gm-Message-State: AOAM533O6i/G/znXzRGbkZ3oKk0dfbpqPH3N/GylM2OqMX9BnQWd1q5S
-        DW/0wQMXcViONCIJQFgj5wZHUYI125Y=
-X-Google-Smtp-Source: ABdhPJyJbsD+RVqZdag3Gf8Q5WmdmdBWTJuC6nLpZq1ctc68wcebdBbJK9cQD+N21Wr9E926xc2ivQ==
-X-Received: by 2002:a05:6808:14e:: with SMTP id h14mr4862068oie.28.1638457563704;
-        Thu, 02 Dec 2021 07:06:03 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bg38sm68612oib.40.2021.12.02.07.06.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 07:06:02 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Subject: Re: [PATCH v2 2/5] MIPS: ralink: implement
- 'pcibios_root_bridge_prepare()'
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc:     linux-pci <linux-pci@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <20211201215127.23550-1-sergio.paracuellos@gmail.com>
- <20211201215127.23550-3-sergio.paracuellos@gmail.com>
- <d243a90d-25b2-a65f-b69d-af7497db8742@roeck-us.net>
- <CAMhs-H_i7aFeqf4EBtzdL0SKgKrseZGpVU-ytvangpeCMVTmFw@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Message-ID: <9401e88b-de5a-dd2a-7e82-f3657ea86e8f@roeck-us.net>
-Date:   Thu, 2 Dec 2021 07:06:00 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 2 Dec 2021 10:09:57 -0500
+Received: from mail.blacknight.com (pemlinmail06.blacknight.ie [81.17.255.152])
+        by outbound-smtp02.blacknight.com (Postfix) with ESMTPS id 82786BACDE
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 15:06:25 +0000 (GMT)
+Received: (qmail 25708 invoked from network); 2 Dec 2021 15:06:25 -0000
+Received: from unknown (HELO stampy.112glenside.lan) (mgorman@techsingularity.net@[84.203.17.29])
+  by 81.17.254.9 with ESMTPA; 2 Dec 2021 15:06:25 -0000
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Michal Hocko <mhocko@suse.com>, Vlastimil Babka <vbabka@suse.cz>,
+        Alexey Avramov <hakavlad@inbox.lv>,
+        Rik van Riel <riel@surriel.com>,
+        Mike Galbraith <efault@gmx.de>,
+        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
+        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH v4 1/1] mm: vmscan: Reduce throttling due to a failure to make progress
+Date:   Thu,  2 Dec 2021 15:06:14 +0000
+Message-Id: <20211202150614.22440-1-mgorman@techsingularity.net>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-In-Reply-To: <CAMhs-H_i7aFeqf4EBtzdL0SKgKrseZGpVU-ytvangpeCMVTmFw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/21 12:29 AM, Sergio Paracuellos wrote:
-> Hi Guenter,
-> 
-> On Wed, Dec 1, 2021 at 11:17 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> On 12/1/21 1:51 PM, Sergio Paracuellos wrote:
->>> PCI core code call 'pcibios_root_bridge_prepare()' function inside function
->>> 'pci_register_host_bridge()'. This point is very good way to properly enter
->>> into this MIPS ralink specific code to properly setup I/O coherency units
->>> with PCI memory addresses.
->>>
->>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
->>> ---
->>>    arch/mips/ralink/mt7621.c | 30 ++++++++++++++++++++++++++++++
->>>    1 file changed, 30 insertions(+)
->>>
->>> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
->>> index bd71f5b14238..7649416c1cd7 100644
->>> --- a/arch/mips/ralink/mt7621.c
->>> +++ b/arch/mips/ralink/mt7621.c
->>> @@ -10,6 +10,7 @@
->>>    #include <linux/slab.h>
->>>    #include <linux/sys_soc.h>
->>>    #include <linux/memblock.h>
->>> +#include <linux/pci.h>
->>>
->>>    #include <asm/bootinfo.h>
->>>    #include <asm/mipsregs.h>
->>> @@ -22,6 +23,35 @@
->>>
->>>    static void *detect_magic __initdata = detect_memory_region;
->>>
->>> +int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
->>> +{
->>> +     struct resource_entry *entry;
->>> +     resource_size_t mask;
->>> +
->>> +     entry = resource_list_first_type(&bridge->windows, IORESOURCE_MEM);
->>> +     if (!entry) {
->>> +             pr_err("Cannot get memory resource\n");
->>> +             return -EINVAL;
->>> +     }
->>> +
->>> +     if (mips_cps_numiocu(0)) {
->>> +             /*
->>> +              * FIXME: hardware doesn't accept mask values with 1s after
->>> +              * 0s (e.g. 0xffef), so it would be great to warn if that's
->>> +              * about to happen
->>> +              */ > +         mask = ~(entry->res->end - entry->res->start);
->>> +
->>
->> Try something like this:
->>                  WARN_ON((mask != ~0UL && BIT(ffz(mask)) - 1 != mask);
-> 
-> Thanks for the tip. The following works for me:
-> 
->                    WARN_ON(mask != ~0UL && ~(BIT(__ffs(mask)) - 1) != mask);
+Mike Galbraith, Alexey Avramov and Darrick Wong all reported similar
+problems due to reclaim throttling for excessive lengths of time.
+In Alexey's case, a memory hog that should go OOM quickly stalls for
+several minutes before stalling. In Mike and Darrick's cases, a small
+memcg environment stalled excessively even though the system had enough
+memory overall.
 
-Are you sure ? __ffs() returns the first bit set, which isn't useful
-for this test.
+Commit 69392a403f49 ("mm/vmscan: throttle reclaim when no progress is being
+made") introduced the problem although commit a19594ca4a8b ("mm/vmscan:
+increase the timeout if page reclaim is not making progress") made it
+worse. Systems at or near an OOM state that cannot be recovered must
+reach OOM quickly and memcg should kill tasks if a memcg is near OOM.
 
-Guenter
+To address this, only stall for the first zone in the zonelist, reduce
+the timeout to 1 tick for VMSCAN_THROTTLE_NOPROGRESS and only stall if
+the scan control nr_reclaimed is 0, kswapd is still active and there were
+excessive pages pending for writeback. If kswapd has stopped reclaiming due
+to excessive failures, do not stall at all so that OOM triggers relatively
+quickly. Similarly, if an LRU is simply congested, only lightly throttle
+similar to NOPROGRESS.
 
-> 
-> I will send this as a different patch, though.
-> 
-> Best regards,
->      Sergio Paracuellos
-> 
->>
->>> +             write_gcr_reg1_base(entry->res->start);
->>> +             write_gcr_reg1_mask(mask | CM_GCR_REGn_MASK_CMTGT_IOCU0);
->>> +             pr_info("PCI coherence region base: 0x%08llx, mask/settings: 0x%08llx\n",
->>> +                     (unsigned long long)read_gcr_reg1_base(),
->>> +                     (unsigned long long)read_gcr_reg1_mask());
->>> +     }
->>> +
->>> +     return 0;
->>> +}
->>> +
->>>    phys_addr_t mips_cpc_default_phys_base(void)
->>>    {
->>>        panic("Cannot detect cpc address");
->>>
->>
+Alexey's original case was the most straight forward
+
+	for i in {1..3}; do tail /dev/zero; done
+
+On vanilla 5.16-rc1, this test stalled heavily, after the patch the test
+completes in a few seconds similar to 5.15.
+
+Alexey's second test case added watching a youtube video while tail runs
+10 times. On 5.15, playback only jitters slightly, 5.16-rc1 stalls a lot
+with lots of frames missing and numerous audio glitches. With this patch
+applies, the video plays similarly to 5.15.
+
+Link: https://lore.kernel.org/r/99e779783d6c7fce96448a3402061b9dc1b3b602.camel@gmx.de
+Link: https://lore.kernel.org/r/20211124011954.7cab9bb4@mail.inbox.lv
+Link: https://lore.kernel.org/r/20211022144651.19914-1-mgorman@techsingularity.net
+
+[lkp@intel.com: Fix W=1 build warning]
+Reported-and-tested-by: Alexey Avramov <hakavlad@inbox.lv>
+Reported-and-tested-by: Mike Galbraith <efault@gmx.de>
+Reported-and-tested-by: Darrick J. Wong <djwong@kernel.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 69392a403f49 ("mm/vmscan: throttle reclaim when no progress is being made")
+Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+---
+ include/linux/mmzone.h        |  1 +
+ include/trace/events/vmscan.h |  4 ++-
+ mm/vmscan.c                   | 64 ++++++++++++++++++++++++++++++-----
+ 3 files changed, 59 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 58e744b78c2c..936dc0b6c226 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -277,6 +277,7 @@ enum vmscan_throttle_state {
+ 	VMSCAN_THROTTLE_WRITEBACK,
+ 	VMSCAN_THROTTLE_ISOLATED,
+ 	VMSCAN_THROTTLE_NOPROGRESS,
++	VMSCAN_THROTTLE_CONGESTED,
+ 	NR_VMSCAN_THROTTLE,
+ };
+ 
+diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
+index f25a6149d3ba..ca2e9009a651 100644
+--- a/include/trace/events/vmscan.h
++++ b/include/trace/events/vmscan.h
+@@ -30,12 +30,14 @@
+ #define _VMSCAN_THROTTLE_WRITEBACK	(1 << VMSCAN_THROTTLE_WRITEBACK)
+ #define _VMSCAN_THROTTLE_ISOLATED	(1 << VMSCAN_THROTTLE_ISOLATED)
+ #define _VMSCAN_THROTTLE_NOPROGRESS	(1 << VMSCAN_THROTTLE_NOPROGRESS)
++#define _VMSCAN_THROTTLE_CONGESTED	(1 << VMSCAN_THROTTLE_CONGESTED)
+ 
+ #define show_throttle_flags(flags)						\
+ 	(flags) ? __print_flags(flags, "|",					\
+ 		{_VMSCAN_THROTTLE_WRITEBACK,	"VMSCAN_THROTTLE_WRITEBACK"},	\
+ 		{_VMSCAN_THROTTLE_ISOLATED,	"VMSCAN_THROTTLE_ISOLATED"},	\
+-		{_VMSCAN_THROTTLE_NOPROGRESS,	"VMSCAN_THROTTLE_NOPROGRESS"}	\
++		{_VMSCAN_THROTTLE_NOPROGRESS,	"VMSCAN_THROTTLE_NOPROGRESS"},	\
++		{_VMSCAN_THROTTLE_CONGESTED,	"VMSCAN_THROTTLE_CONGESTED"}	\
+ 		) : "VMSCAN_THROTTLE_NONE"
+ 
+ 
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index fb9584641ac7..4c4d5f6cd8a3 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -1021,6 +1021,39 @@ static void handle_write_error(struct address_space *mapping,
+ 	unlock_page(page);
+ }
+ 
++static bool skip_throttle_noprogress(pg_data_t *pgdat)
++{
++	int reclaimable = 0, write_pending = 0;
++	int i;
++
++	/*
++	 * If kswapd is disabled, reschedule if necessary but do not
++	 * throttle as the system is likely near OOM.
++	 */
++	if (pgdat->kswapd_failures >= MAX_RECLAIM_RETRIES)
++		return true;
++
++	/*
++	 * If there are a lot of dirty/writeback pages then do not
++	 * throttle as throttling will occur when the pages cycle
++	 * towards the end of the LRU if still under writeback.
++	 */
++	for (i = 0; i < MAX_NR_ZONES; i++) {
++		struct zone *zone = pgdat->node_zones + i;
++
++		if (!populated_zone(zone))
++			continue;
++
++		reclaimable += zone_reclaimable_pages(zone);
++		write_pending += zone_page_state_snapshot(zone,
++						  NR_ZONE_WRITE_PENDING);
++	}
++	if (2 * write_pending <= reclaimable)
++		return true;
++
++	return false;
++}
++
+ void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason)
+ {
+ 	wait_queue_head_t *wqh = &pgdat->reclaim_wait[reason];
+@@ -1056,8 +1089,16 @@ void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason)
+ 		}
+ 
+ 		break;
++	case VMSCAN_THROTTLE_CONGESTED:
++		fallthrough;
+ 	case VMSCAN_THROTTLE_NOPROGRESS:
+-		timeout = HZ/2;
++		if (skip_throttle_noprogress(pgdat)) {
++			cond_resched();
++			return;
++		}
++
++		timeout = 1;
++
+ 		break;
+ 	case VMSCAN_THROTTLE_ISOLATED:
+ 		timeout = HZ/50;
+@@ -3321,7 +3362,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+ 	if (!current_is_kswapd() && current_may_throttle() &&
+ 	    !sc->hibernation_mode &&
+ 	    test_bit(LRUVEC_CONGESTED, &target_lruvec->flags))
+-		reclaim_throttle(pgdat, VMSCAN_THROTTLE_WRITEBACK);
++		reclaim_throttle(pgdat, VMSCAN_THROTTLE_CONGESTED);
+ 
+ 	if (should_continue_reclaim(pgdat, sc->nr_reclaimed - nr_reclaimed,
+ 				    sc))
+@@ -3386,16 +3427,16 @@ static void consider_reclaim_throttle(pg_data_t *pgdat, struct scan_control *sc)
+ 	}
+ 
+ 	/*
+-	 * Do not throttle kswapd on NOPROGRESS as it will throttle on
+-	 * VMSCAN_THROTTLE_WRITEBACK if there are too many pages under
+-	 * writeback and marked for immediate reclaim at the tail of
+-	 * the LRU.
++	 * Do not throttle kswapd or cgroup reclaim on NOPROGRESS as it will
++	 * throttle on VMSCAN_THROTTLE_WRITEBACK if there are too many pages
++	 * under writeback and marked for immediate reclaim at the tail of the
++	 * LRU.
+ 	 */
+-	if (current_is_kswapd())
++	if (current_is_kswapd() || cgroup_reclaim(sc))
+ 		return;
+ 
+ 	/* Throttle if making no progress at high prioities. */
+-	if (sc->priority < DEF_PRIORITY - 2)
++	if (sc->priority == 1 && !sc->nr_reclaimed)
+ 		reclaim_throttle(pgdat, VMSCAN_THROTTLE_NOPROGRESS);
+ }
+ 
+@@ -3415,6 +3456,7 @@ static void shrink_zones(struct zonelist *zonelist, struct scan_control *sc)
+ 	unsigned long nr_soft_scanned;
+ 	gfp_t orig_mask;
+ 	pg_data_t *last_pgdat = NULL;
++	pg_data_t *first_pgdat = NULL;
+ 
+ 	/*
+ 	 * If the number of buffer_heads in the machine exceeds the maximum
+@@ -3478,14 +3520,18 @@ static void shrink_zones(struct zonelist *zonelist, struct scan_control *sc)
+ 			/* need some check for avoid more shrink_zone() */
+ 		}
+ 
++		if (!first_pgdat)
++			first_pgdat = zone->zone_pgdat;
++
+ 		/* See comment about same check for global reclaim above */
+ 		if (zone->zone_pgdat == last_pgdat)
+ 			continue;
+ 		last_pgdat = zone->zone_pgdat;
+ 		shrink_node(zone->zone_pgdat, sc);
+-		consider_reclaim_throttle(zone->zone_pgdat, sc);
+ 	}
+ 
++	consider_reclaim_throttle(first_pgdat, sc);
++
+ 	/*
+ 	 * Restore to original mask to avoid the impact on the caller if we
+ 	 * promoted it to __GFP_HIGHMEM.
+-- 
+2.31.1
 

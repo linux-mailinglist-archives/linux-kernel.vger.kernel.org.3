@@ -2,141 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD804667B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF084667BD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359385AbhLBQVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:21:10 -0500
-Received: from mta-p5.oit.umn.edu ([134.84.196.205]:54876 "EHLO
-        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359376AbhLBQVJ (ORCPT
+        id S1359392AbhLBQWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:22:02 -0500
+Received: from mail-ot1-f53.google.com ([209.85.210.53]:36487 "EHLO
+        mail-ot1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1359376AbhLBQWA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:21:09 -0500
-Received: from localhost (unknown [127.0.0.1])
-        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J4h224KPdz9w32x
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 16:17:46 +0000 (UTC)
-X-Virus-Scanned: amavisd-new at umn.edu
-Received: from mta-p5.oit.umn.edu ([127.0.0.1])
-        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id t3eT9MKNo2RQ for <linux-kernel@vger.kernel.org>;
-        Thu,  2 Dec 2021 10:17:46 -0600 (CST)
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J4h221lB2z9w337
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 10:17:46 -0600 (CST)
-DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J4h221lB2z9w337
-DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J4h221lB2z9w337
-Received: by mail-pf1-f197.google.com with SMTP id 184-20020a6217c1000000b0049f9aad0040so17683504pfx.21
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 08:17:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=umn.edu; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=qgDUgiquyeE/HBpyk1r0o9owU/0QA0kjA2nxOoAn0vg=;
-        b=gXXhkhGRPKwEEtTuml2rjG//g3S0E5irHeJYXmB/fAkm/rSWvG50Ptn6mCIfuhuwLO
-         s+GsPIrsjU/3ol6TexAgYESgAIiQe7PBCSbYIIdssbk3/rWWef+TWJ9aMgkz5p4GZRFe
-         IX4AZwkQtR45z6qZ0uLz8Rb7LdK44LmxI23/ScN9VYA1QkA6cryi8A1YH+D0tcQ5ltV0
-         0NQHz+a2lbP9NIX/ly+XWt+RRXGxULP+6suY7f+Z5mM3sps+5CegsK2W/8GyzhdrxaAz
-         8p80h+HqrdZL6JQLg9X4nuYl9UnYhU8Lkooi9Vn3/bE7ZY3z3LKH0I8hJORLzF5g00v+
-         IaOw==
+        Thu, 2 Dec 2021 11:22:00 -0500
+Received: by mail-ot1-f53.google.com with SMTP id w6-20020a9d77c6000000b0055e804fa524so328674otl.3;
+        Thu, 02 Dec 2021 08:18:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=qgDUgiquyeE/HBpyk1r0o9owU/0QA0kjA2nxOoAn0vg=;
-        b=sjVAWQoohjj7YOW4QrWpvxlG9MYasKMgDdifIVSQkOZ11hb2AE743jhGERJLXqcyLA
-         fRe0SrT0dMvrM92D3EJTX7SLkzyP1IVMJILNyT0xnlb/vh96zc/eM6mymPqG6tQIquq6
-         cSffAkuRKPKOOL6d9Ap6z5jvR+f4C0QLOnyLGpVHA13bEb6TjuxLUUc6zl5N7iMZAbrW
-         0B5fyzVbHaGPj5++0UPrkfqbyi50pqlxiitoSR576vF+ozHyuKPxsIIHAHxg1bq0KPrI
-         vmUBJqudVrthvAz4fd6JxrcH73vw6oQBh9AS5B+j6vKdp2RE85yxeI6otF6wR6EFCXg4
-         R1lw==
-X-Gm-Message-State: AOAM533qHQsvPTaN15a6fuz+zuTMOwyWI9/YALa7iQHz+pZptLWAJQk9
-        0tgU4D05Ej6jR3lZglyGb5xSjXZJsQbVdlbLHS5QrjAyR03n5UMNTfkUzxVwa86JDtqxVkt5fG/
-        ltOOKsx6qOENZDmXvwur8h5R/VycX
-X-Received: by 2002:a17:902:9a09:b0:142:82e1:6cff with SMTP id v9-20020a1709029a0900b0014282e16cffmr16500989plp.47.1638461865445;
-        Thu, 02 Dec 2021 08:17:45 -0800 (PST)
-X-Google-Smtp-Source: ABdhPJzlBUbzHE8EObBvEJkQ4GrdSaOO5BVm897v2oE1K1vI9kxnT2PO8h97GZr1lIie/srkFKr7Yg==
-X-Received: by 2002:a17:902:9a09:b0:142:82e1:6cff with SMTP id v9-20020a1709029a0900b0014282e16cffmr16500956plp.47.1638461865176;
-        Thu, 02 Dec 2021 08:17:45 -0800 (PST)
-Received: from zqy787-GE5S.lan ([36.4.93.212])
-        by smtp.gmail.com with ESMTPSA id s14sm273542pfk.73.2021.12.02.08.17.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 08:17:44 -0800 (PST)
-From:   Zhou Qingyang <zhou1615@umn.edu>
-To:     zhou1615@umn.edu
-Cc:     kjlu@umn.edu, Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, hongao <hongao@uniontech.com>,
-        Jammy Zhou <Jammy.Zhou@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] drm/amdgpu: Fix a NULL pointer dereference in amdgpu_connector_lcd_native_mode()
-Date:   Fri,  3 Dec 2021 00:17:36 +0800
-Message-Id: <20211202161738.79176-1-zhou1615@umn.edu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <CADnq5_P8amQK60zD-2tkVWBneZCoLENe5KY_S6eqoAAyOieatg@mail.gmail.com>
-References: <CADnq5_P8amQK60zD-2tkVWBneZCoLENe5KY_S6eqoAAyOieatg@mail.gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=PGr6jOv41SrTwtlqda0X2UyFg0226rw2ZkBazfb+o5k=;
+        b=gBwyYvNphxIuXkfh8JioOYQUXLmSrGfR5EPZSuWWfxbVZzRcOde8AOucdEXFJxL2nh
+         +vJRRk/N/nX6t6BcFf39SNG28hl0oEDs1XrYn842SM30ALh2LdMWIfzdRdKZuaReD8vo
+         pKHGoYFClXoTiZu7/C8wUQgJyja409d9WKqkfTIsL3dKAPEIZS8QyR0uYXNl3GhynnhX
+         Eck3KUT+Hx5DZQzlxzz48+d382R1E5oY9GMh2tFxNMockxJ0HawwVE2OnZ37XGqpGb0k
+         UFIFhHBQ5//qV/+YPYoWuvUI7vxaZvzgZGqBPLhrytpgQbzGJ8KiN9LL+Uu0apTqQPoe
+         Ojaw==
+X-Gm-Message-State: AOAM531bwG8xw2oWX2m/kPzKFHzeQf+fLZlagJB2JWr3gH5jEnN14wpa
+        L/n8LXPbe5D/NnIbs8sEzEcUmf3/OLh0K0fgwv4=
+X-Google-Smtp-Source: ABdhPJzHtVZSjjV45oLOos1CN7dzyFhbiQ1Y0F1gcAsRPvCm96dSQKmyAPmC6g2VeVAP6kg8JB2XLavoRt1oU+ES53E=
+X-Received: by 2002:a9d:4c10:: with SMTP id l16mr12078971otf.198.1638461917691;
+ Thu, 02 Dec 2021 08:18:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20211026222626.39222-1-ulf.hansson@linaro.org>
+ <CAPDyKFrFdt_U7By_bqk4DBHxCBLpDe00aRb6P6BmwR4MYM2OmQ@mail.gmail.com>
+ <CAJZ5v0i6WPVCf4pf9uTx5vjutw0cbD+omL_FNtw6DrxYDhyYEA@mail.gmail.com>
+ <5794197.lOV4Wx5bFT@kreacher> <CAPDyKFrPC=8cAKGWQ4cDEcD934gi-012CWXu+uh-B_pqX+0RYQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFrPC=8cAKGWQ4cDEcD934gi-012CWXu+uh-B_pqX+0RYQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 2 Dec 2021 17:18:26 +0100
+Message-ID: <CAJZ5v0ijRK0sYoJ6_WyqrhQfYKxEf4jCSjK4T5CbQsYPXaB=Nw@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Allow rpm_resume() to succeed when runtime
+ PM is disabled
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Maulik Shah <mkshah@codeaurora.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In amdgpu_connector_lcd_native_mode(), the return value of
-drm_mode_duplicate() is assigned to mode, and there is a dereference
-of it in amdgpu_connector_lcd_native_mode(), which will lead to a NULL
-pointer dereference on failure of drm_mode_duplicate().
+On Thu, Dec 2, 2021 at 12:29 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>
+> On Wed, 1 Dec 2021 at 21:11, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > On Wednesday, December 1, 2021 6:44:08 PM CET Rafael J. Wysocki wrote:
+> > > On Wed, Dec 1, 2021 at 4:23 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > >
+> > > > On Wed, 1 Dec 2021 at 14:49, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > >
+> > > > > On Wed, Dec 1, 2021 at 10:02 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > >
+> > > > > > On Tue, 30 Nov 2021 at 18:26, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > > >
+> > > > > > > On Tue, Nov 30, 2021 at 5:41 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > > > >
+> > > > > > > > On Tue, 30 Nov 2021 at 14:02, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > > > > > > > >
+> > > > > > > > > On Tue, Nov 30, 2021 at 12:58 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > > > > > > > > >
+> > > > > > > > > > [...]
+> > > > > > > > > >
+> > > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > > Am I thinking correctly that this is mostly about working around the
+> > > > > > > > > > > > > > > > limitations of pm_runtime_force_suspend()?
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > No, this isn't related at all.
+> > > > > > > > > > > > > > >
+> > > > > > > > > > > > > > > The cpuidle-psci driver doesn't have PM callbacks, thus using
+> > > > > > > > > > > > > > > pm_runtime_force_suspend() would not work here.
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > Just wanted to send a ping on this to see if we can come to a
+> > > > > > > > > > > > > > conclusion. Or maybe we did? :-)
+> > > > > > > > > > > > > >
+> > > > > > > > > > > > > > I think in the end, what slightly bothers me, is that the behavior is
+> > > > > > > > > > > > > > a bit inconsistent. Although, maybe it's the best we can do.
+> > > > > > > > > > > > >
+> > > > > > > > > > > > > I've been thinking about this and it looks like we can do better, but
+> > > > > > > > > > > > > instead of talking about this I'd rather send a patch.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Alright.
+> > > > > > > > > > > >
+> > > > > > > > > > > > I was thinking along the lines of make similar changes for
+> > > > > > > > > > > > rpm_idle|suspend(). That would make the behaviour even more
+> > > > > > > > > > > > consistent, I think.
+> > > > > > > > > > > >
+> > > > > > > > > > > > Perhaps that's what you have in mind? :-)
+> > > > > > > > > > >
+> > > > > > > > > > > Well, not exactly.
+> > > > > > > > > > >
+> > > > > > > > > > > The idea is to add another counter (called restrain_depth in the patch)
+> > > > > > > > > > > to prevent rpm_resume() from running the callback when that is potentially
+> > > > > > > > > > > problematic.  With that, it is possible to actually distinguish devices
+> > > > > > > > > > > with PM-runtime enabled and it allows the PM-runtime status to be checked
+> > > > > > > > > > > when it is still known to be meaningful.
+> > > > > > > > > >
+> > > > > > > > > > Hmm, I don't quite understand the benefit of introducing a new flag
+> > > > > > > > > > for this. rpm_resume() already checks the disable_depth to understand
+> > > > > > > > > > when it's safe to invoke the callback. Maybe there is a reason why
+> > > > > > > > > > that isn't sufficient?
+> > > > > > > > >
+> > > > > > > > > The problem is that disable_depth > 0 may very well mean that runtime
+> > > > > > > > > PM has not been enabled at all for the given device which IMO is a
+> > > > > > > > > problem.
+> > > > > > > > >
+> > > > > > > > > As it stands, it is necessary to make assumptions, like disable_depth
+> > > > > > > > > == 1 meaning that runtime PM is really enabled, but the PM core has
+> > > > > > > > > disabled it temporarily, which is somewhat questionable.
+> > > > > > > > >
+> > > > > > > > > Another problem with disabling is that it causes rpm_resume() to fail
+> > > > > > > > > even if the status is RPM_ACTIVE and it has to do that exactly because
+> > > > > > > > > it cannot know why runtime PM has been disabled.  If it has never been
+> > > > > > > > > enabled, rpm_resume() must fail, but if it has been disabled
+> > > > > > > > > temporarily, rpm_resume() may return 1 when the status is RPM_ACTIVE.
+> > > > > > > > >
+> > > > > > > > > The new count allows the "enabled in general, but temporarily disabled
+> > > > > > > > > at the moment" to be handled cleanly.
+> > > > > > > >
+> > > > > > > > My overall comment is that I fail to understand why we need to
+> > > > > > > > distinguish between these two cases. To me, it shouldn't really
+> > > > > > > > matter, *why* runtime PM is (or have been) disabled for the device.
+> > > > > > >
+> > > > > > > It matters if you want to trust the status, because "disabled" means
+> > > > > > > "the status doesn't matter".
+> > > > > >
+> > > > > > Well, that doesn't really match how the runtime PM interface is being
+> > > > > > used today.
+> > > > >
+> > > > > Well, I clearly disagree.
+> > > >
+> > > > Alright, then we can agree to disagree. :-)
+> > > >
+> > > > >
+> > > > > > For example, we have a whole bunch of helper functions, allowing us to
+> > > > > > update and check the runtime PM state of the device, even when the
+> > > > > > disable_depth > 0. Some functions, like pm_runtime_set_active() for
+> > > > > > example, even take parents and device-links into account.
+> > > > >
+> > > > > That's true, but that's for a purpose.
+> > > > >
+> > > > > If runtime PM becomes enabled after using pm_runtime_set_active(), the
+> > > > > status should better be consistent with the settings of the parent
+> > > > > etc.
+> > > > >
+> > > > > > >
+> > > > > > > If you want the status to stay meaningful, but prevent callbacks from
+> > > > > > > running, you need something else.
+> > > > > > >
+> > > > > > > > The important point is that the default state for a device is
+> > > > > > > > RPM_SUSPENDED and someone has moved into RPM_ACTIVE, for whatever
+> > > > > > > > reason. That should be sufficient to allow rpm_resume() to return '1'
+> > > > > > > > when disable_depth > 0, shouldn't it?
+> > > > > > >
+> > > > > > > No, because there is no rule by which the status of devices with
+> > > > > > > PM-runtime disabled must be RPM_SUSPENDED.
+> > > > > >
+> > > > > > That's not what I was trying to say.
+> > > > > >
+> > > > > > The initial/default runtime PM state for a device is RPM_SUSPENDED,
+> > > > > > which is being set in pm_runtime_init(). Although, I agree that it
+> > > > > > can't be trusted that this state actually reflects the state of the
+> > > > > > HW, it's still a valid state for the device from a runtime PM point of
+> > > > > > view.
+> > > > >
+> > > > > No, it is not.  It's just the default.
+> > > > >
+> > > > > > However, and more importantly, if the state has moved to RPM_ACTIVE,
+> > > > > > someone must have deliberately moved the device into that state.
+> > > > >
+> > > > > Sure, but it cannot be regarded as an indication on whether or not
+> > > > > runtime PM is supported and has ever been enabled for the given
+> > > > > device.
+> > > > >
+> > > > > Again, there is no rule regarding the status value for devices with
+> > > > > runtime PM disabled, either way.
+> > > >
+> > > > If I understand correctly, that means you think the
+> > > > pm_runtime_status_suspended() should really be converted to an
+> > > > internal runtime PM interface, not being exported to users outside.
+> > > > Right?
+> > >
+> > > Not really.
+> > >
+> > > I'm just saying that its usefulness is limited.
+> > >
+> > > My basic concern is that system-wide PM transitions must always invoke
+> > > callbacks for devices with PM-runtime disabled, because they may (or
+> > > may not) be functional regardless of the PM-runtime status and if they
+> > > are functional, they must be suspended.  And note that supporting
+> > > system-wide PM is not optional and the only way to kind of disable it
+> > > is to return an error from a device suspend callback (but that's nasty
+> > > for some use cases).
+> > >
+> > > So the "Has PM-runtime been enabled?" question is really fundamental
+> > > for system-wide PM and it is not sufficient to look at the PM-runtime
+> > > status to find out, but if the PM-core itself disables PM-runtime
+> > > (which is has to do at one point to prevent PM-runtime from racing
+> > > with system-wide PM), it is hard to answer definitely in general.
+> > >
+> > > IMO the only way to make it possible to find that out in all cases is
+> > > to make the PM core retain the power.disable_depth value and that can
+> > > be done by making it use a different mechanism to prevent PM-runtime
+> > > callbacks from being run.
+> > >
+> > > Alternatively, the current PM-runtime status could be "latched" during
+> > > the PM-runtime disable operation if power.disable_depth is 0 (and that
+> > > "latched" value would be initialized to "invalid" in case PM-runtime
+> > > is never enabled).
+> >
+> > Which would be something like the patch below (which additionally cleans up
+> > pm_runtime_enable() while at it).
+> >
+> > The idea being that if the status was RPM_ACTIVE last time when
+> > power.disable_depth was changing from 0 to 1 and it is still RPM_ACTIVE, it
+> > can be assumed to reflect what happened to the device last time when it was
+> > using PM-runtime.
+>
+> Alright, this sounds reasonable to me. I have also looked at the code
+> below and it looks good to me.
+>
+> Do you intend to post a formal patch? In any case, feel free to add my
+> reviewed-by tag.
 
-Fix this bug add a check of mode.
-
-This bug was found by a static analyzer. The analysis employs
-differential checking to identify inconsistent security operations
-(e.g., checks or kfrees) between two code paths and confirms that the
-inconsistent operations are not recovered in the current function or
-the callers, so they constitute bugs.
-
-Note that, as a bug found by static analysis, it can be a false
-positive or hard to trigger. Multiple researchers have cross-reviewed
-the bug.
-
-Builds with CONFIG_DRM_AMDGPU=m show no new warnings, and
-our static analyzer no longer warns about this code.
-
-Fixes: d38ceaf99ed0 ("drm/amdgpu: add core driver (v4)")
-Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
----
-Changes in v2:
-  -  Fix the similar bug in else clause
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-index 0de66f59adb8..df1f9b88a53f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-@@ -387,6 +387,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
- 	    native_mode->vdisplay != 0 &&
- 	    native_mode->clock != 0) {
- 		mode = drm_mode_duplicate(dev, native_mode);
-+		if (!mode)
-+			return NULL;
-+
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		drm_mode_set_name(mode);
- 
-@@ -401,6 +404,9 @@ amdgpu_connector_lcd_native_mode(struct drm_encoder *encoder)
- 		 * simpler.
- 		 */
- 		mode = drm_cvt_mode(dev, native_mode->hdisplay, native_mode->vdisplay, 60, true, false, false);
-+		if (!mode)
-+			return NULL;
-+
- 		mode->type = DRM_MODE_TYPE_PREFERRED | DRM_MODE_TYPE_DRIVER;
- 		DRM_DEBUG_KMS("Adding cvt approximation of native panel mode %s\n", mode->name);
- 	}
--- 
-2.25.1
-
+I will, thank you!

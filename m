@@ -2,307 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6C3466BA2
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:24:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56EB466BA7
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:26:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377071AbhLBV1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 16:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S243442AbhLBV3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 16:29:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242942AbhLBV1v (ORCPT
+        with ESMTP id S243209AbhLBV3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 16:27:51 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9ACC06174A;
-        Thu,  2 Dec 2021 13:24:28 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id p18-20020a17090ad31200b001a78bb52876so3526165pju.3;
-        Thu, 02 Dec 2021 13:24:28 -0800 (PST)
+        Thu, 2 Dec 2021 16:29:44 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF46AC061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 13:26:21 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id j14so1612360uan.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 13:26:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+BkUAqxoN5Fy8yjLt+FU0EZ0cX0yYjSMs8+EtuSBhk0=;
-        b=Cd6RK4cQTZRM/IqvHQkZhLCqCs/8jMcF4lppy7tucbr5Vp+FR3+HUnoFq4tqBtf/D1
-         Kev3XDjfu5qg71ZDDrO+4/H+O7T81BV9RXOmklrDVL82HW7YhD/aw26FBAPMTtAlPDcd
-         c6GUG5i/ZaWpi0KH/rW6w/88XjB1cl94v3vN9eKoSMEPaAwHLZNuq/XUPlHCn7AYgx21
-         swoaFqRhA93KhPICqW/XVxobDUglQqVH6mgpQovw3rJOtSbwe2asZcHjLteUP/swflpp
-         9PGMgk31ZwykW6bqfotRQbIgFtc5UD4JJ6J7XrU8U38PzhO+MIoVWG1A10pdfBOFKlT4
-         pRHA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=1Hn9In6dG6/T2rUegQRPLN+LJLRotI0z9a+p2oSgmSw=;
+        b=WcLNPe7hi8P0a769XfSLDW7w5eRkULcbKfx7dM8r6rxLfqJDSlKAGrRjzWgWCu1yBE
+         FTcMiBj74CHLSYb2X7t8R6PffWxPZxiuRiM0VpHebGEJYZMPWozDd4/1DjJXMN9vz+SU
+         9h8aWhii8li6bipguj05vVjcXY1Qe7+iUoCqHjelzow8TIE7G0sP3ExCUascltLi4NTH
+         gIifVEf+zJhTBoAYpVxGTLo/G7tGu0Y7stdZkUaamJHkAyiinRIFuv0YGcgPFk7aJj05
+         upSI/uq4CmgnoIxwcDoH3RKoNxhNAe0qWfmX2r484uDLtutlPGJ89f8DdLEEWVixhBgs
+         g8EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+BkUAqxoN5Fy8yjLt+FU0EZ0cX0yYjSMs8+EtuSBhk0=;
-        b=7+4xXSshssLvb+DGgS7Kq0ica3kufMQskUJw+4GP4cLADIw0OdQ2rJEazSURz8lA0D
-         P9KNZ2HMgx+vH00vcNeL6c6AcPBA7zXkYmLKCPrEnK74XN2rUoP1zt0x9nwN8Z48fHhQ
-         vyTG0OAx3++jtsiCDguXEnwdYvQOhBi25yIA1cKH5MvMa8+gvgAAO7tXAPe1MUVUDNDs
-         +G0JGp/PhwE9lESE1KKeJPYCCHwwqa4NW1z1sJjnB8jRaOkMYWZE7/nTGPpDKiKi5W7i
-         LUn01fxkKMghwxgIQGhethM7WSANOeG11FNenRMyvy5yTd8QSq6QLTyVbtWbP1U4D5Y6
-         pjEA==
-X-Gm-Message-State: AOAM532oG9ERPaBB8DsWIMaWCyaq/g96kOxHOI+rml2or8MfbomWlYjY
-        BKIQLRdDewcWl5Hd80nzc/31FveAJMA=
-X-Google-Smtp-Source: ABdhPJzQfHwdite6wq1wX6654rl7VFWnhrkbBLVs9Lw+py7iIKCDVj2Guu8Qn+ylTh2ccdjXn0MrpQ==
-X-Received: by 2002:a17:902:e88a:b0:141:dfde:eed7 with SMTP id w10-20020a170902e88a00b00141dfdeeed7mr18172144plg.17.1638480267230;
-        Thu, 02 Dec 2021 13:24:27 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id mr2sm402399pjb.25.2021.12.02.13.24.25
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=1Hn9In6dG6/T2rUegQRPLN+LJLRotI0z9a+p2oSgmSw=;
+        b=3reRUqkwr1MuKtzeRkfvgoF0qg0SbqA4svK0LMQzca7f/hEwEb1uBkz/yD9cql8lV+
+         tPFI5FQidLTZNTSOVk/R0XpHPJe07STfRpGcrSI/iAkTX0B8NbpyqUjwHAIkXEPiDOVc
+         bEFcUsRrwUrBlhFmNfAHoVE5PWnskj5/3RIFd5kMAOCbLyS3SsCue+ZT1Xf8KeUCSxJh
+         N9JE841eJIPWbaZJdNroglL627P6qKErtFvuI5DeS/d+RdKmPqbN+bkpVHP4cvGbwN3H
+         KcH+4SO0UCUO7jMHNoZTe9gqJ+PnEPkDsBR6qNx0j/+EVW2gcGWLa4pWDdgEwvSW8G10
+         KFUw==
+X-Gm-Message-State: AOAM533R/HwpJN87kdbd74v3OsK8AOqmqDmWzSRHdmD+7ftOPdbEx6y2
+        tFw0Fmz4fu+/U75dkoQ048oR/LtS9Qs=
+X-Google-Smtp-Source: ABdhPJzq9xl4Ok2S2prtzAZ21KTD8bfj5laWQG3dK51objUS7OtsqLUZ15VBPsI9jEaSW1igYLRMgg==
+X-Received: by 2002:ab0:7c65:: with SMTP id h5mr18490198uax.138.1638480381076;
+        Thu, 02 Dec 2021 13:26:21 -0800 (PST)
+Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com. [209.85.221.182])
+        by smtp.gmail.com with ESMTPSA id a188sm202209vsa.2.2021.12.02.13.26.19
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 13:24:26 -0800 (PST)
-Subject: Re: [PATCH 05/14] dt-bindings: gpio: Convert Broadcom STB GPIO to
- YAML
-To:     Gregory Fong <gregory.0xf0@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>
-Cc:     devicetree@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "maintainer:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Lee Jones <lee.jones@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matt Mackall <mpm@selenic.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Markus Mayer <mmayer@broadcom.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Cooper <alcooperx@gmail.com>,
-        Doug Berger <opendmb@gmail.com>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:MULTIMEDIA CARD (MMC), SECURE DIGITAL (SD) AND..." 
-        <linux-mmc@vger.kernel.org>,
-        "open list:PWM SUBSYSTEM" <linux-pwm@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        "open list:REAL TIME CLOCK (RTC) SUBSYSTEM" 
-        <linux-rtc@vger.kernel.org>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>
-References: <20211201205110.41656-1-f.fainelli@gmail.com>
- <20211201205110.41656-6-f.fainelli@gmail.com>
- <CADtm3G7wiNdDq2fagWeSDd_RV_dyfrNy+5e-VL9OKjwGAWzNtg@mail.gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <f96c346a-0d17-6148-0924-72744dd5c34d@gmail.com>
-Date:   Thu, 2 Dec 2021 13:24:23 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Thu, 02 Dec 2021 13:26:20 -0800 (PST)
+Received: by mail-vk1-f182.google.com with SMTP id b192so514682vkf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 13:26:19 -0800 (PST)
+X-Received: by 2002:a05:6122:1350:: with SMTP id f16mr19584323vkp.10.1638480379557;
+ Thu, 02 Dec 2021 13:26:19 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <CADtm3G7wiNdDq2fagWeSDd_RV_dyfrNy+5e-VL9OKjwGAWzNtg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <cover.1638282789.git.asml.silence@gmail.com> <CA+FuTSf-N08d6pcbie2=zFcQJf3_e2dBJRUZuop4pOhNfSANUA@mail.gmail.com>
+ <0d82f4e2-730f-4888-ec82-2354ffa9c2d8@gmail.com> <CA+FuTSf1dk-ZCN_=oFcYo31XdkLLAaHJHHNfHwJKe01CVq3X+A@mail.gmail.com>
+ <6e07fb0c-075b-4072-273b-f9d55ba1e1dd@gmail.com>
+In-Reply-To: <6e07fb0c-075b-4072-273b-f9d55ba1e1dd@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Thu, 2 Dec 2021 16:25:42 -0500
+X-Gmail-Original-Message-ID: <CA+FuTSfe63=SuuZeC=eZPLWstgOL6oFUrsL4o+J8=3BwHJSTVg@mail.gmail.com>
+Message-ID: <CA+FuTSfe63=SuuZeC=eZPLWstgOL6oFUrsL4o+J8=3BwHJSTVg@mail.gmail.com>
+Subject: Re: [RFC 00/12] io_uring zerocopy send
+To:     Pavel Begunkov <asml.silence@gmail.com>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        io-uring@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>, Jens Axboe <axboe@kernel.dk>
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/21 8:00 AM, Gregory Fong wrote:
-> Hi Florian,
-> 
-> I haven't kept up with the new yaml format, so not entirely sure I
-> know what I'm talking about yet, but here are a few comments:
-> 
-> On Wed, Dec 1, 2021 at 12:51 PM Florian Fainelli <f.fainelli@gmail.com> wrote:
->>
->> Convert the Broadcom STB GPIO Device Tree binding to YAML to help with
->> validation.
->>
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
->> ---
->>  .../bindings/gpio/brcm,brcmstb-gpio.txt       |  83 --------------
->>  .../bindings/gpio/brcm,brcmstb-gpio.yaml      | 104 ++++++++++++++++++
->>  MAINTAINERS                                   |   2 +-
->>  3 files changed, 105 insertions(+), 84 deletions(-)
->>  delete mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
->>  create mode 100644 Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
->> deleted file mode 100644
->> index 5d468ecd1809..000000000000
->> --- a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.txt
->> +++ /dev/null
->> @@ -1,83 +0,0 @@
->> [snip]
->> -
->> -- interrupts-extended:
->> -    Alternate form of specifying interrupts and parents that allows for
->> -    multiple parents.  This takes precedence over 'interrupts' and
->> -    'interrupt-parent'.  Wakeup-capable GPIO controllers often route their
->> -    wakeup interrupt lines through a different interrupt controller than the
->> -    primary interrupt line, making this property necessary.
-> 
-> It looks like interrupts-extended was removed from the new docs, I'm
-> assuming that was intentional?
+> > What if the ubuf pool can be found from the sk, and the index in that
+> > pool is passed as a cmsg?
+>
+> It looks to me that ubufs are by nature is something that is not
+> tightly bound to a socket (at least for io_uring API in the patchset),
+> it'll be pretty ugly:
+>
+> 1) io_uring'd need to care to register the pool in the socket. Having
+> multiple rings using the same socket would be horrible. It may be that
+> it doesn't make much sense to send in parallel from multiple rings, but
+> a per thread io_uring is a popular solution, and then someone would
+> want to pass a socket from one thread to another and we'd need to support
+> it.
+>
+> 2) And io_uring would also need to unregister it, so the pool would
+> store a list of sockets where it's used, and so referencing sockets
+> and then we need to bind it somehow to io_uring fixed files or
+> register all that for tracking referencing circular dependencies.
+>
+> 3) IIRC, we can't add a cmsg entry from the kernel, right? May be wrong,
+> but if so I don't like exposing basically io_uring's referencing through
+> cmsg. And it sounds io_uring would need to parse cmsg then.
+>
+>
+> A lot of nuances :) I'd really prefer to pass it on per-request basis,
 
-Yes that is intentional, since this is a core property there is an
-expectation that it is documented and used outside of the scope of this
-binding.
+Ok
 
-> 
->> [snip]
->> diff --git a/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
->> new file mode 100644
->> index 000000000000..4b7309dc74dc
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/gpio/brcm,brcmstb-gpio.yaml
->> @@ -0,0 +1,104 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/gpio/brcm,brcmstb-gpio.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Broadcom STB "UPG GIO" GPIO controller
->> +
->> +description: >
->> +  The controller's registers are organized as sets of eight 32-bit
->> +  registers with each set controlling a bank of up to 32 pins.  A single
->> +  interrupt is shared for all of the banks handled by the controller.
->> +
->> +maintainers:
->> +  - Doug Berger <opendmb@gmail.com>
->> +  - Florian Fainelli <f.fainelli@gmail.com>
->> +
->> +properties:
->> +  compatible:
->> +    oneOf:
->> +      - items:
->> +          - enum:
->> +              - brcm,bcm7445-gpio
->> +          - const: brcm,brcmstb-gpio
->> +
->> +  reg:
->> +    maxItems: 1
->> +    description:
-> 
-> Missing folded block scalar marker ('>') above
+> it's much cleaner, but still haven't got what's up with msghdr
+> initialisation...
 
-Done.
+And passing the struct through multiple layers of functions.
 
-> 
->> +      Define the base and range of the I/O address space containing
->> +      the brcmstb GPIO controller registers
->> +
->> +  "#gpio-cells":
->> +    const: 2
->> +    description: >
->> +      The first cell is the pin number (within the controller's
->> +      pin space), and the second is used for the following:
->> +      bit[0]: polarity (0 for active-high, 1 for active-low)
->> +
->> +  gpio-controller: true
->> +
->> +  "brcm,gpio-bank-widths":
->> +    $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    description:
-> 
-> Same here
-> 
->> +      Number of GPIO lines for each bank.  Number of elements must
->> +      correspond to number of banks suggested by the 'reg' property.
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +    description:
-> 
-> While it's not necessary while this is only one line, consider adding
-> '>' here too.
-> 
->> +      The interrupt shared by all GPIO lines for this controller.
->> +
->> +  "#interrupt-cells":
->> +    const: 2
->> +    description: >
-> 
-> This next block could get formatted strangely with '>'; recommend
-> using '|' instead
+> Maybe, it's better to add a flags field, which would include
+> "msg_control_is_user : 1" and whether msghdr includes msg_iocb, msg_ubuf,
+> and everything else that may be optional. Does it sound sane?
 
-Yes good point.
+If sendmsg takes the argument, it will just have to be initialized, I think.
 
-> 
->> +      The first cell is the GPIO number, the second should specify
->> +      flags.  The following subset of flags is supported:
->> +      - bits[3:0] trigger type and level flags
->> +        1 = low-to-high edge triggered
->> +        2 = high-to-low edge triggered
->> +        4 = active high level-sensitive
->> +        8 = active low level-sensitive
->> +      Valid combinations are 1, 2, 3, 4, 8.
->> +
->> +  interrupt-controller: true
->> +
->> +  wakeup-source:
->> +    type: boolean
->> +    description: >
->> +      GPIOs for this controller can be used as a wakeup source
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +  - gpio-controller
->> +  - "#gpio-cells"
-> 
-> Need to add required property "brcm,gpio-bank-widths"
-
-Indeed, done.
-
-> 
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    upg_gio: gpio@f040a700 {
->> +        #gpio-cells = <2>;
->> +        #interrupt-cells = <2>;
->> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
->> +        gpio-controller;
->> +        interrupt-controller;
->> +        reg = <0xf040a700 0x80>;
->> +        interrupt-parent = <&irq0_intc>;
->> +        interrupts = <0x6>;
->> +        brcm,gpio-bank-widths = <32 32 32 24>;
->> +    };
->> +
->> +    upg_gio_aon: gpio@f04172c0 {
->> +        #gpio-cells = <2>;
->> +        #interrupt-cells = <2>;
->> +        compatible = "brcm,bcm7445-gpio", "brcm,brcmstb-gpio";
->> +        gpio-controller;
->> +        interrupt-controller;
->> +        reg = <0xf04172c0 0x40>;
->> +        interrupt-parent = <&irq0_aon_intc>;
->> +        interrupts = <0x6>;
->> +        wakeup-source;
->> +        brcm,gpio-bank-widths = <18 4>;
->> +    };
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 913856599623..78161abc384f 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -3772,7 +3772,7 @@ BROADCOM BRCMSTB GPIO DRIVER
->>  M:     Gregory Fong <gregory.0xf0@gmail.com>
-> 
-> Not really related to this patch, but I should probably update this
-> entry to reflect current reality. Should that be you and/or Doug?
-
-If you could add both of us that would be great, thanks!
--- 
-Florian
+Other functions are not aware of its existence so it can remain
+uninitialized there.

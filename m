@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77549466ADC
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:22:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB34B466AF9
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 21:39:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348796AbhLBUZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 15:25:25 -0500
-Received: from ams.source.kernel.org ([145.40.68.75]:41464 "EHLO
-        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348819AbhLBUY1 (ORCPT
+        id S1348866AbhLBUma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 15:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348828AbhLBUm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 15:24:27 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 128CFB82496;
-        Thu,  2 Dec 2021 20:21:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FF2CC00446;
-        Thu,  2 Dec 2021 20:21:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638476461;
-        bh=GmcknGIcoVCZgqVue0xQLgkzb6RY836ixyVzh/vFqvg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l4Bw4IyhRfySNUjrlIXIzauC+uqolhaeUFr/YwQ/bsV1z9KlQaPFkSrzSFWLTJZUF
-         dNeHiONQeN8eOO1GWsgMN4aOYYD6jr2V/KAVenxfxXuOwe1rUcWvtSVmOu38Qavevf
-         cUE/oHaTcPwpuHuapXVoCpx8YlrMtW9sgLkZgI31dOoeB3cORmOndD3b4ajJ1A3fmH
-         pbRqwHzSjN9/96+RlSINhWZYPxoMMTIhZuhQZnLMKz7ITTuhVfpqB+4d++3CaDd7G3
-         IqjvjGINyz5h7PqkOjfF+GkdaIxhqA79c8I+EsUg2X0GeOvKSI5DWn9yreZgjfWlnR
-         Vo++ZUnGPDx8g==
-Received: by pali.im (Postfix)
-        id 81370820; Thu,  2 Dec 2021 21:20:58 +0100 (CET)
-Date:   Thu, 2 Dec 2021 21:20:58 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/6] PCI: pci-bridge-emul: Various fixes
-Message-ID: <20211202202058.3zwy4yqocrkt7tvs@pali>
-References: <20211124155944.1290-1-pali@kernel.org>
- <20211130142652.30654ce5@thinkpad>
+        Thu, 2 Dec 2021 15:42:29 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE83C061757
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 12:39:06 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id 193so1228443qkh.10
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 12:39:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=profian-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=hfpOB/YwxBkZmHMU1DG9r5qDFp0zinpAqA+jC5ucWk4=;
+        b=LzS1sKk/TTReAFEWlKUApPCYo+W6v9VRQwvJi0oULSe22j8TmhbOThj9BS9hdaQ+6M
+         gWnPk4ETvcOQT8RcTgyiseviofwFhJ4o/WgWI1prBz1JZtD7S35fRzyTAkoFT8VTciYu
+         v8DhFQXUEmkynzpEzwWfYSuALGBNZqtT7fAeHuw0Ziclrq6PIuntDNAocvAsJs6EehZd
+         HSQskYlmz26JvlX4QZdSE0d9KDr5BAHke8x/OPvIqK7yVbGmanxnPtdv2/J1s7VwA9qM
+         T33CPBfMJyIERRMecJnf1oDyq7xTuX55tc0Du/1JJqd4a/Z+HzoJG+zoNiMlCUyqvFkd
+         41ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=hfpOB/YwxBkZmHMU1DG9r5qDFp0zinpAqA+jC5ucWk4=;
+        b=SR8kmzN6ZDSEsP2BaONK0LZaaom0h5hlfpI0AjDhYTEd1eLL8P4AeellhQsvpsrZJ2
+         DjHx9nhUlIAgfWfNebz0e3fR6gOLCYiNqAcQMjtl04pMjUXTfeZaAgtGSNpLru+k72dK
+         3Qtm8kiC45TPuxArRovy/x10UE9EUxV5WxoQclIhm3oCNgStxDtbn7rzq1htHYtfRr3B
+         LVV1Dn5VFQs4mBhXDxYqdhCiE3d1Mhg5P/jnzs3rKrCM0mYDLTYkUpH0EjN5/n7atjm+
+         oe+/WZYbmUPd8Ilji8vdaEmaPctIBHpFYuQBFg4dPc85pwknhNjGi2rOCRWb78oseq5Z
+         iwKA==
+X-Gm-Message-State: AOAM530Jo36H5THEr4gjdwRP4WLE4+eGcnvTO6uWy1IxKngD/quT82Oz
+        18uoqPse7OUhijPCCd3xyDjn2540SVR9aEJCCWIMig==
+X-Google-Smtp-Source: ABdhPJwjRjpZnsXo8YziSlyzXGi+3LwY0M2piBNCr8jHpLSss4W4bgiO5A16H4+If8K6pshum+1rZfhjBc5CGvoFV6o=
+X-Received: by 2002:a37:f619:: with SMTP id y25mr14291485qkj.201.1638477545592;
+ Thu, 02 Dec 2021 12:39:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20211130142652.30654ce5@thinkpad>
-User-Agent: NeoMutt/20180716
+References: <cover.1638381245.git.reinette.chatre@intel.com> <94d8d631-5345-66c4-52a3-941e52500f84@intel.com>
+In-Reply-To: <94d8d631-5345-66c4-52a3-941e52500f84@intel.com>
+From:   Nathaniel McCallum <nathaniel@profian.com>
+Date:   Thu, 2 Dec 2021 15:38:55 -0500
+Message-ID: <CAHAy0tQr17mhpHskr4Mr+ooGyxjbSqy02Z2UA27U7=Ew6MW2Rg@mail.gmail.com>
+Subject: Re: [PATCH 00/25] x86/sgx and selftests/sgx: Support SGX2
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Reinette Chatre <reinette.chatre@intel.com>,
+        dave.hansen@linux.intel.com, jarkko@kernel.org, tglx@linutronix.de,
+        bp@alien8.de, luto@kernel.org, mingo@redhat.com,
+        linux-sgx@vger.kernel.org, x86@kernel.org, seanjc@google.com,
+        kai.huang@intel.com, cathy.zhang@intel.com, cedric.xing@intel.com,
+        haitao.huang@intel.com, mark.shanahan@intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 30 November 2021 14:26:52 Marek Behún wrote:
-> On Wed, 24 Nov 2021 16:59:38 +0100
-> Pali Rohár <pali@kernel.org> wrote:
-> 
-> > This patch series contains various fixes for pci-bridge-emul code.
-> > This code is used only by pci-aardvark.c and pci-mvebu.c drivers.
-> > 
-> > Pali Rohár (6):
-> >   PCI: pci-bridge-emul: Make expansion ROM Base Address register
-> >     read-only
-> >   PCI: pci-bridge-emul: Properly mark reserved PCIe bits in PCI config
-> >     space
-> >   PCI: pci-bridge-emul: Add definitions for missing capabilities
-> >     registers
-> >   PCI: pci-bridge-emul: Fix definitions of reserved bits
-> >   PCI: pci-bridge-emul: Correctly set PCIe capabilities
-> >   PCI: pci-bridge-emul: Set PCI_STATUS_CAP_LIST for PCIe device
-> > 
-> >  drivers/pci/controller/pci-aardvark.c |   4 +-
-> >  drivers/pci/controller/pci-mvebu.c    |   8 ++
-> >  drivers/pci/pci-bridge-emul.c         | 113 ++++++++++++++++++++++----
-> >  3 files changed, 108 insertions(+), 17 deletions(-)
-> > 
-> 
-> I will send v2 of this series with the third patch dropped, since it
-> will be applied via aardvark batch 3 series.
-> 
-> Marek
+On Thu, Dec 2, 2021 at 1:30 PM Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 12/1/21 11:22 AM, Reinette Chatre wrote:
+> > * Support modifying permissions of regular enclave pages belonging to an
+> >   initialized enclave. New permissions are not allowed to exceed the
+> >   originally vetted permissions. Modifying permissions is accomplished
+> >   with a new ioctl SGX_IOC_PAGE_MODP.
+>
+> It's probably also worth noting that this effectively punts on the issue
+> of how to allow enclaves to relax the permissions on pages, like taking
+> a page from R=>RW, or R=>RX.  RX isn't allowed unless the page was
+> *added* originally with RX or RWX.
+>
+> Since dynamically added pages start with initial RW permissions, they
+> can *never* be RX or RWX since they did not start with execute
+> permissions.  That's a limitation, of course, but it's one that can be
+> dealt with separately from this set.
+>
+> Does that sound sane to everyone?
 
-I marked third patch at patchwork as "Superseded" (as now it was applied
-into pci/aardvark branch) and so there is no need to resend same patches
-again.
+We (Enarx) need arbitrary permission modifications. But for now we can
+just use this patch series and patch the original permissions to be
+RWX on all new pages. I think that should be sufficient.

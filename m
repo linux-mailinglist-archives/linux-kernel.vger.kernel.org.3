@@ -2,101 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19A7246611E
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3DF466124
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346167AbhLBKI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 05:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240964AbhLBKIL (ORCPT
+        id S1346091AbhLBKJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:09:37 -0500
+Received: from mail-ed1-f54.google.com ([209.85.208.54]:38633 "EHLO
+        mail-ed1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1346149AbhLBKJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 05:08:11 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20DCC061758
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 02:04:48 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id v11so58468772wrw.10
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 02:04:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Q1txYpUSZr7D7uPbcrO25oyFLvtG0YcSl+xSgR678CU=;
-        b=s4DG6/X0sOK04u0D7nRFsOCfQL/+jtYSDxqFMxG40EDJ5GuWYXu9WaaowILfkgyn67
-         tpytbRin5PwhfPSzENpVbcJkoWuqv7o/sYNS3lSdUMXQTw/Ijycr6ocqgw+ER6iyT4Sv
-         fcY969eWHZiK6RecesJ3X6yWxEgPu7x3+gNNUUavMAJT0PaKlShhbiZi2/K3pgobbl6H
-         oyZEjOKnYLeazQ+I+4Kvv+ZFLLAgVukJUHoMlGYwb14Swyskhd8d2+E530pOcMiGgrmM
-         71TpNzl7Kv2zhq8K7YY9QIGXGifZS5moIgE035IDDdX60qhwJqJjwRRzgEk4klJykMrL
-         kt3g==
+        Thu, 2 Dec 2021 05:09:13 -0500
+Received: by mail-ed1-f54.google.com with SMTP id x6so113387476edr.5;
+        Thu, 02 Dec 2021 02:05:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
          :content-transfer-encoding;
-        bh=Q1txYpUSZr7D7uPbcrO25oyFLvtG0YcSl+xSgR678CU=;
-        b=JYIc8Yk3kd11HvKbyQpRP5/ITiy+GI6sjvgZxrnO2rMRkQHXkpgHCHqxEAuCnjpChf
-         SyW6jZOURt6vdJjuVTg+HbtMrAm/E6m5yun+jpvkv3yx/8ewPJNp0I5q2kDA+Xrsg/sE
-         Aj9U8PU03MFyUkEOdQNnt9XZ8FemC7BWXWNRZjvn2Etnfm7cdUJNaZpP4Gh/VI1v9nwP
-         358zU24VxThNVx3CNiruUDMXbsOpMbFo/qx2kuiZBMTgJsw40oMP/kea/5SGAT5qxqY7
-         Zea6rgaYXHNqAGiVqMcEt4RTkDiEw7mINk3Ze9C0qPnkS17ONGHdlD/aFw+mQFRl/N3o
-         aV3A==
-X-Gm-Message-State: AOAM531XOtp3v6ws67idG5Pyg+tl1YaEIDSFqsVaSa3I+GrPrasUJhAy
-        pPMOarunP1iWFwDt6Re78aG3/Q==
-X-Google-Smtp-Source: ABdhPJyCgBQhRwaqcmFlssyYNHQ8qnwc3j4ps6f61OlYNymOPCs3LjEfvAb7l2WH7H7klJ51hGksHQ==
-X-Received: by 2002:adf:dbcb:: with SMTP id e11mr12952895wrj.575.1638439487003;
-        Thu, 02 Dec 2021 02:04:47 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:72d0:52a1:d4ea:f564? ([2a01:e34:ed2f:f020:72d0:52a1:d4ea:f564])
-        by smtp.googlemail.com with ESMTPSA id n13sm2161632wrt.44.2021.12.02.02.04.45
+        bh=HbzldBUJP1MUNJZO4fQ5VmGc+gsf1iO1NZb/2FiG3ZU=;
+        b=QkWdqGoARfffpqf43O5lUKVB3yoan59dg0OY0tXai/mQRRAnfXZrBHKatrzZ5phXIH
+         epUfjHSb2GODcni5WfEm8/zC0coyriJ6VO1DhnkzFQna0zhAP5H579busqSoZ1O1x9+3
+         OSZD8kY061DWQOWAtMKA0qiGpSGetMMAiSZzjnSqZM0txXNoj+dkXUmr87BoJVdjzRZR
+         4Vncl7FHnrsKnXT+ZqDymDe3cOyoSt1qmM+OsuP2AsLjA9z8ABLDHVP9Mp1hRJvj5LfX
+         fjb67LLrzezL4MJSoFbytIVMHWgIkCiEsVZ4V/Qn+czg3vDd1SPi7olEl3FA9t4fR8eH
+         S9tg==
+X-Gm-Message-State: AOAM532pghtSrx3VEBfqbXW3DLbkU/DF8mpT/YvN9+YQQly1ZrkglhO4
+        3u3Q0MnB2G7dQ5fotm+ua8I=
+X-Google-Smtp-Source: ABdhPJzNq+N4jwOuPIoCKvpLKKUDpk/ZJj48UecZF/uHnYX1nTHZUhIjFXa8yjVHQt/bB469ZPQ9yg==
+X-Received: by 2002:a17:907:8a1a:: with SMTP id sc26mr14134432ejc.402.1638439549320;
+        Thu, 02 Dec 2021 02:05:49 -0800 (PST)
+Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
+        by smtp.gmail.com with ESMTPSA id f7sm1780835edl.33.2021.12.02.02.05.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 02:04:46 -0800 (PST)
-Subject: Re: linux-next: build failure after merge of the pm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20211202102814.793d2f67@canb.auug.org.au>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Message-ID: <f6e96a47-01a3-96f3-1ed7-e9a42c2b26bf@linaro.org>
-Date:   Thu, 2 Dec 2021 11:04:45 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Thu, 02 Dec 2021 02:05:48 -0800 (PST)
+Message-ID: <172f894c-01ab-cd9f-3292-1ba811f7222a@kernel.org>
+Date:   Thu, 2 Dec 2021 11:05:47 +0100
 MIME-Version: 1.0
-In-Reply-To: <20211202102814.793d2f67@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 3/3] x86: mm: add x86_64 support for page table check
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+From:   Jiri Slaby <jirislaby@kernel.org>
+To:     Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Paul Turner <pjt@google.com>, weixugc@google.com,
+        Greg Thelen <gthelen@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>, masahiroy@kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        frederic@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+References: <20211123214814.3756047-1-pasha.tatashin@soleen.com>
+ <20211123214814.3756047-4-pasha.tatashin@soleen.com>
+ <f81a6434-9f38-947e-02a8-9a9191285e52@kernel.org>
+ <cadf2582-3004-92b9-ab5a-cb39259fa36c@kernel.org>
+ <CA+CK2bBfcrxDyxnV+xc680AP+sJGHSpong6a+b_vvWcRsB2CcA@mail.gmail.com>
+ <a0968570-a25a-a7e3-3ee5-b7275286c9d1@kernel.org>
+In-Reply-To: <a0968570-a25a-a7e3-3ee5-b7275286c9d1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 02. 12. 21, 10:59, Jiri Slaby wrote:
+> On 01. 12. 21, 14:55, Pasha Tatashin wrote:
+>> On Wed, Dec 1, 2021 at 3:44 AM Jiri Slaby <jirislaby@kernel.org> wrote:
+>>>
+>>> On 01. 12. 21, 9:00, Jiri Slaby wrote:
+>>>> On 23. 11. 21, 22:48, Pasha Tatashin wrote:
+>>>>> Add page table check hooks into routines that modify user page tables.
+>>>>
+>>>> Hi,
+>>>>
+>>>> I bisected to this as this causes crashes during modules load:
+>>>
+>>> And it's not enough to unset CONFIG_PAGE_TABLE_CHECK_ENFORCED. I had to
+>>> unset CONFIG_PAGE_TABLE_CHECK completely to get rid of this.
+>>
+>> Hi,
+>>
+>> Thanks for reporting this. Seems like module load for some reasons
+>> does not like the static branches. However, I was not able to repro
+>> this. Could you please share your config and the module that you were
+>> loading?
+> 
+> It's the openSUSE's -next config:
+> https://raw.githubusercontent.com/openSUSE/kernel-source/linux-next/config/x86_64/vanilla 
+> 
+> 
+> But with CONFIG_IWLMEI=n (as that fails to link).
+> 
+> One has to load i915, other modules (71 on my system) are apparently fine.
+> 
+> i915 tries to patch your `page_table_check_disabled' which is defined as 
+> `DEFINE_STATIC_KEY_TRUE_RO':
+>  > jump_label_add_module: key=__tracepoint_mmap_lock_released 
+> (ffffffff93f36d88) mod=0000000000000000
+>  > jump_label_add_module: key=hugetlb_free_vmemmap_enabled_key 
+> (ffffffff94873560) mod=0000000000000000
+>  > jump_label_add_module: key=devmap_managed_key (ffffffff94902700) 
+> mod=0000000000000000
+>  > jump_label_add_module: key=page_table_check_disabled 
+> (ffffffff939da760) mod=0000000000000000
+>  > BUG: unable to handle page fault for address: ffffffff939da768
 
-On 02/12/2021 00:28, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the pm tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> drivers/powercap/dtpm.c: In function 'init_dtpm':
-> drivers/powercap/dtpm.c:466:21: error: unused variable 'dtpm_descr' [-Werror=unused-variable]
->   466 |  struct dtpm_descr *dtpm_descr;
->       |                     ^~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Caused by commit
-> 
->   f751db8adaea ("powercap/drivers/dtpm: Disable DTPM at boot time")
+Provided you EXPORT page_table_check_disabled and it can be used from 
+modules, it can be barely marked as RO. So the below indeed fixes the 
+problem for me:
 
-Rafael, will you drop the patch from your tree and I send a new one with
-the local variable also, or shall I send a change on top of?
+--- a/mm/page_table_check.c
++++ b/mm/page_table_check.c
+@@ -18,7 +18,7 @@ struct page_table_check {
+  static bool __page_table_check_enabled __initdata =
+ 
+IS_ENABLED(CONFIG_PAGE_TABLE_CHECK_ENFORCED);
+
+-DEFINE_STATIC_KEY_TRUE_RO(page_table_check_disabled);
++DEFINE_STATIC_KEY_TRUE(page_table_check_disabled);
+  EXPORT_SYMBOL(page_table_check_disabled);
+
+  static int __init early_page_table_check_param(char *buf)
 
 > 
-> I have used the pm tree from next-20211201 for today.
-> 
+> regards,
 
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+js
+suse labs

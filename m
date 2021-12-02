@@ -2,171 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AC7FA466958
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:44:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 867AA466955
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355887AbhLBRsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:48:07 -0500
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:36458 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1355721AbhLBRsF (ORCPT
+        id S1348177AbhLBRsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:48:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242145AbhLBRsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:48:05 -0500
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2HMwQC026736;
-        Thu, 2 Dec 2021 17:44:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : reply-to : to : cc : date : in-reply-to : references : content-type
- : mime-version : content-transfer-encoding; s=pp1;
- bh=VaeMHoFHFtcqpx2FX59D4loTdGMl+lmBz6JSTLtaUMQ=;
- b=l0YnE21DEw1BcRcMXGc7XWQ+dxW64g5XN4ElKbzT6pU7NJ2K4NooDVMiT8CKMcRYoK1f
- eJnkeTyBKrfIA1Kjth+HKR63x8ZaB4LoYgrWzJeSbZPLFMz/ok8sfzkpRyKfYflWeBnn
- gCTufgIYzJtPL08PRJvak9U8agXOQxTRKmn5h3DNukQqzH1hkMUwNnxMGkHGiJjGNqS4
- jmM1NtkpIh1obx1xTcDZitc+bB8eVolgqYwxJuIQR69VOdRkZQtz4SwKh6ir0Y4LPhmz
- 9xGeJn0Qa2Nv71Fvo8gBL5+z7b9v8pHKzlihkoP1Re5fbU5ippJkpu1FMf/rvqCxBmnJ XA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq2ga0dyh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 17:44:30 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2Hf1aQ000778;
-        Thu, 2 Dec 2021 17:44:29 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3cq2ga0dy2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 17:44:29 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2HfABG029109;
-        Thu, 2 Dec 2021 17:44:28 GMT
-Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
-        by ppma02wdc.us.ibm.com with ESMTP id 3ckcacubmu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 17:44:28 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2HiQO245285672
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 17:44:26 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9BC127805C;
-        Thu,  2 Dec 2021 17:44:26 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6D5B878063;
-        Thu,  2 Dec 2021 17:44:24 +0000 (GMT)
-Received: from jarvis.int.hansenpartnership.com (unknown [9.211.96.125])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  2 Dec 2021 17:44:24 +0000 (GMT)
-Message-ID: <39e43a4829b86b5a87bc082628cc6f45d4d8c899.camel@linux.ibm.com>
-Subject: Re: [RFC 08/20] ima: Move measurement list related variables into
- ima_namespace
-From:   James Bottomley <jejb@linux.ibm.com>
-Reply-To: jejb@linux.ibm.com
-To:     Stefan Berger <stefanb@linux.ibm.com>,
-        linux-integrity@vger.kernel.org
-Cc:     zohar@linux.ibm.com, serge@hallyn.com,
-        christian.brauner@ubuntu.com, containers@lists.linux.dev,
-        dmitry.kasatkin@gmail.com, ebiederm@xmission.com,
-        krzysztof.struczynski@huawei.com, roberto.sassu@huawei.com,
-        mpeters@redhat.com, lhinds@redhat.com, lsturman@redhat.com,
-        puiterwi@redhat.com, jamjoom@us.ibm.com,
-        linux-kernel@vger.kernel.org, paul@paul-moore.com, rgb@redhat.com,
-        linux-security-module@vger.kernel.org, jmorris@namei.org
-Date:   Thu, 02 Dec 2021 12:44:23 -0500
-In-Reply-To: <05da6ebc-0cd4-753a-8589-4b1a06d198c6@linux.ibm.com>
-References: <20211130160654.1418231-1-stefanb@linux.ibm.com>
-         <20211130160654.1418231-9-stefanb@linux.ibm.com>
-         <141ce433f026b47edb1d9a8f89e4581db253c579.camel@linux.ibm.com>
-         <c3b99439-1dd6-e204-ad41-5d8bacb54d48@linux.ibm.com>
-         <eeaadc76ca2da67d79c155497a73c6905b70e726.camel@linux.ibm.com>
-         <05da6ebc-0cd4-753a-8589-4b1a06d198c6@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 
+        Thu, 2 Dec 2021 12:48:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF90FC06174A
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:44:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65D7A624DC
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 17:44:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B58C00446;
+        Thu,  2 Dec 2021 17:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638467077;
+        bh=20MBb3O0TGXlUvIGLiQ6paI3wafuNiuw+zUTD+gqlCo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YGxoSQfrKIjnndOxqey9jaBI/7LC4P/g2a8m7w8bcJwdl7NnMS5K2wRtQ4dWmGwVM
+         S9CBCl9bFDlz3Lgos25TB3tA84HhRMrMH9uwBjpyHfD140Gph/EXg/mf7TrKiqcVw9
+         mYQXGdhvGitx57ShTaDlRG7rxTCJptbCEPgdiJj6aIktSAtuoPT9NDaGa8xwgjV4u4
+         GshFGuMgohLYqtIs1Zzn+b5rlCTzCBfzFUWbcD7EKkt/tIBzAvsqT/au3xhcRwXbaw
+         7YKjVAlgRGh6Hr3U5odIxHd+Rx/8c1StGFLKi1ap8IYH6Pvi88J0GuFhQF8nWnKxNI
+         yxuXF5Z2EQGRA==
+Date:   Thu, 2 Dec 2021 18:44:34 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Nitesh Lal <nilal@redhat.com>,
+        Nicolas Saenz Julienne <nsaenzju@redhat.com>,
+        Christoph Lameter <cl@linux.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Alex Belits <abelits@belits.com>, Peter Xu <peterx@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: Re: [patch v7 02/10] add prctl task isolation prctl docs and samples
+Message-ID: <20211202174434.GB648659@lothringen>
+References: <20211112123531.497831890@fuller.cnet>
+ <20211112123750.692268849@fuller.cnet>
+ <20211123143726.GC479935@lothringen>
+ <20211129151924.GB135990@fuller.cnet>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: D-gCaSim0Vj8QEuCcA8MkP0yyOBAx-r1
-X-Proofpoint-GUID: l2MaD6vzlpB1TnYWLq5AxdkLss78f0vT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-02_11,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 phishscore=0 impostorscore=0 suspectscore=0
- adultscore=0 mlxlogscore=999 mlxscore=0 spamscore=0 bulkscore=0
- malwarescore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2110150000 definitions=main-2112020113
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20211129151924.GB135990@fuller.cnet>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2021-12-02 at 11:45 -0500, Stefan Berger wrote:
-> On 12/2/21 11:29, James Bottomley wrote:
-> > On Thu, 2021-12-02 at 08:41 -0500, Stefan Berger wrote:
-> > > On 12/2/21 07:46, James Bottomley wrote:
-> > > > On Tue, 2021-11-30 at 11:06 -0500, Stefan Berger wrote:
-> > > > > Move measurement list related variables into the
-> > > > > ima_namespace.
-> > > > > This
-> > > > > way a
-> > > > > front-end like SecurityFS can show the measurement list
-> > > > > inside an
-> > > > > IMA
-> > > > > namespace.
-> > > > > 
-> > > > > Implement ima_free_measurements() to free a list of
-> > > > > measurements
-> > > > > and call it when an IMA namespace is deleted.
-> > > > This one worries me quite a lot.  What seems to be happening in
-> > > > this
-> > > > code:
-> > > > 
-> > > > > @@ -107,7 +100,7 @@ static int ima_add_digest_entry(struct
-> > > > > ima_namespace *ns,
-> > > > >           qe->entry = entry;
-> > > > >    
-> > > > >           INIT_LIST_HEAD(&qe->later);
-> > > > > -       list_add_tail_rcu(&qe->later, &ima_measurements);
-> > > > > +       list_add_tail_rcu(&qe->later, &ns->ima_measurements);
-> > > > >    
-> > > > >           atomic_long_inc(&ns->ima_htable.len);
-> > > > >           if (update_htable) {
-> > > > > 
-> > > > is that we now only add the measurements to the namespace list,
-> > > > but
-> > > > that list is freed when the namespace dies.  However, the
-> > > > measurement
-> > > > is still extended through the PCRs meaning we have incomplete
-> > > > information for a replay after the namespace dies?
-> > > *Not at all.* The measurement list of the namespace is
-> > > independent
-> > > of
-> > > the host.
-> > > 
-> > > The cover letter states:
-> > I get that the host can set up a policy to log everything in the
-> > namespace, but that wasn't my question.  My question is can the
-> > guest
-> > set up a policy to log something that doesn't go into the host log
-> > (because the host hasn't asked for it to be logged) but extends a
-> > PCR
-> > anyway, thus destroying the ability of the host to do log replay.
+On Mon, Nov 29, 2021 at 12:19:24PM -0300, Marcelo Tosatti wrote:
+> On Tue, Nov 23, 2021 at 03:37:26PM +0100, Frederic Weisbecker wrote:
+> > On Fri, Nov 12, 2021 at 09:35:33AM -0300, Marcelo Tosatti wrote:
+> > > +        - ``I_CFG_INHERIT``:
+> > > +                Set inheritance configuration when a new task
+> > > +                is created via fork and clone.
+> > > +
+> > > +                The ``(int *)arg4`` argument is a pointer to::
+> > > +
+> > > +                        struct task_isol_inherit_control {
+> > > +                                __u8    inherit_mask;
+> > > +                                __u8    pad[7];
+> > > +                        };
+> > > +
+> > > +                inherit_mask is a bitmask that specifies which part
+> > > +                of task isolation should be inherited:
+> > > +
+> > > +                - Bit ISOL_INHERIT_CONF: Inherit task isolation configuration.
+> > > +                  This is the state written via prctl(PR_ISOL_CFG_SET, ...).
+> > > +
+> > > +                - Bit ISOL_INHERIT_ACTIVE: Inherit task isolation activation
+> > > +                  (requires ISOL_INHERIT_CONF to be set). The new task
+> > > +                  should behave, after fork/clone, in the same manner
+> > > +                  as the parent task after it executed:
+> > > +
+> > > +                        prctl(PR_ISOL_ACTIVATE_SET, &mask, ...);
+> > 
+> > I'm confused, what is the purpose of ISOL_INHERIT_CONF?
 > 
-> host log goes with host TPM and vice versa
+> When ISOL_INHERIT_CONF is set, task isolation configuration (everything
+> configured through PR_ISOL_CFG_SET) is copied across fork/clone
+> (but not activation) so one can:
 > 
-> guest log goes with (optional) vTPM and vice version
+> 	1) configure task isolation (with chisol, for example).
+> 	2) activate task isolation from the latency sensitive app:
+> 
+> +This is a snippet of code to activate task isolation if
+> +it has been previously configured (by chisol for example)::
+> +
+> +        #include <sys/prctl.h>
+> +        #include <linux/types.h>
+> +
+> +        #ifdef PR_ISOL_CFG_GET
+> +        unsigned long long fmask;
+> +
+> +        ret = prctl(PR_ISOL_CFG_GET, I_CFG_FEAT, 0, &fmask, 0);
+> +        if (ret != -1 && fmask != 0) {
+> +                ret = prctl(PR_ISOL_ACTIVATE_SET, &fmask, 0, 0, 0);
+> +                if (ret == -1) {
+> +                        perror("prctl PR_ISOL_ACTIVATE_SET");
+> +                        return ret;
+> +                }
+> +        }
+> +        #endif
+> 
+> Regarding the 3 possible modes of operation and their relation 
+> to ISOL_INHERIT_CONF / ISOL_INHERIT_ACTIVE:
+> 
+> +This results in three combinations:
+> +
+> +1. Both configuration and activation performed by the
+> +latency sensitive application.
+> +Allows fine grained control of what task isolation
+> +features are enabled and when (see samples section below).
+> 
+> 	inherit_mask = 0
+> 
+> +2. Only activation can be performed by the latency sensitive app
+> +(and configuration performed by chisol).
+> +This allows the admin/user to control task isolation parameters,
+> +and applications have to be modified only once.
+> 
+> 	inherit_mask = ISOL_INHERIT_CONF
+> 
+> +3. Configuration and activation performed by an external tool.
+> +This allows unmodified applications to take advantage of
+> +task isolation. Activation is performed by the "-a" option
+> +of chisol.
+> 
+> 	inherit_mask = ISOL_INHERIT_ACTIVE
+> 
 
-But that's what doesn't seem to happen ... ima_pcr_extend isn't
-virtualized and it's always called from ima_add_template_entry()
-meaning the physical TPM is always extended even for a namespace only
-entry.
+Doh yes of course, I read it too fast but it was actually clear.
 
-> Extending the PCR of the host's TPM would require the data to be
-> logged in the host log as well. So, no, it's not possible.
-
-Well, exactly: if you don't have or want a vTPM per container the only
-way to attest is via the physical TPM which means all entries in the
-namespace must be in the host log, so the host owner can quote and
-reply and they can split the attested log and give assurance to the
-namespaces that their entries are correct.
-
-James
-
-
+Thanks!

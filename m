@@ -2,79 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CB78466A22
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:04:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59F8466A26
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:07:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376653AbhLBTHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 14:07:23 -0500
-Received: from vps0.lunn.ch ([185.16.172.187]:36266 "EHLO vps0.lunn.ch"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1376361AbhLBTHR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 14:07:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=Ca/Np5EqNfWr4TZU2fd5ty7+mfW8+17DiuzNszp3vno=; b=qb
-        qcOnLxHrA2wjcALq7MSiPGiEgwigv7oPeOlb2JHbWy7l6LwCsfKAtCjCTDQGF1ZKzfbuTse//Devi
-        eYi8skOgG3HzqO+xyfNeSlgHLhUS9eaLkGekTKpbzI2ldptr2o/PvtrNw5nQYh5llYahiHAWHAZOp
-        XVOA3K5IQ4NGTog=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1msrMy-00FM1w-Mn; Thu, 02 Dec 2021 20:03:48 +0100
-Date:   Thu, 2 Dec 2021 20:03:48 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
-Cc:     Wells Lu <wellslutw@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        Vincent Shih =?utf-8?B?5pa96YyV6bS7?= 
-        <vincent.shih@sunplus.com>
-Subject: Re: [PATCH net-next v3 2/2] net: ethernet: Add driver for Sunplus
- SP7021
-Message-ID: <YakYlHzvlAI+1at+@lunn.ch>
-References: <1638266572-5831-1-git-send-email-wellslutw@gmail.com>
- <1638266572-5831-3-git-send-email-wellslutw@gmail.com>
- <YabsT0/dASvYUH2p@lunn.ch>
- <cf60c230950747ec918acfc6dda595d6@sphcmbx02.sunplus.com.tw>
- <YajEbXtBwlDL4gOL@lunn.ch>
- <2fded2fc3a1344d0882ae2f186257911@sphcmbx02.sunplus.com.tw>
+        id S1376661AbhLBTKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 14:10:45 -0500
+Received: from smtp08.smtpout.orange.fr ([80.12.242.130]:58062 "EHLO
+        smtp.smtpout.orange.fr" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1348377AbhLBTKn (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 14:10:43 -0500
+Received: from [192.168.1.18] ([86.243.171.122])
+        by smtp.orange.fr with ESMTPA
+        id srQMm8a6iHQrlsrQMmWszZ; Thu, 02 Dec 2021 20:07:19 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: YWZlNiIxYWMyZDliZWIzOTcwYTEyYzlhMmU3ZiQ1M2U2MzfzZDfyZTMxZTBkMTYyNDBjNDJlZmQ3ZQ==
+X-ME-Date: Thu, 02 Dec 2021 20:07:19 +0100
+X-ME-IP: 86.243.171.122
+Subject: Re: [PATCH] xen-blkfront: Use the bitmap API when applicable
+To:     Joe Perches <joe@perches.com>, Juergen Gross <jgross@suse.com>,
+        boris.ostrovsky@oracle.com, sstabellini@kernel.org,
+        roger.pau@citrix.com, axboe@kernel.dk
+Cc:     xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+References: <1c73cf8eaff02ea19439ec676c063e592d273cfe.1638392965.git.christophe.jaillet@wanadoo.fr>
+ <c529a221-f444-ad26-11ff-f693401c9429@suse.com>
+ <d8f87c17-75d1-2e6b-65e1-23adc75bb515@wanadoo.fr>
+ <6fcddba84070c021eb92aa9a5ff15fb2a47e9acb.camel@perches.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Message-ID: <3d71577f-dabe-6e1a-4b03-2a44f304b702@wanadoo.fr>
+Date:   Thu, 2 Dec 2021 20:07:17 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <6fcddba84070c021eb92aa9a5ff15fb2a47e9acb.camel@perches.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2fded2fc3a1344d0882ae2f186257911@sphcmbx02.sunplus.com.tw>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 06:46:40PM +0000, Wells Lu 呂芳騰 wrote:
-> Hi Andrew,
+Le 02/12/2021 à 19:16, Joe Perches a écrit :
+> On Thu, 2021-12-02 at 19:12 +0100, Christophe JAILLET wrote:
+>> Le 02/12/2021 à 07:12, Juergen Gross a écrit :
+>>> On 01.12.21 22:10, Christophe JAILLET wrote:
+>>>> Use 'bitmap_zalloc()' to simplify code, improve the semantic and avoid
+>>>> some open-coded arithmetic in allocator arguments.
+>>>>
+>>>> Also change the corresponding 'kfree()' into 'bitmap_free()' to keep
+>>>> consistency.
+>>>>
+>>>> Use 'bitmap_copy()' to avoid an explicit 'memcpy()'
+> []
+>>>> diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
+> []
+>>>> @@ -442,16 +442,14 @@ static int xlbd_reserve_minors(unsigned int
+>>>> minor, unsigned int nr)
+>>>>        if (end > nr_minors) {
+>>>>            unsigned long *bitmap, *old;
+>>>> -        bitmap = kcalloc(BITS_TO_LONGS(end), sizeof(*bitmap),
+>>>> -                 GFP_KERNEL);
+>>>> +        bitmap = bitmap_zalloc(end, GFP_KERNEL);
+>>>>            if (bitmap == NULL)
+>>>>                return -ENOMEM;
+>>>>            spin_lock(&minor_lock);
+>>>>            if (end > nr_minors) {
+>>>>                old = minors;
+>>>> -            memcpy(bitmap, minors,
+>>>> -                   BITS_TO_LONGS(nr_minors) * sizeof(*bitmap));
+>>>> +            bitmap_copy(bitmap, minors, nr_minors);
+>>>>                minors = bitmap;
+>>>>                nr_minors = BITS_TO_LONGS(end) * BITS_PER_LONG;
 > 
-> Thank you for explanation.
+> 		nr_minors = end;
+> ?
 > 
-> I'll add phy_support_asym_pause() after PHY connected next patch.
-> 
-> I found some drivers call phy_set_max_speed() to set PHY speed to
-> 100M after PHY connected. Is that necessary?
 
-> From 'supported', PHY supports 10M/100M already.
+No,
+My understanding of the code is that if we lack space (end > nr_minors), 
+we need to allocate more. In such a case, we want to keep track of what 
+we have allocated, not what we needed.
+The "padding" bits in the "long align" allocation, can be used later.
 
-You need phy_set_max_speed() when it is possible to connect a 10/100
-MAC to a 1G PHY.  You sometime do this because a 1G PHY is cheaper
-than a 100M PHY. Unless limited, the PHY will advertise and could
-negotiate a 1G link, but the MAC could then not support it. If it is
-not physically possible to connect a 1G PHY to your MAC, you don't
-need to worry.
+first call
+----------
+end = 65
+nr_minors = 63
 
-> I also found some drivers call phy_start_aneg() after PHY started.
+--> we need some space
+--> we allocate 2 longs = 128 bits
+--> we now use 65 bits of these 128 bits
 
-It is not needed.
+new call
+--------
+end = 68
+nr_minors = 128 (from previous call)
+--> no need to reallocate
 
-   Andrew
+CJ

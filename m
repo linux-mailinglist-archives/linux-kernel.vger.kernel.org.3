@@ -2,68 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 299CB466398
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359E146639F
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 13:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346829AbhLBM0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 07:26:35 -0500
-Received: from shark4.inbox.lv ([194.152.32.84]:46894 "EHLO shark4.inbox.lv"
+        id S239533AbhLBM3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 07:29:02 -0500
+Received: from cpanel.siel.si ([46.19.9.99]:57652 "EHLO cpanel.siel.si"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1346852AbhLBM0S (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 07:26:18 -0500
-Received: from shark4.inbox.lv (localhost [127.0.0.1])
-        by shark4-out.inbox.lv (Postfix) with ESMTP id 8167EC0199;
-        Thu,  2 Dec 2021 14:22:50 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=inbox.lv; s=30062014;
-        t=1638447770; bh=neqrILORV8SqsElN1SHhdTvqBGKRhO3YMs913LQNSL8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References;
-        b=L8xvHB+5owKJr2KYgGAIVGqZ1sf/OSzEdiR047eogslRsh90em0/a3MuFdz95qqAu
-         e/slCpppm9YpWmV0SRN2nRy1CCFECdmETSrFBL+edKnLfee9KHW3gRqXc8Tct/LSNH
-         d3HK5ZEGvcm+MC8uxtxp6+1TtcR3tG7ceykAz3Jc=
-Received: from localhost (localhost [127.0.0.1])
-        by shark4-in.inbox.lv (Postfix) with ESMTP id 76CE2C0161;
-        Thu,  2 Dec 2021 14:22:50 +0200 (EET)
-Received: from shark4.inbox.lv ([127.0.0.1])
-        by localhost (shark4.inbox.lv [127.0.0.1]) (spamfilter, port 35)
-        with ESMTP id AYQhrt8Ve0n0; Thu,  2 Dec 2021 14:22:50 +0200 (EET)
-Received: from mail.inbox.lv (pop1 [127.0.0.1])
-        by shark4-in.inbox.lv (Postfix) with ESMTP id 4239DC015A;
-        Thu,  2 Dec 2021 14:22:50 +0200 (EET)
-Date:   Thu, 2 Dec 2021 21:22:40 +0900
-From:   Alexey Avramov <hakavlad@inbox.lv>
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rik van Riel <riel@surriel.com>,
-        Mike Galbraith <efault@gmx.de>,
-        Darrick Wong <djwong@kernel.org>, regressions@lists.linux.dev,
-        Linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/1] mm: vmscan: Reduce throttling due to a failure to
- make progress
-Message-ID: <20211202212240.7f9ee7f5@mail.inbox.lv>
-In-Reply-To: <20211202121554.GY3366@techsingularity.net>
-References: <20211125151853.8540-1-mgorman@techsingularity.net>
-        <20211127011246.7a8ac7b8@mail.inbox.lv>
-        <20211129150117.GO3366@techsingularity.net>
-        <20211201010348.31e99637@mail.inbox.lv>
-        <20211130172754.GS3366@techsingularity.net>
-        <20211201033836.4382a474@mail.inbox.lv>
-        <20211201140005.GU3366@techsingularity.net>
-        <20211202204229.5ed83f31@mail.inbox.lv>
-        <20211202121554.GY3366@techsingularity.net>
-X-Mailer: Claws Mail 3.14.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+        id S233967AbhLBM25 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 07:28:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:MIME-Version:
+        Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=WAT7kNShq1OO482Bpx+8nDJEsH6UkPgjYk0R6HiKn9M=; b=fC+fITspqqdhPsiJbx9wExgsk0
+        BAyD3FrnZc0uOD0pKh4Fr8Y8HGCLCAHkhk6BBWDQrVtX1/43ppF3dfgwmiFU34D2mwL37uPCgxY/R
+        rlHJSUXTCUM4clxMc8jgHCt2p1AgUd/iyPTfncqNEgKxUw3jYimifXCHzODmsjmH/QvjgbhPNfqCr
+        XbV65FDVrEPr46TUKIX27t4qDRwW9AlPhF/c8YqTHOUMuiv8bIfApyHPRGlBrx2zZtuUFp6xP7NN7
+        hXttioUCQaokFfyuLdRAs2+UNTTSRaoi5AgoM5taXSoN1JDS975bUrhP+qwPY+3Nsuq4dUq/sdZdP
+        9RSOoeFQ==;
+Received: from [89.212.21.243] (port=54630 helo=[192.168.69.215])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1msl9U-00DskO-UP; Thu, 02 Dec 2021 13:25:28 +0100
+Subject: Re: [PATCH v4 2/4] watchdog: da9062: reset board on watchdog timeout
+To:     Adam Thomson <Adam.Thomson.Opensource@diasemi.com>,
+        Support Opensource <Support.Opensource@diasemi.com>,
+        "linux@roeck-us.net" <linux@roeck-us.net>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>
+Cc:     "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "linux-imx@nxp.com" <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20211202093230.3951996-1-andrej.picej@norik.com>
+ <20211202093230.3951996-2-andrej.picej@norik.com>
+ <DB9PR10MB4652A6A2F9A2CB48920F3F5F80699@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+From:   Andrej Picej <andrej.picej@norik.com>
+Message-ID: <c6dec107-4866-50df-cdcf-db86542d8635@norik.com>
+Date:   Thu, 2 Dec 2021 13:25:31 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <DB9PR10MB4652A6A2F9A2CB48920F3F5F80699@DB9PR10MB4652.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: OK
-X-ESPOL: EZqEIBwB6gdL+J/+N+Yf6uLl2rTHW1slvCTzybU26ndFz9PMtNdrcW+QBYXqHxy6dn8=
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->can I add
 
-sure
+
+On 2. 12. 21 13:18, Adam Thomson wrote:
+> On 02 December 2021 09:32, Andrej Picej wrote:
+> 
+>> Implement a method to change watchdog timeout configuration based on DT
+>> binding ("dlg,wdt-sd"). There is a possibility to change the bahaviour
+> 
+> behaviour?
+
+Of course.
+
+> 
+>> of watchdog reset. Setting WATCHDOG_SD bit enables SHUTDOWN mode, and
+>> clearing it enables POWERDOWN mode on watchdog timeout.
+>>
+>> If no DT binding is specified the WATCHDOG_SD bit stays in default
+>> configuration, not breaking behaviour of devices which might depend on
+>> default fuse configuration.
+>>
+>> Note: This patch requires that the config register CONFIG_I is
+>> configured as writable in the da9062 multi function device.
+>>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>> ---
+> 
+> Spelling aside:
+> 
+> Reviewed-by: Adam Thomson <Adam.Thomson.Opensource@diasemi.com>
+> 

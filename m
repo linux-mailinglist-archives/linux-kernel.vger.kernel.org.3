@@ -2,89 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D90466BFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:15:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99439466C02
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 23:18:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236548AbhLBWTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 17:19:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57798 "EHLO
+        id S236904AbhLBWWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 17:22:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbhLBWTL (ORCPT
+        with ESMTP id S229836AbhLBWWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 17:19:11 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948D7C06174A;
-        Thu,  2 Dec 2021 14:15:48 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id d9so1701512wrw.4;
-        Thu, 02 Dec 2021 14:15:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Yff+1FpOuMigZbAy73J63jy1kO8FukCv/6vnynIzzvw=;
-        b=m7vw3K0ooNVuluM9tx9YuP9gt3hvjazf/xJuqhZaUTEyFbMV27ooosY8kotGRMfbUJ
-         Ul/aC7auJnanWmh6B5rnVBGeZW0QMFEx2dlW6MIBRv538NC1B0T6peUzZcuI+oAo+9EZ
-         wPWOOqiL9oe8oPFNiS2gzfK4NOaA9HSOannG9uHvwC41sqDg8L9MnQzqIBLjsxFZilx7
-         mw/XLLN+QHq2kkt6I8xxjIkkS5USR4xSanBl+0L7uXh7hFt+ZKDWyWNjBAlCRMgNgKTD
-         cf3+814AUWKcCgxsw5gJmul1K3+3nFAQLVbb2Pm4vzwbFZXxZEoQd6GoJ+nRVzjLZqtn
-         Jx6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Yff+1FpOuMigZbAy73J63jy1kO8FukCv/6vnynIzzvw=;
-        b=COeMJHcLnfUqIL1ko2Qn71ARKu+0BiQCZQr7cb2sqNkbHT4L0RYYQXlXUQ9VbpbzhL
-         eq9yfZo/WMvFgcnp4ILeYmZBgrmrs9jUyBfnEjoh83RJIcQSMhVYqD+AiCaRKF9DYyOi
-         ORO6A0Efmy8/3zpj28azxFb4IMJcIPVHfKHL1dEJCcBnIu8yTJflw7ukgQrhgFaSfXhI
-         2sdV7zaBgFJ7dyrUZH4thlBi9w3BC1KTnRDOvdVaiitbO2+AXf7OVJPmgVddpNekUEyQ
-         P27pByp2ewNEeUwtnapBq6g1mAY0ghbYPWlqMz7I8dHq4yM1wpOCSPRXt91iH9QH6TYB
-         xEOg==
-X-Gm-Message-State: AOAM530vYkj7j4G2/eloqEe/hFJEgmntg55h91Nl5qX1fmDDCxRlha5A
-        v+lQKikfCt26wOJrMCbkE/+SHGOJdNS5VAG0
-X-Google-Smtp-Source: ABdhPJyw0fnVHwqCbx2j/3f+LhuiQhCMSFhQy7mZzArLrLknGa+6azR8ta8grSX8QHKGzuZfQd0QYg==
-X-Received: by 2002:adf:dc44:: with SMTP id m4mr17644222wrj.550.1638483347151;
-        Thu, 02 Dec 2021 14:15:47 -0800 (PST)
-Received: from localhost.localdomain ([39.48.206.151])
-        by smtp.gmail.com with ESMTPSA id h15sm3600820wmq.32.2021.12.02.14.15.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 14:15:46 -0800 (PST)
-From:   Ameer Hamza <amhamza.mgc@gmail.com>
-To:     saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
-        kuba@kernel.org
-Cc:     netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, amhamza.mgc@gmail.com
-Subject: [PATCH] net/mlx5: Fix dangling pointer access
-Date:   Fri,  3 Dec 2021 03:15:39 +0500
-Message-Id: <20211202221539.113434-1-amhamza.mgc@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 2 Dec 2021 17:22:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C195C06174A;
+        Thu,  2 Dec 2021 14:18:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C53F6B823AA;
+        Thu,  2 Dec 2021 22:18:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59408C00446;
+        Thu,  2 Dec 2021 22:18:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638483522;
+        bh=YH4TOJRyH4rRdQrUQ5WZQ74ziTws+s2sSJiYYsJ8HPY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hthdPKE9Tw0YNz6Z1NkOAe11T+COAFIijQ2Ga941VrEPAvoaIf4dEVDDHftqLil+a
+         6yLOdh8VeT46wVfkj2aYOQU3STnMxAj1XdCgN/0+EGFz/y+Fv6tAOJkmNrUzR2t6fX
+         b6ZuFDn/0k1bbrdZJjaPAtB+DDKAOSOON5Z2p9jxQx5NCJlS/ZXhXrZVSb7da5d+Qi
+         QcGG4SF8kW0jGun8qFHpP7UWHSpWrp4G6XiZUQdoEnLrWGhgbKTvWCMfr3dURwAVwg
+         e0axtQR8U8iFmn9WGOzXkwX31MMI8JzXujmL2aNPzQVQx5FWGNvZL6crsN486eYCot
+         xQ6C4jmFYeK0w==
+Date:   Thu, 2 Dec 2021 14:18:40 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Mimi Zohar <zohar@linux.ibm.com>
+Cc:     linux-integrity@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 4/5] ima: support fs-verity file digest based
+ signatures
+Message-ID: <YalGQHTq51SHqC1a@sol.localdomain>
+References: <20211202215507.298415-1-zohar@linux.ibm.com>
+ <20211202215507.298415-5-zohar@linux.ibm.com>
+ <YalDvGjq0inMFKln@sol.localdomain>
+ <4dc45d1ec7450b4d1d06b12baf73668525bd8157.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4dc45d1ec7450b4d1d06b12baf73668525bd8157.camel@linux.ibm.com>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix for dangling pointer access reported by Coverity.
+On Thu, Dec 02, 2021 at 05:13:15PM -0500, Mimi Zohar wrote:
+> On Thu, 2021-12-02 at 14:07 -0800, Eric Biggers wrote:
+> > On Thu, Dec 02, 2021 at 04:55:06PM -0500, Mimi Zohar wrote:
+> > >  	case IMA_VERITY_DIGSIG:
+> > > -		fallthrough;
+> > > +		set_bit(IMA_DIGSIG, &iint->atomic_flags);
+> > > +
+> > > +		/*
+> > > +		 * The IMA signature is based on a hash of IMA_VERITY_DIGSIG
+> > > +		 * and the fs-verity file digest, not directly on the
+> > > +		 * fs-verity file digest.  Both digests should probably be
+> > > +		 * included in the IMA measurement list, but for now this
+> > > +		 * digest is only used for verifying the IMA signature.
+> > > +		 */
+> > > +		verity_digest[0] = IMA_VERITY_DIGSIG;
+> > > +		memcpy(verity_digest + 1, iint->ima_hash->digest,
+> > > +		       iint->ima_hash->length);
+> > > +
+> > > +		hash.hdr.algo = iint->ima_hash->algo;
+> > > +		hash.hdr.length = iint->ima_hash->length;
+> > 
+> > This is still wrong because the bytes being signed don't include the hash
+> > algorithm.  Unless you mean for it to be implicitly always SHA-256?  fs-verity
+> > supports SHA-512 too, and it may support other hash algorithms in the future.
+> 
+> The signature stored in security.ima is prefixed with a header
+> (signature_v2_hdr).
 
-Addresses-Coverity: 1494138 ("Use after free")
+Yes, but the byte that identifies the hash algorithm is not included in the
+bytes that are actually signed, as far as I can tell.
 
-Signed-off-by: Ameer Hamza <amhamza.mgc@gmail.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/health.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/health.c b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-index 3ca998874c50..856023321972 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/health.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/health.c
-@@ -335,7 +335,7 @@ static int mlx5_health_try_recover(struct mlx5_core_dev *dev)
- {
- 	mlx5_core_warn(dev, "handling bad device here\n");
- 	mlx5_handle_bad_state(dev);
--	if (mlx5_health_wait_pci_up(dev)) {
-+	if (dev->timeouts && mlx5_health_wait_pci_up(dev)) {
- 		mlx5_core_err(dev, "health recovery flow aborted, PCI reads still not working\n");
- 		return -EIO;
- 	}
--- 
-2.25.1
-
+- Eric

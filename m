@@ -2,183 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DA754466026
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1862A46602C
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345950AbhLBJLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:11:55 -0500
-Received: from mail-io1-f71.google.com ([209.85.166.71]:57073 "EHLO
-        mail-io1-f71.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345896AbhLBJLs (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:11:48 -0500
-Received: by mail-io1-f71.google.com with SMTP id r199-20020a6b2bd0000000b005e234972ddfso32061668ior.23
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 01:08:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=2nEPO550Rj0CJg8yzFP5f3pa89cCWBV9CiKJJK9J9Ac=;
-        b=sOrZAVlTp26c4Kse0f1OXK/+RT6I/uWB1RPct20VkeTUrWiYGjZiFFLkKEIaS1bIpN
-         C+r4yy4U9TBew/NplocK/iVd/Xs5g15bJCtPWn0QBcDUqNOKWX++Zt+CtMAcYdU3L76s
-         aZw/VwR7n9rYxTi93OHOcNPiJdKiNejfZWuQxA/2M4Eor7W9XMgQr5/qQSoC6lfPDDN5
-         TtJZECgjHw+lVgh/AzJVeUxVif5N33fu393CtXYJGBJrWCBJOl4J8+B9s0U4KYVKfy91
-         bhUoYKssfccfd62Licc986PrWv8PEPpcu6Y29zZIaVtXH7vbtBRu0SmMapiinkY6UlwY
-         aqfw==
-X-Gm-Message-State: AOAM533jJLOqt69k/+sBdsDYP7L3iQtQFZgtMtus2lXK/h8sFs/gdOiy
-        kJx8RDom3FXuefSrY6XBARRaP0S0JsYZn1kde9UpLrbs1rhO
-X-Google-Smtp-Source: ABdhPJwdIiqglfIfrBETAzYIY+rhwwS3wQVLPY4aL7a9eQGw6Sh6Athe+nzFhQbvf66S+B/MJoucChJZb6IAY85eDyrQWXmZKz/U
+        id S1346014AbhLBJN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 04:13:28 -0500
+Received: from mail-dm6nam10on2088.outbound.protection.outlook.com ([40.107.93.88]:61153
+        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S240990AbhLBJN1 (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 04:13:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HoOVTihw6++h/vjlhyD6zXFzDVS8MluD3N0bLlM5YU/FLra9PKyvaWinwCC4Q8AxOOuU7z/Thrf9AtoyHmsfDyY3dFHJ9wPXsF7Xdv9h24ASWqMToRbb6xd/ifjbMzv6SkKCrIGBALJp2v+vmGJ+QHP90crxqRCHQk4bkq726S30zrPCELiMFceboYaNrBiVXY7yHhOMTKmwdeLZnO73tXcQxYG0kkAsE0kA+idIOadmo0KJd0Rq0tni3yJ9Mam1pkVFgzSGvcNTo/7wXJBozaX/de4UcVvUQXgIQiUmRI9uZtJ5nKuTCknZJLqIOEGhPxkc5XJaLSKKCO3eTU9CHg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9AEWuV9OqALxtKGafvvmuWBT694n074L5gTembkazGU=;
+ b=KhwUqQCHFYp7i3De3Z+BQi9nN3XqBwHAnrLbVmDERVQI9DDd/olsPCmZF9vc9f6QoK9XM87qXQi3QAcAe6jS0CrJvH+UgTCYxwWAKIc0TC+r7FwQqAKTNtI2Pt4y+VLp2gM7kUX6RGzJLOLjRqCTdo9enbhDmHkjnaLWSTqTuqKINIw9gCQdcJQEytZFBWTTRfYY6QPYLgAsVzxS4HGg4TVlPFXAiVNB+G1XCBZKksjDveJXjGwF3ylFutDrpm4Ak4SFeC/cDhUMqSP6NHxU773sh5cnltzoNuYoHi7n3ksLbU4GzYXosY2C7+KN+MTw99nvHZZaiJXoQb/esK9+/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9AEWuV9OqALxtKGafvvmuWBT694n074L5gTembkazGU=;
+ b=LD3zD0PUlla2BdVXWiU4lS1m9GZXqo5iSUwEMTqFdacQohs48njvK6VrhQ+MzuiPowlRCV3bX1FjzJ98GFylkiFTPM5c+cWPypF1FSGmi8E1XrBoUl/nSK7bmX4QQPXjbAHh8P2k5D8NY7GTGl+q/Y6YvkShqN2g9JGi48VMYSA=
+Received: from BY5PR02MB6916.namprd02.prod.outlook.com (2603:10b6:a03:234::18)
+ by BYAPR02MB4632.namprd02.prod.outlook.com (2603:10b6:a03:5e::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.4755.11; Thu, 2 Dec
+ 2021 09:10:02 +0000
+Received: from BY5PR02MB6916.namprd02.prod.outlook.com
+ ([fe80::8151:8728:8d6b:c3dc]) by BY5PR02MB6916.namprd02.prod.outlook.com
+ ([fe80::8151:8728:8d6b:c3dc%5]) with mapi id 15.20.4755.016; Thu, 2 Dec 2021
+ 09:10:02 +0000
+From:   Anand Ashok Dumbre <ANANDASH@xilinx.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        git <git@xilinx.com>, Michal Simek <michals@xilinx.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>
+Subject: RE: [PATCH v11 1/5] device property: Add fwnode_iomap()
+Thread-Topic: [PATCH v11 1/5] device property: Add fwnode_iomap()
+Thread-Index: AQHX4YZBUvFrfnFzmkK2bRDvVWcrV6wUH/KAgAgekICAArbIYA==
+Date:   Thu, 2 Dec 2021 09:10:02 +0000
+Message-ID: <BY5PR02MB6916F7BC6ACE5326DB92DB2BA9699@BY5PR02MB6916.namprd02.prod.outlook.com>
+References: <20211124225407.17793-1-anand.ashok.dumbre@xilinx.com>
+ <20211124225407.17793-2-anand.ashok.dumbre@xilinx.com>
+ <YZ92mTURrFWZPUXp@smile.fi.intel.com>
+ <DM6PR02MB69236DAEBED675DB929BB8ACA9679@DM6PR02MB6923.namprd02.prod.outlook.com>
+In-Reply-To: <DM6PR02MB69236DAEBED675DB929BB8ACA9679@DM6PR02MB6923.namprd02.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 0d6e5f26-b8a1-45c7-5e73-08d9b5738625
+x-ms-traffictypediagnostic: BYAPR02MB4632:
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <BYAPR02MB4632CF5EDE3C66C374B0530BA9699@BYAPR02MB4632.namprd02.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:7691;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: PEZrSwlk3ZWMs5EV3YJXxAEvLFsV/jazpF5YJYhbJuYBd6xkXL0kU/fh9e/5f0bcm70rEcDZ88BD05dxnjJOMc64evchEpzSGrqll/Zn5yo9PzZe0Fvg03MmgTWvGYh7rlmqyS/3oVIiH9F3/X4JSi32D5vmCylSDaRPtXtlPubt9nvy16YP4AFlsLLWbhDFZXTldCRfenm6x5SDO7ck7G9iwdXKS1cdsRbsJUiHtUI4ybO3kUvsRnWGL3UL4jenx59xTyo/1jaL2QXlggqJjrxKIryKUsUO1PkTHWf9Mxe8f4gxMTnvHZpg++tss70HfKLCtTvR8UknvvERP6ryHTImjd81nFW6lQDw6NNDPSk6TtxKQprTj2VtLK81kbArEGeF5g7TJZHHhVm0bBv3ZBbfDMLkdFU9Xx5AbJVsBqkQc4ir6A/aqMwK1Joc3Uhd7m9oYJg5r4LiNoAtliAFe6RAGezCwozC1ZPd91dn4DhkpiO75MfbHWSXAILyaBBliEWNqVnAuDAG7OiPeF0nYPMgWXJdTaH7knxavKm0jOhpwVWK5kmQ/56XowPlHOaxuU+JZDDJfGzdTxh7FnXlDhlCsSwym+Ax1CvuEWjLz7stmyDgYyDUME6gu0z6T6cYCQfqxe4RBOXFh0pBrtgq+ZhQGCos1XEBySWWPpzQ/lhbRJNfGlK8WiYGDsHTfG8uWtEGYmXiUuPNlaZvyP1Jpw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR02MB6916.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(366004)(83380400001)(38070700005)(66446008)(38100700002)(122000001)(33656002)(316002)(8676002)(6916009)(66946007)(66476007)(64756008)(8936002)(66556008)(7696005)(2906002)(54906003)(76116006)(55016003)(53546011)(26005)(186003)(9686003)(86362001)(71200400001)(4326008)(7416002)(52536014)(6506007)(508600001)(5660300002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?p3WYWkl301AWsNNZ1kZi6+660gNPx+Q4pJeWcatJZwixMYsvHPWDtiI8m/Z/?=
+ =?us-ascii?Q?5MAZDhuQraGts82AGUeF65QkId2v0yGIhFp5tgOQ3vFm897fg0wHvTtJWgPA?=
+ =?us-ascii?Q?nsoBWm6w+gDv/5QirxAjKt3zcC8E2xC7U32DMpbcHohT13GEHEFzC0M7NjcJ?=
+ =?us-ascii?Q?AeUqoOJSFnH4wFFsEDDKaLCZlPNDq2y4VH6Blg0RheU9SbtXM3R0RpcNb5xV?=
+ =?us-ascii?Q?5/8I26KmIKMl0Lkzri46JkBDZOKVDvW/tYMcAHSUkOfuDZZ122d2KApybb1E?=
+ =?us-ascii?Q?0k4QvzOJiTJBVFJKJ47XCFEpSHjbSO+WW5GLe8s7sY1pHCRNp0kFfukNQ33z?=
+ =?us-ascii?Q?0AOOFQXIkNcFvHR8gx5o6IQlbPFvaitQlsEHK1sEdvQtWjQ6qOYjBQI0OU/7?=
+ =?us-ascii?Q?p0G2KsuZLwkkQdPEiBfvlNvCnQ/w01kzdxmKOdeAhFD93CNxnFxdjCizMYpi?=
+ =?us-ascii?Q?oC0EsSrA9jpxdaGha7w4Sw9l8DiRQNh8tJjSXPihNUUV4deleP3ZZ5wwPx2v?=
+ =?us-ascii?Q?ssqJzj0jj3LSv3lvbwf0OC9Xpimd+I9gkWN8nb+PnbL/Zbz3DQCPtoRUwPRU?=
+ =?us-ascii?Q?IqLdq+bVrNIIDcLpuAOJOBVT2JhFprylq23kMP4HQrZQo3JKEkeCnOad+hpG?=
+ =?us-ascii?Q?dXcrh0GG0IVi/izq++wxEsoaAEZV20ukVQGQwyxaTxxUtr3806C8cbE3xF8x?=
+ =?us-ascii?Q?o8QMJHSMJ0nyc9l9sk88bahHFap5Kkcyocr4dMpGnzyvHLzzDE58siLWRa7Q?=
+ =?us-ascii?Q?igNYf4Mxjj1ma1clz7dwzPOkt/chNgxr3ntVIiVx60TKDbbeFgkDOTv05nkN?=
+ =?us-ascii?Q?/Kn3GpcW2qjAxUL8NU4+RPhrbLZOlusyBoEc1MEkrn2uzZVfZjXZYP9GD5nN?=
+ =?us-ascii?Q?S2S6mS8ZqQAiKe0B4baKB7oMhwHyAxiOfYOBBcZ36QB6BsWuwbIuu6fTJwcT?=
+ =?us-ascii?Q?mmhzUUYZf2UszjpoG3FN098tJ6SH76Gb/YRx3STnQiq/xurhQKDfXhVplMga?=
+ =?us-ascii?Q?RtVBQJW91qHbmPi3mLvQzWcvNglyGvT1edCAZ59Chp8lGtG2wtOzO2gGUzji?=
+ =?us-ascii?Q?BFg/4mwmX2QFT1eDnvRSTCGQfOBUp4Rp5b0zUPi1KatTzLsimQ39tE/i5dDh?=
+ =?us-ascii?Q?LBkboY6KYAOYuHjNZZuutCn3tS7Y0+o3Ls2qnIoxNuDyoZJ9fFMZcL3jMCq8?=
+ =?us-ascii?Q?8oE2N4NZoMYgBYLM+xA4vYJAL24FZzQ4Hnvczw+bZKdxjr8aYT+lfeWGTg50?=
+ =?us-ascii?Q?40+IEgYLMDtzuAWftjaCSVGJA2nUI9e4ttj1qGUac6pxykQPupjBG9htCDQq?=
+ =?us-ascii?Q?BePeVh/Y0rnfzSrtVa1kOf4iChkuB3gkCIJjPvMrJ5X6JSl6acZY8irBE6U2?=
+ =?us-ascii?Q?8zSPKZSsnzLaoJdEvvC4x8TAO999mNMqfx+bOtAihaYKUQzv76uEclBQSqSj?=
+ =?us-ascii?Q?hYTlD3gLeirI/95ACMAdH/1dmNTh+JMcoM1PvAnAwi4fX8op+CMyUKS4663n?=
+ =?us-ascii?Q?SNsmpBpWavwVkeyNVb9nEgt0hVGb9LoPcKMC7W+D63yJfZOkH2wUuzfiQEsz?=
+ =?us-ascii?Q?dMJxmJOFwcpLoo+ZWyBcSTj+Sd2lSASTwtvM0iSqwPSni+KBI64FQzLigtGD?=
+ =?us-ascii?Q?8Q=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Received: by 2002:a6b:b2c1:: with SMTP id b184mr14946846iof.24.1638436103738;
- Thu, 02 Dec 2021 01:08:23 -0800 (PST)
-Date:   Thu, 02 Dec 2021 01:08:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f35e3b05d22621ff@google.com>
-Subject: [syzbot] INFO: task hung in io_uring_try_cancel_iowq
-From:   syzbot <syzbot+97bcaa1dfa37e2512746@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR02MB6916.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0d6e5f26-b8a1-45c7-5e73-08d9b5738625
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Dec 2021 09:10:02.5004
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: i0+efaiNs8JJvRNgy/wuq78UsNsiVaSLQjr/GNw97USRErjj16fuxQSzbQUOdaGYHOPAkQpLjz2KG0qosIjiTw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR02MB4632
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Andy,
 
-syzbot found the following issue on:
+> -----Original Message-----
+> From: Anand Ashok Dumbre <ANANDASH@xilinx.com>
+> Sent: Tuesday 30 November 2021 9:58 PM
+> To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: linux-kernel@vger.kernel.org; jic23@kernel.org; lars@metafoo.de; linu=
+x-
+> iio@vger.kernel.org; git <git@xilinx.com>; Michal Simek
+> <michals@xilinx.com>; gregkh@linuxfoundation.org; rafael@kernel.org;
+> linux-acpi@vger.kernel.org; heikki.krogerus@linux.intel.com
+> Subject: RE: [PATCH v11 1/5] device property: Add fwnode_iomap()
+>=20
+> Hi Andy,
+>=20
+> Thanks for the review.
+>=20
+> > -----Original Message-----
+> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Sent: Thursday 25 November 2021 11:42 AM
+> > To: Anand Ashok Dumbre <ANANDASH@xilinx.com>
+> > Cc: linux-kernel@vger.kernel.org; jic23@kernel.org; lars@metafoo.de;
+> > linux- iio@vger.kernel.org; git <git@xilinx.com>; Michal Simek
+> > <michals@xilinx.com>; gregkh@linuxfoundation.org; rafael@kernel.org;
+> > linux-acpi@vger.kernel.org; heikki.krogerus@linux.intel.com
+> > Subject: Re: [PATCH v11 1/5] device property: Add fwnode_iomap()
+> >
+> > On Wed, Nov 24, 2021 at 10:54:03PM +0000, Anand Ashok Dumbre wrote:
+> > > This patch introduces a new helper routine - fwnode_iomap(), which
+> > > allows to map the memory mapped IO for a given device node.
+> > >
+> > > This implementation does not cover the ACPI case and may be expanded
+> > > in the future. The main purpose here is to be able to develop
+> > > resource provider agnostic drivers.
+> >
+> > ...
+> >
+> > > +void __iomem *fwnode_iomap(struct fwnode_handle *fwnode, int
+> > index) {
+> >
+> > > +	if (is_of_node(fwnode))
+> > > +		return of_iomap(to_of_node(fwnode), index);
+> >
+> > It seems this part should be wrapped in some ifdeffery according to
+> > kbuild bot report.
+>=20
+> I see that of_iomap is wrapped in #ifdef I will fix that and send a new p=
+atch.
 
-HEAD commit:    58e1100fdc59 MAINTAINERS: co-maintain random.c
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14b06cc5b00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e9ea28d2c3c2c389
-dashboard link: https://syzkaller.appspot.com/bug?extid=97bcaa1dfa37e2512746
-compiler:       Debian clang version 11.0.1-2, GNU ld (GNU Binutils for Debian) 2.35.2
+I am unable to reproduce the conditions for the error shown by the kernel b=
+ot.
+Not sure if I am doing something wrong. Any help/suggestion would be apprec=
+iated to fix this issue.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+>=20
+> >
+> > > +	return NULL;
+> > > +}
+> > > +EXPORT_SYMBOL(fwnode_iomap);
+> >
+> > --
+> > With Best Regards,
+> > Andy Shevchenko
+> >
+>=20
+> Thanks,
+> Anand
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+97bcaa1dfa37e2512746@syzkaller.appspotmail.com
-
-INFO: task kworker/u4:10:22176 blocked for more than 143 seconds.
-      Not tainted 5.16.0-rc3-syzkaller #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:kworker/u4:10   state:D stack:22352 pid:22176 ppid:     2 flags:0x00004000
-Workqueue: events_unbound io_ring_exit_work
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:4972 [inline]
- __schedule+0xb72/0x1460 kernel/sched/core.c:6253
- schedule+0x12b/0x1f0 kernel/sched/core.c:6326
- schedule_preempt_disabled+0xf/0x20 kernel/sched/core.c:6385
- __mutex_lock_common+0xd1f/0x2590 kernel/locking/mutex.c:680
- __mutex_lock kernel/locking/mutex.c:740 [inline]
- mutex_lock_nested+0x1a/0x20 kernel/locking/mutex.c:792
- io_uring_try_cancel_iowq+0x2e/0x17e fs/io_uring.c:9644
- io_uring_try_cancel_requests+0x16f/0x42a fs/io_uring.c:9674
- io_ring_exit_work+0x10b/0x6b7 fs/io_uring.c:9483
- process_one_work+0x853/0x1140 kernel/workqueue.c:2298
- worker_thread+0xac1/0x1320 kernel/workqueue.c:2445
- kthread+0x468/0x490 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
- </TASK>
-
-Showing all locks held in the system:
-1 lock held by khungtaskd/27:
- #0: ffffffff8cb1db40 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x0/0x30
-1 lock held by in:imklog/6218:
- #0: ffff88801a8a9c70 (&f->f_pos_lock){+.+.}-{3:3}, at: __fdget_pos+0x24e/0x2f0 fs/file.c:990
-3 locks held by kworker/u4:10/22176:
- #0: ffff888011469138 ((wq_completion)events_unbound){+.+.}-{0:0}, at: process_one_work+0x7ca/0x1140
- #1: ffffc9000f5a7d20 ((work_completion)(&ctx->exit_work)){+.+.}-{0:0}, at: process_one_work+0x808/0x1140 kernel/workqueue.c:2273
- #2: ffff88807ca0c0a8 (&ctx->uring_lock){+.+.}-{3:3}, at: io_uring_try_cancel_iowq+0x2e/0x17e fs/io_uring.c:9644
-2 locks held by kworker/u4:7/4146:
-3 locks held by iou-sqp-5421/5424:
-
-=============================================
-
-NMI backtrace for cpu 1
-CPU: 1 PID: 27 Comm: khungtaskd Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1dc/0x2d8 lib/dump_stack.c:106
- nmi_cpu_backtrace+0x45f/0x490 lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x16a/0x280 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:146 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:210 [inline]
- watchdog+0xc82/0xcd0 kernel/hung_task.c:295
- kthread+0x468/0x490 kernel/kthread.c:327
- ret_from_fork+0x1f/0x30
- </TASK>
-Sending NMI from CPU 1 to CPUs 0:
-NMI backtrace for cpu 0
-CPU: 0 PID: 2950 Comm: systemd-journal Not tainted 5.16.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:check_kcov_mode kernel/kcov.c:177 [inline]
-RIP: 0010:write_comp_data kernel/kcov.c:221 [inline]
-RIP: 0010:__sanitizer_cov_trace_const_cmp4+0x31/0xa0 kernel/kcov.c:287
-Code: 14 25 c0 6f 02 00 65 8b 05 74 e3 7d 7e a9 00 01 ff 00 74 10 a9 00 01 00 00 74 6e 83 ba a4 15 00 00 00 74 65 8b 82 80 15 00 00 <83> f8 03 75 5a 48 8b 8a 88 15 00 00 44 8b 8a 84 15 00 00 49 c1 e1
-RSP: 0018:ffffc90001acf6d0 EFLAGS: 00000246
-RAX: 0000000000000000 RBX: ffffc90001acfbc0 RCX: ffff88807d1bba00
-RDX: ffff88807d1bba00 RSI: 0000000000000040 RDI: 0000000000000000
-RBP: 0000000000000051 R08: ffffffff81df889b R09: ffffc90001acf660
-R10: fffff52000359ed5 R11: 0000000000000000 R12: 1ffff92000359f7f
-R13: dffffc0000000000 R14: ffffc90001acfbf8 R15: dffffc0000000000
-FS:  00007f46c1ca58c0(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f46bf1cd000 CR3: 000000001f549000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- try_to_unlazy+0x7b/0xce0 fs/namei.c:772
- may_lookup fs/namei.c:1684 [inline]
- link_path_walk+0x298/0xd00 fs/namei.c:2239
- path_openat+0x25b/0x3660 fs/namei.c:3555
- do_filp_open+0x277/0x4f0 fs/namei.c:3586
- do_sys_openat2+0x13b/0x500 fs/open.c:1212
- do_sys_open fs/open.c:1228 [inline]
- __do_sys_open fs/open.c:1236 [inline]
- __se_sys_open fs/open.c:1232 [inline]
- __x64_sys_open+0x221/0x270 fs/open.c:1232
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x44/0xd0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f46c1234840
-Code: 73 01 c3 48 8b 0d 68 77 20 00 f7 d8 64 89 01 48 83 c8 ff c3 66 0f 1f 44 00 00 83 3d 89 bb 20 00 00 75 10 b8 02 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 31 c3 48 83 ec 08 e8 1e f6 ff ff 48 89 04 24
-RSP: 002b:00007fffe2dca4d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007fffe2dca7e0 RCX: 00007f46c1234840
-RDX: 00000000000001a0 RSI: 0000000000080042 RDI: 0000563b4c24d640
-RBP: 000000000000000d R08: 000000000000c0c1 R09: 00000000ffffffff
-R10: 0000000000000069 R11: 0000000000000246 R12: 00000000ffffffff
-R13: 0000563b4c240040 R14: 00007fffe2dca7a0 R15: 0000563b4c24d690
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	14 25                	adc    $0x25,%al
-   2:	c0 6f 02 00          	shrb   $0x0,0x2(%rdi)
-   6:	65 8b 05 74 e3 7d 7e 	mov    %gs:0x7e7de374(%rip),%eax        # 0x7e7de381
-   d:	a9 00 01 ff 00       	test   $0xff0100,%eax
-  12:	74 10                	je     0x24
-  14:	a9 00 01 00 00       	test   $0x100,%eax
-  19:	74 6e                	je     0x89
-  1b:	83 ba a4 15 00 00 00 	cmpl   $0x0,0x15a4(%rdx)
-  22:	74 65                	je     0x89
-  24:	8b 82 80 15 00 00    	mov    0x1580(%rdx),%eax
-* 2a:	83 f8 03             	cmp    $0x3,%eax <-- trapping instruction
-  2d:	75 5a                	jne    0x89
-  2f:	48 8b 8a 88 15 00 00 	mov    0x1588(%rdx),%rcx
-  36:	44 8b 8a 84 15 00 00 	mov    0x1584(%rdx),%r9d
-  3d:	49                   	rex.WB
-  3e:	c1                   	.byte 0xc1
-  3f:	e1                   	.byte 0xe1
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Thanks and Regards,
+Anand

@@ -2,320 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EA546678B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:04:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A47246678E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:04:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359078AbhLBQHl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:07:41 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:51584 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S242221AbhLBQHk (ORCPT
+        id S1359327AbhLBQIC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 11:08:02 -0500
+Received: from mta-p5.oit.umn.edu ([134.84.196.205]:58100 "EHLO
+        mta-p5.oit.umn.edu" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S242221AbhLBQIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:07:40 -0500
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2FHMK4009200;
-        Thu, 2 Dec 2021 16:03:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=8a9oXbGzR78DoslxbXE4jxGAjt67YTQ0reW4bF4Hevs=;
- b=Qj5hcRxi5axETJ9TcrTOc9/W00LyNOtel0+c9rNdi1P0PkcwSAkdF31rz3ZG4O01TmJ9
- +WA0sNhfL+l2GayVHeQ9dT0HAQv6bTCjXnzYiKbXdVTCY7mNoZ2Jp845QjYLMTIrX7zQ
- MtJCIBJOfUmSF8zVWJ1q6ClUFPRdK0gIgVtMnp3MR5ty0Bi416Lt9XIR5yYhFuaXe6CR
- sC8IIl+m3T+PPaTSfc2coYyys7VyMGddwSS84oqEpmNSASYOULomW0/ZFnBtODys2zNy
- bt4y4m9kaJXk1UebKq9GI41X++pAb7u3XcTqumehmfYt+im0la0/giEpV0mG/DSZx9QL IQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cq0nfh44r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 16:03:45 +0000
-Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 1B2FJdA0016004;
-        Thu, 2 Dec 2021 16:03:44 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3cq0nfh440-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 16:03:44 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2G3SQZ002918;
-        Thu, 2 Dec 2021 16:03:42 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma03fra.de.ibm.com with ESMTP id 3ckcaabrw4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 02 Dec 2021 16:03:42 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2G3dlQ24903936
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 2 Dec 2021 16:03:39 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9ED2652059;
-        Thu,  2 Dec 2021 16:03:39 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.211.114.96])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 7E2CB52067;
-        Thu,  2 Dec 2021 16:03:32 +0000 (GMT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.13\))
-Subject: Re: [PATCH v1 2/4] perf script: Add "struct machine" parameter to
- process_event callback
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-In-Reply-To: <20211201123334.679131-3-german.gomez@arm.com>
-Date:   Thu, 2 Dec 2021 21:33:27 +0530
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <D6A3A8F3-9946-44FE-A70F-42977C6F38A1@linux.vnet.ibm.com>
-References: <20211201123334.679131-1-german.gomez@arm.com>
- <20211201123334.679131-3-german.gomez@arm.com>
-To:     German Gomez <german.gomez@arm.com>
-X-Mailer: Apple Mail (2.3654.120.0.1.13)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 3CMRHBoEOFgCLvdPBjbwdGqw0tdvwfdq
-X-Proofpoint-GUID: 5I37IjOv4eevDAaMX3wVdZbi9xQEN6p_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
- definitions=2021-12-02_10,2021-12-02_01,2021-12-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 malwarescore=0 clxscore=1011 priorityscore=1501
- impostorscore=0 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2110150000 definitions=main-2112020106
+        Thu, 2 Dec 2021 11:08:01 -0500
+Received: from localhost (unknown [127.0.0.1])
+        by mta-p5.oit.umn.edu (Postfix) with ESMTP id 4J4gkt0lJ2z9vFPp
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 16:04:38 +0000 (UTC)
+X-Virus-Scanned: amavisd-new at umn.edu
+Received: from mta-p5.oit.umn.edu ([127.0.0.1])
+        by localhost (mta-p5.oit.umn.edu [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id SqB6sZRODBb4 for <linux-kernel@vger.kernel.org>;
+        Thu,  2 Dec 2021 10:04:38 -0600 (CST)
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mta-p5.oit.umn.edu (Postfix) with ESMTPS id 4J4gks5clDz9vFPs
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 10:04:37 -0600 (CST)
+DMARC-Filter: OpenDMARC Filter v1.3.2 mta-p5.oit.umn.edu 4J4gks5clDz9vFPs
+DKIM-Filter: OpenDKIM Filter v2.11.0 mta-p5.oit.umn.edu 4J4gks5clDz9vFPs
+Received: by mail-pf1-f197.google.com with SMTP id 184-20020a6217c1000000b0049f9aad0040so17657755pfx.21
+        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 08:04:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=umn.edu; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=tSFdJHmjZmGwK0hgeK/BuhdxfmOuNZpb1fLDoMSMoIA=;
+        b=L7C0+RHzWtzjba9VBc3MozgNXqhPdafl2LWHWHVzAggMUfoWrZALHvx2I8tzb0mZJD
+         uH27GBysDh6p8PYn+9IbSvpazYZDH5AnsPUyf5xseBrxm9ERd/u65z+8bOekTU8dXr35
+         JVg25OtUunTatma0lA9H+Xz93wlAOGSbUduvHPMHz81iMY9vlsYWZpSPxd6CHG0tZwu3
+         D6iAWEhHB2C0HOC5Iflfa6sPTLscRTvsfwSfjXaWH3EzHspoFClknTsEXh0yU/ppbJ+V
+         dXo1B0bKaNRS5+Wj/fNKp6HPZJ4+RcKEEs4vmzmouvuVv/EMH8fzet07v9ElecC6ZQF8
+         ObVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=tSFdJHmjZmGwK0hgeK/BuhdxfmOuNZpb1fLDoMSMoIA=;
+        b=31uN35IKuS6+WGRZjWpw2AaqXvwzwVGUTmTXybyK16G9tmhd2WUzYQSXV5BphA3Zy0
+         sT38rV8U+Zflhu5zkjle0NUdTX/c11fwJV+ap+h4k0S5k9e7X8GdNYQopx1u5aJxWaYK
+         ZEXt4BfrZjlHT7cwklo8i6699F/IvJx9/ErUZljnyrqAZZLF0MHral5sbMJ1azV4NrJc
+         yJPQO6pDhZOgDfPOD6E+/vKwl+IpQ9qS00Ub/65kQoQo7SHaSaNiTsFd0OBHseLQHz83
+         fhugapyLN/WNI7VYalCwCj+aGP/MKJpIhgsyUbD1JCNeHPZh+LnlCgnDbGicGLIPbOBA
+         jceA==
+X-Gm-Message-State: AOAM533q7htEO0BcJ7mBiDA5LqaS/uTXXFa/hJJp9ceN1bukBayOhitI
+        XPppC7r59t8lOjLzU/OwjINRPP5viHn7fwXyosFC4mG5XK6YV4qjruKWvzO3fxGJQO4AvIHeUq2
+        zDEkln7kUC1lmCXROOmOp0Rq0IqkC
+X-Received: by 2002:a63:1754:: with SMTP id 20mr24001pgx.559.1638461077023;
+        Thu, 02 Dec 2021 08:04:37 -0800 (PST)
+X-Google-Smtp-Source: ABdhPJzWtFMeKAwpw/3fOXWwvMLF/51H2uFNuH5A00e7CrM7Jjwcdxc5Efn+9134CUiC/P7QgYHbNw==
+X-Received: by 2002:a63:1754:: with SMTP id 20mr23947pgx.559.1638461076514;
+        Thu, 02 Dec 2021 08:04:36 -0800 (PST)
+Received: from zqy787-GE5S.lan ([36.4.93.212])
+        by smtp.gmail.com with ESMTPSA id a22sm236765pfh.111.2021.12.02.08.04.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Dec 2021 08:04:36 -0800 (PST)
+From:   Zhou Qingyang <zhou1615@umn.edu>
+To:     zhou1615@umn.edu
+Cc:     kjlu@umn.edu, Neil Armstrong <narmstrong@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Maxime Jourdan <mjourdan@baylibre.com>,
+        linux-media@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] media: meson: vdec: Fix a NULL pointer dereference in amvdec_add_ts()
+Date:   Fri,  3 Dec 2021 00:03:57 +0800
+Message-Id: <20211202160357.75173-1-zhou1615@umn.edu>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20211201084108.GE9522@kadam>
+References: <20211201084108.GE9522@kadam>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In amvdec_add_ts(), there is a dereference of kzalloc(), which could lead
+to a NULL pointer dereference on failure of kzalloc().
 
+I fix this bug by adding a NULL check of new_ts.
 
-> On 01-Dec-2021, at 6:03 PM, German Gomez <german.gomez@arm.com> wrote:
->=20
-> Include a "struct machine*" parameter to the process_event callback in
-> the scripting layer. This will allow access to the perf_env from =
-within
-> this callback.
->=20
-> Followup patches will build on top of this to report the correct name =
-of
-> the registers in a perf.data file, consistently with the architecture
-> the file was recorded in.
->=20
-> Signed-off-by: German Gomez <german.gomez@arm.com>
-> ---
-> tools/perf/builtin-script.c                   |  2 +-
-> .../util/scripting-engines/trace-event-perl.c |  3 ++-
-> .../scripting-engines/trace-event-python.c    | 23 +++++++++++--------
-> tools/perf/util/trace-event-scripting.c       |  3 ++-
-> tools/perf/util/trace-event.h                 |  3 ++-
-> 5 files changed, 21 insertions(+), 13 deletions(-)
->=20
-> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-> index 9434367af..711132f0b 100644
-> --- a/tools/perf/builtin-script.c
-> +++ b/tools/perf/builtin-script.c
-> @@ -2256,7 +2256,7 @@ static int process_sample_event(struct perf_tool =
-*tool,
-> 				thread__resolve(al.thread, &addr_al, =
-sample);
-> 			addr_al_ptr =3D &addr_al;
-> 		}
-> -		scripting_ops->process_event(event, sample, evsel, &al, =
-addr_al_ptr);
-> +		scripting_ops->process_event(event, sample, evsel, &al, =
-addr_al_ptr, machine);
+This bug was found by a static analyzer. The analysis employs
+differential checking to identify inconsistent security operations
+(e.g., checks or kfrees) between two code paths and confirms that the
+inconsistent operations are not recovered in the current function or
+the callers, so they constitute bugs.
 
-Hi,
+Note that, as a bug found by static analysis, it can be a false
+positive or hard to trigger. Multiple researchers have cross-reviewed
+the bug.
 
-Looks like the patch is using =E2=80=9Cmachine=E2=80=9D to allow access =
-to perf_env__arch and there by to get the =E2=80=9Carch=E2=80=9D value.
-But can we use from evsel, like  "perf_env__arch(evsel__env(evsel))=E2=80=9D=
- to get arch value instead of including new parameter for =E2=80=9Cstruct =
-machine=E2=80=9D ?
+Builds with CONFIG_VIDEO_MESON_VDEC=m show no new warnings,
+and our static analyzer no longer warns about this code.
 
-Thanks
-Athira=20
-> 	} else {
-> 		process_event(scr, sample, evsel, &al, &addr_al, =
-machine);
-> 	}
-> diff --git a/tools/perf/util/scripting-engines/trace-event-perl.c =
-b/tools/perf/util/scripting-engines/trace-event-perl.c
-> index 32a721b3e..6017c4660 100644
-> --- a/tools/perf/util/scripting-engines/trace-event-perl.c
-> +++ b/tools/perf/util/scripting-engines/trace-event-perl.c
-> @@ -454,7 +454,8 @@ static void perl_process_event(union perf_event =
-*event,
-> 			       struct perf_sample *sample,
-> 			       struct evsel *evsel,
-> 			       struct addr_location *al,
-> -			       struct addr_location *addr_al)
-> +			       struct addr_location *addr_al,
-> +			       struct machine *machine __maybe_unused)
-> {
-> 	scripting_context__update(scripting_context, event, sample, =
-evsel, al, addr_al);
-> 	perl_process_tracepoint(sample, evsel, al);
-> diff --git a/tools/perf/util/scripting-engines/trace-event-python.c =
-b/tools/perf/util/scripting-engines/trace-event-python.c
-> index c0c010350..e164f8d00 100644
-> --- a/tools/perf/util/scripting-engines/trace-event-python.c
-> +++ b/tools/perf/util/scripting-engines/trace-event-python.c
-> @@ -708,7 +708,8 @@ static void regs_map(struct regs_dump *regs, =
-uint64_t mask, char *bf, int size)
->=20
-> static void set_regs_in_dict(PyObject *dict,
-> 			     struct perf_sample *sample,
-> -			     struct evsel *evsel)
-> +			     struct evsel *evsel,
-> +			     struct machine *machine __maybe_unused)
-> {
-> 	struct perf_event_attr *attr =3D &evsel->core.attr;
->=20
-> @@ -776,6 +777,7 @@ static PyObject *get_perf_sample_dict(struct =
-perf_sample *sample,
-> 					 struct evsel *evsel,
-> 					 struct addr_location *al,
-> 					 struct addr_location *addr_al,
-> +					 struct machine *machine,
-> 					 PyObject *callchain)
-> {
-> 	PyObject *dict, *dict_sample, *brstack, *brstacksym;
-> @@ -849,7 +851,7 @@ static PyObject *get_perf_sample_dict(struct =
-perf_sample *sample,
-> 			PyLong_FromUnsignedLongLong(sample->cyc_cnt));
-> 	}
->=20
-> -	set_regs_in_dict(dict, sample, evsel);
-> +	set_regs_in_dict(dict, sample, evsel, machine);
->=20
-> 	return dict;
-> }
-> @@ -857,7 +859,8 @@ static PyObject *get_perf_sample_dict(struct =
-perf_sample *sample,
-> static void python_process_tracepoint(struct perf_sample *sample,
-> 				      struct evsel *evsel,
-> 				      struct addr_location *al,
-> -				      struct addr_location *addr_al)
-> +				      struct addr_location *addr_al,
-> +				      struct machine *machine)
-> {
-> 	struct tep_event *event =3D evsel->tp_format;
-> 	PyObject *handler, *context, *t, *obj =3D NULL, *callchain;
-> @@ -964,7 +967,7 @@ static void python_process_tracepoint(struct =
-perf_sample *sample,
-> 		PyTuple_SetItem(t, n++, dict);
->=20
-> 	if (get_argument_count(handler) =3D=3D (int) n + 1) {
-> -		all_entries_dict =3D get_perf_sample_dict(sample, evsel, =
-al, addr_al,
-> +		all_entries_dict =3D get_perf_sample_dict(sample, evsel, =
-al, addr_al, machine,
-> 			callchain);
-> 		PyTuple_SetItem(t, n++,	all_entries_dict);
-> 	} else {
-> @@ -1366,7 +1369,8 @@ static int python_process_call_return(struct =
-call_return *cr, u64 *parent_db_id,
-> static void python_process_general_event(struct perf_sample *sample,
-> 					 struct evsel *evsel,
-> 					 struct addr_location *al,
-> -					 struct addr_location *addr_al)
-> +					 struct addr_location *addr_al,
-> +					 struct machine *machine)
-> {
-> 	PyObject *handler, *t, *dict, *callchain;
-> 	static char handler_name[64];
-> @@ -1388,7 +1392,7 @@ static void python_process_general_event(struct =
-perf_sample *sample,
->=20
-> 	/* ip unwinding */
-> 	callchain =3D python_process_callchain(sample, evsel, al);
-> -	dict =3D get_perf_sample_dict(sample, evsel, al, addr_al, =
-callchain);
-> +	dict =3D get_perf_sample_dict(sample, evsel, al, addr_al, =
-machine, callchain);
->=20
-> 	PyTuple_SetItem(t, n++, dict);
-> 	if (_PyTuple_Resize(&t, n) =3D=3D -1)
-> @@ -1403,7 +1407,8 @@ static void python_process_event(union =
-perf_event *event,
-> 				 struct perf_sample *sample,
-> 				 struct evsel *evsel,
-> 				 struct addr_location *al,
-> -				 struct addr_location *addr_al)
-> +				 struct addr_location *addr_al,
-> +				 struct machine *machine)
-> {
-> 	struct tables *tables =3D &tables_global;
->=20
-> @@ -1411,14 +1416,14 @@ static void python_process_event(union =
-perf_event *event,
->=20
-> 	switch (evsel->core.attr.type) {
-> 	case PERF_TYPE_TRACEPOINT:
-> -		python_process_tracepoint(sample, evsel, al, addr_al);
-> +		python_process_tracepoint(sample, evsel, al, addr_al, =
-machine);
-> 		break;
-> 	/* Reserve for future process_hw/sw/raw APIs */
-> 	default:
-> 		if (tables->db_export_mode)
-> 			db_export__sample(&tables->dbe, event, sample, =
-evsel, al, addr_al);
-> 		else
-> -			python_process_general_event(sample, evsel, al, =
-addr_al);
-> +			python_process_general_event(sample, evsel, al, =
-addr_al, machine);
-> 	}
-> }
->=20
-> diff --git a/tools/perf/util/trace-event-scripting.c =
-b/tools/perf/util/trace-event-scripting.c
-> index 7172ca052..089a2c905 100644
-> --- a/tools/perf/util/trace-event-scripting.c
-> +++ b/tools/perf/util/trace-event-scripting.c
-> @@ -51,7 +51,8 @@ static void process_event_unsupported(union =
-perf_event *event __maybe_unused,
-> 				      struct perf_sample *sample =
-__maybe_unused,
-> 				      struct evsel *evsel =
-__maybe_unused,
-> 				      struct addr_location *al =
-__maybe_unused,
-> -				      struct addr_location *addr_al =
-__maybe_unused)
-> +				      struct addr_location *addr_al =
-__maybe_unused,
-> +				      struct machine *machine =
-__maybe_unused)
-> {
-> }
->=20
-> diff --git a/tools/perf/util/trace-event.h =
-b/tools/perf/util/trace-event.h
-> index 640981105..6f5b1a6d5 100644
-> --- a/tools/perf/util/trace-event.h
-> +++ b/tools/perf/util/trace-event.h
-> @@ -81,7 +81,8 @@ struct scripting_ops {
-> 			       struct perf_sample *sample,
-> 			       struct evsel *evsel,
-> 			       struct addr_location *al,
-> -			       struct addr_location *addr_al);
-> +			       struct addr_location *addr_al,
-> +			       struct machine *machine);
-> 	void (*process_switch)(union perf_event *event,
-> 			       struct perf_sample *sample,
-> 			       struct machine *machine);
-> --=20
-> 2.25.1
->=20
->=20
+Fixes: 876f123b8956 ("media: meson: vdec: bring up to compliance")
+Signed-off-by: Zhou Qingyang <zhou1615@umn.edu>
+---
+Changes in v2:
+  -  Delete dev_err() message
+
+ drivers/staging/media/meson/vdec/vdec_helpers.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/staging/media/meson/vdec/vdec_helpers.c b/drivers/staging/media/meson/vdec/vdec_helpers.c
+index b9125c295d1d..ac60514c475b 100644
+--- a/drivers/staging/media/meson/vdec/vdec_helpers.c
++++ b/drivers/staging/media/meson/vdec/vdec_helpers.c
+@@ -234,6 +234,9 @@ void amvdec_add_ts(struct amvdec_session *sess, u64 ts,
+ 	unsigned long flags;
+ 
+ 	new_ts = kzalloc(sizeof(*new_ts), GFP_KERNEL);
++	if (!new_ts)
++		return;
++
+ 	new_ts->ts = ts;
+ 	new_ts->tc = tc;
+ 	new_ts->offset = offset;
+-- 
+2.25.1
 

@@ -2,120 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED868465D24
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 04:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7AA465D29
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 04:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237272AbhLBDw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 1 Dec 2021 22:52:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60062 "EHLO
+        id S236762AbhLBDyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 1 Dec 2021 22:54:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355294AbhLBDtZ (ORCPT
+        with ESMTP id S235730AbhLBDys (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 1 Dec 2021 22:49:25 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E07C061757
-        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 19:46:02 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id y14-20020a17090a2b4e00b001a5824f4918so1368873pjc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 19:46:02 -0800 (PST)
+        Wed, 1 Dec 2021 22:54:48 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBDD1C061574
+        for <linux-kernel@vger.kernel.org>; Wed,  1 Dec 2021 19:51:26 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id y8so19292857plg.1
+        for <linux-kernel@vger.kernel.org>; Wed, 01 Dec 2021 19:51:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=U18hQOa1FAfUqBSBf0IHqKmw+XLYtAfpFzE91QsNYTg=;
-        b=VvjoFCNgO7dQ9CmQz7jR1i383nSaFiLDDqkA4qXWNkaRz+ZKFTc5s2NrDuI/mZjgXl
-         bAeS23+4XrAMvC6nEfq3CY+2iyeHbNCwpdpTesLleGSRqvwfSafC8Idh7EJfa8cS5T7b
-         gJtxe3CKz0R44ZuyiBvczOezUDv5aFYt04Puk=
+        bh=6dRMcrqaLSVZWLWxgZvZUiIkmkSi//hdjaprS6i9c/k=;
+        b=Iw6Z9G703+8Oacfc/+IMYQbcIwOyswn5g8sXDOXzDZtON7qh5uAAiI1RuRpE00j7QX
+         PW/LzuLD64epIXzcGXCofioNdiDkpVUX8ymodyrHEif9vKSHIZTJP9MJVm81wU/vZBUF
+         /4abdNmBp/jgXFd+yD3kjZyWHgXCIg0Xqh1lE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=U18hQOa1FAfUqBSBf0IHqKmw+XLYtAfpFzE91QsNYTg=;
-        b=chfbm/qtwD/JPYMBBxi1JJvmY41lN3JnfUX57Q+RudMIvFdsisvyoEJ3oYPZq408/k
-         7hu+QYUlB0NQbPvXtGK0vmKzBE6qOBBVuTHKmwB8mcU2NHRYiUoScRja2OpnZy1ZJo8H
-         zAMUeRaPjPgn2L6/K6F/bRwU+zNumD+8iiL+LQEpd9/JZN4ixJgGpyA22/yND+9OJwLX
-         DRVHWS+c54egRwFEeAB5qTkni54LP3zrZCdGj2O8MVsTktpyCV0ZEdE90vO7jUWS1Z0e
-         T2a7jWs6uWyQYS8WLa1OtOjF0W+3tJgwAYBCDFhmJVQ1BpWMN8RctHiRFxD8wMfwZXU5
-         Ro8A==
-X-Gm-Message-State: AOAM532hh2GeHpiI5F2WAQEVB8b6aPQqikjWj+WT9QLvNV4oVwsV1C/8
-        61UAtIGuYdGyO8wdZ6APkUrouQ==
-X-Google-Smtp-Source: ABdhPJzcpXGaQ+4r1kHUtZXRZ3AUdxl+eWulvIrGiLca5ySRdpf1O1iM5DM7H84EO2vs9Jxci2X3cA==
-X-Received: by 2002:a17:90a:c297:: with SMTP id f23mr3058243pjt.138.1638416762323;
-        Wed, 01 Dec 2021 19:46:02 -0800 (PST)
+        bh=6dRMcrqaLSVZWLWxgZvZUiIkmkSi//hdjaprS6i9c/k=;
+        b=EJAj3P26tE+iIjPZOjrkuXlfTkMlkW0sV/83D/KK+nDkaRIm/uFwgTKhnJwPW6Mpw8
+         Xbk08PLoz4Ebf8t6KQiVxGWaDMQsxLIg3qOK+fF+MP5JQdtzYS7UBhBeLlFLFcCBQ8k5
+         E8cjdmxKfU/nSdti2mVcZuH/Qni2XSKADZjXohmNO8xsQ9pNvyLqZOkB4uYmW8jshI2m
+         oXvFLo0arsF4E5R9b8rWW/YEMZT8Z5/Gpi50EEIXR6sE+7sjuXaOAAUuxN8yVQzF4P3r
+         uPYOLHikfcvNJC7swC2hMZjHEVhGOf+n3DEgXcE8YfQ/lQWKDFv6ZFN2Wrx0z7pyXwf7
+         2KgQ==
+X-Gm-Message-State: AOAM533vtEjILJZz5EMTYvsgk2briVhqeiN6ICscPDNwIuNoHhR1BmGE
+        FAcEBmwBhjOBLHkodxgFbExTdQ==
+X-Google-Smtp-Source: ABdhPJwS+XGcbakLCT12C7UGQbun44XSxZpZFdjTrU+G1v2azU2aW/NcFHzM7MDllaF2F2nej60j7Q==
+X-Received: by 2002:a17:90b:33d0:: with SMTP id lk16mr3136783pjb.20.1638417086417;
+        Wed, 01 Dec 2021 19:51:26 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b15sm1286104pfv.48.2021.12.01.19.46.01
+        by smtp.gmail.com with ESMTPSA id s19sm1303687pfu.137.2021.12.01.19.51.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Dec 2021 19:46:01 -0800 (PST)
-Date:   Wed, 1 Dec 2021 19:46:01 -0800
+        Wed, 01 Dec 2021 19:51:25 -0800 (PST)
+Date:   Wed, 1 Dec 2021 19:51:25 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Bixuan Cui <cuibixuan@linux.alibaba.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, leon@kernel.org,
-        akpm@linux-foundation.org, w@1wt.eu
-Subject: Re: [PATCH -next] mm: delete oversized WARN_ON() in kvmalloc() calls
-Message-ID: <202112011944.28EF2FC44@keescook>
-References: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Geliang Tang <geliangtang@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>, Haren Myneni <haren@us.ibm.com>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        linux-crypto <linux-crypto@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH 1/9] crypto: add zbufsize() interface
+Message-ID: <202112011947.7FA0A587C@keescook>
+References: <20180802215118.17752-1-keescook@chromium.org>
+ <20180802215118.17752-2-keescook@chromium.org>
+ <20180807094513.vstt5dhbb7n6kvds@gondor.apana.org.au>
+ <CAGXu5j+dPqpJZbO_AuGsNqJzq7XGcB2deXA5RELWv1-Ywi5QOA@mail.gmail.com>
+ <20180808025319.32d57wtjpyyapwo5@gondor.apana.org.au>
+ <202112011529.699092F@keescook>
+ <20211202015820.GB8138@gondor.apana.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
+In-Reply-To: <20211202015820.GB8138@gondor.apana.org.au>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 02, 2021 at 10:06:24AM +0800, Bixuan Cui wrote:
-> Delete the WARN_ON() and return NULL directly for oversized parameter
-> in kvmalloc() calls.
-> Also add unlikely().
+On Thu, Dec 02, 2021 at 12:58:20PM +1100, Herbert Xu wrote:
+> On Wed, Dec 01, 2021 at 03:39:06PM -0800, Kees Cook wrote:
+> >
+> > Okay, I'm looking at this again because of the need in the module loader
+> > to know "worst case decompression size"[1]. I am at a loss for how (or
+> > why) the acomp interface is the "primary interface".
 > 
-> Fixes: 7661809d493b ("mm: don't allow oversized kvmalloc() calls")
-> Signed-off-by: Bixuan Cui <cuibixuan@linux.alibaba.com>
-> ---
-> There are a lot of oversize warnings and patches about kvmalloc() calls
-> recently. Maybe these warnings are not very necessary.
+> This is similar to how we transitioned from the old hash interface
+> to shash/ahash.
+> 
+> Basically the legacy interface is synchronous only and cannot support
+> hardware devices without having the CPU spinning while waiting for the
+> result to come back.
+> 
+> If you only care about synchronous support and don't need to access
+> these hardware devices then you should use the new scomp interface
+> that's equivalent to the old compress interface but built in a way
+> to allow acomp users to easily access sync algorithms, but if you
+> are processing large amounts of data and wish to access offload devices
+> then you should consider using the async acomp interface.
 
-It seems these warnings are working, yes? i.e. we're finding the places
-where giant values are coming in?
+But the scomp API appears to be "internal only":
 
-> 
-> https://lore.kernel.org/all/YadOjJXMTjP85MQx@unreal
-> 
-> The example of size check in __do_kmalloc_node():
-> __do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
-> {
->         struct kmem_cache *cachep;
->         void *ret;
-> 
->         if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
->                 return NULL;
->         cachep = kmalloc_slab(size, flags);
-> 
->  mm/util.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/mm/util.c b/mm/util.c
-> index 7e433690..d26f19c 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -587,7 +587,7 @@ void *kvmalloc_node(size_t size, gfp_t flags, int node)
->  		return ret;
->  
->  	/* Don't even allow crazy sizes */
-> -	if (WARN_ON_ONCE(size > INT_MAX))
-> +	if (unlikely(size > INT_MAX))
->  		return NULL;
+include/crypto/internal/scompress.h:static inline int crypto_scomp_decompress(struct crypto_scomp *tfm,
 
-If we're rejecting the value, then it's still a pathological size, so
-shouldn't the check be happening in the caller? I think the WARN is
-doing exactly what it was supposed to do: find the places where bad
-sizes can reach vmalloc.
+What's the correct API calling sequence to do a simple decompress?
 
--Kees
-
->  
->  	return __vmalloc_node(size, 1, flags, node,
-> -- 
-> 1.8.3.1
+> > For modules, all that would be wanted is this, where the buffer size can
+> > be allocated on demand:
+> > 
+> > u8 *decompressed = NULL;
+> > size_t decompressed_size = 0;
+> > 
+> > decompressed = decompress(decompressed, compressed, compressed_size, &decompressed_size);
+> > 
+> > For pstore, the compressed_size is fixed and the decompression buffer
+> > must be preallocated (for catching panic dumps), so the worst-case size
+> > needs to be known in advance:
+> > 
+> > u8 *decompressed = NULL;
+> > size_t decompressed_worst_size = 0;
+> > size_t decompressed_size = 0;
+> > 
+> > worst_case(&decompressed_worst_size, compressed_size);
+> > 
+> > decompressed = kmalloc(decompressed_worst_size, GFP_KERNEL);
+> > ...
+> > decompressed_size = decompressed_worst_size;
+> > decompress(decompressed, compressed, compressed_size, &decompressed_size);
+> > 
+> > 
+> > I don't see anything like this in the kernel for handling a simple
+> > buffer-to-buffer decompression besides crypto_comp_decompress(). The
+> > acomp interface is wildly over-complex for this. What the right
+> > way to do this? (I can't find any documentation that discusses
+> > compress/decompress[2].)
 > 
+> I think you're asking about a different issue, which is that we
+> don't have an interface for on-the-go allocation of decompressed
+> results so every user has to allocate the maximum worst-case buffer.
+> 
+> This is definitely an area that should be addressed but a lot of work
+> needs to be done to get there.  Essentially we'd need to convert
+> the underlying algorithms to a model where they decompress into a
+> list of pages and then they could simply allocate a new page if they
+> need extra space.
+> 
+> The result can then be returned to the original caller as an SG list.
+> 
+> Would you be willing to work on something like this? This would benefit
+> all existing users too.  For example, IPsec would no longer need to
+> allocate those 64K buffers for IPcomp.
+> 
+> Unfortunately not many people care deeply about compression so
+> volunteers are hard to find.
+
+Dmitry has, I think, a bit of this already in [1] that could maybe be
+generalized if it'd needed?
+
+pstore still needs the "worst case" API to do a preallocation, though.
+
+Anyway, if I could have an example of how to use scomp in pstore, I
+could better see where to wire up the proposed zbufsize API...
+
+Thanks!
+
+[1] https://lore.kernel.org/linux-modules/YaMYJv539OEBz5B%2F@google.com/#Z31kernel:module_decompress.c
 
 -- 
 Kees Cook

@@ -2,165 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 29499466A65
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D58B2466A66
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376904AbhLBT1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 14:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47804 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1376796AbhLBT0v (ORCPT
+        id S1376809AbhLBT2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 14:28:35 -0500
+Received: from ams.source.kernel.org ([145.40.68.75]:44318 "EHLO
+        ams.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1376813AbhLBT1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 14:26:51 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C873C06175C
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 11:23:28 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 133so696307pgc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 11:23:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=wHXIIvuoYAHZrBVWauQEqPWbcxtgWE/NXQOKZMGBwXU=;
-        b=ngfmJbU+ZekCv1aLGMmEoKgODpS7TbPHwSiYGNktfucik37Qtr8kru//RXnU59lszW
-         3G9D0rJDetlaOfsxYkFrOeFdnJTiQLImHj2wyHMy5ViRpG+lYYPFcHmarAlUpH2lA9Il
-         kD5ElmOrab9qAOdqf9qmVRjqCdN03lmE8dqqo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wHXIIvuoYAHZrBVWauQEqPWbcxtgWE/NXQOKZMGBwXU=;
-        b=fCEC5FhDdApNRHZ/52hFxLp5/hNy7MaAiMBe0+Q6Xoi4Wq2qvSq8+xstZ7Bb7Moz5J
-         9Gro3hdTGprdimPfG6By9bD+a3MuB2yr/j9ljb9QrXWm5JtmU/jVXe/+XKka+z7zkKTF
-         U0Qd36Tocr9YeLPmNtDJChVEXkES+gFxRef8Wpd+ME34HDEZDviPhouaCmU531IiPUaY
-         WFKdOnoXeRg4AkfMpYyOVFl7QlkTJko2HdqJdU2J/Sf+YxtpCpmkc7f3IDzgM53rV9mC
-         fe//n3LcsexixiAWxeCqlW0471bzAzXvq532Rbn7NJk30v97HH4bBfpIXjNHkdWSkWHe
-         YOQg==
-X-Gm-Message-State: AOAM532j5BLyjQQAqzDjAkigx0sJuWDATWROHwQ8xyWpUjUX4pjrU1GT
-        wX7EZxWEy0IjiXDI6FcDj++T5g==
-X-Google-Smtp-Source: ABdhPJyIkoe0j9eMC19m5ws5v8Pf44+FFaH/FvbVfneo2Zw9LO0Kc6ebuM3i6LkIHUQlqxR1VFOUIQ==
-X-Received: by 2002:a63:f43:: with SMTP id 3mr883306pgp.33.1638473007610;
-        Thu, 02 Dec 2021 11:23:27 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b14sm592254pfv.65.2021.12.02.11.23.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 11:23:27 -0800 (PST)
-Date:   Thu, 2 Dec 2021 11:23:26 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Steffen Maier <maier@linux.ibm.com>
-Cc:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Javed Hasan <jhasan@marvell.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Neerav Parikh <neerav.parikh@intel.com>,
-        Ross Brattain <ross.b.brattain@intel.com>,
-        Robert Love <robert.w.love@intel.com>
-Subject: Re: [PATCH][next] scsi: Replace one-element arrays with
- flexible-array members
-Message-ID: <202112021113.D71F11B70@keescook>
-References: <20211105091102.GA126301@embeddedor>
- <22139a80-3f64-1f21-6b5c-65d250bafe09@linux.ibm.com>
+        Thu, 2 Dec 2021 14:27:39 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C28A1B8245D
+        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 19:24:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C738C00446;
+        Thu,  2 Dec 2021 19:24:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1638473053;
+        bh=ToLJiJi+yfxgYJ7dJxUGOXCS1eDFDGrtQfCtcKFg/cQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cu/9Y8XntevbtxwM0faRmrayGwywHAkeZoIP+/sW8XsTxtPgiy8mR1Y1bL94pfF6j
+         kLT3u7SCR0H20XaGj5t6HH0YWeED9g0fonj8GZdg74k2bSHSRLavz2ZNTWM8Mp39G6
+         EedJMEFJquAnnhhjKm2GwcqBCheUw6seZmYnVN8HVs1OW+cl2QaZ6lnE/oEHpWSy1V
+         RquCM8V4TtFNsLnmGOsAAJ6jjSmJL/8E0YpVk75SGGlSRNsXWfjTc5Dc+U0zxQXpHP
+         lDnxKjWrKTHGkMZWecdHzr9kX0i2qX1kW3es4z8lRMPZaFVpmguXW8ziC2Ukak+nnb
+         2QqL43lh2c4gw==
+Date:   Thu, 2 Dec 2021 21:24:08 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Bixuan Cui <cuibixuan@linux.alibaba.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        w@1wt.eu
+Subject: Re: [PATCH -next] mm: delete oversized WARN_ON() in kvmalloc() calls
+Message-ID: <YakdWMtZzRCTeMUP@unreal>
+References: <1638410784-48646-1-git-send-email-cuibixuan@linux.alibaba.com>
+ <20211201192643.ecb0586e0d53bf8454c93669@linux-foundation.org>
+ <Yajk/oVypyUFTtgd@unreal>
+ <YajmawzehKqR+j0v@casper.infradead.org>
+ <YajviIws7csNbTxU@unreal>
+ <202112021105.C9E64318F@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <22139a80-3f64-1f21-6b5c-65d250bafe09@linux.ibm.com>
+In-Reply-To: <202112021105.C9E64318F@keescook>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Nov 05, 2021 at 12:24:13PM +0100, Steffen Maier wrote:
-> On 11/5/21 10:11, Gustavo A. R. Silva wrote:
-> > Use flexible-array members in struct fc_fdmi_attr_entry and
-> > fs_fdmi_attrs instead of one-element arrays, and refactor the
-> > code accordingly.
+On Thu, Dec 02, 2021 at 11:08:34AM -0800, Kees Cook wrote:
+> On Thu, Dec 02, 2021 at 06:08:40PM +0200, Leon Romanovsky wrote:
+> > On Thu, Dec 02, 2021 at 03:29:47PM +0000, Matthew Wilcox wrote:
+> > > On Thu, Dec 02, 2021 at 05:23:42PM +0200, Leon Romanovsky wrote:
+> > > > The problem is that this WARN_ON() is triggered by the users.
+> > > 
+> > > ... or the problem is that you don't do a sanity check between the user
+> > > and the MM system.  I mean, that's what this conversation is about --
+> > > is it a bug to be asking for this much memory in the first place?
 > > 
-> > Also, turn the one-element array _port_ in struct fc_fdmi_rpl
-> > into a simple object of type struct fc_fdmi_port_name, as it
-> > seems there is no more than just one port expected:
+> > We do a lot of checks, and in this case, user provided valid input.
+> > He asked size that doesn't cross his address space.
+> > https://elixir.bootlin.com/linux/v5.16-rc3/source/drivers/infiniband/core/umem_odp.c#L67
 > > 
-> > $ git grep -nw numport drivers/scsi/
-> > drivers/scsi/csiostor/csio_lnode.c:447: reg_pl->numport = htonl(1);
-> > drivers/scsi/libfc/fc_encode.h:232:             put_unaligned_be32(1, &ct->payload.rhba.port.numport);
+> > 		start = ALIGN_DOWN(umem_odp->umem.address, page_size);
+> > 		if (check_add_overflow(umem_odp->umem.address,
+> > 				       (unsigned long)umem_odp->umem.length,
+> > 				       &end))
+> > 			return -EOVERFLOW;
 > > 
-> > Also, this helps with the ongoing efforts to globally enable
-> > -Warray-bounds and get us closer to being able to tighten the
-> > FORTIFY_SOURCE routines on memcpy().
-> > 
-> > https://github.com/KSPP/linux/issues/79
-> > Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > ---
-> >   drivers/scsi/csiostor/csio_lnode.c | 2 +-
-> >   drivers/scsi/libfc/fc_encode.h     | 4 ++--
-> >   include/scsi/fc/fc_ms.h            | 6 +++---
-> >   3 files changed, 6 insertions(+), 6 deletions(-)
-> > 
-> > diff --git a/drivers/scsi/csiostor/csio_lnode.c b/drivers/scsi/csiostor/csio_lnode.c
-> > index d5ac93897023..cf9dd79ee488 100644
-> > --- a/drivers/scsi/csiostor/csio_lnode.c
-> > +++ b/drivers/scsi/csiostor/csio_lnode.c
-> > @@ -445,7 +445,7 @@ csio_ln_fdmi_dprt_cbfn(struct csio_hw *hw, struct csio_ioreq *fdmi_req)
-> >   	/* Register one port per hba */
-> >   	reg_pl = (struct fc_fdmi_rpl *)pld;
-> >   	reg_pl->numport = htonl(1);
-> > -	memcpy(&reg_pl->port[0].portname, csio_ln_wwpn(ln), 8);
-> > +	memcpy(&reg_pl->port.portname, csio_ln_wwpn(ln), 8);
-> >   	pld += sizeof(*reg_pl);
-> > 
-> >   	/* Start appending HBA attributes hba */
-> > diff --git a/drivers/scsi/libfc/fc_encode.h b/drivers/scsi/libfc/fc_encode.h
-> > index 74ae7fd15d8d..5806f99e4061 100644
-> > --- a/drivers/scsi/libfc/fc_encode.h
-> > +++ b/drivers/scsi/libfc/fc_encode.h
-> > @@ -232,7 +232,7 @@ static inline int fc_ct_ms_fill(struct fc_lport *lport,
-> >   		put_unaligned_be32(1, &ct->payload.rhba.port.numport);
-> >   		/* Port Name */
-> >   		put_unaligned_be64(lport->wwpn,
-> > -				   &ct->payload.rhba.port.port[0].portname);
-> > +				   &ct->payload.rhba.port.port.portname);
-> > 
-> >   		/* HBA Attributes */
-> >   		put_unaligned_be32(numattrs,
+> > There is a feature called ODP (on-demand-paging) which is supported
+> > in some RDMA NICs. It allows to the user "export" their whole address
+> > space to the other RDMA node without pinning the pages. And once the
+> > other node sends data to not-pinned page, the RDMA NIC will prefetch
+> > it.
 > 
-> > diff --git a/include/scsi/fc/fc_ms.h b/include/scsi/fc/fc_ms.h
-> > index 00191695233a..44fbe84fa664 100644
-> > --- a/include/scsi/fc/fc_ms.h
-> > +++ b/include/scsi/fc/fc_ms.h
+> I think we have two cases:
 > 
-> > @@ -174,7 +174,7 @@ struct fs_fdmi_attrs {
+> - limiting kvmalloc allocations to INT_MAX
+> - issuing a WARN when that limit is exceeded
 > 
-> /*
->  * Registered Port List
+> The argument for the having the WARN is "that amount should never be
+> allocated so we want to find the pathological callers".
 > 
-> >    */
-> >   struct fc_fdmi_rpl {
-> >   	__be32				numport;
-> > -	struct fc_fdmi_port_name	port[1];
-> > +	struct fc_fdmi_port_name	port;
-> >   } __attribute__((__packed__));
-> 
-> While I'm not affected by the change, it feels to me as if these are
-> protocol definitions originating in a T11 Fibre Channel standard FC-GS. It's
-> a port *list*. Can you "modify" the standard here?
-> 
-> The fact, that currently existing code users only ever seem to use one
-> single port in the list, would be an independent thing to me.
+> But if the actual issue is that >INT_MAX is _acceptable_, then we have
+> to do away with the entire check, not just the WARN.
 
-There are three changes made here, and I suspect it might make sense to
-split them up.
+First we need to get rid from WARN_ON(), which is completely safe thing to do.
 
-In a quick look, I see "struct fc_fdmi_attr_entry" has a sizeof() call
-against it, so it's not clear if it's safe to switch it to a flexible
-array without other changes.
+Removal of the check can be done in second step as it will require audit
+of whole kvmalloc* path.
 
-The change to struct fs_fdmi_attrs looks okay, since it appears to be
-used only in casts, but it might make sense to use diffoscope on the
-changed .o files to validate nothing weird has happened.
+Thanks
 
-For struct fc_dmi_rpl, as long as "numport" is always set/validated to
-1, I think this change is fine.
-
--- 
-Kees Cook
+> 
+> -- 
+> Kees Cook

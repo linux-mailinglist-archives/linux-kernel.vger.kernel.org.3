@@ -2,105 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F2B46690B
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6870346690E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 18:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376304AbhLBR32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 12:29:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242092AbhLBR32 (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 12:29:28 -0500
-Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0F9C06174A
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:26:05 -0800 (PST)
-Received: by mail-qv1-xf32.google.com with SMTP id gu12so140162qvb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 02 Dec 2021 09:26:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mojatatu-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=tPWb18pzdYP4gepUET+WlF/T7jKUlf4IkvWpJ/7uajs=;
-        b=HWU/YEOe7zB1KHKCkY+8Ou6+yhZt0XooYuPjbA55YiEU8E9Jh92ee8ugy9PBGvlp6/
-         wmEyJG2p3k4DveKEGgY9W+3D2HkSHyGxtOtIyPQDeXBnmxr52SEc30rAnSDnbfpB9wGH
-         zweXfJvbTchrWtOIdTNg+/on+15ZkEYeVKAOJeTujXX6Qo9u0eQPTWPlAP1VNhUXAtxq
-         /HKQ5okeVjvWRa/jCYOJshNXaqPcHdt4NoevKj4uYcc+PtMtEe5n7z2R/WxD+zMbw/2R
-         l4g6dZYJOi+GR9ooJU5NitWpPCB7xOjK5vlCObtVSyyb9cSafSOAtBvZMOcxiVMg96iI
-         yWRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=tPWb18pzdYP4gepUET+WlF/T7jKUlf4IkvWpJ/7uajs=;
-        b=Vf/qAGYLyIaNbB2lqlF3PMJhivp0keJknu4KPenvGt1u9hciD6tk03PpEkc+3LvoYr
-         VPtUokHDdFiaJ4wcl4A5eZn6tgQb+StL1spzwpzwtDDq0Nh9mJ2awmPHGzthCsMvlyGt
-         Npl4JiFwpLqI4HJt4y9wvOrmnZPTf0SkY7O+GodJqRKIBu/R+Yw4INn5ttC9QEfRVHcb
-         2FOjbYSMiBregxyKc9vCga4YqotwRxJeKFmkiQ1iIJeXr8cev0SWWsHyoQGs0BSGUezo
-         iWdSXLiEOhvYYZOIOB3dLnZxSiKknn+EyS6k9+ArIev2s+eN4mU9O03JOeqTou8uL1nt
-         HooA==
-X-Gm-Message-State: AOAM533mfzdYJGIqNjCSOBojVYaS0Jgce5x5/r919IhGmcY0GY2NxoRe
-        lPVwfgwX0FoW5HkFupFLJWvR7A==
-X-Google-Smtp-Source: ABdhPJwPi2N4tWTQDbGIqoIjqHoLgu/k7WNG6Bdr/7aD60T2LHSMCLBsTMn1/Myl0ewziNJJomShQg==
-X-Received: by 2002:a05:6214:29c3:: with SMTP id gh3mr14425707qvb.44.1638465964664;
-        Thu, 02 Dec 2021 09:26:04 -0800 (PST)
-Received: from [192.168.1.173] (bras-base-kntaon1617w-grc-33-142-112-185-132.dsl.bell.ca. [142.112.185.132])
-        by smtp.googlemail.com with ESMTPSA id 2sm266083qkr.126.2021.12.02.09.26.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 09:26:04 -0800 (PST)
-Message-ID: <1e86c2c7-eb84-4170-00f2-007bed67f93a@mojatatu.com>
-Date:   Thu, 2 Dec 2021 12:26:03 -0500
+        id S1376316AbhLBR3u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 12:29:50 -0500
+Received: from foss.arm.com ([217.140.110.172]:38386 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1376307AbhLBR3u (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 12:29:50 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 72E80142F;
+        Thu,  2 Dec 2021 09:26:26 -0800 (PST)
+Received: from [10.57.34.58] (unknown [10.57.34.58])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 350B63F73B;
+        Thu,  2 Dec 2021 09:26:24 -0800 (PST)
+Message-ID: <bd677501-bd65-9648-c8f5-1b90983377b5@arm.com>
+Date:   Thu, 2 Dec 2021 17:26:19 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
  Thunderbird/91.3.2
-Subject: Re: [PATCH net-next] net: prestera: flower template support
-Content-Language: en-US
-To:     Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        netdev@vger.kernel.org
-Cc:     Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        Volodymyr Mytnyk <vmytnyk@marvell.com>,
-        Taras Chornyi <tchornyi@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org
-References: <1638460259-12619-1-git-send-email-volodymyr.mytnyk@plvision.eu>
-From:   Jamal Hadi Salim <jhs@mojatatu.com>
-In-Reply-To: <1638460259-12619-1-git-send-email-volodymyr.mytnyk@plvision.eu>
+Subject: Re: [PATCH v4 04/14] Documentation/x86: Secure Launch kernel
+ documentation
+Content-Language: en-GB
+To:     Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        iommu@lists.linux-foundation.org, linux-integrity@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     dpsmith@apertussolutions.com, luto@amacapital.net,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        kanth.ghatraju@oracle.com, tglx@linutronix.de,
+        trenchboot-devel@googlegroups.com
+References: <1630070917-9896-1-git-send-email-ross.philipson@oracle.com>
+ <1630070917-9896-5-git-send-email-ross.philipson@oracle.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <1630070917-9896-5-git-send-email-ross.philipson@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2021-12-02 10:50, Volodymyr Mytnyk wrote:
-> From: Volodymyr Mytnyk<vmytnyk@marvell.com>
-> 
-> Add user template explicit support. At this moment, max
-> TCAM rule size is utilized for all rules, doesn't matter
-> which and how much flower matches are provided by user. It
-> means that some of TCAM space is wasted, which impacts
-> the number of filters that can be offloaded.
-> 
-> Introducing the template, allows to have more HW offloaded
-> filters.
-> 
-> Example:
->    tc qd add dev PORT clsact
->    tc chain add dev PORT ingress protocol ip \
->      flower dst_ip 0.0.0.0/16
+On 2021-08-27 14:28, Ross Philipson wrote:
+[...]
+> +IOMMU Configuration
+> +-------------------
+> +
+> +When doing a Secure Launch, the IOMMU should always be enabled and the drivers
+> +loaded. However, IOMMU passthrough mode should never be used. This leaves the
+> +MLE completely exposed to DMA after the PMR's [2]_ are disabled. First, IOMMU
+> +passthrough should be disabled by default in the build configuration::
+> +
+> +  "Device Drivers" -->
+> +      "IOMMU Hardware Support" -->
+> +          "IOMMU passthrough by default [ ]"
+> +
+> +This unset the Kconfig value CONFIG_IOMMU_DEFAULT_PASSTHROUGH.
 
-"chain" or "filter"?
+Note that the config structure has now changed, and if set, passthrough 
+is deselected by choosing a different default domain type.
 
->    tc filter add dev PORT ingress protocol ip \
->      flower skip_sw dst_ip 1.2.3.4/16 action drop
+> +In addition, passthrough must be disabled on the kernel command line when doing
+> +a Secure Launch as follows::
+> +
+> +  iommu=nopt iommu.passthrough=0
 
-You are not using tc priority? Above will result in two priorities
-(the 0.0.0.0 entry will be more important) and in classical flower
-approach two  different tables.
-I am wondering how you map the table to the TCAM.
-Is the priority sorting entirely based on masks in hardware?
+This part is a bit silly - those options are literally aliases for the 
+exact same thing, and furthermore if the config is already set as 
+required then the sole effect either of them will have is to cause "(set 
+by kernel command line)" to be printed. There is no value in explicitly 
+overriding the default value with the default value - if anyone can 
+append an additional "iommu.passthrough=1" (or "iommu=pt") to the end of 
+the command line they'll still win.
 
-cheers,
-jamal
+Robin.

@@ -2,169 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2244669A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:13:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 957E54669AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 19:15:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1376585AbhLBSQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 13:16:35 -0500
-Received: from dfw.source.kernel.org ([139.178.84.217]:43314 "EHLO
-        dfw.source.kernel.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348294AbhLBSQe (ORCPT
+        id S1348306AbhLBSSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 13:18:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231128AbhLBSSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 13:16:34 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1666C62714
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 18:13:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A258C00446;
-        Thu,  2 Dec 2021 18:13:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1638468791;
-        bh=m+ZbylS5VCgMMr0/cLLi4oUbGnPEJYr8motS6DdZotQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sALKktU0NlrjrFrpZSQlWO2BbnQTq5wgSMv4uhSgOLR+nu7eYeTOVS+uycvhFCtFe
-         6H+MK3Vam/o2IQ1u+mnfczUab9PCdh7bI6gldPweVZpMcOI5KMXbon7FMUvKpoZ0pV
-         8fyjtGi4uoFeigsJXCVzvlADH99HTvh4BzLwrErHO0Cb0wswhtEBvTczx7LwGmV5g2
-         Ekz0PGliaUzMAeAkM6/Jl/MOstJUWLan1/Y7XXmQvpFFyuqp0zzyCAs/VToOjApRkZ
-         z81cM68C36Iz7YbotDiFLKKlnN+Wqtt39K6LFoO3e6quLgu9y0eZx+Sxrf8JzYADeS
-         +mhcc0jZhDZjA==
-Date:   Thu, 2 Dec 2021 10:13:09 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH 2/6] f2fs: do not expose unwritten blocks to
- user by DIO
-Message-ID: <YakMtRif1f0cXT6R@google.com>
-References: <20211116214510.2934905-1-jaegeuk@kernel.org>
- <20211116214510.2934905-2-jaegeuk@kernel.org>
- <6576ab84-7441-e594-a7c4-e5876a814df7@kernel.org>
+        Thu, 2 Dec 2021 13:18:33 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA48C06174A;
+        Thu,  2 Dec 2021 10:15:10 -0800 (PST)
+Date:   Thu, 02 Dec 2021 18:15:07 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1638468908;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BrF3Lpl38xw4GjI5AYCD/2kHblDIHWUggd56B1HbR9s=;
+        b=QncW17azzEh9KJD/h8ABsFEJmlUESrmWiWaD7GHLSM4+UuStWlYAMv/CfAVHWX9Jnudgel
+        2FTfCSozbg9TKoKpRQchS6upAlVu4le5HFPnq68AWlQqXnBsQXuHN0Sc6hIlfCpg1iv2Qk
+        r1kaNS5I+YH4MJDx1iVIHuyFYYe8ggbVwuLYOcVhqZerrx36lIOXeHu6HmoW9P7hS4AZj/
+        QScxBKa+KacSCoN7OnZsPKThCl5VfwAP51rp8Mvnk3xPVvplXJ/1Eo0T5IPzWAoUspURVs
+        EiGsNz7DhTDx6ImIhvelp3ZcgiumctS0hqlpuHA1HsVgoi3KPelpHLT7kYsx4w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1638468908;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BrF3Lpl38xw4GjI5AYCD/2kHblDIHWUggd56B1HbR9s=;
+        b=Q/x7qj7bv2P2KvTx1mqMn7UGHWIam9uGt9SLYreQv4MgktpKDeF135rvJyelqiGpGNCY4a
+        41GST6JRNsJuXUDw==
+From:   "tip-bot2 for Joerg Roedel" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] x86/mm: Fix PAGE_KERNEL_IO removal breakage
+Cc:     Joerg Roedel <jroedel@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20211202144646.23186-1-joro@8bytes.org>
+References: <20211202144646.23186-1-joro@8bytes.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6576ab84-7441-e594-a7c4-e5876a814df7@kernel.org>
+Message-ID: <163846890716.11128.7464150139974319110.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/02, Chao Yu wrote:
-> On 2021/11/17 5:45, Jaegeuk Kim wrote:
-> > DIO preallocates physical blocks before writing data, but if an error occurrs
-> > or power-cut happens, we can see block contents from the disk. This patch tries
-> > to fix it by 1) turning to buffered writes for DIO into holes, 2) truncating
-> > unwritten blocks from error or power-cut.
-> > 
-> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > ---
-> >   fs/f2fs/data.c |  5 ++++-
-> >   fs/f2fs/f2fs.h |  5 +++++
-> >   fs/f2fs/file.c | 24 +++++++++++++++++++++++-
-> >   3 files changed, 32 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
-> > index 3b27fb7daa8b..7ac1a39fcad2 100644
-> > --- a/fs/f2fs/data.c
-> > +++ b/fs/f2fs/data.c
-> > @@ -1543,8 +1543,11 @@ int f2fs_map_blocks(struct inode *inode, struct f2fs_map_blocks *map,
-> >   					flag != F2FS_GET_BLOCK_DIO);
-> >   				err = __allocate_data_block(&dn,
-> >   							map->m_seg_type);
-> > -				if (!err)
-> > +				if (!err) {
-> > +					if (flag == F2FS_GET_BLOCK_PRE_DIO)
-> > +						file_need_truncate(inode);
-> >   					set_inode_flag(inode, FI_APPEND_WRITE);
-> > +				}
-> >   			}
-> >   			if (err)
-> >   				goto sync_out;
-> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > index be871a79c634..14bea669f87e 100644
-> > --- a/fs/f2fs/f2fs.h
-> > +++ b/fs/f2fs/f2fs.h
-> > @@ -654,6 +654,7 @@ enum {
-> >   #define FADVISE_KEEP_SIZE_BIT	0x10
-> >   #define FADVISE_HOT_BIT		0x20
-> >   #define FADVISE_VERITY_BIT	0x40
-> > +#define FADVISE_TRUNC_BIT	0x80
-> >   #define FADVISE_MODIFIABLE_BITS	(FADVISE_COLD_BIT | FADVISE_HOT_BIT)
-> > @@ -681,6 +682,10 @@ enum {
-> >   #define file_is_verity(inode)	is_file(inode, FADVISE_VERITY_BIT)
-> >   #define file_set_verity(inode)	set_file(inode, FADVISE_VERITY_BIT)
-> > +#define file_should_truncate(inode)	is_file(inode, FADVISE_TRUNC_BIT)
-> > +#define file_need_truncate(inode)	set_file(inode, FADVISE_TRUNC_BIT)
-> > +#define file_dont_truncate(inode)	clear_file(inode, FADVISE_TRUNC_BIT)
-> > +
-> >   #define DEF_DIR_LEVEL		0
-> >   enum {
-> > diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> > index 4bf77a5bf998..ec8de0662437 100644
-> > --- a/fs/f2fs/file.c
-> > +++ b/fs/f2fs/file.c
-> > @@ -960,10 +960,21 @@ int f2fs_setattr(struct user_namespace *mnt_userns, struct dentry *dentry,
-> >   		down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
-> >   		filemap_invalidate_lock(inode->i_mapping);
-> > +		/*
-> > +		 * Truncate stale preallocated blocks used by the previous DIO.
-> > +		 */
-> > +		if (file_should_truncate(inode)) {
-> > +			err = f2fs_truncate(inode);
-> > +			if (err)
-> > +				goto out_unlock;
-> > +			file_dont_truncate(inode);
-> > +		}
-> > +
-> >   		truncate_setsize(inode, attr->ia_size);
-> >   		if (attr->ia_size <= old_size)
-> >   			err = f2fs_truncate(inode);
-> > +out_unlock:
-> >   		/*
-> >   		 * do not trim all blocks after i_size if target size is
-> >   		 * larger than i_size.
-> > @@ -4257,6 +4268,13 @@ static int f2fs_preallocate_blocks(struct kiocb *iocb, struct iov_iter *iter)
-> >   	/* If it will be an out-of-place direct write, don't bother. */
-> >   	if (dio && f2fs_lfs_mode(sbi))
-> >   		return 0;
-> > +	/*
-> > +	 * Don't preallocate holes aligned to DIO_SKIP_HOLES which turns into
-> > +	 * buffered IO, if DIO meets any holes.
-> > +	 */
-> > +	if (dio && i_size_read(inode) &&
-> > +		(F2FS_BYTES_TO_BLK(pos) < F2FS_BLK_ALIGN(i_size_read(inode))))
-> > +		return 0;
-> >   	/* No-wait I/O can't allocate blocks. */
-> >   	if (iocb->ki_flags & IOCB_NOWAIT)
-> > @@ -4366,10 +4384,14 @@ static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct iov_iter *from)
-> >   		if (preallocated > 0 && i_size_read(inode) < target_size) {
-> >   			down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
-> >   			filemap_invalidate_lock(inode->i_mapping);
-> > -			f2fs_truncate(inode);
-> > +			if (!f2fs_truncate(inode))
-> > +				file_dont_truncate(inode);
-> >   			filemap_invalidate_unlock(inode->i_mapping);
-> >   			up_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
-> > +		} else {
-> > +			file_dont_truncate(inode);
-> 
-> How about this case:
-> 
-> - touch file
-> - DIO write [0, 8kb] to file
->  - preallocate 2 physical blocks
->  - set FADVISE_TRUNC_BIT
->  - SPO
-> - BUFIO write [0, 4kb] to file
->  - file_dont_truncate -- it leaks unwritten [4kb, 8kb] to user after
-> truncating file to 8kb
+The following commit has been merged into the x86/mm branch of tip:
 
-i_size should be 4kb, no?
+Commit-ID:     9a951429b2e1670a76b68c90880b01430fe509e4
+Gitweb:        https://git.kernel.org/tip/9a951429b2e1670a76b68c90880b01430fe509e4
+Author:        Joerg Roedel <jroedel@suse.de>
+AuthorDate:    Thu, 02 Dec 2021 15:46:46 +01:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Thu, 02 Dec 2021 09:41:24 -08:00
 
-> 
-> Thanks,
-> 
-> >   		}
-> > +
-> >   		clear_inode_flag(inode, FI_PREALLOCATED_ALL);
-> >   		if (ret > 0)
-> > 
+x86/mm: Fix PAGE_KERNEL_IO removal breakage
+
+The removal of PAGE_KERNEL_IO broke SEV-ES because it changed the
+mapping of ioremap and some fixmap areas (like the local APIC page)
+from unencrypted to encrypted. Change those mappings back to
+be unencrypted.
+
+Fixes: 27dff0f58bde ("x86/mm: Nuke PAGE_KERNEL_IO")
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+Tested-by: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lkml.kernel.org/r/20211202144646.23186-1-joro@8bytes.org
+---
+ arch/x86/include/asm/fixmap.h        |  2 +-
+ arch/x86/include/asm/pgtable_types.h | 21 +++++++++++----------
+ arch/x86/mm/ioremap.c                |  2 +-
+ 3 files changed, 13 insertions(+), 12 deletions(-)
+
+diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+index 5e186a6..a2eaf26 100644
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -173,7 +173,7 @@ static inline void __set_fixmap(enum fixed_addresses idx,
+  * supported for MMIO addresses, so make sure that the memory encryption
+  * mask is not part of the page attributes.
+  */
+-#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE
++#define FIXMAP_PAGE_NOCACHE PAGE_KERNEL_NOCACHE_NOENC
+ 
+ /*
+  * Early memremap routines used for in-place encryption. The mappings created
+diff --git a/arch/x86/include/asm/pgtable_types.h b/arch/x86/include/asm/pgtable_types.h
+index a872247..fc9b699 100644
+--- a/arch/x86/include/asm/pgtable_types.h
++++ b/arch/x86/include/asm/pgtable_types.h
+@@ -208,16 +208,17 @@ enum page_cache_mode {
+ 
+ #define __pgprot_mask(x)	__pgprot((x) & __default_kernel_pte_mask)
+ 
+-#define PAGE_KERNEL		__pgprot_mask(__PAGE_KERNEL            | _ENC)
+-#define PAGE_KERNEL_NOENC	__pgprot_mask(__PAGE_KERNEL            |    0)
+-#define PAGE_KERNEL_RO		__pgprot_mask(__PAGE_KERNEL_RO         | _ENC)
+-#define PAGE_KERNEL_EXEC	__pgprot_mask(__PAGE_KERNEL_EXEC       | _ENC)
+-#define PAGE_KERNEL_EXEC_NOENC	__pgprot_mask(__PAGE_KERNEL_EXEC       |    0)
+-#define PAGE_KERNEL_ROX		__pgprot_mask(__PAGE_KERNEL_ROX        | _ENC)
+-#define PAGE_KERNEL_NOCACHE	__pgprot_mask(__PAGE_KERNEL_NOCACHE    | _ENC)
+-#define PAGE_KERNEL_LARGE	__pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
+-#define PAGE_KERNEL_LARGE_EXEC	__pgprot_mask(__PAGE_KERNEL_LARGE_EXEC | _ENC)
+-#define PAGE_KERNEL_VVAR	__pgprot_mask(__PAGE_KERNEL_VVAR       | _ENC)
++#define PAGE_KERNEL			__pgprot_mask(__PAGE_KERNEL            | _ENC)
++#define PAGE_KERNEL_NOENC		__pgprot_mask(__PAGE_KERNEL            |    0)
++#define PAGE_KERNEL_RO			__pgprot_mask(__PAGE_KERNEL_RO         | _ENC)
++#define PAGE_KERNEL_EXEC		__pgprot_mask(__PAGE_KERNEL_EXEC       | _ENC)
++#define PAGE_KERNEL_EXEC_NOENC		__pgprot_mask(__PAGE_KERNEL_EXEC       |    0)
++#define PAGE_KERNEL_ROX			__pgprot_mask(__PAGE_KERNEL_ROX        | _ENC)
++#define PAGE_KERNEL_NOCACHE		__pgprot_mask(__PAGE_KERNEL_NOCACHE    | _ENC)
++#define PAGE_KERNEL_NOCACHE_NOENC	__pgprot_mask(__PAGE_KERNEL_NOCACHE    |    0)
++#define PAGE_KERNEL_LARGE		__pgprot_mask(__PAGE_KERNEL_LARGE      | _ENC)
++#define PAGE_KERNEL_LARGE_EXEC		__pgprot_mask(__PAGE_KERNEL_LARGE_EXEC | _ENC)
++#define PAGE_KERNEL_VVAR		__pgprot_mask(__PAGE_KERNEL_VVAR       | _ENC)
+ 
+ #endif	/* __ASSEMBLY__ */
+ 
+diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+index 3102dda..4fe8d43 100644
+--- a/arch/x86/mm/ioremap.c
++++ b/arch/x86/mm/ioremap.c
+@@ -243,7 +243,7 @@ __ioremap_caller(resource_size_t phys_addr, unsigned long size,
+ 	 * make sure the memory encryption attribute is enabled in the
+ 	 * resulting mapping.
+ 	 */
+-	prot = PAGE_KERNEL;
++	prot = PAGE_KERNEL_NOENC;
+ 	if ((io_desc.flags & IORES_MAP_ENCRYPTED) || encrypted)
+ 		prot = pgprot_encrypted(prot);
+ 

@@ -2,175 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BD352466641
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:13:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1092466642
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358882AbhLBPRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46882 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236157AbhLBPRG (ORCPT
+        id S1358890AbhLBPR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:17:57 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.129.124]:30934 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S236157AbhLBPR4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:17:06 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61018C06174A;
-        Thu,  2 Dec 2021 07:13:44 -0800 (PST)
-Received: from ip4d173d4a.dynamic.kabel-deutschland.de ([77.23.61.74] helo=[192.168.66.200]); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1msnmF-0004Eu-MA; Thu, 02 Dec 2021 16:13:39 +0100
-Message-ID: <3eb9c3f8-6bca-da08-47ec-af2a02d6a485@leemhuis.info>
-Date:   Thu, 2 Dec 2021 16:13:39 +0100
+        Thu, 2 Dec 2021 10:17:56 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638458073;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FuWM/nUinNNYTfhs/J8qt17tdv5Gw4lghN8CpUibidM=;
+        b=P5hxqRsuG5BEckdMPquJEEeq3W274dlapyyS3GA/VAzE3QJgTVvrR2DWqcO+UH/FaPAdRJ
+        ak5wKF4WP4X1U5I7gFDzPhGWBIqUu7Jr60931+BgO4uPZnWtfuB04aRYQyb43mZebeN5CQ
+        9kJ2cngrCw9ZRLl/hsDhfLMBH4uSQlA=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-379-xM7W9_TYP7yyj7wT1qNm1w-1; Thu, 02 Dec 2021 10:14:32 -0500
+X-MC-Unique: xM7W9_TYP7yyj7wT1qNm1w-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4A314802925;
+        Thu,  2 Dec 2021 15:14:30 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.10.181])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1E0FB19729;
+        Thu,  2 Dec 2021 15:14:29 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id A048E225F43; Thu,  2 Dec 2021 10:14:28 -0500 (EST)
+Date:   Thu, 2 Dec 2021 10:14:28 -0500
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Chengguang Xu <cgxu519@mykernel.net>, Jan Kara <jack@suse.cz>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        ronyjin <ronyjin@tencent.com>,
+        charliecgxu <charliecgxu@tencent.com>
+Subject: Re: ovl_flush() behavior
+Message-ID: <Yaji1C/wK73jAkho@redhat.com>
+References: <20211130112206.GE7174@quack2.suse.cz>
+ <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
+ <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
+ <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
+ <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
+ <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com>
+ <20211201134610.GA1815@quack2.suse.cz>
+ <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
+ <CAOQ4uxiEjGms-sKhrVDtDHSEk97Wku5oPxnmy4vVB=6yRE_Hdg@mail.gmail.com>
+ <CAOQ4uxg6FATciQhzRifOft4gMZj15G=UA6MUiPX2n9-NR5+1Pg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Content-Language: en-BS
-To:     Robert Munteanu <rombert@apache.org>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     tiwai@suse.com, regressions@lists.linux.dev,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: Regression: plugging in USB scanner breaks all USB functionality
-In-Reply-To: <35f7428b39f996c793f5b4a6a314772681c73d7a.camel@apache.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1638458024;7dae5449;
-X-HE-SMSGID: 1msnmF-0004Eu-MA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAOQ4uxg6FATciQhzRifOft4gMZj15G=UA6MUiPX2n9-NR5+1Pg@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker speaking.
-
-Thanks for the report.
-
-Top-posting for once, to make this easy accessible to everyone.
-
-FWIW, 5.14 is EOL, so it might not be fixed there. As the problem is in
-newer kernels as well, I suspect that it was a change applies to 5.15 or
-5.16 that got backported. Maybe one of the developers might have an idea
-which commit causes it. If that's not the case you likely should try a
-bisection to find the culprit. Performing one between v5.14.11..v5.14.14
-is likely the easiest and quickest way to find it.
-
-To be sure this issue doesn't fall through the cracks unnoticed, I'm
-adding it to regzbot, my Linux kernel regression tracking bot:
-
-#regzbot ^introduced v5.14.11..v5.14.14
-#regzbot title usb: plugging in USB scanner breaks all USB functionality
-[regression present in 5.15.2 und 5.16-rc3, too]
-#regzbot ignore-activity
-
-Reminder for developers: when fixing the issue, please add a 'Link:' tag
-with the URL to the report (the parent of this mail), then regzbot will
-automatically mark the regression as resolved once the fix lands in the
-appropriate tree. For more details about regzbot see footer.
-
-Sending this to everyone that got the initial report, to make all aware
-of the tracking. I also hope that messages like this motivate people to
-directly get regzbot involved when dealing with regressions, as messages
-like this wouldn't be needed then.
-
-Don't worry, I'll send further messages wrt to this regression just to
-the lists (with a tag in the subject so people can filter them away), as
-long as they are intended just for regzbot. With a bit of luck no such
-messages will be needed anyway.
-
-Ciao, Thorsten, your Linux kernel regression tracker.
-
-P.S.: As a Linux kernel regression tracker I'm getting a lot of reports
-on my table. I can only look briefly into most of them. Unfortunately
-therefore I sometimes will get things wrong or miss something important.
-I hope that's not the case here; if you think it is, don't hesitate to
-tell me about it in a public reply. That's in everyone's interest, as
-what I wrote above might be misleading to everyone reading this; any
-suggestion I gave they thus might sent someone reading this down the
-wrong rabbit hole, which none of us wants.
-
-BTW, I have no personal interest in this issue, which is tracked using
-regzbot, my Linux kernel regression tracking bot
-(https://linux-regtracking.leemhuis.info/regzbot/). I'm only posting
-this mail to get things rolling again and hence don't need to be CC on
-all further activities wrt to this regression.
-
----
-Additional information about regzbot:
-
-If you want to know more about regzbot, check out its web-interface, the
-getting start guide, and/or the references documentation:
-
-https://linux-regtracking.leemhuis.info/regzbot/
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The last two documents will explain how you can interact with regzbot
-yourself if your want to.
-
-Hint for reporters: when reporting a regression it's in your interest to
-tell #regzbot about it in the report, as that will ensure the regression
-gets on the radar of regzbot and the regression tracker. That's in your
-interest, as they will make sure the report won't fall through the
-cracks unnoticed.
-
-Hint for developers: you normally don't need to care about regzbot once
-it's involved. Fix the issue as you normally would, just remember to
-include a 'Link:' tag to the report in the commit message, as explained
-in Documentation/process/submitting-patches.rst
-That aspect was recently was made more explicit in commit 1f57bd42b77c:
-https://git.kernel.org/linus/1f57bd42b77c
-
-On 02.12.21 15:55, Robert Munteanu wrote:
-> Hi,
+On Thu, Dec 02, 2021 at 01:23:17AM +0200, Amir Goldstein wrote:
+> > >
+> > > To be honest I even don't fully understand what's the ->flush() logic in overlayfs.
+> > > Why should we open new underlying file when calling ->flush()?
+> > > Is it still correct in the case of opening lower layer first then copy-uped case?
+> > >
+> >
+> > The semantics of flush() are far from being uniform across filesystems.
+> > most local filesystems do nothing on close.
+> > most network fs only flush dirty data when a writer closes a file
+> > but not when a reader closes a file.
+> > It is hard to imagine that applications rely on flush-on-close of
+> > rdonly fd behavior and I agree that flushing only if original fd was upper
+> > makes more sense, so I am not sure if it is really essential for
+> > overlayfs to open an upper rdonly fd just to do whatever the upper fs
+> > would have done on close of rdonly fd, but maybe there is no good
+> > reason to change this behavior either.
+> >
 > 
-> After updating from kernel 5.14.11 to 5.14.14 I am seeing the following
-> problem:
+> On second thought, I think there may be a good reason to change
+> ovl_flush() otherwise I wouldn't have submitted commit
+> a390ccb316be ("fuse: add FOPEN_NOFLUSH") - I did observe
+> applications that frequently open short lived rdonly fds and suffered
+> undesired latencies on close().
 > 
-> When plugging in an USB scanner ( Brother DSMobile DS-740D ) to my
-> Lenovo P52 laptop I lose connection to all USB devices. Not only are
-> the devices no longer available on the host, but no power is drawn by
-> them. Only a reboot fixes the problem.
-> 
-> The scanner is the only device that triggers the problem, even when it
-> is the only device plugged in. I have a host of other devices,
-> connected either directly or via a USB hub in my monitor:
-> 
-> - keyboard
-> - mouse
-> - logitech brio webcam
-> - yubikey
-> - stream deck
-> - microphone
-> 
-> None of these cause any issues.
-> I have tried the following kernels ( packaged for openSUSE Tumbleweed
-> ), and none of them fixed the issue:
-> 
-> - 5.15.2
-> - 5.15.5
-> - 5.16~rc3-1.1.ge8ae228
-> 
-> The problem does not appear if the scanner is connected when the laptop
-> is shutdown. It seems to have an init phase of about 6-7 seconds
-> (blinking green led) and then stays on. However, it is not detected via
-> lsusb or scanimage -L.
-> 
-> The problem does not appear on a desktop class machine ( ASUS Prime
-> X470-PRO/Ryzen 3700x).
-> 
-> The relevant parts of the kernel log seem to be:
-> 
-> Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: Abort failed to stop command ring: -110
-> Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: xHCI host controller not responding, assume dead
-> Nov 22 11:53:18 rombert kernel: xhci_hcd 0000:00:14.0: HC died; cleaning up
-> 
-> I've initially reported this at
-> https://bugzilla.opensuse.org/show_bug.cgi?id=1192569 and CC'ed the
-> distribution's kernel maintainer.
-> 
-> Please let me know if additional information is needed.
-> 
-> Regards,
-> Robert Munteanu
-> 
-> 
+> As for "changing existing behavior", I think that most fs used as
+> upper do not implement flush at all.
+> Using fuse/virtiofs as overlayfs upper is quite new, so maybe that
+> is not a problem and maybe the new behavior would be preferred
+> for those users?
+
+It probably will be nice not to send flush to fuse server when it is not
+required.
+
+Right now in virtiofsd, I see that we are depending on flush being sent
+as we are dealing with remote posix lock magic. I am supporting remotme
+posix locks in virtiofs and virtiofsd is building these on top of open
+file description locks on host. (Can't use posix locks on host as these
+locks are per process and virtiofsd is single process working on behalf
+of all the guest processes, and unexpected things happen).
+
+When an fd is being closed, flush request is sent and along with it we
+also send "lock_owner".
+
+inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
+
+We basically use this to keep track which process is closing the fd and
+release associated OFD locks on host. /me needs to dive into details
+to explain it better. Will do that if need be.
+
+Bottom line is that as of now virtiofsd seems to be relying on receiving
+FLUSH requests when remote posix locks are enabled. Maybe we can set
+FOPEN_NOFLUSH when remote posix locks are not enabled.
+
+Thanks
+Vivek
+

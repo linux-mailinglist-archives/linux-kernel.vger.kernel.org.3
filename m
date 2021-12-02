@@ -2,105 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA2E466848
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 624604667CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 17:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234311AbhLBQcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 11:32:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35812 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359784AbhLBQaK (ORCPT
+        id S1359416AbhLBQ1c convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 2 Dec 2021 11:27:32 -0500
+Received: from us-smtp-delivery-44.mimecast.com ([205.139.111.44]:36393 "EHLO
+        us-smtp-delivery-44.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1347508AbhLBQ1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 11:30:10 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6112C061396;
-        Thu,  2 Dec 2021 08:25:36 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id z8so699705ljz.9;
-        Thu, 02 Dec 2021 08:25:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=hEN8lxqzB5PkjPszcdUxNpJc6epYJF7n5YUfahDhZts=;
-        b=RSdFPmrUI402Dc09tnZNn97E4pEduqTRau2Nw1Et+vXSTSItuWqQ1qQgo5J+1BALkT
-         pXeYg8IVZsh7XiyOPcIos4OYMocNv/sdZlmzqs+1PMFo80P1PiaMBMTREakOY97rlIj+
-         p3xxiIOjPJznHICXuXtAWMYjNAjHr6j6o2B4QEe22j2cFRFAexLVMLKWAkcu68zI7Q1M
-         nKy8m9/kVL9Sx9kILwW7DYiglMqhLFai685lmOyY+Dr588tiOYC0mEUmIsj3T5c3yoiC
-         MoulSGSizoR0jg4ycDg4rR4xfpG3PxTpZjMFUyuRkb75Y0WvHCyAW8LcTScBOdBn3AmN
-         UvYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=hEN8lxqzB5PkjPszcdUxNpJc6epYJF7n5YUfahDhZts=;
-        b=XOe5W9DImBnR7as9/6/aGNrOO2qzLUTKOGkMsK7MFnajl7NzpYCYyoGbqSZOijMu+t
-         /UYMNx7KQ7Ie6fvkgQkcBa1mMMglm/BrdCe5U0cMWbRdLZmafx9H/QWmPsB+TH5WKCXJ
-         4poULpU1AocIZGFA4Nkb8m/s/qOCnVqJufRtd3mSjGKIFJlh9pVIrA9Lib0qYe1wUD9G
-         aHaisOQ093ALN3t4NSy2oLf3G1+/c0BQW5ptfj/ZWzAA+vA8/TvvImTLELLh/TBPnlNh
-         v9iqERYNUYoUqMKvMUe8NpaxheOajNQw8W6RrmcicI4Udlshvk/SdUvNexV8Rqn1f+JP
-         +QPg==
-X-Gm-Message-State: AOAM532SYDOWzrcZtkObf5U5fclo5GLx/UqEjamAVUj1ueIixtgv7VvB
-        E19KiYdcUEMWOAraywwmur8=
-X-Google-Smtp-Source: ABdhPJwb+aZCkvsM06cfVFDqv3SaV4prBR7wmD5aUJuI1klW3QBgZtBrKJ0ooP/0EW5plBrMNXKWsg==
-X-Received: by 2002:a2e:7c16:: with SMTP id x22mr12905096ljc.460.1638462334456;
-        Thu, 02 Dec 2021 08:25:34 -0800 (PST)
-Received: from localhost.localdomain (94-29-46-111.dynamic.spd-mgts.ru. [94.29.46.111])
-        by smtp.gmail.com with ESMTPSA id d18sm36806lfl.30.2021.12.02.08.25.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Dec 2021 08:25:34 -0800 (PST)
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Agneli <poczt@protonmail.ch>, Rob Herring <robh+dt@kernel.org>
-Cc:     linux-tegra@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH v3 20/20] ARM: tegra: paz00: Enable S/PDIF and HDMI audio
-Date:   Thu,  2 Dec 2021 19:23:41 +0300
-Message-Id: <20211202162341.1791-21-digetx@gmail.com>
-X-Mailer: git-send-email 2.33.1
-In-Reply-To: <20211202162341.1791-1-digetx@gmail.com>
-References: <20211202162341.1791-1-digetx@gmail.com>
+        Thu, 2 Dec 2021 11:27:30 -0500
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-174-H7VfKqQXPsiGYL21N65XZA-1; Thu, 02 Dec 2021 11:24:04 -0500
+X-MC-Unique: H7VfKqQXPsiGYL21N65XZA-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5853839384;
+        Thu,  2 Dec 2021 16:24:03 +0000 (UTC)
+Received: from x1.com (unknown [10.22.33.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6704F10016F4;
+        Thu,  2 Dec 2021 16:23:58 +0000 (UTC)
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: tracing/osnoise: Make local variables static
+Date:   Thu,  2 Dec 2021 17:23:49 +0100
+Message-Id: <15da91ddf7e9883fb717e1cd213f7dd1fe46d14e.1638461649.git.bristot@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: kernel.org
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset=WINDOWS-1252
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable S/PDIF controller to enable HDMI audio support on Toshiba AC100.
-Use nvidia,fixed-parent-rate property that prevents audio rate conflict
-between S/PDIF and I2S.
+kernel test robot <lkp@intel.com> is reporting some local variables not
+declared as static on trace_osnoise.c.
 
-Tested-by: Agneli <poczt@protonmail.ch>
-Signed-off-by: Dmitry Osipenko <digetx@gmail.com>
+Make these variables static.
+
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: linux-kernel@vger.kernel.org
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
 ---
- arch/arm/boot/dts/tegra20-paz00.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ kernel/trace/trace_osnoise.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/boot/dts/tegra20-paz00.dts b/arch/arm/boot/dts/tegra20-paz00.dts
-index 5b2260f61f05..921a811632a1 100644
---- a/arch/arm/boot/dts/tegra20-paz00.dts
-+++ b/arch/arm/boot/dts/tegra20-paz00.dts
-@@ -264,8 +264,16 @@ conf_ld17_0 {
- 		};
- 	};
+diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
+index 7520d43aed55..fe24e9e38be9 100644
+--- a/kernel/trace/trace_osnoise.c
++++ b/kernel/trace/trace_osnoise.c
+@@ -197,7 +197,7 @@ struct osnoise_variables {
+ /*
+  * Per-cpu runtime information.
+  */
+-DEFINE_PER_CPU(struct osnoise_variables, per_cpu_osnoise_var);
++static DEFINE_PER_CPU(struct osnoise_variables, per_cpu_osnoise_var);
  
-+	spdif@70002400 {
-+		status = "okay";
-+
-+		nvidia,fixed-parent-rate;
-+	};
-+
- 	i2s@70002800 {
- 		status = "okay";
-+
-+		nvidia,fixed-parent-rate;
- 	};
+ /*
+  * this_cpu_osn_var - Return the per-cpu osnoise_variables on its relative CPU
+@@ -220,7 +220,7 @@ struct timerlat_variables {
+ 	u64			count;
+ };
  
- 	serial@70006000 {
+-DEFINE_PER_CPU(struct timerlat_variables, per_cpu_timerlat_var);
++static DEFINE_PER_CPU(struct timerlat_variables, per_cpu_timerlat_var);
+ 
+ /*
+  * this_cpu_tmr_var - Return the per-cpu timerlat_variables on its relative CPU
+@@ -312,7 +312,7 @@ struct timerlat_sample {
+ /*
+  * Protect the interface.
+  */
+-struct mutex interface_lock;
++static struct mutex interface_lock;
+ 
+ /*
+  * Tracer data.
+@@ -1977,8 +1977,8 @@ static struct trace_min_max_param osnoise_print_stack = {
+ /*
+  * osnoise/timerlat_period: min 100 us, max 1 s
+  */
+-u64 timerlat_min_period = 100;
+-u64 timerlat_max_period = 1000000;
++static u64 timerlat_min_period = 100;
++static u64 timerlat_max_period = 1000000;
+ static struct trace_min_max_param timerlat_period = {
+ 	.lock	= &interface_lock,
+ 	.val	= &osnoise_data.timerlat_period,
 -- 
-2.33.1
+2.31.1
 

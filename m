@@ -2,373 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 690684660B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 10:51:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F8246613E
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 11:11:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356694AbhLBJyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 04:54:41 -0500
-Received: from mga11.intel.com ([192.55.52.93]:37639 "EHLO mga11.intel.com"
+        id S1356807AbhLBKOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 05:14:51 -0500
+Received: from ip-15.mailobj.net ([213.182.54.15]:43138 "EHLO msg-4.mailo.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1356606AbhLBJyT (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 04:54:19 -0500
-X-IronPort-AV: E=McAfee;i="6200,9189,10185"; a="234183033"
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="234183033"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Dec 2021 01:50:57 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.87,281,1631602800"; 
-   d="scan'208";a="677605267"
-Received: from ahunter-desktop.fi.intel.com ([10.237.72.76])
-  by orsmga005.jf.intel.com with ESMTP; 02 Dec 2021 01:50:53 -0800
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@redhat.com>, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        H Peter Anvin <hpa@zytor.com>, chang.seok.bae@intel.com
-Subject: [PATCH 6/6] x86/insn: Add AVX512-FP16 instructions to x86 instruction decoder
-Date:   Thu,  2 Dec 2021 11:50:29 +0200
-Message-Id: <20211202095029.2165714-7-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20211202095029.2165714-1-adrian.hunter@intel.com>
-References: <20211202095029.2165714-1-adrian.hunter@intel.com>
+        id S1346163AbhLBKOr (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 05:14:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=net-c.es; s=mailo;
+        t=1638438675; bh=5f/DPkMqinmPlh73ZX8ZjV8oWSQFvI1Ht0rbZIgEoTU=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=m4xkznXL5BtxZv6snz0bnTbM6TebEMl35MrLAeN0vr4U8KdsbHHIgnEM2z1XXjU1Z
+         QK+o1teqMdATJD3pIZTXzYil+JM2TpIewjIV2WVfm7mpZD2bq/JZu6aoPLVYszWnGV
+         5HFI+BND1F4LyXz/rK4zwzYvoI5vp/ovZwneV0Uo=
+Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Thu,  2 Dec 2021 10:51:15 +0100 (CET)
+X-EA-Auth: zwDcSDH3gM9QCabbJenKZLmeMYMU/i70KfPag2vOU2PNbUJjENWd7AGNzkzoEKBP35p9gN+5cDv02lWTEFT4Xto9e7cBiGo3
+Date:   Thu, 2 Dec 2021 10:51:12 +0100
+From:   Claudio Suarez <cssk@net-c.es>
+To:     dri-devel@lists.freedesktop.org, 0day robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>, lkp@lists.01.org,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>
+Subject: Re: [PATCH v2] drm: fix error found in some cases after the patch
+ d1af5cd86997
+Message-ID: <YaiXEARd8z2C463h@gineta.localdomain>
+References: <YaC7zXW119tlzfVh@gineta.localdomain>
+ <20211128142015.GB5295@xsang-OptiPlex-9020>
+ <YaUpsaP7hng6zpFh@gineta.localdomain>
+ <YaXi803g7iv9MxWR@phenom.ffwll.local>
+ <YaiVfZWNyMkG8uED@gineta.localdomain>
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YaiVfZWNyMkG8uED@gineta.localdomain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-x86 instruction decoder is used for both kernel instructions and user space
-instructions (e.g. uprobes, perf tools Intel PT), so it is good to update
-it with new instructions.
+The patch d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log
+calls in drm core, files drm_a*.c") fails when the drm_device
+cannot be found in the parameter plane_state->crtc.
+Fix it using plane_state->plane.
 
-Add AVX512-FP16 instructions to x86 instruction decoder.
-
-Note the EVEX map field is extended by 1 bit, and most instructions are in
-map 5 and map 6.
-
-Reference:
-Intel AVX512-FP16 Architecture Specification
-June 2021
-Revision 1.0
-Document Number: 347407-001US
-
-Example using perf tools' x86 instruction decoder test:
-
-  $ perf test -v "x86 instruction decoder" |& grep vfcmaddcph | head -2
-  Decoded ok: 62 f6 6f 48 56 cb           vfcmaddcph %zmm3,%zmm2,%zmm1
-  Decoded ok: 62 f6 6f 48 56 8c c8 78 56 34 12    vfcmaddcph 0x12345678(%eax,%ecx,8),%zmm2,%zmm1
-
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Fixes: d1af5cd86997 ("drm: get rid of DRM_DEBUG_* log calls in drm core, files drm_a*.c")
+Signed-off-by: Claudio Suarez <cssk@net-c.es>
 ---
- arch/x86/include/asm/insn.h           |  2 +-
- arch/x86/lib/x86-opcode-map.txt       | 95 ++++++++++++++++++++++++---
- tools/arch/x86/include/asm/insn.h     |  2 +-
- tools/arch/x86/lib/x86-opcode-map.txt | 95 ++++++++++++++++++++++++---
- 4 files changed, 176 insertions(+), 18 deletions(-)
+ drivers/gpu/drm/drm_atomic_helper.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/include/asm/insn.h b/arch/x86/include/asm/insn.h
-index 05a6ab940f45..1b29f58f730f 100644
---- a/arch/x86/include/asm/insn.h
-+++ b/arch/x86/include/asm/insn.h
-@@ -124,7 +124,7 @@ struct insn {
- #define X86_VEX_B(vex)	((vex) & 0x20)	/* VEX3 Byte1 */
- #define X86_VEX_L(vex)	((vex) & 0x04)	/* VEX3 Byte2, VEX2 Byte1 */
- /* VEX bit fields */
--#define X86_EVEX_M(vex)	((vex) & 0x03)		/* EVEX Byte1 */
-+#define X86_EVEX_M(vex)	((vex) & 0x07)		/* EVEX Byte1 */
- #define X86_VEX3_M(vex)	((vex) & 0x1f)		/* VEX3 Byte1 */
- #define X86_VEX2_M	1			/* VEX2.M always 1 */
- #define X86_VEX_V(vex)	(((vex) & 0x78) >> 3)	/* VEX3 Byte2, VEX2 Byte1 */
-diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
-index 591797a931bf..d12d1358f96d 100644
---- a/arch/x86/lib/x86-opcode-map.txt
-+++ b/arch/x86/lib/x86-opcode-map.txt
-@@ -828,9 +828,9 @@ AVXcode: 3
- 05: vpermilpd Vx,Wx,Ib (66),(v)
- 06: vperm2f128 Vqq,Hqq,Wqq,Ib (66),(v)
- 07:
--08: vroundps Vx,Wx,Ib (66) | vrndscaleps Vx,Wx,Ib (66),(evo)
-+08: vroundps Vx,Wx,Ib (66) | vrndscaleps Vx,Wx,Ib (66),(evo) | vrndscaleph Vx,Wx,Ib (evo)
- 09: vroundpd Vx,Wx,Ib (66) | vrndscalepd Vx,Wx,Ib (66),(evo)
--0a: vroundss Vss,Wss,Ib (66),(v1) | vrndscaless Vx,Hx,Wx,Ib (66),(evo)
-+0a: vroundss Vss,Wss,Ib (66),(v1) | vrndscaless Vx,Hx,Wx,Ib (66),(evo) | vrndscalesh Vx,Hx,Wx,Ib (evo)
- 0b: vroundsd Vsd,Wsd,Ib (66),(v1) | vrndscalesd Vx,Hx,Wx,Ib (66),(evo)
- 0c: vblendps Vx,Hx,Wx,Ib (66)
- 0d: vblendpd Vx,Hx,Wx,Ib (66)
-@@ -852,8 +852,8 @@ AVXcode: 3
- 22: vpinsrd/q Vdq,Hdq,Ey,Ib (66),(v1)
- 23: vshuff32x4/64x2 Vx,Hx,Wx,Ib (66),(ev)
- 25: vpternlogd/q Vx,Hx,Wx,Ib (66),(ev)
--26: vgetmantps/d Vx,Wx,Ib (66),(ev)
--27: vgetmantss/d Vx,Hx,Wx,Ib (66),(ev)
-+26: vgetmantps/d Vx,Wx,Ib (66),(ev) | vgetmantph Vx,Wx,Ib (ev)
-+27: vgetmantss/d Vx,Hx,Wx,Ib (66),(ev) | vgetmantsh Vx,Hx,Wx,Ib (ev)
- 30: kshiftrb/w Vk,Uk,Ib (66),(v)
- 31: kshiftrd/q Vk,Uk,Ib (66),(v)
- 32: kshiftlb/w Vk,Uk,Ib (66),(v)
-@@ -877,18 +877,19 @@ AVXcode: 3
- 51: vrangess/d Vx,Hx,Wx,Ib (66),(ev)
- 54: vfixupimmps/d Vx,Hx,Wx,Ib (66),(ev)
- 55: vfixupimmss/d Vx,Hx,Wx,Ib (66),(ev)
--56: vreduceps/d Vx,Wx,Ib (66),(ev)
--57: vreducess/d Vx,Hx,Wx,Ib (66),(ev)
-+56: vreduceps/d Vx,Wx,Ib (66),(ev) | vreduceph Vx,Wx,Ib (ev)
-+57: vreducess/d Vx,Hx,Wx,Ib (66),(ev) | vreducesh Vx,Hx,Wx,Ib (ev)
- 60: vpcmpestrm Vdq,Wdq,Ib (66),(v1)
- 61: vpcmpestri Vdq,Wdq,Ib (66),(v1)
- 62: vpcmpistrm Vdq,Wdq,Ib (66),(v1)
- 63: vpcmpistri Vdq,Wdq,Ib (66),(v1)
--66: vfpclassps/d Vk,Wx,Ib (66),(ev)
--67: vfpclassss/d Vk,Wx,Ib (66),(ev)
-+66: vfpclassps/d Vk,Wx,Ib (66),(ev) | vfpclassph Vx,Wx,Ib (ev)
-+67: vfpclassss/d Vk,Wx,Ib (66),(ev) | vfpclasssh Vx,Wx,Ib (ev)
- 70: vpshldw Vx,Hx,Wx,Ib (66),(ev)
- 71: vpshldd/q Vx,Hx,Wx,Ib (66),(ev)
- 72: vpshrdw Vx,Hx,Wx,Ib (66),(ev)
- 73: vpshrdd/q Vx,Hx,Wx,Ib (66),(ev)
-+c2: vcmpph Vx,Hx,Wx,Ib (ev) | vcmpsh Vx,Hx,Wx,Ib (F3),(ev)
- cc: sha1rnds4 Vdq,Wdq,Ib
- ce: vgf2p8affineqb Vx,Wx,Ib (66)
- cf: vgf2p8affineinvqb Vx,Wx,Ib (66)
-@@ -896,6 +897,84 @@ df: VAESKEYGEN Vdq,Wdq,Ib (66),(v1)
- f0: RORX Gy,Ey,Ib (F2),(v) | HRESET Gv,Ib (F3),(000),(11B)
- EndTable
+diff --git a/drivers/gpu/drm/drm_atomic_helper.c b/drivers/gpu/drm/drm_atomic_helper.c
+index aef2fbd676e5..a7a05e1e26bb 100644
+--- a/drivers/gpu/drm/drm_atomic_helper.c
++++ b/drivers/gpu/drm/drm_atomic_helper.c
+@@ -828,8 +828,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+ 	}
  
-+Table: EVEX map 5
-+Referrer:
-+AVXcode: 5
-+10: vmovsh Vx,Hx,Wx (F3),(ev) | vmovsh Vx,Wx (F3),(ev)
-+11: vmovsh Wx,Hx,Vx (F3),(ev) | vmovsh Wx,Vx (F3),(ev)
-+1d: vcvtps2phx Vx,Wx (66),(ev) | vcvtss2sh Vx,Hx,Wx (ev)
-+2a: vcvtsi2sh Vx,Hx,Wx (F3),(ev)
-+2c: vcvttsh2si Vx,Wx (F3),(ev)
-+2d: vcvtsh2si Vx,Wx (F3),(ev)
-+2e: vucomish Vx,Wx (ev)
-+2f: vcomish Vx,Wx (ev)
-+51: vsqrtph Vx,Wx (ev) | vsqrtsh Vx,Hx,Wx (F3),(ev)
-+58: vaddph Vx,Hx,Wx (ev) | vaddsh Vx,Hx,Wx (F3),(ev)
-+59: vmulph Vx,Hx,Wx (ev) | vmulsh Vx,Hx,Wx (F3),(ev)
-+5a: vcvtpd2ph Vx,Wx (66),(ev) | vcvtph2pd Vx,Wx (ev) | vcvtsd2sh Vx,Hx,Wx (F2),(ev) | vcvtsh2sd Vx,Hx,Wx (F3),(ev)
-+5b: vcvtdq2ph Vx,Wx (ev) | vcvtph2dq Vx,Wx (66),(ev) | vcvtqq2ph Vx,Wx (ev) | vcvttph2dq Vx,Wx (F3),(ev)
-+5c: vsubph Vx,Hx,Wx (ev) | vsubsh Vx,Hx,Wx (F3),(ev)
-+5d: vminph Vx,Hx,Wx (ev) | vminsh Vx,Hx,Wx (F3),(ev)
-+5e: vdivph Vx,Hx,Wx (ev) | vdivsh Vx,Hx,Wx (F3),(ev)
-+5f: vmaxph Vx,Hx,Wx (ev) | vmaxsh Vx,Hx,Wx (F3),(ev)
-+6e: vmovw Vx,Wx (66),(ev)
-+78: vcvttph2udq Vx,Wx (ev) | vcvttph2uqq Vx,Wx (66),(ev) | vcvttsh2usi Vx,Wx (F3),(ev)
-+79: vcvtph2udq Vx,Wx (ev) | vcvtph2uqq Vx,Wx (66),(ev) | vcvtsh2usi Vx,Wx (F3),(ev)
-+7a: vcvttph2qq Vx,Wx (66),(ev) | vcvtudq2ph Vx,Wx (F2),(ev) | vcvtuqq2ph Vx,Wx (F2),(ev)
-+7b: vcvtph2qq Vx,Wx (66),(ev) | vcvtusi2sh Vx,Hx,Wx (F3),(ev)
-+7c: vcvttph2uw Vx,Wx (ev) | vcvttph2w Vx,Wx (66),(ev)
-+7d: vcvtph2uw Vx,Wx (ev) | vcvtph2w Vx,Wx (66),(ev) | vcvtuw2ph Vx,Wx (F2),(ev) | vcvtw2ph Vx,Wx (F3),(ev)
-+7e: vmovw Wx,Vx (66),(ev)
-+EndTable
-+
-+Table: EVEX map 6
-+Referrer:
-+AVXcode: 6
-+13: vcvtph2psx Vx,Wx (66),(ev) | vcvtsh2ss Vx,Hx,Wx (ev)
-+2c: vscalefph Vx,Hx,Wx (66),(ev)
-+2d: vscalefsh Vx,Hx,Wx (66),(ev)
-+42: vgetexpph Vx,Wx (66),(ev)
-+43: vgetexpsh Vx,Hx,Wx (66),(ev)
-+4c: vrcpph Vx,Wx (66),(ev)
-+4d: vrcpsh Vx,Hx,Wx (66),(ev)
-+4e: vrsqrtph Vx,Wx (66),(ev)
-+4f: vrsqrtsh Vx,Hx,Wx (66),(ev)
-+56: vfcmaddcph Vx,Hx,Wx (F2),(ev) | vfmaddcph Vx,Hx,Wx (F3),(ev)
-+57: vfcmaddcsh Vx,Hx,Wx (F2),(ev) | vfmaddcsh Vx,Hx,Wx (F3),(ev)
-+96: vfmaddsub132ph Vx,Hx,Wx (66),(ev)
-+97: vfmsubadd132ph Vx,Hx,Wx (66),(ev)
-+98: vfmadd132ph Vx,Hx,Wx (66),(ev)
-+99: vfmadd132sh Vx,Hx,Wx (66),(ev)
-+9a: vfmsub132ph Vx,Hx,Wx (66),(ev)
-+9b: vfmsub132sh Vx,Hx,Wx (66),(ev)
-+9c: vfnmadd132ph Vx,Hx,Wx (66),(ev)
-+9d: vfnmadd132sh Vx,Hx,Wx (66),(ev)
-+9e: vfnmsub132ph Vx,Hx,Wx (66),(ev)
-+9f: vfnmsub132sh Vx,Hx,Wx (66),(ev)
-+a6: vfmaddsub213ph Vx,Hx,Wx (66),(ev)
-+a7: vfmsubadd213ph Vx,Hx,Wx (66),(ev)
-+a8: vfmadd213ph Vx,Hx,Wx (66),(ev)
-+a9: vfmadd213sh Vx,Hx,Wx (66),(ev)
-+aa: vfmsub213ph Vx,Hx,Wx (66),(ev)
-+ab: vfmsub213sh Vx,Hx,Wx (66),(ev)
-+ac: vfnmadd213ph Vx,Hx,Wx (66),(ev)
-+ad: vfnmadd213sh Vx,Hx,Wx (66),(ev)
-+ae: vfnmsub213ph Vx,Hx,Wx (66),(ev)
-+af: vfnmsub213sh Vx,Hx,Wx (66),(ev)
-+b6: vfmaddsub231ph Vx,Hx,Wx (66),(ev)
-+b7: vfmsubadd231ph Vx,Hx,Wx (66),(ev)
-+b8: vfmadd231ph Vx,Hx,Wx (66),(ev)
-+b9: vfmadd231sh Vx,Hx,Wx (66),(ev)
-+ba: vfmsub231ph Vx,Hx,Wx (66),(ev)
-+bb: vfmsub231sh Vx,Hx,Wx (66),(ev)
-+bc: vfnmadd231ph Vx,Hx,Wx (66),(ev)
-+bd: vfnmadd231sh Vx,Hx,Wx (66),(ev)
-+be: vfnmsub231ph Vx,Hx,Wx (66),(ev)
-+bf: vfnmsub231sh Vx,Hx,Wx (66),(ev)
-+d6: vfcmulcph Vx,Hx,Wx (F2),(ev) | vfmulcph Vx,Hx,Wx (F3),(ev)
-+d7: vfcmulcsh Vx,Hx,Wx (F2),(ev) | vfmulcsh Vx,Hx,Wx (F3),(ev)
-+EndTable
-+
- GrpTable: Grp1
- 0: ADD
- 1: OR
-diff --git a/tools/arch/x86/include/asm/insn.h b/tools/arch/x86/include/asm/insn.h
-index dc632b41f135..65c0d9ce1e29 100644
---- a/tools/arch/x86/include/asm/insn.h
-+++ b/tools/arch/x86/include/asm/insn.h
-@@ -124,7 +124,7 @@ struct insn {
- #define X86_VEX_B(vex)	((vex) & 0x20)	/* VEX3 Byte1 */
- #define X86_VEX_L(vex)	((vex) & 0x04)	/* VEX3 Byte2, VEX2 Byte1 */
- /* VEX bit fields */
--#define X86_EVEX_M(vex)	((vex) & 0x03)		/* EVEX Byte1 */
-+#define X86_EVEX_M(vex)	((vex) & 0x07)		/* EVEX Byte1 */
- #define X86_VEX3_M(vex)	((vex) & 0x1f)		/* VEX3 Byte1 */
- #define X86_VEX2_M	1			/* VEX2.M always 1 */
- #define X86_VEX_V(vex)	(((vex) & 0x78) >> 3)	/* VEX3 Byte2, VEX2 Byte1 */
-diff --git a/tools/arch/x86/lib/x86-opcode-map.txt b/tools/arch/x86/lib/x86-opcode-map.txt
-index 591797a931bf..d12d1358f96d 100644
---- a/tools/arch/x86/lib/x86-opcode-map.txt
-+++ b/tools/arch/x86/lib/x86-opcode-map.txt
-@@ -828,9 +828,9 @@ AVXcode: 3
- 05: vpermilpd Vx,Wx,Ib (66),(v)
- 06: vperm2f128 Vqq,Hqq,Wqq,Ib (66),(v)
- 07:
--08: vroundps Vx,Wx,Ib (66) | vrndscaleps Vx,Wx,Ib (66),(evo)
-+08: vroundps Vx,Wx,Ib (66) | vrndscaleps Vx,Wx,Ib (66),(evo) | vrndscaleph Vx,Wx,Ib (evo)
- 09: vroundpd Vx,Wx,Ib (66) | vrndscalepd Vx,Wx,Ib (66),(evo)
--0a: vroundss Vss,Wss,Ib (66),(v1) | vrndscaless Vx,Hx,Wx,Ib (66),(evo)
-+0a: vroundss Vss,Wss,Ib (66),(v1) | vrndscaless Vx,Hx,Wx,Ib (66),(evo) | vrndscalesh Vx,Hx,Wx,Ib (evo)
- 0b: vroundsd Vsd,Wsd,Ib (66),(v1) | vrndscalesd Vx,Hx,Wx,Ib (66),(evo)
- 0c: vblendps Vx,Hx,Wx,Ib (66)
- 0d: vblendpd Vx,Hx,Wx,Ib (66)
-@@ -852,8 +852,8 @@ AVXcode: 3
- 22: vpinsrd/q Vdq,Hdq,Ey,Ib (66),(v1)
- 23: vshuff32x4/64x2 Vx,Hx,Wx,Ib (66),(ev)
- 25: vpternlogd/q Vx,Hx,Wx,Ib (66),(ev)
--26: vgetmantps/d Vx,Wx,Ib (66),(ev)
--27: vgetmantss/d Vx,Hx,Wx,Ib (66),(ev)
-+26: vgetmantps/d Vx,Wx,Ib (66),(ev) | vgetmantph Vx,Wx,Ib (ev)
-+27: vgetmantss/d Vx,Hx,Wx,Ib (66),(ev) | vgetmantsh Vx,Hx,Wx,Ib (ev)
- 30: kshiftrb/w Vk,Uk,Ib (66),(v)
- 31: kshiftrd/q Vk,Uk,Ib (66),(v)
- 32: kshiftlb/w Vk,Uk,Ib (66),(v)
-@@ -877,18 +877,19 @@ AVXcode: 3
- 51: vrangess/d Vx,Hx,Wx,Ib (66),(ev)
- 54: vfixupimmps/d Vx,Hx,Wx,Ib (66),(ev)
- 55: vfixupimmss/d Vx,Hx,Wx,Ib (66),(ev)
--56: vreduceps/d Vx,Wx,Ib (66),(ev)
--57: vreducess/d Vx,Hx,Wx,Ib (66),(ev)
-+56: vreduceps/d Vx,Wx,Ib (66),(ev) | vreduceph Vx,Wx,Ib (ev)
-+57: vreducess/d Vx,Hx,Wx,Ib (66),(ev) | vreducesh Vx,Hx,Wx,Ib (ev)
- 60: vpcmpestrm Vdq,Wdq,Ib (66),(v1)
- 61: vpcmpestri Vdq,Wdq,Ib (66),(v1)
- 62: vpcmpistrm Vdq,Wdq,Ib (66),(v1)
- 63: vpcmpistri Vdq,Wdq,Ib (66),(v1)
--66: vfpclassps/d Vk,Wx,Ib (66),(ev)
--67: vfpclassss/d Vk,Wx,Ib (66),(ev)
-+66: vfpclassps/d Vk,Wx,Ib (66),(ev) | vfpclassph Vx,Wx,Ib (ev)
-+67: vfpclassss/d Vk,Wx,Ib (66),(ev) | vfpclasssh Vx,Wx,Ib (ev)
- 70: vpshldw Vx,Hx,Wx,Ib (66),(ev)
- 71: vpshldd/q Vx,Hx,Wx,Ib (66),(ev)
- 72: vpshrdw Vx,Hx,Wx,Ib (66),(ev)
- 73: vpshrdd/q Vx,Hx,Wx,Ib (66),(ev)
-+c2: vcmpph Vx,Hx,Wx,Ib (ev) | vcmpsh Vx,Hx,Wx,Ib (F3),(ev)
- cc: sha1rnds4 Vdq,Wdq,Ib
- ce: vgf2p8affineqb Vx,Wx,Ib (66)
- cf: vgf2p8affineinvqb Vx,Wx,Ib (66)
-@@ -896,6 +897,84 @@ df: VAESKEYGEN Vdq,Wdq,Ib (66),(v1)
- f0: RORX Gy,Ey,Ib (F2),(v) | HRESET Gv,Ib (F3),(000),(11B)
- EndTable
+ 	if (!crtc_state->enable && !can_update_disabled) {
+-		drm_dbg_kms(plane_state->crtc->dev,
+-			       "Cannot update plane of a disabled CRTC.\n");
++		drm_dbg_kms(plane_state->plane->dev,
++			    "Cannot update plane of a disabled CRTC.\n");
+ 		return -EINVAL;
+ 	}
  
-+Table: EVEX map 5
-+Referrer:
-+AVXcode: 5
-+10: vmovsh Vx,Hx,Wx (F3),(ev) | vmovsh Vx,Wx (F3),(ev)
-+11: vmovsh Wx,Hx,Vx (F3),(ev) | vmovsh Wx,Vx (F3),(ev)
-+1d: vcvtps2phx Vx,Wx (66),(ev) | vcvtss2sh Vx,Hx,Wx (ev)
-+2a: vcvtsi2sh Vx,Hx,Wx (F3),(ev)
-+2c: vcvttsh2si Vx,Wx (F3),(ev)
-+2d: vcvtsh2si Vx,Wx (F3),(ev)
-+2e: vucomish Vx,Wx (ev)
-+2f: vcomish Vx,Wx (ev)
-+51: vsqrtph Vx,Wx (ev) | vsqrtsh Vx,Hx,Wx (F3),(ev)
-+58: vaddph Vx,Hx,Wx (ev) | vaddsh Vx,Hx,Wx (F3),(ev)
-+59: vmulph Vx,Hx,Wx (ev) | vmulsh Vx,Hx,Wx (F3),(ev)
-+5a: vcvtpd2ph Vx,Wx (66),(ev) | vcvtph2pd Vx,Wx (ev) | vcvtsd2sh Vx,Hx,Wx (F2),(ev) | vcvtsh2sd Vx,Hx,Wx (F3),(ev)
-+5b: vcvtdq2ph Vx,Wx (ev) | vcvtph2dq Vx,Wx (66),(ev) | vcvtqq2ph Vx,Wx (ev) | vcvttph2dq Vx,Wx (F3),(ev)
-+5c: vsubph Vx,Hx,Wx (ev) | vsubsh Vx,Hx,Wx (F3),(ev)
-+5d: vminph Vx,Hx,Wx (ev) | vminsh Vx,Hx,Wx (F3),(ev)
-+5e: vdivph Vx,Hx,Wx (ev) | vdivsh Vx,Hx,Wx (F3),(ev)
-+5f: vmaxph Vx,Hx,Wx (ev) | vmaxsh Vx,Hx,Wx (F3),(ev)
-+6e: vmovw Vx,Wx (66),(ev)
-+78: vcvttph2udq Vx,Wx (ev) | vcvttph2uqq Vx,Wx (66),(ev) | vcvttsh2usi Vx,Wx (F3),(ev)
-+79: vcvtph2udq Vx,Wx (ev) | vcvtph2uqq Vx,Wx (66),(ev) | vcvtsh2usi Vx,Wx (F3),(ev)
-+7a: vcvttph2qq Vx,Wx (66),(ev) | vcvtudq2ph Vx,Wx (F2),(ev) | vcvtuqq2ph Vx,Wx (F2),(ev)
-+7b: vcvtph2qq Vx,Wx (66),(ev) | vcvtusi2sh Vx,Hx,Wx (F3),(ev)
-+7c: vcvttph2uw Vx,Wx (ev) | vcvttph2w Vx,Wx (66),(ev)
-+7d: vcvtph2uw Vx,Wx (ev) | vcvtph2w Vx,Wx (66),(ev) | vcvtuw2ph Vx,Wx (F2),(ev) | vcvtw2ph Vx,Wx (F3),(ev)
-+7e: vmovw Wx,Vx (66),(ev)
-+EndTable
-+
-+Table: EVEX map 6
-+Referrer:
-+AVXcode: 6
-+13: vcvtph2psx Vx,Wx (66),(ev) | vcvtsh2ss Vx,Hx,Wx (ev)
-+2c: vscalefph Vx,Hx,Wx (66),(ev)
-+2d: vscalefsh Vx,Hx,Wx (66),(ev)
-+42: vgetexpph Vx,Wx (66),(ev)
-+43: vgetexpsh Vx,Hx,Wx (66),(ev)
-+4c: vrcpph Vx,Wx (66),(ev)
-+4d: vrcpsh Vx,Hx,Wx (66),(ev)
-+4e: vrsqrtph Vx,Wx (66),(ev)
-+4f: vrsqrtsh Vx,Hx,Wx (66),(ev)
-+56: vfcmaddcph Vx,Hx,Wx (F2),(ev) | vfmaddcph Vx,Hx,Wx (F3),(ev)
-+57: vfcmaddcsh Vx,Hx,Wx (F2),(ev) | vfmaddcsh Vx,Hx,Wx (F3),(ev)
-+96: vfmaddsub132ph Vx,Hx,Wx (66),(ev)
-+97: vfmsubadd132ph Vx,Hx,Wx (66),(ev)
-+98: vfmadd132ph Vx,Hx,Wx (66),(ev)
-+99: vfmadd132sh Vx,Hx,Wx (66),(ev)
-+9a: vfmsub132ph Vx,Hx,Wx (66),(ev)
-+9b: vfmsub132sh Vx,Hx,Wx (66),(ev)
-+9c: vfnmadd132ph Vx,Hx,Wx (66),(ev)
-+9d: vfnmadd132sh Vx,Hx,Wx (66),(ev)
-+9e: vfnmsub132ph Vx,Hx,Wx (66),(ev)
-+9f: vfnmsub132sh Vx,Hx,Wx (66),(ev)
-+a6: vfmaddsub213ph Vx,Hx,Wx (66),(ev)
-+a7: vfmsubadd213ph Vx,Hx,Wx (66),(ev)
-+a8: vfmadd213ph Vx,Hx,Wx (66),(ev)
-+a9: vfmadd213sh Vx,Hx,Wx (66),(ev)
-+aa: vfmsub213ph Vx,Hx,Wx (66),(ev)
-+ab: vfmsub213sh Vx,Hx,Wx (66),(ev)
-+ac: vfnmadd213ph Vx,Hx,Wx (66),(ev)
-+ad: vfnmadd213sh Vx,Hx,Wx (66),(ev)
-+ae: vfnmsub213ph Vx,Hx,Wx (66),(ev)
-+af: vfnmsub213sh Vx,Hx,Wx (66),(ev)
-+b6: vfmaddsub231ph Vx,Hx,Wx (66),(ev)
-+b7: vfmsubadd231ph Vx,Hx,Wx (66),(ev)
-+b8: vfmadd231ph Vx,Hx,Wx (66),(ev)
-+b9: vfmadd231sh Vx,Hx,Wx (66),(ev)
-+ba: vfmsub231ph Vx,Hx,Wx (66),(ev)
-+bb: vfmsub231sh Vx,Hx,Wx (66),(ev)
-+bc: vfnmadd231ph Vx,Hx,Wx (66),(ev)
-+bd: vfnmadd231sh Vx,Hx,Wx (66),(ev)
-+be: vfnmsub231ph Vx,Hx,Wx (66),(ev)
-+bf: vfnmsub231sh Vx,Hx,Wx (66),(ev)
-+d6: vfcmulcph Vx,Hx,Wx (F2),(ev) | vfmulcph Vx,Hx,Wx (F3),(ev)
-+d7: vfcmulcsh Vx,Hx,Wx (F2),(ev) | vfmulcsh Vx,Hx,Wx (F3),(ev)
-+EndTable
-+
- GrpTable: Grp1
- 0: ADD
- 1: OR
+@@ -839,8 +839,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+ 	hscale = drm_rect_calc_hscale(src, dst, min_scale, max_scale);
+ 	vscale = drm_rect_calc_vscale(src, dst, min_scale, max_scale);
+ 	if (hscale < 0 || vscale < 0) {
+-		drm_dbg_kms(plane_state->crtc->dev,
+-			       "Invalid scaling of plane\n");
++		drm_dbg_kms(plane_state->plane->dev,
++			    "Invalid scaling of plane\n");
+ 		drm_rect_debug_print("src: ", &plane_state->src, true);
+ 		drm_rect_debug_print("dst: ", &plane_state->dst, false);
+ 		return -ERANGE;
+@@ -864,8 +864,8 @@ int drm_atomic_helper_check_plane_state(struct drm_plane_state *plane_state,
+ 		return 0;
+ 
+ 	if (!can_position && !drm_rect_equals(dst, &clip)) {
+-		drm_dbg_kms(plane_state->crtc->dev,
+-			       "Plane must cover entire CRTC\n");
++		drm_dbg_kms(plane_state->plane->dev,
++			    "Plane must cover entire CRTC\n");
+ 		drm_rect_debug_print("dst: ", dst, false);
+ 		drm_rect_debug_print("clip: ", &clip, false);
+ 		return -EINVAL;
 -- 
-2.25.1
+2.33.0
+
+
 

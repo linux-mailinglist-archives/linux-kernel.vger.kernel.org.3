@@ -2,129 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ABED6466BC1
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE502466BDD
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 22:56:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377149AbhLBVri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 16:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377128AbhLBVrh (ORCPT
+        id S1377206AbhLBV7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 16:59:55 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17220 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1348903AbhLBV7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 16:47:37 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234ECC06174A;
-        Thu,  2 Dec 2021 13:44:14 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id q16so1038322pgq.10;
-        Thu, 02 Dec 2021 13:44:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Kwtlx3rKw93kF2r0vr4LpXNW4MUM1QQz/4nwEzzQ1qo=;
-        b=IKniZ/YD4ttaPJonrP6m+9+a37GGvJat5/hlsHogDcZJpgpmjqFThVNbmRMMPStNzi
-         NRT6uHTz5cYffrLMMt540HN+ThquoOIQ6qZ1Y1Yw2eggTCvVYrkirxGPZMrlSF1gTKV2
-         ViEMJwM+c/1cacsrDcGm8EjWIX23nVjAfVhIxxnkD/ZrfxSHlEWZ0wiEHfMqoimYFgQe
-         ctWRqZtMXxa4ItqS6hKwvHsHPXbyZLtrWWohpOko1FIqhy9FPeyWu10183tIMGTuNlNl
-         uilYv4wP7Cfc7CQOluEllC8lIsabYjWSz+hXiZlmEStQ1IufG5qRx5Byyq7h5CpNbgeH
-         tv8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Kwtlx3rKw93kF2r0vr4LpXNW4MUM1QQz/4nwEzzQ1qo=;
-        b=jwxkmzS3/nNoD5+CAVLx3b2bY0b37sTFaejvtv9j3JmadL8vioj6fYXSfqlcTP7aCI
-         hUF77aeMrDzUTAsEiw2uOZ1djuCJDbYcWEwr+BDkKVws1V5aqgilqBGvgwo+NQpwRFfX
-         dc/lh9bDQxX+9ev2yOHPKgmcWLPjc9abAQQSGluFqFToav0jD/UFbqEZhDM4htRv46V2
-         hzjDVHXqQw1ICeSZTgA7DxXUrxxYQoi5VQUqdyrXRR7IFJy4mTKNZtWg+nLAZGgQ7r5w
-         Xm4z4Cuu9cJu5iIWD51Drj7Gx3DBSPZxkcqhbgnJzjku8Q9X44ZygVcAt5Dty41QXhtB
-         BZEQ==
-X-Gm-Message-State: AOAM531pPW6NBtn0OySh7nlkJ4zX+BRIN3vhlASZP2pScFUX4KFXDlOb
-        1nwCwl7vNveW8L+zcD0VjdA=
-X-Google-Smtp-Source: ABdhPJzvsY9Unots2NzCZQvbQpuBpv9L3Puaz12SDCySbcq+KObJH0CEGUEVsvtIFpu1HLWTX8w47w==
-X-Received: by 2002:a62:8042:0:b0:4a8:15eb:db10 with SMTP id j63-20020a628042000000b004a815ebdb10mr14776369pfd.28.1638481453588;
-        Thu, 02 Dec 2021 13:44:13 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id t8sm729728pfj.26.2021.12.02.13.44.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Dec 2021 13:44:13 -0800 (PST)
-Subject: Re: [PATCH v3 1/3] irqchip: Pass platform_device pointer to init_cb
-To:     Marc Zyngier <maz@kernel.org>, Shawn Guo <shawn.guo@linaro.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Maulik Shah <quic_mkshah@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Neil Armstrong <narmstrong@baylibre.com>
-References: <20211202122122.23548-1-shawn.guo@linaro.org>
- <20211202122122.23548-2-shawn.guo@linaro.org>
- <b221fec0-43d0-537d-d78e-84da10a9c2d7@gmail.com>
- <fa6ae407c1da16e571aaf04eb424fecd@kernel.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Message-ID: <5db6079b-2d8e-9126-5f49-fc891765e360@gmail.com>
-Date:   Thu, 2 Dec 2021 13:44:11 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-MIME-Version: 1.0
-In-Reply-To: <fa6ae407c1da16e571aaf04eb424fecd@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+        Thu, 2 Dec 2021 16:59:54 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 1B2KktsN009762;
+        Thu, 2 Dec 2021 21:56:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=iTWQP/n0n09z1WP95N0FwphD/XUv/oniGiym4E3oL1A=;
+ b=oJwSghfex3WhmIKNZ5mfhtuyyqK/J88kAAbnqZNjSiaB5GDZTGr7Lk1gnBd3WcUPY/zm
+ REVf7+1swebpdRTBeAJ6GuQn2ensMbxdIfgaZOnnKJSQP9lVJ8e9tDmH0GaPvSG2gWSP
+ Eu9SzO5Sug9Eon23kh72EYu2M1hgbUhs2d0D0Y0K0+y8Ei41n/F0r6OZrXFGZAGEXvD2
+ cOxcw4K8j3Rc9cW1I/7y/JnQgYgBtySodeVJDJbuNQI8bhsVYoxLgoWJ1kczZp/jZ/lc
+ gMBq9rne1ujGmrCHUREMUEHNoFmYTNeH2d3CPf0KXBJiT4VS3/vC7ZDGpVzws0OBnj5x NA== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 3cq5fxhndn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 21:56:29 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 1B2LnWbS021437;
+        Thu, 2 Dec 2021 21:55:33 GMT
+Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
+        by ppma05fra.de.ibm.com with ESMTP id 3ckcaa5rd4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 02 Dec 2021 21:55:33 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 1B2Lm0Qb23986568
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 2 Dec 2021 21:48:00 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DD1E352051;
+        Thu,  2 Dec 2021 21:55:30 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com.com (unknown [9.65.72.23])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EF22E5204E;
+        Thu,  2 Dec 2021 21:55:29 +0000 (GMT)
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     linux-integrity@vger.kernel.org
+Cc:     Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/5] ima: support fs-verity signatures stored as
+Date:   Thu,  2 Dec 2021 16:55:02 -0500
+Message-Id: <20211202215507.298415-1-zohar@linux.ibm.com>
+X-Mailer: git-send-email 2.27.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gpLRBplFxcHxg_bJYLu81DF49Qbzn6Fs
+X-Proofpoint-ORIG-GUID: gpLRBplFxcHxg_bJYLu81DF49Qbzn6Fs
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.790,Hydra:6.0.425,FMLib:17.11.62.513
+ definitions=2021-12-02_14,2021-12-02_01,2021-12-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ impostorscore=0 bulkscore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ malwarescore=0 spamscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2110150000 definitions=main-2112020133
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/21 11:10 AM, Marc Zyngier wrote:
-> On 2021-12-02 17:52, Florian Fainelli wrote:
->> On 12/2/21 4:21 AM, Shawn Guo wrote:
->>> It makes sense to just pass device_node for callback in IRQCHIP_DECLARE
->>> case, but not so much for IRQCHIP_PLATFORM_DRIVER one, because
->>> platform_driver probe/init usually needs device pointer for various
->>> purposes, e.g. resource allocation, service request, device prefixed
->>> message output, etc.  Create a new callback type irqchip_init_cb_t which
->>> takes platform_device pointer as parameter, and update the existing
->>> IRQCHIP_PLATFORM_DRIVER users accordingly.
->>>
->>> Cc: Florian Fainelli <f.fainelli@gmail.com>
->>> Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
->>> Cc: Neil Armstrong <narmstrong@baylibre.com>
->>> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
->>
->> Could you copy all recipients on all 3 patches plus your cover letter
->> next time so we have the full context? Thanks!
->>
->> [snip]
->>
->>>
->>> -static int __init bcm7120_l2_intc_probe_7120(struct device_node *dn,
->>> +static int __init bcm7120_l2_intc_probe_7120(struct platform_device
->>> *pdev,
->>>                           struct device_node *parent)
->>>  {
->>> -    return bcm7120_l2_intc_probe(dn, parent,
->>> bcm7120_l2_intc_iomap_7120,
->>> +    return bcm7120_l2_intc_probe(pdev->dev.of_node, parent,
->>> +                     bcm7120_l2_intc_iomap_7120,
->>>                       "BCM7120 L2");
->>
->> If you look further into that driver, you will see that we do something
->> like this in bcm7120_l2_intc_probe:
->>
->>           pdev = of_find_device_by_node(dn);
->>           if (!pdev) {
->>                   ret = -ENODEV;
->>                   goto out_free_data;
->>           }
->>
->> which would be completely superfluous now that we pass a platform_device
->> directly. Can you rework your patch so as to eliminate that
->> of_find_device_by_ndoe() (and the companion put_device call)?
-> 
-> Or just adopt the same construct in the MPM driver. At this stage, drivers
-> requiring a platform_device are the minority.
+Support for fs-verity file digests in IMA was discussed from the beginning,
+prior to fs-verity being upstreamed[1,2].  This patch set adds signature
+verification support based on the fs-verity file digest.  Both the
+file digest and the signature must be included in the IMA measurement list
+in order to disambiguate the type of file digest.
 
-Works for me.
+[1] https://events19.linuxfoundation.org/wp-content/uploads/2017/11/fs-verify_Mike-Halcrow_Eric-Biggers.pdf
+[2] Documentation/filesystems/fsverity.rst
+
+Changelog v1:
+- Updated both fsverity and IMA documentation.
+- Addressed both Eric Bigger's and Lakshmi's comments.
+
+Mimi Zohar (5):
+  fs-verity: define a function to return the integrity protected file
+    digest
+  ima: define a new signature type named IMA_VERITY_DIGSIG
+  ima: limit including fs-verity's file digest in measurement list
+  ima: support fs-verity file digest based signatures
+  fsverity: update the documentation
+
+ Documentation/filesystems/fsverity.rst    | 22 ++++++----
+ Documentation/security/IMA-templates.rst  |  9 +++-
+ fs/verity/Kconfig                         |  1 +
+ fs/verity/fsverity_private.h              |  7 ---
+ fs/verity/measure.c                       | 49 +++++++++++++++++++++
+ include/linux/fsverity.h                  | 18 ++++++++
+ security/integrity/ima/ima.h              |  3 +-
+ security/integrity/ima/ima_api.c          | 23 +++++++++-
+ security/integrity/ima/ima_appraise.c     | 52 ++++++++++++++++++++++-
+ security/integrity/ima/ima_main.c         |  7 ++-
+ security/integrity/ima/ima_template_lib.c |  3 +-
+ security/integrity/integrity.h            |  1 +
+ 12 files changed, 172 insertions(+), 23 deletions(-)
+
 -- 
-Florian
+2.27.0
+

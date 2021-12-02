@@ -2,99 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F37CE466A1F
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CB78466A22
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 20:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356364AbhLBTGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 14:06:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348436AbhLBTGR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 14:06:17 -0500
-Received: from nbd.name (nbd.name [IPv6:2a01:4f8:221:3d45::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CECDC06174A;
-        Thu,  2 Dec 2021 11:02:54 -0800 (PST)
-Received: from [2a04:4540:1400:db00:91f3:71ad:3324:436c]
-        by ds12 with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <john@phrozen.org>)
-        id 1msrM1-00047k-82; Thu, 02 Dec 2021 20:02:49 +0100
-Message-ID: <c721ac4a-8b80-2241-3380-6b55e953d754@phrozen.org>
-Date:   Thu, 2 Dec 2021 20:02:48 +0100
+        id S1376653AbhLBTHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 14:07:23 -0500
+Received: from vps0.lunn.ch ([185.16.172.187]:36266 "EHLO vps0.lunn.ch"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1376361AbhLBTHR (ORCPT <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 2 Dec 2021 14:07:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=Ca/Np5EqNfWr4TZU2fd5ty7+mfW8+17DiuzNszp3vno=; b=qb
+        qcOnLxHrA2wjcALq7MSiPGiEgwigv7oPeOlb2JHbWy7l6LwCsfKAtCjCTDQGF1ZKzfbuTse//Devi
+        eYi8skOgG3HzqO+xyfNeSlgHLhUS9eaLkGekTKpbzI2ldptr2o/PvtrNw5nQYh5llYahiHAWHAZOp
+        XVOA3K5IQ4NGTog=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1msrMy-00FM1w-Mn; Thu, 02 Dec 2021 20:03:48 +0100
+Date:   Thu, 2 Dec 2021 20:03:48 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Wells Lu =?utf-8?B?5ZGC6Iqz6aiw?= <wells.lu@sunplus.com>
+Cc:     Wells Lu <wellslutw@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Vincent Shih =?utf-8?B?5pa96YyV6bS7?= 
+        <vincent.shih@sunplus.com>
+Subject: Re: [PATCH net-next v3 2/2] net: ethernet: Add driver for Sunplus
+ SP7021
+Message-ID: <YakYlHzvlAI+1at+@lunn.ch>
+References: <1638266572-5831-1-git-send-email-wellslutw@gmail.com>
+ <1638266572-5831-3-git-send-email-wellslutw@gmail.com>
+ <YabsT0/dASvYUH2p@lunn.ch>
+ <cf60c230950747ec918acfc6dda595d6@sphcmbx02.sunplus.com.tw>
+ <YajEbXtBwlDL4gOL@lunn.ch>
+ <2fded2fc3a1344d0882ae2f186257911@sphcmbx02.sunplus.com.tw>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.3.2
-Subject: Re: [PATCH v5 12/13] gpio: Add support for Airoha EN7523 GPIO
- controller
-Content-Language: en-GB
-To:     Felix Fietkau <nbd@nbd.name>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-References: <20211129153330.37719-1-nbd@nbd.name>
- <20211129153330.37719-13-nbd@nbd.name>
- <CACRpkdacgoT-K4qZoBpMx8RiPcvOf=YmrTP36LKyizcQk+VyUQ@mail.gmail.com>
- <c42f4ea0-2879-01cf-1db8-ed39844959fc@nbd.name>
-From:   John Crispin <john@phrozen.org>
-In-Reply-To: <c42f4ea0-2879-01cf-1db8-ed39844959fc@nbd.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <2fded2fc3a1344d0882ae2f186257911@sphcmbx02.sunplus.com.tw>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 02, 2021 at 06:46:40PM +0000, Wells Lu 呂芳騰 wrote:
+> Hi Andrew,
+> 
+> Thank you for explanation.
+> 
+> I'll add phy_support_asym_pause() after PHY connected next patch.
+> 
+> I found some drivers call phy_set_max_speed() to set PHY speed to
+> 100M after PHY connected. Is that necessary?
 
+> From 'supported', PHY supports 10M/100M already.
 
-On 02.12.21 18:59, Felix Fietkau wrote:
-> 
-> On 2021-12-02 02:47, Linus Walleij wrote:
->> Hi Felix!
->>
->> Thanks for your patch!
->>
->> On Mon, Nov 29, 2021 at 4:54 PM Felix Fietkau <nbd@nbd.name> wrote:
->>
->>> From: John Crispin <john@phrozen.org>
->>>
->>> Airoha's GPIO controller on their ARM EN7523 SoCs consists of two 
->>> banks of 32
->>> GPIOs. Each instance in DT is for an single bank.
->>>
->>> Signed-off-by: John Crispin <john@phrozen.org>
->>> Signed-off-by: Felix Fietkau <nbd@nbd.name>
->>
->> (...)
->>> +config GPIO_EN7523
->>> +       tristate "Airoha GPIO support"
->>> +       depends on ARCH_AIROHA
->>> +       default ARCH_AIROHA
->>> +       select GPIO_GENERIC
->>
->> Yes that looks applicable, but why isn't it used?
->>
->> The few 32-bit registers look like an ideal candidate for
->> using the generic GPIO. Check similar drivers such as
->> drivers/gpio/gpio-ftgpio010.c and how it uses
->> bgpio_init() and the nice doc for bgpio_init() in
->> drivers/gpio/gpio-mmio.c.
-> I just looked at the datasheet and the driver code again, and I think 
-> EN7523 is too strange for proper generic GPIO support.
-> 
-> For each bank there are two control registers (not consecutive), which 
-> have 2-bit fields for every GPIO line to control direction. No idea why 
-> 2 bits per line, because only values 0 and 1 are valid, the rest are 
-> reserved.
-> For lines configured as output, an extra output-enable bit also needs to 
-> be set in a separate register before output values can be written.
-> 
-> The code does use bgpio to read/write values, but that's about it.
-> I don't think it would do the generic GPIO code any good to support this 
-> weirdness.
-> 
-> - Felix
-Hi Linus,
-I sent an email to you 16.06.21 explaining all of this and you replied, 
-telling me that this approach is the most reasonable one to take.
-	John
+You need phy_set_max_speed() when it is possible to connect a 10/100
+MAC to a 1G PHY.  You sometime do this because a 1G PHY is cheaper
+than a 100M PHY. Unless limited, the PHY will advertise and could
+negotiate a 1G link, but the MAC could then not support it. If it is
+not physically possible to connect a 1G PHY to your MAC, you don't
+need to worry.
+
+> I also found some drivers call phy_start_aneg() after PHY started.
+
+It is not needed.
+
+   Andrew

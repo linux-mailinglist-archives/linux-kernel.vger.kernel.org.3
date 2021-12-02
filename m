@@ -2,370 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F994666E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05EF0466657
+	for <lists+linux-kernel@lfdr.de>; Thu,  2 Dec 2021 16:20:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359113AbhLBPoz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 2 Dec 2021 10:44:55 -0500
-Received: from gateway36.websitewelcome.com ([192.185.198.13]:43967 "EHLO
-        gateway36.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1359098AbhLBPow (ORCPT
+        id S1347585AbhLBPYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 2 Dec 2021 10:24:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com ([170.10.133.124]:24318 "EHLO
+        us-smtp-delivery-124.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S237545AbhLBPYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 2 Dec 2021 10:44:52 -0500
-X-Greylist: delayed 1335 seconds by postgrey-1.27 at vger.kernel.org; Thu, 02 Dec 2021 10:44:52 EST
-Received: from cm16.websitewelcome.com (cm16.websitewelcome.com [100.42.49.19])
-        by gateway36.websitewelcome.com (Postfix) with ESMTP id 545FC401F7196
-        for <linux-kernel@vger.kernel.org>; Thu,  2 Dec 2021 09:18:59 -0600 (CST)
-Received: from gator4132.hostgator.com ([192.185.4.144])
-        by cmsmtp with SMTP
-        id snrOmrE7WgC9EsnrOmYT6i; Thu, 02 Dec 2021 09:18:59 -0600
-X-Authority-Reason: nr=8
-Received: from host-79-34-250-122.business.telecomitalia.it ([79.34.250.122]:57870 helo=[10.0.0.161])
-        by gator4132.hostgator.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <bristot@kernel.org>)
-        id 1msnrN-004BKV-Ad; Thu, 02 Dec 2021 09:18:57 -0600
-Message-ID: <9944378d-456f-79a5-2dbf-30dbbbc94522@kernel.org>
-Date:   Thu, 2 Dec 2021 16:18:53 +0100
+        Thu, 2 Dec 2021 10:24:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1638458440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QpHGsXakpJlVBZeLLA5f4UndWEwg3fD3Vmc+Si6d6Ds=;
+        b=T+KMgep2BA9/jsG3Uvpi7WrE1UqJHQBFKl80Iv712l1Rb0A0d0fq8EPJF7rWeN+PxDLb4F
+        jA+K+WXSSkGX2v2oPWvfKYNsoVHAB62o1E6MOKH0r+yM96s6VMPqyLaM1+4+RoOJntP/sC
+        unxw/nzJZ/w2K4JxB56HU3Qh+G80z7M=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-280-xN-dqma8PymgPha3qORidw-1; Thu, 02 Dec 2021 10:20:35 -0500
+X-MC-Unique: xN-dqma8PymgPha3qORidw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id E662583DD31;
+        Thu,  2 Dec 2021 15:20:33 +0000 (UTC)
+Received: from horse.redhat.com (unknown [10.22.10.181])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C8A945DF21;
+        Thu,  2 Dec 2021 15:20:33 +0000 (UTC)
+Received: by horse.redhat.com (Postfix, from userid 10451)
+        id 57E70225F43; Thu,  2 Dec 2021 10:20:33 -0500 (EST)
+Date:   Thu, 2 Dec 2021 10:20:33 -0500
+From:   Vivek Goyal <vgoyal@redhat.com>
+To:     Chengguang Xu <cgxu519@mykernel.net>
+Cc:     Amir Goldstein <amir73il@gmail.com>, Jan Kara <jack@suse.cz>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        overlayfs <linux-unionfs@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        ronyjin <ronyjin@tencent.com>,
+        charliecgxu <charliecgxu@tencent.com>
+Subject: Re: ovl_flush() behavior
+Message-ID: <YajkQUpxWQI1N64l@redhat.com>
+References: <17d719b79f9.d89bf95117881.5882353172682156775@mykernel.net>
+ <CAOQ4uxidK-yDMZoZtoRwTZLgSTr1o2Mu2L55vJRNJDLV0-Sb1w@mail.gmail.com>
+ <17d73da701b.e571c37220081.6904057835107693340@mykernel.net>
+ <17d74b08dcd.c0e94e6320632.9167792887632811518@mykernel.net>
+ <CAOQ4uxiCYFeeH8oUUNG+rDCru_1XcwB6fR2keS1C6=d_yD9XzA@mail.gmail.com>
+ <20211201134610.GA1815@quack2.suse.cz>
+ <17d76cf59ee.12f4517f122167.2687299278423224602@mykernel.net>
+ <CAOQ4uxiEjGms-sKhrVDtDHSEk97Wku5oPxnmy4vVB=6yRE_Hdg@mail.gmail.com>
+ <CAOQ4uxg6FATciQhzRifOft4gMZj15G=UA6MUiPX2n9-NR5+1Pg@mail.gmail.com>
+ <17d78e95c35.ceeffaaf22655.2727336036618811041@mykernel.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH V8 03/14] rtla: Add osnoise tool
-Content-Language: en-US
-To:     Tao Zhou <tao.zhou@linux.dev>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Clark Williams <williams@redhat.com>,
-        John Kacur <jkacur@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        linux-rt-users@vger.kernel.org, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1638182284.git.bristot@kernel.org>
- <ffb7f1b1e8cc42fc8ec52f1a89fdd2ca0d70c36e.1638182284.git.bristot@kernel.org>
- <YaZEzvzp5jkRyLEJ@geo.homenetwork>
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-In-Reply-To: <YaZEzvzp5jkRyLEJ@geo.homenetwork>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4132.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - kernel.org
-X-BWhitelist: no
-X-Source-IP: 79.34.250.122
-X-Source-L: No
-X-Exim-ID: 1msnrN-004BKV-Ad
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: host-79-34-250-122.business.telecomitalia.it ([10.0.0.161]) [79.34.250.122]:57870
-X-Source-Auth: kernel@bristot.me
-X-Email-Count: 1
-X-Source-Cap: YnJpc3RvdG1lO2JyaXN0b3RtZTtnYXRvcjQxMzIuaG9zdGdhdG9yLmNvbQ==
-X-Local-Domain: no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <17d78e95c35.ceeffaaf22655.2727336036618811041@mykernel.net>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tao
-
-On 11/30/21 16:35, Tao Zhou wrote:
-> Hi Daniel,
+On Thu, Dec 02, 2021 at 10:11:39AM +0800, Chengguang Xu wrote:
 > 
-> On Mon, Nov 29, 2021 at 12:07:41PM +0100, Daniel Bristot de Oliveira wrote:
->> +/*
->> + * osnoise_restore_cpus - restore the original "osnoise/cpus"
->> + *
->> + * osnoise_set_cpus() saves the original data for the "osnoise/cpus"
+>  ---- 在 星期四, 2021-12-02 07:23:17 Amir Goldstein <amir73il@gmail.com> 撰写 ----
+>  > > >
+>  > > > To be honest I even don't fully understand what's the ->flush() logic in overlayfs.
+>  > > > Why should we open new underlying file when calling ->flush()?
+>  > > > Is it still correct in the case of opening lower layer first then copy-uped case?
+>  > > >
+>  > >
+>  > > The semantics of flush() are far from being uniform across filesystems.
+>  > > most local filesystems do nothing on close.
+>  > > most network fs only flush dirty data when a writer closes a file
+>  > > but not when a reader closes a file.
+>  > > It is hard to imagine that applications rely on flush-on-close of
+>  > > rdonly fd behavior and I agree that flushing only if original fd was upper
+>  > > makes more sense, so I am not sure if it is really essential for
+>  > > overlayfs to open an upper rdonly fd just to do whatever the upper fs
+>  > > would have done on close of rdonly fd, but maybe there is no good
+>  > > reason to change this behavior either.
+>  > >
+>  > 
+>  > On second thought, I think there may be a good reason to change
+>  > ovl_flush() otherwise I wouldn't have submitted commit
+>  > a390ccb316be ("fuse: add FOPEN_NOFLUSH") - I did observe
+>  > applications that frequently open short lived rdonly fds and suffered
+>  > undesired latencies on close().
+>  > 
+>  > As for "changing existing behavior", I think that most fs used as
+>  > upper do not implement flush at all.
+>  > Using fuse/virtiofs as overlayfs upper is quite new, so maybe that
+>  > is not a problem and maybe the new behavior would be preferred
+>  > for those users?
+>  > 
 > 
-> osnoise_set_cpus() --> osnoise_restore_cpus()
+> So is that mean simply redirect the ->flush request to original underlying realfile?
 
-This comment is correct... osnoise_set_cpus saves the data (in the tool),
-osnoise_restore_cpus() restores it.
+If the file has been copied up since open(), then flush should go on upper
+file, right?
 
->> + * file. This function restore the original config it was previously
->> + * modified.
->> + */
->> +void osnoise_restore_cpus(struct osnoise_context *context)
->> +{
->> +	int retval;
->> +
->> +	if (!context->orig_cpus)
->> +		return;
->> +
->> +	if (!context->curr_cpus)
->> +		return;
->> +
->> +	/* nothing to do? */
->> +	if (!strcmp(context->orig_cpus, context->curr_cpus))
->> +		goto out_done;
->> +
->> +	retval = write(context->cpus_fd, context->orig_cpus, strlen(context->orig_cpus));
-> 
-> 'strlen(context->orig_cpus) + 1' for write size;
-> 
->> +	if (retval < strlen(context->orig_cpus))
-> 
-> Same here. Check 'strlen(context->orig_cpus) + 1'
+I think Amir is talking about that can we optimize flush in overlay and
+not call ->flush at all if file was opened read-only, IIUC.
 
-Fixed in v9.
+In case of fuse he left it to server. If that's the case, then in case
+of overlayfs, it should be left to underlyng filesystem as well?
+Otherwise, it might happen underlying filesystem (like virtiofs) might
+be expecting ->flush() and overlayfs decided not to call it because
+file was read only.
 
->> +		err_msg("could not restore original osnoise cpus\n");
->> +
->> +out_done:
->> +	free(context->curr_cpus);
->> +	context->curr_cpus = NULL;
->> +}
->> +
->> +/*
->> + * osnoise_get_runtime - return the original "osnoise/runtime_us" value
->> + *
->> + * It also saves the value to be restored.
->> + */
->> +unsigned long long osnoise_get_runtime(struct osnoise_context *context)
->> +{
->> +	char buffer[BUFF_U64_STR_SIZE];
->> +	long long runtime_us;
->> +	char *runtime_path;
->> +	int retval;
->> +
->> +	if (context->runtime_us != OSNOISE_TIME_INIT_VAL)
->> +		return context->runtime_us;
->> +
->> +	if (context->orig_runtime_us != OSNOISE_TIME_INIT_VAL)
->> +		return context->orig_runtime_us;
->> +
->> +	runtime_path = tracefs_get_tracing_file("osnoise/runtime_us");
->> +
->> +	context->runtime_fd = open(runtime_path, O_RDWR);
->> +	if (context->runtime_fd < 0)
->> +		goto out_err;
->> +
->> +	retval = read(context->runtime_fd, &buffer, sizeof(buffer));
->> +	if (retval <= 0)
->> +		goto out_close;
->> +
->> +	runtime_us = get_llong_from_str(buffer);
->> +	if (runtime_us < 0)
->> +		goto out_close;
->> +
->> +	tracefs_put_tracing_file(runtime_path);
->> +
->> +	context->orig_runtime_us = runtime_us;
->> +	return runtime_us;
->> +
->> +out_close:
->> +	close(context->runtime_fd);
->> +	context->runtime_fd = CLOSED_FD;
->> +out_err:
->> +	tracefs_put_tracing_file(runtime_path);
->> +	return 0;
->> +}
->> +/*
->> + * osnoise_get_period - return the original "osnoise/period_us" value
->> + *
->> + * It also saves the value to be restored.
->> + */
->> +unsigned long long osnoise_get_period(struct osnoise_context *context)
->> +{
->> +	char buffer[BUFF_U64_STR_SIZE];
->> +	char *period_path;
->> +	long long period_us;
->> +	int retval;
->> +
->> +	if (context->period_us != OSNOISE_TIME_INIT_VAL)
->> +		return context->period_us;
->> +
->> +	if (context->orig_period_us != OSNOISE_TIME_INIT_VAL)
->> +		return context->orig_period_us;
->> +
->> +	period_path = tracefs_get_tracing_file("osnoise/period_us");
->> +
->> +	context->period_fd = open(period_path, O_RDWR);
->> +	if (context->period_fd < 0)
->> +		goto out_err;
->> +
->> +	retval = read(context->period_fd, &buffer, sizeof(buffer));
->> +	if (retval <= 0)
->> +		goto out_close;
->> +
->> +	period_us = get_llong_from_str(buffer);
->> +	if (period_us < 0)
->> +		goto out_close;
->> +
->> +	tracefs_put_tracing_file(period_path);
->> +
->> +	context->orig_period_us = period_us;
->> +	return period_us;
->> +
->> +out_close:
->> +	close(context->period_fd);
->> +	context->period_fd = CLOSED_FD;
->> +out_err:
->> +	tracefs_put_tracing_file(period_path);
->> +	return 0;
->> +}
-> 
-> osnoise_get_period() and osnoise_get_runtime() almost the same.
-> Use macro to generate code. Some thing also not sure now. Shame
-> 
-> 
-> #define osnoise_get_period osnoise_get(period)
-> #define osnoise_get_runtime osnoise_get(runtime)
-> 
-> #define osnoise_get(x)	\
-> unsigned long long osnoise_get_##x(struct osnoise_context *context) \ 
-> {              \
-> 	char buffer[BUFF_U64_STR_SIZE];             \
-> 	char * x##_path;             \ 
-> 	long long x##_us;            \
-> 	if (context->x##_us != OSNOISE_TIME_INIT_VAL)                   \
-> 		return context->x##_us;           \
-> 	if (context->orig_##x##_us != OSNOISE_TIME_INIT_VAL)            \
-> 		return context->orig_##x##_us;          \
-> 	x##_path = tracefs_get_tracing_file("osnoise/x##_us");        \
-> 	context->x##_fd = open(x##_path, O_RDWR);               \
-> 	if (context->x##_fd < 0)                        \
-> 		goto out_err;                 \
-> 	retval = read(context->x##_fd, &buffer, sizeof(buffer));        \
-> 	if (retval <= 0)                  \
-> 		goto out_close;               \
-> 	x##_us = get_llong_from_str(buffer);            \
-> 	if (x##_us < 0)                   \
-> 		goto out_close;               \
-> 	tracefs_put_tracing_file(x##_path);             \
-> 	context->orig_##x##_us = x##_us;                \
-> 	return x##_us;                    \
-> out_close:                            \
-> 	close(context->x##_fd);           \
-> 	context->x##_fd = CLOSED_FD;                    \
-> out_err:                              \
-> 	tracefs_put_tracing_file(x##_path);             \
-> 	return 0;                         \
-> }
+So I will lean towards continue to call ->flush in overlay and try to
+optimize virtiofsd to set FOPEN_NOFLUSH when not required.
 
-
-I am not sure if it is worth to trade the readability for just two functions. I
-will keep this as is foe now, and think about it in a second moment.
-
-[...]
->> +
->> +/*
->> + * osnoise_set_runtime_period - set osnoise runtime and period
->> + *
->> + * Osnoise's runtime and period are related as runtime <= period.
->> + * Thus, this function saves the original values, and then tries
->> + * to set the runtime and period if they are != 0.
->> + */
->> +int osnoise_set_runtime_period(struct osnoise_context *context,
->> +			       unsigned long long runtime,
->> +			       unsigned long long period)
->> +{
->> +	unsigned long long curr_runtime_us;
->> +	unsigned long long curr_period_us;
->> +	int retval;
->> +
->> +	if (!period && !runtime)
->> +		return 0;
->> +
->> +	curr_runtime_us = osnoise_get_runtime(context);
->> +	curr_period_us = osnoise_get_period(context);
->> +
->> +	/* error getting any value? */
->> +	if (curr_period_us == -1 || curr_runtime_us == -1)
->> +		return -1;
-> 
-> 'curr_period_us' and 'curr_runtime_us' error value should be
-> 0(OSNOISE_TIME_INIT_VAL).
-> 
-
-
-Right, I am now (in v9) returning the *_INIT_VAL on all errors, and using the
-macro to check for errors.
-
-[...]
-
->> +static long long
->> +osnoise_get_timerlat_period_us(struct osnoise_context *context)
->> +{
->> +	char buffer[BUFF_U64_STR_SIZE];
->> +	long long timerlat_period_us;
->> +	char *stop_path;
->> +	int retval;
->> +
->> +	if (context->timerlat_period_us != OSNOISE_TIME_INIT_VAL)
->> +		return context->timerlat_period_us;
->> +
->> +	if (context->orig_timerlat_period_us != OSNOISE_TIME_INIT_VAL)
->> +		return context->orig_timerlat_period_us;
->> +
->> +	stop_path = tracefs_get_tracing_file("osnoise/timerlat_period_us");
-> 
-> Using timerlat_period_path seems to be straightforward.
-> 
-
-I am using config_path for all variables like this.
-
-
-[...]
-
->> +/*
->> + * osnoise_context_alloc - alloc an osnoise_context
->> + *
->> + * The osnoise context contains the information of the "osnoise/" configs.
->> + * It is used to set and restore the config.
->> + */
->> +struct osnoise_context *osnoise_context_alloc(void)
->> +{
->> +	struct osnoise_context *context;
->> +
->> +	context = calloc(1, sizeof(*context));
->> +	if (!context)
->> +		goto out_err;
->> +
->> +	context->cpus_fd 		= CLOSED_FD;
->> +	context->runtime_fd		= CLOSED_FD;
->> +	context->period_fd		= CLOSED_FD;
->> +	context->stop_us_fd		= CLOSED_FD;
->> +	context->stop_total_us_fd	= CLOSED_FD;
->> +	context->timerlat_period_us_fd	= CLOSED_FD;
->> +	context->print_stack_fd		= CLOSED_FD;
->> +
->> +	context->orig_stop_us		= OSNOISE_OPTION_INIT_VAL;
->> +	context->stop_us		= OSNOISE_OPTION_INIT_VAL;
->> +
->> +	context->orig_stop_total_us	= OSNOISE_OPTION_INIT_VAL;
->> +	context->stop_total_us		= OSNOISE_OPTION_INIT_VAL;
->> +
->> +	context->orig_print_stack	= OSNOISE_OPTION_INIT_VAL;
->> +	context->print_stack		= OSNOISE_OPTION_INIT_VAL;
->> +
->> +	osnoise_get_context(context);
->> +
->> +	return context;
->> +out_err:
->> +	if (context)
->> +		free(context);
-> 
-> context is NULL here, so no need the check. Just directly return NULL
-> when 'if(!context)' is enough.
-> 
->> +	return NULL;
->> +}
-
-In v9, I am removing the goto, returning NULL if (!context).
-
-> Sorry for my slow and not complete reply.. and leave not sure here.
-> 
-> Thanks,
-> Tao
-
-Thanks Tao
--- Daniel
+Thanks
+Vivek
 
